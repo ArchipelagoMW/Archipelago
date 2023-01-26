@@ -316,8 +316,8 @@ Items_Table = {
 DonaldAbility_Table = {
     ItemName.DonaldFire: 				ItemData(0x1300F9,  1,165,0x0A5 ,0,1,True),
     ItemName.DonaldBlizzard: 			ItemData(0x1300FA,  1,166,0x0A6 ,0,1,True),
-    ItemName.DonaldThunder: 			ItemData(0x1300FB,  1,167,0x80A7 ,0,1,True),
-    ItemName.DonaldCure: 				ItemData(0x1300FC,  1,168,0x80A8 ,0,1,True),
+    ItemName.DonaldThunder: 			ItemData(0x1300FB,  1,167,0x111 ,0,1,True),
+    ItemName.DonaldCure: 				ItemData(0x1300FC,  1,168,0x111 ,0,1,True),
     ItemName.Fantasia: 				    ItemData(0x1300FD,  1,199,0x0C7 ,0,1,True),
     ItemName.FlareForce: 				ItemData(0x1300FE,  1,200,0x0C8 ,0,1,True),
     ItemName.DonaldMPRage: 				ItemData(0x1300FF,  3,412,0x19C ,0,1,True),
@@ -332,7 +332,7 @@ DonaldAbility_Table = {
     ItemName.DonaldAutoHealing: 		ItemData(0x130108,  1,420,0x1A4 ,0,1,True),
     #find these using cheat engine
     ItemName.DonaldMPHastega: 			ItemData(0x130109,  2,422,0x1A6 ,0,1,True),
-    ItemName.DonaldItemBoost: 			ItemData(0x13010A,  1,411,0x819B ,0,1,True),
+    ItemName.DonaldItemBoost: 			ItemData(0x13010A,  1,411,0x111 ,0,1,True),
     ItemName.DonaldDamageControl: 		ItemData(0x13010B,  2,542,0x21E ,0,1,True),
     ItemName.DonaldDraw: 				ItemData(0x13010C,  1,405,0x195 ,0,1,True),
 }#32                                                                    

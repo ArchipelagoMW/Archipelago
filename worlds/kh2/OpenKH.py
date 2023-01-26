@@ -68,7 +68,6 @@ def patch_kh2(self, output_directory):
             itemcode = item_dictionary_table[location.item.name].kh2id
         else:
             #filling in lists for how to check if a chest is opened
-            self.kh2multiworld_locations.append(location.name)
             itemcode = 461
 
         if data.yml=="Chest":
