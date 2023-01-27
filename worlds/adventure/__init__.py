@@ -150,18 +150,19 @@ class AdventureWorld(World):
             # rom_bytearray[0x007FC0:0x007FC0 + 21] = self.rom_name
             # rom_bytearray[0x014308:0x014308 + 1] = self.capsule_starting_level.value.to_bytes(1, "little")
             # TODO - Place local items (traditional mode) and drained items (inactive mode) in correct locations
-            # TODO - Place non-local items in room 0 offscreen?  Not sure if that actually would work
-            # TODO - Might have to place them in some other dummy room - somewhere the player and bat can't reach
-            # TODO - but also isn't visible in the start screen
             # This places the local items (I still need to make it easy to inject the offset data)
             unplaced_local_items = item_table.copy()
             for location in self.multiworld.get_locations(self.player):
                 if location.item.player == self.player and \
+                        location.item.name == "nothing":
+                    location_data = location_table[location.name]
+                    auto_collect_locations.append(AdventureAutoCollectLocation(location_data.short_location_id,
+                                                                               location_data.room_id))
+                elif location.item.player == self.player and \
                         location.item.name != "nothing" and \
                         location.item.code is not None:
                     static_item = static_item_data_location + \
                                   item_table[location.item.name].table_index * static_item_element_size
-                    print("placing item: " + location.item.name + " " + hex(static_item) + " " + location.name)
                     item_ram_address = rom_bytearray[static_item]
                     item_position_data_start = item_position_table + item_ram_address - items_ram_start
                     location_data = location_table[location.name]
@@ -177,7 +178,6 @@ class AdventureWorld(World):
                         room_y.to_bytes(1, "little")
                 elif location.item.player != self.player and location.item.code is not None:
                     if location.item.code != nothing_item_id:
-                        print("placing foreign item " + location.item.name + " " + location.name)
                         location_data = location_table[location.name]
                         foreign_item_locations.append(location_data)
                     else:
@@ -188,7 +188,6 @@ class AdventureWorld(World):
             for unplaced_item_name, unplaced_item in unplaced_local_items.items():
                 static_item = static_item_data_location + \
                               unplaced_item.table_index * static_item_element_size
-                print("clearing item: " + unplaced_item_name + " " + hex(static_item))
                 item_ram_address = rom_bytearray[static_item]
                 item_position_data_start = item_position_table + item_ram_address - items_ram_start
                 rom_bytearray[item_position_data_start:item_position_data_start + 1] = 0xff.to_bytes(1, "little")

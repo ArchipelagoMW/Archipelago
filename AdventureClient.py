@@ -94,7 +94,7 @@ class AdventureContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
             self.locations_array = None
-            if 'death_link' in args['slot_data'] and args['slot_data']['death_link']:
+            if Utils.get_options()["adventure_options"].get("death_link", False):
                 self.set_deathlink = True
         elif cmd == "RoomInfo":
             self.seed_name = args['seed_name']
@@ -174,6 +174,7 @@ def send_ap_foreign_items(adventure_context):
         foreign_item_json_list.append(fi.get_dict())
     for fi in adventure_context.autocollect_items:
         autocollect_item_json_list.append(fi.get_dict())
+        print (fi.get_dict())
     payload = json.dumps(
         {
             "foreign_items": foreign_item_json_list,
@@ -253,8 +254,16 @@ async def atari_sync_task(ctx: AdventureContext):
                                 and not error_status and ctx.auth:
                             # Not just a keep alive ping, parse
                             async_start(parse_locations(data_decoded['locations'], ctx))
-                        if 'deathLink' in data_decoded and data_decoded['deathLink'] and 'DeathLink' in ctx.tags:
-                            await ctx.send_death(ctx.auth + " has been eaten by " + data_decoded['deathLink'])
+                        if 'deathLink' in data_decoded and data_decoded['deathLink'] > 0 and 'DeathLink' in ctx.tags:
+                            dragonName = "a dragon"
+                            if data_decoded['deathLink'] == 1:
+                                dragonName = "Rhindle"
+                            elif data_decoded['deathLink'] == 2:
+                                dragonName = "Yorgle"
+                            elif data_decoded['deathLink'] == 3:
+                                dragonName = "Grundle"
+                            print (ctx.auth + " has been eaten by " + dragonName )
+                            await ctx.send_death(ctx.auth + " has been eaten by " + dragonName)
                             # TODO - also if player reincarnates with a dragon onscreen ' dies to avoid being eaten by '
                         if 'victory' in data_decoded and not ctx.finished_game:
                             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])

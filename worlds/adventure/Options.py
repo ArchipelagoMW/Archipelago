@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Dict
 
-from Options import Choice, Option, DefaultOnToggle
+from Options import Choice, Option, DefaultOnToggle, DeathLink
 
 
 class ItemRandoType(Choice):
@@ -76,5 +76,7 @@ adventure_option_definitions: Dict[str, type(Option)] = {
     "item_rando_type": ItemRandoType,
     "dragon_slay_check": DragonSlayCheck,
     "trap_bat_check": TrapBatCheck,
+    "death_link": DeathLink,
     "bat_logic": BatLogic
+
 }

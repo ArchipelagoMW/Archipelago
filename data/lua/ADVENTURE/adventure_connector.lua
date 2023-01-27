@@ -22,6 +22,8 @@ local carryAddress = 0x9D
 local last_carry_item = 0xAB
 local frames_with_no_item = 0
 
+
+
 local nullObjectId = 0xAB
 local ItemsReceived = nil
 local sha256hash = nil
@@ -42,7 +44,9 @@ local next_inventory_item = nil
 local input_button_address = 0xD7
 
 local deathlink_rec = nil
-local deathlink_send = false
+local deathlink_send = 0
+
+local deathlink_sent = false
 
 local prevstate = ""
 local curstate =  STATE_UNINITIALIZED
@@ -115,24 +119,22 @@ function processBlock(block)
    local autocollectItems = block["autocollect_items"]
    if autocollectItems ~= nil then
         block_identified = 1
-        print("got autocollect items block")
         autocollect_items = {}
-        for _, acitem in ipairs(autocollectItems) do
+        for _, acitem in pairs(autocollectItems) do
             if autocollect_items[acitem.room_id] == nil then
                 autocollect_items[acitem.room_id] = {}
             end
             table.insert(autocollect_items[acitem.room_id], acitem)
+            print("room: "..tostring(acitem.room_id).." location: "..tostring(acitem.short_location_id))
         end
    end
    local checkedLocationsBlock = block["checked_locations"]
    if checkedLocationsBlock ~= nil then
         block_identified = 1
-        print "Received checked locations"
         for room_id, foreign_item_list in pairs(foreign_items_by_room) do
             for i, foreign_item in pairs(foreign_item_list) do
                 short_id = foreign_item.short_location_id
                 for j, checked_id in pairs(checkedLocationsBlock) do
-                    print(tostring(checked_id).." ==? "..tostring(short_id))
                     if checked_id == short_id then
                         table.remove(foreign_item_list, i)
                     end
@@ -141,7 +143,7 @@ function processBlock(block)
             end
         end
    end
-   deathlink_rec = block["deathlink"]
+   deathlink_rec = deathlink_rec or block["deathlink"]
    if( block_identified == 0 ) then
       print("unidentified block")
       print(block)
@@ -227,8 +229,15 @@ function receive()
     if (u8(WinAddr) ~= 0x00) then
         retTable["victory"] = 1
     end
-    retTable["deathLink"] = deathlink_send
-    deathlink_send = false
+    if( deathlink_sent or deathlink_send == 0 ) then
+        retTable["deathLink"] = 0
+    else
+        print("Sending deathlink "..tostring(deathlink_send))
+        retTable["deathLink"] = deathlink_send
+        deathlink_sent = true
+    end
+    deathlink_send = 0
+
     msg = json.encode(retTable).."\n"
     local ret, error = atariSocket:send(msg)
     if ret == nil then
@@ -246,7 +255,6 @@ function AutocollectFromRoom()
         for _, item in pairs(autocollect_items[prev_player_room]) do
             pending_foreign_items_collected[item.short_location_id] = item
         end
-        table.remove(autocollect_items, prev_player_room)
     end
 end
 
@@ -329,12 +337,28 @@ function main()
             if (frame % 5 == 0) then
                 receive()
                 if alive_mode() then
-                    --if deathlink_rec == true then
-                    --    wU8(APDeathLinkAddress, 1)
-                    --elseif u8(APDeathLinkAddress) == 3 then
-                    --    wU8(APDeathLinkAddress, 0)
-                    --    deathlink_send = true
-                    --end
+                    local is_dead = 0
+                    for index, dragonStateAddr in pairs(DragonState) do
+                        local dragonstateval = memory.read_u8(dragonStateAddr, "System Bus")
+                        if ( dragonstateval == 2) then
+                            is_dead = index
+                        end
+                    end
+                    if deathlink_rec == true and is_dead == 0 then
+                        print("setting dead from deathlink")
+                        deathlink_rec = false
+                        deathlink_sent = true
+                        is_dead = 1
+                        memory.write_u8(carryAddress, nullObjectId, "System Bus")
+                        memory.write_u8(DragonState[1], 2, "System Bus")
+                    end
+                    if (is_dead > 0 and deathlink_send == 0 and not deathlink_sent) then
+                        deathlink_send = is_dead
+                        print("setting deathlink_send to "..tostring(is_dead))
+                    elseif (is_dead == 0) then
+                        deathlink_send = 0
+                        deathlink_sent = false
+                    end
                     if ItemsReceived ~= nil and ItemsReceived[ItemIndex + 1] ~= nil then
                         local static_id = ItemsReceived[ItemIndex + 1]
                         inventory[static_id] = 1
