@@ -12,7 +12,6 @@ from itertools import chain
 from typing import Dict, Tuple, Callable, Any, Union
 
 import ModuleUpdate
-import worlds.AutoWorld
 
 ModuleUpdate.update()
 
