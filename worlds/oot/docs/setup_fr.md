@@ -60,340 +60,340 @@ le dossier "Lecteurs".
 ``` yaml
 description: Modèle par défaut d'Ocarina of Time # Utilisé pour décrire votre yaml. Utile si vous avez plusieurs fichiers
 # Votre nom dans le jeu. Les espaces seront remplacés par des traits de soulignement et il y a une limite de 16 caractères
-nom : VotreNom
-Jeu:
-   Ocarina du temps : 1
-a besoin:
-   version: 0.1.7 # Version d'Archipelago requise pour que ce yaml fonctionne comme prévu.
+name: VotreNom
+game:
+  Ocarina of Time: 1
+requires:
+  version: 0.1.7 # Version d'Archipelago requise pour que ce yaml fonctionne comme prévu.
 # Options partagées prises en charge par tous les jeux :
-accessibilité:
-   articles : 0 # Garantit que vous pourrez acquérir tous les articles, mais vous ne pourrez peut-être pas accéder à tous les emplacements
-   emplacements : 50 # Garantit que vous pourrez accéder à tous les emplacements, et donc à tous les articles
-   none : 0 # Garantit seulement que le jeu est battable. Vous ne pourrez peut-être pas accéder à tous les emplacements ou acquérir tous les objets
-progression_balancing : # Un système pour réduire le BK, comme dans les périodes où vous ne pouvez rien faire, en déplaçant vos éléments dans une sphère d'accès antérieure
-   0: 0 # Choisissez un nombre inférieur si cela ne vous dérange pas d'avoir un multimonde plus long, ou si vous pouvez casser des problèmes / séquences autour d'éléments manquants.
-   25 : 0
-   50 : 50 # Faites en sorte que vous ayez probablement des choses à faire.
-   99 : 0 # Obtenez les éléments importants tôt et restez en tête de la progression.
-Ocarina du temps :
-   logic_rules : # définit la logique utilisée pour le générateur.
-     sans pépin : 50
-     bug : 0
-     aucune_logique : 0
-   logic_no_night_tokens_without_suns_song : # Les skulltulas nocturnes nécessiteront logiquement le Chant du soleil.
-     faux : 50
-     vrai : 0
-   open_forest : # Définissez le sl'état de la forêt de Kokiri et le chemin vers l'arbre Mojo.
-     ouvert : 50
-     fermé_deku : 0
-     fermé : 0
-   open_kakariko : # Définit l'état de la porte du village de Kakariko.
-     ouvert : 50
-     Zelda : 0
-     fermé : 0
-   open_door_of_time : # Ouvre la Porte du Temps par défaut, sans le Chant du Temps.
-     faux : 0
-     vrai : 50
-   zora_fountain : # Définit l'état du roi Zora, bloquant le chemin vers la fontaine de Zora.
-     ouvert : 0
-     adulte : 0
-     fermé : 50
-   gerudo_fortress : # Définir les conditions d'accès à la forteresse Gerudo.
-     normale : 0
-     rapide : 50
-     ouvert : 0
-   bridge : # Définissez les exigences pour le pont arc-en-ciel.
-     ouvert : 0
-     vanille : 0
-     pierres: 0
-     médaillons : 50
-     donjons : 0
-     jetons : 0
-   épreuves : # Définissez le nombre d'épreuves requises dans le Château de Ganon.
+accessibility:
+  items: 0 # Garantit que vous pourrez acquérir tous les articles, mais vous ne pourrez peut-être pas accéder à tous les emplacements
+  locations: 50 # Garantit que vous pourrez accéder à tous les emplacements, et donc à tous les articles
+  none: 0 # Garantit seulement que le jeu est battable. Vous ne pourrez peut-être pas accéder à tous les emplacements ou acquérir tous les objets
+progression_balancing: # Un système pour réduire le BK, comme dans les périodes où vous ne pouvez rien faire, en déplaçant vos éléments dans une sphère d'accès antérieure
+  0: 0 # Choisissez un nombre inférieur si cela ne vous dérange pas d'avoir un multimonde plus long, ou si vous pouvez casser des problèmes / séquences autour d'éléments manquants.
+  25: 0
+  50: 50 # Faites en sorte que vous ayez probablement des choses à faire.
+  99: 0 # Obtenez les éléments importants tôt et restez en tête de la progression.
+Ocarina of Time:
+  logic_rules: # définit la logique utilisée pour le générateur.
+    glitchless: 50
+    glitched: 0
+    no_logic: 0
+  logic_no_night_tokens_without_suns_song: # Les skulltulas nocturnes nécessiteront logiquement le Chant du soleil.
+    false: 50
+    treu: 0
+  open_forest: # Définissez le sl'état de la forêt de Kokiri et le chemin vers l'arbre Mojo.
+    open: 50
+    closed_deku: 0
+    closed: 0
+  open_kakariko: # Définit l'état de la porte du village de Kakariko.
+    open: 50
+    zelda: 0
+    closed: 0
+  open_door_of_time: # Ouvre la Porte du Temps par défaut, sans le Chant du Temps.
+    false: 0
+    true: 50
+  zora_fountain: # Définit l'état du roi Zora, bloquant le chemin vers la fontaine de Zora.
+    open: 0
+    adult: 0
+    closed: 50
+  gerudo_fortress: # Définir les conditions d'accès à la forteresse Gerudo.
+    normal: 0
+    fast: 50
+    open: 0
+  bridge: # Définissez les exigences pour le pont arc-en-ciel.
+    open: 0
+    vanilla: 0
+    stones: 0
+    medallions: 50
+    dungeons: 0
+    tokens: 0
+  trials: # Définissez le nombre d'épreuves requises dans le Château de Ganon.
+    # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
+    0: 50 # valeur minimale
+    6: 0 # valeur maximale
+    random: 0
+    random-low: 0
+    random-higt: 0
+  starting_age: # Choisissez l'âge auquel Link commencera.
+    child: 50
+    adult: 0
+  triforce_hunt: # Rassemblez des morceaux de la Triforce dispersés dans le monde entier pour terminer le jeu.
+    false: 50
+    true: 0
+  triforce_goal: # Nombre de pièces Triforce nécessaires pour terminer le jeu. Nombre total placé déterminé par le paramètre Item Pool.
+    # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
+    1: 0 # valeur minimale
+    50: 0 # valeur maximale
+    random: 0
+    random-low: 0
+    random-higt: 0
+    20: 50
+  bombchus_in_logic: # Les Bombchus sont correctement pris en compte dans la logique. Le premier pack trouvé aura 20 chus ; Kokiri Shop et Bazaar vendent des recharges ; bombchus ouvre Bombchu Bowling.
+    false: 50
+    true: 0
+  bridge_stones: # Définissez le nombre de pierres spirituelles requises pour le pont arc-en-ciel.
+    # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
+    0: 0 # valeur minimale
+    3: 50 # valeur maximale
+    random: 0
+    random-low: 0
+    random-high: 0
+  bridge_medallions: # Définissez le nombre de médaillons requis pour le pont arc-en-ciel.
+    # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
+    0: 0 # valeur minimale
+    6: 50 # valeur maximale
+    random: 0
+    random-low: 0
+    random-high: 0
+  bridge_rewards: # Définissez le nombre de récompenses de donjon requises pour le pont arc-en-ciel.
+    # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
+    0: 0 # valeur minimale
+    9: 50 # valeur maximale
+    random: 0
+    random-low: 0
+    random-high: 0
+  bridge_tokens: # Définissez le nombre de jetons Gold Skulltula requis pour le pont arc-en-ciel.
+    # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
+    0: 0 # valeur minimale
+    100: 50 # valeur maximale
+    random: 0
+    random-low: 0
+    random-high: 0
+  shuffle_mapcompass: # Contrôle où mélanger les cartes et boussoles des donjons.
+    remove: 0
+    startwith: 50
+    vanilla: 0
+    dungeon: 0
+    overworld: 0
+    any_dungeon: 0
+    keysanity: 0
+  shuffle_smallkeys: # Contrôle où mélanger les petites clés de donjon.
+    remove: 0
+    vanilla: 0
+    dungeon: 50
+    overworld: 0
+    any_dungeon: 0
+    keysanity: 0
+  shuffle_hideoutkeys: # Contrôle où mélanger les petites clés de la Forteresse Gerudo.
+    vanilla: 50
+    overworld: 0
+    any_dungeon: 0
+    keysanity: 0
+  shuffle_bosskeys: # Contrôle où mélanger les clés du boss, à l'exception de la clé du boss du château de Ganon.
+    remove: 0
+    vanilla: 0
+    dungeon: 50
+    overworld: 0
+    any_dungeon: 0
+    keysanity: 0
+  shuffle_ganon_bosskey: # Contrôlez où mélanger la clé du patron du château de Ganon.
+    remove: 50
+    vanilla: 0
+    dungeon: 0
+    overworld: 0
+    any_dungeon: 0
+    keysanity: 0
+    on_lacs: 0
+  enhance_map_compass: # La carte indique si un donjon est vanille ou MQ. La boussole indique quelle est la récompense du donjon.
+    false: 50
+    true: 0
+  lacs_condition: # Définissez les exigences pour la cinématique de la Flèche lumineuse dans le Temple du temps.
+    vanilla: 50
+    stones: 0
+    medallions: 0
+    dungeons: 0
+    tokens: 0
+  lacs_stones: # Définissez le nombre de pierres spirituelles requises pour le LACS.
      # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
-     0 : 50 # valeur minimale
-     6 : 0 # valeur maximale
-     aléatoire : 0
-     aléatoire-bas : 0
-     aléatoire-élevé : 0
-   starting_age : # Choisissez l'âge auquel Link commencera.
-     enfant : 50
-     adulte : 0
-   triforce_hunt : # Rassemblez des morceaux de la Triforce dispersés dans le monde entier pour terminer le jeu.
-     faux : 50
-     vrai : 0
-   triforce_goal : # Nombre de pièces Triforce nécessaires pour terminer le jeu. Nombre total placé déterminé par le paramètre Item Pool.
+     0: 0 # valeur minimale
+     3: 50 # valeur maximale
+    random: 0
+    random-low: 0
+    random-high: 0
+  lacs_medallions: # Définissez le nombre de médaillons requis pour LACS.
+    # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
+    0: 0 # valeur minimale
+    6: 50 # valeur maximale
+    random: 0
+    random-low: 0
+    random-high: 0
+  lacs_rewards: # Définissez le nombre de récompenses de donjon requises pour LACS.
+    # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
+    0: 0 # valeur minimale
+    9: 50 # valeur maximale
+    random: 0
+    random-low: 0
+    random-high: 0
+  lacs_tokens: # Définissez le nombre de jetons Gold Skulltula requis pour le LACS.
      # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
-     1 : 0 # valeur minimale
-     50 : 0 # valeur maximale
-     aléatoire : 0
-     aléatoire-bas : 0
-     aléatoire-élevé : 0
-     20h50
-   bombchus_in_logic : # Les Bombchus sont correctement pris en compte dans la logique. Le premier pack trouvé aura 20 chus ; Kokiri Shop et Bazaar vendent des recharges ; bombchus ouvre Bombchu Bowling.
-     faux : 50
-     vrai : 0
-   bridge_stones : # Définissez le nombre de pierres spirituelles requises pour le pont arc-en-ciel.
-     # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
-     0 : 0 # valeur minimale
-     3 : 50 # valeur maximale
-     aléatoire : 0
-     aléatoire-bas : 0
-     aléatoire-élevé : 0
-   bridge_medallions : # Définissez le nombre de médaillons requis pour le pont arc-en-ciel.
-     # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
-     0 : 0 # valeur minimale
-     6 : 50 # valeur maximale
-     aléatoire : 0
-     aléatoire-bas : 0
-     aléatoire-élevé : 0
-   bridge_rewards : # Définissez le nombre de récompenses de donjon requises pour le pont arc-en-ciel.
-     # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
-     0 : 0 # valeur minimale
-     9 : 50 # valeur maximale
-     aléatoire : 0
-     aléatoire-bas : 0
-     aléatoire-élevé : 0
-   bridge_tokens : # Définissez le nombre de jetons Gold Skulltula requis pour le pont arc-en-ciel.
-     # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
-     0 : 0 # valeur minimale
-     100 : 50 # valeur maximale
-     aléatoire : 0
-     aléatoire-bas : 0
-     aléatoire-élevé : 0
-   shuffle_mapcompass : # Contrôle où mélanger les cartes et boussoles des donjons.
-     supprimer : 0
-     au départ : 50
-     vanille : 0
-     donjon : 0
-     surmonde : 0
-     n'importe quel_donjon : 0
-     keysanity : 0
-   shuffle_smallkeys : # Contrôle où mélanger les petites clés de donjon.
-     supprimer : 0
-     vanille : 0
-     donjon : 50
-     surmonde : 0
-     n'importe quel_donjon : 0
-     keysanity : 0
-   shuffle_hideoutkeys : # Contrôle où mélanger les petites clés de la Forteresse Gerudo.
-     vanille : 50
-     surmonde : 0
-     n'importe quel_donjon : 0
-     keysanity : 0
-   shuffle_bosskeys : # Contrôle où mélanger les clés du boss, à l'exception de la clé du boss du château de Ganon.
-     supprimer : 0
-     vanille : 0
-     donjon : 50
-     surmonde : 0
-     n'importe quel_donjon : 0
-     keysanity : 0
-   shuffle_ganon_bosskey : # Contrôlez où mélanger la clé du patron du château de Ganon.
-     supprimer : 50
-     vanille : 0
-     donjon : 0
-     surmonde : 0
-     n'importe quel_donjon : 0
-     keysanity : 0
-     on_lacs : 0
-   enhance_map_compass : # La carte indique si un donjon est vanille ou MQ. La boussole indique quelle est la récompense du donjon.
-     faux : 50
-     vrai : 0
-   lacs_condition : # Définissez les exigences pour la cinématique de la Flèche lumineuse dans le Temple du temps.
-     vanille : 50
-     pierres: 0
-     médaillons : 0
-     donjons : 0
-     jetons : 0
-   lacs_stones : # Définissez le nombre de pierres spirituelles requises pour le LACS.
-     # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
-     0 : 0 # valeur minimale
-     3 : 50 # valeur maximale
-     aléatoire : 0
-     aléatoire-bas : 0
-     aléatoire-élevé : 0
-   lacs_medallions : # Définissez le nombre de médaillons requis pour LACS.
-     # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
-     0 : 0 # valeur minimale
-     6 : 50 # valeur maximale
-     aléatoire : 0
-     aléatoire-bas : 0
-     aléatoire-élevé : 0
-   lacs_rewards : # Définissez le nombre de récompenses de donjon requises pour LACS.
-     # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
-     0 : 0 # valeur minimale
-     9 : 50 # valeur maximale
-     aléatoire : 0
-     aléatoire-bas : 0
-     aléatoire-élevé : 0
-   lacs_tokens : # Définissez le nombre de jetons Gold Skulltula requis pour le LACS.
-     # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
-     0 : 0 # valeur minimale
-     100 : 50 # valeur maximale
-     aléatoire : 0
-     aléatoire-bas : 0
-     aléatoire-élevé : 0
-   shuffle_song_items : # Définir où les chansons peuvent apparaître.
-     chanson : 50
-     donjon : 0
-     n'importe lequel : 0
-   shopsanity : # Randomise le contenu de la boutique. Réglez sur "off" pour ne pas mélanger les magasins ; "0" mélange les magasins mais ne n'autorise pas les articles multimonde dans les magasins.
-     0 : 0
-     dix
-     2 : 0
-     3 : 0
-     4 : 0
-     valeur_aléatoire : 0
-     éteint : 50
-   tokensanity : # les récompenses en jetons des Skulltulas dorées sont mélangées dans la réserve.
-     éteint : 50
-     donjons : 0
-     surmonde : 0
-     tout : 0
-   shuffle_scrubs : # Mélangez les articles vendus par Business Scrubs et fixez les prix.
-     éteint : 50
-     faible : 0
-     régulier : 0
-     prix_aléatoire : 0
-   shuffle_cows : # les vaches donnent des objets lorsque la chanson d'Epona est jouée.
-     faux : 50
-     vrai : 0
-   shuffle_kokiri_sword : # Mélangez l'épée Kokiri dans la réserve d'objets.
-     faux : 50
-     vrai : 0
-   shuffle_ocarinas : # Mélangez l'Ocarina des fées et l'Ocarina du temps dans la réserve d'objets.
-     faux : 50
-     vrai : 0
-   shuffle_weird_egg : # Mélangez l'œuf bizarre de Malon au château d'Hyrule.
-     faux : 50
-     vrai : 0
-   shuffle_gerudo_card : # Mélangez la carte de membre Gerudo dans la réserve d'objets.
-     faux : 50
-     vrai : 0
-   shuffle_beans : # Ajoute un paquet de 10 haricots au pool d'objets et change le vendeur de haricots pour qu'il vende un objet pour 60 roupies.
-     faux : 50
-     vrai : 0
-   shuffle_medigoron_carpet_salesman : # Mélangez les objets vendus par Medigoron et le vendeur de tapis Haunted Wasteland.
-     faux : 50
-     vrai : 0
-   skip_child_zelda : # le jeu commence avec la lettre de Zelda, l'objet de la berceuse de Zelda et les événements pertinents déjà terminés.
-     faux : 50
-     vrai : 0
-   no_escape_sequence : # Ignore la séquence d'effondrement de la tour entre les combats de Ganondorf et de Ganon.
-     faux : 0
-     vrai : 50
-   no_guard_stealth : # Le vide sanitaire du château d'Hyrule passe directement à Zelda.
-     faux : 0
-     vrai : 50
-   no_epona_race: # Epona peut toujours être invoquée avec Epona's Song.
-     faux : 0
-     vrai : 50
-   skip_some_minigame_phases: # Dampe Race et Horseback Archery donnent les deux récompenses si la deuxième condition est remplie lors de la première tentative.
-     faux : 0
-     vrai : 50
-   complete_mask_quest : # Tous les masques sont immédiatement disponibles à l'emprunt dans la boutique Happy Mask.
-     faux : 50
-     vrai : 0
-   utiles_cutscenes : # Réactive la cinématique Poe dans le Temple de la forêt, Darunia dans le Temple du feu et l'introduction de Twinrova. Surtout utile pour les pépins.
-     faux : 50
-     vrai : 0
-   fast_chests : # Toutes les animations des coffres sont rapides. Si désactivé, les éléments principaux ont une animation lente.
-     faux : 0
-     vrai : 50
-   free_scarecrow : # Sortir l'ocarina près d'un point d'épouvantail fait apparaître Pierre sans avoir besoin de la chanson.
-     faux : 50
-     vrai : 0
-   fast_bunny_hood: # Bunny Hood vous permet de vous déplacer 1,5 fois plus vite comme dans Majora's Mask.
-     faux : 50
-     vrai : 0
-   chicken_count : # Contrôle le nombre de Cuccos pour qu'Anju donne un objet en tant qu'enfant.
-     \# vous pouvez ajouter des valeurs supplémentaires entre le minimum et le maximum
-     0 : 0 # valeur minimale
-     7 : 50 # valeur maximale
-     aléatoire : 0
-     aléatoire-bas : 0
-     aléatoire-élevé : 0
-   indices : # les pierres à potins peuvent donner des indices sur l'emplacement des objets.
-     aucun : 0
-     masque : 0
-     agonie: 0
-     toujours : 50
-   hint_dist : # Choisissez la distribution d'astuces à utiliser. Affecte la fréquence des indices forts, quels éléments sont toujours indiqués, etc.
-     équilibré : 50
-     DDR : 0
-     ligue : 0
-     mw2 : 0
-     gommages: 0
-     fort : 0
-     tournoi : 0
-     inutile : 0
-     très_fort : 0
-   text_shuffle : # Randomise le texte dans le jeu pour un effet comique.
-     aucun : 50
-     except_hints : 0
-     complet : 0
-   damage_multiplier : # contrôle la quantité de dégâts subis par Link.
-     moitié : 0
-     normal : 50
-     doublé : 0
-     quadrupler : 0
-     Ohko : 0
-   no_collectible_hearts : # les cœurs ne tomberont pas des ennemis ou des objets.
-     faux : 50
-     vrai : 0
-   starting_tod : # Changer l'heure de début de la journée.
-     par défaut : 50
-     lever du soleil : 0
-     matin : 0
-     midi : 0
-     après-midi : 0
-     coucher de soleil : 0
-     soir : 0
-     minuit : 0
-     heure_sorcière : 0
-   start_with_consumables : # Démarrez le jeu avec des Deku Sticks et des Deku Nuts pleins.
-     faux : 50
-     vrai : 0
-   start_with_rupees : # Commencez avec un portefeuille plein. Les mises à niveau de portefeuille rempliront également votre portefeuille.
-     faux : 50
-     vrai : 0
-   item_pool_value : # modifie le nombre d'objets disponibles dans le jeu.
-     copieux : 0
-     équilibré : 50
-     rare: 0
-     minime : 0
-   junk_ice_traps : # Ajoute des pièges à glace au pool d'objets.
-     éteint : 0
-     normal : 50
-     sur : 0
-     chaos : 0
-     assaut : 0
-   ice_trap_appearance : # modifie l'apparence des pièges à glace en tant qu'éléments autonomes.
-     majeur_seulement : 50
-     indésirable_seulement : 0
-     n'importe quoi : 0
-   logic_earliest_adult_trade : # premier élément pouvant apparaître dans la séquence d'échange pour adultes.
-     pocket_egg : 0
-     pocket_cucco : 0
-     cojiro: 0
-     odd_mushroom : 0
-     braconniers_scie : 0
-     épée_brisée : 0
-     ordonnance : 50
-     eyeball_frog : 0
-     collyre : 0
-     réclamation_vérification : 0
-   logic_latest_adult_trade : # Dernier élément pouvant apparaître dans la séquence d'échange pour adultes.
-     pocket_egg : 0
-     pocket_cucco : 0
-     cojiro: 0
-     odd_mushroom : 0
-     braconniers_scie : 0
-     épée_brisée : 0
-     prescription: 0
-     eyeball_frog : 0
-     collyre : 0
-     réclamation_vérification : 50
+     0: 0 # valeur minimale
+     100: 50 # valeur maximale
+    random: 0
+    random-low: 0
+    random-high: 0
+  shuffle_song_items: # Définir où les chansons peuvent apparaître.
+    song: 50
+    dungeon: 0
+    any: 0
+  shopsanity: # Randomise le contenu de la boutique. Réglez sur "off" pour ne pas mélanger les magasins ; "0" mélange les magasins mais ne n'autorise pas les articles multimonde dans les magasins.
+    0: 0
+    1: 0
+    2: 0
+    3: 0
+    4: 0
+    random_value: 0
+    off: 50
+  tokensanity : # les récompenses en jetons des Skulltulas dorées sont mélangées dans la réserve.
+    off: 50
+    dungeons: 0
+    overworld: 0
+    all: 0
+  shuffle_scrubs: # Mélangez les articles vendus par Business Scrubs et fixez les prix.
+    off: 50
+    low: 0
+    regular: 0
+    random_prices: 0
+  shuffle_cows: # les vaches donnent des objets lorsque la chanson d'Epona est jouée.
+    false: 50
+    true: 0
+  shuffle_kokiri_sword: # Mélangez l'épée Kokiri dans la réserve d'objets.
+    false: 50
+    true: 0
+  shuffle_ocarinas: # Mélangez l'Ocarina des fées et l'Ocarina du temps dans la réserve d'objets.
+    false: 50
+    true: 0
+  shuffle_weird_egg: # Mélangez l'œuf bizarre de Malon au château d'Hyrule.
+    false: 50
+    true: 0
+  shuffle_gerudo_card: # Mélangez la carte de membre Gerudo dans la réserve d'objets.
+    false: 50
+    true: 0
+  shuffle_beans: # Ajoute un paquet de 10 haricots au pool d'objets et change le vendeur de haricots pour qu'il vende un objet pour 60 roupies.
+    false: 50
+    true: 0
+  shuffle_medigoron_carpet_salesman: # Mélangez les objets vendus par Medigoron et le vendeur de tapis Haunted Wasteland.
+    false: 50
+    true: 0
+  skip_child_zelda: # le jeu commence avec la lettre de Zelda, l'objet de la berceuse de Zelda et les événements pertinents déjà terminés.
+    false: 50
+    true: 0
+  no_escape_sequence: # Ignore la séquence d'effondrement de la tour entre les combats de Ganondorf et de Ganon.
+    false: 50
+    true: 0
+  no_guard_stealth: # Le vide sanitaire du château d'Hyrule passe directement à Zelda.
+    false: 50
+    true: 0
+  no_epona_race: # Epona peut toujours être invoquée avec Epona's Song.
+    false: 50
+    true: 0
+  skip_some_minigame_phases: # Dampe Race et Horseback Archery donnent les deux récompenses si la deuxième condition est remplie lors de la première tentative.
+    false: 50
+    true: 0
+   complete_mask_quest: # Tous les masques sont immédiatement disponibles à l'emprunt dans la boutique Happy Mask.
+    false: 50
+    true: 0
+  useful_cutscenes: # Réactive la cinématique Poe dans le Temple de la forêt, Darunia dans le Temple du feu et l'introduction de Twinrova. Surtout utile pour les pépins.
+    false: 50
+    true: 0
+  fast_chests: # Toutes les animations des coffres sont rapides. Si désactivé, les éléments principaux ont une animation lente.
+    false: 50
+    true: 0
+  free_scarecrow: # Sortir l'ocarina près d'un point d'épouvantail fait apparaître Pierre sans avoir besoin de la chanson.
+    false: 50
+    true: 0
+  fast_bunny_hood: # Bunny Hood vous permet de vous déplacer 1,5 fois plus vite comme dans Majora's Mask.
+    false: 50
+    true: 0
+  chicken_count: # Contrôle le nombre de Cuccos pour qu'Anju donne un objet en tant qu'enfant.
+    \# vous pouvez ajouter des valeurs supplémentaires entre le minimum et le maximum
+    0: 0 # valeur minimale
+    7: 50 # valeur maximale
+    random: 0
+    random-low: 0
+    random-high: 0
+  hints: # les pierres à potins peuvent donner des indices sur l'emplacement des objets.
+    none: 0
+    mask: 0
+    agony: 0
+    always: 50
+  hint_dist: # Choisissez la distribution d'astuces à utiliser. Affecte la fréquence des indices forts, quels éléments sont toujours indiqués, etc.
+    balanced: 50
+    ddr: 0
+    league: 0
+    mw2: 0
+    scrubs: 0
+    strong: 0
+    tournament: 0
+    useless: 0
+    very_strong: 0
+  text_shuffle: # Randomise le texte dans le jeu pour un effet comique.
+    none: 50
+    except_hints: 0
+    complete: 0
+  damage_multiplier: # contrôle la quantité de dégâts subis par Link.
+    half: 0
+    normal: 50
+    double: 0
+    quadruple: 0
+    ohko: 0
+  no_collectible_hearts: # les cœurs ne tomberont pas des ennemis ou des objets.
+    false: 50
+    true: 0
+  starting_tod: # Changer l'heure de début de la journée.
+    default: 50
+    sunrise: 0
+    morning: 0
+    noon: 0
+    afternoon: 0
+    sunset: 0
+    evening: 0
+    midnight: 0
+    witching_hour: 0
+  start_with_consumables: # Démarrez le jeu avec des Deku Sticks et des Deku Nuts pleins.
+    false: 50
+    true: 0
+  start_with_rupees: # Commencez avec un portefeuille plein. Les mises à niveau de portefeuille rempliront également votre portefeuille.
+    false: 50
+    true: 0
+  item_pool_value: # modifie le nombre d'objets disponibles dans le jeu.
+    plentiful: 0
+    balanced: 50
+    scarce: 0
+    minimal: 0
+  junk_ice_traps: # Ajoute des pièges à glace au pool d'objets.
+    off: 0
+    normal: 50
+    on: 0
+    mayhem: 0
+    onslaught: 0
+  ice_trap_appearance: # modifie l'apparence des pièges à glace en tant qu'éléments autonomes.
+    major_only: 50
+    junk_only: 0
+    anything: 0
+  logic_earliest_adult_trade: # premier élément pouvant apparaître dans la séquence d'échange pour adultes.
+    pocket_egg: 0
+    pocket_cucco: 0
+    cojiro: 0
+    odd_mushroom: 0
+    poachers_saw: 0
+    broken_sword: 0
+    prescription: 50
+    eyeball_frog: 0
+    eyedrops: 0
+    claim_check: 0
+  logic_latest_adult_trade: # Dernier élément pouvant apparaître dans la séquence d'échange pour adultes.
+    pocket_egg: 0
+    pocket_cucco: 0
+    cojiro: 0
+    odd_mushroom: 0
+    poachers_saw: 0
+    broken_sword: 0
+    prescription: 0
+    eyeball_frog: 0
+    eyedrops: 0
+    claim_check: 50
 
 ```
 
