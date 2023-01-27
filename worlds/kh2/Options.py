@@ -62,11 +62,11 @@ class SummonEXP(Range):
 class Schmovement(Choice):
     """Level of Growth You Start With"""
     display_name = "Schmovement"
-    option_level0 = 0
-    option_level1 = 1
-    option_level2 = 2
-    option_level3 = 3
-    option_level4 = 4
+    option_level_0 = 0
+    option_level_1 = 1
+    option_level_2 = 2
+    option_level_3 = 3
+    option_level_4 = 4
     default = 1
 
 class RandomGrowth(Range):
@@ -96,9 +96,9 @@ class Visitlocking(Choice):
     # What is locked being on
     # if 0 then no visit locking  if 1 then second visits if 2 then first and second visits with one item
     display_name = "Visit locking"
-    option_novisitlocking = 0
-    option_secondvisitlocking = 1
-    option_firstvisitlocking = 2
+    option_no_visit_locking = 0
+    option_second_visit_locking = 1
+    option_first_visit_locking = 2
     default = 0
 
 
@@ -112,23 +112,16 @@ class LevelDepth(Choice):
     # What is locked being on
     # if 0 then no visit locking  if 1 then second visits if 2 then first and second visits with one item
     display_name = "Level Depth"
-    option_level50 = 0
-    option_level99 = 1
-    option_level99sanity=2
-    option_level50sanity=3
-    option_level1=4
+    option_level_50 = 0
+    option_level_99 = 1
+    option_level_99_sanity=2
+    option_level_50_sanity=3
+    option_level_1=4
     default = 0
 
 class Max_Logic(Toggle):
     """Forms on forms and torn pages in cor/ag"""
     display_name = "Max Logic"
-    default = True
-
-
-class Critical_Mode(Toggle):
-    #remove this and send starting checks through the client
-    """Are you playing on Critical Mode?"""
-    display_name = "Critical Mode"
     default = True
 
 
@@ -165,7 +158,6 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "Super_Bosses": SuperBosses,
     "Level_Depth": LevelDepth,
     "Max_Logic": Max_Logic,
-    "Critical_Mode": Critical_Mode,
     "Promise_Charm": Promise_Charm,
     "Keyblade_Abilities":Keyblade_Abilities,
     "BlacklistKeyblade":BlacklistKeyblade,

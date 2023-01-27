@@ -36,13 +36,9 @@ class KH2World(World):
     location_name_to_id = {item_name: data.code for item_name, data in all_locations.items() if data.code}
     totallocations=len(all_locations.items())
 
-    #multiworld locations that are checked in the client using the save anchor
-    StationOfCalling_locations= list()
      
     def _get_slot_data(self):
-        return {
-            "StationOfCalling_locations":self.StationOfCalling_locations,
-        }
+        return {}
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
@@ -152,9 +148,6 @@ class KH2World(World):
             self.totallocations -= 1 
             goofyItemPool.remove(randomAbility)
 
-        if self.multiworld.Level_Depth[self.player].value == 4:
-            ItemQuantityDict.update({ItemName.NoExperience:Items.item_dictionary_table[ItemName.NoExperience].quantity-1})
-            self.multiworld.push_precollected(self.create_item(ItemName.NoExperience))
 
 
         # Option to turn off Promise Charm Item
@@ -186,6 +179,8 @@ class KH2World(World):
         self.multiworld.get_location(LocationName.JunkMedal, self.player).place_locked_item(
             self.create_item(random.choice(fillerItems)))
         self.totallocations -= 2
+
+
         #Makeing a copy of the total growth pool
         GrowthList=list()
         for x in range(4):

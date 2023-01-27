@@ -259,7 +259,8 @@ SupportAbility_Table = {
     ItemName.MPHastega: 				ItemData(0x1300C8,  1,422, 0x1A6 ,0,1,True),
     ItemName.Defender: 				    ItemData(0x1300C9,  2,414, 0x19E ,0,1,True),
     ItemName.DamageControl: 			ItemData(0x1300CA,  2,542, 0x21E ,0,1,True),
-    ItemName.NoExperience: 				ItemData(0x1300CB,  2,404, 0x194 ,0,1,True),
+    #one plandoed into the starting invo
+    ItemName.NoExperience: 				ItemData(0x1300CB,  1,404, 0x194 ,0,1,True),
     ItemName.LightDarkness: 			ItemData(0x1300CC,  1,541, 0x21D ,0,1,True),
     #These are found on levels in vanilla               
     ItemName.MagicLock: 				ItemData(0x1300CD,  1,403, 0x193 , 0,1,True ),
@@ -367,7 +368,7 @@ GoofyAbility_Table = {
 Misc_Table = {
     ItemName.LuckyEmblem: 				ItemData(0x130125,  0,1,0x111),
     ItemName.Victory: 				    ItemData(0x130126,  1,263,0x111),
-    ItemName.ArchipelagoItem:           ItemData(0x130127,  1,461,0x111),
+    #ItemName.ArchipelagoItem:           ItemData(0x130127,  1,461,0x111),
 }   #itemname luckey emblem (0x1320172)    will be unused map
 
 exclusionItem_table = {

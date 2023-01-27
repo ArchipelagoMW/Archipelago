@@ -149,67 +149,10 @@ def patch_kh2(self, output_directory):
                 "GrowthAbilityLevel": 0,
             })
 
-        elif data.yml == "Critical":
-            self.StationOfCalling_locations.append(location.item.name)
-            #if data.charName == "Sora":
-            #    soraStartingItems.append(itemcode)
-            #elif data.charName == "Goofy":
-            #    goofyStartingItems.append(itemcode)
-            #else:
-            #    donaldStartingItems.append(itemcode)
-    #if self.multiworld.Schmovement[self.player].value == 1:
-    #    soraStartingItems += 94, 98, 564, 102, 106
+        elif data.yml == "Critical" and location.item.player==self.player:
+             self.multiworld.push_precollected(self.create_item(location.item.name))
 
-    if self.multiworld.Critical_Mode[self.player].value == 1:
-        self.formattedPlrp.append({
-            "Character": 1,  # Sora Starting Items (Crit)
-            "Id": 7,  # crit difficulty
-            "Hp": 20,
-            "Mp": 100,
-            "Ap": 50,
-            "ArmorSlotMax": 1,
-            "AccessorySlotMax": 1,
-            "ItemSlotMax": 3,
-            "Items": soraStartingItems,
-            "Padding": [0] * 52
-        })
-    else:
-        self.formattedPlrp.append({
-            "Character": 1,  # Sora Starting Items (Non Crit)
-            "Id": 0,
-            "Hp": 20,
-            "Mp": 100,
-            "Ap": 50,
-            "ArmorSlotMax": 1,
-            "AccessorySlotMax": 1,
-            "ItemSlotMax": 3,
-            "Items": soraStartingItems,
-            "Padding": [0] * 52
-        })
-    self.formattedPlrp.append({
-        "Character": 2,  # Donald Starting Items
-        "Id": 0,
-        "Hp": 20,
-        "Mp": 100,
-        "Ap": 45,
-        "ArmorSlotMax": 1,
-        "AccessorySlotMax": 2,
-        "ItemSlotMax": 2,
-        "Items": donaldStartingItems,
-        "Padding": [0] * 52
-    })
-    self.formattedPlrp.append({
-        "Character": 3,  # Goofy Starting Items
-        "Id": 0,
-        "Hp": 20,
-        "Mp": 100,
-        "Ap": 45,
-        "ArmorSlotMax": 2,
-        "AccessorySlotMax": 1,
-        "ItemSlotMax": 3,
-        "Items": goofyStartingItems,
-        "Padding": [0] * 52
-    })
+
 
     # Summons have no checks on them so done fully locally
     self.formattedFmlv["Summon"] = []
@@ -231,11 +174,6 @@ def patch_kh2(self, output_directory):
                 itemcode=item_dictionary_table[data.item.name].kh2id
             else:
                 itemcode=461
-            #    itemcode = item_dictionary_table[location.item.name].kh2id
-            #else:
-            #    #filling in lists for how to check if a chest is opened
-            #    self.kh2multiworld_locations.append(location.name)
-            #    itemcode = 461
         except:
             increaseStat(random.randint(0, 3))
             itemcode=0
@@ -265,8 +203,6 @@ def patch_kh2(self, output_directory):
         f.write(yaml.dump(self.formattedItem,line_break="\n"))
     with open(os.path.join(mod_dir, "FmlvList.yml"), "wt") as f:
         f.write(yaml.dump(self.formattedFmlv,line_break="\n"))
-    with open(os.path.join(mod_dir,"PlrpList.yml"),"wt") as f:
-        f.write(yaml.dump(self.formattedPlrp,line_break="\n"))
     with open(os.path.join(mod_dir, "archipelago.json"), "wt") as f:
         json.dump({"server": "", "player": self.player, "player_name": self.multiworld.player_name[self.player], "game": "Kingdom Hearts 2", "compatible_version": 0, "version": 0},f,indent=4)
     shutil.copytree(os.path.join(os.path.dirname(__file__), "mod_template"),mod_dir,dirs_exist_ok=True)
