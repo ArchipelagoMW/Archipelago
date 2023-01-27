@@ -174,7 +174,6 @@ def send_ap_foreign_items(adventure_context):
         foreign_item_json_list.append(fi.get_dict())
     for fi in adventure_context.autocollect_items:
         autocollect_item_json_list.append(fi.get_dict())
-        print (fi.get_dict())
     payload = json.dumps(
         {
             "foreign_items": foreign_item_json_list,

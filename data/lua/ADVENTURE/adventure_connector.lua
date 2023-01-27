@@ -125,7 +125,6 @@ function processBlock(block)
                 autocollect_items[acitem.room_id] = {}
             end
             table.insert(autocollect_items[acitem.room_id], acitem)
-            print("room: "..tostring(acitem.room_id).." location: "..tostring(acitem.short_location_id))
         end
    end
    local checkedLocationsBlock = block["checked_locations"]

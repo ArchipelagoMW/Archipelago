@@ -175,7 +175,8 @@ adventure_options:
   # Set this to false to never autostart a rom (such as after patching)
   # True for operating system default program for '.BIN'
   # Alternatively, a path to a program to open the .bin file with (generally EmuHawk for multiworld)
-  rom_start: "W:/Games/Archipelago/BizHawk/EmuHawk.exe"
+  rom_start: "EmuHawk.exe"
   # Set this to true to display messages in the emulator window
   display_msgs: true
- 
+  death_link: false
+
