@@ -393,7 +393,12 @@ class MultiWorld():
     def get_items(self) -> List[Item]:
         return [loc.item for loc in self.get_filled_locations()] + self.itempool
 
-    def find_item_locations(self, item, player: int) -> List[Location]:
+    def find_item_locations(self, item, player: int, resolve_group_locations: bool = False) -> List[Location]:
+        if resolve_group_locations:
+            player_groups = self.get_player_groups(player)
+            return [location for location in self.get_locations() if
+                    location.item and location.item.name == item and location.player not in player_groups and
+                    (location.item.player == player or location.item.player in player_groups)]
         return [location for location in self.get_locations() if
                 location.item and location.item.name == item and location.item.player == player]
 
@@ -401,7 +406,12 @@ class MultiWorld():
         return next(location for location in self.get_locations() if
                     location.item and location.item.name == item and location.item.player == player)
 
-    def find_items_in_locations(self, items: Set[str], player: int) -> List[Location]:
+    def find_items_in_locations(self, items: Set[str], player: int, resolve_group_locations: bool = False) -> List[Location]:
+        if resolve_group_locations:
+            player_groups = self.get_player_groups(player)
+            return [location for location in self.get_locations() if
+                    location.item and location.item.name in items and location.player not in player_groups and
+                    (location.item.player == player or location.item.player in player_groups)]
         return [location for location in self.get_locations() if
                 location.item and location.item.name in items and location.item.player == player]
 

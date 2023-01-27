@@ -13,13 +13,15 @@ class SMBoolManager(object):
     items = ['ETank', 'Missile', 'Super', 'PowerBomb', 'Bomb', 'Charge', 'Ice', 'HiJump', 'SpeedBooster', 'Wave', 'Spazer', 'SpringBall', 'Varia', 'Plasma', 'Grapple', 'Morph', 'Reserve', 'Gravity', 'XRayScope', 'SpaceJump', 'ScrewAttack', 'Nothing', 'NoEnergy', 'MotherBrain', 'Hyper'] + Bosses.Golden4()
     countItems = ['Missile', 'Super', 'PowerBomb', 'ETank', 'Reserve']
 
-    def __init__(self, player=0, maxDiff=sys.maxsize, onlyBossLeft = False):
+    def __init__(self, player=0, maxDiff=sys.maxsize, onlyBossLeft = False, lastAP = 'Landing Site'):
         self._items = { }
         self._counts = { }
 
         self.player = player
         self.maxDiff = maxDiff
         self.onlyBossLeft = onlyBossLeft
+
+        self.lastAP = lastAP
 
         # cache related
         self.cacheKey = 0

@@ -29,7 +29,7 @@ their game.
 
 ## What happens if a person has to leave early?
 
-If a player must leave early, they can use Archipelago's forfeit system. When a player forfeits their game, all the
+If a player must leave early, they can use Archipelago's release system. When a player releases their game, all the
 items in that game which belong to other players are sent out automatically, so other players can continue to play.
 
 ## What does multi-game mean?

@@ -108,7 +108,13 @@ class Factorio(World):
                     distribution.option_high: max_cost}[distribution.value]
             rand_values = (random.triangular(min_cost, max_cost, mode) for _ in self.locations)
         rand_values = sorted(rand_values)
-        for i, location in enumerate(sorted(self.locations, key=lambda loc: loc.rel_cost)):
+        if self.multiworld.ramping_tech_costs[self.player]:
+            def sorter(loc: FactorioScienceLocation):
+                return loc.complexity, loc.rel_cost
+        else:
+            def sorter(loc: FactorioScienceLocation):
+                return loc.rel_cost
+        for i, location in enumerate(sorted(self.locations, key=sorter)):
             location.count = rand_values[i]
         del rand_values
         nauvis.locations.extend(self.locations)
@@ -207,6 +213,10 @@ class Factorio(World):
                     self.multiworld.itempool.append(tech_item)
                 else:
                     loc = cost_sorted_locations[index]
+                    if index >= 0:
+                        # beginning techs - limit cost to 10
+                        # as automation is not achievable yet and hand-crafting for hours is not fun gameplay
+                        loc.count = min(loc.count, 10)
                     loc.place_locked_item(tech_item)
                     loc.revealed = True
 
@@ -457,7 +467,7 @@ class FactorioScienceLocation(FactorioLocation):
 
     # Factorio technology properties:
     ingredients: typing.Dict[str, int]
-    count: int
+    count: int = 0
 
     def __init__(self, player: int, name: str, address: int, parent: Region):
         super(FactorioScienceLocation, self).__init__(player, name, address, parent)
@@ -469,8 +479,6 @@ class FactorioScienceLocation(FactorioLocation):
         for complexity in range(self.complexity):
             if parent.multiworld.tech_cost_mix[self.player] > parent.multiworld.random.randint(0, 99):
                 self.ingredients[Factorio.ordered_science_packs[complexity]] = 1
-        self.count = parent.multiworld.random.randint(parent.multiworld.min_tech_cost[self.player],
-                                                      parent.multiworld.max_tech_cost[self.player])
 
     @property
     def factorio_ingredients(self) -> typing.List[typing.Tuple[str, int]]:

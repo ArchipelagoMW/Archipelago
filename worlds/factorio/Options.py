@@ -82,6 +82,14 @@ class TechCostMix(Range):
     default = 70
 
 
+class RampingTechCosts(Toggle):
+    """Forces the amount of Science Packs required to ramp up with the highest involved Pack. Average is preserved.
+    For example:
+    off: Automation (red)/Logistics (green) sciences can range from 1 to 1000 Science Packs,
+    on: Automation (red) ranges to ~500 packs and Logistics (green) from ~500 to 1000 Science Packs"""
+    display_name = "Ramping Tech Costs"
+
+
 class Silo(Choice):
     """Ingredients to craft rocket silo or auto-place if set to spawn."""
     display_name = "Rocket Silo"
@@ -386,6 +394,7 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "max_tech_cost": MaxTechCost,
     "tech_cost_distribution": TechCostDistribution,
     "tech_cost_mix": TechCostMix,
+    "ramping_tech_costs": RampingTechCosts,
     "silo": Silo,
     "satellite": Satellite,
     "free_samples": FreeSamples,
