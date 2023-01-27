@@ -463,14 +463,17 @@ async def kh2_watcher(ctx: KH2Context):
                     await asyncio.create_task(ctx.checkSlots())
                     #ctx.locations_checked = ctx.sending
                     message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
-                    if "Final Xemnas" in message:
+                    #final xemnas id
+                    if 1245677 in message[0]["locations"]:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                         ctx.finished_game = True
                     await ctx.send_msgs(message)
-                except:
-                    logger.debug("Read failed due to Connection Lost,Please /autotrack")
+                except Exception as e: 
+                    logger.info("Connection Lost, Please /autotrack")
                     ctx.KH2_status = CONNECTION_RESET_STATUS
                     ctx.kh2connected = False
+                    print(e)
+
             except:
                 logger.info("Connection Lost, Please /autotrack")
                 ctx.KH2_status = CONNECTION_RESET_STATUS
