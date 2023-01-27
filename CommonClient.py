@@ -823,7 +823,7 @@ if __name__ == '__main__':
                 self.game = self.slot_info[self.slot].game
         
         async def disconnect(self, allow_autoreconnect: bool = False):
-            self.game = None
+            self.game = ""
             await super().disconnect(allow_autoreconnect)
 
 
