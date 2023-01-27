@@ -821,6 +821,10 @@ if __name__ == '__main__':
         def on_package(self, cmd: str, args: dict):
             if cmd == "Connected":
                 self.game = self.slot_info[self.slot].game
+        
+        def disconnect(self, allow_autoreconnect: bool = False):
+            self.game = None
+            super().disconnect(allow_autoreconnect)
 
 
     async def main(args):
