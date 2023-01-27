@@ -142,7 +142,7 @@ class KH2World(World):
             randomAbility = self.multiworld.random.choice(donaldItemPool)
             self.multiworld.get_location(donaldlocation, self.player).place_locked_item(self.create_item(randomAbility))
             self.totallocations -= 1 
-
+            donaldItemPool.remove(randomAbility)
 
 
         # Placing Goofy Abilites on goofy locaitons
@@ -150,6 +150,7 @@ class KH2World(World):
             randomAbility = self.multiworld.random.choice(goofyItemPool)
             self.multiworld.get_location(goofyLocation, self.player).place_locked_item(self.create_item(randomAbility))
             self.totallocations -= 1 
+            goofyItemPool.remove(randomAbility)
 
         if self.multiworld.Level_Depth[self.player].value == 4:
             ItemQuantityDict.update({ItemName.NoExperience:Items.item_dictionary_table[ItemName.NoExperience].quantity-1})
@@ -191,7 +192,7 @@ class KH2World(World):
             GrowthList.extend(Items.Movement_Table.keys())
 
         if self.multiworld.Schmovement[self.player].value !=0:
-               for x in range(self.multiworld.Schmovement[self.player].value+1):
+               for x in range(self.multiworld.Schmovement[self.player].value):
                     for name in {ItemName.HighJump,ItemName.QuickRun,ItemName.DodgeRoll,ItemName.AerialDodge,ItemName.Glide}:
                         ItemQuantityDict.update({name:Items.item_dictionary_table[name].quantity-1})
                         GrowthList.remove(name)

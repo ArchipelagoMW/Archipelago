@@ -300,7 +300,7 @@ class KH2Context(CommonContext):
                     if item in self.item_name_to_data:
                         itemcode=self.item_name_to_data[item]
                     else:
-                        itemcode=self.item_name_to_data["Lucky Emblem"]
+                        itemcode=self.item_name_to_data["Archipelago Item"]
                     if item in DonaldAbility_Table.keys():
                        self.character="Donald"
                        asyncio.create_task(self.give_item(itemcode,"Donald"))
@@ -463,6 +463,9 @@ async def kh2_watcher(ctx: KH2Context):
                     await asyncio.create_task(ctx.checkSlots())
                     #ctx.locations_checked = ctx.sending
                     message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
+                    if "Final Xemnas" in message:
+                        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                        ctx.finished_game = True
                     await ctx.send_msgs(message)
                 except:
                     logger.debug("Read failed due to Connection Lost,Please /autotrack")

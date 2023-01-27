@@ -440,7 +440,7 @@ GoofyProtega        ="Goofy Protega"
 
 Victory                   ="Victory"
 LuckyEmblem               ="Lucky Emblem"
-
+ArchipelagoItem           ="Archipelago Item"
 #Keyblade Slots
 FAKESlot                  ="FAKE (Slot)"
 DetectionSaberSlot        ="Detection Saber (Slot)"
@@ -469,3 +469,4 @@ FatalCrestSlot            ="Fatal Crest (Slot)"
 FenrirSlot                ="Fenrir (Slot)"
 UltimaWeaponSlot          ="Ultima Weapon (Slot)"
 WinnersProofSlot          ="Winner's Proof (Slot)"
+
