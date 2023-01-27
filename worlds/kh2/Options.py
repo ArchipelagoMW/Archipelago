@@ -62,6 +62,7 @@ class SummonEXP(Range):
 class Schmovement(Choice):
     """Level of Growth You Start With"""
     display_name = "Schmovement"
+    option_level0 = 0
     option_level1 = 1
     option_level2 = 2
     option_level3 = 3
