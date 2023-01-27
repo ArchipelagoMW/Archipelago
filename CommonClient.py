@@ -822,9 +822,9 @@ if __name__ == '__main__':
             if cmd == "Connected":
                 self.game = self.slot_info[self.slot].game
         
-        def disconnect(self, allow_autoreconnect: bool = False):
+        async def disconnect(self, allow_autoreconnect: bool = False):
             self.game = None
-            super().disconnect(allow_autoreconnect)
+            await super().disconnect(allow_autoreconnect)
 
 
     async def main(args):
