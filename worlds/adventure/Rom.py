@@ -6,7 +6,7 @@ from typing import Optional, Any
 import Utils
 from .Locations import AdventureLocation
 from Utils import OptionsType
-from worlds.Files import APDeltaPatch
+from worlds.Files import APDeltaPatch, AutoPatchRegister
 from itertools import chain
 
 import bsdiff4
@@ -50,7 +50,7 @@ class AdventureForeignItemInfo:
         }
 
 
-class AdventureDeltaPatch(APDeltaPatch):
+class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
     hash = ADVENTUREHASH
     game = "Adventure"
     patch_file_ending = ".apadvn"
@@ -59,17 +59,26 @@ class AdventureDeltaPatch(APDeltaPatch):
     patched_rom_sha256: str = None
     seedName: bytes = None
 
-    def __init__(self, *args: Any, locations: [], autocollect: [], seed_name: bytes, **kwargs: Any) -> None:
-        self.foreign_items = [AdventureForeignItemInfo(loc.short_location_id, loc.room_id, loc.room_x, loc.room_y)
-                              for loc in locations]
-        self.autocollect_items = autocollect
-        self.seedName = seed_name
+    # locations: [], autocollect: [], seed_name: bytes,
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        patch_only = True
+        if 'autocollect' in kwargs:
+            patch_only = False
+            self.foreign_items = [AdventureForeignItemInfo(loc.short_location_id, loc.room_id, loc.room_x, loc.room_y)
+                                  for loc in kwargs['locations']]
+
+            self.autocollect_items = kwargs['autocollect']
+            self.seedName = kwargs['seed_name']
+            del kwargs['locations']
+            del kwargs['autocollect']
+            del kwargs['seed_name']
         super(AdventureDeltaPatch, self).__init__(*args, **kwargs)
-        with open(self.patched_path, "rb") as file:
-            patched_rom_bytes = bytes(file.read())
-            patchedsha256 = hashlib.sha256()
-            patchedsha256.update(patched_rom_bytes)
-            self.patched_rom_sha256 = patchedsha256.hexdigest()
+        if not patch_only:
+            with open(self.patched_path, "rb") as file:
+                patched_rom_bytes = bytes(file.read())
+                patchedsha256 = hashlib.sha256()
+                patchedsha256.update(patched_rom_bytes)
+                self.patched_rom_sha256 = patchedsha256.hexdigest()
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile):
         super(AdventureDeltaPatch, self).write_contents(opened_zipfile)
