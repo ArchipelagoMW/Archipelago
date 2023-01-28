@@ -109,10 +109,10 @@ def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
 
 class WebWorld:
     """Webhost integration"""
-    
+
     settings_page: Union[bool, str] = True
     """display a settings page. Can be a link to a specific page or external tool."""
-    
+
     game_info_languages: List[str] = ['en']
     """docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'"""
 
@@ -159,22 +159,6 @@ class World(metaclass=AutoWorldRegister):
     required_server_version: Tuple[int, int, int] = (0, 2, 4)
 
     hint_blacklist: ClassVar[FrozenSet[str]] = frozenset()  # any names that should not be hintable
-
-    # NOTE: remote_items and remote_start_inventory are now available in the network protocol for the client to set.
-    # These values will be removed.
-    # if a world is set to remote_items, then it just needs to send location checks to the server and the server
-    # sends back the items
-    # if a world is set to remote_items = False, then the server never sends an item where receiver == finder,
-    # the client finds its own items in its own world.
-    remote_items: bool = True
-
-    # If remote_start_inventory is true, the start_inventory/world.precollected_items is sent on connection,
-    # otherwise the world implementation is in charge of writing the items to their output data.
-    remote_start_inventory: bool = True
-
-    # For games where after a victory it is impossible to go back in and get additional/remaining Locations checked.
-    # this forces forfeit:  auto for those games.
-    forced_auto_forfeit: bool = False
 
     # Hide World Type from various views. Does not remove functionality.
     hidden: ClassVar[bool] = False
@@ -251,7 +235,10 @@ class World(metaclass=AutoWorldRegister):
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
         """Fill in the `slot_data` field in the `Connected` network package.
         This is a way the generator can give custom data to the client.
-        The client will receive this as JSON in the `Connected` response."""
+        The client will receive this as JSON in the `Connected` response.
+
+        The generation does not wait for `generate_output` to complete before calling this.
+        `threading.Event` can be used if you need to wait for something from `generate_output`."""
         return {}
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):

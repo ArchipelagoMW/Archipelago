@@ -7,6 +7,7 @@ from Patch import APDeltaPatch
 from .text import encode_text
 from .rom_addresses import rom_addresses
 from .locations import location_data
+from .items import item_table
 import worlds.pokemon_rb.poke_data as poke_data
 
 
@@ -39,7 +40,7 @@ def get_move(moves, chances, random, starting_move=False):
 
 
 def get_encounter_slots(self):
-    encounter_slots = [location for location in location_data if location.type == "Wild Encounter"]
+    encounter_slots = deepcopy([location for location in location_data if location.type == "Wild Encounter"])
 
     for location in encounter_slots:
         if isinstance(location.original_item, list):
@@ -53,7 +54,7 @@ def get_base_stat_total(mon):
             + poke_data.pokemon_data[mon]["spc"])
 
 
-def randomize_pokemon(self, mon, mons_list, randomize_type):
+def randomize_pokemon(self, mon, mons_list, randomize_type, random):
     if randomize_type in [1, 3]:
         type_mons = [pokemon for pokemon in mons_list if any([poke_data.pokemon_data[mon][
              "type1"] in [self.local_poke_data[pokemon]["type1"], self.local_poke_data[pokemon]["type2"]],
@@ -64,17 +65,17 @@ def randomize_pokemon(self, mon, mons_list, randomize_type):
         if randomize_type == 3:
             stat_base = get_base_stat_total(mon)
             type_mons.sort(key=lambda mon: abs(get_base_stat_total(mon) - stat_base))
-        mon = type_mons[round(self.multiworld.random.triangular(0, len(type_mons) - 1, 0))]
+        mon = type_mons[round(random.triangular(0, len(type_mons) - 1, 0))]
     if randomize_type == 2:
         stat_base = get_base_stat_total(mon)
         mons_list.sort(key=lambda mon: abs(get_base_stat_total(mon) - stat_base))
-        mon = mons_list[round(self.multiworld.random.triangular(0, 50, 0))]
+        mon = mons_list[round(random.triangular(0, 50, 0))]
     elif randomize_type == 4:
-        mon = self.multiworld.random.choice(mons_list)
+        mon = random.choice(mons_list)
     return mon
 
 
-def process_trainer_data(self, data):
+def process_trainer_data(self, data, random):
     mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
                  or self.multiworld.trainer_legendaries[self.player].value]
     address = rom_addresses["Trainer_Data"]
@@ -93,24 +94,26 @@ def process_trainer_data(self, data):
             for i in range(1, 4):
                 for l in ["A", "B", "C", "D", "E", "F", "G", "H"]:
                     if rom_addresses[f"Rival_Starter{i}_{l}"] == address:
-                        mon = " ".join(self.multiworld.get_location(f"Pallet Town - Starter {i}", self.player).item.name.split()[1:])
+                        mon = " ".join(self.multiworld.get_location(f"Pallet Town - Starter {i}",
+                                                                    self.player).item.name.split()[1:])
                         if l in ["D", "E", "F", "G", "H"] and mon in poke_data.evolves_to:
                             mon = poke_data.evolves_to[mon]
                         if l in ["F", "G", "H"] and mon in poke_data.evolves_to:
                             mon = poke_data.evolves_to[mon]
             if mon is None and self.multiworld.randomize_trainer_parties[self.player].value:
                 mon = poke_data.id_to_mon[data[address]]
-                mon = randomize_pokemon(self, mon, mons_list, self.multiworld.randomize_trainer_parties[self.player].value)
+                mon = randomize_pokemon(self, mon, mons_list,
+                                        self.multiworld.randomize_trainer_parties[self.player].value, random)
             if mon is not None:
                 data[address] = poke_data.pokemon_data[mon]["id"]
 
 
 def process_static_pokemon(self):
-    starter_slots = [location for location in location_data if location.type == "Starter Pokemon"]
-    legendary_slots = [location for location in location_data if location.type == "Legendary Pokemon"]
-    static_slots = [location for location in location_data if location.type in
-                    ["Static Pokemon", "Missable Pokemon"]]
-    legendary_mons = [slot.original_item for slot in legendary_slots]
+    starter_slots = deepcopy([location for location in location_data if location.type == "Starter Pokemon"])
+    legendary_slots = deepcopy([location for location in location_data if location.type == "Legendary Pokemon"])
+    static_slots = deepcopy([location for location in location_data if location.type in
+                    ["Static Pokemon", "Missable Pokemon"]])
+    legendary_mons = deepcopy([slot.original_item for slot in legendary_slots])
 
     tower_6F_mons = set()
     for i in range(1, 11):
@@ -153,10 +156,11 @@ def process_static_pokemon(self):
             location.place_locked_item(self.create_item(slot_type + " " + slot.original_item))
         else:
             mon = self.create_item(slot_type + " " +
-                                       randomize_pokemon(self, slot.original_item, mons_list, randomize_type))
+                                       randomize_pokemon(self, slot.original_item, mons_list, randomize_type,
+                                                         self.multiworld.random))
             while location.name == "Pokemon Tower 6F - Restless Soul" and mon in tower_6F_mons:
                 mon = self.create_item(slot_type + " " + randomize_pokemon(self, slot.original_item, mons_list,
-                                                                              randomize_type))
+                                                                           randomize_type, self.multiworld.random))
             location.place_locked_item(mon)
 
     for slot in starter_slots:
@@ -167,7 +171,8 @@ def process_static_pokemon(self):
             location.place_locked_item(self.create_item(slot_type + " " + slot.original_item))
         else:
             location.place_locked_item(self.create_item(slot_type + " " +
-                                       randomize_pokemon(self, slot.original_item, mons_list, randomize_type)))
+                                       randomize_pokemon(self, slot.original_item, mons_list, randomize_type,
+                                                         self.multiworld.random)))
 
 
 def process_wild_pokemon(self):
@@ -181,13 +186,14 @@ def process_wild_pokemon(self):
         self.multiworld.random.shuffle(encounter_slots)
         locations = []
         for slot in encounter_slots:
-            mon = randomize_pokemon(self, slot.original_item, mons_list, self.multiworld.randomize_wild_pokemon[self.player].value)
+            mon = randomize_pokemon(self, slot.original_item, mons_list,
+                                    self.multiworld.randomize_wild_pokemon[self.player].value, self.multiworld.random)
             # if static Pokemon are not randomized, we make sure nothing on Pokemon Tower 6F is a Marowak
             # if static Pokemon are randomized we deal with that during static encounter randomization
             while (self.multiworld.randomize_static_pokemon[self.player].value == 0 and mon == "Marowak"
                    and "Pokemon Tower 6F" in slot.name):
                 # to account for the possibility that only one ground type Pokemon exists, match only stats for this fix
-                mon = randomize_pokemon(self, slot.original_item, mons_list, 2)
+                mon = randomize_pokemon(self, slot.original_item, mons_list, 2, self.multiworld.random)
             placed_mons[mon] += 1
             location = self.multiworld.get_location(slot.name, self.player)
             location.item = self.create_item(mon)
@@ -223,7 +229,7 @@ def process_wild_pokemon(self):
                     poke_data.pokemon_data[slot.original_item]["type2"] in [self.local_poke_data[mon]["type1"],
                                                                           self.local_poke_data[mon]["type2"]]])]
             if not candidate_locations:
-                candidate_locations = location_data
+                candidate_locations = get_encounter_slots(self)
             candidate_locations = [self.multiworld.get_location(location.name, self.player) for location in candidate_locations]
             candidate_locations.sort(key=lambda slot: abs(get_base_stat_total(slot.item.name) - stat_base))
             for location in candidate_locations:
@@ -325,16 +331,20 @@ def process_pokemon_data(self):
         else:
             mon_data["catch rate"] = max(self.multiworld.minimum_catch_rate[self.player], mon_data["catch rate"])
 
-        if mon in poke_data.evolves_from.keys() and mon_data["type1"] == local_poke_data[poke_data.evolves_from[mon]]["type1"] and mon_data["type2"] == local_poke_data[poke_data.evolves_from[mon]]["type2"]:
-            mon_data["tms"] = local_poke_data[poke_data.evolves_from[mon]]["tms"]
-        elif mon != "Mew":
+        if mon != "Mew":
             tms_hms = poke_data.tm_moves + poke_data.hm_moves
             for flag, tm_move in enumerate(tms_hms):
-                if (flag < 50 and self.multiworld.tm_compatibility[self.player].value == 1) or (flag >= 50 and self.multiworld.hm_compatibility[self.player].value == 1):
+                if ((mon in poke_data.evolves_from.keys() and mon_data["type1"] ==
+                     local_poke_data[poke_data.evolves_from[mon]]["type1"] and mon_data["type2"] ==
+                     local_poke_data[poke_data.evolves_from[mon]]["type2"]) and (
+                        (flag < 50 and self.multiworld.tm_compatibility[self.player].value in [1, 2]) or (
+                        flag >= 51 and self.multiworld.hm_compatibility[self.player].value in [1, 2]))):
+                    bit = 1 if local_poke_data[poke_data.evolves_from[mon]]["tms"][int(flag / 8)] & 1 << (flag % 8) else 0
+                elif (flag < 50 and self.multiworld.tm_compatibility[self.player].value == 1) or (flag >= 50 and self.multiworld.hm_compatibility[self.player].value == 1):
                     type_match = poke_data.moves[tm_move]["type"] in [mon_data["type1"], mon_data["type2"]]
                     bit = int(self.multiworld.random.randint(1, 100) < [[90, 50, 25], [100, 75, 25]][flag >= 50][0 if type_match else 1 if poke_data.moves[tm_move]["type"] == "Normal" else 2])
                 elif (flag < 50 and self.multiworld.tm_compatibility[self.player].value == 2) or (flag >= 50 and self.multiworld.hm_compatibility[self.player].value == 2):
-                    bit = [0, 1][self.multiworld.random.randint(0, 1)]
+                    bit = self.multiworld.random.randint(0, 1)
                 elif (flag < 50 and self.multiworld.tm_compatibility[self.player].value == 3) or (flag >= 50 and self.multiworld.hm_compatibility[self.player].value == 3):
                     bit = 1
                 else:
@@ -386,6 +396,11 @@ def generate_output(self, output_directory: str):
         data[rom_addresses["Guard_Drink_List"] + 1] = 0
         data[rom_addresses["Guard_Drink_List"] + 2] = 0
 
+    data[rom_addresses["Fossils_Needed_For_Second_Item"]] = (
+        self.multiworld.second_fossil_check_condition[self.player].value)
+
+    data[rom_addresses["Option_Lose_Money"]] = int(not self.multiworld.lose_money_on_blackout[self.player].value)
+
     if self.multiworld.extra_key_items[self.player].value:
         data[rom_addresses['Options']] |= 4
     data[rom_addresses["Option_Blind_Trainers"]] = round(self.multiworld.blind_trainers[self.player].value * 2.55)
@@ -406,9 +421,7 @@ def generate_output(self, output_directory: str):
     if self.multiworld.old_man[self.player].value == 2:
         data[rom_addresses['Option_Old_Man']] = 0x11
         data[rom_addresses['Option_Old_Man_Lying']] = 0x15
-    money = str(self.multiworld.starting_money[self.player].value)
-    while len(money) < 6:
-        money = "0" + money
+    money = str(self.multiworld.starting_money[self.player].value).zfill(6)
     data[rom_addresses["Starting_Money_High"]] = int(money[:2], 16)
     data[rom_addresses["Starting_Money_Middle"]] = int(money[2:4], 16)
     data[rom_addresses["Starting_Money_Low"]] = int(money[4:], 16)
@@ -417,6 +430,10 @@ def generate_output(self, output_directory: str):
     data[rom_addresses["Text_Badges_Needed"]] = encode_text(
         str(max(self.multiworld.victory_road_condition[self.player].value,
                 self.multiworld.elite_four_condition[self.player].value)))[0]
+    write_bytes(data, encode_text(
+        " ".join(self.multiworld.get_location("Route 3 - Pokemon For Sale", self.player).item.name.upper().split()[1:])),
+                rom_addresses["Text_Magikarp_Salesman"])
+
     if self.multiworld.badges_needed_for_hm_moves[self.player].value == 0:
         for hm_move in poke_data.hm_moves:
             write_bytes(data, bytearray([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
@@ -441,61 +458,16 @@ def generate_output(self, output_directory: str):
             if badge not in written_badges:
                 write_bytes(data, encode_text("Nothing"), rom_addresses["Badge_Text_" + badge.replace(" ", "_")])
 
-    chart = deepcopy(poke_data.type_chart)
-    if self.multiworld.randomize_type_matchup_types[self.player].value == 1:
-        attacking_types = []
-        defending_types = []
-        for matchup in chart:
-            attacking_types.append(matchup[0])
-            defending_types.append(matchup[1])
-        random.shuffle(attacking_types)
-        random.shuffle(defending_types)
-        matchups = []
-        while len(attacking_types) > 0:
-            if [attacking_types[0], defending_types[0]] not in matchups:
-                matchups.append([attacking_types.pop(0), defending_types.pop(0)])
-            else:
-                matchup = matchups.pop(0)
-                attacking_types.append(matchup[0])
-                defending_types.append(matchup[1])
-            random.shuffle(attacking_types)
-            random.shuffle(defending_types)
-        for matchup, chart_row in zip(matchups, chart):
-            chart_row[0] = matchup[0]
-            chart_row[1] = matchup[1]
-    elif self.multiworld.randomize_type_matchup_types[self.player].value == 2:
-        used_matchups = []
-        for matchup in chart:
-            matchup[0] = random.choice(list(poke_data.type_names.values()))
-            matchup[1] = random.choice(list(poke_data.type_names.values()))
-            while [matchup[0], matchup[1]] in used_matchups:
-                matchup[0] = random.choice(list(poke_data.type_names.values()))
-                matchup[1] = random.choice(list(poke_data.type_names.values()))
-            used_matchups.append([matchup[0], matchup[1]])
-    if self.multiworld.randomize_type_matchup_type_effectiveness[self.player].value == 1:
-        effectiveness_list = []
-        for matchup in chart:
-            effectiveness_list.append(matchup[2])
-        random.shuffle(effectiveness_list)
-        for (matchup, effectiveness) in zip(chart, effectiveness_list):
-            matchup[2] = effectiveness
-    elif self.multiworld.randomize_type_matchup_type_effectiveness[self.player].value == 2:
-        for matchup in chart:
-            matchup[2] = random.choice([0] + ([5, 20] * 5))
-    elif self.multiworld.randomize_type_matchup_type_effectiveness[self.player].value == 3:
-        for matchup in chart:
-            matchup[2] = random.choice([i for i in range(0, 21) if i != 10])
     type_loc = rom_addresses["Type_Chart"]
-    for matchup in chart:
-        data[type_loc] = poke_data.type_ids[matchup[0]]
-        data[type_loc + 1] = poke_data.type_ids[matchup[1]]
-        data[type_loc + 2] = matchup[2]
-        type_loc += 3
-    # sort so that super-effective matchups occur first, to prevent dual "not very effective" / "super effective"
-    # matchups from leading to damage being ultimately divided by 2 and then multiplied by 2, which can lead to
-    # damage being reduced by 1 which leads to a "not very effective" message appearing due to my changes
-    # to the way effectiveness messages are generated.
-    self.type_chart = sorted(chart, key=lambda matchup: 0 - matchup[2])
+    for matchup in self.type_chart:
+        if matchup[2] != 10:  # don't needlessly divide damage by 10 and multiply by 10
+            data[type_loc] = poke_data.type_ids[matchup[0]]
+            data[type_loc + 1] = poke_data.type_ids[matchup[1]]
+            data[type_loc + 2] = matchup[2]
+            type_loc += 3
+    data[type_loc] = 0xFF
+    data[type_loc + 1] = 0xFF
+    data[type_loc + 2] = 0xFF
 
     if self.multiworld.normalize_encounter_chances[self.player].value:
         chances = [25, 51, 77, 103, 129, 155, 180, 205, 230, 255]
@@ -525,9 +497,9 @@ def generate_output(self, output_directory: str):
             for i, move in enumerate(self.learnsets[mon]):
                 data[(address + 1) + i * 2] = poke_data.moves[move]["id"]
 
-    data[rom_addresses["Option_Aide_Rt2"]] = self.multiworld.oaks_aide_rt_2[self.player]
-    data[rom_addresses["Option_Aide_Rt11"]] = self.multiworld.oaks_aide_rt_11[self.player]
-    data[rom_addresses["Option_Aide_Rt15"]] = self.multiworld.oaks_aide_rt_15[self.player]
+    data[rom_addresses["Option_Aide_Rt2"]] = self.multiworld.oaks_aide_rt_2[self.player].value
+    data[rom_addresses["Option_Aide_Rt11"]] = self.multiworld.oaks_aide_rt_11[self.player].value
+    data[rom_addresses["Option_Aide_Rt15"]] = self.multiworld.oaks_aide_rt_15[self.player].value
 
     if self.multiworld.safari_zone_normal_battles[self.player].value == 1:
         data[rom_addresses["Option_Safari_Zone_Battle_Type"]] = 255
@@ -535,7 +507,32 @@ def generate_output(self, output_directory: str):
     if self.multiworld.reusable_tms[self.player].value:
         data[rom_addresses["Option_Reusable_TMs"]] = 0xC9
 
-    process_trainer_data(self, data)
+    data[rom_addresses["Option_Trainersanity"]] = self.multiworld.trainersanity[self.player].value
+    data[rom_addresses["Option_Trainersanity2"]] = self.multiworld.trainersanity[self.player].value
+
+    data[rom_addresses["Option_Always_Half_STAB"]] = int(not self.multiworld.same_type_attack_bonus[self.player].value)
+
+    if self.multiworld.better_shops[self.player].value:
+        inventory = ["Poke Ball", "Great Ball", "Ultra Ball"]
+        if self.multiworld.better_shops[self.player].value == 2:
+            inventory.append("Master Ball")
+        inventory += ["Potion", "Super Potion", "Hyper Potion", "Max Potion", "Full Restore", "Revive", "Antidote",
+                      "Awakening", "Burn Heal", "Ice Heal", "Paralyze Heal", "Full Heal", "Repel", "Super Repel",
+                      "Max Repel", "Escape Rope"]
+        shop_data = bytearray([0xFE, len(inventory)])
+        shop_data += bytearray([item_table[item].id - 172000000 for item in inventory])
+        shop_data.append(0xFF)
+        for shop in range(1, 10):
+            write_bytes(data, shop_data, rom_addresses[f"Shop{shop}"])
+    price = str(self.multiworld.master_ball_price[self.player].value).zfill(6)
+    price = bytearray([int(price[:2], 16), int(price[2:4], 16), int(price[4:], 16)])
+    write_bytes(data, price, rom_addresses["Price_Master_Ball"])  # Money values in Red and Blue are weird
+
+    for item in reversed(self.multiworld.precollected_items[self.player]):
+        if data[rom_addresses["Start_Inventory"] + item.code - 172000000] < 255:
+            data[rom_addresses["Start_Inventory"] + item.code - 172000000] += 1
+
+    process_trainer_data(self, data, random)
 
     mons = [mon["id"] for mon in poke_data.pokemon_data.values()]
     random.shuffle(mons)
@@ -558,9 +555,16 @@ def generate_output(self, output_directory: str):
     slot_name.replace(">", " ")
     write_bytes(data, encode_text(slot_name, 16, True, True), rom_addresses['Title_Slot_Name'])
 
-    write_bytes(data, self.trainer_name, rom_addresses['Player_Name'])
-    write_bytes(data, self.rival_name, rom_addresses['Rival_Name'])
+    if self.trainer_name == "choose_in_game":
+        data[rom_addresses["Skip_Player_Name"]] = 0
+    else:
+        write_bytes(data, self.trainer_name, rom_addresses['Player_Name'])
+    if self.rival_name == "choose_in_game":
+        data[rom_addresses["Skip_Rival_Name"]] = 0
+    else:
+        write_bytes(data, self.rival_name, rom_addresses['Rival_Name'])
 
+    data[0xFF00] = 1 # client compatibility version
     write_bytes(data, self.multiworld.seed_name.encode(), 0xFFDB)
     write_bytes(data, self.multiworld.player_name[self.player].encode(), 0xFFF0)
 
@@ -595,8 +599,8 @@ def get_base_rom_bytes(game_version: str, hash: str="") -> bytes:
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
         if hash != basemd5.hexdigest():
-            raise Exception('Supplied Base Rom does not match known MD5 for US(1.0) release. '
-                            'Get the correct game and version, then dump it')
+            raise Exception(f"Supplied Base Rom does not match known MD5 for Pokémon {game_version.title()} UE "
+                            "release. Get the correct game and version, then dump it")
     return base_rom_bytes
 
 

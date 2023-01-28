@@ -37,4 +37,4 @@ jobs:
         python ModuleUpdate.py --yes --force --append "WebHostLib/requirements.txt"
     - name: Unittests
       run: |
-        pytest test
+        pytest
