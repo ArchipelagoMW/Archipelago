@@ -70,6 +70,12 @@ class ShuffleEnvironmentalPuzzles(Choice):
     option_obelisk_sides = 2
 
 
+class ShuffleDog(Toggle):
+    """Add petting the Town dog into the location pool."""
+
+    display_name = "Pet the Dog"
+
+
 class EnvironmentalPuzzlesDifficulty(Choice):
     display_name = "Environmental Puzzles Difficulty"
     option_normal = 0
@@ -155,6 +161,7 @@ the_witness_options: Dict[str, type] = {
     "shuffle_vault_boxes": ShuffleVaultBoxes,
     "shuffle_EPs": ShuffleEnvironmentalPuzzles,
     "EP_difficulty": EnvironmentalPuzzlesDifficulty,
+    "pet_the_dog": ShuffleDog,
     "shuffle_postgame": ShufflePostgame,
     "victory_condition": VictoryCondition,
     "mountain_lasers": MountainLasers,
