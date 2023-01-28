@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import copy
 import functools
 import logging
 import zlib
@@ -43,6 +44,28 @@ min_client_version = Version(0, 1, 6)
 print_command_compatability_threshold = Version(0, 3, 5) # Remove backwards compatibility around 0.3.7
 colorama.init()
 
+
+def remove_from_list(container, value):
+    try:
+        container.remove(value)
+    except ValueError:
+        pass
+    return container
+
+
+def pop_from_container(container, value):
+    try:
+        container.pop(value)
+    except ValueError:
+        pass
+    return container
+
+
+def update_dict(dictionary, entries):
+    dictionary.update(entries)
+    return dictionary
+
+
 # functions callable on storable data on the server by clients
 modify_functions = {
     "add": operator.add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
@@ -59,6 +82,10 @@ modify_functions = {
     "and": operator.and_,
     "left_shift": operator.lshift,
     "right_shift": operator.rshift,
+    # lists/dicts
+    "remove": remove_from_list,
+    "pop": pop_from_container,
+    "update": update_dict,
 }
 
 
@@ -119,7 +146,6 @@ class Context:
                       "location_check_points": int,
                       "server_password": str,
                       "password": str,
-                      "forfeit_mode": str,  # TODO remove around 0.4
                       "release_mode": str,
                       "remaining_mode": str,
                       "collect_mode": str,
@@ -141,7 +167,7 @@ class Context:
     non_hintable_names: typing.Dict[str, typing.Set[str]]
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
-                 hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", collect_mode="disabled",
+                 hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
                  remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, compatibility: int = 2,
                  log_network: bool = False):
         super(Context, self).__init__()
@@ -157,7 +183,7 @@ class Context:
         self.player_names: typing.Dict[team_slot, str] = {}
         self.player_name_lookup: typing.Dict[str, team_slot] = {}
         self.connect_names = {}  # names of slots clients can connect to
-        self.allow_forfeits = {}
+        self.allow_releases = {}
         #                          player          location_id     item_id  target_player_id
         self.locations = {}
         self.host = host
@@ -174,7 +200,7 @@ class Context:
         self.location_check_points = location_check_points
         self.hints_used = collections.defaultdict(int)
         self.hints: typing.Dict[team_slot, typing.Set[NetUtils.Hint]] = collections.defaultdict(set)
-        self.release_mode: str = forfeit_mode
+        self.release_mode: str = release_mode
         self.remaining_mode: str = remaining_mode
         self.collect_mode: str = collect_mode
         self.item_cheat = item_cheat
@@ -593,6 +619,8 @@ class Context:
 
     def _set_options(self, server_options: dict):
         for key, value in server_options.items():
+            if key == "forfeit_mode":
+                key = "release_mode"
             data_type = self.simple_options.get(key, None)
             if data_type is not None:
                 if value not in {False, True, None}:  # some can be boolean OR text, such as password
@@ -1229,7 +1257,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     def _cmd_release(self) -> bool:
         """Sends remaining items in your world to their recipients."""
-        if self.ctx.allow_forfeits.get((self.client.team, self.client.slot), False):
+        if self.ctx.allow_releases.get((self.client.team, self.client.slot), False):
             release_player(self.ctx, self.client.team, self.client.slot)
             return True
         if "enabled" in self.ctx.release_mode:
@@ -1738,7 +1766,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 return
             args["cmd"] = "SetReply"
             value = ctx.stored_data.get(args["key"], args.get("default", 0))
-            args["original_value"] = value
+            args["original_value"] = copy.copy(value)
             for operation in args["operations"]:
                 func = modify_functions[operation["operation"]]
                 value = func(value, operation["value"])
@@ -1885,7 +1913,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
         player = self.resolve_player(player_name)
         if player:
             team, slot, name = player
-            self.ctx.allow_forfeits[(team, slot)] = True
+            self.ctx.allow_releases[(team, slot)] = True
             self.output(f"Player {name} is now allowed to use the !release command at any time.")
             return True
 
@@ -1898,7 +1926,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
         player = self.resolve_player(player_name)
         if player:
             team, slot, name = player
-            self.ctx.allow_forfeits[(team, slot)] = False
+            self.ctx.allow_releases[(team, slot)] = False
             self.output(f"Player {name} has to follow the server restrictions on use of the !release command.")
             return True
 
@@ -2053,7 +2081,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                     return input_text
             setattr(self.ctx, option_name, attrtype(option))
             self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
-            if option_name in {"forfeit_mode", "release_mode", "remaining_mode", "collect_mode"}:  # TODO remove forfeit_mode with 0.4
+            if option_name in {"release_mode", "remaining_mode", "collect_mode"}:
                 self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
             elif option_name in {"hint_cost", "location_check_points"}:
                 self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
