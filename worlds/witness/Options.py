@@ -60,7 +60,7 @@ class ShuffleVaultBoxes(Toggle):
 
 class ShufflePostgame(Toggle):
     """Adds locations into the pool that are guaranteed to become accessible after or at the same time as your goal.
-    Use this if you don't play with forfeit on victory. IMPORTANT NOTE: The possibility of your second
+    Use this if you don't play with release on victory. IMPORTANT NOTE: The possibility of your second
     "Progressive Dots" showing up in the Caves is ignored, they will still be considered "postgame" in base settings."""
     display_name = "Shuffle Postgame"
 

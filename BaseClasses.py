@@ -48,7 +48,7 @@ class MultiWorld():
     precollected_items: Dict[int, List[Item]]
     state: CollectionState
 
-    plando_settings: PlandoSettings
+    plando_options: PlandoOptions
     accessibility: Dict[int, Options.Accessibility]
     early_items: Dict[int, Dict[str, int]]
     local_early_items: Dict[int, Dict[str, int]]
@@ -161,7 +161,7 @@ class MultiWorld():
         self.custom_data = {}
         self.worlds = {}
         self.slot_seeds = {}
-        self.plando_settings = PlandoSettings.none
+        self.plando_options = PlandoOptions.none
 
     def get_all_ids(self) -> Tuple[int, ...]:
         return self.player_ids + tuple(self.groups)
@@ -393,7 +393,12 @@ class MultiWorld():
     def get_items(self) -> List[Item]:
         return [loc.item for loc in self.get_filled_locations()] + self.itempool
 
-    def find_item_locations(self, item, player: int) -> List[Location]:
+    def find_item_locations(self, item, player: int, resolve_group_locations: bool = False) -> List[Location]:
+        if resolve_group_locations:
+            player_groups = self.get_player_groups(player)
+            return [location for location in self.get_locations() if
+                    location.item and location.item.name == item and location.player not in player_groups and
+                    (location.item.player == player or location.item.player in player_groups)]
         return [location for location in self.get_locations() if
                 location.item and location.item.name == item and location.item.player == player]
 
@@ -401,7 +406,12 @@ class MultiWorld():
         return next(location for location in self.get_locations() if
                     location.item and location.item.name == item and location.item.player == player)
 
-    def find_items_in_locations(self, items: Set[str], player: int) -> List[Location]:
+    def find_items_in_locations(self, items: Set[str], player: int, resolve_group_locations: bool = False) -> List[Location]:
+        if resolve_group_locations:
+            player_groups = self.get_player_groups(player)
+            return [location for location in self.get_locations() if
+                    location.item and location.item.name in items and location.player not in player_groups and
+                    (location.item.player == player or location.item.player in player_groups)]
         return [location for location in self.get_locations() if
                 location.item and location.item.name in items and location.item.player == player]
 
@@ -1560,7 +1570,7 @@ class Spoiler():
                     Utils.__version__, self.multiworld.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.multiworld.algorithm)
             outfile.write('Players:                         %d\n' % self.multiworld.players)
-            outfile.write(f'Plando Options:                  {self.multiworld.plando_settings}\n')
+            outfile.write(f'Plando Options:                  {self.multiworld.plando_options}\n')
             AutoWorld.call_stage(self.multiworld, "write_spoiler_header", outfile)
 
             for player in range(1, self.multiworld.players + 1):
@@ -1677,7 +1687,7 @@ class Tutorial(NamedTuple):
     authors: List[str]
 
 
-class PlandoSettings(IntFlag):
+class PlandoOptions(IntFlag):
     none = 0b0000
     items = 0b0001
     connections = 0b0010
@@ -1685,7 +1695,7 @@ class PlandoSettings(IntFlag):
     bosses = 0b1000
 
     @classmethod
-    def from_option_string(cls, option_string: str) -> PlandoSettings:
+    def from_option_string(cls, option_string: str) -> PlandoOptions:
         result = cls(0)
         for part in option_string.split(","):
             part = part.strip().lower()
@@ -1694,14 +1704,14 @@ class PlandoSettings(IntFlag):
         return result
 
     @classmethod
-    def from_set(cls, option_set: Set[str]) -> PlandoSettings:
+    def from_set(cls, option_set: Set[str]) -> PlandoOptions:
         result = cls(0)
         for part in option_set:
             result = cls._handle_part(part, result)
         return result
 
     @classmethod
-    def _handle_part(cls, part: str, base: PlandoSettings) -> PlandoSettings:
+    def _handle_part(cls, part: str, base: PlandoOptions) -> PlandoOptions:
         try:
             part = cls[part]
         except Exception as e:
@@ -1712,7 +1722,7 @@ class PlandoSettings(IntFlag):
 
     def __str__(self) -> str:
         if self.value:
-            return ", ".join(flag.name for flag in PlandoSettings if self.value & flag.value)
+            return ", ".join(flag.name for flag in PlandoOptions if self.value & flag.value)
         return "None"
 
 
