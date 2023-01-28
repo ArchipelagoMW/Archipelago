@@ -31,7 +31,7 @@ apworlds: set = {
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 import subprocess
 import pkg_resources
-requirement = 'cx-Freeze>=6.14.0'
+requirement = 'cx-Freeze>=6.14.1'
 try:
     pkg_resources.require(requirement)
     import cx_Freeze
