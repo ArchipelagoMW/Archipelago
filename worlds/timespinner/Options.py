@@ -1,6 +1,6 @@
-from typing import Dict, Union
+from typing import Dict, Union, Set
 from BaseClasses import MultiWorld
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option, OptionDict
+from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option, OptionDict, OptionSet
 from schema import Schema, And, Optional
 
 
@@ -347,9 +347,26 @@ class RisingTidesOverrides(OptionDict):
         "LakeSerene": { "Dry": 67, "Flooded": 33 },
     }
 
+
 class UnchainedKeys(Toggle):
     "Random area's are flooded or drained, can be further specified with RisingTidesOverrides"
     display_name = "Rising Tides"
+
+
+class TrapChance(Range):
+    "Chance for traps in the item pool, traps will only replace filler items such as potions,vials and sntidotes"
+    display_name = "Trap Chance"
+    range_start = 0
+    range_end = 100
+    default = 10
+
+
+class Traps(OptionSet):
+    "List of traps that will be in the item pool to find"
+    display_name = "Traps Types"
+    valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" }
+    default = valid_keys
+
 
 # Some options that are available in the timespinner randomizer arent currently implemented
 timespinner_options: Dict[str, Option] = {
@@ -383,6 +400,8 @@ timespinner_options: Dict[str, Option] = {
     "RisingTides": RisingTides,
     "RisingTidesOverrides": RisingTidesOverrides,
     "UnchainedKeys": UnchainedKeys,
+    "TrapChance": TrapChance,
+    "Traps": Traps,
     "DeathLink": DeathLink,
 }
 
@@ -391,7 +410,7 @@ def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
     return get_option_value(world, player, name) > 0
 
 
-def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, dict]:
+def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, Dict, Set]:
     option = getattr(world, name, None)
     if option == None:
         return 0

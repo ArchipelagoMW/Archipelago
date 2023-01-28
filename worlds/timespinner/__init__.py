@@ -76,7 +76,13 @@ class TimespinnerWorld(World):
         return create_item_with_correct_settings(self.multiworld, self.player, name)
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(filler_items)
+        trap_chance: int = get_option_value(self.multiworld, self.player, "TrapChance")
+        enabled_traps: Set[str] = get_option_value(self.multiworld, self.player, "Traps")
+
+        if (self.multiworld.random.random() < (trap_chance / 100) and enabled_traps):
+            return self.multiworld.random.choice(tuple(enabled_traps))
+        else:
+            return self.multiworld.random.choice(filler_items) 
 
     def set_rules(self):
         setup_events(self.player, self.locked_locations, self.location_cache)
@@ -108,8 +114,10 @@ class TimespinnerWorld(World):
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}
 
+        ap_specific_settings: Set[str] = { "RisingTidesOverrides", "TrapChance" }
+
         for option_name in timespinner_options:
-            if (option_name != "RisingTidesOverrides"):
+            if (option_name not in ap_specific_settings):
                 slot_data[option_name] = get_option_value(self.multiworld, self.player, option_name)
 
         slot_data["StinkyMaw"] = True
@@ -290,12 +298,16 @@ def place_first_progression_item(world: MultiWorld, player: int, excluded_items:
 
 def create_item_with_correct_settings(world: MultiWorld, player: int, name: str) -> Item:
     data = item_table[name]
+
     if data.useful:
         classification = ItemClassification.useful
     elif data.progression:
         classification = ItemClassification.progression
+    elif data.trap:
+        classification = ItemClassification.trap
     else:
         classification = ItemClassification.filler
+        
     item = Item(name, classification, data.code, player)
 
     if not item.advancement:
@@ -307,7 +319,7 @@ def create_item_with_correct_settings(world: MultiWorld, player: int, name: str)
         item.classification = ItemClassification.filler
     elif (name == 'Kobo' or name == 'Merchant Crow') and not is_option_enabled(world, player, "GyreArchives"):
         item.classification = ItemClassification.filler
-    elif (name == 'MapReveal 0' or name == 'MapReveal 1' or name == 'MapReveal 2') \
+    elif name in {"Timeworn Warp Beacon", "Modern Warp Beacon", "Mysterious Warp Beacon"} \
             and not is_option_enabled(world, player, "UnchainedKeys"):
         item.classification = ItemClassification.filler
 

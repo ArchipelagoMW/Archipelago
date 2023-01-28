@@ -6,6 +6,7 @@ class ItemData(NamedTuple):
     count: int = 1
     progression: bool = False
     useful: bool = False
+    trap: bool = False
 
 # A lot of items arent normally dropped by the randomizer as they are mostly enemy drops, but they can be enabled if desired
 item_table: Dict[str, ItemData] = {
@@ -113,9 +114,9 @@ item_table: Dict[str, ItemData] = {
     'Plasma Core': ItemData('UseItem', 1337101, 0),
     'Silver Ore': ItemData('UseItem', 1337102, 0),
     'Historical Documents': ItemData('UseItem', 1337103, 0),
-    'Timeworn Warp Beacon': ItemData('Relic', 1337104, progression=True),
-    'Modern Warp Beacon': ItemData('Relic', 1337105, progression=True),
-    'Mysterious Warp Beacon': ItemData('Relic', 1337106, progression=True),
+    'MapReveal 0': ItemData('UseItem', 1337104, 0),
+    'MapReveal 1': ItemData('UseItem', 1337105, 0),
+    'MapReveal 2': ItemData('UseItem', 1337106, 0),
     'Timespinner Wheel': ItemData('Relic', 1337107, progression=True),
     'Timespinner Spindle': ItemData('Relic', 1337108, progression=True),
     'Timespinner Gear 1': ItemData('Relic', 1337109, progression=True),
@@ -190,7 +191,15 @@ item_table: Dict[str, ItemData] = {
     'Hope Ring': ItemData('Orb Passive', 1337178),
     'Max HP': ItemData('Stat', 1337179, 12),
     'Max Aura': ItemData('Stat', 1337180, 13),
-    # 1337181 - 1337248 Reserved
+    'Timeworn Warp Beacon': ItemData('Relic', 1337181, progression=True),
+    'Modern Warp Beacon': ItemData('Relic', 1337182, progression=True),
+    'Mysterious Warp Beacon': ItemData('Relic', 1337183, progression=True),
+    'Meteor Sparrow Trap': ItemData('Trap', 1337184, trap=True),
+    'Poison Trap': ItemData('Trap', 1337185, trap=True),
+    'Chaos Trap': ItemData('Trap', 1337186, trap=True),
+    'Neurotoxin Trap': ItemData('Trap', 1337187, trap=True),
+    'Bee Trap': ItemData('Trap', 1337188, trap=True),
+    # 1337189 - 1337248 Reserved
     'Max Sand': ItemData('Stat', 1337249, 14)
 }
 

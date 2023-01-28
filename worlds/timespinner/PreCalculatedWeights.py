@@ -42,14 +42,14 @@ class PreCalculatedWeights:
         present_teleportation_gates: Tuple[str, ...] = (
             "GateKittyBoss",
             "GateLeftLibrary",
-            "GateMilitairyGate",
+            "GateMilitaryGate",
             "GateSealedCaves",
             "GateSealedSirensCave",
             "GateLakeDesolation"
         )
 
         past_teleportation_gates: Tuple[str, ...] = (
-            "GateLakeSirineRight",
+            "GateLakeSereneRight",
             "GateAccessToPast",
             "GateCastleRamparts",
             "GateCastleKeep",
