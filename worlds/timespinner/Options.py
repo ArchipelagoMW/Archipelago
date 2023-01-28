@@ -349,8 +349,8 @@ class RisingTidesOverrides(OptionDict):
 
 
 class UnchainedKeys(Toggle):
-    "Random area's are flooded or drained, can be further specified with RisingTidesOverrides"
-    display_name = "Rising Tides"
+    "Start with Twin Pyramid Key, which does not give free warp; warp items for Past, Present, (and ??? with Enter Sandman) can be found."
+    display_name = "Unchained Keys"
 
 
 class TrapChance(Range):
