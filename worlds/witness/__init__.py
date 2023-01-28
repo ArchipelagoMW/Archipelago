@@ -38,7 +38,7 @@ class WitnessWorld(World):
     """
     game = "The Witness"
     topology_present = False
-    data_version = 10
+    data_version = 11
 
     static_logic = StaticWitnessLogic()
     static_locat = StaticWitnessLocations()
@@ -52,7 +52,7 @@ class WitnessWorld(World):
     location_name_to_id = StaticWitnessLocations.ALL_LOCATIONS_TO_ID
     item_name_groups = StaticWitnessItems.ITEM_NAME_GROUPS
 
-    required_client_version = (0, 3, 6)
+    required_client_version = (0, 3, 8)
 
     def _get_slot_data(self):
         return {
