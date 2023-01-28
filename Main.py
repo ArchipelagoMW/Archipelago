@@ -312,7 +312,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     client_versions[slot] = player_world.required_client_version
                     games[slot] = world.game[slot]
                     slot_info[slot] = NetUtils.NetworkSlot(names[0][slot - 1], world.game[slot],
-                                                           world.player_types[slot])
+                                                           world.player_types[slot], bool(world.allow_collect[slot].value))
                 for slot, group in world.groups.items():
                     games[slot] = world.game[slot]
                     slot_info[slot] = NetUtils.NetworkSlot(group["name"], world.game[slot], world.player_types[slot],

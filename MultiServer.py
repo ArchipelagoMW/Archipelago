@@ -220,6 +220,7 @@ class Context:
         self.save_dirty = False
         self.tags = ['AP']
         self.games: typing.Dict[int, str] = {}
+        self.allow_collect: typing.Dict[int, bool] = {}
         self.minimum_client_versions: typing.Dict[int, Utils.Version] = {}
         self.seed_name = ""
         self.groups = {}
@@ -417,6 +418,8 @@ class Context:
             self.games = {slot: slot_info.game for slot, slot_info in self.slot_info.items()}
             self.groups = {slot: slot_info.group_members for slot, slot_info in self.slot_info.items()
                            if slot_info.type == SlotType.group}
+            self.allow_collect = {slot: slot_info.allow_collect if type(slot_info.allow_collect) is bool else True
+                                  for slot, slot_info in self.slot_info.items()}
         else:
             self.games = decoded_obj["games"]
             self.groups = {}
@@ -429,6 +432,7 @@ class Context:
             }
             # locations may need converting
             for slot, locations in self.locations.items():
+                self.allow_collect[slot] = True
                 for location, item_data in locations.items():
                     if len(item_data) < 3:
                         locations[location] = (*item_data, 0)
@@ -903,6 +907,8 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
     """register any locations that are in the multidata, pointing towards this player"""
     all_locations = collections.defaultdict(set)
     for source_slot, location_data in ctx.locations.items():
+        if not ctx.allow_collect[source_slot]:
+            continue
         for location_id, values in location_data.items():
             if values[1] == slot:
                 all_locations[source_slot].add(location_id)

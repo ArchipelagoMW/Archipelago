@@ -71,6 +71,7 @@ class NetworkSlot(typing.NamedTuple):
     name: str
     game: str
     type: SlotType
+    allow_collect: bool = True
     group_members: typing.Union[typing.List[int], typing.Tuple] = ()  # only populated if type == group
 
 

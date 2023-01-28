@@ -862,9 +862,15 @@ class ProgressionBalancing(SpecialRange):
     }
 
 
+class AllowCollect(DefaultOnToggle):
+    """Controls whether items are collected from the slot when a player does a !collect or not."""
+    display_name = "Allow Collect"
+
+
 common_options = {
     "progression_balancing": ProgressionBalancing,
-    "accessibility": Accessibility
+    "accessibility": Accessibility,
+    "allow_collect": AllowCollect
 }
 
 

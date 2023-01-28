@@ -54,6 +54,7 @@ class MultiWorld():
     local_early_items: Dict[int, Dict[str, int]]
     local_items: Dict[int, Options.LocalItems]
     non_local_items: Dict[int, Options.NonLocalItems]
+    allow_collect: Dict[int, Options.AllowCollect]
     progression_balancing: Dict[int, Options.ProgressionBalancing]
     completion_condition: Dict[int, Callable[[CollectionState], bool]]
     indirect_connections: Dict[Region, Set[Entrance]]
