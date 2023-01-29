@@ -1,17 +1,35 @@
+from typing import Union
 from BaseClasses import MultiWorld, CollectionState
 from .Options import is_option_enabled
+from .PreCalculatedWeights import PreCalculatedWeights
 
 class TimespinnerLogic():
     player: int
 
     flag_unchained_keys: bool
     flag_specific_keycards: bool
+    present_keys_unlock: Union[str, None]
+    present_keys_unlock: Union[str, None]
+    past_keys_unlock: Union[str, None]
+    time_keys_unlock: Union[str, None]
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, world: MultiWorld, player: int, precalculated_weights: PreCalculatedWeights):
         self.player = player
 
         self.flag_specific_keycards = is_option_enabled(world, player, "SpecificKeycards")
         self.flag_unchained_keys = is_option_enabled(world, player, "UnchainedKeys")
+
+        if precalculated_weights:
+            if self.flag_unchained_keys:
+                self.pyramid_keys_unlock = None
+                self.present_keys_unlock = precalculated_weights.present_key_unlock
+                self.past_keys_unlock = precalculated_weights.past_key_unlock
+                self.time_keys_unlock = precalculated_weights.time_key_unlock
+            else:
+                self.pyramid_keys_unlock = precalculated_weights.pyramid_keys_unlock
+                self.present_keys_unlock = None
+                self.past_keys_unlock = None
+                self.time_keys_unlock = None
 
     def has_timestop(self, state: CollectionState) -> bool:
         return state.has_any({'Timespinner Wheel', 'Succubus Hairpin', 'Lightwall', 'Celestial Sash'}, self.player)
@@ -74,3 +92,16 @@ class TimespinnerLogic():
 
     def has_teleport(self, state: CollectionState) -> bool:
         return self.flag_unchained_keys or state.has('Twin Pyramid Key', self.player)
+
+    def can_teleport_to(self, state: CollectionState, era: str, gate: str) -> bool:
+        if not self.flag_unchained_keys:
+            return self.pyramid_keys_unlock == gate
+
+        if era == "Present":
+            return self.present_keys_unlock == gate and state.has("Modern Warp Beacon", self.player)
+        elif era == "Past":
+            return self.past_keys_unlock == gate and state.has("Timeworn Warp Beacon", self.player)
+        elif era == "Time":
+            return self.time_keys_unlock == gate and state.has("Mysterious Warp Beacon", self.player)
+        else:
+            raise Exception("Invallid Era: {}".format(era))

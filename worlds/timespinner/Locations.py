@@ -14,8 +14,11 @@ class LocationData(NamedTuple):
     rule: Callable[[CollectionState], bool] = lambda state: True
 
 
-def get_locations(world: Optional[MultiWorld], player: Optional[int], flooded: PreCalculatedWeights) -> Tuple[LocationData, ...]:
-    logic = TimespinnerLogic(world, player)
+def get_locations(world: Optional[MultiWorld], player: Optional[int], 
+                            precalculated_weights: PreCalculatedWeights) -> Tuple[LocationData, ...]:
+                            
+    flooded: PreCalculatedWeights = precalculated_weights
+    logic = TimespinnerLogic(world, player, precalculated_weights)
 
     # 1337000 - 1337155 Generic locations
     # 1337171 - 1337175 New Pickup checks

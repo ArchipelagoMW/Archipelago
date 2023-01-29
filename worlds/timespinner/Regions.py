@@ -66,17 +66,8 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
 
     connectStartingRegion(world, player)
 
-    if is_option_enabled(world, player, "UnchainedKeys"):
-        present_keys_unlock: str = precalculated_weights.present_key_unlock
-        past_keys_unlock: str = precalculated_weights.past_key_unlock
-        time_keys_unlock: str = precalculated_weights.time_key_unlock
-    else:
-        present_keys_unlock: str = precalculated_weights.pyramid_keys_unlock
-        past_keys_unlock: str = precalculated_weights.pyramid_keys_unlock
-        time_keys_unlock: str = precalculated_weights.pyramid_keys_unlock
-
     flooded: PreCalculatedWeights = precalculated_weights
-    logic = TimespinnerLogic(world, player)
+    logic = TimespinnerLogic(world, player, precalculated_weights)
     names: Dict[str, int] = {}
 
     connect(world, player, names, 'Lake desolation', 'Lower lake desolation', lambda state: logic.has_timestop(state) or state.has('Talaria Attachment', player) or flooded.flood_lake_desolation)
@@ -174,23 +165,23 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Ancient Pyramid (left)', 'Ancient Pyramid (entrance)')
     connect(world, player, names, 'Ancient Pyramid (left)', 'Ancient Pyramid (right)', lambda state: logic.has_upwarddash(state) or flooded.flood_pyramid_shaft)
     connect(world, player, names, 'Ancient Pyramid (right)', 'Ancient Pyramid (left)', lambda state: logic.has_upwarddash(state) or flooded.flood_pyramid_shaft)
-    connect(world, player, names, 'Space time continuum', 'Lake desolation', lambda state:  present_keys_unlock == "GateLakeDesolation")
-    connect(world, player, names, 'Space time continuum', 'Lower lake desolation', lambda state: present_keys_unlock == "GateKittyBoss")
-    connect(world, player, names, 'Space time continuum', 'Library', lambda state: present_keys_unlock == "GateLeftLibrary")
-    connect(world, player, names, 'Space time continuum', 'Varndagroth tower right (lower)', lambda state: present_keys_unlock == "GateMilitaryGate")
-    connect(world, player, names, 'Space time continuum', 'Skeleton Shaft', lambda state: present_keys_unlock == "GateSealedCaves")
-    connect(world, player, names, 'Space time continuum', 'Sealed Caves (Sirens)', lambda state: present_keys_unlock == "GateSealedSirensCave")
-    connect(world, player, names, 'Space time continuum', 'Upper Lake Serene', lambda state: past_keys_unlock == "GateLakeSereneLeft")
-    connect(world, player, names, 'Space time continuum', 'Left Side forest Caves', lambda state: past_keys_unlock == "GateLakeSereneRight")
-    connect(world, player, names, 'Space time continuum', 'Refugee Camp', lambda state: past_keys_unlock == "GateAccessToPast")
-    connect(world, player, names, 'Space time continuum', 'Castle Ramparts', lambda state: past_keys_unlock == "GateCastleRamparts")
-    connect(world, player, names, 'Space time continuum', 'Castle Keep', lambda state: past_keys_unlock == "GateCastleKeep")
-    connect(world, player, names, 'Space time continuum', 'Royal towers (lower)', lambda state: past_keys_unlock == "GateRoyalTowers")
-    connect(world, player, names, 'Space time continuum', 'Caves of Banishment (Maw)', lambda state: past_keys_unlock == "GateMaw")
-    connect(world, player, names, 'Space time continuum', 'Caves of Banishment (upper)', lambda state: past_keys_unlock == "GateCavesOfBanishment")
-    connect(world, player, names, 'Space time continuum', 'Ancient Pyramid (entrance)', lambda state: time_keys_unlock == "GateGyre" or is_option_enabled(world, player, "EnterSandman"))
-    connect(world, player, names, 'Space time continuum', 'Ancient Pyramid (left)', lambda state: time_keys_unlock == "GateLeftPyramid")
-    connect(world, player, names, 'Space time continuum', 'Ancient Pyramid (right)', lambda state: time_keys_unlock == "GateRightPyramid")
+    connect(world, player, names, 'Space time continuum', 'Lake desolation', lambda state: logic.can_teleport_to(state, "Present", "GateLakeDesolation"))
+    connect(world, player, names, 'Space time continuum', 'Lower lake desolation', lambda state: logic.can_teleport_to(state, "Present", "GateKittyBoss"))
+    connect(world, player, names, 'Space time continuum', 'Library', lambda state: logic.can_teleport_to(state, "Present", "GateLeftLibrary"))
+    connect(world, player, names, 'Space time continuum', 'Varndagroth tower right (lower)', lambda state: logic.can_teleport_to(state, "Present", "GateMilitaryGate"))
+    connect(world, player, names, 'Space time continuum', 'Skeleton Shaft', lambda state: logic.can_teleport_to(state, "Present", "GateSealedCaves"))
+    connect(world, player, names, 'Space time continuum', 'Sealed Caves (Sirens)', lambda state: logic.can_teleport_to(state, "Present", "GateSealedSirensCave"))
+    connect(world, player, names, 'Space time continuum', 'Upper Lake Serene', lambda state: logic.can_teleport_to(state, "Past", "GateLakeSereneLeft"))
+    connect(world, player, names, 'Space time continuum', 'Left Side forest Caves', lambda state: logic.can_teleport_to(state, "Past", "GateLakeSereneRight"))
+    connect(world, player, names, 'Space time continuum', 'Refugee Camp', lambda state: logic.can_teleport_to(state, "Past", "GateAccessToPast"))
+    connect(world, player, names, 'Space time continuum', 'Castle Ramparts', lambda state: logic.can_teleport_to(state, "Past", "GateCastleRamparts"))
+    connect(world, player, names, 'Space time continuum', 'Castle Keep', lambda state: logic.can_teleport_to(state, "Past", "GateCastleKeep"))
+    connect(world, player, names, 'Space time continuum', 'Royal towers (lower)', lambda state: logic.can_teleport_to(state, "Past", "GateRoyalTowers"))
+    connect(world, player, names, 'Space time continuum', 'Caves of Banishment (Maw)', lambda state: logic.can_teleport_to(state, "Past", "GateMaw"))
+    connect(world, player, names, 'Space time continuum', 'Caves of Banishment (upper)', lambda state: logic.can_teleport_to(state, "Past", "GateCavesOfBanishment"))
+    connect(world, player, names, 'Space time continuum', 'Ancient Pyramid (entrance)', lambda state: logic.can_teleport_to(state, "Time", "GateGyre") or (not is_option_enabled(world, player, "UnchainedKeys") and is_option_enabled(world, player, "EnterSandman")))
+    connect(world, player, names, 'Space time continuum', 'Ancient Pyramid (left)', lambda state: logic.can_teleport_to(state, "Time", "GateLeftPyramid"))
+    connect(world, player, names, 'Space time continuum', 'Ancient Pyramid (right)', lambda state: logic.can_teleport_to(state, "Time", "GateRightPyramid"))
 
     if is_option_enabled(world, player, "GyreArchives"):
         connect(world, player, names, 'The lab (upper)', 'Ravenlord\'s Lair', lambda state: state.has('Merchant Crow', player))
