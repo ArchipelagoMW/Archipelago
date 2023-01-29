@@ -159,7 +159,7 @@ bmds = [
     LocationData(LocationName.School_2_CodeC_BMD,           0xb3107c, 0x2000209, 0x20, 0x75A0B4, 232, [1]),
     LocationData(LocationName.School_2_CodeA_BMD,           0xb3107d, 0x2000209, 0x80, 0x75A0B4, 230, [1]),
     LocationData(LocationName.School_2_CodeB_BMD,           0xb3107e, 0x2000209, 0x40, 0x75A0B4, 231, [1]),
-    LocationData(LocationName.Hades_HadesKey_BMD,           0xb3107f, 0x20001eb, 0x40, 0x772898, 231, [1]),
+    # LocationData(LocationName.Hades_HadesKey_BMD,           0xb3107f, 0x20001eb, 0x40, 0x772898, 231, [1]),
     # LocationData(LocationName.WWW_1_South_BMD,              0xb31080, 0x2000220, 0x80, 0x75D630, 230, [1]),
     # LocationData(LocationName.WWW_2_West_BMD,               0xb31081, 0x2000221, 0x80, 0x75D790, 230, [1]),
     # LocationData(LocationName.WWW_3_South_BMD,              0xb31082, 0x2000222, 0x80, 0x75D8EC, 230, [1]),

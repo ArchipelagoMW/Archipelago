@@ -103,6 +103,7 @@ class item_info:
     sender = ""
     type = ""
     count = 1
+    itemName = "Unknown"
     itemID = 0x00 #Item ID, Chip ID, etc.
     subItemID = 0x00 #Code for chips, color for programs
     itemIndex = 1
@@ -117,6 +118,7 @@ class item_info:
             "id": self.id,
             "sender": self.sender,
             "type": self.type,
+            "itemName": self.itemName,
             "itemID": self.itemID,
             "subItemID": self.subItemID,
             "count": self.count,
@@ -133,6 +135,7 @@ def get_payload(ctx: MMBN3Context):
         item_data = items_by_id[item.item]
         new_item = item_info(i, ctx.player_names[item.player], item_data.type)
         new_item.itemIndex = i+1
+        new_item.itemName = item_data.itemName
         new_item.type = item_data.type
         new_item.itemID = item_data.itemID
         new_item.subItemID = item_data.subItemID

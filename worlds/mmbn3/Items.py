@@ -200,7 +200,8 @@ chipList: typing.List[ItemData] = [
     ItemData(0xB3107C, ItemName.WideSwrd_L,        ItemClassification.filler,      ItemType.Chip,  31, ChipCode('L')),
     ItemData(0xB3107D, ItemName.Yo_Yo1_D,          ItemClassification.filler,      ItemType.Chip,  69, ChipCode('D')),
     ItemData(0xB3107E, ItemName.ZeusHammer_Z,      ItemClassification.useful,      ItemType.Chip, 208, ChipCode('Z')),
-    ItemData(0xB3107F, ItemName.BassGS_X,          ItemClassification.useful,      ItemType.Chip, 312, ChipCode('X')),
+    # ItemData(0xB3107F, ItemName.BassGS_X,          ItemClassification.useful,      ItemType.Chip, 312, ChipCode('X')),
+    ItemData(0xB3107F, ItemName.Bass_X,          ItemClassification.useful,      ItemType.Chip, 311, ChipCode('X')),
 
     ItemData(0xB31080, ItemName.DeltaRay_Z,        ItemClassification.useful,      ItemType.Chip, 302, ChipCode('Z')),
     ItemData(0xB31081, ItemName.Punk_P,            ItemClassification.useful,      ItemType.Chip, 272, ChipCode('P')),

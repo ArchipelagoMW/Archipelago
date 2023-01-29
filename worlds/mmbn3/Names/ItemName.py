@@ -145,6 +145,7 @@ KingManV3_K = "KingMan V3 K"
 BowlMan_B = "BowlMan B"
 BowlManV2_B = "BowlMan V2 B"
 BowlManV3_B = "BowlMan V3 B"
+Bass_X = "Bass+ X"
 
 ## Navi Cust Programs
 Airshoes = "Airshoes"

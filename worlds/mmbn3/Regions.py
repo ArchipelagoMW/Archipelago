@@ -253,7 +253,6 @@ regions = [
                     LocationName.Hades_Boat_Dock,
                     LocationName.Hades_South_BMD,
                     LocationName.Hades_Gargoyle_BMD,
-                    LocationName.Hades_HadesKey_BMD,
                     LocationName.Hospital_1_North_BMD,
                     LocationName.Hospital_1_West_BMD,
                     LocationName.Hospital_1_Center_BMD,

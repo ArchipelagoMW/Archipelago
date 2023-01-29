@@ -33,6 +33,9 @@ local backup_bytes = nil
 local itemsReceived  = {}
 local previousMessageBit = 0x00
 
+local key_item_start_address = 0x20019C0
+
+
 local charDict = {
     [' ']=0x00,['0']=0x01,['1']=0x02,['2']=0x03,['3']=0x04,['4']=0x05,['5']=0x06,['6']=0x07,['7']=0x08,['8']=0x09,['9']=0x0A,
     ['A']=0x0B,['B']=0x0C,['C']=0x0D,['D']=0x0E,['E']=0x0F,['F']=0x10,['G']=0x11,['H']=0x12,['I']=0x13,['J']=0x14,['K']=0x15,
@@ -100,7 +103,7 @@ local IsInDialog = function()
     return bitand(memory.read_u8(0x02009480),0x01) ~= 0
 end
 local IsInBattle = function()
-    return memory.read_u8(0x02177270) ~= 0x00
+    return memory.read_u8(0x020097F8) == 0x08
 end
 local IsItemQueued = function()
     return memory.read_u8(0x2000224) == 0x01
@@ -130,7 +133,6 @@ local is_game_complete = function()
     -- Game is still ongoing
     return false
 end
-
 
 local saveItemIndexToRAM = function(newIndex)
     memory.write_s16_le(0x20000AE,newIndex)
@@ -329,7 +331,7 @@ local story_bmd_checks = function()
     checks["School 2 CodeC BMD"] = memory.read_u8(0x2000209)
     checks["School 2 CodeA BMD"] = memory.read_u8(0x2000209)
     checks["School 2 CodeB BMD"] = memory.read_u8(0x2000209)
-    checks["Hades HadesKey BMD"] = memory.read_u8(0x20001eb)
+    --checks["Hades HadesKey BMD"] = memory.read_u8(0x20001eb)
     --checks["WWW 1 South BMD"] = memory.read_u8(0x2000220)
     --checks["WWW 2 West BMD"] = memory.read_u8(0x2000221)
     --checks["WWW 3 South BMD"] = memory.read_u8(0x2000222)
@@ -692,7 +694,191 @@ local GetMessage = function(item)
     return bytes
 end
 
+local getChipCodeIndex = function(chip_id, chip_code)
+    chipCodeArrayStartAddress = 0x8011510 + (0x20 * chip_id)
+    for i=1,6 do
+        currentCode = memory.read_u8(chipCodeArrayStartAddress + (i-1))
+        if currentCode == chip_code then
+            return i-1
+        end
+    end
+    return 0
+end
+
+local getProgramColorIndex = function(program_id, program_color)
+    --TO DO Figure out where the color comes from.
+    if program_color > 4 then return 3 end
+    return program_color-1
+end
+
+local addChip = function(chip_id, chip_code, amount)
+    chipStartAddress = 0x02001F60
+    chipOffset = 0x12 * chip_id
+    chip_code_index = getChipCodeIndex(chip_id, chip_code)
+    currentChipAddress = chipStartAddress + chipOffset + chip_code_index
+    currentChipCount = memory.read_u8(currentChipAddress)
+    memory.write_u8(currentChipAddress,currentChipCount+amount)
+end
+
+local addProgram = function(program_id, program_color, amount)
+    print("Attempting to send program")
+    programStartAddress = 0x02001A80
+    programOffset = 0x04 * program_id
+    program_code_index = getProgramColorIndex(program_id, program_color)
+    currentProgramAddress = programStartAddress + programOffset + program_code_index
+    currentProgramCount = memory.read_u8(currentProgramAddress)
+    memory.write_u8(currentProgramAddress, currentProgramCount+amount)
+    -- As far as I can tell, everything uses either some combination of 1, 2, and 3, or it uses 4
+    -- And having extra data in one does not affect the other. So, until I find out how to actually check which index
+    -- We set both.
+    currentProgramAddress = programStartAddress + programOffset + 3
+    currentProgramCount = memory.read_u8(currentProgramAddress)
+    memory.write_u8(currentProgramAddress, currentProgramCount+amount)
+end
+
+local addSubChip = function(subchip_id, amount)
+    subChipStartAddress = 0x02001A30
+    --SubChip indices start after the key items, so subtract 112 from the index to get the actual subchip index
+    currentSubChipAddress = subChipStartAddress + (subchip_id - 112)
+    currentSubChipCount = memory.read_u8(currentSubChipAddress)
+    --TODO check submem, reject if number too big
+    memory.write_u8(currentSubChipAddress, currentSubChipCount+amount)
+end
+
+local changeZenny = function(val)
+	if val == nil then
+		return 0
+	end
+	if memory.read_u32_le(0x20018F4) <= math.abs(tonumber(val)) and tonumber(val) < 0 then
+		memory.write_u32_le(0x20018f4, 0)
+		val = 0
+		return "empty"
+	end
+	memory.write_u32_le(0x20018f4, memory.read_u32_le(0x20018F4) + tonumber(val))
+	if memory.read_u32_le(0x20018F4) > 999999 then
+		memory.write_u32_le(0x20018F4, 999999)
+	end
+	return val
+end
+
+local changeFrags = function(val)
+	if val == nil then
+		return 0
+	end
+	if memory.read_u16_le(0x20018F8) <= math.abs(tonumber(val)) and tonumber(val) < 0 then
+		memory.write_u16_le(0x20018f8, 0)
+		val = 0
+		return "empty"
+	end
+	memory.write_u16_le(0x20018f8, memory.read_u16_le(0x20018F8) + tonumber(val))
+	if memory.read_u16_le(0x20018F8) > 9999 then
+		memory.write_u16_le(0x20018F8, 9999)
+	end
+	return val
+end
+
+-- Fix Health Pools
+local fix_hp = function()
+	-- Current Health fix
+	if IsInBattle() and not (memory.read_u16_le(0x20018A0) == memory.read_u16_le(0x2037294)) then
+		memory.write_u16_le(0x20018A0, memory.read_u16_le(0x2037294))
+	end
+
+	-- Max Health Fix
+	if IsInBattle() and not (memory.read_u16_le(0x20018A2) == memory.read_u16_le(0x2037296)) then
+		memory.write_u16_le(0x20018A2, memory.read_u16_le(0x2037296))
+	end
+end
+
+local changeRegMemory = function(amt)
+    regMemoryAddress = 0x02001897
+    currentRegMem = memory.read_u8(regMemoryAddress)
+    memory.write_u8(regMemoryAddress, currentRegMem + amt)
+end
+
+local changeMaxHealth = function(val)
+	fix_hp()
+	if val == nil then
+		fix_hp()
+		return 0
+	end
+	if math.abs(tonumber(val)) >= memory.read_u16_le(0x20018A2) and tonumber(val) < 0 then
+		memory.write_u16_le(0x20018A2, 0)
+		if IsInBattle() then
+			memory.write_u16_le(0x2037296, memory.read_u16_le(0x20018A2))
+			if memory.read_u16_le(0x2037296) >= memory.read_u16_le(0x20018A2) then
+				memory.write_u16_le(0x2037296, memory.read_u16_le(0x20018A2))
+			end
+		end
+		fix_hp()
+		return "lethal"
+	end
+	memory.write_u16_le(0x20018A2, memory.read_u16_le(0x20018A2) + tonumber(val))
+	if memory.read_u16_le(0x20018A2) > 9999 then
+		memory.write_u16_le(0x20018A2, 9999)
+	end
+	if IsInBattle() then
+		memory.write_u16_le(0x2037296, memory.read_u16_le(0x20018A2))
+	end
+	fix_hp()
+	return val
+end
+
 local SendItem = function(item)
+    print(item["type"])
+
+    if item["type"] == "undernet" then
+        undernet_id = Check_Progressive_Undernet_ID()
+        if undernet_id > 8 then
+            -- Generate Extra BugFrags
+            changeFrags(20)
+            gui.addmessage("Receiving extra Undernet Rank from "..item["sender"]..", +20 BugFrags")
+        else
+            itemAddress = key_item_start_address + Next_Progressive_Undernet_ID(undernet_id)
+
+            itemCount = memory.read_u8(itemAddress)
+            itemCount = itemCount + item["count"]
+            memory.write_u8(itemAddress, itemCount)
+            gui.addmessage("Received Undernet Rank from player "..item["sender"])
+        end
+    elseif item["type"] == "chip" then
+        addChip(item["itemID"], item["subItemID"], item["count"])
+        gui.addmessage("Received Chip "..item["itemName"].." from player "..item["sender"])
+    elseif item["type"] == "key" then
+        itemAddress = key_item_start_address + item["itemID"]
+        itemCount = memory.read_u8(itemAddress)
+        itemCount = itemCount + item["count"]
+        memory.write_u8(itemAddress, itemCount)
+        -- HPMemory will increase the internal counter but not actually increase the HP. If the item is one of those, do that
+        if item["itemID"] == 96 then
+            changeMaxHealth(20)
+        end
+        -- Same for the RegUps, but there's three of those
+        if item["itemID"] == 98 then
+            changeRegMemory(1)
+        end
+        if item["itemID"] == 99 then
+            changeRegMemory(2)
+        end
+        if item["itemID"] == 100 then
+            changeRegMemory(3)
+        end
+        gui.addmessage("Received Key Item "..item["itemName"].." from player "..item["sender"])
+    elseif item["type"] == "subchip" then
+        addSubChip(item["itemID"], item["count"])
+        gui.addmessage("Received SubChip "..item["itemName"].." from player "..item["sender"])
+    elseif item["type"] == "zenny" then
+        changeZenny(item["count"])
+        gui.addmessage("Received "..item["count"].."z from "..item["sender"])
+    elseif item["type"] == "program" then
+        addProgram(item["itemID"], item["subItemID"], item["count"])
+        gui.addmessage("Received Program "..item["itemName"].." from player "..item["sender"])
+    elseif item["type"] == "bugfrag" then
+        changeFrags(item["count"])
+        gui.addmessage("Received "..item["count"].." BugFrag(s) from "..item["sender"])
+    end
+
+    --[[ Temporary removal of the original item system
     message = GetMessage(item)
     -- Store previous
     backup_bytes = memory.read_bytes_as_array(0x203fe10, #message)
@@ -700,6 +886,7 @@ local SendItem = function(item)
     memory.write_bytes_as_array(0x203fe10, message)
     -- Signal that the item is ready to be read
     memory.write_u32_le(0x2000224,0x00000001)
+    --]]
 end
 
 local RestoreItemRam = function()
@@ -820,11 +1007,6 @@ function main()
 
         if not (curstate == prevstate) then
             prevstate = curstate
-        end
-
-        currentMessageBit = memory.read_u8(0x2000224);
-        if (currentMessageBit ~= previousMessageBit) then
-            -- print("Message bit "..previousMessageBit.." -> "..currentMessageBit)
         end
 
         itemStateMachineProcess()

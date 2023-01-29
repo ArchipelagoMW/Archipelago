@@ -243,7 +243,6 @@ class MMBN3World(World):
         self.multiworld.get_location(LocationName.Yoka_2_Upper_BMD, self.player).access_rule = has_press
         self.multiworld.get_location(LocationName.Beach_2_East_BMD, self.player).access_rule = has_press
         self.multiworld.get_location(LocationName.Hades_South_BMD, self.player).access_rule = has_press
-        self.multiworld.get_location(LocationName.Hades_HadesKey_BMD, self.player).access_rule = has_press
         self.multiworld.get_location(LocationName.Secret_3_BugFrag_BMD, self.player).access_rule = has_press
         self.multiworld.get_location(LocationName.Secret_3_Island_BMD, self.player).access_rule = has_press
         self.multiworld.get_location(LocationName.Catching_gang_members, self.player).access_rule = has_press
