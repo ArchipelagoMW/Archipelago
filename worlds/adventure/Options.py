@@ -19,7 +19,7 @@ class ItemRandoType(Choice):
     Default value: traditional
     """
 
-    display_name = "Default capsule monster"
+    display_name = "Item type"
     option_traditional = 0x00
     option_inactive = 0x01
     default = option_traditional
@@ -69,7 +69,7 @@ class BatLogic(Choice):
     option_cannot_break = 0x0
     option_can_break = 0x1
     option_use_logic = 0x2
-    default = option_cannot_break
+    default = option_can_break
 
 
 adventure_option_definitions: Dict[str, type(Option)] = {

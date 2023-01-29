@@ -22,7 +22,7 @@ local carryAddress = 0x9D
 local last_carry_item = 0xAB
 local frames_with_no_item = 0
 
-
+local itemMessages = {}
 
 local nullObjectId = 0xAB
 local ItemsReceived = nil
@@ -59,7 +59,9 @@ local u8 = nil
 local wU8 = nil
 local u16
 
-
+local bizhawk_version = client.getversion()
+local is23Or24Or25 = (bizhawk_version=="2.3.1") or (bizhawk_version:sub(1,3)=="2.4") or (bizhawk_version:sub(1,3)=="2.5")
+local is26To28 =  (bizhawk_version:sub(1,3)=="2.6") or (bizhawk_version:sub(1,3)=="2.7") or (bizhawk_version:sub(1,3)=="2.8")
 
 u8 = memory.read_u8
 wU8 = memory.write_u8
@@ -99,6 +101,16 @@ function processBlock(block)
         return
     end
     local block_identified = 0
+    local msgBlock = block['messages']
+    if msgBlock ~= nil then
+        block_identified = 1
+        for i, v in pairs(msgBlock) do
+            if itemMessages[i] == nil then
+                local msg = {TTL=450, message=v, color=0xFFFF0000}
+                itemMessages[i] = msg
+            end
+        end
+    end
     local itemsBlock = block["items"]
     if itemsBlock ~= nil then
         block_identified = 1
@@ -147,6 +159,63 @@ function processBlock(block)
       print("unidentified block")
       print(block)
    end
+end
+
+local function clearScreen()
+    if is23Or24Or25 then
+        return
+    elseif is26To28 then
+        drawText(0, 0, "", "black")
+    end
+end
+
+local function getMaxMessageLength()
+    if is23Or24Or25 then
+        return client.screenwidth()/11
+    elseif is26To28 then
+        return client.screenwidth()/12
+    end
+end
+
+function drawText(x, y, message, color)
+    if is23Or24Or25 then
+        gui.addmessage(message)
+    elseif is26To28 then
+        gui.drawText(x, y, message, color, 0xB0000000, 18, "Courier New", nil, nil, nil, "client")
+    end
+end
+
+local function drawMessages()
+    if table.empty(itemMessages) then
+        clearScreen()
+        return
+    end
+    local y = 10
+    found = false
+    maxMessageLength = getMaxMessageLength()
+    for k, v in pairs(itemMessages) do
+        if v["TTL"] > 0 then
+            message = v["message"]
+            while true do
+                drawText(5, y, message:sub(1, maxMessageLength), v["color"])
+                y = y + 16
+
+                message = message:sub(maxMessageLength + 1, message:len())
+                if message:len() == 0 then
+                    break
+                end
+            end
+            newTTL = 0
+            if is26To28 then
+                newTTL = itemMessages[k]["TTL"] - 1
+            end
+            itemMessages[k]["TTL"] = newTTL
+            found = true
+        end
+    end
+    if found == false then
+        clearScreen()
+    end
 end
 
 function difference(a, b)
@@ -269,6 +338,7 @@ function main()
     end
     while true do
         frame = frame + 1
+        drawMessages()
         if not (curstate == prevstate) then
             print("Current state: "..curstate)
             prevstate = curstate
@@ -331,6 +401,8 @@ function main()
                     memory.write_u8(APItemRam, 0xFF, "System Bus")
                 end
             end
+        elseif (u8(PlayerRoomAddr) == 0x00) then -- not alive mode, in number room
+            ItemIndex = 0  -- reset our inventory
         end
         if (curstate == STATE_OK) or (curstate == STATE_INITIAL_CONNECTION_MADE) or (curstate == STATE_TENTATIVELY_CONNECTED) then
             if (frame % 5 == 0) then
