@@ -39,9 +39,9 @@ class Shop():
     blacklist: Set[str] = set()  # items that don't work, todo: actually check against this
     type = ShopType.Shop
     slot_names: Dict[int, str] = {
-        0: "Left",
-        1: "Center",
-        2: "Right"
+        0: " Left",
+        1: " Center",
+        2: " Right"
     }
 
     def __init__(self, region, room_id: int, shopkeeper_config: int, custom: bool, locked: bool, sram_offset: int):
@@ -142,7 +142,11 @@ class Shop():
 
 class TakeAny(Shop):
     type = ShopType.TakeAny
-
+    slot_names: Dict[int, str] = {
+        0: "",
+        1: "",
+        2: ""
+    }
 
 class UpgradeShop(Shop):
     type = ShopType.UpgradeShop
@@ -168,8 +172,10 @@ def FillDisabledShopSlots(world):
 
 
 def ShopSlotFill(world):
-    shop_slots: Set[ALttPLocation] = {location for shop_locations in (shop.region.locations for shop in world.shops)
+    shop_slots: Set[ALttPLocation] = {location for shop_locations in
+                                      (shop.region.locations for shop in world.shops if shop.type != ShopType.TakeAny)
                                       for location in shop_locations if location.shop_slot is not None}
+
     removed = set()
     for location in shop_slots:
         shop: Shop = location.parent_region.shop
@@ -318,7 +324,7 @@ def create_shops(world, player: int):
         for index, item in enumerate(inventory):
             shop.add_inventory(index, *item)
             if not locked and num_slots:
-                slot_name = f"{region.name} {shop.slot_names[index]}"
+                slot_name = f"{region.name}{shop.slot_names[index]}"
                 loc = ALttPLocation(player, slot_name, address=shop_table_by_location[slot_name],
                                     parent=region, hint_text="for sale")
                 loc.shop_slot = index
@@ -376,7 +382,7 @@ total_dynamic_shop_slots = sum(3 for shopname, data in shop_table.items() if not
 
 SHOP_ID_START = 0x400000
 shop_table_by_location_id = dict(enumerate(
-    (f"{name} {Shop.slot_names[num]}" for name, shop_data in
+    (f"{name}{Shop.slot_names[num]}" for name, shop_data in
      sorted(shop_table.items(), key=lambda item: item[1].sram_offset)
      for num in range(3)), start=SHOP_ID_START))
 
@@ -591,3 +597,22 @@ def price_to_funny_price(world, item: dict, player: int):
                 item['price'] = min(price_chart[p_type](item['price']), 255)
                 item['price_type'] = p_type
             break
+
+
+def create_dynamic_shop_locations(world, player):
+    for shop in world.shops:
+        if shop.region.player == player:
+            for i, item in enumerate(shop.inventory):
+                if item is None:
+                    continue
+                if item['create_location']:
+                    slot_name = f"{shop.region.name}{shop.slot_names[i]}"
+                    loc = ALttPLocation(player, slot_name,
+                                        address=shop_table_by_location[slot_name], parent=shop.region)
+                    loc.place_locked_item(ItemFactory(item['item'], player))
+                    if shop.type == ShopType.TakeAny:
+                        loc.shop_slot_disabled = True
+                    shop.region.locations.append(loc)
+                    world.clear_location_cache()
+
+                    loc.shop_slot = i
