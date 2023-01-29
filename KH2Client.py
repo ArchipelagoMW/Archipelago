@@ -33,14 +33,15 @@ class KH2CommandProcessor(ClientCommandProcessor):
             #hooking into the game
             if self.ctx.kh2connected:
                 logger.info("You are already autotracking")
+                return
             try:    
                 self.ctx.kh2=pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
                 logger.info("You are now autotracking")
+                self.ctx.kh2connected=True
             except:
                 logger.info("Game is not opened/autotrackable")
-                return
 
-            self.ctx.kh2connected=True
+            
             
 
 
@@ -227,9 +228,12 @@ class KH2Context(CommonContext):
             await asyncio.sleep(1)
         itemMemory=0
         try:
+            #cannot give items during loading screens
+            #0x8E9DA3=load 0xAB8BC7=black 0x2A148E8=controable 
+            while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x8E9DA3,1), "big")!=0 and int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0xAB8BC7,1), "big")!=0 \
+		       and int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x2A148E8,1), "big")!=0:
+               await asyncio.sleep(0.5)
             while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x0714DB8,1), "big")==255:
-                await asyncio.sleep(0.5)
-            while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x8E9DA3,1), "big")>0 or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0xAB8BC7,1), "big")>0:
                 await asyncio.sleep(0.5)
             if itemcode.ability:
                 if char=="Donald":

@@ -445,11 +445,13 @@ exclusionItem_table = {
          
     },
     "StatUps":{
-        ItemName.MaxHPUp,
-        ItemName.MaxMPUp,
-        ItemName.DriveGaugeUp,
-        ItemName.ItemSlotUp,
-        },
+        ItemName.MaxHPUp, 			
+        ItemName.MaxMPUp,			
+        ItemName.DriveGaugeUp,	
+        ItemName.ArmorSlotUp, 		
+        ItemName.AccessorySlotUp, 	
+        ItemName.ItemSlotUp, 		
+    },
     "Forms": {
         ItemName.ValorForm,
         ItemName.WisdomForm,
