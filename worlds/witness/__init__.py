@@ -119,6 +119,14 @@ class WitnessWorld(World):
 
         less_junk = 0
 
+        dog_check = self.multiworld.get_location(
+            "Town Pet the Dog", self.player
+        )
+
+        dog_check.place_locked_item(self.create_item("Puzzle Skip"))
+
+        less_junk += 1
+
         for precol_item in self.multiworld.precollected_items[self.player]:
             if precol_item.name in self.items_by_name:  # if item is in the pool, remove 1 instance.
                 item_obj = self.items_by_name[precol_item.name]

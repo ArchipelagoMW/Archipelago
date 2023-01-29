@@ -161,7 +161,6 @@ the_witness_options: Dict[str, type] = {
     "shuffle_vault_boxes": ShuffleVaultBoxes,
     "shuffle_EPs": ShuffleEnvironmentalPuzzles,
     "EP_difficulty": EnvironmentalPuzzlesDifficulty,
-    "pet_the_dog": ShuffleDog,
     "shuffle_postgame": ShufflePostgame,
     "victory_condition": VictoryCondition,
     "mountain_lasers": MountainLasers,

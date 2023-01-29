@@ -528,10 +528,9 @@ class WitnessPlayerLocations:
             if StaticWitnessLogic.CHECKS_BY_NAME[ch]["panelType"] in self.PANEL_TYPES_TO_SHUFFLE
         }
 
-        if is_option_enabled(world, player, "pet_the_dog"):
-            dog_hex = StaticWitnessLogic.CHECKS_BY_NAME["Town Pet the Dog"]["checkHex"]
-            dog_id = StaticWitnessLocations.ALL_LOCATIONS_TO_ID["Town Pet the Dog"]
-            self.CHECK_PANELHEX_TO_ID[dog_hex] = dog_id
+        dog_hex = StaticWitnessLogic.CHECKS_BY_NAME["Town Pet the Dog"]["checkHex"]
+        dog_id = StaticWitnessLocations.ALL_LOCATIONS_TO_ID["Town Pet the Dog"]
+        self.CHECK_PANELHEX_TO_ID[dog_hex] = dog_id
 
         self.CHECK_PANELHEX_TO_ID = dict(
             sorted(self.CHECK_PANELHEX_TO_ID.items(), key=lambda item: item[1])
