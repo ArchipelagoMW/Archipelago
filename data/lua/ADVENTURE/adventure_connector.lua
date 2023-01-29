@@ -19,6 +19,7 @@ local WinAddr = 0xDE -- if not 0 (I think if 0xff specifically), we won (and sho
 
 local DragonState = {0xA8, 0xAD, 0xB2}
 local carryAddress = 0x9D
+local batCarryAddress = 0xD0
 local last_carry_item = 0xAB
 local frames_with_no_item = 0
 
@@ -31,12 +32,15 @@ local sha256hash = nil
 local foreign_items = nil
 local foreign_items_by_room = {}
 local autocollect_items = {}
+local localItemLocations = {}
 
 local prev_player_room = 0
 local prev_ap_room_index = nil
 
 local pending_foreign_items_collected = {}
+local pending_local_items_collected = {}
 local rendering_foreign_item = nil
+local skip_inventory_items = {}
 
 local inventory = {}
 local next_inventory_item = nil
@@ -139,6 +143,13 @@ function processBlock(block)
             table.insert(autocollect_items[acitem.room_id], acitem)
         end
    end
+    local localLocalItemLocations = block["local_item_locations"]
+    if localLocalItemLocations ~= nil then
+        block_identified = 1
+        localItemLocations = localLocalItemLocations
+        print("got local item locations")
+        print(localItemLocations)
+    end
    local checkedLocationsBlock = block["checked_locations"]
    if checkedLocationsBlock ~= nil then
         block_identified = 1
@@ -258,6 +269,9 @@ local function generateLocationsChecked()
     for s, f in pairs(pending_foreign_items_collected) do
         table.insert(list_of_locations, f.short_location_id + 118000000)
     end
+    for s, f in pairs(pending_local_items_collected) do
+        table.insert(list_of_locations, f + 118000000)
+    end
     return list_of_locations
 end
 
@@ -362,10 +376,21 @@ function main()
                             memory.write_u8(carryAddress, next_inventory_item)
                             ItemIndex = ItemIndex + 1
                             next_inventory_item = nil
+                            if( memory.read_u8(batCarryAddress) == next_inventory_item) then
+                                memory.write_u8(batCarryAddress, nullObjectId)
+                            end
                         end
                     end
                 else
                     frames_with_no_item = 0
+                end
+            end
+            if( carry_item ~= last_carry_item ) then
+                if ( localItemLocations ~= nil and localItemLocations[tostring(carry_item)] ~= nil ) then
+                    pending_local_items_collected[localItemLocations[tostring(carry_item)]] =
+                        localItemLocations[tostring(carry_item)]
+                    table.remove(localItemLocations, tostring(carry_item))
+                    skip_inventory_items[carry_item] = carry_item
                 end
             end
             last_carry_item = carry_item
@@ -403,6 +428,7 @@ function main()
             end
         elseif (u8(PlayerRoomAddr) == 0x00) then -- not alive mode, in number room
             ItemIndex = 0  -- reset our inventory
+            skip_inventory_items = {}
         end
         if (curstate == STATE_OK) or (curstate == STATE_INITIAL_CONNECTION_MADE) or (curstate == STATE_TENTATIVELY_CONNECTED) then
             if (frame % 5 == 0) then
@@ -431,10 +457,15 @@ function main()
                         deathlink_sent = false
                     end
                     if ItemsReceived ~= nil and ItemsReceived[ItemIndex + 1] ~= nil then
+                        while ItemsReceived[ItemIndex + 1] ~= nil and skip_inventory_items[ItemsReceived[ItemIndex + 1]] ~= nil do
+                            ItemIndex = ItemIndex + 1
+                        end
                         local static_id = ItemsReceived[ItemIndex + 1]
-                        inventory[static_id] = 1
-                        if next_inventory_item == nil then
-                            next_inventory_item = static_id
+                        if static_id ~= nil then
+                            inventory[static_id] = 1
+                            if next_inventory_item == nil then
+                                next_inventory_item = static_id
+                            end
                         end
                     end
                 end

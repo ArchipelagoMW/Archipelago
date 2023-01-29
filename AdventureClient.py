@@ -60,6 +60,7 @@ class AdventureContext(CommonContext):
     game = 'Adventure'
     foreign_items: [AdventureForeignItemInfo] = []
     autocollect_items: [AdventureAutoCollectLocation] = []
+    local_item_locations = {}
     checked_locations_sent: bool = False
 
     def __init__(self, server_address, password):
@@ -177,10 +178,12 @@ def send_ap_foreign_items(adventure_context):
     payload = json.dumps(
         {
             "foreign_items": foreign_item_json_list,
-            "autocollect_items": autocollect_item_json_list
+            "autocollect_items": autocollect_item_json_list,
+            "local_item_locations": adventure_context.local_item_locations
         }
     )
     print("sending foreign items")
+    print(payload)
     msg = payload.encode()
     (reader, writer) = adventure_context.atari_streams
     writer.write(msg)
@@ -355,6 +358,7 @@ async def patch_and_run_game(patch_file, ctx):
             patch = stream.read()
         ctx.foreign_items = AdventureDeltaPatch.read_foreign_items(patch_archive)
         ctx.autocollect_items = AdventureDeltaPatch.read_autocollect_items(patch_archive)
+        ctx.local_item_locations = AdventureDeltaPatch.read_local_item_locations(patch_archive)
         ctx.rom_hash, ctx.seed_name_from_data, ctx.player_name = AdventureDeltaPatch.read_rom_info(patch_archive)
         ctx.auth = ctx.player_name
     patched_rom_data = bsdiff4.patch(base_rom, patch)

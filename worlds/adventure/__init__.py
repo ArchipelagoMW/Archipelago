@@ -16,7 +16,7 @@ from .Options import adventure_option_definitions
 from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, apply_basepatch, \
     AdventureAutoCollectLocation
 from .Items import item_table, ItemData, nothing_item_id, event_table, AdventureItem
-from .Locations import location_table
+from .Locations import location_table, base_location_id
 from .Offsets import static_item_data_location, items_ram_start, static_item_element_size, item_position_table
 from .Regions import create_regions
 from .Rules import set_rules
@@ -144,6 +144,7 @@ class AdventureWorld(World):
         rom_path: str = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.bin")
         foreign_item_locations = []
         auto_collect_locations = []
+        local_item_to_location = {}
         try:
             rom_bytearray = bytearray(apply_basepatch(get_base_rom_bytes()))
             # start and stop indices are offsets in the ROM file, not Adventure ROM addresses (which start at f000)
@@ -161,8 +162,8 @@ class AdventureWorld(World):
                 elif location.item.player == self.player and \
                         location.item.name != "nothing" and \
                         location.item.code is not None:
-                    static_item = static_item_data_location + \
-                                  item_table[location.item.name].table_index * static_item_element_size
+                    item_table_offset = item_table[location.item.name].table_index * static_item_element_size
+                    static_item = static_item_data_location + item_table_offset
                     item_ram_address = rom_bytearray[static_item]
                     item_position_data_start = item_position_table + item_ram_address - items_ram_start
                     location_data = location_table[location.name]
@@ -176,6 +177,8 @@ class AdventureWorld(World):
                         room_x.to_bytes(1, "little")
                     rom_bytearray[item_position_data_start + 2: item_position_data_start + 3] = \
                         room_y.to_bytes(1, "little")
+                    local_item_to_location[item_table_offset] = self.location_name_to_id[location.name] - \
+                                                                base_location_id
                 elif location.item.player != self.player and location.item.code is not None:
                     if location.item.code != nothing_item_id:
                         location_data = location_table[location.name]
@@ -209,7 +212,7 @@ class AdventureWorld(World):
             patch = AdventureDeltaPatch(os.path.splitext(rom_path)[0] + AdventureDeltaPatch.patch_file_ending,
                                         player=self.player, player_name=self.multiworld.player_name[self.player],
                                         patched_path=rom_path, locations=foreign_item_locations,
-                                        autocollect=auto_collect_locations,
+                                        autocollect=auto_collect_locations, local_item_locations=local_item_to_location,
                                         seed_name=bytes(self.multiworld.seed_name, encoding='ascii'))
             patch.write()
         finally:

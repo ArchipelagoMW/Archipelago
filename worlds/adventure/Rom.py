@@ -1,4 +1,5 @@
 import hashlib
+import json
 import os
 import zipfile
 from typing import Optional, Any
@@ -56,6 +57,7 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
     patch_file_ending = ".apadvn"
     foreign_items: [AdventureForeignItemInfo] = None
     autocollect_items: [AdventureAutoCollectLocation] = None
+    local_item_locations: {} = None
     patched_rom_sha256: str = None
     seedName: bytes = None
 
@@ -69,9 +71,11 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
 
             self.autocollect_items = kwargs['autocollect']
             self.seedName = kwargs['seed_name']
+            self.local_item_locations = kwargs['local_item_locations']
             del kwargs['locations']
             del kwargs['autocollect']
             del kwargs['seed_name']
+            del kwargs['local_item_locations']
         super(AdventureDeltaPatch, self).__init__(*args, **kwargs)
         if not patch_only:
             with open(self.patched_path, "rb") as file:
@@ -113,6 +117,10 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
             opened_zipfile.writestr("seedName",
                                     self.seedName,
                                     compress_type=zipfile.ZIP_STORED)
+        if self.local_item_locations is not None:
+            opened_zipfile.writestr("local_item_locations",
+                                     json.dumps(self.local_item_locations),
+                                     compress_type=zipfile.ZIP_LZMA)
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile):
         super(AdventureDeltaPatch, self).read_contents(opened_zipfile)
@@ -155,6 +163,12 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
             offset = i * 2
             autocollect_items.append(AdventureAutoCollectLocation(bytelist[offset], bytelist[offset + 1]))
         return autocollect_items
+
+    @classmethod
+    def read_local_item_locations(cls, opened_zipfile: zipfile.ZipFile) -> [AdventureForeignItemInfo]:
+        readbytes: bytes = opened_zipfile.read("local_item_locations")
+        readstr: str = readbytes.decode()
+        return json.loads(readstr)
 
 
 def apply_basepatch(base_rom_bytes: bytes) -> bytes:
