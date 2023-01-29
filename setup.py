@@ -11,8 +11,6 @@ from collections.abc import Iterable
 from hashlib import sha3_512
 from pathlib import Path
 
-import setuptools
-import setuptools.command.build
 
 if __name__ == "__main__":
     import ModuleUpdate
@@ -41,12 +39,15 @@ except pkg_resources.ResolutionError:
     subprocess.call([sys.executable, '-m', 'pip', 'install', requirement, '--upgrade'])
     import cx_Freeze
 
+# .build only exists if cx-Freeze is the right version, so we have to update/install that first before this line
+import setuptools.command.build
 
 if os.path.exists("X:/pw.txt"):
     print("Using signtool")
     with open("X:/pw.txt", encoding="utf-8-sig") as f:
         pw = f.read()
-    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p "' + pw + r'" /fd sha256 /tr http://timestamp.digicert.com/ '
+    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p "' + pw + \
+               r'" /fd sha256 /tr http://timestamp.digicert.com/ '
 else:
     signtool = None
 
