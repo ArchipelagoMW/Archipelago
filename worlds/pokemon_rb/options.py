@@ -25,7 +25,6 @@ class RivalName(TextChoice):
     option_choose_in_game = -1
     default = -1
 
-
 class Goal(Choice):
     """If Professor Oak is selected, your victory condition will require challenging and defeating Oak after becoming
     Champion and defeating or capturing the Pokemon at the end of Cerulean Cave."""
@@ -505,6 +504,9 @@ class LoseMoneyOnBlackout(Toggle):
     display_name = "Lose Money on Blackout"
     default = 1
 
+class EarlyExpAll(Toggle):
+    """Makes it so the Exp. All will be in sphere 1."""
+    display_name = "Early Exp All"
 
 class TrapPercentage(Range):
     """Chance for each filler item to be replaced with trap items. Keep in mind that trainersanity vastly increases the
@@ -599,6 +601,7 @@ pokemon_rb_options = {
     "master_ball_price": MasterBallPrice,
     "starting_money": StartingMoney,
     "lose_money_on_blackout": LoseMoneyOnBlackout,
+    "Early_Exp_All": EarlyExpAll,
     "trap_percentage": TrapPercentage,
     "poison_trap_weight": PoisonTrapWeight,
     "fire_trap_weight": FireTrapWeight,
