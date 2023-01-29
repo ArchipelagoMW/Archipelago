@@ -81,9 +81,19 @@ class KH2Logic(LogicMixin):
                 level += 1
         return level >= amount
 
+    def kh_VisitLocking_Amount(self,player,amount):
+        level = 0
+        #torn pages are not added since you cannot get exp from that world
+        for item in {ItemName.CastleKey,ItemName.BattlefieldsofWar,ItemName.SwordoftheAncestor,ItemName.BeastsClaw,
+                     ItemName.BoneFist,ItemName.ProudFang,ItemName.SkillandCrossbones,ItemName.Scimitar,ItemName.MembershipCard,
+                     ItemName.IceCream,ItemName.Picture, ItemName.WaytotheDawn, ItemName.IdentityDisk, ItemName.Poster}:
+            if self.has(item,player):
+                level+=1
+        return level>=amount
+
+
     def kh_FinalFights_unlocked(self, player):
-        return self.has(ItemName.ProofofConnection, player, 1) and self.has(ItemName.ProofofNonexistence, player, 1) and self.has(
-            ItemName.ProofofPeace, player, 1)
+        return self.has(ItemName.ProofofConnection, player, 1) and self.has(ItemName.ProofofNonexistence, player, 1) and self.has(ItemName.ProofofPeace, player, 1)
 
     def kh_Vicotry(self, player):
         return self.has('Victory', player, 1)

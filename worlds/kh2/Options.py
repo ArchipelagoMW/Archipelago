@@ -140,7 +140,7 @@ class Keyblade_Abilities(Choice):
 
 class BlacklistKeyblade(OptionSet):
     """Black List these Abilities on Keyblades"""
-    display_name = "BlackList Keyblade Abilities"
+    display_name = "Blacklist Keyblade Abilities"
     verify_item_name = True
 
 KH2_Options: typing.Dict[str, type(Option)] = {

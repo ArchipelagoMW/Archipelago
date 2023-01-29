@@ -400,9 +400,9 @@ HB2_Checks = {
     LocationName.HeartlessManufactoryCosmicChain:             LocationData(0x13013C, 311, "Chest"),             
     LocationName.SephirothBonus:                              LocationData(0x13013D, 35, "Get Bonus"),          
     LocationName.SephirothFenrir:                             LocationData(0x13013E, 282, "Chest"),             
-    LocationName.WinnersProof:                                LocationData(0x13013F, 560, "Chest"),             
-    LocationName.ProofofPeace:                                LocationData(0x130140, 588, "Chest"),             
-    LocationName.DemyxDataAPBoost:                            LocationData(0x130141, 589, "Chest"),                   
+    LocationName.WinnersProof:                                LocationData(0x13013F, 588, "Chest"),             
+    LocationName.ProofofPeace:                                LocationData(0x130140, 589, "Chest"),             
+    LocationName.DemyxDataAPBoost:                            LocationData(0x130141, 560, "Chest"),                   
     LocationName.CoRDepthsAPBoost:                            LocationData(0x130142, 562, "Chest"),             
     LocationName.CoRDepthsPowerCrystal:                       LocationData(0x130143, 563, "Chest"),             
     LocationName.CoRDepthsFrostCrystal:                       LocationData(0x130144, 564, "Chest"),             
@@ -1071,6 +1071,7 @@ popupChecks = [
     LocationName.VexenASRoadtoDiscovery,
     LocationName.LarxeneASCloakedThunder,
     LocationName.ZexionASBookofShadows,
+    LocationName.ZexionDataLostIllusion,
     LocationName.LexaeusASStrengthBeyondStrength,
     LocationName.MarluxiaASEternalBlossom
 ]

@@ -93,15 +93,20 @@ class KH2World(World):
         else:
             SoraKeybladeAbilityPool.extend(Items.ActionAbility_Table.keys())
             SoraKeybladeAbilityPool.extend(Items.SupportAbility_Table.keys())
+
         for ability in self.multiworld.BlacklistKeyblade[self.player].value:
             if ability in SoraKeybladeAbilityPool:
                 SoraKeybladeAbilityPool.remove(ability)
         for item,data in Items.item_dictionary_table.items():
             ItemQuantityDict.update({item:data.quantity})     
-        #add level balanceing
-        for item in self.multiworld.start_inventory[self.player].value:
-            data=item_dictionary_table[item]
-            ItemQuantityDict.update({item:Items.item_dictionary_table[item].quantity-1})
+        
+        for item,value in self.multiworld.start_inventory[self.player].value.items():
+            if item in Items.ActionAbility_Table.keys() or item in Items.ActionAbility_Table.keys():
+                data=item_dictionary_table[item]
+                #cannot have more than the quantity for abilties
+                if value>Items.item_dictionary_table[item].quantity:
+                    raise Exception("You have too many "+str(item)+" In the pool")
+                ItemQuantityDict.update({item:Items.item_dictionary_table[item].quantity-1})
 
         for item in Items.DonaldAbility_Table.keys():
             data=ItemQuantityDict[item]
@@ -119,9 +124,7 @@ class KH2World(World):
         while len(goofyItemPool)<len(Items.GoofyAbility_Table.keys()):
             donaldItemPool.append(self.multiworld.random.choice(donaldItemPool))
 
-        #probably could add these into generate early but its fine here currently
-        #creats a copy of the lists so the tests are okay with running them twice even though they would never be ran twice
-         
+        #plando keyblades because they can only have abilites  
         KeyBladeSlotCopy=list(Locations.Keyblade_Slots.keys())
         while len(SoraKeybladeAbilityPool)<len(KeyBladeSlotCopy):
             SoraKeybladeAbilityPool.append(self.multiworld.random.choice(list(Items.SupportAbility_Table.keys())))
@@ -172,12 +175,13 @@ class KH2World(World):
                 self.multiworld.get_location(superboss, self.player).place_locked_item(
                     self.create_item(random.choice(fillerItems)))
                 self.totallocations -= 1
-
+        
         # These checks are missable
+        randomsttitem=random.choice(fillerItems)
         self.multiworld.get_location(LocationName.JunkChampionBelt, self.player).place_locked_item(
-            self.create_item(random.choice(fillerItems)))
+            self.create_item(randomsttitem))
         self.multiworld.get_location(LocationName.JunkMedal, self.player).place_locked_item(
-            self.create_item(random.choice(fillerItems)))
+            self.create_item(randomsttitem))
         self.totallocations -= 2
 
 

@@ -101,6 +101,8 @@ def patch_kh2(self, output_directory):
 
 
         elif data.yml == "Keyblade":
+            #print(self.multiworld.Keyblade_Minimum[self.player].value)
+            #print(self.multiworld.Keyblade_Maximum[self.player].value)
             self.formattedItem["Stats"].append({
                 "Id": data.locid,
                 "Attack": random.randint(self.multiworld.Keyblade_Minimum[self.player].value,

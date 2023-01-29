@@ -740,6 +740,23 @@ elseif ReadLong(0x2F9302-0x56454E) == 0x43B70F0D74D68541 then --Global
 elseif ReadLong(0x2F9142-0x56454E) == 0x43B70F0D74D68541 then --JP
 	WriteByte(0x2F9146 - 0x56454E,0)
 end
+--Alternate Party Models (adding new UCM using MEMT causes problems when shopping)
+if World == 0x0C and Place ~= 0x070C then --Mage & Knight (KH I)
+	WriteString(Obj0+0x16F0,'P_EX020_DC\0')
+	WriteString(Obj0+0x1750,'P_EX030_DC\0')
+	WriteString(Obj0+0x3250,'P_EX020_DC_ANGRY_NPC\0')
+	WriteString(Obj0+0x40F0,'H_ZZ020_DC\0')
+	WriteString(Obj0+0x4150,'H_ZZ030_DC\0')
+elseif Place == 0x2004 or Place == 0x2104 or Place == 0x2204 or Place == 0x2604 then --Casual (CoM)
+	WriteString(Obj0+0x16F0,'P_EX020_CM\0')
+	WriteString(Obj0+0x1750,'P_EX030_CM\0')
+else --Revert costume changes
+	WriteString(Obj0+0x16F0,'P_EX020\0')
+	WriteString(Obj0+0x1750,'P_EX030\0')
+	WriteString(Obj0+0x3250,'P_EX020_ANGRY_NPC\0')
+	WriteString(Obj0+0x40F0,'H_ZZ020\0')
+	WriteString(Obj0+0x4150,'H_ZZ030\0')
+end
 --[[Enable Anti Form Forcing
 if ReadByte(Save+0x3524) == 6 then --In Anti Form
 	BitOr(Save+0x36C0,0x20) --Unlocks Anti Form
@@ -1406,7 +1423,7 @@ if Place == 0x1A04 then
 		elseif Progress == 9 then --After Sandlot Nobodies II
 			WarpRoom = 0x02
 		elseif Progress == 10 then --Post 2nd Visit
-			WarpRoom = 0x02
+			WarpRoom = 0x1A
 		elseif Progress == 11 then --3rd Visit
 			WarpRoom = 0x77
 		elseif Progress == 12 then --[Before The Old Mansion Nobodies, After The Old Mansion Nobodies]

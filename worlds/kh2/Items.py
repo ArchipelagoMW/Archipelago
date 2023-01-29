@@ -366,8 +366,8 @@ GoofyAbility_Table = {
 }
 
 Misc_Table = {
-    ItemName.LuckyEmblem: 				ItemData(0x130125,  0,1,0x111),
-    ItemName.Victory: 				    ItemData(0x130126,  1,263,0x111),
+    ItemName.LuckyEmblem: 				ItemData(0x130126,  0,1,0x111),
+    ItemName.Victory: 				    ItemData(0x130127,  1,263,0x111),
     #ItemName.ArchipelagoItem:           ItemData(0x130127,  1,461,0x111),
 }   #itemname luckey emblem (0x1320172)    will be unused map
 
@@ -448,6 +448,7 @@ exclusionItem_table = {
         ItemName.MaxHPUp,
         ItemName.MaxMPUp,
         ItemName.DriveGaugeUp,
+        ItemName.ItemSlotUp,
         },
     "Forms": {
         ItemName.ValorForm,
