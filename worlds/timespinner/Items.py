@@ -194,11 +194,11 @@ item_table: Dict[str, ItemData] = {
     'Timeworn Warp Beacon': ItemData('Relic', 1337181, progression=True),
     'Modern Warp Beacon': ItemData('Relic', 1337182, progression=True),
     'Mysterious Warp Beacon': ItemData('Relic', 1337183, progression=True),
-    'Meteor Sparrow Trap': ItemData('Trap', 1337184, trap=True),
-    'Poison Trap': ItemData('Trap', 1337185, trap=True),
-    'Chaos Trap': ItemData('Trap', 1337186, trap=True),
-    'Neurotoxin Trap': ItemData('Trap', 1337187, trap=True),
-    'Bee Trap': ItemData('Trap', 1337188, trap=True),
+    'Meteor Sparrow Trap': ItemData('Trap', 1337184, 0, trap=True),
+    'Poison Trap': ItemData('Trap', 1337185, 0, trap=True),
+    'Chaos Trap': ItemData('Trap', 1337186, 0, trap=True),
+    'Neurotoxin Trap': ItemData('Trap', 1337187, 0, trap=True),
+    'Bee Trap': ItemData('Trap', 1337188, 0, trap=True),
     # 1337189 - 1337248 Reserved
     'Max Sand': ItemData('Stat', 1337249, 14)
 }
