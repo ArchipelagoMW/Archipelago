@@ -23,6 +23,7 @@ local batCarryAddress = 0xD0 -- uses ram object location
 local batInvalidCarryItem = 0x78
 local last_carry_item = 0xAB
 local frames_with_no_item = 0
+local ItemTableStart = 0xfe88
 
 local itemMessages = {}
 
@@ -375,8 +376,14 @@ function main()
                         local input_value = memory.read_u8(input_button_address, "System Bus")
                         if( input_value >= 64 and input_value < 128 ) then -- high bit clear, second highest bit set
                             memory.write_u8(carryAddress, next_inventory_item)
-                            if( memory.read_u8(batCarryAddress) == memory.read_u8(next_inventory_item)) then
+                            local item_ram_location = memory.read_u8(ItemTableStart + next_inventory_item)
+                            if( memory.read_u8(batCarryAddress) ~= 0x78 and
+                                    memory.read_u8(batCarryAddress) == item_ram_location) then
                                 memory.write_u8(batCarryAddress, batInvalidCarryItem)
+                                memory.write_u8(batCarryAddress+ 1, 0)
+                                memory.write_u8(item_ram_location, current_player_room)
+                                memory.write_u8(item_ram_location + 1, memory.read_u8(PlayerRoomAddr + 1))
+                                memory.write_u8(item_ram_location + 2, memory.read_u8(PlayerRoomAddr + 2))
                             end
                             ItemIndex = ItemIndex + 1
                             next_inventory_item = nil
@@ -429,6 +436,7 @@ function main()
             end
         elseif (u8(PlayerRoomAddr) == 0x00) then -- not alive mode, in number room
             ItemIndex = 0  -- reset our inventory
+            next_inventory_item = nil
             skip_inventory_items = {}
         end
         if (curstate == STATE_OK) or (curstate == STATE_INITIAL_CONNECTION_MADE) or (curstate == STATE_TENTATIVELY_CONNECTED) then
@@ -459,6 +467,7 @@ function main()
                     end
                     if ItemsReceived ~= nil and ItemsReceived[ItemIndex + 1] ~= nil then
                         while ItemsReceived[ItemIndex + 1] ~= nil and skip_inventory_items[ItemsReceived[ItemIndex + 1]] ~= nil do
+                            print("skip")
                             ItemIndex = ItemIndex + 1
                         end
                         local static_id = ItemsReceived[ItemIndex + 1]
