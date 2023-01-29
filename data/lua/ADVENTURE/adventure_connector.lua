@@ -18,8 +18,9 @@ local WinAddr = 0xDE -- if not 0 (I think if 0xff specifically), we won (and sho
 -- once, and reset that when none of them are 2 again)
 
 local DragonState = {0xA8, 0xAD, 0xB2}
-local carryAddress = 0x9D
-local batCarryAddress = 0xD0
+local carryAddress = 0x9D -- uses rom object table
+local batCarryAddress = 0xD0 -- uses ram object location
+local batInvalidCarryItem = 0x78
 local last_carry_item = 0xAB
 local frames_with_no_item = 0
 
@@ -374,11 +375,11 @@ function main()
                         local input_value = memory.read_u8(input_button_address, "System Bus")
                         if( input_value >= 64 and input_value < 128 ) then -- high bit clear, second highest bit set
                             memory.write_u8(carryAddress, next_inventory_item)
+                            if( memory.read_u8(batCarryAddress) == memory.read_u8(next_inventory_item)) then
+                                memory.write_u8(batCarryAddress, batInvalidCarryItem)
+                            end
                             ItemIndex = ItemIndex + 1
                             next_inventory_item = nil
-                            if( memory.read_u8(batCarryAddress) == next_inventory_item) then
-                                memory.write_u8(batCarryAddress, nullObjectId)
-                            end
                         end
                     end
                 else
