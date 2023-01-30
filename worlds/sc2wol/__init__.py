@@ -1,15 +1,16 @@
 import typing
 
-from typing import List, Set, Tuple, NamedTuple
+from typing import List, Set, Tuple, Dict
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
-from ..AutoWorld import WebWorld
+from worlds.AutoWorld import WebWorld, World
 from .Items import StarcraftWoLItem, item_table, filler_items, item_name_groups, get_full_item_list, \
-    basic_unit
+    get_basic_units
 from .Locations import get_locations
 from .Regions import create_regions
-from .Options import sc2wol_options, get_option_value
+from .Options import sc2wol_options, get_option_value, get_option_set_value
 from .LogicMixin import SC2WoLLogic
-from ..AutoWorld import World
+from .PoolFilter import filter_missions, filter_items, get_item_upgrades
+from .MissionTables import get_starting_mission_locations, MissionInfo
 
 
 class Starcraft2WoLWebWorld(WebWorld):
@@ -33,57 +34,56 @@ class SC2WoLWorld(World):
 
     game = "Starcraft 2 Wings of Liberty"
     web = Starcraft2WoLWebWorld()
-    data_version = 2
+    data_version = 3
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
-    options = sc2wol_options
+    option_definitions = sc2wol_options
 
     item_name_groups = item_name_groups
     locked_locations: typing.List[str]
     location_cache: typing.List[Location]
     mission_req_table = {}
+    final_mission_id: int
+    victory_item: str
+    required_client_version = 0, 3, 6
 
-    def __init__(self, world: MultiWorld, player: int):
-        super(SC2WoLWorld, self).__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super(SC2WoLWorld, self).__init__(multiworld, player)
         self.location_cache = []
         self.locked_locations = []
-
-    def _create_items(self, name: str):
-        data = get_full_item_list()[name]
-        return [self.create_item(name) for _ in range(data.quantity)]
 
     def create_item(self, name: str) -> Item:
         data = get_full_item_list()[name]
         return StarcraftWoLItem(name, data.classification, data.code, self.player)
 
     def create_regions(self):
-        self.mission_req_table = create_regions(self.world, self.player, get_locations(self.world, self.player),
-                                                self.location_cache)
+        self.mission_req_table, self.final_mission_id, self.victory_item = create_regions(
+            self.multiworld, self.player, get_locations(self.multiworld, self.player), self.location_cache
+        )
 
     def generate_basic(self):
-        excluded_items = get_excluded_items(self, self.world, self.player)
+        excluded_items = get_excluded_items(self.multiworld, self.player)
 
-        assign_starter_items(self.world, self.player, excluded_items, self.locked_locations)
+        starter_items = assign_starter_items(self.multiworld, self.player, excluded_items, self.locked_locations)
 
-        pool = get_item_pool(self.world, self.player, excluded_items)
+        pool = get_item_pool(self.multiworld, self.player, self.mission_req_table, starter_items, excluded_items, self.location_cache)
 
-        fill_item_pool_with_dummy_items(self, self.world, self.player, self.locked_locations, self.location_cache, pool)
+        fill_item_pool_with_dummy_items(self, self.multiworld, self.player, self.locked_locations, self.location_cache, pool)
 
-        self.world.itempool += pool
+        self.multiworld.itempool += pool
 
     def set_rules(self):
-        setup_events(self.world, self.player, self.locked_locations, self.location_cache)
-
-        self.world.completion_condition[self.player] = lambda state: state.has('All-In: Victory', self.player)
+        setup_events(self.player, self.locked_locations, self.location_cache)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(self.victory_item, self.player)
 
     def get_filler_item_name(self) -> str:
-        return self.world.random.choice(filler_items)
+        return self.multiworld.random.choice(filler_items)
 
     def fill_slot_data(self):
         slot_data = {}
         for option_name in sc2wol_options:
-            option = getattr(self.world, option_name)[self.player]
+            option = getattr(self.multiworld, option_name)[self.player]
             if type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)
         slot_req_table = {}
@@ -91,10 +91,11 @@ class SC2WoLWorld(World):
             slot_req_table[mission] = self.mission_req_table[mission]._asdict()
 
         slot_data["mission_req"] = slot_req_table
+        slot_data["final_mission"] = self.final_mission_id
         return slot_data
 
 
-def setup_events(world: MultiWorld, player: int, locked_locations: typing.List[str], location_cache: typing.List[Location]):
+def setup_events(player: int, locked_locations: typing.List[str], location_cache: typing.List[Location]):
     for location in location_cache:
         if location.address is None:
             item = Item(location.name, ItemClassification.progression, None, player)
@@ -104,78 +105,108 @@ def setup_events(world: MultiWorld, player: int, locked_locations: typing.List[s
             location.place_locked_item(item)
 
 
-def get_excluded_items(self: SC2WoLWorld, world: MultiWorld, player: int) -> Set[str]:
+def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
     excluded_items: Set[str] = set()
 
-    if get_option_value(world, player, "upgrade_bonus") == 1:
+    if get_option_value(multiworld, player, "upgrade_bonus") == 1:
         excluded_items.add("Ultra-Capacitors")
     else:
         excluded_items.add("Vanadium Plating")
 
-    if get_option_value(world, player, "bunker_upgrade") == 1:
+    if get_option_value(multiworld, player, "bunker_upgrade") == 1:
         excluded_items.add("Shrike Turret")
     else:
         excluded_items.add("Fortified Bunker")
 
-    for item in world.precollected_items[player]:
+    for item in multiworld.precollected_items[player]:
         excluded_items.add(item.name)
+
+    excluded_items_option = getattr(multiworld, 'excluded_items', [])
+
+    excluded_items.update(excluded_items_option[player].value)
 
     return excluded_items
 
 
-def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]):
-    non_local_items = world.non_local_items[player].value
+def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]) -> List[Item]:
+    non_local_items = multiworld.non_local_items[player].value
+    if get_option_value(multiworld, player, "early_unit"):
+        local_basic_unit = sorted(item for item in get_basic_units(multiworld, player) if item not in non_local_items and item not in excluded_items)
+        if not local_basic_unit:
+            raise Exception("At least one basic unit must be local")
 
-    local_basic_unit = tuple(item for item in basic_unit if item not in non_local_items)
-    if not local_basic_unit:
-        raise Exception("At least one basic unit must be local")
+        # The first world should also be the starting world
+        first_mission = list(multiworld.worlds[player].mission_req_table)[0]
+        starting_mission_locations = get_starting_mission_locations(multiworld, player)
+        if first_mission in starting_mission_locations:
+            first_location = starting_mission_locations[first_mission]
+        elif first_mission == "In Utter Darkness":
+            first_location = first_mission + ": Defeat"
+        else:
+            first_location = first_mission + ": Victory"
 
-    # The first world should also be the starting world
-    first_location = list(world.worlds[player].mission_req_table)[0]
-
-    if first_location == "In Utter Darkness":
-        first_location = first_location + ": Defeat"
+        return [assign_starter_item(multiworld, player, excluded_items, locked_locations, first_location, local_basic_unit)]
     else:
-        first_location = first_location + ": Victory"
-
-    assign_starter_item(world, player, excluded_items, locked_locations, first_location,
-                        local_basic_unit)
+        return []
 
 
-def assign_starter_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str],
-                        location: str, item_list: Tuple[str, ...]):
+def assign_starter_item(multiworld: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str],
+                        location: str, item_list: Tuple[str, ...]) -> Item:
 
-    item_name = world.random.choice(item_list)
+    item_name = multiworld.random.choice(item_list)
 
     excluded_items.add(item_name)
 
-    item = create_item_with_correct_settings(world, player, item_name)
+    item = create_item_with_correct_settings(player, item_name)
 
-    world.get_location(location, player).place_locked_item(item)
+    multiworld.get_location(location, player).place_locked_item(item)
 
     locked_locations.append(location)
 
+    return item
 
-def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> List[Item]:
+
+def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[str, MissionInfo],
+                  starter_items: List[str], excluded_items: Set[str], location_cache: List[Location]) -> List[Item]:
     pool: List[Item] = []
+
+    # For the future: goal items like Artifact Shards go here
+    locked_items = []
+
+    # YAML items
+    yaml_locked_items = get_option_set_value(multiworld, player, 'locked_items')
 
     for name, data in item_table.items():
         if name not in excluded_items:
             for _ in range(data.quantity):
-                item = create_item_with_correct_settings(world, player, name)
-                pool.append(item)
+                item = create_item_with_correct_settings(player, name)
+                if name in yaml_locked_items:
+                    locked_items.append(item)
+                else:
+                    pool.append(item)
 
-    return pool
+    existing_items = starter_items + [item for item in multiworld.precollected_items[player]]
+    existing_names = [item.name for item in existing_items]
+    # Removing upgrades for excluded items
+    for item_name in excluded_items:
+        if item_name in existing_names:
+            continue
+        invalid_upgrades = get_item_upgrades(pool, item_name)
+        for invalid_upgrade in invalid_upgrades:
+            pool.remove(invalid_upgrade)
+
+    filtered_pool = filter_items(multiworld, player, mission_req_table, location_cache, pool, existing_items, locked_items)
+    return filtered_pool
 
 
-def fill_item_pool_with_dummy_items(self: SC2WoLWorld, world: MultiWorld, player: int, locked_locations: List[str],
+def fill_item_pool_with_dummy_items(self: SC2WoLWorld, multiworld: MultiWorld, player: int, locked_locations: List[str],
                                     location_cache: List[Location], pool: List[Item]):
     for _ in range(len(location_cache) - len(locked_locations) - len(pool)):
-        item = create_item_with_correct_settings(world, player, self.get_filler_item_name())
+        item = create_item_with_correct_settings(player, self.get_filler_item_name())
         pool.append(item)
 
 
-def create_item_with_correct_settings(world: MultiWorld, player: int, name: str) -> Item:
+def create_item_with_correct_settings(player: int, name: str) -> Item:
     data = item_table[name]
 
     item = Item(name, data.classification, data.code, player)

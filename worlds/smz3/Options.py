@@ -1,5 +1,5 @@
 import typing
-from Options import Choice, Option
+from Options import Choice, Option, Toggle, DefaultOnToggle, Range
 
 class SMLogic(Choice):
     """This option selects what kind of logic to use for item placement inside
@@ -45,6 +45,22 @@ class MorphLocation(Choice):
     option_Original = 2
     default = 0
 
+    
+class Goal(Choice):
+    """This option decides what goal is required to finish the randomizer.
+    Defeat Ganon and Mother Brain - Find the required crystals and boss tokens kill both bosses.
+    Fast Ganon and Defeat Mother Brain - The hole to ganon is open without having to defeat Agahnim in 
+                                         Ganon's Tower and Ganon can be defeat as soon you have the required 
+                                         crystals to make Ganon vulnerable. For keysanity, this mode also removes 
+                                         the Crateria Boss Key requirement from Tourian to allow faster access.
+    All Dungeons and Defeat Mother Brain -  Similar to "Defeat Ganon and Mother Brain", but also requires all dungeons 
+                                            to be beaten including Castle Tower and Agahnim."""
+    display_name = "Goal"
+    option_DefeatBoth = 0
+    option_FastGanonDefeatMotherBrain = 1
+    option_AllDungeonsDefeatMotherBrain = 2
+    default = 0
+
 class KeyShuffle(Choice):
     """This option decides how dungeon items such as keys are shuffled.
     None - A Link to the Past dungeon items can only be placed inside the 
@@ -55,9 +71,74 @@ class KeyShuffle(Choice):
     option_Keysanity = 1
     default = 0
 
+class OpenTower(Range):
+    """The amount of crystals required to be able to enter Ganon's Tower. 
+    If this is set to Random, the amount can be found in-game on a sign next to Ganon's Tower."""
+    display_name = "Open Tower"
+    range_start = 0
+    range_end = 7
+    default = 7
+
+class GanonVulnerable(Range):
+    """The amount of crystals required to be able to harm Ganon. The amount can be found 
+    in-game on a sign near the top of the Pyramid."""
+    display_name = "Ganon Vulnerable"
+    range_start = 0
+    range_end = 7
+    default = 7
+
+class OpenTourian(Range):
+    """The amount of boss tokens required to enter Tourian. The amount can be found in-game 
+    on a sign above the door leading to the Tourian entrance."""
+    display_name = "Open Tourian"
+    range_start = 0
+    range_end = 4
+    default = 4
+
+class SpinJumpsAnimation(Toggle):
+    """Enable separate space/screw jump animations"""
+    display_name = "Spin Jumps Animation"
+
+class HeartBeepSpeed(Choice):
+    """Sets the speed of the heart beep sound in A Link to the Past."""
+    display_name = "Heart Beep Speed"
+    option_Off = 0
+    option_Quarter = 1
+    option_Half = 2
+    option_Normal = 3
+    option_Double = 4
+    default = 3
+
+class HeartColor(Choice):
+    """Changes the color of the hearts in the HUD for A Link to the Past."""
+    display_name = "Heart Color"
+    option_Red = 0
+    option_Green = 1
+    option_Blue = 2
+    option_Yellow = 3
+    default = 0
+
+class QuickSwap(Toggle):
+    """When enabled, lets you switch items in ALTTP with L/R"""
+    display_name = "Quick Swap"
+
+class EnergyBeep(DefaultOnToggle):
+    """Toggles the low health energy beep in Super Metroid."""
+    display_name = "Energy Beep"
+
+
 smz3_options: typing.Dict[str, type(Option)] = {
     "sm_logic": SMLogic,
     "sword_location": SwordLocation,
     "morph_location": MorphLocation,
-    "key_shuffle": KeyShuffle
+    "goal": Goal,
+    "key_shuffle": KeyShuffle,
+    "open_tower": OpenTower, 
+    "ganon_vulnerable": GanonVulnerable,
+    "open_tourian": OpenTourian,
+    "spin_jumps_animation": SpinJumpsAnimation,
+    "heart_beep_speed": HeartBeepSpeed,
+    "heart_color": HeartColor, 
+    "quick_swap": QuickSwap,
+    "energy_beep": EnergyBeep
     }

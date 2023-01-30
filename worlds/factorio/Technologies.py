@@ -19,8 +19,8 @@ pool = ThreadPoolExecutor(1)
 
 
 def load_json_data(data_name: str) -> Union[List[str], Dict[str, Any]]:
-    with open(os.path.join(source_folder, f"{data_name}.json")) as f:
-        return json.load(f)
+    import pkgutil
+    return json.loads(pkgutil.get_data(__name__, "data/" + data_name + ".json").decode())
 
 
 techs_future = pool.submit(load_json_data, "techs")
@@ -36,7 +36,7 @@ technology_table: Dict[str, Technology] = {}
 always = lambda state: True
 
 
-class FactorioElement():
+class FactorioElement:
     name: str
 
     def __repr__(self):
@@ -98,7 +98,7 @@ class CustomTechnology(Technology):
                            and ((ingredients & {"chemical-science-pack", "production-science-pack", "utility-science-pack"})
                                 or origin.name == "rocket-silo")
         self.player = player
-        if origin.name not in world.worlds[player].static_nodes:
+        if origin.name not in world.worlds[player].special_nodes:
             if military_allowed:
                 ingredients.add("military-science-pack")
             ingredients = list(ingredients)
@@ -444,8 +444,6 @@ common_tech_table: Dict[str, int] = {tech_name: tech_id for tech_name, tech_id i
 
 useless_technologies: Set[str] = {tech_name for tech_name in common_tech_table
                                   if not technology_table[tech_name].useful()}
-
-lookup_id_to_name: Dict[int, str] = {item_id: item_name for item_name, item_id in tech_table.items()}
 
 rel_cost = {
     "wood": 10000,

@@ -130,6 +130,11 @@ class ItemType(Enum):
     CardLowerNorfairL1 = 0xDE
     CardLowerNorfairBoss = 0xDF
 
+    SmMapBrinstar = 0xCA
+    SmMapWreckedShip = 0xCB
+    SmMapMaridia = 0xCC
+    SmMapLowerNorfair = 0xCD
+
     Missile = 0xC2
     Super = 0xC3
     PowerBomb = 0xC4
@@ -174,6 +179,7 @@ class Item:
     map = re.compile("^Map")
     compass = re.compile("^Compass")
     keycard = re.compile("^Card")
+    smMap = re.compile("^SmMap")
 
     def IsDungeonItem(self): return self.dungeon.match(self.Type.name)
     def IsBigKey(self): return self.bigKey.match(self.Type.name)
@@ -181,6 +187,7 @@ class Item:
     def IsMap(self): return self.map.match(self.Type.name)
     def IsCompass(self): return self.compass.match(self.Type.name)
     def IsKeycard(self): return self.keycard.match(self.Type.name)
+    def IsSmMap(self): return self.smMap.match(self.Type.name)
 
     def Is(self, type: ItemType, world):
         return self.Type == type and self.World == world
@@ -313,7 +320,7 @@ class Item:
         Item.AddRange(itemPool, 4, Item(ItemType.BombUpgrade5))
         Item.AddRange(itemPool, 2, Item(ItemType.OneRupee))
         Item.AddRange(itemPool, 4, Item(ItemType.FiveRupees))
-        Item.AddRange(itemPool, 25 if world.Config.Keysanity else 28, Item(ItemType.TwentyRupees))
+        Item.AddRange(itemPool, 21 if world.Config.Keysanity else 28, Item(ItemType.TwentyRupees))
         Item.AddRange(itemPool, 7, Item(ItemType.FiftyRupees))
         Item.AddRange(itemPool, 5, Item(ItemType.ThreeHundredRupees))
 
@@ -413,6 +420,21 @@ class Item:
             Item(ItemType.CardWreckedShipBoss, world),
             Item(ItemType.CardLowerNorfairL1, world),
             Item(ItemType.CardLowerNorfairBoss, world),
+        ]
+
+        for item in itemPool:
+            item.Progression = True
+            item.World = world
+
+        return itemPool
+
+    @staticmethod
+    def CreateSmMaps(world):
+        itemPool =  [
+            Item(ItemType.SmMapBrinstar, world),
+            Item(ItemType.SmMapWreckedShip, world),
+            Item(ItemType.SmMapMaridia, world),
+            Item(ItemType.SmMapLowerNorfair, world)
         ]
 
         for item in itemPool:
@@ -725,7 +747,7 @@ class Progression:
 
     def CanAccessMiseryMirePortal(self, config: Config):
         if (config.SMLogic == SMLogic.Normal):
-            return (self.CardNorfairL2 or (self.SpeedBooster and self.Wave)) and self.Varia and self.Super and (self.Gravity and self.SpaceJump) and self.CanUsePowerBombs()
+            return (self.CardNorfairL2 or (self.SpeedBooster and self.Wave)) and self.Varia and self.Super and self.Gravity and self.SpaceJump and self.CanUsePowerBombs()
         else:
             return (self.CardNorfairL2 or self.SpeedBooster) and self.Varia and self.Super and \
                     (self.CanFly() or self.HiJump or self.SpeedBooster or self.CanSpringBallJump() or self.Ice) \
@@ -769,11 +791,11 @@ class Progression:
         if (world.Config.SMLogic == SMLogic.Normal):
             return self.MoonPearl and self.Flippers and \
                     self.Gravity and self.Morph and \
-                    (world.CanAquire(self, worlds.smz3.TotalSMZ3.Region.RewardType.Agahnim) or self.Hammer and self.CanLiftLight() or self.CanLiftHeavy())
+                    (world.CanAcquire(self, worlds.smz3.TotalSMZ3.Region.RewardType.Agahnim) or self.Hammer and self.CanLiftLight() or self.CanLiftHeavy())
         else:
             return self.MoonPearl and self.Flippers and \
                     (self.CanSpringBallJump() or self.HiJump or self.Gravity) and self.Morph and \
-                    (world.CanAquire(self, worlds.smz3.TotalSMZ3.Region.RewardType.Agahnim) or self.Hammer and self.CanLiftLight() or self.CanLiftHeavy())
+                    (world.CanAcquire(self, worlds.smz3.TotalSMZ3.Region.RewardType.Agahnim) or self.Hammer and self.CanLiftLight() or self.CanLiftHeavy())
 
 # Start of AP integration
 items_start_id = 84000

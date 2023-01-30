@@ -2,14 +2,13 @@ from __future__ import annotations
 
 import argparse
 import logging
-import random
-import urllib.request
-import urllib.parse
-from typing import Set, Dict, Tuple, Callable, Any, Union
 import os
-from collections import Counter
+import random
 import string
-import enum
+import urllib.parse
+import urllib.request
+from collections import Counter, ChainMap
+from typing import Dict, Tuple, Callable, Any, Union
 
 import ModuleUpdate
 
@@ -18,48 +17,17 @@ ModuleUpdate.update()
 import Utils
 from worlds.alttp import Options as LttPOptions
 from worlds.generic import PlandoConnection
-from Utils import parse_yamls, version_tuple, __version__, tuplize_version, get_options, local_path, user_path
+from Utils import parse_yamls, version_tuple, __version__, tuplize_version, get_options, user_path
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
-from BaseClasses import seeddigits, get_seed
+from BaseClasses import seeddigits, get_seed, PlandoOptions
 import Options
-from worlds.alttp import Bosses
 from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
 import copy
 
 
-class PlandoSettings(enum.IntFlag):
-    items = 0b0001
-    connections = 0b0010
-    texts = 0b0100
-    bosses = 0b1000
 
-    @classmethod
-    def from_option_string(cls, option_string: str) -> PlandoSettings:
-        result = cls(0)
-        for part in option_string.split(","):
-            part = part.strip().lower()
-            if part:
-                result = cls._handle_part(part, result)
-        return result
-
-    @classmethod
-    def from_set(cls, option_set: Set[str]) -> PlandoSettings:
-        result = cls(0)
-        for part in option_set:
-            result = cls._handle_part(part, result)
-        return result
-
-    @classmethod
-    def _handle_part(cls, part: str, base: PlandoSettings) -> PlandoSettings:
-        try:
-            part = cls[part]
-        except Exception as e:
-            raise KeyError(f"{part} is not a recognized name for a plando module. "
-                           f"Known options: {', '.join(flag.name for flag in cls)}") from e
-        else:
-            return base | part
 
 
 def mystery_argparse():
@@ -79,11 +47,6 @@ def mystery_argparse():
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=defaults["players"], type=lambda value: max(int(value), 1))
     parser.add_argument('--spoiler', type=int, default=defaults["spoiler"])
-    parser.add_argument('--lttp_rom', default=options["lttp_options"]["rom_file"],
-                        help="Path to the 1.0 JP LttP Baserom.")  # absolute, relative to cwd or relative to app path
-    parser.add_argument('--sm_rom', default=options["sm_options"]["rom_file"],
-                        help="Path to the 1.0 JP SM Baserom.")
-    parser.add_argument('--enemizercli', default=resolve_path(defaults["enemizer_path"], local_path))
     parser.add_argument('--outputpath', default=resolve_path(options["general_options"]["output_path"], user_path),
                         help="Path to output folder. Absolute or relative to cwd.")  # absolute or relative to cwd
     parser.add_argument('--race', action='store_true', default=defaults["race"])
@@ -98,7 +61,7 @@ def mystery_argparse():
         args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
     if not os.path.isabs(args.meta_file_path):
         args.meta_file_path = os.path.join(args.player_files_path, args.meta_file_path)
-    args.plando: PlandoSettings = PlandoSettings.from_option_string(args.plando)
+    args.plando: PlandoOptions = PlandoOptions.from_option_string(args.plando)
     return args, options
 
 
@@ -128,12 +91,14 @@ def main(args=None, callback=ERmain):
 
     if args.meta_file_path and os.path.exists(args.meta_file_path):
         try:
-            weights_cache[args.meta_file_path] = read_weights_yamls(args.meta_file_path)
+            meta_weights = read_weights_yamls(args.meta_file_path)[-1]
         except Exception as e:
             raise ValueError(f"File {args.meta_file_path} is destroyed. Please fix your yaml.") from e
-        meta_weights = weights_cache[args.meta_file_path][-1]
         print(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights)}")
-        del(meta_weights["meta_description"])
+        try:  # meta description allows us to verify that the file named meta.yaml is intentionally a meta file
+            del(meta_weights["meta_description"])
+        except Exception as e:
+            raise ValueError("No meta description found for meta.yaml. Unable to verify.") from e
         if args.samesettings:
             raise Exception("Cannot mix --samesettings with --meta")
     else:
@@ -153,13 +118,14 @@ def main(args=None, callback=ERmain):
     # sort dict for consistent results across platforms:
     weights_cache = {key: value for key, value in sorted(weights_cache.items())}
     for filename, yaml_data in weights_cache.items():
-        for yaml in yaml_data:
-            print(f"P{player_id} Weights: {filename} >> "
-                  f"{get_choice('description', yaml, 'No description specified')}")
-            player_files[player_id] = filename
-            player_id += 1
+        if filename not in {args.meta_file_path, args.weights_file_path}:
+            for yaml in yaml_data:
+                print(f"P{player_id} Weights: {filename} >> "
+                      f"{get_choice('description', yaml, 'No description specified')}")
+                player_files[player_id] = filename
+                player_id += 1
 
-    args.multi = max(player_id-1, args.multi)
+    args.multi = max(player_id - 1, args.multi)
     print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed} with plando: "
           f"{args.plando}")
 
@@ -168,6 +134,7 @@ def main(args=None, callback=ERmain):
                         f"A mix is also permitted.")
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
+    erargs.plando_options = args.plando
     erargs.glitch_triforce = options["generator"]["glitch_triforce_room"]
     erargs.spoiler = args.spoiler
     erargs.race = args.race
@@ -176,31 +143,29 @@ def main(args=None, callback=ERmain):
 
     Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
 
-    erargs.lttp_rom = args.lttp_rom
-    erargs.sm_rom = args.sm_rom
-    erargs.enemizercli = args.enemizercli
-
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
-        {fname: ( tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
-                for fname, yamls in weights_cache.items()}
-    player_path_cache = {}
-    for player in range(1, args.multi + 1):
-        player_path_cache[player] = player_files.get(player, args.weights_file_path)
+        {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
+         for fname, yamls in weights_cache.items()}
 
     if meta_weights:
         for category_name, category_dict in meta_weights.items():
             for key in category_dict:
-                option = get_choice(key, category_dict)
+                option = roll_meta_option(key, category_name, category_dict)
                 if option is not None:
-                    for player, path in player_path_cache.items():
+                    for path in weights_cache:
                         for yaml in weights_cache[path]:
                             if category_name is None:
-                                yaml[key] = option
+                                for category in yaml:
+                                    if category in AutoWorldRegister.world_types and key in Options.common_options:
+                                        yaml[category][key] = option
                             elif category_name not in yaml:
                                 logging.warning(f"Meta: Category {category_name} is not present in {path}.")
                             else:
-                               yaml[category_name][key] = option
+                                yaml[category_name][key] = option
 
+    player_path_cache = {}
+    for player in range(1, args.multi + 1):
+        player_path_cache[player] = player_files.get(player, args.weights_file_path)
     name_counter = Counter()
     erargs.player_settings = {}
 
@@ -226,15 +191,15 @@ def main(args=None, callback=ERmain):
                     elif not erargs.name[player]:  # if name was not specified, generate it from filename
                         erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
                     erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
-                    
+
                     player += 1
             except Exception as e:
                 raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
         else:
             raise RuntimeError(f'No weights specified for player {player}')
 
-    if len(set(erargs.name.values())) != len(erargs.name):
-        raise Exception(f"Names have to be unique. Names: {Counter(erargs.name.values())}")
+    if len(set(name.lower() for name in erargs.name.values())) != len(erargs.name):
+        raise Exception(f"Names have to be unique. Names: {Counter(name.lower() for name in erargs.name.values())}")
 
     if args.yaml_output:
         import yaml
@@ -317,11 +282,11 @@ class SafeDict(dict):
 
 
 def handle_name(name: str, player: int, name_counter: Counter):
-    name_counter[name] += 1
+    name_counter[name.lower()] += 1
+    number = name_counter[name.lower()]
     new_name = "%".join([x.replace("%number%", "{number}").replace("%player%", "{player}") for x in name.split("%%")])
-    new_name = string.Formatter().vformat(new_name, (), SafeDict(number=name_counter[name],
-                                                                 NUMBER=(name_counter[name] if name_counter[
-                                                                                                   name] > 1 else ''),
+    new_name = string.Formatter().vformat(new_name, (), SafeDict(number=number,
+                                                                 NUMBER=(number if number > 1 else ''),
                                                                  player=player,
                                                                  PLAYER=(player if player > 1 else '')))
     new_name = new_name.strip()[:16]
@@ -336,19 +301,6 @@ def prefer_int(input_data: str) -> Union[str, int]:
     except:
         return input_data
 
-
-available_boss_names: Set[str] = {boss.lower() for boss in Bosses.boss_table if boss not in
-                                         {'Agahnim', 'Agahnim2', 'Ganon'}}
-available_boss_locations: Set[str] = {f"{loc.lower()}{f' {level}' if level else ''}" for loc, level in
-                                             Bosses.boss_location_table}
-
-boss_shuffle_options = {None: 'none',
-                        'none': 'none',
-                        'basic': 'basic',
-                        'full': 'full',
-                        'chaos': 'chaos',
-                        'singularity': 'singularity'
-                        }
 
 goals = {
     'ganon': 'ganon',
@@ -380,6 +332,28 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
                             f'overwrite a root option. '
                             f'This is probably in error.')
     return weights
+
+
+def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
+    if not game:
+        return get_choice(option_key, category_dict)
+    if game in AutoWorldRegister.world_types:
+        game_world = AutoWorldRegister.world_types[game]
+        options = ChainMap(game_world.option_definitions, Options.per_game_common_options)
+        if option_key in options:
+            if options[option_key].supports_weighting:
+                return get_choice(option_key, category_dict)
+            return category_dict[option_key]
+    if game == "A Link to the Past":  # TODO wow i hate this
+        if option_key in {"glitches_required", "dark_room_logic", "entrance_shuffle", "goals", "triforce_pieces_mode",
+                          "triforce_pieces_percentage", "triforce_pieces_available", "triforce_pieces_extra",
+                          "triforce_pieces_required", "shop_shuffle", "mode", "item_pool", "item_functionality",
+                          "boss_shuffle", "enemy_damage", "enemy_health", "timer", "countdown_start_time",
+                          "red_clock_time", "blue_clock_time", "green_clock_time", "dungeon_counters", "shuffle_prizes",
+                          "misery_mire_medallion", "turtle_rock_medallion", "sprite_pool", "sprite",
+                          "random_sprite_on_event"}:
+            return get_choice(option_key, category_dict)
+    raise Exception(f"Error generating meta option {option_key} for {game}.")
 
 
 def roll_linked_options(weights: dict) -> dict:
@@ -434,42 +408,7 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
     return weights
 
 
-def get_plando_bosses(boss_shuffle: str, plando_options: Set[str]) -> str:
-    if boss_shuffle in boss_shuffle_options:
-        return boss_shuffle_options[boss_shuffle]
-    elif PlandoSettings.bosses in plando_options:
-        options = boss_shuffle.lower().split(";")
-        remainder_shuffle = "none"  # vanilla
-        bosses = []
-        for boss in options:
-            if boss in boss_shuffle_options:
-                remainder_shuffle = boss_shuffle_options[boss]
-            elif "-" in boss:
-                loc, boss_name = boss.split("-")
-                if boss_name not in available_boss_names:
-                    raise ValueError(f"Unknown Boss name {boss_name}")
-                if loc not in available_boss_locations:
-                    raise ValueError(f"Unknown Boss Location {loc}")
-                level = ''
-                if loc.split(" ")[-1] in {"top", "middle", "bottom"}:
-                    # split off level
-                    loc = loc.split(" ")
-                    level = f" {loc[-1]}"
-                    loc = " ".join(loc[:-1])
-                loc = loc.title().replace("Of", "of")
-                if not Bosses.can_place_boss(boss_name.title(), loc, level):
-                    raise ValueError(f"Cannot place {boss_name} at {loc}{level}")
-                bosses.append(boss)
-            elif boss not in available_boss_names:
-                raise ValueError(f"Unknown Boss name or Boss shuffle option {boss}.")
-            else:
-                bosses.append(boss)
-        return ";".join(bosses + [remainder_shuffle])
-    else:
-        raise Exception(f"Boss Shuffle {boss_shuffle} is unknown and boss plando is turned off.")
-
-
-def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option)):
+def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option), plando_options: PlandoOptions):
     if option_key in game_weights:
         try:
             if not option.supports_weighting:
@@ -480,13 +419,12 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
         except Exception as e:
             raise Exception(f"Error generating option {option_key} in {ret.game}") from e
         else:
-            if hasattr(player_option, "verify"):
-                player_option.verify(AutoWorldRegister.world_types[ret.game])
+            player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
     else:
-        setattr(ret, option_key, option(option.default))
+        setattr(ret, option_key, option.from_any(option.default))  # call the from_any here to support default "random"
 
 
-def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings.bosses):
+def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.bosses):
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
@@ -499,7 +437,7 @@ def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings
         if tuplize_version(version) > version_tuple:
             raise Exception(f"Settings reports required version of generator is at least {version}, "
                             f"however generator is of version {__version__}")
-        required_plando_options = PlandoSettings.from_option_string(requirements.get("plando", ""))
+        required_plando_options = PlandoOptions.from_option_string(requirements.get("plando", ""))
         if required_plando_options not in plando_options:
             if required_plando_options:
                 raise Exception(f"Settings reports required plando module {str(required_plando_options)}, "
@@ -526,18 +464,19 @@ def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings
         setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
 
     if ret.game in AutoWorldRegister.world_types:
-        for option_key, option in world_type.options.items():
-            handle_option(ret, game_weights, option_key, option)
+        for option_key, option in world_type.option_definitions.items():
+            handle_option(ret, game_weights, option_key, option, plando_options)
         for option_key, option in Options.per_game_common_options.items():
             # skip setting this option if already set from common_options, defaulting to root option
-            if not (option_key in Options.common_options and option_key not in game_weights):
-                handle_option(ret, game_weights, option_key, option)
-        if PlandoSettings.items in plando_options:
+            if option_key not in world_type.option_definitions and \
+                    (option_key not in Options.common_options or option_key in game_weights):
+                handle_option(ret, game_weights, option_key, option, plando_options)
+        if PlandoOptions.items in plando_options:
             ret.plando_items = game_weights.get("plando_items", [])
         if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
             # bad hardcoded behavior to make this work for now
             ret.plando_connections = []
-            if PlandoSettings.connections in plando_options:
+            if PlandoOptions.connections in plando_options:
                 options = game_weights.get("plando_connections", [])
                 for placement in options:
                     if roll_percentage(get_choice("percentage", placement, 100)):
@@ -614,8 +553,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     ret.item_functionality = get_choice_legacy('item_functionality', weights)
 
-    boss_shuffle = get_choice_legacy('boss_shuffle', weights)
-    ret.shufflebosses = get_plando_bosses(boss_shuffle, plando_options)
 
     ret.enemy_damage = {None: 'default',
                         'default': 'default',
@@ -654,7 +591,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
             raise Exception(f"unknown Medallion {medallion} for {'misery mire' if index == 0 else 'turtle rock'}")
 
     ret.plando_texts = {}
-    if PlandoSettings.texts in plando_options:
+    if PlandoOptions.texts in plando_options:
         tt = TextTable()
         tt.removeUnwantedText()
         options = weights.get("plando_texts", [])
@@ -666,7 +603,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                 ret.plando_texts[at] = str(get_choice_legacy("text", placement))
 
     ret.plando_connections = []
-    if PlandoSettings.connections in plando_options:
+    if PlandoOptions.connections in plando_options:
         options = weights.get("plando_connections", [])
         for placement in options:
             if roll_percentage(get_choice_legacy("percentage", placement, 100)):

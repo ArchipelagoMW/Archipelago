@@ -1,12 +1,12 @@
 {
-	"Raft": ["RadioTower", "ResearchTable"],
+	"Raft": ["ResearchTable", "RadioTower", "Vasagatan", "BalboaIsland", "CaravanIsland", "Tangaroa", "Varuna Point", "Temperance", "Utopia"],
 	"ResearchTable": [],
-	"RadioTower": ["Vasagatan"],
-	"Vasagatan": ["BalboaIsland"],
-	"BalboaIsland": ["CaravanIsland"],
-	"CaravanIsland": ["Tangaroa"],
-	"Tangaroa": ["Varuna Point"],
-	"Varuna Point": ["Temperance"],
-	"Temperance": ["Utopia"],
+	"RadioTower": [],
+	"Vasagatan": [],
+	"BalboaIsland": [],
+	"CaravanIsland": [],
+	"Tangaroa": [],
+	"Varuna Point": [],
+	"Temperance": [],
 	"Utopia": []
 }

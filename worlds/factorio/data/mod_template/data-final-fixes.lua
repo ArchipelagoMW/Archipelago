@@ -1,4 +1,4 @@
-{% from "macros.lua" import dict_to_recipe %}
+{% from "macros.lua" import dict_to_recipe, variable_to_lua %}
 -- this file gets written automatically by the Archipelago Randomizer and is in its raw form a Jinja2 Template
 require('lib')
 data.raw["rocket-silo"]["rocket-silo"].fluid_boxes = {
@@ -50,16 +50,8 @@ data.raw["recipe"]["{{recipe_name}}"].ingredients = {{ dict_to_recipe(recipe.ing
 {%- endfor %}
 
 local technologies = data.raw["technology"]
-local original_tech
 local new_tree_copy
-allowed_ingredients = {}
-{%- for tech_name, technology in custom_technologies.items() %}
-allowed_ingredients["{{ tech_name }}"] = {
-{%- for ingredient in technology.ingredients %}
-["{{ingredient}}"] = 1,
-{%- endfor %}
-}
-{% endfor %}
+
 local template_tech = table.deepcopy(technologies["automation"])
 {#-  ensure the copy unlocks nothing #}
 template_tech.unlocks = {}
@@ -86,39 +78,6 @@ template_tech.prerequisites = {}
 {%- if silo == 2 %}
     data.raw["recipe"]["rocket-silo"].enabled = true
 {% endif %}
-
-function prep_copy(new_copy, old_tech)
-    old_tech.hidden = true
-    local ingredient_filter = allowed_ingredients[old_tech.name]
-    if ingredient_filter ~= nil then
-	    if mods["science-not-invited"] then
-			local weights = {
-				["automation-science-pack"] =   0, -- Red science
-				["logistic-science-pack"]   =   0, -- Green science
-				["military-science-pack"]   =   0, -- Black science
-				["chemical-science-pack"]   =   0, -- Blue science
-				["production-science-pack"] =   0, -- Purple science
-				["utility-science-pack"]    =   0, -- Yellow science
-				["space-science-pack"]      =   0  -- Space science
-			}
-			for key, value in pairs(ingredient_filter) do
-				weights[key] = value
-			end
-			SNI.setWeights(weights)
-            -- Just in case an ingredient is being added to an existing tech. Found the root cause of the 9.223e+18 problem.
-            -- Turns out science-not-invited was ultimately dividing by zero, due to it being unaware of there being added ingredients.
-            old_tech.unit.ingredients = add_ingredients(old_tech.unit.ingredients, ingredient_filter)
-			SNI.sendInvite(old_tech)
-			-- SCIENCE-not-invited could potentially make tech cost 9.223e+18.
-			old_tech.unit.count = math.min(100000, old_tech.unit.count)
-		end
-		new_copy.unit = table.deepcopy(old_tech.unit)
-		new_copy.unit.ingredients = filter_ingredients(new_copy.unit.ingredients, ingredient_filter)
-		new_copy.unit.ingredients = add_ingredients(new_copy.unit.ingredients, ingredient_filter)
-    else
-        new_copy.unit = table.deepcopy(old_tech.unit)
-    end
-end
 
 function set_ap_icon(tech)
     tech.icon = "__{{ mod_name }}__/graphics/icons/ap.png"
@@ -183,41 +142,55 @@ end
 data.raw["assembling-machine"]["assembling-machine-1"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-2"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-1"].fluid_boxes = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes)
+if mods["factory-levels"] then
+    -- Factory-Levels allows the assembling machines to get faster (and depending on settings), more productive at crafting products, the more the
+    -- assembling machine crafts the product.  If the machine crafts enough, it may auto-upgrade to the next tier.
+    for i = 1, 25, 1 do
+        data.raw["assembling-machine"]["assembling-machine-1-level-" .. i].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
+        data.raw["assembling-machine"]["assembling-machine-1-level-" .. i].fluid_boxes = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes)
+    end
+    for i = 1, 50, 1 do
+        data.raw["assembling-machine"]["assembling-machine-2-level-" .. i].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
+    end
+end
+
 data.raw["ammo"]["artillery-shell"].stack_size = 10
 
 {# each randomized tech gets set to be invisible, with new nodes added that trigger those #}
-{%- for original_tech_name, item_name, receiving_player, advancement in locations %}
-original_tech = technologies["{{original_tech_name}}"]
+{%- for original_tech_name in base_tech_table -%}
+technologies["{{ original_tech_name }}"].hidden = true
+{% endfor %}
+{%- for location, item in locations %}
 {#- the tech researched by the local player #}
 new_tree_copy = table.deepcopy(template_tech)
-new_tree_copy.name = "ap-{{ tech_table[original_tech_name] }}-"{# use AP ID #}
-prep_copy(new_tree_copy, original_tech)
-{% if tech_cost_scale != 1 %}
-new_tree_copy.unit.count = math.max(1, math.floor(new_tree_copy.unit.count * {{ tech_cost_scale }}))
-{% endif %}
-{%- if (tech_tree_information == 2 or original_tech_name in static_nodes) and item_name in base_tech_table -%}
-{#- copy Factorio Technology Icon -#}
-copy_factorio_icon(new_tree_copy, "{{ item_name }}")
-{%- if original_tech_name == "rocket-silo" and original_tech_name in static_nodes %}
+new_tree_copy.name = "ap-{{ location.address }}-"{# use AP ID #}
+new_tree_copy.unit.count = {{ location.count }}
+new_tree_copy.unit.ingredients = {{ variable_to_lua(location.factorio_ingredients) }}
+
+{%- if location.revealed and item.name in base_tech_table -%}
+{#- copy Factorio Technology Icon #}
+copy_factorio_icon(new_tree_copy, "{{ item.name }}")
+{%- if item.name == "rocket-silo" and item.player == location.player %}
 {%- for ingredient in custom_recipes["rocket-part"].ingredients %}
 table.insert(new_tree_copy.effects, {type = "nothing", effect_description = "Ingredient {{ loop.index }}: {{ ingredient }}"})
 {% endfor -%}
 {% endif -%}
-{%- elif (tech_tree_information == 2 or original_tech_name in static_nodes) and item_name in progressive_technology_table -%}
-copy_factorio_icon(new_tree_copy, "{{ progressive_technology_table[item_name][0] }}")
+{%- elif location.revealed and item.name in progressive_technology_table -%}
+copy_factorio_icon(new_tree_copy, "{{ progressive_technology_table[item.name][0] }}")
 {%- else -%}
 {#- use default AP icon if no Factorio graphics exist -#}
-{% if advancement or not tech_tree_information %}set_ap_icon(new_tree_copy){% else %}set_ap_unimportant_icon(new_tree_copy){% endif %}
+{% if item.advancement or not tech_tree_information %}set_ap_icon(new_tree_copy){% else %}set_ap_unimportant_icon(new_tree_copy){% endif %}
 {%- endif -%}
 {#- connect Technology  #}
-{%- if original_tech_name in tech_tree_layout_prerequisites %}
-{%- for prerequesite in tech_tree_layout_prerequisites[original_tech_name] %}
-table.insert(new_tree_copy.prerequisites, "ap-{{ tech_table[prerequesite] }}-")
+{%- if location in tech_tree_layout_prerequisites %}
+{%- for prerequisite in tech_tree_layout_prerequisites[location] %}
+table.insert(new_tree_copy.prerequisites, "ap-{{ prerequisite.address }}-")
 {% endfor %}
 {% endif -%}
 {#- add new Technology to game #}
 data:extend{new_tree_copy}
 {% endfor %}
+{#- Recipe Rando #}
 {% if recipe_time_scale %}
 {%- for recipe_name, recipe in recipes.items() %}
 {%- if recipe.category not in ("basic-solid", "basic-fluid") %}

@@ -4,9 +4,7 @@ class Dialog:
 
     command = re.compile(r"^\{[^}]*\}")
     invalid = re.compile(r"(?<!^)\{[^}]*\}(?!$)", re.MULTILINE)
-    digit = re.compile(r"\d")
-    uppercaseLetter = re.compile(r"[A-Z]")
-    lowercaseLetter = re.compile(r"[a-z]")
+    character = re.compile(r"(?P<digit>[0-9])|(?P<upper>[A-Z])|(?P<lower>[a-z])")
 
     @staticmethod
     def Simple(text: str):
@@ -29,19 +27,16 @@ class Dialog:
 
             lineIndex += 1
 
-            if (lineIndex % 3 == 0 and lineIndex < len(lines)):
-                bytes.append(0x7E)
-            if (lineIndex >= 3 and lineIndex < len(lines)):
-                bytes.append(0x73)
+            if (lineIndex < len(lines)):
+                if (lineIndex % 3 == 0):
+                    bytes.append(0x7E) # pause for input
+                if (lineIndex >= 3):
+                    bytes.append(0x73) # scroll
 
-        bytes.append(0x7F)
-        if (len(bytes) > maxBytes):
-            return bytes[:maxBytes - 1].append(0x7F)
-
-        return bytes
+        return bytes[:maxBytes - 1].append(0x7F)
 
     @staticmethod
-    def Compiled(text: str, pause = True):
+    def Compiled(text: str):
         maxBytes = 2046
         wrap = 19
 
@@ -49,6 +44,7 @@ class Dialog:
             raise Exception("Dialog commands must be placed on separate lines", text)
 
         padOut = False
+        pause = True
 
         bytes = [ 0xFB ]
         lines = Dialog.Wordwrap(text, wrap)
@@ -61,33 +57,11 @@ class Dialog:
                     return [ 0xFB, 0xFE, 0x6E, 0x00, 0xFE, 0x6B, 0x04 ]
                 if (match.string == "{INTRO}"):
                     padOut = True
+                if (match.string == "{NOPAUSE}"):
+                    pause = False
+                    continue
 
-                bytesMap = {
-                            "{SPEED0}" : [ 0xFC, 0x00 ],
-                            "{SPEED2}" : [ 0xFC, 0x02 ],
-                            "{SPEED6}" : [ 0xFC, 0x06 ],
-                            "{PAUSE1}" : [ 0xFE, 0x78, 0x01 ],
-                            "{PAUSE3}" : [ 0xFE, 0x78, 0x03 ],
-                            "{PAUSE5}" : [ 0xFE, 0x78, 0x05 ],
-                            "{PAUSE7}" : [ 0xFE, 0x78, 0x07 ],
-                            "{PAUSE9}" : [ 0xFE, 0x78, 0x09 ],
-                            "{INPUT}" : [ 0xFA ],
-                            "{CHOICE}" : [ 0xFE, 0x68 ],
-                            "{ITEMSELECT}" : [ 0xFE, 0x69 ],
-                            "{CHOICE2}" : [ 0xFE, 0x71 ],
-                            "{CHOICE3}" : [ 0xFE, 0x72 ],
-                            "{C:GREEN}" : [ 0xFE, 0x77, 0x07 ],
-                            "{C:YELLOW}" : [ 0xFE, 0x77, 0x02 ],
-                            "{HARP}" : [ 0xFE, 0x79, 0x2D ],
-                            "{MENU}" : [ 0xFE, 0x6D, 0x00 ],
-                            "{BOTTOM}" : [ 0xFE, 0x6D, 0x01 ],
-                            "{NOBORDER}" : [ 0xFE, 0x6B, 0x02 ],
-                            "{CHANGEPIC}" : [ 0xFE, 0x67, 0xFE, 0x67 ],
-                            "{CHANGEMUSIC}" : [ 0xFE, 0x67 ],
-                            "{INTRO}" : [ 0xFE, 0x6E, 0x00, 0xFE, 0x77, 0x07, 0xFC, 0x03, 0xFE, 0x6B, 0x02, 0xFE, 0x67 ],
-                            "{IBOX}" : [ 0xFE, 0x6B, 0x02, 0xFE, 0x77, 0x07, 0xFC, 0x03, 0xF7 ],
-                        }
-                result = bytesMap.get(match.string, None)
+                result = Dialog.CommandBytesFor(match.string)
                 if (result is None):
                     raise Exception(f"Dialog text contained unknown command {match.string}", text)
                 else:
@@ -98,12 +72,10 @@ class Dialog:
 
                 continue
 
-            if (lineIndex == 1):
-                bytes.append(0xF8); #// row 2
-            elif (lineIndex >= 3 and lineIndex < lineCount):
-                bytes.append(0xF6); #// scroll
-            elif (lineIndex >= 2):
-                bytes.append(0xF9); #// row 3
+            if (lineIndex > 0):
+                bytes.append(0xF8 if lineIndex == 1 else    #// row 2
+                             0xF9 if lineIndex == 2 else    #// row 3
+                             0xF6)                          #// scroll
 
             #// The first box needs to fill the full width with spaces as the palette is loaded weird.
             letters = line + (" " * wrap) if padOut and lineIndex < 3 else line
@@ -113,9 +85,38 @@ class Dialog:
             lineIndex += 1
 
             if (pause and lineIndex % 3 == 0 and lineIndex < lineCount):
-                bytes.append(0xFA) #// wait for input
+                bytes.append(0xFA) #// pause for input
 
         return bytes[:maxBytes]
+
+    @staticmethod
+    def CommandBytesFor(text: str):
+        bytesMap = {
+                        "{SPEED0}" : [ 0xFC, 0x00 ],
+                        "{SPEED2}" : [ 0xFC, 0x02 ],
+                        "{SPEED6}" : [ 0xFC, 0x06 ],
+                        "{PAUSE1}" : [ 0xFE, 0x78, 0x01 ],
+                        "{PAUSE3}" : [ 0xFE, 0x78, 0x03 ],
+                        "{PAUSE5}" : [ 0xFE, 0x78, 0x05 ],
+                        "{PAUSE7}" : [ 0xFE, 0x78, 0x07 ],
+                        "{PAUSE9}" : [ 0xFE, 0x78, 0x09 ],
+                        "{INPUT}" : [ 0xFA ],
+                        "{CHOICE}" : [ 0xFE, 0x68 ],
+                        "{ITEMSELECT}" : [ 0xFE, 0x69 ],
+                        "{CHOICE2}" : [ 0xFE, 0x71 ],
+                        "{CHOICE3}" : [ 0xFE, 0x72 ],
+                        "{C:GREEN}" : [ 0xFE, 0x77, 0x07 ],
+                        "{C:YELLOW}" : [ 0xFE, 0x77, 0x02 ],
+                        "{HARP}" : [ 0xFE, 0x79, 0x2D ],
+                        "{MENU}" : [ 0xFE, 0x6D, 0x00 ],
+                        "{BOTTOM}" : [ 0xFE, 0x6D, 0x01 ],
+                        "{NOBORDER}" : [ 0xFE, 0x6B, 0x02 ],
+                        "{CHANGEPIC}" : [ 0xFE, 0x67, 0xFE, 0x67 ],
+                        "{CHANGEMUSIC}" : [ 0xFE, 0x67 ],
+                        "{INTRO}" : [ 0xFE, 0x6E, 0x00, 0xFE, 0x77, 0x07, 0xFC, 0x03, 0xFE, 0x6B, 0x02, 0xFE, 0x67 ],
+                        "{IBOX}" : [ 0xFE, 0x6B, 0x02, 0xFE, 0x77, 0x07, 0xFC, 0x03, 0xF7 ],
+                    }
+        return bytesMap.get(text, None)
 
     @staticmethod
     def Wordwrap(text: str, width: int):
@@ -146,9 +147,13 @@ class Dialog:
 
     @staticmethod
     def LetterToBytes(c: str):
-        if Dialog.digit.match(c): return [(ord(c) - ord('0') + 0xA0) ]
-        elif Dialog.uppercaseLetter.match(c): return [ (ord(c) - ord('A') + 0xAA) ]
-        elif Dialog.lowercaseLetter.match(c): return [ (ord(c) - ord('a') + 0x30) ]
+        match = Dialog.character.match(c)
+        if match is None: 
+            value = Dialog.letters.get(c, None)
+            return value if value else [ 0xFF ]
+        elif match.group("digit") != None: return [(ord(c) - ord('0') + 0xA0) ]
+        elif match.group("upper") != None: return [ (ord(c) - ord('A') + 0xAA) ]
+        elif match.group("lower") != None: return [ (ord(c) - ord('a') + 0x30) ]
         else:
             value = Dialog.letters.get(c, None)
             return value if value else [ 0xFF ]

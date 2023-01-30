@@ -34,33 +34,33 @@ class GanonsTower(Z3Region):
                         self.GetLocation("Ganon's Tower - Randomizer Room - Bottom Left"),
                         self.GetLocation("Ganon's Tower - Randomizer Room - Bottom Right")
                     ]) or self.GetLocation("Ganon's Tower - Firesnake Room").ItemIs(ItemType.KeyGT, self.world) else 3)),
-            Location(self, 256+196, 0x1EAC4, LocationType.Regular, "Ganon's Tower - Randomizer Room - Top Left",
+            Location(self, 256+230, 0x1EAC4, LocationType.Regular, "Ganon's Tower - Randomizer Room - Top Left",
                 lambda items: self.LeftSide(items, [
                     self.GetLocation("Ganon's Tower - Randomizer Room - Top Right"),
                     self.GetLocation("Ganon's Tower - Randomizer Room - Bottom Left"),
                     self.GetLocation("Ganon's Tower - Randomizer Room - Bottom Right")
                 ])),
-            Location(self, 256+197, 0x1EAC7, LocationType.Regular, "Ganon's Tower - Randomizer Room - Top Right",
+            Location(self, 256+231, 0x1EAC7, LocationType.Regular, "Ganon's Tower - Randomizer Room - Top Right",
                 lambda items: self.LeftSide(items, [
                     self.GetLocation("Ganon's Tower - Randomizer Room - Top Left"),
                     self.GetLocation("Ganon's Tower - Randomizer Room - Bottom Left"),
                     self.GetLocation("Ganon's Tower - Randomizer Room - Bottom Right")
                 ])),
-            Location(self, 256+198, 0x1EACA, LocationType.Regular, "Ganon's Tower - Randomizer Room - Bottom Left",
+            Location(self, 256+232, 0x1EACA, LocationType.Regular, "Ganon's Tower - Randomizer Room - Bottom Left",
                 lambda items: self.LeftSide(items, [
                     self.GetLocation("Ganon's Tower - Randomizer Room - Top Right"),
                     self.GetLocation("Ganon's Tower - Randomizer Room - Top Left"),
                     self.GetLocation("Ganon's Tower - Randomizer Room - Bottom Right")
                 ])),
-            Location(self, 256+199, 0x1EACD, LocationType.Regular, "Ganon's Tower - Randomizer Room - Bottom Right",
+            Location(self, 256+233, 0x1EACD, LocationType.Regular, "Ganon's Tower - Randomizer Room - Bottom Right",
                 lambda items: self.LeftSide(items, [
                     self.GetLocation("Ganon's Tower - Randomizer Room - Top Right"),
                     self.GetLocation("Ganon's Tower - Randomizer Room - Top Left"),
                     self.GetLocation("Ganon's Tower - Randomizer Room - Bottom Left")
                 ])),
-            Location(self, 256+200, 0x1EAD9, LocationType.Regular, "Ganon's Tower - Hope Room - Left"),
-            Location(self, 256+201, 0x1EADC, LocationType.Regular, "Ganon's Tower - Hope Room - Right"),
-            Location(self, 256+202, 0x1EAE2, LocationType.Regular, "Ganon's Tower - Tile Room",
+            Location(self, 256+234, 0x1EAD9, LocationType.Regular, "Ganon's Tower - Hope Room - Left"),
+            Location(self, 256+235, 0x1EADC, LocationType.Regular, "Ganon's Tower - Hope Room - Right"),
+            Location(self, 256+236, 0x1EAE2, LocationType.Regular, "Ganon's Tower - Tile Room",
                 lambda items: items.Somaria),
             Location(self, 256+203, 0x1EAE5, LocationType.Regular, "Ganon's Tower - Compass Room - Top Left",
                 lambda items: self.RightSide(items, [
@@ -118,8 +118,9 @@ class GanonsTower(Z3Region):
         return items.Somaria and items.Firerod and items.KeyGT >= (3 if any(l.ItemIs(ItemType.BigKeyGT, self.world) for l in locations) else 4)
 
     def BigKeyRoom(self, items: Progression):
-        return items.KeyGT >= 3 and self.CanBeatArmos(items) \
-            and (items.Hammer and items.Hookshot or items.Firerod and items.Somaria)
+        return items.KeyGT >= 3 and \
+            (items.Hammer and items.Hookshot or items.Firerod and items.Somaria) \
+            and self.CanBeatArmos(items)
 
     def TowerAscend(self, items: Progression):
         return items.BigKeyGT and items.KeyGT >= 3 and items.Bow and items.CanLightTorches()
@@ -134,13 +135,18 @@ class GanonsTower(Z3Region):
 
     def CanEnter(self, items: Progression):
         return items.MoonPearl and self.world.CanEnter("Dark World Death Mountain East", items) and \
-            self.world.CanAquireAll(items, RewardType.CrystalBlue, RewardType.CrystalRed, RewardType.GoldenFourBoss)
+            self.world.CanAcquireAtLeast(self.world.TowerCrystals, items, RewardType.AnyCrystal) and \
+            self.world.CanAcquireAtLeast(self.world.TourianBossTokens * (self.world.TowerCrystals / 7), items, RewardType.AnyBossToken)
+
+    # added for AP completion_condition when TowerCrystals is lower than GanonCrystals
+    def CanComplete(self, items: Progression):
+        return self.world.CanAcquireAtLeast(self.world.GanonCrystals, items, RewardType.AnyCrystal)
 
     def CanFill(self, item: Item):
-        if (self.Config.GameMode == GameMode.Multiworld):
+        if (self.Config.Multiworld):
             if (item.World != self.world or item.Progression):
                 return False
-            if (self.Config.KeyShuffle == KeyShuffle.Keysanity and not ((item.Type == ItemType.BigKeyGT or item.Type == ItemType.KeyGT) and item.World == self.world) and (item.IsKey() or item.IsBigKey() or item.IsKeycard())):
+            if (self.Config.Keysanity and not ((item.Type == ItemType.BigKeyGT or item.Type == ItemType.KeyGT) and item.World == self.world) and (item.IsKey() or item.IsBigKey() or item.IsKeycard())):
                 return False
         return super().CanFill(item)
 

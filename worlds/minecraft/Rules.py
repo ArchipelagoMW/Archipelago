@@ -45,7 +45,7 @@ class MinecraftLogic(LogicMixin):
                     self.can_reach('Bastion Remnant', 'Region', player))
 
     def _mc_overworld_villager(self, player: int):
-        village_region = self.world.get_region('Village', player).entrances[0].parent_region.name
+        village_region = self.multiworld.get_region('Village', player).entrances[0].parent_region.name
         if village_region == 'The Nether': # 2 options: cure zombie villager or build portal in village
             return (self.can_reach('Zombie Doctor', 'Location', player) or
                     (self._mc_has_diamond_pickaxe(player) and self.can_reach('Village', 'Region', player)))
@@ -58,10 +58,10 @@ class MinecraftLogic(LogicMixin):
 
     # Difficulty-dependent functions
     def _mc_combat_difficulty(self, player: int):
-        return self.world.combat_difficulty[player].current_key
+        return self.multiworld.combat_difficulty[player].current_key
 
     def _mc_can_adventure(self, player: int):
-        death_link_check = not self.world.death_link[player] or self.has('Bed', player)
+        death_link_check = not self.multiworld.death_link[player] or self.has('Bed', player)
         if self._mc_combat_difficulty(player) == 'easy':
             return self.has('Progressive Weapons', player, 2) and self._mc_has_iron_ingots(player) and death_link_check
         elif self._mc_combat_difficulty(player) == 'hard':
@@ -112,9 +112,9 @@ class MinecraftLogic(LogicMixin):
         return self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and self.has('Archery', player)
 
     def _mc_has_structure_compass(self, entrance_name: str, player: int):
-        if not self.world.structure_compasses[player]:
+        if not self.multiworld.structure_compasses[player]:
             return True
-        return self.has(f"Structure Compass ({self.world.get_entrance(entrance_name, player).connected_region.name})", player)
+        return self.has(f"Structure Compass ({self.multiworld.get_entrance(entrance_name, player).connected_region.name})", player)
 
 # Sets rules on entrances and advancements that are always applied
 def set_advancement_rules(world: MultiWorld, player: int):
@@ -173,7 +173,7 @@ def set_advancement_rules(world: MultiWorld, player: int):
                            state.can_reach("Hero of the Village", "Location", player))  # Bad Omen, Hero of the Village
     set_rule(world.get_location("Bullseye", player), lambda state: state.has("Archery", player) and state.has("Progressive Tools", player, 2) and state._mc_has_iron_ingots(player))
     set_rule(world.get_location("Spooky Scary Skeleton", player), lambda state: state._mc_basic_combat(player))
-    set_rule(world.get_location("Two by Two", player), lambda state: state._mc_has_iron_ingots(player) and state._mc_can_adventure(player))  # shears > seagrass > turtles; nether > striders; gold carrots > horses skips ingots
+    set_rule(world.get_location("Two by Two", player), lambda state: state._mc_has_iron_ingots(player) and state.has("Bucket", player) and state._mc_can_adventure(player))  # shears > seagrass > turtles; buckets of tropical fish > axolotls; nether > striders; gold carrots > horses skips ingots
     # set_rule(world.get_location("Stone Age", player), lambda state: True)
     set_rule(world.get_location("Two Birds, One Arrow", player), lambda state: state._mc_craft_crossbow(player) and state._mc_can_enchant(player))
     # set_rule(world.get_location("We Need to Go Deeper", player), lambda state: True)
@@ -276,10 +276,10 @@ def set_advancement_rules(world: MultiWorld, player: int):
 
     # 1.19 advancements
 
-    # can make a cake, and can reach a pillager outposts for allays
-    set_rule(world.get_location("Birthday Song", player), lambda state: state.can_reach("The Lie", "Location", player))
-    # find allay and craft a noteblock
-    set_rule(world.get_location("You've Got a Friend in Me", player), lambda state: state.has("Progressive Tools", player, 2) and state._mc_has_iron_ingots(player))
+    # can make a cake, and a noteblock, and can reach a pillager outposts for allays
+    set_rule(world.get_location("Birthday Song", player), lambda state: state.can_reach("The Lie", "Location", player) and state.has("Progressive Tools", player, 2) and state._mc_has_iron_ingots(player))
+    # can get to outposts.
+    # set_rule(world.get_location("You've Got a Friend in Me", player), lambda state: True)
     # craft bucket and adventure to find frog spawning biome
     set_rule(world.get_location("Bukkit Bukkit", player), lambda state: state.has("Bucket", player) and state._mc_has_iron_ingots(player) and state._mc_can_adventure(player))
     # I don't like this one its way to easy to get. just a pain to find.

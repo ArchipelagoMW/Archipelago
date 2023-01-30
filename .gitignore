@@ -4,6 +4,7 @@
 *_Spoiler.txt
 *.bmbp
 *.apbp
+*.apl2ac
 *.apm3
 *.apmc
 *.apz5
@@ -13,6 +14,10 @@
 *.z64
 *.n64
 *.nes
+*.sms
+*.gb
+*.gbc
+*.gba
 *.wixobj
 *.lck
 *.db3
@@ -28,6 +33,7 @@ README.html
 .vs/
 EnemizerCLI/
 /Players/
+/SNI/
 /options.yaml
 /config.yaml
 /logs/
@@ -43,7 +49,7 @@ Output Logs/
 /freeze_requirements.txt
 /Archipelago.zip
 /setup.ini
-
+/installdelete.iss
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -116,17 +122,21 @@ target/
 profile_default/
 ipython_config.py
 
+# vim editor
+*.swp
+
 # SageMath parsed files
 *.sage.py
 
 # Environments
 .env
-.venv
+.venv*
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+.code-workspace
 
 # Spyder project settings
 .spyderproject
