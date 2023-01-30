@@ -504,9 +504,11 @@ class LoseMoneyOnBlackout(Toggle):
     display_name = "Lose Money on Blackout"
     default = 1
 
+
 class EarlyExpAll(Toggle):
     """Makes it so the Exp. All will be in sphere 1."""
     display_name = "Early Exp All"
+
 
 class TrapPercentage(Range):
     """Chance for each filler item to be replaced with trap items. Keep in mind that trainersanity vastly increases the
@@ -601,7 +603,7 @@ pokemon_rb_options = {
     "master_ball_price": MasterBallPrice,
     "starting_money": StartingMoney,
     "lose_money_on_blackout": LoseMoneyOnBlackout,
-    "Early_Exp_All": EarlyExpAll,
+    "early_exp_all": EarlyExpAll,
     "trap_percentage": TrapPercentage,
     "poison_trap_weight": PoisonTrapWeight,
     "fire_trap_weight": FireTrapWeight,
