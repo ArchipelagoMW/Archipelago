@@ -171,8 +171,7 @@ class SMWSNIClient(SNIClient):
 
 
     def add_trap_to_queue(self, trap_item, trap_msg):
-        if not hasattr(self, "trap_queue"):
-            self.trap_queue = []
+        self.trap_queue = getattr(self, "trap_queue", [])
 
         self.trap_queue.append((trap_item, trap_msg))
 
