@@ -42,7 +42,7 @@ class SubnauticaWorld(World):
     option_definitions = Options.options
 
     data_version = 8
-    required_client_version = (0, 3, 7)
+    required_client_version = (0, 3, 8)
 
     creatures_to_scan: List[str]
 
