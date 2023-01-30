@@ -1,10 +1,10 @@
-from ndspy import lz10
 from Patch import APDeltaPatch
 
 import Utils
 import os
 import hashlib
 import bsdiff4
+from .lz10 import gba_decompress, gba_compress
 
 from .BN3RomUtils import ArchiveToReferences, read_u16_le, read_u32_le, int16_to_byte_list_le, int32_to_byte_list_le,\
     generate_progressive_undernet, CompressedArchives, ArchiveToSizeComp, ArchiveToSizeUncomp, generate_item_message, \
@@ -79,12 +79,12 @@ class TextArchive:
         if compressed:
             self.compressedSize = size
             self.compressedData = data
-            self.uncompressedData = lz10.decompress(self.compressedData)
+            self.uncompressedData = gba_decompress(self.compressedData)
             self.uncompressedSize = len(self.uncompressedData)
         else:
             self.uncompressedSize = size
             self.uncompressedData = data
-            self.compressedData = lz10.compress(self.uncompressedData)
+            self.compressedData = gba_compress(self.uncompressedData)
             self.compressedSize = len(self.compressedData)
         self.scriptCount = (read_u16_le(self.uncompressedData, 0)) >> 1
 
@@ -115,7 +115,7 @@ class TextArchive:
         data.extend(scripts)
         byte_data = bytes(data)
         if compressed:
-            byte_data = lz10.compress(byte_data)
+            byte_data = gba_compress(byte_data)
 
         return bytearray(byte_data)
 
