@@ -118,6 +118,7 @@ def create():
                         option, "default") and option.default != "random" else option.range_start,
                     "min": option.range_start,
                     "max": option.range_end,
+                    "step": option.step,
                 }
 
                 if issubclass(option, Options.SpecialRange):

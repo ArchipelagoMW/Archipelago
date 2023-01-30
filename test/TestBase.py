@@ -1,6 +1,6 @@
+import pathlib
 import typing
 import unittest
-import pathlib
 from argparse import Namespace
 
 import Utils
@@ -104,6 +104,7 @@ class WorldTestBase(unittest.TestCase):
     multiworld: MultiWorld
 
     game: typing.ClassVar[str]  # define game name in subclass, example "Secret of Evermore"
+    player: typing.ClassVar[int] = 1
     auto_construct: typing.ClassVar[bool] = True
     """ automatically set up a world for each test in this class """
 
@@ -114,14 +115,14 @@ class WorldTestBase(unittest.TestCase):
     def world_setup(self, seed: typing.Optional[int] = None) -> None:
         if not hasattr(self, "game"):
             raise NotImplementedError("didn't define game name")
-        self.multiworld = MultiWorld(1)
-        self.multiworld.game[1] = self.game
-        self.multiworld.player_name = {1: "Tester"}
+        self.multiworld = MultiWorld(self.player)
+        self.multiworld.game[self.player] = self.game
+        self.multiworld.player_name = {self.player: "Tester"}
         self.multiworld.set_seed(seed)
         args = Namespace()
         for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].option_definitions.items():
             setattr(args, name, {
-                1: option.from_any(self.options.get(name, getattr(option, "default")))
+                self.player: option.from_any(self.options.get(name, getattr(option, "default")))
             })
         self.multiworld.set_options(args)
         self.multiworld.set_default_common_options()
@@ -167,13 +168,13 @@ class WorldTestBase(unittest.TestCase):
             self.multiworld.state.remove(item)
 
     def can_reach_location(self, location: str) -> bool:
-        return self.multiworld.state.can_reach(location, "Location", 1)
+        return self.multiworld.state.can_reach(location, "Location", self.player)
 
     def can_reach_entrance(self, entrance: str) -> bool:
-        return self.multiworld.state.can_reach(entrance, "Entrance", 1)
+        return self.multiworld.state.can_reach(entrance, "Entrance", self.player)
 
     def count(self, item_name: str) -> int:
-        return self.multiworld.state.count(item_name, 1)
+        return self.multiworld.state.count(item_name, self.player)
 
     def assertAccessDependency(self,
                                locations: typing.List[str],
