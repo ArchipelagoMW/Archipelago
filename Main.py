@@ -251,6 +251,15 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         balance_multiworld_progression(world)
 
     logger.info(f'Beginning output...')
+
+    # we're about to output using multithreading, so we're removing the global random state to prevent accidental use
+    class FakeRandom():
+        def __getattr__(self, item: str):
+            raise RuntimeError("You are in a threaded context and global random state was removed for your safety. "
+                               "Please use multiworld.slot_seeds[player] or randomize ahead of output.")
+
+    world.random = FakeRandom()
+
     outfilebase = 'AP_' + world.seed_name
 
     output = tempfile.TemporaryDirectory()
