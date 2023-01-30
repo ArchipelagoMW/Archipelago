@@ -212,6 +212,28 @@ all_locations = {
     **yoshi_house_location_table,
 }
 
+special_zone_level_names = [
+    LocationName.special_zone_1_exit_1,
+    LocationName.special_zone_2_exit_1,
+    LocationName.special_zone_3_exit_1,
+    LocationName.special_zone_4_exit_1,
+    LocationName.special_zone_5_exit_1,
+    LocationName.special_zone_6_exit_1,
+    LocationName.special_zone_7_exit_1,
+    LocationName.special_zone_8_exit_1,
+]
+
+special_zone_dragon_coin_names = [
+    LocationName.special_zone_1_dragon,
+    LocationName.special_zone_2_dragon,
+    LocationName.special_zone_3_dragon,
+    LocationName.special_zone_4_dragon,
+    LocationName.special_zone_5_dragon,
+    LocationName.special_zone_6_dragon,
+    LocationName.special_zone_7_dragon,
+    LocationName.special_zone_8_dragon,
+]
+
 location_table = {}
 
 

@@ -574,7 +574,7 @@ class Context:
             self.location_check_points = savedata["game_options"]["location_check_points"]
             self.server_password = savedata["game_options"]["server_password"]
             self.password = savedata["game_options"]["password"]
-            self.release_mode = savedata["game_options"]["release_mode"]
+            self.release_mode = savedata["game_options"].get("release_mode", savedata["game_options"].get("forfeit_mode", "goal"))
             self.remaining_mode = savedata["game_options"]["remaining_mode"]
             self.collect_mode = savedata["game_options"]["collect_mode"]
             self.item_cheat = savedata["game_options"]["item_cheat"]
