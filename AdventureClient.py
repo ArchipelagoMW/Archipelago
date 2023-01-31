@@ -374,6 +374,7 @@ if __name__ == '__main__':
     Utils.init_logging("AdventureClient")
 
     options = Utils.get_options()
+    DISPLAY_MSGS = options["adventure_options"]["display_msgs"]
 
     async def main():
         parser = get_base_parser()

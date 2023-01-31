@@ -1,3 +1,4 @@
+from worlds.adventure import get_num_items
 from worlds.generic.Rules import add_rule, set_rule, forbid_item
 from BaseClasses import LocationProgressType
 
@@ -35,36 +36,74 @@ def set_rules(self) -> None:
     # and if the magnet is in there, you're not getting it with the bridge!
     forbid_item(world.get_location("DungeonVault", self.player), "Bridge", self.player)
     forbid_item(world.get_location("DungeonVault", self.player), "Magnet", self.player)
+    forbid_item(world.get_location("InYellowCastle", self.player), "Chalice", self.player)
     overworld = world.get_region("Overworld", self.player)
     white_castle_region = world.get_region("WhiteCastle", self.player)
     black_castle_region = world.get_region("WhiteCastle", self.player)
     for loc in overworld.locations:
         forbid_item(loc, "Chalice", self.player)
-    if world.random.randint(0, 1) == 0:
-        for loc in overworld.locations:
-            forbid_item(loc, "WhiteKey", self.player)
-        for loc in black_castle_region.locations:
-            forbid_item(loc, "Chalice", self.player)
-    else:
-        for loc in overworld.locations:
-            forbid_item(loc, "BlackKey", self.player)
-        for loc in white_castle_region.locations:
-            forbid_item(loc, "Chalice", self.player)
 
-    # Assign some priority locations to try to get interesting stuff into the castles
-    priority_index = world.random.randint(0, 4)
-    if priority_index == 0:
-        world.get_location("CreditsRightSide", self.player).progress_type = LocationProgressType.PRIORITY
-    elif priority_index == 1:
-        world.get_location("CreditsLeftSide", self.player).progress_type = LocationProgressType.PRIORITY
-    world.get_location("DungeonVault", self.player).progress_type = LocationProgressType.PRIORITY
-    priority_index = world.random.randint(0, 1)
-    if priority_index == 0:
-        world.get_location("RedMaze2", self.player).progress_type = LocationProgressType.PRIORITY
-    else:
-        world.get_location("RedMaze0a", self.player).progress_type = LocationProgressType.PRIORITY
+    add_rule(world.get_location("ChaliceHome", self.player),
+                   lambda state: state.has("Chalice", self.player) and state.has("YellowKey", self.player))
 
-    world.random.choice(overworld.locations).progress_type = LocationProgressType.PRIORITY
+    # Assign some priority locations to try to get interesting stuff into the castles, most of the time
+    # occasionally some interesting things are generated without that, so I want to leave some chance of
+    # that happening.  The downside to leaving it out is sometimes not needing to visit all castles,
+    # at least in solo world.
+    do_priority = world.random.randint(0, 4) < 3
+    if do_priority:
+        priority_index = world.random.randint(0, 4)
+        hard_location_score = 0
+        priority_count = 0
+        if priority_index == 0:
+            world.get_location("CreditsRightSide", self.player).progress_type = LocationProgressType.PRIORITY
+            hard_location_score = 2
+            priority_count += 1
+        elif priority_index == 1:
+            world.get_location("CreditsLeftSide", self.player).progress_type = LocationProgressType.PRIORITY
+            hard_location_score = 2
+            priority_count += 1
+        priority_index = world.random.randint(hard_location_score, 7)
+        if priority_index < 3:
+            world.get_location("DungeonVault", self.player).progress_type = LocationProgressType.PRIORITY
+            hard_location_score += 2
+            priority_count += 1
+        elif priority_index == 4:
+            world.get_location("Dungeon3", self.player).progress_type = LocationProgressType.PRIORITY
+            priority_count += 1
+        elif priority_index == 5:
+            world.get_location("Dungeon1", self.player).progress_type = LocationProgressType.PRIORITY
+            priority_count += 1
+        elif priority_index == 6:
+            world.get_location("Dungeon0", self.player).progress_type = LocationProgressType.PRIORITY
+            priority_count += 1
+
+        priority_index = world.random.randint(0, 7)
+        if priority_index < 2:
+            world.get_location("RedMaze2", self.player).progress_type = LocationProgressType.PRIORITY
+            priority_count += 1
+        elif priority_index < 4:
+            world.get_location("RedMaze0a", self.player).progress_type = LocationProgressType.PRIORITY
+            priority_count += 1
+        elif priority_index == 4:
+            world.get_location("RedMaze1", self.player).progress_type = LocationProgressType.PRIORITY
+            priority_count += 1
+        elif priority_index == 5:
+            world.get_location("RedMaze0", self.player).progress_type = LocationProgressType.PRIORITY
+            priority_count += 1
+        else:
+            world.get_location("RedMaze3", self.player).progress_type = LocationProgressType.PRIORITY
+            priority_count += 1
+
+    # world.random.choice(overworld.locations).progress_type = LocationProgressType.PRIORITY
+
+    # all_locations = world.get_locations(self.player).copy()
+    # while priority_count < get_num_items():
+    #    loc = world.random.choice(all_locations)
+    #    if loc.progress_type == LocationProgressType.DEFAULT:
+    #        loc.progress_type = LocationProgressType.PRIORITY
+    #        priority_count += 1
+    #    all_locations.remove(loc)
 
     # TODO: Add events for dragon_slay_check and trap_bat_check.  Here?  Elsewhere?
     # if self.dragon_slay_check == 1:

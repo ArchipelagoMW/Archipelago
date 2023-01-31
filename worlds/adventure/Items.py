@@ -33,5 +33,10 @@ item_table = {
     # "Big_Sword":
 }
 
+
+def get_num_items():
+    return len(item_table)
+
+
 event_table = {
 }

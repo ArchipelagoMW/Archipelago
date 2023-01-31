@@ -15,7 +15,7 @@ from worlds.generic.Rules import add_rule, set_rule
 from .Options import adventure_option_definitions
 from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, apply_basepatch, \
     AdventureAutoCollectLocation
-from .Items import item_table, ItemData, nothing_item_id, event_table, AdventureItem
+from .Items import item_table, ItemData, nothing_item_id, event_table, AdventureItem, get_num_items
 from .Locations import location_table, base_location_id
 from .Offsets import static_item_data_location, items_ram_start, static_item_element_size, item_position_table
 from .Regions import create_regions
@@ -62,6 +62,7 @@ class AdventureWorld(World):
     dragon_slay_check: Optional[int]
     trap_bat_check: Optional[int]
     bat_logic: Optional[int]
+    empty_item_count: Optional[int]
 
     @classmethod
     def stage_assert_generate(cls, _multiworld: MultiWorld) -> None:
@@ -78,6 +79,7 @@ class AdventureWorld(World):
         self.dragon_slay_check = self.multiworld.dragon_slay_check[self.player].value
         self.trap_bat_check = self.multiworld.trap_bat_check[self.player].value
         self.bat_logic = self.multiworld.bat_logic[self.player].value
+        self.empty_item_count = self.multiworld.empty_item_count[self.player].value
 
         if self.dragon_slay_check == 0:
             item_table["Sword"].classification = ItemClassification.useful
@@ -112,32 +114,40 @@ class AdventureWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def pre_fill(self):
-        # Place a somewhat random number of empty items (or configured in options) in overworld here, to limit
+        # Place empty items in filler locations here, to limit
         # the number of exported empty items and the density of stuff in overworld.
-        # TODO - Not sure if that's also
-        # TODO - the only way to make items be explicitly local?  In which case I might want to optionally place
-        # TODO - the chalice or yellow key, based on options.  Or just set exclusion on one/both for overworld.
-        # TODO - Probably better to exclude the locations from generation in the first place instead
-        # TODO - of putting nothing items in, except that it would mess up plandos.
-        # TODO - looks like I can call fill_restrictive to tell AP to fill a set of locations for
-        # TODO - this kind of thing?  That would probably make more sense to do than what I'm doing here
         overworld = self.multiworld.get_region("Overworld", self.player)
-        locations_copy = overworld.locations.copy()
-        for loc in overworld.locations:
+        overworld_locations_copy = overworld.locations.copy()
+        all_locations = self.multiworld.get_locations(self.player)
+        total_location_count = len(all_locations)
+        locations_copy = all_locations.copy()
+        for loc in all_locations:
             if loc.item is not None or loc.progress_type != LocationProgressType.DEFAULT:
                 locations_copy.remove(loc)
+                if loc in overworld_locations_copy:
+                    overworld_locations_copy.remove(loc)
 
-        unfilled_locations = len(locations_copy)
-        filled_locations = len(overworld.locations) - unfilled_locations
-        # TODO - move range into options
-        force_empty_overworld_count = self.multiworld.random.randint(3, 4)
+        # unfilled_locations = len(locations_copy)
+        # filled_locations = len(overworld.locations) - unfilled_locations
+        force_empty_item_count = (total_location_count - get_num_items()) - self.empty_item_count
         nothing_items = list(filter(lambda i: i.name == "nothing", self.multiworld.itempool))
-        while force_empty_overworld_count > 0 and len(locations_copy) > 0 and len(nothing_items) > 0:
-            force_empty_overworld_count -= 1
-            loc = self.multiworld.random.choice(locations_copy)
+        # guarantee at least one overworld location, so we can for sure get a key somewhere
+        saved_overworld_loc = self.multiworld.random.choice(overworld_locations_copy)
+        locations_copy.remove(saved_overworld_loc)
+        overworld_locations_copy.remove(saved_overworld_loc)
+        while force_empty_item_count > 0 and len(locations_copy) > 0 and len(nothing_items) > 0:
+            force_empty_item_count -= 1
+            # prefer somewhat to thin out the overworld.  The priority settings on the locations
+            # that we've already filtered by will also tend to do this
+            if len(overworld_locations_copy) > 0 and self.multiworld.random.randint(0, 10) < 4:
+                loc = self.multiworld.random.choice(overworld_locations_copy)
+            else:
+                loc = self.multiworld.random.choice(locations_copy)
             item = nothing_items.pop()
             loc.place_locked_item(item)
             locations_copy.remove(loc)
+            if loc in overworld_locations_copy:
+                overworld_locations_copy.remove(loc)
             self.multiworld.itempool.remove(item)
 
     def generate_output(self, output_directory: str) -> None:

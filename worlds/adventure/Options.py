@@ -2,7 +2,16 @@ from __future__ import annotations
 
 from typing import Dict
 
-from Options import Choice, Option, DefaultOnToggle, DeathLink
+from Options import Choice, Option, DefaultOnToggle, DeathLink, Range
+
+
+class EmptyItemCount(Range):
+    """How many 'nothing' items are exported.  Pulls in more items from other games
+    """
+    display_name = "Empty Item Count"
+    range_start = 0
+    range_end = 8
+    default = 0
 
 
 class ItemRandoType(Choice):
@@ -55,7 +64,7 @@ class TrapBatCheck(Choice):
 class BatLogic(Choice):
     """How the bat is considered for logic
 
-    Not yet implemented
+    Not yet implemented, currently the bat simply ignores AP items
     With cannot_break, the bat cannot pick up an item that starts out-of-logic until the player touches it
     With can_break, the bat is free to pick up local adventure items, even if they are out-of-logic
     With use_logic, the bat itself is placed as an item and can be required for logic for some locations, such
@@ -63,7 +72,7 @@ class BatLogic(Choice):
     is not recommended with TrapBatCheck set to with_key
 
     Supported values: cannot_break, can_break, use_logic
-    Default value: cannot_break
+    Default value: can_break
     """
     display_name = "Bat Logic"
     option_cannot_break = 0x0
@@ -77,6 +86,7 @@ adventure_option_definitions: Dict[str, type(Option)] = {
     "dragon_slay_check": DragonSlayCheck,
     "trap_bat_check": TrapBatCheck,
     "death_link": DeathLink,
-    "bat_logic": BatLogic
+    "bat_logic": BatLogic,
+    "empty_item_count": EmptyItemCount
 
 }

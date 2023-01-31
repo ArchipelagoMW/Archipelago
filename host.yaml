@@ -179,4 +179,7 @@ adventure_options:
   # Set this to true to display messages in the emulator window
   display_msgs: true
   death_link: false
+  # Have 0-8 'nothing' filler items sent to other games, to pull more of their items in
+  empty_item_count: 8
+
 
