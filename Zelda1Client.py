@@ -39,8 +39,6 @@ locations_by_id = {id: location for location, id in location_ids.items()}
 
 
 class ZeldaCommandProcessor(ClientCommandProcessor):
-    def __init__(self, ctx: CommonContext):
-        super().__init__(ctx)
 
     def _cmd_nes(self):
         """Check NES Connection State"""
@@ -71,7 +69,6 @@ class ZeldaContext(CommonContext):
         self.nes_status = CONNECTION_INITIAL_STATUS
         self.game = 'The Legend of Zelda'
         self.awaiting_rom = False
-        self.display_msgs = True
         self.shop_slots_left = 0
         self.shop_slots_middle = 0
         self.shop_slots_right = 0
@@ -94,8 +91,7 @@ class ZeldaContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
-            if "slot_data" in args.keys():
-                self.slot_data = args["slot_data"]
+            self.slot_data = args.get("slot_data", {})
             asyncio.create_task(parse_locations(self.locations_array, self, True))
         elif cmd == 'Print':
             msg = args['text']
@@ -237,9 +233,9 @@ async def parse_locations(locations_array, ctx: ZeldaContext, force: bool, zone=
                         short_name = None
                         if "Left" in location_name:
                             short_name = "TakeAnyLeft"
-                        if "Middle" in location_name:
+                        elif "Middle" in location_name:
                             short_name = "TakeAnyMiddle"
-                        if "Right" in location_name:
+                        elif "Right" in location_name:
                             short_name = "TakeAnyRight"
                         if short_name is not None:
                             item_code = ctx.slot_data[short_name]
@@ -362,7 +358,6 @@ if __name__ == '__main__':
 
 
     async def main(args):
-        print(args)
         if args.diff_file:
             import Patch
             logging.info("Patch file was supplied. Creating nes rom..")

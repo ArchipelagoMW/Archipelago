@@ -1,82 +1,145 @@
-import typing
+from typing import TYPE_CHECKING
 
-from BaseClasses import LocationProgressType
+from ..generic.Rules import add_rule
+from .Locations import food_locations, shop_locations
+from .ItemPool import dangerous_weapon_locations
 
-if typing.TYPE_CHECKING:
-    import BaseClasses
+if TYPE_CHECKING:
+    from . import TLoZWorld
 
-    CollectionRule = typing.Callable[[BaseClasses.CollectionState], bool]
-    ItemRule = typing.Callable[[BaseClasses.Item], bool]
-else:
-    CollectionRule = typing.Callable[[object], bool]
-    ItemRule = typing.Callable[[object], bool]
+def set_rules(self, tloz_world: "TLoZWorld"):
+    player = tloz_world.player
+    world = tloz_world.multiworld
 
+    # Boss events for a nicer spoiler log play through
+    for level in range(1, 9):
+        boss = world.get_location(f"Level {level} Boss", player)
+        boss_event = world.get_location(f"Level {level} Boss Status", player)
+        status = self.create_event(f"Boss {level} Defeated")
+        boss_event.place_locked_item(status)
+        add_rule(boss_event, lambda state: state.can_reach(boss, "Location", player))
 
-def locality_rules(world, player: int):
-    if world.local_items[player].value:
-        for location in world.get_locations():
-            if location.player != player:
-                forbid_items_for_player(location, world.local_items[player].value, player)
-    if world.non_local_items[player].value:
-        for location in world.get_locations():
-            if location.player == player:
-                forbid_items_for_player(location, world.non_local_items[player].value, player)
+    # No dungeons without weapons except for the dangerous weapon locations if we're dangerous, no unsafe dungeons
+    for i, level in enumerate(self.levels[1:10]):
+        for location in level.locations:
+            if world.StartingPosition[player] < 1 or location.name not in dangerous_weapon_locations:
+                add_rule(world.get_location(location.name, player),
+                         lambda state: state.has_group("weapons", player))
+            if i > 0:  # Don't need an extra heart for Level 1
+                add_rule(world.get_location(location.name, player),
+                         lambda state: state.has("Heart Container", player, i) or
+                                       (state.has("Blue Ring", player) and
+                                        state.has("Heart Container", player, int(i / 2))) or
+                                       (state.has("Red Ring", player) and
+                                        state.has("Heart Container", player, int(i / 4)))
 
+                         )
+    # No requiring anything in a shop until we can farm for money
+    for location in shop_locations:
+        add_rule(world.get_location(location, player),
+                 lambda state: state.has_group("weapons", player))
 
-def exclusion_rules(world, player: int, exclude_locations: typing.Set[str]):
-    for loc_name in exclude_locations:
-        try:
-            location = world.get_location(loc_name, player)
-        except KeyError as e:  # failed to find the given location. Check if it's a legitimate location
-            if loc_name not in world.worlds[player].location_name_to_id:
-                raise Exception(f"Unable to exclude location {loc_name} in player {player}'s world.") from e
-        else: 
-            add_item_rule(location, lambda i: not (i.advancement or i.never_exclude))
-            location.progress_type = LocationProgressType.EXCLUDED
+    # Everything from 4 on up has dark rooms
+    for level in self.levels[4:]:
+        for location in level.locations:
+            add_rule(world.get_location(location.name, player),
+                     lambda state: state.has_group("candles", player)
+                                   or (state.has("Magical Rod", player) and state.has("Book", player)))
 
+    # Everything from 5 on up has gaps
+    for level in self.levels[5:]:
+        for location in level.locations:
+            add_rule(world.get_location(location.name, player),
+                     lambda state: state.has("Stepladder", player))
 
-def set_rule(spot, rule: CollectionRule):
-    spot.access_rule = rule
+    add_rule(world.get_location("Level 5 Boss", player),
+             lambda state: state.has("Recorder", player))
 
+    add_rule(world.get_location("Level 6 Boss", player),
+             lambda state: state.has("Bow", player) and state.has_group("arrows", player))
 
-def add_rule(spot, rule: CollectionRule, combine='and'):
-    old_rule = spot.access_rule
-    if combine == 'or':
-        spot.access_rule = lambda state: rule(state) or old_rule(state)
-    else:
-        spot.access_rule = lambda state: rule(state) and old_rule(state)
+    add_rule(world.get_location("Level 7 Item (Red Candle)", player),
+             lambda state: state.has("Recorder", player))
+    add_rule(world.get_location("Level 7 Boss", player),
+             lambda state: state.has("Recorder", player))
+    if world.ExpandedPool[player]:
+        add_rule(world.get_location("Level 7 Key Drop (Stalfos)", player),
+                 lambda state: state.has("Recorder", player))
+        add_rule(world.get_location("Level 7 Bomb Drop (Digdogger)", player),
+                 lambda state: state.has("Recorder", player))
+        add_rule(world.get_location("Level 7 Rupee Drop (Dodongos)", player),
+                 lambda state: state.has("Recorder", player))
 
+    for location in food_locations:
+        if world.ExpandedPool[player] or "Drop" not in location:
+            add_rule(world.get_location(location, player),
+                     lambda state: state.has("Food", player))
 
-def forbid_item(location, item: str, player: int):
-    old_rule = location.item_rule
-    location.item_rule = lambda i: (i.name != item or i.player != player) and old_rule(i)
+    add_rule(world.get_location("Level 8 Item (Magical Key)", player),
+             lambda state: state.has("Bow", player) and state.has_group("arrows", player))
+    if world.ExpandedPool[player]:
+        add_rule(world.get_location("Level 8 Bomb Drop (Darknuts North)", player),
+                 lambda state: state.has("Bow", player) and state.has_group("arrows", player))
 
+    for location in self.levels[9].locations:
+        add_rule(world.get_location(location.name, player),
+                 lambda state: state.has("Triforce Fragment", player, 8) and
+                               state.has_group("swords", player))
 
-def forbid_items_for_player(location, items: typing.Set[str], player: int):
-    old_rule = location.item_rule
-    location.item_rule = lambda i: (i.player != player or i.name not in items) and old_rule(i)
+    # Yes we are looping this range again for Triforce locations. No I can't add it to the boss event loop
+    for level in range(1, 9):
+        add_rule(world.get_location(f"Level {level} Triforce", player),
+                 lambda state: state.has(f"Boss {level} Defeated", player))
 
+    # Sword, raft, and ladder spots
+    add_rule(world.get_location("White Sword Pond", player),
+             lambda state: state.has("Heart Container", player, 2))
+    add_rule(world.get_location("Magical Sword Grave", player),
+             lambda state: state.has("Heart Container", player, 9))
 
-def forbid_items(location, items: typing.Set[str]):
-    """unused, but kept as a debugging tool."""
-    old_rule = location.item_rule
-    location.item_rule = lambda i: i.name not in items and old_rule(i)
+    stepladder_locations = [
+        "Ocean Heart Container", "Level 4 Triforce", "Level 4 Boss",
+        "Level 4 Map", "Level 4 Key Drop (Keese North)"
+    ]
+    for location in stepladder_locations:
+        add_rule(world.get_location("Ocean Heart Container", player),
+                 lambda state: state.has("Stepladder", player))
 
+    if world.StartingPosition[player] != 2:
+        # Don't allow Take Any Items until we can actually get in one
+        if world.ExpandedPool[player]:
+            add_rule(world.get_location("Take Any Item Left", player),
+                     lambda state: state.has_group("candles", player) or
+                                   state.has("Raft", player))
+            add_rule(world.get_location("Take Any Item Middle", player),
+                     lambda state: state.has_group("candles", player) or
+                                   state.has("Raft", player))
+            add_rule(world.get_location("Take Any Item Right", player),
+                     lambda state: state.has_group("candles", player) or
+                                   state.has("Raft", player))
+    for location in self.levels[4].locations:
+        add_rule(world.get_location(location.name, player),
+                 lambda state: state.has("Raft", player) or state.has("Recorder", player))
+    for location in self.levels[7].locations:
+        add_rule(world.get_location(location.name, player),
+                 lambda state: state.has("Recorder", player))
+    for location in self.levels[8].locations:
+        add_rule(world.get_location(location.name, player),
+                 lambda state: state.has("Bow", player))
 
-def add_item_rule(location, rule: ItemRule):
-    old_rule = location.item_rule
-    location.item_rule = lambda item: rule(item) and old_rule(item)
+    add_rule(world.get_location("Potion Shop Item Left", player),
+             lambda state: state.has("Letter", player))
+    add_rule(world.get_location("Potion Shop Item Middle", player),
+             lambda state: state.has("Letter", player))
+    add_rule(world.get_location("Potion Shop Item Right", player),
+             lambda state: state.has("Letter", player))
 
-
-def item_in_locations(state, item: str, player: int, locations: typing.Sequence):
-    for location in locations:
-        if item_name(state, location[0], location[1]) == (item, player):
-            return True
-    return False
-
-
-def item_name(state, location: str, player: int) -> typing.Optional[typing.Tuple[str, int]]:
-    location = state.world.get_location(location, player)
-    if location.item is None:
-        return None
-    return location.item.name, location.item.player
+    add_rule(world.get_location("Shield Shop Item Left", player),
+             lambda state: state.has_group("candles", player) or
+                           state.has("Bomb", player))
+    add_rule(world.get_location("Shield Shop Item Middle", player),
+             lambda state: state.has_group("candles", player) or
+                           state.has("Bomb", player))
+    add_rule(world.get_location("Shield Shop Item Right", player),
+             lambda state: state.has_group("candles", player) or
+                           state.has("Bomb", player))

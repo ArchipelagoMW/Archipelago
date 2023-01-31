@@ -13,6 +13,7 @@ from .Locations import location_table, level_locations, major_locations, shop_lo
     standard_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations
 from .Options import tloz_options
 from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_early, first_quest_dungeon_items_late
+from  .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule
 
@@ -131,159 +132,7 @@ class TLoZWorld(World):
         self.multiworld.regions.append(menu)
         self.multiworld.regions.append(overworld)
 
-
-    def set_rules(self):
-        # Boss events for a nicer spoiler log play through
-        for level in range(1, 9):
-            boss = self.multiworld.get_location(f"Level {level} Boss", self.player)
-            boss_event = self.multiworld.get_location(f"Level {level} Boss Status", self.player)
-            status = self.create_event(f"Boss {level} Defeated")
-            boss_event.place_locked_item(status)
-            add_rule(boss_event, lambda state: state.can_reach(boss, "Location", self.player))
-
-        # No dungeons without weapons except for the dangerous weapon locations if we're dangerous, no unsafe dungeons
-        for i, level in enumerate(self.levels[1:10]):
-            for location in level.locations:
-                if self.multiworld.StartingPosition[self.player] < 1 or location.name not in dangerous_weapon_locations:
-                    add_rule(self.multiworld.get_location(location.name, self.player),
-                             lambda state: state.has_group("weapons", self.player))
-                if i > 0:  # Don't need an extra heart for Level 1
-                    add_rule(self.multiworld.get_location(location.name, self.player),
-                             lambda state: state.has("Heart Container", self.player, i) or
-                                           (state.has("Blue Ring", self.player) and
-                                            state.has("Heart Container", self.player, int(i / 2))) or
-                                           (state.has("Red Ring", self.player) and
-                                            state.has("Heart Container", self.player, int(i / 4)))
-
-                             )
-        # No requiring anything in a shop until we can farm for money
-        for location in shop_locations:
-            add_rule(self.multiworld.get_location(location, self.player),
-                     lambda state: state.has_group("weapons", self.player))
-
-        # Everything from 4 on up has dark rooms
-        for level in self.levels[4:]:
-            for location in level.locations:
-                add_rule(self.multiworld.get_location(location.name, self.player),
-                         lambda state: state.has_group("candles", self.player)
-                                       or (state.has("Magical Rod", self.player) and state.has("Book", self.player)))
-
-        # Everything from 5 on up has gaps
-        for level in self.levels[5:]:
-            for location in level.locations:
-                add_rule(self.multiworld.get_location(location.name, self.player),
-                         lambda state: state.has("Stepladder", self.player))
-
-        add_rule(self.multiworld.get_location("Level 5 Boss", self.player),
-                 lambda state: state.has("Recorder", self.player))
-
-        add_rule(self.multiworld.get_location("Level 6 Boss", self.player),
-                 lambda state: state.has("Bow", self.player) and state.has_group("arrows", self.player))
-
-        add_rule(self.multiworld.get_location("Level 7 Item (Red Candle)", self.player),
-                 lambda state: state.has("Recorder", self.player))
-        add_rule(self.multiworld.get_location("Level 7 Boss", self.player),
-                 lambda state: state.has("Recorder", self.player))
-        if self.multiworld.ExpandedPool[self.player]:
-            add_rule(self.multiworld.get_location("Level 7 Key Drop (Stalfos)", self.player),
-                     lambda state: state.has("Recorder", self.player))
-            add_rule(self.multiworld.get_location("Level 7 Bomb Drop (Digdogger)", self.player),
-                     lambda state: state.has("Recorder", self.player))
-            add_rule(self.multiworld.get_location("Level 7 Rupee Drop (Dodongos)", self.player),
-                     lambda state: state.has("Recorder", self.player))
-
-        for location in food_locations:
-            if self.multiworld.ExpandedPool[self.player] or "Drop" not in location:
-                add_rule(self.multiworld.get_location(location, self.player),
-                         lambda state: state.has("Food", self.player))
-
-        add_rule(self.multiworld.get_location("Level 8 Item (Magical Key)", self.player),
-                 lambda state: state.has("Bow", self.player) and state.has_group("arrows", self.player))
-        if self.multiworld.ExpandedPool[self.player]:
-            add_rule(self.multiworld.get_location("Level 8 Bomb Drop (Darknuts North)", self.player),
-                     lambda state: state.has("Bow", self.player) and state.has_group("arrows", self.player))
-
-        for location in self.levels[9].locations:
-            add_rule(self.multiworld.get_location(location.name, self.player),
-                     lambda state: state.has("Triforce Fragment", self.player, 8) and
-                                   state.has_group("swords", self.player))
-
-        add_rule(self.multiworld.get_location("Level 1 Triforce", self.player),
-                 lambda state: state.has("Boss 1 Defeated", self.player))
-
-        add_rule(self.multiworld.get_location("Level 2 Triforce", self.player),
-                 lambda state: state.has("Boss 2 Defeated", self.player))
-
-        add_rule(self.multiworld.get_location("Level 3 Triforce", self.player),
-                 lambda state: state.has("Boss 3 Defeated", self.player))
-
-        add_rule(self.multiworld.get_location("Level 4 Triforce", self.player),
-                 lambda state: state.has("Boss 4 Defeated", self.player))
-
-        add_rule(self.multiworld.get_location("Level 5 Triforce", self.player),
-                 lambda state: state.has("Boss 5 Defeated", self.player))
-
-        add_rule(self.multiworld.get_location("Level 6 Triforce", self.player),
-                 lambda state: state.has("Boss 6 Defeated", self.player))
-
-        add_rule(self.multiworld.get_location("Level 7 Triforce", self.player),
-                 lambda state: state.has("Boss 7 Defeated", self.player))
-
-        add_rule(self.multiworld.get_location("Level 8 Triforce", self.player),
-                 lambda state: state.has("Boss 8 Defeated", self.player))
-
-        # Sword, raft, and ladder spots
-        add_rule(self.multiworld.get_location("White Sword Pond", self.player),
-                 lambda state: state.has("Heart Container", self.player, 2))
-        add_rule(self.multiworld.get_location("Magical Sword Grave", self.player),
-                 lambda state: state.has("Heart Container", self.player, 9))
-
-        stepladder_locations = [
-            "Ocean Heart Container", "Level 4 Triforce", "Level 4 Boss",
-            "Level 4 Map", "Level 4 Key Drop (Keese North)"
-        ]
-        for location in stepladder_locations:
-            add_rule(self.multiworld.get_location("Ocean Heart Container", self.player),
-                     lambda state: state.has("Stepladder", self.player))
-
-        if self.multiworld.StartingPosition[self.player] != 2:
-            # Don't allow Take Any Items until we can actually get in one
-            if self.multiworld.ExpandedPool[self.player]:
-                add_rule(self.multiworld.get_location("Take Any Item Left", self.player),
-                         lambda state: state.has_group("candles", self.player) or
-                                       state.has("Raft", self.player))
-                add_rule(self.multiworld.get_location("Take Any Item Middle", self.player),
-                         lambda state: state.has_group("candles", self.player) or
-                                       state.has("Raft", self.player))
-                add_rule(self.multiworld.get_location("Take Any Item Right", self.player),
-                         lambda state: state.has_group("candles", self.player) or
-                                       state.has("Raft", self.player))
-        for location in self.levels[4].locations:
-            add_rule(self.multiworld.get_location(location.name, self.player),
-                     lambda state: state.has("Raft", self.player) or state.has("Recorder", self.player))
-        for location in self.levels[7].locations:
-            add_rule(self.multiworld.get_location(location.name, self.player),
-                     lambda state: state.has("Recorder", self.player))
-        for location in self.levels[8].locations:
-            add_rule(self.multiworld.get_location(location.name, self.player),
-                     lambda state: state.has("Bow", self.player))
-
-        add_rule(self.multiworld.get_location("Potion Shop Item Left", self.player),
-                 lambda state: state.has("Letter", self.player))
-        add_rule(self.multiworld.get_location("Potion Shop Item Middle", self.player),
-                 lambda state: state.has("Letter", self.player))
-        add_rule(self.multiworld.get_location("Potion Shop Item Right", self.player),
-                 lambda state: state.has("Letter", self.player))
-
-        add_rule(self.multiworld.get_location("Shield Shop Item Left", self.player),
-                 lambda state: state.has_group("candles", self.player) or
-                               state.has("Bomb", self.player))
-        add_rule(self.multiworld.get_location("Shield Shop Item Middle", self.player),
-                 lambda state: state.has_group("candles", self.player) or
-                               state.has("Bomb", self.player))
-        add_rule(self.multiworld.get_location("Shield Shop Item Right", self.player),
-                 lambda state: state.has_group("candles", self.player) or
-                               state.has("Bomb", self.player))
+    set_rules = set_rules
 
     def generate_basic(self):
         ganon = self.multiworld.get_location("Ganon", self.player)
@@ -378,6 +227,8 @@ class TLoZWorld(World):
                     # Same story as above: bit 6 is what makes this a Take Any cave
                     item_id = item_id | 0b01000000
                 rom_data[location_id] = item_id
+
+            self.multiworld.random.seed()
 
             # We shuffle the tiers of rupee caves. Caves that shared a value before still will.
             secret_caves = self.multiworld.random.sample(sorted(secret_money_ids), 3)
