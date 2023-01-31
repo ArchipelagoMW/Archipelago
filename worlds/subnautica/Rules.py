@@ -113,7 +113,11 @@ def has_stasis_rifle(state: "CollectionState", player: int) -> bool:
 
 
 def has_containment(state: "CollectionState", player: int) -> bool:
-    return state.has("Alien Containment Fragment", player, 2) and state.has("Multipurpose Room", player)
+    return state.has("Alien Containment", player) and has_utility_room(state, player)
+
+
+def has_utility_room(state: "CollectionState", player: int) -> bool:
+    return state.has("Large Room", player) or state.has("Multipurpose Room", player)
 
 
 # Either we have propulsion cannon, or prawn + propulsion cannon arm
@@ -148,7 +152,7 @@ def has_ultra_glide_fins(state: "CollectionState", player: int) -> bool:
 def get_max_swim_depth(state: "CollectionState", player: int) -> int:
     swim_rule: SwimRule = state.multiworld.swim_rule[player]
     depth: int = swim_rule.base_depth
-    if swim_rule == swim_rule.consider_items:
+    if swim_rule.consider_items:
         if has_seaglide(state, player):
             if has_ultra_high_capacity_tank(state, player):
                 depth += 350  # It's about 800m. Give some room

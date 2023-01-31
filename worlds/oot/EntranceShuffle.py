@@ -95,6 +95,8 @@ entrance_shuffle_table = [
                         ('Ice Cavern Beginning -> ZF Ice Ledge',                            { 'index': 0x03D4 })),
     ('Dungeon',         ('Gerudo Fortress -> Gerudo Training Ground Lobby',                 { 'index': 0x0008 }),
                         ('Gerudo Training Ground Lobby -> Gerudo Fortress',                 { 'index': 0x03A8 })),
+    ('DungeonSpecial',  ('Ganons Castle Grounds -> Ganons Castle Lobby',                    { 'index': 0x0467 }),
+                        ('Ganons Castle Lobby -> Castle Grounds From Ganons Castle',        { 'index': 0x023D })),
 
     ('Interior',        ('Kokiri Forest -> KF Midos House',                                 { 'index': 0x0433 }),
                         ('KF Midos House -> Kokiri Forest',                                 { 'index': 0x0443 })),
@@ -238,8 +240,8 @@ entrance_shuffle_table = [
                         ('KF Storms Grotto -> Kokiri Forest',                               { 'grotto_id': 0x1B })),
     ('Grotto',          ('Zoras Domain -> ZD Storms Grotto',                                { 'grotto_id': 0x1C, 'entrance': 0x036D, 'content': 0xFF, 'scene': 0x58 }),
                         ('ZD Storms Grotto -> Zoras Domain',                                { 'grotto_id': 0x1C })),
-    ('Grotto',          ('Gerudo Fortress -> GF Storms Grotto',                             { 'grotto_id': 0x1D, 'entrance': 0x036D, 'content': 0xFF, 'scene': 0x5D }),
-                        ('GF Storms Grotto -> Gerudo Fortress',                             { 'grotto_id': 0x1D })),
+    ('Grotto',          ('GF Entrances Behind Crates -> GF Storms Grotto',                  { 'grotto_id': 0x1D, 'entrance': 0x036D, 'content': 0xFF, 'scene': 0x5D }),
+                        ('GF Storms Grotto -> GF Entrances Behind Crates',                  { 'grotto_id': 0x1D })),
     ('Grotto',          ('GV Fortress Side -> GV Storms Grotto',                            { 'grotto_id': 0x1E, 'entrance': 0x05BC, 'content': 0xF0, 'scene': 0x5A }),
                         ('GV Storms Grotto -> GV Fortress Side',                            { 'grotto_id': 0x1E })),
     ('Grotto',          ('GV Grotto Ledge -> GV Octorok Grotto',                            { 'grotto_id': 0x1F, 'entrance': 0x05AC, 'content': 0xF2, 'scene': 0x5A }),
@@ -263,7 +265,7 @@ entrance_shuffle_table = [
     ('Overworld',       ('Lost Woods -> GC Woods Warp',                                     { 'index': 0x04E2 }),
                         ('GC Woods Warp -> Lost Woods',                                     { 'index': 0x04D6 })),
     ('Overworld',       ('Lost Woods -> Zora River',                                        { 'index': 0x01DD }),
-                        ('Zora River -> Lost Woods',                                        { 'index': 0x04DA })),
+                        ('Zora River -> LW Underwater Entrance',                            { 'index': 0x04DA })),
     ('Overworld',       ('LW Beyond Mido -> SFM Entryway',                                  { 'index': 0x00FC }),
                         ('SFM Entryway -> LW Beyond Mido',                                  { 'index': 0x01A9 })),
     ('Overworld',       ('LW Bridge -> Hyrule Field',                                       { 'index': 0x0185 }),
@@ -329,6 +331,74 @@ entrance_shuffle_table = [
 ]
 
 
+def _add_boss_entrances():
+    # Compute this at load time to save a lot of duplication
+    dungeon_data = {}
+    for type, forward, *reverse in entrance_shuffle_table:
+        if type != 'Dungeon':
+            continue
+        if not reverse:
+            continue
+        name, forward = forward
+        reverse = reverse[0][1]
+        if 'blue_warp' not in reverse:
+            continue
+        dungeon_data[name] = {
+            'dungeon_index': forward['index'],
+            'exit_index': reverse['index'],
+            'exit_blue_warp': reverse['blue_warp']
+        }
+
+    for type, source, target, dungeon, index, rindex, addresses in [
+        (
+            'ChildBoss', 'Deku Tree Boss Door', 'Queen Gohma Boss Room',
+            'KF Outside Deku Tree -> Deku Tree Lobby',
+            0x040f, 0x0252, [ 0xB06292, 0xBC6162, 0xBC60AE ]
+        ),
+        (
+            'ChildBoss', 'Dodongos Cavern Boss Door', 'King Dodongo Boss Room',
+            'Death Mountain -> Dodongos Cavern Beginning',
+            0x040b, 0x00c5, [ 0xB062B6, 0xBC616E ]
+        ),
+        (
+            'ChildBoss', 'Jabu Jabus Belly Boss Door', 'Barinade Boss Room',
+            'Zoras Fountain -> Jabu Jabus Belly Beginning',
+            0x0301, 0x0407, [ 0xB062C2, 0xBC60C2 ]
+        ),
+        (
+            'AdultBoss', 'Forest Temple Boss Door', 'Phantom Ganon Boss Room',
+            'SFM Forest Temple Entrance Ledge -> Forest Temple Lobby',
+            0x000c, 0x024E, [ 0xB062CE, 0xBC6182 ]
+        ),
+        (
+            'AdultBoss', 'Fire Temple Boss Door', 'Volvagia Boss Room',
+            'DMC Fire Temple Entrance -> Fire Temple Lower',
+            0x0305, 0x0175, [ 0xB062DA, 0xBC60CE ]
+        ),
+        (
+            'AdultBoss', 'Water Temple Boss Door', 'Morpha Boss Room',
+            'Lake Hylia -> Water Temple Lobby',
+            0x0417, 0x0423, [ 0xB062E6, 0xBC6196 ]
+        ),
+        (
+            'AdultBoss', 'Spirit Temple Boss Door', 'Twinrova Boss Room',
+            'Desert Colossus -> Spirit Temple Lobby',
+            0x008D, 0x02F5, [ 0xB062F2, 0xBC6122 ]
+        ),
+        (
+            'AdultBoss', 'Shadow Temple Boss Door', 'Bongo Bongo Boss Room',
+            'Graveyard Warp Pad Region -> Shadow Temple Entryway',
+            0x0413, 0x02B2, [ 0xB062FE, 0xBC61AA ]
+        )
+    ]:
+        d = {'index': index, 'patch_addresses': addresses}
+        d.update(dungeon_data[dungeon])
+        entrance_shuffle_table.append(
+            (type, (f"{source} -> {target}", d), (f"{target} -> {source}", {'index': rindex}))
+        )
+_add_boss_entrances()
+
+
 # Basically, the entrances in the list above that go to:
 # - DMC Central Local (child access for the bean and skull)
 # - Desert Colossus (child access to colossus and spirit)
@@ -388,18 +458,31 @@ def shuffle_random_entrances(ootworld):
         one_way_entrance_pools['OwlDrop'] = ootworld.get_shufflable_entrances(type='OwlDrop')
     if ootworld.warp_songs:
         one_way_entrance_pools['WarpSong'] = ootworld.get_shufflable_entrances(type='WarpSong')
-        if ootworld.logic_rules == 'glitchless':
-            one_way_priorities['Bolero'] = priority_entrance_table['Bolero']
-            one_way_priorities['Nocturne'] = priority_entrance_table['Nocturne']
-            if not ootworld.shuffle_dungeon_entrances and not ootworld.shuffle_overworld_entrances:
-                one_way_priorities['Requiem'] = priority_entrance_table['Requiem']
+        # No more exceptions for NL here, causes cascading failures later
+        one_way_priorities['Bolero'] = priority_entrance_table['Bolero']
+        one_way_priorities['Nocturne'] = priority_entrance_table['Nocturne']
+        if not ootworld.shuffle_dungeon_entrances and not ootworld.shuffle_overworld_entrances:
+            one_way_priorities['Requiem'] = priority_entrance_table['Requiem']
     if ootworld.spawn_positions:
         one_way_entrance_pools['Spawn'] = ootworld.get_shufflable_entrances(type='Spawn')
+        if 'child' not in ootworld.spawn_positions:
+            one_way_entrance_pools['Spawn'].remove(ootworld.get_entrance('Child Spawn -> KF Links House'))
+        if 'adult' not in ootworld.spawn_positions:
+            one_way_entrance_pools['Spawn'].remove(ootworld.get_entrance('Adult Spawn -> Temple of Time'))
+
+    if ootworld.shuffle_bosses == 'full':
+        entrance_pools['Boss'] = ootworld.get_shufflable_entrances(type='ChildBoss', only_primary=True)
+        entrance_pools['Boss'] += ootworld.get_shufflable_entrances(type='AdultBoss', only_primary=True)
+    elif ootworld.shuffle_bosses == 'limited':
+        entrance_pools['ChildBoss'] = ootworld.get_shufflable_entrances(type='ChildBoss', only_primary=True)
+        entrance_pools['AdultBoss'] = ootworld.get_shufflable_entrances(type='AdultBoss', only_primary=True)
 
     if ootworld.shuffle_dungeon_entrances:
         entrance_pools['Dungeon'] = ootworld.get_shufflable_entrances(type='Dungeon', only_primary=True)
         if ootworld.open_forest == 'closed':
-            entrance_pools['Dungeon'].remove(world.get_entrance('KF Outside Deku Tree -> Deku Tree Lobby', player))
+            entrance_pools['Dungeon'].remove(ootworld.get_entrance('KF Outside Deku Tree -> Deku Tree Lobby'))
+        if ootworld.shuffle_special_dungeon_entrances:
+            entrance_pools['Dungeon'] += ootworld.get_shufflable_entrances(type='DungeonSpecial', only_primary=True)
         if ootworld.decouple_entrances:
             entrance_pools['DungeonReverse'] = [entrance.reverse for entrance in entrance_pools['Dungeon']]
     if ootworld.shuffle_interior_entrances != 'off':
@@ -417,7 +500,7 @@ def shuffle_random_entrances(ootworld):
         exclude_overworld_reverse = ootworld.mix_entrance_pools == 'all' and not ootworld.decouple_entrances
         entrance_pools['Overworld'] = ootworld.get_shufflable_entrances(type='Overworld', only_primary=exclude_overworld_reverse)
         if not ootworld.decouple_entrances:
-            entrance_pools['Overworld'].remove(world.get_entrance('GV Lower Stream -> Lake Hylia', player))
+            entrance_pools['Overworld'].remove(ootworld.get_entrance('GV Lower Stream -> Lake Hylia'))
 
     # Mark shuffled entrances
     for entrance in chain(chain.from_iterable(one_way_entrance_pools.values()), chain.from_iterable(entrance_pools.values())):
@@ -739,7 +822,7 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
                     raise EntranceShuffleError(f'{entrance.name} potentially accessible as adult')
 
     # Check if all locations are reachable if not NL
-    if ootworld.logic_rules != 'no_logic' and locations_to_ensure_reachable:
+    if locations_to_ensure_reachable:
         for loc in locations_to_ensure_reachable:
             if not all_state.can_reach(loc, 'Location', player):
                 raise EntranceShuffleError(f'{loc} is unreachable')

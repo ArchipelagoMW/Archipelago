@@ -8,12 +8,17 @@
             "Gerudo Training Ground MQ Hidden Ceiling Chest": "logic_lens_gtg_mq or can_use(Lens_of_Truth)",
             "Gerudo Training Ground MQ Maze Path First Chest": "True",
             "Gerudo Training Ground MQ Maze Path Second Chest": "True",
-            "Gerudo Training Ground MQ Maze Path Third Chest": "(Small_Key_Gerudo_Training_Ground, 1)"
+            "Gerudo Training Ground MQ Maze Path Third Chest": "(Small_Key_Gerudo_Training_Ground, 1)",
+            "Gerudo Training Ground MQ Lobby Left Pot 1": "True",
+            "Gerudo Training Ground MQ Lobby Left Pot 2": "True",
+            "Gerudo Training Ground MQ Lobby Right Pot 1": "True",
+            "Gerudo Training Ground MQ Lobby Right Pot 2": "True",
+            "Gerudo Training Ground MQ Maze Crate": "(Small_Key_Gerudo_Training_Ground, 3) and can_break_crate"
         },
         "exits": {
             "Gerudo Fortress": "True",
-            "Gerudo Training Ground Left Side": "here(has_fire_source)",
-            "Gerudo Training Ground Right Side": "here(can_use(Bow) or can_use(Slingshot))"
+            "Gerudo Training Ground Right Side": "here(can_use(Bow) or can_use(Slingshot))",
+            "Gerudo Training Ground Left Side": "here(has_fire_source)"
         }
     },
     {
@@ -21,12 +26,12 @@
         "dungeon": "Gerudo Training Ground",
         "locations": {
             "Gerudo Training Ground MQ Dinolfos Chest": "is_adult",
-            "Wall Fairy": "has_bottle and can_use(Bow)" #in the Dinalfos room shoot the Gerudo symbol above the door to the lava room.
+            # In the Dinalfos room, shoot the Gerudo symbol above the door to the lava room.
+            "Wall Fairy": "has_bottle and can_use(Bow)"
         },
         "exits": {
-            # Still requires has_fire_source in the room
-            "Gerudo Training Ground Underwater": "
-                (Bow or can_use(Longshot)) and can_use(Hover_Boots)"
+            # Fire source is checked in the water room itself.
+            "Gerudo Training Ground Underwater": "is_adult and (Bow or Longshot) and Hover_Boots"
         }
     },
     {
@@ -34,8 +39,8 @@
         "dungeon": "Gerudo Training Ground",
         "locations": {
             "Gerudo Training Ground MQ Underwater Silver Rupee Chest": "
-                has_fire_source and can_use(Iron_Boots) and
-                (logic_fewer_tunic_requirements or can_use(Zora_Tunic)) and can_take_damage"
+                has_fire_source and Iron_Boots and
+                (logic_fewer_tunic_requirements or Zora_Tunic) and can_take_damage"
         }
     },
     {
@@ -62,20 +67,23 @@
         "exits": {
             "Gerudo Training Ground Back Areas": "
                 is_adult and (logic_lens_gtg_mq or can_use(Lens_of_Truth)) and Blue_Fire and
-                (can_play(Song_of_Time) or (logic_gtg_fake_wall and can_use(Hover_Boots)))"
+                (can_play(Song_of_Time) or (logic_gtg_fake_wall and Hover_Boots))"
         }
     },
     {
         "region_name": "Gerudo Training Ground Back Areas",
         "dungeon": "Gerudo Training Ground",
         "locations": {
+            # The switch that opens the door to the Ice Arrows chest can be hit with a precise jumpslash.
+            "Gerudo Training Ground MQ Ice Arrows Chest": "
+                (Small_Key_Gerudo_Training_Ground, 3) and Megaton_Hammer",
             "Gerudo Training Ground MQ Eye Statue Chest": "Bow",
             "Gerudo Training Ground MQ Second Iron Knuckle Chest": "True",
-            "Gerudo Training Ground MQ Flame Circle Chest": "can_use(Hookshot) or Bow or has_explosives"
+            "Gerudo Training Ground MQ Flame Circle Chest": "Hookshot or Bow or has_explosives"
         },
         "exits": {
             "Gerudo Training Ground Central Maze Right": "Megaton_Hammer",
-            "Gerudo Training Ground Right Side": "can_use(Longshot)"
+            "Gerudo Training Ground Right Side": "Longshot"
         }
     },
     {
@@ -83,16 +91,11 @@
         "dungeon": "Gerudo Training Ground",
         "locations": {
             "Gerudo Training Ground MQ Maze Right Central Chest": "True",
-            "Gerudo Training Ground MQ Maze Right Side Chest": "True",
-            # The switch that opens the door to the Ice Arrows chest can be hit with a precise jumpslash.
-            "Gerudo Training Ground MQ Ice Arrows Chest": "
-                (Small_Key_Gerudo_Training_Ground, 3)"
+            "Gerudo Training Ground MQ Maze Right Side Chest": "True"
         },
         "exits": {
-            # guarantees fire with torch
-            "Gerudo Training Ground Underwater": "
-                can_use(Longshot) or (can_use(Hookshot) and Bow)",
-            "Gerudo Training Ground Right Side": "can_use(Hookshot)"
+            "Gerudo Training Ground Underwater": "Longshot or (Hookshot and Bow)",
+            "Gerudo Training Ground Right Side": "Hookshot"
         }
     }
 ]

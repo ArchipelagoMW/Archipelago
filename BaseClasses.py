@@ -1,20 +1,20 @@
 from __future__ import annotations
-from argparse import Namespace
 
 import copy
-from enum import unique, IntEnum, IntFlag
-import logging
-import json
 import functools
-from collections import OrderedDict, Counter, deque
-from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable, NamedTuple
-import typing  # this can go away when Python 3.8 support is dropped
-import secrets
+import json
+import logging
 import random
+import secrets
+import typing  # this can go away when Python 3.8 support is dropped
+from argparse import Namespace
+from collections import OrderedDict, Counter, deque
+from enum import unique, IntEnum, IntFlag
+from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable, NamedTuple
 
+import NetUtils
 import Options
 import Utils
-import NetUtils
 
 
 class Group(TypedDict, total=False):
@@ -48,6 +48,7 @@ class MultiWorld():
     precollected_items: Dict[int, List[Item]]
     state: CollectionState
 
+    plando_options: PlandoOptions
     accessibility: Dict[int, Options.Accessibility]
     early_items: Dict[int, Dict[str, int]]
     local_early_items: Dict[int, Dict[str, int]]
@@ -160,6 +161,7 @@ class MultiWorld():
         self.custom_data = {}
         self.worlds = {}
         self.slot_seeds = {}
+        self.plando_options = PlandoOptions.none
 
     def get_all_ids(self) -> Tuple[int, ...]:
         return self.player_ids + tuple(self.groups)
@@ -391,7 +393,12 @@ class MultiWorld():
     def get_items(self) -> List[Item]:
         return [loc.item for loc in self.get_filled_locations()] + self.itempool
 
-    def find_item_locations(self, item, player: int) -> List[Location]:
+    def find_item_locations(self, item, player: int, resolve_group_locations: bool = False) -> List[Location]:
+        if resolve_group_locations:
+            player_groups = self.get_player_groups(player)
+            return [location for location in self.get_locations() if
+                    location.item and location.item.name == item and location.player not in player_groups and
+                    (location.item.player == player or location.item.player in player_groups)]
         return [location for location in self.get_locations() if
                 location.item and location.item.name == item and location.item.player == player]
 
@@ -399,7 +406,12 @@ class MultiWorld():
         return next(location for location in self.get_locations() if
                     location.item and location.item.name == item and location.item.player == player)
 
-    def find_items_in_locations(self, items: Set[str], player: int) -> List[Location]:
+    def find_items_in_locations(self, items: Set[str], player: int, resolve_group_locations: bool = False) -> List[Location]:
+        if resolve_group_locations:
+            player_groups = self.get_player_groups(player)
+            return [location for location in self.get_locations() if
+                    location.item and location.item.name in items and location.player not in player_groups and
+                    (location.item.player == player or location.item.player in player_groups)]
         return [location for location in self.get_locations() if
                 location.item and location.item.name in items and location.item.player == player]
 
@@ -1369,6 +1381,157 @@ class Spoiler():
             self.bosses[str(player)]["Ganons Tower"] = "Agahnim 2"
             self.bosses[str(player)]["Ganon"] = "Ganon"
 
+    def create_playthrough(self, create_paths: bool = True):
+        """Destructive to the world while it is run, damage gets repaired afterwards."""
+        from itertools import chain
+        # get locations containing progress items
+        multiworld = self.multiworld
+        prog_locations = {location for location in multiworld.get_filled_locations() if location.item.advancement}
+        state_cache = [None]
+        collection_spheres: List[Set[Location]] = []
+        state = CollectionState(multiworld)
+        sphere_candidates = set(prog_locations)
+        logging.debug('Building up collection spheres.')
+        while sphere_candidates:
+
+            # build up spheres of collection radius.
+            # Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
+
+            sphere = {location for location in sphere_candidates if state.can_reach(location)}
+
+            for location in sphere:
+                state.collect(location.item, True, location)
+
+            sphere_candidates -= sphere
+            collection_spheres.append(sphere)
+            state_cache.append(state.copy())
+
+            logging.debug('Calculated sphere %i, containing %i of %i progress items.', len(collection_spheres),
+                          len(sphere),
+                          len(prog_locations))
+            if not sphere:
+                logging.debug('The following items could not be reached: %s', ['%s (Player %d) at %s (Player %d)' % (
+                    location.item.name, location.item.player, location.name, location.player) for location in
+                                                                               sphere_candidates])
+                if any([multiworld.accessibility[location.item.player] != 'minimal' for location in sphere_candidates]):
+                    raise RuntimeError(f'Not all progression items reachable ({sphere_candidates}). '
+                                       f'Something went terribly wrong here.')
+                else:
+                    self.unreachables = sphere_candidates
+                    break
+
+        # in the second phase, we cull each sphere such that the game is still beatable,
+        # reducing each range of influence to the bare minimum required inside it
+        restore_later = {}
+        for num, sphere in reversed(tuple(enumerate(collection_spheres))):
+            to_delete = set()
+            for location in sphere:
+                # we remove the item at location and check if game is still beatable
+                logging.debug('Checking if %s (Player %d) is required to beat the game.', location.item.name,
+                              location.item.player)
+                old_item = location.item
+                location.item = None
+                if multiworld.can_beat_game(state_cache[num]):
+                    to_delete.add(location)
+                    restore_later[location] = old_item
+                else:
+                    # still required, got to keep it around
+                    location.item = old_item
+
+            # cull entries in spheres for spoiler walkthrough at end
+            sphere -= to_delete
+
+        # second phase, sphere 0
+        removed_precollected = []
+        for item in (i for i in chain.from_iterable(multiworld.precollected_items.values()) if i.advancement):
+            logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
+            multiworld.precollected_items[item.player].remove(item)
+            multiworld.state.remove(item)
+            if not multiworld.can_beat_game():
+                multiworld.push_precollected(item)
+            else:
+                removed_precollected.append(item)
+
+        # we are now down to just the required progress items in collection_spheres. Unfortunately
+        # the previous pruning stage could potentially have made certain items dependant on others
+        # in the same or later sphere (because the location had 2 ways to access but the item originally
+        # used to access it was deemed not required.) So we need to do one final sphere collection pass
+        # to build up the correct spheres
+
+        required_locations = {item for sphere in collection_spheres for item in sphere}
+        state = CollectionState(multiworld)
+        collection_spheres = []
+        while required_locations:
+            state.sweep_for_events(key_only=True)
+
+            sphere = set(filter(state.can_reach, required_locations))
+
+            for location in sphere:
+                state.collect(location.item, True, location)
+
+            required_locations -= sphere
+
+            collection_spheres.append(sphere)
+
+            logging.debug('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres),
+                          len(sphere), len(required_locations))
+            if not sphere:
+                raise RuntimeError(f'Not all required items reachable. Unreachable locations: {required_locations}')
+
+        # we can finally output our playthrough
+        self.playthrough = {"0": sorted([str(item) for item in
+                                         chain.from_iterable(multiworld.precollected_items.values())
+                                         if item.advancement])}
+
+        for i, sphere in enumerate(collection_spheres):
+            self.playthrough[str(i + 1)] = {
+                str(location): str(location.item) for location in sorted(sphere)}
+        if create_paths:
+            self.create_paths(state, collection_spheres)
+
+        # repair the multiworld again
+        for location, item in restore_later.items():
+            location.item = item
+
+        for item in removed_precollected:
+            multiworld.push_precollected(item)
+
+    def create_paths(self, state: CollectionState, collection_spheres: List[Set[Location]]):
+        from itertools import zip_longest
+        multiworld = self.multiworld
+
+        def flist_to_iter(node):
+            while node:
+                value, node = node
+                yield value
+
+        def get_path(state, region):
+            reversed_path_as_flist = state.path.get(region, (region, None))
+            string_path_flat = reversed(list(map(str, flist_to_iter(reversed_path_as_flist))))
+            # Now we combine the flat string list into (region, exit) pairs
+            pathsiter = iter(string_path_flat)
+            pathpairs = zip_longest(pathsiter, pathsiter)
+            return list(pathpairs)
+
+        self.paths = {}
+        topology_worlds = (player for player in multiworld.player_ids if multiworld.worlds[player].topology_present)
+        for player in topology_worlds:
+            self.paths.update(
+                {str(location): get_path(state, location.parent_region)
+                 for sphere in collection_spheres for location in sphere
+                 if location.player == player})
+            if player in multiworld.get_game_players("A Link to the Past"):
+                # If Pyramid Fairy Entrance needs to be reached, also path to Big Bomb Shop
+                # Maybe move the big bomb over to the Event system instead?
+                if any(exit_path == 'Pyramid Fairy' for path in self.paths.values()
+                       for (_, exit_path) in path):
+                    if multiworld.mode[player] != 'inverted':
+                        self.paths[str(multiworld.get_region('Big Bomb Shop', player))] = \
+                            get_path(state, multiworld.get_region('Big Bomb Shop', player))
+                    else:
+                        self.paths[str(multiworld.get_region('Inverted Big Bomb Shop', player))] = \
+                            get_path(state, multiworld.get_region('Inverted Big Bomb Shop', player))
+
     def to_json(self):
         self.parse_data()
         out = OrderedDict()
@@ -1407,6 +1570,7 @@ class Spoiler():
                     Utils.__version__, self.multiworld.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.multiworld.algorithm)
             outfile.write('Players:                         %d\n' % self.multiworld.players)
+            outfile.write(f'Plando Options:                  {self.multiworld.plando_options}\n')
             AutoWorld.call_stage(self.multiworld, "write_spoiler_header", outfile)
 
             for player in range(1, self.multiworld.players + 1):
@@ -1521,6 +1685,45 @@ class Tutorial(NamedTuple):
     file_name: str
     link: str
     authors: List[str]
+
+
+class PlandoOptions(IntFlag):
+    none = 0b0000
+    items = 0b0001
+    connections = 0b0010
+    texts = 0b0100
+    bosses = 0b1000
+
+    @classmethod
+    def from_option_string(cls, option_string: str) -> PlandoOptions:
+        result = cls(0)
+        for part in option_string.split(","):
+            part = part.strip().lower()
+            if part:
+                result = cls._handle_part(part, result)
+        return result
+
+    @classmethod
+    def from_set(cls, option_set: Set[str]) -> PlandoOptions:
+        result = cls(0)
+        for part in option_set:
+            result = cls._handle_part(part, result)
+        return result
+
+    @classmethod
+    def _handle_part(cls, part: str, base: PlandoOptions) -> PlandoOptions:
+        try:
+            part = cls[part]
+        except Exception as e:
+            raise KeyError(f"{part} is not a recognized name for a plando module. "
+                           f"Known options: {', '.join(flag.name for flag in cls)}") from e
+        else:
+            return base | part
+
+    def __str__(self) -> str:
+        if self.value:
+            return ", ".join(flag.name for flag in PlandoOptions if self.value & flag.value)
+        return "None"
 
 
 seeddigits = 20

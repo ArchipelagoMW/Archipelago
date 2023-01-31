@@ -795,11 +795,11 @@ def patch_rom(world, rom, player, enemized):
                             itemid = 0x33
                         elif location.item.compass:
                             itemid = 0x25
-                if world.worlds[player].remote_items:  # remote items does not currently work
-                    itemid = list(location_table.keys()).index(location.name) + 1
-                    assert itemid < 0x100
-                    rom.write_byte(location.player_address, 0xFF)
-                elif location.item.player != player:
+                # if world.worlds[player].remote_items:  # remote items does not currently work
+                #     itemid = list(location_table.keys()).index(location.name) + 1
+                #     assert itemid < 0x100
+                #     rom.write_byte(location.player_address, 0xFF)
+                if location.item.player != player:
                     if location.player_address is not None:
                         rom.write_byte(location.player_address, min(location.item.player, ROM_PLAYER_LIMIT))
                     else:
@@ -1654,7 +1654,7 @@ def patch_rom(world, rom, player, enemized):
     write_strings(rom, world, player)
 
     # remote items flag, does not currently work
-    rom.write_byte(0x18637C, int(world.worlds[player].remote_items))
+    rom.write_byte(0x18637C, 0)
 
     # set rom name
     # 21 bytes
@@ -2304,7 +2304,7 @@ def write_strings(rom, world, player):
                                                                 'dungeonscrossed'] else 8
             hint_count = min(hint_count, len(items_to_hint), len(hint_locations))
             if hint_count:
-                locations = world.find_items_in_locations(items_to_hint, player)
+                locations = world.find_items_in_locations(items_to_hint, player, True)
                 local_random.shuffle(locations)
                 for x in range(min(hint_count, len(locations))):
                     this_location = locations.pop()
@@ -2321,7 +2321,7 @@ def write_strings(rom, world, player):
 
     # We still need the older hints of course. Those are done here.
 
-    silverarrows = world.find_item_locations('Silver Bow', player)
+    silverarrows = world.find_item_locations('Silver Bow', player, True)
     local_random.shuffle(silverarrows)
     silverarrow_hint = (
             ' %s?' % hint_text(silverarrows[0]).replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
@@ -2329,13 +2329,13 @@ def write_strings(rom, world, player):
     tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
     if world.worlds[player].has_progressive_bows and (world.difficulty_requirements[player].progressive_bow_limit >= 2 or (
             world.swordless[player] or world.logic[player] == 'noglitches')):
-        prog_bow_locs = world.find_item_locations('Progressive Bow', player)
+        prog_bow_locs = world.find_item_locations('Progressive Bow', player, True)
         world.slot_seeds[player].shuffle(prog_bow_locs)
         found_bow = False
         found_bow_alt = False
         while prog_bow_locs and not (found_bow and found_bow_alt):
             bow_loc = prog_bow_locs.pop()
-            if bow_loc.item.code == 0x65:
+            if bow_loc.item.code == 0x65 or (found_bow and not prog_bow_locs):
                 found_bow_alt = True
                 target = 'ganon_phase_3_no_silvers'
             else:

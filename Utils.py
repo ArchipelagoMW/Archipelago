@@ -38,7 +38,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.7"
+__version__ = "0.3.8"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -99,7 +99,7 @@ def local_path(*path: str) -> str:
             local_path.cached_path = os.path.dirname(os.path.abspath(sys.argv[0]))
     else:
         import __main__
-        if hasattr(__main__, "__file__"):
+        if hasattr(__main__, "__file__") and os.path.isfile(__main__.__file__):
             # we are running in a normal Python environment
             local_path.cached_path = os.path.dirname(os.path.abspath(__main__.__file__))
         else:
@@ -260,7 +260,7 @@ def get_default_options() -> OptionsType:
             "disable_item_cheat": False,
             "location_check_points": 1,
             "hint_cost": 10,
-            "forfeit_mode": "goal",
+            "release_mode": "goal",
             "collect_mode": "disabled",
             "remaining_mode": "goal",
             "auto_shutdown": 0,
@@ -273,7 +273,7 @@ def get_default_options() -> OptionsType:
             "players": 0,
             "weights_file_path": "weights.yaml",
             "meta_file_path": "meta.yaml",
-            "spoiler": 2,
+            "spoiler": 3,
             "glitch_triforce_room": 1,
             "race": 0,
             "plando_options": "bosses",
@@ -306,6 +306,9 @@ def get_default_options() -> OptionsType:
         },
         "ffr_options": {
             "display_msgs": True,
+        },
+        "lufia2ac_options": {
+            "rom_file": "Lufia II - Rise of the Sinistrals (USA).sfc",
         },
     }
     return options
@@ -502,7 +505,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
                     except Exception as e:
                         logging.exception(e)
                     else:
-                        logging.info(f"Deleted old logfile {file.path}")
+                        logging.debug(f"Deleted old logfile {file.path}")
     import threading
     threading.Thread(target=_cleanup, name="LogCleaner").start()
     import platform
