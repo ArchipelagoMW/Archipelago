@@ -446,7 +446,7 @@ class HKWorld(World):
                 options[option_name] = optionvalue
 
         # 32 bit int
-        slot_data["seed"] = self.multiworld.slot_seeds[self.player].randint(-2147483647, 2147483646)
+        slot_data["seed"] = self.multiworld.per_slot_randoms[self.player].randint(-2147483647, 2147483646)
 
         # Backwards compatibility for shop cost data (HKAP < 0.1.0)
         if not self.multiworld.CostSanity[self.player]:
