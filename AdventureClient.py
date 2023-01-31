@@ -337,10 +337,14 @@ async def atari_sync_task(ctx: AdventureContext):
 
 async def run_game(romfile):
     auto_start = Utils.get_options()["adventure_options"].get("rom_start", True)
+    rom_args = Utils.get_options()["adventure_options"].get("rom_args")
     if auto_start is True:
         print("auto_start true not supported.  Supply a path.")
     elif os.path.isfile(auto_start):
-        subprocess.Popen([auto_start, romfile],
+        open_args = [auto_start, romfile]
+        if rom_args is not None:
+            open_args.insert(1, rom_args)
+        subprocess.Popen(open_args,
                          stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 

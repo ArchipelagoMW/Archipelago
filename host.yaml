@@ -176,6 +176,10 @@ adventure_options:
   # True for operating system default program for '.BIN'
   # Alternatively, a path to a program to open the .bin file with (generally EmuHawk for multiworld)
   rom_start: "EmuHawk.exe"
+  # Optional, additional args passed into rom_start before the .bin file
+  # For example, this can be used to autoload the connector script in BizHawk
+  # (see BizHawk --lua= option)
+  rom_args: ""
 
 
 
