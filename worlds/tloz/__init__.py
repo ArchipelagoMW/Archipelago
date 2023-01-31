@@ -74,6 +74,7 @@ class TLoZWorld(World):
         self.generator_in_use = threading.Event()
         self.rom_name_available_event = threading.Event()
         self.levels = None
+        self.filler_items = None
 
     def create_item(self, name: str):
         return TLoZItem(name, item_table[name].classification, self.item_name_to_id[name], self.player)
@@ -229,7 +230,7 @@ class TLoZWorld(World):
         secret_cave_money_amounts = [20, 50, 100]
         for i, amount in enumerate(secret_cave_money_amounts):
             # Giving approximately double the money to keep grinding down
-            amount = amount * self.multiworld.random.triangular(1.5, 2.5)
+            amount = amount * self.multiworld.slot_seeds[self.player].triangular(1.5, 2.5)
             secret_cave_money_amounts[i] = int(amount)
         for i, cave in enumerate(secret_caves):
             rom_data[secret_money_ids[cave]] = secret_cave_money_amounts[i]
@@ -266,14 +267,14 @@ class TLoZWorld(World):
 
     def modify_multidata(self, multidata: dict):
         import base64
-        rom_name = getattr(self, "rom_name", None)
-        if rom_name:
-            new_name = base64.b64encode(bytes(self.rom_name)).decode()
-            multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+        self.rom_name_available_event.wait()
+        new_name = base64.b64encode(bytes(self.rom_name)).decode()
+        multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
     def get_filler_item_name(self) -> str:
-        filler_items = [item for item in item_table if item_table[item].classification == ItemClassification.filler]
-        return self.multiworld.random.choice(filler_items)
+        if self.filler_items is None:
+            self.filler_items = [item for item in item_table if item_table[item].classification == ItemClassification.filler]
+        return self.multiworld.random.choice(self.filler_items)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         if self.multiworld.ExpandedPool[self.player]:
@@ -313,29 +314,3 @@ class TLoZItem(Item):
 
 class TLoZLocation(Location):
     game = 'The Legend of Zelda'
-
-
-class PlandoItem(NamedTuple):
-    item: str
-    location: str
-    world: Union[bool, str] = False  # False -> own world, True -> not own world
-    from_pool: bool = True  # if item should be removed from item pool
-    force: str = 'silent'  # false -> warns if item not successfully placed. true -> errors out on failure to place item
-
-    def warn(self, warning: str):
-        if self.force in ['true', 'fail', 'failure', 'none', 'false', 'warn', 'warning']:
-            logging.warning(f'{warning}')
-        else:
-            logging.debug(f'{warning}')
-
-    def failed(self, warning: str, exception=Exception):
-        if self.force in ['true', 'fail', 'failure']:
-            raise exception(warning)
-        else:
-            self.warn(warning)
-
-
-class PlandoConnection(NamedTuple):
-    entrance: str
-    exit: str
-    direction: str  # entrance, exit or both
