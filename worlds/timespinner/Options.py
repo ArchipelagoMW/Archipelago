@@ -1,6 +1,6 @@
-from typing import Dict, Union, Set
+from typing import Dict, Union, List
 from BaseClasses import MultiWorld
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option, OptionDict, OptionSet
+from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option, OptionDict, OptionList
 from schema import Schema, And, Optional
 
 
@@ -361,7 +361,7 @@ class TrapChance(Range):
     default = 10
 
 
-class Traps(OptionSet):
+class Traps(OptionList):
     "List of traps that will be in the item pool to find"
     display_name = "Traps Types"
     valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" }
@@ -410,7 +410,7 @@ def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
     return get_option_value(world, player, name) > 0
 
 
-def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, Dict, Set]:
+def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, Dict, List]:
     option = getattr(world, name, None)
     if option == None:
         return 0

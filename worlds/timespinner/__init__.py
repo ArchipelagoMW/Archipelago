@@ -77,10 +77,10 @@ class TimespinnerWorld(World):
 
     def get_filler_item_name(self) -> str:
         trap_chance: int = get_option_value(self.multiworld, self.player, "TrapChance")
-        enabled_traps: Set[str] = get_option_value(self.multiworld, self.player, "Traps")
+        enabled_traps: List[str] = get_option_value(self.multiworld, self.player, "Traps")
 
         if (self.multiworld.random.random() < (trap_chance / 100) and enabled_traps):
-            return self.multiworld.random.choice(tuple(enabled_traps))
+            return self.multiworld.random.choice(enabled_traps)
         else:
             return self.multiworld.random.choice(filler_items) 
 
@@ -156,7 +156,7 @@ class TimespinnerWorld(World):
                 (self.precalculated_weights.pyramid_keys_unlock))
        
         if is_option_enabled(self.multiworld, self.player, "RisingTides"):
-            flooded_areas: list[str] = []
+            flooded_areas: List[str] = []
 
             if(self.precalculated_weights.flood_basement):
                 if (self.precalculated_weights.flood_basement_high):
