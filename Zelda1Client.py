@@ -243,7 +243,6 @@ async def parse_locations(locations_array, ctx: ZeldaContext, force: bool, zone=
                                 ctx.bonus_items.append(item_code)
                             locations_checked.append(location)
         if locations_checked:
-            print([ctx.location_names[location] for location in locations_checked])
             await ctx.send_msgs([
                 {"cmd": "LocationChecks",
                  "locations": locations_checked}
