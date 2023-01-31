@@ -367,22 +367,6 @@ class AccessGraph(object):
         #print("canAccess: {}".format(can))
         return can
 
-        # test access from an access point to a list of others, given an optional item
-    def canAccessList(self, smbm, srcAccessPointName, destAccessPointNameList, maxDiff, item=None):
-        if item is not None:
-            smbm.addItem(item)
-        #print("canAccess: item: {}, src: {}, dest: {}".format(item, srcAccessPointName, destAccessPointName))
-        destAccessPointList = [self.accessPoints[destAccessPointName] for destAccessPointName in destAccessPointNameList]
-        srcAccessPoint = self.accessPoints[srcAccessPointName]
-        availAccessPoints = self.getAvailableAccessPoints(srcAccessPoint, smbm, maxDiff, item)
-        can = any(ap in availAccessPoints for ap in destAccessPointList)
-        # if not can:
-        #     self.log.debug("canAccess KO: avail = {}".format([ap.Name for ap in availAccessPoints.keys()]))
-        if item is not None:
-            smbm.removeItem(item)
-        #print("canAccess: {}".format(can))
-        return can
-
     # returns a list of AccessPoint instances from srcAccessPointName to destAccessPointName
     # (not including source ap)
     # or None if no possible path
