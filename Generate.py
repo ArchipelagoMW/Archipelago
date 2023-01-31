@@ -379,10 +379,9 @@ def roll_linked_options(weights: dict) -> dict:
     return weights
 
 
-def roll_triggers(weights: dict, triggers: list) -> dict:
+def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
     weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = Utils.__version__
-    valid_keys = set()
     for i, option_set in enumerate(triggers):
         try:
             currently_targeted_weights = weights
@@ -407,26 +406,6 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
         except Exception as e:
             raise ValueError(f"Your trigger number {i + 1} is destroyed. "
                              f"Please fix your triggers.") from e
-    if isinstance(weights["game"], dict):
-        for game in weights["game"]:
-            if game == "A Link to the Past":  # TODO remove when LTTP doesn't have to be coded around
-                continue
-            game_weights = weights[game]
-            for option_key in game_weights:
-                if option_key not in chain(Options.common_options, Options.per_game_common_options,
-                                              AutoWorldRegister.world_types[game].option_definitions,
-                                           {*valid_keys, "plando_connections", "plando_items", "plando_texts", "triggers"}):
-                    raise ValueError(f"{option_key} not a valid option name for {game} and not present in triggers")
-                    pass
-    else:
-        game = weights["game"]
-        if game != "A Link to the Past":  # TODO remove when LTTP doesn't have to be coded around
-            for option_key in weights[game]:
-                if option_key not in chain(Options.common_options, Options.per_game_common_options,
-                                           AutoWorldRegister.world_types[game].option_definitions,
-                                           {*valid_keys, "plando_connections", "plando_items", "plando_texts",
-                                            "triggers"}):
-                    raise ValueError(f"{option_key} not a valid option name for {game} and not present in triggers")
     return weights
 
 
@@ -450,8 +429,9 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
+    valid_trigger_names = set()
     if "triggers" in weights:
-        weights = roll_triggers(weights, weights["triggers"])
+        weights = roll_triggers(weights, weights["triggers"], valid_trigger_names)
 
     requirements = weights.get("requires", {})
     if requirements:
@@ -478,8 +458,15 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     game_weights = weights[ret.game]
 
     if "triggers" in game_weights:
-        weights = roll_triggers(weights, game_weights["triggers"])
+        weights = roll_triggers(weights, game_weights["triggers"], valid_trigger_names)
         game_weights = weights[ret.game]
+
+    if ret.game != "A Link to the Past":  # TODO rip out LTTP behavior
+        for option_key in weights[ret.game]:
+            if option_key not in chain(Options.common_options, Options.per_game_common_options,
+                                          AutoWorldRegister.world_types[ret.game].option_definitions,
+                                       {*valid_trigger_names, "plando_connections", "plando_items", "plando_texts", "triggers"}):
+                raise ValueError(f"{option_key} not a valid option name for {ret.game} and not present in triggers")
 
     ret.name = get_choice('name', weights)
     for option_key, option in Options.common_options.items():
