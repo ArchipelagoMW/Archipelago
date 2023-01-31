@@ -56,9 +56,14 @@ def patch_kh2(self, output_directory):
     self.magic = 6
     self.defense = 2
     self.ap = 50
-    soraStartingItems = []
-    goofyStartingItems = []
-    donaldStartingItems = []
+    if self.multiworld.Keyblade_Minimum[self.player].value>self.multiworld.Keyblade_Maximum[self.player].value:
+        keyblademin=self.multiworld.Keyblade_Maximum[self.player].value
+        keyblademax=self.multiworld.Keyblade_Minimum[self.player].value
+    else:
+        keyblademin=self.multiworld.Keyblade_Minimum[self.player].value
+        keyblademax=self.multiworld.Keyblade_Maximum[self.player].value
+
+
     mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
     
     for location in self.multiworld.get_filled_locations(self.player):
@@ -105,10 +110,8 @@ def patch_kh2(self, output_directory):
             #print(self.multiworld.Keyblade_Maximum[self.player].value)
             self.formattedItem["Stats"].append({
                 "Id": data.locid,
-                "Attack": random.randint(self.multiworld.Keyblade_Minimum[self.player].value,
-                                         self.multiworld.Keyblade_Maximum[self.player].value),
-                "Magic": random.randint(self.multiworld.Keyblade_Minimum[self.player].value,
-                                        self.multiworld.Keyblade_Maximum[self.player].value),
+                "Attack": random.randint(keyblademin,keyblademax),
+                "Magic": random.randint(keyblademin,keyblademax),
                 "Defense": 0,
                 "Ability": itemcode,
                 "AbilityPoints": 0,

@@ -101,7 +101,7 @@ class KH2World(World):
             ItemQuantityDict.update({item:data.quantity})     
         
         for item,value in self.multiworld.start_inventory[self.player].value.items():
-            if item in Items.ActionAbility_Table.keys() or item in Items.ActionAbility_Table.keys():
+            if item in Items.ActionAbility_Table.keys() or item in Items.SupportAbility_Table.keys():
                 data=item_dictionary_table[item]
                 #cannot have more than the quantity for abilties
                 if value>Items.item_dictionary_table[item].quantity:
