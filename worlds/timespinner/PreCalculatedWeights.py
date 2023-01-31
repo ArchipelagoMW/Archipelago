@@ -71,13 +71,13 @@ class PreCalculatedWeights:
                 ancient_pyramid_teleportation_gates[0]
             )
 
-        if is_maw_flooded:
-            past_teleportation_gates = (*past_teleportation_gates, *("GateMaw"))
+        if not is_maw_flooded:
+            past_teleportation_gates += ("GateMaw", )
 
         if is_option_enabled(world, player, "Inverted"):
             all_gates: Tuple[str, ...] = present_teleportation_gates
         else:
-            all_gates: Tuple[str, ...] = (*past_teleportation_gates, *present_teleportation_gates)
+            all_gates: Tuple[str, ...] = past_teleportation_gates + present_teleportation_gates
 
         return (
             world.random.choice(all_gates),
