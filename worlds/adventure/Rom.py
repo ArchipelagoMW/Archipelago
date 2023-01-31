@@ -107,7 +107,7 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
                                     compress_type=zipfile.ZIP_LZMA)
         if self.patched_rom_sha256 is not None:
             opened_zipfile.writestr("hash",
-                                    bytes(self.patched_rom_sha256, encoding='ascii'),
+                                    bytes(self.patched_rom_sha256, encoding="ascii"),
                                     compress_type=zipfile.ZIP_STORED)
         if self.player_name is not None:
             opened_zipfile.writestr("player",

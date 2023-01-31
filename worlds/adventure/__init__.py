@@ -223,7 +223,7 @@ class AdventureWorld(World):
                                         player=self.player, player_name=self.multiworld.player_name[self.player],
                                         patched_path=rom_path, locations=foreign_item_locations,
                                         autocollect=auto_collect_locations, local_item_locations=local_item_to_location,
-                                        seed_name=bytes(self.multiworld.seed_name, encoding='ascii'))
+                                        seed_name=bytes(self.multiworld.seed_name, encoding="ascii"))
             patch.write()
         finally:
             if os.path.exists(rom_path):
