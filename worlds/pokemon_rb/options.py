@@ -518,6 +518,7 @@ class TrapWeight(Choice):
     option_low = 1
     option_medium = 3
     option_high = 5
+    option_disabled = 0
     default = 3
 
 
@@ -539,7 +540,6 @@ class ParalyzeTrapWeight(TrapWeight):
 class IceTrapWeight(TrapWeight):
     """Weights for Ice Traps. These apply the Ice status to all your party members. Don't forget to buy Ice Heals!"""
     display_name = "Ice Trap Weight"
-    option_disabled = 0
     default = 0
 
 
