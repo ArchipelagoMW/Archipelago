@@ -6,7 +6,13 @@ from Options import Choice, Option, DefaultOnToggle, DeathLink, Range
 
 
 class EmptyItemCount(Range):
-    """How many 'nothing' items are exported.  Pulls in more items from other games
+    """How many empty items to allow in a multiworld.
+
+    Increasing this can pull more items into the Adventure world, at
+    the cost of giving other worlds 'nothing' in some of their filler locations
+
+    Supported values: 0-8
+    Default value: 0
     """
     display_name = "Empty Item Count"
     range_start = 0

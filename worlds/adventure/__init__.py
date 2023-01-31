@@ -16,7 +16,7 @@ from .Options import adventure_option_definitions
 from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, apply_basepatch, \
     AdventureAutoCollectLocation
 from .Items import item_table, ItemData, nothing_item_id, event_table, AdventureItem, get_num_items
-from .Locations import location_table, base_location_id
+from .Locations import location_table, base_location_id, LocationData
 from .Offsets import static_item_data_location, items_ram_start, static_item_element_size, item_position_table
 from .Regions import create_regions
 from .Rules import set_rules
@@ -152,9 +152,9 @@ class AdventureWorld(World):
 
     def generate_output(self, output_directory: str) -> None:
         rom_path: str = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.bin")
-        foreign_item_locations = []
-        auto_collect_locations = []
-        local_item_to_location = {}
+        foreign_item_locations: [LocationData] = []
+        auto_collect_locations: [AdventureAutoCollectLocation] = []
+        local_item_to_location: {int, int} = {}
         try:
             rom_bytearray = bytearray(apply_basepatch(get_base_rom_bytes()))
             # start and stop indices are offsets in the ROM file, not Adventure ROM addresses (which start at f000)
@@ -240,65 +240,3 @@ class AdventureWorld(World):
     def create_event(self, name: str, classification: ItemClassification) -> Item:
         return AdventureItem(name, classification, None, self.player)
 
-    def get_capsule_cravings_table(self) -> bytes:
-        rom: bytes = get_base_rom_bytes()
-
-        if self.capsule_cravings_jp_style:
-            number_of_items: int = 467
-            items_offset: int = 0x0B4F69
-            value_thresholds: List[int] = \
-                [200, 500, 600, 800, 1000, 2000, 3000, 4000, 5000, 6000, 8000, 12000, 20000, 25000, 29000, 32000, 33000]
-            tier_list: List[List[int]] = [list() for _ in value_thresholds[:-1]]
-
-            for item_id in range(number_of_items):
-                pointer: int = int.from_bytes(rom[items_offset + 2 * item_id:items_offset + 2 * item_id + 2], "little")
-                if rom[items_offset + pointer] & 0x20 == 0 and rom[items_offset + pointer + 1] & 0x40 == 0:
-                    value: int = int.from_bytes(rom[items_offset + pointer + 5:items_offset + pointer + 7], "little")
-                    for t in range(len(tier_list)):
-                        if value_thresholds[t] <= value < value_thresholds[t + 1]:
-                            tier_list[t].append(item_id)
-                            break
-            tier_sizes: List[int] = [len(tier) for tier in tier_list]
-
-            cravings_table: bytes = b"".join(i.to_bytes(2, "little") for i in itertools.chain(
-                *zip(itertools.accumulate((2 * tier_size for tier_size in tier_sizes), initial=0x40), tier_sizes),
-                (item_id for tier in tier_list for item_id in tier)))
-            assert len(cravings_table) == 470, cravings_table
-            return cravings_table
-        else:
-            return rom[0x0AFF16:0x0AFF16 + 470]
-
-    def get_goal_text_bytes(self) -> bytes:
-        goal_text: List[str] = []
-        iris: str = f"{self.iris_treasures_required} Iris treasure{'s' if self.iris_treasures_required > 1 else ''}"
-        if self.goal == Goal.option_boss:
-            goal_text = ["You have to defeat", f"the boss on B{self.final_floor}."]
-        elif self.goal == Goal.option_iris_treasure_hunt:
-            goal_text = ["You have to find", f"{iris}."]
-        elif self.goal == Goal.option_boss_iris_treasure_hunt:
-            goal_text = ["You have to retrieve", f"{iris} and", f"defeat the boss on B{self.final_floor}."]
-        elif self.goal == Goal.option_final_floor:
-            goal_text = [f"You need to get to B{self.final_floor}."]
-        assert len(goal_text) <= 4 and all(len(line) <= 28 for line in goal_text), goal_text
-        goal_text_bytes = bytes((0x08, *b"\x03".join(line.encode("ascii") for line in goal_text), 0x00))
-        return goal_text_bytes + b"\x00" * (147 - len(goal_text_bytes))
-
-    @staticmethod
-    def get_node_connection_table() -> bytes:
-        class Connect(IntFlag):
-            TOP_LEFT = 0b00000001
-            LEFT = 0b00000010
-            BOTTOM_LEFT = 0b00000100
-            TOP = 0b00001000
-            BOTTOM = 0b00010000
-            TOP_RIGHT = 0b00100000
-            RIGHT = 0b01000000
-            BOTTOM_RIGHT = 0b10000000
-
-        rom: bytes = get_base_rom_bytes()
-
-        return bytes(rom[0x09D59B + ((n & ~Connect.TOP_LEFT if not n & (Connect.TOP | Connect.LEFT) else n) &
-                                     (n & ~Connect.TOP_RIGHT if not n & (Connect.TOP | Connect.RIGHT) else n) &
-                                     (n & ~Connect.BOTTOM_LEFT if not n & (Connect.BOTTOM | Connect.LEFT) else n) &
-                                     (n & ~Connect.BOTTOM_RIGHT if not n & (Connect.BOTTOM | Connect.RIGHT) else n))]
-                     for n in range(256))

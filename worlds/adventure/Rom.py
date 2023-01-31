@@ -64,18 +64,18 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
     # locations: [], autocollect: [], seed_name: bytes,
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         patch_only = True
-        if 'autocollect' in kwargs:
+        if "autocollect" in kwargs:
             patch_only = False
             self.foreign_items = [AdventureForeignItemInfo(loc.short_location_id, loc.room_id, loc.room_x, loc.room_y)
-                                  for loc in kwargs['locations']]
+                                  for loc in kwargs["locations"]]
 
-            self.autocollect_items = kwargs['autocollect']
-            self.seedName = kwargs['seed_name']
-            self.local_item_locations = kwargs['local_item_locations']
-            del kwargs['locations']
-            del kwargs['autocollect']
-            del kwargs['seed_name']
-            del kwargs['local_item_locations']
+            self.autocollect_items = kwargs["autocollect"]
+            self.seedName = kwargs["seed_name"]
+            self.local_item_locations = kwargs["local_item_locations"]
+            del kwargs["locations"]
+            del kwargs["autocollect"]
+            del kwargs["seed_name"]
+            del kwargs["local_item_locations"]
         super(AdventureDeltaPatch, self).__init__(*args, **kwargs)
         if not patch_only:
             with open(self.patched_path, "rb") as file:
