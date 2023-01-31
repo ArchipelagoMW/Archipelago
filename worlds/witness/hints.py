@@ -233,7 +233,7 @@ def make_hints(world: MultiWorld, player: int, hint_amount: int):
     for item in always_items:
         hint_pair = make_hint_from_item(world, player, item)
 
-        if hint_pair[2] == 158007:
+        if hint_pair[2] == 158007:  # Tutorial Gate Open
             continue
 
         always_hint_pairs[hint_pair[0]] = (hint_pair[1], True, hint_pair[2])
@@ -247,7 +247,7 @@ def make_hints(world: MultiWorld, player: int, hint_amount: int):
     for item in priority_items:
         hint_pair = make_hint_from_item(world, player, item)
 
-        if hint_pair[2] == 158007:
+        if hint_pair[2] == 158007:  # Tutorial Gate Open
             continue
 
         priority_hint_pairs[hint_pair[0]] = (hint_pair[1], True, hint_pair[2])
