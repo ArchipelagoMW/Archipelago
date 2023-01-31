@@ -183,63 +183,57 @@ class TLoZWorld(World):
     def apply_randomizer(self):
         with open(get_base_rom_path(), 'rb') as rom:
             rom_data = self.apply_base_patch(rom)
-            # Write each location's new data in
-            for location in self.multiworld.get_filled_locations():
-                # Zelda and Ganon aren't real locations
-                if location.name == "Ganon" or location.name == "Zelda":
-                    continue
-
-                # Neither are boss defeat events
-                if "Status" in location.name:
-                    continue
-
-                # We, of course, only care about our own world
-                if location.player != self.player:
-                    continue
-
-                item = location.item.name
-                # Remote items are always going to look like Rupees.
-                if location.item.player != self.player:
-                    item = "Rupee"
-
-                item_id = item_game_ids[item]
-                location_id = location_ids[location.name]
-
-                # Shop prices need to be set
-                if location.name in shop_locations:
-                    if location.name[-5:] == "Right":
-                        # Final item in stores has bit 6 and 7 set. It's what marks the cave a shop.
-                        item_id = item_id | 0b11000000
-                    price_location = shop_price_location_ids[location.name]
-                    item_price = item_prices[item]
-                    if item == "Rupee":
-                        item_class = location.item.classification
-                        if item_class == ItemClassification.progression:
-                            item_price = item_price * 2
-                        elif item_class == ItemClassification.useful:
-                            item_price = item_price // 2
-                        elif item_class == ItemClassification.filler:
-                            item_price = item_price // 2
-                        elif item_class == ItemClassification.trap:
-                            item_price = item_price * 2
-                    rom_data[price_location] = item_price
-                if location.name == "Take Any Item Right":
-                    # Same story as above: bit 6 is what makes this a Take Any cave
-                    item_id = item_id | 0b01000000
-                rom_data[location_id] = item_id
-
-            self.multiworld.random.seed()
-
-            # We shuffle the tiers of rupee caves. Caves that shared a value before still will.
-            secret_caves = self.multiworld.random.sample(sorted(secret_money_ids), 3)
-            secret_cave_money_amounts = [20, 50, 100]
-            for i, amount in enumerate(secret_cave_money_amounts):
-                # Giving approximately double the money to keep grinding down
-                amount = amount * self.multiworld.random.triangular(1.5, 2.5)
-                secret_cave_money_amounts[i] = int(amount)
-            for i, cave in enumerate(secret_caves):
-                rom_data[secret_money_ids[cave]] = secret_cave_money_amounts[i]
-            return rom_data
+        # Write each location's new data in
+        for location in self.multiworld.get_filled_locations(self.player):
+            # Zelda and Ganon aren't real locations
+            if location.name == "Ganon" or location.name == "Zelda":
+                continue
+        
+            # Neither are boss defeat events
+            if "Status" in location.name:
+                continue
+        
+            item = location.item.name
+            # Remote items are always going to look like Rupees.
+            if location.item.player != self.player:
+                item = "Rupee"
+        
+            item_id = item_game_ids[item]
+            location_id = location_ids[location.name]
+        
+            # Shop prices need to be set
+            if location.name in shop_locations:
+                if location.name[-5:] == "Right":
+                    # Final item in stores has bit 6 and 7 set. It's what marks the cave a shop.
+                    item_id = item_id | 0b11000000
+                price_location = shop_price_location_ids[location.name]
+                item_price = item_prices[item]
+                if item == "Rupee":
+                    item_class = location.item.classification
+                    if item_class == ItemClassification.progression:
+                        item_price = item_price * 2
+                    elif item_class == ItemClassification.useful:
+                        item_price = item_price // 2
+                    elif item_class == ItemClassification.filler:
+                        item_price = item_price // 2
+                    elif item_class == ItemClassification.trap:
+                        item_price = item_price * 2
+                rom_data[price_location] = item_price
+            if location.name == "Take Any Item Right":
+                # Same story as above: bit 6 is what makes this a Take Any cave
+                item_id = item_id | 0b01000000
+            rom_data[location_id] = item_id
+        
+        # We shuffle the tiers of rupee caves. Caves that shared a value before still will.
+        secret_caves = self.multiworld.random.sample(sorted(secret_money_ids), 3)
+        secret_cave_money_amounts = [20, 50, 100]
+        for i, amount in enumerate(secret_cave_money_amounts):
+            # Giving approximately double the money to keep grinding down
+            amount = amount * self.multiworld.random.triangular(1.5, 2.5)
+            secret_cave_money_amounts[i] = int(amount)
+        for i, cave in enumerate(secret_caves):
+            rom_data[secret_money_ids[cave]] = secret_cave_money_amounts[i]
+        return rom_data
 
     def generate_output(self, output_directory: str):
         patched_rom = self.apply_randomizer()
