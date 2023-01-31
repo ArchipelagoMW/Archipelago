@@ -7,7 +7,7 @@ from .ItemPool import dangerous_weapon_locations
 if TYPE_CHECKING:
     from . import TLoZWorld
 
-def set_rules(self, tloz_world: "TLoZWorld"):
+def set_rules(tloz_world: "TLoZWorld"):
     player = tloz_world.player
     world = tloz_world.multiworld
 
@@ -15,12 +15,12 @@ def set_rules(self, tloz_world: "TLoZWorld"):
     for level in range(1, 9):
         boss = world.get_location(f"Level {level} Boss", player)
         boss_event = world.get_location(f"Level {level} Boss Status", player)
-        status = self.create_event(f"Boss {level} Defeated")
+        status = tloz_world.create_event(f"Boss {level} Defeated")
         boss_event.place_locked_item(status)
         add_rule(boss_event, lambda state: state.can_reach(boss, "Location", player))
 
     # No dungeons without weapons except for the dangerous weapon locations if we're dangerous, no unsafe dungeons
-    for i, level in enumerate(self.levels[1:10]):
+    for i, level in enumerate(tloz_world.levels[1:10]):
         for location in level.locations:
             if world.StartingPosition[player] < 1 or location.name not in dangerous_weapon_locations:
                 add_rule(world.get_location(location.name, player),
@@ -40,14 +40,14 @@ def set_rules(self, tloz_world: "TLoZWorld"):
                  lambda state: state.has_group("weapons", player))
 
     # Everything from 4 on up has dark rooms
-    for level in self.levels[4:]:
+    for level in tloz_world.levels[4:]:
         for location in level.locations:
             add_rule(world.get_location(location.name, player),
                      lambda state: state.has_group("candles", player)
                                    or (state.has("Magical Rod", player) and state.has("Book", player)))
 
     # Everything from 5 on up has gaps
-    for level in self.levels[5:]:
+    for level in tloz_world.levels[5:]:
         for location in level.locations:
             add_rule(world.get_location(location.name, player),
                      lambda state: state.has("Stepladder", player))
@@ -81,7 +81,7 @@ def set_rules(self, tloz_world: "TLoZWorld"):
         add_rule(world.get_location("Level 8 Bomb Drop (Darknuts North)", player),
                  lambda state: state.has("Bow", player) and state.has_group("arrows", player))
 
-    for location in self.levels[9].locations:
+    for location in tloz_world.levels[9].locations:
         add_rule(world.get_location(location.name, player),
                  lambda state: state.has("Triforce Fragment", player, 8) and
                                state.has_group("swords", player))
@@ -117,13 +117,13 @@ def set_rules(self, tloz_world: "TLoZWorld"):
             add_rule(world.get_location("Take Any Item Right", player),
                      lambda state: state.has_group("candles", player) or
                                    state.has("Raft", player))
-    for location in self.levels[4].locations:
+    for location in tloz_world.levels[4].locations:
         add_rule(world.get_location(location.name, player),
                  lambda state: state.has("Raft", player) or state.has("Recorder", player))
-    for location in self.levels[7].locations:
+    for location in tloz_world.levels[7].locations:
         add_rule(world.get_location(location.name, player),
                  lambda state: state.has("Recorder", player))
-    for location in self.levels[8].locations:
+    for location in tloz_world.levels[8].locations:
         add_rule(world.get_location(location.name, player),
                  lambda state: state.has("Bow", player))
 
