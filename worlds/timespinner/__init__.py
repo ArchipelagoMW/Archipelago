@@ -1,8 +1,7 @@
 from typing import Dict, List, Set, Tuple, TextIO
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
-from .Items import get_item_names_per_category, item_table, starter_melee_weapons, starter_spells, \
-    starter_progression_items, filler_items
-from .Locations import get_locations, starter_progression_locations, EventId
+from .Items import get_item_names_per_category, item_table, starter_melee_weapons, starter_spells, filler_items
+from .Locations import get_locations, EventId
 from .Options import is_option_enabled, get_option_value, timespinner_options
 from .PreCalculatedWeights import PreCalculatedWeights
 from .Regions import create_regions
@@ -96,14 +95,9 @@ class TimespinnerWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has(final_boss, self.player) 
 
     def generate_basic(self):
-        excluded_items = get_excluded_items(self, self.multiworld, self.player)
+        excluded_items: Set[str] = get_excluded_items(self, self.multiworld, self.player)
 
         assign_starter_items(self.multiworld, self.player, excluded_items, self.locked_locations)
-
-        if not is_option_enabled(self.multiworld, self.player, "QuickSeed") \
-                and not is_option_enabled(self.multiworld, self.player, "Inverted") \
-                and not self.precalculated_weights.flood_lake_desolation:
-            place_first_progression_item(self.multiworld, self.player, excluded_items, self.locked_locations)
 
         pool = get_item_pool(self.multiworld, self.player, excluded_items)
 
@@ -197,8 +191,12 @@ def get_excluded_items(self: TimespinnerWorld, world: MultiWorld, player: int) -
         excluded_items.add('Meyef')
     if is_option_enabled(world, player, "QuickSeed"):
         excluded_items.add('Talaria Attachment')
+
     if is_option_enabled(world, player, "UnchainedKeys"):
         excluded_items.add('Twin Pyramid Key')
+
+        if not is_option_enabled(world, player, "EnterSandman"):
+            excluded_items.add('Mysterious Warp Beacon')
     else:
         excluded_items.add('Timeworn Warp Beacon')
         excluded_items.add('Modern Warp Beacon')
@@ -255,13 +253,6 @@ def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> L
                 item = create_item_with_correct_settings(world, player, name)
                 pool.append(item)
 
-    if is_option_enabled(world, player, "UnchainedKeys"):
-        pool.append(create_item_with_correct_settings(world, player, "Timeworn Warp Beacon"))
-        pool.append(create_item_with_correct_settings(world, player, "Modern Warp Beacon"))
-
-        if is_option_enabled(world, player, "EnterSandman"):
-            pool.append(create_item_with_correct_settings(world, player, "Mysterious Warp Beacon"))
-
     return pool
 
 
@@ -270,30 +261,6 @@ def fill_item_pool_with_dummy_items(self: TimespinnerWorld, world: MultiWorld, p
     for _ in range(len(location_cache) - len(locked_locations) - len(pool)):
         item = create_item_with_correct_settings(world, player, self.get_filler_item_name())
         pool.append(item)
-
-
-def place_first_progression_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]):
-    for item in world.precollected_items[player]:
-        if item.name in starter_progression_items:
-            return
-
-    local_starter_progression_items = tuple(
-        item for item in starter_progression_items if item not in world.non_local_items[player].value)
-    non_excluded_starter_progression_locations = tuple(
-        location for location in starter_progression_locations if location not in world.exclude_locations[player].value)
-
-    if not local_starter_progression_items or not non_excluded_starter_progression_locations:
-        return
-
-    progression_item = world.random.choice(local_starter_progression_items)
-    location = world.random.choice(non_excluded_starter_progression_locations)
-
-    excluded_items.add(progression_item)
-    locked_locations.append(location)
-
-    item = create_item_with_correct_settings(world, player, progression_item)
-
-    world.get_location(location, player).place_locked_item(item)
 
 
 def create_item_with_correct_settings(world: MultiWorld, player: int, name: str) -> Item:

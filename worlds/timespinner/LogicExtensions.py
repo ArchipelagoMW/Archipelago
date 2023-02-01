@@ -7,6 +7,7 @@ class TimespinnerLogic():
     player: int
 
     flag_unchained_keys: bool
+    flag_eye_spy: bool
     flag_specific_keycards: bool
     present_keys_unlock: Union[str, None]
     present_keys_unlock: Union[str, None]
@@ -17,6 +18,7 @@ class TimespinnerLogic():
         self.player = player
 
         self.flag_specific_keycards = is_option_enabled(world, player, "SpecificKeycards")
+        self.flag_eye_spy = is_option_enabled(world, player, "EyeSpy")
         self.flag_unchained_keys = is_option_enabled(world, player, "UnchainedKeys")
 
         if precalculated_weights:
@@ -82,7 +84,7 @@ class TimespinnerLogic():
             return state.has_any({'Security Keycard A', 'Security Keycard B', 'Security Keycard C', 'Security Keycard D'}, self.player)
 
     def can_break_walls(self, state: CollectionState) -> bool:
-        if self.flag_specific_keycards:
+        if self.flag_eye_spy:
             return state.has('Oculus Ring', self.player)
         else:
             return True

@@ -272,11 +272,3 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int],
         )
  
     return tuple(location_table)
-        
-
-starter_progression_locations: Tuple[str, ...] = (
-    'Lake Desolation: Starter chest 2',
-    'Lake Desolation: Starter chest 3',
-    'Lake Desolation: Starter chest 1',
-    'Lake Desolation (Lower): Timespinner Wheel room'
-)

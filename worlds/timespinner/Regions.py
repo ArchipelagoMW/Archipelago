@@ -190,7 +190,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         connect(world, player, names, 'Ifrit\'s Lair', 'Library top')
 
 def throwIfAnyLocationIsNotAssignedToARegion(regions: List[Region], regionNames: Set[str]):
-    existingRegions = set()
+    existingRegions: Set[str] = set()
 
     for region in regions:
         existingRegions.add(region.name)
