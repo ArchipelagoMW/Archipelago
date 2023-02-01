@@ -20,7 +20,7 @@ comfortable exploiting certain glitches in the game.
 ## What is a multi-world?
 
 While a randomizer shuffles a game, a multi-world randomizer shuffles that game for multiple players. For example, in a
-two player multi-world, players A and B each get their own randomized version of a game, called seeds. In each player's
+two player multi-world, players A and B each get their own randomized version of a game, called a world. In each player's
 game, they may find items which belong to the other player. If player A finds an item which belongs to player B, the
 item will be sent to player B's world over the internet.
 
