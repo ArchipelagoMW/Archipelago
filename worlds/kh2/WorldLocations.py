@@ -1,9 +1,5 @@
 import typing
-
-#from Archipelago.worlds.kh2.Locations import SoraLevels
-
-from .Names import LocationName
-#import LocationName  
+from .Names import LocationName  
 
 
 

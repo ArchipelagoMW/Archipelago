@@ -1,22 +1,13 @@
 import zipfile
-
-from typing import ClassVar, Dict, Tuple, Any, Optional, Union, BinaryIO
 import yaml
 import os
-import shutil
 import random
-import json
 import os
-import shutil
 import Utils
 import zipfile
 from .Items import item_dictionary_table
 from .Locations import all_locations,SoraLevels
 from .XPValues import lvlStats, formExp, soraExp
-import Utils
-import tempfile
-
-from .Names import LocationName
 from worlds.Files import APContainer
 
 
