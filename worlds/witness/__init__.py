@@ -212,7 +212,7 @@ class WitnessWorld(World):
             audio_log = audio_logs.pop()
             self.log_ids_to_hints[int(audio_log, 16)] = credits_hint
 
-        joke_hints = generate_joke_hints(self.multiworld, len(audio_logs))
+        joke_hints = generate_joke_hints(self.multiworld, self.player, len(audio_logs))
 
         while audio_logs:
             audio_log = audio_logs.pop()
