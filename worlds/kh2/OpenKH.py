@@ -14,26 +14,36 @@ from .Items import item_dictionary_table
 from .Locations import all_locations,SoraLevels
 from .XPValues import lvlStats, formExp, soraExp
 import Utils
+import tempfile
+
 from .Names import LocationName
-import worlds.Files
-#class KH2ModFile(worlds.Files.APContainer):
-#    game = "Factorio"
-#    compression_method = zipfile.ZIP_DEFLATED  # Factorio can't load LZMA archives
-#
-#    def write_contents(self, opened_zipfile: zipfile.ZipFile):
-#        # directory containing Factorio mod has to come first, or Factorio won't recognize this file as a mod.
-#        mod_dir = self.path[:-4]  # cut off .zip
-#        for root, dirs, files in os.walk(mod_dir):
-#            for file in files:
-#                opened_zipfile.write(os.path.join(root, file),
-#                                     os.path.relpath(os.path.join(root, file),
-#                                                     os.path.join(mod_dir, '..')))
-#        # now we can add extras.
-#        super(KH2ModFile, self).write_contents(opened_zipfile)
+from worlds.Files import APContainer
+
+
+class KH2Container(APContainer):
+    game: str = 'Kingdom Hearts 2'
+
+    def __init__(self, patch_data: list, base_path: str, output_directory: str,
+                 player = None, player_name: str = "", server: str = ""):
+        self.patch_data = patch_data
+        self.file_path = base_path
+        container_path = os.path.join(output_directory, base_path + ".zip")
+        super().__init__(container_path, player, player_name, server)
+
+    def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
+        for filename,yml in self.patch_data.items():
+            opened_zipfile.writestr(filename, yml)
+        for root, dirs, files in os.walk(os.path.join(os.path.dirname(__file__), "mod_template")):
+            for file in files:
+                opened_zipfile.write(os.path.join(root, file),
+                                     os.path.relpath(os.path.join(root, file),
+                                                     os.path.join(os.path.join(os.path.dirname(__file__), "mod_template"), '.')))
+        #opened_zipfile.writestr(self.zpf_path, self.patch_data)
+        super().write_contents(opened_zipfile)
+        
+
+
 def patch_kh2(self, output_directory):
-
-
-
 
     def increaseStat(i):
         if lvlStats[i] == "str":
@@ -169,7 +179,7 @@ def patch_kh2(self, output_directory):
             "FormLevel": x,
             "GrowthAbilityLevel": 0,
         })
-    #levels done down here because of optinal settings that can take locations out of the pool. Might be able to refactor all the code to do somthing like this
+    #levels done down here because of optional settings that can take locations out of the pool. Might be able to re-factor all the code to do something like this
     self.i=1
     for location in SoraLevels:
         increaseStat(random.randint(0, 3))
@@ -196,26 +206,21 @@ def patch_kh2(self, output_directory):
             "Level": self.i
             }
         self.i+=1
-    mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__, )
-    os.makedirs(mod_dir, exist_ok=False)
-    with open(os.path.join(mod_dir, "Trsrlist.yml"), "wt") as f:
-        f.write(yaml.dump(self.formattedTrsr,line_break="\n"))
-    with open(os.path.join(mod_dir, "LvupList.yml"), "wt") as f:
-        f.write(yaml.dump(self.formattedLvup,line_break="\n"))
-    with open(os.path.join(mod_dir, "BonsList.yml"), "wt") as f:
-        f.write(yaml.dump(self.formattedBons,line_break="\n"))
-    with open(os.path.join(mod_dir, "ItemList.yml"), "wt") as f:
-        f.write(yaml.dump(self.formattedItem,line_break="\n"))
-    with open(os.path.join(mod_dir, "FmlvList.yml"), "wt") as f:
-        f.write(yaml.dump(self.formattedFmlv,line_break="\n"))
-    with open(os.path.join(mod_dir, "archipelago.json"), "wt") as f:
-        json.dump({"server": "", "player": self.player, "player_name": self.multiworld.player_name[self.player], "game": "Kingdom Hearts 2", "compatible_version": 0, "version": 0},f,indent=4)
-    shutil.copytree(os.path.join(os.path.dirname(__file__), "mod_template"),mod_dir,dirs_exist_ok=True)
-    shutil.make_archive(mod_dir,'zip',mod_dir)
-    shutil.rmtree(mod_dir)
+    mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
 
-            
-    #try:
-    #    self.multiworld.get_location(LocationName.Lvl59, self.player).place_locked_item(self.create_item("Potion"))
-    #except:
-    #    print()
+
+
+    
+    openkhmod = {
+        "TrsrList.yml": yaml.dump(self.formattedTrsr,line_break="\n"),
+        "LvupList.yml": yaml.dump(self.formattedLvup,line_break="\n"),
+        "BonsList.yml": yaml.dump(self.formattedBons,line_break="\n"),
+        "ItemList.yml": yaml.dump(self.formattedItem,line_break="\n"),
+        "FmlvList.yml": yaml.dump(self.formattedFmlv,line_break="\n"),
+        }
+    mod = KH2Container(openkhmod, mod_dir, output_directory,self.player,self.multiworld.get_file_safe_player_name(self.player))
+    mod.write()
+
+
+
+           

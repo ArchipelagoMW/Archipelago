@@ -61,13 +61,13 @@ assets:
 - name: itempic/item-243.imd #dummy 14
   method: copy
   source:
-  - name: itempic/item-243.imd
+  - name: item-243.imd
 #PC
 - name: remastered/itempic/item-243.imd/-0.dds #dummy 14
   platform: pc
   method: copy
   source:
-  - name: remastered/itempic/-0.dds
+  - name: -0.dds
 #Text
 - name: msg/jp/sys.bar
   platform: ps2
@@ -77,7 +77,7 @@ assets:
     type: list
     method: kh2msg
     source:
-    - name: msg/sys.yml
+    - name: sys.yml
       language: en
 - name: msg/us/sys.bar
   multi:
@@ -91,6 +91,6 @@ assets:
     type: list
     method: kh2msg
     source:
-    - name: msg/sys.yml
+    - name: sys.yml
       language: en
 title: Randomizer Seed
