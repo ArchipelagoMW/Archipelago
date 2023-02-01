@@ -25,6 +25,7 @@ class RivalName(TextChoice):
     option_choose_in_game = -1
     default = -1
 
+
 class Goal(Choice):
     """If Professor Oak is selected, your victory condition will require challenging and defeating Oak after becoming
     Champion and defeating or capturing the Pokemon at the end of Cerulean Cave."""
