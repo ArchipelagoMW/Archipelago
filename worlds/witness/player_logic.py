@@ -16,10 +16,10 @@ When the world has parsed its options, a second function is called to finalize t
 """
 
 import copy
-from typing import Set, List
+from typing import Set, Dict
 from logging import warning
 
-from BaseClasses import MultiWorld, Item
+from BaseClasses import MultiWorld
 from .static_logic import StaticWitnessLogic
 from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda, get_early_utm_list, \
     get_symbol_shuffle_list, get_door_panel_shuffle_list, get_doors_complex_list, get_doors_max_list, \
@@ -284,7 +284,7 @@ class WitnessPlayerLogic:
             adjustment_linesets_in_order.append(get_early_utm_list())
 
         for item in self.YAML_ADDED_ITEMS:
-            adjustment_linesets_in_order.append(["Items:", item.name])
+            adjustment_linesets_in_order.append(["Items:", item])
 
         if is_option_enabled(world, player, "shuffle_lasers"):
             adjustment_linesets_in_order.append(get_laser_shuffle())
@@ -394,7 +394,7 @@ class WitnessPlayerLogic:
             pair = self.make_event_item_pair(panel)
             self.EVENT_ITEM_PAIRS[pair[0]] = pair[1]
 
-    def __init__(self, world: MultiWorld, player: int, disabled_locations: Set[str], start_inv: List[Item]):
+    def __init__(self, world: MultiWorld, player: int, disabled_locations: Set[str], start_inv: Dict[str, int]):
         self.YAML_DISABLED_LOCATIONS = disabled_locations
         self.YAML_ADDED_ITEMS = start_inv
 
