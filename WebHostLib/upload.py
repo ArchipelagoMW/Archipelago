@@ -70,7 +70,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
             files[int(slot_id[1:])] = data
         # All other files using the standard MultiWorld.get_out_file_name_base method
         else:
-            _, _, slot_id, *_ = file.filename.split('.')[0].split('.', 3)
+            _, _, slot_id, *_ = file.filename.split('.')[0].split('_', 3)
             data = zfile.open(file, "r").read()
             files[int(slot_id[1:])] = data
 
