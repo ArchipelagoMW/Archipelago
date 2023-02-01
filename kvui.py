@@ -600,3 +600,8 @@ class KivyJSONtoTextParser(JSONtoTextParser):
 ExceptionManager.add_handler(E())
 
 Builder.load_file(Utils.local_path("data", "client.kv"))
+user_file = Utils.local_path("data", "user.kv")
+if os.path.exists(user_file):
+    logging.info("Loading user.kv into builder.")
+    Builder.load_file(user_file)
+
