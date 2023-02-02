@@ -24,6 +24,7 @@ local batInvalidCarryItem = 0x78
 local last_carry_item = 0xAB
 local frames_with_no_item = 0
 local ItemTableStart = 0xfe88
+local PlayerSlotAddress = 0xfff9
 
 local itemMessages = {}
 
@@ -348,7 +349,10 @@ function main()
         print("Must use a version of bizhawk 2.3.1 or higher")
         return
     end
-    server, error = socket.bind('localhost', 17242)
+    local playerSlot = memory.read_u8(PlayerSlotAddress)
+    local port = 17242 + playerSlot
+    print("Using port"..tostring(port))
+    server, error = socket.bind('localhost', port)
     if( error ~= nil ) then
         print(error)
     end

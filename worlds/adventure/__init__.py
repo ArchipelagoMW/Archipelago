@@ -18,7 +18,7 @@ from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, app
 from .Items import item_table, ItemData, nothing_item_id, event_table, AdventureItem, get_num_items
 from .Locations import location_table, base_location_id, LocationData, get_random_room_in_regions
 from .Offsets import static_item_data_location, items_ram_start, static_item_element_size, item_position_table, \
-    static_first_dragon_index
+    static_first_dragon_index, connector_port_offset
 from .Regions import create_regions
 from .Rules import set_rules
 
@@ -72,6 +72,7 @@ class AdventureWorld(World):
     bat_logic: Optional[int]
     empty_item_count: Optional[int]
     dragon_rando_type: Optional[int]
+    connector_multi_slot: Optional[int]
 
     dragon_rooms: [str]
 
@@ -96,6 +97,7 @@ class AdventureWorld(World):
         self.bat_logic = self.multiworld.bat_logic[self.player].value
         self.empty_item_count = self.multiworld.empty_item_count[self.player].value
         self.dragon_rando_type = self.multiworld.dragon_rando_type[self.player].value
+        self.connector_multi_slot = self.multiworld.connector_multi_slot[self.player].value
 
         if self.dragon_slay_check == 0:
             item_table["Sword"].classification = ItemClassification.useful
@@ -251,6 +253,11 @@ class AdventureWorld(World):
             # TODO - the old black and white color byte to indicate if it should start active, and store the
             # TODO - realtime part of that in an empty ram bit or high/low bit of the room byte or something
             # TODO - If the room byte-bit doesn't slow it down too much, that'd be ideal, it'd use no extra RAM then
+            if self.connector_multi_slot:
+                rom_bytearray[connector_port_offset:connector_port_offset + 1] = \
+                    (self.player & 0xff).to_bytes(1, "little")
+            else:
+                rom_bytearray[connector_port_offset:connector_port_offset + 1] = (0).to_bytes(1, "little")
             with open(rom_path, "wb") as f:
                 f.write(rom_bytearray)
         except Exception as e:

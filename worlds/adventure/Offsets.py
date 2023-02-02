@@ -6,6 +6,7 @@ static_item_element_size = 9
 static_first_dragon_index = 6
 item_position_table = 0x400
 items_ram_start = 0xa1
+connector_port_offset = 0xff9
 
 
 # in case I need to place a rom address in the rom

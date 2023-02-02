@@ -19,7 +19,8 @@ from worlds.adventure import AdventureDeltaPatch
 from worlds.adventure.Locations import location_table, base_location_id
 from worlds.adventure.Rom import AdventureForeignItemInfo, AdventureAutoCollectLocation
 from worlds.adventure.Items import base_adventure_item_id
-from worlds.adventure.Offsets import static_item_data_location, static_item_element_size, rom_address_space_start
+from worlds.adventure.Offsets import static_item_data_location, static_item_element_size, rom_address_space_start, \
+    connector_port_offset
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -33,11 +34,7 @@ CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
 CONNECTION_CONNECTED_STATUS = "Connected"
 CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
 
-DISPLAY_MSGS = True
-
 SCRIPT_VERSION = 1
-
-lua_connector_port = 17242
 
 
 class AdventureCommandProcessor(ClientCommandProcessor):
@@ -62,6 +59,7 @@ class AdventureContext(CommonContext):
     autocollect_items: [AdventureAutoCollectLocation] = []
     local_item_locations = {}
     checked_locations_sent: bool = False
+    lua_connector_port: int = 17242
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
@@ -77,6 +75,10 @@ class AdventureContext(CommonContext):
         self.client_compatibility_mode = 0
         self.items_handling = 0b111
         self.checked_locations_sent = False
+        self.port_offset = 0
+
+        options = Utils.get_options()
+        self.display_msgs = options["adventure_options"]["display_msgs"]
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -89,7 +91,7 @@ class AdventureContext(CommonContext):
         await self.send_connect()
 
     def _set_message(self, msg: str, msg_id: int):
-        if DISPLAY_MSGS:
+        if self.display_msgs:
             self.messages[(time.time(), msg_id)] = msg
 
     def on_package(self, cmd: str, args: dict):
@@ -316,9 +318,13 @@ async def atari_sync_task(ctx: AdventureContext):
                     logger.info("Lost connection to 2600 and attempting to reconnect. Use /2600 for status updates")
             else:
                 try:
-                    logger.debug("Attempting to connect to 2600")
-                    ctx.atari_streams = await asyncio.wait_for(asyncio.open_connection("localhost", lua_connector_port),
-                                                               timeout=10)
+                    port = ctx.lua_connector_port + ctx.port_offset
+                    logger.debug(f"Attempting to connect to 2600 on port {port}")
+                    print(f"Attempting to connect to 2600 on port {port}")
+                    ctx.atari_streams = await asyncio.wait_for(
+                        asyncio.open_connection("localhost",
+                                                port),
+                                                timeout=10)
                     ctx.atari_status = CONNECTION_TENTATIVE_STATUS
                 except TimeoutError:
                     logger.debug("Connection Timed Out, Trying Again")
@@ -366,6 +372,7 @@ async def patch_and_run_game(patch_file, ctx):
         ctx.rom_hash, ctx.seed_name_from_data, ctx.player_name = AdventureDeltaPatch.read_rom_info(patch_archive)
         ctx.auth = ctx.player_name
     patched_rom_data = bsdiff4.patch(base_rom, patch)
+    ctx.port_offset = patched_rom_data[connector_port_offset]
 
     with open(comp_path, "wb") as patched_rom_file:
         patched_rom_file.write(patched_rom_data)
@@ -376,9 +383,6 @@ async def patch_and_run_game(patch_file, ctx):
 if __name__ == '__main__':
 
     Utils.init_logging("AdventureClient")
-
-    options = Utils.get_options()
-    DISPLAY_MSGS = options["adventure_options"]["display_msgs"]
 
     async def main():
         parser = get_base_parser()
@@ -402,6 +406,8 @@ if __name__ == '__main__':
                 async_start(patch_and_run_game(args.patch_file, ctx))
             else:
                 logger.warning(f"Unknown patch file extension {ext}")
+        if args.port is int:
+            ctx.lua_connector_port = args.port
 
         await ctx.exit_event.wait()
         ctx.server_address = None
