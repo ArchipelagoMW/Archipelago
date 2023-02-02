@@ -159,6 +159,7 @@ class Context:
     stored_data: typing.Dict[str, object]
     read_data: typing.Dict[str, object]
     stored_data_notification_clients: typing.Dict[str, typing.Set[Client]]
+    slot_info: typing.Dict[int, NetworkSlot]
 
     item_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')
     item_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
@@ -171,7 +172,7 @@ class Context:
                  remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, compatibility: int = 2,
                  log_network: bool = False):
         super(Context, self).__init__()
-        self.slot_info: typing.Dict[int, NetworkSlot] = {}
+        self.slot_info = {}
         self.log_network = log_network
         self.endpoints = []
         self.clients = {}
@@ -386,15 +387,23 @@ class Context:
         for player, version in clients_ver.items():
             self.minimum_client_versions[player] = max(Utils.Version(*version), min_client_version)
 
-        self.clients = {}
-        for team, names in enumerate(decoded_obj['names']):
-            self.clients[team] = {}
-            for player, name in enumerate(names, 1):
-                self.clients[team][player] = []
-                self.player_names[team, player] = name
-                self.player_name_lookup[name] = team, player
-                self.read_data[f"hints_{team}_{player}"] = lambda local_team=team, local_player=player: \
-                    list(self.get_rechecked_hints(local_team, local_player))
+        self.slot_info = decoded_obj["slot_info"]
+        self.games = {slot: slot_info.game for slot, slot_info in self.slot_info.items()}
+        self.groups = {slot: slot_info.group_members for slot, slot_info in self.slot_info.items()
+                       if slot_info.type == SlotType.group}
+
+        self.clients = {0: {}}
+        slot_info: NetworkSlot
+        slot_id: int
+
+        team_0 = self.clients[0]
+        for slot_id, slot_info in self.slot_info.items():
+            team_0[slot_id] = []
+            self.player_names[0, slot_id] = slot_info.name
+            self.player_name_lookup[slot_info.name] = 0, slot_id
+            self.read_data[f"hints_{0}_{slot_id}"] = lambda local_team=0, local_player=slot_id: \
+                list(self.get_rechecked_hints(local_team, local_player))
+
         self.seed_name = decoded_obj["seed_name"]
         self.random.seed(self.seed_name)
         self.connect_names = decoded_obj['connect_names']
@@ -409,29 +418,9 @@ class Context:
         for slot, item_codes in decoded_obj["precollected_items"].items():
             self.start_inventory[slot] = [NetworkItem(item_code, -2, 0) for item_code in item_codes]
 
-        for team in range(len(decoded_obj['names'])):
-            for slot, hints in decoded_obj["precollected_hints"].items():
-                self.hints[team, slot].update(hints)
-        if "slot_info" in decoded_obj:
-            self.slot_info = decoded_obj["slot_info"]
-            self.games = {slot: slot_info.game for slot, slot_info in self.slot_info.items()}
-            self.groups = {slot: slot_info.group_members for slot, slot_info in self.slot_info.items()
-                           if slot_info.type == SlotType.group}
-        else:
-            self.games = decoded_obj["games"]
-            self.groups = {}
-            self.slot_info = {
-                slot: NetworkSlot(
-                    self.player_names[0, slot],
-                    self.games[slot],
-                    SlotType(int(bool(locations))))
-                for slot, locations in self.locations.items()
-            }
-            # locations may need converting
-            for slot, locations in self.locations.items():
-                for location, item_data in locations.items():
-                    if len(item_data) < 3:
-                        locations[location] = (*item_data, 0)
+        for slot, hints in decoded_obj["precollected_hints"].items():
+            self.hints[0, slot].update(hints)
+
         # declare slots that aren't players as done
         for slot, slot_info in self.slot_info.items():
             if slot_info.type.always_goal:
