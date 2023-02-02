@@ -21,7 +21,7 @@ def shuffle_structures(mc_world):
             exits.remove(exit)
             structs.remove(struct)
         else: 
-            raise Exception(f"Invalid connection: {exit} => {struct} for player {player} ({world.player_name[player]})")
+            raise Exception(f"Invalid connection: {exit} => {struct} for player {player} ({multiworld.player_name[player]})")
 
     # Connect plando structures first
     if multiworld.plando_connections[player]:

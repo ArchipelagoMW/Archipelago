@@ -1,9 +1,9 @@
 import os, json
+import pkgutil
 
 def load_data_file(*args) -> dict:
-    fname = os.path.join(os.path.dirname(__file__), "data", *args)
-    with open(fname, 'r') as f:
-        return json.load(f)
+    fname = os.path.join("data", *args)
+    return json.loads(pkgutil.get_data(__name__, fname).decode())
 
 # For historical reasons, these values are different.
 # They remain different to ensure datapackage consistency.
