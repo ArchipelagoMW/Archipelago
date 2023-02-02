@@ -26,6 +26,7 @@ apworlds: set = {
     "Subnautica",
     "Factorio",
     "Rogue Legacy",
+    "Minecraft",
 }
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
