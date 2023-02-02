@@ -12,12 +12,13 @@ from worlds.AutoWorld import WebWorld, World
 from Fill import fill_restrictive
 from worlds.generic.Rules import add_rule, set_rule
 # from .Client import L2ACSNIClient  # noqa: F401
-from .Options import adventure_option_definitions
+from .Options import adventure_option_definitions, DragonRandoType
 from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, apply_basepatch, \
     AdventureAutoCollectLocation
 from .Items import item_table, ItemData, nothing_item_id, event_table, AdventureItem, get_num_items
-from .Locations import location_table, base_location_id, LocationData
-from .Offsets import static_item_data_location, items_ram_start, static_item_element_size, item_position_table
+from .Locations import location_table, base_location_id, LocationData, get_random_room_in_regions
+from .Offsets import static_item_data_location, items_ram_start, static_item_element_size, item_position_table, \
+    static_first_dragon_index
 from .Regions import create_regions
 from .Rules import set_rules
 
@@ -32,6 +33,13 @@ class AdventureWeb(WebWorld):
         ["word_fcuk"]
     )]
     theme = "dirt"
+
+
+def get_item_position_data_start(rom_bytearray: bytearray, table_index: int):
+    item_table_offset = table_index * static_item_element_size
+    static_item = static_item_data_location + item_table_offset
+    item_ram_address = rom_bytearray[static_item]
+    return item_position_table + item_ram_address - items_ram_start
 
 
 class AdventureWorld(World):
@@ -63,12 +71,19 @@ class AdventureWorld(World):
     trap_bat_check: Optional[int]
     bat_logic: Optional[int]
     empty_item_count: Optional[int]
+    dragon_rando_type: Optional[int]
+
+    dragon_rooms: [str]
 
     @classmethod
     def stage_assert_generate(cls, _multiworld: MultiWorld) -> None:
         rom_file: str = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(f"Could not find base ROM for {cls.game}: {rom_file}")
+
+    def place_random_dragon(self, dragon_index: int):
+        region_list = ["Overworld", "YellowCastle", "BlackCastle", "WhiteCastle"]
+        self.dragon_rooms[dragon_index] = get_random_room_in_regions(region_list, self.multiworld.random)
 
     def generate_early(self) -> None:
         self.rom_name = \
@@ -80,11 +95,28 @@ class AdventureWorld(World):
         self.trap_bat_check = self.multiworld.trap_bat_check[self.player].value
         self.bat_logic = self.multiworld.bat_logic[self.player].value
         self.empty_item_count = self.multiworld.empty_item_count[self.player].value
+        self.dragon_rando_type = self.multiworld.dragon_rando_type[self.player].value
 
         if self.dragon_slay_check == 0:
             item_table["Sword"].classification = ItemClassification.useful
         else:
             item_table["Sword"].classification = ItemClassification.progression
+
+        self.dragon_rooms = [0x14, 0x19, 0x4]
+        if self.dragon_rando_type == DragonRandoType.option_shuffle:
+            self.multiworld.random.shuffle(self.dragon_rooms)
+        elif self.dragon_rando_type == DragonRandoType.option_overworldplus:
+            dragon_indices = [0, 1, 2]
+            overworld_forced_index = self.multiworld.random.choice(dragon_indices)
+            dragon_indices.remove(overworld_forced_index)
+            region_list = ["Overworld"]
+            self.dragon_rooms[overworld_forced_index] = get_random_room_in_regions(region_list, self.multiworld.random)
+            self.place_random_dragon(dragon_indices[0])
+            self.place_random_dragon(dragon_indices[1])
+        elif self.dragon_rando_type == DragonRandoType.option_randomized:
+            self.place_random_dragon(0)
+            self.place_random_dragon(1)
+            self.place_random_dragon(2)
 
     def create_items(self) -> None:
         self.item_name_to_id["nothing"] = nothing_item_id
@@ -150,6 +182,13 @@ class AdventureWorld(World):
                 overworld_locations_copy.remove(loc)
             self.multiworld.itempool.remove(item)
 
+    def place_dragons(self, rom_bytearray: bytearray):
+        for i in range(3):
+            table_index = static_first_dragon_index + i
+            item_position_data_start = get_item_position_data_start(rom_bytearray, table_index)
+            rom_bytearray[item_position_data_start:item_position_data_start + 1] = \
+                self.dragon_rooms[i].to_bytes(1, "little")
+
     def generate_output(self, output_directory: str) -> None:
         rom_path: str = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.bin")
         foreign_item_locations: [LocationData] = []
@@ -157,10 +196,10 @@ class AdventureWorld(World):
         local_item_to_location: {int, int} = {}
         try:
             rom_bytearray = bytearray(apply_basepatch(get_base_rom_bytes()))
+            self.place_dragons(rom_bytearray)
             # start and stop indices are offsets in the ROM file, not Adventure ROM addresses (which start at f000)
             # rom_bytearray[0x007FC0:0x007FC0 + 21] = self.rom_name
             # rom_bytearray[0x014308:0x014308 + 1] = self.capsule_starting_level.value.to_bytes(1, "little")
-            # TODO - Place local items (traditional mode) and drained items (inactive mode) in correct locations
             # This places the local items (I still need to make it easy to inject the offset data)
             unplaced_local_items = item_table.copy()
             for location in self.multiworld.get_locations(self.player):
@@ -172,6 +211,7 @@ class AdventureWorld(World):
                 elif location.item.player == self.player and \
                         location.item.name != "nothing" and \
                         location.item.code is not None:
+                    # I need many of the intermediate values here.
                     item_table_offset = item_table[location.item.name].table_index * static_item_element_size
                     static_item = static_item_data_location + item_table_offset
                     item_ram_address = rom_bytearray[static_item]
@@ -187,8 +227,8 @@ class AdventureWorld(World):
                         room_x.to_bytes(1, "little")
                     rom_bytearray[item_position_data_start + 2: item_position_data_start + 3] = \
                         room_y.to_bytes(1, "little")
-                    local_item_to_location[item_table_offset] = self.location_name_to_id[location.name] - \
-                                                                base_location_id
+                    local_item_to_location[item_table_offset] = self.location_name_to_id[location.name] \
+                                                                - base_location_id
                 elif location.item.player != self.player and location.item.code is not None:
                     if location.item.code != nothing_item_id:
                         location_data = location_table[location.name]
@@ -199,10 +239,7 @@ class AdventureWorld(World):
                                                                                    location_data.room_id))
 
             for unplaced_item_name, unplaced_item in unplaced_local_items.items():
-                static_item = static_item_data_location + \
-                              unplaced_item.table_index * static_item_element_size
-                item_ram_address = rom_bytearray[static_item]
-                item_position_data_start = item_position_table + item_ram_address - items_ram_start
+                item_position_data_start = get_item_position_data_start(rom_bytearray, unplaced_item.table_index)
                 rom_bytearray[item_position_data_start:item_position_data_start + 1] = 0xff.to_bytes(1, "little")
 
             # TODO - for all remote items in traditional mode, write that out into a file
@@ -239,4 +276,3 @@ class AdventureWorld(World):
 
     def create_event(self, name: str, classification: ItemClassification) -> Item:
         return AdventureItem(name, classification, None, self.player)
-

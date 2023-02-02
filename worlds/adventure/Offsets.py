@@ -3,8 +3,10 @@
 
 static_item_data_location = 0xe88
 static_item_element_size = 9
+static_first_dragon_index = 6
 item_position_table = 0x400
 items_ram_start = 0xa1
+
 
 # in case I need to place a rom address in the rom
 rom_address_space_start = 0xf000

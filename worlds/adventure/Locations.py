@@ -42,6 +42,16 @@ standard_positions = [
     (0x30, 0x20)
 ]
 
+
+def get_random_room_in_regions(regions: [str], random) -> int:
+    possible_rooms = {}
+    for locname in location_table:
+        if location_table[locname].region in regions:
+            if location_table[locname].room_id is not None:
+                possible_rooms[location_table[locname].room_id] = location_table[locname].room_id
+    return random.choice(list(possible_rooms.keys()))
+
+
 location_table = {
     "BlueMaze0": LocationData("Overworld", "BlueMaze0", 0x4),
     "BlueMaze1": LocationData("Overworld", "BlueMaze1", 0x5),

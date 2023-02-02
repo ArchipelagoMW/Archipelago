@@ -67,6 +67,28 @@ class TrapBatCheck(Choice):
     default = option_yes_key_optional
 
 
+class DragonRandoType(Choice):
+    """
+    How to randomize the dragon starting locations
+
+    Not yet implemented
+    normal: Grundle is in the overworld, Yorgle in the white castle, and Rhindle in the black castle
+    shuffle: A random dragon is placed in the overworld, one in the white castle, and one in the black castle
+    overworldplus: Dragons can be placed anywhere, but at least one will be in the overworld
+    randomized: Dragons can be anywhere
+
+
+    Supported values: normal, shuffle, overworldplus, randomized
+    Default value: shuffle
+    """
+    display_name = "Dragon Randomization"
+    option_normal = 0x0
+    option_shuffle = 0x1
+    option_overworldplus = 0x2
+    option_randomized = 0x3
+    default = option_shuffle
+
+
 class BatLogic(Choice):
     """How the bat is considered for logic
 
@@ -93,6 +115,7 @@ adventure_option_definitions: Dict[str, type(Option)] = {
     "trap_bat_check": TrapBatCheck,
     "death_link": DeathLink,
     "bat_logic": BatLogic,
-    "empty_item_count": EmptyItemCount
+    "empty_item_count": EmptyItemCount,
+    "dragon_rando_type": DragonRandoType,
 
 }
