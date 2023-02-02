@@ -359,7 +359,7 @@ def process_pokemon_data(self):
 
 
 def generate_output(self, output_directory: str):
-    random = self.multiworld.slot_seeds[self.player]
+    random = self.multiworld.per_slot_randoms[self.player]
     game_version = self.multiworld.game_version[self.player].current_key
     data = bytes(get_base_rom_bytes(game_version))
 

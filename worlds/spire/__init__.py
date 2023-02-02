@@ -38,7 +38,7 @@ class SpireWorld(World):
 
     def _get_slot_data(self):
         return {
-            'seed': "".join(self.multiworld.slot_seeds[self.player].choice(string.ascii_letters) for i in range(16)),
+            'seed': "".join(self.multiworld.per_slot_randoms[self.player].choice(string.ascii_letters) for i in range(16)),
             'character': self.multiworld.character[self.player],
             'ascension': self.multiworld.ascension[self.player],
             'heart_run': self.multiworld.heart_run[self.player]

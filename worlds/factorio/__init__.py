@@ -222,7 +222,7 @@ class Factorio(World):
 
         map_basic_settings = self.multiworld.world_gen[player].value["basic"]
         if map_basic_settings.get("seed", None) is None:  # allow seed 0
-            map_basic_settings["seed"] = self.multiworld.slot_seeds[player].randint(0, 2 ** 32 - 1)  # 32 bit uint
+            map_basic_settings["seed"] = self.multiworld.per_slot_randoms[player].randint(0, 2 ** 32 - 1)  # 32 bit uint
 
         start_location_hints: typing.Set[str] = self.multiworld.start_location_hints[self.player].value
 
