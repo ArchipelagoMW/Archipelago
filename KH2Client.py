@@ -160,7 +160,7 @@ class KH2Context(CommonContext):
 
         if cmd in {"Connected"}:
            for player in args['players']:
-               if player.slot not in self.kh2seedsave["checked_locations"]:
+               if str(player.slot) not in self.kh2seedsave["checked_locations"]:
                     self.kh2seedsave["checked_locations"].update({player.slot:[]}) 
 
         if cmd in {"ReceivedItems"}:
@@ -169,7 +169,7 @@ class KH2Context(CommonContext):
                 for item in args['items']:
                     itemname=self.lookup_id_to_item[item.item]
                     itemcode=self.item_name_to_data[itemname]
-                    if item.location in {-1,-2}:
+                    if item.location in {-2}:
                             if not self.kh2seedsave["starting_inventory"]:
                                 if itemname in DonaldAbility_Table.keys():
                                    asyncio.create_task(self.give_item(itemcode,"Donald"))
@@ -177,9 +177,7 @@ class KH2Context(CommonContext):
                                     asyncio.create_task(self.give_item(itemcode,"Goofy"))
                                 else:
                                     asyncio.create_task(self.give_item(itemcode,"Sora"))
-                            else:
-                                continue
-                    elif item.location not in self.kh2seedsave["checked_locations"][item.player]:
+                    elif item.location not in self.kh2seedsave["checked_locations"][str(item.player)] or item.location in {-1}:
                         if itemname in DonaldAbility_Table.keys():
                            asyncio.create_task(self.give_item(itemcode,"Donald"))
                         elif itemname in GoofyAbility_Table.keys():
@@ -308,6 +306,8 @@ class KH2Context(CommonContext):
                print(e) 
 
     async def ItemSafe(self,args):
+        while self.kh2connected==False:
+            await asyncio.sleep(1)
         try: 
             svestate=self.kh2.read_short(self.kh2.base_address+self.sveroom)  
             await self.roomSave(args,svestate)
@@ -339,10 +339,8 @@ class KH2Context(CommonContext):
            await asyncio.sleep(0.3)
         try:
            for item in args['items']:
-               if item.location in {-1,-2}:
-                   continue
-               elif item.location not in self.kh2seedsave["checked_locations"][item.player]:
-                   self.kh2seedsave["checked_locations"][item.player].append(item.location)
+               if item.location not in self.kh2seedsave["checked_locations"][item.player] and item.location not in {-1,-2}:
+                    self.kh2seedsave["checked_locations"][item.player].append(item.location)
         except Exception as e: 
               print(e) 
 
