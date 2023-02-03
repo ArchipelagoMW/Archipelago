@@ -1,8 +1,8 @@
-#player-tracker-wrapper{
+#player-tracker-wrapper {
     margin: 0;
 }
 
-#inventory-table{
+#inventory-table {
     border-top: 2px solid #000000;
     border-left: 2px solid #000000;
     border-right: 2px solid #000000;
@@ -13,22 +13,40 @@
     background-color: #8d60a7;
 }
 
-#inventory-table td{
+#inventory-table td {
     width: 40px;
     height: 40px;
     text-align: center;
     vertical-align: middle;
 }
+#inventory-table td.small {
+    width: 16px;
+    height: 16px;
+}
 
-#inventory-table img{
+#inventory-table img {
     height: 100%;
     max-width: 40px;
     max-height: 40px;
     filter: grayscale(100%) contrast(75%) brightness(30%);
 }
+#inventory-table td.samll img {
+    max-width: 20px;
+    max-height: 20px;
+}
 
-#inventory-table img.acquired{
+#inventory-table img.acquired {
     filter: none;
+}
+
+#inventory-table img.acquired.purple { /*00FFFF*/
+    filter: invert(18%) sepia(62%) saturate(5816%) hue-rotate(296deg) brightness(118%) contrast(123%);
+}
+#inventory-table img.acquired.cyan { /*FF00FF*/
+    filter: invert(95%) sepia(11%) saturate(6415%) hue-rotate(115deg) brightness(102%) contrast(104%);
+}
+#inventory-table img.acquired.green { /*32CD32*/
+    filter: invert(79%) sepia(12%) saturate(7500%) hue-rotate(66deg) brightness(88%) contrast(89%);
 }
 
 #inventory-table div.counted-item {
@@ -44,7 +62,7 @@
     right: 0;
 }
 
-#location-table{
+#location-table {
     width: 384px;
     border-left: 2px solid #000000;
     border-right: 2px solid #000000;
@@ -57,13 +75,13 @@
     cursor: default;
 }
 
-#location-table th{
+#location-table th {
     vertical-align: middle;
     text-align: left;
     padding-right: 10px;
 }
 
-#location-table td{
+#location-table td {
     padding-top: 2px;
     padding-bottom: 2px;
     line-height: 20px;
