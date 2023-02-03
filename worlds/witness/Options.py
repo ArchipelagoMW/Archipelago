@@ -63,6 +63,7 @@ class ShuffleEnvironmentalPuzzles(Choice):
     Add Environmental/Obelisk Puzzles into the location pool.
     In "individual", every Environmental Puzzle sends an item.
     In "obelisk_sides", completing every puzzle on one side of an Obelisk sends an item.
+    Note: In Obelisk Sides, any EPs excluded through another setting will be counted as pre-completed on their Obelisk.
     """
     display_name = "Shuffle Environmental Puzzles"
     option_off = 0
@@ -77,6 +78,12 @@ class ShuffleDog(Toggle):
 
 
 class EnvironmentalPuzzlesDifficulty(Choice):
+    """
+    When "Shuffle Environmental Puzzles" is on, this setting governs which EPs are eligible for the location pool.
+    On "eclipse", every EP in the game is eligible, including the 1-hour-long "Theater Eclipse EP".
+    On "tedious", Theater Eclipse EP is excluded from the location pool.
+    On "normal", several other difficult or long EPs are excluded as well.
+    """
     display_name = "Environmental Puzzles Difficulty"
     option_normal = 0
     option_tedious = 1
