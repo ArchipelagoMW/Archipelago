@@ -56,7 +56,7 @@ class WitnessWorld(World):
 
     def _get_slot_data(self):
         return {
-            'seed': self.multiworld.random.randint(0, 1000000),
+            'seed': self.multiworld.per_slot_randoms[self.player].randint(0, 1000000),
             'victory_location': int(self.player_logic.VICTORY_LOCATION, 16),
             'panelhex_to_id': self.locat.CHECK_PANELHEX_TO_ID,
             'item_id_to_door_hexes': self.static_items.ITEM_ID_TO_DOOR_HEX_ALL,
