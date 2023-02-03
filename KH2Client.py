@@ -142,6 +142,8 @@ class KH2Context(CommonContext):
             return []
 
     async def shutdown(self):
+        with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}.json"), 'w') as f:
+            f.write(json.dumps(self.kh2seedsave, indent=4))
         await super(KH2Context, self).shutdown()
 
     def on_package(self, cmd: str, args: dict):
