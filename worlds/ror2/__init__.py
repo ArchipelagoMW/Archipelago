@@ -110,7 +110,7 @@ class RiskOfRainWorld(World):
     def fill_slot_data(self):
         return {
             "itemPickupStep": self.multiworld.item_pickup_step[self.player].value,
-            "seed": "".join(self.multiworld.slot_seeds[self.player].choice(string.digits) for _ in range(16)),
+            "seed": "".join(self.multiworld.per_slot_randoms[self.player].choice(string.digits) for _ in range(16)),
             "totalLocations": self.multiworld.total_locations[self.player].value,
             "totalRevivals": self.multiworld.total_revivals[self.player].value,
             "startWithDio": self.multiworld.start_with_revive[self.player].value,
