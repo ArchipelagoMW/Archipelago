@@ -157,10 +157,10 @@ def get_priority_hint_items(multiworld: MultiWorld, player: int):
         if get_option_value(multiworld, player, "doors") >= 2:
             priority.add("Desert Laser")
             lasers.remove("Desert Laser")
-            priority.update(multiworld.slot_seeds[player].sample(lasers, 2))
+            priority.update(multiworld.per_slot_randoms[player].sample(lasers, 2))
 
         else:
-            priority.update(multiworld.slot_seeds[player].sample(lasers, 3))
+            priority.update(multiworld.per_slot_randoms[player].sample(lasers, 3))
 
     return priority
 
@@ -262,19 +262,19 @@ def make_hints(multiworld: MultiWorld, player: int, hint_amount: int):
         else:
             hints.append((loc, "contains", item[0], item[2]))
 
-    multiworld.slot_seeds[player].shuffle(hints)  # shuffle always hint order in case of low hint amount
+    multiworld.per_slot_randoms[player].shuffle(hints)  # shuffle always hint order in case of low hint amount
 
-    next_random_hint_is_item = multiworld.slot_seeds[player].randint(0, 2)
+    next_random_hint_is_item = multiworld.per_slot_randoms[player].randint(0, 2)
 
     prog_items_in_this_world = sorted(list(prog_items_in_this_world))
     locations_in_this_world = sorted(list(loc_in_this_world))
 
-    multiworld.slot_seeds[player].shuffle(prog_items_in_this_world)
-    multiworld.slot_seeds[player].shuffle(locations_in_this_world)
+    multiworld.per_slot_randoms[player].shuffle(prog_items_in_this_world)
+    multiworld.per_slot_randoms[player].shuffle(locations_in_this_world)
 
     while len(hints) < hint_amount:
         if priority_hint_pairs:
-            loc = multiworld.slot_seeds[player].choice(list(priority_hint_pairs.keys()))
+            loc = multiworld.per_slot_randoms[player].choice(list(priority_hint_pairs.keys()))
             item = priority_hint_pairs[loc]
             del priority_hint_pairs[loc]
 
@@ -301,4 +301,4 @@ def make_hints(multiworld: MultiWorld, player: int, hint_amount: int):
 
 
 def generate_joke_hints(multiworld: MultiWorld, player: int, amount: int):
-    return [(x, y, z, -1) for (x, y, z) in multiworld.slot_seeds[player].sample(joke_hints, amount)]
+    return [(x, y, z, -1) for (x, y, z) in multiworld.per_slot_randoms[player].sample(joke_hints, amount)]
