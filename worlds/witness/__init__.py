@@ -189,7 +189,7 @@ class WitnessWorld(World):
         if hint_amount != 0:
             generated_hints = make_hints(self.multiworld, self.player, hint_amount)
 
-            self.multiworld.slot_seeds[self.player].shuffle(audio_logs)
+            self.multiworld.per_slot_randoms[self.player].shuffle(audio_logs)
 
             duplicates = len(audio_logs) // hint_amount
 
