@@ -3,6 +3,7 @@ import yaml
 import os
 import random
 import os
+from .Names.LocationName import SoraLevels_Region
 import Utils
 import zipfile
 from .Items import item_dictionary_table
@@ -28,7 +29,7 @@ class KH2Container(APContainer):
             for file in files:
                 opened_zipfile.write(os.path.join(root, file),
                                      os.path.relpath(os.path.join(root, file),
-                                                     os.path.join(os.path.join(os.path.dirname(__file__), "mod_template"), '.')))
+                                                     os.path.join(os.path.dirname(__file__), "mod_template")))
         #opened_zipfile.writestr(self.zpf_path, self.patch_data)
         super().write_contents(opened_zipfile)
         
@@ -173,14 +174,14 @@ def patch_kh2(self, output_directory):
     #levels done down here because of optional settings that can take locations out of the pool. Might be able to re-factor all the code to do something like this
     self.i=1
     for location in SoraLevels:
-        increaseStat(random.randint(0, 3))
-        try:
+        increaseStat(random.randint(0, 3))        
+        if f"{location} (Player {self.player})" in str(self.multiworld.get_region(SoraLevels_Region,self.player).locations):
             data=self.multiworld.get_location(location,self.player)
             if data.item.player==self.player: 
                 itemcode=item_dictionary_table[data.item.name].kh2id
             else:
                 itemcode=461
-        except:
+        else:
             increaseStat(random.randint(0, 3))
             itemcode=0
         self.formattedLvup["Sora"][self.i] = {

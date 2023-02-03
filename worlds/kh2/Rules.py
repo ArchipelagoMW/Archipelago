@@ -1,5 +1,6 @@
 from BaseClasses import MultiWorld
 from .Names import LocationName, ItemName
+from .logic import KH2Logic
 from .Items import exclusionItem_table
 from ..generic.Rules import add_rule, forbid_items, forbid_item,set_rule
 from .Locations import popupChecks, STT_Checks, CoR_Checks, Form_Checks, AG2_Checks
@@ -129,6 +130,8 @@ def set_rules(world: MultiWorld, player: int):
         for level in {LocationName.Lvl59,LocationName.Lvl65,LocationName.Lvl73,LocationName.Lvl85,LocationName.Lvl99}:
             add_rule(world.get_location(level, player), lambda state: state.kh_VisitLocking_Amount(player, 7))
     
+
+
     #level 50 sanity
     elif world.Level_Depth[player].value == 2 or world.Level_Depth[player].value == 3: 
         for level in {LocationName.Lvl25,LocationName.Lvl26,LocationName.Lvl27,LocationName.Lvl28,LocationName.Lvl29,LocationName.Lvl30,
@@ -141,17 +144,20 @@ def set_rules(world: MultiWorld, player: int):
             add_rule(world.get_location(level, player), lambda state: state.kh_VisitLocking_Amount(player, 5))
         #level 99 sanity
         if world.Level_Depth[player].value == 2:
+            for level in {LocationName.Lvl51,LocationName.Lvl52,LocationName.Lvl53,LocationName.Lvl54,LocationName.Lvl55,
+                          LocationName.Lvl56,LocationName.Lvl57}:
+                add_rule(world.get_location(level, player), lambda state: state.kh_VisitLocking_Amount(player, 6))
             for level in {LocationName.Lvl58,LocationName.Lvl59,LocationName.Lvl60,LocationName.Lvl61,LocationName.Lvl62,LocationName.Lvl63,
                           LocationName.Lvl64,LocationName.Lvl65,LocationName.Lvl66,LocationName.Lvl67,LocationName.Lvl68}:
-                add_rule(world.get_location(level, player), lambda state: state.kh_VisitLocking_Amount(player, 6))
+                add_rule(world.get_location(level, player), lambda state: state.kh_VisitLocking_Amount(player, 7))
             for level in {LocationName.Lvl69,LocationName.Lvl70,LocationName.Lvl71,LocationName.Lvl72,LocationName.Lvl73,LocationName.Lvl74,
                           LocationName.Lvl75,LocationName.Lvl76,LocationName.Lvl77,LocationName.Lvl78,LocationName.Lvl79,}:
-                add_rule(world.get_location(level, player), lambda state: state.kh_VisitLocking_Amount(player, 7))
+                add_rule(world.get_location(level, player), lambda state: state.kh_VisitLocking_Amount(player, 8))
             for level in {LocationName.Lvl80,LocationName.Lvl81,LocationName.Lvl82,LocationName.Lvl83,LocationName.Lvl84,LocationName.Lvl85,
                           LocationName.Lvl86,LocationName.Lvl87,LocationName.Lvl88,LocationName.Lvl89,LocationName.Lvl90,LocationName.Lvl91,
                           LocationName.Lvl92,LocationName.Lvl93,LocationName.Lvl94,LocationName.Lvl95,LocationName.Lvl96,LocationName.Lvl97,
                           LocationName.Lvl98,LocationName.Lvl99,}:
-                add_rule(world.get_location(level, player), lambda state: state.kh_VisitLocking_Amount(player, 8))
+                add_rule(world.get_location(level, player), lambda state: state.kh_VisitLocking_Amount(player, 9))
 
 
     # if 0 then no visit locking if 1 then second visits if 2 then first and second visits with one item

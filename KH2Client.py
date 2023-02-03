@@ -1,10 +1,7 @@
 from __future__ import annotations
 import os
-import sys
 import asyncio
-import shutil
-from pymem.process import *
-from pymem import memory
+from pymem import pymem
 import ModuleUpdate
 ModuleUpdate.update()
 from worlds.kh2.Items import DonaldAbility_Table,GoofyAbility_Table
@@ -12,7 +9,7 @@ from worlds.kh2 import all_locations, item_dictionary_table
 import Utils
 from worlds.kh2 import WorldLocations
 import typing
-
+import json
 
 if __name__ == "__main__":
     Utils.init_logging("KH2Client", exception_logger="Client")
@@ -31,6 +28,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
     def _cmd_autotrack(self):
             """Start Autotracking"""
             #hooking into the game
+            
             if self.ctx.kh2connected:
                 logger.info("You are already autotracking")
                 return
@@ -38,8 +36,11 @@ class KH2CommandProcessor(ClientCommandProcessor):
                 self.ctx.kh2=pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
                 logger.info("You are now autotracking")
                 self.ctx.kh2connected=True
-            except:
-                logger.info("Game is not opened/autotrackable")
+            except Exception as e: 
+              if self.kh2connected:
+                  logger.info("Connection Lost, Please /autotrack")
+                  self.kh2connected = False
+              print(e) 
 
             
             
@@ -67,6 +68,14 @@ class KH2Context(CommonContext):
         self.collectible_override_flags_address = 0
         self.collectible_offsets = {}
         self.sending = []
+        #flag for if the player has gotten their starting inventory from the server
+        self.hasStartingInvo=False
+        #list used to keep track of locations+items player has. Used for disoneccting 
+        self.kh2seedsave={"checked_locations":{0:[]},"starting_inventory":self.hasStartingInvo}
+        self.kh2seedname=None
+        if "localappdata" in os.environ:
+            self.game_communication_path = os.path.expandvars(r"%localappdata%\KH2AP")
+        
         #hooked object
         self.kh2= None
         self.ItemIsSafe = False
@@ -121,6 +130,8 @@ class KH2Context(CommonContext):
 
     async def connection_closed(self):
         self.kh2connected=False
+        with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}.json"), 'w') as f:
+            f.write(json.dumps(self.kh2seedsave, indent=4))
         await super(KH2Context, self).connection_closed()
 
     @property
@@ -134,7 +145,21 @@ class KH2Context(CommonContext):
         await super(KH2Context, self).shutdown()
 
     def on_package(self, cmd: str, args: dict):
-        #if cmd in {"Connected"}:
+        if cmd in {"RoomInfo"}:
+            self.kh2seedname=args['seed_name']
+            if not os.path.exists(self.game_communication_path):
+                    os.makedirs(self.game_communication_path)
+            if not os.path.exists(self.game_communication_path + f"\kh2save{self.kh2seedname}.json"):
+                with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}.json"), 'wt') as f:
+                    pass
+            elif os.path.exists(self.game_communication_path + f"\kh2save{self.kh2seedname}.json"):
+                    with open(self.game_communication_path + f"\kh2save{self.kh2seedname}.json", 'r') as f:
+                        self.kh2seedsave=json.load(f)
+
+        if cmd in {"Connected"}:
+           for player in args['players']:
+               if player.slot not in self.kh2seedsave["checked_locations"]:
+                    self.kh2seedsave["checked_locations"].update({player.slot:[]}) 
 
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
@@ -142,21 +167,33 @@ class KH2Context(CommonContext):
                 for item in args['items']:
                     itemname=self.lookup_id_to_item[item.item]
                     itemcode=self.item_name_to_data[itemname]
-                    if itemname in DonaldAbility_Table.keys():
-                       asyncio.create_task(self.give_item(itemcode,"Donald"))
-                    elif itemname in GoofyAbility_Table.keys():
-                        asyncio.create_task(self.give_item(itemcode,"Goofy"))
-                    else:
-                        asyncio.create_task(self.give_item(itemcode,"Sora"))
-
+                    if item.location in {-1,-2}:
+                            if not self.kh2seedsave["starting_inventory"]:
+                                if itemname in DonaldAbility_Table.keys():
+                                   asyncio.create_task(self.give_item(itemcode,"Donald"))
+                                elif itemname in GoofyAbility_Table.keys():
+                                    asyncio.create_task(self.give_item(itemcode,"Goofy"))
+                                else:
+                                    asyncio.create_task(self.give_item(itemcode,"Sora"))
+                            else:
+                                continue
+                    elif item.location not in self.kh2seedsave["checked_locations"][item.player]:
+                        if itemname in DonaldAbility_Table.keys():
+                           asyncio.create_task(self.give_item(itemcode,"Donald"))
+                        elif itemname in GoofyAbility_Table.keys():
+                            asyncio.create_task(self.give_item(itemcode,"Goofy"))
+                        else:
+                            asyncio.create_task(self.give_item(itemcode,"Sora"))
+                if not self.kh2seedsave["starting_inventory"]:
+                    self.kh2seedsave["starting_inventory"]=True
                 try:
-                    svestate=self.kh2.read_short(self.kh2.base_address+self.sveroom)  
-                    asyncio.create_task(self.ItemSafe(args,svestate))
+                    asyncio.create_task(self.ItemSafe(args))
                 except Exception as e: 
                         if self.kh2connected:
                             logger.info("Connection Lost, Please /autotrack")
                             self.kh2connected = False
-                        print(e) 
+                        print(e)
+                        
                         
         if cmd in {"RoomUpdate"}:
             if "checked_locations" in args:
@@ -230,9 +267,6 @@ class KH2Context(CommonContext):
         try:
             #cannot give items during loading screens
             #0x8E9DA3=load 0xAB8BC7=black 0x2A148E8=controable 
-            while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x8E9DA3,1), "big")!=0 and int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0xAB8BC7,1), "big")!=0 \
-		       and int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x2A148E8,1), "big")!=0:
-               await asyncio.sleep(0.5)
             while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x0714DB8,1), "big")==255:
                 await asyncio.sleep(0.5)
             if itemcode.ability:
@@ -252,19 +286,28 @@ class KH2Context(CommonContext):
                         self.kh2.write_short(self.kh2.base_address + self.Save+self.backofinventory, itemcode.memaddr)
                         self.backofinventory-=2
             elif itemcode.bitmask>0:
+                while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x8E9DA3,1), "big")!=0 or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0xAB8BC7,1), "big")!=0 \
+		       or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x2A148E8,1), "big")!=0:
+                    await asyncio.sleep(1)
                 itemMemory=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,1), "big")
                 self.kh2.write_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,(itemMemory|0x01<<itemcode.bitmask).to_bytes(1,'big'),1)
             else:
-                amount=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,1), "big")
-                self.kh2.write_bytes(self.kh2.base_address + self.Save+itemcode.memaddr,(amount+1).to_bytes(1,'big'),1)
+               while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x8E9DA3,1), "big")!=0 or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0xAB8BC7,1), "big")!=0 \
+		       or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x2A148E8,1), "big")!=0:
+                    await asyncio.sleep(1)
+                #only give statsanity items when drive gauge max is more than 0
+                #2A20C58+base_address+1B2
+               amount=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,1), "big")
+               self.kh2.write_bytes(self.kh2.base_address + self.Save+itemcode.memaddr,(amount+1).to_bytes(1,'big'),1)
         except Exception as e: 
                if self.kh2connected:
                    logger.info("Connection Lost, Please /autotrack")
                    self.kh2connected = False
                print(e) 
 
-    async def ItemSafe(self,args,svestate):
+    async def ItemSafe(self,args):
         try: 
+            svestate=self.kh2.read_short(self.kh2.base_address+self.sveroom)  
             await self.roomSave(args,svestate)
         except Exception as e: 
             if self.kh2connected:
@@ -288,11 +331,18 @@ class KH2Context(CommonContext):
                        self.character="Donald"
                        asyncio.create_task(self.give_item(itemcode,"Donald"))
                    elif itemname in GoofyAbility_Table.keys():
-                    asyncio.create_task(self.give_item(itemcode,"Goofy"))
+                       asyncio.create_task(self.give_item(itemcode,"Goofy"))
                    else:
                        asyncio.create_task(self.give_item(itemcode,"Sora"))
-           await asyncio.sleep(0.3)        
-    
+           await asyncio.sleep(0.3)
+        try:
+           for item in args['items']:
+               if item.location in {-1,-2}:
+                   continue
+               elif item.location not in self.kh2seedsave["checked_locations"][item.player]:
+                   self.kh2seedsave["checked_locations"][item.player].append(item.location)
+        except Exception as e: 
+              print(e) 
 
     def give_growth(self,itemcode):
         #Credit to num for the goa code and RedBuddha for porting it to python

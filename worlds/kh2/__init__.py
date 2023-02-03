@@ -4,9 +4,8 @@ import typing
 from ..AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, ItemClassification
 from .Items import  KH2Item, item_dictionary_table
-from .Locations import all_locations, setup_locations, exclusion_table,Donald_Checks,Goofy_Checks,Keyblade_Slots
+from .Locations import all_locations, setup_locations, exclusion_table
 from .Rules import set_rules
-from .logic import KH2Logic
 from .Names import ItemName, LocationName
 from .Regions import create_regions, connect_regions
 from .OpenKH import patch_kh2
