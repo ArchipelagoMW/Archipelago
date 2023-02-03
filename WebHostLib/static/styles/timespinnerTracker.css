@@ -14,14 +14,9 @@
 }
 
 #inventory-table td {
-    width: 40px;
-    height: 40px;
+    /*width: 40px;
+    height: 40px;*/
     text-align: center;
-    vertical-align: middle;
-}
-#inventory-table td.small {
-    width: 16px;
-    height: 16px;
 }
 
 #inventory-table img {
@@ -29,10 +24,6 @@
     max-width: 40px;
     max-height: 40px;
     filter: grayscale(100%) contrast(75%) brightness(30%);
-}
-#inventory-table td.samll img {
-    max-width: 20px;
-    max-height: 20px;
 }
 
 #inventory-table img.acquired {
@@ -47,6 +38,56 @@
 }
 #inventory-table img.acquired.green { /*32CD32*/
     filter: invert(79%) sepia(12%) saturate(7500%) hue-rotate(66deg) brightness(88%) contrast(89%);
+}
+
+#inventory-table div.image-stack {
+    display: grid;
+    position: relative;
+    grid-template-columns: 20px 20px;
+    grid-template-rows: 20px 20px;
+
+    margin: 0 auto;
+}
+
+#inventory-table div.image-stack div img {
+    display: block;
+}
+
+#inventory-table div.image-stack div.stack-back {
+    grid-column: 1 / span 2;
+    grid-row: 1 / span 2;
+}
+
+#inventory-table div.image-stack div.stack-top-left {
+    grid-column: 1;
+    grid-row: 1;
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+}
+
+#inventory-table div.image-stack div.stack-top-right {
+    grid-column: 2;
+    grid-row: 1;
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+}
+
+#inventory-table div.image-stack div.stack-bottum-left {
+    grid-column: 1;
+    grid-row: 2;
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+}
+
+#inventory-table div.image-stack div.stack-bottum-right {
+    grid-column: 2;
+    grid-row: 2;
+    z-index: 1;
+    width: 20px;
+    height: 20px;
 }
 
 #inventory-table div.counted-item {
