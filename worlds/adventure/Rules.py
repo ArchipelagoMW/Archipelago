@@ -46,55 +46,6 @@ def set_rules(self) -> None:
     add_rule(world.get_location("ChaliceHome", self.player),
                    lambda state: state.has("Chalice", self.player) and state.has("YellowKey", self.player))
 
-    # Assign some priority locations to try to get interesting stuff into the castles, most of the time
-    # occasionally some interesting things are generated without that, so I want to leave some chance of
-    # that happening.  The downside to leaving it out is sometimes not needing to visit all castles,
-    # at least in solo world.
-    do_priority = world.random.randint(0, 4) < 3
-    if do_priority:
-        priority_index = world.random.randint(0, 4)
-        hard_location_score = 0
-        priority_count = 0
-        if priority_index == 0:
-            world.get_location("CreditsRightSide", self.player).progress_type = LocationProgressType.PRIORITY
-            hard_location_score = 2
-            priority_count += 1
-        elif priority_index == 1:
-            world.get_location("CreditsLeftSide", self.player).progress_type = LocationProgressType.PRIORITY
-            hard_location_score = 2
-            priority_count += 1
-        priority_index = world.random.randint(hard_location_score, 7)
-        if priority_index < 3:
-            world.get_location("DungeonVault", self.player).progress_type = LocationProgressType.PRIORITY
-            hard_location_score += 2
-            priority_count += 1
-        elif priority_index == 4:
-            world.get_location("Dungeon3", self.player).progress_type = LocationProgressType.PRIORITY
-            priority_count += 1
-        elif priority_index == 5:
-            world.get_location("Dungeon1", self.player).progress_type = LocationProgressType.PRIORITY
-            priority_count += 1
-        elif priority_index == 6:
-            world.get_location("Dungeon0", self.player).progress_type = LocationProgressType.PRIORITY
-            priority_count += 1
-
-        priority_index = world.random.randint(0, 7)
-        if priority_index < 2:
-            world.get_location("RedMaze2", self.player).progress_type = LocationProgressType.PRIORITY
-            priority_count += 1
-        elif priority_index < 4:
-            world.get_location("RedMaze0a", self.player).progress_type = LocationProgressType.PRIORITY
-            priority_count += 1
-        elif priority_index == 4:
-            world.get_location("RedMaze1", self.player).progress_type = LocationProgressType.PRIORITY
-            priority_count += 1
-        elif priority_index == 5:
-            world.get_location("RedMaze0", self.player).progress_type = LocationProgressType.PRIORITY
-            priority_count += 1
-        else:
-            world.get_location("RedMaze3", self.player).progress_type = LocationProgressType.PRIORITY
-            priority_count += 1
-
     # world.random.choice(overworld.locations).progress_type = LocationProgressType.PRIORITY
 
     # all_locations = world.get_locations(self.player).copy()

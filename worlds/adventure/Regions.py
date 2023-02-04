@@ -28,6 +28,8 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
     for name, locdata in location_table.items():
         locdata.get_position(multiworld.random)
 
+    # TODO: I guess these names are player facing.  I should adjust them to have spaces and stuff
+    # TODO: And check the names against what's in the manual, it might have some official names
     menu = Region("Menu", RegionType.Generic, "Menu", player, multiworld)
 
     menu.exits.append(Entrance(player, "GameStart", menu))
@@ -79,9 +81,19 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
     credits_room_far_side.exits.append(Entrance(player, "CreditsFromFarSide", credits_room_far_side))
     multiworld.regions.append(credits_room_far_side)
 
+    # TODO - Move the priority code from Rules to a function here, and generate a dict of priority locations
+    # (Above part is now done)
+    # TODO - Separate the location appending to another function that works with a list of locations
+    # TODO - then take the item filler code in pre_fill and move it in there, adjusted to remove locations
+    # TODO - from the list instead of filling them with empty
+    # TODO - leaving the AP algorithm to fill with the forced empty values normally
+    priority_locations = determine_priority_locations(multiworld)
     for name, location_data in location_table.items():
         r = multiworld.get_region(location_data.region, player)
-        r.locations.append(AdventureLocation(player, location_data.name, location_data.location_id, r))
+        adventure_loc = AdventureLocation(player, location_data.name, location_data.location_id, r)
+        if adventure_loc.name in priority_locations:
+            adventure_loc.progress_type = LocationProgressType.PRIORITY
+        r.locations.append(adventure_loc)
 
     # in the future, I will randomize the map some, and that will require moving
     # connections to later, probably
@@ -126,3 +138,64 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
         .connect(multiworld.get_region("CreditsRoomFarSide", player))
     multiworld.get_entrance("CreditsFromFarSide", player) \
         .connect(multiworld.get_region("CreditsRoom", player))
+
+
+# Assign some priority locations to try to get interesting stuff into the castles, most of the time
+# occasionally some interesting things are generated without that, so I want to leave some chance of
+# that happening.  The downside to leaving it out is sometimes not needing to visit all castles,
+# at least in solo world.
+def determine_priority_locations(world: MultiWorld) -> {}:
+    locations = []
+    priority_locations = {}
+    for name, location_data in location_table.items():
+        if location_data.room_id is not None:
+            locations.append(name)
+
+    do_priority = world.random.randint(0, 4) < 3
+    if not do_priority:
+        return priority_locations
+
+    priority_index = world.random.randint(0, 4)
+    hard_location_score = 0
+    priority_count = 0
+    if priority_index == 0:
+        priority_locations["CreditsRightSide"] = True
+        hard_location_score = 2
+        priority_count += 1
+    elif priority_index == 1:
+        priority_locations["CreditsLeftSide"] = True
+        hard_location_score = 2
+        priority_count += 1
+    priority_index = world.random.randint(hard_location_score, 7)
+    if priority_index < 3:
+        priority_locations["DungeonVault"] = True
+        hard_location_score += 2
+        priority_count += 1
+    elif priority_index == 4:
+        priority_locations["Dungeon3"] = True
+        priority_count += 1
+    elif priority_index == 5:
+        priority_locations["Dungeon1"] = True
+        priority_count += 1
+    elif priority_index == 6:
+        priority_locations["Dungeon0"] = True
+        priority_count += 1
+
+    priority_index = world.random.randint(0, 7)
+    if priority_index < 2:
+        priority_locations["RedMaze2"] = True
+        priority_count += 1
+    elif priority_index < 4:
+        priority_locations["RedMaze0a"] = True
+        priority_count += 1
+    elif priority_index == 4:
+        priority_locations["RedMaze1"] = True
+        priority_count += 1
+    elif priority_index == 5:
+        priority_locations["RedMaze0"] = True
+        priority_count += 1
+    else:
+        priority_locations["RedMaze3"] = True
+        priority_count += 1
+
+    return priority_locations

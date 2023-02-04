@@ -52,6 +52,9 @@ def get_random_room_in_regions(regions: [str], random) -> int:
     return random.choice(list(possible_rooms.keys()))
 
 
+# TODO - check locations in each room against key to ensure they are visible
+# TODO: And add more specific locations, especially for blue labyrinth.  Red could
+# TODO: use some too
 location_table = {
     "BlueMaze0": LocationData("Overworld", "BlueMaze0", 0x4),
     "BlueMaze1": LocationData("Overworld", "BlueMaze1", 0x5),
