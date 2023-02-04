@@ -9,7 +9,7 @@ class TimespinnerLogic():
     flag_unchained_keys: bool
     flag_eye_spy: bool
     flag_specific_keycards: bool
-    present_keys_unlock: Union[str, None]
+    pyramid_keys_unlock: Union[str, None]
     present_keys_unlock: Union[str, None]
     past_keys_unlock: Union[str, None]
     time_keys_unlock: Union[str, None]
