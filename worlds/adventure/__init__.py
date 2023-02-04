@@ -152,6 +152,7 @@ class AdventureWorld(World):
         # the number of exported empty items and the density of stuff in overworld.
         # TODO - instead, don't create all these locations?  Or un-create them?
         # TODO - (It's too late to do it here though, items/locations should be generated before end of generate_basic)
+        # TODO - And I need to figure out how plandos interact with this
         overworld = self.multiworld.get_region("Overworld", self.player)
         overworld_locations_copy = overworld.locations.copy()
         all_locations = self.multiworld.get_locations(self.player)

@@ -85,8 +85,12 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
     # (Above part is now done)
     # TODO - Separate the location appending to another function that works with a list of locations
     # TODO - then take the item filler code in pre_fill and move it in there, adjusted to remove locations
-    # TODO - from the list instead of filling them with empty
+    # TODO - from the list instead of filling them with empty, still
     # TODO - leaving the AP algorithm to fill with the forced empty values normally
+    # TODO - BUT WAIT!  I need to figure out how plandos would work with that
+    # TODO - Plando stuff gets done before pre_fill.  Maybe I should try to remove locations there,
+    # TODO - instead of filling them, ensuring either a key is already in overworld or at least one unfilled overworld
+    # TODO - location remains
     priority_locations = determine_priority_locations(multiworld)
     for name, location_data in location_table.items():
         r = multiworld.get_region(location_data.region, player)
