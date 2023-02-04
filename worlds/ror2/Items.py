@@ -1,4 +1,3 @@
-from typing import Dict
 from BaseClasses import Item
 from .Options import ItemWeights
 from .RoR2Environments import *

@@ -114,7 +114,7 @@ class FinalStageDeath(Toggle):
 class BeginWithLoop(Toggle):
     """
     Enable to precollect a full loop of environments.
-    Only has an effect with EnvironmentsAsItems
+    Only has an effect with Explore Mode.
     """
     display_name = "Begin With Loop"
 
@@ -122,7 +122,7 @@ class BeginWithLoop(Toggle):
 class DLC_SOTV(Toggle):
     """
      Enable if you are using SOTV DLC.
-     Affects environment availability for Explore Mode and EnvironmentsAsItems.
+     Affects environment availability for Explore Mode.
      Adds Void Items into the item pool
      """
     display_name = "Enable DLC - SOTV"

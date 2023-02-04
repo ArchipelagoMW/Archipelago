@@ -1,5 +1,4 @@
-from BaseClasses import MultiWorld, CollectionState, Location, Entrance
-from typing import Dict
+from BaseClasses import MultiWorld, CollectionState
 from worlds.generic.Rules import set_rule, add_rule
 from .Locations import orderedstage_location
 from .RoR2Environments import environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table, \
