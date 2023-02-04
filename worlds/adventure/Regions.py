@@ -81,8 +81,6 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
     credits_room_far_side.exits.append(Entrance(player, "CreditsFromFarSide", credits_room_far_side))
     multiworld.regions.append(credits_room_far_side)
 
-    # TODO - Move the priority code from Rules to a function here, and generate a dict of priority locations
-    # (Above part is now done)
     priority_locations = determine_priority_locations(multiworld)
     for name, location_data in location_table.items():
         r = multiworld.get_region(location_data.region, player)
@@ -91,16 +89,11 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
             adventure_loc.progress_type = LocationProgressType.PRIORITY
         r.locations.append(adventure_loc)
 
-    # TODO - Separate the location appending to another function that works with a list of locations
-    # TODO - then take the item filler code in pre_fill and move it in there, adjusted to remove locations
-    # TODO - from the list instead of filling them with empty, still
-    # TODO - leaving the AP algorithm to fill with the forced empty values normally
-    # TODO - BUT WAIT!  I need to figure out how plandos would work with that
-    # TODO - Plando stuff gets done before pre_fill.  Maybe I should try to remove locations there,
-    # TODO - instead of filling them, ensuring either a key is already in overworld or at least one unfilled overworld
-    # TODO - location remains
+    # In a tracker and plando-free world, I'd determine unused locations here and not add them.
+    # But that would cause problems with both plandos and trackers.  So I guess I'll stick
+    # with filling in with 'nothing' in pre_fill.
 
-    # in the future, I will randomize the map some, and that will require moving
+    # in the future, I may randomize the map some, and that will require moving
     # connections to later, probably
 
     multiworld.get_entrance("GameStart", player) \
@@ -164,16 +157,16 @@ def determine_priority_locations(world: MultiWorld) -> {}:
     hard_location_score = 0
     priority_count = 0
     if priority_index == 0:
-        priority_locations["CreditsRightSide"] = True
+        priority_locations["Credits Right Side"] = True
         hard_location_score = 2
         priority_count += 1
     elif priority_index == 1:
-        priority_locations["CreditsLeftSide"] = True
+        priority_locations["Credits Left Side"] = True
         hard_location_score = 2
         priority_count += 1
     priority_index = world.random.randint(hard_location_score, 7)
     if priority_index < 3:
-        priority_locations["DungeonVault"] = True
+        priority_locations["Dungeon Vault"] = True
         hard_location_score += 2
         priority_count += 1
     elif priority_index == 4:
@@ -191,7 +184,7 @@ def determine_priority_locations(world: MultiWorld) -> {}:
         priority_locations["RedMaze2"] = True
         priority_count += 1
     elif priority_index < 4:
-        priority_locations["RedMaze0a"] = True
+        priority_locations["Red Maze Vault"] = True
         priority_count += 1
     elif priority_index == 4:
         priority_locations["RedMaze1"] = True

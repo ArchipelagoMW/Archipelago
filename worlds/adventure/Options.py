@@ -23,11 +23,11 @@ class EmptyItemCount(Range):
 class ItemRandoType(Choice):
     """Choose how items are placed in the game
 
-    Not yet implemented.  Currently only Hidden supported
-    Hidden: Adventure items are not in the map until
+    Not yet implemented.  Currently only traditional supported
+    Traditional: Adventure items are not in the map until
     they are collected (except local items) and are dropped
     on the player when collected.  Adventure items are not checks.
-    Drained: Every item is placed, but is inactive until collected.
+    Inactive: Every item is placed, but is inactive until collected.
     Each item touched is a check.  The bat ignores inactive items.
 
     Supported values: traditional, inactive
@@ -71,7 +71,6 @@ class DragonRandoType(Choice):
     """
     How to randomize the dragon starting locations
 
-    Not yet implemented
     normal: Grundle is in the overworld, Yorgle in the white castle, and Rhindle in the black castle
     shuffle: A random dragon is placed in the overworld, one in the white castle, and one in the black castle
     overworldplus: Dragons can be placed anywhere, but at least one will be in the overworld
@@ -92,7 +91,7 @@ class DragonRandoType(Choice):
 class BatLogic(Choice):
     """How the bat is considered for logic
 
-    Not yet implemented, currently the bat simply ignores AP items
+    Not yet implemented, currently the bat ignores AP items
     With cannot_break, the bat cannot pick up an item that starts out-of-logic until the player touches it
     With can_break, the bat is free to pick up local adventure items, even if they are out-of-logic
     With use_logic, the bat itself is placed as an item and can be required for logic for some locations, such

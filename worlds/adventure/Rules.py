@@ -6,11 +6,11 @@ from BaseClasses import LocationProgressType
 def set_rules(self) -> None:
     world = self.multiworld
     set_rule(world.get_entrance("YellowCastlePort", self.player),
-             lambda state: state.has("YellowKey", self.player))
+             lambda state: state.has("Yellow Key", self.player))
     set_rule(world.get_entrance("BlackCastlePort", self.player),
-             lambda state: state.has("BlackKey", self.player))
+             lambda state: state.has("Black Key", self.player))
     set_rule(world.get_entrance("WhiteCastlePort", self.player),
-             lambda state: state.has("WhiteKey", self.player))
+             lambda state: state.has("White Key", self.player))
     set_rule(world.get_entrance("WhiteCastleSecretPassage", self.player),
              lambda state: state.has("Bridge", self.player))
     set_rule(world.get_entrance("WhiteCastlePeekPassage", self.player),
@@ -27,24 +27,24 @@ def set_rules(self) -> None:
     # the bridge and black key to get to it, as that simplifies things a lot
     set_rule(world.get_entrance("CreditsWall", self.player),
              lambda state: state.has("Bridge", self.player) and
-                           state.has("BlackKey", self.player))
+                           state.has("Black Key", self.player))
 
     set_rule(world.get_entrance("CreditsToFarSide", self.player),
              lambda state: state.has("Magnet", self.player))
 
     # bridge literally does not fit in this space, I think
     # and if the magnet is in there, you're not getting it with the bridge!
-    forbid_item(world.get_location("DungeonVault", self.player), "Bridge", self.player)
-    forbid_item(world.get_location("DungeonVault", self.player), "Magnet", self.player)
-    forbid_item(world.get_location("InYellowCastle", self.player), "Chalice", self.player)
+    forbid_item(world.get_location("Dungeon Vault", self.player), "Bridge", self.player)
+    forbid_item(world.get_location("Dungeon Vault", self.player), "Magnet", self.player)
+    forbid_item(world.get_location("Inside Yellow Castle", self.player), "Chalice", self.player)
     overworld = world.get_region("Overworld", self.player)
     white_castle_region = world.get_region("WhiteCastle", self.player)
     black_castle_region = world.get_region("WhiteCastle", self.player)
     for loc in overworld.locations:
         forbid_item(loc, "Chalice", self.player)
 
-    add_rule(world.get_location("ChaliceHome", self.player),
-                   lambda state: state.has("Chalice", self.player) and state.has("YellowKey", self.player))
+    add_rule(world.get_location("Chalice Home", self.player),
+                   lambda state: state.has("Chalice", self.player) and state.has("Yellow Key", self.player))
 
     # world.random.choice(overworld.locations).progress_type = LocationProgressType.PRIORITY
 

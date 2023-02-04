@@ -22,9 +22,9 @@ nothing_item_id = base_adventure_item_id
 # not the same order as the items in RAM (but offsets 0-1 is the 16-bit
 # location of room and position data
 item_table = {
-    "YellowKey": ItemData(0xB, ItemClassification.progression_skip_balancing),
-    "WhiteKey": ItemData(0xC, ItemClassification.progression),
-    "BlackKey": ItemData(0xD, ItemClassification.progression),
+    "Yellow Key": ItemData(0xB, ItemClassification.progression_skip_balancing),
+    "White Key": ItemData(0xC, ItemClassification.progression),
+    "Black Key": ItemData(0xD, ItemClassification.progression),
     "Bridge": ItemData(0xA, ItemClassification.progression),
     "Magnet": ItemData(0x11, ItemClassification.progression),
     "Sword": ItemData(0x9, ItemClassification.progression),

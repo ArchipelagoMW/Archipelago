@@ -143,22 +143,13 @@ class AdventureWorld(World):
         set_rules(self)
 
     def generate_basic(self) -> None:
-        self.multiworld.get_location("ChaliceHome", self.player).place_locked_item(
+        self.multiworld.get_location("Chalice Home", self.player).place_locked_item(
             self.create_event("Victory", ItemClassification.progression))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def pre_fill(self):
         # Place empty items in filler locations here, to limit
         # the number of exported empty items and the density of stuff in overworld.
-        # TODO - instead, don't create all these locations?  Or un-create them?
-        # TODO - Is it safe to do it here?  I don't see anywhere else it is done after generate_basic
-        # TODO - And I need to figure out how plandos interact with this
-        # TODO - the other problem is with trackers!  If those locations are removed, then they won't
-        # TODO - be listed in the tracker and people will know where everything is!
-        # TODO - So... maybe I shouldn't do any of that, and just stay with 'nothing' items?
-        # TODO - Or try to make enough filler to cover every location?  That'd be a lot of filler.
-        # TODO - with 30 locations (33 with dragon kills) and 8 items
-        # TODO - (+2 with switch unlocks).
         overworld = self.multiworld.get_region("Overworld", self.player)
         overworld_locations_copy = overworld.locations.copy()
         all_locations = self.multiworld.get_locations(self.player)
@@ -209,8 +200,7 @@ class AdventureWorld(World):
             rom_bytearray = bytearray(apply_basepatch(get_base_rom_bytes()))
             self.place_dragons(rom_bytearray)
             # start and stop indices are offsets in the ROM file, not Adventure ROM addresses (which start at f000)
-            # rom_bytearray[0x007FC0:0x007FC0 + 21] = self.rom_name
-            # rom_bytearray[0x014308:0x014308 + 1] = self.capsule_starting_level.value.to_bytes(1, "little")
+
             # This places the local items (I still need to make it easy to inject the offset data)
             unplaced_local_items = item_table.copy()
             for location in self.multiworld.get_locations(self.player):
@@ -253,15 +243,6 @@ class AdventureWorld(World):
                 item_position_data_start = get_item_position_data_start(rom_bytearray, unplaced_item.table_index)
                 rom_bytearray[item_position_data_start:item_position_data_start + 1] = 0xff.to_bytes(1, "little")
 
-            # TODO - for all remote items in traditional mode, write that out into a file
-            # TODO - for the client to read. It will be in charge of placing the Arch objects in
-            # TODO - the room when the player enters.  I can't really fit a lot of them in the rom (or ram) data,
-            # TODO - and these are useless without the client anyway
-
-            # TODO - for drained items (where the actual drained item will then be forced local?) we set a bit in
-            # TODO - the old black and white color byte to indicate if it should start active, and store the
-            # TODO - realtime part of that in an empty ram bit or high/low bit of the room byte or something
-            # TODO - If the room byte-bit doesn't slow it down too much, that'd be ideal, it'd use no extra RAM then
             if self.connector_multi_slot:
                 rom_bytearray[connector_port_offset:connector_port_offset + 1] = \
                     (self.player & 0xff).to_bytes(1, "little")
