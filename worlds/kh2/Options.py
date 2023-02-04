@@ -1,6 +1,5 @@
-from Options import Choice, Option,  Range, Toggle, OptionSet
+from Options import Choice, Option, Range, Toggle, OptionSet
 import typing
-
 
 
 class SoraEXP(Range):
@@ -69,12 +68,14 @@ class Schmovement(Choice):
     option_level_4 = 4
     default = 1
 
+
 class RandomGrowth(Range):
     """Amount of Random Growth Abilites You Start With"""
-    display_name="Random Starting Growth"
-    range_start=0
-    range_end=20
-    default=0
+    display_name = "Random Starting Growth"
+    range_start = 0
+    range_end = 20
+    default = 0
+
 
 class KeybladeMin(Range):
     """Minimum Stats for the Keyblade"""
@@ -114,34 +115,38 @@ class LevelDepth(Choice):
     display_name = "Level Depth"
     option_level_50 = 0
     option_level_99 = 1
-    option_level_99_sanity=2
-    option_level_50_sanity=3
-    option_level_1=4
+    option_level_99_sanity = 2
+    option_level_50_sanity = 3
+    option_level_1 = 4
     default = 0
 
-class Max_Logic(Toggle):
+
+class MaxLogic(Toggle):
     """Forms on forms and torn pages in cor/ag"""
     display_name = "Max Logic"
     default = True
 
 
-class Promise_Charm(Toggle):
+class PromiseCharm(Toggle):
     """Add Promise Charm to the Pool"""
     display_name = "Promise Charm"
     default = False
 
-class Keyblade_Abilities(Choice):
+
+class KeybladeAbilities(Choice):
     """Action:Has Action Abilites on Keyblades Support:Has Support Abilites on Keyblades"""
     display_name = "Keyblade Abilities"
     option_support = 0
     option_action = 1
     option_both = 2
-    default=2
+    default = 2
+
 
 class BlacklistKeyblade(OptionSet):
     """Black List these Abilities on Keyblades"""
     display_name = "Blacklist Keyblade Abilities"
     verify_item_name = True
+
 
 KH2_Options: typing.Dict[str, type(Option)] = {
     "Sora_Level_EXP": SoraEXP,
@@ -157,9 +162,9 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "Visit_locking": Visitlocking,
     "Super_Bosses": SuperBosses,
     "Level_Depth": LevelDepth,
-    "Max_Logic": Max_Logic,
-    "Promise_Charm": Promise_Charm,
-    "Keyblade_Abilities":Keyblade_Abilities,
-    "BlacklistKeyblade":BlacklistKeyblade,
-    "RandomGrowth":RandomGrowth,
+    "Max_Logic": MaxLogic,
+    "Promise_Charm": PromiseCharm,
+    "KeybladeAbilities": KeybladeAbilities,
+    "BlacklistKeyblade": BlacklistKeyblade,
+    "RandomGrowth": RandomGrowth,
 }

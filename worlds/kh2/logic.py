@@ -1,5 +1,5 @@
-from ..AutoWorld import LogicMixin
 from .Names import ItemName
+from ..AutoWorld import LogicMixin
 
 
 class KH2Logic(LogicMixin):
@@ -66,14 +66,13 @@ class KH2Logic(LogicMixin):
     def kh_ag_unlocked(self, player):
         return self.has(ItemName.Scimitar, player)
 
-    #def kh_ag_unlocked(self, player: int):
+    # def kh_ag_unlocked(self, player: int):
     #    return self.has('Scimitar', player)
 
     def kh_bc_unlocked(self, player):
         return self.has(ItemName.BeastsClaw, player)
 
-
-    def kh_FormLevel_unlocked(self, player, amount):
+    def kh_form_level_unlocked(self, player, amount):
         level = 0
         for form in {ItemName.ValorForm, ItemName.WisdomForm, ItemName.LimitForm, ItemName.MasterForm,
                      ItemName.FinalForm}:
@@ -81,19 +80,22 @@ class KH2Logic(LogicMixin):
                 level += 1
         return level >= amount
 
-    def kh_VisitLocking_Amount(self,player,amount):
+    def kh_visit_locking_amount(self, player, amount):
         level = 0
-        #torn pages are not added since you cannot get exp from that world
-        for item in {ItemName.CastleKey,ItemName.BattlefieldsofWar,ItemName.SwordoftheAncestor,ItemName.BeastsClaw,
-                     ItemName.BoneFist,ItemName.ProudFang,ItemName.SkillandCrossbones,ItemName.Scimitar,ItemName.MembershipCard,
-                     ItemName.IceCream,ItemName.Picture, ItemName.WaytotheDawn, ItemName.IdentityDisk, ItemName.Poster}:
-            if self.has(item,player):
-                level+=1
-        return level>=amount
+        # torn pages are not added since you cannot get exp from that world
+        for item in {ItemName.CastleKey, ItemName.BattlefieldsofWar, ItemName.SwordoftheAncestor, ItemName.BeastsClaw,
+                     ItemName.BoneFist, ItemName.ProudFang, ItemName.SkillandCrossbones, ItemName.Scimitar,
+                     ItemName.MembershipCard,
+                     ItemName.IceCream, ItemName.Picture, ItemName.WaytotheDawn, ItemName.IdentityDisk,
+                     ItemName.Poster}:
+            if self.has(item, player):
+                level += 1
+        return level >= amount
 
+    def kh_final_fights_unlocked(self, player):
+        return self.has(ItemName.ProofofConnection, player, 1) \
+            and self.has(ItemName.ProofofNonexistence, player,1)\
+            and self.has(ItemName.ProofofPeace,player, 1)
 
-    def kh_FinalFights_unlocked(self, player):
-        return self.has(ItemName.ProofofConnection, player, 1) and self.has(ItemName.ProofofNonexistence, player, 1) and self.has(ItemName.ProofofPeace, player, 1)
-
-    def kh_Vicotry(self, player):
+    def kh_victory(self, player):
         return self.has('Victory', player, 1)

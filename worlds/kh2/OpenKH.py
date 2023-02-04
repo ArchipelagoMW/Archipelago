@@ -176,7 +176,7 @@ def patch_kh2(self, output_directory):
     for location in SoraLevels:
         increaseStat(random.randint(0, 3))   
         #print(str(self.multiworld.get_region(SoraLevels_Region,self.player).locations))
-        if f"{location} ({self.multiworld.player_name[self.player]})" in str(self.multiworld.get_region(SoraLevels_Region,self.player).locations):
+        if f"{location} ({self.multiworld.get_player_name(self.player)})" in str(self.multiworld.get_region(SoraLevels_Region,self.player).locations):
             data=self.multiworld.get_location(location,self.player)
             if data.item.player==self.player: 
                 itemcode=item_dictionary_table[data.item.name].kh2id

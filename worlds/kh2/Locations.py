@@ -20,7 +20,7 @@ class LocationData(typing.NamedTuple):
    
 
 
-    #data's addrcheck sys3 addr obtained roomid bitindex is eventid 
+#data's addrcheck sys3 addr obtained roomid bitindex is eventid
 LoD_Checks = {
     LocationName.BambooGroveDarkShard:       LocationData(0x130000, 245, "Chest"),         
     LocationName.BambooGroveEther:           LocationData(0x130001, 497, "Chest"),         
@@ -705,8 +705,8 @@ SoraLevels = {
     LocationName.Lvl99: LocationData(0x130251, 99, "Levels"),
 }
 Form_Checks = {
-    # Levels 1 are used for exp modification and nothing else.
-    #first address is whats on that level second is if it is obtainted
+# Levels 1 are used for exp modification and nothing else.
+#first address is whats on that level second is if it is obtainted
 
     LocationName.Valorlvl2:  LocationData(0x130253, 2, "Forms", 1),
     LocationName.Valorlvl3:  LocationData(0x130254, 3, "Forms", 1),
@@ -748,7 +748,6 @@ GoA_Checks = {
     LocationName.GoALostIllusion:       LocationData(0x130276, 586, "Chest"),
     LocationName.ProofofNonexistence:   LocationData(0x130277, 590, "Chest"),
 }
-#Keyblade slots are not "real" locations so they will not count as hint points/will be done if player has keyblade
 Keyblade_Slots = {
     LocationName.FAKESlot:            LocationData(0x130278, 116, "Keyblade"),
     LocationName.DetectionSaberSlot:  LocationData(0x130279, 83, "Keyblade"),
