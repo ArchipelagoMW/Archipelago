@@ -151,8 +151,14 @@ class AdventureWorld(World):
         # Place empty items in filler locations here, to limit
         # the number of exported empty items and the density of stuff in overworld.
         # TODO - instead, don't create all these locations?  Or un-create them?
-        # TODO - (It's too late to do it here though, items/locations should be generated before end of generate_basic)
+        # TODO - Is it safe to do it here?  I don't see anywhere else it is done after generate_basic
         # TODO - And I need to figure out how plandos interact with this
+        # TODO - the other problem is with trackers!  If those locations are removed, then they won't
+        # TODO - be listed in the tracker and people will know where everything is!
+        # TODO - So... maybe I shouldn't do any of that, and just stay with 'nothing' items?
+        # TODO - Or try to make enough filler to cover every location?  That'd be a lot of filler.
+        # TODO - with 30 locations (33 with dragon kills) and 8 items
+        # TODO - (+2 with switch unlocks).
         overworld = self.multiworld.get_region("Overworld", self.player)
         overworld_locations_copy = overworld.locations.copy()
         all_locations = self.multiworld.get_locations(self.player)
