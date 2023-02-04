@@ -23,52 +23,32 @@ def create_item(player: int, name: str) -> Item:
 def create_all_items(world: MultiWorld, player: int) -> None:
     pool_option = world.bad_effects[player].value
     total_locations = world.total_locations[player].value
-    # Generate fixed item pool
+
+    # Generate fixed item pool, these are items with a specific fixed quantity that must be added
     itempool: List = []
     for item_name, count in required_items.items():
         itempool += [item_name] * count
 
+    # Generate items based on victory condition settings (Orbs)
     vic = world.victory_condition[player].value
     orb_count = 0
     if vic == 1: orb_count = 11
     if vic == 2: orb_count = 33
     for i in range(orb_count):
         itempool += ["Orb"]
+
     # todo: put a rule in that says this perk can't be placed at Toveri
     if world.bosses_as_checks[player].value >= 2:
         itempool += ["Perk (Spatial Awareness)"]
 
-    # Add non-fixed items to the pool to meet quota
-    static_locations = 0
-
-    # todo: find a better way to do the below, or put it in a separate place
-    if world.bosses_as_checks[player].value >= 1:
-        static_locations += Locations.boss_mp_locations
-    if world.bosses_as_checks[player].value >= 2:
-        static_locations += Locations.boss_mw_locations
-    if world.orbs_as_checks[player].value >= 1:
-        static_locations += Locations.orb_mp_locations
-    if world.orbs_as_checks[player].value >= 2:
-        static_locations += Locations.orb_mw_locations
-    static_locations += Locations.shop_locations
-
-    useful_pool = useful_weights
+    # Create any non-progression repeat items (referred to as junk regardless of whether it's useful)
     junk_pool = item_pool_weights[pool_option]
-
     random_count = total_locations - len(itempool)
-    junk_count = total_locations - static_locations
-    useful_count = random_count - junk_count
-
-    itempool += world.random.choices(
-        population=list(useful_pool.keys()),
-        weights=list(useful_pool.values()),
-        k=useful_count
-    )
 
     itempool += world.random.choices(
         population=list(junk_pool.keys()),
         weights=list(junk_pool.values()),
-        k=junk_count
+        k=random_count
     )
 
     # Convert itempool into real items
@@ -114,19 +94,19 @@ item_table: Dict[str, ItemData] = {
 
 # todo: test rates, make sure it's fun
 default_weights: Dict[str, int] = {
-    # "Wand (Tier 1)":    10,
+    "Wand (Tier 1)":    10,
     "Potion":           35,
     "Refresh":          25,
-    # "Heart":            25,
-    # "Wand (Tier 2)":    9,
-    # "Wand (Tier 3)":    8,
+    "Heart":            25,
+    "Wand (Tier 2)":    9,
+    "Wand (Tier 3)":    8,
     "Bad":              15,
     "Gold (200)":       15,
-    # "Wand (Tier 4)":    7,
-    # "Wand (Tier 5)":    6,
+    "Wand (Tier 4)":    7,
+    "Wand (Tier 5)":    6,
     "Gold (1000)":      5,
-    # "Wand (Tier 6)":    4,
-    # "Perk (Extra Life)": 4,
+    "Wand (Tier 6)":    4,
+    "Perk (Extra Life)": 4,
     "Random Potion":    5,
     "Secret Potion":    5,
     "Chaos Die":        5,
@@ -139,19 +119,19 @@ default_weights: Dict[str, int] = {
 }
 
 no_bad_weights: Dict[str, int] = {
-    # "Wand (Tier 1)":    10,
+    "Wand (Tier 1)":    10,
     "Potion":           35,
     "Refresh":          25,
-    # "Heart":            25,
-    # "Wand (Tier 2)":    9,
-    # "Wand (Tier 3)":    8,
+    "Heart":            25,
+    "Wand (Tier 2)":    9,
+    "Wand (Tier 3)":    8,
     "Bad":              0,
     "Gold (200)":       15,
-    # "Wand (Tier 4)":    7,
-    # "Wand (Tier 5)":    6,
+    "Wand (Tier 4)":    7,
+    "Wand (Tier 5)":    6,
     "Gold (1000)":      5,
-    # "Wand (Tier 6)":    4,
-    # "Perk (Extra Life)": 4,
+    "Wand (Tier 6)":    4,
+    "Perk (Extra Life)": 4,
     "Random Potion":    5,
     "Secret Potion":    5,
     "Chaos Die":        5,
@@ -161,18 +141,6 @@ no_bad_weights: Dict[str, int] = {
     "Sadekivi":         5,
     "Broken Wand":      10,
     "Powder Pouch":     10,
-}
-
-# potentially separating useful and filler items into their own tables
-useful_weights: Dict[str, int] = {
-    "Wand (Tier 1)": 10,
-    "Heart": 25,
-    "Wand (Tier 2)": 9,
-    "Wand (Tier 3)": 8,
-    "Wand (Tier 4)": 7,
-    "Wand (Tier 5)": 6,
-    "Wand (Tier 6)": 4,
-    "Perk (Extra Life)": 4,
 }
 
 item_pool_weights: Dict[int, Dict[str, int]] = {

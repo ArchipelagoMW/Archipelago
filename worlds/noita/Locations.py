@@ -45,6 +45,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Holy Mountain 1 (To Coal Pits) Shop Item 3": LocationData(111002),
         "Holy Mountain 1 (To Coal Pits) Shop Item 4": LocationData(111003),
         "Holy Mountain 1 (To Coal Pits) Shop Item 5": LocationData(111004),
+        "Holy Mountain 1 (To Coal Pits) Spell Refresh": LocationData(111035),
     },
     "Holy Mountain 2 (To Snowy Depths)": {
         "Holy Mountain 2 (To Snowy Depths) Shop Item 1": LocationData(111005),
@@ -52,6 +53,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Holy Mountain 2 (To Snowy Depths) Shop Item 3": LocationData(111007),
         "Holy Mountain 2 (To Snowy Depths) Shop Item 4": LocationData(111008),
         "Holy Mountain 2 (To Snowy Depths) Shop Item 5": LocationData(111009),
+        "Holy Mountain 2 (To Snowy Depths) Spell Refresh": LocationData(111036),
     },
     "Holy Mountain 3 (To Hiisi Base)": {
         "Holy Mountain 3 (To Hiisi Base) Shop Item 1": LocationData(111010),
@@ -59,6 +61,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Holy Mountain 3 (To Hiisi Base) Shop Item 3": LocationData(111012),
         "Holy Mountain 3 (To Hiisi Base) Shop Item 4": LocationData(111013),
         "Holy Mountain 3 (To Hiisi Base) Shop Item 5": LocationData(111014),
+        "Holy Mountain 3 (To Hiisi Base) Spell Refresh": LocationData(111037),
     },
     "Holy Mountain 4 (To Underground Jungle)": {
         "Holy Mountain 4 (To Underground Jungle) Shop Item 1": LocationData(111015),
@@ -66,6 +69,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Holy Mountain 4 (To Underground Jungle) Shop Item 3": LocationData(111017),
         "Holy Mountain 4 (To Underground Jungle) Shop Item 4": LocationData(111018),
         "Holy Mountain 4 (To Underground Jungle) Shop Item 5": LocationData(111019),
+        "Holy Mountain 4 (To Underground Jungle) Spell Refresh": LocationData(111038),
     },
     "Holy Mountain 5 (To The Vault)": {
         "Holy Mountain 5 (To The Vault) Shop Item 1": LocationData(111020),
@@ -73,6 +77,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Holy Mountain 5 (To The Vault) Shop Item 3": LocationData(111022),
         "Holy Mountain 5 (To The Vault) Shop Item 4": LocationData(111023),
         "Holy Mountain 5 (To The Vault) Shop Item 5": LocationData(111024),
+        "Holy Mountain 5 (To The Vault) Spell Refresh": LocationData(111039),
     },
     "Holy Mountain 6 (To Temple of the Art)": {
         "Holy Mountain 6 (To Temple of the Art) Shop Item 1": LocationData(111025),
@@ -80,6 +85,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Holy Mountain 6 (To Temple of the Art) Shop Item 3": LocationData(111027),
         "Holy Mountain 6 (To Temple of the Art) Shop Item 4": LocationData(111028),
         "Holy Mountain 6 (To Temple of the Art) Shop Item 5": LocationData(111029),
+        "Holy Mountain 6 (To Temple of the Art) Spell Refresh": LocationData(111040),
     },
     "Holy Mountain 7 (To The Laboratory)": {
         "Holy Mountain 7 (To The Laboratory) Shop Item 1": LocationData(111030),
@@ -87,6 +93,13 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Holy Mountain 7 (To The Laboratory) Shop Item 3": LocationData(111032),
         "Holy Mountain 7 (To The Laboratory) Shop Item 4": LocationData(111033),
         "Holy Mountain 7 (To The Laboratory) Shop Item 5": LocationData(111034),
+        "Holy Mountain 7 (To The Laboratory) Spell Refresh": LocationData(111041),
+    },
+    "Secret Shop": {
+        "Secret Shop Item 1": LocationData(111042),
+        "Secret Shop Item 2": LocationData(111043),
+        "Secret Shop Item 3": LocationData(111044),
+        "Secret Shop Item 4": LocationData(111045),
     },
     "Floating Island": {
         "Floating Island Orb": LocationData(110501, "orb", Orbs.main_path),

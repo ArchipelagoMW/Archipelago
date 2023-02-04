@@ -16,12 +16,12 @@ holy_mountain_regions: List[str] = [
 ]
 
 wand_tiers: List[str] = [
-    "Wand (Tier 1)",
-    "Wand (Tier 2)",
-    "Wand (Tier 3)",
-    "Wand (Tier 4)",
-    "Wand (Tier 5)",
-    "Wand (Tier 6)",
+    "Wand (Tier 1)",    # Coal Pits
+    "Wand (Tier 2)",    # Snowy Depths
+    "Wand (Tier 3)",    # Hiisi Base
+    "Wand (Tier 4)",    # Underground Jungle
+    "Wand (Tier 5)",    # The Vault
+    "Wand (Tier 6)",    # Temple of the Art
 ]
 
 items_hidden_from_shops: Set[str] = {"Gold (10)", "Gold (50)", "Gold (200)", "Gold (1000)", "Potion", "Random Potion",
@@ -48,6 +48,13 @@ def create_all_rules(world: MultiWorld, player: int) -> None:
         locations_in_region = Locations.location_region_mapping[region_name].keys()
         for location_name in locations_in_region:
             forbid_items_at_location(world, location_name, wands_to_forbid, player)
+
+    # Prevent high tier wands from appearing in the Secret shop
+    wands_to_forbid = wand_tiers[3:]
+    locations_in_region = Locations.location_region_mapping["Secret Shop"].keys()
+    for location_name in locations_in_region:
+        forbid_items_at_location(world, location_name, wands_to_forbid, player)
+
     #
     # # Prevent the Map perk from being on Toveri
     # for location_name in Locations.location_name_to_id.keys():

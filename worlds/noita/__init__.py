@@ -6,7 +6,6 @@ from worlds.AutoWorld import World, WebWorld
 from . import Options, Items, Locations, Regions, Rules, Events
 from .Options import noita_options
 
-# TODO: Ban higher tier wands from appearing in earlier locations
 # TODO: Gate holy mountain access behind an event that triggers when you visit the same holy mountain?
 
 
