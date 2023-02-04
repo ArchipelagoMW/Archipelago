@@ -365,7 +365,7 @@ class Traps(OptionList):
     "List of traps that will be in the item pool to find"
     display_name = "Traps Types"
     valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" }
-    default = valid_keys
+    default = list(valid_keys)
 
 
 # Some options that are available in the timespinner randomizer arent currently implemented
