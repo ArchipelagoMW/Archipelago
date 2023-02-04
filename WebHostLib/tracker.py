@@ -1232,6 +1232,11 @@ def getTracker(tracker: UUID):
                                 for playernumber in range(1, len(team) + 1) if playernumber not in groups}
                    for teamnumber, team in enumerate(names)}
 
+    percent_total_checks_done = {teamnumber: {playernumber: 0
+                                for playernumber in range(1, len(team) + 1) if playernumber not in groups}
+                    for teamnumber, team in enumerate(names)}
+
+    
     hints = {team: set() for team in range(len(names))}
     if room.multisave:
         multisave = restricted_loads(room.multisave)
@@ -1259,6 +1264,7 @@ def getTracker(tracker: UUID):
                 attribute_item(inventory, team, recipient, item)
             checks_done[team][player][player_location_to_area[player][location]] += 1
             checks_done[team][player]["Total"] += 1
+        percent_total_checks_done[team][player] = int(checks_done[team][player]["Total"] / seed_checks_in_area[player]["Total"] * 100) if seed_checks_in_area[player]["Total"] else 100
 
     for (team, player), game_state in multisave.get("client_game_state", {}).items():
         if player in groups:
@@ -1303,8 +1309,8 @@ def getTracker(tracker: UUID):
     return render_template("tracker.html", inventory=inventory, get_item_name_from_id=lookup_any_item_id_to_name,
                            lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
                            tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=alttp_icons,
-                           multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
-                           checks_in_area=seed_checks_in_area, activity_timers=activity_timers,
+                           multi_items=multi_items, checks_done=checks_done, percent_total_checks_done=percent_total_checks_done,
+                           ordered_areas=ordered_areas, checks_in_area=seed_checks_in_area, activity_timers=activity_timers,
                            key_locations=group_key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids,
                            video=video, big_key_locations=group_big_key_locations,
                            hints=hints, long_player_names=long_player_names)
