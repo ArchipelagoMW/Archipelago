@@ -41,7 +41,6 @@ from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, Networ
     SlotType
 
 min_client_version = Version(0, 1, 6)
-print_command_compatability_threshold = Version(0, 3, 5) # Remove backwards compatibility around 0.3.7
 colorama.init()
 
 
@@ -309,6 +308,10 @@ class Context:
         endpoints = (endpoint for endpoint in self.endpoints if endpoint.auth)
         async_start(self.broadcast_send_encoded_msgs(endpoints, msgs))
 
+    def broadcast_text_all(self, text: str, additional_arguments: dict = {}):
+        logging.info("Notice (all): %s" % text)
+        self.broadcast_all([{**{"cmd": "PrintJSON", "data": [{ "text": text }]}, **additional_arguments}])
+
     def broadcast_team(self, team: int, msgs: typing.List[dict]):
         msgs = self.dumper(msgs)
         endpoints = (endpoint for endpoint in itertools.chain.from_iterable(self.clients[team].values()))
@@ -325,29 +328,18 @@ class Context:
             self.clients[endpoint.team][endpoint.slot].remove(endpoint)
         await on_client_disconnected(self, endpoint)
 
-    # text
-
-    def notify_all(self, text: str):
-        logging.info("Notice (all): %s" % text)
-        broadcast_text_all(self, text)
 
     def notify_client(self, client: Client, text: str):
         if not client.auth:
             return
         logging.info("Notice (Player %s in team %d): %s" % (client.name, client.team + 1, text))
-        if client.version >= print_command_compatability_threshold:
-            async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }]}]))
-        else:
-            async_start(self.send_msgs(client, [{"cmd": "Print", "text": text}]))
+        async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }]}]))
+
 
     def notify_client_multiple(self, client: Client, texts: typing.List[str]):
         if not client.auth:
             return
-        if client.version >= print_command_compatability_threshold:
-            async_start(self.send_msgs(client,
-                [{"cmd": "PrintJSON", "data": [{ "text": text }]} for text in texts]))
-        else:
-            async_start(self.send_msgs(client, [{"cmd": "Print", "text": text} for text in texts]))
+        async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }]} for text in texts]))
 
     # loading
 
@@ -685,7 +677,7 @@ class Context:
     def on_goal_achieved(self, client: Client):
         finished_msg = f'{self.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1})' \
                        f' has completed their goal.'
-        self.notify_all(finished_msg)
+        self.broadcast_text_all(finished_msg)
         if "auto" in self.collect_mode:
             collect_player(self, client.team, client.slot)
         if "auto" in self.release_mode:
@@ -778,7 +770,7 @@ async def on_client_joined(ctx: Context, client: Client):
     update_client_status(ctx, client, ClientStatus.CLIENT_CONNECTED)
     version_str = '.'.join(str(x) for x in client.version)
     verb = "tracking" if "Tracker" in client.tags else "playing"
-    ctx.notify_all(
+    ctx.broadcast_text_all(
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) "
         f"{verb} {ctx.games[client.slot]} has joined. "
         f"Client({version_str}), {client.tags}).")
@@ -791,40 +783,24 @@ async def on_client_joined(ctx: Context, client: Client):
 
 async def on_client_left(ctx: Context, client: Client):
     update_client_status(ctx, client, ClientStatus.CLIENT_UNKNOWN)
-    ctx.notify_all(
+    ctx.broadcast_text_all(
         "%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1))
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 
 async def countdown(ctx: Context, timer: int):
-    broadcast_countdown(ctx, timer, f"[Server]: Starting countdown of {timer}s")
+    ctx.broadcast_text_all(f"[Server]: Starting countdown of {timer}s", {"type": "Countdown", "countdown": timer})
     if ctx.countdown_timer:
         ctx.countdown_timer = timer  # timer is already running, set it to a different time
     else:
         ctx.countdown_timer = timer
         while ctx.countdown_timer > 0:
-            broadcast_countdown(ctx, ctx.countdown_timer, f"[Server]: {ctx.countdown_timer}")
+            ctx.broadcast_text_all(f"[Server]: {ctx.countdown_timer}",
+                {"type": "Countdown", "countdown": ctx.countdown_timer})
             ctx.countdown_timer -= 1
             await asyncio.sleep(1)
-        broadcast_countdown(ctx, 0, f"[Server]: GO")
+        ctx.broadcast_text_all(f"[Server]: GO", {"type": "Countdown", "countdown": 0})
         ctx.countdown_timer = 0
-
-
-def broadcast_text_all(ctx: Context, text: str, additional_arguments: dict = {}):
-    old_clients, new_clients = [], []
-
-    for teams in ctx.clients.values():
-        for clients in teams.values():
-            for client in clients:
-                new_clients.append(client) if client.version >= print_command_compatability_threshold \
-                    else old_clients.append(client)
-
-    ctx.broadcast(old_clients, [{"cmd": "Print", "text": text }])
-    ctx.broadcast(new_clients, [{**{"cmd": "PrintJSON", "data": [{ "text": text }]}, **additional_arguments}])
-
-
-def broadcast_countdown(ctx: Context, timer: int, message: str):
-    broadcast_text_all(ctx, message, {"type": "Countdown", "countdown": timer})
 
 
 def get_players_string(ctx: Context):
@@ -894,7 +870,9 @@ def update_checked_locations(ctx: Context, team: int, slot: int):
 def release_player(ctx: Context, team: int, slot: int):
     """register any locations that are in the multidata"""
     all_locations = set(ctx.locations[slot])
-    ctx.notify_all("%s (Team #%d) has released all remaining items from their world." % (ctx.player_names[(team, slot)], team + 1))
+    ctx.broadcast_text_all(
+        "%s (Team #%d) has released all remaining items from their world." % 
+        (ctx.player_names[(team, slot)], team + 1))
     register_location_checks(ctx, team, slot, all_locations)
     update_checked_locations(ctx, team, slot)
 
@@ -907,7 +885,8 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
             if values[1] == slot:
                 all_locations[source_slot].add(location_id)
 
-    ctx.notify_all("%s (Team #%d) has collected their items from other worlds." % (ctx.player_names[(team, slot)], team + 1))
+    ctx.broadcast_text_all(
+        "%s (Team #%d) has collected their items from other worlds." % (ctx.player_names[(team, slot)], team + 1))
     for source_player, location_ids in all_locations.items():
         register_location_checks(ctx, team, source_player, location_ids, count_activity=False)
         update_checked_locations(ctx, team, source_player)
@@ -1177,7 +1156,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     def __call__(self, raw: str) -> typing.Optional[bool]:
         if not raw.startswith("!admin"):
-            self.ctx.notify_all(self.ctx.get_aliased_name(self.client.team, self.client.slot) + ': ' + raw)
+            self.ctx.broadcast_text_all(self.ctx.get_aliased_name(self.client.team, self.client.slot) + ': ' + raw)
         return super(ClientMessageProcessor, self).__call__(raw)
 
     def output(self, text):
@@ -1205,8 +1184,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 "!admin /option server_password"):
             output = f"!admin /option server_password {('*' * random.randint(4, 16))}"
         # Otherwise notify the others what is happening.
-        self.ctx.notify_all(self.ctx.get_aliased_name(self.client.team,
-                                                      self.client.slot) + ': ' + output)
+        self.ctx.broadcast_text_all(
+            self.ctx.get_aliased_name(self.client.team, self.client.slot) + ': ' + output)
 
         if not self.ctx.server_password:
             self.output("Sorry, Remote administration is disabled")
@@ -1243,7 +1222,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def _cmd_players(self) -> bool:
         """Get information about connected and missing players."""
         if len(self.ctx.player_names) < 10:
-            self.ctx.notify_all(get_players_string(self.ctx))
+            self.ctx.broadcast_text_all(get_players_string(self.ctx))
         else:
             self.output(get_players_string(self.ctx))
         return True
@@ -1381,7 +1360,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 new_item = NetworkItem(names[item_name], -1, self.client.slot)
                 get_received_items(self.ctx, self.client.team, self.client.slot, False).append(new_item)
                 get_received_items(self.ctx, self.client.team, self.client.slot, True).append(new_item)
-                self.ctx.notify_all(
+                self.ctx.broadcast_text_all(
                     'Cheat console: sending "' + item_name + '" to ' + self.ctx.get_aliased_name(self.client.team,
                                                                                                  self.client.slot))
                 send_new_items(self.ctx)
@@ -1682,7 +1661,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 client.tags = args["tags"]
                 if set(old_tags) != set(client.tags):
                     client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
-                    ctx.notify_all(
+                    ctx.broadcast_text_all(
                         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has changed tags "
                         f"from {old_tags} to {client.tags}.")
 
@@ -1806,7 +1785,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
         super(ServerCommandProcessor, self).output(text)
 
     def default(self, raw: str):
-        self.ctx.notify_all('[Server]: ' + raw)
+        self.ctx.broadcast_text_all('[Server]: ' + raw)
 
     def _cmd_save(self) -> bool:
         """Save current state to multidata"""
@@ -1947,7 +1926,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 send_items_to(self.ctx, team, slot, *new_items)
 
                 send_new_items(self.ctx)
-                self.ctx.notify_all(
+                self.ctx.broadcast_text_all(
                     'Cheat console: sending ' + ('' if amount == 1 else f'{amount} of ') +
                     f'"{item_name}" to {self.ctx.get_aliased_name(team, slot)}')
                 return True
