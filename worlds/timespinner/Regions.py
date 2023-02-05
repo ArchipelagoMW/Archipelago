@@ -43,6 +43,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, 'Caves of Banishment (Sirens)'),
         create_region(world, player, locations_per_region, location_cache, 'Castle Ramparts'),
         create_region(world, player, locations_per_region, location_cache, 'Castle Keep'),
+        create_region(world, player, locations_per_region, location_cache, 'Castle Basement'),
         create_region(world, player, locations_per_region, location_cache, 'Royal towers (lower)'),
         create_region(world, player, locations_per_region, location_cache, 'Royal towers'),
         create_region(world, player, locations_per_region, location_cache, 'Royal towers (upper)'),
@@ -152,6 +153,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Castle Ramparts', 'Castle Keep')
     connect(world, player, names, 'Castle Ramparts', 'Space time continuum', logic.has_teleport)
     connect(world, player, names, 'Castle Keep', 'Castle Ramparts')
+    connect(world, player, names, 'Castle Keep', 'Castle Basement', lambda state: state.has('Water Mask', player) or not flooded.flood_basement)
     connect(world, player, names, 'Castle Keep', 'Royal towers (lower)', logic.has_doublejump)
     connect(world, player, names, 'Castle Keep', 'Space time continuum', logic.has_teleport)
     connect(world, player, names, 'Royal towers (lower)', 'Castle Keep')
