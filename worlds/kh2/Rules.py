@@ -16,15 +16,15 @@ def set_rules(world: MultiWorld, player: int):
         else:
             world.completion_condition[player] = lambda state: state.kh_three_proof_unlocked(player)
     #abn
-    elif world.Goal[player].value == 1:
-        if world.FinalXemnas[player].value == 1:
-            add_rule(world.get_location(LocationName.FinalXemnas, player),
-                     lambda state: state.kh_all_blue_numbers_unlocked(player))
-            world.completion_condition[player] = lambda state: state.kh_victory(player)
-        else:
-            world.completion_condition[player] = lambda state: state.kh_all_blue_numbers_unlocked(player)
+    #elif world.Goal[player].value == 1:
+    #    if world.FinalXemnas[player].value == 1:
+    #        add_rule(world.get_location(LocationName.FinalXemnas, player),
+    #                 lambda state: state.kh_all_blue_numbers_unlocked(player))
+    #        world.completion_condition[player] = lambda state: state.kh_victory(player)
+    #    else:
+    #        world.completion_condition[player] = lambda state: state.kh_all_blue_numbers_unlocked(player)
     #lucky emblem hunt
-    elif world.Goal[player].value == 2:
+    elif world.Goal[player].value == 1:
         if world.FinalXemnas[player].value == 1:
             add_rule(world.get_location(LocationName.FinalXemnas, player),
                      lambda state: state.kh_lucky_emblem_unlocked(player, world.LuckyEmblemsRequired[player].value))

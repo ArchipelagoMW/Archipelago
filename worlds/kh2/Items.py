@@ -22,15 +22,15 @@ class ItemData(typing.NamedTuple):
 
 
 Reports_Table = {
-    ItemName.SecretAnsemsReport1: ItemData(0x130000, 1, 226, 0x36C4, 6),
-    ItemName.SecretAnsemsReport2: ItemData(0x130001, 1, 227, 0x36C4, 7),
-    ItemName.SecretAnsemsReport3: ItemData(0x130002, 1, 228, 0x36C5, 0),
-    ItemName.SecretAnsemsReport4: ItemData(0x130003, 1, 229, 0x36C5, 1),
-    ItemName.SecretAnsemsReport5: ItemData(0x130004, 1, 230, 0x36C5, 2),
-    ItemName.SecretAnsemsReport6: ItemData(0x130005, 1, 231, 0x36C5, 3),
-    ItemName.SecretAnsemsReport7: ItemData(0x130006, 1, 232, 0x36C5, 4),
-    ItemName.SecretAnsemsReport8: ItemData(0x130007, 1, 233, 0x36C5, 5),
-    ItemName.SecretAnsemsReport9: ItemData(0x130008, 1, 234, 0x36C5, 6),
+    ItemName.SecretAnsemsReport1: ItemData(0x130000, 1, 226,  0x36C4, 6),
+    ItemName.SecretAnsemsReport2: ItemData(0x130001, 1, 227,  0x36C4, 7),
+    ItemName.SecretAnsemsReport3: ItemData(0x130002, 1, 228,  0x36C5, 0),
+    ItemName.SecretAnsemsReport4: ItemData(0x130003, 1, 229,  0x36C5, 1),
+    ItemName.SecretAnsemsReport5: ItemData(0x130004, 1, 230,  0x36C5, 2),
+    ItemName.SecretAnsemsReport6: ItemData(0x130005, 1, 231,  0x36C5, 3),
+    ItemName.SecretAnsemsReport7: ItemData(0x130006, 1, 232,  0x36C5, 4),
+    ItemName.SecretAnsemsReport8: ItemData(0x130007, 1, 233,  0x36C5, 5),
+    ItemName.SecretAnsemsReport9: ItemData(0x130008, 1, 234,  0x36C5, 6),
     ItemName.SecretAnsemsReport10: ItemData(0x130009, 1, 235, 0x36C5, 7),
     ItemName.SecretAnsemsReport11: ItemData(0x13000A, 1, 236, 0x36C6, 0),
     ItemName.SecretAnsemsReport12: ItemData(0x13000B, 1, 237, 0x36C6, 1),
@@ -38,9 +38,9 @@ Reports_Table = {
 }
 
 Progression_Table = {
-    ItemName.ProofofConnection: ItemData(0x13000D, 1, 593, 0x36B2),
-    ItemName.ProofofNonexistence: ItemData(0x13000E, 1, 594, 0x36B3),
-    ItemName.ProofofPeace: ItemData(0x13000F, 1, 595, 0x36B4),
+    ItemName.ProofofConnection: ItemData(0x13000D, 1, 593,      0x36B2),
+    ItemName.ProofofNonexistence: ItemData(0x13000E, 1, 594,    0x36B3),
+    ItemName.ProofofPeace: ItemData(0x13000F, 1, 595,           0x36B4),
     ItemName.PromiseCharm: ItemData(0x130010, 1, 524, 0x3694),
     ItemName.NamineSketches: ItemData(0x130011, 1, 368, 0x3642),
     # dummy 13
@@ -62,19 +62,19 @@ Progression_Table = {
 
 }
 Forms_Table = {
-    ItemName.ValorForm: ItemData(0x130021, 1, 26, 0x36C0, 1),
+    ItemName.ValorForm: ItemData(0x130021, 1, 26,  0x36C0, 1),
     ItemName.WisdomForm: ItemData(0x130022, 1, 27, 0x36C0, 2),
     ItemName.LimitForm: ItemData(0x130023, 1, 563, 0x36CA, 3),
     ItemName.MasterForm: ItemData(0x130024, 1, 31, 0x36C0, 6),
-    ItemName.FinalForm: ItemData(0x130025, 1, 29, 0x36C0, 4),
+    ItemName.FinalForm: ItemData(0x130025, 1, 29,  0x36C0, 4),
 }
 Magic_Table = {
-    ItemName.FireElement: ItemData(0x130026, 3, 21, 0x3594),
+    ItemName.FireElement: ItemData(0x130026, 3, 21,     0x3594),
     ItemName.BlizzardElement: ItemData(0x130027, 3, 22, 0x3595),
-    ItemName.ThunderElement: ItemData(0x130028, 3, 23, 0x3596),
-    ItemName.CureElement: ItemData(0x130029, 3, 24, 0x3597),
-    ItemName.MagnetElement: ItemData(0x13002A, 3, 87, 0x35CF),
-    ItemName.ReflectElement: ItemData(0x13002B, 3, 88, 0x35D0),
+    ItemName.ThunderElement: ItemData(0x130028, 3, 23,  0x3596),
+    ItemName.CureElement: ItemData(0x130029, 3, 24,     0x3597),
+    ItemName.MagnetElement: ItemData(0x13002A, 3, 87,   0x35CF),
+    ItemName.ReflectElement: ItemData(0x13002B, 3, 88,  0x35D0),
     ItemName.Genie: ItemData(0x13002C, 1, 159, 0x36C4, 4),
     ItemName.PeterPan: ItemData(0x13002D, 1, 160, 0x36C4, 5),
     ItemName.Stitch: ItemData(0x13002E, 1, 25, 0x36C0, 0),

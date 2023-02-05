@@ -93,7 +93,7 @@ class KH2World(World):
         for item, data in Items.item_dictionary_table.items():
             item_quantity_dict.update({item: data.quantity})
 
-        if self.multiworld.Goal[self.player].value == 2:
+        if self.multiworld.Goal[self.player].value == 1:
             luckyemblemamount=self.multiworld.LuckyEmblemsAmount[self.player].value
             luckyemblemrequired=self.multiworld.LuckyEmblemsRequired[self.player].value
             if luckyemblemamount<luckyemblemrequired:
@@ -105,12 +105,6 @@ class KH2World(World):
                                            luckyemblemamount})
             #give this proof to unlock the final door once the player has the amount of lucky emlblem required
             item_quantity_dict.update({ItemName.ProofofNonexistence: 0})
-        elif self.multiworld.Goal[self.player].value == 1:
-            # having these progressive abilities on keyblades would mess up progression balancing
-            if "Second Chance" in sora_keyblade_ability_pool:
-                sora_keyblade_ability_pool.remove("Second Chance")
-            if "Once More" in sora_keyblade_ability_pool:
-                sora_keyblade_ability_pool.remove("Once More")
 
         for item, value in self.multiworld.start_inventory[self.player].value.items():
             if item in Items.ActionAbility_Table.keys() or item in Items.SupportAbility_Table.keys():
@@ -237,7 +231,7 @@ class KH2World(World):
 
         # Creating filler for unfilled locations
         while len(itempool) < self.totalLocations:
-            item = random.choice(filler_items)
+            item = self.multiworld.random.choice(filler_items)
             itempool += [self.create_item(item)]
         self.multiworld.itempool += itempool
 

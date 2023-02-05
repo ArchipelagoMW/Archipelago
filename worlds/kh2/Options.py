@@ -153,10 +153,10 @@ class Goal(Choice):
     display_name = "Goal"
     #three proof kill final xemnas
     option_three_proofs = 0
-    #have all important checks
-    option_all_blue_numbers = 1
+    ##have all important checks
+    #option_all_blue_numbers = 1
     #luckey emblem hunt
-    option_lucky_emblem_hunt = 2
+    option_lucky_emblem_hunt = 1
     default = 0
 
 class FinalXemnas(Toggle):
