@@ -13,14 +13,15 @@ from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
 from .logic import KH2Logic
 
+
 class KingdomHearts2Web(WebWorld):
     tutorials = [Tutorial(
-        "Multiworld Setup Guide",
-        "A guide to playing Kingdom Hearts 2 Final Mix with Archipelago.",
-        "English",
-        "setup_en.md",
-        "setup/en",
-        ["JaredWeakStrike"]
+            "Multiworld Setup Guide",
+            "A guide to playing Kingdom Hearts 2 Final Mix with Archipelago.",
+            "English",
+            "setup_en.md",
+            "setup/en",
+            ["JaredWeakStrike"]
     )]
 
 
@@ -35,7 +36,6 @@ class KH2World(World):
     item_name_to_id = {name: data.code for name, data in item_dictionary_table.items()}
     location_name_to_id = {item_name: data.code for item_name, data in all_locations.items() if data.code}
     totalLocations = len(all_locations.items())
-    
 
     @staticmethod
     def _get_slot_data():
@@ -50,7 +50,9 @@ class KH2World(World):
 
     def create_item(self, name: str, ) -> Item:
         data = item_dictionary_table[name]
-        if name in Items.Progression_Table or name in Items.Movement_Table or name in Items.Forms_Table or name in Items.Magic_Table or name == ItemName.Victory:
+        if name in Items.Progression_Table or name in Items.Movement_Table or name in Items.Forms_Table \
+                or name in Items.Magic_Table or name in Items.Misc_Table or name in Items.Reports_Table or name in {
+            "Second Chance", "Once More"}:
             item_classification = ItemClassification.progression
         elif name in Items.SupportAbility_Table or name in Items.ActionAbility_Table:
             item_classification = ItemClassification.useful
@@ -66,7 +68,7 @@ class KH2World(World):
         itempool: typing.List[KH2Item] = []
 
         self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(
-            self.create_item(ItemName.Victory))
+                self.create_item(ItemName.Victory))
         self.totalLocations -= 1
 
         filler_items = [ItemName.Potion, ItemName.HiPotion, ItemName.Ether, ItemName.Elixir,
@@ -74,9 +76,8 @@ class KH2World(World):
                         ItemName.HighDriveRecovery, ItemName.PowerBoost,
                         ItemName.MagicBoost, ItemName.DefenseBoost, ItemName.APBoost]
         item_quantity_dict = {}
-
-        donald_item_pool = list()
-        goofy_item_pool = list()
+        donald_ability_pool = list()
+        goofy_ability_pool = list()
         sora_keyblade_ability_pool = list()
         if self.multiworld.KeybladeAbilities[self.player].value == 0:
             sora_keyblade_ability_pool.extend(Items.SupportAbility_Table.keys())
@@ -92,6 +93,21 @@ class KH2World(World):
         for item, data in Items.item_dictionary_table.items():
             item_quantity_dict.update({item: data.quantity})
 
+        if self.multiworld.Goal[self.player].value == 2:
+            item_quantity_dict.update(
+                    {ItemName.LuckyEmblem: Items.item_dictionary_table[ItemName.LuckyEmblem].quantity +
+                                           self.multiworld.LuckyEmblemsAmount[self.player].value})
+            # give proofs on getting required amount of lucky emblem.
+            # This is to keep it being 2 goa.lua instead of 3
+            for proof in {ItemName.ProofofConnection, ItemName.ProofofPeace, ItemName.ProofofNonexistence}:
+                item_quantity_dict.update({proof: 0})
+        elif self.multiworld.Goal[self.player].value == 1:
+            # having these progressive abilities on keyblades would mess up progression balancing
+            if "Second Chance" in sora_keyblade_ability_pool:
+                sora_keyblade_ability_pool.remove("Second Chance")
+            if "Once More" in sora_keyblade_ability_pool:
+                sora_keyblade_ability_pool.remove("Once More")
+
         for item, value in self.multiworld.start_inventory[self.player].value.items():
             if item in Items.ActionAbility_Table.keys() or item in Items.SupportAbility_Table.keys():
                 # cannot have more than the quantity for abilties
@@ -102,18 +118,18 @@ class KH2World(World):
         for item in Items.DonaldAbility_Table.keys():
             data = item_quantity_dict[item]
             for x in range(data):
-                donald_item_pool.append(item)
+                donald_ability_pool.append(item)
             self.exclude.add(item)
-        while len(donald_item_pool) < len(Locations.Donald_Checks.keys()):
-            donald_item_pool.append(self.multiworld.random.choice(donald_item_pool))
+        while len(donald_ability_pool) < len(Locations.Donald_Checks.keys()):
+            donald_ability_pool.append(self.multiworld.random.choice(donald_ability_pool))
 
         for item in Items.GoofyAbility_Table.keys():
             data = item_quantity_dict[item]
             for x in range(data):
-                goofy_item_pool.append(item)
+                goofy_ability_pool.append(item)
             self.exclude.add(item)
-        while len(goofy_item_pool) < len(Items.GoofyAbility_Table.keys()):
-            donald_item_pool.append(self.multiworld.random.choice(donald_item_pool))
+        while len(goofy_ability_pool) < len(Items.GoofyAbility_Table.keys()):
+            goofy_ability_pool.append(self.multiworld.random.choice(goofy_ability_pool))
 
         # plando keyblades because they can only have abilites
         keyblade_slot_copy = list(Locations.Keyblade_Slots.keys())
@@ -128,18 +144,18 @@ class KH2World(World):
 
         # Placing Donald Abilities on donald locations
         for donaldLocation in Locations.Donald_Checks.keys():
-            random_ability = self.multiworld.random.choice(donald_item_pool)
+            random_ability = self.multiworld.random.choice(donald_ability_pool)
             self.multiworld.get_location(donaldLocation, self.player).place_locked_item(
-                self.create_item(random_ability))
+                    self.create_item(random_ability))
             self.totalLocations -= 1
-            donald_item_pool.remove(random_ability)
+            donald_ability_pool.remove(random_ability)
 
         # Placing Goofy Abilites on goofy locaitons
         for goofyLocation in Locations.Goofy_Checks.keys():
-            random_ability = self.multiworld.random.choice(goofy_item_pool)
+            random_ability = self.multiworld.random.choice(goofy_ability_pool)
             self.multiworld.get_location(goofyLocation, self.player).place_locked_item(self.create_item(random_ability))
             self.totalLocations -= 1
-            goofy_item_pool.remove(random_ability)
+            goofy_ability_pool.remove(random_ability)
 
         # Option to turn off Promise Charm Item
         if self.multiworld.Promise_Charm[self.player].value == 0:
@@ -158,19 +174,19 @@ class KH2World(World):
         if self.multiworld.Super_Bosses[self.player].value == 0:
             for superboss in exclusion_table["Datas"]:
                 self.multiworld.get_location(superboss, self.player).place_locked_item(
-                    self.create_item(random.choice(filler_items)))
+                        self.create_item(random.choice(filler_items)))
                 self.totalLocations -= 1
             for superboss in exclusion_table["SuperBosses"]:
                 self.multiworld.get_location(superboss, self.player).place_locked_item(
-                    self.create_item(random.choice(filler_items)))
+                        self.create_item(random.choice(filler_items)))
                 self.totalLocations -= 1
 
         # These checks are missable
         random_stt_item = random.choice(filler_items)
         self.multiworld.get_location(LocationName.JunkChampionBelt, self.player).place_locked_item(
-            self.create_item(random_stt_item))
+                self.create_item(random_stt_item))
         self.multiworld.get_location(LocationName.JunkMedal, self.player).place_locked_item(
-            self.create_item(random_stt_item))
+                self.create_item(random_stt_item))
         self.totalLocations -= 2
 
         # Makeing a copy of the total growth pool
@@ -190,9 +206,9 @@ class KH2World(World):
                 # try catch in the instance of the user having max movement and wants too much growth
                 if not len(growth_list) == 0:
                     random_growth = self.multiworld.random.choice(growth_list)
-                    item_quantity_dict.update({name: Items.item_dictionary_table[name].quantity - 1})
+                    item_quantity_dict.update({random_growth: Items.item_dictionary_table[random_growth].quantity - 1})
                     growth_list.remove(random_growth)
-                    self.multiworld.push_precollected(self.create_item(name))
+                    self.multiworld.push_precollected(self.create_item(random_growth))
 
         # there are levels but level 1 is there to keep code clean
         if self.multiworld.Level_Depth[self.player].value == 2:

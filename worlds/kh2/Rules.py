@@ -7,8 +7,30 @@ from ..generic.Rules import add_rule, forbid_items, forbid_item
 
 
 def set_rules(world: MultiWorld, player: int):
-    add_rule(world.get_location(LocationName.FinalXemnas, player), lambda state: state.kh_final_fights_unlocked(player))
-    world.completion_condition[player] = lambda state: state.kh_victory(player)
+    #three proofs
+    if world.Goal[player].value == 0:
+        if world.FinalXemnas[player].value==1:
+            add_rule(world.get_location(LocationName.FinalXemnas, player),
+                     lambda state: state.kh_three_proof_unlocked(player))
+            world.completion_condition[player] = lambda state: state.kh_victory(player)
+        else:
+            world.completion_condition[player] = lambda state: state.kh_three_proof_unlocked(player)
+    #abn
+    elif world.Goal[player].value == 1:
+        if world.FinalXemnas[player].value == 1:
+            add_rule(world.get_location(LocationName.FinalXemnas, player),
+                     lambda state: state.kh_all_blue_numbers_unlocked(player))
+            world.completion_condition[player] = lambda state: state.kh_victory(player)
+        else:
+            world.completion_condition[player] = lambda state: state.kh_all_blue_numbers_unlocked(player)
+    #lucky emblem hunt
+    elif world.Goal[player].value == 2:
+        if world.FinalXemnas[player].value == 1:
+            add_rule(world.get_location(LocationName.FinalXemnas, player),
+                     lambda state: state.kh_lucky_emblem_unlocked(player, world.LuckyEmblemsRequired[player].value))
+            world.completion_condition[player] = lambda state: state.kh_victory(player)
+        else:
+            world.completion_condition[player] = lambda state: state.kh_lucky_emblem_unlocked(player, world.LuckyEmblemsRequired[player].value)
 
     # Forbid Ablilites on popups due to game limitations
     for location in popupChecks:
@@ -176,7 +198,6 @@ def set_rules(world: MultiWorld, player: int):
                 add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 9))
 
     # if 0 then no visit locking if 1 then second visits if 2 then first and second visits with one item
-    print(player)
     if world.Visit_locking[player].value == 1:
         add_rule(world.get_entrance(LocationName.Sp2_Region, player), lambda state: state.kh_sp_unlocked(player))
         add_rule(world.get_entrance(LocationName.Pr2_Region, player), lambda state: state.kh_pr_unlocked(player))

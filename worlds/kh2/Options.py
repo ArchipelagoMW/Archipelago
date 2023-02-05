@@ -148,23 +148,57 @@ class BlacklistKeyblade(OptionSet):
     verify_item_name = True
 
 
+class Goal(Choice):
+    """Win Condition"""
+    display_name = "Goal"
+    #three proof kill final xemnas
+    option_three_proofs = 0
+    #have all important checks
+    option_all_blue_numbers = 1
+    #luckey emblem hunt
+    option_lucky_emblem_hunt = 2
+    default = 0
+
+class FinalXemnas(Toggle):
+    """Kill Final Xemnas to Beat the Game"""
+    display_name = "Final Xemnas"
+    default=True
+class LuckyEmblemsRequired(Range):
+    """Number of Lucky Emblems to collect to Open The Final Door bosses."""
+    display_name = "Lucky Emblems Required"
+    range_start = 0
+    range_end = 40
+    default = 25
+
+class LuckyEmblemsAmount(Range):
+    """Number of Lucky Emblems that are in the pool"""
+    display_name = "Lucky Emblems Available"
+    range_start = 0
+    range_end = 40
+    default = 40
+
+
 KH2_Options: typing.Dict[str, type(Option)] = {
-    "Sora_Level_EXP": SoraEXP,
-    "Final_Form_EXP": FinalEXP,
-    "Master_Form_EXP": MasterEXP,
-    "Limit_Form_EXP": LimitEXP,
-    "Wisdom_Form_EXP": WisdomEXP,
-    "Valor_Form_EXP": ValorEXP,
-    "Summon_EXP": SummonEXP,
-    "Schmovement": Schmovement,
-    "Keyblade_Minimum": KeybladeMin,
-    "Keyblade_Maximum": KeybladeMax,
-    "Visit_locking": Visitlocking,
-    "Super_Bosses": SuperBosses,
-    "Level_Depth": LevelDepth,
-    "Max_Logic": MaxLogic,
-    "Promise_Charm": PromiseCharm,
-    "KeybladeAbilities": KeybladeAbilities,
-    "BlacklistKeyblade": BlacklistKeyblade,
-    "RandomGrowth": RandomGrowth,
+    "Sora_Level_EXP":       SoraEXP,
+    "Final_Form_EXP":       FinalEXP,
+    "Master_Form_EXP":      MasterEXP,
+    "Limit_Form_EXP":       LimitEXP,
+    "Wisdom_Form_EXP":      WisdomEXP,
+    "Valor_Form_EXP":       ValorEXP,
+    "Summon_EXP":           SummonEXP,
+    "Schmovement":          Schmovement,
+    "Keyblade_Minimum":     KeybladeMin,
+    "Keyblade_Maximum":     KeybladeMax,
+    "Visit_locking":        Visitlocking,
+    "Super_Bosses":         SuperBosses,
+    "Level_Depth":          LevelDepth,
+    "Max_Logic":            MaxLogic,
+    "Promise_Charm":        PromiseCharm,
+    "KeybladeAbilities":    KeybladeAbilities,
+    "BlacklistKeyblade":    BlacklistKeyblade,
+    "RandomGrowth":         RandomGrowth,
+    "Goal":                 Goal,
+    "FinalXemnas":FinalXemnas,
+    "LuckyEmblemsAmount":   LuckyEmblemsAmount,
+    "LuckyEmblemsRequired": LuckyEmblemsRequired
 }

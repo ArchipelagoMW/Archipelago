@@ -92,10 +92,49 @@ class KH2Logic(LogicMixin):
                 level += 1
         return level >= amount
 
-    def kh_final_fights_unlocked(self, player):
+    def kh_three_proof_unlocked(self, player):
         return self.has(ItemName.ProofofConnection, player, 1) \
             and self.has(ItemName.ProofofNonexistence, player,1)\
             and self.has(ItemName.ProofofPeace,player, 1)
+    def kh_all_blue_numbers_unlocked(self, player):
+        return self.has(ItemName.ProofofConnection, player, 1) \
+            and self.has(ItemName.ProofofNonexistence, player, 1) \
+            and self.has(ItemName.ProofofPeace, player, 1) \
+            and self.has(ItemName.FireElement, player, 3) \
+            and self.has(ItemName.BlizzardElement, player, 3) \
+            and self.has(ItemName.ThunderElement, player, 3) \
+            and self.has(ItemName.ReflectElement, player, 3) \
+            and self.has(ItemName.MagnetElement, player, 3) \
+            and self.has(ItemName.CureElement, player, 3) \
+            and self.has(ItemName.FinalForm, player, 1) \
+            and self.has(ItemName.LimitForm, player, 1) \
+            and self.has(ItemName.MasterForm, player, 1) \
+            and self.has(ItemName.ValorForm, player, 1) \
+            and self.has(ItemName.WisdomForm, player, 1) \
+            and self.has(ItemName.ChickenLittle, player, 1) \
+            and self.has(ItemName.Stitch, player, 1) \
+            and self.has(ItemName.Genie, player, 1) \
+            and self.has(ItemName.PeterPan, player, 1) \
+            and self.has(ItemName.OnceMore, player, 1) \
+            and self.has(ItemName.SecondChance, player, 1) \
+            and self.has(ItemName.TornPages, player, 5) \
+            and self.has(ItemName.SecondChance, player, 1)\
+            and self.has(ItemName.SecretAnsemsReport1,player,1)\
+            and self.has(ItemName.SecretAnsemsReport2,player,1)\
+            and self.has(ItemName.SecretAnsemsReport3,player,1)\
+            and self.has(ItemName.SecretAnsemsReport4,player,1)\
+            and self.has(ItemName.SecretAnsemsReport5,player,1)\
+            and self.has(ItemName.SecretAnsemsReport6,player,1)\
+            and self.has(ItemName.SecretAnsemsReport7,player,1)\
+            and self.has(ItemName.SecretAnsemsReport8,player,1)\
+            and self.has(ItemName.SecretAnsemsReport9,player,1)\
+            and self.has(ItemName.SecretAnsemsReport10,player,1)\
+            and self.has(ItemName.SecretAnsemsReport11,player,1)\
+            and self.has(ItemName.SecretAnsemsReport12,player,1)\
+            and self.has(ItemName.SecretAnsemsReport13,player,1)
+
+    def kh_lucky_emblem_unlocked(self,player,amount):
+        return self.has(ItemName.LuckyEmblem, player, amount)
 
     def kh_victory(self, player):
         return self.has('Victory', player, 1)
