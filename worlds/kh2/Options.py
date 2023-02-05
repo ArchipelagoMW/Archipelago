@@ -167,14 +167,14 @@ class LuckyEmblemsRequired(Range):
     """Number of Lucky Emblems to collect to Open The Final Door bosses."""
     display_name = "Lucky Emblems Required"
     range_start = 0
-    range_end = 40
+    range_end = 60
     default = 25
 
 class LuckyEmblemsAmount(Range):
     """Number of Lucky Emblems that are in the pool"""
     display_name = "Lucky Emblems Available"
     range_start = 0
-    range_end = 40
+    range_end = 60
     default = 40
 
 

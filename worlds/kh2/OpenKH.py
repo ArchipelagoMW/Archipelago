@@ -15,7 +15,7 @@ from worlds.Files import APContainer
 class KH2Container(APContainer):
     game: str = 'Kingdom Hearts 2'
 
-    def __init__(self, patch_data: list, base_path: str, output_directory: str,
+    def __init__(self, patch_data: dict, base_path: str, output_directory: str,
                  player = None, player_name: str = "", server: str = ""):
         self.patch_data = patch_data
         self.file_path = base_path
@@ -59,6 +59,7 @@ def patch_kh2(self, output_directory):
     self.defense = 2
     self.ap = 50
     if self.multiworld.Keyblade_Minimum[self.player].value>self.multiworld.Keyblade_Maximum[self.player].value:
+        print(f"self.multiworld.get_file_safe_player_name(self.player) has Keyblade Minimum greater than Keyblade Maximum")
         keyblademin=self.multiworld.Keyblade_Maximum[self.player].value
         keyblademax=self.multiworld.Keyblade_Minimum[self.player].value
     else:
@@ -216,4 +217,3 @@ def patch_kh2(self, output_directory):
 
 
 
-           

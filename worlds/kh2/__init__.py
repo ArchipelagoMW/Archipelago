@@ -94,13 +94,17 @@ class KH2World(World):
             item_quantity_dict.update({item: data.quantity})
 
         if self.multiworld.Goal[self.player].value == 2:
+            luckyemblemamount=self.multiworld.LuckyEmblemsAmount[self.player].value
+            luckyemblemrequired=self.multiworld.LuckyEmblemsRequired[self.player].value
+            if luckyemblemamount<luckyemblemrequired:
+                luckyemblemamount = max(luckyemblemamount,luckyemblemrequired)
+                print(f"Luckey Emblem Amount {self.multiworld.LuckyEmblemsAmount[self.player].value} is less than required \
+            {(self.multiworld.LuckyEmblemsRequired[self.player].value)} for player {self.multiworld.get_file_safe_player_name(self.player)}")
             item_quantity_dict.update(
                     {ItemName.LuckyEmblem: Items.item_dictionary_table[ItemName.LuckyEmblem].quantity +
-                                           self.multiworld.LuckyEmblemsAmount[self.player].value})
-            # give proofs on getting required amount of lucky emblem.
-            # This is to keep it being 2 goa.lua instead of 3
-            for proof in {ItemName.ProofofConnection, ItemName.ProofofPeace, ItemName.ProofofNonexistence}:
-                item_quantity_dict.update({proof: 0})
+                                           luckyemblemamount})
+            #give this proof to unlock the final door once the player has the amount of lucky emlblem required
+            item_quantity_dict.update({ItemName.ProofofNonexistence: 0})
         elif self.multiworld.Goal[self.player].value == 1:
             # having these progressive abilities on keyblades would mess up progression balancing
             if "Second Chance" in sora_keyblade_ability_pool:
@@ -112,7 +116,7 @@ class KH2World(World):
             if item in Items.ActionAbility_Table.keys() or item in Items.SupportAbility_Table.keys():
                 # cannot have more than the quantity for abilties
                 if value > Items.item_dictionary_table[item].quantity:
-                    raise Exception("You have too many " + str(item) + " In the pool")
+                    print(f"{self.multiworld.get_file_safe_player_name(self.player)} cannot have more than {Items.item_dictionary_table[item].quantity} of {item}")
                 item_quantity_dict.update({item: Items.item_dictionary_table[item].quantity - 1})
 
         for item in Items.DonaldAbility_Table.keys():

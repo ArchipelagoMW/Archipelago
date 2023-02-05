@@ -134,7 +134,6 @@ def set_rules(world: MultiWorld, player: int):
     # add npc that warps player to tower after tt1 because those chests are missable
 
     # level 50
-    print(world.Level_Depth[player].value)
     if world.Level_Depth[player].value == 0:
         for level in {LocationName.Lvl20, LocationName.Lvl23, LocationName.Lvl25, LocationName.Lvl28,
                       LocationName.Lvl30}:
