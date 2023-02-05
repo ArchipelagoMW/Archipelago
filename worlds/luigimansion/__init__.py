@@ -1,8 +1,7 @@
 from typing import Dict, List, Set, Tuple, TextIO
 
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
-from .Items import get_item_names_per_category, item_table, starter_melee_weapons, starter_spells, \
-    starter_progression_items, filler_items
+from .Items import item_table
 from .Locations import get_locations, starter_progression_locations, EventId
 from .Rules import LuigiMansionLogic
 from .Options import is_option_enabled, get_option_value, luigimansion_options
@@ -174,31 +173,6 @@ def fill_item_pool_with_dummy_items(self: LuigiMansionWorld, world: MultiWorld, 
     for _ in range(len(location_cache) - len(locked_locations) - len(pool)):
         item = create_item_with_correct_settings(world, player, self.get_filler_item_name())
         pool.append(item)
-
-
-def place_first_progression_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]):
-    for item in world.precollected_items[player]:
-        if item.name in starter_progression_items:
-            return
-
-    local_starter_progression_items = tuple(
-        item for item in starter_progression_items if item not in world.non_local_items[player].value)
-    non_excluded_starter_progression_locations = tuple(
-        location for location in starter_progression_locations if location not in world.exclude_locations[player].value)
-
-    if not local_starter_progression_items or not non_excluded_starter_progression_locations:
-        return
-
-    progression_item = world.random.choice(local_starter_progression_items)
-    location = world.random.choice(non_excluded_starter_progression_locations)
-
-    excluded_items.add(progression_item)
-    locked_locations.append(location)
-
-    item = create_item_with_correct_settings(world, player, progression_item)
-
-    world.get_location(location, player).place_locked_item(item)
-
 
 def create_item_with_correct_settings(world: MultiWorld, player: int, name: str) -> Item:
     data = item_table[name]
