@@ -61,8 +61,7 @@ class LuigiMansionWorld(World):
             self.multiworld.StartWithJewelryBox[self.player].value = self.multiworld.StartWithJewelryBox[self.player].option_true
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player),
-                       self.location_cache)
+        create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player), self.location_cache)
 
     def create_item(self, name: str) -> Item:
         return create_item_with_correct_settings(self.multiworld, self.player, name)

@@ -89,12 +89,11 @@ class PortraitGhosts(Toggle):
     display_name = "Portrait Ghosts"
 
 
-# Old Timespinner Options
 class Enemizer(Toggle):
     "Ghosts in room encounters have random elements."
     display_name = "Enemizer"
 
-
+# Old Timespinner Options
 class ShopMultiplier(Range):
     "Multiplier for the cost of items in the shop. Set to 0 for free shops."
     display_name = "Shop Price Multiplier"
@@ -165,19 +164,19 @@ class EnterSandman(Toggle):
 
 # Some options that are available in the timespinner randomizer arent currently implemented
 luigimansion_options: Dict[str, Option] = {
-    "EyeSpy": EyeSpy,
-    "StartWithMeyef": StartWithMeyef,
-    "QuickSeed": QuickSeed,
-    "SpecificKeycards": SpecificKeycards,
-    "Inverted": Inverted,
-    "GyreArchives": GyreArchives,
-    "Cantoran": Cantoran,
-    "LoreChecks": LoreChecks,
-    "BossRando": BossRando,
-    "BossScaling": BossScaling,
-    "FinalBooCount": FinalBooCount,
-    "BossHealing": BossHealing,
-    "ShopFill": ShopFill,
+    "StartWithBetterVacuum": StartWithBetterVacuum,
+    "StartWithBooRadar": StartWithBooRadar,
+    "StartHiddenMansion": StartHiddenMansion,
+    "SpeedySpirits": SpeedySpirits,
+    "Toadsanity": Toadsanity,
+    "Plantsanity": Plants,
+    "Interactables": Interactables,
+    "MarioItems": MarioItems,
+    "WashroomBooCount": WashroomBooCount,
+    "BalconyBooCount": BalconyBooCount,
+    "Boosanity": Boosanity,
+    "PortraitGhosts": PortraitGhosts,
+    "Enemizer": Enemizer,
     "ShopWarpShards": ShopWarpShards,
     "ShopMultiplier": ShopMultiplier,
     "LootPool": LootPool,
