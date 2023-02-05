@@ -7,6 +7,7 @@ from .Names import ItemName
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     progression: bool
+    quantity: int = 1
 
 
 class CV64Item(Item):
@@ -23,19 +24,22 @@ junk_table = {
     ItemName.one_hundred_gold:   ItemData(0xC6401C, False),
 }
 
+special_table = {
+    ItemName.special_one: ItemData(0xC64004, True),
+    ItemName.special_two: ItemData(0xC64005, True, 0),
+}
+
 main_table = {
-    ItemName.special_one:          ItemData(0xC64004, True),
-    ItemName.special_two:          ItemData(0xC64005, True),
-    ItemName.roast_chicken:        ItemData(0xC64006, False),
-    ItemName.roast_beef:           ItemData(0xC64007, False),
-    ItemName.healing_kit:          ItemData(0xC64008, True),
-    ItemName.purifying:            ItemData(0xC64009, False),
-    ItemName.cure_ampoule:         ItemData(0xC6400A, False),
-    ItemName.powerup:              ItemData(0xC6400C, False),
-    ItemName.magical_nitro:        ItemData(0xC64015, True),
-    ItemName.mandragora:           ItemData(0xC64016, True),
-    ItemName.sun_card:             ItemData(0xC64017, False),
-    ItemName.moon_card:            ItemData(0xC64018, False),
+    ItemName.roast_chicken:        ItemData(0xC64006, False, 21),
+    ItemName.roast_beef:           ItemData(0xC64007, False, 24),
+    ItemName.healing_kit:          ItemData(0xC64008, False, 4),
+    ItemName.purifying:            ItemData(0xC64009, False, 14),
+    ItemName.cure_ampoule:         ItemData(0xC6400A, False, 5),
+    ItemName.powerup:              ItemData(0xC6400C, False, 10),
+    ItemName.magical_nitro:        ItemData(0xC64015, True, 2),
+    ItemName.mandragora:           ItemData(0xC64016, True, 2),
+    ItemName.sun_card:             ItemData(0xC64017, False, 9),
+    ItemName.moon_card:            ItemData(0xC64018, False, 8),
     ItemName.five_hundred_gold:    ItemData(0xC6401A, False),
     ItemName.archives_key:         ItemData(0xC6401D, True),
     ItemName.left_tower_key:       ItemData(0xC6401E, True),
@@ -53,12 +57,13 @@ main_table = {
 }
 
 event_table = {
-    ItemName.victory:          ItemData(None, True),
+    ItemName.victory:          ItemData(None, True, 0),
 }
 
 # Complete item table.
 item_table = {
     **junk_table,
+    **special_table,
     **main_table,
     **event_table,
 }

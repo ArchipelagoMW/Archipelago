@@ -2,9 +2,8 @@ import typing
 
 from BaseClasses import MultiWorld, Region, Entrance
 from .Items import CV64Item
-from .Locations import CV64Location
+from .Locations import CV64Location, LocationData, all_locations
 from .Names import LocationName, ItemName
-from .Rom import rom_loc_offsets, npc_items, invis_items, event_items
 from .Levels import end_regions_dict, mid_regions_dict
 
 
@@ -300,7 +299,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.ccll_cwhall_butlerflames_past,
         LocationName.ccll_cwhall_flamethrower,
         LocationName.ccll_cwhall_cwflames,
-        LocationName.ccll_lizardman,
+        LocationName.ccll_heinrich,
         LocationName.ccia_nitro_crates,
         LocationName.ccia_nitro_shelf,
         LocationName.ccia_stairs_knight,
@@ -682,18 +681,11 @@ def create_region(world: MultiWorld, player: int, active_locations, name: str, l
     ret.world = world
     if locations:
         for location in locations:
-            loc_id = active_locations.get(location, 0)
+            loc_data = all_locations[location]
+            loc_id = loc_data.code
             location = CV64Location(player, location, loc_id, ret)
-            if loc_id in rom_loc_offsets:
-                location.rom_offset = rom_loc_offsets[loc_id]
-                if location.address in npc_items:
-                    location.loc_type = "npc"
-                elif location.address in invis_items:
-                    location.loc_type = "invisible"
-                elif location.address in event_items:
-                    location.loc_type = "event"
-                else:
-                    location.loc_type = "normal"
+            location.rom_offset = loc_data.rom_offset
+            location.loc_type = loc_data.loc_type
             ret.locations.append(location)
     if exits:
         for exit in exits:

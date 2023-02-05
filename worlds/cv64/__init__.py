@@ -4,7 +4,7 @@ import typing
 import threading
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from .Items import CV64Item, ItemData, item_table, junk_table
+from .Items import CV64Item, ItemData, item_table, junk_table, main_table
 from .Locations import CV64Location, all_locations, setup_locations
 from .Options import cv64_options
 from .Regions import create_regions, connect_regions
@@ -12,7 +12,7 @@ from .Levels import level_list
 from .Rules import set_rules
 from .Names import ItemName, LocationName
 from ..AutoWorld import WebWorld, World
-from .Rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch, rom_item_bytes, rom_sub_weapon_offsets
+from .Rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch, rom_sub_weapon_offsets
 # import math
 
 
@@ -41,11 +41,10 @@ class CV64World(World):
     option_definitions = cv64_options
     topology_present = True
     data_version = 0
-    # hint_blacklist = {}
     remote_items = False
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = all_locations
+    location_name_to_id = {name: data.code for name, data in all_locations.items()}
 
     active_level_list: typing.List[str]
     villa_cc_ids = [2, 3]
@@ -74,6 +73,7 @@ class CV64World(World):
         }
 
     def generate_early(self):
+        # Handle Stage Shuffle and Warp Shuffle here
         self.active_level_list = level_list.copy()
         self.active_warp_list = self.multiworld.random.sample(self.active_level_list, 7)
         self.sub_weapon_dict = rom_sub_weapon_offsets.copy()
@@ -129,8 +129,6 @@ class CV64World(World):
         created_item = CV64Item(name, classification, data.code, self.player)
         if self.multiworld.draculas_condition[self.player].value != 3 and created_item.name == ItemName.special_two:
             created_item.code = None
-        if name in rom_item_bytes:
-            created_item.item_byte = rom_item_bytes[name]
 
         return created_item
 
@@ -138,22 +136,21 @@ class CV64World(World):
         set_rules(self.multiworld, self.player)
 
     def generate_basic(self):
-        itempool: typing.List[CV64Item] = []
+        item_counts = {name: data.quantity for name, data in item_table.items()}
 
         # Levels
         total_required_locations = 211
 
         self.multiworld.get_location(LocationName.the_end, self.player).place_locked_item(self.create_item(ItemName.victory))
 
-        number_of_s1s = self.multiworld.total_special1s[self.player].value
-        number_of_s2s = self.multiworld.total_special2s[self.player].value
+        item_counts[ItemName.special_one] = self.multiworld.total_special1s[self.player].value
         total_available_bosses = 14
 
-        required_s1s = self.multiworld.special1s_per_warp[self.player].value*7
+        required_s1s = self.multiworld.special1s_per_warp[self.player].value * 7
 
-        if required_s1s > number_of_s1s:
+        if required_s1s > item_counts[ItemName.special_one]:
             raise Exception(f"Not enough Special1 jewels for player {self.multiworld.get_player_name(self.player)} "
-                            f"to use the whole warp menu. Need {required_s1s - number_of_s1s} more.")
+                            f"to use the whole warp menu. Need {required_s1s - item_counts[ItemName.special_one]} more.")
 
         if self.multiworld.draculas_condition[self.player].value == 1:
             self.required_s2s = 1
@@ -201,74 +198,45 @@ class CV64World(World):
                 raise Exception(f"More bosses required than there are for player {self.multiworld.get_player_name(self.player)}. "
                                 f"Need {self.required_s2s - total_available_bosses} more enabled.")
         elif self.multiworld.draculas_condition[self.player].value == 3:
-            itempool += [self.create_item(ItemName.special_two) for _ in range(number_of_s2s)]
+            item_counts[ItemName.special_two] = self.multiworld.total_special2s[self.player].value
             self.required_s2s = self.multiworld.special2s_required[self.player].value
-            if self.required_s2s > number_of_s2s:
+            if self.required_s2s > item_counts[ItemName.special_two]:
                 raise Exception(f"More Special2 jewels required than there are for player {self.multiworld.get_player_name(self.player)}. "
-                                f"Need {self.required_s2s - number_of_s2s} more.")
-
-        extra_keys_dict = {ItemName.left_tower_key: 0, ItemName.storeroom_key: 0, ItemName.archives_key: 0,
-                           ItemName.garden_key: 0, ItemName.copper_key: 0, ItemName.chamber_key: 0,
-                           ItemName.execution_key: 0, ItemName.science_key_one: 0, ItemName.science_key_two: 0,
-                           ItemName.science_key_three: 0, ItemName.clocktower_key_one: 0,
-                           ItemName.clocktower_key_two: 0, ItemName.clocktower_key_three: 0, ItemName.magical_nitro: 0,
-                           ItemName.mandragora: 0}
+                                f"Need {self.required_s2s - item_counts[ItemName.special_two]} more.")
 
         if self.multiworld.extra_keys[self.player].value == 1:
-            for item in extra_keys_dict:
-                extra_keys_dict[item] = 1
+            for item in item_counts:
+                if item_table[item].progression and item in main_table:
+                    item_counts[item] += 1
         elif self.multiworld.extra_keys[self.player].value == 2:
-            for item in extra_keys_dict:
+            for item in item_counts:
                 extra_count = self.multiworld.random.randint(0, 1)
-                extra_keys_dict[item] = extra_count
-
-        itempool += [self.create_item(ItemName.special_one) for _ in range(number_of_s1s)]
-        itempool += [self.create_item(ItemName.roast_chicken) for _ in range(21)]
-        itempool += [self.create_item(ItemName.roast_beef) for _ in range(24)]
-        itempool += [self.create_item(ItemName.healing_kit) for _ in range(4)]
-        itempool += [self.create_item(ItemName.purifying) for _ in range(14)]
-        itempool += [self.create_item(ItemName.cure_ampoule) for _ in range(5)]
-        itempool += [self.create_item(ItemName.powerup) for _ in range(10)]
-        itempool += [self.create_item(ItemName.magical_nitro) for _ in range(2 + extra_keys_dict[ItemName.magical_nitro])]
-        itempool += [self.create_item(ItemName.mandragora) for _ in range(2 + extra_keys_dict[ItemName.mandragora])]
-        itempool += [self.create_item(ItemName.sun_card) for _ in range(9)]
-        itempool += [self.create_item(ItemName.moon_card) for _ in range(8)]
-        itempool += [self.create_item(ItemName.left_tower_key) for _ in range(1 + extra_keys_dict[ItemName.left_tower_key])]
-        itempool += [self.create_item(ItemName.storeroom_key) for _ in range(1 + extra_keys_dict[ItemName.storeroom_key])]
-        itempool += [self.create_item(ItemName.archives_key) for _ in range(1 + extra_keys_dict[ItemName.archives_key])]
-        itempool += [self.create_item(ItemName.garden_key) for _ in range(1 + extra_keys_dict[ItemName.garden_key])]
-        itempool += [self.create_item(ItemName.copper_key) for _ in range(1 + extra_keys_dict[ItemName.copper_key])]
-        itempool += [self.create_item(ItemName.chamber_key) for _ in range(1 + extra_keys_dict[ItemName.chamber_key])]
-        itempool += [self.create_item(ItemName.execution_key) for _ in range(1 + extra_keys_dict[ItemName.execution_key])]
-        itempool += [self.create_item(ItemName.science_key_one) for _ in range(1 + extra_keys_dict[ItemName.science_key_one])]
-        itempool += [self.create_item(ItemName.science_key_two) for _ in range(1 + extra_keys_dict[ItemName.science_key_two])]
-        itempool += [self.create_item(ItemName.science_key_three) for _ in range(1 + extra_keys_dict[ItemName.science_key_three])]
-        itempool += [self.create_item(ItemName.clocktower_key_one) for _ in range(1 + extra_keys_dict[ItemName.clocktower_key_one])]
-        itempool += [self.create_item(ItemName.clocktower_key_two) for _ in range(1 + extra_keys_dict[ItemName.clocktower_key_two])]
-        itempool += [self.create_item(ItemName.clocktower_key_three) for _ in range(1 + extra_keys_dict[ItemName.clocktower_key_three])]
+                if item_table[item].progression and item in main_table:
+                    item_counts[item] += extra_count
 
         if self.multiworld.carrie_logic[self.player]:
-            itempool += [self.create_item(ItemName.roast_beef)]
-            itempool += [self.create_item(ItemName.moon_card)]
+            item_counts[ItemName.roast_beef] += 1
+            item_counts[ItemName.moon_card] += 1
             total_required_locations += 2
 
         if self.multiworld.lizard_generator_items[self.player]:
-            itempool += [self.create_item(ItemName.powerup)]
-            itempool += [self.create_item(ItemName.sun_card)]
+            item_counts[ItemName.powerup] += 1
+            item_counts[ItemName.sun_card] += 1
             total_required_locations += 6
 
-        total_junk_count = total_required_locations - len(itempool)
+        total_junk_count = total_required_locations - sum(item_counts.values())
+        for junk_item in self.multiworld.random.choices(list(junk_table.keys()), k=total_junk_count):
+            item_counts[junk_item] += 1
 
-        junk_pool = []
-        for item_name in self.multiworld.random.choices(list(junk_table.keys()), k=total_junk_count):
-            junk_pool.append(self.create_item(item_name))
+        itempool: typing.List[CV64Item] = []
+        for item in item_counts:
+            if item_counts[item] != 0:
+                itempool += [self.create_item(item) for _ in range(item_counts[item])]
 
-        itempool += junk_pool
+        self.multiworld.itempool += itempool
 
         connect_regions(self.multiworld, self.player, self.active_level_list, self.active_warp_list,
                         self.required_s2s)
-
-        self.multiworld.itempool += itempool
 
         if self.multiworld.sub_weapon_shuffle[self.player]:
             sub_bytes = list(self.sub_weapon_dict.values())
@@ -307,9 +275,9 @@ class CV64World(World):
             offsets_to_ids = {}
             for location_name in active_locations:
                 loc = self.multiworld.get_location(location_name, self.player)
-                if loc.item.name in rom_item_bytes or loc.item.game != "Castlevania 64":
+                if loc.item.game == "Castlevania 64" and loc.loc_type != "event":
                     if loc.item.player == self.player:
-                        offsets_to_ids[loc.rom_offset] = loc.item.item_byte
+                        offsets_to_ids[loc.rom_offset] = loc.item.code - 0xC64000
                         if loc.loc_type == "npc":
                             if 0x19 < offsets_to_ids[loc.rom_offset] < 0x1D:
                                 offsets_to_ids[loc.rom_offset] += 0x0D
