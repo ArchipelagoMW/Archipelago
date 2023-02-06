@@ -17,7 +17,7 @@ class MuseDashCollections:
     SongItems: Dict[str, SongData] = {}
     SongLocations: Dict[str, int] = {}
 
-    FreeAlbums: Set = set("Default Music", "Budget Is Burning: Nano Core", "Budget is Burning Vol.1")
+    FreeAlbums = ["Default Music", "Budget Is Burning: Nano Core", "Budget is Burning Vol.1"]
 
     MusicSheetID: int
 
