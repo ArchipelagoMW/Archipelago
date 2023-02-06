@@ -7,7 +7,7 @@ Note: -1 means difficulty missing. -2 means "?" difficulty
 """
 class SongData(NamedTuple):
     code: Optional[int]
-    default_song: bool
+    song_is_free: bool
     streamer_mode: bool
     easy: str = Optional[int]
     hard: int = Optional[int]

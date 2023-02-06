@@ -2,7 +2,7 @@ import os
 
 from BaseClasses import ItemClassification
 from .Items import MuseDashFixedItem, SongData, AlbumData
-from typing import Dict, Optional
+from typing import Dict, Optional, Set
 
 def load_text_file(name: str) -> str:
     import pkgutil
@@ -16,6 +16,8 @@ class MuseDashCollections:
 
     SongItems: Dict[str, SongData] = {}
     SongLocations: Dict[str, int] = {}
+
+    FreeAlbums: Set = set("Default Music", "Budget Is Burning: Nano Core", "Budget is Burning Vol.1")
 
     MusicSheetID: int
 
@@ -35,14 +37,14 @@ class MuseDashCollections:
 
             # Data is 'Song|Album|StreamerMode|EasyDiff|HardDiff|MasterDiff|SecretDiff'
             itemName = sections[0]
-            song_is_default = sections[1] == "Default Music" # All DLC songs have a different album
+            song_is_free = sections[1] in self.FreeAlbums
             steamer_mode = sections[2] == "True"
 
             easyDiff = self.parse_song_difficulty(sections[3])
             hardDiff = self.parse_song_difficulty(sections[4])
             masterDiff = self.parse_song_difficulty(sections[5])
 
-            self.SongItems[itemName] = SongData(currentItemId, song_is_default, steamer_mode, easyDiff, hardDiff, masterDiff)
+            self.SongItems[itemName] = SongData(currentItemId, song_is_free, steamer_mode, easyDiff, hardDiff, masterDiff)
             currentItemId += 1
 
         for name in self.AlbumItems.keys():
@@ -65,7 +67,7 @@ class MuseDashCollections:
         songList = list()
 
         for songKey, songData in self.SongItems.items():
-            if (not dlcSongs and not songData.default_song):
+            if (not dlcSongs and not songData.song_is_free):
                 continue
 
             if (streamerModeActive and not songData.streamer_mode):
