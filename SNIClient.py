@@ -56,7 +56,9 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
         """Connect to a snes. Optionally include network address of a snes to connect to,
         otherwise show available devices; and a SNES device number if more than one SNES is detected.
         Examples: "/snes", "/snes 1", "/snes localhost:23074 1" """
-
+        if self.ctx.snes_state in {SNESState.SNES_ATTACHED, SNESState.SNES_CONNECTED, SNESState.SNES_CONNECTING}:
+            self.output("Already connected to SNES. Disconnecting first.")
+            self._cmd_snes_close()
         return self.connect_to_snes(snes_options)
 
     def connect_to_snes(self, snes_options: str = "") -> bool:
@@ -84,7 +86,7 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
         """Close connection to a currently connected snes"""
         self.ctx.snes_reconnect_address = None
         self.ctx.cancel_snes_autoreconnect()
-        if self.ctx.snes_socket is not None and not self.ctx.snes_socket.closed:
+        if self.ctx.snes_socket and not self.ctx.snes_socket.closed:
             async_start(self.ctx.snes_socket.close())
             return True
         else:
@@ -443,7 +445,7 @@ async def snes_connect(ctx: SNIContext, address: str, deviceIndex: int = -1) -> 
 
     except Exception as e:
         ctx.snes_state = SNESState.SNES_DISCONNECTED
-        if recv_task is not None:
+        if task_alive(recv_task):
             if not ctx.snes_socket.closed:
                 await ctx.snes_socket.close()
         else:
