@@ -187,7 +187,7 @@ class LuckyEmblemsAmount(Range):
 class UltimaWeaponRequired(Range):
     """Number of Ultima Weapon Pieces that are Required.
         If Goal is not Hitlist this does nothing."""
-    display_name="Ultima Weapon Pieces Available"
+    display_name="Ultima Weapon Pieces Required"
     range_start=0
     range_end=10
     default=3
