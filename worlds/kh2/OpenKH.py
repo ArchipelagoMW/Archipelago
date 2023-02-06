@@ -10,7 +10,7 @@ from .Items import item_dictionary_table
 from .Locations import all_locations,SoraLevels
 from .XPValues import lvlStats, formExp, soraExp
 from worlds.Files import APContainer
-
+from statistics import median
 
 class KH2Container(APContainer):
     game: str = 'Kingdom Hearts 2'
@@ -58,6 +58,7 @@ def patch_kh2(self, output_directory):
     self.magic = 6
     self.defense = 2
     self.ap = 50
+
     if self.multiworld.Keyblade_Minimum[self.player].value>self.multiworld.Keyblade_Maximum[self.player].value:
         print(f"{self.multiworld.get_file_safe_player_name(self.player)} has Keyblade Minimum greater than Keyblade Maximum")
         keyblademin=self.multiworld.Keyblade_Maximum[self.player].value
@@ -68,7 +69,7 @@ def patch_kh2(self, output_directory):
 
 
     mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
-    
+
     for location in self.multiworld.get_filled_locations(self.player):
 
         data = all_locations[location.name]
@@ -113,8 +114,8 @@ def patch_kh2(self, output_directory):
             #print(self.multiworld.Keyblade_Maximum[self.player].value)
             self.formattedItem["Stats"].append({
                 "Id": data.locid,
-                "Attack": random.randint(keyblademin,keyblademax),
-                "Magic": random.randint(keyblademin,keyblademax),
+                "Attack": self.multiworld.per_slot_randoms[self.player].randint(keyblademin,keyblademax),
+                "Magic": self.multiworld.per_slot_randoms[self.player].randint(keyblademin,keyblademax),
                 "Defense": 0,
                 "Ability": itemcode,
                 "AbilityPoints": 0,
@@ -184,7 +185,7 @@ def patch_kh2(self, output_directory):
             else:
                 itemcode=461
         else:
-            increaseStat(random.randint(0, 3))
+            increaseStat(self.multiworld.per_slot_randoms[self.player].randint(0, 3))
             itemcode=0
         self.formattedLvup["Sora"][self.i] = {
             "Exp": int(soraExp[self.i] / self.multiworld.Sora_Level_EXP[self.player].value),
@@ -200,6 +201,23 @@ def patch_kh2(self, output_directory):
             "Level": self.i
             }
         self.i+=1
+    for x in {122,144,145,}:
+        self.formattedItem["Stats"].append({
+            "Id":                  x,
+            "Attack":              int(keyblademin+keyblademax/2),
+            "Magic":               int(keyblademin+keyblademax/2),
+            "Defense":             0,
+            "Ability":             405,
+            "AbilityPoints":       0,
+            "Unknown08":           100,
+            "FireResistance":      100,
+            "IceResistance":       100,
+            "LightningResistance": 100,
+            "DarkResistance":      100,
+            "Unknown0d":           100,
+            "GeneralResistance":   100,
+            "Unknown":             0
+        })
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
 
 
