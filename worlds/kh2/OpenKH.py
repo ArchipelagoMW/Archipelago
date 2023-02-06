@@ -59,7 +59,7 @@ def patch_kh2(self, output_directory):
     self.defense = 2
     self.ap = 50
     if self.multiworld.Keyblade_Minimum[self.player].value>self.multiworld.Keyblade_Maximum[self.player].value:
-        print(f"self.multiworld.get_file_safe_player_name(self.player) has Keyblade Minimum greater than Keyblade Maximum")
+        print(f"{self.multiworld.get_file_safe_player_name(self.player)} has Keyblade Minimum greater than Keyblade Maximum")
         keyblademin=self.multiworld.Keyblade_Maximum[self.player].value
         keyblademax=self.multiworld.Keyblade_Minimum[self.player].value
     else:

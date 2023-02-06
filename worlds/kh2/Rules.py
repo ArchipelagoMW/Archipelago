@@ -15,14 +15,6 @@ def set_rules(world: MultiWorld, player: int):
             world.completion_condition[player] = lambda state: state.kh_victory(player)
         else:
             world.completion_condition[player] = lambda state: state.kh_three_proof_unlocked(player)
-    #abn
-    #elif world.Goal[player].value == 1:
-    #    if world.FinalXemnas[player].value == 1:
-    #        add_rule(world.get_location(LocationName.FinalXemnas, player),
-    #                 lambda state: state.kh_all_blue_numbers_unlocked(player))
-    #        world.completion_condition[player] = lambda state: state.kh_victory(player)
-    #    else:
-    #        world.completion_condition[player] = lambda state: state.kh_all_blue_numbers_unlocked(player)
     #lucky emblem hunt
     elif world.Goal[player].value == 1:
         if world.FinalXemnas[player].value == 1:
@@ -31,7 +23,14 @@ def set_rules(world: MultiWorld, player: int):
             world.completion_condition[player] = lambda state: state.kh_victory(player)
         else:
             world.completion_condition[player] = lambda state: state.kh_lucky_emblem_unlocked(player, world.LuckyEmblemsRequired[player].value)
-
+    #hitlist
+    elif world.Goal[player].value==2:
+        if world.FinalXemnas[player].value == 1:
+            add_rule(world.get_location(LocationName.FinalXemnas, player),
+                     lambda state: state.kh_hitlist(player, world.UltimaWeaponRequired[player].value))
+            world.completion_condition[player] = lambda state: state.kh_victory(player)
+        else:
+            world.completion_condition[player] = lambda state: state.kh_hitlist(player, world.UltimaWeaponRequired[player].value)
     # Forbid Ablilites on popups due to game limitations
     for location in popupChecks:
         forbid_items(world.get_location(location, player), exclusionItem_table["Ability"])

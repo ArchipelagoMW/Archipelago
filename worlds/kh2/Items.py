@@ -363,7 +363,19 @@ GoofyAbility_Table = {
 Misc_Table = {
     ItemName.LuckyEmblem: ItemData(0x130126, 0, 367, 0x3641),#letter item
     ItemName.Victory: ItemData(0x130127, 1, 263, 0x111),
-    # ItemName.ArchipelagoItem:           ItemData(0x130127,  1,461,0x111),
+    ItemName.UltimaWeaponPiece1:ItemData(0x130128   ,0,250,0x36C7,2),#Halloween town Map
+    ItemName.UltimaWeaponPiece2:ItemData(0x130129   ,0,251,0x36C7,3),#Naval map
+    ItemName.UltimaWeaponPiece3:ItemData(0x13012A   ,0,252,0x36C7,4),#Pride Rock Map
+    ItemName.UltimaWeaponPiece4:ItemData(0x13012B   ,0,253,0x36C7,5),#marketplace map
+    ItemName.UltimaWeaponPiece5:ItemData(0x13012C   ,0,254,0x36C7,6),#pit cell area map
+    ItemName.UltimaWeaponPiece6:ItemData(0x13012D   ,0,255,0x36C7,7),#twlight town map
+    ItemName.UltimaWeaponPiece7:ItemData(0x13012E   ,0,256,0x36C8,0),#dark city map
+    ItemName.UltimaWeaponPiece8:ItemData(0x13012F   ,0,506,0x36C8,1),#the black pearl map
+    ItemName.UltimaWeaponPiece9:ItemData(0x130130   ,0,507,0x36C8,2),#isla de muerta map
+    ItemName.UltimaWeaponPiece10:ItemData(0x130131  ,0,508,0x36C8,3),#ship graveyard map
+
+    ItemName.UniversalKey:ItemData(0x130132,0,90,0x36C1,0)#Castle Map
+    #ItemName.PaopuFruit:ItemData(0x130132,0,127,0x36C1,0)#dummy item to open the final door
 }
 
 exclusionItem_table = {

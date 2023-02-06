@@ -149,7 +149,10 @@ class BlacklistKeyblade(OptionSet):
 
 
 class Goal(Choice):
-    """Win Condition"""
+    """Win Condition
+    Three Proofs: Obtain the Three Proofs and Have a Gold Crown on Sora's Head.
+    Lucky Emblem Hunt: Acquire The Amount of Lucky Emblems you have set.
+    Hitlist: Kill the Superbosses on the "Hitlist" then synth ultima weapon."""
     display_name = "Goal"
     #three proof kill final xemnas
     option_three_proofs = 0
@@ -157,27 +160,44 @@ class Goal(Choice):
     #option_all_blue_numbers = 1
     #luckey emblem hunt
     option_lucky_emblem_hunt = 1
+    option_hitlist = 2
     default = 0
 
 class FinalXemnas(Toggle):
-    """Kill Final Xemnas to Beat the Game"""
+    """Kill Final Xemnas to Beat the Game.
+    This is in addition to your Goal. I.E. get three proofs+kill final Xemnas"""
     display_name = "Final Xemnas"
     default=True
 class LuckyEmblemsRequired(Range):
-    """Number of Lucky Emblems to collect to Open The Final Door bosses."""
+    """Number of Lucky Emblems to collect to Open The Final Door bosses.
+    If Goal is not Lucky Emblem Hunt this does nothing."""
     display_name = "Lucky Emblems Required"
     range_start = 0
     range_end = 60
     default = 25
 
 class LuckyEmblemsAmount(Range):
-    """Number of Lucky Emblems that are in the pool"""
+    """Number of Lucky Emblems that are in the pool.
+    If Goal is not Lucky Emblem Hunt this does nothing."""
     display_name = "Lucky Emblems Available"
     range_start = 0
     range_end = 60
     default = 40
 
-
+class UltimaWeaponRequired(Range):
+    """Number of Ultima Weapon Pieces that are Required.
+        If Goal is not Hitlist this does nothing."""
+    display_name="Ultima Weapon Pieces Available"
+    range_start=0
+    range_end=10
+    default=3
+class UltimaWeaponAmount(Range):
+    """Number of Ultima Weapon Pieces that are in the pool.
+        If Goal is not Hitlist this does nothing."""
+    display_name="Ultima Weapon Pieces Available"
+    range_start=0
+    range_end=10
+    default=5
 KH2_Options: typing.Dict[str, type(Option)] = {
     "Sora_Level_EXP":       SoraEXP,
     "Final_Form_EXP":       FinalEXP,
@@ -200,5 +220,7 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "Goal":                 Goal,
     "FinalXemnas":FinalXemnas,
     "LuckyEmblemsAmount":   LuckyEmblemsAmount,
-    "LuckyEmblemsRequired": LuckyEmblemsRequired
+    "LuckyEmblemsRequired": LuckyEmblemsRequired,
+    "UltimaWeaponAmount":UltimaWeaponAmount,
+    "UltimaWeaponRequired":UltimaWeaponRequired,
 }
