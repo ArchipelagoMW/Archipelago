@@ -175,7 +175,7 @@ def patch_kh2(self, output_directory):
     #levels done down here because of optional settings that can take locations out of the pool. Might be able to re-factor all the code to do something like this
     self.i=1
     for location in SoraLevels:
-        increaseStat(random.randint(0, 3))   
+        increaseStat(self.multiworld.per_slot_randoms[self.player].randint(0, 3))
         #print(str(self.multiworld.get_region(SoraLevels_Region,self.player).locations))
         if f"{location} ({self.multiworld.get_player_name(self.player)})" in str(self.multiworld.get_region(SoraLevels_Region,self.player).locations):
             data=self.multiworld.get_location(location,self.player)

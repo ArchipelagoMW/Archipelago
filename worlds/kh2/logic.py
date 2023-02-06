@@ -98,7 +98,6 @@ class KH2Logic(LogicMixin):
             and self.has(ItemName.ProofofPeace,player, 1)
     def kh_hitlist(self,player,amount):
         piece = 0
-        # torn pages are not added since you cannot get exp from that world
         for part in {ItemName.UltimaWeaponPiece1,ItemName.UltimaWeaponPiece2,ItemName.UltimaWeaponPiece3,ItemName.UltimaWeaponPiece4,
                      ItemName.UltimaWeaponPiece5,ItemName.UltimaWeaponPiece6,ItemName.UltimaWeaponPiece7,ItemName.UltimaWeaponPiece8,
                      ItemName.UltimaWeaponPiece9,ItemName.UltimaWeaponPiece10}:

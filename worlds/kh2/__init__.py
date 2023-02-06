@@ -126,7 +126,7 @@ class KH2World(World):
                 randomBoss=self.multiworld.per_slot_randoms[self.player].choice(RandomSuperBoss)
                 self.multiworld.get_location(randomBoss, self.player).place_locked_item(
                         self.create_item(randomPiece))
-                self.histlist.append(self.item_name_to_id[randomBoss])
+                self.histlist.append(self.location_name_to_id[randomBoss])
                 UltimaWeaponPieces.remove(randomPiece)
                 RandomSuperBoss.remove(randomBoss)
                 self.totalLocations-=1
