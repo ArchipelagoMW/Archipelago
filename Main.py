@@ -251,6 +251,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         balance_multiworld_progression(world)
 
     logger.info(f'Beginning output...')
+
+    # we're about to output using multithreading, so we're removing the global random state to prevent accidental use
+    world.random.passthrough = False
+
     outfilebase = 'AP_' + world.seed_name
 
     output = tempfile.TemporaryDirectory()

@@ -821,7 +821,7 @@ def handle_boss_shuffle(rom, world, player):
 
 
 def patch_rom(world, rom, player, active_level_dict):
-    local_random = world.slot_seeds[player]
+    local_random = world.per_slot_randoms[player]
 
     goal_text = generate_goal_text(world, player)
 
