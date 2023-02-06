@@ -97,13 +97,8 @@ class KH2Logic(LogicMixin):
             and self.has(ItemName.ProofofNonexistence, player,1)\
             and self.has(ItemName.ProofofPeace,player, 1)
     def kh_hitlist(self,player,amount):
-        piece = 0
-        for part in {ItemName.UltimaWeaponPiece1,ItemName.UltimaWeaponPiece2,ItemName.UltimaWeaponPiece3,ItemName.UltimaWeaponPiece4,
-                     ItemName.UltimaWeaponPiece5,ItemName.UltimaWeaponPiece6,ItemName.UltimaWeaponPiece7,ItemName.UltimaWeaponPiece8,
-                     ItemName.UltimaWeaponPiece9,ItemName.UltimaWeaponPiece10}:
-            if self.has(part, player):
-                piece += 1
-        return piece >= amount
+        return self.has(ItemName.Bounty, player,amount)
+
     def kh_lucky_emblem_unlocked(self,player,amount):
         return self.has(ItemName.LuckyEmblem, player, amount)
 

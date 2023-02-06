@@ -373,17 +373,7 @@ GoofyProtega = "Goofy Protega"
 
 Victory = "Victory"
 LuckyEmblem = "Lucky Emblem"
-UltimaWeaponPiece1="Ultima Weapon Piece 1"
-UltimaWeaponPiece2="Ultima Weapon Piece 2"
-UltimaWeaponPiece3="Ultima Weapon Piece 3"
-UltimaWeaponPiece4="Ultima Weapon Piece 4"
-UltimaWeaponPiece5="Ultima Weapon Piece 5"
-UltimaWeaponPiece6="Ultima Weapon Piece 6"
-UltimaWeaponPiece7="Ultima Weapon Piece 7"
-UltimaWeaponPiece8="Ultima Weapon Piece 8"
-UltimaWeaponPiece9="Ultima Weapon Piece 9"
-UltimaWeaponPiece10="Ultima Weapon Piece 10"
-PaopuFruit="Paopu Fruit"
+Bounty="Bounty"
 
 UniversalKey="Universal Key"
 # Keyblade Slots

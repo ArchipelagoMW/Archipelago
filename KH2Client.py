@@ -5,7 +5,7 @@ from pymem import pymem
 import ModuleUpdate
 
 ModuleUpdate.update()
-from worlds.kh2.Items import DonaldAbility_Table, GoofyAbility_Table
+from worlds.kh2.Items import DonaldAbility_Table, GoofyAbility_Table,exclusionItem_table
 from worlds.kh2 import all_locations, item_dictionary_table
 import Utils
 from worlds.kh2 import WorldLocations
@@ -68,13 +68,15 @@ class KH2Context(CommonContext):
         self.sending = []
         # flag for if the player has gotten their starting inventory from the server
         self.hasStartingInvo = False
+        self.hasThreeProofs=False
         # list used to keep track of locations+items player has. Used for disoneccting
         self.kh2seedsave = {"checked_locations": {"0": []}, "starting_inventory": self.hasStartingInvo}
         self.kh2seedname = None
         self.kh2slotdata = None
+        self.inventoryslot={}
         if "localappdata" in os.environ:
             self.game_communication_path = os.path.expandvars(r"%localappdata%\KH2AP")
-
+        self.amountOfPieces = 0
         # hooked object
         self.kh2 = None
         self.ItemIsSafe = False
@@ -107,8 +109,6 @@ class KH2Context(CommonContext):
         self.backofinventory = 0x25CC
         self.donaldbackofinventory = 0x2678
         self.goofybackofinventory = 0x278E
-        # string for determining who the item is for in the party
-        self.character = "Sora"
         # 0x2A09C00+0x40 is the sve anchor. +1 is the last saved room
         self.sveroom = 0x2A09C00 + 0x41
         # 0 not in battle 1 in yellow battle 2 red battle #short
@@ -288,7 +288,8 @@ class KH2Context(CommonContext):
                         self.give_growth(itemcode)
                     else:
                         # cannot give stuff past this point or the game will crash
-                        if self.backofinventory == 0x2544: return
+                        if self.backofinventory == 0x2544:
+                            return
                         self.kh2.write_short(self.kh2.base_address + self.Save + self.backofinventory, itemcode.memaddr)
                         self.backofinventory -= 2
             elif itemcode.bitmask > 0:
@@ -343,8 +344,9 @@ class KH2Context(CommonContext):
                 for item in args['items']:
                     itemname = self.lookup_id_to_item[item.item]
                     itemcode = self.item_name_to_data[itemname]
+                    if itemname in exclusionItem_table["Ability"] and itemcode.memaddr not in {0x05E, 0x062, 0x066, 0x06A, 0x234}:
+                        self.backofinventory+=2
                     if itemname in DonaldAbility_Table.keys():
-                        self.character = "Donald"
                         asyncio.create_task(self.give_item(itemcode, "Donald"))
                     elif itemname in GoofyAbility_Table.keys():
                         asyncio.create_task(self.give_item(itemcode, "Goofy"))
@@ -446,35 +448,36 @@ async def kh2_watcher(ctx: KH2Context):
                             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                             ctx.finished_game = True
                 elif ctx.kh2slotdata['Goal'] == 1:
+                    if not ctx.hasThreeProofs and int.from_bytes(ctx.kh2.read_bytes(ctx.kh2.base_address + ctx.Save + 0x3641, 1), "big") >= \
+                            ctx.kh2slotdata['LuckyEmblemsRequired']:
+                        ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B2, (1).to_bytes(1, 'big'), 1)
+                        ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B3, (1).to_bytes(1, 'big'), 1)
+                        ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B4, (1).to_bytes(1, 'big'), 1)
+                        ctx.hasThreeProofs=True
                     if ctx.kh2slotdata['FinalXemnas'] == 1:
-                        if int.from_bytes(ctx.kh2.read_bytes(ctx.kh2.base_address + ctx.Save + 0x3641, 1), "big") == \
-                                ctx.kh2slotdata['LuckyEmblemsRequired']:
-                            ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B2, (1).to_bytes(1, 'big'), 1)
-                            ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B3, (1).to_bytes(1, 'big'), 1)
-                            ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B4, (1).to_bytes(1, 'big'), 1)
                             if 1245677 in message[0]["locations"]:
                                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                                 ctx.finished_game = True
                     else:
-                        if int.from_bytes(ctx.kh2.read_bytes(ctx.kh2.base_address + ctx.Save + 0x3641, 1), "big") == \
+                        if int.from_bytes(ctx.kh2.read_bytes(ctx.kh2.base_address + ctx.Save + 0x3641, 1), "big") >= \
                                 ctx.kh2slotdata['LuckyEmblemsRequired']:
                             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                             ctx.finished_game = True
                 elif ctx.kh2slotdata['Goal'] == 2:
-                    amountOfPieces = 0
                     requiredAmountPieces = ctx.kh2slotdata["UltimaWeaponRequired"]
                     for boss in ctx.kh2slotdata["hitlist"]:
                         if boss in message[0]["locations"]:
-                            amountOfPieces += 1
-                    if amountOfPieces >= requiredAmountPieces:
+                            ctx.amountOfPieces += 1
+                    if not ctx.hasThreeProofs and ctx.amountOfPieces >= requiredAmountPieces:
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B2, (1).to_bytes(1, 'big'), 1)
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B3, (1).to_bytes(1, 'big'), 1)
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B4, (1).to_bytes(1, 'big'), 1)
+                        ctx.hasThreeProofs=True
                     if ctx.kh2slotdata['FinalXemnas'] == 1:
                         if 1245677 in message[0]["locations"]:
                             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                             ctx.finished_game = True
-                    elif amountOfPieces >= requiredAmountPieces:
+                    elif ctx.amountOfPieces >= requiredAmountPieces:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                         ctx.finished_game = True
                 await ctx.send_msgs(message)

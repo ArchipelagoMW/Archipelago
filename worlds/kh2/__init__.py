@@ -3,7 +3,7 @@ import typing
 
 from BaseClasses import Item, Tutorial, ItemClassification
 
-from .Items import KH2Item, item_dictionary_table
+from .Items import KH2Item, item_dictionary_table,exclusionItem_table
 from .Locations import all_locations, setup_locations, exclusion_table
 from .Names import ItemName, LocationName
 from .OpenKH import patch_kh2
@@ -65,16 +65,14 @@ class KH2World(World):
         return created_item
 
     def generate_basic(self):
-        self.exclude = {"Victory"}
         itempool: typing.List[KH2Item] = []
         self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(
                 self.create_item(ItemName.Victory))
         self.totalLocations -= 1
-
-        filler_items = [ItemName.Potion, ItemName.HiPotion, ItemName.Ether, ItemName.Elixir,
-                        ItemName.Megalixir, ItemName.Tent, ItemName.DriveRecovery,
-                        ItemName.HighDriveRecovery, ItemName.PowerBoost,
-                        ItemName.MagicBoost, ItemName.DefenseBoost, ItemName.APBoost]
+        RandomSuperBoss = list()
+        Bounties = list()
+        filler_items = list()
+        filler_items.extend(exclusionItem_table["Filler"])
         item_quantity_dict = {}
         donald_ability_pool = list()
         goofy_ability_pool = list()
@@ -107,28 +105,30 @@ class KH2World(World):
             item_quantity_dict.update({ItemName.ProofofNonexistence: 0})
         #hitlist
         if self.multiworld.Goal[self.player].value==2:
-            RandomSuperBoss=list()
-            #change this to a list in items.py
-            UltimaWeaponPieces=[ItemName.UltimaWeaponPiece1,ItemName.UltimaWeaponPiece2,ItemName.UltimaWeaponPiece3,ItemName.UltimaWeaponPiece4,
-                     ItemName.UltimaWeaponPiece5,ItemName.UltimaWeaponPiece6,ItemName.UltimaWeaponPiece7,ItemName.UltimaWeaponPiece8,
-                     ItemName.UltimaWeaponPiece9,ItemName.UltimaWeaponPiece10]
-            RandomSuperBoss.extend(exclusion_table["Datas"])
-            RandomSuperBoss.extend(exclusion_table["SuperBosses"])
-            RandomSuperBoss.append(LocationName.StarryHillOrichalcumPlus)
-            UltimaWeaponAmount = self.multiworld.UltimaWeaponAmount[self.player].value
-            UltimaWeaponRequired = self.multiworld.UltimaWeaponRequired[self.player].value
-            if UltimaWeaponAmount < UltimaWeaponRequired:
-                UltimaWeaponAmount = max(UltimaWeaponAmount, UltimaWeaponRequired)
-                print(f"Ultima Weapon Amount {self.multiworld.UltimaWeaponAmount[self.player].value} is less than required \
-                        {(self.multiworld.UltimaWeaponRequired[self.player].value)} for player {self.multiworld.get_file_safe_player_name(self.player)}")
-            for piece in range(UltimaWeaponAmount):
-                randomPiece=self.multiworld.per_slot_randoms[self.player].choice(UltimaWeaponPieces)
+            item_quantity_dict.update({ItemName.ProofofNonexistence: 0})
+            RandomSuperBoss.extend(exclusion_table["Hitlist"])
+            BountiesAmount = self.multiworld.BountyAmount[self.player].value
+            BountiesRequired = self.multiworld.BountyRequired[self.player].value
+            if BountiesAmount < BountiesRequired:
+                UltimaWeaponAmount = max(BountiesAmount, BountiesRequired)
+                print(f"Bounties Amount {self.multiworld.BountiesAmount[self.player].value} is less than required \
+                        {(self.multiworld.BountiesRequired[self.player].value)} for player {self.multiworld.get_file_safe_player_name(self.player)}")
+            for location in self.multiworld.BlacklistHitlist[self.player].value:
+                if len(RandomSuperBoss)>BountiesRequired:
+                    print(f"{self.multiworld.get_file_safe_player_name(self.player)} has too many locations in the Blacklist for Hitlist")
+                    break
+                elif location not in RandomSuperBoss:
+                    print(f"{self.multiworld.get_file_safe_player_name(self.player)} has an invalid location in the Blacklist {location}")
+                    break
+                else:
+                    RandomSuperBoss.pop(location)
+            for piece in range(BountiesAmount):
                 randomBoss=self.multiworld.per_slot_randoms[self.player].choice(RandomSuperBoss)
                 self.multiworld.get_location(randomBoss, self.player).place_locked_item(
-                        self.create_item(randomPiece))
+                        self.create_item(ItemName.Bounty))
                 self.histlist.append(self.location_name_to_id[randomBoss])
-                UltimaWeaponPieces.remove(randomPiece)
                 RandomSuperBoss.remove(randomBoss)
+                self.multiworld.start_location_hints[self.player].value.add(randomBoss)
                 self.totalLocations-=1
 
 
@@ -143,7 +143,7 @@ class KH2World(World):
             data = item_quantity_dict[item]
             for x in range(data):
                 donald_ability_pool.append(item)
-            self.exclude.add(item)
+            item_quantity_dict.update({item: 0})
         while len(donald_ability_pool) < len(Locations.Donald_Checks.keys()):
             donald_ability_pool.append(self.multiworld.per_slot_randoms[self.player].choice(donald_ability_pool))
 
@@ -151,7 +151,7 @@ class KH2World(World):
             data = item_quantity_dict[item]
             for x in range(data):
                 goofy_ability_pool.append(item)
-            self.exclude.add(item)
+            item_quantity_dict.update({item: 0})
         while len(goofy_ability_pool) < len(Items.GoofyAbility_Table.keys()):
             goofy_ability_pool.append(self.multiworld.per_slot_randoms[self.player].choice(goofy_ability_pool))
 
@@ -183,7 +183,7 @@ class KH2World(World):
 
         # Option to turn off Promise Charm Item
         if self.multiworld.Promise_Charm[self.player].value == 0:
-            self.exclude.add(ItemName.PromiseCharm)
+            item_quantity_dict.update({ItemName.PromiseCharm: 0})
 
         if self.multiworld.Visit_locking[self.player] == 0:
             for item in {ItemName.BattlefieldsofWar, ItemName.SwordoftheAncestor, ItemName.BeastsClaw,
@@ -191,21 +191,19 @@ class KH2World(World):
                          ItemName.SkillandCrossbones, ItemName.Scimitar, ItemName.MembershipCard, ItemName.IceCream,
                          ItemName.Picture, ItemName.WaytotheDawn,
                          ItemName.IdentityDisk, ItemName.Poster, ItemName.NamineSketches}:
-                self.exclude.add(item)
+                item_quantity_dict.update({item: Items.item_dictionary_table[item].quantity - 1})
                 self.multiworld.push_precollected(self.create_item(item))
 
         # Option to turn off all superbosses. Can do this individually but its like 20+ checks
         if self.multiworld.Super_Bosses[self.player].value == 0 and not self.multiworld.Goal[self.player].value==2 :
             for superboss in exclusion_table["Datas"]:
-                self.multiworld.get_location(superboss, self.player).place_locked_item(
-                        self.create_item(self.multiworld.per_slot_randoms[self.player].choice(filler_items)))
-                self.totalLocations -= 1
+                self.multiworld.exclude_locations[self.player].value.add(superboss)
             for superboss in exclusion_table["SuperBosses"]:
-                self.multiworld.get_location(superboss, self.player).place_locked_item(
-                        self.create_item(self.multiworld.per_slot_randoms[self.player].choice(filler_items)))
-                self.totalLocations -= 1
+                self.multiworld.exclude_locations[self.player].value.add(superboss)
 
-        # These checks are missable
+
+        #same item placed because you can only get one of these 2 locaitons
+        #they are both under the same flag so the player gets both locations just one of the two items
         random_stt_item = self.multiworld.per_slot_randoms[self.player].choice(filler_items)
         self.multiworld.get_location(LocationName.JunkChampionBelt, self.player).place_locked_item(
                 self.create_item(random_stt_item))
@@ -249,11 +247,10 @@ class KH2World(World):
             self.totalLocations -= 76
 
         for item in item_dictionary_table:
-            if item not in self.exclude:
-                data = item_quantity_dict[item]
-                for x in range(data):
-                    itempool.append(self.create_item(item))
-                    item_quantity_dict.update({item: Items.item_dictionary_table[item].quantity - 1})
+            data = item_quantity_dict[item]
+            for x in range(data):
+                itempool.append(self.create_item(item))
+                item_quantity_dict.update({item: Items.item_dictionary_table[item].quantity - 1})
 
         # Creating filler for unfilled locations
         while len(itempool) < self.totalLocations:

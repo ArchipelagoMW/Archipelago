@@ -316,7 +316,7 @@ if true then
 	if ReadByte(Save+0x3643) > 0 then --Membership Card
 		BitOr(Save+0x1C92,0x20) --ZZ_HB_CHECK_1_GOA
 	end
-	if ReadByte(Save+0x35C1) > 0 then --Way to the Dawn
+	if ReadByte(Save+0x35C1) > 0 or true then --Way to the Dawn (Currently unused)
 		BitOr(Save+0x1C92,0x40) --ZZ_HB_CHECK_2_GOA
 	end
 	if ReadByte(Save+0x35B3) > 0 then --Beast's Claw

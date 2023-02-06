@@ -184,20 +184,26 @@ class LuckyEmblemsAmount(Range):
     range_end = 60
     default = 40
 
-class UltimaWeaponRequired(Range):
-    """Number of Ultima Weapon Pieces that are Required.
+class BountyRequired(Range):
+    """Number of Bounties that are Required.
         If Goal is not Hitlist this does nothing."""
-    display_name="Ultima Weapon Pieces Required"
+    display_name="Bounties Required"
     range_start=0
-    range_end=10
+    range_end=22
     default=3
-class UltimaWeaponAmount(Range):
-    """Number of Ultima Weapon Pieces that are in the pool.
+class BountyAmount(Range):
+    """Number of Bounties that are in the pool.
         If Goal is not Hitlist this does nothing."""
-    display_name="Ultima Weapon Pieces Available"
+    display_name="Bounties Available"
     range_start=0
-    range_end=10
+    range_end=22
     default=5
+
+class BlacklistHitlist(OptionSet):
+    """Black List these Locations from the Hitlist"""
+    display_name = "Blacklist Hitlist Locations"
+    verify_location_name = True
+
 KH2_Options: typing.Dict[str, type(Option)] = {
     "Sora_Level_EXP":       SoraEXP,
     "Final_Form_EXP":       FinalEXP,
@@ -221,6 +227,7 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "FinalXemnas":FinalXemnas,
     "LuckyEmblemsAmount":   LuckyEmblemsAmount,
     "LuckyEmblemsRequired": LuckyEmblemsRequired,
-    "UltimaWeaponAmount":UltimaWeaponAmount,
-    "UltimaWeaponRequired":UltimaWeaponRequired,
+    "BountyAmount":BountyAmount,
+    "BountyRequired":BountyRequired,
+    "BlacklistHitlist":BlacklistHitlist
 }

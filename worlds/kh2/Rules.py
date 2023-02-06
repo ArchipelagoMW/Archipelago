@@ -27,10 +27,10 @@ def set_rules(world: MultiWorld, player: int):
     elif world.Goal[player].value==2:
         if world.FinalXemnas[player].value == 1:
             add_rule(world.get_location(LocationName.FinalXemnas, player),
-                     lambda state: state.kh_hitlist(player, world.UltimaWeaponRequired[player].value))
+                     lambda state: state.kh_hitlist(player, world.BountyRequired[player].value))
             world.completion_condition[player] = lambda state: state.kh_victory(player)
         else:
-            world.completion_condition[player] = lambda state: state.kh_hitlist(player, world.UltimaWeaponRequired[player].value)
+            world.completion_condition[player] = lambda state: state.kh_hitlist(player, world.BountyRequired[player].value)
     # Forbid Ablilites on popups due to game limitations
     for location in popupChecks:
         forbid_items(world.get_location(location, player), exclusionItem_table["Ability"])
