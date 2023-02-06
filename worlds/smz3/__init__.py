@@ -244,12 +244,12 @@ class SMZ3World(World):
                 if self.multiworld.accessibility[self.player] != 'locations':
                     l.always_allow = lambda state, item, loc=loc: \
                         item.game == "SMZ3" and \
-                        loc.alwaysAllow(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World), state.smz3state[self.player])
+                        loc.alwaysAllow(item.item, state.smz3state[self.player])
                 old_rule = l.item_rule
                 l.item_rule = lambda item, loc=loc, region=region: (\
                     item.game != "SMZ3" or \
-                    loc.allow(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World), None) and \
-                        region.CanFill(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World))) and old_rule(item)
+                    loc.allow(item.item, None) and \
+                        region.CanFill(item.item)) and old_rule(item)
                 set_rule(l, lambda state, loc=loc: loc.Available(state.smz3state[self.player]))
 
     def create_regions(self):
