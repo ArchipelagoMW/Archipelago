@@ -42,21 +42,21 @@ Progression_Table = {
     ItemName.ProofofNonexistence: ItemData(0x13000E, 1, 594,    0x36B3),
     ItemName.ProofofPeace: ItemData(0x13000F, 1, 595,           0x36B4),
     ItemName.PromiseCharm: ItemData(0x130010, 1, 524, 0x3694),
-    ItemName.NamineSketches: ItemData(0x130011, 1, 368, 0x3642),
+    ItemName.NamineSketches: ItemData(0x130011, 2, 368, 0x3642),
     # dummy 13
-    ItemName.CastleKey: ItemData(0x130012, 1, 460, 0x365D),
-    ItemName.BattlefieldsofWar: ItemData(0x130013, 1, 54, 0x35AE),
-    ItemName.SwordoftheAncestor: ItemData(0x130014, 1, 55, 0x35AF),
-    ItemName.BeastsClaw: ItemData(0x130015, 1, 59, 0x35B3),
-    ItemName.BoneFist: ItemData(0x130016, 1, 60, 0x35B4),
-    ItemName.ProudFang: ItemData(0x130017, 1, 61, 0x35B5),
-    ItemName.SkillandCrossbones: ItemData(0x130018, 1, 62, 0x35B6),
-    ItemName.Scimitar: ItemData(0x130019, 1, 72, 0x35C0),
-    ItemName.MembershipCard: ItemData(0x13001A, 1, 369, 0x3643),
+    ItemName.CastleKey: ItemData(0x130012, 2, 460, 0x365D),
+    ItemName.BattlefieldsofWar: ItemData(0x130013, 2, 54, 0x35AE),
+    ItemName.SwordoftheAncestor: ItemData(0x130014, 2, 55, 0x35AF),
+    ItemName.BeastsClaw: ItemData(0x130015, 2, 59, 0x35B3),
+    ItemName.BoneFist: ItemData(0x130016, 2, 60, 0x35B4),
+    ItemName.ProudFang: ItemData(0x130017, 2, 61, 0x35B5),
+    ItemName.SkillandCrossbones: ItemData(0x130018, 2, 62, 0x35B6),
+    ItemName.Scimitar: ItemData(0x130019, 2, 72, 0x35C0),
+    ItemName.MembershipCard: ItemData(0x13001A, 2, 369, 0x3643),
     ItemName.IceCream: ItemData(0x13001B, 1, 375, 0x3649),
     ItemName.Picture: ItemData(0x13001C, 1, 376, 0x364A),
-    ItemName.WaytotheDawn: ItemData(0x13001D, 1, 73, 0x35C1),
-    ItemName.IdentityDisk: ItemData(0x13001E, 1, 74, 0x35C2),
+    ItemName.WaytotheDawn: ItemData(0x13001D, 2, 73, 0x35C1),
+    ItemName.IdentityDisk: ItemData(0x13001E, 2, 74, 0x35C2),
     ItemName.Poster: ItemData(0x13001F, 1, 366, 0x3640),
     ItemName.TornPages: ItemData(0x130020, 5, 32, 0x3598),
 
@@ -364,9 +364,7 @@ Misc_Table = {
     ItemName.LuckyEmblem: ItemData(0x130126, 0, 367, 0x3641),#letter item
     ItemName.Victory: ItemData(0x130127, 0, 263, 0x111),
     ItemName.Bounty:ItemData(0x130128   ,0,250,0x36C7,2),#Halloween town Map
-
-
-    ItemName.UniversalKey:ItemData(0x130132,0,90,0x36C1,0)#Castle Map
+    ItemName.UniversalKey:ItemData(0x130129,0,90,0x36C1,0)#Castle Map
 
 }
 
@@ -478,6 +476,22 @@ exclusionItem_table = {
         ItemName.MagicBoost,
         ItemName.DefenseBoost,
         ItemName.APBoost
+    },
+    "VisitLocking":{
+    ItemName.BattlefieldsofWar,
+    ItemName.SwordoftheAncestor,
+    ItemName.BeastsClaw,
+    ItemName.BoneFist,
+    ItemName.ProudFang,
+    ItemName.SkillandCrossbones,
+    ItemName.Scimitar,
+    ItemName.MembershipCard,
+    ItemName.IceCream,
+    ItemName.Picture,
+    ItemName.WaytotheDawn,
+    ItemName.IdentityDisk,
+    ItemName.Poster,
+    ItemName.NamineSketches
     }
 }
 

@@ -35,7 +35,7 @@ class LimitEXP(Range):
 
 
 class WisdomEXP(Range):
-    """WIsdom Form exp Multiplier"""
+    """Wisdom Form Exp Multiplier"""
     display_name = "Wisdom Form EXP"
     range_start = 1
     range_end = 10
@@ -51,7 +51,7 @@ class ValorEXP(Range):
 
 
 class SummonEXP(Range):
-    """Summon's Exp Multiplier"""
+    """Summon Exp Multiplier"""
     display_name = "Summon level EXP"
     range_start = 1
     range_end = 10
@@ -70,7 +70,7 @@ class Schmovement(Choice):
 
 
 class RandomGrowth(Range):
-    """Amount of Random Growth Abilites You Start With"""
+    """Amount of Random Growth Abilities You Start With"""
     display_name = "Random Starting Growth"
     range_start = 0
     range_end = 20
@@ -94,14 +94,23 @@ class KeybladeMax(Range):
 
 
 class Visitlocking(Choice):
-    # What is locked being on
-    # if 0 then no visit locking  if 1 then second visits if 2 then first and second visits with one item
+    """Determines the level of visit locking
+    No Visit Locking:No visit locks(everything is sphere 1)
+    Second Visit Locking:Second Visit Locking(every first visit is sphere 1)
+    First Visit Locking:Visit Locking for both First and Second Visit With One Item
+    First and Second Visit Locking:One item for First Visit Two For Second Visit"""
     display_name = "Visit locking"
     option_no_visit_locking = 0
     option_second_visit_locking = 1
     option_first_visit_locking = 2
-    default = 0
+    option_first_and_second_visit_locking = 3
+    default = 1
 
+class RandomVisitLockingItem(Range):
+    display_name = "Random Visit Locking Item"
+    range_start=0
+    range_end=27
+    default=3
 
 class SuperBosses(Toggle):
     """Terra, Sephiroth and Data Fights Toggle"""
@@ -110,8 +119,12 @@ class SuperBosses(Toggle):
 
 
 class LevelDepth(Choice):
-    # What is locked being on
-    # if 0 then no visit locking  if 1 then second visits if 2 then first and second visits with one item
+    """Determines How many locations you want on levels
+    Level 50:23 checks spread through 50 levels
+    Level 99:23 checks spread through 99 levels
+    level 50 sanity:check per level for 50 levels
+    level 99 sanity:check per level for 99 levels
+    level1: no checks on levels(checks are replaced with stats)"""
     display_name = "Level Depth"
     option_level_50 = 0
     option_level_99 = 1
@@ -134,7 +147,8 @@ class PromiseCharm(Toggle):
 
 
 class KeybladeAbilities(Choice):
-    """Action:Has Action Abilites on Keyblades Support:Has Support Abilites on Keyblades"""
+    """Action:Has Action Abilities on Keyblades
+    Support:Has Support Abilities on Keyblades"""
     display_name = "Keyblade Abilities"
     option_support = 0
     option_action = 1
@@ -154,11 +168,7 @@ class Goal(Choice):
     Lucky Emblem Hunt: Acquire The Amount of Lucky Emblems you have set.
     Hitlist: Kill the Superbosses on the "Hitlist" then synth ultima weapon."""
     display_name = "Goal"
-    #three proof kill final xemnas
     option_three_proofs = 0
-    ##have all important checks
-    #option_all_blue_numbers = 1
-    #luckey emblem hunt
     option_lucky_emblem_hunt = 1
     option_hitlist = 2
     default = 0
@@ -215,9 +225,10 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "Schmovement":          Schmovement,
     "Keyblade_Minimum":     KeybladeMin,
     "Keyblade_Maximum":     KeybladeMax,
-    "Visit_locking":        Visitlocking,
-    "Super_Bosses":         SuperBosses,
-    "Level_Depth":          LevelDepth,
+    "Visitlocking":        Visitlocking,
+    "RandomVisitLockingItem":RandomVisitLockingItem,
+    "SuperBosses":         SuperBosses,
+    "LevelDepth":          LevelDepth,
     "Max_Logic":            MaxLogic,
     "Promise_Charm":        PromiseCharm,
     "KeybladeAbilities":    KeybladeAbilities,
@@ -229,5 +240,5 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "LuckyEmblemsRequired": LuckyEmblemsRequired,
     "BountyAmount":BountyAmount,
     "BountyRequired":BountyRequired,
-    "BlacklistHitlist":BlacklistHitlist
+    "BlacklistHitlist":BlacklistHitlist,
 }

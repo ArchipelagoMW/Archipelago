@@ -759,7 +759,7 @@ def create_regions(world, player: int, active_locations):
     final_region = create_region(world, player, active_locations, LocationName.FinalForm,
                                  final_region_locations, None)
     # Level region depends on level depth. Moved to bottom of file to keep it clean
-    level_region_locations = get_LevelRegion(world, world.Level_Depth[player], player)
+    level_region_locations = get_LevelRegion(world, world.LevelDepth[player], player)
     level_region = create_region(world, player, active_locations, LocationName.SoraLevels_Region,
                                  level_region_locations, None)
     keyblade_region_locations = {

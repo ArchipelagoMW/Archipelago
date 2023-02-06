@@ -464,7 +464,7 @@ async def kh2_watcher(ctx: KH2Context):
                             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                             ctx.finished_game = True
                 elif ctx.kh2slotdata['Goal'] == 2:
-                    requiredAmountPieces = ctx.kh2slotdata["UltimaWeaponRequired"]
+                    requiredAmountPieces = ctx.kh2slotdata["BountyRequired"]
                     for boss in ctx.kh2slotdata["hitlist"]:
                         if boss in message[0]["locations"]:
                             ctx.amountOfPieces += 1

@@ -23,54 +23,54 @@ class KH2Logic(LogicMixin):
     def kh_torn_page_5(self, player: int):
         return self.has(ItemName.TornPages, player, 5)
 
-    def kh_lod_unlocked(self, player):
-        return self.has(ItemName.SwordoftheAncestor, player)
+    def kh_lod_unlocked(self, player,amount):
+        return self.has(ItemName.SwordoftheAncestor, player,amount)
 
-    def kh_oc_unlocked(self, player):
-        return self.has(ItemName.BattlefieldsofWar, player)
+    def kh_oc_unlocked(self, player,amount):
+        return self.has(ItemName.BattlefieldsofWar, player,amount)
 
-    def kh_twtnw_unlocked(self, player):
-        return self.has(ItemName.WaytotheDawn, player)
+    def kh_twtnw_unlocked(self, player,amount):
+        return self.has(ItemName.WaytotheDawn, player,amount)
 
-    def kh_ht_unlocked(self, player):
-        return self.has(ItemName.BoneFist, player)
+    def kh_ht_unlocked(self, player,amount):
+        return self.has(ItemName.BoneFist, player,amount)
 
-    def kh_tt_unlocked(self, player):
-        return self.has(ItemName.Poster, player)
+    def kh_tt_unlocked(self, player,amount):
+        return self.has(ItemName.Poster, player,amount)
 
-    def kh_tt2_unlocked(self, player):
-        return self.has(ItemName.Picture, player)
+    def kh_tt2_unlocked(self, player,amount):
+        return self.has(ItemName.Picture, player,amount)
 
-    def kh_tt3_unlocked(self, player):
-        return self.has(ItemName.IceCream, player)
+    def kh_tt3_unlocked(self, player,amount):
+        return self.has(ItemName.IceCream, player,amount)
 
-    def kh_pr_unlocked(self, player):
-        return self.has(ItemName.SkillandCrossbones, player)
+    def kh_pr_unlocked(self, player,amount):
+        return self.has(ItemName.SkillandCrossbones, player,amount)
 
-    def kh_sp_unlocked(self, player):
-        return self.has(ItemName.IdentityDisk, player)
+    def kh_sp_unlocked(self, player,amount):
+        return self.has(ItemName.IdentityDisk, player,amount)
 
-    def kh_stt_unlocked(self, player: int):
-        return self.has(ItemName.NamineSketches, player)
+    def kh_stt_unlocked(self, player: int,amount):
+        return self.has(ItemName.NamineSketches, player,amount)
 
     # Using Dummy 13 for this
-    def kh_dc_unlocked(self, player: int):
-        return self.has(ItemName.CastleKey, player)
+    def kh_dc_unlocked(self, player: int,amount):
+        return self.has(ItemName.CastleKey, player,amount)
 
-    def kh_hb_unlocked(self, player):
-        return self.has(ItemName.MembershipCard, player)
+    def kh_hb_unlocked(self, player,amount):
+        return self.has(ItemName.MembershipCard, player,amount)
 
-    def kh_pl_unlocked(self, player):
-        return self.has(ItemName.ProudFang, player)
+    def kh_pl_unlocked(self, player,amount):
+        return self.has(ItemName.ProudFang, player,amount)
 
-    def kh_ag_unlocked(self, player):
-        return self.has(ItemName.Scimitar, player)
+    def kh_ag_unlocked(self, player,amount):
+        return self.has(ItemName.Scimitar, player,amount)
 
     # def kh_ag_unlocked(self, player: int):
     #    return self.has('Scimitar', player)
 
-    def kh_bc_unlocked(self, player):
-        return self.has(ItemName.BeastsClaw, player)
+    def kh_bc_unlocked(self, player,amount):
+        return self.has(ItemName.BeastsClaw, player,amount)
 
     def kh_form_level_unlocked(self, player, amount):
         level = 0
