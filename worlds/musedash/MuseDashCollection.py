@@ -34,7 +34,7 @@ class MuseDashCollections:
                 currentItemId += 1
 
             # Data is 'Song|Album|StreamerMode|EasyDiff|HardDiff|MasterDiff|SecretDiff'
-            itemName = "%s[%s]" % (sections[0], sections[1])
+            itemName = sections[0]
             song_is_default = sections[1] == "Default Music" # All DLC songs have a different album
             steamer_mode = sections[2] == "True"
 
