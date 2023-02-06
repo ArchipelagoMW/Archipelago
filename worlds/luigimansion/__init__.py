@@ -2,7 +2,7 @@ from typing import Dict, List, Set, Tuple, TextIO
 
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from .Items import item_table
-from .Locations import get_locations, starter_progression_locations, EventId
+from .Locations import get_locations, EventId
 from .Rules import LuigiMansionLogic
 from .Options import is_option_enabled, get_option_value, luigimansion_options
 from .Regions import create_regions
@@ -15,11 +15,11 @@ class LuigiMansionWebWorld(WebWorld):
     theme = "stone"
     setup = Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up the Luigi\'s Mansion randomizer connected to an Archipelago Multiworld",
+        "A guide to setting up the Luigi's Mansion randomizer connected to an Archipelago Multiworld",
         "English",
         "setup_en.md",
         "setup/en",
-        ["Jarno"]
+        ["BootsinSoots"]
     )
 
     tutorials = [setup]
@@ -28,18 +28,17 @@ class LuigiMansionWebWorld(WebWorld):
 class LuigiMansionWorld(World):
     """
     Luigi\'s Mansion is an adventure game starring everyone's favorite plumber brother Luigi. 
-    Luigi has won a strange mansion but on arriving, discovers it's full of ghosts!
+    Luigi has won a strange mansion but on arriving, he discovers it's full of ghosts!
     """
 
     option_definitions = luigimansion_options
-    game = "Luigi\'s Mansion"
+    game = "Luigi's Mansion"
     topology_present = True
     data_version = 0
     web = LuigiMansionWebWorld()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
-    item_name_groups = get_item_names_per_category()
 
     locked_locations: List[str]
     location_cache: List[Location]
@@ -54,16 +53,16 @@ class LuigiMansionWorld(World):
         # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
         if self.multiworld.start_inventory[self.player].value.pop('Meyef', 0) > 0:
             self.multiworld.StartWithMeyef[self.player].value = self.multiworld.StartWithMeyef[self.player].option_true
-        if self.multiworld.start_inventory[self.player].value.pop('Talaria Attachment', 0) > 0:
-            self.multiworld.QuickSeed[self.player].value = self.multiworld.QuickSeed[self.player].option_true
-        if self.multiworld.start_inventory[self.player].value.pop('Jewelry Box', 0) > 0:
-            self.multiworld.StartWithJewelryBox[self.player].value = self.multiworld.StartWithJewelryBox[self.player].option_true
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player), self.location_cache)
 
     def create_item(self, name: str) -> Item:
-        return create_item_with_correct_settings(self.multiworld, self.player, name)
+        item_id: int = self.item_name_to_id[name]
+
+        return LMItem(name,
+                              item_table[name].classification,
+                              item_id, player=self.player)
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(filler_items)
@@ -171,7 +170,7 @@ def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> L
 def fill_item_pool_with_dummy_items(self: LuigiMansionWorld, world: MultiWorld, player: int, locked_locations: List[str],
                                     location_cache: List[Location], pool: List[Item]):
     for _ in range(len(location_cache) - len(locked_locations) - len(pool)):
-        item = create_item_with_correct_settings(world, player, self.get_filler_item_name())
+        item = create_item(world, player, self.get_filler_item_name())
         pool.append(item)
 
 def create_item_with_correct_settings(world: MultiWorld, player: int, name: str) -> Item:
@@ -217,7 +216,7 @@ def get_personal_items(player: int, locations: List[Location]) -> Dict[int, int]
     return personal_items
 
 class LMItem(Item):
-    game = "Luigi\'s Mansion"
+    game = "Luigi's Mansion"
 
     def __init__(self, name, player: int = None):
         item_data = item_table[name]

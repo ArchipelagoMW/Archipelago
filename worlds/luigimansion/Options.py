@@ -1,6 +1,5 @@
 from typing import Dict, Union
 
-from BaseClasses import MultiWorld
 from Options import Toggle, Range, Option
 
 
@@ -28,7 +27,7 @@ class StartWithBooRadar(Toggle):
     display_name = "Boo Radar"
 
 
-# class DoorRando(Toggle):
+#   class DoorRando(Toggle):
 #   "Keys wil open different doors than normal, and doors may require elements instead of keys"
 #   display_name = "Door Randomization"
 # Heavy logic editing required
@@ -111,13 +110,3 @@ luigimansion_options: Dict[str, Option] = {
 }
 
 
-def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
-    return get_option_value(world, player, name) > 0
-
-
-def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, dict]:
-    option = getattr(world, name, None)
-    if option == None:
-        return 0
-
-    return option[player].value
