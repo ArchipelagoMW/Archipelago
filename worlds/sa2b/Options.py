@@ -150,6 +150,13 @@ class Beetlesanity(Toggle):
     display_name = "Beetlesanity"
 
 
+class Omosanity(Toggle):
+    """
+    Determines whether activating Omochao grants checks
+    """
+    display_name = "Omosanity"
+
+
 class EmblemPercentageForCannonsCore(Range):
     """
     Allows logic to gate the final mission behind a number of Emblems
@@ -515,6 +522,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "keysanity": Keysanity,
     "whistlesanity": Whistlesanity,
     "beetlesanity": Beetlesanity,
+    "omosanity": Omosanity,
     "required_rank": RequiredRank,
     "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
     "required_cannons_core_missions": RequiredCannonsCoreMissions,

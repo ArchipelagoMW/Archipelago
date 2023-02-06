@@ -504,6 +504,226 @@ beetle_location_table = {
     LocationName.cannon_core_beetle: 0xFF061E,
 }
 
+omochao_location_table = {
+    LocationName.city_escape_omo_1: 0xFF0800,
+    LocationName.wild_canyon_omo_1: 0xFF0801,
+    LocationName.prison_lane_omo_1: 0xFF0802,
+    LocationName.metal_harbor_omo_1: 0xFF0803,
+    LocationName.pumpkin_hill_omo_1: 0xFF0805,
+    LocationName.mission_street_omo_1: 0xFF0806,
+    LocationName.aquatic_mine_omo_1: 0xFF0807,
+    LocationName.hidden_base_omo_1: 0xFF0809,
+    LocationName.pyramid_cave_omo_1: 0xFF080A,
+    LocationName.death_chamber_omo_1: 0xFF080B,
+    LocationName.eternal_engine_omo_1: 0xFF080C,
+    LocationName.meteor_herd_omo_1: 0xFF080D,
+    LocationName.crazy_gadget_omo_1: 0xFF080E,
+    LocationName.final_rush_omo_1: 0xFF080F,
+
+    LocationName.iron_gate_omo_1: 0xFF0810,
+    LocationName.dry_lagoon_omo_1: 0xFF0811,
+    LocationName.sand_ocean_omo_1: 0xFF0812,
+    LocationName.radical_highway_omo_1: 0xFF0813,
+    LocationName.egg_quarters_omo_1: 0xFF0814,
+    LocationName.lost_colony_omo_1: 0xFF0815,
+    LocationName.weapons_bed_omo_1: 0xFF0816,
+    LocationName.security_hall_omo_1: 0xFF0817,
+    LocationName.white_jungle_omo_1: 0xFF0818,
+    LocationName.mad_space_omo_1: 0xFF081B,
+    LocationName.cosmic_wall_omo_1: 0xFF081C,
+    LocationName.final_chase_omo_1: 0xFF081D,
+
+    LocationName.cannon_core_omo_1: 0xFF081E,
+
+    LocationName.city_escape_omo_2: 0xFF0820,
+    LocationName.wild_canyon_omo_2: 0xFF0821,
+    LocationName.prison_lane_omo_2: 0xFF0822,
+    LocationName.metal_harbor_omo_2: 0xFF0823,
+    LocationName.pumpkin_hill_omo_2: 0xFF0825,
+    LocationName.mission_street_omo_2: 0xFF0826,
+    LocationName.aquatic_mine_omo_2: 0xFF0827,
+    LocationName.hidden_base_omo_2: 0xFF0829,
+    LocationName.pyramid_cave_omo_2: 0xFF082A,
+    LocationName.death_chamber_omo_2: 0xFF082B,
+    LocationName.eternal_engine_omo_2: 0xFF082C,
+    LocationName.meteor_herd_omo_2: 0xFF082D,
+    LocationName.crazy_gadget_omo_2: 0xFF082E,
+    LocationName.final_rush_omo_2: 0xFF082F,
+
+    LocationName.iron_gate_omo_2: 0xFF0830,
+    LocationName.dry_lagoon_omo_2: 0xFF0831,
+    LocationName.sand_ocean_omo_2: 0xFF0832,
+    LocationName.radical_highway_omo_2: 0xFF0833,
+    LocationName.egg_quarters_omo_2: 0xFF0834,
+    LocationName.lost_colony_omo_2: 0xFF0835,
+    LocationName.weapons_bed_omo_2: 0xFF0836,
+    LocationName.security_hall_omo_2: 0xFF0837,
+    LocationName.white_jungle_omo_2: 0xFF0838,
+    LocationName.mad_space_omo_2: 0xFF083B,
+
+    LocationName.cannon_core_omo_2: 0xFF083E,
+
+    LocationName.city_escape_omo_3: 0xFF0840,
+    LocationName.wild_canyon_omo_3: 0xFF0841,
+    LocationName.prison_lane_omo_3: 0xFF0842,
+    LocationName.metal_harbor_omo_3: 0xFF0843,
+    LocationName.pumpkin_hill_omo_3: 0xFF0845,
+    LocationName.mission_street_omo_3: 0xFF0846,
+    LocationName.aquatic_mine_omo_3: 0xFF0847,
+    LocationName.hidden_base_omo_3: 0xFF0849,
+    LocationName.pyramid_cave_omo_3: 0xFF084A,
+    LocationName.death_chamber_omo_3: 0xFF084B,
+    LocationName.eternal_engine_omo_3: 0xFF084C,
+    LocationName.meteor_herd_omo_3: 0xFF084D,
+    LocationName.crazy_gadget_omo_3: 0xFF084E,
+    LocationName.final_rush_omo_3: 0xFF084F,
+
+    LocationName.iron_gate_omo_3: 0xFF0850,
+    LocationName.dry_lagoon_omo_3: 0xFF0851,
+    LocationName.radical_highway_omo_3: 0xFF0853,
+    LocationName.egg_quarters_omo_3: 0xFF0854,
+    LocationName.lost_colony_omo_3: 0xFF0855,
+    LocationName.weapons_bed_omo_3: 0xFF0856,
+    LocationName.security_hall_omo_3: 0xFF0857,
+    LocationName.white_jungle_omo_3: 0xFF0858,
+    LocationName.mad_space_omo_3: 0xFF085B,
+
+    LocationName.cannon_core_omo_3: 0xFF085E,
+
+    LocationName.city_escape_omo_4: 0xFF0860,
+    LocationName.wild_canyon_omo_4: 0xFF0861,
+    LocationName.prison_lane_omo_4: 0xFF0862,
+    LocationName.metal_harbor_omo_4: 0xFF0863,
+    LocationName.pumpkin_hill_omo_4: 0xFF0865,
+    LocationName.mission_street_omo_4: 0xFF0866,
+    LocationName.aquatic_mine_omo_4: 0xFF0867,
+    LocationName.hidden_base_omo_4: 0xFF0869,
+    LocationName.pyramid_cave_omo_4: 0xFF086A,
+    LocationName.death_chamber_omo_4: 0xFF086B,
+    LocationName.eternal_engine_omo_4: 0xFF086C,
+    LocationName.crazy_gadget_omo_4: 0xFF086E,
+
+    LocationName.iron_gate_omo_4: 0xFF0870,
+    LocationName.dry_lagoon_omo_4: 0xFF0871,
+    LocationName.radical_highway_omo_4: 0xFF0873,
+    LocationName.egg_quarters_omo_4: 0xFF0874,
+    LocationName.lost_colony_omo_4: 0xFF0875,
+    LocationName.security_hall_omo_4: 0xFF0877,
+    LocationName.white_jungle_omo_4: 0xFF0878,
+    LocationName.mad_space_omo_4: 0xFF087B,
+
+    LocationName.cannon_core_omo_4: 0xFF087E,
+
+    LocationName.city_escape_omo_5: 0xFF0880,
+    LocationName.wild_canyon_omo_5: 0xFF0881,
+    LocationName.prison_lane_omo_5: 0xFF0882,
+    LocationName.metal_harbor_omo_5: 0xFF0883,
+    LocationName.pumpkin_hill_omo_5: 0xFF0885,
+    LocationName.mission_street_omo_5: 0xFF0886,
+    LocationName.aquatic_mine_omo_5: 0xFF0887,
+    LocationName.death_chamber_omo_5: 0xFF088B,
+    LocationName.eternal_engine_omo_5: 0xFF088C,
+    LocationName.crazy_gadget_omo_5: 0xFF088E,
+
+    LocationName.iron_gate_omo_5: 0xFF0890,
+    LocationName.dry_lagoon_omo_5: 0xFF0891,
+    LocationName.radical_highway_omo_5: 0xFF0893,
+    LocationName.egg_quarters_omo_5: 0xFF0894,
+    LocationName.lost_colony_omo_5: 0xFF0895,
+    LocationName.security_hall_omo_5: 0xFF0897,
+    LocationName.white_jungle_omo_5: 0xFF0898,
+    LocationName.mad_space_omo_5: 0xFF089B,
+
+    LocationName.cannon_core_omo_5: 0xFF089E,
+
+    LocationName.city_escape_omo_6: 0xFF08A0,
+    LocationName.wild_canyon_omo_6: 0xFF08A1,
+    LocationName.prison_lane_omo_6: 0xFF08A2,
+    LocationName.pumpkin_hill_omo_6: 0xFF08A5,
+    LocationName.mission_street_omo_6: 0xFF08A6,
+    LocationName.aquatic_mine_omo_6: 0xFF08A7,
+    LocationName.death_chamber_omo_6: 0xFF08AB,
+    LocationName.eternal_engine_omo_6: 0xFF08AC,
+    LocationName.crazy_gadget_omo_6: 0xFF08AE,
+
+    LocationName.iron_gate_omo_6: 0xFF08B0,
+    LocationName.dry_lagoon_omo_6: 0xFF08B1,
+    LocationName.radical_highway_omo_6: 0xFF08B3,
+    LocationName.lost_colony_omo_6: 0xFF08B5,
+    LocationName.security_hall_omo_6: 0xFF08B7,
+
+    LocationName.cannon_core_omo_6: 0xFF08BE,
+
+    LocationName.city_escape_omo_7: 0xFF08C0,
+    LocationName.wild_canyon_omo_7: 0xFF08C1,
+    LocationName.prison_lane_omo_7: 0xFF08C2,
+    LocationName.pumpkin_hill_omo_7: 0xFF08C5,
+    LocationName.mission_street_omo_7: 0xFF08C6,
+    LocationName.death_chamber_omo_7: 0xFF08CB,
+    LocationName.eternal_engine_omo_7: 0xFF08CC,
+    LocationName.crazy_gadget_omo_7: 0xFF08CE,
+
+    LocationName.dry_lagoon_omo_7: 0xFF08D1,
+    LocationName.lost_colony_omo_7: 0xFF08D5,
+    LocationName.security_hall_omo_7: 0xFF08D7,
+
+    LocationName.cannon_core_omo_7: 0xFF08DE,
+
+    LocationName.city_escape_omo_8: 0xFF08E0,
+    LocationName.wild_canyon_omo_8: 0xFF08E1,
+    LocationName.prison_lane_omo_8: 0xFF08E2,
+    LocationName.pumpkin_hill_omo_8: 0xFF08E5,
+    LocationName.mission_street_omo_8: 0xFF08E6,
+    LocationName.death_chamber_omo_8: 0xFF08EB,
+    LocationName.eternal_engine_omo_8: 0xFF08EC,
+    LocationName.crazy_gadget_omo_8: 0xFF08EE,
+
+    LocationName.dry_lagoon_omo_8: 0xFF08F1,
+    LocationName.lost_colony_omo_8: 0xFF08F5,
+    LocationName.security_hall_omo_8: 0xFF08F7,
+
+    LocationName.cannon_core_omo_8: 0xFF08FE,
+
+    LocationName.city_escape_omo_9: 0xFF0900,
+    LocationName.wild_canyon_omo_9: 0xFF0901,
+    LocationName.prison_lane_omo_9: 0xFF0902,
+    LocationName.pumpkin_hill_omo_9: 0xFF0905,
+    LocationName.eternal_engine_omo_9: 0xFF090C,
+    LocationName.crazy_gadget_omo_9: 0xFF090E,
+
+    LocationName.dry_lagoon_omo_9: 0xFF0911,
+    LocationName.security_hall_omo_9: 0xFF0917,
+
+    LocationName.cannon_core_omo_9: 0xFF091E,
+
+    LocationName.city_escape_omo_10: 0xFF0920,
+    LocationName.wild_canyon_omo_10: 0xFF0921,
+    LocationName.pumpkin_hill_omo_10: 0xFF0925,
+    LocationName.eternal_engine_omo_10: 0xFF092C,
+    LocationName.crazy_gadget_omo_10: 0xFF092E,
+
+    LocationName.dry_lagoon_omo_10: 0xFF0931,
+    LocationName.security_hall_omo_10: 0xFF0937,
+
+    LocationName.city_escape_omo_11: 0xFF0940,
+    LocationName.pumpkin_hill_omo_11: 0xFF0945,
+    LocationName.eternal_engine_omo_11: 0xFF094C,
+    LocationName.crazy_gadget_omo_11: 0xFF094E,
+
+    LocationName.dry_lagoon_omo_11: 0xFF0951,
+    LocationName.security_hall_omo_11: 0xFF0957,
+
+    LocationName.city_escape_omo_12: 0xFF0960,
+    LocationName.eternal_engine_omo_12: 0xFF096C,
+
+    LocationName.dry_lagoon_omo_12: 0xFF0971,
+    LocationName.security_hall_omo_12: 0xFF0977,
+
+    LocationName.city_escape_omo_13: 0xFF0980,
+
+    LocationName.city_escape_omo_14: 0xFF09A0,
+}
+
 boss_gate_location_table = {
     LocationName.gate_1_boss: 0xFF0100,
     LocationName.gate_2_boss: 0xFF0101,
@@ -613,6 +833,7 @@ all_locations = {
     **pipe_location_table,
     **hidden_whistle_location_table,
     **beetle_location_table,
+    **omochao_location_table,
     **chao_garden_beginner_location_table,
     **chao_garden_intermediate_location_table,
     **chao_garden_expert_location_table,
@@ -691,6 +912,9 @@ def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int
 
     if world.beetlesanity[player]:
         location_table.update({**beetle_location_table})
+
+    if world.omosanity[player]:
+        location_table.update({**omochao_location_table})
 
     if world.goal[player].value == 0 or world.goal[player].value == 2:
         location_table.update({**final_boss_location_table})

@@ -82,6 +82,7 @@ class SA2BWorld(World):
             "ChaoKeys": self.multiworld.keysanity[self.player].value,
             "Whistlesanity": self.multiworld.whistlesanity[self.player].value,
             "GoldBeetles": self.multiworld.beetlesanity[self.player].value,
+            "OmochaoChecks": self.multiworld.omosanity[self.player].value,
             "ChaoRaceChecks": self.multiworld.chao_race_checks[self.player].value,
             "ChaoGardenDifficulty": self.multiworld.chao_garden_difficulty[self.player].value,
             "DeathLink": self.multiworld.death_link[self.player].value,
