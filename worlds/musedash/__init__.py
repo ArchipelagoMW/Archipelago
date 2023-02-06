@@ -227,6 +227,7 @@ class MuseDashWorld(World):
         return {
             # "deathLink": self.world.death_link[self.player].value, Todo: Add DeathLink
             "victoryLocation": self.victory_song_name,
+            "deathLink": self.multiworld.death_link[self.player].value,
             "musicSheetWinCount": self.get_number_of_music_sheets_to_win()
             # Todo: Other options include "checkAlbums", "checkSongs"
         }

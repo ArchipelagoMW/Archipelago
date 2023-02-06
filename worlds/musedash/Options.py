@@ -1,6 +1,6 @@
 from typing import Dict, Union
 from BaseClasses import MultiWorld
-from Options import Toggle, DefaultOnToggle, Option, Range, Choice
+from Options import Toggle, Option, Range, Choice, DeathLink
 
 # Should this be default on or off?
 class AllowJustAsPlannedDLCSongs(Toggle):
@@ -117,5 +117,6 @@ musedash_options: Dict[str, type(Option)] = {
     "additional_item_percentage": AdditionalItemPercentage,
     "song_difficulty_mode": DifficultyMode,
     "music_sheet_count": MusicSheetCount,
-    "music_sheet_win_count": MusicSheetWinCount
+    "music_sheet_win_count": MusicSheetWinCount,
+    "death_link": DeathLink
 }
