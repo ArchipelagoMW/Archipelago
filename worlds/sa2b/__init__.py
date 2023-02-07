@@ -318,6 +318,7 @@ class SA2BWorld(World):
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
+        
         if force_non_progression:
             classification = ItemClassification.filler
         elif name == ItemName.emblem:
