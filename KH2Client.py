@@ -293,10 +293,10 @@ class KH2Context(CommonContext):
                         self.kh2.write_short(self.kh2.base_address + self.Save + self.backofinventory, itemcode.memaddr)
                         self.backofinventory -= 2
             elif itemcode.bitmask > 0:
-                while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x8E9DA3, 1),
-                                     "big") != 0 or int.from_bytes(
-                        self.kh2.read_bytes(self.kh2.base_address + 0xAB8BC7, 1), "big") != 0 \
-                        or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A148E8, 1), "big") != 0:
+                while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x8E9DA3, 1),"big") != 0 or \
+                        int.from_bytes( self.kh2.read_bytes(self.kh2.base_address + 0xAB8BC7, 1), "big") != 0 \
+                        or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A148E8, 1), "big") != 0\
+                        or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x715568, 1), "big") == 0:
                     await asyncio.sleep(1)
                 itemMemory = int.from_bytes(
                         self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
@@ -472,7 +472,7 @@ async def kh2_watcher(ctx: KH2Context):
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B2, (1).to_bytes(1, 'big'), 1)
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B3, (1).to_bytes(1, 'big'), 1)
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B4, (1).to_bytes(1, 'big'), 1)
-                        ctx.hasThreeProofs=True
+                        ctx.hasThreeProofs = True
                     if ctx.kh2slotdata['FinalXemnas'] == 1:
                         if 1245677 in message[0]["locations"]:
                             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])

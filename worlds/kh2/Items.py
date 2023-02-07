@@ -478,6 +478,7 @@ exclusionItem_table = {
         ItemName.APBoost
     },
     "VisitLocking":{
+    ItemName.CastleKey,
     ItemName.BattlefieldsofWar,
     ItemName.SwordoftheAncestor,
     ItemName.BeastsClaw,
