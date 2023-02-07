@@ -148,6 +148,7 @@ location_table = {
     "Chalice Home": LocationData("YellowCastle", "Chalice Home", None, event=True)
 }
 
+# the old location table, for reference
 location_table_old = {
     "Blue Labyrinth 0": LocationData("Overworld", "Blue Labyrinth 0", 0x4),
     "Blue Labyrinth 1": LocationData("Overworld", "Blue Labyrinth 1", 0x5),
