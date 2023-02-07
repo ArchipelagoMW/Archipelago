@@ -32,12 +32,6 @@ assets:
     - name: BonsList.yml
       type: bons
     type: List
-  - method: listpatch
-    name: plrp
-    source:
-    - name: PlrpList.yml
-      type: plrp  
-    type: List
 - method: binarc
   name: 03system.bin
   source:
@@ -53,9 +47,4 @@ assets:
     - name: ItemList.yml
       type: item
     type: List
-#Lua Script
-- name: scripts/F266B00B GoA ROM.lua
-  method: copy
-  source:
-  - name: F266B00B GoA ROM.lua
 title: Randomizer Seed
