@@ -244,12 +244,12 @@ class SMZ3World(World):
                 if self.multiworld.accessibility[self.player] != 'locations':
                     l.always_allow = lambda state, item, loc=loc: \
                         item.game == "SMZ3" and \
-                        loc.alwaysAllow(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World), state.smz3state[self.player])
+                        loc.alwaysAllow(item.item, state.smz3state[self.player])
                 old_rule = l.item_rule
                 l.item_rule = lambda item, loc=loc, region=region: (\
                     item.game != "SMZ3" or \
-                    loc.allow(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World), None) and \
-                        region.CanFill(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World))) and old_rule(item)
+                    loc.allow(item.item, None) and \
+                        region.CanFill(item.item)) and old_rule(item)
                 set_rule(l, lambda state, loc=loc: loc.Available(state.smz3state[self.player]))
 
     def create_regions(self):
@@ -502,17 +502,6 @@ class SMZ3World(World):
 
             all_dungeonItems = self.smz3DungeonItems[:]
             fill_restrictive(self.multiworld, all_state, locations, all_dungeonItems, True, True)
-            # some small or big keys (those always_allow) can be unreachable in-game
-            # while logic still collects some of them (probably to simulate the player collecting pot keys in the logic), some others don't
-            # so we need to remove those exceptions as progression items
-            if self.multiworld.accessibility[self.player] != 'locations':
-                exception_item = [TotalSMZ3Item.ItemType.BigKeySW, TotalSMZ3Item.ItemType.BigKeySP, TotalSMZ3Item.ItemType.KeyTH]
-                for item in self.smz3DungeonItems:
-                    if item.item.Type in exception_item and item.location.always_allow(all_state, item) and not all_state.can_reach(item.location):
-                        item.classification = ItemClassification.filler
-                        item.item.Progression = False
-                        item.location.event = False
-                        self.unreachable.append(item.location)
         self.JunkFillGT(0.5)
 
     def get_pre_fill_items(self):
@@ -520,6 +509,22 @@ class SMZ3World(World):
             return self.smz3DungeonItems
         else:
             return []
+        
+    def post_fill(self):
+        # some small or big keys (those always_allow) can be unreachable in-game
+        # while logic still collects some of them (probably to simulate the player collecting pot keys in the logic), some others don't
+        # so we need to remove those exceptions as progression items
+        if self.multiworld.accessibility[self.player] == 'items':
+            state = CollectionState(self.multiworld)
+            locs = [self.multiworld.get_location("Swamp Palace - Big Chest", self.player),
+                   self.multiworld.get_location("Skull Woods - Big Chest", self.player),
+                   self.multiworld.get_location("Tower of Hera - Big Key Chest", self.player)]
+            for loc in locs:
+                if (loc.item.player == self.player and loc.always_allow(state, loc.item)):
+                    loc.item.classification = ItemClassification.filler
+                    loc.item.item.Progression = False
+                    loc.item.location.event = False
+                    self.unreachable.append(loc)  
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(self.junkItemsNames)

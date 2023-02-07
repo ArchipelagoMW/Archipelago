@@ -230,19 +230,19 @@ Quarry Between Entrys (Quarry) - Quarry - 0x17C07:
 158119 - 0x17C09 (Entry 2 Panel) - True - Shapers & Triangles
 Door - 0x17C07 (Entry 2) - 0x17C09
 
-Quarry (Quarry) - Quarry Mill Ground Floor - 0x02010 - Quarry Elevator - 0x17CC4:
-158121 - 0x01E5A (Mill Entry Left Panel) - True - Squares & Black/White Squares & Stars & Stars + Same Colored Symbol
-158122 - 0x01E59 (Mill Entry Right Panel) - True - Triangles
-Door - 0x02010 (Mill Entry) - 0x01E59 & 0x01E5A
+Quarry (Quarry) - Quarry Stoneworks Ground Floor - 0x02010 - Quarry Elevator - 0x17CC4:
+158121 - 0x01E5A (Stoneworks Entry Left Panel) - True - Squares & Black/White Squares & Stars & Stars + Same Colored Symbol
+158122 - 0x01E59 (Stoneworks Entry Right Panel) - True - Triangles
+Door - 0x02010 (Stoneworks Entry) - 0x01E59 & 0x01E5A
 
-Quarry Mill Ground Floor (Quarry Mill) - Quarry - 0x275FF - Quarry Mill Middle Floor - 0x03678 - Outside Quarry - 0x17CE8:
+Quarry Stoneworks Ground Floor (Quarry Stoneworks) - Quarry - 0x275FF - Quarry Stoneworks Middle Floor - 0x03678 - Outside Quarry - 0x17CE8:
 158123 - 0x275ED (Side Exit Panel) - True - True
 Door - 0x275FF (Side Exit) - 0x275ED
 158124 - 0x03678 (Lower Ramp Control) - True - Dots & Eraser
 158145 - 0x17CAC (Roof Exit Panel) - True - True
 Door - 0x17CE8 (Roof Exit) - 0x17CAC
 
-Quarry Mill Middle Floor (Quarry Mill) - Quarry Mill Ground Floor - 0x03675 - Quarry Mill Upper Floor - 0x03679:
+Quarry Stoneworks Middle Floor (Quarry Stoneworks) - Quarry Stoneworks Ground Floor - 0x03675 - Quarry Stoneworks Upper Floor - 0x03679:
 158125 - 0x00E0C (Lower Row 1) - True - Dots & Eraser
 158126 - 0x01489 (Lower Row 2) - 0x00E0C - Triangles & Eraser
 158127 - 0x0148A (Lower Row 3) - 0x01489 - Triangles & Eraser
@@ -251,7 +251,7 @@ Quarry Mill Middle Floor (Quarry Mill) - Quarry Mill Ground Floor - 0x03675 - Qu
 158130 - 0x014E8 (Lower Row 6) - 0x014E7 - Triangles & Eraser
 158131 - 0x03679 (Lower Lift Control) - 0x014E8 - Dots & Eraser
 
-Quarry Mill Upper Floor (Quarry Mill) - Quarry Mill Middle Floor - 0x03676 & 0x03679 - Quarry Mill Ground Floor - 0x0368A:
+Quarry Stoneworks Upper Floor (Quarry Stoneworks) - Quarry Stoneworks Middle Floor - 0x03676 & 0x03679 - Quarry Stoneworks Ground Floor - 0x0368A:
 158132 - 0x03676 (Upper Ramp Control) - True - Dots & Eraser
 158133 - 0x03675 (Upper Lift Control) - True - Dots & Eraser
 158134 - 0x00557 (Upper Row 1) - True - Squares & Colored Squares & Eraser & Stars & Stars + Same Colored Symbol
@@ -330,7 +330,7 @@ Door - 0x194B2 (Laser Entry Right) - 0x1972F
 158185 - 0x197E8 (Near 4) - 0x197E0 - True
 158186 - 0x197E5 (Near 5) - 0x197E8 - True
 Door - 0x19665 (Laser Entry Left) - 0x197E5
-159400 - 0x28A7B (Quarry Mill Rooftop Vent EP) - True - True
+159400 - 0x28A7B (Quarry Stoneworks Rooftop Vent EP) - True - True
 
 Shadows Ledge (Shadows) - Shadows - 0x1855B - Quarry - 0x19865 & 0x0A2DF:
 158187 - 0x334DC (Door Timer Inside) - True - True
@@ -480,10 +480,10 @@ Door - 0x1845B (Windmill Entry) - 0x17F5F
 159010 - 0x037B6 (Windmill First Blade EP) - 0x17D02 - True
 159011 - 0x037B2 (Windmill Second Blade EP) - 0x17D02 - True
 159012 - 0x000F7 (Windmill Third Blade EP) - 0x17D02 - True
-159540 - 0x03335 (Tower Underside First EP) - True - True
-159541 - 0x03412 (Tower Underside Second EP) - True - True
-159542 - 0x038A6 (Tower Underside Third EP) - True - True
-159543 - 0x038AA (Tower Underside Fourth EP) - True - True
+159540 - 0x03335 (Tower Underside Third EP) - True - True
+159541 - 0x03412 (Tower Underside Fourth EP) - True - True
+159542 - 0x038A6 (Tower Underside First EP) - True - True
+159543 - 0x038AA (Tower Underside Second EP) - True - True
 159545 - 0x03E40 (RGB House Green EP) - 0x334D8 & 0x03C0C & 0x03C08 - True
 159546 - 0x28B8E (Maze Bridge Underside EP) - 0x2896A - True
 159552 - 0x03BCF (Black Line Redirect EP) - True - True
@@ -523,9 +523,9 @@ RGB Room (Town):
 158246 - 0x03C08 (RGB Room Right) - 0x334D8 & 0x03C0C - Symmetry & Dots & Colored Dots & Triangles
 
 Town Tower (Town Tower) - Town - True - Town Tower Top - 0x27798 & 0x27799 & 0x2779A & 0x2779C:
-Door - 0x27798 (First Door) - 0x28ACC
-Door - 0x2779C (Second Door) - 0x28AD9
-Door - 0x27799 (Third Door) - 0x28A69
+Door - 0x27798 (Second Door) - 0x28ACC
+Door - 0x2779C (Third Door) - 0x28AD9
+Door - 0x27799 (First Door) - 0x28A69
 Door - 0x2779A (Fourth Door) - 0x28B39
 
 Town Tower Top (Town):
