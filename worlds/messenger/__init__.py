@@ -1,10 +1,10 @@
 from typing import Dict, Any, List
 
-from BaseClasses import Tutorial
+from BaseClasses import Tutorial, ItemClassification
 from Options import Accessibility
 from worlds.AutoWorld import World, WebWorld
 from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS, JUNK, ALWAYS_LOCATIONS, SEALS, ALL_ITEMS
-from .Options import messenger_options, NotesNeeded
+from .Options import messenger_options, NotesNeeded, Goal, PowerSeals
 from .Regions import REGIONS, REGION_CONNECTIONS
 from .Rules import MessengerRules, set_self_locking_items
 from .SubClasses import MessengerRegion, MessengerItem
@@ -57,9 +57,15 @@ class MessengerWorld(World):
     web = MessengerWeb()
 
     rules: MessengerRules
+    total_seals: int
+    required_seals: int
 
     def generate_early(self) -> None:
         self.rules = MessengerRules(self.player)
+        if self.multiworld.goal[self.player] == Goal.option_shop_chest:
+            self.multiworld.shuffle_seals[self.player].value = PowerSeals.option_true
+            self.total_seals = self.multiworld.total_seals[self.player].value
+            self.required_seals = int(self.multiworld.percent_seals_required[self.player].value / 100 * self.total_seals)
 
     def create_regions(self) -> None:
         for region in REGIONS:
@@ -72,20 +78,29 @@ class MessengerWorld(World):
             region.add_exits(exits)
 
     def create_items(self) -> None:
-        precollected_notes_amount = NotesNeeded.range_end - self.multiworld.notes_needed[self.player].value
-        if precollected_notes_amount:
-            notes = NOTES.copy()
-            self.multiworld.random.shuffle(notes)
-            notes = notes[:precollected_notes_amount]
-            for note in notes:
-                self.multiworld.push_precollected(self.create_item(note))
-
         itempool = []
+        if self.multiworld.goal[self.player] == Goal.option_shop_chest:
+            seals = [self.create_item("Power Seal") for _ in range(self.total_seals)]
+            for i in range(self.required_seals):
+                seals[i].classification = ItemClassification.progression_skip_balancing
+            itempool += seals
+        else:
+            precollected_notes_amount = NotesNeeded.range_end - self.multiworld.notes_needed[self.player].value
+            if precollected_notes_amount:
+                notes = NOTES.copy()
+                self.multiworld.random.shuffle(notes)
+                notes = notes[:precollected_notes_amount]
+                for note in notes:
+                    self.multiworld.push_precollected(self.create_item(note))
+                itempool += [self.create_item(note) for note in NOTES if note not in notes]
+            else:
+                itempool += [self.create_item(note) for note in NOTES]
+
         itempool += [self.create_item(item)
                      for item in self.item_name_to_id
                      if item not in
                      {
-                         "Power Seal", "Time Shard",
+                         "Power Seal", "Time Shard", *NOTES,
                          *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]}
                          # this is a set and currently won't create items for anything that appears in here at all
                          # if we get in a position where this can have duplicates of items that aren't Power Seals
@@ -97,8 +112,14 @@ class MessengerWorld(World):
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
+        if self.multiworld.goal[self.player] == Goal.option_shop_chest:
+            self.multiworld.get_location("Shop Chest", self.player).access_rule = lambda state: state.has("Power Seal", self.player, self.required_seals)
+
         if self.multiworld.enable_logic[self.player]:
-            self.multiworld.completion_condition[self.player] = lambda state: state.has("Rescue Phantom", self.player)
+            if self.multiworld.goal[self.player] == Goal.option_shop_chest:
+                self.multiworld.completion_condition[self.player] = lambda state: state.has("Shop Chest", self.player)
+            else:
+                self.multiworld.completion_condition[self.player] = lambda state: state.has("Rescue Phantom", self.player)
         else:
             self.multiworld.accessibility[self.player].value = Accessibility.option_minimal
         if self.multiworld.accessibility[self.player] == Accessibility.option_items:
@@ -112,6 +133,8 @@ class MessengerWorld(World):
 
         return {
             "deathlink": bool(self.multiworld.death_link[self.player].value),
+            "goal": self.multiworld.goal[self.player].current_key,
+            "required_seals": self.required_seals if self.required_seals is not None else 0,
             "locations": locations,
             "settings": {"Difficulty": "Basic" if not self.multiworld.shuffle_seals[self.player] else "Advanced"}
         }

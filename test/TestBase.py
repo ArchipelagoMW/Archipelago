@@ -189,6 +189,8 @@ class WorldTestBase(unittest.TestCase):
             for location in locations:
                 self.assertTrue(self.can_reach_location(location), f"collected {[item for item in items]} but failed "
                                                                    f"accessibility check for {location}")
+                if self.multiworld.get_location(location, 1).address is None:
+                    self.remove(self.multiworld.get_location(location, 1).item)
             self.remove(items)
 
     def assertBeatable(self, beatable: bool):
