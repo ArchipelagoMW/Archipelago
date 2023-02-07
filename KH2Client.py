@@ -276,18 +276,21 @@ class KH2Context(CommonContext):
                 await asyncio.sleep(0.5)
             if itemcode.ability:
                 if char == "Donald":
-                    self.kh2.write_short(self.kh2.base_address + self.Save + self.donaldbackofinventory,
-                                         itemcode.memaddr)
+                    self.kh2.write_short(self.kh2.base_address + self.Save + self.donaldbackofinventory,itemcode.memaddr)
                     self.donaldbackofinventory -= 2
                 elif char == "Goofy":
-                    self.kh2.write_short(self.kh2.base_address + self.Save + self.goofybackofinventory,
-                                         itemcode.memaddr)
+                    self.kh2.write_short(self.kh2.base_address + self.Save + self.goofybackofinventory,itemcode.memaddr)
                     self.goofybackofinventory -= 2
                 else:
                     if itemcode.memaddr in {0x05E, 0x062, 0x066, 0x06A, 0x234}:
                         self.give_growth(itemcode)
                     else:
                         # cannot give stuff past this point or the game will crash
+                        while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x8E9DA3, 1), "big") != 0 \
+                                or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0xAB8BC7, 1), "big") != 0 \
+                                or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A148E8, 1), "big") != 0 \
+                                or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x715568, 1), "big") == 0:
+                            await asyncio.sleep(1)
                         if self.backofinventory == 0x2544:
                             return
                         self.kh2.write_short(self.kh2.base_address + self.Save + self.backofinventory, itemcode.memaddr)
@@ -298,22 +301,19 @@ class KH2Context(CommonContext):
                         or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A148E8, 1), "big") != 0\
                         or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x715568, 1), "big") == 0:
                     await asyncio.sleep(1)
-                itemMemory = int.from_bytes(
-                        self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
-                self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,
-                                     (itemMemory | 0x01 << itemcode.bitmask).to_bytes(1, 'big'), 1)
+                itemMemory = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
+                self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,(itemMemory | 0x01 << itemcode.bitmask).to_bytes(1, 'big'), 1)
             else:
-                while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x8E9DA3, 1),
-                                     "big") != 0 or int.from_bytes(
-                        self.kh2.read_bytes(self.kh2.base_address + 0xAB8BC7, 1), "big") != 0 \
-                        or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A148E8, 1), "big") != 0:
+                while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x8E9DA3, 1),"big") != 0 \
+                        or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0xAB8BC7, 1), "big") != 0 \
+                        or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A148E8, 1), "big") != 0\
+                        or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x715568, 1), "big") == 0\
+                        or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A20C58+0x1B2, 1), "big") < 5:
                     await asyncio.sleep(1)
                 # only give statsanity items when drive gauge max is more than 0
                 # 2A20C58+base_address+1B2
-                amount = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1),
-                                        "big")
-                self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,
-                                     (amount + 1).to_bytes(1, 'big'), 1)
+                amount = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1),"big")
+                self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,(amount + 1).to_bytes(1, 'big'), 1)
         except Exception as e:
             if self.kh2connected:
                 logger.info("Connection Lost, Please /autotrack")

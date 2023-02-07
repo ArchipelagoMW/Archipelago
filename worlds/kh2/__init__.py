@@ -210,15 +210,16 @@ class KH2World(World):
                for x in range(2):
                 self.multiworld.push_precollected(self.create_item(item))
         #second visit locking
-        elif self.multiworld.Visitlocking[self.player].value == 1:
+        elif self.multiworld.Visitlocking[self.player].value in {1,2}:
             for item in exclusionItem_table["VisitLocking"]:
                 item_quantity_dict.update({item: 1})
+                if item=="Ice Cream":
+                    continue
                 self.multiworld.push_precollected(self.create_item(item))
                 visitlockingitem.remove(item)
-        #first visit locking
-        elif self.multiworld.Visitlocking[self.player].value == 2:
-            #can move this to client gives player this if ==2 but this just makes it cleaner imo
-            self.multiworld.push_precollected(self.create_item(ItemName.UniversalKey))
+            if self.multiworld.Visitlocking[self.player].value == 2:
+                # can move this to client gives player this if ==2 but this just makes it cleaner imo
+                self.multiworld.push_precollected(self.create_item(ItemName.UniversalKey))
 
         for x in range(self.multiworld.RandomVisitLockingItem[self.player].value):
             if len(visitlockingitem) <= 0:

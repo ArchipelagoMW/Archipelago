@@ -11,8 +11,8 @@ def set_rules(world: MultiWorld, player: int):
     # first visit lock
     # start with 0
     if world.Visitlocking[player].value == 2:
-        firstvisitlocking = 1
-        secondvisitlocking = 1
+        firstvisitlocking = 2
+        secondvisitlocking = 2
     else:
         #start with level 1 of all visit locking
         firstvisitlocking = 1
@@ -218,9 +218,9 @@ def set_rules(world: MultiWorld, player: int):
     add_rule(world.get_entrance(LocationName.TT_Region, player),
              lambda state: state.kh_tt_unlocked(player, firstvisitlocking))
     add_rule(world.get_entrance(LocationName.TT2_Region, player),
-             lambda state: state.kh_tt2_unlocked(player, firstvisitlocking))
+             lambda state: state.kh_tt2_unlocked(player, 1))
     add_rule(world.get_entrance(LocationName.TT3_Region, player),
-             lambda state: state.kh_tt3_unlocked(player, firstvisitlocking))
+             lambda state: state.kh_tt3_unlocked(player, 1))
     add_rule(world.get_entrance(LocationName.Oc_Region, player),
              lambda state: state.kh_oc_unlocked(player, firstvisitlocking))
     add_rule(world.get_entrance(LocationName.Oc2_Region, player),
