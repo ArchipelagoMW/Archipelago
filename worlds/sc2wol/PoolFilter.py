@@ -2,7 +2,7 @@ from typing import Callable, Dict, List, Set
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
 from .Items import item_table
 from .MissionTables import no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list,\
-    mission_orders, MissionInfo, alt_final_mission_locations, Difficulties
+    mission_orders, MissionInfo, alt_final_mission_locations, MissionPools
 from .Options import get_option_value
 from .LogicMixin import SC2WoLLogic
 
@@ -32,15 +32,15 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
     excluded_missions = get_option_value(multiworld, player, "excluded_missions")
     mission_count = len(mission_orders[mission_order_type]) - 1
     mission_pools = {
-        Difficulties.STARTER: no_build_regions_list[:],
-        Difficulties.EASY: easy_regions_list[:],
-        Difficulties.MEDIUM: medium_regions_list[:],
-        Difficulties.HARD: hard_regions_list[:],
-        Difficulties.FINAL: []
+        MissionPools.STARTER: no_build_regions_list[:],
+        MissionPools.EASY: easy_regions_list[:],
+        MissionPools.MEDIUM: medium_regions_list[:],
+        MissionPools.HARD: hard_regions_list[:],
+        MissionPools.FINAL: []
     }
     # Vanilla and Vanilla Shuffled use the entire mission pool
     if mission_count == 28:
-        mission_pools[Difficulties.FINAL] = ['All-In']
+        mission_pools[MissionPools.FINAL] = ['All-In']
         return mission_pools
 
     # Omitting No-Build missions if not shuffling no-build
@@ -58,7 +58,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
     # Excluding missions
     for difficulty, mission_pool in mission_pools.items():
         mission_pools[difficulty] = [mission for mission in mission_pool if mission not in excluded_missions]
-    mission_pools[Difficulties.FINAL].append(final_mission)
+    mission_pools[MissionPools.FINAL].append(final_mission)
     # Mission pool changes on Build-Only
     if not get_option_value(multiworld, player, 'shuffle_no_build'):
         def move_mission(mission_name, current_pool, new_pool):
@@ -66,22 +66,22 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
                 mission_pools[current_pool].remove(mission_name)
                 mission_pools[new_pool].append(mission_name)
         # Replacing No Build missions with Easy missions
-        move_mission("Zero Hour", Difficulties.EASY, Difficulties.STARTER)
-        move_mission("Evacuation", Difficulties.EASY, Difficulties.STARTER)
-        move_mission("Devil's Playground", Difficulties.EASY, Difficulties.STARTER)
+        move_mission("Zero Hour", MissionPools.EASY, MissionPools.STARTER)
+        move_mission("Evacuation", MissionPools.EASY, MissionPools.STARTER)
+        move_mission("Devil's Playground", MissionPools.EASY, MissionPools.STARTER)
         # Pushing Outbreak to Normal, as it cannot be placed as the second mission on Build-Only
-        move_mission("Outbreak", Difficulties.EASY, Difficulties.MEDIUM)
+        move_mission("Outbreak", MissionPools.EASY, MissionPools.MEDIUM)
         # Pushing extra Normal missions to Easy
-        move_mission("The Great Train Robbery", Difficulties.MEDIUM, Difficulties.EASY)
-        move_mission("Echoes of the Future", Difficulties.MEDIUM, Difficulties.EASY)
-        move_mission("Cutthroat", Difficulties.MEDIUM, Difficulties.EASY)
+        move_mission("The Great Train Robbery", MissionPools.MEDIUM, MissionPools.EASY)
+        move_mission("Echoes of the Future", MissionPools.MEDIUM, MissionPools.EASY)
+        move_mission("Cutthroat", MissionPools.MEDIUM, MissionPools.EASY)
         # Additional changes on Advanced Tactics
         if get_option_value(multiworld, player, "required_tactics") > 0:
-            move_mission("The Great Train Robbery", Difficulties.EASY, Difficulties.STARTER)
-            move_mission("Smash and Grab", Difficulties.EASY, Difficulties.STARTER)
-            move_mission("Moebius Factor", Difficulties.MEDIUM, Difficulties.EASY)
-            move_mission("Welcome to the Jungle", Difficulties.MEDIUM, Difficulties.EASY)
-            move_mission("Engine of Destruction", Difficulties.HARD, Difficulties.MEDIUM)
+            move_mission("The Great Train Robbery", MissionPools.EASY, MissionPools.STARTER)
+            move_mission("Smash and Grab", MissionPools.EASY, MissionPools.STARTER)
+            move_mission("Moebius Factor", MissionPools.MEDIUM, MissionPools.EASY)
+            move_mission("Welcome to the Jungle", MissionPools.MEDIUM, MissionPools.EASY)
+            move_mission("Engine of Destruction", MissionPools.HARD, MissionPools.MEDIUM)
 
     return mission_pools
 

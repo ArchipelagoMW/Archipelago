@@ -11,7 +11,7 @@ hard_regions_list = ["Maw of the Void", "Engine of Destruction", "In Utter Darkn
                      "Shatter the Sky"]
 
 
-class Difficulties(IntEnum):
+class MissionPools(IntEnum):
     STARTER = 0
     EASY = 1
     MEDIUM = 2
@@ -39,109 +39,109 @@ class FillMission(NamedTuple):
 
 
 vanilla_shuffle_order = [
-    FillMission(Difficulties.STARTER, [-1], "Mar Sara", completion_critical=True),
-    FillMission(Difficulties.EASY, [0], "Mar Sara", completion_critical=True),
-    FillMission(Difficulties.EASY, [1], "Mar Sara", completion_critical=True),
-    FillMission(Difficulties.EASY, [2], "Colonist"),
-    FillMission(Difficulties.MEDIUM, [3], "Colonist"),
-    FillMission(Difficulties.HARD, [4], "Colonist", number=7),
-    FillMission(Difficulties.HARD, [4], "Colonist", number=7, relegate=True),
-    FillMission(Difficulties.EASY, [2], "Artifact", completion_critical=True),
-    FillMission(Difficulties.MEDIUM, [7], "Artifact", number=8, completion_critical=True),
-    FillMission(Difficulties.HARD, [8], "Artifact", number=11, completion_critical=True),
-    FillMission(Difficulties.HARD, [9], "Artifact", number=14, completion_critical=True),
-    FillMission(Difficulties.HARD, [10], "Artifact", completion_critical=True),
-    FillMission(Difficulties.MEDIUM, [2], "Covert", number=4),
-    FillMission(Difficulties.MEDIUM, [12], "Covert"),
-    FillMission(Difficulties.HARD, [13], "Covert", number=8, relegate=True),
-    FillMission(Difficulties.HARD, [13], "Covert", number=8, relegate=True),
-    FillMission(Difficulties.MEDIUM, [2], "Rebellion", number=6),
-    FillMission(Difficulties.HARD, [16], "Rebellion"),
-    FillMission(Difficulties.HARD, [17], "Rebellion"),
-    FillMission(Difficulties.HARD, [18], "Rebellion"),
-    FillMission(Difficulties.HARD, [19], "Rebellion", relegate=True),
-    FillMission(Difficulties.MEDIUM, [8], "Prophecy"),
-    FillMission(Difficulties.HARD, [21], "Prophecy"),
-    FillMission(Difficulties.HARD, [22], "Prophecy"),
-    FillMission(Difficulties.HARD, [23], "Prophecy", relegate=True),
-    FillMission(Difficulties.HARD, [11], "Char", completion_critical=True),
-    FillMission(Difficulties.HARD, [25], "Char", completion_critical=True),
-    FillMission(Difficulties.HARD, [25], "Char", completion_critical=True),
-    FillMission(Difficulties.FINAL, [26, 27], "Char", completion_critical=True, or_requirements=True)
+    FillMission(MissionPools.STARTER, [-1], "Mar Sara", completion_critical=True),
+    FillMission(MissionPools.EASY, [0], "Mar Sara", completion_critical=True),
+    FillMission(MissionPools.EASY, [1], "Mar Sara", completion_critical=True),
+    FillMission(MissionPools.EASY, [2], "Colonist"),
+    FillMission(MissionPools.MEDIUM, [3], "Colonist"),
+    FillMission(MissionPools.HARD, [4], "Colonist", number=7),
+    FillMission(MissionPools.HARD, [4], "Colonist", number=7, relegate=True),
+    FillMission(MissionPools.EASY, [2], "Artifact", completion_critical=True),
+    FillMission(MissionPools.MEDIUM, [7], "Artifact", number=8, completion_critical=True),
+    FillMission(MissionPools.HARD, [8], "Artifact", number=11, completion_critical=True),
+    FillMission(MissionPools.HARD, [9], "Artifact", number=14, completion_critical=True),
+    FillMission(MissionPools.HARD, [10], "Artifact", completion_critical=True),
+    FillMission(MissionPools.MEDIUM, [2], "Covert", number=4),
+    FillMission(MissionPools.MEDIUM, [12], "Covert"),
+    FillMission(MissionPools.HARD, [13], "Covert", number=8, relegate=True),
+    FillMission(MissionPools.HARD, [13], "Covert", number=8, relegate=True),
+    FillMission(MissionPools.MEDIUM, [2], "Rebellion", number=6),
+    FillMission(MissionPools.HARD, [16], "Rebellion"),
+    FillMission(MissionPools.HARD, [17], "Rebellion"),
+    FillMission(MissionPools.HARD, [18], "Rebellion"),
+    FillMission(MissionPools.HARD, [19], "Rebellion", relegate=True),
+    FillMission(MissionPools.MEDIUM, [8], "Prophecy"),
+    FillMission(MissionPools.HARD, [21], "Prophecy"),
+    FillMission(MissionPools.HARD, [22], "Prophecy"),
+    FillMission(MissionPools.HARD, [23], "Prophecy", relegate=True),
+    FillMission(MissionPools.HARD, [11], "Char", completion_critical=True),
+    FillMission(MissionPools.HARD, [25], "Char", completion_critical=True),
+    FillMission(MissionPools.HARD, [25], "Char", completion_critical=True),
+    FillMission(MissionPools.FINAL, [26, 27], "Char", completion_critical=True, or_requirements=True)
 ]
 
 mini_campaign_order = [
-    FillMission(Difficulties.STARTER, [-1], "Mar Sara", completion_critical=True),
-    FillMission(Difficulties.EASY, [0], "Colonist"),
-    FillMission(Difficulties.MEDIUM, [1], "Colonist"),
-    FillMission(Difficulties.EASY, [0], "Artifact", completion_critical=True),
-    FillMission(Difficulties.MEDIUM, [3], "Artifact", number=4, completion_critical=True),
-    FillMission(Difficulties.HARD, [4], "Artifact", number=8, completion_critical=True),
-    FillMission(Difficulties.MEDIUM, [0], "Covert", number=2),
-    FillMission(Difficulties.HARD, [6], "Covert"),
-    FillMission(Difficulties.MEDIUM, [0], "Rebellion", number=3),
-    FillMission(Difficulties.HARD, [8], "Rebellion"),
-    FillMission(Difficulties.MEDIUM, [4], "Prophecy"),
-    FillMission(Difficulties.HARD, [10], "Prophecy"),
-    FillMission(Difficulties.HARD, [5], "Char", completion_critical=True),
-    FillMission(Difficulties.HARD, [5], "Char", completion_critical=True),
-    FillMission(Difficulties.FINAL, [12, 13], "Char", completion_critical=True, or_requirements=True)
+    FillMission(MissionPools.STARTER, [-1], "Mar Sara", completion_critical=True),
+    FillMission(MissionPools.EASY, [0], "Colonist"),
+    FillMission(MissionPools.MEDIUM, [1], "Colonist"),
+    FillMission(MissionPools.EASY, [0], "Artifact", completion_critical=True),
+    FillMission(MissionPools.MEDIUM, [3], "Artifact", number=4, completion_critical=True),
+    FillMission(MissionPools.HARD, [4], "Artifact", number=8, completion_critical=True),
+    FillMission(MissionPools.MEDIUM, [0], "Covert", number=2),
+    FillMission(MissionPools.HARD, [6], "Covert"),
+    FillMission(MissionPools.MEDIUM, [0], "Rebellion", number=3),
+    FillMission(MissionPools.HARD, [8], "Rebellion"),
+    FillMission(MissionPools.MEDIUM, [4], "Prophecy"),
+    FillMission(MissionPools.HARD, [10], "Prophecy"),
+    FillMission(MissionPools.HARD, [5], "Char", completion_critical=True),
+    FillMission(MissionPools.HARD, [5], "Char", completion_critical=True),
+    FillMission(MissionPools.FINAL, [12, 13], "Char", completion_critical=True, or_requirements=True)
 ]
 
 gauntlet_order = [
-    FillMission(Difficulties.STARTER, [-1], "I", completion_critical=True),
-    FillMission(Difficulties.EASY, [0], "II", completion_critical=True),
-    FillMission(Difficulties.EASY, [1], "III", completion_critical=True),
-    FillMission(Difficulties.MEDIUM, [2], "IV", completion_critical=True),
-    FillMission(Difficulties.MEDIUM, [3], "V", completion_critical=True),
-    FillMission(Difficulties.HARD, [4], "VI", completion_critical=True),
-    FillMission(Difficulties.FINAL, [5], "Final", completion_critical=True)
+    FillMission(MissionPools.STARTER, [-1], "I", completion_critical=True),
+    FillMission(MissionPools.EASY, [0], "II", completion_critical=True),
+    FillMission(MissionPools.EASY, [1], "III", completion_critical=True),
+    FillMission(MissionPools.MEDIUM, [2], "IV", completion_critical=True),
+    FillMission(MissionPools.MEDIUM, [3], "V", completion_critical=True),
+    FillMission(MissionPools.HARD, [4], "VI", completion_critical=True),
+    FillMission(MissionPools.FINAL, [5], "Final", completion_critical=True)
 ]
 
 grid_order = [
-    FillMission(Difficulties.STARTER, [-1], "_1"),
-    FillMission(Difficulties.EASY, [0], "_1"),
-    FillMission(Difficulties.MEDIUM, [1, 6, 3], "_1", or_requirements=True),
-    FillMission(Difficulties.HARD, [2, 7], "_1", or_requirements=True),
-    FillMission(Difficulties.EASY, [0], "_2"),
-    FillMission(Difficulties.MEDIUM, [1, 4], "_2", or_requirements=True),
-    FillMission(Difficulties.HARD, [2, 5, 10, 7], "_2", or_requirements=True),
-    FillMission(Difficulties.HARD, [3, 6, 11], "_2", or_requirements=True),
-    FillMission(Difficulties.MEDIUM, [4, 9, 12], "_3", or_requirements=True),
-    FillMission(Difficulties.HARD, [5, 8, 10, 13], "_3", or_requirements=True),
-    FillMission(Difficulties.HARD, [6, 9, 11, 14], "_3", or_requirements=True),
-    FillMission(Difficulties.HARD, [7, 10], "_3", or_requirements=True),
-    FillMission(Difficulties.HARD, [8, 13], "_4", or_requirements=True),
-    FillMission(Difficulties.HARD, [9, 12, 14], "_4", or_requirements=True),
-    FillMission(Difficulties.HARD, [10, 13], "_4", or_requirements=True),
-    FillMission(Difficulties.FINAL, [11, 14], "_4", or_requirements=True)
+    FillMission(MissionPools.STARTER, [-1], "_1"),
+    FillMission(MissionPools.EASY, [0], "_1"),
+    FillMission(MissionPools.MEDIUM, [1, 6, 3], "_1", or_requirements=True),
+    FillMission(MissionPools.HARD, [2, 7], "_1", or_requirements=True),
+    FillMission(MissionPools.EASY, [0], "_2"),
+    FillMission(MissionPools.MEDIUM, [1, 4], "_2", or_requirements=True),
+    FillMission(MissionPools.HARD, [2, 5, 10, 7], "_2", or_requirements=True),
+    FillMission(MissionPools.HARD, [3, 6, 11], "_2", or_requirements=True),
+    FillMission(MissionPools.MEDIUM, [4, 9, 12], "_3", or_requirements=True),
+    FillMission(MissionPools.HARD, [5, 8, 10, 13], "_3", or_requirements=True),
+    FillMission(MissionPools.HARD, [6, 9, 11, 14], "_3", or_requirements=True),
+    FillMission(MissionPools.HARD, [7, 10], "_3", or_requirements=True),
+    FillMission(MissionPools.HARD, [8, 13], "_4", or_requirements=True),
+    FillMission(MissionPools.HARD, [9, 12, 14], "_4", or_requirements=True),
+    FillMission(MissionPools.HARD, [10, 13], "_4", or_requirements=True),
+    FillMission(MissionPools.FINAL, [11, 14], "_4", or_requirements=True)
 ]
 
 mini_grid_order = [
-    FillMission(Difficulties.STARTER, [-1], "_1"),
-    FillMission(Difficulties.EASY, [0], "_1"),
-    FillMission(Difficulties.MEDIUM, [1, 5], "_1", or_requirements=True),
-    FillMission(Difficulties.EASY, [0], "_2"),
-    FillMission(Difficulties.MEDIUM, [1, 3], "_2", or_requirements=True),
-    FillMission(Difficulties.HARD, [2, 4], "_2", or_requirements=True),
-    FillMission(Difficulties.MEDIUM, [3, 7], "_3", or_requirements=True),
-    FillMission(Difficulties.HARD, [4, 6], "_3", or_requirements=True),
-    FillMission(Difficulties.FINAL, [5, 7], "_3", or_requirements=True)
+    FillMission(MissionPools.STARTER, [-1], "_1"),
+    FillMission(MissionPools.EASY, [0], "_1"),
+    FillMission(MissionPools.MEDIUM, [1, 5], "_1", or_requirements=True),
+    FillMission(MissionPools.EASY, [0], "_2"),
+    FillMission(MissionPools.MEDIUM, [1, 3], "_2", or_requirements=True),
+    FillMission(MissionPools.HARD, [2, 4], "_2", or_requirements=True),
+    FillMission(MissionPools.MEDIUM, [3, 7], "_3", or_requirements=True),
+    FillMission(MissionPools.HARD, [4, 6], "_3", or_requirements=True),
+    FillMission(MissionPools.FINAL, [5, 7], "_3", or_requirements=True)
 ]
 
 blitz_order = [
-    FillMission(Difficulties.STARTER, [-1], "I"),
-    FillMission(Difficulties.EASY, [-1], "I"),
-    FillMission(Difficulties.MEDIUM, [0, 1], "II", number=1, or_requirements=True),
-    FillMission(Difficulties.MEDIUM, [0, 1], "II", number=1, or_requirements=True),
-    FillMission(Difficulties.MEDIUM, [0, 1], "III", number=2, or_requirements=True),
-    FillMission(Difficulties.MEDIUM, [0, 1], "III", number=2, or_requirements=True),
-    FillMission(Difficulties.HARD, [0, 1], "IV", number=3, or_requirements=True),
-    FillMission(Difficulties.HARD, [0, 1], "IV", number=3, or_requirements=True),
-    FillMission(Difficulties.HARD, [0, 1], "V", number=4, or_requirements=True),
-    FillMission(Difficulties.HARD, [0, 1], "V", number=4, or_requirements=True),
-    FillMission(Difficulties.HARD, [0, 1], "Final", number=5, or_requirements=True),
-    FillMission(Difficulties.FINAL, [0, 1], "Final", number=5, or_requirements=True)
+    FillMission(MissionPools.STARTER, [-1], "I"),
+    FillMission(MissionPools.EASY, [-1], "I"),
+    FillMission(MissionPools.MEDIUM, [0, 1], "II", number=1, or_requirements=True),
+    FillMission(MissionPools.MEDIUM, [0, 1], "II", number=1, or_requirements=True),
+    FillMission(MissionPools.MEDIUM, [0, 1], "III", number=2, or_requirements=True),
+    FillMission(MissionPools.MEDIUM, [0, 1], "III", number=2, or_requirements=True),
+    FillMission(MissionPools.HARD, [0, 1], "IV", number=3, or_requirements=True),
+    FillMission(MissionPools.HARD, [0, 1], "IV", number=3, or_requirements=True),
+    FillMission(MissionPools.HARD, [0, 1], "V", number=4, or_requirements=True),
+    FillMission(MissionPools.HARD, [0, 1], "V", number=4, or_requirements=True),
+    FillMission(MissionPools.HARD, [0, 1], "Final", number=5, or_requirements=True),
+    FillMission(MissionPools.FINAL, [0, 1], "Final", number=5, or_requirements=True)
 ]
 
 mission_orders = [vanilla_shuffle_order, vanilla_shuffle_order, mini_campaign_order, grid_order, mini_grid_order, blitz_order, gauntlet_order]
