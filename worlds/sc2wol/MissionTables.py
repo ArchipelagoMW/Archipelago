@@ -91,9 +91,9 @@ mini_campaign_order = [
 gauntlet_order = [
     FillMission(Difficulties.STARTER, [-1], "I", completion_critical=True),
     FillMission(Difficulties.EASY, [0], "II", completion_critical=True),
-    FillMission(Difficulties.MEDIUM, [1], "III", completion_critical=True),
+    FillMission(Difficulties.EASY, [1], "III", completion_critical=True),
     FillMission(Difficulties.MEDIUM, [2], "IV", completion_critical=True),
-    FillMission(Difficulties.HARD, [3], "V", completion_critical=True),
+    FillMission(Difficulties.MEDIUM, [3], "V", completion_critical=True),
     FillMission(Difficulties.HARD, [4], "VI", completion_critical=True),
     FillMission(Difficulties.FINAL, [5], "Final", completion_critical=True)
 ]
