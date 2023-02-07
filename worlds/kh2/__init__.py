@@ -28,7 +28,7 @@ class KingdomHearts2Web(WebWorld):
 class KH2World(World):
     game: str = "Kingdom Hearts 2"
 
-    data_version = 1
+    data_version = 0
     option_definitions = KH2_Options
     topology_present: bool = True  # show path to required location checks in spoiler
     remote_items: bool = False
