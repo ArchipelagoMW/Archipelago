@@ -244,6 +244,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.crazy_gadget_omo_9,
         LocationName.crazy_gadget_omo_10,
         LocationName.crazy_gadget_omo_11,
+        LocationName.crazy_gadget_omo_12,
+        LocationName.crazy_gadget_omo_13,
         LocationName.crazy_gadget_beetle,
         LocationName.crazy_gadget_upgrade,
     ]
@@ -468,6 +470,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.aquatic_mine_omo_4,
         LocationName.aquatic_mine_omo_5,
         LocationName.aquatic_mine_omo_6,
+        LocationName.aquatic_mine_omo_7,
         LocationName.aquatic_mine_beetle,
         LocationName.aquatic_mine_upgrade,
     ]
@@ -496,6 +499,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.death_chamber_omo_6,
         LocationName.death_chamber_omo_7,
         LocationName.death_chamber_omo_8,
+        LocationName.death_chamber_omo_9,
         LocationName.death_chamber_beetle,
         LocationName.death_chamber_upgrade,
     ]
@@ -544,6 +548,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.radical_highway_omo_4,
         LocationName.radical_highway_omo_5,
         LocationName.radical_highway_omo_6,
+        LocationName.radical_highway_omo_7,
+        LocationName.radical_highway_omo_8,
         LocationName.radical_highway_beetle,
         LocationName.radical_highway_upgrade,
     ]
@@ -781,6 +787,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.egg_quarters_omo_3,
         LocationName.egg_quarters_omo_4,
         LocationName.egg_quarters_omo_5,
+        LocationName.egg_quarters_omo_6,
+        LocationName.egg_quarters_omo_7,
         LocationName.egg_quarters_beetle,
         LocationName.egg_quarters_upgrade,
     ]

@@ -746,6 +746,9 @@ def set_mission_upgrade_rules_standard(world: MultiWorld, player: int):
                                state.has(ItemName.knuckles_hammer_gloves, player) and
                                state.has(ItemName.knuckles_air_necklace, player))
 
+        add_rule(world.get_location(LocationName.death_chamber_omo_9, player),
+                 lambda state: state.has(ItemName.knuckles_mystic_melody, player) and
+                               state.has(ItemName.knuckles_hammer_gloves, player))
         add_rule(world.get_location(LocationName.eternal_engine_omo_9, player),
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(world.get_location(LocationName.crazy_gadget_omo_9, player),
@@ -761,21 +764,26 @@ def set_mission_upgrade_rules_standard(world: MultiWorld, player: int):
                  lambda state: state.has(ItemName.tails_booster, player) and
                                state.has(ItemName.tails_bazooka, player))
         add_rule(world.get_location(LocationName.crazy_gadget_omo_10, player),
-                 lambda state: state.has(ItemName.sonic_light_shoes, player) and
-                               state.has(ItemName.sonic_bounce_bracelet, player) and
-                               state.has(ItemName.sonic_flame_ring, player))
+                 lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
 
         add_rule(world.get_location(LocationName.eternal_engine_omo_11, player),
                  lambda state: state.has(ItemName.tails_booster, player) and
                                state.has(ItemName.tails_bazooka, player))
         add_rule(world.get_location(LocationName.crazy_gadget_omo_11, player),
-                 lambda state: state.has(ItemName.sonic_light_shoes, player) and
-                               state.has(ItemName.sonic_bounce_bracelet, player) and
-                               state.has(ItemName.sonic_flame_ring, player))
+                 lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
 
         add_rule(world.get_location(LocationName.eternal_engine_omo_12, player),
                  lambda state: state.has(ItemName.tails_booster, player) and
                                state.has(ItemName.tails_bazooka, player))
+        add_rule(world.get_location(LocationName.crazy_gadget_omo_12, player),
+                 lambda state: state.has(ItemName.sonic_light_shoes, player) and
+                               state.has(ItemName.sonic_bounce_bracelet, player) and
+                               state.has(ItemName.sonic_flame_ring, player))
+
+        add_rule(world.get_location(LocationName.crazy_gadget_omo_13, player),
+                 lambda state: state.has(ItemName.sonic_light_shoes, player) and
+                               state.has(ItemName.sonic_bounce_bracelet, player) and
+                               state.has(ItemName.sonic_flame_ring, player))
 
     # Gold Beetle Upgrade Requirements
     if world.beetlesanity[player]:
@@ -1298,6 +1306,9 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
                  lambda state: state.has(ItemName.tails_booster, player) and
                                state.has(ItemName.knuckles_hammer_gloves, player))
 
+        add_rule(world.get_location(LocationName.death_chamber_omo_9, player),
+                 lambda state: state.has(ItemName.knuckles_mystic_melody, player) and
+                               state.has(ItemName.knuckles_hammer_gloves, player))
         add_rule(world.get_location(LocationName.eternal_engine_omo_9, player),
                  lambda state: state.has(ItemName.tails_booster, player))
 
@@ -1308,20 +1319,21 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
         add_rule(world.get_location(LocationName.eternal_engine_omo_10, player),
                  lambda state: state.has(ItemName.tails_booster, player) and
                                state.has(ItemName.tails_bazooka, player))
-        add_rule(world.get_location(LocationName.crazy_gadget_omo_10, player),
-                 lambda state: state.has(ItemName.sonic_light_shoes, player) and
-                               state.has(ItemName.sonic_flame_ring, player))
 
         add_rule(world.get_location(LocationName.eternal_engine_omo_11, player),
                  lambda state: state.has(ItemName.tails_booster, player) and
                                state.has(ItemName.tails_bazooka, player))
-        add_rule(world.get_location(LocationName.crazy_gadget_omo_11, player),
-                 lambda state: state.has(ItemName.sonic_light_shoes, player) and
-                               state.has(ItemName.sonic_flame_ring, player))
 
         add_rule(world.get_location(LocationName.eternal_engine_omo_12, player),
                  lambda state: state.has(ItemName.tails_booster, player) and
                                state.has(ItemName.tails_bazooka, player))
+        add_rule(world.get_location(LocationName.crazy_gadget_omo_12, player),
+                 lambda state: state.has(ItemName.sonic_light_shoes, player) and
+                               state.has(ItemName.sonic_flame_ring, player))
+
+        add_rule(world.get_location(LocationName.crazy_gadget_omo_13, player),
+                 lambda state: state.has(ItemName.sonic_light_shoes, player) and
+                               state.has(ItemName.sonic_flame_ring, player))
 
     # Gold Beetle Upgrade Requirements
     if world.beetlesanity[player]:

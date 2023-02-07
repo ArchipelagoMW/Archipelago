@@ -649,6 +649,7 @@ omochao_location_table = {
     LocationName.iron_gate_omo_6: 0xFF08B0,
     LocationName.dry_lagoon_omo_6: 0xFF08B1,
     LocationName.radical_highway_omo_6: 0xFF08B3,
+    LocationName.egg_quarters_omo_6: 0xFF08B4,
     LocationName.lost_colony_omo_6: 0xFF08B5,
     LocationName.security_hall_omo_6: 0xFF08B7,
 
@@ -659,11 +660,14 @@ omochao_location_table = {
     LocationName.prison_lane_omo_7: 0xFF08C2,
     LocationName.pumpkin_hill_omo_7: 0xFF08C5,
     LocationName.mission_street_omo_7: 0xFF08C6,
+    LocationName.aquatic_mine_omo_6: 0xFF08C7,
     LocationName.death_chamber_omo_7: 0xFF08CB,
     LocationName.eternal_engine_omo_7: 0xFF08CC,
     LocationName.crazy_gadget_omo_7: 0xFF08CE,
 
     LocationName.dry_lagoon_omo_7: 0xFF08D1,
+    LocationName.radical_highway_omo_7: 0xFF08D3,
+    LocationName.egg_quarters_omo_7: 0xFF08D4,
     LocationName.lost_colony_omo_7: 0xFF08D5,
     LocationName.security_hall_omo_7: 0xFF08D7,
 
@@ -679,6 +683,7 @@ omochao_location_table = {
     LocationName.crazy_gadget_omo_8: 0xFF08EE,
 
     LocationName.dry_lagoon_omo_8: 0xFF08F1,
+    LocationName.radical_highway_omo_8: 0xFF08F3,
     LocationName.lost_colony_omo_8: 0xFF08F5,
     LocationName.security_hall_omo_8: 0xFF08F7,
 
@@ -688,6 +693,7 @@ omochao_location_table = {
     LocationName.wild_canyon_omo_9: 0xFF0901,
     LocationName.prison_lane_omo_9: 0xFF0902,
     LocationName.pumpkin_hill_omo_9: 0xFF0905,
+    LocationName.death_chamber_omo_9: 0xFF090B,
     LocationName.eternal_engine_omo_9: 0xFF090C,
     LocationName.crazy_gadget_omo_9: 0xFF090E,
 
@@ -715,11 +721,13 @@ omochao_location_table = {
 
     LocationName.city_escape_omo_12: 0xFF0960,
     LocationName.eternal_engine_omo_12: 0xFF096C,
+    LocationName.crazy_gadget_omo_12: 0xFF096E,
 
     LocationName.dry_lagoon_omo_12: 0xFF0971,
     LocationName.security_hall_omo_12: 0xFF0977,
 
     LocationName.city_escape_omo_13: 0xFF0980,
+    LocationName.crazy_gadget_omo_13: 0xFF098E,
 
     LocationName.city_escape_omo_14: 0xFF09A0,
 }
