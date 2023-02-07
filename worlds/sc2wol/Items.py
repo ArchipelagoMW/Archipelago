@@ -184,7 +184,7 @@ filler_items: typing.Tuple[str, ...] = (
 
 defense_ratings = {
     "Siege Tank": 5,
-    "Maelstrom Rounds": 2,
+    # "Maelstrom Rounds": 2,
     "Planetary Fortress": 3,
     # Bunker w/ Marine/Marauder: 3,
     "Perdition Turret": 2,

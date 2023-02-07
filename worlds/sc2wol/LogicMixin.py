@@ -28,6 +28,8 @@ class SC2WoLLogic(LogicMixin):
         defense_score = sum((defense_ratings[item] for item in defense_ratings if self.has(item, player)))
         if self.has_any({'Marine', 'Marauder'}, player) and self.has('Bunker', player):
             defense_score += 3
+        if self.has_all({'Siege Tank', 'Maelstrom Rounds'}, player):
+            defense_score += 2
         if zerg_enemy:
             defense_score += sum((zerg_defense_ratings[item] for item in zerg_defense_ratings if self.has(item, player)))
             if self.has('Firebat', player) and self.has('Bunker', player):
