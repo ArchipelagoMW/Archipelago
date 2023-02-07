@@ -104,12 +104,23 @@ def get_random_room_in_regions(regions: [str], random) -> int:
 # TODO: That, combined with 3 new items, would put half the locations in play
 location_table = {
     "Blue Labyrinth 0": LocationData("Overworld", "Blue Labyrinth 0", 0x4,
-                                     [WorldPosition(0x4),
-                                      WorldPosition(0x5)]),
+                                     [WorldPosition(0x4, 0x83, 0x47),  # exit upper right
+                                      WorldPosition(0x4, 0x12, 0x47),  # exit upper left
+                                      WorldPosition(0x4, 0x65, 0x20),  # exit bottom right
+                                      WorldPosition(0x4, 0x2A, 0x20),  # exit bottom left
+                                      WorldPosition(0x5, 0x4B, 0x60),  # T room, top
+                                      WorldPosition(0x5, 0x28, 0x1F),  # T room, bottom left
+                                      WorldPosition(0x5, 0x70, 0x1F),  # T room, bottom right
+                                      ]),
     "Blue Labyrinth 1": LocationData("Overworld", "Blue Labyrinth 1", 0x6,
-                                     [WorldPosition(0x6),
-                                      WorldPosition(0x7),
-                                      WorldPosition(0x8)]),
+                                     [WorldPosition(0x6, 0x8C, 0x20),  # final turn bottom right
+                                      WorldPosition(0x6, 0x03, 0x20),  # final turn bottom left
+                                      WorldPosition(0x6, 0x4B, 0x30),  # final turn center
+                                      WorldPosition(0x7, 0x4B, 0x40),  # straightaway center
+                                      WorldPosition(0x8, 0x40, 0x40),  # entrance middle loop
+                                      WorldPosition(0x8, 0x4B, 0x60),  # entrance upper loop
+                                      WorldPosition(0x8, 0x8C, 0x5E),  # entrance right loop
+                                      ]),
     "Catacombs": LocationData("Overworld", "Catacombs", 0x9,
                               [WorldPosition(0x9),
                                WorldPosition(0xA),
@@ -125,26 +136,30 @@ location_table = {
     "Dungeon0": LocationData("BlackCastle", "Dungeon0", 0x13,
                              [WorldPosition(0x13),
                               WorldPosition(0x14)]),
-    "Dungeon Vault": LocationData("BlackCastleVault", "Dungeon Vault", 0x15,
-                                  [WorldPosition(0xB5, 0x46, 0x1B)]),
+    "Dungeon Vault": LocationData("BlackCastleVault", "Dungeon Vault", 0xB5,
+                                  [WorldPosition(0x15, 0x46, 0x1B)]),
     "Dungeon1": LocationData("BlackCastle", "Dungeon1", 0x15,
                              [WorldPosition(0x15),
                               WorldPosition(0x16)]),
     "RedMaze0": LocationData("WhiteCastle", "RedMaze0", 0x17,
-                             [WorldPosition(0x17, 0x70, 0x40),
-                              WorldPosition(0x18, 0x20, 0x40)]),
-    "Red Maze Vault Entrance": LocationData("WhiteCastlePreVaultPeek", "Red Maze Vault Entrance", 0x17,
-                                            [WorldPosition(0xB7, 0x50, 0x60)]),
+                             [WorldPosition(0x17, 0x70, 0x40),  # right side third room
+                              WorldPosition(0x17, 0x18, 0x40),  # left side third room
+                              WorldPosition(0x18, 0x20, 0x40),
+                              WorldPosition(0x18, 0x1A, 0x3F),  # left side second room
+                              WorldPosition(0x18, 0x70, 0x3F),  # right side second room
+                              ]),
+    "Red Maze Vault Entrance": LocationData("WhiteCastlePreVaultPeek", "Red Maze Vault Entrance", 0xB7,
+                                            [WorldPosition(0x17, 0x50, 0x60)]),
     "Red Maze Vault": LocationData("WhiteCastleVault", "Red Maze Vault", 0x19,
                                    [WorldPosition(0x19, 0x4E, 0x35)]),
-    "RedMaze1": LocationData("WhiteCastle", "RedMaze1", 0x1A),
+    "RedMaze1": LocationData("WhiteCastle", "RedMaze1", 0x1A),  # entrance
     "Black Castle Foyer": LocationData("BlackCastle", "Black Castle Foyer", 0x1B),
     "Northeast of Catacombs": LocationData("Overworld", "Northeast of Catacombs", 0x1C),
     "Southeast of Catacombs": LocationData("Overworld", "Southeast of Catacombs", 0x1D),
     "Credits Left Side": LocationData("CreditsRoom", "Credits Left Side", 0x1E,
                                       [WorldPosition(0x1E, 0x25, 0x50)]),
-    "Credits Right Side": LocationData("CreditsRoomFarSide", "Credits Right Side", 0x1E,
-                                       [WorldPosition(0xBE, 0x70, 0x40)]),
+    "Credits Right Side": LocationData("CreditsRoomFarSide", "Credits Right Side", 0xBE,
+                                       [WorldPosition(0x1E, 0x70, 0x40)]),
     "Chalice Home": LocationData("YellowCastle", "Chalice Home", None, event=True)
 }
 

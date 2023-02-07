@@ -19,8 +19,8 @@ class ItemData:
 nothing_item_id = base_adventure_item_id
 
 # base IDs are the index in the static item data table, which is
-# not the same order as the items in RAM (but offsets 0-1 is the 16-bit
-# location of room and position data
+# not the same order as the items in RAM (but offset 0 is a 16-bit address of
+# location of room and position data)
 item_table = {
     "Yellow Key": ItemData(0xB, ItemClassification.progression_skip_balancing),
     "White Key": ItemData(0xC, ItemClassification.progression),
@@ -29,8 +29,16 @@ item_table = {
     "Magnet": ItemData(0x11, ItemClassification.progression),
     "Sword": ItemData(0x9, ItemClassification.progression),
     "Chalice": ItemData(0x10, ItemClassification.progression_skip_balancing),
-    # "Dragon_Revival": ItemData(0x100, ItemClassification.trap) or would this be an event?
-    # "Big_Sword":
+    # Non-ROM Adventure items, managed by lua
+    # Difficulty Switch A
+    # Difficulty Switch B
+    # Freeincarnate
+    # Slow Yorgle
+    # Slow Grundle
+    # Slow Rhindle
+    # Bat Trap
+    # Bat Time Out
+    # "Revive Dragons": ItemData(0x100, ItemClassification.trap)
 }
 
 
