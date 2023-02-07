@@ -204,8 +204,8 @@ def patch_kh2(self, output_directory):
     for x in {122,144,145,}:
         self.formattedItem["Stats"].append({
             "Id":                  x,
-            "Attack":              int(keyblademin+keyblademax/2),
-            "Magic":               int(keyblademin+keyblademax/2),
+            "Attack":              int((keyblademin+keyblademax)/2),
+            "Magic":               int((keyblademin+keyblademax)/2),
             "Defense":             0,
             "Ability":             405,
             "AbilityPoints":       0,
