@@ -4,8 +4,8 @@ from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from .Items import item_table
 from .Locations import get_locations, EventId
 from .Rules import LuigiMansionLogic
-from .Options import is_option_enabled, get_option_value, luigimansion_options
-from .Regions import create_regions
+from .Options import luigimansion_options
+from .Regions import create_regions, is_option_enabled, get_option_value
 from ..AutoWorld import World, WebWorld
 
 # Incomplete, some function removal required
@@ -75,11 +75,6 @@ class LuigiMansionWorld(World):
     def generate_basic(self):
         excluded_items = get_excluded_items(self, self.multiworld, self.player)
 
-        assign_starter_items(self.multiworld, self.player, excluded_items, self.locked_locations)
-
-        if not is_option_enabled(self.multiworld, self.player, "QuickSeed") and not is_option_enabled(self.multiworld, self.player, "Inverted"):
-            place_first_progression_item(self.multiworld, self.player, excluded_items, self.locked_locations)
-
         pool = get_item_pool(self.multiworld, self.player, excluded_items)
 
         fill_item_pool_with_dummy_items(self, self.multiworld, self.player, self.locked_locations, self.location_cache, pool)
@@ -118,28 +113,6 @@ def get_excluded_items(self: LuigiMansionWorld, world: MultiWorld, player: int) 
             excluded_items.add(item.name)
 
     return excluded_items
-
-
-def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]):
-    non_local_items = world.non_local_items[player].value
-
-    local_starter_melee_weapons = tuple(item for item in starter_melee_weapons if item not in non_local_items)
-    if not local_starter_melee_weapons:
-        if 'Plasma Orb' in non_local_items:
-            raise Exception("Atleast one melee orb must be local")
-        else:
-            local_starter_melee_weapons = ('Plasma Orb',)
-
-    local_starter_spells = tuple(item for item in starter_spells if item not in non_local_items)
-    if not local_starter_spells:
-        if 'Lightwall' in non_local_items:
-            raise Exception("Atleast one spell must be local")
-        else:
-            local_starter_spells = ('Lightwall',)
-
-    assign_starter_item(world, player, excluded_items, locked_locations, 'Tutorial: Yo Momma 1', local_starter_melee_weapons)
-    assign_starter_item(world, player, excluded_items, locked_locations, 'Tutorial: Yo Momma 2', local_starter_spells)
-
 
 def assign_starter_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str],
         location: str, item_list: Tuple[str, ...]):
