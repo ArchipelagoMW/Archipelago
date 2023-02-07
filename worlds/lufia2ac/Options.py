@@ -429,28 +429,18 @@ class IrisTreasuresRequired(Range):
     default = 9
 
 
-class MasterHp(SpecialRange):
+class MasterHp(Range):
     """The number of hit points of the Master
 
-    Supported values:
-    1 – 9980,
-    scale — scales the HP depending on the value of final_floor
+    (Only has an effect if boss is set to master.)
+    Supported values: 1 – 9980
     Default value: 9980 (same as in an unmodified game)
     """
 
     display_name = "Master HP"
-    range_start = 0
+    range_start = 1
     range_end = 9980
     default = 9980
-    special_range_cutoff = 1
-    special_range_names = {
-        "default": 9980,
-        "scale": 0,
-    }
-
-    @staticmethod
-    def scale(final_floor: int) -> int:
-        return final_floor * 100 + 80
 
 
 class PartyStartingLevel(LevelMixin, Range):

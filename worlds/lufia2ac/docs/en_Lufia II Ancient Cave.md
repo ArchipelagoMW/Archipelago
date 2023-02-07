@@ -41,11 +41,11 @@ Your Party Leader will hold up the item they received when not in a fight or in 
 - Choose a goal for your world. Possible goals are: 1) Reach the final floor; 2) Defeat the boss on the final floor; 3)
   Retrieve a (customizable) number of iris treasures from the cave; 4) Retrieve the iris treasures *and* defeat the boss
 - You can also randomize the goal; The blue-haired NPC in front of the cafe can tell you about the selected objective
-- Customize (or randomize) the chances of encountering blue chests, healing tiles, iris treasures, etc.
-- Customize (or randomize) the default party lineup and capsule monster
-- Customize (or randomize) the party starting level as well as capsule monster level and form
-- Customize (or randomize) the initial and final floor numbers
-- Customize (or randomize) the boss that resides on the final floor
+- Customize the chances of encountering blue chests, healing tiles, iris treasures, etc.
+- Customize the default party lineup and capsule monster
+- Customize the party starting level as well as capsule monster level and form
+- Customize the initial and final floor numbers
+- Customize the boss that resides on the final floor
 - Customize start inventory, i.e., begin every run with certain items or spells of your choice
 - Option to shuffle your party members and/or capsule monsters into the multiworld, meaning that someone will have to
   find them in order to unlock them for you to use

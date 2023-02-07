@@ -13,7 +13,7 @@ from .Client import L2ACSNIClient  # noqa: F401
 from .Items import ItemData, ItemType, l2ac_item_name_to_id, l2ac_item_table, L2ACItem, start_id as items_start_id
 from .Locations import l2ac_location_name_to_id, L2ACLocation
 from .Options import Boss, CapsuleStartingForm, CapsuleStartingLevel, DefaultParty, Goal, l2ac_option_definitions, \
-    MasterHp, PartyStartingLevel, ShuffleCapsuleMonsters, ShufflePartyMembers
+    PartyStartingLevel, ShuffleCapsuleMonsters, ShufflePartyMembers
 from .Rom import get_base_rom_bytes, get_base_rom_path, L2ACDeltaPatch
 from .basepatch import apply_basepatch
 
@@ -122,8 +122,6 @@ class L2ACWorld(World):
             self.capsule_starting_level.value = self.party_starting_level.value
         if self.initial_floor >= self.final_floor:
             self.initial_floor = self.final_floor - 1
-        if self.master_hp == MasterHp.special_range_names["scale"]:
-            self.master_hp = MasterHp.scale(self.final_floor)
         if self.shuffle_party_members:
             self.default_party.value = DefaultParty.default
 
