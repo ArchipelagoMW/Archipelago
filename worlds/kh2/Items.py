@@ -363,8 +363,8 @@ GoofyAbility_Table = {
 Misc_Table = {
     ItemName.LuckyEmblem: ItemData(0x130126, 0, 367, 0x3641),#letter item
     ItemName.Victory: ItemData(0x130127, 0, 263, 0x111),
-    ItemName.Bounty:ItemData(0x130128   ,0,250,0x36C7,2),#Halloween town Map
-    ItemName.UniversalKey:ItemData(0x130129,0,90,0x36C1,0)#Castle Map
+    ItemName.Bounty:ItemData(0x130128   ,0,90,0x36C1,0),#Castle Map
+    ItemName.UniversalKey:ItemData(0x130129,0,365,0x363F,0)#Tournament Poster
 
 }
 
