@@ -14,7 +14,7 @@ from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems
 from .rules import set_rules
 from .regions import WitnessRegions
 from .Options import is_option_enabled, the_witness_options, get_option_value
-from .utils import best_junk_to_add_based_on_weights, get_audio_logs
+from .utils import best_junk_to_add_based_on_weights, get_audio_logs, make_warning_string
 from logging import warning
 
 
@@ -198,23 +198,29 @@ class WitnessWorld(World):
             self.multiworld.per_slot_randoms[self.player].shuffle(usefuls)
             self.multiworld.per_slot_randoms[self.player].shuffle(removable_doors)
 
-            warning_string = ""
+            removed_junk = False
+            removed_usefuls = False
+            removed_doors = False
 
             for i in range(itempool_difference, 0):
                 if junk:
-                    warning_string = "some junk"
                     self.multiworld.itempool.remove(junk.pop())
-                elif f_brain:
+                    removed_junk = True
+                if f_brain:
                     self.multiworld.itempool.remove(f_brain.pop())
                 elif usefuls:
-                    warning_string = "all junk and some usefuls"
                     self.multiworld.itempool.remove(usefuls.pop())
+                    removed_usefuls = True
                 elif removable_doors:
-                    warning_string = "all junk and usefuls, as well as some non-required door items"
                     self.multiworld.itempool.remove(removable_doors.pop())
+                    removed_doors = True
+
+            warn = make_warning_string(
+                removed_junk, removed_usefuls, removed_doors, not junk, not usefuls, not removable_doors
+            )
 
             warning(f"This Witness world has too few locations to place all its items."
-                    f" In order to make space, {warning_string} had to be removed.")
+                    f" In order to make space, {warn} had to be removed.")
 
     def set_rules(self):
         set_rules(self.multiworld, self.player, self.player_logic, self.locat)
