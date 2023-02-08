@@ -35,9 +35,9 @@ Doors:
 1107 - Symmetry Island Upper (Panel) - 0x1C349
 1110 - Desert Light Room Entry (Panel) - 0x0C339
 1111 - Desert Flood Controls (Panel) - 0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B
-1119 - Quarry Mill Entry (Panel) - 0x01E5A,0x01E59
-1120 - Quarry Mill Ramp Controls (Panel) - 0x03678,0x03676
-1122 - Quarry Mill Lift Controls (Panel) - 0x03679,0x03675
+1119 - Quarry Stoneworks Entry (Panel) - 0x01E5A,0x01E59
+1120 - Quarry Stoneworks Ramp Controls (Panel) - 0x03678,0x03676
+1122 - Quarry Stoneworks Lift Controls (Panel) - 0x03679,0x03675
 1125 - Quarry Boathouse Ramp Height Control (Panel) - 0x03852
 1127 - Quarry Boathouse Ramp Horizontal Control (Panel) - 0x03858
 1131 - Shadows Door Timer (Panel) - 0x334DB,0x334DC
@@ -90,14 +90,14 @@ Doors:
 1630 - Desert Elevator Room Entry (Door) - 0x0C316
 1633 - Quarry Entry 1 (Door) - 0x09D6F
 1636 - Quarry Entry 2 (Door) - 0x17C07
-1639 - Quarry Mill Entry (Door) - 0x02010
-1642 - Quarry Mill Side Exit (Door) - 0x275FF
-1645 - Quarry Mill Roof Exit (Door) - 0x17CE8
-1648 - Quarry Mill Stairs (Door) - 0x0368A
+1639 - Quarry Stoneworks Entry (Door) - 0x02010
+1642 - Quarry Stoneworks Side Exit (Door) - 0x275FF
+1645 - Quarry Stoneworks Roof Exit (Door) - 0x17CE8
+1648 - Quarry Stoneworks Stairs (Door) - 0x0368A
 1651 - Quarry Boathouse Dock (Door) - 0x2769B,0x27163
 1653 - Quarry Boathouse First Barrier (Door) - 0x17C50
 1654 - Quarry Boathouse Second Barrier (Door) - 0x3865F
-1656 - Shadows Timed Door (Door) - 0x19B24
+1656 - Shadows Timed Door - 0x19B24
 1657 - Shadows Laser Entry Right (Door) - 0x194B2
 1660 - Shadows Laser Entry Left (Door) - 0x19665
 1663 - Shadows Quarry Barrier (Door) - 0x19865,0x0A2DF
@@ -121,15 +121,15 @@ Doors:
 1717 - Monastery Garden Entry (Door) - 0x03750
 1718 - Town Cargo Box Entry (Door) - 0x0A0C9
 1720 - Town Wooden Roof Stairs (Door) - 0x034F5
-1723 - Town Tinted Glass Door (Door) - 0x28A61
+1723 - Town Tinted Glass Door - 0x28A61
 1726 - Town Church Entry (Door) - 0x03BB0
 1729 - Town Maze Stairs (Door) - 0x28AA2
 1732 - Town Windmill Entry (Door) - 0x1845B
 1735 - Town RGB House Stairs (Door) - 0x2897B
-1738 - Town Tower First Door (Door) - 0x27798
-1741 - Town Tower Third Door (Door) - 0x27799
-1744 - Town Tower Fourth Door (Door) - 0x2779A
-1747 - Town Tower Second Door (Door) - 0x2779C
+1738 - Town Tower Second (Door) - 0x27798
+1741 - Town Tower First (Door) - 0x27799
+1744 - Town Tower Fourth (Door) - 0x2779A
+1747 - Town Tower Third (Door) - 0x2779C
 1750 - Theater Entry (Door) - 0x17F88
 1753 - Theater Exit Left (Door) - 0x0A16D
 1756 - Theater Exit Right (Door) - 0x3CCDF
@@ -137,7 +137,7 @@ Doors:
 1760 - Jungle Popup Wall (Door) - 0x1475B
 1762 - River Monastery Shortcut (Door) - 0x0CF2A
 1765 - Bunker Entry (Door) - 0x0C2A4
-1768 - Bunker Tinted Glass Door (Door) - 0x17C79
+1768 - Bunker Tinted Glass Door - 0x17C79
 1771 - Bunker UV Room Entry (Door) - 0x0C2A3
 1774 - Bunker Elevator Room Entry (Door) - 0x0A08D
 1777 - Swamp Entry (Door) - 0x00C1C
@@ -150,9 +150,9 @@ Doors:
 1798 - Swamp Blue Water Pump (Door) - 0x18482
 1801 - Swamp Purple Water Pump (Door) - 0x0A1D6
 1804 - Swamp Laser Shortcut (Door) - 0x2D880
-1807 - Treehouse First Door (Door) - 0x0C309
-1810 - Treehouse Second Door (Door) - 0x0C310
-1813 - Treehouse Third Door (Door) - 0x0A181
+1807 - Treehouse First (Door) - 0x0C309
+1810 - Treehouse Second (Door) - 0x0C310
+1813 - Treehouse Third (Door) - 0x0A181
 1816 - Treehouse Drawbridge (Door) - 0x0C32D
 1819 - Treehouse Laser House Entry (Door) - 0x0C323
 1822 - Mountain Floor 1 Exit (Door) - 0x09E54
@@ -163,7 +163,7 @@ Doors:
 1840 - Mountain Bottom Floor Final Room Entry (Door) - 0x0C141
 1843 - Mountain Bottom Floor Rock (Door) - 0x17F33
 1846 - Caves Entry (Door) - 0x2D77D
-1849 - Caves Pillar Door (Door) - 0x019A5
+1849 - Caves Pillar Door - 0x019A5
 1855 - Caves Swamp Shortcut (Door) - 0x2D859
 1858 - Challenge Entry (Door) - 0x0A19A
 1861 - Challenge Tunnels Entry (Door) - 0x0348A
@@ -176,7 +176,7 @@ Doors:
 1909 - Orchard Gates - 0x03313,0x03307
 1912 - Desert Doors - 0x09FEE,0x0C2C3,0x0A24B,0x0C316
 1915 - Quarry Main Entry - 0x09D6F,0x17C07
-1918 - Quarry Mill Shortcuts - 0x17CE8,0x0368A,0x275FF
+1918 - Quarry Stoneworks Shortcuts - 0x17CE8,0x0368A,0x275FF
 1921 - Quarry Boathouse Barriers - 0x17C50,0x3865F
 1924 - Shadows Laser Room Door - 0x194B2,0x19665
 1927 - Shadows Barriers - 0x19865,0x0A2DF,0x1855B,0x19ADE
