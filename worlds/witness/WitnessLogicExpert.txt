@@ -411,7 +411,7 @@ Keep Tower (Keep) - Keep - 0x04F8F:
 158206 - 0x0361B (Tower Shortcut Panel) - True - True
 Door - 0x04F8F (Tower Shortcut) - 0x0361B
 158704 - 0x0360E (Laser Panel Hedges) - 0x01A0F & 0x019E7 & 0x019DC & 0x00139 - True
-158705 - 0x03317 (Laser Panel Pressure Plates) - 0x01BE9 - Shapers & Rotated Shapers & Triangles & Stars & Stars + Same Colored Symbol & Colored Squares & Black/White Squares
+158705 - 0x03317 (Laser Panel Pressure Plates) - 0x033EA & 0x01BE9 & 0x01CD3 & 0x01D3F - Shapers & Rotated Shapers & Triangles & Stars & Stars + Same Colored Symbol & Colored Squares & Black/White Squares
 Laser - 0x014BB (Laser) - 0x0360E | 0x03317
 159240 - 0x033BE (Pressure Plates 1 EP) - 0x033EA - True
 159241 - 0x033BF (Pressure Plates 2 EP) - 0x01BE9 - True
