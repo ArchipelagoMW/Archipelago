@@ -132,15 +132,8 @@ class WitnessWorld(World):
 
         for item in self.items.EXTRA_AMOUNTS:
             for i in range(0, self.items.EXTRA_AMOUNTS[item]):
-                if len(pool) < len(self.locat.CHECK_LOCATION_TABLE) - len(self.locat.EVENT_LOCATION_TABLE) - less_junk:
-                    witness_item = self.create_item(item)
-                    pool.append(witness_item)
-
-        # Put in junk items to fill the rest
-        junk_size = len(self.locat.CHECK_LOCATION_TABLE) - len(pool) - len(self.locat.EVENT_LOCATION_TABLE) - less_junk
-
-        for i in range(0, junk_size):
-            pool.append(self.create_item(self.get_filler_item_name()))
+                witness_item = self.create_item(item)
+                pool.append(witness_item)
 
         # Tie Event Items to Event Locations (e.g. Laser Activations)
         for event_location in self.locat.EVENT_LOCATION_TABLE:
@@ -171,6 +164,57 @@ class WitnessWorld(World):
 
             first_check.place_locked_item(item)
             self.multiworld.itempool.remove(item)
+
+        itempool_difference = len(self.multiworld.get_unfilled_locations(self.player)) - len(self.multiworld.itempool)
+
+        # fill rest of item pool with junk if there is room
+        if itempool_difference > 0:
+            for i in range(0, itempool_difference):
+                self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
+
+        # remove junk, Functioning Brain, useful items (non-door), useful door items in that order until there is room
+        if itempool_difference < 0:
+            junk = [
+                item for item in self.multiworld.itempool
+                if item.classification in {ItemClassification.filler, ItemClassification.trap}
+                and item.name != "Functioning Brain"
+            ]
+
+            f_brain = [item for item in self.multiworld.itempool if item.name == "Functioning Brain"]
+
+            usefuls = [
+                item for item in self.multiworld.itempool
+                if item.classification == ItemClassification.useful
+                and item.name not in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT
+            ]
+
+            removable_doors = [
+                item for item in self.multiworld.itempool
+                if item.classification == ItemClassification.useful
+                and item.name in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT
+            ]
+
+            self.multiworld.per_slot_randoms[self.player].shuffle(junk)
+            self.multiworld.per_slot_randoms[self.player].shuffle(usefuls)
+            self.multiworld.per_slot_randoms[self.player].shuffle(removable_doors)
+
+            warning_string = ""
+
+            for i in range(itempool_difference, 0):
+                if junk:
+                    warning_string = "some junk"
+                    self.multiworld.itempool.remove(junk.pop())
+                elif f_brain:
+                    self.multiworld.itempool.remove(f_brain.pop())
+                elif usefuls:
+                    warning_string = "all junk and some usefuls"
+                    self.multiworld.itempool.remove(usefuls.pop())
+                elif removable_doors:
+                    warning_string = "all junk and usefuls, as well as some non-required door items"
+                    self.multiworld.itempool.remove(removable_doors.pop())
+
+            warning(f"This Witness world has too few locations to place all its items."
+                    f" In order to make space, {warning_string} had to be removed.")
 
     def set_rules(self):
         set_rules(self.multiworld, self.player, self.player_logic, self.locat)
