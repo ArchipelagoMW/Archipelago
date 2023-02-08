@@ -704,6 +704,7 @@ omochao_location_table = {
 
     LocationName.city_escape_omo_10: 0xFF0920,
     LocationName.wild_canyon_omo_10: 0xFF0921,
+    LocationName.prison_lane_omo_10: 0xFF0922,
     LocationName.pumpkin_hill_omo_10: 0xFF0925,
     LocationName.eternal_engine_omo_10: 0xFF092C,
     LocationName.crazy_gadget_omo_10: 0xFF092E,

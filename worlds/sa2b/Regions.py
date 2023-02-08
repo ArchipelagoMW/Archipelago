@@ -296,6 +296,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.prison_lane_omo_7,
         LocationName.prison_lane_omo_8,
         LocationName.prison_lane_omo_9,
+        LocationName.prison_lane_omo_10,
         LocationName.prison_lane_beetle,
         LocationName.prison_lane_upgrade,
     ]
