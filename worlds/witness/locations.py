@@ -13,13 +13,10 @@ class StaticWitnessLocations:
     """
     ID_START = 158000
 
-    EXTRA_LOCATIONS = {
+    GENERAL_LOCATIONS = {
         "Tutorial Front Left",
         "Tutorial Back Left",
         "Tutorial Back Right",
-    }
-
-    GENERAL_LOCATIONS = {
         "Tutorial Gate Open",
 
         "Outside Tutorial Vault Box",
