@@ -646,7 +646,7 @@ def set_mission_upgrade_rules_standard(world: MultiWorld, player: int):
                  lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
         add_rule(world.get_location(LocationName.eternal_engine_omo_3, player),
                  lambda state: state.has(ItemName.tails_booster, player))
-        add_rule(world, LocationName.final_rush_omo_3, player,
+        add_rule(world.get_location(LocationName.final_rush_omo_3, player),
                  lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
 
         add_rule(world.get_location(LocationName.weapons_bed_omo_3, player),
@@ -1240,7 +1240,7 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(world.get_location(LocationName.eternal_engine_omo_3, player),
                  lambda state: state.has(ItemName.tails_booster, player))
-        add_rule(world, LocationName.final_rush_omo_3, player,
+        add_rule(world.get_location(LocationName.final_rush_omo_3, player),
                  lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
 
         add_rule(world.get_location(LocationName.weapons_bed_omo_3, player),
