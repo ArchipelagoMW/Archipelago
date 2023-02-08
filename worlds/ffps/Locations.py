@@ -3,13 +3,13 @@ import typing
 from .Items import item_table
 
 
-class AdvData(typing.NamedTuple):
+class LocData(typing.NamedTuple):
     id: typing.Optional[int]
     region: str
     setId: str
 
 
-class FFPSAdvancement(Location):
+class FFPSLocations(Location):
     game: str = "FFPS"
 
     def __init__(self, player: int, name: str, address: typing.Optional[int], parent):
@@ -17,26 +17,32 @@ class FFPSAdvancement(Location):
         self.event = not address
 
 
-advancement_table = {
-    "Salvage ScrapTrap": AdvData(57500, 'Salvage', "m3"),
-    "Salvage Scrap Baby": AdvData(57501, 'Salvage', "m4"),
-    "Salvage Lefty": AdvData(57502, 'Salvage', "m5"),
-    "Salvage Molten Freddy": AdvData(57503, 'Salvage', "m2"),
-    "Unlocked Catalogue 2": AdvData(None, 'Pizzeria', ""),
-    "Unlocked Catalogue 3": AdvData(None, 'Pizzeria', ""),
-    "Unlocked Catalogue 4": AdvData(None, 'Pizzeria', ""),
+location_table = {
+    "Salvage ScrapTrap": LocData(57500, 'Salvage', "m3"),
+    "Salvage Scrap Baby": LocData(57501, 'Salvage', "m4"),
+    "Salvage Lefty": LocData(57502, 'Salvage', "m5"),
+    "Salvage Molten Freddy": LocData(57503, 'Salvage', "m2"),
+    "Unlocked Catalogue 2": LocData(57504, 'Pizzeria', "un1"),
+    "Unlocked Catalogue 3": LocData(57505, 'Pizzeria', "un2"),
+    "Unlocked Catalogue 4": LocData(57506, 'Pizzeria', "un3"),
+    "Bought Printer Upgrade": LocData(57507, 'Office', "printer"),
+    "Bought Handyman Upgrade": LocData(57508, 'Office', "handyman"),
+    "Bought Internet Upgrade": LocData(57509, 'Office', "hispeed"),
 }
 
 for name, data in item_table.items():
     if data.setId != "":
-        if data.code > 55503 and data.setId != "stage" and data.setId != "cups" and data.setId != "speakers":
-            advancement_table.update({"Buy "+name: AdvData(len(advancement_table)+57500, 'Pizzeria', data.setId), })
+        if data.code >= 55600 and data.setId != "stage" and data.setId != "cups" and data.setId != "speakers":
+            location_table.update({"Buy " + name: LocData(len(location_table)+57500, 'Pizzeria', data.setId), })
 for i in range(5):
-    advancement_table.update({"Buy Stage Upgrade "+str(i+1): AdvData(len(advancement_table)+57500, 'Pizzeria', 'stage'), })
+    location_table.update({"Buy Stage Upgrade " +
+                           str(i+1): LocData(len(location_table)+57500, 'Pizzeria', 'stage'), })
 for i in range(4):
-    advancement_table.update({"Buy Cups Upgrade "+str(i+1): AdvData(len(advancement_table)+57500, 'Pizzeria', 'cups'), })
+    location_table.update({"Buy Cups Upgrade " +
+                           str(i+1): LocData(len(location_table)+57500, 'Pizzeria', 'cups'), })
 for i in range(2):
-    advancement_table.update({"Buy Speaker Upgrade "+str(i+1): AdvData(len(advancement_table)+57500, 'Pizzeria', 'speakers'), })
+    location_table.update({"Buy Speaker Upgrade " +
+                           str(i+1): LocData(len(location_table)+57500, 'Pizzeria', 'speakers'), })
 
 exclusion_table = {
 }
@@ -44,4 +50,4 @@ exclusion_table = {
 events_table = {
 }
 
-lookup_id_to_name: typing.Dict[int, str] = {data.id: item_name for item_name, data in advancement_table.items() if data.id}
+lookup_id_to_name: typing.Dict[int, str] = {data.id: item_name for item_name, data in location_table.items() if data.id}

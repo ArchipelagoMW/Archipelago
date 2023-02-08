@@ -1,27 +1,14 @@
 from __future__ import annotations
-import os
-import logging
-import asyncio
-import string
-import urllib.parse
 import multiprocessing
-import sys
-import typing
-import time
-
-import websockets
 
 import Utils
 
 if __name__ == "__main__":
     Utils.init_logging("ffpsClient", exception_logger="Client")
 
-from MultiServer import CommandProcessor
-from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
-from Utils import Version, stream_input
-from worlds import network_data_package, AutoWorldRegister, ffps
+from worlds import ffps
 from CommonClient import *
-from worlds.ffps import FFPSWorld, item_table, advancement_table
+from worlds.ffps import FFPSWorld, item_table, location_table
 import bsdiff4
 
 
@@ -36,7 +23,8 @@ class FFPSCommandProcessor(ClientCommandProcessor):
 
     def _cmd_patch(self):
         """Patch the vanilla game."""
-        bsdiff4.file_patch(os.getcwd() + "/FFPS Game/Pizzeria Simulator.exe", os.getcwd() + "/FFPS Game/FFPS Mod.exe", ffps.data_path("patch.bsdiff"))
+        bsdiff4.file_patch(os.getcwd() + "/FFPS Game/Pizzeria Simulator.exe", os.getcwd() + "/FFPS Game/FFPS Mod.exe",
+                           ffps.data_path("patch.bsdiff"))
         self.output(f"Done!")
 
 
@@ -49,6 +37,7 @@ class FFPSContext(CommonContext):
         super().__init__(server_address, password)
         self.syncing = False
         self.max_anim = 4
+        self.difficulty = 0
         self.recieved_stages = 0
         self.recieved_cups = 0
         self.recieved_speakers = 0
@@ -64,54 +53,6 @@ class FFPSContext(CommonContext):
         await self.send_connect()
 
 
-async def server_loop(ctx: CommonContext, address=None):
-    cached_address = None
-    if ctx.server and ctx.server.socket:
-        logger.error('Already connected')
-        return
-
-    if address is None:  # set through CLI or APBP
-        address = ctx.server_address
-
-    # Wait for the user to provide a multiworld server address
-    if not address:
-        logger.info('Please connect to an Archipelago server.')
-        return
-
-    address = f"ws://{address}" if "://" not in address else address
-    port = urllib.parse.urlparse(address).port or 38281
-    logger.info(f'Connecting to Archipelago server at {address}')
-    try:
-        socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None)
-        ctx.server = Endpoint(socket)
-        logger.info('Connected')
-        ctx.server_address = address
-        ctx.current_reconnect_delay = ctx.starting_reconnect_delay
-        async for data in ctx.server.socket:
-            for msg in decode(data):
-                await process_server_cmd(ctx, msg)
-        ctx.connected_success = False
-        logger.warning('Disconnected from multiworld server, type /connect to reconnect')
-    except ConnectionRefusedError:
-        if cached_address:
-            logger.error('Unable to connect to multiworld server at cached address. '
-                         'Please use the connect button above.')
-        else:
-            logger.exception('Connection refused by the multiworld server')
-    except websockets.InvalidURI:
-        logger.exception('Failed to connect to the multiworld server (invalid URI)')
-    except (OSError, websockets.InvalidURI):
-        logger.exception('Failed to connect to the multiworld server')
-    except Exception as e:
-        logger.exception('Lost connection to the multiworld server, type /connect to reconnect')
-    finally:
-        await ctx.connection_closed()
-        if ctx.server_address:
-            logger.info(f"... reconnecting in {ctx.current_reconnect_delay}s")
-            asyncio.create_task(server_autoreconnect(ctx), name="server auto reconnect")
-        ctx.current_reconnect_delay *= 2
-
-
 async def not_in_use(filename):
     try:
         os.rename(filename, filename)
@@ -123,6 +64,7 @@ async def not_in_use(filename):
 async def process_ffps_cmd(ctx: FFPSContext, cmd: str, args: dict):
     if cmd == 'Connected':
         ctx.max_anim = args["slot_data"]["max_anim_appears"]
+        ctx.difficulty = args["slot_data"]["night_difficulty"]
         path = os.path.expandvars("%appdata%/MMFApplications/FNAF6")
         if not os.path.exists(path):
             with open(path, "w") as f:
@@ -150,9 +92,13 @@ async def process_ffps_cmd(ctx: FFPSContext, cmd: str, args: dict):
                             with open(os.path.expandvars("%appdata%/MMFApplications/FNAF6"), 'r+') as f:
                                 lines = f.read()
                                 item_got = item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId
-                                if (lines.count("m2")+lines.count("m3")+lines.count("m4")+lines.count("m5")) < ctx.max_anim and (item_got == "m2" or item_got == "m3" or item_got == "m4" or item_got == "m5"):
+                                if (lines.count("m2")+lines.count("m3")+lines.count("m4")+lines.count("m5")) < \
+                                        ctx.max_anim and \
+                                        (item_got == "m2" or item_got == "m3" or item_got == "m4" or item_got == "m5"):
                                     f.write(str(item_got)+"=1\n")
-                                if not item_got == "m2" and not item_got == "m3" and not item_got == "m4" and not item_got == "m5" and not item_got == "speakers" and not item_got == "cups" and not item_got == "stage":
+                                if not item_got == "m2" and not item_got == "m3" and not item_got == "m4" \
+                                        and not item_got == "m5" and not item_got == "speakers" \
+                                        and not item_got == "cups" and not item_got == "stage":
                                     f.write(str(item_got)+"=1\n")
                                 if not lines.__contains__("stage="):
                                     f.write("stage=0\n")
@@ -161,13 +107,7 @@ async def process_ffps_cmd(ctx: FFPSContext, cmd: str, args: dict):
                                 if not lines.__contains__("speakers="):
                                     f.write("speakers=0\n")
                                 if not lines.__contains__("money="):
-                                    f.write("money=100\n")
-                                if not lines.__contains__("first="):
-                                    f.write("first=1\n")
-                                if not lines.__contains__("night="):
-                                    f.write("night=1\n")
-                                if not lines.__contains__("phase="):
-                                    f.write("phase=1\n")
+                                    f.write("money=200\n")
                                 f.close()
                             break
                         except PermissionError:
@@ -178,22 +118,28 @@ async def process_ffps_cmd(ctx: FFPSContext, cmd: str, args: dict):
                                 replacement = ""
                                 for line in file:
                                     line = line.strip()
-                                    if item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == "stage":
+                                    if item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == \
+                                            "stage":
                                         if line.__contains__("stage="):
                                             ctx.recieved_stages += 1
-                                            changes = line.replace("stage="+line[line.find("stage=")+6], "stage="+str(ctx.recieved_stages))
+                                            changes = line.replace("stage="+line[line.find("stage=")+6],
+                                                                   "stage=" + str(ctx.recieved_stages))
                                         else:
                                             changes = line
-                                    elif item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == "cups":
+                                    elif item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == \
+                                            "cups":
                                         if line.__contains__("cups="):
                                             ctx.recieved_cups += 1
-                                            changes = line.replace("cups="+line[line.find("cups=")+5], "cups="+str(ctx.recieved_cups))
+                                            changes = line.replace("cups="+line[line.find("cups=")+5],
+                                                                   "cups=" + str(ctx.recieved_cups))
                                         else:
                                             changes = line
-                                    elif item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == "speakers":
+                                    elif item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == \
+                                            "speakers":
                                         if line.__contains__("speakers="):
                                             ctx.recieved_speakers += 1
-                                            changes = line.replace("speakers="+line[line.find("speakers=")+9], "speakers="+str(ctx.recieved_speakers))
+                                            changes = line.replace("speakers="+line[line.find("speakers=")+9],
+                                                                   "speakers=" + str(ctx.recieved_speakers))
                                         else:
                                             changes = line
                                     else:
@@ -212,16 +158,19 @@ async def process_ffps_cmd(ctx: FFPSContext, cmd: str, args: dict):
                             temp_lines.append(ln+"\n")
                     anim_count = 0
                     for itm in ctx.items_received:
-                        if item_table[FFPSWorld.item_id_to_name[itm.item]].setId == "m2" or item_table[FFPSWorld.item_id_to_name[itm.item]].setId == "m3" or item_table[FFPSWorld.item_id_to_name[itm.item]].setId == "m4" or item_table[FFPSWorld.item_id_to_name[itm.item]].setId == "m5":
+                        if item_table[FFPSWorld.item_id_to_name[itm.item]].setId == "m2" or \
+                                item_table[FFPSWorld.item_id_to_name[itm.item]].setId == "m3" or \
+                                item_table[FFPSWorld.item_id_to_name[itm.item]].setId == "m4" or \
+                                item_table[FFPSWorld.item_id_to_name[itm.item]].setId == "m5":
                             anim_count += 1
                     if anim_count >= 4 and lines_to_simplify.count("canWin=1") <= 0:
                         temp_lines.append("canWin=1\n")
                     lines_to_simplify = temp_lines
                     while True:
                         try:
-                            with open(os.path.expandvars("%appdata%/MMFApplications/FNAF6"), "w") as fout:
-                                fout.writelines(lines_to_simplify)
-                                fout.close()
+                            with open(os.path.expandvars("%appdata%/MMFApplications/FNAF6"), "w") as f:
+                                f.writelines(lines_to_simplify)
+                                f.close()
                             break
                         except PermissionError:
                             continue
@@ -252,13 +201,15 @@ async def game_watcher(ctx: FFPSContext):
                         if not lines.__contains__("speakers="):
                             f.write("speakers=0\n")
                         if not lines.__contains__("money="):
-                            f.write("money=100\n")
+                            f.write("money=200\n")
                         if not lines.__contains__("first="):
                             f.write("first=1\n")
                         if not lines.__contains__("night="):
                             f.write("night=1\n")
                         if not lines.__contains__("phase="):
                             f.write("phase=1\n")
+                        if not lines.__contains__("diffap="):
+                            f.write("diffap="+str(ctx.difficulty)+"\n")
                         f.close()
                     break
                 except PermissionError:
@@ -267,7 +218,7 @@ async def game_watcher(ctx: FFPSContext):
                 try:
                     with open(path, 'r') as f:
                         filesread = f.read()
-                        for name, data in advancement_table.items():
+                        for name, data in location_table.items():
                             if data.setId == "stage" or data.setId == "cups" or data.setId == "speakers":
                                 for i in range(int([int(s) for s in name.split() if s.isdigit()][0]), 10):
                                     if data.setId+"="+str(i) in filesread and not str(data.id)+"=sent" in filesread:

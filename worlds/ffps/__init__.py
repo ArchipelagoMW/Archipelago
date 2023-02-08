@@ -1,18 +1,14 @@
 import os
-import json
-import random
-from base64 import b64encode, b64decode
-from math import ceil
 
-from .Items import FFPSItem, item_table, required_items
-from .Locations import FFPSAdvancement, advancement_table, exclusion_table
+import BaseClasses
+from .Items import FFPSItem, item_table
+from .Locations import FFPSLocations, location_table, exclusion_table
 from .Regions import FFPS_regions, link_FFPS_structures
 from .Rules import set_rules, set_completion_rules
-from worlds.generic.Rules import exclusion_rules
 
 from BaseClasses import Region, Entrance, Item
 from .Options import FFPS_options
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
 
 client_version = 7
 
@@ -21,17 +17,22 @@ def data_path(*args):
     return os.path.join(os.path.dirname(__file__), 'data', *args)
 
 
+class FFPSWeb(WebWorld):
+    tutorials = []
+
+
 class FFPSWorld(World):
     """
     Freddy Fazbear's Pizzeria Simulator is a horror game where animatronics come through vents into your office
     to kill you. You win if you complete night 5 with all 4 animatronics obtained in your world to get the true ending.
     """
-    game: str = "FFPS"
+    game = "FFPS"
+    web = FFPSWeb()
     option_definitions = FFPS_options
     topology_present = True
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = {name: data.id for name, data in advancement_table.items()}
+    location_name_to_id = {name: data.id for name, data in location_table.items()}
 
     data_version = 4
 
@@ -44,6 +45,9 @@ class FFPSWorld(World):
             'client_version': client_version,
             'race': self.multiworld.is_race,
             'max_anim_appears': int(self.multiworld.max_animatronics_appearing[self.player]),
+            'catalogue_rando': bool(self.multiworld.catalogue_rando[self.player]),
+            'night_difficulty': int(self.multiworld.night_difficulty[self.player]),
+            'upgrade_rando': bool(self.multiworld.upgrade_rando[self.player]),
         }
 
     def generate_basic(self):
@@ -60,14 +64,29 @@ class FFPSWorld(World):
         self.multiworld.random.shuffle(itempool)
 
         # Convert itempool into real items
+        if not getattr(self.multiworld, f"catalogue_rando")[self.player]:
+            self.multiworld.get_location("Unlocked Catalogue 2", self.player).place_locked_item(
+                self.create_item("Catalogue 2 Unlock"))
+            self.multiworld.get_location("Unlocked Catalogue 3", self.player).place_locked_item(
+                self.create_item("Catalogue 3 Unlock"))
+            self.multiworld.get_location("Unlocked Catalogue 4", self.player).place_locked_item(
+                self.create_item("Catalogue 4 Unlock"))
+            itempool.remove("Catalogue 2 Unlock")
+            itempool.remove("Catalogue 3 Unlock")
+            itempool.remove("Catalogue 4 Unlock")
+
+        if not getattr(self.multiworld, f"upgrade_rando")[self.player]:
+            self.multiworld.get_location("Bought Printer Upgrade", self.player).place_locked_item(
+                self.create_item("Printer Upgrade"))
+            self.multiworld.get_location("Bought Handyman Upgrade", self.player).place_locked_item(
+                self.create_item("Handyman Upgrade"))
+            self.multiworld.get_location("Bought Internet Upgrade", self.player).place_locked_item(
+                self.create_item("Internet Upgrade"))
+            itempool.remove("Printer Upgrade")
+            itempool.remove("Handyman Upgrade")
+            itempool.remove("Internet Upgrade")
+
         itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
-
-        # Choose locations to automatically exclude based on settings
-        exclusion_pool = set()
-        self.multiworld.get_location("Unlocked Catalogue 2", self.player).place_locked_item(self.create_item("Catalogue 2 Unlock"))
-        self.multiworld.get_location("Unlocked Catalogue 3", self.player).place_locked_item(self.create_item("Catalogue 3 Unlock"))
-        self.multiworld.get_location("Unlocked Catalogue 4", self.player).place_locked_item(self.create_item("Catalogue 4 Unlock"))
-
         self.multiworld.itempool += itempool
 
     def set_rules(self):
@@ -76,10 +95,10 @@ class FFPSWorld(World):
 
     def create_regions(self):
         def FFPSRegion(region_name: str, exits=[]):
-            ret = Region(region_name, None, region_name, self.player, self.multiworld)
-            ret.locations = [FFPSAdvancement(self.player, loc_name, loc_data.id, ret)
-                for loc_name, loc_data in advancement_table.items()
-                if loc_data.region == region_name]
+            ret = Region(region_name, BaseClasses.RegionType.Generic, region_name, self.player, self.multiworld)
+            ret.locations = [FFPSLocations(self.player, loc_name, loc_data.id, ret)
+                             for loc_name, loc_data in location_table.items()
+                             if loc_data.region == region_name]
             for exit in exits:
                 ret.exits.append(Entrance(self.player, exit, ret))
             return ret
