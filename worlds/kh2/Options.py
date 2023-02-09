@@ -117,7 +117,9 @@ class SuperBosses(Toggle):
     display_name = "Super Bosses"
     default = False
 class Cups(Toggle):
-    """All Olympus """
+    """All Olympus Cups"""
+    display_name = "Olympus Cups"
+    default = True
 
 class LevelDepth(Choice):
     """Determines How many locations you want on levels

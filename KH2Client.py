@@ -233,8 +233,7 @@ class KH2Context(CommonContext):
             for i in range(5):
                 for location, data in formDict[i].items():
                     if location not in self.locations_checked:
-                        if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + data.addrObtained, 1),
-                                          "big") >= data.bitIndex:
+                        if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + data.addrObtained, 1),"big") >= data.bitIndex:
                             self.locations_checked.add(location)
                             self.sending = self.sending + [(int(kh2_loc_name_to_id[location]))]
         except Exception as e:
@@ -271,7 +270,7 @@ class KH2Context(CommonContext):
         try:
             # cannot give items during loading screens
             # 0x8E9DA3=load 0xAB8BC7=black 0x2A148E8=controable 0x715568=room transition
-            while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x0714DB8, 1), "big") == 255:
+            while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Now, 1), "big") == 255:
                 await asyncio.sleep(0.5)
             if itemcode.ability:
                 if char == "Donald":
@@ -297,7 +296,7 @@ class KH2Context(CommonContext):
             elif itemcode.bitmask > 0:
                 while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x8E9DA3, 1),"big") != 0 or \
                         int.from_bytes( self.kh2.read_bytes(self.kh2.base_address + 0xAB8BC7, 1), "big") != 0 \
-                        or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Now, 1), "big") != 0\
+                        or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A148E8, 1), "big") != 0\
                         or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x715568, 1), "big") == 0:
                     await asyncio.sleep(1)
                 itemMemory = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
