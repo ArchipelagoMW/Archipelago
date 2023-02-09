@@ -8,9 +8,9 @@ from .Items import CV64Item, ItemData, item_table, junk_table, main_table
 from .Locations import CV64Location, all_locations, setup_locations
 from .Options import cv64_options
 from .Regions import create_regions, connect_regions
-from .Levels import level_list
+from .Stages import stage_dict, vanilla_stage_order
 from .Rules import set_rules
-from .Names import ItemName, LocationName
+from .Names import ItemName, LocationName, RegionName
 from ..AutoWorld import WebWorld, World
 from .Rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch, rom_sub_weapon_offsets
 # import math
@@ -46,7 +46,7 @@ class CV64World(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in all_locations.items()}
 
-    active_level_list: typing.List[str]
+    active_stage_list: typing.List[str]
     villa_cc_ids = [2, 3]
     active_warp_list: typing.List[str]
     sub_weapon_dict: typing.Dict[int, int]
@@ -68,44 +68,44 @@ class CV64World(World):
     def _get_slot_data(self):
         return {
             "death_link": self.multiworld.death_link[self.player].value,
-            "active_levels": self.active_level_list,
+            "active_levels": self.active_stage_list,
             "active_warps": self.active_warp_list,
         }
 
     def generate_early(self):
         # Handle Stage Shuffle and Warp Shuffle here
-        self.active_level_list = level_list.copy()
-        self.active_warp_list = self.multiworld.random.sample(self.active_level_list, 7)
+        self.active_stage_list = vanilla_stage_order.copy()
+        self.active_warp_list = self.multiworld.random.sample(self.active_stage_list, 7)
         self.sub_weapon_dict = rom_sub_weapon_offsets.copy()
 
         if self.multiworld.stage_shuffle[self.player]:
-            self.active_level_list.remove(LocationName.villa)
-            self.active_level_list.remove(LocationName.castle_center)
-            self.active_level_list.remove(LocationName.castle_keep)
-            self.multiworld.random.shuffle(self.active_level_list)
+            self.active_stage_list.remove(RegionName.villa)
+            self.active_stage_list.remove(RegionName.castle_center)
+            self.active_stage_list.remove(RegionName.castle_keep)
+            self.multiworld.random.shuffle(self.active_stage_list)
             self.villa_cc_ids = self.multiworld.random.sample(range(0, 6), 2)
             if self.villa_cc_ids[0] < self.villa_cc_ids[1]:
-                self.active_level_list.insert(self.villa_cc_ids[0], LocationName.villa)
-                self.active_level_list.insert(self.villa_cc_ids[1] + 2, LocationName.castle_center)
+                self.active_stage_list.insert(self.villa_cc_ids[0], RegionName.villa)
+                self.active_stage_list.insert(self.villa_cc_ids[1] + 2, RegionName.castle_center)
             else:
-                self.active_level_list.insert(self.villa_cc_ids[1], LocationName.castle_center)
-                self.active_level_list.insert(self.villa_cc_ids[0] + 4, LocationName.villa)
-            self.active_level_list.append(LocationName.castle_keep)
+                self.active_stage_list.insert(self.villa_cc_ids[1], RegionName.castle_center)
+                self.active_stage_list.insert(self.villa_cc_ids[0] + 4, RegionName.villa)
+            self.active_stage_list.append(RegionName.castle_keep)
             # Prevent Clock Tower from being Stage 1 if more than 4 S1s are needed to warp.
-            if self.multiworld.special1s_per_warp[self.player].value > 4 and self.active_level_list[0] == LocationName.clock_tower:
-                self.active_level_list.remove(LocationName.clock_tower)
+            if self.multiworld.special1s_per_warp[self.player].value > 4 and self.active_stage_list[0] == RegionName.clock_tower:
+                self.active_stage_list.remove(RegionName.clock_tower)
                 new_ct_slot = self.multiworld.random.randint(1, 11)
-                self.active_level_list.insert(new_ct_slot, LocationName.clock_tower)
+                self.active_stage_list.insert(new_ct_slot, RegionName.clock_tower)
 
         if self.multiworld.warp_shuffle[self.player].value == 0:
-            new_list = self.active_level_list.copy()
-            for warp in self.active_level_list:
+            new_list = self.active_stage_list.copy()
+            for warp in self.active_stage_list:
                 if warp not in self.active_warp_list:
                     new_list.remove(warp)
             self.active_warp_list = new_list
         elif self.multiworld.warp_shuffle[self.player].value == 2:
-            new_list = level_list.copy()
-            for warp in level_list:
+            new_list = stage_dict.keys()
+            for warp in stage_dict:
                 if warp not in self.active_warp_list:
                     new_list.remove(warp)
             self.active_warp_list = new_list
@@ -139,7 +139,7 @@ class CV64World(World):
         item_counts = {name: data.quantity for name, data in item_table.items()}
 
         # Levels
-        total_required_locations = 211
+        total_required_locations = 210
 
         self.multiworld.get_location(LocationName.the_end, self.player).place_locked_item(self.create_item(ItemName.victory))
 
@@ -235,7 +235,7 @@ class CV64World(World):
 
         self.multiworld.itempool += itempool
 
-        connect_regions(self.multiworld, self.player, self.active_level_list, self.active_warp_list,
+        connect_regions(self.multiworld, self.player, self.active_stage_list, self.active_warp_list,
                         self.required_s2s)
 
         if self.multiworld.sub_weapon_shuffle[self.player]:
@@ -244,10 +244,10 @@ class CV64World(World):
             self.sub_weapon_dict = dict(zip(self.sub_weapon_dict, sub_bytes))
 
     def pre_fill(self):
-        if self.active_level_list[0] == LocationName.tower_of_science:
+        if self.active_stage_list[0] == RegionName.tower_of_science:
             if self.multiworld.special1s_per_warp[self.player].value > 3:
                 self.multiworld.local_early_items[self.player][ItemName.science_key_two] = 1
-        elif self.active_level_list[0] == LocationName.clock_tower:
+        elif self.active_stage_list[0] == RegionName.clock_tower:
             if self.multiworld.special1s_per_warp[self.player].value > 2:
                 self.multiworld.local_early_items[self.player][ItemName.clocktower_key_one] = 1
 
@@ -289,7 +289,7 @@ class CV64World(World):
                         else:
                             offsets_to_ids[loc.rom_offset] = 0x12
 
-            patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.active_level_list, self.active_warp_list,
+            patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.active_stage_list, self.active_warp_list,
                       self.sub_weapon_dict, self.required_s2s)
 
             outfilepname = f'_P{player}'
@@ -305,7 +305,7 @@ class CV64World(World):
             patch.write()
         except:
             print("Oh no, something went wrong in CV64's generate_output!")
-            raise
+            raise Exception("Oh no, something went wrong in CV64's generate_output!")
         finally:
             if os.path.exists(rompath):
                 os.unlink(rompath)
@@ -317,27 +317,27 @@ class CV64World(World):
         header_text = "Castlevania 64 stage order:\n"
         header_text = header_text.format(self.multiworld.player_name[self.player])
         spoiler_handle.write(header_text)
-        for x in range(len(self.active_level_list)):
-            if self.active_level_list[x - 2] == LocationName.villa or self.active_level_list[x - 3] \
-                    == LocationName.castle_center or self.active_level_list[x - 4] == LocationName.castle_center:
+        for x in range(len(self.active_stage_list)):
+            if self.active_stage_list[x - 2] == RegionName.villa or self.active_stage_list[x - 3] \
+                    == RegionName.castle_center or self.active_stage_list[x - 4] == RegionName.castle_center:
                 path = "'"
             else:
                 path = " "
 
-            if self.active_level_list[x - 2] == LocationName.villa:
+            if self.active_stage_list[x - 2] == RegionName.villa:
                 stage_count -= 1
-            elif self.active_level_list[x - 3] == LocationName.castle_center:
+            elif self.active_stage_list[x - 3] == RegionName.castle_center:
                 stage_count -= 2
 
             if stage_count < 10:
                 text = "Stage {0}{1}:\t{2}\n"
             else:
                 text = "Stage {0}:\t{2}\n"
-            text = text.format(stage_count, path, self.active_level_list[x])
+            text = text.format(stage_count, path, self.active_stage_list[x])
             spoiler_handle.writelines(text)
             stage_count += 1
 
-        spoiler_handle.writelines("\nStart :\t" + self.active_level_list[0])
+        spoiler_handle.writelines("\nStart :\t" + self.active_stage_list[0])
         for x in range(len(self.active_warp_list)):
             text = "\nWarp {0}:\t{1}"
             text = text.format(x + 1, self.active_warp_list[x])

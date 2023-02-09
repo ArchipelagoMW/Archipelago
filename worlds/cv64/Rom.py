@@ -4,10 +4,9 @@ from worlds.Files import APDeltaPatch
 
 import hashlib
 import os
-import math
 
-from .Names import PatchName, LocationName
-from .Levels import level_list, level_dict
+from .Names import Patches, RegionName
+from .Stages import stage_dict
 
 USHASH = '1cc5cf3b4d29d8c3ade957648b529dc1'
 BSUSHASH = '0bbaa6de2b9cbb822f8b4d85c1d5497b'
@@ -143,7 +142,7 @@ class LocalRom(object):
             self.buffer = bytearray(stream.read())
 
 
-def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, sub_weapon_dict, required_s2s):
+def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp_list, sub_weapon_dict, required_s2s):
     # local_random = world.slot_seeds[player]
 
     w1 = str(world.special1s_per_warp[player]).zfill(2)
@@ -181,7 +180,7 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
     # Villa coffin time-of-day hack
     rom.write_byte(0xD9D83, 0x74)
     rom.write_bytes(0xD9D84, [0x08, 0x0F, 0xF1, 0x4D])  # J 0x803FC534
-    rom.write_bytes(0xBFC534, PatchName.coffin_time_checker)
+    rom.write_bytes(0xBFC534, Patches.coffin_time_checker)
 
     # Fix both Castle Center elevator bridges for both characters
     rom.write_bytes(0x6CEAA0, [0x24, 0x0B, 0x00, 0x01])
@@ -189,7 +188,7 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
 
     # Were-bull arena flag hack
     rom.write_bytes(0x6E38F0, [0x0C, 0x0F, 0xF1, 0x57])
-    rom.write_bytes(0xBFC55C, PatchName.werebull_flag_unsetter)
+    rom.write_bytes(0xBFC55C, Patches.werebull_flag_unsetter)
 
     # Enable being able to carry multiple Special jewels, Nitros, and Mandragoras simultaneously
     rom.write_bytes(0xBF1F4, [0x3C, 0x03, 0x80, 0x39])  # LUI V1, 0x8039
@@ -214,37 +213,37 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
     rom.write_bytes(0xA9730, [0x24, 0x09, 0x00, 0x00])  # ADDIU	T1, R0, 0x0000
     rom.write_bytes(0xBF2FC, [0x08, 0x0F, 0xF1, 0x6D])  # J	0x803FC5B4
     rom.write_bytes(0xBF300, [0x00, 0x00, 0x00, 0x00])  # NOP
-    rom.write_bytes(0xBFC5B4, PatchName.give_powerup_stopper)
+    rom.write_bytes(0xBFC5B4, Patches.give_powerup_stopper)
 
     # Rename "Wooden stake" and "Rose" to "Sent major" and "Sent" respectively
     rom.write_bytes(0xEFE34, cv64_text_converter("Sent major  ", False))
     rom.write_bytes(0xEFE4E, cv64_text_converter("Sent", False))
 
     # Change the Stage Select menu options
-    rom.write_bytes(0xADF64, PatchName.warp_menu_rewrite)
-    rom.write_bytes(0x10E0C8, PatchName.warp_pointer_table)
-    rom.write_byte(0xADF67, level_dict[active_level_list[0]].startSceneID)
-    for i in range(len(warp_list)):
-        rom.write_byte(warp_scene_offsets[i], level_dict[warp_list[i]].midSceneID)
-        rom.write_byte(warp_scene_offsets[i] + 4, level_dict[warp_list[i]].midSpawnID)
+    rom.write_bytes(0xADF64, Patches.warp_menu_rewrite)
+    rom.write_bytes(0x10E0C8, Patches.warp_pointer_table)
+    rom.write_byte(0xADF67, stage_dict[active_stage_list[0]].start_map_id)
+    for warp in range(len(active_warp_list)):
+        rom.write_byte(warp_scene_offsets[warp], stage_dict[active_warp_list[warp]].mid_map_id)
+        rom.write_byte(warp_scene_offsets[warp] + 4, stage_dict[active_warp_list[warp]].mid_spawn_id)
 
     # Play the "teleportation" sound effect when teleporting
     rom.write_bytes(0xAE088, [0x08, 0x00, 0x4F, 0xAB,   # J 0x80013EAC
                               0x24, 0x04, 0x01, 0x9E])  # ADDIU A0, R0, 0x019E
 
     # Change the Stage Select menu's text to reflect its new purpose
-    rom.write_bytes(0xEFAD0, cv64_text_converter(f"Where to...?\t{active_level_list[0]}\t"
-                                                 f"`{w1} {warp_list[0]}\t"
-                                                 f"`{w2} {warp_list[1]}\t"
-                                                 f"`{w3} {warp_list[2]}\t"
-                                                 f"`{w4} {warp_list[3]}\t"
-                                                 f"`{w5} {warp_list[4]}\t"
-                                                 f"`{w6} {warp_list[5]}\t"
-                                                 f"`{w7} {warp_list[6]}", False))
+    rom.write_bytes(0xEFAD0, cv64_text_converter(f"Where to...?\t{active_stage_list[0]}\t"
+                                                 f"`{w1} {active_warp_list[0]}\t"
+                                                 f"`{w2} {active_warp_list[1]}\t"
+                                                 f"`{w3} {active_warp_list[2]}\t"
+                                                 f"`{w4} {active_warp_list[3]}\t"
+                                                 f"`{w5} {active_warp_list[4]}\t"
+                                                 f"`{w6} {active_warp_list[5]}\t"
+                                                 f"`{w7} {active_warp_list[6]}", False))
 
     # Lizard-man save proofing
     rom.write_bytes(0xA99AC, [0x08, 0x0F, 0xF0, 0xB8])  # J 0x803FC2E0
-    rom.write_bytes(0xBFC2E0, PatchName.boss_save_stopper)
+    rom.write_bytes(0xBFC2E0, Patches.boss_save_stopper)
 
     # Disable or guarantee vampire Vincent's fight
     if world.vincent_fight_condition[player] == "never":
@@ -263,7 +262,7 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
         rom.write_byte(0xB80988, 0xB8)
         rom.write_byte(0xB816BD, 0xB8)
         rom.write_byte(0xB817CF, 0x00)
-        rom.write_bytes(0xBFC690, PatchName.renon_cutscene_checker_jr)
+        rom.write_bytes(0xBFC690, Patches.renon_cutscene_checker_jr)
     elif world.renon_fight_condition[player] == "always":
         rom.write_byte(0xB804F0, 0x0C)
         rom.write_byte(0xB80632, 0x0C)
@@ -272,9 +271,9 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
         rom.write_byte(0xB816BD, 0xC4)
         rom.write_byte(0xB817CF, 0x0C)
         # rom.write_bytes(0xB816C9, 0x00, 0x00)
-        rom.write_bytes(0xBFC690, PatchName.renon_cutscene_checker_jr)
+        rom.write_bytes(0xBFC690, Patches.renon_cutscene_checker_jr)
     else:
-        rom.write_bytes(0xBFC690, PatchName.renon_cutscene_checker)
+        rom.write_bytes(0xBFC690, Patches.renon_cutscene_checker)
 
     # Disable or guarantee the Bad Ending
     if world.bad_ending_condition[player] == "never":
@@ -284,7 +283,7 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
 
     # Play Castle Keep's song if teleporting in front of Dracula's door outside the escape sequence
     rom.write_bytes(0x6E937C, [0x08, 0x0F, 0xF1, 0x2E])
-    rom.write_bytes(0xBFC4B8, PatchName.ck_door_music_player)
+    rom.write_bytes(0xBFC4B8, Patches.ck_door_music_player)
 
     # Increase item capacity to 100
     if world.increase_item_limit[player]:
@@ -297,11 +296,11 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
 
     # Enable the Game Over's "Continue" menu starting the cursor on whichever checkpoint is most recent
     rom.write_bytes(0xB4DDC, [0x0C, 0x06, 0x0D, 0x58])  # JAL 0x80183560
-    rom.write_bytes(0x106750, PatchName.continue_cursor_start_checker)
+    rom.write_bytes(0x106750, Patches.continue_cursor_start_checker)
     rom.write_bytes(0x1C444, [0x08, 0x0F, 0xF0, 0x90])  # J   0x803FC240
-    rom.write_bytes(0xBFC240, PatchName.savepoint_cursor_updater)
+    rom.write_bytes(0xBFC240, Patches.savepoint_cursor_updater)
     rom.write_bytes(0x1C2D0, [0x08, 0x0F, 0xF0, 0x94])  # J   0x803FC250
-    rom.write_bytes(0xBFC250, PatchName.stage_start_cursor_updater)
+    rom.write_bytes(0xBFC250, Patches.stage_start_cursor_updater)
     rom.write_byte(0xB585C8, 0xFF)
 
     # Add data for White Jewel #22 (the new Duel Tower savepoint) at the end of the White Jewel ID data list
@@ -310,8 +309,8 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
 
     # Spawn coordinates list extension
     rom.write_bytes(0xD5BF4, [0x08, 0x0F, 0xF1, 0x03])  # J	0x803FC40C
-    rom.write_bytes(0xBFC40C, PatchName.spawn_coordinates_extension)
-    rom.write_bytes(0x108A5E, PatchName.waterway_end_coordinates)
+    rom.write_bytes(0xBFC40C, Patches.spawn_coordinates_extension)
+    rom.write_bytes(0x108A5E, Patches.waterway_end_coordinates)
 
     # Change the File Select stage numbers to match the new stage order. Also fix a vanilla issue wherein saving in a
     # character-exclusive stage as the other character would incorrectly display the name of that character's equivalent
@@ -329,17 +328,17 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
     rom.write_byte(0x104AA1, 0x01)
 
     stage_number = 0x01
-    for i in range(len(active_level_list) - 1):
-        for offset in level_dict[active_level_list[i]].stageNumberOffsetList:
+    for stage in range(len(active_stage_list) - 1):
+        for offset in stage_dict[active_stage_list[stage]].stage_number_offset_list:
             rom.write_byte(offset, stage_number)
-        if active_level_list[i - 2] == LocationName.castle_center:
+        if active_stage_list[stage - 2] == RegionName.castle_center:
             stage_number -= 1
-        elif active_level_list[i - 1] != LocationName.villa:
+        elif active_stage_list[stage - 1] != RegionName.villa:
             stage_number += 1
 
     # Top elevator switch check
     rom.write_bytes(0x6CF0A0, [0x0C, 0x0F, 0xF0, 0xAF])  # JAL 0x803FC2BC
-    rom.write_bytes(0xBFC2BC, PatchName.elevator_flag_checker)
+    rom.write_bytes(0xBFC2BC, Patches.elevator_flag_checker)
 
     # Waterway brick platforms skip
     if world.skip_waterway_platforms[player]:
@@ -362,53 +361,53 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
 
     # Custom data-loading code
     rom.write_bytes(0x6B5028, [0x08, 0x06, 0x0D, 0x70])  # J 0x801835D0
-    rom.write_bytes(0x1067B0, PatchName.custom_code_loader)
+    rom.write_bytes(0x1067B0, Patches.custom_code_loader)
 
     # Custom remote item rewarding and DeathLink receiving code
     rom.write_bytes(0x19B98, [0x08, 0x0F, 0xF0, 0x00])  # J 0x803FC000
-    rom.write_bytes(0xBFC000, PatchName.remote_item_giver)
+    rom.write_bytes(0xBFC000, Patches.remote_item_giver)
 
     # DeathLink counter decrementer code
     rom.write_bytes(0x1C2A0, [0x08, 0x0F, 0xF0, 0x52])  # J 0x803FC148
     rom.write_bytes(0x1C340, [0x08, 0x0F, 0xF0, 0x52])  # J 0x803FC148
-    rom.write_bytes(0xBFC148, PatchName.deathlink_counter_decrementer)
+    rom.write_bytes(0xBFC148, Patches.deathlink_counter_decrementer)
 
     # Death flag un-setter on "Beginning of stage" state overwrite code
     rom.write_bytes(0x1C2B0, [0x08, 0x0F, 0xF0, 0x47])  # J 0x803FC11C
-    rom.write_bytes(0xBFC11C, PatchName.death_flag_unsetter)
+    rom.write_bytes(0xBFC11C, Patches.death_flag_unsetter)
 
     # Warp menu-opening code
     rom.write_bytes(0xB9BA8, [0x08, 0x0F, 0xF0, 0x9B])  # J	0x803FC26C
-    rom.write_bytes(0xBFC26C, PatchName.warp_menu_opener)
+    rom.write_bytes(0xBFC26C, Patches.warp_menu_opener)
 
     # NPC item textbox hack
     rom.write_bytes(0xBF1DC, [0x08, 0x0F, 0xF0, 0x67])  # J 0x803FC19C
     rom.write_bytes(0xBF1E0, [0x27, 0xBD, 0xFF, 0xE0])  # ADDIU SP, SP, -0x20
-    rom.write_bytes(0xBFC19C, PatchName.npc_item_hack)
+    rom.write_bytes(0xBFC19C, Patches.npc_item_hack)
 
     # Sub-weapon check function hook
     rom.write_bytes(0xBF32C, [0x00, 0x00, 0x00, 0x00])  # NOP
     rom.write_bytes(0xBF330, [0x08, 0x0F, 0xF0, 0x5D])  # J	0x803FC174
-    rom.write_bytes(0xBFC174, PatchName.give_subweapon_stopper)
+    rom.write_bytes(0xBFC174, Patches.give_subweapon_stopper)
 
     # Warp menu Special1 restriction
     rom.write_bytes(0xADD68, [0x0C, 0x04, 0xAB, 0x12])  # JAL 0x8012AC48
-    rom.write_bytes(0xADE28, PatchName.stage_select_overwrite)
+    rom.write_bytes(0xADE28, Patches.stage_select_overwrite)
     rom.write_byte(0xADE47, world.special1s_per_warp[player])
 
     # Dracula's door text pointer hijack
     rom.write_bytes(0xD69F0, [0x08, 0x0F, 0xF1, 0x41])  # J 0x803FC504
-    rom.write_bytes(0xBFC504, PatchName.dracula_door_text_redirector)
+    rom.write_bytes(0xBFC504, Patches.dracula_door_text_redirector)
 
     # Dracula's chamber condition
     rom.write_bytes(0xE2FDC, [0x08, 0x04, 0xAB, 0x25])  # J 0x8012AC78
-    rom.write_bytes(0xADE84, PatchName.special_goal_checker)
+    rom.write_bytes(0xADE84, Patches.special_goal_checker)
     rom.write_bytes(0xBFCC3C, [0xA0, 0x00, 0xFF, 0xFF, 0xA0, 0x01, 0xFF, 0xFF, 0xA0, 0x02, 0xFF, 0xFF, 0xA0, 0x03, 0xFF,
                                0xFF, 0xA0, 0x04, 0xFF, 0xFF, 0xA0, 0x05, 0xFF, 0xFF, 0xA0, 0x06, 0xFF, 0xFF, 0xA0, 0x07,
                                0xFF, 0xFF, 0xA0, 0x08, 0xFF, 0xFF, 0xA0, 0x09])
     if world.draculas_condition[player] == 1:
         rom.write_bytes(0x6C8A54, [0x0C, 0x0F, 0xF0, 0x89])  # JAL 0x803FC224
-        rom.write_bytes(0xBFC224, PatchName.crystal_special2_giver)
+        rom.write_bytes(0xBFC224, Patches.crystal_special2_giver)
         rom.write_byte(0xADE8F, 0x01)
         rom.write_bytes(0xBFCC62, cv64_text_converter(f"It won't budge!\n"
                                                       f"You'll need the power\n"
@@ -416,8 +415,8 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
                                                       f"to undo the seal.", True))
     elif world.draculas_condition[player] == 2:
         rom.write_bytes(0xBBD50, [0x08, 0x0F, 0xF1, 0x8C])  # J	0x803FC630
-        rom.write_bytes(0xBFC630, PatchName.boss_special2_giver)
-        rom.write_bytes(0xBFC55C, PatchName.werebull_flag_unsetter_special2_electric_boogaloo)
+        rom.write_bytes(0xBFC630, Patches.boss_special2_giver)
+        rom.write_bytes(0xBFC55C, Patches.werebull_flag_unsetter_special2_electric_boogaloo)
         rom.write_byte(0xADE8F, world.bosses_required[player].value)
         rom.write_bytes(0xBFCC62, cv64_text_converter(f"It won't budge!\n"
                                                       f"You'll need to defeat\n"
@@ -433,13 +432,13 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
         rom.write_byte(0xADE8F, 0x00)
 
     # On-the-fly TLB script modifier
-    rom.write_bytes(0xBFC338, PatchName.double_component_checker)
-    rom.write_bytes(0xBFC3D4, PatchName.downstairs_seal_checker)
-    rom.write_bytes(0xBFC700, PatchName.tlb_modifiers)
+    rom.write_bytes(0xBFC338, Patches.double_component_checker)
+    rom.write_bytes(0xBFC3D4, Patches.downstairs_seal_checker)
+    rom.write_bytes(0xBFC700, Patches.tlb_modifiers)
 
     # On-the-fly scene object data modifier hook
     rom.write_bytes(0xEAB04, [0x08, 0x0F, 0xF2, 0x40])  # J 0x803FC900
-    rom.write_bytes(0xBFC8F8, PatchName.scene_data_modifiers)
+    rom.write_bytes(0xBFC8F8, Patches.scene_data_modifiers)
 
     # Fix locked doors to check the key counters instead of their vanilla key locations' flags
     # Pickup flag check modifications:
@@ -475,10 +474,10 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
     rom.write_bytes(0x10AB40, [0x80, 0x15, 0xFB, 0xD4])
     rom.write_bytes(0x10AB50, [0x0D, 0x0C, 0x00, 0x00, 0x80, 0x15, 0xFB, 0xD4])
     rom.write_bytes(0x10AB64, [0x0D, 0x0C, 0x00, 0x00, 0x80, 0x15, 0xFB, 0xD4])
-    rom.write_bytes(0xE2E14, PatchName.normal_door_hook)
-    rom.write_bytes(0xBFC5D0, PatchName.normal_door_code)
-    rom.write_bytes(0x6EF298, PatchName.ct_door_hook)
-    rom.write_bytes(0xBFC608, PatchName.ct_door_code)
+    rom.write_bytes(0xE2E14, Patches.normal_door_hook)
+    rom.write_bytes(0xBFC5D0, Patches.normal_door_code)
+    rom.write_bytes(0x6EF298, Patches.ct_door_hook)
+    rom.write_bytes(0xBFC608, Patches.ct_door_code)
     # Fix key counter not decrementing if 2 or above
     rom.write_bytes(0xAA0E0, [0x24, 0x02, 0x00, 0x00])  # ADDIU	V0, R0, 0x0000
 
@@ -502,57 +501,57 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
     rom.write_byte(0x90FE58, 0xFB)  # CC staircase knight (z)
 
     # Item property table extension (for the remaining invisible items)
-    # rom.write_bytes(0xBFCD20, PatchName.item_property_list_extension)
+    # rom.write_bytes(0xBFCD20, Patches.item_property_list_extension)
 
     # Write the new scene/spawn IDs for Stage Shuffle
     if world.stage_shuffle[player]:
-        rom.write_byte(0xB73308, level_dict[active_level_list[0]].startSceneID)
-        rom.write_byte(0xD9DAB, level_dict[active_level_list[active_level_list.index(LocationName.villa) + 2]].startSceneID)
-        rom.write_byte(0x109CCF, level_dict[active_level_list[active_level_list.index(LocationName.castle_center) + 3]].startSceneID)
-        for i in range(len(active_level_list) - 1):
-            if active_level_list[i - 1] == LocationName.villa:
-                rom.write_byte(level_dict[active_level_list[i]].endzoneSceneOffset,
-                               level_dict[active_level_list[i + 2]].startSceneID)
-                rom.write_byte(level_dict[active_level_list[i]].endzoneSpawnOffset,
-                               level_dict[active_level_list[i + 2]].startSpawnID)
-            elif active_level_list[i - 2] == LocationName.castle_center:
-                rom.write_byte(level_dict[active_level_list[i]].endzoneSceneOffset,
-                               level_dict[active_level_list[i + 3]].startSceneID)
-                rom.write_byte(level_dict[active_level_list[i]].endzoneSpawnOffset,
-                               level_dict[active_level_list[i + 3]].startSpawnID)
-            else:
-                rom.write_byte(level_dict[active_level_list[i]].endzoneSceneOffset,
-                               level_dict[active_level_list[i + 1]].startSceneID)
-                rom.write_byte(level_dict[active_level_list[i]].endzoneSpawnOffset,
-                               level_dict[active_level_list[i + 1]].startSpawnID)
+        rom.write_byte(0xB73308, stage_dict[active_stage_list[0]].start_map_id)
+        rom.write_byte(0xD9DAB, stage_dict[active_stage_list[active_stage_list.index(RegionName.villa) + 2]].start_map_id)
+        rom.write_byte(0x109CCF, stage_dict[active_stage_list[active_stage_list.index(RegionName.castle_center) + 3]].start_map_id)
+        for stage in range(len(active_stage_list) - 1):
+            if active_stage_list[stage - 1] == RegionName.villa:
+                rom.write_byte(stage_dict[active_stage_list[stage]].endzone_map_offset,
+                               stage_dict[active_stage_list[stage + 2]].start_map_id)
+                rom.write_byte(stage_dict[active_stage_list[stage]].endzone_spawn_offset,
+                               stage_dict[active_stage_list[stage + 2]].start_spawn_id)
+            elif active_stage_list[stage - 2] == RegionName.castle_center:
+                rom.write_byte(stage_dict[active_stage_list[stage]].endzone_map_offset,
+                               stage_dict[active_stage_list[stage + 3]].start_spawn_id)
+                rom.write_byte(stage_dict[active_stage_list[stage]].endzone_spawn_offset,
+                               stage_dict[active_stage_list[stage + 3]].start_spawn_id)
+            elif active_stage_list[stage - 1] != RegionName.villa and active_stage_list[stage - 2] != RegionName.castle_center:
+                rom.write_byte(stage_dict[active_stage_list[stage]].endzone_map_offset,
+                               stage_dict[active_stage_list[stage + 1]].start_map_id)
+                rom.write_byte(stage_dict[active_stage_list[stage]].endzone_spawn_offset,
+                               stage_dict[active_stage_list[stage + 1]].start_spawn_id)
 
-            if level_dict[active_level_list[i]].startzoneSceneOffset != 0xFFFFFF:
-                if i - 1 < 0:
-                    rom.write_byte(level_dict[active_level_list[i]].startzoneSceneOffset,
-                                   level_dict[active_level_list[i]].startSceneID)
-                    rom.write_byte(level_dict[active_level_list[i]].startzoneSpawnOffset,
-                                   level_dict[active_level_list[i]].startSpawnID)
-                elif active_level_list[i - 2] == LocationName.villa:
-                    rom.write_byte(level_dict[active_level_list[i]].startzoneSceneOffset, 0x1A)
-                    rom.write_byte(level_dict[active_level_list[i]].startzoneSpawnOffset, 0x03)
-                elif active_level_list[i - 3] == LocationName.villa:
-                    rom.write_byte(level_dict[active_level_list[i]].startzoneSceneOffset,
-                                   level_dict[active_level_list[i - 2]].endSceneID)
-                    rom.write_byte(level_dict[active_level_list[i]].startzoneSpawnOffset,
-                                   level_dict[active_level_list[i - 2]].endSpawnID)
-                elif active_level_list[i - 3] == LocationName.castle_center:
-                    rom.write_byte(level_dict[active_level_list[i]].startzoneSceneOffset, 0x0F)
-                    rom.write_byte(level_dict[active_level_list[i]].startzoneSpawnOffset, 0x03)
-                elif active_level_list[i - 5] == LocationName.castle_center:
-                    rom.write_byte(level_dict[active_level_list[i]].startzoneSceneOffset,
-                                   level_dict[active_level_list[i - 3]].endSceneID)
-                    rom.write_byte(level_dict[active_level_list[i]].startzoneSpawnOffset,
-                                   level_dict[active_level_list[i - 3]].endSpawnID)
+            if stage_dict[active_stage_list[stage]].startzone_map_offset != 0xFFFFFF:
+                if stage - 1 < 0:
+                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_map_offset,
+                                   stage_dict[active_stage_list[stage]].start_map_id)
+                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_spawn_offset,
+                                   stage_dict[active_stage_list[stage]].start_spawn_id)
+                elif active_stage_list[stage - 2] == RegionName.villa:
+                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_map_offset, 0x1A)
+                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_spawn_offset, 0x03)
+                elif active_stage_list[stage - 3] == RegionName.villa:
+                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_map_offset,
+                                   stage_dict[active_stage_list[stage - 2]].end_map_id)
+                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_spawn_offset,
+                                   stage_dict[active_stage_list[stage - 2]].end_spawn_id)
+                elif active_stage_list[stage - 3] == RegionName.castle_center:
+                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_map_offset, 0x0F)
+                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_spawn_offset, 0x03)
+                elif active_stage_list[stage - 5] == RegionName.castle_center:
+                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_map_offset,
+                                   stage_dict[active_stage_list[stage - 3]].end_map_id)
+                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_spawn_offset,
+                                   stage_dict[active_stage_list[stage - 3]].end_spawn_id)
                 else:
-                    rom.write_byte(level_dict[active_level_list[i]].startzoneSceneOffset,
-                                   level_dict[active_level_list[i - 1]].endSceneID)
-                    rom.write_byte(level_dict[active_level_list[i]].startzoneSpawnOffset,
-                                   level_dict[active_level_list[i - 1]].endSpawnID)
+                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_map_offset,
+                                   stage_dict[active_stage_list[stage - 1]].end_map_id)
+                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_spawn_offset,
+                                   stage_dict[active_stage_list[stage - 1]].end_spawn_id)
 
     # Write the new item bytes
     for offset, item_id in offsets_to_ids.items():
