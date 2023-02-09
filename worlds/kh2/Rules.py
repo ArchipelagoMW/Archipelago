@@ -6,17 +6,11 @@ from .Names import LocationName, ItemName
 from ..generic.Rules import add_rule, forbid_items, forbid_item
 
 
-def set_rules(world: MultiWorld, player: int):
+def set_rules(world: MultiWorld, player: int,firstvisitlocking,secondvisitlocking):
     # 27 visit locking items
     # first visit lock
     # start with 0
-    if world.Visitlocking[player].value == 2:
-        firstvisitlocking = 2
-        secondvisitlocking = 2
-    else:
-        #start with level 1 of all visit locking
-        firstvisitlocking = 1
-        secondvisitlocking = 2
+
 
 
     if world.Goal[player].value == 0:
@@ -234,7 +228,7 @@ def set_rules(world: MultiWorld, player: int):
     add_rule(world.get_entrance(LocationName.LoD2_Region, player),
              lambda state: state.kh_lod_unlocked(player, secondvisitlocking))
     add_rule(world.get_entrance(LocationName.Twtnw_Region, player),
-             lambda state: state.kh_twtnw_unlocked(player, secondvisitlocking))
+             lambda state: state.kh_twtnw_unlocked(player, firstvisitlocking))
     add_rule(world.get_entrance(LocationName.Twtnw2_Region, player),
              lambda state: state.kh_twtnw_unlocked(player, secondvisitlocking))
     add_rule(world.get_entrance(LocationName.Bc_Region, player),
@@ -258,4 +252,4 @@ def set_rules(world: MultiWorld, player: int):
     add_rule(world.get_entrance(LocationName.Tr_Region, player),
              lambda state: state.kh_dc_unlocked(player, secondvisitlocking))
     add_rule(world.get_entrance(LocationName.STT_Region, player),
-             lambda state: state.kh_stt_unlocked(player, secondvisitlocking))
+             lambda state: state.kh_stt_unlocked(player, 1))

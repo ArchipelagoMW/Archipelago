@@ -3,26 +3,6 @@ from ..AutoWorld import LogicMixin
 
 
 class KH2Logic(LogicMixin):
-    # piglets house
-    def kh_torn_page_1(self, player: int):
-        return self.has(ItemName.TornPages, player, 1)
-
-    # rabbits
-    def kh_torn_page_2(self, player: int):
-        return self.has(ItemName.TornPages, player, 2)
-
-    # kangaroo's house
-    def kh_torn_page_3(self, player: int):
-        return self.has(ItemName.TornPages, player, 3)
-
-    # spooky cave
-    def kh_torn_page_4(self, player: int):
-        return self.has(ItemName.TornPages, player, 4)
-
-    # Stary Hill
-    def kh_torn_page_5(self, player: int):
-        return self.has(ItemName.TornPages, player, 5)
-
     def kh_lod_unlocked(self, player,amount):
         return self.has(ItemName.SwordoftheAncestor, player,amount)
 

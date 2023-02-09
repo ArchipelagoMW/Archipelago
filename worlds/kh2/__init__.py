@@ -28,7 +28,7 @@ class KingdomHearts2Web(WebWorld):
 class KH2World(World):
     game: str = "Kingdom Hearts 2"
 
-    data_version = 0
+    data_version = 1
     option_definitions = KH2_Options
     topology_present: bool = True  # show path to required location checks in spoiler
     remote_items: bool = False
@@ -70,6 +70,13 @@ class KH2World(World):
                 self.multiworld.exclude_locations[self.player].value.add(superboss)
             for superboss in exclusion_table["SuperBosses"]:
                 self.multiworld.exclude_locations[self.player].value.add(superboss)
+        if self.multiworld.Visitlocking[self.player].value == 2:
+            self.firstvisitlocking = 2
+            self.secondvisitlocking = 2
+        else:
+            #start with level 1 of all visit locking
+            self.firstvisitlocking = 1
+            self.secondvisitlocking = 2
     def generate_basic(self):
         itempool: typing.List[KH2Item] = []
         if self.multiworld.FinalXemnas[self.player].value == 1:
@@ -202,6 +209,8 @@ class KH2World(World):
         visitlockingitem.remove(ItemName.IceCream)
         visitlockingitem.remove(ItemName.Picture)
         visitlockingitem.remove(ItemName.Poster)
+        visitlockingitem.remove(ItemName.NamineSketches)
+
         #no visit locking
         if self.multiworld.Visitlocking[self.player].value == 0:
            for item in exclusionItem_table["VisitLocking"]:
@@ -213,7 +222,7 @@ class KH2World(World):
         elif self.multiworld.Visitlocking[self.player].value in {1,2}:
             for item in exclusionItem_table["VisitLocking"]:
                 item_quantity_dict.update({item: 1})
-                if item=="Ice Cream":
+                if item in {ItemName.IceCream}:
                     continue
                 self.multiworld.push_precollected(self.create_item(item))
                 visitlockingitem.remove(item)
@@ -292,7 +301,7 @@ class KH2World(World):
         connect_regions(self.multiworld, self.player, self)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player)
+        set_rules(self.multiworld, self.player,self.firstvisitlocking,self.secondvisitlocking)
 
     def generate_output(self, output_directory: str):
         patch_kh2(self, output_directory)

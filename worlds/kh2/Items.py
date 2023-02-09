@@ -42,7 +42,7 @@ Progression_Table = {
     ItemName.ProofofNonexistence: ItemData(0x13000E, 1, 594,    0x36B3),
     ItemName.ProofofPeace: ItemData(0x13000F, 1, 595,           0x36B4),
     ItemName.PromiseCharm: ItemData(0x130010, 1, 524, 0x3694),
-    ItemName.NamineSketches: ItemData(0x130011, 2, 368, 0x3642),
+    ItemName.NamineSketches: ItemData(0x130011, 1, 368, 0x3642),
     # dummy 13
     ItemName.CastleKey: ItemData(0x130012, 2, 460, 0x365D),
     ItemName.BattlefieldsofWar: ItemData(0x130013, 2, 54, 0x35AE),
