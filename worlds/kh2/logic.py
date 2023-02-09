@@ -9,6 +9,7 @@ class KH2Logic(LogicMixin):
     def kh_oc_unlocked(self, player,amount):
         return self.has(ItemName.BattlefieldsofWar, player,amount)
 
+
     def kh_twtnw_unlocked(self, player,amount):
         return self.has(ItemName.WaytotheDawn, player,amount)
 
@@ -46,8 +47,6 @@ class KH2Logic(LogicMixin):
     def kh_ag_unlocked(self, player,amount):
         return self.has(ItemName.Scimitar, player,amount)
 
-    # def kh_ag_unlocked(self, player: int):
-    #    return self.has('Scimitar', player)
 
     def kh_bc_unlocked(self, player,amount):
         return self.has(ItemName.BeastsClaw, player,amount)
@@ -85,3 +84,110 @@ class KH2Logic(LogicMixin):
 
     def kh_victory(self, player):
         return self.has('Victory', player, 1)
+
+    def kh_summon(self,player,amount):
+        summonlevel=0
+        for summon in {ItemName.Genie,ItemName.ChickenLittle,ItemName.Stitch,ItemName.PeterPan}:
+            if self.has(summon,player):
+                summonlevel+=1
+        return summonlevel>=amount
+    #magic progression
+    def kh_fire(self,player):
+        return self.has(ItemName.FireElement,player,1)
+    def kh_fira(self,player):
+        return self.has(ItemName.FireElement,player,2)
+    def kh_firaga(self,player):
+        return self.has(ItemName.FireElement,player,3)
+    def kh_blizzard(self,player):
+        return self.has(ItemName.BlizzardElement,player,1)
+    def kh_blizzara(self,player):
+        return self.has(ItemName.BlizzardElement,player,2)
+    def kh_blizzaga(self,player):
+        return self.has(ItemName.BlizzardElement,player,3)
+    def kh_thunder(self,player):
+        return self.has(ItemName.ThunderElement,player,1)
+    def kh_thundara(self,player):
+        return self.has(ItemName.ThunderElement,player,2)
+    def kh_thundaga(self,player):
+        return self.has(ItemName.ThunderElement,player,3)
+    def kh_magnet(self,player):
+        return self.has(ItemName.MagnetElement,player,1)
+    def kh_magnera(self,player):
+        return self.has(ItemName.MagnetElement,player,2)
+    def kh_magnega(self,player):
+        return self.has(ItemName.MagnetElement,player,3)
+    def kh_reflect(self,player):
+        return self.has(ItemName.ReflectElement,player,1)
+    def kh_reflera(self,player):
+        return self.has(ItemName.ReflectElement,player,2)
+    def kh_reflega(self,player):
+        return self.has(ItemName.ReflectElement,player,3)
+    def kh_highjump(self,player,amount):
+        return self.has(ItemName.HighJump,player,amount)
+    def kh_quickrun(self,player,amount):
+        return self.has(ItemName.QuickRun,player,amount)
+    def kh_dodgeroll(self,player,amount):
+        return self.has(ItemName.DodgeRoll,player,amount)
+    def kh_aerialdodge(self,player,amount):
+        return self.has(ItemName.AerialDodge,player,amount)
+    def kh_glide(self,player,amount):
+        return self.has(ItemName.Glide,player,amount)
+    def kh_comboplus(self,player,amount):
+        return self.has(ItemName.ComboPlus,player,amount)
+    def kh_aircomboplus(self,player,amount):
+        return self.has(ItemName.AirComboPlus,player,amount)
+    def kh_valorgenie(self,player):
+        return self.has(ItemName.Genie, player) and self.has(ItemName.ValorForm, player)
+    def kh_wisdomgenie(self,player):
+        return self.has(ItemName.Genie,player) and self.has(ItemName.WisdomForm,player)
+    def kh_mastergenie(self,player):
+        return self.has(ItemName.Genie,player) and self.has(ItemName.MasterForm,player)
+    def kh_finalgenie(self,player):
+        return self.has(ItemName.Genie,player) and self.has(ItemName.FinalForm,player)
+    def kh_crowdcontrol(self,player):
+        return self.kh_magnera(self,player) and self.has(ItemName.ChickenLittle,player)\
+            or self.kh_magnega(self,player) and self.kh_mastergenie(self,player)
+    #reflect slapshot reflect
+    def kh_rsr(self,player):
+        return self.has(ItemName.Slapshot,player,1) and self.has(ItemName.ComboMaster,player) and self.kh_reflect(self,player)
+    def kh_gapcloser(self,player):
+        return self.has(ItemName.FlashStep,player,1) or self.has(ItemName.SlideDash,player)
+    def kh_berserkhori(self,player):
+        return self.has(ItemName.HorizontalSlash,player,1) and self.has(ItemName.BerserkCharge,player)
+    def kh_donaldlimit(self,player):
+        return self.has(ItemName.FlareForce,player,1) or self.has(ItemName.Fantasia,player)
+    def kh_goofylimit(self,player):
+        return self.has(ItemName.TornadoFusion,player,1) or self.has(ItemName.Teamwork,player)
+    def kh_basetools(self,player):
+        return self.has(ItemName.Guard,player,1) and self.has(ItemName.AerialRecovery,player,1) and self.has(ItemName.FinishingPlus,player,1)
+
+    def kh_painandpanic(self,player,visitlocking):
+        return self.kh_goofylimit(player) and self.kh_donaldlimit(player) and self.kh_dc_unlocked(player,visitlocking)
+    def kh_cerberuscup(self,player,visitlocking):
+        return self.kh_form_level_unlocked(player,2) and self.kh_thundara(player) \
+        and self.kh_ag_unlocked(player, visitlocking) and self.kh_ht_unlocked(player, visitlocking) and self.kh_pl_unlocked(player, visitlocking)
+    def kh_titan(self,player:int,visitlocking):
+        return self.kh_summon(player,2) and (self.kh_thundara(player) or self.kh_magnera(player))\
+        and self.kh_oc_unlocked(player,visitlocking)
+    def kh_gof(self,player,visitlocking):
+        return self.kh_titan(player,visitlocking) and self.kh_cerberuscup(player,visitlocking) and self.kh_painandpanic(player,visitlocking) and self.kh_twtnw_unlocked(player,visitlocking)
+
+
+
+   #def kh_(self,player):
+   #    return self.has(,player,1)
+   #def kh_(self,player):
+   #    return self.has(,player,1)
+   #def kh_(self,player):
+   #    return self.has(,player,1)
+   #def kh_(self,player):
+   #    return self.has(,player,1)
+   #def kh_(self,player):
+   #    return self.has(,player,1)
+   #def kh_(self,player):
+   #    return self.has(,player,1)
+   #def kh_(self,player):
+   #    return self.has(,player,1)
+    
+
+

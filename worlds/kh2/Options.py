@@ -95,7 +95,7 @@ class KeybladeMax(Range):
 
 class Visitlocking(Choice):
     """Determines the level of visit locking
-    No Visit Locking:No visit locks(everything is sphere 1)
+    No Visit Locking:No visit locks(everything is sphere 1.Not Recommended)# BK is making a lot of money
     Second Visit Locking:Second Visit Locking(every first visit is sphere 1)
     First Visit Locking:Visit Locking for both First and Second Visit With One Item
     First and Second Visit Locking:One item for First Visit Two For Second Visit"""
@@ -104,7 +104,7 @@ class Visitlocking(Choice):
     option_second_visit_locking = 1#starts with 13 (no icecream/picture)
     option_first_visit_locking = 2#starts with nothing
     option_first_and_second_visit_locking = 3#starts with nothing
-    default = 1
+    default = 3
 
 class RandomVisitLockingItem(Range):
     display_name = "Random Visit Locking Item"
@@ -116,7 +116,8 @@ class SuperBosses(Toggle):
     """Terra, Sephiroth and Data Fights Toggle"""
     display_name = "Super Bosses"
     default = False
-
+class Cups(Toggle):
+    """All Olympus """
 
 class LevelDepth(Choice):
     """Determines How many locations you want on levels

@@ -873,58 +873,57 @@ def create_regions(world, player: int, active_locations):
     ]
 
 
-def connect_regions(world: MultiWorld, player: int, self):
+def connect_regions(world: MultiWorld, player: int, firstvisitlocking,secondvisitlocking):
     # connecting every first visit to the GoA
     # 2 Visit locking and is going to be turned off mabybe
 
     names: typing.Dict[str, int] = {}
     connect(world, player, names, 'Menu', LocationName.GoA_Region)
     connect(world, player, names, "Menu", LocationName.Keyblade_Region)
-    connect(world, player, names, LocationName.GoA_Region, LocationName.LoD_Region)
-    connect(world, player, names, LocationName.LoD_Region, LocationName.LoD2_Region)
+    connect(world, player, names, LocationName.GoA_Region, LocationName.LoD_Region,lambda state:state.kh_lod_unlocked(player,firstvisitlocking))
+    connect(world, player, names, LocationName.LoD_Region, LocationName.LoD2_Region,lambda state:state.kh_lod_unlocked(player,secondvisitlocking))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Oc_Region)
-    connect(world, player, names, LocationName.Oc_Region, LocationName.Oc2_Region)
+    connect(world, player, names, LocationName.GoA_Region, LocationName.Oc_Region,lambda state:state.kh_oc_unlocked(player,firstvisitlocking))
+    connect(world, player, names, LocationName.Oc_Region, LocationName.Oc2_Region,lambda state:state.kh_oc_unlocked(player,secondvisitlocking))
 
     connect(world, player, names, LocationName.Oc2_Region, LocationName.Oc2Cups_Region)
+    connect(world, player, names, LocationName.GoA_Region, LocationName.Ag_Region,lambda state:state.kh_ag_unlocked(player,firstvisitlocking))
+    connect(world, player, names, LocationName.Ag_Region, LocationName.Ag2_Region,lambda state:state.kh_ag_unlocked(player,secondvisitlocking)
+                            and (state.has(ItemName.FireElement, player)
+                            and state.has(ItemName.BlizzardElement, player)
+                            and state.has(ItemName.ThunderElement, player)))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Ag_Region)
-    connect(world, player, names, LocationName.Ag_Region, LocationName.Ag2_Region,
-            lambda state: (state.has(ItemName.FireElement, player)
-                           and state.has(ItemName.BlizzardElement, player)
-                           and state.has(ItemName.ThunderElement, player)))
+    connect(world, player, names, LocationName.GoA_Region, LocationName.Dc_Region,lambda state:state.kh_dc_unlocked(player,firstvisitlocking))
+    connect(world, player, names, LocationName.Dc_Region, LocationName.Tr_Region,lambda state:state.kh_dc_unlocked(player,secondvisitlocking))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Dc_Region)
-    connect(world, player, names, LocationName.Dc_Region, LocationName.Tr_Region)
+    connect(world, player, names, LocationName.GoA_Region, LocationName.Pr_Region,lambda state:state.kh_pr_unlocked(player,firstvisitlocking))
+    connect(world, player, names, LocationName.Pr_Region, LocationName.Pr2_Region,lambda state:state.kh_pr_unlocked(player,secondvisitlocking))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Pr_Region)
-    connect(world, player, names, LocationName.Pr_Region, LocationName.Pr2_Region)
+    connect(world, player, names, LocationName.GoA_Region, LocationName.Bc_Region,lambda state:state.kh_dc_unlocked(player,firstvisitlocking))
+    connect(world, player, names, LocationName.Bc_Region, LocationName.Bc2_Region,lambda state:state.kh_dc_unlocked(player,secondvisitlocking))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Bc_Region)
-    connect(world, player, names, LocationName.Bc_Region, LocationName.Bc2_Region)
+    connect(world, player, names, LocationName.GoA_Region, LocationName.Sp_Region,lambda state:state.kh_sp_unlocked(player,firstvisitlocking))
+    connect(world, player, names, LocationName.Sp_Region, LocationName.Sp2_Region,lambda state:state.kh_sp_unlocked(player,secondvisitlocking))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Sp_Region)
-    connect(world, player, names, LocationName.Sp_Region, LocationName.Sp2_Region)
+    connect(world, player, names, LocationName.GoA_Region, LocationName.Ht_Region,lambda state:state.kh_ht_unlocked(player,firstvisitlocking))
+    connect(world, player, names, LocationName.Ht_Region, LocationName.Ht2_Region,lambda state:state.kh_ht_unlocked(player,secondvisitlocking))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Ht_Region)
-    connect(world, player, names, LocationName.Ht_Region, LocationName.Ht2_Region)
-
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Hb_Region)
-    connect(world, player, names, LocationName.Hb_Region, LocationName.Hb2_Region)
+    connect(world, player, names, LocationName.GoA_Region, LocationName.Hb_Region,lambda state:state.kh_hb_unlocked(player,firstvisitlocking))
+    connect(world, player, names, LocationName.Hb_Region, LocationName.Hb2_Region,lambda state:state.kh_hb_unlocked(player,secondvisitlocking))
 
     connect(world, player, names, LocationName.Hb2_Region, LocationName.CoR_Region)
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Pl_Region)
-    connect(world, player, names, LocationName.Pl_Region, LocationName.Pl2_Region)
+    connect(world, player, names, LocationName.GoA_Region, LocationName.Pl_Region,lambda state:state.kh_pl_unlocked(player,firstvisitlocking))
+    connect(world, player, names, LocationName.Pl_Region, LocationName.Pl2_Region,lambda state:state.kh_pl_unlocked(player,secondvisitlocking))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.STT_Region)
+    connect(world, player, names, LocationName.GoA_Region, LocationName.STT_Region,lambda state:state.kh_stt_unlocked(player,firstvisitlocking))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.TT_Region)
-    connect(world, player, names, LocationName.TT_Region, LocationName.TT2_Region)
-    connect(world, player, names, LocationName.TT2_Region, LocationName.TT3_Region)
+    connect(world, player, names, LocationName.GoA_Region, LocationName.TT_Region,lambda state:state.kh_tt_unlocked(player,firstvisitlocking))
+    connect(world, player, names, LocationName.TT_Region,  LocationName.TT2_Region,lambda state:state.kh_tt2_unlocked(player,firstvisitlocking))
+    connect(world, player, names, LocationName.TT2_Region, LocationName.TT3_Region,lambda state:state.kh_tt3_unlocked(player,firstvisitlocking))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Twtnw_Region)
-    connect(world, player, names, LocationName.Twtnw_Region, LocationName.Twtnw2_Region)
+    connect(world, player, names, LocationName.GoA_Region, LocationName.Twtnw_Region,lambda state:state.kh_twtnw_unlocked(player,firstvisitlocking))
+    connect(world, player, names, LocationName.Twtnw_Region, LocationName.Twtnw2_Region,lambda state:state.kh_twtnw_unlocked(player,secondvisitlocking))
 
     connect(world, player, names, LocationName.GoA_Region, LocationName.HundredAcre1_Region)
     connect(world, player, names, LocationName.GoA_Region, LocationName.HundredAcre2_Region,

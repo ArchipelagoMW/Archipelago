@@ -1,7 +1,7 @@
 from BaseClasses import MultiWorld
 
 from .Items import exclusionItem_table
-from .Locations import popupChecks, STT_Checks, CoR_Checks, Form_Checks, AG2_Checks
+from .Locations import popupChecks, STT_Checks, CoR_Checks, Form_Checks, AG2_Checks, exclusion_table
 from .Names import LocationName, ItemName
 from ..generic.Rules import add_rule, forbid_items, forbid_item
 
@@ -10,9 +10,12 @@ def set_rules(world: MultiWorld, player: int,firstvisitlocking,secondvisitlockin
     # 27 visit locking items
     # first visit lock
     # start with 0
+    add_rule(world.get_location(LocationName.DemyxDataAPBoost, player),
+             lambda state: state.kh_form_level_unlocked(player, 5))
 
-
-
+    for location in exclusion_table["Datas"]:
+        add_rule(world.get_location(location,player),
+                lambda state:state.has(ItemName.ReflectElement,player) and state.has(ItemName.FinalForm,player))
     if world.Goal[player].value == 0:
         add_rule(world.get_location(LocationName.FinalXemnas, player),
                  lambda state: state.kh_three_proof_unlocked(player))
@@ -67,28 +70,21 @@ def set_rules(world: MultiWorld, player: int,firstvisitlocking,secondvisitlockin
                      LocationName.HadesCupTrophyParadoxCups}:
         add_rule(world.get_location(location, player),
                  lambda state:
-                 state.kh_ag_unlocked(player,           secondvisitlocking)
-                 and state.kh_ht_unlocked(player,       secondvisitlocking)
-                 and state.kh_pl_unlocked(player,       secondvisitlocking)
-                 and state.kh_oc_unlocked(player,       secondvisitlocking)
-                 and state.kh_dc_unlocked(player,       secondvisitlocking)
-                 and state.kh_twtnw_unlocked(player,    secondvisitlocking))
+                 state.kh_gof(player,secondvisitlocking))
 
     for location in {LocationName.ProtectBeltPainandPanicCup, LocationName.SerenityGemPainandPanicCup}:
         add_rule(world.get_location(location, player),
-                 lambda state: state.kh_dc_unlocked(player, secondvisitlocking))
+                 lambda state: state.kh_painandpanic(player, secondvisitlocking))
 
     for location in {LocationName.RisingDragonCerberusCup, LocationName.SerenityCrystalCerberusCup}:
         add_rule(world.get_location(location, player),
                  lambda state:
-                 state.kh_ag_unlocked(player, secondvisitlocking)
-                 and state.kh_ht_unlocked(player, secondvisitlocking)
-                 and state.kh_pl_unlocked(player, secondvisitlocking))
+                 state.kh_cerberuscup(player,secondvisitlocking))
 
     for location in {LocationName.GenjiShieldTitanCup, LocationName.SkillfulRingTitanCup}:
         add_rule(world.get_location(location, player),
                  lambda state:
-                 state.kh_oc_unlocked(player, secondvisitlocking))
+                 state.kh_titan(player, secondvisitlocking))
     for formlvl2 in {LocationName.Valorlvl2, LocationName.Wisdomlvl2, LocationName.Limitlvl2, LocationName.Masterlvl2,
                      LocationName.Finallvl2}:
         add_rule(world.get_location(formlvl2, player), lambda state: state.kh_form_level_unlocked(player, 1))
@@ -201,55 +197,7 @@ def set_rules(world: MultiWorld, player: int,firstvisitlocking,secondvisitlockin
                           LocationName.Lvl98, LocationName.Lvl99,}:
                 add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 9*secondvisitlocking))
 
-    add_rule(world.get_entrance(LocationName.Sp_Region, player),
-             lambda state: state.kh_sp_unlocked(player, firstvisitlocking))
-    add_rule(world.get_entrance(LocationName.Sp2_Region, player),
-             lambda state: state.kh_sp_unlocked(player, secondvisitlocking))
-    add_rule(world.get_entrance(LocationName.Pr_Region, player),
-             lambda state: state.kh_pr_unlocked(player, firstvisitlocking))
-    add_rule(world.get_entrance(LocationName.Pr2_Region, player),
-             lambda state: state.kh_pr_unlocked(player, secondvisitlocking))
-    add_rule(world.get_entrance(LocationName.TT_Region, player),
-             lambda state: state.kh_tt_unlocked(player, firstvisitlocking))
-    add_rule(world.get_entrance(LocationName.TT2_Region, player),
-             lambda state: state.kh_tt2_unlocked(player, 1))
-    add_rule(world.get_entrance(LocationName.TT3_Region, player),
-             lambda state: state.kh_tt3_unlocked(player, 1))
-    add_rule(world.get_entrance(LocationName.Oc_Region, player),
-             lambda state: state.kh_oc_unlocked(player, firstvisitlocking))
-    add_rule(world.get_entrance(LocationName.Oc2_Region, player),
-             lambda state: state.kh_oc_unlocked(player, secondvisitlocking))
-    add_rule(world.get_entrance(LocationName.Ht_Region, player),
-             lambda state: state.kh_ht_unlocked(player, firstvisitlocking))
-    add_rule(world.get_entrance(LocationName.Ht2_Region, player),
-             lambda state: state.kh_ht_unlocked(player, secondvisitlocking))
-    add_rule(world.get_entrance(LocationName.LoD_Region, player),
-             lambda state: state.kh_lod_unlocked(player, firstvisitlocking))
-    add_rule(world.get_entrance(LocationName.LoD2_Region, player),
-             lambda state: state.kh_lod_unlocked(player, secondvisitlocking))
-    add_rule(world.get_entrance(LocationName.Twtnw_Region, player),
-             lambda state: state.kh_twtnw_unlocked(player, firstvisitlocking))
-    add_rule(world.get_entrance(LocationName.Twtnw2_Region, player),
-             lambda state: state.kh_twtnw_unlocked(player, secondvisitlocking))
-    add_rule(world.get_entrance(LocationName.Bc_Region, player),
-             lambda state: state.kh_bc_unlocked(player, firstvisitlocking))
-    add_rule(world.get_entrance(LocationName.Bc2_Region, player),
-             lambda state: state.kh_bc_unlocked(player, secondvisitlocking))
-    add_rule(world.get_entrance(LocationName.Ag_Region, player),
-             lambda state: state.kh_ag_unlocked(player, firstvisitlocking))
-    add_rule(world.get_entrance(LocationName.Ag2_Region, player),
-             lambda state: state.kh_ag_unlocked(player, secondvisitlocking))
-    add_rule(world.get_entrance(LocationName.Pl_Region, player),
-             lambda state: state.kh_pl_unlocked(player, firstvisitlocking))
-    add_rule(world.get_entrance(LocationName.Pl2_Region, player),
-             lambda state: state.kh_pl_unlocked(player, secondvisitlocking))
-    add_rule(world.get_entrance(LocationName.Hb_Region, player),
-             lambda state: state.kh_hb_unlocked(player, firstvisitlocking))
-    add_rule(world.get_entrance(LocationName.Hb2_Region, player),
-             lambda state: state.kh_hb_unlocked(player, secondvisitlocking))
-    add_rule(world.get_entrance(LocationName.Dc_Region, player),
-             lambda state: state.kh_dc_unlocked(player, secondvisitlocking))
-    add_rule(world.get_entrance(LocationName.Tr_Region, player),
-             lambda state: state.kh_dc_unlocked(player, secondvisitlocking))
-    add_rule(world.get_entrance(LocationName.STT_Region, player),
-             lambda state: state.kh_stt_unlocked(player, 1))
+
+
+
+

@@ -3,7 +3,7 @@ import typing
 
 from BaseClasses import Item, Tutorial, ItemClassification
 
-from .Items import KH2Item, item_dictionary_table, exclusionItem_table
+from .Items import KH2Item, item_dictionary_table, exclusionItem_table, ProgressionItems
 from .Locations import all_locations, setup_locations, exclusion_table
 from .Names import ItemName, LocationName
 from .OpenKH import patch_kh2
@@ -28,7 +28,7 @@ class KingdomHearts2Web(WebWorld):
 class KH2World(World):
     game: str = "Kingdom Hearts 2"
 
-    data_version = 1
+    data_version = 0
     option_definitions = KH2_Options
     topology_present: bool = True  # show path to required location checks in spoiler
     remote_items: bool = False
@@ -52,12 +52,8 @@ class KH2World(World):
 
     def create_item(self, name: str, ) -> Item:
         data = item_dictionary_table[name]
-        if name in Items.Progression_Table or name in Items.Movement_Table or name in Items.Forms_Table \
-                or name in Items.Magic_Table or name in Items.Misc_Table or name in Items.Reports_Table or name in {
-            "Second Chance", "Once More"}:
+        if name in ProgressionItems or name in Items.Misc_Table:
             item_classification = ItemClassification.progression
-        elif name in Items.SupportAbility_Table or name in Items.ActionAbility_Table:
-            item_classification = ItemClassification.useful
         else:
             item_classification = ItemClassification.filler
 
@@ -298,7 +294,7 @@ class KH2World(World):
     def create_regions(self):
         location_table = setup_locations(self.multiworld, self.player)
         create_regions(self.multiworld, self.player, location_table)
-        connect_regions(self.multiworld, self.player, self)
+        connect_regions(self.multiworld, self.player, self.firstvisitlocking,self.secondvisitlocking)
 
     def set_rules(self):
         set_rules(self.multiworld, self.player,self.firstvisitlocking,self.secondvisitlocking)
