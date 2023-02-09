@@ -252,7 +252,7 @@ class HelpersGraph(Helpers):
         mult = tbl['mult']
         minE = tbl['minE']
         mult *= 0.66 if sm.haveItem('SpeedBooster') else 0.33 # speed booster usable for 1st hell run
-        return sm.wor(RomPatches.has(RomPatches.SpeedAreaBlueDoors),
+        return sm.wor(RomPatches.has(sm.player, RomPatches.SpeedAreaBlueDoors),
                       sm.traverse('SpeedBoosterHallRight'),
                       sm.canHellRun(hellrun, mult, minE))
 

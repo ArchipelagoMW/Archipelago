@@ -386,7 +386,7 @@ locationsDict["Mother Brain"].AccessFrom = {
     'Golden Four': lambda sm: sm.canPassG4()
 }
 locationsDict["Mother Brain"].Available = (
-    lambda sm: sm.wor(RomPatches.has(RomPatches.NoTourian),
+    lambda sm: sm.wor(RomPatches.has(sm.player, RomPatches.NoTourian),
                       sm.enoughStuffTourian())
 )
 locationsDict["Spore Spawn"].AccessFrom = {

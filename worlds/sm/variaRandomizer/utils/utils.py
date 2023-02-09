@@ -420,7 +420,7 @@ def loadRandoPreset(world, player, args):
     args.minorQty = world.minor_qty[player].value
     args.energyQty = defaultMultiValues["energyQty"][world.energy_qty[player].value]
     args.objective = world.objective[player].value
-    args.tourian = world.tourian[player].value
+    args.tourian = defaultMultiValues["tourian"][world.tourian[player].value]
     #args.minimizerN
     #args.minimizerTourian
 
@@ -526,3 +526,9 @@ def fixEnergy(items):
             items.remove(cf)
         items.append('{}-CrystalFlash'.format(maxCf))
     return items
+
+def dumpErrorMsg(outFileName, msg):
+    print("DIAG: " + msg)
+    if outFileName is not None:
+        with open(outFileName, 'w') as jsonFile:
+            json.dump({"errorMsg": msg}, jsonFile)

@@ -285,7 +285,7 @@ class Helpers(object):
 
     def canCrystalFlash(self, n=1):
         sm = self.smbm
-        if not RomPatches.has(RomPatches.RoundRobinCF).bool:
+        if not RomPatches.has(sm.player, RomPatches.RoundRobinCF).bool:
             ret = sm.wand(sm.canUsePowerBombs(),
                           sm.itemCountOk('Missile', 2*n),
                           sm.itemCountOk('Super', 2*n),

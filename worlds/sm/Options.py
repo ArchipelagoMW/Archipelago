@@ -1,5 +1,6 @@
 import typing
 from Options import Choice, Range, OptionDict, OptionList, Option, Toggle, DefaultOnToggle
+from worlds.sm.variaRandomizer.utils.objectives import _goals
 
 class StartItemsRemovesFromPool(Toggle):
     """Remove items in starting inventory from pool."""
@@ -239,6 +240,36 @@ class VariaCustomPreset(OptionList):
     display_name = "Varia Custom Preset"  
     default = {}
 
+class Tourian(Choice):
+    """
+    Choose endgame Tourian behaviour:
+    Vanilla: regular vanilla Tourian
+    Fast: speed up Tourian to skip Metroids, Zebetites, and all cutscenes (including Mother Brain 3 fight). Golden Four statues are replaced by an invincible Gadora until all objectives are completed.
+    Disabled: skip Tourian entirely, ie. escape sequence is triggered as soon as all objectives are completed.
+    """
+    display_name = "Endgame behavior with Tourian"
+    option_Vanilla = 0
+    option_Fast = 1
+    option_Disabled = 2
+    default = 0  
+
+class Objective(OptionList):
+    """
+    Choose which objectives are required to sink the Golden Four statue and to open access to Tourian.
+    You can choose from 0 to 5 objectives.
+    Note: If you leave the list empty no objective is required to access Tourian, ie. it's open.
+    Note: See the Tourian parameter to enable fast Tourian or trigger the escape when all objectives are completed.
+    Note: Current percentage of collected items is displayed in the inventory pause menu.
+    Note: Collect 100% items is excluded by default when randomizing the objectives list as it requires you to complete all the objectives.
+
+    Format as a comma-separated list of objective names: ["kill three G4", "collect 75% items"].
+    A full list of supported objectives can be found at:
+    https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/sm/utils/objectives.py
+    """
+    display_name = "Objectives"
+    valid_keys = frozenset({name: goal for (name, goal) in _goals.items()})
+    #valid_keys_casefold = True
+
 sm_options: typing.Dict[str, type(Option)] = {
     "start_inventory_removes_from_pool": StartItemsRemovesFromPool,
     "preset": Preset,
@@ -290,4 +321,6 @@ sm_options: typing.Dict[str, type(Option)] = {
     "random_music": RandomMusic,
     "custom_preset": CustomPreset,
     "varia_custom_preset": VariaCustomPreset,
+    "tourian": Tourian,
+    "objective": Objective,
     }

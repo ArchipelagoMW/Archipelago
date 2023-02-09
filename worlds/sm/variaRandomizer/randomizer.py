@@ -513,7 +513,7 @@ class VariaRandomizer:
         #fileName = 'VARIA_Randomizer_' + seedCode + str(seed) + '_' + preset
         #if args.progressionSpeed != "random":
         #    fileName += "_" + args.progressionSpeed
-        #self.fileName = output_path
+        self.fileName = output_path
         seedName = self.fileName
         if args.directory != '.':
             self.fileName = args.directory + '/' + self.fileName
@@ -618,10 +618,10 @@ class VariaRandomizer:
 
         self.escapeAttr = None
         if plandoSettings is None:
-            objectivesManager = Objectives(args.tourian != 'Disabled', randoSettings)
+            self.objectivesManager = Objectives(args.tourian != 'Disabled', randoSettings)
             addedObjectives = 0
             if args.majorsSplit == "Scavenger":
-                objectivesManager.setScavengerHunt()
+                self.objectivesManager.setScavengerHunt()
                 addedObjectives = 1
 
             if args.objective:
@@ -633,26 +633,26 @@ class VariaRandomizer:
                     availableObjectives = args.objectiveList.split(',') if args.objectiveList is not None else objectives
                     if nbObjectives == 0:
                         nbObjectives = random.randint(1, min(Objectives.maxActiveGoals, len(availableObjectives)))
-                    objectivesManager.setRandom(nbObjectives, availableObjectives)
+                    self.objectivesManager.setRandom(nbObjectives, availableObjectives)
                 else:
                     maxActiveGoals = Objectives.maxActiveGoals - addedObjectives
                     if len(args.objective) > maxActiveGoals:
                         args.objective = args.objective[0:maxActiveGoals]
                     for goal in args.objective:
-                        objectivesManager.addGoal(goal)
-                objectivesManager.expandGoals()
+                        self.objectivesManager.addGoal(goal)
+                self.objectivesManager.expandGoals()
             else:
                 if not (args.majorsSplit == "Scavenger" and args.tourian == 'Disabled'):
-                    objectivesManager.setVanilla()
+                    self.objectivesManager.setVanilla()
             if len(Objectives.activeGoals) == 0:
-                objectivesManager.addGoal('nothing')
+                self.objectivesManager.addGoal('nothing')
             if any(goal for goal in Objectives.activeGoals if goal.area is not None):
                 forceArg('hud', True, "'VARIA HUD' forced to on", webValue='on')
         else:
             args.tourian = plandoRando["tourian"]
-            objectivesManager = Objectives(args.tourian != 'Disabled')
+            self.objectivesManager = Objectives(args.tourian != 'Disabled')
             for goal in plandoRando["objectives"]:
-                objectivesManager.addGoal(goal)
+                self.objectivesManager.addGoal(goal)
 
         # print some parameters for jm's stats
         #if args.jm == True:
@@ -666,28 +666,28 @@ class VariaRandomizer:
         #    print("objectives:{}".format([g.name for g in Objectives.activeGoals]))
         #    print("energyQty:{}".format(energyQty))
 
-        try:
-            self.randoExec = RandoExec(seedName, args.vcr, randoSettings, graphSettings, self.player)
-            self.container = self.randoExec.randomize()
-            # if we couldn't find an area layout then the escape graph is not created either
-            # and getDoorConnections will crash if random escape is activated.
-            stuck = False
-            if not stuck or args.vcr == True:
-                self.doors = GraphUtils.getDoorConnections(self.randoExec.areaGraph,
-                                                    args.area, args.bosses,
-                                                    args.escapeRando)
-                escapeAttr = self.randoExec.areaGraph.EscapeAttributes if args.escapeRando else None
-                if escapeAttr is not None:
-                    escapeAttr['patches'] = []
-                    if args.noRemoveEscapeEnemies == True:
-                        escapeAttr['patches'].append("Escape_Rando_Enable_Enemies")
-                    if args.scavEscape == True:
-                        escapeAttr['patches'].append('Escape_Scavenger')
-        except Exception as e:
-            import traceback
-            traceback.print_exc(file=sys.stdout)
-            dumpErrorMsg(args.output, "Error: {}".format(e))
-            sys.exit(-1)
+        #try:
+        self.randoExec = RandoExec(seedName, args.vcr, randoSettings, graphSettings, self.player)
+        self.container = self.randoExec.randomize()
+        # if we couldn't find an area layout then the escape graph is not created either
+        # and getDoorConnections will crash if random escape is activated.
+        stuck = False
+        if not stuck or args.vcr == True:
+            self.doors = GraphUtils.getDoorConnections(self.randoExec.areaGraph,
+                                                args.area, args.bosses,
+                                                args.escapeRando)
+            escapeAttr = self.randoExec.areaGraph.EscapeAttributes if args.escapeRando else None
+            if escapeAttr is not None:
+                escapeAttr['patches'] = []
+                if args.noRemoveEscapeEnemies == True:
+                    escapeAttr['patches'].append("Escape_Rando_Enable_Enemies")
+                if args.scavEscape == True:
+                    escapeAttr['patches'].append('Escape_Scavenger')
+        #except Exception as e:
+        #    import traceback
+        #    traceback.print_exc(file=sys.stdout)
+        #    dumpErrorMsg(args.output, "Error: {}".format(e))
+        #    sys.exit(-1)
 
         if stuck == True:
             dumpErrorMsg(args.output, self.randoExec.errorMsg)
@@ -750,26 +750,26 @@ class VariaRandomizer:
                 "startLocation": args.startLocation,
                 "optionalPatches": args.patches,
                 "layout": not args.noLayout,
-                "suitsMode": gravityBehaviour,
-                "area": areaRandomization,
+                "suitsMode": args.gravityBehaviour,
+                "area": args.area in ['light', 'full'],
                 "boss": args.bosses,
                 "areaLayout": not args.areaLayoutBase,
                 "variaTweaks": not args.noVariaTweaks,
                 "nerfedCharge": args.nerfedCharge,
-                "nerfedRainbowBeam": energyQty == 'ultra sparse',
-                "escapeAttr": escapeAttr,
-                "minimizerN": minimizerN,
+                "nerfedRainbowBeam": args.energyQty == 'ultra sparse',
+                "escapeAttr": None, #escapeAttr,
+                "minimizerN": None, #minimizerN,
                 "tourian": args.tourian,
                 "doorsColorsRando": args.doorsColorsRando,
-                "vanillaObjectives": objectivesManager.isVanilla(),
-                "ctrlDict": ctrlDict,
+                "vanillaObjectives": self.objectivesManager.isVanilla(),
+                "ctrlDict": self.ctrlDict,
                 "moonWalk": args.moonWalk,
-                "seed": seed,
-                "randoSettings": randoSettings,
-                "doors": doors,
+                "seed": self.seed,
+                "randoSettings": self.randoExec.randoSettings,
+                "doors": self.doors,
                 "displayedVersion": displayedVersion,
-                "itemLocs": itemLocs,
-                "progItemLocs": progItemLocs,
+                #"itemLocs": itemLocs,
+                #"progItemLocs": progItemLocs,
             }
 
             # args.rom is not None: generate local rom named filename.sfc with args.rom as source
@@ -778,7 +778,7 @@ class VariaRandomizer:
                 # patch local rom
                 romFileName = args.rom
                 shutil.copyfile(romFileName, outputFilename)
-                romPatcher = RomPatcher(settings=patcherSettings, romFileName=outputFilename, magic=args.raceMagic, False, self.player)
+                romPatcher = RomPatcher(settings=patcherSettings, romFileName=outputFilename, magic=args.raceMagic, player=self.player)
             else:
                 romPatcher = RomPatcher(settings=patcherSettings, magic=args.raceMagic)
 

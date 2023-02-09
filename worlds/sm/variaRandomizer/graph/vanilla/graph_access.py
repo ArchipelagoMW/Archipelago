@@ -184,6 +184,9 @@ accessPoints = [
         'Wrecked Ship Main': lambda sm: SMBool(True),
         'Crab Maze Left': Cache.ldeco(lambda sm: sm.canPassForgottenHighway(True))
     }, internal=True),
+    AccessPoint('Bowling', 'WreckedShip', {
+        'West Ocean Left': lambda sm: SMBool(True)
+    }, internal=True),
     AccessPoint('Crab Maze Left', 'WreckedShip', {
         'Wrecked Ship Back': Cache.ldeco(lambda sm: sm.canPassForgottenHighway(False))
     }, traverse=Cache.ldeco(lambda sm: sm.wor(RomPatches.has(sm.player, RomPatches.AreaRandoBlueDoors),
@@ -595,7 +598,7 @@ accessPoints = [
        dotOrientation = 'ne'),
     ### East Maridia
     AccessPoint('Aqueduct Top Left', 'EastMaridia', {
-        'Aqueduct Bottom': lambda sm: sm.wor(sm.wand(RomPatches.has(RomPatches.AqueductBombBlocks),
+        'Aqueduct Bottom': lambda sm: sm.wor(sm.wand(RomPatches.has(sm.player, RomPatches.AqueductBombBlocks),
                                                      sm.canDestroyBombWallsUnderwater()),
                                              sm.canUsePowerBombs())
     }, roomInfo = {'RoomPtr':0xd5a7, "area": 0x4},

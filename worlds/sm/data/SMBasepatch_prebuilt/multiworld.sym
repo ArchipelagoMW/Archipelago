@@ -173,12 +173,12 @@ B8:83EF write_repeated_memory
 B8:83F4 write_repeated_memory_loop
 
 [source files]
-0000 8d746646 main.asm
+0000 f30c3fdc main.asm
 0001 06780555 ../common/nofanfare.asm
 0002 ae952bc9 ../common/multiworld.asm
-0003 613d24e1 ../common/itemextras.asm
+0003 f7e9db95 ../common/itemextras.asm
 0004 cc2c77e4 ../common/items.asm
-0005 440b54fe ../common/startitem.asm
+0005 dbfcb38d ../common/startitem.asm
 
 [rom checksum]
 f0ac0521

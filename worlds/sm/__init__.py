@@ -337,12 +337,16 @@ class SMWorld(World):
         idx = 0
         vanillaItemTypesCount = 21
         for itemLoc in self.multiworld.get_locations():
-            if itemLoc.player == self.player and locationsDict[itemLoc.name].Id != None:
+            if itemLoc.player == self.player and "Boss" not in locationsDict[itemLoc.name].Class:
                 # item to place in this SM world: write full item data to tables
                 if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items:
                     itemId = ItemManager.Items[itemLoc.item.type].Id
+                    if itemId == None:
+                        a = 10
                 else:
                     itemId = ItemManager.Items["ArchipelagoItem"].Id + idx
+                    if itemId == None:
+                        a = 10
                     multiWorldItems.append({"sym": symbols["message_item_names"],
                                             "offset": (vanillaItemTypesCount + idx)*64,
                                             "values": self.convertToROMItemName(itemLoc.item.name)})
@@ -529,6 +533,7 @@ class SMWorld(World):
                          locationsDict[itemLoc.name], True)
             for itemLoc in self.multiworld.get_locations() if itemLoc.player == self.player
         ]
+        romPatcher.writeObjectives(itemLocs, romPatcher.settings["tourian"])
         romPatcher.writeItemsLocs(itemLocs)
 
         itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name] if itemLoc.name in locationsDict and itemLoc.player == self.player else self.DummyLocation(self.multiworld.get_player_name(itemLoc.player) + " " + itemLoc.name), True) for itemLoc in self.multiworld.get_locations() if itemLoc.item.player == self.player]
@@ -536,8 +541,30 @@ class SMWorld(World):
         # progItemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.multiworld.get_locations() if itemLoc.player == self.player and itemLoc.item.player == self.player and itemLoc.item.advancement == True]
         
         # romPatcher.writeSplitLocs(self.variaRando.args.majorsSplit, itemLocs, progItemLocs)
+        romPatcher.writeItemsNumber()
+        if not romPatcher.settings["isPlando"]:
+            romPatcher.writeSeed(romPatcher.settings["seed"]) # lol if race mode
         romPatcher.writeSpoiler(itemLocs, progItemLocs)
         romPatcher.writeRandoSettings(self.variaRando.randoExec.randoSettings, itemLocs)
+        romPatcher.writeDoorConnections(romPatcher.settings["doors"])
+        romPatcher.writeVersion(romPatcher.settings["displayedVersion"])
+        if romPatcher.settings["ctrlDict"] is not None:
+            romPatcher.writeControls(romPatcher.settings["ctrlDict"])
+        if romPatcher.settings["moonWalk"] == True:
+            romPatcher.enableMoonWalk()
+
+        romPatcher.writeMagic()
+        romPatcher.writeMajorsSplit(romPatcher.settings["majorsSplit"])
+
+        #if self.settings["isPlando"] and self.race is None:
+        #    doorsPtrs = GraphUtils.getAps2DoorsPtrs()
+        #    self.writePlandoTransitions(self.settings["plando"]["graphTrans"], doorsPtrs,
+        #                                self.settings["plando"]["maxTransitions"])
+        #    self.writePlandoAddresses(self.settings["plando"]["visitedLocations"])
+        #if self.settings["isPlando"] and self.settings["plando"]["additionalETanks"] != 0:
+        #    self.writeAdditionalETanks(self.settings["plando"]["additionalETanks"])
+
+        romPatcher.end()
 
     def generate_output(self, output_directory: str):
         outfilebase = self.multiworld.get_out_file_name_base(self.player)

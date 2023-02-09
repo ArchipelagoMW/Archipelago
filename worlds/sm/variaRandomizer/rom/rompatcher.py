@@ -4,6 +4,7 @@ from enum import IntFlag
 from ..rando.Items import ItemManager
 from ..rom.ips import IPS_Patch
 from ..utils.doorsmanager import DoorsManager, IndicatorFlag
+from ..utils.objectives import Objectives
 from ..graph.graph_utils import GraphUtils, getAccessPoint, locIdsByAreaAddresses, graphAreas
 from ..logic.logic import Logic
 from ..rom.rom import RealROM, snes_to_pc, pc_to_snes
@@ -78,6 +79,7 @@ class RomPatcher:
         self.applyIPSPatches()
         self.commitIPS()
 
+        """
         self.writeObjectives(self.settings["itemLocs"], self.settings["tourian"])
         self.writeItemsLocs(self.settings["itemLocs"])
         self.writeSplitLocs(self.settings["majorsSplit"], self.settings["itemLocs"], self.settings["progItemLocs"])
@@ -104,8 +106,8 @@ class RomPatcher:
             self.writePlandoAddresses(self.settings["plando"]["visitedLocations"])
         if self.settings["isPlando"] and self.settings["plando"]["additionalETanks"] != 0:
             self.writeAdditionalETanks(self.settings["plando"]["additionalETanks"])
-
         self.end()
+        """
 
     def end(self):
         self.romFile.fillToNextBank()
@@ -1078,7 +1080,7 @@ class RomPatcher:
             plmBytes[0] = w[0]
             plmBytes[1] = w[1]
             return plmName, addPlm
-        indicatorPLMs = DoorsManager.getIndicatorPLMs(indicatorFlags)
+        indicatorPLMs = DoorsManager.getIndicatorPLMs(self.player, indicatorFlags)
         for doorName,plmType in indicatorPLMs.items():
             plmName,addPlm = updateIndicatorPLM(doorName, plmType)
             if addPlm:
