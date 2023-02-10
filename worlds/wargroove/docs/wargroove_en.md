@@ -62,7 +62,7 @@ Double-check the mod installation under `%appdata%\Chucklefish\Wargroove\mods`. 
 
 ### Wargroove crashes or there is a lua error
 Wargroove is finicky, but there could be several causes for this. If it happens often or can be reproduced, 
-please submit a bug report.
+please submit a bug report in the tech-support channel on the [discord](https://discord.gg/archipelago).
 
 ### Wargroove crashes when trying to run the Archipelago campaign
 This is caused by not deleting campaign progress before updating the mod and campaign files.
