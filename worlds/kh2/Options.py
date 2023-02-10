@@ -113,13 +113,19 @@ class RandomVisitLockingItem(Range):
     default=3
 
 class SuperBosses(Toggle):
-    """Terra, Sephiroth and Data Fights Toggle"""
+    """Terra, Sephiroth and Data Fights Toggle."""
     display_name = "Super Bosses"
     default = False
-class Cups(Toggle):
-    """All Olympus Cups"""
+class Cups(Choice):
+    """Olympus Cups Toggles
+        No Cups: No Cups.
+        Cups: Has every cup except Paradox.
+        Cups and Hades Paradox: Has Every Cup On."""
     display_name = "Olympus Cups"
-    default = True
+    option_no_cups=0
+    option_cups=1
+    option_cups_and_hades_paradox=2
+    default = 1
 
 class LevelDepth(Choice):
     """Determines How many locations you want on levels
@@ -212,10 +218,6 @@ class BountyAmount(Range):
     range_end=22
     default=5
 
-class BlacklistHitlist(OptionSet):
-    """Black List these Locations from the Hitlist"""
-    display_name = "Blacklist Hitlist Locations"
-    verify_location_name = True
 
 KH2_Options: typing.Dict[str, type(Option)] = {
     "Sora_Level_EXP":       SoraEXP,
@@ -243,5 +245,6 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "LuckyEmblemsRequired": LuckyEmblemsRequired,
     "BountyAmount":BountyAmount,
     "BountyRequired":BountyRequired,
-    "BlacklistHitlist":BlacklistHitlist,
+    "Cups":Cups,
+
 }

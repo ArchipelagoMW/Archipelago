@@ -1,7 +1,7 @@
 import typing
 
 from BaseClasses import Location
-from .Names import LocationName
+from .Names import LocationName,RegionName,ItemName
 
 
 class KH2Location(Location):
@@ -973,24 +973,161 @@ exclusion_table = {
         LocationName.Masterlvl7,
         LocationName.Finallvl7,
         LocationName.TransporttoRemembrance,
+        LocationName.OrichalcumPlusGoddessofFateCup,
+    },
+    "Cups":{
+        LocationName.ProtectBeltPainandPanicCup,
+        LocationName.SerenityGemPainandPanicCup,
+        LocationName.RisingDragonCerberusCup,
+        LocationName.SerenityCrystalCerberusCup,
+        LocationName.GenjiShieldTitanCup,
+        LocationName.SkillfulRingTitanCup,
+        LocationName.FatalCrestGoddessofFateCup,
+        LocationName.OrichalcumPlusGoddessofFateCup,
+        LocationName.HadesCupTrophyParadoxCups,
     }
 }
-firstVisits = [
-    LocationName.LoD_Region,
-    LocationName.Ag_Region,
-    LocationName.Dc_Region,
-    LocationName.Pr_Region,
-    LocationName.Oc_Region,
-    LocationName.Bc_Region,
-    LocationName.Sp_Region,
-    LocationName.Ht_Region,
-    LocationName.Hb_Region,
-    LocationName.Pl_Region,
-    LocationName.STT_Region,
-    LocationName.TT_Region,
-    LocationName.Twtnw_Region,
-]
-popupChecks = [
+weaponslots={
+LocationName.FAKESlot:ItemName.ValorForm,
+LocationName.DetectionSaberSlot:ItemName.MasterForm,
+LocationName.EdgeofUltimaSlot:ItemName.FinalForm,
+LocationName.OathkeeperSlot:ItemName.Oathkeeper,
+LocationName.OblivionSlot:ItemName.Oblivion,
+LocationName.StarSeekerSlot:ItemName.StarSeeker,
+LocationName.HiddenDragonSlot:ItemName.HiddenDragon,
+LocationName.HerosCrestSlot:ItemName.HerosCrest,
+LocationName.MonochromeSlot:ItemName.Monochrome,
+LocationName.FollowtheWindSlot:ItemName.FollowtheWind,
+LocationName.CircleofLifeSlot:ItemName.CircleofLife,
+LocationName.PhotonDebuggerSlot:ItemName.PhotonDebugger,
+LocationName.GullWingSlot:ItemName.GullWing,
+LocationName.RumblingRoseSlot:ItemName.RumblingRose,
+LocationName.GuardianSoulSlot:ItemName.GuardianSoul,
+LocationName.WishingLampSlot:ItemName.WishingLamp,
+LocationName.DecisivePumpkinSlot:ItemName.DecisivePumpkin,
+LocationName.SweetMemoriesSlot:ItemName.SleepingLion,
+LocationName.MysteriousAbyssSlot:ItemName.SweetMemories,
+LocationName.SleepingLionSlot:ItemName.MysteriousAbyss,
+LocationName.BondofFlameSlot:ItemName.TwoBecomeOne,
+LocationName.TwoBecomeOneSlot:ItemName.FatalCrest,
+LocationName.FatalCrestSlot:ItemName.BondofFlame,
+LocationName.FenrirSlot:ItemName.Fenrir,
+#every slot not here is in the goa shop and are in sphere 0
+LocationName.UltimaWeaponSlot:ItemName.UltimaWeapon,
+LocationName.WinnersProofSlot:ItemName.WinnersProof,
+LocationName.PurebloodSlot:ItemName.Pureblood,
+LocationName.AkashicRecord:ItemName.AkashicRecord,
+LocationName.FrozenPride2:ItemName.FrozenPride2,
+LocationName.GenjiShield:ItemName.GenjiShield,
+LocationName.MajesticMushroom:ItemName.MajesticMushroom,
+LocationName.MajesticMushroom2:ItemName.MajesticMushroom2,
+LocationName.NobodyGuard:ItemName.NobodyGuard,
+LocationName.OgreShield:ItemName.OgreShield,
+LocationName.SaveTheKing2:ItemName.SaveTheKing2,
+LocationName.UltimateMushroom:ItemName.UltimateMushroom,
+
+LocationName.MeteorStaff: ItemName.MeteorStaff,
+LocationName.NobodyLance:ItemName.NobodyLance,
+LocationName.PreciousMushroom:ItemName.PreciousMushroom,
+LocationName.PreciousMushroom2:ItemName.PreciousMushroom2,
+LocationName.PremiumMushroom: ItemName.PremiumMushroom,
+LocationName.RisingDragon:ItemName.RisingDragon,
+LocationName.SaveTheQueen2: ItemName.SaveTheQueen2,
+LocationName.ShamansRelic: ItemName.ShamansRelic,
+LocationName.Centurion2:ItemName.Centurion2,
+
+
+
+}
+firstVisits={
+RegionName.LoD_Region,
+RegionName.Ag_Region,
+RegionName.Dc_Region,
+RegionName.Pr_Region,
+RegionName.Oc_Region,
+RegionName.Bc_Region,
+RegionName.Sp_Region,
+RegionName.Ht_Region,
+RegionName.Hb_Region,
+RegionName.Pl_Region,
+RegionName.STT_Region,
+RegionName.TT_Region,
+RegionName.Twtnw_Region,
+}
+secondVisits={
+RegionName.LoD2_Region,
+RegionName.Ag2_Region,
+RegionName.Tr_Region,
+RegionName.Pr2_Region,
+RegionName.Oc2_Region,
+RegionName.Bc2_Region,
+RegionName.Sp2_Region,
+RegionName.Ht2_Region,
+RegionName.Hb2_Region,
+RegionName.Pl2_Region,
+RegionName.STT_Region,
+RegionName.Twtnw2_Region,
+}
+valorLevelRegions = {
+    RegionName.LoD_Region,
+    RegionName.Ag_Region,
+    RegionName.Dc_Region,
+    RegionName.Pr_Region,
+    RegionName.Oc_Region,
+    RegionName.Bc_Region,
+    RegionName.Sp_Region,
+    RegionName.Ht_Region,
+    RegionName.Hb_Region,
+    RegionName.TT_Region,
+    RegionName.Twtnw_Region,
+}
+wisdomLevelRegions={
+    RegionName.LoD_Region,
+    RegionName.Ag_Region,
+    RegionName.Dc_Region,
+    RegionName.Pr_Region,
+    RegionName.Oc_Region,
+    RegionName.Bc_Region,
+    RegionName.Sp_Region,
+    RegionName.Ht_Region,
+    RegionName.Hb_Region,
+    RegionName.TT_Region,
+    RegionName.Twtnw_Region,
+}
+limitLevelRegions={
+    RegionName.LoD_Region,
+    RegionName.Ag_Region,
+    RegionName.Dc_Region,
+    RegionName.Pr_Region,
+    RegionName.Oc_Region,
+    RegionName.Bc_Region,
+    RegionName.Sp_Region,
+    RegionName.Ht_Region,
+    RegionName.Hb_Region,
+    RegionName.TT_Region,
+    RegionName.Twtnw_Region,
+    RegionName.STT_Region,
+}
+masterLevelRegions={
+    RegionName.LoD_Region,
+    RegionName.Ag_Region,
+    RegionName.Dc_Region,
+    RegionName.Pr_Region,
+    RegionName.Oc_Region,
+    RegionName.Bc_Region,
+    RegionName.Sp_Region,
+    RegionName.Ht_Region,
+    RegionName.Hb_Region,
+    RegionName.TT_Region,
+    RegionName.Twtnw_Region,
+}
+#could add lod2 and bc2 as a qption since those spawns are rng
+finalLevelRegions={
+    RegionName.TT3_Region,
+    RegionName.Twtnw2_Region,
+}
+
+popupChecks = {
     LocationName.SweetMemories,
     LocationName.SpookyCaveMap,
     LocationName.StarryHillCureElement,
@@ -1098,7 +1235,7 @@ popupChecks = [
     LocationName.ZexionDataLostIllusion,
     LocationName.LexaeusASStrengthBeyondStrength,
     LocationName.MarluxiaASEternalBlossom
-]
+}
 
 all_locations = {
     **TWTNW_Checks,

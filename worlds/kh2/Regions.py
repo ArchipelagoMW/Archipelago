@@ -2,8 +2,8 @@ import typing
 
 from BaseClasses import MultiWorld, Region, Entrance
 
-from .Locations import KH2Location, firstVisits
-from .Names import LocationName, ItemName
+from .Locations import KH2Location, valorLevelRegions,wisdomLevelRegions,limitLevelRegions,masterLevelRegions,finalLevelRegions,firstVisits,secondVisits
+from .Names import LocationName, ItemName, RegionName
 
 
 def create_regions(world, player: int, active_locations):
@@ -25,7 +25,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.GoofyStarting1:        [13],
         LocationName.GoofyStarting2:        [14],
     }
-    goa_region = create_region(world, player, active_locations, LocationName.GoA_Region,
+    goa_region = create_region(world, player, active_locations, RegionName.GoA_Region,
                                goa_region_locations, None)
 
     lod_Region_locations = {
@@ -51,7 +51,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.HiddenDragon:                [20],
         LocationName.GoofyShanYu:                 [21],
     }
-    lod_Region = create_region(world, player, active_locations, LocationName.LoD_Region,
+    lod_Region = create_region(world, player, active_locations, RegionName.LoD_Region,
                                lod_Region_locations, None)
     lod2_Region_locations = {
         LocationName.ThroneRoomTornPages:      [1],
@@ -66,7 +66,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.XigbarDataDefenseBoost:   [10],
         LocationName.GoofyStormRider:          [11],
     }
-    lod2_Region = create_region(world, player, active_locations, LocationName.LoD2_Region,
+    lod2_Region = create_region(world, player, active_locations, RegionName.LoD2_Region,
                                 lod2_Region_locations, None)
     ag_region_locations = {
         LocationName.AgrabahMap:                        [1],
@@ -101,7 +101,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.GoofyTreasureRoom:                 [30],
         LocationName.DonaldAbuEscort:                   [31],
     }
-    ag_region = create_region(world, player, active_locations, LocationName.Ag_Region,
+    ag_region = create_region(world, player, active_locations, RegionName.Ag_Region,
                               ag_region_locations, None)
     ag2_region_locations = {
         LocationName.RuinedChamberTornPages:          [1],
@@ -112,7 +112,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.LexaeusASStrengthBeyondStrength: [6],
         LocationName.LexaeusDataLostIllusion:         [7],
     }
-    ag2_region = create_region(world, player, active_locations, LocationName.Ag2_Region,
+    ag2_region = create_region(world, player, active_locations, RegionName.Ag2_Region,
                                ag2_region_locations, None)
 
     dc_region_locations = {
@@ -128,7 +128,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.MinnieEscort:             [10],
         LocationName.MinnieEscortGetBonus:     [11],
     }
-    dc_region = create_region(world, player, active_locations, LocationName.Dc_Region,
+    dc_region = create_region(world, player, active_locations, RegionName.Dc_Region,
                               dc_region_locations, None)
     tr_region_locations = {
         LocationName.CornerstoneHillMap:             [1],
@@ -154,7 +154,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.DonaldBoatPeteGetBonus:         [20],
         LocationName.GoofyFuturePete:                [21],
     }
-    tr_region = create_region(world, player, active_locations, LocationName.Tr_Region,
+    tr_region = create_region(world, player, active_locations, RegionName.Tr_Region,
                               tr_region_locations, None)
 
     hundred_acre1_region_locations = {
@@ -162,28 +162,28 @@ def create_regions(world, player: int, active_locations):
         LocationName.PoohsHouseAPBoost:        [2],
         LocationName.PoohsHouseMythrilStone:   [3],
     }
-    hundred_acre1_region = create_region(world, player, active_locations, LocationName.HundredAcre1_Region,
+    hundred_acre1_region = create_region(world, player, active_locations, RegionName.HundredAcre1_Region,
                                          hundred_acre1_region_locations, None)
     hundred_acre2_region_locations = {
         LocationName.PigletsHouseDefenseBoost: [1],
         LocationName.PigletsHouseAPBoost:      [2],
         LocationName.PigletsHouseMythrilGem:   [3],
     }
-    hundred_acre2_region = create_region(world, player, active_locations, LocationName.HundredAcre2_Region,
+    hundred_acre2_region = create_region(world, player, active_locations, RegionName.HundredAcre2_Region,
                                          hundred_acre2_region_locations, None)
     hundred_acre3_region_locations = {
         LocationName.RabbitsHouseDrawRing:       [1],
         LocationName.RabbitsHouseMythrilCrystal: [2],
         LocationName.RabbitsHouseAPBoost:        [3],
     }
-    hundred_acre3_region = create_region(world, player, active_locations, LocationName.HundredAcre3_Region,
+    hundred_acre3_region = create_region(world, player, active_locations, RegionName.HundredAcre3_Region,
                                          hundred_acre3_region_locations, None)
     hundred_acre4_region_locations = {
         LocationName.KangasHouseMagicBoost: [1],
         LocationName.KangasHouseAPBoost:    [2],
         LocationName.KangasHouseOrichalcum: [3],
     }
-    hundred_acre4_region = create_region(world, player, active_locations, LocationName.HundredAcre4_Region,
+    hundred_acre4_region = create_region(world, player, active_locations, RegionName.HundredAcre4_Region,
                                          hundred_acre4_region_locations, None)
     hundred_acre5_region_locations = {
         LocationName.SpookyCaveMythrilGem:     [1],
@@ -195,7 +195,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.SweetMemories:            [7],
         LocationName.SpookyCaveMap:            [8],
     }
-    hundred_acre5_region = create_region(world, player, active_locations, LocationName.HundredAcre5_Region,
+    hundred_acre5_region = create_region(world, player, active_locations, RegionName.HundredAcre5_Region,
                                          hundred_acre5_region_locations, None)
     hundred_acre6_region_locations = {
         LocationName.StarryHillCosmicRing:     [1],
@@ -203,7 +203,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.StarryHillCureElement:    [3],
         LocationName.StarryHillOrichalcumPlus: [4],
     }
-    hundred_acre6_region = create_region(world, player, active_locations, LocationName.HundredAcre6_Region,
+    hundred_acre6_region = create_region(world, player, active_locations, RegionName.HundredAcre6_Region,
                                          hundred_acre6_region_locations, None)
     pr_region_locations = {
         LocationName.RampartNavalMap:           [1],
@@ -231,7 +231,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.GoofyBarbossaGetBonus:     [23],
         LocationName.GoofyInterceptorBarrels:   [24],
     }
-    pr_region = create_region(world, player, active_locations, LocationName.Pr_Region,
+    pr_region = create_region(world, player, active_locations, RegionName.Pr_Region,
                               pr_region_locations, None)
     pr2_region_locations = {
         LocationName.GrimReaper1:                  [1],
@@ -250,7 +250,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.GoofyGrimReaper1:             [14],
         LocationName.DonaladGrimReaper2:           [15],
     }
-    pr2_region = create_region(world, player, active_locations, LocationName.Pr2_Region,
+    pr2_region = create_region(world, player, active_locations, RegionName.Pr2_Region,
                                pr2_region_locations, None)
     oc_region_locations = {
         LocationName.PassageMythrilShard:          [1],
@@ -286,7 +286,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.DonaldDemyxOC:                [31],
         LocationName.GoofyPeteOC:                  [32],
     }
-    oc_region = create_region(world, player, active_locations, LocationName.Oc_Region,
+    oc_region = create_region(world, player, active_locations, RegionName.Oc_Region,
                               oc_region_locations, None)
     oc2_region_locations = {
         LocationName.AuronsStatue:           [1],
@@ -298,21 +298,30 @@ def create_regions(world, player: int, active_locations):
         LocationName.ZexionDataLostIllusion: [7],
         LocationName.GoofyZexion:            [8],
     }
-    oc2_region = create_region(world, player, active_locations, LocationName.Oc2_Region,
+    oc2_region = create_region(world, player, active_locations, RegionName.Oc2_Region,
                                oc2_region_locations, None)
-    oc2_cups_region_locations = {
-        LocationName.ProtectBeltPainandPanicCup:     [1],
-        LocationName.SerenityGemPainandPanicCup:     [3],
-        LocationName.RisingDragonCerberusCup:        [4],
-        LocationName.SerenityCrystalCerberusCup:     [5],
-        LocationName.GenjiShieldTitanCup:            [6],
-        LocationName.SkillfulRingTitanCup:           [7],
+    oc2_pain_and_panic_locations = {
+        LocationName.ProtectBeltPainandPanicCup: [1],
+        LocationName.SerenityGemPainandPanicCup: [3],
+    }
+    oc2_titan_locations={
+        LocationName.GenjiShieldTitanCup:  [6],
+        LocationName.SkillfulRingTitanCup: [7],
+    }
+    oc2_cerberus_locations={
+        LocationName.RisingDragonCerberusCup:    [4],
+        LocationName.SerenityCrystalCerberusCup: [5],
+    }
+    oc2_gof_cup_locations={
         LocationName.FatalCrestGoddessofFateCup:     [8],
         LocationName.OrichalcumPlusGoddessofFateCup: [9],
         LocationName.HadesCupTrophyParadoxCups:      [10],
     }
-    oc2_cups_region = create_region(world, player, active_locations, LocationName.Oc2Cups_Region,
-                                    oc2_cups_region_locations, None)
+    oc2_pain_and_panic_cup      =create_region(world,player,active_locations,RegionName.Oc2_pain_and_panic_Region,oc2_pain_and_panic_locations)
+    oc2_titan_cup               =create_region(world,player,active_locations,RegionName.Oc2_titan_Region,oc2_titan_locations)
+    oc2_cerberus_cup            =create_region(world,player,active_locations,RegionName.Oc2_cerberus_Region,oc2_cerberus_locations)
+    oc2_gof_cup                 =create_region(world,player,active_locations,RegionName.Oc2_gof_Region,oc2_gof_cup_locations)
+
     bc_region_locations = {
         LocationName.BCCourtyardAPBoost:            [1],
         LocationName.BCCourtyardHiPotion:           [2],
@@ -344,7 +353,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.GoofyBeast:                    [29],
 
     }
-    bc_region = create_region(world, player, active_locations, LocationName.Bc_Region,
+    bc_region = create_region(world, player, active_locations, RegionName.Bc_Region,
                               bc_region_locations, None)
     bc2_region_locations = {
         LocationName.RumblingRose:           [1],
@@ -355,7 +364,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.XaldinDataDefenseBoost: [6],
         LocationName.DonaldXaldinGetBonus:   [7],
     }
-    bc2_region = create_region(world, player, active_locations, LocationName.Bc2_Region,
+    bc2_region = create_region(world, player, active_locations, RegionName.Bc2_Region,
                                bc2_region_locations, None)
     sp_region_locations = {
         LocationName.PitCellAreaMap:               [1],
@@ -376,7 +385,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.GoofyHostileProgram:          [16],
 
     }
-    sp_region = create_region(world, player, active_locations, LocationName.Sp_Region,
+    sp_region = create_region(world, player, active_locations, RegionName.Sp_Region,
                               sp_region_locations, None)
     sp2_region_locations = {
         LocationName.SolarSailer:                       [1],
@@ -391,7 +400,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.LarxeneDataLostIllusion:           [10],
         LocationName.DonaldSolarSailer:                 [11],
     }
-    sp2_region = create_region(world, player, active_locations, LocationName.Sp2_Region,
+    sp2_region = create_region(world, player, active_locations, RegionName.Sp2_Region,
                                sp2_region_locations, None)
     ht_region_locations = {
         LocationName.GraveyardMythrilShard:           [1],
@@ -414,7 +423,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.DonaldPrisonKeeper:              [18],
         LocationName.GoofyOogieBoogie:                [19],
     }
-    ht_region = create_region(world, player, active_locations, LocationName.Ht_Region,
+    ht_region = create_region(world, player, active_locations, RegionName.Ht_Region,
                               ht_region_locations, None)
     ht2_region_locations = {
         LocationName.Lock:                   [1],
@@ -428,7 +437,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.DonaldExperiment:       [9],
         LocationName.GoofyLock:              [10],
     }
-    ht2_region = create_region(world, player, active_locations, LocationName.Ht2_Region,
+    ht2_region = create_region(world, player, active_locations, RegionName.Ht2_Region,
                                ht2_region_locations, None)
 
     hb_region_locations = {
@@ -444,7 +453,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.BaileySecretAnsemReport7:    [10],
         LocationName.BaseballCharm:               [11],
     }
-    hb_region = create_region(world, player, active_locations, LocationName.Hb_Region,
+    hb_region = create_region(world, player, active_locations, RegionName.Hb_Region,
                               hb_region_locations, None)
     hb2_region_locations = {
         LocationName.PosternCastlePerimeterMap:                    [1],
@@ -487,7 +496,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.CoRMineshaftLowerLevelAPBoost:                [37],
         LocationName.DonaldDemyxHBGetBonus:                        [38],
     }
-    hb2_region = create_region(world, player, active_locations, LocationName.Hb2_Region,
+    hb2_region = create_region(world, player, active_locations, RegionName.Hb2_Region,
                                hb2_region_locations, None)
 
     cor_region_locations = {
@@ -508,7 +517,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.TransporttoRemembrance:             [15],
 
     }
-    cor_region = create_region(world, player, active_locations, LocationName.CoR_Region,
+    cor_region = create_region(world, player, active_locations, RegionName.CoR_Region,
                                cor_region_locations, None)
 
     pl_region_locations = {
@@ -545,7 +554,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.GoofyHyenas1:                  [31],
 
     }
-    pl_region = create_region(world, player, active_locations, LocationName.Pl_Region,
+    pl_region = create_region(world, player, active_locations, RegionName.Pl_Region,
                               pl_region_locations, None)
     pl2_region_locations = {
         LocationName.Hyenas2:              [1],
@@ -554,7 +563,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.SaixDataDefenseBoost: [4],
         LocationName.GoofyHyenas2:         [5],
     }
-    pl2_region = create_region(world, player, active_locations, LocationName.Pl2_Region,
+    pl2_region = create_region(world, player, active_locations, RegionName.Pl2_Region,
                                pl2_region_locations, None)
 
     stt_region_locations = {
@@ -587,7 +596,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.MansionBasementCorridorHiPotion: [27],
         LocationName.RoxasDataMagicBoost:             [28],
     }
-    stt_region = create_region(world, player, active_locations, LocationName.STT_Region,
+    stt_region = create_region(world, player, active_locations, RegionName.STT_Region,
                                stt_region_locations, None)
 
     tt_region_locations = {
@@ -619,14 +628,14 @@ def create_regions(world, player: int, active_locations):
         LocationName.StarSeeker:                     [26],
         LocationName.ValorForm:                      [27],
     }
-    tt_region = create_region(world, player, active_locations, LocationName.TT_Region,
+    tt_region = create_region(world, player, active_locations, RegionName.TT_Region,
                               tt_region_locations, None)
     tt2_region_locations = {
         LocationName.SeifersTrophy: [1],
         LocationName.Oathkeeper:    [2],
         LocationName.LimitForm:     [3],
     }
-    tt2_region = create_region(world, player, active_locations, LocationName.TT2_Region,
+    tt2_region = create_region(world, player, active_locations, RegionName.TT2_Region,
                                tt2_region_locations, None)
     tt3_region_locations = {
         LocationName.UndergroundConcourseMythrilGem:        [1],
@@ -653,7 +662,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.AxelDataMagicBoost:                    [22],
         LocationName.DonaldMansionNobodies:                 [23],
     }
-    tt3_region = create_region(world, player, active_locations, LocationName.TT3_Region,
+    tt3_region = create_region(world, player, active_locations, RegionName.TT3_Region,
                                tt3_region_locations, None)
 
     twtnw_region_locations = {
@@ -671,7 +680,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.TheBrinkofDespairDarkCityMap:    [11],
         LocationName.TheBrinkofDespairOrichalcumPlus: [12],
     }
-    twtnw_region = create_region(world, player, active_locations, LocationName.Twtnw_Region,
+    twtnw_region = create_region(world, player, active_locations, RegionName.Twtnw_Region,
                                  twtnw_region_locations, None)
     twtnw2_region_locations = {
         LocationName.NothingsCallMythrilGem:                [1],
@@ -700,7 +709,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.FinalXemnas:                           [24],
         LocationName.XemnasDataPowerBoost:                  [25],
     }
-    twtnw2_region = create_region(world, player, active_locations, LocationName.Twtnw2_Region,
+    twtnw2_region = create_region(world, player, active_locations, RegionName.Twtnw2_Region,
                                   twtnw2_region_locations, None)
 
     valor_region_locations = {
@@ -712,7 +721,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.Valorlvl6: [5],
         LocationName.Valorlvl7: [6],
     }
-    valor_region = create_region(world, player, active_locations, LocationName.ValorForm,
+    valor_region = create_region(world, player, active_locations, RegionName.Valor_Region,
                                  valor_region_locations, None)
     wisdom_region_locations = {
         # LocationName.Wisdomlvl1: [0],
@@ -723,7 +732,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.Wisdomlvl6: [11],
         LocationName.Wisdomlvl7: [12],
     }
-    wisdom_region = create_region(world, player, active_locations, LocationName.WisdomForm,
+    wisdom_region = create_region(world, player, active_locations, RegionName.Wisdom_Region,
                                   wisdom_region_locations, None)
     limit_region_locations = {
         # LocationName.Limitlvl1: [0],
@@ -734,7 +743,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.Limitlvl6: [17],
         LocationName.Limitlvl7: [18],
     }
-    limit_region = create_region(world, player, active_locations, LocationName.LimitForm,
+    limit_region = create_region(world, player, active_locations, RegionName.Limit_Region,
                                  limit_region_locations, None)
     master_region_locations = {
         # LocationName.Masterlvl1: [0],
@@ -745,7 +754,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.Masterlvl6: [23],
         LocationName.Masterlvl7: [24],
     }
-    master_region = create_region(world, player, active_locations, LocationName.MasterForm,
+    master_region = create_region(world, player, active_locations, RegionName.Master_Region,
                                   master_region_locations, None)
     final_region_locations = {
         # LocationName.Finallvl1: [25],
@@ -756,11 +765,11 @@ def create_regions(world, player: int, active_locations):
         LocationName.Finallvl6: [29],
         LocationName.Finallvl7: [30],
     }
-    final_region = create_region(world, player, active_locations, LocationName.FinalForm,
+    final_region = create_region(world, player, active_locations, RegionName.Final_Region,
                                  final_region_locations, None)
     # Level region depends on level depth. Moved to bottom of file to keep it clean
     level_region_locations = get_LevelRegion(world, world.LevelDepth[player], player)
-    level_region = create_region(world, player, active_locations, LocationName.SoraLevels_Region,
+    level_region = create_region(world, player, active_locations, RegionName.SoraLevels_Region,
                                  level_region_locations, None)
     keyblade_region_locations = {
         LocationName.FAKESlot:            [1],
@@ -823,7 +832,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.SaveTheKing2:        [57],
         LocationName.UltimateMushroom:    [58],
     }
-    keyblade_region = create_region(world, player, active_locations, LocationName.Keyblade_Region,
+    keyblade_region = create_region(world, player, active_locations, RegionName.Keyblade_Region,
                                     keyblade_region_locations, None)
 
     world.regions += [
@@ -843,7 +852,10 @@ def create_regions(world, player: int, active_locations):
         pr2_region,
         oc_region,
         oc2_region,
-        oc2_cups_region,
+        oc2_pain_and_panic_cup,
+        oc2_titan_cup,
+        oc2_cerberus_cup,
+        oc2_gof_cup,
         bc_region,
         bc2_region,
         sp_region,
@@ -878,77 +890,80 @@ def connect_regions(world: MultiWorld, player: int, firstvisitlocking,secondvisi
     # 2 Visit locking and is going to be turned off mabybe
 
     names: typing.Dict[str, int] = {}
-    connect(world, player, names, 'Menu', LocationName.GoA_Region)
-    connect(world, player, names, "Menu", LocationName.Keyblade_Region)
-    connect(world, player, names, LocationName.GoA_Region, LocationName.LoD_Region,lambda state:state.kh_lod_unlocked(player,firstvisitlocking))
-    connect(world, player, names, LocationName.LoD_Region, LocationName.LoD2_Region,lambda state:state.kh_lod_unlocked(player,secondvisitlocking))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Oc_Region,lambda state:state.kh_oc_unlocked(player,firstvisitlocking))
-    connect(world, player, names, LocationName.Oc_Region, LocationName.Oc2_Region,lambda state:state.kh_oc_unlocked(player,secondvisitlocking))
+    connect(world, player, names, "Menu", RegionName.Keyblade_Region)
+    connect(world, player, names, "Menu", RegionName.GoA_Region)
 
-    connect(world, player, names, LocationName.Oc2_Region, LocationName.Oc2Cups_Region)
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Ag_Region,lambda state:state.kh_ag_unlocked(player,firstvisitlocking))
-    connect(world, player, names, LocationName.Ag_Region, LocationName.Ag2_Region,lambda state:state.kh_ag_unlocked(player,secondvisitlocking)
+    connect(world, player, names, RegionName.GoA_Region, RegionName.LoD_Region, lambda state:state.kh_lod_unlocked(player,firstvisitlocking))
+    connect(world, player, names, RegionName.LoD_Region, RegionName.LoD2_Region,lambda state:state.kh_lod_unlocked(player,secondvisitlocking))
+
+    connect(world, player, names, RegionName.GoA_Region, RegionName.Oc_Region, lambda state:state.kh_oc_unlocked(player,firstvisitlocking))
+    connect(world, player, names, RegionName.Oc_Region,  RegionName.Oc2_Region,lambda state:state.kh_oc_unlocked(player,secondvisitlocking))
+    for cups in {RegionName.Oc2_pain_and_panic_Region ,RegionName.Oc2_titan_Region ,RegionName.Oc2_cerberus_Region,RegionName.Oc2_gof_Region}:
+        connect(world, player, names, RegionName.Oc2_Region, cups)
+
+    connect(world, player, names, RegionName.GoA_Region, RegionName.Ag_Region,lambda state:state.kh_ag_unlocked(player,firstvisitlocking))
+    connect(world, player, names, RegionName.Ag_Region, RegionName.Ag2_Region,lambda state:state.kh_ag_unlocked(player,secondvisitlocking)
                             and (state.has(ItemName.FireElement, player)
                             and state.has(ItemName.BlizzardElement, player)
                             and state.has(ItemName.ThunderElement, player)))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Dc_Region,lambda state:state.kh_dc_unlocked(player,firstvisitlocking))
-    connect(world, player, names, LocationName.Dc_Region, LocationName.Tr_Region,lambda state:state.kh_dc_unlocked(player,secondvisitlocking))
+    connect(world, player, names, RegionName.GoA_Region, RegionName.Dc_Region,lambda state:state.kh_dc_unlocked(player,firstvisitlocking))
+    connect(world, player, names, RegionName.Dc_Region, RegionName.Tr_Region,lambda state:state.kh_dc_unlocked(player,secondvisitlocking))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Pr_Region,lambda state:state.kh_pr_unlocked(player,firstvisitlocking))
-    connect(world, player, names, LocationName.Pr_Region, LocationName.Pr2_Region,lambda state:state.kh_pr_unlocked(player,secondvisitlocking))
+    connect(world, player, names, RegionName.GoA_Region, RegionName.Pr_Region ,lambda state:state.kh_pr_unlocked(player,firstvisitlocking))
+    connect(world, player, names, RegionName.Pr_Region,  RegionName.Pr2_Region,lambda state:state.kh_pr_unlocked(player,secondvisitlocking))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Bc_Region,lambda state:state.kh_dc_unlocked(player,firstvisitlocking))
-    connect(world, player, names, LocationName.Bc_Region, LocationName.Bc2_Region,lambda state:state.kh_dc_unlocked(player,secondvisitlocking))
+    connect(world, player, names, RegionName.GoA_Region, RegionName.Bc_Region,lambda state:state.kh_dc_unlocked(player,firstvisitlocking))
+    connect(world, player, names, RegionName.Bc_Region, RegionName.Bc2_Region,lambda state:state.kh_dc_unlocked(player,secondvisitlocking))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Sp_Region,lambda state:state.kh_sp_unlocked(player,firstvisitlocking))
-    connect(world, player, names, LocationName.Sp_Region, LocationName.Sp2_Region,lambda state:state.kh_sp_unlocked(player,secondvisitlocking))
+    connect(world, player, names, RegionName.GoA_Region, RegionName.Sp_Region,lambda state:state.kh_sp_unlocked(player,firstvisitlocking))
+    connect(world, player, names, RegionName.Sp_Region, RegionName.Sp2_Region,lambda state:state.kh_sp_unlocked(player,secondvisitlocking))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Ht_Region,lambda state:state.kh_ht_unlocked(player,firstvisitlocking))
-    connect(world, player, names, LocationName.Ht_Region, LocationName.Ht2_Region,lambda state:state.kh_ht_unlocked(player,secondvisitlocking))
+    connect(world, player, names, RegionName.GoA_Region, RegionName.Ht_Region,lambda state:state.kh_ht_unlocked(player,firstvisitlocking))
+    connect(world, player, names, RegionName.Ht_Region, RegionName.Ht2_Region,lambda state:state.kh_ht_unlocked(player,secondvisitlocking))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Hb_Region,lambda state:state.kh_hb_unlocked(player,firstvisitlocking))
-    connect(world, player, names, LocationName.Hb_Region, LocationName.Hb2_Region,lambda state:state.kh_hb_unlocked(player,secondvisitlocking))
+    connect(world, player, names, RegionName.GoA_Region, RegionName.Hb_Region,lambda state:state.kh_hb_unlocked(player,firstvisitlocking))
+    connect(world, player, names, RegionName.Hb_Region, RegionName.Hb2_Region,lambda state:state.kh_hb_unlocked(player,secondvisitlocking))
 
-    connect(world, player, names, LocationName.Hb2_Region, LocationName.CoR_Region)
+    connect(world, player, names, RegionName.Hb2_Region, RegionName.CoR_Region)
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Pl_Region,lambda state:state.kh_pl_unlocked(player,firstvisitlocking))
-    connect(world, player, names, LocationName.Pl_Region, LocationName.Pl2_Region,lambda state:state.kh_pl_unlocked(player,secondvisitlocking))
+    connect(world, player, names, RegionName.GoA_Region, RegionName.Pl_Region,lambda state:state.kh_pl_unlocked(player,firstvisitlocking))
+    connect(world, player, names, RegionName.Pl_Region, RegionName.Pl2_Region,lambda state:state.kh_pl_unlocked(player,secondvisitlocking))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.STT_Region,lambda state:state.kh_stt_unlocked(player,firstvisitlocking))
+    connect(world, player, names, RegionName.GoA_Region, RegionName.STT_Region,lambda state:state.kh_stt_unlocked(player,1))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.TT_Region,lambda state:state.kh_tt_unlocked(player,firstvisitlocking))
-    connect(world, player, names, LocationName.TT_Region,  LocationName.TT2_Region,lambda state:state.kh_tt2_unlocked(player,firstvisitlocking))
-    connect(world, player, names, LocationName.TT2_Region, LocationName.TT3_Region,lambda state:state.kh_tt3_unlocked(player,firstvisitlocking))
+    connect(world, player, names, RegionName.GoA_Region, RegionName.TT_Region ,lambda state:state.kh_tt_unlocked(player,1))
+    connect(world, player, names, RegionName.TT_Region,  RegionName.TT2_Region,lambda state:state.kh_tt2_unlocked(player,1))
+    connect(world, player, names, RegionName.TT2_Region, RegionName.TT3_Region,lambda state:state.kh_tt3_unlocked(player,1))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Twtnw_Region,lambda state:state.kh_twtnw_unlocked(player,firstvisitlocking))
-    connect(world, player, names, LocationName.Twtnw_Region, LocationName.Twtnw2_Region,lambda state:state.kh_twtnw_unlocked(player,secondvisitlocking))
+    connect(world, player, names, RegionName.GoA_Region, RegionName.Twtnw_Region,lambda state:state.kh_twtnw_unlocked(player,firstvisitlocking))
+    connect(world, player, names, RegionName.Twtnw_Region, RegionName.Twtnw2_Region,lambda state:state.kh_twtnw_unlocked(player,secondvisitlocking))
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.HundredAcre1_Region)
-    connect(world, player, names, LocationName.GoA_Region, LocationName.HundredAcre2_Region,
-            lambda state: (state.has(ItemName.TornPages, player, 1)))
-    connect(world, player, names, LocationName.GoA_Region, LocationName.HundredAcre3_Region,
-            lambda state: (state.has(ItemName.TornPages, player, 2)))
-    connect(world, player, names, LocationName.GoA_Region, LocationName.HundredAcre4_Region,
-            lambda state: (state.has(ItemName.TornPages, player, 3)))
-    connect(world, player, names, LocationName.GoA_Region, LocationName.HundredAcre5_Region,
-            lambda state: (state.has(ItemName.TornPages, player, 4)))
-    connect(world, player, names, LocationName.GoA_Region, LocationName.HundredAcre6_Region,
-            lambda state: (state.has(ItemName.TornPages, player, 5)))
+    connect(world, player, names, RegionName.GoA_Region, RegionName.HundredAcre1_Region)
 
-    for region in firstVisits:
-        connect(world, player, names, region, LocationName.SoraLevels_Region)
+    hundredacrevisits={RegionName.HundredAcre2_Region:1,RegionName.HundredAcre3_Region:2,
+                       RegionName.HundredAcre4_Region:3,RegionName.HundredAcre5_Region:4,RegionName.HundredAcre6_Region:5}
+    for visit,tornpage in hundredacrevisits.items():
+        connect(world, player, names, RegionName.GoA_Region, visit,
+                lambda state: (state.has(ItemName.TornPages, player, tornpage)))
 
-        connect(world, player, names, region, LocationName.Valor_Region,
-                lambda state: state.has(ItemName.ValorForm, player))
-        connect(world, player, names, region, LocationName.Wisdom_Region,
+
+    for region in valorLevelRegions:
+     connect(world, player, names, region, RegionName.Valor_Region,
+             lambda state: state.has(ItemName.ValorForm, player))
+     connect(world, player, names, region, RegionName.SoraLevels_Region)
+     for region in wisdomLevelRegions:
+        connect(world, player, names, region, RegionName.Wisdom_Region,
                 lambda state: state.has(ItemName.WisdomForm, player))
-        connect(world, player, names, region, LocationName.Limit_Region,
+     for region in limitLevelRegions:
+        connect(world, player, names, region, RegionName.Limit_Region,
                 lambda state: state.has(ItemName.LimitForm, player))
-        connect(world, player, names, region, LocationName.Master_Region,
-                lambda state: state.has(ItemName.MasterForm, player))
-        connect(world, player, names, region, LocationName.Final_Region,
+     for region in masterLevelRegions:
+        connect(world, player, names, region, RegionName.Master_Region,
+                lambda state: state.has(ItemName.MasterForm, player) and state.has(ItemName.DriveConverter,player))
+     for region in finalLevelRegions:
+        connect(world, player, names, region, RegionName.Final_Region,
                 lambda state: state.has(ItemName.FinalForm, player))
 
 

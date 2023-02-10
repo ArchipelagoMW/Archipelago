@@ -1,4 +1,3 @@
-
 import typing
 
 from BaseClasses import Item, Tutorial, ItemClassification
@@ -36,8 +35,8 @@ class KH2World(World):
     item_name_to_id = {name: data.code for name, data in item_dictionary_table.items()}
     location_name_to_id = {item_name: data.code for item_name, data in all_locations.items() if data.code}
     totalLocations = len(all_locations.items())
-    # hitlist for the bosses. This goes in slot data
 
+    # hitlist for the bosses. This goes in slot data
 
     @staticmethod
     def _get_slot_data(self):
@@ -52,7 +51,7 @@ class KH2World(World):
 
     def create_item(self, name: str, ) -> Item:
         data = item_dictionary_table[name]
-        if name in ProgressionItems or name in Items.Misc_Table:
+        if name in ProgressionItems or name in Items.Misc_Table or name in Items.Staffs_Table or name in Items.Shields_Table:
             item_classification = ItemClassification.progression
         else:
             item_classification = ItemClassification.filler
@@ -60,24 +59,30 @@ class KH2World(World):
         created_item = KH2Item(name, item_classification, data.code, self.player)
 
         return created_item
+
     def generate_early(self) -> None:
         if self.multiworld.SuperBosses[self.player].value == 0 and not self.multiworld.Goal[self.player].value == 2:
             for superboss in exclusion_table["Datas"]:
                 self.multiworld.exclude_locations[self.player].value.add(superboss)
             for superboss in exclusion_table["SuperBosses"]:
                 self.multiworld.exclude_locations[self.player].value.add(superboss)
+
         if self.multiworld.Visitlocking[self.player].value == 2:
             self.firstvisitlocking = 2
             self.secondvisitlocking = 2
         else:
-            #start with level 1 of all visit locking
             self.firstvisitlocking = 1
             self.secondvisitlocking = 2
+
+        if self.multiworld.Cups[self.player].value == 1:
+            for cup in exclusion_table["Cups"]:
+                self.multiworld.exclude_locations[self.player].value.add(cup)
+
+
     def generate_basic(self):
         itempool: typing.List[KH2Item] = []
         if self.multiworld.FinalXemnas[self.player].value == 1:
-            self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(
-                    self.create_item(ItemName.Victory))
+            self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(self.create_item(ItemName.Victory))
             self.totalLocations -= 1
         self.hitlist = list()
         RandomSuperBoss = list()
@@ -109,31 +114,34 @@ class KH2World(World):
                 luckyemblemamount = max(luckyemblemamount, luckyemblemrequired)
                 print(f"Luckey Emblem Amount {self.multiworld.LuckyEmblemsAmount[self.player].value} is less than required \
             {(self.multiworld.LuckyEmblemsRequired[self.player].value)} for player {self.multiworld.get_file_safe_player_name(self.player)}")
-            item_quantity_dict.update(
-                    {ItemName.LuckyEmblem: Items.item_dictionary_table[ItemName.LuckyEmblem].quantity +
-                                           luckyemblemamount})
+            item_quantity_dict.update({ItemName.LuckyEmblem: Items.item_dictionary_table[ItemName.LuckyEmblem].quantity + luckyemblemamount})
             # give this proof to unlock the final door once the player has the amount of lucky emlblem required
             item_quantity_dict.update({ItemName.ProofofNonexistence: 0})
         # hitlist
         if self.multiworld.Goal[self.player].value == 2:
             RandomSuperBoss.extend(exclusion_table["Hitlist"])
-            BountiesAmount = self.multiworld.BountyAmount[self.player].value
+            BountiesAmount =   self.multiworld.BountyAmount[self.player].value
             BountiesRequired = self.multiworld.BountyRequired[self.player].value
+
+            for location in self.multiworld.exclude_locations[self.player].value:
+                if location in RandomSuperBoss:
+                    RandomSuperBoss.remove(location)
+
+            if len(RandomSuperBoss) < BountiesAmount:
+                print(f"{self.multiworld.get_file_safe_player_name(self.player)} has too many bounties than bosses")
+                BountiesAmount=len(RandomSuperBoss)
+                self.multiworld.BountyAmount[self.player].value=len(RandomSuperBoss)
+
+            if len(RandomSuperBoss) < BountiesRequired:
+                print(f"{self.multiworld.get_file_safe_player_name(self.player)} has too many required bounties")
+                BountiesRequired=len(RandomSuperBoss)
+                self.multiworld.BountyRequired[self.player].value=len(RandomSuperBoss)
+
             if BountiesAmount < BountiesRequired:
                 BountiesAmount = max(BountiesAmount, BountiesRequired)
-                print(f"Bounties Amount {self.multiworld.BountiesAmount[self.player].value} is less than required \
-                        {(self.multiworld.BountiesRequired[self.player].value)} for player {self.multiworld.get_file_safe_player_name(self.player)}")
-            for location in self.multiworld.BlacklistHitlist[self.player].value:
-                if len(RandomSuperBoss) > BountiesRequired:
-                    print(
-                        f"{self.multiworld.get_file_safe_player_name(self.player)} has too many locations in the Blacklist for Hitlist")
-                    break
-                elif location not in RandomSuperBoss:
-                    print(
-                        f"{self.multiworld.get_file_safe_player_name(self.player)} has an invalid location in the Blacklist {location}")
-                    break
-                else:
-                    RandomSuperBoss.pop(location)
+                print(f"Bounties Amount {self.multiworld.BountyAmount[self.player].value} is less than required \
+                        {(self.multiworld.BountyRequired[self.player].value)} for player {self.multiworld.get_file_safe_player_name(self.player)}")
+
             for bounty in range(BountiesAmount):
                 randomBoss = self.multiworld.per_slot_randoms[self.player].choice(RandomSuperBoss)
                 self.multiworld.get_location(randomBoss, self.player).place_locked_item(
@@ -171,7 +179,7 @@ class KH2World(World):
         keyblade_slot_copy = list(Locations.Keyblade_Slots.keys())
         while len(sora_keyblade_ability_pool) < len(keyblade_slot_copy):
             sora_keyblade_ability_pool.append(
-                self.multiworld.per_slot_randoms[self.player].choice(list(Items.SupportAbility_Table.keys())))
+                    self.multiworld.per_slot_randoms[self.player].choice(list(Items.SupportAbility_Table.keys())))
         for keyblade in keyblade_slot_copy:
             random_ability = self.multiworld.per_slot_randoms[self.player].choice(sora_keyblade_ability_pool)
             self.multiworld.get_location(keyblade, self.player).place_locked_item(self.create_item(random_ability))
@@ -201,21 +209,21 @@ class KH2World(World):
         visitlockingitem = list()
         for x in range(2):
             visitlockingitem.extend(exclusionItem_table["VisitLocking"])
-        #these items only have one in the pool while .extending twice makes them have 2
+        # these items only have one in the pool while .extending twice makes them have 2
         visitlockingitem.remove(ItemName.IceCream)
         visitlockingitem.remove(ItemName.Picture)
         visitlockingitem.remove(ItemName.Poster)
         visitlockingitem.remove(ItemName.NamineSketches)
 
-        #no visit locking
+        # no visit locking
         if self.multiworld.Visitlocking[self.player].value == 0:
-           for item in exclusionItem_table["VisitLocking"]:
-               item_quantity_dict.update({item: 0})
-               visitlockingitem.remove(item)
-               for x in range(2):
-                self.multiworld.push_precollected(self.create_item(item))
-        #second visit locking
-        elif self.multiworld.Visitlocking[self.player].value in {1,2}:
+            for item in exclusionItem_table["VisitLocking"]:
+                item_quantity_dict.update({item: 0})
+                visitlockingitem.remove(item)
+                for x in range(2):
+                    self.multiworld.push_precollected(self.create_item(item))
+        # second visit locking
+        elif self.multiworld.Visitlocking[self.player].value in {1, 2}:
             for item in exclusionItem_table["VisitLocking"]:
                 item_quantity_dict.update({item: 1})
                 if item in {ItemName.IceCream}:
@@ -234,7 +242,6 @@ class KH2World(World):
             self.multiworld.push_precollected(self.create_item(item))
         # Option to turn off all superbosses. Can do this individually but its like 20+ checks
 
-
         # same item placed because you can only get one of these 2 locations
         # they are both under the same flag so the player gets both locations just one of the two items
         random_stt_item = self.multiworld.per_slot_randoms[self.player].choice(filler_items)
@@ -244,7 +251,7 @@ class KH2World(World):
                 self.create_item(random_stt_item))
         self.totalLocations -= 2
 
-        #Making a copy of the total growth pool
+        # Making a copy of the total growth pool
         growth_list = list()
         for x in range(4):
             growth_list.extend(Items.Movement_Table.keys())
@@ -294,10 +301,10 @@ class KH2World(World):
     def create_regions(self):
         location_table = setup_locations(self.multiworld, self.player)
         create_regions(self.multiworld, self.player, location_table)
-        connect_regions(self.multiworld, self.player, self.firstvisitlocking,self.secondvisitlocking)
+        connect_regions(self.multiworld, self.player, self.firstvisitlocking, self.secondvisitlocking)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player,self.firstvisitlocking,self.secondvisitlocking)
+        set_rules(self.multiworld, self.player, self.firstvisitlocking, self.secondvisitlocking)
 
     def generate_output(self, output_directory: str):
         patch_kh2(self, output_directory)

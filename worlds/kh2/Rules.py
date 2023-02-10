@@ -1,21 +1,47 @@
 from BaseClasses import MultiWorld
 
 from .Items import exclusionItem_table
-from .Locations import popupChecks, STT_Checks, CoR_Checks, Form_Checks, AG2_Checks, exclusion_table
-from .Names import LocationName, ItemName
+from .Locations import popupChecks, STT_Checks, CoR_Checks, Form_Checks, AG2_Checks, exclusion_table,weaponslots
+from .Names import LocationName, ItemName,RegionName
 from ..generic.Rules import add_rule, forbid_items, forbid_item
 
 
 def set_rules(world: MultiWorld, player: int,firstvisitlocking,secondvisitlocking):
-    # 27 visit locking items
-    # first visit lock
-    # start with 0
-    add_rule(world.get_location(LocationName.DemyxDataAPBoost, player),
-             lambda state: state.kh_form_level_unlocked(player, 5))
 
-    for location in exclusion_table["Datas"]:
-        add_rule(world.get_location(location,player),
-                lambda state:state.has(ItemName.ReflectElement,player) and state.has(ItemName.FinalForm,player))
+    add_rule(world.get_location(LocationName.RoxasDataMagicBoost, player),
+             lambda state: state.kh_dataroxas(player))
+
+    add_rule(world.get_location(LocationName.MarluxiaDataLostIllusion, player),
+             lambda state: state.kh_datamarluxia(player))
+
+    add_rule(world.get_location(LocationName.DemyxDataAPBoost, player),
+            lambda state: state.kh_datademyx(player))
+
+    add_rule(world.get_location(LocationName.LexaeusDataLostIllusion, player),
+             lambda state: state.kh_datalexaeus(player))
+
+    add_rule(world.get_location(LocationName.SaixDataDefenseBoost, player),
+             lambda state: state.kh_datasaix(player))
+    add_rule(world.get_location(LocationName.XaldinDataDefenseBoost, player),
+             lambda state: state.kh_dataxaldin(player))
+    add_rule(world.get_location(LocationName.XemnasDataPowerBoost, player),
+             lambda state: state.kh_dataxemnas(player))
+    add_rule(world.get_location(LocationName.XigbarDataDefenseBoost, player),
+             lambda state: state.kh_dataxigbar(player))
+    add_rule(world.get_location(LocationName.VexenDataLostIllusion, player),
+             lambda state: state.kh_datavexen(player))
+    add_rule(world.get_location(LocationName.ZexionDataLostIllusion, player),
+             lambda state: state.kh_datazexion(player))
+    add_rule(world.get_location(LocationName.AxelDataMagicBoost, player),
+             lambda state: state.kh_dataaxel(player))
+    add_rule(world.get_location(LocationName.LuxordDataAPBoost, player),
+             lambda state: state.kh_dataluxord(player))
+    add_rule(world.get_location(LocationName.LarxeneDataLostIllusion, player),
+             lambda state: state.kh_datalarxene(player))
+
+    for slot,weapon in weaponslots.items():
+        add_rule(world.get_location(slot,player),lambda state: state.has(weapon,player))
+
     if world.Goal[player].value == 0:
         add_rule(world.get_location(LocationName.FinalXemnas, player),
                  lambda state: state.kh_three_proof_unlocked(player))
@@ -30,9 +56,7 @@ def set_rules(world: MultiWorld, player: int,firstvisitlocking,secondvisitlockin
         if world.FinalXemnas[player].value == 1:
             world.completion_condition[player] = lambda state: state.kh_victory(player)
         else:
-            world.completion_condition[player] = lambda state: state.kh_lucky_emblem_unlocked(player,
-                                                                                              world.LuckyEmblemsRequired[
-                                                                                                  player].value)
+            world.completion_condition[player] = lambda state: state.kh_lucky_emblem_unlocked(player, world.LuckyEmblemsRequired[player].value)
     # hitlist
     elif world.Goal[player].value == 2:
         add_rule(world.get_location(LocationName.FinalXemnas, player),
@@ -40,8 +64,7 @@ def set_rules(world: MultiWorld, player: int,firstvisitlocking,secondvisitlockin
         if world.FinalXemnas[player].value == 1:
             world.completion_condition[player] = lambda state: state.kh_victory(player)
         else:
-            world.completion_condition[player] = lambda state: state.kh_hitlist(player,
-                                                                                world.BountyRequired[player].value)
+            world.completion_condition[player] = lambda state: state.kh_hitlist(player,world.BountyRequired[player].value)
     # Forbid Ablilites on popups due to game limitations
     for location in popupChecks:
         forbid_items(world.get_location(location, player), exclusionItem_table["Ability"])
@@ -66,25 +89,6 @@ def set_rules(world: MultiWorld, player: int,firstvisitlocking,secondvisitlockin
              and state.has(ItemName.AerialDodge, player, 3)
              and state.has(ItemName.Glide, player, 3))
 
-    for location in {LocationName.FatalCrestGoddessofFateCup, LocationName.OrichalcumPlusGoddessofFateCup,
-                     LocationName.HadesCupTrophyParadoxCups}:
-        add_rule(world.get_location(location, player),
-                 lambda state:
-                 state.kh_gof(player,secondvisitlocking))
-
-    for location in {LocationName.ProtectBeltPainandPanicCup, LocationName.SerenityGemPainandPanicCup}:
-        add_rule(world.get_location(location, player),
-                 lambda state: state.kh_painandpanic(player, secondvisitlocking))
-
-    for location in {LocationName.RisingDragonCerberusCup, LocationName.SerenityCrystalCerberusCup}:
-        add_rule(world.get_location(location, player),
-                 lambda state:
-                 state.kh_cerberuscup(player,secondvisitlocking))
-
-    for location in {LocationName.GenjiShieldTitanCup, LocationName.SkillfulRingTitanCup}:
-        add_rule(world.get_location(location, player),
-                 lambda state:
-                 state.kh_titan(player, secondvisitlocking))
     for formlvl2 in {LocationName.Valorlvl2, LocationName.Wisdomlvl2, LocationName.Limitlvl2, LocationName.Masterlvl2,
                      LocationName.Finallvl2}:
         add_rule(world.get_location(formlvl2, player), lambda state: state.kh_form_level_unlocked(player, 1))
@@ -194,7 +198,7 @@ def set_rules(world: MultiWorld, player: int,firstvisitlocking,secondvisitlockin
                           LocationName.Lvl90, LocationName.Lvl91,
                           LocationName.Lvl92, LocationName.Lvl93, LocationName.Lvl94, LocationName.Lvl95,
                           LocationName.Lvl96, LocationName.Lvl97,
-                          LocationName.Lvl98, LocationName.Lvl99,}:
+                          LocationName.Lvl98, LocationName.Lvl99}:
                 add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 9*secondvisitlocking))
 
 

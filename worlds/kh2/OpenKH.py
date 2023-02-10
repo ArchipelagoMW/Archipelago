@@ -3,7 +3,7 @@ import yaml
 import os
 import random
 import os
-from .Names.LocationName import SoraLevels_Region
+from .Names.RegionName import SoraLevels_Region
 import Utils
 import zipfile
 from .Items import item_dictionary_table
