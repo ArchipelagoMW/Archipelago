@@ -122,6 +122,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     logger.info('Creating Items.')
     AutoWorld.call_all(world, "create_items")
 
+    # All worlds should have finished creating all regions, locations, and entrances.
+    # Recache to ensure that they are all visible for locality rules.
+    world._recache()
+
     logger.info('Calculating Access Rules.')
 
     for player in world.player_ids:
@@ -247,6 +251,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         balance_multiworld_progression(world)
 
     logger.info(f'Beginning output...')
+
+    # we're about to output using multithreading, so we're removing the global random state to prevent accidental use
+    world.random.passthrough = False
+
     outfilebase = 'AP_' + world.seed_name
 
     output = tempfile.TemporaryDirectory()

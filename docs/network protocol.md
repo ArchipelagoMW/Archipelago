@@ -9,7 +9,7 @@ These steps should be followed in order to establish a gameplay connection with 
 5. Client sends [Connect](#Connect) packet in order to authenticate with the server.
 6. Server validates the client's packet and responds with [Connected](#Connected) or [ConnectionRefused](#ConnectionRefused).
 7. Server may send [ReceivedItems](#ReceivedItems) to the client, in the case that the client is missing items that are queued up for it.
-8. Server sends [Print](#Print) to all players to notify them of the new client connection.
+8. Server sends [PrintJSON](#PrintJSON) to all players to notify them of updates.
 
 In the case that the client does not authenticate properly and receives a [ConnectionRefused](#ConnectionRefused) then the server will maintain the connection and allow for follow-up [Connect](#Connect) packet.
 
@@ -54,7 +54,6 @@ These packets are are sent from the multiworld server to the client. They are no
 * [ReceivedItems](#ReceivedItems)
 * [LocationInfo](#LocationInfo)
 * [RoomUpdate](#RoomUpdate)
-* [Print](#Print)
 * [PrintJSON](#PrintJSON)
 * [DataPackage](#DataPackage)
 * [Bounced](#Bounced)
@@ -70,7 +69,7 @@ Sent to clients when they connect to an Archipelago server.
 | version | [NetworkVersion](#NetworkVersion) | Object denoting the version of Archipelago which the server is running. |
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. Example: `WebHost` |
 | password | bool | Denoted whether a password is required to join this room.|
-| permissions | dict\[str, [Permission](#Permission)\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "forfeit", "collect" and "remaining". |
+| permissions | dict\[str, [Permission](#Permission)\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "release", "collect" and "remaining". |
 | hint_cost | int | The amount of points it costs to receive a hint from the server. |
 | location_check_points | int | The amount of hint points you receive per item/location check completed. ||
 | games | list\[str\] | List of games present in this multiworld. |
@@ -78,14 +77,14 @@ Sent to clients when they connect to an Archipelago server.
 | seed_name | str | uniquely identifying name of this generation |
 | time | float | Unix time stamp of "now". Send for time synchronization if wanted for things like the DeathLink Bounce. |
 
-#### forfeit
-Dictates what is allowed when it comes to a player forfeiting their run. A forfeit is an action which distributes the rest of the items in a player's run to those other players awaiting them.
+#### release
+Dictates what is allowed when it comes to a player releasing their run. A release is an action which distributes the rest of the items in a player's run to those other players awaiting them.
 
 * `auto`: Distributes a player's items to other players when they complete their goal.
-* `enabled`: Denotes that players may forfeit at any time in the game.
+* `enabled`: Denotes that players may release at any time in the game.
 * `auto-enabled`: Both of the above options together.
-* `disabled`: All forfeit modes disabled.
-* `goal`: Allows for manual use of forfeit command once a player completes their goal. (Disabled until goal completion)
+* `disabled`: All release modes disabled.
+* `goal`: Allows for manual use of release command once a player completes their goal. (Disabled until goal completion)
 
 #### collect
 Dictates what is allowed when it comes to a player collecting their run. A collect is an action which sends the rest of the items in a player's run.
@@ -160,16 +159,8 @@ The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring:
 
 All arguments for this packet are optional, only changes are sent.
 
-### Print
-Sent to clients purely to display a message to the player. 
-* *Deprecation warning: clients that connect with version 0.3.5 or higher will nolonger recieve Print packets, instead all messsages are send as [PrintJSON](#PrintJSON)*
-#### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| text | str | Message to display to player. |
-
 ### PrintJSON
-Sent to clients purely to display a message to the player. This packet differs from [Print](#Print) in that the data being sent with this packet allows for more configurable or specific messaging.
+Sent to clients purely to display a message to the player. The data being sent with this packet allows for configurability or specific messaging.
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
@@ -181,7 +172,7 @@ Sent to clients purely to display a message to the player. This packet differs f
 | countdown | int | Is present if type is `Countdown`, denotes the amount of seconds remaining on the countdown. |
 
 ##### PrintJsonType
-PrintJsonType indicates the type of [PrintJson](#PrintJson) packet, different types can be handled differently by the client and can also contain additional arguments. When receiving an unknown type the data's list\[[JSONMessagePart](#JSONMessagePart)\] should still be printed as normal. 
+PrintJsonType indicates the type of [PrintJson](#PrintJson) packet, different types can be handled differently by the client and can also contain additional arguments. When receiving an unknown or missing type the data's list\[[JSONMessagePart](#JSONMessagePart)\] should still be displayed to the player as normal text. 
 
 Currently defined types are:
 | Type | Notes |
@@ -411,6 +402,9 @@ The following operations can be applied to a datastorage key
 | xor | Applies a bitwise Exclusive OR to the current value of the key with `value`. |
 | left_shift | Applies a bitwise left-shift to the current value of the key by `value`. |
 | right_shift | Applies a bitwise right-shift to the current value of the key by `value`. |
+| remove | List only: removes the first instance of `value` found in the list. |
+| pop | List or Dict: for lists it will remove the index of the `value` given. for dicts it removes the element with the specified key of `value`. |
+| update | Dict only: Updates the dictionary with the specified elements given in `value` creating new keys, or updating old ones if they previously existed. |
 
 ### SetNotify
 Used to register your current session for receiving all [SetReply](#SetReply) packages of certain keys to allow your client to keep track of changes.
@@ -596,7 +590,7 @@ class Permission(enum.IntEnum):
     disabled = 0b000  # 0, completely disables access
     enabled = 0b001  # 1, allows manual use
     goal = 0b010  # 2, allows manual use after goal completion
-    auto = 0b110  # 6, forces use after goal completion, only works for forfeit and collect
+    auto = 0b110  # 6, forces use after goal completion, only works for release and collect
     auto_enabled = 0b111  # 7, forces use after goal completion, allows manual use any time
 ```
 
