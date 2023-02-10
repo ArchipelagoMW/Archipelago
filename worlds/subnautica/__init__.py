@@ -34,7 +34,7 @@ class SubnauticaWorld(World):
     an unknown bacteria. The planet's automatic quarantine will shoot you down if you try to leave.
     You must find a cure for yourself, build an escape rocket, and leave the planet.
     """
-    game: str = "Subnautica"
+    game = "Subnautica"
     web = SubnaticaWeb()
 
     item_name_to_id = {data["name"]: item_id for item_id, data in Items.item_table.items()}
@@ -42,7 +42,7 @@ class SubnauticaWorld(World):
     option_definitions = Options.options
 
     data_version = 8
-    required_client_version = (0, 3, 7)
+    required_client_version = (0, 3, 8)
 
     creatures_to_scan: List[str]
 
@@ -112,6 +112,7 @@ class SubnauticaWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         goal: Options.Goal = self.multiworld.goal[self.player]
         item_pool: Options.ItemPool = self.multiworld.item_pool[self.player]
+        swim_rule: Options.SwimRule = self.multiworld.swim_rule[self.player]
         vanilla_tech: List[str] = []
         if item_pool == Options.ItemPool.option_valuable:
             for item in Items.item_table.values():
@@ -120,6 +121,7 @@ class SubnauticaWorld(World):
 
         slot_data: Dict[str, Any] = {
             "goal": goal.current_key,
+            "swim_rule": swim_rule.current_key,
             "vanilla_tech": vanilla_tech,
             "creatures_to_scan": self.creatures_to_scan,
             "death_link": self.multiworld.death_link[self.player].value,

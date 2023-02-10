@@ -584,6 +584,9 @@ if False:  # turn to True to export for Subnautica mod
         aurora_dist = math.sqrt((pos["x"] - 1038.0) ** 2 + (pos["y"] - -3.4) ** 2 + (pos["y"] - -163.1) ** 2)
         return aurora_dist < 950
 
+    def far_away(pos: Vector):
+        return (pos["x"] ** 2 + pos["z"] ** 2) > (800 ** 2)
+
     payload = {
         # "LaserCutter" in Subnautica ID
         "761": [location_id for location_id, location_data
@@ -593,7 +596,10 @@ if False:  # turn to True to export for Subnautica mod
                 in location_table.items() if location_data.get("need_propulsion_cannon", False)],
         # Radiation Suit in Subnautica ID
         "519": [location_id for location_id, location_data
-                in location_table.items() if radiated(location_data["position"])]
+                in location_table.items() if radiated(location_data["position"])],
+        # SeaGlide in Subnautica ID
+        "751": [location_id for location_id, location_data
+                in location_table.items() if far_away(location_data["position"])],
     }
     with open("logic.json", "w") as f:
         json.dump(payload, f)
