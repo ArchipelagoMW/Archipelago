@@ -340,6 +340,13 @@ class MinimumCatchRate(Range):
     default = 3
 
 
+class MoveBalancing(Toggle):
+    """All one-hit-KO moves and fixed-damage moves become normal damaging moves.
+    Blizzard, and moves that cause sleep have their accuracy reduced."""
+    display_name = "Move Balancing"
+    default = 0
+
+
 class RandomizePokemonMovesets(Choice):
     """Randomize the moves learned by Pokemon. prefer_types will prefer moves that match the type of the Pokemon."""
     display_name = "Randomize Pokemon Movesets"
@@ -348,6 +355,12 @@ class RandomizePokemonMovesets(Choice):
     option_completely_random = 2
     default = 0
 
+
+class ConfineTranstormToDitto(Toggle):
+    """Regardless of moveset randomization, will keep Ditto's first move as Transform no others will learn it.
+    If an enemy Pokemon uses transform before you catch it, it will permanently change to Ditto after capture."""
+    display_name = "Confine Transform to Ditto"
+    default = 1
 
 class StartWithFourMoves(Toggle):
     """If movesets are randomized, this will give all Pokemon 4 starting moves."""
@@ -622,7 +635,9 @@ pokemon_rb_options = {
     "minimum_catch_rate": MinimumCatchRate,
     "randomize_trainer_parties": RandomizeTrainerParties,
     "trainer_legendaries": TrainerLegendaries,
+    "move_balancing": MoveBalancing,
     "randomize_pokemon_movesets": RandomizePokemonMovesets,
+    "confine_transform_to_ditto": ConfineTranstormToDitto,
     "start_with_four_moves": StartWithFourMoves,
     "same_type_attack_bonus": SameTypeAttackBonus,
     "tm_same_type_compatibility": TMSameTypeCompatibility,

@@ -284,6 +284,7 @@ def process_pokemon_data(self):
 
     local_poke_data = deepcopy(poke_data.pokemon_data)
     learnsets = deepcopy(poke_data.learnsets)
+    tms_hms = poke_data.tm_moves + poke_data.hm_moves
 
     for mon, mon_data in local_poke_data.items():
         if self.multiworld.randomize_pokemon_stats[self.player].value == 1:
@@ -347,43 +348,104 @@ def process_pokemon_data(self):
             moves = list(poke_data.moves.keys())
             for move in ["No Move"] + poke_data.hm_moves:
                 moves.remove(move)
-            mon_data["start move 1"] = get_move(moves, chances, self.multiworld.random, True)
-            for i in range(2, 5):
-                if mon_data[f"start move {i}"] != "No Move" or self.multiworld.start_with_four_moves[
-                        self.player].value == 1:
-                    mon_data[f"start move {i}"] = get_move(moves, chances, self.multiworld.random)
-            if mon in learnsets:
-                for move_num in range(0, len(learnsets[mon])):
-                    learnsets[mon][move_num] = get_move(moves, chances, self.multiworld.random)
+            if self.multiworld.confine_transform_to_ditto[self.player]:
+                moves.remove("Transform")
+            # if self.multiworld.confine_transform_to_ditto[self.player] and mon == "Ditto":
+            #     mon_data["start move 1"] = "Transform"
+            # else:
+            #     mon_data["start move 1"] = get_move(moves, chances, self.multiworld.random, True)
+            # for i in range(2, 5):
+            #     if mon_data[f"start move {i}"] != "No Move" or self.multiworld.start_with_four_moves[
+            #             self.player].value == 1:
+            #         mon_data[f"start move {i}"] = get_move(moves, chances, self.multiworld.random)
+            # if mon in learnsets:
+            #     for move_num in range(0, len(learnsets[mon])):
+            #         learnsets[mon][move_num] = get_move(moves, chances, self.multiworld.random)
+            num_moves = len([i for i in [mon_data["start move 1"], mon_data["start move 2"], mon_data["start move 3"],
+                                         mon_data["start move 4"]] if i != "No Move"]) + len(learnsets[mon])
+            moves = []
+            non_power_moves = []
+            for i in range(num_moves):
+                if i == 0 and mon == "Ditto" and self.multiworld.confine_transform_to_ditto[self.player]:
+                    move = "Transform"
+                else:
+                    move = get_move(moves, chances, self.multiworld.random)
+                    while move == "Transform" and self.multiworld.confine_transform_to_ditto[self.player]:
+                        move = get_move(moves, chances, self.multiworld.random)
+                if poke_data[move]["power"] == 0:
+                    non_power_moves.append(move)
+                else:
+                    moves.append(move)
+            moves.sort(key=lambda move: poke_data[move]["power"])
+            for move in non_power_moves:
+                moves.insert(self.multiworld.random.randint(0, len(moves)), move)
+            for i in range(1, 5):
+                if mon_data[f"start move {i}"] != "No Move" or self.multiworld.start_with_four_moves[self.player]:
+                    mon_data[f"start move {i}"] = moves.pop(0)
+            learnsets[mon] = moves
+
+
         if self.multiworld.randomize_pokemon_catch_rates[self.player].value:
             mon_data["catch rate"] = self.multiworld.random.randint(self.multiworld.minimum_catch_rate[self.player], 255)
         else:
             mon_data["catch rate"] = max(self.multiworld.minimum_catch_rate[self.player], mon_data["catch rate"])
 
-        # tms_hms = poke_data.tm_moves + poke_data.hm_moves
-        # for flag, tm_move in enumerate(tms_hms):
-        #     if ((mon in poke_data.evolves_from.keys() and mon_data["type1"] ==
-        #          local_poke_data[poke_data.evolves_from[mon]]["type1"] and mon_data["type2"] ==
-        #          local_poke_data[poke_data.evolves_from[mon]]["type2"]) and (
-        #             (flag < 50 and self.multiworld.tm_compatibility[self.player].value in [1, 2]) or (
-        #             flag >= 51 and self.multiworld.hm_compatibility[self.player].value in [1, 2]))):
-        #         bit = 1 if local_poke_data[poke_data.evolves_from[mon]]["tms"][int(flag / 8)] & 1 << (flag % 8) else 0
-        #     elif (flag < 50 and self.multiworld.tm_compatibility[self.player].value == 1) or (flag >= 50 and self.multiworld.hm_compatibility[self.player].value == 1):
-        #         type_match = poke_data.moves[tm_move]["type"] in [mon_data["type1"], mon_data["type2"]]
-        #         bit = int(self.multiworld.random.randint(1, 100) < [[90, 50, 25], [100, 75, 25]][flag >= 50][0 if type_match else 1 if poke_data.moves[tm_move]["type"] == "Normal" else 2])
-        #     elif (flag < 50 and self.multiworld.tm_compatibility[self.player].value == 2) or (flag >= 50 and self.multiworld.hm_compatibility[self.player].value == 2):
-        #         bit = self.multiworld.random.randint(0, 1)
-        #     elif (flag < 50 and self.multiworld.tm_compatibility[self.player].value == 3) or (flag >= 50 and self.multiworld.hm_compatibility[self.player].value == 3):
-        #         bit = 1
-        #     else:
-        #         continue
-        #     if bit:
-        #         mon_data["tms"][int(flag / 8)] |= 1 << (flag % 8)
-        #     else:
-        #         mon_data["tms"][int(flag / 8)] &= ~(1 << (flag % 8))
-        tms_hms = poke_data.tm_moves + poke_data.hm_moves
-        for flag, tm_move in enumerate(poke_data.tm_moves):
-            pass
+
+        def roll_tm_compat(roll_move):
+            if poke_data.moves[roll_move]["type"] in [mon_data["type1"], mon_data["type2"]]:
+                if roll_move in poke_data.tm_moves:
+                    if self.multiworld.tm_same_type_compatibility[self.player].value == -1:
+                        return mon_data["tms"][int(flag / 8)]
+                    return self.multiworld.random.randint(1, 100) <= self.multiworld.tm_same_type_compatibility[self.player].value
+                elif roll_move in poke_data.hm_moves:
+                    if self.multiworld.hm_same_type_compatibility[self.player].value == -1:
+                        return mon_data["tms"][int(flag / 8)]
+                    return self.multiworld.random.randint(1, 100) <= self.multiworld.hm_same_type_compatibility[self.player].value
+            elif poke_data.moves[roll_move]["type"] == "Normal" and "Normal" not in [mon_data["type1"], mon_data["type2"]]:
+                if roll_move in poke_data.tm_moves:
+                    if self.multiworld.tm_normal_type_compatibility[self.player].value == -1:
+                        return mon_data["tms"][int(flag / 8)]
+                    return self.multiworld.random.randint(1, 100) <= self.multiworld.tm_normal_type_compatibility[self.player].value
+                elif roll_move in poke_data.hm_moves:
+                    if self.multiworld.hm_normal_type_compatibility[self.player].value == -1:
+                        return mon_data["tms"][int(flag / 8)]
+                    return self.multiworld.random.randint(1, 100) <= self.multiworld.hm_normal_type_compatibility[self.player].value
+            else:
+                if roll_move in poke_data.tm_moves:
+                    if self.multiworld.tm_other_type_compatibility[self.player].value == -1:
+                        return mon_data["tms"][int(flag / 8)]
+                    return self.multiworld.random.randint(1, 100) <= self.multiworld.tm_other_type_compatibility[self.player].value
+                elif roll_move in poke_data.hm_moves:
+                    if self.multiworld.hm_other_type_compatibility[self.player].value == -1:
+                        return mon_data["tms"][int(flag / 8)]
+                    return self.multiworld.random.randint(1, 100) <= self.multiworld.hm_other_type_compatibility[self.player].value
+
+
+        for flag, tm_move in enumerate(tms_hms):
+            if mon in poke_data.evolves_from.keys() and self.multiworld.inherit_tm_hm_compatibility[self.player]:
+
+                if local_poke_data[poke_data.evolves_from[mon]]["tms"][int(flag / 8)] & 1 << (flag % 8):
+                    # always inherit learnable tms/hms
+                    bit = 1
+                else:
+                    if poke_data.moves[tm_move]["type"] in [mon_data["type1"], mon_data["type2"]] and \
+                            poke_data.moves[tm_move]["type"] not in [
+                            local_poke_data[poke_data.evolves_from[mon]["type1"]],
+                            local_poke_data[poke_data.evolves_from[mon]["type2"]]]:
+                        # the tm/hm is for a move whose type matches current mon, but not pre-evolved form
+                        # so this gets full chance roll
+                        bit = roll_tm_compat(tm_move)
+                    # otherwise 50% reduced chance to add compatibility over pre-evolved form
+                    elif self.multiworld.randint(1, 100) > 50 and roll_tm_compat(tm_move):
+                        bit = 1
+                    else:
+                        bit = 0
+            else:
+                bit = roll_tm_compat(tm_move)
+            if bit:
+                mon_data["tms"][int(flag / 8)] |= 1 << (flag % 8)
+            else:
+                mon_data["tms"][int(flag / 8)] &= ~(1 << (flag % 8))
 
 
     self.local_poke_data = local_poke_data
@@ -566,6 +628,27 @@ def generate_output(self, output_directory: str):
 
     set_mon_pallets(self, random, data)
     process_trainer_data(self, data)
+
+    if self.multiworld.move_balancing[self.player]:
+        data[rom_addresses["Move_Data_SING"] + 4] = 30  # 30% accuracy
+        data[rom_addresses["Move_Data_SLEEP_POWDER"] + 4] = 40  # 40% accuracy
+        data[rom_addresses["Move_Data_SPORE"] + 4] = 50  # 50% accuracy
+        data[rom_addresses["Move_Data_SONICBOOM"] + 1] = 0  # no special damage effect
+        data[rom_addresses["Move_Data_SONICBOOM"] + 2] = 50  # 50 power
+        data[rom_addresses["Move_Data_DRAGON_RAGE"] + 1] = 0  # no special damage effect
+        data[rom_addresses["Move_Data_DRAGON_RAGE"] + 2] = 80  # 80 power
+        data[rom_addresses["Move_Data_HORN_DRILL"] + 1] = 0  # no special damage effect
+        data[rom_addresses["Move_Data_HORN_DRILL"] + 2] = 70  # 80 power
+        data[rom_addresses["Move_Data_HORN_DRILL"] + 4] = 90  # 90% accuracy
+        data[rom_addresses["Move_Data_GUILLOTINE"] + 1] = 0  # no special damage effect
+        data[rom_addresses["Move_Data_GUILLOTINE"] + 2] = 70  # 80 power
+        data[rom_addresses["Move_Data_GUILLOTINE"] + 4] = 90  # 90% accuracy
+        data[rom_addresses["Move_Data_FISSURE"] + 1] = 0  # no special damage effect
+        data[rom_addresses["Move_Data_FISSURE"] + 2] = 70  # 80 power
+        data[rom_addresses["Move_Data_FISSURE"] + 4] = 90  # 90% accuracy
+        data[rom_addresses["Move_Data_BLIZZARD"] + 4] = 70  # 70% accuracy
+
+
 
     mons = [mon["id"] for mon in poke_data.pokemon_data.values()]
     random.shuffle(mons)
