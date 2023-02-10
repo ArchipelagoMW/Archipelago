@@ -23,7 +23,7 @@ local batCarryAddress = 0xD0 -- uses ram object location
 local batInvalidCarryItem = 0x78
 local last_carry_item = 0xAB
 local frames_with_no_item = 0
-local ItemTableStart = 0xfe88
+local ItemTableStart = 0xfe99
 local PlayerSlotAddress = 0xfff9
 
 local itemMessages = {}

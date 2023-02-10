@@ -15,7 +15,7 @@ from worlds.generic.Rules import add_rule, set_rule
 from .Options import adventure_option_definitions, DragonRandoType
 from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, apply_basepatch, \
     AdventureAutoCollectLocation
-from .Items import item_table, ItemData, nothing_item_id, event_table, AdventureItem, get_num_items
+from .Items import item_table, ItemData, nothing_item_id, event_table, AdventureItem, standard_item_max
 from .Locations import location_table, base_location_id, LocationData, get_random_room_in_regions
 from .Offsets import static_item_data_location, items_ram_start, static_item_element_size, item_position_table, \
     static_first_dragon_index, connector_port_offset
@@ -75,6 +75,7 @@ class AdventureWorld(World):
     connector_multi_slot: Optional[int]
 
     dragon_rooms: [str]
+    created_items: int
 
     @classmethod
     def stage_assert_generate(cls, _multiworld: MultiWorld) -> None:
@@ -98,6 +99,7 @@ class AdventureWorld(World):
         self.empty_item_count = self.multiworld.empty_item_count[self.player].value
         self.dragon_rando_type = self.multiworld.dragon_rando_type[self.player].value
         self.connector_multi_slot = self.multiworld.connector_multi_slot[self.player].value
+        self.created_items = 0
 
         if self.dragon_slay_check == 0:
             item_table["Sword"].classification = ItemClassification.useful
@@ -126,14 +128,18 @@ class AdventureWorld(World):
         for event in map(self.create_item, event_table):
             self.multiworld.itempool.append(event)
         exclude = [item for item in self.multiworld.precollected_items[self.player]]
+        self.created_items = 0
         for item in map(self.create_item, item_table):
             if item in exclude:
                 exclude.remove(item)  # this is destructive. create unique list above
                 self.multiworld.itempool.append(self.create_item("nothing"))
+                self.created_items += 1
             else:
-                self.multiworld.itempool.append(item)
+                if item.code <= standard_item_max:
+                    self.multiworld.itempool.append(item)
+                    self.created_items += 1
         num_locations = len(location_table) - 1  # subtract out the chalice location
-        extra_filler_count = num_locations - len(item_table)
+        extra_filler_count = num_locations - self.created_items
         self.multiworld.itempool += [self.create_item("nothing") for _ in range(extra_filler_count)]
 
     def create_regions(self) -> None:
@@ -163,7 +169,7 @@ class AdventureWorld(World):
 
         # unfilled_locations = len(locations_copy)
         # filled_locations = len(overworld.locations) - unfilled_locations
-        force_empty_item_count = (total_location_count - get_num_items()) - self.empty_item_count
+        force_empty_item_count = (total_location_count - self.created_items) - self.empty_item_count
         nothing_items = list(filter(lambda i: i.name == "nothing", self.multiworld.itempool))
         # guarantee at least one overworld location, so we can for sure get a key somewhere
         saved_overworld_loc = self.multiworld.random.choice(overworld_locations_copy)
@@ -202,7 +208,7 @@ class AdventureWorld(World):
             # start and stop indices are offsets in the ROM file, not Adventure ROM addresses (which start at f000)
 
             # This places the local items (I still need to make it easy to inject the offset data)
-            unplaced_local_items = item_table.copy()
+            unplaced_local_items = dict(filter(lambda x: x[1].id <= standard_item_max, item_table.items()))
             for location in self.multiworld.get_locations(self.player):
                 if location.item.player == self.player and \
                         location.item.name == "nothing":

@@ -10,7 +10,7 @@ class AdventureItem(Item):
 
 
 class ItemData:
-    def __init__(self, id, classification):
+    def __init__(self, id: int, classification: ItemClassification):
         self.classification = classification
         self.id = None if id is None else id + base_adventure_item_id
         self.table_index = id
@@ -30,20 +30,22 @@ item_table = {
     "Sword": ItemData(0x9, ItemClassification.progression),
     "Chalice": ItemData(0x10, ItemClassification.progression_skip_balancing),
     # Non-ROM Adventure items, managed by lua
-    # Difficulty Switch A
-    # Difficulty Switch B
-    # Freeincarnate
-    # Slow Yorgle
-    # Slow Grundle
-    # Slow Rhindle
+    "Difficulty Switch A": ItemData(0x100, ItemClassification.filler),
+    "Difficulty Switch B": ItemData(0x101, ItemClassification.filler),
+    # Can use these instead of 'nothing'
+    "Freeincarnate": ItemData(0x102, ItemClassification.filler),
+    # These should only be enabled if fast dragons is on?
+    "Slow Yorgle": ItemData(0x103, ItemClassification.filler),
+    "Slow Grundle": ItemData(0x104, ItemClassification.filler),
+    "Slow Rhindle": ItemData(0x105, ItemClassification.filler),
+    # this should only be enabled if opted into?  For now, I'll just include them
+    "Revive Dragons": ItemData(0x106, ItemClassification.trap),
     # Bat Trap
     # Bat Time Out
-    # "Revive Dragons": ItemData(0x100, ItemClassification.trap)
+    # "Revive Dragons": ItemData(0x110, ItemClassification.trap)
 }
 
-
-def get_num_items():
-    return len(item_table)
+standard_item_max = item_table["Magnet"].id
 
 
 event_table = {

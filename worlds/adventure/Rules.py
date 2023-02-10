@@ -1,4 +1,3 @@
-from worlds.adventure import get_num_items
 from worlds.generic.Rules import add_rule, set_rule, forbid_item
 from BaseClasses import LocationProgressType
 
