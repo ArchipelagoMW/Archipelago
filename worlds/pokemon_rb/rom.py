@@ -103,14 +103,14 @@ def set_mon_pallets(self, random, data):
               poke_data.evolves_from and poke_data.evolves_from[mon] != "Eevee"):
             pallet = pallets[-1]
         else:  # completely_random or follow_evolutions and it is not an evolved form (except eeveelutions)
-            pallet = random.choice(pallet_map.values())
+            pallet = random.choice(list(pallet_map.values()))
         pallets.append(pallet)
     address = rom_addresses["Mon_Pallets"]
     for pallet in pallets:
         data[address] = pallet
         address += 1
 
-def process_trainer_data(self, data):
+
 def process_trainer_data(self, data, random):
     mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
                  or self.multiworld.trainer_legendaries[self.player].value]
@@ -302,17 +302,21 @@ def process_pokemon_data(self):
             mon_data["spd"] = stats[3]
             mon_data["spc"] = stats[4]
         elif self.multiworld.randomize_pokemon_stats[self.player].value == 2:
-            total_stats = mon_data["hp"] + mon_data["atk"] + mon_data["def"] + mon_data["spd"] + mon_data["spc"] - 60
-            dist = [self.multiworld.random.randint(1, 101) / 100, self.multiworld.random.randint(1, 101) / 100,
-                    self.multiworld.random.randint(1, 101) / 100, self.multiworld.random.randint(1, 101) / 100,
-                    self.multiworld.random.randint(1, 101) / 100]
-            total_dist = sum(dist)
+            first_run = True
+            while (mon_data["hp"] > 255 or mon_data["atk"] > 255 or mon_data["def"] > 255 or mon_data["spd"] > 255
+                   or mon_data["spc"] > 255 or first_run):
+                first_run = False
+                total_stats = mon_data["hp"] + mon_data["atk"] + mon_data["def"] + mon_data["spd"] + mon_data["spc"] - 60
+                dist = [self.multiworld.random.randint(1, 101) / 100, self.multiworld.random.randint(1, 101) / 100,
+                        self.multiworld.random.randint(1, 101) / 100, self.multiworld.random.randint(1, 101) / 100,
+                        self.multiworld.random.randint(1, 101) / 100]
+                total_dist = sum(dist)
 
-            mon_data["hp"] = int(round(dist[0] / total_dist * total_stats) + 20)
-            mon_data["atk"] = int(round(dist[1] / total_dist * total_stats) + 10)
-            mon_data["def"] = int(round(dist[2] / total_dist * total_stats) + 10)
-            mon_data["spd"] = int(round(dist[3] / total_dist * total_stats) + 10)
-            mon_data["spc"] = int(round(dist[4] / total_dist * total_stats) + 10)
+                mon_data["hp"] = int(round(dist[0] / total_dist * total_stats) + 20)
+                mon_data["atk"] = int(round(dist[1] / total_dist * total_stats) + 10)
+                mon_data["def"] = int(round(dist[2] / total_dist * total_stats) + 10)
+                mon_data["spd"] = int(round(dist[3] / total_dist * total_stats) + 10)
+                mon_data["spc"] = int(round(dist[4] / total_dist * total_stats) + 10)
         if self.multiworld.randomize_pokemon_types[self.player].value:
             if self.multiworld.randomize_pokemon_types[self.player].value == 1 and mon in poke_data.evolves_from:
                 type1 = local_poke_data[poke_data.evolves_from[mon]]["type1"]
@@ -367,10 +371,15 @@ def process_pokemon_data(self):
             # if mon in learnsets:
             #     for move_num in range(0, len(learnsets[mon])):
             #         learnsets[mon][move_num] = get_move(moves, chances, self.multiworld.random)
-            num_moves = len([i for i in [mon_data["start move 1"], mon_data["start move 2"], mon_data["start move 3"],
-                                         mon_data["start move 4"]] if i != "No Move"]) + len(learnsets[mon])
-            moves = []
+            if self.multiworld.start_with_four_moves[self.player]:
+                num_moves = 4
+            else:
+                num_moves = len([i for i in [mon_data["start move 1"], mon_data["start move 2"],
+                                             mon_data["start move 3"], mon_data["start move 4"]] if i != "No Move"])
+            if mon in learnsets:
+                num_moves += len(learnsets[mon])
             non_power_moves = []
+            learnsets[mon] = []
             for i in range(num_moves):
                 if i == 0 and mon == "Ditto" and self.multiworld.confine_transform_to_ditto[self.player]:
                     move = "Transform"
@@ -378,17 +387,16 @@ def process_pokemon_data(self):
                     move = get_move(moves, chances, self.multiworld.random)
                     while move == "Transform" and self.multiworld.confine_transform_to_ditto[self.player]:
                         move = get_move(moves, chances, self.multiworld.random)
-                if poke_data[move]["power"] == 0:
+                if poke_data.moves[move]["power"] == 0:
                     non_power_moves.append(move)
                 else:
-                    moves.append(move)
-            moves.sort(key=lambda move: poke_data[move]["power"])
+                    learnsets[mon].append(move)
+            learnsets[mon].sort(key=lambda move: poke_data.moves[move]["power"])
             for move in non_power_moves:
-                moves.insert(self.multiworld.random.randint(0, len(moves)), move)
+                learnsets[mon].insert(self.multiworld.random.randint(0, len(learnsets[mon])), move)
             for i in range(1, 5):
                 if mon_data[f"start move {i}"] != "No Move" or self.multiworld.start_with_four_moves[self.player]:
-                    mon_data[f"start move {i}"] = moves.pop(0)
-            learnsets[mon] = moves
+                    mon_data[f"start move {i}"] = learnsets[mon].pop(0)
 
 
         if self.multiworld.randomize_pokemon_catch_rates[self.player].value:
@@ -436,13 +444,13 @@ def process_pokemon_data(self):
                 else:
                     if poke_data.moves[tm_move]["type"] in [mon_data["type1"], mon_data["type2"]] and \
                             poke_data.moves[tm_move]["type"] not in [
-                            local_poke_data[poke_data.evolves_from[mon]["type1"]],
-                            local_poke_data[poke_data.evolves_from[mon]["type2"]]]:
+                            local_poke_data[poke_data.evolves_from[mon]]["type1"],
+                            local_poke_data[poke_data.evolves_from[mon]]["type2"]]:
                         # the tm/hm is for a move whose type matches current mon, but not pre-evolved form
                         # so this gets full chance roll
                         bit = roll_tm_compat(tm_move)
                     # otherwise 50% reduced chance to add compatibility over pre-evolved form
-                    elif self.multiworld.randint(1, 100) > 50 and roll_tm_compat(tm_move):
+                    elif self.multiworld.random.randint(1, 100) > 50 and roll_tm_compat(tm_move):
                         bit = 1
                     else:
                         bit = 0
@@ -592,10 +600,10 @@ def generate_output(self, output_directory: str):
         data[address + 17] = poke_data.moves[self.local_poke_data[mon]["start move 3"]]["id"]
         data[address + 18] = poke_data.moves[self.local_poke_data[mon]["start move 4"]]["id"]
         write_bytes(data, self.local_poke_data[mon]["tms"], address + 20)
-        if mon in self.learnsets:
-            address = rom_addresses["Learnset_" + mon.replace(" ", "")]
-            for i, move in enumerate(self.learnsets[mon]):
-                data[(address + 1) + i * 2] = poke_data.moves[move]["id"]
+        if mon in self.learnsets and self.learnsets[mon]:
+                address = rom_addresses["Learnset_" + mon.replace(" ", "")]
+                for i, move in enumerate(self.learnsets[mon]):
+                    data[(address + 1) + i * 2] = poke_data.moves[move]["id"]
 
     data[rom_addresses["Option_Aide_Rt2"]] = self.multiworld.oaks_aide_rt_2[self.player].value
     data[rom_addresses["Option_Aide_Rt11"]] = self.multiworld.oaks_aide_rt_11[self.player].value
