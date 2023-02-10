@@ -360,17 +360,6 @@ def process_pokemon_data(self):
                 moves.remove(move)
             if self.multiworld.confine_transform_to_ditto[self.player]:
                 moves.remove("Transform")
-            # if self.multiworld.confine_transform_to_ditto[self.player] and mon == "Ditto":
-            #     mon_data["start move 1"] = "Transform"
-            # else:
-            #     mon_data["start move 1"] = get_move(moves, chances, self.multiworld.random, True)
-            # for i in range(2, 5):
-            #     if mon_data[f"start move {i}"] != "No Move" or self.multiworld.start_with_four_moves[
-            #             self.player].value == 1:
-            #         mon_data[f"start move {i}"] = get_move(moves, chances, self.multiworld.random)
-            # if mon in learnsets:
-            #     for move_num in range(0, len(learnsets[mon])):
-            #         learnsets[mon][move_num] = get_move(moves, chances, self.multiworld.random)
             if self.multiworld.start_with_four_moves[self.player]:
                 num_moves = 4
             else:
@@ -398,12 +387,10 @@ def process_pokemon_data(self):
                 if mon_data[f"start move {i}"] != "No Move" or self.multiworld.start_with_four_moves[self.player]:
                     mon_data[f"start move {i}"] = learnsets[mon].pop(0)
 
-
         if self.multiworld.randomize_pokemon_catch_rates[self.player].value:
             mon_data["catch rate"] = self.multiworld.random.randint(self.multiworld.minimum_catch_rate[self.player], 255)
         else:
             mon_data["catch rate"] = max(self.multiworld.minimum_catch_rate[self.player], mon_data["catch rate"])
-
 
         def roll_tm_compat(roll_move):
             if poke_data.moves[roll_move]["type"] in [mon_data["type1"], mon_data["type2"]]:

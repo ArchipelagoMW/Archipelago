@@ -65,7 +65,7 @@ class CeruleanCaveCondition(Range):
     If extra_key_items is turned on, the number chosen will be increased by 4."""
     display_name = "Cerulean Cave Condition"
     range_start = 0
-    range_end = 25
+    range_end = 26
     default = 20
 
 
