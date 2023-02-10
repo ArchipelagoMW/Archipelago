@@ -17,7 +17,7 @@
    `Steam->Right Click Wargroove->Properties->Local Files->Browse Local Files` and copying the path in the address bar.
    - Paste the path in between the quotes next to `root_directory:` in the `host.yaml`.
    - You may have to replace all single \\ with \\\\.
-4. Start the Wargroove client. It should start with no errors, if it does go back to step 1.
+4. Start the Wargroove client.
 
 ## Installing the Archipelago Wargroove Mod and Campaign files
 
