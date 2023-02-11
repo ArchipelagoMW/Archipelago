@@ -26,7 +26,7 @@ class KingdomHearts2Web(WebWorld):
 
 class KH2World(World):
     game: str = "Kingdom Hearts 2"
-
+    web = KingdomHearts2Web()
     data_version = 0
     option_definitions = KH2_Options
     topology_present: bool = True  # show path to required location checks in spoiler
@@ -240,6 +240,7 @@ class KH2World(World):
             item = self.multiworld.per_slot_randoms[self.player].choice(visitlockingitem)
             item_quantity_dict.update({item: Items.item_dictionary_table[item].quantity - 1})
             self.multiworld.push_precollected(self.create_item(item))
+            visitlockingitem.remove(item)
         # Option to turn off all superbosses. Can do this individually but its like 20+ checks
 
         # same item placed because you can only get one of these 2 locations

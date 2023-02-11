@@ -336,7 +336,7 @@ class KH2Context(CommonContext):
                     itemname = self.lookup_id_to_item[item.item]
                     itemcode = self.item_name_to_data[itemname]
                     if itemname in exclusionItem_table["Ability"] and itemcode.memaddr not in {0x05E, 0x062, 0x066, 0x06A, 0x234}:
-                        self.backofinventory+=2
+                        self.kh2seedsave["SoraInvo"]+=2
                     if itemname in DonaldAbility_Table.keys():
                         asyncio.create_task(self.give_item(itemcode, "Donald"))
                     elif itemname in GoofyAbility_Table.keys():
