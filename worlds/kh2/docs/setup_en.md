@@ -1,4 +1,18 @@
 # Kingdom Hearts 2 Archipelago Setup Guide
+## Quick Links
+- [Main Page](../../../../games/Kingdom%20Hearts%202/info/en)
+- [Settings Page](../../../../games/Kingdom%20Hearts%202/player-settings)
+
+## Setting up the Mod Manager
+Follow this Guide [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/)
+
+### Loading A Seed
+
+When you generate a game you will see a download link for a KH2 .zip seed on the room page. Download the seed then open OpenKH Mod Manager and click the green plus and `Select and install Mod Archive`. Make sure the seed is on the top of the list (Highest Priority)
+
+### Archipelago Compainion Mod
+
+Load this mod just like the GoA ROM you did during the KH2 Rando setup. `JaredWeakStrike/APCompanion` Have this mod second highest priority below the .zip seed
 
 ## Generating a game
 
@@ -23,19 +37,4 @@ slot name and, if the relevant game requires it, files to associate it with that
 
 If multiple people plan to play in one world cooperatively then they will only need one YAML for their coop world. If
 each player is planning on playing their own game then they will each need a YAML.
-
-### Setting up the Mod Manager
-Follow this Guide https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/
-
-#### Loading A Seed
-
-Load The .zip file that is outputted for KH2 just like a normal KH2 Ranomizer seed.
-
-#### Archipelago Compainion Mod
-
-Load This Mod Just like the Goa\
-***JaredWeakStrike/APCompanion***\
-Have this Above the GOA in the Mod Manager
-
-
 
