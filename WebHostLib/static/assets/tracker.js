@@ -81,16 +81,9 @@ window.addEventListener('load', () => {
     };
     searchBox.addEventListener("keyup", doSearch);
     window.addEventListener("keydown", (event) => {
-        if (event.ctrlKey && !event.altKey && !event.shiftKey && event.key === "f") {
-            searchBox.focus();
-            searchBox.select();
-            event.preventDefault();
-        }
         if (!event.ctrlKey && !event.altKey && event.key.length === 1 && document.activeElement !== searchBox) {
             searchBox.focus();
             searchBox.select();
-            if (event.key === "/")
-                event.preventDefault();
         }
         if (!event.ctrlKey && !event.altKey && !event.shiftKey && event.key === "Escape") {
             if (searchBox.value !== "") {
