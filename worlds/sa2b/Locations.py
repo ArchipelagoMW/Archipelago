@@ -660,7 +660,7 @@ omochao_location_table = {
     LocationName.prison_lane_omo_7: 0xFF08C2,
     LocationName.pumpkin_hill_omo_7: 0xFF08C5,
     LocationName.mission_street_omo_7: 0xFF08C6,
-    LocationName.aquatic_mine_omo_6: 0xFF08C7,
+    LocationName.aquatic_mine_omo_7: 0xFF08C7,
     LocationName.death_chamber_omo_7: 0xFF08CB,
     LocationName.eternal_engine_omo_7: 0xFF08CC,
     LocationName.crazy_gadget_omo_7: 0xFF08CE,
