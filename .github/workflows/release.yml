@@ -8,7 +8,7 @@ on:
       - '*.*.*'
 
 env:
-  SNI_VERSION: v0.0.84
+  SNI_VERSION: v0.0.88
   ENEMIZER_VERSION: 7.1
   APPIMAGETOOL_VERSION: 13
 
@@ -65,9 +65,10 @@ jobs:
       - name: Build
         run: |
           # pygobject is an optional dependency for kivy that's not in requirements
-          "${{ env.PYTHON }}" -m pip install --upgrade pip virtualenv PyGObject setuptools
+          # charset-normalizer was somehow incomplete in the github runner
           "${{ env.PYTHON }}" -m venv venv
           source venv/bin/activate
+          "${{ env.PYTHON }}" -m pip install --upgrade pip PyGObject setuptools charset-normalizer
           pip install -r requirements.txt
           python setup.py build --yes bdist_appimage --yes
           echo -e "setup.py build output:\n `ls build`"
