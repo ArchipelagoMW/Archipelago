@@ -18,7 +18,7 @@ from worlds.adventure import AdventureDeltaPatch
 
 from worlds.adventure.Locations import location_table, base_location_id
 from worlds.adventure.Rom import AdventureForeignItemInfo, AdventureAutoCollectLocation
-from worlds.adventure.Items import base_adventure_item_id
+from worlds.adventure.Items import base_adventure_item_id, standard_item_max, item_table
 from worlds.adventure.Offsets import static_item_data_location, static_item_element_size, rom_address_space_start, \
     connector_port_offset
 
@@ -58,6 +58,7 @@ class AdventureContext(CommonContext):
     foreign_items: [AdventureForeignItemInfo] = []
     autocollect_items: [AdventureAutoCollectLocation] = []
     local_item_locations = {}
+    dragon_speed_info = {}
     checked_locations_sent: bool = False
     lua_connector_port: int = 17242
 
@@ -134,18 +135,32 @@ def convert_item_id(ap_item_id: int):
 def get_payload(ctx: AdventureContext):
     current_time = time.time()
     items = []
+    dragon_speed_update = {}
+    diff_a_locked = ctx.diff_a_mode > 0
+    diff_b_locked = ctx.diff_b_mode > 0
     for item in ctx.items_received:
-        if item.item > base_adventure_item_id:
+        if base_adventure_item_id < item.item <= standard_item_max:
             items.append(convert_item_id(item.item))
+        elif item.item in ctx.dragon_speed_info:
+            if item.item in dragon_speed_update:
+                last_index = len(ctx.dragon_speed_info[item.item]) - 1
+                dragon_speed_update[item.item] = ctx.dragon_speed_info[item.item][last_index]
+            else:
+                dragon_speed_update[item.item] = ctx.dragon_speed_info[item.item][0]
+        elif item.item == item_table["Difficulty Switch A"].id:
+            diff_a_locked = False
+        elif item.item == item_table["Difficulty Switch B"].id:
+            diff_b_locked = False
+
     ret = json.dumps(
         {
-            # TODO - send down the item table offset to the connector, which can look up its ram location
-            # TODO - or use it directly.  The connector will need to
-            # TODO - keep track of what's in the 'inventory' and place items into player when requested
             "items": items,
             "messages": {f'{key[0]}:{key[1]}': value for key, value in ctx.messages.items()
                          if key[0] > current_time - 10},
-            "deathlink": ctx.deathlink_pending
+            "deathlink": ctx.deathlink_pending,
+            "dragon_speeds": dragon_speed_update,
+            "difficulty_a_locked": diff_a_locked,
+            "difficulty_b_locked": diff_b_locked
         }
     )
     ctx.deathlink_pending = False
@@ -369,7 +384,9 @@ async def patch_and_run_game(patch_file, ctx):
         ctx.foreign_items = AdventureDeltaPatch.read_foreign_items(patch_archive)
         ctx.autocollect_items = AdventureDeltaPatch.read_autocollect_items(patch_archive)
         ctx.local_item_locations = AdventureDeltaPatch.read_local_item_locations(patch_archive)
+        ctx.dragon_speed_info = AdventureDeltaPatch.read_dragon_speed_info(patch_archive)
         ctx.rom_hash, ctx.seed_name_from_data, ctx.player_name = AdventureDeltaPatch.read_rom_info(patch_archive)
+        ctx.diff_a_mode, ctx.diff_b_mode = AdventureDeltaPatch.read_difficulty_switch_info(patch_archive)
         ctx.auth = ctx.player_name
     patched_rom_data = bsdiff4.patch(base_rom, patch)
     ctx.port_offset = patched_rom_data[connector_port_offset]

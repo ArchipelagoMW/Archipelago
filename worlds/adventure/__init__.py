@@ -1,5 +1,6 @@
 import base64
 import itertools
+import math
 import os
 from enum import IntFlag
 from typing import Any, ClassVar, Dict, List, Optional, Set, Tuple
@@ -12,13 +13,14 @@ from worlds.AutoWorld import WebWorld, World
 from Fill import fill_restrictive
 from worlds.generic.Rules import add_rule, set_rule
 # from .Client import L2ACSNIClient  # noqa: F401
-from .Options import adventure_option_definitions, DragonRandoType
+from .Options import adventure_option_definitions, DragonRandoType, DifficultySwitchA
 from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, apply_basepatch, \
     AdventureAutoCollectLocation
 from .Items import item_table, ItemData, nothing_item_id, event_table, AdventureItem, standard_item_max
 from .Locations import location_table, base_location_id, LocationData, get_random_room_in_regions
 from .Offsets import static_item_data_location, items_ram_start, static_item_element_size, item_position_table, \
-    static_first_dragon_index, connector_port_offset
+    static_first_dragon_index, connector_port_offset, yorgle_speed_data_location, grundle_speed_data_location, \
+    rhindle_speed_data_location
 from .Regions import create_regions
 from .Rules import set_rules
 
@@ -73,9 +75,20 @@ class AdventureWorld(World):
     empty_item_count: Optional[int]
     dragon_rando_type: Optional[int]
     connector_multi_slot: Optional[int]
+    yorgle_speed: Optional[int]
+    yorgle_min_speed: Optional[int]
+    grundle_speed: Optional[int]
+    grundle_min_speed: Optional[int]
+    rhindle_speed: Optional[int]
+    rhindle_min_speed: Optional[int]
+    difficulty_switch_a: Optional[int]
+    difficulty_switch_b: Optional[int]
 
     dragon_rooms: [str]
     created_items: int
+
+    # dict of item names -> list of speed deltas
+    dragon_speed_reducer_info: {}
 
     @classmethod
     def stage_assert_generate(cls, _multiworld: MultiWorld) -> None:
@@ -99,6 +112,14 @@ class AdventureWorld(World):
         self.empty_item_count = self.multiworld.empty_item_count[self.player].value
         self.dragon_rando_type = self.multiworld.dragon_rando_type[self.player].value
         self.connector_multi_slot = self.multiworld.connector_multi_slot[self.player].value
+        self.yorgle_speed = self.multiworld.yorgle_speed[self.player].value
+        self.yorgle_min_speed = self.multiworld.yorgle_min_speed[self.player].value
+        self.grundle_speed = self.multiworld.grundle_speed[self.player].value
+        self.grundle_min_speed = self.multiworld.grundle_min_speed[self.player].value
+        self.rhindle_speed = self.multiworld.rhindle_speed[self.player].value
+        self.rhindle_min_speed = self.multiworld.rhindle_min_speed[self.player].value
+        self.difficulty_switch_a = self.multiworld.difficulty_switch_a[self.player].value
+        self.difficulty_switch_b = self.multiworld.difficulty_switch_b[self.player].value
         self.created_items = 0
 
         if self.dragon_slay_check == 0:
@@ -130,7 +151,7 @@ class AdventureWorld(World):
         exclude = [item for item in self.multiworld.precollected_items[self.player]]
         self.created_items = 0
         for item in map(self.create_item, item_table):
-            if item in exclude:
+            if item in exclude and item.code <= standard_item_max:
                 exclude.remove(item)  # this is destructive. create unique list above
                 self.multiworld.itempool.append(self.create_item("nothing"))
                 self.created_items += 1
@@ -139,8 +160,47 @@ class AdventureWorld(World):
                     self.multiworld.itempool.append(item)
                     self.created_items += 1
         num_locations = len(location_table) - 1  # subtract out the chalice location
+
+        if self.difficulty_switch_a == DifficultySwitchA.option_hard_with_unlock_item:
+            self.multiworld.itempool.append(self.create_item("Difficulty Switch A"))
+            self.created_items += 1
+        if self.difficulty_switch_b == DifficultySwitchA.option_hard_with_unlock_item:
+            self.multiworld.itempool.append(self.create_item("Difficulty Switch B"))
+            self.created_items += 1
+
         extra_filler_count = num_locations - self.created_items
-        self.multiworld.itempool += [self.create_item("nothing") for _ in range(extra_filler_count)]
+        self.dragon_speed_reducer_info = {}
+        # make sure yorgle doesn't take 2 if there's not enough for the others to get at least one
+        if extra_filler_count <= 4:
+            extra_filler_count = 1
+        self.create_dragon_slow_items(self.yorgle_min_speed, self.yorgle_speed, "Slow Yorgle", extra_filler_count)
+        extra_filler_count = num_locations - self.created_items
+
+        if extra_filler_count <= 3:
+            extra_filler_count = 1
+        self.create_dragon_slow_items(self.grundle_min_speed, self.grundle_speed, "Slow Grundle", extra_filler_count)
+        extra_filler_count = num_locations - self.created_items
+
+        self.create_dragon_slow_items(self.grundle_min_speed, self.grundle_speed, "Slow Rhindle", extra_filler_count)
+        extra_filler_count = num_locations - self.created_items
+
+        # TODO: add traps if enabled
+
+        self.multiworld.itempool += [self.create_item("Freeincarnate") for _ in range(extra_filler_count)]
+
+    def create_dragon_slow_items(self, min_speed: int, speed: int, item_name: str, maximum_items: int):
+        if min_speed < speed:
+            delta = speed - min_speed
+            if delta > 2 and maximum_items >= 2:
+                self.multiworld.itempool.append(self.create_item(item_name))
+                self.multiworld.itempool.append(self.create_item(item_name))
+                speed_with_one = speed - math.floor(delta / 2)
+                self.dragon_speed_reducer_info[item_table[item_name].id] = [speed_with_one, min_speed]
+                self.created_items += 2
+            elif maximum_items >= 1:
+                self.multiworld.itempool.append(self.create_item(item_name))
+                self.dragon_speed_reducer_info[item_table[item_name].id] = [min_speed]
+                self.created_items += 1
 
     def create_regions(self) -> None:
         create_regions(self.multiworld, self.player)
@@ -197,6 +257,14 @@ class AdventureWorld(World):
             rom_bytearray[item_position_data_start:item_position_data_start + 1] = \
                 self.dragon_rooms[i].to_bytes(1, "little")
 
+    def set_dragon_speeds(self, rom_bytearray: bytearray):
+        rom_bytearray[yorgle_speed_data_location:yorgle_speed_data_location + 1] = \
+            self.yorgle_speed.to_bytes(1, "little")
+        rom_bytearray[grundle_speed_data_location:grundle_speed_data_location + 1] = \
+            self.grundle_speed.to_bytes(1, "little")
+        rom_bytearray[rhindle_speed_data_location:rhindle_speed_data_location + 1] = \
+            self.rhindle_speed.to_bytes(1, "little")
+
     def generate_output(self, output_directory: str) -> None:
         rom_path: str = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.bin")
         foreign_item_locations: [LocationData] = []
@@ -205,19 +273,23 @@ class AdventureWorld(World):
         try:
             rom_bytearray = bytearray(apply_basepatch(get_base_rom_bytes()))
             self.place_dragons(rom_bytearray)
+            self.set_dragon_speeds(rom_bytearray)
             # start and stop indices are offsets in the ROM file, not Adventure ROM addresses (which start at f000)
 
             # This places the local items (I still need to make it easy to inject the offset data)
             unplaced_local_items = dict(filter(lambda x: x[1].id <= standard_item_max, item_table.items()))
             for location in self.multiworld.get_locations(self.player):
+                # 'nothing' items, which are autocollected when the room is entered
                 if location.item.player == self.player and \
                         location.item.name == "nothing":
                     location_data = location_table[location.name]
                     auto_collect_locations.append(AdventureAutoCollectLocation(location_data.short_location_id,
                                                                                location_data.room_id))
+                # standard Adventure items, which are placed in the rom
                 elif location.item.player == self.player and \
                         location.item.name != "nothing" and \
-                        location.item.code is not None:
+                        location.item.code is not None and \
+                        location.item.code <= standard_item_max:
                     # I need many of the intermediate values here.
                     item_table_offset = item_table[location.item.name].table_index * static_item_element_size
                     static_item = static_item_data_location + item_table_offset
@@ -235,8 +307,9 @@ class AdventureWorld(World):
                     rom_bytearray[item_position_data_start + 2: item_position_data_start + 3] = \
                         room_y.to_bytes(1, "little")
                     local_item_to_location[item_table_offset] = self.location_name_to_id[location.name] \
-                                                                - base_location_id
-                elif location.item.player != self.player and location.item.code is not None:
+                                                              - base_location_id
+                # items from other worlds, and non-standard Adventure items handled by script, like difficulty switches
+                elif location.item.code is not None:
                     if location.item.code != nothing_item_id:
                         location_data = location_table[location.name]
                         foreign_item_locations.append(location_data)
@@ -244,7 +317,7 @@ class AdventureWorld(World):
                         location_data = location_table[location.name]
                         auto_collect_locations.append(AdventureAutoCollectLocation(location_data.short_location_id,
                                                                                    location_data.room_id))
-
+            # Adventure items that are in another world get put in an invalid room until needed
             for unplaced_item_name, unplaced_item in unplaced_local_items.items():
                 item_position_data_start = get_item_position_data_start(rom_bytearray, unplaced_item.table_index)
                 rom_bytearray[item_position_data_start:item_position_data_start + 1] = 0xff.to_bytes(1, "little")
@@ -263,6 +336,8 @@ class AdventureWorld(World):
                                         player=self.player, player_name=self.multiworld.player_name[self.player],
                                         patched_path=rom_path, locations=foreign_item_locations,
                                         autocollect=auto_collect_locations, local_item_locations=local_item_to_location,
+                                        dragon_speed_reducer_info=self.dragon_speed_reducer_info,
+                                        diff_a_mode=self.difficulty_switch_a, diff_b_mode=self.difficulty_switch_b,
                                         seed_name=bytes(self.multiworld.seed_name, encoding="ascii"))
             patch.write()
         finally:

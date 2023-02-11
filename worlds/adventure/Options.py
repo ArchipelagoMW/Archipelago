@@ -108,6 +108,72 @@ class BatLogic(Choice):
     default = option_can_break
 
 
+class YorgleStartingSpeed(Range):
+    """
+    Sets Yorgle's initial speed.  Yorgle has a speed of 2 in the original game
+    Default value: 2
+    """
+    display_name = "Yorgle MaxSpeed"
+    range_start = 1
+    range_end = 9
+    default = 2
+
+
+class YorgleMinimumSpeed(Range):
+    """
+    Sets Yorgle's speed when all speed reducers are found.  Yorgle has a speed of 2 in the original game
+    Default value: 2
+    """
+    display_name = "Yorgle Min Speed"
+    range_start = 1
+    range_end = 9
+    default = 1
+
+
+class GrundleStartingSpeed(Range):
+    """
+    Sets Grundle's initial speed.  Grundle has a speed of 2 in the original game
+    Default value: 2
+    """
+    display_name = "Grundle MaxSpeed"
+    range_start = 1
+    range_end = 9
+    default = 2
+
+
+class GrundleMinimumSpeed(Range):
+    """
+    Sets Grundle's speed when all speed reducers are found.  Grundle has a speed of 2 in the original game
+    Default value: 2
+    """
+    display_name = "Grundle Min Speed"
+    range_start = 1
+    range_end = 9
+    default = 1
+
+
+class RhindleStartingSpeed(Range):
+    """
+    Sets Rhindle's initial speed.  Rhindle has a speed of 3 in the original game
+    Default value: 3
+    """
+    display_name = "Rhindle MaxSpeed"
+    range_start = 1
+    range_end = 9
+    default = 3
+
+
+class RhindleMinimumSpeed(Range):
+    """
+    Sets Rhindle's speed when all speed reducers are found.  Rhindle has a speed of 3 in the original game
+    Default value: 2
+    """
+    display_name = "Rhindle Min Speed"
+    range_start = 1
+    range_end = 9
+    default = 2
+
+
 class ConnectorMultiSlot(Toggle):
     """If true, the client and lua connector will add lowest 8 bits of the player slot
     to the port number used to connect to each other, to simplify connecting multiple local
@@ -115,6 +181,28 @@ class ConnectorMultiSlot(Toggle):
     Set in the yaml, since the connector has to read this out of the rom file before connecting.
     """
     display_name = "Connector Multi-Slot"
+
+
+class DifficultySwitchA(Choice):
+    """Set availability of difficulty switch A
+
+    """
+    display_name = "Difficulty Switch A"
+    option_normal = 0x0
+    option_locked_hard = 0x1
+    option_hard_with_unlock_item = 0x2
+    default = option_hard_with_unlock_item
+
+
+class DifficultySwitchB(Choice):
+    """Set availability of difficulty switch B
+
+    """
+    display_name = "Difficulty Switch B"
+    option_normal = 0x0
+    option_locked_hard = 0x1
+    option_hard_with_unlock_item = 0x2
+    default = option_hard_with_unlock_item
 
 
 adventure_option_definitions: Dict[str, type(Option)] = {
@@ -125,6 +213,14 @@ adventure_option_definitions: Dict[str, type(Option)] = {
     "bat_logic": BatLogic,
     "empty_item_count": EmptyItemCount,
     "dragon_rando_type": DragonRandoType,
-    "connector_multi_slot": ConnectorMultiSlot
+    "connector_multi_slot": ConnectorMultiSlot,
+    "yorgle_speed": YorgleStartingSpeed,
+    "yorgle_min_speed": YorgleMinimumSpeed,
+    "grundle_speed": GrundleStartingSpeed,
+    "grundle_min_speed": GrundleMinimumSpeed,
+    "rhindle_speed": RhindleStartingSpeed,
+    "rhindle_min_speed": RhindleMinimumSpeed,
+    "difficulty_switch_a": DifficultySwitchA,
+    "difficulty_switch_b": DifficultySwitchB,
 
 }

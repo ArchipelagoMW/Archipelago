@@ -60,6 +60,9 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
     local_item_locations: {} = None
     patched_rom_sha256: str = None
     seedName: bytes = None
+    dragon_speed_reducer_info: {} = None
+    diff_a_mode: int = None
+    diff_b_mode: int = None
 
     # locations: [], autocollect: [], seed_name: bytes,
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -72,10 +75,16 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
             self.autocollect_items = kwargs["autocollect"]
             self.seedName = kwargs["seed_name"]
             self.local_item_locations = kwargs["local_item_locations"]
+            self.dragon_speed_reducer_info = kwargs["dragon_speed_reducer_info"]
+            self.diff_a_mode = kwargs["diff_a_mode"]
+            self.diff_b_mode = kwargs["diff_b_mode"]
             del kwargs["locations"]
             del kwargs["autocollect"]
             del kwargs["seed_name"]
             del kwargs["local_item_locations"]
+            del kwargs["dragon_speed_reducer_info"]
+            del kwargs["diff_a_mode"]
+            del kwargs["diff_b_mode"]
         super(AdventureDeltaPatch, self).__init__(*args, **kwargs)
         if not patch_only:
             with open(self.patched_path, "rb") as file:
@@ -119,8 +128,20 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
                                     compress_type=zipfile.ZIP_STORED)
         if self.local_item_locations is not None:
             opened_zipfile.writestr("local_item_locations",
-                                     json.dumps(self.local_item_locations),
-                                     compress_type=zipfile.ZIP_LZMA)
+                                    json.dumps(self.local_item_locations),
+                                    compress_type=zipfile.ZIP_LZMA)
+        if self.dragon_speed_reducer_info is not None:
+            opened_zipfile.writestr("dragon_speed_reducer_info",
+                                    json.dumps(self.dragon_speed_reducer_info),
+                                    compress_type=zipfile.ZIP_LZMA)
+        if self.diff_a_mode is not None:
+            opened_zipfile.writestr("diff_a_mode",
+                                    self.diff_a_mode.to_bytes(1, "little"),
+                                    compress_type=zipfile.ZIP_STORED)
+        if self.diff_b_mode is not None:
+            opened_zipfile.writestr("diff_b_mode",
+                                    self.diff_b_mode.to_bytes(1, "little"),
+                                    compress_type=zipfile.ZIP_STORED)
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile):
         super(AdventureDeltaPatch, self).read_contents(opened_zipfile)
@@ -140,6 +161,17 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
         namestr: str = namebytes.decode("utf-8")
         return hashbytes, seedbytes, namestr
 
+    @classmethod
+    def read_difficulty_switch_info(cls, opened_zipfile: zipfile.ZipFile) -> (int, int):
+        diff_a_bytes = opened_zipfile.read("diff_a_mode")
+        diff_b_bytes = opened_zipfile.read("diff_b_mode")
+        diff_a = 0
+        diff_b = 0
+        if diff_a_bytes is not None:
+            diff_a = int.from_bytes(diff_a_bytes, "little")
+        if diff_b_bytes is not None:
+            diff_b = int.from_bytes(diff_b_bytes, "little")
+        return diff_a, diff_b
 
     @classmethod
     def read_foreign_items(cls, opened_zipfile: zipfile.ZipFile) -> [AdventureForeignItemInfo]:
@@ -167,6 +199,12 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
     @classmethod
     def read_local_item_locations(cls, opened_zipfile: zipfile.ZipFile) -> [AdventureForeignItemInfo]:
         readbytes: bytes = opened_zipfile.read("local_item_locations")
+        readstr: str = readbytes.decode()
+        return json.loads(readstr)
+
+    @classmethod
+    def read_dragon_speed_info(cls, opened_zipfile: zipfile.ZipFile) -> {}:
+        readbytes: bytes = opened_zipfile.read("dragon_speed_reducer_info")
         readstr: str = readbytes.decode()
         return json.loads(readstr)
 

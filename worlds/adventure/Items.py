@@ -38,7 +38,7 @@ item_table = {
     "Slow Yorgle": ItemData(0x103, ItemClassification.filler),
     "Slow Grundle": ItemData(0x104, ItemClassification.filler),
     "Slow Rhindle": ItemData(0x105, ItemClassification.filler),
-    # this should only be enabled if opted into?  For now, I'll just include them
+    # this should only be enabled if opted into?  For now, I'll just exclude them
     "Revive Dragons": ItemData(0x106, ItemClassification.trap),
     # Bat Trap
     # Bat Time Out
