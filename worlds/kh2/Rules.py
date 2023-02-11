@@ -10,16 +10,8 @@ def set_rules(world: MultiWorld, player: int,firstvisitlocking,secondvisitlockin
 
     add_rule(world.get_location(LocationName.RoxasDataMagicBoost, player),
              lambda state: state.kh_dataroxas(player))
-
-    add_rule(world.get_location(LocationName.MarluxiaDataLostIllusion, player),
-             lambda state: state.kh_datamarluxia(player))
-
     add_rule(world.get_location(LocationName.DemyxDataAPBoost, player),
             lambda state: state.kh_datademyx(player))
-
-    add_rule(world.get_location(LocationName.LexaeusDataLostIllusion, player),
-             lambda state: state.kh_datalexaeus(player))
-
     add_rule(world.get_location(LocationName.SaixDataDefenseBoost, player),
              lambda state: state.kh_datasaix(player))
     add_rule(world.get_location(LocationName.XaldinDataDefenseBoost, player),
@@ -29,15 +21,10 @@ def set_rules(world: MultiWorld, player: int,firstvisitlocking,secondvisitlockin
     add_rule(world.get_location(LocationName.XigbarDataDefenseBoost, player),
              lambda state: state.kh_dataxigbar(player))
     add_rule(world.get_location(LocationName.VexenDataLostIllusion, player),
-             lambda state: state.kh_datavexen(player))
-    add_rule(world.get_location(LocationName.ZexionDataLostIllusion, player),
-             lambda state: state.kh_datazexion(player))
-    add_rule(world.get_location(LocationName.AxelDataMagicBoost, player),
              lambda state: state.kh_dataaxel(player))
     add_rule(world.get_location(LocationName.LuxordDataAPBoost, player),
              lambda state: state.kh_dataluxord(player))
-    add_rule(world.get_location(LocationName.LarxeneDataLostIllusion, player),
-             lambda state: state.kh_datalarxene(player))
+
 
     for slot,weapon in weaponslots.items():
         add_rule(world.get_location(slot,player),lambda state: state.has(weapon,player))
@@ -77,17 +64,9 @@ def set_rules(world: MultiWorld, player: int,firstvisitlocking,secondvisitlockin
     forbid_items(world.get_location(LocationName.SantasHouseChristmasTownMap, player), exclusionItem_table["StatUps"])
     forbid_items(world.get_location(LocationName.SantasHouseAPBoost, player), exclusionItem_table["StatUps"])
 
-    # Final checks of cor requires more locks than other checks in cor
-    add_rule(world.get_location(LocationName.CoRMineshaftUpperLevelAPBoost, player),
-             lambda state:
-             state.has(ItemName.HighJump, player, 3)
-             and state.has(ItemName.AerialDodge, player, 3)
-             and state.has(ItemName.Glide, player, 3))
+
     add_rule(world.get_location(LocationName.TransporttoRemembrance, player),
-             lambda state:
-             state.has(ItemName.HighJump, player, 3)
-             and state.has(ItemName.AerialDodge, player, 3)
-             and state.has(ItemName.Glide, player, 3))
+             lambda state:state.kh_transport(player))
 
     for formlvl2 in {LocationName.Valorlvl2, LocationName.Wisdomlvl2, LocationName.Limitlvl2, LocationName.Masterlvl2,
                      LocationName.Finallvl2}:

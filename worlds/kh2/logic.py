@@ -219,12 +219,17 @@ class KH2Logic(LogicMixin):
 
     def kh_terra(self,player):
         return self.kh_basetools(player) and self.kh_dodgeroll(player,2) and self.kh_aerialdodge(player,2) and self.kh_glide(player,3)\
-        and (self.kh_comboplus(player,2) and self.has(ItemName.Explosion)) or (self.has(ItemName.NegativeCombo,player,2))
+        and (self.kh_comboplus(player,2) and self.has(ItemName.Explosion,player)) or (self.has(ItemName.NegativeCombo,player,2))
 
     def kh_cor(self,player):
         return self.kh_reflect(player) \
         and self.kh_highjump(player,2) and self.kh_quickrun(player,2) and self.kh_aerialdodge(player,2)\
-        and (self.has(ItemName.MasterForm,player) and self.kh_fire(player) \
-        or self.has(ItemName.ChickenLittle.player) and self.kh_donaldlimit(player) and self.kh_glide(player,2))
+        and (self.has(ItemName.MasterForm,player) and self.kh_fire(player)
+        or (self.has(ItemName.ChickenLittle,player) and self.kh_donaldlimit(player) and self.kh_glide(player,2)))
+
+    def kh_transport(self,player):
+        return self.kh_basetools(player) and self.kh_reflera(player)\
+        and (self.kh_mastergenie(player) and self.kh_magnera(player) and self.kh_donaldlimit(player))\
+        or (self.has(ItemName.FinalForm,player) and self.kh_form_level_unlocked(player, 4) and self.kh_fira(player))
 
 

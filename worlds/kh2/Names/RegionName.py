@@ -39,6 +39,7 @@ Hb_Region                                    ="Hollow Bastion"
 Hb2_Region                                   ="Hollow Bastion 2"
 
 CoR_Region                                   ="Cavern of Rememberance"
+Transport_Region                             ="Transport to Rememberance"
 
 Pl_Region                                    ="Pride Lands"
 Pl2_Region                                   ="Pride Lands 2"
@@ -61,4 +62,12 @@ Wisdom_Region                                ="Wisdom Form"
 Limit_Region                                 ="Limit Form"
 Master_Region                                ="Master Form"
 Final_Region                                 ="Final Form"
+
+Terra_Region                                 ="Lingering Will"
+Sephi_Region                                 ="Sephiroth"
+Marluxia_Region                              ="Marluxia"
+Larxene_Region                               ="Larxene"
+Vexen_Region                                 ="Vexen"
+Lexaeus_Region                               ="Lexaeus"
+Zexion_Region                                ="Zexion"
 

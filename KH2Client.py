@@ -70,7 +70,7 @@ class KH2Context(CommonContext):
         self.hasStartingInvo = False
         self.hasThreeProofs=False
         # list used to keep track of locations+items player has. Used for disoneccting
-        self.kh2seedsave = {"checked_locations": {"0": []}, "starting_inventory": self.hasStartingInvo}
+        self.kh2seedsave = {"checked_locations": {"0": []}, "starting_inventory": self.hasStartingInvo,"SoraInvo":0x25CC,"DonaldInvo":0x2678,"GoofyInvo":0x278E}
         self.kh2seedname = None
         self.kh2slotdata = None
         self.inventoryslot={}
@@ -104,11 +104,6 @@ class KH2Context(CommonContext):
             255: WorldLocations.HB_Checks,  # starting screen
         }
 
-        # back of inventory
-        # subtract 2 everytime someone gets a ability from ap
-        self.backofinventory = 0x25CC
-        self.donaldbackofinventory = 0x2678
-        self.goofybackofinventory = 0x278E
         # 0x2A09C00+0x40 is the sve anchor. +1 is the last saved room
         self.sveroom = 0x2A09C00 + 0x41
         # 0 not in battle 1 in yellow battle 2 red battle #short
@@ -274,11 +269,11 @@ class KH2Context(CommonContext):
                 await asyncio.sleep(0.5)
             if itemcode.ability:
                 if char == "Donald":
-                    self.kh2.write_short(self.kh2.base_address + self.Save + self.donaldbackofinventory,itemcode.memaddr)
-                    self.donaldbackofinventory -= 2
+                    self.kh2.write_short(self.kh2.base_address + self.Save + self.kh2seedsave["DonaldInvo"],itemcode.memaddr)
+                    self.kh2seedsave["DonaldInvo"] -= 2
                 elif char == "Goofy":
-                    self.kh2.write_short(self.kh2.base_address + self.Save + self.goofybackofinventory,itemcode.memaddr)
-                    self.goofybackofinventory -= 2
+                    self.kh2.write_short(self.kh2.base_address + self.Save + self.kh2seedsave["GoofyInvo"],itemcode.memaddr)
+                    self.kh2seedsave["GoofyInvo"] -= 2
                 else:
                     if itemcode.memaddr in {0x05E, 0x062, 0x066, 0x06A, 0x234}:
                         self.give_growth(itemcode)
@@ -289,10 +284,10 @@ class KH2Context(CommonContext):
                                 or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A148E8, 1), "big") != 0 \
                                 or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x715568, 1), "big") == 0:
                             await asyncio.sleep(1)
-                        if self.backofinventory == 0x2544:
+                        if self.kh2seedsave["SoraInvo"] == 0x2544:
                             return
-                        self.kh2.write_short(self.kh2.base_address + self.Save + self.backofinventory, itemcode.memaddr)
-                        self.backofinventory -= 2
+                        self.kh2.write_short(self.kh2.base_address + self.Save + self.kh2seedsave["SoraInvo"], itemcode.memaddr)
+                        self.kh2seedsave["SoraInvo"] -= 2
             elif itemcode.bitmask > 0:
                 while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x8E9DA3, 1),"big") != 0 or \
                         int.from_bytes( self.kh2.read_bytes(self.kh2.base_address + 0xAB8BC7, 1), "big") != 0 \

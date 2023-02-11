@@ -400,20 +400,20 @@ HB_Checks = {
 
     LocationName.LexaeusBonus:                                WorldLocationData(0x370C, 1),
     LocationName.LexaeusASStrengthBeyondStrength:             WorldLocationData(0x370C, 1),
-    LocationName.LexaeusDataLostIllusion:                     WorldLocationData(0x1D26, 1),#
+    LocationName.LexaeusDataLostIllusion:                     WorldLocationData(0x370C, 1),#
     LocationName.MarluxiaGetBonus:                            WorldLocationData(0x370C, 3),              
     LocationName.MarluxiaASEternalBlossom:                    WorldLocationData(0x370C, 3),              
-    LocationName.MarluxiaDataLostIllusion:                    WorldLocationData(0x1D26, 7),#
+    LocationName.MarluxiaDataLostIllusion:                    WorldLocationData(0x370C, 3),#
     LocationName.ZexionBonus:                                 WorldLocationData(0x370C, 2),
     LocationName.GoofyZexion:                                 WorldLocationData(0x370C, 2),
     LocationName.ZexionASBookofShadows:                       WorldLocationData(0x370C, 2),
-    LocationName.ZexionDataLostIllusion:                      WorldLocationData(0x1D26, 2),#
+    LocationName.ZexionDataLostIllusion:                      WorldLocationData(0x370C, 2),#
     LocationName.LarxeneBonus:                                WorldLocationData(0x370C, 4),
     LocationName.LarxeneASCloakedThunder:                     WorldLocationData(0x370C, 4),
-    LocationName.LarxeneDataLostIllusion:                     WorldLocationData(0x1D27, 0),#
+    LocationName.LarxeneDataLostIllusion:                     WorldLocationData(0x370C, 4),#
     LocationName.VexenBonus:                                  WorldLocationData(0x370C, 0),
     LocationName.VexenASRoadtoDiscovery:                      WorldLocationData(0x370C, 0),
-    LocationName.VexenDataLostIllusion:                       WorldLocationData(0x1D26, 0),#
+    LocationName.VexenDataLostIllusion:                       WorldLocationData(0x370C, 0),#
     LocationName.DemyxDataAPBoost:                            WorldLocationData(0x1D26, 5),
     LocationName.GardenofAssemblageMap:                       WorldLocationData(0x23DF, 1),
     LocationName.GoALostIllusion:                             WorldLocationData(0x23DF, 2),
