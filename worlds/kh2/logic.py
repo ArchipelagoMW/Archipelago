@@ -62,14 +62,12 @@ class KH2Logic(LogicMixin):
     def kh_visit_locking_amount(self, player, amount):
         visit = 0
         # torn pages are not added since you cannot get exp from that world
-        for x in range(2):
-            for item in {ItemName.CastleKey, ItemName.BattlefieldsofWar, ItemName.SwordoftheAncestor, ItemName.BeastsClaw,
-                         ItemName.BoneFist, ItemName.ProudFang, ItemName.SkillandCrossbones, ItemName.Scimitar,
-                         ItemName.MembershipCard,
-                         ItemName.IceCream, ItemName.Picture, ItemName.WaytotheDawn, ItemName.IdentityDisk,
-                         ItemName.Poster}:
-                if self.has(item, player):
-                    visit += 1
+        for item in {ItemName.CastleKey, ItemName.BattlefieldsofWar, ItemName.SwordoftheAncestor, ItemName.BeastsClaw,
+                     ItemName.BoneFist, ItemName.ProudFang, ItemName.SkillandCrossbones, ItemName.Scimitar,
+                     ItemName.MembershipCard,
+                     ItemName.IceCream, ItemName.Picture, ItemName.WaytotheDawn, ItemName.IdentityDisk,
+                     ItemName.Poster}:
+            visit += self.item_count(item,player)
         return visit >= amount
 
     def kh_three_proof_unlocked(self, player):

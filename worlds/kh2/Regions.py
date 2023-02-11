@@ -994,9 +994,7 @@ def connect_regions(world: MultiWorld, player: int, firstvisitlocking,secondvisi
     connect(world, player, names, RegionName.TT2_Region, RegionName.TT3_Region,lambda state:state.kh_tt3_unlocked(player,1))
 
     connect(world, player, names, RegionName.GoA_Region, RegionName.Twtnw_Region,lambda state:state.kh_twtnw_unlocked(player,firstvisitlocking))
-    connect(world, player, names, RegionName.Twtnw_Region, RegionName.Twtnw2_Region,lambda state:
-            state.kh_twtnw_unlocked(player,secondvisitlocking) and state.kh_basetools(player)
-            and state.kh_donaldlimit(player) or state.has(ItemName.FinalForm,player))
+    connect(world, player, names, RegionName.Twtnw_Region, RegionName.Twtnw2_Region,lambda state:state.kh_twtnw_unlocked(player,secondvisitlocking) and state.kh_basetools(player) and state.kh_donaldlimit(player)) #or state.has(ItemName.FinalForm,player))
 
     connect(world, player, names, RegionName.GoA_Region, RegionName.HundredAcre1_Region)
 

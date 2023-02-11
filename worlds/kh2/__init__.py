@@ -66,13 +66,18 @@ class KH2World(World):
                 self.multiworld.exclude_locations[self.player].value.add(superboss)
             for superboss in exclusion_table["SuperBosses"]:
                 self.multiworld.exclude_locations[self.player].value.add(superboss)
-
         if self.multiworld.Visitlocking[self.player].value == 2:
-            self.firstvisitlocking = 2
-            self.secondvisitlocking = 2
+            #first visit locking. Start with nothing except universal key
+
+            self.firstvisitlocking = 1
+            self.secondvisitlocking = 1
+        #first+second visit locking. Start with nothing
+        #second visit locking. Start with 13 items.
+        # no visit locking. Start with everything
         else:
             self.firstvisitlocking = 1
             self.secondvisitlocking = 2
+
 
         if self.multiworld.Cups[self.player].value == 1:
             for cup in exclusion_table["Cups"]:
@@ -222,7 +227,7 @@ class KH2World(World):
                 visitlockingitem.remove(item)
                 for x in range(2):
                     self.multiworld.push_precollected(self.create_item(item))
-        # second visit locking
+        # first and second visit locking
         elif self.multiworld.Visitlocking[self.player].value in {1, 2}:
             for item in exclusionItem_table["VisitLocking"]:
                 item_quantity_dict.update({item: 1})

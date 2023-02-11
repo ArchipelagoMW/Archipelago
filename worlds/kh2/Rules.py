@@ -119,58 +119,73 @@ def set_rules(world: MultiWorld, player: int,firstvisitlocking,secondvisitlockin
 
     # level 50
     if world.LevelDepth[player].value == 0:
+        for level in {LocationName.Lvl2,LocationName.Lvl4,LocationName.Lvl7,LocationName.Lvl9,LocationName.Lvl10}:
+            add_rule(world.get_location(level, player),
+                     lambda state: state.kh_visit_locking_amount(player, 3))
+        for level in {LocationName.Lvl12,LocationName.Lvl14,LocationName.Lvl15,LocationName.Lvl17}:
+            add_rule(world.get_location(level, player),
+                     lambda state: state.kh_visit_locking_amount(player, 6))
         for level in {LocationName.Lvl20, LocationName.Lvl23, LocationName.Lvl25, LocationName.Lvl28,
                       LocationName.Lvl30}:
-            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 6*secondvisitlocking))
+            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 9))
         for level in {LocationName.Lvl32, LocationName.Lvl34, LocationName.Lvl36, LocationName.Lvl39,
                       LocationName.Lvl41}:
-            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 7*secondvisitlocking))
+            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 12))
         for level in {LocationName.Lvl44, LocationName.Lvl46, LocationName.Lvl48, LocationName.Lvl50}:
-            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 8*secondvisitlocking))
+            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 15))
     # level 99
     elif world.LevelDepth[player].value == 1:
+        for level in {LocationName.Lvl7,LocationName.Lvl9,LocationName.Lvl12}:
+            add_rule(world.get_location(level, player),lambda state: state.kh_visit_locking_amount(player, 1))
+        for level in {LocationName.Lvl15,LocationName.Lvl17,LocationName.Lvl20}:
+            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 3))
         for level in {LocationName.Lvl23, LocationName.Lvl25, LocationName.Lvl28, LocationName.Lvl31}:
-            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 6*secondvisitlocking))
+            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 6))
         for level in {LocationName.Lvl33, LocationName.Lvl36, LocationName.Lvl39, LocationName.Lvl41, }:
-            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 7*secondvisitlocking))
+            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 9))
         for level in {LocationName.Lvl44, LocationName.Lvl47, LocationName.Lvl49, LocationName.Lvl53}:
-            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 8*secondvisitlocking))
+            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 12))
         for level in {LocationName.Lvl59, LocationName.Lvl65, LocationName.Lvl73, LocationName.Lvl85,
                       LocationName.Lvl99}:
-            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 9*secondvisitlocking))
+            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 15))
 
 
 
     # level 50 sanity
-    elif world.LevelDepth[player].value == 2 or world.LevelDepth[player].value == 3:
+    elif world.LevelDepth[player].value in {2,3}:
+        for level in {LocationName.Lvl13,LocationName.Lvl14,LocationName.Lvl15,LocationName.Lvl16,LocationName.Lvl17,
+                      LocationName.Lvl18,LocationName.Lvl19,LocationName.Lvl20,LocationName.Lvl21,LocationName.Lvl22,
+                      LocationName.Lvl23}:
+            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 3))
         for level in {LocationName.Lvl25, LocationName.Lvl26, LocationName.Lvl27, LocationName.Lvl28,
                       LocationName.Lvl29, LocationName.Lvl30,
                       LocationName.Lvl31, LocationName.Lvl32, LocationName.Lvl33, LocationName.Lvl34,
                       LocationName.Lvl35}:
-            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 3*secondvisitlocking))
+            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 6))
         for level in {LocationName.Lvl36, LocationName.Lvl37, LocationName.Lvl38, LocationName.Lvl39,
                       LocationName.Lvl40,
                       LocationName.Lvl41, LocationName.Lvl42, LocationName.Lvl43, LocationName.Lvl44,
                       LocationName.Lvl45, LocationName.Lvl46}:
-            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 4*secondvisitlocking))
+            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 9))
         for level in {LocationName.Lvl47, LocationName.Lvl48, LocationName.Lvl49, LocationName.Lvl50}:
-            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 5*secondvisitlocking))
+            add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 12))
+
         # level 99 sanity
         if world.LevelDepth[player].value == 2:
             for level in {LocationName.Lvl51, LocationName.Lvl52, LocationName.Lvl53, LocationName.Lvl54,
                           LocationName.Lvl55,
                           LocationName.Lvl56, LocationName.Lvl57}:
-                add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 6*secondvisitlocking))
+                add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 15))
             for level in {LocationName.Lvl58, LocationName.Lvl59, LocationName.Lvl60, LocationName.Lvl61,
                           LocationName.Lvl62, LocationName.Lvl63,
                           LocationName.Lvl64, LocationName.Lvl65, LocationName.Lvl66, LocationName.Lvl67,
                           LocationName.Lvl68}:
-                add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 7*secondvisitlocking))
+                add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 15))
             for level in {LocationName.Lvl69, LocationName.Lvl70, LocationName.Lvl71, LocationName.Lvl72,
                           LocationName.Lvl73, LocationName.Lvl74,
                           LocationName.Lvl75, LocationName.Lvl76, LocationName.Lvl77, LocationName.Lvl78,
                           LocationName.Lvl79, }:
-                add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 8*secondvisitlocking))
+                add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 15))
             for level in {LocationName.Lvl80, LocationName.Lvl81, LocationName.Lvl82, LocationName.Lvl83,
                           LocationName.Lvl84, LocationName.Lvl85,
                           LocationName.Lvl86, LocationName.Lvl87, LocationName.Lvl88, LocationName.Lvl89,
@@ -178,7 +193,7 @@ def set_rules(world: MultiWorld, player: int,firstvisitlocking,secondvisitlockin
                           LocationName.Lvl92, LocationName.Lvl93, LocationName.Lvl94, LocationName.Lvl95,
                           LocationName.Lvl96, LocationName.Lvl97,
                           LocationName.Lvl98, LocationName.Lvl99}:
-                add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 9*secondvisitlocking))
+                add_rule(world.get_location(level, player), lambda state: state.kh_visit_locking_amount(player, 15))
 
 
 

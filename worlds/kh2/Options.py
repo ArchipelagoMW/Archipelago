@@ -102,7 +102,7 @@ class Visitlocking(Choice):
     display_name = "Visit locking"
     option_no_visit_locking = 0#starts with 27 visit locking
     option_second_visit_locking = 1#starts with 13 (no icecream/picture)
-    option_first_visit_locking = 2#starts with nothing
+    option_first_visit_locking = 2#start with universal key
     option_first_and_second_visit_locking = 3#starts with nothing
     default = 3
 
