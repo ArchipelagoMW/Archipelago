@@ -71,8 +71,8 @@ def has_cyclops(state: "CollectionState", player: int) -> bool:
 
 
 def has_cyclops_depth_module_mk1(state: "CollectionState", player: int) -> bool:
-    return state.has("Cyclops Depth Module MK1", player) and \
-           has_modification_station(state, player)
+    # Crafted in the Cyclops, so we don't need to check for crafting station
+    return state.has("Cyclops Depth Module MK1", player)
 
 
 def has_cyclops_depth_module_mk2(state: "CollectionState", player: int) -> bool:
