@@ -962,10 +962,10 @@ class OOTWorld(World):
             trap_location_ids = [loc.address for loc in self.get_locations() if loc.item.trap]
             self.trap_appearances = {}
             for loc_id in trap_location_ids:
-                self.trap_appearances[loc_id] = self.create_item(self.multiworld.slot_seeds[self.player].choice(self.fake_items).name)
+                self.trap_appearances[loc_id] = self.create_item(self.multiworld.per_slot_randoms[self.player].choice(self.fake_items).name)
 
             # Seed hint RNG, used for ganon text lines also
-            self.hint_rng = self.multiworld.slot_seeds[self.player]
+            self.hint_rng = self.multiworld.per_slot_randoms[self.player]
 
             outfile_name = self.multiworld.get_out_file_name_base(self.player)
             rom = Rom(file=get_options()['oot_options']['rom_file'])
