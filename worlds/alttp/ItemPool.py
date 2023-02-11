@@ -3,7 +3,7 @@ import logging
 
 from BaseClasses import ItemClassification
 from worlds.alttp.SubClasses import ALttPLocation, LTTPRegion, LTTPRegionType
-from worlds.alttp.Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops
+from worlds.alttp.Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops, create_dynamic_shop_locations
 from worlds.alttp.Bosses import place_bosses
 from worlds.alttp.Dungeons import get_dungeon_item_pool_player
 from worlds.alttp.EntranceShuffle import connect_entrance

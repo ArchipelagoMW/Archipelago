@@ -78,7 +78,7 @@ class OOTRegion(Region):
             self._oot_hint = HintArea.for_dungeon(self.dungeon)
         else:
             self._oot_hint = HintArea[hint]
-        self.hint_text = str(self._oot_hint)
+        self._hint_text = str(self._oot_hint)
 
     # This is too generic of a name to risk not breaking in the future.
     # This lets us possibly switch it out later if AP starts using it.

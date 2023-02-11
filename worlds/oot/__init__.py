@@ -1028,7 +1028,7 @@ class OOTWorld(World):
             for player in barren_hint_players:
                 items_by_region[player] = {}
                 for r in multiworld.worlds[player].regions:
-                    items_by_region[player][r.hint_text] = {'dungeon': False, 'weight': 0, 'is_barren': True}
+                    items_by_region[player][r._hint_text] = {'dungeon': False, 'weight': 0, 'is_barren': True}
                 for d in multiworld.worlds[player].dungeons:
                     items_by_region[player][d.hint_text] = {'dungeon': True, 'weight': 0, 'is_barren': True}
                 del (items_by_region[player]["Link's pocket"])

@@ -6,7 +6,7 @@ from .SubClasses import LTTPRegion, LTTPRegionType
 
 
 def is_main_entrance(entrance: Entrance) -> bool:
-    return entrance.parent_region.type in {LTTPRegionType.DarkWorld, LTTPRegionType.LightWorld, LTTPRegionType.Generic}
+    return entrance.parent_region.type in {LTTPRegionType.DarkWorld, LTTPRegionType.LightWorld} if entrance.parent_region.type else True
 
 
 def create_regions(world, player):
