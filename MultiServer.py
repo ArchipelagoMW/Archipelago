@@ -238,9 +238,6 @@ class Context:
     def location_names_for_game(self, game: str) -> typing.Optional[typing.Dict[str, int]]:
         return self.gamespackage[game]["location_name_to_id"] if game in self.gamespackage else None
 
-    def checksum(self, game: str) -> typing.Optional[typing.Dict[str, str]]:
-        return self.gamespackage[game]["checksum"] if game in self.gamespackage else None
-
     # General networking
     async def send_msgs(self, endpoint: Endpoint, msgs: typing.Iterable[dict]) -> bool:
         if not endpoint.socket or not endpoint.socket.open:

@@ -147,13 +147,15 @@ class World(metaclass=AutoWorldRegister):
     # maps item group names to sets of items. Example: "Weapons" -> {"Sword", "Bow"}
     item_name_groups: ClassVar[Dict[str, Set[str]]] = {}
 
-    # increment this every time something in your world's names/id mappings changes.
-    # While this is set to 0 in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
-    # retrieved by clients on every connection.
+    # Increment this every time something in your world's names/id mappings changes.
     #
-    # Deprecated. This is only used by older clients. Newer clients should be checking the checksum in DataPackage
-    # instead.
-    data_version: ClassVar[int] = 0
+    # When this is set to 0, that world's DataPackage is considered in "testing mode", which signals to servers/clients
+    # that it should not be cached, and clients should request that world's DataPackage every connection. Not
+    # recommended for production-ready worlds.
+    #
+    # Deprecated. Clients should utilize `checksum` to determine if DataPackage has changed since last connection and
+    # request a new DataPackage, if necessary.
+    data_version: ClassVar[int] = 1
 
     # override this if changes to a world break forward-compatibility of the client
     # The base version of (0, 1, 6) is provided for backwards compatibility and does *not* need to be updated in the
