@@ -198,6 +198,17 @@ class OOTWorld(World):
         if self.triforce_hunt:
             self.shuffle_ganon_bosskey = 'triforce'
 
+        # Force itempool to higher settings if it doesn't have enough hearts
+        max_required_hearts = 3
+        if self.bridge == 'hearts':
+            max_required_hearts = max(max_required_hearts, self.bridge_hearts)
+        if self.shuffle_ganon_bosskey == 'hearts':
+            max_required_hearts = max(max_required_hearts, self.ganon_bosskey_hearts)
+        if max_required_hearts > 3 and self.item_pool_value == 'minimal':
+            self.item_pool_value = 'scarce'
+        if max_required_hearts > 12 and self.item_pool_value == 'scarce':
+            self.item_pool_value = 'balanced'
+
         # If songs/keys locked to own world by settings, add them to local_items
         local_types = []
         if self.shuffle_song_items != 'any':
@@ -951,10 +962,10 @@ class OOTWorld(World):
             trap_location_ids = [loc.address for loc in self.get_locations() if loc.item.trap]
             self.trap_appearances = {}
             for loc_id in trap_location_ids:
-                self.trap_appearances[loc_id] = self.create_item(self.multiworld.slot_seeds[self.player].choice(self.fake_items).name)
+                self.trap_appearances[loc_id] = self.create_item(self.multiworld.per_slot_randoms[self.player].choice(self.fake_items).name)
 
             # Seed hint RNG, used for ganon text lines also
-            self.hint_rng = self.multiworld.slot_seeds[self.player]
+            self.hint_rng = self.multiworld.per_slot_randoms[self.player]
 
             outfile_name = self.multiworld.get_out_file_name_base(self.player)
             rom = Rom(file=get_options()['oot_options']['rom_file'])
