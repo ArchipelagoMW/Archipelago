@@ -38,7 +38,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.7"
+__version__ = "0.3.8"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -260,7 +260,7 @@ def get_default_options() -> OptionsType:
             "disable_item_cheat": False,
             "location_check_points": 1,
             "hint_cost": 10,
-            "forfeit_mode": "goal",
+            "release_mode": "goal",
             "collect_mode": "disabled",
             "remaining_mode": "goal",
             "auto_shutdown": 0,
@@ -505,7 +505,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
                     except Exception as e:
                         logging.exception(e)
                     else:
-                        logging.info(f"Deleted old logfile {file.path}")
+                        logging.debug(f"Deleted old logfile {file.path}")
     import threading
     threading.Thread(target=_cleanup, name="LogCleaner").start()
     import platform
