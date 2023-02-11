@@ -121,8 +121,6 @@ class ALTTPWorld(World):
     location_name_to_id = lookup_name_to_id
 
     data_version = 8
-    remote_items: bool = False
-    remote_start_inventory: bool = False
     required_client_version = (0, 3, 2)
     web = ALTTPWeb()
 
@@ -194,6 +192,14 @@ class ALTTPWorld(World):
                     self.dungeon_specific_item_names |= self.item_name_groups[option.item_name_group]
 
         world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
+
+        # enforce pre-defined local items.
+        if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
+            world.local_items[player].value.add('Triforce Piece')
+
+        # Not possible to place crystals outside boss prizes yet (might as well make it consistent with pendants too).
+        world.non_local_items[player].value -= item_name_groups['Pendants']
+        world.non_local_items[player].value -= item_name_groups['Crystals']
 
     def create_regions(self):
         player = self.player

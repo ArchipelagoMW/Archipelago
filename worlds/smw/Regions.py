@@ -11,14 +11,6 @@ def create_regions(world, player: int, active_locations):
     menu_region = create_region(world, player, active_locations, 'Menu', None)
 
     yoshis_island_region = create_region(world, player, active_locations, LocationName.yoshis_island_region, None)
-    donut_plains_region = create_region(world, player, active_locations, LocationName.donut_plains_region, None)
-    vanilla_dome_region = create_region(world, player, active_locations, LocationName.vanilla_dome_region, None)
-    twin_bridges_region = create_region(world, player, active_locations, LocationName.twin_bridges_region, None)
-    forest_of_illusion_region = create_region(world, player, active_locations, LocationName.forest_of_illusion_region, None)
-    chocolate_island_region = create_region(world, player, active_locations, LocationName.chocolate_island_region, None)
-    valley_of_bowser_region = create_region(world, player, active_locations, LocationName.valley_of_bowser_region, None)
-    star_road_region = create_region(world, player, active_locations, LocationName.star_road_region, None)
-    special_zone_region = create_region(world, player, active_locations, LocationName.special_zone_region, None)
 
 
     yoshis_house_tile = create_region(world, player, active_locations, LocationName.yoshis_house_tile, None)
@@ -472,14 +464,6 @@ def create_regions(world, player: int, active_locations):
     world.regions += [
         menu_region,
         yoshis_island_region,
-        donut_plains_region,
-        vanilla_dome_region,
-        twin_bridges_region,
-        forest_of_illusion_region,
-        chocolate_island_region,
-        valley_of_bowser_region,
-        star_road_region,
-        special_zone_region,
         yoshis_house_tile,
         yoshis_house_region,
         yoshis_island_1_tile,
@@ -791,7 +775,7 @@ def create_regions(world, player: int, active_locations):
                                lambda state: state.has(ItemName.mario_climb, player))
         add_location_to_region(world, player, active_locations, LocationName.butter_bridge_1_region, LocationName.butter_bridge_1_dragon)
         add_location_to_region(world, player, active_locations, LocationName.butter_bridge_2_region, LocationName.butter_bridge_2_dragon,
-                               lambda state: (state.has(ItemName.yoshi_activate, player) or
+                               lambda state: (state.has(ItemName.mario_run, player) and
                                               state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(world, player, active_locations, LocationName.cheese_bridge_region, LocationName.cheese_bridge_dragon,
                                lambda state: (state.has(ItemName.yoshi_activate, player) or
@@ -824,7 +808,7 @@ def create_regions(world, player: int, active_locations):
                                                (state.has(ItemName.yellow_switch_palace, player) or state.has(ItemName.red_switch_palace, player)))))
         add_location_to_region(world, player, active_locations, LocationName.chocolate_island_3_region, LocationName.chocolate_island_3_dragon)
         add_location_to_region(world, player, active_locations, LocationName.chocolate_island_4_region, LocationName.chocolate_island_4_dragon,
-                               lambda state: (state.has(ItemName.mario_run, player) and
+                               lambda state: (state.has(ItemName.p_switch, player) and
                                               state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(world, player, active_locations, LocationName.chocolate_island_5_region, LocationName.chocolate_island_5_dragon,
                                lambda state: (state.has(ItemName.mario_swim, player) or
@@ -834,7 +818,8 @@ def create_regions(world, player: int, active_locations):
                                               state.has(ItemName.super_star_active, player) and
                                               state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(world, player, active_locations, LocationName.valley_of_bowser_1_region, LocationName.valley_of_bowser_1_dragon)
-        add_location_to_region(world, player, active_locations, LocationName.valley_of_bowser_2_region, LocationName.valley_of_bowser_2_dragon)
+        add_location_to_region(world, player, active_locations, LocationName.valley_of_bowser_2_region, LocationName.valley_of_bowser_2_dragon,
+                               lambda state: state.has(ItemName.yoshi_activate, player))
         add_location_to_region(world, player, active_locations, LocationName.valley_of_bowser_3_region, LocationName.valley_of_bowser_3_dragon)
         add_location_to_region(world, player, active_locations, LocationName.valley_ghost_house_region, LocationName.valley_ghost_house_dragon,
                                lambda state: state.has(ItemName.p_switch, player))
@@ -865,6 +850,8 @@ def connect_regions(world, player, level_to_tile_dict):
     names: typing.Dict[str, int] = {}
 
     connect(world, player, names, "Menu", LocationName.yoshis_island_region)
+    connect(world, player, names, LocationName.yoshis_island_region, LocationName.yoshis_house_tile)
+    connect(world, player, names, LocationName.yoshis_house_tile, LocationName.donut_plains_top_secret)
     connect(world, player, names, LocationName.yoshis_island_region, LocationName.yoshis_island_1_tile)
     connect(world, player, names, LocationName.yoshis_island_region, LocationName.yoshis_island_2_tile)
 

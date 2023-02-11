@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Dict, Callable, Optional
 from worlds.generic.Rules import set_rule, add_rule
 from .Locations import location_table, LocationDict
 from .Creatures import all_creatures, aggressive, suffix, hatchable, containment
-from .Options import AggressiveScanLogic
+from .Options import AggressiveScanLogic, SwimRule
 import math
 
 if TYPE_CHECKING:
@@ -11,155 +11,166 @@ if TYPE_CHECKING:
     from BaseClasses import CollectionState, Location
 
 
-def has_seaglide(state: "CollectionState", player: int):
+def has_seaglide(state: "CollectionState", player: int) -> bool:
     return state.has("Seaglide Fragment", player, 2)
 
 
-def has_modification_station(state: "CollectionState", player: int):
+def has_modification_station(state: "CollectionState", player: int) -> bool:
     return state.has("Modification Station Fragment", player, 3)
 
 
-def has_mobile_vehicle_bay(state: "CollectionState", player: int):
+def has_mobile_vehicle_bay(state: "CollectionState", player: int) -> bool:
     return state.has("Mobile Vehicle Bay Fragment", player, 3)
 
 
-def has_moonpool(state: "CollectionState", player: int):
+def has_moonpool(state: "CollectionState", player: int) -> bool:
     return state.has("Moonpool Fragment", player, 2)
 
 
-def has_vehicle_upgrade_console(state: "CollectionState", player: int):
+def has_vehicle_upgrade_console(state: "CollectionState", player: int) -> bool:
     return state.has("Vehicle Upgrade Console", player) and \
            has_moonpool(state, player)
 
 
-def has_seamoth(state: "CollectionState", player: int):
+def has_seamoth(state: "CollectionState", player: int) -> bool:
     return state.has("Seamoth Fragment", player, 3) and \
            has_mobile_vehicle_bay(state, player)
 
 
-def has_seamoth_depth_module_mk1(state: "CollectionState", player: int):
+def has_seamoth_depth_module_mk1(state: "CollectionState", player: int) -> bool:
     return has_vehicle_upgrade_console(state, player)
 
 
-def has_seamoth_depth_module_mk2(state: "CollectionState", player: int):
+def has_seamoth_depth_module_mk2(state: "CollectionState", player: int) -> bool:
     return has_seamoth_depth_module_mk1(state, player) and \
            has_modification_station(state, player)
 
 
-def has_seamoth_depth_module_mk3(state: "CollectionState", player: int):
+def has_seamoth_depth_module_mk3(state: "CollectionState", player: int) -> bool:
     return has_seamoth_depth_module_mk2(state, player) and \
            has_modification_station(state, player)
 
 
-def has_cyclops_bridge(state: "CollectionState", player: int):
+def has_cyclops_bridge(state: "CollectionState", player: int) -> bool:
     return state.has("Cyclops Bridge Fragment", player, 3)
 
 
-def has_cyclops_engine(state: "CollectionState", player: int):
+def has_cyclops_engine(state: "CollectionState", player: int) -> bool:
     return state.has("Cyclops Engine Fragment", player, 3)
 
 
-def has_cyclops_hull(state: "CollectionState", player: int):
+def has_cyclops_hull(state: "CollectionState", player: int) -> bool:
     return state.has("Cyclops Hull Fragment", player, 3)
 
 
-def has_cyclops(state: "CollectionState", player: int):
+def has_cyclops(state: "CollectionState", player: int) -> bool:
     return has_cyclops_bridge(state, player) and \
            has_cyclops_engine(state, player) and \
            has_cyclops_hull(state, player) and \
            has_mobile_vehicle_bay(state, player)
 
 
-def has_cyclops_depth_module_mk1(state: "CollectionState", player: int):
+def has_cyclops_depth_module_mk1(state: "CollectionState", player: int) -> bool:
     return state.has("Cyclops Depth Module MK1", player) and \
            has_modification_station(state, player)
 
 
-def has_cyclops_depth_module_mk2(state: "CollectionState", player: int):
+def has_cyclops_depth_module_mk2(state: "CollectionState", player: int) -> bool:
     return has_cyclops_depth_module_mk1(state, player) and \
            has_modification_station(state, player)
 
 
-def has_cyclops_depth_module_mk3(state: "CollectionState", player: int):
+def has_cyclops_depth_module_mk3(state: "CollectionState", player: int) -> bool:
     return has_cyclops_depth_module_mk2(state, player) and \
            has_modification_station(state, player)
 
 
-def has_prawn(state: "CollectionState", player: int):
+def has_prawn(state: "CollectionState", player: int) -> bool:
     return state.has("Prawn Suit Fragment", player, 4) and \
            has_mobile_vehicle_bay(state, player)
 
 
-def has_prawn_propulsion_arm(state: "CollectionState", player: int):
+def has_prawn_propulsion_arm(state: "CollectionState", player: int) -> bool:
     return state.has("Prawn Suit Propulsion Cannon Fragment", player, 2) and \
            has_vehicle_upgrade_console(state, player)
 
 
-def has_prawn_depth_module_mk1(state: "CollectionState", player: int):
+def has_prawn_depth_module_mk1(state: "CollectionState", player: int) -> bool:
     return has_vehicle_upgrade_console(state, player)
 
 
-def has_prawn_depth_module_mk2(state: "CollectionState", player: int):
+def has_prawn_depth_module_mk2(state: "CollectionState", player: int) -> bool:
     return has_prawn_depth_module_mk1(state, player) and \
            has_modification_station(state, player)
 
 
-def has_laser_cutter(state: "CollectionState", player: int):
+def has_laser_cutter(state: "CollectionState", player: int) -> bool:
     return state.has("Laser Cutter Fragment", player, 3)
 
 
-def has_stasis_rifle(state: "CollectionState", player: int):
+def has_stasis_rifle(state: "CollectionState", player: int) -> bool:
     return state.has("Stasis Rifle Fragment", player, 2)
 
 
-def has_containment(state: "CollectionState", player: int):
-    return state.has("Alien Containment Fragment", player, 2) and state.has("Multipurpose Room", player)
+def has_containment(state: "CollectionState", player: int) -> bool:
+    return state.has("Alien Containment", player) and has_utility_room(state, player)
+
+
+def has_utility_room(state: "CollectionState", player: int) -> bool:
+    return state.has("Large Room", player) or state.has("Multipurpose Room", player)
 
 
 # Either we have propulsion cannon, or prawn + propulsion cannon arm
-def has_propulsion_cannon(state: "CollectionState", player: int):
-    return state.has("Propulsion Cannon Fragment", player, 2) or \
-           (has_prawn(state, player) and has_prawn_propulsion_arm(state, player))
+def has_propulsion_cannon(state: "CollectionState", player: int) -> bool:
+    return state.has("Propulsion Cannon Fragment", player, 2)
 
 
-def has_cyclops_shield(state: "CollectionState", player: int):
+def has_cyclops_shield(state: "CollectionState", player: int) -> bool:
     return has_cyclops(state, player) and \
            state.has("Cyclops Shield Generator", player)
 
+
+def has_ultra_high_capacity_tank(state: "CollectionState", player: int) -> bool:
+    return has_modification_station(state, player) and state.has("Ultra High Capacity Tank", player)
+
+
+def has_lightweight_high_capacity_tank(state: "CollectionState", player: int) -> bool:
+    return has_modification_station(state, player) and state.has("Lightweight High Capacity Tank", player)
+
+
+def has_ultra_glide_fins(state: "CollectionState", player: int) -> bool:
+    return has_modification_station(state, player) and state.has("Ultra Glide Fins", player)
 
 # Swim depth rules:
 # Rebreather, high capacity tank and fins are available from the start.
 # All tests for those were done without inventory for light weight.
 # Fins and ultra Fins are better than charge fins, so we ignore charge fins.
-# We're ignoring lightweight tank in the chart, because the difference is
-# negligeable with from high capacity tank. 430m -> 460m
-# Fins are not used when using seaglide
-#
-def get_max_swim_depth(state: "CollectionState", player: int):
-    # TODO, Make this a difficulty setting.
-    # Only go up to 200m without any submarines for now.
-    return 200
 
-    # Rules bellow, are what are technically possible
+# swim speeds: https://subnautica.fandom.com/wiki/Swimming_Speed
 
-    # has_ultra_high_capacity_tank = state.has("Ultra High Capacity Tank", player)
-    # has_ultra_glide_fins = state.has("Ultra Glide Fins", player)
 
-    # max_depth = 400 # More like 430m. Give some room
-    # if has_seaglide(state: "CollectionState", player: int):
-    #     if has_ultra_high_capacity_tank:
-    #         max_depth = 750 # It's about 50m more. Give some room
-    #     else:
-    #         max_depth = 600 # It's about 50m more. Give some room
-    # elif has_ultra_high_capacity_tank:
-    #     if has_ultra_glide_fins:
-    #         pass
-    #     else:
-    #         pass
-    # elif has_ultra_glide_fins:
-    #     max_depth = 500
-
-    # return max_depth
+def get_max_swim_depth(state: "CollectionState", player: int) -> int:
+    swim_rule: SwimRule = state.multiworld.swim_rule[player]
+    depth: int = swim_rule.base_depth
+    if swim_rule.consider_items:
+        if has_seaglide(state, player):
+            if has_ultra_high_capacity_tank(state, player):
+                depth += 350  # It's about 800m. Give some room
+            else:
+                depth += 200  # It's about 650m. Give some room
+        # seaglide and fins cannot be used together
+        elif has_ultra_glide_fins(state, player):
+            if has_ultra_high_capacity_tank(state, player):
+                depth += 150
+            elif has_lightweight_high_capacity_tank(state, player):
+                depth += 75
+            else:
+                depth += 50
+        elif has_ultra_high_capacity_tank(state, player):
+            depth += 100
+        elif has_lightweight_high_capacity_tank(state, player):
+            depth += 25
+    return depth
 
 
 def get_seamoth_max_depth(state: "CollectionState", player: int):
@@ -203,13 +214,11 @@ def get_prawn_max_depth(state: "CollectionState", player):
 
 
 def get_max_depth(state: "CollectionState", player: int):
-    # TODO, Difficulty option, we can add vehicle depth + swim depth
-    # But at this point, we have to consider traver distance in caves, not
-    # just depth
-    return max(get_max_swim_depth(state, player),
-               get_seamoth_max_depth(state, player),
-               get_cyclops_max_depth(state, player),
-               get_prawn_max_depth(state, player))
+    return get_max_swim_depth(state, player) + max(
+        get_seamoth_max_depth(state, player),
+        get_cyclops_max_depth(state, player),
+        get_prawn_max_depth(state, player)
+    )
 
 
 def can_access_location(state: "CollectionState", player: int, loc: LocationDict) -> bool:
@@ -298,22 +307,22 @@ def set_rules(subnautica_world: "SubnauticaWorld"):
     # Victory locations
     set_rule(world.get_location("Neptune Launch", player),
              lambda state:
-        get_max_depth(state, player) >= 1444 and
-        has_mobile_vehicle_bay(state, player) and
-        state.has("Neptune Launch Platform", player) and
-        state.has("Neptune Gantry", player) and
-        state.has("Neptune Boosters", player) and
-        state.has("Neptune Fuel Reserve", player) and
-        state.has("Neptune Cockpit", player) and
-        state.has("Ion Power Cell", player) and
-        state.has("Ion Battery", player) and
-        has_cyclops_shield(state, player))
+             get_max_depth(state, player) >= 1444 and
+             has_mobile_vehicle_bay(state, player) and
+             state.has("Neptune Launch Platform", player) and
+             state.has("Neptune Gantry", player) and
+             state.has("Neptune Boosters", player) and
+             state.has("Neptune Fuel Reserve", player) and
+             state.has("Neptune Cockpit", player) and
+             state.has("Ion Power Cell", player) and
+             state.has("Ion Battery", player) and
+             has_cyclops_shield(state, player))
 
     set_rule(world.get_location("Disable Quarantine", player), lambda state:
-        get_max_depth(state, player) >= 1444)
+    get_max_depth(state, player) >= 1444)
 
     set_rule(world.get_location("Full Infection", player), lambda state:
-        get_max_depth(state, player) >= 900)
+    get_max_depth(state, player) >= 900)
 
     room = world.get_location("Aurora Drive Room - Upgrade Console", player)
     set_rule(world.get_location("Repair Aurora Drive", player), lambda state: room.can_reach(state))

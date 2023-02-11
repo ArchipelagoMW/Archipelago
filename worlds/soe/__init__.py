@@ -153,7 +153,6 @@ class SoEWorld(World):
     game: str = "Secret of Evermore"
     option_definitions = soe_options
     topology_present = False
-    remote_items = False
     data_version = 4
     web = SoEWebWorld()
     required_client_version = (0, 3, 5)

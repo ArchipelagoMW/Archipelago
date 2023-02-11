@@ -1,7 +1,38 @@
 import typing
 
-from Options import Choice, Range, DeathLink
+from Options import Choice, Range, DeathLink, DefaultOnToggle
 from .Creatures import all_creatures, Definitions
+
+
+class SwimRule(Choice):
+    """What logic considers ok swimming distances.
+    Easy: +200 depth from any max vehicle depth.
+    Normal: +400 depth from any max vehicle depth.
+    Warning: Normal can expect you to death run to a location (No viable return trip).
+    Hard: +600 depth from any max vehicle depth.
+    Warning: Hard may require bases, deaths, glitches, multi-tank inventory or other depth extending means.
+    Items: Expected depth is extended by items like seaglide, ultra glide fins and capacity tanks.
+    """
+    display_name = "Swim Rule"
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    option_items_easy = 3
+    option_items_normal = 4
+    option_items_hard = 5
+
+    @property
+    def base_depth(self) -> int:
+        return [200, 400, 600][self.value % 3]
+
+    @property
+    def consider_items(self) -> bool:
+        return self.value > 2
+
+
+class EarlySeaglide(DefaultOnToggle):
+    """Make sure 2 of the Seaglide Fragments are available in or near the Safe Shallows (Sphere 1 Locations)."""
+    display_name = "Early Seaglide"
 
 
 class ItemPool(Choice):
@@ -75,6 +106,8 @@ class SubnauticaDeathLink(DeathLink):
 
 
 options = {
+    "swim_rule": SwimRule,
+    "early_seaglide": EarlySeaglide,
     "item_pool": ItemPool,
     "goal": Goal,
     "creature_scans": CreatureScans,

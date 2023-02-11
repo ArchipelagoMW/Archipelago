@@ -36,8 +36,6 @@ class Hylics2World(World):
     option_definitions = Options.hylics2_options
 
     topology_present: bool = True
-    remote_items: bool = True
-    remote_start_inventory: bool = True
 
     data_version: 1
 
@@ -76,14 +74,6 @@ class Hylics2World(World):
                 self.start_location = "Shield Facility"
 
     def generate_basic(self):
-        # create location for beating the game and place Victory event there
-        loc = Location(self.player, "Defeat Gibby", None, self.multiworld.get_region("Hylemxylem", self.player))
-        loc.place_locked_item(self.create_event("Victory"))
-        set_rule(loc, lambda state: state._hylics2_has_upper_chamber_key(self.player)
-            and state._hylics2_has_vessel_room_key(self.player))
-        self.multiworld.get_region("Hylemxylem", self.player).locations.append(loc)
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
-
         # create item pool
         pool = []
         
@@ -236,6 +226,14 @@ class Hylics2World(World):
             for i, data in Locations.medallion_location_table.items():
                 region_table[data["region"]].locations\
                     .append(Hylics2Location(self.player, data["name"], i, region_table[data["region"]]))
+
+        # create location for beating the game and place Victory event there
+        loc = Location(self.player, "Defeat Gibby", None, self.multiworld.get_region("Hylemxylem", self.player))
+        loc.place_locked_item(self.create_event("Victory"))
+        set_rule(loc, lambda state: state._hylics2_has_upper_chamber_key(self.player)
+            and state._hylics2_has_vessel_room_key(self.player))
+        self.multiworld.get_region("Hylemxylem", self.player).locations.append(loc)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
 
 class Hylics2Location(Location):

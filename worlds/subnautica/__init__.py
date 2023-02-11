@@ -41,13 +41,14 @@ class SubnauticaWorld(World):
     location_name_to_id = all_locations
     option_definitions = Options.options
 
-    data_version = 7
-    required_client_version = (0, 3, 5)
+    data_version = 8
+    required_client_version = (0, 3, 8)
 
     creatures_to_scan: List[str]
 
     def generate_early(self) -> None:
-        self.multiworld.local_early_items[self.player]["Seaglide Fragment"] = 2
+        if self.multiworld.early_seaglide[self.player]:
+            self.multiworld.local_early_items[self.player]["Seaglide Fragment"] = 2
 
         scan_option: Options.AggressiveScanLogic = self.multiworld.creature_scan_logic[self.player]
         creature_pool = scan_option.get_pool()

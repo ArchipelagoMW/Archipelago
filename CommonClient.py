@@ -134,6 +134,7 @@ class CommonContext:
     tags: typing.Set[str] = {"AP"}
     game: typing.Optional[str] = None
     items_handling: typing.Optional[int] = None
+    want_slot_data: bool = True  # should slot_data be retrieved via Connect
 
     # datapackage
     # Contents in flux until connection to server is made, to download correct data for this multiworld.
@@ -192,7 +193,7 @@ class CommonContext:
         self.hint_cost = None
         self.slot_info = {}
         self.permissions = {
-            "forfeit": "disabled",
+            "release": "disabled",
             "collect": "disabled",
             "remaining": "disabled",
         }
@@ -259,7 +260,7 @@ class CommonContext:
         self.server_task = None
         self.hint_cost = None
         self.permissions = {
-            "forfeit": "disabled",
+            "release": "disabled",
             "collect": "disabled",
             "remaining": "disabled",
         }
@@ -309,7 +310,7 @@ class CommonContext:
             'cmd': 'Connect',
             'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
             'tags': self.tags, 'items_handling': self.items_handling,
-            'uuid': Utils.get_unique_identifier(), 'game': self.game
+            'uuid': Utils.get_unique_identifier(), 'game': self.game, "slot_data": self.want_slot_data,
         }
         if kwargs:
             payload.update(kwargs)
@@ -493,7 +494,7 @@ class CommonContext:
         self._messagebox.open()
         return self._messagebox
 
-    def _handle_connection_loss(self, msg: str) -> None:
+    def handle_connection_loss(self, msg: str) -> None:
         """Helper for logging and displaying a loss of connection. Must be called from an except block."""
         exc_info = sys.exc_info()
         logger.exception(msg, exc_info=exc_info, extra={'compact_gui': True})
@@ -579,14 +580,22 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
             for msg in decode(data):
                 await process_server_cmd(ctx, msg)
         logger.warning(f"Disconnected from multiworld server{reconnect_hint()}")
+    except websockets.InvalidMessage:
+        # probably encrypted
+        if address.startswith("ws://"):
+            await server_loop(ctx, "ws" + address[1:])
+        else:
+            ctx.handle_connection_loss(f"Lost connection to the multiworld server due to InvalidMessage"
+                                       f"{reconnect_hint()}")
     except ConnectionRefusedError:
-        ctx._handle_connection_loss("Connection refused by the server. May not be running Archipelago on that address or port.")
+        ctx.handle_connection_loss("Connection refused by the server. "
+                                   "May not be running Archipelago on that address or port.")
     except websockets.InvalidURI:
-        ctx._handle_connection_loss("Failed to connect to the multiworld server (invalid URI)")
+        ctx.handle_connection_loss("Failed to connect to the multiworld server (invalid URI)")
     except OSError:
-        ctx._handle_connection_loss("Failed to connect to the multiworld server")
+        ctx.handle_connection_loss("Failed to connect to the multiworld server")
     except Exception:
-        ctx._handle_connection_loss(f"Lost connection to the multiworld server{reconnect_hint()}")
+        ctx.handle_connection_loss(f"Lost connection to the multiworld server{reconnect_hint()}")
     finally:
         await ctx.connection_closed()
         if ctx.server_address and ctx.username and not ctx.disconnected_intentionally:
@@ -798,9 +807,10 @@ if __name__ == '__main__':
     # Text Mode to use !hint and such with games that have no text entry
 
     class TextContext(CommonContext):
-        tags = {"AP", "IgnoreGame", "TextOnly"}
+        tags = {"AP", "TextOnly"}
         game = ""  # empty matches any game since 0.3.2
         items_handling = 0b111  # receive all items for /received
+        want_slot_data = False  # Can't use game specific slot_data
 
         async def server_auth(self, password_requested: bool = False):
             if password_requested and not self.password:
@@ -811,6 +821,10 @@ if __name__ == '__main__':
         def on_package(self, cmd: str, args: dict):
             if cmd == "Connected":
                 self.game = self.slot_info[self.slot].game
+        
+        async def disconnect(self, allow_autoreconnect: bool = False):
+            self.game = ""
+            await super().disconnect(allow_autoreconnect)
 
 
     async def main(args):

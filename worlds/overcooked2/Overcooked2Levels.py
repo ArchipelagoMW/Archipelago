@@ -32,16 +32,16 @@ class Overcooked2Dlc(Enum):
         assert False
 
     # inclusive
+    @property
     def start_level_id(self) -> int:
-        if self == Overcooked2Dlc.STORY:
-            return 1
         return 0
 
     # exclusive
+    @property
     def end_level_id(self) -> int:
         id = None
         if self == Overcooked2Dlc.STORY:
-            id = 6*6 + 8  # world_count*level_count + kevin count
+            id = 1 + 6*6 + 8 # tutorial + world_count*level_count + kevin count
         if self == Overcooked2Dlc.SURF_N_TURF:
             id = 3*4 + 1
         if self == Overcooked2Dlc.CAMPFIRE_COOK_OFF:
@@ -51,9 +51,9 @@ class Overcooked2Dlc(Enum):
         if self == Overcooked2Dlc.CARNIVAL_OF_CHAOS:
             id = 3*4 + 3
         if self == Overcooked2Dlc.SEASONAL:
-            id = 31
+            id = 31 + 1
 
-        return self.start_level_id() + id
+        return self.start_level_id + id
 
     # Tutorial + Horde Levels + Endgame
     def excluded_levels(self) -> List[int]:
@@ -87,6 +87,31 @@ class Overcooked2Dlc(Enum):
 
         return []
 
+    def exclusive_items(self) -> List[str]:
+        """Returns list of items exclusive to this DLC"""
+        if self == Overcooked2Dlc.SURF_N_TURF:
+            return ["Bellows"]
+        if self == Overcooked2Dlc.CAMPFIRE_COOK_OFF:
+            return ["Wood"]
+        if self == Overcooked2Dlc.NIGHT_OF_THE_HANGRY_HORDE:
+            return ["Coal Bucket"]
+        if self == Overcooked2Dlc.CARNIVAL_OF_CHAOS:
+            return ["Faster Condiment/Drink Switch"]
+        if self == Overcooked2Dlc.SEASONAL:
+            return ["Wok Wheels"]
+
+        return []
+
+ITEMS_TO_EXCLUDE_IF_NO_DLC = [
+    "Wood",
+    "Coal Bucket",
+    "Bellows",
+    "Coin Purse",
+    "Wok Wheels",
+    "Lightweight Backpack",
+    "Faster Condiment/Drink Switch",
+    "Calmer Unbread",
+]
 
 class Overcooked2GameWorld(Enum):
     ONE = 1
