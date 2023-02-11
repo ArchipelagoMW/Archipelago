@@ -73,6 +73,8 @@ window.addEventListener('load', () => {
 
     const searchBox = document.getElementById("search");
     searchBox.value = tables.search();
+    searchBox.focus();
+    searchBox.select();
     const doSearch = () => {
         tables.search(searchBox.value);
         tables.draw();
