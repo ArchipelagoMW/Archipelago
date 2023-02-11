@@ -507,7 +507,7 @@ class LoseMoneyOnBlackout(Toggle):
 
 
 class EarlyExpAll(Toggle):
-    """Makes it so the Exp. All will be in sphere 1."""
+    """Makes it so the Exp. All will be in anyone's sphere 1. ONLY RECOMMENDED to make local items when playing with open viridian city."""
     display_name = "Early Exp All"
 
 
