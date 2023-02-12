@@ -100,9 +100,19 @@ class RiskOfRainWorld(World):
             else:
                 junk_pool = item_pool_weights[pool_option].copy()
         else:  # generate junk pool from user created presets
-            junk_pool = self.o.as_dict("Item Scrap, Green", "Item Scrap, Red", "Item Scrap, Yellow", "Item Scrap, White",
-                                       "Common Item", "Uncommon Item", "Legendary Item", "Boss Item", "Lunar Item",
-                                       "Void Item", "Equipment")
+            junk_pool = {
+                "Item Scrap, Green": self.o.green_scrap.value,
+                "Item Scrap, Red": self.o.red_scrap.value,
+                "Item Scrap, Yellow": self.o.yellow_scrap.value,
+                "Item Scrap, White": self.o.white_scrap.value,
+                "Common Item": self.o.common_item.value,
+                "Uncommon Item": self.o.uncommon_item.value,
+                "Legendary Item": self.o.legendary_item.value,
+                "Boss Item": self.o.boss_item.value,
+                "Lunar Item": self.o.lunar_item.value,
+                "Void Item": self.o.void_item.value,
+                "Equipment": self.o.equipment.value
+            }
 
         # remove lunar items from the pool if they're disabled in the yaml unless lunartic is rolled
         if not self.o.enable_lunar or pool_option == ItemWeights.option_lunartic:
