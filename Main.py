@@ -192,7 +192,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 new_item.classification |= classifications[item_name]
                 new_itempool.append(new_item)
 
-        region = Region("Menu", "ItemLink", group_id, world)
+        region = Region("Menu", group_id, world, "ItemLink")
         world.regions.append(region)
         locations = region.locations = []
         for item in world.itempool:
