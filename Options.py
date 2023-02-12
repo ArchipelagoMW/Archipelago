@@ -866,7 +866,11 @@ class CommonOptions:
     progression_balancing: ProgressionBalancing
     accessibility: Accessibility
 
-    def as_dict(self, *args: str) -> typing.Dict:
+    def as_dict(self, *args: str) -> typing.Dict[str, typing.Any]:
+        """
+        Pass the option_names you would like returned as a dictionary as strings.
+        Returns a dictionary of [str, Option.value]
+        """
         option_results = {}
         for option_name in args:
             if option_name in self.__annotations__:

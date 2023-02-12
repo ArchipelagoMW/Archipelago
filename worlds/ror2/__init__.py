@@ -1,4 +1,5 @@
 import string
+from typing import get_type_hints
 
 from .Items import RiskOfRainItem, item_table, item_pool_weights, environment_offest
 from .Locations import RiskOfRainLocation, get_classic_item_pickups, item_pickups, orderedstage_location
@@ -6,7 +7,7 @@ from .Rules import set_rules
 from .RoR2Environments import *
 
 from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, MultiWorld, Tutorial
-from .Options import ror2_options, ItemWeights
+from .Options import ItemWeights, ROR2Options
 from worlds.AutoWorld import World, WebWorld
 from .Regions import create_regions
 
@@ -28,7 +29,7 @@ class RiskOfRainWorld(World):
      Combine loot in surprising ways and master each character until you become the havoc you feared upon your
      first crash landing.
     """
-    game: str = "Risk of Rain 2"
+    game = "Risk of Rain 2"
     option_definitions = get_type_hints(ROR2Options)
     options_dataclass = ROR2Options
     o: ROR2Options
@@ -44,45 +45,44 @@ class RiskOfRainWorld(World):
 
     def generate_early(self) -> None:
         # figure out how many revivals should exist in the pool
-        if self.multiworld.goal[self.player] == "classic":
-            total_locations = self.multiworld.total_locations[self.player].value
+        if self.o.goal == "classic":
+            total_locations = self.o.total_locations.value
         else:
             total_locations = len(
                 orderedstage_location.get_locations(
-                    chests=self.multiworld.chests_per_stage[self.player].value,
-                    shrines=self.multiworld.shrines_per_stage[self.player].value,
-                    scavengers=self.multiworld.scavengers_per_stage[self.player].value,
-                    scanners=self.multiworld.scanner_per_stage[self.player].value,
-                    altars=self.multiworld.altars_per_stage[self.player].value,
-                    dlc_sotv=self.multiworld.dlc_sotv[self.player].value
+                    chests=self.o.chests_per_stage.value,
+                    shrines=self.o.shrines_per_stage.value,
+                    scavengers=self.o.scavengers_per_stage.value,
+                    scanners=self.o.scanner_per_stage.value,
+                    altars=self.o.altars_per_stage.value,
+                    dlc_sotv=self.o.dlc_sotv.value
                 )
             )
-        self.total_revivals = int(self.multiworld.total_revivals[self.player].value / 100 *
+        self.total_revivals = int(self.o.total_revivals.value / 100 *
                                   total_locations)
-        # self.total_revivals = self.multiworld.total_revivals[self.player].value
-        if self.multiworld.start_with_revive[self.player].value:
+        if self.o.start_with_revive:
             self.total_revivals -= 1
 
     def create_items(self) -> None:
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend
-        if self.multiworld.start_with_revive[self.player]:
+        if self.o.start_with_revive:
             self.multiworld.push_precollected(self.multiworld.create_item("Dio's Best Friend", self.player))
 
         environments_pool = {}
         # only mess with the environments if they are set as items
-        if self.multiworld.goal[self.player] == "explore":
+        if self.o.goal == "explore":
 
             # figure out all available ordered stages for each tier
             environment_available_orderedstages_table = environment_vanilla_orderedstages_table
-            if self.multiworld.dlc_sotv[self.player]:
+            if self.o.dlc_sotv:
                 environment_available_orderedstages_table = collapse_dict_list_vertical(environment_available_orderedstages_table, environment_sotv_orderedstages_table)
 
             environments_pool = shift_by_offset(environment_vanilla_table, environment_offest)
 
-            if self.multiworld.dlc_sotv[self.player]:
+            if self.o.dlc_sotv:
                 environment_offset_table = shift_by_offset(environment_sotv_table, environment_offest)
                 environments_pool = {**environments_pool, **environment_offset_table}
-            environments_to_precollect = 5 if self.multiworld.begin_with_loop[self.player].value else 1
+            environments_to_precollect = 5 if self.o.begin_with_loop.value else 1
             # percollect environments for each stage (or just stage 1)
             for i in range(environments_to_precollect):
                 unlock = self.multiworld.random.choices(list(environment_available_orderedstages_table[i].keys()), k=1)
@@ -100,25 +100,15 @@ class RiskOfRainWorld(World):
             else:
                 junk_pool = item_pool_weights[pool_option].copy()
         else:  # generate junk pool from user created presets
-            junk_pool = {
-                "Item Scrap, Green": self.multiworld.green_scrap[self.player].value,
-                "Item Scrap, Red": self.multiworld.red_scrap[self.player].value,
-                "Item Scrap, Yellow": self.multiworld.yellow_scrap[self.player].value,
-                "Item Scrap, White": self.multiworld.white_scrap[self.player].value,
-                "Common Item": self.multiworld.common_item[self.player].value,
-                "Uncommon Item": self.multiworld.uncommon_item[self.player].value,
-                "Legendary Item": self.multiworld.legendary_item[self.player].value,
-                "Boss Item": self.multiworld.boss_item[self.player].value,
-                "Lunar Item": self.multiworld.lunar_item[self.player].value,
-                "Void Item": self.multiworld.void_item[self.player].value,
-                "Equipment": self.multiworld.equipment[self.player].value
-            }
+            junk_pool = self.o.as_dict("Item Scrap, Green", "Item Scrap, Red", "Item Scrap, Yellow", "Item Scrap, White",
+                                       "Common Item", "Uncommon Item", "Legendary Item", "Boss Item", "Lunar Item",
+                                       "Void Item", "Equipment")
 
         # remove lunar items from the pool if they're disabled in the yaml unless lunartic is rolled
-        if not self.multiworld.enable_lunar[self.player] or pool_option == ItemWeights.option_lunartic:
+        if not self.o.enable_lunar or pool_option == ItemWeights.option_lunartic:
             junk_pool.pop("Lunar Item")
         # remove void items from the pool
-        if not self.multiworld.dlc_sotv[self.player] or pool_option == ItemWeights.option_void:
+        if not self.o.dlc_sotv or pool_option == ItemWeights.option_void:
             junk_pool.pop("Void Item")
 
         # Generate item pool
@@ -131,19 +121,19 @@ class RiskOfRainWorld(World):
 
         # precollected environments are popped from the pool so counting like this is valid
         nonjunk_item_count = self.total_revivals + len(environments_pool)
-        if self.multiworld.goal[self.player] == "classic":
+        if self.o.goal == "classic":
             # classic mode
-            total_locations = self.multiworld.total_locations[self.player].value
+            total_locations = self.o.total_locations.value
         else:
             # explore mode
             total_locations = len(
                 orderedstage_location.get_locations(
-                    chests=self.multiworld.chests_per_stage[self.player].value,
-                    shrines=self.multiworld.shrines_per_stage[self.player].value,
-                    scavengers=self.multiworld.scavengers_per_stage[self.player].value,
-                    scanners=self.multiworld.scanner_per_stage[self.player].value,
-                    altars=self.multiworld.altars_per_stage[self.player].value,
-                    dlc_sotv=self.multiworld.dlc_sotv[self.player].value
+                    chests=self.o.chests_per_stage.value,
+                    shrines=self.o.shrines_per_stage.value,
+                    scavengers=self.o.scavengers_per_stage.value,
+                    scanners=self.o.scanner_per_stage.value,
+                    altars=self.o.altars_per_stage.value,
+                    dlc_sotv=self.o.dlc_sotv.value
                 )
             )
         junk_item_count = total_locations - nonjunk_item_count
@@ -160,7 +150,7 @@ class RiskOfRainWorld(World):
 
     def create_regions(self) -> None:
 
-        if self.multiworld.goal[self.player] == "classic":
+        if self.o.goal == "classic":
             # classic mode
             menu = create_region(self.multiworld, self.player, "Menu")
             self.multiworld.regions.append(menu)
@@ -169,7 +159,7 @@ class RiskOfRainWorld(World):
             victory_region = create_region(self.multiworld, self.player, "Victory")
             self.multiworld.regions.append(victory_region)
             petrichor = create_region(self.multiworld, self.player, "Petrichor V",
-                                      get_classic_item_pickups(self.multiworld.total_locations[self.player].value))
+                                      get_classic_item_pickups(self.o.total_locations.value))
             self.multiworld.regions.append(petrichor)
 
             # classic mode can get to victory from the beginning of the game
@@ -184,24 +174,23 @@ class RiskOfRainWorld(World):
             # explore mode
             create_regions(self.multiworld, self.player)
 
-        self.create_events()
+        create_events(self.multiworld, self.player)
 
     def fill_slot_data(self):
+        options_dict = self.o.as_dict("item_pickup_step", "shrine_use_step", "goal", "total_locations",
+                                      "chests_per_stage", "shrines_per_stage", "scavengers_per_stage",
+                                      "scanner_per_stage", "altars_per_stage", "total_revivals", "start_with_revive",
+                                      "final_stage_death", "death_link")
+        cased_dict = {}
+        for key, value in options_dict.items():
+            split_name = [name.title() for name in key.split("_")]
+            split_name[0] = split_name[0].lower()
+            new_name = "".join(split_name)
+            cased_dict[new_name] = value
+
         return {
-            "itemPickupStep": self.multiworld.item_pickup_step[self.player].value,
-            "shrineUseStep": self.multiworld.shrine_use_step[self.player].value,
-            "goal": self.multiworld.goal[self.player].value,
+            **cased_dict,
             "seed": "".join(self.multiworld.per_slot_randoms[self.player].choice(string.digits) for _ in range(16)),
-            "totalLocations": self.multiworld.total_locations[self.player].value,
-            "chestsPerStage": self.multiworld.chests_per_stage[self.player].value,
-            "shrinesPerStage": self.multiworld.shrines_per_stage[self.player].value,
-            "scavengersPerStage": self.multiworld.scavengers_per_stage[self.player].value,
-            "scannerPerStage": self.multiworld.scanner_per_stage[self.player].value,
-            "altarsPerStage": self.multiworld.altars_per_stage[self.player].value,
-            "totalRevivals": self.multiworld.total_revivals[self.player].value,
-            "startWithDio": self.multiworld.start_with_revive[self.player].value,
-            "finalStageDeath": self.multiworld.final_stage_death[self.player].value,
-            "deathLink": self.multiworld.death_link[self.player].value,
         }
 
     def create_item(self, name: str) -> Item:
