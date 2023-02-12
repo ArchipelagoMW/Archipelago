@@ -188,12 +188,12 @@ class SkillRando(Toggle):
 class EnemyRando(Choice):
     """Randomizes the enemies that appear in each room.
     Shuffled: Enemies will be shuffled amongst each other, but can only appear as many times as they do in a standard game.
-    Random: Every enemy is completely random, and can appear any number of times.
+    Randomized: Every enemy is completely random, and can appear any number of times.
     Some enemies will never be randomized."""
     display_name = "Enemy Randomizer"
     option_disabled = 0
     option_shuffled = 1
-    option_random = 2
+    option_randomized = 2
     default = 0
 
 
