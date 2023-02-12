@@ -70,7 +70,7 @@ class ALttPEntrance(Entrance):
     addresses = None
     target = None
 
-    def connect(self, region: Region, addresses=None, target=None) -> None:
+    def connect(self, region: Region, addresses: typing.Tuple[int] = None, target: typing.Tuple[int] = None) -> None:
         self.connected_region = region
         self.target = target
         self.addresses = addresses

@@ -1040,7 +1040,7 @@ class Entrance:
 
         return False
 
-    def connect(self, region: Region):
+    def connect(self, region: Region) -> None:
         self.connected_region = region
         region.entrances.append(self)
 
