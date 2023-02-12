@@ -40,7 +40,7 @@ class ItemManager:
         'ETank': Item(
             Category='Energy',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Energy Tank",
             Type='ETank',
             Id=0
@@ -48,7 +48,7 @@ class ItemManager:
         'Missile': Item(
             Category='Ammo',
             Class='Minor',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Missile",
             Type='Missile',
             Id=1
@@ -56,7 +56,7 @@ class ItemManager:
         'Super': Item(
             Category='Ammo',
             Class='Minor',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Super Missile",
             Type='Super',
             Id=2
@@ -64,7 +64,7 @@ class ItemManager:
         'PowerBomb': Item(
             Category='Ammo',
             Class='Minor',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Power Bomb",
             Type='PowerBomb',
             Id=3
@@ -72,7 +72,7 @@ class ItemManager:
         'Bomb': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Bomb",
             Type='Bomb',
             ItemBits=0x1000,
@@ -81,7 +81,7 @@ class ItemManager:
         'Charge': Item(
             Category='Beam',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Charge Beam",
             Type='Charge',
             BeamBits=0x1000,
@@ -90,7 +90,7 @@ class ItemManager:
         'Ice': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Ice Beam",
             Type='Ice',
             BeamBits=0x2,
@@ -99,7 +99,7 @@ class ItemManager:
         'HiJump': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Hi-Jump Boots",
             Type='HiJump',
             ItemBits=0x100,
@@ -108,7 +108,7 @@ class ItemManager:
         'SpeedBooster': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Speed Booster",
             Type='SpeedBooster',
             ItemBits=0x2000,
@@ -117,7 +117,7 @@ class ItemManager:
         'Wave': Item(
             Category='Beam',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Wave Beam",
             Type='Wave',
             BeamBits=0x1,
@@ -126,7 +126,7 @@ class ItemManager:
         'Spazer': Item(
             Category='Beam',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Spazer",
             Type='Spazer',
             BeamBits=0x4,
@@ -135,7 +135,7 @@ class ItemManager:
         'SpringBall': Item(
             Category='Misc',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Spring Ball",
             Type='SpringBall',
             ItemBits=0x2,
@@ -144,7 +144,7 @@ class ItemManager:
         'Varia': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Varia Suit",
             Type='Varia',
             ItemBits=0x1,
@@ -153,7 +153,7 @@ class ItemManager:
         'Plasma': Item(
             Category='Beam',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Plasma Beam",
             Type='Plasma',
             BeamBits=0x8,
@@ -162,7 +162,7 @@ class ItemManager:
         'Grapple': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Grappling Beam",
             Type='Grapple',
             ItemBits=0x4000,
@@ -171,7 +171,7 @@ class ItemManager:
         'Morph': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Morph Ball",
             Type='Morph',
             ItemBits=0x4,
@@ -180,7 +180,7 @@ class ItemManager:
         'Reserve': Item(
             Category='Energy',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Reserve Tank",
             Type='Reserve',
             Id=20
@@ -188,7 +188,7 @@ class ItemManager:
         'Gravity': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Gravity Suit",
             Type='Gravity',
             ItemBits=0x20,
@@ -197,7 +197,7 @@ class ItemManager:
         'XRayScope': Item(
             Category='Misc',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="X-Ray Scope",
             Type='XRayScope',
             ItemBits=0x8000,
@@ -206,7 +206,7 @@ class ItemManager:
         'SpaceJump': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Space Jump",
             Type='SpaceJump',
             ItemBits=0x200,
@@ -215,7 +215,7 @@ class ItemManager:
         'ScrewAttack': Item(
             Category='Misc',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Screw Attack",
             Type='ScrewAttack',
             ItemBits= 0x8,
@@ -302,7 +302,7 @@ class ItemManager:
         'ArchipelagoItem': Item(
             Category='ArchipelagoItem',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Generic",
             Type='ArchipelagoItem',
             Id=21
