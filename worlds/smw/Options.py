@@ -58,7 +58,7 @@ class BowserCastleDoors(Choice):
     Vanilla: Front and Back Doors behave as vanilla
     Fast: Both doors behave as the Back Door
     Slow: Both doors behave as the Front Door
-    "Front Door" requires beating all 8 Rooms
+    "Front Door" rooms depend on the `bowser_castle_rooms` option
     "Back Door" only requires going through the dark hallway to Bowser
     """
     display_name = "Bowser Castle Doors"
@@ -68,11 +68,53 @@ class BowserCastleDoors(Choice):
     default = 0
 
 
+class BowserCastleRooms(Choice):
+    """
+    How the rooms of Bowser's Castle Front Door behave
+    Vanilla: You can choose which rooms to enter, as in vanilla
+    Random Two Room: Two random rooms are chosen
+    Random Five Room: Five random rooms are chosen
+    Gauntlet: All eight rooms must be cleared
+    Labyrinth: Which room leads to Bowser?
+    """
+    display_name = "Bowser Castle Rooms"
+    option_vanilla = 0
+    option_random_two_room = 1
+    option_random_five_room = 2
+    option_gauntlet = 3
+    option_labyrinth = 4
+    default = 1
+
+
+class BossShuffle(Choice):
+    """
+    How the rooms of Bowser's Castle Front Door behave
+    None: Bosses are not shuffled
+    Simple: Four Reznors and the seven Koopalings are shuffled around
+    Full: Each boss location gets a fully random boss
+    Singularity: One or two bosses are chosen and placed at every boss location
+    """
+    display_name = "Boss Shuffle"
+    option_none = 0
+    option_simple = 1
+    option_full = 2
+    option_singularity = 3
+    default = 0
+
+
 class LevelShuffle(Toggle):
     """
     Whether levels are shuffled
     """
     display_name = "Level Shuffle"
+
+
+class ExcludeSpecialZone(Toggle):
+    """
+    If active, this option will prevent any progression items from being placed in Special Zone levels.
+    Additionally, if Level Shuffle is active, Special Zone levels will not be shuffled away from their vanilla tiles.
+    """
+    display_name = "Exclude Special Zone"
 
 
 class SwapDonutGhostHouseExits(Toggle):
@@ -148,11 +190,37 @@ class LiteratureTrapWeight(BaseTrapWeight):
     display_name = "Literature Trap Weight"
 
 
+class TimerTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes the timer to run low
+    """
+    display_name = "Timer Trap Weight"
+
+
 class Autosave(DefaultOnToggle):
     """
     Whether a save prompt will appear after every level
     """
     display_name = "Autosave"
+
+
+class EarlyClimb(Toggle):
+    """
+    Force Climb to appear early in the seed as a local item.
+    This is particularly useful to prevent BK when Level Shuffle is disabled
+    """
+    display_name = "Early Climb"
+
+
+class OverworldSpeed(Choice):
+    """
+    How fast Mario moves on the overworld
+    """
+    display_name = "Overworld Speed"
+    option_slow = 0
+    option_vanilla = 1
+    option_fast = 2
+    default = 1
 
 
 class MusicShuffle(Choice):
@@ -201,6 +269,13 @@ class BackgroundPaletteShuffle(Toggle):
     display_name = "Background Palette Shuffle"
 
 
+class OverworldPaletteShuffle(Toggle):
+    """
+    Whether to shuffle overworld palettes
+    """
+    display_name = "Overworld Palette Shuffle"
+
+
 class StartingLifeCount(Range):
     """
     How many extra lives to start the game with
@@ -220,7 +295,10 @@ smw_options: typing.Dict[str, type(Option)] = {
     "percentage_of_yoshi_eggs": PercentageOfYoshiEggs,
     "dragon_coin_checks": DragonCoinChecks,
     "bowser_castle_doors": BowserCastleDoors,
+    "bowser_castle_rooms": BowserCastleRooms,
     "level_shuffle": LevelShuffle,
+    "exclude_special_zone": ExcludeSpecialZone,
+    "boss_shuffle": BossShuffle,
     "swap_donut_gh_exits": SwapDonutGhostHouseExits,
     #"display_sent_item_popups": DisplaySentItemPopups,
     "display_received_item_popups": DisplayReceivedItemPopups,
@@ -228,10 +306,14 @@ smw_options: typing.Dict[str, type(Option)] = {
     "ice_trap_weight": IceTrapWeight,
     "stun_trap_weight": StunTrapWeight,
     "literature_trap_weight": LiteratureTrapWeight,
+    "timer_trap_weight": TimerTrapWeight,
     "autosave": Autosave,
+    "early_climb": EarlyClimb,
+    "overworld_speed": OverworldSpeed,
     "music_shuffle": MusicShuffle,
     "mario_palette": MarioPalette,
     "foreground_palette_shuffle": ForegroundPaletteShuffle,
     "background_palette_shuffle": BackgroundPaletteShuffle,
+    "overworld_palette_shuffle": OverworldPaletteShuffle,
     "starting_life_count": StartingLifeCount,
 }

@@ -3055,7 +3055,8 @@ level_logic = {
     "Horde H-8": (
         (  # 1-star
             {  # Exclusive
-
+                "Coin Purse",
+                "Calmer Unbread"
             },
             horde_logic,
         ),
@@ -3467,7 +3468,8 @@ level_logic = {
     "Winter H-4": (
         (  # 1-star
             {  # Exclusive
-
+                "Coin Purse",
+                "Calmer Unbread"
             },
             horde_logic,
         ),
