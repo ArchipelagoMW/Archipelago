@@ -497,7 +497,7 @@ def create_items(self) -> None:
 ```python
 def create_regions(self) -> None:
     # Add regions to the multiworld. "Menu" is the required starting point.
-    # Arguments to Region() are name, type, human_readable_name, player, world
+    # Arguments to Region() are name, player, world, and optionally hint_text
     r = Region("Menu", self.player, self.multiworld)
     # Set Region.exits to a list of entrances that are reachable from region
     r.exits = [Entrance(self.player, "New game", r)]  # or use r.exits.append
