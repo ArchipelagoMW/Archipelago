@@ -213,8 +213,11 @@ function processBlock(block)
     local freeincarnates_available_block = block["freeincarnates_available"]
     if freeincarnates_available_block ~= nil then
         block_identified = 1
-        freeincarnates_available = freeincarnates_available_block
-        print("freeincarnates_available "..tostring(freeincarnates_available))
+        if freeincarnates_available ~= freeincarnates_available_block then
+            freeincarnates_available = freeincarnates_available_block
+            local msg = {TTL=450, message="freeincarnates: "..tostring(freeincarnates_available), color=0xFFFF0000}
+            itemMessages[-2] = msg
+        end
     end
     deathlink_rec = deathlink_rec or block["deathlink"]
     if( block_identified == 0 ) then
@@ -440,6 +443,8 @@ function TryFreeincarnate()
             if last_dragon_state[index] == 1 then
                 send_freeincarnate_used = true
                 memory.write_u8(state_addr, 1, "System Bus")
+                local msg = {TTL=450, message="used freeincarnate", color=0xFF00FF00}
+                itemMessages[-1] = msg
             end
         end
 
