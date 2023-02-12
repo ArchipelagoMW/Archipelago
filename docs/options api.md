@@ -19,8 +19,8 @@ snake_case. If the option supports having multiple sub_options such as Choice
 options, these can be defined with `option_my_sub_option`, where the preceding
 `option_` is required and stripped for users, so will show as `my_sub_option` in
 yaml files and if `auto_display_name` is True `My Sub Option` on the webhost.
-All options support `random` as a generic option that will choose from any of the
-available options and is reserved by AP. You can set this as your default value
+All options support `random` as a generic option. `random` chooses from any of the
+available values for that option, and is reserved by AP. You can set this as your default value
 but you cannot define your own new `option_random`.
 
 ### Option Creation
