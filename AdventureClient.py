@@ -138,15 +138,17 @@ def get_payload(ctx: AdventureContext):
     dragon_speed_update = {}
     diff_a_locked = ctx.diff_a_mode > 0
     diff_b_locked = ctx.diff_b_mode > 0
+
     for item in ctx.items_received:
+        item_id_str = str(item.item)
         if base_adventure_item_id < item.item <= standard_item_max:
             items.append(convert_item_id(item.item))
-        elif item.item in ctx.dragon_speed_info:
+        elif item_id_str in ctx.dragon_speed_info:
             if item.item in dragon_speed_update:
-                last_index = len(ctx.dragon_speed_info[item.item]) - 1
-                dragon_speed_update[item.item] = ctx.dragon_speed_info[item.item][last_index]
+                last_index = len(ctx.dragon_speed_info[item_id_str]) - 1
+                dragon_speed_update[item.item] = ctx.dragon_speed_info[item_id_str][last_index]
             else:
-                dragon_speed_update[item.item] = ctx.dragon_speed_info[item.item][0]
+                dragon_speed_update[item.item] = ctx.dragon_speed_info[item_id_str][0]
         elif item.item == item_table["Difficulty Switch A"].id:
             diff_a_locked = False
         elif item.item == item_table["Difficulty Switch B"].id:
@@ -200,7 +202,6 @@ def send_ap_foreign_items(adventure_context):
         }
     )
     print("sending foreign items")
-    print(payload)
     msg = payload.encode()
     (reader, writer) = adventure_context.atari_streams
     writer.write(msg)

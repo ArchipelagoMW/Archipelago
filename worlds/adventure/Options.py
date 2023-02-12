@@ -184,10 +184,10 @@ class ConnectorMultiSlot(Toggle):
 
 
 class DifficultySwitchA(Choice):
-    """Set availability of difficulty switch A
+    """Set availability of left difficulty switch
 
     """
-    display_name = "Difficulty Switch A"
+    display_name = "Left Difficulty Switch"
     option_normal = 0x0
     option_locked_hard = 0x1
     option_hard_with_unlock_item = 0x2
@@ -195,10 +195,10 @@ class DifficultySwitchA(Choice):
 
 
 class DifficultySwitchB(Choice):
-    """Set availability of difficulty switch B
+    """Set availability of right difficulty switch
 
     """
-    display_name = "Difficulty Switch B"
+    display_name = "Right Difficulty Switch"
     option_normal = 0x0
     option_locked_hard = 0x1
     option_hard_with_unlock_item = 0x2

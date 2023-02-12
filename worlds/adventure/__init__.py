@@ -181,7 +181,7 @@ class AdventureWorld(World):
         self.create_dragon_slow_items(self.grundle_min_speed, self.grundle_speed, "Slow Grundle", extra_filler_count)
         extra_filler_count = num_locations - self.created_items
 
-        self.create_dragon_slow_items(self.grundle_min_speed, self.grundle_speed, "Slow Rhindle", extra_filler_count)
+        self.create_dragon_slow_items(self.rhindle_min_speed, self.rhindle_speed, "Slow Rhindle", extra_filler_count)
         extra_filler_count = num_locations - self.created_items
 
         # TODO: add traps if enabled

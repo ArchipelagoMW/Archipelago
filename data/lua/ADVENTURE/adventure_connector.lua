@@ -62,6 +62,24 @@ local frame = 0
 
 local ItemIndex = 0
 
+local yorgle_speed_address = 0xf723
+local grundle_speed_address = 0xf73e
+local rhindle_speed_address = 0xf708
+
+local read_switch_a = 0xf762
+local read_switch_b = 0xf77e
+
+local yorgle_speed = nil
+local grundle_speed = nil
+local rhindle_speed = nil
+
+local slow_yorgle_id = tostring(118000000 + 0x103)
+local slow_grundle_id = tostring(118000000 + 0x104)
+local slow_rhindle_id = tostring(118000000 + 0x105)
+
+local diff_a_locked = false
+local diff_b_locked = false
+
 local u8 = nil
 local wU8 = nil
 local u16
@@ -123,8 +141,8 @@ function processBlock(block)
         block_identified = 1
 	    ItemsReceived = itemsBlock
     end
-   local apItemsBlock = block["foreign_items"]
-   if apItemsBlock ~= nil then
+    local apItemsBlock = block["foreign_items"]
+    if apItemsBlock ~= nil then
         block_identified = 1
         print("got foreign items block")
         foreign_items = apItemsBlock
@@ -134,9 +152,9 @@ function processBlock(block)
             end
             table.insert(foreign_items_by_room[foreign_item.room_id], foreign_item)
         end
-   end
-   local autocollectItems = block["autocollect_items"]
-   if autocollectItems ~= nil then
+    end
+    local autocollectItems = block["autocollect_items"]
+    if autocollectItems ~= nil then
         block_identified = 1
         autocollect_items = {}
         for _, acitem in pairs(autocollectItems) do
@@ -145,16 +163,15 @@ function processBlock(block)
             end
             table.insert(autocollect_items[acitem.room_id], acitem)
         end
-   end
+    end
     local localLocalItemLocations = block["local_item_locations"]
     if localLocalItemLocations ~= nil then
         block_identified = 1
         localItemLocations = localLocalItemLocations
         print("got local item locations")
-        print(localItemLocations)
     end
-   local checkedLocationsBlock = block["checked_locations"]
-   if checkedLocationsBlock ~= nil then
+    local checkedLocationsBlock = block["checked_locations"]
+    if checkedLocationsBlock ~= nil then
         block_identified = 1
         for room_id, foreign_item_list in pairs(foreign_items_by_room) do
             for i, foreign_item in pairs(foreign_item_list) do
@@ -164,15 +181,33 @@ function processBlock(block)
                         table.remove(foreign_item_list, i)
                     end
                 end
-
             end
         end
-   end
-   deathlink_rec = deathlink_rec or block["deathlink"]
-   if( block_identified == 0 ) then
-      print("unidentified block")
-      print(block)
-   end
+    end
+    local dragon_speeds_block = block["dragon_speeds"]
+    if dragon_speeds_block ~= nil then
+        block_identified = 1
+        yorgle_speed = dragon_speeds_block[slow_yorgle_id]
+        grundle_speed = dragon_speeds_block[slow_grundle_id]
+        rhindle_speed = dragon_speeds_block[slow_rhindle_id]
+    end
+    local diff_a_block = block["difficulty_a_locked"]
+    if diff_a_block ~= nil then
+        block_identified = 1
+        diff_a_block = block["difficulty_a_locked"]
+        diff_a_locked = block["difficulty_a_locked"]
+    end
+    local diff_b_block = block["difficulty_b_locked"]
+    if diff_b_block ~= nil then
+        block_identified = 1
+        diff_b_block = block["difficulty_b_locked"]
+        diff_b_locked = block["difficulty_b_locked"]
+    end
+    deathlink_rec = deathlink_rec or block["deathlink"]
+    if( block_identified == 0 ) then
+        print("unidentified block")
+        print(block)
+    end
 end
 
 local function clearScreen()
@@ -343,6 +378,42 @@ function AutocollectFromRoom()
     end
 end
 
+function SetYorgleSpeed()
+    if yorgle_speed ~= nil then
+        emu.setregister("A", yorgle_speed);
+    end
+end
+
+function SetGrundleSpeed()
+    if grundle_speed ~= nil then
+        emu.setregister("A", grundle_speed);
+    end
+end
+
+function SetRhindleSpeed()
+    if rhindle_speed ~= nil then
+        emu.setregister("A", rhindle_speed);
+    end
+end
+
+function SetDifficultySwitchA()
+    if diff_a_locked then
+        local a = emu.getregister("A")
+        if a < 128 then
+            emu.setregister("A", a + 128)
+        end
+    end
+end
+
+function SetDifficultySwitchB()
+    if diff_b_locked then
+        local a = emu.getregister("A")
+        if (a > 128 and a < 128 + 64) or (a < 64) then
+            emu.setregister("A", a + 64)
+        end
+    end
+end
+
 function main()
     memory.usememorydomain("System Bus")
     if (is23Or24Or25 or is26To28) == false then
@@ -356,6 +427,11 @@ function main()
     if( error ~= nil ) then
         print(error)
     end
+    event.onmemoryexecute(SetYorgleSpeed, yorgle_speed_address);
+    event.onmemoryexecute(SetGrundleSpeed, grundle_speed_address);
+    event.onmemoryexecute(SetRhindleSpeed, rhindle_speed_address);
+    event.onmemoryexecute(SetDifficultySwitchA, read_switch_a)
+    event.onmemoryexecute(SetDifficultySwitchB, read_switch_b)
     while true do
         frame = frame + 1
         drawMessages()
