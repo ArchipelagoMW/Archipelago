@@ -9,7 +9,7 @@ These steps should be followed in order to establish a gameplay connection with 
 5. Client sends [Connect](#Connect) packet in order to authenticate with the server.
 6. Server validates the client's packet and responds with [Connected](#Connected) or [ConnectionRefused](#ConnectionRefused).
 7. Server may send [ReceivedItems](#ReceivedItems) to the client, in the case that the client is missing items that are queued up for it.
-8. Server sends [Print](#Print) to all players to notify them of the new client connection.
+8. Server sends [PrintJSON](#PrintJSON) to all players to notify them of updates.
 
 In the case that the client does not authenticate properly and receives a [ConnectionRefused](#ConnectionRefused) then the server will maintain the connection and allow for follow-up [Connect](#Connect) packet.
 
@@ -54,7 +54,6 @@ These packets are are sent from the multiworld server to the client. They are no
 * [ReceivedItems](#ReceivedItems)
 * [LocationInfo](#LocationInfo)
 * [RoomUpdate](#RoomUpdate)
-* [Print](#Print)
 * [PrintJSON](#PrintJSON)
 * [DataPackage](#DataPackage)
 * [Bounced](#Bounced)
@@ -160,16 +159,8 @@ The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring:
 
 All arguments for this packet are optional, only changes are sent.
 
-### Print
-Sent to clients purely to display a message to the player. 
-* *Deprecation warning: clients that connect with version 0.3.5 or higher will nolonger recieve Print packets, instead all messsages are send as [PrintJSON](#PrintJSON)*
-#### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| text | str | Message to display to player. |
-
 ### PrintJSON
-Sent to clients purely to display a message to the player. This packet differs from [Print](#Print) in that the data being sent with this packet allows for more configurable or specific messaging.
+Sent to clients purely to display a message to the player. The data being sent with this packet allows for configurability or specific messaging.
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
@@ -181,7 +172,7 @@ Sent to clients purely to display a message to the player. This packet differs f
 | countdown | int | Is present if type is `Countdown`, denotes the amount of seconds remaining on the countdown. |
 
 ##### PrintJsonType
-PrintJsonType indicates the type of [PrintJson](#PrintJson) packet, different types can be handled differently by the client and can also contain additional arguments. When receiving an unknown type the data's list\[[JSONMessagePart](#JSONMessagePart)\] should still be printed as normal. 
+PrintJsonType indicates the type of [PrintJson](#PrintJson) packet, different types can be handled differently by the client and can also contain additional arguments. When receiving an unknown or missing type the data's list\[[JSONMessagePart](#JSONMessagePart)\] should still be displayed to the player as normal text. 
 
 Currently defined types are:
 | Type | Notes |
