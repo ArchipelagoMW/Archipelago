@@ -24,8 +24,8 @@ available values for that option, and is reserved by AP. You can set this as you
 but you cannot define your own new `option_random`.
 
 ### Option Creation
-If I want to create an option that will let the user decide if they want to start
-with a sword, for instance, I must do the following:
+As an example, suppose we want an option that lets the user start their game with a sword
+in their inventory. Let's create our option class (with a docstring), give it a `display_name`, and add it to a dictionary that keeps track of our options:
 
 ```python
 class StartingSword(Toggle):
