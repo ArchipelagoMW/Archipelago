@@ -64,13 +64,15 @@ class ArchipIDLEWorld(World):
         return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
 
     def create_regions(self):
-        menu_region = create_region(self.multiworld, self.player, 'Menu')
-        idle_zone = create_region(self.multiworld, self.player, 'IDLE Zone', self.location_name_to_id)
+        self.multiworld.regions += [
+            create_region(self.multiworld, self.player, 'Menu', None, ['Entrance to IDLE Zone']),
+            create_region(self.multiworld, self.player, 'IDLE Zone', self.location_name_to_id)
+        ]
 
-        connection = Entrance(self.player, 'Entrance to IDLE Zone', menu_region)
-        connection.connect(idle_zone)
-
-        self.multiworld.regions += [menu_region, idle_zone]
+        # link up our region with the entrance we just made
+        connection = Entrance(self.player, 'Entrance to IDLE Zone')
+        self.multiworld.get_region('Entrance to IDLE Zone', self.player).exits.append(connection)
+        connection.connect(self.multiworld.get_region('IDLE Zone', self.player))
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(item_table)
