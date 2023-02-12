@@ -14,7 +14,7 @@ specific units or items in order to progress.
 
 ## What items and locations get shuffled?
 
-1. Every buildable unit in the game (except for soldiers and dogs which are free).
+1. Every buildable unit in the game (except for soldiers and dogs, which are free).
 2. Commanders available to certain factions. If the player acquires the Floran Commanders, they can select any commander
 from that faction.
 3. Income and Commander Defense boosts that provide the player with extra income or extra commander defense.

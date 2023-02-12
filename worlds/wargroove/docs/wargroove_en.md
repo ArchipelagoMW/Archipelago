@@ -34,8 +34,8 @@ This should install the mod and campaign for you.
 ## Starting a Multiworld game
 
 1. Start the Wargroove Client and connect to the server. Enter your username from your 
-[settings file](/games/Wargroove/player-settings)
-2. Start Wargroove and play the Archipelago campaign by going to `Story->Campaign->Custom->Archipelago`
+[settings file.](/games/Wargroove/player-settings)
+2. Start Wargroove and play the Archipelago campaign by going to `Story->Campaign->Custom->Archipelago`.
 
 ## Ending a Multiworld game
 It is strongly recommended that you delete your campaign progress after finishing a multiworld game.
