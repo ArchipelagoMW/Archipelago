@@ -133,7 +133,7 @@ class L2ACWorld(World):
         self.multiworld.regions.append(menu)
 
         ancient_dungeon = Region("AncientDungeon", self.player, self.multiworld, "Ancient Dungeon")
-        ancient_dungeon.exits.append(Entrance(self.player, "FinalFloorEntrance", menu))
+        ancient_dungeon.exits.append(Entrance(self.player, "FinalFloorEntrance", ancient_dungeon))
         item_count: int = self.blue_chest_count
         if self.shuffle_capsule_monsters:
             item_count += len(self.item_name_groups["Capsule monsters"])
