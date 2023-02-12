@@ -43,7 +43,7 @@ class Permission(enum.IntFlag):
     disabled = 0b000  # 0, completely disables access
     enabled = 0b001  # 1, allows manual use
     goal = 0b010  # 2, allows manual use after goal completion
-    auto = 0b110  # 6, forces use after goal completion, only works for forfeit
+    auto = 0b110  # 6, forces use after goal completion, only works for release
     auto_enabled = 0b111  # 7, forces use after goal completion, allows manual use any time
 
     @staticmethod
@@ -86,7 +86,7 @@ def _scan_for_TypedTuples(obj: typing.Any) -> typing.Any:
         data = obj._asdict()
         data["class"] = obj.__class__.__name__
         return data
-    if isinstance(obj, (tuple, list, set)):
+    if isinstance(obj, (tuple, list, set, frozenset)):
         return tuple(_scan_for_TypedTuples(o) for o in obj)
     if isinstance(obj, dict):
         return {key: _scan_for_TypedTuples(value) for key, value in obj.items()}
@@ -109,7 +109,7 @@ def get_any_version(data: dict) -> Version:
     return Version(int(data["major"]), int(data["minor"]), int(data["build"]))
 
 
-whitelist = {
+allowlist = {
     "NetworkPlayer": NetworkPlayer,
     "NetworkItem": NetworkItem,
     "NetworkSlot": NetworkSlot
@@ -125,7 +125,7 @@ def _object_hook(o: typing.Any) -> typing.Any:
         hook = custom_hooks.get(o.get("class", None), None)
         if hook:
             return hook(o)
-        cls = whitelist.get(o.get("class", None), None)
+        cls = allowlist.get(o.get("class", None), None)
         if cls:
             for key in tuple(o):
                 if key not in cls._fields:

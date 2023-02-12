@@ -109,10 +109,10 @@ def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
 
 class WebWorld:
     """Webhost integration"""
-    
+
     settings_page: Union[bool, str] = True
     """display a settings page. Can be a link to a specific page or external tool."""
-    
+
     game_info_languages: List[str] = ['en']
     """docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'"""
 
@@ -159,10 +159,6 @@ class World(metaclass=AutoWorldRegister):
     required_server_version: Tuple[int, int, int] = (0, 2, 4)
 
     hint_blacklist: ClassVar[FrozenSet[str]] = frozenset()  # any names that should not be hintable
-
-    # For games where after a victory it is impossible to go back in and get additional/remaining Locations checked.
-    # this forces forfeit:  auto for those games.
-    forced_auto_forfeit: bool = False
 
     # Hide World Type from various views. Does not remove functionality.
     hidden: ClassVar[bool] = False
@@ -233,7 +229,7 @@ class World(metaclass=AutoWorldRegister):
 
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use world.random here.
-        If you need any last-second randomization, use MultiWorld.slot_seeds[slot] instead."""
+        If you need any last-second randomization, use MultiWorld.per_slot_randoms[slot] instead."""
         pass
 
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot

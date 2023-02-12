@@ -38,6 +38,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     logger = logging.getLogger()
     world.set_seed(seed, args.race, str(args.outputname if args.outputname else world.seed))
+    world.plando_options = args.plando_options
 
     world.shuffle = args.shuffle.copy()
     world.logic = args.logic.copy()
@@ -120,6 +121,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     logger.info('Creating Items.')
     AutoWorld.call_all(world, "create_items")
+
+    # All worlds should have finished creating all regions, locations, and entrances.
+    # Recache to ensure that they are all visible for locality rules.
+    world._recache()
 
     logger.info('Calculating Access Rules.')
 
@@ -246,6 +251,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         balance_multiworld_progression(world)
 
     logger.info(f'Beginning output...')
+
+    # we're about to output using multithreading, so we're removing the global random state to prevent accidental use
+    world.random.passthrough = False
+
     outfilebase = 'AP_' + world.seed_name
 
     output = tempfile.TemporaryDirectory()
@@ -290,27 +299,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                         elif main_entrance.parent_region.type == RegionType.DarkWorld:
                             checks_in_area[location.player]["Dark World"].append(location.address)
                     checks_in_area[location.player]["Total"] += 1
-
-            oldmancaves = []
-            takeanyregions = ["Old Man Sword Cave", "Take-Any #1", "Take-Any #2", "Take-Any #3", "Take-Any #4"]
-            for index, take_any in enumerate(takeanyregions):
-                for region in [world.get_region(take_any, player) for player in
-                               world.get_game_players("A Link to the Past") if world.retro_caves[player]]:
-                    item = world.create_item(
-                        region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'],
-                        region.player)
-                    player = region.player
-                    location_id = SHOP_ID_START + total_shop_slots + index
-
-                    main_entrance = region.get_connecting_entrance(is_main_entrance)
-                    if main_entrance.parent_region.type == RegionType.LightWorld:
-                        checks_in_area[player]["Light World"].append(location_id)
-                    else:
-                        checks_in_area[player]["Dark World"].append(location_id)
-                    checks_in_area[player]["Total"] += 1
-
-                    er_hint_data[player][location_id] = main_entrance.name
-                    oldmancaves.append(((location_id, player), (item.code, player)))
 
             FillDisabledShopSlots(world)
 

@@ -6,7 +6,7 @@ and connects them with the proper requirements
 from BaseClasses import MultiWorld, Entrance
 from .static_logic import StaticWitnessLogic
 from .Options import get_option_value
-from .locations import WitnessPlayerLocations
+from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .player_logic import WitnessPlayerLogic
 
 
@@ -27,7 +27,7 @@ class WitnessRegions:
         )
 
     def connect(self, world: MultiWorld, player: int, source: str, target: str, player_logic: WitnessPlayerLogic,
-                panel_hex_to_solve_set=None):
+                panel_hex_to_solve_set=frozenset({frozenset()})):
         """
         connect two regions and set the corresponding requirement
         """
@@ -63,8 +63,10 @@ class WitnessRegions:
 
         if difficulty == 1:
             reference_logic = StaticWitnessLogic.sigma_expert
-        else:
+        elif difficulty == 0:
             reference_logic = StaticWitnessLogic.sigma_normal
+        else:
+            reference_logic = StaticWitnessLogic.vanilla
 
         all_locations = set()
 
@@ -74,8 +76,8 @@ class WitnessRegions:
                 if reference_logic.CHECKS_BY_HEX[panel]["checkName"] in self.locat.CHECK_LOCATION_TABLE
             ]
             locations_for_this_region += [
-                reference_logic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" for panel in region["panels"]
-                if reference_logic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" in self.locat.EVENT_LOCATION_TABLE
+                StaticWitnessLocations.get_event_name(panel) for panel in region["panels"]
+                if StaticWitnessLocations.get_event_name(panel) in self.locat.EVENT_LOCATION_TABLE
             ]
 
             all_locations = all_locations | set(locations_for_this_region)
@@ -86,9 +88,6 @@ class WitnessRegions:
 
         for region_name, region in reference_logic.ALL_REGIONS_BY_NAME.items():
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
-                if connection[0] == "Entry":
-                    continue
-
                 if connection[1] == frozenset({frozenset(["TrueOneWay"])}):
                     self.connect(world, player, region_name, connection[0], player_logic, frozenset({frozenset()}))
                     continue

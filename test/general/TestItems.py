@@ -33,6 +33,14 @@ class TestBase(unittest.TestCase):
                             for item in items:
                                 self.assertIn(item, world_type.item_name_to_id)
 
+    def testItemNameGroupConflict(self):
+        """Test that all item name groups aren't also item names."""
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            with self.subTest(game_name, game_name=game_name):
+                for group_name in world_type.item_name_groups:
+                    with self.subTest(group_name, group_name=group_name):
+                        self.assertNotIn(group_name, world_type.item_name_to_id)
+
     def testItemCountGreaterEqualLocations(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
 
