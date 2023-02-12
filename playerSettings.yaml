@@ -65,7 +65,7 @@ A Link to the Past:
 
   start_hints:
     # Start with these item's locations prefilled into the !hint command.
-    [ ]
+    { }
 
   start_location_hints:
     # Start with these locations and their item prefilled into the !hint command
