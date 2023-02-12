@@ -18,6 +18,7 @@ local WinAddr = 0xDE -- if not 0 (I think if 0xff specifically), we won (and sho
 -- once, and reset that when none of them are 2 again)
 
 local DragonState = {0xA8, 0xAD, 0xB2}
+local last_dragon_state = {0, 0, 0}
 local carryAddress = 0x9D -- uses rom object table
 local batCarryAddress = 0xD0 -- uses ram object location
 local batInvalidCarryItem = 0x78
@@ -77,8 +78,16 @@ local slow_yorgle_id = tostring(118000000 + 0x103)
 local slow_grundle_id = tostring(118000000 + 0x104)
 local slow_rhindle_id = tostring(118000000 + 0x105)
 
+local yorgle_dead = false
+local grundle_dead = false
+local rhindle_dead = false
+
 local diff_a_locked = false
 local diff_b_locked = false
+
+local is_dead = 0
+local freeincarnates_available = 0
+local send_freeincarnate_used = false
 
 local u8 = nil
 local wU8 = nil
@@ -194,14 +203,18 @@ function processBlock(block)
     local diff_a_block = block["difficulty_a_locked"]
     if diff_a_block ~= nil then
         block_identified = 1
-        diff_a_block = block["difficulty_a_locked"]
-        diff_a_locked = block["difficulty_a_locked"]
+        diff_a_locked = diff_a_block
     end
     local diff_b_block = block["difficulty_b_locked"]
     if diff_b_block ~= nil then
         block_identified = 1
-        diff_b_block = block["difficulty_b_locked"]
-        diff_b_locked = block["difficulty_b_locked"]
+        diff_b_locked = diff_b_block
+    end
+    local freeincarnates_available_block = block["freeincarnates_available"]
+    if freeincarnates_available_block ~= nil then
+        block_identified = 1
+        freeincarnates_available = freeincarnates_available_block
+        print("freeincarnates_available "..tostring(freeincarnates_available))
     end
     deathlink_rec = deathlink_rec or block["deathlink"]
     if( block_identified == 0 ) then
@@ -358,6 +371,12 @@ function receive()
     end
     deathlink_send = 0
 
+    if send_freeincarnate_used == true then
+        print("Sending freeincarnate used")
+        retTable["freeincarnate"] = true
+        send_freeincarnate_used = false
+    end
+
     msg = json.encode(retTable).."\n"
     local ret, error = atariSocket:send(msg)
     if ret == nil then
@@ -411,6 +430,19 @@ function SetDifficultySwitchB()
         if (a > 128 and a < 128 + 64) or (a < 64) then
             emu.setregister("A", a + 64)
         end
+    end
+end
+
+function TryFreeincarnate()
+    if freeincarnates_available > 0 then
+        freeincarnates_available = freeincarnates_available - 1
+        for index, state_addr in pairs(DragonState) do
+            if last_dragon_state[index] == 1 then
+                send_freeincarnate_used = true
+                memory.write_u8(state_addr, 1, "System Bus")
+            end
+        end
+
     end
 end
 
@@ -514,6 +546,24 @@ function main()
                     memory.write_u8(APItemRam, 0xFF, "System Bus")
                 end
             end
+            if is_dead == 0 then
+                dragons_revived = false
+                player_dead = false
+                new_dragon_state = {0,0,0}
+                for index, dragon_state_addr in pairs(DragonState) do
+                    new_dragon_state[index] = memory.read_u8(dragon_state_addr, "System Bus" )
+                    if last_dragon_state[index] == 1 and new_dragon_state[index] ~= 1 then
+                        dragons_revived = true
+                    end
+                    if new_dragon_state[index] == 2 then
+                        player_dead = true
+                    end
+                end
+                if dragons_revived and player_dead == false then
+                    TryFreeincarnate()
+                end
+                last_dragon_state = new_dragon_state
+            end
         elseif (u8(PlayerRoomAddr) == 0x00) then -- not alive mode, in number room
             ItemIndex = 0  -- reset our inventory
             next_inventory_item = nil
@@ -523,12 +573,16 @@ function main()
             if (frame % 5 == 0) then
                 receive()
                 if alive_mode() then
-                    local is_dead = 0
+                    local was_dead = is_dead
+                    is_dead = 0
                     for index, dragonStateAddr in pairs(DragonState) do
                         local dragonstateval = memory.read_u8(dragonStateAddr, "System Bus")
                         if ( dragonstateval == 2) then
                             is_dead = index
                         end
+                    end
+                    if was_dead ~= 0 and is_dead == 0 then
+                        TryFreeincarnate()
                     end
                     if deathlink_rec == true and is_dead == 0 then
                         print("setting dead from deathlink")

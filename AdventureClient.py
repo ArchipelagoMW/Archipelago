@@ -64,6 +64,8 @@ class AdventureContext(CommonContext):
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
+        self.freeincarnates_used: int = -1
+        self.freeincarnate_pending: int = 0
         self.atari_streams: (StreamReader, StreamWriter) = None
         self.atari_sync_task = None
         self.messages = {}
@@ -100,6 +102,7 @@ class AdventureContext(CommonContext):
             self.locations_array = None
             if Utils.get_options()["adventure_options"].get("death_link", False):
                 self.set_deathlink = True
+            async_start(self.get_freeincarnates_used())
         elif cmd == "RoomInfo":
             self.seed_name = args['seed_name']
         elif cmd == 'Print':
@@ -109,6 +112,19 @@ class AdventureContext(CommonContext):
         elif cmd == "ReceivedItems":
             msg = f"Received {', '.join([self.item_names[item.item] for item in args['items']])}"
             self._set_message(msg, SYSTEM_MESSAGE_ID)
+        elif cmd == "Retrieved":
+            self.freeincarnates_used = args["keys"][f"adventure_{self.auth}_freeincarnates_used"]
+            if self.freeincarnates_used is None:
+                self.freeincarnates_used = 0
+            self.freeincarnates_used += self.freeincarnate_pending
+            self.send_pending_freeincarnates()
+        elif cmd == "SetReply":
+            if args["key"] == f"adventure_{self.auth}_freeincarnates_used":
+                self.freeincarnates_used = args["value"]
+                if self.freeincarnates_used is None:
+                    self.freeincarnates_used = 0
+                self.freeincarnates_used += self.freeincarnate_pending
+                self.send_pending_freeincarnates()
 
     def on_deathlink(self, data: dict):
         self.deathlink_pending = True
@@ -126,6 +142,31 @@ class AdventureContext(CommonContext):
         self.ui = AdventureManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
+    async def get_freeincarnates_used(self):
+        if self.server and not self.server.socket.closed:
+            await self.send_msgs([{"cmd": "SetNotify", "keys": [f"adventure_{self.auth}_freeincarnates_used"]}])
+            await self.send_msgs([{"cmd": "Get", "keys": [f"adventure_{self.auth}_freeincarnates_used"]}])
+
+    def send_pending_freeincarnates(self):
+        if self.freeincarnate_pending > 0:
+            async_start(self.send_pending_freeincarnates_impl(self.freeincarnate_pending))
+            self.freeincarnate_pending = 0
+
+    async def send_pending_freeincarnates_impl(self, send_val: int) -> None:
+        await self.send_msgs([{"cmd": "Set", "key": f"adventure_{self.auth}_freeincarnates_used",
+                               "default": 0, "want_reply": False,
+                               "operations": [{"operation": "add", "value": send_val}]}])
+
+    async def used_freeincarnate(self) -> None:
+        if self.server and not self.server.socket.closed:
+            # send message
+            # f"zillion-{self.auth}-doors"]
+            await self.send_msgs([{"cmd": "Set", "key": f"adventure_{self.auth}_freeincarnates_used",
+                                   "default": 0, "want_reply": True,
+                                   "operations": [{"operation": "add", "value": 1}]}])
+        else:
+            self.freeincarnate_pending = self.freeincarnate_pending + 1
+
 
 def convert_item_id(ap_item_id: int):
     static_item_index = ap_item_id - base_adventure_item_id
@@ -138,7 +179,7 @@ def get_payload(ctx: AdventureContext):
     dragon_speed_update = {}
     diff_a_locked = ctx.diff_a_mode > 0
     diff_b_locked = ctx.diff_b_mode > 0
-
+    freeincarnate_count = 0
     for item in ctx.items_received:
         item_id_str = str(item.item)
         if base_adventure_item_id < item.item <= standard_item_max:
@@ -153,7 +194,12 @@ def get_payload(ctx: AdventureContext):
             diff_a_locked = False
         elif item.item == item_table["Difficulty Switch B"].id:
             diff_b_locked = False
+        elif item.item == item_table["Freeincarnate"].id:
+            freeincarnate_count = freeincarnate_count + 1
+    freeincarnates_available = 0
 
+    if ctx.freeincarnates_used >= 0:
+        freeincarnates_available = freeincarnate_count - (ctx.freeincarnates_used + ctx.freeincarnate_pending)
     ret = json.dumps(
         {
             "items": items,
@@ -162,7 +208,8 @@ def get_payload(ctx: AdventureContext):
             "deathlink": ctx.deathlink_pending,
             "dragon_speeds": dragon_speed_update,
             "difficulty_a_locked": diff_a_locked,
-            "difficulty_b_locked": diff_b_locked
+            "difficulty_b_locked": diff_b_locked,
+            "freeincarnates_available": freeincarnates_available
         }
     )
     ctx.deathlink_pending = False
@@ -245,6 +292,7 @@ async def atari_sync_task(ctx: AdventureContext):
                         # 1. A keepalive response of the Players Name (always)
                         # 2. romhash field with sha256 hash of the ROM memory region
                         # 3. locations, messages, and deathLink
+                        # 4. freeincarnate, to indicate a freeincarnate was used
                         data = await asyncio.wait_for(reader.readline(), timeout=5)
                         data_decoded = json.loads(data.decode())
                         if 'scriptVersion' not in data_decoded or data_decoded['scriptVersion'] != SCRIPT_VERSION:
@@ -288,6 +336,8 @@ async def atari_sync_task(ctx: AdventureContext):
                         if 'victory' in data_decoded and not ctx.finished_game:
                             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                             ctx.finished_game = True
+                        if 'freeincarnate' in data_decoded:
+                            await ctx.used_freeincarnate()
                         if ctx.set_deathlink:
                             await ctx.update_death_link(True)
                         send_checked_locations_if_needed(ctx)
