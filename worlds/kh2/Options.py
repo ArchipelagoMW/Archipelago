@@ -96,15 +96,13 @@ class KeybladeMax(Range):
 class Visitlocking(Choice):
     """Determines the level of visit locking
     No Visit Locking:No visit locks(everything is sphere 1.Not Recommended)# BK is making a lot of money
-    Second Visit Locking:Second Visit Locking(every first visit is sphere 1)
-    First Visit Locking:Visit Locking for both First and Second Visit With One Item
+    Second Visit Locking:Second Visit Locking(Start with 13 visit locking items)
     First and Second Visit Locking:One item for First Visit Two For Second Visit"""
     display_name = "Visit locking"
     option_no_visit_locking = 0#starts with 27 visit locking
     option_second_visit_locking = 1#starts with 13 (no icecream/picture)
-    option_first_visit_locking = 2#start with universal key
-    option_first_and_second_visit_locking = 3#starts with nothing
-    default = 3
+    option_first_and_second_visit_locking = 2#starts with nothing
+    default = 2
 
 class RandomVisitLockingItem(Range):
     display_name = "Random Visit Locking Item"
@@ -131,14 +129,14 @@ class LevelDepth(Choice):
     """Determines How many locations you want on levels
     Level 50:23 checks spread through 50 levels
     Level 99:23 checks spread through 99 levels
-    level 50 sanity:check per level for 50 levels
-    level 99 sanity:check per level for 99 levels
-    level1: no checks on levels(checks are replaced with stats)"""
+    Level 50 sanity:check per level for 50 levels
+    Level 99 sanity:check per level for 99 levels
+    Level 1: no checks on levels(checks are replaced with stats)"""
     display_name = "Level Depth"
     option_level_50 = 0
     option_level_99 = 1
-    option_level_99_sanity = 2
-    option_level_50_sanity = 3
+    option_level_50_sanity = 2
+    option_level_99_sanity = 3
     option_level_1 = 4
     default = 0
 

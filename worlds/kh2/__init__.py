@@ -61,22 +61,13 @@ class KH2World(World):
         return created_item
 
     def generate_early(self) -> None:
+        # Option to turn off all superbosses. Can do this individually but its like 20+ checks
         if self.multiworld.SuperBosses[self.player].value == 0 and not self.multiworld.Goal[self.player].value == 2:
             for superboss in exclusion_table["Datas"]:
                 self.multiworld.exclude_locations[self.player].value.add(superboss)
             for superboss in exclusion_table["SuperBosses"]:
                 self.multiworld.exclude_locations[self.player].value.add(superboss)
-        if self.multiworld.Visitlocking[self.player].value == 2:
-            #first visit locking. Start with nothing except universal key
 
-            self.firstvisitlocking = 1
-            self.secondvisitlocking = 1
-        #first+second visit locking. Start with nothing
-        #second visit locking. Start with 13 items.
-        # no visit locking. Start with everything
-        else:
-            self.firstvisitlocking = 1
-            self.secondvisitlocking = 2
 
 
         if self.multiworld.Cups[self.player].value == 1:
@@ -86,9 +77,8 @@ class KH2World(World):
 
     def generate_basic(self):
         itempool: typing.List[KH2Item] = []
-        if self.multiworld.FinalXemnas[self.player].value == 1:
-            self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(self.create_item(ItemName.Victory))
-            self.totalLocations -= 1
+        self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(self.create_item(ItemName.Victory))
+        self.totalLocations -= 1
         self.hitlist = list()
         RandomSuperBoss = list()
         filler_items = list()
@@ -211,42 +201,6 @@ class KH2World(World):
         if self.multiworld.Promise_Charm[self.player].value == 0:
             item_quantity_dict.update({ItemName.PromiseCharm: 0})
 
-        visitlockingitem = list()
-        for x in range(2):
-            visitlockingitem.extend(exclusionItem_table["VisitLocking"])
-        # these items only have one in the pool while .extending twice makes them have 2
-        visitlockingitem.remove(ItemName.IceCream)
-        visitlockingitem.remove(ItemName.Picture)
-        visitlockingitem.remove(ItemName.Poster)
-        visitlockingitem.remove(ItemName.NamineSketches)
-
-        # no visit locking
-        if self.multiworld.Visitlocking[self.player].value == 0:
-            for item in exclusionItem_table["VisitLocking"]:
-                item_quantity_dict.update({item: 0})
-                visitlockingitem.remove(item)
-                for x in range(2):
-                    self.multiworld.push_precollected(self.create_item(item))
-        # first and second visit locking
-        elif self.multiworld.Visitlocking[self.player].value in {1, 2}:
-            for item in exclusionItem_table["VisitLocking"]:
-                item_quantity_dict.update({item: 1})
-                if item in {ItemName.IceCream}:
-                    continue
-                self.multiworld.push_precollected(self.create_item(item))
-                visitlockingitem.remove(item)
-            if self.multiworld.Visitlocking[self.player].value == 2:
-                # can move this to client gives player this if ==2 but this just makes it cleaner imo
-                self.multiworld.push_precollected(self.create_item(ItemName.UniversalKey))
-
-        for x in range(self.multiworld.RandomVisitLockingItem[self.player].value):
-            if len(visitlockingitem) <= 0:
-                break
-            item = self.multiworld.per_slot_randoms[self.player].choice(visitlockingitem)
-            item_quantity_dict.update({item: Items.item_dictionary_table[item].quantity - 1})
-            self.multiworld.push_precollected(self.create_item(item))
-            visitlockingitem.remove(item)
-        # Option to turn off all superbosses. Can do this individually but its like 20+ checks
 
         # same item placed because you can only get one of these 2 locations
         # they are both under the same flag so the player gets both locations just one of the two items
@@ -269,6 +223,7 @@ class KH2World(World):
                     item_quantity_dict.update({name: Items.item_dictionary_table[name].quantity - 1})
                     growth_list.remove(name)
                     self.multiworld.push_precollected(self.create_item(name))
+
         if self.multiworld.RandomGrowth[self.player].value != 0:
             for x in range(self.multiworld.RandomGrowth[self.player].value):
                 # try catch in the instance of the user having max movement and wants too much growth
@@ -278,11 +233,36 @@ class KH2World(World):
                     growth_list.remove(random_growth)
                     self.multiworld.push_precollected(self.create_item(random_growth))
 
+        visitlockingitem = list()
+        visitlockingitem.extend(exclusionItem_table["AllVisitLocking"])
+        # these items only have one in the pool while .extending twice makes them have 2
+                # no visit locking
+        if self.multiworld.Visitlocking[self.player].value == 0:
+            for item in visitlockingitem:
+                self.multiworld.push_precollected(self.create_item(item))
+                item_quantity_dict.update({item: Items.item_dictionary_table[item].quantity - 1})
+                visitlockingitem.remove(item)
+        # first and second visit locking
+        elif self.multiworld.Visitlocking[self.player].value in {1}:
+            for item in exclusionItem_table["2VisitLocking"]:
+                item_quantity_dict.update({item: Items.item_dictionary_table[item].quantity - 1})
+                self.multiworld.push_precollected(self.create_item(item))
+                visitlockingitem.remove(item)
+
+        for x in range(self.multiworld.RandomVisitLockingItem[self.player].value):
+            if len(visitlockingitem) <= 0:
+                break
+            item = self.multiworld.per_slot_randoms[self.player].choice(visitlockingitem)
+            item_quantity_dict.update({item: Items.item_dictionary_table[item].quantity - 1})
+            self.multiworld.push_precollected(self.create_item(item))
+            visitlockingitem.remove(item)
+
+
         # there are levels but level 1 is there to keep code clean
-        if self.multiworld.LevelDepth[self.player].value == 2:
+        if self.multiworld.LevelDepth[self.player].value == 3:
             # level 99 sanity
             self.totalLocations -= 1
-        elif self.multiworld.LevelDepth[self.player].value == 3:
+        elif self.multiworld.LevelDepth[self.player].value == 2:
             # level 50 sanity
             self.totalLocations -= 50
         elif self.multiworld.LevelDepth[self.player].value == 4:
@@ -307,10 +287,10 @@ class KH2World(World):
     def create_regions(self):
         location_table = setup_locations(self.multiworld, self.player)
         create_regions(self.multiworld, self.player, location_table)
-        connect_regions(self.multiworld, self.player, self.firstvisitlocking, self.secondvisitlocking)
+        connect_regions(self.multiworld, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self.firstvisitlocking, self.secondvisitlocking)
+        set_rules(self.multiworld, self.player)
 
     def generate_output(self, output_directory: str):
         patch_kh2(self, output_directory)

@@ -7,7 +7,7 @@ from .Names.RegionName import SoraLevels_Region
 import Utils
 import zipfile
 from .Items import item_dictionary_table
-from .Locations import all_locations,SoraLevels
+from .Locations import all_locations,SoraLevels,exclusion_table
 from .XPValues import lvlStats, formExp, soraExp
 from worlds.Files import APContainer
 from statistics import median
@@ -58,6 +58,7 @@ def patch_kh2(self, output_directory):
     self.magic = 6
     self.defense = 2
     self.ap = 50
+    levelsetting=list()
 
     if self.multiworld.Keyblade_Minimum[self.player].value>self.multiworld.Keyblade_Maximum[self.player].value:
         print(f"{self.multiworld.get_file_safe_player_name(self.player)} has Keyblade Minimum greater than Keyblade Maximum")
@@ -66,6 +67,15 @@ def patch_kh2(self, output_directory):
     else:
         keyblademin=self.multiworld.Keyblade_Minimum[self.player].value
         keyblademax=self.multiworld.Keyblade_Maximum[self.player].value
+
+    if self.multiworld.LevelDepth[self.player]==0:
+        levelsetting.extend(exclusion_table["Level50"])
+    elif self.multiworld.LevelDepth[self.player]==1:
+        levelsetting.extend(exclusion_table["Level99"])
+    elif self.multiworld.LevelDepth[self.player] in {2,3}:
+        levelsetting.extend(exclusion_table["Level50Sanity"])
+        if self.multiworld.LevelDepth[self.player]==3:
+            levelsetting.extend(exclusion_table["Level99Sanity"])
 
 
     mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
@@ -177,8 +187,7 @@ def patch_kh2(self, output_directory):
     self.i=1
     for location in SoraLevels:
         increaseStat(self.multiworld.per_slot_randoms[self.player].randint(0, 3))
-        #print(str(self.multiworld.get_region(SoraLevels_Region,self.player).locations))
-        if f"{location} ({self.multiworld.get_player_name(self.player)})" in str(self.multiworld.get_region(SoraLevels_Region,self.player).locations):
+        if location in levelsetting:
             data=self.multiworld.get_location(location,self.player)
             if data.item.player==self.player: 
                 itemcode=item_dictionary_table[data.item.name].kh2id

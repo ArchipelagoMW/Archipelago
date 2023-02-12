@@ -38,13 +38,12 @@ Reports_Table = {
 }
 
 Progression_Table = {
-    ItemName.ProofofConnection:     ItemData(0x13000D, 1, 593,      0x36B2),
-    ItemName.ProofofNonexistence:   ItemData(0x13000E, 1, 594,    0x36B3),
-    ItemName.ProofofPeace:          ItemData(0x13000F, 1, 595,           0x36B4),
+    ItemName.ProofofConnection:     ItemData(0x13000D, 1, 593, 0x36B2),
+    ItemName.ProofofNonexistence:   ItemData(0x13000E, 1, 594, 0x36B3),
+    ItemName.ProofofPeace:          ItemData(0x13000F, 1, 595, 0x36B4),
     ItemName.PromiseCharm:          ItemData(0x130010, 1, 524, 0x3694),
     ItemName.NamineSketches:        ItemData(0x130011, 1, 368, 0x3642),
-    # dummy 13
-    ItemName.CastleKey:             ItemData(0x130012, 2, 460, 0x365D),
+    ItemName.CastleKey:             ItemData(0x130012, 2, 460, 0x365D),# dummy 13
     ItemName.BattlefieldsofWar:     ItemData(0x130013, 2, 54, 0x35AE),
     ItemName.SwordoftheAncestor:    ItemData(0x130014, 2, 55, 0x35AF),
     ItemName.BeastsClaw:            ItemData(0x130015, 2, 59, 0x35B3),
@@ -362,7 +361,7 @@ Misc_Table = {
     ItemName.LuckyEmblem: ItemData(0x130126, 0, 367, 0x3641),#letter item
     ItemName.Victory: ItemData(0x130127, 0, 263, 0x111),
     ItemName.Bounty:ItemData(0x130128   ,0,90,0x36C1,0),#Castle Map
-    ItemName.UniversalKey:ItemData(0x130129,0,365,0x363F,0)#Tournament Poster
+    #ItemName.UniversalKey:ItemData(0x130129,0,365,0x363F,0)#Tournament Poster
 
 }
 
@@ -609,7 +608,7 @@ exclusionItem_table = {
         ItemName.DefenseBoost,
         ItemName.APBoost
     },
-    "VisitLocking":{
+    "2VisitLocking":{
     ItemName.CastleKey,
     ItemName.BattlefieldsofWar,
     ItemName.SwordoftheAncestor,
@@ -619,12 +618,39 @@ exclusionItem_table = {
     ItemName.SkillandCrossbones,
     ItemName.Scimitar,
     ItemName.MembershipCard,
-    ItemName.IceCream,
     ItemName.Picture,
     ItemName.WaytotheDawn,
     ItemName.IdentityDisk,
     ItemName.Poster,
     ItemName.NamineSketches
+    },
+    "AllVisitLocking":{
+    ItemName.CastleKey,
+    ItemName.CastleKey,
+    ItemName.BattlefieldsofWar,
+    ItemName.BattlefieldsofWar,
+    ItemName.SwordoftheAncestor,
+    ItemName.SwordoftheAncestor,
+    ItemName.BeastsClaw,
+    ItemName.BeastsClaw,
+    ItemName.BoneFist,
+    ItemName.BoneFist,
+    ItemName.ProudFang,
+    ItemName.ProudFang,
+    ItemName.SkillandCrossbones,
+    ItemName.SkillandCrossbones,
+    ItemName.Scimitar,
+    ItemName.Scimitar,
+    ItemName.MembershipCard,
+    ItemName.MembershipCard,
+    ItemName.WaytotheDawn,
+    ItemName.WaytotheDawn,
+    ItemName.IdentityDisk,
+    ItemName.IdentityDisk,
+    ItemName.Poster,
+    ItemName.Picture,
+    ItemName.IceCream,
+    ItemName.NamineSketches,
     }
 }
 

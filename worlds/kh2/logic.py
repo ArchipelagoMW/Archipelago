@@ -158,6 +158,7 @@ class KH2Logic(LogicMixin):
     def kh_goofylimit(self,player):
         return self.has(ItemName.TornadoFusion,player,1) or self.has(ItemName.Teamwork,player)
     def kh_basetools(self,player):
+        #if option is easy then add reflect,gap closer and second chance&once more. #option east scom option normal adds gap closer or combo master #hard is what is right now
         return self.has(ItemName.Guard,player,1) and self.has(ItemName.AerialRecovery,player,1) and self.has(ItemName.FinishingPlus,player,1)
 
     def kh_painandpanic(self,player,visitlocking):
