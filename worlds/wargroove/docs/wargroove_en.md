@@ -6,7 +6,11 @@
   - Only the Steam Windows version is supported. MAC, Switch, Xbox, and Playstation are not supported.
 - [The most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
 
-
+## Backup playerProgress files
+`playerProgress` and `playerProgress.bak` contain save data for all of your Wargroove campaigns. Backing up these files
+is strongly recommended in case they become corrupted.
+1. Type `%appdata%\Chucklefish\Wargroove\save` in the file browser and hit enter.
+2. Copy the `playerProgress` and `playerProgress.bak` files and paste them into a backup directory.
 
 ## Update host.yaml to include the Wargroove root directory
 
