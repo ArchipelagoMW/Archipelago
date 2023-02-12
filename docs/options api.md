@@ -8,18 +8,22 @@ For more information on where these options go in your world please refer to:
 Archipelago will be abbreviated as "AP" from now on.
 
 ## Option Definitions
-Option parsing in AP is done using different Option classes. For each option you would like to have available in your
-game, you need to create a new option class with a docstring detailing what the option will do to your user, a
-`display_name` to be displayed on the webhost, and a dictionary of `option_definitions` of internal names to class. By
-style and convention, the internal names should be snake_case. If the option supports having multiple sub_options such
-as Choice options, these can be defined with `option_my_sub_option`, where the preceding `option_` is required and
-stripped for users, so will show as `my_sub_option` in yaml files and if `auto_display_name` is True `My Sub Option` on
-the webhost. All options support `random` as a generic option that will choose from any of the available options and is
-reserved by AP. You can set this as your default value but you cannot define your own new `option_random`.
+Option parsing in AP is done using different Option classes. For each option you would like to have in your game, you
+need to create:
+- A new option class with a docstring detailing what the option will do to your user.
+- A `display_name` to be displayed on the webhost.
+- A new entry in the `option_definitions` dict for your World.
+By style and convention, the internal names should be snake_case. If the option supports having multiple sub_options
+such as Choice options, these can be defined with `option_my_sub_option`, where the preceding `option_` is required and
+stripped for users, so will show as `my_sub_option` in yaml files and if `auto_display_name` is True `My Sub Option`
+on the webhost. All options support `random` as a generic option. `random` chooses from any of the available
+values for that option, and is reserved by AP. You can set this as your default value but you cannot define your own
+new `option_random`.
 
 ### Option Creation
-If I want to create an option that will let the user decide if they want to start with a sword, for instance, I must do
-the following:
+As an example, suppose we want an option that lets the user start their game with a sword in their inventory. Let's
+create our option class (with a docstring), give it a `display_name`, and add it to a dictionary that keeps track of our
+options:
 
 ```python
 class StartingSword(Toggle):
