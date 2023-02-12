@@ -1,4 +1,4 @@
-from typing import List, Set, Dict, Tuple, Optional, Callable, NamedTuple
+from typing import List, Set, Dict, Tuple, Optional, Callable
 from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import LocationData
 from .Options import get_option_value

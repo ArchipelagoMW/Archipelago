@@ -725,7 +725,7 @@ def handle_swap_donut_gh_exits(rom):
 
 def handle_bowser_rooms(rom, world, player: int):
     if world.bowser_castle_rooms[player] == "random_two_room":
-        chosen_rooms = world.per_slot_randoms[player].sample(standard_bowser_rooms, 2)
+        chosen_rooms = world.random.sample(standard_bowser_rooms, 2)
 
         rom.write_byte(0x3A680, chosen_rooms[0].roomID)
         rom.write_byte(0x3A684, chosen_rooms[0].roomID)
@@ -738,7 +738,7 @@ def handle_bowser_rooms(rom, world, player: int):
         rom.write_byte(chosen_rooms[len(chosen_rooms)-1].exitAddress, 0xBD)
 
     elif world.bowser_castle_rooms[player] == "random_five_room":
-        chosen_rooms = world.per_slot_randoms[player].sample(standard_bowser_rooms, 5)
+        chosen_rooms = world.random.sample(standard_bowser_rooms, 5)
 
         rom.write_byte(0x3A680, chosen_rooms[0].roomID)
         rom.write_byte(0x3A684, chosen_rooms[0].roomID)
@@ -752,7 +752,7 @@ def handle_bowser_rooms(rom, world, player: int):
 
     elif world.bowser_castle_rooms[player] == "gauntlet":
         chosen_rooms = standard_bowser_rooms.copy()
-        world.per_slot_randoms[player].shuffle(chosen_rooms)
+        world.random.shuffle(chosen_rooms)
 
         rom.write_byte(0x3A680, chosen_rooms[0].roomID)
         rom.write_byte(0x3A684, chosen_rooms[0].roomID)
@@ -768,7 +768,7 @@ def handle_bowser_rooms(rom, world, player: int):
 
         entrance_point = bowser_rooms_copy.pop(0)
 
-        world.per_slot_randoms[player].shuffle(bowser_rooms_copy)
+        world.random.shuffle(bowser_rooms_copy)
 
         rom.write_byte(entrance_point.exitAddress, bowser_rooms_copy[0].roomID)
         for i in range(0, len(bowser_rooms_copy) - 1):

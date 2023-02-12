@@ -11,7 +11,11 @@ from .item import ZillionItem
 class ZillionRegion(Region):
     zz_r: ZzRegion
 
-    def __init__(self, zz_r: ZzRegion, name: str, hint: str, player: int, world: Optional[MultiWorld] = None) -> None:
+    def __init__(self, zz_r: ZzRegion,
+                 name: str,
+                 hint: str,
+                 player: int,
+                 world: Optional[MultiWorld] = None) -> None:
         super().__init__(name, player, world, hint)
         self.zz_r = zz_r
 

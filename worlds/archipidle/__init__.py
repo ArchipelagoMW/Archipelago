@@ -25,11 +25,9 @@ class ArchipIDLEWorld(World):
     """
     game = "ArchipIDLE"
     topology_present = False
-    data_version = 3
+    data_version = 4
     hidden = (datetime.now().month != 4)  # ArchipIDLE is only visible during April
     web = ArchipIDLEWebWorld()
-
-    prog_items: set
 
     item_name_to_id = {}
     start_id = 9000
@@ -46,8 +44,8 @@ class ArchipIDLEWorld(World):
     def generate_basic(self):
         item_table_copy = list(item_table)
         self.multiworld.random.shuffle(item_table_copy)
-        self.prog_items = set()
 
+        item_pool = []
         for i in range(100):
             item = ArchipIDLEItem(
                 item_table_copy[i],
@@ -55,9 +53,9 @@ class ArchipIDLEWorld(World):
                 self.item_name_to_id[item_table_copy[i]],
                 self.player
             )
-            if i < 20:
-                self.prog_items.add(item_table_copy[i])
-            self.multiworld.itempool.append(item)
+            item_pool.append(item)
+
+        self.multiworld.itempool += item_pool
 
     def set_rules(self):
         set_rules(self.multiworld, self.player)
@@ -66,22 +64,22 @@ class ArchipIDLEWorld(World):
         return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
 
     def create_regions(self):
-        menu = create_region(self.multiworld, self.player, 'Menu')
-        entrance = Entrance(self.player, 'Entrance to IDLE Zone', menu)
-        menu.exits.append(entrance)
+        menu_region = create_region(self.multiworld, self.player, 'Menu')
         idle_zone = create_region(self.multiworld, self.player, 'IDLE Zone', self.location_name_to_id)
-        entrance.connect(idle_zone)
 
-        self.multiworld.regions += [menu, idle_zone]
+        connection = Entrance(self.player, 'Entrance to IDLE Zone', menu_region)
+        connection.connect(idle_zone)
+
+        self.multiworld.regions += [menu_region, idle_zone]
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(item_table)
 
 
-def create_region(world: MultiWorld, player: int, name: str, locations=None):
+def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     region = Region(name, player, world)
     if locations:
-        for location_name in locations:
+        for location_name in locations.keys():
             location = ArchipIDLELocation(player, location_name, locations[location_name], region)
             region.locations.append(location)
 
