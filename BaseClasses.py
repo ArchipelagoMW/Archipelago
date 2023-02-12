@@ -965,12 +965,12 @@ class Region:
     is_light_world: bool = False
     is_dark_world: bool = False
 
-    def __init__(self, name: str, player: int, world: MultiWorld, hint: Optional[str] = None):
+    def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: Optional[str] = None):
         self.name = name
         self.entrances = []
         self.exits = []
         self.locations = []
-        self.multiworld = world
+        self.multiworld = multiworld
         self._hint_text = hint
         self.player = player
 

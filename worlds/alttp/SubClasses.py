@@ -81,8 +81,8 @@ class LTTPRegionType(IntEnum):
 class LTTPRegion(Region):
     type: LTTPRegionType
 
-    def __init__(self, name: str, type_: LTTPRegionType, hint: str, player: int, world: MultiWorld):
-        super().__init__(name, player, world, hint)
+    def __init__(self, name: str, type_: LTTPRegionType, hint: str, player: int, multiworld: MultiWorld):
+        super().__init__(name, player, multiworld, hint)
         self.type = type_
 
     @property
