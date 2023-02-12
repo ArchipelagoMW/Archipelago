@@ -65,25 +65,28 @@ class ArchipIDLEWorld(World):
 
     def create_regions(self):
         self.multiworld.regions += [
-            create_region(self.multiworld, self.player, 'Menu', None),
+            create_region(self.multiworld, self.player, 'Menu', None, ['Entrance to IDLE Zone']),
             create_region(self.multiworld, self.player, 'IDLE Zone', self.location_name_to_id)
         ]
 
         # link up our region with the entrance we just made
-        connection = Entrance(self.player, 'Entrance to IDLE Zone')
-        self.multiworld.get_region('Menu', self.player).exits.append(connection)
-        connection.connect(self.multiworld.get_region('IDLE Zone', self.player))
+        self.multiworld.get_entrance('Entrance to IDLE Zone', self.player)\
+            .connect(self.multiworld.get_region('IDLE Zone', self.player))
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(item_table)
 
 
-def create_region(world: MultiWorld, player: int, name: str, locations=None):
+def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     region = Region(name, player, world)
     if locations:
         for location_name in locations.keys():
             location = ArchipIDLELocation(player, location_name, locations[location_name], region)
             region.locations.append(location)
+
+    if exits:
+        for _exit in exits:
+            region.exits.append(Entrance(player, _exit, region))
 
     return region
 
