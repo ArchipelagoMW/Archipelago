@@ -913,7 +913,7 @@ def connect_regions(world, player, level_list):
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None, exits=None):
     # Shamelessly stolen from the ROR2 definition
     ret = Region(name, None, name, player)
-    ret.world = world
+    ret.multiworld = world
     if locations:
         for locationName, locationData in locations.items():
             loc_id = active_locations.get(locationName, 0)

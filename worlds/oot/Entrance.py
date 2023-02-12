@@ -6,9 +6,8 @@ class OOTEntrance(Entrance):
     game: str = 'Ocarina of Time'
 
     def __init__(self, player, world, name='', parent=None): 
-        super(OOTEntrance, self).__init__(player, name)
-        self.parent_region = parent
-        self.world = world
+        super(OOTEntrance, self).__init__(player, name, parent)
+        self.multiworld = world
         self.access_rules = []
         self.reverse = None
         self.replaces = None
@@ -31,8 +30,8 @@ class OOTEntrance(Entrance):
         return previously_connected
 
     def get_new_target(self):
-        root = self.world.get_region('Root Exits', self.player)
-        target_entrance = OOTEntrance(self.player, self.world, 'Root -> ' + self.connected_region.name, root)
+        root = self.multiworld.get_region('Root Exits', self.player)
+        target_entrance = OOTEntrance(self.player, self.multiworld, 'Root -> ' + self.connected_region.name, root)
         target_entrance.connect(self.connected_region)
         target_entrance.replaces = self
         root.exits.append(target_entrance)

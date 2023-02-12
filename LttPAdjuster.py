@@ -26,14 +26,16 @@ ModuleUpdate.update()
 from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings, get_base_rom_bytes
 from Utils import output_path, local_path, user_path, open_file, get_cert_none_ssl_context, persistent_store, \
     get_adjuster_settings, tkinter_center_window, init_logging
-from Patch import GAME_ALTTP
+
+
+GAME_ALTTP = "A Link to the Past"
 
 
 class AdjusterWorld(object):
     def __init__(self, sprite_pool):
         import random
         self.sprite_pool = {1: sprite_pool}
-        self.slot_seeds = {1: random}
+        self.per_slot_randoms = {1: random}
 
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):

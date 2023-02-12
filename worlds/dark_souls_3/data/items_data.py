@@ -52,6 +52,7 @@ weapons_upgrade_5_table = {
     "Storm Curved Sword": 0x003E4180,
     "Dragonslayer Swordspear": 0x008BC540,
     "Sage's Crystal Staff": 0x00C8CE40,
+    "Irithyll Rapier": 0x002E8A10
 }
 
 weapons_upgrade_10_table = {
@@ -131,7 +132,7 @@ shields_table = {
     "Golden Wing Crest Shield": 0x0143CAA0,
     "Ancient Dragon Greatshield": 0x013599D0,
     "Spirit Tree Crest Shield": 0x014466E0,
-
+    "Blessed Red and White Shield": 0x01343FB9,
 }
 
 goods_table = {
@@ -151,6 +152,22 @@ goods_table = {
     "Soul of Boreal Valley Vordt": 0x400002CF,
     "Soul of a Stray Demon": 0x400002E7,
     "Soul of a Demon": 0x400002E3,
+
+    # Upgrade materials
+    **{"Titanite Shard #"+str(i): 0x400003E8 for i in range(1, 11)},
+    **{"Large Titanite Shard #"+str(i): 0x400003E9 for i in range(1, 11)},
+    **{"Titanite Chunk #"+str(i): 0x400003EA for i in range(1, 6)},
+    **{"Titanite Slab #"+str(i): 0x400003EB for i in range(1, 4)},
+
+    # Healing
+    **{"Estus Shard #"+str(i): 0x4000085D for i in range(1, 16)},
+    **{"Undead Bone Shard #"+str(i): 0x4000085F for i in range(1, 6)},
+
+    # Souls
+    **{"Soul of a Great Champion #"+str(i): 0x400001A4 for i in range(1, 3)},
+    **{"Soul of a Champion #"+str(i): 0x400001A3 for i in range(1, 5)},
+    **{"Soul of a Venerable Old Hand #"+str(i): 0x400001A2 for i in range(1, 5)},
+    **{"Soul of a Crestfallen Knight #"+str(i): 0x40000199 for i in range(1, 11)},
 }
 
 armor_table = {
@@ -244,6 +261,10 @@ armor_table = {
     "Shadow Garb": 0x14D3FA28,
     "Shadow Gauntlets": 0x14D3FE10,
     "Shadow Leggings": 0x14D401F8,
+    "Outrider Knight Helm": 0x1328B740,
+    "Outrider Knight Armor": 0x1328BB28,
+    "Outrider Knight Gauntlets": 0x1328BF10,
+    "Outrider Knight Leggings": 0x1328C2F8,
 }
 
 rings_table = {
@@ -292,6 +313,7 @@ rings_table = {
     "Red Tearstone Ring": 0x20004ECA,
     "Dragonscale Ring": 0x2000515E,
     "Knight Slayer's Ring": 0x20005000,
+    "Magic Stoneplate Ring": 0x20004E66,
 }
 
 spells_table = {
@@ -313,6 +335,7 @@ spells_table = {
     "Divine Pillars of Light": 0x4038C340,
     "Great Magic Barrier": 0x40365628,
     "Great Magic Shield": 0x40144F38,
+    "Crystal Scroll": 0x40000856,
 }
 
 misc_items_table = {
@@ -359,6 +382,10 @@ misc_items_table = {
     "Dragon Chaser's Ashes": 0x40000867,
     "Twinkling Dragon Torso Stone": 0x40000184,
     "Braille Divine Tome of Lothric": 0x40000848,
+    "Irina's Ashes": 0x40000843,
+    "Karla's Ashes": 0x40000842,
+    "Cornyx's Ashes": 0x40000841,
+    "Orbeck's Ashes": 0x40000840
 }
 
 key_items_list = {
@@ -380,4 +407,6 @@ key_items_list = {
     "Jailer's Key Ring",
 }
 
-item_dictionary_table = {**weapons_upgrade_5_table, **weapons_upgrade_10_table, **shields_table, **armor_table, **rings_table, **spells_table, **misc_items_table, **goods_table}
+item_tables = [weapons_upgrade_5_table, weapons_upgrade_10_table, shields_table, armor_table, rings_table, spells_table, misc_items_table, goods_table]
+
+item_dictionary = {**weapons_upgrade_5_table, **weapons_upgrade_10_table, **shields_table, **armor_table, **rings_table, **spells_table, **misc_items_table, **goods_table}

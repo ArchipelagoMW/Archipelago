@@ -9,17 +9,20 @@ class OC2OnToggle(DefaultOnToggle):
 
 
 class AlwaysServeOldestOrder(OC2OnToggle):
-    """Modifies the game so that serving an expired order doesn't target the ticket with the highest tip. This helps players dig out of a broken tip combo faster."""
+    """Modifies the game so that serving an expired order doesn't target the ticket with the highest tip. This helps
+    players dig out of a broken tip combo faster."""
     display_name = "Always Serve Oldest Order"
 
 
 class AlwaysPreserveCookingProgress(OC2OnToggle):
-    """Modifies the game to behave more like AYCE, where adding an item to an in-progress container doesn't reset the entire progress bar."""
+    """Modifies the game to behave more like AYCE, where adding an item to an in-progress container doesn't reset the
+    entire progress bar."""
     display_name = "Preserve Cooking/Mixing Progress"
 
 
 class DisplayLeaderboardScores(OC2OnToggle):
-    """Modifies the Overworld map to fetch and display the current world records for each level. Press number keys 1-4 to view leaderboard scores for that number of players."""
+    """Modifies the Overworld map to fetch and display the current world records for each level. Press number keys 1-4
+    to view leaderboard scores for that number of players."""
     display_name = "Display Leaderboard Scores"
 
 
@@ -29,7 +32,8 @@ class ShuffleLevelOrder(OC2OnToggle):
 
 
 class IncludeHordeLevels(OC2OnToggle):
-    """Includes "Horde Defence" levels in the pool of possible kitchens when Shuffle Level Order is enabled. Also adds two horde-specific items into the item pool."""
+    """Includes "Horde Defence" levels in the pool of possible kitchens when Shuffle Level Order is enabled. Also adds
+    two horde-specific items into the item pool."""
     display_name = "Include Horde Levels"
 
 
@@ -48,10 +52,19 @@ class FixBugs(OC2OnToggle):
 
 
 class ShorterLevelDuration(OC2OnToggle):
-    """Modifies level duration to be about 1/3rd shorter than in the original game, thus bringing the item discovery pace in line with other popular Archipelago games.
+    """Modifies level duration to be about 1/3rd shorter than in the original game, thus bringing the item discovery
+    pace in line with other popular Archipelago games.
     
-    Points required to earn stars are scaled accordingly. ("Boss Levels" which change scenery mid-game are not affected.)"""
+    Points required to earn stars are scaled accordingly. ("Boss Levels" which change scenery mid-game are not
+    affected.)"""
     display_name = "Shorter Level Duration"
+
+
+class ShortHordeLevels(OC2OnToggle):
+    """Modifies horde levels to contain roughly 1/3rd fewer waves than in the original game.
+
+    The kitchen's health is sacled appropriately to preserve the same approximate difficulty."""
+    display_name = "Shorter Horde Levels"
 
 
 class PrepLevels(Choice):
@@ -61,7 +74,8 @@ class PrepLevels(Choice):
 
     - Excluded: Prep Levels are excluded from the pool during level shuffling
 
-    - All You Can Eat: Prep Levels may appear, but the timer automatically starts. The star score requirements are also adjusted to use the All You Can Eat World Record (if it exists)"""
+    - All You Can Eat: Prep Levels may appear, but the timer automatically starts. The star score requirements are also
+    adjusted to use the All You Can Eat World Record (if it exists)"""
     auto_display_name = True
     display_name = "Prep Level Behavior"
     option_original = 0
@@ -73,19 +87,21 @@ class PrepLevels(Choice):
 class StarsToWin(Range):
     """Number of stars required to unlock 6-6.
 
-    Level purchase requirements between 1-1 and 6-6 will be spread between these two numbers. Using too high of a number may result in more frequent generation failures, especially when horde levels are enabled."""
+    Level purchase requirements between 1-1 and 6-6 will be spread between these two numbers. Using too high of a number
+    may result in more frequent generation failures, especially when horde levels are enabled."""
     display_name = "Stars to Win"
     range_start = 0
     range_end = 100
-    default = 66
+    default = 60
 
 
 class StarThresholdScale(Range):
-    """How difficult should the third star for each level be on a scale of 1-100%, where 100% is the current world record score and 45% is the average vanilla 4-star score."""
+    """How difficult should the third star for each level be on a scale of 1-100%, where 100% is the current world
+    record score and 45% is the average vanilla 4-star score."""
     display_name = "Star Difficulty %"
     range_start = 1
     range_end = 100
-    default = 45
+    default = 35
 
 
 overcooked_options = {
@@ -98,6 +114,7 @@ overcooked_options = {
     # quality of life options
     "fix_bugs": FixBugs,
     "shorter_level_duration": ShorterLevelDuration,
+    "short_horde_levels": ShortHordeLevels,
     "always_preserve_cooking_progress": AlwaysPreserveCookingProgress,
     "always_serve_oldest_order": AlwaysServeOldestOrder,
     "display_leaderboard_scores": DisplayLeaderboardScores,
