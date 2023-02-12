@@ -45,13 +45,15 @@ class OOTRegion(Region):
         self.font_color = None
         self.is_boss_room = False
 
+    # This is too generic of a name to risk not breaking in the future.
+    # This lets us possibly switch it out later if AP starts using it.
     @property
     def hint(self):
-        return self._hint_text
+        return self._oot_hint
 
     @hint.setter
     def hint(self, value):
-        self._hint_text = value
+        self._oot_hint = value
 
     def get_scene(self):
         if self.scene: 
@@ -79,9 +81,3 @@ class OOTRegion(Region):
         else:
             self._oot_hint = HintArea[hint]
         self._hint_text = str(self._oot_hint)
-
-    # This is too generic of a name to risk not breaking in the future.
-    # This lets us possibly switch it out later if AP starts using it.
-    @property
-    def hint(self):
-        return self._oot_hint
