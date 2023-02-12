@@ -10,10 +10,11 @@ Archipelago will be abbreviated as "AP" from now on.
 
 ## Option Definitions
 Option parsing in AP is done using different Option classes. For each option you
-would like to have available in your game, you need to create a new option class
-with a docstring detailing what the option will do to your user, a `display_name`
-to be displayed on the webhost, and a dictionary of `option_definitions` of
-internal names to class. By style and convention, the internal names should be
+would like to have in your game, you need to create:
+- A new option class with a docstring detailing what the option will do to your user.
+- A `display_name` to be displayed on the webhost.
+- A new entry in the `option_definitions` dict for your World.
+By style and convention, the internal names should be
 snake_case. If the option supports having multiple sub_options such as Choice
 options, these can be defined with `option_my_sub_option`, where the preceding
 `option_` is required and stripped for users, so will show as `my_sub_option` in
