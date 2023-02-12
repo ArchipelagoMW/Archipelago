@@ -759,6 +759,33 @@ chao_garden_beginner_location_table = {
 }
 
 chao_garden_intermediate_location_table = {
+    LocationName.chao_race_challenge_1: 0xFF022A,
+    LocationName.chao_race_challenge_2: 0xFF022B,
+    LocationName.chao_race_challenge_3: 0xFF022C,
+    LocationName.chao_race_challenge_4: 0xFF022D,
+    LocationName.chao_race_challenge_5: 0xFF022E,
+    LocationName.chao_race_challenge_6: 0xFF022F,
+    LocationName.chao_race_challenge_7: 0xFF0230,
+    LocationName.chao_race_challenge_8: 0xFF0231,
+    LocationName.chao_race_challenge_9: 0xFF0232,
+    LocationName.chao_race_challenge_10: 0xFF0233,
+    LocationName.chao_race_challenge_11: 0xFF0234,
+    LocationName.chao_race_challenge_12: 0xFF0235,
+
+    LocationName.chao_race_hero_1: 0xFF0236,
+    LocationName.chao_race_hero_2: 0xFF0237,
+    LocationName.chao_race_hero_3: 0xFF0238,
+    LocationName.chao_race_hero_4: 0xFF0239,
+
+    LocationName.chao_race_dark_1: 0xFF023A,
+    LocationName.chao_race_dark_2: 0xFF023B,
+    LocationName.chao_race_dark_3: 0xFF023C,
+    LocationName.chao_race_dark_4: 0xFF023D,
+
+    LocationName.chao_standard_karate: 0xFF0301,
+}
+
+chao_garden_expert_location_table = {
     LocationName.chao_race_aquamarine_1: 0xFF020C,
     LocationName.chao_race_aquamarine_2: 0xFF020D,
     LocationName.chao_race_aquamarine_3: 0xFF020E,
@@ -789,33 +816,6 @@ chao_garden_intermediate_location_table = {
     LocationName.chao_race_diamond_3: 0xFF0227,
     LocationName.chao_race_diamond_4: 0xFF0228,
     LocationName.chao_race_diamond_5: 0xFF0229,
-
-    LocationName.chao_standard_karate: 0xFF0301,
-}
-
-chao_garden_expert_location_table = {
-    LocationName.chao_race_challenge_1: 0xFF022A,
-    LocationName.chao_race_challenge_2: 0xFF022B,
-    LocationName.chao_race_challenge_3: 0xFF022C,
-    LocationName.chao_race_challenge_4: 0xFF022D,
-    LocationName.chao_race_challenge_5: 0xFF022E,
-    LocationName.chao_race_challenge_6: 0xFF022F,
-    LocationName.chao_race_challenge_7: 0xFF0230,
-    LocationName.chao_race_challenge_8: 0xFF0231,
-    LocationName.chao_race_challenge_9: 0xFF0232,
-    LocationName.chao_race_challenge_10: 0xFF0233,
-    LocationName.chao_race_challenge_11: 0xFF0234,
-    LocationName.chao_race_challenge_12: 0xFF0235,
-
-    LocationName.chao_race_hero_1: 0xFF0236,
-    LocationName.chao_race_hero_2: 0xFF0237,
-    LocationName.chao_race_hero_3: 0xFF0238,
-    LocationName.chao_race_hero_4: 0xFF0239,
-
-    LocationName.chao_race_dark_1: 0xFF023A,
-    LocationName.chao_race_dark_2: 0xFF023B,
-    LocationName.chao_race_dark_3: 0xFF023C,
-    LocationName.chao_race_dark_4: 0xFF023D,
 
     LocationName.chao_expert_karate: 0xFF0302,
     LocationName.chao_super_karate: 0xFF0303,
