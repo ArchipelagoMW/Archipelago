@@ -36,8 +36,8 @@ options = {
 }
 ```
 
-This will create a `Toggle` option, internally called `starting_sword`. To then submit this to the multiworld I can add
-it to my world's `__init__.py` as such:
+This will create a `Toggle` option, internally called `starting_sword`. To then submit this to the multiworld, we add it
+to our world's `__init__.py`:
 
 ```python
 from worlds.AutoWorld import World
@@ -50,8 +50,8 @@ class ExampleWorld(World):
 Options are parsed by `Generate.py` before the worlds are created, and then the option classes are created shortly after
 world instantiation. These are created as attributes on the MultiWorld and can be accessed with
 `self.multiworld.my_option_name[self.player]`. This is the option class, which supports direct comparison methods to
-relevant objects. If you need to access the option result directly, this is the option class's `value` attribute. For
-our example above we can do a simple check:
+relevant objects (like comparing a Toggle class to a `bool`). If you need to access the option result directly, this is
+the option class's `value` attribute. For our example above we can do a simple check:
 ```python
 if self.multiworld.starting_sword[self.player]:
     do_some_things()
@@ -154,12 +154,12 @@ point, `self.multiworld.my_option[self.player].current_key` will always return a
 
 ### PlandoBosses
 An option specifically built for handling boss rando, if your game can use it. Is a subclass of TextChoice so supports
-everything it does, as long as having multiple validation steps to automatically support boss plando from the users. If
+everything it does, as well as having multiple validation steps to automatically support boss plando from users. If
 using this class, you must define `bosses`, a set of valid boss names, and `locations`, a set of valid boss location
 names, and `def can_place_boss`, which passes a boss and location, allowing you to check if that placement is valid for
 your game. When this function is called, `bosses`, `locations`, and the passed strings will all be lowercase. There is
 also a `duplicate_bosses` attribute allowing you to define if a boss can be placed multiple times in your world. False
-by default, and will reject duplicate boss names from the user. For an example of using this class refer to
+by default, and will reject duplicate boss names from the user. For an example of using this class, refer to
 `worlds.alttp.options.py`
 
 ### OptionDict
@@ -169,13 +169,13 @@ options system will automatically validate the user supplied data against the sc
 format.
 
 ### ItemDict
-Like OptionDict, except will verify that every key in the dictionary is a valid name for an item for your world.
+Like OptionDict, except this will verify that every key in the dictionary is a valid name for an item for your world.
 
 ### OptionList
 This option defines a List, where the user can add any number of strings to said list, allowing duplicate values. You
 can define a set of keys in `valid_keys`, and a default list if you want certain options to be available without editing
-for this. If `valid_keys_casefold` is true, the verification will be case-insensitive, `verify_item_name` will check
-that each value is a valid item name, and`verify_location_name` will check that each value is a valid location name.
+for this. If `valid_keys_casefold` is true, the verification will be case-insensitive; `verify_item_name` will check
+that each value is a valid item name; and`verify_location_name` will check that each value is a valid location name.
 
 ### OptionSet
 Like OptionList, but returns a set, preventing duplicates.
