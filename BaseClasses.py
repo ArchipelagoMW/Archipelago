@@ -29,6 +29,20 @@ class Group(TypedDict, total=False):
     link_replacement: bool
 
 
+class ThreadBarrierProxy():
+    """Passes through getattr while passthrough is True"""
+    def __init__(self, obj: Any):
+        self.passthrough = True
+        self.obj = obj
+
+    def __getattr__(self, item):
+        if self.passthrough:
+            return getattr(self.obj, item)
+        else:
+            raise RuntimeError("You are in a threaded context and global random state was removed for your safety. "
+                               "Please use multiworld.per_slot_randoms[player] or randomize ahead of output.")
+
+
 class MultiWorld():
     debug_types = False
     player_name: Dict[int, str]
@@ -61,6 +75,9 @@ class MultiWorld():
 
     game: Dict[int, str]
 
+    random: random.Random
+    per_slot_randoms: Dict[int, random.Random]
+
     class AttributeProxy():
         def __init__(self, rule):
             self.rule = rule
@@ -69,7 +86,8 @@ class MultiWorld():
             return self.rule(player)
 
     def __init__(self, players: int):
-        self.random = random.Random()  # world-local random state is saved for multiple generations running concurrently
+        # world-local random state is saved for multiple generations running concurrently
+        self.random = ThreadBarrierProxy(random.Random())
         self.players = players
         self.player_types = {player: NetUtils.SlotType.player for player in self.player_ids}
         self.glitch_triforce = False
@@ -160,7 +178,7 @@ class MultiWorld():
             set_player_attr('completion_condition', lambda state: True)
         self.custom_data = {}
         self.worlds = {}
-        self.slot_seeds = {}
+        self.per_slot_randoms = {}
         self.plando_options = PlandoOptions.none
 
     def get_all_ids(self) -> Tuple[int, ...]:
@@ -206,8 +224,8 @@ class MultiWorld():
         else:
             self.random.seed(self.seed)
         self.seed_name = name if name else str(self.seed)
-        self.slot_seeds = {player: random.Random(self.random.getrandbits(64)) for player in
-                           range(1, self.players + 1)}
+        self.per_slot_randoms = {player: random.Random(self.random.getrandbits(64)) for player in
+                                 range(1, self.players + 1)}
 
     def set_options(self, args: Namespace) -> None:
         for option_key in Options.common_options:
@@ -291,7 +309,7 @@ class MultiWorld():
         self.state = CollectionState(self)
 
     def secure(self):
-        self.random = secrets.SystemRandom()
+        self.random = ThreadBarrierProxy(secrets.SystemRandom())
         self.is_race = True
 
     @functools.cached_property
