@@ -447,6 +447,27 @@ class CannonsCoreMission5(DefaultOnToggle):
     display_name = "Cannon's Core Mission 5"
 
 
+class RingLoss(Choice):
+    """
+    How taking damage is handled
+    Classic: You lose all of your rings when hit
+    Modern: You lose 20 rings when hit
+    OHKO: You die immediately when hit (even with a shield)
+    """
+    display_name = "SADX Music"
+    option_classic = 0
+    option_modern = 1
+    option_ohko = 2
+    default = 0
+
+    @classmethod
+    def get_option_name(cls, value) -> str:
+        if cls.auto_display_name and value == 2:
+            return cls.name_lookup[value].upper()
+        else:
+            return cls.name_lookup[value]
+
+
 class SADXMusic(Choice):
     """
     Whether the randomizer will include Sonic Adventure DX Music in the music pool
@@ -541,6 +562,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "gravity_trap_weight": GravityTrapWeight,
     "exposition_trap_weight": ExpositionTrapWeight,
     #"darkness_trap_weight": DarknessTrapWeight,
+    "ring_loss": RingLoss,
     "sadx_music": SADXMusic,
     "music_shuffle": MusicShuffle,
     "narrator": Narrator,

@@ -78,6 +78,7 @@ class SA2BWorld(World):
             "MissionCountMap": self.mission_count_map,
             "MusicShuffle": self.multiworld.music_shuffle[self.player].value,
             "Narrator": self.multiworld.narrator[self.player].value,
+            "RingLoss": self.multiworld.ring_loss[self.player].value,
             "RequiredRank": self.multiworld.required_rank[self.player].value,
             "ChaoKeys": self.multiworld.keysanity[self.player].value,
             "Whistlesanity": self.multiworld.whistlesanity[self.player].value,
