@@ -296,7 +296,7 @@ class AdventureWorld(World):
                     item_ram_address = rom_bytearray[static_item]
                     item_position_data_start = item_position_table + item_ram_address - items_ram_start
                     location_data = location_table[location.name]
-                    room_x, room_y = location_data.get_position(self.multiworld.random)
+                    room_x, room_y = location_data.get_position(self.multiworld.per_slot_randoms[self.player])
 
                     del unplaced_local_items[location.item.name]
 
