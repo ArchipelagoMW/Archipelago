@@ -6,9 +6,10 @@ class OOTEntrance(Entrance):
     game: str = 'Ocarina of Time'
 
     def __init__(self, player, world, name='', parent=None): 
-        super(OOTEntrance, self).__init__(player, name, parent)
+        super(OOTEntrance, self).__init__(player, name)
         self.multiworld = world
         self.access_rules = []
+        self.parent_region = parent
         self.reverse = None
         self.replaces = None
         self.assumed = None

@@ -2,7 +2,7 @@
 import typing
 from typing import Optional
 
-from BaseClasses import Location, Item, ItemClassification, Entrance
+from BaseClasses import Location, Item, ItemClassification, Entrance, Region
 
 
 class ALttPLocation(Location):
@@ -70,7 +70,7 @@ class ALttPEntrance(Entrance):
     addresses = None
     target = None
 
-    def connect(self, region, addresses=None, target=None):
+    def connect(self, region: Region, addresses=None, target=None) -> None:
         self.connected_region = region
         self.target = target
         self.addresses = addresses

@@ -171,12 +171,9 @@ class RiskOfRainWorld(World):
             self.multiworld.regions.append(petrichor)
 
             # classic mode can get to victory from the beginning of the game
-            to_victory = Entrance(self.player, "beating game", petrichor)
-            petrichor.exits.append(to_victory)
-            to_victory.connect(victory_region)
+            Entrance(self.player, "beating game", petrichor).connect(victory_region)
 
-            connection = Entrance(self.player, "Lobby", menu)
-            connection.connect(petrichor)
+            Entrance(self.player, "Lobby", menu).connect(petrichor)
         else:
             # explore mode
             create_regions(self.multiworld, self.player)

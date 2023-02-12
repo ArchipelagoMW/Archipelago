@@ -195,9 +195,7 @@ class ZillionWorld(World):
             for zz_dest in zz_here.connections.keys():
                 dest_name = "Menu" if zz_dest.name == 'start' else zz_reg_name_to_reg_name(zz_dest.name)
                 dest = all[dest_name]
-                exit = Entrance(p, f"{here_name} to {dest_name}", here)
-                here.exits.append(exit)
-                exit.connect(dest)
+                Entrance(p, f"{here_name} to {dest_name}", here).connect(dest)
 
                 queue.append(zz_dest)
             done.add(here.name)

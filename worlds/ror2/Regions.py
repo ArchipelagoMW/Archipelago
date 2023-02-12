@@ -123,4 +123,3 @@ def create_connections_in_regions(multiworld: MultiWorld, player: int, name: str
             r_exit_stage = Entrance(player, region_exit, region)
             exit_region = multiworld.get_region(region_exit, player)
             r_exit_stage.connect(exit_region)
-            region.exits.append(r_exit_stage)
