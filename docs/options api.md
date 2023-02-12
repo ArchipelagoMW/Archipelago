@@ -108,8 +108,8 @@ compared to strings but can be directly compared to True and False.
 Like toggle but 1 (true) is the default value.
 
 ### Choice
-A numeric option allowing you to define different sub options. Values are stored as integers but you can also do
-comparison methods with the class and strings so if you have an `option_early_sword` this can be compared with:
+A numeric option allowing you to define different sub options. Values are stored as integers, but you can also do
+comparison methods with the class and strings, so if you have an `option_early_sword`, this can be compared with:
 ```python
 if self.multiworld.sword_availability[self.player] == "early_sword":
     do_early_sword_things()
