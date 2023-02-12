@@ -73,7 +73,7 @@ class CV64World(World):
         }
 
     def generate_early(self):
-        # Handle Stage Shuffle and Warp Shuffle here
+        # Handle Stage Shuffle here
         self.active_stage_list = vanilla_stage_order.copy()
         self.active_warp_list = self.multiworld.random.sample(self.active_stage_list, 7)
         self.sub_weapon_dict = rom_sub_weapon_offsets.copy()
@@ -97,6 +97,7 @@ class CV64World(World):
                 new_ct_slot = self.multiworld.random.randint(1, 11)
                 self.active_stage_list.insert(new_ct_slot, RegionName.clock_tower)
 
+        # Handle Warp Shuffle here
         if self.multiworld.warp_shuffle[self.player].value == 0:
             new_list = self.active_stage_list.copy()
             for warp in self.active_stage_list:
@@ -251,6 +252,99 @@ class CV64World(World):
             if self.multiworld.special1s_per_warp[self.player].value > 2:
                 self.multiworld.local_early_items[self.player][ItemName.clocktower_key_one] = 1
 
+    def get_offsets_and_ids(self):
+        offsets_to_ids = {}
+
+        # Items
+        active_locations = self.location_name_to_id.copy()
+
+        if not self.multiworld.carrie_logic[self.player]:
+            del active_locations[LocationName.uw_carrie1]
+            del active_locations[LocationName.uw_carrie2]
+
+        if not self.multiworld.lizard_generator_items[self.player]:
+            del active_locations[LocationName.ccff_lizard_coffin_fl]
+            del active_locations[LocationName.ccff_lizard_coffin_fr]
+            del active_locations[LocationName.ccff_lizard_coffin_nfl]
+            del active_locations[LocationName.ccff_lizard_coffin_nfr]
+            del active_locations[LocationName.ccff_lizard_coffin_nml]
+            del active_locations[LocationName.ccff_lizard_coffin_nmr]
+        
+        for location_name in active_locations:
+            loc = self.multiworld.get_location(location_name, self.player)
+            if loc.item.game == "Castlevania 64" and loc.loc_type != "event":
+                if loc.item.player == self.player:
+                    offsets_to_ids[loc.rom_offset] = loc.item.code - 0xC64000
+                    if loc.loc_type == "npc":
+                        if 0x19 < offsets_to_ids[loc.rom_offset] < 0x1D:
+                            offsets_to_ids[loc.rom_offset] += 0x0D
+                        elif offsets_to_ids[loc.rom_offset] > 0x1C:
+                            offsets_to_ids[loc.rom_offset] -= 0x03
+                else:
+                    if loc.item.classification == ItemClassification.progression:
+                        offsets_to_ids[loc.rom_offset] = 0x11
+                    else:
+                        offsets_to_ids[loc.rom_offset] = 0x12
+
+        # Sub-weapons
+        if self.multiworld.sub_weapon_shuffle[self.player]:
+            for offset, sub_id in self.sub_weapon_dict.items():
+                offsets_to_ids[offset] = sub_id
+
+        # Loading zones
+        if self.multiworld.stage_shuffle[self.player]:
+            offsets_to_ids[0xB73308] = stage_dict[self.active_stage_list[0]].start_map_id
+            offsets_to_ids[0xD9DAB] = stage_dict[
+                self.active_stage_list[self.active_stage_list.index(RegionName.villa) + 2]].start_map_id
+            offsets_to_ids[0x109CCF] = stage_dict[
+                self.active_stage_list[self.active_stage_list.index(RegionName.castle_center) + 3]].start_map_id
+            for stage in range(len(self.active_stage_list) - 1):
+                if self.active_stage_list[stage - 1] == RegionName.villa:
+                    offsets_to_ids[stage_dict[self.active_stage_list[stage]].endzone_map_offset] = stage_dict[
+                        self.active_stage_list[stage + 2]].start_map_id
+                    offsets_to_ids[stage_dict[self.active_stage_list[stage]].endzone_spawn_offset] = stage_dict[
+                        self.active_stage_list[stage + 2]].start_spawn_id
+                elif self.active_stage_list[stage - 2] == RegionName.castle_center:
+                    offsets_to_ids[stage_dict[self.active_stage_list[stage]].endzone_map_offset] = stage_dict[
+                        self.active_stage_list[stage + 3]].start_spawn_id
+                    offsets_to_ids[stage_dict[self.active_stage_list[stage]].endzone_spawn_offset] = stage_dict[
+                        self.active_stage_list[stage + 3]].start_spawn_id
+                else:
+                    offsets_to_ids[stage_dict[self.active_stage_list[stage]].endzone_map_offset] = stage_dict[
+                        self.active_stage_list[stage + 1]].start_map_id
+                    offsets_to_ids[stage_dict[self.active_stage_list[stage]].endzone_spawn_offset] = stage_dict[
+                        self.active_stage_list[stage + 1]].start_spawn_id
+
+                if stage_dict[self.active_stage_list[stage]].startzone_map_offset != 0xFFFFFF:
+                    if stage - 1 < 0:
+                        offsets_to_ids[stage_dict[self.active_stage_list[stage]].startzone_map_offset] = stage_dict[
+                            self.active_stage_list[stage]].start_map_id
+                        offsets_to_ids[stage_dict[self.active_stage_list[stage]].startzone_spawn_offset] = \
+                            stage_dict[self.active_stage_list[stage]].start_spawn_id
+                    elif self.active_stage_list[stage - 2] == RegionName.villa:
+                        offsets_to_ids[stage_dict[self.active_stage_list[stage]].startzone_map_offset] = 0x1A
+                        offsets_to_ids[stage_dict[self.active_stage_list[stage]].startzone_spawn_offset] = 0x03
+                    elif self.active_stage_list[stage - 3] == RegionName.villa:
+                        offsets_to_ids[stage_dict[self.active_stage_list[stage]].startzone_map_offset] = stage_dict[
+                            self.active_stage_list[stage - 2]].end_map_id
+                        offsets_to_ids[stage_dict[self.active_stage_list[stage]].startzone_spawn_offset] = \
+                            stage_dict[self.active_stage_list[stage - 2]].end_spawn_id
+                    elif self.active_stage_list[stage - 3] == RegionName.castle_center:
+                        offsets_to_ids[stage_dict[self.active_stage_list[stage]].startzone_map_offset] = 0x0F
+                        offsets_to_ids[stage_dict[self.active_stage_list[stage]].startzone_spawn_offset] = 0x03
+                    elif self.active_stage_list[stage - 5] == RegionName.castle_center:
+                        offsets_to_ids[stage_dict[self.active_stage_list[stage]].startzone_map_offset] = stage_dict[
+                            self.active_stage_list[stage - 3]].end_map_id
+                        offsets_to_ids[stage_dict[self.active_stage_list[stage]].startzone_spawn_offset] = \
+                            stage_dict[self.active_stage_list[stage - 3]].end_spawn_id
+                    else:
+                        offsets_to_ids[stage_dict[self.active_stage_list[stage]].startzone_map_offset] = stage_dict[
+                            self.active_stage_list[stage - 1]].end_map_id
+                        offsets_to_ids[stage_dict[self.active_stage_list[stage]].startzone_spawn_offset] = \
+                            stage_dict[self.active_stage_list[stage - 1]].end_spawn_id
+
+        return offsets_to_ids
+    
     def generate_output(self, output_directory: str):
         try:
             world = self.multiworld
@@ -258,39 +352,10 @@ class CV64World(World):
 
             rom = LocalRom(get_base_rom_path())
 
-            active_locations = self.location_name_to_id.copy()
-
-            if not self.multiworld.carrie_logic[self.player]:
-                del active_locations[LocationName.uw_carrie1]
-                del active_locations[LocationName.uw_carrie2]
-
-            if not self.multiworld.lizard_generator_items[self.player]:
-                del active_locations[LocationName.ccff_lizard_coffin_fl]
-                del active_locations[LocationName.ccff_lizard_coffin_fr]
-                del active_locations[LocationName.ccff_lizard_coffin_nfl]
-                del active_locations[LocationName.ccff_lizard_coffin_nfr]
-                del active_locations[LocationName.ccff_lizard_coffin_nml]
-                del active_locations[LocationName.ccff_lizard_coffin_nmr]
-
-            offsets_to_ids = {}
-            for location_name in active_locations:
-                loc = self.multiworld.get_location(location_name, self.player)
-                if loc.item.game == "Castlevania 64" and loc.loc_type != "event":
-                    if loc.item.player == self.player:
-                        offsets_to_ids[loc.rom_offset] = loc.item.code - 0xC64000
-                        if loc.loc_type == "npc":
-                            if 0x19 < offsets_to_ids[loc.rom_offset] < 0x1D:
-                                offsets_to_ids[loc.rom_offset] += 0x0D
-                            elif offsets_to_ids[loc.rom_offset] > 0x1C:
-                                offsets_to_ids[loc.rom_offset] -= 0x03
-                    else:
-                        if loc.item.classification == ItemClassification.progression:
-                            offsets_to_ids[loc.rom_offset] = 0x11
-                        else:
-                            offsets_to_ids[loc.rom_offset] = 0x12
+            offsets_to_ids = self.get_offsets_and_ids()
 
             patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.active_stage_list, self.active_warp_list,
-                      self.sub_weapon_dict, self.required_s2s)
+                      self.required_s2s)
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \

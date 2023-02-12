@@ -17,14 +17,14 @@ class CV64Stage:
     end_name: str
     endzone_map_offset: int
     endzone_spawn_offset: int
-    end_scene_id: int
+    end_map_id: int
     end_spawn_id: int
 
     stage_number_offset_list: typing.List[int]
 
     def __init__(self, start_region_name: str, startzone_map_offset: int, startzone_spawn_offset: int, start_map_id: int,
                  start_spawn_id: int, mid_region_name: str, mid_map_id: int, mid_spawn_id: int, end_region_name: str,
-                 endzone_map_offset: int, endzone_spawn_offset: int, end_scene_id: int, end_spawn_id: int,
+                 endzone_map_offset: int, endzone_spawn_offset: int, end_map_id: int, end_spawn_id: int,
                  stage_number_offset_list: list):
         self.start_region_name = start_region_name
         self.startzone_map_offset = startzone_map_offset
@@ -39,7 +39,7 @@ class CV64Stage:
         self.end_region_name = end_region_name
         self.endzone_map_offset = endzone_map_offset
         self.endzone_spawn_offset = endzone_spawn_offset
-        self.end_scene_id = end_scene_id
+        self.end_map_id = end_map_id
         self.end_spawn_id = end_spawn_id
 
         self.stage_number_offset_list = stage_number_offset_list

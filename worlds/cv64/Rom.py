@@ -142,7 +142,7 @@ class LocalRom(object):
             self.buffer = bytearray(stream.read())
 
 
-def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp_list, sub_weapon_dict, required_s2s):
+def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp_list, required_s2s):
     # local_random = world.slot_seeds[player]
 
     w1 = str(world.special1s_per_warp[player]).zfill(2)
@@ -503,64 +503,12 @@ def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp
     # Item property table extension (for the remaining invisible items)
     # rom.write_bytes(0xBFCD20, Patches.item_property_list_extension)
 
-    # Write the new scene/spawn IDs for Stage Shuffle
-    if world.stage_shuffle[player]:
-        rom.write_byte(0xB73308, stage_dict[active_stage_list[0]].start_map_id)
-        rom.write_byte(0xD9DAB, stage_dict[active_stage_list[active_stage_list.index(RegionName.villa) + 2]].start_map_id)
-        rom.write_byte(0x109CCF, stage_dict[active_stage_list[active_stage_list.index(RegionName.castle_center) + 3]].start_map_id)
-        for stage in range(len(active_stage_list) - 1):
-            if active_stage_list[stage - 1] == RegionName.villa:
-                rom.write_byte(stage_dict[active_stage_list[stage]].endzone_map_offset,
-                               stage_dict[active_stage_list[stage + 2]].start_map_id)
-                rom.write_byte(stage_dict[active_stage_list[stage]].endzone_spawn_offset,
-                               stage_dict[active_stage_list[stage + 2]].start_spawn_id)
-            elif active_stage_list[stage - 2] == RegionName.castle_center:
-                rom.write_byte(stage_dict[active_stage_list[stage]].endzone_map_offset,
-                               stage_dict[active_stage_list[stage + 3]].start_spawn_id)
-                rom.write_byte(stage_dict[active_stage_list[stage]].endzone_spawn_offset,
-                               stage_dict[active_stage_list[stage + 3]].start_spawn_id)
-            elif active_stage_list[stage - 1] != RegionName.villa and active_stage_list[stage - 2] != RegionName.castle_center:
-                rom.write_byte(stage_dict[active_stage_list[stage]].endzone_map_offset,
-                               stage_dict[active_stage_list[stage + 1]].start_map_id)
-                rom.write_byte(stage_dict[active_stage_list[stage]].endzone_spawn_offset,
-                               stage_dict[active_stage_list[stage + 1]].start_spawn_id)
+    # Change bitflag on item in upper coffin in Forest final switch gate tomb to one that's not used by something else
+    rom.write_bytes(0x10C77C, [0x00, 0x00, 0x00, 0x02])
 
-            if stage_dict[active_stage_list[stage]].startzone_map_offset != 0xFFFFFF:
-                if stage - 1 < 0:
-                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_map_offset,
-                                   stage_dict[active_stage_list[stage]].start_map_id)
-                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_spawn_offset,
-                                   stage_dict[active_stage_list[stage]].start_spawn_id)
-                elif active_stage_list[stage - 2] == RegionName.villa:
-                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_map_offset, 0x1A)
-                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_spawn_offset, 0x03)
-                elif active_stage_list[stage - 3] == RegionName.villa:
-                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_map_offset,
-                                   stage_dict[active_stage_list[stage - 2]].end_map_id)
-                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_spawn_offset,
-                                   stage_dict[active_stage_list[stage - 2]].end_spawn_id)
-                elif active_stage_list[stage - 3] == RegionName.castle_center:
-                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_map_offset, 0x0F)
-                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_spawn_offset, 0x03)
-                elif active_stage_list[stage - 5] == RegionName.castle_center:
-                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_map_offset,
-                                   stage_dict[active_stage_list[stage - 3]].end_map_id)
-                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_spawn_offset,
-                                   stage_dict[active_stage_list[stage - 3]].end_spawn_id)
-                else:
-                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_map_offset,
-                                   stage_dict[active_stage_list[stage - 1]].end_map_id)
-                    rom.write_byte(stage_dict[active_stage_list[stage]].startzone_spawn_offset,
-                                   stage_dict[active_stage_list[stage - 1]].end_spawn_id)
-
-    # Write the new item bytes
+    # Write all the new item and loading zone bytes
     for offset, item_id in offsets_to_ids.items():
         rom.write_byte(offset, item_id)
-
-    # Write the new sub-weapon bytes (if Sub-weapon Shuffle is on)
-    if world.sub_weapon_shuffle[player]:
-        for offset, sub_id in sub_weapon_dict.items():
-            rom.write_byte(offset, sub_id)
 
 
 class CV64DeltaPatch(APDeltaPatch):
@@ -601,131 +549,30 @@ def get_base_rom_path(file_name: str = "") -> str:
 
 
 def cv64_text_converter(cv64text, a_advance) -> list:
-    char_dict = {
-        "\n": 0x01,
-        " ": 0x02,
-        "!": 0x03,
-        '"': 0x04,
-        "#": 0x05,
-        "$": 0x06,
-        "%": 0x07,
-        "&": 0x08,
-        "'": 0x09,
-        "(": 0x0A,
-        ")": 0x0B,
-        "*": 0x0C,
-        "+": 0x0D,
-        ",": 0x0E,
-        "-": 0x0F,
-        ".": 0x10,
-        "/": 0x11,
-        "0": 0x12,
-        "1": 0x13,
-        "2": 0x14,
-        "3": 0x15,
-        "4": 0x16,
-        "5": 0x17,
-        "6": 0x18,
-        "7": 0x19,
-        "8": 0x1A,
-        "9": 0x1B,
-        ":": 0x1C,
-        ";": 0x1D,
-        "<": 0x1E,
-        "=": 0x1F,
-        ">": 0x20,
-        "?": 0x21,
-        "@": 0x22,
-        "A": 0x23,
-        "B": 0x24,
-        "C": 0x25,
-        "D": 0x26,
-        "E": 0x27,
-        "F": 0x28,
-        "G": 0x29,
-        "H": 0x2A,
-        "I": 0x2B,
-        "J": 0x2C,
-        "K": 0x2D,
-        "L": 0x2E,
-        "M": 0x2F,
-        "N": 0x30,
-        "O": 0x31,
-        "P": 0x32,
-        "Q": 0x33,
-        "R": 0x34,
-        "S": 0x35,
-        "T": 0x36,
-        "U": 0x37,
-        "V": 0x38,
-        "W": 0x39,
-        "X": 0x3A,
-        "Y": 0x3B,
-        "Z": 0x3C,
-        "[": 0x3D,
-        "\\": 0x3E,
-        "]": 0x3F,
-        "^": 0x40,
-        "_": 0x41,
+    char_dict = {"\n": 0x01, " ": 0x02, "!": 0x03, '"': 0x04, "#": 0x05, "$": 0x06, "%": 0x07, "&": 0x08, "'": 0x09,
+                 "(": 0x0A, ")": 0x0B, "*": 0x0C, "+": 0x0D, ",": 0x0E, "-": 0x0F, ".": 0x10, "/": 0x11, "0": 0x12,
+                 "1": 0x13, "2": 0x14, "3": 0x15, "4": 0x16, "5": 0x17, "6": 0x18, "7": 0x19, "8": 0x1A, "9": 0x1B,
+                 ":": 0x1C, ";": 0x1D, "<": 0x1E, "=": 0x1F, ">": 0x20, "?": 0x21, "@": 0x22, "A": 0x23, "B": 0x24,
+                 "C": 0x25, "D": 0x26, "E": 0x27, "F": 0x28, "G": 0x29, "H": 0x2A, "I": 0x2B, "J": 0x2C, "K": 0x2D,
+                 "L": 0x2E, "M": 0x2F, "N": 0x30, "O": 0x31, "P": 0x32, "Q": 0x33, "R": 0x34, "S": 0x35, "T": 0x36,
+                 "U": 0x37, "V": 0x38, "W": 0x39, "X": 0x3A, "Y": 0x3B, "Z": 0x3C, "[": 0x3D, "\\": 0x3E, "]": 0x3F,
+                 "^": 0x40, "_": 0x41, "a": 0x43, "b": 0x44, "c": 0x45, "d": 0x46, "e": 0x47, "f": 0x48, "g": 0x49,
+                 "h": 0x4A, "i": 0x4B, "j": 0x4C, "k": 0x4D, "l": 0x4E, "m": 0x4F, "n": 0x50, "o": 0x51, "p": 0x52,
+                 "q": 0x53, "r": 0x54, "s": 0x55, "t": 0x56, "u": 0x57, "v": 0x58, "w": 0x59, "x": 0x5A, "y": 0x5B,
+                 "z": 0x5C, "{": 0x5D, "|": 0x5E, "}": 0x5F, "`": 0x61, "「": 0x62, "」": 0x63, "~": 0x65, "″": 0x72,
+                 "°": 0x73, "∞": 0x74}
 
-        "a": 0x43,
-        "b": 0x44,
-        "c": 0x45,
-        "d": 0x46,
-        "e": 0x47,
-        "f": 0x48,
-        "g": 0x49,
-        "h": 0x4A,
-        "i": 0x4B,
-        "j": 0x4C,
-        "k": 0x4D,
-        "l": 0x4E,
-        "m": 0x4F,
-        "n": 0x50,
-        "o": 0x51,
-        "p": 0x52,
-        "q": 0x53,
-        "r": 0x54,
-        "s": 0x55,
-        "t": 0x56,
-        "u": 0x57,
-        "v": 0x58,
-        "w": 0x59,
-        "x": 0x5A,
-        "y": 0x5B,
-        "z": 0x5C,
-        "{": 0x5D,
-        "|": 0x5E,
-        "}": 0x5F,
-
-        "`": 0x61,
-        "「": 0x62,
-        "」": 0x63,
-
-        "~": 0x65,
-
-
-
-
-
-
-        "″": 0x72,
-        "°": 0x73,
-        "∞": 0x74
-    }
-
-    textbytes = []
+    text_bytes = []
     for i in cv64text:
         if i == "\t":
-            textbytes.append(0xFF)
-            textbytes.append(0xFF)
+            text_bytes.append(0xFF)
+            text_bytes.append(0xFF)
         else:
-            textbytes.append(0x00)
-            textbytes.append(char_dict[i])
+            text_bytes.append(0x00)
+            text_bytes.append(char_dict[i])
     if a_advance:
-        textbytes.append(0xA3)
-        textbytes.append(0x00)
-    textbytes.append(0xFF)
-    textbytes.append(0xFF)
-    return textbytes
-
+        text_bytes.append(0xA3)
+        text_bytes.append(0x00)
+    text_bytes.append(0xFF)
+    text_bytes.append(0xFF)
+    return text_bytes
