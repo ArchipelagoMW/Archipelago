@@ -1,24 +1,21 @@
+import base64
+import datetime
 import os
+import platform
 import shutil
 import sys
 import sysconfig
-import platform
-from pathlib import Path
-from hashlib import sha3_512
-import base64
-import datetime
-from Utils import version_tuple, is_windows, is_linux
-from collections.abc import Iterable
 import typing
-import setuptools
-from Launcher import components, icon_paths
-
-
-# This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
+import zipfile
+from collections.abc import Iterable
+from hashlib import sha3_512
+from pathlib import Path
 import subprocess
 import pkg_resources
-requirement = 'cx-Freeze>=6.13.1'
+
+# This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 try:
+    requirement = 'cx-Freeze>=6.14.1'
     pkg_resources.require(requirement)
     import cx_Freeze
 except pkg_resources.ResolutionError:
@@ -27,12 +24,35 @@ except pkg_resources.ResolutionError:
     subprocess.call([sys.executable, '-m', 'pip', 'install', requirement, '--upgrade'])
     import cx_Freeze
 
+# .build only exists if cx-Freeze is the right version, so we have to update/install that first before this line
+import setuptools.command.build
+
+if __name__ == "__main__":
+    # need to run this early to import from Utils and Launcher
+    # TODO: move stuff to not require this
+    import ModuleUpdate
+    ModuleUpdate.update(yes="--yes" in sys.argv or "-y" in sys.argv)
+    ModuleUpdate.update_ran = False  # restore for later
+
+from Launcher import components, icon_paths
+from Utils import version_tuple, is_windows, is_linux
+
+
+# On  Python < 3.10 LogicMixin is not currently supported.
+apworlds: set = {
+    "Subnautica",
+    "Factorio",
+    "Rogue Legacy",
+    "Donkey Kong Country 3",
+    "Super Mario World",
+}
 
 if os.path.exists("X:/pw.txt"):
     print("Using signtool")
     with open("X:/pw.txt", encoding="utf-8-sig") as f:
         pw = f.read()
-    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p "' + pw + r'" /fd sha256 /tr http://timestamp.digicert.com/ '
+    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p "' + pw + \
+               r'" /fd sha256 /tr http://timestamp.digicert.com/ '
 else:
     signtool = None
 
@@ -55,6 +75,7 @@ exes = [
 ]
 
 extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml", "SNI"]
+extra_libs = ["libssl.so", "libcrypto.so"] if is_linux else []
 
 
 def remove_sprites_from_folder(folder):
@@ -70,7 +91,7 @@ def _threaded_hash(filepath):
 
 
 # cx_Freeze's build command runs other commands. Override to accept --yes and store that.
-class BuildCommand(cx_Freeze.command.build.Build):
+class BuildCommand(setuptools.command.build.build):
     user_options = [
         ('yes', 'y', 'Answer "yes" to all questions.'),
     ]
@@ -94,6 +115,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
     ]
     yes: bool
     extra_data: Iterable  # [any] not available in 3.8
+    extra_libs: Iterable  # work around broken include_files
 
     buildfolder: Path
     libfolder: Path
@@ -104,6 +126,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         super().initialize_options()
         self.yes = BuildCommand.last_yes
         self.extra_data = []
+        self.extra_libs = []
 
     def finalize_options(self):
         super().finalize_options()
@@ -160,17 +183,22 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         self.buildtime = datetime.datetime.utcnow()
         super().run()
 
-        # include_files seems to be broken with this setup. implement here
+        # include_files seems to not be done automatically. implement here
         for src, dst in self.include_files:
-            print('copying', src, '->', self.buildfolder / dst)
+            print(f"copying {src} -> {self.buildfolder / dst}")
+            shutil.copyfile(src, self.buildfolder / dst, follow_symlinks=False)
+
+        # now that include_files is completely broken, run find_libs here
+        for src, dst in find_libs(*self.extra_libs):
+            print(f"copying {src} -> {self.buildfolder / dst}")
             shutil.copyfile(src, self.buildfolder / dst, follow_symlinks=False)
 
         # post build steps
-        if sys.platform == "win32":  # kivy_deps is win32 only, linux picks them up automatically
+        if is_windows:  # kivy_deps is win32 only, linux picks them up automatically
             from kivy_deps import sdl2, glew
             for folder in sdl2.dep_bins + glew.dep_bins:
                 shutil.copytree(folder, self.libfolder, dirs_exist_ok=True)
-                print('copying', folder, '->', self.libfolder)
+                print(f"copying {folder} -> {self.libfolder}")
 
         for data in self.extra_data:
             self.installfile(Path(data))
@@ -185,11 +213,26 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         from WebHostLib.options import create
         create()
         from worlds.AutoWorld import AutoWorldRegister
+        assert not apworlds - set(AutoWorldRegister.world_types), "Unknown world designated for .apworld"
+        folders_to_remove: typing.List[str] = []
         for worldname, worldtype in AutoWorldRegister.world_types.items():
             if not worldtype.hidden:
                 file_name = worldname+".yaml"
                 shutil.copyfile(os.path.join("WebHostLib", "static", "generated", "configs", file_name),
                                 self.buildfolder / "Players" / "Templates" / file_name)
+            if worldname in apworlds:
+                file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
+                world_directory = self.libfolder / "worlds" / file_name
+                # this method creates an apworld that cannot be moved to a different OS or minor python version,
+                # which should be ok
+                with zipfile.ZipFile(self.libfolder / "worlds" / (file_name + ".apworld"), "x", zipfile.ZIP_DEFLATED,
+                                     compresslevel=9) as zf:
+                    entry: os.DirEntry
+                    for path in world_directory.rglob("*.*"):
+                        relative_path = os.path.join(*path.parts[path.parts.index("worlds")+1:])
+                        zf.write(path, relative_path)
+                    folders_to_remove.append(file_name)
+                shutil.rmtree(world_directory)
         shutil.copyfile("meta.yaml", self.buildfolder / "Players" / "Templates" / "meta.yaml")
         # TODO: fix LttP options one day
         shutil.copyfile("playerSettings.yaml", self.buildfolder / "Players" / "Templates" / "A Link to the Past.yaml")
@@ -218,9 +261,13 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         self.create_manifest()
 
         if is_windows:
+            # Inno setup stuff
             with open("setup.ini", "w") as f:
                 min_supported_windows = "6.2.9200" if sys.version_info > (3, 9) else "6.0.6000"
                 f.write(f"[Data]\nsource_path={self.buildfolder}\nmin_windows={min_supported_windows}\n")
+            with open("installdelete.iss", "w") as f:
+                f.writelines("Type: filesandordirs; Name: \"{app}\\lib\\worlds\\"+world_directory+"\"\n"
+                             for world_directory in folders_to_remove)
         else:
             # make sure extra programs are executable
             enemizer_exe = self.buildfolder / 'EnemizerCLI/EnemizerCLI.Core'
@@ -352,6 +399,9 @@ $APPDIR/$exe "$@"
 
 def find_libs(*args: str) -> typing.Sequence[typing.Tuple[str, str]]:
     """Try to find system libraries to be included."""
+    if not args:
+        return []
+
     arch = build_arch.replace('_', '-')
     libc = 'libc6'  # we currently don't support musl
 
@@ -418,12 +468,13 @@ cx_Freeze.setup(
                          "pandas"],
             "zip_include_packages": ["*"],
             "zip_exclude_packages": ["worlds", "sc2"],
-            "include_files": find_libs("libssl.so", "libcrypto.so") if is_linux else [],
+            "include_files": [],  # broken in cx 6.14.0, we use more special sauce now
             "include_msvcr": False,
-            "replace_paths": [("*", "")],
+            "replace_paths": ["*."],
             "optimize": 1,
             "build_exe": buildfolder,
             "extra_data": extra_data,
+            "extra_libs": extra_libs,
             "bin_includes": ["libffi.so", "libcrypt.so"] if is_linux else []
         },
         "bdist_appimage": {

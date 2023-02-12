@@ -130,8 +130,8 @@ sc2wol_options: Dict[str, Option] = {
 }
 
 
-def get_option_value(world: MultiWorld, player: int, name: str) -> int:
-    option = getattr(world, name, None)
+def get_option_value(multiworld: MultiWorld, player: int, name: str) -> int:
+    option = getattr(multiworld, name, None)
 
     if option is None:
         return 0
@@ -139,8 +139,8 @@ def get_option_value(world: MultiWorld, player: int, name: str) -> int:
     return int(option[player].value)
 
 
-def get_option_set_value(world: MultiWorld, player: int, name: str) -> set:
-    option = getattr(world, name, None)
+def get_option_set_value(multiworld: MultiWorld, player: int, name: str) -> set:
+    option = getattr(multiworld, name, None)
 
     if option is None:
         return set()
