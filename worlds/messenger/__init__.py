@@ -66,6 +66,9 @@ class MessengerWorld(World):
             self.multiworld.shuffle_seals[self.player].value = PowerSeals.option_true
             self.total_seals = self.multiworld.total_seals[self.player].value
             self.required_seals = int(self.multiworld.percent_seals_required[self.player].value / 100 * self.total_seals)
+        else:
+            self.total_seals = 0
+            self.required_seals = 0
 
     def create_regions(self) -> None:
         for region in REGIONS:
@@ -134,7 +137,7 @@ class MessengerWorld(World):
         return {
             "deathlink": bool(self.multiworld.death_link[self.player].value),
             "goal": self.multiworld.goal[self.player].current_key,
-            "required_seals": self.required_seals if self.required_seals is not None else 0,
+            "required_seals": self.required_seals,
             "locations": locations,
             "settings": {"Difficulty": "Basic" if not self.multiworld.shuffle_seals[self.player] else "Advanced"}
         }
