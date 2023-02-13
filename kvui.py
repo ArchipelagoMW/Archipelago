@@ -1,7 +1,6 @@
 import os
 import logging
 import typing
-import asyncio
 
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
@@ -26,6 +25,7 @@ from kivy.base import ExceptionHandler, ExceptionManager
 from kivy.clock import Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
+from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.layout import Layout
@@ -49,6 +49,7 @@ fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, dura
 
 
 from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
+from Utils import async_start
 
 if typing.TYPE_CHECKING:
     import CommonClient
@@ -329,6 +330,12 @@ class GameManager(App):
 
         super(GameManager, self).__init__()
 
+    @property
+    def tab_count(self):
+        if hasattr(self, "tabs"):
+            return max(1, len(self.tabs.tab_list))
+        return 1
+
     def build(self) -> Layout:
         self.container = ContainerLayout()
 
@@ -338,9 +345,12 @@ class GameManager(App):
         # top part
         server_label = ServerLabel()
         self.connect_layout.add_widget(server_label)
-        self.server_connect_bar = ConnectBarTextInput(text=self.ctx.server_address or "archipelago.gg", size_hint_y=None,
+        self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg:", size_hint_y=None,
                                                       height=30, multiline=False, write_tab=False)
-        self.server_connect_bar.bind(on_text_validate=self.connect_button_action)
+        def connect_bar_validate(sender):
+            if not self.ctx.server:
+                self.connect_button_action(sender)
+        self.server_connect_bar.bind(on_text_validate=connect_bar_validate)
         self.connect_layout.add_widget(self.server_connect_bar)
         self.server_connect_button = Button(text="Connect", size=(100, 30), size_hint_y=None, size_hint_x=None)
         self.server_connect_button.bind(on_press=self.connect_button_action)
@@ -381,17 +391,21 @@ class GameManager(App):
         bottom_layout.add_widget(info_button)
         self.textinput = TextInput(size_hint_y=None, height=30, multiline=False, write_tab=False)
         self.textinput.bind(on_text_validate=self.on_message)
-
-        def text_focus(event):
-            """Needs to be set via delay, as unfocusing happens after on_message"""
-            self.textinput.focus = True
-
-        self.textinput.text_focus = text_focus
+        self.textinput.text_validate_unfocus = False
         bottom_layout.add_widget(self.textinput)
         self.grid.add_widget(bottom_layout)
         self.commandprocessor("/help")
         Clock.schedule_interval(self.update_texts, 1 / 30)
         self.container.add_widget(self.grid)
+
+        # If the address contains a port, select it; otherwise, select the host.
+        s = self.server_connect_bar.text
+        host_start = s.find("@") + 1
+        ipv6_end = s.find("]", host_start) + 1
+        port_start = s.find(":", ipv6_end if ipv6_end > 0 else host_start) + 1
+        self.server_connect_bar.focus = True
+        self.server_connect_bar.select_text(port_start if port_start > 0 else host_start, len(s))
+
         return self.container
 
     def update_texts(self, dt):
@@ -402,10 +416,12 @@ class GameManager(App):
                          f" | Connected to: {self.ctx.server_address} " \
                          f"{'.'.join(str(e) for e in self.ctx.server_version)}"
             self.server_connect_button.text = "Disconnect"
+            self.server_connect_bar.readonly = True
             self.progressbar.max = len(self.ctx.checked_locations) + len(self.ctx.missing_locations)
             self.progressbar.value = len(self.ctx.checked_locations)
         else:
             self.server_connect_button.text = "Connect"
+            self.server_connect_bar.readonly = False
             self.title = self.base_title + " " + Utils.__version__
             self.progressbar.value = 0
 
@@ -418,11 +434,10 @@ class GameManager(App):
 
     def connect_button_action(self, button):
         if self.ctx.server:
-            self.ctx.server_address = None
             self.ctx.username = None
-            asyncio.create_task(self.ctx.disconnect())
+            async_start(self.ctx.disconnect())
         else:
-            asyncio.create_task(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
+            async_start(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
 
     def on_stop(self):
         # "kill" input tasks
@@ -443,8 +458,6 @@ class GameManager(App):
             elif input_text:
                 self.commandprocessor(input_text)
 
-            Clock.schedule_once(textinput.text_focus)
-
         except Exception as e:
             logging.getLogger("Client").exception(e)
 
@@ -452,6 +465,10 @@ class GameManager(App):
         text = self.json_to_kivy_parser(data)
         self.log_panels["Archipelago"].on_message_markup(text)
         self.log_panels["All"].on_message_markup(text)
+
+    def focus_textinput(self):
+        if hasattr(self, "textinput"):
+            self.textinput.focus = True
 
     def update_address_bar(self, text: str):
         if hasattr(self, "server_connect_bar"):
@@ -491,7 +508,7 @@ class LogtoUI(logging.Handler):
 
 
 class UILog(RecycleView):
-    cols = 1
+    messages: typing.ClassVar[int]  # comes from kv file
 
     def __init__(self, *loggers_to_handle, **kwargs):
         super(UILog, self).__init__(**kwargs)
@@ -501,9 +518,15 @@ class UILog(RecycleView):
 
     def on_log(self, record: str) -> None:
         self.data.append({"text": escape_markup(record)})
+        self.clean_old()
 
     def on_message_markup(self, text):
         self.data.append({"text": text})
+        self.clean_old()
+
+    def clean_old(self):
+        if len(self.data) > self.messages:
+            self.data.pop(0)
 
     def fix_heights(self):
         """Workaround fix for divergent texture and layout heights"""
@@ -521,6 +544,19 @@ class E(ExceptionHandler):
 
 
 class KivyJSONtoTextParser(JSONtoTextParser):
+    # dummy class to absorb kvlang definitions
+    class TextColors(Widget):
+        pass
+
+    def __init__(self, *args, **kwargs):
+        # we grab the color definitions from the .kv file, then overwrite the JSONtoTextParser default entries
+        colors = self.TextColors()
+        color_codes = self.color_codes.copy()
+        for name, code in color_codes.items():
+            color_codes[name] = getattr(colors, name, code)
+        self.color_codes = color_codes
+        super().__init__(*args, **kwargs)
+
     def __call__(self, *args, **kwargs):
         self.ref_count = 0
         return super(KivyJSONtoTextParser, self).__call__(*args, **kwargs)
@@ -570,3 +606,8 @@ class KivyJSONtoTextParser(JSONtoTextParser):
 ExceptionManager.add_handler(E())
 
 Builder.load_file(Utils.local_path("data", "client.kv"))
+user_file = Utils.local_path("data", "user.kv")
+if os.path.exists(user_file):
+    logging.info("Loading user.kv into builder.")
+    Builder.load_file(user_file)
+

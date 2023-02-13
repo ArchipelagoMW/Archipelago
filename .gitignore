@@ -4,6 +4,7 @@
 *_Spoiler.txt
 *.bmbp
 *.apbp
+*.apl2ac
 *.apm3
 *.apmc
 *.apz5
@@ -48,7 +49,8 @@ Output Logs/
 /freeze_requirements.txt
 /Archipelago.zip
 /setup.ini
-
+/installdelete.iss
+/data/user.kv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -135,6 +137,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.code-workspace
 
 # Spyder project settings
 .spyderproject
