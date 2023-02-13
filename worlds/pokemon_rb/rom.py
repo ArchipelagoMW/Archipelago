@@ -483,6 +483,24 @@ def generate_output(self, output_directory: str):
 
         else:
             data[location.rom_address] = 0x2C  # AP Item
+
+    def set_trade_mon(address, loc):
+        data[rom_addresses[address]] = poke_data.pokemon_data[self.multiworld.get_location(loc, self.player).item.name]["id"]
+
+    if game_version == "red":
+        set_trade_mon("Trade_Terry", "Safari Zone Center - Wild Pokemon - 5")
+        set_trade_mon("Trade_Spot", "Safari Zone East - Wild Pokemon - 1")
+    else:
+        set_trade_mon("Trade_Terry", "Safari Zone Center - Wild Pokemon - 7")
+        set_trade_mon("Trade_Spot", "Safari Zone East - Wild Pokemon - 7")
+    set_trade_mon("Trade_Marcel", "Route 24 - Wild Pokemon - 6")
+    set_trade_mon("Trade_Sailor", "Pokemon Mansion 1F - Wild Pokemon - 3")
+    set_trade_mon("Trade_Dux", "Route 3 - Wild Pokemon - 2")
+    set_trade_mon("Trade_Marc", "Route 23 - Super Rod Pokemon - 1")
+    set_trade_mon("Trade_Lola", "Route 10 - Super Rod Pokemon - 1")
+    set_trade_mon("Trade_Doris", "Cerulean Cave 1F - Wild Pokemon - 9")
+    set_trade_mon("Trade_Crinkles", "Route 12 - Wild Pokemon - 4")
+
     data[rom_addresses['Fly_Location']] = self.fly_map_code
 
     if self.multiworld.tea[self.player].value:

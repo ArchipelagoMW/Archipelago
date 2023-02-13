@@ -89,6 +89,16 @@ def set_rules(world, player):
         "Seafoam Islands B4F - Legendary Pokemon": lambda state: state.pokemon_rb_can_strength(player),
         "Vermilion City - Legendary Pokemon": lambda state: state.pokemon_rb_can_surf(player) and state.has("S.S. Ticket", player),
 
+        "Route 2 - Marcel Trade": lambda state: state.can_reach("Route 24 - Wild Pokemon - 6", "Location", player),
+        "Underground Tunnel West-East - Spot Trade": lambda state: state.can_reach("Route 24 - Wild Pokemon - 6", "Location", player),
+        "Route 11 - Terry Trade": lambda state: state.can_reach("Safari Zone Center - Wild Pokemon - 5", "Location", player),
+        "Route 18 - Marc Trade": lambda state: state.can_reach("Route 23 - Super Rod Pokemon - 1", "Location", player),
+        "Cinnabar Island - Sailor Trade": lambda state: state.can_reach("Pokemon Mansion 1F - Wild Pokemon - 3", "Location", player),
+        "Cinnabar Island - Crinkles Trade": lambda state: state.can_reach("Route 12 - Wild Pokemon - 4", "Location", player),
+        "Cinnabar Island - Doris Trade": lambda state: state.can_reach("Cerulean Cave 1F - Wild Pokemon - 9", "Location", player),
+        "Vermilion City - Dux Trade": lambda state: state.can_reach("Route 3 - Wild Pokemon - 2", "Location", player),
+        "Cerulean City - Lola Trade": lambda state: state.can_reach("Route 10 - Super Rod Pokemon - 1", "Location", player),
+
         # Pokédex check
         "Pallet Town - Oak's Parcel Reward": lambda state: state.has("Oak's Parcel", player),
 
