@@ -22,6 +22,9 @@ import ModuleUpdate
 
 ModuleUpdate.update()
 
+if typing.TYPE_CHECKING:
+    import ssl
+
 import websockets
 import colorama
 try:
@@ -116,7 +119,6 @@ class Context:
                       "location_check_points": int,
                       "server_password": str,
                       "password": str,
-                      "forfeit_mode": str,  # TODO remove around 0.4
                       "release_mode": str,
                       "remaining_mode": str,
                       "collect_mode": str,
@@ -138,7 +140,7 @@ class Context:
     non_hintable_names: typing.Dict[str, typing.Set[str]]
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
-                 hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", collect_mode="disabled",
+                 hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
                  remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, compatibility: int = 2,
                  log_network: bool = False):
         super(Context, self).__init__()
@@ -154,7 +156,7 @@ class Context:
         self.player_names: typing.Dict[team_slot, str] = {}
         self.player_name_lookup: typing.Dict[str, team_slot] = {}
         self.connect_names = {}  # names of slots clients can connect to
-        self.allow_forfeits = {}
+        self.allow_releases = {}
         #                          player          location_id     item_id  target_player_id
         self.locations = {}
         self.host = host
@@ -171,7 +173,7 @@ class Context:
         self.location_check_points = location_check_points
         self.hints_used = collections.defaultdict(int)
         self.hints: typing.Dict[team_slot, typing.Set[NetUtils.Hint]] = collections.defaultdict(set)
-        self.release_mode: str = forfeit_mode
+        self.release_mode: str = release_mode
         self.remaining_mode: str = remaining_mode
         self.collect_mode: str = collect_mode
         self.item_cheat = item_cheat
@@ -590,6 +592,8 @@ class Context:
 
     def _set_options(self, server_options: dict):
         for key, value in server_options.items():
+            if key == "forfeit_mode":
+                key = "release_mode"
             data_type = self.simple_options.get(key, None)
             if data_type is not None:
                 if value not in {False, True, None}:  # some can be boolean OR text, such as password
@@ -1226,7 +1230,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     def _cmd_release(self) -> bool:
         """Sends remaining items in your world to their recipients."""
-        if self.ctx.allow_forfeits.get((self.client.team, self.client.slot), False):
+        if self.ctx.allow_releases.get((self.client.team, self.client.slot), False):
             release_player(self.ctx, self.client.team, self.client.slot)
             return True
         if "enabled" in self.ctx.release_mode:
@@ -1882,7 +1886,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
         player = self.resolve_player(player_name)
         if player:
             team, slot, name = player
-            self.ctx.allow_forfeits[(team, slot)] = True
+            self.ctx.allow_releases[(team, slot)] = True
             self.output(f"Player {name} is now allowed to use the !release command at any time.")
             return True
 
@@ -1895,7 +1899,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
         player = self.resolve_player(player_name)
         if player:
             team, slot, name = player
-            self.ctx.allow_forfeits[(team, slot)] = False
+            self.ctx.allow_releases[(team, slot)] = False
             self.output(f"Player {name} has to follow the server restrictions on use of the !release command.")
             return True
 
@@ -2050,7 +2054,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                     return input_text
             setattr(self.ctx, option_name, attrtype(option))
             self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
-            if option_name in {"forfeit_mode", "release_mode", "remaining_mode", "collect_mode"}:  # TODO remove forfeit_mode with 0.4
+            if option_name in {"release_mode", "remaining_mode", "collect_mode"}:
                 self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
             elif option_name in {"hint_cost", "location_check_points"}:
                 self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
@@ -2090,6 +2094,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--password', default=defaults["password"])
     parser.add_argument('--savefile', default=defaults["savefile"])
     parser.add_argument('--disable_save', default=defaults["disable_save"], action='store_true')
+    parser.add_argument('--cert', help="Path to a SSL Certificate for encryption.")
+    parser.add_argument('--cert_key', help="Path to SSL Certificate Key file")
     parser.add_argument('--loglevel', default=defaults["loglevel"],
                         choices=['debug', 'info', 'warning', 'error', 'critical'])
     parser.add_argument('--location_check_points', default=defaults["location_check_points"], type=int)
@@ -2162,6 +2168,14 @@ async def auto_shutdown(ctx, to_cancel=None):
                 await asyncio.sleep(seconds)
 
 
+def load_server_cert(path: str, cert_key: typing.Optional[str]) -> "ssl.SSLContext":
+    import ssl
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    ssl_context.load_default_certs()
+    ssl_context.load_cert_chain(path, cert_key if cert_key else path)
+    return ssl_context
+
+
 async def main(args: argparse.Namespace):
     Utils.init_logging("Server", loglevel=args.loglevel.lower())
 
@@ -2197,8 +2211,10 @@ async def main(args: argparse.Namespace):
 
     ctx.init_save(not args.disable_save)
 
+    ssl_context = load_server_cert(args.cert, args.cert_key) if args.cert else None
+
     ctx.server = websockets.serve(functools.partial(server, ctx=ctx), host=ctx.host, port=ctx.port, ping_timeout=None,
-                                  ping_interval=None)
+                                  ping_interval=None, ssl=ssl_context)
     ip = args.host if args.host else Utils.get_public_ipv4()
     logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port,
                                                  'No password' if not ctx.password else 'Password: %s' % ctx.password))

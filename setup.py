@@ -12,6 +12,11 @@ from hashlib import sha3_512
 from pathlib import Path
 
 import setuptools
+import setuptools.command.build
+
+if __name__ == "__main__":
+    import ModuleUpdate
+    ModuleUpdate.update()
 
 from Launcher import components, icon_paths
 from Utils import version_tuple, is_windows, is_linux
@@ -26,7 +31,7 @@ apworlds: set = {
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 import subprocess
 import pkg_resources
-requirement = 'cx-Freeze>=6.13.1'
+requirement = 'cx-Freeze>=6.14.0'
 try:
     pkg_resources.require(requirement)
     import cx_Freeze
@@ -64,6 +69,7 @@ exes = [
 ]
 
 extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml", "SNI"]
+extra_libs = ["libssl.so", "libcrypto.so"] if is_linux else []
 
 
 def remove_sprites_from_folder(folder):
@@ -79,7 +85,7 @@ def _threaded_hash(filepath):
 
 
 # cx_Freeze's build command runs other commands. Override to accept --yes and store that.
-class BuildCommand(cx_Freeze.command.build.Build):
+class BuildCommand(setuptools.command.build.build):
     user_options = [
         ('yes', 'y', 'Answer "yes" to all questions.'),
     ]
@@ -103,6 +109,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
     ]
     yes: bool
     extra_data: Iterable  # [any] not available in 3.8
+    extra_libs: Iterable  # work around broken include_files
 
     buildfolder: Path
     libfolder: Path
@@ -113,6 +120,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         super().initialize_options()
         self.yes = BuildCommand.last_yes
         self.extra_data = []
+        self.extra_libs = []
 
     def finalize_options(self):
         super().finalize_options()
@@ -169,17 +177,22 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         self.buildtime = datetime.datetime.utcnow()
         super().run()
 
-        # include_files seems to be broken with this setup. implement here
+        # include_files seems to not be done automatically. implement here
         for src, dst in self.include_files:
-            print('copying', src, '->', self.buildfolder / dst)
+            print(f"copying {src} -> {self.buildfolder / dst}")
+            shutil.copyfile(src, self.buildfolder / dst, follow_symlinks=False)
+
+        # now that include_files is completely broken, run find_libs here
+        for src, dst in find_libs(*self.extra_libs):
+            print(f"copying {src} -> {self.buildfolder / dst}")
             shutil.copyfile(src, self.buildfolder / dst, follow_symlinks=False)
 
         # post build steps
-        if sys.platform == "win32":  # kivy_deps is win32 only, linux picks them up automatically
+        if is_windows:  # kivy_deps is win32 only, linux picks them up automatically
             from kivy_deps import sdl2, glew
             for folder in sdl2.dep_bins + glew.dep_bins:
                 shutil.copytree(folder, self.libfolder, dirs_exist_ok=True)
-                print('copying', folder, '->', self.libfolder)
+                print(f"copying {folder} -> {self.libfolder}")
 
         for data in self.extra_data:
             self.installfile(Path(data))
@@ -380,6 +393,9 @@ $APPDIR/$exe "$@"
 
 def find_libs(*args: str) -> typing.Sequence[typing.Tuple[str, str]]:
     """Try to find system libraries to be included."""
+    if not args:
+        return []
+
     arch = build_arch.replace('_', '-')
     libc = 'libc6'  # we currently don't support musl
 
@@ -446,12 +462,13 @@ cx_Freeze.setup(
                          "pandas"],
             "zip_include_packages": ["*"],
             "zip_exclude_packages": ["worlds", "sc2"],
-            "include_files": find_libs("libssl.so", "libcrypto.so") if is_linux else [],
+            "include_files": [],  # broken in cx 6.14.0, we use more special sauce now
             "include_msvcr": False,
-            "replace_paths": [("*", "")],
+            "replace_paths": ["*."],
             "optimize": 1,
             "build_exe": buildfolder,
             "extra_data": extra_data,
+            "extra_libs": extra_libs,
             "bin_includes": ["libffi.so", "libcrypt.so"] if is_linux else []
         },
         "bdist_appimage": {
