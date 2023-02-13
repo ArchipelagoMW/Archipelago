@@ -7,11 +7,11 @@ config file.
 
 ## What does randomization do to this game?
 
-All acquirable pickups (except maps and compasses) are shuffled amongst each other. Logic is in place to ensure both
-that the game is still completable, and ensuring that players aren't forced to enter dungeons under-geared.
+All acquirable pickups (except maps and compasses) are shuffled among each other. Logic is in place to ensure both
+that the game is still completable, and that players aren't forced to enter dungeons under-geared.
 
 Shops can contain any item in the game, with prices added for the items unavailable in stores. Rupee caves are worth
-more while shops will cost less, making shop routing and money management important without requiring mindless grinding.
+more while shops cost less, making shop routing and money management important without requiring mindless grinding.
 
 ## What items and locations get shuffled?
 
