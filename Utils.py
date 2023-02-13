@@ -12,7 +12,7 @@ import io
 import collections
 import importlib
 import logging
-from typing import BinaryIO, ClassVar, Coroutine, Optional, Set
+from typing import BinaryIO, Coroutine, Optional, Set
 
 from yaml import load, load_all, dump, SafeLoader
 
@@ -38,7 +38,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.8"
+__version__ = "0.3.9"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")

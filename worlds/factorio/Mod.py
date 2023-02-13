@@ -99,7 +99,7 @@ def generate_mod(world: "Factorio", output_directory: str):
                  for location in world.locations]
     mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.get_file_safe_player_name(player)}"
 
-    random = multiworld.slot_seeds[player]
+    random = multiworld.per_slot_randoms[player]
 
     def flop_random(low, high, base=None):
         """Guarantees 50% below base and 50% above base, uniform distribution in each direction."""
