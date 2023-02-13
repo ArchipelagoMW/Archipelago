@@ -10,14 +10,16 @@ import random
 import socket
 import threading
 import time
+import typing
 
 import websockets
 from pony.orm import commit, db_session, select
 
 import Utils
-from MultiServer import ClientMessageProcessor, Context, ServerCommandProcessor, auto_shutdown, server
-from Utils import cache_argsless, get_public_ipv4, get_public_ipv6, restricted_loads
-from .models import Command, Room, db
+
+from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor, load_server_cert
+from Utils import get_public_ipv4, get_public_ipv6, restricted_loads, cache_argsless
+from .models import Room, Command, db
 
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
@@ -137,7 +139,8 @@ def get_static_server_data() -> dict:
     return data
 
 
-def run_server_process(room_id, ponyconfig: dict, static_server_data: dict):
+def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
+                       cert_file: typing.Optional[str], cert_key_file: typing.Optional[str]):
     # establish DB connection for multidata and multisave
     db.bind(**ponyconfig)
     db.generate_mapping(check_tables=False)
@@ -147,15 +150,15 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict):
         ctx = WebHostContext(static_server_data)
         ctx.load(room_id)
         ctx.init_save()
-
+        ssl_context = load_server_cert(cert_file, cert_key_file) if cert_file else None
         try:
             ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ping_timeout=None,
-                                          ping_interval=None)
+                                          ping_interval=None, ssl=ssl_context)
 
             await ctx.server
         except Exception:  # likely port in use - in windows this is OSError, but I didn't check the others
             ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0, ping_timeout=None,
-                                          ping_interval=None)
+                                          ping_interval=None, ssl=ssl_context)
 
             await ctx.server
         port = 0

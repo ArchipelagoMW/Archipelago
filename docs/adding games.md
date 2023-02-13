@@ -148,7 +148,7 @@ The next step is to know what you need to make the game do now that you can modi
 - Listen for messages from the Archipelago server  
 - Modify the game to display messages from the Archipelago server  
 - Add interface for connecting to the Archipelago server with passwords and sessions  
-- Add commands for manually rewarding, re-syncing, forfeiting, and other actions  
+- Add commands for manually rewarding, re-syncing, releasing, and other actions  
   
 To elaborate, you need to be able to inform the server whenever you check locations, print out messages that you receive
 from the server in-game so players can read them, award items when the server tells you to, sync and re-sync when necessary,

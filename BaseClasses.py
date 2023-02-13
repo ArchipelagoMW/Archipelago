@@ -1,20 +1,20 @@
 from __future__ import annotations
-from argparse import Namespace
 
 import copy
-from enum import unique, IntEnum, IntFlag
-import logging
-import json
 import functools
-from collections import OrderedDict, Counter, deque
-from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable, NamedTuple
-import typing  # this can go away when Python 3.8 support is dropped
-import secrets
+import json
+import logging
 import random
+import secrets
+import typing  # this can go away when Python 3.8 support is dropped
+from argparse import Namespace
+from collections import OrderedDict, Counter, deque
+from enum import unique, IntEnum, IntFlag
+from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable, NamedTuple
 
+import NetUtils
 import Options
 import Utils
-import NetUtils
 
 
 class Group(TypedDict, total=False):
@@ -27,6 +27,20 @@ class Group(TypedDict, total=False):
     local_items: Set[str]
     non_local_items: Set[str]
     link_replacement: bool
+
+
+class ThreadBarrierProxy():
+    """Passes through getattr while passthrough is True"""
+    def __init__(self, obj: Any):
+        self.passthrough = True
+        self.obj = obj
+
+    def __getattr__(self, item):
+        if self.passthrough:
+            return getattr(self.obj, item)
+        else:
+            raise RuntimeError("You are in a threaded context and global random state was removed for your safety. "
+                               "Please use multiworld.per_slot_randoms[player] or randomize ahead of output.")
 
 
 class MultiWorld():
@@ -48,6 +62,7 @@ class MultiWorld():
     precollected_items: Dict[int, List[Item]]
     state: CollectionState
 
+    plando_options: PlandoOptions
     accessibility: Dict[int, Options.Accessibility]
     early_items: Dict[int, Dict[str, int]]
     local_early_items: Dict[int, Dict[str, int]]
@@ -60,6 +75,9 @@ class MultiWorld():
 
     game: Dict[int, str]
 
+    random: random.Random
+    per_slot_randoms: Dict[int, random.Random]
+
     class AttributeProxy():
         def __init__(self, rule):
             self.rule = rule
@@ -68,7 +86,8 @@ class MultiWorld():
             return self.rule(player)
 
     def __init__(self, players: int):
-        self.random = random.Random()  # world-local random state is saved for multiple generations running concurrently
+        # world-local random state is saved for multiple generations running concurrently
+        self.random = ThreadBarrierProxy(random.Random())
         self.players = players
         self.player_types = {player: NetUtils.SlotType.player for player in self.player_ids}
         self.glitch_triforce = False
@@ -159,7 +178,8 @@ class MultiWorld():
             set_player_attr('completion_condition', lambda state: True)
         self.custom_data = {}
         self.worlds = {}
-        self.slot_seeds = {}
+        self.per_slot_randoms = {}
+        self.plando_options = PlandoOptions.none
 
     def get_all_ids(self) -> Tuple[int, ...]:
         return self.player_ids + tuple(self.groups)
@@ -204,8 +224,8 @@ class MultiWorld():
         else:
             self.random.seed(self.seed)
         self.seed_name = name if name else str(self.seed)
-        self.slot_seeds = {player: random.Random(self.random.getrandbits(64)) for player in
-                           range(1, self.players + 1)}
+        self.per_slot_randoms = {player: random.Random(self.random.getrandbits(64)) for player in
+                                 range(1, self.players + 1)}
 
     def set_options(self, args: Namespace) -> None:
         for option_key in Options.common_options:
@@ -289,7 +309,7 @@ class MultiWorld():
         self.state = CollectionState(self)
 
     def secure(self):
-        self.random = secrets.SystemRandom()
+        self.random = ThreadBarrierProxy(secrets.SystemRandom())
         self.is_race = True
 
     @functools.cached_property
@@ -391,7 +411,12 @@ class MultiWorld():
     def get_items(self) -> List[Item]:
         return [loc.item for loc in self.get_filled_locations()] + self.itempool
 
-    def find_item_locations(self, item, player: int) -> List[Location]:
+    def find_item_locations(self, item, player: int, resolve_group_locations: bool = False) -> List[Location]:
+        if resolve_group_locations:
+            player_groups = self.get_player_groups(player)
+            return [location for location in self.get_locations() if
+                    location.item and location.item.name == item and location.player not in player_groups and
+                    (location.item.player == player or location.item.player in player_groups)]
         return [location for location in self.get_locations() if
                 location.item and location.item.name == item and location.item.player == player]
 
@@ -399,7 +424,12 @@ class MultiWorld():
         return next(location for location in self.get_locations() if
                     location.item and location.item.name == item and location.item.player == player)
 
-    def find_items_in_locations(self, items: Set[str], player: int) -> List[Location]:
+    def find_items_in_locations(self, items: Set[str], player: int, resolve_group_locations: bool = False) -> List[Location]:
+        if resolve_group_locations:
+            player_groups = self.get_player_groups(player)
+            return [location for location in self.get_locations() if
+                    location.item and location.item.name in items and location.player not in player_groups and
+                    (location.item.player == player or location.item.player in player_groups)]
         return [location for location in self.get_locations() if
                 location.item and location.item.name in items and location.item.player == player]
 
@@ -1567,6 +1597,7 @@ class Spoiler():
                     Utils.__version__, self.multiworld.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.multiworld.algorithm)
             outfile.write('Players:                         %d\n' % self.multiworld.players)
+            outfile.write(f'Plando Options:                  {self.multiworld.plando_options}\n')
             AutoWorld.call_stage(self.multiworld, "write_spoiler_header", outfile)
 
             for player in range(1, self.multiworld.players + 1):
@@ -1681,6 +1712,45 @@ class Tutorial(NamedTuple):
     file_name: str
     link: str
     authors: List[str]
+
+
+class PlandoOptions(IntFlag):
+    none = 0b0000
+    items = 0b0001
+    connections = 0b0010
+    texts = 0b0100
+    bosses = 0b1000
+
+    @classmethod
+    def from_option_string(cls, option_string: str) -> PlandoOptions:
+        result = cls(0)
+        for part in option_string.split(","):
+            part = part.strip().lower()
+            if part:
+                result = cls._handle_part(part, result)
+        return result
+
+    @classmethod
+    def from_set(cls, option_set: Set[str]) -> PlandoOptions:
+        result = cls(0)
+        for part in option_set:
+            result = cls._handle_part(part, result)
+        return result
+
+    @classmethod
+    def _handle_part(cls, part: str, base: PlandoOptions) -> PlandoOptions:
+        try:
+            part = cls[part]
+        except Exception as e:
+            raise KeyError(f"{part} is not a recognized name for a plando module. "
+                           f"Known options: {', '.join(flag.name for flag in cls)}") from e
+        else:
+            return base | part
+
+    def __str__(self) -> str:
+        if self.value:
+            return ", ".join(flag.name for flag in PlandoOptions if self.value & flag.value)
+        return "None"
 
 
 seeddigits = 20

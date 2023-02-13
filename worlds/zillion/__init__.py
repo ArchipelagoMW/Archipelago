@@ -343,7 +343,7 @@ class ZillionWorld(World):
 
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use world.random here.
-        If you need any last-second randomization, use MultiWorld.slot_seeds[slot] instead."""
+        If you need any last-second randomization, use MultiWorld.per_slot_randoms[slot] instead."""
         self.finalize_item_locations()
 
         assert self.zz_system.patcher, "didn't get patcher from generate_early"

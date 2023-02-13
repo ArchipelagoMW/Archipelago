@@ -43,7 +43,7 @@ class Permission(enum.IntFlag):
     disabled = 0b000  # 0, completely disables access
     enabled = 0b001  # 1, allows manual use
     goal = 0b010  # 2, allows manual use after goal completion
-    auto = 0b110  # 6, forces use after goal completion, only works for forfeit
+    auto = 0b110  # 6, forces use after goal completion, only works for release
     auto_enabled = 0b111  # 7, forces use after goal completion, allows manual use any time
 
     @staticmethod
