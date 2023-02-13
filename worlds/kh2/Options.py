@@ -96,7 +96,7 @@ class KeybladeMax(Range):
 class Visitlocking(Choice):
     """Determines the level of visit locking
     No Visit Locking:No visit locks(everything is sphere 1.Not Recommended)# BK is making a lot of money
-    Second Visit Locking:Second Visit Locking(Start with 13 visit locking items)
+    Second Visit Locking:Start with 13 visit locking items for every first visit
     First and Second Visit Locking:One item for First Visit Two For Second Visit"""
     display_name = "Visit locking"
     option_no_visit_locking = 0#starts with 27 visit locking

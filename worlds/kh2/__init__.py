@@ -235,8 +235,7 @@ class KH2World(World):
 
         visitlockingitem = list()
         visitlockingitem.extend(exclusionItem_table["AllVisitLocking"])
-        # these items only have one in the pool while .extending twice makes them have 2
-                # no visit locking
+        # no visit locking
         if self.multiworld.Visitlocking[self.player].value == 0:
             for item in visitlockingitem:
                 self.multiworld.push_precollected(self.create_item(item))
