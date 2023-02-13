@@ -148,18 +148,15 @@ class TLoZWorld(World):
         generate_itempool(self)
 
     def apply_base_patch(self, rom):
+        # The base patch source is on a different repo, so here's the summary of changes:
         # Remove Triforce check for recorder, so you can always warp.
         # Remove level check for Triforce Fragments (and maps and compasses, but this won't matter)
-        # Replace AND #07 TAY with a JSR to free space later in the bank
+        # Replace some code with a jump to free space
         # Check if we're picking up a Triforce Fragment. If so, increment the local count
-        # In either case, we do the instructions we overwrote with the JSR and then RTS to normal flow
-        # N.B.: the location of these instructions in the PRG ROM and where the bank is mapped to
-        # do not correspond to each other: while it is not an error that we're jumping to 7EF0,
-        # this was calculated by hand, and so if any errors arise it'll likely be here.
-        # Reduce variety of boss roars in order to make room for additional dungeon items
+        # In either case, we do the instructions we overwrote with the jump and then return to normal flow
         # Remove map/compass check so they're always on
-        # Stealing a bit from the boss roars flag, so we can have more dungeon items. This allows us to
-        # go past 0x1F items for dungeon drops.
+        # Removing a bit from the boss roars flags, so we can have more dungeon items. This allows us to
+        # go past 0x1F items for dungeon items.
         with open("worlds/tloz/z1_base_patch.bsdiff4", "rb") as base_patch:
             rom_data = bsdiff4.patch(rom.read(), base_patch.read())
         rom_data = bytearray(rom_data)
@@ -226,44 +223,39 @@ class TLoZWorld(World):
             rom_data[location_id] = item_id
         
         # We shuffle the tiers of rupee caves. Caves that shared a value before still will.
-        secret_caves = self.multiworld.random.sample(sorted(secret_money_ids), 3)
+        secret_caves = self.multiworld.per_slot_randoms[self.player].sample(sorted(secret_money_ids), 3)
         secret_cave_money_amounts = [20, 50, 100]
         for i, amount in enumerate(secret_cave_money_amounts):
             # Giving approximately double the money to keep grinding down
-            amount = amount * self.multiworld.slot_seeds[self.player].triangular(1.5, 2.5)
+            amount = amount * self.multiworld.per_slot_randoms[self.player].triangular(1.5, 2.5)
             secret_cave_money_amounts[i] = int(amount)
         for i, cave in enumerate(secret_caves):
             rom_data[secret_money_ids[cave]] = secret_cave_money_amounts[i]
         return rom_data
 
     def generate_output(self, output_directory: str):
-        patched_rom = self.apply_randomizer()
-        outfilebase = 'AP_' + self.multiworld.seed_name
-        outfilepname = f'_P{self.player}'
-        outfilepname += f"_{self.multiworld.get_file_safe_player_name(self.player).replace(' ', '_')}"
-        outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.nes')
-
-        self.rom_name_text = f'LOZ{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0'
-        self.romName = bytearray(self.rom_name_text, 'utf8')[:0x20]
-        self.romName.extend([0] * (0x20 - len(self.romName)))
-        self.rom_name = self.romName
-        patched_rom[0x10:0x30] = self.romName
-
-        self.playerName = bytearray(self.multiworld.player_name[self.player], 'utf8')[:0x20]
-        self.playerName.extend([0] * (0x20 - len(self.playerName)))
-        patched_rom[0x30:0x50] = self.playerName
-
-        patched_filename = os.path.join(output_directory, outputFilename)
-
-        with open(patched_filename, 'wb') as patched_rom_file:
-            patched_rom_file.write(patched_rom)
-
-        patch = TLoZDeltaPatch(os.path.splitext(outputFilename)[0] + TLoZDeltaPatch.patch_file_ending,
-                               player=self.player,
-                               player_name=self.multiworld.player_name[self.player], patched_path=outputFilename)
-        self.rom_name_available_event.set()
-        patch.write()
-        os.unlink(outputFilename)
+        try:
+            patched_rom = self.apply_randomizer()
+            outfilebase = 'AP_' + self.multiworld.seed_name
+            outfilepname = f'_P{self.player}'
+            outfilepname += f"_{self.multiworld.get_file_safe_player_name(self.player).replace(' ', '_')}"
+            outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.nes')
+            self.rom_name_text = f'LOZ{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0'
+            self.romName = bytearray(self.rom_name_text, 'utf8')[:0x20]
+            self.romName.extend([0] * (0x20 - len(self.romName)))
+            self.rom_name = self.romName
+            patched_rom[0x10:0x30] = self.romName
+            self.playerName = bytearray(self.multiworld.player_name[self.player], 'utf8')[:0x20]
+            self.playerName.extend([0] * (0x20 - len(self.playerName)))
+            patched_rom[0x30:0x50] = self.playerName
+            patched_filename = os.path.join(output_directory, outputFilename)
+            with open(patched_filename, 'wb') as patched_rom_file:
+                patched_rom_file.write(patched_rom)
+            patch = TLoZDeltaPatch(os.path.splitext(outputFilename)[0] + TLoZDeltaPatch.patch_file_ending,
+                                   player=self.player,
+                                   player_name=self.multiworld.player_name[self.player], patched_path=outputFilename)
+        finally:
+            self.rom_name_available_event.set()
 
     def modify_multidata(self, multidata: dict):
         import base64

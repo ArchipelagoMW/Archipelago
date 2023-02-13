@@ -17,7 +17,7 @@ def set_rules(tloz_world: "TLoZWorld"):
         boss_event = world.get_location(f"Level {level} Boss Status", player)
         status = tloz_world.create_event(f"Boss {level} Defeated")
         boss_event.place_locked_item(status)
-        add_rule(boss_event, lambda state: state.can_reach(boss, "Location", player))
+        add_rule(boss_event, lambda state, b=boss: state.can_reach(b, "Location", player))
 
     # No dungeons without weapons except for the dangerous weapon locations if we're dangerous, no unsafe dungeons
     for i, level in enumerate(tloz_world.levels[1:10]):
@@ -27,11 +27,11 @@ def set_rules(tloz_world: "TLoZWorld"):
                          lambda state: state.has_group("weapons", player))
             if i > 0:  # Don't need an extra heart for Level 1
                 add_rule(world.get_location(location.name, player),
-                         lambda state: state.has("Heart Container", player, i) or
+                         lambda state, hearts=i: state.has("Heart Container", player, hearts) or
                                        (state.has("Blue Ring", player) and
-                                        state.has("Heart Container", player, int(i / 2))) or
+                                        state.has("Heart Container", player, int(hearts / 2))) or
                                        (state.has("Red Ring", player) and
-                                        state.has("Heart Container", player, int(i / 4)))
+                                        state.has("Heart Container", player, int(hearts / 4)))
 
                          )
     # No requiring anything in a shop until we can farm for money
@@ -89,7 +89,7 @@ def set_rules(tloz_world: "TLoZWorld"):
     # Yes we are looping this range again for Triforce locations. No I can't add it to the boss event loop
     for level in range(1, 9):
         add_rule(world.get_location(f"Level {level} Triforce", player),
-                 lambda state: state.has(f"Boss {level} Defeated", player))
+                 lambda state, l=level: state.has(f"Boss {l} Defeated", player))
 
     # Sword, raft, and ladder spots
     add_rule(world.get_location("White Sword Pond", player),
