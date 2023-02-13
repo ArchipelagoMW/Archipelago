@@ -329,18 +329,18 @@ class Context:
             self.clients[endpoint.team][endpoint.slot].remove(endpoint)
         await on_client_disconnected(self, endpoint)
 
-
-    def notify_client(self, client: Client, text: str):
+    def notify_client(self, client: Client, text: str, additional_arguments: dict = {}):
         if not client.auth:
             return
         logging.info("Notice (Player %s in team %d): %s" % (client.name, client.team + 1, text))
-        async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }]}]))
+        async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}]))
 
-
-    def notify_client_multiple(self, client: Client, texts: typing.List[str]):
+    def notify_client_multiple(self, client: Client, texts: typing.List[str], additional_arguments: dict = {}):
         if not client.auth:
             return
-        async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }]} for text in texts]))
+        async_start(self.send_msgs(client,
+                                   [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}
+                                    for text in texts]))
 
     # loading
 
@@ -666,7 +666,7 @@ class Context:
     def on_goal_achieved(self, client: Client):
         finished_msg = f'{self.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1})' \
                        f' has completed their goal.'
-        self.broadcast_text_all(finished_msg)
+        self.broadcast_text_all(finished_msg, {"type": "Goal", "team": client.team, "slot": client.slot})
         if "auto" in self.collect_mode:
             collect_player(self, client.team, client.slot)
         if "auto" in self.release_mode:
@@ -762,18 +762,21 @@ async def on_client_joined(ctx: Context, client: Client):
     ctx.broadcast_text_all(
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) "
         f"{verb} {ctx.games[client.slot]} has joined. "
-        f"Client({version_str}), {client.tags}).")
+        f"Client({version_str}), {client.tags}).",
+        {"type": "Join", "team": client.team, "slot": client.slot, "tags": client.tags})
     ctx.notify_client(client, "Now that you are connected, "
                               "you can use !help to list commands to run via the server. "
                               "If your client supports it, "
-                              "you may have additional local commands you can list with /help.")
+                              "you may have additional local commands you can list with /help.",
+                      {"type": "Tutorial"})
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 
 async def on_client_left(ctx: Context, client: Client):
     update_client_status(ctx, client, ClientStatus.CLIENT_UNKNOWN)
     ctx.broadcast_text_all(
-        "%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1))
+        "%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1),
+        {"type": "Part", "team": client.team, "slot": client.slot})
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 
@@ -859,9 +862,9 @@ def update_checked_locations(ctx: Context, team: int, slot: int):
 def release_player(ctx: Context, team: int, slot: int):
     """register any locations that are in the multidata"""
     all_locations = set(ctx.locations[slot])
-    ctx.broadcast_text_all(
-        "%s (Team #%d) has released all remaining items from their world." % 
-        (ctx.player_names[(team, slot)], team + 1))
+    ctx.broadcast_text_all("%s (Team #%d) has released all remaining items from their world."
+                           % (ctx.player_names[(team, slot)], team + 1),
+                           {"type": "Release", "team": team, "slot": slot})
     register_location_checks(ctx, team, slot, all_locations)
     update_checked_locations(ctx, team, slot)
 
@@ -874,8 +877,9 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
             if values[1] == slot:
                 all_locations[source_slot].add(location_id)
 
-    ctx.broadcast_text_all(
-        "%s (Team #%d) has collected their items from other worlds." % (ctx.player_names[(team, slot)], team + 1))
+    ctx.broadcast_text_all("%s (Team #%d) has collected their items from other worlds."
+                           % (ctx.player_names[(team, slot)], team + 1),
+                           {"type": "Collect", "team": team, "slot": slot})
     for source_player, location_ids in all_locations.items():
         register_location_checks(ctx, team, source_player, location_ids, count_activity=False)
         update_checked_locations(ctx, team, source_player)
@@ -1145,11 +1149,15 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     def __call__(self, raw: str) -> typing.Optional[bool]:
         if not raw.startswith("!admin"):
-            self.ctx.broadcast_text_all(self.ctx.get_aliased_name(self.client.team, self.client.slot) + ': ' + raw)
+            self.ctx.broadcast_text_all(self.ctx.get_aliased_name(self.client.team, self.client.slot) + ': ' + raw,
+                                        {"type": "Chat", "team": self.client.team, "slot": self.client.slot, "message": raw})
         return super(ClientMessageProcessor, self).__call__(raw)
 
-    def output(self, text):
-        self.ctx.notify_client(self.client, text)
+    def output(self, text: str):
+        self.ctx.notify_client(self.client, text, {"type": "CommandResult"})
+
+    def output_multiple(self, texts: typing.List[str]):
+        self.ctx.notify_client_multiple(self.client, texts, {"type": "CommandResult"})
 
     def default(self, raw: str):
         pass  # default is client sending just text
@@ -1172,9 +1180,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 # disallow others from knowing what the new remote administration password is.
                 "!admin /option server_password"):
             output = f"!admin /option server_password {('*' * random.randint(4, 16))}"
-        # Otherwise notify the others what is happening.
-        self.ctx.broadcast_text_all(
-            self.ctx.get_aliased_name(self.client.team, self.client.slot) + ': ' + output)
+        self.ctx.broadcast_text_all(self.ctx.get_aliased_name(self.client.team, self.client.slot) + ': ' + output,
+                                    {"type": "Chat", "team": self.client.team, "slot": self.client.slot, "message": output})
 
         if not self.ctx.server_password:
             self.output("Sorry, Remote administration is disabled")
@@ -1211,7 +1218,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def _cmd_players(self) -> bool:
         """Get information about connected and missing players."""
         if len(self.ctx.player_names) < 10:
-            self.ctx.broadcast_text_all(get_players_string(self.ctx))
+            self.ctx.broadcast_text_all(get_players_string(self.ctx), {"type": "CommandResult"})
         else:
             self.output(get_players_string(self.ctx))
         return True
@@ -1300,7 +1307,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if locations:
             texts = [f'Missing: {self.ctx.location_names[location]}' for location in locations]
             texts.append(f"Found {len(locations)} missing location checks")
-            self.ctx.notify_client_multiple(self.client, texts)
+            self.output_multiple(texts)
         else:
             self.output("No missing location checks found.")
         return True
@@ -1313,7 +1320,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if locations:
             texts = [f'Checked: {self.ctx.location_names[location]}' for location in locations]
             texts.append(f"Found {len(locations)} done location checks")
-            self.ctx.notify_client_multiple(self.client, texts)
+            self.output_multiple(texts)
         else:
             self.output("No done location checks found.")
         return True
@@ -1351,7 +1358,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 get_received_items(self.ctx, self.client.team, self.client.slot, True).append(new_item)
                 self.ctx.broadcast_text_all(
                     'Cheat console: sending "' + item_name + '" to ' + self.ctx.get_aliased_name(self.client.team,
-                                                                                                 self.client.slot))
+                                                                                                 self.client.slot),
+                    {"type": "ItemCheat", "team": self.client.team, "receiving": self.client.slot, "item": new_item})
                 send_new_items(self.ctx)
                 return True
             else:
@@ -1652,7 +1660,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
                     ctx.broadcast_text_all(
                         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has changed tags "
-                        f"from {old_tags} to {client.tags}.")
+                        f"from {old_tags} to {client.tags}.",
+                        {"type": "TagsChanged", "team": client.team, "slot": client.slot, "tags": client.tags})
 
         elif cmd == 'Sync':
             start_inventory = get_start_inventory(ctx, client.slot, client.remote_start_inventory)
@@ -1770,11 +1779,11 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def output(self, text: str):
         if self.client:
-            self.ctx.notify_client(self.client, text)
+            self.ctx.notify_client(self.client, text, {"type": "AdminCommandResult"})
         super(ServerCommandProcessor, self).output(text)
 
     def default(self, raw: str):
-        self.ctx.broadcast_text_all('[Server]: ' + raw)
+        self.ctx.broadcast_text_all('[Server]: ' + raw, {"type": "ServerChat", "message": raw})
 
     def _cmd_save(self) -> bool:
         """Save current state to multidata"""
