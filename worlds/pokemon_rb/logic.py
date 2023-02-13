@@ -27,9 +27,19 @@ class PokemonLogic(LogicMixin):
                 or self.multiworld.badges_needed_for_hm_moves[player].value == 0)
 
     def pokemon_rb_can_flash(self, player):
-        return (((self.has("HM05 Flash", player) and self.can_learn_hm("1000000", player)) or self.has("Lamp", player))
+        return (self.multiworld.flash_logic[player].value == 4 or (((self.has("HM05 Flash", player) and self.can_learn_hm("1000000", player)) or self.has("Lamp", player))
                  and (self.has("Boulder Badge", player) or self.has(self.multiworld.worlds[player].extra_badges.get("Flash"),
-                 player) or self.multiworld.badges_needed_for_hm_moves[player].value == 0))
+                 player) or self.multiworld.badges_needed_for_hm_moves[player].value == 0)))
+    
+    def pokemon_rb_trainers_require_flash(self, player):
+        return (self.multiworld.flash_logic[player].value in [0,1,2])
+    
+    def pokemon_rb_items_require_flash(self, player):
+        return (self.multiworld.flash_logic[player].value in [0,1,3])
+    
+    
+    def pokemon_rb_scope(self, player):
+        return (self.has("Silph Scope", player) or (self.multiworld.logic_require_silph_scope[player].value == 0))
 
     def can_learn_hm(self, move, player):
         for pokemon, data in self.multiworld.worlds[player].local_poke_data.items():
