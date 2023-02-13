@@ -883,9 +883,6 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
                   lambda state: state.has(ItemName.tails_booster, player))
 
     # Mission 3 Upgrade Requirements
-    add_rule_safe(world, LocationName.city_escape_3, player,
-                  lambda state: state.has(ItemName.sonic_bounce_bracelet, player) or
-                                state.has(ItemName.sonic_mystic_melody, player))
     add_rule_safe(world, LocationName.wild_canyon_3, player,
                   lambda state: state.has(ItemName.knuckles_shovel_claws, player))
     add_rule_safe(world, LocationName.prison_lane_3, player,
@@ -920,9 +917,7 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
     add_rule_safe(world, LocationName.sand_ocean_3, player,
                   lambda state: state.has(ItemName.eggman_jet_engine, player))
     add_rule_safe(world, LocationName.egg_quarters_3, player,
-                  lambda state: state.has(ItemName.rouge_mystic_melody, player) and
-                                state.has(ItemName.rouge_pick_nails, player) and
-                                state.has(ItemName.rouge_iron_boots, player))
+                  lambda state: state.has(ItemName.rouge_mystic_melody, player))
     add_rule_safe(world, LocationName.lost_colony_3, player,
                   lambda state: state.has(ItemName.eggman_mystic_melody, player) and
                                 state.has(ItemName.eggman_jet_engine, player))
@@ -1013,8 +1008,6 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
     add_rule_safe(world, LocationName.security_hall_5, player,
                   lambda state: state.has(ItemName.rouge_treasure_scope, player))
-    add_rule_safe(world, LocationName.mad_space_5, player,
-                  lambda state: state.has(ItemName.rouge_iron_boots, player))
     add_rule_safe(world, LocationName.cosmic_wall_5, player,
                   lambda state: state.has(ItemName.eggman_jet_engine, player))
 
@@ -1136,8 +1129,6 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
         add_rule(world.get_location(LocationName.cosmic_wall_pipe_1, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
 
-        add_rule(world.get_location(LocationName.mission_street_pipe_2, player),
-                 lambda state: state.has(ItemName.tails_booster, player))
         add_rule(world.get_location(LocationName.hidden_base_pipe_2, player),
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(world.get_location(LocationName.death_chamber_pipe_2, player),
