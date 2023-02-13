@@ -151,11 +151,11 @@ class ALTTPWorld(World):
         super(ALTTPWorld, self).__init__(*args, **kwargs)
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld):
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
-        if world.is_race:
+        if multiworld.is_race:
             import xxtea
 
     def generate_early(self):

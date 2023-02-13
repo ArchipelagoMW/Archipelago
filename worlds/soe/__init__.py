@@ -201,7 +201,7 @@ class SoEWorld(World):
         return SoEItem(item.name, classification, self.item_name_to_id[item.name], self.player)
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld):
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)

@@ -107,7 +107,7 @@ class SMWorld(World):
         super().__init__(world, player)
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld: MultiWorld):
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)

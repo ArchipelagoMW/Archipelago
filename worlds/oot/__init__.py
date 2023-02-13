@@ -140,7 +140,7 @@ class OOTWorld(World):
         super(OOTWorld, self).__init__(world, player)
 
     @classmethod
-    def stage_assert_generate(cls, world: MultiWorld):
+    def stage_assert_generate(cls, multiworld: MultiWorld):
         rom = Rom(file=get_options()['oot_options']['rom_file'])
 
     def generate_early(self):
