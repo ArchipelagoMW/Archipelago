@@ -1364,10 +1364,14 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 new_item = NetworkItem(names[item_name], -1, self.client.slot)
                 get_received_items(self.ctx, self.client.team, self.client.slot, False).append(new_item)
                 get_received_items(self.ctx, self.client.team, self.client.slot, True).append(new_item)
+                total = sum(item.item == new_item.item for item in
+                            get_received_items(self.ctx, self.client.team, self.client.slot, True))
                 self.ctx.broadcast_text_all(
-                    'Cheat console: sending "' + item_name + '" to ' + self.ctx.get_aliased_name(self.client.team,
-                                                                                                 self.client.slot),
-                    {"type": "ItemCheat", "team": self.client.team, "receiving": self.client.slot, "item": new_item})
+                    f'Cheat console: sending "{item_name}"' +
+                    (f" #{total}" if total > 1 and not new_item.flags & ItemClassification.consumable else "") +
+                    f" to {self.ctx.get_aliased_name(self.client.team, self.client.slot)}",
+                    {"type": "ItemCheat", "team": self.client.team, "receiving": self.client.slot, "item": new_item,
+                     **({"total": total} if total > 1 else {})})
                 send_new_items(self.ctx)
                 return True
             else:
@@ -1920,6 +1924,14 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def _cmd_send_multiple(self, amount: typing.Union[int, str], player_name: str, *item_name: str) -> bool:
         """Sends multiples of an item to the specified player"""
+        try:
+            amount = int(amount)
+        except ValueError:
+            self.output("Invalid amount.")
+            return False
+        if amount < 1:
+            self.output("Amount must be positive.")
+            return False
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
             team, slot = self.ctx.player_name_lookup[seeked_player]
@@ -1927,14 +1939,18 @@ class ServerCommandProcessor(CommonCommandProcessor):
             names = self.ctx.item_names_for_game(self.ctx.games[slot])
             item_name, usable, response = get_intended_text(item_name, names)
             if usable:
-                amount: int = int(amount)
-                new_items = [NetworkItem(names[item_name], -1, 0) for _ in range(int(amount))]
+                new_items = [NetworkItem(names[item_name], -1, 0) for _ in range(amount)]
                 send_items_to(self.ctx, team, slot, *new_items)
+                total = sum(item.item == new_items[0].item for item in get_received_items(self.ctx, team, slot, True))
 
                 send_new_items(self.ctx)
                 self.ctx.broadcast_text_all(
-                    'Cheat console: sending ' + ('' if amount == 1 else f'{amount} of ') +
-                    f'"{item_name}" to {self.ctx.get_aliased_name(team, slot)}')
+                    "Cheat console: sending " + ("" if amount == 1 else f"{amount} of ") + f'"{item_name}"' +
+                    (f" #{total}" if amount == 1 and total > 1
+                                     and not new_items[0].flags & ItemClassification.consumable else "") +
+                    f" to {self.ctx.get_aliased_name(team, slot)}",
+                    {"type": "ItemCheat", "team": team, "receiving": slot, "item": new_items[0],
+                     **({"total": total} if total > 1 else {})})
                 return True
             else:
                 self.output(response)

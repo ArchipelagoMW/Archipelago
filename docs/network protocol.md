@@ -168,7 +168,7 @@ Sent to clients purely to display a message to the player. While various message
 | type | str | (any) | [PrintJsonType](#PrintJsonType) of this message (optional) |
 | receiving | int | ItemSend, ItemCheat, Hint | Destination player's ID |
 | item | [NetworkItem](#NetworkItem) | ItemSend, ItemCheat, Hint | Source player's ID, location ID, item ID and item flags |
-| total | int | ItemSend | How many instances of this item the destination player has received so far (optional, typically omitted if 1) |
+| total | int | ItemSend, ItemCheat | How many instances of this item the destination player has received so far (optional, typically omitted if 1) |
 | found | bool | Hint | Whether the location hinted for was checked |
 | team | int | Join, Part, Chat, TagsChanged, Goal, Release, Collect, ItemCheat | Team of the triggering player |
 | slot | int | Join, Part, Chat, TagsChanged, Goal, Release, Collect | Slot of the triggering player |
