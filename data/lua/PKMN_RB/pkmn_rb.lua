@@ -132,7 +132,7 @@ function receive()
     end
     if l ~= nil then
         block = json.decode(l)
-        if block != nil then
+        if block ~= nil then
             local itemsBlock = block["items"]
             if itemsBlock ~= nil then
                 ItemsReceived = itemsBlock
@@ -158,12 +158,24 @@ function receive()
     retTable["playerName"] = playerName
     retTable["seedName"] = seedName
     memDomain.wram()
-    if u8(InGameAddress) == 0xAC then
+
+    in_game = u8(InGameAddress_
+    if in_game == 0xAC then
         retTable["locations"] = generateLocationsChecked()
+    elseif in_game ~= 0 then
+        print("Game may have crashed")
+        curstate = STATE_UNINITIALIZED
+        return
     end
     retTable["deathLink"] = deathlink_send
 
-    retTable["options"] = u8(OptionsAddress) & 12
+    options = u8(OptionsAddress)
+    if bit.bor(options, 243) == 0:
+        retTable["options"] = bit.band(options, 12)
+    else
+        print("Game may have crashed")
+        curstate = STATE_UNINITIALIZED
+        return
 
     deathlink_send = false
     msg = json.encode(retTable).."\n"

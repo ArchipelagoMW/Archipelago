@@ -212,10 +212,10 @@ async def gb_sync_task(ctx: GBContext):
                         await ctx.send_death(ctx.auth + " is out of usable Pokémon! " + ctx.auth + " blacked out!")
                     if 'options' in data_decoded:
                         msgs = []
-                        if options & 4 and not ctx.sent_release:
+                        if data_decoded['options'] & 4 and not ctx.sent_release:
                             ctx.sent_release = True
                             msgs.append({"cmd": "Say", "text": "!release"})
-                        if options & 8 and not ctx.sent_collect:
+                        if data_decoded['options'] & 8 and not ctx.sent_collect:
                             ctx.sent_collect = True
                             msgs.append({"cmd": "Say", "text": "!collect"})
                         if msgs:
