@@ -206,15 +206,15 @@ class BountyRequired(Range):
         If Goal is not Hitlist this does nothing."""
     display_name="Bounties Required"
     range_start=0
-    range_end=22
-    default=3
+    range_end=24
+    default=7
 class BountyAmount(Range):
     """Number of Bounties that are in the pool.
         If Goal is not Hitlist this does nothing."""
     display_name="Bounties Available"
     range_start=0
-    range_end=22
-    default=5
+    range_end=24
+    default=13
 
 
 KH2_Options: typing.Dict[str, type(Option)] = {

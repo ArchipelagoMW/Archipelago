@@ -1086,6 +1086,7 @@ exclusion_table = {
         LocationName.Finallvl7,
         LocationName.TransporttoRemembrance,
         LocationName.OrichalcumPlusGoddessofFateCup,
+        LocationName.HadesCupTrophyParadoxCups,
     },
     "Cups":{
         LocationName.ProtectBeltPainandPanicCup,

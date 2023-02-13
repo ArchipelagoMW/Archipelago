@@ -295,9 +295,7 @@ class KH2Context(CommonContext):
                 itemMemory = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
                 self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,(itemMemory | 0x01 << itemcode.bitmask).to_bytes(1, 'big'), 1)
             elif itemcode.code in {0x130026, 0x130027, 0x130028, 0x130029, 0x13002A, 0x13002B}:
-                    while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x715568, 1), "big") != 0:
-                        await asyncio.sleep(1)
-                    while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x715568, 1), "big") != 1:
+                    while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x741320, 1), "big") not in {10,8}:
                         await asyncio.sleep(1)
                     amount = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
                     self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,
@@ -333,7 +331,7 @@ class KH2Context(CommonContext):
     async def roomSave(self, args, svestate):
         while svestate == self.kh2.read_short(self.kh2.base_address + self.sveroom):
             deathstate = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.onDeath, 2), "big")
-            if deathstate == 1024 or deathstate == 1280:
+            if deathstate == 1280:
                 # cannot give item on death screen so waits untill they are not dead
                 while deathstate == 1024 or deathstate == 1280:
                     deathstate = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.onDeath, 2), "big")
