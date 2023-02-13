@@ -7,7 +7,7 @@ import typing
 from BaseClasses import Region, Entrance, Location, Item, RegionType, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from .Mod import generate_mod
-from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal
+from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal, TechCostDistribution
 from .Shapes import get_shapes
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, \
     all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, \
@@ -97,9 +97,24 @@ class Factorio(World):
         location_names = self.multiworld.random.sample(location_pool, location_count)
         self.locations = [FactorioScienceLocation(player, loc_name, self.location_name_to_id[loc_name], nauvis)
                           for loc_name in location_names]
-        rand_values = sorted(random.randint(self.multiworld.min_tech_cost[self.player],
-                                            self.multiworld.max_tech_cost[self.player]) for _ in self.locations)
-        for i, location in enumerate(sorted(self.locations, key=lambda loc: loc.rel_cost)):
+        distribution: TechCostDistribution = self.multiworld.tech_cost_distribution[self.player]
+        min_cost = self.multiworld.min_tech_cost[self.player]
+        max_cost = self.multiworld.max_tech_cost[self.player]
+        if distribution == distribution.option_even:
+            rand_values = (random.randint(min_cost, max_cost) for _ in self.locations)
+        else:
+            mode = {distribution.option_low: min_cost,
+                    distribution.option_middle: (min_cost+max_cost)//2,
+                    distribution.option_high: max_cost}[distribution.value]
+            rand_values = (random.triangular(min_cost, max_cost, mode) for _ in self.locations)
+        rand_values = sorted(rand_values)
+        if self.multiworld.ramping_tech_costs[self.player]:
+            def sorter(loc: FactorioScienceLocation):
+                return loc.complexity, loc.rel_cost
+        else:
+            def sorter(loc: FactorioScienceLocation):
+                return loc.rel_cost
+        for i, location in enumerate(sorted(self.locations, key=sorter)):
             location.count = rand_values[i]
         del rand_values
         nauvis.locations.extend(self.locations)
@@ -207,7 +222,7 @@ class Factorio(World):
 
         map_basic_settings = self.multiworld.world_gen[player].value["basic"]
         if map_basic_settings.get("seed", None) is None:  # allow seed 0
-            map_basic_settings["seed"] = self.multiworld.slot_seeds[player].randint(0, 2 ** 32 - 1)  # 32 bit uint
+            map_basic_settings["seed"] = self.multiworld.per_slot_randoms[player].randint(0, 2 ** 32 - 1)  # 32 bit uint
 
         start_location_hints: typing.Set[str] = self.multiworld.start_location_hints[self.player].value
 

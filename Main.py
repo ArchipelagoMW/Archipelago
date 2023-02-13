@@ -13,7 +13,7 @@ from BaseClasses import Item, MultiWorld, CollectionState, Region, RegionType, L
 import worlds
 from worlds.alttp.Regions import is_main_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
-from worlds.alttp.Shops import SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
+from worlds.alttp.Shops import FillDisabledShopSlots
 from Utils import output_path, get_options, __version__, version_tuple
 from worlds.generic.Rules import locality_rules, exclusion_rules
 from worlds import AutoWorld
@@ -251,6 +251,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         balance_multiworld_progression(world)
 
     logger.info(f'Beginning output...')
+
+    # we're about to output using multithreading, so we're removing the global random state to prevent accidental use
+    world.random.passthrough = False
+
     outfilebase = 'AP_' + world.seed_name
 
     output = tempfile.TemporaryDirectory()
@@ -361,8 +365,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 multidata = {
                     "slot_data": slot_data,
                     "slot_info": slot_info,
-                    "names": names,  # TODO: remove around 0.2.5 in favor of slot_info
-                    "games": games,  # TODO: remove around 0.2.5 in favor of slot_info
+                    "names": names,  # TODO: remove after 0.3.9
                     "connect_names": {name: (0, player) for player, name in world.player_name.items()},
                     "locations": locations_data,
                     "checks_in_area": checks_in_area,
