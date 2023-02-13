@@ -72,7 +72,7 @@ class AdventureWorld(World):
     dragon_slay_check: Optional[int]
     trap_bat_check: Optional[int]
     bat_logic: Optional[int]
-    empty_item_count: Optional[int]
+    freeincarnate_max: Optional[int]
     dragon_rando_type: Optional[int]
     connector_multi_slot: Optional[int]
     yorgle_speed: Optional[int]
@@ -109,7 +109,7 @@ class AdventureWorld(World):
         self.dragon_slay_check = self.multiworld.dragon_slay_check[self.player].value
         self.trap_bat_check = self.multiworld.trap_bat_check[self.player].value
         self.bat_logic = self.multiworld.bat_logic[self.player].value
-        self.empty_item_count = self.multiworld.empty_item_count[self.player].value
+        self.freeincarnate_max = self.multiworld.freeincarnate_max[self.player].value
         self.dragon_rando_type = self.multiworld.dragon_rando_type[self.player].value
         self.connector_multi_slot = self.multiworld.connector_multi_slot[self.player].value
         self.yorgle_speed = self.multiworld.yorgle_speed[self.player].value
@@ -184,9 +184,15 @@ class AdventureWorld(World):
         self.create_dragon_slow_items(self.rhindle_min_speed, self.rhindle_speed, "Slow Rhindle", extra_filler_count)
         extra_filler_count = num_locations - self.created_items
 
-        # TODO: add traps if enabled
+        # traps would probably go here, if enabled
 
-        self.multiworld.itempool += [self.create_item("Freeincarnate") for _ in range(extra_filler_count)]
+        actual_freeincarnates = min(extra_filler_count, self.freeincarnate_max)
+        self.multiworld.itempool += [self.create_item("Freeincarnate") for _ in range(actual_freeincarnates)]
+        self.created_items += actual_freeincarnates
+
+        extra_filler_count = num_locations - self.created_items
+        self.multiworld.itempool += [self.create_item("nothing") for _ in range(extra_filler_count)]
+
 
     def create_dragon_slow_items(self, min_speed: int, speed: int, item_name: str, maximum_items: int):
         if min_speed < speed:
@@ -229,7 +235,7 @@ class AdventureWorld(World):
 
         # unfilled_locations = len(locations_copy)
         # filled_locations = len(overworld.locations) - unfilled_locations
-        force_empty_item_count = (total_location_count - self.created_items) - self.empty_item_count
+        force_empty_item_count = (total_location_count - self.created_items)
         nothing_items = list(filter(lambda i: i.name == "nothing", self.multiworld.itempool))
         # guarantee at least one overworld location, so we can for sure get a key somewhere
         saved_overworld_loc = self.multiworld.random.choice(overworld_locations_copy)
@@ -237,8 +243,7 @@ class AdventureWorld(World):
         overworld_locations_copy.remove(saved_overworld_loc)
         while force_empty_item_count > 0 and len(locations_copy) > 0 and len(nothing_items) > 0:
             force_empty_item_count -= 1
-            # prefer somewhat to thin out the overworld.  The priority settings on the locations
-            # that we've already filtered by will also tend to do this
+            # prefer somewhat to thin out the overworld.
             if len(overworld_locations_copy) > 0 and self.multiworld.random.randint(0, 10) < 4:
                 loc = self.multiworld.random.choice(overworld_locations_copy)
             else:

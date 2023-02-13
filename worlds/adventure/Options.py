@@ -5,19 +5,19 @@ from typing import Dict
 from Options import Choice, Option, DefaultOnToggle, DeathLink, Range, Toggle
 
 
-class EmptyItemCount(Range):
-    """How many empty items to allow in a multiworld.
+class FreeincarnateMax(Range):
+    """How many maximum freeincarnate items to allow
 
-    Increasing this can pull more items into the Adventure world, at
-    the cost of giving other worlds 'nothing' in some of their filler locations
-
-    Supported values: 0-8
-    Default value: 0
+    When done generating items, and remaining item slots will be filled
+    with freeincarnates, up to this maximum amount.  Any remaining item
+    slots after that will be 'nothing' items placed locally, so in multigame
+    multiworlds, keeping this value high will allow more items from other games
+    into Adventure.
     """
-    display_name = "Empty Item Count"
+    display_name = "Freeincarnate Maximum"
     range_start = 0
-    range_end = 8
-    default = 0
+    range_end = 17
+    default = 17
 
 
 class ItemRandoType(Choice):
@@ -211,7 +211,7 @@ adventure_option_definitions: Dict[str, type(Option)] = {
     "trap_bat_check": TrapBatCheck,
     "death_link": DeathLink,
     "bat_logic": BatLogic,
-    "empty_item_count": EmptyItemCount,
+    "freeincarnate_max": FreeincarnateMax,
     "dragon_rando_type": DragonRandoType,
     "connector_multi_slot": ConnectorMultiSlot,
     "yorgle_speed": YorgleStartingSpeed,
