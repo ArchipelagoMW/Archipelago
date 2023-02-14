@@ -534,11 +534,11 @@ class VariaRandomizer:
         if self.minimizerN is not None:
             RomPatches.ActivePatches[self.player].append(RomPatches.NoGadoras)
         if args.tourian == 'Fast':
-            RomPatches.ActivePatches += RomPatches.MinimizerTourian
+            RomPatches.ActivePatches[self.player] += RomPatches.MinimizerTourian
         elif args.tourian == 'Disabled':
-            RomPatches.ActivePatches.append(RomPatches.NoTourian)
+            RomPatches.ActivePatches[self.player].append(RomPatches.NoTourian)
         if 'relaxed_round_robin_cf.ips' in args.patches:
-            RomPatches.ActivePatches.append(RomPatches.RoundRobinCF)
+            RomPatches.ActivePatches[self.player].append(RomPatches.RoundRobinCF)
         missileQty = float(args.missileQty)
         superQty = float(args.superQty)
         powerBombQty = float(args.powerBombQty)
@@ -673,16 +673,11 @@ class VariaRandomizer:
         # and getDoorConnections will crash if random escape is activated.
         stuck = False
         if not stuck or args.vcr == True:
-            self.doors = GraphUtils.getDoorConnections(self.randoExec.areaGraph,
-                                                args.area, args.bosses,
-                                                args.escapeRando)
-            escapeAttr = self.randoExec.areaGraph.EscapeAttributes if args.escapeRando else None
-            if escapeAttr is not None:
-                escapeAttr['patches'] = []
+            self.escapeAttr = self.randoExec.areaGraph.EscapeAttributes if args.escapeRando else None
+            if self.escapeAttr is not None:
+                self.escapeAttr['patches'] = []
                 if args.noRemoveEscapeEnemies == True:
-                    escapeAttr['patches'].append("Escape_Rando_Enable_Enemies")
-                if args.scavEscape == True:
-                    escapeAttr['patches'].append('Escape_Scavenger')
+                    self.escapeAttr['patches'].append("Escape_Rando_Enable_Enemies")
         #except Exception as e:
         #    import traceback
         #    traceback.print_exc(file=sys.stdout)
@@ -757,7 +752,7 @@ class VariaRandomizer:
                 "variaTweaks": not args.noVariaTweaks,
                 "nerfedCharge": args.nerfedCharge,
                 "nerfedRainbowBeam": args.energyQty == 'ultra sparse',
-                "escapeAttr": None, #escapeAttr,
+                "escapeAttr": self.escapeAttr,
                 "minimizerN": None, #minimizerN,
                 "tourian": args.tourian,
                 "doorsColorsRando": args.doorsColorsRando,

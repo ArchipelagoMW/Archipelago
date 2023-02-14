@@ -31,7 +31,7 @@ class RandoExec(object):
         vcr = VCR(self.seedName, 'rando') if self.vcr == True else None
         self.errorMsg = ""
         split = self.randoSettings.restrictions['MajorMinor']
-        graphBuilder = GraphBuilder(self.graphSettings)
+        self.graphBuilder = GraphBuilder(self.graphSettings)
         container = None
         i = 0
         attempts = 500 if self.graphSettings.areaRando or self.graphSettings.doorsColorsRando or split == 'Scavenger' else 1
@@ -44,7 +44,7 @@ class RandoExec(object):
             self.restrictions = Restrictions(self.randoSettings)
             if self.graphSettings.doorsColorsRando == True:
                 DoorsManager.randomize(self.graphSettings.allowGreyDoors, self.player)
-            self.areaGraph = graphBuilder.createGraph(self.randoSettings.maxDiff)
+            self.areaGraph = self.graphBuilder.createGraph(self.randoSettings.maxDiff)
             services = RandoServices(self.areaGraph, self.restrictions)
             setup = RandoSetup(self.graphSettings, Logic.locations, services, self.player)
             self.setup = setup

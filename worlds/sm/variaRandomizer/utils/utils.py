@@ -410,7 +410,6 @@ def loadRandoPreset(world, player, args):
     #args.majorsSplit
     #args.scavNumLocs
     #args.scavRandomized
-    #args.scavEscape
     args.startLocation = defaultMultiValues["startLocation"][world.start_location[player].value]
     #args.progressionDifficulty
     #args.progressionSpeed

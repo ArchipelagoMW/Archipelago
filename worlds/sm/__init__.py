@@ -526,15 +526,8 @@ class SMWorld(World):
         # commit all the changes we've made here to the ROM
         romPatcher.commitIPS()
 
-        itemLocs = [
-            ItemLocation(ItemManager.Items[itemLoc.item.type
-                         if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
-                         'ArchipelagoItem'],
-                         locationsDict[itemLoc.name], True)
-            for itemLoc in self.multiworld.get_locations() if itemLoc.player == self.player
-        ]
-        romPatcher.writeObjectives(itemLocs, romPatcher.settings["tourian"])
-        romPatcher.writeItemsLocs(itemLocs)
+        romPatcher.writeObjectives(self.itemLocs, romPatcher.settings["tourian"])
+        romPatcher.writeItemsLocs(self.itemLocs)
 
         itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name] if itemLoc.name in locationsDict and itemLoc.player == self.player else self.DummyLocation(self.multiworld.get_player_name(itemLoc.player) + " " + itemLoc.name), True) for itemLoc in self.multiworld.get_locations() if itemLoc.item.player == self.player]
         progItemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name] if itemLoc.name in locationsDict and itemLoc.player == self.player else self.DummyLocation(self.multiworld.get_player_name(itemLoc.player) + " " + itemLoc.name), True) for itemLoc in self.multiworld.get_locations() if itemLoc.item.player == self.player and itemLoc.item.advancement == True]
@@ -708,6 +701,36 @@ class SMWorld(World):
             for item, loc in zip(self.NothingPool, locations):
                 loc.place_locked_item(item)
                 loc.address = loc.item.code = None
+
+    def post_fill(self):
+        self.itemLocs = [
+            ItemLocation(ItemManager.Items[itemLoc.item.type
+                         if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
+                         'ArchipelagoItem'],
+                         locationsDict[itemLoc.name], True)
+            for itemLoc in self.multiworld.get_locations() if itemLoc.player == self.player
+        ]
+        self.progItemLocs = [
+            ItemLocation(ItemManager.Items[itemLoc.item.type
+                         if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
+                         'ArchipelagoItem'],
+                         locationsDict[itemLoc.name], True)
+            for itemLoc in self.multiworld.get_locations() if itemLoc.player == self.player and itemLoc.item.advancement == True
+        ]
+        for itemLoc in self.itemLocs:
+            if itemLoc.Item.Class == "Boss":
+                itemLoc.Item.Class = "Minor"
+        for itemLoc in self.progItemLocs:
+            if itemLoc.Item.Class == "Boss":
+                itemLoc.Item.Class = "Minor"
+
+        escapeTrigger = (self.itemLocs, self.progItemLocs, 'Full') if self.variaRando.randoExec.randoSettings.restrictions["EscapeTrigger"] else None
+        escapeOk = self.variaRando.randoExec.graphBuilder.escapeGraph(self.variaRando.container, self.variaRando.randoExec.areaGraph, self.variaRando.randoExec.randoSettings.maxDiff, escapeTrigger)
+        assert escapeOk, "Could not find a solution for escape"
+
+        self.variaRando.doors = GraphUtils.getDoorConnections(self.variaRando.randoExec.areaGraph,
+                                    self.variaRando.args.area, self.variaRando.args.bosses,
+                                    self.variaRando.args.escapeRando)
 
     @classmethod
     def stage_post_fill(cls, world):
