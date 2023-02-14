@@ -550,5 +550,5 @@ class ALttPLogic(LogicMixin):
         if self.multiworld.logic[player] == 'nologic':
             return True
         if self.multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
-            return can_buy_unlimited(state, 'Small Key (Universal)', player)
+            return can_buy_unlimited(self, 'Small Key (Universal)', player)
         return self.prog_items[item, player] >= count
