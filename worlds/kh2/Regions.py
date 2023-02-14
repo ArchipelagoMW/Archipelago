@@ -8,7 +8,7 @@ from .Names import LocationName, ItemName, RegionName
 
 
 def create_regions(world, player: int, active_locations):
-    menu_region = create_region(world, player, active_locations, 'Menu', None, None)
+    menu_region = create_region(world, player, active_locations, 'Menu',None)
 
     goa_region_locations = [
         LocationName.Crit_1,
@@ -28,7 +28,7 @@ def create_regions(world, player: int, active_locations):
     ]
 
     goa_region = create_region(world, player, active_locations, RegionName.GoA_Region,
-                               goa_region_locations, None)
+                               goa_region_locations)
 
     lod_Region_locations = [
         LocationName.BambooGroveDarkShard,
@@ -54,7 +54,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.GoofyShanYu,
     ]
     lod_Region = create_region(world, player, active_locations, RegionName.LoD_Region,
-                               lod_Region_locations, None)
+                               lod_Region_locations)
     lod2_Region_locations = [
         LocationName.ThroneRoomTornPages,
         LocationName.ThroneRoomPalaceMap,
@@ -69,7 +69,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.GoofyStormRider,
     ]
     lod2_Region = create_region(world, player, active_locations, RegionName.LoD2_Region,
-                                lod2_Region_locations, None)
+                                lod2_Region_locations)
     ag_region_locations = [
         LocationName.AgrabahMap,
         LocationName.AgrabahDarkShard,
@@ -104,7 +104,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.DonaldAbuEscort,
     ]
     ag_region = create_region(world, player, active_locations, RegionName.Ag_Region,
-                              ag_region_locations, None)
+                              ag_region_locations)
     ag2_region_locations = [
         LocationName.RuinedChamberTornPages,
         LocationName.RuinedChamberRuinsMap,
@@ -112,14 +112,14 @@ def create_regions(world, player: int, active_locations):
         LocationName.WishingLamp,
     ]
     ag2_region = create_region(world, player, active_locations, RegionName.Ag2_Region,
-                               ag2_region_locations, None)
+                               ag2_region_locations)
     lexaeus_region_locations = [
         LocationName.LexaeusBonus,
         LocationName.LexaeusASStrengthBeyondStrength,
         LocationName.LexaeusDataLostIllusion,
     ]
     lexaeus_region = create_region(world, player, active_locations, RegionName.Lexaeus_Region,
-                                   lexaeus_region_locations, None)
+                                   lexaeus_region_locations)
 
     dc_region_locations = [
         LocationName.DCCourtyardMythrilShard,
@@ -135,7 +135,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.MinnieEscortGetBonus,
     ]
     dc_region = create_region(world, player, active_locations, RegionName.Dc_Region,
-                              dc_region_locations, None)
+                              dc_region_locations)
     tr_region_locations = [
         LocationName.CornerstoneHillMap,
         LocationName.CornerstoneHillFrostShard,
@@ -155,21 +155,21 @@ def create_regions(world, player: int, active_locations):
         LocationName.GoofyFuturePete,
     ]
     tr_region = create_region(world, player, active_locations, RegionName.Tr_Region,
-                              tr_region_locations, None)
+                              tr_region_locations)
     marluxia_region_locations = [
         LocationName.MarluxiaGetBonus,
         LocationName.MarluxiaASEternalBlossom,
         LocationName.MarluxiaDataLostIllusion,
     ]
     marluxia_region = create_region(world, player, active_locations, RegionName.Marluxia_Region,
-                                    marluxia_region_locations, None)
+                                    marluxia_region_locations)
     terra_region_locations = [
         LocationName.LingeringWillBonus,
         LocationName.LingeringWillProofofConnection,
         LocationName.LingeringWillManifestIllusion,
     ]
     terra_region = create_region(world, player, active_locations, RegionName.Terra_Region,
-                                 terra_region_locations, None)
+                                 terra_region_locations)
 
     hundred_acre1_region_locations = [
         LocationName.PoohsHouse100AcreWoodMap,
@@ -177,28 +177,28 @@ def create_regions(world, player: int, active_locations):
         LocationName.PoohsHouseMythrilStone,
     ]
     hundred_acre1_region = create_region(world, player, active_locations, RegionName.HundredAcre1_Region,
-                                         hundred_acre1_region_locations, None)
+                                         hundred_acre1_region_locations)
     hundred_acre2_region_locations = [
         LocationName.PigletsHouseDefenseBoost,
         LocationName.PigletsHouseAPBoost,
         LocationName.PigletsHouseMythrilGem,
     ]
     hundred_acre2_region = create_region(world, player, active_locations, RegionName.HundredAcre2_Region,
-                                         hundred_acre2_region_locations, None)
+                                         hundred_acre2_region_locations)
     hundred_acre3_region_locations = [
         LocationName.RabbitsHouseDrawRing,
         LocationName.RabbitsHouseMythrilCrystal,
         LocationName.RabbitsHouseAPBoost,
     ]
     hundred_acre3_region = create_region(world, player, active_locations, RegionName.HundredAcre3_Region,
-                                         hundred_acre3_region_locations, None)
+                                         hundred_acre3_region_locations)
     hundred_acre4_region_locations = [
         LocationName.KangasHouseMagicBoost,
         LocationName.KangasHouseAPBoost,
         LocationName.KangasHouseOrichalcum,
     ]
     hundred_acre4_region = create_region(world, player, active_locations, RegionName.HundredAcre4_Region,
-                                         hundred_acre4_region_locations, None)
+                                         hundred_acre4_region_locations)
     hundred_acre5_region_locations = [
         LocationName.SpookyCaveMythrilGem,
         LocationName.SpookyCaveAPBoost,
@@ -210,7 +210,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.SpookyCaveMap,
     ]
     hundred_acre5_region = create_region(world, player, active_locations, RegionName.HundredAcre5_Region,
-                                         hundred_acre5_region_locations, None)
+                                         hundred_acre5_region_locations)
     hundred_acre6_region_locations = [
         LocationName.StarryHillCosmicRing,
         LocationName.StarryHillStyleRecipe,
@@ -218,7 +218,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.StarryHillOrichalcumPlus,
     ]
     hundred_acre6_region = create_region(world, player, active_locations, RegionName.HundredAcre6_Region,
-                                         hundred_acre6_region_locations, None)
+                                         hundred_acre6_region_locations)
     pr_region_locations = [
         LocationName.RampartNavalMap,
         LocationName.RampartMythrilStone,
@@ -246,7 +246,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.GoofyInterceptorBarrels,
     ]
     pr_region = create_region(world, player, active_locations, RegionName.Pr_Region,
-                              pr_region_locations, None)
+                              pr_region_locations)
     pr2_region_locations = [
         LocationName.GrimReaper1,
         LocationName.InterceptorsHoldFeatherCharm,
@@ -265,7 +265,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.DonaladGrimReaper2,
     ]
     pr2_region = create_region(world, player, active_locations, RegionName.Pr2_Region,
-                               pr2_region_locations, None)
+                               pr2_region_locations)
     oc_region_locations = [
         LocationName.PassageMythrilShard,
         LocationName.PassageMythrilStone,
@@ -301,7 +301,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.GoofyPeteOC,
     ]
     oc_region = create_region(world, player, active_locations, RegionName.Oc_Region,
-                              oc_region_locations, None)
+                              oc_region_locations)
     oc2_region_locations = [
         LocationName.AuronsStatue,
         LocationName.Hades,
@@ -310,7 +310,7 @@ def create_regions(world, player: int, active_locations):
 
     ]
     oc2_region = create_region(world, player, active_locations, RegionName.Oc2_Region,
-                               oc2_region_locations, None)
+                               oc2_region_locations)
     oc2_pain_and_panic_locations = [
         LocationName.ProtectBeltPainandPanicCup,
         LocationName.SerenityGemPainandPanicCup,
@@ -335,14 +335,12 @@ def create_regions(world, player: int, active_locations):
         LocationName.GoofyZexion,
     ]
     oc2_pain_and_panic_cup = create_region(world, player, active_locations, RegionName.Oc2_pain_and_panic_Region,
-                                           oc2_pain_and_panic_locations, None)
-    oc2_titan_cup = create_region(world, player, active_locations, RegionName.Oc2_titan_Region, oc2_titan_locations,
-                                  None)
+                                           oc2_pain_and_panic_locations)
+    oc2_titan_cup = create_region(world, player, active_locations, RegionName.Oc2_titan_Region, oc2_titan_locations)
     oc2_cerberus_cup = create_region(world, player, active_locations, RegionName.Oc2_cerberus_Region,
-                                     oc2_cerberus_locations, None)
-    oc2_gof_cup = create_region(world, player, active_locations, RegionName.Oc2_gof_Region, oc2_gof_cup_locations, None)
-    zexion_region = create_region(world, player, active_locations, RegionName.Zexion_Region, zexion_region_locations,
-                                  None)
+                                     oc2_cerberus_locations)
+    oc2_gof_cup = create_region(world, player, active_locations, RegionName.Oc2_gof_Region, oc2_gof_cup_locations)
+    zexion_region = create_region(world, player, active_locations, RegionName.Zexion_Region, zexion_region_locations)
 
     bc_region_locations = [
         LocationName.BCCourtyardAPBoost,
@@ -375,7 +373,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.GoofyBeast,
     ]
     bc_region = create_region(world, player, active_locations, RegionName.Bc_Region,
-                              bc_region_locations, None)
+                              bc_region_locations)
     bc2_region_locations = [
         LocationName.RumblingRose,
         LocationName.CastleWallsMap,
@@ -386,7 +384,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.DonaldXaldinGetBonus,
     ]
     bc2_region = create_region(world, player, active_locations, RegionName.Bc2_Region,
-                               bc2_region_locations, None)
+                               bc2_region_locations)
     sp_region_locations = [
         LocationName.PitCellAreaMap,
         LocationName.PitCellMythrilCrystal,
@@ -407,7 +405,7 @@ def create_regions(world, player: int, active_locations):
 
     ]
     sp_region = create_region(world, player, active_locations, RegionName.Sp_Region,
-                              sp_region_locations, None)
+                              sp_region_locations)
     sp2_region_locations = [
         LocationName.SolarSailer,
         LocationName.CentralComputerCoreAPBoost,
@@ -420,14 +418,14 @@ def create_regions(world, player: int, active_locations):
         LocationName.DonaldSolarSailer,
     ]
     sp2_region = create_region(world, player, active_locations, RegionName.Sp2_Region,
-                               sp2_region_locations, None)
+                               sp2_region_locations)
     larxene_region_locations = [
         LocationName.LarxeneBonus,
         LocationName.LarxeneASCloakedThunder,
         LocationName.LarxeneDataLostIllusion,
     ]
     larxene_region = create_region(world, player, active_locations, RegionName.Larxene_Region,
-                                   larxene_region_locations, None)
+                                   larxene_region_locations)
     ht_region_locations = [
         LocationName.GraveyardMythrilShard,
         LocationName.GraveyardSerenityGem,
@@ -450,7 +448,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.GoofyOogieBoogie,
     ]
     ht_region = create_region(world, player, active_locations, RegionName.Ht_Region,
-                              ht_region_locations, None)
+                              ht_region_locations)
     ht2_region_locations = [
         LocationName.Lock,
         LocationName.Present,
@@ -462,14 +460,14 @@ def create_regions(world, player: int, active_locations):
         LocationName.GoofyLock,
     ]
     ht2_region = create_region(world, player, active_locations, RegionName.Ht2_Region,
-                               ht2_region_locations, None)
+                               ht2_region_locations)
     vexen_region_locations = [
         LocationName.VexenBonus,
         LocationName.VexenASRoadtoDiscovery,
         LocationName.VexenDataLostIllusion,
     ]
     vexen_region = create_region(world, player, active_locations, RegionName.Vexen_Region,
-                                 vexen_region_locations, None)
+                                 vexen_region_locations)
     hb_region_locations = [
         LocationName.MarketplaceMap,
         LocationName.BoroughDriveRecovery,
@@ -484,7 +482,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.BaseballCharm,
     ]
     hb_region = create_region(world, player, active_locations, RegionName.Hb_Region,
-                              hb_region_locations, None)
+                              hb_region_locations)
     hb2_region_locations = [
         LocationName.PosternCastlePerimeterMap,
         LocationName.PosternMythrilGem,
@@ -525,13 +523,13 @@ def create_regions(world, player: int, active_locations):
         LocationName.DonaldDemyxHBGetBonus,
     ]
     hb2_region = create_region(world, player, active_locations, RegionName.Hb2_Region,
-                               hb2_region_locations, None)
+                               hb2_region_locations)
     sephi_region_locations = [
         LocationName.SephirothBonus,
         LocationName.SephirothFenrir,
     ]
     sephi_region = create_region(world, player, active_locations, RegionName.Sephi_Region,
-                                 sephi_region_locations, None)
+                                 sephi_region_locations)
 
     cor_region_locations = [
         LocationName.CoRDepthsUpperLevelRemembranceGem,
@@ -549,13 +547,13 @@ def create_regions(world, player: int, active_locations):
         LocationName.CoRMineshaftUpperLevelMagicBoost,
     ]
     cor_region = create_region(world, player, active_locations, RegionName.CoR_Region,
-                               cor_region_locations, None)
+                               cor_region_locations)
     transport_region_locations = [
         LocationName.CoRMineshaftUpperLevelAPBoost,
         LocationName.TransporttoRemembrance,
     ]
     transport_region = create_region(world, player, active_locations, RegionName.Transport_Region,
-                                     transport_region_locations, None)
+                                     transport_region_locations)
     pl_region_locations = [
         LocationName.GorgeSavannahMap,
         LocationName.GorgeDarkGem,
@@ -591,7 +589,7 @@ def create_regions(world, player: int, active_locations):
 
     ]
     pl_region = create_region(world, player, active_locations, RegionName.Pl_Region,
-                              pl_region_locations, None)
+                              pl_region_locations)
     pl2_region_locations = [
         LocationName.Hyenas2,
         LocationName.Groundshaker,
@@ -600,7 +598,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.GoofyHyenas2,
     ]
     pl2_region = create_region(world, player, active_locations, RegionName.Pl2_Region,
-                               pl2_region_locations, None)
+                               pl2_region_locations)
 
     stt_region_locations = [
         LocationName.TwilightTownMap,
@@ -633,7 +631,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.RoxasDataMagicBoost,
     ]
     stt_region = create_region(world, player, active_locations, RegionName.STT_Region,
-                               stt_region_locations, None)
+                               stt_region_locations)
 
     tt_region_locations = [
         LocationName.OldMansionPotion,
@@ -665,14 +663,14 @@ def create_regions(world, player: int, active_locations):
         LocationName.ValorForm,
     ]
     tt_region = create_region(world, player, active_locations, RegionName.TT_Region,
-                              tt_region_locations, None)
+                              tt_region_locations)
     tt2_region_locations = [
         LocationName.SeifersTrophy,
         LocationName.Oathkeeper,
         LocationName.LimitForm,
     ]
     tt2_region = create_region(world, player, active_locations, RegionName.TT2_Region,
-                               tt2_region_locations, None)
+                               tt2_region_locations)
     tt3_region_locations = [
         LocationName.UndergroundConcourseMythrilGem,
         LocationName.UndergroundConcourseAPBoost,
@@ -699,7 +697,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.DonaldMansionNobodies,
     ]
     tt3_region = create_region(world, player, active_locations, RegionName.TT3_Region,
-                               tt3_region_locations, None)
+                               tt3_region_locations)
 
     twtnw_region_locations = [
         LocationName.FragmentCrossingMythrilStone,
@@ -730,7 +728,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.LuxordSecretAnsemReport9,
     ]
     twtnw_region = create_region(world, player, active_locations, RegionName.Twtnw_Region,
-                                 twtnw_region_locations, None)
+                                 twtnw_region_locations)
     twtnw2_region_locations = [
         LocationName.SaixBonus,
         LocationName.SaixSecretAnsemReport12,
@@ -746,7 +744,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.XemnasDataPowerBoost,
     ]
     twtnw2_region = create_region(world, player, active_locations, RegionName.Twtnw2_Region,
-                                  twtnw2_region_locations, None)
+                                  twtnw2_region_locations)
 
     valor_region_locations = [
         # LocationName.Valorlvl1,
@@ -758,7 +756,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.Valorlvl7,
     ]
     valor_region = create_region(world, player, active_locations, RegionName.Valor_Region,
-                                 valor_region_locations, None)
+                                 valor_region_locations)
     wisdom_region_locations = [
         # LocationName.Wisdomlvl1,
         LocationName.Wisdomlvl2,
@@ -769,7 +767,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.Wisdomlvl7,
     ]
     wisdom_region = create_region(world, player, active_locations, RegionName.Wisdom_Region,
-                                  wisdom_region_locations, None)
+                                  wisdom_region_locations)
     limit_region_locations = [
         # LocationName.Limitlvl1,
         LocationName.Limitlvl2,
@@ -780,7 +778,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.Limitlvl7,
     ]
     limit_region = create_region(world, player, active_locations, RegionName.Limit_Region,
-                                 limit_region_locations, None)
+                                 limit_region_locations)
     master_region_locations = [
         # LocationName.Masterlvl1,
         LocationName.Masterlvl2,
@@ -791,7 +789,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.Masterlvl7,
     ]
     master_region = create_region(world, player, active_locations, RegionName.Master_Region,
-                                  master_region_locations, None)
+                                  master_region_locations)
     final_region_locations = [
         # LocationName.Finallvl1,
         LocationName.Finallvl2,
@@ -802,7 +800,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.Finallvl7,
     ]
     final_region = create_region(world, player, active_locations, RegionName.Final_Region,
-                                 final_region_locations, None)
+                                 final_region_locations)
     keyblade_region_locations = [
         LocationName.FAKESlot,
         LocationName.DetectionSaberSlot,
@@ -865,7 +863,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.UltimateMushroom,
     ]
     keyblade_region = create_region(world, player, active_locations, RegionName.Keyblade_Region,
-                                    keyblade_region_locations, None)
+                                    keyblade_region_locations)
 
     world.regions += [
         lod_Region,
@@ -970,25 +968,25 @@ def create_regions(world, player: int, active_locations):
             levelVL26 = [LocationName.Lvl91,LocationName.Lvl92,LocationName.Lvl93,LocationName.Lvl94,LocationName.Lvl95,LocationName.Lvl96,LocationName.Lvl97,LocationName.Lvl98,LocationName.Lvl99]
 
     level_regionVL1 = create_region(world, player, active_locations, RegionName.LevelsVS1,
-                                 levelVL1, None)
+                                 levelVL1)
     level_regionVL3 = create_region(world, player, active_locations, RegionName.LevelsVS3,
-                                 levelVL3, None)
+                                 levelVL3)
     level_regionVL6 = create_region(world, player, active_locations, RegionName.LevelsVS6,
-                                 levelVL6, None)
+                                 levelVL6)
     level_regionVL9 = create_region(world, player, active_locations, RegionName.LevelsVS9,
-                                 levelVL9, None)
+                                 levelVL9)
     level_regionVL12 = create_region(world, player, active_locations, RegionName.LevelsVS12,
-                                 levelVL12, None)
+                                 levelVL12)
     level_regionVL15 = create_region(world, player, active_locations, RegionName.LevelsVS15,
-                                 levelVL15, None)
+                                 levelVL15)
     level_regionVL18 = create_region(world, player, active_locations, RegionName.LevelsVS18,
-                                 levelVL18, None)
+                                 levelVL18)
     level_regionVL21 = create_region(world, player, active_locations, RegionName.LevelsVS21,
-                                 levelVL21, None)
+                                 levelVL21)
     level_regionVL24 = create_region(world, player, active_locations, RegionName.LevelsVS24,
-                                  levelVL24, None)
+                                  levelVL24)
     level_regionVL26 = create_region(world, player, active_locations, RegionName.LevelsVS26,
-                                  levelVL26, None)
+                                  levelVL26)
     world.regions+=[level_regionVL1,level_regionVL3 ,level_regionVL6,level_regionVL9,level_regionVL12,level_regionVL15,level_regionVL18,level_regionVL21,level_regionVL24,level_regionVL26]
 
 
@@ -1144,12 +1142,13 @@ def connect(world: MultiWorld, player: int, used_names: typing.Dict[str, int], s
             rule: typing.Optional[typing.Callable] = None):
     source_region = world.get_region(source, player)
     target_region = world.get_region(target, player)
+
     if target not in used_names:
         used_names[target] = 1
         name = target
     else:
         used_names[target] += 1
-        name = target + (' ' * used_names[source])
+        name = target + (' ' * used_names[target])
 
     connection = Entrance(player, name, source_region)
 
@@ -1160,19 +1159,15 @@ def connect(world: MultiWorld, player: int, used_names: typing.Dict[str, int], s
     connection.connect(target_region)
 
 
-def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None, exits=None):
-    # Shamelessly stolen from the SA2B definition that stole from ROR2 definition
-    ret = Region(name, None, name, player)
-    ret.multiworld = world
+def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None):
+    ret = Region(name, player, world)
     if locations:
         for location in locations:
             loc_id = active_locations.get(location, 0)
             if loc_id:
-                location = KH2Location(player, location, loc_id.code, ret)
+                location = KH2Location(player, location, loc_id, ret)
                 ret.locations.append(location)
-    if exits:
-        for exit in exits:
-            ret.exits.append(Entrance(player, exit, ret))
+
     return ret
 
 
