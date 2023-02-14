@@ -19,7 +19,7 @@ class TestInvertedBombRules(unittest.TestCase):
         args = self.multiworld.default_common_options
         for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
             setattr(args, name, {1: option.from_any(option.default)})
-            self.multiworld.set_options(args)
+        self.multiworld.set_options(args)
         self.multiworld.difficulty_requirements[1] = difficulties['normal']
         create_inverted_regions(self.multiworld, 1)
         create_dungeons(self.multiworld, 1)

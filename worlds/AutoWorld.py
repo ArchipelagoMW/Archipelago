@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import sys
 import pathlib
+from dataclasses import make_dataclass
 from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Type, Union, TYPE_CHECKING, \
     ClassVar
 
@@ -43,6 +44,12 @@ class AutoWorldRegister(type):
                 if "required_client_version" in base.__dict__:
                     dct["required_client_version"] = max(dct["required_client_version"],
                                                          base.__dict__["required_client_version"])
+
+        # create missing options_dataclass from legacy option_definitions
+        # TODO - remove this once all worlds use options dataclasses
+        if "options_dataclass" not in dct and "option_definitions" in dct:
+            dct["options_dataclass"] = make_dataclass(f"{name}Options", dct["option_definitions"].items(),
+                                                      bases=(PerGameCommonOptions,))
 
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
