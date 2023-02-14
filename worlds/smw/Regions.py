@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import MultiWorld, Region, RegionType, Entrance
+from BaseClasses import MultiWorld, Region, Entrance
 from .Locations import SMWLocation
 from .Levels import level_info_dict
 from .Names import LocationName, ItemName
@@ -1130,8 +1130,7 @@ def connect_regions(world, player, level_to_tile_dict):
 
 
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None):
-    ret = Region(name, RegionType.Generic, name, player)
-    ret.world = world
+    ret = Region(name, player, world)
     if locations:
         for locationName in locations:
             loc_id = active_locations.get(locationName, 0)
