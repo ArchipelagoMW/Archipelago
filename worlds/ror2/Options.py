@@ -300,7 +300,7 @@ class ROR2Options(PerGameCommonOptions, ROR2Weights):
     total_revivals: TotalRevivals
     start_with_revive: StartWithRevive
     final_stage_death: FinalStageDeath
-    being_with_loop: BeginWithLoop
+    begin_with_loop: BeginWithLoop
     dlc_sotv: DLC_SOTV
     death_link: DeathLink
     item_pickup_step: ItemPickupStep
