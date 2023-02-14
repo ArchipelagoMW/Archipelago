@@ -1,12 +1,13 @@
+from .SubClasses import LTTPRegion
 
 # TODO: typing busted temporarily
-def is_not_bunny(state, region: "LTTPRegion", player: int) -> bool:
+def is_not_bunny(state, region: LTTPRegion, player: int) -> bool:
     if state.has('Moon Pearl', player):
         return True
 
     return region.is_light_world if state.multiworld.mode[player] != 'inverted' else region.is_dark_world
 
-def can_bomb_clip(state, region: "LTTPRegion", player: int) -> bool:
+def can_bomb_clip(state, region: LTTPRegion, player: int) -> bool:
     return is_not_bunny(state, region, player) and state.has('Pegasus Boots', player)
 
 def can_buy_unlimited(state, item: str, player: int) -> bool:
@@ -71,7 +72,7 @@ def can_extend_magic(state, player: int, smallmagic: int = 16,
 def can_kill_most_things(state, player: int, enemies: int = 5) -> bool:
     return (has_melee_weapon(state, player)
             or state.has('Cane of Somaria', player)
-            or (state.has('Cane of Byrna', player) and (enemies < 6 or state.can_extend_magic(player)))
+            or (state.has('Cane of Byrna', player) and (enemies < 6 or can_extend_magic(state, player)))
             or can_shoot_arrows(state, player)
             or state.has('Fire Rod', player)
             or (state.has('Bombs (10)', player) and enemies < 6))

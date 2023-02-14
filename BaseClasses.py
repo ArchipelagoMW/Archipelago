@@ -16,8 +16,6 @@ import NetUtils
 import Options
 import Utils
 
-from worlds.alttp.StateHelpers import can_shoot_arrows, can_buy_unlimited, is_not_bunny
-
 class Group(TypedDict, total=False):
     name: str
     game: str
