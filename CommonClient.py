@@ -193,7 +193,7 @@ class CommonContext:
         self.hint_cost = None
         self.slot_info = {}
         self.permissions = {
-            "forfeit": "disabled",
+            "release": "disabled",
             "collect": "disabled",
             "remaining": "disabled",
         }
@@ -260,7 +260,7 @@ class CommonContext:
         self.server_task = None
         self.hint_cost = None
         self.permissions = {
-            "forfeit": "disabled",
+            "release": "disabled",
             "collect": "disabled",
             "remaining": "disabled",
         }
@@ -340,6 +340,11 @@ class CommonContext:
         if slot in self.slot_info:
             return self.slot in self.slot_info[slot].group_members
         return False
+
+    def is_echoed_chat(self, print_json_packet: dict) -> bool:
+        return print_json_packet.get("type", "") == "Chat" \
+            and print_json_packet.get("team", None) == self.team \
+            and print_json_packet.get("slot", None) == self.slot
 
     def is_uninteresting_item_send(self, print_json_packet: dict) -> bool:
         """Helper function for filtering out ItemSend prints that do not concern the local player."""
@@ -821,6 +826,10 @@ if __name__ == '__main__':
         def on_package(self, cmd: str, args: dict):
             if cmd == "Connected":
                 self.game = self.slot_info[self.slot].game
+        
+        async def disconnect(self, allow_autoreconnect: bool = False):
+            self.game = ""
+            await super().disconnect(allow_autoreconnect)
 
 
     async def main(args):

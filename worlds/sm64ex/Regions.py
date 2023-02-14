@@ -1,5 +1,5 @@
 import typing
-from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
+from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import SM64Location, location_table, locBoB_table, locWhomp_table, locJRB_table, locCCM_table, \
     locBBH_table, \
     locHMC_table, locLLL_table, locSSL_table, locDDD_table, locSL_table, \
@@ -27,7 +27,7 @@ sm64_internalloc_to_string = dict(zip(sm64paintings+sm64secrets, sm64entrances_s
 sm64_internalloc_to_regionid = dict(zip(sm64paintings+sm64secrets, list(range(13)) + [12,13,14] + list(range(15,15+len(sm64secrets)))))
 
 def create_regions(world: MultiWorld, player: int):
-    regSS = Region("Menu", RegionType.Generic, "Castle Area", player, world)
+    regSS = Region("Menu", player, world, "Castle Area")
     create_default_locs(regSS, locSS_table, player)
     world.regions.append(regSS)
 
@@ -179,7 +179,7 @@ def connect_regions(world: MultiWorld, player: int, source: str, target: str, ru
     connection.connect(targetRegion)
 
 def create_region(name: str, player: int, world: MultiWorld) -> Region:
-    return Region(name, RegionType.Generic, name, player, world)
+    return Region(name, player, world)
 
 def create_default_locs(reg: Region, locs, player):
     reg_names = [name for name, id in locs.items()]
