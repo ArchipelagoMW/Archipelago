@@ -2,7 +2,7 @@ import os
 import string
 import json
 
-from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification, RegionType
+from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification
 from .Items import item_table, faction_table
 from .Locations import location_table
 from .Regions import create_regions
@@ -105,8 +105,7 @@ class WargrooveWorld(World):
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, RegionType.Generic, name, player)
-    ret.multiworld = world
+    ret = Region(name, player, world)
     if locations:
         for location in locations:
             loc_id = location_table.get(location, 0)
