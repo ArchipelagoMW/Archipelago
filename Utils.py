@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-from ctypes import Union
 import typing
 import builtins
 import os
@@ -13,7 +12,7 @@ import io
 import collections
 import importlib
 import logging
-from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any
+from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
 
 from yaml import load, load_all, dump, SafeLoader
 

@@ -1,7 +1,6 @@
 import datetime
 import os
-from tkinter import W
-from typing import List
+from typing import List, Dict, Union
 
 import jinja2.exceptions
 from flask import request, redirect, url_for, render_template, Response, session, abort, send_from_directory
@@ -165,7 +164,7 @@ def get_datapackage():
 @app.route('/index')
 @app.route('/sitemap')
 def get_sitemap():
-    available_games: List = []
+    available_games: List[Dict[str, Union[str, bool]]] = []
     for game, world in AutoWorldRegister.world_types.items():
         if not world.hidden:
             has_settings: bool = isinstance(world.web.settings_page, bool) and world.web.settings_page
