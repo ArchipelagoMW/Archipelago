@@ -171,8 +171,7 @@ class PokemonRedBlueWorld(World):
         # damage being reduced by 1 which leads to a "not very effective" message appearing due to my changes
         # to the way effectiveness messages are generated.
         self.type_chart = sorted(chart, key=lambda matchup: -matchup[2])
-        if self.multiworld.early_exp_all[self.player]:
-            self.multiworld.early_items[self.player]["Exp. All"] = 1
+        self.multiworld.early_items[self.player]["Exp. All"] = 1
  
             
 
