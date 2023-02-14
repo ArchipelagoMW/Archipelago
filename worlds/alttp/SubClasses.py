@@ -84,7 +84,7 @@ class LTTPRegion(Region):
     is_light_world: bool = False
     is_dark_world: bool = False
 
-    shop: Optional["Shop"] = None
+    shop: Optional = None
 
     def __init__(self, name: str, type_: LTTPRegionType, hint: str, player: int, multiworld: MultiWorld):
         super().__init__(name, player, multiworld, hint)
