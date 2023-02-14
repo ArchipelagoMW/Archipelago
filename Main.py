@@ -9,11 +9,12 @@ import tempfile
 import zipfile
 from typing import Dict, List, Tuple, Optional, Set
 
-from BaseClasses import Item, MultiWorld, CollectionState, Region, RegionType, LocationProgressType, Location
+from BaseClasses import Item, MultiWorld, CollectionState, Region, LocationProgressType, Location
 import worlds
+from worlds.alttp.SubClasses import LTTPRegionType
 from worlds.alttp.Regions import is_main_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
-from worlds.alttp.Shops import SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
+from worlds.alttp.Shops import FillDisabledShopSlots
 from Utils import output_path, get_options, __version__, version_tuple
 from worlds.generic.Rules import locality_rules, exclusion_rules
 from worlds import AutoWorld
@@ -38,7 +39,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     logger = logging.getLogger()
     world.set_seed(seed, args.race, str(args.outputname if args.outputname else world.seed))
-    world.plando_settings = args.plando_settings
+    world.plando_options = args.plando_options
 
     world.shuffle = args.shuffle.copy()
     world.logic = args.logic.copy()
@@ -122,6 +123,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     logger.info('Creating Items.')
     AutoWorld.call_all(world, "create_items")
 
+    # All worlds should have finished creating all regions, locations, and entrances.
+    # Recache to ensure that they are all visible for locality rules.
+    world._recache()
+
     logger.info('Calculating Access Rules.')
 
     for player in world.player_ids:
@@ -187,7 +192,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 new_item.classification |= classifications[item_name]
                 new_itempool.append(new_item)
 
-        region = Region("Menu", RegionType.Generic, "ItemLink", group_id, world)
+        region = Region("Menu", group_id, world, "ItemLink")
         world.regions.append(region)
         locations = region.locations = []
         for item in world.itempool:
@@ -247,6 +252,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         balance_multiworld_progression(world)
 
     logger.info(f'Beginning output...')
+
+    # we're about to output using multithreading, so we're removing the global random state to prevent accidental use
+    world.random.passthrough = False
+
     outfilebase = 'AP_' + world.seed_name
 
     output = tempfile.TemporaryDirectory()
@@ -282,36 +291,15 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                                            'Inverted Ganons Tower': 'Ganons Tower'} \
                                 .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
                             checks_in_area[location.player][dungeonname].append(location.address)
-                        elif location.parent_region.type == RegionType.LightWorld:
+                        elif location.parent_region.type == LTTPRegionType.LightWorld:
                             checks_in_area[location.player]["Light World"].append(location.address)
-                        elif location.parent_region.type == RegionType.DarkWorld:
+                        elif location.parent_region.type == LTTPRegionType.DarkWorld:
                             checks_in_area[location.player]["Dark World"].append(location.address)
-                        elif main_entrance.parent_region.type == RegionType.LightWorld:
+                        elif main_entrance.parent_region.type == LTTPRegionType.LightWorld:
                             checks_in_area[location.player]["Light World"].append(location.address)
-                        elif main_entrance.parent_region.type == RegionType.DarkWorld:
+                        elif main_entrance.parent_region.type == LTTPRegionType.DarkWorld:
                             checks_in_area[location.player]["Dark World"].append(location.address)
                     checks_in_area[location.player]["Total"] += 1
-
-            oldmancaves = []
-            takeanyregions = ["Old Man Sword Cave", "Take-Any #1", "Take-Any #2", "Take-Any #3", "Take-Any #4"]
-            for index, take_any in enumerate(takeanyregions):
-                for region in [world.get_region(take_any, player) for player in
-                               world.get_game_players("A Link to the Past") if world.retro_caves[player]]:
-                    item = world.create_item(
-                        region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'],
-                        region.player)
-                    player = region.player
-                    location_id = SHOP_ID_START + total_shop_slots + index
-
-                    main_entrance = region.get_connecting_entrance(is_main_entrance)
-                    if main_entrance.parent_region.type == RegionType.LightWorld:
-                        checks_in_area[player]["Light World"].append(location_id)
-                    else:
-                        checks_in_area[player]["Dark World"].append(location_id)
-                    checks_in_area[player]["Total"] += 1
-
-                    er_hint_data[player][location_id] = main_entrance.name
-                    oldmancaves.append(((location_id, player), (item.code, player)))
 
             FillDisabledShopSlots(world)
 
@@ -378,8 +366,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 multidata = {
                     "slot_data": slot_data,
                     "slot_info": slot_info,
-                    "names": names,  # TODO: remove around 0.2.5 in favor of slot_info
-                    "games": games,  # TODO: remove around 0.2.5 in favor of slot_info
+                    "names": names,  # TODO: remove after 0.3.9
                     "connect_names": {name: (0, player) for player, name in world.player_name.items()},
                     "locations": locations_data,
                     "checks_in_area": checks_in_area,

@@ -169,6 +169,9 @@ class WorldTestBase(unittest.TestCase):
     def can_reach_location(self, location: str) -> bool:
         return self.multiworld.state.can_reach(location, "Location", 1)
 
+    def can_reach_entrance(self, entrance: str) -> bool:
+        return self.multiworld.state.can_reach(entrance, "Entrance", 1)
+
     def count(self, item_name: str) -> int:
         return self.multiworld.state.count(item_name, 1)
 

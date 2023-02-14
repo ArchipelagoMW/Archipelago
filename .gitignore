@@ -55,7 +55,7 @@ Output Logs/
 /files.iss
 /sni_components.iss
 /code.iss
-
+/data/user.kv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,5 +1,5 @@
 from typing import Optional
-from BaseClasses import MultiWorld, Region, RegionType, Location, Item, CollectionState
+from BaseClasses import MultiWorld, Region, Location, Item, CollectionState
 from zilliandomizer.logic_components.regions import Region as ZzRegion
 from zilliandomizer.logic_components.locations import Location as ZzLocation
 from zilliandomizer.logic_components.items import RESCUE
@@ -11,14 +11,12 @@ from .item import ZillionItem
 class ZillionRegion(Region):
     zz_r: ZzRegion
 
-    def __init__(self,
-                 zz_r: ZzRegion,
+    def __init__(self, zz_r: ZzRegion,
                  name: str,
-                 type_: RegionType,
                  hint: str,
                  player: int,
-                 world: Optional[MultiWorld] = None) -> None:
-        super().__init__(name, type_, hint, player, world)
+                 multiworld: Optional[MultiWorld] = None) -> None:
+        super().__init__(name, player, multiworld, hint)
         self.zz_r = zz_r
 
 
