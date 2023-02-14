@@ -427,13 +427,13 @@ class KH2Context(CommonContext):
         self.ui = KH2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
-    def hasThreeProofs(self):
-        if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x36B2, 1), "big")+\
-           int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x36B3, 1), "big")+ \
-           int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x36B4, 1), "big")>=3:
-            return True
-        else:
-            return False
+    #def hasThreeProofs(self):
+    #    if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x36B2, 1), "big")+\
+    #       int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x36B3, 1), "big")+ \
+    #       int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x36B4, 1), "big")>=3:
+    #        return True
+    #    else:
+    #        return False
 
 async def kh2_watcher(ctx: KH2Context):
     logger.info("Please use /autotrack")
@@ -458,7 +458,7 @@ async def kh2_watcher(ctx: KH2Context):
                             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                             ctx.finished_game = True
                 elif ctx.kh2slotdata['Goal'] == 1:
-                    if not ctx.hasThreeProofs() and int.from_bytes(ctx.kh2.read_bytes(ctx.kh2.base_address + ctx.Save + 0x3641, 1), "big") >= ctx.kh2slotdata['LuckyEmblemsRequired']:
+                    if int.from_bytes(ctx.kh2.read_bytes(ctx.kh2.base_address + ctx.Save + 0x3641, 1), "big") >= ctx.kh2slotdata['LuckyEmblemsRequired']:
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B2, (1).to_bytes(1, 'big'), 1)
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B3, (1).to_bytes(1, 'big'), 1)
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B4, (1).to_bytes(1, 'big'), 1)
@@ -475,7 +475,7 @@ async def kh2_watcher(ctx: KH2Context):
                     for boss in ctx.kh2slotdata["hitlist"]:
                         if boss in message[0]["locations"]:
                             ctx.amountOfPieces += 1
-                    if not ctx.hasThreeProofs() and ctx.amountOfPieces >= requiredAmountPieces:
+                    if ctx.amountOfPieces >= requiredAmountPieces:
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B2, (1).to_bytes(1, 'big'), 1)
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B3, (1).to_bytes(1, 'big'), 1)
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B4, (1).to_bytes(1, 'big'), 1)

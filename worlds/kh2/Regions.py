@@ -715,10 +715,6 @@ def create_regions(world, player: int, active_locations):
         LocationName.MemorysSkyscaperMythrilStone,
         LocationName.TheBrinkofDespairDarkCityMap,
         LocationName.TheBrinkofDespairOrichalcumPlus,
-    ]
-    twtnw_region = create_region(world, player, active_locations, RegionName.Twtnw_Region,
-                                 twtnw_region_locations, None)
-    twtnw2_region_locations = [
         LocationName.NothingsCallMythrilGem,
         LocationName.NothingsCallOrichalcum,
         LocationName.TwilightsViewCosmicBelt,
@@ -732,6 +728,10 @@ def create_regions(world, player: int, active_locations):
         LocationName.Luxord,
         LocationName.LuxordGetBonus,
         LocationName.LuxordSecretAnsemReport9,
+    ]
+    twtnw_region = create_region(world, player, active_locations, RegionName.Twtnw_Region,
+                                 twtnw_region_locations, None)
+    twtnw2_region_locations = [
         LocationName.SaixBonus,
         LocationName.SaixSecretAnsemReport12,
         LocationName.PreXemnas1SecretAnsemReport11,
