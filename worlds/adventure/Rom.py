@@ -63,6 +63,7 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
     dragon_speed_reducer_info: {} = None
     diff_a_mode: int = None
     diff_b_mode: int = None
+    bat_logic: int = None
 
     # locations: [], autocollect: [], seed_name: bytes,
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -78,6 +79,7 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
             self.dragon_speed_reducer_info = kwargs["dragon_speed_reducer_info"]
             self.diff_a_mode = kwargs["diff_a_mode"]
             self.diff_b_mode = kwargs["diff_b_mode"]
+            self.bat_logic = kwargs["bat_logic"]
             del kwargs["locations"]
             del kwargs["autocollect"]
             del kwargs["seed_name"]
@@ -85,6 +87,7 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
             del kwargs["dragon_speed_reducer_info"]
             del kwargs["diff_a_mode"]
             del kwargs["diff_b_mode"]
+            del kwargs["bat_logic"]
         super(AdventureDeltaPatch, self).__init__(*args, **kwargs)
         if not patch_only:
             with open(self.patched_path, "rb") as file:
@@ -142,6 +145,10 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
             opened_zipfile.writestr("diff_b_mode",
                                     self.diff_b_mode.to_bytes(1, "little"),
                                     compress_type=zipfile.ZIP_STORED)
+        if self.bat_logic is not None:
+            opened_zipfile.writestr("bat_logic",
+                                    self.bat_logic.to_bytes(1, "little"),
+                                    compress_type=zipfile.ZIP_STORED)
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile):
         super(AdventureDeltaPatch, self).read_contents(opened_zipfile)
@@ -172,6 +179,13 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
         if diff_b_bytes is not None:
             diff_b = int.from_bytes(diff_b_bytes, "little")
         return diff_a, diff_b
+
+    @classmethod
+    def read_bat_logic(cls, opened_zipfile: zipfile.ZipFile) -> int:
+        bat_logic = opened_zipfile.read("bat_logic")
+        if bat_logic is None:
+            return 0
+        return int.from_bytes(bat_logic, "little")
 
     @classmethod
     def read_foreign_items(cls, opened_zipfile: zipfile.ZipFile) -> [AdventureForeignItemInfo]:

@@ -11,6 +11,8 @@ local SCRIPT_VERSION = 1
 
 local APItemValue = 0xA2
 local APItemRam = 0xE7
+local BatAPItemValue = 0xAB
+local BatAPItemRam = 0xEA
 local PlayerRoomAddr = 0x8A -- if in number room, we're not in play mode
 local WinAddr = 0xDE -- if not 0 (I think if 0xff specifically), we won (and should update once, immediately)
 
@@ -20,16 +22,17 @@ local WinAddr = 0xDE -- if not 0 (I think if 0xff specifically), we won (and sho
 local DragonState = {0xA8, 0xAD, 0xB2}
 local last_dragon_state = {0, 0, 0}
 local carryAddress = 0x9D -- uses rom object table
+local batRoomAddr = 0xCB
 local batCarryAddress = 0xD0 -- uses ram object location
 local batInvalidCarryItem = 0x78
-local last_carry_item = 0xAB
+local last_carry_item = 0xB4
 local frames_with_no_item = 0
-local ItemTableStart = 0xfe99
+local ItemTableStart = 0xfe9B
 local PlayerSlotAddress = 0xfff9
 
 local itemMessages = {}
 
-local nullObjectId = 0xAB
+local nullObjectId = 0xB4
 local ItemsReceived = nil
 local sha256hash = nil
 -- TODO: See how best to handle storage of collected foreign items, and resetting that after a restart/reload/whatever
@@ -38,6 +41,7 @@ local foreign_items_by_room = {}
 local autocollect_items = {}
 local localItemLocations = {}
 
+local prev_bat_room = 0xff
 local prev_player_room = 0
 local prev_ap_room_index = nil
 
@@ -85,9 +89,12 @@ local rhindle_dead = false
 local diff_a_locked = false
 local diff_b_locked = false
 
+local bat_logic = 0
+
 local is_dead = 0
 local freeincarnates_available = 0
 local send_freeincarnate_used = false
+local current_bat_ap_item = nil
 
 local u8 = nil
 local wU8 = nil
@@ -218,6 +225,11 @@ function processBlock(block)
             local msg = {TTL=450, message="freeincarnates: "..tostring(freeincarnates_available), color=0xFFFF0000}
             itemMessages[-2] = msg
         end
+    end
+    local bat_logic_block = block["bat_logic"]
+    if bat_logic_block ~= nil then
+        block_identified = 1
+        bat_logic = bat_logic_block
     end
     deathlink_rec = deathlink_rec or block["deathlink"]
     if( block_identified == 0 ) then
@@ -451,6 +463,23 @@ function TryFreeincarnate()
     end
 end
 
+function CheckCollectAPItem(carry_item, target_item_value, target_item_ram, rendering_foreign_item)
+    if( carry_item == target_item_value and rendering_foreign_item ~= nil ) then
+        memory.write_u8(carryAddress, nullObjectId, "System Bus")
+        memory.write_u8(target_item_ram, 0xFF, "System Bus")
+        pending_foreign_items_collected[rendering_foreign_item.short_location_id] = rendering_foreign_item
+        for index, fi in pairs(foreign_items_by_room[rendering_foreign_item.room_id]) do
+            if( fi.short_location_id == rendering_foreign_item.short_location_id ) then
+                table.remove(foreign_items_by_room[rendering_foreign_item.room_id], index)
+                break
+            end
+        end
+        prev_ap_room_index = 0
+        return true
+    end
+    return false
+end
+
 function main()
     memory.usememorydomain("System Bus")
     if (is23Or24Or25 or is26To28) == false then
@@ -476,8 +505,59 @@ function main()
             print("Current state: "..curstate)
             prevstate = curstate
         end
+
+        local current_player_room = u8(PlayerRoomAddr)
+        local bat_room = u8(batRoomAddr)
+        local bat_carrying_item = u8(batCarryAddress)
+        local bat_carrying_ap_item = (BatAPItemRam == bat_carrying_item)
+
+        if bat_room ~= prev_bat_room then
+            if bat_carrying_ap_item then
+                if foreign_items_by_room[prev_bat_room] ~= nil then
+                    for r,f in pairs(foreign_items_by_room[prev_bat_room]) do
+                        if f.short_location_id == current_bat_ap_item.short_location_id then
+                            print("removing item from "..tostring(r).." in "..tostring(prev_bat_room))
+                            table.remove(foreign_items_by_room[prev_bat_room], r)
+                            break
+                        end
+                    end
+                end
+                if foreign_items_by_room[bat_room] == nil then
+                    foreign_items_by_room[bat_room] = {}
+                end
+                print("adding item to "..tostring(bat_room))
+                table.insert(foreign_items_by_room[bat_room], current_bat_ap_item)
+            else
+                -- set AP item room and position for new room, or to invalid room
+                if foreign_items_by_room[bat_room] ~= nil and foreign_items_by_room[bat_room][1] ~= nil then
+                    if current_bat_ap_item ~= foreign_items_by_room[bat_room][1] then
+                        current_bat_ap_item = foreign_items_by_room[bat_room][1]
+                        print("Changing bat item to "..tostring(current_bat_ap_item.short_location_id))
+                    end
+                    memory.write_u8(BatAPItemRam, bat_room)
+                    memory.write_u8(BatAPItemRam + 1, current_bat_ap_item.room_x)
+                    memory.write_u8(BatAPItemRam + 2, current_bat_ap_item.room_y)
+                else
+                    memory.write_u8(BatAPItemRam, 0xff)
+                    if current_bat_ap_item ~= nil then
+                        print("clearing bat item")
+                    end
+                    current_bat_ap_item = nil
+                end
+            end
+        end
+        prev_bat_room = bat_room
+
+        -- update foreign_items_by_room position and room id for bat item if bat carrying an item
+        if bat_carrying_ap_item then
+            -- this is setting the item using the bat's position, which is somewhat wrong, but I think
+            -- there will be more problems with the room not matching sometimes if I use the actual item position
+            current_bat_ap_item.room_id = bat_room
+            current_bat_ap_item.room_x = u8(batRoomAddr + 1)
+            current_bat_ap_item.room_y = u8(batRoomAddr + 2)
+        end
+
         if (alive_mode()) then
-            local current_player_room = u8(PlayerRoomAddr)
             if (current_player_room ~= prev_player_room) then
                 memory.write_u8(APItemRam, 0xFF, "System Bus")
                 prev_ap_room_index = 0
@@ -519,30 +599,35 @@ function main()
                 end
             end
             last_carry_item = carry_item
-            if( carry_item == APItemValue and rendering_foreign_item ~= nil ) then
-                memory.write_u8(carryAddress, nullObjectId, "System Bus")
-                memory.write_u8(APItemRam, 0xFF, "System Bus")
-                pending_foreign_items_collected[rendering_foreign_item.short_location_id] = rendering_foreign_item
-                for index, fi in pairs(foreign_items_by_room[rendering_foreign_item.room_id]) do
-                    if( fi.short_location_id == rendering_foreign_item.short_location_id ) then
-                        table.remove(foreign_items_by_room[rendering_foreign_item.room_id], index)
-                        break
-                    end
-                end
-                prev_ap_room_index = 0
+
+            CheckCollectAPItem(carry_item, APItemValue, APItemRam, rendering_foreign_item)
+            if CheckCollectAPItem(carry_item, BatAPItemValue, BatAPItemRam, current_bat_ap_item) and bat_carrying_ap_item then
+                memory.write_u8(batCarryAddress, batInvalidCarryItem)
+                memory.write_u8(batCarryAddress+ 1, 0)
             end
+
 
             rendering_foreign_item = nil
             if( foreign_items_by_room[current_player_room] ~= nil ) then
-                if( foreign_items_by_room[current_player_room][prev_ap_room_index] ~= nil ) then
+                if( foreign_items_by_room[current_player_room][prev_ap_room_index] ~= nil ) and memory.read_u8(APItemRam) ~= 0xff then
                     foreign_items_by_room[current_player_room][prev_ap_room_index].room_x = memory.read_u8(APItemRam + 1)
                     foreign_items_by_room[current_player_room][prev_ap_room_index].room_y = memory.read_u8(APItemRam + 2)
                 end
                 prev_ap_room_index = prev_ap_room_index + 1
+                local invalid_index = -1
                 if( foreign_items_by_room[current_player_room][prev_ap_room_index] == nil ) then
                     prev_ap_room_index = 1
                 end
-                if( foreign_items_by_room[current_player_room][prev_ap_room_index] ~= nil ) then
+                if( foreign_items_by_room[current_player_room][prev_ap_room_index] ~= nil and current_bat_ap_item ~= nil and
+                    foreign_items_by_room[current_player_room][prev_ap_room_index].short_location_id == current_bat_ap_item.short_location_id) then
+                    invalid_index = prev_ap_room_index
+                    prev_ap_room_index = prev_ap_room_index + 1
+                    if( foreign_items_by_room[current_player_room][prev_ap_room_index] == nil ) then
+                        prev_ap_room_index = 1
+                    end
+                end
+
+                if( foreign_items_by_room[current_player_room][prev_ap_room_index] ~= nil and prev_ap_room_index ~= invalid_index ) then
                     memory.write_u8(APItemRam, current_player_room)
                     rendering_foreign_item = foreign_items_by_room[current_player_room][prev_ap_room_index]
                     memory.write_u8(APItemRam + 1, rendering_foreign_item.room_x)

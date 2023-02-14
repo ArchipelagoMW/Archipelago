@@ -343,6 +343,7 @@ class AdventureWorld(World):
                                         autocollect=auto_collect_locations, local_item_locations=local_item_to_location,
                                         dragon_speed_reducer_info=self.dragon_speed_reducer_info,
                                         diff_a_mode=self.difficulty_switch_a, diff_b_mode=self.difficulty_switch_b,
+                                        bat_logic=self.bat_logic,
                                         seed_name=bytes(self.multiworld.seed_name, encoding="ascii"))
             patch.write()
         finally:

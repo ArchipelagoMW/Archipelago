@@ -1,6 +1,6 @@
 # probably I should generate this from the list file
 
-static_item_data_location = 0xe99
+static_item_data_location = 0xe9b
 static_item_element_size = 9
 static_first_dragon_index = 6
 item_position_table = 0x400

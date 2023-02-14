@@ -209,7 +209,8 @@ def get_payload(ctx: AdventureContext):
             "dragon_speeds": dragon_speed_update,
             "difficulty_a_locked": diff_a_locked,
             "difficulty_b_locked": diff_b_locked,
-            "freeincarnates_available": freeincarnates_available
+            "freeincarnates_available": freeincarnates_available,
+            "bat_logic": ctx.bat_logic
         }
     )
     ctx.deathlink_pending = False
@@ -439,6 +440,7 @@ async def patch_and_run_game(patch_file, ctx):
         ctx.dragon_speed_info = AdventureDeltaPatch.read_dragon_speed_info(patch_archive)
         ctx.rom_hash, ctx.seed_name_from_data, ctx.player_name = AdventureDeltaPatch.read_rom_info(patch_archive)
         ctx.diff_a_mode, ctx.diff_b_mode = AdventureDeltaPatch.read_difficulty_switch_info(patch_archive)
+        ctx.bat_logic = AdventureDeltaPatch.read_bat_logic(patch_archive)
         ctx.auth = ctx.player_name
     patched_rom_data = bsdiff4.patch(base_rom, patch)
     ctx.port_offset = patched_rom_data[connector_port_offset]
