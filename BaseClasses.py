@@ -16,6 +16,7 @@ import NetUtils
 import Options
 import Utils
 
+from worlds.alttp.StateHelpers import can_shoot_arrows, can_buy_unlimited, is_not_bunny
 
 class Group(TypedDict, total=False):
     name: str
@@ -760,30 +761,8 @@ class CollectionState():
             found += self.prog_items[item_name, player]
         return found
 
-    def can_buy_unlimited(self, item: str, player: int) -> bool:
-        return any(shop.region.player == player and shop.has_unlimited(item) and shop.region.can_reach(self) for
-                   shop in self.multiworld.shops)
-
-    def can_buy(self, item: str, player: int) -> bool:
-        return any(shop.region.player == player and shop.has(item) and shop.region.can_reach(self) for
-                   shop in self.multiworld.shops)
-
     def item_count(self, item: str, player: int) -> int:
         return self.prog_items[item, player]
-
-    def has_triforce_pieces(self, count: int, player: int) -> bool:
-        return self.item_count('Triforce Piece', player) + self.item_count('Power Star', player) >= count
-
-    def has_crystals(self, count: int, player: int) -> bool:
-        found: int = 0
-        for crystalnumber in range(1, 8):
-            found += self.prog_items[f"Crystal {crystalnumber}", player]
-            if found >= count:
-                return True
-        return False
-
-    def can_lift_rocks(self, player: int):
-        return self.has('Power Glove', player) or self.has('Titans Mitts', player)
 
     def bottle_count(self, player: int) -> int:
         return min(self.multiworld.difficulty_requirements[player].progressive_bottle_limit,
@@ -811,7 +790,7 @@ class CollectionState():
             basemagic = 32
         elif self.has('Magic Upgrade (1/2)', player):
             basemagic = 16
-        if self.can_buy_unlimited('Green Potion', player) or self.can_buy_unlimited('Blue Potion', player):
+        if can_buy_unlimited(self, 'Green Potion', player) or can_buy_unlimited(self, 'Blue Potion', player):
             if self.multiworld.item_functionality[player] == 'hard' and not fullrefill:
                 basemagic = basemagic + int(basemagic * 0.5 * self.bottle_count(player))
             elif self.multiworld.item_functionality[player] == 'expert' and not fullrefill:
@@ -824,14 +803,9 @@ class CollectionState():
         return (self.has_melee_weapon(player)
                 or self.has('Cane of Somaria', player)
                 or (self.has('Cane of Byrna', player) and (enemies < 6 or self.can_extend_magic(player)))
-                or self.can_shoot_arrows(player)
+                or can_shoot_arrows(self, player)
                 or self.has('Fire Rod', player)
                 or (self.has('Bombs (10)', player) and enemies < 6))
-
-    def can_shoot_arrows(self, player: int) -> bool:
-        if self.multiworld.retro_bow[player]:
-            return (self.has('Bow', player) or self.has('Silver Bow', player)) and self.can_buy('Single Arrow', player)
-        return self.has('Bow', player) or self.has('Silver Bow', player)
 
     def can_get_good_bee(self, player: int) -> bool:
         cave = self.multiworld.get_region('Good Bee Cave', player)
@@ -840,7 +814,7 @@ class CollectionState():
                 self.has('Bug Catching Net', player) and
                 (self.has('Pegasus Boots', player) or (self.has_sword(player) and self.has('Quake', player))) and
                 cave.can_reach(self) and
-                self.is_not_bunny(cave, player)
+                is_not_bunny(self, cave, player)
         )
 
     def can_retrieve_tablet(self, player: int) -> bool:
@@ -939,7 +913,6 @@ class Region:
     exits: List[Entrance]
     locations: List[Location]
     dungeon: Optional[Dungeon] = None
-    shop: Optional = None
 
     def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: Optional[str] = None):
         self.name = name

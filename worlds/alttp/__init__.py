@@ -22,6 +22,7 @@ from .Rules import set_rules
 from .Shops import create_shops, ShopSlotFill
 from .SubClasses import ALttPItem
 from worlds.AutoWorld import World, WebWorld, LogicMixin
+from .StateHelpers import can_buy_unlimited
 
 lttp_logger = logging.getLogger("A Link to the Past")
 
@@ -549,5 +550,5 @@ class ALttPLogic(LogicMixin):
         if self.multiworld.logic[player] == 'nologic':
             return True
         if self.multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
-            return self.can_buy_unlimited('Small Key (Universal)', player)
+            return can_buy_unlimited(state, 'Small Key (Universal)', player)
         return self.prog_items[item, player] >= count

@@ -2,15 +2,7 @@
 from BaseClasses import Entrance
 from .SubClasses import LTTPRegion
 from worlds.generic.Rules import set_rule, add_rule
-
-def is_not_bunny(state, region: LTTPRegion, player: int) -> bool:
-    if state.has('Moon Pearl', player):
-        return True
-
-    return region.is_light_world if state.multiworld.mode[player] != 'inverted' else region.is_dark_world
-
-def can_bomb_clip(state, region: LTTPRegion, player: int) -> bool:
-    return is_not_bunny(state, region, player) and state.has('Pegasus Boots', player)
+from .StateHelpers import can_bomb_clip
 
 # We actually need the logic to properly "mark" these regions as Light or Dark world. 
 # Therefore we need to make these connections during the normal link_entrances stage, rather than during set_rules. 

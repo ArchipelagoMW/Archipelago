@@ -4,7 +4,7 @@ from typing import Optional, Union, List, Tuple, Callable, Dict
 from BaseClasses import Boss
 from Fill import FillError
 from .Options import LTTPBosses as Bosses
-
+from .StateHelpers import can_shoot_arrows
 
 def BossFactory(boss: str, player: int) -> Optional[Boss]:
     if boss in boss_table:
@@ -17,7 +17,7 @@ def ArmosKnightsDefeatRule(state, player: int) -> bool:
     # Magic amounts are probably a bit overkill
     return (
             state.has_melee_weapon(player) or
-            state.can_shoot_arrows(player) or
+            can_shoot_arrows(state, player) or
             (state.has('Cane of Somaria', player) and state.can_extend_magic(player, 10)) or
             (state.has('Cane of Byrna', player) and state.can_extend_magic(player, 16)) or
             (state.has('Ice Rod', player) and state.can_extend_magic(player, 32)) or
@@ -33,7 +33,7 @@ def LanmolasDefeatRule(state, player: int) -> bool:
             state.has('Ice Rod', player) or
             state.has('Cane of Somaria', player) or
             state.has('Cane of Byrna', player) or
-            state.can_shoot_arrows(player))
+            can_shoot_arrows(state, player))
 
 
 def MoldormDefeatRule(state, player: int) -> bool:
@@ -42,7 +42,7 @@ def MoldormDefeatRule(state, player: int) -> bool:
 
 def HelmasaurKingDefeatRule(state, player: int) -> bool:
     # TODO: technically possible with the hammer
-    return state.has_sword(player) or state.can_shoot_arrows(player)
+    return state.has_sword(player) or can_shoot_arrows(state, player)
 
 
 def ArrghusDefeatRule(state, player: int) -> bool:
@@ -54,9 +54,9 @@ def ArrghusDefeatRule(state, player: int) -> bool:
     if state.has_melee_weapon(player):
         return True
 
-    return ((state.has('Fire Rod', player) and (state.can_shoot_arrows(player) or state.can_extend_magic(player,
+    return ((state.has('Fire Rod', player) and (can_shoot_arrows(state, player) or state.can_extend_magic(player,
                                                                                                          12))) or  # assuming mostly gitting two puff with one shot
-            (state.has('Ice Rod', player) and (state.can_shoot_arrows(player) or state.can_extend_magic(player, 16))))
+            (state.has('Ice Rod', player) and (can_shoot_arrows(state, player) or state.can_extend_magic(player, 16))))
 
 
 def MothulaDefeatRule(state, player: int) -> bool:
@@ -98,7 +98,7 @@ def KholdstareDefeatRule(state, player: int) -> bool:
 
 
 def VitreousDefeatRule(state, player: int) -> bool:
-    return state.can_shoot_arrows(player) or state.has_melee_weapon(player)
+    return can_shoot_arrows(state, player) or state.has_melee_weapon(player)
 
 
 def TrinexxDefeatRule(state, player: int) -> bool:
@@ -118,7 +118,7 @@ def GanonDefeatRule(state, player: int) -> bool:
         return state.has('Hammer', player) and \
                state.has_fire_source(player) and \
                state.has('Silver Bow', player) and \
-               state.can_shoot_arrows(player)
+               can_shoot_arrows(state, player)
 
     can_hurt = state.has_beam_sword(player)
     common = can_hurt and state.has_fire_source(player)
@@ -126,11 +126,11 @@ def GanonDefeatRule(state, player: int) -> bool:
     if state.multiworld.logic[player] != 'noglitches':
         # need to light torch a sufficient amount of times
         return common and (state.has('Tempered Sword', player) or state.has('Golden Sword', player) or (
-                state.has('Silver Bow', player) and state.can_shoot_arrows(player)) or
+                state.has('Silver Bow', player) and can_shoot_arrows(state, player)) or
                            state.has('Lamp', player) or state.can_extend_magic(player, 12))
 
     else:
-        return common and state.has('Silver Bow', player) and state.can_shoot_arrows(player)
+        return common and state.has('Silver Bow', player) and can_shoot_arrows(state, player)
 
 
 boss_table: Dict[str, Tuple[str, Optional[Callable]]] = {
