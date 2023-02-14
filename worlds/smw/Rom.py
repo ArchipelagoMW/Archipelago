@@ -723,7 +723,7 @@ def handle_swap_donut_gh_exits(rom):
     rom.write_bytes(0x26371, bytes([0x32]))
 
 
-def handle_bowser_rooms(rom, world, player):
+def handle_bowser_rooms(rom, world, player: int):
     if world.bowser_castle_rooms[player] == "random_two_room":
         chosen_rooms = world.random.sample(standard_bowser_rooms, 2)
 
