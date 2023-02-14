@@ -497,21 +497,21 @@ def create_items(self) -> None:
 ```python
 def create_regions(self) -> None:
     # Add regions to the multiworld. "Menu" is the required starting point.
-    # Arguments to Region() are name, type, human_readable_name, player, world
-    r = Region("Menu", RegionType.Generic, "Menu", self.player, self.multiworld)
+    # Arguments to Region() are name, player, world, and optionally hint_text
+    r = Region("Menu", self.player, self.multiworld)
     # Set Region.exits to a list of entrances that are reachable from region
     r.exits = [Entrance(self.player, "New game", r)]  # or use r.exits.append
     # Append region to MultiWorld's regions
     self.multiworld.regions.append(r)  # or use += [r...]
     
-    r = Region("Main Area", RegionType.Generic, "Main Area", self.player, self.multiworld)
+    r = Region("Main Area", self.player, self.multiworld)
     # Add main area's locations to main area (all but final boss)
     r.locations = [MyGameLocation(self.player, location.name,
                    self.location_name_to_id[location.name], r)]
     r.exits = [Entrance(self.player, "Boss Door", r)]
     self.multiworld.regions.append(r)
     
-    r = Region("Boss Room", RegionType.Generic, "Boss Room", self.player, self.multiworld)
+    r = Region("Boss Room", self.player, self.multiworld)
     # add event to Boss Room
     r.locations = [MyGameLocation(self.player, "Final Boss", None, r)]
     self.multiworld.regions.append(r)
