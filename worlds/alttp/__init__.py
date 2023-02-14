@@ -372,19 +372,19 @@ class ALTTPWorld(World):
         ShopSlotFill(world)
 
     @property
-    def use_enemizer(self):
+    def use_enemizer(self) -> bool:
         world = self.multiworld
         player = self.player
-        return (world.boss_shuffle[player] or world.enemy_shuffle[player]
-                or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
-                or world.pot_shuffle[player] or world.bush_shuffle[player]
-                or world.killable_thieves[player])
+        return bool(world.boss_shuffle[player] or world.enemy_shuffle[player]
+                    or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
+                    or world.pot_shuffle[player] or world.bush_shuffle[player]
+                    or world.killable_thieves[player])
 
     def generate_output(self, output_directory: str):
         world = self.multiworld
         player = self.player
         try:
-            use_enemizer = self.use_enemizer()
+            use_enemizer = self.use_enemizer
 
             rom = LocalRom(get_base_rom_path())
 
