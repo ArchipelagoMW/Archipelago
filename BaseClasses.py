@@ -873,22 +873,6 @@ class CollectionState():
     def can_avoid_lasers(self, player: int) -> bool:
         return self.has('Mirror Shield', player) or self.has('Cane of Byrna', player) or self.has('Cape', player)
 
-    def is_not_bunny(self, region: Region, player: int) -> bool:
-        if self.has('Moon Pearl', player):
-            return True
-
-        return region.is_light_world if self.multiworld.mode[player] != 'inverted' else region.is_dark_world
-
-    def can_reach_light_world(self, player: int) -> bool:
-        if True in [i.is_light_world for i in self.reachable_regions[player]]:
-            return True
-        return False
-
-    def can_reach_dark_world(self, player: int) -> bool:
-        if True in [i.is_dark_world for i in self.reachable_regions[player]]:
-            return True
-        return False
-
     def has_misery_mire_medallion(self, player: int) -> bool:
         return self.has(self.multiworld.required_medallions[player][0], player)
 
@@ -919,9 +903,6 @@ class CollectionState():
         if self.multiworld.mode[player] != 'inverted':
             rules.append(self.has('Moon Pearl', player))
         return all(rules)
-
-    def can_bomb_clip(self, region: Region, player: int) -> bool:
-        return self.is_not_bunny(region, player) and self.has('Pegasus Boots', player)
 
     def collect(self, item: Item, event: bool = False, location: Optional[Location] = None) -> bool:
         if location:
@@ -959,11 +940,6 @@ class Region:
     locations: List[Location]
     dungeon: Optional[Dungeon] = None
     shop: Optional = None
-
-    # LttP specific. TODO: move to a LttPRegion
-    # will be set after making connections.
-    is_light_world: bool = False
-    is_dark_world: bool = False
 
     def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: Optional[str] = None):
         self.name = name

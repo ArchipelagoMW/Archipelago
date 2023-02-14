@@ -1,6 +1,16 @@
 
 from BaseClasses import Entrance
+from .SubClasses import LTTPRegion
 from worlds.generic.Rules import set_rule, add_rule
+
+def is_not_bunny(state, region: LTTPRegion, player: int) -> bool:
+    if state.has('Moon Pearl', player):
+        return True
+
+    return region.is_light_world if state.multiworld.mode[player] != 'inverted' else region.is_dark_world
+
+def can_bomb_clip(state, region: LTTPRegion, player: int) -> bool:
+    return is_not_bunny(state, region, player) and state.has('Pegasus Boots', player)
 
 # We actually need the logic to properly "mark" these regions as Light or Dark world. 
 # Therefore we need to make these connections during the normal link_entrances stage, rather than during set_rules. 
@@ -66,21 +76,21 @@ def underworld_glitches_rules(world, player):
 
     # Ice Palace Entrance Clip
     # This is the easiest one since it's a simple internal clip. Just need to also add melting to freezor chest since it's otherwise assumed. 
-    add_rule(world.get_entrance('Ice Palace Entrance Room', player), lambda state: state.can_bomb_clip(world.get_region('Ice Palace (Entrance)', player), player), combine='or')
+    add_rule(world.get_entrance('Ice Palace Entrance Room', player), lambda state: can_bomb_clip(state, world.get_region('Ice Palace (Entrance)', player), player), combine='or')
     add_rule(world.get_location('Ice Palace - Freezor Chest', player), lambda state: state.can_melt_things(player))
 
 
     # Kiki Skip
     kikiskip = world.get_entrance('Kiki Skip', player)
-    set_rule(kikiskip, lambda state: state.can_bomb_clip(kikiskip.parent_region, player))
+    set_rule(kikiskip, lambda state: can_bomb_clip(state, kikiskip.parent_region, player))
     dungeon_reentry_rules(world, player, kikiskip, 'Palace of Darkness (Entrance)', 'Palace of Darkness Exit')
 
 
     # Mire -> Hera -> Swamp
     # Using mire keys on other dungeon doors
     mire = world.get_region('Misery Mire (West)', player)
-    mire_clip = lambda state: state.can_reach('Misery Mire (West)', 'Region', player) and state.can_bomb_clip(mire, player) and state.has_fire_source(player)
-    hera_clip = lambda state: state.can_reach('Tower of Hera (Top)', 'Region', player) and state.can_bomb_clip(world.get_region('Tower of Hera (Top)', player), player)
+    mire_clip = lambda state: state.can_reach('Misery Mire (West)', 'Region', player) and can_bomb_clip(state, mire, player) and state.has_fire_source(player)
+    hera_clip = lambda state: state.can_reach('Tower of Hera (Top)', 'Region', player) and can_bomb_clip(state, world.get_region('Tower of Hera (Top)', player), player)
     add_rule(world.get_entrance('Tower of Hera Big Key Door', player), lambda state: mire_clip(state) and state.has('Big Key (Misery Mire)', player), combine='or')
     add_rule(world.get_entrance('Swamp Palace Small Key Door', player), lambda state: mire_clip(state), combine='or')
     add_rule(world.get_entrance('Swamp Palace (Center)', player), lambda state: mire_clip(state) or hera_clip(state), combine='or')
