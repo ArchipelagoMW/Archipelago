@@ -88,11 +88,11 @@ class TLoZWorld(World):
         return return_location
 
     def create_regions(self):
-        menu = Region("Menu", None, "Menu", self.player, self.multiworld)
-        overworld = Region("Overworld", None, "Overworld", self.player, self.multiworld)
+        menu = Region("Menu", self.player, self.multiworld)
+        overworld = Region("Overworld", self.player, self.multiworld)
         self.levels = [None]  # Yes I'm making a one-indexed array in a zero-indexed language. I hate me too.
         for i in range(1, 10):
-            level = Region(f"Level {i}", None, f"Level {i}", self.player, self.multiworld)
+            level = Region(f"Level {i}", self.player, self.multiworld)
             self.levels.append(level)
             new_entrance = Entrance(self.player, f"Level {i}", overworld)
             new_entrance.connect(level)
