@@ -10,7 +10,7 @@ from worlds.alttp.EntranceShuffle import connect_entrance
 from Fill import FillError
 from worlds.alttp.Items import ItemFactory, GetBeemizerItem
 from worlds.alttp.Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle
-from .StateHelpers import has_triforce_pieces
+from .StateHelpers import has_triforce_pieces, has_melee_weapon
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 # Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
@@ -328,7 +328,7 @@ def generate_itempool(world):
     for item in precollected_items:
         world.push_precollected(ItemFactory(item, player))
 
-    if world.mode[player] == 'standard' and not world.state.has_melee_weapon(player):
+    if world.mode[player] == 'standard' and not has_melee_weapon(world.state, player):
         if "Link's Uncle" not in placed_items:
             found_sword = False
             found_bow = False
