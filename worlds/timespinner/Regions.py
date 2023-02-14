@@ -1,5 +1,5 @@
 from typing import List, Set, Dict, Tuple, Optional, Callable
-from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
+from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Options import is_option_enabled
 from .Locations import LocationData
 
@@ -200,8 +200,7 @@ def create_location(player: int, location_data: LocationData, region: Region, lo
 
 
 def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str, List[LocationData]], location_cache: List[Location], name: str) -> Region:
-    region = Region(name, RegionType.Generic, name, player)
-    region.multiworld = world
+    region = Region(name, player, world)
 
     if name in locations_per_region:
         for location_data in locations_per_region[name]:

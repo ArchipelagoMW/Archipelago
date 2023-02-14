@@ -7,8 +7,7 @@ import os
 import logging
 
 from BaseClasses import ItemClassification, LocationProgressType, \
-    MultiWorld, Item, CollectionState, RegionType, \
-    Entrance, Tutorial
+    MultiWorld, Item, CollectionState, Entrance, Tutorial
 from Options import AssembleOptions
 from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
@@ -155,7 +154,7 @@ class ZillionWorld(World):
         all: Dict[str, ZillionRegion] = {}
         for here_zz_name, zz_r in self.zz_system.randomizer.regions.items():
             here_name = "Menu" if here_zz_name == "start" else zz_reg_name_to_reg_name(here_zz_name)
-            all[here_name] = ZillionRegion(zz_r, here_name, RegionType.Generic, here_name, p, w)
+            all[here_name] = ZillionRegion(zz_r, here_name, here_name, p, w)
             self.multiworld.regions.append(all[here_name])
 
         limited_skill = Req(gun=3, jump=3, skill=self.zz_system.randomizer.options.skill, hp=940, red=1, floppy=126)

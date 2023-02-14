@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Callable, Dict, Any, List, Optional
 
-from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, RegionType, Tutorial
+from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, Tutorial
 from worlds.AutoWorld import World, WebWorld
 
 from .Overcooked2Levels import Overcooked2Level, Overcooked2GenericLevel, ITEMS_TO_EXCLUDE_IF_NO_DLC
@@ -82,8 +82,6 @@ class Overcooked2World(World):
 
     def add_region(self, region_name: str):
         region = Region(
-            region_name,
-            RegionType.Generic,
             region_name,
             self.player,
             self.multiworld,
