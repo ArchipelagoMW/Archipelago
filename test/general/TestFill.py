@@ -7,7 +7,7 @@ from Options import Accessibility
 from worlds.AutoWorld import World
 from Fill import FillError, balance_multiworld_progression, fill_restrictive, \
     distribute_early_items, distribute_items_restrictive
-from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, RegionType, Item, Location, \
+from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, Item, Location, \
     ItemClassification
 from worlds.generic.Rules import CollectionRule, add_item_rule, locality_rules, set_rule
 
@@ -22,8 +22,7 @@ def generate_multi_world(players: int = 1) -> MultiWorld:
         multi_world.game[player_id] = f"Game {player_id}"
         multi_world.worlds[player_id] = world
         multi_world.player_name[player_id] = "Test Player " + str(player_id)
-        region = Region("Menu", RegionType.Generic,
-                        "Menu Region Hint", player_id, multi_world)
+        region = Region("Menu", player_id, multi_world, "Menu Region Hint")
         multi_world.regions.append(region)
 
         for option_key in itertools.chain(Options.common_options, Options.per_game_common_options):
@@ -59,8 +58,7 @@ class PlayerDefinition(object):
     def generate_region(self, parent: Region, size: int, access_rule: CollectionRule = lambda state: True) -> Region:
         region_tag = "_region" + str(len(self.regions))
         region_name = "player" + str(self.id) + region_tag
-        region = Region("player" + str(self.id) + region_tag, RegionType.Generic,
-                        "Region Hint", self.id, self.multiworld)
+        region = Region("player" + str(self.id) + region_tag, self.id, self.multiworld)
         self.locations += generate_locations(size, self.id, None, region, region_tag)
 
         entrance = Entrance(self.id, region_name + "_entrance", parent)
