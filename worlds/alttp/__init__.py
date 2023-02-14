@@ -151,15 +151,15 @@ class ALTTPWorld(World):
         super(ALTTPWorld, self).__init__(*args, **kwargs)
 
     @classmethod
-    def stage_assert_generate(cls, world: MultiWorld):
+    def stage_assert_generate(cls, multiworld: MultiWorld):
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
-        if world.is_race:
+        if multiworld.is_race:
             import xxtea
-        for player in world.get_game_players(cls.game):
-            if world.worlds[player].use_enemizer:
-                check_enemizer(world.worlds[player].enemizer_path)
+        for player in multiworld.get_game_players(cls.game):
+            if multiworld.worlds[player].use_enemizer:
+                check_enemizer(multiworld.worlds[player].enemizer_path)
                 break
 
     def generate_early(self):
