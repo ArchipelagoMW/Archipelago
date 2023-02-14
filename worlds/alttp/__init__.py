@@ -5,7 +5,7 @@ import threading
 import typing
 
 import Utils
-from BaseClasses import Item, CollectionState, Tutorial
+from BaseClasses import Item, CollectionState, Tutorial, MultiWorld
 from .Dungeons import create_dungeons
 from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect, \
     indirect_connections, indirect_connections_inverted, indirect_connections_not_inverted
@@ -151,16 +151,18 @@ class ALTTPWorld(World):
         super(ALTTPWorld, self).__init__(*args, **kwargs)
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, world: MultiWorld):
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
         if world.is_race:
             import xxtea
+        for player in world.get_game_players(cls.game):
+            if world.worlds[player].use_enemizer:
+                check_enemizer(world.worlds[player].enemizer_path)
+                break
 
     def generate_early(self):
-        if self.use_enemizer():
-            check_enemizer(self.enemizer_path)
 
         player = self.player
         world = self.multiworld
@@ -369,6 +371,7 @@ class ALTTPWorld(World):
     def stage_post_fill(cls, world):
         ShopSlotFill(world)
 
+    @property
     def use_enemizer(self):
         world = self.multiworld
         player = self.player
