@@ -1575,10 +1575,7 @@ class Spoiler():
             return 'Yes' if variable else 'No'
 
         def write_option(option_key: str, option_obj: Union[type(Options.Option), "Options.AssembleOptions"]):
-            if hasattr(self.multiworld.worlds[player].o, option_key):
-                res = getattr(self.multiworld.worlds[player].o, option_key)
-            else:  # TODO remove when all worlds move to new system
-                res = getattr(self.multiworld, option_key)[player]
+            res = getattr(self.multiworld.worlds[player].o, option_key)
             display_name = getattr(option_obj, "display_name", option_key)
             try:
                 outfile.write(f'{display_name + ":":33}{res.get_current_option_name()}\n')
@@ -1599,14 +1596,8 @@ class Spoiler():
                     outfile.write('\nPlayer %d: %s\n' % (player, self.multiworld.get_player_name(player)))
                 outfile.write('Game:                            %s\n' % self.multiworld.game[player])
 
-                if type(self.multiworld.worlds[player].o) is not Options.PerGameCommonOptions:
-                    for f_option, option in self.multiworld.worlds[player].o.__annotations__.items():
-                        write_option(f_option, option)
-                else:  # TODO remove when all worlds move to new system
-                    options = self.multiworld.worlds[player].option_definitions
-                    for f_option, option\
-                            in collections.ChainMap(Options.PerGameCommonOptions.__annotations__, options).items():
-                        write_option(f_option, option)
+                for f_option, option in self.multiworld.worlds[player].o.__annotations__.items():
+                    write_option(f_option, option)
 
                 AutoWorld.call_single(self.multiworld, "write_spoiler_header", player, outfile)
 
