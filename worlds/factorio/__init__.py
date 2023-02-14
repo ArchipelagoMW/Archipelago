@@ -73,8 +73,8 @@ class Factorio(World):
     generate_output = generate_mod
 
     def generate_early(self) -> None:
-        self.multiworld.max_tech_cost[self.player].value = max(self.multiworld.max_tech_cost[self.player].value,
-                                                    self.multiworld.min_tech_cost[self.player].value)
+        self.multiworld.max_tech_cost[self.player] = max(self.multiworld.max_tech_cost[self.player],
+                                                    self.multiworld.min_tech_cost[self.player])
         self.tech_mix = self.multiworld.tech_cost_mix[self.player]
         self.skip_silo = self.multiworld.silo[self.player].value == Silo.option_spawn
 
