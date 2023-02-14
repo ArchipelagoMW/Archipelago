@@ -343,7 +343,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
                 locations_data: Dict[int, Dict[int, Tuple[int, int, int]]] = {player: {} for player in world.player_ids}
                 filled_locations = world.get_filled_locations()
-                world.random.shuffle(filled_locations)
+                world.per_slot_randoms[1].shuffle(filled_locations)
                 for location in filled_locations:
                     if type(location.address) == int:
                         assert location.item.code is not None, "item code None should be event, " \
