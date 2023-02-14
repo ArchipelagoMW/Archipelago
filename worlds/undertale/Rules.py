@@ -164,10 +164,9 @@ def set_rules(multiworld: MultiWorld, player: int):
         set_rule(multiworld.get_entrance("Undyne\"s Home Entrance", player),
                  lambda state: _undertale_has_plot(state, player, "Fish") and state.has("Papyrus Date", player))
         set_rule(multiworld.get_entrance("Lab Elevator", player),
-                 lambda state: state.has("Undyne Letter EX", player) and state.has("Undyne Date", player)
-                               and state.has("Alphys Date", player)
-                               and _undertale_has_plot(state, player, "DT Extractor"))
-    if _undertale_is_route(multiworld.state, player, 1):
+                 lambda state: state.has("Alphys Date", player) and _undertale_has_plot(state, player, "DT Extractor"))
+        set_rule(multiworld.get_location("Alphys Date", player),
+                 lambda state: state.has("Undyne Letter EX", player) and state.has("Undyne Date", player))
         set_rule(multiworld.get_location("Papyrus Plot", player),
                  lambda state: state.can_reach("Snowdin Town", "Region", player))
         set_rule(multiworld.get_location("Undyne Plot", player),
