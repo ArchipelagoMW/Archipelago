@@ -1,7 +1,7 @@
 import logging
 from typing import List, Dict, Any
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, RegionType
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from . import Items
 from . import Locations
@@ -135,8 +135,7 @@ class SubnauticaWorld(World):
                               item_id, player=self.player)
 
     def create_region(self, name: str, locations=None, exits=None):
-        ret = Region(name, RegionType.Generic, name, self.player)
-        ret.multiworld = self.multiworld
+        ret = Region(name, self.player, self.multiworld)
         if locations:
             for location in locations:
                 loc_id = self.location_name_to_id.get(location, None)

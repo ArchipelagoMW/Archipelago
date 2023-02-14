@@ -7,10 +7,10 @@ Symmetry Island Doors
 Orchard Gates
 Desert Doors
 Quarry Main Entry
-Quarry Mill Entry (Door)
-Quarry Mill Shortcuts
+Quarry Stoneworks Entry (Door)
+Quarry Stoneworks Shortcuts
 Quarry Boathouse Barriers
-Shadows Timed Door (Door)
+Shadows Timed Door
 Shadows Laser Room Door
 Shadows Barriers
 Keep Hedge Maze Doors
@@ -56,11 +56,11 @@ Desert Flood Room Entry Panel
 Desert Flood Room 6
 Quarry Entry 1 Panel
 Quarry Entry 2 Panel
-Quarry Mill Entry Right Panel
-Quarry Mill Entry Left Panel
-Quarry Mill Side Exit Panel
-Quarry Mill Roof Exit Panel
-Quarry Mill Stair Control
+Quarry Stoneworks Entry Right Panel
+Quarry Stoneworks Entry Left Panel
+Quarry Stoneworks Side Exit Panel
+Quarry Stoneworks Roof Exit Panel
+Quarry Stoneworks Stair Control
 Quarry Boathouse Second Barrier Panel
 Shadows Door Timer Inside
 Shadows Door Timer Outside
