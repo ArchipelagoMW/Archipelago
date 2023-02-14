@@ -1,6 +1,5 @@
 from .SubClasses import LTTPRegion
 
-# TODO: typing busted temporarily
 def is_not_bunny(state, region: LTTPRegion, player: int) -> bool:
     if state.has('Moon Pearl', player):
         return True
