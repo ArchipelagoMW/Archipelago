@@ -5,7 +5,7 @@ import os
 from enum import IntFlag
 from typing import Any, ClassVar, Dict, List, Optional, Set, Tuple
 
-from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, RegionType, Tutorial, \
+from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, Tutorial, \
     LocationProgressType
 from Main import __version__
 from Options import AssembleOptions
