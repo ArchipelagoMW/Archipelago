@@ -247,7 +247,7 @@ class MultiWorld():
         item_links = {}
         replacement_prio = [False, True, None]
         for player in self.player_ids:
-            for item_link in self.item_links[player].value:
+            for item_link in self.worlds[player].o.item_links.value:
                 if item_link["name"] in item_links:
                     if item_links[item_link["name"]]["game"] != self.game[player]:
                         raise Exception(f"Cannot ItemLink across games. Link: {item_link['name']}")
