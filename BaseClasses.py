@@ -1599,13 +1599,13 @@ class Spoiler():
                     outfile.write('\nPlayer %d: %s\n' % (player, self.multiworld.get_player_name(player)))
                 outfile.write('Game:                            %s\n' % self.multiworld.game[player])
 
-                if self.multiworld.worlds[player].o is not Options.PerGameCommonOptions:
+                if type(self.multiworld.worlds[player].o) is not Options.PerGameCommonOptions:
                     for f_option, option in self.multiworld.worlds[player].o.__annotations__.items():
                         write_option(f_option, option)
                 else:  # TODO remove when all worlds move to new system
                     options = self.multiworld.worlds[player].option_definitions
                     for f_option, option\
-                            in collections.ChainMap(Options.PerGameCommonOptions.__annotations__.items(), options):
+                            in collections.ChainMap(Options.PerGameCommonOptions.__annotations__, options).items():
                         write_option(f_option, option)
 
                 AutoWorld.call_single(self.multiworld, "write_spoiler_header", player, outfile)
