@@ -48,7 +48,7 @@ Un guide de configuration Bizhawk alternatif ainsi que divers conseils de dépan
 
 Votre fichier YAML contient un ensemble d'options de configuration qui fournissent au générateur des informations sur la façon dont il doit
 générer votre jeu. Chaque joueur d'un multimonde fournira son propre fichier YAML. Cette configuration permet à chaque joueur de profiter
-une expérience personnalisée à leur goût, et différents joueurs dans le même multimonde peuvent tous avoir des options différentes.
+d'une expérience personnalisée à leur goût, et différents joueurs dans le même multimonde peuvent tous avoir des options différentes.
 
 ### Où puis-je obtenir un fichier YAML ?
 
