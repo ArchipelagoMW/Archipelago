@@ -50,7 +50,7 @@
                             No file to download for this game.
                         {% endif %}
                     </td>
-                    <td><a href="{{ url_for("getPlayerTracker", tracker=room.tracker, tracked_team=0, tracked_player=patch.player_id) }}">Tracker</a></td>
+                    <td><a href="{{ url_for("get_player_tracker", tracker=room.tracker, tracked_team=0, tracked_player=patch.player_id) }}">Tracker</a></td>
                 </tr>
             {% endfor %}
             </tbody>

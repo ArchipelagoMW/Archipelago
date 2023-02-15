@@ -3,6 +3,7 @@ import json
 import os
 import multiprocessing
 import subprocess
+import zipfile
 from asyncio import StreamReader, StreamWriter
 
 # CommonClient import first to trigger ModuleUpdater
@@ -50,7 +51,7 @@ deathlink_sent_this_death: we interacted with the multiworld on this death, wait
 
 oot_loc_name_to_id = network_data_package["games"]["Ocarina of Time"]["location_name_to_id"]
 
-script_version: int = 2
+script_version: int = 3
 
 def get_item_value(ap_id):
     return ap_id - 66000
@@ -85,6 +86,9 @@ class OoTContext(CommonContext):
         self.n64_status = CONNECTION_INITIAL_STATUS
         self.awaiting_rom = False
         self.location_table = {}
+        self.collectible_table = {}
+        self.collectible_override_flags_address = 0
+        self.collectible_offsets = {}
         self.deathlink_enabled = False
         self.deathlink_pending = False
         self.deathlink_sent_this_death = False
@@ -117,6 +121,13 @@ class OoTContext(CommonContext):
         self.ui = OoTManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
+    def on_package(self, cmd, args):
+        if cmd == 'Connected':
+            slot_data = args.get('slot_data', None)
+            if slot_data:
+                self.collectible_override_flags_address = slot_data.get('collectible_override_flags', 0)
+                self.collectible_offsets = slot_data.get('collectible_flag_offsets', {})
+
 
 def get_payload(ctx: OoTContext):
     if ctx.deathlink_enabled and ctx.deathlink_pending:
@@ -125,11 +136,14 @@ def get_payload(ctx: OoTContext):
     else:
         trigger_death = False
 
-    return json.dumps({
+    payload = json.dumps({
             "items": [get_item_value(item.item) for item in ctx.items_received],
             "playerNames": [name for (i, name) in ctx.player_names.items() if i != 0],
-            "triggerDeath": trigger_death
+            "triggerDeath": trigger_death,
+            "collectibleOverrides": ctx.collectible_override_flags_address,
+            "collectibleOffsets": ctx.collectible_offsets
         })
+    return payload
 
 
 async def parse_payload(payload: dict, ctx: OoTContext, force: bool):
@@ -141,6 +155,7 @@ async def parse_payload(payload: dict, ctx: OoTContext, force: bool):
         ctx.deathlink_client_override = False
         ctx.finished_game = False
         ctx.location_table = {}
+        ctx.collectible_table = {}
         ctx.deathlink_pending = False
         ctx.deathlink_sent_this_death = False
         ctx.auth = payload['playerName']
@@ -161,11 +176,17 @@ async def parse_payload(payload: dict, ctx: OoTContext, force: bool):
         ctx.finished_game = True
 
     # Locations handling
-    if ctx.location_table != payload['locations']:
-        ctx.location_table = payload['locations']
+    locations = payload['locations']
+    collectibles = payload['collectibles']
+
+    if ctx.location_table != locations or ctx.collectible_table != collectibles:
+        ctx.location_table = locations
+        ctx.collectible_table = collectibles
+        locs1 = [oot_loc_name_to_id[loc] for loc, b in ctx.location_table.items() if b]
+        locs2 = [int(loc) for loc, b in ctx.collectible_table.items() if b]
         await ctx.send_msgs([{
             "cmd": "LocationChecks",
-            "locations": [oot_loc_name_to_id[loc] for loc in ctx.location_table if ctx.location_table[loc]]
+            "locations": locs1 + locs2
         }])
 
     # Deathlink handling
@@ -191,13 +212,6 @@ async def n64_sync_task(ctx: OoTContext):
             try:
                 await asyncio.wait_for(writer.drain(), timeout=1.5)
                 try:
-                    # Data will return a dict with up to six fields:
-                    # 1. str: player name (always)
-                    # 2. int: script version (always)
-                    # 3. bool: deathlink active (always)
-                    # 4. dict[str, bool]: checked locations
-                    # 5. bool: whether Link is currently at 0 HP
-                    # 6. bool: whether the game currently registers as complete
                     data = await asyncio.wait_for(reader.readline(), timeout=10)
                     data_decoded = json.loads(data.decode())
                     reported_version = data_decoded.get('scriptVersion', 0)
@@ -270,12 +284,16 @@ async def run_game(romfile):
 
 
 async def patch_and_run_game(apz5_file):
+    apz5_file = os.path.abspath(apz5_file)
     base_name = os.path.splitext(apz5_file)[0]
     decomp_path = base_name + '-decomp.z64'
     comp_path = base_name + '.z64'
     # Load vanilla ROM, patch file, compress ROM
     rom = Rom(Utils.local_path(Utils.get_options()["oot_options"]["rom_file"]))
-    apply_patch_file(rom, apz5_file)
+    apply_patch_file(rom, apz5_file,
+        sub_file=(os.path.basename(base_name) + '.zpf'
+            if zipfile.is_zipfile(apz5_file)
+            else None))
     rom.write_to_file(decomp_path)
     os.chdir(data_path("Compress"))
     compress_rom_file(decomp_path, comp_path)

@@ -83,10 +83,6 @@ class AssembleOptions(abc.ABCMeta):
 
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
-    @classmethod
-    @abc.abstractmethod
-    def from_any(cls, value: typing.Any) -> "Option[typing.Any]": ...
-
 
 T = typing.TypeVar('T')
 
@@ -135,11 +131,12 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
         return bool(self.value)
 
     @classmethod
+    @abc.abstractmethod
     def from_any(cls, data: typing.Any) -> Option[T]:
-        raise NotImplementedError
+        ...
 
     if typing.TYPE_CHECKING:
-        def verify(self, world: World, player_name: str, plando_options: PlandoSettings) -> None:
+        def verify(self, world: World, player_name: str, plando_options: PlandoOptions) -> None:
             pass
     else:
         def verify(self, *args, **kwargs) -> None:
@@ -171,7 +168,7 @@ class FreeText(Option[str]):
         return value
 
 
-class NumericOption(Option[int], numbers.Integral):
+class NumericOption(Option[int], numbers.Integral, abc.ABC):
     default = 0
     # note: some of the `typing.Any`` here is a result of unresolved issue in python standards
     # `int` is not a `numbers.Integral` according to the official typestubs
@@ -581,8 +578,8 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
     def verify(self, world: World, player_name: str, plando_options: PlandoSettings) -> None:
         if isinstance(self.value, int):
             return
-        from Generate import PlandoSettings
-        if not(PlandoSettings.bosses & plando_options):
+        from Generate import PlandoOptions
+        if not(PlandoOptions.bosses & plando_options):
             import logging
             # plando is disabled but plando options were given so pull the option and change it to an int
             option = self.value.split(";")[-1]
@@ -886,11 +883,6 @@ class NonLocalItems(ItemSet):
     display_name = "Not Local Items"
 
 
-class EarlyItems(ItemDict):
-    """Force the specified items to be in locations that are reachable from the start."""
-    display_name = "Early Items"
-
-
 class StartInventory(ItemDict):
     """Start with these items."""
     verify_item_name = True
@@ -936,7 +928,8 @@ class ItemLinks(OptionList):
             Optional("exclude"): [And(str, len)],
             "replacement_item": Or(And(str, len), None),
             Optional("local_items"): [And(str, len)],
-            Optional("non_local_items"): [And(str, len)]
+            Optional("non_local_items"): [And(str, len)],
+            Optional("link_replacement"): Or(None, bool),
         }
     ])
 
@@ -958,7 +951,8 @@ class ItemLinks(OptionList):
                 pool |= {item_name}
         return pool
 
-    def verify(self, world: World, player_name: str, plando_options: PlandoSettings) -> None:
+    def verify(self, world: World, player_name: str, plando_options: PlandoOptions) -> None:
+        link: dict
         super(ItemLinks, self).verify(world, player_name, plando_options)
         existing_links = set()
         for link in self.value:
@@ -983,14 +977,15 @@ class ItemLinks(OptionList):
 
             intersection = local_items.intersection(non_local_items)
             if intersection:
-                raise Exception(f"item_link {link['name']} has {intersection} items in both its local_items and non_local_items pool.")
+                raise Exception(f"item_link {link['name']} has {intersection} "
+                                f"items in both its local_items and non_local_items pool.")
+            link.setdefault("link_replacement", None)
 
 
 per_game_common_options = {
     **common_options,  # can be overwritten per-game
     "local_items": LocalItems,
     "non_local_items": NonLocalItems,
-    "early_items": EarlyItems,
     "start_inventory": StartInventory,
     "start_hints": StartHints,
     "start_location_hints": StartLocationHints,

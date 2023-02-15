@@ -25,7 +25,7 @@
         <div id="tables-container">
             {% for team, players in inventory.items() %}
                 <div class="table-wrapper">
-                    <table class="table unique-item-table">
+                    <table id="inventory-table" class="table unique-item-table">
                         <thead>
                         <tr>
                             <th>#</th>
@@ -44,7 +44,7 @@
                         <tbody>
                             {%- for player, items in players.items() -%}
                                 <tr>
-                                    <td><a href="{{ url_for("getPlayerTracker", tracker=room.tracker,
+                                    <td><a href="{{ url_for("get_player_tracker", tracker=room.tracker,
                                     tracked_team=team, tracked_player=player)}}">{{ loop.index }}</a></td>
                                     {%- if (team, loop.index) in video -%}
                                         {%- if video[(team, loop.index)][0] == "Twitch" -%}
@@ -78,7 +78,7 @@
 
             {% for team, players in checks_done.items() %}
                 <div class="table-wrapper">
-                    <table class="table non-unique-item-table">
+                    <table id="checks-table" class="table non-unique-item-table">
                         <thead>
                             <tr>
                                 <th rowspan="2">#</th>
@@ -98,6 +98,7 @@
                                         <th colspan="{{ colspan }}" class="center-column">{{ area }}</th>
                                     {%- endif -%}
                                 {%- endfor -%}
+                                <th rowspan="2" class="center-column">&percnt;</th>
                                 <th rowspan="2" class="center-column hours">Last<br>Activity</th>
                             </tr>
                             <tr>
@@ -121,7 +122,7 @@
                         <tbody>
                             {%- for player, checks in players.items() -%}
                                 <tr>
-                                    <td><a href="{{ url_for("getPlayerTracker", tracker=room.tracker,
+                                    <td><a href="{{ url_for("get_player_tracker", tracker=room.tracker,
                                     tracked_team=team, tracked_player=player)}}">{{ loop.index }}</a></td>
                                     <td>{{ player_names[(team, loop.index)]|e }}</td>
                                     {%- for area in ordered_areas -%}
@@ -140,6 +141,7 @@
                                             <td class="center-column">{% if inventory[team][player][big_key_ids[area]] %}✔️{% endif %}</td>
                                         {%- endif -%}
                                     {%- endfor -%}
+                                    <td class="center-column">{{ percent_total_checks_done[team][player] }}</td>
                                     {%- if activity_timers[(team, player)] -%}
                                         <td class="center-column">{{ activity_timers[(team, player)].total_seconds() }}</td>
                                     {%- else -%}
@@ -153,7 +155,7 @@
             {% endfor %}
             {% for team, hints in hints.items() %}
                 <div class="table-wrapper">
-                    <table class="table non-unique-item-table" data-order='[[5, "asc"], [0, "asc"]]'>
+                    <table id="hints-table" class="table non-unique-item-table" data-order='[[5, "asc"], [0, "asc"]]'>
                         <thead>
                         <tr>
                             <th>Finder</th>
