@@ -28,7 +28,7 @@ Une fois Bizhawk installé, ouvrez Bizhawk et modifiez les paramètres suivants�
 - Sous Config > Personnaliser, cochez les cases "Exécuter en arrière-plan" et "Accepter la saisie en arrière-plan". Cela vous permettra de
    continuer à jouer en arrière-plan, même si une autre fenêtre est sélectionnée.
 - Sous Config> Raccourcis clavier, de nombreux raccourcis clavier sont répertoriés, dont beaucoup sont liés aux touches communes du clavier. Vous voudrez probablement
-   pour désactiver la plupart d'entre eux, ce que vous pouvez faire rapidement en utilisant `Esc`.
+   désactiver la plupart d'entre eux, ce que vous pouvez faire rapidement en utilisant `Esc`.
 - Si vous jouez avec une manette, lorsque vous liez les commandes, désactivez "P1 A Up", "P1 A Down", "P1 A Left" et "P1 A Right"
    car ceux-ci interfèrent avec la visée s'ils sont liés. Définissez l'entrée directionnelle à l'aide de l'onglet Analogique à la place.
 - Sous N64, activez "Utiliser l'emplacement d'extension". Ceci est nécessaire pour que les sauvegardes fonctionnent.
