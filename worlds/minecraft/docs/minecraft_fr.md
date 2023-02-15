@@ -45,7 +45,7 @@ Serveur Archipelago. `(Port)` n'est requis que si le serveur Archipelago n'utili
 
 Lorsque la console vous indique que vous avez rejoint la salle, vous êtes prêt. Félicitations pour avoir rejoint avec succès un
 jeu multimonde ! À ce stade, tous les joueurs minecraft supplémentaires peuvent se connecter à votre serveur forge. Pour commencer le jeu une fois
-tout le monde est prêt utilisez la commande `/start`.
+que tout le monde est prêt utilisez la commande `/start`.
 
 ## Installation non Windows
 
