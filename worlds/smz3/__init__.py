@@ -181,7 +181,7 @@ class SMZ3World(World):
         return itemType in progressionTypes
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld: MultiWorld):
         base_combined_rom = get_base_rom_bytes()
 
     def generate_early(self):
