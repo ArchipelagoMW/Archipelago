@@ -263,12 +263,16 @@ def get_static_room_data(room: Room):
         games = {slot: slot_info.game for slot, slot_info in multidata["slot_info"].items()}
         groups = {slot: slot_info.group_members for slot, slot_info in multidata["slot_info"].items()
                   if slot_info.type == SlotType.group}
-    seed_checks_in_area = checks_in_area.copy()
 
-    for game in games.values():
-        if game in multidata["datapackage"]:
-            lookup_any_location_id_to_name.update({id: name for name, id in multidata["datapackage"][game]["location_name_to_id"].items()})
-            lookup_any_item_id_to_name.update({id: name for name, id in multidata["datapackage"][game]["item_name_to_id"].items()})
+        for game in games.values():
+            if game in multidata["datapackage"]:
+                lookup_any_location_id_to_name.update(
+                    {id: name for name, id in multidata["datapackage"][game]["location_name_to_id"].items()})
+                lookup_any_item_id_to_name.update(
+                    {id: name for name, id in multidata["datapackage"][game]["item_name_to_id"].items()})
+    elif "games" in multidata:
+        games = multidata["games"]
+    seed_checks_in_area = checks_in_area.copy()
 
     use_door_tracker = False
     if "tags" in multidata:
