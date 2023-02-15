@@ -22,4 +22,4 @@ class TestBase(unittest.TestCase):
                 locations = multiworld.get_unfilled_locations()  # do unfilled locations to avoid Events
                 for location in locations:
                     self.assertIn(location.name, world_type.location_name_to_id)
-                self.assertLessEqual(len(locations), len(world_type.location_name_to_id))
+                    self.assertEqual(location.address, world_type.location_name_to_id[location.name])
