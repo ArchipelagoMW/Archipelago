@@ -9,10 +9,6 @@ import random
 from schema import Schema, And, Or, Optional
 from Utils import get_fuzzy_results
 
-if typing.TYPE_CHECKING:
-    from BaseClasses import PlandoOptions
-    from worlds.AutoWorld import World
-
 
 class AssembleOptions(abc.ABCMeta):
     def __new__(mcs, name, bases, attrs):
@@ -136,6 +132,9 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
         ...
 
     if typing.TYPE_CHECKING:
+        from BaseClasses import PlandoOptions
+        from worlds.AutoWorld import World
+
         def verify(self, world: World, player_name: str, plando_options: PlandoOptions) -> None:
             pass
     else:
@@ -575,9 +574,10 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
     def valid_location_name(cls, value: str) -> bool:
         return value in cls.locations
 
-    def verify(self, world: World, player_name: str, plando_options: PlandoOptions) -> None:
+    def verify(self, world: "World", player_name: str, plando_options: "PlandoOptions") -> None:
         if isinstance(self.value, int):
             return
+        from BaseClasses import PlandoOptions
         if not(PlandoOptions.bosses & plando_options):
             import logging
             # plando is disabled but plando options were given so pull the option and change it to an int
@@ -726,7 +726,7 @@ class VerifyKeys:
                 raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
                                 f"Allowed keys: {cls.valid_keys}.")
 
-    def verify(self, world: World, player_name: str, plando_options: PlandoOptions) -> None:
+    def verify(self, world: "World", player_name: str, plando_options: "PlandoOptions") -> None:
         if self.convert_name_groups and self.verify_item_name:
             new_value = type(self.value)()  # empty container of whatever value is
             for item_name in self.value:
@@ -950,7 +950,7 @@ class ItemLinks(OptionList):
                 pool |= {item_name}
         return pool
 
-    def verify(self, world: World, player_name: str, plando_options: PlandoOptions) -> None:
+    def verify(self, world: "World", player_name: str, plando_options: "PlandoOptions") -> None:
         link: dict
         super(ItemLinks, self).verify(world, player_name, plando_options)
         existing_links = set()
