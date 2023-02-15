@@ -102,7 +102,7 @@ Ocarina of Time:
     normal: 0
     fast: 50
     open: 0
-  bridge: # Définissez les exigences pour le pont arc-en-ciel.
+  bridge: # Définit les exigences pour le pont arc-en-ciel.
     open: 0
     vanilla: 0
     stones: 0
