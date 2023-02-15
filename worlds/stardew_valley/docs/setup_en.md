@@ -30,7 +30,7 @@ You can customize your settings by visiting the [Stardew Valley Player Settings 
 
 - Install [SMAPI](https://smapi.io/) by following the instructions on their website
 - Download and extract the [StardewArchipelago](https://github.com/agilbert1412/StardewArchipelago/releases) mod into your Stardew Valley "Mods" folder
-- If you want to launch your game through Steam, add the following to your Stardew Valley launch options:
+- *OPTIONAL*: If you want to launch your game through Steam, add the following to your Stardew Valley launch options:
     - "[PATH TO STARDEW VALLEY]\Stardew Valley\StardewModdingAPI.exe" %command%
 - Otherwise just launch "StardewModdingAPI.exe" in your installation folder directly
 - Stardew Valley should launch itself alongside a console which allows you to read mod information and interact with some of them.
@@ -45,7 +45,7 @@ On the new character creation page, you will see 3 new fields, used to link your
 
 You can customize your farm and character as much as desired.
 
-The Server needs to have both the address and the port, and your slotname is the name specified in your yaml
+The Server text box needs to have both the address and the port, and your slotname is the name specified in your yaml
 
 `archipelago.gg:38281`
 
@@ -56,6 +56,17 @@ The password is optional.
 Your game will connect automatically to Archipelago, and reconnect automatically when loading the save, later.
 
 You will never need to enter this information again for this character.
+
+### Interacting with the MultiWorld from in-game
+
+When you connect, you should see a message in the chat informing you of the `!!help` command. This command will list other Stardew-exclusive chat commands you can use.
+
+Furthermore, you can use the in-game chat box to talk to other players in the multiworld, assuming they are using a game that supports chatting.
+
+Lastly, you can also run Archipelago commands `!help` from the in game chat box, allowing you to request hints on certain items, or check missing locations.
+
+It is important to note that the Stardew Valley chat is fairly limited in its capabilities. For example, it doesn't allow scrolling up to see history that has been pushed off screen. The SMAPI console running alonside your game will have the full history as well and may be better suited to read older messages.
+For a better chat experience, you can also use the official Archipelago Text Client, altough it will not allow you to run Stardew-exclusive commands.
 
 ### Multiplayer
 
