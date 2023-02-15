@@ -35,7 +35,7 @@ Une fois Bizhawk installé, ouvrez Bizhawk et modifiez les paramètres suivants�
    (Le menu N64 n'apparaît qu'après le chargement d'une ROM.)
 
 Il est fortement recommandé d'associer les extensions de rom N64 (\*.n64, \*.z64) au Bizhawk que nous venons d'installer.
-Pour ce faire, nous devons simplement rechercher n'importe quelle rom N64 que nous possédons, faire un clic droit et sélectionner "Ouvrir avec ...", déplier
+Pour ce faire, nous devons simplement rechercher n'importe quelle rom N64 que nous possédons, faire un clic droit et sélectionner "Ouvrir avec ...", dépliez
 la liste qui apparaît et sélectionnez l'option du bas "Rechercher une autre application", puis naviguez jusqu'au dossier Bizhawk
 et sélectionnez EmuHawk.exe.
 
