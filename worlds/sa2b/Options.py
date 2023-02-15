@@ -9,11 +9,13 @@ class Goal(Choice):
     Biolizard: Finish Cannon's Core and defeat the Biolizard and Finalhazard
     Chaos Emerald Hunt: Find the Seven Chaos Emeralds and reach Green Hill Zone
     Finalhazard Chaos Emerald Hunt: Find the Seven Chaos Emeralds and reach Green Hill Zone, then defeat Finalhazard
+    Grand Prix: Win every race in Kart Race Mode (with every character!)
     """
     display_name = "Goal"
     option_biolizard = 0
     option_chaos_emerald_hunt = 1
     option_finalhazard_chaos_emerald_hunt = 2
+    option_grand_prix = 3
     default = 0
 
 
@@ -155,6 +157,13 @@ class Omosanity(Toggle):
     Determines whether activating Omochao grants checks
     """
     display_name = "Omosanity"
+
+
+class KartRaceChecks(Toggle):
+    """
+    Determines whether Kart Race Mode grants checks
+    """
+    display_name = "Kart Race Checks"
 
 
 class EmblemPercentageForCannonsCore(Range):
@@ -544,6 +553,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "whistlesanity": Whistlesanity,
     "beetlesanity": Beetlesanity,
     "omosanity": Omosanity,
+    "kart_race_checks": KartRaceChecks,
     "required_rank": RequiredRank,
     "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
     "required_cannons_core_missions": RequiredCannonsCoreMissions,

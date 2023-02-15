@@ -1370,11 +1370,12 @@ def set_rules(world: MultiWorld, player: int, gate_bosses: typing.Dict[int, int]
     # Mission Progression Rules (Mission 1 begets Mission 2, etc.)
     set_mission_progress_rules(world, player, mission_map, mission_count_map)
 
-    # Upgrade Requirements for each mission location
-    if world.logic_difficulty[player].value == 0:
-        set_mission_upgrade_rules_standard(world, player)
-    elif world.logic_difficulty[player].value == 1:
-        set_mission_upgrade_rules_hard(world, player)
+    if world.goal[player].value != 3:
+        # Upgrade Requirements for each mission location
+        if world.logic_difficulty[player].value == 0:
+            set_mission_upgrade_rules_standard(world, player)
+        elif world.logic_difficulty[player].value == 1:
+            set_mission_upgrade_rules_hard(world, player)
 
     # Upgrade Requirements for each boss gate
     set_boss_gate_rules(world, player, gate_bosses)

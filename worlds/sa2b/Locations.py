@@ -821,6 +821,33 @@ chao_garden_expert_location_table = {
     LocationName.chao_super_karate: 0xFF0303,
 }
 
+kart_race_beginner_location_table = {
+    LocationName.kart_race_beginner_sonic: 0xFF0A00,
+    LocationName.kart_race_beginner_tails: 0xFF0A01,
+    LocationName.kart_race_beginner_knuckles: 0xFF0A02,
+    LocationName.kart_race_beginner_shadow: 0xFF0A03,
+    LocationName.kart_race_beginner_eggman: 0xFF0A04,
+    LocationName.kart_race_beginner_rouge: 0xFF0A05,
+}
+
+kart_race_standard_location_table = {
+    LocationName.kart_race_standard_sonic: 0xFF0A06,
+    LocationName.kart_race_standard_tails: 0xFF0A07,
+    LocationName.kart_race_standard_knuckles: 0xFF0A08,
+    LocationName.kart_race_standard_shadow: 0xFF0A09,
+    LocationName.kart_race_standard_eggman: 0xFF0A0A,
+    LocationName.kart_race_standard_rouge: 0xFF0A0B,
+}
+
+kart_race_expert_location_table = {
+    LocationName.kart_race_expert_sonic: 0xFF0A0C,
+    LocationName.kart_race_expert_tails: 0xFF0A0D,
+    LocationName.kart_race_expert_knuckles: 0xFF0A0E,
+    LocationName.kart_race_expert_shadow: 0xFF0A0F,
+    LocationName.kart_race_expert_eggman: 0xFF0A10,
+    LocationName.kart_race_expert_rouge: 0xFF0A11,
+}
+
 green_hill_location_table = {
     LocationName.green_hill: 0xFF001F,
 }
@@ -832,6 +859,10 @@ green_hill_chao_location_table = {
 final_boss_location_table = {
     # LocationName.biolizard: 0xFF003F,
     LocationName.finalhazard: 0xFF005F,
+}
+
+grand_prix_location_table = {
+    LocationName.grand_prix: 0xFF007F,
 }
 
 all_locations = {
@@ -846,9 +877,13 @@ all_locations = {
     **chao_garden_beginner_location_table,
     **chao_garden_intermediate_location_table,
     **chao_garden_expert_location_table,
+    **kart_race_beginner_location_table,
+    **kart_race_standard_location_table,
+    **kart_race_expert_location_table,
     **green_hill_location_table,
     **green_hill_chao_location_table,
     **final_boss_location_table,
+    **grand_prix_location_table,
 }
 
 boss_gate_set = [
@@ -895,65 +930,75 @@ def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int
     location_table = {}
     chao_location_table = {}
 
+    if world.goal[player] == 3:
+        location_table.update({**kart_race_beginner_location_table})
+        location_table.update({**kart_race_standard_location_table})
+        location_table.update({**kart_race_expert_location_table})
+        location_table.update({**grand_prix_location_table})
+    else:
+        for i in range(31):
+            mission_count = mission_count_map[i]
+            mission_order: typing.List[int] = mission_orders[mission_map[i]]
+            stage_prefix: str = stage_name_prefixes[i]
 
-    for i in range(31):
-        mission_count = mission_count_map[i]
-        mission_order: typing.List[int] = mission_orders[mission_map[i]]
-        stage_prefix: str = stage_name_prefixes[i]
+            for j in range(mission_count):
+                mission_number = mission_order[j]
+                location_name: str = stage_prefix + str(mission_number)
+                location_table[location_name] = mission_location_table[location_name]
 
-        for j in range(mission_count):
-            mission_number = mission_order[j]
-            location_name: str = stage_prefix + str(mission_number)
-            location_table[location_name] = mission_location_table[location_name]
-
-    location_table.update({**upgrade_location_table})
-
-    if world.keysanity[player]:
-        location_table.update({**chao_key_location_table})
-
-    if world.whistlesanity[player].value == 1:
-        location_table.update({**pipe_location_table})
-    elif world.whistlesanity[player].value == 2:
-        location_table.update({**hidden_whistle_location_table})
-    elif world.whistlesanity[player].value == 3:
-        location_table.update({**pipe_location_table})
-        location_table.update({**hidden_whistle_location_table})
-
-    if world.beetlesanity[player]:
-        location_table.update({**beetle_location_table})
-
-    if world.omosanity[player]:
-        location_table.update({**omochao_location_table})
-
-    if world.goal[player].value == 0 or world.goal[player].value == 2:
-        location_table.update({**final_boss_location_table})
-
-    if world.goal[player].value == 1 or world.goal[player].value == 2:
-        location_table.update({**green_hill_location_table})
+        location_table.update({**upgrade_location_table})
 
         if world.keysanity[player]:
-            location_table.update({**green_hill_chao_location_table})
+            location_table.update({**chao_key_location_table})
 
-    if world.chao_garden_difficulty[player].value >= 1:
-        chao_location_table.update({**chao_garden_beginner_location_table})
-    if world.chao_garden_difficulty[player].value >= 2:
-        chao_location_table.update({**chao_garden_intermediate_location_table})
-    if world.chao_garden_difficulty[player].value >= 3:
-        chao_location_table.update({**chao_garden_expert_location_table})
+        if world.whistlesanity[player].value == 1:
+            location_table.update({**pipe_location_table})
+        elif world.whistlesanity[player].value == 2:
+            location_table.update({**hidden_whistle_location_table})
+        elif world.whistlesanity[player].value == 3:
+            location_table.update({**pipe_location_table})
+            location_table.update({**hidden_whistle_location_table})
 
-    for key, value in chao_location_table.items():
-        if key in chao_karate_set:
-            if world.include_chao_karate[player]:
+        if world.beetlesanity[player]:
+            location_table.update({**beetle_location_table})
+
+        if world.omosanity[player]:
+            location_table.update({**omochao_location_table})
+
+        if world.kart_race_checks[player]:
+            location_table.update({**kart_race_beginner_location_table})
+            location_table.update({**kart_race_standard_location_table})
+            location_table.update({**kart_race_expert_location_table})
+
+        if world.goal[player].value == 0 or world.goal[player].value == 2:
+            location_table.update({**final_boss_location_table})
+
+        if world.goal[player].value == 1 or world.goal[player].value == 2:
+            location_table.update({**green_hill_location_table})
+
+            if world.keysanity[player]:
+                location_table.update({**green_hill_chao_location_table})
+
+        if world.chao_garden_difficulty[player].value >= 1:
+            chao_location_table.update({**chao_garden_beginner_location_table})
+        if world.chao_garden_difficulty[player].value >= 2:
+            chao_location_table.update({**chao_garden_intermediate_location_table})
+        if world.chao_garden_difficulty[player].value >= 3:
+            chao_location_table.update({**chao_garden_expert_location_table})
+
+        for key, value in chao_location_table.items():
+            if key in chao_karate_set:
+                if world.include_chao_karate[player]:
+                    location_table[key] = value
+            elif key not in chao_race_prize_set:
+                if world.chao_race_checks[player] == "all":
+                    location_table[key] = value
+            else:
                 location_table[key] = value
-        elif key not in chao_race_prize_set:
-            if world.chao_race_checks[player] == "all":
-                location_table[key] = value
-        else:
-            location_table[key] = value
 
-    for x in range(len(boss_gate_set)):
-        if x < world.number_of_level_gates[player].value:
-            location_table[boss_gate_set[x]] = boss_gate_location_table[boss_gate_set[x]]
+        for x in range(len(boss_gate_set)):
+            if x < world.number_of_level_gates[player].value:
+                location_table[boss_gate_set[x]] = boss_gate_location_table[boss_gate_set[x]]
 
     return location_table
 

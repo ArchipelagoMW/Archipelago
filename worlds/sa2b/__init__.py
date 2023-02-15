@@ -147,13 +147,29 @@ class SA2BWorld(World):
         return levels_per_gate
 
     def generate_early(self):
-        self.gate_bosses = get_gate_bosses(self.multiworld, self.player)
+        if self.multiworld.goal[self.player].value == 3:
+            # Turn off everything else for Grand Prix goal
+            self.multiworld.number_of_level_gates[self.player].value = 0
+            self.multiworld.emblem_percentage_for_cannons_core[self.player].value = 0
+            self.multiworld.junk_fill_percentage[self.player].value = 100
+            self.multiworld.trap_fill_percentage[self.player].value = 100
+            self.multiworld.omochao_trap_weight[self.player].value = 0
+            self.multiworld.timestop_trap_weight[self.player].value = 0
+            self.multiworld.confusion_trap_weight[self.player].value = 0
+            self.multiworld.tiny_trap_weight[self.player].value = 0
+            self.multiworld.gravity_trap_weight[self.player].value = 0
+            self.multiworld.exposition_trap_weight[self.player].value = 4
+            self.gate_bosses = {}
+        else:
+            self.gate_bosses = get_gate_bosses(self.multiworld, self.player)
 
     def generate_basic(self):
         if self.multiworld.goal[self.player].value == 0 or self.multiworld.goal[self.player].value == 2:
             self.multiworld.get_location(LocationName.finalhazard, self.player).place_locked_item(self.create_item(ItemName.maria))
         elif self.multiworld.goal[self.player].value == 1:
             self.multiworld.get_location(LocationName.green_hill, self.player).place_locked_item(self.create_item(ItemName.maria))
+        elif self.multiworld.goal[self.player].value == 3:
+            self.multiworld.get_location(LocationName.grand_prix, self.player).place_locked_item(self.create_item(ItemName.maria))
 
         itempool: typing.List[SA2BItem] = []
 
@@ -161,14 +177,15 @@ class SA2BWorld(World):
         total_required_locations = len(self.location_table)
         total_required_locations -= 1; # Locked Victory Location
 
-        # Fill item pool with all required items
-        for item in {**upgrades_table}:
-            itempool += self._create_items(item)
-
-        if self.multiworld.goal[self.player].value == 1 or self.multiworld.goal[self.player].value == 2:
-            # Some flavor of Chaos Emerald Hunt
-            for item in {**emeralds_table}:
+        if self.multiworld.goal[self.player].value != 3:
+            # Fill item pool with all required items
+            for item in {**upgrades_table}:
                 itempool += self._create_items(item)
+
+            if self.multiworld.goal[self.player].value == 1 or self.multiworld.goal[self.player].value == 2:
+                # Some flavor of Chaos Emerald Hunt
+                for item in {**emeralds_table}:
+                    itempool += self._create_items(item)
 
         # Cap at 180 Emblems
         raw_emblem_count = total_required_locations - len(itempool)
