@@ -52,7 +52,7 @@ d'une expérience personnalisée à leur goût, et différents joueurs dans le m
 
 ### Où puis-je obtenir un fichier YAML ?
 
-Un yaml OoT de base ressemblera à ceci. Il y a beaucoup d'options cosmétiques qui ont été supprimées pour le plaisir de cela
+Un yaml OoT de base ressemblera à ceci. Il y a beaucoup d'options cosmétiques qui ont été supprimées pour le plaisir de ce
 tutoriel, si vous voulez voir une liste complète, téléchargez Archipelago depuis
 la [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases) et recherchez l'exemple de fichier dans
 le dossier "Lecteurs".
