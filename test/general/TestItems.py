@@ -44,11 +44,10 @@ class TestBase(unittest.TestCase):
     def testItemCountGreaterEqualLocations(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game=game_name):
-                world = setup_default_world(world_type)
-                location_count = sum(0 if location.event or location.item else 1 for location in world.get_locations())
+                multiworld = setup_default_world(world_type)
                 self.assertGreaterEqual(
-                    len(world.itempool),
-                    location_count,
+                    len(multiworld.itempool),
+                    len(multiworld.get_unfilled_locations()),
                     f"{game_name} Item count MUST meet or exceed the number of locations",
                 )
 
