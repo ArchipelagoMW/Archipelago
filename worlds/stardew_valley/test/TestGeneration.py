@@ -1,5 +1,3 @@
-import pytest
-
 from BaseClasses import ItemClassification
 from test.general import setup_default_world
 from . import SVTestBase
@@ -74,31 +72,6 @@ class TestRemixedMineRewards(SVTestBase):
                        for item in
                        ["Leather Boots", "Steel Smallsword", "Tundra Boots", "Crystal Dagger", "Firewalker Boots",
                         "Obsidian Edge", "Space Boots"])
-
-
-class TestProgressiveTools(SVTestBase):
-    options = {options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
-               options.SkillProgression.internal_name: options.SkillProgression.option_vanilla,
-               options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_disabled}
-
-    @pytest.mark.skip
-    def test_when_generate_world_then_bundles_and_some_fishing_rods_locked_behind_first_progressive_fishing_rod(self):
-        self.assertAccessDependency(
-            ["Purchase Fiberglass Rod", "Purchase Iridium Rod", "River Fish Bundle", "Lake Fish Bundle",
-             "Ocean Fish Bundle", "Night Fishing Bundle", "Specialty Fish Bundle", "Chef's Bundle",
-             "Field Research Bundle", "Complete Fish Tank", "Complete Bulletin Board", "Complete Community Center"],
-            [["Progressive Fishing Rod"]])
-
-    @pytest.mark.skip
-    def test_when_generate_world_then_iridium_tool_upgrades_are_locked_behind_access_to_skull_cavern(self):
-        self.collect(self.get_item_by_name("Bus Repair"))
-        self.collect(self.get_item_by_name("Progressive Pickaxe"))
-        self.collect(self.get_item_by_name("Progressive Pickaxe"))
-        self.collect(self.get_item_by_name("Progressive Pickaxe"))
-        self.assertAccessDependency(
-            ["Iridium Hoe Upgrade", "Iridium Pickaxe Upgrade", "Iridium Axe Upgrade", "Iridium Watering Can Upgrade",
-             "Iridium Trash Can Upgrade"],
-            [["Skull Key"]])
 
 
 class TestProgressiveElevator(SVTestBase):

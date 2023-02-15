@@ -1,6 +1,6 @@
 from typing import Dict, Any, Iterable, Optional
 
-from BaseClasses import Region, RegionType, Entrance, Location, Item, Tutorial
+from BaseClasses import Region, Entrance, Location, Item, Tutorial
 from worlds.AutoWorld import World, WebWorld
 from . import rules, logic
 from .bundles import get_all_bundles, Bundle
@@ -70,7 +70,7 @@ class StardewValleyWorld(World):
 
     def create_regions(self):
         def create_region(name: str, exits: Iterable[str]) -> Region:
-            region = Region(name, RegionType.Generic, name, self.player, self.multiworld)
+            region = Region(name, self.player, self.multiworld)
             region.exits = [Entrance(self.player, exit_name, region) for exit_name in exits]
             return region
 
@@ -91,7 +91,8 @@ class StardewValleyWorld(World):
                                if not location.event])
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]
-                            if not item_table[excluded_items.name].has_any_group(Group.RESOURCE_PACK, Group.FRIENDSHIP_PACK)]
+                            if not item_table[excluded_items.name].has_any_group(Group.RESOURCE_PACK,
+                                                                                 Group.FRIENDSHIP_PACK)]
         created_items = create_items(self.create_item, locations_count + len(items_to_exclude), self.options,
                                      self.multiworld.random)
         self.multiworld.itempool += created_items
@@ -172,7 +173,7 @@ class StardewValleyWorld(World):
             "fishsanity": self.options[options.Fishsanity],
             "death_link": self.options["death_link"],
             "goal": self.options[options.Goal],
-            "seed": self.multiworld.slot_seeds[self.player].randrange(1000000000),  # Seed should be max 9 digits
+            "seed": self.multiworld.per_slot_randoms[self.player].randrange(1000000000),  # Seed should be max 9 digits
             "multiple_day_sleep_enabled": self.options[options.MultipleDaySleepEnabled],
             "multiple_day_sleep_cost": self.options[options.MultipleDaySleepCost],
             "experience_multiplier": self.options[options.ExperienceMultiplier],
