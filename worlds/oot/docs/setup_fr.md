@@ -71,7 +71,7 @@ accessibility:
   locations: 50 # Garantit que vous pourrez accéder à tous les emplacements, et donc à tous les articles
   none: 0 # Garantit seulement que le jeu est battable. Vous ne pourrez peut-être pas accéder à tous les emplacements ou acquérir tous les objets
 progression_balancing: # Un système pour réduire le BK, comme dans les périodes où vous ne pouvez rien faire, en déplaçant vos éléments dans une sphère d'accès antérieure
-  0: 0 # Choisissez un nombre inférieur si cela ne vous dérange pas d'avoir un multimonde plus long, ou si vous pouvez casser des problèmes / séquences autour d'éléments manquants.
+  0: 0 # Choisissez un nombre inférieur si cela ne vous dérange pas d'avoir un multimonde plus long, ou si vous pouvez glitch / séquences autour d'éléments manquants.
   25: 0
   50: 50 # Faites en sorte que vous ayez probablement des choses à faire.
   99: 0 # Obtenez les éléments importants tôt et restez en tête de la progression.
