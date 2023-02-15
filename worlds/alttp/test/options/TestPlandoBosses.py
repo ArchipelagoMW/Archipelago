@@ -1,5 +1,5 @@
 import unittest
-import Generate
+from BaseClasses import PlandoOptions
 from Options import PlandoBosses
 
 
@@ -123,14 +123,14 @@ class TestPlandoBosses(unittest.TestCase):
         regular = MultiBosses.from_any(regular_string)
 
         # plando should work with boss plando
-        plandoed.verify(None, "Player", Generate.PlandoOptions.bosses)
+        plandoed.verify(None, "Player", PlandoOptions.bosses)
         self.assertTrue(plandoed.value.startswith(plandoed_string))
         # plando should fall back to default without boss plando
-        plandoed.verify(None, "Player", Generate.PlandoOptions.items)
+        plandoed.verify(None, "Player", PlandoOptions.items)
         self.assertEqual(plandoed, MultiBosses.option_vanilla)
         # mixed should fall back to mode
-        mixed.verify(None, "Player", Generate.PlandoOptions.items)  # should produce a warning and still work
+        mixed.verify(None, "Player", PlandoOptions.items)  # should produce a warning and still work
         self.assertEqual(mixed, MultiBosses.option_shuffle)
         # mode stuff should just work
-        regular.verify(None, "Player", Generate.PlandoOptions.items)
+        regular.verify(None, "Player", PlandoOptions.items)
         self.assertEqual(regular, MultiBosses.option_shuffle)
