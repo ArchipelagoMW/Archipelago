@@ -65,7 +65,7 @@ Il est fortement recommandé d'utiliser le programme d'installation d'Archipelag
 Le support ne sera pas fourni pour ceux qui souhaitent installer manuellement forge. Pour ceux d'entre vous qui savent comment faire et qui souhaitent le faire,
 les liens suivants sont les versions des logiciels que nous utilisons.
 
-### Liens du logiciel d'installation manuelle
+### Liens d'installation manuelle du logiciel
 
 - [Page de téléchargement de Minecraft Forge] (https://files.minecraftforge.net/net/minecraftforge/forge/)
 - [Page des versions du mod Minecraft Archipelago Randomizer] (https://github.com/KonoTyran/Minecraft_AP_Randomizer/releases)
