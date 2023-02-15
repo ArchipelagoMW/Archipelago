@@ -38,7 +38,7 @@ Ouvrez Minecraft, accédez à "Multijoueur> Connexion directe" et rejoignez l'ad
 Si vous utilisez le site Web pour héberger le jeu, il devrait se connecter automatiquement au serveur AP sans avoir besoin de `/connect`
 
 sinon, une fois que vous êtes dans le jeu, tapez `/connect <AP-Address> (Port) (Password)` où `<AP-Address>` est l'adresse du
-Serveur Archipel. `(Port)` n'est requis que si le serveur Archipelago n'utilise pas le port par défaut 38281. Notez qu'il n'y a pas de deux-points entre `<AP-Address>` et `(Port)`.
+Serveur Archipelago. `(Port)` n'est requis que si le serveur Archipelago n'utilise pas le port par défaut 38281. Notez qu'il n'y a pas de deux-points entre `<AP-Address>` et `(Port)` mais un espace.
 `(Mot de passe)` n'est requis que si le serveur Archipelago que vous utilisez a un mot de passe défini.
 
 ### Jouer le jeu
