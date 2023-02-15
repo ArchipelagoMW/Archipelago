@@ -260,6 +260,7 @@ def get_static_room_data(room: Room):
     names: Dict[int, Dict[int, str]] = multidata["names"]
     groups = {}
     if "slot_info" in multidata:
+        games = {slot: slot_info.game for slot, slot_info in multidata["slot_info"].items()}
         groups = {slot: slot_info.group_members for slot, slot_info in multidata["slot_info"].items()
                   if slot_info.type == SlotType.group}
     seed_checks_in_area = checks_in_area.copy()
@@ -282,7 +283,7 @@ def get_static_room_data(room: Room):
                                if playernumber not in groups}
     saving_second = get_saving_second(multidata["seed_name"])
     result = locations, names, use_door_tracker, player_checks_in_area, player_location_to_area, \
-             multidata["precollected_items"], multidata["games"], multidata["slot_data"], groups, saving_second
+             multidata["precollected_items"], games, multidata["slot_data"], groups, saving_second
     _multidata_cache[room.seed.id] = result
     return result
 
