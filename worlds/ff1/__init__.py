@@ -51,8 +51,8 @@ class FF1World(World):
         for player in multiworld.get_game_players(cls.game):
             options = get_options(multiworld, 'items', player)
             assert options,\
-                f"FFR settings submitted with no key items ({multiworld.get_player_name(player)}). Please ensure you generated the settings " \
-                f"using finalfantasyrandomizer.com AND enabled the AP flag"
+                f"FFR settings submitted with no key items ({multiworld.get_player_name(player)}). Please ensure you " \
+                f"generated the settings using finalfantasyrandomizer.com AND enabled the AP flag"
 
     def create_regions(self):
         locations = get_options(self.multiworld, 'locations', self.player)
