@@ -1,7 +1,7 @@
 import logging
 from typing import List, Dict, Any
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, RegionType
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from . import Items
 from . import Locations
@@ -41,13 +41,13 @@ class SubnauticaWorld(World):
     location_name_to_id = all_locations
     option_definitions = Options.options
 
-    data_version = 7
-    required_client_version = (0, 3, 6)
+    data_version = 8
+    required_client_version = (0, 3, 8)
 
     creatures_to_scan: List[str]
 
     def generate_early(self) -> None:
-        if self.multiworld.early_seaglide:
+        if self.multiworld.early_seaglide[self.player]:
             self.multiworld.local_early_items[self.player]["Seaglide Fragment"] = 2
 
         scan_option: Options.AggressiveScanLogic = self.multiworld.creature_scan_logic[self.player]
@@ -135,8 +135,7 @@ class SubnauticaWorld(World):
                               item_id, player=self.player)
 
     def create_region(self, name: str, locations=None, exits=None):
-        ret = Region(name, RegionType.Generic, name, self.player)
-        ret.multiworld = self.multiworld
+        ret = Region(name, self.player, self.multiworld)
         if locations:
             for location in locations:
                 loc_id = self.location_name_to_id.get(location, None)

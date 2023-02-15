@@ -109,10 +109,10 @@ def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
 
 class WebWorld:
     """Webhost integration"""
-    
+
     settings_page: Union[bool, str] = True
     """display a settings page. Can be a link to a specific page or external tool."""
-    
+
     game_info_languages: List[str] = ['en']
     """docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'"""
 
@@ -160,10 +160,6 @@ class World(metaclass=AutoWorldRegister):
 
     hint_blacklist: ClassVar[FrozenSet[str]] = frozenset()  # any names that should not be hintable
 
-    # For games where after a victory it is impossible to go back in and get additional/remaining Locations checked.
-    # this forces forfeit:  auto for those games.
-    forced_auto_forfeit: bool = False
-
     # Hide World Type from various views. Does not remove functionality.
     hidden: ClassVar[bool] = False
 
@@ -192,10 +188,11 @@ class World(metaclass=AutoWorldRegister):
     # can also be implemented as a classmethod and called "stage_<original_name>",
     # in that case the MultiWorld object is passed as an argument and it gets called once for the entire multiworld.
     # An example of this can be found in alttp as stage_pre_fill
+
     @classmethod
-    def assert_generate(cls) -> None:
+    def stage_assert_generate(cls, multiworld: "MultiWorld") -> None:
         """Checks that a game is capable of generating, usually checks for some base file like a ROM.
-        Not run for unittests since they don't produce output"""
+        This gets called once per present world type. Not run for unittests since they don't produce output"""
         pass
 
     def generate_early(self) -> None:
@@ -217,14 +214,12 @@ class World(metaclass=AutoWorldRegister):
         """Optional method that is supposed to be used for special fill stages. This is run *after* plando."""
         pass
 
-    @classmethod
-    def fill_hook(cls,
+    def fill_hook(self,
                   progitempool: List["Item"],
                   usefulitempool: List["Item"],
                   filleritempool: List["Item"],
                   fill_locations: List["Location"]) -> None:
-        """Special method that gets called as part of distribute_items_restrictive (main fill).
-        This gets called once per present world type."""
+        """Special method that gets called as part of distribute_items_restrictive (main fill)."""
         pass
 
     def post_fill(self) -> None:
@@ -233,7 +228,7 @@ class World(metaclass=AutoWorldRegister):
 
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use world.random here.
-        If you need any last-second randomization, use MultiWorld.slot_seeds[slot] instead."""
+        If you need any last-second randomization, use MultiWorld.per_slot_randoms[slot] instead."""
         pass
 
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
