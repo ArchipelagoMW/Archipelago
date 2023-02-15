@@ -233,7 +233,7 @@ Ocarina of Time:
     random: 0
     random-low: 0
     random-high: 0
-  shuffle_song_items: # Définir où les chansons peuvent apparaître.
+  shuffle_song_items: # Définit où les chansons peuvent apparaître.
     song: 50
     dungeon: 0
     any: 0
