@@ -82,7 +82,7 @@ Ocarina of Time:
     no_logic: 0
   logic_no_night_tokens_without_suns_song: # Les skulltulas nocturnes nécessiteront logiquement le Chant du soleil.
     false: 50
-    treu: 0
+    true: 0
   open_forest: # Définissez l'état de la forêt de Kokiri et du chemin vers l'arbre Mojo.
     open: 50
     closed_deku: 0
