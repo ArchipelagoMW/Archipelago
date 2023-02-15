@@ -163,7 +163,7 @@ class Overcooked2World(World):
             elif not self.options["KevinLevels"] and level.level_id > 36:
                 break
 
-            levels.append(level)
+            levels.append(level.level_id)
 
         self.multiworld.random.shuffle(levels)
         return levels[:n]
@@ -338,12 +338,13 @@ class Overcooked2World(World):
                 )
             else:
                 # Location to house progression item
+                priority = level.level_id in priority_locations
                 self.add_level_location(
                     level.level_name,
                     level.location_name_item,
                     level.level_id,
                     1,
-                    priority=level.level_id in priority_locations
+                    priority=priority,
                 )
 
                 # Location to house level completed event
