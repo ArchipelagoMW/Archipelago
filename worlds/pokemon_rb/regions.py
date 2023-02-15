@@ -1,10 +1,10 @@
 
-from BaseClasses import MultiWorld, Region, Entrance, LocationProgressType
+from BaseClasses import MultiWorld, Region, Entrance, RegionType, LocationProgressType
 from .locations import location_data, PokemonRBLocation
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations_per_region=None, exits=None):
-    ret = Region(name, player, world)
+    ret = Region(name, RegionType.Generic, name, player, world)
     for location in locations_per_region.get(name, []):
         location.parent_region = ret
         ret.locations.append(location)
@@ -175,10 +175,10 @@ def create_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "Route 24", "Route 25", one_way=True)
     connect(multiworld, player, "Cerulean City", "Route 9", lambda state: state.pokemon_rb_can_cut(player))
     connect(multiworld, player, "Route 9", "Route 10 North")
-    connect(multiworld, player, "Route 10 North", "Rock Tunnel 1F", lambda state: state.pokemon_rb_can_flash(player) or not (state.multiworld.flash_logic[player].value == 0))
+    connect(multiworld, player, "Route 10 North", "Rock Tunnel 1F", lambda state: state.pokemon_rb_can_flash(player) or not state.pokemon_rb_movement_require_flash(player))
     connect(multiworld, player, "Route 10 North", "Power Plant", lambda state: state.pokemon_rb_can_surf(player) and
                                                                                (state.has("Plant Key", player) or not state.multiworld.extra_key_items[player].value), one_way=True)
-    connect(multiworld, player, "Rock Tunnel 1F", "Route 10 South", lambda state: state.pokemon_rb_can_flash(player) or not (state.multiworld.flash_logic[player].value == 0))
+    connect(multiworld, player, "Rock Tunnel 1F", "Route 10 South", lambda state: state.pokemon_rb_can_flash(player) or not state.pokemon_rb_movement_require_flash(player))
     connect(multiworld, player, "Rock Tunnel 1F", "Rock Tunnel B1F")
     connect(multiworld, player, "Lavender Town", "Pokemon Tower 1F", one_way=True)
     connect(multiworld, player, "Lavender Town", "Pokemon Tower 1F", one_way=True)

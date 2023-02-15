@@ -97,23 +97,16 @@ class BadgesNeededForHMMoves(Choice):
     option_extra = 2
     option_extra_plus = 3
 
-class FlashLogic(Choice):
-    """All means you logically need to be able to use Flash to go through Rock Tunnel.
-    Checks means you logically need to be able to use Flash to get checks in Rock Tunnel, but you can go through without it.
-    Trainers means you logically need to be able to use Flash to fight Trainers, but can go through and pick up items without it.
-    Items means you logically need to be able to use Flash to find items, but can go through and fight trainers without it.
-    None means you do not need Flash for anything."""
-    display_name = "Flash Logic"
+class RequireFlash(Choice):
+    """Sets if you need HM05 Flash to travel through Rock Tunnel
+    Yes or True means it's needed. Checks means it's only needed for checks. No or False means you don't need Flash at all."""
+    display_name = "Require Flash"
     default = 0
-    option_all = 0
+    option_yes = 0
     alias_true = 0
-    alias_on = 0
     option_checks = 1
-    option_trainers = 2
-    option_items = 3
-    option_none = 4
-    alias_false = 4
-    alias_off = 4
+    option_no = 2
+    alias_false = 2
 
 class OldMan(Choice):
     """With Open Viridian City, the Old Man will let you through without needing to turn in Oak's Parcel.
@@ -586,7 +579,7 @@ pokemon_rb_options = {
     "randomize_hidden_items": RandomizeHiddenItems,
     "trainersanity": TrainerSanity,
     "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
-    "flash_logic": FlashLogic,
+    "require_flash": RequireFlash,
     "free_fly_location": FreeFlyLocation,
     "oaks_aide_rt_2": OaksAidRt2,
     "oaks_aide_rt_11": OaksAidRt11,
