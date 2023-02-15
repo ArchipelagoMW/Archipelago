@@ -59,7 +59,7 @@ le dossier "Lecteurs".
 
 ``` yaml
 description: Modèle par défaut d'Ocarina of Time # Utilisé pour décrire votre yaml. Utile si vous avez plusieurs fichiers
-# Votre nom dans le jeu. Les espaces seront remplacés par des traits de soulignement et il y a une limite de 16 caractères
+# Votre nom dans le jeu. Les espaces seront remplacés par des underscores et il y a une limite de 16 caractères
 name: VotreNom
 game:
   Ocarina of Time: 1
