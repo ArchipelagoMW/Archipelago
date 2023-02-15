@@ -3,7 +3,7 @@ import unittest
 from BaseClasses import CollectionState
 from worlds.AutoWorld import AutoWorldRegister
 
-from . import setup_default_world
+from . import setup_solo_multiworld
 
 
 class TestBase(unittest.TestCase):
@@ -14,7 +14,7 @@ class TestBase(unittest.TestCase):
             # Final Fantasy logic is controlled by finalfantasyrandomizer.com
             if game_name not in {"Ori and the Blind Forest"}:  # TODO: fix Ori Logic
                 with self.subTest("Game", game=game_name):
-                    world = setup_default_world(world_type)
+                    world = setup_solo_multiworld(world_type)
                     excluded = world.exclude_locations[1].value
                     state = world.get_all_state(False)
                     for location in world.get_locations():
@@ -30,7 +30,7 @@ class TestBase(unittest.TestCase):
             # Final Fantasy logic is controlled by finalfantasyrandomizer.com
             if game_name not in {"Archipelago", "Sudoku"}:
                 with self.subTest("Game", game=game_name):
-                    world = setup_default_world(world_type)
+                    world = setup_solo_multiworld(world_type)
                     state = CollectionState(world)
                     locations = set()
                     for location in world.get_locations():
