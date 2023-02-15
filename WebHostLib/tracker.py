@@ -83,8 +83,10 @@ def get_alttp_id(item_name):
     return Items.item_table[item_name][2]
 
 
-app.jinja_env.filters["location_name"] = lambda location: lookup_any_location_id_to_name.get(location, location)
-app.jinja_env.filters['item_name'] = lambda id: lookup_any_item_id_to_name.get(id, id)
+lookup_custom_location_id_to_name = {}
+lookup_custom_item_id_to_name = {}
+app.jinja_env.filters["location_name"] = lambda location: lookup_any_location_id_to_name.get(location, lookup_custom_location_id_to_name.get(location, location))
+app.jinja_env.filters['item_name'] = lambda id: lookup_any_item_id_to_name.get(id, lookup_custom_item_id_to_name.get(id, id))
 
 links = {"Bow": "Progressive Bow",
          "Silver Arrows": "Progressive Bow",
@@ -264,6 +266,11 @@ def get_static_room_data(room: Room):
         groups = {slot: slot_info.group_members for slot, slot_info in multidata["slot_info"].items()
                   if slot_info.type == SlotType.group}
     seed_checks_in_area = checks_in_area.copy()
+
+    for game in games.values():
+        if game in multidata["datapackage"]:
+            lookup_custom_location_id_to_name.update({id: name for name, id in multidata["datapackage"][game]["location_name_to_id"].items()})
+            lookup_custom_item_id_to_name.update({id: name for name, id in multidata["datapackage"][game]["item_name_to_id"].items()})
 
     use_door_tracker = False
     if "tags" in multidata:
