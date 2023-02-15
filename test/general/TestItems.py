@@ -52,5 +52,15 @@ class TestBase(unittest.TestCase):
                 self.assertGreaterEqual(
                     len(world.itempool),
                     location_count,
-                    f"{game_name} Item count MUST meet or exceede the number of locations",
+                    f"{game_name} Item count MUST meet or exceed the number of locations",
                 )
+
+    def testItemsInDatapackage(self):
+        """Test that any created items in the itempool are in the datapackage"""
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            if game_name in {"Final Fantasy"}:
+                continue
+            with self.subTest("Game", game=game_name):
+                multiworld = setup_default_world(world_type)
+                for item in multiworld.itempool:
+                    self.assertIn(item.name, world_type.item_name_to_id)
