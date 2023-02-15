@@ -53,7 +53,7 @@ Le client Minecraft installera forge et le mod pour d'autres systèmes d'exploit
 utilisateur. Rendez-vous sur [minecraft_versions.json sur le MC AP GitHub](https://raw.githubusercontent.com/KonoTyran/Minecraft_AP_Randomizer/master/versions/minecraft_versions.json)
 pour voir quelle version de Java est requise. Les nouvelles installations utiliseront par défaut la version "release" la plus élevée.
 - Installez le JDK Amazon Corretto correspondant
-     - voir [Liens du logiciel d'installation manuelle](#manual-installation-software-links)
+     - voir les [Liens d'installation manuelle du logiciel](#manual-installation-software-links)
      - ou gestionnaire de paquets fourni par votre OS/distribution
 - Ouvrez votre `host.yaml` et ajoutez le chemin vers votre Java sous la clé `minecraft_options`
      - ` java : "chemin/vers/java-xx-amazon-corretto/bin/java"`
