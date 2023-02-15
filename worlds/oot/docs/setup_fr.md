@@ -188,7 +188,7 @@ Ocarina of Time:
     overworld: 0
     any_dungeon: 0
     keysanity: 0
-  shuffle_ganon_bosskey: # Contrôlez où mélanger la clé du patron du château de Ganon.
+  shuffle_ganon_bosskey: # Contrôle où mélanger la clé du patron du château de Ganon.
     remove: 50
     vanilla: 0
     dungeon: 0
