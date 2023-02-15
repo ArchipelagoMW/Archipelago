@@ -136,7 +136,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
         ...
 
     if typing.TYPE_CHECKING:
-        def verify(self, world: World, player_name: str, plando_options: PlandoOptions) -> None:
+        def verify(self, world: World, player_name: str, plando_options: PlandoSettings) -> None:
             pass
     else:
         def verify(self, *args, **kwargs) -> None:
@@ -578,8 +578,7 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
     def verify(self, world: World, player_name: str, plando_options: PlandoSettings) -> None:
         if isinstance(self.value, int):
             return
-        from Generate import PlandoOptions
-        if not(PlandoOptions.bosses & plando_options):
+        if not(PlandoSettings.bosses & plando_options):
             import logging
             # plando is disabled but plando options were given so pull the option and change it to an int
             option = self.value.split(";")[-1]
@@ -951,7 +950,7 @@ class ItemLinks(OptionList):
                 pool |= {item_name}
         return pool
 
-    def verify(self, world: World, player_name: str, plando_options: PlandoOptions) -> None:
+    def verify(self, world: World, player_name: str, plando_options: PlandoSettings) -> None:
         link: dict
         super(ItemLinks, self).verify(world, player_name, plando_options)
         existing_links = set()
