@@ -98,7 +98,7 @@ Ocarina of Time:
     open: 0
     adult: 0
     closed: 50
-  gerudo_fortress: # Définir les conditions d'accès à la forteresse Gerudo.
+  gerudo_fortress: # Définit les conditions d'accès à la forteresse Gerudo.
     normal: 0
     fast: 50
     open: 0
