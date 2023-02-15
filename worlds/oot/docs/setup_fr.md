@@ -109,7 +109,7 @@ Ocarina of Time:
     medallions: 50
     dungeons: 0
     tokens: 0
-  trials: # Définissez le nombre d'épreuves requises dans le Château de Ganon.
+  trials: # Définit le nombre d'épreuves requises dans le Château de Ganon.
     # vous pouvez ajouter des valeurs supplémentaires entre minimum et maximum
     0: 50 # valeur minimale
     6: 0 # valeur maximale
