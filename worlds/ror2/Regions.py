@@ -1,6 +1,6 @@
 from typing import Dict, List, NamedTuple, Optional
 
-from BaseClasses import MultiWorld, Region, RegionType, Entrance
+from BaseClasses import MultiWorld, Region, Entrance
 from .Locations import location_table, RiskOfRainLocation
 
 
@@ -106,7 +106,7 @@ def create_regions(multiworld: MultiWorld, player: int):
 
 
 def create_region(multiworld: MultiWorld, player: int, name: str, data: RoRRegionData):
-    region = Region(name, RegionType.Generic, name, player, multiworld)
+    region = Region(name, player, multiworld)
     if data.locations:
         for location_name in data.locations:
             location_data = location_table.get(location_name)

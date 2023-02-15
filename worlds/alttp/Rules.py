@@ -3,7 +3,7 @@ import logging
 from typing import Iterator, Set
 
 from worlds.alttp import OverworldGlitchRules
-from BaseClasses import RegionType, MultiWorld, Entrance
+from BaseClasses import MultiWorld, Entrance
 from worlds.alttp.Items import ItemFactory, progression_items, item_name_groups, item_table
 from worlds.alttp.OverworldGlitchRules import overworld_glitches_rules, no_logic_rules
 from worlds.alttp.Regions import location_table
@@ -12,6 +12,7 @@ from worlds.alttp.Bosses import GanonDefeatRule
 from worlds.generic.Rules import set_rule, add_rule, forbid_item, add_item_rule, item_in_locations, \
     item_name
 from worlds.alttp.Options import smallkey_shuffle
+from worlds.alttp.Regions import LTTPRegionType
 
 
 def set_rules(world):
@@ -1423,7 +1424,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
                 return lambda state: state.has('Magic Mirror', player) and state.has_sword(player) or state.has('Moon Pearl', player)
             if region.name in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
                 return lambda state: state.has('Magic Mirror', player) or state.has('Moon Pearl', player)
-            if region.type == RegionType.Dungeon:
+            if region.type == LTTPRegionType.Dungeon:
                 return lambda state: True
             if (((location is None or location.name not in OverworldGlitchRules.get_superbunny_accessible_locations())
                     or (connecting_entrance is not None and connecting_entrance.name in OverworldGlitchRules.get_invalid_bunny_revival_dungeons()))
@@ -1467,7 +1468,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
                                 possible_options.append(lambda state: path_to_access_rule(new_path, entrance))
                             else:
                                 possible_options.append(lambda state: path_to_access_rule(new_path, entrance) and state.has('Magic Mirror', player))
-                        if new_region.type != RegionType.Cave:
+                        if new_region.type != LTTPRegionType.Cave:
                             continue
                     else:
                         continue
@@ -1495,8 +1496,8 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
     for entrance in world.get_entrances():
         if entrance.player == player and is_bunny(entrance.connected_region):
             if world.logic[player] in ['minorglitches', 'owglitches', 'hybridglitches', 'nologic'] :
-                if entrance.connected_region.type == RegionType.Dungeon:
-                    if entrance.parent_region.type != RegionType.Dungeon and entrance.connected_region.name in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
+                if entrance.connected_region.type == LTTPRegionType.Dungeon:
+                    if entrance.parent_region.type != LTTPRegionType.Dungeon and entrance.connected_region.name in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
                         add_rule(entrance, get_rule_to_add(entrance.connected_region, None, entrance))
                     continue
                 if entrance.connected_region.name == 'Turtle Rock (Entrance)':
