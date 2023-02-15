@@ -8,8 +8,6 @@ class TestBase(unittest.TestCase):
     def testCreateDuplicateLocations(self):
         """Tests that no two Locations share a name."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            if game_name in {"Final Fantasy"}:
-                continue
             multiworld = setup_default_world(world_type)
             locations = Counter(multiworld.get_locations())
             if locations:
@@ -19,8 +17,6 @@ class TestBase(unittest.TestCase):
     def testLocationsInDatapackage(self):
         """Tests that created locations not filled before fill starts exist in the datapackage."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            if game_name in {"Final Fantasy"}:
-                continue
             with self.subTest("Game", game_name=game_name):
                 multiworld = setup_default_world(world_type)
                 locations = multiworld.get_unfilled_locations()  # do unfilled locations to avoid Events

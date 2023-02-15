@@ -45,8 +45,12 @@ class FF1World(World):
         self.locked_items = []
         self.locked_locations = []
 
-    def generate_early(self):
-        return
+    @classmethod
+    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
+        # Fail generation if there are no items in the pool
+        assert (get_options(multiworld, 'items', cls.player) is not None),\
+            "FFR settings submitted with no key items. Please ensure you generated the settings using " \
+            "finalfantasyrandomizer.com AND enabled the AP flag"
 
     def create_regions(self):
         locations = get_options(self.multiworld, 'locations', self.player)
@@ -85,10 +89,6 @@ class FF1World(World):
             if possible_early_items:
                 progression_item = self.multiworld.random.choice(possible_early_items)
                 self._place_locked_item_in_sphere0(progression_item)
-        else:
-            # Fail generation if there are no items in the pool
-            raise Exception("FFR settings submitted with no key items. Please ensure you generated the settings using "
-                            "finalfantasyrandomizer.com AND enabled the AP flag")
 
         items = [self.create_item(name) for name, data in items.items() for x in range(data['count']) if name not in
                  self.locked_items]
