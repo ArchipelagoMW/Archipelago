@@ -355,12 +355,12 @@ class GiftTax(SpecialRange):
     default = 20
 
     special_range_names = {
-        "taxation is theft": 0,
+        "no tax": 0,
         "soft tax": 20,
         "rough tax": 40,
-        "communism": 100,
-        "oppression": 200,
-        "they better really need it": 400,
+        "full tax": 100,
+        "oppressive tax": 200,
+        "nightmare tax": 400,
     }
 
 
