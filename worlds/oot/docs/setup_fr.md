@@ -1,4 +1,4 @@
-# Guide d'installation pour Ocarina of Time Archipelago
+# Guide d'installation Archipelago pour Ocarina of Time 
 
 ## Important
 
