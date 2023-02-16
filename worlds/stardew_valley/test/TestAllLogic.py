@@ -1,11 +1,11 @@
 import pytest
 
-from test.general import setup_default_world
+from test.general import setup_solo_multiworld
 from .. import StardewValleyWorld, StardewLocation
 from ..bundle_data import BundleItem, all_bundle_items_except_money
 from ..logic import MISSING_ITEM, _False
 
-multi_world = setup_default_world(StardewValleyWorld)
+multi_world = setup_solo_multiworld(StardewValleyWorld)
 world = multi_world.worlds[1]
 logic = world.logic
 

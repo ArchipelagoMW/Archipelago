@@ -1,5 +1,5 @@
 from BaseClasses import ItemClassification
-from test.general import setup_default_world
+from test.general import setup_solo_multiworld
 from . import SVTestBase
 from .. import locations, items, location_table, options, StardewValleyWorld
 from ..items import items_by_group, Group
@@ -7,7 +7,7 @@ from ..locations import LocationTags
 
 
 def test_can_generate_world():
-    multi_world = setup_default_world(StardewValleyWorld)
+    multi_world = setup_solo_multiworld(StardewValleyWorld)
 
     assert multi_world.completion_condition[1] is not None
 
