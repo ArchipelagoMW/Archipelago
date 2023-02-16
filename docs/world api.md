@@ -687,9 +687,9 @@ the `.md` files in your world's `/docs` directory.
 
 #### Game Info
 The game info page is for a short breakdown of what your game is and how it works in Archipelago. Any additional
-information that may be useful for the player to know when learning your randomizer should also go here. The file format
-is `<language key>_<game name>.md`. While you can write these docs for multiple languages and can tell the `WebWorld`
-you have multiple of these docs, they currently do not render on the website.
+information that may be useful to the player when learning your randomizer should also go here. The file name format
+is `<language key>_<game name>.md`. While you can write these docs for multiple languages, currently only the english
+version is displayed on the website.
 
 #### Tutorials
 Your game can have as many tutorials in as many languages as you like, with each one having a relevant `Tutorial`
