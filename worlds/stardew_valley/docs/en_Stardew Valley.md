@@ -36,7 +36,7 @@ There also are a number of location checks that are optional, and individual pla
 - Help Wanted quests
 - Fishsanity: Catching individual fish
 
-## Which items can be in another player's world
+## Which items can be in another player's world?
 Every normal reward from the above locations can be in another player's world.
 For the locations which do not include a normal reward, Resource Packs are instead added to the pool. These can contain ores, seeds, fertilizers, warp totems, etc.
 There are a few extra items, which are added to the pool but do not have a matching location. These include
@@ -50,7 +50,7 @@ And lastly, some archipelago-exclusive items exist in the pool, which are design
 - Traveling Merchant buffs
 
 ## When the player receives an item, what happens?
-Since Pelican Town is a remote area, it takes one working day for every item to reach the player. If an item is received while online, it will appear in the player's mailbox the next morning, with a message from the sender telling them where it was found.
+Since Pelican Town is a remote area, it takes one business day for every item to reach the player. If an item is received while online, it will appear in the player's mailbox the next morning, with a message from the sender telling them where it was found.
 If an item is received while offline, it will be in the mailbox as soon as the player logs in.
 
 ## Multiplayer
