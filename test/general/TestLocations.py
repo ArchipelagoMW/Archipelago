@@ -1,7 +1,7 @@
 import unittest
 from collections import Counter
 from worlds.AutoWorld import AutoWorldRegister, call_all
-from . import setup_solo_multiworld, setup_solo_multiworld_without_calls
+from . import setup_solo_multiworld
 
 
 class TestBase(unittest.TestCase):
@@ -29,9 +29,7 @@ class TestBase(unittest.TestCase):
         gen_steps = ["generate_early", "create_regions", "create_items"]
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game_name=game_name):
-                multiworld = setup_solo_multiworld_without_calls(world_type)
-                for step in gen_steps:
-                    call_all(multiworld, step)
+                multiworld = setup_solo_multiworld(world_type, gen_steps)
                 multiworld._recache()
                 region_count = len(multiworld.get_regions())
                 location_count = len(multiworld.get_locations())
@@ -42,12 +40,14 @@ class TestBase(unittest.TestCase):
                 self.assertEqual(location_count, len(multiworld.get_locations()),
                                  f"{game_name} modified locations count during rule creation")
 
+                multiworld._recache()
                 call_all(multiworld, "generate_basic")
                 self.assertEqual(region_count, len(multiworld.get_regions()),
                                  f"{game_name} modified region count during generate_basic")
                 self.assertGreaterEqual(location_count, len(multiworld.get_locations()),
                                         f"{game_name} modified locations count during generate_basic")
 
+                multiworld._recache()
                 call_all(multiworld, "pre_fill")
                 self.assertEqual(region_count, len(multiworld.get_regions()),
                                  f"{game_name} modified region count during pre_fill")
