@@ -1122,18 +1122,18 @@ def connect_regions(world: MultiWorld, player: int):
     for region in valorLevelRegions:
         connect(world, player, names, region, RegionName.Valor_Region,
                 lambda state: state.has(ItemName.ValorForm, player))
-        for region in wisdomLevelRegions:
-            connect(world, player, names, region, RegionName.Wisdom_Region,
-                    lambda state: state.has(ItemName.WisdomForm, player))
-        for region in limitLevelRegions:
-            connect(world, player, names, region, RegionName.Limit_Region,
-                    lambda state: state.has(ItemName.LimitForm, player))
-        for region in masterLevelRegions:
-            connect(world, player, names, region, RegionName.Master_Region,
-                    lambda state: state.has(ItemName.MasterForm, player) and state.has(ItemName.DriveConverter, player))
-        for region in finalLevelRegions:
-            connect(world, player, names, region, RegionName.Final_Region,
-                    lambda state: state.has(ItemName.FinalForm, player))
+    for region in wisdomLevelRegions:
+        connect(world, player, names, region, RegionName.Wisdom_Region,
+                lambda state: state.has(ItemName.WisdomForm, player))
+    for region in limitLevelRegions:
+        connect(world, player, names, region, RegionName.Limit_Region,
+                lambda state: state.has(ItemName.LimitForm, player))
+    for region in masterLevelRegions:
+        connect(world, player, names, region, RegionName.Master_Region,
+                lambda state: state.has(ItemName.MasterForm, player) and state.has(ItemName.DriveConverter, player))
+    for region in finalLevelRegions:
+        connect(world, player, names, region, RegionName.Final_Region,
+                lambda state: state.has(ItemName.FinalForm, player))
 
 
 
@@ -1165,7 +1165,7 @@ def create_region(world: MultiWorld, player: int, active_locations, name: str, l
         for location in locations:
             loc_id = active_locations.get(location, 0)
             if loc_id:
-                location = KH2Location(player, location, loc_id, ret)
+                location = KH2Location(player, location, loc_id.code, ret)
                 ret.locations.append(location)
 
     return ret

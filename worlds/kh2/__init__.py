@@ -29,9 +29,6 @@ class KH2World(World):
     web = KingdomHearts2Web()
     data_version = 0
     option_definitions = KH2_Options
-    topology_present: bool = True  # show path to required location checks in spoiler
-    remote_items: bool = False
-    remote_start_inventory: bool = False
     item_name_to_id = {name: data.code for name, data in item_dictionary_table.items()}
     location_name_to_id = {item_name: data.code for item_name, data in all_locations.items() if data.code}
     totalLocations = len(all_locations.items())
@@ -284,7 +281,7 @@ class KH2World(World):
         self.multiworld.itempool += itempool
 
     def create_regions(self):
-        location_table = setup_locations(self.multiworld, self.player)
+        location_table = setup_locations()
         create_regions(self.multiworld, self.player, location_table)
         connect_regions(self.multiworld, self.player)
 

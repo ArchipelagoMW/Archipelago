@@ -1399,7 +1399,7 @@ all_locations = {
 location_table = {}
 
 
-def setup_locations(world, player: int):
+def setup_locations():
     location_table = {**TWTNW_Checks, **TWTNW2_Checks, **TT_Checks, **TT2_Checks, **TT3_Checks, **STT_Checks,
                       **PL_Checks, **PL2_Checks, **CoR_Checks, **HB_Checks, **HB2_Checks,
                       **PR_Checks, **PR2_Checks, **PR_Checks, **PR2_Checks, **SP_Checks, **SP2_Checks, **BC_Checks,

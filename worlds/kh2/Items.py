@@ -18,7 +18,7 @@ class ItemData(typing.NamedTuple):
     bitmask: int = 0
     # if ability then
     ability: bool = False
-    event: bool = False
+
 
 
 Reports_Table = {
