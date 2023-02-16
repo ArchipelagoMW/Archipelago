@@ -79,9 +79,6 @@ class AssembleOptions(abc.ABCMeta):
 
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
-    @abc.abstractclassmethod
-    def from_any(cls, value: typing.Any) -> "Option[typing.Any]": ...
-
 
 T = typing.TypeVar('T')
 
@@ -129,8 +126,9 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
         return bool(self.value)
 
     @classmethod
+    @abc.abstractmethod
     def from_any(cls, data: typing.Any) -> Option[T]:
-        raise NotImplementedError
+        ...
 
     if typing.TYPE_CHECKING:
         from Generate import PlandoOptions
@@ -168,7 +166,7 @@ class FreeText(Option):
         return value
 
 
-class NumericOption(Option[int], numbers.Integral):
+class NumericOption(Option[int], numbers.Integral, abc.ABC):
     default = 0
     # note: some of the `typing.Any`` here is a result of unresolved issue in python standards
     # `int` is not a `numbers.Integral` according to the official typestubs

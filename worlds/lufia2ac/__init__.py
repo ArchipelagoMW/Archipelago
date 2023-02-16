@@ -4,7 +4,7 @@ import os
 from enum import IntFlag
 from typing import Any, ClassVar, Dict, List, Optional, Set, Tuple
 
-from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, RegionType, Tutorial
+from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, Tutorial
 from Main import __version__
 from Options import AssembleOptions
 from worlds.AutoWorld import WebWorld, World
@@ -80,7 +80,7 @@ class L2ACWorld(World):
     shuffle_party_members: Optional[ShufflePartyMembers]
 
     @classmethod
-    def stage_assert_generate(cls, _multiworld: MultiWorld) -> None:
+    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         rom_file: str = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(f"Could not find base ROM for {cls.game}: {rom_file}")
@@ -128,12 +128,12 @@ class L2ACWorld(World):
             self.default_party.value = DefaultParty.default
 
     def create_regions(self) -> None:
-        menu = Region("Menu", RegionType.Generic, "Menu", self.player, self.multiworld)
+        menu = Region("Menu", self.player, self.multiworld)
         menu.exits.append(Entrance(self.player, "AncientDungeonEntrance", menu))
         self.multiworld.regions.append(menu)
 
-        ancient_dungeon = Region("AncientDungeon", RegionType.Generic, "Ancient Dungeon", self.player, self.multiworld)
-        ancient_dungeon.exits.append(Entrance(self.player, "FinalFloorEntrance", menu))
+        ancient_dungeon = Region("AncientDungeon", self.player, self.multiworld, "Ancient Dungeon")
+        ancient_dungeon.exits.append(Entrance(self.player, "FinalFloorEntrance", ancient_dungeon))
         item_count: int = self.blue_chest_count
         if self.shuffle_capsule_monsters:
             item_count += len(self.item_name_groups["Capsule monsters"])
@@ -152,7 +152,7 @@ class L2ACWorld(World):
         ancient_dungeon.locations.append(treasures)
         self.multiworld.regions.append(ancient_dungeon)
 
-        final_floor = Region("FinalFloor", RegionType.Generic, "Ancient Cave Final Floor", self.player, self.multiworld)
+        final_floor = Region("FinalFloor", self.player, self.multiworld, "Ancient Cave Final Floor")
         ff_reached = L2ACLocation(self.player, "Final Floor reached", None, final_floor)
         ff_reached.place_locked_item(L2ACItem("Final Floor access", ItemClassification.progression, None, self.player))
         final_floor.locations.append(ff_reached)
