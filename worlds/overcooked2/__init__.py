@@ -49,7 +49,7 @@ class Overcooked2World(World):
     required_client_version = (0, 3, 7)
     option_definitions = overcooked_options
     topology_present: bool = False
-    data_version = 2
+    data_version = 3
 
     item_name_to_id = item_name_to_id
     item_id_to_name = item_id_to_name
@@ -443,7 +443,14 @@ class Overcooked2World(World):
             "DisableCatch": True,
             "DisableControlStick": True,
             "DisableWokDrag": True,
-            # "DisableRampButton": True,
+            # "DisableRampButton": True, # Unused
+            "DisableGreenRampButton" : True,
+            "DisableYellowRampButton" : True,
+            "DisableBlueRampButton" : True,
+            "DisablePinkRampButton" : True,
+            "DisableGreyRampButton" : True,
+            "DisableRedRampButton" : True,
+            "DisablePurpleRampButton" : True,
             "WashTimeMultiplier": 1.4,
             "BurnSpeedMultiplier": 1.43,
             "MaxOrdersOnScreenOffset": -2,
