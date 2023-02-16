@@ -67,11 +67,12 @@ class KH2World(World):
 
 
 
-        if self.multiworld.Cups[self.player].value in {1,2}:
+        if self.multiworld.Cups[self.player].value ==0:
             for cup in exclusion_table["Cups"]:
                 self.multiworld.exclude_locations[self.player].value.add(cup)
-            if self.multiworld.Cups[self.player].value==2:
-                self.multiworld.exclude_locations[self.player].value.add(LocationName.HadesCupTrophyParadoxCups)
+            self.multiworld.exclude_locations[self.player].value.add(LocationName.HadesCupTrophyParadoxCups)
+        elif self.multiworld.Cups[self.player].value==1:
+            self.multiworld.exclude_locations[self.player].value.add(LocationName.HadesCupTrophyParadoxCups)
 
     def generate_basic(self):
         itempool: typing.List[KH2Item] = []
