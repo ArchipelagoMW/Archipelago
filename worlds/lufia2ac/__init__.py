@@ -80,7 +80,7 @@ class L2ACWorld(World):
     shuffle_party_members: Optional[ShufflePartyMembers]
 
     @classmethod
-    def stage_assert_generate(cls, _multiworld: MultiWorld) -> None:
+    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         rom_file: str = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(f"Could not find base ROM for {cls.game}: {rom_file}")
