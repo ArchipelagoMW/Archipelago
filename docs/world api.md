@@ -418,14 +418,14 @@ In addition, the following methods can be implemented and attributes can be set
   called to place player's regions and their locations into the MultiWorld's regions list. If it's
   hard to separate, this can be done during `generate_early` or `basic` as well.
 * `def create_items(self)`
-  called to place player's items into the MultiWorld's itempool.
+  called to place player's items into the MultiWorld's itempool. After this step all regions and items have to be in
+the MultiWorld's regions and itempool.
 * `def set_rules(self)`
   called to set access and item rules on locations and entrances. 
   Locations have to be defined before this, or rule application can miss them.
 * `def generate_basic(self)`
   called after the previous steps. Some placement and player specific
-  randomizations can be done here. After this step all regions and items have
-  to be in the MultiWorld's regions and itempool.
+  randomizations can be done here.
 * `pre_fill`, `fill_hook` and `post_fill` are called to modify item placement
   before, during and after the regular fill process, before `generate_output`.
 * `fill_slot_data` and `modify_multidata` can be used to modify the data that
