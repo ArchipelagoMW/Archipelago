@@ -694,14 +694,14 @@ version is displayed on the website.
 #### Tutorials
 Your game can have as many tutorials in as many languages as you like, with each one having a relevant `Tutorial`
 defined in the `WebWorld`. The file name you use aren't particularly important, but it should be descriptive of what
-the tutorial is covering, and the name of the file must match the URL extension provided in the `Tutorial`. Currently,
+the tutorial is covering, and the name of the file must match the relative URL provided in the `Tutorial`. Currently,
 the JS that determines this ignores the provided file name and will search for `game/document_lang.md`, where
 `game/document/lang` is the provided URL.
 
 ### Tests
 
-Each world is expected to include unit tests that cover its logic, to ensure no logic bug regressions. This can be done
-by creating a `/test` package within your world package. The `__init__.py` within this folder is where the World's
+Each world is expected to include unit tests that cover its logic, to ensure no logic bug regressions occur. This can be
+done by creating a `/test` package within your world package. The `__init__.py` within this folder is where the world's
 TestBase should be defined. This can be inherited from the main TestBase, which will automatically set up a solo
 multiworld for each test written using it. Within subsequent modules, classes should be defined which inherit the world
 TestBase, and can then define options to test in the class body, and run tests in each test method.
