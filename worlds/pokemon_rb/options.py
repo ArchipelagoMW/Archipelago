@@ -143,6 +143,12 @@ class RequireItemFinder(Toggle):
     display_name = "Require Item Finder"
     default = 0
 
+class RequireSilphScope(Toggle):
+    """Logically require the Silph Scope to get past the Marowak Ghost in Pokemon Tower 6F.
+    Whether a glitch or intentional, you can use a Poke Doll to get past the ghost and gain access to Pokemon Tower 7F.
+    You can buy Poke Dolls in Celadon Department Store 4F"""
+    display_name = "Require Silph Scope"
+    default = 1
 
 class RandomizeHiddenItems(Choice):
     """Randomize hidden items. If you choose exclude, they will be randomized but will be guaranteed junk items."""
@@ -560,6 +566,7 @@ pokemon_rb_options = {
     "extra_key_items": ExtraKeyItems,
     "extra_strength_boulders": ExtraStrengthBoulders,
     "require_item_finder": RequireItemFinder,
+    "require_silph_scope": RequireSilphScope,
     "randomize_hidden_items": RandomizeHiddenItems,
     "trainersanity": TrainerSanity,
     "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
