@@ -1,3 +1,4 @@
+import os
 import unittest
 from worlds.AutoWorld import AutoWorldRegister
 
@@ -31,3 +32,11 @@ class TestImplemented(unittest.TestCase):
                     for method in ("assert_generate",):
                         self.assertFalse(hasattr(world_type, method),
                                          f"{method} must be implemented as a @classmethod named stage_{method}.")
+
+    def testHasTests(self):
+        """Tests that worlds have implemented their own tests."""
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            if not world_type.hidden:
+                with self.subTest(game_name):
+                    path = f"{os.path.dirname(world_type.__file__)}/test"
+                    self.assertTrue(os.path.exists(path))
