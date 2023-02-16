@@ -308,9 +308,6 @@ class Overcooked2World(World):
 
         self.multiworld.itempool += self.itempool
 
-    def set_rules(self):
-        pass
-
     def create_regions_late(self) -> None:
         # Menu -> Overworld
         self.add_region("Menu")
@@ -392,9 +389,7 @@ class Overcooked2World(World):
             state.has("Victory", self.player)
         self.multiworld.completion_condition[self.player] = completion_condition
 
-    def generate_basic(self) -> None:
-        self.create_regions_late()
-
+    def place_events(self):
         # Add Events (Star Acquisition)
         for level in Overcooked2Level():
             if not self.options["KevinLevels"] and level.level_id > 36:
@@ -414,6 +409,12 @@ class Overcooked2World(World):
 
         # Add Victory Condition
         self.place_event("6-6 Completed", "Victory")
+
+    def set_rules(self):
+        self.create_regions_late()
+
+    def generate_basic(self) -> None:
+        self.place_events()
 
     # Items get distributed to locations
 
