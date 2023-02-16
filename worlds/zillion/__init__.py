@@ -108,7 +108,7 @@ class ZillionWorld(World):
         self.id_to_zz_item = id_to_zz_item
 
     @classmethod
-    def stage_assert_generate(cls, world: MultiWorld) -> None:
+    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         """Checks that a game is capable of generating, usually checks for some base file like a ROM.
         Not run for unittests since they don't produce output"""
         rom_file = get_base_rom_path()
