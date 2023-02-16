@@ -57,6 +57,7 @@ item_table: Dict[str, ItemData] = {
     "Dark Green Ramp"               : ItemData(oc2_base_id + 42),
     "Red Ramp"                      : ItemData(oc2_base_id + 43),
     "Purple Ramp"                   : ItemData(oc2_base_id + 44),
+    "Emote Wheel"                   : ItemData(oc2_base_id + 45),
 }
 
 item_frequencies = {
@@ -68,9 +69,12 @@ item_frequencies = {
 
     # Unused items
     "Ramp Button": 0,
+    "Cooking Emote" : 0,
+    "Curse Emote" : 0,
     "Serving Emote" : 0,
-    "Preparing Emote": 0,
+    "Preparing Emote" : 0,
     "Washing Up Emote": 0,
+    "Ok Emote": 0,
 }
 
 item_name_to_config_name = {
@@ -94,7 +98,7 @@ item_name_to_config_name = {
     "Yellow Ramp"                   : "DisableYellowRampButton"        ,
     "Blue Ramp"                     : "DisableBlueRampButton"          ,
     "Pink Ramp"                     : "DisablePinkRampButton"          ,
-    "Dark Green Ramp"                     : "DisableGreyRampButton"          ,
+    "Dark Green Ramp"               : "DisableGreyRampButton"          ,
     "Red Ramp"                      : "DisableRedRampButton"           ,
     "Purple Ramp"                   : "DisablePurpleRampButton"        ,
     "Calmer Unbread"                : "AggressiveHorde"                ,
@@ -150,6 +154,8 @@ def item_to_unlock_event(item_name: str) -> Dict[str, str]:
         kevin_num = int(item_name.split("-")[-1])
         action = "UNLOCK_LEVEL"
         payload = str(kevin_num + 36)
+    elif item_name == "Emote Wheel":
+        action = "UNLOCK_EMOTES"
     elif "Emote" in item_name:
         action = "UNLOCK_EMOTE"
         payload = str(item_table[item_name].code - item_table["Cooking Emote"].code)

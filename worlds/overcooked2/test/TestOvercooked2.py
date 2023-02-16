@@ -17,7 +17,7 @@ class Overcooked2Test(unittest.TestCase):
         for item_name in item_table.keys():
             item: Item = item_table[item_name]
             self.assertGreaterEqual(item.code, oc2_base_id, "Overcooked Item ID out of range")
-            self.assertLessEqual(item.code, item_table["Purple Ramp"].code, "Overcooked Item ID out of range")
+            self.assertLessEqual(item.code, item_table["Emote Wheel"].code, "Overcooked Item ID out of range")
 
             if previous_item is not None:
                 self.assertEqual(item.code, previous_item + 1,

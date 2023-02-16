@@ -459,7 +459,7 @@ class Overcooked2World(World):
             "RespawnTime": 10.0,
             "CarnivalDispenserRefactoryTime": 4.0,
             "LevelUnlockRequirements": level_unlock_requirements,
-            "LockedEmotes": [0, 1, 5],
+            "LockedEmotes": [0, 1, 2, 3, 4, 5],
             "StarOffset": 0,
             "AggressiveHorde": True,
             "DisableEarnHordeMoney": True,
