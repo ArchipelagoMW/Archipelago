@@ -30,6 +30,12 @@ class PokemonLogic(LogicMixin):
         return (((self.has("HM05 Flash", player) and self.can_learn_hm("1000000", player)) or self.has("Lamp", player))
                  and (self.has("Boulder Badge", player) or self.has(self.multiworld.worlds[player].extra_badges.get("Flash"),
                  player) or self.multiworld.badges_needed_for_hm_moves[player].value == 0))
+                 
+    def pokemon_rb_can_navigate_darkness(self, player):
+        return self.multiworld.flash_logic[player]
+        
+    def pokemon_rb_ignore_flash(self, player):
+        return self.multiworld.flash_logic[player].value == 2
 
     def can_learn_hm(self, move, player):
         for pokemon, data in self.multiworld.worlds[player].local_poke_data.items():
@@ -54,6 +60,13 @@ class PokemonLogic(LogicMixin):
         else:
             # this could just be "True", but you never know what weird options I might introduce later ;)
             return self.can_reach("Celadon City - Counter Man", "Location", player)
+            
+    def pokemon_rb_can_pass_ghost(self, player):
+        if self.multiworld.require_silph_scope[player] > 0:
+            return self.has("Silph Scope", player)
+        else:
+            # just like with can pass guards, setting this up in case of an entrance rando or other weird option
+            return self.can_reach("Celadon City - Counter Man", "Location", player) or self.has("Silph Scope", player)
 
     def pokemon_rb_has_badges(self, count, player):
         return len([item for item in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Marsh Badge",

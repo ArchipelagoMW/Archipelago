@@ -137,6 +137,16 @@ class ExtraStrengthBoulders(Toggle):
     display_name = "Extra Strength Boulders"
     default = 0
 
+class FlashLogic(Choice):
+    """Sets if you need to be able to use HM05 Flash for Rock Tunnel.
+    All means you need to be able to use Flash to go through Rock Tunnel.
+    Checks means you need to be able to use Flash to do any checks (if any are enabled), however navigating Rock Tunnel does not require Flash.
+    None means you don't need Flash to navigate Rock Tunnel or do any of the checks in there."""
+    display_name = "Flash Logic"
+    default = 0
+    option_all = 0
+    option_checks = 1
+    option_none = 2
 
 class RequireItemFinder(Toggle):
     """Require Item Finder to pick up hidden items."""
@@ -144,9 +154,9 @@ class RequireItemFinder(Toggle):
     default = 0
 
 class RequireSilphScope(Toggle):
-    """Logically require the Silph Scope to get past the Marowak Ghost in Pokemon Tower 6F.
-    Whether a glitch or intentional, you can use a Poke Doll to get past the ghost and gain access to Pokemon Tower 7F.
-    You can buy Poke Dolls in Celadon Department Store 4F"""
+    """Whether a glitch or intentional, you can use a Poke Doll to get past the ghost and gain access to Pokemon Tower 7F.
+    This setting allows you to make it so that either using a Poke Doll or having the Silph Scope is enough to get past the ghost.
+    You can buy Poke Dolls in Celadon Department Store 4F. Picking up a Poke Doll is not considered in logic as you could waste it."""
     display_name = "Require Silph Scope"
     default = 1
 
@@ -565,6 +575,7 @@ pokemon_rb_options = {
     "tea": Tea,
     "extra_key_items": ExtraKeyItems,
     "extra_strength_boulders": ExtraStrengthBoulders,
+    "flash_logic": FlashLogic,
     "require_item_finder": RequireItemFinder,
     "require_silph_scope": RequireSilphScope,
     "randomize_hidden_items": RandomizeHiddenItems,
