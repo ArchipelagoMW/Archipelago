@@ -70,7 +70,6 @@ class ResourcePackMultiplier(SpecialRange):
     default = 100
     range_start = 0
     range_end = 200
-    step = 25
     display_name = "Resource Pack Multiplier"
 
     special_range_names = {
@@ -222,12 +221,12 @@ class ArcadeMachineLocations(Choice):
 
 class HelpWantedLocations(SpecialRange):
     """How many "Help Wanted" quests need to be completed as ArchipelagoLocations
-    Out of every 7 quests, 4 will be item deliveries, and then 1 of each for: Fishing, Gathering and Slaying Monsters."""
+    Out of every 7 quests, 4 will be item deliveries, and then 1 of each for: Fishing, Gathering and Slaying Monsters.
+    Choosing a multiple of 7 is recommended."""
     internal_name = "help_wanted_locations"
     default = 7
     range_start = 0
     range_end = 56
-    step = 7
     display_name = "Number of Help Wanted locations"
 
     special_range_names = {
@@ -266,7 +265,6 @@ class NumberOfPlayerBuffs(Range):
     range_start = 0
     range_end = 12
     default = 4
-    step = 1
 
 
 class MultipleDaySleepEnabled(Toggle):
@@ -282,7 +280,6 @@ class MultipleDaySleepCost(SpecialRange):
     display_name = "Multiple Day Sleep Cost"
     range_start = 0
     range_end = 200
-    step = 25
 
     special_range_names = {
         "free": 0,
@@ -299,7 +296,6 @@ class ExperienceMultiplier(SpecialRange):
     display_name = "Experience Multiplier"
     range_start = 25
     range_end = 400
-    step = 25
     default = 200
 
     special_range_names = {
@@ -351,7 +347,6 @@ class GiftTax(SpecialRange):
     display_name = "Gift Tax"
     range_start = 0
     range_end = 400
-    step = 20
     default = 20
 
     special_range_names = {
