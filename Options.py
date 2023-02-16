@@ -136,9 +136,6 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
         ...
 
     if typing.TYPE_CHECKING:
-        from BaseClasses import PlandoOptions
-        from worlds.AutoWorld import World
-
         def verify(self, world: typing.Type[World], player_name: str, plando_options: PlandoOptions) -> None:
             pass
     else:
@@ -838,9 +835,6 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
 class ItemSet(OptionSet):
     verify_item_name = True
     convert_name_groups = True
-
-
-local_objective = Toggle  # local triforce pieces, local dungeon prizes etc.
 
 
 class Accessibility(Choice):
