@@ -1,5 +1,5 @@
 from typing import List, Set, Dict, Tuple, Optional, Callable
-from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
+from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import LocationData
 from .Options import get_option_value
 from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, alt_final_mission_locations
@@ -234,8 +234,7 @@ def create_location(player: int, location_data: LocationData, region: Region,
 
 def create_region(multiworld: MultiWorld, player: int, locations_per_region: Dict[str, List[LocationData]],
                   location_cache: List[Location], name: str) -> Region:
-    region = Region(name, RegionType.Generic, name, player)
-    region.multiworld = multiworld
+    region = Region(name, player, multiworld)
 
     if name in locations_per_region:
         for location_data in locations_per_region[name]:

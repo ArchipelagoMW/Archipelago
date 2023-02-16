@@ -137,7 +137,7 @@ class MinecraftWorld(World):
 
     def create_regions(self):
         def MCRegion(region_name: str, exits=[]):
-            ret = Region(region_name, None, region_name, self.player, self.multiworld)
+            ret = Region(region_name, self.player, self.multiworld)
             ret.locations = [MinecraftAdvancement(self.player, loc_name, loc_data.id, ret)
                 for loc_name, loc_data in advancement_table.items()
                 if loc_data.region == region_name]
