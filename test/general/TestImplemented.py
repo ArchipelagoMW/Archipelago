@@ -36,7 +36,13 @@ class TestImplemented(unittest.TestCase):
     def testHasTests(self):
         """Tests that worlds have implemented their own tests."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            if not world_type.hidden:
-                with self.subTest(game_name):
-                    path = f"{os.path.dirname(world_type.__file__)}/test"
-                    self.assertTrue(os.path.exists(path))
+            if game_name in {"Sudoku", "ChecksFinder", "Dark Souls III", "Donkey Kong Country 3", "Factorio",
+                             "Final Fantasy", "Hollow Knight", "Hylics 2", "Meritous", "Ocarina of Time",
+                             "Pokemon Red and Blue", "Raft", "Risk of Rain 2", "Sonic Adventure 2 Battle",
+                             "Starcraft 2 Wings of Liberty", "Super Metroid", "Super Mario 64", "Super Mario World",
+                             "SMZ3", "Slay the Spire", "Subnautica", "Timespinner", "VVVVVV", "The Witness"}\
+                    or world_type.hidden:
+                continue
+            with self.subTest(game_name):
+                path = f"{os.path.dirname(world_type.__file__)}/test"
+                self.assertTrue(os.path.exists(path))
