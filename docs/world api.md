@@ -700,7 +700,7 @@ the JS that determines this ignores the provided file name and will search for `
 
 ### Tests
 
-Each World is expected to include unit tests that cover its logic, to ensure no logic bug regressions. This can be done
+Each world is expected to include unit tests that cover its logic, to ensure no logic bug regressions. This can be done
 by creating a `/test` package within your world package. The `__init__.py` within this folder is where the World's
 TestBase should be defined. This can be inherited from the main TestBase, which will automatically set up a solo
 multiworld for each test written using it. Within subsequent modules, classes should be defined which inherit the world
