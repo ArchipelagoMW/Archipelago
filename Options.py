@@ -139,7 +139,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
         from BaseClasses import PlandoOptions
         from worlds.AutoWorld import World
 
-        def verify(self, world: World, player_name: str, plando_options: PlandoOptions) -> None:
+        def verify(self, world: typing.Type[World], player_name: str, plando_options: PlandoOptions) -> None:
             pass
     else:
         def verify(self, *args, **kwargs) -> None:
@@ -438,9 +438,9 @@ class TextChoice(Choice):
 
     @property
     def current_key(self) -> str:
-        if self.value in self.name_lookup:
-            return self.name_lookup[self.value]
-        return self.value
+        if isinstance(self.value, str):
+            return self.value
+        return super().current_key
 
     @classmethod
     def from_text(cls, text: str) -> TextChoice:
@@ -453,9 +453,9 @@ class TextChoice(Choice):
 
     @classmethod
     def get_option_name(cls, value: T) -> str:
-        if value in cls.name_lookup:
-            return cls.name_lookup[value].replace("_", " ").title()
-        return value
+        if isinstance(value, str):
+            return value
+        return super().get_option_name(value)
 
     def __eq__(self, other: typing.Any):
         if isinstance(other, self.__class__):
@@ -578,7 +578,7 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
     def valid_location_name(cls, value: str) -> bool:
         return value in cls.locations
 
-    def verify(self, world: "World", player_name: str, plando_options: "PlandoOptions") -> None:
+    def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
         if isinstance(self.value, int):
             return
         from BaseClasses import PlandoOptions
@@ -730,7 +730,7 @@ class VerifyKeys:
                 raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
                                 f"Allowed keys: {cls.valid_keys}.")
 
-    def verify(self, world: "World", player_name: str, plando_options: "PlandoOptions") -> None:
+    def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
         if self.convert_name_groups and self.verify_item_name:
             new_value = type(self.value)()  # empty container of whatever value is
             for item_name in self.value:
@@ -894,26 +894,26 @@ class StartInventory(ItemDict):
 
 class StartHints(ItemSet):
     """Start with these item's locations prefilled into the !hint command."""
-    verify_item_name = True
     display_name = "Start Hints"
 
 
-class StartLocationHints(OptionSet):
+class LocationSet(OptionSet):
+    verify_location_name = True
+
+
+class StartLocationHints(LocationSet):
     """Start with these locations and their item prefilled into the !hint command"""
     display_name = "Start Location Hints"
-    verify_location_name = True
 
 
-class ExcludeLocations(OptionSet):
+class ExcludeLocations(LocationSet):
     """Prevent these locations from having an important item"""
     display_name = "Excluded Locations"
-    verify_location_name = True
 
 
-class PriorityLocations(OptionSet):
+class PriorityLocations(LocationSet):
     """Prevent these locations from having an unimportant item"""
     display_name = "Priority Locations"
-    verify_location_name = True
 
 
 class DeathLink(Toggle):
@@ -954,7 +954,7 @@ class ItemLinks(OptionList):
                 pool |= {item_name}
         return pool
 
-    def verify(self, world: "World", player_name: str, plando_options: "PlandoOptions") -> None:
+    def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
         link: dict
         super(ItemLinks, self).verify(world, player_name, plando_options)
         existing_links = set()
