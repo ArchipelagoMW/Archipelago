@@ -556,58 +556,6 @@ class ALTTPWorld(World):
         spoiler_handle.write('Enemy damage:                    %s\n' % self.multiworld.enemy_damage[self.player])
         spoiler_handle.write('Prize shuffle                    %s\n' % self.multiworld.shuffle_prizes[self.player])
 
-    @classmethod
-    def stage_write_spoiler(cls, multiworld: MultiWorld, spoiler_handle: typing.TextIO) -> None:
-        locations = OrderedDict()
-        listed_locations = set()
-        lw_locations = []
-        dw_locations = []
-        cave_locations = []
-        for player_locs in [multiworld.get_locations(player) for player in multiworld.get_game_players(cls.game)]:
-            for loc in player_locs:
-                if loc not in listed_locations and loc.parent_region and \
-                        loc.parent_region.type == LTTPRegionType.LightWorld and loc.show_in_spoiler:
-                    lw_locations.append(loc)
-                elif loc not in listed_locations and loc.parent_region and \
-                        loc.parent_region.type == LTTPRegionType.DarkWorld and loc.show_in_spoiler:
-                    dw_locations.append(loc)
-                elif loc not in listed_locations and loc.parent_region and \
-                        loc.parent_region.type == LTTPRegionType.Cave and loc.show_in_spoiler:
-                    cave_locations.append(loc)
-
-        locations['Light World'] = OrderedDict(
-            [(str(location), str(location.item) if location.item is not None else 'Nothing') for location in
-             lw_locations])
-        listed_locations.update(lw_locations)
-
-        locations['Dark World'] = OrderedDict(
-            [(str(location), str(location.item) if location.item is not None else 'Nothing') for location in
-             dw_locations])
-        listed_locations.update(dw_locations)
-
-        locations['Caves'] = OrderedDict(
-            [(str(location), str(location.item) if location.item is not None else 'Nothing') for location in
-             cave_locations])
-        listed_locations.update(cave_locations)
-
-        for dungeon in multiworld.dungeons.values():
-            dungeon_locations = [loc for loc in multiworld.get_locations() if
-                                 loc not in listed_locations and loc.parent_region and loc.parent_region.dungeon == dungeon and loc.show_in_spoiler]
-            locations[str(dungeon)] = OrderedDict(
-                [(str(location), str(location.item) if location.item is not None else 'Nothing') for location in
-                 dungeon_locations])
-            listed_locations.update(dungeon_locations)
-
-        other_locations = [loc for loc in multiworld.get_locations() if
-                           loc not in listed_locations and loc.show_in_spoiler]
-        if other_locations:
-            locations['Other Locations'] = OrderedDict(
-                [(str(location), str(location.item) if location.item is not None else 'Nothing') for location in
-                 other_locations])
-            listed_locations.update(other_locations)
-
-        multiworld.spoiler.locations = locations
-
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
         spoiler_handle.write("\n\nMedallions:\n")
         spoiler_handle.write(f"\nMisery Mire ({self.multiworld.get_player_name(self.player)}):"
@@ -689,7 +637,7 @@ class ALTTPWorld(World):
         shop_data = build_shop_info()
         if shop_data is not None:
             spoiler_handle.write('\n\nShops:\n\n')
-            spoiler_handle.write('\n'.join("{} [{}]\n    {}".format(shop_data['location'], shop_data['type'], "\n    ".join(
+            spoiler_handle.write(''.join("{} [{}]\n    {}".format(shop_data['location'], shop_data['type'], "\n    ".join(
                 item for item in [shop_data.get('item_0', None), shop_data.get('item_1', None), shop_data.get('item_2', None)] if
                 item))))
 
