@@ -44,5 +44,5 @@ class TestImplemented(unittest.TestCase):
                     or world_type.hidden:
                 continue
             with self.subTest(game_name):
-                path = f"{os.path.dirname(world_type.__file__)}/test"
+                path = f"{os.path.dirname(world_type.__file__)}/test/__init__.py"
                 self.assertTrue(os.path.exists(path))
