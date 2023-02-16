@@ -403,6 +403,7 @@ location_data = [
     LocationData("Cerulean City", "Hidden Item Gym Badge Guy's Backyard", "Rare Candy", rom_addresses['Hidden_Item_Cerulean_City'], Hidden(52), inclusion=hidden_items),
     LocationData("Route 4", "Hidden Item Plateau East Of Mt Moon", "Great Ball", rom_addresses['Hidden_Item_Route_4'], Hidden(53), inclusion=hidden_items),
 
+
     LocationData("Pallet Town", "Oak's Parcel Reward", "Pokedex", rom_addresses["Event_Pokedex"], EventFlag(0x38), inclusion=pokedex),
 
     LocationData("Pokemon Mansion 1F", "Scientist", None, rom_addresses["Trainersanity_EVENT_BEAT_MANSION_1_TRAINER_0_ITEM"], EventFlag(376), inclusion=trainersanity),
@@ -719,6 +720,22 @@ location_data = [
     LocationData("Celadon Prize Corner", "Item Prize 1", "TM23 Dragon Rage", rom_addresses["Prize_Item_A"], EventFlag(0x69a), inclusion=prizesanity),
     LocationData("Celadon Prize Corner", "Item Prize 2", "TM15 Hyper Beam", rom_addresses["Prize_Item_B"], EventFlag(0x69B), inclusion=prizesanity),
     LocationData("Celadon Prize Corner", "Item Prize 3", "TM50 Substitute", rom_addresses["Prize_Item_C"], EventFlag(0x69C), inclusion=prizesanity),
+
+    LocationData("Celadon Game Corner", "West Gambler's Gift (Coin Case)", "10 Coins", rom_addresses["Event_Game_Corner_Gift_A"], EventFlag(0x1ba)),
+    LocationData("Celadon Game Corner", "Center Gambler's Gift (Coin Case)", "20 Coins", rom_addresses["Event_Game_Corner_Gift_C"], EventFlag(0x1bc)),
+    LocationData("Celadon Game Corner", "East Gambler's Gift (Coin Case)", "20 Coins", rom_addresses["Event_Game_Corner_Gift_B"], EventFlag(0x1bb)),
+
+    LocationData("Celadon Game Corner", "Hidden Item Northwest By Counter (Coin Case)", "10 Coins", rom_addresses["Hidden_Item_Game_Corner_1"], Hidden(54), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item Southwest Corner (Coin Case)", "10 Coins", rom_addresses["Hidden_Item_Game_Corner_2"], Hidden(55), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item Near Rumor Man (Coin Case)", "20 Coins", rom_addresses["Hidden_Item_Game_Corner_3"], Hidden(56), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item Near Speculating Woman (Coin Case)", "10 Coins", rom_addresses["Hidden_Item_Game_Corner_4"], Hidden(57), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item Near West Gifting Gambler (Coin Case)", "10 Coins", rom_addresses["Hidden_Item_Game_Corner_5"], Hidden(58), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item Near Wonderful Time Woman (Coin Case)", "20 Coins", rom_addresses["Hidden_Item_Game_Corner_6"], Hidden(59), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item Near Failing Gym Information Guy (Coin Case)", "10 Coins", rom_addresses["Hidden_Item_Game_Corner_7"], Hidden(60), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item Near East Gifting Gambler (Coin Case)", "10 Coins", rom_addresses["Hidden_Item_Game_Corner_8"], Hidden(61), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item Near Hooked Guy (Coin Case)", "10 Coins", rom_addresses["Hidden_Item_Game_Corner_9"], Hidden(62), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item at End of Horizontal Machine Row (Coin Case)", "20 Coins", rom_addresses["Hidden_Item_Game_Corner_10"], Hidden(63), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item in Front of Horizontal Machine Row (Coin Case)", "100 Coins", rom_addresses["Hidden_Item_Game_Corner_11"], Hidden(64), inclusion=hidden_items),
 
     LocationData("Indigo Plateau", "Become Champion", "Become Champion", event=True),
     LocationData("Pokemon Tower 7F", "Fuji Saved", "Fuji Saved", event=True),

@@ -1,10 +1,20 @@
 from ..generic.Rules import add_item_rule, add_rule
+from .items import item_groups
+
 
 def set_rules(world, player):
 
     add_item_rule(world.get_location("Pallet Town - Player's PC", player),
                   lambda i: i.player == player and "Badge" not in i.name and "Trap" not in i.name and
-                            i.name != "Pokedex")
+                  i.name != "Pokedex")
+
+    if world.prizesanity[player]:
+        add_item_rule(world.get_location("Celadon Prize Corner - Item Prize 1", player),
+                      lambda i: i.player != player or i.name in item_groups["Unique"])
+        add_item_rule(world.get_location("Celadon Prize Corner - Item Prize 2", player),
+                      lambda i: i.player != player or i.name in item_groups["Unique"])
+        add_item_rule(world.get_location("Celadon Prize Corner - Item Prize 3", player),
+                      lambda i: i.player != player or i.name in item_groups["Unique"])
 
     access_rules = {
 
@@ -38,6 +48,23 @@ def set_rules(world, player):
         "Silph Co 6F - Southwest Item (Card Key)": lambda state: state.has("Card Key", player),
         "Silph Co 7F - East Item (Card Key)": lambda state: state.has("Card Key", player),
         "Safari Zone Center - Island Item": lambda state: state.pokemon_rb_can_surf(player),
+        "Celadon Prize Corner - Item Prize 1": lambda state: state.has("Coin Case", player),
+        "Celadon Prize Corner - Item Prize 2": lambda state: state.has("Coin Case", player),
+        "Celadon Prize Corner - Item Prize 3": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - West Gambler's Gift (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Center Gambler's Gift (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - East Gambler's Gift (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item Northwest By Counter (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item Southwest Corner (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item Near Rumor Man (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item Near Speculating Woman (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item Near West Gifting Gambler (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item Near Wonderful Time Woman (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item Near Failing Gym Information Guy (Coin Case)": lambda state: state.has( "Coin Case", player),
+        "Celadon Game Corner - Hidden Item Near East Gifting Gambler (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item Near Hooked Guy (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item at End of Horizontal Machine Row (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item in Front of Horizontal Machine Row (Coin Case)": lambda state: state.has("Coin Case", player),
 
         "Silph Co 11F - Silph Co Liberated": lambda state: state.has("Card Key", player),
 
@@ -75,9 +102,6 @@ def set_rules(world, player):
         "Anywhere - Good Rod Pokemon - 1": lambda state: state.has("Good Rod", player),
         "Anywhere - Good Rod Pokemon - 2": lambda state: state.has("Good Rod", player),
         "Anywhere - Old Rod Pokemon": lambda state: state.has("Old Rod", player),
-        "Celadon Prize Corner - Item Prize 1": lambda state: state.has("Coin Case", player),
-        "Celadon Prize Corner - Item Prize 2": lambda state: state.has("Coin Case", player),
-        "Celadon Prize Corner - Item Prize 3": lambda state: state.has("Coin Case", player),
         "Celadon Prize Corner - Pokemon Prize - 1": lambda state: state.has("Coin Case", player),
         "Celadon Prize Corner - Pokemon Prize - 2": lambda state: state.has("Coin Case", player),
         "Celadon Prize Corner - Pokemon Prize - 3": lambda state: state.has("Coin Case", player),

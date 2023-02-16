@@ -266,9 +266,6 @@ class PokemonRedBlueWorld(World):
 
         locs = [self.multiworld.get_location("Fossil - Choice A", self.player),
                 self.multiworld.get_location("Fossil - Choice B", self.player)]
-        for loc in locs:
-            add_item_rule(loc, lambda i: i.advancement or i.name in self.item_name_groups["Unique"]
-                                         or i.name == "Master Ball")
 
         loc = self.multiworld.get_location("Pallet Town - Player's PC", self.player)
         if loc.item is None:

@@ -88,6 +88,7 @@ def create_regions(multiworld: MultiWorld, player: int):
         create_region(multiworld, player, "Route 8", locations_per_region),
         create_region(multiworld, player, "Route 8 Grass", locations_per_region),
         create_region(multiworld, player, "Celadon City", locations_per_region),
+        create_region(multiworld, player, "Celadon Game Corner", locations_per_region),
         create_region(multiworld, player, "Celadon Prize Corner", locations_per_region),
         create_region(multiworld, player, "Celadon Gym", locations_per_region),
         create_region(multiworld, player, "Route 16", locations_per_region),
