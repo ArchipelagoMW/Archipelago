@@ -54,7 +54,7 @@ item_table: Dict[str, ItemData] = {
     "Yellow Ramp"                   : ItemData(oc2_base_id + 39),
     "Blue Ramp"                     : ItemData(oc2_base_id + 40),
     "Pink Ramp"                     : ItemData(oc2_base_id + 41),
-    "Grey Ramp"                     : ItemData(oc2_base_id + 42),
+    "Dark Green Ramp"               : ItemData(oc2_base_id + 42),
     "Red Ramp"                      : ItemData(oc2_base_id + 43),
     "Purple Ramp"                   : ItemData(oc2_base_id + 44),
 }
@@ -94,7 +94,7 @@ item_name_to_config_name = {
     "Yellow Ramp"                   : "DisableYellowRampButton"        ,
     "Blue Ramp"                     : "DisableBlueRampButton"          ,
     "Pink Ramp"                     : "DisablePinkRampButton"          ,
-    "Grey Ramp"                     : "DisableGreyRampButton"          ,
+    "Dark Green Ramp"                     : "DisableGreyRampButton"          ,
     "Red Ramp"                      : "DisableRedRampButton"           ,
     "Purple Ramp"                   : "DisablePurpleRampButton"        ,
     "Calmer Unbread"                : "AggressiveHorde"                ,

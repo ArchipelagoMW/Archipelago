@@ -229,7 +229,7 @@ ramp_logic = {
     "5-2": (["Purple"], []),
     "6-1": (["Pink"], []),
     "6-2": (["Red", "Purple"], ["5-1"]),  # 5-1 spawns blue button, blue button gets you to red button
-    "Kevin-1": (["Grey"], []),
+    "Kevin-1": (["Dark Green"], []),
     "Kevin-7": (["Purple"], ["5-1"]), # 5-1 spawns blue button,
                                     # press blue button,
                                     # climb blue ramp,
