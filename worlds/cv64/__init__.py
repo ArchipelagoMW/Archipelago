@@ -7,7 +7,7 @@ from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from .Items import CV64Item, ItemData, item_table, junk_table, main_table
 from .Locations import CV64Location, all_locations, setup_locations
 from .Options import cv64_options
-from .Regions import create_regions, connect_regions
+from .Regions import create_regions
 from .Stages import stage_dict, vanilla_stage_order
 from .Rules import set_rules
 from .Names import ItemName, LocationName, RegionName
@@ -113,7 +113,8 @@ class CV64World(World):
 
     def create_regions(self):
         location_table = setup_locations(self.multiworld, self.player)
-        create_regions(self.multiworld, self.player, location_table)
+        create_regions(self.multiworld, self.player, location_table, self.active_stage_list, self.active_warp_list,
+                       self.required_s2s)
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
@@ -150,8 +151,8 @@ class CV64World(World):
         required_s1s = self.multiworld.special1s_per_warp[self.player].value * 7
 
         if required_s1s > item_counts[ItemName.special_one]:
-            raise Exception(f"Not enough Special1 jewels for player {self.multiworld.get_player_name(self.player)} "
-                            f"to use the whole warp menu. Need {required_s1s - item_counts[ItemName.special_one]} more.")
+            raise Exception(f"Not enough Special1 jewels for player {self.multiworld.get_player_name(self.player)} to "
+                            f"use the whole warp menu. Need {required_s1s - item_counts[ItemName.special_one]} more.")
 
         if self.multiworld.draculas_condition[self.player].value == 1:
             self.required_s2s = 1
@@ -236,9 +237,6 @@ class CV64World(World):
 
         self.multiworld.itempool += itempool
 
-        connect_regions(self.multiworld, self.player, self.active_stage_list, self.active_warp_list,
-                        self.required_s2s)
-
         if self.multiworld.sub_weapon_shuffle[self.player]:
             sub_bytes = list(self.sub_weapon_dict.values())
             self.multiworld.random.shuffle(sub_bytes)
@@ -272,19 +270,19 @@ class CV64World(World):
         
         for location_name in active_locations:
             loc = self.multiworld.get_location(location_name, self.player)
-            if loc.item.game == "Castlevania 64" and loc.loc_type != "event":
+            if loc.item.game == "Castlevania 64" and loc.cv64_loc_type != "event":
                 if loc.item.player == self.player:
-                    offsets_to_ids[loc.rom_offset] = loc.item.code - 0xC64000
-                    if loc.loc_type == "npc":
-                        if 0x19 < offsets_to_ids[loc.rom_offset] < 0x1D:
-                            offsets_to_ids[loc.rom_offset] += 0x0D
-                        elif offsets_to_ids[loc.rom_offset] > 0x1C:
-                            offsets_to_ids[loc.rom_offset] -= 0x03
+                    offsets_to_ids[loc.cv64_rom_offset] = loc.item.code - 0xC64000
+                    if loc.cv64_loc_type == "npc":
+                        if 0x19 < offsets_to_ids[loc.cv64_rom_offset] < 0x1D:
+                            offsets_to_ids[loc.cv64_rom_offset] += 0x0D
+                        elif offsets_to_ids[loc.cv64_rom_offset] > 0x1C:
+                            offsets_to_ids[loc.cv64_rom_offset] -= 0x03
                 else:
                     if loc.item.classification == ItemClassification.progression:
-                        offsets_to_ids[loc.rom_offset] = 0x11
+                        offsets_to_ids[loc.cv64_rom_offset] = 0x11
                     else:
-                        offsets_to_ids[loc.rom_offset] = 0x12
+                        offsets_to_ids[loc.cv64_rom_offset] = 0x12
 
         # Sub-weapons
         if self.multiworld.sub_weapon_shuffle[self.player]:

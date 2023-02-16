@@ -7,16 +7,14 @@ from .Names import LocationName, RegionName
 class CV64Location(Location):
     game: str = "Castlevania 64"
 
-    progress_byte: int = 0x000000
-    progress_bit:  int = 0
-    inverted_bit: bool = False
+    cv64_rom_offset: int
+    cv64_loc_type: str
 
-    def __init__(self, player: int, name: str = '', address: int = None, parent=None, prog_byte: int = None,
-                 prog_bit: int = None, invert: bool = False):
+    def __init__(self, player: int, name: str = '', address: int = None, parent=None, cv64_rom_offset: int = None,
+                 cv64_loc_type: str = None):
         super().__init__(player, name, address, parent)
-        self.progress_byte = prog_byte
-        self.progress_bit = prog_bit
-        self.inverted_bit = invert
+        self.cv64_rom_offset = cv64_rom_offset
+        self.cv64_loc_type = cv64_loc_type
 
 
 class LocationData(typing.NamedTuple):
