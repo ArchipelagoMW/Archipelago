@@ -256,7 +256,16 @@ class Overcooked2World(World):
         # useful = list()
         # filler = list()
         # progression = list()
-        for item_name in item_table:
+        for item_name in item_table:            
+            if item_name in item_frequencies:
+                freq = item_frequencies[item_name]
+            else:
+                freq = 1
+            
+            if freq <= 0:
+                # not used
+                continue
+
             if not self.options["ShuffleLevelOrder"] and item_name in ITEMS_TO_EXCLUDE_IF_NO_DLC:
                 # skip DLC items if no DLC
                 continue
@@ -282,15 +291,10 @@ class Overcooked2World(World):
                     # filler.append(item_name)
                     classification = ItemClassification.filler
 
-            if item_name in item_frequencies:
-                freq = item_frequencies[item_name]
-
-                while freq > 0:
-                    self.itempool.append(self.create_item(item_name, classification))
-                    classification = ItemClassification.useful  # only the first progressive item can be progression
-                    freq -= 1
-            else:
+            while freq > 0:
                 self.itempool.append(self.create_item(item_name, classification))
+                classification = ItemClassification.useful  # only the first progressive item can be progression
+                freq -= 1
 
         # print(f"progression: {progression}")
         # print(f"useful: {useful}")
@@ -439,7 +443,7 @@ class Overcooked2World(World):
             "DisableCatch": True,
             "DisableControlStick": True,
             "DisableWokDrag": True,
-            "DisableRampButton": True,
+            # "DisableRampButton": True,
             "WashTimeMultiplier": 1.4,
             "BurnSpeedMultiplier": 1.43,
             "MaxOrdersOnScreenOffset": -2,
@@ -448,7 +452,7 @@ class Overcooked2World(World):
             "RespawnTime": 10.0,
             "CarnivalDispenserRefactoryTime": 4.0,
             "LevelUnlockRequirements": level_unlock_requirements,
-            "LockedEmotes": [0, 1, 2, 3, 4, 5],
+            "LockedEmotes": [0, 1, 5],
             "StarOffset": 0,
             "AggressiveHorde": True,
             "DisableEarnHordeMoney": True,

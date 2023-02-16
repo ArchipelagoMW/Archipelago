@@ -50,6 +50,13 @@ item_table: Dict[str, ItemData] = {
     "Ramp Button"                   : ItemData(oc2_base_id + 35),
     "Bonus Star"                    : ItemData(oc2_base_id + 36),
     "Calmer Unbread"                : ItemData(oc2_base_id + 37),
+    "Green Ramp"                    : ItemData(oc2_base_id + 38),
+    "Yellow Ramp"                   : ItemData(oc2_base_id + 39),
+    "Blue Ramp"                     : ItemData(oc2_base_id + 40),
+    "Pink Ramp"                     : ItemData(oc2_base_id + 41),
+    "Grey Ramp"                     : ItemData(oc2_base_id + 42),
+    "Red Ramp"                      : ItemData(oc2_base_id + 43),
+    "Purple Ramp"                   : ItemData(oc2_base_id + 44),
 }
 
 item_frequencies = {
@@ -58,28 +65,40 @@ item_frequencies = {
     "Order Lookahead": 2,
     "Progressive Dash": 2,
     "Bonus Star": 0,  # Filler Item
-    # default: 1
+
+    # Unused items
+    "Ramp Button": 0,
+    "Serving Emote" : 0,
+    "Preparing Emote": 0,
+    "Washing Up Emote": 0,
 }
 
 item_name_to_config_name = {
-    "Wood"                         : "DisableWood"                   ,
-    "Coal Bucket"                  : "DisableCoal"                   ,
-    "Spare Plate"                  : "DisableOnePlate"               ,
-    "Fire Extinguisher"            : "DisableFireExtinguisher"       ,
-    "Bellows"                      : "DisableBellows"                ,
-    "Clean Dishes"                 : "PlatesStartDirty"              ,
-    "Control Stick Batteries"      : "DisableControlStick"           ,
-    "Wok Wheels"                   : "DisableWokDrag"                ,
-    "Dish Scrubber"                : "WashTimeMultiplier"            ,
-    "Burn Leniency"                : "BurnSpeedMultiplier"           ,
-    "Sharp Knife"                  : "ChoppingTimeScale"             ,
-    "Lightweight Backpack"         : "BackpackMovementScale"         ,
-    "Faster Respawn Time"          : "RespawnTime"                   ,
-    "Faster Condiment/Drink Switch": "CarnivalDispenserRefactoryTime",
-    "Guest Patience"               : "CustomOrderLifetime"           ,
-    "Ramp Button"                  : "DisableRampButton"             ,
-    "Calmer Unbread"               : "AggressiveHorde"               ,
-    "Coin Purse"                   : "DisableEarnHordeMoney"         ,
+    "Wood"                          : "DisableWood"                    ,
+    "Coal Bucket"                   : "DisableCoal"                    ,
+    "Spare Plate"                   : "DisableOnePlate"                ,
+    "Fire Extinguisher"             : "DisableFireExtinguisher"        ,
+    "Bellows"                       : "DisableBellows"                 ,
+    "Clean Dishes"                  : "PlatesStartDirty"               ,
+    "Control Stick Batteries"       : "DisableControlStick"            ,
+    "Wok Wheels"                    : "DisableWokDrag"                 ,
+    "Dish Scrubber"                 : "WashTimeMultiplier"             ,
+    "Burn Leniency"                 : "BurnSpeedMultiplier"            ,
+    "Sharp Knife"                   : "ChoppingTimeScale"              ,
+    "Lightweight Backpack"          : "BackpackMovementScale"          ,
+    "Faster Respawn Time"           : "RespawnTime"                    ,
+    "Faster Condiment/Drink Switch" : "CarnivalDispenserRefactoryTime" ,
+    "Guest Patience"                : "CustomOrderLifetime"            ,
+    "Ramp Button"                   : "DisableRampButton"              ,
+    "Green Ramp"                    : "DisableGreenRampButton"         ,
+    "Yellow Ramp"                   : "DisableYellowRampButton"        ,
+    "Blue Ramp"                     : "DisableBlueRampButton"          ,
+    "Pink Ramp"                     : "DisablePinkRampButton"          ,
+    "Grey Ramp"                     : "DisableGreyRampButton"          ,
+    "Red Ramp"                      : "DisableRedRampButton"           ,
+    "Purple Ramp"                   : "DisablePurpleRampButton"        ,
+    "Calmer Unbread"                : "AggressiveHorde"                ,
+    "Coin Purse"                    : "DisableEarnHordeMoney"          ,
 }
 
 vanilla_values = {
@@ -101,6 +120,13 @@ vanilla_values = {
     "CustomOrderLifetime": 100.0,
     "AggressiveHorde": False,
     "DisableEarnHordeMoney": False,
+    "DisableGreenRampButton" : False,
+    "DisableYellowRampButton" : False,
+    "DisableBlueRampButton" : False,
+    "DisablePinkRampButton" : False,
+    "DisableGreyRampButton" : False,
+    "DisableRedRampButton" : False,
+    "DisablePurpleRampButton" : False,
 }
 
 item_id_to_name: Dict[int, str] = {
