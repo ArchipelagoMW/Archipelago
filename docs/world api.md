@@ -682,7 +682,7 @@ def generate_output(self, output_directory: str):
 
 ### Documentation
 
-Every World implemented should have a tutorial and a game info page. These are both rendered on the website by reading
+Each world implementation should have a tutorial and a game info page. These are both rendered on the website by reading
 the `.md` files in your world's `/docs` directory.
 
 #### Game Info
@@ -694,11 +694,13 @@ you have multiple of these docs, they currently do not render on the website.
 #### Tutorials
 Your game can have as many tutorials in as many languages as you like, with each one having a relevant `Tutorial`
 defined in the `WebWorld`. The file name you use aren't particularly important, but it should be descriptive of what
-the tutorial is covering, and the name of the file must match the url extension provided in the `Tutorial`.
+the tutorial is covering, and the name of the file must match the URL extension provided in the `Tutorial`. Currently,
+the JS that determines this ignores the provided file name and will search for `game/document_lang.md`, where
+`game/document/lang` is the provided URL.
 
 ### Tests
 
-Ever World is expected to write unit tests that cover its logic, to ensure no logic bug regressions. This can be done
+Each World is expected to include unit tests that cover its logic, to ensure no logic bug regressions. This can be done
 by creating a `/test` package within your world package. The `__init__.py` within this folder is where the World's
 TestBase should be defined. This can be inherited from the main TestBase, which will automatically set up a solo
 multiworld for each test written using it. Within subsequent modules, classes should be defined which inherit the world
@@ -723,17 +725,15 @@ from . import MyGameTestBase
 class TestChestAccess(MyGameTestBase):
     def testSwordChests(self):
         """Test locations that require a sword"""
-        # this builds a list of Chest2 - Chest5
-        locations = [f"Chest{i}" for i in range(2, 6)]
+        locations = ["Chest1", "Chest2"]
         items = [["Sword"]]
-        # this will test that each location can't be accessed without the items in each list in `items`, but can be
-        # once we have those items.
+        # this will test that each location can't be accessed without the "Sword", but can be accessed once obtained.
         self.assertAccessDependency(locations, items)
     
     def testAnyWeaponChests(self):
-        """Test locations that require any weapons"""
+        """Test locations that require any weapon"""
         locations = [f"Chest{i}" for i in range(3, 6)]
         items = [["Sword"], ["Axe"], ["Spear"]]
-        # this will test that any weapon from 3-5 can't be accessed without these items, but can be with all of them.
+        # this will test that chests 3-5 can't be accessed without any weapon, but can be with just one of them.
         self.assertAccessDependency(locations, items)
 ```
