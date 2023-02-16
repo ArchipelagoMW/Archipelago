@@ -909,7 +909,7 @@ Mountain Floor 2 (Mountain Floor 2) - Mountain Floor 2 Light Bridge Room Near - 
 158430 - 0x09FD8 (Near Row 5) - 0x09FD7 - Colored Squares & Symmetry
 Door - 0x09FFB (Staircase Near) - 0x09FD8
 
-Mountain Floor 2 Blue Bridge (Mountain Floor 2) - Mountain Floor 2 Beyond Bridge - TrueOneWay - Mountain Floor 2 At Door - TrueOneWay:
+Mountain Floor 2 Blue Bridge (Mountain Floor 2) - Mountain Floor 2 Beyond Bridge - TrueOneWay - Mountain Floor 2 At Door - 0x09ED8:
 
 Mountain Floor 2 At Door (Mountain Floor 2) - Mountain Floor 2 Elevator Room - 0x09EDD:
 Door - 0x09EDD (Elevator Room Entry) - 0x09ED8 & 0x09E86
