@@ -7,6 +7,7 @@ class ItemDict(TypedDict):
     count: int
     classification: ItemClassification
 
+base_id = 1909000
 
 item_table: List[ItemDict] = [
     # Rosary Beads

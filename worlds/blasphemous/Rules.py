@@ -929,7 +929,7 @@ def rules(blasphemousworld):
         set_rule(world.get_location("BotTC: Inside giant statue", player),
             lambda state: state._blasphemous_ex_bridge_access(player) and \
                 state._blasphemous_laudes_gate(player) and \
-                    state._blasphemous_laudes_gate(player))
+                    state._blasphemous_1_mask(player))
         set_rule(world.get_location("BotSS: Esdras' final gift", player),
             lambda state: state._blasphemous_blood_relic(player) and \
                 state._blasphemous_scapular(player) and \
