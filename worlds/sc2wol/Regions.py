@@ -99,27 +99,26 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
     else:
         missions = []
 
+        remove_prophecy = mission_order_type == 1 and not get_option_value(multiworld, player, "shuffle_protoss")
+
         final_mission = mission_pools[MissionPools.FINAL][0]
+
+        # Determining if missions must be removed
+        mission_pool_size = sum(len(mission_pool) for mission_pool in mission_pools.values())
+        removals = len(mission_order) - mission_pool_size
+        # Removing entire Prophecy chain on vanilla shuffled when not shuffling protoss
+        if remove_prophecy:
+            removals -= 4
 
         # Initial fill out of mission list and marking all-in mission
         for mission in mission_order:
-            if mission is None:
+            # Removing extra missions if mission pool is too small
+            if 0 < mission.removal_priority <= removals or mission.category == 'Prophecy' and remove_prophecy:
                 missions.append(None)
             elif mission.type == MissionPools.FINAL:
                 missions.append(final_mission)
-            elif mission.relegate and not get_option_value(multiworld, player, "shuffle_no_build"):
-                missions.append(MissionPools.STARTER)
             else:
                 missions.append(mission.type)
-
-        # Place Protoss Missions if we are not using ShuffleProtoss and are in Vanilla Shuffled
-        if get_option_value(multiworld, player, "shuffle_protoss") == 0 and mission_order_type == 1:
-            missions[22] = "A Sinister Turn"
-            mission_pools[MissionPools.MEDIUM].remove("A Sinister Turn")
-            missions[23] = "Echoes of the Future"
-            mission_pools[MissionPools.MEDIUM].remove("Echoes of the Future")
-            missions[24] = "In Utter Darkness"
-            mission_pools[MissionPools.HARD].remove("In Utter Darkness")
 
         no_build_slots = []
         easy_slots = []
@@ -180,24 +179,38 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
             regions.append(create_region(multiworld, player, locations_per_region, location_cache, region_name))
         multiworld.regions += regions
 
+        # Mapping original mission slots to shifted mission slots when missions are removed
+        slot_map = []
+        slot_offset = 0
+        for position, mission in enumerate(missions):
+            slot_map.append(position - slot_offset + 1)
+            if mission is None:
+                slot_offset += 1
+
         # Loop through missions to create requirements table and connect regions
         # TODO: Handle 'and' connections
         mission_req_table = {}
-        for i in range(len(missions)):
+
+        for i, mission in enumerate(missions):
+            if mission is None:
+                continue
             connections = []
             for connection in mission_order[i].connect_to:
+                required_mission = missions[connection]
                 if connection == -1:
-                    connect(multiworld, player, names, "Menu", missions[i])
+                    connect(multiworld, player, names, "Menu", mission)
+                elif required_mission is None:
+                    continue
                 else:
-                    connect(multiworld, player, names, missions[connection], missions[i],
+                    connect(multiworld, player, names, required_mission, mission,
                             (lambda name, missions_req: (lambda state: state.has(f"Beat {name}", player) and
                                                                        state._sc2wol_cleared_missions(multiworld, player,
                                                                                                       missions_req)))
                             (missions[connection], mission_order[i].number))
-                    connections.append(connection + 1)
+                    connections.append(slot_map[connection])
 
-            mission_req_table.update({missions[i]: MissionInfo(
-                vanilla_mission_req_table[missions[i]].id, connections, mission_order[i].category,
+            mission_req_table.update({mission: MissionInfo(
+                vanilla_mission_req_table[mission].id, connections, mission_order[i].category,
                 number=mission_order[i].number,
                 completion_critical=mission_order[i].completion_critical,
                 or_requirements=mission_order[i].or_requirements)})

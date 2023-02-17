@@ -39,7 +39,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
         MissionPools.FINAL: []
     }
     # Vanilla and Vanilla Shuffled use the entire mission pool
-    if mission_count == 28:
+    if mission_order_type == 0:
         mission_pools[MissionPools.FINAL] = ['All-In']
         return mission_pools
 
@@ -135,8 +135,6 @@ class ValidInventory:
                     if item in existing_items:
                         existing_items.remove(item)
 
-        if self.min_units_per_structure > 0:
-            requirements.append(lambda state: state.has_units_per_structure())
 
         def attempt_removal(item: Item) -> bool:
             # If item can be removed and has associated items, remove them as well

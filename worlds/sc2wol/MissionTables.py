@@ -35,7 +35,7 @@ class FillMission(NamedTuple):
     number: int = 0  # number of worlds need beaten
     completion_critical: bool = False  # missions needed to beat game
     or_requirements: bool = False  # true if the requirements should be or-ed instead of and-ed
-    relegate: bool = False  # true if this is a slot no build missions should be relegated to.
+    removal_priority: int = 0  # how many missions missing from the pool required to remove this mission
 
 
 vanilla_shuffle_order = [
@@ -45,7 +45,7 @@ vanilla_shuffle_order = [
     FillMission(MissionPools.EASY, [2], "Colonist"),
     FillMission(MissionPools.MEDIUM, [3], "Colonist"),
     FillMission(MissionPools.HARD, [4], "Colonist", number=7),
-    FillMission(MissionPools.HARD, [4], "Colonist", number=7, relegate=True),
+    FillMission(MissionPools.HARD, [4], "Colonist", number=7, removal_priority=1),
     FillMission(MissionPools.EASY, [2], "Artifact", completion_critical=True),
     FillMission(MissionPools.MEDIUM, [7], "Artifact", number=8, completion_critical=True),
     FillMission(MissionPools.HARD, [8], "Artifact", number=11, completion_critical=True),
@@ -53,19 +53,19 @@ vanilla_shuffle_order = [
     FillMission(MissionPools.HARD, [10], "Artifact", completion_critical=True),
     FillMission(MissionPools.MEDIUM, [2], "Covert", number=4),
     FillMission(MissionPools.MEDIUM, [12], "Covert"),
-    FillMission(MissionPools.HARD, [13], "Covert", number=8, relegate=True),
-    FillMission(MissionPools.HARD, [13], "Covert", number=8, relegate=True),
+    FillMission(MissionPools.HARD, [13], "Covert", number=8, removal_priority=3),
+    FillMission(MissionPools.HARD, [13], "Covert", number=8, removal_priority=2),
     FillMission(MissionPools.MEDIUM, [2], "Rebellion", number=6),
     FillMission(MissionPools.HARD, [16], "Rebellion"),
     FillMission(MissionPools.HARD, [17], "Rebellion"),
     FillMission(MissionPools.HARD, [18], "Rebellion"),
-    FillMission(MissionPools.HARD, [19], "Rebellion", relegate=True),
-    FillMission(MissionPools.MEDIUM, [8], "Prophecy"),
-    FillMission(MissionPools.HARD, [21], "Prophecy"),
-    FillMission(MissionPools.HARD, [22], "Prophecy"),
-    FillMission(MissionPools.HARD, [23], "Prophecy", relegate=True),
+    FillMission(MissionPools.HARD, [19], "Rebellion", removal_priority=5),
+    FillMission(MissionPools.MEDIUM, [8], "Prophecy", removal_priority=9),
+    FillMission(MissionPools.HARD, [21], "Prophecy", removal_priority=8),
+    FillMission(MissionPools.HARD, [22], "Prophecy", removal_priority=7),
+    FillMission(MissionPools.HARD, [23], "Prophecy", removal_priority=6),
     FillMission(MissionPools.HARD, [11], "Char", completion_critical=True),
-    FillMission(MissionPools.HARD, [25], "Char", completion_critical=True),
+    FillMission(MissionPools.HARD, [25], "Char", completion_critical=True, removal_priority=4),
     FillMission(MissionPools.HARD, [25], "Char", completion_critical=True),
     FillMission(MissionPools.FINAL, [26, 27], "Char", completion_critical=True, or_requirements=True)
 ]
