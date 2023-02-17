@@ -191,6 +191,22 @@ class HpCap(Range):
     default = 999
 
 
+class LevelCap(Range):
+    "Sets the max level Lunais can achieve."
+    display_name = "Level Cap"
+    range_start = 1
+    range_end = 99
+    default = 99
+
+
+class ExtraEarringsXP(Range):
+    "Adds additional XP granted by Galaxy Earrings."
+    display_name = "Extra Earrings XP"
+    range_start = 0
+    range_end = 24
+    default = 0
+    
+
 class BossHealing(DefaultOnToggle):
     "Enables/disables healing after boss fights. NOTE: Currently only applicable when Boss Rando is enabled."
     display_name = "Heal After Bosses"
@@ -385,6 +401,8 @@ timespinner_options: Dict[str, Option] = {
     "DamageRando": DamageRando,
     "DamageRandoOverrides": DamageRandoOverrides,
     "HpCap": HpCap,
+    "LevelCap": LevelCap,
+    "ExtraEarringsXP": ExtraEarringsXP,
     "BossHealing": BossHealing,
     "ShopFill": ShopFill,
     "ShopWarpShards": ShopWarpShards,
