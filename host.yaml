@@ -131,6 +131,8 @@ dkc3_options:
 smw_options:
   # File name of the SMW US rom
   rom_file: "Super Mario World (USA).sfc"
+pokemon_emerald_options:
+  rom_start: false
 pokemon_rb_options:
   # File names of the Pokemon Red and Blue roms
   red_rom_file: "Pokemon Red (UE) [S][!].gb"
