@@ -5,7 +5,7 @@ import zipfile
 from typing import Optional, Any
 
 import Utils
-from .Locations import AdventureLocation
+from .Locations import AdventureLocation, LocationData
 from Utils import OptionsType
 from worlds.Files import APDeltaPatch, AutoPatchRegister
 from itertools import chain
@@ -64,6 +64,7 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
     diff_a_mode: int = None
     diff_b_mode: int = None
     bat_logic: int = None
+    bat_no_touch_locations: [LocationData] = None
 
     # locations: [], autocollect: [], seed_name: bytes,
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -80,6 +81,7 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
             self.diff_a_mode = kwargs["diff_a_mode"]
             self.diff_b_mode = kwargs["diff_b_mode"]
             self.bat_logic = kwargs["bat_logic"]
+            self.bat_no_touch_locations = kwargs["bat_no_touch_locations"]
             del kwargs["locations"]
             del kwargs["autocollect"]
             del kwargs["seed_name"]
@@ -88,6 +90,7 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
             del kwargs["diff_a_mode"]
             del kwargs["diff_b_mode"]
             del kwargs["bat_logic"]
+            del kwargs["bat_no_touch_locations"]
         super(AdventureDeltaPatch, self).__init__(*args, **kwargs)
         if not patch_only:
             with open(self.patched_path, "rb") as file:
@@ -149,6 +152,16 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
             opened_zipfile.writestr("bat_logic",
                                     self.bat_logic.to_bytes(1, "little"),
                                     compress_type=zipfile.ZIP_STORED)
+        if self.bat_no_touch_locations is not None:
+            loc_bytes = []
+            for loc in self.bat_no_touch_locations:
+                loc_bytes.append(loc.short_location_id)  # used for AP items managed by script
+                loc_bytes.append(loc.room_id)  # used for local items placed in rom
+                loc_bytes.append(loc.room_x)
+                loc_bytes.append(loc.room_y)
+            opened_zipfile.writestr("bat_no_touch_locations",
+                                    bytes(loc_bytes),
+                                    compress_type=zipfile.ZIP_LZMA)
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile):
         super(AdventureDeltaPatch, self).read_contents(opened_zipfile)

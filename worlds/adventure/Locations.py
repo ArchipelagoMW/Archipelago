@@ -27,7 +27,6 @@ class WorldPosition:
 class LocationData:
     # There are a set of standard x,y positions that are good in all locations except
     # for locations that only contain part of a room.  Those have to be specified.
-    # TODO - multiple specified positions per location
     region: str
     name: str
     world_positions: [WorldPosition]
@@ -37,8 +36,10 @@ class LocationData:
     room_id: int
     room_x: int
     room_y: int
+    needs_bat_logic: bool
 
-    def __init__(self, region, name, location_id, world_positions: [WorldPosition] = None, event=False):
+    def __init__(self, region, name, location_id, world_positions: [WorldPosition] = None, event=False,
+                 needs_bat_logic: bool = False):
         self.region = region
         self.name = name
         self.world_positions = world_positions
@@ -53,6 +54,7 @@ class LocationData:
         self.event = event
         if world_positions is None and not event:
             self.room_id = self.short_location_id
+        self.needs_bat_logic = needs_bat_logic
 
     def get_position(self, random):
         if self.world_positions is None or len(self.world_positions) == 0:
@@ -94,14 +96,6 @@ def get_random_room_in_regions(regions: [str], random) -> int:
     return random.choice(list(possible_rooms.keys()))
 
 
-# TODO - check locations in each room against key to ensure they are visible
-# TODO: And add more specific locations, especially for blue labyrinth.  Red could
-# TODO: use some too
-# TODO: And also improve the names
-# TODO: Possibly consolidate some locations into a smaller number of multi-room locations
-# TODO: Such as only having 2 blue labyrinth locations that still cover all 5 rooms
-# TODO: Probably eliminate about 10 locations that way.  Maybe an option for 'condensed locations'
-# TODO: That, combined with 3 new items, would put half the locations in play
 location_table = {
     "Blue Labyrinth 0": LocationData("Overworld", "Blue Labyrinth 0", 0x4,
                                      [WorldPosition(0x4, 0x83, 0x47),  # exit upper right
@@ -137,7 +131,8 @@ location_table = {
                              [WorldPosition(0x13),
                               WorldPosition(0x14)]),
     "Dungeon Vault": LocationData("BlackCastleVault", "Dungeon Vault", 0xB5,
-                                  [WorldPosition(0x15, 0x46, 0x1B)]),
+                                  [WorldPosition(0x15, 0x46, 0x1B)],
+                                  needs_bat_logic=True),
     "Dungeon1": LocationData("BlackCastle", "Dungeon1", 0x15,
                              [WorldPosition(0x15),
                               WorldPosition(0x16)]),
@@ -149,9 +144,11 @@ location_table = {
                               WorldPosition(0x18, 0x70, 0x3F),  # right side second room
                               ]),
     "Red Maze Vault Entrance": LocationData("WhiteCastlePreVaultPeek", "Red Maze Vault Entrance", 0xB7,
-                                            [WorldPosition(0x17, 0x50, 0x60)]),
+                                            [WorldPosition(0x17, 0x50, 0x60)],
+                                            needs_bat_logic=True),
     "Red Maze Vault": LocationData("WhiteCastleVault", "Red Maze Vault", 0x19,
-                                   [WorldPosition(0x19, 0x4E, 0x35)]),
+                                   [WorldPosition(0x19, 0x4E, 0x35)],
+                                   needs_bat_logic=True),
     "RedMaze1": LocationData("WhiteCastle", "RedMaze1", 0x1A),  # entrance
     "Black Castle Foyer": LocationData("BlackCastle", "Black Castle Foyer", 0x1B),
     "Northeast of Catacombs": LocationData("Overworld", "Northeast of Catacombs", 0x1C),
@@ -159,7 +156,8 @@ location_table = {
     "Credits Left Side": LocationData("CreditsRoom", "Credits Left Side", 0x1E,
                                       [WorldPosition(0x1E, 0x25, 0x50)]),
     "Credits Right Side": LocationData("CreditsRoomFarSide", "Credits Right Side", 0xBE,
-                                       [WorldPosition(0x1E, 0x70, 0x40)]),
+                                       [WorldPosition(0x1E, 0x70, 0x40)],
+                                       needs_bat_logic=True),
     "Chalice Home": LocationData("YellowCastle", "Chalice Home", None, event=True)
 }
 

@@ -511,6 +511,12 @@ function main()
         local bat_carrying_item = u8(batCarryAddress)
         local bat_carrying_ap_item = (BatAPItemRam == bat_carrying_item)
 
+        if current_player_room == 0x1E then
+            if u8(PlayerRoomAddr + 1) > 0x4B then
+                memory.write_u8(PlayerRoomAddr + 1, 0x4B)
+            end
+        end
+
         if bat_room ~= prev_bat_room then
             if bat_carrying_ap_item then
                 if foreign_items_by_room[prev_bat_room] ~= nil then

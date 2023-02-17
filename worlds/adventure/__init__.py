@@ -275,6 +275,7 @@ class AdventureWorld(World):
         foreign_item_locations: [LocationData] = []
         auto_collect_locations: [AdventureAutoCollectLocation] = []
         local_item_to_location: {int, int} = {}
+        bat_no_touch_locs: [LocationData] = []
         try:
             rom_bytearray = bytearray(apply_basepatch(get_base_rom_bytes()))
             self.place_dragons(rom_bytearray)
@@ -302,7 +303,8 @@ class AdventureWorld(World):
                     item_position_data_start = item_position_table + item_ram_address - items_ram_start
                     location_data = location_table[location.name]
                     room_x, room_y = location_data.get_position(self.multiworld.per_slot_randoms[self.player])
-
+                    if location_data.needs_bat_logic and self.bat_logic == 0x0:
+                        bat_no_touch_locs.append(location_data)
                     del unplaced_local_items[location.item.name]
 
                     rom_bytearray[item_position_data_start:item_position_data_start + 1] = \
@@ -318,6 +320,8 @@ class AdventureWorld(World):
                     if location.item.code != nothing_item_id:
                         location_data = location_table[location.name]
                         foreign_item_locations.append(location_data)
+                        if location_data.needs_bat_logic and self.bat_logic == 0x0:
+                            bat_no_touch_locs.append(location_data)
                     else:
                         location_data = location_table[location.name]
                         auto_collect_locations.append(AdventureAutoCollectLocation(location_data.short_location_id,
@@ -343,7 +347,7 @@ class AdventureWorld(World):
                                         autocollect=auto_collect_locations, local_item_locations=local_item_to_location,
                                         dragon_speed_reducer_info=self.dragon_speed_reducer_info,
                                         diff_a_mode=self.difficulty_switch_a, diff_b_mode=self.difficulty_switch_b,
-                                        bat_logic=self.bat_logic,
+                                        bat_logic=self.bat_logic, bat_no_touch_locations=bat_no_touch_locs,
                                         seed_name=bytes(self.multiworld.seed_name, encoding="ascii"))
             patch.write()
         finally:
