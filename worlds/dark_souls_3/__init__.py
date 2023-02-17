@@ -295,25 +295,25 @@ class DarkSouls3World(World):
             # Randomize some weapons upgrades
             if self.multiworld.randomize_weapons_level[self.player] in [1, 3]:  # Options are either all or +5
                 for name in weapons_upgrade_5_table.keys():
-                    if self.multiworld.random.randint(1, 100) < weapons_percentage:
+                    if self.multiworld.per_slot_random[self.player].randint(1, 100) < weapons_percentage:
                         value = self.multiworld.random.randint(min_5, max_5)
                         item_dictionary_copy[name] += value
 
             if self.multiworld.randomize_weapons_level[self.player] in [1, 2]:  # Options are either all or +10
                 for name in weapons_upgrade_10_table.keys():
-                    if self.multiworld.random.randint(1, 100) < weapons_percentage:
+                    if self.multiworld.per_slot_random[self.player].randint(1, 100) < weapons_percentage:
                         value = self.multiworld.random.randint(min_10, max_10)
                         item_dictionary_copy[name] += value
 
             if self.multiworld.randomize_weapons_level[self.player] in [1, 3]:
                 for name in dlc_weapons_upgrade_5_table.keys():
-                    if self.multiworld.random.randint(1, 100) < weapons_percentage:
+                    if self.multiworld.per_slot_random[self.player].randint(1, 100) < weapons_percentage:
                         value = self.multiworld.random.randint(min_5, max_5)
                         item_dictionary_copy[name] += value
 
             if self.multiworld.randomize_weapons_level[self.player] in [1, 2]:
                 for name in dlc_weapons_upgrade_10_table.keys():
-                    if self.multiworld.random.randint(1, 100) < weapons_percentage:
+                    if self.multiworld.per_slot_random[self.player].randint(1, 100) < weapons_percentage:
                         value = self.multiworld.random.randint(min_10, max_10)
                         item_dictionary_copy[name] += value
 
