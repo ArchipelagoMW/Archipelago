@@ -135,6 +135,8 @@ class ValidInventory:
                     if item in existing_items:
                         existing_items.remove(item)
 
+        if self.min_units_per_structure > 0 and self.has_units_per_structure():
+            requirements.append(lambda state: state.has_units_per_structure())
 
         def attempt_removal(item: Item) -> bool:
             # If item can be removed and has associated items, remove them as well
@@ -148,6 +150,10 @@ class ValidInventory:
                     locked_items.append(item)
                     return False
             return True
+
+        # Determining if the full-size inventory can complete campaign
+        if not all(requirement(self) for requirement in requirements):
+            raise Exception("Too many items excluded - campaign is impossible to complete.")
 
         while len(inventory) + len(locked_items) > inventory_size:
             if len(inventory) == 0:
