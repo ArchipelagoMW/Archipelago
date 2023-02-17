@@ -17,7 +17,7 @@ class Overcooked2Test(unittest.TestCase):
         for item_name in item_table.keys():
             item: Item = item_table[item_name]
             self.assertGreaterEqual(item.code, oc2_base_id, "Overcooked Item ID out of range")
-            self.assertLessEqual(item.code, item_table["Calmer Unbread"].code, "Overcooked Item ID out of range")
+            self.assertLessEqual(item.code, item_table["Emote Wheel"].code, "Overcooked Item ID out of range")
 
             if previous_item is not None:
                 self.assertEqual(item.code, previous_item + 1,
@@ -31,7 +31,7 @@ class Overcooked2Test(unittest.TestCase):
             self.assertIn(item_name, item_table.keys(), "Unexpected Overcooked Item in item_frequencies")
 
         for item_name in item_name_to_config_name.keys():
-            self.assertIn(item_name, item_table.keys(), "Unexpected Overcooked Item in config mapping")
+            self.assertIn(item_name, item_table.keys(), "Unexpected config in item-config mapping")
 
         for config_name in item_name_to_config_name.values():
             self.assertIn(config_name, vanilla_values.keys(), "Unexpected Overcooked Item in default config mapping")

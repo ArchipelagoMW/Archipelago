@@ -46,10 +46,10 @@ class Overcooked2World(World):
 
     game = "Overcooked! 2"
     web = Overcooked2Web()
-    required_client_version = (0, 3, 7)
+    required_client_version = (0, 3, 8)
     option_definitions = overcooked_options
     topology_present: bool = False
-    data_version = 2
+    data_version = 3
 
     item_name_to_id = item_name_to_id
     item_id_to_name = item_id_to_name
@@ -340,7 +340,16 @@ class Overcooked2World(World):
         # useful = list()
         # filler = list()
         # progression = list()
-        for item_name in item_table:
+        for item_name in item_table:            
+            if item_name in item_frequencies:
+                freq = item_frequencies[item_name]
+            else:
+                freq = 1
+            
+            if freq <= 0:
+                # not used
+                continue
+
             if not self.options["ShuffleLevelOrder"] and item_name in ITEMS_TO_EXCLUDE_IF_NO_DLC:
                 # skip DLC items if no DLC
                 continue
@@ -364,15 +373,10 @@ class Overcooked2World(World):
                     # filler.append(item_name)
                     classification = ItemClassification.filler
 
-            if item_name in item_frequencies:
-                freq = item_frequencies[item_name]
-
-                while freq > 0:
-                    self.itempool.append(self.create_item(item_name, classification))
-                    classification = ItemClassification.useful  # only the first progressive item can be progression
-                    freq -= 1
-            else:
+            while freq > 0:
                 self.itempool.append(self.create_item(item_name, classification))
+                classification = ItemClassification.useful  # only the first progressive item can be progression
+                freq -= 1
 
         # print(f"progression: {progression}")
         # print(f"useful: {useful}")
@@ -526,7 +530,14 @@ class Overcooked2World(World):
             "DisableCatch": True,
             "DisableControlStick": True,
             "DisableWokDrag": True,
-            "DisableRampButton": True,
+            # "DisableRampButton": True, # Unused
+            "DisableGreenRampButton" : True,
+            "DisableYellowRampButton" : True,
+            "DisableBlueRampButton" : True,
+            "DisablePinkRampButton" : True,
+            "DisableGreyRampButton" : True,
+            "DisableRedRampButton" : True,
+            "DisablePurpleRampButton" : True,
             "WashTimeMultiplier": 1.4,
             "BurnSpeedMultiplier": 1.43,
             "MaxOrdersOnScreenOffset": -2,
