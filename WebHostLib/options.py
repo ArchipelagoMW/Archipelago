@@ -58,6 +58,7 @@ def create():
     for game_name, world in AutoWorldRegister.world_types.items():
 
         all_options: typing.Dict[str, Options.AssembleOptions] = {
+            **get_annotations(Options.CommonOptions, eval_str=True),
             **get_annotations(Options.PerGameCommonOptions, eval_str=True),
             **get_annotations(world.options_dataclass, eval_str=True)
         }
