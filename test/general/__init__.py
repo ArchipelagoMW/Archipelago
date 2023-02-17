@@ -6,7 +6,7 @@ from worlds.AutoWorld import call_all
 gen_steps = ["generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill"]
 
 
-def setup_default_world(world_type) -> MultiWorld:
+def setup_solo_multiworld(world_type) -> MultiWorld:
     multiworld = MultiWorld(1)
     multiworld.game[1] = world_type.game
     multiworld.player_name = {1: "Tester"}
