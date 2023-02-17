@@ -208,18 +208,7 @@ class PokemonRedBlueWorld(World):
         process_wild_pokemon(self)
         process_static_pokemon(self)
 
-        intervene = []
-        test_state = self.multiworld.get_all_state(False)
-        if not test_state.pokemon_rb_can_surf(self.player):
-            intervene.append("Surf")
-        if not test_state.pokemon_rb_can_strength(self.player):
-            intervene.append("Strength")
-        if self.multiworld.accessibility[self.player].current_key != "minimal":
-            if not test_state.pokemon_rb_can_cut(self.player):
-                intervene.append("Cut")
-            if not test_state.pokemon_rb_can_flash(self.player):
-                intervene.append("Flash")
-        for move in intervene:
+        def intervene(move):
             accessible_slots = [loc for loc in self.multiworld.get_reachable_locations(test_state, self.player) if loc.type == "Wild Encounter"]
             move_bit = pow(2, poke_data.hm_moves.index(move) + 2)
             viable_mons = [mon for mon in self.local_poke_data if self.local_poke_data[mon]["tms"][6] & move_bit]
@@ -235,6 +224,19 @@ class PokemonRedBlueWorld(World):
             replace_slot = self.multiworld.random.choice([slot for slot in accessible_slots if slot.item.name == placed_mon])
             replace_mon = self.multiworld.random.choice(viable_mons)
             replace_slot.item = self.create_item(replace_mon)
+        test_state = self.multiworld.get_all_state(False)
+        if not test_state.pokemon_rb_can_surf(self.player):
+            intervene("Surf")
+            test_state = self.multiworld.get_all_state(False)
+        if not test_state.pokemon_rb_can_strength(self.player):
+            intervene("Strength")
+            test_state = self.multiworld.get_all_state(False)
+        if self.multiworld.accessibility[self.player].current_key != "minimal":
+            if not test_state.pokemon_rb_can_cut(self.player):
+                intervene("Cut")
+            test_state = self.multiworld.get_all_state(False)
+            if not test_state.pokemon_rb_can_flash(self.player):
+                intervene("Flash")
 
         if self.multiworld.old_man[self.player].value == 1:
             self.multiworld.local_early_items[self.player]["Oak's Parcel"] = 1
