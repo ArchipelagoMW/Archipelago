@@ -83,9 +83,6 @@ def get_alttp_id(item_name):
     return Items.item_table[item_name][2]
 
 
-app.jinja_env.filters["location_name"] = lambda location: lookup_any_location_id_to_name.get(location, location)
-app.jinja_env.filters['item_name'] = lambda id: lookup_any_item_id_to_name.get(id, id)
-
 links = {"Bow": "Progressive Bow",
          "Silver Arrows": "Progressive Bow",
          "Silver Bow": "Progressive Bow",
@@ -258,7 +255,10 @@ def get_static_room_data(room: Room):
     # in > 100 players this can take a bit of time and is the main reason for the cache
     locations: Dict[int, Dict[int, Tuple[int, int, int]]] = multidata['locations']
     names: Dict[int, Dict[int, str]] = multidata["names"]
+    games = {}
     groups = {}
+    custom_locations = {}
+    custom_items = {}
     if "slot_info" in multidata:
         games = {slot: slot_info.game for slot, slot_info in multidata["slot_info"].items()}
         groups = {slot: slot_info.group_members for slot, slot_info in multidata["slot_info"].items()
@@ -266,9 +266,9 @@ def get_static_room_data(room: Room):
 
         for game in games.values():
             if game in multidata["datapackage"]:
-                lookup_any_location_id_to_name.update(
+                custom_locations.update(
                     {id: name for name, id in multidata["datapackage"][game]["location_name_to_id"].items()})
-                lookup_any_item_id_to_name.update(
+                custom_items.update(
                     {id: name for name, id in multidata["datapackage"][game]["item_name_to_id"].items()})
     elif "games" in multidata:
         games = multidata["games"]
@@ -292,7 +292,8 @@ def get_static_room_data(room: Room):
                                if playernumber not in groups}
     saving_second = get_saving_second(multidata["seed_name"])
     result = locations, names, use_door_tracker, player_checks_in_area, player_location_to_area, \
-             multidata["precollected_items"], games, multidata["slot_data"], groups, saving_second
+             multidata["precollected_items"], games, multidata["slot_data"], groups, saving_second, \
+             custom_locations, custom_items
     _multidata_cache[room.seed.id] = result
     return result
 
@@ -319,7 +320,8 @@ def _get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, w
 
     # Collect seed information and pare it down to a single player
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
-        precollected_items, games, slot_data, groups, saving_second = get_static_room_data(room)
+        precollected_items, games, slot_data, groups, saving_second, custom_locations, custom_items = \
+        get_static_room_data(room)
     player_name = names[tracked_team][tracked_player - 1]
     location_to_area = player_location_to_area[tracked_player]
     inventory = collections.Counter()
@@ -361,7 +363,7 @@ def _get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, w
                                 seed_checks_in_area, checks_done, slot_data[tracked_player], saving_second)
     else:
         tracker =  __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
-                                      seed_checks_in_area, checks_done, saving_second)
+                                      seed_checks_in_area, checks_done, saving_second, custom_locations, custom_items)
 
     return (saving_second - datetime.datetime.now().second) % 60 or 60, tracker
 
@@ -1204,7 +1206,7 @@ def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict
 def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                            inventory: Counter, team: int, player: int, playerName: str,
                            seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int],
-                           saving_second: int) -> str:
+                           saving_second: int, custom_locations: Dict[int, str], custom_items: Dict[int, str]) -> str:
 
     checked_locations = multisave.get("location_checks", {}).get((team, player), set())
     player_received_items = {}
@@ -1216,6 +1218,9 @@ def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dic
     # add numbering to all items but starter_inventory
     for order_index, networkItem in enumerate(ordered_items, start=1):
         player_received_items[networkItem.item] = order_index
+
+    app.jinja_env.filters["location_name"] = lambda loc: collections.ChainMap(lookup_any_location_id_to_name, custom_locations).get(loc, loc)
+    app.jinja_env.filters["item_name"] = lambda item: collections.ChainMap(lookup_any_item_id_to_name, custom_items).get(item, item)
 
     return render_template("genericTracker.html",
                            inventory=inventory,
@@ -1233,7 +1238,8 @@ def getTracker(tracker: UUID):
     if not room:
         abort(404)
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
-        precollected_items, games, slot_data, groups, saving_second = get_static_room_data(room)
+        precollected_items, games, slot_data, groups, saving_second, custom_locations, custom_items = \
+        get_static_room_data(room)
 
     inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1) if playernumber not in groups}
                  for teamnumber, team in enumerate(names)}
