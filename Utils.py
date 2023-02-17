@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import types
 import typing
 import builtins
 import os
@@ -680,6 +681,75 @@ def read_snes_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
 
 
 _faf_tasks: "Set[asyncio.Task[None]]" = set()
+
+
+def get_annotations(obj, *, globals=None, locals=None, eval_str=False):
+    """
+    Shamelessly copy pasted implementation of `inspect.get_annotations` from Python 3.10.
+    TODO remove this once Python 3.8 and 3.9 support is dropped and replace with `inspect.get_annotations`
+    """
+    if isinstance(obj, type):
+        # class
+        obj_dict = getattr(obj, "__dict__", None)
+        if obj_dict and hasattr(obj_dict, "get"):
+            ann = obj_dict.get("__annotations__", None)
+            if isinstance(ann, types.GetSetDescriptorType):
+                ann = None
+        else:
+            ann = None
+
+        obj_globals = None
+        module_name = getattr(obj, "__module__", None)
+        if module_name:
+            module = sys.modules.get(module_name, None)
+            if module_name:
+                module = sys.modules.get(module_name, None)
+                if module:
+                    obj_globals = getattr(module, "__dict__", None)
+        obj_locals = dict(vars(obj))
+        unwrap = obj
+    elif isinstance(obj, types.ModuleType):
+        # module
+        ann = getattr(obj, "__annotations__", None)
+        obj_globals = getattr(obj, "__dict__")
+        obj_locals = None
+        unwrap = None
+    elif callable(obj):
+        ann = getattr(obj, "__annotations__", None)
+        obj_globals = getattr(obj, "__globals__", None)
+        obj_locals = None
+        unwrap = obj
+    else:
+        raise TypeError(f"{obj!r} is not a module, class, or callable")
+
+    if ann is None:
+        return {}
+    if not isinstance(ann, dict):
+        raise ValueError(f"{obj!r}.__annotations__ is neither a dict nor None")
+    if not ann:
+        return {}
+    if not eval_str:
+        return dict(ann)
+    if unwrap is not None:
+        while True:
+            if hasattr(unwrap, "__wrapped__"):
+                unwrap = unwrap.__wrapped__
+                continue
+            if isinstance(unwrap, functools.partial):
+                unwrap = unwrap.func
+                continue
+            break
+        if hasattr(unwrap, "__globals__"):
+            obj_globals = unwrap.__globals__
+
+    if globals is None:
+        globals = obj_globals
+    if locals is None:
+        locals = obj_locals
+
+    return_value = {key: value if not isinstance(value, str) else eval(value, globals, locals)
+                    for key, value in ann.items()}
+    return return_value
 
 
 def async_start(co: Coroutine[typing.Any, typing.Any, bool], name: Optional[str] = None) -> None:
