@@ -71,8 +71,8 @@ def has_cyclops(state: "CollectionState", player: int) -> bool:
 
 
 def has_cyclops_depth_module_mk1(state: "CollectionState", player: int) -> bool:
-    return state.has("Cyclops Depth Module MK1", player) and \
-           has_modification_station(state, player)
+    # Crafted in the Cyclops, so we don't need to check for crafting station
+    return state.has("Cyclops Depth Module MK1", player)
 
 
 def has_cyclops_depth_module_mk2(state: "CollectionState", player: int) -> bool:
@@ -152,7 +152,7 @@ def has_ultra_glide_fins(state: "CollectionState", player: int) -> bool:
 def get_max_swim_depth(state: "CollectionState", player: int) -> int:
     swim_rule: SwimRule = state.multiworld.swim_rule[player]
     depth: int = swim_rule.base_depth
-    if swim_rule == swim_rule.consider_items:
+    if swim_rule.consider_items:
         if has_seaglide(state, player):
             if has_ultra_high_capacity_tank(state, player):
                 depth += 350  # It's about 800m. Give some room

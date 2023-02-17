@@ -155,3 +155,38 @@ def get_laser_shuffle():
 @cache_argsless
 def get_audio_logs():
     return get_adjustment_file("settings/Audio_Logs.txt")
+
+
+@cache_argsless
+def get_ep_all_individual():
+    return get_adjustment_file("settings/EP_Shuffle/EP_All.txt")
+
+
+@cache_argsless
+def get_ep_obelisks():
+    return get_adjustment_file("settings/EP_Shuffle/EP_Sides.txt")
+
+
+@cache_argsless
+def get_ep_easy():
+    return get_adjustment_file("settings/EP_Shuffle/EP_Easy.txt")
+
+
+@cache_argsless
+def get_ep_no_eclipse():
+    return get_adjustment_file("settings/EP_Shuffle/EP_NoEclipse.txt")
+
+
+@cache_argsless
+def get_ep_no_caves():
+    return get_adjustment_file("settings/EP_Shuffle/EP_NoCavesEPs.txt")
+
+
+@cache_argsless
+def get_ep_no_mountain():
+    return get_adjustment_file("settings/EP_Shuffle/EP_NoMountainEPs.txt")
+
+
+@cache_argsless
+def get_ep_no_videos():
+    return get_adjustment_file("settings/EP_Shuffle/EP_Videos.txt")
