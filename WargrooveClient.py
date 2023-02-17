@@ -18,7 +18,6 @@ import logging
 
 if __name__ == "__main__":
     Utils.init_logging("WargrooveClient", exception_logger="Client")
-    Utils.init_logging("WG", exception_logger="Client")
 
 from NetUtils import NetworkItem, ClientStatus
 from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \

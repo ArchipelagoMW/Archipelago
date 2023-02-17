@@ -73,8 +73,10 @@ def set_rules(world: MultiWorld, player: int):
     set_region_exit_rules(world.get_region('Mage Mayhem', player), [world.get_location('Mage Mayhem: Victory', player)])
 
     set_rule(world.get_location('Endless Knight: Victory', player),
-             lambda state: state._wargroove_has_item(player, 'Eastern Bridges') and
-                           state._wargroove_has_item(player, 'Spearman'))
+             lambda state: state._wargroove_has_item(player, 'Eastern Bridges') and (
+                           state._wargroove_has_item(player, 'Spearman') or
+                           state._wargroove_has_item(player, 'Harpy') or
+                           state._wargroove_has_item(player, 'Dragon')))
     set_region_exit_rules(world.get_region('Endless Knight', player),
                           [world.get_location('Endless Knight: Victory', player)])
 

@@ -36,11 +36,9 @@ class WargrooveWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
 
-    forced_auto_forfeit = True
-
     def _get_slot_data(self):
         return {
-            'seed': "".join(self.multiworld.slot_seeds[self.player].choice(string.ascii_letters) for i in range(16)),
+            'seed': "".join(self.multiworld.per_slot_randoms[self.player].choice(string.ascii_letters) for i in range(16)),
             'income_boost': self.multiworld.income_boost[self.player],
             'commander_defense_boost': self.multiworld.commander_defense_boost[self.player],
             'can_choose_commander': self.multiworld.commander_choice[self.player] != 0,
