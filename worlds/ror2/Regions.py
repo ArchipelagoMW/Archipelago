@@ -33,7 +33,7 @@ def create_regions(multiworld: MultiWorld, player: int):
         "Sulfur Pools":                         RoRRegionData([], ["OrderedStage_3"])
     }
     other_regions: Dict[str, RoRRegionData] = {
-        "Commencement":                         RoRRegionData(None, ["Victory"]),
+        "Commencement":                         RoRRegionData(None, ["Victory", "Petrichor V"]),
         "OrderedStage_5":                       RoRRegionData(None, ["Hidden Realm: A Moment, Fractured", "Commencement"]),
         "OrderedStage_1":                       RoRRegionData(None, ["Hidden Realm: Bazaar Between Time",
                                                 "Hidden Realm: Gilded Coast", "Abandoned Aqueduct", "Wetland Aspect"]),
