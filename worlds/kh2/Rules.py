@@ -68,15 +68,7 @@ def set_rules(world: MultiWorld, player: int):
     add_rule(world.get_location(LocationName.TransporttoRemembrance, player),
              lambda state:state.kh_transport(player))
 
-    # Option to be more in line of the current KH2 Randomizer
-    if world.Max_Logic[player].value == 0:
-        for location in CoR_Checks:
-            forbid_items(world.get_location(location, player), exclusionItem_table["Forms"])
-            forbid_item(world.get_location(location, player), "Torn Page", player)
-        for location in AG2_Checks:
-            forbid_items(world.get_location(location, player), exclusionItem_table["Forms"])
-            forbid_item(world.get_location(location, player), "Torn Page", player)
-        # forbid forms on forms
-        for location in Form_Checks:
-            forbid_items(world.get_location(location, player), exclusionItem_table["Forms"])
-            forbid_item(world.get_location(location, player), "Torn Page", player)
+
+
+
+

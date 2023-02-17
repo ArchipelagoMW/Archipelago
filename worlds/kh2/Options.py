@@ -141,12 +141,6 @@ class LevelDepth(Choice):
     default = 0
 
 
-class MaxLogic(Toggle):
-    """Forms on forms and torn pages in cor/ag"""
-    display_name = "Max Logic"
-    default = True
-
-
 class PromiseCharm(Toggle):
     """Add Promise Charm to the Pool"""
     display_name = "Promise Charm"
@@ -232,7 +226,6 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "RandomVisitLockingItem":RandomVisitLockingItem,
     "SuperBosses":         SuperBosses,
     "LevelDepth":          LevelDepth,
-    "Max_Logic":            MaxLogic,
     "Promise_Charm":        PromiseCharm,
     "KeybladeAbilities":    KeybladeAbilities,
     "BlacklistKeyblade":    BlacklistKeyblade,
