@@ -159,7 +159,7 @@ function receive()
     retTable["seedName"] = seedName
     memDomain.wram()
 
-    in_game = u8(InGameAddress_
+    in_game = u8(InGameAddress)
     if in_game == 0xAC then
         retTable["locations"] = generateLocationsChecked()
     elseif in_game ~= 0 then
@@ -170,12 +170,13 @@ function receive()
     retTable["deathLink"] = deathlink_send
 
     options = u8(OptionsAddress)
-    if bit.bor(options, 243) == 0:
+    if bit.band(options, 240) == 0 then
         retTable["options"] = bit.band(options, 12)
     else
         print("Game may have crashed")
         curstate = STATE_UNINITIALIZED
         return
+    end
 
     deathlink_send = false
     msg = json.encode(retTable).."\n"
