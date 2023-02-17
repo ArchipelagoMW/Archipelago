@@ -27,17 +27,62 @@ game: # Pick a game to play
   A Link to the Past: 1
 requires:
   version: 0.3.3 # Version of Archipelago required for this yaml to work as expected.
-# Shared Options supported by all games:
-accessibility:
-  items: 0 # Guarantees you will be able to acquire all items, but you may not be able to access all locations
-  locations: 50 # Guarantees you will be able to access all locations, and therefore all items
-  none: 0 # Guarantees only that the game is beatable. You may not be able to access all locations or acquire all items
-progression_balancing: # A system to reduce BK, as in times during which you can't do anything, by moving your items into an earlier access sphere
-  0: 0 # Choose a lower number if you don't mind a longer multiworld, or can glitch/sequence break around missing items.
-  25: 0
-  50: 50 # Make it likely you have stuff to do.
-  99: 0 # Get important items early, and stay at the front of the progression.
 A Link to the Past:
+  progression_balancing:
+    # A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
+    # A lower setting means more getting stuck. A higher setting means less getting stuck.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 99
+    random: 0
+    random-low: 0
+    random-high: 0
+    disabled: 0 # equivalent to 0
+    normal: 50 # equivalent to 50
+    extreme: 0 # equivalent to 99
+
+  accessibility:
+    # Set rules for reachability of your items/locations.
+    # Locations: ensure everything can be reached and acquired.
+    # Items: ensure all logically relevant items can be acquired.
+    # Minimal: ensure what is needed to reach your goal can be acquired.
+    locations: 0
+    items: 50
+    minimal: 0
+
+  local_items:
+    # Forces these items to be in their native world.
+    [ ]
+
+  non_local_items:
+    # Forces these items to be outside their native world.
+    [ ]
+
+  start_inventory:
+    # Start with these items.
+    { }
+
+  start_hints:
+    # Start with these item's locations prefilled into the !hint command.
+    [ ]
+
+  start_location_hints:
+    # Start with these locations and their item prefilled into the !hint command
+    [ ]
+
+  exclude_locations:
+    # Prevent these locations from having an important item
+    [ ]
+
+  priority_locations:
+    # Prevent these locations from having an unimportant item
+    [ ]
+
+  item_links:
+    # Share part of your item pool with other players.
+    [ ]
+
   ### Logic Section ###
   glitches_required: # Determine the logic required to complete the seed
     none: 50 # No glitches required
@@ -120,8 +165,8 @@ A Link to the Past:
   open_pyramid:
     goal: 50 # Opens the pyramid if the goal requires you to kill Ganon, unless the goal is Slow Ganon or All Dungeons
     auto: 0 # Same as Goal, but also is closed if holes are shuffled and ganon is part of the shuffle pool
-    yes: 0 # Pyramid hole is always open. Ganon's vulnerable condition is still required before he can he hurt
-    no: 0 # Pyramid hole is always closed until you defeat Agahnim atop Ganon's Tower
+    open: 0 # Pyramid hole is always open. Ganon's vulnerable condition is still required before he can he hurt
+    closed: 0 # Pyramid hole is always closed until you defeat Agahnim atop Ganon's Tower
   triforce_pieces_mode: #Determine how to calculate the extra available triforce pieces.
     extra: 0 # available = triforce_pieces_extra + triforce_pieces_required
     percentage: 0 # available = (triforce_pieces_percentage /100) * triforce_pieces_required

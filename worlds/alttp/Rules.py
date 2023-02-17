@@ -1,14 +1,18 @@
 import collections
 import logging
+from typing import Iterator, Set
+
 from worlds.alttp import OverworldGlitchRules
-from BaseClasses import RegionType, MultiWorld, Entrance
-from worlds.alttp.Items import ItemFactory, progression_items, item_name_groups
+from BaseClasses import MultiWorld, Entrance
+from worlds.alttp.Items import ItemFactory, progression_items, item_name_groups, item_table
 from worlds.alttp.OverworldGlitchRules import overworld_glitches_rules, no_logic_rules
+from worlds.alttp.Regions import location_table
 from worlds.alttp.UnderworldGlitchRules import underworld_glitches_rules
 from worlds.alttp.Bosses import GanonDefeatRule
 from worlds.generic.Rules import set_rule, add_rule, forbid_item, add_item_rule, item_in_locations, \
     item_name
 from worlds.alttp.Options import smallkey_shuffle
+from worlds.alttp.Regions import LTTPRegionType
 
 
 def set_rules(world):
@@ -176,6 +180,14 @@ def dungeon_boss_rules(world, player):
 def global_rules(world, player):
     # ganon can only carry triforce
     add_item_rule(world.get_location('Ganon', player), lambda item: item.name == 'Triforce' and item.player == player)
+    # dungeon prizes can only be crystals/pendants
+    crystals_and_pendants: Set[str] = \
+        {item for item, item_data in item_table.items() if item_data.type == "Crystal"}
+    prize_locations: Iterator[str] = \
+        (locations for locations, location_data in location_table.items() if location_data[2] == True)
+    for prize_location in prize_locations:
+        add_item_rule(world.get_location(prize_location, player),
+                      lambda item: item.name in crystals_and_pendants and item.player == player)
     # determines which S&Q locations are available - hide from paths since it isn't an in-game location
     world.get_region('Menu', player).can_reach_private = lambda state: True
     for exit in world.get_region('Menu', player).exits:
@@ -515,7 +527,7 @@ def default_rules(world, player):
     set_rule(world.get_entrance('Floating Island Mirror Spot', player), lambda state: state.has('Magic Mirror', player))
     set_rule(world.get_entrance('Turtle Rock', player), lambda state: state.has('Moon Pearl', player) and state.has_sword(player) and state.has_turtle_rock_medallion(player) and state.can_reach('Turtle Rock (Top)', 'Region', player))  # sword required to cast magic (!)
 
-    set_rule(world.get_entrance('Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.open_pyramid[player])
+    set_rule(world.get_entrance('Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.open_pyramid[player].to_bool(world, player))
 
     if world.swordless[player]:
         swordless_rules(world, player)
@@ -1412,7 +1424,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
                 return lambda state: state.has('Magic Mirror', player) and state.has_sword(player) or state.has('Moon Pearl', player)
             if region.name in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
                 return lambda state: state.has('Magic Mirror', player) or state.has('Moon Pearl', player)
-            if region.type == RegionType.Dungeon:
+            if region.type == LTTPRegionType.Dungeon:
                 return lambda state: True
             if (((location is None or location.name not in OverworldGlitchRules.get_superbunny_accessible_locations())
                     or (connecting_entrance is not None and connecting_entrance.name in OverworldGlitchRules.get_invalid_bunny_revival_dungeons()))
@@ -1456,7 +1468,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
                                 possible_options.append(lambda state: path_to_access_rule(new_path, entrance))
                             else:
                                 possible_options.append(lambda state: path_to_access_rule(new_path, entrance) and state.has('Magic Mirror', player))
-                        if new_region.type != RegionType.Cave:
+                        if new_region.type != LTTPRegionType.Cave:
                             continue
                     else:
                         continue
@@ -1484,8 +1496,8 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
     for entrance in world.get_entrances():
         if entrance.player == player and is_bunny(entrance.connected_region):
             if world.logic[player] in ['minorglitches', 'owglitches', 'hybridglitches', 'nologic'] :
-                if entrance.connected_region.type == RegionType.Dungeon:
-                    if entrance.parent_region.type != RegionType.Dungeon and entrance.connected_region.name in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
+                if entrance.connected_region.type == LTTPRegionType.Dungeon:
+                    if entrance.parent_region.type != LTTPRegionType.Dungeon and entrance.connected_region.name in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
                         add_rule(entrance, get_rule_to_add(entrance.connected_region, None, entrance))
                     continue
                 if entrance.connected_region.name == 'Turtle Rock (Entrance)':

@@ -17,7 +17,7 @@ from .ExtractedData import locations, starts, multi_locations, location_to_regio
     event_names, item_effects, connectors, one_ways, vanilla_shop_costs, vanilla_location_costs
 from .Charms import names as charm_names
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, LocationProgressType, Tutorial, ItemClassification
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, LocationProgressType, Tutorial, ItemClassification
 from ..AutoWorld import World, LogicMixin, WebWorld
 
 path_of_pain_locations = {
@@ -318,14 +318,15 @@ class HKWorld(World):
             if not self.multiworld.EggShopSlots[self.player].value:  # No eggshop, so don't place items there
                 shops.remove('Egg_Shop')
 
-            for _ in range(additional_shop_items):
-                shop = self.multiworld.random.choice(shops)
-                loc = self.create_location(shop)
-                unfilled_locations += 1
-                if len(self.created_multi_locations[shop]) >= 16:
-                    shops.remove(shop)
-                    if not shops:
-                        break
+            if shops:
+                for _ in range(additional_shop_items):
+                    shop = self.multiworld.random.choice(shops)
+                    loc = self.create_location(shop)
+                    unfilled_locations += 1
+                    if len(self.created_multi_locations[shop]) >= 16:
+                        shops.remove(shop)
+                        if not shops:
+                            break
 
         # Create filler items, if needed
         if item_count < unfilled_locations:
@@ -445,7 +446,7 @@ class HKWorld(World):
                 options[option_name] = optionvalue
 
         # 32 bit int
-        slot_data["seed"] = self.multiworld.slot_seeds[self.player].randint(-2147483647, 2147483646)
+        slot_data["seed"] = self.multiworld.per_slot_randoms[self.player].randint(-2147483647, 2147483646)
 
         # Backwards compatibility for shop cost data (HKAP < 0.1.0)
         if not self.multiworld.CostSanity[self.player]:
@@ -584,17 +585,13 @@ class HKWorld(World):
         return self.multiworld.random.choice(self.cached_filler_items[self.player])
 
 
-def create_region(world: MultiWorld, player: int, name: str, location_names=None, exits=None) -> Region:
-    ret = Region(name, RegionType.Generic, name, player)
-    ret.multiworld = world
+def create_region(world: MultiWorld, player: int, name: str, location_names=None) -> Region:
+    ret = Region(name, player, world)
     if location_names:
         for location in location_names:
             loc_id = HKWorld.location_name_to_id.get(location, None)
             location = HKLocation(player, location, loc_id, ret)
             ret.locations.append(location)
-    if exits:
-        for exit in exits:
-            ret.exits.append(Entrance(player, exit, ret))
     return ret
 
 

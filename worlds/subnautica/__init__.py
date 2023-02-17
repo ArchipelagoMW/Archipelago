@@ -1,7 +1,7 @@
 import logging
 from typing import List, Dict, Any
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, RegionType
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from . import Items
 from . import Locations
@@ -34,21 +34,21 @@ class SubnauticaWorld(World):
     an unknown bacteria. The planet's automatic quarantine will shoot you down if you try to leave.
     You must find a cure for yourself, build an escape rocket, and leave the planet.
     """
-    game: str = "Subnautica"
+    game = "Subnautica"
     web = SubnaticaWeb()
 
     item_name_to_id = {data["name"]: item_id for item_id, data in Items.item_table.items()}
     location_name_to_id = all_locations
     option_definitions = Options.options
 
-    data_version = 7
-    required_client_version = (0, 3, 5)
+    data_version = 8
+    required_client_version = (0, 3, 8)
 
     creatures_to_scan: List[str]
 
     def generate_early(self) -> None:
-        if "Seaglide Fragment" not in self.multiworld.early_items[self.player]:
-            self.multiworld.early_items[self.player].value["Seaglide Fragment"] = 2
+        if self.multiworld.early_seaglide[self.player]:
+            self.multiworld.local_early_items[self.player]["Seaglide Fragment"] = 2
 
         scan_option: Options.AggressiveScanLogic = self.multiworld.creature_scan_logic[self.player]
         creature_pool = scan_option.get_pool()
@@ -112,6 +112,7 @@ class SubnauticaWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         goal: Options.Goal = self.multiworld.goal[self.player]
         item_pool: Options.ItemPool = self.multiworld.item_pool[self.player]
+        swim_rule: Options.SwimRule = self.multiworld.swim_rule[self.player]
         vanilla_tech: List[str] = []
         if item_pool == Options.ItemPool.option_valuable:
             for item in Items.item_table.values():
@@ -120,6 +121,7 @@ class SubnauticaWorld(World):
 
         slot_data: Dict[str, Any] = {
             "goal": goal.current_key,
+            "swim_rule": swim_rule.current_key,
             "vanilla_tech": vanilla_tech,
             "creatures_to_scan": self.creatures_to_scan,
             "death_link": self.multiworld.death_link[self.player].value,
@@ -135,8 +137,7 @@ class SubnauticaWorld(World):
                               item_id, player=self.player)
 
     def create_region(self, name: str, locations=None, exits=None):
-        ret = Region(name, RegionType.Generic, name, self.player)
-        ret.multiworld = self.multiworld
+        ret = Region(name, self.player, self.multiworld)
         if locations:
             for location in locations:
                 loc_id = self.location_name_to_id.get(location, None)
