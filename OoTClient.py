@@ -179,6 +179,12 @@ async def parse_payload(payload: dict, ctx: OoTContext, force: bool):
     locations = payload['locations']
     collectibles = payload['collectibles']
 
+    # The Lua JSON library serializes an empty table into a list instead of a dict. Verify types for safety:
+    if isinstance(locations, list):
+        locations = {}
+    if isinstance(collectibles, list):
+        collectibles = {}
+
     if ctx.location_table != locations or ctx.collectible_table != collectibles:
         ctx.location_table = locations
         ctx.collectible_table = collectibles
