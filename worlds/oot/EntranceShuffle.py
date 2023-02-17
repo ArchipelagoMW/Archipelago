@@ -458,11 +458,11 @@ def shuffle_random_entrances(ootworld):
         one_way_entrance_pools['OwlDrop'] = ootworld.get_shufflable_entrances(type='OwlDrop')
     if ootworld.warp_songs:
         one_way_entrance_pools['WarpSong'] = ootworld.get_shufflable_entrances(type='WarpSong')
-        if ootworld.logic_rules == 'glitchless':
-            one_way_priorities['Bolero'] = priority_entrance_table['Bolero']
-            one_way_priorities['Nocturne'] = priority_entrance_table['Nocturne']
-            if not ootworld.shuffle_dungeon_entrances and not ootworld.shuffle_overworld_entrances:
-                one_way_priorities['Requiem'] = priority_entrance_table['Requiem']
+        # No more exceptions for NL here, causes cascading failures later
+        one_way_priorities['Bolero'] = priority_entrance_table['Bolero']
+        one_way_priorities['Nocturne'] = priority_entrance_table['Nocturne']
+        if not ootworld.shuffle_dungeon_entrances and not ootworld.shuffle_overworld_entrances:
+            one_way_priorities['Requiem'] = priority_entrance_table['Requiem']
     if ootworld.spawn_positions:
         one_way_entrance_pools['Spawn'] = ootworld.get_shufflable_entrances(type='Spawn')
         if 'child' not in ootworld.spawn_positions:
@@ -822,7 +822,7 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
                     raise EntranceShuffleError(f'{entrance.name} potentially accessible as adult')
 
     # Check if all locations are reachable if not NL
-    if ootworld.logic_rules != 'no_logic' and locations_to_ensure_reachable:
+    if locations_to_ensure_reachable:
         for loc in locations_to_ensure_reachable:
             if not all_state.can_reach(loc, 'Location', player):
                 raise EntranceShuffleError(f'{loc} is unreachable')

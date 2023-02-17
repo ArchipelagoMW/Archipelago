@@ -113,8 +113,8 @@ class TestPlandoBosses(unittest.TestCase):
         """Test automatic singularity mode"""
         self.assertIn(";singularity", MultiBosses.from_any("b2").value)
 
-    def testPlandoSettings(self):
-        """Test that plando settings verification works"""
+    def testPlandoOptions(self):
+        """Test that plando options verification works"""
         plandoed_string = "l1-b2;l2-b1"
         mixed_string = "l1-b2;shuffle"
         regular_string = "shuffle"
@@ -123,14 +123,14 @@ class TestPlandoBosses(unittest.TestCase):
         regular = MultiBosses.from_any(regular_string)
 
         # plando should work with boss plando
-        plandoed.verify(None, "Player", Generate.PlandoSettings.bosses)
+        plandoed.verify(None, "Player", Generate.PlandoOptions.bosses)
         self.assertTrue(plandoed.value.startswith(plandoed_string))
         # plando should fall back to default without boss plando
-        plandoed.verify(None, "Player", Generate.PlandoSettings.items)
+        plandoed.verify(None, "Player", Generate.PlandoOptions.items)
         self.assertEqual(plandoed, MultiBosses.option_vanilla)
         # mixed should fall back to mode
-        mixed.verify(None, "Player", Generate.PlandoSettings.items)  # should produce a warning and still work
+        mixed.verify(None, "Player", Generate.PlandoOptions.items)  # should produce a warning and still work
         self.assertEqual(mixed, MultiBosses.option_shuffle)
         # mode stuff should just work
-        regular.verify(None, "Player", Generate.PlandoSettings.items)
+        regular.verify(None, "Player", Generate.PlandoOptions.items)
         self.assertEqual(regular, MultiBosses.option_shuffle)

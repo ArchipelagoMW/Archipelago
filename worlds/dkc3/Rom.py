@@ -476,7 +476,7 @@ class LocalRom(object):
 
 
 def patch_rom(world, rom, player, active_level_list):
-    local_random = world.slot_seeds[player]
+    local_random = world.per_slot_randoms[player]
 
     # Boomer Costs
     bonus_coin_cost = world.krematoa_bonus_coin_cost[player]
