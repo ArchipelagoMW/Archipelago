@@ -175,6 +175,12 @@ class FreeFlyLocation(Toggle):
     default = 1
 
 
+class RandomizeRockTunnel(Toggle):
+    """Randomize the path through Rock Tunnel."""
+    display_name = "Randomize Rock Tunnel"
+    default = 1
+
+
 class OaksAidRt2(Range):
     """Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 2.
     Vanilla is 10."""
@@ -619,6 +625,7 @@ pokemon_rb_options = {
     "trainersanity": TrainerSanity,
     "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
     "free_fly_location": FreeFlyLocation,
+    "randomize_rock_tunnel": RandomizeRockTunnel,
     "oaks_aide_rt_2": OaksAidRt2,
     "oaks_aide_rt_11": OaksAidRt11,
     "oaks_aide_rt_15": OaksAidRt15,

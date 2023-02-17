@@ -8,6 +8,7 @@ from .text import encode_text
 from .rom_addresses import rom_addresses
 from .locations import location_data
 from .items import item_table
+from .rock_tunnel import randomize_rock_tunnel
 import worlds.pokemon_rb.poke_data as poke_data
 
 
@@ -73,6 +74,8 @@ def randomize_pokemon(self, mon, mons_list, randomize_type, random):
     elif randomize_type == 4:
         mon = random.choice(mons_list)
     return mon
+
+
 
 
 def set_mon_pallets(self, random, data):
@@ -292,6 +295,8 @@ def process_pokemon_data(self):
     learnsets = deepcopy(poke_data.learnsets)
     tms_hms = poke_data.tm_moves + poke_data.hm_moves
 
+    compat_hms = set()
+
     for mon, mon_data in local_poke_data.items():
         if self.multiworld.randomize_pokemon_stats[self.player].value == 1:
             stats = [mon_data["hp"], mon_data["atk"], mon_data["def"], mon_data["spd"], mon_data["spc"]]
@@ -401,7 +406,10 @@ def process_pokemon_data(self):
                 elif roll_move in poke_data.hm_moves:
                     if self.multiworld.hm_same_type_compatibility[self.player].value == -1:
                         return mon_data["tms"][int(flag / 8)]
-                    return self.multiworld.random.randint(1, 100) <= self.multiworld.hm_same_type_compatibility[self.player].value
+                    r = self.multiworld.random.randint(1, 100) <= self.multiworld.hm_same_type_compatibility[self.player].value
+                    if r and mon not in poke_data.legendary_pokemon:
+                        compat_hms.add(roll_move)
+                    return r
             elif poke_data.moves[roll_move]["type"] == "Normal" and "Normal" not in [mon_data["type1"], mon_data["type2"]]:
                 if roll_move in poke_data.tm_moves:
                     if self.multiworld.tm_normal_type_compatibility[self.player].value == -1:
@@ -410,7 +418,10 @@ def process_pokemon_data(self):
                 elif roll_move in poke_data.hm_moves:
                     if self.multiworld.hm_normal_type_compatibility[self.player].value == -1:
                         return mon_data["tms"][int(flag / 8)]
-                    return self.multiworld.random.randint(1, 100) <= self.multiworld.hm_normal_type_compatibility[self.player].value
+                    r = self.multiworld.random.randint(1, 100) <= self.multiworld.hm_normal_type_compatibility[self.player].value
+                    if r and mon not in poke_data.legendary_pokemon:
+                        compat_hms.add(roll_move)
+                    return r
             else:
                 if roll_move in poke_data.tm_moves:
                     if self.multiworld.tm_other_type_compatibility[self.player].value == -1:
@@ -419,7 +430,10 @@ def process_pokemon_data(self):
                 elif roll_move in poke_data.hm_moves:
                     if self.multiworld.hm_other_type_compatibility[self.player].value == -1:
                         return mon_data["tms"][int(flag / 8)]
-                    return self.multiworld.random.randint(1, 100) <= self.multiworld.hm_other_type_compatibility[self.player].value
+                    r = self.multiworld.random.randint(1, 100) <= self.multiworld.hm_other_type_compatibility[self.player].value
+                    if r and mon not in poke_data.legendary_pokemon:
+                        compat_hms.add(roll_move)
+                    return r
 
 
         for flag, tm_move in enumerate(tms_hms):
@@ -448,6 +462,18 @@ def process_pokemon_data(self):
             else:
                 mon_data["tms"][int(flag / 8)] &= ~(1 << (flag % 8))
 
+    hm_verify = ["Surf", "Strength"]
+    if self.multiworld.accessibility[self.player] != "minimal":
+        hm_verify += ["Cut"]
+        if self.multiworld.trainersanity[self.player] or self.multiworld.extra_key_items[self.player]:
+            hm_verify += ["Flash"]
+
+    for hm_move in hm_verify:
+        if hm_move not in compat_hms:
+            mon = self.multiworld.random.choice([mon for mon in poke_data.pokemon_data if mon not in
+                                                 poke_data.legendary_pokemon])
+            flag = tms_hms.index(hm_move)
+            local_poke_data[mon]["tms"][int(flag / 8)] |= 1 << (flag % 8)
 
     self.local_poke_data = local_poke_data
     self.learnsets = learnsets
@@ -666,6 +692,9 @@ def generate_output(self, output_directory: str):
         data[rom_addresses["Move_Data_FISSURE"] + 2] = 70  # 80 power
         data[rom_addresses["Move_Data_FISSURE"] + 4] = 90  # 90% accuracy
         data[rom_addresses["Move_Data_BLIZZARD"] + 4] = 70  # 70% accuracy
+
+
+    randomize_rock_tunnel(data, random)
 
 
 
