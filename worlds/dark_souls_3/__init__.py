@@ -1,7 +1,6 @@
 # world/dark_souls_3/__init__.py
 from typing import Dict
 
-from BaseClasses import MultiWorld, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
 from .Items import DarkSouls3Item
 from .Locations import DarkSouls3Location
 from .Options import dark_souls_options
@@ -15,6 +14,7 @@ from .data.locations_data import location_dictionary, fire_link_shrine_table, \
     untended_graves_table, archdragon_peak_table, firelink_shrine_bell_tower_table, progressive_locations, \
     progressive_locations_2, progressive_locations_3, painted_world_table, dreg_heap_table, ringed_city_table, dlc_progressive_locations
 from ..AutoWorld import World, WebWorld
+from BaseClasses import MultiWorld, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
 from ..generic.Rules import set_rule, add_item_rule
 
 
