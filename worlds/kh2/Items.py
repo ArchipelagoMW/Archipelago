@@ -54,7 +54,7 @@ Progression_Table = {
     ItemName.MembershipCard:        ItemData(0x13001A, 2, 369, 0x3643),
     ItemName.IceCream:              ItemData(0x13001B, 1, 375, 0x3649),
     ItemName.Picture:               ItemData(0x13001C, 1, 376, 0x364A),
-    ItemName.WaytotheDawn:          ItemData(0x13001D, 2, 73, 0x35C1),
+    ItemName.WaytotheDawn:          ItemData(0x13001D, 1, 73, 0x35C1),#currently first visit locking doesnt work for twtnw.When goa is updated should be 2
     ItemName.IdentityDisk:          ItemData(0x13001E, 2, 74, 0x35C2),
     ItemName.Poster:                ItemData(0x13001F, 1, 366, 0x3640),
     ItemName.TornPages:             ItemData(0x130020, 5, 32, 0x3598),
@@ -643,7 +643,6 @@ exclusionItem_table = {
     ItemName.Scimitar,
     ItemName.MembershipCard,
     ItemName.MembershipCard,
-    ItemName.WaytotheDawn,
     ItemName.WaytotheDawn,
     ItemName.IdentityDisk,
     ItemName.IdentityDisk,

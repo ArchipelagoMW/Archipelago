@@ -1237,6 +1237,7 @@ masterLevelRegions={
 #could add lod2 and bc2 as a qption since those spawns are rng
 finalLevelRegions={
     RegionName.TT3_Region,
+    RegionName.Twtnw_PostRoxas,
     RegionName.Twtnw2_Region,
 }
 

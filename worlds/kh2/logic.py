@@ -160,7 +160,8 @@ class KH2Logic(LogicMixin):
     def kh_basetools(self,player):
         #if option is easy then add reflect,gap closer and second chance&once more. #option east scom option normal adds gap closer or combo master #hard is what is right now
         return self.has(ItemName.Guard,player,1) and self.has(ItemName.AerialRecovery,player,1) and self.has(ItemName.FinishingPlus,player,1)
-
+    def kh_roxastools(self,player):
+        return (self.kh_basetools(player) and self.has(ItemName.QuickRun,player)) or self.has(ItemName.NegativeCombo, player, 2)
     def kh_painandpanic(self,player,visitlocking):
         return self.kh_goofylimit(player) and self.kh_donaldlimit(player) and self.kh_dc_unlocked(player,visitlocking)
     def kh_cerberuscup(self,player,visitlocking):
@@ -215,9 +216,10 @@ class KH2Logic(LogicMixin):
 
     def kh_sephi(self,player):
         return self.kh_dataxemnas(player)
-
+    def kh_onek(self,player):
+        return self.kh_reflect(player) or self.has(ItemName.Guard,player)
     def kh_terra(self,player):
-        return self.kh_basetools(player) and self.kh_dodgeroll(player,2) and self.kh_aerialdodge(player,2) and self.kh_glide(player,3)\
+        return self.has(ItemName.ProofofConnection,player) and self.kh_basetools(player) and self.kh_dodgeroll(player,2) and self.kh_aerialdodge(player,2) and self.kh_glide(player,3)\
         and (self.kh_comboplus(player,2) and self.has(ItemName.Explosion,player)) or (self.has(ItemName.NegativeCombo,player,2))
 
     def kh_cor(self,player):
@@ -230,5 +232,12 @@ class KH2Logic(LogicMixin):
         return self.kh_basetools(player) and self.kh_reflera(player)\
         and (self.kh_mastergenie(player) and self.kh_magnera(player) and self.kh_donaldlimit(player))\
         or (self.has(ItemName.FinalForm,player) and self.kh_form_level_unlocked(player, 4) and self.kh_fira(player))
+
+    def kh_gr2(self,player):
+        return (self.has(ItemName.MasterForm,player) or self.has(ItemName.Stitch ,player)) and (self.kh_fire(player) or self.kh_blizzard(player) or self.kh_thunder(player))
+    def kh_xaldin(self,player):
+        return self.kh_basetools(player) and(self.kh_donaldlimit(player) or self.kh_form_level_unlocked(player,1))
+    def kh_mcp(self,player):
+        return self.kh_reflect(player) and (self.has(ItemName.MasterForm,player) or self.has(ItemName.FinalForm,player))
 
 

@@ -25,27 +25,12 @@ from worlds import network_data_package
 kh2_loc_name_to_id = network_data_package["games"]["Kingdom Hearts 2"]["location_name_to_id"]
 
 
-class KH2CommandProcessor(ClientCommandProcessor):
-    def _cmd_autotrack(self):
-        """Start Autotracking"""
-        # hooking into the game
+#class KH2CommandProcessor(ClientCommandProcessor):
 
-        if self.ctx.kh2connected:
-            logger.info("You are already autotracking")
-            return
-        try:
-            self.ctx.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
-            logger.info("You are now auto-tracking")
-            self.ctx.kh2connected = True
-        except Exception as e:
-            if self.ctx.kh2connected:
-                logger.info("Connection Lost, Please /autotrack")
-                self.kh2connected = False
-            print(e)
 
 
 class KH2Context(CommonContext):
-    command_processor: int = KH2CommandProcessor
+    #command_processor: int = KH2CommandProcessor
     game = "Kingdom Hearts 2"
     items_handling = 0b101  # Indicates you get items sent from other worlds.
 
@@ -116,6 +101,9 @@ class KH2Context(CommonContext):
         self.BtlEnd = 0x2A0D3E0
         self.Slot1 = 0x2A20C98
 
+
+
+
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(KH2Context, self).server_auth(password_requested)
@@ -124,6 +112,7 @@ class KH2Context(CommonContext):
 
     async def connection_closed(self):
         self.kh2connected = False
+        self.serverconneced = False
         with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}.json"), 'w') as f:
             f.write(json.dumps(self.kh2seedsave, indent=4))
         await super(KH2Context, self).connection_closed()
@@ -158,6 +147,17 @@ class KH2Context(CommonContext):
                     self.kh2seedsave["checked_locations"].update({str(player.slot): []})
             self.kh2slotdata = args['slot_data']
             self.serverconneced = True
+            try:
+                self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
+                logger.info("You are now auto-tracking")
+                self.kh2connected = True
+            except Exception as e:
+                if self.kh2connected:
+                    logger.info("Connection Lost")
+                    self.kh2connected = False
+                print(e)
+
+
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
             if start_index != len(self.items_received):
@@ -186,7 +186,7 @@ class KH2Context(CommonContext):
                     asyncio.create_task(self.ItemSafe(args))
                 except Exception as e:
                     if self.kh2connected:
-                        logger.info("Connection Lost, Please /autotrack")
+                        logger.info("Connection Lost.")
                         self.kh2connected = False
                     print(e)
 
@@ -206,7 +206,7 @@ class KH2Context(CommonContext):
                         self.sending = self.sending + [(int(kh2_loc_name_to_id[location]))]
         except Exception as e:
             if self.kh2connected:
-                logger.info("Connection Lost, Please /autotrack")
+                logger.info("Connection Lost.")
                 self.kh2connected = False
             print(e)
 
@@ -231,7 +231,7 @@ class KH2Context(CommonContext):
                             self.sending = self.sending + [(int(kh2_loc_name_to_id[location]))]
         except Exception as e:
             if self.kh2connected:
-                logger.info("Connection Lost, Please /autotrack")
+                logger.info("Connection Lost.")
                 self.kh2connected = False
             print(e)
             # checks for items that has checks on their item slot
@@ -252,7 +252,7 @@ class KH2Context(CommonContext):
                         self.sending = self.sending + [(int(kh2_loc_name_to_id[location]))]
         except Exception as e:
             if self.kh2connected:
-                logger.info("Connection Lost, Please /autotrack")
+                logger.info("Connection Lost.")
                 self.kh2connected = False
             print(e)
 
@@ -312,7 +312,7 @@ class KH2Context(CommonContext):
                 self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,(amount + 1).to_bytes(1, 'big'), 1)
         except Exception as e:
             if self.kh2connected:
-                logger.info("Connection Lost, Please /autotrack")
+                logger.info("Connection Lost.")
                 self.kh2connected = False
             print(e)
 
@@ -324,30 +324,32 @@ class KH2Context(CommonContext):
             await self.roomSave(args, svestate)
         except Exception as e:
             if self.kh2connected:
-                logger.info("Connection Lost, Please /autotrack")
+                logger.info("Connection Lost.")
                 self.kh2connected = False
             print(e)
 
     async def roomSave(self, args, svestate):
         while svestate == self.kh2.read_short(self.kh2.base_address + self.sveroom):
             deathstate = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.onDeath, 2), "big")
-            if deathstate == 1280:
+            if deathstate in {1024,1280}:
                 # cannot give item on death screen so waits untill they are not dead
-                while deathstate == 1024 or deathstate == 1280:
+                while deathstate in {1024,1280}:
                     deathstate = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.onDeath, 2), "big")
                     await asyncio.sleep(0.5)
-                # give item because they have not room saved and are dead
-                for item in args['items']:
-                    itemname = self.lookup_id_to_item[item.item]
-                    itemcode = self.item_name_to_data[itemname]
-                    if itemname in exclusionItem_table["Ability"] and itemcode.memaddr not in {0x05E, 0x062, 0x066, 0x06A, 0x234}:
-                        self.kh2seedsave["SoraInvo"]+=2
-                    if itemname in DonaldAbility_Table.keys():
-                        asyncio.create_task(self.give_item(itemcode, "Donald"))
-                    elif itemname in GoofyAbility_Table.keys():
-                        asyncio.create_task(self.give_item(itemcode, "Goofy"))
-                    else:
-                        asyncio.create_task(self.give_item(itemcode, "Sora"))
+                # checking if the player is out of battle. If player gets mickey/peter pan there is no need for them to get the item again.
+                if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address +0x2A0EAC4+0x40,1),"big")==0:
+                    # give item because they have not room saved and are dead
+                    for item in args['items']:
+                        itemname = self.lookup_id_to_item[item.item]
+                        itemcode = self.item_name_to_data[itemname]
+                        if itemname in exclusionItem_table["Ability"] and itemcode.memaddr not in {0x05E, 0x062, 0x066, 0x06A, 0x234}:
+                            self.kh2seedsave["SoraInvo"]+=2
+                        if itemname in DonaldAbility_Table.keys():
+                            asyncio.create_task(self.give_item(itemcode, "Donald"))
+                        elif itemname in GoofyAbility_Table.keys():
+                            asyncio.create_task(self.give_item(itemcode, "Goofy"))
+                        else:
+                            asyncio.create_task(self.give_item(itemcode, "Sora"))
             await asyncio.sleep(1)
         try:
             for item in args['items']:
@@ -490,9 +492,12 @@ async def kh2_watcher(ctx: KH2Context):
                 await ctx.send_msgs(message)
             except Exception as e:
                 if ctx.kh2connected:
-                    logger.info("Connection Lost, Please /autotrack")
+                    logger.info("Connection Lost.")
                     ctx.kh2connected = False
                 print(e)
+        elif not ctx.kh2connected and ctx.serverconneced:
+            logger.info("Game has stopped auto tracking. Connection is now closing.")
+            await ctx.connection_closed()
         await asyncio.sleep(0.5)
 
 

@@ -76,8 +76,7 @@ class KH2World(World):
 
     def generate_basic(self):
         itempool: typing.List[KH2Item] = []
-        self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(self.create_item(ItemName.Victory))
-        self.totalLocations -= 1
+
         self.hitlist = list()
         RandomSuperBoss = list()
         filler_items = list()
@@ -86,7 +85,11 @@ class KH2World(World):
         donald_ability_pool = list()
         goofy_ability_pool = list()
         sora_keyblade_ability_pool = list()
-
+        if self.multiworld.FinalXemnas[self.player].value == 1:
+            self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(self.create_item(ItemName.Victory))
+        else:
+            self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(self.create_item(self.multiworld.per_slot_randoms[self.player].choice(filler_items)))
+        self.totalLocations -= 1
         if self.multiworld.KeybladeAbilities[self.player].value == 0:
             sora_keyblade_ability_pool.extend(Items.SupportAbility_Table.keys())
         elif self.multiworld.KeybladeAbilities[self.player].value == 1:

@@ -52,6 +52,7 @@ def set_rules(world: MultiWorld, player: int):
             world.completion_condition[player] = lambda state: state.kh_victory(player)
         else:
             world.completion_condition[player] = lambda state: state.kh_hitlist(player,world.BountyRequired[player].value)
+
     # Forbid Ablilites on popups due to game limitations
     for location in popupChecks:
         forbid_items(world.get_location(location, player), exclusionItem_table["Ability"])
@@ -61,36 +62,11 @@ def set_rules(world: MultiWorld, player: int):
         forbid_items(world.get_location(location, player), exclusionItem_table["StatUps"])
 
     # Santa's house also breaks with stat ups
-    forbid_items(world.get_location(LocationName.SantasHouseChristmasTownMap, player), exclusionItem_table["StatUps"])
-    forbid_items(world.get_location(LocationName.SantasHouseAPBoost, player), exclusionItem_table["StatUps"])
-
+    for location in {LocationName.SantasHouseChristmasTownMap,LocationName.SantasHouseAPBoost}:
+        forbid_items(world.get_location(location, player), exclusionItem_table["StatUps"])
 
     add_rule(world.get_location(LocationName.TransporttoRemembrance, player),
              lambda state:state.kh_transport(player))
-
-    for formlvl2 in {LocationName.Valorlvl2, LocationName.Wisdomlvl2, LocationName.Limitlvl2, LocationName.Masterlvl2,
-                     LocationName.Finallvl2}:
-        add_rule(world.get_location(formlvl2, player), lambda state: state.kh_form_level_unlocked(player, 1))
-
-    for formlvl3 in {LocationName.Valorlvl3, LocationName.Wisdomlvl3, LocationName.Limitlvl3, LocationName.Masterlvl3,
-                     LocationName.Finallvl3}:
-        add_rule(world.get_location(formlvl3, player), lambda state: state.kh_form_level_unlocked(player, 1))
-
-    for formlvl4 in {LocationName.Valorlvl4, LocationName.Wisdomlvl4, LocationName.Limitlvl4, LocationName.Masterlvl4,
-                     LocationName.Finallvl4}:
-        add_rule(world.get_location(formlvl4, player), lambda state: state.kh_form_level_unlocked(player, 2))
-
-    for formlvl5 in {LocationName.Valorlvl5, LocationName.Wisdomlvl5, LocationName.Limitlvl5, LocationName.Masterlvl5,
-                     LocationName.Finallvl5}:
-        add_rule(world.get_location(formlvl5, player), lambda state: state.kh_form_level_unlocked(player, 3))
-
-    for formlvl6 in {LocationName.Valorlvl6, LocationName.Wisdomlvl6, LocationName.Limitlvl6, LocationName.Masterlvl6,
-                     LocationName.Finallvl6}:
-        add_rule(world.get_location(formlvl6, player), lambda state: state.kh_form_level_unlocked(player, 4))
-
-    for formlvl7 in {LocationName.Valorlvl7, LocationName.Wisdomlvl7, LocationName.Limitlvl7, LocationName.Masterlvl7,
-                     LocationName.Finallvl7}:
-        add_rule(world.get_location(formlvl7, player), lambda state: state.kh_form_level_unlocked(player, 5))
 
     # Option to be more in line of the current KH2 Randomizer
     if world.Max_Logic[player].value == 0:
@@ -104,21 +80,3 @@ def set_rules(world: MultiWorld, player: int):
         for location in Form_Checks:
             forbid_items(world.get_location(location, player), exclusionItem_table["Forms"])
             forbid_item(world.get_location(location, player), "Torn Page", player)
-
-    # Creating Access rules for terra and mushroom 13 checks
-    add_rule(world.get_location(LocationName.LingeringWillBonus, player),
-             lambda state: state.has(ItemName.ProofofConnection, player))
-    add_rule(world.get_location(LocationName.LingeringWillProofofConnection, player),
-             lambda state: state.has(ItemName.ProofofConnection, player))
-    add_rule(world.get_location(LocationName.LingeringWillManifestIllusion, player),
-             lambda state: state.has(ItemName.ProofofConnection, player))
-    add_rule(world.get_location(LocationName.WinnersProof, player),
-             lambda state: state.has(ItemName.ProofofPeace, player))
-    add_rule(world.get_location(LocationName.ProofofPeace, player),
-             lambda state: state.has(ItemName.ProofofPeace, player))
-
-
-
-
-
-

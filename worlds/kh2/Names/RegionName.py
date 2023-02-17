@@ -16,6 +16,7 @@ HundredAcre6_Region                          ="Starry Hill"
 
 Pr_Region                                    ="Port Royal"
 Pr2_Region                                   ="Port Royal 2"
+Gr2_Region                                   ="Grim Reaper 2"
 
 Oc_Region                                    ="Olympus Coliseum"
 Oc2_Region                                   ="Olympus Coliseum 2"
@@ -28,16 +29,19 @@ HadesCups_Region                             ="Olympus Coliseum Hade's Paradox"
 
 Bc_Region                                    ="Beast's Castle"
 Bc2_Region                                   ="Beast's Castle 2"
+Xaldin_Region                                ="Xaldin"
 
 Sp_Region                                    ="Space Paranoids"
 Sp2_Region                                   ="Space Paranoids 2"
+Mcp_Region                                   ="Master Control Program"
 
 Ht_Region                                    ="Holloween Town"
 Ht2_Region                                   ="Holloween Town 2"
 
 Hb_Region                                    ="Hollow Bastion"
 Hb2_Region                                   ="Hollow Bastion 2"
-
+ThousandHeartless_Region                     ="Thousand Hearless"
+Mushroom13_Region                            ="Mushroom 13"
 CoR_Region                                   ="Cavern of Rememberance"
 Transport_Region                             ="Transport to Rememberance"
 
@@ -51,7 +55,8 @@ TT2_Region                                   ="Twlight Town 2"
 TT3_Region                                   ="Twlight Town 3"
 
 Twtnw_Region                                 ="The World That Never Was (First Visit)"
-Twtnw2_Region                                ="The World That Never Was (Second Visit)"  #before the castle road
+Twtnw_PostRoxas                              ="The World the Never Was (Post Roxas)"
+Twtnw2_Region                                ="The World That Never Was (Second Visit)"  #before riku transformation
 
 SoraLevels_Region                            ="Sora's Levels"
 GoA_Region                                   ="Garden Of Assemblage"

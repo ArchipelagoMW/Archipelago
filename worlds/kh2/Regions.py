@@ -258,14 +258,19 @@ def create_regions(world, player: int, active_locations):
         LocationName.SeadriftRowMythrilCrystal,
         LocationName.SeadriftRowCursedMedallion,
         LocationName.SeadriftRowShipGraveyardMap,
-        LocationName.GrimReaper2,
-        LocationName.SecretAnsemReport6,
-        LocationName.LuxordDataAPBoost,
         LocationName.GoofyGrimReaper1,
-        LocationName.DonaladGrimReaper2,
+
     ]
     pr2_region = create_region(world, player, active_locations, RegionName.Pr2_Region,
                                pr2_region_locations)
+    gr2_region_locations=[
+        LocationName.DonaladGrimReaper2,
+        LocationName.GrimReaper2,
+        LocationName.SecretAnsemReport6,
+        LocationName.LuxordDataAPBoost,
+    ]
+    gr2_region = create_region(world, player, active_locations, RegionName.Gr2_Region,
+                               gr2_region_locations)
     oc_region_locations = [
         LocationName.PassageMythrilShard,
         LocationName.PassageMythrilStone,
@@ -377,14 +382,19 @@ def create_regions(world, player: int, active_locations):
     bc2_region_locations = [
         LocationName.RumblingRose,
         LocationName.CastleWallsMap,
-        LocationName.Xaldin,
-        LocationName.XaldinGetBonus,
-        LocationName.SecretAnsemReport4,
-        LocationName.XaldinDataDefenseBoost,
-        LocationName.DonaldXaldinGetBonus,
+
     ]
     bc2_region = create_region(world, player, active_locations, RegionName.Bc2_Region,
                                bc2_region_locations)
+    xaldin_region_locations=[
+        LocationName.Xaldin,
+        LocationName.XaldinGetBonus,
+        LocationName.DonaldXaldinGetBonus,
+        LocationName.SecretAnsemReport4,
+        LocationName.XaldinDataDefenseBoost,
+    ]
+    xaldin_region = create_region(world, player, active_locations, RegionName.Xaldin_Region,
+                               xaldin_region_locations)
     sp_region_locations = [
         LocationName.PitCellAreaMap,
         LocationName.PitCellMythrilCrystal,
@@ -412,13 +422,18 @@ def create_regions(world, player: int, active_locations):
         LocationName.CentralComputerCoreOrichalcumPlus,
         LocationName.CentralComputerCoreCosmicArts,
         LocationName.CentralComputerCoreMap,
-        LocationName.MCP,
-        LocationName.MCPGetBonus,
 
         LocationName.DonaldSolarSailer,
     ]
+
     sp2_region = create_region(world, player, active_locations, RegionName.Sp2_Region,
                                sp2_region_locations)
+    mcp_region_locations = [
+        LocationName.MCP,
+        LocationName.MCPGetBonus,
+    ]
+    mcp_region = create_region(world, player, active_locations, RegionName.Mcp_Region,
+                               mcp_region_locations)
     larxene_region_locations = [
         LocationName.LarxeneBonus,
         LocationName.LarxeneASCloakedThunder,
@@ -497,6 +512,18 @@ def create_regions(world, player: int, active_locations):
         LocationName.AnsemsStudyUkuleleCharm,
         LocationName.RestorationSiteMoonRecipe,
         LocationName.RestorationSiteAPBoost,
+        LocationName.CoRDepthsAPBoost,
+        LocationName.CoRDepthsPowerCrystal,
+        LocationName.CoRDepthsFrostCrystal,
+        LocationName.CoRDepthsManifestIllusion,
+        LocationName.CoRDepthsAPBoost2,
+        LocationName.CoRMineshaftLowerLevelDepthsofRemembranceMap,
+        LocationName.CoRMineshaftLowerLevelAPBoost,
+        LocationName.DonaldDemyxHBGetBonus,
+    ]
+    hb2_region = create_region(world, player, active_locations, RegionName.Hb2_Region,
+                               hb2_region_locations)
+    onek_region_locations=[
         LocationName.DemyxHB,
         LocationName.DemyxHBGetBonus,
         LocationName.FFFightsCureElement,
@@ -510,20 +537,16 @@ def create_regions(world, player: int, active_locations):
         LocationName.ThousandHeartlessPicture,
         LocationName.PosternGullWing,
         LocationName.HeartlessManufactoryCosmicChain,
+        LocationName.DemyxDataAPBoost,
+    ]
+    onek_region = create_region(world, player, active_locations, RegionName.ThousandHeartless_Region,
+                               onek_region_locations)
+    mushroom_region_locations=[
         LocationName.WinnersProof,
         LocationName.ProofofPeace,
-        LocationName.DemyxDataAPBoost,
-        LocationName.CoRDepthsAPBoost,
-        LocationName.CoRDepthsPowerCrystal,
-        LocationName.CoRDepthsFrostCrystal,
-        LocationName.CoRDepthsManifestIllusion,
-        LocationName.CoRDepthsAPBoost2,
-        LocationName.CoRMineshaftLowerLevelDepthsofRemembranceMap,
-        LocationName.CoRMineshaftLowerLevelAPBoost,
-        LocationName.DonaldDemyxHBGetBonus,
     ]
-    hb2_region = create_region(world, player, active_locations, RegionName.Hb2_Region,
-                               hb2_region_locations)
+    mushroom_region = create_region(world, player, active_locations, RegionName.Mushroom13_Region,
+                               mushroom_region_locations)
     sephi_region_locations = [
         LocationName.SephirothBonus,
         LocationName.SephirothFenrir,
@@ -704,31 +727,36 @@ def create_regions(world, player: int, active_locations):
         LocationName.FragmentCrossingMythrilCrystal,
         LocationName.FragmentCrossingAPBoost,
         LocationName.FragmentCrossingOrichalcum,
-        LocationName.Roxas,
-        LocationName.RoxasGetBonus,
-        LocationName.RoxasSecretAnsemReport8,
-        LocationName.TwoBecomeOne,
-        LocationName.MemorysSkyscaperMythrilCrystal,
-        LocationName.MemorysSkyscaperAPBoost,
-        LocationName.MemorysSkyscaperMythrilStone,
-        LocationName.TheBrinkofDespairDarkCityMap,
-        LocationName.TheBrinkofDespairOrichalcumPlus,
-        LocationName.NothingsCallMythrilGem,
-        LocationName.NothingsCallOrichalcum,
-        LocationName.TwilightsViewCosmicBelt,
-        LocationName.XigbarBonus,
-        LocationName.XigbarSecretAnsemReport3,
-        LocationName.NaughtsSkywayMythrilGem,
-        LocationName.NaughtsSkywayOrichalcum,
-        LocationName.NaughtsSkywayMythrilCrystal,
-        LocationName.Oblivion,
-        LocationName.CastleThatNeverWasMap,
-        LocationName.Luxord,
-        LocationName.LuxordGetBonus,
-        LocationName.LuxordSecretAnsemReport9,
-    ]
+        ]
+
     twtnw_region = create_region(world, player, active_locations, RegionName.Twtnw_Region,
                                  twtnw_region_locations)
+    twtnw_postroxas_region_locations=[
+            LocationName.Roxas,
+            LocationName.RoxasGetBonus,
+            LocationName.RoxasSecretAnsemReport8,
+            LocationName.TwoBecomeOne,
+            LocationName.MemorysSkyscaperMythrilCrystal,
+            LocationName.MemorysSkyscaperAPBoost,
+            LocationName.MemorysSkyscaperMythrilStone,
+            LocationName.TheBrinkofDespairDarkCityMap,
+            LocationName.TheBrinkofDespairOrichalcumPlus,
+            LocationName.NothingsCallMythrilGem,
+            LocationName.NothingsCallOrichalcum,
+            LocationName.TwilightsViewCosmicBelt,
+            LocationName.XigbarBonus,
+            LocationName.XigbarSecretAnsemReport3,
+            LocationName.NaughtsSkywayMythrilGem,
+            LocationName.NaughtsSkywayOrichalcum,
+            LocationName.NaughtsSkywayMythrilCrystal,
+            LocationName.Oblivion,
+            LocationName.CastleThatNeverWasMap,
+            LocationName.Luxord,
+            LocationName.LuxordGetBonus,
+            LocationName.LuxordSecretAnsemReport9,
+        ]
+    twtnw_postroxas_region = create_region(world, player, active_locations, RegionName.Twtnw_PostRoxas,
+                                twtnw_postroxas_region_locations)
     twtnw2_region_locations = [
         LocationName.SaixBonus,
         LocationName.SaixSecretAnsemReport12,
@@ -883,6 +911,7 @@ def create_regions(world, player: int, active_locations):
         hundred_acre6_region,
         pr_region,
         pr2_region,
+        gr2_region,
         oc_region,
         oc2_region,
         oc2_pain_and_panic_cup,
@@ -892,14 +921,18 @@ def create_regions(world, player: int, active_locations):
         zexion_region,
         bc_region,
         bc2_region,
+        xaldin_region,
         sp_region,
         sp2_region,
+        mcp_region,
         larxene_region,
         ht_region,
         ht2_region,
         vexen_region,
         hb_region,
         hb2_region,
+        onek_region,
+        mushroom_region,
         sephi_region,
         cor_region,
         transport_region,
@@ -910,6 +943,7 @@ def create_regions(world, player: int, active_locations):
         tt2_region,
         tt3_region,
         twtnw_region,
+        twtnw_postroxas_region,
         twtnw2_region,
         goa_region,
         menu_region,
@@ -1037,17 +1071,23 @@ def connect_regions(world: MultiWorld, player: int):
             lambda state: state.kh_pr_unlocked(player, 1))
     connect(world, player, names, RegionName.Pr_Region, RegionName.Pr2_Region,
             lambda state: state.kh_pr_unlocked(player, 2))
+    connect(world, player, names, RegionName.Pr2_Region, RegionName.Gr2_Region,
+            lambda state: state.kh_gr2(player))
 
     connect(world, player, names, RegionName.GoA_Region, RegionName.Bc_Region,
             lambda state: state.kh_bc_unlocked(player, 1))
     connect(world, player, names, RegionName.Bc_Region, RegionName.Bc2_Region,
             lambda state: state.kh_bc_unlocked(player, 2))
+    connect(world, player, names, RegionName.Bc2_Region, RegionName.Xaldin_Region,
+            lambda state: state.kh_xaldin(player))
 
     connect(world, player, names, RegionName.GoA_Region, RegionName.Sp_Region,
             lambda state: state.kh_sp_unlocked(player, 1))
     connect(world, player, names, RegionName.Sp_Region, RegionName.Sp2_Region,
             lambda state: state.kh_sp_unlocked(player, 2))
-    connect(world, player, names, RegionName.Sp2_Region, RegionName.Larxene_Region,
+    connect(world, player, names, RegionName.Sp2_Region, RegionName.Mcp_Region,
+            lambda state: state.kh_mcp(player))
+    connect(world, player, names, RegionName.Mcp_Region, RegionName.Larxene_Region,
             lambda state: state.kh_datalarxene(player))
 
     connect(world, player, names, RegionName.GoA_Region, RegionName.Ht_Region,
@@ -1061,7 +1101,10 @@ def connect_regions(world: MultiWorld, player: int):
             lambda state: state.kh_hb_unlocked(player, 1))
     connect(world, player, names, RegionName.Hb_Region, RegionName.Hb2_Region,
             lambda state: state.kh_hb_unlocked(player, 2))
-    connect(world, player, names, RegionName.Hb2_Region, RegionName.Sephi_Region, lambda state: state.kh_sephi(player))
+    connect(world, player, names, RegionName.Hb2_Region, RegionName.ThousandHeartless_Region,
+            lambda state: state.kh_onek(player))
+    connect(world, player, names, RegionName.ThousandHeartless_Region, RegionName.Mushroom13_Region, lambda state: state.has(ItemName.ProofofPeace,player))
+    connect(world, player, names, RegionName.ThousandHeartless_Region, RegionName.Sephi_Region, lambda state: state.kh_sephi(player))
 
     connect(world, player, names, RegionName.Hb2_Region, RegionName.CoR_Region, lambda state: state.kh_cor(player))
     connect(world, player, names, RegionName.CoR_Region, RegionName.Transport_Region, lambda state:
@@ -1072,7 +1115,7 @@ def connect_regions(world: MultiWorld, player: int):
     connect(world, player, names, RegionName.GoA_Region, RegionName.Pl_Region,
             lambda state: state.kh_pl_unlocked(player, 1))
     connect(world, player, names, RegionName.Pl_Region, RegionName.Pl2_Region,
-            lambda state: state.kh_pl_unlocked(player, 2))
+            lambda state: state.kh_pl_unlocked(player, 2) and (state.has(ItemName.BerserkCharge,player) or state.kh_reflect(player)))
 
     connect(world, player, names, RegionName.GoA_Region, RegionName.STT_Region,
             lambda state: state.kh_stt_unlocked(player, 1))
@@ -1085,20 +1128,21 @@ def connect_regions(world: MultiWorld, player: int):
             lambda state: state.kh_tt3_unlocked(player, 1))
 
     connect(world, player, names, RegionName.GoA_Region, RegionName.Twtnw_Region,
-            lambda state: state.kh_twtnw_unlocked(player, 1))
-    connect(world, player, names, RegionName.Twtnw_Region, RegionName.Twtnw2_Region,
-            lambda state: state.kh_twtnw_unlocked(player, 2) and state.kh_basetools(player) and (state.kh_donaldlimit(player) or state.has(ItemName.FinalForm,player) and state.has(ItemName.FireElement,player)))
+            lambda state: state.kh_twtnw_unlocked(player, 0))
+    connect(world, player, names, RegionName.Twtnw_Region, RegionName.Twtnw_PostRoxas,
+            lambda state: state.kh_roxastools(player))
+    connect(world, player, names, RegionName.Twtnw_PostRoxas, RegionName.Twtnw2_Region,
+            lambda state: state.kh_twtnw_unlocked(player, 1) and state.kh_basetools(player) and (state.kh_donaldlimit(player) or state.has(ItemName.FinalForm,player) and state.has(ItemName.FireElement,player)))
 
-    connect(world, player, names, RegionName.GoA_Region, RegionName.HundredAcre1_Region)
-
-    hundredacrevisits = {RegionName.HundredAcre2_Region: 1, RegionName.HundredAcre3_Region: 2,
+    hundredacrevisits = {RegionName.HundredAcre1_Region: 0, RegionName.HundredAcre2_Region: 1, RegionName.HundredAcre3_Region: 2,
                          RegionName.HundredAcre4_Region: 3, RegionName.HundredAcre5_Region: 4,
                          RegionName.HundredAcre6_Region: 5}
     for visit, tornpage in hundredacrevisits.items():
         connect(world, player, names, RegionName.GoA_Region, visit,
                 lambda state: (state.has(ItemName.TornPages, player, tornpage)))
 
-    connect(world, player, names, RegionName.GoA_Region, RegionName.LevelsVS1,lambda state: state.kh_visit_locking_amount(player,1))
+    connect(world, player, names, RegionName.GoA_Region, RegionName.LevelsVS1,
+            lambda state: state.kh_visit_locking_amount(player,1))
     connect(world, player, names, RegionName.LevelsVS1, RegionName.LevelsVS3,
             lambda state: state.kh_visit_locking_amount(player, 3))
     connect(world, player, names, RegionName.LevelsVS3, RegionName.LevelsVS6,
