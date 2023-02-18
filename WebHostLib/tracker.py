@@ -4,7 +4,9 @@ import typing
 from typing import Counter, Optional, Dict, Any, Tuple
 from uuid import UUID
 
+import jinja2
 from flask import render_template
+from jinja2 import pass_context
 from werkzeug.exceptions import abort
 
 from MultiServer import Context, get_saving_second
@@ -1219,16 +1221,26 @@ def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dic
     for order_index, networkItem in enumerate(ordered_items, start=1):
         player_received_items[networkItem.item] = order_index
 
-    app.jinja_env.filters["location_name"] = lambda loc: collections.ChainMap(lookup_any_location_id_to_name, custom_locations).get(loc, loc)
-    app.jinja_env.filters["item_name"] = lambda item: collections.ChainMap(lookup_any_item_id_to_name, custom_items).get(item, item)
+    @pass_context
+    def get_location_name(context: Dict, loc: int) -> str:
+        custom_locations = context["custom_locations"]
+        return collections.ChainMap(lookup_any_location_id_to_name, custom_locations).get(loc, loc)
+
+    @pass_context
+    def get_item_name(context: Dict, item: int) -> str:
+        custom_items = context["custom_items"]
+        return collections.ChainMap(lookup_any_item_id_to_name, custom_items).get(item, item)
+
+    app.jinja_env.filters["location_name"] = get_location_name
+    app.jinja_env.filters["item_name"] = get_item_name
 
     return render_template("genericTracker.html",
                            inventory=inventory,
                            player=player, team=team, room=room, player_name=playerName,
                            checked_locations=checked_locations,
                            not_checked_locations=set(locations[player]) - checked_locations,
-                           received_items=player_received_items,
-                           saving_second=saving_second)
+                           received_items=player_received_items, saving_second=saving_second,
+                           custom_items=custom_items, custom_locations=custom_locations)
 
 
 @app.route('/tracker/<suuid:tracker>')
