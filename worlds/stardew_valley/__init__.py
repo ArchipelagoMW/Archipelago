@@ -2,7 +2,7 @@ from typing import Dict, Any, Iterable, Optional, Union
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial
 from worlds.AutoWorld import World, WebWorld
-from . import rules, logic
+from . import rules, logic, options
 from .bundles import get_all_bundles, Bundle
 from .items import item_table, create_items, ItemData, Group
 from .locations import location_table, create_locations, LocationData
