@@ -2,7 +2,7 @@ import csv
 import enum
 from dataclasses import dataclass
 from random import Random
-from typing import Optional, Dict, Protocol, List
+from typing import Optional, Dict, Protocol, List, FrozenSet
 
 from . import options, data
 from .fish_data import legendary_fish, special_fish, all_fish_items
@@ -53,7 +53,7 @@ class LocationData:
     code_without_offset: Optional[int]
     region: str
     name: str
-    tags: frozenset[LocationTags] = frozenset()
+    tags: FrozenSet[LocationTags] = frozenset()
 
     @property
     def code(self) -> Optional[int]:
@@ -66,7 +66,7 @@ class StardewLocationCollector(Protocol):
 
 
 def load_location_csv() -> List[LocationData]:
-    from importlib.resources import files
+    from importlib_resources import files
 
     with files(data).joinpath("locations.csv").open() as file:
         reader = csv.DictReader(file)
@@ -107,7 +107,7 @@ def initialize_groups():
 initialize_groups()
 
 
-def extend_help_wanted_quests(randomized_locations: list[LocationData], desired_number_of_quests: int):
+def extend_help_wanted_quests(randomized_locations: List[LocationData], desired_number_of_quests: int):
     for i in range(0, desired_number_of_quests):
         batch = i // 7
         index_this_batch = i % 7
@@ -122,7 +122,7 @@ def extend_help_wanted_quests(randomized_locations: list[LocationData], desired_
             randomized_locations.append(location_table[f"Help Wanted: Gathering {batch + 1}"])
 
 
-def extend_fishsanity_locations(randomized_locations: list[LocationData], fishsanity: int, random: Random):
+def extend_fishsanity_locations(randomized_locations: List[LocationData], fishsanity: int, random: Random):
     prefix = "Fishsanity: "
     if fishsanity == options.Fishsanity.option_none:
         return

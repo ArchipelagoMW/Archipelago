@@ -1,4 +1,4 @@
-from typing import Dict, Any, Iterable, Optional
+from typing import Dict, Any, Iterable, Optional, Union
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial
 from worlds.AutoWorld import World, WebWorld
@@ -106,7 +106,7 @@ class StardewValleyWorld(World):
     def set_rules(self):
         set_rules(self.multiworld, self.player, self.options, self.logic, self.modified_bundles)
 
-    def create_item(self, item: str | ItemData) -> StardewItem:
+    def create_item(self, item: Union[str, ItemData]) -> StardewItem:
         if isinstance(item, str):
             item = item_table[item]
 

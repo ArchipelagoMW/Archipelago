@@ -110,7 +110,7 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: options.Stard
     if world_options[options.BuildingProgression] != options.BuildingProgression.option_vanilla:
         for building in locations.locations_by_tag[LocationTags.BUILDING_BLUEPRINT]:
             MultiWorldRules.set_rule(multi_world.get_location(building.name, player),
-                                     logic.building_rules[building.name.removesuffix(" Blueprint")].simplify())
+                                     logic.building_rules[building.name.replace(" Blueprint", "")].simplify())
 
     # Story Quests
     for quest in locations.locations_by_tag[LocationTags.QUEST]:

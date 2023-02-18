@@ -9,7 +9,9 @@ from dataclasses import dataclass, field
 from functools import cached_property
 from pathlib import Path
 from random import Random
-from typing import Dict, List, Protocol, Union, Set, Optional
+from typing import Dict, List, Protocol, Union, Set, Optional, FrozenSet
+
+import typing
 
 from BaseClasses import Item, ItemClassification
 from . import options, data
@@ -75,7 +77,7 @@ class ResourcePackData:
     default_amount: int = 1
     scaling_factor: int = 1
     classification: ItemClassification = ItemClassification.filler
-    groups: frozenset[Group] = frozenset()
+    groups: FrozenSet[Group] = frozenset()
 
     def as_item_data(self, counter: itertools.count) -> [ItemData]:
         return [ItemData(next(counter), self.create_item_name(quantity), self.classification,
@@ -86,7 +88,7 @@ class ResourcePackData:
         return f"Resource Pack: {quantity} {self.name}"
 
     @cached_property
-    def scale_quantity(self) -> OrderedDict[int, int]:
+    def scale_quantity(self) -> typing.OrderedDict[int, int]:
         """Discrete scaling of the resource pack quantities.
         100 is default, 200 is double, 50 is half (if the scaling_factor allows it).
         """
@@ -128,7 +130,7 @@ class StardewItemFactory(Protocol):
 
 
 def load_item_csv():
-    from importlib.resources import files
+    from importlib_resources import files
 
     items = []
     with files(data).joinpath("items.csv").open() as file:
@@ -142,7 +144,7 @@ def load_item_csv():
 
 
 def load_resource_pack_csv() -> List[ResourcePackData]:
-    from importlib.resources import files
+    from importlib_resources import files
 
     resource_packs = []
     with files(data).joinpath("resource_packs.csv").open() as file:

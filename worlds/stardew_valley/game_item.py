@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from typing import FrozenSet
+
 
 @dataclass(frozen=True)
 class GameItem:
@@ -12,8 +14,8 @@ class GameItem:
 
 @dataclass(frozen=True)
 class FishItem(GameItem):
-    locations: frozenset[str]
-    seasons: frozenset[str]
+    locations: FrozenSet[str]
+    seasons: FrozenSet[str]
     difficulty: int
 
     def __repr__(self):

@@ -1,5 +1,6 @@
-from .game_item import FishItem
+from typing import Set, List
 
+from .game_item import FishItem
 
 spring = {"Spring"}
 summer = {"Summer"}
@@ -41,11 +42,10 @@ forest_mountain = {*forest, *mountain}
 rivers_mountain_lake = {*town, *forest, *mountain}
 mines_20_60 = {*mines_20, *mines_60}
 
+all_fish_items: List[FishItem] = []
 
-all_fish_items: list[FishItem] = []
 
-
-def fish(name: str, item_id: int, locations: set[str], seasons: set[str], difficulty: int) -> FishItem:
+def fish(name: str, item_id: int, locations: Set[str], seasons: Set[str], difficulty: int) -> FishItem:
     fish_item = FishItem(name, item_id, frozenset(locations), frozenset(seasons), difficulty)
     all_fish_items.append(fish_item)
     return fish_item

@@ -1072,7 +1072,7 @@ class StardewLogic:
             return self.received("Fall")
         return self.received("Winter")
 
-    def can_complete_bundle(self, bundle_requirements: list[BundleItem], number_required: int) -> StardewRule:
+    def can_complete_bundle(self, bundle_requirements: List[BundleItem], number_required: int) -> StardewRule:
         item_rules = []
         for bundle_item in bundle_requirements:
             if bundle_item.item.item_id == -1:
