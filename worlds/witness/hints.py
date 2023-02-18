@@ -41,6 +41,12 @@ joke_hints = [
     "Have you tried Hylics 2?\nStop motion might just be the epitome of unique art styles.",
     "Have you tried Pokemon Red&Blue?\nA cute pet collecting game that fascinated an entire generation.",
     "Have you tried Lufia II?\nRoguelites are not just a 2010s phenomenon, turns out.",
+    "Have you tried Minecraft?\nI have recently learned this is a question that needs to be asked.",
+    "Have you tried Subnautica?\nIf you like this game's lonely atmosphere, I would suggest you try it.",
+
+    "Have you tried Sonic Adventure 2?\nIf the silence on this island is getting to you, "
+    "there aren't many games more energetic.",
+
     "Waiting to get your items?\nTry BK Sudoku! Make progress even while stuck.",
     "One day I was fascinated by the subject of generation of waves by wind.",
     "I don't like sandwiches. Why would you think I like sandwiches? Have you ever seen me with a sandwich?",
