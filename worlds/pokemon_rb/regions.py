@@ -221,6 +221,7 @@ def create_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "Route 8", "Route 8 Grass", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
     connect(multiworld, player, "Route 7", "Celadon City")
     connect(multiworld, player, "Celadon City", "Celadon Gym", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
+    connect(multiworld, player, "Celadon City", "Celadon Game Corner")
     connect(multiworld, player, "Celadon City", "Celadon Prize Corner")
     connect(multiworld, player, "Celadon City", "Route 16")
     connect(multiworld, player, "Route 16", "Route 16 North", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
