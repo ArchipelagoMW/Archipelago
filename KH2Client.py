@@ -438,7 +438,6 @@ class KH2Context(CommonContext):
     #        return False
 
 async def kh2_watcher(ctx: KH2Context):
-    logger.info("Please use /autotrack")
     while not ctx.exit_event.is_set():
         if ctx.kh2connected and ctx.serverconneced:
             try:
