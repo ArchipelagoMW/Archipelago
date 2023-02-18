@@ -4,7 +4,6 @@ import typing
 from typing import Counter, Optional, Dict, Any, Tuple
 from uuid import UUID
 
-import jinja2
 from flask import render_template
 from jinja2 import pass_context, runtime
 from werkzeug.exceptions import abort
@@ -234,6 +233,22 @@ def render_timedelta(delta: datetime.timedelta):
     hours = str(int(hours))
     minutes = str(int(minutes)).zfill(2)
     return f"{hours}:{minutes}"
+
+
+@pass_context
+def get_location_name(context: runtime.Context, loc: int) -> str:
+    context_locations = context.get("custom_locations", {})
+    return collections.ChainMap(lookup_any_location_id_to_name, context_locations).get(loc, loc)
+
+
+@pass_context
+def get_item_name(context: runtime.Context, item: int) -> str:
+    context_items = context.get("custom_items", {})
+    return collections.ChainMap(lookup_any_item_id_to_name, context_items).get(item, item)
+
+
+app.jinja_env.filters["location_name"] = get_location_name
+app.jinja_env.filters["item_name"] = get_item_name
 
 
 _multidata_cache = {}
@@ -1220,19 +1235,6 @@ def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dic
     # add numbering to all items but starter_inventory
     for order_index, networkItem in enumerate(ordered_items, start=1):
         player_received_items[networkItem.item] = order_index
-
-    @pass_context
-    def get_location_name(context: runtime.Context, loc: int) -> str:
-        context_locations = context.get("custom_locations", {})
-        return collections.ChainMap(lookup_any_location_id_to_name, context_locations).get(loc, loc)
-
-    @pass_context
-    def get_item_name(context: runtime.Context, item: int) -> str:
-        context_items = context.get("custom_items", {})
-        return collections.ChainMap(lookup_any_item_id_to_name, context_items).get(item, item)
-
-    app.jinja_env.filters["location_name"] = get_location_name
-    app.jinja_env.filters["item_name"] = get_item_name
 
     return render_template("genericTracker.html",
                            inventory=inventory,
