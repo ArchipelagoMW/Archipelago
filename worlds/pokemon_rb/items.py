@@ -104,7 +104,7 @@ item_table = {
     "Ice Trap": ItemData(96, ItemClassification.trap, ["Traps"]),
     "Fire Trap": ItemData(97, ItemClassification.trap, ["Traps"]),
     "20 Coins": ItemData(98, ItemClassification.filler, ["Coins"]),
-    "100 Coins": ItemData(90, ItemClassification.filler, ["Coins"]),
+    "100 Coins": ItemData(99, ItemClassification.filler, ["Coins"]),
     "HM01 Cut": ItemData(196, ItemClassification.progression, ["Unique", "HMs"]),
     "HM02 Fly": ItemData(197, ItemClassification.progression, ["Unique", "HMs"]),
     "HM03 Surf": ItemData(198, ItemClassification.progression, ["Unique", "HMs"]),

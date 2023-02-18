@@ -387,7 +387,7 @@ def process_pokemon_data(self):
                     learnsets[mon].append(move)
             learnsets[mon].sort(key=lambda move: poke_data.moves[move]["power"])
             for move in non_power_moves:
-                learnsets[mon].insert(self.multiworld.random.randint(0, len(learnsets[mon])), move)
+                learnsets[mon].insert(self.multiworld.random.randint(1, len(learnsets[mon])), move)
             for i in range(1, 5):
                 if mon_data[f"start move {i}"] != "No Move" or self.multiworld.start_with_four_moves[self.player]:
                     mon_data[f"start move {i}"] = learnsets[mon].pop(0)
