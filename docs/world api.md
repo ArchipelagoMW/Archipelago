@@ -429,9 +429,9 @@ In addition, the following methods can be implemented and are called in this ord
   randomizations can be done here.
 * `pre_fill`, `fill_hook` and `post_fill` are called to modify item placement
   before, during and after the regular fill process, before `generate_output`.
-  If items need to be placed during pre_fill and these items can be determined
+  If items need to be placed during pre_fill, these items can be determined
   and created using `get_prefill_items`
-* a `def generate_output(self, output_directory: str)` that creates the output
+* `def generate_output(self, output_directory: str)` that creates the output
   files if there is output to be generated. When this is
   called, `self.multiworld.get_locations(self.player)` has all locations for the player, with
   attribute `item` pointing to the item.
