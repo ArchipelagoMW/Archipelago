@@ -744,19 +744,24 @@ def create_regions(world, player: int, active_locations):
             LocationName.NothingsCallMythrilGem,
             LocationName.NothingsCallOrichalcum,
             LocationName.TwilightsViewCosmicBelt,
-            LocationName.XigbarBonus,
-            LocationName.XigbarSecretAnsemReport3,
-            LocationName.NaughtsSkywayMythrilGem,
-            LocationName.NaughtsSkywayOrichalcum,
-            LocationName.NaughtsSkywayMythrilCrystal,
-            LocationName.Oblivion,
-            LocationName.CastleThatNeverWasMap,
-            LocationName.Luxord,
-            LocationName.LuxordGetBonus,
-            LocationName.LuxordSecretAnsemReport9,
+
         ]
     twtnw_postroxas_region = create_region(world, player, active_locations, RegionName.Twtnw_PostRoxas,
                                 twtnw_postroxas_region_locations)
+    twtnw_postxigbar_region_locations=[
+        LocationName.XigbarBonus,
+        LocationName.XigbarSecretAnsemReport3,
+        LocationName.NaughtsSkywayMythrilGem,
+        LocationName.NaughtsSkywayOrichalcum,
+        LocationName.NaughtsSkywayMythrilCrystal,
+        LocationName.Oblivion,
+        LocationName.CastleThatNeverWasMap,
+        LocationName.Luxord,
+        LocationName.LuxordGetBonus,
+        LocationName.LuxordSecretAnsemReport9,
+    ]
+    twtnw_postxigbar_region = create_region(world, player, active_locations, RegionName.Twtnw_PostXigbar,
+                                twtnw_postxigbar_region_locations)
     twtnw2_region_locations = [
         LocationName.SaixBonus,
         LocationName.SaixSecretAnsemReport12,
@@ -944,6 +949,7 @@ def create_regions(world, player: int, active_locations):
         tt3_region,
         twtnw_region,
         twtnw_postroxas_region,
+        twtnw_postxigbar_region,
         twtnw2_region,
         goa_region,
         menu_region,
@@ -1131,8 +1137,10 @@ def connect_regions(world: MultiWorld, player: int):
             lambda state: state.kh_twtnw_unlocked(player, 0))
     connect(world, player, names, RegionName.Twtnw_Region, RegionName.Twtnw_PostRoxas,
             lambda state: state.kh_roxastools(player))
+    connect(world, player, names, RegionName.Twtnw_PostRoxas, RegionName.Twtnw_PostXigbar,
+            lambda state: state.kh_basetools(player) and (state.kh_donaldlimit(player) or (state.has(ItemName.FinalForm,player) and state.has(ItemName.FireElement,player))))
     connect(world, player, names, RegionName.Twtnw_PostRoxas, RegionName.Twtnw2_Region,
-            lambda state: state.kh_twtnw_unlocked(player, 1) and state.kh_basetools(player) and (state.kh_donaldlimit(player) or state.has(ItemName.FinalForm,player) and state.has(ItemName.FireElement,player)))
+            lambda state: state.kh_twtnw_unlocked(player, 1))
 
     hundredacrevisits = {RegionName.HundredAcre1_Region: 0, RegionName.HundredAcre2_Region: 1, RegionName.HundredAcre3_Region: 2,
                          RegionName.HundredAcre4_Region: 3, RegionName.HundredAcre5_Region: 4,
@@ -1160,7 +1168,7 @@ def connect_regions(world: MultiWorld, player: int):
     connect(world, player, names, RegionName.LevelsVS21, RegionName.LevelsVS24,
             lambda state: state.kh_visit_locking_amount(player, 24))
     connect(world, player, names, RegionName.LevelsVS24, RegionName.LevelsVS26,
-            lambda state: state.kh_visit_locking_amount(player, 26))
+            lambda state: state.kh_visit_locking_amount(player, 25))
 
 
     for region in valorLevelRegions:

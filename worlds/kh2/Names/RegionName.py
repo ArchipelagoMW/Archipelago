@@ -55,7 +55,8 @@ TT2_Region                                   ="Twlight Town 2"
 TT3_Region                                   ="Twlight Town 3"
 
 Twtnw_Region                                 ="The World That Never Was (First Visit)"
-Twtnw_PostRoxas                              ="The World the Never Was (Post Roxas)"
+Twtnw_PostRoxas                              ="The World That Never Was (Post Roxas)"
+Twtnw_PostXigbar                             ="The World That Never Was (Post Xigbar)"
 Twtnw2_Region                                ="The World That Never Was (Second Visit)"  #before riku transformation
 
 SoraLevels_Region                            ="Sora's Levels"
