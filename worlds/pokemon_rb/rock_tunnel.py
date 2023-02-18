@@ -7,41 +7,11 @@ disallowed2F = [[16, 2], [17, 2], [18, 2], [15, 5], [15, 6], [10, 10], [11, 10],
                 [11, 1]]
 
 
-# from PIL import Image
-#
-# def create_bitmap(lists, filename, scale=25):
-#     # Determine the dimensions of the bitmap
-#     height = len(lists) * scale
-#     width = len(lists[0]) * scale
-#
-#     # Create a new image with the specified dimensions
-#     image = Image.new('1', (width, height))
-#
-#     # Loop through the list of lists and set the pixel values in the image
-#     for y in range(len(lists)):
-#         for x in range(len(lists[y])):
-#             pixel_value = 255 if lists[y][x] in [1, 62] else 0
-#
-#             # Set the pixels in the image based on the scale
-#             for dy in range(scale):
-#                 for dx in range(scale):
-#                     image.putpixel((x*scale+dx, y*scale+dy), pixel_value)
-#
-#     # Save the image to a file
-#     image.save(filename)
 
 
 def randomize_rock_tunnel(data, random):
     map1f = []
     map2f = []
-    # address = rom_addresses["Map_Rock_Tunnel1F"]
-    # for y in range(0, 18):
-    #     row = []
-    #     for x in range(0, 20):
-    #         row.append(data[address])
-    #         address += 1
-    #     map1f.append(row)
-    #random.seed(14)
     with open("C:\\src\\pokered\\maps\\RockTunnel1F.blk", "br") as file:
         f = file.read()
 
@@ -308,28 +278,6 @@ def randomize_rock_tunnel(data, random):
         current_map = map2f
         check_addable_block(map2f, disallowed2F)
 
-
-    # b = bytearray(18*20)
-    # i = 0
-    # for y in map1f:
-    #     for x in y:
-    #         b[i] = x
-    #         i += 1
-    # with open("C:\\src\\pokered\\RTTest.blk", "bw") as file:
-    #     file.write(bytes(b))
-    #
-    # b = bytearray(18*20)
-    # i = 0
-    # for y in map2f:
-    #     for x in y:
-    #         b[i] = x
-    #         i += 1
-    # with open("C:\\src\\pokered\\RTTest2.blk", "bw") as file:
-    #     file.write(bytes(b))
-    #
-    # create_bitmap(map1f, f"D:\\bmp\\{seed}1F.bmp")
-    # create_bitmap(map2f, f"D:\\bmp\\{seed}2F.bmp")
-    #
     address = rom_addresses["Map_Rock_Tunnel1F"]
     for y in map1f:
         for x in y:
@@ -340,9 +288,3 @@ def randomize_rock_tunnel(data, random):
         for x in y:
             data[address] = x
             address += 1
-
-# import random
-# for i in range(10):
-#     random.seed(i)
-#     print(i)
-#     randomize_rock_tunnel([], random, i)

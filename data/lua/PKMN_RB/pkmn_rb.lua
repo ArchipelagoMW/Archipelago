@@ -138,7 +138,8 @@ function receive()
                 ItemsReceived = itemsBlock
             end
             deathlink_rec = block["deathlink"]
-            options = block["options"]
+            options = bit.bor(block["options"], bit.band(options, 12))
+
         end
     end
     -- Determine Message to send back
@@ -169,7 +170,7 @@ function receive()
     end
     retTable["deathLink"] = deathlink_send
 
-    options = u8(OptionsAddress)
+    options = bit.bor(u8(OptionsAddress), bit.band(options, 3))
     if bit.band(options, 240) == 0 then
         retTable["options"] = bit.band(options, 12)
     else
@@ -220,7 +221,7 @@ function main()
                             wU8(APItemAddress, ItemsReceived[ItemIndex + 1] - 172000000)
                         end
                     end
-                    wU8(OptionsAddress, options)
+                    --wU8(OptionsAddress, options)
                 end
             end
         elseif (curstate == STATE_UNINITIALIZED) then
