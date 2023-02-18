@@ -1262,7 +1262,6 @@ class Spoiler():
         self.entrances = OrderedDict()
         self.playthrough = {}
         self.unreachables = set()
-        self.locations = {}
         self.paths = {}
 
     def set_entrance(self, entrance: str, exit_: str, direction: str, player: int):
@@ -1424,17 +1423,6 @@ class Spoiler():
                         self.paths[str(multiworld.get_region('Inverted Big Bomb Shop', player))] = \
                             get_path(state, multiworld.get_region('Inverted Big Bomb Shop', player))
 
-    def to_json(self):
-        out = OrderedDict()
-        out['Entrances'] = list(self.entrances.values())
-        out.update(self.locations)
-        if self.hashes:
-            out['Hashes'] = self.hashes
-        out['playthrough'] = self.playthrough
-        out['paths'] = self.paths
-
-        return json.dumps(out)
-
     def to_file(self, filename: str):
         def write_option(option_key: str, option_obj: type(Options.Option)):
             res = getattr(self.multiworld, option_key)[player]
@@ -1475,11 +1463,11 @@ class Spoiler():
 
             AutoWorld.call_all(self.multiworld, "write_spoiler", outfile)
 
-            self.locations = [(str(location), str(location.item) if location.item is not None else "Nothing")
+            locations = [(str(location), str(location.item) if location.item is not None else "Nothing")
                               for location in self.multiworld.get_locations()]
             outfile.write('\n\nLocations:\n\n')
             outfile.write('\n'.join(
-                ['%s: %s' % (location, item) for location, item in self.locations]))
+                ['%s: %s' % (location, item) for location, item in locations]))
 
             outfile.write('\n\nPlaythrough:\n\n')
             outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(
