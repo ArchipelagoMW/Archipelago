@@ -14,6 +14,10 @@ When you generate a game you will see a download link for a KH2 .zip seed on the
 
 Load this mod just like the GoA ROM you did during the KH2 Rando setup. `JaredWeakStrike/APCompanion` Have this mod second highest priority below the .zip seed
 
+### Using the KH2 Client
+
+Once you have started the game through OpenKH Mod Manager and are on the title screen run the ArchipelagoKH2Client.exe. When you successfully connect to the server the client will automatically hook into the game to send/receive checks. If the client ever loses connection to the game, it will also disconnect from the server and you will need to reconnect. Make sure the game is open whenever you try to connect the client to the server otherwise it will immediately disconnect you. Most checks will be sent to you anywhere outside of a load or cutscene but to receive magic you will need to pause and then room transition for it to show up. The only safe way to send magic is while you are paused and needing to room transition after receiving magic for it to show up is how KH2 works. If you die and "lose" checks room transition to receive them again.
+
 ## Generating a game
 
 ### What is a YAML?
