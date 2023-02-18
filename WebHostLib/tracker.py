@@ -6,7 +6,7 @@ from uuid import UUID
 
 import jinja2
 from flask import render_template
-from jinja2 import pass_context
+from jinja2 import pass_context, runtime
 from werkzeug.exceptions import abort
 
 from MultiServer import Context, get_saving_second
@@ -1222,14 +1222,14 @@ def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dic
         player_received_items[networkItem.item] = order_index
 
     @pass_context
-    def get_location_name(context: Dict, loc: int) -> str:
-        custom_locations = context["custom_locations"]
-        return collections.ChainMap(lookup_any_location_id_to_name, custom_locations).get(loc, loc)
+    def get_location_name(context: runtime.Context, loc: int) -> str:
+        context_locations = context.get("custom_locations", {})
+        return collections.ChainMap(lookup_any_location_id_to_name, context_locations).get(loc, loc)
 
     @pass_context
-    def get_item_name(context: Dict, item: int) -> str:
-        custom_items = context["custom_items"]
-        return collections.ChainMap(lookup_any_item_id_to_name, custom_items).get(item, item)
+    def get_item_name(context: runtime.Context, item: int) -> str:
+        context_items = context.get("custom_items", {})
+        return collections.ChainMap(lookup_any_item_id_to_name, context_items).get(item, item)
 
     app.jinja_env.filters["location_name"] = get_location_name
     app.jinja_env.filters["item_name"] = get_item_name
