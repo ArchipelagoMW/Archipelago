@@ -1,50 +1,28 @@
 #player-tracker-wrapper{
     margin: 0;
-    width: 640px;
-    height: 180px;
-    background-color: #008000;
 }
 
 #inventory-table{
-    padding-top: 8px;
-    padding-left: 6px;
-    padding-right: 10px;
-    padding-bottom: 2px;
-    background-color: #008000;
+    padding: 8px 10px 2px 6px;
+    background-color: #42b149;
+    border-radius: 4px;
+    border: 2px solid black;
 }
 
-#inventory-table tr{
-    height: 48px;
-    max-height: 48px;
-    margin: 0;
-    padding: 0;
+#inventory-table tr.column-headers td {
+    font-size: 1rem;
+    padding: 0 5rem 0 0;
 }
 
 #inventory-table td{
-    display: inline-block;
-    padding: 0;
-    margin: 0;
-    height: 48px;
-    max-height: 48px;
-    text-align: left;
-    vertical-align: bottom;
+    padding: 0 0.5rem 0.5rem;
+    font-family: LexendDeca-Light, monospace;
+    font-size: 2.5rem;
+    color: #ffffff;
 }
 
-#inventory-table td.icon{
-    width: 48px;
-    background-repeat: no-repeat;
-}
-
-#inventory-table td.item-count {
-    overflow: visible;
-    width: 188px;
-    padding-left: 4px;
-    font-family: "Determination Sans", monospace;
-    font-size: 80px;
-    font-smooth: never;
-    -webkit-font-smoothing : none;
-    line-height: 42px;
-    color: white;
+#inventory-table td img{
+    vertical-align: middle;
 }
 
 .hide {

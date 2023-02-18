@@ -2,25 +2,32 @@
 <html lang="en">
 <head>
     <title>{{ player_name }}&apos;s Tracker</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/checksfinderTracker.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/checksfinderTracker.css') }}" />
     <script type="application/ecmascript" src="{{ url_for('static', filename='assets/checksfinderTracker.js') }}"></script>
-    <link rel="stylesheet" type="text/css" href="//undertalefonts.duodecima.technology/webfonts/stylesheet.css">
 </head>
 
 <body>
     <div id="player-tracker-wrapper" data-tracker="{{ room.tracker|suuid }}">
         <table id="inventory-table">
-            <tr>
-                <td class="icon" style="background-image: url('{{ icons['Checks Available'] }}');">&nbsp;</td>
-                <td class="item-count">{{ checks_available }}</td>
-                <td class="icon" style="background-image: url('{{ icons['Map Bombs'] }}');">&nbsp;</td>
-                <td class="item-count">{{ bombs_display }}/20</td>
+            <tr class="column-headers">
+                <td colspan="2">Checks Available:</td>
+                <td colspan="2">Map Bombs:</td>
             </tr>
             <tr>
-                <td class="icon" style="background-image: url('{{ icons['Map Width'] }}');">&nbsp;</td>
-                <td class="item-count">{{ width_display }}/10</td>
-                <td class="icon" style="background-image: url('{{ icons['Map Height'] }}');">&nbsp;</td>
-                <td class="item-count">{{ height_display }}/10</td>
+                <td><img alt="Checks Available" src="{{ icons['Checks Available'] }}" /></td>
+                <td>{{ checks_available }}</td>
+                <td><img alt="Bombs Remaining" src="{{ icons['Map Bombs'] }}" /></td>
+                <td>{{ bombs_display }}/20</td>
+            </tr>
+            <tr class="column-headers">
+                <td colspan="2">Map Width:</td>
+                <td colspan="2">Map Height:</td>
+            </tr>
+            <tr>
+                <td><img alt="Map Width" src="{{ icons['Map Width'] }}" /></td>
+                <td>{{ width_display }}/10</td>
+                <td><img alt="Map Height" src="{{ icons['Map Height'] }}" /></td>
+                <td>{{ height_display }}/10</td>
             </tr>
         </table>
     </div>
