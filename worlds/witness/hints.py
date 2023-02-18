@@ -40,7 +40,7 @@ joke_hints = [
     "Have you tried Zillion?\nMe neither. But it looks fun. So, let's try something new together?",
     "Have you tried Hylics 2?\nStop motion might just be the epitome of unique art styles.",
     "Have you tried Pokemon Red&Blue?\nA cute pet collecting game that fascinated an entire generation.",
-    "Have you tried Lufia II?\nRoguelites are not a 2010s phenomenon, turns out.",
+    "Have you tried Lufia II?\nRoguelites are not just a 2010s phenomenon, turns out.",
     "Waiting to get your items?\nTry BK Sudoku! Make progress even while stuck.",
     "One day I was fascinated by the subject of generation of waves by wind.",
     "I don't like sandwiches. Why would you think I like sandwiches? Have you ever seen me with a sandwich?",
