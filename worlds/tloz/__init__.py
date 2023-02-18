@@ -1,6 +1,7 @@
 import logging
 import os
 import threading
+import pkgutil
 from typing import NamedTuple, Union, Dict, Any
 
 import bsdiff4
@@ -157,7 +158,8 @@ class TLoZWorld(World):
         # Remove map/compass check so they're always on
         # Removing a bit from the boss roars flags, so we can have more dungeon items. This allows us to
         # go past 0x1F items for dungeon items.
-        with open("worlds/tloz/z1_base_patch.bsdiff4", "rb") as base_patch:
+        base_patch_location = os.path.dirname(__file__) + "\z1_base_patch.bsdiff4"
+        with open(base_patch_location, "rb") as base_patch:
             rom_data = bsdiff4.patch(rom.read(), base_patch.read())
         rom_data = bytearray(rom_data)
         # Set every item to the new nothing value, but keep room flags. Type 2 boss roars should
@@ -253,7 +255,10 @@ class TLoZWorld(World):
                 patched_rom_file.write(patched_rom)
             patch = TLoZDeltaPatch(os.path.splitext(outputFilename)[0] + TLoZDeltaPatch.patch_file_ending,
                                    player=self.player,
-                                   player_name=self.multiworld.player_name[self.player], patched_path=outputFilename)
+                                   player_name=self.multiworld.player_name[self.player],
+                                   patched_path=outputFilename)
+            patch.write()
+            os.unlink(patched_filename)
         finally:
             self.rom_name_available_event.set()
 
