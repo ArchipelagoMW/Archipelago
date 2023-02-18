@@ -3,7 +3,7 @@ from typing import Dict, List, Set, Tuple, TextIO
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from .Items import item_table
 from .Locations import get_locations, EventId
-from .Rules import LuigiMansionLogic
+from .Rules import set_ghost_rules
 from .Options import luigimansion_options
 from .Regions import create_regions, is_option_enabled, get_option_value
 from ..AutoWorld import World, WebWorld
@@ -48,11 +48,11 @@ class LuigiMansionWorld(World):
 
         self.locked_locations = []
         self.location_cache = []
+        self.room_to_ghost_table: {}
 
     def generate_early(self):
-        # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
-        if self.multiworld.start_inventory[self.player].value.pop('Meyef', 0) > 0:
-            self.multiworld.StartWithMeyef[self.player].value = self.multiworld.StartWithMeyef[self.player].option_true
+        # in generate_early the start_inventory isn't copied over to precollected_items yet, so we can still modify the options directly
+        pass
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player), self.location_cache)
@@ -60,7 +60,7 @@ class LuigiMansionWorld(World):
     def create_item(self, name: str) -> Item:
         item_id: int = self.item_name_to_id[name]
 
-        return LMItem(name,
+        return Item(name,
                               item_table[name].classification,
                               item_id, player=self.player)
 
@@ -68,16 +68,18 @@ class LuigiMansionWorld(World):
         return self.multiworld.random.choice(filler_items)
 
     def set_rules(self):
-        setup_events(self.player, self.locked_locations, self.location_cache)
+        if self.multiworld.Enemizer[self.player]:
+            set_ghost_rules(self.location_cache)
 
-        self.multiworld.completion_condition[self.player] = lambda state: state.has('Killed Nightmare', self.player)
+        setup_events(self.player, self.locked_locations, self.location_cache)
 
     def generate_basic(self):
         excluded_items = get_excluded_items(self, self.multiworld, self.player)
 
         pool = get_item_pool(self.multiworld, self.player, excluded_items)
 
-        fill_item_pool_with_dummy_items(self, self.multiworld, self.player, self.locked_locations, self.location_cache, pool)
+        fill_item_pool_with_filler_items(self, self.multiworld, self.player, self.locked_locations, self.location_cache,
+                                         pool)
 
         self.multiworld.itempool += pool
 
@@ -140,24 +142,14 @@ def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> L
     return pool
 
 
-def fill_item_pool_with_dummy_items(self: LuigiMansionWorld, world: MultiWorld, player: int, locked_locations: List[str],
+def fill_item_pool_with_filler_items(self: LuigiMansionWorld, world: MultiWorld, player: int, locked_locations: List[str],
                                     location_cache: List[Location], pool: List[Item]):
+
     for _ in range(len(location_cache) - len(locked_locations) - len(pool)):
-        item = create_item(world, player, self.get_filler_item_name())
+        item = world.create_item(world, player, filler.random.choice())
         pool.append(item)
 
-def create_item_with_correct_settings(world: MultiWorld, player: int, name: str) -> Item:
-    data = item_table[name]
-    if data.useful:
-        classification = ItemClassification.useful
-    elif data.progression:
-        classification = ItemClassification.progression
-    else:
-        classification = ItemClassification.filler
-    item = Item(name, classification, data.code, player)
 
-    if not item.advancement:
-        return item
 
     if (name == 'Tablet' or name == 'Library Keycard V') and not is_option_enabled(world, player, "DownloadableItems"):
         item.classification = ItemClassification.filler

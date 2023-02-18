@@ -1,5 +1,5 @@
 from typing import List, Set, Dict, Tuple, Optional, Callable, Union
-from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
+from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import LocationData
 
 
@@ -73,8 +73,6 @@ def create_regions(multiworld: MultiWorld, player: int, locations: tuple[Locatio
         throwIfAnyLocationIsNotAssignedToARegion(regions, locations_per_region.keys())
 
     multiworld.regions += regions
-
-    connectStartingRegion(multiworld, player)
 
     names: Dict[str, int] = {}
 
@@ -186,7 +184,7 @@ def create_location(player: int, location_data: LocationData, region: Region,
 
 def create_region(multiworld: MultiWorld, player: int, locations_per_region: Dict[str, List[LocationData]],
                   location_cache: List[Location], name: str) -> Region:
-    region = Region(name, RegionType.Generic, name, player)
+    region = Region(name, player, multiworld)
     region.multiworld = multiworld
 
     if name in locations_per_region:
@@ -197,33 +195,10 @@ def create_region(multiworld: MultiWorld, player: int, locations_per_region: Dic
     return region
 
 
-def connectStartingRegion(multiworld: MultiWorld, player: int):
-    menu = multiworld.get_region('Menu', player)
-    tutorial = multiworld.get_region('Tutorial', player)
-    space_time_continuum = multiworld.get_region('Space time continuum', player)
-
-    if is_option_enabled(multiworld, player, "Inverted"):
-        starting_region = multiworld.get_region('Refugee Camp', player)
-    else:
-        starting_region = multiworld.get_region('Lake desolation', player)
-
-    menu_to_tutorial = Entrance(player, 'Tutorial', menu)
-    menu_to_tutorial.connect(tutorial)
-    menu.exits.append(menu_to_tutorial)
-
-    tutorial_to_start = Entrance(player, 'Start Game', tutorial)
-    tutorial_to_start.connect(starting_region)
-    tutorial.exits.append(tutorial_to_start)
-
-    teleport_back_to_start = Entrance(player, 'Teleport back to start', space_time_continuum)
-    teleport_back_to_start.connect(starting_region)
-    space_time_continuum.exits.append(teleport_back_to_start)
-
-
 def connect(multiworld: MultiWorld, player: int, used_names: Dict[str, int], source: str, target: str,
             rule: Optional[Callable] = None):
-    sourceRegion = multiworld.get_region(source, player)
-    targetRegion = multiworld.get_region(target, player)
+    source_region = multiworld.get_region(source, player)
+    target_region = multiworld.get_region(target, player)
 
     if target not in used_names:
         used_names[target] = 1
@@ -232,13 +207,13 @@ def connect(multiworld: MultiWorld, player: int, used_names: Dict[str, int], sou
         used_names[target] += 1
         name = target + (' ' * used_names[target])
 
-    connection = Entrance(player, name, sourceRegion)
+    connection = Entrance(player, name, source_region)
 
     if rule:
         connection.access_rule = rule
 
-    sourceRegion.exits.append(connection)
-    connection.connect(targetRegion)
+    source_region.exits.append(connection)
+    connection.connect(target_region)
 
 
 def get_locations_per_region(locations: Tuple[LocationData, ...]) -> Dict[str, List[LocationData]]:

@@ -1,66 +1,32 @@
-from BaseClasses import MultiWorld
-from ..AutoWorld import LogicMixin
-from .Options import is_option_enabled
+from BaseClasses import Location, MultiWorld
+from worlds.generic.Rules import set_rule, CollectionRule
+from .Locations import ghost_affected_locations
 
+#Assign ghost_type to region subcless statically, access that attribute to set rules using function below
+def set_ghost_type(multiworld: MultiWorld, player: int, location: Location, region: LMRegion) -> CollectionRule:
+    if multiworld.Enemizer == True:
+        result = multiworld.random.choice(["Fire", "Water", "Ice", "No Element"])
+        room_to_ghost_table.update{location.name: result}
 
-# May not need Rules file. Remains here until I have determined it is totally unnecessary
-
-
-
-class LuigiMansionLogic(LogicMixin):
-    def _luigimansion_boo_count(self, world: MultiWorld, player: int) -> bool:
-        return self.has('Fire Element Medal', player)
-
-    def _luigimansion_has_icemedal(self, world: MultiWorld, player: int) -> bool:
-        return self.has('Ice Element Medal', player)
-
-    def _luigimansion_has_watermedal(self, world: MultiWorld, player: int) -> bool:
-        return self.has('Water Element Medal', player)
-
-    def _timespinner_has_doublejump_of_npc(self, world: MultiWorld, player: int) -> bool:
-        return self._timespinner_has_upwarddash(world, player) or (self.has('Timespinner Wheel', player))
-
-    def _timespinner_has_fastjump_on_npc(self, world: MultiWorld, player: int) -> bool:
-        return self.has_all({'Timespinner Wheel', 'Talaria Attachment'}, player)
-
-    def _timespinner_has_multiple_small_jumps_of_npc(self, world: MultiWorld, player: int) -> bool:
-        return self.has('Timespinner Wheel', player) or self._timespinner_has_upwarddash(world, player)
-
-    def _timespinner_has_upwarddash(self, world: MultiWorld, player: int) -> bool:
-        return self.has_any({'Lightwall', 'Celestial Sash'}, player)
-    
-    def _timespinner_has_fire(self, world: MultiWorld, player: int) -> bool:
-        return self.has_any({'Fire Orb', 'Infernal Flames', 'Pyro Ring', 'Djinn Inferno'}, player)
-
-    def _timespinner_has_pink(self, world: MultiWorld, player: int) -> bool:
-        return self.has_any({'Plasma Orb', 'Plasma Geyser', 'Royal Ring'}, player)
-
-    def _timespinner_has_keycard_A(self, world: MultiWorld, player: int) -> bool:
-        return self.has('Security Keycard A', player)
-
-    def _timespinner_has_keycard_B(self, world: MultiWorld, player: int) -> bool:
-        if is_option_enabled(world, player, "SpecificKeycards"):
-            return self.has('Security Keycard B', player)
+    for location_name, ghost_type in room_to_ghost_table:
+        if ghost_type == "Fire":
+            room_to_ghost_table.update{location.name: "Fire"}
+            return lambda state: state.has("Water Element Medal", player)
+        elif ghost_type == "Water":
+            room_to_ghost_table.update{location.name: "Water"}
+            return lambda state: state.has("Ice Element Medal", player)
+        elif ghost_type == "Ice":
+            room_to_ghost_table.update{location.name: "Ice"}
+            return lambda state: state.has("Fire Element Medal", player)
         else:
-            return self.has_any({'Security Keycard A', 'Security Keycard B'}, player)
+            room_to_ghost_table.update{location.name: "No Element"}
+            return lambda state: False
 
-    def _timespinner_has_keycard_C(self, world: MultiWorld, player: int) -> bool:
-        if is_option_enabled(world, player, "SpecificKeycards"):
-            return self.has('Security Keycard C', player)
-        else:
-            return self.has_any({'Security Keycard A', 'Security Keycard B', 'Security Keycard C'}, player)
 
-    def _timespinner_has_keycard_D(self, world: MultiWorld, player: int) -> bool:
-        if is_option_enabled(world, player, "SpecificKeycards"):
-            return self.has('Security Keycard D', player)
-        else:
-            return self.has_any({'Security Keycard A', 'Security Keycard B', 'Security Keycard C', 'Security Keycard D'}, player)
-
-    def _timespinner_can_break_walls(self, world: MultiWorld, player: int) -> bool:
-        if is_option_enabled(world, player, "EyeSpy"):
-            return self.has('Oculus Ring', player)
-        else:
-            return True
-
-    def _timespinner_can_kill_all_3_bosses(self, world: MultiWorld, player: int) -> bool:
-        return self.has_all({'Killed Maw', 'Killed Twins', 'Killed Aelana'}, player)
+def set_ghost_rules(multiworld: MultiWorld, player: int, locations: [Location]):
+    for location in locations:
+        for location_name in ghost_affected_locations:
+            if location_name == location.name:
+                ghost_state = set_ghost_type(multiworld, player)
+                if ghost_state:
+                    set_rule(location, ghost_state)
