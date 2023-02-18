@@ -1,7 +1,8 @@
 import bsdiff4
-import json
 import os
 
+from .data.Pokemon import get_random_species
+from .Util import get_data_json, set_bytes_little_endian
 from Patch import APDeltaPatch
 
 def get_base_rom_as_bytes() -> bytes:
@@ -9,34 +10,35 @@ def get_base_rom_as_bytes() -> bytes:
         base_rom_bytes = bytes(infile.read())
     return base_rom_bytes
 
-# def patch(self):
-#     base_rom = get_base_rom_as_bytes()
-#     data = read_json("./data.json")
-#     item_address = data["ball_items"]["ITEM_ROUTE_104_POTION"]["rom_address"]
-#     rom[item_address] = data["constants"]["items"]["ITEM_ARCHIPELAGO_PROGRESSION"]
+# For every encounter table, replace each unique species.
+# So if a table only has 2 species across multiple slots, it will
+# still have 2 species in the same respective slots after randomization.
+# TODO: Account for access to pokemon who can learn required HMs
+def randomize_encounter_tables(self, patched_rom):
+    data = get_data_json()
 
-#     for location in self.multiworld.get_locations():
-#         if location.player != self.player:
-#             continue
+    for map_name, tables in data["encounter_tables"].items():
+        for table in tables.values():
+            default_pokemon = [p for p in set(table["encounter_slots"])]
+            new_pokemon = []
 
-#         if location.item and location.item.player == self.player:
-#             rom[location.rom_address] = location.item.id
-#         else:
-#             rom[location.rom_address] = data["constants"]["items"]["ITEM_ARCHIPELAGO_PROGRESSION"]
-
-#     with open("./patched-emerald.gba", 'wb') as outfile:
-#         outfile.write(rom)
-
-def read_json():
-    json_string = ""
-    with open(os.path.join(os.path.dirname(__file__), f"data.json"), "r") as infile:
-        for line in infile.readlines():
-            # json_string += line.replace('\n', ' ')
-            json_string += line
-    return json.loads(json_string)
+            for pokemon in default_pokemon:
+                new_pokemon_id = get_random_species(self.multiworld.per_slot_randoms[self.player]).id
+                new_pokemon.append(new_pokemon_id)
+            
+            for slot_i, slot in enumerate(table["encounter_slots"]):
+                """Encounter tables are lists of
+                struct {
+                    min_level:  0x01 bytes,
+                    max_level:  0x01 bytes,
+                    species_id: 0x02 bytes
+                }
+                """
+                address = table["rom_address"] + 2 + (slot_i * 4)
+                set_bytes_little_endian(patched_rom, address, 2, new_pokemon[default_pokemon.index(slot)])
 
 def generate_output(self, output_directory: str):
-    data = read_json() 
+    data = get_data_json() 
 
     base_rom = get_base_rom_as_bytes()
     with open(os.path.join(os.path.dirname(__file__), f"base_patch.bsdiff4"), "rb") as stream:
@@ -51,6 +53,8 @@ def generate_output(self, output_directory: str):
             patched_rom[location.address] = location.item.code
         else:
             patched_rom[location.address] = data["constants"]["items"]["ITEM_ARCHIPELAGO_PROGRESSION"]
+
+    randomize_encounter_tables(self, patched_rom)
 
     outfile_player_name = f"_P{self.player}"
     outfile_player_name += f"_{self.multiworld.get_file_safe_player_name(self.player).replace(' ', '_')}" \
@@ -67,7 +71,7 @@ def generate_output(self, output_directory: str):
 
 
 class PokemonEmeraldDeltaPatch(APDeltaPatch):
-    hash = "3d45c1ee9abd5738df46d2bdda8b57dc"
+    hash = "605b89b67018abcea91e693a4dd25be3"
     game = "Pokemon Emerald"
     patch_file_ending = ".apemerald"
     result_file_ending = ".gba"
