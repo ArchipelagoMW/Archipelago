@@ -690,7 +690,6 @@ class VariaRandomizer:
             # in vcr mode we still want the seed to be generated to analyze it
             if args.vcr == False:
                 sys.exit(-1)
-        #randoExec.postProcessItemLocs(itemLocs, args.hideItems)
 
     def PatchRom(self, outputFilename, customPrePatchApply = None, customPostPatchApply = None):
         args = self.args

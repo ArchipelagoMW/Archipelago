@@ -367,7 +367,7 @@ def loadRandoPreset(world, player, args):
     args.noVariaTweaks = not world.varia_tweaks[player].value
     args.maxDifficulty = diffs[world.max_difficulty[player].value]
     #args.suitsRestriction = world.suits_restriction[player].value
-    #args.hideItems = world.hide_items[player].value
+    args.hideItems = world.hide_items[player].value
     args.strictMinors = world.strict_minors[player].value
     args.noLayout = not world.layout_patches[player].value
     args.gravityBehaviour = defaultMultiValues["gravityBehaviour"][world.gravity_behaviour[player].value]
@@ -378,8 +378,8 @@ def loadRandoPreset(world, player, args):
         args.area == "full"
     if args.area != "off":
         args.areaLayoutBase = not world.area_layout[player].value
-    #args.escapeRando
-    #args.noRemoveEscapeEnemies
+    args.escapeRando = world.escape_rando[player].value
+    args.noRemoveEscapeEnemies = world.remove_escape_enemies[player].value
     args.doorsColorsRando = world.doors_colors_rando[player].value
     args.allowGreyDoors = world.allow_grey_doors[player].value
     args.bosses = world.boss_randomization[player].value

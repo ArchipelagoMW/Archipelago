@@ -231,9 +231,10 @@ _goalsList = [
          expandableList=["kill spore spawn", "kill botwoon", "kill crocomire", "kill golden torizo"],
          category="Minibosses",
          conflictFunc=lambda settings: settings.qty['energy'] == 'ultra sparse' and (not Knows.LowStuffGT or (Knows.LowStuffGT.difficulty > settings.maxDiff))),
-    Goal("finish scavenger hunt", "other", lambda sm, ap: SMBool(True), "scavenger_hunt_completed",
-         exclusion={"list": []}, # will be auto-completed
-         available=False),
+    # not available in AP
+    #Goal("finish scavenger hunt", "other", lambda sm, ap: SMBool(True), "scavenger_hunt_completed",
+    #     exclusion={"list": []}, # will be auto-completed
+    #     available=False),
     Goal("nothing", "other", lambda sm, ap: Objectives.canAccess(sm, ap, "Landing Site"), "nothing_objective",
          escapeAccessPoints=(1, ["Landing Site"])), # with no objectives at all, escape auto triggers only in crateria
     Goal("collect 25% items", "items", lambda sm, ap: SMBool(True), "collect_25_items",
@@ -341,7 +342,8 @@ def completeGoalData():
     # if we need 100% items, don't require "clear area", as it covers those
     _goals["collect 100% items"].exclusion["list"] += areaGoals[:]
     # if we have scav hunt, don't require "clear area" (HUD behaviour incompatibility)
-    _goals["finish scavenger hunt"].exclusion["list"] += areaGoals[:]
+    # not available in AP
+    #_goals["finish scavenger hunt"].exclusion["list"] += areaGoals[:]
     # remove clear area goals if disabled tourian, as escape can trigger as soon as an area is cleared,
     # even if ship is not currently reachable
     for goal in areaGoals:

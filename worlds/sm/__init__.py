@@ -731,6 +731,8 @@ class SMWorld(World):
         self.variaRando.doors = GraphUtils.getDoorConnections(self.variaRando.randoExec.areaGraph,
                                     self.variaRando.args.area, self.variaRando.args.bosses,
                                     self.variaRando.args.escapeRando)
+        
+        self.variaRando.randoExec.postProcessItemLocs(self.itemLocs, self.variaRando.args.hideItems)
 
     @classmethod
     def stage_post_fill(cls, world):
