@@ -22,7 +22,7 @@ joke_hints = [
     "Have you tried Hollow Knight?\nAnother independent hit revolutionising a genre!",
     "Have you tried A Link to the Past?\nThe Archipelago game that started it all!",
     "Have you tried Meritous?\nYou should know that obscure games are often groundbreaking!",
-    "Have you tried Ocarine of Time?\nOne of the biggest randomizers, big inspiration for this one's features!",
+    "Have you tried Ocarina of Time?\nOne of the biggest randomizers, big inspiration for this one's features!",
     "Have you tried Raft?\nHaven't you always wanted to explore the ocean surrounding this island?",
     "Have you tried Risk of Rain 2?\nI haven't either. But I hear it's incredible!",
     "Have you tried Rogue Legacy?\nAfter solving so many puzzles it's the perfect way to rest your brain.",
