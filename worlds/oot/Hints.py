@@ -15,7 +15,7 @@ from .Items import OOTItem
 from .HintList import getHint, getHintGroup, Hint, hintExclusions, \
     misc_item_hint_table, misc_location_hint_table
 from .Messages import COLOR_MAP, update_message_by_id
-from .TextBox import line_wrap
+from .TextBox import line_wrap, character_table
 from .Utils import data_path, read_json
 
 
@@ -147,13 +147,17 @@ def isRestrictedDungeonItem(dungeon, item):
     return False
 
 
+def rom_safe_text(text):
+    return ''.join(map(lambda c: c if c in character_table else '?', text))
+
+
 # Attach a player name to the item or location text.
 # If the associated player of the item/location and the world are the same, does nothing.
-# Otherwise, attaches the object's player's name to the string.
+# Otherwise, attaches the object's player's name to the string, calling rom_safe_text for foreign items/locations.
 def attach_name(text, hinted_object, world):
     if hinted_object.player == world.player:
         return text
-    return f"{text} for {world.multiworld.get_player_name(hinted_object.player)}"
+    return rom_safe_text(f"{world.multiworld.get_player_name(hinted_object.player)}'s {text}")
 
 
 def add_hint(world, groups, gossip_text, count, location=None, force_reachable=False):
