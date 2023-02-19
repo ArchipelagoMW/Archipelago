@@ -42,8 +42,10 @@ cc_library               = "Castle Center: library"
 cc_elev_top              = "Castle Center: elevator top"
 
 duel_tower               = "Duel Tower"
+dt_main                  = "Duel Tower"
 
 tower_of_sorcery         = "Tower of Sorcery"
+tosor_main               = "Tower of Sorcery"
 
 tower_of_execution       = "Tower of Execution"
 toe_main                 = "Tower of Execution: main area"
@@ -56,6 +58,7 @@ tosci_conveyors          = "Tower of Science: spiky conveyors"
 tosci_key3               = "Tower of Science: locked key3 room"
 
 room_of_clocks           = "Room of Clocks"
+roc_main                 = "Room of Clocks"
 
 clock_tower              = "Clock Tower"
 ct_start                 = "Clock Tower: start"
@@ -63,5 +66,52 @@ ct_middle                = "Clock Tower: middle"
 ct_end                   = "Clock Tower: end"
 
 castle_keep              = "Castle Keep"
+ck_main                  = "Castle Keep: exterior"
+ck_drac_chamber          = "Castle Keep: Dracula's chamber"
 
-drac_chamber             = "Dracula's Chamber"
+regions_to_stages = {
+    menu:                None,
+    warp1:               None,
+    warp2:               None,
+    warp3:               None,
+    warp4:               None,
+    warp5:               None,
+    warp6:               None,
+    warp7:               None,
+    forest_start:        forest_of_silence,
+    forest_mid:          forest_of_silence,
+    forest_end:          forest_of_silence,
+    cw_start:            castle_wall,
+    cw_exit:             castle_wall,
+    cw_ltower:           castle_wall,
+    villa_start:         villa,
+    villa_main:          villa,
+    villa_storeroom:     villa,
+    villa_archives:      villa,
+    villa_maze:          villa,
+    villa_servants:      villa,
+    villa_crypt:         villa,
+    tunnel_start:        tunnel,
+    tunnel_end:          tunnel,
+    uw_main:             underground_waterway,
+    uw_end:              underground_waterway,
+    cc_main:             castle_center,
+    cc_crystal:          castle_center,
+    cc_torture_chamber:  castle_center,
+    cc_library:          castle_center,
+    cc_elev_top:         castle_center,
+    dt_main:             duel_tower,
+    toe_main:            tower_of_execution,
+    toe_ledge:           tower_of_execution,
+    tosci_start:         tower_of_science,
+    tosci_three_doors:   tower_of_science,
+    tosci_conveyors:     tower_of_science,
+    tosci_key3:          tower_of_science,
+    tosor_main:          tower_of_sorcery,
+    roc_main:            room_of_clocks,
+    ct_start:            clock_tower,
+    ct_middle:           clock_tower,
+    ct_end:              clock_tower,
+    ck_main:             castle_keep,
+    ck_drac_chamber:     castle_keep
+}

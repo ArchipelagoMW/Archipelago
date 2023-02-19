@@ -3,13 +3,12 @@ import typing
 # import math
 import threading
 
-from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
+from BaseClasses import Item, Region, Entrance, Location, MultiWorld, Tutorial, ItemClassification
 from .Items import CV64Item, ItemData, item_table, junk_table, main_table
-from .Locations import CV64Location, all_locations, setup_locations
+from .Locations import CV64Location, all_locations, create_locations
+from .Entrances import create_entrances
 from .Options import cv64_options
-from .Regions import create_regions
 from .Stages import stage_dict, vanilla_stage_order
-from .Rules import set_rules
 from .Names import ItemName, LocationName, RegionName
 from ..AutoWorld import WebWorld, World
 from .Rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch, rom_sub_weapon_offsets
@@ -112,9 +111,20 @@ class CV64World(World):
             self.active_warp_list = new_list
 
     def create_regions(self):
-        location_table = setup_locations(self.multiworld, self.player)
-        create_regions(self.multiworld, self.player, location_table, self.active_stage_list, self.active_warp_list,
-                       self.required_s2s)
+        active_regions = {}
+
+        for name, stage in RegionName.regions_to_stages.items():
+            if stage in self.active_stage_list or stage is None:
+                active_regions[name] = Region(name, None, name, self.player, self.multiworld)
+
+        create_locations(self.multiworld, self.player, active_regions)
+
+        create_entrances(self.multiworld, self.player, self.active_stage_list, self.active_warp_list, self.required_s2s,
+                         active_regions)
+
+        # Set up the regions correctly
+        for region in active_regions:
+            self.multiworld.regions.append(active_regions[region])
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
@@ -134,13 +144,9 @@ class CV64World(World):
 
         return created_item
 
-    def set_rules(self):
-        set_rules(self.multiworld, self.player)
-
-    def generate_basic(self):
+    def create_items(self):
         item_counts = {name: data.quantity for name, data in item_table.items()}
 
-        # Levels
         total_required_locations = 210
 
         self.multiworld.get_location(LocationName.the_end, self.player).place_locked_item(self.create_item(ItemName.victory))
@@ -241,6 +247,9 @@ class CV64World(World):
             sub_bytes = list(self.sub_weapon_dict.values())
             self.multiworld.random.shuffle(sub_bytes)
             self.sub_weapon_dict = dict(zip(self.sub_weapon_dict, sub_bytes))
+
+    def set_rules(self):
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.victory, self.player)
 
     def pre_fill(self):
         if self.active_stage_list[0] == RegionName.tower_of_science:
@@ -367,8 +376,8 @@ class CV64World(World):
                                    player_name=world.player_name[player], patched_path=rompath)
             patch.write()
         except:
-            print("Oh no, something went wrong in CV64's generate_output!")
-            raise Exception("Oh no, something went wrong in CV64's generate_output!")
+            print("D'oh, something went wrong in CV64's generate_output!")
+            raise
         finally:
             if os.path.exists(rompath):
                 os.unlink(rompath)
