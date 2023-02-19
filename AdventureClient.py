@@ -17,7 +17,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandP
 from worlds.adventure import AdventureDeltaPatch
 
 from worlds.adventure.Locations import location_table, base_location_id
-from worlds.adventure.Rom import AdventureForeignItemInfo, AdventureAutoCollectLocation
+from worlds.adventure.Rom import AdventureForeignItemInfo, AdventureAutoCollectLocation, BatNoTouchLocation
 from worlds.adventure.Items import base_adventure_item_id, standard_item_max, item_table
 from worlds.adventure.Offsets import static_item_data_location, static_item_element_size, rom_address_space_start, \
     connector_port_offset
@@ -57,6 +57,7 @@ class AdventureContext(CommonContext):
     game = 'Adventure'
     foreign_items: [AdventureForeignItemInfo] = []
     autocollect_items: [AdventureAutoCollectLocation] = []
+    bat_no_touch_locations: [BatNoTouchLocation]
     local_item_locations = {}
     dragon_speed_info = {}
     checked_locations_sent: bool = False
@@ -79,6 +80,7 @@ class AdventureContext(CommonContext):
         self.items_handling = 0b111
         self.checked_locations_sent = False
         self.port_offset = 0
+        self.bat_no_touch_locations = []
 
         options = Utils.get_options()
         self.display_msgs = options["adventure_options"]["display_msgs"]
@@ -238,15 +240,19 @@ async def parse_locations(data: List, ctx: AdventureContext):
 def send_ap_foreign_items(adventure_context):
     foreign_item_json_list = []
     autocollect_item_json_list = []
+    bat_no_touch_locations_json_list = []
     for fi in adventure_context.foreign_items:
         foreign_item_json_list.append(fi.get_dict())
     for fi in adventure_context.autocollect_items:
         autocollect_item_json_list.append(fi.get_dict())
+    for ntl in adventure_context.bat_no_touch_locations:
+        bat_no_touch_locations_json_list.append(ntl.get_dict())
     payload = json.dumps(
         {
             "foreign_items": foreign_item_json_list,
             "autocollect_items": autocollect_item_json_list,
-            "local_item_locations": adventure_context.local_item_locations
+            "local_item_locations": adventure_context.local_item_locations,
+            "bat_no_touch_locations": bat_no_touch_locations_json_list
         }
     )
     print("sending foreign items")
@@ -441,6 +447,7 @@ async def patch_and_run_game(patch_file, ctx):
         ctx.rom_hash, ctx.seed_name_from_data, ctx.player_name = AdventureDeltaPatch.read_rom_info(patch_archive)
         ctx.diff_a_mode, ctx.diff_b_mode = AdventureDeltaPatch.read_difficulty_switch_info(patch_archive)
         ctx.bat_logic = AdventureDeltaPatch.read_bat_logic(patch_archive)
+        ctx.bat_no_touch_locations = AdventureDeltaPatch.read_bat_no_touch(patch_archive)
         ctx.auth = ctx.player_name
     patched_rom_data = bsdiff4.patch(base_rom, patch)
     ctx.port_offset = patched_rom_data[connector_port_offset]

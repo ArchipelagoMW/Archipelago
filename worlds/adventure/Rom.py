@@ -51,6 +51,27 @@ class AdventureForeignItemInfo:
         }
 
 
+class BatNoTouchLocation:
+    short_location_id: int
+    room_id: int
+    room_x: int
+    room_y: int
+
+    def __init__(self, short_location_id: int, room_id: int, room_x: int, room_y: int):
+        self.short_location_id = short_location_id
+        self.room_id = room_id
+        self.room_x = room_x
+        self.room_y = room_y
+
+    def get_dict(self):
+        return {
+            "short_location_id": self.short_location_id,
+            "room_id": self.room_id,
+            "room_x": self.room_x,
+            "room_y": self.room_y,
+        }
+
+
 class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
     hash = ADVENTUREHASH
     game = "Adventure"
@@ -168,7 +189,6 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
         self.foreign_items = AdventureDeltaPatch.read_foreign_items(opened_zipfile)
         self.autocollect_items = AdventureDeltaPatch.read_autocollect_items(opened_zipfile)
 
-
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
@@ -205,7 +225,7 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
         foreign_items = []
         readbytes: bytes = opened_zipfile.read("adventure_locations")
         bytelist = list(readbytes)
-        for i in range(round(len(bytelist)/4)):
+        for i in range(round(len(bytelist) / 4)):
             offset = i * 4
             foreign_items.append(AdventureForeignItemInfo(bytelist[offset],
                                                           bytelist[offset + 1],
@@ -214,11 +234,24 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
         return foreign_items
 
     @classmethod
+    def read_bat_no_touch(cls, opened_zipfile: zipfile.ZipFile) -> [BatNoTouchLocation]:
+        locations = []
+        readbytes: bytes = opened_zipfile.read("bat_no_touch_locations")
+        bytelist = list(readbytes)
+        for i in range(round(len(bytelist) / 4)):
+            offset = i * 4
+            locations.append(BatNoTouchLocation(bytelist[offset],
+                                                bytelist[offset + 1],
+                                                bytelist[offset + 2],
+                                                bytelist[offset + 3]))
+        return locations
+
+    @classmethod
     def read_autocollect_items(cls, opened_zipfile: zipfile.ZipFile) -> [AdventureForeignItemInfo]:
         autocollect_items = []
         readbytes: bytes = opened_zipfile.read("adventure_autocollect")
         bytelist = list(readbytes)
-        for i in range(round(len(bytelist)/2)):
+        for i in range(round(len(bytelist) / 2)):
             offset = i * 2
             autocollect_items.append(AdventureAutoCollectLocation(bytelist[offset], bytelist[offset + 1]))
         return autocollect_items
