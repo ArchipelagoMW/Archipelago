@@ -1,10 +1,10 @@
 from BaseClasses import Region, Entrance
+from ..AutoWorld import World
 from .Items import create_item_name_to_id_map, create_ball_items, create_hidden_items, create_badge_items
 from .Locations import create_location_name_to_id_map, create_ball_item_locations, create_hidden_item_locations, create_badge_locations
 from .Options import options
 from .Rom import generate_output
 from .Util import get_data_json
-from ..AutoWorld import World
 
 class PokemonEmeraldWorld(World):
     """
@@ -27,6 +27,7 @@ class PokemonEmeraldWorld(World):
             'player_id': self.player,
             'race': self.multiworld.is_race,
         }
+
 
     def create_regions(self):
         region_map = {}
@@ -56,10 +57,12 @@ class PokemonEmeraldWorld(World):
         create_badge_locations(self, region_map)
         self.multiworld.regions += region_map.values()
 
+
     def create_items(self):
         self.multiworld.itempool += create_ball_items(self)
         self.multiworld.itempool += create_hidden_items(self)
         self.multiworld.itempool += create_badge_items(self)
+
 
     def fill_slot_data(self):
         slot_data = self._get_pokemon_emerald_data()
@@ -68,6 +71,7 @@ class PokemonEmeraldWorld(World):
             if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)
         return slot_data
+
 
     def generate_output(self, output_directory: str):
         generate_output(self, output_directory)

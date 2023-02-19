@@ -1,9 +1,8 @@
 import bsdiff4
 import os
-
+from Patch import APDeltaPatch
 from .data.Pokemon import get_random_species
 from .Util import get_data_json, set_bytes_little_endian
-from Patch import APDeltaPatch
 
 def get_base_rom_as_bytes() -> bytes:
     with open(os.path.join(os.path.dirname(__file__), f"pokeemerald-vanilla.gba"), "rb") as infile:

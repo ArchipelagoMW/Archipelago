@@ -8,28 +8,35 @@ class PokemonSpecies:
         self.name = name
         self.id = id
 
+
 national_pokedex = None
 data = get_data_json()
+
 
 def get_random_species(random):
     pokemon = get_national_pokedex()
     return pokemon[random.randint(0, len(pokemon) - 1)]
 
+
 def get_species_by_national_pokedex_id(dex_number: int):
     global national_pokedex
     return national_pokedex[dex_number - 1]
+
 
 def get_species_by_id(id: int):
     global national_pokedex
     return next(p for p in national_pokedex if p.id == id)
 
+
 def get_species_by_name(name: str):
     global national_pokedex
     return next(p for p in national_pokedex if p.name == name)
 
+
 def create_species(name, constant_name):
     global data
     return PokemonSpecies(name, data["constants"]["species"][constant_name])
+
 
 def get_national_pokedex():
     global national_pokedex
