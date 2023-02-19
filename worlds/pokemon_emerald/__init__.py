@@ -1,6 +1,6 @@
-from BaseClasses import Region, Entrance, Item, ItemClassification
-from .Items import PokemonEmeraldItem, create_item_name_to_id_map, create_ball_items
-from .Locations import create_location_name_to_id_map, create_ball_item_locations
+from BaseClasses import Region, Entrance
+from .Items import create_item_name_to_id_map, create_ball_items, create_hidden_items, create_badge_items
+from .Locations import create_location_name_to_id_map, create_ball_item_locations, create_hidden_item_locations, create_badge_locations
 from .Options import options
 from .Rom import generate_output
 from .Util import get_data_json
@@ -52,10 +52,14 @@ class PokemonEmeraldWorld(World):
         region_map["Menu"] = menu
 
         create_ball_item_locations(self, region_map)
+        create_hidden_item_locations(self, region_map)
+        create_badge_locations(self, region_map)
         self.multiworld.regions += region_map.values()
 
     def create_items(self):
         self.multiworld.itempool += create_ball_items(self)
+        self.multiworld.itempool += create_hidden_items(self)
+        self.multiworld.itempool += create_badge_items(self)
 
     def fill_slot_data(self):
         slot_data = self._get_pokemon_emerald_data()
@@ -64,9 +68,6 @@ class PokemonEmeraldWorld(World):
             if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)
         return slot_data
-
-    # def get_filler_item_name(self) -> str:
-    #     return 'Potion'
 
     def generate_output(self, output_directory: str):
         generate_output(self, output_directory)
