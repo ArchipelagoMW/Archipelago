@@ -27,7 +27,7 @@ class KingdomHearts2Web(WebWorld):
 class KH2World(World):
     game: str = "Kingdom Hearts 2"
     web = KingdomHearts2Web()
-    data_version = 0
+    data_version = 1
     option_definitions = KH2_Options
     item_name_to_id = {name: data.code for name, data in item_dictionary_table.items()}
     location_name_to_id = {item_name: data.code for item_name, data in all_locations.items() if data.code}
