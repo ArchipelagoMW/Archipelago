@@ -2,7 +2,7 @@ import typing
 
 from BaseClasses import Item, Tutorial, ItemClassification
 
-from .Items import KH2Item, item_dictionary_table, exclusionItem_table, ProgressionItems
+from .Items import *
 from .Locations import all_locations, setup_locations, exclusion_table
 from .Names import ItemName, LocationName
 from .OpenKH import patch_kh2
@@ -27,7 +27,7 @@ class KingdomHearts2Web(WebWorld):
 class KH2World(World):
     game: str = "Kingdom Hearts 2"
     web = KingdomHearts2Web()
-    data_version = 1
+    data_version = 0
     option_definitions = KH2_Options
     item_name_to_id = {name: data.code for name, data in item_dictionary_table.items()}
     location_name_to_id = {item_name: data.code for item_name, data in all_locations.items() if data.code}
@@ -48,7 +48,7 @@ class KH2World(World):
 
     def create_item(self, name: str, ) -> Item:
         data = item_dictionary_table[name]
-        if name in ProgressionItems or name in Items.Misc_Table or name in Items.Staffs_Table or name in Items.Shields_Table:
+        if name in ProgressionItems or name in Misc_Table or name in Staffs_Table or name in Shields_Table:
             item_classification = ItemClassification.progression
         else:
             item_classification = ItemClassification.filler
@@ -90,17 +90,17 @@ class KH2World(World):
             self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(self.create_item(self.multiworld.per_slot_randoms[self.player].choice(filler_items)))
         self.totalLocations -= 1
         if self.multiworld.KeybladeAbilities[self.player].value == 0:
-            sora_keyblade_ability_pool.extend(Items.SupportAbility_Table.keys())
+            sora_keyblade_ability_pool.extend(SupportAbility_Table.keys())
         elif self.multiworld.KeybladeAbilities[self.player].value == 1:
-            sora_keyblade_ability_pool.extend(Items.ActionAbility_Table.keys())
+            sora_keyblade_ability_pool.extend(ActionAbility_Table.keys())
         else:
-            sora_keyblade_ability_pool.extend(Items.ActionAbility_Table.keys())
-            sora_keyblade_ability_pool.extend(Items.SupportAbility_Table.keys())
+            sora_keyblade_ability_pool.extend(ActionAbility_Table.keys())
+            sora_keyblade_ability_pool.extend(SupportAbility_Table.keys())
 
         for ability in self.multiworld.BlacklistKeyblade[self.player].value:
             if ability in sora_keyblade_ability_pool:
                 sora_keyblade_ability_pool.remove(ability)
-        for item, data in Items.item_dictionary_table.items():
+        for item, data in item_dictionary_table.items():
             item_quantity_dict.update({item: data.quantity})
 
         if self.multiworld.Goal[self.player].value == 1:
@@ -110,7 +110,7 @@ class KH2World(World):
                 luckyemblemamount = max(luckyemblemamount, luckyemblemrequired)
                 print(f"Luckey Emblem Amount {self.multiworld.LuckyEmblemsAmount[self.player].value} is less than required \
             {(self.multiworld.LuckyEmblemsRequired[self.player].value)} for player {self.multiworld.get_file_safe_player_name(self.player)}")
-            item_quantity_dict.update({ItemName.LuckyEmblem: Items.item_dictionary_table[ItemName.LuckyEmblem].quantity + luckyemblemamount})
+            item_quantity_dict.update({ItemName.LuckyEmblem: item_dictionary_table[ItemName.LuckyEmblem].quantity + luckyemblemamount})
             # give this proof to unlock the final door once the player has the amount of lucky emlblem required
             item_quantity_dict.update({ItemName.ProofofNonexistence: 0})
         # hitlist
@@ -149,13 +149,13 @@ class KH2World(World):
             item_quantity_dict.update({ItemName.ProofofNonexistence: 0})
 
         for item, value in self.multiworld.start_inventory[self.player].value.items():
-            if item in Items.ActionAbility_Table.keys() or item in Items.SupportAbility_Table.keys():
+            if item in ActionAbility_Table.keys() or item in SupportAbility_Table.keys():
                 # cannot have more than the quantity for abilties
-                if value > Items.item_dictionary_table[item].quantity:
-                    print(f"{self.multiworld.get_file_safe_player_name(self.player)} cannot have more than {Items.item_dictionary_table[item].quantity} of {item}")
-                item_quantity_dict.update({item: Items.item_dictionary_table[item].quantity - 1})
+                if value > item_dictionary_table[item].quantity:
+                    print(f"{self.multiworld.get_file_safe_player_name(self.player)} cannot have more than {item_dictionary_table[item].quantity} of {item}")
+                item_quantity_dict.update({item: item_dictionary_table[item].quantity - 1})
 
-        for item in Items.DonaldAbility_Table.keys():
+        for item in DonaldAbility_Table.keys():
             data = item_quantity_dict[item]
             for x in range(data):
                 donald_ability_pool.append(item)
@@ -163,23 +163,23 @@ class KH2World(World):
         while len(donald_ability_pool) < len(Locations.Donald_Checks.keys()):
             donald_ability_pool.append(self.multiworld.per_slot_randoms[self.player].choice(donald_ability_pool))
 
-        for item in Items.GoofyAbility_Table.keys():
+        for item in GoofyAbility_Table.keys():
             data = item_quantity_dict[item]
             for x in range(data):
                 goofy_ability_pool.append(item)
             item_quantity_dict.update({item: 0})
-        while len(goofy_ability_pool) < len(Items.GoofyAbility_Table.keys()):
+        while len(goofy_ability_pool) < len(GoofyAbility_Table.keys()):
             goofy_ability_pool.append(self.multiworld.per_slot_randoms[self.player].choice(goofy_ability_pool))
 
         # plando keyblades because they can only have abilites
         keyblade_slot_copy = list(Locations.Keyblade_Slots.keys())
         while len(sora_keyblade_ability_pool) < len(keyblade_slot_copy):
             sora_keyblade_ability_pool.append(
-                    self.multiworld.per_slot_randoms[self.player].choice(list(Items.SupportAbility_Table.keys())))
+                    self.multiworld.per_slot_randoms[self.player].choice(list(SupportAbility_Table.keys())))
         for keyblade in keyblade_slot_copy:
             random_ability = self.multiworld.per_slot_randoms[self.player].choice(sora_keyblade_ability_pool)
             self.multiworld.get_location(keyblade, self.player).place_locked_item(self.create_item(random_ability))
-            item_quantity_dict.update({random_ability: Items.item_dictionary_table[random_ability].quantity - 1})
+            item_quantity_dict.update({random_ability: item_dictionary_table[random_ability].quantity - 1})
             sora_keyblade_ability_pool.remove(random_ability)
             self.totalLocations -= 1
 
@@ -215,13 +215,13 @@ class KH2World(World):
         # Making a copy of the total growth pool
         growth_list = list()
         for x in range(4):
-            growth_list.extend(Items.Movement_Table.keys())
+            growth_list.extend(Movement_Table.keys())
 
         if self.multiworld.Schmovement[self.player].value != 0:
             for x in range(self.multiworld.Schmovement[self.player].value):
                 for name in {ItemName.HighJump, ItemName.QuickRun, ItemName.DodgeRoll, ItemName.AerialDodge,
                              ItemName.Glide}:
-                    item_quantity_dict.update({name: Items.item_dictionary_table[name].quantity - 1})
+                    item_quantity_dict.update({name: item_dictionary_table[name].quantity - 1})
                     growth_list.remove(name)
                     self.multiworld.push_precollected(self.create_item(name))
 
@@ -230,7 +230,7 @@ class KH2World(World):
                 # try catch in the instance of the user having max movement and wants too much growth
                 if not len(growth_list) == 0:
                     random_growth = self.multiworld.per_slot_randoms[self.player].choice(growth_list)
-                    item_quantity_dict.update({random_growth: Items.item_dictionary_table[random_growth].quantity - 1})
+                    item_quantity_dict.update({random_growth: item_dictionary_table[random_growth].quantity - 1})
                     growth_list.remove(random_growth)
                     self.multiworld.push_precollected(self.create_item(random_growth))
 
@@ -240,12 +240,12 @@ class KH2World(World):
         if self.multiworld.Visitlocking[self.player].value == 0:
             for item in visitlockingitem:
                 self.multiworld.push_precollected(self.create_item(item))
-                item_quantity_dict.update({item: Items.item_dictionary_table[item].quantity - 1})
+                item_quantity_dict.update({item: item_dictionary_table[item].quantity - 1})
                 visitlockingitem.remove(item)
         # first and second visit locking
         elif self.multiworld.Visitlocking[self.player].value in {1}:
             for item in exclusionItem_table["2VisitLocking"]:
-                item_quantity_dict.update({item: Items.item_dictionary_table[item].quantity - 1})
+                item_quantity_dict.update({item: item_dictionary_table[item].quantity - 1})
                 self.multiworld.push_precollected(self.create_item(item))
                 visitlockingitem.remove(item)
 
@@ -253,7 +253,7 @@ class KH2World(World):
             if len(visitlockingitem) <= 0:
                 break
             item = self.multiworld.per_slot_randoms[self.player].choice(visitlockingitem)
-            item_quantity_dict.update({item: Items.item_dictionary_table[item].quantity - 1})
+            item_quantity_dict.update({item: item_dictionary_table[item].quantity - 1})
             self.multiworld.push_precollected(self.create_item(item))
             visitlockingitem.remove(item)
 
@@ -276,7 +276,7 @@ class KH2World(World):
             data = item_quantity_dict[item]
             for x in range(data):
                 itempool.append(self.create_item(item))
-                item_quantity_dict.update({item: Items.item_dictionary_table[item].quantity - 1})
+                item_quantity_dict.update({item: item_dictionary_table[item].quantity - 1})
 
         # Creating filler for unfilled locations
         while len(itempool) < self.totalLocations:
