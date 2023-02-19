@@ -3,7 +3,8 @@ from BaseClasses import MultiWorld, CollectionState
 from .Options import is_option_enabled
 from .PreCalculatedWeights import PreCalculatedWeights
 
-class TimespinnerLogic():
+
+class TimespinnerLogic:
     player: int
 
     flag_unchained_keys: bool

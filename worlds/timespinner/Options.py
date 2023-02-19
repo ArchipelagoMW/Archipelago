@@ -192,7 +192,7 @@ class HpCap(Range):
 
 
 class LevelCap(Range):
-    "Sets the max level Lunais can achieve."
+    """Sets the max level Lunais can achieve."""
     display_name = "Level Cap"
     range_start = 1
     range_end = 99
@@ -200,7 +200,7 @@ class LevelCap(Range):
 
 
 class ExtraEarringsXP(Range):
-    "Adds additional XP granted by Galaxy Earrings."
+    """Adds additional XP granted by Galaxy Earrings."""
     display_name = "Extra Earrings XP"
     range_start = 0
     range_end = 24
@@ -299,18 +299,18 @@ class EnterSandman(Toggle):
 
 
 class DadPercent(Toggle):
-    "The win condition is beating the boss of Emperor's Tower"
+    """The win condition is beating the boss of Emperor's Tower"""
     display_name = "Dad Percent"
 
 
 class RisingTides(Toggle):
-    "Random area's are flooded or drained, can be further specified with RisingTidesOverrides"
+    """Random areas are flooded or drained, can be further specified with RisingTidesOverrides"""
     display_name = "Rising Tides"
 
 
 class RisingTidesOverrides(OptionDict):
-    """Manual odds for specific area's to be flooded or drained, only has effect when RisingTides is on.
-    Areas that you don't specify will roll with the default 33% change of getting flooded or drained"""
+    """Odds for specific areas to be flooded or drained, only has effect when RisingTides is on.
+    Areas that are not specified will roll with the default 33% chance of getting flooded or drained"""
     schema = Schema({
         Optional("Xarion"): { 
             "Dry": And(int, lambda n: n >= 0), 
@@ -365,12 +365,14 @@ class RisingTidesOverrides(OptionDict):
 
 
 class UnchainedKeys(Toggle):
-    "Start with Twin Pyramid Key, which does not give free warp; warp items for Past, Present, (and ??? with Enter Sandman) can be found."
+    """Start with Twin Pyramid Key, which does not give free warp;
+    warp items for Past, Present, (and ??? with Enter Sandman) can be found."""
     display_name = "Unchained Keys"
 
 
 class TrapChance(Range):
-    "Chance for traps in the item pool, traps will only replace filler items such as potions,vials and sntidotes"
+    """Chance of traps in the item pool.
+    Traps will only replace filler items such as potions, vials and antidotes"""
     display_name = "Trap Chance"
     range_start = 0
     range_end = 100
@@ -378,7 +380,7 @@ class TrapChance(Range):
 
 
 class Traps(OptionList):
-    "List of traps that will be in the item pool to find"
+    """List of traps that may be in the item pool to find"""
     display_name = "Traps Types"
     valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" }
     default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" ]

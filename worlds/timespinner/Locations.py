@@ -15,8 +15,8 @@ class LocationData(NamedTuple):
 
 
 def get_locations(world: Optional[MultiWorld], player: Optional[int], 
-                            precalculated_weights: PreCalculatedWeights) -> Tuple[LocationData, ...]:
-                            
+                  precalculated_weights: PreCalculatedWeights) -> Tuple[LocationData, ...]:
+
     flooded: PreCalculatedWeights = precalculated_weights
     logic = TimespinnerLogic(world, player, precalculated_weights)
 
