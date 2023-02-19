@@ -46,6 +46,25 @@ class DifficultyMode(Choice):
     option_Easy = 1
     option_Medium = 2
     option_Hard = 3
+    default = 0
+
+class GradeNeeded(Choice):
+    """Requires a grade of this or higher in order to get items.
+    Grades are as follows:
+    Silver S (SS): >= 95% accuracy
+    Pink S (S): >= 90% accuracy
+    A: >= 80% or a Full Combo
+    B: >= 70%
+    C: >= 60%
+    """
+    display_name = "Grade Needed"
+    option_Any = 0
+    option_C = 1
+    option_B = 2
+    option_A = 3
+    option_PinkS = 4
+    option_SilverS = 5
+    default = 0
 
 
 class MusicSheetCount(Range):
@@ -71,43 +90,6 @@ class AdditionalItemPercentage(Range):
     default = 33
     range_end = 100
 
-# Options Beyond this point are not Implemented
-
-class RandomisationMode(Choice):
-    """The way that MuseDash will be randomised:
-    'Albums' - Items will unlock albums. A certain number of songs will need to be completed per Album.
-    'Songs' - Items will unlock songs."""
-    display_name = "Randomisation Mode"
-    option_Albums = 0
-    option_Songs = 1
-
-
-class StartingAlbums(Range):
-    """The number of albums that are given at the start.
-    Only applicable in 'Album' gamemode."""
-    display_name = "Starting Amout of Albums"
-    range_start = 1
-    range_end = 5  # Todo: Make Sane Maximum
-    default = 3
-    heading = "Album_Mode"
-
-
-class AlbumDepth(Range):
-    """The number of albums deep the goal will be.
-    Only applicable in 'Album' gamemode."""
-    display_name = "Minumum Albums To Goal"
-    range_start = 3
-    range_end = 10
-    default = 5
-
-
-class MinimumDifficulty(Choice):
-    """"""
-    display_name = "Minimum Song Difficulty"
-    option_Easy_Or_Above = 0
-    option_hard = "Hard or Above"
-    option_expert = "Expert Only"
-
 
 musedash_options: Dict[str, type(Option)] = {
     "allow_just_as_planned_dlc_songs": AllowJustAsPlannedDLCSongs,
@@ -116,6 +98,7 @@ musedash_options: Dict[str, type(Option)] = {
     "additional_song_count": AdditionalSongs,
     "additional_item_percentage": AdditionalItemPercentage,
     "song_difficulty_mode": DifficultyMode,
+    "grade_needed": GradeNeeded,
     "music_sheet_count": MusicSheetCount,
     "music_sheet_win_count": MusicSheetWinCount,
     "death_link": DeathLink
