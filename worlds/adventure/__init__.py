@@ -163,10 +163,10 @@ class AdventureWorld(World):
         num_locations = len(location_table) - 1  # subtract out the chalice location
 
         if self.difficulty_switch_a == DifficultySwitchA.option_hard_with_unlock_item:
-            self.multiworld.itempool.append(self.create_item("Difficulty Switch A"))
+            self.multiworld.itempool.append(self.create_item("Left Difficulty Switch"))
             self.created_items += 1
         if self.difficulty_switch_b == DifficultySwitchA.option_hard_with_unlock_item:
-            self.multiworld.itempool.append(self.create_item("Difficulty Switch B"))
+            self.multiworld.itempool.append(self.create_item("Right Difficulty Switch"))
             self.created_items += 1
 
         extra_filler_count = num_locations - self.created_items

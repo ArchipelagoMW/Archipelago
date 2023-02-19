@@ -55,18 +55,14 @@ class AdventureCommandProcessor(ClientCommandProcessor):
 class AdventureContext(CommonContext):
     command_processor = AdventureCommandProcessor
     game = 'Adventure'
-    foreign_items: [AdventureForeignItemInfo] = []
-    autocollect_items: [AdventureAutoCollectLocation] = []
-    bat_no_touch_locations: [BatNoTouchLocation]
-    local_item_locations = {}
-    dragon_speed_info = {}
-    checked_locations_sent: bool = False
     lua_connector_port: int = 17242
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
         self.freeincarnates_used: int = -1
         self.freeincarnate_pending: int = 0
+        self.foreign_items: [AdventureForeignItemInfo] = []
+        self.autocollect_items: [AdventureAutoCollectLocation] = []
         self.atari_streams: (StreamReader, StreamWriter) = None
         self.atari_sync_task = None
         self.messages = {}
@@ -78,9 +74,11 @@ class AdventureContext(CommonContext):
         self.set_deathlink = False
         self.client_compatibility_mode = 0
         self.items_handling = 0b111
-        self.checked_locations_sent = False
+        self.checked_locations_sent: bool = False
         self.port_offset = 0
-        self.bat_no_touch_locations = []
+        self.bat_no_touch_locations: [BatNoTouchLocation] = []
+        self.local_item_locations = {}
+        self.dragon_speed_info = {}
 
         options = Utils.get_options()
         self.display_msgs = options["adventure_options"]["display_msgs"]
@@ -192,9 +190,9 @@ def get_payload(ctx: AdventureContext):
                 dragon_speed_update[item.item] = ctx.dragon_speed_info[item_id_str][last_index]
             else:
                 dragon_speed_update[item.item] = ctx.dragon_speed_info[item_id_str][0]
-        elif item.item == item_table["Difficulty Switch A"].id:
+        elif item.item == item_table["Left Difficulty Switch"].id:
             diff_a_locked = False
-        elif item.item == item_table["Difficulty Switch B"].id:
+        elif item.item == item_table["Right Difficulty Switch"].id:
             diff_b_locked = False
         elif item.item == item_table["Freeincarnate"].id:
             freeincarnate_count = freeincarnate_count + 1

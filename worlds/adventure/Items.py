@@ -30,8 +30,8 @@ item_table = {
     "Sword": ItemData(0x9, ItemClassification.progression),
     "Chalice": ItemData(0x10, ItemClassification.progression_skip_balancing),
     # Non-ROM Adventure items, managed by lua
-    "Difficulty Switch A": ItemData(0x100, ItemClassification.filler),
-    "Difficulty Switch B": ItemData(0x101, ItemClassification.filler),
+    "Left Difficulty Switch": ItemData(0x100, ItemClassification.filler),
+    "Right Difficulty Switch": ItemData(0x101, ItemClassification.filler),
     # Can use these instead of 'nothing'
     "Freeincarnate": ItemData(0x102, ItemClassification.filler),
     # These should only be enabled if fast dragons is on?
