@@ -1,4 +1,5 @@
 import base64
+import copy
 import itertools
 import math
 import os
@@ -304,7 +305,9 @@ class AdventureWorld(World):
                     location_data = location_table[location.name]
                     room_x, room_y = location_data.get_position(self.multiworld.per_slot_randoms[self.player])
                     if location_data.needs_bat_logic and self.bat_logic == 0x0:
-                        bat_no_touch_locs.append(location_data)
+                        copied_location = copy.copy(location_data)
+                        copied_location.local_item = item_ram_address
+                        bat_no_touch_locs.append(copied_location)
                     del unplaced_local_items[location.item.name]
 
                     rom_bytearray[item_position_data_start:item_position_data_start + 1] = \

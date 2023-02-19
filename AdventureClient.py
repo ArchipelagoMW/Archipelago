@@ -256,6 +256,7 @@ def send_ap_foreign_items(adventure_context):
         }
     )
     print("sending foreign items")
+    print(payload)
     msg = payload.encode()
     (reader, writer) = adventure_context.atari_streams
     writer.write(msg)
@@ -438,6 +439,9 @@ async def patch_and_run_game(patch_file, ctx):
         ctx.gui_error('Error', msg)
 
     with zipfile.ZipFile(patch_file, 'r') as patch_archive:
+        if not AdventureDeltaPatch.check_version(patch_archive):
+            logger.error("apadvn version doesn't match this client.  Make sure your generator and client are the same")
+            raise Exception("apadvn version doesn't match this client.")
         with patch_archive.open('delta.bsdiff4', 'r') as stream:
             patch = stream.read()
         ctx.foreign_items = AdventureDeltaPatch.read_foreign_items(patch_archive)

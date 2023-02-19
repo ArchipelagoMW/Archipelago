@@ -25,36 +25,26 @@ class WorldPosition:
 
 
 class LocationData:
-    # There are a set of standard x,y positions that are good in all locations except
-    # for locations that only contain part of a room.  Those have to be specified.
-    region: str
-    name: str
-    world_positions: [WorldPosition]
-    location_id: int
-    short_location_id: int  # should fit in a byte
-    event: bool
-    room_id: int
-    room_x: int
-    room_y: int
-    needs_bat_logic: bool
-
     def __init__(self, region, name, location_id, world_positions: [WorldPosition] = None, event=False,
                  needs_bat_logic: bool = False):
-        self.region = region
-        self.name = name
-        self.world_positions = world_positions
-        self.room_id = None
-        self.location_id = location_id
+        self.region: str = region
+        self.name: str = name
+        self.world_positions: [WorldPosition] = world_positions
+        self.room_id: int = None
+        self.room_x: int = None
+        self.room_y: int = None
+        self.location_id: int = location_id
         if location_id is None:
-            self.short_location_id = None
-            self.location_id = None
+            self.short_location_id: int = None
+            self.location_id: int = None
         else:
-            self.short_location_id = location_id
-            self.location_id = location_id + base_location_id
-        self.event = event
+            self.short_location_id: int = location_id
+            self.location_id: int = location_id + base_location_id
+        self.event: bool = event
         if world_positions is None and not event:
-            self.room_id = self.short_location_id
-        self.needs_bat_logic = needs_bat_logic
+            self.room_id: int = self.short_location_id
+        self.needs_bat_logic: int = needs_bat_logic
+        self.local_item: int = None
 
     def get_position(self, random):
         if self.world_positions is None or len(self.world_positions) == 0:

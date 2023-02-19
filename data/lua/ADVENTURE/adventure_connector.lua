@@ -25,6 +25,8 @@ local carryAddress = 0x9D -- uses rom object table
 local batRoomAddr = 0xCB
 local batCarryAddress = 0xD0 -- uses ram object location
 local batInvalidCarryItem = 0x78
+local batItemCheckAddr = 0xf69d
+local batMatrixLen = 11 -- number of pairs
 local last_carry_item = 0xB4
 local frames_with_no_item = 0
 local ItemTableStart = 0xfe9B
@@ -35,10 +37,10 @@ local itemMessages = {}
 local nullObjectId = 0xB4
 local ItemsReceived = nil
 local sha256hash = nil
--- TODO: See how best to handle storage of collected foreign items, and resetting that after a restart/reload/whatever
 local foreign_items = nil
 local foreign_items_by_room = {}
 local bat_no_touch_locations_by_room = {}
+local bat_no_touch_items = {}
 local autocollect_items = {}
 local localItemLocations = {}
 
@@ -159,6 +161,14 @@ local function createForeignItemsByRoom()
     end
 end
 
+function debugPrintNoTouchLocations()
+    for room_id, list in pairs(bat_no_touch_locations_by_room) do
+        for index, notouch_location in ipairs(list) do
+            print("ROOM "..tostring(room_id).. "["..tostring(index).."]: "..tostring(notouch_location.short_location_id))
+        end
+    end
+end
+
 function processBlock(block)
     if block == nil then
         return
@@ -264,11 +274,18 @@ function processBlock(block)
     if bat_no_touch_locations_block ~= nil then
         block_identified = 1
         for _, notouch_location in pairs(bat_no_touch_locations_block) do
-            if bat_no_touch_locations_by_room[notouch_location.room_id] == nil then
-                bat_no_touch_locations_by_room[notouch_location.room_id] = {}
+            local room_id = tonumber(notouch_location.room_id)
+            if bat_no_touch_locations_by_room[room_id] == nil then
+                bat_no_touch_locations_by_room[room_id] = {}
             end
-            table.insert(bat_no_touch_locations_by_room[notouch_location.room_id], notouch_location)
+            table.insert(bat_no_touch_locations_by_room[room_id], notouch_location)
+
+            if notouch_location.local_item ~= nil and notouch_location.local_item ~= 255 then
+                bat_no_touch_items[tonumber(notouch_location.local_item)] = true
+                -- print("no touch: "..tostring(notouch_location.local_item))
+            end
         end
+        -- debugPrintNoTouchLocations()
     end
     deathlink_rec = deathlink_rec or block["deathlink"]
     if( block_identified == 0 ) then
@@ -502,6 +519,18 @@ function TryFreeincarnate()
     end
 end
 
+function GetLinkedObject()
+    if emu.getregister("X") == batRoomAddr then
+        bat_interest_item = emu.getregister("A")
+        -- if the bat can't touch that item, we'll switch it to the number item, which should never be
+        -- in the same room as the bat.
+        if bat_no_touch_items[bat_interest_item] ~= nil then
+            emu.setregister("A", 0xDD )
+            emu.setregister("Y", 0xDD )
+        end
+    end
+end
+
 function CheckCollectAPItem(carry_item, target_item_value, target_item_ram, rendering_foreign_item)
     if( carry_item == target_item_value and rendering_foreign_item ~= nil ) then
         memory.write_u8(carryAddress, nullObjectId, "System Bus")
@@ -525,12 +554,12 @@ function CheckCollectAPItem(carry_item, target_item_value, target_item_ram, rend
     return false
 end
 
-function BatCanTouchForeign(foreign_item)
+function BatCanTouchForeign(foreign_item, bat_room)
     if bat_no_touch_locations_by_room[bat_room] == nil or bat_no_touch_locations_by_room[bat_room][1] == nil then
         return true
     end
 
-    for index, location in pairs(bat_no_touch_locations_by_room[bat_room]) do
+    for index, location in ipairs(bat_no_touch_locations_by_room[bat_room]) do
         if location.short_location_id == foreign_item.short_location_id then
             return false
         end
@@ -556,6 +585,7 @@ function main()
     event.onmemoryexecute(SetRhindleSpeed, rhindle_speed_address);
     event.onmemoryexecute(SetDifficultySwitchA, read_switch_a)
     event.onmemoryexecute(SetDifficultySwitchB, read_switch_b)
+    event.onmemoryexecute(GetLinkedObject, batItemCheckAddr)
     -- TODO: Add an onmemoryexecute event to intercept the bat reading item rooms, and don't 'see' an item in the
     -- room if it is in bat_no_touch_locations_by_room.  Although realistically, I may have to handle this in the rom
     -- for it to be totally reliable, because it won't work before the script connects (I might have to reset them?)
@@ -601,7 +631,7 @@ function main()
                 if foreign_items_by_room[prev_bat_room] ~= nil then
                     for r,f in pairs(foreign_items_by_room[prev_bat_room]) do
                         if f.short_location_id == current_bat_ap_item.short_location_id then
-                            print("removing item from "..tostring(r).." in "..tostring(prev_bat_room))
+                            -- print("removing item from "..tostring(r).." in "..tostring(prev_bat_room))
                             table.remove(foreign_items_by_room[prev_bat_room], r)
                             break
                         end
@@ -610,15 +640,15 @@ function main()
                 if foreign_items_by_room[bat_room] == nil then
                     foreign_items_by_room[bat_room] = {}
                 end
-                print("adding item to "..tostring(bat_room))
+                -- print("adding item to "..tostring(bat_room))
                 table.insert(foreign_items_by_room[bat_room], current_bat_ap_item)
             else
                 -- set AP item room and position for new room, or to invalid room
                 if foreign_items_by_room[bat_room] ~= nil and foreign_items_by_room[bat_room][1] ~= nil
-                            and BatCanTouchForeign(foreign_items_by_room[bat_room][1]) then
+                            and BatCanTouchForeign(foreign_items_by_room[bat_room][1], bat_room) then
                     if current_bat_ap_item ~= foreign_items_by_room[bat_room][1] then
                         current_bat_ap_item = foreign_items_by_room[bat_room][1]
-                        print("Changing bat item to "..tostring(current_bat_ap_item.short_location_id))
+                        -- print("Changing bat item to "..tostring(current_bat_ap_item.short_location_id))
                     end
                     memory.write_u8(BatAPItemRam, bat_room)
                     memory.write_u8(BatAPItemRam + 1, current_bat_ap_item.room_x)
@@ -626,7 +656,7 @@ function main()
                 else
                     memory.write_u8(BatAPItemRam, 0xff)
                     if current_bat_ap_item ~= nil then
-                        print("clearing bat item")
+                        -- print("clearing bat item")
                     end
                     current_bat_ap_item = nil
                 end
@@ -651,6 +681,7 @@ function main()
                 AutocollectFromRoom()
             end
             local carry_item = memory.read_u8(carryAddress, "System Bus")
+            bat_no_touch_items[carry_item] = nil
             if (next_inventory_item ~= nil) then
                 if ( carry_item == nullObjectId and last_carry_item == nullObjectId ) then
                     frames_with_no_item = frames_with_no_item + 1
@@ -742,7 +773,6 @@ function main()
             end
         elseif (u8(PlayerRoomAddr) == 0x00) then -- not alive mode, in number room
             ItemIndex = 0  -- reset our inventory
-            -- TODO: I also need to reset the bat-moved-items once
             next_inventory_item = nil
             skip_inventory_items = {}
         end

@@ -56,53 +56,51 @@ class BatNoTouchLocation:
     room_id: int
     room_x: int
     room_y: int
+    local_item: int
 
-    def __init__(self, short_location_id: int, room_id: int, room_x: int, room_y: int):
+    def __init__(self, short_location_id: int, room_id: int, room_x: int, room_y: int, local_item: int = None):
         self.short_location_id = short_location_id
         self.room_id = room_id
         self.room_x = room_x
         self.room_y = room_y
+        self.local_item = local_item
 
     def get_dict(self):
-        return {
+        ret_dict = {
             "short_location_id": self.short_location_id,
             "room_id": self.room_id,
             "room_x": self.room_x,
             "room_y": self.room_y,
         }
+        if self.local_item is not None:
+            ret_dict["local_item"] = self.local_item
+        else:
+            ret_dict["local_item"] = 255
+        return ret_dict
 
 
 class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
     hash = ADVENTUREHASH
     game = "Adventure"
     patch_file_ending = ".apadvn"
-    foreign_items: [AdventureForeignItemInfo] = None
-    autocollect_items: [AdventureAutoCollectLocation] = None
-    local_item_locations: {} = None
-    patched_rom_sha256: str = None
-    seedName: bytes = None
-    dragon_speed_reducer_info: {} = None
-    diff_a_mode: int = None
-    diff_b_mode: int = None
-    bat_logic: int = None
-    bat_no_touch_locations: [LocationData] = None
+    zip_version: int = 1
 
     # locations: [], autocollect: [], seed_name: bytes,
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         patch_only = True
         if "autocollect" in kwargs:
             patch_only = False
-            self.foreign_items = [AdventureForeignItemInfo(loc.short_location_id, loc.room_id, loc.room_x, loc.room_y)
+            self.foreign_items: [AdventureForeignItemInfo] = [AdventureForeignItemInfo(loc.short_location_id, loc.room_id, loc.room_x, loc.room_y)
                                   for loc in kwargs["locations"]]
 
-            self.autocollect_items = kwargs["autocollect"]
-            self.seedName = kwargs["seed_name"]
-            self.local_item_locations = kwargs["local_item_locations"]
-            self.dragon_speed_reducer_info = kwargs["dragon_speed_reducer_info"]
-            self.diff_a_mode = kwargs["diff_a_mode"]
-            self.diff_b_mode = kwargs["diff_b_mode"]
-            self.bat_logic = kwargs["bat_logic"]
-            self.bat_no_touch_locations = kwargs["bat_no_touch_locations"]
+            self.autocollect_items: [AdventureAutoCollectLocation] = kwargs["autocollect"]
+            self.seedName: bytes = kwargs["seed_name"]
+            self.local_item_locations: {} = kwargs["local_item_locations"]
+            self.dragon_speed_reducer_info: {} = kwargs["dragon_speed_reducer_info"]
+            self.diff_a_mode: int = kwargs["diff_a_mode"]
+            self.diff_b_mode: int = kwargs["diff_b_mode"]
+            self.bat_logic: int = kwargs["bat_logic"]
+            self.bat_no_touch_locations: [LocationData] = kwargs["bat_no_touch_locations"]
             del kwargs["locations"]
             del kwargs["autocollect"]
             del kwargs["seed_name"]
@@ -118,11 +116,14 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
                 patched_rom_bytes = bytes(file.read())
                 patchedsha256 = hashlib.sha256()
                 patchedsha256.update(patched_rom_bytes)
-                self.patched_rom_sha256 = patchedsha256.hexdigest()
+                self.patched_rom_sha256: str = patchedsha256.hexdigest()
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile):
         super(AdventureDeltaPatch, self).write_contents(opened_zipfile)
         # write Delta
+        opened_zipfile.writestr("zip_version",
+                                self.zip_version.to_bytes(1, "little"),
+                                compress_type=zipfile.ZIP_STORED)
         if self.foreign_items is not None:
             loc_bytes = []
             for foreign_item in self.foreign_items:
@@ -180,6 +181,7 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
                 loc_bytes.append(loc.room_id)  # used for local items placed in rom
                 loc_bytes.append(loc.room_x)
                 loc_bytes.append(loc.room_y)
+                loc_bytes.append(0xff if loc.local_item is None else loc.local_item)
             opened_zipfile.writestr("bat_no_touch_locations",
                                     bytes(loc_bytes),
                                     compress_type=zipfile.ZIP_LZMA)
@@ -192,6 +194,16 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
+
+    @classmethod
+    def check_version(cls, opened_zipfile: zipfile.ZipFile) -> bool:
+        version_bytes = opened_zipfile.read("zip_version")
+        version = 0
+        if version_bytes is not None:
+            version = int.from_bytes(version_bytes, "little")
+        if version != cls.zip_version:
+            return False
+        return True
 
     @classmethod
     def read_rom_info(cls, opened_zipfile: zipfile.ZipFile) -> (bytes, bytes, str):
@@ -238,12 +250,13 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
         locations = []
         readbytes: bytes = opened_zipfile.read("bat_no_touch_locations")
         bytelist = list(readbytes)
-        for i in range(round(len(bytelist) / 4)):
-            offset = i * 4
+        for i in range(round(len(bytelist) / 5)):
+            offset = i * 5
             locations.append(BatNoTouchLocation(bytelist[offset],
                                                 bytelist[offset + 1],
                                                 bytelist[offset + 2],
-                                                bytelist[offset + 3]))
+                                                bytelist[offset + 3],
+                                                bytelist[offset + 4]))
         return locations
 
     @classmethod
