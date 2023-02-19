@@ -86,11 +86,12 @@ class PreCalculatedWeights:
             world.random.choice(ancient_pyramid_teleportation_gates)
         )
 
-    def get_flood_weights_overrides(self, world: MultiWorld, player: int) -> Dict[str, int]:
+    @staticmethod
+    def get_flood_weights_overrides( world: MultiWorld, player: int) -> Dict[str, int]:
         weights_overrrides_option: Union[int, Dict[str, Dict[str, int]]] = \
             get_option_value(world, player, "RisingTidesOverrides")
 
-        if (weights_overrrides_option == 0):
+        if weights_overrrides_option == 0:
             return {}
         else:
             return weights_overrrides_option 
