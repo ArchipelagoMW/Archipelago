@@ -34,7 +34,7 @@ class TestBase(unittest.TestCase):
     def testAllStateCanReachEverything(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             # Final Fantasy logic is controlled by finalfantasyrandomizer.com
-            if game_name != "Ori and the Blind Forest" and game_name != "Final Fantasy":  # TODO: fix Ori Logic
+            if game_name not in {"Ori and the Blind Forest"}:  # TODO: fix Ori Logic
                 unreachable_regions = self.default_settings_unreachable_regions.get(game_name, set())
                 with self.subTest("Game", game=game_name):
                     world = setup_solo_multiworld(world_type)
