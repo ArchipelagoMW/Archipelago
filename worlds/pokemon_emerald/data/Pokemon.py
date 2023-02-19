@@ -34,7 +34,6 @@ def create_species(name, constant_name):
 def get_national_pokedex():
     global national_pokedex
     if (not national_pokedex):
-        print("Only Once")
         national_pokedex = []
         national_pokedex.append(create_species("Bulbasaur", "SPECIES_BULBASAUR"))
         national_pokedex.append(create_species("Ivysaur", "SPECIES_IVYSAUR"))
