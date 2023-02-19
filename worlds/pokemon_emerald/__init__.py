@@ -1,23 +1,10 @@
 from BaseClasses import Region, Entrance, Item, ItemClassification
-from .Items import PokemonEmeraldItem, item_table, required_items
-from .Locations import PokemonEmeraldLocation, advancement_table, exclusion_table
+from .Items import PokemonEmeraldItem, create_item_name_to_id_map, create_ball_items
+from .Locations import create_location_name_to_id_map, create_ball_item_locations
 from .Options import options
 from .Rom import generate_output
+from .Util import get_data_json
 from ..AutoWorld import World
-
-def create_item_name_to_id():
-    map = {
-        "Potion": 13,
-        "Rare Candy": 68,
-    }
-    return map
-
-def create_location_name_to_id():
-    map = {
-        "Route 104: Potion": 1135,
-        "Route 104: Hidden Poke Ball": 562,
-    }
-    return map
 
 class PokemonEmeraldWorld(World):
     """
@@ -27,8 +14,8 @@ class PokemonEmeraldWorld(World):
     option_definitions = options
     topology_present = True
 
-    item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = {name: data.id for name, data in advancement_table.items()}
+    item_name_to_id = create_item_name_to_id_map()
+    location_name_to_id = create_location_name_to_id_map()
 
     data_version = 4
 
@@ -41,32 +28,34 @@ class PokemonEmeraldWorld(World):
             'race': self.multiworld.is_race,
         }
 
-    def generate_basic(self):
-        # Generate item pool
-        itempool = []
-        # Add all required progression items
-        for (name, num) in required_items.items():
-            itempool += [name] * num
-        itempool += [self.get_filler_item_name()]
-        # Convert itempool into real items
-        itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
-
-        self.multiworld.itempool += itempool
-
-    # def set_rules(self):
-        # set_rules(self.multiworld, self.player)
-        # set_completion_rules(self.multiworld, self.player)
-
     def create_regions(self):
-        menu = Region("Menu", self.player, self.multiworld)
-        game = Region("Game", self.player, self.multiworld)
-        game.locations = [PokemonEmeraldLocation(self.player, loc_name, loc_data.rom_address, game)
-                           for loc_name, loc_data in advancement_table.items() if loc_data.region == game.name]
+        region_map = {}
+        data = get_data_json()
 
+        for map in data["maps"]:
+            region = Region(map["name"], self.player, self.multiworld)
+            exit_names = set([map_name for map_name in map["connections"]] + [map_name for map_name in map["warps"]])
+            for exit_name in exit_names:
+                connection = Entrance(self.player, exit_name, region)
+                region.exits.append(connection)
+            
+            region_map[map["name"]] = region
+
+        for region in region_map.values():
+            for connection in region.exits:
+                connection.connect(region_map[connection.name])
+
+        menu = Region("Menu", self.player, self.multiworld)
         connection = Entrance(self.player, "New Game", menu)
         menu.exits.append(connection)
-        connection.connect(game)
-        self.multiworld.regions += [menu, game]
+        connection.connect(region_map["MAP_LITTLEROOT_TOWN"])
+        region_map["Menu"] = menu
+
+        create_ball_item_locations(self, region_map)
+        self.multiworld.regions += region_map.values()
+
+    def create_items(self):
+        self.multiworld.itempool += create_ball_items(self)
 
     def fill_slot_data(self):
         slot_data = self._get_pokemon_emerald_data()
@@ -76,15 +65,8 @@ class PokemonEmeraldWorld(World):
                 slot_data[option_name] = int(option.value)
         return slot_data
 
-    def create_item(self, name: str) -> Item:
-        item_data = item_table[name]
-        item = PokemonEmeraldItem(name,
-                                  ItemClassification.progression if item_data.progression else ItemClassification.filler,
-                                  item_data.code, self.player)
-        return item
-
-    def get_filler_item_name(self) -> str:
-        return 'Potion'
+    # def get_filler_item_name(self) -> str:
+    #     return 'Potion'
 
     def generate_output(self, output_directory: str):
         generate_output(self, output_directory)

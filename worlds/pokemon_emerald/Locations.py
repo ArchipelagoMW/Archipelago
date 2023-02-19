@@ -1,29 +1,28 @@
-from BaseClasses import Location
 import typing
-
-
-class AdvData(typing.NamedTuple):
-    id: typing.Optional[int]
-    rom_address: int
-    region: str
-
+from BaseClasses import Location, Region, Entrance
+from .Util import get_data_json
 
 class PokemonEmeraldLocation(Location):
     game: str = "Pokemon Emerald"
+    id: int
 
-    # def __init__(self, player: int, name: str, address: typing.Optional[int], parent):
-    #     super().__init__(player, name, address, parent)
+    def __init__(self, player: int, name: str, id: int, address: typing.Optional[int], parent):
+        super().__init__(player, name, address, parent)
+        self.id = id
 
+def create_location_name_to_id_map():
+    data = get_data_json()
 
-advancement_table = {
-    "Route 104: Potion": AdvData(1135, 2690726, 'Game'),
-    "Route 104: Hidden Poke Ball": AdvData(562, 5408816, 'Game'),
-}
+    map = {}
+    for item in data["ball_items"]:
+        map[item["name"]] = item["flag"]
 
-exclusion_table = {
-}
+    return map
 
-events_table = {
-}
+def create_ball_item_locations(self, region_map):
+    data = get_data_json()
 
-lookup_id_to_name: typing.Dict[int, str] = {data.id: item_name for item_name, data in advancement_table.items() if data.id}
+    for item in data["ball_items"]:
+        region = region_map[item["map_name"]]
+        location = PokemonEmeraldLocation(self.player, item["name"], item["flag"], item["rom_address"], region)
+        region.locations.append(location)

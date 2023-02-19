@@ -1,26 +1,27 @@
-from BaseClasses import Item
-import typing
-
-
-class ItemData(typing.NamedTuple):
-    code: typing.Optional[int]
-    progression: bool
-
+from BaseClasses import Item, ItemClassification
+from .Util import get_data_json
 
 class PokemonEmeraldItem(Item):
     game: str = "Pokemon Emerald"
 
+    def __init__(self, name: str, classification: ItemClassification, code: int, player: int):
+        super().__init__(name, classification, code, player)
 
-item_table = {
-    "Potion": ItemData(13, False),
-    "Rare Candy": ItemData(68, True),
-}
+def create_ball_items(self):
+    data = get_data_json()
+    items = []
 
-required_items = {
-    "Rare Candy": 1
-}
+    for item in data["ball_items"]:
+        new_item = PokemonEmeraldItem(item["name"], ItemClassification.filler, item["default_item"], self.player)
+        items.append(new_item)
 
-item_frequencies = {
-}
+    return items
 
-lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
+def create_item_name_to_id_map():
+    data = get_data_json()
+
+    map = {}
+    for item in data["ball_items"]:
+        map[item["name"]] = item["default_item"]
+
+    return map
