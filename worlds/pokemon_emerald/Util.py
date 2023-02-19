@@ -1,7 +1,8 @@
-import os
 import json
+import os
 
 data_json = None
+
 
 def get_data_json():
     global data_json
@@ -13,6 +14,7 @@ def get_data_json():
         data_json = json.loads(json_string)
     
     return data_json
+
 
 def set_bytes_little_endian(byte_array, address, size, value):
     offset = 0
