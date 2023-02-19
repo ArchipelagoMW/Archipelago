@@ -5,8 +5,9 @@ from .Locations import LocationData
 from .PreCalculatedWeights import PreCalculatedWeights
 from .LogicExtensions import TimespinnerLogic
 
+
 def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location],
-            precalculated_weights: PreCalculatedWeights):
+                   precalculated_weights: PreCalculatedWeights):
 
     locations_per_region = get_locations_per_region(locations)
 
@@ -158,7 +159,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Castle Keep', 'Space time continuum', logic.has_teleport)
     connect(world, player, names, 'Royal towers (lower)', 'Castle Keep')
     connect(world, player, names, 'Royal towers (lower)', 'Royal towers', lambda state: state.has('Timespinner Wheel', player) or logic.has_forwarddash_doublejump(state))
-    connect(world, player, names, 'Royal towers (lower)', 'Space time continuum',logic.has_teleport)
+    connect(world, player, names, 'Royal towers (lower)', 'Space time continuum', logic.has_teleport)
     connect(world, player, names, 'Royal towers', 'Royal towers (lower)')
     connect(world, player, names, 'Royal towers', 'Royal towers (upper)', logic.has_doublejump)
     connect(world, player, names, 'Royal towers (upper)', 'Royal towers')
@@ -249,7 +250,7 @@ def connectStartingRegion(world: MultiWorld, player: int):
 
 
 def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: str, target: str, 
-        rule: Optional[Callable[[CollectionState], bool]] = None):
+            rule: Optional[Callable[[CollectionState], bool]] = None):
     sourceRegion = world.get_region(source, player)
     targetRegion = world.get_region(target, player)
 

@@ -78,7 +78,7 @@ class TimespinnerWorld(World):
         trap_chance: int = get_option_value(self.multiworld, self.player, "TrapChance")
         enabled_traps: List[str] = get_option_value(self.multiworld, self.player, "Traps")
 
-        if (self.multiworld.random.random() < (trap_chance / 100) and enabled_traps):
+        if self.multiworld.random.random() < (trap_chance / 100) and enabled_traps:
             return self.multiworld.random.choice(enabled_traps)
         else:
             return self.multiworld.random.choice(filler_items) 
@@ -108,7 +108,7 @@ class TimespinnerWorld(World):
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}
 
-        ap_specific_settings: Set[str] = { "RisingTidesOverrides", "TrapChance" }
+        ap_specific_settings: Set[str] = {"RisingTidesOverrides", "TrapChance"}
 
         for option_name in timespinner_options:
             if (option_name not in ap_specific_settings):
