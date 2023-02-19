@@ -16,8 +16,7 @@ class DarkSouls3Location(Location):
         output = {}
         for i, table in enumerate(location_tables):
             if len(table) > table_offset:
-                print("A location table has {} entries, that is more than {} entries ({})".format(len(table), table_offset, i))
-                sys.exit(1)
+                raise Exception("A location table has {} entries, that is more than {} entries (table #{})".format(len(table), table_offset, i))
             output.update({name: id for id, name in enumerate(table, base_id + (table_offset * i))})
 
         return output

@@ -21,8 +21,7 @@ class DarkSouls3Item(Item):
         output = {}
         for i, table in enumerate(item_tables):
             if len(table) > table_offset:
-                print("An item table has {} entries, that is more than {} entries ({})".format(len(table), table_offset, i))
-                sys.exit(1)
+                raise Exception("An item table has {} entries, that is more than {} entries (table #{})".format(len(table), table_offset, i))
             output.update({name: id for id, name in enumerate(table, base_id + (table_offset * i))})
 
         return output
