@@ -1,7 +1,6 @@
 # world/dark_souls_3/__init__.py
 from typing import Dict
 
-from BaseClasses import MultiWorld, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
 from .Items import DarkSouls3Item
 from .Locations import DarkSouls3Location
 from .Options import dark_souls_options
@@ -15,6 +14,7 @@ from .data.locations_data import location_dictionary, fire_link_shrine_table, \
     untended_graves_table, archdragon_peak_table, firelink_shrine_bell_tower_table, progressive_locations, \
     progressive_locations_2, progressive_locations_3, painted_world_table, dreg_heap_table, ringed_city_table, dlc_progressive_locations
 from ..AutoWorld import World, WebWorld
+from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification
 from ..generic.Rules import set_rule, add_item_rule
 
 
@@ -180,7 +180,7 @@ class DarkSouls3World(World):
 
     # For each region, add the associated locations retrieved from the corresponding location_table
     def create_region(self, region_name, location_table) -> Region:
-        new_region = Region(region_name, RegionType.Generic, region_name, self.player, self.multiworld)
+        new_region = Region(region_name, self.player, self.multiworld)
         if location_table:
             for name, address in location_table.items():
                 location = DarkSouls3Location(self.player, name, self.location_name_to_id[name], new_region)
@@ -295,26 +295,26 @@ class DarkSouls3World(World):
             # Randomize some weapons upgrades
             if self.multiworld.randomize_weapons_level[self.player] in [1, 3]:  # Options are either all or +5
                 for name in weapons_upgrade_5_table.keys():
-                    if self.multiworld.random.randint(1, 100) < weapons_percentage:
-                        value = self.multiworld.random.randint(min_5, max_5)
+                    if self.multiworld.per_slot_randoms[self.player].randint(1, 100) < weapons_percentage:
+                        value = self.multiworld.per_slot_randoms[self.player].randint(min_5, max_5)
                         item_dictionary_copy[name] += value
 
             if self.multiworld.randomize_weapons_level[self.player] in [1, 2]:  # Options are either all or +10
                 for name in weapons_upgrade_10_table.keys():
-                    if self.multiworld.random.randint(1, 100) < weapons_percentage:
-                        value = self.multiworld.random.randint(min_10, max_10)
+                    if self.multiworld.per_slot_randoms[self.player].randint(1, 100) < weapons_percentage:
+                        value = self.multiworld.per_slot_randoms[self.player].randint(min_10, max_10)
                         item_dictionary_copy[name] += value
 
             if self.multiworld.randomize_weapons_level[self.player] in [1, 3]:
                 for name in dlc_weapons_upgrade_5_table.keys():
-                    if self.multiworld.random.randint(1, 100) < weapons_percentage:
-                        value = self.multiworld.random.randint(min_5, max_5)
+                    if self.multiworld.per_slot_randoms[self.player].randint(1, 100) < weapons_percentage:
+                        value = self.multiworld.per_slot_randoms[self.player].randint(min_5, max_5)
                         item_dictionary_copy[name] += value
 
             if self.multiworld.randomize_weapons_level[self.player] in [1, 2]:
                 for name in dlc_weapons_upgrade_10_table.keys():
-                    if self.multiworld.random.randint(1, 100) < weapons_percentage:
-                        value = self.multiworld.random.randint(min_10, max_10)
+                    if self.multiworld.per_slot_randoms[self.player].randint(1, 100) < weapons_percentage:
+                        value = self.multiworld.per_slot_randoms[self.player].randint(min_10, max_10)
                         item_dictionary_copy[name] += value
 
         # Create the mandatory lists to generate the player's output file
