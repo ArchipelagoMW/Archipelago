@@ -102,7 +102,7 @@ def set_rules(tloz_world: "TLoZWorld"):
         "Level 4 Map", "Level 4 Key Drop (Keese North)"
     ]
     for location in stepladder_locations:
-        add_rule(world.get_location("Ocean Heart Container", player),
+        add_rule(world.get_location(location, player),
                  lambda state: state.has("Stepladder", player))
 
     if world.StartingPosition[player] != 2:
