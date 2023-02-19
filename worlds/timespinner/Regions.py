@@ -192,6 +192,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         connect(world, player, names, 'Library top', 'Ifrit\'s Lair', lambda state: state.has('Kobo', player) and state.can_reach('Refugee Camp', 'Region', player))
         connect(world, player, names, 'Ifrit\'s Lair', 'Library top')
 
+
 def throwIfAnyLocationIsNotAssignedToARegion(regions: List[Region], regionNames: Set[str]):
     existingRegions: Set[str] = set()
 

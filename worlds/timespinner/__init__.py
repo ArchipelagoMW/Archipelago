@@ -137,49 +137,45 @@ class TimespinnerWorld(World):
 
     def write_spoiler_header(self, spoiler_handle: TextIO):
         if is_option_enabled(self.multiworld, self.player, "UnchainedKeys"):
-            spoiler_handle.write('Modern Warp Beacon unlock:       %s\n' % 
-                (self.precalculated_weights.present_key_unlock))
-            spoiler_handle.write('Timeworn Warp Beacon unlock:     %s\n' % 
-                (self.precalculated_weights.past_key_unlock))
+            spoiler_handle.write(f'Modern Warp Beacon unlock:       {self.precalculated_weights.present_key_unlock}\n')
+            spoiler_handle.write(f'Timeworn Warp Beacon unlock:     {self.precalculated_weights.past_key_unlock}\n')
 
             if is_option_enabled(self.multiworld, self.player, "EnterSandman"):
-                spoiler_handle.write('Mysterious Warp Beacon unlock:   %s\n' % 
-                    (self.precalculated_weights.time_key_unlock))
+                spoiler_handle.write(f'Mysterious Warp Beacon unlock:   {self.precalculated_weights.time_key_unlock}\n')
         else:
-            spoiler_handle.write('Twin Pyramid Keys unlock:        %s\n' % 
-                (self.precalculated_weights.pyramid_keys_unlock))
+            spoiler_handle.write(f'Twin Pyramid Keys unlock:        {self.precalculated_weights.pyramid_keys_unlock}\n')
        
         if is_option_enabled(self.multiworld, self.player, "RisingTides"):
             flooded_areas: List[str] = []
 
-            if(self.precalculated_weights.flood_basement):
-                if (self.precalculated_weights.flood_basement_high):
+            if self.precalculated_weights.flood_basement:
+                if self.precalculated_weights.flood_basement_high:
                     flooded_areas.append("Castle Basement")
                 else:
                     flooded_areas.append("Castle Basement (Savepoint available)")
-            if (self.precalculated_weights.flood_xarion):
+            if self.precalculated_weights.flood_xarion:
                 flooded_areas.append("Xarion (boss)")
-            if (self.precalculated_weights.flood_maw):
+            if self.precalculated_weights.flood_maw:
                 flooded_areas.append("Maw (caves + boss)")
-            if (self.precalculated_weights.flood_pyramid_shaft):
+            if self.precalculated_weights.flood_pyramid_shaft:
                 flooded_areas.append("Ancient Pyramid Shaft")
-            if (self.precalculated_weights.flood_pyramid_back):
+            if self.precalculated_weights.flood_pyramid_back:
                 flooded_areas.append("Sandman\\Nightmare (boss)")
-            if (self.precalculated_weights.flood_moat):
+            if self.precalculated_weights.flood_moat:
                 flooded_areas.append("Castle Ramparts Moat")
-            if (self.precalculated_weights.flood_courtyard):
+            if self.precalculated_weights.flood_courtyard:
                 flooded_areas.append("Castle Courtyard")
-            if (self.precalculated_weights.flood_lake_desolation):
+            if self.precalculated_weights.flood_lake_desolation:
                 flooded_areas.append("Lake Desolation")
-            if (self.precalculated_weights.dry_lake_serene):
+            if self.precalculated_weights.dry_lake_serene:
                 flooded_areas.append("Dry Lake Serene")
 
-            if (len(flooded_areas) == 0):
+            if len(flooded_areas) == 0:
                 flooded_areas_string: str = "None"
             else:
                 flooded_areas_string: str = ", ".join(flooded_areas)
 
-            spoiler_handle.write('Flooded Areas:                   %s\n' % (flooded_areas_string))
+            spoiler_handle.write(f'Flooded Areas:                   {flooded_areas_string}\n')
 
 
 def get_excluded_items(self: TimespinnerWorld, world: MultiWorld, player: int) -> Set[str]:

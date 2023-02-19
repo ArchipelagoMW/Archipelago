@@ -88,13 +88,13 @@ class PreCalculatedWeights:
 
     @staticmethod
     def get_flood_weights_overrides( world: MultiWorld, player: int) -> Dict[str, int]:
-        weights_overrrides_option: Union[int, Dict[str, Dict[str, int]]] = \
+        weights_overrides_option: Union[int, Dict[str, Dict[str, int]]] = \
             get_option_value(world, player, "RisingTidesOverrides")
 
-        if weights_overrrides_option == 0:
+        if weights_overrides_option == 0:
             return {}
         else:
-            return weights_overrrides_option 
+            return weights_overrides_option 
 
     @staticmethod
     def roll_flood_setting(world: MultiWorld, player: int, weights: Dict[str, Dict[str, int]], key: str) -> bool:
