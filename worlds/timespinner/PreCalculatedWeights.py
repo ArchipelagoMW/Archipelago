@@ -96,8 +96,8 @@ class PreCalculatedWeights:
         else:
             return weights_overrrides_option 
 
-
-    def roll_flood_setting(self, world: MultiWorld, player: int, weights: Dict[str, Dict[str, int]], key: str) -> bool:
+    @staticmethod
+    def roll_flood_setting(world: MultiWorld, player: int, weights: Dict[str, Dict[str, int]], key: str) -> bool:
         if not world or not is_option_enabled(world, player, "RisingTides"):
             return False
 
@@ -107,20 +107,20 @@ class PreCalculatedWeights:
 
         return result == "Flooded"
 
-
-    def roll_flood_setting_with_available_save(self, world: MultiWorld, player: int, \
+    @staticmethod
+    def roll_flood_setting_with_available_save(world: MultiWorld, player: int,
                                                weights: Dict[str, Dict[str, int]], key: str) -> Tuple[bool, bool]:
 
         if not world or not is_option_enabled(world, player, "RisingTides"):
-            return (False, False)
+            return False, False
 
-        weights = weights[key] if key in weights else { "Dry": 66, "Flooded": 17, "FloodedWithSavePointAvailable": 17 }
+        weights = weights[key] if key in weights else {"Dry": 66, "Flooded": 17, "FloodedWithSavePointAvailable": 17}
 
         result: str = world.random.choices(list(weights.keys()), weights=list(map(int, weights.values())))[0]
         
-        if (result == "Dry"):
-            return (False, False)
-        elif (result == "Flooded"):
-            return (True, False)
-        elif (result == "FloodedWithSavePointAvailable"):
-            return (True, True)
+        if result == "Dry":
+            return False, False
+        elif result == "Flooded":
+            return True, False
+        elif result == "FloodedWithSavePointAvailable":
+            return True, True
