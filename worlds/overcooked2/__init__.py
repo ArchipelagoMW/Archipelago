@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import IntEnum
 from typing import Callable, Dict, Any, List, Optional
 
 from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, Tutorial, LocationProgressType
@@ -27,7 +27,7 @@ class Overcooked2Web(WebWorld):
     tutorials = [setup_en]
 
 
-class PrepLevelMode(Enum):
+class PrepLevelMode(IntEnum):
     original = 0
     excluded = 1
     ayce = 2
@@ -179,7 +179,7 @@ class Overcooked2World(World):
 
         balancing_mode = self.get_options()["LocationBalancing"]
 
-        if balancing_mode == LocationBalancingMode.disabled.value:
+        if balancing_mode == LocationBalancingMode.disabled:
             # Location balancing is disabled, progression density is purely determined by filler
             return list()
 
@@ -191,12 +191,12 @@ class Overcooked2World(World):
                 game_progression_count += 1
         game_progression_density = game_progression_count/game_item_count
 
-        if balancing_mode == LocationBalancingMode.full.value:
+        if balancing_mode == LocationBalancingMode.full:
             # Location balancing will be employed in an attempt to keep the number of
             # progression locations and proression items as close to equal as possible
             return self.get_n_random_locations(game_progression_count)
 
-        assert balancing_mode == LocationBalancingMode.compromise.value
+        assert balancing_mode == LocationBalancingMode.compromise
 
         # Count how many progression items are shuffled between all games
         total_item_count = len(self.multiworld.itempool)
@@ -242,7 +242,7 @@ class Overcooked2World(World):
             self.level_mapping = \
                 level_shuffle_factory(
                     self.multiworld.random,
-                    self.options["PrepLevels"] != PrepLevelMode.excluded.value,
+                    self.options["PrepLevels"] != PrepLevelMode.excluded,
                     self.options["IncludeHordeLevels"],
                 )
         else:
@@ -508,8 +508,8 @@ class Overcooked2World(World):
             "SaveFolderName": mod_name,
             "CustomOrderTimeoutPenalty": 10,
             "LevelForceHide": [37, 38, 39, 40, 41, 42, 43, 44],
-            "LocalDeathLink": self.options["DeathLink"] != DeathLinkMode.disabled.value,
-            "BurnTriggersDeath": self.options["DeathLink"] == DeathLinkMode.death_and_overcook.value,
+            "LocalDeathLink": self.options["DeathLink"] != DeathLinkMode.disabled,
+            "BurnTriggersDeath": self.options["DeathLink"] == DeathLinkMode.death_and_overcook,
 
             # Game Modifications
             "LevelPurchaseRequirements": level_purchase_requirements,
@@ -562,7 +562,7 @@ class Overcooked2World(World):
         for bug in bugs:
             self.options[bug] = self.options["FixBugs"]
         self.options["PreserveCookingProgress"] = self.options["AlwaysPreserveCookingProgress"]
-        self.options["TimerAlwaysStarts"] = self.options["PrepLevels"] == PrepLevelMode.ayce.value
+        self.options["TimerAlwaysStarts"] = self.options["PrepLevels"] == PrepLevelMode.ayce
         self.options["LevelTimerScale"] = 0.666 if self.options["ShorterLevelDuration"] else 1.0
         self.options["LeaderboardScoreScale"] = {
             "FourStars": 1.0,

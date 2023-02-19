@@ -1,15 +1,15 @@
-from enum import Enum
+from enum import IntEnum
 from typing import TypedDict
 from Options import DefaultOnToggle, Range, Choice
 
 
-class LocationBalancingMode(Enum):
+class LocationBalancingMode(IntEnum):
     disabled = 0
     compromise = 1
     full = 2
 
 
-class DeathLinkMode(Enum):
+class DeathLinkMode(IntEnum):
     disabled = 0
     death_only = 1
     death_and_overcook = 2
