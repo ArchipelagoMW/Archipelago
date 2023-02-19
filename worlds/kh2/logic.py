@@ -65,8 +65,8 @@ class KH2Logic(LogicMixin):
         for item in {ItemName.CastleKey, ItemName.BattlefieldsofWar, ItemName.SwordoftheAncestor, ItemName.BeastsClaw,
                      ItemName.BoneFist, ItemName.ProudFang, ItemName.SkillandCrossbones, ItemName.Scimitar,
                      ItemName.MembershipCard,
-                     ItemName.IceCream, ItemName.Picture, ItemName.WaytotheDawn, ItemName.IdentityDisk,
-                     ItemName.Poster}:
+                     ItemName.Poster,ItemName.IceCream, ItemName.Picture, ItemName.WaytotheDawn,
+                     ItemName.IdentityDisk,ItemName.NamineSketches}:
             visit += self.item_count(item,player)
         return visit >= amount
 
