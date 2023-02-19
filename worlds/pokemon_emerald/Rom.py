@@ -2,12 +2,20 @@ import bsdiff4
 import os
 from Patch import APDeltaPatch
 from .data.Pokemon import get_random_species
-from .Util import get_data_json, set_bytes_little_endian
+from .Data import get_data_json
 
 def get_base_rom_as_bytes() -> bytes:
     with open(os.path.join(os.path.dirname(__file__), f"pokeemerald-vanilla.gba"), "rb") as infile:
         base_rom_bytes = bytes(infile.read())
     return base_rom_bytes
+
+def set_bytes_little_endian(byte_array, address, size, value):
+    offset = 0
+    while (size > 0):
+        byte_array[address + offset] = value & 0xFF
+        value = value >> 8
+        offset += 1
+        size -= 1
 
 # For every encounter table, replace each unique species.
 # So if a table only has 2 species across multiple slots, it will

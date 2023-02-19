@@ -1,10 +1,10 @@
 from BaseClasses import Region, Entrance
 from ..AutoWorld import World
 from .Items import create_item_name_to_id_map, create_ball_items, create_hidden_items, create_badge_items
-from .Locations import create_location_name_to_id_map, create_ball_item_locations, create_hidden_item_locations, create_badge_locations
+from .Locations import create_location_name_to_id_map, create_locations_with_tags
 from .Options import options
 from .Rom import generate_output
-from .Util import get_data_json
+from .Data import get_data
 
 class PokemonEmeraldWorld(World):
     """
@@ -31,16 +31,16 @@ class PokemonEmeraldWorld(World):
 
     def create_regions(self):
         region_map = {}
-        data = get_data_json()
+        data = get_data()
 
-        for map in data["maps"]:
-            region = Region(map["name"], self.player, self.multiworld)
-            exit_names = set([map_name for map_name in map["connections"]] + [map_name for map_name in map["warps"]])
+        for map in data.values():
+            region = Region(map.name, self.player, self.multiworld)
+            exit_names = set(map.connections + map.warps)
             for exit_name in exit_names:
                 connection = Entrance(self.player, exit_name, region)
                 region.exits.append(connection)
             
-            region_map[map["name"]] = region
+            region_map[map.name] = region
 
         for region in region_map.values():
             for connection in region.exits:
@@ -52,9 +52,7 @@ class PokemonEmeraldWorld(World):
         connection.connect(region_map["MAP_LITTLEROOT_TOWN"])
         region_map["Menu"] = menu
 
-        create_ball_item_locations(self, region_map)
-        create_hidden_item_locations(self, region_map)
-        create_badge_locations(self, region_map)
+        create_locations_with_tags(self, region_map, ["GroundItem", "HiddenItem", "Badge"])
         self.multiworld.regions += region_map.values()
 
 

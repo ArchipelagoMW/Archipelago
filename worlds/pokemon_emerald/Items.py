@@ -1,5 +1,5 @@
 from BaseClasses import Item, ItemClassification
-from .Util import get_data_json
+from .Data import get_data_json
 
 
 class PokemonEmeraldItem(Item):

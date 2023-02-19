@@ -7934,7 +7934,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_BROWN_CAVE1",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [
@@ -8037,12 +8039,16 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_BLUE_CAVE2",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_RED_CAVE3",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -8099,7 +8105,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_BROWN_CAVE3",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -8398,7 +8406,10 @@
     {
       "connections": [],
       "name": "MAP_TRADE_CENTER",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC",
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -8418,7 +8429,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_YELLOW_CAVE1",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -8526,7 +8539,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_BLUE_CAVE1",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -8573,7 +8588,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_YELLOW_CAVE2",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -8595,7 +8612,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_SHRUB3",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -8939,7 +8958,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_YELLOW_CAVE3",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -9148,7 +9169,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_TREE2",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -9323,7 +9346,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_TREE1",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -9387,7 +9412,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_BLUE_CAVE3",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -9628,7 +9655,9 @@
     {
       "connections": [],
       "name": "MAP_UNDERWATER_MARINE_CAVE",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -9721,7 +9750,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_YELLOW_CAVE4",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -9838,7 +9869,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_TREE4",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -9862,12 +9895,17 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_TREE3",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
       "name": "MAP_BATTLE_COLOSSEUM_2P",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC",
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -9983,7 +10021,11 @@
     {
       "connections": [],
       "name": "MAP_INSIDE_OF_TRUCK",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC",
+        "MAP_DYNAMIC",
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -10245,7 +10287,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_BROWN_CAVE2",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -10431,7 +10475,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_SHRUB1",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [
@@ -10525,7 +10571,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_SHRUB4",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [
@@ -10742,7 +10790,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_RED_CAVE2",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -11080,7 +11130,10 @@
     {
       "connections": [],
       "name": "MAP_UNION_ROOM",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC",
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -11149,7 +11202,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_BROWN_CAVE4",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -11171,6 +11226,7 @@
       "connections": [],
       "name": "MAP_TERRA_CAVE_ENTRANCE",
       "warps": [
+        "MAP_DYNAMIC",
         "MAP_TERRA_CAVE_END"
       ]
     },
@@ -11236,7 +11292,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_RED_CAVE4",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -11379,7 +11437,12 @@
     {
       "connections": [],
       "name": "MAP_BATTLE_COLOSSEUM_4P",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC",
+        "MAP_DYNAMIC",
+        "MAP_DYNAMIC",
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -11583,7 +11646,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_RED_CAVE1",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -11597,7 +11662,12 @@
     {
       "connections": [],
       "name": "MAP_RECORD_CORNER",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC",
+        "MAP_DYNAMIC",
+        "MAP_DYNAMIC",
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -11747,7 +11817,10 @@
     {
       "connections": [],
       "name": "MAP_LILYCOVE_CITY_DEPARTMENT_STORE_ELEVATOR",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC",
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [
@@ -11996,7 +12069,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_SHRUB2",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
@@ -12179,7 +12254,9 @@
     {
       "connections": [],
       "name": "MAP_SECRET_BASE_BLUE_CAVE4",
-      "warps": []
+      "warps": [
+        "MAP_DYNAMIC"
+      ]
     },
     {
       "connections": [],
