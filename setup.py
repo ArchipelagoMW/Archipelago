@@ -10,29 +10,12 @@ import zipfile
 from collections.abc import Iterable
 from hashlib import sha3_512
 from pathlib import Path
-
-import setuptools
-import setuptools.command.build
-
-if __name__ == "__main__":
-    import ModuleUpdate
-    ModuleUpdate.update()
-
-from Launcher import components, icon_paths
-from Utils import version_tuple, is_windows, is_linux
-
-# On  Python < 3.10 LogicMixin is not currently supported.
-apworlds: set = {
-    "Subnautica",
-    "Factorio",
-    "Rogue Legacy",
-}
-
-# This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 import subprocess
 import pkg_resources
-requirement = 'cx-Freeze>=6.14.1'
+
+# This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 try:
+    requirement = 'cx-Freeze>=6.14.1'
     pkg_resources.require(requirement)
     import cx_Freeze
 except pkg_resources.ResolutionError:
@@ -41,12 +24,36 @@ except pkg_resources.ResolutionError:
     subprocess.call([sys.executable, '-m', 'pip', 'install', requirement, '--upgrade'])
     import cx_Freeze
 
+# .build only exists if cx-Freeze is the right version, so we have to update/install that first before this line
+import setuptools.command.build
+
+if __name__ == "__main__":
+    # need to run this early to import from Utils and Launcher
+    # TODO: move stuff to not require this
+    import ModuleUpdate
+    ModuleUpdate.update(yes="--yes" in sys.argv or "-y" in sys.argv)
+    ModuleUpdate.update_ran = False  # restore for later
+
+from Launcher import components, icon_paths
+from Utils import version_tuple, is_windows, is_linux
+
+
+# On  Python < 3.10 LogicMixin is not currently supported.
+apworlds: set = {
+    "Subnautica",
+    "Factorio",
+    "Rogue Legacy",
+    "Donkey Kong Country 3",
+    "Super Mario World",
+    "Timespinner",
+}
 
 if os.path.exists("X:/pw.txt"):
     print("Using signtool")
     with open("X:/pw.txt", encoding="utf-8-sig") as f:
         pw = f.read()
-    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p "' + pw + r'" /fd sha256 /tr http://timestamp.digicert.com/ '
+    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p "' + pw + \
+               r'" /fd sha256 /tr http://timestamp.digicert.com/ '
 else:
     signtool = None
 

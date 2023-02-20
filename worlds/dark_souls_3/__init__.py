@@ -14,7 +14,7 @@ from .data.locations_data import location_dictionary, fire_link_shrine_table, \
     irithyll_dungeon_table, profaned_capital_table, anor_londo_table, lothric_castle_table, grand_archives_table, \
     untended_graves_table, archdragon_peak_table, firelink_shrine_bell_tower_table, progressive_locations
 from ..AutoWorld import World, WebWorld
-from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
+from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification
 from ..generic.Rules import set_rule, add_item_rule
 
 
@@ -77,7 +77,6 @@ class DarkSouls3World(World):
         return DarkSouls3Item(name, item_classification, data, self.player)
 
     def create_regions(self):
-
         menu_region = self.create_region("Menu", progressive_locations)
 
         # Create all Vanilla regions of Dark Souls III
@@ -157,7 +156,7 @@ class DarkSouls3World(World):
 
     # For each region, add the associated locations retrieved from the corresponding location_table
     def create_region(self, region_name, location_table) -> Region:
-        new_region = Region(region_name, RegionType.Generic, region_name, self.player, self.multiworld)
+        new_region = Region(region_name, self.player, self.multiworld)
         if location_table:
             for name, address in location_table.items():
                 location = DarkSouls3Location(self.player, name, self.location_name_to_id[name], new_region)
