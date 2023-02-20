@@ -25,12 +25,18 @@ class KingdomHearts2Web(WebWorld):
 
 
 class KH2World(World):
+    """
+    Kingdom Hearts II is an action role-playing game developed and published by Square Enix and released in 2005.
+    It is the sequel to Kingdom Hearts and Kingdom Hearts: Chain of Memories, and like the two previous games,
+    focuses on Sora and his friends' continued battle against the Darkness.
+    """
     game: str = "Kingdom Hearts 2"
     web = KingdomHearts2Web()
-    data_version = 0
+    data_version = 1
     option_definitions = KH2_Options
     item_name_to_id = {name: data.code for name, data in item_dictionary_table.items()}
     location_name_to_id = {item_name: data.code for item_name, data in all_locations.items() if data.code}
+
     totalLocations = len(all_locations.items())
 
     # hitlist for the bosses. This goes in slot data

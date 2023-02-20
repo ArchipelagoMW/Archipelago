@@ -1,26 +1,28 @@
 # Kingdom Hearts 2 Archipelago Setup Guide
-## Quick Links
+<h2 style="text-transform:none";>Quick Links</h2>
+
 - [Main Page](../../../../games/Kingdom%20Hearts%202/info/en)
 - [Settings Page](../../../../games/Kingdom%20Hearts%202/player-settings)
 
-## Setting up the Mod Manager
+<h2 style="text-transform:none";>Setting up the Mod Manager</h2>
+
 Follow this Guide [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/)
 
-### Loading A Seed
+<h3 style="text-transform:none";>Loading A Seed</h3>
 
 When you generate a game you will see a download link for a KH2 .zip seed on the room page. Download the seed then open OpenKH Mod Manager and click the green plus and `Select and install Mod Archive`. Make sure the seed is on the top of the list (Highest Priority)
 
-### Archipelago Compainion Mod
+<h3 style="text-transform:none";>Archipelago Compainion Mod</h3>
 
 Load this mod just like the GoA ROM you did during the KH2 Rando setup. `JaredWeakStrike/APCompanion` Have this mod second highest priority below the .zip seed
 
-### Using the KH2 Client
+<h2 style="text-transform:none";>Using the KH2 Client</h2>
 
-Once you have started the game through OpenKH Mod Manager and are on the title screen run the ArchipelagoKH2Client.exe. When you successfully connect to the server the client will automatically hook into the game to send/receive checks. If the client ever loses connection to the game, it will also disconnect from the server and you will need to reconnect. Make sure the game is open whenever you try to connect the client to the server otherwise it will immediately disconnect you. Most checks will be sent to you anywhere outside of a load or cutscene but to receive magic you will need to pause and then room transition for it to show up. The only safe way to send magic is while you are paused and needing to room transition after receiving magic for it to show up is how KH2 works. If you die and "lose" checks room transition to receive them again.
+Once you have started the game through OpenKH Mod Manager, and are on the title screen, run the ArchipelagoKH2Client.exe. The client will automatically hook into the game to send/receive checks when you successfully connect to the server. If the client loses connection to the game, it will also disconnect from the server, and you will need to reconnect. Make sure the game is open whenever you try to connect the client to the server otherwise it will immediately disconnect you. Most checks will be sent to you anywhere outside of a load or cutscene but if you obtain magic, you will need to pause your game to have it show up in your inventory, then enter a new room for it to become properly usable.
 
-## Generating a game
+<h2 style="text-transform:none";>Generating a game</h2>
 
-### What is a YAML?
+<h3 style="text-transform:none";>What is a YAML?</h3>
 
 YAML is the file format which Archipelago uses in order to configure a player's world. It allows you to dictate which
 game you will be playing as well as the settings you would like for that game.
@@ -29,7 +31,7 @@ YAML is a format very similar to JSON however it is made to be more human-readab
 validity of your YAML file you may check the file by uploading it to the check page on the Archipelago website. Check
 page: [YAML Validation Page](/mysterycheck)
 
-### Creating a YAML
+<h3 style="text-transform:none";>Creating a YAML</h3>
 
 YAML files may be generated on the Archipelago website by visiting the games page and clicking the "Settings Page" link
 under any game. Clicking "Export Settings" in a game's settings page will download the YAML to your system. Games

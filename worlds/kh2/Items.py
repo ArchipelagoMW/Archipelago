@@ -254,8 +254,8 @@ SupportAbility_Table = {
     ItemName.Defender:          ItemData(0x1300C9, 2, 414, 0x19E, 0, True),
     ItemName.DamageControl:     ItemData(0x1300CA, 2, 542, 0x21E, 0, True),
     ItemName.NoExperience:      ItemData(0x1300CB, 1, 404, 0x194, 0, True),
-    ItemName.LightDarkness:     ItemData(0x1300CC, 1, 541, 0x21D, 0, True),# one plandoed into the starting invo
-    ItemName.MagicLock:         ItemData(0x1300CD, 1, 403, 0x193, 0, True), # These are found on levels in vanilla
+    ItemName.LightDarkness:     ItemData(0x1300CC, 1, 541, 0x21D, 0, True),
+    ItemName.MagicLock:         ItemData(0x1300CD, 1, 403, 0x193, 0, True),
     ItemName.LeafBracer:        ItemData(0x1300CE, 1, 402, 0x192, 0, True),
     ItemName.CombinationBoost:  ItemData(0x1300CF, 1, 400, 0x190, 0, True),
     ItemName.OnceMore:          ItemData(0x1300D0, 1, 416, 0x1A0, 0, True),
@@ -569,7 +569,6 @@ exclusionItem_table = {
         ItemName.DodgeRoll,
         ItemName.AerialDodge,
         ItemName.Glide,
-
     },
     "StatUps": {
         ItemName.MaxHPUp,
