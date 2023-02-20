@@ -151,7 +151,7 @@ def patch_kh2(self, output_directory):
                 self.formattedFmlv[formName] = []
                 self.formattedFmlv[formName].append({
                             "Ability": 1,
-                            "Experience": formExp[data.charName][data.locid] / formexp,
+                            "Experience": int(formExp[data.charName][data.locid] / formexp),
                             "FormId": data.charName,
                             "FormLevel": 1,
                             "GrowthAbilityLevel": 0,

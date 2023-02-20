@@ -78,13 +78,11 @@ Magic_Table = {
 }
 
 Movement_Table = {
-
     ItemName.HighJump:    ItemData(0x13002E, 4, 94,  0x05E, 0, True),
     ItemName.QuickRun:    ItemData(0x13002F, 4, 98,  0x062, 0, True),
     ItemName.DodgeRoll:   ItemData(0x130030, 4, 564, 0x234, 0, True),
     ItemName.AerialDodge: ItemData(0x130031, 4, 102, 0x066, 0, True),
     ItemName.Glide:       ItemData(0x130032, 4, 106, 0x06A, 0, True),
-
 }
 
 Keyblade_Table = {
