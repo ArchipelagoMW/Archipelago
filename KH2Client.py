@@ -295,7 +295,7 @@ class KH2Context(CommonContext):
                     await asyncio.sleep(1)
                 itemMemory = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
                 self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,(itemMemory | 0x01 << itemcode.bitmask).to_bytes(1, 'big'), 1)
-            elif itemcode.memaddr in {0x130026, 0x130027, 0x130028, 0x130029, 0x13002A, 0x13002B}:
+            elif itemcode.memaddr in {0x3594, 0x3595, 0x3596, 0x3597, 0x35CF, 0x35D0}:
                 asyncio.create_task(self.give_magic(item))
             else:
                 while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x8E9DA3, 1),"big") != 0 \
@@ -360,7 +360,7 @@ class KH2Context(CommonContext):
     async def give_magic(self,item):
         itemname = self.lookup_id_to_item[item.item]
         itemcode = self.item_name_to_data[itemname]
-        while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A0EAC4+0x40, 1), "big") not in {10, 8}:
+        while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x741320, 1), "big") not in {10, 8}:
             await asyncio.sleep(1)
         amount = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
         self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,
