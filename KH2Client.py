@@ -353,7 +353,7 @@ class KH2Context(CommonContext):
         try:
             for item in args['items']:
                 if item.location not in self.kh2seedsave["checked_locations"][str(item.player)] \
-                and item.location not in {-1, -2} and item.item not in {0x130024, 0x130025, 0x130026, 0x130027, 0x130028, 0x130029, 0x13002A, 0x13002B, 0x13002C, 0x13002D}:
+                and item.location not in {-1, -2} and item.item not in {0x130024, 0x130025, 0x130026, 0x130027, 0x130028, 0x130029}:
                     self.kh2seedsave["checked_locations"][str(item.player)].append(item.location)
         except Exception as e:
             print(e)
