@@ -615,7 +615,7 @@ exclusionItem_table = {
         ItemName.IceCream,
         ItemName.WaytotheDawn,
         ItemName.IdentityDisk,
-        ItemName.Poster,
+        ItemName.IceCream,
         ItemName.NamineSketches
     },
     "AllVisitLocking": {
