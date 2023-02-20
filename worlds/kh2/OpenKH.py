@@ -1,16 +1,13 @@
-import zipfile
 import yaml
 import os
-import random
-import os
-from .Names.RegionName import SoraLevels_Region
 import Utils
 import zipfile
+
 from .Items import item_dictionary_table
 from .Locations import all_locations,SoraLevels,exclusion_table
 from .XPValues import lvlStats, formExp, soraExp
 from worlds.Files import APContainer
-from statistics import median
+
 
 class KH2Container(APContainer):
     game: str = 'Kingdom Hearts 2'
@@ -58,6 +55,8 @@ def patch_kh2(self, output_directory):
     self.magic = 6
     self.defense = 2
     self.ap = 50
+    formexp=None
+    formName=None
     levelsetting=list()
 
     if self.multiworld.Keyblade_Minimum[self.player].value>self.multiworld.Keyblade_Maximum[self.player].value:
@@ -115,13 +114,11 @@ def patch_kh2(self, output_directory):
                 "BonusItem2": dblbonus,
                 "Padding": 0
             }
-            # putting dbl bonus at 0 again so we dont have the same item placed multiple time
+            # putting dbl bonus at 0 again, so we don't have the same item placed multiple time
             dblbonus = 0
 
 
         elif data.yml == "Keyblade":
-            #print(self.multiworld.Keyblade_Minimum[self.player].value)
-            #print(self.multiworld.Keyblade_Maximum[self.player].value)
             self.formattedItem["Stats"].append({
                 "Id": data.locid,
                 "Attack": self.multiworld.per_slot_randoms[self.player].randint(keyblademin,keyblademax),
@@ -142,7 +139,7 @@ def patch_kh2(self, output_directory):
         elif data.yml == "Forms":
             # loc id is form lvl
             # char name is the form name number :)
-            if (data.locid == 2):
+            if data.locid == 2:
                 formDict = {1: "Valor", 2: "Wisdom", 3: "Limit", 4: "Master", 5: "Final"}
                 formDictExp = {1: self.multiworld.Valor_Form_EXP[self.player].value,
                                2: self.multiworld.Wisdom_Form_EXP[self.player].value
@@ -154,7 +151,7 @@ def patch_kh2(self, output_directory):
                 self.formattedFmlv[formName] = []
                 self.formattedFmlv[formName].append({
                             "Ability": 1,
-                            "Experience": int(formExp[data.charName][data.locid] / formexp),
+                            "Experience": formExp[data.charName][data.locid] / formexp,
                             "FormId": data.charName,
                             "FormLevel": 1,
                             "GrowthAbilityLevel": 0,
@@ -183,7 +180,7 @@ def patch_kh2(self, output_directory):
             "FormLevel": x,
             "GrowthAbilityLevel": 0,
         })
-    #levels done down here because of optional settings that can take locations out of the pool. Might be able to re-factor all the code to do something like this
+    #levels done down here because of optional settings that can take locations out of the pool.
     self.i=1
     for location in SoraLevels:
         increaseStat(self.multiworld.per_slot_randoms[self.player].randint(0, 3))
