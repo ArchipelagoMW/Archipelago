@@ -1,7 +1,7 @@
 from typing import Dict, Union, List
 from BaseClasses import MultiWorld
 from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option, OptionDict, OptionList
-from schema import Schema, And, Optional
+from schema import Schema, And, Optional, Or
 
 
 class StartWithJewelryBox(Toggle):
@@ -312,43 +312,43 @@ class RisingTidesOverrides(OptionDict):
     """Odds for specific areas to be flooded or drained, only has effect when RisingTides is on.
     Areas that are not specified will roll with the default 33% chance of getting flooded or drained"""
     schema = Schema({
-        Optional("Xarion"): { 
+        Optional("Xarion"): Or(And({
             "Dry": And(int, lambda n: n >= 0), 
             "Flooded": And(int, lambda n: n >= 0)
-        },
-        Optional("Maw"): { 
+        }, lambda d: any(v > 0 for v in d.values())), "Dry", "Flooded"),
+        Optional("Maw"): Or(And({
             "Dry": And(int, lambda n: n >= 0), 
             "Flooded": And(int, lambda n: n >= 0)
-        },
-        Optional("AncientPyramidShaft"): { 
+        }, lambda d: any(v > 0 for v in d.values())), "Dry", "Flooded"),
+        Optional("AncientPyramidShaft"): Or(And({
             "Dry": And(int, lambda n: n >= 0), 
             "Flooded": And(int, lambda n: n >= 0)
-        },
-        Optional("Sandman"): { 
+        }, lambda d: any(v > 0 for v in d.values())), "Dry", "Flooded"),
+        Optional("Sandman"): Or(And({
             "Dry": And(int, lambda n: n >= 0), 
             "Flooded": And(int, lambda n: n >= 0)
-        },
-        Optional("CastleMoat"): { 
+        }, lambda d: any(v > 0 for v in d.values())), "Dry", "Flooded"),
+        Optional("CastleMoat"): Or(And({
             "Dry": And(int, lambda n: n >= 0), 
             "Flooded": And(int, lambda n: n >= 0)
-        },
-        Optional("CastleBasement"): { 
+        }, lambda d: any(v > 0 for v in d.values())), "Dry", "Flooded"),
+        Optional("CastleBasement"): Or(And({
             "Dry": And(int, lambda n: n >= 0), 
             "FloodedWithSavePointAvailable": And(int, lambda n: n >= 0), 
             "Flooded": And(int, lambda n: n >= 0) 
-        },
-        Optional("CastleCourtyard"): { 
+        }, lambda d: any(v > 0 for v in d.values())), "Dry", "FloodedWithSavePointAvailable", "Flooded"),
+        Optional("CastleCourtyard"): Or(And({
             "Dry": And(int, lambda n: n >= 0), 
             "Flooded": And(int, lambda n: n >= 0)
-        },
-        Optional("LakeDesolation"): { 
+        }, lambda d: any(v > 0 for v in d.values())), "Dry", "Flooded"),
+        Optional("LakeDesolation"): Or(And({
             "Dry": And(int, lambda n: n >= 0), 
             "Flooded": And(int, lambda n: n >= 0)
-        },
-        Optional("LakeSerene"): { 
+        }, lambda d: any(v > 0 for v in d.values())), "Dry", "Flooded"),
+        Optional("LakeSerene"): Or(And({
             "Dry": And(int, lambda n: n >= 0), 
             "Flooded": And(int, lambda n: n >= 0)
-        }
+        }, lambda d: any(v > 0 for v in d.values())), "Dry", "Flooded")
     })
     display_name = "Rising Tides Overrides"
     default = {
