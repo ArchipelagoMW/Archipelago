@@ -11,7 +11,6 @@ import Utils
 from worlds.kh2 import WorldLocations
 import typing
 import json
-import json
 
 if __name__ == "__main__":
     Utils.init_logging("KH2Client", exception_logger="Client")
@@ -182,7 +181,13 @@ class KH2Context(CommonContext):
                             asyncio.create_task(self.give_item(item, "Sora"))
                 if not self.kh2seedsave["starting_inventory"]:
                     self.kh2seedsave["starting_inventory"] = True
-
+                try:
+                    asyncio.create_task(self.ItemSafe(args))
+                except Exception as e:
+                    if self.kh2connected:
+                        logger.info("Connection Lost.")
+                        self.kh2connected = False
+                    print(e)
 
         if cmd in {"RoomUpdate"}:
             if "checked_locations" in args:
@@ -255,27 +260,22 @@ class KH2Context(CommonContext):
             await asyncio.sleep(1)
         itemMemory = 0
         try:
-            # cannot give items during loading screens
-            # 0x8E9DA3=load 0xAB8BC7=black 0x2A148E8=controable 0x715568=room transition
-            #cannot give items while on title screen
             itemname = self.lookup_id_to_item[item.item]
             itemcode = self.item_name_to_data[itemname]
+            # cannot give items during loading screens
+            # 0x8E9DA3=load 0xAB8BC7=black 0x2A148E8=controable 0x715568=room transition
             while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Now, 1), "big") == 255:
                 await asyncio.sleep(0.5)
             if itemcode.ability:
                 if char == "Donald":
                     self.kh2.write_short(self.kh2.base_address + self.Save + self.kh2seedsave["DonaldInvo"],itemcode.memaddr)
                     self.kh2seedsave["DonaldInvo"] -= 2
-                    asyncio.create_task(self.ItemSafe(item))
                 elif char == "Goofy":
                     self.kh2.write_short(self.kh2.base_address + self.Save + self.kh2seedsave["GoofyInvo"],itemcode.memaddr)
                     self.kh2seedsave["GoofyInvo"] -= 2
-                    asyncio.create_task(self.ItemSafe(item))
                 else:
-                    # if in movement
                     if itemcode.memaddr in {0x05E, 0x062, 0x066, 0x06A, 0x234}:
                         self.give_growth(itemcode)
-                        asyncio.create_task(self.ItemSafe(item))
                     else:
                         # cannot give stuff past this point or the game will crash
                         while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x8E9DA3, 1), "big") != 0 \
@@ -287,7 +287,6 @@ class KH2Context(CommonContext):
                             return
                         self.kh2.write_short(self.kh2.base_address + self.Save + self.kh2seedsave["SoraInvo"], itemcode.memaddr)
                         self.kh2seedsave["SoraInvo"] -= 2
-                        asyncio.create_task(self.ItemSafe(item))
             elif itemcode.bitmask > 0:
                 while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x8E9DA3, 1),"big") != 0 or \
                         int.from_bytes( self.kh2.read_bytes(self.kh2.base_address + 0xAB8BC7, 1), "big") != 0 \
@@ -296,14 +295,8 @@ class KH2Context(CommonContext):
                     await asyncio.sleep(1)
                 itemMemory = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
                 self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,(itemMemory | 0x01 << itemcode.bitmask).to_bytes(1, 'big'), 1)
-                asyncio.create_task(self.ItemSafe(item))
-            elif itemcode.memaddr in {0x3594, 0x3595, 0x3596, 0x3597, 0x35CF, 0x35D0}:
-                    while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x741320, 1), "big") not in {10,8}:
-                        await asyncio.sleep(0.3)
-                    amount = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
-                    self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,
-                                         (amount + 1).to_bytes(1, 'big'), 1)
-                    asyncio.create_task(self.ItemSafe(item))
+            elif itemcode.memaddr in {0x130026, 0x130027, 0x130028, 0x130029, 0x13002A, 0x13002B}:
+                asyncio.create_task(self.give_magic(item))
             else:
                 while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x8E9DA3, 1),"big") != 0 \
                         or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0xAB8BC7, 1), "big") != 0 \
@@ -314,28 +307,25 @@ class KH2Context(CommonContext):
                     await asyncio.sleep(1)
                 amount = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1),"big")
                 self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,(amount + 1).to_bytes(1, 'big'), 1)
-                asyncio.create_task(self.ItemSafe(item))
         except Exception as e:
             if self.kh2connected:
                 logger.info("Connection Lost.")
                 self.kh2connected = False
             print(e)
 
-    async def ItemSafe(self, item):
+    async def ItemSafe(self, args):
         while not self.kh2connected:
             await asyncio.sleep(1)
         try:
             svestate = self.kh2.read_short(self.kh2.base_address + self.sveroom)
-            await self.roomSave(item, svestate)
+            await self.roomSave(args, svestate)
         except Exception as e:
             if self.kh2connected:
                 logger.info("Connection Lost.")
                 self.kh2connected = False
             print(e)
 
-    async def roomSave(self, item, svestate):
-        itemname = self.lookup_id_to_item[item.item]
-        itemcode = self.item_name_to_data[itemname]
+    async def roomSave(self, args, svestate):
         while svestate == self.kh2.read_short(self.kh2.base_address + self.sveroom):
             deathstate = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.onDeath, 2), "big")
             if deathstate in {1024,1280}:
@@ -346,31 +336,56 @@ class KH2Context(CommonContext):
                 # checking if the player is out of battle. If player gets mickey/peter pan there is no need for them to get the item again.
                 if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address +0x2A0EAC4+0x40,1),"big")==0:
                     # give item because they have not room saved and are dead
-                    itemname = self.lookup_id_to_item[itemcode.code]
-                    if itemname in exclusionItem_table["Ability"] and itemcode.memaddr not in {0x05E, 0x062, 0x066, 0x06A, 0x234}:
-                        self.kh2seedsave["SoraInvo"]+=2
-                    if itemname in DonaldAbility_Table.keys():
-                        asyncio.create_task(self.give_item(item, "Donald"))
-                    elif itemname in GoofyAbility_Table.keys():
-                        asyncio.create_task(self.give_item(item, "Goofy"))
-                    else:
-                        asyncio.create_task(self.give_item(item, "Sora"))
+                    for item in args['items']:
+                        itemname = self.lookup_id_to_item[item.item]
+                        itemcode = self.item_name_to_data[itemname]
+                        if itemname in exclusionItem_table["Ability"] and itemcode.memaddr not in {0x05E, 0x062, 0x066, 0x06A, 0x234}:
+                            self.kh2seedsave["SoraInvo"]+=2
+                        if itemname in DonaldAbility_Table.keys():
+                            asyncio.create_task(self.give_item(item, "Donald"))
+                        elif itemname in GoofyAbility_Table.keys():
+                            asyncio.create_task(self.give_item(item, "Goofy"))
+                        else:
+                            asyncio.create_task(self.give_item(item, "Sora"))
+            await asyncio.sleep(1)
+        try:
+            for item in args['items']:
+                if item.location not in self.kh2seedsave["checked_locations"][str(item.player)] \
+                and item.location not in {-1, -2} and item.item not in {0x130024, 0x130025, 0x130026, 0x130027, 0x130028, 0x130029, 0x13002A, 0x13002B, 0x13002C, 0x13002D}:
+                    self.kh2seedsave["checked_locations"][str(item.player)].append(item.location)
+        except Exception as e:
+            print(e)
+    async def give_magic(self,item):
+        itemname = self.lookup_id_to_item[item.item]
+        itemcode = self.item_name_to_data[itemname]
+        while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x741320, 1), "big") not in {10, 8}:
+            await asyncio.sleep(1)
+        amount = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
+        self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,
+                             (amount + 1).to_bytes(1, 'big'), 1)
+        svestate = self.kh2.read_short(self.kh2.base_address + self.sveroom)
+        while svestate == self.kh2.read_short(self.kh2.base_address + self.sveroom):
+            deathstate = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.onDeath, 2), "big")
+            if deathstate in {1024, 1280}:
+                # cannot give item on death screen so waits until they are not dead
+                while deathstate in {1024, 1280}:
+                    deathstate = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.onDeath, 2), "big")
+                    await asyncio.sleep(0.5)
+                # checking if the player is out of battle. If player gets mickey/peter pan there is no need for them to get the item again.
+                if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A0EAC4 + 0x40, 1), "big") == 0:
+                    # give item because they have not room saved and are dead
+                    while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x741320, 1), "big") not in {10,8}:
+                        await asyncio.sleep(1)
+                    amount = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
+                    self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,
+                                         (amount + 1).to_bytes(1, 'big'), 1)
             await asyncio.sleep(1)
         try:
             if item.location not in self.kh2seedsave["checked_locations"][str(item.player)] \
                     and item.location not in {-1, -2}:
-                self.kh2seedsave["checked_locations"][str(item.player)].append(item.location)
+                    self.kh2seedsave["checked_locations"][str(item.player)].append(item.location)
         except Exception as e:
             print(e)
-    #def roomTextCheck(self,CurrentRoom):
-    #    while CurrentRoom != int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Now, 1), "big"):
-    #        CurrentRoom = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Now, 1), "big")
-#
-    #        while RoomTextCheck2 > self.kh2.read_uint(
-    #                self.kh2.read_longlong(self.kh2.base_address + 0x00ABC130) + 0xC) or RoomTextCheck == 12:
-    #            await asyncio.sleep(1)
-    #            print(self.kh2.read_uint(self.kh2.read_longlong(self.kh2.base_address + 0x00ABC130) + 0xC))
-    #            # RoomTextCheck2 = self.kh2.read_uint(self.kh2.read_longlong(self.kh2.base_address + 0x00ABC130) + 0xC)
 
     def give_growth(self, itemcode):
         # Credit to num for the goa code and RedBuddha for porting it to python
