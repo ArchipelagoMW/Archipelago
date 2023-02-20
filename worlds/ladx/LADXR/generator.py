@@ -409,6 +409,29 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
                 packed = rgb_to_bin(r, g, b)
                 rom.banks[bank][address] = packed & 0xFF
                 rom.banks[bank][address + 1] = packed >> 8
+    WARP_PATCH = True
+    if WARP_PATCH:
+        rom.patch(0x19, 0x1DB9, None, assembler.ASM("""
+            ld a, 7       ; Set GAMEPLAY_MAP
+            ld [$DB95], a 
+            ld a, 0       ; reset subtype
+            ld [$DB96], a
+            ld [$FFA2], a ; reset link z position
+            ; call $5626
+            
+            ldh  a, [$99] ; bump link down a bit
+            add  a, $10
+            ldh  [$99], a
+            ret
+        """), fill_nop=True)
+
+        # Always allow warping, for a moment
+        # TODO: check byte instead
+        rom.banks[0x01][0x17BB] = 0
+        rom.banks[0x01][0x17BC] = 0
+        rom.banks[0x01][0x1802] = 0
+        rom.banks[0x01][0x1803] = 0
+    # rom.banks[0][3] = 1
 
     SEED_LOCATION = 0x0134
     SEED_SIZE = 10
