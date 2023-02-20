@@ -137,16 +137,12 @@ class ExtraStrengthBoulders(Toggle):
     display_name = "Extra Strength Boulders"
     default = 0
 
-class FlashLogic(Choice):
-    """Sets if you need to be able to use HM05 Flash for Rock Tunnel.
-    All means you need to be able to use Flash to go through Rock Tunnel.
-    Checks means you need to be able to use Flash to do any checks (if any are enabled), however navigating Rock Tunnel does not require Flash.
-    None means you don't need Flash to navigate Rock Tunnel or do any of the checks in there."""
+class FlashLogic(Toggle):
+    """Sets if you need to be able to use HM05 Flash to logically get through Rock Tunnel or do any checks in there.
+    You're able to see where you're going if you follow the edges a bit like a maze. There are no hidden item spots.
+    Items will only be in there if Extra Keys and/or Trainersanity is on."""
     display_name = "Flash Logic"
     default = 0
-    option_all = 0
-    option_checks = 1
-    option_none = 2
 
 class RequireItemFinder(Toggle):
     """Require Item Finder to pick up hidden items."""
