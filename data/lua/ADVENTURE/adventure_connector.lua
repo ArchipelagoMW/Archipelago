@@ -25,11 +25,11 @@ local carryAddress = 0x9D -- uses rom object table
 local batRoomAddr = 0xCB
 local batCarryAddress = 0xD0 -- uses ram object location
 local batInvalidCarryItem = 0x78
-local batItemCheckAddr = 0xf69d
+local batItemCheckAddr = 0xf69f
 local batMatrixLen = 11 -- number of pairs
 local last_carry_item = 0xB4
 local frames_with_no_item = 0
-local ItemTableStart = 0xfe9B
+local ItemTableStart = 0xfe9d
 local PlayerSlotAddress = 0xfff9
 
 local itemMessages = {}
@@ -70,12 +70,12 @@ local frame = 0
 
 local ItemIndex = 0
 
-local yorgle_speed_address = 0xf723
-local grundle_speed_address = 0xf73e
-local rhindle_speed_address = 0xf708
+local yorgle_speed_address = 0xf725
+local grundle_speed_address = 0xf740
+local rhindle_speed_address = 0xf70A
 
-local read_switch_a = 0xf762
-local read_switch_b = 0xf77e
+local read_switch_a = 0xf764
+local read_switch_b = 0xf780
 
 local yorgle_speed = nil
 local grundle_speed = nil
