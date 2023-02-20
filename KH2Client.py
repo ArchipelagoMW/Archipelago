@@ -360,7 +360,7 @@ class KH2Context(CommonContext):
     async def give_magic(self,item):
         itemname = self.lookup_id_to_item[item.item]
         itemcode = self.item_name_to_data[itemname]
-        while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x741320, 1), "big") not in {10, 8}:
+        while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A0EAC4+0x40, 1), "big") not in {10, 8}:
             await asyncio.sleep(1)
         amount = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
         self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,
