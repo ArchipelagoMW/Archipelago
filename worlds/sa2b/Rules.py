@@ -1227,6 +1227,10 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
         add_rule(world.get_location(LocationName.eternal_engine_omo_2, player),
                  lambda state: state.has(ItemName.tails_booster, player))
 
+        add_rule(world.get_location(LocationName.weapons_bed_omo_2, player),
+                 lambda state: state.has(ItemName.eggman_jet_engine, player) or
+                               state.has(ItemName.eggman_large_cannon, player))
+
         add_rule(world.get_location(LocationName.hidden_base_omo_3, player),
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(world.get_location(LocationName.eternal_engine_omo_3, player),
