@@ -1,5 +1,5 @@
 from BaseClasses import Item, ItemClassification
-from .Data import get_data_json
+from .Data import get_item_attributes
 
 
 class PokemonEmeraldItem(Item):
@@ -10,48 +10,14 @@ class PokemonEmeraldItem(Item):
 
 
 def create_item_name_to_id_map():
-    data = get_data_json()
+    items = get_item_attributes()
 
     map = {}
-    for item in data["ball_items"]:
-        map[item["name"]] = item["default_item"]
-    for item in data["hidden_items"]:
-        map[item["name"]] = item["default_item"]
-    for i in range(0, 8):
-        map[f"ITEM_BADGE_{i + 1}"] = data["constants"]["items"][f"ITEM_BADGE_{i + 1}"]
+    for id, attributes in items.items():
+        map[attributes.name] = id
 
     return map
 
 
-def create_badge_items(self):
-    data = get_data_json()
-
-    items = []
-    for i in range(0, 8):
-        key = f"ITEM_BADGE_{i + 1}"
-        code = data["constants"]["items"][key]
-        items.append(PokemonEmeraldItem(key, ItemClassification.progression, code, self.player))
-    
-    return items
-
-
-def create_ball_items(self):
-    data = get_data_json()
-    items = []
-
-    for item in data["ball_items"]:
-        new_item = PokemonEmeraldItem(item["name"], ItemClassification.filler, item["default_item"], self.player)
-        items.append(new_item)
-
-    return items
-
-
-def create_hidden_items(self):
-    data = get_data_json()
-    items = []
-
-    for item in data["hidden_items"]:
-        new_item = PokemonEmeraldItem(item["name"], ItemClassification.filler, item["default_item"], self.player)
-        items.append(new_item)
-
-    return items
+def get_item_classification(item_id):
+    return get_item_attributes()[item_id].classification

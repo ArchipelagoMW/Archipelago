@@ -1,6 +1,6 @@
 from BaseClasses import Region, Entrance
 from ..AutoWorld import World
-from .Items import create_item_name_to_id_map, create_ball_items, create_hidden_items, create_badge_items
+from .Items import create_item_name_to_id_map, get_item_classification, PokemonEmeraldItem
 from .Locations import create_location_name_to_id_map, create_locations_with_tags
 from .Options import options
 from .Rom import generate_output
@@ -57,9 +57,15 @@ class PokemonEmeraldWorld(World):
 
 
     def create_items(self):
-        self.multiworld.itempool += create_ball_items(self)
-        self.multiworld.itempool += create_hidden_items(self)
-        self.multiworld.itempool += create_badge_items(self)
+        item_ids = []
+        for region in self.multiworld.regions:
+            if (region.player == self.player):
+                item_ids += [location.default_item_id for location in region.locations]
+        
+        self.multiworld.itempool += [
+            PokemonEmeraldItem(self.item_id_to_name[id], get_item_classification(id), id, self.player)
+            for id in item_ids
+        ]
 
 
     def fill_slot_data(self):
