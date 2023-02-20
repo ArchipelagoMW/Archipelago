@@ -1,8 +1,8 @@
 from enum import Enum
 import json
 import os
-from typing import List, Optional, Dict, MutableSet
-
+from typing import List, Optional, Dict, MutableSet, NamedTuple
+from BaseClasses import ItemClassification
 
 class LocationData:
     name: str
@@ -61,15 +61,50 @@ class MapData:
         self.locations = []
 
 
+class ItemAttributes(NamedTuple):
+    name: str
+    classification: ItemClassification
+
+
+item_attributes = None
+def get_item_attributes():
+    global item_attributes
+    data_json = get_data_json()
+    if (item_attributes == None):
+        item_attributes = dict()
+        items_json = load_json("items.json")
+
+        for item_constant_name, attributes in items_json.items():
+            item_id = data_json["constants"]["items"][item_constant_name]
+            item_attributes[item_id] = ItemAttributes(attributes[0], str_to_item_classification(attributes[1]))
+
+    return item_attributes
+
+
+def str_to_item_classification(string):
+    if (string == "PROGRESSION"):
+        return ItemClassification.progression
+    if (string == "USEFUL"):
+        return ItemClassification.useful
+    elif (string == "FILLER"):
+        return ItemClassification.filler
+    elif (string == "TRAP"):
+        return ItemClassification.trap
+    
+
+def load_json(filename):
+    json_string = ""
+    with open(os.path.join(os.path.dirname(__file__), f"data/{filename}"), "r") as infile:
+        for line in infile.readlines():
+            json_string += line
+    return json.loads(json_string)
+
+
 data_json = None
 def get_data_json():
     global data_json
     if (data_json == None):
-        json_string = ""
-        with open(os.path.join(os.path.dirname(__file__), f"data/data.json"), "r") as infile:
-            for line in infile.readlines():
-                json_string += line
-        data_json = json.loads(json_string)
+        data_json = load_json("data.json")
     
     return data_json
 
