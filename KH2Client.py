@@ -339,6 +339,8 @@ class KH2Context(CommonContext):
                     for item in args['items']:
                         itemname = self.lookup_id_to_item[item.item]
                         itemcode = self.item_name_to_data[itemname]
+                        if item.item in {0x130024, 0x130025, 0x130026, 0x130027, 0x130028, 0x130029, 0x13002A, 0x13002B, 0x13002C, 0x13002D}:
+                            continue
                         if itemname in exclusionItem_table["Ability"] and itemcode.memaddr not in {0x05E, 0x062, 0x066, 0x06A, 0x234}:
                             self.kh2seedsave["SoraInvo"]+=2
                         if itemname in DonaldAbility_Table.keys():
