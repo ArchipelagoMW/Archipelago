@@ -272,6 +272,7 @@ class KH2Context(CommonContext):
                     self.kh2seedsave["GoofyInvo"] -= 2
                     asyncio.create_task(self.ItemSafe(item))
                 else:
+                    # if in movement
                     if itemcode.memaddr in {0x05E, 0x062, 0x066, 0x06A, 0x234}:
                         self.give_growth(itemcode)
                         asyncio.create_task(self.ItemSafe(item))
@@ -296,7 +297,7 @@ class KH2Context(CommonContext):
                 itemMemory = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
                 self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,(itemMemory | 0x01 << itemcode.bitmask).to_bytes(1, 'big'), 1)
                 asyncio.create_task(self.ItemSafe(item))
-            elif itemcode.code in {0x130026, 0x130027, 0x130028, 0x130029, 0x13002A, 0x13002B}:
+            elif itemcode.memaddr in {0x3594, 0x3595, 0x3596, 0x3597, 0x35CF, 0x35D0}:
                     while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x741320, 1), "big") not in {10,8}:
                         await asyncio.sleep(0.3)
                     amount = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")

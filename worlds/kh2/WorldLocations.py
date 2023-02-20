@@ -10,10 +10,7 @@ class WorldLocationData(typing.NamedTuple):
     addrObtained: int
     #bitmask
     bitIndex: int
-    #if addr obtainted >0x200 then it is a room id and handled differently  
 
-
-    #data's addrcheck sys3 addr obtained roomid bitindex is eventid 
 LoD_Checks = {
     LocationName.BambooGroveDarkShard:       WorldLocationData(0x23AC, 1),
     LocationName.BambooGroveEther:           WorldLocationData(0x23D9, 7),

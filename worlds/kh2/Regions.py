@@ -2,13 +2,12 @@ import typing
 
 from BaseClasses import MultiWorld, Region, Entrance
 
-from .Locations import KH2Location, valorLevelRegions, wisdomLevelRegions, limitLevelRegions, masterLevelRegions, \
-    finalLevelRegions, firstVisits, secondVisits
+from .Locations import KH2Location,RegionTable
 from .Names import LocationName, ItemName, RegionName
 
 
 def create_regions(world, player: int, active_locations):
-    menu_region = create_region(world, player, active_locations, 'Menu',None)
+    menu_region = create_region(world, player, active_locations, 'Menu', None)
 
     goa_region_locations = [
         LocationName.Crit_1,
@@ -263,7 +262,7 @@ def create_regions(world, player: int, active_locations):
     ]
     pr2_region = create_region(world, player, active_locations, RegionName.Pr2_Region,
                                pr2_region_locations)
-    gr2_region_locations=[
+    gr2_region_locations = [
         LocationName.DonaladGrimReaper2,
         LocationName.GrimReaper2,
         LocationName.SecretAnsemReport6,
@@ -386,7 +385,7 @@ def create_regions(world, player: int, active_locations):
     ]
     bc2_region = create_region(world, player, active_locations, RegionName.Bc2_Region,
                                bc2_region_locations)
-    xaldin_region_locations=[
+    xaldin_region_locations = [
         LocationName.Xaldin,
         LocationName.XaldinGetBonus,
         LocationName.DonaldXaldinGetBonus,
@@ -394,7 +393,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.XaldinDataDefenseBoost,
     ]
     xaldin_region = create_region(world, player, active_locations, RegionName.Xaldin_Region,
-                               xaldin_region_locations)
+                                  xaldin_region_locations)
     sp_region_locations = [
         LocationName.PitCellAreaMap,
         LocationName.PitCellMythrilCrystal,
@@ -523,7 +522,7 @@ def create_regions(world, player: int, active_locations):
     ]
     hb2_region = create_region(world, player, active_locations, RegionName.Hb2_Region,
                                hb2_region_locations)
-    onek_region_locations=[
+    onek_region_locations = [
         LocationName.DemyxHB,
         LocationName.DemyxHBGetBonus,
         LocationName.FFFightsCureElement,
@@ -540,13 +539,13 @@ def create_regions(world, player: int, active_locations):
         LocationName.DemyxDataAPBoost,
     ]
     onek_region = create_region(world, player, active_locations, RegionName.ThousandHeartless_Region,
-                               onek_region_locations)
-    mushroom_region_locations=[
+                                onek_region_locations)
+    mushroom_region_locations = [
         LocationName.WinnersProof,
         LocationName.ProofofPeace,
     ]
     mushroom_region = create_region(world, player, active_locations, RegionName.Mushroom13_Region,
-                               mushroom_region_locations)
+                                    mushroom_region_locations)
     sephi_region_locations = [
         LocationName.SephirothBonus,
         LocationName.SephirothFenrir,
@@ -727,28 +726,28 @@ def create_regions(world, player: int, active_locations):
         LocationName.FragmentCrossingMythrilCrystal,
         LocationName.FragmentCrossingAPBoost,
         LocationName.FragmentCrossingOrichalcum,
-        ]
+    ]
 
     twtnw_region = create_region(world, player, active_locations, RegionName.Twtnw_Region,
                                  twtnw_region_locations)
-    twtnw_postroxas_region_locations=[
-            LocationName.Roxas,
-            LocationName.RoxasGetBonus,
-            LocationName.RoxasSecretAnsemReport8,
-            LocationName.TwoBecomeOne,
-            LocationName.MemorysSkyscaperMythrilCrystal,
-            LocationName.MemorysSkyscaperAPBoost,
-            LocationName.MemorysSkyscaperMythrilStone,
-            LocationName.TheBrinkofDespairDarkCityMap,
-            LocationName.TheBrinkofDespairOrichalcumPlus,
-            LocationName.NothingsCallMythrilGem,
-            LocationName.NothingsCallOrichalcum,
-            LocationName.TwilightsViewCosmicBelt,
+    twtnw_postroxas_region_locations = [
+        LocationName.Roxas,
+        LocationName.RoxasGetBonus,
+        LocationName.RoxasSecretAnsemReport8,
+        LocationName.TwoBecomeOne,
+        LocationName.MemorysSkyscaperMythrilCrystal,
+        LocationName.MemorysSkyscaperAPBoost,
+        LocationName.MemorysSkyscaperMythrilStone,
+        LocationName.TheBrinkofDespairDarkCityMap,
+        LocationName.TheBrinkofDespairOrichalcumPlus,
+        LocationName.NothingsCallMythrilGem,
+        LocationName.NothingsCallOrichalcum,
+        LocationName.TwilightsViewCosmicBelt,
 
-        ]
+    ]
     twtnw_postroxas_region = create_region(world, player, active_locations, RegionName.Twtnw_PostRoxas,
-                                twtnw_postroxas_region_locations)
-    twtnw_postxigbar_region_locations=[
+                                           twtnw_postroxas_region_locations)
+    twtnw_postxigbar_region_locations = [
         LocationName.XigbarBonus,
         LocationName.XigbarSecretAnsemReport3,
         LocationName.NaughtsSkywayMythrilGem,
@@ -761,7 +760,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.LuxordSecretAnsemReport9,
     ]
     twtnw_postxigbar_region = create_region(world, player, active_locations, RegionName.Twtnw_PostXigbar,
-                                twtnw_postxigbar_region_locations)
+                                            twtnw_postxigbar_region_locations)
     twtnw2_region_locations = [
         LocationName.SaixBonus,
         LocationName.SaixSecretAnsemReport12,
@@ -780,7 +779,6 @@ def create_regions(world, player: int, active_locations):
                                   twtnw2_region_locations)
 
     valor_region_locations = [
-        # LocationName.Valorlvl1,
         LocationName.Valorlvl2,
         LocationName.Valorlvl3,
         LocationName.Valorlvl4,
@@ -791,7 +789,6 @@ def create_regions(world, player: int, active_locations):
     valor_region = create_region(world, player, active_locations, RegionName.Valor_Region,
                                  valor_region_locations)
     wisdom_region_locations = [
-        # LocationName.Wisdomlvl1,
         LocationName.Wisdomlvl2,
         LocationName.Wisdomlvl3,
         LocationName.Wisdomlvl4,
@@ -802,7 +799,6 @@ def create_regions(world, player: int, active_locations):
     wisdom_region = create_region(world, player, active_locations, RegionName.Wisdom_Region,
                                   wisdom_region_locations)
     limit_region_locations = [
-        # LocationName.Limitlvl1,
         LocationName.Limitlvl2,
         LocationName.Limitlvl3,
         LocationName.Limitlvl4,
@@ -813,7 +809,6 @@ def create_regions(world, player: int, active_locations):
     limit_region = create_region(world, player, active_locations, RegionName.Limit_Region,
                                  limit_region_locations)
     master_region_locations = [
-        # LocationName.Masterlvl1,
         LocationName.Masterlvl2,
         LocationName.Masterlvl3,
         LocationName.Masterlvl4,
@@ -824,7 +819,6 @@ def create_regions(world, player: int, active_locations):
     master_region = create_region(world, player, active_locations, RegionName.Master_Region,
                                   master_region_locations)
     final_region_locations = [
-        # LocationName.Finallvl1,
         LocationName.Finallvl2,
         LocationName.Finallvl3,
         LocationName.Finallvl4,
@@ -961,78 +955,94 @@ def create_regions(world, player: int, active_locations):
         keyblade_region,
     ]
     # Level region depends on level depth.
-    #for every 5 levels there should be +3 visit locking
-    levelVL1=[]
-    levelVL3=[]
-    levelVL6=[]
-    levelVL9=[]
-    levelVL12=[]
-    levelVL15=[]
-    levelVL18=[]
-    levelVL21=[]
-    levelVL24=[]
-    levelVL26=[]
-    #level 50
-    if world.LevelDepth[player]==0:
-        levelVL1 =  [LocationName.Lvl2, LocationName.Lvl4, LocationName.Lvl7,LocationName.Lvl9, LocationName.Lvl10]
-        levelVL3 =  [LocationName.Lvl12,LocationName.Lvl14,LocationName.Lvl15,LocationName.Lvl17,LocationName.Lvl20,]
-        levelVL6 =  [ LocationName.Lvl23, LocationName.Lvl25, LocationName.Lvl28,LocationName.Lvl30]
-        levelVL9 =  [LocationName.Lvl32, LocationName.Lvl34, LocationName.Lvl36, LocationName.Lvl39,LocationName.Lvl41]
+    # for every 5 levels there should be +3 visit locking
+    levelVL1 = []
+    levelVL3 = []
+    levelVL6 = []
+    levelVL9 = []
+    levelVL12 = []
+    levelVL15 = []
+    levelVL18 = []
+    levelVL21 = []
+    levelVL24 = []
+    levelVL26 = []
+    # level 50
+    if world.LevelDepth[player] == 0:
+        levelVL1 = [LocationName.Lvl2, LocationName.Lvl4, LocationName.Lvl7, LocationName.Lvl9, LocationName.Lvl10]
+        levelVL3 = [LocationName.Lvl12, LocationName.Lvl14, LocationName.Lvl15, LocationName.Lvl17,
+                    LocationName.Lvl20, ]
+        levelVL6 = [LocationName.Lvl23, LocationName.Lvl25, LocationName.Lvl28, LocationName.Lvl30]
+        levelVL9 = [LocationName.Lvl32, LocationName.Lvl34, LocationName.Lvl36, LocationName.Lvl39, LocationName.Lvl41]
         levelVL12 = [LocationName.Lvl44, LocationName.Lvl46, LocationName.Lvl48]
         levelVL15 = [LocationName.Lvl50]
-    #level 99
-    elif world.LevelDepth[player]==1:
-        levelVL1 =[LocationName.Lvl7,LocationName.Lvl9,]
-        levelVL3 =[LocationName.Lvl12,LocationName.Lvl15,LocationName.Lvl17,LocationName.Lvl20]
-        levelVL6 =[LocationName.Lvl23, LocationName.Lvl25, LocationName.Lvl28]
-        levelVL9 =[LocationName.Lvl31,LocationName.Lvl33, LocationName.Lvl36, LocationName.Lvl39]
-        levelVL12=[LocationName.Lvl41,LocationName.Lvl44, LocationName.Lvl47, LocationName.Lvl49]
-        levelVL15=[LocationName.Lvl53,LocationName.Lvl59]
-        levelVL18=[LocationName.Lvl65]
-        levelVL21=[LocationName.Lvl73]
-        levelVL24=[LocationName.Lvl85]
-        levelVL26=[LocationName.Lvl99]
-    #level sanity
-    elif world.LevelDepth[player] in {2,3}:
-        levelVL1  = [LocationName.Lvl2,LocationName.Lvl3,LocationName.Lvl4,LocationName.Lvl5,LocationName.Lvl6,LocationName.Lvl7,LocationName.Lvl8,LocationName.Lvl9,LocationName.Lvl10]
-        levelVL3  = [LocationName.Lvl11,LocationName.Lvl12,LocationName.Lvl13,LocationName.Lvl14,LocationName.Lvl15,LocationName.Lvl16,LocationName.Lvl17,LocationName.Lvl18,LocationName.Lvl19,LocationName.Lvl20]
-        levelVL6  = [LocationName.Lvl21,LocationName.Lvl22,LocationName.Lvl23,LocationName.Lvl24,LocationName.Lvl25,LocationName.Lvl26,LocationName.Lvl27,LocationName.Lvl28,LocationName.Lvl29,LocationName.Lvl30]
-        levelVL9  = [LocationName.Lvl31,LocationName.Lvl32,LocationName.Lvl33,LocationName.Lvl34,LocationName.Lvl35,LocationName.Lvl36,LocationName.Lvl37,LocationName.Lvl38,LocationName.Lvl39,LocationName.Lvl40]
-        levelVL12 = [LocationName.Lvl41,LocationName.Lvl42,LocationName.Lvl43,LocationName.Lvl44,LocationName.Lvl45,LocationName.Lvl46,LocationName.Lvl47,LocationName.Lvl48,LocationName.Lvl49,LocationName.Lvl50]
-        #level 99 sanity
-        if world.LevelDepth[player]==3:
-            levelVL15 = [LocationName.Lvl51,LocationName.Lvl52,LocationName.Lvl53,LocationName.Lvl54,LocationName.Lvl55,LocationName.Lvl56,LocationName.Lvl57,LocationName.Lvl58,LocationName.Lvl59,LocationName.Lvl60]
-            levelVL18 = [LocationName.Lvl61,LocationName.Lvl62,LocationName.Lvl63,LocationName.Lvl64,LocationName.Lvl65,LocationName.Lvl66,LocationName.Lvl67,LocationName.Lvl68,LocationName.Lvl69,LocationName.Lvl70]
-            levelVL21 = [LocationName.Lvl71,LocationName.Lvl72,LocationName.Lvl73,LocationName.Lvl74,LocationName.Lvl75,LocationName.Lvl76,LocationName.Lvl77,LocationName.Lvl78,LocationName.Lvl79,LocationName.Lvl80]
-            levelVL24 = [LocationName.Lvl81,LocationName.Lvl82,LocationName.Lvl83,LocationName.Lvl84,LocationName.Lvl85,LocationName.Lvl86,LocationName.Lvl87,LocationName.Lvl88,LocationName.Lvl89,LocationName.Lvl90]
-            levelVL26 = [LocationName.Lvl91,LocationName.Lvl92,LocationName.Lvl93,LocationName.Lvl94,LocationName.Lvl95,LocationName.Lvl96,LocationName.Lvl97,LocationName.Lvl98,LocationName.Lvl99]
+    # level 99
+    elif world.LevelDepth[player] == 1:
+        levelVL1 = [LocationName.Lvl7, LocationName.Lvl9, ]
+        levelVL3 = [LocationName.Lvl12, LocationName.Lvl15, LocationName.Lvl17, LocationName.Lvl20]
+        levelVL6 = [LocationName.Lvl23, LocationName.Lvl25, LocationName.Lvl28]
+        levelVL9 = [LocationName.Lvl31, LocationName.Lvl33, LocationName.Lvl36, LocationName.Lvl39]
+        levelVL12 = [LocationName.Lvl41, LocationName.Lvl44, LocationName.Lvl47, LocationName.Lvl49]
+        levelVL15 = [LocationName.Lvl53, LocationName.Lvl59]
+        levelVL18 = [LocationName.Lvl65]
+        levelVL21 = [LocationName.Lvl73]
+        levelVL24 = [LocationName.Lvl85]
+        levelVL26 = [LocationName.Lvl99]
+    # level sanity
+    elif world.LevelDepth[player] in {2, 3}:
+        levelVL1 = [LocationName.Lvl2, LocationName.Lvl3, LocationName.Lvl4, LocationName.Lvl5, LocationName.Lvl6,
+                    LocationName.Lvl7, LocationName.Lvl8, LocationName.Lvl9, LocationName.Lvl10]
+        levelVL3 = [LocationName.Lvl11, LocationName.Lvl12, LocationName.Lvl13, LocationName.Lvl14, LocationName.Lvl15,
+                    LocationName.Lvl16, LocationName.Lvl17, LocationName.Lvl18, LocationName.Lvl19, LocationName.Lvl20]
+        levelVL6 = [LocationName.Lvl21, LocationName.Lvl22, LocationName.Lvl23, LocationName.Lvl24, LocationName.Lvl25,
+                    LocationName.Lvl26, LocationName.Lvl27, LocationName.Lvl28, LocationName.Lvl29, LocationName.Lvl30]
+        levelVL9 = [LocationName.Lvl31, LocationName.Lvl32, LocationName.Lvl33, LocationName.Lvl34, LocationName.Lvl35,
+                    LocationName.Lvl36, LocationName.Lvl37, LocationName.Lvl38, LocationName.Lvl39, LocationName.Lvl40]
+        levelVL12 = [LocationName.Lvl41, LocationName.Lvl42, LocationName.Lvl43, LocationName.Lvl44, LocationName.Lvl45,
+                     LocationName.Lvl46, LocationName.Lvl47, LocationName.Lvl48, LocationName.Lvl49, LocationName.Lvl50]
+        # level 99 sanity
+        if world.LevelDepth[player] == 3:
+            levelVL15 = [LocationName.Lvl51, LocationName.Lvl52, LocationName.Lvl53, LocationName.Lvl54,
+                         LocationName.Lvl55, LocationName.Lvl56, LocationName.Lvl57, LocationName.Lvl58,
+                         LocationName.Lvl59, LocationName.Lvl60]
+            levelVL18 = [LocationName.Lvl61, LocationName.Lvl62, LocationName.Lvl63, LocationName.Lvl64,
+                         LocationName.Lvl65, LocationName.Lvl66, LocationName.Lvl67, LocationName.Lvl68,
+                         LocationName.Lvl69, LocationName.Lvl70]
+            levelVL21 = [LocationName.Lvl71, LocationName.Lvl72, LocationName.Lvl73, LocationName.Lvl74,
+                         LocationName.Lvl75, LocationName.Lvl76, LocationName.Lvl77, LocationName.Lvl78,
+                         LocationName.Lvl79, LocationName.Lvl80]
+            levelVL24 = [LocationName.Lvl81, LocationName.Lvl82, LocationName.Lvl83, LocationName.Lvl84,
+                         LocationName.Lvl85, LocationName.Lvl86, LocationName.Lvl87, LocationName.Lvl88,
+                         LocationName.Lvl89, LocationName.Lvl90]
+            levelVL26 = [LocationName.Lvl91, LocationName.Lvl92, LocationName.Lvl93, LocationName.Lvl94,
+                         LocationName.Lvl95, LocationName.Lvl96, LocationName.Lvl97, LocationName.Lvl98,
+                         LocationName.Lvl99]
 
     level_regionVL1 = create_region(world, player, active_locations, RegionName.LevelsVS1,
-                                 levelVL1)
+                                    levelVL1)
     level_regionVL3 = create_region(world, player, active_locations, RegionName.LevelsVS3,
-                                 levelVL3)
+                                    levelVL3)
     level_regionVL6 = create_region(world, player, active_locations, RegionName.LevelsVS6,
-                                 levelVL6)
+                                    levelVL6)
     level_regionVL9 = create_region(world, player, active_locations, RegionName.LevelsVS9,
-                                 levelVL9)
+                                    levelVL9)
     level_regionVL12 = create_region(world, player, active_locations, RegionName.LevelsVS12,
-                                 levelVL12)
+                                     levelVL12)
     level_regionVL15 = create_region(world, player, active_locations, RegionName.LevelsVS15,
-                                 levelVL15)
+                                     levelVL15)
     level_regionVL18 = create_region(world, player, active_locations, RegionName.LevelsVS18,
-                                 levelVL18)
+                                     levelVL18)
     level_regionVL21 = create_region(world, player, active_locations, RegionName.LevelsVS21,
-                                 levelVL21)
+                                     levelVL21)
     level_regionVL24 = create_region(world, player, active_locations, RegionName.LevelsVS24,
-                                  levelVL24)
+                                     levelVL24)
     level_regionVL26 = create_region(world, player, active_locations, RegionName.LevelsVS26,
-                                  levelVL26)
-    world.regions+=[level_regionVL1,level_regionVL3 ,level_regionVL6,level_regionVL9,level_regionVL12,level_regionVL15,level_regionVL18,level_regionVL21,level_regionVL24,level_regionVL26]
+                                     levelVL26)
+    world.regions += [level_regionVL1, level_regionVL3, level_regionVL6, level_regionVL9, level_regionVL12,
+                      level_regionVL15, level_regionVL18, level_regionVL21, level_regionVL24, level_regionVL26]
 
 
 def connect_regions(world: MultiWorld, player: int):
     # connecting every first visit to the GoA
-    # 2 Visit locking and is going to be turned off maybe
 
     names: typing.Dict[str, int] = {}
 
@@ -1109,8 +1119,10 @@ def connect_regions(world: MultiWorld, player: int):
             lambda state: state.kh_hb_unlocked(player, 2))
     connect(world, player, names, RegionName.Hb2_Region, RegionName.ThousandHeartless_Region,
             lambda state: state.kh_onek(player))
-    connect(world, player, names, RegionName.ThousandHeartless_Region, RegionName.Mushroom13_Region, lambda state: state.has(ItemName.ProofofPeace,player))
-    connect(world, player, names, RegionName.ThousandHeartless_Region, RegionName.Sephi_Region, lambda state: state.kh_sephi(player))
+    connect(world, player, names, RegionName.ThousandHeartless_Region, RegionName.Mushroom13_Region,
+            lambda state: state.has(ItemName.ProofofPeace, player))
+    connect(world, player, names, RegionName.ThousandHeartless_Region, RegionName.Sephi_Region,
+            lambda state: state.kh_sephi(player))
 
     connect(world, player, names, RegionName.Hb2_Region, RegionName.CoR_Region, lambda state: state.kh_cor(player))
     connect(world, player, names, RegionName.CoR_Region, RegionName.Transport_Region, lambda state:
@@ -1121,7 +1133,8 @@ def connect_regions(world: MultiWorld, player: int):
     connect(world, player, names, RegionName.GoA_Region, RegionName.Pl_Region,
             lambda state: state.kh_pl_unlocked(player, 1))
     connect(world, player, names, RegionName.Pl_Region, RegionName.Pl2_Region,
-            lambda state: state.kh_pl_unlocked(player, 2) and (state.has(ItemName.BerserkCharge,player) or state.kh_reflect(player)))
+            lambda state: state.kh_pl_unlocked(player, 2) and (
+                        state.has(ItemName.BerserkCharge, player) or state.kh_reflect(player)))
 
     connect(world, player, names, RegionName.GoA_Region, RegionName.STT_Region,
             lambda state: state.kh_stt_unlocked(player, 1))
@@ -1129,20 +1142,22 @@ def connect_regions(world: MultiWorld, player: int):
     connect(world, player, names, RegionName.GoA_Region, RegionName.TT_Region,
             lambda state: state.kh_tt_unlocked(player, 1))
     connect(world, player, names, RegionName.TT_Region, RegionName.TT2_Region,
-            lambda state: state.kh_tt2_unlocked(player, 1))
+            lambda state: state.kh_tt_unlocked(player, 2))
     connect(world, player, names, RegionName.TT2_Region, RegionName.TT3_Region,
-            lambda state: state.kh_tt3_unlocked(player, 1))
+            lambda state: state.kh_tt_unlocked(player, 3))
 
     connect(world, player, names, RegionName.GoA_Region, RegionName.Twtnw_Region,
             lambda state: state.kh_twtnw_unlocked(player, 0))
     connect(world, player, names, RegionName.Twtnw_Region, RegionName.Twtnw_PostRoxas,
             lambda state: state.kh_roxastools(player))
     connect(world, player, names, RegionName.Twtnw_PostRoxas, RegionName.Twtnw_PostXigbar,
-            lambda state: state.kh_basetools(player) and (state.kh_donaldlimit(player) or (state.has(ItemName.FinalForm,player) and state.has(ItemName.FireElement,player))))
+            lambda state: state.kh_basetools(player) and (state.kh_donaldlimit(player) or (
+                        state.has(ItemName.FinalForm, player) and state.has(ItemName.FireElement, player))))
     connect(world, player, names, RegionName.Twtnw_PostRoxas, RegionName.Twtnw2_Region,
             lambda state: state.kh_twtnw_unlocked(player, 1))
 
-    hundredacrevisits = {RegionName.HundredAcre1_Region: 0, RegionName.HundredAcre2_Region: 1, RegionName.HundredAcre3_Region: 2,
+    hundredacrevisits = {RegionName.HundredAcre1_Region: 0, RegionName.HundredAcre2_Region: 1,
+                         RegionName.HundredAcre3_Region: 2,
                          RegionName.HundredAcre4_Region: 3, RegionName.HundredAcre5_Region: 4,
                          RegionName.HundredAcre6_Region: 5}
     for visit, tornpage in hundredacrevisits.items():
@@ -1150,7 +1165,7 @@ def connect_regions(world: MultiWorld, player: int):
                 lambda state: (state.has(ItemName.TornPages, player, tornpage)))
 
     connect(world, player, names, RegionName.GoA_Region, RegionName.LevelsVS1,
-            lambda state: state.kh_visit_locking_amount(player,1))
+            lambda state: state.kh_visit_locking_amount(player, 1))
     connect(world, player, names, RegionName.LevelsVS1, RegionName.LevelsVS3,
             lambda state: state.kh_visit_locking_amount(player, 3))
     connect(world, player, names, RegionName.LevelsVS3, RegionName.LevelsVS6,
@@ -1168,25 +1183,23 @@ def connect_regions(world: MultiWorld, player: int):
     connect(world, player, names, RegionName.LevelsVS21, RegionName.LevelsVS24,
             lambda state: state.kh_visit_locking_amount(player, 24))
     connect(world, player, names, RegionName.LevelsVS24, RegionName.LevelsVS26,
-            lambda state: state.kh_visit_locking_amount(player, 25))
+            lambda state: state.kh_visit_locking_amount(player, 25))  # 25 because of goa twtnw bugs with visit locking.
 
-
-    for region in valorLevelRegions:
+    for region in RegionTable["ValorRegion"]:
         connect(world, player, names, region, RegionName.Valor_Region,
                 lambda state: state.has(ItemName.ValorForm, player))
-    for region in wisdomLevelRegions:
+    for region in RegionTable["WisdomRegion"]:
         connect(world, player, names, region, RegionName.Wisdom_Region,
                 lambda state: state.has(ItemName.WisdomForm, player))
-    for region in limitLevelRegions:
+    for region in RegionTable["LimitRegion"]:
         connect(world, player, names, region, RegionName.Limit_Region,
                 lambda state: state.has(ItemName.LimitForm, player))
-    for region in masterLevelRegions:
+    for region in RegionTable["MasterRegion"]:
         connect(world, player, names, region, RegionName.Master_Region,
                 lambda state: state.has(ItemName.MasterForm, player) and state.has(ItemName.DriveConverter, player))
-    for region in finalLevelRegions:
+    for region in RegionTable["FinalRegion"]:
         connect(world, player, names, region, RegionName.Final_Region,
                 lambda state: state.has(ItemName.FinalForm, player))
-
 
 
 # shamelessly stolen from the sa2b
@@ -1221,5 +1234,3 @@ def create_region(world: MultiWorld, player: int, active_locations, name: str, l
                 ret.locations.append(location)
 
     return ret
-
-

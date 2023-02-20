@@ -1,9 +1,9 @@
 from BaseClasses import MultiWorld
 
 from .Items import exclusionItem_table
-from .Locations import popupChecks, STT_Checks, CoR_Checks, Form_Checks, AG2_Checks, exclusion_table,weaponslots
-from .Names import LocationName, ItemName,RegionName
-from ..generic.Rules import add_rule, forbid_items, forbid_item
+from .Locations import STT_Checks,exclusion_table
+from .Names import LocationName
+from ..generic.Rules import add_rule, forbid_items
 
 
 def set_rules(world: MultiWorld, player: int):
@@ -26,7 +26,7 @@ def set_rules(world: MultiWorld, player: int):
              lambda state: state.kh_dataluxord(player))
 
 
-    for slot,weapon in weaponslots.items():
+    for slot,weapon in exclusion_table["WeaponSlots"].items():
         add_rule(world.get_location(slot,player),lambda state: state.has(weapon,player))
 
     if world.Goal[player].value == 0:
@@ -54,7 +54,7 @@ def set_rules(world: MultiWorld, player: int):
             world.completion_condition[player] = lambda state: state.kh_hitlist(player,world.BountyRequired[player].value)
 
     # Forbid Ablilites on popups due to game limitations
-    for location in popupChecks:
+    for location in exclusion_table["Popups"]:
         forbid_items(world.get_location(location, player), exclusionItem_table["Ability"])
         forbid_items(world.get_location(location, player), exclusionItem_table["StatUps"])
 
