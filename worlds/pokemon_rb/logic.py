@@ -33,9 +33,6 @@ class PokemonLogic(LogicMixin):
                  
     def pokemon_rb_can_navigate_darkness(self, player):
         return self.multiworld.flash_logic[player]
-        
-    def pokemon_rb_ignore_flash(self, player):
-        return self.multiworld.flash_logic[player].value == 2
 
     def can_learn_hm(self, move, player):
         for pokemon, data in self.multiworld.worlds[player].local_poke_data.items():
