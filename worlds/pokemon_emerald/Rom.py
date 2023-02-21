@@ -4,10 +4,12 @@ from Patch import APDeltaPatch
 from .data.Pokemon import get_random_species
 from .Data import get_data_json
 
+
 def get_base_rom_as_bytes() -> bytes:
     with open(os.path.join(os.path.dirname(__file__), f"pokeemerald-vanilla.gba"), "rb") as infile:
         base_rom_bytes = bytes(infile.read())
     return base_rom_bytes
+
 
 def set_bytes_little_endian(byte_array, address, size, value):
     offset = 0
@@ -16,6 +18,7 @@ def set_bytes_little_endian(byte_array, address, size, value):
         value = value >> 8
         offset += 1
         size -= 1
+
 
 # For every encounter table, replace each unique species.
 # So if a table only has 2 species across multiple slots, it will
@@ -43,6 +46,7 @@ def randomize_encounter_tables(self, patched_rom):
                 """
                 address = table["rom_address"] + 2 + (slot_i * 4)
                 set_bytes_little_endian(patched_rom, address, 2, new_pokemon[default_pokemon.index(slot)])
+
 
 def generate_output(self, output_directory: str):
     data = get_data_json() 

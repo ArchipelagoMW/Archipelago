@@ -4,7 +4,7 @@ from .Items import create_item_name_to_id_map, get_item_classification, PokemonE
 from .Locations import create_location_name_to_id_map, create_locations_with_tags
 from .Options import options
 from .Rom import generate_output
-from .Data import get_data
+from .Data import get_regions_data, get_warp_destination_region_name
 
 class PokemonEmeraldWorld(World):
     """
@@ -30,30 +30,32 @@ class PokemonEmeraldWorld(World):
 
 
     def create_regions(self):
-        region_map = {}
-        data = get_data()
+        regions = {}
+        regions_data = get_regions_data()
 
-        for map in data.values():
-            region = Region(map.name, self.player, self.multiworld)
-            exit_names = set(map.connections + map.warps)
+        for region_name, region_data in regions_data.items():
+            region = Region(region_name, self.player, self.multiworld)
+            warp_destinations = [get_warp_destination_region_name(warp) for warp in region_data.warps]
+            warp_destinations = [destination for destination in warp_destinations if not destination == None]
+            exit_names = set(region_data.exits + warp_destinations)
             for exit_name in exit_names:
                 connection = Entrance(self.player, exit_name, region)
                 region.exits.append(connection)
             
-            region_map[map.name] = region
+            regions[region_name] = region
 
-        for region in region_map.values():
+        for region in regions.values():
             for connection in region.exits:
-                connection.connect(region_map[connection.name])
+                connection.connect(regions[connection.name])
 
         menu = Region("Menu", self.player, self.multiworld)
         connection = Entrance(self.player, "New Game", menu)
         menu.exits.append(connection)
-        connection.connect(region_map["MAP_LITTLEROOT_TOWN"])
-        region_map["Menu"] = menu
+        connection.connect(regions["REGION_LITTLEROOT_TOWN"])
+        regions["Menu"] = menu
 
-        create_locations_with_tags(self, region_map, ["GroundItem", "HiddenItem", "Badge"])
-        self.multiworld.regions += region_map.values()
+        create_locations_with_tags(self, regions, ["GroundItem", "HiddenItem", "Badge"])
+        self.multiworld.regions += regions.values()
 
 
     def create_items(self):
