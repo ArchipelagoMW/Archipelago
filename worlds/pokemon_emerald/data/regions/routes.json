@@ -1,0 +1,1089 @@
+{
+  "REGION_ROUTE_101": {
+    "parent_map": "MAP_ROUTE101",
+    "locations": [],
+    "exits": [
+      "REGION_LITTLEROOT_TOWN",
+      "REGION_OLDALE_TOWN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_102": {
+    "parent_map": "MAP_ROUTE102",
+    "locations": [
+      "ITEM_ROUTE_102_POTION"
+    ],
+    "exits": [
+      "REGION_OLDALE_TOWN",
+      "REGION_PETALBURG_CITY"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_103": {
+    "parent_map": "MAP_ROUTE103",
+    "locations": [
+      "ITEM_ROUTE_103_GUARD_SPEC",
+      "ITEM_ROUTE_103_PP_UP"
+    ],
+    "exits": [
+      "REGION_OLDALE_TOWN",
+      "REGION_ROUTE_110"
+    ],
+    "warps": [
+      "MAP_ROUTE103:0/MAP_ALTERING_CAVE:0"
+    ]
+  },
+  "REGION_ROUTE_104": {
+    "parent_map": "MAP_ROUTE104",
+    "locations": [
+      "ITEM_ROUTE_104_PP_UP",
+      "ITEM_ROUTE_104_POTION",
+      "ITEM_ROUTE_104_X_ACCURACY",
+      "ITEM_ROUTE_104_POKE_BALL",
+      "HIDDEN_ITEM_ROUTE_104_SUPER_POTION",
+      "HIDDEN_ITEM_ROUTE_104_POKE_BALL",
+      "HIDDEN_ITEM_ROUTE_104_POTION",
+      "HIDDEN_ITEM_ROUTE_104_HEART_SCALE",
+      "HIDDEN_ITEM_ROUTE_104_ANTIDOTE"
+    ],
+    "exits": [
+      "REGION_PETALBURG_CITY",
+      "REGION_ROUTE_105",
+      "REGION_RUSTBORO_CITY"
+    ],
+    "warps": [
+      "MAP_ROUTE104:0/MAP_ROUTE104_MR_BRINEYS_HOUSE:0",
+      "MAP_ROUTE104:1/MAP_ROUTE104_PRETTY_PETAL_FLOWER_SHOP:0",
+      "MAP_ROUTE104:2/MAP_PETALBURG_WOODS:0",
+      "MAP_ROUTE104:3/MAP_PETALBURG_WOODS:1",
+      "MAP_ROUTE104:4/MAP_PETALBURG_WOODS:2",
+      "MAP_ROUTE104:5/MAP_PETALBURG_WOODS:3",
+      "MAP_ROUTE104:6/MAP_PETALBURG_WOODS:4",
+      "MAP_ROUTE104:7/MAP_PETALBURG_WOODS:5"
+    ]
+  },
+  "REGION_ROUTE_104_MR_BRINEYS_HOUSE": {
+    "parent_map": "MAP_ROUTE104_MR_BRINEYS_HOUSE",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE104_MR_BRINEYS_HOUSE:0,1/MAP_ROUTE104:0"
+    ]
+  },
+  "REGION_ROUTE_104_PRETTY_PETAL_FLOWER_SHOP": {
+    "parent_map": "MAP_ROUTE104_PRETTY_PETAL_FLOWER_SHOP",
+    "locations": [
+      "RECEIVED_WAILMER_PAIL"
+    ],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE104_PRETTY_PETAL_FLOWER_SHOP:0,1/MAP_ROUTE104:1"
+    ]
+  },
+  "REGION_ROUTE_105": {
+    "parent_map": "MAP_ROUTE105",
+    "locations": [
+      "ITEM_ROUTE_105_IRON",
+      "HIDDEN_ITEM_ROUTE_105_HEART_SCALE",
+      "HIDDEN_ITEM_ROUTE_105_BIG_PEARL"
+    ],
+    "exits": [
+      "REGION_ROUTE_104",
+      "REGION_ROUTE_106",
+      "REGION_ROUTE_105_UNDERWATER"
+    ],
+    "warps": [
+      "MAP_ROUTE105:0/MAP_ISLAND_CAVE:0"
+    ]
+  },
+  "REGION_ROUTE_105_UNDERWATER": {
+    "parent_map": "MAP_UNDERWATER_ROUTE105",
+    "locations": [],
+    "exits": [
+      "REGION_ROUTE_105"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_106": {
+    "parent_map": "MAP_ROUTE106",
+    "locations": [
+      "ITEM_ROUTE_106_PROTEIN",
+      "HIDDEN_ITEM_ROUTE_106_POKE_BALL",
+      "HIDDEN_ITEM_ROUTE_106_STARDUST",
+      "HIDDEN_ITEM_ROUTE_106_HEART_SCALE"
+    ],
+    "exits": [
+      "REGION_ROUTE_105",
+      "REGION_DEWFORD_TOWN"
+    ],
+    "warps": [
+      "MAP_ROUTE106:0/MAP_GRANITE_CAVE_1F:0"
+    ]
+  },
+  "REGION_ROUTE_107": {
+    "parent_map": "MAP_ROUTE107",
+    "locations": [],
+    "exits": [
+      "REGION_DEWFORD_TOWN",
+      "REGION_ROUTE_108"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_108": {
+    "parent_map": "MAP_ROUTE108",
+    "locations": [
+      "ITEM_ROUTE_108_STAR_PIECE",
+      "HIDDEN_ITEM_ROUTE_108_RARE_CANDY"
+    ],
+    "exits": [
+      "REGION_ROUTE_106",
+      "REGION_ROUTE_107"
+    ],
+    "warps": [
+      "MAP_ROUTE108:0/MAP_ABANDONED_SHIP_DECK:0"
+    ]
+  },
+  "REGION_ROUTE_109": {
+    "parent_map": "MAP_ROUTE109",
+    "locations": [
+      "ITEM_ROUTE_109_RARE_CANDY",
+      "ITEM_ROUTE_109_PP_UP",
+      "ITEM_ROUTE_109_POTION",
+      "HIDDEN_ITEM_ROUTE_109_REVIVE",
+      "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_1",
+      "HIDDEN_ITEM_ROUTE_109_GREAT_BALL",
+      "HIDDEN_ITEM_ROUTE_109_ETHER",
+      "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_2",
+      "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_3"
+    ],
+    "exits": [
+      "REGION_ROUTE_108",
+      "REGION_SLATEPORT_CITY"
+    ],
+    "warps": [
+      "MAP_ROUTE109:0/MAP_ROUTE109_SEASHORE_HOUSE:0"
+    ]
+  },
+  "REGION_ROUTE_109_SEASHORE_HOUSE": {
+    "parent_map": "MAP_ROUTE109_SEASHORE_HOUSE",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE109_SEASHORE_HOUSE:0,1/MAP_ROUTE109:0"
+    ]
+  },
+  "REGION_ROUTE_110": {
+    "parent_map": "MAP_ROUTE110",
+    "locations": [
+      "ITEM_ROUTE_110_DIRE_HIT",
+      "ITEM_ROUTE_110_ELIXIR",
+      "HIDDEN_ITEM_ROUTE_110_REVIVE",
+      "HIDDEN_ITEM_ROUTE_110_GREAT_BALL",
+      "HIDDEN_ITEM_ROUTE_110_POKE_BALL",
+      "HIDDEN_ITEM_ROUTE_110_FULL_HEAL"
+    ],
+    "exits": [
+      "REGION_MAUVILLE_CITY",
+      "REGION_ROUTE_103",
+      "REGION_SLATEPORT_CITY"
+    ],
+    "warps": [
+      "MAP_ROUTE110:0/MAP_NEW_MAUVILLE_ENTRANCE:0",
+      "MAP_ROUTE110:1/MAP_ROUTE110_TRICK_HOUSE_ENTRANCE:0",
+      "MAP_ROUTE110:2/MAP_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE:0",
+      "MAP_ROUTE110:3/MAP_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE:2",
+      "MAP_ROUTE110:4/MAP_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE:0",
+      "MAP_ROUTE110:5/MAP_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE:2"
+    ]
+  },
+  "REGION_ROUTE_110_TRICK_HOUSE_ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_ENTRANCE",
+    "locations": [],
+    "exits": [
+      "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_1",
+      "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_2",
+      "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_3",
+      "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_4",
+      "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_5",
+      "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_6",
+      "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_7",
+      "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_8"
+    ],
+    "warps": [
+      "MAP_ROUTE110_TRICK_HOUSE_ENTRANCE:0,1/MAP_ROUTE110:1"
+    ]
+  },
+  "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_1": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE1",
+    "locations": [
+      "ITEM_TRICK_HOUSE_PUZZLE_1_ORANGE_MAIL"
+    ],
+    "exits": [
+      "REGION_ROUTE_110_TRICK_HOUSE_ENTRANCE",
+      "REGION_ROUTE_110_TRICK_HOUSE_END"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_2": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE2",
+    "locations": [
+      "ITEM_TRICK_HOUSE_PUZZLE_2_WAVE_MAIL",
+      "ITEM_TRICK_HOUSE_PUZZLE_2_HARBOR_MAIL"
+    ],
+    "exits": [
+      "REGION_ROUTE_110_TRICK_HOUSE_ENTRANCE",
+      "REGION_ROUTE_110_TRICK_HOUSE_END"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_3": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE3",
+    "locations": [
+      "ITEM_TRICK_HOUSE_PUZZLE_3_WOOD_MAIL",
+      "ITEM_TRICK_HOUSE_PUZZLE_3_SHADOW_MAIL"
+    ],
+    "exits": [
+      "REGION_ROUTE_110_TRICK_HOUSE_ENTRANCE",
+      "REGION_ROUTE_110_TRICK_HOUSE_END"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_4": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE4",
+    "locations": [
+      "ITEM_TRICK_HOUSE_PUZZLE_4_MECH_MAIL"
+    ],
+    "exits": [
+      "REGION_ROUTE_110_TRICK_HOUSE_ENTRANCE",
+      "REGION_ROUTE_110_TRICK_HOUSE_END"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_5": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE5",
+    "locations": [
+      "ITEM_TRICK_HOUSE_PUZZLE_4_MECH_MAIL"
+    ],
+    "exits": [
+      "REGION_ROUTE_110_TRICK_HOUSE_ENTRANCE",
+      "REGION_ROUTE_110_TRICK_HOUSE_END"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_6": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE6",
+    "locations": [
+      "ITEM_TRICK_HOUSE_PUZZLE_6_GLITTER_MAIL"
+    ],
+    "exits": [
+      "REGION_ROUTE_110_TRICK_HOUSE_ENTRANCE",
+      "REGION_ROUTE_110_TRICK_HOUSE_END"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_7": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE7",
+    "locations": [
+      "ITEM_TRICK_HOUSE_PUZZLE_7_TROPIC_MAIL"
+    ],
+    "exits": [
+      "REGION_ROUTE_110_TRICK_HOUSE_ENTRANCE",
+      "REGION_ROUTE_110_TRICK_HOUSE_END"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_8": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE8",
+    "locations": [
+      "ITEM_TRICK_HOUSE_PUZZLE_8_BEAD_MAIL"
+    ],
+    "exits": [
+      "REGION_ROUTE_110_TRICK_HOUSE_ENTRANCE",
+      "REGION_ROUTE_110_TRICK_HOUSE_END"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_110_TRICK_HOUSE_END": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_END",
+    "locations": [
+      "HIDDEN_ITEM_TRICK_HOUSE_NUGGET"
+    ],
+    "exits": [
+      "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_1",
+      "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_2",
+      "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_3",
+      "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_4",
+      "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_5",
+      "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_6",
+      "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_7",
+      "REGION_ROUTE_110_TRICK_HOUSE_PUZZLE_8",
+      "REGION_ROUTE_110_TRICK_HOUSE_END"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_110_TRICK_HOUSE_CORRIDOR": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_CORRIDOR",
+    "locations": [],
+    "exits": [
+      "REGION_ROUTE_110_TRICK_HOUSE_ENTRANCE",
+      "REGION_ROUTE_110_TRICK_HOUSE_END"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE:0,1/MAP_ROUTE110:2",
+      "MAP_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE:2,3/MAP_ROUTE110:3"
+    ]
+  },
+  "REGION_ROUTE_110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE:0,1/MAP_ROUTE110:4",
+      "MAP_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE:2,3/MAP_ROUTE110:5"
+    ]
+  },
+  "REGION_ROUTE_111": {
+    "parent_map": "MAP_ROUTE111",
+    "locations": [
+      "ITEM_ROUTE_111_TM37",
+      "ITEM_ROUTE_111_STARDUST",
+      "ITEM_ROUTE_111_HP_UP",
+      "ITEM_ROUTE_111_ELIXIR",
+      "HIDDEN_ITEM_ROUTE_111_STARDUST",
+      "HIDDEN_ITEM_ROUTE_111_PROTEIN",
+      "HIDDEN_ITEM_ROUTE_111_RARE_CANDY"
+    ],
+    "exits": [
+      "REGION_ROUTE_113",
+      "REGION_ROUTE_112",
+      "REGION_MAUVILLE_CITY"
+    ],
+    "warps": [
+      "MAP_ROUTE111:0/MAP_ROUTE111_WINSTRATE_FAMILYS_HOUSE:0",
+      "MAP_ROUTE111:1/MAP_DESERT_RUINS:0",
+      "MAP_ROUTE111:2/MAP_ROUTE111_OLD_LADYS_REST_STOP:0",
+      "MAP_ROUTE111:3/MAP_MIRAGE_TOWER_1F:0",
+      "MAP_ROUTE111:4/MAP_TRAINER_HILL_ENTRANCE:0"
+    ]
+  },
+  "REGION_ROUTE_111_OLD_LADYS_REST_STOP": {
+    "parent_map": "MAP_ROUTE111_OLD_LADYS_REST_STOP",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE111_OLD_LADYS_REST_STOP:0,1/MAP_ROUTE111:2"
+    ]
+  },
+  "REGION_ROUTE_111_WINSTRATE_FAMILYS_HOUSE": {
+    "parent_map": "MAP_ROUTE111_WINSTRATE_FAMILYS_HOUSE",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE111_WINSTRATE_FAMILYS_HOUSE:0,1/MAP_ROUTE111:0"
+    ]
+  },
+  "REGION_ROUTE_112": {
+    "parent_map": "MAP_ROUTE112",
+    "locations": [
+      "ITEM_ROUTE_112_NUGGET"
+    ],
+    "exits": [
+      "REGION_ROUTE_111",
+      "REGION_LAVARIDGE_TOWN"
+    ],
+    "warps": [
+      "MAP_ROUTE112:0/MAP_ROUTE112_CABLE_CAR_STATION:0",
+      "MAP_ROUTE112:1/MAP_ROUTE112_CABLE_CAR_STATION:1",
+      "MAP_ROUTE112:2/MAP_JAGGED_PASS:0",
+      "MAP_ROUTE112:3/MAP_JAGGED_PASS:1",
+      "MAP_ROUTE112:4/MAP_FIERY_PATH:0",
+      "MAP_ROUTE112:5/MAP_FIERY_PATH:1"
+    ]
+  },
+  "REGION_LOWER_CABLE_CAR_STATION": {
+    "parent_map": "MAP_ROUTE112_CABLE_CAR_STATION",
+    "locations": [],
+    "exits": [
+      "REGION_UPPER_CABLE_CAR_STATION"
+    ],
+    "warps": [
+      "MAP_ROUTE112_CABLE_CAR_STATION:0/MAP_ROUTE112:0",
+      "MAP_ROUTE112_CABLE_CAR_STATION:1/MAP_ROUTE112:1"
+    ]
+  },
+  "REGION_UPPER_CABLE_CAR_STATION": {
+    "parent_map": "MAP_MT_CHIMNEY_CABLE_CAR_STATION",
+    "locations": [],
+    "exits": [
+      "REGION_LOWER_CABLE_CAR_STATION"
+    ],
+    "warps": [
+      "MAP_MT_CHIMNEY_CABLE_CAR_STATION:0/MAP_MT_CHIMNEY:0",
+      "MAP_MT_CHIMNEY_CABLE_CAR_STATION:1/MAP_MT_CHIMNEY:1"
+    ]
+  },
+  "REGION_MT_CHIMNEY": {
+    "parent_map": "MAP_MT_CHIMNEY",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_MT_CHIMNEY:0/MAP_MT_CHIMNEY_CABLE_CAR_STATION:0",
+      "MAP_MT_CHIMNEY:1/MAP_MT_CHIMNEY_CABLE_CAR_STATION:1",
+      "MAP_MT_CHIMNEY:2/MAP_JAGGED_PASS:2",
+      "MAP_MT_CHIMNEY:3/MAP_JAGGED_PASS:3"
+    ]
+  },
+  "REGION_JAGGED_PASS": {
+    "parent_map": "MAP_JAGGED_PASS",
+    "locations": [
+      "ITEM_JAGGED_PASS_BURN_HEAL",
+      "HIDDEN_ITEM_JAGGED_PASS_FULL_HEAL",
+      "HIDDEN_ITEM_JAGGED_PASS_GREAT_BALL"
+    ],
+    "exits": [],
+    "warps": [
+      "MAP_JAGGED_PASS:0/MAP_ROUTE112:2",
+      "MAP_JAGGED_PASS:1/MAP_ROUTE112:3",
+      "MAP_JAGGED_PASS:2/MAP_MT_CHIMNEY:2",
+      "MAP_JAGGED_PASS:3/MAP_MT_CHIMNEY:3",
+      "MAP_JAGGED_PASS:4/MAP_MAGMA_HIDEOUT_1F:0"
+    ]
+  },
+  "REGION_ROUTE_113": {
+    "parent_map": "MAP_ROUTE113",
+    "locations": [
+      "ITEM_ROUTE_113_MAX_ETHER",
+      "ITEM_ROUTE_113_SUPER_REPEL",
+      "ITEM_ROUTE_113_HYPER_POTION",
+      "HIDDEN_ITEM_ROUTE_113_REVIVE",
+      "HIDDEN_ITEM_ROUTE_113_ETHER",
+      "HIDDEN_ITEM_ROUTE_113_TM32",
+      "HIDDEN_ITEM_ROUTE_113_NUGGET"
+    ],
+    "exits": [
+      "REGION_FALLARBOR_TOWN",
+      "REGION_ROUTE_111"
+    ],
+    "warps": [
+      "MAP_ROUTE113:0/MAP_ROUTE113_GLASS_WORKSHOP:0"
+    ]
+  },
+  "REGION_ROUTE_113_GLASS_WORKSHOP": {
+    "parent_map": "MAP_ROUTE113_GLASS_WORKSHOP",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE113_GLASS_WORKSHOP:0,1/MAP_ROUTE113:0"
+    ]
+  },
+  "REGION_ROUTE_114": {
+    "parent_map": "MAP_ROUTE114",
+    "locations": [
+      "ITEM_ROUTE_114_PROTEIN",
+      "ITEM_ROUTE_114_RARE_CANDY",
+      "ITEM_ROUTE_114_ENERGY_POWDER",
+      "HIDDEN_ITEM_ROUTE_114_REVIVE",
+      "HIDDEN_ITEM_ROUTE_114_CARBOS"
+    ],
+    "exits": [
+      "REGION_FALLARBOR_TOWN"
+    ],
+    "warps": [
+      "MAP_ROUTE114:0/MAP_METEOR_FALLS_1F_1R:0",
+      "MAP_ROUTE114:1/MAP_ROUTE114_FOSSIL_MANIACS_HOUSE:0",
+      "MAP_ROUTE114:2/MAP_ROUTE114_LANETTES_HOUSE:0"
+    ]
+  },
+  "REGION_ROUTE_114_FOSSIL_MANIACS_HOUSE": {
+    "parent_map": "MAP_ROUTE114_FOSSIL_MANIACS_HOUSE",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE114_FOSSIL_MANIACS_HOUSE:0,1/MAP_ROUTE114:1",
+      "MAP_ROUTE114_FOSSIL_MANIACS_HOUSE:2/MAP_ROUTE114_FOSSIL_MANIACS_TUNNEL:0"
+    ]
+  },
+  "REGION_ROUTE_114_FOSSIL_MANIACS_TUNNEL": {
+    "parent_map": "MAP_ROUTE114_FOSSIL_MANIACS_TUNNEL",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE114_FOSSIL_MANIACS_TUNNEL:0,1/MAP_ROUTE114_FOSSIL_MANIACS_HOUSE:2",
+      "MAP_ROUTE114_FOSSIL_MANIACS_TUNNEL:2/MAP_DESERT_UNDERPASS:0"
+    ]
+  },
+  "REGION_DESERT_UNDERPASS": {
+    "parent_map": "MAP_DESERT_UNDERPASS",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_DESERT_UNDERPASS:0/MAP_ROUTE114_FOSSIL_MANIACS_TUNNEL:2"
+    ]
+  },
+  "REGION_ROUTE_114_LANETTES_HOUSE": {
+    "parent_map": "MAP_ROUTE114_LANETTES_HOUSE",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE114_LANETTES_HOUSE:0,1/MAP_ROUTE114:2"
+    ]
+  },
+  "REGION_ROUTE_115": {
+    "parent_map": "MAP_ROUTE115",
+    "locations": [
+      "ITEM_ROUTE_115_PP_UP",
+      "ITEM_ROUTE_115_SUPER_POTION",
+      "ITEM_ROUTE_115_GREAT_BALL",
+      "ITEM_ROUTE_115_IRON",
+      "ITEM_ROUTE_115_HEAL_POWDER",
+      "ITEM_ROUTE_115_TM01",
+      "HIDDEN_ITEM_ROUTE_115_HEART_SCALE"
+    ],
+    "exits": [
+      "REGION_RUSTBORO_CITY"
+    ],
+    "warps": [
+      "MAP_ROUTE115:0/MAP_METEOR_FALLS_1F_1R:1"
+    ]
+  },
+  "REGION_ROUTE_116": {
+    "parent_map": "MAP_ROUTE116",
+    "locations": [
+      "ITEM_ROUTE_116_REPEL",
+      "ITEM_ROUTE_116_ETHER",
+      "ITEM_ROUTE_116_POTION",
+      "ITEM_ROUTE_116_X_SPECIAL",
+      "ITEM_ROUTE_116_HP_UP",
+      "HIDDEN_ITEM_ROUTE_116_BLACK_GLASSES",
+      "HIDDEN_ITEM_ROUTE_116_SUPER_POTION"
+    ],
+    "exits": [
+      "REGION_RUSTBORO_CITY"
+    ],
+    "warps": [
+      "MAP_ROUTE116:0/MAP_RUSTURF_TUNNEL:0",
+      "MAP_ROUTE116:1/MAP_ROUTE116_TUNNELERS_REST_HOUSE:0",
+      "MAP_ROUTE116:2/MAP_RUSTURF_TUNNEL:2"
+    ]
+  },
+  "REGION_ROUTE_116_TUNNELERS_REST_HOUSE": {
+    "parent_map": "MAP_ROUTE116_TUNNELERS_REST_HOUSE",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE116_TUNNELERS_REST_HOUSE:0,1/MAP_ROUTE116:1"
+    ]
+  },
+  "REGION_ROUTE_117": {
+    "parent_map": "MAP_ROUTE117",
+    "locations": [
+      "ITEM_ROUTE_117_GREAT_BALL",
+      "ITEM_ROUTE_117_REVIVE",
+      "HIDDEN_ITEM_ROUTE_117_REPEL"
+    ],
+    "exits": [
+      "REGION_VERDANTURF_TOWN",
+      "REGION_MAUVILLE_CITY"
+    ],
+    "warps": [
+      "MAP_ROUTE117:0/MAP_ROUTE117_POKEMON_DAY_CARE:0"
+    ]
+  },
+  "REGION_ROUTE_117_POKEMON_DAY_CARE": {
+    "parent_map": "MAP_ROUTE117_POKEMON_DAY_CARE",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE117_POKEMON_DAY_CARE:0,1/MAP_ROUTE117:0"
+    ]
+  },
+  "REGION_ROUTE_118": {
+    "parent_map": "MAP_ROUTE118",
+    "locations": [
+      "ITEM_ROUTE_118_HYPER_POTION",
+      "HIDDEN_ITEM_ROUTE_118_IRON",
+      "HIDDEN_ITEM_ROUTE_118_HEART_SCALE"
+    ],
+    "exits": [
+      "REGION_MAUVILLE_CITY",
+      "REGION_ROUTE_119",
+      "REGION_ROUTE_123"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_119": {
+    "parent_map": "MAP_ROUTE119",
+    "locations": [
+      "ITEM_ROUTE_119_SUPER_REPEL",
+      "ITEM_ROUTE_119_ZINC",
+      "ITEM_ROUTE_119_ELIXIR_1",
+      "ITEM_ROUTE_119_LEAF_STONE",
+      "ITEM_ROUTE_119_RARE_CANDY",
+      "ITEM_ROUTE_119_HYPER_POTION_1",
+      "ITEM_ROUTE_119_HYPER_POTION_2",
+      "ITEM_ROUTE_119_NUGGET",
+      "ITEM_ROUTE_119_ELIXIR_2",
+      "HIDDEN_ITEM_ROUTE_119_CALCIUM",
+      "HIDDEN_ITEM_ROUTE_119_ULTRA_BALL",
+      "HIDDEN_ITEM_ROUTE_119_FULL_HEAL",
+      "HIDDEN_ITEM_ROUTE_119_MAX_ETHER"
+    ],
+    "exits": [
+      "REGION_FORTREE_CITY",
+      "REGION_ROUTE_118"
+    ],
+    "warps": [
+      "MAP_ROUTE119:0/MAP_ROUTE119_WEATHER_INSTITUTE_1F:0",
+      "MAP_ROUTE119:1/MAP_ROUTE119_HOUSE:0"
+    ]
+  },
+  "REGION_ROUTE_119_WEATHER_INSTITUTE_1F": {
+    "parent_map": "MAP_ROUTE119_WEATHER_INSTITUTE_1F",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE119_WEATHER_INSTITUTE_1F:0,1/MAP_ROUTE119:0",
+      "MAP_ROUTE119_WEATHER_INSTITUTE_1F:2/MAP_ROUTE119_WEATHER_INSTITUTE_2F:0"
+    ]
+  },
+  "REGION_ROUTE_119_WEATHER_INSTITUTE_2F": {
+    "parent_map": "MAP_ROUTE119_WEATHER_INSTITUTE_2F",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE119_WEATHER_INSTITUTE_2F:0/MAP_ROUTE119_WEATHER_INSTITUTE_1F:2"
+    ]
+  },
+  "REGION_ROUTE_119_HOUSE": {
+    "parent_map": "MAP_ROUTE119_HOUSE",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE119_HOUSE:0,1/MAP_ROUTE119:1"
+    ]
+  },
+  "REGION_ROUTE_120": {
+    "parent_map": "MAP_ROUTE120",
+    "locations": [
+      "ITEM_ROUTE_120_NUGGET",
+      "ITEM_ROUTE_120_FULL_HEAL",
+      "ITEM_ROUTE_120_NEST_BALL",
+      "ITEM_ROUTE_120_HYPER_POTION",
+      "ITEM_ROUTE_120_REVIVE",
+      "HIDDEN_ITEM_ROUTE_120_RARE_CANDY_1",
+      "HIDDEN_ITEM_ROUTE_120_REVIVE",
+      "HIDDEN_ITEM_ROUTE_120_RARE_CANDY_2",
+      "HIDDEN_ITEM_ROUTE_120_ZINC"
+    ],
+    "exits": [
+      "REGION_FORTREE_CITY",
+      "REGION_ROUTE_121"
+    ],
+    "warps": [
+      "MAP_ROUTE120:0/MAP_ANCIENT_TOMB:0",
+      "MAP_ROUTE120:1/MAP_SCORCHED_SLAB:0"
+    ]
+  },
+  "REGION_ROUTE_121": {
+    "parent_map": "MAP_ROUTE121",
+    "locations": [
+      "ITEM_ROUTE_121_CARBOS",
+      "ITEM_ROUTE_121_REVIVE",
+      "ITEM_ROUTE_121_ZINC",
+      "HIDDEN_ITEM_ROUTE_121_HP_UP",
+      "HIDDEN_ITEM_ROUTE_121_NUGGET",
+      "HIDDEN_ITEM_ROUTE_121_FULL_HEAL",
+      "HIDDEN_ITEM_ROUTE_121_MAX_REVIVE"
+    ],
+    "exits": [
+      "REGION_ROUTE_120",
+      "REGION_ROUTE_122",
+      "REGION_LILYCOVE_CITY"
+    ],
+    "warps": [
+      "MAP_ROUTE121:0/MAP_ROUTE121_SAFARI_ZONE_ENTRANCE:2"
+    ]
+  },
+  "REGION_ROUTE_121_SAFARI_ZONE_ENTRANCE": {
+    "parent_map": "MAP_ROUTE121_SAFARI_ZONE_ENTRANCE",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE121_SAFARI_ZONE_ENTRANCE:0,1/MAP_SAFARI_ZONE_SOUTH:0",
+      "MAP_ROUTE121_SAFARI_ZONE_ENTRANCE:2,3/MAP_ROUTE121:0"
+    ]
+  },
+  "REGION_SAFARI_ZONE_NORTH": {
+    "parent_map": "MAP_SAFARI_ZONE_NORTH",
+    "locations": [
+      "ITEM_SAFARI_ZONE_NORTH_CALCIUM"
+    ],
+    "exits": [
+      "REGION_SAFARI_ZONE_NORTHEAST",
+      "REGION_SAFARI_ZONE_NORTHWEST",
+      "REGION_SAFARI_ZONE_SOUTH"
+    ],
+    "warps": []
+  },
+  "REGION_SAFARI_ZONE_NORTHEAST": {
+    "parent_map": "MAP_SAFARI_ZONE_NORTHEAST",
+    "locations": [
+      "ITEM_SAFARI_ZONE_NORTH_EAST_NUGGET",
+      "HIDDEN_ITEM_SAFARI_ZONE_NORTH_EAST_RARE_CANDY",
+      "HIDDEN_ITEM_SAFARI_ZONE_NORTH_EAST_ZINC"
+    ],
+    "exits": [
+      "REGION_SAFARI_ZONE_NORTH",
+      "REGION_SAFARI_ZONE_SOUTHEAST"
+    ],
+    "warps": []
+  },
+  "REGION_SAFARI_ZONE_NORTHWEST": {
+    "parent_map": "MAP_SAFARI_ZONE_NORTHWEST",
+    "locations": [
+      "ITEM_SAFARI_ZONE_NORTH_WEST_TM22"
+    ],
+    "exits": [
+      "REGION_SAFARI_ZONE_NORTH",
+      "REGION_SAFARI_ZONE_SOUTHWEST"
+    ],
+    "warps": []
+  },
+  "REGION_SAFARI_ZONE_SOUTH": {
+    "parent_map": "MAP_SAFARI_ZONE_SOUTH",
+    "locations": [],
+    "exits": [
+      "REGION_SAFARI_ZONE_NORTH",
+      "REGION_SAFARI_ZONE_SOUTHEAST",
+      "REGION_SAFARI_ZONE_SOUTHWEST"
+    ],
+    "warps": [
+      "MAP_SAFARI_ZONE_SOUTH:0/MAP_ROUTE121_SAFARI_ZONE_ENTRANCE:0"
+    ]
+  },
+  "REGION_SAFARI_ZONE_SOUTHEAST": {
+    "parent_map": "MAP_SAFARI_ZONE_SOUTHEAST",
+    "locations": [
+      "ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL",
+      "HIDDEN_ITEM_SAFARI_ZONE_SOUTH_EAST_PP_UP",
+      "HIDDEN_ITEM_SAFARI_ZONE_SOUTH_EAST_FULL_RESTORE"
+    ],
+    "exits": [
+      "REGION_SAFARI_ZONE_SOUTH",
+      "REGION_SAFARI_ZONE_NORTHEAST"
+    ],
+    "warps": []
+  },
+  "REGION_SAFARI_ZONE_SOUTHWEST": {
+    "parent_map": "MAP_SAFARI_ZONE_SOUTHWEST",
+    "locations": [
+      "ITEM_SAFARI_ZONE_SOUTH_WEST_MAX_REVIVE",
+      "HIDDEN_ITEM_SAFARI_ZONE_SOUTH_EAST_PP_UP",
+      "HIDDEN_ITEM_SAFARI_ZONE_SOUTH_EAST_FULL_RESTORE"
+    ],
+    "exits": [
+      "REGION_SAFARI_ZONE_SOUTH",
+      "REGION_SAFARI_ZONE_NORTHWEST"
+    ],
+    "warps": [
+      "MAP_SAFARI_ZONE_SOUTHWEST:0/MAP_SAFARI_ZONE_REST_HOUSE:0"
+    ]
+  },
+  "REGION_SAFARI_ZONE_REST_HOUSE": {
+    "parent_map": "MAP_SAFARI_ZONE_REST_HOUSE",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_SAFARI_ZONE_REST_HOUSE:0,1/MAP_SAFARI_ZONE_SOUTHWEST:0"
+    ]
+  },
+  "REGION_ROUTE_122": {
+    "parent_map": "MAP_ROUTE122",
+    "locations": [],
+    "exits": [
+      "REGION_ROUTE_121",
+      "REGION_ROUTE_123"
+    ],
+    "warps": [
+      "MAP_ROUTE122:0/MAP_MT_PYRE_1F:0"
+    ]
+  },
+  "REGION_ROUTE_123": {
+    "parent_map": "MAP_ROUTE123",
+    "locations": [
+      "ITEM_ROUTE_123_CALCIUM",
+      "ITEM_ROUTE_123_ULTRA_BALL",
+      "ITEM_ROUTE_123_ELIXIR",
+      "ITEM_ROUTE_123_PP_UP",
+      "ITEM_ROUTE_123_REVIVAL_HERB",
+      "HIDDEN_ITEM_ROUTE_123_SUPER_REPEL",
+      "HIDDEN_ITEM_ROUTE_123_REVIVE",
+      "HIDDEN_ITEM_ROUTE_123_HYPER_POTION",
+      "HIDDEN_ITEM_ROUTE_123_PP_UP",
+      "HIDDEN_ITEM_ROUTE_123_RARE_CANDY"
+    ],
+    "exits": [
+      "REGION_ROUTE_122",
+      "REGION_ROUTE_118"
+    ],
+    "warps": [
+      "MAP_ROUTE123:0/MAP_ROUTE123_BERRY_MASTERS_HOUSE:0"
+    ]
+  },
+  "REGION_ROUTE_123_BERRY_MASTERS_HOUSE": {
+    "parent_map": "MAP_ROUTE123_BERRY_MASTERS_HOUSE",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE123_BERRY_MASTERS_HOUSE:0,1/MAP_ROUTE123:0"
+    ]
+  },
+  "REGION_ROUTE_124": {
+    "parent_map": "MAP_ROUTE124",
+    "locations": [
+      "ITEM_ROUTE_124_RED_SHARD",
+      "ITEM_ROUTE_124_BLUE_SHARD",
+      "ITEM_ROUTE_124_YELLOW_SHARD"
+    ],
+    "exits": [
+      "REGION_LILYCOVE_CITY",
+      "REGION_MOSSDEEP_CITY",
+      "REGION_ROUTE_126",
+      "REGION_ROUTE_124_UNDERWATER"
+    ],
+    "warps": [
+      "MAP_ROUTE124:0/MAP_ROUTE124_DIVING_TREASURE_HUNTERS_HOUSE:0"
+    ]
+  },
+  "REGION_ROUTE_124_DIVING_TREASURE_HUNTERS_HOUSE": {
+    "parent_map": "MAP_ROUTE124_DIVING_TREASURE_HUNTERS_HOUSE",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE124_DIVING_TREASURE_HUNTERS_HOUSE:0,1/MAP_ROUTE124:0"
+    ]
+  },
+  "REGION_ROUTE_124_UNDERWATER": {
+    "parent_map": "MAP_UNDERWATER_ROUTE124",
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_124_CARBOS",
+      "HIDDEN_ITEM_UNDERWATER_124_GREEN_SHARD",
+      "HIDDEN_ITEM_UNDERWATER_124_PEARL",
+      "HIDDEN_ITEM_UNDERWATER_124_BIG_PEARL",
+      "HIDDEN_ITEM_UNDERWATER_124_HEART_SCALE_1",
+      "HIDDEN_ITEM_UNDERWATER_124_CALCIUM",
+      "HIDDEN_ITEM_UNDERWATER_124_HEART_SCALE_2"
+    ],
+    "exits": [
+      "REGION_ROUTE_124"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_125": {
+    "parent_map": "MAP_ROUTE125",
+    "locations": [
+      "ITEM_ROUTE_125_BIG_PEARL"
+    ],
+    "exits": [
+      "REGION_MOSSDEEP_CITY",
+      "REGION_ROUTE_125_UNDERWATER"
+    ],
+    "warps": [
+      "MAP_ROUTE125:0/MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM:0"
+    ]
+  },
+  "REGION_ROUTE_125_UNDERWATER": {
+    "parent_map": "MAP_UNDERWATER_ROUTE125",
+    "locations": [
+      "ITEM_ROUTE_125_BIG_PEARL"
+    ],
+    "exits": [
+      "REGION_ROUTE_125"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_126": {
+    "parent_map": "MAP_ROUTE126",
+    "locations": [
+      "ITEM_ROUTE_126_GREEN_SHARD"
+    ],
+    "exits": [
+      "REGION_ROUTE_124",
+      "REGION_ROUTE_127",
+      "REGION_ROUTE_126_UNDERWATER"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_126_UNDERWATER": {
+    "parent_map": "MAP_UNDERWATER_ROUTE126",
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_126_HEART_SCALE",
+      "HIDDEN_ITEM_UNDERWATER_126_ULTRA_BALL",
+      "HIDDEN_ITEM_UNDERWATER_126_STARDUST",
+      "HIDDEN_ITEM_UNDERWATER_126_PEARL",
+      "HIDDEN_ITEM_UNDERWATER_126_IRON",
+      "HIDDEN_ITEM_UNDERWATER_126_YELLOW_SHARD",
+      "HIDDEN_ITEM_UNDERWATER_126_BIG_PEARL",
+      "HIDDEN_ITEM_UNDERWATER_126_BLUE_SHARD"
+    ],
+    "exits": [
+      "REGION_ROUTE_126"
+    ],
+    "warps": [
+      "MAP_UNDERWATER_ROUTE126:0/MAP_UNDERWATER_SOOTOPOLIS_CITY:0"
+    ]
+  },
+  "REGION_ROUTE_127": {
+    "parent_map": "MAP_ROUTE127",
+    "locations": [
+      "ITEM_ROUTE_127_ZINC",
+      "ITEM_ROUTE_127_CARBOS",
+      "ITEM_ROUTE_127_RARE_CANDY"
+    ],
+    "exits": [
+      "REGION_ROUTE_126",
+      "REGION_MOSSDEEP_CITY",
+      "REGION_ROUTE_128",
+      "REGION_ROUTE_127_UNDERWATER"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_127_UNDERWATER": {
+    "parent_map": "MAP_UNDERWATER_ROUTE127",
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_127_STAR_PIECE",
+      "HIDDEN_ITEM_UNDERWATER_127_HP_UP",
+      "HIDDEN_ITEM_UNDERWATER_127_HEART_SCALE",
+      "HIDDEN_ITEM_UNDERWATER_127_RED_SHARD"
+    ],
+    "exits": [
+      "REGION_ROUTE_127",
+      "REGION_ROUTE_128_UNDERWATER"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_128": {
+    "parent_map": "MAP_ROUTE128",
+    "locations": [
+      "HIDDEN_ITEM_ROUTE_128_HEART_SCALE_1",
+      "HIDDEN_ITEM_ROUTE_128_HEART_SCALE_2",
+      "HIDDEN_ITEM_ROUTE_128_HEART_SCALE_3"
+    ],
+    "exits": [
+      "REGION_ROUTE_127",
+      "REGION_ROUTE_129",
+      "REGION_EVER_GRANDE_CITY",
+      "REGION_ROUTE_128_UNDERWATER"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_128_UNDERWATER": {
+    "parent_map": "MAP_UNDERWATER_ROUTE128",
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_128_PROTEIN",
+      "HIDDEN_ITEM_UNDERWATER_128_PEARL"
+    ],
+    "exits": [
+      "REGION_ROUTE_128",
+      "REGION_ROUTE_127_UNDERWATER"
+    ],
+    "warps": [
+      "MAP_UNDERWATER_ROUTE128:0/MAP_UNDERWATER_SEAFLOOR_CAVERN:0"
+    ]
+  },
+  "REGION_ROUTE_129": {
+    "parent_map": "MAP_ROUTE129",
+    "locations": [],
+    "exits": [
+      "REGION_ROUTE_130",
+      "REGION_ROUTE_128",
+      "REGION_ROUTE_129_UNDERWATER"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_129_UNDERWATER": {
+    "parent_map": "MAP_UNDERWATER_ROUTE129",
+    "locations": [],
+    "exits": [
+      "REGION_ROUTE_129"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_130": {
+    "parent_map": "MAP_ROUTE130",
+    "locations": [],
+    "exits": [
+      "REGION_ROUTE_129",
+      "Route 131"
+    ],
+    "warps": []
+  },
+  "Route 131": {
+    "parent_map": "MAP_ROUTE131",
+    "locations": [],
+    "exits": [
+      "REGION_PACIFIDLOG_TOWN",
+      "REGION_ROUTE_130"
+    ],
+    "warps": [
+      "MAP_ROUTE131:0/MAP_SKY_PILLAR_ENTRANCE:0"
+    ]
+  },
+  "REGION_ROUTE_132": {
+    "parent_map": "MAP_ROUTE132",
+    "locations": [
+      "ITEM_ROUTE_132_RARE_CANDY",
+      "ITEM_ROUTE_132_PROTEIN"
+    ],
+    "exits": [
+      "REGION_PACIFIDLOG_TOWN",
+      "REGION_ROUTE_133"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_133": {
+    "parent_map": "MAP_ROUTE133",
+    "locations": [
+      "ITEM_ROUTE_133_BIG_PEARL",
+      "ITEM_ROUTE_133_STAR_PIECE",
+      "ITEM_ROUTE_133_MAX_REVIVE"
+    ],
+    "exits": [
+      "REGION_ROUTE_132",
+      "REGION_ROUTE_134"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_134": {
+    "parent_map": "MAP_ROUTE134",
+    "locations": [
+      "ITEM_ROUTE_134_CARBOS",
+      "ITEM_ROUTE_134_STAR_PIECE"
+    ],
+    "exits": [
+      "REGION_ROUTE_133",
+      "REGION_SLATEPORT_CITY",
+      "REGION_ROUTE_134_UNDERWATER"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_134_UNDERWATER": {
+    "parent_map": "MAP_UNDERWATER_ROUTE134",
+    "locations": [
+      "ITEM_ROUTE_134_CARBOS",
+      "ITEM_ROUTE_134_STAR_PIECE"
+    ],
+    "exits": [
+      "REGION_ROUTE_134"
+    ],
+    "warps": [
+      "MAP_UNDERWATER_ROUTE134:0/MAP_UNDERWATER_SEALED_CHAMBER:0"
+    ]
+  }
+}

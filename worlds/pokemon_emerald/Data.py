@@ -108,7 +108,21 @@ def create_regions_from_json() -> Dict[str, RegionData]:
 
     location_to_region_map = {}
 
-    regions_json = load_json("regions.json")
+    battle_frontier_json = load_json("regions/battle_frontier.json")
+    city_regions_json = load_json("regions/cities.json")
+    dungeon_regions_json = load_json("regions/dungeons.json")
+    route_regions_json = load_json("regions/routes.json")
+
+    regions_json = {}
+    for region_name, region_json in battle_frontier_json.items():
+        regions_json[region_name] = region_json
+    for region_name, region_json in city_regions_json.items():
+        regions_json[region_name] = region_json
+    for region_name, region_json in dungeon_regions_json.items():
+        regions_json[region_name] = region_json
+    for region_name, region_json in route_regions_json.items():
+        regions_json[region_name] = region_json
+    
     regions = {}
     for region_name, region_json in regions_json.items():
         new_region = RegionData(region_name)
