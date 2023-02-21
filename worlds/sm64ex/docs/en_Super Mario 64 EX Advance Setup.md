@@ -14,9 +14,10 @@ You can use other sm64-port based builds with it, but you can't use a different 
 ## Building with Textures, Models and Patch Files
 
 # Installation via sm64pclauncher (For Windows)
-First, install [MSYS](https://www.msys2.org/) as described on the page. DO NOT INSTALL INTO A FOLDER PATH WITH SPACES.
-Do all steps up to including step 6.
-Best use default install directory.
+First, install [MSYS](https://www.msys2.org/) as described on the page.
+- DO NOT INSTALL INTO A FOLDER PATH WITH SPACES.
+- Do all steps, up to and including step 6.
+- Use the default install directory.
 Then follow the steps below
 
 1. Go to the page linked for sm64pclauncher, and press on the topmost entry
