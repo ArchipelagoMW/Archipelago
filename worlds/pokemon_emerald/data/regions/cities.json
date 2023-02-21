@@ -149,7 +149,9 @@
   },
   "REGION_PETALBURG_CITY_WALLYS_HOUSE": {
     "parent_map": "MAP_PETALBURG_CITY_WALLYS_HOUSE",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_HM03"
+    ],
     "exits": [],
     "warps": [
       "MAP_PETALBURG_CITY_WALLYS_HOUSE:0,1/MAP_PETALBURG_CITY:1"
@@ -380,7 +382,7 @@
   "REGION_RUSTBORO_CITY_CUTTERS_HOUSE": {
     "parent_map": "MAP_RUSTBORO_CITY_CUTTERS_HOUSE",
     "locations": [
-      "RECEIVED_HM01"
+      "NPC_GIFT_RECEIVED_HM01"
     ],
     "exits": [],
     "warps": [
@@ -650,7 +652,9 @@
   },
   "REGION_MAUVILLE_CITY_HOUSE_1": {
     "parent_map": "MAP_MAUVILLE_CITY_HOUSE1",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_HM06"
+    ],
     "exits": [],
     "warps": [
       "MAP_MAUVILLE_CITY_HOUSE1:0,1/MAP_MAUVILLE_CITY:4"
@@ -1421,7 +1425,9 @@
   },
   "REGION_MOSSDEEP_CITY_STEVENS_HOUSE": {
     "parent_map": "MAP_MOSSDEEP_CITY_STEVENS_HOUSE",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_HM08"
+    ],
     "exits": [],
     "warps": [
       "MAP_MOSSDEEP_CITY_STEVENS_HOUSE:0,1/MAP_MOSSDEEP_CITY:6"
@@ -1462,7 +1468,9 @@
 
   "REGION_SOOTOPOLIS_CITY": {
     "parent_map": "MAP_SOOTOPOLIS_CITY",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_HM07"
+    ],
     "exits": [
       "REGION_UNDERWATER_SOOTOPOLIS_CITY"
     ],

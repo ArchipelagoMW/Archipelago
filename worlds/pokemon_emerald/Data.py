@@ -36,7 +36,7 @@ def get_item_attributes():
         items_json = load_json("items.json")
 
         for item_constant_name, attributes in items_json.items():
-            item_id = data_json["constants"]["items"][item_constant_name]
+            item_id = data_json["constants"][item_constant_name]
             item_attributes[item_id] = ItemAttributes(attributes[0], str_to_item_classification(attributes[1]))
 
     return item_attributes
@@ -177,14 +177,14 @@ def create_regions_from_json() -> Dict[str, RegionData]:
     # Badges
     for i in range(0, 8):
         item_name = f"ITEM_BADGE_{i + 1}"
-        item_code = data_json["constants"]["items"][item_name]
+        item_code = data_json["constants"][item_name]
         new_location = LocationData(
             item_name,
             location_to_region_map[item_json["name"]],
             item_code,
             None,
             data_json["misc_rom_addresses"]["gGymBadgeItems"] + (i * 2),
-            data_json["constants"]["flags"][f"FLAG_BADGE0{i + 1}_GET"]
+            data_json["constants"][f"FLAG_BADGE0{i + 1}_GET"]
         )
         new_location.tags.add("Badge")
         regions[new_location.region_name].locations.append(new_location)

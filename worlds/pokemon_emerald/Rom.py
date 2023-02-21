@@ -63,7 +63,7 @@ def generate_output(self, output_directory: str):
         if location.item and location.item.player == self.player:
             set_bytes_little_endian(patched_rom, location.address, 2, location.item.code)
         else:
-            set_bytes_little_endian(patched_rom, location.address, 2, data["constants"]["items"]["ITEM_ARCHIPELAGO_PROGRESSION"])
+            set_bytes_little_endian(patched_rom, location.address, 2, data["constants"]["ITEM_ARCHIPELAGO_PROGRESSION"])
 
     randomize_encounter_tables(self, patched_rom)
 
