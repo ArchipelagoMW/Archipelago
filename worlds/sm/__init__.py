@@ -209,10 +209,11 @@ class SMWorld(World):
         """ little-endian convert a 16-bit number to an array of numbers <= 255 each """
         return [w & 0x00FF, (w & 0xFF00) >> 8]
 
-    # used for remote location Credits Spoiler of local items
+    # used for remote location Credits Spoiler of local items and Objectives' writeItemsMasks
     class DummyLocation:
         def __init__(self, name):
             self.Name = name
+            self.restricted = False
 
         def isBoss(self):
             return False
@@ -526,13 +527,13 @@ class SMWorld(World):
         # commit all the changes we've made here to the ROM
         romPatcher.commitIPS()
 
-        romPatcher.writeObjectives(self.itemLocs, romPatcher.settings["tourian"])
-        romPatcher.writeItemsLocs(self.itemLocs)
-
         itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name] if itemLoc.name in locationsDict and itemLoc.player == self.player else self.DummyLocation(self.multiworld.get_player_name(itemLoc.player) + " " + itemLoc.name), True) for itemLoc in self.multiworld.get_locations() if itemLoc.item.player == self.player]
         progItemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name] if itemLoc.name in locationsDict and itemLoc.player == self.player else self.DummyLocation(self.multiworld.get_player_name(itemLoc.player) + " " + itemLoc.name), True) for itemLoc in self.multiworld.get_locations() if itemLoc.item.player == self.player and itemLoc.item.advancement == True]
-        # progItemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.multiworld.get_locations() if itemLoc.player == self.player and itemLoc.item.player == self.player and itemLoc.item.advancement == True]
-        
+
+
+        romPatcher.writeObjectives(itemLocs, romPatcher.settings["tourian"])
+        romPatcher.writeItemsLocs(self.itemLocs)
+
         # romPatcher.writeSplitLocs(self.variaRando.args.majorsSplit, itemLocs, progItemLocs)
         romPatcher.writeItemsNumber()
         if not romPatcher.settings["isPlando"]:

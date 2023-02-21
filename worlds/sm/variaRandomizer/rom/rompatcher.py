@@ -79,36 +79,6 @@ class RomPatcher:
         self.applyIPSPatches()
         self.commitIPS()
 
-        """
-        self.writeObjectives(self.settings["itemLocs"], self.settings["tourian"])
-        self.writeItemsLocs(self.settings["itemLocs"])
-        self.writeSplitLocs(self.settings["majorsSplit"], self.settings["itemLocs"], self.settings["progItemLocs"])
-        self.writeItemsNumber()
-        if not self.settings["isPlando"]:
-            self.writeSeed(self.settings["seed"]) # lol if race mode
-        self.writeSpoiler(self.settings["itemLocs"], self.settings["progItemLocs"])
-        self.writeRandoSettings(self.settings["randoSettings"], self.settings["itemLocs"])
-        self.writeDoorConnections(self.settings["doors"])
-
-        self.writeVersion(self.settings["displayedVersion"])
-        if self.settings["ctrlDict"] is not None:
-            self.writeControls(self.settings["ctrlDict"])
-        if self.settings["moonWalk"] == True:
-            self.enableMoonWalk()
-
-        self.writeMagic()
-        self.writeMajorsSplit(self.settings["majorsSplit"])
-
-        if self.settings["isPlando"] and self.race is None:
-            doorsPtrs = GraphUtils.getAps2DoorsPtrs()
-            self.writePlandoTransitions(self.settings["plando"]["graphTrans"], doorsPtrs,
-                                        self.settings["plando"]["maxTransitions"])
-            self.writePlandoAddresses(self.settings["plando"]["visitedLocations"])
-        if self.settings["isPlando"] and self.settings["plando"]["additionalETanks"] != 0:
-            self.writeAdditionalETanks(self.settings["plando"]["additionalETanks"])
-        self.end()
-        """
-
     def end(self):
         self.romFile.fillToNextBank()
         self.romFile.close()
