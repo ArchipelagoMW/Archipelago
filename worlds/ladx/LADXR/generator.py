@@ -55,9 +55,9 @@ from . import hints
 
 from .locations.keyLocation import KeyLocation
 from .patches import bank34
-
+from .utils import formatText
 from ..Options import TrendyGame, Palette
-
+from .roomEditor import RoomEditor, Object
 
 # Function to generate a final rom, this patches the rom with all required patches
 def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=None, player_name=None, player_names=[], player_id = 0):
@@ -279,7 +279,7 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
 
         # TODO: if 0 or 4, 5, remove inaccurate conveyor tiles
 
-        from .roomEditor import RoomEditor, Object
+        
         room_editor = RoomEditor(rom, 0x2A0)
 
         if ap_settings["trendy_game"] == TrendyGame.option_easy:
@@ -419,11 +419,7 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
             ld [$DB96], a
             ld [$FFA2], a ; reset link z position
             ; call $5626
-            
-            ldh  a, [$99] ; bump link down a bit
-            add  a, $10
-            ldh  [$99], a
-            
+
             ld a, 1         ; Set flag for using teleport
             ld [$FFDD], a
 
@@ -441,49 +437,55 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
         rom.banks[0x01][0x1803] = 0x20
         
         # Patch the icon for all teleports
-        rom.banks[0x20][0x168B + 0x95] = 0xF8
-        rom.banks[0x01][0x1959 + 0x95] = 0x42
+        all_warps = [0x01, 0x95, 0x2C, 0xEC]
+
+        ADD_MAMU = True
+        if ADD_MAMU:
+            all_warps.append(0x45)
+            # Tweak the flute location
+            rom.banks[0x14][0x0E95] += 0x10
+            rom.banks[0x14][0x0EA3] += 0x01
+
+            mamu_pond = RoomEditor(rom, 0x45)
+            # Remove some tall grass so we can add a warp instead
+            mamu_pond.changeObject(1, 6, 0xE8)
+            mamu_pond.moveObject(1, 6, 3, 5)
+            mamu_pond.addEntity(3, 5, 0x61)
+              
+            mamu_pond.store(rom)
+        for warp in all_warps:
+            # Set icon
+            rom.banks[0x20][0x168B + warp] = 0xF8
+            # Set text
+            if not rom.banks[0x01][0x1959 + warp]:
+                rom.banks[0x01][0x1959 + warp] = 0x42
+
+            # rom.banks[0x20][0x178B + 0x95] = 0x8
 
         rom.banks[0x01][0x1909 + 0x42] = 0x2B
-        from .utils import formatText
+        
+        
         rom.texts[0x02B] = formatText('Warp')
-
-        # rom.banks[0x20][0x178B + 0x95] = 0x8
+        
         rom.patch(0x01, 0x17C3, None, assembler.ASM("""    
         call $7E7B
         ret
         """))
-        rom.patch(0x01, 0x3E7B, None, assembler.ASM("""    
+        # TODO fix the jumps
+        warp_jump = "".join(f"cp ${hex(warp)[2:]}\njr success\n" for warp in all_warps)
+        print(warp_jump)
+        rom.patch(0x01, 0x3E7B, None, assembler.ASM(f"""    
 TeleportHandler:
 
     ld  a, [$DBB4]
     ; Check cursor against different tiles
     
 
-    cp   01
-    jr   nz, warp95
-    
-    jr success
-warp95:
-    cp   $95
-    jr   nz, warp2C
-    
+    {warp_jump}
 
-
-    jr success
-warp2C:
-    cp   $2C
-    jr   nz, warpEC
-    
-    jr success
-warpEC:
-    cp   $EC
-    jr   nz, exit
-
-    jr success
+    jr exit
 
 success:
-
 
     ld   a, $0B                      ; Otherwise, warp somewhere ; $57C3: $3E $0B
     ld   [$DB95], a                       ; $57C5: $EA $95 $DB
