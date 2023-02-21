@@ -36,7 +36,9 @@ Then follow the steps below.
 13. Set Build Options.
   - Recommended: `-jn` where `n` is the Number of CPU Cores, to build faster.
   - Recommended: Add EXTERNAL_DATA=1 to the build options.
-SM64EX will now be compiled. The Launcher will appear to have crashed, but this is not likely the case. Best wait a bit, but there may be a problem if it takes longer than 10 Minutes
+SM64EX will now be compiled. The Launcher will appear to have crashed, but this is not likely the case. Wait for it to finish.
+- There may be a problem if it takes longer than 10 minutes.
+
 
 After it's done, the Build list should have another entry titled with what you named the folder in step 7.
 
