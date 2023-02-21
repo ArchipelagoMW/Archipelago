@@ -12,7 +12,7 @@ import io
 import collections
 import importlib
 import logging
-from typing import BinaryIO, Coroutine, Optional, Set
+from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
 
 from yaml import load, load_all, dump, SafeLoader
 
@@ -662,7 +662,10 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
 
 def title_sorted(data: typing.Sequence, key=None, ignore: typing.Set = frozenset(("a", "the"))):
     """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
-    def sorter(element: str) -> str:
+    def sorter(element: Union[str, Dict[str, Any]]) -> str:
+        if (not isinstance(element, str)):
+            element = element["title"]
+
         parts = element.split(maxsplit=1)
         if parts[0].lower() in ignore:
             return parts[1].lower()

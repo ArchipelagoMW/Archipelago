@@ -45,14 +45,19 @@ class FF1World(World):
         self.locked_items = []
         self.locked_locations = []
 
-    def generate_early(self):
-        return
+    @classmethod
+    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
+        # Fail generation if there are no items in the pool
+        for player in multiworld.get_game_players(cls.game):
+            options = get_options(multiworld, 'items', player)
+            assert options,\
+                f"FFR settings submitted with no key items ({multiworld.get_player_name(player)}). Please ensure you " \
+                f"generated the settings using finalfantasyrandomizer.com AND enabled the AP flag"
 
     def create_regions(self):
         locations = get_options(self.multiworld, 'locations', self.player)
         rules = get_options(self.multiworld, 'rules', self.player)
-        menu_region = self.ff1_locations.create_menu_region(self.player, locations, rules)
-        menu_region.multiworld = self.multiworld
+        menu_region = self.ff1_locations.create_menu_region(self.player, locations, rules, self.multiworld)
         terminated_event = Location(self.player, CHAOS_TERMINATED_EVENT, EventId, menu_region)
         terminated_item = Item(CHAOS_TERMINATED_EVENT, ItemClassification.progression, EventId, self.player)
         terminated_event.place_locked_item(terminated_item)
@@ -66,8 +71,8 @@ class FF1World(World):
             terminated_event.access_rule = goal_rule_and_shards
         if "MARK" in items.keys():
             # Fail generation for Noverworld and provide link to old FFR website
-            raise Exception("FFR Noverworld seeds must be generated on an older version of FFR. Please ensure you generated the settings using "
-                            "4-4-0.finalfantasyrandomizer.com")
+            raise Exception("FFR Noverworld seeds must be generated on an older version of FFR. Please ensure you "
+                            "generated the settings using 4-4-0.finalfantasyrandomizer.com")
         menu_region.locations.append(terminated_event)
         self.multiworld.regions += [menu_region]
 
@@ -86,10 +91,6 @@ class FF1World(World):
             if possible_early_items:
                 progression_item = self.multiworld.random.choice(possible_early_items)
                 self._place_locked_item_in_sphere0(progression_item)
-        else:
-            # Fail generation if there are no items in the pool
-            raise Exception("FFR settings submitted with no key items. Please ensure you generated the settings using "
-                            "finalfantasyrandomizer.com AND enabled the AP flag")
 
         items = [self.create_item(name) for name, data in items.items() for x in range(data['count']) if name not in
                  self.locked_items]

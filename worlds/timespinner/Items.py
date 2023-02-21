@@ -6,6 +6,7 @@ class ItemData(NamedTuple):
     count: int = 1
     progression: bool = False
     useful: bool = False
+    trap: bool = False
 
 # A lot of items arent normally dropped by the randomizer as they are mostly enemy drops, but they can be enabled if desired
 item_table: Dict[str, ItemData] = {
@@ -190,7 +191,15 @@ item_table: Dict[str, ItemData] = {
     'Hope Ring': ItemData('Orb Passive', 1337178),
     'Max HP': ItemData('Stat', 1337179, 12),
     'Max Aura': ItemData('Stat', 1337180, 13),
-    # 1337181 - 1337248 Reserved
+    'Timeworn Warp Beacon': ItemData('Relic', 1337181, progression=True),
+    'Modern Warp Beacon': ItemData('Relic', 1337182, progression=True),
+    'Mysterious Warp Beacon': ItemData('Relic', 1337183, progression=True),
+    'Meteor Sparrow Trap': ItemData('Trap', 1337184, 0, trap=True),
+    'Poison Trap': ItemData('Trap', 1337185, 0, trap=True),
+    'Chaos Trap': ItemData('Trap', 1337186, 0, trap=True),
+    'Neurotoxin Trap': ItemData('Trap', 1337187, 0, trap=True),
+    'Bee Trap': ItemData('Trap', 1337188, 0, trap=True),
+    # 1337189 - 1337248 Reserved
     'Max Sand': ItemData('Stat', 1337249, 14)
 }
 
@@ -228,19 +237,6 @@ starter_spells: Tuple[str, ...] = (
     'Djinn Inferno',
     'Bombardment',
     'Corruption'
-)
-
-# weighted
-starter_progression_items: Tuple[str, ...] = (
-    'Talaria Attachment',
-    'Talaria Attachment',
-    'Succubus Hairpin',
-    'Succubus Hairpin',
-    'Timespinner Wheel',
-    'Timespinner Wheel',
-    'Twin Pyramid Key',
-    'Celestial Sash',
-    'Lightwall'
 )
 
 filler_items: Tuple[str, ...] = (

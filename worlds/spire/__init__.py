@@ -1,6 +1,6 @@
 import string
 
-from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, RegionType, Tutorial
+from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 from .Items import event_item_pairs, item_pool, item_table
 from .Locations import location_table
 from .Options import spire_options
@@ -85,8 +85,7 @@ class SpireWorld(World):
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, RegionType.Generic, name, player)
-    ret.multiworld = world
+    ret = Region(name, player, world)
     if locations:
         for location in locations:
             loc_id = location_table.get(location, 0)
