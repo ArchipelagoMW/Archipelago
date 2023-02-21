@@ -7,7 +7,7 @@ import yaml
 from jinja2 import Template
 
 import Options
-from Utils import __version__, local_path, get_annotations
+from Utils import __version__, local_path
 from worlds.AutoWorld import AutoWorldRegister
 
 handled_in_js = {"start_inventory", "local_items", "non_local_items", "start_hints", "start_location_hints",
@@ -58,9 +58,9 @@ def create():
     for game_name, world in AutoWorldRegister.world_types.items():
 
         all_options: typing.Dict[str, Options.AssembleOptions] = {
-            **get_annotations(Options.CommonOptions, eval_str=True),
-            **get_annotations(Options.PerGameCommonOptions, eval_str=True),
-            **get_annotations(world.options_dataclass, eval_str=True)
+            **typing.get_type_hints(Options.CommonOptions),
+            **typing.get_type_hints(Options.PerGameCommonOptions),
+            **typing.get_type_hints(world.options_dataclass)
         }
         with open(local_path("WebHostLib", "templates", "options.yaml")) as f:
             file_data = f.read()
