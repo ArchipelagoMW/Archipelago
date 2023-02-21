@@ -17,7 +17,7 @@ from worlds.alttp.Items import ItemFactory
 
 class WorldTestBaseRegister(type):
     def __new__(mcs, name: str, bases: typing.Tuple[type, ...], dct: typing.Dict[str, typing.Any]):
-        if "game" in dct or hasattr(bases, "game"):
+        if ("game" in dct or hasattr(bases, "game")) and ("options" in dct or getattr(bases, "options", {})):
             if "auto_construct" in dct and dct["auto_construct"]:
                 def testAllStateCanReachEverything(self):
                     print(f"running test for {self.game}")
