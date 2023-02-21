@@ -20,7 +20,6 @@ class WorldTestBaseRegister(type):
         if ("game" in dct or hasattr(bases, "game")) and ("options" in dct or getattr(bases, "options", {})):
             if "auto_construct" in dct and dct["auto_construct"]:
                 def testAllStateCanReachEverything(self):
-                    print(f"running test for {self.game}")
                     with self.subTest("Game", game=self.game):
                         excluded = self.multiworld.exclude_locations[1].value
                         state = self.multiworld.get_all_state(False)
@@ -38,7 +37,6 @@ class WorldTestBaseRegister(type):
             else:
                 def testAllStateCanReachEverything(self):
                     self.world_setup()
-                    print(f"running test for {self.game}")
                     with self.subTest("Game", game=self.game):
                         excluded = self.multiworld.exclude_locations[1].value
                         state = self.multiworld.get_all_state(False)
