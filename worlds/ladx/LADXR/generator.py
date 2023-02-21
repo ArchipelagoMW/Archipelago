@@ -127,7 +127,7 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
     patches.core.fixWrongWarp(rom)
     patches.core.alwaysAllowSecretBook(rom)
     patches.core.injectMainLoop(rom)
-    
+
     from ..Options import ShuffleSmallKeys, ShuffleNightmareKeys
 
     if ap_settings["shuffle_small_keys"] != ShuffleSmallKeys.option_original_dungeon or  ap_settings["shuffle_nightmare_keys"] != ShuffleNightmareKeys.option_original_dungeon:
@@ -231,7 +231,7 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
         patches.core.quickswap(rom, 1)
     elif settings.quickswap == 'b':
         patches.core.quickswap(rom, 0)
-    
+
     # TODO: hints bad
 
     world_setup = logic.world_setup
@@ -279,7 +279,7 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
 
         # TODO: if 0 or 4, 5, remove inaccurate conveyor tiles
 
-        
+
         room_editor = RoomEditor(rom, 0x2A0)
 
         if ap_settings["trendy_game"] == TrendyGame.option_easy:
@@ -308,12 +308,12 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
                 }
                 def speed():
                     return rnd.randint(*speeds[ap_settings["trendy_game"]])
-                rom.banks[0x4][0x76A0-0x4000] = 0xFF - speed()                
+                rom.banks[0x4][0x76A0-0x4000] = 0xFF - speed()
                 rom.banks[0x4][0x76A2-0x4000] = speed()
                 rom.banks[0x4][0x76A6-0x4000] = speed()
                 rom.banks[0x4][0x76A8-0x4000] = 0xFF - speed()
                 if int(ap_settings["trendy_game"]) >= TrendyGame.option_hardest:
-                    rom.banks[0x4][0x76A1-0x4000] = 0xFF - speed()                
+                    rom.banks[0x4][0x76A1-0x4000] = 0xFF - speed()
                     rom.banks[0x4][0x76A3-0x4000] = speed()
                     rom.banks[0x4][0x76A5-0x4000] = speed()
                     rom.banks[0x4][0x76A7-0x4000] = 0xFF - speed()
@@ -330,12 +330,12 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
             [0x0f, 0x38, 0x0f],
             [0x30, 0x62, 0x30],
             [0x8b, 0xac, 0x0f],
-            [0x9b, 0xbc, 0x0f], 
+            [0x9b, 0xbc, 0x0f],
         ]
         for color in gb_colors:
             for channel in range(3):
                 color[channel] = color[channel] * 31 // 0xbc
-        
+
 
     palette = ap_settings["palette"]
     if palette != Palette.option_normal:
@@ -375,7 +375,7 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
             for address in range(start, end, 2):
                 packed = (rom.banks[bank][address + 1] << 8) | rom.banks[bank][address]
                 r,g,b = bin_to_rgb(packed)
-                
+
                 # 1 bit
                 if palette == Palette.option_1bit:
                     r &= 0b10000
@@ -411,10 +411,47 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
                 rom.banks[bank][address + 1] = packed >> 8
     WARP_PATCH = True
     if WARP_PATCH:
+        # Interesting - 3CA0 should be free, but something has pushed all the code forward a byte
+        rom.patch(0x02, 0x3CA1, None, assembler.ASM("""
+            ld   e, $0F
+            ld   d, $00
+        warp_search_loop:
+            ; Warp search loop
+            ld   hl, $C3A0
+            add  hl, de                     ; $5FE1: $19
+            ld   a, [hl]                    ; $5FE2: $7E
+            cp   $61 ; ENTITY_WARP
+            jr   nz, search_continue        ; if it's not a warp, check the next one
+            ld   hl, $C280
+            add  hl, de
+            ld   a, [hl]
+            and  a
+            jr   z, search_continue         ; if this is despawned, check the next one
+        found:
+            jp   $511B                      ; found
+        search_continue:
+            dec  e
+            ld   a, e
+            cp   $FF
+            jr   nz, warp_search_loop
+        
+        not_found:
+            jp   $512B
+
+        """))
+        rom.patch(0x02, 0x1109, assembler.ASM("""
+        ldh a, [$F6]
+        cp 1
+        
+        """), assembler.ASM("""
+        jp $7CA1
+        nop
+        """))
+
         # On warp hole, open map instead
         rom.patch(0x19, 0x1DB9, None, assembler.ASM("""
             ld a, 7       ; Set GAMEPLAY_MAP
-            ld [$DB95], a 
+            ld [$DB95], a
             ld a, 0       ; reset subtype
             ld [$DB96], a
             ld [$FFA2], a ; reset link z position
@@ -435,7 +472,7 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
         # Allow warp with just B
         rom.banks[0x01][0x17C0] = 0x20
         rom.banks[0x01][0x1803] = 0x20
-        
+
         # Patch the icon for all teleports
         all_warps = [0x01, 0x95, 0x2C, 0xEC]
 
@@ -451,7 +488,7 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
             mamu_pond.changeObject(1, 6, 0xE8)
             mamu_pond.moveObject(1, 6, 3, 5)
             mamu_pond.addEntity(3, 5, 0x61)
-              
+
             mamu_pond.store(rom)
         for warp in all_warps:
             # Set icon
@@ -463,23 +500,23 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
             # rom.banks[0x20][0x178B + 0x95] = 0x8
 
         rom.banks[0x01][0x1909 + 0x42] = 0x2B
-        
-        
+
+
         rom.texts[0x02B] = formatText('Warp')
-        
-        rom.patch(0x01, 0x17C3, None, assembler.ASM("""    
+
+        rom.patch(0x01, 0x17C3, None, assembler.ASM("""
         call $7E7B
         ret
         """))
         # TODO fix the jumps
         warp_jump = "".join(f"cp ${hex(warp)[2:]}\njr success\n" for warp in all_warps)
         print(warp_jump)
-        rom.patch(0x01, 0x3E7B, None, assembler.ASM(f"""    
+        rom.patch(0x01, 0x3E7B, None, assembler.ASM(f"""
 TeleportHandler:
 
     ld  a, [$DBB4]
     ; Check cursor against different tiles
-    
+
 
     {warp_jump}
 
@@ -494,7 +531,7 @@ success:
     ld   [$D402], a                           ; $57D0: $EA $02 $D4 wWarp0Map
     ld   a, [$DBB4]                               ; $57D3: $FA $B4 $DB wDBB4
     ld   [$D403], a                          ; $57D6: $EA $03 $D4 wWarp0Room
-    
+
     ld   a, $68
     ld   [$D404], a                  ; $57DB: $EA $04 $D4 wWarp0DestinationX
     ldh  [$98], a
