@@ -288,7 +288,7 @@ def get_mission_table(multiworld: MultiWorld, player: int):
             level_active_missions: typing.List[int] = copy.deepcopy(active_missions[level_style])
             level_chosen_missions: typing.List[int] = []
 
-            # The first mission must be M1, M2, or M4
+            # The first mission must be M1, M2, M3, or M4
             first_mission = 1
 
             if multiworld.mission_shuffle[player]:

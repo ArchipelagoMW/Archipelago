@@ -3,8 +3,8 @@ import typing
 from BaseClasses import MultiWorld
 from .Names import LocationName, ItemName
 from .Locations import boss_gate_set
-from ..AutoWorld import LogicMixin
-from ..generic.Rules import add_rule, set_rule, CollectionRule
+from worlds.AutoWorld import LogicMixin
+from worlds.generic.Rules import add_rule, set_rule, CollectionRule
 from .GateBosses import boss_has_requirement
 from .Missions import stage_name_prefixes, mission_orders
 

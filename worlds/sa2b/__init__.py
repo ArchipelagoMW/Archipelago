@@ -9,7 +9,7 @@ from .Regions import create_regions, shuffleable_regions, connect_regions, Level
     gate_0_blacklist_regions
 from .Rules import set_rules
 from .Names import ItemName, LocationName
-from ..AutoWorld import WebWorld, World
+from worlds.AutoWorld import WebWorld, World
 from .GateBosses import get_gate_bosses, get_boss_name
 from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions
 import Patch
