@@ -35,7 +35,7 @@ def get_species_by_name(name: str):
 
 def create_species(name, constant_name):
     global data
-    return PokemonSpecies(name, data["constants"]["species"][constant_name])
+    return PokemonSpecies(name, data["constants"][constant_name])
 
 
 def get_national_pokedex():
