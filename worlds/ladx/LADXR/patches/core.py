@@ -255,8 +255,9 @@ noWrapDown:
     """ % (type, map, room, x, y)), fill_nop=True)
 
    # Patch the RAM clear not to delete our custom dialog when we screen transition
+   # This is kind of horrible as it relies on bank 1 being loaded, lol
     rom.patch(0x01, 0x042C, "C629", "6B7E")
-    rom.patch(0x01, 0x3E6B, 0x3FFF, ASM("""
+    rom.patch(0x01, 0x3E6B, 0x3E7B, ASM("""
         ld bc, $A0
         call $29DC
         ld bc, $1200

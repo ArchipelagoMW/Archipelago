@@ -411,6 +411,7 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
                 rom.banks[bank][address + 1] = packed >> 8
     WARP_PATCH = True
     if WARP_PATCH:
+        # On warp hole, open map instead
         rom.patch(0x19, 0x1DB9, None, assembler.ASM("""
             ld a, 7       ; Set GAMEPLAY_MAP
             ld [$DB95], a 
@@ -422,16 +423,82 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
             ldh  a, [$99] ; bump link down a bit
             add  a, $10
             ldh  [$99], a
+            
+            ld a, 1         ; Set flag for using teleport
+            ld [$FFDD], a
+
             ret
         """), fill_nop=True)
 
-        # Always allow warping, for a moment
-        # TODO: check byte instead
-        rom.banks[0x01][0x17BB] = 0
-        rom.banks[0x01][0x17BC] = 0
-        rom.banks[0x01][0x1802] = 0
-        rom.banks[0x01][0x1803] = 0
-    # rom.banks[0][3] = 1
+        # Use this check byte for deciding if warp allowed
+        rom.banks[0x01][0x17B8] = 0xDD
+        rom.banks[0x01][0x17B9] = 0xFF
+        rom.banks[0x01][0x17FD] = 0xDD
+        rom.banks[0x01][0x17FE] = 0xFF
+
+        # Allow warp with just B
+        rom.banks[0x01][0x17C0] = 0x20
+        rom.banks[0x01][0x1803] = 0x20
+        rom.patch(0x01, 0x17C3, None, assembler.ASM("""    
+        call $7E7B
+        ret
+        """))
+        rom.patch(0x01, 0x3E7B, None, assembler.ASM("""    
+TeleportHandler:
+
+    ld  a, [$DBB4]
+    ; Check cursor against different tiles
+    
+
+    cp   01
+    jr   nz, warp95
+    
+    jr success
+warp95:
+    cp   $95
+    jr   nz, warp2C
+    
+
+
+    jr success
+warp2C:
+    cp   $2C
+    jr   nz, warpEC
+    
+    jr success
+warpEC:
+    cp   $EC
+    jr   nz, exit
+
+    jr success
+
+success:
+
+
+    ld   a, $0B                      ; Otherwise, warp somewhere ; $57C3: $3E $0B
+    ld   [$DB95], a                       ; $57C5: $EA $95 $DB
+    ld   a, $00                                   ; $57CB: $3E $00
+    ld   [$D401], a                   ; $57CD: $EA $01 $D4 wWarp0MapCategory
+    ld   [$D402], a                           ; $57D0: $EA $02 $D4 wWarp0Map
+    ld   a, [$DBB4]                               ; $57D3: $FA $B4 $DB wDBB4
+    ld   [$D403], a                          ; $57D6: $EA $03 $D4 wWarp0Room
+    
+    ld   a, $68
+    ld   [$D404], a                  ; $57DB: $EA $04 $D4 wWarp0DestinationX
+    ldh  [$98], a
+    ld   a, $70
+    ld   [$D405], a                  ; $57E0: $EA $05 $D4 wWarp0DestinationY
+    ldh  [$99], a
+    ld   a, $66                                   ; $425D: $3E $45
+    ld   [$D416], a             ; $425F: $EA $16 $D4
+    ld   a, $07                                   ; $57F4: $3E $07
+    ld   [$DB96], a                    ; $57F6: $EA $96 $DB wGameplaySubtype
+    call $0C7D       ; $57C8: $CD $7D $0C
+
+exit:
+    ret
+        """))
+    
 
     SEED_LOCATION = 0x0134
     SEED_SIZE = 10
