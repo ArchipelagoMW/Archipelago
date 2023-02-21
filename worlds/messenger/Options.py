@@ -18,8 +18,10 @@ class PowerSeals(DefaultOnToggle):
 
 class Goal(Choice):
     """Requirement to finish the game. Shop Chest will force seals to be shuffled."""
-    option_phantom = 0
-    option_shop_chest = 1
+    option_music_box_and_phantom = 0
+    option_phantom = 1
+    option_shop_chest = 2
+    option_shop_chest_and_music_box = 3
 
 
 class NotesNeeded(Range):

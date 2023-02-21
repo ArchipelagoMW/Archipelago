@@ -22,10 +22,8 @@ class MessengerRegion(Region):
     def add_locations(self) -> None:
         for loc in REGIONS[self.name]:
             self.locations.append(MessengerLocation(loc, self))
-        if self.name == "The Shop" and self.multiworld.goal[self.player] == Goal.option_shop_chest:
+        if self.name == "The Shop" and self.multiworld.goal[self.player] > Goal.option_phantom:
             self.locations.append(MessengerLocation("Shop Chest", self))
-        elif self.name == "Music Box" and self.multiworld.goal[self.player] != Goal.option_shop_chest:
-            self.locations.append(MessengerLocation("Rescue Phantom", self))
         if self.multiworld.shuffle_seals[self.player]:
             # putting some dumb special case for searing crags and ToT so i can split them into 2 regions
             seal_locs = [loc for loc in SEALS

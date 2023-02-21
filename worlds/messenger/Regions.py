@@ -22,7 +22,7 @@ REGIONS: Dict[str, Set[str]] = {  # seal locations have the region in their name
     "Sunken Shrine": {"Ninja Tabi", "Sun Crest", "Moon Crest", "Key of Love"},
     "Elemental Skylands": {"Key of Symbiosis"},
     "Corrupted Future": {"Key of Courage"},
-    "Music Box": {}
+    "Music Box": {"Rescue Phantom"}
 }
 
 

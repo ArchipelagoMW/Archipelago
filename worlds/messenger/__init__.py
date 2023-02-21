@@ -8,6 +8,7 @@ from .Options import messenger_options, NotesNeeded, Goal, PowerSeals
 from .Regions import REGIONS, REGION_CONNECTIONS
 from .Rules import MessengerRules, set_self_locking_items
 from .SubClasses import MessengerRegion, MessengerItem
+from worlds.generic.Rules import set_rule
 
 
 class MessengerWeb(WebWorld):
@@ -57,18 +58,15 @@ class MessengerWorld(World):
     web = MessengerWeb()
 
     rules: MessengerRules
-    total_seals: int
-    required_seals: int
+    total_seals: int = None
+    required_seals: int = None
 
     def generate_early(self) -> None:
         self.rules = MessengerRules(self.player)
-        if self.multiworld.goal[self.player] == Goal.option_shop_chest:
+        if self.multiworld.goal[self.player] > Goal.option_phantom:
             self.multiworld.shuffle_seals[self.player].value = PowerSeals.option_true
             self.total_seals = self.multiworld.total_seals[self.player].value
             self.required_seals = int(self.multiworld.percent_seals_required[self.player].value / 100 * self.total_seals)
-        else:
-            self.total_seals = 0
-            self.required_seals = 0
 
     def create_regions(self) -> None:
         for region in REGIONS:
@@ -115,17 +113,15 @@ class MessengerWorld(World):
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
-        if self.multiworld.goal[self.player] == Goal.option_shop_chest:
-            self.multiworld.get_location("Shop Chest", self.player).access_rule = lambda state: state.has("Power Seal", self.player, self.required_seals)
+        if self.multiworld.goal[self.player] > Goal.option_phantom:
+            set_rule(self.multiworld.get_region("Music Box", self.player).entrances[0],
+                     lambda state: state.has("Shop Chest", self.player))
 
         if self.multiworld.enable_logic[self.player]:
-            if self.multiworld.goal[self.player] == Goal.option_shop_chest:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has("Shop Chest", self.player)
-            else:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has("Rescue Phantom", self.player)
+            self.multiworld.completion_condition[self.player] = lambda state: state.has("Rescue Phantom", self.player)
         else:
             self.multiworld.accessibility[self.player].value = Accessibility.option_minimal
-        if self.multiworld.accessibility[self.player] == Accessibility.option_items:
+        if self.multiworld.accessibility[self.player] > Accessibility.option_locations:
             set_self_locking_items(self.multiworld, self.player)
 
     def fill_slot_data(self) -> Dict[str, Any]:

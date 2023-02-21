@@ -60,6 +60,8 @@ class MessengerRules:
             "Elemental Skylands Seal - Fire": lambda state: self.has_dart(state, player),
             # corrupted future
             "Key of Courage": lambda state: state.has_all({"Demon King Crown", "Fairy Bottle"}, player),
+            # the shop
+            "Shop Chest": lambda state: self.has_enough_seals(state, player)
         }
 
     def has_wingsuit(self, state: CollectionState, player: int) -> bool:
@@ -73,6 +75,10 @@ class MessengerRules:
 
     def has_vertical(self, state: CollectionState, player: int) -> bool:
         return self.has_wingsuit(state, player) or self.has_dart(state, player)
+
+    def has_enough_seals(self, state: CollectionState, player: int) -> bool:
+        required_seals = state.multiworld.worlds[player].required_seals
+        return state.has("Power Seal", player, required_seals)
 
 
 def set_self_locking_items(multiworld: MultiWorld, player: int) -> None:
