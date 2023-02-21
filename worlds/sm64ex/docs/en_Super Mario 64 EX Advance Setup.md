@@ -21,18 +21,21 @@ First, install [MSYS](https://www.msys2.org/) as described on the page.
 Then follow the steps below.
 
 
-1. Go to the page linked for sm64pclauncher, and press on the topmost entry
-3. Scroll down, and download the zip file
-4. Unpack the zip file in an empty folder
+1. Go to the page linked for sm64pclauncher, and press on the topmost entry.
+3. Scroll down, and download the zip file.
+4. Unpack the zip file into an empty folder.
 5. Run the Launcher and press build.
-6. Set the location where you installed MSYS when prompted. Check the "Install Dependencies" Checkbox
-7. Set the Repo link to `https://github.com/N00byKing/sm64ex` and the Branch to `archipelago` (Top two boxes). You can choose the folder (Secound Box) at will, as long as it does not exist yet
-8. Set the location for the Models Pack
-9. Set the location for the Texture Pack
-10. Point the Launcher to your Super Mario 64 US/JP Rom, and set the Region correspondingly
-11. Copy the .patch file/s to the enachancements folder which is located in e.g. C:/sm64pclauncher/apmario/enhancements NOTE: outside patches may break the game. Only the ones supplied with the repo are tested
-12. click on refresh patchlist click on the patchs you want
-13. Set Build Options. Recommended: `-jn` where `n` is the Number of CPU Cores, to build faster and add EXTERNAL_DATA=1 to the build options
+6. When prompted, set the location where you installed MSYS. Check the "Install Dependencies" Checkbox.
+7. Set the Repo link to `https://github.com/N00byKing/sm64ex` and the Branch to `archipelago` (Top two boxes). You can choose the folder (Second Box) at will, as long as it does not exist yet.
+8. Set the location for the Models Pack.
+9. Set the location for the Texture Pack.
+10. Point the Launcher to your Super Mario 64 US/JP Rom, and set the Region correspondingly.
+11. Copy the .patch file/s to the enhancements folder which is located in e.g. `C:/sm64pclauncher/apmario/enhancements`.
+  - NOTE: outside patches may break the game. Only the ones supplied with the repo are tested.
+12. Click on refresh patchlist. Click on the patches you want
+13. Set Build Options.
+  - Recommended: `-jn` where `n` is the Number of CPU Cores, to build faster.
+  - Recommended: Add EXTERNAL_DATA=1 to the build options.
 SM64EX will now be compiled. The Launcher will appear to have crashed, but this is not likely the case. Best wait a bit, but there may be a problem if it takes longer than 10 Minutes
 
 After it's done, the Build list should have another entry titled with what you named the folder in step 7.
