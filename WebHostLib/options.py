@@ -57,11 +57,8 @@ def create():
 
     for game_name, world in AutoWorldRegister.world_types.items():
 
-        all_options: typing.Dict[str, Options.AssembleOptions] = {
-            **typing.get_type_hints(Options.CommonOptions),
-            **typing.get_type_hints(Options.PerGameCommonOptions),
-            **typing.get_type_hints(world.options_dataclass)
-        }
+        all_options: typing.Dict[str, Options.AssembleOptions] = typing.get_type_hints(world.options_dataclass)
+
         with open(local_path("WebHostLib", "templates", "options.yaml")) as f:
             file_data = f.read()
         res = Template(file_data).render(
