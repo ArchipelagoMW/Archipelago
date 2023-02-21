@@ -42,8 +42,8 @@ SM64EX will now be compiled. The Launcher will appear to have crashed, but this 
 
 After it's done, the Build list should have another entry titled with what you named the folder in step 7.
 
-NOTE: For some reason first start of the game always crashes the launcher. Just restart it.
-If it still crashes, recheck if you typed the launch options correctly (Described in "Joining a MultiWorld Game")
+NOTE: For some reason, starting the game for the first time always crashes the launcher. Just restart it.
+- If it still crashes, check if you typed the launch options correctly (described in "Joining a MultiWorld Game")
 
 # Manual Compilation (Linux/Windows)
 
