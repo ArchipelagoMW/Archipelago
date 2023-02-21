@@ -15,6 +15,28 @@ from BaseClasses import MultiWorld, CollectionState, ItemClassification, Item
 from worlds.alttp.Items import ItemFactory
 
 
+class WorldTestBaseRegister(type):
+    def __new__(mcs, name: str, bases: typing.Tuple[type, ...], dct: typing.Dict[str, typing.Any]):
+        if "game" in dct:
+            def testAllStateCanReachEverything(self):
+                with self.subTest("Game", game=self.game):
+                    excluded = self.multiworld.exclude_locations[1].value
+                    state = self.multiworld.get_all_state(False)
+                    for location in self.multiworld.get_locations():
+                        if location.name not in excluded:
+                            with self.subTest("Location should be reached", location=location):
+                                self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
+
+            def testEmptyStateCanReachSomething(self):
+                with self.subTest("Game", game=self.game):
+                    state = CollectionState(self.multiworld)
+                    locations = self.multiworld.get_reachable_locations(state, 1)
+                    self.assertGreater(len(locations), 0,
+                                       "Need to be able to reach at least one location to get started.")
+
+        return super(WorldTestBaseRegister, mcs).__new__(mcs, name, bases, dct)
+
+
 class TestBase(unittest.TestCase):
     multiworld: MultiWorld
     _state_cache = {}
@@ -99,7 +121,7 @@ class TestBase(unittest.TestCase):
         return self.get_state(items)
 
 
-class WorldTestBase(unittest.TestCase):
+class WorldTestBase(unittest.TestCase, metaclass=WorldTestBaseRegister):
     options: typing.Dict[str, typing.Any] = {}
     multiworld: MultiWorld
 
