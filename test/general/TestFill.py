@@ -1,4 +1,5 @@
 import itertools
+from argparse import Namespace
 from typing import get_type_hints, List, Iterable
 import unittest
 
@@ -8,14 +9,14 @@ from worlds.AutoWorld import World
 from Fill import FillError, balance_multiworld_progression, fill_restrictive, \
     distribute_early_items, distribute_items_restrictive
 from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, Item, Location, \
-    ItemClassification
+    ItemClassification, CollectionState
 from worlds.generic.Rules import CollectionRule, add_item_rule, locality_rules, set_rule
 
 
 def generate_multi_world(players: int = 1) -> MultiWorld:
     multi_world = MultiWorld(players)
     multi_world.player_name = {}
-    args = multi_world.default_common_options
+    multi_world.state = CollectionState(multi_world)
     for i in range(players):
         player_id = i+1
         world = World(multi_world, player_id)
@@ -24,12 +25,13 @@ def generate_multi_world(players: int = 1) -> MultiWorld:
         multi_world.player_name[player_id] = "Test Player " + str(player_id)
         region = Region("Menu", player_id, multi_world, "Menu Region Hint")
         multi_world.regions.append(region)
-
-        for option_key in itertools.chain(Options.common_options, Options.per_game_common_options):
-            option_value = getattr(args, option_key, {})
-            setattr(multi_world, option_key, option_value)
-            # TODO - remove this loop once all worlds use options dataclasses
-        world.o = world.options_dataclass(**{option_key: getattr(args, option_key)[player_id]
+        for option_key, option in get_type_hints(Options.PerGameCommonOptions).items():
+            if hasattr(multi_world, option_key):
+                getattr(multi_world, option_key).setdefault(player_id, option.from_any(getattr(option, "default")))
+            else:
+                setattr(multi_world, option_key, {player_id: option.from_any(getattr(option, "default"))})
+        # TODO - remove this loop once all worlds use options dataclasses
+        world.o = world.options_dataclass(**{option_key: getattr(multi_world, option_key)[player_id]
                                              for option_key in get_type_hints(world.options_dataclass)})
 
     multi_world.set_seed(0)

@@ -1,24 +1,16 @@
-import unittest
-from argparse import Namespace
-
-from BaseClasses import MultiWorld, CollectionState, ItemClassification
+from BaseClasses import CollectionState, ItemClassification
 from worlds.alttp.Dungeons import create_dungeons, get_dungeon_item_pool
 from worlds.alttp.EntranceShuffle import mandatory_connections, connect_simple
 from worlds.alttp.ItemPool import difficulties, generate_itempool
 from worlds.alttp.Items import ItemFactory
 from worlds.alttp.Regions import create_regions
 from worlds.alttp.Shops import create_shops
-from worlds.alttp.Rules import set_rules
-from worlds import AutoWorld
+from worlds.alttp.test import LTTPTestBase
 
 
-class TestDungeon(unittest.TestCase):
+class TestDungeon(LTTPTestBase):
     def setUp(self):
-        self.multiworld = MultiWorld(1)
-        args = self.multiworld.default_common_options
-        for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
-            setattr(args, name, {1: option.from_any(option.default)})
-        self.multiworld.set_options(args)
+        self.world_setup()
         self.starting_regions = []  # Where to start exploring
         self.remove_exits = []      # Block dungeon exits
         self.multiworld.difficulty_requirements[1] = difficulties['normal']

@@ -234,8 +234,7 @@ class MultiWorld():
             self.custom_data[player] = {}
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
             self.worlds[player] = world_type(self, player)
-            for option_key in itertools.chain(Options.common_options, Options.per_game_common_options,
-                                              world_type.option_definitions):
+            for option_key in typing.get_type_hints(world_type.options_dataclass):
                 option_values = getattr(args, option_key, {})
                 setattr(self, option_key, option_values)
                 # TODO - remove this loop once all worlds use options dataclasses
@@ -301,15 +300,6 @@ class MultiWorld():
             group["local_items"] = item_link["local_items"]
             group["non_local_items"] = item_link["non_local_items"]
             group["link_replacement"] = replacement_prio[item_link["link_replacement"]]
-
-    # intended for unittests
-    @property
-    def default_common_options(self) -> Namespace:
-        self.state = CollectionState(self)
-        args = Namespace()
-        for option_key, option in itertools.chain(Options.common_options.items(), Options.per_game_common_options.items()):
-            setattr(args, option_key, {player_id: option.from_any(option.default) for player_id in self.player_ids})
-        return args
 
     def secure(self):
         self.random = ThreadBarrierProxy(secrets.SystemRandom())
