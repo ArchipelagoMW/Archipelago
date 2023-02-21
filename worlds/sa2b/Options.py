@@ -86,6 +86,24 @@ class DarknessTrapWeight(BaseTrapWeight):
     display_name = "Darkness Trap Weight"
 
 
+class PongTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which forces you to play a Pong minigame
+    """
+    display_name = "Pong Trap Weight"
+
+
+class MinigameTrapDifficulty(Choice):
+    """
+    How difficult any Minigame-style traps are
+    """
+    display_name = "Minigame Trap Difficulty"
+    option_easy = 0
+    option_medium = 1
+    option_hard = 2
+    default = 1
+
+
 class JunkFillPercentage(Range):
     """
     Replace a percentage of non-required emblems in the item pool with random junk items
@@ -572,6 +590,8 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "gravity_trap_weight": GravityTrapWeight,
     "exposition_trap_weight": ExpositionTrapWeight,
     #"darkness_trap_weight": DarknessTrapWeight,
+    "pong_trap_weight": PongTrapWeight,
+    "minigame_trap_difficulty": MinigameTrapDifficulty,
     "ring_loss": RingLoss,
     "sadx_music": SADXMusic,
     "music_shuffle": MusicShuffle,
