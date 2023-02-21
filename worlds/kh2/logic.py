@@ -162,16 +162,16 @@ class KH2Logic(LogicMixin):
     def kh_finalgenie(self, player):
         return self.has(ItemName.Genie, player) and self.has(ItemName.FinalForm, player)
 
-    def kh_crowdcontrol(self, player):
-        return self.kh_magnera(player) and self.has(ItemName.ChickenLittle, player) \
-            or self.kh_magnega(player) and self.kh_mastergenie(player)
-
-    # reflect slapshot reflect
     def kh_rsr(self, player):
         return self.has(ItemName.Slapshot, player, 1) and self.has(ItemName.ComboMaster, player) and self.kh_reflect(player)
 
     def kh_gapcloser(self, player):
         return self.has(ItemName.FlashStep, player, 1) or self.has(ItemName.SlideDash, player)
+    #  Crowd Control and Berserk Hori will be used when I add hard logic.
+
+    def kh_crowdcontrol(self, player):
+        return self.kh_magnera(player) and self.has(ItemName.ChickenLittle, player) \
+            or self.kh_magnega(player) and self.kh_mastergenie(player)
 
     def kh_berserkhori(self, player):
         return self.has(ItemName.HorizontalSlash, player, 1) and self.has(ItemName.BerserkCharge, player)
@@ -188,36 +188,32 @@ class KH2Logic(LogicMixin):
         and self.has(ItemName.FinishingPlus, player, 1)
 
     def kh_roxastools(self, player):
-        return (self.kh_basetools(player) and self.has(ItemName.QuickRun, player))\
-        or self.has(ItemName.NegativeCombo,player, 2)
+        return self.kh_basetools(player) and (self.has(ItemName.QuickRun, player) or self.has(ItemName.NegativeCombo,player, 2))
 
-    def kh_painandpanic(self, player, visitlocking):
-        return self.kh_goofylimit(player) and self.kh_donaldlimit(player) and self.kh_dc_unlocked(player, visitlocking)
+    def kh_painandpanic(self, player):
+        return (self.kh_goofylimit(player) or self.kh_donaldlimit(player)) and self.kh_dc_unlocked(player, 2)
 
-    def kh_cerberuscup(self, player, visitlocking):
+    def kh_cerberuscup(self, player):
         return self.kh_form_level_unlocked(player, 2) and self.kh_thundara(player) \
-            and self.kh_ag_unlocked(player, visitlocking) and self.kh_ht_unlocked(player, visitlocking) \
-            and self.kh_pl_unlocked(player, visitlocking)
+            and self.kh_ag_unlocked(player, 1) and self.kh_ht_unlocked(player, 1) \
+            and self.kh_pl_unlocked(player, 1)
 
-    def kh_titan(self, player: int, visitlocking):
+    def kh_titan(self, player: int):
         return self.kh_summon(player, 2) and (self.kh_thundara(player) or self.kh_magnera(player)) \
-        and self.kh_oc_unlocked(player, visitlocking)
+        and self.kh_oc_unlocked(player, 2)
 
-    def kh_gof(self, player, visitlocking):
-        return self.kh_titan(player, visitlocking) and self.kh_cerberuscup(player, visitlocking)\
-        and self.kh_painandpanic(player, visitlocking) and self.kh_twtnw_unlocked(player, visitlocking)
+    def kh_gof(self, player):
+        return self.kh_titan(player) and self.kh_cerberuscup(player)\
+        and self.kh_painandpanic(player) and self.kh_twtnw_unlocked(player, 1)
 
     def kh_dataroxas(self, player):
         return self.kh_basetools(player) and \
-            (self.has(ItemName.LimitForm, player) and self.kh_form_level_unlocked(player, 3)
-             and self.has( ItemName.TrinityLimit, player) and self.kh_gapcloser(player)) \
-             or (self.has(ItemName.NegativeCombo, player, 2) and self.kh_quickrun(player, 2))
+            ((self.has(ItemName.LimitForm, player) and self.kh_form_level_unlocked(player, 3) and self.has(ItemName.TrinityLimit, player) and self.kh_gapcloser(player))
+             or (self.has(ItemName.NegativeCombo, player, 2) and self.kh_quickrun(player, 2)))
 
     def kh_datamarluxia(self, player):
-        return self.kh_basetools(player) and self.kh_reflera(player) and (self.kh_form_level_unlocked(player, 3)
-                                                                          and (self.has(ItemName.FinalForm,
-                                                                                        player) and self.kh_fira(
-                    player)) or self.has(ItemName.NegativeCombo, player, 2) or self.kh_donaldlimit(player))
+        return self.kh_basetools(player) and self.kh_reflera(player) \
+        and ((self.kh_form_level_unlocked(player, 3) and self.has(ItemName.FinalForm,player) and self.kh_fira(player)) or self.has(ItemName.NegativeCombo, player, 2) or self.kh_donaldlimit(player))
 
     def kh_datademyx(self, player):
         return self.kh_basetools(player) and self.kh_form_level_unlocked(player, 5) and self.kh_firaga(player) \
@@ -229,9 +225,8 @@ class KH2Logic(LogicMixin):
 
     def kh_datasaix(self, player):
         return self.kh_basetools(player) and (self.kh_thunder(player) or self.kh_blizzard(player)) \
-            and self.kh_highjump(player, 2) and self.kh_aerialdodge(player, 2) and self.kh_glide(player,2) \
-            and self.kh_form_level_unlocked(player, 3) \
-            and (self.kh_rsr(player) or self.has(ItemName.NegativeCombo, player, 2 or self.has(ItemName.PeterPan)))
+            and self.kh_highjump(player, 2) and self.kh_aerialdodge(player, 2) and self.kh_glide(player,2) and self.kh_form_level_unlocked(player, 3) \
+            and (self.kh_rsr(player) or self.has(ItemName.NegativeCombo, player, 2) or self.has(ItemName.PeterPan,player))
 
     def kh_dataxaldin(self, player):
         return self.kh_basetools(player) and self.kh_donaldlimit(player) and self.kh_goofylimit(player) \
@@ -243,8 +238,8 @@ class KH2Logic(LogicMixin):
             and (self.has(ItemName.LimitForm, player) or self.has(ItemName.TrinityLimit, player))
 
     def kh_dataxigbar(self, player):
-        return self.kh_basetools(player) and self.kh_donaldlimit(player) and self.has(ItemName.FinalForm, player) and self.kh_form_level_unlocked(player, 3) \
-            and self.kh_reflera(player)
+        return self.kh_basetools(player) and self.kh_donaldlimit(player) and self.has(ItemName.FinalForm, player) \
+            and self.kh_form_level_unlocked(player, 3) and self.kh_reflera(player)
 
     def kh_datavexen(self, player):
         return self.kh_basetools(player) and self.kh_donaldlimit(player) and self.has(ItemName.FinalForm, player) \
@@ -252,21 +247,20 @@ class KH2Logic(LogicMixin):
 
     def kh_datazexion(self, player):
         return self.kh_basetools(player) and self.kh_donaldlimit(player) and self.has(ItemName.FinalForm, player)\
-            and self.kh_form_level_unlocked( player, 3) \
+            and self.kh_form_level_unlocked(player, 3) \
             and self.kh_reflera(player) and self.kh_fira(player)
 
     def kh_dataaxel(self, player):
         return self.kh_basetools(player) \
-            and ( self.kh_reflera(player) and (self.kh_blizzara(player))
-                  or self.has(ItemName.NegativeCombo, player,2))
+            and ((self.kh_reflera(player) and self.kh_blizzara(player)) or self.has(ItemName.NegativeCombo, player, 2))
 
     def kh_dataluxord(self, player):
         return self.kh_basetools(player) and self.kh_reflect(player)
 
     def kh_datalarxene(self, player):
         return self.kh_basetools(player) and self.kh_reflera(player) \
-            and (self.has(ItemName.FinalForm, player) and self.kh_form_level_unlocked(player, 4) and self.kh_fire(player)) \
-            or self.kh_donaldlimit(player)
+            and ((self.has(ItemName.FinalForm, player) and self.kh_form_level_unlocked(player, 4) and self.kh_fire(player))
+            or (self.kh_donaldlimit(player) and self.kh_form_level_unlocked(player, 2)))
 
     def kh_sephi(self, player):
         return self.kh_dataxemnas(player)
@@ -275,10 +269,9 @@ class KH2Logic(LogicMixin):
         return self.kh_reflect(player) or self.has(ItemName.Guard, player)
 
     def kh_terra(self, player):
-        return self.has(ItemName.ProofofConnection, player) and self.kh_basetools(player) and self.kh_dodgeroll(player, 2) \
-            and self.kh_aerialdodge(player, 2) and self.kh_glide(player, 3) \
-            and (self.kh_comboplus(player, 2) and self.has(ItemName.Explosion, player)) \
-            or (self.has(ItemName.NegativeCombo, player, 2))
+        return self.has(ItemName.ProofofConnection, player) and self.kh_basetools(player) \
+            and self.kh_dodgeroll(player, 2) and self.kh_aerialdodge(player, 2) and self.kh_glide(player, 3) \
+            and ((self.kh_comboplus(player, 2) and self.has(ItemName.Explosion, player)) or self.has(ItemName.NegativeCombo, player, 2))
 
     def kh_cor(self, player):
         return self.kh_reflect(player) \
@@ -288,9 +281,8 @@ class KH2Logic(LogicMixin):
 
     def kh_transport(self, player):
         return self.kh_basetools(player) and self.kh_reflera(player) \
-            and (self.kh_mastergenie(player) and self.kh_magnera(player) and self.kh_donaldlimit(player)) \
-            or (self.has(ItemName.FinalForm, player) and self.kh_form_level_unlocked(player, 4)
-            and self.kh_fira(player))
+            and ((self.kh_mastergenie(player) and self.kh_magnera(player) and self.kh_donaldlimit(player))
+            or (self.has(ItemName.FinalForm, player) and self.kh_form_level_unlocked(player, 4) and self.kh_fira(player)))
 
     def kh_gr2(self, player):
         return (self.has(ItemName.MasterForm, player) or self.has(ItemName.Stitch, player)) \
@@ -300,4 +292,4 @@ class KH2Logic(LogicMixin):
         return self.kh_basetools(player) and (self.kh_donaldlimit(player) or self.kh_form_level_unlocked(player, 1))
 
     def kh_mcp(self, player):
-        return self.kh_reflect(player) and ( self.has(ItemName.MasterForm, player) or self.has(ItemName.FinalForm, player))
+        return self.kh_reflect(player) and (self.has(ItemName.MasterForm, player) or self.has(ItemName.FinalForm, player))

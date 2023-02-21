@@ -357,6 +357,7 @@ class KH2Context(CommonContext):
                     self.kh2seedsave["checked_locations"][str(item.player)].append(item.location)
         except Exception as e:
             print(e)
+
     async def give_magic(self,item):
         itemname = self.lookup_id_to_item[item.item]
         itemcode = self.item_name_to_data[itemname]
@@ -377,7 +378,7 @@ class KH2Context(CommonContext):
                 if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A0EAC4 + 0x40, 1), "big") == 0:
                     # give item because they have not room saved and are dead
                     while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x741320, 1), "big") not in {10,8}:
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(0.5)
                     amount = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
                     self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,
                                          (amount + 1).to_bytes(1, 'big'), 1)

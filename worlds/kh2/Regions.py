@@ -1061,9 +1061,16 @@ def connect_regions(world: MultiWorld, player: int):
     connect(world, player, names, RegionName.Oc2_Region, RegionName.Zexion_Region,
             lambda state: state.kh_datazexion(player))
 
-    for cups in {RegionName.Oc2_pain_and_panic_Region, RegionName.Oc2_titan_Region, RegionName.Oc2_cerberus_Region,
-                 RegionName.Oc2_gof_Region}:
-        connect(world, player, names, RegionName.Oc2_Region, cups)
+
+    connect(world, player, names, RegionName.Oc2_Region, RegionName.Oc2_pain_and_panic_Region,
+            lambda state: state.kh_painandpanic(player))
+    connect(world, player, names, RegionName.Oc2_Region, RegionName.Oc2_cerberus_Region,
+            lambda state: state.kh_cerberuscup(player))
+    connect(world, player, names, RegionName.Oc2_Region, RegionName.Oc2_titan_Region,
+            lambda state: state.kh_titan(player))
+    connect(world, player, names, RegionName.Oc2_Region, RegionName.Oc2_gof_Region,
+            lambda state: state.kh_gof(player))
+
 
     connect(world, player, names, RegionName.GoA_Region, RegionName.Ag_Region,
             lambda state: state.kh_ag_unlocked(player, 1))
