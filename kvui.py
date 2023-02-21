@@ -508,7 +508,7 @@ class LogtoUI(logging.Handler):
 
 
 class UILog(RecycleView):
-    cols = 1
+    messages: typing.ClassVar[int]  # comes from kv file
 
     def __init__(self, *loggers_to_handle, **kwargs):
         super(UILog, self).__init__(**kwargs)
@@ -518,9 +518,15 @@ class UILog(RecycleView):
 
     def on_log(self, record: str) -> None:
         self.data.append({"text": escape_markup(record)})
+        self.clean_old()
 
     def on_message_markup(self, text):
         self.data.append({"text": text})
+        self.clean_old()
+
+    def clean_old(self):
+        if len(self.data) > self.messages:
+            self.data.pop(0)
 
     def fix_heights(self):
         """Workaround fix for divergent texture and layout heights"""
