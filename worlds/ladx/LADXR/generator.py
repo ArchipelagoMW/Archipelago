@@ -439,6 +439,16 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
         # Allow warp with just B
         rom.banks[0x01][0x17C0] = 0x20
         rom.banks[0x01][0x1803] = 0x20
+        
+        # Patch the icon for all teleports
+        rom.banks[0x20][0x168B + 0x95] = 0xF8
+        rom.banks[0x01][0x1959 + 0x95] = 0x42
+
+        rom.banks[0x01][0x1909 + 0x42] = 0x2B
+        from .utils import formatText
+        rom.texts[0x02B] = formatText('Warp')
+
+        # rom.banks[0x20][0x178B + 0x95] = 0x8
         rom.patch(0x01, 0x17C3, None, assembler.ASM("""    
         call $7E7B
         ret
@@ -498,7 +508,7 @@ success:
 exit:
     ret
         """))
-    
+
 
     SEED_LOCATION = 0x0134
     SEED_SIZE = 10
