@@ -58,7 +58,7 @@ SM64EX will link `jsoncpp` dynamic if installed. If not, it will compile and lin
 The Compiled binary will be in `build/REGION_pc/`.
 
 # Other Build Options
-There are more build options it's recommended to use only what is required but if you want to use these options USE AT YOUR OWN RISK.
+There are more build options. It's recommended to use only what is required, but if you want to use these options, USE AT YOUR OWN RISK.
 They are listed as Build Option, Default, Possible Values and Description sourced from here https://github.com/sm64pc/sm64ex/wiki/Build-options
 1. BETTERCAMERA 0, (0,1) If 1, build with analog camera support (uses Puppycam).
 2. NODRAWINGDISTANCE 0, (0,1) If 1, build with disabled draw distance (every object is active at all times). May affect gameplay.
