@@ -14,7 +14,7 @@ def create_item_name_to_id_map():
 
     map = {}
     for id, attributes in items.items():
-        map[attributes.name] = id
+        map[attributes.label] = id
 
     return map
 

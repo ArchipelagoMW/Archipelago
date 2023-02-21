@@ -1,293 +1,1458 @@
 {
-  "ITEM_MASTER_BALL": ["Master Ball", "FILLER"],
-  "ITEM_ULTRA_BALL": ["Ultra Ball", "FILLER"],
-  "ITEM_GREAT_BALL": ["Great Ball", "FILLER"],
-  "ITEM_POKE_BALL": ["Poke Ball", "FILLER"],
-  "ITEM_SAFARI_BALL": ["Safari Ball", "FILLER"],
-  "ITEM_NET_BALL": ["Net Ball", "FILLER"],
-  "ITEM_DIVE_BALL": ["Dive Ball", "FILLER"],
-  "ITEM_NEST_BALL": ["Nest Ball", "FILLER"],
-  "ITEM_REPEAT_BALL": ["Repeat Ball", "FILLER"],
-  "ITEM_TIMER_BALL": ["Timer Ball", "FILLER"],
-  "ITEM_LUXURY_BALL": ["Luxury Ball", "FILLER"],
-  "ITEM_PREMIER_BALL": ["Premier Ball", "FILLER"],
-  "ITEM_POTION": ["Potion", "FILLER"],
-  "ITEM_ANTIDOTE": ["Antidote", "FILLER"],
-  "ITEM_BURN_HEAL": ["Burn Heal", "FILLER"],
-  "ITEM_ICE_HEAL": ["Ice Heal", "FILLER"],
-  "ITEM_AWAKENING": ["Awakening", "FILLER"],
-  "ITEM_PARALYZE_HEAL": ["Paralyze Heal", "FILLER"],
-  "ITEM_FULL_RESTORE": ["Full Restore", "FILLER"],
-  "ITEM_MAX_POTION": ["Max Potion", "FILLER"],
-  "ITEM_HYPER_POTION": ["Hyper Potion", "FILLER"],
-  "ITEM_SUPER_POTION": ["Super Potion", "FILLER"],
-  "ITEM_FULL_HEAL": ["Full Heal", "FILLER"],
-  "ITEM_REVIVE": ["Revive", "FILLER"],
-  "ITEM_MAX_REVIVE": ["Max Revive", "FILLER"],
-  "ITEM_FRESH_WATER": ["Fresh Water", "FILLER"],
-  "ITEM_SODA_POP": ["Soda Pop", "FILLER"],
-  "ITEM_LEMONADE": ["Lemonade", "FILLER"],
-  "ITEM_MOOMOO_MILK": ["Moomoo Milk", "FILLER"],
-  "ITEM_ENERGY_POWDER": ["Energy Powder", "FILLER"],
-  "ITEM_ENERGY_ROOT": ["Energy Root", "FILLER"],
-  "ITEM_HEAL_POWDER": ["Heal Powder", "FILLER"],
-  "ITEM_REVIVAL_HERB": ["Revival Herb", "FILLER"],
-  "ITEM_ETHER": ["Ether", "FILLER"],
-  "ITEM_MAX_ETHER": ["Max Ether", "FILLER"],
-  "ITEM_ELIXIR": ["Elixir", "FILLER"],
-  "ITEM_MAX_ELIXIR": ["Max Elixir", "FILLER"],
-  "ITEM_LAVA_COOKIE": ["Lava Cookie", "FILLER"],
-  "ITEM_BLUE_FLUTE": ["Blue Flute", "FILLER"],
-  "ITEM_YELLOW_FLUTE": ["Yellow Flute", "FILLER"],
-  "ITEM_RED_FLUTE": ["Red Flute", "FILLER"],
-  "ITEM_BLACK_FLUTE": ["Black Flute", "FILLER"],
-  "ITEM_WHITE_FLUTE": ["White Flute", "FILLER"],
-  "ITEM_BERRY_JUICE": ["Berry Juice", "FILLER"],
-  "ITEM_SACRED_ASH": ["Sacred Ash", "FILLER"],
-  "ITEM_SHOAL_SALT": ["Shoal Salt", "FILLER"],
-  "ITEM_SHOAL_SHELL": ["Shoal Shell", "FILLER"],
-  "ITEM_RED_SHARD": ["Red Shard", "FILLER"],
-  "ITEM_BLUE_SHARD": ["Blue Shard", "FILLER"],
-  "ITEM_YELLOW_SHARD": ["Yellow Shard", "FILLER"],
-  "ITEM_GREEN_SHARD": ["Green Shard", "FILLER"],
-  "ITEM_HP_UP": ["HP Up", "FILLER"],
-  "ITEM_PROTEIN": ["Protein", "FILLER"],
-  "ITEM_IRON": ["Iron", "FILLER"],
-  "ITEM_CARBOS": ["Carbos", "FILLER"],
-  "ITEM_CALCIUM": ["Calcium", "FILLER"],
-  "ITEM_RARE_CANDY": ["Rare Candy", "FILLER"],
-  "ITEM_PP_UP": ["PP Up", "FILLER"],
-  "ITEM_ZINC": ["Zinc", "FILLER"],
-  "ITEM_PP_MAX": ["PP Max", "FILLER"],
-  "ITEM_GUARD_SPEC": ["Guard Spec", "FILLER"],
-  "ITEM_DIRE_HIT": ["Dire Hit", "FILLER"],
-  "ITEM_X_ATTACK": ["X Attack", "FILLER"],
-  "ITEM_X_DEFEND": ["X Defend", "FILLER"],
-  "ITEM_X_SPEED": ["X Speed", "FILLER"],
-  "ITEM_X_ACCURACY": ["X Accuracy", "FILLER"],
-  "ITEM_X_SPECIAL": ["X Special", "FILLER"],
-  "ITEM_POKE_DOLL": ["Poke Doll", "FILLER"],
-  "ITEM_FLUFFY_TAIL": ["Fluffy Tail", "FILLER"],
-  "ITEM_SUPER_REPEL": ["Super Repel", "FILLER"],
-  "ITEM_MAX_REPEL": ["Max Repel", "FILLER"],
-  "ITEM_ESCAPE_ROPE": ["Escape Rope", "FILLER"],
-  "ITEM_REPEL": ["Repel", "FILLER"],
-  "ITEM_SUN_STONE": ["Sun Stone", "FILLER"],
-  "ITEM_MOON_STONE": ["Moon Stone", "FILLER"],
-  "ITEM_FIRE_STONE": ["Fire Stone", "FILLER"],
-  "ITEM_THUNDER_STONE": ["Thunder Stone", "FILLER"],
-  "ITEM_WATER_STONE": ["Water Stone", "FILLER"],
-  "ITEM_LEAF_STONE": ["Leaf Stone", "FILLER"],
-  "ITEM_TINY_MUSHROOM": ["Tiny Mushroom", "FILLER"],
-  "ITEM_BIG_MUSHROOM": ["Big Mushroom", "FILLER"],
-  "ITEM_PEARL": ["Pearl", "FILLER"],
-  "ITEM_BIG_PEARL": ["Big Pearl", "FILLER"],
-  "ITEM_STARDUST": ["Stardust", "FILLER"],
-  "ITEM_STAR_PIECE": ["Star Piece", "FILLER"],
-  "ITEM_NUGGET": ["Nugget", "FILLER"],
-  "ITEM_HEART_SCALE": ["Heart Scale", "FILLER"],
-  "ITEM_ORANGE_MAIL": ["Orange Mail", "FILLER"],
-  "ITEM_HARBOR_MAIL": ["Harbor Mail", "FILLER"],
-  "ITEM_GLITTER_MAIL": ["Glitter Mail", "FILLER"],
-  "ITEM_MECH_MAIL": ["Mech Mail", "FILLER"],
-  "ITEM_WOOD_MAIL": ["Wood Mail", "FILLER"],
-  "ITEM_WAVE_MAIL": ["Wave Mail", "FILLER"],
-  "ITEM_BEAD_MAIL": ["Bead Mail", "FILLER"],
-  "ITEM_SHADOW_MAIL": ["Shadow Mail", "FILLER"],
-  "ITEM_TROPIC_MAIL": ["Tropic Mail", "FILLER"],
-  "ITEM_DREAM_MAIL": ["Dream Mail", "FILLER"],
-  "ITEM_FAB_MAIL": ["Fab Mail", "FILLER"],
-  "ITEM_RETRO_MAIL": ["Retro Mail", "FILLER"],
-  "ITEM_CHERI_BERRY": ["Cheri Berry", "FILLER"],
-  "ITEM_CHESTO_BERRY": ["Chesto Berry", "FILLER"],
-  "ITEM_PECHA_BERRY": ["Pecha Berry", "FILLER"],
-  "ITEM_RAWST_BERRY": ["Rawst Berry", "FILLER"],
-  "ITEM_ASPEAR_BERRY": ["Aspear Berry", "FILLER"],
-  "ITEM_LEPPA_BERRY": ["Leppa Berry", "FILLER"],
-  "ITEM_ORAN_BERRY": ["Oran Berry", "FILLER"],
-  "ITEM_PERSIM_BERRY": ["Persim Berry", "FILLER"],
-  "ITEM_LUM_BERRY": ["Lum Berry", "FILLER"],
-  "ITEM_SITRUS_BERRY": ["Sitrus Berry", "FILLER"],
-  "ITEM_FIGY_BERRY": ["Figy Berry", "FILLER"],
-  "ITEM_WIKI_BERRY": ["Wiki Berry", "FILLER"],
-  "ITEM_MAGO_BERRY": ["Mago Berry", "FILLER"],
-  "ITEM_AGUAV_BERRY": ["Aguav Berry", "FILLER"],
-  "ITEM_IAPAPA_BERRY": ["Iapapa Berry", "FILLER"],
-  "ITEM_RAZZ_BERRY": ["Razz Berry", "FILLER"],
-  "ITEM_BLUK_BERRY": ["Bluk Berry", "FILLER"],
-  "ITEM_NANAB_BERRY": ["Nanab Berry", "FILLER"],
-  "ITEM_WEPEAR_BERRY": ["Wepear Berry", "FILLER"],
-  "ITEM_PINAP_BERRY": ["Pinap Berry", "FILLER"],
-  "ITEM_POMEG_BERRY": ["Pomeg Berry", "FILLER"],
-  "ITEM_KELPSY_BERRY": ["Kelpsy Berry", "FILLER"],
-  "ITEM_QUALOT_BERRY": ["Qualot Berry", "FILLER"],
-  "ITEM_HONDEW_BERRY": ["Hondew Berry", "FILLER"],
-  "ITEM_GREPA_BERRY": ["Grepa Berry", "FILLER"],
-  "ITEM_TAMATO_BERRY": ["Tamato Berry", "FILLER"],
-  "ITEM_CORNN_BERRY": ["Cornn Berry", "FILLER"],
-  "ITEM_MAGOST_BERRY": ["Magost Berry", "FILLER"],
-  "ITEM_RABUTA_BERRY": ["Rabuta Berry", "FILLER"],
-  "ITEM_NOMEL_BERRY": ["Nomel Berry", "FILLER"],
-  "ITEM_SPELON_BERRY": ["Spelon Berry", "FILLER"],
-  "ITEM_PAMTRE_BERRY": ["Pamtre Berry", "FILLER"],
-  "ITEM_WATMEL_BERRY": ["Watmel Berry", "FILLER"],
-  "ITEM_DURIN_BERRY": ["Durin Berry", "FILLER"],
-  "ITEM_BELUE_BERRY": ["Belue Berry", "FILLER"],
-  "ITEM_LIECHI_BERRY": ["Liechi Berry", "FILLER"],
-  "ITEM_GANLON_BERRY": ["Ganlon Berry", "FILLER"],
-  "ITEM_SALAC_BERRY": ["Salac Berry", "FILLER"],
-  "ITEM_PETAYA_BERRY": ["Petaya Berry", "FILLER"],
-  "ITEM_APICOT_BERRY": ["Apicot Berry", "FILLER"],
-  "ITEM_LANSAT_BERRY": ["Lansat Berry", "FILLER"],
-  "ITEM_STARF_BERRY": ["Starf Berry", "FILLER"],
-  "ITEM_ENIGMA_BERRY": ["Enigma Berry", "FILLER"],
-  "ITEM_BRIGHT_POWDER": ["Bright Powder", "FILLER"],
-  "ITEM_WHITE_HERB": ["White Herb", "FILLER"],
-  "ITEM_MACHO_BRACE": ["Macho Brace", "FILLER"],
-  "ITEM_EXP_SHARE": ["Exp. Share", "FILLER"],
-  "ITEM_QUICK_CLAW": ["Quick Claw", "FILLER"],
-  "ITEM_SOOTHE_BELL": ["Soothe Bell", "FILLER"],
-  "ITEM_MENTAL_HERB": ["Mental Herb", "FILLER"],
-  "ITEM_CHOICE_BAND": ["Choice Band", "FILLER"],
-  "ITEM_KINGS_ROCK": ["King's Rock", "FILLER"],
-  "ITEM_SILVER_POWDER": ["Silver Powder", "FILLER"],
-  "ITEM_AMULET_COIN": ["Amulet Coin", "FILLER"],
-  "ITEM_CLEANSE_TAG": ["Cleanse Tag", "FILLER"],
-  "ITEM_SOUL_DEW": ["Soul Dew", "FILLER"],
-  "ITEM_DEEP_SEA_TOOTH": ["Deep Sea Tooth", "FILLER"],
-  "ITEM_DEEP_SEA_SCALE": ["Deep Sea Scale", "FILLER"],
-  "ITEM_SMOKE_BALL": ["Smoke Ball", "FILLER"],
-  "ITEM_EVERSTONE": ["Everstone", "FILLER"],
-  "ITEM_FOCUS_BAND": ["Focus Band", "FILLER"],
-  "ITEM_LUCKY_EGG": ["Lucky Egg", "FILLER"],
-  "ITEM_SCOPE_LENS": ["Scope Lens", "FILLER"],
-  "ITEM_METAL_COAT": ["Metal Coat", "FILLER"],
-  "ITEM_LEFTOVERS": ["Leftovers", "FILLER"],
-  "ITEM_DRAGON_SCALE": ["Dragon Scale", "FILLER"],
-  "ITEM_LIGHT_BALL": ["Light Ball", "FILLER"],
-  "ITEM_SOFT_SAND": ["Soft Sand", "FILLER"],
-  "ITEM_HARD_STONE": ["Hard Stone", "FILLER"],
-  "ITEM_MIRACLE_SEED": ["Miracle Seed", "FILLER"],
-  "ITEM_BLACK_GLASSES": ["Black Glasses", "FILLER"],
-  "ITEM_BLACK_BELT": ["Black Belt", "FILLER"],
-  "ITEM_MAGNET": ["Magnet", "FILLER"],
-  "ITEM_MYSTIC_WATER": ["Mystic Water", "FILLER"],
-  "ITEM_SHARP_BEAK": ["Sharp Beak", "FILLER"],
-  "ITEM_POISON_BARB": ["Poison Barb", "FILLER"],
-  "ITEM_NEVER_MELT_ICE": ["Never-Melt Ice", "FILLER"],
-  "ITEM_SPELL_TAG": ["Spell Tag", "FILLER"],
-  "ITEM_TWISTED_SPOON": ["Twisted Spoon", "FILLER"],
-  "ITEM_CHARCOAL": ["Charcoal", "FILLER"],
-  "ITEM_DRAGON_FANG": ["Dragon Fang", "FILLER"],
-  "ITEM_SILK_SCARF": ["Silk Scarf", "FILLER"],
-  "ITEM_UP_GRADE": ["Up-Grade", "FILLER"],
-  "ITEM_SHELL_BELL": ["Shell Bell", "FILLER"],
-  "ITEM_SEA_INCENSE": ["Sea Incense", "FILLER"],
-  "ITEM_LAX_INCENSE": ["Lax Incense", "FILLER"],
-  "ITEM_LUCKY_PUNCH": ["Lucky Punch", "FILLER"],
-  "ITEM_METAL_POWDER": ["Metal Powder", "FILLER"],
-  "ITEM_THICK_CLUB": ["Thick Club", "FILLER"],
-  "ITEM_STICK": ["Stick", "FILLER"],
-  "ITEM_BADGE_1": ["Stone Badge", "PROGRESSION"],
-  "ITEM_BADGE_2": ["Knuckle Badge", "PROGRESSION"],
-  "ITEM_BADGE_3": ["Dynamo Badge", "PROGRESSION"],
-  "ITEM_BADGE_4": ["Heat Badge", "PROGRESSION"],
-  "ITEM_BADGE_5": ["Balance Badge", "PROGRESSION"],
-  "ITEM_BADGE_6": ["Feather Badge", "PROGRESSION"],
-  "ITEM_BADGE_7": ["Mind Badge", "PROGRESSION"],
-  "ITEM_BADGE_8": ["Rain Badge", "PROGRESSION"],
-  "ITEM_RED_SCARF": ["Red Scarf", "FILLER"],
-  "ITEM_BLUE_SCARF": ["Blue Scarf", "FILLER"],
-  "ITEM_PINK_SCARF": ["Pink Scarf", "FILLER"],
-  "ITEM_GREEN_SCARF": ["Green Scarf", "FILLER"],
-  "ITEM_YELLOW_SCARF": ["Yellow Scarf", "FILLER"],
-  "ITEM_MACH_BIKE": ["Mach Bike", "FILLER"],
-  "ITEM_COIN_CASE": ["Coin Case", "FILLER"],
-  "ITEM_ITEMFINDER": ["Itemfinder", "FILLER"],
-  "ITEM_OLD_ROD": ["Old Rod", "FILLER"],
-  "ITEM_GOOD_ROD": ["Good Rod", "FILLER"],
-  "ITEM_SUPER_ROD": ["Super Rod", "FILLER"],
-  "ITEM_SS_TICKET": ["SS Ticket", "FILLER"],
-  "ITEM_CONTEST_PASS": ["Contest Pass", "FILLER"],
-  "ITEM_WAILMER_PAIL": ["Wailmer Pail", "FILLER"],
-  "ITEM_DEVON_GOODS": ["Devon Goods", "FILLER"],
-  "ITEM_SOOT_SACK": ["Soot Sack", "FILLER"],
-  "ITEM_BASEMENT_KEY": ["Basement Key", "FILLER"],
-  "ITEM_ACRO_BIKE": ["Acro Bike", "FILLER"],
-  "ITEM_POKEBLOCK_CASE": ["Pokeblock Case", "FILLER"],
-  "ITEM_LETTER": ["Letter", "FILLER"],
-  "ITEM_EON_TICKET": ["Eon Ticket", "FILLER"],
-  "ITEM_RED_ORB": ["Red Orb", "FILLER"],
-  "ITEM_BLUE_ORB": ["Blue Orb", "FILLER"],
-  "ITEM_SCANNER": ["Scanner", "FILLER"],
-  "ITEM_GO_GOGGLES": ["Go Goggles", "FILLER"],
-  "ITEM_METEORITE": ["Meteorite", "FILLER"],
-  "ITEM_ROOM_1_KEY": ["Room 1 Key", "FILLER"],
-  "ITEM_ROOM_2_KEY": ["Room 2 Key", "FILLER"],
-  "ITEM_ROOM_4_KEY": ["Room 4 Key", "FILLER"],
-  "ITEM_ROOM_6_KEY": ["Room 6 Key", "FILLER"],
-  "ITEM_STORAGE_KEY": ["Storage Key", "FILLER"],
-  "ITEM_ROOT_FOSSIL": ["Root Fossil", "FILLER"],
-  "ITEM_CLAW_FOSSIL": ["Claw Fossil", "FILLER"],
-  "ITEM_DEVON_SCOPE": ["Devon Scope", "FILLER"],
-  "ITEM_TM01_FOCUS_PUNCH": ["TM01 Focus Punch", "FILLER"],
-  "ITEM_TM02_DRAGON_CLAW": ["TM02 Dragon Claw", "FILLER"],
-  "ITEM_TM03_WATER_PULSE": ["TM03 Water Pulse", "FILLER"],
-  "ITEM_TM04_CALM_MIND": ["TM04 Calm Mind", "FILLER"],
-  "ITEM_TM05_ROAR": ["TM05 Roar", "FILLER"],
-  "ITEM_TM06_TOXIC": ["TM06 Toxic", "FILLER"],
-  "ITEM_TM07_HAIL": ["TM07 Hail", "FILLER"],
-  "ITEM_TM08_BULK_UP": ["TM08 Bulk Up", "FILLER"],
-  "ITEM_TM09_BULLET_SEED": ["TM09 Bullet Seed", "FILLER"],
-  "ITEM_TM10_HIDDEN_POWER": ["TM10 Hidden Power", "FILLER"],
-  "ITEM_TM11_SUNNY_DAY": ["TM11 Sunny Day", "FILLER"],
-  "ITEM_TM12_TAUNT": ["TM12 Taunt", "FILLER"],
-  "ITEM_TM13_ICE_BEAM": ["TM13 Ice Beam", "FILLER"],
-  "ITEM_TM14_BLIZZARD": ["TM14 Blizzard", "FILLER"],
-  "ITEM_TM15_HYPER_BEAM": ["TM15 Hyper Beam", "FILLER"],
-  "ITEM_TM16_LIGHT_SCREEN": ["TM16 Light Screen", "FILLER"],
-  "ITEM_TM17_PROTECT": ["TM17 Protect", "FILLER"],
-  "ITEM_TM18_RAIN_DANCE": ["TM18 Rain Dance", "FILLER"],
-  "ITEM_TM19_GIGA_DRAIN": ["TM19 Giga Drain", "FILLER"],
-  "ITEM_TM20_SAFEGUARD": ["TM20 Safeguard", "FILLER"],
-  "ITEM_TM21_FRUSTRATION": ["TM21 Frustration", "FILLER"],
-  "ITEM_TM22_SOLAR_BEAM": ["TM22 Solar Beam", "FILLER"],
-  "ITEM_TM23_IRON_TAIL": ["TM23 Iron Tail", "FILLER"],
-  "ITEM_TM24_THUNDERBOLT": ["TM24 Thunderbolt", "FILLER"],
-  "ITEM_TM25_THUNDER": ["TM25 Thunder", "FILLER"],
-  "ITEM_TM26_EARTHQUAKE": ["TM26 Earthquake", "FILLER"],
-  "ITEM_TM27_RETURN": ["TM27 Return", "FILLER"],
-  "ITEM_TM28_DIG": ["TM28 Dig", "FILLER"],
-  "ITEM_TM29_PSYCHIC": ["TM29 Psychic", "FILLER"],
-  "ITEM_TM30_SHADOW_BALL": ["TM30 Shadow Ball", "FILLER"],
-  "ITEM_TM31_BRICK_BREAK": ["TM31 Brick Break", "FILLER"],
-  "ITEM_TM32_DOUBLE_TEAM": ["TM32 Double Team", "FILLER"],
-  "ITEM_TM33_REFLECT": ["TM33 Reflect", "FILLER"],
-  "ITEM_TM34_SHOCK_WAVE": ["TM34 Shock Wave", "FILLER"],
-  "ITEM_TM35_FLAMETHROWER": ["TM35 Flamethrower", "FILLER"],
-  "ITEM_TM36_SLUDGE_BOMB": ["TM36 Sludge Bomb", "FILLER"],
-  "ITEM_TM37_SANDSTORM": ["TM37 Sandstorm", "FILLER"],
-  "ITEM_TM38_FIRE_BLAST": ["TM38 Fire Blast", "FILLER"],
-  "ITEM_TM39_ROCK_TOMB": ["TM39 Rock Tomb", "FILLER"],
-  "ITEM_TM40_AERIAL_ACE": ["TM40 Aerial Ace", "FILLER"],
-  "ITEM_TM41_TORMENT": ["TM41 Torment", "FILLER"],
-  "ITEM_TM42_FACADE": ["TM42 Facade", "FILLER"],
-  "ITEM_TM43_SECRET_POWER": ["TM43 Secret Power", "FILLER"],
-  "ITEM_TM44_REST": ["TM44 Rest", "FILLER"],
-  "ITEM_TM45_ATTRACT": ["TM45 Attract", "FILLER"],
-  "ITEM_TM46_THIEF": ["TM46 Thief", "FILLER"],
-  "ITEM_TM47_STEEL_WING": ["TM47 Steel Wing", "FILLER"],
-  "ITEM_TM48_SKILL_SWAP": ["TM48 Skill Swap", "FILLER"],
-  "ITEM_TM49_SNATCH": ["TM49 Snatch", "FILLER"],
-  "ITEM_TM50_OVERHEAT": ["TM50 Overheat", "FILLER"],
-  "ITEM_HM01_CUT": ["HM01 Cut", "FILLER"],
-  "ITEM_HM02_FLY": ["HM02 Fly", "FILLER"],
-  "ITEM_HM03_SURF": ["HM03 Surf", "FILLER"],
-  "ITEM_HM04_STRENGTH": ["HM04 Strength", "FILLER"],
-  "ITEM_HM05_FLASH": ["HM05 Flash", "FILLER"],
-  "ITEM_HM06_ROCK_SMASH": ["HM06 Rock Smash", "FILLER"],
-  "ITEM_HM07_WATERFALL": ["HM07 Waterfall", "FILLER"],
-  "ITEM_HM08_DIVE": ["HM08 Dive", "FILLER"],
-  "ITEM_MAGMA_EMBLEM": ["Magma Emblem", "FILLER"],
-  "ITEM_OLD_SEA_MAP": ["Old Sea Map", "FILLER"]
+  "ITEM_MASTER_BALL": {
+    "label": "Master Ball",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ULTRA_BALL": {
+    "label": "Ultra Ball",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_GREAT_BALL": {
+    "label": "Great Ball",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_POKE_BALL": {
+    "label": "Poke Ball",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SAFARI_BALL": {
+    "label": "Safari Ball",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_NET_BALL": {
+    "label": "Net Ball",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_DIVE_BALL": {
+    "label": "Dive Ball",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_NEST_BALL": {
+    "label": "Nest Ball",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_REPEAT_BALL": {
+    "label": "Repeat Ball",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TIMER_BALL": {
+    "label": "Timer Ball",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_LUXURY_BALL": {
+    "label": "Luxury Ball",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_PREMIER_BALL": {
+    "label": "Premier Ball",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_POTION": {
+    "label": "Potion",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ANTIDOTE": {
+    "label": "Antidote",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_BURN_HEAL": {
+    "label": "Burn Heal",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ICE_HEAL": {
+    "label": "Ice Heal",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_AWAKENING": {
+    "label": "Awakening",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_PARALYZE_HEAL": {
+    "label": "Paralyze Heal",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_FULL_RESTORE": {
+    "label": "Full Restore",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_MAX_POTION": {
+    "label": "Max Potion",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_HYPER_POTION": {
+    "label": "Hyper Potion",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SUPER_POTION": {
+    "label": "Super Potion",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_FULL_HEAL": {
+    "label": "Full Heal",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_REVIVE": {
+    "label": "Revive",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_MAX_REVIVE": {
+    "label": "Max Revive",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_FRESH_WATER": {
+    "label": "Fresh Water",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SODA_POP": {
+    "label": "Soda Pop",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_LEMONADE": {
+    "label": "Lemonade",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_MOOMOO_MILK": {
+    "label": "Moomoo Milk",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ENERGY_POWDER": {
+    "label": "Energy Powder",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ENERGY_ROOT": {
+    "label": "Energy Root",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_HEAL_POWDER": {
+    "label": "Heal Powder",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_REVIVAL_HERB": {
+    "label": "Revival Herb",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ETHER": {
+    "label": "Ether",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_MAX_ETHER": {
+    "label": "Max Ether",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ELIXIR": {
+    "label": "Elixir",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_MAX_ELIXIR": {
+    "label": "Max Elixir",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_LAVA_COOKIE": {
+    "label": "Lava Cookie",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_BLUE_FLUTE": {
+    "label": "Blue Flute",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_YELLOW_FLUTE": {
+    "label": "Yellow Flute",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_RED_FLUTE": {
+    "label": "Red Flute",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_BLACK_FLUTE": {
+    "label": "Black Flute",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_WHITE_FLUTE": {
+    "label": "White Flute",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_BERRY_JUICE": {
+    "label": "Berry Juice",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SACRED_ASH": {
+    "label": "Sacred Ash",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SHOAL_SALT": {
+    "label": "Shoal Salt",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SHOAL_SHELL": {
+    "label": "Shoal Shell",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_RED_SHARD": {
+    "label": "Red Shard",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_BLUE_SHARD": {
+    "label": "Blue Shard",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_YELLOW_SHARD": {
+    "label": "Yellow Shard",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_GREEN_SHARD": {
+    "label": "Green Shard",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_HP_UP": {
+    "label": "HP Up",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_PROTEIN": {
+    "label": "Protein",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_IRON": {
+    "label": "Iron",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_CARBOS": {
+    "label": "Carbos",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_CALCIUM": {
+    "label": "Calcium",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_RARE_CANDY": {
+    "label": "Rare Candy",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_PP_UP": {
+    "label": "PP Up",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ZINC": {
+    "label": "Zinc",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_PP_MAX": {
+    "label": "PP Max",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_GUARD_SPEC": {
+    "label": "Guard Spec",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_DIRE_HIT": {
+    "label": "Dire Hit",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_X_ATTACK": {
+    "label": "X Attack",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_X_DEFEND": {
+    "label": "X Defend",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_X_SPEED": {
+    "label": "X Speed",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_X_ACCURACY": {
+    "label": "X Accuracy",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_X_SPECIAL": {
+    "label": "X Special",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_POKE_DOLL": {
+    "label": "Poke Doll",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_FLUFFY_TAIL": {
+    "label": "Fluffy Tail",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SUPER_REPEL": {
+    "label": "Super Repel",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_MAX_REPEL": {
+    "label": "Max Repel",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ESCAPE_ROPE": {
+    "label": "Escape Rope",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_REPEL": {
+    "label": "Repel",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SUN_STONE": {
+    "label": "Sun Stone",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_MOON_STONE": {
+    "label": "Moon Stone",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_FIRE_STONE": {
+    "label": "Fire Stone",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_THUNDER_STONE": {
+    "label": "Thunder Stone",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_WATER_STONE": {
+    "label": "Water Stone",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_LEAF_STONE": {
+    "label": "Leaf Stone",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TINY_MUSHROOM": {
+    "label": "Tiny Mushroom",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_BIG_MUSHROOM": {
+    "label": "Big Mushroom",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_PEARL": {
+    "label": "Pearl",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_BIG_PEARL": {
+    "label": "Big Pearl",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_STARDUST": {
+    "label": "Stardust",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_STAR_PIECE": {
+    "label": "Star Piece",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_NUGGET": {
+    "label": "Nugget",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_HEART_SCALE": {
+    "label": "Heart Scale",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ORANGE_MAIL": {
+    "label": "Orange Mail",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_HARBOR_MAIL": {
+    "label": "Harbor Mail",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_GLITTER_MAIL": {
+    "label": "Glitter Mail",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_MECH_MAIL": {
+    "label": "Mech Mail",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_WOOD_MAIL": {
+    "label": "Wood Mail",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_WAVE_MAIL": {
+    "label": "Wave Mail",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_BEAD_MAIL": {
+    "label": "Bead Mail",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SHADOW_MAIL": {
+    "label": "Shadow Mail",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TROPIC_MAIL": {
+    "label": "Tropic Mail",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_DREAM_MAIL": {
+    "label": "Dream Mail",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_FAB_MAIL": {
+    "label": "Fab Mail",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_RETRO_MAIL": {
+    "label": "Retro Mail",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_CHERI_BERRY": {
+    "label": "Cheri Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_CHESTO_BERRY": {
+    "label": "Chesto Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_PECHA_BERRY": {
+    "label": "Pecha Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_RAWST_BERRY": {
+    "label": "Rawst Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ASPEAR_BERRY": {
+    "label": "Aspear Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_LEPPA_BERRY": {
+    "label": "Leppa Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ORAN_BERRY": {
+    "label": "Oran Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_PERSIM_BERRY": {
+    "label": "Persim Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_LUM_BERRY": {
+    "label": "Lum Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SITRUS_BERRY": {
+    "label": "Sitrus Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_FIGY_BERRY": {
+    "label": "Figy Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_WIKI_BERRY": {
+    "label": "Wiki Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_MAGO_BERRY": {
+    "label": "Mago Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_AGUAV_BERRY": {
+    "label": "Aguav Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_IAPAPA_BERRY": {
+    "label": "Iapapa Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_RAZZ_BERRY": {
+    "label": "Razz Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_BLUK_BERRY": {
+    "label": "Bluk Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_NANAB_BERRY": {
+    "label": "Nanab Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_WEPEAR_BERRY": {
+    "label": "Wepear Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_PINAP_BERRY": {
+    "label": "Pinap Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_POMEG_BERRY": {
+    "label": "Pomeg Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_KELPSY_BERRY": {
+    "label": "Kelpsy Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_QUALOT_BERRY": {
+    "label": "Qualot Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_HONDEW_BERRY": {
+    "label": "Hondew Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_GREPA_BERRY": {
+    "label": "Grepa Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TAMATO_BERRY": {
+    "label": "Tamato Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_CORNN_BERRY": {
+    "label": "Cornn Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_MAGOST_BERRY": {
+    "label": "Magost Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_RABUTA_BERRY": {
+    "label": "Rabuta Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_NOMEL_BERRY": {
+    "label": "Nomel Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SPELON_BERRY": {
+    "label": "Spelon Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_PAMTRE_BERRY": {
+    "label": "Pamtre Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_WATMEL_BERRY": {
+    "label": "Watmel Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_DURIN_BERRY": {
+    "label": "Durin Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_BELUE_BERRY": {
+    "label": "Belue Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_LIECHI_BERRY": {
+    "label": "Liechi Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_GANLON_BERRY": {
+    "label": "Ganlon Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SALAC_BERRY": {
+    "label": "Salac Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_PETAYA_BERRY": {
+    "label": "Petaya Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_APICOT_BERRY": {
+    "label": "Apicot Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_LANSAT_BERRY": {
+    "label": "Lansat Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_STARF_BERRY": {
+    "label": "Starf Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ENIGMA_BERRY": {
+    "label": "Enigma Berry",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_BRIGHT_POWDER": {
+    "label": "Bright Powder",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_WHITE_HERB": {
+    "label": "White Herb",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_MACHO_BRACE": {
+    "label": "Macho Brace",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_EXP_SHARE": {
+    "label": "Exp. Share",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_QUICK_CLAW": {
+    "label": "Quick Claw",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SOOTHE_BELL": {
+    "label": "Soothe Bell",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_MENTAL_HERB": {
+    "label": "Mental Herb",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_CHOICE_BAND": {
+    "label": "Choice Band",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_KINGS_ROCK": {
+    "label": "King's Rock",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SILVER_POWDER": {
+    "label": "Silver Powder",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_AMULET_COIN": {
+    "label": "Amulet Coin",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_CLEANSE_TAG": {
+    "label": "Cleanse Tag",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SOUL_DEW": {
+    "label": "Soul Dew",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_DEEP_SEA_TOOTH": {
+    "label": "Deep Sea Tooth",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_DEEP_SEA_SCALE": {
+    "label": "Deep Sea Scale",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SMOKE_BALL": {
+    "label": "Smoke Ball",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_EVERSTONE": {
+    "label": "Everstone",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_FOCUS_BAND": {
+    "label": "Focus Band",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_LUCKY_EGG": {
+    "label": "Lucky Egg",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SCOPE_LENS": {
+    "label": "Scope Lens",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_METAL_COAT": {
+    "label": "Metal Coat",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_LEFTOVERS": {
+    "label": "Leftovers",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_DRAGON_SCALE": {
+    "label": "Dragon Scale",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_LIGHT_BALL": {
+    "label": "Light Ball",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SOFT_SAND": {
+    "label": "Soft Sand",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_HARD_STONE": {
+    "label": "Hard Stone",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_MIRACLE_SEED": {
+    "label": "Miracle Seed",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_BLACK_GLASSES": {
+    "label": "Black Glasses",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_BLACK_BELT": {
+    "label": "Black Belt",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_MAGNET": {
+    "label": "Magnet",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_MYSTIC_WATER": {
+    "label": "Mystic Water",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SHARP_BEAK": {
+    "label": "Sharp Beak",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_POISON_BARB": {
+    "label": "Poison Barb",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_NEVER_MELT_ICE": {
+    "label": "Never-Melt Ice",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SPELL_TAG": {
+    "label": "Spell Tag",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TWISTED_SPOON": {
+    "label": "Twisted Spoon",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_CHARCOAL": {
+    "label": "Charcoal",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_DRAGON_FANG": {
+    "label": "Dragon Fang",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SILK_SCARF": {
+    "label": "Silk Scarf",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_UP_GRADE": {
+    "label": "Up-Grade",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SHELL_BELL": {
+    "label": "Shell Bell",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SEA_INCENSE": {
+    "label": "Sea Incense",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_LAX_INCENSE": {
+    "label": "Lax Incense",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_LUCKY_PUNCH": {
+    "label": "Lucky Punch",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_METAL_POWDER": {
+    "label": "Metal Powder",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_THICK_CLUB": {
+    "label": "Thick Club",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_STICK": {
+    "label": "Stick",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_RED_SCARF": {
+    "label": "Red Scarf",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_BLUE_SCARF": {
+    "label": "Blue Scarf",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_PINK_SCARF": {
+    "label": "Pink Scarf",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_GREEN_SCARF": {
+    "label": "Green Scarf",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_YELLOW_SCARF": {
+    "label": "Yellow Scarf",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_MACH_BIKE": {
+    "label": "Mach Bike",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_COIN_CASE": {
+    "label": "Coin Case",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ITEMFINDER": {
+    "label": "Itemfinder",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_OLD_ROD": {
+    "label": "Old Rod",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_GOOD_ROD": {
+    "label": "Good Rod",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SUPER_ROD": {
+    "label": "Super Rod",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SS_TICKET": {
+    "label": "SS Ticket",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_CONTEST_PASS": {
+    "label": "Contest Pass",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_WAILMER_PAIL": {
+    "label": "Wailmer Pail",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_DEVON_GOODS": {
+    "label": "Devon Goods",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SOOT_SACK": {
+    "label": "Soot Sack",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_BASEMENT_KEY": {
+    "label": "Basement Key",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ACRO_BIKE": {
+    "label": "Acro Bike",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_POKEBLOCK_CASE": {
+    "label": "Pokeblock Case",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_LETTER": {
+    "label": "Letter",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_EON_TICKET": {
+    "label": "Eon Ticket",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_RED_ORB": {
+    "label": "Red Orb",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_BLUE_ORB": {
+    "label": "Blue Orb",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_SCANNER": {
+    "label": "Scanner",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_GO_GOGGLES": {
+    "label": "Go Goggles",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_METEORITE": {
+    "label": "Meteorite",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ROOM_1_KEY": {
+    "label": "Room 1 Key",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ROOM_2_KEY": {
+    "label": "Room 2 Key",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ROOM_4_KEY": {
+    "label": "Room 4 Key",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ROOM_6_KEY": {
+    "label": "Room 6 Key",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_STORAGE_KEY": {
+    "label": "Storage Key",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_ROOT_FOSSIL": {
+    "label": "Root Fossil",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_CLAW_FOSSIL": {
+    "label": "Claw Fossil",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_DEVON_SCOPE": {
+    "label": "Devon Scope",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM01_FOCUS_PUNCH": {
+    "label": "TM01 Focus Punch",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM02_DRAGON_CLAW": {
+    "label": "TM02 Dragon Claw",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM03_WATER_PULSE": {
+    "label": "TM03 Water Pulse",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM04_CALM_MIND": {
+    "label": "TM04 Calm Mind",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM05_ROAR": {
+    "label": "TM05 Roar",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM06_TOXIC": {
+    "label": "TM06 Toxic",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM07_HAIL": {
+    "label": "TM07 Hail",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM08_BULK_UP": {
+    "label": "TM08 Bulk Up",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM09_BULLET_SEED": {
+    "label": "TM09 Bullet Seed",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM10_HIDDEN_POWER": {
+    "label": "TM10 Hidden Power",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM11_SUNNY_DAY": {
+    "label": "TM11 Sunny Day",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM12_TAUNT": {
+    "label": "TM12 Taunt",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM13_ICE_BEAM": {
+    "label": "TM13 Ice Beam",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM14_BLIZZARD": {
+    "label": "TM14 Blizzard",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM15_HYPER_BEAM": {
+    "label": "TM15 Hyper Beam",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM16_LIGHT_SCREEN": {
+    "label": "TM16 Light Screen",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM17_PROTECT": {
+    "label": "TM17 Protect",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM18_RAIN_DANCE": {
+    "label": "TM18 Rain Dance",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM19_GIGA_DRAIN": {
+    "label": "TM19 Giga Drain",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM20_SAFEGUARD": {
+    "label": "TM20 Safeguard",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM21_FRUSTRATION": {
+    "label": "TM21 Frustration",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM22_SOLAR_BEAM": {
+    "label": "TM22 Solar Beam",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM23_IRON_TAIL": {
+    "label": "TM23 Iron Tail",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM24_THUNDERBOLT": {
+    "label": "TM24 Thunderbolt",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM25_THUNDER": {
+    "label": "TM25 Thunder",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM26_EARTHQUAKE": {
+    "label": "TM26 Earthquake",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM27_RETURN": {
+    "label": "TM27 Return",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM28_DIG": {
+    "label": "TM28 Dig",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM29_PSYCHIC": {
+    "label": "TM29 Psychic",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM30_SHADOW_BALL": {
+    "label": "TM30 Shadow Ball",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM31_BRICK_BREAK": {
+    "label": "TM31 Brick Break",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM32_DOUBLE_TEAM": {
+    "label": "TM32 Double Team",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM33_REFLECT": {
+    "label": "TM33 Reflect",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM34_SHOCK_WAVE": {
+    "label": "TM34 Shock Wave",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM35_FLAMETHROWER": {
+    "label": "TM35 Flamethrower",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM36_SLUDGE_BOMB": {
+    "label": "TM36 Sludge Bomb",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM37_SANDSTORM": {
+    "label": "TM37 Sandstorm",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM38_FIRE_BLAST": {
+    "label": "TM38 Fire Blast",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM39_ROCK_TOMB": {
+    "label": "TM39 Rock Tomb",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM40_AERIAL_ACE": {
+    "label": "TM40 Aerial Ace",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM41_TORMENT": {
+    "label": "TM41 Torment",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM42_FACADE": {
+    "label": "TM42 Facade",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM43_SECRET_POWER": {
+    "label": "TM43 Secret Power",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM44_REST": {
+    "label": "TM44 Rest",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM45_ATTRACT": {
+    "label": "TM45 Attract",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM46_THIEF": {
+    "label": "TM46 Thief",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM47_STEEL_WING": {
+    "label": "TM47 Steel Wing",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM48_SKILL_SWAP": {
+    "label": "TM48 Skill Swap",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM49_SNATCH": {
+    "label": "TM49 Snatch",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_TM50_OVERHEAT": {
+    "label": "TM50 Overheat",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_MAGMA_EMBLEM": {
+    "label": "Magma Emblem",
+    "classification": "FILLER",
+    "tags": []
+  },
+  "ITEM_OLD_SEA_MAP": {
+    "label": "Old Sea Map",
+    "classification": "FILLER",
+    "tags": []
+  },
+
+  "ITEM_BADGE_1": {
+    "label": "Stone Badge",
+    "classification": "PROGRESSION",
+    "tags": ["Badge"]
+  },
+  "ITEM_BADGE_2": {
+    "label": "Knuckle Badge",
+    "classification": "PROGRESSION",
+    "tags": ["Badge"]
+  },
+  "ITEM_BADGE_3": {
+    "label": "Dynamo Badge",
+    "classification": "PROGRESSION",
+    "tags": ["Badge"]
+  },
+  "ITEM_BADGE_4": {
+    "label": "Heat Badge",
+    "classification": "PROGRESSION",
+    "tags": ["Badge"]
+  },
+  "ITEM_BADGE_5": {
+    "label": "Balance Badge",
+    "classification": "PROGRESSION",
+    "tags": ["Badge"]
+  },
+  "ITEM_BADGE_6": {
+    "label": "Feather Badge",
+    "classification": "PROGRESSION",
+    "tags": ["Badge"]
+  },
+  "ITEM_BADGE_7": {
+    "label": "Mind Badge",
+    "classification": "PROGRESSION",
+    "tags": ["Badge"]
+  },
+  "ITEM_BADGE_8": {
+    "label": "Rain Badge",
+    "classification": "PROGRESSION",
+    "tags": ["Badge"]
+  },
+  "ITEM_HM01_CUT": {
+    "label": "HM01 Cut",
+    "classification": "PROGRESSION",
+    "tags": ["HM"]
+  },
+  "ITEM_HM02_FLY": {
+    "label": "HM02 Fly",
+    "classification": "PROGRESSION",
+    "tags": ["HM"]
+  },
+  "ITEM_HM03_SURF": {
+    "label": "HM03 Surf",
+    "classification": "PROGRESSION",
+    "tags": ["HM"]
+  },
+  "ITEM_HM04_STRENGTH": {
+    "label": "HM04 Strength",
+    "classification": "PROGRESSION",
+    "tags": ["HM"]
+  },
+  "ITEM_HM05_FLASH": {
+    "label": "HM05 Flash",
+    "classification": "PROGRESSION",
+    "tags": ["HM"]
+  },
+  "ITEM_HM06_ROCK_SMASH": {
+    "label": "HM06 Rock Smash",
+    "classification": "PROGRESSION",
+    "tags": ["HM"]
+  },
+  "ITEM_HM07_WATERFALL": {
+    "label": "HM07 Waterfall",
+    "classification": "PROGRESSION",
+    "tags": ["HM"]
+  },
+  "ITEM_HM08_DIVE": {
+    "label": "HM08 Dive",
+    "classification": "PROGRESSION",
+    "tags": ["HM"]
+  }
 }

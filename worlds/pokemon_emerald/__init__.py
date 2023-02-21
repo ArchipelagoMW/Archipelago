@@ -54,7 +54,7 @@ class PokemonEmeraldWorld(World):
         connection.connect(regions["REGION_LITTLEROOT_TOWN"])
         regions["Menu"] = menu
 
-        create_locations_with_tags(self, regions, ["GroundItem", "HiddenItem", "Badge"])
+        create_locations_with_tags(self, regions, ["GroundItem", "HiddenItem", "Badge", "NpcGift"])
         self.multiworld.regions += regions.values()
 
 

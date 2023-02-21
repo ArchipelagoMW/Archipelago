@@ -22,22 +22,27 @@ def get_data_json():
     return data_json
 
 
-class ItemAttributes(NamedTuple):
-    name: str
+class ItemData(NamedTuple):
+    label: str
     classification: ItemClassification
+    tags: MutableSet[str]
 
 
 item_attributes = None
-def get_item_attributes():
+def get_item_attributes() -> Dict[str, ItemData]:
     global item_attributes
     data_json = get_data_json()
     if (item_attributes == None):
-        item_attributes = dict()
+        item_attributes = {}
         items_json = load_json("items.json")
 
         for item_constant_name, attributes in items_json.items():
             item_id = data_json["constants"][item_constant_name]
-            item_attributes[item_id] = ItemAttributes(attributes[0], str_to_item_classification(attributes[1]))
+            item_attributes[item_id] = ItemData(
+                attributes["label"],
+                str_to_item_classification(attributes["classification"]),
+                set(attributes["tags"])
+            )
 
     return item_attributes
 
