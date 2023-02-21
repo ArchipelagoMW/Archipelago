@@ -65,31 +65,24 @@ class AdventureWorld(World):
     data_version: ClassVar[int] = 0
     required_client_version: Tuple[int, int, int] = (0, 3, 6)
 
-    # adventure specific properties
-    rom_name: Optional[bytearray]
-
-    # definitely a bunch of things I COULD put in here, but right now won't
-    item_rando_type: Optional[int]
-    dragon_slay_check: Optional[int]
-    trap_bat_check: Optional[int]
-    bat_logic: Optional[int]
-    freeincarnate_max: Optional[int]
-    dragon_rando_type: Optional[int]
-    connector_multi_slot: Optional[int]
-    yorgle_speed: Optional[int]
-    yorgle_min_speed: Optional[int]
-    grundle_speed: Optional[int]
-    grundle_min_speed: Optional[int]
-    rhindle_speed: Optional[int]
-    rhindle_min_speed: Optional[int]
-    difficulty_switch_a: Optional[int]
-    difficulty_switch_b: Optional[int]
-
-    dragon_rooms: [str]
-    created_items: int
-
-    # dict of item names -> list of speed deltas
-    dragon_speed_reducer_info: {}
+    def __init__(self, world: MultiWorld, player: int):
+        super().__init__(world, player)
+        self.rom_name: Optional[bytearray] = bytearray("", "utf8" )
+        self.dragon_rooms: [int] = [0x14, 0x19, 0x4]
+        self.dragon_slay_check: Optional[int] = 0
+        self.connector_multi_slot: Optional[int] = 0
+        self.dragon_rando_type: Optional[int] = 0
+        self.yorgle_speed: Optional[int] = 2
+        self.yorgle_min_speed: Optional[int] = 2
+        self.grundle_speed: Optional[int] = 2
+        self.grundle_min_speed: Optional[int] = 2
+        self.rhindle_speed: Optional[int] = 3
+        self.rhindle_min_speed: Optional[int] = 3
+        self.difficulty_switch_a: Optional[int] = 0
+        self.difficulty_switch_b: Optional[int] = 0
+        # dict of item names -> list of speed deltas
+        self.dragon_speed_reducer_info: {} = {}
+        self.created_items: int = 0
 
     @classmethod
     def stage_assert_generate(cls, _multiworld: MultiWorld) -> None:
@@ -106,12 +99,8 @@ class AdventureWorld(World):
             bytearray(f"ADVENTURE{__version__.replace('.', '')[:3]}_{self.player}_{self.multiworld.seed}", "utf8")[:21]
         self.rom_name.extend([0] * (21 - len(self.rom_name)))
 
-        self.item_rando_type = self.multiworld.item_rando_type[self.player].value
-        self.dragon_slay_check = self.multiworld.dragon_slay_check[self.player].value
-        self.trap_bat_check = self.multiworld.trap_bat_check[self.player].value
-        self.bat_logic = self.multiworld.bat_logic[self.player].value
-        self.freeincarnate_max = self.multiworld.freeincarnate_max[self.player].value
         self.dragon_rando_type = self.multiworld.dragon_rando_type[self.player].value
+        self.dragon_slay_check = self.multiworld.dragon_slay_check[self.player].value
         self.connector_multi_slot = self.multiworld.connector_multi_slot[self.player].value
         self.yorgle_speed = self.multiworld.yorgle_speed[self.player].value
         self.yorgle_min_speed = self.multiworld.yorgle_min_speed[self.player].value
@@ -128,7 +117,6 @@ class AdventureWorld(World):
         else:
             item_table["Sword"].classification = ItemClassification.progression
 
-        self.dragon_rooms = [0x14, 0x19, 0x4]
         if self.dragon_rando_type == DragonRandoType.option_shuffle:
             self.multiworld.random.shuffle(self.dragon_rooms)
         elif self.dragon_rando_type == DragonRandoType.option_overworldplus:
@@ -186,14 +174,13 @@ class AdventureWorld(World):
         extra_filler_count = num_locations - self.created_items
 
         # traps would probably go here, if enabled
-
-        actual_freeincarnates = min(extra_filler_count, self.freeincarnate_max)
+        freeincarnate_max = self.multiworld.freeincarnate_max[self.player].value
+        actual_freeincarnates = min(extra_filler_count, freeincarnate_max)
         self.multiworld.itempool += [self.create_item("Freeincarnate") for _ in range(actual_freeincarnates)]
         self.created_items += actual_freeincarnates
 
         extra_filler_count = num_locations - self.created_items
         self.multiworld.itempool += [self.create_item("nothing") for _ in range(extra_filler_count)]
-
 
     def create_dragon_slow_items(self, min_speed: int, speed: int, item_name: str, maximum_items: int):
         if min_speed < speed:
@@ -277,6 +264,7 @@ class AdventureWorld(World):
         auto_collect_locations: [AdventureAutoCollectLocation] = []
         local_item_to_location: {int, int} = {}
         bat_no_touch_locs: [LocationData] = []
+        bat_logic: int = self.multiworld.bat_logic[self.player].value
         try:
             rom_bytearray = bytearray(apply_basepatch(get_base_rom_bytes()))
             self.place_dragons(rom_bytearray)
@@ -304,7 +292,7 @@ class AdventureWorld(World):
                     item_position_data_start = item_position_table + item_ram_address - items_ram_start
                     location_data = location_table[location.name]
                     room_x, room_y = location_data.get_position(self.multiworld.per_slot_randoms[self.player])
-                    if location_data.needs_bat_logic and self.bat_logic == 0x0:
+                    if location_data.needs_bat_logic and bat_logic == 0x0:
                         copied_location = copy.copy(location_data)
                         copied_location.local_item = item_ram_address
                         bat_no_touch_locs.append(copied_location)
@@ -323,7 +311,7 @@ class AdventureWorld(World):
                     if location.item.code != nothing_item_id:
                         location_data = location_table[location.name]
                         foreign_item_locations.append(location_data)
-                        if location_data.needs_bat_logic and self.bat_logic == 0x0:
+                        if location_data.needs_bat_logic and bat_logic == 0x0:
                             bat_no_touch_locs.append(location_data)
                     else:
                         location_data = location_table[location.name]
@@ -334,7 +322,7 @@ class AdventureWorld(World):
                 item_position_data_start = get_item_position_data_start(rom_bytearray, unplaced_item.table_index)
                 rom_bytearray[item_position_data_start:item_position_data_start + 1] = 0xff.to_bytes(1, "little")
 
-            if self.connector_multi_slot:
+            if self.multiworld.connector_multi_slot[self.player].value:
                 rom_bytearray[connector_port_offset:connector_port_offset + 1] = \
                     (self.player & 0xff).to_bytes(1, "little")
             else:
@@ -350,7 +338,7 @@ class AdventureWorld(World):
                                         autocollect=auto_collect_locations, local_item_locations=local_item_to_location,
                                         dragon_speed_reducer_info=self.dragon_speed_reducer_info,
                                         diff_a_mode=self.difficulty_switch_a, diff_b_mode=self.difficulty_switch_b,
-                                        bat_logic=self.bat_logic, bat_no_touch_locations=bat_no_touch_locs,
+                                        bat_logic=bat_logic, bat_no_touch_locations=bat_no_touch_locs,
                                         seed_name=bytes(self.multiworld.seed_name, encoding="ascii"))
             patch.write()
         finally:

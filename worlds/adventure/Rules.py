@@ -1,23 +1,32 @@
+from worlds.adventure import location_table
+from worlds.adventure.Options import BatLogic
 from worlds.generic.Rules import add_rule, set_rule, forbid_item
 from BaseClasses import LocationProgressType
 
 
 def set_rules(self) -> None:
     world = self.multiworld
+    use_bat_logic = world.bat_logic[self.player].value == BatLogic.option_use_logic
+
     set_rule(world.get_entrance("YellowCastlePort", self.player),
              lambda state: state.has("Yellow Key", self.player))
     set_rule(world.get_entrance("BlackCastlePort", self.player),
              lambda state: state.has("Black Key", self.player))
     set_rule(world.get_entrance("WhiteCastlePort", self.player),
              lambda state: state.has("White Key", self.player))
-    set_rule(world.get_entrance("WhiteCastleSecretPassage", self.player),
-             lambda state: state.has("Bridge", self.player))
-    set_rule(world.get_entrance("WhiteCastlePeekPassage", self.player),
-             lambda state: state.has("Bridge", self.player) or
-                           state.has("Magnet", self.player))
-    set_rule(world.get_entrance("BlackCastleVaultEntrance", self.player),
-             lambda state: state.has("Bridge", self.player) or
-                           state.has("Magnet", self.player))
+
+    # a future thing would be to make the bat an actual item, or at least allow it to
+    # be placed in a castle, which would require some additions to the rules when
+    # use_bat_logic is true
+    if not use_bat_logic:
+        set_rule(world.get_entrance("WhiteCastleSecretPassage", self.player),
+                 lambda state: state.has("Bridge", self.player))
+        set_rule(world.get_entrance("WhiteCastlePeekPassage", self.player),
+                 lambda state: state.has("Bridge", self.player) or
+                               state.has("Magnet", self.player))
+        set_rule(world.get_entrance("BlackCastleVaultEntrance", self.player),
+                 lambda state: state.has("Bridge", self.player) or
+                               state.has("Magnet", self.player))
 
     # really this requires getting the dot item, and having another item or enemy
     # in the room, but the dot would be *super evil*
@@ -28,17 +37,22 @@ def set_rules(self) -> None:
              lambda state: state.has("Bridge", self.player) and
                            state.has("Black Key", self.player))
 
-    set_rule(world.get_entrance("CreditsToFarSide", self.player),
-             lambda state: state.has("Magnet", self.player))
+    if not use_bat_logic:
+        set_rule(world.get_entrance("CreditsToFarSide", self.player),
+                 lambda state: state.has("Magnet", self.player))
 
-    # bridge literally does not fit in this space, I think
-    # and if the magnet is in there, you're not getting it with the bridge!
+    # bridge literally does not fit in this space, I think.  I'll just exclude it
     forbid_item(world.get_location("Dungeon Vault", self.player), "Bridge", self.player)
-    forbid_item(world.get_location("Dungeon Vault", self.player), "Magnet", self.player)
+    # don't put magnet in locations that can pull in-logic items out of reach unless the bat is in play
+    if not use_bat_logic:
+        forbid_item(world.get_location("Dungeon Vault", self.player), "Magnet", self.player)
+        forbid_item(world.get_location("Red Maze Vault Entrance", self.player), "Magnet", self.player)
+        forbid_item(world.get_location("Credits Right Side", self.player), "Magnet", self.player)
+
+    # and obviously we don't want to start with the game already won
     forbid_item(world.get_location("Inside Yellow Castle", self.player), "Chalice", self.player)
     overworld = world.get_region("Overworld", self.player)
-    white_castle_region = world.get_region("WhiteCastle", self.player)
-    black_castle_region = world.get_region("WhiteCastle", self.player)
+
     for loc in overworld.locations:
         forbid_item(loc, "Chalice", self.player)
 
