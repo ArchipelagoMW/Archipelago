@@ -37,11 +37,11 @@ def patch_kh2(self, output_directory):
     def increaseStat(i):
         if lvlStats[i] == "str":
             self.strength += 2
-        if lvlStats[i] == "mag":
+        elif lvlStats[i] == "mag":
             self.magic += 2
-        if lvlStats[i] == "def":
+        elif lvlStats[i] == "def":
             self.defense += 1
-        if lvlStats[i] == "ap":
+        elif lvlStats[i] == "ap":
             self.ap += 3
 
     self.formattedTrsr = {}

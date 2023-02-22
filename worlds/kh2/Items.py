@@ -51,8 +51,10 @@ Progression_Table = {
     ItemName.SkillandCrossbones:  ItemData(0x130018, 2, 62, 0x35B6),
     ItemName.Scimitar:            ItemData(0x130019, 2, 72, 0x35C0),
     ItemName.MembershipCard:      ItemData(0x13001A, 2, 369, 0x3643),
-    ItemName.IceCream:            ItemData(0x13001B, 3, 375, 0x3649),  # Changed to 3 instead of one poster, picture and ice cream respectively
-    ItemName.WaytotheDawn:        ItemData(0x13001C, 1, 73, 0x35C1),  # currently first visit locking doesn't work for twtnw.When goa is updated should be 2
+    ItemName.IceCream:            ItemData(0x13001B, 3, 375, 0x3649),
+    # Changed to 3 instead of one poster, picture and ice cream respectively
+    ItemName.WaytotheDawn:        ItemData(0x13001C, 1, 73, 0x35C1),
+    # currently first visit locking doesn't work for twtnw.When goa is updated should be 2
     ItemName.IdentityDisk:        ItemData(0x13001D, 2, 74, 0x35C2),
     ItemName.TornPages:           ItemData(0x13001E, 5, 32, 0x3598),
 
@@ -71,15 +73,15 @@ Magic_Table = {
     ItemName.CureElement:     ItemData(0x130027, 3, 24, 0x3597),
     ItemName.MagnetElement:   ItemData(0x130028, 3, 87, 0x35CF),
     ItemName.ReflectElement:  ItemData(0x130029, 3, 88, 0x35D0),
-    ItemName.Genie:           ItemData(0x13002A, 1, 159,0x36C4, 4),
-    ItemName.PeterPan:        ItemData(0x13002B, 1, 160,0x36C4, 5),
+    ItemName.Genie:           ItemData(0x13002A, 1, 159, 0x36C4, 4),
+    ItemName.PeterPan:        ItemData(0x13002B, 1, 160, 0x36C4, 5),
     ItemName.Stitch:          ItemData(0x13002C, 1, 25, 0x36C0, 0),
-    ItemName.ChickenLittle:   ItemData(0x13002D, 1, 383,0x36C0, 3),
+    ItemName.ChickenLittle:   ItemData(0x13002D, 1, 383, 0x36C0, 3),
 }
 
 Movement_Table = {
-    ItemName.HighJump:    ItemData(0x13002E, 4, 94,  0x05E, 0, True),
-    ItemName.QuickRun:    ItemData(0x13002F, 4, 98,  0x062, 0, True),
+    ItemName.HighJump:    ItemData(0x13002E, 4, 94, 0x05E, 0, True),
+    ItemName.QuickRun:    ItemData(0x13002F, 4, 98, 0x062, 0, True),
     ItemName.DodgeRoll:   ItemData(0x130030, 4, 564, 0x234, 0, True),
     ItemName.AerialDodge: ItemData(0x130031, 4, 102, 0x066, 0, True),
     ItemName.Glide:       ItemData(0x130032, 4, 106, 0x06A, 0, True),
@@ -667,5 +669,23 @@ item_dictionary_table = {**Reports_Table,
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_dictionary_table.items() if
                                             data.code}
+
+item_groups: typing.Dict[str, list] = {"Drive Form":      [item_name for item_name in Forms_Table.keys()],
+                                       "Donald Limit":    [ItemName.FlareForce, ItemName.Fantasia],
+                                       "Goofy Limit":     [ItemName.Teamwork, ItemName.TornadoFusion],
+                                       "Magic":           [ItemName.FireElement, ItemName.BlizzardElement,
+                                                           ItemName.ThunderElement,
+                                                           ItemName.CureElement, ItemName.MagnetElement,
+                                                           ItemName.ReflectElement],
+                                       "Summon":          [ItemName.ChickenLittle, ItemName.Genie, ItemName.Stitch,
+                                                           ItemName.PeterPan],
+                                       "Gap Closer":      [ItemName.SlideDash, ItemName.FlashStep],
+                                       "Ground Finisher": [ItemName.GuardBreak, ItemName.Explosion,
+                                                           ItemName.FinishingLeap],
+                                       "Visit Lock":      [item_name for item_name in
+                                                           exclusionItem_table["2VisitLocking"]],
+                                       "Keyblade":        [item_name for item_name in Keyblade_Table.keys()]
+                                       }
+
 # lookup_kh2id_to_name: typing.Dict[int, str] = {data.kh2id: item_name for item_name, data in
 #                                               item_dictionary_table.items() if data.kh2id}
