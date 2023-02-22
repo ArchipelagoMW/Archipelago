@@ -411,6 +411,20 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
                 rom.banks[bank][address + 1] = packed >> 8
     WARP_PATCH = True
     if WARP_PATCH:
+        from . import utils
+        tile = utils.createTileData( \
+"""11111111
+10000000
+10200320 
+10323200
+10033300
+10023230
+10230020
+10000000""", key="0231")
+        MINIMAP_BASE = 0x3800
+        #for i in range(64):
+        #    rom.banks[0x0C][MINIMAP_BASE + len(tile) * i : MINIMAP_BASE + len(tile) * (i + 1)] = tile
+        rom.banks[0x2C][MINIMAP_BASE + len(tile) * 0x65 : MINIMAP_BASE + len(tile) * 0x66] = tile
         # Interesting - 3CA0 should be free, but something has pushed all the code forward a byte
         rom.patch(0x02, 0x3CA1, None, assembler.ASM("""
             ld   e, $0F
@@ -490,13 +504,39 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
             mamu_pond.addEntity(3, 5, 0x61)
 
             mamu_pond.store(rom)
+        ADD_EAGLE = True
+        if ADD_EAGLE:
+            all_warps.append(0x0F)
+            room = RoomEditor(rom, 0x0F)
+            # Move one cliff edge and change it into a pit
+            room.changeObject(7, 6, 0xE8)
+            room.moveObject(7, 6, 6, 4)
+
+            # Add the warp
+            room.addEntity(6, 4, 0x61)
+            # move the two corners
+            room.moveObject(6, 7, 7, 7)
+            room.moveObject(6, 6, 7, 6)
+            for object in room.objects:
+                # Extend the lower wall
+                if ((object.x == 0 and object.y == 7)
+                # Extend the lower floor
+                or (object.x == 0 and object.y == 6)):
+                    room.overlay[object.x + object.count + object.y * 10] = object.type_id
+                    object.count += 1
+
+                # Don't leave floor under the pit
+                # ...this doesn't matter
+                #if object.x == 0 and object.y == 4:
+                #    object.count = 6
+            room.store(rom)
         for warp in all_warps:
             # Set icon
-            rom.banks[0x20][0x168B + warp] = 0xF8
+            rom.banks[0x20][0x168B + warp] = 0x55
             # Set text
             if not rom.banks[0x01][0x1959 + warp]:
                 rom.banks[0x01][0x1959 + warp] = 0x42
-
+            # Set palette
             # rom.banks[0x20][0x178B + 0x95] = 0x8
 
         rom.banks[0x01][0x1909 + 0x42] = 0x2B
@@ -508,9 +548,9 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
         call $7E7B
         ret
         """))
-        # TODO fix the jumps
+        
         warp_jump = "".join(f"cp ${hex(warp)[2:]}\njr success\n" for warp in all_warps)
-        print(warp_jump)
+
         rom.patch(0x01, 0x3E7B, None, assembler.ASM(f"""
 TeleportHandler:
 
@@ -542,8 +582,7 @@ success:
     ld   [$D416], a             ; $425F: $EA $16 $D4
     ld   a, $07                                   ; $57F4: $3E $07
     ld   [$DB96], a                    ; $57F6: $EA $96 $DB wGameplaySubtype
-    call $0C7D       ; $57C8: $CD $7D $0C
-
+    call $0C7D
 exit:
     ret
         """))

@@ -155,7 +155,8 @@ class RoomEditor:
 
     def removeObject(self, x, y):
         self.objects = list(filter(lambda obj: obj.x != x or obj.y != y, self.objects))
-
+        if self.overlay is not None:
+            self.overlay[x + y * 10] = self.floor_object
     def moveObject(self, x, y, new_x, new_y):
         for obj in self.objects:
             if obj.x == x and obj.y == y:
