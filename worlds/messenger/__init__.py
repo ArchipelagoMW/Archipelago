@@ -63,7 +63,7 @@ class MessengerWorld(World):
 
     def generate_early(self) -> None:
         self.rules = MessengerRules(self.player)
-        if self.multiworld.goal[self.player] > Goal.option_phantom:
+        if self.multiworld.goal[self.player] == Goal.option_open_shop_chest:
             self.multiworld.shuffle_seals[self.player].value = PowerSeals.option_true
             self.total_seals = self.multiworld.total_seals[self.player].value
             self.required_seals = int(self.multiworld.percent_seals_required[self.player].value / 100 * self.total_seals)
@@ -80,7 +80,7 @@ class MessengerWorld(World):
 
     def create_items(self) -> None:
         itempool = []
-        if self.multiworld.goal[self.player] == Goal.option_shop_chest:
+        if self.multiworld.goal[self.player] == Goal.option_open_shop_chest:
             seals = [self.create_item("Power Seal") for _ in range(self.total_seals)]
             for i in range(self.required_seals):
                 seals[i].classification = ItemClassification.progression_skip_balancing
@@ -113,7 +113,7 @@ class MessengerWorld(World):
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
-        if self.multiworld.goal[self.player] > Goal.option_phantom:
+        if self.multiworld.goal[self.player] == Goal.option_open_shop_chest:
             set_rule(self.multiworld.get_region("Music Box", self.player).entrances[0],
                      lambda state: state.has("Shop Chest", self.player))
 
@@ -131,8 +131,9 @@ class MessengerWorld(World):
                 locations[loc.address] = [loc.item.name, self.multiworld.player_name[loc.item.player]]
 
         return {
-            "deathlink": bool(self.multiworld.death_link[self.player].value),
+            "deathlink": self.multiworld.death_link[self.player].value,
             "goal": self.multiworld.goal[self.player].current_key,
+            "music_box": self.multiworld.music_box[self.player].value,
             "required_seals": self.required_seals,
             "locations": locations,
             "settings": {"Difficulty": "Basic" if not self.multiworld.shuffle_seals[self.player] else "Advanced"}
@@ -144,4 +145,3 @@ class MessengerWorld(World):
     def create_item(self, name: str) -> MessengerItem:
         item_id = self.item_name_to_id[name] if name in self.item_name_to_id else None
         return MessengerItem(name, self.player, item_id)
-

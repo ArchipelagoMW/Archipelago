@@ -18,10 +18,14 @@ class PowerSeals(DefaultOnToggle):
 
 class Goal(Choice):
     """Requirement to finish the game. Shop Chest will force seals to be shuffled."""
-    option_music_box_and_phantom = 0
-    option_phantom = 1
-    option_shop_chest = 2
-    option_shop_chest_and_music_box = 3
+    display_name = "Goal"
+    option_open_music_box = 0
+    option_open_shop_chest = 1
+
+
+class MusicBox(DefaultOnToggle):
+    """Whether the music box gauntlet needs to be done."""
+    display_name = "Music Box Gauntlet"
 
 
 class NotesNeeded(Range):
@@ -51,6 +55,7 @@ messenger_options = {
     "enable_logic": Logic,
     "shuffle_seals": PowerSeals,
     "goal": Goal,
+    "music_box": MusicBox,
     "notes_needed": NotesNeeded,
     "total_seals": AmountSeals,
     "percent_seals_required": RequiredSeals,
