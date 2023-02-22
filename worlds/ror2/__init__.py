@@ -30,7 +30,6 @@ class RiskOfRainWorld(World):
      first crash landing.
     """
     game = "Risk of Rain 2"
-    option_definitions = get_type_hints(ROR2Options)
     options_dataclass = ROR2Options
     o: ROR2Options
     topology_present = False

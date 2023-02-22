@@ -120,7 +120,7 @@ class WorldTestBase(unittest.TestCase):
         self.multiworld.set_seed(seed)
         self.multiworld.state = CollectionState(self.multiworld)
         args = Namespace()
-        for name, option in typing.get_type_hints(AutoWorld.AutoWorldRegister.world_types[self.game].options_dataclass).items():
+        for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].options_dataclass.type_hints.items():
             setattr(args, name, {
                 1: option.from_any(self.options.get(name, getattr(option, "default")))
             })

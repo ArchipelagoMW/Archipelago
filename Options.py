@@ -861,8 +861,15 @@ class ProgressionBalancing(SpecialRange):
     }
 
 
+class OptionsMetaProperty(type):
+    @property
+    def type_hints(cls) -> typing.Dict[str, AssembleOptions]:
+        """Returns type hints of the class as a dictionary."""
+        return typing.get_type_hints(cls)
+
+
 @dataclass
-class CommonOptions:
+class CommonOptions(metaclass=OptionsMetaProperty):
     progression_balancing: ProgressionBalancing
     accessibility: Accessibility
 

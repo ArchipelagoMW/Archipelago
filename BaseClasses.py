@@ -200,7 +200,7 @@ class MultiWorld():
         self.player_types[new_id] = NetUtils.SlotType.group
         self._region_cache[new_id] = {}
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
-        for option_key, option in world_type.option_definitions.items():
+        for option_key, option in world_type.options_dataclass.type_hints.items():
             getattr(self, option_key)[new_id] = option(option.default)
         for option_key, option in Options.common_options.items():
             getattr(self, option_key)[new_id] = option(option.default)

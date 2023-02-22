@@ -7,8 +7,8 @@ import random
 import string
 import urllib.parse
 import urllib.request
-from collections import Counter, ChainMap
-from typing import Dict, Tuple, Callable, Any, Union, get_type_hints
+from collections import Counter
+from typing import Dict, Tuple, Callable, Any, Union
 
 import ModuleUpdate
 
@@ -339,7 +339,7 @@ def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
         return get_choice(option_key, category_dict)
     if game in AutoWorldRegister.world_types:
         game_world = AutoWorldRegister.world_types[game]
-        options = get_type_hints(game_world.options_dataclass)
+        options = game_world.options_dataclass.type_hints
         if option_key in options:
             if options[option_key].supports_weighting:
                 return get_choice(option_key, category_dict)
@@ -464,7 +464,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
 
     if ret.game in AutoWorldRegister.world_types:
-        for option_key, option in get_type_hints(world_type.options_dataclass).items():
+        for option_key, option in world_type.options_dataclass.type_hints.items():
             handle_option(ret, game_weights, option_key, option, plando_options)
         if PlandoOptions.items in plando_options:
             ret.plando_items = game_weights.get("plando_items", [])
