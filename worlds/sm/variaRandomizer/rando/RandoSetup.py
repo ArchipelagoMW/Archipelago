@@ -229,7 +229,7 @@ class RandoSetup(object):
         startAP = self.areaGraph.accessPoints[self.startAP]
         availAPs = [ap.Name for ap in self.areaGraph.getAvailableAccessPoints(startAP, self.sm, self.settings.maxDiff)]
         self.log.debug("availAPs="+str(availAPs))
-        for goal in Objectives.activeGoals:
+        for goal in Objectives.objDict[self.graphSettings.player].activeGoals:
             n, aps = goal.escapeAccessPoints
             if len(aps) == 0:
                 continue
@@ -267,7 +267,7 @@ class RandoSetup(object):
         # check if we can reach/beat all bosses
         if ret:
             # always add G4 to mandatory bosses, even if not required by objectives
-            mandatoryBosses = set(Objectives.getMandatoryBosses() + Bosses.Golden4())
+            mandatoryBosses = set(Objectives.objDict[self.sm.player].getMandatoryBosses() + Bosses.Golden4())
 
             for loc in self.lastRestricted:
                 if loc.Name in self.bossesLocs:
@@ -286,7 +286,7 @@ class RandoSetup(object):
                     beatableBosses = sorted([loc.BossItemType for loc in self.services.currentLocations(self.startAP, container, diff=infinity) if loc.isBoss()])
                     self.log.debug("checkPool. beatableBosses="+str(beatableBosses))
                     self.log.debug("checkPool. mandatoryBosses: {}".format(mandatoryBosses))
-                    ret = mandatoryBosses.issubset(set(beatableBosses)) and Objectives.checkLimitObjectives(beatableBosses)
+                    ret = mandatoryBosses.issubset(set(beatableBosses)) and Objectives.objDict[self.sm.player].checkLimitObjectives(beatableBosses)
                     if ret:
                         # check that we can then kill mother brain
                         self.sm.addItems(Bosses.Golden4() + Bosses.miniBosses())
@@ -395,7 +395,7 @@ class RandoSetup(object):
     def getForbiddenMovement(self):
         self.log.debug("getForbiddenMovement BEGIN. forbidden="+str(self.forbiddenItems))
         removableMovement = [mvt for mvt in self.movementItems if self.checkPool([mvt])]
-        if 'Bomb' in removableMovement and not RomPatches.has(RomPatches.BombTorizoWake) and Objectives.isGoalActive("activate chozo robots"):
+        if 'Bomb' in removableMovement and not RomPatches.has(self.sm.player, RomPatches.BombTorizoWake) and Objectives.objDict[self.sm.player].isGoalActive("activate chozo robots"):
             # in this objective, without VARIA tweaks, BT has to wake so give bombs
             removableMovement.remove('Bomb')
         self.log.debug("getForbiddenMovement removable="+str(removableMovement))

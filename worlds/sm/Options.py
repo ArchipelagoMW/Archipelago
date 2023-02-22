@@ -266,7 +266,7 @@ class EscapeRando(Toggle):
 
 class RemoveEscapeEnemies(Toggle):
     """Remove enemies during escape sequence, disable it to blast through enemies with your Hyper Beam and cause lag."""
-    display_name = "Randomize the escape sequence"   
+    display_name = "Remove enemies during escape"   
 
 class Tourian(Choice):
     """
@@ -289,6 +289,7 @@ class Objective(OptionList):
     Note: See the Tourian parameter to enable fast Tourian or trigger the escape when all objectives are completed.
     Note: Current percentage of collected items is displayed in the inventory pause menu.
     Note: Collect 100% items is excluded by default when randomizing the objectives list as it requires you to complete all the objectives.
+    Note: In AP, Items% and areas objectives are counted toward location checks, not items collected or received, except for "collect all upgrades"
 
     Format as a comma-separated list of objective names: ["kill three G4", "collect 75% items"].
     A full list of supported objectives can be found at:

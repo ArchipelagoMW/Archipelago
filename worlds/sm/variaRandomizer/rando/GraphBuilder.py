@@ -34,11 +34,11 @@ class GraphBuilder(object):
                     forcedAreas.add('Crateria')
                 # force areas required by objectives
                 # 1st the 'clear area' ones
-                forcedAreas = forcedAreas.union({goal.area for goal in Objectives.activeGoals if goal.area is not None})
+                forcedAreas = forcedAreas.union({goal.area for goal in Objectives.objDict[self.graphSettings.player].activeGoals if goal.area is not None})
                 # for the rest, base ourselves on escapeAccessPoints :
                 # - if only "1 of n" pick an area, preferably one already forced
                 # - filter out G4 AP (always there)
-                for goal in Objectives.activeGoals:
+                for goal in Objectives.objDict[self.graphSettings.player].activeGoals:
                     if goal.area is None:
                         n, apNames = goal.escapeAccessPoints
                         aps = [getAccessPoint(apName) for apName in apNames]
@@ -61,7 +61,7 @@ class GraphBuilder(object):
                 else:
                     transitions += GraphUtils.createAreaTransitions(self.graphSettings.lightAreaRando)
         ret = AccessGraph(Logic.accessPoints, transitions, self.graphSettings.dotFile)
-        Objectives.setGraph(ret, maxDiff)
+        Objectives.objDict[self.graphSettings.player].setGraph(ret, maxDiff)
         return ret
 
     # fills in escape transitions if escape rando is enabled
@@ -166,7 +166,7 @@ class GraphBuilder(object):
         possibleTargets = self._getTargets(sm, graph, maxDiff)
         # try to escape from all the possible objectives APs
         possiblePaths = []
-        for goal in Objectives.activeGoals:
+        for goal in Objectives.objDict[self.graphSettings.player].activeGoals:
             n, possibleAccessPoints = goal.escapeAccessPoints
             count = 0
             for ap in possibleAccessPoints:

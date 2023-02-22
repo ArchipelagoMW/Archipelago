@@ -1,3 +1,4 @@
+import copy
 import random
 from rom.addresses import Addresses
 from rom.rom import pc_to_snes
@@ -199,7 +200,7 @@ _goalsList = [
          items=["GoldenTorizo"],
          text="{} golden torizo",
          category="Minibosses",
-         conflictFunc=lambda settings: settings.qty['energy'] == 'ultra sparse' and (not Knows.LowStuffGT or (Knows.LowStuffGT.difficulty > settings.maxDiff))),
+         conflictFunc=lambda settings, player: settings.qty['energy'] == 'ultra sparse' and (not Knows.knowsDict[player].LowStuffGT or (Knows.knowsDict[player].LowStuffGT.difficulty > settings.maxDiff))),
     Goal("kill one miniboss", "other", lambda sm, ap: Bosses.xMiniBossesDead(sm, 1), "miniboss_1_killed",
          escapeAccessPoints=getMiniBossesEscapeAccessPoints(1),
          exclusion={"list": ["kill spore spawn", "kill botwoon", "kill crocomire", "kill golden torizo",
@@ -230,12 +231,12 @@ _goalsList = [
          text="{} all mini bosses",
          expandableList=["kill spore spawn", "kill botwoon", "kill crocomire", "kill golden torizo"],
          category="Minibosses",
-         conflictFunc=lambda settings: settings.qty['energy'] == 'ultra sparse' and (not Knows.LowStuffGT or (Knows.LowStuffGT.difficulty > settings.maxDiff))),
+         conflictFunc=lambda settings, player: settings.qty['energy'] == 'ultra sparse' and (not Knows.knowsDict[player].LowStuffGT or (Knows.knowsDict[player].LowStuffGT.difficulty > settings.maxDiff))),
     # not available in AP
     #Goal("finish scavenger hunt", "other", lambda sm, ap: SMBool(True), "scavenger_hunt_completed",
     #     exclusion={"list": []}, # will be auto-completed
     #     available=False),
-    Goal("nothing", "other", lambda sm, ap: Objectives.canAccess(sm, ap, "Landing Site"), "nothing_objective",
+    Goal("nothing", "other", lambda sm, ap: Objectives.objDict[sm.player].canAccess(sm, ap, "Landing Site"), "nothing_objective",
          escapeAccessPoints=(1, ["Landing Site"])), # with no objectives at all, escape auto triggers only in crateria
     Goal("collect 25% items", "items", lambda sm, ap: SMBool(True), "collect_25_items",
          exclusion={"list": ["collect 50% items", "collect 75% items", "collect 100% items"]},
@@ -286,13 +287,13 @@ _goalsList = [
          category="Items",
          area="EastMaridia"),
     Goal("tickle the red fish", "other",
-         lambda sm, ap: sm.wand(sm.haveItem('Grapple'), Objectives.canAccess(sm, ap, "Red Fish Room Bottom")),
+         lambda sm, ap: sm.wand(sm.haveItem('Grapple'), Objectives.objDict[sm.player].canAccess(sm, ap, "Red Fish Room Bottom")),
          "fish_tickled",
          escapeAccessPoints=(1, ["Red Fish Room Bottom"]),
          objCompletedFuncAPs=lambda ap: ["Red Fish Room Bottom"],
          category="Memes"),
     Goal("kill the orange geemer", "other",
-         lambda sm, ap: sm.wand(Objectives.canAccess(sm, ap, "Bowling"), # XXX this unnecessarily adds canPassBowling as requirement
+         lambda sm, ap: sm.wand(Objectives.objDict[sm.player].canAccess(sm, ap, "Bowling"), # XXX this unnecessarily adds canPassBowling as requirement
                                 sm.wor(sm.haveItem('Wave'), sm.canUsePowerBombs())),
          "orange_geemer",
          escapeAccessPoints=(1, ["Bowling"]),
@@ -300,7 +301,7 @@ _goalsList = [
          text="{} orange geemer",
          category="Memes"),
     Goal("kill shaktool", "other",
-         lambda sm, ap: sm.wand(Objectives.canAccess(sm, ap, "Oasis Bottom"),
+         lambda sm, ap: sm.wand(Objectives.objDict[sm.player].canAccess(sm, ap, "Oasis Bottom"),
                                 sm.canTraverseSandPits(),
                                 sm.canAccessShaktoolFromPantsRoom()),
          "shak_dead",
@@ -308,8 +309,8 @@ _goalsList = [
          objCompletedFuncAPs=lambda ap: ["Oasis Bottom"],
          text="{} shaktool",
          category="Memes"),
-    Goal("activate chozo robots", "other", lambda sm, ap: sm.wand(Objectives.canAccessLocation(sm, ap, "Bomb"),
-                                                                  Objectives.canAccessLocation(sm, ap, "Gravity Suit"),
+    Goal("activate chozo robots", "other", lambda sm, ap: sm.wand(Objectives.objDict[sm.player].canAccessLocation(sm, ap, "Bomb"),
+                                                                  Objectives.objDict[sm.player].canAccessLocation(sm, ap, "Gravity Suit"),
                                                                   sm.haveItem("GoldenTorizo"),
                                                                   sm.canPassLowerNorfairChozo()), # graph access implied by GT loc
          "all_chozo_robots",
@@ -317,15 +318,15 @@ _goalsList = [
          escapeAccessPoints=(3, ["Landing Site", "Screw Attack Bottom", "Bowling"]),
          objCompletedFuncAPs=lambda ap: ["Landing Site", "Screw Attack Bottom", "Bowling"],
          exclusion={"list": ["kill golden torizo"]},
-         conflictFunc=lambda settings: settings.qty['energy'] == 'ultra sparse' and (not Knows.LowStuffGT or (Knows.LowStuffGT.difficulty > settings.maxDiff))),
-    Goal("visit the animals", "other", lambda sm, ap: sm.wand(Objectives.canAccess(sm, ap, "Big Pink"), sm.haveItem("SpeedBooster"), # dachora
-                                                              Objectives.canAccess(sm, ap, "Etecoons Bottom")), # Etecoons
+         conflictFunc=lambda settings, player: settings.qty['energy'] == 'ultra sparse' and (not Knows.knowsDict[player].LowStuffGT or (Knows.knowsDict[player].LowStuffGT.difficulty > settings.maxDiff))),
+    Goal("visit the animals", "other", lambda sm, ap: sm.wand(Objectives.objDict[sm.player].canAccess(sm, ap, "Big Pink"), sm.haveItem("SpeedBooster"), # dachora
+                                                              Objectives.objDict[sm.player].canAccess(sm, ap, "Etecoons Bottom")), # Etecoons
          "visited_animals",
          category="Memes",
          escapeAccessPoints=(2, ["Big Pink", "Etecoons Bottom"]),
          objCompletedFuncAPs=lambda ap: ["Big Pink", "Etecoons Bottom"]),
     Goal("kill king cacatac", "other",
-         lambda sm, ap: Objectives.canAccess(sm, ap, 'Bubble Mountain Top'),
+         lambda sm, ap: Objectives.objDict[sm.player].canAccess(sm, ap, 'Bubble Mountain Top'),
          "king_cac_dead",
          category="Memes",
          escapeAccessPoints=(1, ['Bubble Mountain Top']),
@@ -352,29 +353,30 @@ def completeGoalData():
 completeGoalData()
 
 class Objectives(object):
-    activeGoals = []
-    nbActiveGoals = 0
     maxActiveGoals = 5
-    totalItemsCount = 100
-    goals = _goals
-    graph = None
-    _tourianRequired = None
     vanillaGoals = ["kill kraid", "kill phantoon", "kill draygon", "kill ridley"]
     scavHuntGoal = ["finish scavenger hunt"]
+    objDict = {}
 
-    def __init__(self, tourianRequired=True, randoSettings=None):
-        if Objectives._tourianRequired is None:
-            Objectives._tourianRequired = tourianRequired
+    def __init__(self, player=0, tourianRequired=True, randoSettings=None):
+        self.player = player
+        self.activeGoals = []
+        self.nbActiveGoals = 0
+        self.totalItemsCount = 100
+        self.goals = copy.deepcopy(_goals)
+        self.graph = None
+        self._tourianRequired = tourianRequired
         self.randoSettings = randoSettings
+        Objectives.objDict[player] = self
 
     @property
     def tourianRequired(self):
-        assert Objectives._tourianRequired is not None
-        return Objectives._tourianRequired
+        assert self._tourianRequired is not None
+        return self._tourianRequired
 
     def resetGoals(self):
-        Objectives.activeGoals = []
-        Objectives.nbActiveGoals = 0
+        self.activeGoals = []
+        self.nbActiveGoals = 0
 
     def conflict(self, newGoal):
         if newGoal.exclusion.get('tourian') == "Disabled" and self.tourianRequired == False:
@@ -382,7 +384,7 @@ class Objectives(object):
             return True
         LOG.debug("check if new goal {} conflicts with existing active goals".format(newGoal.name))
         count = 0
-        for goal in Objectives.activeGoals:
+        for goal in self.activeGoals:
             if newGoal.name in goal.exclusion["list"]:
                 LOG.debug("new goal {} in exclusion list of active goal {}".format(newGoal.name, goal.name))
                 return True
@@ -400,11 +402,11 @@ class Objectives(object):
 
         # if at least one active goal has a limit and new goal has the same type of one of the existing limit
         # check that new goal doesn't exceed the limit
-        for goal in Objectives.activeGoals:
+        for goal in self.activeGoals:
             goalExclusionType = goal.exclusion.get("type")
             if goalExclusionType is not None and goalExclusionType == newGoal.gtype:
                 count = 0
-                for lgoal in Objectives.activeGoals:
+                for lgoal in self.activeGoals:
                     if lgoal.gtype == newGoal.gtype:
                         count += 1
                 # add new goal to the count
@@ -415,7 +417,7 @@ class Objectives(object):
         LOG.debug("no backward conflict detected for new goal {}".format(newGoal.name))
 
         if self.randoSettings is not None and newGoal.conflictFunc is not None:
-            if newGoal.conflictFunc(self.randoSettings):
+            if newGoal.conflictFunc(self.randoSettings, self.player):
                 LOG.debug("new Goal {} is conflicting with rando settings".format(newGoal.name))
                 return True
             LOG.debug("no conflict with rando settings detected for new goal {}".format(newGoal.name))
@@ -424,66 +426,62 @@ class Objectives(object):
 
     def addGoal(self, goalName, completed=False):
         LOG.debug("addGoal: {}".format(goalName))
-        goal = Objectives.goals[goalName]
+        goal = self.goals[goalName]
         if self.conflict(goal):
             return
-        Objectives.nbActiveGoals += 1
-        assert Objectives.nbActiveGoals <= Objectives.maxActiveGoals, "Too many active goals"
-        goal.setRank(Objectives.nbActiveGoals)
+        self.nbActiveGoals += 1
+        assert self.nbActiveGoals <= self.maxActiveGoals, "Too many active goals"
+        goal.setRank(self.nbActiveGoals)
         goal.completed = completed
-        Objectives.activeGoals.append(goal)
+        self.activeGoals.append(goal)
 
     def removeGoal(self, goal):
-        Objectives.nbActiveGoals -= 1
-        Objectives.activeGoals.remove(goal)
+        self.nbActiveGoals -= 1
+        self.activeGoals.remove(goal)
 
     def clearGoals(self):
-        Objectives.nbActiveGoals = 0
-        Objectives.activeGoals.clear()
+        self.nbActiveGoals = 0
+        self.activeGoals.clear()
 
-    @staticmethod
-    def isGoalActive(goalName):
-        return Objectives.goals[goalName] in Objectives.activeGoals
+    def isGoalActive(self, goalName):
+        return self.goals[goalName] in self.activeGoals
 
     # having graph as a global sucks but Objectives instances are all over the place,
     # goals must access it, and it doesn't change often
-    @staticmethod
-    def setGraph(graph, maxDiff):
-        Objectives.graph = graph
-        Objectives.maxDiff = maxDiff
-        for goalName, goal in Objectives.goals.items():
+    def setGraph(self, graph, maxDiff):
+        self.graph = graph
+        self.maxDiff = maxDiff
+        for goalName, goal in self.goals.items():
             if goal.area is not None:
                 goal.escapeAccessPoints = getAreaEscapeAccessPoints(goal.area)
 
-    @staticmethod
-    def canAccess(sm, src, dst):
-        return SMBool(Objectives.graph.canAccess(sm, src, dst, Objectives.maxDiff))
+    def canAccess(self, sm, src, dst):
+        return SMBool(self.graph.canAccess(sm, src, dst, self.maxDiff))
 
-    @staticmethod
-    def canAccessLocation(sm, ap, locName):
+    def canAccessLocation(self, sm, ap, locName):
         loc = locationsDict[locName]
-        availLocs = Objectives.graph.getAvailableLocations([loc], sm, Objectives.maxDiff, ap)
+        availLocs = self.graph.getAvailableLocations([loc], sm, self.maxDiff, ap)
         return SMBool(loc in availLocs)
 
     def setVanilla(self):
-        for goal in Objectives.vanillaGoals:
+        for goal in self.vanillaGoals:
             self.addGoal(goal)
 
     def isVanilla(self):
         # kill G4 and/or scav hunt
-        if len(Objectives.activeGoals) == 1:
-            for goal in Objectives.activeGoals:
-                if goal.name not in Objectives.scavHuntGoal:
+        if len(self.activeGoals) == 1:
+            for goal in self.activeGoals:
+                if goal.name not in self.scavHuntGoal:
                     return False
             return True
-        elif len(Objectives.activeGoals) == 4:
-            for goal in Objectives.activeGoals:
-                if goal.name not in Objectives.vanillaGoals:
+        elif len(self.activeGoals) == 4:
+            for goal in self.activeGoals:
+                if goal.name not in self.vanillaGoals:
                     return False
             return True
-        elif len(Objectives.activeGoals) == 5:
-            for goal in Objectives.activeGoals:
-                if goal.name not in Objectives.vanillaGoals + Objectives.scavHuntGoal:
+        elif len(self.activeGoals) == 5:
+            for goal in self.activeGoals:
+                if goal.name not in self.vanillaGoals + self.scavHuntGoal:
                     return False
             return True
         else:
@@ -493,12 +491,12 @@ class Objectives(object):
         self.addGoal("finish scavenger hunt")
 
     def updateScavengerEscapeAccess(self, ap):
-        assert Objectives.isGoalActive("finish scavenger hunt")
-        (_, apList) = Objectives.goals['finish scavenger hunt'].escapeAccessPoints
+        assert self.isGoalActive("finish scavenger hunt")
+        (_, apList) = self.goals['finish scavenger hunt'].escapeAccessPoints
         apList.append(ap)
 
     def _replaceEscapeAccessPoints(self, goal, aps):
-        (_, apList) = Objectives.goals[goal].escapeAccessPoints
+        (_, apList) = self.goals[goal].escapeAccessPoints
         apList.clear()
         apList += aps
 
@@ -510,7 +508,7 @@ class Objectives(object):
         self._replaceEscapeAccessPoints("collect all upgrades", collectedLocsAccessPoints)
 
     def setScavengerHuntFunc(self, scavClearFunc):
-        Objectives.goals["finish scavenger hunt"].clearFunc = scavClearFunc
+        self.goals["finish scavenger hunt"].clearFunc = scavClearFunc
 
     def setItemPercentFuncs(self, totalItemsCount=None, allUpgradeTypes=None):
         def getPctFunc(pct, totalItemsCount):
@@ -521,12 +519,12 @@ class Objectives(object):
 
         for pct in [25,50,75,100]:
             goal = 'collect %d%% items' % pct
-            Objectives.goals[goal].clearFunc = getPctFunc(pct, totalItemsCount)
+            self.goals[goal].clearFunc = getPctFunc(pct, totalItemsCount)
         if allUpgradeTypes is not None:
-            Objectives.goals["collect all upgrades"].clearFunc = lambda sm, ap: sm.haveItems(allUpgradeTypes)
+            self.goals["collect all upgrades"].clearFunc = lambda sm, ap: sm.haveItems(allUpgradeTypes)
 
     def setAreaFuncs(self, funcsByArea):
-        goalsByArea = {goal.area:goal for goalName, goal in Objectives.goals.items()}
+        goalsByArea = {goal.area:goal for goalName, goal in self.goals.items()}
         for area, func in funcsByArea.items():
             if area in goalsByArea:
                 goalsByArea[area].clearFunc = func
@@ -545,14 +543,14 @@ class Objectives(object):
         self.setAreaFuncs({area:getObjAreaFunc(area) for area in solver.splitLocsByArea})
 
     def expandGoals(self):
-        LOG.debug("Active goals:"+str(Objectives.activeGoals))
+        LOG.debug("Active goals:"+str(self.activeGoals))
         # try to replace 'kill all G4' with the four associated objectives.
         # we need at least 3 empty objectives out of the max (-1 +4)
-        if Objectives.maxActiveGoals - Objectives.nbActiveGoals < 3:
+        if self.maxActiveGoals - self.nbActiveGoals < 3:
             return
 
         expandable = None
-        for goal in Objectives.activeGoals:
+        for goal in self.activeGoals:
             if goal.expandable:
                 expandable = goal
                 break
@@ -566,14 +564,13 @@ class Objectives(object):
             self.addGoal(name)
 
         # rebuild ranks
-        for i, goal in enumerate(Objectives.activeGoals, 1):
+        for i, goal in enumerate(self.activeGoals, 1):
             goal.rank = i
 
     # call from logic
-    @staticmethod
-    def canClearGoals(smbm, ap):
+    def canClearGoals(self, smbm, ap):
         result = SMBool(True)
-        for goal in Objectives.activeGoals:
+        for goal in self.activeGoals:
             result = smbm.wand(result, goal.canClearGoal(smbm, ap))
         return result
 
@@ -581,7 +578,7 @@ class Objectives(object):
     def checkGoals(self, smbm, ap):
         ret = {}
 
-        for goal in Objectives.activeGoals:
+        for goal in self.activeGoals:
             if goal.completed is True:
                 continue
             # check if goal can be completed
@@ -590,71 +587,64 @@ class Objectives(object):
         return ret
 
     def setGoalCompleted(self, goalName, completed):
-        for goal in Objectives.activeGoals:
+        for goal in self.activeGoals:
             if goal.name == goalName:
                 goal.completed = completed
                 return
         assert False, "Can't set goal {} completion to {}, goal not active".format(goalName, completed)
 
     def allGoalsCompleted(self):
-        for goal in Objectives.activeGoals:
+        for goal in self.activeGoals:
             if goal.completed is False:
                 return False
         return True
 
     def getGoalFromCheckFunction(self, checkFunction):
-        for name, goal in Objectives.goals.items():
+        for name, goal in self.goals.items():
             if goal.checkAddr == checkFunction:
                 return goal
         assert True, "Goal with check function {} not found".format(hex(checkFunction))
 
-    @staticmethod
-    def getTotalItemsCount():
-        return Objectives.totalItemsCount
+    def getTotalItemsCount(self):
+        return self.totalItemsCount
 
     # call from web
-    @staticmethod
-    def getAddressesToRead():
+    def getAddressesToRead(self):
         terminator = 1
         objectiveSize = 2
-        bytesToRead = (Objectives.maxActiveGoals + terminator) * objectiveSize
+        bytesToRead = (self.maxActiveGoals + terminator) * objectiveSize
         return [Addresses.getOne('objectivesList')+i for i in range(0, bytesToRead+1)] + Addresses.getWeb('totalItems') + Addresses.getWeb("itemsMask") + Addresses.getWeb("beamsMask")
 
-    @staticmethod
-    def getExclusions():
+    def getExclusions(self):
         # to compute exclusions in the front end
-        return {goalName: goal.exclusion for goalName, goal in Objectives.goals.items()}
+        return {goalName: goal.exclusion for goalName, goal in self.goals.items()}
 
-    @staticmethod
-    def getObjectivesTypes():
+    def getObjectivesTypes(self):
         # to compute exclusions in the front end
         types = {'boss': [], 'miniboss': []}
-        for goalName, goal in Objectives.goals.items():
+        for goalName, goal in self.goals.items():
             if goal.gtype in types:
                 types[goal.gtype].append(goalName)
         return types
 
-    @staticmethod
-    def getObjectivesSort():
-        return list(Objectives.goals.keys())
+    def getObjectivesSort(self):
+        return list(self.goals.keys())
 
-    @staticmethod
-    def getObjectivesCategories():
-        return {goal.name: goal.category for goal in Objectives.goals.values() if goal.category is not None}
+    def getObjectivesCategories(self):
+        return {goal.name: goal.category for goal in self.goals.values() if goal.category is not None}
 
     # call from rando check pool and solver
-    @staticmethod
-    def getMandatoryBosses():
-        r = [goal.items for goal in Objectives.activeGoals]
+
+    def getMandatoryBosses(self):
+        r = [goal.items for goal in self.activeGoals]
         return [item for items in r for item in items]
 
-    @staticmethod
-    def checkLimitObjectives(beatableBosses):
+    def checkLimitObjectives(self, beatableBosses):
         # check that there's enough bosses/minibosses for limit objectives
         from logic.smboolmanager import SMBoolManager
         smbm = SMBoolManager()
         smbm.addItems(beatableBosses)
-        for goal in Objectives.activeGoals:
+        for goal in self.activeGoals:
             if not goal.isLimit():
                 continue
             if not goal.canClearGoal(smbm):
@@ -662,30 +652,29 @@ class Objectives(object):
         return True
 
     # call from solver
-    @staticmethod
-    def getGoalsList():
-        return [goal.name for goal in Objectives.activeGoals]
+    def getGoalsList(self):
+        return [goal.name for goal in self.activeGoals]
 
     # call from interactivesolver
     def getState(self):
-        return {goal.name: goal.completed for goal in Objectives.activeGoals}
+        return {goal.name: goal.completed for goal in self.activeGoals}
 
     def setState(self, state):
         for goalName, completed in state.items():
             self.addGoal(goalName, completed)
 
     def resetGoals(self):
-        for goal in Objectives.activeGoals:
+        for goal in self.activeGoals:
             goal.completed = False
 
     # call from rando
     @staticmethod
     def getAllGoals(removeNothing=False):
-        return [goal.name for goal in Objectives.goals.values() if goal.available and (not removeNothing or goal.name != "nothing")]
+        return [goal.name for goal in _goals.values() if goal.available and (not removeNothing or goal.name != "nothing")]
 
     # call from rando
     def setRandom(self, nbGoals, availableGoals):
-        while Objectives.nbActiveGoals < nbGoals and availableGoals:
+        while self.nbActiveGoals < nbGoals and availableGoals:
             goalName = random.choice(availableGoals)
             self.addGoal(goalName)
             availableGoals.remove(goalName)
@@ -697,23 +686,23 @@ class Objectives(object):
         checkFunction = romReader.romFile.readWord()
         while checkFunction != 0x0000:
             goal = self.getGoalFromCheckFunction(checkFunction)
-            Objectives.activeGoals.append(goal)
+            self.activeGoals.append(goal)
             checkFunction = romReader.romFile.readWord()
 
         # read number of available items for items % objectives
-        Objectives.totalItemsCount = romReader.romFile.readByte(Addresses.getOne('totalItems'))
+        self.totalItemsCount = romReader.romFile.readByte(Addresses.getOne('totalItems'))
 
-        for goal in Objectives.activeGoals:
+        for goal in self.activeGoals:
             LOG.debug("active goal: {}".format(goal.name))
 
-        Objectives._tourianRequired = not romReader.patchPresent('Escape_Trigger')
+        self._tourianRequired = not romReader.patchPresent('Escape_Trigger')
         LOG.debug("tourianRequired: {}".format(self.tourianRequired))
 
     # call from rando
     def writeGoals(self, romFile):
         # write check functions
         romFile.seek(Addresses.getOne('objectivesList'))
-        for goal in Objectives.activeGoals:
+        for goal in self.activeGoals:
             romFile.writeWord(goal.checkAddr)
         # list terminator
         romFile.writeWord(0x0000)
@@ -741,8 +730,8 @@ class Objectives(object):
         # start at 8th line
         baseAddr = Addresses.getOne('objectivesText') + lineLength * 8 + firstChar
         # space between two lines of text
-        space = 3 if Objectives.nbActiveGoals == 5 else 4
-        for i, goal in enumerate(Objectives.activeGoals):
+        space = 3 if self.nbActiveGoals == 5 else 4
+        for i, goal in enumerate(self.activeGoals):
             addr = baseAddr + i * lineLength * space
             text = goal.getText()
             romFile.seek(addr)
@@ -755,7 +744,7 @@ class Objectives(object):
         baseY = 0x40
         addr = Addresses.getOne('objectivesSpritesOAM')
         spritemapSize = 5 + 2
-        for i, goal in enumerate(Objectives.activeGoals):
+        for i, goal in enumerate(self.activeGoals):
             y = baseY + i * space * 8
             # sprite center is at 128
             y = (y - 128) & 0xFF
@@ -767,7 +756,7 @@ class Objectives(object):
         # objectives or tourian are not vanilla, prepare intro text
         # two \n for an actual newline
         text = "MISSION OBJECTIVES\n"
-        for goal in Objectives.activeGoals:
+        for goal in self.activeGoals:
             text += "\n\n%s" % goal.getIntroText()
         text += "\n\n\nTOURIAN IS %s\n\n\n" % tourian
         text += "CHECK OBJECTIVES STATUS IN\n\n"

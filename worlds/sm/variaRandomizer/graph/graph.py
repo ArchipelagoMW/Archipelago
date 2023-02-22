@@ -140,7 +140,7 @@ class AccessGraph(object):
 
     def addAccessPoint(self, ap):
         ap.distance = 0
-        self.accessPoints[ap.Name] = ap
+        self.accessPoints[ap.Name] = copy.deepcopy(ap)
 
     def toDot(self, dotFile):
         colors = ['red', 'blue', 'green', 'yellow', 'skyblue', 'violet', 'orange',

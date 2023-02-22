@@ -608,7 +608,7 @@ class VariaRandomizer:
                 RomPatches.ActivePatches[self.player] += RomPatches.AreaComfortSet
         if args.doorsColorsRando == True:
             RomPatches.ActivePatches[self.player].append(RomPatches.RedDoorsMissileOnly)
-        graphSettings = GraphSettings(args.startLocation, areaRandomization, lightArea, args.bosses,
+        graphSettings = GraphSettings(self.player, args.startLocation, areaRandomization, lightArea, args.bosses,
                                     args.escapeRando, self.minimizerN, dotFile,
                                     args.doorsColorsRando, args.allowGreyDoors, args.tourian,
                                     plandoRando["transitions"] if plandoSettings is not None else None)
@@ -618,7 +618,7 @@ class VariaRandomizer:
 
         self.escapeAttr = None
         if plandoSettings is None:
-            self.objectivesManager = Objectives(args.tourian != 'Disabled', randoSettings)
+            self.objectivesManager = Objectives(self.player, args.tourian != 'Disabled', randoSettings)
             addedObjectives = 0
             if args.majorsSplit == "Scavenger":
                 self.objectivesManager.setScavengerHunt()
@@ -644,13 +644,13 @@ class VariaRandomizer:
             else:
                 if not (args.majorsSplit == "Scavenger" and args.tourian == 'Disabled'):
                     self.objectivesManager.setVanilla()
-            if len(Objectives.activeGoals) == 0:
+            if len(self.objectivesManager.activeGoals) == 0:
                 self.objectivesManager.addGoal('nothing')
-            if any(goal for goal in Objectives.activeGoals if goal.area is not None):
+            if any(goal for goal in self.objectivesManager.activeGoals if goal.area is not None):
                 forceArg('hud', True, "'VARIA HUD' forced to on", webValue='on')
         else:
             args.tourian = plandoRando["tourian"]
-            self.objectivesManager = Objectives(args.tourian != 'Disabled')
+            self.objectivesManager = Objectives(self.player, args.tourian != 'Disabled')
             for goal in plandoRando["objectives"]:
                 self.objectivesManager.addGoal(goal)
 

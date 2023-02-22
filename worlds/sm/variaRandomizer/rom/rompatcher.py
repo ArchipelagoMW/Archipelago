@@ -301,7 +301,7 @@ class RomPatcher:
             if self.settings["doorsColorsRando"] == True:
                 for patchName in RomPatcher.IPSPatches['DoorsColors']:
                     self.applyIPSPatch(patchName)
-                self.writeDoorsColor(doors)
+                self.writeDoorsColor(doors, self.player)
             if self.settings["layout"]:
                 self.writeDoorIndicators(plms, self.settings["area"], self.settings["doorsColorsRando"])
             self.applyStartAP(self.settings["startLocation"], plms, doors)
@@ -1059,7 +1059,7 @@ class RomPatcher:
                 self.applyIPSPatch(plmName)
 
     def writeObjectives(self, itemLocs, tourian):
-        objectives = Objectives()
+        objectives = Objectives.objDict[self.player]
         objectives.writeGoals(self.romFile)
         objectives.writeIntroObjectives(self.romFile, tourian)
         self.writeItemsMasks(itemLocs)
