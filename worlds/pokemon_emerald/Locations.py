@@ -1,5 +1,5 @@
 from BaseClasses import Location
-from .Data import get_regions_data
+from .Data import get_region_data
 
 
 class PokemonEmeraldLocation(Location):
@@ -14,10 +14,10 @@ class PokemonEmeraldLocation(Location):
 
 
 def create_location_name_to_id_map():
-    regions_data = get_regions_data()
+    region_data = get_region_data()
 
     map = {}
-    for region_data in regions_data.values():
+    for region_data in region_data.values():
         for locaion_data in region_data.locations:
             map[locaion_data.name] = locaion_data.flag
 
@@ -25,10 +25,10 @@ def create_location_name_to_id_map():
 
 
 def create_locations_with_tags(self, region_map, tags):
-    regions_data = get_regions_data()
+    region_data = get_region_data()
     tags = set(tags)
 
-    for region_name, region_data in regions_data.items():
+    for region_name, region_data in region_data.items():
         region = region_map[region_name]
         for location_data in [location for location in region_data.locations if len(tags & location.tags) > 0]:
             location = PokemonEmeraldLocation(self.player, location_data.name, location_data.default_item, location_data.flag, location_data.rom_address, region)

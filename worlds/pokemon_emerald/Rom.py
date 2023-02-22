@@ -2,7 +2,7 @@ import bsdiff4
 import os
 from Patch import APDeltaPatch
 from .data.Pokemon import get_random_species
-from .Data import get_data_json
+from .Data import get_extracted_data
 
 
 def get_base_rom_as_bytes() -> bytes:
@@ -25,10 +25,12 @@ def set_bytes_little_endian(byte_array, address, size, value):
 # still have 2 species in the same respective slots after randomization.
 # TODO: Account for access to pokemon who can learn required HMs
 def randomize_encounter_tables(self, patched_rom):
-    data = get_data_json()
+    extracted_data = get_extracted_data()
 
-    for map_name, tables in data["encounter_tables"].items():
+    for map_name, tables in extracted_data["maps"].items():
         for table in tables.values():
+            if (table == None): continue
+
             default_pokemon = [p for p in set(table["encounter_slots"])]
             new_pokemon = []
 
@@ -49,7 +51,7 @@ def randomize_encounter_tables(self, patched_rom):
 
 
 def generate_output(self, output_directory: str):
-    data = get_data_json() 
+    extracted_data = get_extracted_data()
 
     base_rom = get_base_rom_as_bytes()
     with open(os.path.join(os.path.dirname(__file__), f"base_patch.bsdiff4"), "rb") as stream:
@@ -63,7 +65,7 @@ def generate_output(self, output_directory: str):
         if location.item and location.item.player == self.player:
             set_bytes_little_endian(patched_rom, location.address, 2, location.item.code)
         else:
-            set_bytes_little_endian(patched_rom, location.address, 2, data["constants"]["ITEM_ARCHIPELAGO_PROGRESSION"])
+            set_bytes_little_endian(patched_rom, location.address, 2, extracted_data["constants"]["ITEM_ARCHIPELAGO_PROGRESSION"])
 
     randomize_encounter_tables(self, patched_rom)
 

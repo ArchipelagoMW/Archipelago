@@ -3,23 +3,6 @@ import json
 import os
 from typing import List, Optional, Dict, MutableSet, NamedTuple
 from BaseClasses import ItemClassification
-    
-
-def load_json(filename):
-    json_string = ""
-    with open(os.path.join(os.path.dirname(__file__), f"data/{filename}"), "r") as infile:
-        for line in infile.readlines():
-            json_string += line
-    return json.loads(json_string)
-
-
-data_json = None
-def get_data_json():
-    global data_json
-    if (data_json == None):
-        data_json = load_json("data.json")
-    
-    return data_json
 
 
 class ItemData(NamedTuple):
@@ -28,16 +11,72 @@ class ItemData(NamedTuple):
     tags: MutableSet[str]
 
 
+class LocationData:
+    name: str
+    region_name: str
+    default_item: int
+    rom_address: Optional[int]
+    flag: int
+    tags: MutableSet[str]
+
+    def __init__(self, name: str, region_name: str, default_item: int, rom_address: Optional[int], flag: int):
+        self.name = name
+        self.region_name = region_name
+        self.default_item = default_item
+        self.rom_address = rom_address
+        self.flag = flag
+        self.tags = set()
+
+
+class WarpData:
+    region_name: str
+    encoded_string: str
+
+    def __init__(self, encoded_string: str, region_name: str):
+        self.encoded_string = encoded_string
+        self.region_name = region_name
+
+
+class RegionData:
+    name: str
+    exits: List[str]
+    warps: List[str]
+    locations: List[LocationData]
+
+    def __init__(self, name: str):
+        self.name = name
+        self.exits = []
+        self.warps = []
+        self.locations = []
+    
+
+def load_json(filepath):
+    json_string = ""
+    with open(filepath, "r") as infile:
+        for line in infile.readlines():
+            json_string += line
+    return json.loads(json_string)
+
+
+extracted_data = None
+def get_extracted_data() -> Dict[str, any]:
+    global extracted_data
+    if (extracted_data == None):
+        extracted_data = load_json(os.path.join(os.path.dirname(__file__), "data/extracted_data.json"))
+    
+    return extracted_data
+
+
 item_attributes = None
 def get_item_attributes() -> Dict[str, ItemData]:
     global item_attributes
-    data_json = get_data_json()
+    extracted_data = get_extracted_data()
     if (item_attributes == None):
         item_attributes = {}
-        items_json = load_json("items.json")
+        items_json = load_json(os.path.join(os.path.dirname(__file__), "data/items.json"))
 
         for item_constant_name, attributes in items_json.items():
-            item_id = data_json["constants"][item_constant_name]
+            item_id = extracted_data["constants"][item_constant_name]
             item_attributes[item_id] = ItemData(
                 attributes["label"],
                 str_to_item_classification(attributes["classification"]),
@@ -58,138 +97,107 @@ def str_to_item_classification(string):
         return ItemClassification.trap
 
 
-class LocationData:
-    name: str
-    region_name: str
-    default_item: int
-    ram_address: Optional[int]
-    rom_address: Optional[int]
-    flag: int
-    tags: MutableSet[str]
-
-    def __init__(self, name: str, region_name: str, default_item: int, ram_address: Optional[int], rom_address: Optional[int], flag: int):
-        self.name = name
-        self.region_name = region_name
-        self.default_item = default_item
-        self.ram_address = ram_address
-        self.rom_address = rom_address
-        self.flag = flag
-        self.tags = set()
+# TODO: Could generalize this with regex
+# Or this function is maybe superfluous
+def str_to_tag(string):
+    if (string == "HIDDEN_ITEM"):
+        return "HiddenItem"
+    if (string == "GROUND_ITEM"):
+        return "GroundItem"
+    elif (string == "NPC_GIFT"):
+        return "NpcGift"
 
 
-class WarpData:
-    region_name: str
-    encoded_string: str
+def load_region_jsons() -> List[Dict[str, any]]:
+    regions_dir = os.path.join(os.path.dirname(__file__), "data/regions")
 
-    def __init__(self, encoded_string: str, region_name: str):
-        self.encoded_string = encoded_string
-        self.region_name = region_name
+    region_jsons = []
 
-
-class RegionData:
-    name: str
-    exits: List[str]
-    warps: List[WarpData]
-    locations: List[LocationData]
-
-    def __init__(self, name: str):
-        self.name = name
-        self.exits = []
-        self.warps = []
-        self.locations = []
-
-
-regions_data = None
-def get_regions_data():
-    global regions_data
-    if (regions_data == None):
-        regions_data = create_regions_from_json()
-
-    return regions_data
-
-
-def create_regions_from_json() -> Dict[str, RegionData]:
-    data_json = get_data_json()
-
-    location_to_region_map = {}
-
-    battle_frontier_json = load_json("regions/battle_frontier.json")
-    city_regions_json = load_json("regions/cities.json")
-    dungeon_regions_json = load_json("regions/dungeons.json")
-    route_regions_json = load_json("regions/routes.json")
-
-    regions_json = {}
-    for region_name, region_json in battle_frontier_json.items():
-        regions_json[region_name] = region_json
-    for region_name, region_json in city_regions_json.items():
-        regions_json[region_name] = region_json
-    for region_name, region_json in dungeon_regions_json.items():
-        regions_json[region_name] = region_json
-    for region_name, region_json in route_regions_json.items():
-        regions_json[region_name] = region_json
+    for file in os.listdir(regions_dir):
+        if os.path.isfile(os.path.join(regions_dir, file)):
+            region_jsons.append(load_json(os.path.join(regions_dir, file)))
     
+    return region_jsons
+
+
+def merge_region_jsons(region_jsons: List[Dict[str, any]]) -> Dict[str, any]:
+    merged_regions = {}
+
+    for region_subset in region_jsons:
+        for region_name, region_data in region_subset.items():
+            if (region_name in merged_regions):
+                raise AssertionError("Region [{region_name}] was defined multiple times")
+            merged_regions[region_name] = region_data
+    
+    return merged_regions
+
+
+location_to_region_map = None
+def get_location_to_region_map() -> Dict[str, str]:
+    if (location_to_region_map == None):
+        raise AssertionError("Cannot get_location_to_region_map before region data has been loaded")
+    return location_to_region_map
+
+
+warp_to_region_map = None
+def get_warp_to_region_map() -> Dict[str, str]:
+    if (warp_to_region_map == None):
+        raise AssertionError("Cannot get_warp_to_region_map before region data has been loaded")
+    return warp_to_region_map
+
+
+def create_region_data() -> Dict[str, RegionData]:
+    global location_to_region_map
+    global warp_to_region_map
+    location_to_region_map = {}
+    warp_to_region_map = {}
+
+    extracted_data = get_extracted_data()
+    region_jsons = load_region_jsons()
+    regions_json = merge_region_jsons(region_jsons)
+
+
+    # RegionDatas
     regions = {}
     for region_name, region_json in regions_json.items():
         new_region = RegionData(region_name)
         for location_name in region_json["locations"]:
+            if (location_name in location_to_region_map):
+                raise AssertionError(f"Location [{location_name}] was claimed by multiple regions")
             location_to_region_map[location_name] = region_name
+
         for exit in region_json["exits"]:
             new_region.exits.append(exit)
         for encoded_warp in region_json["warps"]:
-            new_region.warps.append(WarpData(encoded_warp, region_name))
+            if (encoded_warp in location_to_region_map):
+                raise AssertionError(f"Warp [{encoded_warp}] was claimed by multiple regions")
+            warp_to_region_map[encoded_warp] = region_name
+            new_region.warps.append(encoded_warp)
 
         regions[region_name] = new_region
 
-    # Ground Items
-    for item_json in data_json["ball_items"]:
+    # LocationDatas
+    for location_name, location_json in extracted_data["locations"].items():
         new_location = LocationData(
-            item_json["name"],
-            location_to_region_map[item_json["name"]],
-            item_json["default_item"],
-            None,
-            item_json["rom_address"],
-            item_json["flag"]
+            location_name,
+            location_to_region_map[location_name],
+            location_json["default_item"],
+            location_json["rom_address"],
+            location_json["flag"]
         )
-        new_location.tags.add("GroundItem")
+        new_location.tags.add(str_to_tag(location_json["type"]))
         regions[new_location.region_name].locations.append(new_location)
 
-    # Hidden Items
-    for item_json in data_json["hidden_items"]:
-        new_location = LocationData(
-            item_json["name"],
-            location_to_region_map[item_json["name"]],
-            item_json["default_item"],
-            None,
-            item_json["rom_address"],
-            item_json["flag"]
-        )
-        new_location.tags.add("HiddenItem")
-        regions[new_location.region_name].locations.append(new_location)
-
-    # NPC Gifts
-    for item_json in data_json["npc_gifts"]:
-        new_location = LocationData(
-            item_json["name"],
-            location_to_region_map[item_json["name"]],
-            item_json["default_item"],
-            None,
-            item_json["rom_address"],
-            item_json["flag"]
-        )
-        new_location.tags.add("NpcGift")
-        regions[new_location.region_name].locations.append(new_location)
-
-    # Badges
+    # Badges aren't extracted locations, so enumerate them explicitly
     for i in range(0, 8):
-        item_name = f"ITEM_BADGE_{i + 1}"
-        item_code = data_json["constants"][item_name]
+        location_name = f"BADGE_{i + 1}"
+        item_code = extracted_data["constants"][f"ITEM_{location_name}"]
         new_location = LocationData(
-            item_name,
-            location_to_region_map[item_json["name"]],
+            location_name,
+            location_to_region_map[location_name],
             item_code,
-            None,
-            data_json["misc_rom_addresses"]["gGymBadgeItems"] + (i * 2),
-            data_json["constants"][f"FLAG_BADGE0{i + 1}_GET"]
+            extracted_data["misc_rom_addresses"]["gGymBadgeItems"] + (i * 2),
+            extracted_data["constants"][f"FLAG_BADGE0{i + 1}_GET"]
         )
         new_location.tags.add("Badge")
         regions[new_location.region_name].locations.append(new_location)
@@ -197,25 +205,13 @@ def create_regions_from_json() -> Dict[str, RegionData]:
     return regions
 
 
-def get_warp_destination_region_name(warp: WarpData):
-    regions_data = get_regions_data()
-    
-    source, dest = warp.encoded_string.split("/")
-    dest_map_name, dest_id = dest.split(':')
+region_data = None
+def get_region_data():
+    global region_data
+    if (region_data == None):
+        region_data = create_region_data()
 
-    for region in regions_data.values():
-        for region_warp in region.warps:
-            region_warp_source, region_warp_dest = region_warp.encoded_string.split("/")
-            region_warp_source_map_name, region_warp_source_id_string = region_warp_source.split(':')
-            source_ids = region_warp_source_id_string.split(",")
-
-            if (
-                dest_map_name == region_warp_source_map_name and
-                dest_id in source_ids
-            ):
-                return region_warp.region_name
-
-    return None
+    return region_data
 
 
 class EncounterType(Enum):
@@ -246,9 +242,11 @@ class EncounterData:
     fishing_encounters: Optional[EncounterTableData]
 
 
+# TODO: Fix and call
 def create_encounters_from_json():
+    extracted_data = get_extracted_data()
     encounters = {}
-    for map_name, encounter_table in data_json["encounter_tables"].items():
+    for map_name, encounter_table in extracted_data["encounter_tables"].items():
         if ("land_encounters" in encounter_table):
             land_encounters_json = encounter_table["land_encounters"]
             encounter_slots = [slot for slot in land_encounters_json["encounter_slots"]]

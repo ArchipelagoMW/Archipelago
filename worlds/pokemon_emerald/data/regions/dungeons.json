@@ -184,9 +184,7 @@
   },
   "REGION_MAGMA_HIDEOUT_2F_1R": {
     "parent_map": "MAP_MAGMA_HIDEOUT_2F_1R",
-    "locations": [
-      "ITEM_MAGMA_HIDEOUT_1F_RARE_CANDY"
-    ],
+    "locations": [],
     "exits": [],
     "warps": [
       "MAP_MAGMA_HIDEOUT_2F_1R:0/MAP_MAGMA_HIDEOUT_2F_2R:0",
@@ -794,9 +792,7 @@
   },
   "REGION_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM",
-    "locations": [
-      "ITEM_SHOAL_CAVE_STAIRS_ROOM_ICE_HEAL"
-    ],
+    "locations": [],
     "exits": [],
     "warps": [
       "MAP_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM:0/MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM:3",
@@ -834,6 +830,7 @@
       "REGION_UNDERWATER_SEAFLOOR_CAVERN"
     ],
     "warps": [
+      "MAP_SEAFLOOR_CAVERN_ENTRANCE:0/MAP_UNDERWATER_ROUTE128:0",
       "MAP_SEAFLOOR_CAVERN_ENTRANCE:1/MAP_SEAFLOOR_CAVERN_ROOM1:0"
     ]
   },

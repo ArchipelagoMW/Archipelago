@@ -1,4 +1,4 @@
-from ..Data import get_data_json
+from ..Data import get_extracted_data
 
 class PokemonSpecies:
     name: str
@@ -10,7 +10,6 @@ class PokemonSpecies:
 
 
 national_pokedex = None
-data = get_data_json()
 
 
 def get_random_species(random):
@@ -34,8 +33,8 @@ def get_species_by_name(name: str):
 
 
 def create_species(name, constant_name):
-    global data
-    return PokemonSpecies(name, data["constants"][constant_name])
+    extracted_data = get_extracted_data()
+    return PokemonSpecies(name, extracted_data["constants"][constant_name])
 
 
 def get_national_pokedex():
