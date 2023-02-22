@@ -73,7 +73,6 @@ def randomize_encounter_tables(self, patched_rom):
             replace_encounters(patched_rom, fishing_encounters["rom_address"], new_encounters)
 
 
-
 def generate_output(self, output_directory: str):
     extracted_data = get_extracted_data()
 
