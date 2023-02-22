@@ -412,6 +412,7 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
     WARP_PATCH = True
     if WARP_PATCH:
         from . import utils
+        # Patch in a warp icon
         tile = utils.createTileData( \
 """11111111
 10000000
@@ -422,9 +423,9 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
 10230020
 10000000""", key="0231")
         MINIMAP_BASE = 0x3800
-        #for i in range(64):
-        #    rom.banks[0x0C][MINIMAP_BASE + len(tile) * i : MINIMAP_BASE + len(tile) * (i + 1)] = tile
         rom.banks[0x2C][MINIMAP_BASE + len(tile) * 0x65 : MINIMAP_BASE + len(tile) * 0x66] = tile
+
+        # Allow using ENTITY_WARP for finding which map sections are warps
         # Interesting - 3CA0 should be free, but something has pushed all the code forward a byte
         rom.patch(0x02, 0x3CA1, None, assembler.ASM("""
             ld   e, $0F
@@ -453,6 +454,7 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
             jp   $512B
 
         """))
+        # Insert redirect to above code
         rom.patch(0x02, 0x1109, assembler.ASM("""
         ldh a, [$F6]
         cp 1
@@ -461,6 +463,7 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
         jp $7CA1
         nop
         """))
+        # Leaves some extra bytes behind, if we need more space in 0x02
 
         # On warp hole, open map instead
         rom.patch(0x19, 0x1DB9, None, assembler.ASM("""
@@ -468,9 +471,6 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
             ld [$DB95], a
             ld a, 0       ; reset subtype
             ld [$DB96], a
-            ld [$FFA2], a ; reset link z position
-            ; call $5626
-
             ld a, 1         ; Set flag for using teleport
             ld [$FFDD], a
 
@@ -482,6 +482,9 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
         rom.banks[0x01][0x17B9] = 0xFF
         rom.banks[0x01][0x17FD] = 0xDD
         rom.banks[0x01][0x17FE] = 0xFF
+
+        # If in warp mode, don't allow manual exit
+        #rom.patch(0x01, 0x1800, "20021E60", assembler.ASM("jp nz, $5818"), fill_nop=True)
 
         # Allow warp with just B
         rom.banks[0x01][0x17C0] = 0x20
@@ -524,11 +527,6 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
                 or (object.x == 0 and object.y == 6)):
                     room.overlay[object.x + object.count + object.y * 10] = object.type_id
                     object.count += 1
-
-                # Don't leave floor under the pit
-                # ...this doesn't matter
-                #if object.x == 0 and object.y == 4:
-                #    object.count = 6
             room.store(rom)
         for warp in all_warps:
             # Set icon
@@ -537,7 +535,7 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
             if not rom.banks[0x01][0x1959 + warp]:
                 rom.banks[0x01][0x1959 + warp] = 0x42
             # Set palette
-            # rom.banks[0x20][0x178B + 0x95] = 0x8
+            # rom.banks[0x20][0x178B + 0x95] = 0x1      
 
         rom.banks[0x01][0x1909 + 0x42] = 0x2B
 
@@ -549,7 +547,7 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
         ret
         """))
         
-        warp_jump = "".join(f"cp ${hex(warp)[2:]}\njr success\n" for warp in all_warps)
+        warp_jump = "".join(f"cp ${hex(warp)[2:]}\njr z, success\n" for warp in all_warps)
 
         rom.patch(0x01, 0x3E7B, None, assembler.ASM(f"""
 TeleportHandler:
@@ -565,24 +563,24 @@ TeleportHandler:
 success:
 
     ld   a, $0B                      ; Otherwise, warp somewhere ; $57C3: $3E $0B
-    ld   [$DB95], a                       ; $57C5: $EA $95 $DB
-    ld   a, $00                                   ; $57CB: $3E $00
-    ld   [$D401], a                   ; $57CD: $EA $01 $D4 wWarp0MapCategory
-    ld   [$D402], a                           ; $57D0: $EA $02 $D4 wWarp0Map
-    ld   a, [$DBB4]                               ; $57D3: $FA $B4 $DB wDBB4
-    ld   [$D403], a                          ; $57D6: $EA $03 $D4 wWarp0Room
+    ld   [$DB95], a
+    ld   a, $00
+    ld   [$D401], a                  ; wWarp0MapCategory
+    ld   [$D402], a                  ; wWarp0Map
+    ld   a, [$DBB4]                  ; wDBB4
+    ld   [$D403], a                  ; wWarp0Room
 
     ld   a, $68
-    ld   [$D404], a                  ; $57DB: $EA $04 $D4 wWarp0DestinationX
-    ldh  [$98], a
+    ld   [$D404], a                  ; wWarp0DestinationX
+    ldh  [$98], a                    ; LinkPositionY
     ld   a, $70
-    ld   [$D405], a                  ; $57E0: $EA $05 $D4 wWarp0DestinationY
-    ldh  [$99], a
-    ld   a, $66                                   ; $425D: $3E $45
-    ld   [$D416], a             ; $425F: $EA $16 $D4
-    ld   a, $07                                   ; $57F4: $3E $07
-    ld   [$DB96], a                    ; $57F6: $EA $96 $DB wGameplaySubtype
-    call $0C7D
+    ld   [$D405], a                  ; wWarp0DestinationY
+    ldh  [$99], a                    ; LinkPositionX
+    ld   a, $66                        
+    ld   [$D416], a                  ; wWarp0PositionTileIndex
+    ld   a, $07
+    ld   [$DB96], a                  ; wGameplaySubtype
+    call $0C83
 exit:
     ret
         """))
