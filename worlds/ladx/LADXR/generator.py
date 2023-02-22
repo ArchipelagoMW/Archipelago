@@ -484,11 +484,25 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
         rom.banks[0x01][0x17FE] = 0xFF
 
         # If in warp mode, don't allow manual exit
-        #rom.patch(0x01, 0x1800, "20021E60", assembler.ASM("jp nz, $5818"), fill_nop=True)
+        rom.patch(0x01, 0x1800, "20021E60", assembler.ASM("jp nz, $5818"), fill_nop=True)
 
         # Allow warp with just B
         rom.banks[0x01][0x17C0] = 0x20
-        rom.banks[0x01][0x1803] = 0x20
+
+        # Allow cursor to move over black squares
+        # This allows warping to undiscovered areas - a fine cheat, but needs a check for wOverworldRoomStatus in the warp code
+        # rom.patch(0x01, 0x1AE8, None, assembler.ASM("jp $5AF5"))
+
+        # This disables the arrows around the selection bubble
+        #rom.patch(0x01, 0x1B6F, None, assembler.ASM("ret"), fill_nop=True)
+        
+        # Fix lag when moving the cursor
+        # One option - just disable the delay code
+        #rom.patch(0x01, 0x1A76, 0x1A76+3, assembler.ASM("xor a"), fill_nop=True)
+        #rom.banks[0x01][0x1A7C] = 0
+        # Another option - just remove the animation
+        rom.banks[0x01][0x1B20] = 0
+        rom.banks[0x01][0x1B3B] = 0
 
         # Patch the icon for all teleports
         all_warps = [0x01, 0x95, 0x2C, 0xEC]
@@ -538,7 +552,6 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
             # rom.banks[0x20][0x178B + 0x95] = 0x1      
 
         rom.banks[0x01][0x1909 + 0x42] = 0x2B
-
 
         rom.texts[0x02B] = formatText('Warp')
 
