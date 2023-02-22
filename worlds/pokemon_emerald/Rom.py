@@ -1,7 +1,8 @@
 import bsdiff4
 import os
+from typing import Dict
 from Patch import APDeltaPatch
-from .data.Pokemon import get_random_species
+from .Pokemon import get_random_species
 from .Data import get_extracted_data
 
 
@@ -20,34 +21,57 @@ def set_bytes_little_endian(byte_array, address, size, value):
         size -= 1
 
 
+def create_randomized_encounter_table(random, default_slots):
+    default_pokemon = [p_id for p_id in set(default_slots)]
+    new_pokemon = []
+
+    new_pokemon_map: Dict[int, int] = {}
+    for pokemon_id in default_pokemon:
+        new_pokemon_id = get_random_species(random).id
+        new_pokemon_map[pokemon_id] = new_pokemon_id
+
+    new_slots = []
+    for slot in default_slots:
+        new_slots.append(new_pokemon_map[slot])
+
+    return new_slots
+
+
+def replace_encounters(data, table_address, encounter_slots):
+    """Encounter tables are lists of
+    struct {
+        min_level:  0x01 bytes,
+        max_level:  0x01 bytes,
+        species_id: 0x02 bytes
+    }
+    """
+    for slot_i, species_id in enumerate(encounter_slots):
+        address = table_address + 2 + (4 * slot_i)
+        set_bytes_little_endian(data, address, 2, species_id)
+
+
 # For every encounter table, replace each unique species.
 # So if a table only has 2 species across multiple slots, it will
 # still have 2 species in the same respective slots after randomization.
 # TODO: Account for access to pokemon who can learn required HMs
 def randomize_encounter_tables(self, patched_rom):
+    random = self.multiworld.per_slot_randoms[self.player]
     extracted_data = get_extracted_data()
 
-    for map_name, tables in extracted_data["maps"].items():
-        for table in tables.values():
-            if (table == None): continue
+    for map_data in extracted_data["maps"].values():
+        land_encounters = map_data["land_encounters"]
+        water_encounters = map_data["water_encounters"]
+        fishing_encounters = map_data["fishing_encounters"]
+        if (not land_encounters == None):
+            new_encounters = create_randomized_encounter_table(random, land_encounters["encounter_slots"])
+            replace_encounters(patched_rom, land_encounters["rom_address"], new_encounters)
+        if (not water_encounters == None):
+            new_encounters = create_randomized_encounter_table(random, water_encounters["encounter_slots"])
+            replace_encounters(patched_rom, water_encounters["rom_address"], new_encounters)
+        if (not fishing_encounters == None):
+            new_encounters = create_randomized_encounter_table(random, fishing_encounters["encounter_slots"])
+            replace_encounters(patched_rom, fishing_encounters["rom_address"], new_encounters)
 
-            default_pokemon = [p for p in set(table["encounter_slots"])]
-            new_pokemon = []
-
-            for pokemon in default_pokemon:
-                new_pokemon_id = get_random_species(self.multiworld.per_slot_randoms[self.player]).id
-                new_pokemon.append(new_pokemon_id)
-            
-            for slot_i, slot in enumerate(table["encounter_slots"]):
-                """Encounter tables are lists of
-                struct {
-                    min_level:  0x01 bytes,
-                    max_level:  0x01 bytes,
-                    species_id: 0x02 bytes
-                }
-                """
-                address = table["rom_address"] + 2 + (slot_i * 4)
-                set_bytes_little_endian(patched_rom, address, 2, new_pokemon[default_pokemon.index(slot)])
 
 
 def generate_output(self, output_directory: str):

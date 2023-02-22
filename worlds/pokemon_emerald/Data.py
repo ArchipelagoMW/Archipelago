@@ -209,6 +209,9 @@ class EncounterType(Enum):
     # STATIC = 4
 
 
+# Not currently reading encounter data until output.
+# But we will eventually need to in order to logically check
+# that players can obtain a pokemon that can use required HMs
 class EncounterTableData:
     encounter_type: EncounterType
     map_name: str
@@ -228,45 +231,3 @@ class EncounterData:
     land_encounters: Optional[EncounterTableData]
     water_encounters: Optional[EncounterTableData]
     fishing_encounters: Optional[EncounterTableData]
-
-
-# TODO: Fix and call
-def create_encounters_from_json():
-    extracted_data = get_extracted_data()
-    encounters = {}
-    for map_name, encounter_table in extracted_data["encounter_tables"].items():
-        if ("land_encounters" in encounter_table):
-            land_encounters_json = encounter_table["land_encounters"]
-            encounter_slots = [slot for slot in land_encounters_json["encounter_slots"]]
-            land_encounters = EncounterTableData(
-                EncounterType.LAND,
-                map_name,
-                encounter_slots,
-                land_encounters_json["ram_address"],
-                land_encounters_json["rom_address"]
-            )
-            encounters[map_name].land_encounters = land_encounters
-
-        if ("water_encounters" in encounter_table):
-            water_encounters_json = encounter_table["water_encounters"]
-            encounter_slots = [slot for slot in water_encounters_json["encounter_slots"]]
-            water_encounters = EncounterTableData(
-                EncounterType.WATER,
-                map_name,
-                encounter_slots,
-                water_encounters_json["ram_address"],
-                water_encounters_json["rom_address"]
-            )
-            encounters[map_name].water_encounters = water_encounters
-
-        if ("fishing_encounters" in encounter_table):
-            fishing_encounters_json = encounter_table["fishing_encounters"]
-            encounter_slots = [slot for slot in fishing_encounters_json["encounter_slots"]]
-            fishing_encounters = EncounterTableData(
-                EncounterType.FISHING,
-                map_name,
-                encounter_slots,
-                fishing_encounters_json["ram_address"],
-                fishing_encounters_json["rom_address"]
-            )
-            encounters[map_name].fishing_encounters = fishing_encounters
