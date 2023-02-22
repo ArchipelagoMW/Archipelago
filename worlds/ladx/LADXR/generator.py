@@ -565,17 +565,16 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
         rom.patch(0x01, 0x3E7B, None, assembler.ASM(f"""
 TeleportHandler:
 
-    ld  a, [$DBB4]
+    ld  a, [$DBB4] ; Load the current selected tile
+    ; TODO: check if actually revealed so we can have free movement
     ; Check cursor against different tiles
-
-
     {warp_jump}
-
     jr exit
 
 success:
-
-    ld   a, $0B                      ; Otherwise, warp somewhere ; $57C3: $3E $0B
+    xor a
+    ldh [$DD], a                     ; unset teleport flag(!!!)
+    ld   a, $0B
     ld   [$DB95], a
     ld   a, $00
     ld   [$D401], a                  ; wWarp0MapCategory
