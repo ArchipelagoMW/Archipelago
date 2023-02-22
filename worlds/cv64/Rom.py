@@ -5,7 +5,7 @@ from worlds.Files import APDeltaPatch
 import hashlib
 import os
 
-from .Names import Patches, RegionName
+from .Names import Patches, RName
 from .Stages import stage_dict
 
 USHASH = '1cc5cf3b4d29d8c3ade957648b529dc1'

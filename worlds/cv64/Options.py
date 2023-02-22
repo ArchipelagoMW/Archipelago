@@ -1,11 +1,20 @@
-from typing import Dict, Union
-from BaseClasses import MultiWorld
+from typing import Dict
 from Options import Option, Choice, DefaultOnToggle, Range, Toggle, DeathLink
+
+
+class CharacterStages(Choice):
+    """Whether to include Reinhardt-only stages, Carrie-only stages, or both."""
+    display_name = "Character Stages"
+    option_reinhardt_only = 0
+    option_carrie_only = 1
+    option_both = 2
+    default = 2
 
 
 class StageShuffle(Toggle):
     """Shuffles which stages appear in which stage slots. Villa and Castle Center will never appear in any character
-    stage slots; they can only be somewhere on the main path. Castle Keep will always be at the end of the line."""
+    stage slots if all character stages are included; they can only be somewhere on the main path.
+    Castle Keep will always be at the end of the line."""
     display_name = "Stage Shuffle"
 
 
@@ -160,6 +169,7 @@ class SkipWaterwayPlatforms(Toggle):
 
 
 cv64_options: Dict[str, Option] = {
+    "character_stages": CharacterStages,
     "stage_shuffle": StageShuffle,
     "warp_shuffle": WarpShuffle,
     "sub_weapon_shuffle": SubWeaponShuffle,
