@@ -551,10 +551,11 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
             # Set palette
             # rom.banks[0x20][0x178B + 0x95] = 0x1      
 
+        # Setup [?!] icon on map and associated text
         rom.banks[0x01][0x1909 + 0x42] = 0x2B
-
         rom.texts[0x02B] = formatText('Warp')
 
+        # call warp function (why not just jmp?)
         rom.patch(0x01, 0x17C3, None, assembler.ASM("""
         call $7E7B
         ret
@@ -572,12 +573,11 @@ TeleportHandler:
     jr exit
 
 success:
-    xor a
-    ldh [$DD], a                     ; unset teleport flag(!!!)
     ld   a, $0B
-    ld   [$DB95], a
-    ld   a, $00
+    ld   [$DB95], a ; Gameplay type
+    xor a
     ld   [$D401], a                  ; wWarp0MapCategory
+    ldh [$DD], a                     ; unset teleport flag(!!!)
     ld   [$D402], a                  ; wWarp0Map
     ld   a, [$DBB4]                  ; wDBB4
     ld   [$D403], a                  ; wWarp0Room
@@ -585,6 +585,7 @@ success:
     ld   a, $68
     ld   [$D404], a                  ; wWarp0DestinationX
     ldh  [$98], a                    ; LinkPositionY
+    ld a, [$D475] ; spin lonk?
     ld   a, $70
     ld   [$D405], a                  ; wWarp0DestinationY
     ldh  [$99], a                    ; LinkPositionX
@@ -592,7 +593,9 @@ success:
     ld   [$D416], a                  ; wWarp0PositionTileIndex
     ld   a, $07
     ld   [$DB96], a                  ; wGameplaySubtype
-    call $0C83
+    ld a, $78 ; Set link Z pos, doesn't work
+    ldh [$A2], a
+    call $0C83                       ; ApplyMapFadeOutTransition
 exit:
     ret
         """))
