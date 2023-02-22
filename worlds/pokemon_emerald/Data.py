@@ -104,7 +104,9 @@ def str_to_tag(string):
         return "HiddenItem"
     if (string == "GROUND_ITEM"):
         return "GroundItem"
-    elif (string == "NPC_GIFT"):
+    if (string == "NPC_GIFT"):
+        return "NpcGift"
+    if (string == "BADGE"):
         return "NpcGift"
 
 
@@ -156,7 +158,6 @@ def create_region_data() -> Dict[str, RegionData]:
     region_jsons = load_region_jsons()
     regions_json = merge_region_jsons(region_jsons)
 
-
     # RegionDatas
     regions = {}
     for region_name, region_json in regions_json.items():
@@ -177,7 +178,8 @@ def create_region_data() -> Dict[str, RegionData]:
         regions[region_name] = new_region
 
     # LocationDatas
-    for location_name, location_json in extracted_data["locations"].items():
+    for location_name, region_name in location_to_region_map.items():
+        location_json = extracted_data["locations"][location_name]
         new_location = LocationData(
             location_name,
             location_to_region_map[location_name],
@@ -186,20 +188,6 @@ def create_region_data() -> Dict[str, RegionData]:
             location_json["flag"]
         )
         new_location.tags.add(str_to_tag(location_json["type"]))
-        regions[new_location.region_name].locations.append(new_location)
-
-    # Badges aren't extracted locations, so enumerate them explicitly
-    for i in range(0, 8):
-        location_name = f"BADGE_{i + 1}"
-        item_code = extracted_data["constants"][f"ITEM_{location_name}"]
-        new_location = LocationData(
-            location_name,
-            location_to_region_map[location_name],
-            item_code,
-            extracted_data["misc_rom_addresses"]["gGymBadgeItems"] + (i * 2),
-            extracted_data["constants"][f"FLAG_BADGE0{i + 1}_GET"]
-        )
-        new_location.tags.add("Badge")
         regions[new_location.region_name].locations.append(new_location)
     
     return regions

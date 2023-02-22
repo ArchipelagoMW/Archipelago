@@ -39,9 +39,9 @@ class PokemonEmeraldWorld(World):
 
         for region_name, region_data in region_data.items():
             region = Region(region_name, self.player, self.multiworld)
-            warp_destinations = [get_warp_region_name(get_warp_destination(warp)) for warp in region_data.warps]
-            warp_destinations = [destination for destination in warp_destinations if not destination == None]
-            exit_names = set(region_data.exits + warp_destinations)
+            warp_destination_regions = [get_warp_region_name(get_warp_destination(warp)) for warp in region_data.warps]
+            warp_destination_regions = [destination for destination in warp_destination_regions if not destination == None]
+            exit_names = set(region_data.exits + warp_destination_regions)
             for exit_name in exit_names:
                 connection = Entrance(self.player, exit_name, region)
                 region.exits.append(connection)
@@ -52,13 +52,14 @@ class PokemonEmeraldWorld(World):
             for connection in region.exits:
                 connection.connect(regions[connection.name])
 
+        create_locations_with_tags(self, regions, ["GroundItem", "HiddenItem", "Badge", "NpcGift"])
+
         menu = Region("Menu", self.player, self.multiworld)
         connection = Entrance(self.player, "New Game", menu)
         menu.exits.append(connection)
         connection.connect(regions["REGION_LITTLEROOT_TOWN"])
         regions["Menu"] = menu
 
-        create_locations_with_tags(self, regions, ["GroundItem", "HiddenItem", "Badge", "NpcGift"])
         self.multiworld.regions += regions.values()
 
 

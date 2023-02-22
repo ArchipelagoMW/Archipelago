@@ -211,9 +211,9 @@
     "FLAG_HIDDEN_ITEM_ROUTE_111_STARDUST": 502,
     "FLAG_HIDDEN_ITEM_ROUTE_113_ETHER": 503,
     "FLAG_HIDDEN_ITEM_ROUTE_113_NUGGET": 598,
-    "FLAG_HIDDEN_ITEM_ROUTE_113_REVIVE": 542,
     "FLAG_HIDDEN_ITEM_ROUTE_113_TM32": 530,
     "FLAG_HIDDEN_ITEM_ROUTE_114_CARBOS": 504,
+    "FLAG_HIDDEN_ITEM_ROUTE_114_REVIVE": 542,
     "FLAG_HIDDEN_ITEM_ROUTE_115_HEART_SCALE": 597,
     "FLAG_HIDDEN_ITEM_ROUTE_116_BLACK_GLASSES": 596,
     "FLAG_HIDDEN_ITEM_ROUTE_116_SUPER_POTION": 545,
@@ -2476,1985 +2476,2041 @@
     "TRAINER_FLAGS_START": 1280
   },
   "locations": {
+    "BADGE_1": {
+      "default_item": 226,
+      "flag": 2151,
+      "ram_address": 136393113,
+      "rom_address": 2175385,
+      "type": "BADGE"
+    },
+    "BADGE_2": {
+      "default_item": 227,
+      "flag": 2152,
+      "ram_address": 136301162,
+      "rom_address": 2083434,
+      "type": "BADGE"
+    },
+    "BADGE_3": {
+      "default_item": 228,
+      "flag": 2153,
+      "ram_address": 136372590,
+      "rom_address": 2154862,
+      "type": "BADGE"
+    },
+    "BADGE_4": {
+      "default_item": 229,
+      "flag": 2154,
+      "ram_address": 136309280,
+      "rom_address": 2091552,
+      "type": "BADGE"
+    },
+    "BADGE_5": {
+      "default_item": 230,
+      "flag": 2155,
+      "ram_address": 136335516,
+      "rom_address": 2117788,
+      "type": "BADGE"
+    },
+    "BADGE_6": {
+      "default_item": 231,
+      "flag": 2156,
+      "ram_address": 136407076,
+      "rom_address": 2189348,
+      "type": "BADGE"
+    },
+    "BADGE_7": {
+      "default_item": 232,
+      "flag": 2157,
+      "ram_address": 136448744,
+      "rom_address": 2231016,
+      "type": "BADGE"
+    },
+    "BADGE_8": {
+      "default_item": 233,
+      "flag": 2158,
+      "ram_address": 136466821,
+      "rom_address": 2249093,
+      "type": "BADGE"
+    },
     "HIDDEN_ITEM_ABANDONED_SHIP_RM_1_KEY": {
       "default_item": 281,
       "flag": 531,
-      "ram_address": 139685540,
-      "rom_address": 5467812,
+      "ram_address": 139685432,
+      "rom_address": 5467704,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ABANDONED_SHIP_RM_2_KEY": {
       "default_item": 282,
       "flag": 532,
-      "ram_address": 139685552,
-      "rom_address": 5467824,
+      "ram_address": 139685444,
+      "rom_address": 5467716,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ABANDONED_SHIP_RM_4_KEY": {
       "default_item": 283,
       "flag": 533,
-      "ram_address": 139685564,
-      "rom_address": 5467836,
+      "ram_address": 139685456,
+      "rom_address": 5467728,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ABANDONED_SHIP_RM_6_KEY": {
       "default_item": 284,
       "flag": 534,
-      "ram_address": 139685576,
-      "rom_address": 5467848,
+      "ram_address": 139685468,
+      "rom_address": 5467740,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ARTISAN_CAVE_B1F_CALCIUM": {
       "default_item": 67,
       "flag": 601,
-      "ram_address": 139688440,
-      "rom_address": 5470712,
+      "ram_address": 139688332,
+      "rom_address": 5470604,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ARTISAN_CAVE_B1F_IRON": {
       "default_item": 65,
       "flag": 604,
-      "ram_address": 139688464,
-      "rom_address": 5470736,
+      "ram_address": 139688356,
+      "rom_address": 5470628,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ARTISAN_CAVE_B1F_PROTEIN": {
       "default_item": 64,
       "flag": 603,
-      "ram_address": 139688452,
-      "rom_address": 5470724,
+      "ram_address": 139688344,
+      "rom_address": 5470616,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ARTISAN_CAVE_B1F_ZINC": {
       "default_item": 70,
       "flag": 602,
-      "ram_address": 139688428,
-      "rom_address": 5470700,
+      "ram_address": 139688320,
+      "rom_address": 5470592,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_FALLARBOR_TOWN_NUGGET": {
       "default_item": 110,
       "flag": 528,
-      "ram_address": 139624312,
-      "rom_address": 5406584,
+      "ram_address": 139624204,
+      "rom_address": 5406476,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_GRANITE_CAVE_B2F_EVERSTONE_1": {
       "default_item": 195,
       "flag": 548,
-      "ram_address": 139675712,
-      "rom_address": 5457984,
+      "ram_address": 139675604,
+      "rom_address": 5457876,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_GRANITE_CAVE_B2F_EVERSTONE_2": {
       "default_item": 195,
       "flag": 549,
-      "ram_address": 139675724,
-      "rom_address": 5457996,
+      "ram_address": 139675616,
+      "rom_address": 5457888,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_JAGGED_PASS_FULL_HEAL": {
       "default_item": 23,
       "flag": 577,
-      "ram_address": 139677456,
-      "rom_address": 5459728,
+      "ram_address": 139677348,
+      "rom_address": 5459620,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_JAGGED_PASS_GREAT_BALL": {
       "default_item": 3,
       "flag": 576,
-      "ram_address": 139677468,
-      "rom_address": 5459740,
+      "ram_address": 139677360,
+      "rom_address": 5459632,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_LAVARIDGE_TOWN_ICE_HEAL": {
       "default_item": 16,
       "flag": 500,
-      "ram_address": 139624060,
-      "rom_address": 5406332,
+      "ram_address": 139623952,
+      "rom_address": 5406224,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_LILYCOVE_CITY_HEART_SCALE": {
       "default_item": 111,
       "flag": 527,
-      "ram_address": 139621020,
-      "rom_address": 5403292,
+      "ram_address": 139620912,
+      "rom_address": 5403184,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_LILYCOVE_CITY_POKE_BALL": {
       "default_item": 4,
       "flag": 575,
-      "ram_address": 139621044,
-      "rom_address": 5403316,
+      "ram_address": 139620936,
+      "rom_address": 5403208,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_LILYCOVE_CITY_PP_UP": {
       "default_item": 69,
       "flag": 543,
-      "ram_address": 139621032,
-      "rom_address": 5403304,
+      "ram_address": 139620924,
+      "rom_address": 5403196,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_MT_PYRE_EXTERIOR_MAX_ETHER": {
       "default_item": 35,
       "flag": 578,
-      "ram_address": 139678780,
-      "rom_address": 5461052,
+      "ram_address": 139678672,
+      "rom_address": 5460944,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_MT_PYRE_EXTERIOR_ULTRA_BALL": {
       "default_item": 2,
       "flag": 529,
-      "ram_address": 139678768,
-      "rom_address": 5461040,
+      "ram_address": 139678660,
+      "rom_address": 5460932,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_MT_PYRE_SUMMIT_RARE_CANDY": {
       "default_item": 68,
       "flag": 580,
-      "ram_address": 139679136,
-      "rom_address": 5461408,
+      "ram_address": 139679028,
+      "rom_address": 5461300,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_MT_PYRE_SUMMIT_ZINC": {
       "default_item": 70,
       "flag": 579,
-      "ram_address": 139679124,
-      "rom_address": 5461396,
+      "ram_address": 139679016,
+      "rom_address": 5461288,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH": {
       "default_item": 45,
       "flag": 609,
-      "ram_address": 139714144,
-      "rom_address": 5496416,
+      "ram_address": 139714036,
+      "rom_address": 5496308,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_PETALBURG_CITY_RARE_CANDY": {
       "default_item": 68,
       "flag": 595,
-      "ram_address": 139617384,
-      "rom_address": 5399656,
+      "ram_address": 139617276,
+      "rom_address": 5399548,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_PETALBURG_WOODS_POKE_BALL": {
       "default_item": 4,
       "flag": 561,
-      "ram_address": 139676248,
-      "rom_address": 5458520,
+      "ram_address": 139676140,
+      "rom_address": 5458412,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_PETALBURG_WOODS_POTION": {
       "default_item": 13,
       "flag": 558,
-      "ram_address": 139676212,
-      "rom_address": 5458484,
+      "ram_address": 139676104,
+      "rom_address": 5458376,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_PETALBURG_WOODS_TINY_MUSHROOM_1": {
       "default_item": 103,
       "flag": 559,
-      "ram_address": 139676224,
-      "rom_address": 5458496,
+      "ram_address": 139676116,
+      "rom_address": 5458388,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_PETALBURG_WOODS_TINY_MUSHROOM_2": {
       "default_item": 103,
       "flag": 560,
-      "ram_address": 139676236,
-      "rom_address": 5458508,
+      "ram_address": 139676128,
+      "rom_address": 5458400,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_104_ANTIDOTE": {
       "default_item": 14,
       "flag": 585,
-      "ram_address": 139626880,
-      "rom_address": 5409152,
+      "ram_address": 139626772,
+      "rom_address": 5409044,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_104_HEART_SCALE": {
       "default_item": 111,
       "flag": 588,
-      "ram_address": 139626892,
-      "rom_address": 5409164,
+      "ram_address": 139626784,
+      "rom_address": 5409056,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_104_POKE_BALL": {
       "default_item": 4,
       "flag": 562,
-      "ram_address": 139626856,
-      "rom_address": 5409128,
+      "ram_address": 139626748,
+      "rom_address": 5409020,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_104_POTION": {
       "default_item": 13,
       "flag": 537,
-      "ram_address": 139626868,
-      "rom_address": 5409140,
+      "ram_address": 139626760,
+      "rom_address": 5409032,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_104_SUPER_POTION": {
       "default_item": 22,
       "flag": 544,
-      "ram_address": 139626844,
-      "rom_address": 5409116,
+      "ram_address": 139626736,
+      "rom_address": 5409008,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_105_BIG_PEARL": {
       "default_item": 107,
       "flag": 611,
-      "ram_address": 139627136,
-      "rom_address": 5409408,
+      "ram_address": 139627028,
+      "rom_address": 5409300,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_105_HEART_SCALE": {
       "default_item": 111,
       "flag": 589,
-      "ram_address": 139627124,
-      "rom_address": 5409396,
+      "ram_address": 139627016,
+      "rom_address": 5409288,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_106_HEART_SCALE": {
       "default_item": 111,
       "flag": 547,
-      "ram_address": 139627320,
-      "rom_address": 5409592,
+      "ram_address": 139627212,
+      "rom_address": 5409484,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_106_POKE_BALL": {
       "default_item": 4,
       "flag": 563,
-      "ram_address": 139627296,
-      "rom_address": 5409568,
+      "ram_address": 139627188,
+      "rom_address": 5409460,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_106_STARDUST": {
       "default_item": 108,
       "flag": 546,
-      "ram_address": 139627308,
-      "rom_address": 5409580,
+      "ram_address": 139627200,
+      "rom_address": 5409472,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_108_RARE_CANDY": {
       "default_item": 68,
       "flag": 586,
-      "ram_address": 139627728,
-      "rom_address": 5410000,
+      "ram_address": 139627620,
+      "rom_address": 5409892,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_109_ETHER": {
       "default_item": 34,
       "flag": 564,
-      "ram_address": 139628404,
-      "rom_address": 5410676,
+      "ram_address": 139628296,
+      "rom_address": 5410568,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_109_GREAT_BALL": {
       "default_item": 3,
       "flag": 551,
-      "ram_address": 139628392,
-      "rom_address": 5410664,
+      "ram_address": 139628284,
+      "rom_address": 5410556,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_1": {
       "default_item": 111,
       "flag": 552,
-      "ram_address": 139628380,
-      "rom_address": 5410652,
+      "ram_address": 139628272,
+      "rom_address": 5410544,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_2": {
       "default_item": 111,
       "flag": 590,
-      "ram_address": 139628416,
-      "rom_address": 5410688,
+      "ram_address": 139628308,
+      "rom_address": 5410580,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_3": {
       "default_item": 111,
       "flag": 591,
-      "ram_address": 139628428,
-      "rom_address": 5410700,
+      "ram_address": 139628320,
+      "rom_address": 5410592,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_109_REVIVE": {
       "default_item": 24,
       "flag": 550,
-      "ram_address": 139628368,
-      "rom_address": 5410640,
+      "ram_address": 139628260,
+      "rom_address": 5410532,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_110_FULL_HEAL": {
       "default_item": 23,
       "flag": 555,
-      "ram_address": 139629696,
-      "rom_address": 5411968,
+      "ram_address": 139629588,
+      "rom_address": 5411860,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_110_GREAT_BALL": {
       "default_item": 3,
       "flag": 553,
-      "ram_address": 139629672,
-      "rom_address": 5411944,
+      "ram_address": 139629564,
+      "rom_address": 5411836,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_110_POKE_BALL": {
       "default_item": 4,
       "flag": 565,
-      "ram_address": 139629684,
-      "rom_address": 5411956,
+      "ram_address": 139629576,
+      "rom_address": 5411848,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_110_REVIVE": {
       "default_item": 24,
       "flag": 554,
-      "ram_address": 139629660,
-      "rom_address": 5411932,
+      "ram_address": 139629552,
+      "rom_address": 5411824,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_111_PROTEIN": {
       "default_item": 64,
       "flag": 556,
-      "ram_address": 139631608,
-      "rom_address": 5413880,
+      "ram_address": 139631500,
+      "rom_address": 5413772,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_111_RARE_CANDY": {
       "default_item": 68,
       "flag": 557,
-      "ram_address": 139631620,
-      "rom_address": 5413892,
+      "ram_address": 139631512,
+      "rom_address": 5413784,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_111_STARDUST": {
       "default_item": 108,
       "flag": 502,
-      "ram_address": 139631548,
-      "rom_address": 5413820,
+      "ram_address": 139631440,
+      "rom_address": 5413712,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_113_ETHER": {
       "default_item": 34,
       "flag": 503,
-      "ram_address": 139632876,
-      "rom_address": 5415148,
+      "ram_address": 139632768,
+      "rom_address": 5415040,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_113_NUGGET": {
       "default_item": 110,
       "flag": 598,
-      "ram_address": 139632900,
-      "rom_address": 5415172,
-      "type": "HIDDEN_ITEM"
-    },
-    "HIDDEN_ITEM_ROUTE_113_REVIVE": {
-      "default_item": 24,
-      "flag": 542,
-      "ram_address": 139633752,
-      "rom_address": 5416024,
+      "ram_address": 139632792,
+      "rom_address": 5415064,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_113_TM32": {
       "default_item": 320,
       "flag": 530,
-      "ram_address": 139632888,
-      "rom_address": 5415160,
+      "ram_address": 139632780,
+      "rom_address": 5415052,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_114_CARBOS": {
       "default_item": 66,
       "flag": 504,
-      "ram_address": 139633728,
-      "rom_address": 5416000,
+      "ram_address": 139633620,
+      "rom_address": 5415892,
+      "type": "HIDDEN_ITEM"
+    },
+    "HIDDEN_ITEM_ROUTE_114_REVIVE": {
+      "default_item": 24,
+      "flag": 542,
+      "ram_address": 139633644,
+      "rom_address": 5415916,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_115_HEART_SCALE": {
       "default_item": 111,
       "flag": 597,
-      "ram_address": 139634516,
-      "rom_address": 5416788,
+      "ram_address": 139634408,
+      "rom_address": 5416680,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_116_BLACK_GLASSES": {
       "default_item": 206,
       "flag": 596,
-      "ram_address": 139635396,
-      "rom_address": 5417668,
+      "ram_address": 139635288,
+      "rom_address": 5417560,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_116_SUPER_POTION": {
       "default_item": 22,
       "flag": 545,
-      "ram_address": 139635384,
-      "rom_address": 5417656,
+      "ram_address": 139635276,
+      "rom_address": 5417548,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_117_REPEL": {
       "default_item": 86,
       "flag": 572,
-      "ram_address": 139636048,
-      "rom_address": 5418320,
+      "ram_address": 139635940,
+      "rom_address": 5418212,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_118_HEART_SCALE": {
       "default_item": 111,
       "flag": 566,
-      "ram_address": 139636744,
-      "rom_address": 5419016,
+      "ram_address": 139636636,
+      "rom_address": 5418908,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_118_IRON": {
       "default_item": 65,
       "flag": 567,
-      "ram_address": 139636732,
-      "rom_address": 5419004,
+      "ram_address": 139636624,
+      "rom_address": 5418896,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_119_CALCIUM": {
       "default_item": 67,
       "flag": 505,
-      "ram_address": 139638312,
-      "rom_address": 5420584,
+      "ram_address": 139638204,
+      "rom_address": 5420476,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_119_FULL_HEAL": {
       "default_item": 23,
       "flag": 568,
-      "ram_address": 139638396,
-      "rom_address": 5420668,
+      "ram_address": 139638288,
+      "rom_address": 5420560,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_119_MAX_ETHER": {
       "default_item": 35,
       "flag": 587,
-      "ram_address": 139638408,
-      "rom_address": 5420680,
+      "ram_address": 139638300,
+      "rom_address": 5420572,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_119_ULTRA_BALL": {
       "default_item": 2,
       "flag": 506,
-      "ram_address": 139638324,
-      "rom_address": 5420596,
+      "ram_address": 139638216,
+      "rom_address": 5420488,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_120_RARE_CANDY_1": {
       "default_item": 68,
       "flag": 571,
-      "ram_address": 139639936,
-      "rom_address": 5422208,
+      "ram_address": 139639828,
+      "rom_address": 5422100,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_120_RARE_CANDY_2": {
       "default_item": 68,
       "flag": 569,
-      "ram_address": 139639960,
-      "rom_address": 5422232,
+      "ram_address": 139639852,
+      "rom_address": 5422124,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_120_REVIVE": {
       "default_item": 24,
       "flag": 584,
-      "ram_address": 139639948,
-      "rom_address": 5422220,
+      "ram_address": 139639840,
+      "rom_address": 5422112,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_120_ZINC": {
       "default_item": 70,
       "flag": 570,
-      "ram_address": 139639972,
-      "rom_address": 5422244,
+      "ram_address": 139639864,
+      "rom_address": 5422136,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_121_FULL_HEAL": {
       "default_item": 23,
       "flag": 573,
-      "ram_address": 139640880,
-      "rom_address": 5423152,
+      "ram_address": 139640772,
+      "rom_address": 5423044,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_121_HP_UP": {
       "default_item": 63,
       "flag": 539,
-      "ram_address": 139640856,
-      "rom_address": 5423128,
+      "ram_address": 139640748,
+      "rom_address": 5423020,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_121_MAX_REVIVE": {
       "default_item": 25,
       "flag": 600,
-      "ram_address": 139640892,
-      "rom_address": 5423164,
+      "ram_address": 139640784,
+      "rom_address": 5423056,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_121_NUGGET": {
       "default_item": 110,
       "flag": 540,
-      "ram_address": 139640868,
-      "rom_address": 5423140,
+      "ram_address": 139640760,
+      "rom_address": 5423032,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_123_HYPER_POTION": {
       "default_item": 21,
       "flag": 574,
-      "ram_address": 139642440,
-      "rom_address": 5424712,
+      "ram_address": 139642332,
+      "rom_address": 5424604,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_123_PP_UP": {
       "default_item": 69,
       "flag": 599,
-      "ram_address": 139642452,
-      "rom_address": 5424724,
+      "ram_address": 139642344,
+      "rom_address": 5424616,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_123_RARE_CANDY": {
       "default_item": 68,
       "flag": 610,
-      "ram_address": 139642464,
-      "rom_address": 5424736,
+      "ram_address": 139642356,
+      "rom_address": 5424628,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_123_REVIVE": {
       "default_item": 24,
       "flag": 541,
-      "ram_address": 139642428,
-      "rom_address": 5424700,
+      "ram_address": 139642320,
+      "rom_address": 5424592,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_123_SUPER_REPEL": {
       "default_item": 83,
       "flag": 507,
-      "ram_address": 139642392,
-      "rom_address": 5424664,
+      "ram_address": 139642284,
+      "rom_address": 5424556,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_128_HEART_SCALE_1": {
       "default_item": 111,
       "flag": 592,
-      "ram_address": 139643960,
-      "rom_address": 5426232,
+      "ram_address": 139643852,
+      "rom_address": 5426124,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_128_HEART_SCALE_2": {
       "default_item": 111,
       "flag": 593,
-      "ram_address": 139643972,
-      "rom_address": 5426244,
+      "ram_address": 139643864,
+      "rom_address": 5426136,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_ROUTE_128_HEART_SCALE_3": {
       "default_item": 111,
       "flag": 594,
-      "ram_address": 139643984,
-      "rom_address": 5426256,
+      "ram_address": 139643876,
+      "rom_address": 5426148,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_SAFARI_ZONE_NORTH_EAST_RARE_CANDY": {
       "default_item": 68,
       "flag": 606,
-      "ram_address": 139705596,
-      "rom_address": 5487868,
+      "ram_address": 139705488,
+      "rom_address": 5487760,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_SAFARI_ZONE_NORTH_EAST_ZINC": {
       "default_item": 70,
       "flag": 607,
-      "ram_address": 139705608,
-      "rom_address": 5487880,
+      "ram_address": 139705500,
+      "rom_address": 5487772,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_SAFARI_ZONE_SOUTH_EAST_FULL_RESTORE": {
       "default_item": 19,
       "flag": 605,
-      "ram_address": 139705772,
-      "rom_address": 5488044,
+      "ram_address": 139705664,
+      "rom_address": 5487936,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_SAFARI_ZONE_SOUTH_EAST_PP_UP": {
       "default_item": 69,
       "flag": 608,
-      "ram_address": 139705760,
-      "rom_address": 5488032,
+      "ram_address": 139705652,
+      "rom_address": 5487924,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_SS_TIDAL_LOWER_DECK_LEFTOVERS": {
       "default_item": 200,
       "flag": 535,
-      "ram_address": 139699632,
-      "rom_address": 5481904,
+      "ram_address": 139699524,
+      "rom_address": 5481796,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_TRICK_HOUSE_NUGGET": {
       "default_item": 110,
       "flag": 501,
-      "ram_address": 139715056,
-      "rom_address": 5497328,
+      "ram_address": 139714948,
+      "rom_address": 5497220,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_124_BIG_PEARL": {
       "default_item": 107,
       "flag": 511,
-      "ram_address": 139645332,
-      "rom_address": 5427604,
+      "ram_address": 139645224,
+      "rom_address": 5427496,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_124_CALCIUM": {
       "default_item": 67,
       "flag": 536,
-      "ram_address": 139645356,
-      "rom_address": 5427628,
+      "ram_address": 139645248,
+      "rom_address": 5427520,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_124_CARBOS": {
       "default_item": 66,
       "flag": 508,
-      "ram_address": 139645296,
-      "rom_address": 5427568,
+      "ram_address": 139645188,
+      "rom_address": 5427460,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_124_GREEN_SHARD": {
       "default_item": 51,
       "flag": 509,
-      "ram_address": 139645308,
-      "rom_address": 5427580,
+      "ram_address": 139645200,
+      "rom_address": 5427472,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_124_HEART_SCALE_1": {
       "default_item": 111,
       "flag": 513,
-      "ram_address": 139645344,
-      "rom_address": 5427616,
+      "ram_address": 139645236,
+      "rom_address": 5427508,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_124_HEART_SCALE_2": {
       "default_item": 111,
       "flag": 538,
-      "ram_address": 139645368,
-      "rom_address": 5427640,
+      "ram_address": 139645260,
+      "rom_address": 5427532,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_124_PEARL": {
       "default_item": 106,
       "flag": 510,
-      "ram_address": 139645320,
-      "rom_address": 5427592,
+      "ram_address": 139645212,
+      "rom_address": 5427484,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_126_BIG_PEARL": {
       "default_item": 107,
       "flag": 520,
-      "ram_address": 139645480,
-      "rom_address": 5427752,
+      "ram_address": 139645372,
+      "rom_address": 5427644,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_126_BLUE_SHARD": {
       "default_item": 49,
       "flag": 512,
-      "ram_address": 139645492,
-      "rom_address": 5427764,
+      "ram_address": 139645384,
+      "rom_address": 5427656,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_126_HEART_SCALE": {
       "default_item": 111,
       "flag": 514,
-      "ram_address": 139645408,
-      "rom_address": 5427680,
+      "ram_address": 139645300,
+      "rom_address": 5427572,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_126_IRON": {
       "default_item": 65,
       "flag": 519,
-      "ram_address": 139645456,
-      "rom_address": 5427728,
+      "ram_address": 139645348,
+      "rom_address": 5427620,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_126_PEARL": {
       "default_item": 106,
       "flag": 517,
-      "ram_address": 139645444,
-      "rom_address": 5427716,
+      "ram_address": 139645336,
+      "rom_address": 5427608,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_126_STARDUST": {
       "default_item": 108,
       "flag": 516,
-      "ram_address": 139645432,
-      "rom_address": 5427704,
+      "ram_address": 139645324,
+      "rom_address": 5427596,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_126_ULTRA_BALL": {
       "default_item": 2,
       "flag": 515,
-      "ram_address": 139645420,
-      "rom_address": 5427692,
+      "ram_address": 139645312,
+      "rom_address": 5427584,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_126_YELLOW_SHARD": {
       "default_item": 50,
       "flag": 518,
-      "ram_address": 139645468,
-      "rom_address": 5427740,
+      "ram_address": 139645360,
+      "rom_address": 5427632,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_127_HEART_SCALE": {
       "default_item": 111,
       "flag": 523,
-      "ram_address": 139645564,
-      "rom_address": 5427836,
+      "ram_address": 139645456,
+      "rom_address": 5427728,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_127_HP_UP": {
       "default_item": 63,
       "flag": 522,
-      "ram_address": 139645552,
-      "rom_address": 5427824,
+      "ram_address": 139645444,
+      "rom_address": 5427716,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_127_RED_SHARD": {
       "default_item": 48,
       "flag": 524,
-      "ram_address": 139645576,
-      "rom_address": 5427848,
+      "ram_address": 139645468,
+      "rom_address": 5427740,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_127_STAR_PIECE": {
       "default_item": 109,
       "flag": 521,
-      "ram_address": 139645540,
-      "rom_address": 5427812,
+      "ram_address": 139645432,
+      "rom_address": 5427704,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_128_PEARL": {
       "default_item": 106,
       "flag": 526,
-      "ram_address": 139645628,
-      "rom_address": 5427900,
+      "ram_address": 139645520,
+      "rom_address": 5427792,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_UNDERWATER_128_PROTEIN": {
       "default_item": 64,
       "flag": 525,
-      "ram_address": 139645616,
-      "rom_address": 5427888,
+      "ram_address": 139645508,
+      "rom_address": 5427780,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_VICTORY_ROAD_1F_ULTRA_BALL": {
       "default_item": 2,
       "flag": 581,
-      "ram_address": 139682272,
-      "rom_address": 5464544,
+      "ram_address": 139682164,
+      "rom_address": 5464436,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_VICTORY_ROAD_B2F_ELIXIR": {
       "default_item": 36,
       "flag": 582,
-      "ram_address": 139683084,
-      "rom_address": 5465356,
+      "ram_address": 139682976,
+      "rom_address": 5465248,
       "type": "HIDDEN_ITEM"
     },
     "HIDDEN_ITEM_VICTORY_ROAD_B2F_MAX_REPEL": {
       "default_item": 84,
       "flag": 583,
-      "ram_address": 139683096,
-      "rom_address": 5465368,
+      "ram_address": 139682988,
+      "rom_address": 5465260,
       "type": "HIDDEN_ITEM"
     },
     "ITEM_ABANDONED_SHIP_CAPTAINS_OFFICE_STORAGE_KEY": {
       "default_item": 285,
       "flag": 1100,
-      "ram_address": 136910120,
-      "rom_address": 2692392,
+      "ram_address": 136910012,
+      "rom_address": 2692284,
       "type": "GROUND_ITEM"
     },
     "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_1_TM18": {
       "default_item": 306,
       "flag": 1102,
-      "ram_address": 136910172,
-      "rom_address": 2692444,
+      "ram_address": 136910064,
+      "rom_address": 2692336,
       "type": "GROUND_ITEM"
     },
     "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_3_WATER_STONE": {
       "default_item": 97,
       "flag": 1101,
-      "ram_address": 136910159,
-      "rom_address": 2692431,
+      "ram_address": 136910051,
+      "rom_address": 2692323,
       "type": "GROUND_ITEM"
     },
     "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_4_SCANNER": {
       "default_item": 278,
       "flag": 1078,
-      "ram_address": 136910146,
-      "rom_address": 2692418,
+      "ram_address": 136910038,
+      "rom_address": 2692310,
       "type": "GROUND_ITEM"
     },
     "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_6_LUXURY_BALL": {
       "default_item": 11,
       "flag": 1077,
-      "ram_address": 136910133,
-      "rom_address": 2692405,
+      "ram_address": 136910025,
+      "rom_address": 2692297,
       "type": "GROUND_ITEM"
     },
     "ITEM_ABANDONED_SHIP_ROOMS_1F_HARBOR_MAIL": {
       "default_item": 122,
       "flag": 1095,
-      "ram_address": 136910055,
-      "rom_address": 2692327,
+      "ram_address": 136909947,
+      "rom_address": 2692219,
       "type": "GROUND_ITEM"
     },
     "ITEM_ABANDONED_SHIP_ROOMS_2_1F_REVIVE": {
       "default_item": 24,
       "flag": 1099,
-      "ram_address": 136910107,
-      "rom_address": 2692379,
+      "ram_address": 136909999,
+      "rom_address": 2692271,
       "type": "GROUND_ITEM"
     },
     "ITEM_ABANDONED_SHIP_ROOMS_2_B1F_DIVE_BALL": {
       "default_item": 7,
       "flag": 1097,
-      "ram_address": 136910081,
-      "rom_address": 2692353,
+      "ram_address": 136909973,
+      "rom_address": 2692245,
       "type": "GROUND_ITEM"
     },
     "ITEM_ABANDONED_SHIP_ROOMS_B1F_ESCAPE_ROPE": {
       "default_item": 85,
       "flag": 1096,
-      "ram_address": 136910068,
-      "rom_address": 2692340,
+      "ram_address": 136909960,
+      "rom_address": 2692232,
       "type": "GROUND_ITEM"
     },
     "ITEM_ABANDONED_SHIP_ROOMS_B1F_TM13": {
       "default_item": 301,
       "flag": 1098,
-      "ram_address": 136910094,
-      "rom_address": 2692366,
+      "ram_address": 136909986,
+      "rom_address": 2692258,
       "type": "GROUND_ITEM"
     },
     "ITEM_AQUA_HIDEOUT_B1F_MASTER_BALL": {
       "default_item": 1,
       "flag": 1124,
-      "ram_address": 136910354,
-      "rom_address": 2692626,
+      "ram_address": 136910246,
+      "rom_address": 2692518,
       "type": "GROUND_ITEM"
     },
     "ITEM_AQUA_HIDEOUT_B1F_MAX_ELIXIR": {
       "default_item": 37,
       "flag": 1071,
-      "ram_address": 136910380,
-      "rom_address": 2692652,
+      "ram_address": 136910272,
+      "rom_address": 2692544,
       "type": "GROUND_ITEM"
     },
     "ITEM_AQUA_HIDEOUT_B1F_NUGGET": {
       "default_item": 110,
       "flag": 1132,
-      "ram_address": 136910367,
-      "rom_address": 2692639,
+      "ram_address": 136910259,
+      "rom_address": 2692531,
       "type": "GROUND_ITEM"
     },
     "ITEM_AQUA_HIDEOUT_B2F_NEST_BALL": {
       "default_item": 8,
       "flag": 1072,
-      "ram_address": 136910393,
-      "rom_address": 2692665,
+      "ram_address": 136910285,
+      "rom_address": 2692557,
       "type": "GROUND_ITEM"
     },
     "ITEM_ARTISAN_CAVE_1F_CARBOS": {
       "default_item": 66,
       "flag": 1163,
-      "ram_address": 136910731,
-      "rom_address": 2693003,
+      "ram_address": 136910623,
+      "rom_address": 2692895,
       "type": "GROUND_ITEM"
     },
     "ITEM_ARTISAN_CAVE_B1F_HP_UP": {
       "default_item": 63,
       "flag": 1162,
-      "ram_address": 136910718,
-      "rom_address": 2692990,
+      "ram_address": 136910610,
+      "rom_address": 2692882,
       "type": "GROUND_ITEM"
     },
     "ITEM_FIERY_PATH_FIRE_STONE": {
       "default_item": 95,
       "flag": 1111,
-      "ram_address": 136909899,
-      "rom_address": 2692171,
+      "ram_address": 136909791,
+      "rom_address": 2692063,
       "type": "GROUND_ITEM"
     },
     "ITEM_FIERY_PATH_TM06": {
       "default_item": 294,
       "flag": 1091,
-      "ram_address": 136909912,
-      "rom_address": 2692184,
+      "ram_address": 136909804,
+      "rom_address": 2692076,
       "type": "GROUND_ITEM"
     },
     "ITEM_GRANITE_CAVE_1F_ESCAPE_ROPE": {
       "default_item": 85,
       "flag": 1050,
-      "ram_address": 136909834,
-      "rom_address": 2692106,
+      "ram_address": 136909726,
+      "rom_address": 2691998,
       "type": "GROUND_ITEM"
     },
     "ITEM_GRANITE_CAVE_B1F_POKE_BALL": {
       "default_item": 4,
       "flag": 1051,
-      "ram_address": 136909847,
-      "rom_address": 2692119,
+      "ram_address": 136909739,
+      "rom_address": 2692011,
       "type": "GROUND_ITEM"
     },
     "ITEM_GRANITE_CAVE_B2F_RARE_CANDY": {
       "default_item": 68,
       "flag": 1054,
-      "ram_address": 136909873,
-      "rom_address": 2692145,
+      "ram_address": 136909765,
+      "rom_address": 2692037,
       "type": "GROUND_ITEM"
     },
     "ITEM_GRANITE_CAVE_B2F_REPEL": {
       "default_item": 86,
       "flag": 1053,
-      "ram_address": 136909860,
-      "rom_address": 2692132,
+      "ram_address": 136909752,
+      "rom_address": 2692024,
       "type": "GROUND_ITEM"
     },
     "ITEM_JAGGED_PASS_BURN_HEAL": {
       "default_item": 15,
       "flag": 1070,
-      "ram_address": 136909886,
-      "rom_address": 2692158,
+      "ram_address": 136909778,
+      "rom_address": 2692050,
       "type": "GROUND_ITEM"
     },
     "ITEM_LILYCOVE_CITY_MAX_REPEL": {
       "default_item": 84,
       "flag": 1042,
-      "ram_address": 136909730,
-      "rom_address": 2692002,
+      "ram_address": 136909622,
+      "rom_address": 2691894,
       "type": "GROUND_ITEM"
     },
     "ITEM_MAGMA_HIDEOUT_1F_RARE_CANDY": {
       "default_item": 68,
       "flag": 1151,
-      "ram_address": 136910744,
-      "rom_address": 2693016,
+      "ram_address": 136910636,
+      "rom_address": 2692908,
       "type": "GROUND_ITEM"
     },
     "ITEM_MAGMA_HIDEOUT_2F_2R_FULL_RESTORE": {
       "default_item": 19,
       "flag": 1165,
-      "ram_address": 136910770,
-      "rom_address": 2693042,
+      "ram_address": 136910662,
+      "rom_address": 2692934,
       "type": "GROUND_ITEM"
     },
     "ITEM_MAGMA_HIDEOUT_2F_2R_MAX_ELIXIR": {
       "default_item": 37,
       "flag": 1164,
-      "ram_address": 136910757,
-      "rom_address": 2693029,
+      "ram_address": 136910649,
+      "rom_address": 2692921,
       "type": "GROUND_ITEM"
     },
     "ITEM_MAGMA_HIDEOUT_3F_1R_NUGGET": {
       "default_item": 110,
       "flag": 1166,
-      "ram_address": 136910783,
-      "rom_address": 2693055,
+      "ram_address": 136910675,
+      "rom_address": 2692947,
       "type": "GROUND_ITEM"
     },
     "ITEM_MAGMA_HIDEOUT_3F_2R_PP_MAX": {
       "default_item": 71,
       "flag": 1167,
-      "ram_address": 136910796,
-      "rom_address": 2693068,
+      "ram_address": 136910688,
+      "rom_address": 2692960,
       "type": "GROUND_ITEM"
     },
     "ITEM_MAGMA_HIDEOUT_3F_3R_ECAPE_ROPE": {
       "default_item": 85,
       "flag": 1059,
-      "ram_address": 136910822,
-      "rom_address": 2693094,
+      "ram_address": 136910714,
+      "rom_address": 2692986,
       "type": "GROUND_ITEM"
     },
     "ITEM_MAGMA_HIDEOUT_4F_MAX_REVIVE": {
       "default_item": 25,
       "flag": 1168,
-      "ram_address": 136910809,
-      "rom_address": 2693081,
+      "ram_address": 136910701,
+      "rom_address": 2692973,
       "type": "GROUND_ITEM"
     },
     "ITEM_MAUVILLE_CITY_X_SPEED": {
       "default_item": 77,
       "flag": 1116,
-      "ram_address": 136909704,
-      "rom_address": 2691976,
+      "ram_address": 136909596,
+      "rom_address": 2691868,
       "type": "GROUND_ITEM"
     },
     "ITEM_METEOR_FALLS_1F_1R_FULL_HEAL": {
       "default_item": 23,
       "flag": 1045,
-      "ram_address": 136909938,
-      "rom_address": 2692210,
+      "ram_address": 136909830,
+      "rom_address": 2692102,
       "type": "GROUND_ITEM"
     },
     "ITEM_METEOR_FALLS_1F_1R_MOON_STONE": {
       "default_item": 94,
       "flag": 1046,
-      "ram_address": 136909951,
-      "rom_address": 2692223,
+      "ram_address": 136909843,
+      "rom_address": 2692115,
       "type": "GROUND_ITEM"
     },
     "ITEM_METEOR_FALLS_1F_1R_PP_UP": {
       "default_item": 69,
       "flag": 1047,
-      "ram_address": 136909964,
-      "rom_address": 2692236,
+      "ram_address": 136909856,
+      "rom_address": 2692128,
       "type": "GROUND_ITEM"
     },
     "ITEM_METEOR_FALLS_1F_1R_TM23": {
       "default_item": 311,
       "flag": 1044,
-      "ram_address": 136909925,
-      "rom_address": 2692197,
+      "ram_address": 136909817,
+      "rom_address": 2692089,
       "type": "GROUND_ITEM"
     },
     "ITEM_METEOR_FALLS_B1F_2R_TM02": {
       "default_item": 290,
       "flag": 1080,
-      "ram_address": 136909977,
-      "rom_address": 2692249,
+      "ram_address": 136909869,
+      "rom_address": 2692141,
       "type": "GROUND_ITEM"
     },
     "ITEM_MOSSDEEP_CITY_NET_BALL": {
       "default_item": 6,
       "flag": 1043,
-      "ram_address": 136909743,
-      "rom_address": 2692015,
+      "ram_address": 136909635,
+      "rom_address": 2691907,
       "type": "GROUND_ITEM"
     },
     "ITEM_MT_PYRE_2F_ULTRA_BALL": {
       "default_item": 2,
       "flag": 1129,
-      "ram_address": 136910263,
-      "rom_address": 2692535,
+      "ram_address": 136910155,
+      "rom_address": 2692427,
       "type": "GROUND_ITEM"
     },
     "ITEM_MT_PYRE_3F_SUPER_REPEL": {
       "default_item": 83,
       "flag": 1120,
-      "ram_address": 136910276,
-      "rom_address": 2692548,
+      "ram_address": 136910168,
+      "rom_address": 2692440,
       "type": "GROUND_ITEM"
     },
     "ITEM_MT_PYRE_4F_SEA_INCENSE": {
       "default_item": 220,
       "flag": 1130,
-      "ram_address": 136910289,
-      "rom_address": 2692561,
+      "ram_address": 136910181,
+      "rom_address": 2692453,
       "type": "GROUND_ITEM"
     },
     "ITEM_MT_PYRE_5F_LAX_INCENSE": {
       "default_item": 221,
       "flag": 1052,
-      "ram_address": 136910302,
-      "rom_address": 2692574,
+      "ram_address": 136910194,
+      "rom_address": 2692466,
       "type": "GROUND_ITEM"
     },
     "ITEM_MT_PYRE_6F_TM30": {
       "default_item": 318,
       "flag": 1089,
-      "ram_address": 136910315,
-      "rom_address": 2692587,
+      "ram_address": 136910207,
+      "rom_address": 2692479,
       "type": "GROUND_ITEM"
     },
     "ITEM_MT_PYRE_EXTERIOR_MAX_POTION": {
       "default_item": 20,
       "flag": 1073,
-      "ram_address": 136910328,
-      "rom_address": 2692600,
+      "ram_address": 136910220,
+      "rom_address": 2692492,
       "type": "GROUND_ITEM"
     },
     "ITEM_MT_PYRE_EXTERIOR_TM48": {
       "default_item": 336,
       "flag": 1074,
-      "ram_address": 136910341,
-      "rom_address": 2692613,
+      "ram_address": 136910233,
+      "rom_address": 2692505,
       "type": "GROUND_ITEM"
     },
     "ITEM_NEW_MAUVILLE_ESCAPE_ROPE": {
       "default_item": 85,
       "flag": 1076,
-      "ram_address": 136910003,
-      "rom_address": 2692275,
+      "ram_address": 136909895,
+      "rom_address": 2692167,
       "type": "GROUND_ITEM"
     },
     "ITEM_NEW_MAUVILLE_FULL_HEAL": {
       "default_item": 23,
       "flag": 1122,
-      "ram_address": 136910029,
-      "rom_address": 2692301,
+      "ram_address": 136909921,
+      "rom_address": 2692193,
       "type": "GROUND_ITEM"
     },
     "ITEM_NEW_MAUVILLE_PARALYZE_HEAL": {
       "default_item": 18,
       "flag": 1123,
-      "ram_address": 136910042,
-      "rom_address": 2692314,
+      "ram_address": 136909934,
+      "rom_address": 2692206,
       "type": "GROUND_ITEM"
     },
     "ITEM_NEW_MAUVILLE_THUNDER_STONE": {
       "default_item": 96,
       "flag": 1110,
-      "ram_address": 136910016,
-      "rom_address": 2692288,
+      "ram_address": 136909908,
+      "rom_address": 2692180,
       "type": "GROUND_ITEM"
     },
     "ITEM_NEW_MAUVILLE_ULTRA_BALL": {
       "default_item": 2,
       "flag": 1075,
-      "ram_address": 136909990,
-      "rom_address": 2692262,
+      "ram_address": 136909882,
+      "rom_address": 2692154,
       "type": "GROUND_ITEM"
     },
     "ITEM_PETALBURG_CITY_ETHER": {
       "default_item": 34,
       "flag": 1040,
-      "ram_address": 136909691,
-      "rom_address": 2691963,
+      "ram_address": 136909583,
+      "rom_address": 2691855,
       "type": "GROUND_ITEM"
     },
     "ITEM_PETALBURG_CITY_MAX_REVIVE": {
       "default_item": 25,
       "flag": 1039,
-      "ram_address": 136909678,
-      "rom_address": 2691950,
+      "ram_address": 136909570,
+      "rom_address": 2691842,
       "type": "GROUND_ITEM"
     },
     "ITEM_PETALBURG_WOODS_ETHER": {
       "default_item": 34,
       "flag": 1058,
-      "ram_address": 136909782,
-      "rom_address": 2692054,
+      "ram_address": 136909674,
+      "rom_address": 2691946,
       "type": "GROUND_ITEM"
     },
     "ITEM_PETALBURG_WOODS_GREAT_BALL": {
       "default_item": 3,
       "flag": 1056,
-      "ram_address": 136909769,
-      "rom_address": 2692041,
+      "ram_address": 136909661,
+      "rom_address": 2691933,
       "type": "GROUND_ITEM"
     },
     "ITEM_PETALBURG_WOODS_PARALYZE_HEAL": {
       "default_item": 18,
       "flag": 1117,
-      "ram_address": 136909795,
-      "rom_address": 2692067,
+      "ram_address": 136909687,
+      "rom_address": 2691959,
       "type": "GROUND_ITEM"
     },
     "ITEM_PETALBURG_WOODS_X_ATTACK": {
       "default_item": 75,
       "flag": 1055,
-      "ram_address": 136909756,
-      "rom_address": 2692028,
+      "ram_address": 136909648,
+      "rom_address": 2691920,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_102_POTION": {
       "default_item": 13,
       "flag": 1000,
-      "ram_address": 136908690,
-      "rom_address": 2690962,
+      "ram_address": 136908582,
+      "rom_address": 2690854,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_103_GUARD_SPEC": {
       "default_item": 73,
       "flag": 1114,
-      "ram_address": 136908703,
-      "rom_address": 2690975,
+      "ram_address": 136908595,
+      "rom_address": 2690867,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_103_PP_UP": {
       "default_item": 69,
       "flag": 1137,
-      "ram_address": 136908716,
-      "rom_address": 2690988,
+      "ram_address": 136908608,
+      "rom_address": 2690880,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_104_POKE_BALL": {
       "default_item": 4,
       "flag": 1057,
-      "ram_address": 136908742,
-      "rom_address": 2691014,
+      "ram_address": 136908634,
+      "rom_address": 2690906,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_104_POTION": {
       "default_item": 13,
       "flag": 1135,
-      "ram_address": 136908768,
-      "rom_address": 2691040,
+      "ram_address": 136908660,
+      "rom_address": 2690932,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_104_PP_UP": {
       "default_item": 69,
       "flag": 1002,
-      "ram_address": 136908729,
-      "rom_address": 2691001,
+      "ram_address": 136908621,
+      "rom_address": 2690893,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_104_X_ACCURACY": {
       "default_item": 78,
       "flag": 1115,
-      "ram_address": 136908755,
-      "rom_address": 2691027,
+      "ram_address": 136908647,
+      "rom_address": 2690919,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_105_IRON": {
       "default_item": 65,
       "flag": 1003,
-      "ram_address": 136908781,
-      "rom_address": 2691053,
+      "ram_address": 136908673,
+      "rom_address": 2690945,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_106_PROTEIN": {
       "default_item": 64,
       "flag": 1004,
-      "ram_address": 136908794,
-      "rom_address": 2691066,
+      "ram_address": 136908686,
+      "rom_address": 2690958,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_108_STAR_PIECE": {
       "default_item": 109,
       "flag": 1139,
-      "ram_address": 136908807,
-      "rom_address": 2691079,
+      "ram_address": 136908699,
+      "rom_address": 2690971,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_109_POTION": {
       "default_item": 13,
       "flag": 1140,
-      "ram_address": 136908833,
-      "rom_address": 2691105,
+      "ram_address": 136908725,
+      "rom_address": 2690997,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_109_PP_UP": {
       "default_item": 69,
       "flag": 1005,
-      "ram_address": 136908820,
-      "rom_address": 2691092,
+      "ram_address": 136908712,
+      "rom_address": 2690984,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_109_RARE_CANDY": {
       "default_item": 68,
       "flag": 1006,
-      "ram_address": 136908846,
-      "rom_address": 2691118,
+      "ram_address": 136908738,
+      "rom_address": 2691010,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_110_DIRE_HIT": {
       "default_item": 74,
       "flag": 1007,
-      "ram_address": 136908859,
-      "rom_address": 2691131,
+      "ram_address": 136908751,
+      "rom_address": 2691023,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_110_ELIXIR": {
       "default_item": 36,
       "flag": 1141,
-      "ram_address": 136908872,
-      "rom_address": 2691144,
+      "ram_address": 136908764,
+      "rom_address": 2691036,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_111_ELIXIR": {
       "default_item": 36,
       "flag": 1142,
-      "ram_address": 136908924,
-      "rom_address": 2691196,
+      "ram_address": 136908816,
+      "rom_address": 2691088,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_111_HP_UP": {
       "default_item": 63,
       "flag": 1010,
-      "ram_address": 136908911,
-      "rom_address": 2691183,
+      "ram_address": 136908803,
+      "rom_address": 2691075,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_111_STARDUST": {
       "default_item": 108,
       "flag": 1009,
-      "ram_address": 136908898,
-      "rom_address": 2691170,
+      "ram_address": 136908790,
+      "rom_address": 2691062,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_111_TM37": {
       "default_item": 325,
       "flag": 1008,
-      "ram_address": 136908885,
-      "rom_address": 2691157,
+      "ram_address": 136908777,
+      "rom_address": 2691049,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_112_NUGGET": {
       "default_item": 110,
       "flag": 1011,
-      "ram_address": 136908937,
-      "rom_address": 2691209,
+      "ram_address": 136908829,
+      "rom_address": 2691101,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_113_HYPER_POTION": {
       "default_item": 21,
       "flag": 1143,
-      "ram_address": 136908976,
-      "rom_address": 2691248,
+      "ram_address": 136908868,
+      "rom_address": 2691140,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_113_MAX_ETHER": {
       "default_item": 35,
       "flag": 1012,
-      "ram_address": 136908950,
-      "rom_address": 2691222,
+      "ram_address": 136908842,
+      "rom_address": 2691114,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_113_SUPER_REPEL": {
       "default_item": 83,
       "flag": 1013,
-      "ram_address": 136908963,
-      "rom_address": 2691235,
+      "ram_address": 136908855,
+      "rom_address": 2691127,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_114_ENERGY_POWDER": {
       "default_item": 30,
       "flag": 1160,
-      "ram_address": 136909015,
-      "rom_address": 2691287,
+      "ram_address": 136908907,
+      "rom_address": 2691179,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_114_PROTEIN": {
       "default_item": 64,
       "flag": 1015,
-      "ram_address": 136909002,
-      "rom_address": 2691274,
+      "ram_address": 136908894,
+      "rom_address": 2691166,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_114_RARE_CANDY": {
       "default_item": 68,
       "flag": 1014,
-      "ram_address": 136908989,
-      "rom_address": 2691261,
+      "ram_address": 136908881,
+      "rom_address": 2691153,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_115_GREAT_BALL": {
       "default_item": 3,
       "flag": 1118,
-      "ram_address": 136909067,
-      "rom_address": 2691339,
+      "ram_address": 136908959,
+      "rom_address": 2691231,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_115_HEAL_POWDER": {
       "default_item": 32,
       "flag": 1144,
-      "ram_address": 136909080,
-      "rom_address": 2691352,
+      "ram_address": 136908972,
+      "rom_address": 2691244,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_115_IRON": {
       "default_item": 65,
       "flag": 1018,
-      "ram_address": 136909054,
-      "rom_address": 2691326,
+      "ram_address": 136908946,
+      "rom_address": 2691218,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_115_PP_UP": {
       "default_item": 69,
       "flag": 1161,
-      "ram_address": 136909093,
-      "rom_address": 2691365,
+      "ram_address": 136908985,
+      "rom_address": 2691257,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_115_SUPER_POTION": {
       "default_item": 22,
       "flag": 1016,
-      "ram_address": 136909028,
-      "rom_address": 2691300,
+      "ram_address": 136908920,
+      "rom_address": 2691192,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_115_TM01": {
       "default_item": 289,
       "flag": 1017,
-      "ram_address": 136909041,
-      "rom_address": 2691313,
+      "ram_address": 136908933,
+      "rom_address": 2691205,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_116_ETHER": {
       "default_item": 34,
       "flag": 1019,
-      "ram_address": 136909119,
-      "rom_address": 2691391,
+      "ram_address": 136909011,
+      "rom_address": 2691283,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_116_HP_UP": {
       "default_item": 63,
       "flag": 1021,
-      "ram_address": 136909145,
-      "rom_address": 2691417,
+      "ram_address": 136909037,
+      "rom_address": 2691309,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_116_POTION": {
       "default_item": 13,
       "flag": 1146,
-      "ram_address": 136909158,
-      "rom_address": 2691430,
+      "ram_address": 136909050,
+      "rom_address": 2691322,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_116_REPEL": {
       "default_item": 86,
       "flag": 1020,
-      "ram_address": 136909132,
-      "rom_address": 2691404,
+      "ram_address": 136909024,
+      "rom_address": 2691296,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_116_X_SPECIAL": {
       "default_item": 79,
       "flag": 1001,
-      "ram_address": 136909106,
-      "rom_address": 2691378,
+      "ram_address": 136908998,
+      "rom_address": 2691270,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_117_GREAT_BALL": {
       "default_item": 3,
       "flag": 1022,
-      "ram_address": 136909171,
-      "rom_address": 2691443,
+      "ram_address": 136909063,
+      "rom_address": 2691335,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_117_REVIVE": {
       "default_item": 24,
       "flag": 1023,
-      "ram_address": 136909184,
-      "rom_address": 2691456,
+      "ram_address": 136909076,
+      "rom_address": 2691348,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_118_HYPER_POTION": {
       "default_item": 21,
       "flag": 1121,
-      "ram_address": 136909197,
-      "rom_address": 2691469,
+      "ram_address": 136909089,
+      "rom_address": 2691361,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_119_ELIXIR_1": {
       "default_item": 36,
       "flag": 1026,
-      "ram_address": 136909236,
-      "rom_address": 2691508,
+      "ram_address": 136909128,
+      "rom_address": 2691400,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_119_ELIXIR_2": {
       "default_item": 36,
       "flag": 1147,
-      "ram_address": 136909301,
-      "rom_address": 2691573,
+      "ram_address": 136909193,
+      "rom_address": 2691465,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_119_HYPER_POTION_1": {
       "default_item": 21,
       "flag": 1029,
-      "ram_address": 136909275,
-      "rom_address": 2691547,
+      "ram_address": 136909167,
+      "rom_address": 2691439,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_119_HYPER_POTION_2": {
       "default_item": 21,
       "flag": 1106,
-      "ram_address": 136909288,
-      "rom_address": 2691560,
+      "ram_address": 136909180,
+      "rom_address": 2691452,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_119_LEAF_STONE": {
       "default_item": 98,
       "flag": 1027,
-      "ram_address": 136909249,
-      "rom_address": 2691521,
+      "ram_address": 136909141,
+      "rom_address": 2691413,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_119_NUGGET": {
       "default_item": 110,
       "flag": 1134,
-      "ram_address": 136910419,
-      "rom_address": 2692691,
+      "ram_address": 136910311,
+      "rom_address": 2692583,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_119_RARE_CANDY": {
       "default_item": 68,
       "flag": 1028,
-      "ram_address": 136909262,
-      "rom_address": 2691534,
+      "ram_address": 136909154,
+      "rom_address": 2691426,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_119_SUPER_REPEL": {
       "default_item": 83,
       "flag": 1024,
-      "ram_address": 136909210,
-      "rom_address": 2691482,
+      "ram_address": 136909102,
+      "rom_address": 2691374,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_119_ZINC": {
       "default_item": 70,
       "flag": 1025,
-      "ram_address": 136909223,
-      "rom_address": 2691495,
+      "ram_address": 136909115,
+      "rom_address": 2691387,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_120_FULL_HEAL": {
       "default_item": 23,
       "flag": 1031,
-      "ram_address": 136909327,
-      "rom_address": 2691599,
+      "ram_address": 136909219,
+      "rom_address": 2691491,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_120_HYPER_POTION": {
       "default_item": 21,
       "flag": 1107,
-      "ram_address": 136909340,
-      "rom_address": 2691612,
+      "ram_address": 136909232,
+      "rom_address": 2691504,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_120_NEST_BALL": {
       "default_item": 8,
       "flag": 1108,
-      "ram_address": 136909353,
-      "rom_address": 2691625,
+      "ram_address": 136909245,
+      "rom_address": 2691517,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_120_NUGGET": {
       "default_item": 110,
       "flag": 1030,
-      "ram_address": 136909314,
-      "rom_address": 2691586,
+      "ram_address": 136909206,
+      "rom_address": 2691478,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_120_REVIVE": {
       "default_item": 24,
       "flag": 1148,
-      "ram_address": 136909366,
-      "rom_address": 2691638,
+      "ram_address": 136909258,
+      "rom_address": 2691530,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_121_CARBOS": {
       "default_item": 66,
       "flag": 1103,
-      "ram_address": 136909379,
-      "rom_address": 2691651,
+      "ram_address": 136909271,
+      "rom_address": 2691543,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_121_REVIVE": {
       "default_item": 24,
       "flag": 1149,
-      "ram_address": 136909392,
-      "rom_address": 2691664,
+      "ram_address": 136909284,
+      "rom_address": 2691556,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_121_ZINC": {
       "default_item": 70,
       "flag": 1150,
-      "ram_address": 136909405,
-      "rom_address": 2691677,
+      "ram_address": 136909297,
+      "rom_address": 2691569,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_123_CALCIUM": {
       "default_item": 67,
       "flag": 1032,
-      "ram_address": 136909418,
-      "rom_address": 2691690,
+      "ram_address": 136909310,
+      "rom_address": 2691582,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_123_ELIXIR": {
       "default_item": 36,
       "flag": 1109,
-      "ram_address": 136909444,
-      "rom_address": 2691716,
+      "ram_address": 136909336,
+      "rom_address": 2691608,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_123_PP_UP": {
       "default_item": 69,
       "flag": 1152,
-      "ram_address": 136909457,
-      "rom_address": 2691729,
+      "ram_address": 136909349,
+      "rom_address": 2691621,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_123_REVIVAL_HERB": {
       "default_item": 33,
       "flag": 1153,
-      "ram_address": 136909470,
-      "rom_address": 2691742,
+      "ram_address": 136909362,
+      "rom_address": 2691634,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_123_ULTRA_BALL": {
       "default_item": 2,
       "flag": 1104,
-      "ram_address": 136909431,
-      "rom_address": 2691703,
+      "ram_address": 136909323,
+      "rom_address": 2691595,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_124_BLUE_SHARD": {
       "default_item": 49,
       "flag": 1093,
-      "ram_address": 136909496,
-      "rom_address": 2691768,
+      "ram_address": 136909388,
+      "rom_address": 2691660,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_124_RED_SHARD": {
       "default_item": 48,
       "flag": 1092,
-      "ram_address": 136909483,
-      "rom_address": 2691755,
+      "ram_address": 136909375,
+      "rom_address": 2691647,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_124_YELLOW_SHARD": {
       "default_item": 50,
       "flag": 1066,
-      "ram_address": 136909509,
-      "rom_address": 2691781,
+      "ram_address": 136909401,
+      "rom_address": 2691673,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_125_BIG_PEARL": {
       "default_item": 107,
       "flag": 1154,
-      "ram_address": 136909522,
-      "rom_address": 2691794,
+      "ram_address": 136909414,
+      "rom_address": 2691686,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_126_GREEN_SHARD": {
       "default_item": 51,
       "flag": 1105,
-      "ram_address": 136909535,
-      "rom_address": 2691807,
+      "ram_address": 136909427,
+      "rom_address": 2691699,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_127_CARBOS": {
       "default_item": 66,
       "flag": 1035,
-      "ram_address": 136909561,
-      "rom_address": 2691833,
+      "ram_address": 136909453,
+      "rom_address": 2691725,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_127_RARE_CANDY": {
       "default_item": 68,
       "flag": 1155,
-      "ram_address": 136909574,
-      "rom_address": 2691846,
+      "ram_address": 136909466,
+      "rom_address": 2691738,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_127_ZINC": {
       "default_item": 70,
       "flag": 1034,
-      "ram_address": 136909548,
-      "rom_address": 2691820,
+      "ram_address": 136909440,
+      "rom_address": 2691712,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_132_PROTEIN": {
       "default_item": 64,
       "flag": 1156,
-      "ram_address": 136909600,
-      "rom_address": 2691872,
+      "ram_address": 136909492,
+      "rom_address": 2691764,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_132_RARE_CANDY": {
       "default_item": 68,
       "flag": 1036,
-      "ram_address": 136909587,
-      "rom_address": 2691859,
+      "ram_address": 136909479,
+      "rom_address": 2691751,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_133_BIG_PEARL": {
       "default_item": 107,
       "flag": 1037,
-      "ram_address": 136909613,
-      "rom_address": 2691885,
+      "ram_address": 136909505,
+      "rom_address": 2691777,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_133_MAX_REVIVE": {
       "default_item": 25,
       "flag": 1157,
-      "ram_address": 136909639,
-      "rom_address": 2691911,
+      "ram_address": 136909531,
+      "rom_address": 2691803,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_133_STAR_PIECE": {
       "default_item": 109,
       "flag": 1038,
-      "ram_address": 136909626,
-      "rom_address": 2691898,
+      "ram_address": 136909518,
+      "rom_address": 2691790,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_134_CARBOS": {
       "default_item": 66,
       "flag": 1158,
-      "ram_address": 136909652,
-      "rom_address": 2691924,
+      "ram_address": 136909544,
+      "rom_address": 2691816,
       "type": "GROUND_ITEM"
     },
     "ITEM_ROUTE_134_STAR_PIECE": {
       "default_item": 109,
       "flag": 1159,
-      "ram_address": 136909665,
-      "rom_address": 2691937,
+      "ram_address": 136909557,
+      "rom_address": 2691829,
       "type": "GROUND_ITEM"
     },
     "ITEM_RUSTBORO_CITY_X_DEFEND": {
       "default_item": 76,
       "flag": 1041,
-      "ram_address": 136909717,
-      "rom_address": 2691989,
+      "ram_address": 136909609,
+      "rom_address": 2691881,
       "type": "GROUND_ITEM"
     },
     "ITEM_RUSTURF_TUNNEL_MAX_ETHER": {
       "default_item": 35,
       "flag": 1049,
-      "ram_address": 136909821,
-      "rom_address": 2692093,
+      "ram_address": 136909713,
+      "rom_address": 2691985,
       "type": "GROUND_ITEM"
     },
     "ITEM_RUSTURF_TUNNEL_POKE_BALL": {
       "default_item": 4,
       "flag": 1048,
-      "ram_address": 136909808,
-      "rom_address": 2692080,
+      "ram_address": 136909700,
+      "rom_address": 2691972,
       "type": "GROUND_ITEM"
     },
     "ITEM_SAFARI_ZONE_NORTH_CALCIUM": {
       "default_item": 67,
       "flag": 1119,
-      "ram_address": 136910211,
-      "rom_address": 2692483,
+      "ram_address": 136910103,
+      "rom_address": 2692375,
       "type": "GROUND_ITEM"
     },
     "ITEM_SAFARI_ZONE_NORTH_EAST_NUGGET": {
       "default_item": 110,
       "flag": 1169,
-      "ram_address": 136910237,
-      "rom_address": 2692509,
+      "ram_address": 136910129,
+      "rom_address": 2692401,
       "type": "GROUND_ITEM"
     },
     "ITEM_SAFARI_ZONE_NORTH_WEST_TM22": {
       "default_item": 310,
       "flag": 1094,
-      "ram_address": 136910198,
-      "rom_address": 2692470,
+      "ram_address": 136910090,
+      "rom_address": 2692362,
       "type": "GROUND_ITEM"
     },
     "ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL": {
       "default_item": 107,
       "flag": 1170,
-      "ram_address": 136910250,
-      "rom_address": 2692522,
+      "ram_address": 136910142,
+      "rom_address": 2692414,
       "type": "GROUND_ITEM"
     },
     "ITEM_SAFARI_ZONE_SOUTH_WEST_MAX_REVIVE": {
       "default_item": 25,
       "flag": 1131,
-      "ram_address": 136910224,
-      "rom_address": 2692496,
+      "ram_address": 136910116,
+      "rom_address": 2692388,
       "type": "GROUND_ITEM"
     },
     "ITEM_SCORCHED_SLAB_TM11": {
       "default_item": 299,
       "flag": 1079,
-      "ram_address": 136910185,
-      "rom_address": 2692457,
+      "ram_address": 136910077,
+      "rom_address": 2692349,
       "type": "GROUND_ITEM"
     },
     "ITEM_SEAFLOOR_CAVERN_ROOM_9_TM26": {
       "default_item": 314,
       "flag": 1090,
-      "ram_address": 136910523,
-      "rom_address": 2692795,
+      "ram_address": 136910415,
+      "rom_address": 2692687,
       "type": "GROUND_ITEM"
     },
     "ITEM_SHOAL_CAVE_ENTRANCE_BIG_PEARL": {
       "default_item": 107,
       "flag": 1081,
-      "ram_address": 136910458,
-      "rom_address": 2692730,
+      "ram_address": 136910350,
+      "rom_address": 2692622,
       "type": "GROUND_ITEM"
     },
     "ITEM_SHOAL_CAVE_ICE_ROOM_NEVER_MELT_ICE": {
       "default_item": 212,
       "flag": 1113,
-      "ram_address": 136910510,
-      "rom_address": 2692782,
+      "ram_address": 136910402,
+      "rom_address": 2692674,
       "type": "GROUND_ITEM"
     },
     "ITEM_SHOAL_CAVE_ICE_ROOM_TM07": {
       "default_item": 295,
       "flag": 1112,
-      "ram_address": 136910497,
-      "rom_address": 2692769,
+      "ram_address": 136910389,
+      "rom_address": 2692661,
       "type": "GROUND_ITEM"
     },
     "ITEM_SHOAL_CAVE_INNER_ROOM_RARE_CANDY": {
       "default_item": 68,
       "flag": 1082,
-      "ram_address": 136910471,
-      "rom_address": 2692743,
+      "ram_address": 136910363,
+      "rom_address": 2692635,
       "type": "GROUND_ITEM"
     },
     "ITEM_SHOAL_CAVE_STAIRS_ROOM_ICE_HEAL": {
       "default_item": 16,
       "flag": 1083,
-      "ram_address": 136910484,
-      "rom_address": 2692756,
+      "ram_address": 136910376,
+      "rom_address": 2692648,
       "type": "GROUND_ITEM"
     },
     "ITEM_TRICK_HOUSE_PUZZLE_1_ORANGE_MAIL": {
       "default_item": 121,
       "flag": 1060,
-      "ram_address": 136910536,
-      "rom_address": 2692808,
+      "ram_address": 136910428,
+      "rom_address": 2692700,
       "type": "GROUND_ITEM"
     },
     "ITEM_TRICK_HOUSE_PUZZLE_2_HARBOR_MAIL": {
       "default_item": 122,
       "flag": 1061,
-      "ram_address": 136910549,
-      "rom_address": 2692821,
+      "ram_address": 136910441,
+      "rom_address": 2692713,
       "type": "GROUND_ITEM"
     },
     "ITEM_TRICK_HOUSE_PUZZLE_2_WAVE_MAIL": {
       "default_item": 126,
       "flag": 1062,
-      "ram_address": 136910562,
-      "rom_address": 2692834,
+      "ram_address": 136910454,
+      "rom_address": 2692726,
       "type": "GROUND_ITEM"
     },
     "ITEM_TRICK_HOUSE_PUZZLE_3_SHADOW_MAIL": {
       "default_item": 128,
       "flag": 1063,
-      "ram_address": 136910575,
-      "rom_address": 2692847,
+      "ram_address": 136910467,
+      "rom_address": 2692739,
       "type": "GROUND_ITEM"
     },
     "ITEM_TRICK_HOUSE_PUZZLE_3_WOOD_MAIL": {
       "default_item": 125,
       "flag": 1064,
-      "ram_address": 136910588,
-      "rom_address": 2692860,
+      "ram_address": 136910480,
+      "rom_address": 2692752,
       "type": "GROUND_ITEM"
     },
     "ITEM_TRICK_HOUSE_PUZZLE_4_MECH_MAIL": {
       "default_item": 124,
       "flag": 1065,
-      "ram_address": 136910601,
-      "rom_address": 2692873,
+      "ram_address": 136910493,
+      "rom_address": 2692765,
       "type": "GROUND_ITEM"
     },
     "ITEM_TRICK_HOUSE_PUZZLE_6_GLITTER_MAIL": {
       "default_item": 123,
       "flag": 1067,
-      "ram_address": 136910614,
-      "rom_address": 2692886,
+      "ram_address": 136910506,
+      "rom_address": 2692778,
       "type": "GROUND_ITEM"
     },
     "ITEM_TRICK_HOUSE_PUZZLE_7_TROPIC_MAIL": {
       "default_item": 129,
       "flag": 1068,
-      "ram_address": 136910627,
-      "rom_address": 2692899,
+      "ram_address": 136910519,
+      "rom_address": 2692791,
       "type": "GROUND_ITEM"
     },
     "ITEM_TRICK_HOUSE_PUZZLE_8_BEAD_MAIL": {
       "default_item": 127,
       "flag": 1069,
-      "ram_address": 136910640,
-      "rom_address": 2692912,
+      "ram_address": 136910532,
+      "rom_address": 2692804,
       "type": "GROUND_ITEM"
     },
     "ITEM_VICTORY_ROAD_1F_MAX_ELIXIR": {
       "default_item": 37,
       "flag": 1084,
-      "ram_address": 136910653,
-      "rom_address": 2692925,
+      "ram_address": 136910545,
+      "rom_address": 2692817,
       "type": "GROUND_ITEM"
     },
     "ITEM_VICTORY_ROAD_1F_PP_UP": {
       "default_item": 69,
       "flag": 1085,
-      "ram_address": 136910666,
-      "rom_address": 2692938,
+      "ram_address": 136910558,
+      "rom_address": 2692830,
       "type": "GROUND_ITEM"
     },
     "ITEM_VICTORY_ROAD_B1F_FULL_RESTORE": {
       "default_item": 19,
       "flag": 1087,
-      "ram_address": 136910692,
-      "rom_address": 2692964,
+      "ram_address": 136910584,
+      "rom_address": 2692856,
       "type": "GROUND_ITEM"
     },
     "ITEM_VICTORY_ROAD_B1F_TM29": {
       "default_item": 317,
       "flag": 1086,
-      "ram_address": 136910679,
-      "rom_address": 2692951,
+      "ram_address": 136910571,
+      "rom_address": 2692843,
       "type": "GROUND_ITEM"
     },
     "ITEM_VICTORY_ROAD_B2F_FULL_HEAL": {
       "default_item": 23,
       "flag": 1088,
-      "ram_address": 136910705,
-      "rom_address": 2692977,
+      "ram_address": 136910597,
+      "rom_address": 2692869,
       "type": "GROUND_ITEM"
     },
     "NPC_GIFT_RECEIVED_HM01": {
       "default_item": 339,
       "flag": 137,
-      "ram_address": 136404570,
-      "rom_address": 2186842,
+      "ram_address": 136404494,
+      "rom_address": 2186766,
       "type": "NPC_GIFT"
     },
     "NPC_GIFT_RECEIVED_HM02": {
       "default_item": 340,
       "flag": 110,
-      "ram_address": 136267918,
-      "rom_address": 2050190,
+      "ram_address": 136267890,
+      "rom_address": 2050162,
       "type": "NPC_GIFT"
     },
     "NPC_GIFT_RECEIVED_HM03": {
       "default_item": 341,
       "flag": 122,
-      "ram_address": 136332509,
-      "rom_address": 2114781,
+      "ram_address": 136332457,
+      "rom_address": 2114729,
       "type": "NPC_GIFT"
     },
     "NPC_GIFT_RECEIVED_HM04": {
       "default_item": 342,
       "flag": 106,
-      "ram_address": 136499542,
-      "rom_address": 2281814,
+      "ram_address": 136499434,
+      "rom_address": 2281706,
       "type": "NPC_GIFT"
     },
     "NPC_GIFT_RECEIVED_HM05": {
       "default_item": 343,
       "flag": 109,
-      "ram_address": 136502484,
-      "rom_address": 2284756,
+      "ram_address": 136502376,
+      "rom_address": 2284648,
       "type": "NPC_GIFT"
     },
     "NPC_GIFT_RECEIVED_HM06": {
       "default_item": 344,
       "flag": 107,
-      "ram_address": 136379395,
-      "rom_address": 2161667,
+      "ram_address": 136379325,
+      "rom_address": 2161597,
       "type": "NPC_GIFT"
     },
     "NPC_GIFT_RECEIVED_HM07": {
       "default_item": 345,
       "flag": 312,
-      "ram_address": 136210182,
-      "rom_address": 1992454,
+      "ram_address": 136210154,
+      "rom_address": 1992426,
       "type": "NPC_GIFT"
     },
     "NPC_GIFT_RECEIVED_HM08": {
       "default_item": 346,
       "flag": 123,
-      "ram_address": 136456801,
-      "rom_address": 2239073,
+      "ram_address": 136456705,
+      "rom_address": 2238977,
       "type": "NPC_GIFT"
     },
     "NPC_GIFT_RECEIVED_WAILMER_PAIL": {
       "default_item": 268,
       "flag": 94,
-      "ram_address": 136488588,
-      "rom_address": 2270860,
+      "ram_address": 136488480,
+      "rom_address": 2270752,
       "type": "NPC_GIFT"
     }
   },
@@ -4493,8 +4549,8 @@
           73,
           73
         ],
-        "ram_address": 139795700,
-        "rom_address": 5577972
+        "ram_address": 139795592,
+        "rom_address": 5577864
       },
       "land_encounters": null,
       "water_encounters": {
@@ -4505,8 +4561,8 @@
           72,
           73
         ],
-        "ram_address": 139795672,
-        "rom_address": 5577944
+        "ram_address": 139795564,
+        "rom_address": 5577836
       }
     },
     "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS": {
@@ -4543,8 +4599,8 @@
           73,
           73
         ],
-        "ram_address": 139792936,
-        "rom_address": 5575208
+        "ram_address": 139792828,
+        "rom_address": 5575100
       },
       "land_encounters": null,
       "water_encounters": {
@@ -4555,8 +4611,8 @@
           72,
           73
         ],
-        "ram_address": 139792908,
-        "rom_address": 5575180
+        "ram_address": 139792800,
+        "rom_address": 5575072
       }
     },
     "MAP_ABANDONED_SHIP_ROOM_B1F": {
@@ -4591,8 +4647,8 @@
           41,
           41
         ],
-        "ram_address": 139800012,
-        "rom_address": 5582284
+        "ram_address": 139799904,
+        "rom_address": 5582176
       },
       "water_encounters": null
     },
@@ -4648,8 +4704,8 @@
           235,
           235
         ],
-        "ram_address": 139799956,
-        "rom_address": 5582228
+        "ram_address": 139799848,
+        "rom_address": 5582120
       },
       "water_encounters": null
     },
@@ -4670,8 +4726,8 @@
           235,
           235
         ],
-        "ram_address": 139799900,
-        "rom_address": 5582172
+        "ram_address": 139799792,
+        "rom_address": 5582064
       },
       "water_encounters": null
     },
@@ -5027,8 +5083,8 @@
           42,
           42
         ],
-        "ram_address": 139796480,
-        "rom_address": 5578752
+        "ram_address": 139796372,
+        "rom_address": 5578644
       },
       "water_encounters": null
     },
@@ -5054,8 +5110,8 @@
           42,
           42
         ],
-        "ram_address": 139796424,
-        "rom_address": 5578696
+        "ram_address": 139796316,
+        "rom_address": 5578588
       },
       "water_encounters": null
     },
@@ -5076,8 +5132,8 @@
           42,
           42
         ],
-        "ram_address": 139796536,
-        "rom_address": 5578808
+        "ram_address": 139796428,
+        "rom_address": 5578700
       },
       "water_encounters": null
     },
@@ -5098,8 +5154,8 @@
           42,
           42
         ],
-        "ram_address": 139796592,
-        "rom_address": 5578864
+        "ram_address": 139796484,
+        "rom_address": 5578756
       },
       "water_encounters": null
     },
@@ -5120,8 +5176,8 @@
           42,
           42
         ],
-        "ram_address": 139796648,
-        "rom_address": 5578920
+        "ram_address": 139796540,
+        "rom_address": 5578812
       },
       "water_encounters": null
     },
@@ -5177,8 +5233,8 @@
           371,
           132
         ],
-        "ram_address": 139799844,
-        "rom_address": 5582116
+        "ram_address": 139799736,
+        "rom_address": 5582008
       },
       "water_encounters": null
     },
@@ -5196,8 +5252,8 @@
           313,
           313
         ],
-        "ram_address": 139798200,
-        "rom_address": 5580472
+        "ram_address": 139798092,
+        "rom_address": 5580364
       },
       "land_encounters": null,
       "water_encounters": {
@@ -5208,8 +5264,8 @@
           310,
           310
         ],
-        "ram_address": 139798172,
-        "rom_address": 5580444
+        "ram_address": 139798064,
+        "rom_address": 5580336
       }
     },
     "MAP_DEWFORD_TOWN_GYM": {
@@ -5256,8 +5312,8 @@
           313,
           313
         ],
-        "ram_address": 139798504,
-        "rom_address": 5580776
+        "ram_address": 139798396,
+        "rom_address": 5580668
       },
       "land_encounters": null,
       "water_encounters": {
@@ -5268,8 +5324,8 @@
           310,
           310
         ],
-        "ram_address": 139798476,
-        "rom_address": 5580748
+        "ram_address": 139798368,
+        "rom_address": 5580640
       }
     },
     "MAP_EVER_GRANDE_CITY_CHAMPIONS_ROOM": {
@@ -5419,8 +5475,8 @@
           88,
           88
         ],
-        "ram_address": 139793068,
-        "rom_address": 5575340
+        "ram_address": 139792960,
+        "rom_address": 5575232
       },
       "water_encounters": null
     },
@@ -5496,8 +5552,8 @@
           74,
           74
         ],
-        "ram_address": 139792600,
-        "rom_address": 5574872
+        "ram_address": 139792492,
+        "rom_address": 5574764
       },
       "water_encounters": null
     },
@@ -5518,8 +5574,8 @@
           322,
           322
         ],
-        "ram_address": 139792656,
-        "rom_address": 5574928
+        "ram_address": 139792548,
+        "rom_address": 5574820
       },
       "water_encounters": null
     },
@@ -5540,8 +5596,8 @@
           322,
           322
         ],
-        "ram_address": 139792984,
-        "rom_address": 5575256
+        "ram_address": 139792876,
+        "rom_address": 5575148
       },
       "water_encounters": null
     },
@@ -5562,8 +5618,8 @@
           382,
           382
         ],
-        "ram_address": 139794800,
-        "rom_address": 5577072
+        "ram_address": 139794692,
+        "rom_address": 5576964
       },
       "water_encounters": null
     },
@@ -5594,8 +5650,8 @@
           339,
           351
         ],
-        "ram_address": 139793256,
-        "rom_address": 5575528
+        "ram_address": 139793148,
+        "rom_address": 5575420
       },
       "water_encounters": null
     },
@@ -5653,8 +5709,8 @@
           313,
           313
         ],
-        "ram_address": 139798124,
-        "rom_address": 5580396
+        "ram_address": 139798016,
+        "rom_address": 5580288
       },
       "land_encounters": null,
       "water_encounters": {
@@ -5665,8 +5721,8 @@
           310,
           310
         ],
-        "ram_address": 139798096,
-        "rom_address": 5580368
+        "ram_address": 139797988,
+        "rom_address": 5580260
       }
     },
     "MAP_LILYCOVE_CITY_CONTEST_HALL": {
@@ -5831,8 +5887,8 @@
           75,
           75
         ],
-        "ram_address": 139799172,
-        "rom_address": 5581444
+        "ram_address": 139799064,
+        "rom_address": 5581336
       },
       "water_encounters": null
     },
@@ -5853,8 +5909,8 @@
           75,
           75
         ],
-        "ram_address": 139799228,
-        "rom_address": 5581500
+        "ram_address": 139799120,
+        "rom_address": 5581392
       },
       "water_encounters": null
     },
@@ -5875,8 +5931,8 @@
           75,
           75
         ],
-        "ram_address": 139799284,
-        "rom_address": 5581556
+        "ram_address": 139799176,
+        "rom_address": 5581448
       },
       "water_encounters": null
     },
@@ -5897,8 +5953,8 @@
           75,
           75
         ],
-        "ram_address": 139799564,
-        "rom_address": 5581836
+        "ram_address": 139799456,
+        "rom_address": 5581728
       },
       "water_encounters": null
     },
@@ -5919,8 +5975,8 @@
           75,
           75
         ],
-        "ram_address": 139799340,
-        "rom_address": 5581612
+        "ram_address": 139799232,
+        "rom_address": 5581504
       },
       "water_encounters": null
     },
@@ -5941,8 +5997,8 @@
           75,
           75
         ],
-        "ram_address": 139799396,
-        "rom_address": 5581668
+        "ram_address": 139799288,
+        "rom_address": 5581560
       },
       "water_encounters": null
     },
@@ -5963,8 +6019,8 @@
           75,
           75
         ],
-        "ram_address": 139799508,
-        "rom_address": 5581780
+        "ram_address": 139799400,
+        "rom_address": 5581672
       },
       "water_encounters": null
     },
@@ -5985,8 +6041,8 @@
           75,
           75
         ],
-        "ram_address": 139799452,
-        "rom_address": 5581724
+        "ram_address": 139799344,
+        "rom_address": 5581616
       },
       "water_encounters": null
     },
@@ -6059,8 +6115,8 @@
           323,
           323
         ],
-        "ram_address": 139797408,
-        "rom_address": 5579680
+        "ram_address": 139797300,
+        "rom_address": 5579572
       },
       "land_encounters": {
         "encounter_slots": [
@@ -6077,8 +6133,8 @@
           41,
           41
         ],
-        "ram_address": 139797324,
-        "rom_address": 5579596
+        "ram_address": 139797216,
+        "rom_address": 5579488
       },
       "water_encounters": {
         "encounter_slots": [
@@ -6088,8 +6144,8 @@
           349,
           349
         ],
-        "ram_address": 139797380,
-        "rom_address": 5579652
+        "ram_address": 139797272,
+        "rom_address": 5579544
       }
     },
     "MAP_METEOR_FALLS_1F_2R": {
@@ -6106,8 +6162,8 @@
           324,
           324
         ],
-        "ram_address": 139797540,
-        "rom_address": 5579812
+        "ram_address": 139797432,
+        "rom_address": 5579704
       },
       "land_encounters": {
         "encounter_slots": [
@@ -6124,8 +6180,8 @@
           42,
           42
         ],
-        "ram_address": 139797456,
-        "rom_address": 5579728
+        "ram_address": 139797348,
+        "rom_address": 5579620
       },
       "water_encounters": {
         "encounter_slots": [
@@ -6135,8 +6191,8 @@
           349,
           349
         ],
-        "ram_address": 139797512,
-        "rom_address": 5579784
+        "ram_address": 139797404,
+        "rom_address": 5579676
       }
     },
     "MAP_METEOR_FALLS_B1F_1R": {
@@ -6153,8 +6209,8 @@
           324,
           324
         ],
-        "ram_address": 139797672,
-        "rom_address": 5579944
+        "ram_address": 139797564,
+        "rom_address": 5579836
       },
       "land_encounters": {
         "encounter_slots": [
@@ -6171,8 +6227,8 @@
           42,
           42
         ],
-        "ram_address": 139797588,
-        "rom_address": 5579860
+        "ram_address": 139797480,
+        "rom_address": 5579752
       },
       "water_encounters": {
         "encounter_slots": [
@@ -6182,8 +6238,8 @@
           349,
           349
         ],
-        "ram_address": 139797644,
-        "rom_address": 5579916
+        "ram_address": 139797536,
+        "rom_address": 5579808
       }
     },
     "MAP_METEOR_FALLS_B1F_2R": {
@@ -6200,8 +6256,8 @@
           324,
           324
         ],
-        "ram_address": 139793208,
-        "rom_address": 5575480
+        "ram_address": 139793100,
+        "rom_address": 5575372
       },
       "land_encounters": {
         "encounter_slots": [
@@ -6218,8 +6274,8 @@
           42,
           42
         ],
-        "ram_address": 139793124,
-        "rom_address": 5575396
+        "ram_address": 139793016,
+        "rom_address": 5575288
       },
       "water_encounters": {
         "encounter_slots": [
@@ -6229,8 +6285,8 @@
           349,
           349
         ],
-        "ram_address": 139793180,
-        "rom_address": 5575452
+        "ram_address": 139793072,
+        "rom_address": 5575344
       }
     },
     "MAP_METEOR_FALLS_STEVENS_CAVE": {
@@ -6250,8 +6306,8 @@
           42,
           42
         ],
-        "ram_address": 139800516,
-        "rom_address": 5582788
+        "ram_address": 139800408,
+        "rom_address": 5582680
       },
       "water_encounters": null
     },
@@ -6272,8 +6328,8 @@
           27,
           332
         ],
-        "ram_address": 139799620,
-        "rom_address": 5581892
+        "ram_address": 139799512,
+        "rom_address": 5581784
       },
       "water_encounters": null
     },
@@ -6294,8 +6350,8 @@
           27,
           332
         ],
-        "ram_address": 139799676,
-        "rom_address": 5581948
+        "ram_address": 139799568,
+        "rom_address": 5581840
       },
       "water_encounters": null
     },
@@ -6316,8 +6372,8 @@
           27,
           332
         ],
-        "ram_address": 139799732,
-        "rom_address": 5582004
+        "ram_address": 139799624,
+        "rom_address": 5581896
       },
       "water_encounters": null
     },
@@ -6338,8 +6394,8 @@
           27,
           332
         ],
-        "ram_address": 139799788,
-        "rom_address": 5582060
+        "ram_address": 139799680,
+        "rom_address": 5581952
       },
       "water_encounters": null
     },
@@ -6357,8 +6413,8 @@
           313,
           313
         ],
-        "ram_address": 139798352,
-        "rom_address": 5580624
+        "ram_address": 139798244,
+        "rom_address": 5580516
       },
       "land_encounters": null,
       "water_encounters": {
@@ -6369,8 +6425,8 @@
           310,
           310
         ],
-        "ram_address": 139798324,
-        "rom_address": 5580596
+        "ram_address": 139798216,
+        "rom_address": 5580488
       }
     },
     "MAP_MOSSDEEP_CITY_GAME_CORNER_1F": {
@@ -6465,8 +6521,8 @@
           377,
           377
         ],
-        "ram_address": 139792712,
-        "rom_address": 5574984
+        "ram_address": 139792604,
+        "rom_address": 5574876
       },
       "water_encounters": null
     },
@@ -6487,8 +6543,8 @@
           377,
           377
         ],
-        "ram_address": 139794408,
-        "rom_address": 5576680
+        "ram_address": 139794300,
+        "rom_address": 5576572
       },
       "water_encounters": null
     },
@@ -6509,8 +6565,8 @@
           377,
           377
         ],
-        "ram_address": 139794464,
-        "rom_address": 5576736
+        "ram_address": 139794356,
+        "rom_address": 5576628
       },
       "water_encounters": null
     },
@@ -6531,8 +6587,8 @@
           361,
           361
         ],
-        "ram_address": 139794520,
-        "rom_address": 5576792
+        "ram_address": 139794412,
+        "rom_address": 5576684
       },
       "water_encounters": null
     },
@@ -6553,8 +6609,8 @@
           361,
           361
         ],
-        "ram_address": 139794576,
-        "rom_address": 5576848
+        "ram_address": 139794468,
+        "rom_address": 5576740
       },
       "water_encounters": null
     },
@@ -6575,8 +6631,8 @@
           361,
           361
         ],
-        "ram_address": 139794632,
-        "rom_address": 5576904
+        "ram_address": 139794524,
+        "rom_address": 5576796
       },
       "water_encounters": null
     },
@@ -6597,8 +6653,8 @@
           309,
           309
         ],
-        "ram_address": 139794688,
-        "rom_address": 5576960
+        "ram_address": 139794580,
+        "rom_address": 5576852
       },
       "water_encounters": null
     },
@@ -6619,8 +6675,8 @@
           411,
           411
         ],
-        "ram_address": 139794744,
-        "rom_address": 5577016
+        "ram_address": 139794636,
+        "rom_address": 5576908
       },
       "water_encounters": null
     },
@@ -6751,8 +6807,8 @@
           100,
           81
         ],
-        "ram_address": 139796704,
-        "rom_address": 5578976
+        "ram_address": 139796596,
+        "rom_address": 5578868
       },
       "water_encounters": null
     },
@@ -6773,8 +6829,8 @@
           101,
           82
         ],
-        "ram_address": 139793748,
-        "rom_address": 5576020
+        "ram_address": 139793640,
+        "rom_address": 5575912
       },
       "water_encounters": null
     },
@@ -6822,8 +6878,8 @@
           313,
           313
         ],
-        "ram_address": 139798428,
-        "rom_address": 5580700
+        "ram_address": 139798320,
+        "rom_address": 5580592
       },
       "land_encounters": null,
       "water_encounters": {
@@ -6834,8 +6890,8 @@
           310,
           310
         ],
-        "ram_address": 139798400,
-        "rom_address": 5580672
+        "ram_address": 139798292,
+        "rom_address": 5580564
       }
     },
     "MAP_PACIFIDLOG_TOWN_HOUSE1": {
@@ -6887,8 +6943,8 @@
           326,
           326
         ],
-        "ram_address": 139798580,
-        "rom_address": 5580852
+        "ram_address": 139798472,
+        "rom_address": 5580744
       },
       "land_encounters": null,
       "water_encounters": {
@@ -6899,8 +6955,8 @@
           183,
           183
         ],
-        "ram_address": 139798552,
-        "rom_address": 5580824
+        "ram_address": 139798444,
+        "rom_address": 5580716
       }
     },
     "MAP_PETALBURG_CITY_GYM": {
@@ -6955,8 +7011,8 @@
           304,
           364
         ],
-        "ram_address": 139792488,
-        "rom_address": 5574760
+        "ram_address": 139792380,
+        "rom_address": 5574652
       },
       "water_encounters": null
     },
@@ -6982,8 +7038,8 @@
           288,
           288
         ],
-        "ram_address": 139791000,
-        "rom_address": 5573272
+        "ram_address": 139790892,
+        "rom_address": 5573164
       },
       "water_encounters": null
     },
@@ -7001,8 +7057,8 @@
           326,
           326
         ],
-        "ram_address": 139791140,
-        "rom_address": 5573412
+        "ram_address": 139791032,
+        "rom_address": 5573304
       },
       "land_encounters": {
         "encounter_slots": [
@@ -7019,8 +7075,8 @@
           288,
           298
         ],
-        "ram_address": 139791056,
-        "rom_address": 5573328
+        "ram_address": 139790948,
+        "rom_address": 5573220
       },
       "water_encounters": {
         "encounter_slots": [
@@ -7030,8 +7086,8 @@
           183,
           118
         ],
-        "ram_address": 139791112,
-        "rom_address": 5573384
+        "ram_address": 139791004,
+        "rom_address": 5573276
       }
     },
     "MAP_ROUTE103": {
@@ -7048,8 +7104,8 @@
           313,
           313
         ],
-        "ram_address": 139791272,
-        "rom_address": 5573544
+        "ram_address": 139791164,
+        "rom_address": 5573436
       },
       "land_encounters": {
         "encounter_slots": [
@@ -7066,8 +7122,8 @@
           309,
           309
         ],
-        "ram_address": 139791188,
-        "rom_address": 5573460
+        "ram_address": 139791080,
+        "rom_address": 5573352
       },
       "water_encounters": {
         "encounter_slots": [
@@ -7077,8 +7133,8 @@
           310,
           310
         ],
-        "ram_address": 139791244,
-        "rom_address": 5573516
+        "ram_address": 139791136,
+        "rom_address": 5573408
       }
     },
     "MAP_ROUTE104": {
@@ -7095,8 +7151,8 @@
           129,
           129
         ],
-        "ram_address": 139791404,
-        "rom_address": 5573676
+        "ram_address": 139791296,
+        "rom_address": 5573568
       },
       "land_encounters": {
         "encounter_slots": [
@@ -7113,8 +7169,8 @@
           309,
           309
         ],
-        "ram_address": 139791320,
-        "rom_address": 5573592
+        "ram_address": 139791212,
+        "rom_address": 5573484
       },
       "water_encounters": {
         "encounter_slots": [
@@ -7124,8 +7180,8 @@
           310,
           310
         ],
-        "ram_address": 139791376,
-        "rom_address": 5573648
+        "ram_address": 139791268,
+        "rom_address": 5573540
       }
     },
     "MAP_ROUTE104_MR_BRINEYS_HOUSE": {
@@ -7162,8 +7218,8 @@
           313,
           313
         ],
-        "ram_address": 139791480,
-        "rom_address": 5573752
+        "ram_address": 139791372,
+        "rom_address": 5573644
       },
       "land_encounters": null,
       "water_encounters": {
@@ -7174,8 +7230,8 @@
           310,
           310
         ],
-        "ram_address": 139791452,
-        "rom_address": 5573724
+        "ram_address": 139791344,
+        "rom_address": 5573616
       }
     },
     "MAP_ROUTE106": {
@@ -7192,8 +7248,8 @@
           313,
           313
         ],
-        "ram_address": 139793340,
-        "rom_address": 5575612
+        "ram_address": 139793232,
+        "rom_address": 5575504
       },
       "land_encounters": null,
       "water_encounters": {
@@ -7204,8 +7260,8 @@
           310,
           310
         ],
-        "ram_address": 139793312,
-        "rom_address": 5575584
+        "ram_address": 139793204,
+        "rom_address": 5575476
       }
     },
     "MAP_ROUTE107": {
@@ -7222,8 +7278,8 @@
           313,
           313
         ],
-        "ram_address": 139793416,
-        "rom_address": 5575688
+        "ram_address": 139793308,
+        "rom_address": 5575580
       },
       "land_encounters": null,
       "water_encounters": {
@@ -7234,8 +7290,8 @@
           310,
           310
         ],
-        "ram_address": 139793388,
-        "rom_address": 5575660
+        "ram_address": 139793280,
+        "rom_address": 5575552
       }
     },
     "MAP_ROUTE108": {
@@ -7252,8 +7308,8 @@
           313,
           313
         ],
-        "ram_address": 139793492,
-        "rom_address": 5575764
+        "ram_address": 139793384,
+        "rom_address": 5575656
       },
       "land_encounters": null,
       "water_encounters": {
@@ -7264,8 +7320,8 @@
           310,
           310
         ],
-        "ram_address": 139793464,
-        "rom_address": 5575736
+        "ram_address": 139793356,
+        "rom_address": 5575628
       }
     },
     "MAP_ROUTE109": {
@@ -7282,8 +7338,8 @@
           313,
           313
         ],
-        "ram_address": 139793568,
-        "rom_address": 5575840
+        "ram_address": 139793460,
+        "rom_address": 5575732
       },
       "land_encounters": null,
       "water_encounters": {
@@ -7294,8 +7350,8 @@
           310,
           310
         ],
-        "ram_address": 139793540,
-        "rom_address": 5575812
+        "ram_address": 139793432,
+        "rom_address": 5575704
       }
     },
     "MAP_ROUTE109_SEASHORE_HOUSE": {
@@ -7317,8 +7373,8 @@
           313,
           313
         ],
-        "ram_address": 139791612,
-        "rom_address": 5573884
+        "ram_address": 139791504,
+        "rom_address": 5573776
       },
       "land_encounters": {
         "encounter_slots": [
@@ -7335,8 +7391,8 @@
           353,
           353
         ],
-        "ram_address": 139791528,
-        "rom_address": 5573800
+        "ram_address": 139791420,
+        "rom_address": 5573692
       },
       "water_encounters": {
         "encounter_slots": [
@@ -7346,8 +7402,8 @@
           310,
           310
         ],
-        "ram_address": 139791584,
-        "rom_address": 5573856
+        "ram_address": 139791476,
+        "rom_address": 5573748
       }
     },
     "MAP_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE": {
@@ -7429,8 +7485,8 @@
           323,
           323
         ],
-        "ram_address": 139791772,
-        "rom_address": 5574044
+        "ram_address": 139791664,
+        "rom_address": 5573936
       },
       "land_encounters": {
         "encounter_slots": [
@@ -7447,8 +7503,8 @@
           344,
           344
         ],
-        "ram_address": 139791660,
-        "rom_address": 5573932
+        "ram_address": 139791552,
+        "rom_address": 5573824
       },
       "water_encounters": {
         "encounter_slots": [
@@ -7458,8 +7514,8 @@
           183,
           118
         ],
-        "ram_address": 139791716,
-        "rom_address": 5573988
+        "ram_address": 139791608,
+        "rom_address": 5573880
       }
     },
     "MAP_ROUTE111_OLD_LADYS_REST_STOP": {
@@ -7489,8 +7545,8 @@
           339,
           339
         ],
-        "ram_address": 139791820,
-        "rom_address": 5574092
+        "ram_address": 139791712,
+        "rom_address": 5573984
       },
       "water_encounters": null
     },
@@ -7516,8 +7572,8 @@
           308,
           227
         ],
-        "ram_address": 139791876,
-        "rom_address": 5574148
+        "ram_address": 139791768,
+        "rom_address": 5574040
       },
       "water_encounters": null
     },
@@ -7540,8 +7596,8 @@
           323,
           323
         ],
-        "ram_address": 139792044,
-        "rom_address": 5574316
+        "ram_address": 139791936,
+        "rom_address": 5574208
       },
       "land_encounters": {
         "encounter_slots": [
@@ -7558,8 +7614,8 @@
           379,
           299
         ],
-        "ram_address": 139791932,
-        "rom_address": 5574204
+        "ram_address": 139791824,
+        "rom_address": 5574096
       },
       "water_encounters": {
         "encounter_slots": [
@@ -7569,8 +7625,8 @@
           183,
           118
         ],
-        "ram_address": 139791988,
-        "rom_address": 5574260
+        "ram_address": 139791880,
+        "rom_address": 5574152
       }
     },
     "MAP_ROUTE114_FOSSIL_MANIACS_HOUSE": {
@@ -7602,8 +7658,8 @@
           313,
           313
         ],
-        "ram_address": 139793700,
-        "rom_address": 5575972
+        "ram_address": 139793592,
+        "rom_address": 5575864
       },
       "land_encounters": {
         "encounter_slots": [
@@ -7620,8 +7676,8 @@
           309,
           309
         ],
-        "ram_address": 139793616,
-        "rom_address": 5575888
+        "ram_address": 139793508,
+        "rom_address": 5575780
       },
       "water_encounters": {
         "encounter_slots": [
@@ -7631,8 +7687,8 @@
           310,
           310
         ],
-        "ram_address": 139793672,
-        "rom_address": 5575944
+        "ram_address": 139793564,
+        "rom_address": 5575836
       }
     },
     "MAP_ROUTE116": {
@@ -7652,8 +7708,8 @@
           315,
           315
         ],
-        "ram_address": 139792092,
-        "rom_address": 5574364
+        "ram_address": 139791984,
+        "rom_address": 5574256
       },
       "water_encounters": null
     },
@@ -7676,8 +7732,8 @@
           326,
           326
         ],
-        "ram_address": 139792232,
-        "rom_address": 5574504
+        "ram_address": 139792124,
+        "rom_address": 5574396
       },
       "land_encounters": {
         "encounter_slots": [
@@ -7694,8 +7750,8 @@
           386,
           298
         ],
-        "ram_address": 139792148,
-        "rom_address": 5574420
+        "ram_address": 139792040,
+        "rom_address": 5574312
       },
       "water_encounters": {
         "encounter_slots": [
@@ -7705,8 +7761,8 @@
           183,
           118
         ],
-        "ram_address": 139792204,
-        "rom_address": 5574476
+        "ram_address": 139792096,
+        "rom_address": 5574368
       }
     },
     "MAP_ROUTE117_POKEMON_DAY_CARE": {
@@ -7728,8 +7784,8 @@
           330,
           330
         ],
-        "ram_address": 139792364,
-        "rom_address": 5574636
+        "ram_address": 139792256,
+        "rom_address": 5574528
       },
       "land_encounters": {
         "encounter_slots": [
@@ -7746,8 +7802,8 @@
           309,
           317
         ],
-        "ram_address": 139792280,
-        "rom_address": 5574552
+        "ram_address": 139792172,
+        "rom_address": 5574444
       },
       "water_encounters": {
         "encounter_slots": [
@@ -7757,8 +7813,8 @@
           310,
           310
         ],
-        "ram_address": 139792336,
-        "rom_address": 5574608
+        "ram_address": 139792228,
+        "rom_address": 5574500
       }
     },
     "MAP_ROUTE119": {
@@ -7775,8 +7831,8 @@
           330,
           330
         ],
-        "ram_address": 139793888,
-        "rom_address": 5576160
+        "ram_address": 139793780,
+        "rom_address": 5576052
       },
       "land_encounters": {
         "encounter_slots": [
@@ -7793,8 +7849,8 @@
           369,
           317
         ],
-        "ram_address": 139793804,
-        "rom_address": 5576076
+        "ram_address": 139793696,
+        "rom_address": 5575968
       },
       "water_encounters": {
         "encounter_slots": [
@@ -7804,8 +7860,8 @@
           310,
           310
         ],
-        "ram_address": 139793860,
-        "rom_address": 5576132
+        "ram_address": 139793752,
+        "rom_address": 5576024
       }
     },
     "MAP_ROUTE119_HOUSE": {
@@ -7837,8 +7893,8 @@
           323,
           323
         ],
-        "ram_address": 139794020,
-        "rom_address": 5576292
+        "ram_address": 139793912,
+        "rom_address": 5576184
       },
       "land_encounters": {
         "encounter_slots": [
@@ -7855,8 +7911,8 @@
           317,
           298
         ],
-        "ram_address": 139793936,
-        "rom_address": 5576208
+        "ram_address": 139793828,
+        "rom_address": 5576100
       },
       "water_encounters": {
         "encounter_slots": [
@@ -7866,8 +7922,8 @@
           183,
           118
         ],
-        "ram_address": 139793992,
-        "rom_address": 5576264
+        "ram_address": 139793884,
+        "rom_address": 5576156
       }
     },
     "MAP_ROUTE121": {
@@ -7884,8 +7940,8 @@
           313,
           313
         ],
-        "ram_address": 139794152,
-        "rom_address": 5576424
+        "ram_address": 139794044,
+        "rom_address": 5576316
       },
       "land_encounters": {
         "encounter_slots": [
@@ -7902,8 +7958,8 @@
           309,
           317
         ],
-        "ram_address": 139794068,
-        "rom_address": 5576340
+        "ram_address": 139793960,
+        "rom_address": 5576232
       },
       "water_encounters": {
         "encounter_slots": [
@@ -7913,8 +7969,8 @@
           310,
           310
         ],
-        "ram_address": 139794124,
-        "rom_address": 5576396
+        "ram_address": 139794016,
+        "rom_address": 5576288
       }
     },
     "MAP_ROUTE121_SAFARI_ZONE_ENTRANCE": {
@@ -7936,8 +7992,8 @@
           313,
           313
         ],
-        "ram_address": 139794228,
-        "rom_address": 5576500
+        "ram_address": 139794120,
+        "rom_address": 5576392
       },
       "land_encounters": null,
       "water_encounters": {
@@ -7948,8 +8004,8 @@
           310,
           310
         ],
-        "ram_address": 139794200,
-        "rom_address": 5576472
+        "ram_address": 139794092,
+        "rom_address": 5576364
       }
     },
     "MAP_ROUTE123": {
@@ -7966,8 +8022,8 @@
           313,
           313
         ],
-        "ram_address": 139794360,
-        "rom_address": 5576632
+        "ram_address": 139794252,
+        "rom_address": 5576524
       },
       "land_encounters": {
         "encounter_slots": [
@@ -7984,8 +8040,8 @@
           309,
           317
         ],
-        "ram_address": 139794276,
-        "rom_address": 5576548
+        "ram_address": 139794168,
+        "rom_address": 5576440
       },
       "water_encounters": {
         "encounter_slots": [
@@ -7995,8 +8051,8 @@
           310,
           310
         ],
-        "ram_address": 139794332,
-        "rom_address": 5576604
+        "ram_address": 139794224,
+        "rom_address": 5576496
       }
     },
     "MAP_ROUTE123_BERRY_MASTERS_HOUSE": {
@@ -8018,8 +8074,8 @@
           313,
           313
         ],
-        "ram_address": 139792440,
-        "rom_address": 5574712
+        "ram_address": 139792332,
+        "rom_address": 5574604
       },
       "land_encounters": null,
       "water_encounters": {
@@ -8030,8 +8086,8 @@
           310,
           310
         ],
-        "ram_address": 139792412,
-        "rom_address": 5574684
+        "ram_address": 139792304,
+        "rom_address": 5574576
       }
     },
     "MAP_ROUTE124_DIVING_TREASURE_HUNTERS_HOUSE": {
@@ -8053,8 +8109,8 @@
           313,
           313
         ],
-        "ram_address": 139794884,
-        "rom_address": 5577156
+        "ram_address": 139794776,
+        "rom_address": 5577048
       },
       "land_encounters": null,
       "water_encounters": {
@@ -8065,8 +8121,8 @@
           310,
           310
         ],
-        "ram_address": 139794856,
-        "rom_address": 5577128
+        "ram_address": 139794748,
+        "rom_address": 5577020
       }
     },
     "MAP_ROUTE126": {
@@ -8083,8 +8139,8 @@
           313,
           313
         ],
-        "ram_address": 139794960,
-        "rom_address": 5577232
+        "ram_address": 139794852,
+        "rom_address": 5577124
       },
       "land_encounters": null,
       "water_encounters": {
@@ -8095,8 +8151,8 @@
           310,
           310
         ],
-        "ram_address": 139794932,
-        "rom_address": 5577204
+        "ram_address": 139794824,
+        "rom_address": 5577096
       }
     },
     "MAP_ROUTE127": {
@@ -8113,8 +8169,8 @@
           313,
           313
         ],
-        "ram_address": 139795036,
-        "rom_address": 5577308
+        "ram_address": 139794928,
+        "rom_address": 5577200
       },
       "land_encounters": null,
       "water_encounters": {
@@ -8125,8 +8181,8 @@
           310,
           310
         ],
-        "ram_address": 139795008,
-        "rom_address": 5577280
+        "ram_address": 139794900,
+        "rom_address": 5577172
       }
     },
     "MAP_ROUTE128": {
@@ -8143,8 +8199,8 @@
           313,
           313
         ],
-        "ram_address": 139795112,
-        "rom_address": 5577384
+        "ram_address": 139795004,
+        "rom_address": 5577276
       },
       "land_encounters": null,
       "water_encounters": {
@@ -8155,8 +8211,8 @@
           310,
           310
         ],
-        "ram_address": 139795084,
-        "rom_address": 5577356
+        "ram_address": 139794976,
+        "rom_address": 5577248
       }
     },
     "MAP_ROUTE129": {
@@ -8173,8 +8229,8 @@
           313,
           313
         ],
-        "ram_address": 139795188,
-        "rom_address": 5577460
+        "ram_address": 139795080,
+        "rom_address": 5577352
       },
       "land_encounters": null,
       "water_encounters": {
@@ -8185,8 +8241,8 @@
           310,
           314
         ],
-        "ram_address": 139795160,
-        "rom_address": 5577432
+        "ram_address": 139795052,
+        "rom_address": 5577324
       }
     },
     "MAP_ROUTE130": {
@@ -8203,8 +8259,8 @@
           313,
           313
         ],
-        "ram_address": 139795320,
-        "rom_address": 5577592
+        "ram_address": 139795212,
+        "rom_address": 5577484
       },
       "land_encounters": {
         "encounter_slots": [
@@ -8221,8 +8277,8 @@
           360,
           360
         ],
-        "ram_address": 139795236,
-        "rom_address": 5577508
+        "ram_address": 139795128,
+        "rom_address": 5577400
       },
       "water_encounters": {
         "encounter_slots": [
@@ -8232,8 +8288,8 @@
           310,
           310
         ],
-        "ram_address": 139795292,
-        "rom_address": 5577564
+        "ram_address": 139795184,
+        "rom_address": 5577456
       }
     },
     "MAP_ROUTE131": {
@@ -8250,8 +8306,8 @@
           313,
           313
         ],
-        "ram_address": 139795396,
-        "rom_address": 5577668
+        "ram_address": 139795288,
+        "rom_address": 5577560
       },
       "land_encounters": null,
       "water_encounters": {
@@ -8262,8 +8318,8 @@
           310,
           310
         ],
-        "ram_address": 139795368,
-        "rom_address": 5577640
+        "ram_address": 139795260,
+        "rom_address": 5577532
       }
     },
     "MAP_ROUTE132": {
@@ -8280,8 +8336,8 @@
           313,
           313
         ],
-        "ram_address": 139795472,
-        "rom_address": 5577744
+        "ram_address": 139795364,
+        "rom_address": 5577636
       },
       "land_encounters": null,
       "water_encounters": {
@@ -8292,8 +8348,8 @@
           310,
           310
         ],
-        "ram_address": 139795444,
-        "rom_address": 5577716
+        "ram_address": 139795336,
+        "rom_address": 5577608
       }
     },
     "MAP_ROUTE133": {
@@ -8310,8 +8366,8 @@
           313,
           313
         ],
-        "ram_address": 139795548,
-        "rom_address": 5577820
+        "ram_address": 139795440,
+        "rom_address": 5577712
       },
       "land_encounters": null,
       "water_encounters": {
@@ -8322,8 +8378,8 @@
           310,
           310
         ],
-        "ram_address": 139795520,
-        "rom_address": 5577792
+        "ram_address": 139795412,
+        "rom_address": 5577684
       }
     },
     "MAP_ROUTE134": {
@@ -8340,8 +8396,8 @@
           313,
           313
         ],
-        "ram_address": 139795624,
-        "rom_address": 5577896
+        "ram_address": 139795516,
+        "rom_address": 5577788
       },
       "land_encounters": null,
       "water_encounters": {
@@ -8352,8 +8408,8 @@
           310,
           310
         ],
-        "ram_address": 139795596,
-        "rom_address": 5577868
+        "ram_address": 139795488,
+        "rom_address": 5577760
       }
     },
     "MAP_RUSTBORO_CITY": {
@@ -8463,8 +8519,8 @@
           370,
           370
         ],
-        "ram_address": 139792544,
-        "rom_address": 5574816
+        "ram_address": 139792436,
+        "rom_address": 5574708
       },
       "water_encounters": null
     },
@@ -8485,8 +8541,8 @@
           178,
           214
         ],
-        "ram_address": 139796892,
-        "rom_address": 5579164
+        "ram_address": 139796784,
+        "rom_address": 5579056
       },
       "water_encounters": null
     },
@@ -8507,8 +8563,8 @@
           228,
           241
         ],
-        "ram_address": 139799088,
-        "rom_address": 5581360
+        "ram_address": 139798980,
+        "rom_address": 5581252
       },
       "water_encounters": null
     },
@@ -8526,8 +8582,8 @@
           119,
           119
         ],
-        "ram_address": 139797060,
-        "rom_address": 5579332
+        "ram_address": 139796952,
+        "rom_address": 5579224
       },
       "land_encounters": {
         "encounter_slots": [
@@ -8544,8 +8600,8 @@
           85,
           127
         ],
-        "ram_address": 139796976,
-        "rom_address": 5579248
+        "ram_address": 139796868,
+        "rom_address": 5579140
       },
       "water_encounters": {
         "encounter_slots": [
@@ -8555,8 +8611,8 @@
           55,
           55
         ],
-        "ram_address": 139797032,
-        "rom_address": 5579304
+        "ram_address": 139796924,
+        "rom_address": 5579196
       }
     },
     "MAP_SAFARI_ZONE_REST_HOUSE": {
@@ -8581,8 +8637,8 @@
           25,
           202
         ],
-        "ram_address": 139792824,
-        "rom_address": 5575096
+        "ram_address": 139792716,
+        "rom_address": 5574988
       },
       "water_encounters": null
     },
@@ -8600,8 +8656,8 @@
           223,
           224
         ],
-        "ram_address": 139799040,
-        "rom_address": 5581312
+        "ram_address": 139798932,
+        "rom_address": 5581204
       },
       "land_encounters": {
         "encounter_slots": [
@@ -8618,8 +8674,8 @@
           234,
           207
         ],
-        "ram_address": 139798956,
-        "rom_address": 5581228
+        "ram_address": 139798848,
+        "rom_address": 5581120
       },
       "water_encounters": {
         "encounter_slots": [
@@ -8629,8 +8685,8 @@
           183,
           195
         ],
-        "ram_address": 139799012,
-        "rom_address": 5581284
+        "ram_address": 139798904,
+        "rom_address": 5581176
       }
     },
     "MAP_SAFARI_ZONE_SOUTHWEST": {
@@ -8647,8 +8703,8 @@
           119,
           119
         ],
-        "ram_address": 139796844,
-        "rom_address": 5579116
+        "ram_address": 139796736,
+        "rom_address": 5579008
       },
       "land_encounters": {
         "encounter_slots": [
@@ -8665,8 +8721,8 @@
           25,
           202
         ],
-        "ram_address": 139796760,
-        "rom_address": 5579032
+        "ram_address": 139796652,
+        "rom_address": 5578924
       },
       "water_encounters": {
         "encounter_slots": [
@@ -8676,8 +8732,8 @@
           54,
           54
         ],
-        "ram_address": 139796816,
-        "rom_address": 5579088
+        "ram_address": 139796708,
+        "rom_address": 5578980
       }
     },
     "MAP_SCORCHED_SLAB": {
@@ -8699,8 +8755,8 @@
           313,
           313
         ],
-        "ram_address": 139796376,
-        "rom_address": 5578648
+        "ram_address": 139796268,
+        "rom_address": 5578540
       },
       "land_encounters": null,
       "water_encounters": {
@@ -8711,8 +8767,8 @@
           42,
           42
         ],
-        "ram_address": 139796348,
-        "rom_address": 5578620
+        "ram_address": 139796240,
+        "rom_address": 5578512
       }
     },
     "MAP_SEAFLOOR_CAVERN_ROOM1": {
@@ -8732,8 +8788,8 @@
           42,
           42
         ],
-        "ram_address": 139795748,
-        "rom_address": 5578020
+        "ram_address": 139795640,
+        "rom_address": 5577912
       },
       "water_encounters": null
     },
@@ -8754,8 +8810,8 @@
           42,
           42
         ],
-        "ram_address": 139795804,
-        "rom_address": 5578076
+        "ram_address": 139795696,
+        "rom_address": 5577968
       },
       "water_encounters": null
     },
@@ -8776,8 +8832,8 @@
           42,
           42
         ],
-        "ram_address": 139795860,
-        "rom_address": 5578132
+        "ram_address": 139795752,
+        "rom_address": 5578024
       },
       "water_encounters": null
     },
@@ -8798,8 +8854,8 @@
           42,
           42
         ],
-        "ram_address": 139795916,
-        "rom_address": 5578188
+        "ram_address": 139795808,
+        "rom_address": 5578080
       },
       "water_encounters": null
     },
@@ -8820,8 +8876,8 @@
           42,
           42
         ],
-        "ram_address": 139795972,
-        "rom_address": 5578244
+        "ram_address": 139795864,
+        "rom_address": 5578136
       },
       "water_encounters": null
     },
@@ -8839,8 +8895,8 @@
           313,
           313
         ],
-        "ram_address": 139796112,
-        "rom_address": 5578384
+        "ram_address": 139796004,
+        "rom_address": 5578276
       },
       "land_encounters": {
         "encounter_slots": [
@@ -8857,8 +8913,8 @@
           42,
           42
         ],
-        "ram_address": 139796028,
-        "rom_address": 5578300
+        "ram_address": 139795920,
+        "rom_address": 5578192
       },
       "water_encounters": {
         "encounter_slots": [
@@ -8868,8 +8924,8 @@
           42,
           42
         ],
-        "ram_address": 139796084,
-        "rom_address": 5578356
+        "ram_address": 139795976,
+        "rom_address": 5578248
       }
     },
     "MAP_SEAFLOOR_CAVERN_ROOM7": {
@@ -8886,8 +8942,8 @@
           313,
           313
         ],
-        "ram_address": 139796244,
-        "rom_address": 5578516
+        "ram_address": 139796136,
+        "rom_address": 5578408
       },
       "land_encounters": {
         "encounter_slots": [
@@ -8904,8 +8960,8 @@
           42,
           42
         ],
-        "ram_address": 139796160,
-        "rom_address": 5578432
+        "ram_address": 139796052,
+        "rom_address": 5578324
       },
       "water_encounters": {
         "encounter_slots": [
@@ -8915,8 +8971,8 @@
           42,
           42
         ],
-        "ram_address": 139796216,
-        "rom_address": 5578488
+        "ram_address": 139796108,
+        "rom_address": 5578380
       }
     },
     "MAP_SEAFLOOR_CAVERN_ROOM8": {
@@ -8936,8 +8992,8 @@
           42,
           42
         ],
-        "ram_address": 139796292,
-        "rom_address": 5578564
+        "ram_address": 139796184,
+        "rom_address": 5578456
       },
       "water_encounters": null
     },
@@ -9100,8 +9156,8 @@
           313,
           313
         ],
-        "ram_address": 139798048,
-        "rom_address": 5580320
+        "ram_address": 139797940,
+        "rom_address": 5580212
       },
       "land_encounters": {
         "encounter_slots": [
@@ -9118,8 +9174,8 @@
           42,
           341
         ],
-        "ram_address": 139797964,
-        "rom_address": 5580236
+        "ram_address": 139797856,
+        "rom_address": 5580128
       },
       "water_encounters": {
         "encounter_slots": [
@@ -9129,8 +9185,8 @@
           341,
           341
         ],
-        "ram_address": 139798020,
-        "rom_address": 5580292
+        "ram_address": 139797912,
+        "rom_address": 5580184
       }
     },
     "MAP_SHOAL_CAVE_LOW_TIDE_ICE_ROOM": {
@@ -9150,8 +9206,8 @@
           42,
           346
         ],
-        "ram_address": 139798656,
-        "rom_address": 5580928
+        "ram_address": 139798548,
+        "rom_address": 5580820
       },
       "water_encounters": null
     },
@@ -9169,8 +9225,8 @@
           313,
           313
         ],
-        "ram_address": 139797916,
-        "rom_address": 5580188
+        "ram_address": 139797808,
+        "rom_address": 5580080
       },
       "land_encounters": {
         "encounter_slots": [
@@ -9187,8 +9243,8 @@
           42,
           341
         ],
-        "ram_address": 139797832,
-        "rom_address": 5580104
+        "ram_address": 139797724,
+        "rom_address": 5579996
       },
       "water_encounters": {
         "encounter_slots": [
@@ -9198,8 +9254,8 @@
           341,
           341
         ],
-        "ram_address": 139797888,
-        "rom_address": 5580160
+        "ram_address": 139797780,
+        "rom_address": 5580052
       }
     },
     "MAP_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM": {
@@ -9219,8 +9275,8 @@
           42,
           341
         ],
-        "ram_address": 139797776,
-        "rom_address": 5580048
+        "ram_address": 139797668,
+        "rom_address": 5579940
       },
       "water_encounters": null
     },
@@ -9241,8 +9297,8 @@
           42,
           341
         ],
-        "ram_address": 139797720,
-        "rom_address": 5579992
+        "ram_address": 139797612,
+        "rom_address": 5579884
       },
       "water_encounters": null
     },
@@ -9263,8 +9319,8 @@
           319,
           319
         ],
-        "ram_address": 139798712,
-        "rom_address": 5580984
+        "ram_address": 139798604,
+        "rom_address": 5580876
       },
       "water_encounters": null
     },
@@ -9290,8 +9346,8 @@
           319,
           319
         ],
-        "ram_address": 139798844,
-        "rom_address": 5581116
+        "ram_address": 139798736,
+        "rom_address": 5581008
       },
       "water_encounters": null
     },
@@ -9317,8 +9373,8 @@
           359,
           359
         ],
-        "ram_address": 139798900,
-        "rom_address": 5581172
+        "ram_address": 139798792,
+        "rom_address": 5581064
       },
       "water_encounters": null
     },
@@ -9351,8 +9407,8 @@
           313,
           313
         ],
-        "ram_address": 139798276,
-        "rom_address": 5580548
+        "ram_address": 139798168,
+        "rom_address": 5580440
       },
       "land_encounters": null,
       "water_encounters": {
@@ -9363,8 +9419,8 @@
           310,
           310
         ],
-        "ram_address": 139798248,
-        "rom_address": 5580520
+        "ram_address": 139798140,
+        "rom_address": 5580412
       }
     },
     "MAP_SLATEPORT_CITY_BATTLE_TENT_BATTLE_ROOM": {
@@ -9451,8 +9507,8 @@
           130,
           130
         ],
-        "ram_address": 139798796,
-        "rom_address": 5581068
+        "ram_address": 139798688,
+        "rom_address": 5580960
       },
       "land_encounters": null,
       "water_encounters": {
@@ -9463,8 +9519,8 @@
           129,
           129
         ],
-        "ram_address": 139798768,
-        "rom_address": 5581040
+        "ram_address": 139798660,
+        "rom_address": 5580932
       }
     },
     "MAP_SOOTOPOLIS_CITY_GYM_1F": {
@@ -9638,8 +9694,8 @@
           381,
           381
         ],
-        "ram_address": 139798628,
-        "rom_address": 5580900
+        "ram_address": 139798520,
+        "rom_address": 5580792
       }
     },
     "MAP_UNDERWATER_ROUTE125": {
@@ -9658,8 +9714,8 @@
           381,
           381
         ],
-        "ram_address": 139792880,
-        "rom_address": 5575152
+        "ram_address": 139792772,
+        "rom_address": 5575044
       }
     },
     "MAP_UNDERWATER_ROUTE127": {
@@ -9799,8 +9855,8 @@
           382,
           370
         ],
-        "ram_address": 139792768,
-        "rom_address": 5575040
+        "ram_address": 139792660,
+        "rom_address": 5574932
       },
       "water_encounters": null
     },
@@ -9821,8 +9877,8 @@
           383,
           355
         ],
-        "ram_address": 139797108,
-        "rom_address": 5579380
+        "ram_address": 139797000,
+        "rom_address": 5579272
       },
       "water_encounters": null
     },
@@ -9840,8 +9896,8 @@
           324,
           324
         ],
-        "ram_address": 139797276,
-        "rom_address": 5579548
+        "ram_address": 139797168,
+        "rom_address": 5579440
       },
       "land_encounters": {
         "encounter_slots": [
@@ -9858,8 +9914,8 @@
           383,
           355
         ],
-        "ram_address": 139797192,
-        "rom_address": 5579464
+        "ram_address": 139797084,
+        "rom_address": 5579356
       },
       "water_encounters": {
         "encounter_slots": [
@@ -9869,18 +9925,14 @@
           42,
           42
         ],
-        "ram_address": 139797248,
-        "rom_address": 5579520
+        "ram_address": 139797140,
+        "rom_address": 5579412
       }
     }
   },
   "misc_ram_addresses": {
     "gArchipelagoReceivedItem": 33791448,
-    "gGymBadgeItems": 139985236,
     "gSaveblock1": 33708544
-  },
-  "misc_rom_addresses": {
-    "gGymBadgeItems": 5767508
   },
   "warps": [
     "MAP_SECRET_BASE_BROWN_CAVE1:0/MAP_DYNAMIC:WARP_ID_SECRET_BASE",
