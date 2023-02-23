@@ -1,4 +1,4 @@
-from BaseClasses import Location
+from BaseClasses import Location, MultiWorld
 from .Data import get_region_data
 
 
@@ -24,12 +24,12 @@ def create_location_name_to_id_map():
     return map
 
 
-def create_locations_with_tags(self, region_map, tags):
+def create_locations_with_tags(world: MultiWorld, player: int, tags):
     region_data = get_region_data()
     tags = set(tags)
 
     for region_name, region_data in region_data.items():
-        region = region_map[region_name]
+        region = world.get_region(region_name, player)
         for location_data in [location for location in region_data.locations if len(tags & location.tags) > 0]:
-            location = PokemonEmeraldLocation(self.player, location_data.name, location_data.default_item, location_data.flag, location_data.rom_address, region)
+            location = PokemonEmeraldLocation(player, location_data.name, location_data.default_item, location_data.flag, location_data.rom_address, region)
             region.locations.append(location)

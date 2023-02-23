@@ -531,6 +531,22 @@
       "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:5/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:8"
     ]
   },
+  "REGION_ABANDONED_SHIP_UNDERWATER_1": {
+    "parent_map": "MAP_ABANDONED_SHIP_UNDERWATER1",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ABANDONED_SHIP_UNDERWATER1:0,1/MAP_ABANDONED_SHIP_UNDERWATER2:0"
+    ]
+  },
+  "REGION_ABANDONED_SHIP_UNDERWATER_2": {
+    "parent_map": "MAP_ABANDONED_SHIP_UNDERWATER2",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_ABANDONED_SHIP_UNDERWATER2:0/MAP_ABANDONED_SHIP_UNDERWATER1:0"
+    ]
+  },
 
   "REGION_NEW_MAUVILLE_ENTRANCE": {
     "parent_map": "MAP_NEW_MAUVILLE_ENTRANCE",
@@ -1029,9 +1045,29 @@
   "REGION_UNDERWATER_SEALED_CHAMBER": {
     "parent_map": "MAP_UNDERWATER_SEALED_CHAMBER",
     "locations": [],
-    "exits": [],
+    "exits": [
+      "REGION_SEALED_CHAMBER_OUTER_ROOM"
+    ],
     "warps": [
       "MAP_UNDERWATER_SEALED_CHAMBER:0/MAP_UNDERWATER_ROUTE134:0"
+    ]
+  },
+  "REGION_SEALED_CHAMBER_OUTER_ROOM": {
+    "parent_map": "MAP_SEALED_CHAMBER_OUTER_ROOM",
+    "locations": [],
+    "exits": [
+      "REGION_UNDERWATER_SEALED_CHAMBER"
+    ],
+    "warps": [
+      "MAP_SEALED_CHAMBER_OUTER_ROOM:0/MAP_SEALED_CHAMBER_INNER_ROOM:0"
+    ]
+  },
+  "REGION_SEALED_CHAMBER_INNER_ROOM": {
+    "parent_map": "MAP_SEALED_CHAMBER_INNER_ROOM",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_SEALED_CHAMBER_INNER_ROOM:0/MAP_SEALED_CHAMBER_OUTER_ROOM:0"
     ]
   },
 
@@ -1280,6 +1316,53 @@
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_TOP:0/MAP_NAVEL_ROCK_UP4:1"
+    ]
+  },
+
+  "REGION_TERRA_CAVE_ENTRANCE": {
+    "parent_map": "MAP_TERRA_CAVE_ENTRANCE",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_TERRA_CAVE_ENTRANCE:0/MAP_DYNAMIC:WARP_ID_DYNAMIC",
+      "MAP_TERRA_CAVE_ENTRANCE:1/MAP_TERRA_CAVE_END:0"
+    ]
+  },
+  "REGION_TERRA_CAVE_END": {
+    "parent_map": "MAP_TERRA_CAVE_END",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_TERRA_CAVE_END:0/MAP_TERRA_CAVE_ENTRANCE:1"
+    ]
+  },
+
+  "REGION_UNDERWATER_MARINE_CAVE": {
+    "parent_map": "MAP_UNDERWATER_MARINE_CAVE",
+    "locations": [],
+    "exits": [
+      "REGION_MARINE_CAVE_ENTRANCE"
+    ],
+    "warps": [
+      "MAP_UNDERWATER_MARINE_CAVE:0/MAP_DYNAMIC:WARP_ID_DYNAMIC"
+    ]
+  },
+  "REGION_MARINE_CAVE_ENTRANCE": {
+    "parent_map": "MAP_MARINE_CAVE_ENTRANCE",
+    "locations": [],
+    "exits": [
+      "REGION_UNDERWATER_MARINE_CAVE"
+    ],
+    "warps": [
+      "MAP_MARINE_CAVE_ENTRANCE:0/MAP_MARINE_CAVE_END:0"
+    ]
+  },
+  "REGION_MARINE_CAVE_END": {
+    "parent_map": "MAP_MARINE_CAVE_END",
+    "locations": [],
+    "exits": [],
+    "warps": [
+      "MAP_MARINE_CAVE_END:0/MAP_MARINE_CAVE_ENTRANCE:0"
     ]
   }
 }

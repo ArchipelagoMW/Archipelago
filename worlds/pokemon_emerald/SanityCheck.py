@@ -1,6 +1,7 @@
+import logging
 import os
 from .Data import load_json, get_region_data
-from .Warps import Warp, get_warp_map, get_warp_region_name
+from .Warps import warps_connect_ltr, get_warp_map, get_warp_region_name
 
 
 dot_dir = os.path.dirname(__file__)
@@ -13,24 +14,25 @@ def error(message):
     global errors
     global failed
     failed = True
-    errors.append("ERROR: " + message)
+    errors.append(message)
 
 
 def warn(message):
     global warnings
-    warnings.append("WARN: " + message)
+    warnings.append(message)
 
 
-def finish(should_log):
+def finish():
     global errors
     global warnings
     global failed
-    if (should_log):
-        for message in errors:
-            print(message)
-        for message in warnings:
-            print(message)
-        print(f"Sanity check done. Found {len(errors)} errors and {len(warnings)} warnings.")
+    warnings.sort()
+    errors.sort()
+    for message in warnings:
+        logging.warning(message)
+    for message in errors:
+        logging.error(message)
+    logging.debug(f"Sanity check done. Found {len(errors)} errors and {len(warnings)} warnings.")
     return not failed
 
 
@@ -171,12 +173,14 @@ def check_warps():
         if (can_ignore): continue
 
         if (warp_dest == None):
+            error(f"Warp [{warp_source}] has no destination")
+        elif (not warps_connect_ltr(warp_dest, warp_source)):
             warn(f"Warp [{warp_source}] appears to be a one-way warp")
         elif (get_warp_region_name(warp_source) == None):
             warn(f"Warp [{warp_source}] was not claimed by any region")
 
 
-def sanity_check(should_log = False):
+def sanity_check():
     global failed
 
     region_data = get_region_data()
@@ -185,6 +189,6 @@ def sanity_check(should_log = False):
     check_warps()
     # TODO: Check location claims
 
-    if (failed): return finish(should_log)
+    if (failed): return finish()
 
-    return finish(should_log)
+    return finish()

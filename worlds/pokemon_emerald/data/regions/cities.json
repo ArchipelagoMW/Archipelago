@@ -60,7 +60,7 @@
     "exits": [
       "REGION_ROUTE_101",
       "REGION_ROUTE_102",
-      "REGION_ROUTE_103"
+      "REGION_ROUTE_103/WEST"
     ],
     "warps": [
       "MAP_OLDALE_TOWN:0/MAP_OLDALE_TOWN_HOUSE1:0",
@@ -111,14 +111,12 @@
     ]
   },
 
-  "REGION_PETALBURG_CITY": {
+  "REGION_PETALBURG_CITY/MAIN": {
     "parent_map": "MAP_PETALBURG_CITY",
-    "locations": [
-      "ITEM_PETALBURG_CITY_MAX_REVIVE",
-      "ITEM_PETALBURG_CITY_ETHER",
-      "HIDDEN_ITEM_PETALBURG_CITY_RARE_CANDY"
-    ],
+    "locations": [],
     "exits": [
+      "REGION_PETALBURG_CITY/SOUTH_POND",
+      "REGION_PETALBURG_CITY/NORTH_POND",
       "REGION_ROUTE_102",
       "REGION_ROUTE_104"
     ],
@@ -130,6 +128,27 @@
       "MAP_PETALBURG_CITY:4/MAP_PETALBURG_CITY_HOUSE2:0",
       "MAP_PETALBURG_CITY:5/MAP_PETALBURG_CITY_MART:0"
     ]
+  },
+  "REGION_PETALBURG_CITY/NORTH_POND": {
+    "parent_map": "MAP_PETALBURG_CITY",
+    "locations": [
+      "ITEM_PETALBURG_CITY_MAX_REVIVE"
+    ],
+    "exits": [
+      "REGION_PETALBURG_CITY/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_PETALBURG_CITY/SOUTH_POND": {
+    "parent_map": "MAP_PETALBURG_CITY",
+    "locations": [
+      "ITEM_PETALBURG_CITY_ETHER",
+      "HIDDEN_ITEM_PETALBURG_CITY_RARE_CANDY"
+    ],
+    "exits": [
+      "REGION_PETALBURG_CITY/MAIN"
+    ],
+    "warps": []
   },
   "REGION_PETALBURG_CITY_HOUSE_1": {
     "parent_map": "MAP_PETALBURG_CITY_HOUSE1",

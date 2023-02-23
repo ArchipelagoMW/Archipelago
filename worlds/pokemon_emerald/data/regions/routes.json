@@ -15,18 +15,36 @@
     ],
     "exits": [
       "REGION_OLDALE_TOWN",
-      "REGION_PETALBURG_CITY"
+      "REGION_PETALBURG_CITY/MAIN"
     ],
     "warps": []
   },
-  "REGION_ROUTE_103": {
+  "REGION_ROUTE_103/WEST": {
+    "parent_map": "MAP_ROUTE103",
+    "locations": [],
+    "exits": [
+      "REGION_ROUTE_103/WATER",
+      "REGION_OLDALE_TOWN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_103/WATER": {
+    "parent_map": "MAP_ROUTE103",
+    "locations": [],
+    "exits": [
+      "REGION_ROUTE_103/WEST",
+      "REGION_ROUTE_103/EAST"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE_103/EAST": {
     "parent_map": "MAP_ROUTE103",
     "locations": [
       "ITEM_ROUTE_103_GUARD_SPEC",
       "ITEM_ROUTE_103_PP_UP"
     ],
     "exits": [
-      "REGION_OLDALE_TOWN",
+      "REGION_ROUTE_103/WATER",
       "REGION_ROUTE_110"
     ],
     "warps": [
@@ -47,7 +65,7 @@
       "HIDDEN_ITEM_ROUTE_104_ANTIDOTE"
     ],
     "exits": [
-      "REGION_PETALBURG_CITY",
+      "REGION_PETALBURG_CITY/MAIN",
       "REGION_ROUTE_105",
       "REGION_RUSTBORO_CITY"
     ],
@@ -184,7 +202,7 @@
     ],
     "exits": [
       "REGION_MAUVILLE_CITY",
-      "REGION_ROUTE_103",
+      "REGION_ROUTE_103/WEST",
       "REGION_SLATEPORT_CITY"
     ],
     "warps": [

@@ -1,11 +1,10 @@
-from BaseClasses import Region, Entrance
 from ..AutoWorld import World
 from .Items import create_item_name_to_id_map, get_item_classification, PokemonEmeraldItem
+from .Rules import set_default_rules
 from .Locations import create_location_name_to_id_map, create_locations_with_tags
 from .Options import options
 from .Rom import generate_output
-from .Data import get_region_data
-from .Warps import get_warp_region_name, get_warp_destination
+from .Regions import create_regions
 from .SanityCheck import sanity_check
 
 
@@ -33,34 +32,12 @@ class PokemonEmeraldWorld(World):
 
 
     def create_regions(self):
-        if (sanity_check(True) == False): raise AssertionError("Sanity check failed")
-        regions = {}
-        region_data = get_region_data()
+        if (sanity_check() == False): raise AssertionError("Sanity check failed")
 
-        for region_name, region_data in region_data.items():
-            region = Region(region_name, self.player, self.multiworld)
-            warp_destination_regions = [get_warp_region_name(get_warp_destination(warp)) for warp in region_data.warps]
-            warp_destination_regions = [destination for destination in warp_destination_regions if not destination == None]
-            exit_names = set(region_data.exits + warp_destination_regions)
-            for exit_name in exit_names:
-                connection = Entrance(self.player, exit_name, region)
-                region.exits.append(connection)
-            
-            regions[region_name] = region
+        create_regions(self.multiworld, self.player)
+        set_default_rules(self.multiworld, self.player)
 
-        for region in regions.values():
-            for connection in region.exits:
-                connection.connect(regions[connection.name])
-
-        create_locations_with_tags(self, regions, ["GroundItem", "HiddenItem", "Badge", "NpcGift"])
-
-        menu = Region("Menu", self.player, self.multiworld)
-        connection = Entrance(self.player, "New Game", menu)
-        menu.exits.append(connection)
-        connection.connect(regions["REGION_LITTLEROOT_TOWN"])
-        regions["Menu"] = menu
-
-        self.multiworld.regions += regions.values()
+        create_locations_with_tags(self.multiworld, self.player, ["GroundItem", "HiddenItem", "Badge", "NpcGift"])
 
 
     def create_items(self):
@@ -76,7 +53,7 @@ class PokemonEmeraldWorld(World):
 
 
     def generate_output(self, output_directory: str):
-        generate_output(self, output_directory)
+        generate_output(self.multiworld, self.player, output_directory)
 
 
     def fill_slot_data(self):

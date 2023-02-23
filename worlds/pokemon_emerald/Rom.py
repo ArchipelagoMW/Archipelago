@@ -54,8 +54,7 @@ def replace_encounters(data, table_address, encounter_slots):
 # So if a table only has 2 species across multiple slots, it will
 # still have 2 species in the same respective slots after randomization.
 # TODO: Account for access to pokemon who can learn required HMs
-def randomize_encounter_tables(self, patched_rom):
-    random = self.multiworld.per_slot_randoms[self.player]
+def randomize_encounter_tables(random, patched_rom):
     extracted_data = get_extracted_data()
 
     for map_data in extracted_data["maps"].values():
@@ -73,7 +72,7 @@ def randomize_encounter_tables(self, patched_rom):
             replace_encounters(patched_rom, fishing_encounters["rom_address"], new_encounters)
 
 
-def generate_output(self, output_directory: str):
+def generate_output(world, player, output_directory: str):
     extracted_data = get_extracted_data()
 
     base_rom = get_base_rom_as_bytes()
@@ -81,26 +80,26 @@ def generate_output(self, output_directory: str):
         base_patch = bytes(stream.read())
         patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
 
-    for location in self.multiworld.get_locations():
-        if location.player != self.player:
+    for location in world.get_locations():
+        if location.player != player:
             continue
 
-        if location.item and location.item.player == self.player:
+        if location.item and location.item.player == player:
             set_bytes_little_endian(patched_rom, location.address, 2, location.item.code)
         else:
             set_bytes_little_endian(patched_rom, location.address, 2, extracted_data["constants"]["ITEM_ARCHIPELAGO_PROGRESSION"])
 
-    randomize_encounter_tables(self, patched_rom)
+    randomize_encounter_tables(world.per_slot_randoms[player], patched_rom)
 
-    outfile_player_name = f"_P{self.player}"
-    outfile_player_name += f"_{self.multiworld.get_file_safe_player_name(self.player).replace(' ', '_')}" \
-        if self.multiworld.player_name[self.player] != "Player%d" % self.player else ""
+    outfile_player_name = f"_P{player}"
+    outfile_player_name += f"_{world.get_file_safe_player_name(player).replace(' ', '_')}" \
+        if world.player_name[player] != "Player%d" % player else ""
 
-    output_path = os.path.join(output_directory, f"AP_{self.multiworld.seed_name}{outfile_player_name}.gba")
+    output_path = os.path.join(output_directory, f"AP_{world.seed_name}{outfile_player_name}.gba")
     with open(output_path, "wb") as outfile:
         outfile.write(patched_rom)
-    patch = PokemonEmeraldDeltaPatch(os.path.splitext(output_path)[0] + ".apemerald", player=self.player,
-                            player_name=self.multiworld.player_name[self.player], patched_path=output_path)
+    patch = PokemonEmeraldDeltaPatch(os.path.splitext(output_path)[0] + ".apemerald", player=player,
+                                     player_name=world.player_name[player], patched_path=output_path)
 
     patch.write()
     os.unlink(output_path)
