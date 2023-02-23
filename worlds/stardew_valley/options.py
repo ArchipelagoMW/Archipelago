@@ -118,7 +118,7 @@ class EntranceRandomization(Choice):
     # With Buildings, All buildings in the world are randomized with each other
     # With Everything, All buildings and areas are randomized with each other
     # With Chaos, same as everything, but the buildings are shuffled again every in-game day. You can't learn it!
-    
+
     internal_name = "entrance_randomization"
     display_name = "Entrance Randomization"
     default = 0
