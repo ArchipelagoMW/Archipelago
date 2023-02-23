@@ -114,10 +114,11 @@ class EntranceRandomization(Choice):
     With Disabled, no entrance randomization is done
     With Pelican Town, only buildings in the main town area are randomized with each other
     With Non Progression, only buildings that are always available are randomized with each other
-    With Buildings, All buildings in the world are randomized with each other
-    With Everything, All buildings and areas are randomized with each other
-    With Chaos, same as everything, but the buildings are shuffled again every in-game day. You can't learn it!
     """
+    # With Buildings, All buildings in the world are randomized with each other
+    # With Everything, All buildings and areas are randomized with each other
+    # With Chaos, same as everything, but the buildings are shuffled again every in-game day. You can't learn it!
+
     internal_name = "entrance_randomization"
     display_name = "Entrance Randomization"
     default = 0
@@ -202,14 +203,12 @@ class BuildingProgression(Choice):
 class ArcadeMachineLocations(Choice):
     """How are the Arcade Machines handled?
     With Vanilla, the arcade machines are not included in the Archipelago shuffling.
-    With Victories, each Arcade Machine will contain one check on victory, and be otherwise unchanged
+    With Victories, each Arcade Machine will contain one check on victory
     With Victories Easy, the arcade machines are both made considerably easier to be more accessible for the average
-        player. Junimo Kart will start each level with 6 Extra lives, and Journey of the Prairie King will start with
-        one of each equipment, and the drop rates of coins and powerups is increased.
+        player.
     With Full Shuffling, the arcade machines will contain multiple checks each, and different buffs that make the game
-        easier are received in the item pool. Junimo Kart has one check at the end of each level, and 6 extra lives in
-        the item pool. Journey of the Prairie King has one check after each boss, plus one check for each vendor
-        equipment. Every equipment is instead in the item pool, plus 2 starting lives and one drop rate buff.
+        easier are in the item pool. Junimo Kart has one check at the end of each level.
+        Journey of the Prairie King has one check after each boss, plus one check for each vendor equipment.
     """
     internal_name = "arcade_machine_locations"
     display_name = "Arcade Machine Locations"
