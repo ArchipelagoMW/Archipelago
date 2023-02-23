@@ -1,4 +1,3 @@
-
 import os
 import asyncio
 import ModuleUpdate
@@ -315,7 +314,7 @@ class KH2Context(CommonContext):
                     await asyncio.sleep(1)
                 amount = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
                 if self.dupecheck[itemname] != amount:
-                    self.dupecheck.update({itemname: amount})
+                    self.dupecheck.update({itemname: amount+1})
                     self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,
                                          (amount + 1).to_bytes(1, 'big'), 1)
         except Exception as e:
@@ -362,7 +361,12 @@ class KH2Context(CommonContext):
                         elif itemname in GoofyAbility_Table.keys():
                             asyncio.create_task(self.give_item(item, "Goofy"))
                         else:
-                            asyncio.create_task(self.give_item(item, "Sora"))
+                                if self.dupecheck[itemname] != int.from_bytes(
+                                        self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1),
+                                        "big"):
+                                    asyncio.create_task(self.give_item(item, "Sora"))
+                            else:
+                                asyncio.create_task(self.give_item(item, "Sora"))
             await asyncio.sleep(1)
         try:
             for item in args['items']:
