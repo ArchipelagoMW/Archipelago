@@ -1,2 +1,1 @@
-# required for python 3.8
-importlib_resources
+importlib_resources; python_version <= '3.8'
