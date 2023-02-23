@@ -29,7 +29,7 @@ def set_rules(world, player):
         "Vermilion Gym - Lt. Surge 2": lambda state: state.pokemon_rb_can_cut(player or state.pokemon_rb_can_surf(player)),
         "Route 11 - Oak's Aide": lambda state: state.pokemon_rb_oaks_aide(state.multiworld.oaks_aide_rt_11[player].value + 5, player),
         "Celadon City - Stranded Man": lambda state: state.pokemon_rb_can_surf(player),
-        "Silph Co 11F - Silph Co President": lambda state: state.has("Card Key", player),
+        "Silph Co 11F - Silph Co President (Card Key)": lambda state: state.has("Card Key", player),
         "Fuchsia City - Safari Zone Warden": lambda state: state.has("Gold Teeth", player),
         "Route 12 - Island Item": lambda state: state.pokemon_rb_can_surf(player),
         "Route 12 - Item Behind Cuttable Tree": lambda state: state.pokemon_rb_can_cut(player),
@@ -179,7 +179,7 @@ def set_rules(world, player):
         "Pokemon Mansion 1F - Hidden Item Block Near Entrance Carpet": lambda
             state: state.pokemon_rb_can_get_hidden_items(player),
         "Pokemon Mansion 3F - Hidden Item Behind Burglar": lambda state: state.pokemon_rb_can_get_hidden_items(player),
-        "Route 23 - Hidden Item Rocks Before Final Guard": lambda state: state.pokemon_rb_can_get_hidden_items(
+        "Route 23 - Hidden Item Rocks Before Victory Road": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
         "Route 23 - Hidden Item East Bush After Water": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
