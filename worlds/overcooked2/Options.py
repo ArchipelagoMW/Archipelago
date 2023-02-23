@@ -1,11 +1,34 @@
+from enum import Enum
 from typing import TypedDict
 from Options import DefaultOnToggle, Range, Choice
+
+
+class LocationBalancingMode(Enum):
+    disabled = 0
+    compromise = 1
+    full = 2
 
 
 class OC2OnToggle(DefaultOnToggle):
     @property
     def result(self) -> bool:
         return bool(self.value)
+
+
+class LocationBalancing(Choice):
+    """Location balancing affects the density of progression items found in your world relative to other wordlds. This setting changes nothing for solo games.
+
+    - Disabled: Location density in your world can fluctuate greatly depending on the settings of other players. In extreme cases, your world may be entirely populated with filler items
+
+    - Compromise: Locations are balanced to a midpoint between "fair" and "natural"
+
+    - Full: Locations are balanced in an attempt to make the number of progression items sent out and received equal over the entire game"""
+    auto_display_name = True
+    display_name = "Location Balancing"
+    option_disabled = LocationBalancingMode.disabled.value
+    option_compromise = LocationBalancingMode.compromise.value
+    option_full = LocationBalancingMode.full.value
+    default = LocationBalancingMode.compromise.value
 
 
 class AlwaysServeOldestOrder(OC2OnToggle):
@@ -105,6 +128,9 @@ class StarThresholdScale(Range):
 
 
 overcooked_options = {
+    # generator options
+    "location_balancing": LocationBalancing,
+
     # randomization options
     "shuffle_level_order": ShuffleLevelOrder,
     "include_horde_levels": IncludeHordeLevels,

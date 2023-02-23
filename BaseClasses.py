@@ -29,6 +29,20 @@ class Group(TypedDict, total=False):
     link_replacement: bool
 
 
+class ThreadBarrierProxy():
+    """Passes through getattr while passthrough is True"""
+    def __init__(self, obj: Any):
+        self.passthrough = True
+        self.obj = obj
+
+    def __getattr__(self, item):
+        if self.passthrough:
+            return getattr(self.obj, item)
+        else:
+            raise RuntimeError("You are in a threaded context and global random state was removed for your safety. "
+                               "Please use multiworld.per_slot_randoms[player] or randomize ahead of output.")
+
+
 class MultiWorld():
     debug_types = False
     player_name: Dict[int, str]
@@ -61,6 +75,9 @@ class MultiWorld():
 
     game: Dict[int, str]
 
+    random: random.Random
+    per_slot_randoms: Dict[int, random.Random]
+
     class AttributeProxy():
         def __init__(self, rule):
             self.rule = rule
@@ -69,7 +86,8 @@ class MultiWorld():
             return self.rule(player)
 
     def __init__(self, players: int):
-        self.random = random.Random()  # world-local random state is saved for multiple generations running concurrently
+        # world-local random state is saved for multiple generations running concurrently
+        self.random = ThreadBarrierProxy(random.Random())
         self.players = players
         self.player_types = {player: NetUtils.SlotType.player for player in self.player_ids}
         self.glitch_triforce = False
@@ -160,7 +178,7 @@ class MultiWorld():
             set_player_attr('completion_condition', lambda state: True)
         self.custom_data = {}
         self.worlds = {}
-        self.slot_seeds = {}
+        self.per_slot_randoms = {}
         self.plando_options = PlandoOptions.none
 
     def get_all_ids(self) -> Tuple[int, ...]:
@@ -206,8 +224,8 @@ class MultiWorld():
         else:
             self.random.seed(self.seed)
         self.seed_name = name if name else str(self.seed)
-        self.slot_seeds = {player: random.Random(self.random.getrandbits(64)) for player in
-                           range(1, self.players + 1)}
+        self.per_slot_randoms = {player: random.Random(self.random.getrandbits(64)) for player in
+                                 range(1, self.players + 1)}
 
     def set_options(self, args: Namespace) -> None:
         for option_key in Options.common_options:
@@ -291,7 +309,7 @@ class MultiWorld():
         self.state = CollectionState(self)
 
     def secure(self):
-        self.random = secrets.SystemRandom()
+        self.random = ThreadBarrierProxy(secrets.SystemRandom())
         self.is_race = True
 
     @functools.cached_property
@@ -931,24 +949,9 @@ class CollectionState():
             self.stale[item.player] = True
 
 
-@unique
-class RegionType(IntEnum):
-    Generic = 0
-    LightWorld = 1
-    DarkWorld = 2
-    Cave = 3  # Also includes Houses
-    Dungeon = 4
-
-    @property
-    def is_indoors(self) -> bool:
-        """Shorthand for checking if Cave or Dungeon"""
-        return self in (RegionType.Cave, RegionType.Dungeon)
-
-
 class Region:
     name: str
-    type: RegionType
-    hint_text: str
+    _hint_text: str
     player: int
     multiworld: Optional[MultiWorld]
     entrances: List[Entrance]
@@ -962,14 +965,13 @@ class Region:
     is_light_world: bool = False
     is_dark_world: bool = False
 
-    def __init__(self, name: str, type_: RegionType, hint: str, player: int, world: Optional[MultiWorld] = None):
+    def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: Optional[str] = None):
         self.name = name
-        self.type = type_
         self.entrances = []
         self.exits = []
         self.locations = []
-        self.multiworld = world
-        self.hint_text = hint
+        self.multiworld = multiworld
+        self._hint_text = hint
         self.player = player
 
     def can_reach(self, state: CollectionState) -> bool:
@@ -984,6 +986,10 @@ class Region:
                     state.path[self] = (self.name, state.path.get(entrance, None))
                 return True
         return False
+
+    @property
+    def hint_text(self) -> str:
+        return self._hint_text if self._hint_text else self.name
 
     def get_connecting_entrance(self, is_main_entrance: typing.Callable[[Entrance], bool]) -> Entrance:
         for entrance in self.entrances:
@@ -1271,6 +1277,7 @@ class Spoiler():
                 [('player', player), ('entrance', entrance), ('exit', exit_), ('direction', direction)])
 
     def parse_data(self):
+        from worlds.alttp.SubClasses import LTTPRegionType
         self.medallions = OrderedDict()
         for player in self.multiworld.get_game_players("A Link to the Past"):
             self.medallions[f'Misery Mire ({self.multiworld.get_player_name(player)})'] = \
@@ -1280,23 +1287,31 @@ class Spoiler():
 
         self.locations = OrderedDict()
         listed_locations = set()
+        lw_locations = []
+        dw_locations = []
+        cave_locations = []
+        for loc in self.multiworld.get_locations():
+            if loc.game == "A Link to the Past":
+                if loc not in listed_locations and loc.parent_region and \
+                        loc.parent_region.type == LTTPRegionType.LightWorld and loc.show_in_spoiler:
+                    lw_locations.append(loc)
+                elif loc not in listed_locations and loc.parent_region and \
+                    loc.parent_region.type == LTTPRegionType.DarkWorld and loc.show_in_spoiler:
+                    dw_locations.append(loc)
+                elif loc not in listed_locations and loc.parent_region and \
+                        loc.parent_region.type == LTTPRegionType.Cave and loc.show_in_spoiler:
+                    cave_locations.append(loc)
 
-        lw_locations = [loc for loc in self.multiworld.get_locations() if
-                        loc not in listed_locations and loc.parent_region and loc.parent_region.type == RegionType.LightWorld and loc.show_in_spoiler]
         self.locations['Light World'] = OrderedDict(
             [(str(location), str(location.item) if location.item is not None else 'Nothing') for location in
              lw_locations])
         listed_locations.update(lw_locations)
 
-        dw_locations = [loc for loc in self.multiworld.get_locations() if
-                        loc not in listed_locations and loc.parent_region and loc.parent_region.type == RegionType.DarkWorld and loc.show_in_spoiler]
         self.locations['Dark World'] = OrderedDict(
             [(str(location), str(location.item) if location.item is not None else 'Nothing') for location in
              dw_locations])
         listed_locations.update(dw_locations)
 
-        cave_locations = [loc for loc in self.multiworld.get_locations() if
-                          loc not in listed_locations and loc.parent_region and loc.parent_region.type == RegionType.Cave and loc.show_in_spoiler]
         self.locations['Caves'] = OrderedDict(
             [(str(location), str(location.item) if location.item is not None else 'Nothing') for location in
              cave_locations])
