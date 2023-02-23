@@ -209,7 +209,7 @@ class KH2Logic(LogicMixin):
     def kh_dataroxas(self, player):
         return self.kh_basetools(player) and \
             ((self.has(ItemName.LimitForm, player) and self.kh_form_level_unlocked(player, 3) and self.has(ItemName.TrinityLimit, player) and self.kh_gapcloser(player))
-             or (self.has(ItemName.NegativeCombo, player, 2) and self.kh_quickrun(player, 2)))
+             or (self.has(ItemName.NegativeCombo, player, 2) or self.kh_quickrun(player, 2)))
 
     def kh_datamarluxia(self, player):
         return self.kh_basetools(player) and self.kh_reflera(player) \
