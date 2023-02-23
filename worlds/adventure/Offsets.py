@@ -8,7 +8,7 @@ items_ram_start = 0xa1
 connector_port_offset = 0xff9
 # dragon speeds are hardcoded directly in their respective movement subroutines, not in their item table or state data
 # so this is the second byte of an LDA immediate instruction
-yorgle_speed_data_location = 0x722
+yorgle_speed_data_location = 0x724
 grundle_speed_data_location = 0x73f
 rhindle_speed_data_location = 0x709
 
