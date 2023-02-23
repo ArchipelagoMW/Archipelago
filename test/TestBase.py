@@ -15,50 +15,6 @@ from BaseClasses import MultiWorld, CollectionState, ItemClassification, Item
 from worlds.alttp.Items import ItemFactory
 
 
-class WorldTestBaseRegister(type):
-    def __new__(mcs, name: str, bases: typing.Tuple[type, ...], dct: typing.Dict[str, typing.Any]):
-        if ("game" in dct or hasattr(bases, "game")) and ("options" in dct or getattr(bases, "options", {})):
-            if "auto_construct" in dct and dct["auto_construct"]:
-                def testAllStateCanReachEverything(self):
-                    with self.subTest("Game", game=self.game):
-                        excluded = self.multiworld.exclude_locations[1].value
-                        state = self.multiworld.get_all_state(False)
-                        for location in self.multiworld.get_locations():
-                            if location.name not in excluded:
-                                with self.subTest("Location should be reached", location=location):
-                                    self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
-
-                def testEmptyStateCanReachSomething(self):
-                    with self.subTest("Game", game=self.game):
-                        state = CollectionState(self.multiworld)
-                        locations = self.multiworld.get_reachable_locations(state, 1)
-                        self.assertGreater(len(locations), 0,
-                                           "Need to be able to reach at least one location to get started.")
-            else:
-                def testAllStateCanReachEverything(self):
-                    self.world_setup()
-                    with self.subTest("Game", game=self.game):
-                        excluded = self.multiworld.exclude_locations[1].value
-                        state = self.multiworld.get_all_state(False)
-                        for location in self.multiworld.get_locations():
-                            if location.name not in excluded:
-                                with self.subTest("Location should be reached", location=location):
-                                    self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
-
-                def testEmptyStateCanReachSomething(self):
-                    self.world_setup()
-                    with self.subTest("Game", game=self.game):
-                        state = CollectionState(self.multiworld)
-                        locations = self.multiworld.get_reachable_locations(state, 1)
-                        self.assertGreater(len(locations), 0,
-                                           "Need to be able to reach at least one location to get started.")
-
-            dct["testAllStateCanReachEverything"] = testAllStateCanReachEverything
-            dct["testEmptyStateCanReachSomething"] = testEmptyStateCanReachSomething
-
-        return super(WorldTestBaseRegister, mcs).__new__(mcs, name, bases, dct)
-
-
 class TestBase(unittest.TestCase):
     multiworld: MultiWorld
     _state_cache = {}
@@ -143,7 +99,7 @@ class TestBase(unittest.TestCase):
         return self.get_state(items)
 
 
-class WorldTestBase(unittest.TestCase, metaclass=WorldTestBaseRegister):
+class WorldTestBase(unittest.TestCase):
     options: typing.Dict[str, typing.Any] = {}
     multiworld: MultiWorld
 
@@ -156,6 +112,8 @@ class WorldTestBase(unittest.TestCase, metaclass=WorldTestBaseRegister):
             self.world_setup()
 
     def world_setup(self, seed: typing.Optional[int] = None) -> None:
+        if type(self) is WorldTestBase:
+            return
         if not hasattr(self, "game"):
             raise NotImplementedError("didn't define game name")
         self.multiworld = MultiWorld(1)
@@ -172,7 +130,9 @@ class WorldTestBase(unittest.TestCase, metaclass=WorldTestBaseRegister):
         for step in gen_steps:
             call_all(self.multiworld, step)
 
+    # methods that can be called within tests
     def collect_all_but(self, item_names: typing.Union[str, typing.Iterable[str]]) -> None:
+        """Collects all pre-placed items and items in the multiworld itempool except those provided"""
         if isinstance(item_names, str):
             item_names = (item_names,)
         for item in self.multiworld.get_items():
@@ -180,12 +140,14 @@ class WorldTestBase(unittest.TestCase, metaclass=WorldTestBaseRegister):
                 self.multiworld.state.collect(item)
 
     def get_item_by_name(self, item_name: str) -> Item:
+        """Returns the first item found in placed items, or in the itempool with the matching name"""
         for item in self.multiworld.get_items():
             if item.name == item_name:
                 return item
         raise ValueError("No such item")
 
     def get_items_by_name(self, item_names: typing.Union[str, typing.Iterable[str]]) -> typing.List[Item]:
+        """Returns actual items from the itempool with the provided name(s)"""
         if isinstance(item_names, str):
             item_names = (item_names,)
         return [item for item in self.multiworld.itempool if item.name in item_names]
@@ -197,12 +159,14 @@ class WorldTestBase(unittest.TestCase, metaclass=WorldTestBaseRegister):
         return items
 
     def collect(self, items: typing.Union[Item, typing.Iterable[Item]]) -> None:
+        """Collects the provided item(s) into state"""
         if isinstance(items, Item):
             items = (items,)
         for item in items:
             self.multiworld.state.collect(item)
 
     def remove(self, items: typing.Union[Item, typing.Iterable[Item]]) -> None:
+        """Removes the provided item(s) from state"""
         if isinstance(items, Item):
             items = (items,)
         for item in items:
@@ -211,17 +175,22 @@ class WorldTestBase(unittest.TestCase, metaclass=WorldTestBaseRegister):
             self.multiworld.state.remove(item)
 
     def can_reach_location(self, location: str) -> bool:
+        """Determines if the current state can reach the provide location name"""
         return self.multiworld.state.can_reach(location, "Location", 1)
 
     def can_reach_entrance(self, entrance: str) -> bool:
+        """Determines if the current state can reach the provided entrance name"""
         return self.multiworld.state.can_reach(entrance, "Entrance", 1)
 
     def count(self, item_name: str) -> int:
+        """Returns the amount of an item currently in state"""
         return self.multiworld.state.count(item_name, 1)
 
     def assertAccessDependency(self,
                                locations: typing.List[str],
                                possible_items: typing.Iterable[typing.Iterable[str]]) -> None:
+        """Asserts that the provided locations can't be reached without all provided items but can be reached with any
+         one of the provided combinations"""
         all_items = [item_name for item_names in possible_items for item_name in item_names]
 
         self.collect_all_but(all_items)
@@ -234,4 +203,28 @@ class WorldTestBase(unittest.TestCase, metaclass=WorldTestBaseRegister):
             self.remove(items)
 
     def assertBeatable(self, beatable: bool):
+        """Asserts that the game can be beatable with the current state"""
         self.assertEqual(self.multiworld.can_beat_game(self.multiworld.state), beatable)
+
+    # following tests are automatically run
+    def testAllStateCanReachEverything(self):
+        """Ensure all state can reach everything with the defined options"""
+        if not (hasattr(self, "game") and hasattr(self, "multiworld") and getattr(self, "options", {})):
+            return
+        with self.subTest("Game", game=self.game):
+            excluded = self.multiworld.exclude_locations[1].value
+            state = self.multiworld.get_all_state(False)
+            for location in self.multiworld.get_locations():
+                if location.name not in excluded:
+                    with self.subTest("Location should be reached", location=location):
+                        self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
+
+    def testEmptyStateCanReachSomething(self):
+        """Ensure empty state can reach at least one location with the defined options"""
+        if not (hasattr(self, "game") and hasattr(self, "multiworld") and getattr(self, "options", {})):
+            return
+        with self.subTest("Game", game=self.game):
+            state = CollectionState(self.multiworld)
+            locations = self.multiworld.get_reachable_locations(state, 1)
+            self.assertGreater(len(locations), 0,
+                               "Need to be able to reach at least one location to get started.")
