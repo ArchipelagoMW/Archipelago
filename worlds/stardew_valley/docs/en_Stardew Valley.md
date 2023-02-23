@@ -6,11 +6,13 @@ The [player settings page for this game](../player-settings) contains all the op
 config file.
 
 ## What does randomization do to this game?
+
 A vast number of optional objectives in stardew valley can be shuffled around the multiworld. Most of these are optional, and the player can customize their experience in their YAML file.
 
 For these objectives, if they have a vanilla reward, this reward will instead be an item in the multiworld. For the remaining number of such objectives, there are a number of "Resource Pack" items, which are simply a stack of an item that may be useful to the player.
 
 ## What is the goal of Stardew Valley?
+
 The player can choose from a number of goals, using their YAML settings.
 - Complete the Community Center
 - Succeed Grandpa's Evaluation with 4 lit candles
@@ -19,6 +21,7 @@ The player can choose from a number of goals, using their YAML settings.
 - Get the achievement "Master Angler", which requires catching every fish in the game
 
 ## What are location check in Stardew Valley?
+
 Location checks in Stardew Valley always include:
 - Community Center Bundles
 - Mineshaft chest rewards
@@ -37,19 +40,23 @@ There also are a number of location checks that are optional, and individual pla
 - Fishsanity: Catching individual fish
 
 ## Which items can be in another player's world?
+
 Every normal reward from the above locations can be in another player's world.
 For the locations which do not include a normal reward, Resource Packs are instead added to the pool. These can contain ores, seeds, fertilizers, warp totems, etc.
 There are a few extra items, which are added to the pool but do not have a matching location. These include
 - Wizard Buildings
 - Return Scepter
 
-And lastly, some archipelago-exclusive items exist in the pool, which are designed around game balance and QoL. These include:
+And lastly, some Archipelago-exclusive items exist in the pool, which are designed around game balance and QoL. These include:
 - Arcade Machine buffs (Only if the arcade machines are randomized)
+  - Journey of the Prairie King has drop rate increases, extra lives, and equipment
+  - Junimo Kart has extra lives.
 - Permanent Movement Speed Bonuses (customizable)
 - Permanent Luck Bonuses (customizable)
 - Traveling Merchant buffs
 
 ## When the player receives an item, what happens?
+
 Since Pelican Town is a remote area, it takes one business day for every item to reach the player. If an item is received while online, it will appear in the player's mailbox the next morning, with a message from the sender telling them where it was found.
 If an item is received while offline, it will be in the mailbox as soon as the player logs in.
 
