@@ -86,7 +86,7 @@ class SMWorld(World):
 
     game: str = "Super Metroid"
     topology_present = True
-    data_version = 2
+    data_version = 3
     option_definitions = sm_options
 
     item_name_to_id = {value.Name: items_start_id + value.Id for key, value in ItemManager.Items.items() if value.Id != None}
@@ -342,12 +342,8 @@ class SMWorld(World):
                 # item to place in this SM world: write full item data to tables
                 if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items:
                     itemId = ItemManager.Items[itemLoc.item.type].Id
-                    if itemId == None:
-                        a = 10
                 else:
                     itemId = ItemManager.Items["ArchipelagoItem"].Id + idx
-                    if itemId == None:
-                        a = 10
                     multiWorldItems.append({"sym": symbols["message_item_names"],
                                             "offset": (vanillaItemTypesCount + idx)*64,
                                             "values": self.convertToROMItemName(itemLoc.item.name)})

@@ -372,10 +372,7 @@ def loadRandoPreset(world, player, args):
     args.noLayout = not world.layout_patches[player].value
     args.gravityBehaviour = defaultMultiValues["gravityBehaviour"][world.gravity_behaviour[player].value]
     args.nerfedCharge = world.nerfed_charge[player].value
-    args.area = world.area_randomization[player].value
-    if args.area == "on":
-        # DEPRECATED previously areaRandomization was on/off, now it's off, full, or light
-        args.area == "full"
+    args.area = world.area_randomization[player].current_key
     if args.area != "off":
         args.areaLayoutBase = not world.area_layout[player].value
     args.escapeRando = world.escape_rando[player].value
