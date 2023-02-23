@@ -66,9 +66,12 @@ class StardewLocationCollector(Protocol):
 
 
 def load_location_csv() -> List[LocationData]:
-    from importlib.resources import path
+    try:
+        from importlib.resources import files
+    except ImportError:
+        from importlib_resources import files
 
-    with path(data, "locations.csv") as resource:
+    with files(data).joinpath("resource_packs.csv").open() as resource:
         with open(resource) as file:
             reader = csv.DictReader(file)
             return [LocationData(int(location["id"]) if location["id"] else None,
