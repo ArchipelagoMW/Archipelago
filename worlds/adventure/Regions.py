@@ -1,5 +1,5 @@
 from BaseClasses import MultiWorld, Region, Entrance, LocationProgressType
-from .Locations import location_table, LocationData, AdventureLocation
+from .Locations import location_table, LocationData, AdventureLocation, dragon_room_to_region
 
 
 def connect(world: MultiWorld, player: int, source: str, target: str, rule: callable = lambda state: True,
@@ -24,12 +24,11 @@ def connect(world: MultiWorld, player: int, source: str, target: str, rule: call
         connect(world, player, target, source, rule, True)
 
 
-def create_regions(multiworld: MultiWorld, player: int) -> None:
+def create_regions(multiworld: MultiWorld, player: int, dragon_rooms: []) -> None:
     for name, locdata in location_table.items():
         locdata.get_position(multiworld.random)
 
-    # TODO: I guess these names are player facing.  I should adjust them to have spaces and stuff
-    # TODO: And check the names against what's in the manual, it might have some official names
+    # TODO: Check the names against what's in the manual, it might have some official names
     menu = Region("Menu", player, multiworld)
 
     menu.exits.append(Entrance(player, "GameStart", menu))
@@ -78,9 +77,30 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
     credits_room_far_side.exits.append(Entrance(player, "CreditsFromFarSide", credits_room_far_side))
     multiworld.regions.append(credits_room_far_side)
 
-    priority_locations = determine_priority_locations(multiworld)
+    dragon_slay_check = multiworld.dragon_slay_check[player].value
+    priority_locations = determine_priority_locations(multiworld, dragon_slay_check)
+
     for name, location_data in location_table.items():
-        r = multiworld.get_region(location_data.region, player)
+        require_sword = False
+        if location_data.region == "Varies":
+            if location_data.name == "Slay Yorgle":
+                if not dragon_slay_check:
+                    continue
+                region_name = dragon_room_to_region(dragon_rooms[0])
+            elif location_data.name == "Slay Grundle":
+                if not dragon_slay_check:
+                    continue
+                region_name = dragon_room_to_region(dragon_rooms[1])
+            elif location_data.name == "Slay Rhindle":
+                if not dragon_slay_check:
+                    continue
+                region_name = dragon_room_to_region(dragon_rooms[2])
+            else:
+                raise Exception(f"Unknown location region for {location_data.name}")
+            r = multiworld.get_region(region_name, player)
+        else:
+            r = multiworld.get_region(location_data.region, player)
+
         adventure_loc = AdventureLocation(player, location_data.name, location_data.location_id, r)
         if adventure_loc.name in priority_locations:
             adventure_loc.progress_type = LocationProgressType.PRIORITY
@@ -137,9 +157,9 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
 
 # Assign some priority locations to try to get interesting stuff into the castles, most of the time
 # occasionally some interesting things are generated without that, so I want to leave some chance of
-# that happening.  The downside to leaving it out is sometimes not needing to visit all castles,
+# that happening.  The downside to leaving it out is sometimes not needing to visit castles,
 # at least in solo world.
-def determine_priority_locations(world: MultiWorld) -> {}:
+def determine_priority_locations(world: MultiWorld, dragon_slay_check: bool) -> {}:
     locations = []
     priority_locations = {}
     for name, location_data in location_table.items():
@@ -150,16 +170,31 @@ def determine_priority_locations(world: MultiWorld) -> {}:
     if not do_priority:
         return priority_locations
 
-    priority_index = world.random.randint(0, 4)
     hard_location_score = 0
     priority_count = 0
+    if dragon_slay_check:
+        dragon_index = world.random.randint(0, 3)
+        hard_location_score = 1
+        priority_count = 1
+        if dragon_index == 0:
+            priority_locations["Slay Yorgle"] = True
+        elif dragon_index == 1:
+            priority_locations["Slay Grundle"] = True
+        elif dragon_index == 2:
+            priority_locations["Slay Rhindle"] = True
+        else:
+            priority_count = 0
+            hard_location_score = 0
+
+    priority_index = world.random.randint(0, 4)
+
     if priority_index == 0:
         priority_locations["Credits Right Side"] = True
-        hard_location_score = 2
+        hard_location_score += 2
         priority_count += 1
     elif priority_index == 1:
         priority_locations["Credits Left Side"] = True
-        hard_location_score = 2
+        hard_location_score += 2
         priority_count += 1
     priority_index = world.random.randint(hard_location_score, 7)
     if priority_index < 3:

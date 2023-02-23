@@ -761,6 +761,12 @@ function main()
                     new_dragon_state[index] = memory.read_u8(dragon_state_addr, "System Bus" )
                     if last_dragon_state[index] == 1 and new_dragon_state[index] ~= 1 then
                         dragons_revived = true
+                    elseif last_dragon_state[index] ~= 1 and new_dragon_state[index] == 1 then
+                        dragon_real_index = index - 1
+                        print("Killed dragon: "..tostring(dragon_real_index))
+                        local dragon_item = {}
+                        dragon_item["short_location_id"] = 0xD0 + dragon_real_index
+                        pending_foreign_items_collected[dragon_item.short_location_id] = dragon_item
                     end
                     if new_dragon_state[index] == 2 then
                         player_dead = true

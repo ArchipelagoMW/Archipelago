@@ -76,6 +76,23 @@ standard_positions = [
 ]
 
 
+# Gives the most difficult region the dragon can reach and get stuck in from the provided room without the
+# player unlocking something for it
+def dragon_room_to_region(room: int) -> str:
+    if room <= 0x11:
+        return "Overworld"
+    elif room <= 0x12:
+        return "YellowCastle"
+    elif room <= 0x16 or room == 0x1B:
+        return "BlackCastle"
+    elif room <= 0x1A:
+        return "WhiteCastleVault"
+    elif room <= 0x1D:
+        return "Overworld"
+    elif room <= 0x1E:
+        return "CreditsRoom"
+
+
 def get_random_room_in_regions(regions: [str], random) -> int:
     possible_rooms = {}
     for locname in location_table:
@@ -148,7 +165,10 @@ location_table = {
     "Credits Right Side": LocationData("CreditsRoomFarSide", "Credits Right Side", 0xBE,
                                        [WorldPosition(0x1E, 0x70, 0x40)],
                                        needs_bat_logic=True),
-    "Chalice Home": LocationData("YellowCastle", "Chalice Home", None, event=True)
+    "Chalice Home": LocationData("YellowCastle", "Chalice Home", None, event=True),
+    "Slay Yorgle": LocationData("Varies", "Slay Yorgle", 0xD1, event=False),
+    "Slay Grundle": LocationData("Varies", "Slay Grundle", 0xD2, event=False),
+    "Slay Rhindle": LocationData("Varies", "Slay Rhindle", 0xD0, event=False),
 }
 
 # the old location table, for reference

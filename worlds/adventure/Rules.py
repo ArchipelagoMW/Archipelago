@@ -1,5 +1,5 @@
 from worlds.adventure import location_table
-from worlds.adventure.Options import BatLogic
+from worlds.adventure.Options import BatLogic, DifficultySwitchB, DifficultySwitchA
 from worlds.generic.Rules import add_rule, set_rule, forbid_item
 from BaseClasses import LocationProgressType
 
@@ -27,6 +27,26 @@ def set_rules(self) -> None:
         set_rule(world.get_entrance("BlackCastleVaultEntrance", self.player),
                  lambda state: state.has("Bridge", self.player) or
                                state.has("Magnet", self.player))
+
+    dragon_slay_check = world.dragon_slay_check[self.player].value
+    if dragon_slay_check:
+        if self.difficulty_switch_a == DifficultySwitchA.option_hard_with_unlock_item:
+            set_rule(world.get_location("Slay Yorgle", self.player),
+                     lambda state: state.has("Sword", self.player) and
+                                   state.has("Left Difficulty Switch", self.player))
+            set_rule(world.get_location("Slay Grundle", self.player),
+                     lambda state: state.has("Sword", self.player) and
+                                   state.has("Left Difficulty Switch", self.player))
+            set_rule(world.get_location("Slay Rhindle", self.player),
+                     lambda state: state.has("Sword", self.player) and
+                                   state.has("Left Difficulty Switch", self.player))
+        else:
+            set_rule(world.get_location("Slay Yorgle", self.player),
+                     lambda state: state.has("Sword", self.player))
+            set_rule(world.get_location("Slay Grundle", self.player),
+                     lambda state: state.has("Sword", self.player))
+            set_rule(world.get_location("Slay Rhindle", self.player),
+                     lambda state: state.has("Sword", self.player))
 
     # really this requires getting the dot item, and having another item or enemy
     # in the room, but the dot would be *super evil*
@@ -57,7 +77,7 @@ def set_rules(self) -> None:
         forbid_item(loc, "Chalice", self.player)
 
     add_rule(world.get_location("Chalice Home", self.player),
-                   lambda state: state.has("Chalice", self.player) and state.has("Yellow Key", self.player))
+             lambda state: state.has("Chalice", self.player) and state.has("Yellow Key", self.player))
 
     # world.random.choice(overworld.locations).progress_type = LocationProgressType.PRIORITY
 

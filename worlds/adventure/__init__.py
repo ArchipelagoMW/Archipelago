@@ -14,7 +14,7 @@ from worlds.AutoWorld import WebWorld, World
 from Fill import fill_restrictive
 from worlds.generic.Rules import add_rule, set_rule
 # from .Client import L2ACSNIClient  # noqa: F401
-from .Options import adventure_option_definitions, DragonRandoType, DifficultySwitchA
+from .Options import adventure_option_definitions, DragonRandoType, DifficultySwitchA, DifficultySwitchB
 from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, apply_basepatch, \
     AdventureAutoCollectLocation
 from .Items import item_table, ItemData, nothing_item_id, event_table, AdventureItem, standard_item_max
@@ -116,6 +116,8 @@ class AdventureWorld(World):
             item_table["Sword"].classification = ItemClassification.useful
         else:
             item_table["Sword"].classification = ItemClassification.progression
+            if self.difficulty_switch_a == DifficultySwitchA.option_hard_with_unlock_item:
+                item_table["Left Difficulty Switch"].classification = ItemClassification.progression
 
         if self.dragon_rando_type == DragonRandoType.option_shuffle:
             self.multiworld.random.shuffle(self.dragon_rooms)
@@ -149,6 +151,8 @@ class AdventureWorld(World):
                     self.multiworld.itempool.append(item)
                     self.created_items += 1
         num_locations = len(location_table) - 1  # subtract out the chalice location
+        if self.dragon_slay_check == 0:
+            num_locations -= 3
 
         if self.difficulty_switch_a == DifficultySwitchA.option_hard_with_unlock_item:
             self.multiworld.itempool.append(self.create_item("Left Difficulty Switch"))
@@ -197,7 +201,7 @@ class AdventureWorld(World):
                 self.created_items += 1
 
     def create_regions(self) -> None:
-        create_regions(self.multiworld, self.player)
+        create_regions(self.multiworld, self.player, self.dragon_rooms)
 
     def set_rules(self) -> None:
         set_rules(self)
