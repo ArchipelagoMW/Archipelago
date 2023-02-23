@@ -371,7 +371,8 @@ class PokemonRedBlueWorld(World):
             "type_chart": self.type_chart,
             "randomize_pokedex": self.multiworld.randomize_pokedex[self.player].value,
             "trainersanity": self.multiworld.trainersanity[self.player].value,
-            "death_link": self.multiworld.death_link[self.player].value
+            "death_link": self.multiworld.death_link[self.player].value,
+            "prizesanity": self.multiworld.prizesanity[self.player].value
         }
 
 
