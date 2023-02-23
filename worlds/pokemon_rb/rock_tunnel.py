@@ -151,6 +151,7 @@ def randomize_rock_tunnel(data, random):
             tall(random.randint(6, 7), 7)
             r = random.choice([1, 3, 5, 9])
             floor(6, r)
+            floor(6, r + 1)
         if random.randint(0, 2):
             wide(7, 15)
             r = random.randint(0, 4)
