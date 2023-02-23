@@ -25,8 +25,8 @@ class ToolUpgradeRando(Toggle):
 class NightDifficulty(Choice):
     """Alters mechanics in the Night Mode to make it easier or harder."""
     display_name = "Night Mode Difficulty"
-    option_normal = 0
     option_easy = 1
+    option_normal = 0
     default = 0
 
 
