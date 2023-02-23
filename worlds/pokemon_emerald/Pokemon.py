@@ -2,6 +2,10 @@ import os
 from typing import Dict
 from .Data import get_extracted_data, load_json
 
+
+all_pokemon_species = None
+
+
 class PokemonSpecies:
     label: str
     id: int
@@ -11,9 +15,6 @@ class PokemonSpecies:
         self.label = label
         self.id = id
         self.national_dex_number = national_dex_number
-
-
-pokemon_species = None
 
 
 def get_random_species(random) -> PokemonSpecies:
@@ -30,18 +31,20 @@ def get_species_by_name(name: str) -> PokemonSpecies:
 
 
 def get_pokemon_species() -> Dict[str, PokemonSpecies]:
-    global pokemon_species
-    extracted_data = get_extracted_data()
-    pokemon_data = load_json(os.path.join(os.path.dirname(__file__), "data/pokemon.json"))
+    global all_pokemon_species
 
-    if (pokemon_species == None):
-        national_pokedex = {}
+    if (all_pokemon_species == None):
+        all_pokemon_species = {}
+
+        extracted_data = get_extracted_data()
+        pokemon_data = load_json(os.path.join(os.path.dirname(__file__), "data/pokemon.json"))
+
         for species_name, species_data in pokemon_data.items():
-            national_pokedex[species_name] = \
+            all_pokemon_species[species_name] = \
                 PokemonSpecies(
                     species_data["label"],
                     extracted_data["constants"][species_name],
                     species_data["national_dex_number"],
                 )
     
-    return national_pokedex
+    return all_pokemon_species

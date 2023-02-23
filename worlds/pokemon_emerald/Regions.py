@@ -2,6 +2,7 @@ from BaseClasses import Region, Entrance
 from .Data import get_region_data
 from .Warps import get_warp_region_name, get_warp_destination
 
+
 def create_regions(world, player):
     regions = {}
     region_data = get_region_data()

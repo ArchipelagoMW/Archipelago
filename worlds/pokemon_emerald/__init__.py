@@ -1,10 +1,10 @@
 from ..AutoWorld import World
-from .Items import create_item_name_to_id_map, get_item_classification, PokemonEmeraldItem
-from .Rules import set_default_rules
+from .Items import PokemonEmeraldItem, create_item_name_to_id_map, get_item_classification
 from .Locations import create_location_name_to_id_map, create_locations_with_tags
 from .Options import options
-from .Rom import generate_output
 from .Regions import create_regions
+from .Rom import generate_output
+from .Rules import set_default_rules
 from .SanityCheck import sanity_check
 
 
