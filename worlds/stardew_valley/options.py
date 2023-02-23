@@ -11,9 +11,9 @@ class StardewOption(Protocol):
 
 @dataclass
 class StardewOptions:
-    options: Dict[str, Union[bool, int, str]]
+    options: Dict[str, Union[bool, int]]
 
-    def __getitem__(self, item: Union[str, StardewOption]) -> Union[bool, int, str]:
+    def __getitem__(self, item: Union[str, StardewOption]) -> Union[bool, int]:
         if isinstance(item, StardewOption):
             item = item.internal_name
 
@@ -399,13 +399,10 @@ def fetch_options(world, player: int) -> StardewOptions:
     return StardewOptions({option: get_option_value(world, player, option) for option in stardew_valley_options})
 
 
-def get_option_value(world, player: int, name: str) -> Union[bool, int, str]:
+def get_option_value(world, player: int, name: str) -> Union[bool, int]:
     assert name in stardew_valley_options, f"{name} is not a valid option for Stardew Valley."
 
-    value = getattr(world, name, None)
-
-    if value is None:
-        return stardew_valley_options[name].default
+    value = getattr(world, name)
 
     if issubclass(stardew_valley_options[name], Toggle):
         return bool(value[player].value)
