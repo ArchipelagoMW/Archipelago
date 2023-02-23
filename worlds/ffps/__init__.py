@@ -6,7 +6,7 @@ from .Locations import FFPSLocations, location_table, exclusion_table
 from .Regions import FFPS_regions, link_FFPS_structures
 from .Rules import set_rules, set_completion_rules
 
-from BaseClasses import Region, Entrance, Item
+from BaseClasses import Region, Entrance, Item, Tutorial
 from .Options import FFPS_options
 from ..AutoWorld import World, WebWorld
 
@@ -18,7 +18,15 @@ def data_path(*args):
 
 
 class FFPSWeb(WebWorld):
-    tutorials = []
+    tutorials = [Tutorial(
+        "Multiworld Setup Tutorial",
+        "A guide to setting up the Archipelago FFPS software on your computer. This guide covers "
+        "single-player, multiworld, and related software.",
+        "English",
+        "ffps_en.md",
+        "ffps/en",
+        ["Mewlif"]
+    )]
 
 
 class FFPSWorld(World):
