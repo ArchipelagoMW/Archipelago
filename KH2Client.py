@@ -48,7 +48,6 @@ class KH2Context(CommonContext):
         self.collectible_table = {}
         self.collectible_override_flags_address = 0
         self.collectible_offsets = {}
-        self.dupecheck = {}
         self.sending = []
         # flag for if the player has gotten their starting inventory from the server
         self.hasStartingInvo = False
@@ -313,9 +312,9 @@ class KH2Context(CommonContext):
                         or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Slot1 + 0x1B2, 1), "big") < 5:
                     await asyncio.sleep(1)
                 amount = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
-                if self.dupecheck[itemname] != amount:
-                    self.dupecheck.update({itemname: amount+1})
-                    self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,
+                if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0xAB9078, 1), "big") in {4,5}:
+                    return
+                self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,
                                          (amount + 1).to_bytes(1, 'big'), 1)
         except Exception as e:
             if self.kh2connected:
@@ -353,21 +352,15 @@ class KH2Context(CommonContext):
                         if item.item in {0x130024, 0x130025, 0x130026, 0x130027, 0x130028, 0x130029}:
                             continue
                         if itemname in exclusionItem_table["Ability"] \
-                        and itemcode.memaddr not in {0x05E, 0x062, 0x066, 0x06A, 0x234}\
-                        and self.dupecheck[itemname]:
+                        and itemcode.memaddr not in {0x05E, 0x062, 0x066, 0x06A, 0x234}:
                             self.kh2seedsave["SoraInvo"] += 2
                         if itemname in DonaldAbility_Table.keys():
                             asyncio.create_task(self.give_item(item, "Donald"))
                         elif itemname in GoofyAbility_Table.keys():
                             asyncio.create_task(self.give_item(item, "Goofy"))
                         else:
-                                if self.dupecheck[itemname] != int.from_bytes(
-                                        self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1),
-                                        "big"):
-                                    asyncio.create_task(self.give_item(item, "Sora"))
-                            else:
-                                asyncio.create_task(self.give_item(item, "Sora"))
-            await asyncio.sleep(1)
+                            asyncio.create_task(self.give_item(item, "Sora"))
+            await asyncio.sleep(0.5)
         try:
             for item in args['items']:
                 if item.location not in self.kh2seedsave["checked_locations"][str(item.player)] \
@@ -396,8 +389,7 @@ class KH2Context(CommonContext):
                 # checking if the player is out of battle. If player gets mickey/peter pan there is no need for them to get the item again.
                 if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A0EAC4 + 0x40, 1), "big") == 0:
                     # give item because they have not room saved and are dead
-                    while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x741320, 1), "big") not in {10,
-                                                                                                                  8}:
+                    while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x741320, 1), "big") not in {10,8}:
                         await asyncio.sleep(0.5)
                     amount = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
                     self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,
