@@ -597,7 +597,7 @@ class VariaRandomizer:
             plandoSettings = {"locsItems": plandoRando['locsItems'], "forbiddenItems": plandoRando['forbiddenItems']}
         randoSettings = RandoSettings(self.maxDifficulty, progSpeed, progDiff, qty,
                                     restrictions, args.superFun, args.runtimeLimit_s,
-                                    PlandoOptions, minDifficulty)
+                                    plandoSettings, minDifficulty)
 
         dotFile = None
         if areaRandomization == True:
