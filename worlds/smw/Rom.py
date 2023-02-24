@@ -723,9 +723,9 @@ def handle_swap_donut_gh_exits(rom):
     rom.write_bytes(0x26371, bytes([0x32]))
 
 
-def handle_bowser_rooms(rom, world, player):
+def handle_bowser_rooms(rom, world, player: int):
     if world.bowser_castle_rooms[player] == "random_two_room":
-        chosen_rooms = world.random.sample(standard_bowser_rooms, 2)
+        chosen_rooms = world.per_slot_randoms[player].sample(standard_bowser_rooms, 2)
 
         rom.write_byte(0x3A680, chosen_rooms[0].roomID)
         rom.write_byte(0x3A684, chosen_rooms[0].roomID)
@@ -738,7 +738,7 @@ def handle_bowser_rooms(rom, world, player):
         rom.write_byte(chosen_rooms[len(chosen_rooms)-1].exitAddress, 0xBD)
 
     elif world.bowser_castle_rooms[player] == "random_five_room":
-        chosen_rooms = world.random.sample(standard_bowser_rooms, 5)
+        chosen_rooms = world.per_slot_randoms[player].sample(standard_bowser_rooms, 5)
 
         rom.write_byte(0x3A680, chosen_rooms[0].roomID)
         rom.write_byte(0x3A684, chosen_rooms[0].roomID)
@@ -752,7 +752,7 @@ def handle_bowser_rooms(rom, world, player):
 
     elif world.bowser_castle_rooms[player] == "gauntlet":
         chosen_rooms = standard_bowser_rooms.copy()
-        world.random.shuffle(chosen_rooms)
+        world.per_slot_randoms[player].shuffle(chosen_rooms)
 
         rom.write_byte(0x3A680, chosen_rooms[0].roomID)
         rom.write_byte(0x3A684, chosen_rooms[0].roomID)
@@ -768,7 +768,7 @@ def handle_bowser_rooms(rom, world, player):
 
         entrance_point = bowser_rooms_copy.pop(0)
 
-        world.random.shuffle(bowser_rooms_copy)
+        world.per_slot_randoms[player].shuffle(bowser_rooms_copy)
 
         rom.write_byte(entrance_point.exitAddress, bowser_rooms_copy[0].roomID)
         for i in range(0, len(bowser_rooms_copy) - 1):
@@ -782,8 +782,8 @@ def handle_boss_shuffle(rom, world, player):
         submap_boss_rooms_copy = submap_boss_rooms.copy()
         ow_boss_rooms_copy = ow_boss_rooms.copy()
 
-        world.random.shuffle(submap_boss_rooms_copy)
-        world.random.shuffle(ow_boss_rooms_copy)
+        world.per_slot_randoms[player].shuffle(submap_boss_rooms_copy)
+        world.per_slot_randoms[player].shuffle(ow_boss_rooms_copy)
 
         for i in range(len(submap_boss_rooms_copy)):
             rom.write_byte(submap_boss_rooms[i].exitAddress, submap_boss_rooms_copy[i].roomID)
@@ -796,19 +796,19 @@ def handle_boss_shuffle(rom, world, player):
 
     elif world.boss_shuffle[player] == "full":
         for i in range(len(submap_boss_rooms)):
-            chosen_boss = world.random.choice(submap_boss_rooms)
+            chosen_boss = world.per_slot_randoms[player].choice(submap_boss_rooms)
             rom.write_byte(submap_boss_rooms[i].exitAddress, chosen_boss.roomID)
 
         for i in range(len(ow_boss_rooms)):
-            chosen_boss = world.random.choice(ow_boss_rooms)
+            chosen_boss = world.per_slot_randoms[player].choice(ow_boss_rooms)
             rom.write_byte(ow_boss_rooms[i].exitAddress, chosen_boss.roomID)
 
             if ow_boss_rooms[i].exitAddressAlt is not None:
                 rom.write_byte(ow_boss_rooms[i].exitAddressAlt, chosen_boss.roomID)
 
     elif world.boss_shuffle[player] == "singularity":
-        chosen_submap_boss = world.random.choice(submap_boss_rooms)
-        chosen_ow_boss = world.random.choice(ow_boss_rooms)
+        chosen_submap_boss = world.per_slot_randoms[player].choice(submap_boss_rooms)
+        chosen_ow_boss = world.per_slot_randoms[player].choice(ow_boss_rooms)
 
         for i in range(len(submap_boss_rooms)):
             rom.write_byte(submap_boss_rooms[i].exitAddress, chosen_submap_boss.roomID)
@@ -821,8 +821,6 @@ def handle_boss_shuffle(rom, world, player):
 
 
 def patch_rom(world, rom, player, active_level_dict):
-    local_random = world.slot_seeds[player]
-
     goal_text = generate_goal_text(world, player)
 
     rom.write_bytes(0x2A6E2, goal_text)

@@ -4,7 +4,7 @@ import collections
 import logging
 import typing
 
-from BaseClasses import Region, Entrance, Location, Item, RegionType, Tutorial, ItemClassification
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from .Mod import generate_mod
 from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal, TechCostDistribution
@@ -81,10 +81,10 @@ class Factorio(World):
     def create_regions(self):
         player = self.player
         random = self.multiworld.random
-        menu = Region("Menu", RegionType.Generic, "Menu", player, self.multiworld)
+        menu = Region("Menu", player, self.multiworld)
         crash = Entrance(player, "Crash Land", menu)
         menu.exits.append(crash)
-        nauvis = Region("Nauvis", RegionType.Generic, "Nauvis", player, self.multiworld)
+        nauvis = Region("Nauvis", player, self.multiworld)
 
         location_count = len(base_tech_table) - len(useless_technologies) - self.skip_silo + \
                          self.multiworld.evolution_traps[player].value + self.multiworld.attack_traps[player].value
@@ -222,7 +222,7 @@ class Factorio(World):
 
         map_basic_settings = self.multiworld.world_gen[player].value["basic"]
         if map_basic_settings.get("seed", None) is None:  # allow seed 0
-            map_basic_settings["seed"] = self.multiworld.slot_seeds[player].randint(0, 2 ** 32 - 1)  # 32 bit uint
+            map_basic_settings["seed"] = self.multiworld.per_slot_randoms[player].randint(0, 2 ** 32 - 1)  # 32 bit uint
 
         start_location_hints: typing.Set[str] = self.multiworld.start_location_hints[self.player].value
 

@@ -5,7 +5,7 @@ import threading
 import typing
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_item_rule, set_rule
-from BaseClasses import Entrance, Item, ItemClassification, Location, LocationProgressType, Region, RegionType, Tutorial
+from BaseClasses import Entrance, Item, ItemClassification, Location, LocationProgressType, Region, Tutorial
 from Utils import output_path
 
 try:
@@ -201,7 +201,7 @@ class SoEWorld(World):
         return SoEItem(item.name, classification, self.item_name_to_id[item.name], self.player)
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld):
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
@@ -211,7 +211,7 @@ class SoEWorld(World):
         max_difficulty = 1 if self.multiworld.difficulty[self.player] == Difficulty.option_easy else 256
 
         # TODO: generate *some* regions from locations' requirements?
-        r = Region('Menu', RegionType.Generic, 'Menu', self.player, self.multiworld)
+        r = Region('Menu', self.player, self.multiworld)
         r.exits = [Entrance(self.player, 'New Game', r)]
         self.multiworld.regions += [r]
 
@@ -267,7 +267,7 @@ class SoEWorld(World):
         late_locations = self.multiworld.random.sample(late_bosses, late_count)
 
         # add locations to the world
-        r = Region('Ingame', RegionType.Generic, 'Ingame', self.player, self.multiworld)
+        r = Region('Ingame', self.player, self.multiworld)
         for sphere in spheres.values():
             for locations in sphere.values():
                 for location in locations:
