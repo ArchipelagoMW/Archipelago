@@ -1,5 +1,5 @@
 from typing import Optional
-from BaseClasses import Location, MultiWorld, Region, Item, ItemClassification
+from BaseClasses import Location, MultiWorld, Region
 from .Data import get_region_data
 
 

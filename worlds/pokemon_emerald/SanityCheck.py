@@ -1,10 +1,9 @@
 import logging
 import os
-from .Data import load_json, get_region_data
+from .Data import load_json, get_region_data, get_extracted_data
 from .Warps import warps_connect_ltr, get_warp_map, get_warp_region_name
 
 
-_dot_dir = os.path.dirname(__file__)
 _error_messages = []
 _warn_messages = []
 _failed = False
@@ -14,21 +13,18 @@ def sanity_check():
     global _failed
     _failed = False
 
-    region_data = get_region_data()
-
-    _check_exits(region_data)
+    _check_exits()
     _check_warps()
-    # TODO: Check location claims
-
-    if (_failed): return _finish()
+    _check_locations()
 
     return _finish()
 
 
-def _check_exits(regions):
-    for name, region in regions.items():
+def _check_exits():
+    region_data = get_region_data()
+    for name, region in region_data.items():
         for exit in region.exits:
-            if (not exit in regions):
+            if (not exit in region_data):
                 _error(f"Region [{exit}] referenced by [{name}] was not defined")
 
 
@@ -48,6 +44,20 @@ def _check_warps():
             _warn(f"Warp [{warp_source}] appears to be a one-way warp")
         elif (get_warp_region_name(warp_source) == None):
             _warn(f"Warp [{warp_source}] was not claimed by any region")
+
+
+def _check_locations():
+    extracted_data = get_extracted_data()
+    claimed_locations = [location for region in get_region_data().values() for location in region.locations]
+    claimed_location_map = {}
+    for location_data in claimed_locations:
+        if (location_data.name in claimed_location_map):
+            _error(f"Location [{location_data.name}] was claimed by multiple regions")
+        claimed_location_map[location_data.name] = location_data
+
+    for location_name, location_json in extracted_data["locations"].items():
+        if (not location_name in claimed_location_map):
+            _warn(f"Location [{location_name}] was not claimed by any region")
 
 
 def _finish():

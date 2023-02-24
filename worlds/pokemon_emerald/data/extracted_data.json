@@ -4450,6 +4450,83 @@
       "rom_address": 2692869,
       "type": "GROUND_ITEM"
     },
+    "NPC_GIFT_GOT_BASEMENT_KEY_FROM_WATTSON": {
+      "default_item": 271,
+      "flag": 208,
+      "ram_address": 136182228,
+      "rom_address": 1964500,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_GOT_TM24_FROM_WATTSON": {
+      "default_item": 312,
+      "flag": 209,
+      "ram_address": 136182271,
+      "rom_address": 1964543,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_6_SODA_POP": {
+      "default_item": 27,
+      "flag": 140,
+      "ram_address": 136746545,
+      "rom_address": 2528817,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_CHARCOAL": {
+      "default_item": 215,
+      "flag": 254,
+      "ram_address": 136308599,
+      "rom_address": 2090871,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_CHESTO_BERRY_ROUTE_104": {
+      "default_item": 134,
+      "flag": 246,
+      "ram_address": 136237586,
+      "rom_address": 2019858,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_CLEANSE_TAG": {
+      "default_item": 190,
+      "flag": 282,
+      "ram_address": 136515913,
+      "rom_address": 2298185,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_COIN_CASE": {
+      "default_item": 260,
+      "flag": 258,
+      "ram_address": 136384249,
+      "rom_address": 2166521,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_DEVON_SCOPE": {
+      "default_item": 288,
+      "flag": 285,
+      "ram_address": 136272312,
+      "rom_address": 2054584,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_EXP_SHARE": {
+      "default_item": 182,
+      "flag": 272,
+      "ram_address": 136390608,
+      "rom_address": 2172880,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_FOCUS_BAND": {
+      "default_item": 196,
+      "flag": 283,
+      "ram_address": 136541116,
+      "rom_address": 2323388,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_GOOD_ROD": {
+      "default_item": 263,
+      "flag": 227,
+      "ram_address": 136265913,
+      "rom_address": 2048185,
+      "type": "NPC_GIFT"
+    },
     "NPC_GIFT_RECEIVED_HM01": {
       "default_item": 339,
       "flag": 137,
@@ -4506,11 +4583,221 @@
       "rom_address": 2238977,
       "type": "NPC_GIFT"
     },
+    "NPC_GIFT_RECEIVED_KINGS_ROCK": {
+      "default_item": 187,
+      "flag": 276,
+      "ram_address": 136203967,
+      "rom_address": 1986239,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_MACHO_BRACE": {
+      "default_item": 181,
+      "flag": 277,
+      "ram_address": 136488625,
+      "rom_address": 2270897,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_MENTAL_HERB": {
+      "default_item": 185,
+      "flag": 223,
+      "ram_address": 136412929,
+      "rom_address": 2195201,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_METEORITE": {
+      "default_item": 280,
+      "flag": 115,
+      "ram_address": 136508169,
+      "rom_address": 2290441,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_MIRACLE_SEED": {
+      "default_item": 205,
+      "flag": 297,
+      "ram_address": 136504364,
+      "rom_address": 2286636,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_OLD_ROD": {
+      "default_item": 262,
+      "flag": 257,
+      "ram_address": 136222842,
+      "rom_address": 2005114,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_POTION_OLDALE": {
+      "default_item": 13,
+      "flag": 132,
+      "ram_address": 136221191,
+      "rom_address": 2003463,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_POWDER_JAR": {
+      "default_item": 372,
+      "flag": 337,
+      "ram_address": 136173044,
+      "rom_address": 1955316,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_PREMIER_BALL_RUSTBORO": {
+      "default_item": 12,
+      "flag": 213,
+      "ram_address": 136405531,
+      "rom_address": 2187803,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_QUICK_CLAW": {
+      "default_item": 183,
+      "flag": 275,
+      "ram_address": 136397282,
+      "rom_address": 2179554,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_SECRET_POWER": {
+      "default_item": 331,
+      "flag": 96,
+      "ram_address": 136800364,
+      "rom_address": 2582636,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_SILK_SCARF": {
+      "default_item": 217,
+      "flag": 289,
+      "ram_address": 136307873,
+      "rom_address": 2090145,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_SOFT_SAND": {
+      "default_item": 203,
+      "flag": 280,
+      "ram_address": 136244286,
+      "rom_address": 2026558,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_SOOTHE_BELL": {
+      "default_item": 184,
+      "flag": 278,
+      "ram_address": 136356869,
+      "rom_address": 2139141,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_SUPER_ROD": {
+      "default_item": 264,
+      "flag": 152,
+      "ram_address": 136456172,
+      "rom_address": 2238444,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_TM05": {
+      "default_item": 293,
+      "flag": 231,
+      "ram_address": 136259671,
+      "rom_address": 2041943,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_TM08": {
+      "default_item": 296,
+      "flag": 166,
+      "ram_address": 136301249,
+      "rom_address": 2083521,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_TM09": {
+      "default_item": 297,
+      "flag": 262,
+      "ram_address": 136237789,
+      "rom_address": 2020061,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_TM10": {
+      "default_item": 298,
+      "flag": 264,
+      "ram_address": 136411733,
+      "rom_address": 2194005,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_TM27": {
+      "default_item": 315,
+      "flag": 229,
+      "ram_address": 136319404,
+      "rom_address": 2101676,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_TM28": {
+      "default_item": 316,
+      "flag": 261,
+      "ram_address": 136490820,
+      "rom_address": 2273092,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_TM31": {
+      "default_item": 319,
+      "flag": 121,
+      "ram_address": 136473431,
+      "rom_address": 2255703,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_TM36": {
+      "default_item": 324,
+      "flag": 230,
+      "ram_address": 136305234,
+      "rom_address": 2087506,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_TM39": {
+      "default_item": 327,
+      "flag": 165,
+      "ram_address": 136393173,
+      "rom_address": 2175445,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_TM41": {
+      "default_item": 329,
+      "flag": 265,
+      "ram_address": 136350867,
+      "rom_address": 2133139,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_TM42": {
+      "default_item": 330,
+      "flag": 169,
+      "ram_address": 136335647,
+      "rom_address": 2117919,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_TM44": {
+      "default_item": 332,
+      "flag": 234,
+      "ram_address": 136441759,
+      "rom_address": 2224031,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_TM45": {
+      "default_item": 333,
+      "flag": 235,
+      "ram_address": 136322269,
+      "rom_address": 2104541,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_TM46": {
+      "default_item": 334,
+      "flag": 269,
+      "ram_address": 136360287,
+      "rom_address": 2142559,
+      "type": "NPC_GIFT"
+    },
     "NPC_GIFT_RECEIVED_WAILMER_PAIL": {
       "default_item": 268,
       "flag": 94,
       "ram_address": 136488480,
       "rom_address": 2270752,
+      "type": "NPC_GIFT"
+    },
+    "NPC_GIFT_RECEIVED_WHITE_HERB": {
+      "default_item": 180,
+      "flag": 279,
+      "ram_address": 136237651,
+      "rom_address": 2019923,
       "type": "NPC_GIFT"
     }
   },
