@@ -206,7 +206,7 @@ class WitnessWorld(World):
                 if junk:
                     self.multiworld.itempool.remove(junk.pop())
                     removed_junk = True
-                if f_brain:
+                elif f_brain:
                     self.multiworld.itempool.remove(f_brain.pop())
                 elif usefuls:
                     self.multiworld.itempool.remove(usefuls.pop())
