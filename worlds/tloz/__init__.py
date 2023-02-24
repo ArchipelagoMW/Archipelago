@@ -158,7 +158,7 @@ class TLoZWorld(World):
         # Remove map/compass check so they're always on
         # Removing a bit from the boss roars flags, so we can have more dungeon items. This allows us to
         # go past 0x1F items for dungeon items.
-        base_patch_location = os.path.dirname(__file__) + "\z1_base_patch.bsdiff4"
+        base_patch_location = os.path.dirname(__file__) + "/z1_base_patch.bsdiff4"
         with open(base_patch_location, "rb") as base_patch:
             rom_data = bsdiff4.patch(rom.read(), base_patch.read())
         rom_data = bytearray(rom_data)
