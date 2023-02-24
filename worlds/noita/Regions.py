@@ -1,14 +1,14 @@
 # Regions are areas in your game that you travel to.
 import itertools
 from typing import Dict, List, Set
-from BaseClasses import Region, Entrance, LocationProgressType, RegionType, MultiWorld
+from BaseClasses import Region, Entrance, LocationProgressType, MultiWorld
 from . import Locations, Items
 
 
 # Creates a new Region with the locations found in `location_region_mapping`
 # and adds them to the world.
 def create_region(world: MultiWorld, player: int, region_name: str) -> Region:
-    new_region = Region(region_name, RegionType.Generic, region_name, player, world)
+    new_region = Region(region_name, player, world)
 
     # Here we create and assign locations to the region
     for location_name, location_data in Locations.location_region_mapping.get(region_name, {}).items():
@@ -25,7 +25,7 @@ def create_region(world: MultiWorld, player: int, region_name: str) -> Region:
 
 # Creates chest locations in the Forest region (HACK), making sure not to generate more locations than requested
 def create_chests(world: MultiWorld, player: int, num_locations: int) -> Region:
-    new_region = Region("Forest", RegionType.Generic, "Forest", player, world)
+    new_region = Region("Forest", player, world)
     total_locations = world.total_locations[player].value - num_locations
 
     for i in range(total_locations):
