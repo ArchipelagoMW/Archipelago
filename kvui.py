@@ -1,7 +1,6 @@
 import os
 import logging
 import typing
-import asyncio
 
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
@@ -26,6 +25,7 @@ from kivy.base import ExceptionHandler, ExceptionManager
 from kivy.clock import Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
+from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.layout import Layout
@@ -508,7 +508,7 @@ class LogtoUI(logging.Handler):
 
 
 class UILog(RecycleView):
-    cols = 1
+    messages: typing.ClassVar[int]  # comes from kv file
 
     def __init__(self, *loggers_to_handle, **kwargs):
         super(UILog, self).__init__(**kwargs)
@@ -518,9 +518,15 @@ class UILog(RecycleView):
 
     def on_log(self, record: str) -> None:
         self.data.append({"text": escape_markup(record)})
+        self.clean_old()
 
     def on_message_markup(self, text):
         self.data.append({"text": text})
+        self.clean_old()
+
+    def clean_old(self):
+        if len(self.data) > self.messages:
+            self.data.pop(0)
 
     def fix_heights(self):
         """Workaround fix for divergent texture and layout heights"""
@@ -538,6 +544,19 @@ class E(ExceptionHandler):
 
 
 class KivyJSONtoTextParser(JSONtoTextParser):
+    # dummy class to absorb kvlang definitions
+    class TextColors(Widget):
+        pass
+
+    def __init__(self, *args, **kwargs):
+        # we grab the color definitions from the .kv file, then overwrite the JSONtoTextParser default entries
+        colors = self.TextColors()
+        color_codes = self.color_codes.copy()
+        for name, code in color_codes.items():
+            color_codes[name] = getattr(colors, name, code)
+        self.color_codes = color_codes
+        super().__init__(*args, **kwargs)
+
     def __call__(self, *args, **kwargs):
         self.ref_count = 0
         return super(KivyJSONtoTextParser, self).__call__(*args, **kwargs)
@@ -587,3 +606,8 @@ class KivyJSONtoTextParser(JSONtoTextParser):
 ExceptionManager.add_handler(E())
 
 Builder.load_file(Utils.local_path("data", "client.kv"))
+user_file = Utils.local_path("data", "user.kv")
+if os.path.exists(user_file):
+    logging.info("Loading user.kv into builder.")
+    Builder.load_file(user_file)
+

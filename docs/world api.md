@@ -402,40 +402,43 @@ The world has to provide the following things for generation
 * additions to the regions list: at least one called "Menu"
 * locations placed inside those regions
 * a `def create_item(self, item: str) -> MyGameItem` to create any item on demand
-* applying `self.world.push_precollected` for start inventory
-* a `def generate_output(self, output_directory: str)` that creates the output
-  files if there is output to be generated. When this is
-  called, `self.world.get_locations(self.player)` has all locations for the player, with
-  attribute `item` pointing to the item.
-  `location.item.player` can be used to see if it's a local item.
+* applying `self.multiworld.push_precollected` for start inventory
+* `required_client_version: Tuple(int, int, int)`
+  Optional client version as tuple of 3 ints to make sure the client is compatible to
+  this world (e.g. implements all required features) when connecting.
 
-In addition, the following methods can be implemented and attributes can be set
+In addition, the following methods can be implemented and are called in this order during generation
 
+* `stage_assert_generate(cls, multiworld)` is a class method called at the start of
+  generation to check the existence of prerequisite files, usually a ROM for
+  games which require one.
 * `def generate_early(self)`
   called per player before any items or locations are created. You can set
   properties on your world here. Already has access to player options and RNG.
 * `def create_regions(self)`
   called to place player's regions and their locations into the MultiWorld's regions list. If it's
-  hard to separate, this can be done during `generate_early` or `basic` as well.
+  hard to separate, this can be done during `generate_early` or `create_items` as well.
 * `def create_items(self)`
-  called to place player's items into the MultiWorld's itempool.
+  called to place player's items into the MultiWorld's itempool. After this step all regions and items have to be in
+  the MultiWorld's regions and itempool, and these lists should not be modified afterwards.
 * `def set_rules(self)`
   called to set access and item rules on locations and entrances. 
   Locations have to be defined before this, or rule application can miss them.
 * `def generate_basic(self)`
   called after the previous steps. Some placement and player specific
-  randomizations can be done here. After this step all regions and items have
-  to be in the MultiWorld's regions and itempool.
+  randomizations can be done here.
 * `pre_fill`, `fill_hook` and `post_fill` are called to modify item placement
   before, during and after the regular fill process, before `generate_output`.
+  If items need to be placed during pre_fill, these items can be determined
+  and created using `get_prefill_items`
+* `def generate_output(self, output_directory: str)` that creates the output
+  files if there is output to be generated. When this is
+  called, `self.multiworld.get_locations(self.player)` has all locations for the player, with
+  attribute `item` pointing to the item.
+  `location.item.player` can be used to see if it's a local item.
 * `fill_slot_data` and `modify_multidata` can be used to modify the data that
   will be used by the server to host the MultiWorld.
-* `required_client_version: Tuple(int, int, int)`
-  Client version as tuple of 3 ints to make sure the client is compatible to
-  this world (e.g. implements all required features) when connecting.
-* `assert_generate(cls, world)` is a class method called at the start of
-  generation to check the existence of prerequisite files, usually a ROM for
-  games which require one.
+
 
 #### generate_early
 
@@ -497,21 +500,21 @@ def create_items(self) -> None:
 ```python
 def create_regions(self) -> None:
     # Add regions to the multiworld. "Menu" is the required starting point.
-    # Arguments to Region() are name, type, human_readable_name, player, world
-    r = Region("Menu", RegionType.Generic, "Menu", self.player, self.multiworld)
+    # Arguments to Region() are name, player, world, and optionally hint_text
+    r = Region("Menu", self.player, self.multiworld)
     # Set Region.exits to a list of entrances that are reachable from region
     r.exits = [Entrance(self.player, "New game", r)]  # or use r.exits.append
     # Append region to MultiWorld's regions
     self.multiworld.regions.append(r)  # or use += [r...]
     
-    r = Region("Main Area", RegionType.Generic, "Main Area", self.player, self.multiworld)
+    r = Region("Main Area", self.player, self.multiworld)
     # Add main area's locations to main area (all but final boss)
     r.locations = [MyGameLocation(self.player, location.name,
                    self.location_name_to_id[location.name], r)]
     r.exits = [Entrance(self.player, "Boss Door", r)]
     self.multiworld.regions.append(r)
     
-    r = Region("Boss Room", RegionType.Generic, "Boss Room", self.player, self.multiworld)
+    r = Region("Boss Room", self.player, self.multiworld)
     # add event to Boss Room
     r.locations = [MyGameLocation(self.player, "Final Boss", None, r)]
     self.multiworld.regions.append(r)
@@ -680,3 +683,60 @@ def generate_output(self, output_directory: str):
     generate_mod(src, out_file, data)
 ```
 
+### Documentation
+
+Each world implementation should have a tutorial and a game info page. These are both rendered on the website by reading
+the `.md` files in your world's `/docs` directory.
+
+#### Game Info
+The game info page is for a short breakdown of what your game is and how it works in Archipelago. Any additional
+information that may be useful to the player when learning your randomizer should also go here. The file name format
+is `<language key>_<game name>.md`. While you can write these docs for multiple languages, currently only the english
+version is displayed on the website.
+
+#### Tutorials
+Your game can have as many tutorials in as many languages as you like, with each one having a relevant `Tutorial`
+defined in the `WebWorld`. The file name you use aren't particularly important, but it should be descriptive of what
+the tutorial is covering, and the name of the file must match the relative URL provided in the `Tutorial`. Currently,
+the JS that determines this ignores the provided file name and will search for `game/document_lang.md`, where
+`game/document/lang` is the provided URL.
+
+### Tests
+
+Each world is expected to include unit tests that cover its logic, to ensure no logic bug regressions occur. This can be
+done by creating a `/test` package within your world package. The `__init__.py` within this folder is where the world's
+TestBase should be defined. This can be inherited from the main TestBase, which will automatically set up a solo
+multiworld for each test written using it. Within subsequent modules, classes should be defined which inherit the world
+TestBase, and can then define options to test in the class body, and run tests in each test method.
+
+Example `__init__.py`
+```python
+from test.TestBase import WorldTestBase
+
+
+class MyGameTestBase(WorldTestBase):
+  game = "My Game"
+```
+
+Next using the rules defined in the above `set_rules` we can test that the chests have the correct access rules.
+
+Example `testChestAccess.py`
+```python
+from . import MyGameTestBase
+
+
+class TestChestAccess(MyGameTestBase):
+    def testSwordChests(self):
+        """Test locations that require a sword"""
+        locations = ["Chest1", "Chest2"]
+        items = [["Sword"]]
+        # this will test that each location can't be accessed without the "Sword", but can be accessed once obtained.
+        self.assertAccessDependency(locations, items)
+    
+    def testAnyWeaponChests(self):
+        """Test locations that require any weapon"""
+        locations = [f"Chest{i}" for i in range(3, 6)]
+        items = [["Sword"], ["Axe"], ["Spear"]]
+        # this will test that chests 3-5 can't be accessed without any weapon, but can be with just one of them.
+        self.assertAccessDependency(locations, items)
+```

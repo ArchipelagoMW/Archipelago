@@ -1,10 +1,10 @@
 
-from BaseClasses import MultiWorld, Region, Entrance, RegionType, LocationProgressType
+from BaseClasses import MultiWorld, Region, Entrance, LocationProgressType
 from .locations import location_data, PokemonRBLocation
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations_per_region=None, exits=None):
-    ret = Region(name, RegionType.Generic, name, player, world)
+    ret = Region(name, player, world)
     for location in locations_per_region.get(name, []):
         location.parent_region = ret
         ret.locations.append(location)

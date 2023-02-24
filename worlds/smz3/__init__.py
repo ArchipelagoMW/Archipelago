@@ -5,7 +5,7 @@ import random
 import threading
 from typing import Dict, Set, TextIO
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, RegionType, CollectionState, \
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, \
     Tutorial
 from worlds.generic.Rules import set_rule
 from worlds.smz3.TotalSMZ3.Item import ItemType
@@ -181,7 +181,7 @@ class SMZ3World(World):
         return itemType in progressionTypes
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld: MultiWorld):
         base_combined_rom = get_base_rom_bytes()
 
     def generate_early(self):
@@ -637,8 +637,7 @@ class SMZ3World(World):
             self.smz3World.locationLookup[name].APLocation = newLoc
 
     def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):
-        ret = Region(name, RegionType.LightWorld, name, player)
-        ret.multiworld = world
+        ret = Region(name, player, world)
         if locations:
             for loc in locations:
                 location = self.locations[loc]
