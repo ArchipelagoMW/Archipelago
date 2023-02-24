@@ -30,16 +30,16 @@ def set_rules(self) -> None:
 
     dragon_slay_check = world.dragon_slay_check[self.player].value
     if dragon_slay_check:
-        if self.difficulty_switch_a == DifficultySwitchA.option_hard_with_unlock_item:
+        if self.difficulty_switch_b == DifficultySwitchB.option_hard_with_unlock_item:
             set_rule(world.get_location("Slay Yorgle", self.player),
                      lambda state: state.has("Sword", self.player) and
-                                   state.has("Left Difficulty Switch", self.player))
+                                   state.has("Right Difficulty Switch", self.player))
             set_rule(world.get_location("Slay Grundle", self.player),
                      lambda state: state.has("Sword", self.player) and
-                                   state.has("Left Difficulty Switch", self.player))
+                                   state.has("Right Difficulty Switch", self.player))
             set_rule(world.get_location("Slay Rhindle", self.player),
                      lambda state: state.has("Sword", self.player) and
-                                   state.has("Left Difficulty Switch", self.player))
+                                   state.has("Right Difficulty Switch", self.player))
         else:
             set_rule(world.get_location("Slay Yorgle", self.player),
                      lambda state: state.has("Sword", self.player))

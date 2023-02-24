@@ -74,8 +74,8 @@ local yorgle_speed_address = 0xf725
 local grundle_speed_address = 0xf740
 local rhindle_speed_address = 0xf70A
 
-local read_switch_a = 0xf764
-local read_switch_b = 0xf780
+local read_switch_a = 0xf780
+local read_switch_b = 0xf764
 
 local yorgle_speed = nil
 local grundle_speed = nil
@@ -486,8 +486,8 @@ function SetRhindleSpeed()
     end
 end
 
-function SetDifficultySwitchA()
-    if diff_a_locked then
+function SetDifficultySwitchB()
+    if diff_b_locked then
         local a = emu.getregister("A")
         if a < 128 then
             emu.setregister("A", a + 128)
@@ -495,8 +495,8 @@ function SetDifficultySwitchA()
     end
 end
 
-function SetDifficultySwitchB()
-    if diff_b_locked then
+function SetDifficultySwitchA()
+    if diff_a_locked then
         local a = emu.getregister("A")
         if (a > 128 and a < 128 + 64) or (a < 64) then
             emu.setregister("A", a + 64)

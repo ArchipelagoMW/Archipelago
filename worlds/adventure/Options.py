@@ -74,7 +74,7 @@ class DragonRandoType(Choice):
     normal: Grundle is in the overworld, Yorgle in the white castle, and Rhindle in the black castle
     shuffle: A random dragon is placed in the overworld, one in the white castle, and one in the black castle
     overworldplus: Dragons can be placed anywhere, but at least one will be in the overworld
-    randomized: Dragons can be anywhere
+    randomized: Dragons can be anywhere except the credits room
 
 
     Supported values: normal, shuffle, overworldplus, randomized
@@ -184,6 +184,7 @@ class ConnectorMultiSlot(Toggle):
 
 class DifficultySwitchA(Choice):
     """Set availability of left difficulty switch
+    This controls the speed of the dragons' bite animation
 
     """
     display_name = "Left Difficulty Switch"
@@ -195,6 +196,7 @@ class DifficultySwitchA(Choice):
 
 class DifficultySwitchB(Choice):
     """Set availability of right difficulty switch
+    On hard, dragons will run away from the sword
 
     """
     display_name = "Right Difficulty Switch"

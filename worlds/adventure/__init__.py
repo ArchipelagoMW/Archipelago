@@ -116,8 +116,8 @@ class AdventureWorld(World):
             item_table["Sword"].classification = ItemClassification.useful
         else:
             item_table["Sword"].classification = ItemClassification.progression
-            if self.difficulty_switch_a == DifficultySwitchA.option_hard_with_unlock_item:
-                item_table["Left Difficulty Switch"].classification = ItemClassification.progression
+            if self.difficulty_switch_b == DifficultySwitchB.option_hard_with_unlock_item:
+                item_table["Right Difficulty Switch"].classification = ItemClassification.progression
 
         if self.dragon_rando_type == DragonRandoType.option_shuffle:
             self.multiworld.random.shuffle(self.dragon_rooms)
@@ -157,7 +157,7 @@ class AdventureWorld(World):
         if self.difficulty_switch_a == DifficultySwitchA.option_hard_with_unlock_item:
             self.multiworld.itempool.append(self.create_item("Left Difficulty Switch"))
             self.created_items += 1
-        if self.difficulty_switch_b == DifficultySwitchA.option_hard_with_unlock_item:
+        if self.difficulty_switch_b == DifficultySwitchB.option_hard_with_unlock_item:
             self.multiworld.itempool.append(self.create_item("Right Difficulty Switch"))
             self.created_items += 1
 
