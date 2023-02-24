@@ -3,7 +3,7 @@ from .Data import get_extracted_data, get_warp_to_region_map
 
 
 _warp_map = None
-special_warp_id_map = {
+_special_warp_id_map = {
     "WARP_ID_SECRET_BASE": -1,
     "WARP_ID_DYNAMIC": -2
 }
@@ -23,13 +23,14 @@ class Warp:
         self.dest_id = dest_id
 
     def encode(self):
+        global _special_warp_id_map
         source_ids_string = ""
         for id in self.source_ids:
             source_ids_string += str(id) + ","
         source_ids_string = source_ids_string[:-1] # Remove last ","
     
         if (self.dest_id < 0):
-            dest_id = {key for key in special_warp_id_map if special_warp_id_map[key] == self.dest_id}
+            dest_id = {key for key in _special_warp_id_map if _special_warp_id_map[key] == self.dest_id}
 
         return f"{self.source_map}:{source_ids_string}/{self.dest_map}:{self.dest_id}"
     
@@ -40,7 +41,7 @@ class Warp:
         warp_dest_map, warp_dest_index = warp_dest.split(":")
 
         warp_source_indices = [int(index) for index in warp_source_indices.split(",")]
-        warp_dest_index = int(warp_dest_index) if (not warp_dest_index in special_warp_id_map) else special_warp_id_map[warp_dest_index]
+        warp_dest_index = int(warp_dest_index) if (not warp_dest_index in _special_warp_id_map) else _special_warp_id_map[warp_dest_index]
 
         return (warp_source_map, warp_source_indices, warp_dest_map, warp_dest_index)
 
