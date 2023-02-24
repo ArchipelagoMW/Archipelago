@@ -37,7 +37,7 @@ def create_regions(world, player):
     menu = Region("Menu", player, world)
     connection = Entrance(player, "New Game", menu)
     menu.exits.append(connection)
-    connection.connect(regions["REGION_LITTLEROOT_TOWN"])
+    connection.connect(regions["REGION_LITTLEROOT_TOWN/MAIN"])
     regions["Menu"] = menu
 
     world.regions += regions.values()

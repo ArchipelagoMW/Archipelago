@@ -22,24 +22,24 @@ def _can_dive(state: CollectionState, player: int):
 
 def set_default_rules(world: MultiWorld, player):
     set_rule(
-        world.get_entrance('REGION_OLDALE_TOWN -> REGION_ROUTE_102', player),
+        world.get_entrance("REGION_OLDALE_TOWN/MAIN -> REGION_ROUTE102/MAIN", player),
         lambda state: state.has("EVENT_DEFEAT_RIVAL_ROUTE_103", player)
     )
 
     set_rule(
-        world.get_entrance('REGION_ROUTE_103/EAST -> REGION_ROUTE_103/WATER', player),
+        world.get_entrance("REGION_ROUTE103/EAST -> REGION_ROUTE103/WATER", player),
         lambda state: _can_surf(state, player)
     )
     set_rule(
-        world.get_entrance('REGION_ROUTE_103/WEST -> REGION_ROUTE_103/WATER', player),
+        world.get_entrance("REGION_ROUTE103/WEST -> REGION_ROUTE103/WATER", player),
         lambda state: _can_surf(state, player)
     )
 
     set_rule(
-        world.get_entrance('REGION_PETALBURG_CITY/MAIN -> REGION_PETALBURG_CITY/SOUTH_POND', player),
+        world.get_entrance("REGION_PETALBURG_CITY/MAIN -> REGION_PETALBURG_CITY/SOUTH_POND", player),
         lambda state: _can_surf(state, player)
     )
     set_rule(
-        world.get_entrance('REGION_PETALBURG_CITY/MAIN -> REGION_PETALBURG_CITY/NORTH_POND', player),
+        world.get_entrance("REGION_PETALBURG_CITY/MAIN -> REGION_PETALBURG_CITY/NORTH_POND", player),
         lambda state: _can_surf(state, player)
     )

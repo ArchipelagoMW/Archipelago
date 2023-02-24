@@ -39,7 +39,7 @@ class Warp:
         warp_source_map, warp_source_indices = warp_source.split(":")
         warp_dest_map, warp_dest_index = warp_dest.split(":")
 
-        warp_source_indices = [int(index) for index in warp_source_indices.split(',')]
+        warp_source_indices = [int(index) for index in warp_source_indices.split(",")]
         warp_dest_index = int(warp_dest_index) if (not warp_dest_index in special_warp_id_map) else special_warp_id_map[warp_dest_index]
 
         return (warp_source_map, warp_source_indices, warp_dest_map, warp_dest_index)

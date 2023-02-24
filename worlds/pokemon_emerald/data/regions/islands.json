@@ -1,5 +1,5 @@
 {
-  "REGION_SOUTHERN_ISLAND_EXTERIOR": {
+  "REGION_SOUTHERN_ISLAND_EXTERIOR/MAIN": {
     "parent_map": "MAP_SOUTHERN_ISLAND_EXTERIOR",
     "locations": [],
     "events": [],
@@ -9,7 +9,7 @@
       "MAP_SOUTHERN_ISLAND_EXTERIOR:1/MAP_SOUTHERN_ISLAND_INTERIOR:1"
     ]
   },
-  "REGION_SOUTHERN_ISLAND_INTERIOR": {
+  "REGION_SOUTHERN_ISLAND_INTERIOR/MAIN": {
     "parent_map": "MAP_SOUTHERN_ISLAND_INTERIOR",
     "locations": [],
     "events": [],
@@ -19,8 +19,7 @@
       "MAP_SOUTHERN_ISLAND_INTERIOR:1/MAP_SOUTHERN_ISLAND_EXTERIOR:1"
     ]
   },
-
-  "REGION_FARAWAY_ISLAND_ENTRANCE": {
+  "REGION_FARAWAY_ISLAND_ENTRANCE/MAIN": {
     "parent_map": "MAP_FARAWAY_ISLAND_ENTRANCE",
     "locations": [],
     "events": [],
@@ -30,7 +29,7 @@
       "MAP_FARAWAY_ISLAND_ENTRANCE:1/MAP_FARAWAY_ISLAND_INTERIOR:1"
     ]
   },
-  "REGION_FARAWAY_ISLAND_INTERIOR": {
+  "REGION_FARAWAY_ISLAND_INTERIOR/MAIN": {
     "parent_map": "MAP_FARAWAY_ISLAND_INTERIOR",
     "locations": [],
     "events": [],
@@ -40,8 +39,7 @@
       "MAP_FARAWAY_ISLAND_INTERIOR:1/MAP_FARAWAY_ISLAND_ENTRANCE:1"
     ]
   },
-
-  "REGION_BIRTH_ISLAND_HARBOR": {
+  "REGION_BIRTH_ISLAND_HARBOR/MAIN": {
     "parent_map": "MAP_BIRTH_ISLAND_HARBOR",
     "locations": [],
     "events": [],
@@ -50,7 +48,7 @@
       "MAP_BIRTH_ISLAND_HARBOR:0/MAP_BIRTH_ISLAND_EXTERIOR:0"
     ]
   },
-  "REGION_BIRTH_ISLAND_EXTERIOR": {
+  "REGION_BIRTH_ISLAND_EXTERIOR/MAIN": {
     "parent_map": "MAP_BIRTH_ISLAND_EXTERIOR",
     "locations": [],
     "events": [],
