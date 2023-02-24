@@ -113,7 +113,7 @@ class WorldTestBase(unittest.TestCase):
 
     def world_setup(self, seed: typing.Optional[int] = None) -> None:
         if type(self) is WorldTestBase:
-            return
+            return  # setUp gets called for tests defined in the base class. We skip world_setup here.
         if not hasattr(self, "game"):
             raise NotImplementedError("didn't define game name")
         self.multiworld = MultiWorld(1)
@@ -147,7 +147,7 @@ class WorldTestBase(unittest.TestCase):
         raise ValueError("No such item")
 
     def get_items_by_name(self, item_names: typing.Union[str, typing.Iterable[str]]) -> typing.List[Item]:
-        """Returns actual items from the itempool with the provided name(s)"""
+        """Returns actual items from the itempool that match the provided name(s)"""
         if isinstance(item_names, str):
             item_names = (item_names,)
         return [item for item in self.multiworld.itempool if item.name in item_names]
@@ -189,7 +189,7 @@ class WorldTestBase(unittest.TestCase):
     def assertAccessDependency(self,
                                locations: typing.List[str],
                                possible_items: typing.Iterable[typing.Iterable[str]]) -> None:
-        """Asserts that the provided locations can't be reached without all provided items but can be reached with any
+        """Asserts that the provided locations can't be reached without the listed items but can be reached with any
          one of the provided combinations"""
         all_items = [item_name for item_names in possible_items for item_name in item_names]
 
@@ -203,7 +203,7 @@ class WorldTestBase(unittest.TestCase):
             self.remove(items)
 
     def assertBeatable(self, beatable: bool):
-        """Asserts that the game can be beatable with the current state"""
+        """Asserts that the game can be beaten with the current state"""
         self.assertEqual(self.multiworld.can_beat_game(self.multiworld.state), beatable)
 
     # following tests are automatically run
