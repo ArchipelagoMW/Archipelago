@@ -7,24 +7,24 @@ config file.
 
 ## What does randomization do to this game?
 
-Noita is a procedurally generated Roguelike. During runs in Noita you will find potions, wands, spells, perks and
+Noita is a procedurally generated roguelite. During runs in Noita you will find potions, wands, spells, perks, and
 chests. For purposes of Archipelago multiworld functionality, collecting chests, results in an item check. Noita items 
-that can be found in other players games include, gold, max health increase, spell refresh, wands and perks. 
-Additionally, within your player settings yaml you can enable "Bad items" in the pool, resulting in negative effects on 
+that can be found in other players' games include, gold, max health increase, spell refresh, wands, and perks. 
+Additionally, within your player settings YAML you can enable "Bad items" in the pool, resulting in negative effects on 
 the Noita world.
 
-As chests are quite rare in the Noita world, options in the Archipelago Noita mod allow you to set a kill count to spawn 
-chests. 
+Because chests are quite rare in Noita, the Archipelago Noita mod allows you to set a kill count to spawn chests. 
 
 ## What is the goal of Noita 
 
-The vanilla (obvious) goal of Noita is to progress through each of the levels and fight the final boss, after defeating
-the final boss and ending the game this the credits will roll. The Archipelago implementation in Noita however, is an 
-"Endless run" continuing runs after death or even after finishing the game until all location checks are completed.
+The vanilla goal of Noita is to progress through each level and beat the final boss, taking the Sampo
+(gear shaped object) through the portal and interacting with the end.
+In the Archipelago implementation, however, you play an "endless run"; when you die or beat the final boss, you
+continue playing from the beginning until all locations have been checked.
 
 Starting a fresh run after death or unlocking one of the endings can re-deliver previous rewards (excluding bad events). 
-As the standard wand, potion and perk pool are unaffected by the multiworld item pools this should not present an issue 
-with progression.
+The standard wand, potion, and perk pool are unaffected by the multiworld item pools, so this should not present an
+issue with progression.
 
 ## What Noita items can appear in other players' worlds?
 
