@@ -10,9 +10,9 @@ class TotalLocations(Range):
     default = 100
 
 
-class BadEffects(DefaultOnToggle):
-    """Negative effects on the Noita world are added to the item pool."""
-    display_name = "Bad Times"
+class Traps(DefaultOnToggle):
+    """Whether negative effects on the Noita world are added to the item pool."""
+    display_name = "Traps"
 
 
 class VictoryCondition(Choice):
@@ -54,7 +54,7 @@ class BossesAsChecks(Choice):
 
 noita_options: Dict[str, type(Option)] = {
     "total_locations": TotalLocations,
-    "bad_effects": BadEffects,
+    "bad_effects": Traps,
     "death_link": DeathLink,
     "victory_condition": VictoryCondition,
     "orbs_as_checks": OrbsAsChecks,

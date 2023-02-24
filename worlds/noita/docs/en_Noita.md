@@ -10,7 +10,7 @@ config file.
 Noita is a procedurally generated roguelite. During runs in Noita you will find potions, wands, spells, perks, and
 chests. For purposes of Archipelago multiworld functionality, collecting chests, results in an item check. Noita items 
 that can be found in other players' games include, gold, max health increase, spell refresh, wands, and perks. 
-Additionally, within your player settings YAML you can enable "Bad items" in the pool, resulting in negative effects on 
+Additionally, within your player settings YAML you can enable traps in the pool, resulting in negative effects on 
 the Noita world.
 
 Because chests are quite rare in Noita, the Archipelago Noita mod allows you to set a kill count to spawn chests. 
@@ -18,13 +18,13 @@ Because chests are quite rare in Noita, the Archipelago Noita mod allows you to 
 ## What is the goal of Noita 
 
 The vanilla goal of Noita is to progress through each level and beat the final boss, taking the Sampo
-(gear shaped object) through the portal and interacting with the end.
+(gear shaped object) through the portal and interacting with the end. 
 In the Archipelago implementation, however, you play an "endless run"; when you die or beat the final boss, you
 continue playing from the beginning until all locations have been checked.
 
-Starting a fresh run after death or unlocking one of the endings can re-deliver previous rewards (excluding bad events). 
-The standard wand, potion, and perk pool are unaffected by the multiworld item pools, so this should not present an
-issue with progression.
+Starting a fresh run after death or unlocking one of the endings can re-deliver previous rewards (excluding potions
+and traps). The standard wand, potion, and perk pool are unaffected by the multiworld item pools, so this should not
+present an issue with progression.
 
 ## What Noita items can appear in other players' worlds?
 
@@ -36,7 +36,7 @@ Positive rewards can be:
 * `Random Wand (Tiers 1 - 6)` 
 * `Potion`
 
-Negative rewards consist of all "Bad" and "Awful" events from the native stream integration, some examples:
+Traps consist of all "Bad" and "Awful" events from the native stream integration, some examples:
 
 * `Slow Player` 
 * `Trailing Lava` 

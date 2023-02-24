@@ -15,8 +15,8 @@ Download the Archipelago mod zip from the GitHub page:
 Find Noita in your Steam library, right click, select Manage > Browse Local Files
 
 Here you should see your game files and a folder called "mods". Create a folder called "archipelago" and place all files
-from within the zip folder directly into the archipelago folder. After starting Noita select the Mods menu. Here you 
-should see the Archipelgo mod listed.
+from within the zip folder directly into the archipelago folder. After starting Noita, select the Mods menu. Here you 
+should see the Archipelago mod listed.
 
 In order to enable the mod you will first need to toggle "Allow unsafe mods". This is required, as some external 
 libraries are used in the mod in order to communicate with the Archipelago server. Enable "Allow unsafe mods" and enable
