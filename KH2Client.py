@@ -263,8 +263,6 @@ class KH2Context(CommonContext):
         try:
             itemname = self.lookup_id_to_item[item.item]
             itemcode = self.item_name_to_data[itemname]
-            if itemname not in self.dupecheck:
-                self.dupecheck.update({itemname: 1})
             # cannot give items during loading screens
             # 0x8E9DA3=load 0xAB8BC7=black 0x2A148E8=controable 0x715568=room transition
             while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Now, 1), "big") == 255:
