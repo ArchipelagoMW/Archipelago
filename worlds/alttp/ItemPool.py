@@ -1,9 +1,9 @@
 from collections import namedtuple
 import logging
 
-from BaseClasses import Region, RegionType, ItemClassification
-from worlds.alttp.SubClasses import ALttPLocation
-from worlds.alttp.Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops
+from BaseClasses import ItemClassification
+from worlds.alttp.SubClasses import ALttPLocation, LTTPRegion, LTTPRegionType
+from worlds.alttp.Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops, create_dynamic_shop_locations
 from worlds.alttp.Bosses import place_bosses
 from worlds.alttp.Dungeons import get_dungeon_item_pool_player
 from worlds.alttp.EntranceShuffle import connect_entrance
@@ -224,7 +224,7 @@ for diff in {'easy', 'normal', 'hard', 'expert'}:
 
 def generate_itempool(world):
     player = world.player
-    world = world.world
+    world = world.multiworld
 
     if world.difficulty[player] not in difficulties:
         raise NotImplementedError(f"Diffulty {world.difficulty[player]}")
@@ -286,7 +286,7 @@ def generate_itempool(world):
         region = world.get_region('Light World', player)
 
         loc = ALttPLocation(player, "Murahdahla", parent=region)
-        loc.access_rule = lambda state: state.has_triforce_pieces(state.world.treasure_hunt_count[player], player)
+        loc.access_rule = lambda state: state.has_triforce_pieces(state.multiworld.treasure_hunt_count[player], player)
 
         region.locations.append(loc)
         world.clear_location_cache()
@@ -415,7 +415,7 @@ def generate_itempool(world):
         if additional_triforce_pieces > len(nonprogressionitems):
             raise FillError(f"Not enough non-progression items to replace with Triforce pieces found for player "
                             f"{world.get_player_name(player)}.")
-        progressionitems += [ItemFactory("Triforce Piece", player)] * additional_triforce_pieces
+        progressionitems += [ItemFactory("Triforce Piece", player) for _ in range(additional_triforce_pieces)]
         nonprogressionitems.sort(key=lambda item: int("Heart" in item.name))  # try to keep hearts in the pool
         nonprogressionitems = nonprogressionitems[additional_triforce_pieces:]
         world.random.shuffle(nonprogressionitems)
@@ -436,12 +436,13 @@ def generate_itempool(world):
 
     if world.shop_shuffle[player]:
         shuffle_shops(world, nonprogressionitems, player)
-    create_dynamic_shop_locations(world, player)
 
     world.itempool += progressionitems + nonprogressionitems
 
     if world.retro_caves[player]:
         set_up_take_anys(world, player)  # depends on world.itempool to be set
+    # set_up_take_anys needs to run first
+    create_dynamic_shop_locations(world, player)
 
 
 take_any_locations = {
@@ -470,7 +471,7 @@ def set_up_take_anys(world, player):
 
     regions = world.random.sample(take_any_locs, 5)
 
-    old_man_take_any = Region("Old Man Sword Cave", RegionType.Cave, 'the sword cave', player)
+    old_man_take_any = LTTPRegion("Old Man Sword Cave", LTTPRegionType.Cave, 'the sword cave', player, world)
     world.regions.append(old_man_take_any)
 
     reg = regions.pop()
@@ -487,10 +488,10 @@ def set_up_take_anys(world, player):
         world.itempool.append(ItemFactory('Rupees (20)', player))
         old_man_take_any.shop.add_inventory(0, sword.name, 0, 0, create_location=True)
     else:
-        old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 0)
+        old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 0, create_location=True)
 
     for num in range(4):
-        take_any = Region("Take-Any #{}".format(num+1), RegionType.Cave, 'a cave of choice', player)
+        take_any = LTTPRegion("Take-Any #{}".format(num+1), LTTPRegionType.Cave, 'a cave of choice', player, world)
         world.regions.append(take_any)
 
         target, room_id = world.random.choice([(0x58, 0x0112), (0x60, 0x010F), (0x46, 0x011F)])
@@ -501,27 +502,9 @@ def set_up_take_anys(world, player):
         take_any.shop = TakeAny(take_any, room_id, 0xE3, True, True, total_shop_slots + num + 1)
         world.shops.append(take_any.shop)
         take_any.shop.add_inventory(0, 'Blue Potion', 0, 0)
-        take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 0)
+        take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 0, create_location=True)
 
     world.initialize_regions()
-
-
-def create_dynamic_shop_locations(world, player):
-    for shop in world.shops:
-        if shop.region.player == player:
-            for i, item in enumerate(shop.inventory):
-                if item is None:
-                    continue
-                if item['create_location']:
-                    loc = ALttPLocation(player, f"{shop.region.name} {shop.slot_names[i]}", parent=shop.region)
-                    shop.region.locations.append(loc)
-
-                    world.clear_location_cache()
-
-                    world.push_item(loc, ItemFactory(item['item'], player), False)
-                    loc.shop_slot = i
-                    loc.event = True
-                    loc.locked = True
 
 
 def get_pool_core(world, player: int):

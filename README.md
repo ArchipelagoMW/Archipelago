@@ -33,6 +33,7 @@ Currently, the following games are supported:
 * Hylics 2
 * Overcooked! 2
 * Zillion
+* Lufia II Ancient Cave
 * Noita
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
