@@ -157,13 +157,19 @@ class WitnessWorld(World):
         if good_items_in_the_game:
             random_good_item = self.multiworld.random.choice(good_items_in_the_game)
 
-            first_check = self.multiworld.get_location(
-                "Tutorial Gate Open", self.player
-            )
+            print(random_good_item)
+
             item = self.items_by_name[random_good_item]
 
-            first_check.place_locked_item(item)
-            self.multiworld.itempool.remove(item)
+            if get_option_value(self.multiworld, self.player, "puzzle_randomization") == 1:
+                self.multiworld.local_early_items[self.player][random_good_item] = 1
+            else:
+                first_check = self.multiworld.get_location(
+                    "Tutorial Gate Open", self.player
+                )
+
+                first_check.place_locked_item(item)
+                self.multiworld.itempool.remove(item)
 
         itempool_difference = len(self.multiworld.get_unfilled_locations(self.player)) - len(self.multiworld.itempool)
 
