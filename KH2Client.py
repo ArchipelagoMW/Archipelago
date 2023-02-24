@@ -109,15 +109,17 @@ class KH2Context(CommonContext):
     async def connection_closed(self):
         self.kh2connected = False
         self.serverconneced = False
-        with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}.json"), 'w') as f:
-            f.write(json.dumps(self.kh2seedsave, indent=4))
+        if self.kh2seedname not in {None} and self.auth not in {None}:
+            with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}{self.auth}.json"), 'w') as f:
+                f.write(json.dumps(self.kh2seedsave, indent=4))
         await super(KH2Context, self).connection_closed()
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.kh2connected = False
         self.serverconneced = False
-        with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}.json"), 'w') as f:
-            f.write(json.dumps(self.kh2seedsave, indent=4))
+        if self.kh2seedname not in {None} and self.auth not in {None}:
+            with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}{self.auth}.json"), 'w') as f:
+                f.write(json.dumps(self.kh2seedsave, indent=4))
         await super(KH2Context, self).disconnect()
 
     @property
@@ -128,8 +130,9 @@ class KH2Context(CommonContext):
             return []
 
     async def shutdown(self):
-        with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}.json"), 'w') as f:
-            f.write(json.dumps(self.kh2seedsave, indent=4))
+        if self.kh2seedname not in {None} and self.auth not in {None}:
+            with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}{self.auth}.json"), 'w') as f:
+                f.write(json.dumps(self.kh2seedsave, indent=4))
         await super(KH2Context, self).shutdown()
 
     def on_package(self, cmd: str, args: dict):
@@ -137,11 +140,11 @@ class KH2Context(CommonContext):
             self.kh2seedname = args['seed_name']
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
-            if not os.path.exists(self.game_communication_path + f"\kh2save{self.kh2seedname}.json"):
-                with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}.json"), 'wt') as f:
+            if not os.path.exists(self.game_communication_path + f"\kh2save{self.kh2seedname}{self.auth}.json"):
+                with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}{self.auth}.json"), 'wt') as f:
                     pass
-            elif os.path.exists(self.game_communication_path + f"\kh2save{self.kh2seedname}.json"):
-                with open(self.game_communication_path + f"\kh2save{self.kh2seedname}.json", 'r') as f:
+            elif os.path.exists(self.game_communication_path + f"\kh2save{self.kh2seedname}{self.auth}.json"):
+                with open(self.game_communication_path + f"\kh2save{self.kh2seedname}{self.auth}.json", 'r') as f:
                     self.kh2seedsave = json.load(f)
 
         if cmd in {"Connected"}:
@@ -158,7 +161,7 @@ class KH2Context(CommonContext):
                 if self.kh2connected:
                     logger.info("Connection Lost")
                     self.kh2connected = False
-                print(e)
+                logger.info(e)
 
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
@@ -181,7 +184,7 @@ class KH2Context(CommonContext):
                             asyncio.create_task(self.give_item(item, "Goofy"))
                         else:
                             asyncio.create_task(self.give_item(item, "Sora"))
-                if not self.kh2seedsave["starting_inventory"]:
+                if not self.kh2seedsave["starting_inventory"] and self.kh2connected:
                     self.kh2seedsave["starting_inventory"] = True
                 try:
                     asyncio.create_task(self.ItemSafe(args))
@@ -189,7 +192,7 @@ class KH2Context(CommonContext):
                     if self.kh2connected:
                         logger.info("Connection Lost.")
                         self.kh2connected = False
-                    print(e)
+                    logger.info(e)
 
         if cmd in {"RoomUpdate"}:
             if "checked_locations" in args:
@@ -209,7 +212,7 @@ class KH2Context(CommonContext):
             if self.kh2connected:
                 logger.info("Connection Lost.")
                 self.kh2connected = False
-            print(e)
+            logger.info(e)
 
     async def checkLevels(self):
         try:
@@ -234,7 +237,7 @@ class KH2Context(CommonContext):
             if self.kh2connected:
                 logger.info("Connection Lost.")
                 self.kh2connected = False
-            print(e)
+            logger.info(e)
             # checks for items that has checks on their item slot
 
     async def checkSlots(self):
@@ -254,7 +257,7 @@ class KH2Context(CommonContext):
             if self.kh2connected:
                 logger.info("Connection Lost.")
                 self.kh2connected = False
-            print(e)
+            logger.info(e)
 
     async def give_item(self, item, char):
         while not self.kh2connected:
@@ -318,7 +321,7 @@ class KH2Context(CommonContext):
             if self.kh2connected:
                 logger.info("Connection Lost.")
                 self.kh2connected = False
-            print(e)
+            logger.info(e)
 
     async def ItemSafe(self, args):
         while not self.kh2connected:
@@ -330,7 +333,7 @@ class KH2Context(CommonContext):
             if self.kh2connected:
                 logger.info("Connection Lost.")
                 self.kh2connected = False
-            print(e)
+            logger.info(e)
 
     async def roomSave(self, args, svestate):
         while svestate == self.kh2.read_short(self.kh2.base_address + self.sveroom):
@@ -366,7 +369,7 @@ class KH2Context(CommonContext):
                                                                                 0x130028, 0x130029}:
                     self.kh2seedsave["checked_locations"][str(item.player)].append(item.location)
         except Exception as e:
-            print(e)
+            logger.info(e)
 
     async def give_magic(self, item):
         itemname = self.lookup_id_to_item[item.item]
@@ -398,7 +401,7 @@ class KH2Context(CommonContext):
                     and item.location not in {-1, -2}:
                 self.kh2seedsave["checked_locations"][str(item.player)].append(item.location)
         except Exception as e:
-            print(e)
+            logger.info(e)
 
     def give_growth(self, itemcode):
         # Credit to num for the goa code and RedBuddha for porting it to python
@@ -518,7 +521,7 @@ async def kh2_watcher(ctx: KH2Context):
                 if ctx.kh2connected:
                     logger.info("Connection Lost.")
                     ctx.kh2connected = False
-                print(e)
+                logger.info(e)
         elif not ctx.kh2connected and ctx.serverconneced:
             logger.info("Game is not open. Disconnecting from Server.")
             await ctx.disconnect()
