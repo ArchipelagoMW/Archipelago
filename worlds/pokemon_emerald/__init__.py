@@ -44,12 +44,16 @@ class PokemonEmeraldWorld(World):
         item_ids = []
         for region in self.multiworld.regions:
             if (region.player == self.player):
-                item_ids += [location.default_item_id for location in region.locations]
-        
-        self.multiworld.itempool += [
-            PokemonEmeraldItem(self.item_id_to_name[id], get_item_classification(id), id, self.player)
-            for id in item_ids
-        ]
+                item_locations = [location for location in region.locations if not location.id == None] # Filter events
+                item_ids += [location.default_item_id for location in item_locations]
+
+        for item_id in item_ids:
+            self.multiworld.itempool.append(PokemonEmeraldItem(
+                self.item_id_to_name[item_id],
+                get_item_classification(item_id),
+                item_id,
+                self.player
+            ))
 
 
     def generate_output(self, output_directory: str):

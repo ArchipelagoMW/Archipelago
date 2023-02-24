@@ -11,6 +11,7 @@
       "HIDDEN_ITEM_PETALBURG_WOODS_TINY_MUSHROOM_2",
       "HIDDEN_ITEM_PETALBURG_WOODS_POKE_BALL"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_PETALBURG_WOODS:0/MAP_ROUTE104:2",
@@ -29,6 +30,7 @@
       "ITEM_RUSTURF_TUNNEL_MAX_ETHER",
       "NPC_GIFT_RECEIVED_HM04"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_RUSTURF_TUNNEL:0/MAP_ROUTE116:0",
@@ -43,6 +45,7 @@
       "ITEM_GRANITE_CAVE_1F_ESCAPE_ROPE",
       "NPC_GIFT_RECEIVED_HM05"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_GRANITE_CAVE_1F:0/MAP_ROUTE106:0",
@@ -56,6 +59,7 @@
     "locations": [
       "ITEM_GRANITE_CAVE_B1F_POKE_BALL"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_GRANITE_CAVE_B1F:0/MAP_GRANITE_CAVE_1F:1",
@@ -75,6 +79,7 @@
       "HIDDEN_ITEM_GRANITE_CAVE_B2F_EVERSTONE_1",
       "HIDDEN_ITEM_GRANITE_CAVE_B2F_EVERSTONE_2"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_GRANITE_CAVE_B2F:0/MAP_GRANITE_CAVE_B1F:2",
@@ -87,6 +92,7 @@
   "REGION_GRANITE_CAVE_STEVENS_ROOM": {
     "parent_map": "MAP_GRANITE_CAVE_STEVENS_ROOM",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_GRANITE_CAVE_STEVENS_ROOM:0/MAP_GRANITE_CAVE_1F:3"
@@ -96,6 +102,7 @@
   "REGION_TRAINER_HILL_ENTRANCE": {
     "parent_map": "MAP_TRAINER_HILL_ENTRANCE",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_TRAINER_HILL_ENTRANCE:0,1/MAP_ROUTE111:4",
@@ -105,6 +112,7 @@
   "REGION_TRAINER_HILL_1F": {
     "parent_map": "MAP_TRAINER_HILL_1F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_TRAINER_HILL_1F:0/MAP_TRAINER_HILL_ENTRANCE:2",
@@ -114,6 +122,7 @@
   "REGION_TRAINER_HILL_2F": {
     "parent_map": "MAP_TRAINER_HILL_2F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_TRAINER_HILL_2F:0/MAP_TRAINER_HILL_1F:1",
@@ -123,6 +132,7 @@
   "REGION_TRAINER_HILL_3F": {
     "parent_map": "MAP_TRAINER_HILL_3F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_TRAINER_HILL_3F:0/MAP_TRAINER_HILL_2F:1",
@@ -132,6 +142,7 @@
   "REGION_TRAINER_HILL_4F": {
     "parent_map": "MAP_TRAINER_HILL_4F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_TRAINER_HILL_4F:0/MAP_TRAINER_HILL_3F:1",
@@ -141,6 +152,7 @@
   "REGION_TRAINER_HILL_ROOF": {
     "parent_map": "MAP_TRAINER_HILL_ROOF",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_TRAINER_HILL_ROOF:0/MAP_TRAINER_HILL_4F:1",
@@ -150,6 +162,7 @@
   "REGION_TRAINER_HILL_ELEVATOR": {
     "parent_map": "MAP_TRAINER_HILL_ELEVATOR",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_TRAINER_HILL_ELEVATOR:0,1/MAP_TRAINER_HILL_ROOF:1"
@@ -162,6 +175,7 @@
       "ITEM_FIERY_PATH_TM06",
       "ITEM_FIERY_PATH_FIRE_STONE"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_FIERY_PATH:0/MAP_ROUTE112:4",
@@ -174,6 +188,7 @@
     "locations": [
       "ITEM_MAGMA_HIDEOUT_1F_RARE_CANDY"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MAGMA_HIDEOUT_1F:0/MAP_JAGGED_PASS:4",
@@ -185,6 +200,7 @@
   "REGION_MAGMA_HIDEOUT_2F_1R": {
     "parent_map": "MAP_MAGMA_HIDEOUT_2F_1R",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MAGMA_HIDEOUT_2F_1R:0/MAP_MAGMA_HIDEOUT_2F_2R:0",
@@ -198,6 +214,7 @@
       "ITEM_MAGMA_HIDEOUT_2F_2R_MAX_ELIXIR",
       "ITEM_MAGMA_HIDEOUT_2F_2R_FULL_RESTORE"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MAGMA_HIDEOUT_2F_2R:0/MAP_MAGMA_HIDEOUT_2F_1R:0",
@@ -207,6 +224,7 @@
   "REGION_MAGMA_HIDEOUT_2F_3R": {
     "parent_map": "MAP_MAGMA_HIDEOUT_2F_3R",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MAGMA_HIDEOUT_2F_3R:0/MAP_MAGMA_HIDEOUT_1F:3",
@@ -218,6 +236,7 @@
     "locations": [
       "ITEM_MAGMA_HIDEOUT_3F_1R_NUGGET"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MAGMA_HIDEOUT_3F_1R:0/MAP_MAGMA_HIDEOUT_4F:0",
@@ -230,6 +249,7 @@
     "locations": [
       "ITEM_MAGMA_HIDEOUT_3F_2R_PP_MAX"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MAGMA_HIDEOUT_3F_2R:0/MAP_MAGMA_HIDEOUT_3F_1R:1"
@@ -240,6 +260,7 @@
     "locations": [
       "ITEM_MAGMA_HIDEOUT_3F_3R_ECAPE_ROPE"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MAGMA_HIDEOUT_3F_3R:0/MAP_MAGMA_HIDEOUT_2F_3R:1",
@@ -251,6 +272,7 @@
     "locations": [
       "ITEM_MAGMA_HIDEOUT_4F_MAX_REVIVE"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MAGMA_HIDEOUT_4F:0/MAP_MAGMA_HIDEOUT_3F_1R:0",
@@ -261,6 +283,7 @@
   "REGION_MIRAGE_TOWER_1F": {
     "parent_map": "MAP_MIRAGE_TOWER_1F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MIRAGE_TOWER_1F:0/MAP_ROUTE111:3",
@@ -270,6 +293,7 @@
   "REGION_MIRAGE_TOWER_2F": {
     "parent_map": "MAP_MIRAGE_TOWER_2F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MIRAGE_TOWER_2F:0/MAP_MIRAGE_TOWER_3F:0",
@@ -279,6 +303,7 @@
   "REGION_MIRAGE_TOWER_3F": {
     "parent_map": "MAP_MIRAGE_TOWER_3F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MIRAGE_TOWER_3F:0/MAP_MIRAGE_TOWER_2F:0",
@@ -288,6 +313,7 @@
   "REGION_MIRAGE_TOWER_4F": {
     "parent_map": "MAP_MIRAGE_TOWER_4F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MIRAGE_TOWER_4F:0/MAP_MIRAGE_TOWER_3F:1"
@@ -297,6 +323,7 @@
   "REGION_DESERT_RUINS": {
     "parent_map": "MAP_DESERT_RUINS",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_DESERT_RUINS:0/MAP_ROUTE111:1",
@@ -313,6 +340,7 @@
       "ITEM_METEOR_FALLS_1F_1R_FULL_HEAL",
       "ITEM_METEOR_FALLS_1F_1R_PP_UP"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_METEOR_FALLS_1F_1R:0/MAP_ROUTE114:0",
@@ -326,6 +354,7 @@
   "REGION_METEOR_FALLS_1F_2R": {
     "parent_map": "MAP_METEOR_FALLS_1F_2R",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_METEOR_FALLS_1F_2R:0/MAP_METEOR_FALLS_1F_1R:2",
@@ -337,6 +366,7 @@
   "REGION_METEOR_FALLS_B1F_1R": {
     "parent_map": "MAP_METEOR_FALLS_B1F_1R",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_METEOR_FALLS_B1F_1R:0/MAP_METEOR_FALLS_1F_2R:1",
@@ -352,6 +382,7 @@
     "locations": [
       "ITEM_METEOR_FALLS_B1F_2R_TM02"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_METEOR_FALLS_B1F_2R:0/MAP_METEOR_FALLS_B1F_1R:3"
@@ -360,6 +391,7 @@
   "REGION_METEOR_FALLS_STEVENS_CAVE": {
     "parent_map": "MAP_METEOR_FALLS_STEVENS_CAVE",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_METEOR_FALLS_STEVENS_CAVE:0/MAP_METEOR_FALLS_1F_1R:5"
@@ -369,6 +401,7 @@
   "REGION_ALTERING_CAVE": {
     "parent_map": "MAP_ALTERING_CAVE",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ALTERING_CAVE:0/MAP_ROUTE103:0"
@@ -378,6 +411,7 @@
   "REGION_ISLAND_CAVE": {
     "parent_map": "MAP_ISLAND_CAVE",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ISLAND_CAVE:0/MAP_ROUTE105:0",
@@ -389,6 +423,7 @@
   "REGION_ABANDONED_SHIP_DECK": {
     "parent_map": "MAP_ABANDONED_SHIP_DECK",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ABANDONED_SHIP_DECK:0,1/MAP_ROUTE108:0",
@@ -402,6 +437,7 @@
     "locations": [
       "ITEM_ABANDONED_SHIP_CAPTAINS_OFFICE_STORAGE_KEY"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ABANDONED_SHIP_CAPTAINS_OFFICE:0,1/MAP_ABANDONED_SHIP_DECK:4"
@@ -410,6 +446,7 @@
   "REGION_ABANDONED_SHIP_CORRIDORS_1F": {
     "parent_map": "MAP_ABANDONED_SHIP_CORRIDORS_1F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ABANDONED_SHIP_CORRIDORS_1F:0,1/MAP_ABANDONED_SHIP_DECK:2",
@@ -429,6 +466,7 @@
     "locations": [
       "ITEM_ABANDONED_SHIP_ROOMS_1F_HARBOR_MAIL"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ABANDONED_SHIP_ROOMS_1F:0,1/MAP_ABANDONED_SHIP_CORRIDORS_1F:4",
@@ -442,6 +480,7 @@
     "locations": [
       "ITEM_ABANDONED_SHIP_ROOMS_2_1F_REVIVE"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ABANDONED_SHIP_ROOMS2_1F:0,1/MAP_ABANDONED_SHIP_CORRIDORS_1F:8",
@@ -451,6 +490,7 @@
   "REGION_ABANDONED_SHIP_CORRIDORS_B1F": {
     "parent_map": "MAP_ABANDONED_SHIP_CORRIDORS_B1F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ABANDONED_SHIP_CORRIDORS_B1F:0/MAP_ABANDONED_SHIP_ROOMS2_B1F:2",
@@ -468,6 +508,7 @@
     "locations": [
       "ITEM_ABANDONED_SHIP_ROOMS_B1F_ESCAPE_ROPE"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ABANDONED_SHIP_ROOMS_B1F:0/MAP_ABANDONED_SHIP_CORRIDORS_B1F:2",
@@ -480,6 +521,7 @@
     "locations": [
       "ITEM_ABANDONED_SHIP_ROOMS_2_B1F_DIVE_BALL"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ABANDONED_SHIP_ROOMS2_B1F:0,1/MAP_ABANDONED_SHIP_CORRIDORS_B1F:1",
@@ -491,6 +533,7 @@
     "locations": [
       "ITEM_ABANDONED_SHIP_ROOMS_B1F_TM13"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ABANDONED_SHIP_ROOM_B1F:0,1/MAP_ABANDONED_SHIP_CORRIDORS_B1F:5"
@@ -508,6 +551,7 @@
       "HIDDEN_ITEM_ABANDONED_SHIP_RM_4_KEY",
       "HIDDEN_ITEM_ABANDONED_SHIP_RM_6_KEY"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:0,1/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:0",
@@ -521,6 +565,7 @@
   "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS": {
     "parent_map": "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:0/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:0",
@@ -534,6 +579,7 @@
   "REGION_ABANDONED_SHIP_UNDERWATER_1": {
     "parent_map": "MAP_ABANDONED_SHIP_UNDERWATER1",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ABANDONED_SHIP_UNDERWATER1:0,1/MAP_ABANDONED_SHIP_UNDERWATER2:0"
@@ -542,6 +588,7 @@
   "REGION_ABANDONED_SHIP_UNDERWATER_2": {
     "parent_map": "MAP_ABANDONED_SHIP_UNDERWATER2",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ABANDONED_SHIP_UNDERWATER2:0/MAP_ABANDONED_SHIP_UNDERWATER1:0"
@@ -551,6 +598,7 @@
   "REGION_NEW_MAUVILLE_ENTRANCE": {
     "parent_map": "MAP_NEW_MAUVILLE_ENTRANCE",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NEW_MAUVILLE_ENTRANCE:0/MAP_ROUTE110:0",
@@ -566,6 +614,7 @@
       "ITEM_NEW_MAUVILLE_FULL_HEAL",
       "ITEM_NEW_MAUVILLE_PARALYZE_HEAL"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NEW_MAUVILLE_INSIDE:0/MAP_NEW_MAUVILLE_ENTRANCE:1"
@@ -577,6 +626,7 @@
     "locations": [
       "ITEM_SCORCHED_SLAB_TM11"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SCORCHED_SLAB:0/MAP_ROUTE120:1"
@@ -586,6 +636,7 @@
   "REGION_ANCIENT_TOMB": {
     "parent_map": "MAP_ANCIENT_TOMB",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ANCIENT_TOMB:0/MAP_ROUTE120:0",
@@ -597,6 +648,7 @@
   "REGION_MT_PYRE_1F": {
     "parent_map": "MAP_MT_PYRE_1F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MT_PYRE_1F:0,2/MAP_ROUTE122:0",
@@ -610,6 +662,7 @@
     "locations": [
       "ITEM_MT_PYRE_2F_ULTRA_BALL"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MT_PYRE_2F:0/MAP_MT_PYRE_1F:4",
@@ -624,6 +677,7 @@
     "locations": [
       "ITEM_MT_PYRE_3F_SUPER_REPEL"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MT_PYRE_3F:0/MAP_MT_PYRE_2F:1",
@@ -639,6 +693,7 @@
     "locations": [
       "ITEM_MT_PYRE_4F_SEA_INCENSE"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MT_PYRE_4F:0/MAP_MT_PYRE_5F:1",
@@ -654,6 +709,7 @@
     "locations": [
       "ITEM_MT_PYRE_5F_LAX_INCENSE"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MT_PYRE_5F:0/MAP_MT_PYRE_6F:0",
@@ -668,6 +724,7 @@
     "locations": [
       "ITEM_MT_PYRE_6F_TM30"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MT_PYRE_6F:0/MAP_MT_PYRE_5F:0",
@@ -682,6 +739,7 @@
       "HIDDEN_ITEM_MT_PYRE_EXTERIOR_ULTRA_BALL",
       "HIDDEN_ITEM_MT_PYRE_EXTERIOR_MAX_ETHER"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MT_PYRE_EXTERIOR:0/MAP_MT_PYRE_1F:1",
@@ -694,6 +752,7 @@
       "HIDDEN_ITEM_MT_PYRE_SUMMIT_ZINC",
       "HIDDEN_ITEM_MT_PYRE_SUMMIT_RARE_CANDY"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MT_PYRE_SUMMIT:0,1,2/MAP_MT_PYRE_EXTERIOR:1"
@@ -703,6 +762,7 @@
   "REGION_AQUA_HIDEOUT_1F": {
     "parent_map": "MAP_AQUA_HIDEOUT_1F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_AQUA_HIDEOUT_1F:0,1/MAP_LILYCOVE_CITY:6",
@@ -716,6 +776,7 @@
       "ITEM_AQUA_HIDEOUT_B1F_MASTER_BALL",
       "ITEM_AQUA_HIDEOUT_B1F_MAX_ELIXIR"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_AQUA_HIDEOUT_B1F:0/MAP_AQUA_HIDEOUT_1F:2",
@@ -750,6 +811,7 @@
     "locations": [
       "ITEM_AQUA_HIDEOUT_B2F_NEST_BALL"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_AQUA_HIDEOUT_B2F:0/MAP_AQUA_HIDEOUT_B1F:1",
@@ -770,6 +832,7 @@
     "locations": [
       "ITEM_SHOAL_CAVE_ENTRANCE_BIG_PEARL"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM:0/MAP_ROUTE125:0",
@@ -783,6 +846,7 @@
     "locations": [
       "ITEM_SHOAL_CAVE_INNER_ROOM_RARE_CANDY"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM:0/MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM:1",
@@ -800,6 +864,7 @@
     "locations": [
       "ITEM_SHOAL_CAVE_STAIRS_ROOM_ICE_HEAL"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SHOAL_CAVE_LOW_TIDE_STAIRS_ROOM:0/MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM:1",
@@ -809,6 +874,7 @@
   "REGION_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM:0/MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM:3",
@@ -823,6 +889,7 @@
       "ITEM_SHOAL_CAVE_ICE_ROOM_TM07",
       "ITEM_SHOAL_CAVE_ICE_ROOM_NEVER_MELT_ICE"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SHOAL_CAVE_LOW_TIDE_ICE_ROOM:0/MAP_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM:3"
@@ -832,6 +899,7 @@
   "REGION_UNDERWATER_SEAFLOOR_CAVERN": {
     "parent_map": "MAP_UNDERWATER_SEAFLOOR_CAVERN",
     "locations": [],
+    "events": [],
     "exits": [
       "REGION_SEAFLOOR_CAVERN_ENTRANCE"
     ],
@@ -842,6 +910,7 @@
   "REGION_SEAFLOOR_CAVERN_ENTRANCE": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ENTRANCE",
     "locations": [],
+    "events": [],
     "exits": [
       "REGION_UNDERWATER_SEAFLOOR_CAVERN"
     ],
@@ -853,6 +922,7 @@
   "REGION_SEAFLOOR_CAVERN_ROOM_1": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM1",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SEAFLOOR_CAVERN_ROOM1:0/MAP_SEAFLOOR_CAVERN_ENTRANCE:1",
@@ -863,6 +933,7 @@
   "REGION_SEAFLOOR_CAVERN_ROOM_2": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM2",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SEAFLOOR_CAVERN_ROOM2:1/MAP_SEAFLOOR_CAVERN_ROOM4:0",
@@ -874,6 +945,7 @@
   "REGION_SEAFLOOR_CAVERN_ROOM_3": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM3",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SEAFLOOR_CAVERN_ROOM3:2/MAP_SEAFLOOR_CAVERN_ROOM6:1",
@@ -884,6 +956,7 @@
   "REGION_SEAFLOOR_CAVERN_ROOM_4": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM4",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SEAFLOOR_CAVERN_ROOM4:1/MAP_SEAFLOOR_CAVERN_ROOM5:1",
@@ -895,6 +968,7 @@
   "REGION_SEAFLOOR_CAVERN_ROOM_5": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM5",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SEAFLOOR_CAVERN_ROOM5:0/MAP_SEAFLOOR_CAVERN_ROOM1:1",
@@ -905,6 +979,7 @@
   "REGION_SEAFLOOR_CAVERN_ROOM_6": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM6",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SEAFLOOR_CAVERN_ROOM6:1/MAP_SEAFLOOR_CAVERN_ROOM3:2",
@@ -915,6 +990,7 @@
   "REGION_SEAFLOOR_CAVERN_ROOM_7": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM7",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SEAFLOOR_CAVERN_ROOM7:0/MAP_SEAFLOOR_CAVERN_ROOM2:3",
@@ -924,6 +1000,7 @@
   "REGION_SEAFLOOR_CAVERN_ROOM_8": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM8",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SEAFLOOR_CAVERN_ROOM8:0/MAP_SEAFLOOR_CAVERN_ROOM9:0",
@@ -935,6 +1012,7 @@
     "locations": [
       "ITEM_SEAFLOOR_CAVERN_ROOM_9_TM26"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SEAFLOOR_CAVERN_ROOM9:0/MAP_SEAFLOOR_CAVERN_ROOM8:0"
@@ -944,6 +1022,7 @@
   "REGION_CAVE_OF_ORIGIN_ENTRANCE": {
     "parent_map": "MAP_CAVE_OF_ORIGIN_ENTRANCE",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_CAVE_OF_ORIGIN_ENTRANCE:0/MAP_SOOTOPOLIS_CITY:3",
@@ -953,6 +1032,7 @@
   "REGION_CAVE_OF_ORIGIN_1F": {
     "parent_map": "MAP_CAVE_OF_ORIGIN_1F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_CAVE_OF_ORIGIN_1F:0/MAP_CAVE_OF_ORIGIN_ENTRANCE:1",
@@ -962,6 +1042,7 @@
   "REGION_CAVE_OF_ORIGIN_B1F": {
     "parent_map": "MAP_CAVE_OF_ORIGIN_B1F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_CAVE_OF_ORIGIN_B1F:0/MAP_CAVE_OF_ORIGIN_1F:1"
@@ -971,6 +1052,7 @@
   "REGION_SKY_PILLAR_ENTRANCE": {
     "parent_map": "MAP_SKY_PILLAR_ENTRANCE",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SKY_PILLAR_ENTRANCE:0/MAP_ROUTE131:0",
@@ -980,6 +1062,7 @@
   "REGION_SKY_PILLAR_OUTSIDE": {
     "parent_map": "MAP_SKY_PILLAR_OUTSIDE",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SKY_PILLAR_OUTSIDE:0/MAP_SKY_PILLAR_ENTRANCE:1",
@@ -989,6 +1072,7 @@
   "REGION_SKY_PILLAR_1F": {
     "parent_map": "MAP_SKY_PILLAR_1F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SKY_PILLAR_1F:0,1/MAP_SKY_PILLAR_OUTSIDE:1",
@@ -998,6 +1082,7 @@
   "REGION_SKY_PILLAR_2F": {
     "parent_map": "MAP_SKY_PILLAR_2F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SKY_PILLAR_2F:0/MAP_SKY_PILLAR_1F:2",
@@ -1007,6 +1092,7 @@
   "REGION_SKY_PILLAR_3F": {
     "parent_map": "MAP_SKY_PILLAR_3F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SKY_PILLAR_3F:0/MAP_SKY_PILLAR_2F:1",
@@ -1017,6 +1103,7 @@
   "REGION_SKY_PILLAR_4F": {
     "parent_map": "MAP_SKY_PILLAR_4F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SKY_PILLAR_4F:0/MAP_SKY_PILLAR_3F:1",
@@ -1027,6 +1114,7 @@
   "REGION_SKY_PILLAR_5F": {
     "parent_map": "MAP_SKY_PILLAR_5F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SKY_PILLAR_5F:0/MAP_SKY_PILLAR_4F:2",
@@ -1036,6 +1124,7 @@
   "REGION_SKY_PILLAR_TOP": {
     "parent_map": "MAP_SKY_PILLAR_TOP",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SKY_PILLAR_TOP:0/MAP_SKY_PILLAR_5F:1"
@@ -1045,6 +1134,7 @@
   "REGION_UNDERWATER_SEALED_CHAMBER": {
     "parent_map": "MAP_UNDERWATER_SEALED_CHAMBER",
     "locations": [],
+    "events": [],
     "exits": [
       "REGION_SEALED_CHAMBER_OUTER_ROOM"
     ],
@@ -1055,6 +1145,7 @@
   "REGION_SEALED_CHAMBER_OUTER_ROOM": {
     "parent_map": "MAP_SEALED_CHAMBER_OUTER_ROOM",
     "locations": [],
+    "events": [],
     "exits": [
       "REGION_UNDERWATER_SEALED_CHAMBER"
     ],
@@ -1065,6 +1156,7 @@
   "REGION_SEALED_CHAMBER_INNER_ROOM": {
     "parent_map": "MAP_SEALED_CHAMBER_INNER_ROOM",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_SEALED_CHAMBER_INNER_ROOM:0/MAP_SEALED_CHAMBER_OUTER_ROOM:0"
@@ -1078,6 +1170,7 @@
       "ITEM_VICTORY_ROAD_1F_PP_UP",
       "HIDDEN_ITEM_VICTORY_ROAD_1F_ULTRA_BALL"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_VICTORY_ROAD_1F:0/MAP_EVER_GRANDE_CITY:2",
@@ -1093,6 +1186,7 @@
       "ITEM_VICTORY_ROAD_B1F_TM29",
       "ITEM_VICTORY_ROAD_B1F_FULL_RESTORE"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_VICTORY_ROAD_B1F:0/MAP_VICTORY_ROAD_B2F:0",
@@ -1111,6 +1205,7 @@
       "HIDDEN_ITEM_VICTORY_ROAD_B2F_ELIXIR",
       "HIDDEN_ITEM_VICTORY_ROAD_B2F_MAX_REPEL"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_VICTORY_ROAD_B2F:0/MAP_VICTORY_ROAD_B1F:0",
@@ -1123,6 +1218,7 @@
   "REGION_NAVEL_ROCK_HARBOR": {
     "parent_map": "MAP_NAVEL_ROCK_HARBOR",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_HARBOR:0/MAP_NAVEL_ROCK_EXTERIOR:0"
@@ -1131,6 +1227,7 @@
   "REGION_NAVEL_ROCK_EXTERIOR": {
     "parent_map": "MAP_NAVEL_ROCK_EXTERIOR",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_EXTERIOR:0/MAP_NAVEL_ROCK_HARBOR:0",
@@ -1140,6 +1237,7 @@
   "REGION_NAVEL_ROCK_ENTRANCE": {
     "parent_map": "MAP_NAVEL_ROCK_ENTRANCE",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_ENTRANCE:0/MAP_NAVEL_ROCK_B1F:0",
@@ -1149,6 +1247,7 @@
   "REGION_NAVEL_ROCK_B1F": {
     "parent_map": "MAP_NAVEL_ROCK_B1F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_B1F:0/MAP_NAVEL_ROCK_ENTRANCE:0",
@@ -1158,6 +1257,7 @@
   "REGION_NAVEL_ROCK_FORK": {
     "parent_map": "MAP_NAVEL_ROCK_FORK",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_FORK:0/MAP_NAVEL_ROCK_UP1:0",
@@ -1168,6 +1268,7 @@
   "REGION_NAVEL_ROCK_DOWN_01": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN01",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_DOWN01:0/MAP_NAVEL_ROCK_FORK:2",
@@ -1177,6 +1278,7 @@
   "REGION_NAVEL_ROCK_DOWN_02": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN02",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_DOWN02:1/MAP_NAVEL_ROCK_DOWN03:0",
@@ -1186,6 +1288,7 @@
   "REGION_NAVEL_ROCK_DOWN_03": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN03",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_DOWN03:0/MAP_NAVEL_ROCK_DOWN02:1",
@@ -1195,6 +1298,7 @@
   "REGION_NAVEL_ROCK_DOWN_04": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN04",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_DOWN04:1/MAP_NAVEL_ROCK_DOWN05:0",
@@ -1204,6 +1308,7 @@
   "REGION_NAVEL_ROCK_DOWN_05": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN05",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_DOWN05:0/MAP_NAVEL_ROCK_DOWN04:1",
@@ -1213,6 +1318,7 @@
   "REGION_NAVEL_ROCK_DOWN_06": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN06",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_DOWN06:1/MAP_NAVEL_ROCK_DOWN07:0",
@@ -1222,6 +1328,7 @@
   "REGION_NAVEL_ROCK_DOWN_07": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN07",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_DOWN07:0/MAP_NAVEL_ROCK_DOWN06:1",
@@ -1231,6 +1338,7 @@
   "REGION_NAVEL_ROCK_DOWN_08": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN08",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_DOWN08:1/MAP_NAVEL_ROCK_DOWN09:0",
@@ -1240,6 +1348,7 @@
   "REGION_NAVEL_ROCK_DOWN_09": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN09",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_DOWN09:0/MAP_NAVEL_ROCK_DOWN08:1",
@@ -1249,6 +1358,7 @@
   "REGION_NAVEL_ROCK_DOWN_10": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN10",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_DOWN10:1/MAP_NAVEL_ROCK_DOWN11:1",
@@ -1258,6 +1368,7 @@
   "REGION_NAVEL_ROCK_DOWN_11": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN11",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_DOWN11:1/MAP_NAVEL_ROCK_DOWN10:1",
@@ -1267,6 +1378,7 @@
   "REGION_NAVEL_ROCK_BOTTOM": {
     "parent_map": "MAP_NAVEL_ROCK_BOTTOM",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_BOTTOM:0/MAP_NAVEL_ROCK_DOWN11:0"
@@ -1275,6 +1387,7 @@
   "REGION_NAVEL_ROCK_UP_1": {
     "parent_map": "MAP_NAVEL_ROCK_UP1",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_UP1:1/MAP_NAVEL_ROCK_UP2:0",
@@ -1284,6 +1397,7 @@
   "REGION_NAVEL_ROCK_UP_2": {
     "parent_map": "MAP_NAVEL_ROCK_UP2",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_UP2:0/MAP_NAVEL_ROCK_UP1:1",
@@ -1293,6 +1407,7 @@
   "REGION_NAVEL_ROCK_UP_3": {
     "parent_map": "MAP_NAVEL_ROCK_UP3",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_UP3:1/MAP_NAVEL_ROCK_UP4:0",
@@ -1302,6 +1417,7 @@
   "REGION_NAVEL_ROCK_UP_4": {
     "parent_map": "MAP_NAVEL_ROCK_UP4",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_UP4:0/MAP_NAVEL_ROCK_UP3:1",
@@ -1313,6 +1429,7 @@
     "locations": [
       "HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_TOP:0/MAP_NAVEL_ROCK_UP4:1"
@@ -1322,6 +1439,7 @@
   "REGION_TERRA_CAVE_ENTRANCE": {
     "parent_map": "MAP_TERRA_CAVE_ENTRANCE",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_TERRA_CAVE_ENTRANCE:0/MAP_DYNAMIC:WARP_ID_DYNAMIC",
@@ -1331,6 +1449,7 @@
   "REGION_TERRA_CAVE_END": {
     "parent_map": "MAP_TERRA_CAVE_END",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_TERRA_CAVE_END:0/MAP_TERRA_CAVE_ENTRANCE:1"
@@ -1340,6 +1459,7 @@
   "REGION_UNDERWATER_MARINE_CAVE": {
     "parent_map": "MAP_UNDERWATER_MARINE_CAVE",
     "locations": [],
+    "events": [],
     "exits": [
       "REGION_MARINE_CAVE_ENTRANCE"
     ],
@@ -1350,6 +1470,7 @@
   "REGION_MARINE_CAVE_ENTRANCE": {
     "parent_map": "MAP_MARINE_CAVE_ENTRANCE",
     "locations": [],
+    "events": [],
     "exits": [
       "REGION_UNDERWATER_MARINE_CAVE"
     ],
@@ -1360,6 +1481,7 @@
   "REGION_MARINE_CAVE_END": {
     "parent_map": "MAP_MARINE_CAVE_END",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MARINE_CAVE_END:0/MAP_MARINE_CAVE_ENTRANCE:0"

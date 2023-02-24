@@ -1,5 +1,7 @@
-from BaseClasses import Region, Entrance
+from BaseClasses import Region, Entrance, ItemClassification
 from .Data import get_region_data
+from .Items import PokemonEmeraldItem
+from .Locations import PokemonEmeraldLocation
 from .Warps import get_warp_region_name, get_warp_destination
 
 
@@ -9,7 +11,15 @@ def create_regions(world, player):
 
     connections = []
     for region_name, region_data in region_data.items():
-        regions[region_name] = Region(region_name, player, world)
+        new_region = Region(region_name, player, world)
+
+        for event_data in region_data.events:
+            event = PokemonEmeraldLocation(player, event_data.name, None, new_region)
+            event.place_locked_item(PokemonEmeraldItem(event_data.name, ItemClassification.progression, None, player))
+            new_region.locations.append(event)
+
+        for exit in region_data.exits:
+            connections.append((f"{region_name} -> {exit}", region_name, exit))
 
         for warp in region_data.warps:
             destination_region_name = get_warp_region_name(get_warp_destination(warp))
@@ -17,8 +27,7 @@ def create_regions(world, player):
                 continue
             connections.append((warp, region_name, destination_region_name))
 
-        for exit in region_data.exits:
-            connections.append((f"{region_name} -> {exit}", region_name, exit))
+        regions[region_name] = new_region
 
     for name, source, dest in connections:
         connection = Entrance(player, name, regions[source])

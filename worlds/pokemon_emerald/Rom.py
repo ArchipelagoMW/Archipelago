@@ -29,6 +29,8 @@ def generate_output(world, player, output_directory: str):
     for location in world.get_locations():
         if location.player != player:
             continue
+        if location.is_event:
+            continue
 
         if location.item and location.item.player == player:
             _set_bytes_little_endian(patched_rom, location.address, 2, location.item.code)

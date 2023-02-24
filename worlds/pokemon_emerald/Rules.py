@@ -1,4 +1,4 @@
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, MultiWorld
 from worlds.generic.Rules import set_rule
 
 
@@ -20,7 +20,12 @@ def _can_dive(state: CollectionState, player: int):
     return state.has("HM08 Dive", player) and state.has("Mind Badge", player)
 
 
-def set_default_rules(world, player):
+def set_default_rules(world: MultiWorld, player):
+    set_rule(
+        world.get_entrance('REGION_OLDALE_TOWN -> REGION_ROUTE_102', player),
+        lambda state: state.has("EVENT_DEFEAT_RIVAL_ROUTE_103", player)
+    )
+
     set_rule(
         world.get_entrance('REGION_ROUTE_103/EAST -> REGION_ROUTE_103/WATER', player),
         lambda state: _can_surf(state, player)
@@ -29,6 +34,7 @@ def set_default_rules(world, player):
         world.get_entrance('REGION_ROUTE_103/WEST -> REGION_ROUTE_103/WATER', player),
         lambda state: _can_surf(state, player)
     )
+
     set_rule(
         world.get_entrance('REGION_PETALBURG_CITY/MAIN -> REGION_PETALBURG_CITY/SOUTH_POND', player),
         lambda state: _can_surf(state, player)

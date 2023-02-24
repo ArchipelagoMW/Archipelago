@@ -2,6 +2,7 @@
   "REGION_BATTLE_FRONTIER_RECEPTION_GATE": {
     "parent_map": "MAP_BATTLE_FRONTIER_RECEPTION_GATE",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_RECEPTION_GATE:0/MAP_BATTLE_FRONTIER_OUTSIDE_WEST:8",
@@ -11,6 +12,7 @@
   "REGION_BATTLE_FRONTIER_OUTSIDE_WEST": {
     "parent_map": "MAP_BATTLE_FRONTIER_OUTSIDE_WEST",
     "locations": [],
+    "events": [],
     "exits": [
       "REGION_BATTLE_FRONTIER_OUTSIDE_EAST"
     ],
@@ -31,6 +33,7 @@
   "REGION_BATTLE_FRONTIER_OUTSIDE_EAST": {
     "parent_map": "MAP_BATTLE_FRONTIER_OUTSIDE_EAST",
     "locations": [],
+    "events": [],
     "exits": [
       "REGION_BATTLE_FRONTIER_OUTSIDE_WEST"
     ],
@@ -54,6 +57,7 @@
   "REGION_BATTLE_FRONTIER_BATTLE_FACTORY_LOBBY": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_FACTORY_LOBBY",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_BATTLE_FACTORY_LOBBY:0,1/MAP_BATTLE_FRONTIER_OUTSIDE_WEST:2"
@@ -62,6 +66,7 @@
   "REGION_BATTLE_FRONTIER_BATTLE_PIKE_LOBBY": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_PIKE_LOBBY",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_BATTLE_PIKE_LOBBY:0,1,2/MAP_BATTLE_FRONTIER_OUTSIDE_WEST:0"
@@ -70,6 +75,7 @@
   "REGION_BATTLE_FRONTIER_BATTLE_ARENA_LOBBY": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_ARENA_LOBBY",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_BATTLE_ARENA_LOBBY:0/MAP_BATTLE_FRONTIER_OUTSIDE_EAST:1"
@@ -78,6 +84,7 @@
   "REGION_BATTLE_FRONTIER_BATTLE_PYRAMID_LOBBY": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_PYRAMID_LOBBY",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_BATTLE_PYRAMID_LOBBY:0/MAP_BATTLE_FRONTIER_OUTSIDE_EAST:3"
@@ -86,6 +93,7 @@
   "REGION_BATTLE_FRONTIER_BATTLE_DOME_LOBBY": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_DOME_LOBBY",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_BATTLE_DOME_LOBBY:0,1/MAP_BATTLE_FRONTIER_OUTSIDE_WEST:1"
@@ -94,6 +102,7 @@
   "REGION_BATTLE_FRONTIER_BATTLE_DOME_PRE_BATTLE_ROOM": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_DOME_PRE_BATTLE_ROOM",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_BATTLE_DOME_PRE_BATTLE_ROOM:0,1/MAP_BATTLE_FRONTIER_OUTSIDE_WEST:1"
@@ -102,6 +111,7 @@
   "REGION_BATTLE_FRONTIER_BATTLE_DOME_CORRIDOR": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_DOME_CORRIDOR",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_BATTLE_DOME_CORRIDOR:0,1/MAP_BATTLE_FRONTIER_OUTSIDE_WEST:1"
@@ -110,6 +120,7 @@
   "REGION_BATTLE_FRONTIER_BATTLE_PALACE_LOBBY": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_PALACE_LOBBY",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_BATTLE_PALACE_LOBBY:2/MAP_BATTLE_FRONTIER_BATTLE_PALACE_CORRIDOR:0",
@@ -119,6 +130,7 @@
   "REGION_BATTLE_FRONTIER_BATTLE_PALACE_CORRIDOR": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_PALACE_CORRIDOR",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_BATTLE_PALACE_CORRIDOR:2/MAP_BATTLE_FRONTIER_BATTLE_PALACE_BATTLE_ROOM:0",
@@ -129,6 +141,7 @@
   "REGION_BATTLE_FRONTIER_BATTLE_PALACE_BATTLE_ROOM": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_PALACE_BATTLE_ROOM",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_BATTLE_PALACE_BATTLE_ROOM:0,1/MAP_BATTLE_FRONTIER_BATTLE_PALACE_CORRIDOR:2"
@@ -137,6 +150,7 @@
   "REGION_BATTLE_FRONTIER_BATTLE_TOWER_LOBBY": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_TOWER_LOBBY",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_BATTLE_TOWER_LOBBY:2/MAP_BATTLE_FRONTIER_BATTLE_TOWER_BATTLE_ROOM:0",
@@ -146,6 +160,7 @@
   "REGION_BATTLE_FRONTIER_BATTLE_TOWER_BATTLE_ROOM": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_TOWER_BATTLE_ROOM",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_BATTLE_TOWER_BATTLE_ROOM:0,1/MAP_BATTLE_FRONTIER_BATTLE_TOWER_LOBBY:2"
@@ -154,6 +169,7 @@
   "REGION_BATTLE_FRONTIER_EXCHANGE_SERVICE_CORNER": {
     "parent_map": "MAP_BATTLE_FRONTIER_EXCHANGE_SERVICE_CORNER",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_EXCHANGE_SERVICE_CORNER:0,1,2/MAP_BATTLE_FRONTIER_OUTSIDE_EAST:6"
@@ -162,6 +178,7 @@
   "REGION_BATTLE_FRONTIER_RANKING_HALL": {
     "parent_map": "MAP_BATTLE_FRONTIER_RANKING_HALL",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_RANKING_HALL:0,1/MAP_BATTLE_FRONTIER_OUTSIDE_EAST:4"
@@ -170,6 +187,7 @@
   "REGION_BATTLE_FRONTIER_POKEMON_CENTER_1F": {
     "parent_map": "MAP_BATTLE_FRONTIER_POKEMON_CENTER_1F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_POKEMON_CENTER_1F:2/MAP_BATTLE_FRONTIER_POKEMON_CENTER_2F:0",
@@ -179,6 +197,7 @@
   "REGION_BATTLE_FRONTIER_POKEMON_CENTER_2F": {
     "parent_map": "MAP_BATTLE_FRONTIER_POKEMON_CENTER_2F",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_POKEMON_CENTER_2F:0/MAP_BATTLE_FRONTIER_POKEMON_CENTER_1F:2"
@@ -187,6 +206,7 @@
   "REGION_BATTLE_FRONTIER_MART": {
     "parent_map": "MAP_BATTLE_FRONTIER_MART",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_MART:0,1/MAP_BATTLE_FRONTIER_OUTSIDE_WEST:4"
@@ -195,6 +215,7 @@
   "REGION_BATTLE_FRONTIER_SCOTTS_HOUSE": {
     "parent_map": "MAP_BATTLE_FRONTIER_SCOTTS_HOUSE",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_SCOTTS_HOUSE:0,1/MAP_BATTLE_FRONTIER_OUTSIDE_WEST:5"
@@ -203,6 +224,7 @@
   "REGION_BATTLE_FRONTIER_LOUNGE_1": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE1",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_LOUNGE1:0/MAP_BATTLE_FRONTIER_OUTSIDE_EAST:5"
@@ -211,6 +233,7 @@
   "REGION_BATTLE_FRONTIER_LOUNGE_2": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE2",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_LOUNGE2:0,1/MAP_BATTLE_FRONTIER_OUTSIDE_WEST:3"
@@ -219,6 +242,7 @@
   "REGION_BATTLE_FRONTIER_LOUNGE_3": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE3",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_LOUNGE3:0/MAP_BATTLE_FRONTIER_OUTSIDE_EAST:9"
@@ -227,6 +251,7 @@
   "REGION_BATTLE_FRONTIER_LOUNGE_4": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE4",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_LOUNGE4:0/MAP_BATTLE_FRONTIER_OUTSIDE_WEST:6"
@@ -235,6 +260,7 @@
   "REGION_BATTLE_FRONTIER_LOUNGE_5": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE5",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_LOUNGE5:0,1/MAP_BATTLE_FRONTIER_OUTSIDE_EAST:7"
@@ -243,6 +269,7 @@
   "REGION_BATTLE_FRONTIER_LOUNGE_6": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE6",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_LOUNGE6:0/MAP_BATTLE_FRONTIER_OUTSIDE_EAST:8"
@@ -251,6 +278,7 @@
   "REGION_BATTLE_FRONTIER_LOUNGE_7": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE7",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_LOUNGE7:0/MAP_BATTLE_FRONTIER_OUTSIDE_WEST:7"
@@ -259,6 +287,7 @@
   "REGION_BATTLE_FRONTIER_LOUNGE_8": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE8",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_LOUNGE8:0/MAP_BATTLE_FRONTIER_OUTSIDE_EAST:10"
@@ -267,6 +296,7 @@
   "REGION_BATTLE_FRONTIER_LOUNGE_9": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE9",
     "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_BATTLE_FRONTIER_LOUNGE9:0,1/MAP_BATTLE_FRONTIER_OUTSIDE_EAST:11"
@@ -278,6 +308,7 @@
     "locations": [
       "ITEM_ARTISAN_CAVE_1F_CARBOS"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ARTISAN_CAVE_1F:1/MAP_ARTISAN_CAVE_B1F:1",
@@ -293,6 +324,7 @@
       "HIDDEN_ITEM_ARTISAN_CAVE_B1F_PROTEIN",
       "HIDDEN_ITEM_ARTISAN_CAVE_B1F_IRON"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_ARTISAN_CAVE_B1F:0/MAP_BATTLE_FRONTIER_OUTSIDE_WEST:10",

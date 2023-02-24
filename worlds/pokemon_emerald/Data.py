@@ -35,6 +35,15 @@ class LocationData:
         self.tags = set()
 
 
+class EventData:
+    name: str
+    region_name: str
+
+    def __init__(self, name: str, region_name: str):
+        self.name = name
+        self.region_name = region_name
+
+
 class WarpData:
     region_name: str
     encoded_string: str
@@ -49,12 +58,14 @@ class RegionData:
     exits: List[str]
     warps: List[str]
     locations: List[LocationData]
+    events: List[EventData]
 
     def __init__(self, name: str):
         self.name = name
         self.exits = []
         self.warps = []
         self.locations = []
+        self.events = []
 
 
 # Not currently reading encounter data until output.
@@ -126,13 +137,22 @@ def create_region_data() -> Dict[str, RegionData]:
     regions = {}
     for region_name, region_json in regions_json.items():
         new_region = RegionData(region_name)
+
+        # Locations
         for location_name in region_json["locations"]:
             if (location_name in location_to_region_map):
                 raise AssertionError(f"Location [{location_name}] was claimed by multiple regions")
             location_to_region_map[location_name] = region_name
 
+        # Events
+        for event in region_json["events"]:
+            new_region.events.append(EventData(event, region_name))
+
+        # Exits
         for exit in region_json["exits"]:
             new_region.exits.append(exit)
+
+        # Warps
         for encoded_warp in region_json["warps"]:
             if (encoded_warp in location_to_region_map):
                 raise AssertionError(f"Warp [{encoded_warp}] was claimed by multiple regions")
