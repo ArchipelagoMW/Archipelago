@@ -1237,6 +1237,25 @@ def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dic
                            custom_items=custom_items, custom_locations=custom_locations)
 
 
+def getEnabledMultiworldTrackers(room: Room, current: str):
+    enabled = [
+        {
+            "name": "Generic",
+            "endpoint": "getMultiworldTracker",
+            "current": current == "Generic"
+         }
+    ]
+
+    if any(slot.game == "A Link to the Past" for slot in room.seed.slots) or current == "A Link to the Past":
+        enabled.append({
+            "name": "A Link to the Past",
+            "endpoint": "getLttpMultiworldTracker",
+            "current": current == "A Link to the Past"}
+        )
+
+    return enabled
+
+
 @app.route('/tracker/<suuid:tracker>')
 @cache.memoize(timeout=1)  # multisave is currently created at most every minute
 def getMultiworldTracker(tracker: UUID):
@@ -1289,10 +1308,12 @@ def getMultiworldTracker(tracker: UUID):
     for (team, player), data in multisave.get("video", []):
         video[(team, player)] = data
 
+    enabled_multiworld_trackers = getEnabledMultiworldTrackers(room, "Generic")
+
     return render_template("multiTracker.html", player_names=player_names, room=room, checks_done=checks_done,
                            percent_total_checks_done=percent_total_checks_done, checks_in_area=seed_checks_in_area,
                            activity_timers=activity_timers, video=video, hints=hints,
-                           long_player_names=long_player_names)
+                           long_player_names=long_player_names, enabled_multiworld_trackers=enabled_multiworld_trackers)
 
 
 @app.route('/tracker/<suuid:tracker>/lttp')
@@ -1395,6 +1416,8 @@ def getLttpMultiworldTracker(tracker: UUID):
     for (team, player), data in multisave.get("video", []):
         video[(team, player)] = data
 
+    enabled_multiworld_trackers = getEnabledMultiworldTrackers(room, "A Link to the Past")
+
     return render_template("lttpMultiTracker.html", inventory=inventory, get_item_name_from_id=lookup_any_item_id_to_name,
                            lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
                            tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=alttp_icons,
@@ -1404,7 +1427,8 @@ def getLttpMultiworldTracker(tracker: UUID):
                            activity_timers=activity_timers,
                            key_locations=group_key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids,
                            video=video, big_key_locations=group_big_key_locations,
-                           hints=hints, long_player_names=long_player_names)
+                           hints=hints, long_player_names=long_player_names,
+                           enabled_multiworld_trackers=enabled_multiworld_trackers)
 
 
 game_specific_trackers: typing.Dict[str, typing.Callable] = {
