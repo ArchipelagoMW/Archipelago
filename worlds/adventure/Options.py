@@ -42,7 +42,6 @@ class ItemRandoType(Choice):
 
 class DragonSlayCheck(DefaultOnToggle):
     """If true, slaying each dragon for the first time is a check
-    Not yet implemented
     """
     display_name = "Slay Dragon Checks"
 
@@ -207,7 +206,6 @@ class DifficultySwitchB(Choice):
 
 
 adventure_option_definitions: Dict[str, type(Option)] = {
-    "item_rando_type": ItemRandoType,
     "dragon_slay_check": DragonSlayCheck,
     "death_link": DeathLink,
     "bat_logic": BatLogic,
