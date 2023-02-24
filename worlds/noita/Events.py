@@ -26,16 +26,5 @@ def create_victory_events(world: MultiWorld, player: int) -> None:
     world.completion_condition[player] = lambda state: state.has("Victory", player)
 
 
-def create_chest_events(world: MultiWorld, player: int) -> None:
-    total_locations = world.total_locations[player].value - Locations.num_static_locations
-
-    # Iterates all our generated chests and makes sure that they are accessible in a specific
-    # logical order (?) TODO: Revisit and confirm this
-    for i in range(1, 1 + total_locations):
-        event_loc = create_locked_location_event(world, player, "Forest", f"Pickup{(i + 1)}")
-        event_loc.access_rule = lambda state, i=i: state.can_reach(f"Chest{i}", "Location", player)
-
-
 def create_all_events(world: MultiWorld, player: int) -> None:
     create_victory_events(world, player)
-    create_chest_events(world, player)

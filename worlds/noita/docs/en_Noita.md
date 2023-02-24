@@ -15,7 +15,7 @@ the Noita world.
 
 Because chests are quite rare in Noita, the Archipelago Noita mod allows you to set a kill count to spawn chests. 
 
-## What is the goal of Noita 
+## What is the goal of Noita?
 
 The vanilla goal of Noita is to progress through each level and beat the final boss, taking the Sampo
 (gear shaped object) through the portal and interacting with the end. 
@@ -30,17 +30,17 @@ present an issue with progression.
 
 Positive rewards can be:
 
-* `Gold (10 - 1000)` 
-* `Heart` 
-* `Spell Refresh` 
-* `Random Wand (Tiers 1 - 6)` 
+* `Gold (200 - 1000)`
+* `Extra Max HP`
+* `Spell Refresher`
+* `Random Wand (Tiers 1 - 6)`
 * `Potion`
 
 Traps consist of all "Bad" and "Awful" events from the native stream integration, some examples:
 
-* `Slow Player` 
-* `Trailing Lava` 
-* `Worm Rain` 
+* `Slow Player`
+* `Trailing Lava`
+* `Worm Rain`
 * `Spawning black holes`
 
 ### How many items are there?
@@ -49,12 +49,23 @@ You can configure the number of item checks that will be present in the Noita wo
 default this is set to 100. After all checks are completed any further chests opened will be empty. For high location 
 counts it is recommended to use a lower setting for number of kills required to spawn a chest.
 
-## What does another world's item look like in Noita
+## What does another world's item look like in Noita?
 
 All chests in the game will perform an item check and drop a banner featuring the archipelago logo, the in game console
 will confirm what items was sent or received when collecting.
 
-## Is Archipelago compatible with other Noita mods
+## Is Archipelago compatible with other Noita mods?
 
-Yes, other Noita mods should work just fine, however avoid any mods which alter in game chests as this will likely clash
-with the item check coding.
+Yes, most other Noita mods should work, since the Archipelago mod's implementation is non-destructive and
+non-conflicting. However, it is possible that some implementations are overlooked.
+
+The Archipelago implementation makes the following assumptions, so mods that greatly interfere with these may not
+work well:
+
+* All the vanilla biomes and Holy Mountains still exist.
+* Holy Mountains exist at certain depths (with some tolerance to shifting their depth).
+* There must be at least one chest or pedestal available in each of the vanilla biomes they appear normally.
+* Biomes are traversed roughly in the vanilla layout, otherwise some items may be out-of-sequence.
+* There are spell refreshes and shops in Holy Mountains, each with at least 5 items.
+* There is a secret shop, with at least 4 items (it can be anywhere).
+* That the player can complete their selected goal (i.e. kill a boss).
