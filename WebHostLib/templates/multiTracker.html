@@ -4,7 +4,7 @@
     <title>Multiworld Tracker</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/tracker.css") }}"/>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/jquery.scrollsync.js") }}"></script>
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/tracker.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/multiTrackerCommon.js") }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -28,11 +28,11 @@
                     <table id="checks-table" class="table non-unique-item-table">
                         <thead>
                             <tr>
-                                <th rowspan="2">#</th>
-                                <th rowspan="2">Name</th>
-                                <th rowspan="2" class="center-column">Checks</th>
-                                <th rowspan="2" class="center-column">&percnt;</th>
-                                <th rowspan="2" class="center-column hours">Last<br>Activity</th>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th class="center-column">Checks</th>
+                                <th class="center-column">&percnt;</th>
+                                <th class="center-column hours">Last<br>Activity</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -41,7 +41,7 @@
                                     <td><a href="{{ url_for("get_player_tracker", tracker=room.tracker,
                                     tracked_team=team, tracked_player=player)}}">{{ loop.index }}</a></td>
                                     <td>{{ player_names[(team, loop.index)]|e }}</td>
-                                    <td class="center-column">{{  checks["Total"]  }}/{{ checks_in_area[player]["Total"] }}</td>
+                                    <td class="center-column">{{ checks["Total"] }}/{{ checks_in_area[player]["Total"] }}</td>
                                     <td class="center-column">{{ percent_total_checks_done[team][player] }}</td>
                                     {%- if activity_timers[(team, player)] -%}
                                         <td class="center-column">{{ activity_timers[(team, player)].total_seconds() }}</td>

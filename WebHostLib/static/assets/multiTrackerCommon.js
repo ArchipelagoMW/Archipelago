@@ -108,7 +108,7 @@ window.addEventListener('load', () => {
     const update = () => {
         const target = $("<div></div>");
         console.log("Updating Tracker...");
-        target.load("/tracker/" + tracker, function (response, status) {
+        target.load(location.href, function (response, status) {
             if (status === "success") {
                 target.find(".table").each(function (i, new_table) {
                     const new_trs = $(new_table).find("tbody>tr");
@@ -133,11 +133,6 @@ window.addEventListener('load', () => {
     window.addEventListener('resize', () => {
         adjustTableHeight();
         tables.draw();
-    });
-
-    $(".table-wrapper").scrollsync({
-        y_sync: true,
-        x_sync: true
     });
 
     adjustTableHeight();

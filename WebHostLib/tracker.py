@@ -1239,7 +1239,7 @@ def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dic
 
 @app.route('/tracker/<suuid:tracker>')
 @cache.memoize(timeout=1)  # multisave is currently created at most every minute
-def getTracker(tracker: UUID):
+def getMultiworldTracker(tracker: UUID):
     room: Room = Room.get(tracker=tracker)
     if not room:
         abort(404)
@@ -1289,10 +1289,122 @@ def getTracker(tracker: UUID):
     for (team, player), data in multisave.get("video", []):
         video[(team, player)] = data
 
-    return render_template("tracker.html", player_names=player_names, room=room, checks_done=checks_done,
+    return render_template("multiTracker.html", player_names=player_names, room=room, checks_done=checks_done,
                            percent_total_checks_done=percent_total_checks_done, checks_in_area=seed_checks_in_area,
                            activity_timers=activity_timers, video=video, hints=hints,
                            long_player_names=long_player_names)
+
+
+@app.route('/tracker/<suuid:tracker>/lttp')
+@cache.memoize(timeout=1)  # multisave is currently created at most every minute
+def getLttpMultiworldTracker(tracker: UUID):
+    room: Room = Room.get(tracker=tracker)
+    if not room:
+        abort(404)
+    locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
+        precollected_items, games, slot_data, groups, saving_second, custom_locations, custom_items = \
+        get_static_room_data(room)
+
+    inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1) if
+                              playernumber not in groups}
+                 for teamnumber, team in enumerate(names)}
+
+    checks_done = {teamnumber: {playernumber: {loc_name: 0 for loc_name in default_locations}
+                                for playernumber in range(1, len(team) + 1) if playernumber not in groups}
+                   for teamnumber, team in enumerate(names)}
+
+    percent_total_checks_done = {teamnumber: {playernumber: 0
+                                              for playernumber in range(1, len(team) + 1) if playernumber not in groups}
+                                 for teamnumber, team in enumerate(names)}
+
+    hints = {team: set() for team in range(len(names))}
+    if room.multisave:
+        multisave = restricted_loads(room.multisave)
+    else:
+        multisave = {}
+    if "hints" in multisave:
+        for (team, slot), slot_hints in multisave["hints"].items():
+            hints[team] |= set(slot_hints)
+
+    def attribute_item(inventory, team, recipient, item):
+        target_item = links.get(item, item)
+        if item in levels:  # non-progressive
+            inventory[team][recipient][target_item] = max(inventory[team][recipient][target_item], levels[item])
+        else:
+            inventory[team][recipient][target_item] += 1
+
+    for (team, player), locations_checked in multisave.get("location_checks", {}).items():
+        if player in groups:
+            continue
+        player_locations = locations[player]
+        if precollected_items:
+            precollected = precollected_items[player]
+            for item_id in precollected:
+                attribute_item(inventory, team, player, item_id)
+        for location in locations_checked:
+            if location not in player_locations or location not in player_location_to_area[player]:
+                continue
+
+            item, recipient, flags = player_locations[location]
+
+            if recipient in names:
+                attribute_item(inventory, team, recipient, item)
+            checks_done[team][player][player_location_to_area[player][location]] += 1
+            checks_done[team][player]["Total"] += 1
+        percent_total_checks_done[team][player] = int(
+            checks_done[team][player]["Total"] / seed_checks_in_area[player]["Total"] * 100) if \
+        seed_checks_in_area[player]["Total"] else 100
+
+    for (team, player), game_state in multisave.get("client_game_state", {}).items():
+        if player in groups:
+            continue
+        if game_state == 30:
+            inventory[team][player][106] = 1  # Triforce
+
+    player_big_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
+    player_small_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
+    for loc_data in locations.values():
+        for values in loc_data.values():
+            item_id, item_player, flags = values
+
+            if item_id in ids_big_key:
+                player_big_key_locations[item_player].add(ids_big_key[item_id])
+            elif item_id in ids_small_key:
+                player_small_key_locations[item_player].add(ids_small_key[item_id])
+    group_big_key_locations = set()
+    group_key_locations = set()
+    for player in [player for player in range(1, len(names[0]) + 1) if player not in groups]:
+        group_key_locations |= player_small_key_locations[player]
+        group_big_key_locations |= player_big_key_locations[player]
+
+    activity_timers = {}
+    now = datetime.datetime.utcnow()
+    for (team, player), timestamp in multisave.get("client_activity_timers", []):
+        activity_timers[team, player] = now - datetime.datetime.utcfromtimestamp(timestamp)
+
+    player_names = {}
+    for team, names in enumerate(names):
+        for player, name in enumerate(names, 1):
+            player_names[(team, player)] = name
+    long_player_names = player_names.copy()
+    for (team, player), alias in multisave.get("name_aliases", {}).items():
+        player_names[(team, player)] = alias
+        long_player_names[(team, player)] = f"{alias} ({long_player_names[(team, player)]})"
+
+    video = {}
+    for (team, player), data in multisave.get("video", []):
+        video[(team, player)] = data
+
+    return render_template("lttpMultiTracker.html", inventory=inventory, get_item_name_from_id=lookup_any_item_id_to_name,
+                           lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
+                           tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=alttp_icons,
+                           multi_items=multi_items, checks_done=checks_done,
+                           percent_total_checks_done=percent_total_checks_done,
+                           ordered_areas=ordered_areas, checks_in_area=seed_checks_in_area,
+                           activity_timers=activity_timers,
+                           key_locations=group_key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids,
+                           video=video, big_key_locations=group_big_key_locations,
+                           hints=hints, long_player_names=long_player_names)
 
 
 game_specific_trackers: typing.Dict[str, typing.Callable] = {
