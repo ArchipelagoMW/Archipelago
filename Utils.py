@@ -315,6 +315,9 @@ def get_default_options() -> OptionsType:
             "rom_start": True,
             "display_msgs": True,
         }
+        "wargroove_options": {
+            "root_directory": "C:/Program Files (x86)/Steam/steamapps/common/Wargroove"
+        }
     }
     return options
 
