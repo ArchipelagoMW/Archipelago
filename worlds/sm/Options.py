@@ -314,7 +314,7 @@ class HideItems(Toggle):
     - Missile (Gravity Suit)
     - Missile (green Maridia shinespark)
     """
-    display_name = "Relaxed round robin Crystal Flash"
+    display_name = "Hide half the items"
 
 class RelaxedRoundRobinCF(Toggle):
     """
