@@ -221,8 +221,6 @@ class KH2Context(CommonContext):
                         and int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + 0x24FF, 1), "big") >= data.bitIndex:
                     self.locations_checked.add(location)
                     self.sending = self.sending + [(int(kh2_loc_name_to_id[location]))]
-                else:
-                    break
             formDict = {
                 0: WorldLocations.ValorLevels, 1: WorldLocations.WisdomLevels, 2: WorldLocations.LimitLevels,
                 3: WorldLocations.MasterLevels, 4: WorldLocations.FinalLevels}
