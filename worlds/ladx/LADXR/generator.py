@@ -491,7 +491,9 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
 
         # Allow cursor to move over black squares
         # This allows warping to undiscovered areas - a fine cheat, but needs a check for wOverworldRoomStatus in the warp code
-        # rom.patch(0x01, 0x1AE8, None, assembler.ASM("jp $5AF5"))
+        CHEAT_WARP_ANYWHERE = False
+        if CHEAT_WARP_ANYWHERE:
+            rom.patch(0x01, 0x1AE8, None, assembler.ASM("jp $5AF5"))
 
         # This disables the arrows around the selection bubble
         #rom.patch(0x01, 0x1B6F, None, assembler.ASM("ret"), fill_nop=True)
