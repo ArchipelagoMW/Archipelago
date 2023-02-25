@@ -887,10 +887,6 @@ class CommonOptions(metaclass=OptionsMetaProperty):
         return option_results
 
 
-common_options = typing.get_type_hints(CommonOptions)
-# TODO - remove this dict once all worlds use options dataclasses
-
-
 class ItemSet(OptionSet):
     verify_item_name = True
     convert_name_groups = True
@@ -1014,10 +1010,6 @@ class PerGameCommonOptions(CommonOptions):
     exclude_locations: ExcludeLocations
     priority_locations: PriorityLocations
     item_links: ItemLinks
-
-
-per_game_common_options = typing.get_type_hints(PerGameCommonOptions)
-# TODO - remove this dict once all worlds use options dataclasses
 
 
 GameOptions = typing.TypeVar("GameOptions", bound=PerGameCommonOptions)

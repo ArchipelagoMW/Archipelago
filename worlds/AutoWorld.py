@@ -7,7 +7,7 @@ from dataclasses import make_dataclass
 from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Type, Union, TYPE_CHECKING, \
     ClassVar
 
-from Options import AssembleOptions, GameOptions, PerGameCommonOptions
+from Options import GameOptions, PerGameCommonOptions
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
@@ -138,7 +138,6 @@ class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
-    option_definitions: ClassVar[Dict[str, AssembleOptions]] = {}  # TODO - remove this once all worlds use options dataclasses
     options_dataclass: Type[GameOptions] = PerGameCommonOptions  # link your Options mapping
     o: PerGameCommonOptions
 
