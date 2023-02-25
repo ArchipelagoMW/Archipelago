@@ -216,7 +216,7 @@ class MuseDashWorld(World):
     def get_difficulty_range(self) -> list[int, int]:
         difficultyMode = self.multiworld.song_difficulty_mode[self.player]
 
-        diffThreshold = [0, 20]
+        diffThreshold = [1, 12]
         if (difficultyMode == 1):
             diffThreshold[1] = 3
         elif (difficultyMode == 2):
@@ -231,8 +231,8 @@ class MuseDashWorld(World):
         elif (difficultyMode == 5):
             diffThreshold[0] = 10
         elif (difficultyMode == 6):
-            minDiff = self.multiworld.song_difficulty_min[self.player]
-            maxDiff = self.multiworld.song_difficulty_max[self.player]
+            minDiff = self.multiworld.song_difficulty_min[self.player].value
+            maxDiff = self.multiworld.song_difficulty_max[self.player].value
 
             #Cover for stupidity
             diffThreshold[0] = min(minDiff, maxDiff)
