@@ -10,7 +10,7 @@
 - Muse Dash: [Available on Steam](https://store.steampowered.com/app/774171/Muse_Dash/)
 - Just As Planned DLC: [Available on Steam](https://store.steampowered.com/app/1055810/Muse_Dash__Just_as_planned/)
 - Melon Loader v0.5.7 Open-Beta or Newer: [GitHub](https://github.com/LavaGang/MelonLoader/releases/latest)
-- Muse Dash Archipelago Mod: [GitHub](https://github.com/toasterparty/oc2-modding/releases)
+- Muse Dash Archipelago Mod: [GitHub](https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest)
 
 ## Installing the Archipelago mod to Muse Dash
 
@@ -19,10 +19,10 @@
   - You can find the folder in steam by finding the game in your library, right clicking it and choosing *Manage→Browse Local Files*.
   - If you click the bar at the top telling you your current folder, this will give you a path you can copy. If you paste that into the window popped up by **MelonLoader**, it will automatically go to the same folder.
 3. Run the game once, and wait until you get to the Muse Dash screen before exiting.
-4. Download the latest [Muse Dash Archipelago Mod](https://github.com/toasterparty/oc2-modding/releases) and then extract that into the newly created `/Mods/` folder in MuseDash's install location.
+4. Download the latest [Muse Dash Archipelago Mod](https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest) and then extract that into the newly created `/Mods/` folder in MuseDash's install location.
   - All files must be under the `/Mods/` folder and not a sub folder within `/Mods/`
 
-If you've successfully installed everything, a prompt for joining an Archipelago game should show after the intro screen.
+If you've successfully installed everything, a button will appear in the bottom right which will allow you to log into an Archipelago server.
 
 ## Generating a MultiWorld Game
 1. Visit the [Player Settings](../../../../games/Muse%20Dash/player-settings) page and configure the game-specific settings to your taste.
@@ -32,7 +32,6 @@ If you've successfully installed everything, a prompt for joining an Archipelago
 
 ## Joining a MultiWorld Game
 
-1. Launch Muse Dash and get past the intro screen.
-2. Enter in the details for the archipelago game, such as the server address (with port), username and password.
-  - If you want to continue to the vanilla game, press "Play Without Archipelago"
+1. Launch Muse Dash and get past the intro screen. Click on the button in the bottom right.
+2. Enter in the details for the archipelago game, such as the server address with port (i.e archipelago.gg:38381), username and password.
 3. If entered correctly, the pop-up should disappear and the usual main menu will show. When entering the song select, you should see a limited number of songs.tton until it shows the desired setting.
