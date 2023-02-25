@@ -329,6 +329,7 @@ class FixXYZGlitch(Toggle):
     display_name = "Fix XYZ Glitch"
 
 # By convention, we call the options dataclass `<world>Options`.
+# It has to be derived from 'PerGameCommonOptions'.
 @dataclass
 class MyGameOptions(PerGameCommonOptions):
     difficulty: Difficulty

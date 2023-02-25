@@ -2,6 +2,7 @@ from __future__ import annotations
 import abc
 from copy import deepcopy
 from dataclasses import dataclass
+import functools
 import math
 import numbers
 import typing
@@ -863,6 +864,7 @@ class ProgressionBalancing(SpecialRange):
 
 class OptionsMetaProperty(type):
     @property
+    @functools.lru_cache(maxsize=None)
     def type_hints(cls) -> typing.Dict[str, AssembleOptions]:
         """Returns type hints of the class as a dictionary."""
         return typing.get_type_hints(cls)
@@ -873,22 +875,18 @@ class CommonOptions(metaclass=OptionsMetaProperty):
     progression_balancing: ProgressionBalancing
     accessibility: Accessibility
 
-    def as_dict(self, *args: str) -> typing.Dict[str, typing.Any]:
+    def as_dict(self, *option_names: str) -> typing.Dict[str, typing.Any]:
         """
         Pass the option_names you would like returned as a dictionary as strings.
         Returns a dictionary of [str, Option.value]
         """
         option_results = {}
-        for option_name in args:
-            if option_name in self.__annotations__:
+        for option_name in option_names:
+            if option_name in type(self).type_hints:
                 option_results[option_name] = getattr(self, option_name).value
             else:
-                raise ValueError(f"{option_name} not found in {self.__annotations__}")
+                raise ValueError(f"{option_name} not found in {tuple(type(self).type_hints)}")
         return option_results
-
-
-common_options = typing.get_type_hints(CommonOptions)
-# TODO - remove this dict once all worlds use options dataclasses
 
 
 class ItemSet(OptionSet):
@@ -1014,10 +1012,6 @@ class PerGameCommonOptions(CommonOptions):
     exclude_locations: ExcludeLocations
     priority_locations: PriorityLocations
     item_links: ItemLinks
-
-
-per_game_common_options = typing.get_type_hints(PerGameCommonOptions)
-# TODO - remove this dict once all worlds use options dataclasses
 
 
 GameOptions = typing.TypeVar("GameOptions", bound=PerGameCommonOptions)

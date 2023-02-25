@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import collections
 import copy
-import itertools
 import functools
 import json
 import logging
@@ -202,10 +200,6 @@ class MultiWorld():
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
         for option_key, option in world_type.options_dataclass.type_hints.items():
             getattr(self, option_key)[new_id] = option(option.default)
-        for option_key, option in Options.common_options.items():
-            getattr(self, option_key)[new_id] = option(option.default)
-        for option_key, option in Options.per_game_common_options.items():
-            getattr(self, option_key)[new_id] = option(option.default)
 
         self.worlds[new_id] = world_type(self, new_id)
         self.worlds[new_id].collect_item = classmethod(AutoWorld.World.collect_item).__get__(self.worlds[new_id])
@@ -234,13 +228,13 @@ class MultiWorld():
             self.custom_data[player] = {}
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
             self.worlds[player] = world_type(self, player)
-            for option_key in typing.get_type_hints(world_type.options_dataclass):
+            for option_key in world_type.options_dataclass.type_hints:
                 option_values = getattr(args, option_key, {})
                 setattr(self, option_key, option_values)
                 # TODO - remove this loop once all worlds use options dataclasses
             options_dataclass: typing.Type[Options.GameOptions] = self.worlds[player].options_dataclass
             self.worlds[player].o = options_dataclass(**{option_key: getattr(args, option_key)[player]
-                                                         for option_key in typing.get_type_hints(options_dataclass)})
+                                                         for option_key in options_dataclass.type_hints})
 
     def set_item_links(self):
         item_links = {}
@@ -1586,7 +1580,7 @@ class Spoiler():
                     outfile.write('\nPlayer %d: %s\n' % (player, self.multiworld.get_player_name(player)))
                 outfile.write('Game:                            %s\n' % self.multiworld.game[player])
 
-                for f_option, option in self.multiworld.worlds[player].o.__annotations__.items():
+                for f_option, option in self.multiworld.worlds[player].options_dataclass.type_hints.items():
                     write_option(f_option, option)
 
                 AutoWorld.call_single(self.multiworld, "write_spoiler_header", player, outfile)

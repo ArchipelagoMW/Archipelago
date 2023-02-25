@@ -156,7 +156,8 @@ def main(args=None, callback=ERmain):
                         for yaml in weights_cache[path]:
                             if category_name is None:
                                 for category in yaml:
-                                    if category in AutoWorldRegister.world_types and key in Options.common_options:
+                                    if category in AutoWorldRegister.world_types and \
+                                            key in Options.CommonOptions.type_hints:
                                         yaml[category][key] = option
                             elif category_name not in yaml:
                                 logging.warning(f"Meta: Category {category_name} is not present in {path}.")
@@ -444,8 +445,8 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
                                 f"which is not enabled.")
 
     ret = argparse.Namespace()
-    for option_key in Options.per_game_common_options:
-        if option_key in weights and option_key not in Options.common_options:
+    for option_key in Options.PerGameCommonOptions.type_hints:
+        if option_key in weights and option_key not in Options.CommonOptions.type_hints:
             raise Exception(f"Option {option_key} has to be in a game's section, not on its own.")
 
     ret.game = get_choice("game", weights)
@@ -460,7 +461,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         game_weights = weights[ret.game]
 
     ret.name = get_choice('name', weights)
-    for option_key, option in Options.common_options.items():
+    for option_key, option in Options.CommonOptions.type_hints.items():
         setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
 
     if ret.game in AutoWorldRegister.world_types:

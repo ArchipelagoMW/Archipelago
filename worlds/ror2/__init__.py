@@ -1,5 +1,4 @@
 import string
-from typing import get_type_hints
 
 from .Items import RiskOfRainItem, item_table, item_pool_weights, environment_offest
 from .Locations import RiskOfRainLocation, get_classic_item_pickups, item_pickups, orderedstage_location
