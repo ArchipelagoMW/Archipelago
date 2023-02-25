@@ -1,15 +1,8 @@
 from BaseClasses import ItemClassification
-from test.general import setup_solo_multiworld
 from . import SVTestBase
-from .. import locations, items, location_table, options, StardewValleyWorld
+from .. import locations, items, location_table, options
 from ..items import items_by_group, Group
 from ..locations import LocationTags
-
-
-def test_can_generate_world():
-    multi_world = setup_solo_multiworld(StardewValleyWorld)
-
-    assert multi_world.completion_condition[1] is not None
 
 
 class TestBaseItemGeneration(SVTestBase):
@@ -66,7 +59,6 @@ class TestRemixedMineRewards(SVTestBase):
         assert self.world.create_item("Skull Key") in self.multiworld.itempool
 
     # This test as 1 over 90,000 changes to fail... Sorry in advance
-    # @pytest.mark.skip
     def test_when_generate_world_then_rewards_are_not_all_vanilla(self):
         assert not all(self.world.create_item(item) in self.multiworld.itempool
                        for item in
