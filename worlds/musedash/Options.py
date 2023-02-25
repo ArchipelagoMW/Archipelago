@@ -50,7 +50,22 @@ class DifficultyMode(Choice):
     option_Hard = 3
     option_Expert = 4
     option_Master = 5
+    option_Manual = 6
     default = 0
+
+class DifficultyModeOverrideMin(Range):
+    """Ensures that 1 song has at least 1 song this value or higher."""
+    supports_weighting = False
+    range_start = 1
+    range_end = 12
+    default = 4
+
+class DifficultyModeOverrideMax(Range):
+    """Ensures that 1 song has at least 1 song this value or lower."""
+    supports_weighting = False
+    range_start = 1
+    range_end = 12
+    default = 8
 
 class GradeNeeded(Choice):
     """Requires a grade of this or higher in order to get items.
@@ -102,6 +117,8 @@ musedash_options: Dict[str, type(Option)] = {
     "additional_song_count": AdditionalSongs,
     "additional_item_percentage": AdditionalItemPercentage,
     "song_difficulty_mode": DifficultyMode,
+    "song_difficulty_min": DifficultyModeOverrideMin,
+    "song_difficulty_max": DifficultyModeOverrideMax,
     "grade_needed": GradeNeeded,
     "music_sheet_count": MusicSheetCount,
     "music_sheet_win_count": MusicSheetWinCount,

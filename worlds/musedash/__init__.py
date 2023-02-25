@@ -64,26 +64,10 @@ class MuseDashWorld(World):
 
         dlc_songs = self.multiworld.allow_just_as_planned_dlc_songs[self.player]
         streamer_mode = self.multiworld.streamer_mode_enabled[self.player]
-        difficultyMode = self.multiworld.song_difficulty_mode[self.player]
 
-        lower_diff_threshold = 0
-        higher_diff_threshold = 20
+        diff_threshold = self.get_difficulty_range()
 
-        if (difficultyMode == 1):
-            higher_diff_threshold = 3
-        elif (difficultyMode == 2):
-            lower_diff_threshold = 4
-            higher_diff_threshold = 5
-        elif (difficultyMode == 3):
-            lower_diff_threshold = 6
-            higher_diff_threshold = 7
-        elif (difficultyMode == 4):
-            lower_diff_threshold = 8
-            higher_diff_threshold = 9
-        elif (difficultyMode == 5):
-            lower_diff_threshold = 10
-
-        available_song_keys = self.museDashCollection.get_all_songs_with_settings(dlc_songs, streamer_mode, lower_diff_threshold, higher_diff_threshold)
+        available_song_keys = self.museDashCollection.get_all_songs_with_settings(dlc_songs, streamer_mode, diff_threshold[0], diff_threshold[1])
         self.create_song_pool(available_song_keys)
 
         #Todo: where should we have pre collected items?
@@ -215,9 +199,6 @@ class MuseDashWorld(World):
             self.multiworld.regions.append(region)
 
 
-    def get_number_of_music_sheets_to_win(self) -> int:
-        return min(self.multiworld.music_sheet_win_count[self.player].value, self.multiworld.music_sheet_count[self.player].value)
-
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: state.has(self.music_sheet_name, self.player, self.get_number_of_music_sheets_to_win())
 
@@ -227,6 +208,37 @@ class MuseDashWorld(World):
                 set_rule(location, lambda state: state.has(self.music_sheet_name, self.player, self.get_number_of_music_sheets_to_win()))
             else:
                 set_rule(location, lambda state, place=itemName: state.has(place, self.player))
+
+
+    def get_number_of_music_sheets_to_win(self) -> int:
+        return min(self.multiworld.music_sheet_win_count[self.player].value, self.multiworld.music_sheet_count[self.player].value)
+
+    def get_difficulty_range(self) -> list[int, int]:
+        difficultyMode = self.multiworld.song_difficulty_mode[self.player]
+
+        diffThreshold = [0, 20]
+        if (difficultyMode == 1):
+            diffThreshold[1] = 3
+        elif (difficultyMode == 2):
+            diffThreshold[0] = 4
+            diffThreshold[1] = 5
+        elif (difficultyMode == 3):
+            diffThreshold[0] = 6
+            diffThreshold[1] = 7
+        elif (difficultyMode == 4):
+            diffThreshold[0] = 8
+            diffThreshold[1] = 9
+        elif (difficultyMode == 5):
+            diffThreshold[0] = 10
+        elif (difficultyMode == 6):
+            minDiff = self.multiworld.song_difficulty_min[self.player]
+            maxDiff = self.multiworld.song_difficulty_max[self.player]
+
+            #Cover for stupidity
+            diffThreshold[0] = min(minDiff, maxDiff)
+            diffThreshold[1] = max(minDiff, maxDiff)
+
+        return diffThreshold
 
 
     def fill_slot_data(self):
