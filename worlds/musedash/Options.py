@@ -55,14 +55,12 @@ class DifficultyMode(Choice):
 
 class DifficultyModeOverrideMin(Range):
     """Ensures that 1 song has at least 1 song this value or higher."""
-    supports_weighting = False
     range_start = 1
     range_end = 11
     default = 4
 
 class DifficultyModeOverrideMax(Range):
     """Ensures that 1 song has at least 1 song this value or lower."""
-    supports_weighting = False
     range_start = 1
     range_end = 11
     default = 8
