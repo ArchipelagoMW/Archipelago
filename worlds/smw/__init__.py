@@ -10,10 +10,10 @@ from .Options import smw_options
 from .Regions import create_regions, connect_regions
 from .Levels import full_level_list, generate_level_list, location_id_to_level_id
 from .Rules import set_rules
-from ..generic.Rules import add_rule, exclusion_rules
+from worlds.generic.Rules import add_rule, exclusion_rules
 from .Names import ItemName, LocationName
 from .Client import SMWSNIClient
-from ..AutoWorld import WebWorld, World
+from worlds.AutoWorld import WebWorld, World
 from .Rom import LocalRom, patch_rom, get_base_rom_path, SMWDeltaPatch
 
 

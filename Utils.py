@@ -310,6 +310,9 @@ def get_default_options() -> OptionsType:
         "lufia2ac_options": {
             "rom_file": "Lufia II - Rise of the Sinistrals (USA).sfc",
         },
+        "wargroove_options": {
+            "root_directory": "C:/Program Files (x86)/Steam/steamapps/common/Wargroove"
+        }
     }
     return options
 
