@@ -65,11 +65,11 @@ class PokemonRedBlueWorld(World):
         self.traps = None
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld: MultiWorld):
         versions = set()
-        for player in world.player_ids:
-            if world.worlds[player].game == "Pokemon Red and Blue":
-                versions.add(world.game_version[player].current_key)
+        for player in multiworld.player_ids:
+            if multiworld.worlds[player].game == "Pokemon Red and Blue":
+                versions.add(multiworld.game_version[player].current_key)
         for version in versions:
             if not os.path.exists(get_base_rom_path(version)):
                 raise FileNotFoundError(get_base_rom_path(version))
@@ -172,7 +172,7 @@ class PokemonRedBlueWorld(World):
         # to the way effectiveness messages are generated.
         self.type_chart = sorted(chart, key=lambda matchup: -matchup[2])
         self.multiworld.early_items[self.player]["Exp. All"] = 1
-        
+
     def create_items(self) -> None:
         start_inventory = self.multiworld.start_inventory[self.player].value.copy()
         if self.multiworld.randomize_pokedex[self.player] == "start_with":

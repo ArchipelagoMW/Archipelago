@@ -599,7 +599,6 @@ pokemon_rb_options = {
     "master_ball_price": MasterBallPrice,
     "starting_money": StartingMoney,
     "lose_money_on_blackout": LoseMoneyOnBlackout,
-    "early_exp_all": EarlyExpAll,
     "trap_percentage": TrapPercentage,
     "poison_trap_weight": PoisonTrapWeight,
     "fire_trap_weight": FireTrapWeight,
