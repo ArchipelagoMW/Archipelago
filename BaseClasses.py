@@ -570,9 +570,9 @@ class MultiWorld():
         if not state:
             state = CollectionState(self)
         players: Dict[str, Set[int]] = {
-            "full": set(),
+            "minimal": set(),
             "items": set(),
-            "locations": set()
+            "full": set()
         }
         for player, access in self.accessibility.items():
             players[access.current_key].add(player)
