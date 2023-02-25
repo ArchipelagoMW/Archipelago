@@ -26,7 +26,7 @@ name: YourName{number} # Your name in-game. Spaces will be replaced with undersc
 game: # Pick a game to play
   A Link to the Past: 1
 requires:
-  version: 0.3.3 # Version of Archipelago required for this yaml to work as expected.
+  version: 0.3.9 # Version of Archipelago required for this yaml to work as expected.
 A Link to the Past:
   progression_balancing:
     # A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
@@ -44,10 +44,10 @@ A Link to the Past:
 
   accessibility:
     # Set rules for reachability of your items/locations.
-    # Locations: ensure everything can be reached and acquired.
-    # Items: ensure all logically relevant items can be acquired.
+    # Full: ensure everything can be reached and acquired.
+    # Items: ensure all logically relevant items can be acquired. Some items, such as keys, may be self-locking.
     # Minimal: ensure what is needed to reach your goal can be acquired.
-    locations: 0
+    full: 0
     items: 50
     minimal: 0
 

@@ -847,7 +847,7 @@ class Accessibility(Choice):
 class ItemsAccessibility(Accessibility):
     """Set rules for reachability of your items/locations.
     Full: ensure everything can be reached and acquired.
-    Items: all logically relevant items can be acquired. Some items, such as keys, may be self-locking.
+    Items: ensure all logically relevant items can be acquired. Some items, such as keys, may be self-locking.
     Minimal: ensure what is needed to reach your goal can be acquired."""
     option_items = 1
     default = 1
