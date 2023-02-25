@@ -31,3 +31,7 @@ def set_rules(world: MultiWorld, player: int):
             world.get_location(f"IDLE for at least {int(i / 2)} minutes {30 if (i % 2) else 0} seconds", player),
             lambda state: state._archipidle_location_is_accessible(player, 20)
         )
+
+    world.completion_condition[player] =\
+        lambda state:\
+        state.can_reach(world.get_location("IDLE for at least 50 minutes 0 seconds", player), "Location", player)
