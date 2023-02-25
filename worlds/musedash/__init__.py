@@ -54,8 +54,10 @@ class MuseDashWorld(World):
 
     # Working Data
     victory_song_name: str = ""
-    starting_songs: list[str]
-    included_songs: list[str]
+    #starting_songs: list[str]
+    starting_songs: list
+    #included_songs: list[str]
+    included_songs: list
     needed_token_count: int
     location_count: int
 
@@ -75,7 +77,8 @@ class MuseDashWorld(World):
             self.multiworld.push_precollected(self.create_item(song))
 
 
-    def create_song_pool(self, available_song_keys: list[str]):
+    #def create_song_pool(self, available_song_keys: list[str]):
+    def create_song_pool(self, available_song_keys: list):
         # Sanity checks to ensure we can even generate
         total_available_songs = len(available_song_keys)
 
@@ -106,7 +109,8 @@ class MuseDashWorld(World):
             self.location_count = minimum_location_count
 
 
-    def get_random_item_and_remove(self, list: list[str]) -> str:
+    #def get_random_item_and_remove(self, list: list[str]) -> str:
+    def get_random_item_and_remove(self, list: list) -> str:
         index = self.multiworld.random.randrange(0, len(list))
         choice = list[index]
         list.pop(index)
@@ -213,7 +217,8 @@ class MuseDashWorld(World):
     def get_number_of_music_sheets_to_win(self) -> int:
         return min(self.multiworld.music_sheet_win_count[self.player].value, self.multiworld.music_sheet_count[self.player].value)
 
-    def get_difficulty_range(self) -> list[int, int]:
+    #def get_difficulty_range(self) -> list[int]:
+    def get_difficulty_range(self) -> list:
         difficultyMode = self.multiworld.song_difficulty_mode[self.player]
 
         diffThreshold = [1, 12]

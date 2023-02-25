@@ -62,7 +62,8 @@ class MuseDashCollections:
         self.MusicSheetID = currentItemId
 
 
-    def get_all_songs_with_settings(self, dlcSongs: bool, streamerModeActive: bool, lowerDiffThreshold : int, higherDiffThreshold : int) -> list[str]:
+    #def get_all_songs_with_settings(self, dlcSongs: bool, streamerModeActive: bool, lowerDiffThreshold : int, higherDiffThreshold : int) -> list[str]:
+    def get_all_songs_with_settings(self, dlcSongs: bool, streamerModeActive: bool, lowerDiffThreshold : int, higherDiffThreshold : int) -> list:
         """Returns all song keys that fit the settings provided."""
         songList = list()
 
