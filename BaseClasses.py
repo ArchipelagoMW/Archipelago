@@ -589,7 +589,7 @@ class MultiWorld():
             """Determine if this location is relevant to sweep."""
             if getattr(sys, "gettrace", None) \
                     and location.progress_type != LocationProgressType.EXCLUDED \
-                    and (location.player in players["locations"] or location.event
+                    and (location.player in players["full"] or location.event
                          or (location.item and location.item.advancement)):
                 return True
             return False
