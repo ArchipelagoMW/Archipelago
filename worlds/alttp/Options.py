@@ -1,7 +1,7 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice, PlandoBosses
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, PlandoBosses, ItemsAccessibility
 
 
 class Logic(Choice):
@@ -402,6 +402,7 @@ class AllowCollect(Toggle):
 
 
 alttp_options: typing.Dict[str, type(Option)] = {
+    "accessibility": ItemsAccessibility,
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
     "open_pyramid": OpenPyramid,

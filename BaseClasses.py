@@ -6,6 +6,7 @@ import json
 import logging
 import random
 import secrets
+import sys
 import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
 from collections import OrderedDict, Counter, deque
@@ -569,7 +570,7 @@ class MultiWorld():
         if not state:
             state = CollectionState(self)
         players: Dict[str, Set[int]] = {
-            "minimal": set(),
+            "full": set(),
             "items": set(),
             "locations": set()
         }
@@ -586,9 +587,10 @@ class MultiWorld():
 
         def location_relevant(location: Location):
             """Determine if this location is relevant to sweep."""
-            if location.progress_type != LocationProgressType.EXCLUDED \
-                and (location.player in players["locations"] or location.event
-                     or (location.item and location.item.advancement)):
+            if getattr(sys, "gettrace", None) \
+                    and location.progress_type != LocationProgressType.EXCLUDED \
+                    and (location.player in players["locations"] or location.event
+                         or (location.item and location.item.advancement)):
                 return True
             return False
 
