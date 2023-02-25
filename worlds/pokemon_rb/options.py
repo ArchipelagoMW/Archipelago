@@ -506,7 +506,6 @@ class LoseMoneyOnBlackout(Toggle):
     default = 1
 
 
-
 class TrapPercentage(Range):
     """Chance for each filler item to be replaced with trap items. Keep in mind that trainersanity vastly increases the
     number of filler items. The trap weight options will determine which traps can be chosen from and at what likelihood."""
@@ -600,6 +599,7 @@ pokemon_rb_options = {
     "master_ball_price": MasterBallPrice,
     "starting_money": StartingMoney,
     "lose_money_on_blackout": LoseMoneyOnBlackout,
+    "early_exp_all": EarlyExpAll,
     "trap_percentage": TrapPercentage,
     "poison_trap_weight": PoisonTrapWeight,
     "fire_trap_weight": FireTrapWeight,
