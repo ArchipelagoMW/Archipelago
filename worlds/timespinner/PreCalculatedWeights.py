@@ -21,7 +21,7 @@ class PreCalculatedWeights:
     dry_lake_serene: bool
 
     def __init__(self, world: MultiWorld, player: int):
-        weights_overrrides: Dict[str, Dict[str, int]] = self.get_flood_weights_overrides(world, player)
+        weights_overrrides: Dict[str, Union[str, Dict[str, int]]] = self.get_flood_weights_overrides(world, player)
 
         self.flood_basement, self.flood_basement_high = \
             self.roll_flood_setting_with_available_save(world, player, weights_overrrides, "CastleBasement")
@@ -87,8 +87,8 @@ class PreCalculatedWeights:
         )
 
     @staticmethod
-    def get_flood_weights_overrides( world: MultiWorld, player: int) -> Dict[str, int]:
-        weights_overrides_option: Union[int, Dict[str, Dict[str, int]]] = \
+    def get_flood_weights_overrides( world: MultiWorld, player: int) -> Dict[str, Union[str, Dict[str, int]]]:
+        weights_overrides_option: Union[int, Dict[str, Union[str, Dict[str, int]]]] = \
             get_option_value(world, player, "RisingTidesOverrides")
 
         if weights_overrides_option == 0:
@@ -97,26 +97,32 @@ class PreCalculatedWeights:
             return weights_overrides_option 
 
     @staticmethod
-    def roll_flood_setting(world: MultiWorld, player: int, weights: Dict[str, Dict[str, int]], key: str) -> bool:
+    def roll_flood_setting(world: MultiWorld, player: int, weights: Dict[str, Union[Dict[str, int], str]], key: str) -> bool:
         if not world or not is_option_enabled(world, player, "RisingTides"):
             return False
 
         weights = weights[key] if key in weights else { "Dry": 67, "Flooded": 33 }
 
-        result: str = world.random.choices(list(weights.keys()), weights=list(map(int, weights.values())))[0]
+        if isinstance(weights, dict):
+            result: str = world.random.choices(list(weights.keys()), weights=list(map(int, weights.values())))[0]
+        else:
+            result: str = weights
 
         return result == "Flooded"
 
     @staticmethod
     def roll_flood_setting_with_available_save(world: MultiWorld, player: int,
-                                               weights: Dict[str, Dict[str, int]], key: str) -> Tuple[bool, bool]:
+                                               weights: Dict[str, Union[Dict[str, int], str]], key: str) -> Tuple[bool, bool]:
 
         if not world or not is_option_enabled(world, player, "RisingTides"):
             return False, False
 
         weights = weights[key] if key in weights else {"Dry": 66, "Flooded": 17, "FloodedWithSavePointAvailable": 17}
 
-        result: str = world.random.choices(list(weights.keys()), weights=list(map(int, weights.values())))[0]
+        if isinstance(weights, dict):
+            result: str = world.random.choices(list(weights.keys()), weights=list(map(int, weights.values())))[0]
+        else:
+            result: str = weights
         
         if result == "Dry":
             return False, False
