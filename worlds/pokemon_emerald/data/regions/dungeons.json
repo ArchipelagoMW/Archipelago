@@ -742,7 +742,8 @@
     "parent_map": "MAP_MT_PYRE_SUMMIT",
     "locations": [
       "HIDDEN_ITEM_MT_PYRE_SUMMIT_ZINC",
-      "HIDDEN_ITEM_MT_PYRE_SUMMIT_RARE_CANDY"
+      "HIDDEN_ITEM_MT_PYRE_SUMMIT_RARE_CANDY",
+      "NPC_GIFT_RECEIVED_MAGMA_EMBLEM"
     ],
     "events": [],
     "exits": [],
@@ -752,9 +753,7 @@
   },
   "REGION_AQUA_HIDEOUT_1F/MAIN": {
     "parent_map": "MAP_AQUA_HIDEOUT_1F",
-    "locations": [
-      "NPC_GIFT_RECEIVED_RED_OR_BLUE_ORB"
-    ],
+    "locations": [],
     "events": [],
     "exits": [],
     "warps": [

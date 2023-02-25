@@ -8,6 +8,7 @@ from BaseClasses import ItemClassification
 extracted_data = None
 region_data = None
 item_attributes = None
+location_attributes = None
 warp_to_region_map = None
 location_to_region_map = None
 
@@ -18,8 +19,14 @@ class ItemData(NamedTuple):
     tags: MutableSet[str]
 
 
+class LocationAttributes(NamedTuple):
+    label: str
+    tags: MutableSet[str]
+
+
 class LocationData:
     name: str
+    label: str
     region_name: str
     default_item: int
     rom_address: Optional[int]
@@ -27,12 +34,14 @@ class LocationData:
     tags: MutableSet[str]
 
     def __init__(self, name: str, region_name: str, default_item: int, rom_address: Optional[int], flag: int):
+        attributes = get_location_attributes()[name]
         self.name = name
+        self.label = attributes.label
         self.region_name = region_name
         self.default_item = default_item
         self.rom_address = rom_address
         self.flag = flag
-        self.tags = set()
+        self.tags = attributes.tags
 
 
 class EventData:
@@ -171,7 +180,6 @@ def create_region_data() -> Dict[str, RegionData]:
             location_json["rom_address"],
             location_json["flag"]
         )
-        new_location.tags.add(_str_to_tag(location_json["type"]))
         regions[new_location.region_name].locations.append(new_location)
     
     return regions
@@ -231,6 +239,21 @@ def get_item_attributes() -> Dict[str, ItemData]:
     return item_attributes
 
 
+def get_location_attributes() -> Dict[str, LocationAttributes]:
+    global location_attributes
+    if (location_attributes == None):
+        location_attributes = {}
+        locations_json = load_json(os.path.join(os.path.dirname(__file__), "data/locations.json"))
+
+        for location_constant_name, attributes in locations_json.items():
+            location_attributes[location_constant_name] = LocationAttributes(
+                attributes["label"],
+                set(attributes["tags"])
+            )
+
+    return location_attributes
+
+
 def _str_to_item_classification(string):
     if (string == "PROGRESSION"):
         return ItemClassification.progression
@@ -241,15 +264,3 @@ def _str_to_item_classification(string):
     elif (string == "TRAP"):
         return ItemClassification.trap
 
-
-# TODO: Could generalize this with regex
-# Or this function is maybe superfluous
-def _str_to_tag(string):
-    if (string == "HIDDEN_ITEM"):
-        return "HiddenItem"
-    if (string == "GROUND_ITEM"):
-        return "GroundItem"
-    if (string == "NPC_GIFT"):
-        return "NpcGift"
-    if (string == "BADGE"):
-        return "NpcGift"

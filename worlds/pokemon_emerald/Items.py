@@ -9,7 +9,7 @@ class PokemonEmeraldItem(Item):
         super().__init__(name, classification, code, player)
 
 
-def create_item_name_to_id_map():
+def create_item_label_to_id_map():
     items = get_item_attributes()
 
     map = {}

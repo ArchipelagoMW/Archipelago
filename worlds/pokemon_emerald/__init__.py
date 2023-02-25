@@ -1,6 +1,6 @@
 from ..AutoWorld import World
-from .Items import PokemonEmeraldItem, create_item_name_to_id_map, get_item_classification
-from .Locations import create_location_name_to_id_map, create_locations_with_tags
+from .Items import PokemonEmeraldItem, create_item_label_to_id_map, get_item_classification
+from .Locations import create_location_label_to_id_map, create_locations_with_tags
 from .Options import options
 from .Regions import create_regions
 from .Rom import generate_output
@@ -16,8 +16,8 @@ class PokemonEmeraldWorld(World):
     option_definitions = options
     topology_present = True
 
-    item_name_to_id = create_item_name_to_id_map()
-    location_name_to_id = create_location_name_to_id_map()
+    item_name_to_id = create_item_label_to_id_map()
+    location_name_to_id = create_location_label_to_id_map()
 
     data_version = 4
 
@@ -37,7 +37,7 @@ class PokemonEmeraldWorld(World):
         create_regions(self.multiworld, self.player)
         set_default_rules(self.multiworld, self.player)
 
-        create_locations_with_tags(self.multiworld, self.player, ["GroundItem", "HiddenItem", "Badge", "NpcGift"])
+        create_locations_with_tags(self.multiworld, self.player, ["OverworldItem", "HiddenItem", "Badge", "NpcGift", "HM", "KeyItem"])
 
 
     def create_items(self):
