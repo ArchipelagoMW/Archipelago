@@ -159,8 +159,8 @@ class MuseDashWorld(World):
 
     def create_regions(self) -> None:
         # Basic Region Setup: Menu -> Song Select -> Songs
-        mainMenu = Region("Menu", RegionType.Generic, "Menu", self.player, self.multiworld)
-        songSelect = Region("Song Select", RegionType.Generic, "Song Select", self.player, self.multiworld)
+        mainMenu = Region("Menu", "Menu", self.player, self.multiworld)
+        songSelect = Region("Song Select", "Song Select", self.player, self.multiworld)
 
         songSelectExit = Entrance(self.player, "Song Select Entrance", mainMenu)
 
@@ -183,7 +183,7 @@ class MuseDashWorld(World):
         # Make a region per song/album, then adds 1-2 item locations to them
         for i in range(0, len(all_selected_locations)):
             name = all_selected_locations[i]
-            region = Region(name, RegionType.Generic, name, self.player, self.multiworld)
+            region = Region(name, name, self.player, self.multiworld)
 
             # 2 Locations are defined per song
             location_name = name + "-0"
