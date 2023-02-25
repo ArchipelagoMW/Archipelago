@@ -2,6 +2,7 @@ from __future__ import annotations
 import abc
 from copy import deepcopy
 from dataclasses import dataclass
+import functools
 import math
 import numbers
 import typing
@@ -863,6 +864,7 @@ class ProgressionBalancing(SpecialRange):
 
 class OptionsMetaProperty(type):
     @property
+    @functools.lru_cache(maxsize=None)
     def type_hints(cls) -> typing.Dict[str, AssembleOptions]:
         """Returns type hints of the class as a dictionary."""
         return typing.get_type_hints(cls)
