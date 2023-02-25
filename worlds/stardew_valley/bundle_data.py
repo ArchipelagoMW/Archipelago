@@ -282,7 +282,7 @@ summer_crops_items = [blueberry, corn, hops, hot_pepper, melon, poppy,
 # TODO artichoke, beet
 fall_crops_items = [corn, sunflower, wheat, amaranth, bok_choy, cranberries,
                     eggplant, fairy_rose, grape, pumpkin, yam, sweet_gem_berry]
-all_crops_items = list({*spring_crop_items, *summer_crops_items, *fall_crops_items})
+all_crops_items = sorted({*spring_crop_items, *summer_crops_items, *fall_crops_items})
 quality_crops_items = [item.as_quality(2).as_amount(5) for item in all_crops_items]
 # TODO void_egg, dinosaur_egg, ostrich_egg, golden_egg
 animal_product_items = [egg, large_egg, brown_egg, large_brown_egg, wool, milk, large_milk,
@@ -351,7 +351,7 @@ crafts_room_bundle_items = [
     *construction_items,
 ]
 
-pantry_bundle_items = list({
+pantry_bundle_items = sorted({
     *spring_crop_items,
     *summer_crops_items,
     *fall_crops_items,
@@ -360,7 +360,7 @@ pantry_bundle_items = list({
     *artisan_goods_items,
 })
 
-fish_tank_bundle_items = list({
+fish_tank_bundle_items = sorted({
     *river_fish_items,
     *lake_fish_items,
     *ocean_fish_items,
@@ -369,13 +369,13 @@ fish_tank_bundle_items = list({
     *specialty_fish_items,
 })
 
-boiler_room_bundle_items = list({
+boiler_room_bundle_items = sorted({
     *blacksmith_items,
     *geologist_items,
     *adventurer_items,
 })
 
-bulletin_board_bundle_items = list({
+bulletin_board_bundle_items = sorted({
     *chef_items,
     *[item for dye_color_items in dye_items for item in dye_color_items],
     *field_research_items,

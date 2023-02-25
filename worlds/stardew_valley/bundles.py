@@ -190,7 +190,7 @@ def shuffle_bundles_completely(random: Random, logic: StardewLogic, bundles: Dic
 
     items_sorted = sorted(choices, key=lambda x: logic.item_rules[x.item.name].get_difficulty())
 
-    keys = list(bundles.keys())
+    keys = sorted(bundles.keys())
     random.shuffle(keys)
 
     for key in keys:
