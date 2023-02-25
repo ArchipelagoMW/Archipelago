@@ -693,10 +693,9 @@ def generate_output(self, output_directory: str):
         data[rom_addresses["Move_Data_FISSURE"] + 4] = 90  # 90% accuracy
         data[rom_addresses["Move_Data_BLIZZARD"] + 4] = 70  # 70% accuracy
 
-
-    randomize_rock_tunnel(data, random)
-
-
+    if self.multiworld.randomize_rock_tunnel[self.player]:
+        seed = randomize_rock_tunnel(data, random)
+        encode_text(data, "SEED: <LINE>" + seed, rom_addresses["Rock_Tunnel_Sign"])
 
     mons = [mon["id"] for mon in poke_data.pokemon_data.values()]
     random.shuffle(mons)

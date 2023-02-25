@@ -7,9 +7,11 @@ disallowed2F = [[16, 2], [17, 2], [18, 2], [15, 5], [15, 6], [10, 10], [11, 10],
                 [11, 1]]
 
 
-
-
 def randomize_rock_tunnel(data, random):
+
+    seed = random.randint(0, 999999999999999999)
+    random.seed(seed)
+
     map1f = []
     map2f = []
     with open("C:\\src\\pokered\\maps\\RockTunnel1F.blk", "br") as file:
@@ -289,3 +291,4 @@ def randomize_rock_tunnel(data, random):
         for x in y:
             data[address] = x
             address += 1
+    return seed

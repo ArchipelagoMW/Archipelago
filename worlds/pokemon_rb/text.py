@@ -1,5 +1,6 @@
 special_chars = {
     "PKMN": 0x4A,
+    "LINE": 0x4F,
     "'d": 0xBB,
     "'l": 0xBC,
     "'t": 0xBE,

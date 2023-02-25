@@ -176,9 +176,12 @@ class FreeFlyLocation(Toggle):
 
 
 class RandomizeRockTunnel(Toggle):
-    """Randomize the path through Rock Tunnel."""
+    """Randomize the layoutof Rock Tunnel. This is highly experimental, if you encounter any issues (items or trainers
+     unreachable, trainers walking over walls, inability to reach end of tunnel, anything looking strange) to
+     Alchav#8826 in the Archipelago Discord (directly or in #pkmn-red-blue) along with the seed number found on the
+     signs outside the tunnel."""
     display_name = "Randomize Rock Tunnel"
-    default = 1
+    default = 0
 
 
 class OaksAidRt2(Range):
