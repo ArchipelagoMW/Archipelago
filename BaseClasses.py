@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import collections
 import copy
-import itertools
 import functools
 import json
 import logging
@@ -201,10 +199,6 @@ class MultiWorld():
         self._region_cache[new_id] = {}
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
         for option_key, option in world_type.options_dataclass.type_hints.items():
-            getattr(self, option_key)[new_id] = option(option.default)
-        for option_key, option in Options.common_options.items():
-            getattr(self, option_key)[new_id] = option(option.default)
-        for option_key, option in Options.per_game_common_options.items():
             getattr(self, option_key)[new_id] = option(option.default)
 
         self.worlds[new_id] = world_type(self, new_id)
