@@ -3,6 +3,7 @@ from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import LocationData
 
 
+
 def create_regions(multiworld: MultiWorld, player: int, locations: tuple[LocationData, ...],
                    location_cache: List[Location]):
     locations_per_region = get_locations_per_region(locations)
@@ -61,7 +62,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations: tuple[Locatio
         create_region(multiworld, player, locations_per_region, location_cache, 'Clockwork Room'),
         create_region(multiworld, player, locations_per_region, location_cache, 'Roof'),
         create_region(multiworld, player, locations_per_region, location_cache, 'Breaker Room'),
-        create_region(multiworld, player, locations_per_region, location_cache, 'Celler'),
+        create_region(multiworld, player, locations_per_region, location_cache, 'Cellar'),
         create_region(multiworld, player, locations_per_region, location_cache, 'Basement Hallway'),
         create_region(multiworld, player, locations_per_region, location_cache, 'Cold Storage'),
         create_region(multiworld, player, locations_per_region, location_cache, 'Pipe Room'),

@@ -3,7 +3,7 @@ from typing import Dict, List, Set, Tuple, TextIO
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from .Items import item_table
 from .Locations import get_locations, EventId
-from .Rules import set_ghost_rules
+from .Rules import set_ghost_type
 from .Options import luigimansion_options
 from .Regions import create_regions, is_option_enabled, get_option_value
 from ..AutoWorld import World, WebWorld
@@ -42,6 +42,28 @@ class LuigiMansionWorld(World):
 
     locked_locations: List[str]
     location_cache: List[Location]
+    # Create list of Regions with randomization, reuse list to filter locations and entrances later. str
+    ghost_affected_regions = {
+        "Anteroom": "No Element",
+        "Wardrobe": "No Element",
+        "Laundry Room": "No Element",
+        "Hidden Room": "Ice",
+        "Mirror Room": "No Element",
+        "Storage Room": "No Element",
+        "Kitchen": "Ice",
+        "1F Bathroom": "No Element",
+        "Courtyard": "No Element",
+        "Tea Room": "No Element",
+        "2F Washroom": "Fire",
+        "Projection Room": "No Element",
+        "Safari Room": "Water",
+        "Cellar": "No Element",
+        "Telephone Room": "No Element",
+        "Roof": "No Element",
+        "Sealed Room": "No Element",
+        "Armory": "No Element",
+        "Pipe Room": "No Element"
+    }
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
@@ -51,8 +73,10 @@ class LuigiMansionWorld(World):
         self.room_to_ghost_table: {}
 
     def generate_early(self):
-        # in generate_early the start_inventory isn't copied over to precollected_items yet, so we can still modify the options directly
-        pass
+        # in generate_early the start_inventory isn't copied over to precollected_items yet, so we can still modify
+        # the options directly
+        if self.multiworld.Enemizer[self.player]:
+            set_ghost_type(self.multiworld, self.ghost_affected_regions)
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player), self.location_cache)

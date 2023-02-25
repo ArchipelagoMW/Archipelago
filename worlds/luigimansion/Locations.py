@@ -17,9 +17,7 @@ class LocationData(NamedTuple):
     code: Optional[int]
     rule: Callable = lambda state: True
 
-ghost_affected_locations = [
-    LocationData('Study', 'Study Clear Chest', 8501),
-]
+
 
 def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tuple[LocationData, ...]:
     # 1337000 - 1337155 Generic locations
