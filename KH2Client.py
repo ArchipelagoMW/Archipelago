@@ -201,13 +201,13 @@ class KH2Context(CommonContext):
 
     async def checkWorldLocations(self):
         try:
-            curworldid = (
-            self.worldid[int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x0714DB8, 1), "big")])
-            for location, data in curworldid.items():
-                if location not in self.locations_checked \
-                        and (int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + data.addrObtained, 1),"big") & 0x1 << data.bitIndex) > 0:
-                    self.locations_checked.add(location)
-                    self.sending = self.sending + [(int(kh2_loc_name_to_id[location]))]
+            curworldid = (self.worldid[int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x0714DB8, 1), "big")])
+            if not int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x0714DB8, 1), "big") == 1:
+                for location, data in curworldid.items():
+                    if location not in self.locations_checked \
+                            and (int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + data.addrObtained, 1),"big") & 0x1 << data.bitIndex) > 0:
+                        self.locations_checked.add(location)
+                        self.sending = self.sending + [(int(kh2_loc_name_to_id[location]))]
         except Exception as e:
             if self.kh2connected:
                 logger.info("Connection Lost.")
