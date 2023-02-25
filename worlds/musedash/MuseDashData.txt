@@ -73,6 +73,12 @@ Frightfully-insane Flan-chan's frightful song|Just as Planned  Plus|False|5|7|10
 snooze|Just as Planned  Plus|False|5|7|10|
 Kuishinbo Hacker feat.Kuishinbo Akachan|Just as Planned  Plus|True|5|7|9|
 Inu no outa|Just as Planned  Plus|True|3|5|7|
+N3V3R G3T OV3R|maimai DX Limited-time Suite|True|4|7|10|
+Oshama Scramble!|maimai DX Limited-time Suite|True|5|7|10|
+Valsqotch|maimai DX Limited-time Suite|True|5|9|11|
+Paranormal My Mind|maimai DX Limited-time Suite|True|5|7|9|
+Flower, snow and Drum'n'bass.|maimai DX Limited-time Suite|True|5|8|10|?
+Amenohoakari|maimai DX Limited-time Suite|True|6|8|10|
 Boiling Blood|MSR Anthology|True|5|8|10|
 ManiFesto:|MSR Anthology|True|4|6|9|
 Operation Blade|MSR Anthology|True|3|5|7|
@@ -90,8 +96,8 @@ Down Low|Happy Otaku Pack Vol.16|True|4|6|8|
 LOUDER MACHINE|Happy Otaku Pack Vol.16|True|5|7|9|
 Sorewa mo Lovechu|Happy Otaku Pack Vol.16|True|5|7|10|
 Rave_Tech|Happy Otaku Pack Vol.16|True|5|8|10|
-Brilliant & Shining!|Happy Otaku Pack Vol.16|True|5|8|10|
-Psyched Fevereiro|Give Up TREATMENT Vol.11|True|5|8|10|
+Brilliant & Shining!|Happy Otaku Pack Vol.16|False|5|8|10|
+Psyched Fevereiro|Give Up TREATMENT Vol.11|False|5|8|10|
 Inferno City|Give Up TREATMENT Vol.11|False|6|8|10|
 Paradigm Shift|Give Up TREATMENT Vol.11|False|4|7|10|
 Snapdragon|Give Up TREATMENT Vol.11|False|5|7|10|
