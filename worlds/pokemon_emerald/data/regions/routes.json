@@ -69,7 +69,10 @@
       "HIDDEN_ITEM_ROUTE_104_POKE_BALL",
       "HIDDEN_ITEM_ROUTE_104_POTION",
       "HIDDEN_ITEM_ROUTE_104_HEART_SCALE",
-      "HIDDEN_ITEM_ROUTE_104_ANTIDOTE"
+      "HIDDEN_ITEM_ROUTE_104_ANTIDOTE",
+      "NPC_GIFT_RECEIVED_TM09",
+      "NPC_GIFT_RECEIVED_WHITE_HERB",
+      "NPC_GIFT_RECEIVED_CHESTO_BERRY_ROUTE_104"
     ],
     "events": [],
     "exits": [
@@ -187,7 +190,8 @@
       "HIDDEN_ITEM_ROUTE_109_GREAT_BALL",
       "HIDDEN_ITEM_ROUTE_109_ETHER",
       "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_2",
-      "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_3"
+      "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_3",
+      "NPC_GIFT_RECEIVED_SOFT_SAND"
     ],
     "events": [],
     "exits": [
@@ -200,7 +204,9 @@
   },
   "REGION_ROUTE109_SEASHORE_HOUSE/MAIN": {
     "parent_map": "MAP_ROUTE109_SEASHORE_HOUSE",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_6_SODA_POP"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -215,7 +221,8 @@
       "HIDDEN_ITEM_ROUTE_110_REVIVE",
       "HIDDEN_ITEM_ROUTE_110_GREAT_BALL",
       "HIDDEN_ITEM_ROUTE_110_POKE_BALL",
-      "HIDDEN_ITEM_ROUTE_110_FULL_HEAL"
+      "HIDDEN_ITEM_ROUTE_110_FULL_HEAL",
+      "NPC_GIFT_RECEIVED_ITEMFINDER"
     ],
     "events": [],
     "exits": [
@@ -399,7 +406,8 @@
       "ITEM_ROUTE_111_ELIXIR",
       "HIDDEN_ITEM_ROUTE_111_STARDUST",
       "HIDDEN_ITEM_ROUTE_111_PROTEIN",
-      "HIDDEN_ITEM_ROUTE_111_RARE_CANDY"
+      "HIDDEN_ITEM_ROUTE_111_RARE_CANDY",
+      "NPC_GIFT_RECEIVED_SECRET_POWER"
     ],
     "events": [],
     "exits": [
@@ -426,7 +434,9 @@
   },
   "REGION_ROUTE111_WINSTRATE_FAMILYS_HOUSE/MAIN": {
     "parent_map": "MAP_ROUTE111_WINSTRATE_FAMILYS_HOUSE",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_MACHO_BRACE"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -478,7 +488,9 @@
   },
   "REGION_MT_CHIMNEY/MAIN": {
     "parent_map": "MAP_MT_CHIMNEY",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_METEORITE"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -540,7 +552,8 @@
       "ITEM_ROUTE_114_RARE_CANDY",
       "ITEM_ROUTE_114_ENERGY_POWDER",
       "HIDDEN_ITEM_ROUTE_114_REVIVE",
-      "HIDDEN_ITEM_ROUTE_114_CARBOS"
+      "HIDDEN_ITEM_ROUTE_114_CARBOS",
+      "NPC_GIFT_RECEIVED_TM05"
     ],
     "events": [],
     "exits": [
@@ -554,7 +567,9 @@
   },
   "REGION_ROUTE114_FOSSIL_MANIACS_HOUSE/MAIN": {
     "parent_map": "MAP_ROUTE114_FOSSIL_MANIACS_HOUSE",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_TM28"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -618,7 +633,8 @@
       "ITEM_ROUTE_116_X_SPECIAL",
       "ITEM_ROUTE_116_HP_UP",
       "HIDDEN_ITEM_ROUTE_116_BLACK_GLASSES",
-      "HIDDEN_ITEM_ROUTE_116_SUPER_POTION"
+      "HIDDEN_ITEM_ROUTE_116_SUPER_POTION",
+      "NPC_GIFT_RECEIVED_REPEAT_BALL"
     ],
     "events": [],
     "exits": [
@@ -669,7 +685,8 @@
     "locations": [
       "ITEM_ROUTE_118_HYPER_POTION",
       "HIDDEN_ITEM_ROUTE_118_IRON",
-      "HIDDEN_ITEM_ROUTE_118_HEART_SCALE"
+      "HIDDEN_ITEM_ROUTE_118_HEART_SCALE",
+      "NPC_GIFT_RECEIVED_GOOD_ROD"
     ],
     "events": [],
     "exits": [
@@ -746,7 +763,8 @@
       "HIDDEN_ITEM_ROUTE_120_RARE_CANDY_1",
       "HIDDEN_ITEM_ROUTE_120_REVIVE",
       "HIDDEN_ITEM_ROUTE_120_RARE_CANDY_2",
-      "HIDDEN_ITEM_ROUTE_120_ZINC"
+      "HIDDEN_ITEM_ROUTE_120_ZINC",
+      "NPC_GIFT_RECEIVED_DEVON_SCOPE"
     ],
     "events": [],
     "exits": [

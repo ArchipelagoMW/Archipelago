@@ -9,7 +9,9 @@
       "HIDDEN_ITEM_PETALBURG_WOODS_POTION",
       "HIDDEN_ITEM_PETALBURG_WOODS_TINY_MUSHROOM_1",
       "HIDDEN_ITEM_PETALBURG_WOODS_TINY_MUSHROOM_2",
-      "HIDDEN_ITEM_PETALBURG_WOODS_POKE_BALL"
+      "HIDDEN_ITEM_PETALBURG_WOODS_POKE_BALL",
+      "NPC_GIFT_RECEIVED_MIRACLE_SEED",
+      "NPC_GIFT_RECEIVED_GREAT_BALL_PETALBURG_WOODS"
     ],
     "events": [],
     "exits": [],
@@ -27,7 +29,8 @@
     "locations": [
       "ITEM_RUSTURF_TUNNEL_POKE_BALL",
       "ITEM_RUSTURF_TUNNEL_MAX_ETHER",
-      "NPC_GIFT_RECEIVED_HM04"
+      "NPC_GIFT_RECEIVED_HM04",
+      "NPC_GIFT_RECEIVED_DEVON_GOODS_RUSTURF_TUNNEL"
     ],
     "events": [],
     "exits": [],
@@ -89,7 +92,9 @@
   },
   "REGION_GRANITE_CAVE_STEVENS_ROOM/MAIN": {
     "parent_map": "MAP_GRANITE_CAVE_STEVENS_ROOM",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_TM47"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -632,7 +637,9 @@
   },
   "REGION_MT_PYRE_1F/MAIN": {
     "parent_map": "MAP_MT_PYRE_1F",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_CLEANSE_TAG"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -745,7 +752,9 @@
   },
   "REGION_AQUA_HIDEOUT_1F/MAIN": {
     "parent_map": "MAP_AQUA_HIDEOUT_1F",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_RED_OR_BLUE_ORB"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -856,7 +865,9 @@
   },
   "REGION_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM/MAIN": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_FOCUS_BAND"
+    ],
     "events": [],
     "exits": [],
     "warps": [

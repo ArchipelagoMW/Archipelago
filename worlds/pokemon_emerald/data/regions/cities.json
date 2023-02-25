@@ -33,7 +33,9 @@
   },
   "REGION_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F/MAIN": {
     "parent_map": "MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_AMULET_COIN"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -62,7 +64,9 @@
 
   "REGION_OLDALE_TOWN/MAIN": {
     "parent_map": "MAP_OLDALE_TOWN",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_POTION_OLDALE"
+    ],
     "events": [],
     "exits": [
       "REGION_ROUTE101/MAIN",
@@ -197,6 +201,7 @@
   "REGION_PETALBURG_CITY_GYM/MAIN": {
     "parent_map": "MAP_PETALBURG_CITY_GYM",
     "locations": [
+      "NPC_GIFT_RECEIVED_TM42",
       "BADGE_5"
     ],
     "events": [],
@@ -261,7 +266,8 @@
   "REGION_RUSTBORO_CITY/MAIN": {
     "parent_map": "MAP_RUSTBORO_CITY",
     "locations": [
-      "ITEM_RUSTBORO_CITY_X_DEFEND"
+      "ITEM_RUSTBORO_CITY_X_DEFEND",
+      "NPC_GIFT_RECEIVED_GREAT_BALL_RUSTBORO_CITY"
     ],
     "events": [],
     "exits": [
@@ -287,6 +293,7 @@
   "REGION_RUSTBORO_CITY_GYM/MAIN": {
     "parent_map": "MAP_RUSTBORO_CITY_GYM",
     "locations": [
+      "NPC_GIFT_RECEIVED_TM39",
       "BADGE_1"
     ],
     "events": [],
@@ -325,7 +332,9 @@
   },
   "REGION_RUSTBORO_CITY_POKEMON_SCHOOL/MAIN": {
     "parent_map": "MAP_RUSTBORO_CITY_POKEMON_SCHOOL",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_QUICK_CLAW"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -355,7 +364,10 @@
   },
   "REGION_RUSTBORO_CITY_DEVON_CORP_3F/MAIN": {
     "parent_map": "MAP_RUSTBORO_CITY_DEVON_CORP_3F",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_LETTER",
+      "NPC_GIFT_RECEIVED_EXP_SHARE"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -393,7 +405,9 @@
   },
   "REGION_RUSTBORO_CITY_FLAT2_2F/MAIN": {
     "parent_map": "MAP_RUSTBORO_CITY_FLAT2_2F",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_PREMIER_BALL_RUSTBORO"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -451,7 +465,9 @@
 
   "REGION_DEWFORD_TOWN/MAIN": {
     "parent_map": "MAP_DEWFORD_TOWN",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_OLD_ROD"
+    ],
     "events": [],
     "exits": [
       "REGION_ROUTE106/MAIN",
@@ -467,7 +483,9 @@
   },
   "REGION_DEWFORD_TOWN_HALL/MAIN": {
     "parent_map": "MAP_DEWFORD_TOWN_HALL",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_TM36"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -496,6 +514,7 @@
   "REGION_DEWFORD_TOWN_GYM/MAIN": {
     "parent_map": "MAP_DEWFORD_TOWN_GYM",
     "locations": [
+      "NPC_GIFT_RECEIVED_TM08",
       "BADGE_2"
     ],
     "events": [],
@@ -515,7 +534,9 @@
   },
   "REGION_DEWFORD_TOWN_HOUSE2/MAIN": {
     "parent_map": "MAP_DEWFORD_TOWN_HOUSE2",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_SILK_SCARF"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -525,7 +546,9 @@
 
   "REGION_SLATEPORT_CITY/MAIN": {
     "parent_map": "MAP_SLATEPORT_CITY",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_POWDER_JAR"
+    ],
     "events": [],
     "exits": [
       "REGION_ROUTE109/MAIN",
@@ -595,7 +618,9 @@
   },
   "REGION_SLATEPORT_CITY_BATTLE_TENT_LOBBY/MAIN": {
     "parent_map": "MAP_SLATEPORT_CITY_BATTLE_TENT_LOBBY",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_TM41"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -604,7 +629,9 @@
   },
   "REGION_SLATEPORT_CITY_POKEMON_FAN_CLUB/MAIN": {
     "parent_map": "MAP_SLATEPORT_CITY_POKEMON_FAN_CLUB",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_SOOTHE_BELL"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -613,7 +640,9 @@
   },
   "REGION_SLATEPORT_CITY_OCEANIC_MUSEUM_1F/MAIN": {
     "parent_map": "MAP_SLATEPORT_CITY_OCEANIC_MUSEUM_1F",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_TM46"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -663,7 +692,9 @@
   "REGION_MAUVILLE_CITY/MAIN": {
     "parent_map": "MAP_MAUVILLE_CITY",
     "locations": [
-      "ITEM_MAUVILLE_CITY_X_SPEED"
+      "ITEM_MAUVILLE_CITY_X_SPEED",
+      "NPC_GIFT_GOT_BASEMENT_KEY_FROM_WATTSON",
+      "NPC_GIFT_GOT_TM24_FROM_WATTSON"
     ],
     "events": [],
     "exits": [
@@ -685,6 +716,7 @@
   "REGION_MAUVILLE_CITY_GYM/MAIN": {
     "parent_map": "MAP_MAUVILLE_CITY_GYM",
     "locations": [
+      "NPC_GIFT_RECEIVED_TM34",
       "BADGE_3"
     ],
     "events": [],
@@ -743,7 +775,9 @@
   },
   "REGION_MAUVILLE_CITY_HOUSE2/MAIN": {
     "parent_map": "MAP_MAUVILLE_CITY_HOUSE2",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_COIN_CASE"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -779,7 +813,9 @@
   },
   "REGION_VERDANTURF_TOWN_BATTLE_TENT_LOBBY/MAIN": {
     "parent_map": "MAP_VERDANTURF_TOWN_BATTLE_TENT_LOBBY",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_TM45"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -899,7 +935,9 @@
   },
   "REGION_FALLARBOR_TOWN_COZMOS_HOUSE/MAIN": {
     "parent_map": "MAP_FALLARBOR_TOWN_COZMOS_HOUSE",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_TM27"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -936,7 +974,9 @@
   },
   "REGION_LAVARIDGE_TOWN_HERB_SHOP/MAIN": {
     "parent_map": "MAP_LAVARIDGE_TOWN_HERB_SHOP",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_CHARCOAL"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -946,6 +986,7 @@
   "REGION_LAVARIDGE_TOWN_GYM_1F/MAIN": {
     "parent_map": "MAP_LAVARIDGE_TOWN_GYM_1F",
     "locations": [
+      "NPC_GIFT_RECEIVED_TM50",
       "BADGE_4"
     ],
     "events": [],
@@ -1099,7 +1140,9 @@
   },
   "REGION_FORTREE_CITY_HOUSE2/MAIN": {
     "parent_map": "MAP_FORTREE_CITY_HOUSE2",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_TM10"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -1117,7 +1160,9 @@
   },
   "REGION_FORTREE_CITY_HOUSE4/MAIN": {
     "parent_map": "MAP_FORTREE_CITY_HOUSE4",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_MENTAL_HERB"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -1136,6 +1181,7 @@
   "REGION_FORTREE_CITY_GYM/MAIN": {
     "parent_map": "MAP_FORTREE_CITY_GYM",
     "locations": [
+      "NPC_GIFT_RECEIVED_TM40",
       "BADGE_6"
     ],
     "events": [],
@@ -1372,7 +1418,9 @@
   },
   "REGION_LILYCOVE_CITY_HOUSE2/MAIN": {
     "parent_map": "MAP_LILYCOVE_CITY_HOUSE2",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_TM44"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -1454,7 +1502,8 @@
   "REGION_MOSSDEEP_CITY/MAIN": {
     "parent_map": "MAP_MOSSDEEP_CITY",
     "locations": [
-      "ITEM_MOSSDEEP_CITY_NET_BALL"
+      "ITEM_MOSSDEEP_CITY_NET_BALL",
+      "NPC_GIFT_RECEIVED_KINGS_ROCK"
     ],
     "events": [],
     "exits": [
@@ -1478,6 +1527,7 @@
   "REGION_MOSSDEEP_CITY_GYM/MAIN": {
     "parent_map": "MAP_MOSSDEEP_CITY_GYM",
     "locations": [
+      "NPC_GIFT_RECEIVED_TM04",
       "BADGE_7"
     ],
     "events": [],
@@ -1528,7 +1578,9 @@
   },
   "REGION_MOSSDEEP_CITY_SPACE_CENTER_1F/MAIN": {
     "parent_map": "MAP_MOSSDEEP_CITY_SPACE_CENTER_1F",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_SUN_STONE_MOSSDEEP"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -1595,7 +1647,9 @@
   },
   "REGION_MOSSDEEP_CITY_HOUSE3/MAIN": {
     "parent_map": "MAP_MOSSDEEP_CITY_HOUSE3",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_SUPER_ROD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -1679,6 +1733,7 @@
   "REGION_SOOTOPOLIS_CITY_GYM_1F/MAIN": {
     "parent_map": "MAP_SOOTOPOLIS_CITY_GYM_1F",
     "locations": [
+      "NPC_GIFT_RECEIVED_TM03",
       "BADGE_8"
     ],
     "events": [],
@@ -1727,7 +1782,9 @@
   },
   "REGION_SOOTOPOLIS_CITY_HOUSE1/MAIN": {
     "parent_map": "MAP_SOOTOPOLIS_CITY_HOUSE1",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_TM31"
+    ],
     "events": [],
     "exits": [],
     "warps": [

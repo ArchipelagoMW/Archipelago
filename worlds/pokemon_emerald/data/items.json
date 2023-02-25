@@ -1364,6 +1364,12 @@
     "classification": "FILLER",
     "tags": []
   },
+
+  "ITEM_POWDER_JAR": {
+    "label": "Powder Jar",
+    "classification": "FILLER",
+    "tags": []
+  },
   "ITEM_MAGMA_EMBLEM": {
     "label": "Magma Emblem",
     "classification": "FILLER",
