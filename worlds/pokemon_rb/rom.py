@@ -219,27 +219,36 @@ def process_wild_pokemon(self):
     encounter_slots = get_encounter_slots(self)
 
     placed_mons = {pokemon: 0 for pokemon in poke_data.pokemon_data.keys()}
+    zone_mapping = {}
     if self.multiworld.randomize_wild_pokemon[self.player].value:
         mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
                      or self.multiworld.randomize_legendary_pokemon[self.player].value == 3]
         self.multiworld.random.shuffle(encounter_slots)
         locations = []
         for slot in encounter_slots:
-            mon = randomize_pokemon(self, slot.original_item, mons_list,
-                                    self.multiworld.randomize_wild_pokemon[self.player].value, self.multiworld.random)
+            location = self.multiworld.get_location(slot.name, self.player)
+            zone = " - ".join(location.name.split(" - ")[:-1])
+            if zone not in zone_mapping:
+                zone_mapping[zone] = {}
+            original_mon = slot.original_item
+            if self.multiworld.area_1_to_1_mapping[self.player] and original_mon in zone_mapping[zone]:
+                mon = zone_mapping[zone][original_mon]
+            else:
+                mon = randomize_pokemon(self, original_mon, mons_list,
+                                        self.multiworld.randomize_wild_pokemon[self.player].value, self.multiworld.random)
             # if static Pokemon are not randomized, we make sure nothing on Pokemon Tower 6F is a Marowak
             # if static Pokemon are randomized we deal with that during static encounter randomization
             while (self.multiworld.randomize_static_pokemon[self.player].value == 0 and mon == "Marowak"
                    and "Pokemon Tower 6F" in slot.name):
                 # to account for the possibility that only one ground type Pokemon exists, match only stats for this fix
-                mon = randomize_pokemon(self, slot.original_item, mons_list, 2, self.multiworld.random)
+                mon = randomize_pokemon(self, original_mon, mons_list, 2, self.multiworld.random)
             placed_mons[mon] += 1
-            location = self.multiworld.get_location(slot.name, self.player)
             location.item = self.create_item(mon)
             location.event = True
             location.locked = True
             location.item.location = location
             locations.append(location)
+            zone_mapping[zone][original_mon] = mon
 
         mons_to_add = []
         remaining_pokemon = [pokemon for pokemon in poke_data.pokemon_data.keys() if placed_mons[pokemon] == 0 and
@@ -272,11 +281,19 @@ def process_wild_pokemon(self):
             candidate_locations = [self.multiworld.get_location(location.name, self.player) for location in candidate_locations]
             candidate_locations.sort(key=lambda slot: abs(get_base_stat_total(slot.item.name) - stat_base))
             for location in candidate_locations:
-                if placed_mons[location.item.name] > 1 or location.item.name not in poke_data.first_stage_pokemon:
-                    placed_mons[location.item.name] -= 1
-                    location.item = self.create_item(mon)
-                    location.item.location = location
-                    placed_mons[mon] += 1
+                if placed_mons[location.item.name] > 10 or location.item.name not in poke_data.first_stage_pokemon:
+                    if self.multiworld.area_1_to_1_mapping[self.player]:
+                        zone = " - ".join(location.name.split(" - ")[:-1])
+                        place_locations = [place_location for place_location in candidate_locations if
+                                           place_location.name.startswith(zone)]
+                    else:
+                        place_locations = [location]
+                    for place_location in place_locations:
+                        print(f"replacing {place_location.item.name} with {mon} in {place_location.name} ")
+                        placed_mons[place_location.item.name] -= 1
+                        place_location.item = self.create_item(mon)
+                        place_location.item.location = place_location
+                        placed_mons[mon] += 1
                     break
 
     else:
@@ -463,10 +480,13 @@ def process_pokemon_data(self):
                 mon_data["tms"][int(flag / 8)] &= ~(1 << (flag % 8))
 
     hm_verify = ["Surf", "Strength"]
-    if self.multiworld.accessibility[self.player] != "minimal":
+    if self.multiworld.accessibility[self.player] != "minimal" or ((not
+                self.multiworld.badgesanity[self.player]) and max(self.multiworld.elite_four_condition[self.player],
+                                                                 self.multiworld.victory_road_conditions) > 7):
         hm_verify += ["Cut"]
-        if self.multiworld.trainersanity[self.player] or self.multiworld.extra_key_items[self.player]:
-            hm_verify += ["Flash"]
+    if self.multiworld.accessibility[self.player] != "minimal" and (self.multiworld.trainersanity[self.player] or
+                                                                    self.multiworld.extra_key_items[self.player]):
+        hm_verify += ["Flash"]
 
     for hm_move in hm_verify:
         if hm_move not in compat_hms:
@@ -683,13 +703,13 @@ def generate_output(self, output_directory: str):
         data[rom_addresses["Move_Data_DRAGON_RAGE"] + 1] = 0  # no special damage effect
         data[rom_addresses["Move_Data_DRAGON_RAGE"] + 2] = 80  # 80 power
         data[rom_addresses["Move_Data_HORN_DRILL"] + 1] = 0  # no special damage effect
-        data[rom_addresses["Move_Data_HORN_DRILL"] + 2] = 70  # 80 power
+        data[rom_addresses["Move_Data_HORN_DRILL"] + 2] = 70  # 70 power
         data[rom_addresses["Move_Data_HORN_DRILL"] + 4] = 90  # 90% accuracy
         data[rom_addresses["Move_Data_GUILLOTINE"] + 1] = 0  # no special damage effect
-        data[rom_addresses["Move_Data_GUILLOTINE"] + 2] = 70  # 80 power
+        data[rom_addresses["Move_Data_GUILLOTINE"] + 2] = 70  # 70 power
         data[rom_addresses["Move_Data_GUILLOTINE"] + 4] = 90  # 90% accuracy
         data[rom_addresses["Move_Data_FISSURE"] + 1] = 0  # no special damage effect
-        data[rom_addresses["Move_Data_FISSURE"] + 2] = 70  # 80 power
+        data[rom_addresses["Move_Data_FISSURE"] + 2] = 70  # 70 power
         data[rom_addresses["Move_Data_FISSURE"] + 4] = 90  # 90% accuracy
         data[rom_addresses["Move_Data_BLIZZARD"] + 4] = 70  # 70% accuracy
 

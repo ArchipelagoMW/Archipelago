@@ -244,6 +244,12 @@ class RandomizeWildPokemon(Choice):
     option_completely_random = 4
 
 
+class Area1To1Mapping(Toggle):
+    """When randomizing wild Pokemon, for each zone, all instances of a particular Pokemon will be replaced with the
+    same Pokemon, resulting in fewer Pokemon in each area."""
+    default = 1
+
+
 class RandomizeStarterPokemon(Choice):
     """Randomize the starter Pokemon choices."""
     display_name = "Randomize Starter Pokemon"
@@ -636,6 +642,7 @@ pokemon_rb_options = {
     "minimum_steps_between_encounters": MinimumStepsBetweenEncounters,
     "exp_modifier": ExpModifier,
     "randomize_wild_pokemon": RandomizeWildPokemon,
+    "area_1_to_1_mapping": Area1To1Mapping,
     "randomize_starter_pokemon": RandomizeStarterPokemon,
     "randomize_static_pokemon": RandomizeStaticPokemon,
     "randomize_legendary_pokemon": RandomizeLegendaryPokemon,

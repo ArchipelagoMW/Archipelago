@@ -204,39 +204,65 @@ class PokemonRedBlueWorld(World):
         self.multiworld.itempool += item_pool
 
     def pre_fill(self) -> None:
-
         process_wild_pokemon(self)
         process_static_pokemon(self)
+        pokemon_locs = [location.name for location in location_data if location.type != "Item"]
+        for location in self.multiworld.get_locations(self.player):
+            if location.name in pokemon_locs:
+                 location.show_in_spoiler = False
+
 
         def intervene(move):
+            last_intervene = move
             accessible_slots = [loc for loc in self.multiworld.get_reachable_locations(test_state, self.player) if loc.type == "Wild Encounter"]
             move_bit = pow(2, poke_data.hm_moves.index(move) + 2)
             viable_mons = [mon for mon in self.local_poke_data if self.local_poke_data[mon]["tms"][6] & move_bit]
             placed_mons = [slot.item.name for slot in accessible_slots]
-            self.multiworld.random.shuffle(placed_mons)
-            # make sure the mon we're replacing exists elsewhere so that we don't cut Pokémon out of the game entirely
-            # in the interest of efficiency we'll just only look at the accessible_slots list we already have
-            # even with no HM-compatible Pokémon available this list should have 162 slots so it should be impossible
-            # for no duplicates to exist
-            for placed_mon in placed_mons:
-                if placed_mons.count(placed_mon) > 1:
-                    break
-            replace_slot = self.multiworld.random.choice([slot for slot in accessible_slots if slot.item.name == placed_mon])
+            # this sort method doesn't seem to work if you reference the same list being sorted in the lambda
+            placed_mons_copy = placed_mons.copy()
+            placed_mons.sort(key=lambda i: placed_mons_copy.count(i))
+            placed_mon = placed_mons.pop()
+            if self.multiworld.area_1_to_1_mapping[self.player]:
+                zone = " - ".join(placed_mon.split(" - ")[:-1])
+                replace_slots = [slot for slot in accessible_slots if slot.name.startswith(zone) and slot.item.name ==
+                                 placed_mon]
+            else:
+                replace_slots = [self.multiworld.random.choice([slot for slot in accessible_slots if slot.item.name ==
+                                                               placed_mon])]
             replace_mon = self.multiworld.random.choice(viable_mons)
-            replace_slot.item = self.create_item(replace_mon)
-        test_state = self.multiworld.get_all_state(False)
-        if not test_state.pokemon_rb_can_surf(self.player):
-            intervene("Surf")
+            for replace_slot in replace_slots:
+                replace_slot.item = self.create_item(replace_mon)
+        last_intervene = None
+        while True:
+            intervene_move = None
             test_state = self.multiworld.get_all_state(False)
-        if not test_state.pokemon_rb_can_strength(self.player):
-            intervene("Strength")
-            test_state = self.multiworld.get_all_state(False)
-        if self.multiworld.accessibility[self.player].current_key != "minimal":
-            if not test_state.pokemon_rb_can_cut(self.player):
-                intervene("Cut")
-            test_state = self.multiworld.get_all_state(False)
-            if not test_state.pokemon_rb_can_flash(self.player):
-                intervene("Flash")
+            if not self.multiworld.badgesanity[self.player]:
+                for badge in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge",
+                              "Marsh Badge", "Volcano Badge", "Earth Badge"]:
+                    test_state.collect(self.create_item(badge))
+            if not test_state.pokemon_rb_can_surf(self.player):
+                intervene_move = "Surf"
+            if not test_state.pokemon_rb_can_strength(self.player):
+                intervene_move = "Strength"
+            # cut may not be needed if accessibility is minimal, unless you need all 8 badges and badgesanity is off,
+            # as you will require cut to access celadon gyn
+            if (self.multiworld.accessibility[self.player].current_key != "minimal" or ((not
+                self.multiworld.badgesanity[self.player]) and max(self.multiworld.elite_four_condition[self.player],
+                                                                 self.multiworld.victory_road_conditions) > 7)):
+                if not test_state.pokemon_rb_can_cut(self.player):
+                    intervene_move = "Cut"
+            if (self.multiworld.accessibility[self.player].current_key != "minimal" and
+                (self.multiworld.trainersanity[self.player] or self.multiworld.extra_key_items[self.player])):
+                if not test_state.pokemon_rb_can_flash(self.player):
+                    intervene_move = "Flash"
+            if intervene_move:
+                if intervene_move == last_intervene:
+                    raise Exception(f"Caught in infinite loop attempting to ensure {intervene_move} is available to player {self.player}")
+                print("intervening: " + intervene_move)
+                intervene(intervene_move)
+                last_intervene = intervene_move
+            else:
+                break
 
         if self.multiworld.old_man[self.player].value == 1:
             self.multiworld.local_early_items[self.player]["Oak's Parcel"] = 1
@@ -330,6 +356,13 @@ class PokemonRedBlueWorld(World):
             spoiler_handle.write(f"\n\nType matchups ({self.multiworld.player_name[self.player]}):\n\n")
             for matchup in self.type_chart:
                 spoiler_handle.write(f"{matchup[0]} deals {matchup[2] * 10}% damage to {matchup[1]}\n")
+        spoiler_handle.write(f"\n\nPokémon locations ({self.multiworld.player_name[self.player]}):\n\n")
+        pokemon_locs = [location.name for location in location_data if location.type != "Item"]
+        for location in self.multiworld.get_locations(self.player):
+            if location.name in pokemon_locs:
+                spoiler_handle.write(location.name + ": " + location.item.name + "\n")
+
+
 
     def get_filler_item_name(self) -> str:
         combined_traps = self.multiworld.poison_trap_weight[self.player].value + self.multiworld.fire_trap_weight[self.player].value + self.multiworld.paralyze_trap_weight[self.player].value + self.multiworld.ice_trap_weight[self.player].value
