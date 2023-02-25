@@ -67,15 +67,21 @@ class MuseDashWorld(World):
         difficultyMode = self.multiworld.song_difficulty_mode[self.player]
 
         lower_diff_threshold = 0
-        higher_diff_threshold = 12
+        higher_diff_threshold = 20
 
         if (difficultyMode == 1):
-            higher_diff_threshold = 5
+            higher_diff_threshold = 3
         elif (difficultyMode == 2):
-            lower_diff_threshold = 5
-            higher_diff_threshold = 8
+            lower_diff_threshold = 4
+            higher_diff_threshold = 5
         elif (difficultyMode == 3):
+            lower_diff_threshold = 6
+            higher_diff_threshold = 7
+        elif (difficultyMode == 4):
             lower_diff_threshold = 8
+            higher_diff_threshold = 9
+        elif (difficultyMode == 5):
+            lower_diff_threshold = 10
 
         available_song_keys = self.museDashCollection.get_all_songs_with_settings(dlc_songs, streamer_mode, lower_diff_threshold, higher_diff_threshold)
         self.create_song_pool(available_song_keys)
@@ -91,7 +97,7 @@ class MuseDashWorld(World):
 
         startingSongCount = self.multiworld.starting_song_count[self.player]
         if (total_available_songs < startingSongCount + 2): # Needs Starting Songs + Victory Song + At least 1 intermediary song
-            raise Exception("Not enough songs available to satify the starting song.")
+            raise Exception("Not enough songs available to satify the starting song count.")
 
         self.included_songs = list()
         self.starting_songs = list()

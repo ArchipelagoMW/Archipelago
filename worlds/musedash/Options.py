@@ -36,16 +36,20 @@ class AdditionalSongs(Range):
 
 #Todo: Get feedback on these ranges.
 class DifficultyMode(Choice):
-    """Filters songs based:
-    - Easy: At least 1 difficulty between 1-5
-    - Medium: At least 1 difficulty between 5-8
-    - Hard: At least 1 difficulty between 8+
+    """Ensures that at any chosen song as at least 1 value falling within these values.
+    - Easy: 1, 2 or 3
+    - Medium: 4, 5
+    - Hard: 6, 7
+    - Expert: 8, 9
+    - Master: 10+
     - Any: All songs are available"""
     display_name = "Song Difficulty"
     option_Any = 0
     option_Easy = 1
     option_Medium = 2
     option_Hard = 3
+    option_Expert = 4
+    option_Master = 5
     default = 0
 
 class GradeNeeded(Choice):
