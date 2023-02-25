@@ -234,13 +234,13 @@ class MultiWorld():
             self.custom_data[player] = {}
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
             self.worlds[player] = world_type(self, player)
-            for option_key in typing.get_type_hints(world_type.options_dataclass):
+            for option_key in world_type.options_dataclass.type_hints:
                 option_values = getattr(args, option_key, {})
                 setattr(self, option_key, option_values)
                 # TODO - remove this loop once all worlds use options dataclasses
             options_dataclass: typing.Type[Options.GameOptions] = self.worlds[player].options_dataclass
             self.worlds[player].o = options_dataclass(**{option_key: getattr(args, option_key)[player]
-                                                         for option_key in typing.get_type_hints(options_dataclass)})
+                                                         for option_key in options_dataclass.type_hints})
 
     def set_item_links(self):
         item_links = {}

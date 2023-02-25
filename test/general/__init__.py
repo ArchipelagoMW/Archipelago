@@ -1,20 +1,20 @@
 from argparse import Namespace
-from typing import get_type_hints
+from typing import Type
 
 from BaseClasses import MultiWorld, CollectionState
-from worlds.AutoWorld import call_all
+from worlds.AutoWorld import call_all, World
 
 gen_steps = ["generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill"]
 
 
-def setup_solo_multiworld(world_type) -> MultiWorld:
+def setup_solo_multiworld(world_type: Type[World]) -> MultiWorld:
     multiworld = MultiWorld(1)
     multiworld.game[1] = world_type.game
     multiworld.player_name = {1: "Tester"}
     multiworld.set_seed()
     multiworld.state = CollectionState(multiworld)
     args = Namespace()
-    for name, option in get_type_hints(world_type.options_dataclass).items():
+    for name, option in world_type.options_dataclass.type_hints.items():
         setattr(args, name, {1: option.from_any(option.default)})
     multiworld.set_options(args)
     for step in gen_steps:

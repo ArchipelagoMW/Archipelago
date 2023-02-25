@@ -1,6 +1,4 @@
-import itertools
-from argparse import Namespace
-from typing import get_type_hints, List, Iterable
+from typing import List, Iterable
 import unittest
 
 import Options
@@ -25,14 +23,14 @@ def generate_multi_world(players: int = 1) -> MultiWorld:
         multi_world.player_name[player_id] = "Test Player " + str(player_id)
         region = Region("Menu", player_id, multi_world, "Menu Region Hint")
         multi_world.regions.append(region)
-        for option_key, option in get_type_hints(Options.PerGameCommonOptions).items():
+        for option_key, option in Options.PerGameCommonOptions.type_hints.items():
             if hasattr(multi_world, option_key):
                 getattr(multi_world, option_key).setdefault(player_id, option.from_any(getattr(option, "default")))
             else:
                 setattr(multi_world, option_key, {player_id: option.from_any(getattr(option, "default"))})
         # TODO - remove this loop once all worlds use options dataclasses
         world.o = world.options_dataclass(**{option_key: getattr(multi_world, option_key)[player_id]
-                                             for option_key in get_type_hints(world.options_dataclass)})
+                                             for option_key in world.options_dataclass.type_hints})
 
     multi_world.set_seed(0)
 
