@@ -1,52 +1,52 @@
-from typing import Set, List
+from typing import List, Tuple
 
 from .game_item import FishItem
 
-spring = {"Spring"}
-summer = {"Summer"}
-fall = {"Fall"}
-winter = {"Winter"}
-spring_summer = {*spring, *summer}
-spring_fall = {*spring, *fall}
-spring_winter = {*spring, *winter}
-summer_fall = {*summer, *fall}
-summer_winter = {*summer, *winter}
-fall_winter = {*fall, *winter}
-spring_summer_fall = {*spring, *summer, *fall}
-spring_summer_winter = {*spring, *summer, *winter}
-spring_fall_winter = {*spring, *fall, *winter}
-all_seasons = {*spring, *summer, *fall, *winter}
+spring = ("Spring",)
+summer = ("Summer",)
+fall = ("Fall",)
+winter = ("Winter",)
+spring_summer = (*spring, *summer)
+spring_fall = (*spring, *fall)
+spring_winter = (*spring, *winter)
+summer_fall = (*summer, *fall)
+summer_winter = (*summer, *winter)
+fall_winter = (*fall, *winter)
+spring_summer_fall = (*spring, *summer, *fall)
+spring_summer_winter = (*spring, *summer, *winter)
+spring_fall_winter = (*spring, *fall, *winter)
+all_seasons = (*spring, *summer, *fall, *winter)
 
-town = {"Town"}
-beach = {"Beach"}
-mountain = {"Mountain"}
-forest = {"Forest"}
-secret_woods = {"Secret Woods"}
-desert = {"The Desert"}
-mines_20 = {"The Mines - Floor 20"}
-mines_60 = {"The Mines - Floor 60"}
-mines_100 = {"The Mines - Floor 100"}
-sewers = {"Sewers"}
-mutant_bug_lair = {"Mutant Bug Lair"}
-witch_swamp = {"Witch's Swamp"}
-ginger_island = {"Ginger Island"}
-ginger_island_ocean = {*ginger_island}
-ginger_island_river = {*ginger_island}
-pirate_cove = {*ginger_island}
-night_market = {*beach}
-lakes = {*mountain, *secret_woods, *sewers}
-ocean = {*beach}
-rivers = {*town, *forest}
-rivers_secret_woods = {*rivers, *secret_woods}
-forest_mountain = {*forest, *mountain}
-rivers_mountain_lake = {*town, *forest, *mountain}
-mines_20_60 = {*mines_20, *mines_60}
+town = ("Town",)
+beach = ("Beach",)
+mountain = ("Mountain",)
+forest = ("Forest",)
+secret_woods = ("Secret Woods",)
+desert = ("The Desert",)
+mines_20 = ("The Mines - Floor 20",)
+mines_60 = ("The Mines - Floor 60",)
+mines_100 = ("The Mines - Floor 100",)
+sewers = ("Sewers",)
+mutant_bug_lair = ("Mutant Bug Lair",)
+witch_swamp = ("Witch's Swamp",)
+ginger_island = ("Ginger Island",)
+ginger_island_ocean = ginger_island
+ginger_island_river = ginger_island
+pirate_cove = ginger_island
+night_market = beach
+lakes = (*mountain, *secret_woods, *sewers)
+ocean = beach
+rivers = (*town, *forest)
+rivers_secret_woods = (*rivers, *secret_woods)
+forest_mountain = (*forest, *mountain)
+rivers_mountain_lake = (*town, *forest, *mountain)
+mines_20_60 = (*mines_20, *mines_60)
 
 all_fish_items: List[FishItem] = []
 
 
-def fish(name: str, item_id: int, locations: Set[str], seasons: Set[str], difficulty: int) -> FishItem:
-    fish_item = FishItem(name, item_id, frozenset(locations), frozenset(seasons), difficulty)
+def fish(name: str, item_id: int, locations: Tuple[str, ...], seasons: Tuple[str, ...], difficulty: int) -> FishItem:
+    fish_item = FishItem(name, item_id, locations, seasons, difficulty)
     all_fish_items.append(fish_item)
     return fish_item
 
@@ -120,8 +120,8 @@ mussel = fish("Mussel", 719, ocean, all_seasons, -1)
 shrimp = fish("Shrimp", 720, ocean, all_seasons, -1)
 oyster = fish("Oyster", 723, ocean, all_seasons, -1)
 
-legendary_fish = {crimsonfish, angler, legend, glacierfish, mutant_carp}
-special_fish = {*legendary_fish, blob_fish, lava_eel, octopus, scorpion_carp, ice_pip, super_cucumber, dorado}
+legendary_fish = [crimsonfish, angler, legend, glacierfish, mutant_carp]
+special_fish = [*legendary_fish, blob_fish, lava_eel, octopus, scorpion_carp, ice_pip, super_cucumber, dorado]
 
 all_fish_items_by_name = {fish.name: fish for fish in all_fish_items}
 all_fish_items_by_id = {fish.item_id: fish for fish in all_fish_items}

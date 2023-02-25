@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, Union, Optional, Iterable, Sized, Tuple, List
+from typing import Dict, Union, Optional, Iterable, Sized, Tuple, List, FrozenSet
 
 from BaseClasses import CollectionState, ItemClassification
 from . import options
@@ -162,7 +162,7 @@ class _False(StardewRule):
 
 
 class _Or(StardewRule):
-    rules: frozenset[StardewRule]
+    rules: FrozenSet[StardewRule]
 
     def __init__(self, rule: Union[StardewRule, Iterable[StardewRule]], *rules: StardewRule):
         rules_list = set()

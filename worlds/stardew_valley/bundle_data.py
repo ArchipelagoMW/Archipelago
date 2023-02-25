@@ -34,6 +34,9 @@ class BundleItem:
     def __repr__(self):
         return f"{self.amount} {quality_dict[self.quality]} {self.item.name}"
 
+    def __lt__(self, other):
+        return self.item < other.item
+
 
 wild_horseradish = BundleItem.item_bundle("Wild Horseradish", 16, 1, 0)
 daffodil = BundleItem.item_bundle("Daffodil", 18, 1, 0)
