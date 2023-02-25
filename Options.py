@@ -873,17 +873,17 @@ class CommonOptions(metaclass=OptionsMetaProperty):
     progression_balancing: ProgressionBalancing
     accessibility: Accessibility
 
-    def as_dict(self, *args: str) -> typing.Dict[str, typing.Any]:
+    def as_dict(self, *option_names: str) -> typing.Dict[str, typing.Any]:
         """
         Pass the option_names you would like returned as a dictionary as strings.
         Returns a dictionary of [str, Option.value]
         """
         option_results = {}
-        for option_name in args:
-            if option_name in self.__annotations__:
+        for option_name in option_names:
+            if option_name in type(self).type_hints:
                 option_results[option_name] = getattr(self, option_name).value
             else:
-                raise ValueError(f"{option_name} not found in {self.__annotations__}")
+                raise ValueError(f"{option_name} not found in {tuple(type(self).type_hints)}")
         return option_results
 
 

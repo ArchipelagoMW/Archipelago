@@ -1586,7 +1586,7 @@ class Spoiler():
                     outfile.write('\nPlayer %d: %s\n' % (player, self.multiworld.get_player_name(player)))
                 outfile.write('Game:                            %s\n' % self.multiworld.game[player])
 
-                for f_option, option in self.multiworld.worlds[player].o.__annotations__.items():
+                for f_option, option in self.multiworld.worlds[player].options_dataclass.type_hints.items():
                     write_option(f_option, option)
 
                 AutoWorld.call_single(self.multiworld, "write_spoiler_header", player, outfile)
