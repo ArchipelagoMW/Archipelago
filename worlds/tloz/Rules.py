@@ -97,13 +97,15 @@ def set_rules(tloz_world: "TLoZWorld"):
     add_rule(world.get_location("Magical Sword Grave", player),
              lambda state: state.has("Heart Container", player, 9))
 
-    stepladder_locations = [
-        "Ocean Heart Container", "Level 4 Triforce", "Level 4 Boss",
-        "Level 4 Map", "Level 4 Key Drop (Keese North)"
-    ]
+    stepladder_locations = ["Ocean Heart Container", "Level 4 Triforce", "Level 4 Boss", "Level 4 Map"]
+    stepladder_locations_expanded = ["Level 4 Key Drop (Keese North)"]
     for location in stepladder_locations:
         add_rule(world.get_location(location, player),
                  lambda state: state.has("Stepladder", player))
+    if world.ExpandedPool[player]:
+        for location in stepladder_locations_expanded:
+            add_rule(world.get_location(location, player),
+                     lambda state: state.has("Stepladder", player))
 
     if world.StartingPosition[player] != 2:
         # Don't allow Take Any Items until we can actually get in one
