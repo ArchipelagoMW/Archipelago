@@ -18,8 +18,8 @@ class TestDungeon(unittest.TestCase):
         args = Namespace()
         for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
             setattr(args, name, {1: option.from_any(option.default)})
-        self.multiworld.set_options(args)
         self.multiworld.set_default_common_options()
+        self.multiworld.set_options(args)
         self.starting_regions = []  # Where to start exploring
         self.remove_exits = []      # Block dungeon exits
         self.multiworld.difficulty_requirements[1] = difficulties['normal']

@@ -4,11 +4,10 @@ from BaseClasses import MultiWorld
 from worlds.alttp.Dungeons import create_dungeons, get_dungeon_item_pool
 from worlds.alttp.EntranceShuffle import link_inverted_entrances
 from worlds.alttp.InvertedRegions import create_inverted_regions
-from worlds.alttp.ItemPool import generate_itempool, difficulties
+from worlds.alttp.ItemPool import difficulties
 from worlds.alttp.Items import ItemFactory
 from worlds.alttp.Regions import mark_light_world_regions
 from worlds.alttp.Shops import create_shops
-from worlds.alttp.Rules import set_rules
 from test.TestBase import TestBase
 
 from worlds import AutoWorld
@@ -20,8 +19,8 @@ class TestInvertedOWG(TestBase):
         args = Namespace()
         for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
             setattr(args, name, {1: option.from_any(option.default)})
-        self.multiworld.set_options(args)
         self.multiworld.set_default_common_options()
+        self.multiworld.set_options(args)
         self.multiworld.logic[1] = "owglitches"
         self.multiworld.mode[1] = "inverted"
         self.multiworld.difficulty_requirements[1] = difficulties['normal']
