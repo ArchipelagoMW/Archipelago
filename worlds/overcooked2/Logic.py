@@ -8,12 +8,15 @@ def has_requirements_for_level_access(state: CollectionState, level_name: str, p
                                       required_star_count: int, player: int) -> bool:
     # Check if the ramps in the overworld are set correctly
     if level_name in ramp_logic:
-        if not state.has("Ramp Button", player):
-            return False  # need the item to use ramps
+        (ramp_reqs, level_reqs) = ramp_logic[level_name]
 
-        for req in ramp_logic[level_name]:
+        for req in level_reqs:
             if not state.has(req + " Level Complete", player):
                 return False  # This level needs another to be beaten first
+
+        for req in ramp_reqs:
+            if not state.has(req + " Ramp", player):
+                return False  # The player doesn't have the pre-requisite ramp button
 
     # Kevin Levels Need to have the corresponding items
     if level_name.startswith("K"):
@@ -78,7 +81,7 @@ def is_item_progression(item_name, level_mapping, include_kevin):
     if item_name.endswith("Emote"):
         return False
 
-    if "Kevin" in item_name or item_name in ["Ramp Button"]:
+    if "Kevin" in item_name or "Ramp" in item_name:
         return True  # always progression
 
     def item_in_logic(shortname, _item_name):
@@ -216,23 +219,23 @@ def is_completable_no_items(level: Overcooked2GenericLevel) -> bool:
 #
 # If empty, a ramp is required to access, but the ramp button is garunteed accessible
 #
-# If populated, a ramp is required to access and the button requires all levels in the
+# If populated, ramp(s) are required to access and the button requires all levels in the
 # list to be compelted before it can be pressed
 #
 ramp_logic = {
-    "1-5": [],
-    "2-2": [],
-    "3-1": [],
-    "5-2": [],
-    "6-1": [],
-    "6-2": ["5-1"],  # 5-1 spawns blue button, blue button gets you to red button
-    "Kevin-1": [],
-    "Kevin-7": ["5-1"],  # 5-1 spawns blue button,
-                         # press blue button,
-                         # climb blue ramp,
-                         # jump the gap,
-                         # climb wood ramps
-    "Kevin-8": ["5-1", "6-2"],  # Same as above, but 6-2 spawns the ramp to K8
+    "1-5": (["Yellow"], []),
+    "2-2": (["Green"], []),
+    "3-1": (["Blue"], []),
+    "5-2": (["Purple"], []),
+    "6-1": (["Pink"], []),
+    "6-2": (["Red", "Purple"], ["5-1"]),  # 5-1 spawns blue button, blue button gets you to red button
+    "Kevin-1": (["Dark Green"], []),
+    "Kevin-7": (["Purple"], ["5-1"]), # 5-1 spawns blue button,
+                                    # press blue button,
+                                    # climb blue ramp,
+                                    # jump the gap,
+                                    # climb wood ramps
+    "Kevin-8": (["Red", "Blue"], ["5-1", "6-2"]),  # Same as above, but 6-2 spawns the ramp to K8
 }
 
 horde_logic = {  # Additive
@@ -3055,7 +3058,8 @@ level_logic = {
     "Horde H-8": (
         (  # 1-star
             {  # Exclusive
-
+                "Coin Purse",
+                "Calmer Unbread"
             },
             horde_logic,
         ),
@@ -3467,7 +3471,8 @@ level_logic = {
     "Winter H-4": (
         (  # 1-star
             {  # Exclusive
-
+                "Coin Purse",
+                "Calmer Unbread"
             },
             horde_logic,
         ),

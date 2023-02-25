@@ -65,11 +65,11 @@ class PokemonRedBlueWorld(World):
         self.traps = None
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld: MultiWorld):
         versions = set()
-        for player in world.player_ids:
-            if world.worlds[player].game == "Pokemon Red and Blue":
-                versions.add(world.game_version[player].current_key)
+        for player in multiworld.player_ids:
+            if multiworld.worlds[player].game == "Pokemon Red and Blue":
+                versions.add(multiworld.game_version[player].current_key)
         for version in versions:
             if not os.path.exists(get_base_rom_path(version)):
                 raise FileNotFoundError(get_base_rom_path(version))
@@ -318,7 +318,8 @@ class PokemonRedBlueWorld(World):
                 spoiler_handle.write(f"{matchup[0]} deals {matchup[2] * 10}% damage to {matchup[1]}\n")
 
     def get_filler_item_name(self) -> str:
-        if self.multiworld.random.randint(1, 100) <= self.multiworld.trap_percentage[self.player].value:
+        combined_traps = self.multiworld.poison_trap_weight[self.player].value + self.multiworld.fire_trap_weight[self.player].value + self.multiworld.paralyze_trap_weight[self.player].value + self.multiworld.ice_trap_weight[self.player].value
+        if self.multiworld.random.randint(1, 100) <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0:
             return self.select_trap()
 
         return self.multiworld.random.choice([item for item in item_table if item_table[
