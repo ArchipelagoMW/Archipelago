@@ -1,4 +1,4 @@
-from typing import Dict, FrozenSet
+from typing import Dict, FrozenSet, Union
 from BaseClasses import MultiWorld
 from Options import Choice, Option, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range
 from .MissionTables import vanilla_mission_req_table
@@ -132,7 +132,7 @@ sc2wol_options: Dict[str, Option] = {
 }
 
 
-def get_option_value(multiworld: MultiWorld, player: int, name: str) -> int or FrozenSet:
+def get_option_value(multiworld: MultiWorld, player: int, name: str) -> Union[int,  FrozenSet]:
     if multiworld is None:
         return sc2wol_options[name].default
 
