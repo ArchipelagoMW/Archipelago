@@ -19,34 +19,34 @@ script_folder = Path(__file__)
 
 
 def write_item_csv(items: List[ItemData]):
-    with open((script_folder.parent.parent / "data/items.csv").resolve(), 'w', newline="") as file:
-        writer = csv.DictWriter(file, ['id', 'name', 'classification', 'groups'])
+    with open((script_folder.parent.parent / "data/items.csv").resolve(), "w", newline="") as file:
+        writer = csv.DictWriter(file, ["id", "name", "classification", "groups"])
         writer.writeheader()
         for item in items:
             item_dict = {
-                'id': item.code_without_offset,
-                'name': item.name,
-                'classification': item.classification.name,
-                'groups': ','.join(sorted(group.name for group in item.groups))
+                "id": item.code_without_offset,
+                "name": item.name,
+                "classification": item.classification.name,
+                "groups": ",".join(sorted(group.name for group in item.groups))
             }
             writer.writerow(item_dict)
 
 
 def write_location_csv(locations: List[LocationData]):
-    with open((script_folder.parent.parent / "data/locations.csv").resolve(), 'w', newline="") as file:
-        write = csv.DictWriter(file, ['id', 'region', 'name', 'tags'])
+    with open((script_folder.parent.parent / "data/locations.csv").resolve(), "w", newline="") as file:
+        write = csv.DictWriter(file, ["id", "region", "name", "tags"])
         write.writeheader()
         for location in locations:
             location_dict = {
-                'id': location.code_without_offset,
-                'name': location.name,
-                'region': location.region,
-                'tags': ','.join(sorted(group.name for group in location.tags))
+                "id": location.code_without_offset,
+                "name": location.name,
+                "region": location.region,
+                "tags": ",".join(sorted(group.name for group in location.tags))
             }
             write.writerow(location_dict)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     loaded_items = load_item_csv()
 
     item_counter = itertools.count(max(item.code_without_offset
