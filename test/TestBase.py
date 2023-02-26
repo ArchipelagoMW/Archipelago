@@ -209,6 +209,7 @@ class WorldTestBase(unittest.TestCase):
     # following tests are automatically run
     @property
     def dont_run_default_tests(self) -> bool:
+        """Not possible or identical to the base test that's always being run already"""
         constructed = hasattr(self, "game") and hasattr(self, "multiworld")
         return not constructed or (not self.options
                                    and self.setUp is WorldTestBase.setUp
