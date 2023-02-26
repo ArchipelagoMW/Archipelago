@@ -35,9 +35,12 @@ class PokemonEmeraldWorld(World):
         if (sanity_check() == False): raise AssertionError("Sanity check failed")
 
         create_regions(self.multiworld, self.player)
+        create_locations_with_tags(self.multiworld, self.player, ["OverworldItem", "HiddenItem", "Badge", "NpcGift", "HM", "KeyItem", "Rod"])
         set_default_rules(self.multiworld, self.player)
 
-        create_locations_with_tags(self.multiworld, self.player, ["OverworldItem", "HiddenItem", "Badge", "NpcGift", "HM", "KeyItem"])
+
+    def generate_basic(self):
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
 
     def create_items(self):

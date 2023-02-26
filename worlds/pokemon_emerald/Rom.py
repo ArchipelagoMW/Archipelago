@@ -17,7 +17,7 @@ class PokemonEmeraldDeltaPatch(APDeltaPatch):
         return get_base_rom_as_bytes()
 
 
-def generate_output(world, player, output_directory: str):
+def generate_output(multiworld, player, output_directory: str):
     extracted_data = get_extracted_data()
 
     base_rom = get_base_rom_as_bytes()
@@ -26,7 +26,7 @@ def generate_output(world, player, output_directory: str):
         patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
 
     # Set item values
-    for location in world.get_locations():
+    for location in multiworld.get_locations():
         if location.player != player:
             continue
         if location.is_event:
@@ -38,18 +38,18 @@ def generate_output(world, player, output_directory: str):
             _set_bytes_little_endian(patched_rom, location.address, 2, extracted_data["constants"]["ITEM_ARCHIPELAGO_PROGRESSION"])
 
     # Set encounter tables
-    _randomize_encounter_tables(world.per_slot_randoms[player], patched_rom)
+    _randomize_encounter_tables(multiworld.per_slot_randoms[player], patched_rom)
 
     # Write Output
     outfile_player_name = f"_P{player}"
-    outfile_player_name += f"_{world.get_file_safe_player_name(player).replace(' ', '_')}" \
-        if world.player_name[player] != "Player%d" % player else ""
+    outfile_player_name += f"_{multiworld.get_file_safe_player_name(player).replace(' ', '_')}" \
+        if multiworld.player_name[player] != "Player%d" % player else ""
 
-    output_path = os.path.join(output_directory, f"AP_{world.seed_name}{outfile_player_name}.gba")
+    output_path = os.path.join(output_directory, f"AP_{multiworld.seed_name}{outfile_player_name}.gba")
     with open(output_path, "wb") as outfile:
         outfile.write(patched_rom)
     patch = PokemonEmeraldDeltaPatch(os.path.splitext(output_path)[0] + ".apemerald", player=player,
-                                     player_name=world.player_name[player], patched_path=output_path)
+                                     player_name=multiworld.player_name[player], patched_path=output_path)
 
     patch.write()
     os.unlink(output_path)

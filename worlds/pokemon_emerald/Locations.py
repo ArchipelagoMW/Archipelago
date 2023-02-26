@@ -16,12 +16,12 @@ class PokemonEmeraldLocation(Location):
         self.is_event = id == None
 
 
-def create_locations_with_tags(world: MultiWorld, player: int, tags):
+def create_locations_with_tags(multiworld: MultiWorld, player: int, tags):
     region_data = get_region_data()
     tags = set(tags)
 
     for region_name, region_data in region_data.items():
-        region = world.get_region(region_name, player)
+        region = multiworld.get_region(region_name, player)
         for location_data in [location for location in region_data.locations if len(tags & location.tags) > 0]:
             location = PokemonEmeraldLocation(player, location_data.label, location_data.flag, region, location_data.rom_address, location_data.default_item)
             region.locations.append(location)

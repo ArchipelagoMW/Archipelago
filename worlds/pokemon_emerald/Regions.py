@@ -5,13 +5,13 @@ from .Locations import PokemonEmeraldLocation
 from .Warps import get_warp_region_name, get_warp_destination
 
 
-def create_regions(world, player):
+def create_regions(multiworld, player):
     regions = {}
     region_data = get_region_data()
 
     connections = []
     for region_name, region_data in region_data.items():
-        new_region = Region(region_name, player, world)
+        new_region = Region(region_name, player, multiworld)
 
         for event_data in region_data.events:
             event = PokemonEmeraldLocation(player, event_data.name, None, new_region)
@@ -34,11 +34,11 @@ def create_regions(world, player):
         regions[source].exits.append(connection)
         connection.connect(regions[dest])
 
-    menu = Region("Menu", player, world)
-    connection = Entrance(player, "New Game", menu)
+    menu = Region("Menu", player, multiworld)
+    connection = Entrance(player, "Start Game", menu)
     menu.exits.append(connection)
     connection.connect(regions["REGION_LITTLEROOT_TOWN/MAIN"])
     regions["Menu"] = menu
 
-    world.regions += regions.values()
-    world.initialize_regions()
+    multiworld.regions += regions.values()
+    multiworld.initialize_regions()

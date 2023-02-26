@@ -1175,6 +1175,10 @@
     "label": "Shoal Cave Lower Room: Gift from Black Belt",
     "tags": ["NpcGift"]
   },
+  "NPC_GIFT_RECEIVED_GO_GOGGLES": {
+    "label": "Lavaridge Town: Go Goggles from Rival",
+    "tags": ["KeyItem"]
+  },
   "NPC_GIFT_RECEIVED_GOOD_ROD": {
     "label": "Route 118: Good Rod from Fisherman",
     "tags": ["Rod"]
@@ -1220,7 +1224,7 @@
     "tags": ["HM"]
   },
   "NPC_GIFT_RECEIVED_ITEMFINDER": {
-    "label": "Route 110: Gift from Rival",
+    "label": "Route 110: Itemfinder from Rival",
     "tags": ["KeyItem"]
   },
   "NPC_GIFT_RECEIVED_KINGS_ROCK": {
