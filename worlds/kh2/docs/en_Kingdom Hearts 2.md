@@ -72,6 +72,14 @@ With the help of Shananas, Num, and ZakTheRobot we have many QoL features such a
 - Removal of Absent Silhouette and go straight into the Data Fights.
 - And much more can be found at [Kingdom Hearts 2 GoA Overview](https://tommadness.github.io/KH2Randomizer/overview/)
 
+<h2 style="text-transform:none";>Recommendation</h2>
+
+- Recommended making a save at the start of the GoA before opening anything. This will be the recommended file to load if/when your game crashes.
+    - If you don't want to have a save in the GoA. Disconnect the client, load the auto save, and then reconnect the client after it loads the auto save.
+- Recommended to set fps limit to 60fps.
+- Recommended to run the game in windows/borderless windowed mode. Fullscreen is stable but the game can crash if you alt-tab out.
+- Recommend viewing [Requirements/logic sheet](https://docs.google.com/spreadsheets/d/1Embae0t7pIrbzvX-NRywk7bTHHEvuFzzQBUUpSUL7Ak/edit?usp=sharing)
+
 <h2 style="text-transform:none";>F.A.Q.</h2>
 
 - Why am I not getting magic?
@@ -87,5 +95,11 @@ With the help of Shananas, Num, and ZakTheRobot we have many QoL features such a
     - You will need to get the `JaredWeakStrike/APCompanion` (you can find how to get this in the setup guide)
 - Why am I not sending or receiving items?
     - Make sure you are connected to the KH2 client and the correct room (for more information reference the setup guide)
-- Why did I not load in to the correct world visit?
+- Why did I not load in to the correct visit
     - You need to trigger a cutscene or visit The World That Never Was for it to update you have recevied the item.
+- Why should I install the auto save mod at `KH2FM-Mods-equations19/auto-save`?
+    - Because Kingdom Hearts 2 is prone to crashes and will keep you from losing your progress.
+- How do I load an auto save?
+    - To load an auto-save, hold down the Select or your equivalent on your prefered controller while choosing a file. Make sure to hold the button down the whole time.
+- How do I do a soft reset?
+    - Hold L1+L2+R1+R2+Start or your equivalent on your prefered controller at the same time to immediately reset the game to the start screen.
