@@ -6,6 +6,7 @@ import urllib.parse
 import sys
 import typing
 import bsdiff4
+import zipimport
 
 import Utils
 
@@ -136,6 +137,16 @@ class UndertaleContext(CommonContext):
                     os.remove(root+"/"+file)
                 elif file.find(".hint") > -1:
                     os.remove(root+"/"+file)
+                elif file.find(".spot") > -1:
+                    os.remove(root+"/"+file)
+
+    async def connect(self):
+        self.clear_undertale_files()
+        await super().connect()
+
+    async def disconnect(self):
+        self.clear_undertale_files()
+        await super().disconnect()
 
     async def connection_closed(self):
         self.clear_undertale_files()
