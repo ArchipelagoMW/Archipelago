@@ -720,7 +720,9 @@ class VerifyKeys:
         if cls.valid_keys:
             data = set(data)
             dataset = set(word.casefold() for word in data) if cls.valid_keys_casefold else set(data)
-            extra = dataset - cls.valid_keys
+            valid_keys = {valid_key.casefold() for valid_key in cls.valid_keys} if cls.valid_keys_casefold\
+                else cls.valid_keys
+            extra = dataset - valid_keys
             if extra:
                 raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
                                 f"Allowed keys: {cls.valid_keys}.")
