@@ -18,7 +18,7 @@ class BundleItem:
     quality: int
 
     @staticmethod
-    def item_bundle(name: str, item_id: int, amount:int, quality: int):
+    def item_bundle(name: str, item_id: int, amount: int, quality: int):
         return BundleItem(GameItem(name, item_id), amount, quality)
 
     @staticmethod
@@ -33,6 +33,9 @@ class BundleItem:
 
     def __repr__(self):
         return f"{self.amount} {quality_dict[self.quality]} {self.item.name}"
+
+    def __lt__(self, other):
+        return self.item < other.item
 
 
 wild_horseradish = BundleItem.item_bundle("Wild Horseradish", 16, 1, 0)
@@ -282,8 +285,8 @@ summer_crops_items = [blueberry, corn, hops, hot_pepper, melon, poppy,
 # TODO artichoke, beet
 fall_crops_items = [corn, sunflower, wheat, amaranth, bok_choy, cranberries,
                     eggplant, fairy_rose, grape, pumpkin, yam, sweet_gem_berry]
-all_crops_items = {*spring_crop_items, *summer_crops_items, *fall_crops_items}
-quality_crops_items = {item.as_quality(2).as_amount(5) for item in all_crops_items}
+all_crops_items = sorted({*spring_crop_items, *summer_crops_items, *fall_crops_items})
+quality_crops_items = [item.as_quality(2).as_amount(5) for item in all_crops_items]
 # TODO void_egg, dinosaur_egg, ostrich_egg, golden_egg
 animal_product_items = [egg, large_egg, brown_egg, large_brown_egg, wool, milk, large_milk,
                         goat_milk, large_goat_milk, truffle, duck_feather, duck_egg, rabbit_foot]
@@ -342,53 +345,53 @@ vault_5000_items = [BundleItem.money_bundle(5000)]
 vault_10000_items = [BundleItem.money_bundle(10000)]
 vault_25000_items = [BundleItem.money_bundle(25000)]
 
-crafts_room_bundle_items = {
+crafts_room_bundle_items = [
     *spring_foraging_items,
     *summer_foraging_items,
     *fall_foraging_items,
     *winter_foraging_items,
     *exotic_foraging_items,
     *construction_items,
-}
+]
 
-pantry_bundle_items = {
+pantry_bundle_items = sorted({
     *spring_crop_items,
     *summer_crops_items,
     *fall_crops_items,
     *quality_crops_items,
     *animal_product_items,
     *artisan_goods_items,
-}
+})
 
-fish_tank_bundle_items = {
+fish_tank_bundle_items = sorted({
     *river_fish_items,
     *lake_fish_items,
     *ocean_fish_items,
     *night_fish_items,
     *crab_pot_items,
     *specialty_fish_items,
-}
+})
 
-boiler_room_bundle_items = {
+boiler_room_bundle_items = sorted({
     *blacksmith_items,
     *geologist_items,
     *adventurer_items,
-}
+})
 
-bulletin_board_bundle_items = {
+bulletin_board_bundle_items = sorted({
     *chef_items,
     *[item for dye_color_items in dye_items for item in dye_color_items],
     *field_research_items,
     *fodder_items,
     *enchanter_items
-}
+})
 
-vault_bundle_items = {
+vault_bundle_items = [
     *vault_2500_items,
     *vault_5000_items,
     *vault_10000_items,
     *vault_25000_items,
-}
+]
 
 all_bundle_items_except_money = sorted({
     *crafts_room_bundle_items,

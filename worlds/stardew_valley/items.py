@@ -4,14 +4,13 @@ import enum
 import itertools
 import logging
 import math
+import typing
 from collections import OrderedDict
 from dataclasses import dataclass, field
 from functools import cached_property
 from pathlib import Path
 from random import Random
 from typing import Dict, List, Protocol, Union, Set, Optional, FrozenSet
-
-import typing
 
 from BaseClasses import Item, ItemClassification
 from . import options, data
@@ -130,34 +129,38 @@ class StardewItemFactory(Protocol):
 
 
 def load_item_csv():
-    from importlib.resources import path
+    try:
+        from importlib.resources import files
+    except ImportError:
+        from importlib_resources import files
 
     items = []
-    with path(data, "items.csv") as resource:
-        with open(resource) as file:
-            item_reader = csv.DictReader(file)
-            for item in item_reader:
-                id = int(item["id"]) if item["id"] else None
-                classification = ItemClassification[item["classification"]]
-                groups = {Group[group] for group in item["groups"].split(",") if group}
-                items.append(ItemData(id, item["name"], classification, groups))
+    with files(data).joinpath("items.csv").open() as file:
+        item_reader = csv.DictReader(file)
+        for item in item_reader:
+            id = int(item["id"]) if item["id"] else None
+            classification = ItemClassification[item["classification"]]
+            groups = {Group[group] for group in item["groups"].split(",") if group}
+            items.append(ItemData(id, item["name"], classification, groups))
     return items
 
 
 def load_resource_pack_csv() -> List[ResourcePackData]:
-    from importlib.resources import path
+    try:
+        from importlib.resources import files
+    except ImportError:
+        from importlib_resources import files
 
     resource_packs = []
-    with path(data, "resource_packs.csv") as resource:
-        with open(resource) as file:
-            resource_pack_reader = csv.DictReader(file)
-            for resource_pack in resource_pack_reader:
-                groups = frozenset(Group[group] for group in resource_pack["groups"].split(",") if group)
-                resource_packs.append(ResourcePackData(resource_pack["name"],
-                                                       int(resource_pack['default_amount']),
-                                                       int(resource_pack['scaling_factor']),
-                                                       ItemClassification[resource_pack["classification"]],
-                                                       groups))
+    with files(data).joinpath("resource_packs.csv").open() as file:
+        resource_pack_reader = csv.DictReader(file)
+        for resource_pack in resource_pack_reader:
+            groups = frozenset(Group[group] for group in resource_pack["groups"].split(",") if group)
+            resource_packs.append(ResourcePackData(resource_pack["name"],
+                                                   int(resource_pack['default_amount']),
+                                                   int(resource_pack['scaling_factor']),
+                                                   ItemClassification[resource_pack["classification"]],
+                                                   groups))
     return resource_packs
 
 

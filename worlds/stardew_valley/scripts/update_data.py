@@ -1,3 +1,10 @@
+"""Update data script
+This script can be used to assign new ids for the items and locations in the CSV file. It also regenerates the items
+based on the resource packs.
+
+To run the script, use `python -m worlds.stardew_valley.scripts.update_data` from the repository root.
+"""
+
 import csv
 import itertools
 from pathlib import Path

@@ -66,18 +66,20 @@ class StardewLocationCollector(Protocol):
 
 
 def load_location_csv() -> List[LocationData]:
-    from importlib.resources import path
+    try:
+        from importlib.resources import files
+    except ImportError:
+        from importlib_resources import files
 
-    with path(data, "locations.csv") as resource:
-        with open(resource) as file:
-            reader = csv.DictReader(file)
-            return [LocationData(int(location["id"]) if location["id"] else None,
-                                 location["region"],
-                                 location["name"],
-                                 frozenset(LocationTags[group]
-                                           for group in location["tags"].split(",")
-                                           if group))
-                    for location in reader]
+    with files(data).joinpath("locations.csv").open() as file:
+        reader = csv.DictReader(file)
+        return [LocationData(int(location["id"]) if location["id"] else None,
+                             location["region"],
+                             location["name"],
+                             frozenset(LocationTags[group]
+                                       for group in location["tags"].split(",")
+                                       if group))
+                for location in reader]
 
 
 events_locations = [

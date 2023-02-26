@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-
-from typing import FrozenSet
+from typing import Tuple
 
 
 @dataclass(frozen=True)
@@ -11,11 +10,14 @@ class GameItem:
     def __repr__(self):
         return f"{self.name} [{self.item_id}]"
 
+    def __lt__(self, other):
+        return self.name < other.name
+
 
 @dataclass(frozen=True)
 class FishItem(GameItem):
-    locations: FrozenSet[str]
-    seasons: FrozenSet[str]
+    locations: Tuple[str]
+    seasons: Tuple[str]
     difficulty: int
 
     def __repr__(self):
