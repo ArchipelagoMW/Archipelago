@@ -116,7 +116,9 @@
     "parent_map": "MAP_ROUTE104_MR_BRINEYS_HOUSE",
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_DEWFORD_TOWN/MAIN"
+    ],
     "warps": [
       "MAP_ROUTE104_MR_BRINEYS_HOUSE:0,1/MAP_ROUTE104:0"
     ]
@@ -248,7 +250,8 @@
     "events": [],
     "exits": [
       "REGION_ROUTE109/SEA",
-      "REGION_SLATEPORT_CITY/MAIN"
+      "REGION_SLATEPORT_CITY/MAIN",
+      "REGION_DEWFORD_TOWN/MAIN"
     ],
     "warps": [
       "MAP_ROUTE109:0/MAP_ROUTE109_SEASHORE_HOUSE:0"

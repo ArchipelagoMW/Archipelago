@@ -92,6 +92,10 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_location(name_to_label("ITEM_ROUTE_104_PP_UP"), player),
         lambda state: _can_surf(state, player)
     )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN", player),
+        lambda state: state.has("EVENT_RESCUED_PEEKO", player)
+    )
 
     # Petalburg Woods
     set_rule(
@@ -115,13 +119,40 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: _can_rock_smash(state, player)
     )
 
+    # Dewford Town
+    set_rule(
+        multiworld.get_entrance("REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE109/BEACH", player),
+        lambda state:
+            state.can_reach("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN", "Entrance", player)
+            and state.has("EVENT_RESCUED_PEEKO", player)
+            and state.has("EVENT_DELIVERED_LETTER", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN", player),
+        lambda state:
+            state.can_reach("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN", "Entrance", player)
+            and state.has("EVENT_RESCUED_PEEKO", player)
+    )
+
     # Granite Cave
+    set_rule(
+        multiworld.get_entrance("REGION_GRANITE_CAVE_STEVENS_ROOM/MAIN -> REGION_GRANITE_CAVE_STEVENS_ROOM/LETTER_DELIVERED", player),
+        lambda state: state.has("Letter", player)
+    )
     set_rule(
         multiworld.get_entrance("REGION_GRANITE_CAVE_B1F/LOWER -> REGION_GRANITE_CAVE_B1F/UPPER", player),
         lambda state: _can_use_mach_bike(state, player)
     )
 
     # Route 109
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE109/BEACH -> REGION_DEWFORD_TOWN/MAIN", player),
+        lambda state:
+            state.can_reach("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN", "Entrance", player)
+            and state.can_reach("REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE109/BEACH", "Entrance", player)
+            and state.has("EVENT_RESCUED_PEEKO", player)
+            and state.has("EVENT_DELIVERED_LETTER", player)
+    )
     set_rule(
         multiworld.get_entrance("REGION_ROUTE109/BEACH -> REGION_ROUTE109/SEA", player),
         lambda state: _can_surf(state, player)

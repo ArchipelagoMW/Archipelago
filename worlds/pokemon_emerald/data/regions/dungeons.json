@@ -42,7 +42,9 @@
       "ITEM_RUSTURF_TUNNEL_POKE_BALL",
       "NPC_GIFT_RECEIVED_DEVON_GOODS_RUSTURF_TUNNEL"
     ],
-    "events": [],
+    "events": [
+      "EVENT_RESCUED_PEEKO"
+    ],
     "exits": [
       "REGION_RUSTURF_TUNNEL/EAST"
     ],
@@ -175,14 +177,25 @@
   },
   "REGION_GRANITE_CAVE_STEVENS_ROOM/MAIN": {
     "parent_map": "MAP_GRANITE_CAVE_STEVENS_ROOM",
-    "locations": [
-      "NPC_GIFT_RECEIVED_TM47"
-    ],
+    "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_GRANITE_CAVE_STEVENS_ROOM/LETTER_DELIVERED"
+    ],
     "warps": [
       "MAP_GRANITE_CAVE_STEVENS_ROOM:0/MAP_GRANITE_CAVE_1F:3"
     ]
+  },
+  "REGION_GRANITE_CAVE_STEVENS_ROOM/LETTER_DELIVERED": {
+    "parent_map": "MAP_GRANITE_CAVE_STEVENS_ROOM",
+    "locations": [
+      "NPC_GIFT_RECEIVED_TM47"
+    ],
+    "events": [
+      "EVENT_DELIVERED_LETTER"
+    ],
+    "exits": [],
+    "warps": []
   },
   "REGION_TRAINER_HILL_ENTRANCE/MAIN": {
     "parent_map": "MAP_TRAINER_HILL_ENTRANCE",
