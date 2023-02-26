@@ -7,7 +7,7 @@ local STATE_TENTATIVELY_CONNECTED = "Tentatively Connected"
 local STATE_INITIAL_CONNECTION_MADE = "Initial Connection Made"
 local STATE_UNINITIALIZED = "Uninitialized"
 
-local SCRIPT_VERSION = 2
+local SCRIPT_VERSION = 3
 
 local APIndex = 0x1A6E
 local APDeathLinkAddress = 0x00FD
@@ -16,8 +16,9 @@ local EventFlagAddress = 0x1735
 local MissableAddress = 0x161A
 local HiddenItemsAddress = 0x16DE
 local RodAddress = 0x1716
-local InGameAddress = 0x1A71
-local OptionsAddress = 0x1A72
+local DexSanityAddress = 0x1A71
+local InGameAddress = 0x1A84
+local OptionsAddress = 0x1A85
 local ClientCompatibilityAddress = 0xFF00
 
 local ItemsReceived = nil
@@ -36,6 +37,7 @@ local options = 0
 local u8 = nil
 local wU8 = nil
 local u16
+local compat = nil
 
 local function defineMemoryFunctions()
 	local memDomain = {}
@@ -98,6 +100,14 @@ function generateLocationsChecked()
 	table.foreach(hiddenitems, function(k, v) table.insert(data, v) end)
 	table.insert(data, rod)
 
+    print("6")
+	if compat > 1 then
+	    dexsanity = uRange(DexSanityAddress, 19)
+        print(dexsanity)
+	    table.foreach(dexsanity, function(k, v) table.insert(data, v) end)
+    end
+    print("8")
+
     return data
 end
 
@@ -155,7 +165,19 @@ function receive()
     seedName = newSeedName
     local retTable = {}
     retTable["scriptVersion"] = SCRIPT_VERSION
-    retTable["clientCompatibilityVersion"] = u8(ClientCompatibilityAddress)
+    print("1")
+    if compat == nil then
+        print("2")
+        compat = u8(ClientCompatibilityAddress)
+        print("3")
+        if compat < 2 then
+            print("4")
+            InGameAddress = 0x1A71
+            OptionsAddress = 0x1A72
+        end
+    end
+    print("5")
+    retTable["clientCompatibilityVersion"] = compat
     retTable["playerName"] = playerName
     retTable["seedName"] = seedName
     memDomain.wram()
@@ -206,9 +228,13 @@ function main()
             prevstate = curstate
         end
         if (curstate == STATE_OK) or (curstate == STATE_INITIAL_CONNECTION_MADE) or (curstate == STATE_TENTATIVELY_CONNECTED) then
+            print("A")
             if (frame % 5 == 0) then
+                print("B")
                 receive()
+                print("C")
                 if u8(InGameAddress) == 0xAC then
+                    print("D")
                     if u8(APItemAddress) == 0x00 then
                         ItemIndex = u16(APIndex)
                         if deathlink_rec == true then

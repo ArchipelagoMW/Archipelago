@@ -272,29 +272,45 @@ def process_wild_pokemon(self):
             stat_base = get_base_stat_total(mon)
             candidate_locations = get_encounter_slots(self)
             if self.multiworld.randomize_wild_pokemon[self.player].value in [1, 3]:
-                candidate_locations = [slot for slot in candidate_locations if any([poke_data.pokemon_data[slot.original_item][
-                    "type1"] in [self.local_poke_data[mon]["type1"], self.local_poke_data[mon]["type2"]],
-                    poke_data.pokemon_data[slot.original_item]["type2"] in [self.local_poke_data[mon]["type1"],
-                                                                          self.local_poke_data[mon]["type2"]]])]
+                candidate_locations = [slot for slot in candidate_locations if
+                    any([poke_data.pokemon_data[slot.original_item][ "type1"] in [self.local_poke_data[mon]["type1"],
+                    self.local_poke_data[mon]["type2"]], poke_data.pokemon_data[slot.original_item]["type2"] in
+                    [self.local_poke_data[mon]["type1"], self.local_poke_data[mon]["type2"]]])]
             if not candidate_locations:
                 candidate_locations = get_encounter_slots(self)
             candidate_locations = [self.multiworld.get_location(location.name, self.player) for location in candidate_locations]
             candidate_locations.sort(key=lambda slot: abs(get_base_stat_total(slot.item.name) - stat_base))
             for location in candidate_locations:
-                if placed_mons[location.item.name] > 10 or location.item.name not in poke_data.first_stage_pokemon:
-                    if self.multiworld.area_1_to_1_mapping[self.player]:
-                        zone = " - ".join(location.name.split(" - ")[:-1])
-                        place_locations = [place_location for place_location in candidate_locations if
-                                           place_location.name.startswith(zone)]
-                    else:
-                        place_locations = [location]
-                    for place_location in place_locations:
-                        print(f"replacing {place_location.item.name} with {mon} in {place_location.name} ")
-                        placed_mons[place_location.item.name] -= 1
-                        place_location.item = self.create_item(mon)
-                        place_location.item.location = place_location
-                        placed_mons[mon] += 1
-                    break
+                zone = " - ".join(location.name.split(" - ")[:-1])
+                if self.multiworld.catch_em_all[self.player] == "all_pokemon" and self.multiworld.area_1_to_1_mapping[self.player]:
+                    if not [self.multiworld.get_location(l.name, self.player) for l in get_encounter_slots(self)
+                            if (not l.name.startswith(zone)) and
+                               self.multiworld.get_location(l.name, self.player).item.name == location.item.name]:
+                        continue
+                if self.multiworld.catch_em_all[self.player] == "first_stage" and self.multiworld.area_1_to_1_mapping[self.player]:
+                    if not [self.multiworld.get_location(l.name, self.player) for l in get_encounter_slots(self)
+                            if (not l.name.startswith(zone)) and
+                               self.multiworld.get_location(l.name, self.player).item.name == location.item.name and l.name
+                            not in poke_data.evolves_from]:
+                        continue
+
+                if placed_mons[location.item.name] < 1 and location.item.name not in poke_data.first_stage_pokemon:
+                    continue
+
+                if self.multiworld.area_1_to_1_mapping[self.player]:
+                    place_locations = [place_location for place_location in candidate_locations if
+                        place_location.name.startswith(zone) and
+                        place_location.item.name == location.item.name]
+                else:
+                    place_locations = [location]
+                for place_location in place_locations:
+                    placed_mons[place_location.item.name] -= 1
+                    place_location.item = self.create_item(mon)
+                    place_location.item.location = place_location
+                    placed_mons[mon] += 1
+                break
+            else:
+                raise Exception
 
     else:
         for slot in encounter_slots:
@@ -747,7 +763,7 @@ def generate_output(self, output_directory: str):
     else:
         write_bytes(data, self.rival_name, rom_addresses['Rival_Name'])
 
-    data[0xFF00] = 1 # client compatibility version
+    data[0xFF00] = 2 # client compatibility version
     write_bytes(data, self.multiworld.seed_name.encode(), 0xFFDB)
     write_bytes(data, self.multiworld.player_name[self.player].encode(), 0xFFF0)
 

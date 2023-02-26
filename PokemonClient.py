@@ -17,7 +17,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandP
 from worlds.pokemon_rb.locations import location_data
 from worlds.pokemon_rb.rom import RedDeltaPatch, BlueDeltaPatch
 
-location_map = {"Rod": {}, "EventFlag": {}, "Missable": {}, "Hidden": {}, "list": {}}
+location_map = {"Rod": {}, "EventFlag": {}, "Missable": {}, "Hidden": {}, "list": {}, "DexSanityFlag": {}}
 location_bytes_bits = {}
 for location in location_data:
     if location.ram_address is not None:
@@ -40,7 +40,7 @@ CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
 
 DISPLAY_MSGS = True
 
-SCRIPT_VERSION = 2
+SCRIPT_VERSION = 3
 
 
 class GBCommandProcessor(ClientCommandProcessor):
@@ -137,10 +137,13 @@ def get_payload(ctx: GBContext):
 async def parse_locations(data: List, ctx: GBContext):
     locations = []
     flags = {"EventFlag": data[:0x140], "Missable": data[0x140:0x140 + 0x20],
-             "Hidden": data[0x140 + 0x20: 0x140 + 0x20 + 0x0E], "Rod": data[0x140 + 0x20 + 0x0E:]}
+             "Hidden": data[0x140 + 0x20: 0x140 + 0x20 + 0x0E],
+             "Rod": data[0x140 + 0x20 + 0x0E:0x140 + 0x20 + 0x0E + 0x01]}
 
-    if len(flags['Rod']) > 1:
-        return
+    if len(data) > 0x140 + 0x20 + 0x0E + 0x01:
+        flags["DexSanityFlag"] = data[0x140 + 0x20 + 0x0E + 0x01:]
+    else:
+        flags["DexSanityFlag"] = [0] * 19
 
     for flag_type, loc_map in location_map.items():
         for flag, loc_id in loc_map.items():

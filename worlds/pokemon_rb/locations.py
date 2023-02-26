@@ -1,11 +1,17 @@
 
 from BaseClasses import Location
 from .rom_addresses import rom_addresses
+from .poke_data import pokemon_data
+
 loc_id_start = 172000000
 
 
 def trainersanity(multiworld, player):
     return multiworld.trainersanity[player]
+
+
+def dexsanity(multiworld, player):
+    return multiworld.dexsanity[player]
 
 
 def hidden_items(multiworld, player):
@@ -18,10 +24,6 @@ def tea(multiworld, player):
 
 def extra_key_items(multiworld, player):
     return multiworld.extra_key_items[player]
-
-
-def pokedex(multiworld, player):
-    return multiworld.randomize_pokedex[player].value > 0
 
 
 def always_on(multiworld, player):
@@ -72,6 +74,13 @@ class Rod:
     def __init__(self, flag):
         self.byte = 0
         self.bit = flag
+        self.flag = flag
+
+
+class DexSanityFlag:
+    def __init__(self, flag):
+        self.byte = int(flag / 8)
+        self.bit = flag % 8
         self.flag = flag
 
 
@@ -404,7 +413,7 @@ location_data = [
     LocationData("Route 4", "Hidden Item Plateau East Of Mt Moon", "Great Ball", rom_addresses['Hidden_Item_Route_4'], Hidden(53), inclusion=hidden_items),
 
 
-    LocationData("Pallet Town", "Oak's Parcel Reward", "Pokedex", rom_addresses["Event_Pokedex"], EventFlag(0x38), inclusion=pokedex),
+    LocationData("Pallet Town", "Oak's Parcel Reward", "Pokedex", rom_addresses["Event_Pokedex"], EventFlag(0x38)),
 
     LocationData("Pokemon Mansion 1F", "Scientist", None, rom_addresses["Trainersanity_EVENT_BEAT_MANSION_1_TRAINER_0_ITEM"], EventFlag(376), inclusion=trainersanity),
     LocationData("Pokemon Mansion 2F", "Burglar", None, rom_addresses["Trainersanity_EVENT_BEAT_MANSION_2_TRAINER_0_ITEM"], EventFlag(43), inclusion=trainersanity),
@@ -2085,6 +2094,10 @@ location_data = [
                  None, event=True, type="Legendary Pokemon"),
 
 ]
+
+for i, mon in enumerate(pokemon_data.keys()):
+    location_data.append(LocationData("Pokedex", mon, None, rom_addresses["Dexsanity_Items"] + i, DexSanityFlag(i),
+                                      type="Item", inclusion=dexsanity))
 
 for i, location in enumerate(location_data):
     if location.event or location.rom_address is None:

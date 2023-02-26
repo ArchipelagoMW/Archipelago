@@ -169,6 +169,21 @@ class TrainerSanity(Toggle):
     default = 0
 
 
+class RequirePokedex(Toggle):
+    """Require the Pokedex to obtain items from Oak's Aides or from Dexsanity checks."""
+    display_name = "Require Pokedex"
+    default = 1
+
+
+class DexSanity(Toggle):
+    """Adds a location check for each Pokemon flagged "Owned" on your Pokedex. If accessibility is set to `locations`
+    and randomize_wild_pokemon is off, catch_em_all is not `all_pokemon` or randomize_legendary_pokemon is not `any`,
+    accessibility will be forced to `items` instead, as not all Dexsanity locations can be guaranteed to be considered
+    in logic."""
+    display_name = "Dexsanity"
+    default = 0
+
+
 class FreeFlyLocation(Toggle):
     """One random fly destination will be unlocked by default."""
     display_name = "Free Fly Location"
@@ -632,12 +647,14 @@ pokemon_rb_options = {
     "randomize_hidden_items": RandomizeHiddenItems,
     "prizesanity": PrizeSanity,
     "trainersanity": TrainerSanity,
-    "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
-    "free_fly_location": FreeFlyLocation,
-    "randomize_rock_tunnel": RandomizeRockTunnel,
+    "require_pokedex": RequirePokedex,
+    "dexsanity": DexSanity,
     "oaks_aide_rt_2": OaksAidRt2,
     "oaks_aide_rt_11": OaksAidRt11,
     "oaks_aide_rt_15": OaksAidRt15,
+    "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
+    "free_fly_location": FreeFlyLocation,
+    "randomize_rock_tunnel": RandomizeRockTunnel,
     "blind_trainers": BlindTrainers,
     "minimum_steps_between_encounters": MinimumStepsBetweenEncounters,
     "exp_modifier": ExpModifier,

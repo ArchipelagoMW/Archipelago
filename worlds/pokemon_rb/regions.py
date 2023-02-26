@@ -28,6 +28,7 @@ def create_regions(multiworld: MultiWorld, player: int):
         create_region(multiworld, player, "Menu", locations_per_region),
         create_region(multiworld, player, "Anywhere", locations_per_region),
         create_region(multiworld, player, "Fossil", locations_per_region),
+        create_region(multiworld, player, "Pokedex", locations_per_region),
         create_region(multiworld, player, "Pallet Town", locations_per_region),
         create_region(multiworld, player, "Route 1", locations_per_region),
         create_region(multiworld, player, "Viridian City", locations_per_region),
@@ -149,6 +150,7 @@ def create_regions(multiworld: MultiWorld, player: int):
     multiworld.regions += regions
     connect(multiworld, player, "Menu", "Anywhere", one_way=True)
     connect(multiworld, player, "Menu", "Pallet Town", one_way=True)
+    connect(multiworld, player, "Menu", "Pokedex", one_way=True)
     connect(multiworld, player, "Menu", "Fossil", lambda state: state.pokemon_rb_fossil_checks(
         state.multiworld.second_fossil_check_condition[player].value, player), one_way=True)
     connect(multiworld, player, "Pallet Town", "Route 1")

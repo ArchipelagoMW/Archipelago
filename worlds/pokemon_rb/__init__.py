@@ -94,6 +94,12 @@ class PokemonRedBlueWorld(World):
         if len(self.multiworld.player_name[self.player].encode()) > 16:
             raise Exception(f"Player name too long for {self.multiworld.get_player_name(self.player)}. Player name cannot exceed 16 bytes for Pokémon Red and Blue.")
 
+        if (self.multiworld.dexsanity[self.player] and self.multiworld.accessibility[self.player] == "locations"
+                and (self.multiworld.catch_em_all[self.player] != "all_pokemon"
+                     or self.multiworld.randomize_wild_pokemon[self.player] == "vanilla"
+                     or self.multiworld.randomize_legendary_pokemon[self.player] != "any")):
+            self.multiworld.accessibility[self.player] = self.multiworld.accessibility[self.player].from_text("items")
+
         if self.multiworld.badges_needed_for_hm_moves[self.player].value >= 2:
             badges_to_add = ["Marsh Badge", "Volcano Badge", "Earth Badge"]
             if self.multiworld.badges_needed_for_hm_moves[self.player].value == 3:
@@ -177,6 +183,7 @@ class PokemonRedBlueWorld(World):
         if self.multiworld.randomize_pokedex[self.player] == "start_with":
             start_inventory["Pokedex"] = 1
             self.multiworld.push_precollected(self.create_item("Pokedex"))
+
         locations = [location for location in location_data if location.type == "Item"]
         item_pool = []
         for location in locations:
@@ -188,6 +195,11 @@ class PokemonRedBlueWorld(World):
                 item = self.create_filler()
             elif location.original_item is None:
                 item = self.create_filler()
+            elif location.original_item == "Pokedex":
+                if self.multiworld.randomize_pokedex[self.player] == "vanilla":
+                    self.multiworld.get_location(location.name, self.player).event = True
+                    location.event = True
+                    item = self.create_item("Pokedex")
             else:
                 item = self.create_item(location.original_item)
                 combined_traps = self.multiworld.poison_trap_weight[self.player].value + self.multiworld.fire_trap_weight[self.player].value + self.multiworld.paralyze_trap_weight[self.player].value + self.multiworld.ice_trap_weight[self.player].value
