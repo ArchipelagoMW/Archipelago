@@ -184,5 +184,5 @@ class StardewValleyWorld(World):
             "gift_tax": self.options[options.GiftTax],
             "modified_bundles": modified_bundles,
             "randomized_entrances": self.randomized_entrances,
-            "client_version": "2.x.x",
+            "client_version": "2.2.2",
         }
