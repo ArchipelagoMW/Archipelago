@@ -239,6 +239,16 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     AutoWorld.call_all(world, "pre_fill")
 
+    def exclude_regions(regions: List[Region]) -> None:
+        def exclude_region(region: Region) -> None:
+            for loc in [location for location in region.locations if not location.item]:
+                loc.progress_type = LocationProgressType.EXCLUDED
+
+        for reg in regions:
+            exclude_region(reg)
+
+    exclude_regions([reg for reg in world.get_regions() if reg.excluded])
+
     logger.info(f'Filling the world with {len(world.itempool)} items.')
 
     if world.algorithm == 'flood':

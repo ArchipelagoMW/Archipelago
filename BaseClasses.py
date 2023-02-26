@@ -959,6 +959,7 @@ class Region:
     locations: List[Location]
     dungeon: Optional[Dungeon] = None
     shop: Optional = None
+    excluded: bool = False
 
     # LttP specific. TODO: move to a LttPRegion
     # will be set after making connections.
