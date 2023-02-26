@@ -82,7 +82,7 @@ level_locations = [
         "Level 9 Bomb Drop (Like Likes and Zols Corridor)", "Level 9 Bomb Drop (Patra Northeast)",
         "Level 9 Bomb Drop (Vires)", "Level 9 Rupee Drop (Wizzrobes West Island)",
         "Level 9 Rupee Drop (Red Lanmolas)", "Level 9 Rupee Drop (Keese Southwest)",
-        "Level 9 Rupee Drop (Keese Central Island))", "Level 9 Rupee Drop (Wizzrobes Central)",
+        "Level 9 Rupee Drop (Keese Central Island)", "Level 9 Rupee Drop (Wizzrobes Central)",
         "Level 9 Rupee Drop (Wizzrobes North Island)", "Level 9 Rupee Drop (Gels East)"
     ]
 ]
