@@ -472,6 +472,17 @@
       "MAP_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE:2,3/MAP_ROUTE110:5"
     ]
   },
+  "REGION_ROUTE111/MIDDLE": {
+    "parent_map": "MAP_ROUTE111",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE111/DESERT",
+      "REGION_ROUTE111/SOUTH",
+      "REGION_ROUTE112/SOUTH_EAST"
+    ],
+    "warps": []
+  },
   "REGION_ROUTE111/SOUTH": {
     "parent_map": "MAP_ROUTE111",
     "locations": [
@@ -480,8 +491,7 @@
     "events": [],
     "exits": [
       "REGION_ROUTE111/SOUTH_POND",
-      "REGION_ROUTE111/DESERT",
-      "REGION_ROUTE112/SOUTH_EAST",
+      "REGION_ROUTE111/MIDDLE",
       "REGION_MAUVILLE_CITY/MAIN"
     ],
     "warps": [
@@ -630,21 +640,45 @@
       "MAP_MT_CHIMNEY:3/MAP_JAGGED_PASS:3"
     ]
   },
-  "REGION_JAGGED_PASS/MAIN": {
+  "REGION_JAGGED_PASS/TOP": {
+    "parent_map": "MAP_JAGGED_PASS",
+    "locations": [
+      "HIDDEN_ITEM_JAGGED_PASS_FULL_HEAL"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_JAGGED_PASS/MIDDLE"
+    ],
+    "warps": [
+      "MAP_JAGGED_PASS:2/MAP_MT_CHIMNEY:2",
+      "MAP_JAGGED_PASS:3/MAP_MT_CHIMNEY:3"
+    ]
+  },
+  "REGION_JAGGED_PASS/MIDDLE": {
     "parent_map": "MAP_JAGGED_PASS",
     "locations": [
       "ITEM_JAGGED_PASS_BURN_HEAL",
-      "HIDDEN_ITEM_JAGGED_PASS_FULL_HEAL",
       "HIDDEN_ITEM_JAGGED_PASS_GREAT_BALL"
     ],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_JAGGED_PASS/TOP",
+      "REGION_JAGGED_PASS/BOTTOM"
+    ],
+    "warps": [
+      "MAP_JAGGED_PASS:4/MAP_MAGMA_HIDEOUT_1F:0"
+    ]
+  },
+  "REGION_JAGGED_PASS/BOTTOM": {
+    "parent_map": "MAP_JAGGED_PASS",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_JAGGED_PASS/MIDDLE"
+    ],
     "warps": [
       "MAP_JAGGED_PASS:0/MAP_ROUTE112:2",
-      "MAP_JAGGED_PASS:1/MAP_ROUTE112:3",
-      "MAP_JAGGED_PASS:2/MAP_MT_CHIMNEY:2",
-      "MAP_JAGGED_PASS:3/MAP_MT_CHIMNEY:3",
-      "MAP_JAGGED_PASS:4/MAP_MAGMA_HIDEOUT_1F:0"
+      "MAP_JAGGED_PASS:1/MAP_ROUTE112:3"
     ]
   },
   "REGION_ROUTE113/MAIN": {
@@ -762,17 +796,28 @@
     "parent_map": "MAP_ROUTE115",
     "locations": [
       "ITEM_ROUTE_115_PP_UP",
-      "ITEM_ROUTE_115_GREAT_BALL",
       "HIDDEN_ITEM_ROUTE_115_HEART_SCALE"
     ],
     "events": [],
     "exits": [
       "REGION_ROUTE115/SOUTH_BELOW_LEDGE",
+      "REGION_ROUTE115/SOUTH_BEHIND_ROCK",
       "REGION_ROUTE115/SEA"
     ],
     "warps": [
       "MAP_ROUTE115:0/MAP_METEOR_FALLS_1F_1R:1"
     ]
+  },
+  "REGION_ROUTE115/SOUTH_BEHIND_ROCK": {
+    "parent_map": "MAP_ROUTE115",
+    "locations": [
+      "ITEM_ROUTE_115_GREAT_BALL"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE115/SOUTH_ABOVE_LEDGE"
+    ],
+    "warps": []
   },
   "REGION_ROUTE115/NORTH_BELOW_SLOPE": {
     "parent_map": "MAP_ROUTE115",
@@ -813,15 +858,12 @@
     "parent_map": "MAP_ROUTE116",
     "locations": [
       "ITEM_ROUTE_116_REPEL",
-      "ITEM_ROUTE_116_ETHER",
-      "ITEM_ROUTE_116_POTION",
       "ITEM_ROUTE_116_X_SPECIAL",
-      "ITEM_ROUTE_116_HP_UP",
-      "HIDDEN_ITEM_ROUTE_116_SUPER_POTION",
       "NPC_GIFT_RECEIVED_REPEAT_BALL"
     ],
     "events": [],
     "exits": [
+      "REGION_ROUTE116/WEST_ABOVE_LEDGE",
       "REGION_RUSTBORO_CITY/MAIN"
     ],
     "warps": [
@@ -829,9 +871,23 @@
       "MAP_ROUTE116:1/MAP_ROUTE116_TUNNELERS_REST_HOUSE:0"
     ]
   },
+  "REGION_ROUTE116/WEST_ABOVE_LEDGE": {
+    "parent_map": "MAP_ROUTE116",
+    "locations": [
+      "ITEM_ROUTE_116_ETHER",
+      "ITEM_ROUTE_116_POTION",
+      "HIDDEN_ITEM_ROUTE_116_SUPER_POTION"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE116/WEST"
+    ],
+    "warps": []
+  },
   "REGION_ROUTE116/EAST": {
     "parent_map": "MAP_ROUTE116",
     "locations": [
+      "ITEM_ROUTE_116_HP_UP",
       "HIDDEN_ITEM_ROUTE_116_BLACK_GLASSES"
     ],
     "events": [],
@@ -1253,14 +1309,25 @@
       "ITEM_ROUTE_123_PP_UP",
       "ITEM_ROUTE_123_REVIVAL_HERB",
       "HIDDEN_ITEM_ROUTE_123_SUPER_REPEL",
-      "HIDDEN_ITEM_ROUTE_123_HYPER_POTION",
+      "HIDDEN_ITEM_ROUTE_123_HYPER_POTION"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE123/WEST",
+      "REGION_ROUTE123/EAST_BEHIND_TREE",
+      "REGION_ROUTE122/SEA"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE123/EAST_BEHIND_TREE": {
+    "parent_map": "MAP_ROUTE123",
+    "locations": [
       "HIDDEN_ITEM_ROUTE_123_PP_UP",
       "HIDDEN_ITEM_ROUTE_123_RARE_CANDY"
     ],
     "events": [],
     "exits": [
-      "REGION_ROUTE123/WEST",
-      "REGION_ROUTE122/SEA"
+      "REGION_ROUTE123/EAST"
     ],
     "warps": []
   },

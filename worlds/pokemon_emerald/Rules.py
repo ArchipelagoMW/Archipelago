@@ -23,6 +23,17 @@ def _can_use_mach_bike(state: CollectionState, player: int):
     return state.has("EVENT_RECEIVE_BIKE", player)
 def _can_use_acro_bike(state: CollectionState, player: int):
     return state.has("EVENT_RECEIVE_BIKE", player)
+def _has_at_least_n_badges(state: CollectionState, player: int, n: int):
+    num_badges = 0
+    num_badges += 1 if state.has("Stone Badge", player) else 0
+    num_badges += 1 if state.has("Knuckle Badge", player) else 0
+    num_badges += 1 if state.has("Dynamo Badge", player) else 0
+    num_badges += 1 if state.has("Heat Badge", player) else 0
+    num_badges += 1 if state.has("Balance Badge", player) else 0
+    num_badges += 1 if state.has("Feather Badge", player) else 0
+    num_badges += 1 if state.has("Mind Badge", player) else 0
+    num_badges += 1 if state.has("Rain Badge", player) else 0
+    return num_badges >= n
 
 
 def set_default_rules(multiworld: MultiWorld, player: int):
@@ -44,12 +55,25 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_ROUTE103/WEST -> REGION_ROUTE103/WATER", player),
         lambda state: _can_surf(state, player)
     )
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_ROUTE_103_PP_UP"), player),
+        lambda state: _can_cut(state, player)
+    )
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_ROUTE_103_GUARD_SPEC"), player),
+        lambda state: _can_cut(state, player)
+    )
 
     # Petalburg City
     set_rule(
         multiworld.get_entrance("REGION_PETALBURG_CITY/MAIN -> REGION_PETALBURG_CITY/SOUTH_POND", player),
         lambda state: _can_surf(state, player)
     )
+    set_rule(
+        multiworld.get_entrance("REGION_PETALBURG_CITY/MAIN -> REGION_PETALBURG_CITY/NORTH_POND", player),
+        lambda state: _can_surf(state, player)
+    )
+
     set_rule(
         multiworld.get_entrance("REGION_PETALBURG_CITY/MAIN -> REGION_PETALBURG_CITY/NORTH_POND", player),
         lambda state: _can_surf(state, player)
@@ -69,6 +93,34 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: _can_surf(state, player)
     )
 
+    # Petalburg Woods
+    set_rule(
+        multiworld.get_entrance("REGION_PETALBURG_WOODS/WEST_PATH -> REGION_PETALBURG_WOODS/EAST_PATH", player),
+        lambda state: _can_cut(state, player)
+    )
+
+    # Route 116
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE116/WEST -> REGION_ROUTE116/WEST_ABOVE_LEDGE", player),
+        lambda state: _can_cut(state, player)
+    )
+
+    # Rusturf Tunnel
+    set_rule(
+        multiworld.get_entrance("REGION_RUSTURF_TUNNEL/WEST -> REGION_RUSTURF_TUNNEL/EAST", player),
+        lambda state: _can_rock_smash(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_RUSTURF_TUNNEL/EAST -> REGION_RUSTURF_TUNNEL/WEST", player),
+        lambda state: _can_rock_smash(state, player)
+    )
+
+    # Granite Cave
+    set_rule(
+        multiworld.get_entrance("REGION_GRANITE_CAVE_B1F/LOWER -> REGION_GRANITE_CAVE_B1F/UPPER", player),
+        lambda state: _can_use_mach_bike(state, player)
+    )
+
     # Route 109
     set_rule(
         multiworld.get_entrance("REGION_ROUTE109/BEACH -> REGION_ROUTE109/SEA", player),
@@ -83,6 +135,10 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     set_rule(
         multiworld.get_entrance("REGION_ROUTE115/SOUTH_ABOVE_LEDGE -> REGION_ROUTE115/SEA", player),
         lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE115/SOUTH_ABOVE_LEDGE -> REGION_ROUTE115/SOUTH_BEHIND_ROCK", player),
+        lambda state: _can_rock_smash(state, player)
     )
     set_rule(
         multiworld.get_entrance("REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_ROUTE115/SEA", player),
@@ -121,6 +177,12 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: _can_surf(state, player)
     )
 
+    # Route 117
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_ROUTE_117_REVIVE"), player),
+        lambda state: _can_cut(state, player)
+    )
+
     # Route 110
     set_rule(
         multiworld.get_entrance("REGION_ROUTE110/MAIN -> REGION_ROUTE110/SOUTH_WATER", player),
@@ -133,12 +195,26 @@ def set_default_rules(multiworld: MultiWorld, player: int):
 
     # Route 111
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE111/SOUTH -> REGION_ROUTE111/DESERT", player),
+        multiworld.get_entrance("REGION_ROUTE111/MIDDLE -> REGION_ROUTE111/DESERT", player),
         lambda state: state.has("Go Goggles", player)
     )
     set_rule(
         multiworld.get_entrance("REGION_ROUTE111/NORTH -> REGION_ROUTE111/DESERT", player),
         lambda state: state.has("Go Goggles", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE111/MIDDLE -> REGION_ROUTE111/SOUTH", player),
+        lambda state: _can_rock_smash(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE111/SOUTH -> REGION_ROUTE111/MIDDLE", player),
+        lambda state: _can_rock_smash(state, player)
+    )
+
+    # Fiery Path
+    set_rule(
+        multiworld.get_entrance("REGION_FIERY_PATH/MAIN -> REGION_FIERY_PATH/BEHIND_BOULDER", player),
+        lambda state: _can_strength(state, player)
     )
 
     # Route 114
@@ -149,6 +225,56 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     set_rule(
         multiworld.get_entrance("REGION_ROUTE114/ABOVE_WATERFALL -> REGION_ROUTE114/MAIN", player),
         lambda state: _can_surf(state, player) and _can_waterfall(state, player)
+    )
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_ROUTE_114_PROTEIN"), player),
+        lambda state: _can_rock_smash(state, player)
+    )
+
+    # Meteor Falls
+    set_rule(
+        multiworld.get_entrance("REGION_METEOR_FALLS_1F_1R/MAIN -> REGION_METEOR_FALLS_1F_1R/ABOVE_WATERFALL", player),
+        lambda state: _can_surf(state, player) and _can_waterfall(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_METEOR_FALLS_1F_1R/ABOVE_WATERFALL -> REGION_METEOR_FALLS_1F_1R/MAIN", player),
+        lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_METEOR_FALLS_B1F_1R/HIGHEST_LADDER -> REGION_METEOR_FALLS_B1F_1R/WATER", player),
+        lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_METEOR_FALLS_B1F_1R/NORTH_SHORE -> REGION_METEOR_FALLS_B1F_1R/WATER", player),
+        lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_METEOR_FALLS_B1F_1R/SOUTH_SHORE -> REGION_METEOR_FALLS_B1F_1R/WATER", player),
+        lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_METEOR_FALLS_B1F_2R/ENTRANCE -> REGION_METEOR_FALLS_B1F_2R/WATER", player),
+        lambda state: _can_surf(state, player)
+    )
+
+    # Jagged Pass
+    set_rule(
+        multiworld.get_entrance("REGION_JAGGED_PASS/BOTTOM -> REGION_JAGGED_PASS/MIDDLE", player),
+        lambda state: _can_use_acro_bike(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_JAGGED_PASS/MIDDLE -> REGION_JAGGED_PASS/TOP", player),
+        lambda state: _can_use_acro_bike(state, player)
+    )
+
+    # Route 118
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE118/WEST -> REGION_ROUTE118/WATER", player),
+        lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE118/EAST -> REGION_ROUTE118/WATER", player),
+        lambda state: _can_surf(state, player)
     )
 
     # Route 119
@@ -208,11 +334,23 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     #     multiworld.get_entrance("REGION_ROUTE120/SOUTH -> REGION_ROUTE120/NORTH", player),
     #     lambda state: state.has("Devon Scope", player)
     # )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE120/NORTH -> REGION_ROUTE120/NORTH_POND", player),
+        lambda state: state.has("Devon Scope", player)
+    )
+    set_rule(
+        multiworld.get_location(name_to_label("HIDDEN_ITEM_ROUTE_120_RARE_CANDY_1"), player),
+        lambda state: _can_cut(state, player)
+    )
 
     # Route 121
     set_rule(
         multiworld.get_entrance("REGION_ROUTE121/MAIN -> REGION_ROUTE122/SEA", player),
         lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_location(name_to_label("HIDDEN_ITEM_ROUTE_121_NUGGET"), player),
+        lambda state: _can_cut(state, player)
     )
 
     # Route 122
@@ -331,6 +469,12 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: _can_dive(state, player)
     )
 
+    # Sootopolis City
+    set_rule(
+        multiworld.get_entrance("REGION_SOOTOPOLIS_CITY/MAIN -> REGION_UNDERWATER_SOOTOPOLIS_CITY/MAIN", player),
+        lambda state: _can_dive(state, player)
+    )
+
     # Route 127
     set_rule(
         multiworld.get_entrance("REGION_ROUTE127/MAIN -> REGION_UNDERWATER_ROUTE127/TUNNEL", player),
@@ -367,6 +511,84 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: _can_dive(state, player)
     )
 
+    # Seafloor Cavern
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM1/SOUTH -> REGION_SEAFLOOR_CAVERN_ROOM1/NORTH", player),
+        lambda state: _can_rock_smash(state, player) and _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM1/NORTH -> REGION_SEAFLOOR_CAVERN_ROOM1/SOUTH", player),
+        lambda state: _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM2/SOUTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM2/NORTH_WEST", player),
+        lambda state: _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM2/NORTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM2/SOUTH_WEST", player),
+        lambda state: _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM2/SOUTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM2/SOUTH_EAST", player),
+        lambda state: _can_rock_smash(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM2/SOUTH_EAST -> REGION_SEAFLOOR_CAVERN_ROOM2/SOUTH_WEST", player),
+        lambda state: _can_rock_smash(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM2/NORTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM2/NORTH_EAST", player),
+        lambda state: _can_rock_smash(state, player) and _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM2/NORTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM2/SOUTH_EAST", player),
+        lambda state: _can_rock_smash(state, player) and _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM5/NORTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM5/EAST", player),
+        lambda state: _can_rock_smash(state, player) and _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM5/EAST -> REGION_SEAFLOOR_CAVERN_ROOM5/NORTH_WEST", player),
+        lambda state: _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM5/NORTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM5/SOUTH_WEST", player),
+        lambda state: _can_rock_smash(state, player) and _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM5/SOUTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM5/NORTH_WEST", player),
+        lambda state: _can_rock_smash(state, player) and _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM6/NORTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM6/CAVE_ON_WATER", player),
+        lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM6/SOUTH -> REGION_SEAFLOOR_CAVERN_ROOM6/NORTH_WEST", player),
+        lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM6/SOUTH -> REGION_SEAFLOOR_CAVERN_ROOM6/CAVE_ON_WATER", player),
+        lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM7/SOUTH -> REGION_SEAFLOOR_CAVERN_ROOM7/NORTH", player),
+        lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM7/NORTH -> REGION_SEAFLOOR_CAVERN_ROOM7/SOUTH", player),
+        lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM8/NORTH -> REGION_SEAFLOOR_CAVERN_ROOM8/SOUTH", player),
+        lambda state: _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM8/SOUTH -> REGION_SEAFLOOR_CAVERN_ROOM8/NORTH", player),
+        lambda state: _can_strength(state, player)
+    )
+
     # Pacifidlog Town
     set_rule(
         multiworld.get_entrance("REGION_PACIFIDLOG_TOWN/MAIN -> REGION_ROUTE131/MAIN", player),
@@ -393,8 +615,66 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: _can_surf(state, player) and _can_waterfall(state, player)
     )
 
+    # Victory Road
+    set_rule(
+        multiworld.get_entrance("REGION_VICTORY_ROAD_B1F/SOUTH_WEST_MAIN -> REGION_VICTORY_ROAD_B1F/SOUTH_WEST_LADDER_UP", player),
+        lambda state: _can_rock_smash(state, player) and _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_VICTORY_ROAD_B1F/SOUTH_WEST_LADDER_UP -> REGION_VICTORY_ROAD_B1F/SOUTH_WEST_MAIN", player),
+        lambda state: _can_rock_smash(state, player) and _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_VICTORY_ROAD_B1F/MAIN_UPPER -> REGION_VICTORY_ROAD_B1F/MAIN_LOWER_EAST", player),
+        lambda state: _can_rock_smash(state, player) and _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_VICTORY_ROAD_B1F/MAIN_LOWER_EAST -> REGION_VICTORY_ROAD_B1F/MAIN_LOWER_WEST", player),
+        lambda state: _can_rock_smash(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_VICTORY_ROAD_B1F/MAIN_LOWER_WEST -> REGION_VICTORY_ROAD_B1F/MAIN_LOWER_EAST", player),
+        lambda state: _can_rock_smash(state, player) and _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_VICTORY_ROAD_B1F/MAIN_LOWER_WEST -> REGION_VICTORY_ROAD_B1F/MAIN_UPPER", player),
+        lambda state: _can_rock_smash(state, player) and _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_VICTORY_ROAD_B1F_FULL_RESTORE"), player),
+        lambda state: _can_rock_smash(state, player) and _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_VICTORY_ROAD_B2F/LOWER_WEST -> REGION_VICTORY_ROAD_B2F/LOWER_WEST_WATER", player),
+        lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_VICTORY_ROAD_B2F/LOWER_WEST_ISLAND -> REGION_VICTORY_ROAD_B2F/LOWER_WEST_WATER", player),
+        lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_VICTORY_ROAD_B2F/LOWER_EAST -> REGION_VICTORY_ROAD_B2F/LOWER_EAST_WATER", player),
+        lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_VICTORY_ROAD_B2F/LOWER_WEST_WATER -> REGION_VICTORY_ROAD_B2F/UPPER_WATER", player),
+        lambda state: _can_waterfall(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_VICTORY_ROAD_B2F/LOWER_EAST_WATER -> REGION_VICTORY_ROAD_B2F/UPPER_WATER", player),
+        lambda state: _can_waterfall(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_VICTORY_ROAD_B2F/UPPER -> REGION_VICTORY_ROAD_B2F/UPPER_WATER", player),
+        lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_VICTORY_ROAD_B2F/UPPER -> REGION_VICTORY_ROAD_B2F/LOWER_EAST_WATER", player),
+        lambda state: _can_surf(state, player)
+    )
+
     # Pokemon League
     set_rule(
         multiworld.get_entrance("REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/MAIN -> REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/BEHIND_BADGE_CHECKERS", player),
-        lambda state: state.has_all(["Stone Badge", "Knuckle Badge", "Dynamo Badge", "Heat Badge", "Balance Badge", "Feather Badge", "Mind Badge", "Rain Badge"], player)
+        lambda state: _has_at_least_n_badges(state, player, 8)
     )
