@@ -7,9 +7,9 @@ class SubnauticaTest(unittest.TestCase):
     scancutoff: int = 33999
 
     def testIDRange(self):
-        for id, name in subnautica.SubnauticaWorld.location_name_to_id.items():
+        for name, id in subnautica.SubnauticaWorld.location_name_to_id.items():
             with self.subTest(item=name):
                 if "Scan" in name:
-                    self.assertGreater(self.scancutoff, id)
-                else:
                     self.assertLess(self.scancutoff, id)
+                else:
+                    self.assertGreater(self.scancutoff, id)
