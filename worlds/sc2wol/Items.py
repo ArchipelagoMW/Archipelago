@@ -182,6 +182,8 @@ filler_items: typing.Tuple[str, ...] = (
     '+15 Starting Vespene'
 )
 
+# Defense rating table
+# Commented defense ratings are handled in LogicMixin
 defense_ratings = {
     "Siege Tank": 5,
     # "Maelstrom Rounds": 2,
@@ -193,7 +195,7 @@ defense_ratings = {
 }
 zerg_defense_ratings = {
     "Perdition Turret": 2,
-    # Bunker w/ Firebat: 2
+    # Bunker w/ Firebat: 2,
     "Hive Mind Emulator": 3,
     "Psi Disruptor": 3
 }
