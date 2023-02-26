@@ -60,6 +60,10 @@ And lastly, some Archipelago-exclusive items exist in the pool, which are design
 Since Pelican Town is a remote area, it takes one business day for every item to reach the player. If an item is received while online, it will appear in the player's mailbox the next morning, with a message from the sender telling them where it was found.
 If an item is received while offline, it will be in the mailbox as soon as the player logs in.
 
+Some items will be directly attached to the letter, while some others will instead be a world-wide unlock, and the letter only serves to tell the player about it.
+
+In some cases, like receiving Carpenter and Wizard buildings, the player will still need to go ask Robin to construct the building that they have received, so they can choose its position. This construction will be completely free.
+
 ## Multiplayer
 
 You cannot play an Archipelago Slot in multiplayer at the moment. There is no short-terms plans to support that feature.
