@@ -52,6 +52,7 @@ class StardewValleyWorld(World):
     location_name_to_id = {name: data.code for name, data in location_table.items()}
 
     data_version = 1
+    required_client_version = (0, 3, 9)
 
     options: StardewOptions
     logic: StardewLogic
@@ -182,5 +183,6 @@ class StardewValleyWorld(World):
             "gifting": self.options[options.Gifting],
             "gift_tax": self.options[options.GiftTax],
             "modified_bundles": modified_bundles,
-            "randomized_entrances": self.randomized_entrances
+            "randomized_entrances": self.randomized_entrances,
+            "client_version": "2.x.x",
         }
