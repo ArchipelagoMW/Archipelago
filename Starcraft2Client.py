@@ -10,6 +10,8 @@ import re
 import sys
 import typing
 import queue
+import zipfile
+import io
 from pathlib import Path
 
 # CommonClient import first to trigger ModuleUpdater
@@ -120,9 +122,9 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             sc2_logger.warning("When using set_path, you must type the path to your SC2 install directory.")
         return False
 
-    def _cmd_download_data(self, force: bool = False) -> bool:
+    def _cmd_download_data(self) -> bool:
         """Download the most recent release of the necessary files for playing SC2 with
-        Archipelago. force should be True or False. force=True will overwrite your files."""
+        Archipelago. Will overwrite existing files."""
         if "SC2PATH" not in os.environ:
             check_game_install_path()
 
@@ -132,11 +134,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         else:
             current_ver = None
 
-        tempzip, version = download_latest_release_zip('TheCondor07', 'Starcraft2ArchipelagoData', current_version=current_ver, force_download=force)
+        tempzip, version = download_latest_release_zip('TheCondor07', 'Starcraft2ArchipelagoData',
+                                                       current_version=current_ver, force_download=True)
 
         if tempzip != '':
             try:
-                import zipfile
                 zipfile.ZipFile(tempzip).extractall(path=os.environ["SC2PATH"])
                 sc2_logger.info(f"Download complete. Version {version} installed.")
                 with open(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt", "w") as f:
@@ -195,12 +197,16 @@ class SC2Context(CommonContext):
             self.build_location_to_mission_mapping()
 
             # Looks for the required maps and mods for SC2. Runs check_game_install_path.
-            is_mod_installed_correctly()
+            maps_present = is_mod_installed_correctly()
             if os.path.exists(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt"):
                 with open(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt", "r") as f:
                     current_ver = f.read()
                 if is_mod_update_available("TheCondor07", "Starcraft2ArchipelagoData", current_ver):
                     sc2_logger.info("NOTICE: Update for required files found. Run /download_data to install.")
+            elif maps_present:
+                sc2_logger.warning("NOTICE: Your map files may be outdated (version number not found). "
+                                   "Run /download_data to update them.")
+
 
     def on_print_json(self, args: dict):
         # goes to this world
@@ -639,6 +645,13 @@ def request_unfinished_missions(ctx: SC2Context):
 
         _, unfinished_missions = calc_unfinished_missions(ctx, unlocks=unlocks)
 
+        # Removing All-In from location pool
+        final_mission = lookup_id_to_mission[ctx.final_mission]
+        if final_mission in unfinished_missions.keys():
+            message = f"Final Mission Available: {final_mission}[{ctx.final_mission}]\n" + message
+            if unfinished_missions[final_mission] == -1:
+                unfinished_missions.pop(final_mission)
+
         message += ", ".join(f"{mark_up_mission_name(ctx, mission, unlocks)}[{ctx.mission_req_table[mission].id}] " +
                              mark_up_objectives(
                                  f"[{len(unfinished_missions[mission])}/"
@@ -996,7 +1009,7 @@ def download_latest_release_zip(owner: str, repo: str, current_version: str = No
     download_url = r1.json()["assets"][0]["browser_download_url"]
 
     r2 = requests.get(download_url, headers=headers)
-    if r2.status_code == 200:
+    if r2.status_code == 200 and zipfile.is_zipfile(io.BytesIO(r2.content)):
         with open(f"{repo}.zip", "wb") as fh:
             fh.write(r2.content)
         sc2_logger.info(f"Successfully downloaded {repo}.zip.")

@@ -1,14 +1,15 @@
 import typing
 
-from BaseClasses import Location
+from BaseClasses import Location, MultiWorld
 from .Names import LocationName
+from .Missions import stage_name_prefixes, mission_orders
 
 
 class SA2BLocation(Location):
     game: str = "Sonic Adventure 2: Battle"
 
 
-first_mission_location_table = {
+mission_location_table = {
     LocationName.city_escape_1: 0xFF0000,
     LocationName.wild_canyon_1: 0xFF0001,
     LocationName.prison_lane_1: 0xFF0002,
@@ -42,9 +43,8 @@ first_mission_location_table = {
     LocationName.final_chase_1: 0xFF001D,
 
     LocationName.cannon_core_1: 0xFF001E,
-}
 
-second_mission_location_table = {
+
     LocationName.city_escape_2: 0xFF0020,
     LocationName.wild_canyon_2: 0xFF0021,
     LocationName.prison_lane_2: 0xFF0022,
@@ -78,9 +78,8 @@ second_mission_location_table = {
     LocationName.final_chase_2: 0xFF003D,
 
     LocationName.cannon_core_2: 0xFF003E,
-}
 
-third_mission_location_table = {
+
     LocationName.city_escape_3: 0xFF0040,
     LocationName.wild_canyon_3: 0xFF0041,
     LocationName.prison_lane_3: 0xFF0042,
@@ -114,9 +113,8 @@ third_mission_location_table = {
     LocationName.final_chase_3: 0xFF005D,
 
     LocationName.cannon_core_3: 0xFF005E,
-}
 
-fourth_mission_location_table = {
+
     LocationName.city_escape_4: 0xFF0060,
     LocationName.wild_canyon_4: 0xFF0061,
     LocationName.prison_lane_4: 0xFF0062,
@@ -150,9 +148,8 @@ fourth_mission_location_table = {
     LocationName.final_chase_4: 0xFF007D,
 
     LocationName.cannon_core_4: 0xFF007E,
-}
 
-fifth_mission_location_table = {
+
     LocationName.city_escape_5: 0xFF0080,
     LocationName.wild_canyon_5: 0xFF0081,
     LocationName.prison_lane_5: 0xFF0082,
@@ -218,6 +215,293 @@ upgrade_location_table = {
     LocationName.mad_space_upgrade: 0xFF00BB,
     LocationName.cosmic_wall_upgrade: 0xFF00BC,
     LocationName.final_chase_upgrade: 0xFF00BD,
+}
+
+chao_key_location_table = {
+    LocationName.city_escape_chao_1: 0xFF0400,
+    LocationName.wild_canyon_chao_1: 0xFF0401,
+    LocationName.prison_lane_chao_1: 0xFF0402,
+    LocationName.metal_harbor_chao_1: 0xFF0403,
+    LocationName.green_forest_chao_1: 0xFF0404,
+    LocationName.pumpkin_hill_chao_1: 0xFF0405,
+    LocationName.mission_street_chao_1: 0xFF0406,
+    LocationName.aquatic_mine_chao_1: 0xFF0407,
+    LocationName.hidden_base_chao_1: 0xFF0409,
+    LocationName.pyramid_cave_chao_1: 0xFF040A,
+    LocationName.death_chamber_chao_1: 0xFF040B,
+    LocationName.eternal_engine_chao_1: 0xFF040C,
+    LocationName.meteor_herd_chao_1: 0xFF040D,
+    LocationName.crazy_gadget_chao_1: 0xFF040E,
+    LocationName.final_rush_chao_1: 0xFF040F,
+
+    LocationName.iron_gate_chao_1: 0xFF0410,
+    LocationName.dry_lagoon_chao_1: 0xFF0411,
+    LocationName.sand_ocean_chao_1: 0xFF0412,
+    LocationName.radical_highway_chao_1: 0xFF0413,
+    LocationName.egg_quarters_chao_1: 0xFF0414,
+    LocationName.lost_colony_chao_1: 0xFF0415,
+    LocationName.weapons_bed_chao_1: 0xFF0416,
+    LocationName.security_hall_chao_1: 0xFF0417,
+    LocationName.white_jungle_chao_1: 0xFF0418,
+    LocationName.sky_rail_chao_1: 0xFF041A,
+    LocationName.mad_space_chao_1: 0xFF041B,
+    LocationName.cosmic_wall_chao_1: 0xFF041C,
+    LocationName.final_chase_chao_1: 0xFF041D,
+
+    LocationName.cannon_core_chao_1: 0xFF041E,
+
+    LocationName.city_escape_chao_2: 0xFF0420,
+    LocationName.wild_canyon_chao_2: 0xFF0421,
+    LocationName.prison_lane_chao_2: 0xFF0422,
+    LocationName.metal_harbor_chao_2: 0xFF0423,
+    LocationName.green_forest_chao_2: 0xFF0424,
+    LocationName.pumpkin_hill_chao_2: 0xFF0425,
+    LocationName.mission_street_chao_2: 0xFF0426,
+    LocationName.aquatic_mine_chao_2: 0xFF0427,
+    LocationName.hidden_base_chao_2: 0xFF0429,
+    LocationName.pyramid_cave_chao_2: 0xFF042A,
+    LocationName.death_chamber_chao_2: 0xFF042B,
+    LocationName.eternal_engine_chao_2: 0xFF042C,
+    LocationName.meteor_herd_chao_2: 0xFF042D,
+    LocationName.crazy_gadget_chao_2: 0xFF042E,
+    LocationName.final_rush_chao_2: 0xFF042F,
+
+    LocationName.iron_gate_chao_2: 0xFF0430,
+    LocationName.dry_lagoon_chao_2: 0xFF0431,
+    LocationName.sand_ocean_chao_2: 0xFF0432,
+    LocationName.radical_highway_chao_2: 0xFF0433,
+    LocationName.egg_quarters_chao_2: 0xFF0434,
+    LocationName.lost_colony_chao_2: 0xFF0435,
+    LocationName.weapons_bed_chao_2: 0xFF0436,
+    LocationName.security_hall_chao_2: 0xFF0437,
+    LocationName.white_jungle_chao_2: 0xFF0438,
+    LocationName.sky_rail_chao_2: 0xFF043A,
+    LocationName.mad_space_chao_2: 0xFF043B,
+    LocationName.cosmic_wall_chao_2: 0xFF043C,
+    LocationName.final_chase_chao_2: 0xFF043D,
+
+    LocationName.cannon_core_chao_2: 0xFF043E,
+
+    LocationName.city_escape_chao_3: 0xFF0440,
+    LocationName.wild_canyon_chao_3: 0xFF0441,
+    LocationName.prison_lane_chao_3: 0xFF0442,
+    LocationName.metal_harbor_chao_3: 0xFF0443,
+    LocationName.green_forest_chao_3: 0xFF0444,
+    LocationName.pumpkin_hill_chao_3: 0xFF0445,
+    LocationName.mission_street_chao_3: 0xFF0446,
+    LocationName.aquatic_mine_chao_3: 0xFF0447,
+    LocationName.pyramid_cave_chao_3: 0xFF044A,
+    LocationName.death_chamber_chao_3: 0xFF044B,
+    LocationName.eternal_engine_chao_3: 0xFF044C,
+    LocationName.meteor_herd_chao_3: 0xFF044D,
+    LocationName.crazy_gadget_chao_3: 0xFF044E,
+    LocationName.final_rush_chao_3: 0xFF044F,
+
+    LocationName.iron_gate_chao_3: 0xFF0450,
+    LocationName.dry_lagoon_chao_3: 0xFF0451,
+    LocationName.sand_ocean_chao_3: 0xFF0452,
+    LocationName.radical_highway_chao_3: 0xFF0453,
+    LocationName.egg_quarters_chao_3: 0xFF0454,
+    LocationName.lost_colony_chao_3: 0xFF0455,
+    LocationName.weapons_bed_chao_3: 0xFF0456,
+    LocationName.security_hall_chao_3: 0xFF0457,
+    LocationName.white_jungle_chao_3: 0xFF0458,
+    LocationName.sky_rail_chao_3: 0xFF045A,
+    LocationName.mad_space_chao_3: 0xFF045B,
+    LocationName.cosmic_wall_chao_3: 0xFF045C,
+    LocationName.final_chase_chao_3: 0xFF045D,
+
+    LocationName.cannon_core_chao_3: 0xFF045E,
+}
+
+pipe_location_table = {
+    LocationName.city_escape_pipe_1: 0xFF0500,
+    LocationName.wild_canyon_pipe_1: 0xFF0501,
+    LocationName.prison_lane_pipe_1: 0xFF0502,
+    LocationName.metal_harbor_pipe_1: 0xFF0503,
+    LocationName.green_forest_pipe_1: 0xFF0504,
+    LocationName.pumpkin_hill_pipe_1: 0xFF0505,
+    LocationName.mission_street_pipe_1: 0xFF0506,
+    LocationName.aquatic_mine_pipe_1: 0xFF0507,
+    LocationName.hidden_base_pipe_1: 0xFF0509,
+    LocationName.pyramid_cave_pipe_1: 0xFF050A,
+    LocationName.death_chamber_pipe_1: 0xFF050B,
+    LocationName.eternal_engine_pipe_1: 0xFF050C,
+    LocationName.meteor_herd_pipe_1: 0xFF050D,
+    LocationName.crazy_gadget_pipe_1: 0xFF050E,
+    LocationName.final_rush_pipe_1: 0xFF050F,
+
+    LocationName.iron_gate_pipe_1: 0xFF0510,
+    LocationName.dry_lagoon_pipe_1: 0xFF0511,
+    LocationName.sand_ocean_pipe_1: 0xFF0512,
+    LocationName.radical_highway_pipe_1: 0xFF0513,
+    LocationName.egg_quarters_pipe_1: 0xFF0514,
+    LocationName.lost_colony_pipe_1: 0xFF0515,
+    LocationName.weapons_bed_pipe_1: 0xFF0516,
+    LocationName.security_hall_pipe_1: 0xFF0517,
+    LocationName.white_jungle_pipe_1: 0xFF0518,
+    LocationName.sky_rail_pipe_1: 0xFF051A,
+    LocationName.mad_space_pipe_1: 0xFF051B,
+    LocationName.cosmic_wall_pipe_1: 0xFF051C,
+    LocationName.final_chase_pipe_1: 0xFF051D,
+
+    LocationName.cannon_core_pipe_1: 0xFF051E,
+
+    LocationName.city_escape_pipe_2: 0xFF0520,
+    LocationName.wild_canyon_pipe_2: 0xFF0521,
+    LocationName.prison_lane_pipe_2: 0xFF0522,
+    LocationName.green_forest_pipe_2: 0xFF0524,
+    LocationName.mission_street_pipe_2: 0xFF0526,
+    LocationName.aquatic_mine_pipe_2: 0xFF0527,
+    LocationName.hidden_base_pipe_2: 0xFF0529,
+    LocationName.pyramid_cave_pipe_2: 0xFF052A,
+    LocationName.death_chamber_pipe_2: 0xFF052B,
+    LocationName.eternal_engine_pipe_2: 0xFF052C,
+    LocationName.meteor_herd_pipe_2: 0xFF052D,
+    LocationName.crazy_gadget_pipe_2: 0xFF052E,
+    LocationName.final_rush_pipe_2: 0xFF052F,
+
+    LocationName.iron_gate_pipe_2: 0xFF0530,
+    LocationName.sand_ocean_pipe_2: 0xFF0532,
+    LocationName.radical_highway_pipe_2: 0xFF0533,
+    LocationName.egg_quarters_pipe_2: 0xFF0534,
+    LocationName.lost_colony_pipe_2: 0xFF0535,
+    LocationName.weapons_bed_pipe_2: 0xFF0536,
+    LocationName.white_jungle_pipe_2: 0xFF0538,
+    LocationName.sky_rail_pipe_2: 0xFF053A,
+    LocationName.mad_space_pipe_2: 0xFF053B,
+    LocationName.cosmic_wall_pipe_2: 0xFF053C,
+    LocationName.final_chase_pipe_2: 0xFF053D,
+
+    LocationName.cannon_core_pipe_2: 0xFF053E,
+
+    LocationName.city_escape_pipe_3: 0xFF0540,
+    LocationName.wild_canyon_pipe_3: 0xFF0541,
+    LocationName.prison_lane_pipe_3: 0xFF0542,
+    LocationName.mission_street_pipe_3: 0xFF0546,
+    LocationName.aquatic_mine_pipe_3: 0xFF0547,
+    LocationName.hidden_base_pipe_3: 0xFF0549,
+    LocationName.pyramid_cave_pipe_3: 0xFF054A,
+    LocationName.death_chamber_pipe_3: 0xFF054B,
+    LocationName.eternal_engine_pipe_3: 0xFF054C,
+    LocationName.meteor_herd_pipe_3: 0xFF054D,
+    LocationName.crazy_gadget_pipe_3: 0xFF054E,
+
+    LocationName.iron_gate_pipe_3: 0xFF0550,
+    LocationName.sand_ocean_pipe_3: 0xFF0552,
+    LocationName.radical_highway_pipe_3: 0xFF0553,
+    LocationName.weapons_bed_pipe_3: 0xFF0556,
+    LocationName.white_jungle_pipe_3: 0xFF0558,
+    LocationName.sky_rail_pipe_3: 0xFF055A,
+    LocationName.mad_space_pipe_3: 0xFF055B,
+    LocationName.cosmic_wall_pipe_3: 0xFF055C,
+    LocationName.final_chase_pipe_3: 0xFF055D,
+
+    LocationName.cannon_core_pipe_3: 0xFF055E,
+
+    LocationName.city_escape_pipe_4: 0xFF0560,
+    LocationName.hidden_base_pipe_4: 0xFF0569,
+    LocationName.pyramid_cave_pipe_4: 0xFF056A,
+    LocationName.eternal_engine_pipe_4: 0xFF056C,
+    LocationName.crazy_gadget_pipe_4: 0xFF056E,
+
+    LocationName.iron_gate_pipe_4: 0xFF0570,
+    LocationName.sand_ocean_pipe_4: 0xFF0572,
+    LocationName.weapons_bed_pipe_4: 0xFF0576,
+    LocationName.white_jungle_pipe_4: 0xFF0578,
+    LocationName.sky_rail_pipe_4: 0xFF057A,
+    LocationName.mad_space_pipe_4: 0xFF057B,
+    LocationName.cosmic_wall_pipe_4: 0xFF057C,
+
+    LocationName.cannon_core_pipe_4: 0xFF057E,
+
+    LocationName.hidden_base_pipe_5: 0xFF0589,
+    LocationName.eternal_engine_pipe_5: 0xFF058C,
+
+    LocationName.iron_gate_pipe_5: 0xFF0590,
+    LocationName.sand_ocean_pipe_5: 0xFF0592,
+    LocationName.weapons_bed_pipe_5: 0xFF0596,
+    LocationName.sky_rail_pipe_5: 0xFF059A,
+    LocationName.cosmic_wall_pipe_5: 0xFF059C,
+
+    LocationName.cannon_core_pipe_5: 0xFF059E,
+
+    LocationName.sky_rail_pipe_6: 0xFF05BA,
+}
+
+hidden_whistle_location_table = {
+    LocationName.city_escape_hidden_1: 0xFF0700,
+    LocationName.prison_lane_hidden_1: 0xFF0702,
+    LocationName.green_forest_hidden_1: 0xFF0704,
+    LocationName.pumpkin_hill_hidden_1: 0xFF0705,
+    LocationName.mission_street_hidden_1: 0xFF0706,
+    LocationName.death_chamber_hidden_1: 0xFF070B,
+    LocationName.crazy_gadget_hidden_1: 0xFF070E,
+
+    LocationName.dry_lagoon_hidden_1: 0xFF0711,
+    LocationName.radical_highway_hidden_1: 0xFF0713,
+    LocationName.egg_quarters_hidden_1: 0xFF0714,
+    LocationName.lost_colony_hidden_1: 0xFF0715,
+    LocationName.security_hall_hidden_1: 0xFF0717,
+    LocationName.white_jungle_hidden_1: 0xFF0718,
+
+    LocationName.cannon_core_hidden_1: 0xFF071E,
+
+    LocationName.city_escape_hidden_2: 0xFF0720,
+    LocationName.prison_lane_hidden_2: 0xFF0722,
+    LocationName.green_forest_hidden_2: 0xFF0724,
+    LocationName.mission_street_hidden_2: 0xFF0726,
+    LocationName.death_chamber_hidden_2: 0xFF072B,
+
+    LocationName.radical_highway_hidden_2: 0xFF0733,
+    LocationName.egg_quarters_hidden_2: 0xFF0734,
+    LocationName.white_jungle_hidden_2: 0xFF0738,
+
+    LocationName.city_escape_hidden_3: 0xFF0740,
+    LocationName.prison_lane_hidden_3: 0xFF0742,
+    LocationName.green_forest_hidden_3: 0xFF0744,
+    LocationName.mission_street_hidden_3: 0xFF0746,
+
+    LocationName.radical_highway_hidden_3: 0xFF0753,
+    LocationName.white_jungle_hidden_3: 0xFF0758,
+
+    LocationName.city_escape_hidden_4: 0xFF0760,
+    LocationName.green_forest_hidden_4: 0xFF0764,
+    LocationName.mission_street_hidden_4: 0xFF0766,
+
+    LocationName.city_escape_hidden_5: 0xFF0780,
+}
+
+beetle_location_table = {
+    LocationName.city_escape_beetle: 0xFF0600,
+    LocationName.wild_canyon_beetle: 0xFF0601,
+    LocationName.prison_lane_beetle: 0xFF0602,
+    LocationName.metal_harbor_beetle: 0xFF0603,
+    LocationName.green_forest_beetle: 0xFF0604,
+    LocationName.mission_street_beetle: 0xFF0606,
+    LocationName.aquatic_mine_beetle: 0xFF0607,
+    LocationName.hidden_base_beetle: 0xFF0609,
+    LocationName.pyramid_cave_beetle: 0xFF060A,
+    LocationName.death_chamber_beetle: 0xFF060B,
+    LocationName.eternal_engine_beetle: 0xFF060C,
+    LocationName.meteor_herd_beetle: 0xFF060D,
+    LocationName.crazy_gadget_beetle: 0xFF060E,
+    LocationName.final_rush_beetle: 0xFF060F,
+
+    LocationName.iron_gate_beetle: 0xFF0610,
+    LocationName.dry_lagoon_beetle: 0xFF0611,
+    LocationName.sand_ocean_beetle: 0xFF0612,
+    LocationName.radical_highway_beetle: 0xFF0613,
+    LocationName.egg_quarters_beetle: 0xFF0614,
+    LocationName.lost_colony_beetle: 0xFF0615,
+    LocationName.security_hall_beetle: 0xFF0617,
+    LocationName.white_jungle_beetle: 0xFF0618,
+    LocationName.sky_rail_beetle: 0xFF061A,
+    LocationName.mad_space_beetle: 0xFF061B,
+    LocationName.cosmic_wall_beetle: 0xFF061C,
+    LocationName.final_chase_beetle: 0xFF061D,
+
+    LocationName.cannon_core_beetle: 0xFF061E,
 }
 
 boss_gate_location_table = {
@@ -308,23 +592,33 @@ chao_garden_expert_location_table = {
     LocationName.chao_super_karate: 0xFF0303,
 }
 
-other_location_table = {
-    # LocationName.green_hill: 0xFF001F,
-    LocationName.biolizard: 0xFF003F,
+green_hill_location_table = {
+    LocationName.green_hill: 0xFF001F,
+}
+
+green_hill_chao_location_table = {
+    LocationName.green_hill_chao_1: 0xFF041F,
+}
+
+final_boss_location_table = {
+    # LocationName.biolizard: 0xFF003F,
+    LocationName.finalhazard: 0xFF005F,
 }
 
 all_locations = {
-    **first_mission_location_table,
-    **second_mission_location_table,
-    **third_mission_location_table,
-    **fourth_mission_location_table,
-    **fifth_mission_location_table,
+    **mission_location_table,
     **upgrade_location_table,
     **boss_gate_location_table,
+    **chao_key_location_table,
+    **pipe_location_table,
+    **hidden_whistle_location_table,
+    **beetle_location_table,
     **chao_garden_beginner_location_table,
     **chao_garden_intermediate_location_table,
     **chao_garden_expert_location_table,
-    **other_location_table,
+    **green_hill_location_table,
+    **green_hill_chao_location_table,
+    **final_boss_location_table,
 }
 
 boss_gate_set = [
@@ -367,26 +661,45 @@ chao_race_prize_set = [
 ]
 
 
-def setup_locations(world, player: int):
+def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int]):
     location_table = {}
     chao_location_table = {}
-    location_table.update({**first_mission_location_table})
 
-    if world.include_missions[player].value >= 2:
-        location_table.update({**second_mission_location_table})
 
-    if world.include_missions[player].value >= 3:
-        location_table.update({**third_mission_location_table})
+    for i in range(31):
+        mission_count = mission_count_map[i]
+        mission_order: typing.List[int] = mission_orders[mission_map[i]]
+        stage_prefix: str = stage_name_prefixes[i]
 
-    if world.include_missions[player].value >= 4:
-        location_table.update({**fourth_mission_location_table})
-
-    if world.include_missions[player].value >= 5:
-        location_table.update({**fifth_mission_location_table})
+        for j in range(mission_count):
+            mission_number = mission_order[j]
+            location_name: str = stage_prefix + str(mission_number)
+            location_table[location_name] = mission_location_table[location_name]
 
     location_table.update({**upgrade_location_table})
 
-    location_table.update({**other_location_table})
+    if world.keysanity[player]:
+        location_table.update({**chao_key_location_table})
+
+    if world.whistlesanity[player].value == 1:
+        location_table.update({**pipe_location_table})
+    elif world.whistlesanity[player].value == 2:
+        location_table.update({**hidden_whistle_location_table})
+    elif world.whistlesanity[player].value == 3:
+        location_table.update({**pipe_location_table})
+        location_table.update({**hidden_whistle_location_table})
+
+    if world.beetlesanity[player]:
+        location_table.update({**beetle_location_table})
+
+    if world.goal[player].value == 0 or world.goal[player].value == 2:
+        location_table.update({**final_boss_location_table})
+
+    if world.goal[player].value == 1 or world.goal[player].value == 2:
+        location_table.update({**green_hill_location_table})
+
+        if world.keysanity[player]:
+            location_table.update({**green_hill_chao_location_table})
 
     if world.chao_garden_difficulty[player].value >= 1:
         chao_location_table.update({**chao_garden_beginner_location_table})

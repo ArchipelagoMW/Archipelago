@@ -24,7 +24,7 @@ place them directly into the player's inventory.
 ## What does another world's item look like in Factorio?
 
 In Factorio, items which need to be sent to other worlds appear in the tech tree as new research items. They are
-represented by the Archipelago icon, and must be researched as if it were a normal technology. Upon successful
+represented by the Archipelago icon, and must be researched as if they were normal technologies. Upon successful
 completion of research, the item will be sent to its home world.
 
 ## When the engineer receives an item, what happens?
@@ -32,3 +32,13 @@ completion of research, the item will be sent to its home world.
 When the player receives a technology, it is instantly learned and able to be crafted. A message will appear in the chat
 log to notify the player, and if free samples are enabled the player may also receive some items directly to their
 inventory.
+
+## What is EnergyLink?
+
+EnergyLink is an energy storage supported by certain games that is shared across all worlds in a multiworld.
+In Factorio, if enabled in the player settings, EnergyLink Bridge buildings can be crafted and placed, which allow
+depositing excess energy and supplementing energy deficits, much like Accumulators.
+
+Each placed EnergyLink Bridge provides 1 MW of throughput. The shared storage has unlimited capacity, but 25% of energy
+is lost during depositing. The amount of energy currently in the shared storage is displayed in the Archipelago client.
+It can also be queried by typing `/energy-link` in-game.
