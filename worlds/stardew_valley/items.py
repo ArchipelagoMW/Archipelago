@@ -157,8 +157,8 @@ def load_resource_pack_csv() -> List[ResourcePackData]:
         for resource_pack in resource_pack_reader:
             groups = frozenset(Group[group] for group in resource_pack["groups"].split(",") if group)
             resource_packs.append(ResourcePackData(resource_pack["name"],
-                                                   int(resource_pack['default_amount']),
-                                                   int(resource_pack['scaling_factor']),
+                                                   int(resource_pack["default_amount"]),
+                                                   int(resource_pack["scaling_factor"]),
                                                    ItemClassification[resource_pack["classification"]],
                                                    groups))
     return resource_packs
