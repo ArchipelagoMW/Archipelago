@@ -63,6 +63,20 @@ class GraphBuilder(object):
         ret = AccessGraph(Logic.accessPoints, transitions, self.graphSettings.dotFile)
         Objectives.objDict[self.graphSettings.player].setGraph(ret, maxDiff)
         return ret
+    
+    def addForeignItems(self, container, itemLocs):
+        itemPoolCounts = {}
+        for item in container.itemPool:
+            if item.Code is not None:
+                itemPoolCounts[item.Type] = itemPoolCounts.get(item.Type, 0) + 1
+        itemLocsCounts = {}
+        for il in itemLocs:
+            if il.Item.Code is not None:
+                itemLocsCounts[il.Item.Type] = itemLocsCounts.get(il.Item.Type, 0) + 1
+
+        for item, count in itemPoolCounts.items():
+            for n in range(max(0, count - itemLocsCounts.get(item, 0))):
+                container.sm.addItem(item)
 
     # fills in escape transitions if escape rando is enabled
     # escapeTrigger = None or (itemLocs, progItemlocs) couple from filler
@@ -78,6 +92,7 @@ class GraphBuilder(object):
             graph.addTransition(escapeSource, dst)
             paths = [path]
         else:
+            self.addForeignItems(emptyContainer, escapeTrigger[0])
             possibleTargets, paths = self.escapeTrigger(emptyContainer, graph, maxDiff, escapeTrigger)
             if paths is None:
                 return False
@@ -155,7 +170,7 @@ class GraphBuilder(object):
         ap = "Landing Site" # dummy value it'll be overwritten at first collection
         while len(itemLocs) > 0 and not (sm.canPassG4() and graph.canAccess(sm, ap, "Landing Site", maxDiff)):
             il = itemLocs.pop(0)
-            if il.Location.restricted:
+            if il.Location.restricted or il.Item.Type == "ArchipelagoItem":
                 continue
             self.log.debug("collecting " + getItemLocStr(il))
             container.collect(il)
@@ -201,7 +216,7 @@ class GraphBuilder(object):
             return len(allAreas - startAreas) == 0
         while not areaPathCheck() and len(itemLocs) > 0:
             il = itemLocs.pop(0)
-            if il.Location.restricted:
+            if il.Location.restricted or il.Item.Type == "ArchipelagoItem":
                 continue
             self.log.debug("collecting " + getItemLocStr(il))
             container.collect(il)

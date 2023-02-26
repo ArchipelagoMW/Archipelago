@@ -642,7 +642,7 @@ class Objectives(object):
     def checkLimitObjectives(self, beatableBosses):
         # check that there's enough bosses/minibosses for limit objectives
         from logic.smboolmanager import SMBoolManager
-        smbm = SMBoolManager()
+        smbm = SMBoolManager(self.player)
         smbm.addItems(beatableBosses)
         for goal in self.activeGoals:
             if not goal.isLimit():

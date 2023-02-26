@@ -26,13 +26,13 @@ class SMBoolManager(object):
         self.lastAP = lastAP
 
         # cache related
-        self.cacheKey = 0
-        self.computeItemsPositions()
+        #self.cacheKey = 0
+        #self.computeItemsPositions()
         Cache.reset()
         Logic.factory('vanilla')
         self.helpers = Logic.HelpersGraph(self)
         self.doorsManager = DoorsManager()
-        self.objectives = Objectives()
+        self.objectives = Objectives.objDict[player]
         self.createFacadeFunctions()
         self.createKnowsFunctions(player)
         self.resetItems()
@@ -100,8 +100,8 @@ class SMBoolManager(object):
         self._items = { item : smboolFalse for item in self.items }
         self._counts = { item : 0 for item in self.countItems }
 
-        self.cacheKey = 0
-        Cache.update(self.cacheKey)
+        #self.cacheKey = 0
+        #Cache.update(self.cacheKey)
 
     def addItem(self, item):
         # a new item is available
@@ -109,11 +109,11 @@ class SMBoolManager(object):
         if self.isCountItem(item):
             count = self._counts[item] + 1
             self._counts[item] = count
-            self.computeNewCacheKey(item, count)
-        else:
-            self.computeNewCacheKey(item, 1)
+            #self.computeNewCacheKey(item, count)
+        #else:
+            #self.computeNewCacheKey(item, 1)
 
-        Cache.update(self.cacheKey)
+        #Cache.update(self.cacheKey)
 
     def addItems(self, items):
         if len(items) == 0:
@@ -123,11 +123,11 @@ class SMBoolManager(object):
             if self.isCountItem(item):
                 count = self._counts[item] + 1
                 self._counts[item] = count
-                self.computeNewCacheKey(item, count)
-            else:
-                self.computeNewCacheKey(item, 1)
+                #self.computeNewCacheKey(item, count)
+            #else:
+                #self.computeNewCacheKey(item, 1)
 
-        Cache.update(self.cacheKey)
+        #Cache.update(self.cacheKey)
 
     def removeItem(self, item):
         # randomizer removed an item (or the item was added to test a post available)
@@ -136,12 +136,12 @@ class SMBoolManager(object):
             self._counts[item] = count
             if count == 0:
                 self._items[item] = smboolFalse
-            self.computeNewCacheKey(item, count)
+            #self.computeNewCacheKey(item, count)
         else:
             self._items[item] = smboolFalse
-            self.computeNewCacheKey(item, 0)
+            #self.computeNewCacheKey(item, 0)
 
-        Cache.update(self.cacheKey)
+        #Cache.update(self.cacheKey)
 
     def createFacadeFunctions(self):
         for fun in dir(self.helpers):
@@ -184,14 +184,14 @@ class SMBoolManager(object):
     def changeKnows(self, knows, newVal):
         if isKnows(knows):
             self._setKnowsFunction(knows, newVal)
-            Cache.reset()
+            #Cache.reset()
         else:
             raise ValueError("Invalid knows "+str(knows))
 
     def restoreKnows(self, knows):
         if isKnows(knows):
             self._createKnowsFunction(knows)
-            Cache.reset()
+            #Cache.reset()
         else:
             raise ValueError("Invalid knows "+str(knows))
         
@@ -256,11 +256,11 @@ class SMBoolManagerPlando(SMBoolManager):
         if isCount:
             count = self._counts[item] + 1
             self._counts[item] = count
-            self.computeNewCacheKey(item, count)
-        else:
-            self.computeNewCacheKey(item, 1)
+            #self.computeNewCacheKey(item, count)
+        #else:
+            #self.computeNewCacheKey(item, 1)
 
-        Cache.update(self.cacheKey)
+        #Cache.update(self.cacheKey)
 
     def removeItem(self, item):
         # randomizer removed an item (or the item was added to test a post available)
@@ -269,14 +269,14 @@ class SMBoolManagerPlando(SMBoolManager):
             self._counts[item] = count
             if count == 0:
                 self._items[item] = smboolFalse
-            self.computeNewCacheKey(item, count)
+            #self.computeNewCacheKey(item, count)
         else:
             dup = 'dup_'+item
             if self._items.get(dup, None) is None:
                 self._items[item] = smboolFalse
-                self.computeNewCacheKey(item, 0)
+                #self.computeNewCacheKey(item, 0)
             else:
                 del self._items[dup]
-                self.computeNewCacheKey(item, 1)
+                #self.computeNewCacheKey(item, 1)
 
-        Cache.update(self.cacheKey)
+        #Cache.update(self.cacheKey)
