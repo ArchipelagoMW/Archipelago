@@ -140,8 +140,8 @@ class SMWorld(World):
                 if (item in itemPool):
                     itemPool.remove(item)
 
-        missingPool = 105 - len(itemPool) + 1
-        for i in range(1, missingPool):
+        missingPool = 109 - len(itemPool)
+        for i in range(missingPool):
             itemPool.append(ItemManager.Items['Nothing'])
         
         # Generate item pool
@@ -704,14 +704,14 @@ class SMWorld(World):
             ItemLocation(ItemManager.Items[itemLoc.item.type
                          if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
                          'ArchipelagoItem'],
-                         locationsDict[itemLoc.name], True)
+                         locationsDict[itemLoc.name], itemLoc.item.player, True)
             for itemLoc in self.multiworld.get_locations() if itemLoc.player == self.player
         ]
         self.progItemLocs = [
             ItemLocation(ItemManager.Items[itemLoc.item.type
                          if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
                          'ArchipelagoItem'],
-                         locationsDict[itemLoc.name], True)
+                         locationsDict[itemLoc.name], itemLoc.item.player, True)
             for itemLoc in self.multiworld.get_locations() if itemLoc.player == self.player and itemLoc.item.advancement == True
         ]
         for itemLoc in self.itemLocs:
@@ -721,7 +721,10 @@ class SMWorld(World):
             if itemLoc.Item.Class == "Boss":
                 itemLoc.Item.Class = "Minor"
 
-        escapeTrigger = (self.itemLocs, self.progItemLocs, 'Full') if self.variaRando.randoExec.randoSettings.restrictions["EscapeTrigger"] else None
+        localItemLocs = [il for il in self.itemLocs if il.player == self.player]
+        localprogItemLocs = [il for il in self.progItemLocs if il.player == self.player]
+
+        escapeTrigger = (localItemLocs, localprogItemLocs, 'Full') if self.variaRando.randoExec.randoSettings.restrictions["EscapeTrigger"] else None
         escapeOk = self.variaRando.randoExec.graphBuilder.escapeGraph(self.variaRando.container, self.variaRando.randoExec.areaGraph, self.variaRando.randoExec.randoSettings.maxDiff, escapeTrigger)
         assert escapeOk, "Could not find a solution for escape"
 

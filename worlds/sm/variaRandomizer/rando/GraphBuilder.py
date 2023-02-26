@@ -71,7 +71,7 @@ class GraphBuilder(object):
                 itemPoolCounts[item.Type] = itemPoolCounts.get(item.Type, 0) + 1
         itemLocsCounts = {}
         for il in itemLocs:
-            if il.Item.Code is not None:
+            if il.Item.Code is not None and il.player == container.sm.player:
                 itemLocsCounts[il.Item.Type] = itemLocsCounts.get(il.Item.Type, 0) + 1
 
         for item, count in itemPoolCounts.items():
