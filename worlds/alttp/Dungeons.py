@@ -8,17 +8,29 @@ from worlds.alttp.Regions import lookup_boss_drops
 from worlds.alttp.Options import smallkey_shuffle
 
 
-def create_dungeons(world, player):
-    def make_dungeon(name, default_boss, dungeon_regions, big_key, small_keys, dungeon_items):
+def create_dungeons(multiworld: MultiWorld, player: int):
+
+    excluded_dungeons: typing.List[str]
+    if multiworld.mode[player] == "inverted":
+        excluded_dungeons = multiworld.excluded_dungeons[player].inverted_names
+    else:
+        excluded_dungeons = multiworld.excluded_dungeons[player].value
+
+    def make_dungeon(name: str, default_boss: typing.Optional[str], dungeon_regions: typing.List[str],
+                     big_key: typing.Optional[Item], small_keys: typing.Union[Item, typing.List[Item]],
+                     dungeon_items: typing.Union[Item, typing.List[Item]]) -> Dungeon:
         dungeon = Dungeon(name, dungeon_regions, big_key,
                           [] if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal else small_keys,
                           dungeon_items, player)
+        dungeon.excluded = name in excluded_dungeons
         for item in dungeon.all_items:
             item.dungeon = dungeon
         dungeon.boss = BossFactory(default_boss, player) if default_boss else None
-        for region in dungeon.regions:
-            world.get_region(region, player).dungeon = dungeon
-            dungeon.multiworld = world
+        for region_name in dungeon.regions:
+            region = multiworld.get_region(region_name, player)
+            region.dungeon = dungeon
+            region.excluded = dungeon.excluded
+            dungeon.multiworld = multiworld
         return dungeon
 
     ES = make_dungeon('Hyrule Castle', None, ['Hyrule Castle', 'Sewers', 'Sewer Drop', 'Sewers (Dark)', 'Sanctuary'],

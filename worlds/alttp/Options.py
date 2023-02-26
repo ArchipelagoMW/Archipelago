@@ -1,7 +1,7 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice, PlandoBosses
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice, PlandoBosses, OptionList
 
 
 class Logic(Choice):
@@ -381,6 +381,37 @@ class BeemizerRange(Range):
     range_end = 100
 
 
+class ExcludeDungeons(OptionList):
+    """Listed dungeons will have all locations marked as excluded after key logic resolves. Pendants and Crystals may
+    still be required."""
+    display_name = "Excluded Dungeons"
+    valid_keys = {
+        "Hyrule Castle",
+        "Eastern Palace",
+        "Desert Palace",
+        "Tower of Hera",
+        "Palace of Darkness",
+        "Thieves Town",
+        "Skull Woods",
+        "Swamp Palace",
+        "Ice Palace",
+        "Misery Mire",
+        "Turtle Rock",
+        "Agahnims Tower",
+        "Ganons Tower"
+    }
+    valid_keys_casefold = True
+
+    @property
+    def inverted_names(self) -> typing.List[str]:
+        inverted_excluded_names = self.value.copy()
+        if "Agahnims Tower" in self.value:
+            inverted_excluded_names[self.value.index("Agahnims Tower")] = "Inverted Agahnims Tower"
+        if "Ganons Tower" in self.value:
+            inverted_excluded_names[self.value.index("Ganons Tower")] = "Inverted Ganons Tower"
+        return inverted_excluded_names
+
+
 class BeemizerTotalChance(BeemizerRange):
     """Percentage chance for each junk-fill item (rupees, bombs, arrows) to be
     replaced with either a bee swarm trap or a single bottle-filling bee."""
@@ -441,5 +472,6 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "beemizer_total_chance": BeemizerTotalChance,
     "beemizer_trap_chance": BeemizerTrapChance,
     "death_link": DeathLink,
-    "allow_collect": AllowCollect
+    "allow_collect": AllowCollect,
+    "excluded_dungeons": ExcludeDungeons,
 }
