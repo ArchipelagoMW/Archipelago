@@ -279,16 +279,36 @@
   },
   "REGION_MAGMA_HIDEOUT_1F/MAIN": {
     "parent_map": "MAP_MAGMA_HIDEOUT_1F",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_MAGMA_HIDEOUT_1F/ENTRANCE"
+    ],
+    "warps": [
+      "MAP_MAGMA_HIDEOUT_1F:1/MAP_MAGMA_HIDEOUT_2F_1R:1",
+      "MAP_MAGMA_HIDEOUT_1F:3/MAP_MAGMA_HIDEOUT_2F_3R:0"
+    ]
+  },
+  "REGION_MAGMA_HIDEOUT_1F/LEDGE": {
+    "parent_map": "MAP_MAGMA_HIDEOUT_1F",
     "locations": [
       "ITEM_MAGMA_HIDEOUT_1F_RARE_CANDY"
     ],
     "events": [],
     "exits": [],
     "warps": [
-      "MAP_MAGMA_HIDEOUT_1F:0/MAP_JAGGED_PASS:4",
-      "MAP_MAGMA_HIDEOUT_1F:1/MAP_MAGMA_HIDEOUT_2F_1R:1",
-      "MAP_MAGMA_HIDEOUT_1F:2/MAP_MAGMA_HIDEOUT_2F_2R:1",
-      "MAP_MAGMA_HIDEOUT_1F:3/MAP_MAGMA_HIDEOUT_2F_3R:0"
+      "MAP_MAGMA_HIDEOUT_1F:2/MAP_MAGMA_HIDEOUT_2F_2R:1"
+    ]
+  },
+  "REGION_MAGMA_HIDEOUT_1F/ENTRANCE": {
+    "parent_map": "MAP_MAGMA_HIDEOUT_1F",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_MAGMA_HIDEOUT_1F/MAIN"
+    ],
+    "warps": [
+      "MAP_MAGMA_HIDEOUT_1F:0/MAP_JAGGED_PASS:4"
     ]
   },
   "REGION_MAGMA_HIDEOUT_2F_1R/MAIN": {
@@ -383,21 +403,50 @@
       "MAP_MIRAGE_TOWER_1F:1/MAP_MIRAGE_TOWER_2F:1"
     ]
   },
-  "REGION_MIRAGE_TOWER_2F/MAIN": {
+  "REGION_MIRAGE_TOWER_2F/TOP": {
     "parent_map": "MAP_MIRAGE_TOWER_2F",
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_MIRAGE_TOWER_2F/BOTTOM",
+      "REGION_MIRAGE_TOWER_1F/MAIN"
+    ],
     "warps": [
-      "MAP_MIRAGE_TOWER_2F:0/MAP_MIRAGE_TOWER_3F:0",
       "MAP_MIRAGE_TOWER_2F:1/MAP_MIRAGE_TOWER_1F:1"
     ]
   },
-  "REGION_MIRAGE_TOWER_3F/MAIN": {
+  "REGION_MIRAGE_TOWER_2F/BOTTOM": {
+    "parent_map": "MAP_MIRAGE_TOWER_2F",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_MIRAGE_TOWER_2F/TOP",
+      "REGION_MIRAGE_TOWER_1F/MAIN"
+    ],
+    "warps": [
+      "MAP_MIRAGE_TOWER_2F:0/MAP_MIRAGE_TOWER_3F:0"
+    ]
+  },
+  "REGION_MIRAGE_TOWER_3F/TOP": {
     "parent_map": "MAP_MIRAGE_TOWER_3F",
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_MIRAGE_TOWER_3F/BOTTOM"
+    ],
+    "warps": [
+      "MAP_MIRAGE_TOWER_3F:0/MAP_MIRAGE_TOWER_2F:0",
+      "MAP_MIRAGE_TOWER_3F:1/MAP_MIRAGE_TOWER_4F:0"
+    ]
+  },
+  "REGION_MIRAGE_TOWER_3F/BOTTOM": {
+    "parent_map": "MAP_MIRAGE_TOWER_3F",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_MIRAGE_TOWER_3F/TOP",
+      "REGION_MIRAGE_TOWER_2F/TOP"
+    ],
     "warps": [
       "MAP_MIRAGE_TOWER_3F:0/MAP_MIRAGE_TOWER_2F:0",
       "MAP_MIRAGE_TOWER_3F:1/MAP_MIRAGE_TOWER_4F:0"
@@ -407,10 +456,19 @@
     "parent_map": "MAP_MIRAGE_TOWER_4F",
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_MIRAGE_TOWER_4F/FOSSIL_PLATFORM"
+    ],
     "warps": [
       "MAP_MIRAGE_TOWER_4F:0/MAP_MIRAGE_TOWER_3F:1"
     ]
+  },
+  "REGION_MIRAGE_TOWER_4F/FOSSIL_PLATFORM": {
+    "parent_map": "MAP_MIRAGE_TOWER_4F",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": []
   },
   "REGION_DESERT_RUINS/MAIN": {
     "parent_map": "MAP_DESERT_RUINS",
@@ -609,14 +667,22 @@
       "MAP_ISLAND_CAVE:2/MAP_ISLAND_CAVE:1"
     ]
   },
-  "REGION_ABANDONED_SHIP_DECK/MAIN": {
+  "REGION_ABANDONED_SHIP_DECK/ENTRANCE": {
     "parent_map": "MAP_ABANDONED_SHIP_DECK",
     "locations": [],
     "events": [],
     "exits": [],
     "warps": [
       "MAP_ABANDONED_SHIP_DECK:0,1/MAP_ROUTE108:0",
-      "MAP_ABANDONED_SHIP_DECK:2/MAP_ABANDONED_SHIP_CORRIDORS_1F:1",
+      "MAP_ABANDONED_SHIP_DECK:2/MAP_ABANDONED_SHIP_CORRIDORS_1F:1"
+    ]
+  },
+  "REGION_ABANDONED_SHIP_DECK/UPPER": {
+    "parent_map": "MAP_ABANDONED_SHIP_DECK",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
       "MAP_ABANDONED_SHIP_DECK:3/MAP_ABANDONED_SHIP_CORRIDORS_1F:2",
       "MAP_ABANDONED_SHIP_DECK:4/MAP_ABANDONED_SHIP_CAPTAINS_OFFICE:0"
     ]
@@ -632,25 +698,44 @@
       "MAP_ABANDONED_SHIP_CAPTAINS_OFFICE:0,1/MAP_ABANDONED_SHIP_DECK:4"
     ]
   },
-  "REGION_ABANDONED_SHIP_CORRIDORS_1F/MAIN": {
+  "REGION_ABANDONED_SHIP_CORRIDORS_1F/WEST": {
+    "parent_map": "MAP_ABANDONED_SHIP_CORRIDORS_1F",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ABANDONED_SHIP_CORRIDORS_1F:2,3/MAP_ABANDONED_SHIP_DECK:3",
+      "MAP_ABANDONED_SHIP_CORRIDORS_1F:8/MAP_ABANDONED_SHIP_ROOMS2_1F:0",
+      "MAP_ABANDONED_SHIP_CORRIDORS_1F:10/MAP_ABANDONED_SHIP_CORRIDORS_B1F:6",
+      "MAP_ABANDONED_SHIP_CORRIDORS_1F:11/MAP_ABANDONED_SHIP_ROOMS2_1F:2"
+    ]
+  },
+  "REGION_ABANDONED_SHIP_CORRIDORS_1F/EAST": {
     "parent_map": "MAP_ABANDONED_SHIP_CORRIDORS_1F",
     "locations": [],
     "events": [],
     "exits": [],
     "warps": [
       "MAP_ABANDONED_SHIP_CORRIDORS_1F:0,1/MAP_ABANDONED_SHIP_DECK:2",
-      "MAP_ABANDONED_SHIP_CORRIDORS_1F:2,3/MAP_ABANDONED_SHIP_DECK:3",
       "MAP_ABANDONED_SHIP_CORRIDORS_1F:4/MAP_ABANDONED_SHIP_ROOMS_1F:0",
       "MAP_ABANDONED_SHIP_CORRIDORS_1F:5/MAP_ABANDONED_SHIP_ROOMS_1F:3",
       "MAP_ABANDONED_SHIP_CORRIDORS_1F:6/MAP_ABANDONED_SHIP_ROOMS_1F:2",
       "MAP_ABANDONED_SHIP_CORRIDORS_1F:7/MAP_ABANDONED_SHIP_ROOMS_1F:4",
-      "MAP_ABANDONED_SHIP_CORRIDORS_1F:8/MAP_ABANDONED_SHIP_ROOMS2_1F:0",
-      "MAP_ABANDONED_SHIP_CORRIDORS_1F:9/MAP_ABANDONED_SHIP_CORRIDORS_B1F:7",
-      "MAP_ABANDONED_SHIP_CORRIDORS_1F:10/MAP_ABANDONED_SHIP_CORRIDORS_B1F:6",
-      "MAP_ABANDONED_SHIP_CORRIDORS_1F:11/MAP_ABANDONED_SHIP_ROOMS2_1F:2"
+      "MAP_ABANDONED_SHIP_CORRIDORS_1F:9/MAP_ABANDONED_SHIP_CORRIDORS_B1F:7"
     ]
   },
   "REGION_ABANDONED_SHIP_ROOMS_1F/MAIN": {
+    "parent_map": "MAP_ABANDONED_SHIP_ROOMS_1F",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ABANDONED_SHIP_ROOMS_1F:0,1/MAP_ABANDONED_SHIP_CORRIDORS_1F:4",
+      "MAP_ABANDONED_SHIP_ROOMS_1F:3,5/MAP_ABANDONED_SHIP_CORRIDORS_1F:5",
+      "MAP_ABANDONED_SHIP_ROOMS_1F:4/MAP_ABANDONED_SHIP_CORRIDORS_1F:7"
+    ]
+  },
+  "REGION_ABANDONED_SHIP_ROOMS_1F/NORTH_WEST": {
     "parent_map": "MAP_ABANDONED_SHIP_ROOMS_1F",
     "locations": [
       "ITEM_ABANDONED_SHIP_ROOMS_1F_HARBOR_MAIL"
@@ -658,10 +743,7 @@
     "events": [],
     "exits": [],
     "warps": [
-      "MAP_ABANDONED_SHIP_ROOMS_1F:0,1/MAP_ABANDONED_SHIP_CORRIDORS_1F:4",
-      "MAP_ABANDONED_SHIP_ROOMS_1F:2/MAP_ABANDONED_SHIP_CORRIDORS_1F:6",
-      "MAP_ABANDONED_SHIP_ROOMS_1F:3,5/MAP_ABANDONED_SHIP_CORRIDORS_1F:5",
-      "MAP_ABANDONED_SHIP_ROOMS_1F:4/MAP_ABANDONED_SHIP_CORRIDORS_1F:7"
+      "MAP_ABANDONED_SHIP_ROOMS_1F:2/MAP_ABANDONED_SHIP_CORRIDORS_1F:6"
     ]
   },
   "REGION_ABANDONED_SHIP_ROOMS2_1F/MAIN": {
@@ -692,7 +774,7 @@
       "MAP_ABANDONED_SHIP_CORRIDORS_B1F:7/MAP_ABANDONED_SHIP_CORRIDORS_1F:9"
     ]
   },
-  "REGION_ABANDONED_SHIP_ROOMS_B1F/MAIN": {
+  "REGION_ABANDONED_SHIP_ROOMS_B1F/LEFT": {
     "parent_map": "MAP_ABANDONED_SHIP_ROOMS_B1F",
     "locations": [
       "ITEM_ABANDONED_SHIP_ROOMS_B1F_ESCAPE_ROPE"
@@ -700,8 +782,26 @@
     "events": [],
     "exits": [],
     "warps": [
-      "MAP_ABANDONED_SHIP_ROOMS_B1F:0/MAP_ABANDONED_SHIP_CORRIDORS_B1F:2",
-      "MAP_ABANDONED_SHIP_ROOMS_B1F:1/MAP_ABANDONED_SHIP_CORRIDORS_B1F:3",
+      "MAP_ABANDONED_SHIP_ROOMS_B1F:0/MAP_ABANDONED_SHIP_CORRIDORS_B1F:2"
+    ]
+  },
+  "REGION_ABANDONED_SHIP_ROOMS_B1F/CENTER": {
+    "parent_map": "MAP_ABANDONED_SHIP_ROOMS_B1F",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ABANDONED_SHIP_UNDERWATER1/MAIN"
+    ],
+    "warps": [
+      "MAP_ABANDONED_SHIP_ROOMS_B1F:1/MAP_ABANDONED_SHIP_CORRIDORS_B1F:3"
+    ]
+  },
+  "REGION_ABANDONED_SHIP_ROOMS_B1F/RIGHT": {
+    "parent_map": "MAP_ABANDONED_SHIP_ROOMS_B1F",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
       "MAP_ABANDONED_SHIP_ROOMS_B1F:2/MAP_ABANDONED_SHIP_CORRIDORS_B1F:4"
     ]
   },
@@ -728,34 +828,72 @@
       "MAP_ABANDONED_SHIP_ROOM_B1F:0,1/MAP_ABANDONED_SHIP_CORRIDORS_B1F:5"
     ]
   },
-  "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS/MAIN": {
+  "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS/TOP_LEFT": {
     "parent_map": "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS",
     "locations": [
-      "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_6_LUXURY_BALL",
-      "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_4_SCANNER",
-      "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_1_TM18",
-      "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_3_WATER_STONE",
-      "HIDDEN_ITEM_ABANDONED_SHIP_RM_1_KEY",
-      "HIDDEN_ITEM_ABANDONED_SHIP_RM_2_KEY",
-      "HIDDEN_ITEM_ABANDONED_SHIP_RM_4_KEY",
       "HIDDEN_ITEM_ABANDONED_SHIP_RM_6_KEY"
     ],
     "events": [],
     "exits": [],
     "warps": [
-      "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:0,1/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:0",
-      "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:6/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:3",
-      "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:2,3/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:1",
+      "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:6/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:3"
+    ]
+  },
+  "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS/TOP_RIGHT": {
+    "parent_map": "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS",
+    "locations": [
+      "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_6_LUXURY_BALL",
+      "HIDDEN_ITEM_ABANDONED_SHIP_RM_2_KEY"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": [
       "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:7/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:4",
-      "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:4,5/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:2",
       "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:8/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:5"
+    ]
+  },
+  "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS/BOTTOM_LEFT": {
+    "parent_map": "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS",
+    "locations": [
+      "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_1_TM18",
+      "HIDDEN_ITEM_ABANDONED_SHIP_RM_4_KEY"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:0,1/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:0"
+    ]
+  },
+  "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS/BOTTOM_CENTER": {
+    "parent_map": "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS",
+    "locations": [
+      "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_4_SCANNER"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:2,3/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:1"
+    ]
+  },
+  "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS/BOTTOM_RIGHT": {
+    "parent_map": "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS",
+    "locations": [
+      "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_3_WATER_STONE",
+      "HIDDEN_ITEM_ABANDONED_SHIP_RM_1_KEY"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:4,5/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:2"
     ]
   },
   "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS/MAIN": {
     "parent_map": "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS",
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_ABANDONED_SHIP_UNDERWATER2/MAIN"
+    ],
     "warps": [
       "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:0/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:0",
       "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:3/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:6",
@@ -769,7 +907,9 @@
     "parent_map": "MAP_ABANDONED_SHIP_UNDERWATER1",
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_ABANDONED_SHIP_ROOMS_B1F/CENTER"
+    ],
     "warps": [
       "MAP_ABANDONED_SHIP_UNDERWATER1:0,1/MAP_ABANDONED_SHIP_UNDERWATER2:0"
     ]
@@ -778,7 +918,9 @@
     "parent_map": "MAP_ABANDONED_SHIP_UNDERWATER2",
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS/MAIN"
+    ],
     "warps": [
       "MAP_ABANDONED_SHIP_UNDERWATER2:0/MAP_ABANDONED_SHIP_UNDERWATER1:0"
     ]
@@ -956,44 +1098,194 @@
       "MAP_AQUA_HIDEOUT_1F:2/MAP_AQUA_HIDEOUT_B1F:0"
     ]
   },
-  "REGION_AQUA_HIDEOUT_B1F/MAIN": {
+  "REGION_AQUA_HIDEOUT_B1F/WEST_BOTTOM": {
+    "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_AQUA_HIDEOUT_B1F:8/MAP_AQUA_HIDEOUT_B1F:5",
+      "MAP_AQUA_HIDEOUT_B1F:9/MAP_AQUA_HIDEOUT_B1F:12",
+      "MAP_AQUA_HIDEOUT_B1F:10/MAP_AQUA_HIDEOUT_B1F:6"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_B1F/WEST_TOP_LEFT": {
+    "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_AQUA_HIDEOUT_B1F:2/MAP_AQUA_HIDEOUT_B2F:1",
+      "MAP_AQUA_HIDEOUT_B1F:3/MAP_AQUA_HIDEOUT_B2F:2"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_B1F/WEST_TOP_CENTER": {
+    "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_AQUA_HIDEOUT_B1F:1/MAP_AQUA_HIDEOUT_B2F:0",
+      "MAP_AQUA_HIDEOUT_B1F:6/MAP_AQUA_HIDEOUT_B1F:10"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_B1F/WEST_TOP_RIGHT": {
+    "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_AQUA_HIDEOUT_B1F:0/MAP_AQUA_HIDEOUT_1F:2",
+      "MAP_AQUA_HIDEOUT_B1F:4/MAP_AQUA_HIDEOUT_B1F:7",
+      "MAP_AQUA_HIDEOUT_B1F:5/MAP_AQUA_HIDEOUT_B1F:8"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_B1F/WEST_CENTER_RIGHT": {
     "parent_map": "MAP_AQUA_HIDEOUT_B1F",
     "locations": [
-      "ITEM_AQUA_HIDEOUT_B1F_NUGGET",
-      "ITEM_AQUA_HIDEOUT_B1F_MASTER_BALL",
       "ITEM_AQUA_HIDEOUT_B1F_MAX_ELIXIR"
     ],
     "events": [],
     "exits": [],
     "warps": [
-      "MAP_AQUA_HIDEOUT_B1F:0/MAP_AQUA_HIDEOUT_1F:2",
-      "MAP_AQUA_HIDEOUT_B1F:1/MAP_AQUA_HIDEOUT_B2F:0",
-      "MAP_AQUA_HIDEOUT_B1F:2/MAP_AQUA_HIDEOUT_B2F:1",
-      "MAP_AQUA_HIDEOUT_B1F:3/MAP_AQUA_HIDEOUT_B2F:2",
-      "MAP_AQUA_HIDEOUT_B1F:4/MAP_AQUA_HIDEOUT_B1F:7",
-      "MAP_AQUA_HIDEOUT_B1F:5/MAP_AQUA_HIDEOUT_B1F:8",
-      "MAP_AQUA_HIDEOUT_B1F:6/MAP_AQUA_HIDEOUT_B1F:10",
-      "MAP_AQUA_HIDEOUT_B1F:7/MAP_AQUA_HIDEOUT_B1F:4",
-      "MAP_AQUA_HIDEOUT_B1F:8/MAP_AQUA_HIDEOUT_B1F:5",
-      "MAP_AQUA_HIDEOUT_B1F:9/MAP_AQUA_HIDEOUT_B1F:12",
-      "MAP_AQUA_HIDEOUT_B1F:10/MAP_AQUA_HIDEOUT_B1F:6",
-      "MAP_AQUA_HIDEOUT_B1F:11/MAP_AQUA_HIDEOUT_B1F:22",
+      "MAP_AQUA_HIDEOUT_B1F:7/MAP_AQUA_HIDEOUT_B1F:4"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_B1F/WEST_CENTER": {
+    "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "locations": [
+      "ITEM_AQUA_HIDEOUT_B1F_NUGGET",
+      "ITEM_AQUA_HIDEOUT_B1F_MASTER_BALL"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_AQUA_HIDEOUT_B1F:11/MAP_AQUA_HIDEOUT_B1F:22"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_B1F/EAST_TOP": {
+    "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
       "MAP_AQUA_HIDEOUT_B1F:12/MAP_AQUA_HIDEOUT_B1F:9",
       "MAP_AQUA_HIDEOUT_B1F:13/MAP_AQUA_HIDEOUT_B1F:18",
       "MAP_AQUA_HIDEOUT_B1F:14/MAP_AQUA_HIDEOUT_B1F:12",
-      "MAP_AQUA_HIDEOUT_B1F:15/MAP_AQUA_HIDEOUT_B1F:16",
-      "MAP_AQUA_HIDEOUT_B1F:16/MAP_AQUA_HIDEOUT_B1F:15",
-      "MAP_AQUA_HIDEOUT_B1F:17/MAP_AQUA_HIDEOUT_B1F:20",
-      "MAP_AQUA_HIDEOUT_B1F:18/MAP_AQUA_HIDEOUT_B1F:13",
-      "MAP_AQUA_HIDEOUT_B1F:19/MAP_AQUA_HIDEOUT_B1F:24",
-      "MAP_AQUA_HIDEOUT_B1F:20/MAP_AQUA_HIDEOUT_B1F:17",
-      "MAP_AQUA_HIDEOUT_B1F:21/MAP_AQUA_HIDEOUT_B1F:12",
+      "MAP_AQUA_HIDEOUT_B1F:15/MAP_AQUA_HIDEOUT_B1F:16"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_1_RIGHT": {
+    "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_1_CENTER"
+    ],
+    "warps": [
+      "MAP_AQUA_HIDEOUT_B1F:18/MAP_AQUA_HIDEOUT_B1F:13"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_1_CENTER": {
+    "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_1_LEFT",
+      "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_1_RIGHT"
+    ],
+    "warps": [
+      "MAP_AQUA_HIDEOUT_B1F:17/MAP_AQUA_HIDEOUT_B1F:20"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_1_LEFT": {
+    "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_1_CENTER"
+    ],
+    "warps": [
+      "MAP_AQUA_HIDEOUT_B1F:16/MAP_AQUA_HIDEOUT_B1F:15"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_2_RIGHT": {
+    "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_2_CENTER"
+    ],
+    "warps": [
+      "MAP_AQUA_HIDEOUT_B1F:21/MAP_AQUA_HIDEOUT_B1F:12"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_2_CENTER": {
+    "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_2_LEFT",
+      "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_2_RIGHT"
+    ],
+    "warps": [
+      "MAP_AQUA_HIDEOUT_B1F:20/MAP_AQUA_HIDEOUT_B1F:17"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_2_LEFT": {
+    "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_2_CENTER"
+    ],
+    "warps": [
+      "MAP_AQUA_HIDEOUT_B1F:19/MAP_AQUA_HIDEOUT_B1F:24"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_B1F/EAST_BOTTOM": {
+    "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
       "MAP_AQUA_HIDEOUT_B1F:22/MAP_AQUA_HIDEOUT_B1F:11",
       "MAP_AQUA_HIDEOUT_B1F:23/MAP_AQUA_HIDEOUT_B1F:17",
       "MAP_AQUA_HIDEOUT_B1F:24/MAP_AQUA_HIDEOUT_B1F:19"
     ]
   },
-  "REGION_AQUA_HIDEOUT_B2F/MAIN": {
+  "REGION_AQUA_HIDEOUT_B2F/TOP_LEFT": {
+    "parent_map": "MAP_AQUA_HIDEOUT_B2F",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_AQUA_HIDEOUT_B2F:2/MAP_AQUA_HIDEOUT_B1F:3",
+      "MAP_AQUA_HIDEOUT_B2F:5/MAP_AQUA_HIDEOUT_B2F:3"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_B2F/TOP_CENTER": {
+    "parent_map": "MAP_AQUA_HIDEOUT_B2F",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_AQUA_HIDEOUT_B2F:1/MAP_AQUA_HIDEOUT_B1F:2",
+      "MAP_AQUA_HIDEOUT_B2F:4/MAP_AQUA_HIDEOUT_B2F:8"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_B2F/TOP_RIGHT": {
+    "parent_map": "MAP_AQUA_HIDEOUT_B2F",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_AQUA_HIDEOUT_B2F:0/MAP_AQUA_HIDEOUT_B1F:1",
+      "MAP_AQUA_HIDEOUT_B2F:3/MAP_AQUA_HIDEOUT_B2F:5",
+      "MAP_AQUA_HIDEOUT_B2F:6/MAP_AQUA_HIDEOUT_B2F:7"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_B2F/BOTTOM_LEFT": {
     "parent_map": "MAP_AQUA_HIDEOUT_B2F",
     "locations": [
       "ITEM_AQUA_HIDEOUT_B2F_NEST_BALL"
@@ -1001,29 +1293,40 @@
     "events": [],
     "exits": [],
     "warps": [
-      "MAP_AQUA_HIDEOUT_B2F:0/MAP_AQUA_HIDEOUT_B1F:1",
-      "MAP_AQUA_HIDEOUT_B2F:1/MAP_AQUA_HIDEOUT_B1F:2",
-      "MAP_AQUA_HIDEOUT_B2F:2/MAP_AQUA_HIDEOUT_B1F:3",
-      "MAP_AQUA_HIDEOUT_B2F:3/MAP_AQUA_HIDEOUT_B2F:5",
-      "MAP_AQUA_HIDEOUT_B2F:4/MAP_AQUA_HIDEOUT_B2F:8",
-      "MAP_AQUA_HIDEOUT_B2F:5/MAP_AQUA_HIDEOUT_B2F:3",
-      "MAP_AQUA_HIDEOUT_B2F:6/MAP_AQUA_HIDEOUT_B2F:7",
-      "MAP_AQUA_HIDEOUT_B2F:7/MAP_AQUA_HIDEOUT_B2F:6",
+      "MAP_AQUA_HIDEOUT_B2F:7/MAP_AQUA_HIDEOUT_B2F:6"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_B2F/BOTTOM_RIGHT": {
+    "parent_map": "MAP_AQUA_HIDEOUT_B2F",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
       "MAP_AQUA_HIDEOUT_B2F:8/MAP_AQUA_HIDEOUT_B2F:4",
       "MAP_AQUA_HIDEOUT_B2F:9/MAP_AQUA_HIDEOUT_B1F:4"
     ]
   },
   "REGION_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM/MAIN": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM",
-    "locations": [
-      "ITEM_SHOAL_CAVE_ENTRANCE_BIG_PEARL"
-    ],
+    "locations": [],
     "events": [],
     "exits": [],
     "warps": [
       "MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM:0/MAP_ROUTE125:0",
       "MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM:1/MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM:0",
-      "MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM:2/MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM:6",
+      "MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM:2/MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM:6"
+    ]
+  },
+  "REGION_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM/NORTH_EAST_CORNER": {
+    "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM",
+    "locations": [
+      "ITEM_SHOAL_CAVE_ENTRANCE_BIG_PEARL"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM/MAIN"
+    ],
+    "warps": [
       "MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM:3/MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM:7"
     ]
   },
@@ -1397,14 +1700,28 @@
       "MAP_SKY_PILLAR_1F:2/MAP_SKY_PILLAR_2F:0"
     ]
   },
-  "REGION_SKY_PILLAR_2F/MAIN": {
+  "REGION_SKY_PILLAR_2F/LEFT": {
     "parent_map": "MAP_SKY_PILLAR_2F",
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_SKY_PILLAR_2F/RIGHT",
+      "REGION_SKY_PILLAR_1F/MAIN"
+    ],
     "warps": [
-      "MAP_SKY_PILLAR_2F:0/MAP_SKY_PILLAR_1F:2",
       "MAP_SKY_PILLAR_2F:1/MAP_SKY_PILLAR_3F:0"
+    ]
+  },
+  "REGION_SKY_PILLAR_2F/RIGHT": {
+    "parent_map": "MAP_SKY_PILLAR_2F",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_SKY_PILLAR_2F/LEFT",
+      "REGION_SKY_PILLAR_1F/MAIN"
+    ],
+    "warps": [
+      "MAP_SKY_PILLAR_2F:0/MAP_SKY_PILLAR_1F:2"
     ]
   },
   "REGION_SKY_PILLAR_3F/MAIN": {
@@ -1414,7 +1731,15 @@
     "exits": [],
     "warps": [
       "MAP_SKY_PILLAR_3F:0/MAP_SKY_PILLAR_2F:1",
-      "MAP_SKY_PILLAR_3F:1/MAP_SKY_PILLAR_4F:0",
+      "MAP_SKY_PILLAR_3F:1/MAP_SKY_PILLAR_4F:0"
+    ]
+  },
+  "REGION_SKY_PILLAR_3F/TOP_CENTER": {
+    "parent_map": "MAP_SKY_PILLAR_3F",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
       "MAP_SKY_PILLAR_3F:2/MAP_SKY_PILLAR_4F:1"
     ]
   },
@@ -1422,9 +1747,29 @@
     "parent_map": "MAP_SKY_PILLAR_4F",
     "locations": [],
     "events": [],
+    "exits": [
+      "REGION_SKY_PILLAR_4F/ABOVE_3F_TOP_CENTER",
+      "REGION_SKY_PILLAR_3F/MAIN"
+    ],
+    "warps": [
+      "MAP_SKY_PILLAR_4F:0/MAP_SKY_PILLAR_3F:1"
+    ]
+  },
+  "REGION_SKY_PILLAR_4F/ABOVE_3F_TOP_CENTER": {
+    "parent_map": "MAP_SKY_PILLAR_4F",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_SKY_PILLAR_3F/TOP_CENTER"
+    ],
+    "warps": []
+  },
+  "REGION_SKY_PILLAR_4F/TOP_LEFT": {
+    "parent_map": "MAP_SKY_PILLAR_4F",
+    "locations": [],
+    "events": [],
     "exits": [],
     "warps": [
-      "MAP_SKY_PILLAR_4F:0/MAP_SKY_PILLAR_3F:1",
       "MAP_SKY_PILLAR_4F:1/MAP_SKY_PILLAR_3F:2",
       "MAP_SKY_PILLAR_4F:2/MAP_SKY_PILLAR_5F:0"
     ]

@@ -971,7 +971,7 @@
   },
   "ITEM_MACH_BIKE": {
     "label": "Mach Bike",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": []
   },
   "ITEM_COIN_CASE": {
@@ -986,12 +986,12 @@
   },
   "ITEM_OLD_ROD": {
     "label": "Old Rod",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": []
   },
   "ITEM_GOOD_ROD": {
     "label": "Good Rod",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": []
   },
   "ITEM_SUPER_ROD": {
@@ -1031,7 +1031,7 @@
   },
   "ITEM_ACRO_BIKE": {
     "label": "Acro Bike",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": []
   },
   "ITEM_POKEBLOCK_CASE": {
@@ -1041,7 +1041,7 @@
   },
   "ITEM_LETTER": {
     "label": "Letter",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": []
   },
   "ITEM_EON_TICKET": {
@@ -1066,36 +1066,11 @@
   },
   "ITEM_GO_GOGGLES": {
     "label": "Go Goggles",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": []
   },
   "ITEM_METEORITE": {
     "label": "Meteorite",
-    "classification": "FILLER",
-    "tags": []
-  },
-  "ITEM_ROOM_1_KEY": {
-    "label": "Room 1 Key",
-    "classification": "FILLER",
-    "tags": []
-  },
-  "ITEM_ROOM_2_KEY": {
-    "label": "Room 2 Key",
-    "classification": "FILLER",
-    "tags": []
-  },
-  "ITEM_ROOM_4_KEY": {
-    "label": "Room 4 Key",
-    "classification": "FILLER",
-    "tags": []
-  },
-  "ITEM_ROOM_6_KEY": {
-    "label": "Room 6 Key",
-    "classification": "FILLER",
-    "tags": []
-  },
-  "ITEM_STORAGE_KEY": {
-    "label": "Storage Key",
     "classification": "FILLER",
     "tags": []
   },
@@ -1111,7 +1086,7 @@
   },
   "ITEM_DEVON_SCOPE": {
     "label": "Devon Scope",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": []
   },
   "ITEM_TM01_FOCUS_PUNCH": {
@@ -1381,6 +1356,31 @@
     "tags": []
   },
 
+  "ITEM_ROOM_1_KEY": {
+    "label": "Room 1 Key",
+    "classification": "PROGRESSION",
+    "tags": []
+  },
+  "ITEM_ROOM_2_KEY": {
+    "label": "Room 2 Key",
+    "classification": "PROGRESSION",
+    "tags": []
+  },
+  "ITEM_ROOM_4_KEY": {
+    "label": "Room 4 Key",
+    "classification": "PROGRESSION",
+    "tags": []
+  },
+  "ITEM_ROOM_6_KEY": {
+    "label": "Room 6 Key",
+    "classification": "PROGRESSION",
+    "tags": []
+  },
+  "ITEM_STORAGE_KEY": {
+    "label": "Storage Key",
+    "classification": "PROGRESSION",
+    "tags": []
+  },
   "ITEM_BADGE_1": {
     "label": "Stone Badge",
     "classification": "PROGRESSION",

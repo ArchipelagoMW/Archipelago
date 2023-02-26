@@ -1,1394 +1,1394 @@
 {
   "BADGE_1": {
-    "label": "Rustboro City Gym: Stone Badge",
+    "label": "Rustboro City Gym - Stone Badge",
     "tags": ["Badge"]
   },
   "BADGE_2": {
-    "label": "Dewford Town Gym: Knuckle Badge",
+    "label": "Dewford Town Gym - Knuckle Badge",
     "tags": ["Badge"]
   },
   "BADGE_3": {
-    "label": "Mauville City Gym: Dynamo Badge",
+    "label": "Mauville City Gym - Dynamo Badge",
     "tags": ["Badge"]
   },
   "BADGE_4": {
-    "label": "Lavaridge Town Gym: Heat Badge",
+    "label": "Lavaridge Town Gym - Heat Badge",
     "tags": ["Badge"]
   },
   "BADGE_5": {
-    "label": "Petalburg City Gym: Balance Badge",
+    "label": "Petalburg City Gym - Balance Badge",
     "tags": ["Badge"]
   },
   "BADGE_6": {
-    "label": "Fortree City Gym: Feather Badge",
+    "label": "Fortree City Gym - Feather Badge",
     "tags": ["Badge"]
   },
   "BADGE_7": {
-    "label": "Mossdeep City Gym: Mind Badge",
+    "label": "Mossdeep City Gym - Mind Badge",
     "tags": ["Badge"]
   },
   "BADGE_8": {
-    "label": "Sootopolis City Gym: Rain Badge",
+    "label": "Sootopolis City Gym - Rain Badge",
     "tags": ["Badge"]
   },
   "HIDDEN_ITEM_ABANDONED_SHIP_RM_1_KEY": {
-    "label": "Abandoned Ship HF: Hidden Room 1 Key",
+    "label": "Abandoned Ship HF - Hidden Room 1 Key",
     "tags": ["KeyItem"]
   },
   "HIDDEN_ITEM_ABANDONED_SHIP_RM_2_KEY": {
-    "label": "Abandoned Ship HF: Hidden Room 2 Key",
+    "label": "Abandoned Ship HF - Hidden Room 2 Key",
     "tags": ["KeyItem"]
   },
   "HIDDEN_ITEM_ABANDONED_SHIP_RM_4_KEY": {
-    "label": "Abandoned Ship HF: Hidden Room 4 Key",
+    "label": "Abandoned Ship HF - Hidden Room 4 Key",
     "tags": ["KeyItem"]
   },
   "HIDDEN_ITEM_ABANDONED_SHIP_RM_6_KEY": {
-    "label": "Abandoned Ship HF: Hidden Room 6 Key",
+    "label": "Abandoned Ship HF - Hidden Room 6 Key",
     "tags": ["KeyItem"]
   },
   "HIDDEN_ITEM_ARTISAN_CAVE_B1F_CALCIUM": {
-    "label": "Artisan Cave B1F: Hidden Item 1",
+    "label": "Artisan Cave B1F - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ARTISAN_CAVE_B1F_IRON": {
-    "label": "Artisan Cave B1F: Hidden Item 2",
+    "label": "Artisan Cave B1F - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ARTISAN_CAVE_B1F_PROTEIN": {
-    "label": "Artisan Cave B1F: Hidden Item 3",
+    "label": "Artisan Cave B1F - Hidden Item 3",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ARTISAN_CAVE_B1F_ZINC": {
-    "label": "Artisan Cave B1F: Hidden Item 4",
+    "label": "Artisan Cave B1F - Hidden Item 4",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_FALLARBOR_TOWN_NUGGET": {
-    "label": "Fallarbor Town: Hidden Item",
+    "label": "Fallarbor Town - Hidden Item",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_GRANITE_CAVE_B2F_EVERSTONE_1": {
-    "label": "Granite Cave B2F: Hidden Item 1",
+    "label": "Granite Cave B2F - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_GRANITE_CAVE_B2F_EVERSTONE_2": {
-    "label": "Granite Cave B2F: Hidden Item 2",
+    "label": "Granite Cave B2F - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_JAGGED_PASS_FULL_HEAL": {
-    "label": "Jagged Pass: Hidden Item 1",
+    "label": "Jagged Pass - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_JAGGED_PASS_GREAT_BALL": {
-    "label": "Jagged Pass: Hidden Item 2",
+    "label": "Jagged Pass - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_LAVARIDGE_TOWN_ICE_HEAL": {
-    "label": "Lavaridge Town: Hidden Item in Springs",
+    "label": "Lavaridge Town - Hidden Item in Springs",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_LILYCOVE_CITY_HEART_SCALE": {
-    "label": "Lilycove City: Hidden Item 1",
+    "label": "Lilycove City - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_LILYCOVE_CITY_POKE_BALL": {
-    "label": "Lilycove City: Hidden Item 2",
+    "label": "Lilycove City - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_LILYCOVE_CITY_PP_UP": {
-    "label": "Lilycove City: Hidden Item 3",
+    "label": "Lilycove City - Hidden Item 3",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_MT_PYRE_EXTERIOR_MAX_ETHER": {
-    "label": "Mt Pyre Exterior: Hidden Item 1",
+    "label": "Mt Pyre Exterior - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_MT_PYRE_EXTERIOR_ULTRA_BALL": {
-    "label": "Mt Pyre Exterior: Hidden Item 2",
+    "label": "Mt Pyre Exterior - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_MT_PYRE_SUMMIT_RARE_CANDY": {
-    "label": "Mt Pyre Summit: Hidden Item 1",
+    "label": "Mt Pyre Summit - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_MT_PYRE_SUMMIT_ZINC": {
-    "label": "Mt Pyre Summit: Hidden Item 2",
+    "label": "Mt Pyre Summit - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH": {
-    "label": "Navel Rock Top: Hidden Item",
+    "label": "Navel Rock Top - Hidden Item",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_PETALBURG_CITY_RARE_CANDY": {
-    "label": "Petalburg City: Hidden Item",
+    "label": "Petalburg City - Hidden Item",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_PETALBURG_WOODS_POKE_BALL": {
-    "label": "Petalburg Woods: Hidden Item 1",
+    "label": "Petalburg Woods - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_PETALBURG_WOODS_POTION": {
-    "label": "Petalburg Woods: Hidden Item 2",
+    "label": "Petalburg Woods - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_PETALBURG_WOODS_TINY_MUSHROOM_1": {
-    "label": "Petalburg Woods: Hidden Item 2",
+    "label": "Petalburg Woods - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_PETALBURG_WOODS_TINY_MUSHROOM_2": {
-    "label": "Petalburg Woods: Hidden Item 3",
+    "label": "Petalburg Woods - Hidden Item 3",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_104_ANTIDOTE": {
-    "label": "Route 104: Hidden Item 1",
+    "label": "Route 104 - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_104_HEART_SCALE": {
-    "label": "Route 104: Hidden Item 2",
+    "label": "Route 104 - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_104_POKE_BALL": {
-    "label": "Route 104: Hidden Item 3",
+    "label": "Route 104 - Hidden Item 3",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_104_POTION": {
-    "label": "Route 104: Hidden Item 4",
+    "label": "Route 104 - Hidden Item 4",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_104_SUPER_POTION": {
-    "label": "Route 104: Hidden Item 5",
+    "label": "Route 104 - Hidden Item 5",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_105_BIG_PEARL": {
-    "label": "Route 105: Hidden Item 1",
+    "label": "Route 105 - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_105_HEART_SCALE": {
-    "label": "Route 105: Hidden Item 2",
+    "label": "Route 105 - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_106_HEART_SCALE": {
-    "label": "Route 106: Hidden Item 1",
+    "label": "Route 106 - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_106_POKE_BALL": {
-    "label": "Route 106: Hidden Item 2",
+    "label": "Route 106 - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_106_STARDUST": {
-    "label": "Route 106: Hidden Item 3",
+    "label": "Route 106 - Hidden Item 3",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_108_RARE_CANDY": {
-    "label": "Route 108: Hidden Item",
+    "label": "Route 108 - Hidden Item",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_109_ETHER": {
-    "label": "Route 109: Hidden Item 1",
+    "label": "Route 109 - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_109_GREAT_BALL": {
-    "label": "Route 109: Hidden Item 2",
+    "label": "Route 109 - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_1": {
-    "label": "Route 109: Hidden Item 3",
+    "label": "Route 109 - Hidden Item 3",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_2": {
-    "label": "Route 109: Hidden Item 4",
+    "label": "Route 109 - Hidden Item 4",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_3": {
-    "label": "Route 109: Hidden Item 5",
+    "label": "Route 109 - Hidden Item 5",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_109_REVIVE": {
-    "label": "Route 109: Hidden Item 6",
+    "label": "Route 109 - Hidden Item 6",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_110_FULL_HEAL": {
-    "label": "Route 110: Hidden Item 1",
+    "label": "Route 110 - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_110_GREAT_BALL": {
-    "label": "Route 110: Hidden Item 2",
+    "label": "Route 110 - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_110_POKE_BALL": {
-    "label": "Route 110: Hidden Item 3",
+    "label": "Route 110 - Hidden Item 3",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_110_REVIVE": {
-    "label": "Route 110: Hidden Item 4",
+    "label": "Route 110 - Hidden Item 4",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_111_PROTEIN": {
-    "label": "Route 111: Hidden Item 1",
+    "label": "Route 111 - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_111_RARE_CANDY": {
-    "label": "Route 111: Hidden Item 2",
+    "label": "Route 111 - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_111_STARDUST": {
-    "label": "Route 111: Hidden Item 3",
+    "label": "Route 111 - Hidden Item 3",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_113_ETHER": {
-    "label": "Route 113: Hidden Item 1",
+    "label": "Route 113 - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_113_NUGGET": {
-    "label": "Route 113: Hidden Item 2",
+    "label": "Route 113 - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_113_TM32": {
-    "label": "Route 113: Hidden Item 3",
+    "label": "Route 113 - Hidden Item 3",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_114_CARBOS": {
-    "label": "Route 114: Hidden Item 1",
+    "label": "Route 114 - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_114_REVIVE": {
-    "label": "Route 114: Hidden Item 2",
+    "label": "Route 114 - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_115_HEART_SCALE": {
-    "label": "Route 115: Hidden Item",
+    "label": "Route 115 - Hidden Item",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_116_BLACK_GLASSES": {
-    "label": "Route 116: Hidden Item 1",
+    "label": "Route 116 - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_116_SUPER_POTION": {
-    "label": "Route 116: Hidden Item 2",
+    "label": "Route 116 - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_117_REPEL": {
-    "label": "Route 117: Hidden Item",
+    "label": "Route 117 - Hidden Item",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_118_HEART_SCALE": {
-    "label": "Route 118: Hidden Item 1",
+    "label": "Route 118 - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_118_IRON": {
-    "label": "Route 118: Hidden Item 2",
+    "label": "Route 118 - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_119_CALCIUM": {
-    "label": "Route 119: Hidden Item 1",
+    "label": "Route 119 - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_119_FULL_HEAL": {
-    "label": "Route 119: Hidden Item 2",
+    "label": "Route 119 - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_119_MAX_ETHER": {
-    "label": "Route 119: Hidden Item 3",
+    "label": "Route 119 - Hidden Item 3",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_119_ULTRA_BALL": {
-    "label": "Route 119: Hidden Item 4",
+    "label": "Route 119 - Hidden Item 4",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_120_RARE_CANDY_1": {
-    "label": "Route 120: Hidden Item 1",
+    "label": "Route 120 - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_120_RARE_CANDY_2": {
-    "label": "Route 120: Hidden Item 2",
+    "label": "Route 120 - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_120_REVIVE": {
-    "label": "Route 120: Hidden Item 3",
+    "label": "Route 120 - Hidden Item 3",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_120_ZINC": {
-    "label": "Route 120: Hidden Item 4",
+    "label": "Route 120 - Hidden Item 4",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_121_FULL_HEAL": {
-    "label": "Route 121: Hidden Item 1",
+    "label": "Route 121 - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_121_HP_UP": {
-    "label": "Route 121: Hidden Item 2",
+    "label": "Route 121 - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_121_MAX_REVIVE": {
-    "label": "Route 121: Hidden Item 3",
+    "label": "Route 121 - Hidden Item 3",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_121_NUGGET": {
-    "label": "Route 121: Hidden Item 4",
+    "label": "Route 121 - Hidden Item 4",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_123_HYPER_POTION": {
-    "label": "Route 123: Hidden Item 1",
+    "label": "Route 123 - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_123_PP_UP": {
-    "label": "Route 123: Hidden Item 2",
+    "label": "Route 123 - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_123_RARE_CANDY": {
-    "label": "Route 123: Hidden Item 3",
+    "label": "Route 123 - Hidden Item 3",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_123_REVIVE": {
-    "label": "Route 123: Hidden Item 4",
+    "label": "Route 123 - Hidden Item 4",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_123_SUPER_REPEL": {
-    "label": "Route 123: Hidden Item 5",
+    "label": "Route 123 - Hidden Item 5",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_128_HEART_SCALE_1": {
-    "label": "Route 128: Hidden Item 1",
+    "label": "Route 128 - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_128_HEART_SCALE_2": {
-    "label": "Route 128: Hidden Item 2",
+    "label": "Route 128 - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_ROUTE_128_HEART_SCALE_3": {
-    "label": "Route 128: Hidden Item 3",
+    "label": "Route 128 - Hidden Item 3",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_SAFARI_ZONE_NORTH_EAST_RARE_CANDY": {
-    "label": "Safari Zone NE: Hidden Item 1",
+    "label": "Safari Zone NE - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_SAFARI_ZONE_NORTH_EAST_ZINC": {
-    "label": "Safari Zone NE: Hidden Item 2",
+    "label": "Safari Zone NE - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_SAFARI_ZONE_SOUTH_EAST_FULL_RESTORE": {
-    "label": "Safari Zone SE: Hidden Item 1",
+    "label": "Safari Zone SE - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_SAFARI_ZONE_SOUTH_EAST_PP_UP": {
-    "label": "Safari Zone SE: Hidden Item 2",
+    "label": "Safari Zone SE - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_SS_TIDAL_LOWER_DECK_LEFTOVERS": {
-    "label": "SS Tidal: Lower Deck Hidden Item",
+    "label": "SS Tidal - Lower Deck Hidden Item",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_TRICK_HOUSE_NUGGET": {
-    "label": "Trick House: End Room Hidden Item",
+    "label": "Trick House - End Room Hidden Item",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_124_BIG_PEARL": {
-    "label": "Route 124 UW: Hidden Item 1",
+    "label": "Route 124 UW - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_124_CALCIUM": {
-    "label": "Route 124 UW: Hidden Item 2",
+    "label": "Route 124 UW - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_124_CARBOS": {
-    "label": "Route 124 UW: Hidden Item 3",
+    "label": "Route 124 UW - Hidden Item 3",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_124_GREEN_SHARD": {
-    "label": "Route 124 UW: Hidden Item 4",
+    "label": "Route 124 UW - Hidden Item 4",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_124_HEART_SCALE_1": {
-    "label": "Route 124 UW: Hidden Item 5",
+    "label": "Route 124 UW - Hidden Item 5",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_124_HEART_SCALE_2": {
-    "label": "Route 124 UW: Hidden Item 6",
+    "label": "Route 124 UW - Hidden Item 6",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_124_PEARL": {
-    "label": "Route 124 UW: Hidden Item 7",
+    "label": "Route 124 UW - Hidden Item 7",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_126_BIG_PEARL": {
-    "label": "Route 126 UW: Hidden Item 1",
+    "label": "Route 126 UW - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_126_BLUE_SHARD": {
-    "label": "Route 126 UW: Hidden Item 2",
+    "label": "Route 126 UW - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_126_HEART_SCALE": {
-    "label": "Route 126 UW: Hidden Item 3",
+    "label": "Route 126 UW - Hidden Item 3",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_126_IRON": {
-    "label": "Route 126 UW: Hidden Item 4",
+    "label": "Route 126 UW - Hidden Item 4",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_126_PEARL": {
-    "label": "Route 126 UW: Hidden Item 5",
+    "label": "Route 126 UW - Hidden Item 5",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_126_STARDUST": {
-    "label": "Route 126 UW: Hidden Item 6",
+    "label": "Route 126 UW - Hidden Item 6",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_126_ULTRA_BALL": {
-    "label": "Route 126 UW: Hidden Item 7",
+    "label": "Route 126 UW - Hidden Item 7",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_126_YELLOW_SHARD": {
-    "label": "Route 126 UW: Hidden Item 8",
+    "label": "Route 126 UW - Hidden Item 8",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_127_HEART_SCALE": {
-    "label": "Route 127 UW: Hidden Item 1",
+    "label": "Route 127 UW - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_127_HP_UP": {
-    "label": "Route 127 UW: Hidden Item 2",
+    "label": "Route 127 UW - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_127_RED_SHARD": {
-    "label": "Route 127 UW: Hidden Item 3",
+    "label": "Route 127 UW - Hidden Item 3",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_127_STAR_PIECE": {
-    "label": "Route 127 UW: Hidden Item 4",
+    "label": "Route 127 UW - Hidden Item 4",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_128_PEARL": {
-    "label": "Route 128 UW: Hidden Item 1",
+    "label": "Route 128 UW - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_UNDERWATER_128_PROTEIN": {
-    "label": "Route 128 UW: Hidden Item 2",
+    "label": "Route 128 UW - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_VICTORY_ROAD_1F_ULTRA_BALL": {
-    "label": "Victory Road 1F: Hidden Item",
+    "label": "Victory Road 1F - Hidden Item",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_VICTORY_ROAD_B2F_ELIXIR": {
-    "label": "Victory Road B2F: Hidden Item 1",
+    "label": "Victory Road B2F - Hidden Item 1",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_VICTORY_ROAD_B2F_MAX_REPEL": {
-    "label": "Victory Road B2F: Hidden Item 2",
+    "label": "Victory Road B2F - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
   "ITEM_ABANDONED_SHIP_CAPTAINS_OFFICE_STORAGE_KEY": {
-    "label": "Abandoned Ship: Captain's Office Key",
+    "label": "Abandoned Ship - Captain's Office Key",
     "tags": ["OverworldItem"]
   },
   "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_1_TM18": {
-    "label": "Abandoned Ship HF: Room 1 Item",
+    "label": "Abandoned Ship HF - Room 1 Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_3_WATER_STONE": {
-    "label": "Abandoned Ship HF: Room 3 Item",
+    "label": "Abandoned Ship HF - Room 3 Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_4_SCANNER": {
-    "label": "Abandoned Ship HF: Room 4 Item",
+    "label": "Abandoned Ship HF - Room 4 Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_6_LUXURY_BALL": {
-    "label": "Abandoned Ship HF: Room 6 Item",
+    "label": "Abandoned Ship HF - Room 6 Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_ABANDONED_SHIP_ROOMS_1F_HARBOR_MAIL": {
-    "label": "Abandoned Ship 1F: Room Item 1",
+    "label": "Abandoned Ship 1F - Room Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ABANDONED_SHIP_ROOMS_2_1F_REVIVE": {
-    "label": "Abandoned Ship 1F: Room Item 2",
+    "label": "Abandoned Ship 1F - Room Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ABANDONED_SHIP_ROOMS_2_B1F_DIVE_BALL": {
-    "label": "Abandoned Ship B1F: Room Item 1",
+    "label": "Abandoned Ship B1F - Room Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ABANDONED_SHIP_ROOMS_B1F_ESCAPE_ROPE": {
-    "label": "Abandoned Ship B1F: Room Item 2",
+    "label": "Abandoned Ship B1F - Room Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ABANDONED_SHIP_ROOMS_B1F_TM13": {
-    "label": "Abandoned Ship B1F: Room Item 3",
+    "label": "Abandoned Ship B1F - Room Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_AQUA_HIDEOUT_B1F_MASTER_BALL": {
-    "label": "Aqua Hideout B1F: Master Ball",
+    "label": "Aqua Hideout B1F - Master Ball",
     "tags": ["OverworldItem"]
   },
   "ITEM_AQUA_HIDEOUT_B1F_MAX_ELIXIR": {
-    "label": "Aqua Hideout B1F: OW Item 1",
+    "label": "Aqua Hideout B1F - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_AQUA_HIDEOUT_B1F_NUGGET": {
-    "label": "Aqua Hideout B1F: OW Item 2",
+    "label": "Aqua Hideout B1F - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_AQUA_HIDEOUT_B2F_NEST_BALL": {
-    "label": "Aqua Hideout B2F: OW Item",
+    "label": "Aqua Hideout B2F - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_ARTISAN_CAVE_1F_CARBOS": {
-    "label": "Artisan Cave 1F: OW Item",
+    "label": "Artisan Cave 1F - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_ARTISAN_CAVE_B1F_HP_UP": {
-    "label": "Artisan Cave B1F: OW Item",
+    "label": "Artisan Cave B1F - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_FIERY_PATH_FIRE_STONE": {
-    "label": "Fiery Path: OW Item 1",
+    "label": "Fiery Path - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_FIERY_PATH_TM06": {
-    "label": "Fiery Path: OW Item 2",
+    "label": "Fiery Path - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_GRANITE_CAVE_1F_ESCAPE_ROPE": {
-    "label": "Granite Cave 1F: OW Item",
+    "label": "Granite Cave 1F - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_GRANITE_CAVE_B1F_POKE_BALL": {
-    "label": "Granite Cave B1F: OW Item",
+    "label": "Granite Cave B1F - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_GRANITE_CAVE_B2F_RARE_CANDY": {
-    "label": "Granite Cave B2F: OW Item 1",
+    "label": "Granite Cave B2F - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_GRANITE_CAVE_B2F_REPEL": {
-    "label": "Granite Cave B2F: OW Item 2",
+    "label": "Granite Cave B2F - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_JAGGED_PASS_BURN_HEAL": {
-    "label": "Jagged Pass: OW Item",
+    "label": "Jagged Pass - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_LILYCOVE_CITY_MAX_REPEL": {
-    "label": "Lilycove City: OW Item",
+    "label": "Lilycove City - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_MAGMA_HIDEOUT_1F_RARE_CANDY": {
-    "label": "Magma Hideout 1F: OW Item",
+    "label": "Magma Hideout 1F - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_MAGMA_HIDEOUT_2F_2R_FULL_RESTORE": {
-    "label": "Magma Hideout 2F: OW Item 1",
+    "label": "Magma Hideout 2F - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_MAGMA_HIDEOUT_2F_2R_MAX_ELIXIR": {
-    "label": "Magma Hideout 2F: OW Item 2",
+    "label": "Magma Hideout 2F - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_MAGMA_HIDEOUT_3F_1R_NUGGET": {
-    "label": "Magma Hideout 3F: OW Item 1",
+    "label": "Magma Hideout 3F - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_MAGMA_HIDEOUT_3F_2R_PP_MAX": {
-    "label": "Magma Hideout 3F: OW Item 2",
+    "label": "Magma Hideout 3F - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_MAGMA_HIDEOUT_3F_3R_ECAPE_ROPE": {
-    "label": "Magma Hideout 3F: OW Item 3",
+    "label": "Magma Hideout 3F - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_MAGMA_HIDEOUT_4F_MAX_REVIVE": {
-    "label": "Magma Hideout 4F: OW Item",
+    "label": "Magma Hideout 4F - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_MAUVILLE_CITY_X_SPEED": {
-    "label": "Mauville City: OW Item",
+    "label": "Mauville City - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_METEOR_FALLS_1F_1R_FULL_HEAL": {
-    "label": "Meteor Falls 1F: OW Item 1",
+    "label": "Meteor Falls 1F - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_METEOR_FALLS_1F_1R_MOON_STONE": {
-    "label": "Meteor Falls 1F: OW Item 2",
+    "label": "Meteor Falls 1F - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_METEOR_FALLS_1F_1R_PP_UP": {
-    "label": "Meteor Falls 1F: OW Item 3",
+    "label": "Meteor Falls 1F - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_METEOR_FALLS_1F_1R_TM23": {
-    "label": "Meteor Falls 1F: OW Item 4",
+    "label": "Meteor Falls 1F - Item 4",
     "tags": ["OverworldItem"]
   },
   "ITEM_METEOR_FALLS_B1F_2R_TM02": {
-    "label": "Meteor Falls B1F: OW Item 1",
+    "label": "Meteor Falls B1F - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_MOSSDEEP_CITY_NET_BALL": {
-    "label": "Mossdeep City: OW Item",
+    "label": "Mossdeep City - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_MT_PYRE_2F_ULTRA_BALL": {
-    "label": "Mt Pyre 2F: OW Item",
+    "label": "Mt Pyre 2F - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_MT_PYRE_3F_SUPER_REPEL": {
-    "label": "Mt Pyre 3F: OW Item",
+    "label": "Mt Pyre 3F - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_MT_PYRE_4F_SEA_INCENSE": {
-    "label": "Mt Pyre 4F: OW Item",
+    "label": "Mt Pyre 4F - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_MT_PYRE_5F_LAX_INCENSE": {
-    "label": "Mt Pyre 5F: OW Item",
+    "label": "Mt Pyre 5F - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_MT_PYRE_6F_TM30": {
-    "label": "Mt Pyre 6F: OW Item",
+    "label": "Mt Pyre 6F - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_MT_PYRE_EXTERIOR_MAX_POTION": {
-    "label": "Mt Pyre Exterior: OW Item 1",
+    "label": "Mt Pyre Exterior - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_MT_PYRE_EXTERIOR_TM48": {
-    "label": "Mt Pyre Exterior: OW Item 2",
+    "label": "Mt Pyre Exterior - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_NEW_MAUVILLE_ESCAPE_ROPE": {
-    "label": "New Mauville: OW Item 1",
+    "label": "New Mauville - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_NEW_MAUVILLE_FULL_HEAL": {
-    "label": "New Mauville: OW Item 2",
+    "label": "New Mauville - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_NEW_MAUVILLE_PARALYZE_HEAL": {
-    "label": "New Mauville: OW Item 3",
+    "label": "New Mauville - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_NEW_MAUVILLE_THUNDER_STONE": {
-    "label": "New Mauville: OW Item 4",
+    "label": "New Mauville - Item 4",
     "tags": ["OverworldItem"]
   },
   "ITEM_NEW_MAUVILLE_ULTRA_BALL": {
-    "label": "New Mauville: OW Item 5",
+    "label": "New Mauville - Item 5",
     "tags": ["OverworldItem"]
   },
   "ITEM_PETALBURG_CITY_ETHER": {
-    "label": "Petalburg City: OW Item 1",
+    "label": "Petalburg City - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_PETALBURG_CITY_MAX_REVIVE": {
-    "label": "Petalburg City: OW Item 2",
+    "label": "Petalburg City - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_PETALBURG_WOODS_ETHER": {
-    "label": "Petalburg Woods: OW Item 1",
+    "label": "Petalburg Woods - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_PETALBURG_WOODS_GREAT_BALL": {
-    "label": "Petalburg Woods: OW Item 2",
+    "label": "Petalburg Woods - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_PETALBURG_WOODS_PARALYZE_HEAL": {
-    "label": "Petalburg Woods: OW Item 3",
+    "label": "Petalburg Woods - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_PETALBURG_WOODS_X_ATTACK": {
-    "label": "Petalburg Woods: OW Item 4",
+    "label": "Petalburg Woods - Item 4",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_102_POTION": {
-    "label": "Route 102: OW Item",
+    "label": "Route 102 - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_103_GUARD_SPEC": {
-    "label": "Route 103: OW Item 1",
+    "label": "Route 103 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_103_PP_UP": {
-    "label": "Route 103: OW Item 2",
+    "label": "Route 103 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_104_POKE_BALL": {
-    "label": "Route 104: OW Item 1",
+    "label": "Route 104 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_104_POTION": {
-    "label": "Route 104: OW Item 2",
+    "label": "Route 104 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_104_PP_UP": {
-    "label": "Route 104: OW Item 3",
+    "label": "Route 104 - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_104_X_ACCURACY": {
-    "label": "Route 104: OW Item 4",
+    "label": "Route 104 - Item 4",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_105_IRON": {
-    "label": "Route 105: OW Item",
+    "label": "Route 105 - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_106_PROTEIN": {
-    "label": "Route 106: OW Item",
+    "label": "Route 106 - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_108_STAR_PIECE": {
-    "label": "Route 108: OW Item",
+    "label": "Route 108 - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_109_POTION": {
-    "label": "Route 109: OW Item 1",
+    "label": "Route 109 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_109_PP_UP": {
-    "label": "Route 109: OW Item 2",
+    "label": "Route 109 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_109_RARE_CANDY": {
-    "label": "Route 109: OW Item 3",
+    "label": "Route 109 - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_110_DIRE_HIT": {
-    "label": "Route 110: OW Item 1",
+    "label": "Route 110 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_110_ELIXIR": {
-    "label": "Route 110: OW Item 2",
+    "label": "Route 110 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_111_ELIXIR": {
-    "label": "Route 111: OW Item 1",
+    "label": "Route 111 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_111_HP_UP": {
-    "label": "Route 111: OW Item 2",
+    "label": "Route 111 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_111_STARDUST": {
-    "label": "Route 111: OW Item 3",
+    "label": "Route 111 - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_111_TM37": {
-    "label": "Route 111: OW Item 4",
+    "label": "Route 111 - Item 4",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_112_NUGGET": {
-    "label": "Route 112: OW Item",
+    "label": "Route 112 - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_113_HYPER_POTION": {
-    "label": "Route 113: OW Item 1",
+    "label": "Route 113 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_113_MAX_ETHER": {
-    "label": "Route 113: OW Item 2",
+    "label": "Route 113 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_113_SUPER_REPEL": {
-    "label": "Route 113: OW Item 3",
+    "label": "Route 113 - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_114_ENERGY_POWDER": {
-    "label": "Route 114: OW Item 1",
+    "label": "Route 114 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_114_PROTEIN": {
-    "label": "Route 114: OW Item 2",
+    "label": "Route 114 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_114_RARE_CANDY": {
-    "label": "Route 114: OW Item 3",
+    "label": "Route 114 - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_115_GREAT_BALL": {
-    "label": "Route 115: OW Item 1",
+    "label": "Route 115 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_115_HEAL_POWDER": {
-    "label": "Route 115: OW Item 2",
+    "label": "Route 115 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_115_IRON": {
-    "label": "Route 115: OW Item 3",
+    "label": "Route 115 - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_115_PP_UP": {
-    "label": "Route 115: OW Item 4",
+    "label": "Route 115 - Item 4",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_115_SUPER_POTION": {
-    "label": "Route 115: OW Item 5",
+    "label": "Route 115 - Item 5",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_115_TM01": {
-    "label": "Route 115: OW Item 6",
+    "label": "Route 115 - Item 6",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_116_ETHER": {
-    "label": "Route 116: OW Item 1",
+    "label": "Route 116 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_116_HP_UP": {
-    "label": "Route 116: OW Item 2",
+    "label": "Route 116 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_116_POTION": {
-    "label": "Route 116: OW Item 3",
+    "label": "Route 116 - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_116_REPEL": {
-    "label": "Route 116: OW Item 4",
+    "label": "Route 116 - Item 4",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_116_X_SPECIAL": {
-    "label": "Route 116: OW Item 5",
+    "label": "Route 116 - Item 5",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_117_GREAT_BALL": {
-    "label": "Route 117: OW Item 1",
+    "label": "Route 117 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_117_REVIVE": {
-    "label": "Route 117: OW Item 2",
+    "label": "Route 117 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_118_HYPER_POTION": {
-    "label": "Route 118: OW Item",
+    "label": "Route 118 - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_119_ELIXIR_1": {
-    "label": "Route 119: OW Item 1",
+    "label": "Route 119 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_119_ELIXIR_2": {
-    "label": "Route 119: OW Item 2",
+    "label": "Route 119 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_119_HYPER_POTION_1": {
-    "label": "Route 119: OW Item 3",
+    "label": "Route 119 - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_119_HYPER_POTION_2": {
-    "label": "Route 119: OW Item 4",
+    "label": "Route 119 - Item 4",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_119_LEAF_STONE": {
-    "label": "Route 119: OW Item 5",
+    "label": "Route 119 - Item 5",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_119_NUGGET": {
-    "label": "Route 119: OW Item 6",
+    "label": "Route 119 - Item 6",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_119_RARE_CANDY": {
-    "label": "Route 119: OW Item 7",
+    "label": "Route 119 - Item 7",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_119_SUPER_REPEL": {
-    "label": "Route 119: OW Item 8",
+    "label": "Route 119 - Item 8",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_119_ZINC": {
-    "label": "Route 119: OW Item 9",
+    "label": "Route 119 - Item 9",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_120_FULL_HEAL": {
-    "label": "Route 120: OW Item 1",
+    "label": "Route 120 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_120_HYPER_POTION": {
-    "label": "Route 120: OW Item 2",
+    "label": "Route 120 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_120_NEST_BALL": {
-    "label": "Route 120: OW Item 3",
+    "label": "Route 120 - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_120_NUGGET": {
-    "label": "Route 120: OW Item 4",
+    "label": "Route 120 - Item 4",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_120_REVIVE": {
-    "label": "Route 120: OW Item 5",
+    "label": "Route 120 - Item 5",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_121_CARBOS": {
-    "label": "Route 121: OW Item 1",
+    "label": "Route 121 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_121_REVIVE": {
-    "label": "Route 121: OW Item 2",
+    "label": "Route 121 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_121_ZINC": {
-    "label": "Route 121: OW Item 3",
+    "label": "Route 121 - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_123_CALCIUM": {
-    "label": "Route 123: OW Item 1",
+    "label": "Route 123 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_123_ELIXIR": {
-    "label": "Route 123: OW Item 2",
+    "label": "Route 123 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_123_PP_UP": {
-    "label": "Route 123: OW Item 3",
+    "label": "Route 123 - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_123_REVIVAL_HERB": {
-    "label": "Route 123: OW Item 4",
+    "label": "Route 123 - Item 4",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_123_ULTRA_BALL": {
-    "label": "Route 123: OW Item 5",
+    "label": "Route 123 - Item 5",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_124_BLUE_SHARD": {
-    "label": "Route 124: OW Item 1",
+    "label": "Route 124 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_124_RED_SHARD": {
-    "label": "Route 124: OW Item 2",
+    "label": "Route 124 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_124_YELLOW_SHARD": {
-    "label": "Route 124: OW Item 3",
+    "label": "Route 124 - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_125_BIG_PEARL": {
-    "label": "Route 125: OW Item",
+    "label": "Route 125 - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_126_GREEN_SHARD": {
-    "label": "Route 126: OW Item",
+    "label": "Route 126 - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_127_CARBOS": {
-    "label": "Route 127: OW Item 1",
+    "label": "Route 127 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_127_RARE_CANDY": {
-    "label": "Route 127: OW Item 2",
+    "label": "Route 127 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_127_ZINC": {
-    "label": "Route 127: OW Item 3",
+    "label": "Route 127 - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_132_PROTEIN": {
-    "label": "Route 132: OW Item 1",
+    "label": "Route 132 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_132_RARE_CANDY": {
-    "label": "Route 132: OW Item 2",
+    "label": "Route 132 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_133_BIG_PEARL": {
-    "label": "Route 133: OW Item 1",
+    "label": "Route 133 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_133_MAX_REVIVE": {
-    "label": "Route 133: OW Item 2",
+    "label": "Route 133 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_133_STAR_PIECE": {
-    "label": "Route 133: OW Item 3",
+    "label": "Route 133 - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_134_CARBOS": {
-    "label": "Route 134: OW Item 1",
+    "label": "Route 134 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_134_STAR_PIECE": {
-    "label": "Route 134: OW Item 2",
+    "label": "Route 134 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_RUSTBORO_CITY_X_DEFEND": {
-    "label": "Rustboro City: OW Item",
+    "label": "Rustboro City - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_RUSTURF_TUNNEL_MAX_ETHER": {
-    "label": "Rusturf Tunnel: OW Item 1",
+    "label": "Rusturf Tunnel - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_RUSTURF_TUNNEL_POKE_BALL": {
-    "label": "Rusturf Tunnel: OW Item 2",
+    "label": "Rusturf Tunnel - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_SAFARI_ZONE_NORTH_CALCIUM": {
-    "label": "Safari Zone N: OW Item",
+    "label": "Safari Zone N - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_SAFARI_ZONE_NORTH_EAST_NUGGET": {
-    "label": "Safari Zone NE: OW Item",
+    "label": "Safari Zone NE - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_SAFARI_ZONE_NORTH_WEST_TM22": {
-    "label": "Safari Zone NW: OW Item",
+    "label": "Safari Zone NW - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL": {
-    "label": "Safari Zone SE: OW Item",
+    "label": "Safari Zone SE - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_SAFARI_ZONE_SOUTH_WEST_MAX_REVIVE": {
-    "label": "Safari Zone SW: OW Item",
+    "label": "Safari Zone SW - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_SCORCHED_SLAB_TM11": {
-    "label": "Scorched Slab: OW Item",
+    "label": "Scorched Slab - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_SEAFLOOR_CAVERN_ROOM_9_TM26": {
-    "label": "Seafloor Cavern Room 9: OW Item",
+    "label": "Seafloor Cavern Room 9 - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_SHOAL_CAVE_ENTRANCE_BIG_PEARL": {
-    "label": "Shoal Cave Entrance: OW Item",
+    "label": "Shoal Cave Entrance - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_SHOAL_CAVE_ICE_ROOM_NEVER_MELT_ICE": {
-    "label": "Shoal Cave Ice Room: OW Item 1",
+    "label": "Shoal Cave Ice Room - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_SHOAL_CAVE_ICE_ROOM_TM07": {
-    "label": "Shoal Cave Ice Room: OW Item 2",
+    "label": "Shoal Cave Ice Room - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_SHOAL_CAVE_INNER_ROOM_RARE_CANDY": {
-    "label": "Shoal Cave Inner Room: OW Item",
+    "label": "Shoal Cave Inner Room - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_SHOAL_CAVE_STAIRS_ROOM_ICE_HEAL": {
-    "label": "Shoal Cave Stairs Room: OW Item",
+    "label": "Shoal Cave Stairs Room - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_TRICK_HOUSE_PUZZLE_1_ORANGE_MAIL": {
-    "label": "Trick House Puzzle 1: OW Item",
+    "label": "Trick House Puzzle 1 - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_TRICK_HOUSE_PUZZLE_2_HARBOR_MAIL": {
-    "label": "Trick House Puzzle 2: OW Item 1",
+    "label": "Trick House Puzzle 2 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_TRICK_HOUSE_PUZZLE_2_WAVE_MAIL": {
-    "label": "Trick House Puzzle 2: OW Item 2",
+    "label": "Trick House Puzzle 2 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_TRICK_HOUSE_PUZZLE_3_SHADOW_MAIL": {
-    "label": "Trick House Puzzle 3: OW Item 1",
+    "label": "Trick House Puzzle 3 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_TRICK_HOUSE_PUZZLE_3_WOOD_MAIL": {
-    "label": "Trick House Puzzle 3: OW Item 2",
+    "label": "Trick House Puzzle 3 - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_TRICK_HOUSE_PUZZLE_4_MECH_MAIL": {
-    "label": "Trick House Puzzle 4: OW Item",
+    "label": "Trick House Puzzle 4 - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_TRICK_HOUSE_PUZZLE_6_GLITTER_MAIL": {
-    "label": "Trick House Puzzle 6: OW Item",
+    "label": "Trick House Puzzle 6 - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_TRICK_HOUSE_PUZZLE_7_TROPIC_MAIL": {
-    "label": "Trick House Puzzle 7: OW Item",
+    "label": "Trick House Puzzle 7 - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_TRICK_HOUSE_PUZZLE_8_BEAD_MAIL": {
-    "label": "Trick House Puzzle 8: OW Item",
+    "label": "Trick House Puzzle 8 - Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_VICTORY_ROAD_1F_MAX_ELIXIR": {
-    "label": "Victory Road 1F: OW Item 1",
+    "label": "Victory Road 1F - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_VICTORY_ROAD_1F_PP_UP": {
-    "label": "Victory Road 1F: OW Item 2",
+    "label": "Victory Road 1F - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_VICTORY_ROAD_B1F_FULL_RESTORE": {
-    "label": "Victory Road B1F: OW Item 1",
+    "label": "Victory Road B1F - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_VICTORY_ROAD_B1F_TM29": {
-    "label": "Victory Road B1F: OW Item 2",
+    "label": "Victory Road B1F - Item 2",
     "tags": ["OverworldItem"]
   },
   "ITEM_VICTORY_ROAD_B2F_FULL_HEAL": {
-    "label": "Victory Road B2F: OW Item 1",
+    "label": "Victory Road B2F - Item 1",
     "tags": ["OverworldItem"]
   },
   "NPC_GIFT_GOT_BASEMENT_KEY_FROM_WATTSON": {
-    "label": "Mauville City: Basement Key from Wattson",
+    "label": "Mauville City - Basement Key from Wattson",
     "tags": ["KeyItem"]
   },
   "NPC_GIFT_GOT_TM24_FROM_WATTSON": {
-    "label": "Mauville City: TM24 from Wattson",
+    "label": "Mauville City - TM24 from Wattson",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_6_SODA_POP": {
-    "label": "Route 109: Seashore House Reward",
+    "label": "Route 109 - Seashore House Reward",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_AMULET_COIN": {
-    "label": "Littleroot Town: Gift from Mom",
+    "label": "Littleroot Town - Gift from Mom",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_CHARCOAL": {
-    "label": "Lavaridge Town Herb Shop: Gift from Man",
+    "label": "Lavaridge Town Herb Shop - Gift from Man",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_CHESTO_BERRY_ROUTE_104": {
-    "label": "Route 104: Gift from Woman Near Berries",
+    "label": "Route 104 - Gift from Woman Near Berries",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_CLEANSE_TAG": {
-    "label": "Mt Pyre 1F: Gift from Woman in NE Corner",
+    "label": "Mt Pyre 1F - Gift from Woman in NE Corner",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_COIN_CASE": {
-    "label": "Mauville City: Gift from Woman in House",
+    "label": "Mauville City - Gift from Woman in House",
     "tags": ["KeyItem"]
   },
   "NPC_GIFT_RECEIVED_DEVON_GOODS_RUSTURF_TUNNEL": {
-    "label": "Rusturf Tunnel: Recover Devon Goods",
+    "label": "Rusturf Tunnel - Recover Devon Goods",
     "tags": ["KeyItem"]
   },
   "NPC_GIFT_RECEIVED_DEVON_SCOPE": {
-    "label": "Route 120: Devon Scope from Steven",
+    "label": "Route 120 - Devon Scope from Steven",
     "tags": ["KeyItem"]
   },
   "NPC_GIFT_RECEIVED_EXP_SHARE": {
-    "label": "Devon Corp 3F: Exp. Share from Mr. Stone",
+    "label": "Devon Corp 3F - Exp. Share from Mr. Stone",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_FOCUS_BAND": {
-    "label": "Shoal Cave Lower Room: Gift from Black Belt",
+    "label": "Shoal Cave Lower Room - Gift from Black Belt",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_GO_GOGGLES": {
-    "label": "Lavaridge Town: Go Goggles from Rival",
+    "label": "Lavaridge Town - Go Goggles from Rival",
     "tags": ["KeyItem"]
   },
   "NPC_GIFT_RECEIVED_GOOD_ROD": {
-    "label": "Route 118: Good Rod from Fisherman",
+    "label": "Route 118 - Good Rod from Fisherman",
     "tags": ["Rod"]
   },
   "NPC_GIFT_RECEIVED_GREAT_BALL_PETALBURG_WOODS": {
-    "label": "Petalburg Woods: Gift from Devon Employee",
+    "label": "Petalburg Woods - Gift from Devon Employee",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_GREAT_BALL_RUSTBORO_CITY": {
-    "label": "Rustboro City: Gift from Devon Employee",
+    "label": "Rustboro City - Gift from Devon Employee",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_HM01": {
-    "label": "Rustboro City: HM01 from Cutter's House",
+    "label": "Rustboro City - HM01 from Cutter's House",
     "tags": ["HM"]
   },
   "NPC_GIFT_RECEIVED_HM02": {
-    "label": "Route 119: HM02 from Rival Battle",
+    "label": "Route 119 - HM02 from Rival Battle",
     "tags": ["HM"]
   },
   "NPC_GIFT_RECEIVED_HM03": {
-    "label": "Petalburg City: HM03 from Wally's Uncle",
+    "label": "Petalburg City - HM03 from Wally's Uncle",
     "tags": ["HM"]
   },
   "NPC_GIFT_RECEIVED_HM04": {
-    "label": "Rusturf Tunnel: HM04 from Tunneler",
+    "label": "Rusturf Tunnel - HM04 from Tunneler",
     "tags": ["HM"]
   },
   "NPC_GIFT_RECEIVED_HM05": {
-    "label": "Granite Cave 1F: HM05 from Hiker",
+    "label": "Granite Cave 1F - HM05 from Hiker",
     "tags": ["HM"]
   },
   "NPC_GIFT_RECEIVED_HM06": {
-    "label": "Mauville City: HM06 from Rock Smash Guy",
+    "label": "Mauville City - HM06 from Rock Smash Guy",
     "tags": ["HM"]
   },
   "NPC_GIFT_RECEIVED_HM07": {
-    "label": "Sootopolis City: HM07 from Wallace",
+    "label": "Sootopolis City - HM07 from Wallace",
     "tags": ["HM"]
   },
   "NPC_GIFT_RECEIVED_HM08": {
-    "label": "Mossdeep City: HM08 from Steven's House",
+    "label": "Mossdeep City - HM08 from Steven's House",
     "tags": ["HM"]
   },
   "NPC_GIFT_RECEIVED_ITEMFINDER": {
-    "label": "Route 110: Itemfinder from Rival",
+    "label": "Route 110 - Itemfinder from Rival",
     "tags": ["KeyItem"]
   },
   "NPC_GIFT_RECEIVED_KINGS_ROCK": {
-    "label": "Mossdeep City: Gift from Kid",
+    "label": "Mossdeep City - Gift from Kid",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_LETTER": {
-    "label": "Devon Corp 3F: Letter from Mr. Stone",
+    "label": "Devon Corp 3F - Letter from Mr. Stone",
     "tags": ["KeyItem"]
   },
   "NPC_GIFT_RECEIVED_MACHO_BRACE": {
-    "label": "Route 111: Reward from Winstrate Family",
+    "label": "Route 111 - Reward from Winstrate Family",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_MAGMA_EMBLEM": {
-    "label": "Mt Pyre Summet: Magma Emblem from Old Lady",
+    "label": "Mt Pyre Summet - Magma Emblem from Old Lady",
     "tags": ["KeyItem"]
   },
   "NPC_GIFT_RECEIVED_MENTAL_HERB": {
-    "label": "Fortree City: Wingull Delivery Reward",
+    "label": "Fortree City - Wingull Delivery Reward",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_METEORITE": {
-    "label": "Mt Chimney: Recover Meteorite",
+    "label": "Mt Chimney - Recover Meteorite",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_MIRACLE_SEED": {
-    "label": "Petalburg Woods: Gift from Lady",
+    "label": "Petalburg Woods - Gift from Lady",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_OLD_ROD": {
-    "label": "Dewford Town: Old Rod from Fisherman",
+    "label": "Dewford Town - Old Rod from Fisherman",
     "tags": ["Rod"]
   },
   "NPC_GIFT_RECEIVED_POTION_OLDALE": {
-    "label": "Oldale Town: Gift from Shop Tutorial",
+    "label": "Oldale Town - Gift from Shop Tutorial",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_POWDER_JAR": {
-    "label": "Slateport City: Gift from Lady in Market",
+    "label": "Slateport City - Gift from Lady in Market",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_PREMIER_BALL_RUSTBORO": {
-    "label": "Rustboro City: Gift from Boy in Apartments",
+    "label": "Rustboro City - Gift from Boy in Apartments",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_QUICK_CLAW": {
-    "label": "Rustboro City: Gift from School Teacher",
+    "label": "Rustboro City - Gift from School Teacher",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_REPEAT_BALL": {
-    "label": "Route 116: Gift from Devon Researcher",
+    "label": "Route 116 - Gift from Devon Researcher",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_SECRET_POWER": {
-    "label": "Route 111: Secret Power Gift",
+    "label": "Route 111 - Secret Power Gift",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_SILK_SCARF": {
-    "label": "Dewford Town: Gift from Man in House",
+    "label": "Dewford Town - Gift from Man in House",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_SOFT_SAND": {
-    "label": "Route 109: Gift from Girl",
+    "label": "Route 109 - Gift from Girl",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_SOOTHE_BELL": {
-    "label": "Slateport City: Gift from Woman in Fan Club",
+    "label": "Slateport City - Gift from Woman in Fan Club",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_SUN_STONE_MOSSDEEP": {
-    "label": "Mossdeep City: Gift from Man in Museum",
+    "label": "Mossdeep City - Gift from Man in Museum",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_SUPER_ROD": {
-    "label": "Mossdeep City: Super Rod from Fisherman in House",
+    "label": "Mossdeep City - Super Rod from Fisherman in House",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM03": {
-    "label": "Sootopolis City Gym: TM03 from Juan",
+    "label": "Sootopolis City Gym - TM03 from Juan",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM04": {
-    "label": "Mossdeep City Gym: TM04 from Tate and Liza",
+    "label": "Mossdeep City Gym - TM04 from Tate and Liza",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM05": {
-    "label": "Route 114: TM05 from Roaring Man",
+    "label": "Route 114 - TM05 from Roaring Man",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM08": {
-    "label": "Dewford Town Gym: TM08 from Brawley",
+    "label": "Dewford Town Gym - TM08 from Brawley",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM09": {
-    "label": "Route 104: TM09 from Boy",
+    "label": "Route 104 - TM09 from Boy",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM10": {
-    "label": "Fortree City: TM10 from Hidden Power Lady",
+    "label": "Fortree City - TM10 from Hidden Power Lady",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM27": {
-    "label": "Fallarbor Town: TM27 from Cozmo",
+    "label": "Fallarbor Town - TM27 from Cozmo",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM28": {
-    "label": "Route 114: TM28 from Fossil Maniac",
+    "label": "Route 114 - TM28 from Fossil Maniac",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM31": {
-    "label": "Sootopolis City: TM31 from Black Belt in House",
+    "label": "Sootopolis City - TM31 from Black Belt in House",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM34": {
-    "label": "Mauville City Gym: TM34 from Wattson",
+    "label": "Mauville City Gym - TM34 from Wattson",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM36": {
-    "label": "Dewford Town: TM36 from Sludge Bomb Man",
+    "label": "Dewford Town - TM36 from Sludge Bomb Man",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM39": {
-    "label": "Rustboro City Gym: TM39 from Roxanne",
+    "label": "Rustboro City Gym - TM39 from Roxanne",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM40": {
-    "label": "Fortree City Gym: TM40 from Winona",
+    "label": "Fortree City Gym - TM40 from Winona",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM41": {
-    "label": "Slateport City: TM41 from Sailor in Battle Tent",
+    "label": "Slateport City - TM41 from Sailor in Battle Tent",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM42": {
-    "label": "Petalburg City Gym: TM42 from Norman",
+    "label": "Petalburg City Gym - TM42 from Norman",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM44": {
-    "label": "Lilycove City: TM44 from Man in House",
+    "label": "Lilycove City - TM44 from Man in House",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM45": {
-    "label": "Verdanturf Town: TM45 from Woman in Battle Tent",
+    "label": "Verdanturf Town - TM45 from Woman in Battle Tent",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM46": {
-    "label": "Slateport City: TM46 from Aqua Grunt in Museum",
+    "label": "Slateport City - TM46 from Aqua Grunt in Museum",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM47": {
-    "label": "Granite Cave 1F: TM47 from Steven",
+    "label": "Granite Cave 1F - TM47 from Steven",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM50": {
-    "label": "Lavaridge Town Gym: TM50 from Flannery",
+    "label": "Lavaridge Town Gym - TM50 from Flannery",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_WAILMER_PAIL": {
-    "label": "Route 104: Wailmer Pail from Flower Shop Lady",
+    "label": "Route 104 - Wailmer Pail from Flower Shop Lady",
     "tags": ["KeyItem"]
   },
   "NPC_GIFT_RECEIVED_WHITE_HERB": {
-    "label": "Route 104: Gift from Lady",
+    "label": "Route 104 - Gift from Lady",
     "tags": ["NpcGift"]
   }
 }

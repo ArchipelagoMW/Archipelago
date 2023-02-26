@@ -267,6 +267,58 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: _can_use_acro_bike(state, player)
     )
 
+    # Mirage Tower
+    set_rule(
+        multiworld.get_entrance("REGION_MIRAGE_TOWER_2F/TOP -> REGION_MIRAGE_TOWER_2F/BOTTOM", player),
+        lambda state: _can_use_mach_bike(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_MIRAGE_TOWER_2F/BOTTOM -> REGION_MIRAGE_TOWER_2F/TOP", player),
+        lambda state: _can_use_mach_bike(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_MIRAGE_TOWER_3F/TOP -> REGION_MIRAGE_TOWER_3F/BOTTOM", player),
+        lambda state: _can_rock_smash(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_MIRAGE_TOWER_3F/BOTTOM -> REGION_MIRAGE_TOWER_3F/TOP", player),
+        lambda state: _can_rock_smash(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_MIRAGE_TOWER_4F/MAIN -> REGION_MIRAGE_TOWER_4F/FOSSIL_PLATFORM", player),
+        lambda state: _can_rock_smash(state, player)
+    )
+
+    # Abandoned Ship
+    set_rule(
+        multiworld.get_entrance("REGION_ABANDONED_SHIP_ROOMS_B1F/CENTER -> REGION_ABANDONED_SHIP_UNDERWATER1/MAIN", player),
+        lambda state: _can_dive(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS/MAIN -> REGION_ABANDONED_SHIP_UNDERWATER2/MAIN", player),
+        lambda state: _can_dive(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:3/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:6", player),
+        lambda state: state.has("Room 4 Key", player)
+    )
+    set_rule(
+        multiworld.get_entrance("MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:1/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:2", player),
+        lambda state: state.has("Room 1 Key", player)
+    )
+    set_rule(
+        multiworld.get_entrance("MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:2/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:4", player),
+        lambda state: state.has("Room 2 Key", player)
+    )
+    set_rule(
+        multiworld.get_entrance("MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:4/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:7", player),
+        lambda state: state.has("Room 6 Key", player)
+    )
+    set_rule(
+        multiworld.get_entrance("MAP_ABANDONED_SHIP_CORRIDORS_B1F:5/MAP_ABANDONED_SHIP_ROOM_B1F:0", player),
+        lambda state: state.has("Storage Key", player)
+    )
+
     # Route 118
     set_rule(
         multiworld.get_entrance("REGION_ROUTE118/WEST -> REGION_ROUTE118/WATER", player),
@@ -353,6 +405,20 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: _can_cut(state, player)
     )
 
+    # Safari Zone
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_SAFARI_ZONE_NORTH_WEST_TM22"), player),
+        lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_SAFARI_ZONE_SOUTH_WEST_MAX_REVIVE"), player),
+        lambda state: _can_surf(state, player)
+    )
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL"), player),
+        lambda state: _can_surf(state, player)
+    )
+
     # Route 122
     set_rule(
         multiworld.get_entrance("REGION_ROUTE122/MT_PYRE_ENTRANCE -> REGION_ROUTE122/SEA", player),
@@ -369,6 +435,16 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     set_rule(
         multiworld.get_entrance("REGION_LILYCOVE_CITY/MAIN -> REGION_LILYCOVE_CITY/SEA", player),
         lambda state: _can_surf(state, player)
+    )
+
+    # Magma Hideout
+    set_rule(
+        multiworld.get_entrance("REGION_MAGMA_HIDEOUT_1F/ENTRANCE -> REGION_MAGMA_HIDEOUT_1F/MAIN", player),
+        lambda state: _can_strength(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_MAGMA_HIDEOUT_1F/MAIN -> REGION_MAGMA_HIDEOUT_1F/ENTRANCE", player),
+        lambda state: _can_strength(state, player)
     )
 
     # Route 124
@@ -597,6 +673,20 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     set_rule(
         multiworld.get_entrance("REGION_PACIFIDLOG_TOWN/MAIN -> REGION_ROUTE132/EAST", player),
         lambda state: _can_surf(state, player)
+    )
+
+    # Sky Pillar
+    set_rule(
+        multiworld.get_entrance("REGION_SKY_PILLAR_2F/RIGHT -> REGION_SKY_PILLAR_2F/LEFT", player),
+        lambda state: _can_use_mach_bike(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SKY_PILLAR_2F/LEFT -> REGION_SKY_PILLAR_2F/RIGHT", player),
+        lambda state: _can_use_mach_bike(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SKY_PILLAR_4F/MAIN -> REGION_SKY_PILLAR_4F/ABOVE_3F_TOP_CENTER", player),
+        lambda state: _can_use_mach_bike(state, player)
     )
 
     # Route 134
