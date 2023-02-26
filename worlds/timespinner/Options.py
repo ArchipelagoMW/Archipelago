@@ -1,7 +1,7 @@
-from typing import Dict, Union
+from typing import Dict, Union, List
 from BaseClasses import MultiWorld
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option, OptionDict
-from schema import Schema, And, Optional
+from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option, OptionDict, OptionList
+from schema import Schema, And, Optional, Or
 
 
 class StartWithJewelryBox(Toggle):
@@ -191,6 +191,22 @@ class HpCap(Range):
     default = 999
 
 
+class LevelCap(Range):
+    """Sets the max level Lunais can achieve."""
+    display_name = "Level Cap"
+    range_start = 1
+    range_end = 99
+    default = 99
+
+
+class ExtraEarringsXP(Range):
+    """Adds additional XP granted by Galaxy Earrings."""
+    display_name = "Extra Earrings XP"
+    range_start = 0
+    range_end = 24
+    default = 0
+    
+
 class BossHealing(DefaultOnToggle):
     "Enables/disables healing after boss fights. NOTE: Currently only applicable when Boss Rando is enabled."
     display_name = "Heal After Bosses"
@@ -282,6 +298,91 @@ class EnterSandman(Toggle):
     display_name = "Enter Sandman"
 
 
+class DadPercent(Toggle):
+    """The win condition is beating the boss of Emperor's Tower"""
+    display_name = "Dad Percent"
+
+
+class RisingTides(Toggle):
+    """Random areas are flooded or drained, can be further specified with RisingTidesOverrides"""
+    display_name = "Rising Tides"
+
+
+def rising_tide_option(location: str, with_save_point_option: bool = False) -> Dict[Optional, Or]:
+    if with_save_point_option:
+        return {
+            Optional(location): Or(
+                And({
+                    Optional("Dry"): And(int, lambda n: n >= 0),
+                    Optional("Flooded"): And(int, lambda n: n >= 0),
+                    Optional("FloodedWithSavePointAvailable"): And(int, lambda n: n >= 0)
+                }, lambda d: any(v > 0 for v in d.values())),
+                "Dry",
+                "Flooded",
+                "FloodedWithSavePointAvailable")
+        }
+    else:
+        return {
+            Optional(location): Or(
+                And({
+                    Optional("Dry"): And(int, lambda n: n >= 0),
+                    Optional("Flooded"): And(int, lambda n: n >= 0)
+                }, lambda d: any(v > 0 for v in d.values())),
+                "Dry",
+                "Flooded")
+        }
+
+
+class RisingTidesOverrides(OptionDict):
+    """Odds for specific areas to be flooded or drained, only has effect when RisingTides is on.
+    Areas that are not specified will roll with the default 33% chance of getting flooded or drained"""
+    schema = Schema({
+        **rising_tide_option("Xarion"),
+        **rising_tide_option("Maw"),
+        **rising_tide_option("AncientPyramidShaft"),
+        **rising_tide_option("Sandman"),
+        **rising_tide_option("CastleMoat"),
+        **rising_tide_option("CastleBasement", with_save_point_option=True),
+        **rising_tide_option("CastleCourtyard"),
+        **rising_tide_option("LakeDesolation"),
+        **rising_tide_option("LakeSerene")
+    })
+    display_name = "Rising Tides Overrides"
+    default = {
+        "Xarion": { "Dry": 67, "Flooded": 33 },
+        "Maw": { "Dry": 67, "Flooded": 33 },
+        "AncientPyramidShaft": { "Dry": 67, "Flooded": 33 },
+        "Sandman": { "Dry": 67, "Flooded": 33 },
+        "CastleMoat": { "Dry": 67, "Flooded": 33 },
+        "CastleBasement": { "Dry": 66, "Flooded": 17, "FloodedWithSavePointAvailable": 17 },
+        "CastleCourtyard": { "Dry": 67, "Flooded": 33 },
+        "LakeDesolation": { "Dry": 67, "Flooded": 33 },
+        "LakeSerene": { "Dry": 67, "Flooded": 33 },
+    }
+
+
+class UnchainedKeys(Toggle):
+    """Start with Twin Pyramid Key, which does not give free warp;
+    warp items for Past, Present, (and ??? with Enter Sandman) can be found."""
+    display_name = "Unchained Keys"
+
+
+class TrapChance(Range):
+    """Chance of traps in the item pool.
+    Traps will only replace filler items such as potions, vials and antidotes"""
+    display_name = "Trap Chance"
+    range_start = 0
+    range_end = 100
+    default = 10
+
+
+class Traps(OptionList):
+    """List of traps that may be in the item pool to find"""
+    display_name = "Traps Types"
+    valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" }
+    default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" ]
+
+
 # Some options that are available in the timespinner randomizer arent currently implemented
 timespinner_options: Dict[str, Option] = {
     "StartWithJewelryBox": StartWithJewelryBox,
@@ -299,6 +400,8 @@ timespinner_options: Dict[str, Option] = {
     "DamageRando": DamageRando,
     "DamageRandoOverrides": DamageRandoOverrides,
     "HpCap": HpCap,
+    "LevelCap": LevelCap,
+    "ExtraEarringsXP": ExtraEarringsXP,
     "BossHealing": BossHealing,
     "ShopFill": ShopFill,
     "ShopWarpShards": ShopWarpShards,
@@ -310,6 +413,12 @@ timespinner_options: Dict[str, Option] = {
     "ShowBestiary": ShowBestiary,
     "ShowDrops": ShowDrops,
     "EnterSandman": EnterSandman,
+    "DadPercent": DadPercent,
+    "RisingTides": RisingTides,
+    "RisingTidesOverrides": RisingTidesOverrides,
+    "UnchainedKeys": UnchainedKeys,
+    "TrapChance": TrapChance,
+    "Traps": Traps,
     "DeathLink": DeathLink,
 }
 
@@ -318,7 +427,7 @@ def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
     return get_option_value(world, player, name) > 0
 
 
-def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, dict]:
+def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, Dict, List]:
     option = getattr(world, name, None)
     if option == None:
         return 0
