@@ -246,7 +246,6 @@ class ALTTPWorld(World):
             world.register_indirect_condition(world.get_region(region_name, player),
                                               world.get_entrance(entrance_name, player))
 
-
     def collect_item(self, state: CollectionState, item: Item, remove=False):
         item_name = item.name
         if item_name.startswith('Progressive '):

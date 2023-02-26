@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import Dungeon
+from BaseClasses import Dungeon, MultiWorld, Item
 from worlds.alttp.Bosses import BossFactory
 from Fill import fill_restrictive
 from worlds.alttp.Items import ItemFactory
@@ -20,7 +20,7 @@ def create_dungeons(multiworld: MultiWorld, player: int):
                      big_key: typing.Optional[Item], small_keys: typing.Union[Item, typing.List[Item]],
                      dungeon_items: typing.Union[Item, typing.List[Item]]) -> Dungeon:
         dungeon = Dungeon(name, dungeon_regions, big_key,
-                          [] if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal else small_keys,
+                          [] if multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal else small_keys,
                           dungeon_items, player)
         dungeon.excluded = name in excluded_dungeons
         for item in dungeon.all_items:
@@ -91,7 +91,7 @@ def create_dungeons(multiworld: MultiWorld, player: int):
                       ItemFactory(['Small Key (Turtle Rock)'] * 4, player),
                       ItemFactory(['Map (Turtle Rock)', 'Compass (Turtle Rock)'], player))
 
-    if world.mode[player] != 'inverted':
+    if multiworld.mode[player] != 'inverted':
         AT = make_dungeon('Agahnims Tower', 'Agahnim', ['Agahnims Tower', 'Agahnim 1'], None,
                           ItemFactory(['Small Key (Agahnims Tower)'] * 2, player), [])
         GT = make_dungeon('Ganons Tower', 'Agahnim2',
@@ -119,7 +119,7 @@ def create_dungeons(multiworld: MultiWorld, player: int):
     GT.bosses['top'] = BossFactory('Moldorm', player)
 
     for dungeon in [ES, EP, DP, ToH, AT, PoD, TT, SW, SP, IP, MM, TR, GT]:
-        world.dungeons[dungeon.name, dungeon.player] = dungeon
+        multiworld.dungeons[dungeon.name, dungeon.player] = dungeon
 
 
 def get_dungeon_item_pool(world) -> typing.List:
