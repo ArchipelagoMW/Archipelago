@@ -59,7 +59,6 @@ def download_SNI():
 
     for file in files:
         download_url: str = file["browser_download_url"]
-        # make sure to ignore a 64 in a version number
         machine_match = download_url.rsplit("-", 1)[1].split(".", 1)[0] == machine_name
         if platform_name in download_url and machine_match:
             # prefer "many" builds
@@ -83,11 +82,11 @@ def download_SNI():
             with tarfile.open(fileobj=io.BytesIO(download.read()), mode="r:xz") as tf:
                 for member in tf.getmembers():
                     if member.name.startswith("/") or member.name.startswith("..") or member.name.startswith("./"):
-                        raise ValueError("Unexpected file '{member.name}' in {source_url}")
+                        raise ValueError(f"Unexpected file '{member.name}' in {source_url}")
                     elif member.isdir() and not sni_dir:
                         sni_dir = member.name
                     elif member.isfile() and not sni_dir or not member.name.startswith(sni_dir):
-                        raise ValueError("Expected folder before '{member.name}' in {source_url}")
+                        raise ValueError(f"Expected folder before '{member.name}' in {source_url}")
                     elif member.isfile() and sni_dir:
                         tf.extract(member)
             # sadly SNI is in its own folder on non-windows, so we need to rename
