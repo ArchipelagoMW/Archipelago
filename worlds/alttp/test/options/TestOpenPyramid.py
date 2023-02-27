@@ -1,12 +1,8 @@
-from test.TestBase import WorldTestBase
+from . import LTTPOptionsTestBase
 from ...Items import ItemFactory
 
 
-class PyramidTestBase(WorldTestBase):
-    game = "A Link to the Past"
-
-
-class OpenPyramidTest(PyramidTestBase):
+class OpenPyramidTest(LTTPOptionsTestBase):
     options = {
         "open_pyramid": "open"
     }
@@ -17,7 +13,7 @@ class OpenPyramidTest(PyramidTestBase):
         self.assertTrue(self.can_reach_entrance("Pyramid Hole"))
 
 
-class GoalPyramidTest(PyramidTestBase):
+class GoalPyramidTest(LTTPOptionsTestBase):
     options = {
         "open_pyramid": "goal"
     }

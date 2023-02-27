@@ -402,6 +402,12 @@ class ExcludeDungeons(OptionList):
     }
     valid_keys_casefold = True
 
+    def __init__(self, value: typing.List[str]):
+        super(ExcludeDungeons, self).__init__(value)
+        titled_names = [name.lower().title() for name in value]
+        for index in range(len(titled_names)):
+            self.value[index] = titled_names[index].replace("Of", "of")
+
     @property
     def inverted_names(self) -> typing.List[str]:
         inverted_excluded_names = self.value.copy()
