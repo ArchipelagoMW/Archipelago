@@ -1,4 +1,4 @@
-from typing import Dict, List, Set, Tuple, TextIO
+from typing import Dict, List, Set, Tuple, TextIO, Union
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from .Items import get_item_names_per_category, item_table, starter_melee_weapons, starter_spells, filler_items
 from .Locations import get_location_datas, EventId
@@ -89,7 +89,7 @@ class TimespinnerWorld(World):
 
         for option_name in timespinner_options:
             if (option_name not in ap_specific_settings):
-                slot_data[option_name] = get_option_value(self.multiworld, self.player, option_name)
+                slot_data[option_name] = self.get_option_value(option_name)
 
         slot_data["StinkyMaw"] = True
         slot_data["ProgressiveVerticalMovement"] = False
@@ -184,16 +184,13 @@ class TimespinnerWorld(World):
         return item
 
     def get_filler_item_name(self) -> str:
-        trap_chance: int = get_option_value(self.multiworld, self.player, "TrapChance")
-        enabled_traps: List[str] = get_option_value(self.multiworld, self.player, "Traps")
+        trap_chance: int = self.get_option_value("TrapChance")
+        enabled_traps: List[str] = self.get_option_value("Traps")
 
         if self.multiworld.random.random() < (trap_chance / 100) and enabled_traps:
             return self.multiworld.random.choice(enabled_traps)
         else:
             return self.multiworld.random.choice(filler_items) 
-        
-    def is_option_enabled(self, option: str) -> bool:
-        is_option_enabled(self.multiworld, self.player, option)
 
     def get_excluded_items(self) -> Set[str]:
         excluded_items: Set[str] = set()
@@ -279,3 +276,9 @@ class TimespinnerWorld(World):
                 personal_items[location.address] = location.item.code
 
         return personal_items
+    
+    def is_option_enabled(self, option: str) -> bool:
+        is_option_enabled(self.multiworld, self.player, option)
+
+    def get_option_value(self, option: str) -> Union[int, Dict, List]:
+        get_option_value(self.multiworld, self.player, option)
