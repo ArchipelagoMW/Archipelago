@@ -258,9 +258,9 @@ def make_hints(multiworld: MultiWorld, player: int, hint_amount: int):
 
     for loc, item in always_hint_pairs.items():
         if item[1]:
-            hints.append((item[0] + " can be found at " + loc + ".", item[2]))
+            hints.append((f"{item[0]} can be found at {loc}.", item[2]))
         else:
-            hints.append((loc + " contains " + item[0] + ".", item[2]))
+            hints.append((f"{loc} contains {item[0]}.", item[2]))
 
     multiworld.per_slot_randoms[player].shuffle(hints)  # shuffle always hint order in case of low hint amount
 
@@ -279,9 +279,9 @@ def make_hints(multiworld: MultiWorld, player: int, hint_amount: int):
             del priority_hint_pairs[loc]
 
             if item[1]:
-                hints.append((item[0] + " can be found at " + loc + ".", item[2]))
+                hints.append((f"{item[0]} can be found at {loc}.", item[2]))
             else:
-                hints.append((loc + " contains " + item[0] + ".", item[2]))
+                hints.append((f"{loc} contains {item[0]}.", item[2]))
             continue
 
         if next_random_hint_is_item:
@@ -290,10 +290,10 @@ def make_hints(multiworld: MultiWorld, player: int, hint_amount: int):
                 continue
 
             hint = make_hint_from_item(multiworld, player, prog_items_in_this_world.pop())
-            hints.append((hint[1] + " can be found at " + hint[0] + ".", hint[2]))
+            hints.append((f"{hint[1]} can be found at {hint[0]}.", hint[2]))
         else:
             hint = make_hint_from_location(multiworld, player, locations_in_this_world.pop())
-            hints.append((hint[0] + " contains " + hint[1] + ".", hint[2]))
+            hints.append((f"{hint[0]} contains {hint[1]}.", hint[2]))
 
         next_random_hint_is_item = not next_random_hint_is_item
 
