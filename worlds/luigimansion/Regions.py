@@ -1,7 +1,8 @@
 from typing import List, Set, Dict, Tuple, Optional, Callable, Union
-from BaseClasses import MultiWorld, Region, Entrance, Location
+from BaseClasses import MultiWorld, Region, Entrance, Location, ItemClassification
+from . import LMItem
 from .Locations import LocationData
-
+from worlds.generic.Rules import add_rule
 
 
 def create_regions(multiworld: MultiWorld, player: int, locations: tuple[LocationData, ...],
@@ -75,85 +76,99 @@ def create_regions(multiworld: MultiWorld, player: int, locations: tuple[Locatio
 
     multiworld.regions += regions
 
-    names: Dict[str, int] = {}
-
-    connect(multiworld, player, names, 'Menu', 'Foyer')
-    connect(multiworld, player, names, 'Foyer', 'Parlor')
-    connect(multiworld, player, names, 'Parlor', 'Anteroom', lambda state: state.has("Anteroom Key", player))
-    connect(multiworld, player, names, 'Anteroom', 'Wardrobe')
-    connect(multiworld, player, names, 'Wardrobe', 'Wardrobe Balcony')
-    connect(multiworld, player, names, 'Foyer', '2F Front Hallway',
+    connect(multiworld, player, "Menu -> Foyer", 'Menu', 'Foyer')  # name all connections
+    connect(multiworld, player, "Foyer -> Parlor", 'Foyer', 'Parlor')
+    connect(multiworld, player, "Parlor -> Anteroom", 'Parlor', 'Anteroom')
+    connect(multiworld, player, "Anteroom -> Wardrobe", 'Anteroom', 'Wardrobe')
+    connect(multiworld, player, "Wardrobe -> Wardrobe Balcony", 'Wardrobe', 'Wardrobe Balcony')
+    connect(multiworld, player, "Foyer -> 2F Front Hallway", 'Foyer', '2F Front Hallway',
             lambda state: state.has("Front Hallway Key", player))
-    connect(multiworld, player, names, '2F Front Hallway', 'Study')
-    connect(multiworld, player, names, '2F Front Hallway', 'Master Bedroom',
+    connect(multiworld, player, "2F Front Hallway -> Study", '2F Front Hallway', 'Study')
+    connect(multiworld, player, "2F Front Hallway -> Master Bedroom", '2F Front Hallway', 'Master Bedroom',
             lambda state: state.has("Master Bedroom Key", player))
-    connect(multiworld, player, names, '2F Front Hallway', 'Nursery', lambda state: state.has("Nursery Key", player))
-    connect(multiworld, player, names, '2F Front Hallway', 'Twins\' Room',
+    connect(multiworld, player, "2F Front Hallway -> Nursery", '2F Front Hallway', 'Nursery',
+            lambda state: state.has("Nursery Key", player))
+    connect(multiworld, player, "2F Front Hallway -> Twins' Room", '2F Front Hallway', 'Twins\' Room',
             lambda state: state.has("Twins Bedroom Key", player))
-    connect(multiworld, player, names, 'Foyer', '1F Hallway', lambda state: state.has("Heart Key", player))
-    connect(multiworld, player, names, '1F Hallway', 'Basement Stairwell')
-    connect(multiworld, player, names, '1F Hallway', '2F Stairwell',
+    connect(multiworld, player, "Foyer -> 1F Hallway", 'Foyer', '1F Hallway',
+            lambda state: state.has("Heart Key", player))
+    connect(multiworld, player, "1F Hallway -> Basement Stairwell", '1F Hallway', 'Basement Stairwell')
+    connect(multiworld, player, "1F Hallway -> 2F Stairwell", '1F Hallway', '2F Stairwell',
             lambda state: state.has("2F Stairwell Key", player))
-    connect(multiworld, player, names, '1F Hallway', 'Courtyard', lambda state: state.has("Club Key", player))
-    connect(multiworld, player, names, '1F Hallway', '1F Bathroom')
-    connect(multiworld, player, names, '1F Hallway', 'Conservatory',
+    connect(multiworld, player, "1F Hallway -> Courtyard", '1F Hallway', 'Courtyard',
+            lambda state: state.has("Club Key", player))
+    connect(multiworld, player, "1F Hallway -> 1F Bathroom", '1F Hallway', '1F Bathroom')
+    connect(multiworld, player, "1F Hallway -> Conservatory", '1F Hallway', 'Conservatory',
             lambda state: state.has("Conservatory Key", player))
-    connect(multiworld, player, names, '1F Hallway', 'Billiards Room', lambda state: state.has("Billiards Key", player))
-    connect(multiworld, player, names, '1F Hallway', '1F Washroom',
+    connect(multiworld, player, "1F Hallway -> Billiards Room", '1F Hallway', 'Billiards Room',
+            lambda state: state.has("Billiards Key", player))
+    connect(multiworld, player, "1F Hallway -> 1F Washroom", '1F Hallway', '1F Washroom',
             lambda state: state.has("Boo", player, multiworld.WashroomBooCount[player]))
-    connect(multiworld, player, names, '1F Hallway', 'Ballroom', lambda state: state.has("Ballroom Key", player))
-    connect(multiworld, player, names, '1F Hallway', 'Dining Room', lambda state: state.has("Dining Room Key", player))
-    connect(multiworld, player, names, '1F Hallway', 'Laundry Room', lambda state: state.has("Laundry Key", player))
-    connect(multiworld, player, names, '1F Hallway', 'Fortune-Teller\'s Room',
+    connect(multiworld, player, "1F Hallway -> Ballroom", '1F Hallway', 'Ballroom',
+            lambda state: state.has("Ballroom Key", player))
+    connect(multiworld, player, "1F Hallway -> Dining Room", '1F Hallway', 'Dining Room',
+            lambda state: state.has("Dining Room Key", player))
+    connect(multiworld, player, "1F Hallway -> Laundry Room", '1F Hallway', 'Laundry Room',
+            lambda state: state.has("Laundry Key", player))
+    connect(multiworld, player, "1F Hallway -> Fortune-Teller's Room", '1F Hallway', 'Fortune-Teller\'s Room',
             lambda state: state.has("Fortune Teller Key", player))
-    connect(multiworld, player, names, 'Courtyard', 'Rec Room', lambda state: state.has("Rec Room Key", player))
-    connect(multiworld, player, names, 'Rec Room', 'Courtyard', lambda state: state.has("Rec Room Key", player))
-    connect(multiworld, player, names, 'Ballroom', 'Storage Room', lambda state: state.has("Storage Room Key", player))
-    connect(multiworld, player, names, 'Dining Room', 'Kitchen')
-    connect(multiworld, player, names, 'Kitchen', 'Boneyard', lambda state: state.has("Water Element Medal", player))
-    connect(multiworld, player, names, 'Boneyard', 'Graveyard', lambda state: state.has("Water Element Medal", player))
-    connect(multiworld, player, names, 'Billiards Room', 'Projection Room')
-    connect(multiworld, player, names, 'Fortune-Teller\'s Room', 'Mirror Room')
-    connect(multiworld, player, names, 'Laundry Room', 'Butler\'s Room')
-    connect(multiworld, player, names, 'Butler\'s Room', 'Hidden Room')
-    connect(multiworld, player, names, 'Courtyard', 'The Well')
-    connect(multiworld, player, names, 'Rec Room', '2F Stairwell')
-    connect(multiworld, player, names, '2F Stairwell', 'Tea Room',
+    connect(multiworld, player, "Courtyard -> Rec Room", 'Courtyard', 'Rec Room',
+            lambda state: state.has("Rec Room Key", player))
+    connect(multiworld, player, "Rec Room -> Courtyard", 'Rec Room', 'Courtyard',
+            lambda state: state.has("Rec Room Key", player))
+    connect(multiworld, player, "Ballroom -> Storage Room", 'Ballroom', 'Storage Room',
+            lambda state: state.has("Storage Room Key", player))
+    connect(multiworld, player, "Dining Room -> Kitchen", 'Dining Room', 'Kitchen')
+    connect(multiworld, player, "Kitchen -> Boneyard", 'Kitchen', 'Boneyard',
             lambda state: state.has("Water Element Medal", player))
-    connect(multiworld, player, names, '2F Stairwell', 'Rec Room')
-    connect(multiworld, player, names, '2F Stairwell', '2F Rear Hallway')
-    connect(multiworld, player, names, '2F Rear Hallway', '2F Bathroom')
-    connect(multiworld, player, names, '2F Rear Hallway', '2F Washroom')
-    connect(multiworld, player, names, '2F Rear Hallway', 'Nana\'s Room')
-    connect(multiworld, player, names, '2F Rear Hallway', 'Astral Hall')
-    connect(multiworld, player, names, '2F Rear Hallway', 'Sitting Room',
+    connect(multiworld, player, "Boneyard -> Graveyard", 'Boneyard', 'Graveyard',
+            lambda state: state.has("Water Element Medal", player))
+    connect(multiworld, player, "Billiards Room -> Projection Room", 'Billiards Room', 'Projection Room')
+    connect(multiworld, player, "Fortune-Teller's Room -> Mirror Room", 'Fortune-Teller\'s Room', 'Mirror Room')
+    connect(multiworld, player, "Laundry Room -> Butler's Room", 'Laundry Room', 'Butler\'s Room')
+    connect(multiworld, player, "Butler's Room -> Hidden Room", 'Butler\'s Room', 'Hidden Room')
+    connect(multiworld, player, "Courtyard -> The Well", 'Courtyard', 'The Well')
+    connect(multiworld, player, "Rec Room -> 2F Stairwell", 'Rec Room', '2F Stairwell')
+    connect(multiworld, player, "2F Stairwell -> Tea Room", '2F Stairwell', 'Tea Room',
+            lambda state: state.has("Water Element Medal", player))
+    connect(multiworld, player, "2F Stairwell -> Rec Room", '2F Stairwell', 'Rec Room')
+    connect(multiworld, player, "2F Stairwell -> 2F Rear Hallway", '2F Stairwell', '2F Rear Hallway')
+    connect(multiworld, player, "2F Rear Hallway -> 2F Bathroom", '2F Rear Hallway', '2F Bathroom')
+    connect(multiworld, player, "2F Rear Hallway -> 2F Washroom", '2F Rear Hallway', '2F Washroom')
+    connect(multiworld, player, "2F Rear Hallway -> Nana's Room", '2F Rear Hallway', 'Nana\'s Room')
+    connect(multiworld, player, "2F Rear Hallway -> Astral Hall", '2F Rear Hallway', 'Astral Hall')
+    connect(multiworld, player, "2F Rear Hallway -> Sitting Room", '2F Rear Hallway', 'Sitting Room',
             lambda state: state.has("Sitting Room Key", player))
-    connect(multiworld, player, names, '2F Rear Hallway', 'Safari Room', lambda state: state.has("Safari Key", player))
-    connect(multiworld, player, names, 'Astral Hall', 'Observatory',
+    connect(multiworld, player, "2F Rear Hallway -> Safari Room", '2F Rear Hallway', 'Safari Room',
+            lambda state: state.has("Safari Key", player))
+    connect(multiworld, player, "Astral Hall -> Observatory", 'Astral Hall', 'Observatory',
             lambda state: state.has("Fire Element Medal", player))
-    connect(multiworld, player, names, 'Sitting Room', 'Guest Room')
-    connect(multiworld, player, names, 'Safari Room', '3F Right Hallway')
-    connect(multiworld, player, names, '3F Right Hallway', 'Artist\'s Studio',
+    connect(multiworld, player, "Sitting Room -> Guest Room", 'Sitting Room', 'Guest Room')
+    connect(multiworld, player, "Safari Room -> 3F Right Hallway", 'Safari Room', '3F Right Hallway')
+    connect(multiworld, player, "3F Right Hallway -> Artist's Studio", '3F Right Hallway', 'Artist\'s Studio',
             lambda state: state.has("Art Studio Key", player))
-    connect(multiworld, player, names, '3F Right Hallway', 'Balcony',
+    connect(multiworld, player, "3F Right Hallway -> Balcony", '3F Right Hallway', 'Balcony',
             lambda state: state.has("Balcony Key", player) and state.has("Boo", player,
                                                                          multiworld.BalconyBooCount[player]))
-    connect(multiworld, player, names, 'Balcony', '3F Left Hallway', lambda state: state.has("Diamond Key", player))
-    connect(multiworld, player, names, '3F Left Hallway', 'Armory', lambda state: state.has("Armory Key", player))
-    connect(multiworld, player, names, '3F Left Hallway', 'Telephone Room')
-    connect(multiworld, player, names, 'Telephone Room', 'Clockwork Room',
+    connect(multiworld, player, "Balcony -> 3F Left Hallway", 'Balcony', '3F Left Hallway',
+            lambda state: state.has("Diamond Key", player))
+    connect(multiworld, player, "3F Left Hallway -> Armory", '3F Left Hallway', 'Armory',
+            lambda state: state.has("Armory Key", player))
+    connect(multiworld, player, "3F Left Hallway -> Telephone Room", '3F Left Hallway', 'Telephone Room')
+    connect(multiworld, player, "Telephone Room -> Clockwork Room", 'Telephone Room', 'Clockwork Room',
             lambda state: state.has("Clockwork Key", player))
-    connect(multiworld, player, names, 'Armory', 'Ceramics Studio')
-    connect(multiworld, player, names, 'Clockwork Room', 'Roof')
-    connect(multiworld, player, names, 'Roof', 'Sealed Room')
-    connect(multiworld, player, names, 'Basement Stairwell', 'Breaker room')
-    connect(multiworld, player, names, 'Basement Stairwell', 'Cellar', lambda state: state.has("Cellar Key", player))
-    connect(multiworld, player, names, 'Cellar', 'Basement Hallway')
-    connect(multiworld, player, names, 'Basement Hallway', 'Cold Storage',
+    connect(multiworld, player, "Armory -> Ceramics Studio", 'Armory', 'Ceramics Studio')
+    connect(multiworld, player, "Clockwork Room -> Roof", 'Clockwork Room', 'Roof')
+    connect(multiworld, player, "Roof -> Sealed Room", 'Roof', 'Sealed Room')
+    connect(multiworld, player, "Basement Stairwell -> Breaker Room", 'Basement Stairwell', 'Breaker Room')
+    connect(multiworld, player, "Basement Stairwell -> Cellar", 'Basement Stairwell', 'Cellar',
+            lambda state: state.has("Cellar Key", player))
+    connect(multiworld, player, "Cellar -> Basement Hallway", 'Cellar', 'Basement Hallway')
+    connect(multiworld, player, "Basement Hallway -> Cold Storage", 'Basement Hallway', 'Cold Storage',
             lambda state: state.has("Cold Storage Key", player))
-    connect(multiworld, player, names, 'Basement Hallway', 'Pipe Room',
+    connect(multiworld, player, "Basement Hallway -> Pipe Room", 'Basement Hallway', 'Pipe Room',
             lambda state: state.has("Pipe Room Key", player))
-    connect(multiworld, player, names, 'Basement Hallway', 'Secret Altar',
+    connect(multiworld, player, "Basement Hallway -> Secret Altar", 'Basement Hallway', 'Secret Altar',
             lambda state: state.has("Spade Key", player) and state.has("Boo", player, multiworld.FinalBooCount[player]))
 
 
@@ -169,14 +184,15 @@ def throwIfAnyLocationIsNotAssignedToARegion(regions: List[Region], regionNames:
                 regionNames - existingRegions))
 
 
-def create_location(player: int, location_data: LocationData, region: Region,
+def create_location(player: int, location_data: LocationData, region: Region,  # check where event items are assigned
                     location_cache: List[Location]) -> Location:
     location = Location(player, location_data.name, location_data.code, region)
     location.access_rule = location_data.rule
 
-    if id is None:
+    if location_data.code is None:
         location.event = True
         location.locked = True
+        location.place_locked_item(LMItem(location_data.locked_item, ItemClassification.progression, None, player))
 
     location_cache.append(location)
 
@@ -196,22 +212,24 @@ def create_region(multiworld: MultiWorld, player: int, locations_per_region: Dic
     return region
 
 
-def connect(multiworld: MultiWorld, player: int, used_names: Dict[str, int], source: str, target: str,
+def connect(multiworld: MultiWorld, player: int, name: str, source: str, target: str,
             rule: Optional[Callable] = None):
     source_region = multiworld.get_region(source, player)
     target_region = multiworld.get_region(target, player)
-
-    if target not in used_names:
-        used_names[target] = 1
-        name = target
-    else:
-        used_names[target] += 1
-        name = target + (' ' * used_names[target])
 
     connection = Entrance(player, name, source_region)
 
     if rule:
         connection.access_rule = rule
+
+    for region_to_type in multiworld.ghost_affected_regions:
+        if region_to_type == target_region.name:
+            if multiworld.ghost_affected_regions[region_to_type] == "Fire":
+                add_rule(connection, lambda state: state.has("Water Element Medal", player), "and")
+            elif multiworld.ghost_affected_regions[region_to_type] == "Water":
+                add_rule(connection, lambda state: state.has("Ice Element Medal", player), "and")
+            elif multiworld.ghost_affected_regions[region_to_type] == "Ice":
+                add_rule(connection, lambda state: state.has("Fire Element Medal", player), "and")
 
     source_region.exits.append(connection)
     connection.connect(target_region)

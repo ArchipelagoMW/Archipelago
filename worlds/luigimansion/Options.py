@@ -96,6 +96,7 @@ class Enemizer(Toggle):
     """
     display_name = "Enemizer"
 
+
 luigimansion_options: Dict[str, Option] = {
     "StartWithBetterVacuum": StartWithBetterVacuum,
     "StartWithBooRadar": StartWithBooRadar,
@@ -111,5 +112,3 @@ luigimansion_options: Dict[str, Option] = {
     "PortraitGhosts": PortraitGhosts,
     "Enemizer": Enemizer,
 }
-
-
