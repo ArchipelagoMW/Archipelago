@@ -1,6 +1,6 @@
+import pathlib
 import typing
 import unittest
-import pathlib
 from argparse import Namespace
 
 import Utils
