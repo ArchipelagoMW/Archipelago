@@ -157,8 +157,6 @@ class WitnessWorld(World):
         if good_items_in_the_game:
             random_good_item = self.multiworld.random.choice(good_items_in_the_game)
 
-            print(random_good_item)
-
             item = self.items_by_name[random_good_item]
 
             if get_option_value(self.multiworld, self.player, "puzzle_randomization") == 1:
