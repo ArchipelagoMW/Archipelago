@@ -3,10 +3,9 @@ import os
 import random
 import threading
 import typing
-from collections import OrderedDict
 
 import Utils
-from BaseClasses import Item, CollectionState, Tutorial, MultiWorld
+from BaseClasses import Item, CollectionState, Tutorial, MultiWorld, LocationProgressType
 from .Dungeons import create_dungeons
 from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect, \
     indirect_connections, indirect_connections_inverted, indirect_connections_not_inverted
@@ -363,9 +362,18 @@ class ALTTPWorld(World):
             raise FillError('Unable to place dungeon prizes')
 
     @classmethod
-    def stage_pre_fill(cls, world):
+    def stage_pre_fill(cls, multiworld: MultiWorld):
         from .Dungeons import fill_dungeons_restrictive
-        fill_dungeons_restrictive(world)
+        fill_dungeons_restrictive(multiworld)
+        # mark excluded dungeons
+        for world in multiworld.get_game_worlds("A Link to the Past"):
+            if multiworld.mode[world.player] == "inverted":
+                excluded_dungeons = multiworld.excluded_dungeons[world.player].inverted_names
+            else:
+                excluded_dungeons = multiworld.excluded_dungeons[world.player].value
+            for dungeon_name in excluded_dungeons:
+                for region in multiworld.get_dungeon(dungeon_name, world.player).regions:
+                    region.progress_type = LocationProgressType.EXCLUDED
 
     @classmethod
     def stage_post_fill(cls, world):

@@ -999,9 +999,6 @@ class Region:
         for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
             return entrance.parent_region.get_connecting_entrance(is_main_entrance)
 
-    def set_progress_type(self) -> None:
-        for loc in [loc for loc in self.locations if not loc.item]:
-            loc.progress_type = self.progress_type
 
     def __repr__(self):
         return self.__str__()
@@ -1120,7 +1117,7 @@ class Location:
     event: bool = False
     locked: bool = False
     show_in_spoiler: bool = True
-    progress_type: LocationProgressType = LocationProgressType.DEFAULT
+    _progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow = staticmethod(lambda item, state: False)
     access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
     item_rule = staticmethod(lambda item: True)
@@ -1131,6 +1128,16 @@ class Location:
         self.name = name
         self.address = address
         self.parent_region = parent
+
+    @property
+    def progress_type(self):
+        if self._progress_type == LocationProgressType.DEFAULT:
+            return getattr(self.parent_region, "progress_type", LocationProgressType.DEFAULT)
+        return self._progress_type
+
+    @progress_type.setter
+    def progress_type(self, value: LocationProgressType) -> None:
+        self._progress_type = value
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
         return (self.always_allow(state, item)
@@ -1146,6 +1153,8 @@ class Location:
     def place_locked_item(self, item: Item):
         if self.item:
             raise Exception(f"Location {self} already filled.")
+        if ItemClassification.progression in item.classification or ItemClassification.useful in item.classification:
+            self.progress_type = LocationProgressType.PRIORITY
         self.item = item
         item.location = self
         self.event = item.advancement

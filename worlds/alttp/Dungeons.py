@@ -9,13 +9,6 @@ from worlds.alttp.Options import smallkey_shuffle
 
 
 def create_dungeons(multiworld: MultiWorld, player: int):
-
-    excluded_dungeons: typing.List[str]
-    if multiworld.mode[player] == "inverted":
-        excluded_dungeons = multiworld.excluded_dungeons[player].inverted_names
-    else:
-        excluded_dungeons = multiworld.excluded_dungeons[player].value
-
     def make_dungeon(name: str, default_boss: typing.Optional[str], dungeon_regions: typing.List[str],
                      big_key: typing.Optional[Item], small_keys: typing.Union[Item, typing.List[Item]],
                      dungeon_items: typing.Union[Item, typing.List[Item]]) -> Dungeon:
@@ -27,13 +20,11 @@ def create_dungeons(multiworld: MultiWorld, player: int):
             dungeon_items,
             player
         )
-        dungeon.progress_type = LocationProgressType.EXCLUDED if name in excluded_dungeons else LocationProgressType.DEFAULT
         for item in dungeon.all_items:
             item.dungeon = dungeon
         dungeon.boss = BossFactory(default_boss, player) if default_boss else None
         for region in dungeon.regions:
             region.dungeon = dungeon
-            region.progress_type = dungeon.progress_type
         dungeon.multiworld = multiworld
         return dungeon
 
@@ -138,11 +129,11 @@ def get_unfilled_dungeon_locations(multiworld) -> typing.List:
     return [location for location in multiworld.get_locations() if not location.item and location.parent_region.dungeon]
 
 
-def fill_dungeons_restrictive(world):
+def fill_dungeons_restrictive(multiworld: MultiWorld):
     """Places dungeon-native items into their dungeons, places nothing if everything is shuffled outside."""
     localized: set = set()
     dungeon_specific: set = set()
-    for subworld in world.get_game_worlds("A Link to the Past"):
+    for subworld in multiworld.get_game_worlds("A Link to the Past"):
         player = subworld.player
         localized |= {(player, item_name) for item_name in
                       subworld.dungeon_local_item_names}
@@ -150,11 +141,11 @@ def fill_dungeons_restrictive(world):
                              subworld.dungeon_specific_item_names}
 
     if localized:
-        in_dungeon_items = [item for item in get_dungeon_item_pool(world) if (item.player, item.name) in localized]
+        in_dungeon_items = [item for item in get_dungeon_item_pool(multiworld) if (item.player, item.name) in localized]
         if in_dungeon_items:
-            restricted_players = {player for player, restricted in world.restrict_dungeon_item_on_boss.items() if
+            restricted_players = {player for player, restricted in multiworld.restrict_dungeon_item_on_boss.items() if
                                   restricted}
-            locations = [location for location in get_unfilled_dungeon_locations(world)
+            locations = [location for location in get_unfilled_dungeon_locations(multiworld)
                          # filter boss
                          if not (location.player in restricted_players and location.name in lookup_boss_drops)]
             if dungeon_specific:
@@ -164,8 +155,8 @@ def fill_dungeons_restrictive(world):
                     location.item_rule = lambda item, dungeon=dungeon, orig_rule=orig_rule: \
                         (not (item.player, item.name) in dungeon_specific or item.dungeon is dungeon) and orig_rule(item)
 
-            world.random.shuffle(locations)
-            all_state_base = world.get_all_state(use_cache=True)
+            multiworld.random.shuffle(locations)
+            all_state_base = multiworld.get_all_state(use_cache=True)
             # Dungeon-locked items have to be placed first, to not run out of spaces for dungeon-locked items
             # subsort in the order Big Key, Small Key, Other before placing dungeon items
 
@@ -175,7 +166,7 @@ def fill_dungeons_restrictive(world):
                                  (5 if (item.player, item.name) in dungeon_specific else 0))
             for item in in_dungeon_items:
                 all_state_base.remove(item)
-            fill_restrictive(world, all_state_base, locations, in_dungeon_items, True, True)
+            fill_restrictive(multiworld, all_state_base, locations, in_dungeon_items, True, True)
 
 
 dungeon_music_addresses = {'Eastern Palace - Prize': [0x1559A],

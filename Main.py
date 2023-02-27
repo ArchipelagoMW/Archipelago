@@ -239,10 +239,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     AutoWorld.call_all(world, "pre_fill")
 
-    for reg in world.get_regions():
-        if getattr(reg, "progress_type", None):
-            reg.set_progress_type()
-
     logger.info(f'Filling the world with {len(world.itempool)} items.')
 
     if world.algorithm == 'flood':
