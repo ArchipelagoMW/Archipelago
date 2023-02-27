@@ -1,5 +1,5 @@
 from argparse import Namespace
-from typing import Type, List, Tuple
+from typing import Type, Tuple
 
 from BaseClasses import MultiWorld
 from worlds.AutoWorld import call_all, World
