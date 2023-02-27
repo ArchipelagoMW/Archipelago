@@ -17,10 +17,10 @@ class PowerSeals(DefaultOnToggle):
 
 
 class Goal(Choice):
-    """Requirement to finish the game. Shop Chest will force seals to be shuffled."""
+    """Requirement to finish the game. Power Seal Hunt will force power seal locations to be shuffled."""
     display_name = "Goal"
     option_open_music_box = 0
-    option_open_shop_chest = 1
+    option_power_seal_hunt = 1
 
 
 class MusicBox(DefaultOnToggle):

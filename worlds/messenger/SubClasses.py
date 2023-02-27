@@ -1,6 +1,6 @@
 from typing import Set, TYPE_CHECKING
 
-from BaseClasses import Region, RegionType, Location, Item, ItemClassification, Entrance
+from BaseClasses import Region, Location, Item, ItemClassification, Entrance
 from .Constants import SEALS, NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
 from .Options import Goal
 from .Regions import REGIONS
@@ -13,8 +13,7 @@ else:
 
 class MessengerRegion(Region):
     def __init__(self, name: str, world: MessengerWorld):
-        super().__init__(name, RegionType.Generic, name, world.player, world.multiworld)
-        self.rules = world.rules
+        super().__init__(name, world.player, world.multiworld)
         self.locations_lookup = self.multiworld.worlds[self.player].location_name_to_id
         self.add_locations()
         world.multiworld.regions.append(self)
@@ -22,7 +21,7 @@ class MessengerRegion(Region):
     def add_locations(self) -> None:
         for loc in REGIONS[self.name]:
             self.locations.append(MessengerLocation(loc, self))
-        if self.name == "The Shop" and self.multiworld.goal[self.player] > Goal.option_phantom:
+        if self.name == "The Shop" and self.multiworld.goal[self.player] > Goal.option_open_music_box:
             self.locations.append(MessengerLocation("Shop Chest", self))
         if self.multiworld.shuffle_seals[self.player]:
             # putting some dumb special case for searing crags and ToT so i can split them into 2 regions
@@ -34,8 +33,6 @@ class MessengerRegion(Region):
     def add_exits(self, exits: Set[str]) -> None:
         for exit in exits:
             ret = Entrance(self.player, f"{self.name} -> {exit}", self)
-            if exit in self.rules.region_rules:
-                ret.access_rule = self.rules.region_rules[exit]
             self.exits.append(ret)
             ret.connect(self.multiworld.get_region(exit, self.player))
 
@@ -46,8 +43,6 @@ class MessengerLocation(Location):
     def __init__(self, name: str, parent: MessengerRegion):
         loc_id = parent.locations_lookup[name] if name in parent.locations_lookup else None
         super().__init__(parent.player, name, loc_id, parent)
-        if name in parent.rules.location_rules:
-            self.access_rule = parent.rules.location_rules[name]
         if loc_id is None:
             self.place_locked_item(parent.multiworld.worlds[self.player].create_item(name))
 

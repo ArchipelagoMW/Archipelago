@@ -6,7 +6,7 @@ from .. import PowerSeals
 class NoLogicTest(MessengerTestBase):
     options = {
         "enable_logic": "false",
-        "goal": "shop_chest",
+        "goal": "power_seal_hunt",
     }
 
     def testChestAccess(self):
@@ -18,7 +18,7 @@ class NoLogicTest(MessengerTestBase):
 class AllSealsRequired(MessengerTestBase):
     options = {
         "shuffle_seals": "false",
-        "goal": "shop_chest",
+        "goal": "power_seal_hunt",
     }
 
     def testSealsShuffled(self):
@@ -49,7 +49,7 @@ class AllSealsRequired(MessengerTestBase):
 
 class HalfSealsRequired(MessengerTestBase):
     options = {
-        "goal": "shop_chest",
+        "goal": "power_seal_hunt",
         "percent_seals_required": 50,
     }
 
@@ -66,7 +66,7 @@ class HalfSealsRequired(MessengerTestBase):
 
 class ThirtyThirtySeals(MessengerTestBase):
     options = {
-        "goal": "shop_chest",
+        "goal": "power_seal_hunt",
         "total_seals": 30,
         "percent_seals_required": 34,
     }
