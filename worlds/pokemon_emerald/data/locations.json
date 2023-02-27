@@ -751,16 +751,16 @@
     "label": "Route 109 - Item 2",
     "tags": ["OverworldItem"]
   },
-  "ITEM_ROUTE_109_RARE_CANDY": {
-    "label": "Route 109 - Item 3",
-    "tags": ["OverworldItem"]
-  },
   "ITEM_ROUTE_110_DIRE_HIT": {
     "label": "Route 110 - Item 1",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_110_ELIXIR": {
     "label": "Route 110 - Item 2",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_110_RARE_CANDY": {
+    "label": "Route 110 - Item 3",
     "tags": ["OverworldItem"]
   },
   "ITEM_ROUTE_111_ELIXIR": {

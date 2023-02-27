@@ -298,7 +298,7 @@
   "REGION_ROUTE110/SOUTH_WATER": {
     "parent_map": "MAP_ROUTE110",
     "locations": [
-      "ITEM_ROUTE_109_RARE_CANDY"
+      "ITEM_ROUTE_110_RARE_CANDY"
     ],
     "events": [],
     "exits": [
