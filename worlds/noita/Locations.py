@@ -16,7 +16,6 @@ class LocationData(NamedTuple):
     flag: int = 0
 
 
-# todo: something's wrong here, when it generates it doesn't generate anything on the main path for some reason??
 class Orbs(IntEnum):
     main_path = 1
     main_world = 2
