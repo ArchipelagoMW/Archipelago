@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import Dungeon, MultiWorld, Item
+from BaseClasses import Dungeon, MultiWorld, Item, LocationProgressType
 from worlds.alttp.Bosses import BossFactory
 from Fill import fill_restrictive
 from worlds.alttp.Items import ItemFactory
@@ -19,18 +19,22 @@ def create_dungeons(multiworld: MultiWorld, player: int):
     def make_dungeon(name: str, default_boss: typing.Optional[str], dungeon_regions: typing.List[str],
                      big_key: typing.Optional[Item], small_keys: typing.Union[Item, typing.List[Item]],
                      dungeon_items: typing.Union[Item, typing.List[Item]]) -> Dungeon:
-        dungeon = Dungeon(name, dungeon_regions, big_key,
-                          [] if multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal else small_keys,
-                          dungeon_items, player)
-        dungeon.excluded = name in excluded_dungeons
+        dungeon = Dungeon(
+            name,
+            [multiworld.get_region(dungeon_region, player) for dungeon_region in dungeon_regions],
+            big_key,
+            [] if multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal else small_keys,
+            dungeon_items,
+            player
+        )
+        dungeon.progress_type = LocationProgressType.EXCLUDED if name in excluded_dungeons else LocationProgressType.DEFAULT
         for item in dungeon.all_items:
             item.dungeon = dungeon
         dungeon.boss = BossFactory(default_boss, player) if default_boss else None
-        for region_name in dungeon.regions:
-            region = multiworld.get_region(region_name, player)
+        for region in dungeon.regions:
             region.dungeon = dungeon
-            region.excluded = dungeon.excluded
-            dungeon.multiworld = multiworld
+            region.progress_type = dungeon.progress_type
+        dungeon.multiworld = multiworld
         return dungeon
 
     ES = make_dungeon('Hyrule Castle', None, ['Hyrule Castle', 'Sewers', 'Sewer Drop', 'Sewers (Dark)', 'Sanctuary'],

@@ -959,7 +959,7 @@ class Region:
     locations: List[Location]
     dungeon: Optional[Dungeon] = None
     shop: Optional = None
-    excluded: bool = False
+    progress_type: LocationProgressType
 
     # LttP specific. TODO: move to a LttPRegion
     # will be set after making connections.
@@ -999,9 +999,9 @@ class Region:
         for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
             return entrance.parent_region.get_connecting_entrance(is_main_entrance)
 
-    def exclude_locations(self) -> None:
+    def set_progress_type(self) -> None:
         for loc in [loc for loc in self.locations if not loc.item]:
-            loc.progress_type = LocationProgressType.EXCLUDED
+            loc.progress_type = self.progress_type
 
     def __repr__(self):
         return self.__str__()
@@ -1049,7 +1049,6 @@ class Entrance:
 
 
 class Dungeon(object):
-    excluded: bool = False
     def __init__(self, name: str, regions: List[Region], big_key: Item, small_keys: List[Item],
                  dungeon_items: List[Item], player: int):
         self.name = name
