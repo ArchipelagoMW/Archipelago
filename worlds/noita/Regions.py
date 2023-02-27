@@ -33,7 +33,7 @@ def create_chests(world: MultiWorld, player: int, num_locations: int) -> Region:
         location_id = 110000+i
 
         location = Locations.NoitaLocation(player, location_name, location_id, new_region)
-        location.progress_type = LocationProgressType.EXCLUDED
+        location.progress_type = LocationProgressType.DEFAULT
 
         new_region.locations.append(location)
 
