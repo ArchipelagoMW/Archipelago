@@ -1,14 +1,16 @@
+import hashlib
 import bsdiff4
 import os
 from typing import Dict
 from Patch import APDeltaPatch
+import Utils
 from .Data import get_extracted_data
 from .Pokemon import get_random_species
 
 
 class PokemonEmeraldDeltaPatch(APDeltaPatch):
-    hash = "605b89b67018abcea91e693a4dd25be3" # TODO: Update this (maybe put it in generated_data.json)
     game = "Pokemon Emerald"
+    hash = "a9dec84dfe7f62ab2220bafaef7479da0929d066ece16a6885f6226db19085af"
     patch_file_ending = ".apemerald"
     result_file_ending = ".gba"
 
@@ -56,9 +58,24 @@ def generate_output(multiworld, player, output_directory: str):
 
 
 def get_base_rom_as_bytes() -> bytes:
-    with open(os.path.join(os.path.dirname(__file__), f"pokeemerald-vanilla.gba"), "rb") as infile:
+    with open(get_base_rom_path(), "rb") as infile:
         base_rom_bytes = bytes(infile.read())
+
+        local_hash = hashlib.sha256()
+        local_hash.update(base_rom_bytes)
+
+        if (not local_hash.hexdigest() == PokemonEmeraldDeltaPatch.hash):
+            raise AssertionError("Base ROM does not match expected hash. Please get Pokemon Emerald Version (USA, Europe) and dump it.")
+
     return base_rom_bytes
+    
+
+def get_base_rom_path() -> str:
+    options = Utils.get_options()
+    file_name = options["pokemon_emerald_options"]["rom_file"]
+    if not os.path.exists(file_name):
+        file_name = Utils.local_path(file_name)
+    return file_name
 
 
 def _set_bytes_little_endian(byte_array, address, size, value):

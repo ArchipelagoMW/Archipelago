@@ -140,6 +140,9 @@ pokemon_rb_options:
   # Alternatively, a path to a program to open the .gb file with
   rom_start: true
 
+pokemon_emerald_options:
+  rom_file: "Pokemon - Emerald Version (USA, Europe).gba"
+
 wargroove_options:
   # Locate the Wargroove root directory on your system.
   # This is used by the Wargroove client, so it knows where to send communication files to
