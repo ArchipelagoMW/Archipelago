@@ -999,6 +999,10 @@ class Region:
         for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
             return entrance.parent_region.get_connecting_entrance(is_main_entrance)
 
+    def exclude_locations(self) -> None:
+        for loc in [loc for loc in self.locations if not loc.item]:
+            loc.progress_type = LocationProgressType.EXCLUDED
+
     def __repr__(self):
         return self.__str__()
 
@@ -1045,6 +1049,7 @@ class Entrance:
 
 
 class Dungeon(object):
+    excluded: bool = False
     def __init__(self, name: str, regions: List[Region], big_key: Item, small_keys: List[Item],
                  dungeon_items: List[Item], player: int):
         self.name = name
