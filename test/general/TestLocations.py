@@ -26,7 +26,7 @@ class TestBase(unittest.TestCase):
 
     def testLocationCreationSteps(self):
         """Tests that Regions and Locations aren't created after `create_items`."""
-        gen_steps = ["generate_early", "create_regions", "create_items"]
+        gen_steps = ("generate_early", "create_regions", "create_items")
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game_name=game_name):
                 multiworld = setup_solo_multiworld(world_type, gen_steps)
