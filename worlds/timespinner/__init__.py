@@ -1,10 +1,10 @@
 from typing import Dict, List, Set, Tuple, TextIO
-from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
+from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from .Items import get_item_names_per_category, item_table, starter_melee_weapons, starter_spells, filler_items
-from .Locations import get_locations, EventId
+from .Locations import get_location_datas, EventId
 from .Options import is_option_enabled, get_option_value, timespinner_options
 from .PreCalculatedWeights import PreCalculatedWeights
-from .Regions import create_regions
+from .Regions import create_regions_and_locations
 from worlds.AutoWorld import World, WebWorld
 
 class TimespinnerWebWorld(WebWorld):
@@ -44,21 +44,16 @@ class TimespinnerWorld(World):
     required_client_version = (0, 3, 7)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = {location.name: location.code for location in get_locations(None, None, None)}
+    location_name_to_id = {location.name: location.code for location in get_location_datas(None, None, None)}
     item_name_groups = get_item_names_per_category()
 
-    locked_locations: List[str]
-    location_cache: List[Location]
     precalculated_weights: PreCalculatedWeights
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
-
-        self.locked_locations = []
-        self.location_cache = []
         self.precalculated_weights = PreCalculatedWeights(world, player)
 
-    def generate_early(self):
+    def generate_early(self) -> None:
         # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
         if self.multiworld.start_inventory[self.player].value.pop('Meyef', 0) > 0:
             self.multiworld.StartWithMeyef[self.player].value = self.multiworld.StartWithMeyef[self.player].option_true
@@ -67,25 +62,21 @@ class TimespinnerWorld(World):
         if self.multiworld.start_inventory[self.player].value.pop('Jewelry Box', 0) > 0:
             self.multiworld.StartWithJewelryBox[self.player].value = self.multiworld.StartWithJewelryBox[self.player].option_true
 
-    def create_regions(self):
-        locations = get_locations(self.multiworld, self.player, self.precalculated_weights)
-        create_regions(self.multiworld, self.player, locations, self.location_cache, self.precalculated_weights)
+    def create_regions(self) -> None: 
+        create_regions_and_locations(self.multiworld, self.player, self.precalculated_weights)
 
-    def create_item(self, name: str) -> Item:
-        return create_item_with_correct_settings(self.multiworld, self.player, name)
+    def create_items(self) -> None: 
+        create_and_assign_event_items(self.multiworld, self.player)
 
-    def get_filler_item_name(self) -> str:
-        trap_chance: int = get_option_value(self.multiworld, self.player, "TrapChance")
-        enabled_traps: List[str] = get_option_value(self.multiworld, self.player, "Traps")
+        excluded_items: Set[str] = get_excluded_items(self, self.multiworld, self.player)
 
-        if self.multiworld.random.random() < (trap_chance / 100) and enabled_traps:
-            return self.multiworld.random.choice(enabled_traps)
-        else:
-            return self.multiworld.random.choice(filler_items) 
+        assign_starter_items(self.multiworld, self.player, excluded_items)
 
-    def set_rules(self):
-        setup_events(self.player, self.locked_locations, self.location_cache)
+        pool: List[Item] = get_item_pool(self, excluded_items)
 
+        self.multiworld.itempool += pool
+
+    def set_rules(self) -> None:
         final_boss: str
         if is_option_enabled(self.multiworld, self.player, "DadPercent"):
             final_boss = "Killed Emperor"
@@ -93,17 +84,6 @@ class TimespinnerWorld(World):
             final_boss = "Killed Nightmare"
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has(final_boss, self.player) 
-
-    def generate_basic(self):
-        excluded_items: Set[str] = get_excluded_items(self, self.multiworld, self.player)
-
-        assign_starter_items(self.multiworld, self.player, excluded_items, self.locked_locations)
-
-        pool = get_item_pool(self.multiworld, self.player, excluded_items)
-
-        fill_item_pool_with_dummy_items(self, self.multiworld, self.player, self.locked_locations, self.location_cache, pool)
-
-        self.multiworld.itempool += pool
 
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}
@@ -117,7 +97,7 @@ class TimespinnerWorld(World):
         slot_data["StinkyMaw"] = True
         slot_data["ProgressiveVerticalMovement"] = False
         slot_data["ProgressiveKeycards"] = False
-        slot_data["PersonalItems"] = get_personal_items(self.player, self.location_cache)
+        slot_data["PersonalItems"] = get_personal_items(self.multiworld, self.player)
         slot_data["PyramidKeysGate"] = self.precalculated_weights.pyramid_keys_unlock
         slot_data["PresentGate"] = self.precalculated_weights.present_key_unlock
         slot_data["PastGate"] = self.precalculated_weights.past_key_unlock
@@ -135,7 +115,7 @@ class TimespinnerWorld(World):
 
         return slot_data
 
-    def write_spoiler_header(self, spoiler_handle: TextIO):
+    def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         if is_option_enabled(self.multiworld, self.player, "UnchainedKeys"):
             spoiler_handle.write(f'Modern Warp Beacon unlock:       {self.precalculated_weights.present_key_unlock}\n')
             spoiler_handle.write(f'Timeworn Warp Beacon unlock:     {self.precalculated_weights.past_key_unlock}\n')
@@ -177,6 +157,18 @@ class TimespinnerWorld(World):
 
             spoiler_handle.write(f'Flooded Areas:                   {flooded_areas_string}\n')
 
+    def create_item(self, name: str) -> Item:
+        return create_item_with_correct_settings(self.multiworld, self.player, name)
+
+    def get_filler_item_name(self) -> str:
+        trap_chance: int = get_option_value(self.multiworld, self.player, "TrapChance")
+        enabled_traps: List[str] = get_option_value(self.multiworld, self.player, "Traps")
+
+        if self.multiworld.random.random() < (trap_chance / 100) and enabled_traps:
+            return self.multiworld.random.choice(enabled_traps)
+        else:
+            return self.multiworld.random.choice(filler_items) 
+
 
 def get_excluded_items(self: TimespinnerWorld, world: MultiWorld, player: int) -> Set[str]:
     excluded_items: Set[str] = set()
@@ -205,8 +197,8 @@ def get_excluded_items(self: TimespinnerWorld, world: MultiWorld, player: int) -
     return excluded_items
 
 
-def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]):
-    non_local_items = world.non_local_items[player].value
+def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str]) -> None:
+    non_local_items: Set[str] = world.non_local_items[player].value
 
     local_starter_melee_weapons = tuple(item for item in starter_melee_weapons if item not in non_local_items)
     if not local_starter_melee_weapons:
@@ -222,12 +214,12 @@ def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str
         else:
             local_starter_spells = ('Lightwall',)
 
-    assign_starter_item(world, player, excluded_items, locked_locations, 'Tutorial: Yo Momma 1', local_starter_melee_weapons)
-    assign_starter_item(world, player, excluded_items, locked_locations, 'Tutorial: Yo Momma 2', local_starter_spells)
+    assign_starter_item(world, player, excluded_items, 'Tutorial: Yo Momma 1', local_starter_melee_weapons)
+    assign_starter_item(world, player, excluded_items, 'Tutorial: Yo Momma 2', local_starter_spells)
 
 
-def assign_starter_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str],
-        location: str, item_list: Tuple[str, ...]):
+def assign_starter_item(world: MultiWorld, player: int, excluded_items: Set[str], location: str, 
+        item_list: Tuple[str, ...]) -> None:
 
     item_name = world.random.choice(item_list)
 
@@ -237,26 +229,21 @@ def assign_starter_item(world: MultiWorld, player: int, excluded_items: Set[str]
 
     world.get_location(location, player).place_locked_item(item)
 
-    locked_locations.append(location)
 
-
-def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> List[Item]:
+def get_item_pool(self: TimespinnerWorld, excluded_items: Set[str]) -> List[Item]:
     pool: List[Item] = []
 
     for name, data in item_table.items():
         if name not in excluded_items:
             for _ in range(data.count):
-                item = create_item_with_correct_settings(world, player, name)
+                item = create_item_with_correct_settings(self.multiworld, self.player, name)
                 pool.append(item)
 
-    return pool
-
-
-def fill_item_pool_with_dummy_items(self: TimespinnerWorld, world: MultiWorld, player: int, locked_locations: List[str],
-                                    location_cache: List[Location], pool: List[Item]):
-    for _ in range(len(location_cache) - len(locked_locations) - len(pool)):
-        item = create_item_with_correct_settings(world, player, self.get_filler_item_name())
+    for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
+        item = create_item_with_correct_settings(self.multiworld, self.player, self.get_filler_item_name())
         pool.append(item)
+
+    return pool
 
 
 def create_item_with_correct_settings(world: MultiWorld, player: int, name: str) -> Item:
@@ -289,20 +276,17 @@ def create_item_with_correct_settings(world: MultiWorld, player: int, name: str)
     return item
 
 
-def setup_events(player: int, locked_locations: List[str], location_cache: List[Location]):
-    for location in location_cache:
+def create_and_assign_event_items(world: MultiWorld, player: int) -> None:
+    for location in world.get_locations(player):
         if location.address == EventId:
             item = Item(location.name, ItemClassification.progression, EventId, player)
-
-            locked_locations.append(location.name)
-
             location.place_locked_item(item)
 
 
-def get_personal_items(player: int, locations: List[Location]) -> Dict[int, int]:
+def get_personal_items(world: MultiWorld, player: int) -> Dict[int, int]:
     personal_items: Dict[int, int] = {}
 
-    for location in locations:
+    for location in world.get_locations(player):
         if location.address and location.item and location.item.code and location.item.player == player:
             personal_items[location.address] = location.item.code
 
