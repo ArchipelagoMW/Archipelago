@@ -184,9 +184,13 @@ class GravityBehaviour(Choice):
     option_Progressive = 2
     default = 1
 
-class ElevatorsDoorsSpeed(DefaultOnToggle):
-    """Accelerate doors and elevators transitions."""
-    display_name = "Elevators doors speed"
+class ElevatorsSpeed(DefaultOnToggle):
+    """Accelerate elevators transitions."""
+    display_name = "Elevators speed"
+
+class DoorsSpeed(DefaultOnToggle):
+    """Accelerate doors transitions."""
+    display_name = "Doors speed"
 
 class SpinJumpRestart(Toggle):
     """Allows Samus to start spinning in mid air after jumping or falling."""
@@ -368,7 +372,8 @@ sm_options: typing.Dict[str, type(Option)] = {
     "nerfed_charge": NerfedCharge,
     "gravity_behaviour": GravityBehaviour,
     #"item_sounds": "on",
-    "elevators_doors_speed": ElevatorsDoorsSpeed,
+    "elevators_speed": ElevatorsSpeed,
+    "fast_doors": DoorsSpeed,
     "spin_jump_restart": SpinJumpRestart,
     "rando_speed": SpeedKeep,
     "infinite_space_jump": InfiniteSpaceJump,

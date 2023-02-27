@@ -376,7 +376,7 @@ def loadRandoPreset(world, player, args):
     if args.area != "off":
         args.areaLayoutBase = not world.area_layout[player].value
     args.escapeRando = world.escape_rando[player].value
-    args.noRemoveEscapeEnemies = world.remove_escape_enemies[player].value
+    args.noRemoveEscapeEnemies = not world.remove_escape_enemies[player].value
     args.doorsColorsRando = world.doors_colors_rando[player].value
     args.allowGreyDoors = world.allow_grey_doors[player].value
     args.bosses = world.boss_randomization[player].value
