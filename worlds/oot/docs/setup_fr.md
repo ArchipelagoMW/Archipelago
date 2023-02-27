@@ -417,6 +417,6 @@ menu et sélectionnez "Console Lua". Cliquez sur le bouton du dossier ou appuyez
 Accédez à votre dossier d'installation Archipelago et ouvrez `data/lua/OOT/oot_connector.lua`.
 
 Pour connecter le client au multiserveur, mettez simplement `<adresse>:<port>` dans le champ de texte en haut et appuyez sur Entrée (si le
-le serveur utilise un mot de passe, saisissez dans le champ de texte inférieur `/connect <adresse> :<port> [mot de passe]`)
+le serveur utilise un mot de passe, saisissez dans le champ de texte inférieur `/connect <adresse>:<port> [mot de passe]`)
 
 Vous êtes maintenant prêt à commencer votre aventure à Hyrule.

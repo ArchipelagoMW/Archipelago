@@ -2,7 +2,7 @@
 
 ## Logiciel requis
 
--Minecraft Java Edition à partir de
+- Minecraft Java Edition à partir de
    la [page de la boutique Minecraft Java Edition](https://www.minecraft.net/en-us/store/minecraft-java-edition)
 - Archipelago depuis la [page des versions d'Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
      - (sélectionnez `Minecraft Client` lors de l'installation.)
