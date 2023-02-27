@@ -148,10 +148,11 @@ class WitnessWorld(World):
     def pre_fill(self):
         # Put good item on first check if there are any of the designated "good items" in the pool
         good_items_in_the_game = []
+        this_world_itempool = [item for item in self.multiworld.itempool if item.player == self.player]
 
         for symbol in self.items.GOOD_ITEMS:
             item = self.items_by_name[symbol]
-            if item in self.multiworld.itempool: # Only do this if the item is still in item pool (e.g. after plando)
+            if item in this_world_itempool:  # Only do this if the item is still in item pool (e.g. after plando)
                 good_items_in_the_game.append(symbol)
 
         if good_items_in_the_game:
@@ -168,8 +169,9 @@ class WitnessWorld(World):
 
                 first_check.place_locked_item(item)
                 self.multiworld.itempool.remove(item)
+                this_world_itempool.remove(item)
 
-        itempool_difference = len(self.multiworld.get_unfilled_locations(self.player)) - len(self.multiworld.itempool)
+        itempool_difference = len(self.multiworld.get_unfilled_locations(self.player)) - len(this_world_itempool)
 
         # fill rest of item pool with junk if there is room
         if itempool_difference > 0:
@@ -179,21 +181,21 @@ class WitnessWorld(World):
         # remove junk, Functioning Brain, useful items (non-door), useful door items in that order until there is room
         if itempool_difference < 0:
             junk = [
-                item for item in self.multiworld.itempool
+                item for item in this_world_itempool
                 if item.classification in {ItemClassification.filler, ItemClassification.trap}
                 and item.name != "Functioning Brain"
             ]
 
-            f_brain = [item for item in self.multiworld.itempool if item.name == "Functioning Brain"]
+            f_brain = [item for item in this_world_itempool if item.name == "Functioning Brain"]
 
             usefuls = [
-                item for item in self.multiworld.itempool
+                item for item in this_world_itempool
                 if item.classification == ItemClassification.useful
                 and item.name not in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT
             ]
 
             removable_doors = [
-                item for item in self.multiworld.itempool
+                item for item in this_world_itempool
                 if item.classification == ItemClassification.useful
                 and item.name in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT
             ]
