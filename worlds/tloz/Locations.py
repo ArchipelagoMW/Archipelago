@@ -248,7 +248,7 @@ floor_location_game_offsets_late = {
     "Level 9 Rupee Drop (Wizzrobes West Island)": 0x40,
     "Level 9 Rupee Drop (Red Lanmolas)": 0x12,
     "Level 9 Rupee Drop (Keese Southwest)": 0x62,
-    "Level 9 Rupee Drop (Keese Central Island))": 0x34,
+    "Level 9 Rupee Drop (Keese Central Island)": 0x34,
     "Level 9 Rupee Drop (Wizzrobes Central)": 0x44,
     "Level 9 Rupee Drop (Wizzrobes North Island)": 0x15,
     "Level 9 Rupee Drop (Gels East)": 0x26
