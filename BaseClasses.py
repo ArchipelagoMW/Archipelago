@@ -6,11 +6,10 @@ import json
 import logging
 import random
 import secrets
-import sys
 import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
 from collections import OrderedDict, Counter, deque
-from enum import unique, IntEnum, IntFlag
+from enum import IntEnum, IntFlag
 from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable, NamedTuple
 
 import NetUtils
@@ -587,7 +586,7 @@ class MultiWorld():
 
         def location_relevant(location: Location):
             """Determine if this location is relevant to sweep."""
-            if getattr(sys, "gettrace", None) \
+            if __debug__ \
                     and location.progress_type != LocationProgressType.EXCLUDED \
                     and (location.player in players["full"] or location.event
                          or (location.item and location.item.advancement)):
