@@ -175,7 +175,7 @@ class WitnessWorld(World):
                 this_world_itempool.remove(item)
 
         unfilled_count = len(self.multiworld.get_unfilled_locations(self.player))
-        itempool_difference = unfilled_count - len(this_world_itempool) - len(remove_these)
+        itempool_difference = unfilled_count - len(this_world_itempool)
 
         # fill rest of item pool with junk if there is room
         if itempool_difference > 0:
@@ -214,22 +214,22 @@ class WitnessWorld(World):
 
             for i in range(itempool_difference, 0):
                 if junk:
-                    remove_these += junk.pop()
+                    remove_these.append(junk.pop())
                     removed_junk = True
                 elif f_brain:
-                    remove_these += f_brain.pop()
+                    remove_these.append(f_brain.pop())
                 elif usefuls:
-                    remove_these += usefuls.pop()
+                    remove_these.append(usefuls.pop())
                     removed_usefuls = True
                 elif removable_doors:
-                    remove_these += removable_doors.pop()
+                    remove_these.append(removable_doors.pop())
                     removed_doors = True
 
             warn = make_warning_string(
                 removed_junk, removed_usefuls, removed_doors, not junk, not usefuls, not removable_doors
             )
 
-            self.multiworld.itempool = (Counter(self.multiworld.itempool) - Counter(remove_these)).elements()
+            self.multiworld.itempool = list((Counter(self.multiworld.itempool) - Counter(remove_these)).elements())
             # O(n) way to remove multiple items from a list
 
             warning(f"This Witness world has too few locations to place all its items."
