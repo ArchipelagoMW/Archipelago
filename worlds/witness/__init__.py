@@ -16,6 +16,7 @@ from .regions import WitnessRegions
 from .Options import is_option_enabled, the_witness_options, get_option_value
 from .utils import best_junk_to_add_based_on_weights, get_audio_logs, make_warning_string
 from logging import warning
+from collections import Counter
 
 
 class WitnessWebWorld(WebWorld):
@@ -146,6 +147,8 @@ class WitnessWorld(World):
         self.multiworld.itempool += pool
 
     def pre_fill(self):
+        remove_these = []  # Items to be removed from the MW itempool at the end
+
         # Put good item on first check if there are any of the designated "good items" in the pool
         good_items_in_the_game = []
         this_world_itempool = [item for item in self.multiworld.itempool if item.player == self.player]
@@ -168,10 +171,11 @@ class WitnessWorld(World):
                 )
 
                 first_check.place_locked_item(item)
-                self.multiworld.itempool.remove(item)
+                remove_these.append(item)
                 this_world_itempool.remove(item)
 
-        itempool_difference = len(self.multiworld.get_unfilled_locations(self.player)) - len(this_world_itempool)
+        unfilled_count = len(self.multiworld.get_unfilled_locations(self.player))
+        itempool_difference = unfilled_count - len(this_world_itempool) - len(remove_these)
 
         # fill rest of item pool with junk if there is room
         if itempool_difference > 0:
@@ -210,20 +214,22 @@ class WitnessWorld(World):
 
             for i in range(itempool_difference, 0):
                 if junk:
-                    self.multiworld.itempool.remove(junk.pop())
+                    remove_these += junk.pop()
                     removed_junk = True
                 elif f_brain:
-                    self.multiworld.itempool.remove(f_brain.pop())
+                    remove_these += f_brain.pop()
                 elif usefuls:
-                    self.multiworld.itempool.remove(usefuls.pop())
+                    remove_these += usefuls.pop()
                     removed_usefuls = True
                 elif removable_doors:
-                    self.multiworld.itempool.remove(removable_doors.pop())
+                    remove_these += removable_doors.pop()
                     removed_doors = True
 
             warn = make_warning_string(
                 removed_junk, removed_usefuls, removed_doors, not junk, not usefuls, not removable_doors
             )
+
+            self.multiworld.itempool = (Counter(self.multiworld.itempool) - Counter(remove_these)).elements()
 
             warning(f"This Witness world has too few locations to place all its items."
                     f" In order to make space, {warn} had to be removed.")
