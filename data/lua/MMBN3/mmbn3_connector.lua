@@ -35,6 +35,9 @@ local previousMessageBit = 0x00
 
 local key_item_start_address = 0x20019C0
 
+-- The Canary Byte is a flag byte that is intentionally left unused. If this byte is FF, then we know the flag
+-- data cannot be trusted, so we don't send checks.
+local canary_byte = 0x20001A9
 
 local charDict = {
     [' ']=0x00,['0']=0x01,['1']=0x02,['2']=0x03,['3']=0x04,['4']=0x05,['5']=0x06,['6']=0x07,['7']=0x08,['8']=0x09,['9']=0x0A,
@@ -498,6 +501,7 @@ local check_all_locations = function()
     local location_checks = {}
     -- Title Screen should not check items
     if itemState == ITEMSTATE_NONINITIALIZED or IsInTransition() then return location_checks end
+    if memory.read_u8(canary_byte) == 0xFF then return location_checks end
     for name,checked in pairs(acdc_bmd_checks()) do location_checks[name] = checked end
     for name,checked in pairs(sci_bmd_checks()) do location_checks[name] = checked end
     for name,checked in pairs(yoka_bmd_checks()) do location_checks[name] = checked end
@@ -721,7 +725,6 @@ local addChip = function(chip_id, chip_code, amount)
 end
 
 local addProgram = function(program_id, program_color, amount)
-    print("Attempting to send program")
     programStartAddress = 0x02001A80
     programOffset = 0x04 * program_id
     program_code_index = getProgramColorIndex(program_id, program_color)
@@ -825,14 +828,13 @@ local changeMaxHealth = function(val)
 end
 
 local SendItem = function(item)
-    print(item["type"])
-
     if item["type"] == "undernet" then
         undernet_id = Check_Progressive_Undernet_ID()
         if undernet_id > 8 then
             -- Generate Extra BugFrags
             changeFrags(20)
             gui.addmessage("Receiving extra Undernet Rank from "..item["sender"]..", +20 BugFrags")
+            print("Receiving extra Undernet Rank from "..item["sender"]..", +20 BugFrags")
         else
             itemAddress = key_item_start_address + Next_Progressive_Undernet_ID(undernet_id)
 
@@ -840,10 +842,12 @@ local SendItem = function(item)
             itemCount = itemCount + item["count"]
             memory.write_u8(itemAddress, itemCount)
             gui.addmessage("Received Undernet Rank from player "..item["sender"])
+            print("Received Undernet Rank from player "..item["sender"])
         end
     elseif item["type"] == "chip" then
         addChip(item["itemID"], item["subItemID"], item["count"])
         gui.addmessage("Received Chip "..item["itemName"].." from player "..item["sender"])
+        print("Received Chip "..item["itemName"].." from player "..item["sender"])
     elseif item["type"] == "key" then
         itemAddress = key_item_start_address + item["itemID"]
         itemCount = memory.read_u8(itemAddress)
@@ -864,29 +868,24 @@ local SendItem = function(item)
             changeRegMemory(3)
         end
         gui.addmessage("Received Key Item "..item["itemName"].." from player "..item["sender"])
+        print("Received Key Item "..item["itemName"].." from player "..item["sender"])
     elseif item["type"] == "subchip" then
         addSubChip(item["itemID"], item["count"])
         gui.addmessage("Received SubChip "..item["itemName"].." from player "..item["sender"])
+        print("Received SubChip "..item["itemName"].." from player "..item["sender"])
     elseif item["type"] == "zenny" then
         changeZenny(item["count"])
         gui.addmessage("Received "..item["count"].."z from "..item["sender"])
+        print("Received "..item["count"].."z from "..item["sender"])
     elseif item["type"] == "program" then
         addProgram(item["itemID"], item["subItemID"], item["count"])
         gui.addmessage("Received Program "..item["itemName"].." from player "..item["sender"])
+        print("Received Program "..item["itemName"].." from player "..item["sender"])
     elseif item["type"] == "bugfrag" then
         changeFrags(item["count"])
         gui.addmessage("Received "..item["count"].." BugFrag(s) from "..item["sender"])
+        print("Received "..item["count"].." BugFrag(s) from "..item["sender"])
     end
-
-    --[[ Temporary removal of the original item system
-    message = GetMessage(item)
-    -- Store previous
-    backup_bytes = memory.read_bytes_as_array(0x203fe10, #message)
-    -- Write the item message to RAM
-    memory.write_bytes_as_array(0x203fe10, message)
-    -- Signal that the item is ready to be read
-    memory.write_u32_le(0x2000224,0x00000001)
-    --]]
 end
 
 local RestoreItemRam = function()
