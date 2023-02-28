@@ -1,4 +1,6 @@
 import os
+import sys
+
 from .Items import UndertaleItem, item_table, required_armor, required_weapons, non_key_items, key_items, \
     junk_weights_all, plot_items, junk_weights_neutral, junk_weights_pacifist, junk_weights_genocide
 from .Locations import UndertaleAdvancement, advancement_table, exclusion_table
@@ -10,8 +12,9 @@ from .Options import undertale_options
 from worlds.AutoWorld import World, WebWorld
 
 
-def data_path(*args):
-    return os.path.join(os.path.dirname(__file__), "data", *args)
+def data_path(file_name: str):
+    import pkgutil
+    return pkgutil.get_data(__name__, "data/" + file_name)
 
 
 class UndertaleWeb(WebWorld):
