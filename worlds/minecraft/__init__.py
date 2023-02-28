@@ -47,7 +47,16 @@ class MinecraftWebWorld(WebWorld):
         ["Albinum"]
     )
 
-    tutorials = [setup, setup_es, setup_sv]
+    setup_fr = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Français",
+        "minecraft_fr.md",
+        "minecraft/fr",
+        ["TheLynk"]
+    )
+
+    tutorials = [setup, setup_es, setup_sv, setup_fr]
 
 
 class MinecraftWorld(World):

@@ -1,12 +1,18 @@
-from enum import Enum
+from enum import IntEnum
 from typing import TypedDict
 from Options import DefaultOnToggle, Range, Choice
 
 
-class LocationBalancingMode(Enum):
+class LocationBalancingMode(IntEnum):
     disabled = 0
     compromise = 1
     full = 2
+
+
+class DeathLinkMode(IntEnum):
+    disabled = 0
+    death_only = 1
+    death_and_overcook = 2
 
 
 class OC2OnToggle(DefaultOnToggle):
@@ -29,6 +35,23 @@ class LocationBalancing(Choice):
     option_compromise = LocationBalancingMode.compromise.value
     option_full = LocationBalancingMode.full.value
     default = LocationBalancingMode.compromise.value
+
+
+class DeathLink(Choice):
+    """DeathLink is an opt-in feature for Multiworlds where individual death events are propogated to all games with DeathLink enabled.
+
+    - Disabled: Death will behave as it does in the original game.
+
+    - Death Only: A DeathLink broadcast will be sent every time a chef falls into a stage hazard. All local chefs will be killed when any one perishes.
+
+    - Death and Overcook: Same as above, but an additional broadcast will be sent whenever the kitchen catches on fire from burnt food.
+    """
+    auto_display_name = True
+    display_name = "DeathLink"
+    option_disabled = DeathLinkMode.disabled.value
+    option_death_only = DeathLinkMode.death_only.value
+    option_death_and_overcook = DeathLinkMode.death_and_overcook.value
+    default = DeathLinkMode.disabled.value
 
 
 class AlwaysServeOldestOrder(OC2OnToggle):
@@ -130,6 +153,9 @@ class StarThresholdScale(Range):
 overcooked_options = {
     # generator options
     "location_balancing": LocationBalancing,
+
+    # deathlink
+    "deathlink": DeathLink,
 
     # randomization options
     "shuffle_level_order": ShuffleLevelOrder,
