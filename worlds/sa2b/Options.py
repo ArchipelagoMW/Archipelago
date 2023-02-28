@@ -177,11 +177,18 @@ class Omosanity(Toggle):
     display_name = "Omosanity"
 
 
-class KartRaceChecks(Toggle):
+class KartRaceChecks(Choice):
     """
     Determines whether Kart Race Mode grants checks
+    None: No Kart Races checks
+    Mini: Each Kart Race difficulty must be beaten only once
+    Full: Every Character must separately beat each Kart Race difficulty
     """
     display_name = "Kart Race Checks"
+    option_none = 0
+    option_mini = 1
+    option_full = 2
+    default = 0
 
 
 class EmblemPercentageForCannonsCore(Range):

@@ -730,6 +730,10 @@ kart_race_expert_shadow     = "Kart Race - Expert - Shadow"
 kart_race_expert_eggman     = "Kart Race - Expert - Eggman"
 kart_race_expert_rouge      = "Kart Race - Expert - Rouge"
 
+kart_race_beginner = "Kart Race - Beginner"
+kart_race_standard = "Kart Race - Standard"
+kart_race_expert   = "Kart Race - Expert"
+
 # Other Definitions
 green_hill        = "Green Hill"
 green_hill_chao_1 = "Green Hill - Chao Key 1"

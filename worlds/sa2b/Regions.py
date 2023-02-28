@@ -974,36 +974,48 @@ def create_regions(world, player: int, active_locations):
     chao_garden_expert_region = create_region(world, player, active_locations, LocationName.chao_garden_expert_region,
                                               chao_garden_expert_region_locations)
 
-    kart_race_beginner_region_locations = [
-        LocationName.kart_race_beginner_sonic,
-        LocationName.kart_race_beginner_tails,
-        LocationName.kart_race_beginner_knuckles,
-        LocationName.kart_race_beginner_shadow,
-        LocationName.kart_race_beginner_eggman,
-        LocationName.kart_race_beginner_rouge,
-    ]
+    kart_race_beginner_region_locations = []
+    if world.kart_race_checks[player] == 2:
+        kart_race_beginner_region_locations.extend([
+            LocationName.kart_race_beginner_sonic,
+            LocationName.kart_race_beginner_tails,
+            LocationName.kart_race_beginner_knuckles,
+            LocationName.kart_race_beginner_shadow,
+            LocationName.kart_race_beginner_eggman,
+            LocationName.kart_race_beginner_rouge,
+        ])
+    if world.kart_race_checks[player] == 1:
+        kart_race_beginner_region_locations.append(LocationName.kart_race_expert)
     kart_race_beginner_region = create_region(world, player, active_locations, LocationName.kart_race_beginner_region,
                                               kart_race_beginner_region_locations)
 
-    kart_race_standard_region_locations = [
-        LocationName.kart_race_standard_sonic,
-        LocationName.kart_race_standard_tails,
-        LocationName.kart_race_standard_knuckles,
-        LocationName.kart_race_standard_shadow,
-        LocationName.kart_race_standard_eggman,
-        LocationName.kart_race_standard_rouge,
-    ]
+    kart_race_standard_region_locations = []
+    if world.kart_race_checks[player] == 2:
+        kart_race_standard_region_locations.extend([
+            LocationName.kart_race_standard_sonic,
+            LocationName.kart_race_standard_tails,
+            LocationName.kart_race_standard_knuckles,
+            LocationName.kart_race_standard_shadow,
+            LocationName.kart_race_standard_eggman,
+            LocationName.kart_race_standard_rouge,
+        ])
+    if world.kart_race_checks[player] == 1:
+        kart_race_standard_region_locations.append(LocationName.kart_race_expert)
     kart_race_standard_region = create_region(world, player, active_locations, LocationName.kart_race_standard_region,
                                               kart_race_standard_region_locations)
 
-    kart_race_expert_region_locations = [
-        LocationName.kart_race_expert_sonic,
-        LocationName.kart_race_expert_tails,
-        LocationName.kart_race_expert_knuckles,
-        LocationName.kart_race_expert_shadow,
-        LocationName.kart_race_expert_eggman,
-        LocationName.kart_race_expert_rouge,
-    ]
+    kart_race_expert_region_locations = []
+    if world.kart_race_checks[player] == 2:
+        kart_race_expert_region_locations.extend([
+            LocationName.kart_race_expert_sonic,
+            LocationName.kart_race_expert_tails,
+            LocationName.kart_race_expert_knuckles,
+            LocationName.kart_race_expert_shadow,
+            LocationName.kart_race_expert_eggman,
+            LocationName.kart_race_expert_rouge,
+        ])
+    if world.kart_race_checks[player] == 1:
+        kart_race_expert_region_locations.append(LocationName.kart_race_expert)
     kart_race_expert_region = create_region(world, player, active_locations, LocationName.kart_race_expert_region,
                                             kart_race_expert_region_locations)
 

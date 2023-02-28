@@ -848,6 +848,12 @@ kart_race_expert_location_table = {
     LocationName.kart_race_expert_rouge: 0xFF0A11,
 }
 
+kart_race_mini_location_table = {
+    LocationName.kart_race_beginner: 0xFF0A12,
+    LocationName.kart_race_standard: 0xFF0A13,
+    LocationName.kart_race_expert: 0xFF0A14,
+}
+
 green_hill_location_table = {
     LocationName.green_hill: 0xFF001F,
 }
@@ -931,9 +937,12 @@ def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int
     chao_location_table = {}
 
     if world.goal[player] == 3:
-        location_table.update({**kart_race_beginner_location_table})
-        location_table.update({**kart_race_standard_location_table})
-        location_table.update({**kart_race_expert_location_table})
+        if world.kart_race_checks[player] == 2:
+            location_table.update({**kart_race_beginner_location_table})
+            location_table.update({**kart_race_standard_location_table})
+            location_table.update({**kart_race_expert_location_table})
+        elif world.kart_race_checks[player] == 1:
+            location_table.update({**kart_race_mini_location_table})
         location_table.update({**grand_prix_location_table})
     else:
         for i in range(31):
@@ -965,10 +974,12 @@ def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int
         if world.omosanity[player]:
             location_table.update({**omochao_location_table})
 
-        if world.kart_race_checks[player]:
+        if world.kart_race_checks[player] == 2:
             location_table.update({**kart_race_beginner_location_table})
             location_table.update({**kart_race_standard_location_table})
             location_table.update({**kart_race_expert_location_table})
+        elif world.kart_race_checks[player] == 1:
+            location_table.update({**kart_race_mini_location_table})
 
         if world.goal[player].value == 0 or world.goal[player].value == 2:
             location_table.update({**final_boss_location_table})

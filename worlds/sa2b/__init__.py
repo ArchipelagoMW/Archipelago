@@ -167,6 +167,9 @@ class SA2BWorld(World):
                 self.multiworld.exposition_trap_weight[self.player].value = 4
                 self.multiworld.pong_trap_weight[self.player].value = 4
 
+            if self.multiworld.kart_race_checks[self.player].value == 0:
+                self.multiworld.kart_race_checks[self.player].value = 2
+
             self.gate_bosses = {}
         else:
             self.gate_bosses = get_gate_bosses(self.multiworld, self.player)
