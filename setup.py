@@ -81,7 +81,7 @@ def download_SNI():
             sni_dir = None
             with tarfile.open(fileobj=io.BytesIO(download.read()), mode="r:xz") as tf:
                 for member in tf.getmembers():
-                    if member.name.startswith("/") or member.name.startswith("..") or member.name.startswith("./"):
+                    if member.name.startswith("/") or "../" in member.name:
                         raise ValueError(f"Unexpected file '{member.name}' in {source_url}")
                     elif member.isdir() and not sni_dir:
                         sni_dir = member.name
