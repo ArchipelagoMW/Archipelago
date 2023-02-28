@@ -205,11 +205,10 @@ class WitnessPlayerItems:
                 ]
 
             if is_option_enabled(multiworld, player, "shuffle_discarded_panels"):
-                if is_option_enabled(multiworld, player, "shuffle_discarded_panels"):
-                    if get_option_value(multiworld, player, "puzzle_randomization") == 1:
-                        self.GOOD_ITEMS.append("Arrows")
-                    else:
-                        self.GOOD_ITEMS.append("Triangles")
+                if get_option_value(multiworld, player, "puzzle_randomization") == 1:
+                    self.GOOD_ITEMS.append("Arrows")
+                else:
+                    self.GOOD_ITEMS.append("Triangles")
 
             self.GOOD_ITEMS = [
                 StaticWitnessLogic.ITEMS_TO_PROGRESSIVE.get(item, item) for item in self.GOOD_ITEMS
