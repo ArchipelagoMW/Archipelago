@@ -314,7 +314,7 @@ regions = [
                     LocationName.Undernet_7_West_BMD,
                     LocationName.Undernet_7_Northeast_BMD,
                     LocationName.Undernet_7_Northwest_BMD,
-                    # LocationName.Undernet_7_Upper_BMD]),
+                    LocationName.Undernet_7_Upper_BMD,
                 ]),
     region_info(RegionName.WWW_Island,
                 [],
