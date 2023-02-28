@@ -1240,7 +1240,7 @@
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_MAGMA_EMBLEM": {
-    "label": "Mt Pyre Summet - Magma Emblem from Old Lady",
+    "label": "Mt Pyre Summit - Magma Emblem from Old Lady",
     "tags": ["KeyItem"]
   },
   "NPC_GIFT_RECEIVED_MENTAL_HERB": {
@@ -1295,6 +1295,10 @@
     "label": "Slateport City - Gift from Woman in Fan Club",
     "tags": ["NpcGift"]
   },
+  "NPC_GIFT_RECEIVED_SS_TICKET": {
+    "label": "Littleroot Town - Gift from Norman",
+    "tags": ["NpcGift"]
+  },
   "NPC_GIFT_RECEIVED_SUN_STONE_MOSSDEEP": {
     "label": "Mossdeep City - Gift from Man in Museum",
     "tags": ["NpcGift"]
@@ -1316,7 +1320,7 @@
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM08": {
-    "label": "Dewford Town Gym - TM08 from Brawley",
+    "label": "Dewford Town Gym - TM08 from Brawly",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM09": {

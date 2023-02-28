@@ -43,7 +43,7 @@
       "NPC_GIFT_RECEIVED_DEVON_GOODS_RUSTURF_TUNNEL"
     ],
     "events": [
-      "EVENT_RESCUED_PEEKO"
+      "EVENT_RECOVER_DEVON_GOODS"
     ],
     "exits": [
       "REGION_RUSTURF_TUNNEL/EAST"
@@ -192,7 +192,7 @@
       "NPC_GIFT_RECEIVED_TM47"
     ],
     "events": [
-      "EVENT_DELIVERED_LETTER"
+      "EVENT_DELIVER_LETTER"
     ],
     "exits": [],
     "warps": []
@@ -399,7 +399,9 @@
     "locations": [
       "ITEM_MAGMA_HIDEOUT_4F_MAX_REVIVE"
     ],
-    "events": [],
+    "events": [
+      "EVENT_RELEASE_GROUDON"
+    ],
     "exits": [],
     "warps": [
       "MAP_MAGMA_HIDEOUT_4F:0/MAP_MAGMA_HIDEOUT_3F_1R:0",
@@ -500,7 +502,9 @@
       "ITEM_METEOR_FALLS_1F_1R_MOON_STONE",
       "ITEM_METEOR_FALLS_1F_1R_FULL_HEAL"
     ],
-    "events": [],
+    "events": [
+      "EVENT_MAGMA_STEALS_METEORITE"
+    ],
     "exits": [
       "REGION_METEOR_FALLS_1F_1R/ABOVE_WATERFALL"
     ],
@@ -1105,10 +1109,22 @@
     "parent_map": "MAP_AQUA_HIDEOUT_1F",
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_AQUA_HIDEOUT_1F/WATER"
+    ],
     "warps": [
-      "MAP_AQUA_HIDEOUT_1F:0,1/MAP_LILYCOVE_CITY:6",
       "MAP_AQUA_HIDEOUT_1F:2/MAP_AQUA_HIDEOUT_B1F:0"
+    ]
+  },
+  "REGION_AQUA_HIDEOUT_1F/WATER": {
+    "parent_map": "MAP_AQUA_HIDEOUT_1F",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_AQUA_HIDEOUT_1F/MAIN"
+    ],
+    "warps": [
+      "MAP_AQUA_HIDEOUT_1F:0,1/MAP_LILYCOVE_CITY:6"
     ]
   },
   "REGION_AQUA_HIDEOUT_B1F/WEST_BOTTOM": {
@@ -1312,7 +1328,9 @@
   "REGION_AQUA_HIDEOUT_B2F/BOTTOM_RIGHT": {
     "parent_map": "MAP_AQUA_HIDEOUT_B2F",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_CLEAR_AQUA_HIDEOUT"
+    ],
     "exits": [],
     "warps": [
       "MAP_AQUA_HIDEOUT_B2F:8/MAP_AQUA_HIDEOUT_B2F:4",
@@ -1648,7 +1666,9 @@
     "locations": [
       "ITEM_SEAFLOOR_CAVERN_ROOM_9_TM26"
     ],
-    "events": [],
+    "events": [
+      "EVENT_RELEASE_KYOGRE"
+    ],
     "exits": [],
     "warps": [
       "MAP_SEAFLOOR_CAVERN_ROOM9:0/MAP_SEAFLOOR_CAVERN_ROOM8:0"
@@ -1677,7 +1697,9 @@
   "REGION_CAVE_OF_ORIGIN_B1F/MAIN": {
     "parent_map": "MAP_CAVE_OF_ORIGIN_B1F",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_WALLACE_GOES_TO_SKY_PILLAR"
+    ],
     "exits": [],
     "warps": [
       "MAP_CAVE_OF_ORIGIN_B1F:0/MAP_CAVE_OF_ORIGIN_1F:1"
@@ -1800,7 +1822,9 @@
   "REGION_SKY_PILLAR_TOP/MAIN": {
     "parent_map": "MAP_SKY_PILLAR_TOP",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_WAKE_RAYQUAZA"
+    ],
     "exits": [],
     "warps": [
       "MAP_SKY_PILLAR_TOP:0/MAP_SKY_PILLAR_5F:1"

@@ -981,7 +981,7 @@
   },
   "ITEM_ITEMFINDER": {
     "label": "Itemfinder",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": []
   },
   "ITEM_OLD_ROD": {
@@ -996,12 +996,12 @@
   },
   "ITEM_SUPER_ROD": {
     "label": "Super Rod",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": []
   },
   "ITEM_SS_TICKET": {
     "label": "SS Ticket",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": []
   },
   "ITEM_CONTEST_PASS": {
@@ -1016,7 +1016,7 @@
   },
   "ITEM_DEVON_GOODS": {
     "label": "Devon Goods",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": []
   },
   "ITEM_SOOT_SACK": {
@@ -1036,7 +1036,7 @@
   },
   "ITEM_POKEBLOCK_CASE": {
     "label": "Pokeblock Case",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": []
   },
   "ITEM_LETTER": {
@@ -1061,7 +1061,7 @@
   },
   "ITEM_SCANNER": {
     "label": "Scanner",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": []
   },
   "ITEM_GO_GOGGLES": {
@@ -1071,7 +1071,7 @@
   },
   "ITEM_METEORITE": {
     "label": "Meteorite",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": []
   },
   "ITEM_ROOT_FOSSIL": {
@@ -1347,7 +1347,7 @@
   },
   "ITEM_MAGMA_EMBLEM": {
     "label": "Magma Emblem",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": []
   },
   "ITEM_OLD_SEA_MAP": {

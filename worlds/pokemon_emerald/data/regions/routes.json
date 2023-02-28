@@ -128,7 +128,9 @@
     "locations": [
       "NPC_GIFT_RECEIVED_WAILMER_PAIL"
     ],
-    "events": [],
+    "events": [
+      "EVENT_MEET_FLOWER_SHOP_OWNER"
+    ],
     "exits": [],
     "warps": [
       "MAP_ROUTE104_PRETTY_PETAL_FLOWER_SHOP:0,1/MAP_ROUTE104:1"
@@ -281,17 +283,36 @@
     ],
     "events": [],
     "exits": [
+      "REGION_ROUTE110/SOUTH",
       "REGION_ROUTE110/SOUTH_WATER",
       "REGION_ROUTE110/NORTH_WATER",
       "REGION_MAUVILLE_CITY/MAIN",
-      "REGION_ROUTE103/EAST",
-      "REGION_SLATEPORT_CITY/MAIN"
+      "REGION_ROUTE103/EAST"
     ],
     "warps": [
       "MAP_ROUTE110:1/MAP_ROUTE110_TRICK_HOUSE_ENTRANCE:0",
-      "MAP_ROUTE110:2/MAP_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE:0",
+      "MAP_ROUTE110:2/MAP_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE:0"
+    ]
+  },
+  "REGION_ROUTE110/SOUTH": {
+    "parent_map": "MAP_ROUTE110",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110/MAIN",
+      "REGION_SLATEPORT_CITY/MAIN"
+    ],
+    "warps": [
+      "MAP_ROUTE110:4/MAP_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE:0"
+    ]
+  },
+  "REGION_ROUTE110/CYCLING_ROAD": {
+    "parent_map": "MAP_ROUTE110",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
       "MAP_ROUTE110:3/MAP_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE:2",
-      "MAP_ROUTE110:4/MAP_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE:0",
       "MAP_ROUTE110:5/MAP_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE:2"
     ]
   },
@@ -571,12 +592,23 @@
     "locations": [],
     "events": [],
     "exits": [
+      "REGION_ROUTE112/CABLE_CAR_STATION_ENTRANCE",
       "REGION_ROUTE111/SOUTH"
     ],
     "warps": [
-      "MAP_ROUTE112:0/MAP_ROUTE112_CABLE_CAR_STATION:0",
-      "MAP_ROUTE112:1/MAP_ROUTE112_CABLE_CAR_STATION:1",
       "MAP_ROUTE112:4/MAP_FIERY_PATH:0"
+    ]
+  },
+  "REGION_ROUTE112/CABLE_CAR_STATION_ENTRANCE": {
+    "parent_map": "MAP_ROUTE112",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE112/SOUTH_EAST"
+    ],
+    "warps": [
+      "MAP_ROUTE112:0/MAP_ROUTE112_CABLE_CAR_STATION:0",
+      "MAP_ROUTE112:1/MAP_ROUTE112_CABLE_CAR_STATION:1"
     ]
   },
   "REGION_ROUTE112/SOUTH_WEST": {
@@ -634,7 +666,9 @@
     "locations": [
       "NPC_GIFT_RECEIVED_METEORITE"
     ],
-    "events": [],
+    "events": [
+      "EVENT_RECOVER_METEORITE"
+    ],
     "exits": [],
     "warps": [
       "MAP_MT_CHIMNEY:0/MAP_MT_CHIMNEY_CABLE_CAR_STATION:0",
@@ -1087,7 +1121,9 @@
   "REGION_ROUTE119_WEATHER_INSTITUTE_2F/MAIN": {
     "parent_map": "MAP_ROUTE119_WEATHER_INSTITUTE_2F",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_DEFEAT_SHELLY"
+    ],
     "exits": [],
     "warps": [
       "MAP_ROUTE119_WEATHER_INSTITUTE_2F:0/MAP_ROUTE119_WEATHER_INSTITUTE_1F:2"
@@ -1186,9 +1222,18 @@
     ],
     "events": [],
     "exits": [
-      "REGION_SAFARI_ZONE_NORTHEAST/MAIN",
-      "REGION_SAFARI_ZONE_NORTHWEST/MAIN",
       "REGION_SAFARI_ZONE_SOUTH/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_SAFARI_ZONE_NORTHWEST/MAIN": {
+    "parent_map": "MAP_SAFARI_ZONE_NORTHWEST",
+    "locations": [
+      "ITEM_SAFARI_ZONE_NORTH_WEST_TM22"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_SAFARI_ZONE_SOUTHWEST/MAIN"
     ],
     "warps": []
   },
@@ -1201,20 +1246,7 @@
     ],
     "events": [],
     "exits": [
-      "REGION_SAFARI_ZONE_NORTH/MAIN",
       "REGION_SAFARI_ZONE_SOUTHEAST/MAIN"
-    ],
-    "warps": []
-  },
-  "REGION_SAFARI_ZONE_NORTHWEST/MAIN": {
-    "parent_map": "MAP_SAFARI_ZONE_NORTHWEST",
-    "locations": [
-      "ITEM_SAFARI_ZONE_NORTH_WEST_TM22"
-    ],
-    "events": [],
-    "exits": [
-      "REGION_SAFARI_ZONE_NORTH/MAIN",
-      "REGION_SAFARI_ZONE_SOUTHWEST/MAIN"
     ],
     "warps": []
   },
@@ -1231,20 +1263,6 @@
       "MAP_SAFARI_ZONE_SOUTH:0/MAP_ROUTE121_SAFARI_ZONE_ENTRANCE:0"
     ]
   },
-  "REGION_SAFARI_ZONE_SOUTHEAST/MAIN": {
-    "parent_map": "MAP_SAFARI_ZONE_SOUTHEAST",
-    "locations": [
-      "ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL",
-      "HIDDEN_ITEM_SAFARI_ZONE_SOUTH_EAST_PP_UP",
-      "HIDDEN_ITEM_SAFARI_ZONE_SOUTH_EAST_FULL_RESTORE"
-    ],
-    "events": [],
-    "exits": [
-      "REGION_SAFARI_ZONE_SOUTH/MAIN",
-      "REGION_SAFARI_ZONE_NORTHEAST/MAIN"
-    ],
-    "warps": []
-  },
   "REGION_SAFARI_ZONE_SOUTHWEST/MAIN": {
     "parent_map": "MAP_SAFARI_ZONE_SOUTHWEST",
     "locations": [
@@ -1258,6 +1276,20 @@
     "warps": [
       "MAP_SAFARI_ZONE_SOUTHWEST:0/MAP_SAFARI_ZONE_REST_HOUSE:0"
     ]
+  },
+  "REGION_SAFARI_ZONE_SOUTHEAST/MAIN": {
+    "parent_map": "MAP_SAFARI_ZONE_SOUTHEAST",
+    "locations": [
+      "ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL",
+      "HIDDEN_ITEM_SAFARI_ZONE_SOUTH_EAST_PP_UP",
+      "HIDDEN_ITEM_SAFARI_ZONE_SOUTH_EAST_FULL_RESTORE"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_SAFARI_ZONE_SOUTH/MAIN",
+      "REGION_SAFARI_ZONE_NORTHEAST/MAIN"
+    ],
+    "warps": []
   },
   "REGION_SAFARI_ZONE_REST_HOUSE/MAIN": {
     "parent_map": "MAP_SAFARI_ZONE_REST_HOUSE",

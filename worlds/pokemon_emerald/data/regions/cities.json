@@ -1,10 +1,35 @@
 {
-  "REGION_LITTLEROOT_TOWN/MAIN": {
-    "parent_map": "MAP_LITTLEROOT_TOWN",
+  "REGION_SKY": {
+    "parent_map": null,
     "locations": [],
     "events": [],
     "exits": [
-      "REGION_ROUTE101/MAIN"
+      "REGION_LITTLEROOT_TOWN/MAIN",
+      "REGION_OLDALE_TOWN/MAIN",
+      "REGION_RUSTBORO_CITY/MAIN",
+      "REGION_DEWFORD_TOWN/MAIN",
+      "REGION_SLATEPORT_CITY/MAIN",
+      "REGION_MAUVILLE_CITY/MAIN",
+      "REGION_VERDANTURF_TOWN/MAIN",
+      "REGION_FALLARBOR_TOWN/MAIN",
+      "REGION_LAVARIDGE_TOWN/MAIN",
+      "REGION_FORTREE_CITY/MAIN",
+      "REGION_LILYCOVE_CITY/MAIN",
+      "REGION_MOSSDEEP_CITY/MAIN",
+      "REGION_SOOTOPOLIS_CITY/MAIN",
+      "REGION_EVER_GRANDE_CITY/SOUTH"
+    ],
+    "warps": []
+  },
+  "REGION_LITTLEROOT_TOWN/MAIN": {
+    "parent_map": "MAP_LITTLEROOT_TOWN",
+    "locations": [],
+    "events": [
+      "EVENT_VISIT_LITTLEROOT_TOWN"
+    ],
+    "exits": [
+      "REGION_ROUTE101/MAIN",
+      "REGION_SKY"
     ],
     "warps": [
       "MAP_LITTLEROOT_TOWN:0/MAP_LITTLEROOT_TOWN_MAYS_HOUSE_1F:1",
@@ -34,7 +59,8 @@
   "REGION_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F/MAIN": {
     "parent_map": "MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F",
     "locations": [
-      "NPC_GIFT_RECEIVED_AMULET_COIN"
+      "NPC_GIFT_RECEIVED_AMULET_COIN",
+      "NPC_GIFT_RECEIVED_SS_TICKET"
     ],
     "events": [],
     "exits": [],
@@ -67,7 +93,9 @@
     "locations": [
       "NPC_GIFT_RECEIVED_POTION_OLDALE"
     ],
-    "events": [],
+    "events": [
+      "EVENT_VISIT_OLDALE_TOWN"
+    ],
     "exits": [
       "REGION_ROUTE101/MAIN",
       "REGION_ROUTE102/MAIN",
@@ -130,7 +158,9 @@
   "REGION_PETALBURG_CITY/MAIN": {
     "parent_map": "MAP_PETALBURG_CITY",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_VISIT_PETALBURG_CITY"
+    ],
     "exits": [
       "REGION_PETALBURG_CITY/SOUTH_POND",
       "REGION_PETALBURG_CITY/NORTH_POND",
@@ -291,7 +321,9 @@
       "NPC_GIFT_RECEIVED_TM42",
       "BADGE_5"
     ],
-    "events": [],
+    "events": [
+      "EVENT_DEFEAT_NORMAN"
+    ],
     "exits": [],
     "warps": [
       "MAP_PETALBURG_CITY_GYM:34,35/MAP_PETALBURG_CITY_GYM:32",
@@ -333,7 +365,10 @@
       "ITEM_RUSTBORO_CITY_X_DEFEND",
       "NPC_GIFT_RECEIVED_GREAT_BALL_RUSTBORO_CITY"
     ],
-    "events": [],
+    "events": [
+      "EVENT_RETURN_DEVON_GOODS",
+      "EVENT_VISIT_RUSTBORO_CITY"
+    ],
     "exits": [
       "REGION_ROUTE104/NORTH",
       "REGION_ROUTE115/SOUTH_BELOW_LEDGE",
@@ -360,7 +395,9 @@
       "NPC_GIFT_RECEIVED_TM39",
       "BADGE_1"
     ],
-    "events": [],
+    "events": [
+      "EVENT_DEFEAT_ROXANNE"
+    ],
     "exits": [],
     "warps": [
       "MAP_RUSTBORO_CITY_GYM:0,1/MAP_RUSTBORO_CITY:0"
@@ -432,7 +469,9 @@
       "NPC_GIFT_RECEIVED_LETTER",
       "NPC_GIFT_RECEIVED_EXP_SHARE"
     ],
-    "events": [],
+    "events": [
+      "EVENT_TALK_TO_MR_STONE"
+    ],
     "exits": [],
     "warps": [
       "MAP_RUSTBORO_CITY_DEVON_CORP_3F:0/MAP_RUSTBORO_CITY_DEVON_CORP_2F:1"
@@ -532,7 +571,9 @@
     "locations": [
       "NPC_GIFT_RECEIVED_OLD_ROD"
     ],
-    "events": [],
+    "events": [
+      "EVENT_VISIT_DEWFORD_TOWN"
+    ],
     "exits": [
       "REGION_ROUTE106/EAST",
       "REGION_ROUTE107/MAIN",
@@ -615,7 +656,10 @@
     "locations": [
       "NPC_GIFT_RECEIVED_POWDER_JAR"
     ],
-    "events": [],
+    "events": [
+      "EVENT_AQUA_STEALS_SUBMARINE",
+      "EVENT_VISIT_SLATEPORT_CITY"
+    ],
     "exits": [
       "REGION_ROUTE109/BEACH",
       "REGION_ROUTE110/MAIN",
@@ -720,7 +764,9 @@
   "REGION_SLATEPORT_CITY_OCEANIC_MUSEUM_2F/MAIN": {
     "parent_map": "MAP_SLATEPORT_CITY_OCEANIC_MUSEUM_2F",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_RESCUE_CAPT_STERN"
+    ],
     "exits": [],
     "warps": [
       "MAP_SLATEPORT_CITY_OCEANIC_MUSEUM_2F:0/MAP_SLATEPORT_CITY_OCEANIC_MUSEUM_1F:2"
@@ -738,8 +784,12 @@
   "REGION_SLATEPORT_CITY_HARBOR/MAIN": {
     "parent_map": "MAP_SLATEPORT_CITY_HARBOR",
     "locations": [],
-    "events": [],
-    "exits": [],
+    "events": [
+      "EVENT_TALK_TO_DOCK"
+    ],
+    "exits": [
+      "REGION_LILYCOVE_CITY_HARBOR/MAIN"
+    ],
     "warps": [
       "MAP_SLATEPORT_CITY_HARBOR:0,1/MAP_SLATEPORT_CITY:8",
       "MAP_SLATEPORT_CITY_HARBOR:2,3/MAP_SLATEPORT_CITY:9"
@@ -762,7 +812,9 @@
       "NPC_GIFT_GOT_BASEMENT_KEY_FROM_WATTSON",
       "NPC_GIFT_GOT_TM24_FROM_WATTSON"
     ],
-    "events": [],
+    "events": [
+      "EVENT_VISIT_MAUVILLE_CITY"
+    ],
     "exits": [
       "REGION_ROUTE111/SOUTH",
       "REGION_ROUTE117/MAIN",
@@ -865,7 +917,9 @@
   "REGION_VERDANTURF_TOWN/MAIN": {
     "parent_map": "MAP_VERDANTURF_TOWN",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_VISIT_VERDANTURF_TOWN"
+    ],
     "exits": [
       "REGION_ROUTE117/MAIN"
     ],
@@ -951,7 +1005,9 @@
     "locations": [
       "HIDDEN_ITEM_FALLARBOR_TOWN_NUGGET"
     ],
-    "events": [],
+    "events": [
+      "EVENT_VISIT_FALLARBOR_TOWN"
+    ],
     "exits": [
       "REGION_ROUTE114/MAIN",
       "REGION_ROUTE113/MAIN"
@@ -1027,7 +1083,9 @@
     "locations": [
       "NPC_GIFT_RECEIVED_GO_GOGGLES"
     ],
-    "events": [],
+    "events": [
+      "EVENT_VISIT_LAVARIDGE_TOWN"
+    ],
     "exits": [
       "REGION_ROUTE112/SOUTH_WEST"
     ],
@@ -1141,7 +1199,9 @@
       "NPC_GIFT_RECEIVED_TM50",
       "BADGE_4"
     ],
-    "events": [],
+    "events": [
+      "EVENT_DEFEAT_FLANNERY"
+    ],
     "exits": [
       "REGION_LAVARIDGE_TOWN_GYM_1F/ENTRANCE"
     ],
@@ -1289,7 +1349,9 @@
   "REGION_FORTREE_CITY/MAIN": {
     "parent_map": "MAP_FORTREE_CITY",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_VISIT_FORTREE_CITY"
+    ],
     "exits": [
       "REGION_FORTREE_CITY/BEFORE_GYM",
       "REGION_ROUTE119/UPPER",
@@ -1370,7 +1432,9 @@
     "locations": [
       "NPC_GIFT_RECEIVED_MENTAL_HERB"
     ],
-    "events": [],
+    "events": [
+      "EVENT_WINGULL_QUEST_1"
+    ],
     "exits": [],
     "warps": [
       "MAP_FORTREE_CITY_HOUSE4:0,1/MAP_FORTREE_CITY:6"
@@ -1424,7 +1488,9 @@
       "HIDDEN_ITEM_LILYCOVE_CITY_PP_UP",
       "HIDDEN_ITEM_LILYCOVE_CITY_POKE_BALL"
     ],
-    "events": [],
+    "events": [
+      "EVENT_VISIT_LILYCOVE_CITY"
+    ],
     "exits": [
       "REGION_ROUTE121/MAIN",
       "REGION_LILYCOVE_CITY/SEA"
@@ -1667,7 +1733,9 @@
     "parent_map": "MAP_LILYCOVE_CITY_HARBOR",
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_SLATEPORT_CITY_HARBOR/MAIN"
+    ],
     "warps": [
       "MAP_LILYCOVE_CITY_HARBOR:0,1/MAP_LILYCOVE_CITY:12"
     ]
@@ -1723,7 +1791,9 @@
       "ITEM_MOSSDEEP_CITY_NET_BALL",
       "NPC_GIFT_RECEIVED_KINGS_ROCK"
     ],
-    "events": [],
+    "events": [
+      "EVENT_VISIT_MOSSDEEP_CITY"
+    ],
     "exits": [
       "REGION_ROUTE124/MAIN",
       "REGION_ROUTE125/SEA",
@@ -1800,7 +1870,9 @@
       "NPC_GIFT_RECEIVED_TM04",
       "BADGE_7"
     ],
-    "events": [],
+    "events": [
+      "EVENT_DEFEAT_TATE_AND_LIZA"
+    ],
     "exits": [
       "REGION_MOSSDEEP_CITY_GYM/ROOM_1"
     ],
@@ -1851,7 +1923,9 @@
   "REGION_MOSSDEEP_CITY_SPACE_CENTER_2F/MAIN": {
     "parent_map": "MAP_MOSSDEEP_CITY_SPACE_CENTER_2F",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_DEFEAT_MAXIE_AT_SPACE_STATION"
+    ],
     "exits": [],
     "warps": [
       "MAP_MOSSDEEP_CITY_SPACE_CENTER_2F:0/MAP_MOSSDEEP_CITY_SPACE_CENTER_1F:2"
@@ -1881,7 +1955,9 @@
     "locations": [
       "NPC_GIFT_RECEIVED_HM08"
     ],
-    "events": [],
+    "events": [
+      "EVENT_STEVEN_GIVES_DIVE"
+    ],
     "exits": [],
     "warps": [
       "MAP_MOSSDEEP_CITY_STEVENS_HOUSE:0,1/MAP_MOSSDEEP_CITY:6"
@@ -1899,7 +1975,9 @@
   "REGION_MOSSDEEP_CITY_HOUSE2/MAIN": {
     "parent_map": "MAP_MOSSDEEP_CITY_HOUSE2",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_WINGULL_QUEST_2"
+    ],
     "exits": [],
     "warps": [
       "MAP_MOSSDEEP_CITY_HOUSE2:0,1/MAP_MOSSDEEP_CITY:3"
@@ -1942,7 +2020,9 @@
     "locations": [
       "NPC_GIFT_RECEIVED_HM07"
     ],
-    "events": [],
+    "events": [
+      "EVENT_VISIT_SOOTOPOLIS_CITY"
+    ],
     "exits": [
       "REGION_UNDERWATER_SOOTOPOLIS_CITY/MAIN"
     ],
@@ -2180,7 +2260,9 @@
   "REGION_PACIFIDLOG_TOWN/MAIN": {
     "parent_map": "MAP_PACIFIDLOG_TOWN",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_VISIT_PACIFIDLOG_TOWN"
+    ],
     "exits": [
       "REGION_ROUTE131/MAIN",
       "REGION_ROUTE132/EAST"
@@ -2262,7 +2344,9 @@
   "REGION_EVER_GRANDE_CITY/SEA": {
     "parent_map": "MAP_EVER_GRANDE_CITY",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_VISIT_EVER_GRANDE_CITY"
+    ],
     "exits": [
       "REGION_EVER_GRANDE_CITY/SOUTH",
       "REGION_ROUTE128/MAIN"
@@ -2446,6 +2530,7 @@
     "parent_map": "MAP_EVER_GRANDE_CITY_HALL_OF_FAME",
     "locations": [],
     "events": [
+      "EVENT_DEFEAT_CHAMPION",
       "Victory"
     ],
     "exits": [],
