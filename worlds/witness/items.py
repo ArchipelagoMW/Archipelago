@@ -210,8 +210,6 @@ class WitnessPlayerItems:
                         self.GOOD_ITEMS.append("Arrows")
                     else:
                         self.GOOD_ITEMS.append("Triangles")
-            if not is_option_enabled(multiworld, player, "disable_non_randomized_puzzles"):
-                self.GOOD_ITEMS.append("Colored Squares")
 
             self.GOOD_ITEMS = [
                 StaticWitnessLogic.ITEMS_TO_PROGRESSIVE.get(item, item) for item in self.GOOD_ITEMS
