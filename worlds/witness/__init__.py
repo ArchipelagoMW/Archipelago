@@ -14,7 +14,7 @@ from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems
 from .rules import set_rules
 from .regions import WitnessRegions
 from .Options import is_option_enabled, the_witness_options, get_option_value
-from .utils import best_junk_to_add_based_on_weights, get_audio_logs, make_warning_string, list_difference
+from .utils import best_junk_to_add_based_on_weights, get_audio_logs, make_warning_string
 from logging import warning
 
 
@@ -93,13 +93,13 @@ class WitnessWorld(World):
         self.items = WitnessPlayerItems(self.locat, self.multiworld, self.player, self.player_logic)
         self.regio = WitnessRegions(self.locat)
 
-    def create_regions(self):
-        self.regio.create_regions(self.multiworld, self.player, self.player_logic)
-
-    def generate_basic(self):
         self.log_ids_to_hints = dict()
         self.junk_items_created = {key: 0 for key in self.items.JUNK_WEIGHTS.keys()}
 
+    def create_regions(self):
+        self.regio.create_regions(self.multiworld, self.player, self.player_logic)
+
+    def create_items(self):
         # Generate item pool
         pool = []
         for item in self.items.ITEM_TABLE:
@@ -109,22 +109,12 @@ class WitnessWorld(World):
                     pool.append(witness_item)
                     self.items_by_name[item] = witness_item
 
-        less_junk = 0
-
-        dog_check = self.multiworld.get_location(
-            "Town Pet the Dog", self.player
-        )
-
-        dog_check.place_locked_item(self.create_item("Puzzle Skip"))
-
-        less_junk += 1
-
         for precol_item in self.multiworld.precollected_items[self.player]:
             if precol_item.name in self.items_by_name:  # if item is in the pool, remove 1 instance.
                 item_obj = self.items_by_name[precol_item.name]
 
                 if item_obj in pool:
-                    pool.remove(item_obj) # remove one instance of this pre-collected item if it exists
+                    pool.remove(item_obj)  # remove one instance of this pre-collected item if it exists
 
         for item in self.player_logic.STARTING_INVENTORY:
             self.multiworld.push_precollected(self.items_by_name[item])
@@ -143,18 +133,24 @@ class WitnessWorld(World):
             location_obj = self.multiworld.get_location(event_location, self.player)
             location_obj.place_locked_item(item_obj)
 
-        self.multiworld.itempool += pool
+        # Find out how much empty space there is for junk items. -1 for the "Town Pet the Dog" check
+        itempool_difference = len(self.locat.CHECK_LOCATION_TABLE) - len(self.locat.EVENT_LOCATION_TABLE) - 1
+        itempool_difference -= len(pool)
 
-    def pre_fill(self):
-        remove_these = []  # Items to be removed from the MW itempool at the end
-
-        # Put good item on first check if there are any of the designated "good items" in the pool
+        # Place two locked items: Good symbol on Tutorial Gate Open, and a Puzzle Skip on "Town Pet the Dog"
         good_items_in_the_game = []
-        this_world_itempool = [item for item in self.multiworld.itempool if item.player == self.player]
+        plandoed_items = set()
+
+        for v in self.multiworld.plando_items[self.player]:
+            if v["from_pool"]:
+                plandoed_items.update({self.items_by_name[i] for i in v["items"].keys()})
 
         for symbol in self.items.GOOD_ITEMS:
             item = self.items_by_name[symbol]
-            if item in this_world_itempool:  # Only do this if the item is still in item pool (e.g. after plando)
+            if item in pool and item not in plandoed_items:
+                # for now, any item that is mentioned in any plando option, even if it's a list of items, is ineligible.
+                # Hopefully, in the future, plando gets resolved before create_items.
+                # I could also partially resolve lists myself, but this could introduce errors if not done carefully.
                 good_items_in_the_game.append(symbol)
 
         if good_items_in_the_game:
@@ -170,35 +166,37 @@ class WitnessWorld(World):
                 )
 
                 first_check.place_locked_item(item)
-                remove_these.append(item)
-                this_world_itempool.remove(item)
+                pool.remove(item)
 
-        unfilled_count = len(self.multiworld.get_unfilled_locations(self.player))
-        itempool_difference = unfilled_count - len(this_world_itempool)
+        dog_check = self.multiworld.get_location(
+            "Town Pet the Dog", self.player
+        )
 
-        # fill rest of item pool with junk if there is room
+        dog_check.place_locked_item(self.create_item("Puzzle Skip"))
+
+        # Fill rest of item pool with junk if there is room
         if itempool_difference > 0:
             for i in range(0, itempool_difference):
                 self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
 
-        # remove junk, Functioning Brain, useful items (non-door), useful door items in that order until there is room
+        # Remove junk, Functioning Brain, useful items (non-door), useful door items in that order until there is room
         if itempool_difference < 0:
             junk = [
-                item for item in this_world_itempool
+                item for item in pool
                 if item.classification in {ItemClassification.filler, ItemClassification.trap}
                 and item.name != "Functioning Brain"
             ]
 
-            f_brain = [item for item in this_world_itempool if item.name == "Functioning Brain"]
+            f_brain = [item for item in pool if item.name == "Functioning Brain"]
 
             usefuls = [
-                item for item in this_world_itempool
+                item for item in pool
                 if item.classification == ItemClassification.useful
                 and item.name not in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT
             ]
 
             removable_doors = [
-                item for item in this_world_itempool
+                item for item in pool
                 if item.classification == ItemClassification.useful
                 and item.name in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT
             ]
@@ -213,26 +211,26 @@ class WitnessWorld(World):
 
             for i in range(itempool_difference, 0):
                 if junk:
-                    remove_these.append(junk.pop())
+                    pool.remove(junk.pop())
                     removed_junk = True
                 elif f_brain:
-                    remove_these.append(f_brain.pop())
+                    pool.remove(f_brain.pop())
                 elif usefuls:
-                    remove_these.append(usefuls.pop())
+                    pool.remove(usefuls.pop())
                     removed_usefuls = True
                 elif removable_doors:
-                    remove_these.append(removable_doors.pop())
+                    pool.remove(removable_doors.pop())
                     removed_doors = True
 
             warn = make_warning_string(
                 removed_junk, removed_usefuls, removed_doors, not junk, not usefuls, not removable_doors
             )
 
-            self.multiworld.itempool = list_difference(self.multiworld.itempool, remove_these)
-            # O(n) way to remove multiple items from a list
-
             warning(f"This Witness world has too few locations to place all its items."
                     f" In order to make space, {warn} had to be removed.")
+
+        # Finally, add the generated pool to the overall itempool
+        self.multiworld.itempool += pool
 
     def set_rules(self):
         set_rules(self.multiworld, self.player, self.player_logic, self.locat)
