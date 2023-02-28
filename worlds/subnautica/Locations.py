@@ -140,7 +140,7 @@ location_table: Dict[int, LocationDict] = {
             'need_laser_cutter': False,
             'position': {'x': -664.4, 'y': -97.8, 'z': -8.0}},
     33029: {'can_slip_through': False,
-            'name': 'Grassy Plateaus West Wreck - Databox',
+            'name': 'Grassy Plateaus Southwest Wreck - Databox',
             'need_laser_cutter': True,
             'position': {'x': -421.4, 'y': -107.8, 'z': -266.5}},
     33030: {'can_slip_through': False,
