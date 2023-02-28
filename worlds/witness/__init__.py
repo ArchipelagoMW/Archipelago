@@ -144,6 +144,8 @@ class WitnessWorld(World):
         for v in self.multiworld.plando_items[self.player]:
             if v["from_pool"]:
                 plandoed_items.update({self.items_by_name[i] for i in v["items"].keys()})
+            else:
+                itempool_difference -= 1
 
         for symbol in self.items.GOOD_ITEMS:
             item = self.items_by_name[symbol]
