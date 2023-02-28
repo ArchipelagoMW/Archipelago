@@ -171,7 +171,7 @@ floor_location_game_offsets_early = {
     "Level 5 Key Drop (Pols Voice Entrance)": 0x77,
     "Level 5 Key Drop (Gibdos Entrance)": 0x66,
     "Level 5 Key Drop (Gibdos, Keese, and Pols Voice)": 0x27,
-    "Level 5 Key Drop (Zols)": 0x27,
+    "Level 5 Key Drop (Zols)": 0x55,
     "Level 5 Bomb Drop (Gibdos)": 0x65,
     "Level 5 Bomb Drop (Dodongos)": 0x56,
     "Level 5 Rupee Drop (Zols)": 0x57,
