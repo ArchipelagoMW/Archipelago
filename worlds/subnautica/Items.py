@@ -223,7 +223,7 @@ item_table: Dict[int, ItemDict] = {
             'name': 'Observatory',
             'tech_type': 'BaseObservatory'},
     35053: {'classification': ItemClassification.progression,
-            'count': 2,
+            'count': 1,
             'name': 'Multipurpose Room',
             'tech_type': 'BaseRoom'},
     35054: {'classification': ItemClassification.useful,
@@ -338,12 +338,11 @@ item_table: Dict[int, ItemDict] = {
             'count': 1,
             'name': 'Ultra High Capacity Tank',
             'tech_type': 'HighCapacityTank'},
-    # these currently unlock through some special sauce in Subnautica, unlike any established other
-    # keeping here for later
     35082: {'classification': ItemClassification.progression,
-            'count': 0,
+            'count': 1,
             'name': 'Large Room',
             'tech_type': 'BaseLargeRoom'},
+    # awarded with their rooms, keeping that as-is as they're cosmetic
     35083: {'classification': ItemClassification.filler,
             'count': 0,
             'name': 'Large Room Glass Dome',
