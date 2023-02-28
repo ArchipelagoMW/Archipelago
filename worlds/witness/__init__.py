@@ -230,6 +230,7 @@ class WitnessWorld(World):
             )
 
             self.multiworld.itempool = (Counter(self.multiworld.itempool) - Counter(remove_these)).elements()
+            # O(n) way to remove multiple items from a list
 
             warning(f"This Witness world has too few locations to place all its items."
                     f" In order to make space, {warn} had to be removed.")
