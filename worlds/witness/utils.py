@@ -3,6 +3,18 @@ from Utils import cache_argsless
 from itertools import accumulate
 from typing import *
 from fractions import Fraction
+from collections import Counter
+
+
+def remove_one_and_return_false(counter: Counter, i):
+    counter -= {i: 1}
+    return False
+
+
+def list_difference(list1: list, list2: list):
+    list2counter = Counter(list2)
+
+    return [i for i in list1 if i not in list2counter or remove_one_and_return_false(list2counter, i)]
 
 
 def make_warning_string(any_j: bool, any_u: bool, any_d: bool, all_j: bool, all_u: bool, all_d: bool) -> str:

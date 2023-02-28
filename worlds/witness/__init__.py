@@ -14,9 +14,8 @@ from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems
 from .rules import set_rules
 from .regions import WitnessRegions
 from .Options import is_option_enabled, the_witness_options, get_option_value
-from .utils import best_junk_to_add_based_on_weights, get_audio_logs, make_warning_string
+from .utils import best_junk_to_add_based_on_weights, get_audio_logs, make_warning_string, list_difference
 from logging import warning
-from collections import Counter
 
 
 class WitnessWebWorld(WebWorld):
@@ -229,7 +228,7 @@ class WitnessWorld(World):
                 removed_junk, removed_usefuls, removed_doors, not junk, not usefuls, not removable_doors
             )
 
-            self.multiworld.itempool = list((Counter(self.multiworld.itempool) - Counter(remove_these)).elements())
+            self.multiworld.itempool = list_difference(self.multiworld.itempool, remove_these)
             # O(n) way to remove multiple items from a list
 
             warning(f"This Witness world has too few locations to place all its items."
