@@ -52,7 +52,7 @@ class SA2BWorld(World):
     game: str = "Sonic Adventure 2 Battle"
     option_definitions = sa2b_options
     topology_present = False
-    data_version = 4
+    data_version = 5
 
     item_name_groups = item_groups
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -198,9 +198,9 @@ class SA2BWorld(World):
                 for item in {**emeralds_table}:
                     itempool += self._create_items(item)
 
-        # Cap at 180 Emblems
+        # Cap at 250 Emblems
         raw_emblem_count = total_required_locations - len(itempool)
-        total_emblem_count = min(raw_emblem_count, 180)
+        total_emblem_count = min(raw_emblem_count, 250)
         extra_junk_count = raw_emblem_count - total_emblem_count
 
         self.emblems_for_cannons_core = math.floor(
