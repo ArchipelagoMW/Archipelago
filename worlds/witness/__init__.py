@@ -228,8 +228,9 @@ class WitnessWorld(World):
                 removed_junk, removed_usefuls, removed_doors, not junk, not usefuls, not removable_doors
             )
 
-            warning(f"This Witness world has too few locations to place all its items."
-                    f" In order to make space, {warn} had to be removed.")
+            if warn != "":
+                warning(f"This Witness world has too few locations to place all its items."
+                        f" In order to make space, {warn} had to be removed.")
 
         # Finally, add the generated pool to the overall itempool
         self.multiworld.itempool += pool
