@@ -8,7 +8,7 @@ from .Structures import shuffle_structures
 from .ItemPool import build_item_pool
 from .Rules import set_rules
 
-from BaseClasses import Region, RegionType, Entrance, Item, Tutorial, ItemClassification, Location
+from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification, Location
 from worlds.AutoWorld import World, WebWorld
 
 client_version = 9
@@ -119,7 +119,7 @@ class MinecraftWorld(World):
     def create_regions(self):
         # Create regions
         for region_name, exits in Constants.region_info["regions"]:
-            r = Region(region_name, RegionType.Generic, region_name, self.player, self.multiworld)
+            r = Region(region_name, self.player, self.multiworld)
             for exit_name in exits:
                 r.exits.append(Entrance(self.player, exit_name, r))
             self.multiworld.regions.append(r)
