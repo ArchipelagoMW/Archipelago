@@ -80,30 +80,15 @@ local int16ToByteList_le = function(x)
     end
     return bytes
 end
---It boils my parsnips that this needs a whole ass function to do this
-local bitand = function(a, b)
-    local result = 0
-    local bitval = 1
-    while a > 0 and b > 0 do
-      if a % 2 == 1 and b % 2 == 1 then -- test the rightmost bits
-          result = result + bitval      -- set the current bit
-      end
-      bitval = bitval * 2 -- shift left
-      a = math.floor(a/2) -- shift right
-      b = math.floor(b/2)
-    end
-    return result
-end
-
 
 local IsInMenu = function()
-    return bitand(memory.read_u8(0x0200027A),0x10) ~= 0
+    return bit.band(memory.read_u8(0x0200027A),0x10) ~= 0
 end
 local IsInTransition = function()
-    return bitand(memory.read_u8(0x02001880), 0x10) ~= 0
+    return bit.band(memory.read_u8(0x02001880), 0x10) ~= 0
 end
 local IsInDialog = function()
-    return bitand(memory.read_u8(0x02009480),0x01) ~= 0
+    return bit.band(memory.read_u8(0x02009480),0x01) ~= 0
 end
 local IsInBattle = function()
     return memory.read_u8(0x020097F8) == 0x08
@@ -115,7 +100,7 @@ end
 -- This function actually determines when you're on ANY full-screen menu (navi cust, link battle, etc.) but we
 -- don't want to check any locations there either so it's fine.
 local IsOnTitle = function()
-    return bitand(memory.read_u8(0x020097F8),0x04) == 0
+    return bit.band(memory.read_u8(0x020097F8),0x04) == 0
 end
 local IsItemable = function()
     return not IsInMenu() and not IsInTransition() and not IsInDialog() and not IsInBattle() and not IsOnTitle() and not IsItemQueued()
@@ -126,7 +111,7 @@ local is_game_complete = function()
 
     -- If the game is already marked complete, do not read memory
     if game_complete then return true end
-    local is_alpha_defeated = bitand(memory.read_u8(0x2000433), 0x01) ~= 0
+    local is_alpha_defeated = bit.band(memory.read_u8(0x2000433), 0x01) ~= 0
 
     if (is_alpha_defeated) then
         game_complete = true
@@ -888,6 +873,24 @@ local SendItem = function(item)
     end
 end
 
+-- Set the flags for opening the shortcuts as soon as the Cybermetro passes are received to save having to check email
+local OpenShortcuts = function()
+    if (memory.read_u8(key_item_start_address + 92) > 0) then
+        memory.write_u8(0x2000032, bit.bor(memory.read_u8(0x2000032),0x10))
+        print(bit.bor(memory.read_u8(0x2000032),0x10))
+    end
+    -- if CSciPass
+    if (memory.read_u8(key_item_start_address + 93) > 0) then
+        memory.write_u8(0x2000032, bit.bor(memory.read_u8(0x2000032),0x08))
+    end
+    if (memory.read_u8(key_item_start_address + 94) > 0) then
+        memory.write_u8(0x2000032, bit.bor(memory.read_u8(0x2000032),0x20))
+    end
+    if (memory.read_u8(key_item_start_address + 95) > 0) then
+       memory.write_u8(0x2000032, bit.bor(memory.read_u8(0x2000032),0x40))
+    end
+end
+
 local RestoreItemRam = function()
     if backup_bytes ~= nil then
         memory.write_bytes_as_array(0x203fe10, backup_bytes)
@@ -901,7 +904,6 @@ local process_block = function(block)
         return
     end
     debugEnabled = block['debug']
-
     -- Queue item for receiving, if one exists
     if (itemsReceived ~= block['items']) then
         itemsReceived = block['items']
@@ -1015,6 +1017,8 @@ function main()
             if (frame % 60 == 0) then
                 receive()
                 send()
+                -- Perform utility functions which read and write data but aren't directly related to checks
+                OpenShortcuts()
             end
         elseif (curstate == STATE_UNINITIALIZED) then
             -- If we're uninitialized, attempt to make the connection.
