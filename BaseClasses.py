@@ -29,6 +29,20 @@ class Group(TypedDict, total=False):
     link_replacement: bool
 
 
+class ThreadBarrierProxy():
+    """Passes through getattr while passthrough is True"""
+    def __init__(self, obj: Any):
+        self.passthrough = True
+        self.obj = obj
+
+    def __getattr__(self, item):
+        if self.passthrough:
+            return getattr(self.obj, item)
+        else:
+            raise RuntimeError("You are in a threaded context and global random state was removed for your safety. "
+                               "Please use multiworld.per_slot_randoms[player] or randomize ahead of output.")
+
+
 class MultiWorld():
     debug_types = False
     player_name: Dict[int, str]
@@ -61,6 +75,9 @@ class MultiWorld():
 
     game: Dict[int, str]
 
+    random: random.Random
+    per_slot_randoms: Dict[int, random.Random]
+
     class AttributeProxy():
         def __init__(self, rule):
             self.rule = rule
@@ -69,7 +86,8 @@ class MultiWorld():
             return self.rule(player)
 
     def __init__(self, players: int):
-        self.random = random.Random()  # world-local random state is saved for multiple generations running concurrently
+        # world-local random state is saved for multiple generations running concurrently
+        self.random = ThreadBarrierProxy(random.Random())
         self.players = players
         self.player_types = {player: NetUtils.SlotType.player for player in self.player_ids}
         self.glitch_triforce = False
@@ -160,7 +178,7 @@ class MultiWorld():
             set_player_attr('completion_condition', lambda state: True)
         self.custom_data = {}
         self.worlds = {}
-        self.slot_seeds = {}
+        self.per_slot_randoms = {}
         self.plando_options = PlandoOptions.none
 
     def get_all_ids(self) -> Tuple[int, ...]:
@@ -206,8 +224,8 @@ class MultiWorld():
         else:
             self.random.seed(self.seed)
         self.seed_name = name if name else str(self.seed)
-        self.slot_seeds = {player: random.Random(self.random.getrandbits(64)) for player in
-                           range(1, self.players + 1)}
+        self.per_slot_randoms = {player: random.Random(self.random.getrandbits(64)) for player in
+                                 range(1, self.players + 1)}
 
     def set_options(self, args: Namespace) -> None:
         for option_key in Options.common_options:
@@ -291,7 +309,7 @@ class MultiWorld():
         self.state = CollectionState(self)
 
     def secure(self):
-        self.random = secrets.SystemRandom()
+        self.random = ThreadBarrierProxy(secrets.SystemRandom())
         self.is_race = True
 
     @functools.cached_property
@@ -931,24 +949,9 @@ class CollectionState():
             self.stale[item.player] = True
 
 
-@unique
-class RegionType(IntEnum):
-    Generic = 0
-    LightWorld = 1
-    DarkWorld = 2
-    Cave = 3  # Also includes Houses
-    Dungeon = 4
-
-    @property
-    def is_indoors(self) -> bool:
-        """Shorthand for checking if Cave or Dungeon"""
-        return self in (RegionType.Cave, RegionType.Dungeon)
-
-
 class Region:
     name: str
-    type: RegionType
-    hint_text: str
+    _hint_text: str
     player: int
     multiworld: Optional[MultiWorld]
     entrances: List[Entrance]
@@ -962,14 +965,13 @@ class Region:
     is_light_world: bool = False
     is_dark_world: bool = False
 
-    def __init__(self, name: str, type_: RegionType, hint: str, player: int, world: Optional[MultiWorld] = None):
+    def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: Optional[str] = None):
         self.name = name
-        self.type = type_
         self.entrances = []
         self.exits = []
         self.locations = []
-        self.multiworld = world
-        self.hint_text = hint
+        self.multiworld = multiworld
+        self._hint_text = hint
         self.player = player
 
     def can_reach(self, state: CollectionState) -> bool:
@@ -984,6 +986,10 @@ class Region:
                     state.path[self] = (self.name, state.path.get(entrance, None))
                 return True
         return False
+
+    @property
+    def hint_text(self) -> str:
+        return self._hint_text if self._hint_text else self.name
 
     def get_connecting_entrance(self, is_main_entrance: typing.Callable[[Entrance], bool]) -> Entrance:
         for entrance in self.entrances:
@@ -1254,13 +1260,9 @@ class Spoiler():
         self.multiworld = world
         self.hashes = {}
         self.entrances = OrderedDict()
-        self.medallions = {}
         self.playthrough = {}
         self.unreachables = set()
-        self.locations = {}
         self.paths = {}
-        self.shops = []
-        self.bosses = OrderedDict()
 
     def set_entrance(self, entrance: str, exit_: str, direction: str, player: int):
         if self.multiworld.players == 1:
@@ -1269,117 +1271,6 @@ class Spoiler():
         else:
             self.entrances[(entrance, direction, player)] = OrderedDict(
                 [('player', player), ('entrance', entrance), ('exit', exit_), ('direction', direction)])
-
-    def parse_data(self):
-        self.medallions = OrderedDict()
-        for player in self.multiworld.get_game_players("A Link to the Past"):
-            self.medallions[f'Misery Mire ({self.multiworld.get_player_name(player)})'] = \
-                self.multiworld.required_medallions[player][0]
-            self.medallions[f'Turtle Rock ({self.multiworld.get_player_name(player)})'] = \
-                self.multiworld.required_medallions[player][1]
-
-        self.locations = OrderedDict()
-        listed_locations = set()
-
-        lw_locations = [loc for loc in self.multiworld.get_locations() if
-                        loc not in listed_locations and loc.parent_region and loc.parent_region.type == RegionType.LightWorld and loc.show_in_spoiler]
-        self.locations['Light World'] = OrderedDict(
-            [(str(location), str(location.item) if location.item is not None else 'Nothing') for location in
-             lw_locations])
-        listed_locations.update(lw_locations)
-
-        dw_locations = [loc for loc in self.multiworld.get_locations() if
-                        loc not in listed_locations and loc.parent_region and loc.parent_region.type == RegionType.DarkWorld and loc.show_in_spoiler]
-        self.locations['Dark World'] = OrderedDict(
-            [(str(location), str(location.item) if location.item is not None else 'Nothing') for location in
-             dw_locations])
-        listed_locations.update(dw_locations)
-
-        cave_locations = [loc for loc in self.multiworld.get_locations() if
-                          loc not in listed_locations and loc.parent_region and loc.parent_region.type == RegionType.Cave and loc.show_in_spoiler]
-        self.locations['Caves'] = OrderedDict(
-            [(str(location), str(location.item) if location.item is not None else 'Nothing') for location in
-             cave_locations])
-        listed_locations.update(cave_locations)
-
-        for dungeon in self.multiworld.dungeons.values():
-            dungeon_locations = [loc for loc in self.multiworld.get_locations() if
-                                 loc not in listed_locations and loc.parent_region and loc.parent_region.dungeon == dungeon and loc.show_in_spoiler]
-            self.locations[str(dungeon)] = OrderedDict(
-                [(str(location), str(location.item) if location.item is not None else 'Nothing') for location in
-                 dungeon_locations])
-            listed_locations.update(dungeon_locations)
-
-        other_locations = [loc for loc in self.multiworld.get_locations() if
-                           loc not in listed_locations and loc.show_in_spoiler]
-        if other_locations:
-            self.locations['Other Locations'] = OrderedDict(
-                [(str(location), str(location.item) if location.item is not None else 'Nothing') for location in
-                 other_locations])
-            listed_locations.update(other_locations)
-
-        self.shops = []
-        from worlds.alttp.Shops import ShopType, price_type_display_name, price_rate_display
-        for shop in self.multiworld.shops:
-            if not shop.custom:
-                continue
-            shopdata = {
-                'location': str(shop.region),
-                'type': 'Take Any' if shop.type == ShopType.TakeAny else 'Shop'
-            }
-            for index, item in enumerate(shop.inventory):
-                if item is None:
-                    continue
-                my_price = item['price'] // price_rate_display.get(item['price_type'], 1)
-                shopdata['item_{}'.format(
-                    index)] = f"{item['item']} — {my_price} {price_type_display_name[item['price_type']]}"
-
-                if item['player'] > 0:
-                    shopdata['item_{}'.format(index)] = shopdata['item_{}'.format(index)].replace('—',
-                                                                                                  '(Player {}) — '.format(
-                                                                                                      item['player']))
-
-                if item['max'] == 0:
-                    continue
-                shopdata['item_{}'.format(index)] += " x {}".format(item['max'])
-
-                if item['replacement'] is None:
-                    continue
-                shopdata['item_{}'.format(
-                    index)] += f", {item['replacement']} - {item['replacement_price']} {price_type_display_name[item['replacement_price_type']]}"
-            self.shops.append(shopdata)
-
-        for player in self.multiworld.get_game_players("A Link to the Past"):
-            self.bosses[str(player)] = OrderedDict()
-            self.bosses[str(player)]["Eastern Palace"] = self.multiworld.get_dungeon("Eastern Palace", player).boss.name
-            self.bosses[str(player)]["Desert Palace"] = self.multiworld.get_dungeon("Desert Palace", player).boss.name
-            self.bosses[str(player)]["Tower Of Hera"] = self.multiworld.get_dungeon("Tower of Hera", player).boss.name
-            self.bosses[str(player)]["Hyrule Castle"] = "Agahnim"
-            self.bosses[str(player)]["Palace Of Darkness"] = self.multiworld.get_dungeon("Palace of Darkness",
-                                                                                         player).boss.name
-            self.bosses[str(player)]["Swamp Palace"] = self.multiworld.get_dungeon("Swamp Palace", player).boss.name
-            self.bosses[str(player)]["Skull Woods"] = self.multiworld.get_dungeon("Skull Woods", player).boss.name
-            self.bosses[str(player)]["Thieves Town"] = self.multiworld.get_dungeon("Thieves Town", player).boss.name
-            self.bosses[str(player)]["Ice Palace"] = self.multiworld.get_dungeon("Ice Palace", player).boss.name
-            self.bosses[str(player)]["Misery Mire"] = self.multiworld.get_dungeon("Misery Mire", player).boss.name
-            self.bosses[str(player)]["Turtle Rock"] = self.multiworld.get_dungeon("Turtle Rock", player).boss.name
-            if self.multiworld.mode[player] != 'inverted':
-                self.bosses[str(player)]["Ganons Tower Basement"] = \
-                    self.multiworld.get_dungeon('Ganons Tower', player).bosses['bottom'].name
-                self.bosses[str(player)]["Ganons Tower Middle"] = self.multiworld.get_dungeon('Ganons Tower', player).bosses[
-                    'middle'].name
-                self.bosses[str(player)]["Ganons Tower Top"] = self.multiworld.get_dungeon('Ganons Tower', player).bosses[
-                    'top'].name
-            else:
-                self.bosses[str(player)]["Ganons Tower Basement"] = \
-                    self.multiworld.get_dungeon('Inverted Ganons Tower', player).bosses['bottom'].name
-                self.bosses[str(player)]["Ganons Tower Middle"] = \
-                    self.multiworld.get_dungeon('Inverted Ganons Tower', player).bosses['middle'].name
-                self.bosses[str(player)]["Ganons Tower Top"] = \
-                    self.multiworld.get_dungeon('Inverted Ganons Tower', player).bosses['top'].name
-
-            self.bosses[str(player)]["Ganons Tower"] = "Agahnim 2"
-            self.bosses[str(player)]["Ganon"] = "Ganon"
 
     def create_playthrough(self, create_paths: bool = True):
         """Destructive to the world while it is run, damage gets repaired afterwards."""
@@ -1532,30 +1423,7 @@ class Spoiler():
                         self.paths[str(multiworld.get_region('Inverted Big Bomb Shop', player))] = \
                             get_path(state, multiworld.get_region('Inverted Big Bomb Shop', player))
 
-    def to_json(self):
-        self.parse_data()
-        out = OrderedDict()
-        out['Entrances'] = list(self.entrances.values())
-        out.update(self.locations)
-        out['Special'] = self.medallions
-        if self.hashes:
-            out['Hashes'] = self.hashes
-        if self.shops:
-            out['Shops'] = self.shops
-        out['playthrough'] = self.playthrough
-        out['paths'] = self.paths
-        out['Bosses'] = self.bosses
-
-        return json.dumps(out)
-
     def to_file(self, filename: str):
-        self.parse_data()
-
-        def bool_to_text(variable: Union[bool, str]) -> str:
-            if type(variable) == str:
-                return variable
-            return 'Yes' if variable else 'No'
-
         def write_option(option_key: str, option_obj: type(Options.Option)):
             res = getattr(self.multiworld, option_key)[player]
             display_name = getattr(option_obj, "display_name", option_key)
@@ -1585,38 +1453,6 @@ class Spoiler():
                         write_option(f_option, option)
                 AutoWorld.call_single(self.multiworld, "write_spoiler_header", player, outfile)
 
-                if player in self.multiworld.get_game_players("A Link to the Past"):
-                    outfile.write('%s%s\n' % ('Hash: ', self.hashes[player]))
-
-                    outfile.write('Logic:                           %s\n' % self.multiworld.logic[player])
-                    outfile.write('Dark Room Logic:                 %s\n' % self.multiworld.dark_room_logic[player])
-                    outfile.write('Mode:                            %s\n' % self.multiworld.mode[player])
-                    outfile.write('Goal:                            %s\n' % self.multiworld.goal[player])
-                    if "triforce" in self.multiworld.goal[player]:  # triforce hunt
-                        outfile.write("Pieces available for Triforce:   %s\n" %
-                                      self.multiworld.triforce_pieces_available[player])
-                        outfile.write("Pieces required for Triforce:    %s\n" %
-                                      self.multiworld.triforce_pieces_required[player])
-                    outfile.write('Difficulty:                      %s\n' % self.multiworld.difficulty[player])
-                    outfile.write('Item Functionality:              %s\n' % self.multiworld.item_functionality[player])
-                    outfile.write('Entrance Shuffle:                %s\n' % self.multiworld.shuffle[player])
-                    if self.multiworld.shuffle[player] != "vanilla":
-                        outfile.write('Entrance Shuffle Seed            %s\n' % self.multiworld.worlds[player].er_seed)
-                    outfile.write('Shop inventory shuffle:          %s\n' %
-                                  bool_to_text("i" in self.multiworld.shop_shuffle[player]))
-                    outfile.write('Shop price shuffle:              %s\n' %
-                                  bool_to_text("p" in self.multiworld.shop_shuffle[player]))
-                    outfile.write('Shop upgrade shuffle:            %s\n' %
-                                  bool_to_text("u" in self.multiworld.shop_shuffle[player]))
-                    outfile.write('New Shop inventory:              %s\n' %
-                                  bool_to_text("g" in self.multiworld.shop_shuffle[player] or
-                                               "f" in self.multiworld.shop_shuffle[player]))
-                    outfile.write('Custom Potion Shop:              %s\n' %
-                                  bool_to_text("w" in self.multiworld.shop_shuffle[player]))
-                    outfile.write('Enemy health:                    %s\n' % self.multiworld.enemy_health[player])
-                    outfile.write('Enemy damage:                    %s\n' % self.multiworld.enemy_damage[player])
-                    outfile.write('Prize shuffle                    %s\n' %
-                                  self.multiworld.shuffle_prizes[player])
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
                 outfile.write('\n'.join(['%s%s %s %s' % (f'{self.multiworld.get_player_name(entry["player"])}: '
@@ -1625,30 +1461,14 @@ class Spoiler():
                                                          '<=' if entry['direction'] == 'exit' else '=>',
                                                          entry['exit']) for entry in self.entrances.values()]))
 
-            if self.medallions:
-                outfile.write('\n\nMedallions:\n')
-                for dungeon, medallion in self.medallions.items():
-                    outfile.write(f'\n{dungeon}: {medallion}')
-
             AutoWorld.call_all(self.multiworld, "write_spoiler", outfile)
 
+            locations = [(str(location), str(location.item) if location.item is not None else "Nothing")
+                              for location in self.multiworld.get_locations()]
             outfile.write('\n\nLocations:\n\n')
             outfile.write('\n'.join(
-                ['%s: %s' % (location, item) for grouping in self.locations.values() for (location, item) in
-                 grouping.items()]))
+                ['%s: %s' % (location, item) for location, item in locations]))
 
-            if self.shops:
-                outfile.write('\n\nShops:\n\n')
-                outfile.write('\n'.join("{} [{}]\n    {}".format(shop['location'], shop['type'], "\n    ".join(
-                    item for item in [shop.get('item_0', None), shop.get('item_1', None), shop.get('item_2', None)] if
-                    item)) for shop in self.shops))
-
-            for player in self.multiworld.get_game_players("A Link to the Past"):
-                if self.multiworld.boss_shuffle[player] != 'none':
-                    bossmap = self.bosses[str(player)] if self.multiworld.players > 1 else self.bosses
-                    outfile.write(
-                        f'\n\nBosses{(f" ({self.multiworld.get_player_name(player)})" if self.multiworld.players > 1 else "")}:\n')
-                    outfile.write('    ' + '\n    '.join([f'{x}: {y}' for x, y in bossmap.items()]))
             outfile.write('\n\nPlaythrough:\n\n')
             outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(
                 ['  %s: %s' % (location, item) for (location, item) in sphere.items()] if sphere_nr != '0' else [

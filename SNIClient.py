@@ -56,7 +56,9 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
         """Connect to a snes. Optionally include network address of a snes to connect to,
         otherwise show available devices; and a SNES device number if more than one SNES is detected.
         Examples: "/snes", "/snes 1", "/snes localhost:23074 1" """
-
+        if self.ctx.snes_state in {SNESState.SNES_ATTACHED, SNESState.SNES_CONNECTED, SNESState.SNES_CONNECTING}:
+            self.output("Already connected to SNES. Disconnecting first.")
+            self._cmd_snes_close()
         return self.connect_to_snes(snes_options)
 
     def connect_to_snes(self, snes_options: str = "") -> bool:
@@ -84,7 +86,7 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
         """Close connection to a currently connected snes"""
         self.ctx.snes_reconnect_address = None
         self.ctx.cancel_snes_autoreconnect()
-        if self.ctx.snes_socket is not None and not self.ctx.snes_socket.closed:
+        if self.ctx.snes_socket and not self.ctx.snes_socket.closed:
             async_start(self.ctx.snes_socket.close())
             return True
         else:
@@ -442,7 +444,8 @@ async def snes_connect(ctx: SNIContext, address: str, deviceIndex: int = -1) -> 
         recv_task = asyncio.create_task(snes_recv_loop(ctx))
 
     except Exception as e:
-        if recv_task is not None:
+        ctx.snes_state = SNESState.SNES_DISCONNECTED
+        if task_alive(recv_task):
             if not ctx.snes_socket.closed:
                 await ctx.snes_socket.close()
         else:
@@ -450,15 +453,9 @@ async def snes_connect(ctx: SNIContext, address: str, deviceIndex: int = -1) -> 
                 if not ctx.snes_socket.closed:
                     await ctx.snes_socket.close()
                 ctx.snes_socket = None
-            ctx.snes_state = SNESState.SNES_DISCONNECTED
-        if not ctx.snes_reconnect_address:
-            snes_logger.error("Error connecting to snes (%s)" % e)
-        else:
-            snes_logger.error(f"Error connecting to snes, retrying in {_global_snes_reconnect_delay} seconds")
-            assert ctx.snes_autoreconnect_task is None
-            ctx.snes_autoreconnect_task = asyncio.create_task(snes_autoreconnect(ctx), name="snes auto-reconnect")
+        snes_logger.error(f"Error connecting to snes ({e}), retrying in {_global_snes_reconnect_delay} seconds")
+        ctx.snes_autoreconnect_task = asyncio.create_task(snes_autoreconnect(ctx), name="snes auto-reconnect")
         _global_snes_reconnect_delay *= 2
-
     else:
         _global_snes_reconnect_delay = ctx.starting_reconnect_delay
         snes_logger.info(f"Attached to {device}")
@@ -471,10 +468,17 @@ async def snes_disconnect(ctx: SNIContext) -> None:
         ctx.snes_socket = None
 
 
+def task_alive(task: typing.Optional[asyncio.Task]) -> bool:
+    if task:
+        return not task.done()
+    return False
+
+
 async def snes_autoreconnect(ctx: SNIContext) -> None:
     await asyncio.sleep(_global_snes_reconnect_delay)
-    if ctx.snes_reconnect_address and not ctx.snes_socket and not ctx.snes_connect_task:
-        ctx.snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_reconnect_address), name="SNES Connect")
+    if not ctx.snes_socket and not task_alive(ctx.snes_connect_task):
+        address = ctx.snes_reconnect_address if ctx.snes_reconnect_address else ctx.snes_address
+        ctx.snes_connect_task = asyncio.create_task(snes_connect(ctx, address), name="SNES Connect")
 
 
 async def snes_recv_loop(ctx: SNIContext) -> None:

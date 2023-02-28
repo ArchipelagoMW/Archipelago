@@ -50,6 +50,7 @@ Output Logs/
 /Archipelago.zip
 /setup.ini
 /installdelete.iss
+/data/user.kv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

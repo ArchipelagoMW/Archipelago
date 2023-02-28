@@ -45,7 +45,16 @@ class MinecraftWebWorld(WebWorld):
         ["Albinum"]
     )
 
-    tutorials = [setup, setup_es, setup_sv]
+    setup_fr = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Français",
+        "minecraft_fr.md",
+        "minecraft/fr",
+        ["TheLynk"]
+    )
+
+    tutorials = [setup, setup_es, setup_sv, setup_fr]
 
 
 class MinecraftWorld(World):
@@ -68,7 +77,7 @@ class MinecraftWorld(World):
     def _get_mc_data(self):
         exits = [connection[0] for connection in Constants.region_info["default_connections"]]
         return {
-            'world_seed': self.multiworld.slot_seeds[self.player].getrandbits(32),
+            'world_seed': self.multiworld.per_slot_randoms[self.player].getrandbits(32),
             'seed_name': self.multiworld.seed_name,
             'player_name': self.multiworld.get_player_name(self.player),
             'player_id': self.player,
