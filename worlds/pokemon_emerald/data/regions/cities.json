@@ -622,7 +622,9 @@
       "NPC_GIFT_RECEIVED_TM08",
       "BADGE_2"
     ],
-    "events": [],
+    "events": [
+      "EVENT_DEFEAT_BRAWLY"
+    ],
     "exits": [],
     "warps": [
       "MAP_DEWFORD_TOWN_GYM:0,1/MAP_DEWFORD_TOWN:2"
@@ -833,7 +835,9 @@
       "NPC_GIFT_RECEIVED_TM34",
       "BADGE_3"
     ],
-    "events": [],
+    "events": [
+      "EVENT_DEFEAT_WATTSON"
+    ],
     "exits": [],
     "warps": [
       "MAP_MAUVILLE_CITY_GYM:0,1/MAP_MAUVILLE_CITY:0"
@@ -1451,7 +1455,9 @@
       "NPC_GIFT_RECEIVED_TM40",
       "BADGE_6"
     ],
-    "events": [],
+    "events": [
+      "EVENT_DEFEAT_WINONA"
+    ],
     "exits": [],
     "warps": [
       "MAP_FORTREE_CITY_GYM:0,1/MAP_FORTREE_CITY:2"
@@ -2117,7 +2123,9 @@
       "NPC_GIFT_RECEIVED_TM03",
       "BADGE_8"
     ],
-    "events": [],
+    "events": [
+      "EVENT_DEFEAT_JUAN"
+    ],
     "exits": [
       "REGION_SOOTOPOLIS_CITY_GYM_1F/PUZZLE_3"
     ],

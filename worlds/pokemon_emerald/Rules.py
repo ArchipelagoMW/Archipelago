@@ -23,6 +23,17 @@ def _can_use_mach_bike(state: CollectionState, player: int):
     return state.has("EVENT_RECEIVE_BIKE", player)
 def _can_use_acro_bike(state: CollectionState, player: int):
     return state.has("EVENT_RECEIVE_BIKE", player)
+def _defeated_n_gym_leaders(state: CollectionState, player: int, n: int):
+    num_gym_leaders_defeated = 0
+    num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_ROXANNE", player) else 0
+    num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_BRAWLY", player) else 0
+    num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_WATTSON", player) else 0
+    num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_FLANNERY", player) else 0
+    num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_NORMAN", player) else 0
+    num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_WINONA", player) else 0
+    num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_TATE_AND_LIZA", player) else 0
+    num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_JUAN", player) else 0
+    return num_gym_leaders_defeated >= n
 def _has_at_least_n_badges(state: CollectionState, player: int, n: int):
     num_badges = 0
     num_badges += 1 if state.has("Stone Badge", player) else 0
@@ -369,6 +380,14 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     )
 
     # Mauville City
+    set_rule(
+        multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3", player),
+        lambda state: _defeated_n_gym_leaders(state, player, 4)
+    )
+    set_rule(
+        multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6", player),
+        lambda state: _defeated_n_gym_leaders(state, player, 4)
+    )
     set_rule(
         multiworld.get_location(name_to_label("NPC_GIFT_GOT_BASEMENT_KEY_FROM_WATTSON"), player),
         lambda state: state.has("EVENT_DEFEAT_NORMAN", player)
