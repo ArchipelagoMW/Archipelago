@@ -41,7 +41,7 @@ class BumpStikWorld(World):
 
     data_version = 0
 
-    required_client_version = (0, 3, 7)
+    required_client_version = (0, 3, 8)
 
     option_definitions = bumpstik_options
 
