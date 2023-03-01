@@ -6,7 +6,7 @@ class AdvancementGoal(Range):
     """Number of advancements required to spawn bosses."""
     display_name = "Advancement Goal"
     range_start = 0
-    range_end = 95
+    range_end = 114
     default = 40
 
 
@@ -14,7 +14,7 @@ class EggShardsRequired(Range):
     """Number of dragon egg shards to collect to spawn bosses."""
     display_name = "Egg Shards Required"
     range_start = 0
-    range_end = 40
+    range_end = 79
     default = 0
 
 
@@ -22,7 +22,7 @@ class EggShardsAvailable(Range):
     """Number of dragon egg shards available to collect."""
     display_name = "Egg Shards Available"
     range_start = 0
-    range_end = 40
+    range_end = 79
     default = 0
 
 

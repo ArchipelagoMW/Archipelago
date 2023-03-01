@@ -134,7 +134,7 @@ def get_rules_lookup(player):
             "The End Structure": lambda state: (can_adventure(state, player) and has_structure_compass(state, "The End Structure", player)),
         },
         "locations": {
-            "Ender Dragon": lambda state: can_kill_ender_dragon(state, player),
+            "Ender Dragon": lambda state: can_respawn_ender_dragon(state, player) and can_kill_ender_dragon(state, player),
             "Wither": lambda state: can_kill_wither(state, player),
             "Blaze Rods": lambda state: fortress_loot(state, player),
 
@@ -155,7 +155,7 @@ def get_rules_lookup(player):
             "Not Today, Thank You": lambda state: state.has("Shield", player) and has_iron_ingots(state, player),
             "Isn't It Iron Pick": lambda state: state.has("Progressive Tools", player, 2) and has_iron_ingots(state, player),
             "Local Brewery": lambda state: can_brew_potions(state, player),
-            "The Next Generation": lambda state: can_kill_ender_dragon(state, player),
+            "The Next Generation": lambda state: can_respawn_ender_dragon(state, player) and can_kill_ender_dragon(state, player),
             "Fishy Business": lambda state: state.has("Fishing Rod", player),
             "This Boat Has Legs": lambda state: ((fortress_loot(state, player) or complete_raid(state, player)) and 
                 state.has("Saddle", player) and state.has("Fishing Rod", player)),
@@ -289,7 +289,6 @@ def set_rules(mc_world):
 
     def location_count(state):
         return len([location for location in multiworld.get_locations(player) if
-            location.name not in postgame_advancements and
             location.address != None and
             location.can_reach(state)])
 
