@@ -145,13 +145,13 @@ class UndertaleContext(CommonContext):
                 elif file.find(".spot") > -1:
                     os.remove(root+"/"+file)
 
-    async def connect(self):
+    async def connect(self, address: typing.Optional[str] = None):
         self.clear_undertale_files()
-        await super().connect()
+        await super().connect(address)
 
-    async def disconnect(self):
+    async def disconnect(self, allow_autoreconnect: bool = False):
         self.clear_undertale_files()
-        await super().disconnect()
+        await super().disconnect(allow_autoreconnect)
 
     async def connection_closed(self):
         self.clear_undertale_files()
