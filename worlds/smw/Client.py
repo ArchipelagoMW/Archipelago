@@ -169,7 +169,74 @@ class SMWSNIClient(SNIClient):
 
         await snes_flush_writes(ctx)
 
-        return
+
+    def add_trap_to_queue(self, trap_item, trap_msg):
+        self.trap_queue = getattr(self, "trap_queue", [])
+
+        self.trap_queue.append((trap_item, trap_msg))
+
+
+    async def handle_trap_queue(self, ctx):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+
+        if not hasattr(self, "trap_queue") or len(self.trap_queue) == 0:
+            return
+
+        game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
+        if game_state[0] != 0x14:
+            return
+
+        mario_state = await snes_read(ctx, SMW_MARIO_STATE_ADDR, 0x1)
+        if mario_state[0] != 0x00:
+            return
+
+        pause_state = await snes_read(ctx, SMW_PAUSE_ADDR, 0x1)
+        if pause_state[0] != 0x00:
+            return
+
+        next_trap, message = self.trap_queue.pop(0)
+
+        from worlds.smw.Rom import trap_rom_data
+        if next_trap.item in trap_rom_data:
+            trap_active = await snes_read(ctx, WRAM_START + trap_rom_data[next_trap.item][0], 0x3)
+
+            if next_trap.item == 0xBC0016:
+                # Timer Trap
+                if trap_active[0] == 0 or (trap_active[0] == 1 and trap_active[1] == 0 and trap_active[2] == 0):
+                    # Trap already active
+                    self.add_trap_to_queue(next_trap, message)
+                    return
+                else:
+                    snes_buffered_write(ctx, WRAM_START + trap_rom_data[next_trap.item][0], bytes([0x01]))
+                    snes_buffered_write(ctx, WRAM_START + trap_rom_data[next_trap.item][0] + 1, bytes([0x00]))
+                    snes_buffered_write(ctx, WRAM_START + trap_rom_data[next_trap.item][0] + 2, bytes([0x00]))
+            else:
+                if trap_active[0] > 0:
+                    # Trap already active
+                    self.add_trap_to_queue(next_trap, message)
+                    return
+                else:
+                    verify_game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
+                    if verify_game_state[0] == 0x14 and len(trap_rom_data[next_trap.item]) > 2:
+                        snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([trap_rom_data[next_trap.item][2]]))
+
+                    new_item_count = trap_rom_data[next_trap.item][1]
+                    snes_buffered_write(ctx, WRAM_START + trap_rom_data[next_trap.item][0], bytes([new_item_count]))
+
+            current_level = await snes_read(ctx, SMW_CURRENT_LEVEL_ADDR, 0x1)
+            if current_level[0] in SMW_BAD_TEXT_BOX_LEVELS:
+                return
+
+            boss_state = await snes_read(ctx, SMW_BOSS_STATE_ADDR, 0x1)
+            if boss_state[0] in SMW_BOSS_STATES:
+                return
+
+            active_boss = await snes_read(ctx, SMW_ACTIVE_BOSS_ADDR, 0x1)
+            if active_boss[0] != 0x00:
+                return
+
+            if ctx.receive_option == 1 or (ctx.receive_option == 2 and ((next_trap.flags & 1) != 0)):
+                self.add_message_to_queue(message)
 
 
     async def game_watcher(self, ctx):
@@ -229,13 +296,14 @@ class SMWSNIClient(SNIClient):
             await snes_flush_writes(ctx)
 
         await self.handle_message_queue(ctx)
+        await self.handle_trap_queue(ctx)
 
         new_checks = []
         event_data = await snes_read(ctx, SMW_EVENT_ROM_DATA, 0x60)
         progress_data = bytearray(await snes_read(ctx, SMW_PROGRESS_DATA, 0x0F))
         dragon_coins_data = bytearray(await snes_read(ctx, SMW_DRAGON_COINS_DATA, 0x0C))
         dragon_coins_active = await snes_read(ctx, SMW_DRAGON_COINS_ACTIVE_ADDR, 0x1)
-        from worlds.smw.Rom import item_rom_data, ability_rom_data
+        from worlds.smw.Rom import item_rom_data, ability_rom_data, trap_rom_data
         from worlds.smw.Levels import location_id_to_level_id, level_info_dict
         from worlds import AutoWorldRegister
         for loc_name, level_data in location_id_to_level_id.items():
@@ -307,7 +375,7 @@ class SMWSNIClient(SNIClient):
                 ctx.location_names[item.location], recv_index, len(ctx.items_received)))
 
             if ctx.receive_option == 1 or (ctx.receive_option == 2 and ((item.flags & 1) != 0)):
-                if item.item != 0xBC0012:
+                if item.item != 0xBC0012 and item.item not in trap_rom_data:
                     # Don't send messages for Boss Tokens
                     item_name = ctx.item_names[item.item]
                     player_name = ctx.player_names[item.player]
@@ -316,7 +384,13 @@ class SMWSNIClient(SNIClient):
                     self.add_message_to_queue(receive_message)
 
             snes_buffered_write(ctx, SMW_RECV_PROGRESS_ADDR, bytes([recv_index]))
-            if item.item in item_rom_data:
+            if item.item in trap_rom_data:
+                item_name = ctx.item_names[item.item]
+                player_name = ctx.player_names[item.player]
+
+                receive_message = generate_received_text(item_name, player_name)
+                self.add_trap_to_queue(item, receive_message)
+            elif item.item in item_rom_data:
                 item_count = await snes_read(ctx, WRAM_START + item_rom_data[item.item][0], 0x1)
                 increment = item_rom_data[item.item][1]
 
