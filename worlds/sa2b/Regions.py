@@ -985,7 +985,7 @@ def create_regions(world, player: int, active_locations):
             LocationName.kart_race_beginner_rouge,
         ])
     if world.kart_race_checks[player] == 1:
-        kart_race_beginner_region_locations.append(LocationName.kart_race_expert)
+        kart_race_beginner_region_locations.append(LocationName.kart_race_beginner)
     kart_race_beginner_region = create_region(world, player, active_locations, LocationName.kart_race_beginner_region,
                                               kart_race_beginner_region_locations)
 
@@ -1000,7 +1000,7 @@ def create_regions(world, player: int, active_locations):
             LocationName.kart_race_standard_rouge,
         ])
     if world.kart_race_checks[player] == 1:
-        kart_race_standard_region_locations.append(LocationName.kart_race_expert)
+        kart_race_standard_region_locations.append(LocationName.kart_race_standard)
     kart_race_standard_region = create_region(world, player, active_locations, LocationName.kart_race_standard_region,
                                               kart_race_standard_region_locations)
 

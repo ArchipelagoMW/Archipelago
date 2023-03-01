@@ -886,6 +886,7 @@ all_locations = {
     **kart_race_beginner_location_table,
     **kart_race_standard_location_table,
     **kart_race_expert_location_table,
+    **kart_race_mini_location_table,
     **green_hill_location_table,
     **green_hill_chao_location_table,
     **final_boss_location_table,
