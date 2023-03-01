@@ -79,7 +79,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.state = CollectionState(world)
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, world.seed)
 
-    logger.info("Found World Types:")
+    logger.info(f"Found {len(AutoWorld.AutoWorldRegister.world_types)} World Types:")
     longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
 
     max_item = 0
