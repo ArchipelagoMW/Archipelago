@@ -563,6 +563,12 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: state.has("Storage Key", player)
     )
 
+    # New Mauville
+    set_rule(
+        multiworld.get_entrance("MAP_NEW_MAUVILLE_ENTRANCE:1/MAP_NEW_MAUVILLE_INSIDE:0", player),
+        lambda state: state.has("Basement Key", player)
+    )
+
     # Route 118
     set_rule(
         multiworld.get_entrance("REGION_ROUTE118/WEST -> REGION_ROUTE118/WATER", player),
