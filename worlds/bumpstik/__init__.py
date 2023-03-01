@@ -73,7 +73,7 @@ class BumpStikWorld(World):
 
     def create_items(self):
         frequencies = [
-            0, 10, 5, 3, 0, 4, 5, 25, 33,
+            0, 0, 5, 3, 0, 4, 5, 25, 33,
             self.rainbow_traps, self.spinner_traps, self.killer_traps
         ]
         item_pool = []
@@ -86,7 +86,7 @@ class BumpStikWorld(World):
         item_delta = len(location_table) - len(item_pool) - 1
         if item_delta > 0:
             item_pool += self._create_item_in_quantities(
-                self.get_filler_item_name(), item_delta)
+                "Score Bonus", item_delta)
 
         self.multiworld.itempool += item_pool
 
