@@ -130,7 +130,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: state.has("Balance Badge", player)
     )
     set_rule(
-        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_AMULET_COIN"), player),
+        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_SS_TICKET"), player),
         lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
     )
 
