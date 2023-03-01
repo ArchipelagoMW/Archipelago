@@ -195,7 +195,8 @@ class MMBN3World(World):
                     entrance.access_rule = lambda state: self.explore_score(state) > 8 and\
                         state.has(ItemName.Press, self.player)
                 if connection == RegionName.Secret_Area:
-                    entrance.access_rule = lambda state: self.explore_score(state) > 12
+                    entrance.access_rule = lambda state: self.explore_score(state) > 12 and\
+                        state.has(ItemName.Hammer, self.player)
                 if connection == RegionName.WWW_Island:
                     entrance.access_rule = lambda state:\
                         state.has(ItemName.Progressive_Undernet_Rank, self.player, 8)

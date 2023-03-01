@@ -152,7 +152,7 @@ bmds = [
     LocationData(LocationName.Dexs_HP_BMD_1,                0xb31075, 0x200023a, 0x40, 0x75DEA4, 231, [1]),
     LocationData(LocationName.Dexs_HP_BMD_2,                0xb31076, 0x200023a, 0x80, 0x75DEA4, 230, [1]),
     LocationData(LocationName.Tamakos_HP_BMD,               0xb31077, 0x200023c, 0x80, 0x75E2D4, 230, [1]),
-    # LocationData(LocationName.Undernet_7_Upper_BMD,         0xb31078, 0x20001f6, 0x1, 0x775934, 250, [1]),
+    LocationData(LocationName.Undernet_7_Upper_BMD,         0xb31078, 0x20001f6, 0x1, 0x775934, 250, [1]),
     LocationData(LocationName.School_1_KeyDataA_BMD,        0xb31079, 0x2000208, 0x80, 0x759BF8, 230, [1]),
     LocationData(LocationName.School_1_KeyDataB_BMD,        0xb3107a, 0x2000208, 0x40, 0x759BF8, 231, [1]),
     LocationData(LocationName.School_1_KeyDataC_BMD,        0xb3107b, 0x2000208, 0x20, 0x759BF8, 232, [1]),
@@ -327,7 +327,6 @@ victory = [
 
 excluded_locations = [
     LocationName.Undernet_7_PMD,
-    LocationName.Undernet_7_West_BMD,
     LocationName.Undernet_7_Northeast_BMD,
     LocationName.Undernet_7_Northwest_BMD,
     LocationName.Secret_1_Northwest_BMD,

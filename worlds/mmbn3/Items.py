@@ -83,8 +83,9 @@ keyItemList: typing.List[ItemData] = [
 
     ItemData(0xB310B1, ItemName.SubPET, ItemClassification.progression, ItemType.KeyItem, 10),
     ItemData(0xB310B2, ItemName.Needle, ItemClassification.progression, ItemType.KeyItem, 14),
-    ItemData(0xB310B3, ItemName.PETCase, ItemClassification.progression, ItemType.KeyItem, 16)
+    ItemData(0xB310B3, ItemName.PETCase, ItemClassification.progression, ItemType.KeyItem, 16),
     # ItemData(0xB310B4, ItemName.Parasol, ItemClassification.progression, ItemType.KeyItem, 3),
+    ItemData(0xB310DF, ItemName.Hammer, ItemClassification.progression, ItemType.KeyItem, 56)
 ]
 
 subChipList: typing.List[ItemData] = [

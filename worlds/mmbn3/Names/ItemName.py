@@ -225,6 +225,7 @@ Parasol = "Parasol"
 SubPET = "SubPET"
 Needle = "Needle"
 PETCase = "PETCase"
+Hammer = "Hammer"
 
 ## Upgrades
 HPMemory = "HPMemory"

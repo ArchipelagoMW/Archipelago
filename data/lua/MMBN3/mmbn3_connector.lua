@@ -190,9 +190,9 @@ local undernet_bmd_checks = function()
     checks["Undernet 6 East BMD"] = memory.read_u8(0x20001f5)
     checks["Undernet 6 Central BMD"] = memory.read_u8(0x20001f5)
     checks["Undernet 6 TV BMD"] = memory.read_u8(0x20001f5)
-    --checks["Undernet 7 West BMD"] = memory.read_u8(0x20001f6)
-    --checks["Undernet 7 Northwest BMD"] = memory.read_u8(0x20001f6)
-    --checks["Undernet 7 Northeast BMD"] = memory.read_u8(0x20001f6)
+    checks["Undernet 7 West BMD"] = memory.read_u8(0x20001f6)
+    checks["Undernet 7 Northwest BMD"] = memory.read_u8(0x20001f6)
+    checks["Undernet 7 Northeast BMD"] = memory.read_u8(0x20001f6)
             return checks
 end
 local secret_bmd_checks = function()
@@ -312,7 +312,7 @@ local misc_bmd_checks = function()
 end
 local story_bmd_checks = function()
     local checks ={}
-    --checks["Undernet 7 Upper BMD"] = memory.read_u8(0x20001f6)
+    checks["Undernet 7 Upper BMD"] = memory.read_u8(0x20001f6)
     checks["School 1 KeyDataA BMD"] = memory.read_u8(0x2000208)
     checks["School 1 KeyDataB BMD"] = memory.read_u8(0x2000208)
     checks["School 1 KeyDataC BMD"] = memory.read_u8(0x2000208)
@@ -331,7 +331,7 @@ local pmd_checks = function()
     checks["ACDC 1 PMD"] = memory.read_u8(0x020001d0)
     checks["Yoka 1 PMD"] = memory.read_u8(0x20001e0)
     checks["Beach 1 PMD"] = memory.read_u8(0x20001e8)
-    --checks["Undernet 7 PMD"] = memory.read_u8(0x20001f6)
+    checks["Undernet 7 PMD"] = memory.read_u8(0x20001f6)
     checks["Mayl's HP PMD"] = memory.read_u8(0x2000239)
     checks["SciLab Dad's Computer PMD"] = memory.read_u8(0x2000241)
     checks["Zoo Panda PMD"] = memory.read_u8(0x2000249)
@@ -485,8 +485,14 @@ end
 local check_all_locations = function()
     local location_checks = {}
     -- Title Screen should not check items
-    if itemState == ITEMSTATE_NONINITIALIZED or IsInTransition() then return location_checks end
-    if memory.read_u8(canary_byte) == 0xFF then return location_checks end
+    if itemState == ITEMSTATE_NONINITIALIZED or IsInTransition() then
+        print("Skipping due to state")
+        return location_checks
+    end
+    if memory.read_u8(canary_byte) == 0xFF then
+        print("Skipping due to canary byte")
+        return location_checks
+    end
     for name,checked in pairs(acdc_bmd_checks()) do location_checks[name] = checked end
     for name,checked in pairs(sci_bmd_checks()) do location_checks[name] = checked end
     for name,checked in pairs(yoka_bmd_checks()) do location_checks[name] = checked end
