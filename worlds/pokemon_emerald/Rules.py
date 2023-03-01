@@ -870,6 +870,10 @@ def set_default_rules(multiworld: MultiWorld, player: int):
 
     # Route 127
     set_rule(
+        multiworld.get_entrance("REGION_ROUTE127/MAIN -> REGION_UNDERWATER_ROUTE127/MAIN", player),
+        can_dive
+    )
+    set_rule(
         multiworld.get_entrance("REGION_ROUTE127/MAIN -> REGION_UNDERWATER_ROUTE127/TUNNEL", player),
         can_dive
     )
