@@ -188,23 +188,24 @@ async def game_watcher(ctx: FFPSContext):
             ctx.syncing = False
 
         if os.path.exists(os.path.expandvars("%appdata%/MMFApplications/FNAF6")):
-            try:
-                with open(os.path.expandvars("%appdata%/MMFApplications/FNAF6"), 'r+') as f:
-                    lines = f.read()
-                    if not lines.__contains__("[FNAF6]"):
-                        f.write("[FNAF6]\n")
-                    if not lines.__contains__("stage="):
-                        f.write("stage=0\n")
-                    if not lines.__contains__("cups="):
-                        f.write("cups=0\n")
-                    if not lines.__contains__("speakers="):
-                        f.write("speakers=0\n")
-                    if not lines.__contains__("money="):
-                        f.write("money=200\n")
-                    f.close()
-                break
-            except PermissionError:
-                continue
+            while True:
+                try:
+                    with open(os.path.expandvars("%appdata%/MMFApplications/FNAF6"), 'r+') as f:
+                        lines = f.read()
+                        if not lines.__contains__("[FNAF6]"):
+                            f.write("[FNAF6]\n")
+                        if not lines.__contains__("stage="):
+                            f.write("stage=0\n")
+                        if not lines.__contains__("cups="):
+                            f.write("cups=0\n")
+                        if not lines.__contains__("speakers="):
+                            f.write("speakers=0\n")
+                        if not lines.__contains__("money="):
+                            f.write("money=200\n")
+                        f.close()
+                    break
+                except PermissionError:
+                    continue
         path = os.path.expandvars("%appdata%/MMFApplications/FNAF6BOUGHT")
         sending = []
         victory = False
