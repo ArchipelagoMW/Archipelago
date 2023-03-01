@@ -3,24 +3,23 @@ from .Data import get_extracted_data, get_warp_to_region_map
 
 
 _warp_map = None
-_special_warp_id_map = {
-    "WARP_ID_SECRET_BASE": -1,
-    "WARP_ID_DYNAMIC": -2
-}
 
 
 class Warp:
+    is_one_way: bool
     source_map: str
     source_ids: List[int]
     dest_map: str
-    dest_id: int
+    dest_ids: int
 
-    def __init__(self, encoded_string: str) -> None:
-        source_map, source_ids, dest_map, dest_id = Warp.decode(encoded_string)
-        self.source_map = source_map
-        self.source_ids = source_ids
-        self.dest_map = dest_map
-        self.dest_id = dest_id
+    def __init__(self, encoded_string: Optional[str] = None) -> None:
+        if (encoded_string != None):
+            decoded_warp = Warp.decode(encoded_string)
+            self.is_one_way = decoded_warp.is_one_way
+            self.source_map = decoded_warp.source_map
+            self.source_ids = decoded_warp.source_ids
+            self.dest_map = decoded_warp.dest_map
+            self.dest_ids = decoded_warp.dest_ids
 
     def encode(self):
         global _special_warp_id_map
@@ -28,34 +27,34 @@ class Warp:
         for id in self.source_ids:
             source_ids_string += str(id) + ","
         source_ids_string = source_ids_string[:-1] # Remove last ","
-    
-        if (self.dest_id < 0):
-            dest_id = {key for key in _special_warp_id_map if _special_warp_id_map[key] == self.dest_id}
 
         return f"{self.source_map}:{source_ids_string}/{self.dest_map}:{self.dest_id}"
     
+    def connects_to(self, other: 'Warp'):
+        return self.dest_map == other.source_map and set(self.dest_ids) <= set(other.source_ids)
+
     @staticmethod
-    def decode(encoded_string: str):
+    def decode(encoded_string: str) -> 'Warp':
+        warp = Warp()
+        warp.is_one_way = encoded_string.endswith("!")
+        if (warp.is_one_way):
+            encoded_string = encoded_string[:-1]
+
         warp_source, warp_dest = encoded_string.split("/")
         warp_source_map, warp_source_indices = warp_source.split(":")
-        warp_dest_map, warp_dest_index = warp_dest.split(":")
+        warp_dest_map, warp_dest_indices = warp_dest.split(":")
 
-        warp_source_indices = [int(index) for index in warp_source_indices.split(",")]
-        warp_dest_index = int(warp_dest_index) if (not warp_dest_index in _special_warp_id_map) else _special_warp_id_map[warp_dest_index]
+        warp.source_map = warp_source_map
+        warp.dest_map = warp_dest_map
 
-        return (warp_source_map, warp_source_indices, warp_dest_map, warp_dest_index)
+        warp.source_ids = [int(index) for index in warp_source_indices.split(",")]
+        warp.dest_ids = [int(index) for index in warp_dest_indices.split(",")]
+
+        return warp
 
 
-def warps_connect_ltr(warp_1, warp_2) -> bool:
-    warp_1_source, warp_1_dest = warp_1.split("/")
-    warp_2_source, warp_2_dest = warp_2.split("/")
-    warp_1_source_map, warp_1_source_indices = warp_1_source.split(":")
-    warp_2_source_map, warp_2_source_indices = warp_2_source.split(":")
-    warp_1_dest_map, warp_1_dest_index = warp_1_dest.split(":")
-    warp_2_dest_map, warp_2_dest_index = warp_2_dest.split(":")
-
-    return warp_1_dest_map == warp_2_source_map and \
-           warp_1_dest_index in warp_2_source_indices.split(",")
+def warps_connect_ltr(warp_1: str, warp_2: str) -> bool:
+    return Warp(warp_1).connects_to(Warp(warp_2))
 
 
 def get_warp_map() -> Dict[str, Optional[str]]:

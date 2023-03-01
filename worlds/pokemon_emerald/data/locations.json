@@ -1259,6 +1259,10 @@
     "label": "Dewford Town - Old Rod from Fisherman",
     "tags": ["Rod"]
   },
+  "NPC_GIFT_RECEIVED_POKEBLOCK_CASE": {
+    "label": "Lilycove City - Pokeblock Case from Contest Hall",
+    "tags": ["NpcGift"]
+  },
   "NPC_GIFT_RECEIVED_POTION_OLDALE": {
     "label": "Oldale Town - Gift from Shop Tutorial",
     "tags": ["NpcGift"]

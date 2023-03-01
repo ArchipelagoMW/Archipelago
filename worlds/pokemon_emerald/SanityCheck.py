@@ -1,7 +1,7 @@
 import logging
 import os
 from .Data import load_json, get_region_data, get_extracted_data
-from .Warps import warps_connect_ltr, get_warp_map, get_warp_region_name
+from .Warps import Warp, warps_connect_ltr, get_warp_map, get_warp_region_name
 
 
 _error_messages = []
@@ -40,8 +40,8 @@ def _check_warps():
 
         if (warp_dest == None):
             _error(f"Warp [{warp_source}] has no destination")
-        elif (not warps_connect_ltr(warp_dest, warp_source)):
-            _warn(f"Warp [{warp_source}] appears to be a one-way warp")
+        elif (not warps_connect_ltr(warp_dest, warp_source) and not Warp(warp_source).is_one_way):
+            _error(f"Warp [{warp_source}] appears to be a one-way warp but was not marked as one")
         elif (get_warp_region_name(warp_source) == None):
             _warn(f"Warp [{warp_source}] was not claimed by any region")
 

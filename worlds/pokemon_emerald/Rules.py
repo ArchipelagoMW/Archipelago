@@ -335,13 +335,8 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_location("EVENT_TALK_TO_DOCK", player),
         lambda state: state.has("Devon Goods", player)
     )
-    # Double-wide entrances which lead to double-wide entrances are given two warps. Need to fix.
     set_rule(
-        multiworld.get_entrance("MAP_SLATEPORT_CITY:5/MAP_SLATEPORT_CITY_OCEANIC_MUSEUM_1F:0", player),
-        lambda state: state.has("EVENT_TALK_TO_DOCK", player)
-    )
-    set_rule(
-        multiworld.get_entrance("MAP_SLATEPORT_CITY:7/MAP_SLATEPORT_CITY_OCEANIC_MUSEUM_1F:1", player),
+        multiworld.get_entrance("MAP_SLATEPORT_CITY:5,7/MAP_SLATEPORT_CITY_OCEANIC_MUSEUM_1F:0,1", player),
         lambda state: state.has("EVENT_TALK_TO_DOCK", player)
     )
     set_rule(
