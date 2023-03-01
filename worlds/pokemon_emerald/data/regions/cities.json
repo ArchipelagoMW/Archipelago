@@ -1761,7 +1761,9 @@
   },
   "REGION_SS_TIDAL_ROOMS/MAIN": {
     "parent_map": "MAP_SS_TIDAL_ROOMS",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_TM49"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -2310,7 +2312,10 @@
   },
   "REGION_PACIFIDLOG_TOWN_HOUSE2/MAIN": {
     "parent_map": "MAP_PACIFIDLOG_TOWN_HOUSE2",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_TM27_2",
+      "NPC_GIFT_RECEIVED_TM21"
+    ],
     "events": [],
     "exits": [],
     "warps": [

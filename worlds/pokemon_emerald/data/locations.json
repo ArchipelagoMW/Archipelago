@@ -1335,8 +1335,20 @@
     "label": "Fortree City - TM10 from Hidden Power Lady",
     "tags": ["NpcGift"]
   },
+  "NPC_GIFT_RECEIVED_TM19": {
+    "label": "Route 123 - TM19 from Girl near Berries",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM21": {
+    "label": "Pacifidlog Town - TM21 from Man in House",
+    "tags": ["NpcGift"]
+  },
   "NPC_GIFT_RECEIVED_TM27": {
     "label": "Fallarbor Town - TM27 from Cozmo",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM27_2": {
+    "label": "Pacifidlog Town - TM27 from Man in House",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM28": {
@@ -1385,6 +1397,10 @@
   },
   "NPC_GIFT_RECEIVED_TM47": {
     "label": "Granite Cave 1F - TM47 from Steven",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM49": {
+    "label": "SS Tidal - TM49 from Thief",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM50": {
