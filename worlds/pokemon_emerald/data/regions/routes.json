@@ -347,9 +347,7 @@
   },
   "REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/MAIN": {
     "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE1",
-    "locations": [
-      "ITEM_TRICK_HOUSE_PUZZLE_1_ORANGE_MAIL"
-    ],
+    "locations": [],
     "events": [],
     "exits": [],
     "warps": [
@@ -359,10 +357,7 @@
   },
   "REGION_ROUTE110_TRICK_HOUSE_PUZZLE2/MAIN": {
     "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE2",
-    "locations": [
-      "ITEM_TRICK_HOUSE_PUZZLE_2_WAVE_MAIL",
-      "ITEM_TRICK_HOUSE_PUZZLE_2_HARBOR_MAIL"
-    ],
+    "locations": [],
     "events": [],
     "exits": [],
     "warps": [
@@ -372,10 +367,7 @@
   },
   "REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/MAIN": {
     "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE3",
-    "locations": [
-      "ITEM_TRICK_HOUSE_PUZZLE_3_WOOD_MAIL",
-      "ITEM_TRICK_HOUSE_PUZZLE_3_SHADOW_MAIL"
-    ],
+    "locations": [],
     "events": [],
     "exits": [],
     "warps": [
@@ -385,9 +377,7 @@
   },
   "REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/MAIN": {
     "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE4",
-    "locations": [
-      "ITEM_TRICK_HOUSE_PUZZLE_4_MECH_MAIL"
-    ],
+    "locations": [],
     "events": [],
     "exits": [],
     "warps": [
@@ -407,9 +397,7 @@
   },
   "REGION_ROUTE110_TRICK_HOUSE_PUZZLE6/MAIN": {
     "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE6",
-    "locations": [
-      "ITEM_TRICK_HOUSE_PUZZLE_6_GLITTER_MAIL"
-    ],
+    "locations": [],
     "events": [],
     "exits": [],
     "warps": [
@@ -419,9 +407,7 @@
   },
   "REGION_ROUTE110_TRICK_HOUSE_PUZZLE7/MAIN": {
     "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE7",
-    "locations": [
-      "ITEM_TRICK_HOUSE_PUZZLE_7_TROPIC_MAIL"
-    ],
+    "locations": [],
     "events": [],
     "exits": [],
     "warps": [
@@ -441,9 +427,7 @@
   },
   "REGION_ROUTE110_TRICK_HOUSE_PUZZLE8/MAIN": {
     "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE8",
-    "locations": [
-      "ITEM_TRICK_HOUSE_PUZZLE_8_BEAD_MAIL"
-    ],
+    "locations": [],
     "events": [],
     "exits": [],
     "warps": [
@@ -453,9 +437,7 @@
   },
   "REGION_ROUTE110_TRICK_HOUSE_END/MAIN": {
     "parent_map": "MAP_ROUTE110_TRICK_HOUSE_END",
-    "locations": [
-      "HIDDEN_ITEM_TRICK_HOUSE_NUGGET"
-    ],
+    "locations": [],
     "events": [],
     "exits": [],
     "warps": [
