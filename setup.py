@@ -47,6 +47,7 @@ apworlds: set = {
     "Super Mario World",
     "Stardew Valley",
     "Timespinner",
+    "The Messenger",
 }
 
 if os.path.exists("X:/pw.txt"):
