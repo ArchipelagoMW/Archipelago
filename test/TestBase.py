@@ -226,6 +226,9 @@ class WorldTestBase(unittest.TestCase):
                 if location.name not in excluded:
                     with self.subTest("Location should be reached", location=location):
                         self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
+            with self.subTest("Beatable"):
+                self.multiworld.state = state
+                self.assertBeatable(True)
 
     def testEmptyStateCanReachSomething(self):
         """Ensure empty state can reach at least one location with the defined options"""
