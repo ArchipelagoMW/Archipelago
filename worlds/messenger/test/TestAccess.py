@@ -90,7 +90,7 @@ class AccessTest(MessengerTestBase):
         self.collect_all_but("Sun Crest")
         self.assertEqual(self.can_reach_location("Key of Love"), False)
         self.remove(self.get_item_by_name("Moon Crest"))
-        self.collect_all_but("Moon Crest")
+        self.collect_by_name("Sun Crest")
         self.assertEqual(self.can_reach_location("Key of Love"), False)
 
     def testThistle(self):
