@@ -75,8 +75,7 @@ You only have to do these steps once. Note, RetroArch 1.9.x will not work as it 
    Network Command Port at 55355.
 
 ![Screenshot of Network Commands setting](/static/generated/docs/A%20Link%20to%20the%20Past/retroarch-network-commands-en.png)
-4. Go to Main Menu --> Online Updater --> Core Downloader. Scroll down and select "Nintendo - SNES / SFC (bsnes-mercury
-   Performance)".
+4. Go to Main Menu --> Online Updater --> Core Downloader. Scroll down and select "Nintendo - Gameboy / Color (SameBoy)".
 
 ### Connect to the Archipelago Server
 
