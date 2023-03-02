@@ -208,16 +208,15 @@ class WorldTestBase(unittest.TestCase):
 
     # following tests are automatically run
     @property
-    def skip_default_tests(self) -> bool:
+    def run_default_tests(self) -> bool:
         """Not possible or identical to the base test that's always being run already"""
         constructed = hasattr(self, "game") and hasattr(self, "multiworld")
-        return not (constructed and self.options) or (not self.options
-                                                      and self.setUp is WorldTestBase.setUp
-                                                      and self.world_setup is WorldTestBase.world_setup)
+        return (constructed and self.options) or not (self.setUp.__code__ is WorldTestBase.setUp.__code__
+                                                      and self.world_setup.__code__ is WorldTestBase.world_setup.__code__)
 
     def testAllStateCanReachEverything(self):
         """Ensure all state can reach everything and complete the game with the defined options"""
-        if self.skip_default_tests:
+        if not self.run_default_tests:
             return
         with self.subTest("Game", game=self.game):
             excluded = self.multiworld.exclude_locations[1].value
@@ -232,7 +231,7 @@ class WorldTestBase(unittest.TestCase):
 
     def testEmptyStateCanReachSomething(self):
         """Ensure empty state can reach at least one location with the defined options"""
-        if self.skip_default_tests:
+        if not self.run_default_tests:
             return
         with self.subTest("Game", game=self.game):
             state = CollectionState(self.multiworld)
