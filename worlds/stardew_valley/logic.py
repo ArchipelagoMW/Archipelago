@@ -946,7 +946,7 @@ class StardewLogic:
         return region_rule & season_rule & difficulty_rule
 
     def can_catch_every_fish(self) -> StardewRule:
-        rules = [self.has_skill_level("Fishing", 10), self.received("Progressive Fishing Rod", 4)]
+        rules = [self.has_skill_level("Fishing", 10), self.has_max_fishing_rod()]
         for fish in all_fish_items:
             rules.append(self.can_catch_fish(fish))
         return _And(rules)
