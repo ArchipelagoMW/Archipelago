@@ -25,7 +25,7 @@ class CompassTestBase(MCTestBase):
         structures = [x[1] for x in region_info["default_connections"]]
         itempool_str = {item.name for item in self.multiworld.itempool}
         for struct in structures:
-            assert f"Structure Compass {struct}" in itempool_str
+            assert f"Structure Compass ({struct})" in itempool_str
 
 class NoBeeTestBase(MCTestBase):
     options = {
