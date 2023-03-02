@@ -5,6 +5,7 @@ from typing import Dict
 from Patch import APDeltaPatch
 import Utils
 from .Data import get_extracted_data
+from .Options import get_option_value
 from .Pokemon import get_random_species
 
 
@@ -41,6 +42,11 @@ def generate_output(multiworld, player, output_directory: str):
 
     # Set encounter tables
     _randomize_encounter_tables(multiworld.per_slot_randoms[player], patched_rom)
+
+    # Set exp multiplier
+    numerator = min(get_option_value(multiworld, player, "exp_multiplier"), 2**16 - 1)
+    _set_bytes_little_endian(patched_rom, extracted_data["misc_rom_addresses"]["sExpMultiplier"], 2, numerator)
+    _set_bytes_little_endian(patched_rom, extracted_data["misc_rom_addresses"]["sExpMultiplier"] + 2, 2, 100)
 
     # Write Output
     outfile_player_name = f"_P{player}"
