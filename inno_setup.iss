@@ -458,7 +458,7 @@ begin
   else if (assigned(BlueROMFilePage)) and (CurPageID = BlueROMFilePage.ID) then
     Result := not (BlueROMFilePage.Values[0] = '')
   else if (assigned(LADXROMFilePage)) and (CurPageID = LADXROMFilePage.ID) then
-    Result := not (LADXROMFilePage.Values[0] = '');
+    Result := not (LADXROMFilePage.Values[0] = '')
   else
     Result := True;
 end;
