@@ -35,6 +35,5 @@ class TestDocs(unittest.TestCase):
                     with self.subTest(game_name):
                         self.assertTrue(
                             os.path.isfile(Utils.local_path(target_path, f"{game_info_lang}_{game_name}.md")),
-                            f"{game_name} missing game info file for '{game_info_lang}' language. \
-                            Expected {game_info_lang}_{game_name}.md"
+                            f'{game_name} missing game info file for "{game_info_lang}" language.'
                         )
