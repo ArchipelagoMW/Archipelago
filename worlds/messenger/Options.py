@@ -37,14 +37,14 @@ class NotesNeeded(Range):
 
 
 class AmountSeals(Range):
-    """Number of power seals that exist in the item pool when shop chest is the goal."""
+    """Number of power seals that exist in the item pool when power seal hunt is the goal."""
     range_start = 1
     range_end = 45
     default = range_end
 
 
 class RequiredSeals(Range):
-    """Percentage of total seals required to open the sh op chest."""
+    """Percentage of total seals required to open the shop chest."""
     range_start = 10
     range_end = 100
     default = range_end

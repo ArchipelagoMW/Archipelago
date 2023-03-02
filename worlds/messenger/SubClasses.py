@@ -51,10 +51,11 @@ class MessengerItem(Item):
     game = "The Messenger"
 
     def __init__(self, name: str, player: int, item_id: int = None):
-        item_class = ItemClassification.filler
         if name in {*NOTES, *PROG_ITEMS, *PHOBEKINS} or item_id is None:
             item_class = ItemClassification.progression
         elif name in USEFUL_ITEMS:
             item_class = ItemClassification.useful
+        else:
+            item_class = ItemClassification.filler
         super().__init__(name, item_class, item_id, player)
 
