@@ -5,7 +5,7 @@ from worlds.AutoWorld import World, WebWorld
 from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS, JUNK, ALWAYS_LOCATIONS, SEALS, ALL_ITEMS
 from .Options import messenger_options, NotesNeeded, Goal, PowerSeals
 from .Regions import REGIONS, REGION_CONNECTIONS
-from .Rules import MessengerRules, set_rules
+from .Rules import MessengerRules, set_messenger_rules
 from .SubClasses import MessengerRegion, MessengerItem
 
 
@@ -110,7 +110,7 @@ class MessengerWorld(World):
 
         self.multiworld.itempool += itempool
 
-    set_rules = set_rules
+    set_rules = set_messenger_rules
 
     def fill_slot_data(self) -> Dict[str, Any]:
         locations: Dict[int, List[str]] = {}

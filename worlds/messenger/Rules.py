@@ -90,7 +90,7 @@ class MessengerRules:
         return state.has("Power Seal", self.player, required_seals)
 
 
-def set_rules(world: MessengerWorld) -> None:
+def set_messenger_rules(world: MessengerWorld) -> None:
     multiworld = world.multiworld
     player = world.player
 
