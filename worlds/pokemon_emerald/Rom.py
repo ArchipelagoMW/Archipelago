@@ -2,6 +2,7 @@ import hashlib
 import bsdiff4
 import os
 from typing import Dict
+from Options import Toggle
 from Patch import APDeltaPatch
 import Utils
 from .Data import get_extracted_data
@@ -47,6 +48,10 @@ def generate_output(multiworld, player, output_directory: str):
     numerator = min(get_option_value(multiworld, player, "exp_multiplier"), 2**16 - 1)
     _set_bytes_little_endian(patched_rom, extracted_data["misc_rom_addresses"]["sExpMultiplier"], 2, numerator)
     _set_bytes_little_endian(patched_rom, extracted_data["misc_rom_addresses"]["sExpMultiplier"] + 2, 2, 100)
+
+    # Set blind trainers
+    are_blind = 1 if get_option_value(multiworld, player, "blind_trainers") == Toggle.option_true else 0
+    _set_bytes_little_endian(patched_rom, extracted_data["misc_rom_addresses"]["sAreTrainersBlind"], 1, are_blind)
 
     # Write Output
     outfile_player_name = f"_P{player}"

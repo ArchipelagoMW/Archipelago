@@ -46,6 +46,10 @@ class ExpMultiplier(Range):
     range_end = 10000
     default = 100
 
+class BlindTrainers(Toggle):
+    """Causes trainers to not start a battle with you unless you talk to them"""
+    display_name = "Blind Trainers"
+
 options: Dict[str, Option] = {
   "badges": Badges,
   "hms": HMs,
@@ -55,7 +59,8 @@ options: Dict[str, Option] = {
   "hidden_items": HiddenItems,
   "npc_gifts": NpcGifts,
   "require_itemfinder": HiddenItemsRequireItemfinder,
-  "exp_multiplier": ExpMultiplier
+  "exp_multiplier": ExpMultiplier,
+  "blind_trainers": BlindTrainers
 }
 
 def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, Dict, List]:
