@@ -211,8 +211,9 @@ class WorldTestBase(unittest.TestCase):
     def run_default_tests(self) -> bool:
         """Not possible or identical to the base test that's always being run already"""
         constructed = hasattr(self, "game") and hasattr(self, "multiworld")
-        return (constructed and self.options) or not (self.setUp.__code__ is WorldTestBase.setUp.__code__
-                                                      or self.world_setup.__code__ is WorldTestBase.world_setup.__code__)
+        return constructed and (self.options
+                                or self.setUp.__code__ is not WorldTestBase.setUp.__code__
+                                or self.world_setup.__code__ is not WorldTestBase.world_setup.__code__)
 
     def testAllStateCanReachEverything(self):
         """Ensure all state can reach everything and complete the game with the defined options"""
