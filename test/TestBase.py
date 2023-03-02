@@ -116,7 +116,7 @@ class WorldTestBase(unittest.TestCase):
             return  # setUp gets called for tests defined in the base class. We skip world_setup here.
         if not hasattr(self, "game"):
             raise NotImplementedError("didn't define game name")
-        if self._testMethodName in self.default_test_names\
+        if self._testMethodName in WorldTestBase.__dict__\
                 and not self.run_default_tests and\
                 getattr(self, self._testMethodName).__code__ is\
                 getattr(WorldTestBase, self._testMethodName, None).__code__:
@@ -219,8 +219,6 @@ class WorldTestBase(unittest.TestCase):
             and (self.options
                  or self.setUp.__code__ is not WorldTestBase.setUp.__code__
                  or self.world_setup.__code__ is not WorldTestBase.world_setup.__code__)
-
-    default_test_names = {"testAllStateCanReachEverything", "testEmptyStateCanReachSomething"}
 
     def testAllStateCanReachEverything(self):
         """Ensure all state can reach everything and complete the game with the defined options"""
