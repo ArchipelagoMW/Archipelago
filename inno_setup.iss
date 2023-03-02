@@ -63,6 +63,7 @@ Name: "generator/oot";    Description: "Ocarina of Time ROM Setup"; Types: full 
 Name: "generator/zl";     Description: "Zillion ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 150000; Flags: disablenouninstallwarning
 Name: "generator/pkmn_r"; Description: "Pokemon Red ROM Setup"; Types: full hosting
 Name: "generator/pkmn_b"; Description: "Pokemon Blue ROM Setup"; Types: full hosting
+Name: "generator/ladx";   Description: "Link's Awakening DX ROM Setup"; Types: full hosting
 Name: "server";           Description: "Server"; Types: full hosting
 Name: "client";           Description: "Clients"; Types: full playing
 Name: "client/la";        Description: "Links Awakening DX Client"; Types: full playing
@@ -79,6 +80,7 @@ Name: "client/ff1";       Description: "Final Fantasy 1"; Types: full playing
 Name: "client/pkmn";      Description: "Pokemon Client"
 Name: "client/pkmn/red";  Description: "Pokemon Client - Pokemon Red Setup"; Types: full playing; ExtraDiskSpaceRequired: 1048576
 Name: "client/pkmn/blue"; Description: "Pokemon Client - Pokemon Blue Setup"; Types: full playing; ExtraDiskSpaceRequired: 1048576
+Name: "client/ladx";      Description: "Link's Awakening Client"; Types: full playing; ExtraDiskSpaceRequired: 1048576
 Name: "client/cf";        Description: "ChecksFinder"; Types: full playing
 Name: "client/sc2";       Description: "Starcraft 2"; Types: full playing
 Name: "client/zl";        Description: "Zillion"; Types: full playing
@@ -98,6 +100,7 @@ Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda
 Source: "{code:GetZlROMPath}"; DestDir: "{app}"; DestName: "Zillion (UE) [!].sms"; Flags: external; Components: client/zl or generator/zl
 Source: "{code:GetRedROMPath}"; DestDir: "{app}"; DestName: "Pokemon Red (UE) [S][!].gb"; Flags: external; Components: client/pkmn/red or generator/pkmn_r
 Source: "{code:GetBlueROMPath}"; DestDir: "{app}"; DestName: "Pokemon Blue (UE) [S][!].gb"; Flags: external; Components: client/pkmn/blue or generator/pkmn_b
+Source: "{code:GetLADXROMPath}"; DestDir: "{app}"; DestName: "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"; Flags: external; Components: client/ladx or generator/ladx
 Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#source_path}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/sni
 Source: "{#source_path}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator/lttp
@@ -292,6 +295,9 @@ var RedROMFilePage:  TInputFileWizardPage;
 
 var bluerom: string;
 var BlueROMFilePage:  TInputFileWizardPage;
+
+var ladxrom: string;
+var LADXROMFilePage:  TInputFileWizardPage;
 
 function GetSNESMD5OfFile(const rom: string): string;
 var data: AnsiString;
@@ -611,6 +617,22 @@ begin
     Result := '';
  end;
 
+function GetLADXROMPath(Param: string): string;
+begin
+  if Length(ladxrom) > 0 then
+    Result := ladxrom
+  else if Assigned(LADXROMFilePage) then
+    begin
+      R := CompareStr(GetMD5OfFile(LADXROMFilePage.Values[0]), '07c211479386825042efb4ad31bb525f')
+      if R <> 0 then
+        MsgBox('Link's Awakening DX ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := LADXROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+ end;
+
 procedure InitializeWizard();
 begin
   AddOoTRomPage();
@@ -647,6 +669,10 @@ begin
   if Length(bluerom) = 0 then
     BlueROMFilePage:= AddGBRomPage('Pokemon Blue (UE) [S][!].gb');
 
+  ladxrom := CheckRom('Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc','07c211479386825042efb4ad31bb525f');
+  if Length(ladxrom) = 0 then
+    LADXROMFilePage:= AddGBRomPage('Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc');
+
   l2acrom := CheckRom('Lufia II - Rise of the Sinistrals (USA).sfc', '6efc477d6203ed2b3b9133c1cd9e9c5d');
   if Length(l2acrom) = 0 then
     L2ACROMFilePage:= AddRomPage('Lufia II - Rise of the Sinistrals (USA).sfc');
@@ -676,4 +702,6 @@ begin
     Result := not (WizardIsComponentSelected('generator/pkmn_r') or WizardIsComponentSelected('client/pkmn/red'));
   if (assigned(BlueROMFilePage)) and (PageID = BlueROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/pkmn_b') or WizardIsComponentSelected('client/pkmn/blue'));
+  if (assigned(LADXROMFilePage)) and (PageID = LADXROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('generator/ladx') or WizardIsComponentSelected('client/ladx'));
 end;
