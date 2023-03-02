@@ -116,6 +116,11 @@ class WorldTestBase(unittest.TestCase):
             return  # setUp gets called for tests defined in the base class. We skip world_setup here.
         if not hasattr(self, "game"):
             raise NotImplementedError("didn't define game name")
+        if self._testMethodName in self.default_test_names\
+                and not self.run_default_tests and\
+                getattr(self, self._testMethodName).__code__ is\
+                getattr(WorldTestBase, self._testMethodName, None).__code__:
+            return
         self.multiworld = MultiWorld(1)
         self.multiworld.game[1] = self.game
         self.multiworld.player_name = {1: "Tester"}
@@ -210,10 +215,12 @@ class WorldTestBase(unittest.TestCase):
     @property
     def run_default_tests(self) -> bool:
         """Not possible or identical to the base test that's always being run already"""
-        constructed = hasattr(self, "game") and hasattr(self, "multiworld")
-        return constructed and (self.options
-                                or self.setUp.__code__ is not WorldTestBase.setUp.__code__
-                                or self.world_setup.__code__ is not WorldTestBase.world_setup.__code__)
+        return getattr(self, "auto_construct", False)\
+            and (self.options
+                 or self.setUp.__code__ is not WorldTestBase.setUp.__code__
+                 or self.world_setup.__code__ is not WorldTestBase.world_setup.__code__)
+
+    default_test_names = {"testAllStateCanReachEverything", "testEmptyStateCanReachSomething"}
 
     def testAllStateCanReachEverything(self):
         """Ensure all state can reach everything and complete the game with the defined options"""
