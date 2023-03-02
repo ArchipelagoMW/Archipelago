@@ -55,7 +55,7 @@ class LocationTracker:
             '0x234': 0x20,
             '0x2A3': 0x20,
             '0x2FD': 0x20,
-            '0x2A1-1': 0x20,
+            '0x2A7': 0x20,
             '0x1F5': 0x06,
             '0x301-0': 0x10,
             '0x301-1': 0x10,
@@ -77,6 +77,7 @@ class LocationTracker:
             '0x301-1': 0xDDE1,
             '0x223': 0xDA2E,
             '0x169': 0xD97C,
+            '0x2A7': 0xD800 + 0x2A1
         }
 
         alternateAddresses = {
@@ -136,7 +137,6 @@ class LocationTracker:
             if check.value:
                 self.remaining_checks.remove(check)
                 new_checks.append(check)
-
         if new_checks:
             cb(new_checks)
         return True
@@ -165,12 +165,20 @@ class MagpieBridge:
         while self.checks == None:
             await asyncio.sleep(0.1)
         logger.info("sending all checks to magpie")
+        # Translate renamed IDs back to LADXR IDs
+        def fixup_id(the_id):
+            if the_id == "0x2A1":
+                return "0x2A1-0"
+            if the_id == "0x2A7":
+                return "0x2A1-1"
+            return the_id
+
         message = {
             "type": "check",
             "refresh":  True,
             "version": "1.0",
             "diff": False,
-            "checks": [{"id": check.id, "checked": check.value} for check in self.checks]
+            "checks": [{"id": fixup_id(check.id), "checked": check.value} for check in self.checks]
         }
 
         await self.ws.send(json.dumps(message))

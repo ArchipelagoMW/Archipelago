@@ -16,8 +16,8 @@ checkMetadataTable = {
     "0x301-0": CheckMetadata("Tunic Fairy Item 1", "Color Dungeon"), #http://artemis251.fobby.net/zelda/maps/underworld3/0301.GIF
     "0x301-1": CheckMetadata("Tunic Fairy Item 2", "Color Dungeon"), #http://artemis251.fobby.net/zelda/maps/underworld3/0301.GIF
     "0x2A2": CheckMetadata("Witch Item", "Koholint Prairie"), #http://artemis251.fobby.net/zelda/maps/underworld2/02A2.GIF
-    "0x2A1-0": CheckMetadata("Shop 200 Item", "Mabe Village"), #http://artemis251.fobby.net/zelda/maps/underworld2/02A1.GIF
-    "0x2A1-1": CheckMetadata("Shop 980 Item", "Mabe Village"), #http://artemis251.fobby.net/zelda/maps/underworld2/02A1.GIF
+    "0x2A1": CheckMetadata("Shop 200 Item", "Mabe Village"), #http://artemis251.fobby.net/zelda/maps/underworld2/02A1.GIF
+    "0x2A7": CheckMetadata("Shop 980 Item", "Mabe Village"), #http://artemis251.fobby.net/zelda/maps/underworld2/02A1.GIF
     "0x2A1-2": CheckMetadata("Shop 10 Item", "Mabe Village"), #http://artemis251.fobby.net/zelda/maps/underworld2/02A1.GIF
     "0x113": CheckMetadata("Pit Button Chest", "Tail Cave"), #http://artemis251.fobby.net/zelda/maps/underworld1/0113.GIF
     "0x115": CheckMetadata("Four Zol Chest", "Tail Cave"), #http://artemis251.fobby.net/zelda/maps/underworld1/0115.GIF
