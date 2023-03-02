@@ -248,6 +248,9 @@ def get_default_options() -> OptionsType:
         "lttp_options": {
             "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
         },
+        "ladx_options": {
+            "rom_file": "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc",
+        },
         "server_options": {
             "host": None,
             "port": 38281,

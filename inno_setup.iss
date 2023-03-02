@@ -65,6 +65,7 @@ Name: "generator/pkmn_r"; Description: "Pokemon Red ROM Setup"; Types: full host
 Name: "generator/pkmn_b"; Description: "Pokemon Blue ROM Setup"; Types: full hosting
 Name: "server";           Description: "Server"; Types: full hosting
 Name: "client";           Description: "Clients"; Types: full playing
+Name: "client/la";        Description: "Links Awakening DX Client"; Types: full playing
 Name: "client/sni";       Description: "SNI Client"; Types: full playing
 Name: "client/sni/lttp";  Description: "SNI Client - A Link to the Past Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/sni/sm";    Description: "SNI Client - Super Metroid Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
@@ -106,6 +107,7 @@ Source: "{#source_path}\ArchipelagoServer.exe"; DestDir: "{app}"; Flags: ignorev
 Source: "{#source_path}\ArchipelagoFactorioClient.exe";  DestDir: "{app}"; Flags: ignoreversion; Components: client/factorio
 Source: "{#source_path}\ArchipelagoTextClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/text
 Source: "{#source_path}\ArchipelagoSNIClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sni
+Source: "{#source_path}\ArchipelagoLinksAwakening.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/la
 Source: "{#source_path}\ArchipelagoLttPAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sni/lttp or generator/lttp
 Source: "{#source_path}\ArchipelagoMinecraftClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/minecraft
 Source: "{#source_path}\ArchipelagoOoTClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/oot
@@ -218,6 +220,11 @@ Root: HKCR; Subkey: ".apblue";                                    ValueData: "{#
 Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch";                     ValueData: "Archipelago Pokemon Blue Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/pkmn
 Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoPokemonClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/pkmn
 Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch\shell\open\command";  ValueData: """{app}\ArchipelagoPokemonClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/pkmn
+
+Root: HKCR; Subkey: ".apladx";                                    ValueData: "{#MyAppName}ladxpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/ladx
+Root: HKCR; Subkey: "{#MyAppName}ladxpatch";                     ValueData: "Archipelago Links Awakening DX Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/ladx
+Root: HKCR; Subkey: "{#MyAppName}ladxpatch\DefaultIcon";         ValueData: "{app}\LinksAwakeningClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/ladx
+Root: HKCR; Subkey: "{#MyAppName}ladxpatch\shell\open\command";  ValueData: """{app}\LinksAwakeningClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/ladx
 
 Root: HKCR; Subkey: ".archipelago";                              ValueData: "{#MyAppName}multidata";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: server
 Root: HKCR; Subkey: "{#MyAppName}multidata";                     ValueData: "Archipelago Server Data";       Flags: uninsdeletekey;  ValueType: string;  ValueName: ""; Components: server
