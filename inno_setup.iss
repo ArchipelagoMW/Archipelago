@@ -110,7 +110,7 @@ Source: "{#source_path}\ArchipelagoServer.exe"; DestDir: "{app}"; Flags: ignorev
 Source: "{#source_path}\ArchipelagoFactorioClient.exe";  DestDir: "{app}"; Flags: ignoreversion; Components: client/factorio
 Source: "{#source_path}\ArchipelagoTextClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/text
 Source: "{#source_path}\ArchipelagoSNIClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sni
-Source: "{#source_path}\ArchipelagoLinksAwakening.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/la
+Source: "{#source_path}\ArchipelagoLinksAwakeningClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/la
 Source: "{#source_path}\ArchipelagoLttPAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sni/lttp or generator/lttp
 Source: "{#source_path}\ArchipelagoMinecraftClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/minecraft
 Source: "{#source_path}\ArchipelagoOoTClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/oot
@@ -625,7 +625,7 @@ begin
     begin
       R := CompareStr(GetMD5OfFile(LADXROMFilePage.Values[0]), '07c211479386825042efb4ad31bb525f')
       if R <> 0 then
-        MsgBox('Link's Awakening DX ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+        MsgBox('Link''s Awakening DX ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
 
       Result := LADXROMFilePage.Values[0]
     end
@@ -669,9 +669,9 @@ begin
   if Length(bluerom) = 0 then
     BlueROMFilePage:= AddGBRomPage('Pokemon Blue (UE) [S][!].gb');
 
-  ladxrom := CheckRom('Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc','07c211479386825042efb4ad31bb525f');
+  ladxrom := CheckRom('Legend of Zelda, The - Link''s Awakening DX (USA, Europe) (SGB Enhanced).gbc','07c211479386825042efb4ad31bb525f');
   if Length(ladxrom) = 0 then
-    LADXROMFilePage:= AddGBRomPage('Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc');
+    LADXROMFilePage:= AddGBRomPage('Legend of Zelda, The - Link''s Awakening DX (USA, Europe) (SGB Enhanced).gbc');
 
   l2acrom := CheckRom('Lufia II - Rise of the Sinistrals (USA).sfc', '6efc477d6203ed2b3b9133c1cd9e9c5d');
   if Length(l2acrom) = 0 then
