@@ -1,4 +1,5 @@
 from . import MCTestBase
+from ..Constants import region_info
 from ..Options import minecraft_options
 
 from BaseClasses import ItemClassification
@@ -7,10 +8,7 @@ class AdvancementTestBase(MCTestBase):
     options = {
         "advancement_goal": minecraft_options["advancement_goal"].range_end
     }
-
-    def test_beatable(self):
-        self.multiworld.state = self.multiworld.get_all_state(False)
-        self.assertBeatable(True)
+    # beatability test implicit
 
 class ShardTestBase(MCTestBase):
     options = {
@@ -18,19 +16,16 @@ class ShardTestBase(MCTestBase):
         "egg_shards_available": minecraft_options["egg_shards_available"].range_end
     }
 
-    def test_beatable(self):
+    # check that itempool is not overfilled with shards
+    def test_itempool(self):
         assert len(self.multiworld.get_unfilled_locations()) == len(self.multiworld.itempool)
-        self.multiworld.state = self.multiworld.get_all_state(False)
-        self.assertBeatable(True)
 
 class CompassTestBase(MCTestBase):
     def test_compasses_in_pool(self):
-        state = self.multiworld.get_all_state(False)
-        assert state.has("Structure Compass (Village)", 1)
-        assert state.has("Structure Compass (Pillager Outpost)", 1)
-        assert state.has("Structure Compass (Nether Fortress)", 1)
-        assert state.has("Structure Compass (Bastion Remnant)", 1)
-        assert state.has("Structure Compass (End City)", 1)
+        structures = [x[1] for x in region_info["default_connections"]]
+        itempool_str = {item.name for item in self.multiworld.itempool}
+        for struct in structures:
+            assert f"Structure Compass {struct}" in itempool_str
 
 class NoBeeTestBase(MCTestBase):
     options = {
