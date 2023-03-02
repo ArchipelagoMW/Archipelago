@@ -412,14 +412,19 @@ class LinksAwakeningClient():
             await self.recved_item_from_ap(item.item, item.player, recv_index)
 
 
+all_tasks = set()
+
 def create_task_log_exception(awaitable) -> asyncio.Task:
     async def _log_exception(awaitable):
         try:
             return await awaitable
         except Exception as e:
-            #logger.exception(e)
+            logger.exception(e)
             pass
-    return asyncio.create_task(_log_exception(awaitable))
+        finally:
+            all_tasks.remove(task)
+    task = asyncio.create_task(_log_exception(awaitable))
+    all_tasks.add(task)
 
 
 class LinksAwakeningContext(CommonContext):
@@ -501,8 +506,8 @@ class LinksAwakeningContext(CommonContext):
 
     def new_checks(self, item_ids, ladxr_ids):
         self.found_checks += item_ids
-        asyncio.create_task(self.send_checks())
-        asyncio.create_task(self.magpie.send_new_checks(ladxr_ids))
+        create_task_log_exception(self.send_checks())
+        create_task_log_exception(self.magpie.send_new_checks(ladxr_ids))
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
