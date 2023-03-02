@@ -1,6 +1,8 @@
+from worlds.AutoWorld import World
+
 from . import Constants
 
-def shuffle_structures(mc_world):
+def shuffle_structures(mc_world: World) -> None:
     multiworld = mc_world.multiworld
     player = mc_world.player
 

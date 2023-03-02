@@ -1,4 +1,5 @@
-import os, json
+import os
+import json
 import pkgutil
 
 def load_data_file(*args) -> dict:

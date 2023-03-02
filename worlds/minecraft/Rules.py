@@ -1,53 +1,54 @@
 import typing
 from collections.abc import Callable
 
-from . import Constants
 from BaseClasses import CollectionState
-from worlds.generic.Rules import add_rule, exclusion_rules
+from worlds.generic.Rules import exclusion_rules
+from worlds.AutoWorld import World
 
+from . import Constants
 
 # Helper functions
 # moved from logicmixin
 
-def has_iron_ingots(state, player: int):
+def has_iron_ingots(state: CollectionState, player: int) -> bool:
     return state.has('Progressive Tools', player) and state.has('Progressive Resource Crafting', player)
 
-def has_copper_ingots(state, player: int):
+def has_copper_ingots(state: CollectionState, player: int) -> bool:
     return state.has('Progressive Tools', player) and state.has('Progressive Resource Crafting', player)
 
-def has_gold_ingots(state, player: int): 
+def has_gold_ingots(state: CollectionState, player: int) -> bool: 
     return state.has('Progressive Resource Crafting', player) and (state.has('Progressive Tools', player, 2) or state.can_reach('The Nether', 'Region', player))
 
-def has_diamond_pickaxe(state, player: int):
+def has_diamond_pickaxe(state: CollectionState, player: int) -> bool:
     return state.has('Progressive Tools', player, 3) and has_iron_ingots(state, player)
 
-def craft_crossbow(state, player: int): 
+def craft_crossbow(state: CollectionState, player: int) -> bool: 
     return state.has('Archery', player) and has_iron_ingots(state, player)
 
-def has_bottle(state, player: int): 
+def has_bottle(state: CollectionState, player: int) -> bool: 
     return state.has('Bottles', player) and state.has('Progressive Resource Crafting', player)
 
-def has_spyglass(state, player: int):
+def has_spyglass(state: CollectionState, player: int) -> bool:
     return has_copper_ingots(state, player) and state.has('Spyglass', player) and can_adventure(state, player)
 
-def can_enchant(state, player: int): 
+def can_enchant(state: CollectionState, player: int) -> bool: 
     return state.has('Enchanting', player) and has_diamond_pickaxe(state, player) # mine obsidian and lapis
 
-def can_use_anvil(state, player: int): 
+def can_use_anvil(state: CollectionState, player: int) -> bool: 
     return state.has('Enchanting', player) and state.has('Progressive Resource Crafting', player, 2) and has_iron_ingots(state, player)
 
-def fortress_loot(state, player: int): # saddles, blaze rods, wither skulls
+def fortress_loot(state: CollectionState, player: int) -> bool: # saddles, blaze rods, wither skulls
     return state.can_reach('Nether Fortress', 'Region', player) and basic_combat(state, player)
 
-def can_brew_potions(state, player: int):
+def can_brew_potions(state: CollectionState, player: int) -> bool:
     return state.has('Blaze Rods', player) and state.has('Brewing', player) and has_bottle(state, player)
 
-def can_piglin_trade(state, player: int):
+def can_piglin_trade(state: CollectionState, player: int) -> bool:
     return has_gold_ingots(state, player) and (
                 state.can_reach('The Nether', 'Region', player) or 
                 state.can_reach('Bastion Remnant', 'Region', player))
 
-def overworld_villager(state, player: int):
+def overworld_villager(state: CollectionState, player: int) -> bool:
     village_region = state.multiworld.get_region('Village', player).entrances[0].parent_region.name
     if village_region == 'The Nether': # 2 options: cure zombie villager or build portal in village
         return (state.can_reach('Zombie Doctor', 'Location', player) or
@@ -56,14 +57,14 @@ def overworld_villager(state, player: int):
         return state.can_reach('Zombie Doctor', 'Location', player)
     return state.can_reach('Village', 'Region', player)
 
-def enter_stronghold(state, player: int):
+def enter_stronghold(state: CollectionState, player: int) -> bool:
     return state.has('Blaze Rods', player) and state.has('Brewing', player) and state.has('3 Ender Pearls', player)
 
 # Difficulty-dependent functions
-def combat_difficulty(state, player: int):
+def combat_difficulty(state: CollectionState, player: int) -> bool:
     return state.multiworld.combat_difficulty[player].current_key
 
-def can_adventure(state, player: int):
+def can_adventure(state: CollectionState, player: int) -> bool:
     death_link_check = not state.multiworld.death_link[player] or state.has('Bed', player)
     if combat_difficulty(state, player) == 'easy':
         return state.has('Progressive Weapons', player, 2) and has_iron_ingots(state, player) and death_link_check
@@ -72,7 +73,7 @@ def can_adventure(state, player: int):
     return (state.has('Progressive Weapons', player) and death_link_check and 
         (state.has('Progressive Resource Crafting', player) or state.has('Campfire', player)))
 
-def basic_combat(state, player: int):
+def basic_combat(state: CollectionState, player: int) -> bool:
     if combat_difficulty(state, player) == 'easy': 
         return state.has('Progressive Weapons', player, 2) and state.has('Progressive Armor', player) and \
                state.has('Shield', player) and has_iron_ingots(state, player)
@@ -80,7 +81,7 @@ def basic_combat(state, player: int):
         return True
     return state.has('Progressive Weapons', player) and (state.has('Progressive Armor', player) or state.has('Shield', player)) and has_iron_ingots(state, player)
 
-def complete_raid(state, player: int): 
+def complete_raid(state: CollectionState, player: int) -> bool: 
     reach_regions = state.can_reach('Village', 'Region', player) and state.can_reach('Pillager Outpost', 'Region', player)
     if combat_difficulty(state, player) == 'easy': 
         return reach_regions and \
@@ -93,7 +94,7 @@ def complete_raid(state, player: int):
     return reach_regions and state.has('Progressive Weapons', player, 2) and has_iron_ingots(state, player) and \
            state.has('Progressive Armor', player) and state.has('Shield', player)
 
-def can_kill_wither(state, player: int): 
+def can_kill_wither(state: CollectionState, player: int) -> bool: 
     normal_kill = state.has("Progressive Weapons", player, 3) and state.has("Progressive Armor", player, 2) and can_brew_potions(state, player) and can_enchant(state, player)
     if combat_difficulty(state, player) == 'easy': 
         return fortress_loot(state, player) and normal_kill and state.has('Archery', player)
@@ -101,11 +102,11 @@ def can_kill_wither(state, player: int):
         return fortress_loot(state, player) and (normal_kill or state.can_reach('The Nether', 'Region', player) or state.can_reach('The End', 'Region', player))
     return fortress_loot(state, player) and normal_kill
 
-def can_respawn_ender_dragon(state, player: int):
+def can_respawn_ender_dragon(state: CollectionState, player: int) -> bool:
     return state.can_reach('The Nether', 'Region', player) and state.can_reach('The End', 'Region', player) and \
         state.has('Progressive Resource Crafting', player) # smelt sand into glass
 
-def can_kill_ender_dragon(state, player: int):
+def can_kill_ender_dragon(state: CollectionState, player: int) -> bool:
     if combat_difficulty(state, player) == 'easy': 
         return state.has("Progressive Weapons", player, 3) and state.has("Progressive Armor", player, 2) and \
                state.has('Archery', player) and can_brew_potions(state, player) and can_enchant(state, player)
@@ -114,13 +115,13 @@ def can_kill_ender_dragon(state, player: int):
                (state.has('Progressive Weapons', player, 1) and state.has('Bed', player))
     return state.has('Progressive Weapons', player, 2) and state.has('Progressive Armor', player) and state.has('Archery', player)
 
-def has_structure_compass(state, entrance_name: str, player: int):
+def has_structure_compass(state: CollectionState, entrance_name: str, player: int) -> bool:
     if not state.multiworld.structure_compasses[player]:
         return True
     return state.has(f"Structure Compass ({state.multiworld.get_entrance(entrance_name, player).connected_region.name})", player)
 
 
-def get_rules_lookup(player):
+def get_rules_lookup(player: int):
     rules_lookup: typing.Dict[str, typing.List[Callable[[CollectionState], bool]]] = {
         "entrances": {
             "Nether Portal": lambda state: (state.has('Flint and Steel', player) and 
@@ -265,7 +266,7 @@ def get_rules_lookup(player):
     return rules_lookup
 
 
-def set_rules(mc_world):
+def set_rules(mc_world: World) -> None:
     multiworld = mc_world.multiworld
     player = mc_world.player
 
@@ -287,12 +288,12 @@ def set_rules(mc_world):
     if bosses.wither:
         postgame_advancements.update(Constants.exclusion_info["wither"])
 
-    def location_count(state):
+    def location_count(state: CollectionState) -> bool:
         return len([location for location in multiworld.get_locations(player) if
             location.address != None and
             location.can_reach(state)])
 
-    def defeated_bosses(state):
+    def defeated_bosses(state: CollectionState) -> bool:
         return ((not bosses.dragon or state.has("Ender Dragon", player))
             and (not bosses.wither or state.has("Wither", player)))
 

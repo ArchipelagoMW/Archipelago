@@ -1,7 +1,12 @@
 from math import ceil
+from typing import List
+
+from BaseClasses import Item
+from worlds.AutoWorld import World
+
 from . import Constants
 
-def build_item_pool(mc_world):
+def build_item_pool(mc_world: World) -> List[Item]:
 	multiworld = mc_world.multiworld
 	player = mc_world.player
 

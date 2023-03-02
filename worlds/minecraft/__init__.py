@@ -1,15 +1,16 @@
 import os
 import json
 from base64 import b64encode, b64decode
+from typing import Dict, Any
+
+from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification, Location
+from worlds.AutoWorld import World, WebWorld
 
 from . import Constants
 from .Options import minecraft_options
 from .Structures import shuffle_structures
 from .ItemPool import build_item_pool
 from .Rules import set_rules
-
-from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification, Location
-from worlds.AutoWorld import World, WebWorld
 
 client_version = 9
 
@@ -74,7 +75,7 @@ class MinecraftWorld(World):
 
     data_version = 7
 
-    def _get_mc_data(self):
+    def _get_mc_data(self) -> Dict[str, Any]:
         exits = [connection[0] for connection in Constants.region_info["default_connections"]]
         return {
             'world_seed': self.multiworld.per_slot_randoms[self.player].getrandbits(32),
@@ -105,18 +106,18 @@ class MinecraftWorld(World):
 
         return MinecraftItem(name, item_class, self.item_name_to_id.get(name, None), self.player)
 
-    def create_event(self, region_name, event_name):
+    def create_event(self, region_name: str, event_name: str) -> None:
         region = self.multiworld.get_region(region_name, self.player)
         loc = MinecraftLocation(self.player, event_name, None, region)
         loc.place_locked_item(self.create_event_item(event_name))
         region.locations.append(loc)
 
-    def create_event_item(self, name):
+    def create_event_item(self, name: str) -> None:
         item = self.create_item(name)
         item.classification = ItemClassification.progression
         return item
 
-    def create_regions(self):
+    def create_regions(self) -> None:
         # Create regions
         for region_name, exits in Constants.region_info["regions"]:
             r = Region(region_name, self.player, self.multiworld)
@@ -146,19 +147,18 @@ class MinecraftWorld(World):
         # Shuffle the connections
         shuffle_structures(self)
 
-    def create_items(self):
+    def create_items(self) -> None:
         self.multiworld.itempool += build_item_pool(self)
 
-    def set_rules(self):
-        set_rules(self)
+    set_rules = set_rules
 
-    def generate_output(self, output_directory: str):
+    def generate_output(self, output_directory: str) -> None:
         data = self._get_mc_data()
         filename = f"AP_{self.multiworld.get_out_file_name_base(self.player)}.apmc"
         with open(os.path.join(output_directory, filename), 'wb') as f:
             f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
 
-    def fill_slot_data(self):
+    def fill_slot_data(self) -> dict:
         slot_data = self._get_mc_data()
         for option_name in minecraft_options:
             option = getattr(self.multiworld, option_name)[self.player]
