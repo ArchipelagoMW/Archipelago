@@ -84,12 +84,12 @@
   "ITEM_MACH_BIKE": {
     "label": "Mach Bike",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Bike"]
   },
   "ITEM_ACRO_BIKE": {
     "label": "Acro Bike",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Bike"]
   },
 
   "ITEM_DEVON_GOODS": {

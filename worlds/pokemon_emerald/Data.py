@@ -221,7 +221,7 @@ def get_warp_to_region_map() -> Dict[str, str]:
     return warp_to_region_map
 
 
-def get_item_attributes() -> Dict[str, ItemData]:
+def get_item_attributes() -> Dict[int, ItemData]:
     global item_attributes
     extracted_data = get_extracted_data()
     if (item_attributes == None):

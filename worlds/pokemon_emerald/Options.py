@@ -2,46 +2,38 @@ from BaseClasses import MultiWorld
 from typing import Dict, List, Union
 from Options import Option, Choice, DefaultOnToggle, Range, Toggle
 
-class Badges(Choice):
-    """Sets where badges can be found
-    Vanilla: Gym leaders give their own badges
-    Shuffle: Gym leaders give a random badge
-    Badgesanity: Badges can be anywhere"""
-    display_name = "Badges"
-    option_vanilla = 0
-    option_shuffle = 1
-    option_badgesanity = 2
+class Badges(DefaultOnToggle):
+    """Adds Badges to the pool"""
+    display_name = "Randomize Badges"
 
-class HMs(Choice):
-    """Sets where HMs can be found
-    Vanilla: HMs are at their vanilla locations
-    Shuffle: HMs are shuffled between locations you would normally find an HM
-    Fully Random: HMs can be anywhere"""
-    display_name = "Badges"
-    option_vanilla = 0
-    option_shuffle = 1
-    option_fully_random = 2
+class HMs(DefaultOnToggle):
+    """Adds HMs to the pool"""
+    display_name = "Randomize HMs"
 
 class KeyItems(Toggle):
-    """Adds many key items to the pool. These are categorized by whether locations
-    or regions logically require them to get to (e.g. Devon Scope, Letter, Devon Goods)"""
-    display_name = "Key Items"
+    """Adds most key items to the pool. These are usually required to unlock
+    a location or region (e.g. Devon Scope, Letter, Basement Key)"""
+    display_name = "Randomize Key Items"
 
 class Rods(Toggle):
     """Adds fishing rods to the pool"""
-    display_name = "Fishing Rods"
+    display_name = "Randomize Fishing Rods"
 
-class Items(DefaultOnToggle):
+class OverworldItems(DefaultOnToggle):
     """Adds items on the ground with a Pokeball sprite to the pool"""
-    display_name = "Overworld Items"
+    display_name = "Randomize Overworld Items"
 
 class HiddenItems(Toggle):
     """Adds hidden items to the pool"""
-    display_name = "Hidden Items"
+    display_name = "Randomize Hidden Items"
 
 class NpcGifts(Toggle):
-    """Adds most gifts received from NPCs to the pool"""
-    display_name = "NPC Gifts"
+    """Adds most gifts received from NPCs to the pool (not including key items or HMs)"""
+    display_name = "Randomize NPC Gifts"
+
+class HiddenItemsRequireItemfinder(DefaultOnToggle):
+    """The Itemfinder is logically required to pick up hidden items"""
+    display_name = "Require Itemfinder"
 
 class ExpMultiplier(Range):
     """Modifies gained experience by a percentage
@@ -55,13 +47,15 @@ class ExpMultiplier(Range):
     default = 100
 
 options: Dict[str, Option] = {
-  "Badges": Badges,
-  "HMs": HMs,
-  "KeyItems": KeyItems,
-  "Items": Items,
-  "HiddenItems": HiddenItems,
-  "NpcGifts": NpcGifts,
-  "ExpMultiplier": ExpMultiplier
+  "badges": Badges,
+  "hms": HMs,
+  "key_items": KeyItems,
+  "rods": Rods,
+  "overworld_items": OverworldItems,
+  "hidden_items": HiddenItems,
+  "npc_gifts": NpcGifts,
+  "require_itemfinder": HiddenItemsRequireItemfinder,
+  "exp_multiplier": ExpMultiplier
 }
 
 def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, Dict, List]:

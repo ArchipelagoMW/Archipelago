@@ -19,10 +19,12 @@ def _can_waterfall(state: CollectionState, player: int):
     return state.has("HM07 Waterfall", player) and state.has("Rain Badge", player)
 def _can_dive(state: CollectionState, player: int):
     return state.has("HM08 Dive", player) and state.has("Mind Badge", player)
+
 def _can_use_mach_bike(state: CollectionState, player: int):
     return state.has("EVENT_RECEIVE_BIKE", player)
 def _can_use_acro_bike(state: CollectionState, player: int):
     return state.has("EVENT_RECEIVE_BIKE", player)
+
 def _defeated_n_gym_leaders(state: CollectionState, player: int, n: int):
     num_gym_leaders_defeated = 0
     num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_ROXANNE", player) else 0
@@ -34,6 +36,7 @@ def _defeated_n_gym_leaders(state: CollectionState, player: int, n: int):
     num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_TATE_AND_LIZA", player) else 0
     num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_JUAN", player) else 0
     return num_gym_leaders_defeated >= n
+
 def _has_at_least_n_badges(state: CollectionState, player: int, n: int):
     num_badges = 0
     num_badges += 1 if state.has("Stone Badge", player) else 0
@@ -46,12 +49,12 @@ def _has_at_least_n_badges(state: CollectionState, player: int, n: int):
     num_badges += 1 if state.has("Rain Badge", player) else 0
     return num_badges >= n
 
+def name_to_label(name):
+    return get_location_attributes()[name].label
+
 # Rules are organized by town/route/dungeon and ordered approximately
 # by when you would first reach that place in a vanilla playthrough.
 def set_default_rules(multiworld: MultiWorld, player: int):
-    location_attributes = get_location_attributes()
-    name_to_label = lambda name: location_attributes[name].label
-
     can_cut = lambda state: _can_cut(state, player)
     can_fly = lambda state: _can_fly(state, player)
     can_surf = lambda state: _can_surf(state, player)
@@ -124,16 +127,6 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: state.has("EVENT_VISITED_EVER_GRANDE_CITY", player)
     )
 
-    # Littleroot Town
-    set_rule(
-        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_AMULET_COIN"), player),
-        lambda state: state.has("Balance Badge", player)
-    )
-    set_rule(
-        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_SS_TICKET"), player),
-        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
-    )
-
     # Oldale Town
     set_rule(
         multiworld.get_entrance("REGION_OLDALE_TOWN/MAIN -> REGION_ROUTE102/MAIN", player),
@@ -149,14 +142,6 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_ROUTE103/WEST -> REGION_ROUTE103/WATER", player),
         can_surf
     )
-    set_rule(
-        multiworld.get_location(name_to_label("ITEM_ROUTE_103_PP_UP"), player),
-        can_cut
-    )
-    set_rule(
-        multiworld.get_location(name_to_label("ITEM_ROUTE_103_GUARD_SPEC"), player),
-        can_cut
-    )
 
     # Petalburg City
     set_rule(
@@ -167,14 +152,6 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_PETALBURG_CITY/MAIN -> REGION_PETALBURG_CITY/NORTH_POND", player),
         can_surf
     )
-    set_rule(
-        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_TM36"), player),
-        lambda state: state.has("EVENT_DEFEAT_NORMAN", player)
-    )
-    set_rule(
-        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_HM03"), player),
-        lambda state: state.has("EVENT_DEFEAT_NORMAN", player)
-    )
 
     # Route 104
     set_rule(
@@ -182,20 +159,8 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         can_surf
     )
     set_rule(
-        multiworld.get_location(name_to_label("ITEM_ROUTE_104_X_ACCURACY"), player),
-        lambda state: can_surf(state) or can_cut(state)
-    )
-    set_rule(
-        multiworld.get_location(name_to_label("ITEM_ROUTE_104_PP_UP"), player),
-        can_surf
-    )
-    set_rule(
         multiworld.get_entrance("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN", player),
         lambda state: state.has("EVENT_TALK_TO_MR_STONE", player)
-    )
-    set_rule(
-        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_WHITE_HERB"), player),
-        lambda state: state.has("Dynamo Badge", player) and state.has("EVENT_MEET_FLOWER_SHOP_OWNER", player)
     )
 
     # Petalburg Woods
@@ -215,19 +180,11 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("MAP_RUSTBORO_CITY_DEVON_CORP_1F:2/MAP_RUSTBORO_CITY_DEVON_CORP_2F:0", player),
         lambda state: state.has("EVENT_RETURN_DEVON_GOODS", player)
     )
-    set_rule(
-        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_EXP_SHARE"), player),
-        lambda state: state.has("EVENT_DELIVER_LETTER", player)
-    )
 
     # Route 116
     set_rule(
         multiworld.get_entrance("REGION_ROUTE116/WEST -> REGION_ROUTE116/WEST_ABOVE_LEDGE", player),
         can_cut
-    )
-    set_rule(
-        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_REPEAT_BALL"), player),
-        lambda state: state.has("EVENT_RESCUE_CAPT_STERN", player)
     )
 
     # Rusturf Tunnel
@@ -388,20 +345,6 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6", player),
         lambda state: _defeated_n_gym_leaders(state, player, 4)
     )
-    set_rule(
-        multiworld.get_location(name_to_label("NPC_GIFT_GOT_BASEMENT_KEY_FROM_WATTSON"), player),
-        lambda state: state.has("EVENT_DEFEAT_NORMAN", player)
-    )
-    set_rule(
-        multiworld.get_location(name_to_label("NPC_GIFT_GOT_TM24_FROM_WATTSON"), player),
-        lambda state: state.has("EVENT_DEFEAT_NORMAN", player) and state.has("EVENT_TURN_OFF_GENERATOR", player)
-    )
-
-    # Route 117
-    set_rule(
-        multiworld.get_location(name_to_label("ITEM_ROUTE_117_REVIVE"), player),
-        can_cut
-    )
 
     # Route 111
     set_rule(
@@ -451,18 +394,8 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: can_surf(state) and can_waterfall(state)
     )
     set_rule(
-        multiworld.get_location(name_to_label("ITEM_ROUTE_114_PROTEIN"), player),
-        can_rock_smash
-    )
-    set_rule(
         multiworld.get_entrance("MAP_ROUTE114_FOSSIL_MANIACS_TUNNEL:2/MAP_DESERT_UNDERPASS:0", player),
         lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
-    )
-
-    # Fallarbor Town
-    set_rule(
-        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_TM27"), player),
-        lambda state: state.has("EVENT_RECOVER_METEORITE", player) and state.has("Meteorite", player)
     )
 
     # Meteor Falls
@@ -503,12 +436,6 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     set_rule(
         multiworld.get_entrance("MAP_JAGGED_PASS:4/MAP_MAGMA_HIDEOUT_1F:0", player),
         lambda state: state.has("Magma Emblem", player)
-    )
-
-    # Lavaridge Town
-    set_rule(
-        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_GO_GOGGLES"), player),
-        lambda state: state.has("EVENT_DEFEAT_FLANNERY", player)
     )
 
     # Mirage Tower
@@ -630,10 +557,6 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_FORTREE_CITY/BEFORE_GYM -> REGION_FORTREE_CITY/MAIN", player),
         lambda state: state.has("Devon Scope", player)
     )
-    set_rule(
-        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_MENTAL_HERB"), player),
-        lambda state: state.has("EVENT_WINGULL_QUEST_2", player)
-    )
 
     # TODO: Check behavior of talking to Steven on Route 120 from west or
     # interacting with the Kecleon while having the Devon Scope and without
@@ -652,19 +575,11 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_ROUTE120/NORTH -> REGION_ROUTE120/NORTH_POND", player),
         lambda state: state.has("Devon Scope", player)
     )
-    set_rule(
-        multiworld.get_location(name_to_label("HIDDEN_ITEM_ROUTE_120_RARE_CANDY_1"), player),
-        can_cut
-    )
 
     # Route 121
     set_rule(
         multiworld.get_entrance("REGION_ROUTE121/MAIN -> REGION_ROUTE122/SEA", player),
         can_surf
-    )
-    set_rule(
-        multiworld.get_location(name_to_label("HIDDEN_ITEM_ROUTE_121_NUGGET"), player),
-        can_cut
     )
 
     # Safari Zone
@@ -683,18 +598,6 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     set_rule(
         multiworld.get_entrance("REGION_SAFARI_ZONE_SOUTH/MAIN -> REGION_SAFARI_ZONE_SOUTHEAST/MAIN", player),
         lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
-    )
-    set_rule(
-        multiworld.get_location(name_to_label("ITEM_SAFARI_ZONE_NORTH_WEST_TM22"), player),
-        can_surf
-    )
-    set_rule(
-        multiworld.get_location(name_to_label("ITEM_SAFARI_ZONE_SOUTH_WEST_MAX_REVIVE"), player),
-        can_surf
-    )
-    set_rule(
-        multiworld.get_location(name_to_label("ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL"), player),
-        can_surf
     )
 
     # Route 122
@@ -819,10 +722,6 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_location("EVENT_DEFEAT_MAXIE_AT_SPACE_STATION", player),
         lambda state: state.has("EVENT_DEFEAT_TATE_AND_LIZA", player)
     )
-    set_rule(
-        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_HM08"), player),
-        lambda state: state.has("EVENT_DEFEAT_MAXIE_AT_SPACE_STATION", player)
-    )
 
     # Route 126
     set_rule(
@@ -861,10 +760,6 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     )
     set_rule(
         multiworld.get_entrance("MAP_SOOTOPOLIS_CITY:2/MAP_SOOTOPOLIS_CITY_GYM_1F:0", player),
-        lambda state: state.has("EVENT_WAKE_RAYQUAZA", player)
-    )
-    set_rule(
-        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_HM07"), player),
         lambda state: state.has("EVENT_WAKE_RAYQUAZA", player)
     )
 
@@ -1106,10 +1001,6 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: can_rock_smash(state) and can_strength(state)
     )
     set_rule(
-        multiworld.get_location(name_to_label("ITEM_VICTORY_ROAD_B1F_FULL_RESTORE"), player),
-        lambda state: can_rock_smash(state) and can_strength(state)
-    )
-    set_rule(
         multiworld.get_entrance("REGION_VICTORY_ROAD_B2F/LOWER_WEST -> REGION_VICTORY_ROAD_B2F/LOWER_WEST_WATER", player),
         can_surf
     )
@@ -1142,4 +1033,170 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     set_rule(
         multiworld.get_entrance("REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/MAIN -> REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/BEHIND_BADGE_CHECKERS", player),
         lambda state: _has_at_least_n_badges(state, player, 8)
+    )
+
+
+def set_overworld_item_rules(multiworld: MultiWorld, player: int):
+    can_cut = lambda state: _can_cut(state, player)
+    can_fly = lambda state: _can_fly(state, player)
+    can_surf = lambda state: _can_surf(state, player)
+    can_strength = lambda state: _can_strength(state, player)
+    can_flash = lambda state: _can_flash(state, player)
+    can_rock_smash = lambda state: _can_rock_smash(state, player)
+    can_waterfall = lambda state: _can_waterfall(state, player)
+    can_dive = lambda state: _can_dive(state, player)
+
+    # Route 103
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_ROUTE_103_PP_UP"), player),
+        can_cut
+    )
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_ROUTE_103_GUARD_SPEC"), player),
+        can_cut
+    )
+
+    # Route 104
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_ROUTE_104_X_ACCURACY"), player),
+        lambda state: can_surf(state) or can_cut(state)
+    )
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_ROUTE_104_PP_UP"), player),
+        can_surf
+    )
+
+    # Route 117
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_ROUTE_117_REVIVE"), player),
+        can_cut
+    )
+
+    # Route 114
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_ROUTE_114_PROTEIN"), player),
+        can_rock_smash
+    )
+
+    # Safari Zone
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_SAFARI_ZONE_NORTH_WEST_TM22"), player),
+        can_surf
+    )
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_SAFARI_ZONE_SOUTH_WEST_MAX_REVIVE"), player),
+        can_surf
+    )
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL"), player),
+        can_surf
+    )
+
+    # Victory Road
+    set_rule(
+        multiworld.get_location(name_to_label("ITEM_VICTORY_ROAD_B1F_FULL_RESTORE"), player),
+        lambda state: can_rock_smash(state) and can_strength(state)
+    )
+
+
+def set_hidden_item_rules(multiworld: MultiWorld, player: int):
+    can_cut = lambda state: _can_cut(state, player)
+    can_fly = lambda state: _can_fly(state, player)
+    can_surf = lambda state: _can_surf(state, player)
+    can_strength = lambda state: _can_strength(state, player)
+    can_flash = lambda state: _can_flash(state, player)
+    can_rock_smash = lambda state: _can_rock_smash(state, player)
+    can_waterfall = lambda state: _can_waterfall(state, player)
+    can_dive = lambda state: _can_dive(state, player)
+
+    # Route 120
+    set_rule(
+        multiworld.get_location(name_to_label("HIDDEN_ITEM_ROUTE_120_RARE_CANDY_1"), player),
+        can_cut
+    )
+
+    # Route 121
+    set_rule(
+        multiworld.get_location(name_to_label("HIDDEN_ITEM_ROUTE_121_NUGGET"), player),
+        can_cut
+    )
+
+
+def set_npc_gift_rules(multiworld: MultiWorld, player: int):
+    # Littleroot Town
+    set_rule(
+        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_AMULET_COIN"), player),
+        lambda state: state.has("Balance Badge", player)
+    )
+    set_rule(
+        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_SS_TICKET"), player),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
+    )
+
+    # Petalburg City
+    set_rule(
+        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_TM36"), player),
+        lambda state: state.has("EVENT_DEFEAT_NORMAN", player)
+    )
+    set_rule(
+        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_HM03"), player),
+        lambda state: state.has("EVENT_DEFEAT_NORMAN", player)
+    )
+
+    # Route 104
+    set_rule(
+        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_WHITE_HERB"), player),
+        lambda state: state.has("Dynamo Badge", player) and state.has("EVENT_MEET_FLOWER_SHOP_OWNER", player)
+    )
+
+    # Devon Corp
+    set_rule(
+        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_EXP_SHARE"), player),
+        lambda state: state.has("EVENT_DELIVER_LETTER", player)
+    )
+
+    # Route 116
+    set_rule(
+        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_REPEAT_BALL"), player),
+        lambda state: state.has("EVENT_RESCUE_CAPT_STERN", player)
+    )
+
+    # Mauville City
+    set_rule(
+        multiworld.get_location(name_to_label("NPC_GIFT_GOT_BASEMENT_KEY_FROM_WATTSON"), player),
+        lambda state: state.has("EVENT_DEFEAT_NORMAN", player)
+    )
+    set_rule(
+        multiworld.get_location(name_to_label("NPC_GIFT_GOT_TM24_FROM_WATTSON"), player),
+        lambda state: state.has("EVENT_DEFEAT_NORMAN", player) and state.has("EVENT_TURN_OFF_GENERATOR", player)
+    )
+
+    # Fallarbor Town
+    set_rule(
+        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_TM27"), player),
+        lambda state: state.has("EVENT_RECOVER_METEORITE", player) and state.has("Meteorite", player)
+    )
+
+    # Lavaridge Town
+    set_rule(
+        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_GO_GOGGLES"), player),
+        lambda state: state.has("EVENT_DEFEAT_FLANNERY", player)
+    )
+
+    # Fortree City
+    set_rule(
+        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_MENTAL_HERB"), player),
+        lambda state: state.has("EVENT_WINGULL_QUEST_2", player)
+    )
+
+    # Mossdeep City
+    set_rule(
+        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_HM08"), player),
+        lambda state: state.has("EVENT_DEFEAT_MAXIE_AT_SPACE_STATION", player)
+    )
+
+    # Sootopolis City
+    set_rule(
+        multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_HM07"), player),
+        lambda state: state.has("EVENT_WAKE_RAYQUAZA", player)
     )

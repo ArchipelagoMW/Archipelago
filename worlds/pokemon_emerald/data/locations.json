@@ -31,6 +31,84 @@
     "label": "Sootopolis City Gym - Rain Badge",
     "tags": ["Badge"]
   },
+
+  "NPC_GIFT_RECEIVED_HM01": {
+    "label": "Rustboro City - HM01 from Cutter's House",
+    "tags": ["HM"]
+  },
+  "NPC_GIFT_RECEIVED_HM02": {
+    "label": "Route 119 - HM02 from Rival Battle",
+    "tags": ["HM"]
+  },
+  "NPC_GIFT_RECEIVED_HM03": {
+    "label": "Petalburg City - HM03 from Wally's Uncle",
+    "tags": ["HM"]
+  },
+  "NPC_GIFT_RECEIVED_HM04": {
+    "label": "Rusturf Tunnel - HM04 from Tunneler",
+    "tags": ["HM"]
+  },
+  "NPC_GIFT_RECEIVED_HM05": {
+    "label": "Granite Cave 1F - HM05 from Hiker",
+    "tags": ["HM"]
+  },
+  "NPC_GIFT_RECEIVED_HM06": {
+    "label": "Mauville City - HM06 from Rock Smash Guy",
+    "tags": ["HM"]
+  },
+  "NPC_GIFT_RECEIVED_HM07": {
+    "label": "Sootopolis City - HM07 from Wallace",
+    "tags": ["HM"]
+  },
+  "NPC_GIFT_RECEIVED_HM08": {
+    "label": "Mossdeep City - HM08 from Steven's House",
+    "tags": ["HM"]
+  },
+
+  "NPC_GIFT_RECEIVED_WAILMER_PAIL": {
+    "label": "Route 104 - Wailmer Pail from Flower Shop Lady",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_DEVON_GOODS_RUSTURF_TUNNEL": {
+    "label": "Rusturf Tunnel - Recover Devon Goods",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_LETTER": {
+    "label": "Devon Corp 3F - Letter from Mr. Stone",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_COIN_CASE": {
+    "label": "Mauville City - Gift from Woman in House",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_METEORITE": {
+    "label": "Mt Chimney - Recover Meteorite",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_GO_GOGGLES": {
+    "label": "Lavaridge Town - Go Goggles from Rival",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_GOT_BASEMENT_KEY_FROM_WATTSON": {
+    "label": "Mauville City - Basement Key from Wattson",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_ITEMFINDER": {
+    "label": "Route 110 - Itemfinder from Rival",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_DEVON_SCOPE": {
+    "label": "Route 120 - Devon Scope from Steven",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_MAGMA_EMBLEM": {
+    "label": "Mt Pyre Summit - Magma Emblem from Old Lady",
+    "tags": ["KeyItem"]
+  },
+  "ITEM_ABANDONED_SHIP_CAPTAINS_OFFICE_STORAGE_KEY": {
+    "label": "Abandoned Ship - Captain's Office Key",
+    "tags": ["KeyItem"]
+  },
   "HIDDEN_ITEM_ABANDONED_SHIP_RM_1_KEY": {
     "label": "Abandoned Ship HF - Hidden Room 1 Key",
     "tags": ["KeyItem"]
@@ -47,6 +125,32 @@
     "label": "Abandoned Ship HF - Hidden Room 6 Key",
     "tags": ["KeyItem"]
   },
+  "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_4_SCANNER": {
+    "label": "Abandoned Ship HF - Room 4 Item",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_POKEBLOCK_CASE": {
+    "label": "Lilycove City - Pokeblock Case from Contest Hall",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_SS_TICKET": {
+    "label": "Littleroot Town - Gift from Norman",
+    "tags": ["KeyItem"]
+  },
+
+  "NPC_GIFT_RECEIVED_OLD_ROD": {
+    "label": "Dewford Town - Old Rod from Fisherman",
+    "tags": ["Rod"]
+  },
+  "NPC_GIFT_RECEIVED_GOOD_ROD": {
+    "label": "Route 118 - Good Rod from Fisherman",
+    "tags": ["Rod"]
+  },
+  "NPC_GIFT_RECEIVED_SUPER_ROD": {
+    "label": "Mossdeep City - Super Rod from Fisherman in House",
+    "tags": ["Rod"]
+  },
+
   "HIDDEN_ITEM_ARTISAN_CAVE_B1F_CALCIUM": {
     "label": "Artisan Cave B1F - Hidden Item 1",
     "tags": ["HiddenItem"]
@@ -479,20 +583,12 @@
     "label": "Victory Road B2F - Hidden Item 2",
     "tags": ["HiddenItem"]
   },
-  "ITEM_ABANDONED_SHIP_CAPTAINS_OFFICE_STORAGE_KEY": {
-    "label": "Abandoned Ship - Captain's Office Key",
-    "tags": ["OverworldItem"]
-  },
   "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_1_TM18": {
     "label": "Abandoned Ship HF - Room 1 Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_3_WATER_STONE": {
     "label": "Abandoned Ship HF - Room 3 Item",
-    "tags": ["OverworldItem"]
-  },
-  "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_4_SCANNER": {
-    "label": "Abandoned Ship HF - Room 4 Item",
     "tags": ["OverworldItem"]
   },
   "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_6_LUXURY_BALL": {
@@ -1127,10 +1223,6 @@
     "label": "Victory Road B2F - Item 1",
     "tags": ["OverworldItem"]
   },
-  "NPC_GIFT_GOT_BASEMENT_KEY_FROM_WATTSON": {
-    "label": "Mauville City - Basement Key from Wattson",
-    "tags": ["KeyItem"]
-  },
   "NPC_GIFT_GOT_TM24_FROM_WATTSON": {
     "label": "Mauville City - TM24 from Wattson",
     "tags": ["NpcGift"]
@@ -1155,18 +1247,6 @@
     "label": "Mt Pyre 1F - Gift from Woman in NE Corner",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_COIN_CASE": {
-    "label": "Mauville City - Gift from Woman in House",
-    "tags": ["KeyItem"]
-  },
-  "NPC_GIFT_RECEIVED_DEVON_GOODS_RUSTURF_TUNNEL": {
-    "label": "Rusturf Tunnel - Recover Devon Goods",
-    "tags": ["KeyItem"]
-  },
-  "NPC_GIFT_RECEIVED_DEVON_SCOPE": {
-    "label": "Route 120 - Devon Scope from Steven",
-    "tags": ["KeyItem"]
-  },
   "NPC_GIFT_RECEIVED_EXP_SHARE": {
     "label": "Devon Corp 3F - Exp. Share from Mr. Stone",
     "tags": ["NpcGift"]
@@ -1174,14 +1254,6 @@
   "NPC_GIFT_RECEIVED_FOCUS_BAND": {
     "label": "Shoal Cave Lower Room - Gift from Black Belt",
     "tags": ["NpcGift"]
-  },
-  "NPC_GIFT_RECEIVED_GO_GOGGLES": {
-    "label": "Lavaridge Town - Go Goggles from Rival",
-    "tags": ["KeyItem"]
-  },
-  "NPC_GIFT_RECEIVED_GOOD_ROD": {
-    "label": "Route 118 - Good Rod from Fisherman",
-    "tags": ["Rod"]
   },
   "NPC_GIFT_RECEIVED_GREAT_BALL_PETALBURG_WOODS": {
     "label": "Petalburg Woods - Gift from Devon Employee",
@@ -1191,76 +1263,20 @@
     "label": "Rustboro City - Gift from Devon Employee",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_HM01": {
-    "label": "Rustboro City - HM01 from Cutter's House",
-    "tags": ["HM"]
-  },
-  "NPC_GIFT_RECEIVED_HM02": {
-    "label": "Route 119 - HM02 from Rival Battle",
-    "tags": ["HM"]
-  },
-  "NPC_GIFT_RECEIVED_HM03": {
-    "label": "Petalburg City - HM03 from Wally's Uncle",
-    "tags": ["HM"]
-  },
-  "NPC_GIFT_RECEIVED_HM04": {
-    "label": "Rusturf Tunnel - HM04 from Tunneler",
-    "tags": ["HM"]
-  },
-  "NPC_GIFT_RECEIVED_HM05": {
-    "label": "Granite Cave 1F - HM05 from Hiker",
-    "tags": ["HM"]
-  },
-  "NPC_GIFT_RECEIVED_HM06": {
-    "label": "Mauville City - HM06 from Rock Smash Guy",
-    "tags": ["HM"]
-  },
-  "NPC_GIFT_RECEIVED_HM07": {
-    "label": "Sootopolis City - HM07 from Wallace",
-    "tags": ["HM"]
-  },
-  "NPC_GIFT_RECEIVED_HM08": {
-    "label": "Mossdeep City - HM08 from Steven's House",
-    "tags": ["HM"]
-  },
-  "NPC_GIFT_RECEIVED_ITEMFINDER": {
-    "label": "Route 110 - Itemfinder from Rival",
-    "tags": ["KeyItem"]
-  },
   "NPC_GIFT_RECEIVED_KINGS_ROCK": {
     "label": "Mossdeep City - Gift from Kid",
     "tags": ["NpcGift"]
-  },
-  "NPC_GIFT_RECEIVED_LETTER": {
-    "label": "Devon Corp 3F - Letter from Mr. Stone",
-    "tags": ["KeyItem"]
   },
   "NPC_GIFT_RECEIVED_MACHO_BRACE": {
     "label": "Route 111 - Reward from Winstrate Family",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_MAGMA_EMBLEM": {
-    "label": "Mt Pyre Summit - Magma Emblem from Old Lady",
-    "tags": ["KeyItem"]
-  },
   "NPC_GIFT_RECEIVED_MENTAL_HERB": {
     "label": "Fortree City - Wingull Delivery Reward",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_METEORITE": {
-    "label": "Mt Chimney - Recover Meteorite",
-    "tags": ["NpcGift"]
-  },
   "NPC_GIFT_RECEIVED_MIRACLE_SEED": {
     "label": "Petalburg Woods - Gift from Lady",
-    "tags": ["NpcGift"]
-  },
-  "NPC_GIFT_RECEIVED_OLD_ROD": {
-    "label": "Dewford Town - Old Rod from Fisherman",
-    "tags": ["Rod"]
-  },
-  "NPC_GIFT_RECEIVED_POKEBLOCK_CASE": {
-    "label": "Lilycove City - Pokeblock Case from Contest Hall",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_POTION_OLDALE": {
@@ -1299,16 +1315,8 @@
     "label": "Slateport City - Gift from Woman in Fan Club",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_SS_TICKET": {
-    "label": "Littleroot Town - Gift from Norman",
-    "tags": ["NpcGift"]
-  },
   "NPC_GIFT_RECEIVED_SUN_STONE_MOSSDEEP": {
     "label": "Mossdeep City - Gift from Man in Museum",
-    "tags": ["NpcGift"]
-  },
-  "NPC_GIFT_RECEIVED_SUPER_ROD": {
-    "label": "Mossdeep City - Super Rod from Fisherman in House",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM03": {
@@ -1406,10 +1414,6 @@
   "NPC_GIFT_RECEIVED_TM50": {
     "label": "Lavaridge Town Gym - TM50 from Flannery",
     "tags": ["NpcGift"]
-  },
-  "NPC_GIFT_RECEIVED_WAILMER_PAIL": {
-    "label": "Route 104 - Wailmer Pail from Flower Shop Lady",
-    "tags": ["KeyItem"]
   },
   "NPC_GIFT_RECEIVED_WHITE_HERB": {
     "label": "Route 104 - Gift from Lady",
