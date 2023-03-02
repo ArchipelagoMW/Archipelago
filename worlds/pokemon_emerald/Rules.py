@@ -1200,3 +1200,12 @@ def set_npc_gift_rules(multiworld: MultiWorld, player: int):
         multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_HM07"), player),
         lambda state: state.has("EVENT_WAKE_RAYQUAZA", player)
     )
+
+
+def add_hidden_item_itemfinder_rules(multiworld: MultiWorld, player: int):
+    for location in multiworld.get_locations(player):
+        if (location.tags != None and "HiddenItem" in location.tags):
+            add_rule(
+                location,
+                lambda state: state.has("Itemfinder", player)
+            )

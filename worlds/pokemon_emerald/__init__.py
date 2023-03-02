@@ -7,7 +7,7 @@ from .Locations import PokemonEmeraldLocation, create_location_label_to_id_map, 
 from .Options import options, get_option_value
 from .Regions import create_regions
 from .Rom import generate_output
-from .Rules import set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules
+from .Rules import set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules, add_hidden_item_itemfinder_rules
 from .SanityCheck import sanity_check
 
 
@@ -85,6 +85,9 @@ class PokemonEmeraldWorld(World):
             set_hidden_item_rules(self.multiworld, self.player)
         if (get_option_value(self.multiworld, self.player, "npc_gifts") == Toggle.option_true):
             set_npc_gift_rules(self.multiworld, self.player)
+
+        if (get_option_value(self.multiworld, self.player, "require_itemfinder") == Toggle.option_true):
+            add_hidden_item_itemfinder_rules(self.multiworld, self.player)
 
     def generate_basic(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
