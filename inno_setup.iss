@@ -453,6 +453,12 @@ begin
     Result := not (OoTROMFilePage.Values[0] = '')
   else if (assigned(ZlROMFilePage)) and (CurPageID = ZlROMFilePage.ID) then
     Result := not (ZlROMFilePage.Values[0] = '')
+  else if (assigned(RedROMFilePage)) and (CurPageID = RedROMFilePage.ID) then
+    Result := not (RedROMFilePage.Values[0] = '')
+  else if (assigned(BlueROMFilePage)) and (CurPageID = BlueROMFilePage.ID) then
+    Result := not (BlueROMFilePage.Values[0] = '')
+  else if (assigned(LADXROMFilePage)) and (CurPageID = LADXROMFilePage.ID) then
+    Result := not (LADXROMFilePage.Values[0] = '');
   else
     Result := True;
 end;
@@ -589,7 +595,7 @@ function GetRedROMPath(Param: string): string;
 begin
   if Length(redrom) > 0 then
     Result := redrom
-  else if Assigned(RedRomFilePage) then
+  else if Assigned(RedROMFilePage) then
     begin
       R := CompareStr(GetMD5OfFile(RedROMFilePage.Values[0]), '3d45c1ee9abd5738df46d2bdda8b57dc')
       if R <> 0 then
@@ -605,7 +611,7 @@ function GetBlueROMPath(Param: string): string;
 begin
   if Length(bluerom) > 0 then
     Result := bluerom
-  else if Assigned(BlueRomFilePage) then
+  else if Assigned(BlueROMFilePage) then
     begin
       R := CompareStr(GetMD5OfFile(BlueROMFilePage.Values[0]), '50927e843568814f7ed45ec4f944bd8b')
       if R <> 0 then
