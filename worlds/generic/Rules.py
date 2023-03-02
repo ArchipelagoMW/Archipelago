@@ -1,7 +1,7 @@
 import collections
 import typing
 
-from BaseClasses import LocationProgressType, MultiWorld, Location, Region, Entrance
+from BaseClasses import LocationProgressType, MultiWorld
 
 if typing.TYPE_CHECKING:
     import BaseClasses

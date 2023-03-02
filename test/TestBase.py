@@ -200,8 +200,6 @@ class WorldTestBase(unittest.TestCase):
             items = self.collect_by_name(item_names)
             for location in locations:
                 self.assertTrue(self.can_reach_location(location))
-                if self.multiworld.get_location(location, 1).address is None:
-                    self.remove(self.multiworld.get_location(location, 1).item)
             self.remove(items)
 
     def assertBeatable(self, beatable: bool):
