@@ -218,9 +218,14 @@ class WorldTestBase(unittest.TestCase):
                 or self.setUp.__code__ is not WorldTestBase.setUp.__code__
                 or self.world_setup.__code__ is not WorldTestBase.world_setup.__code__)
 
+    @property
+    def constructed(self) -> bool:
+        """A multiworld has been constructed by this point"""
+        return hasattr(self, "game") and hasattr(self, "multiworld")
+
     def testAllStateCanReachEverything(self):
         """Ensure all state can reach everything and complete the game with the defined options"""
-        if not self.run_default_tests:
+        if not (self.run_default_tests and self.constructed):
             return
         with self.subTest("Game", game=self.game):
             excluded = self.multiworld.exclude_locations[1].value
@@ -235,7 +240,7 @@ class WorldTestBase(unittest.TestCase):
 
     def testEmptyStateCanReachSomething(self):
         """Ensure empty state can reach at least one location with the defined options"""
-        if not self.run_default_tests:
+        if not (self.run_default_tests and self.constructed):
             return
         with self.subTest("Game", game=self.game):
             state = CollectionState(self.multiworld)
