@@ -34,12 +34,14 @@ class AllSealsRequired(MessengerTestBase):
         self.assertAccessDependency(locations, items)
         # these are events so need to be hard removed from state
         self.remove(self.get_item_by_name("Shop Chest"))
-        # gets added twice for some reason. this is a quirk with fill that i hate
+        # gets added twice for some reason. this is a quirk with fill that I hate
         self.remove(self.get_item_by_name("Rescue Phantom"))
         self.remove(self.get_item_by_name("Rescue Phantom"))
         self.assertEqual(self.can_reach_location("Shop Chest"), False)
         self.assertBeatable(False)
         self.collect_all_but(["Power Seal", "Shop Chest", "Rescue Phantom"])
+        # can someone please explain why I need to do this
+        self.remove(self.get_item_by_name("Rescue Phantom"))
         self.assertEqual(self.can_reach_location("Shop Chest"), False)
         self.assertBeatable(False)
         self.collect_by_name("Power Seal")
