@@ -216,7 +216,7 @@ class WorldTestBase(unittest.TestCase):
                                    and self.world_setup is WorldTestBase.world_setup)
 
     def testAllStateCanReachEverything(self):
-        """Ensure all state can reach everything with the defined options"""
+        """Ensure all state can reach everything and complete the game with the defined options"""
         if self.skip_default_tests:
             return
         with self.subTest("Game", game=self.game):
