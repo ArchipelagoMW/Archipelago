@@ -77,7 +77,7 @@ class TerrariaWorld(World):
         rules = get_rules(self.player, self.multiworld.achievements[self.player].value == 3)
 
         for location in self.ter_locations:
-            rule = rules.get(location)
+            rule = rules[location]
             if rule != None:
                 add_rule(self.multiworld.get_location(location, self.player), rule)
 

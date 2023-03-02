@@ -17,6 +17,18 @@ prehardmode_items = [
     "Post-Deerclops",
 ]
 
+calamity_prehardmode_items = [
+    "Post-Desert Scourge",
+    "Post-Giant Clam",
+    "Post-Crabulon",
+    "Post-The Hive Mind or The Perforators",
+    "Post-The Slime God",
+    "Post-Leviathan and Anahita",
+    "Post-Colossal Squid",
+    "Post-Reaper Shark",
+    "Post-Eidolon Wyrm",
+]
+
 post_wall_of_flesh_items = [
     "Hardmode",
     "Post-Pirate Invasion",
@@ -26,6 +38,19 @@ post_wall_of_flesh_items = [
     "Post-Skeletron Prime",
     "Post-Old One's Army Tier 2",
     "Post-Duke Fishron",
+]
+
+calamity_post_wall_of_flesh_items = [
+    "Post-Earth Elemental",
+    "Post-Cloud Elemental",
+    "Post-Cryogen",
+    "Post-Aquatic Scourge",
+    "Post-Cragmaw Mire",
+    "Post-Brimstone Elemental",
+    "Post-Calamitas",
+    "Post-Astrum Aureus",
+    "Post-Astrum Deus",
+    "Post-Adult Eidolon Wyrm",
 ]
 
 post_plantera_items = [
@@ -44,8 +69,33 @@ post_plantera_items = [
     "Post-Lunar Events",
 ]
 
+calamity_post_plantera_items = [
+    "Post-Armored Digger",
+    "Post-Great Sand Shark",
+    "Post-Plaguebringer",
+    "Post-The Plaguebringer Goliath",
+    "Post-Ravager",
+    "Post-The Dragonfolly",
+    "Post-Jungle Dragon, Yharon",
+]
+
 post_moon_lord_items = [
     "Post-Moon Lord"
+]
+
+calamity_post_moon_lord_items = [
+    "Post-Profaned Guardians",
+    "Post-Providence, the Profaned Goddess"
+    "Post-Storm Weaver",
+    "Post-Ceaseless Void",
+    "Post-Signus, Envoy of the Devourer",
+    "Post-Polterghast",
+    "Post-Mauler",
+    "Post-Nuclear Terror",
+    "Post-The Old Duke",
+    "Post-The Devourer of Gods",
+    "Post-Exo Mechs",
+    "Post-Supreme Calamitas",
 ]
 
 item_items = [
@@ -140,6 +190,19 @@ prehardmode_locations = [
     "Wall of Flesh",
 ]
 
+calamity_prehardmode_locations = [
+    "Desert Scourge",
+    "Giant Clam",
+    "Crabulon",
+    "The Hive Mind or The Perforators",
+    "The Slime God",
+    "Aquatic Scourge",
+    "Leviathan and Anahita",
+    "Colossal Squid",
+    "Reaper Shark",
+    "Eidolon Wyrm",
+]
+
 post_wall_of_flesh_locations = [
     "Pirate Invasion",
     "Queen Slime",
@@ -149,6 +212,18 @@ post_wall_of_flesh_locations = [
     "Old One's Army Tier 2",
     "Plantera",
     "Duke Fishron",
+]
+
+calamity_post_wall_of_flesh_locations = [
+    "Earth Elemental",
+    "Cloud Elemental",
+    "Cryogen",
+    "Cragmaw Mire",
+    "Brimstone Elemental",
+    "Calamitas",
+    "Astrum Aureus",
+    "Astrum Deus",
+    "Adult Eidolon Wyrm",
 ]
 
 post_plantera_locations = [
@@ -167,8 +242,33 @@ post_plantera_locations = [
     "Moon Lord",
 ]
 
+calamity_post_plantera_locations = [
+    "Armored Digger",
+    "Great Sand Shark",
+    "Plaguebringer",
+    "The Plaguebringer Goliath",
+    "Ravager",
+    "The Dragonfolly",
+    "Jungle Dragon, Yharon",
+]
+
 post_moon_lord_locations = [
     "Zenith",
+]
+
+calamity_post_moon_lord_locations = [
+    "Profaned Guardians",
+    "Providence, the Profaned Goddess"
+    "Storm Weaver",
+    "Ceaseless Void",
+    "Signus, Envoy of the Devourer",
+    "Polterghast",
+    "Mauler",
+    "Nuclear Terror",
+    "The Old Duke",
+    "The Devourer of Gods",
+    "Exo Mechs",
+    "Supreme Calamitas",
 ]
 
 prehardmode_achievements = [
@@ -198,6 +298,7 @@ prehardmode_achievements = [
     "Lucky Break",
     "Throwing Lines",
     "Dye Hard",
+    "The Frequent Flyer", # New
     "The Cavalry",
     "Completely Awesome",
     "Til Death...",
@@ -214,9 +315,11 @@ prehardmode_achievements = [
 grindy_prehardmode_achievements = [
     "Sticky Situation",
     "There are Some Who Call Him...",
+    "Bulldozer", # New
     "Deceiver of Fools",
     "Archaeologist",
     "Pretty in Pink",
+    "Marathon Medalist", # New
     "Boots of the Hero",
     "A Rather Blustery Day",
     "Heliophobia",
@@ -240,6 +343,7 @@ achievements_that_are_fishing_if_prehardmode = [
 post_wall_of_flesh_achievements = [
     "Begone, Evil!",
     "Extra Shiny!",
+    "Buckets of Bolts", # New
     "Drax Attax",
     "Photosynthesis",
     "Get a Life",
@@ -272,6 +376,7 @@ grindy_post_plantera_achievements = [
 post_moon_lord_achievements = [
     "Sick Throw",
     "You and What Army?",
+    "Slayer of Worlds", # New
 ]
 
 def register(names, name_to_id, next_id):
