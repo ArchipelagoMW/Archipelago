@@ -1,11 +1,9 @@
+from Fill import distribute_items_restrictive
 from . import MessengerTestBase
-from .. import NOTES
+from .. import NOTES, PHOBEKINS
 
 
 class AccessTest(MessengerTestBase):
-    options = {
-        "shuffle_seals": "true",
-    }
 
     def testTabi(self):
         """locations that hard require the Ninja Tabi"""
@@ -114,6 +112,32 @@ class AccessTest(MessengerTestBase):
         self.collect_by_name(["Key of Love"])
         self.assertEqual(self.can_reach_location("Rescue Phantom"), True)
         self.assertBeatable(True)
+
+
+class ItemsAccessTest(MessengerTestBase):
+    options = {
+        "shuffle_seals": False,
+        "accessibility": "items"
+    }
+
+    def testSelfLockingItems(self):
+        """Force items that can be self locked to ensure it's valid placement."""
+        location_lock_pairs = {
+            "Key of Strength": ["Power Thistle"],
+            "Key of Love": ["Sun Crest", "Moon Crest"],
+            "Key of Courage": ["Demon King Crown"],
+            "Acro": ["Ruxxtin's Amulet"],
+            "Demon King Crown": PHOBEKINS
+        }
+        for loc in location_lock_pairs:
+            item = self.multiworld.random.choice(location_lock_pairs[loc])
+            location = self.multiworld.get_location(loc, self.player)
+            self.multiworld.push_item(location, self.multiworld.worlds[self.player].create_item(item))
+            self.assertTrue(location.item.name, item)
+
+        with self.subTest("Fulfills Accessibility"):
+            distribute_items_restrictive(self.multiworld)
+            self.assertTrue(self.multiworld.fulfills_accessibility())
 
 
 class NoLogicTest(MessengerTestBase):

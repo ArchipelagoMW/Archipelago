@@ -8,7 +8,7 @@ class TwoNoteGoalTest(MessengerTestBase):
     }
 
     def testPrecollectedNotes(self):
-        self.assertEqual(self.multiworld.state.count_group("Notes", 1), 4)
+        self.assertEqual(self.multiworld.state.count_group("Notes", self.player), 4)
 
 
 class FourNoteGoalTest(MessengerTestBase):
@@ -17,12 +17,12 @@ class FourNoteGoalTest(MessengerTestBase):
     }
 
     def testPrecollectedNotes(self):
-        self.assertEqual(self.multiworld.state.count_group("Notes", 1), 2)
+        self.assertEqual(self.multiworld.state.count_group("Notes", self.player), 2)
 
 
 class DefaultGoalTest(MessengerTestBase):
     def testPrecollectedNotes(self):
-        self.assertEqual(self.multiworld.state.count_group("Notes", 1), 0)
+        self.assertEqual(self.multiworld.state.count_group("Notes", self.player), 0)
 
     def testGoal(self):
         self.assertBeatable(False)
