@@ -278,7 +278,7 @@ class TimespinnerWorld(World):
         return personal_items
     
     def is_option_enabled(self, option: str) -> bool:
-        is_option_enabled(self.multiworld, self.player, option)
+        return is_option_enabled(self.multiworld, self.player, option)
 
     def get_option_value(self, option: str) -> Union[int, Dict, List]:
-        get_option_value(self.multiworld, self.player, option)
+        return get_option_value(self.multiworld, self.player, option)
