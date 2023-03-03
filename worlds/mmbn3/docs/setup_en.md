@@ -31,7 +31,7 @@ Once Bizhawk has been installed, open Bizhawk and change the following settings:
   to disable most of these, which you can do quickly using `Esc`.
 
 It is strongly recommended to associate GBA rom extensions (\*.gba) to the Bizhawk we've just installed.
-To do so, we simply have to search any N64 rom we happened to own, right click and select "Open with...", unfold
+To do so, we simply have to search any GBA rom we happened to own, right click and select "Open with...", unfold
 the list that appears and select the bottom option "Look for another application", then browse to the Bizhawk folder
 and select EmuHawk.exe.
 
