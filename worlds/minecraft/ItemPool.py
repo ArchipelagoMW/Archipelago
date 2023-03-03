@@ -1,10 +1,18 @@
 from math import ceil
 from typing import List
 
-from BaseClasses import Item
+from BaseClasses import MultiWorld, Item
 from worlds.AutoWorld import World
 
 from . import Constants
+
+def get_junk_item_names(rand, k: int) -> str:
+	junk_weights = Constants.item_info["junk_weights"]
+	junk = rand.choices(
+		list(junk_weights.keys()),
+		weights=list(junk_weights.values()),
+		k=k)
+	return junk
 
 def build_item_pool(mc_world: World) -> List[Item]:
 	multiworld = mc_world.multiworld
@@ -38,10 +46,7 @@ def build_item_pool(mc_world: World) -> List[Item]:
 		itempool += [mc_world.create_item("Bee Trap") for _ in range(bee_trap_qty)]
 
 	# Fill remaining itempool with randomly generated junk
-	junk = multiworld.random.choices(
-		list(junk_weights.keys()),
-		weights=list(junk_weights.values()),
-		k=total_location_count - len(itempool))
+	junk = get_junk_item_names(multiworld.random, total_location_count - len(itempool))
 	itempool += [mc_world.create_item(name) for name in junk]
 
 	return itempool

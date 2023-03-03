@@ -9,7 +9,7 @@ from worlds.AutoWorld import World, WebWorld
 from . import Constants
 from .Options import minecraft_options
 from .Structures import shuffle_structures
-from .ItemPool import build_item_pool
+from .ItemPool import build_item_pool, get_junk_item_names
 from .Rules import set_rules
 
 client_version = 9
@@ -165,6 +165,9 @@ class MinecraftWorld(World):
             if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)
         return slot_data
+
+    def get_filler_item_name(self) -> str:
+        return get_junk_item_names(self.multiworld.random, 1)[0]
 
 
 class MinecraftLocation(Location):
