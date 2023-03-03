@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import atexit
 import os
 import sys
 import asyncio
@@ -89,6 +91,7 @@ class WargrooveContext(CommonContext):
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
             self.remove_communication_files()
+            atexit.register(self.remove_communication_files)
             if not os.path.isdir(appdata_wargroove):
                 print_error_and_close("WargrooveClient couldn't find Wargoove in appdata!"
                                       "Boot Wargroove and then close it to attempt to fix this error")
