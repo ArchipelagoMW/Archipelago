@@ -8,7 +8,7 @@ from .lz10 import gba_decompress, gba_compress
 
 from .BN3RomUtils import ArchiveToReferences, read_u16_le, read_u32_le, int16_to_byte_list_le, int32_to_byte_list_le,\
     generate_progressive_undernet, CompressedArchives, ArchiveToSizeComp, ArchiveToSizeUncomp, generate_item_message, \
-    generate_external_item_message
+    generate_external_item_message, generate_text_bytes, shorten_item_name
 
 from .Items import ItemType
 
@@ -29,6 +29,17 @@ def list_contains_subsequence(lst, sublist) -> bool:
 class ArchiveScript:
     def __init__(self, index, message_bytes):
         self.index = index
+        self.messageBoxes = []
+
+        self.set_bytes(message_bytes)
+
+    def get_bytes(self):
+        data = []
+        for message in self.messageBoxes:
+            data.extend(message)
+        return data
+
+    def set_bytes(self, message_bytes):
         self.messageBoxes = []
 
         message_box = []
@@ -54,12 +65,6 @@ class ArchiveScript:
         if len(message_box) > 0:
             self.messageBoxes.append(message_box)
 
-    def get_bytes(self):
-        data = []
-        for message in self.messageBoxes:
-            data.extend(message)
-        return data
-
     def __str__(self):
         s = str(self.index)+' - \n'
         for messageBox in self.messageBoxes:
@@ -76,6 +81,8 @@ class TextArchive:
         self.unused_indices = []  # A list of places it's okay to inject new scripts
         self.progressive_undernet_indices = []  # If this archive has progressive undernet, here they are in order
 
+        self.text_changed = False
+
         if compressed:
             self.compressedSize = size
             self.compressedData = data
@@ -91,6 +98,7 @@ class TextArchive:
         for i in range(0, self.scriptCount):
             start_offset = read_u16_le(self.uncompressedData, i * 2)
             next_offset = read_u16_le(self.uncompressedData, (i + 1) * 2)
+
             if start_offset != next_offset:
                 message_bytes = list(self.uncompressedData[start_offset:next_offset])
                 message = ArchiveScript(i, message_bytes)
@@ -120,9 +128,10 @@ class TextArchive:
         return bytearray(byte_data)
 
     def inject_item_message(self, script_index, message_indices, new_bytes):
+        if self.text_changed:
+            print("Archive " + hex(self.startOffset) + " has had text changed and a new item is being inserted")
         # First step, if the old message had any flag sets or flag clears, we need to keep them.
         # Mystery data has a flag set to actually remove the mystery data, and jobs often have a completion flag
-
         for message_index in message_indices:
             oldbytes = self.scripts[script_index].messageBoxes[message_index]
             for i in range(len(oldbytes)-3):
@@ -140,27 +149,20 @@ class TextArchive:
             self.scripts[script_index].messageBoxes[index] = []
 
     def inject_into_rom(self, modified_rom_data):
+        if self.text_changed:
+            print("Archive " + hex(self.startOffset) + " is injecting into rom")
         original_size = self.compressedSize if self.compressed else self.uncompressedSize
 
         working_data = self.generate_data(self.compressed)
-        """
-        with open("C:/Users/digiholic/Projects/BN3AP/randomized-archives/"+hex(self.startOffset)+".bin", "wb") as tempFile:
-            tempFile.write(working_data)
-        return modified_rom_data
-        """
-        if len(working_data) < original_size:
-            # If it's shorter than the original data, we can pad the difference with FF and directrly replace
-            working_data.extend([0x00] * (original_size - len(working_data)))
-            modified_rom_data[self.startOffset:self.startOffset+len(working_data)] = working_data
-        else:
-            # It needs to start on a byte divisible by 4. If the rom data is not, add an FF
-            while len(modified_rom_data) % 4 != 0:
-                modified_rom_data.append(0xFF)
-            new_start_offset = 0x08000000 + len(modified_rom_data)
-            offset_byte = int32_to_byte_list_le(new_start_offset)
-            modified_rom_data.extend(working_data)
-            for offset in self.references:
-                modified_rom_data[offset:offset+4] = offset_byte
+
+        # It needs to start on a byte divisible by 4. If the rom data is not, add an FF
+        while len(modified_rom_data) % 4 != 0:
+            modified_rom_data.append(0xFF)
+        new_start_offset = 0x08000000 + len(modified_rom_data)
+        offset_byte = int32_to_byte_list_le(new_start_offset)
+        modified_rom_data.extend(working_data)
+        for offset in self.references:
+            modified_rom_data[offset:offset+4] = offset_byte
         return modified_rom_data
 
     def add_progression_scripts(self):
@@ -175,6 +177,20 @@ class TextArchive:
             self.scripts[new_script_index] = new_script
             self.progressive_undernet_indices.append(new_script_index)
         self.unused_indices = self.unused_indices[9:]  # Remove the first eight elements
+
+    def inject_item_text(self, item_text):
+        item_text_bytes = generate_text_bytes(item_text)
+        for script_index in self.scripts:
+            script = self.scripts[script_index]
+            # Loop through the bytes
+            for message_index in range(0, len(script.messageBoxes)):
+                oldbytes = self.scripts[script_index].messageBoxes[message_index]
+                for i in range(0, len(oldbytes)-1):
+                    if oldbytes[i] == 0x68 and oldbytes[i+1] == 0x68:
+                        print("Injecting "+ item_text +" at Archive "+hex(self.startOffset)+" Script "+str(script_index)+" message "+str(message_index)+" position "+str(i))
+                        oldbytes[i:i+2] = item_text_bytes
+                        self.text_changed = True
+                        self.scripts[script_index].messageBoxes[message_index] = oldbytes
 
 
 class LocalRom:
@@ -237,6 +253,15 @@ class LocalRom:
             item_bytes = generate_item_message(item)
         archive.inject_item_message(location.text_script_index, location.text_box_indices,
                                     item_bytes)
+        # Replace item name placeholders
+        if location.inject_name:
+            item_name_text = shorten_item_name(item.itemName)
+            # Adding in the player name almost definitely overflows the line.
+            # So this variable goes unused, until I can figure out a way to properly wrap it
+            if item.recipient != 'Myself':
+                item_name_text = item.recipient + "'s " + item_name_text
+
+            archive.inject_item_text(item.itemName)
 
     def inject_name(self, player):
         authname = player

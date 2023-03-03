@@ -342,6 +342,7 @@ local pmd_checks = function()
 end
 local overworld_checks = function()
     local checks ={}
+    checks["Yoka Mr Quiz"] = memory.read_u8(0x200005f)
     checks["Yoka Quiz Master"] = memory.read_u8(0x200005f)
     checks["Hospital Quiz Queen"] = memory.read_u8(0x200005f)
     checks["Hades Quiz King"] = memory.read_u8(0x2000164)
@@ -486,11 +487,9 @@ local check_all_locations = function()
     local location_checks = {}
     -- Title Screen should not check items
     if itemState == ITEMSTATE_NONINITIALIZED or IsInTransition() then
-        print("Skipping due to state")
         return location_checks
     end
     if memory.read_u8(canary_byte) == 0xFF then
-        print("Skipping due to canary byte")
         return location_checks
     end
     for name,checked in pairs(acdc_bmd_checks()) do location_checks[name] = checked end
@@ -883,7 +882,6 @@ end
 local OpenShortcuts = function()
     if (memory.read_u8(key_item_start_address + 92) > 0) then
         memory.write_u8(0x2000032, bit.bor(memory.read_u8(0x2000032),0x10))
-        print(bit.bor(memory.read_u8(0x2000032),0x10))
     end
     -- if CSciPass
     if (memory.read_u8(key_item_start_address + 93) > 0) then
