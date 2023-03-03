@@ -433,7 +433,6 @@ class WitnessPlayerLogic:
         self.ADDED_CHECKS = set()
         self.VICTORY_LOCATION = "0x0356B"
         self.EVENT_ITEM_NAMES = {
-            "0x01A0F": "Keep Laser Panel (Hedge Mazes) Activates",
             "0x09D9B": "Monastery Shutters Open",
             "0x193A6": "Monastery Laser Panel Activates",
             "0x00037": "Monastery Branch Panels Activate",
@@ -442,8 +441,11 @@ class WitnessPlayerLogic:
             "0x00139": "Keep Hedges 1 Knowledge",
             "0x019DC": "Keep Hedges 2 Knowledge",
             "0x019E7": "Keep Hedges 3 Knowledge",
-            "0x01D3F": "Keep Laser Panel (Pressure Plates) Activates",
-            "0x01BE9": "Keep Laser Panel (Pressure Plates) Activates - Expert",
+            "0x01A0F": "Keep Hedges 4 Knowledge",
+            "0x033EA": "Pressure Plates 1 Knowledge",
+            "0x01BE9": "Pressure Plates 2 Knowledge",
+            "0x01CD3": "Pressure Plates 3 Knowledge",
+            "0x01D3F": "Pressure Plates 4 Knowledge",
             "0x09F7F": "Mountain Access",
             "0x0367C": "Quarry Laser Stoneworks Requirement Met",
             "0x009A1": "Swamp Between Bridges Far 1 Activates",
@@ -492,11 +494,9 @@ class WitnessPlayerLogic:
             "0x17D02": "Windmill Blades Spinning",
             "0x0A0C9": "Cargo Box EP completable",
             "0x09E39": "Pink Light Bridge Extended",
-            "0x01CD3": "Pressure Plates 3 EP available",
             "0x17CC4": "Rails EP available",
             "0x2896A": "Bridge Underside EP available",
             "0x00064": "First Tunnel EP visible",
-            "0x033EA": "Pressure Plates 1 EP available",
             "0x03553": "Tutorial Video EPs availble",
             "0x17C79": "Bunker Door EP available",
             "0x275FF": "Stoneworks Light EPs available",
