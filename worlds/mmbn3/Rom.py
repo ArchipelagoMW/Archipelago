@@ -128,8 +128,6 @@ class TextArchive:
         return bytearray(byte_data)
 
     def inject_item_message(self, script_index, message_indices, new_bytes):
-        if self.text_changed:
-            print("Archive " + hex(self.startOffset) + " has had text changed and a new item is being inserted")
         # First step, if the old message had any flag sets or flag clears, we need to keep them.
         # Mystery data has a flag set to actually remove the mystery data, and jobs often have a completion flag
         for message_index in message_indices:
@@ -149,8 +147,6 @@ class TextArchive:
             self.scripts[script_index].messageBoxes[index] = []
 
     def inject_into_rom(self, modified_rom_data):
-        if self.text_changed:
-            print("Archive " + hex(self.startOffset) + " is injecting into rom")
         original_size = self.compressedSize if self.compressed else self.uncompressedSize
 
         working_data = self.generate_data(self.compressed)
@@ -187,7 +183,6 @@ class TextArchive:
                 oldbytes = self.scripts[script_index].messageBoxes[message_index]
                 for i in range(0, len(oldbytes)-1):
                     if oldbytes[i] == 0x68 and oldbytes[i+1] == 0x68:
-                        print("Injecting "+ item_text +" at Archive "+hex(self.startOffset)+" Script "+str(script_index)+" message "+str(message_index)+" position "+str(i))
                         oldbytes[i:i+2] = item_text_bytes
                         self.text_changed = True
                         self.scripts[script_index].messageBoxes[message_index] = oldbytes

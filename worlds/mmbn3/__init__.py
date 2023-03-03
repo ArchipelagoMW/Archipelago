@@ -3,7 +3,7 @@ import typing
 import math
 import threading
 
-from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, RegionType, Entrance, \
+from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, Entrance, \
     LocationProgressType
 from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
 from ..AutoWorld import WebWorld, World
@@ -148,7 +148,7 @@ class MMBN3World(World):
         """
         name_to_region = {}
         for region_info in regions:
-            region = Region(region_info.name, RegionType.Generic, region_info.name, self.player, self.multiworld)
+            region = Region(region_info.name, self.player, self.multiworld)
             name_to_region[region_info.name] = region
             for location in region_info.locations:
                 loc = MMBN3Location(self.player, location, self.location_name_to_id.get(location, None), region)
