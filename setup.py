@@ -45,6 +45,7 @@ apworlds: set = {
     "Rogue Legacy",
     "Donkey Kong Country 3",
     "Super Mario World",
+    "Stardew Valley",
     "Timespinner",
 }
 

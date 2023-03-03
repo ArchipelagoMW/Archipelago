@@ -14,7 +14,7 @@ from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems
 from .rules import set_rules
 from .regions import WitnessRegions
 from .Options import is_option_enabled, the_witness_options, get_option_value
-from .utils import best_junk_to_add_based_on_weights, get_audio_logs
+from .utils import best_junk_to_add_based_on_weights, get_audio_logs, make_warning_string
 from logging import warning
 
 
@@ -38,7 +38,7 @@ class WitnessWorld(World):
     """
     game = "The Witness"
     topology_present = False
-    data_version = 12
+    data_version = 13
 
     static_logic = StaticWitnessLogic()
     static_locat = StaticWitnessLocations()
@@ -52,7 +52,7 @@ class WitnessWorld(World):
     location_name_to_id = StaticWitnessLocations.ALL_LOCATIONS_TO_ID
     item_name_groups = StaticWitnessItems.ITEM_NAME_GROUPS
 
-    required_client_version = (0, 3, 8)
+    required_client_version = (0, 3, 9)
 
     def _get_slot_data(self):
         return {
@@ -93,13 +93,13 @@ class WitnessWorld(World):
         self.items = WitnessPlayerItems(self.locat, self.multiworld, self.player, self.player_logic)
         self.regio = WitnessRegions(self.locat)
 
-    def create_regions(self):
-        self.regio.create_regions(self.multiworld, self.player, self.player_logic)
-
-    def generate_basic(self):
         self.log_ids_to_hints = dict()
         self.junk_items_created = {key: 0 for key in self.items.JUNK_WEIGHTS.keys()}
 
+    def create_regions(self):
+        self.regio.create_regions(self.multiworld, self.player, self.player_logic)
+
+    def create_items(self):
         # Generate item pool
         pool = []
         for item in self.items.ITEM_TABLE:
@@ -109,22 +109,12 @@ class WitnessWorld(World):
                     pool.append(witness_item)
                     self.items_by_name[item] = witness_item
 
-        less_junk = 0
-
-        dog_check = self.multiworld.get_location(
-            "Town Pet the Dog", self.player
-        )
-
-        dog_check.place_locked_item(self.create_item("Puzzle Skip"))
-
-        less_junk += 1
-
         for precol_item in self.multiworld.precollected_items[self.player]:
             if precol_item.name in self.items_by_name:  # if item is in the pool, remove 1 instance.
                 item_obj = self.items_by_name[precol_item.name]
 
                 if item_obj in pool:
-                    pool.remove(item_obj) # remove one instance of this pre-collected item if it exists
+                    pool.remove(item_obj)  # remove one instance of this pre-collected item if it exists
 
         for item in self.player_logic.STARTING_INVENTORY:
             self.multiworld.push_precollected(self.items_by_name[item])
@@ -132,15 +122,8 @@ class WitnessWorld(World):
 
         for item in self.items.EXTRA_AMOUNTS:
             for i in range(0, self.items.EXTRA_AMOUNTS[item]):
-                if len(pool) < len(self.locat.CHECK_LOCATION_TABLE) - len(self.locat.EVENT_LOCATION_TABLE) - less_junk:
-                    witness_item = self.create_item(item)
-                    pool.append(witness_item)
-
-        # Put in junk items to fill the rest
-        junk_size = len(self.locat.CHECK_LOCATION_TABLE) - len(pool) - len(self.locat.EVENT_LOCATION_TABLE) - less_junk
-
-        for i in range(0, junk_size):
-            pool.append(self.create_item(self.get_filler_item_name()))
+                witness_item = self.create_item(item)
+                pool.append(witness_item)
 
         # Tie Event Items to Event Locations (e.g. Laser Activations)
         for event_location in self.locat.EVENT_LOCATION_TABLE:
@@ -150,27 +133,108 @@ class WitnessWorld(World):
             location_obj = self.multiworld.get_location(event_location, self.player)
             location_obj.place_locked_item(item_obj)
 
-        self.multiworld.itempool += pool
+        # Find out how much empty space there is for junk items. -1 for the "Town Pet the Dog" check
+        itempool_difference = len(self.locat.CHECK_LOCATION_TABLE) - len(self.locat.EVENT_LOCATION_TABLE) - 1
+        itempool_difference -= len(pool)
 
-    def pre_fill(self):
-        # Put good item on first check if there are any of the designated "good items" in the pool
+        # Place two locked items: Good symbol on Tutorial Gate Open, and a Puzzle Skip on "Town Pet the Dog"
         good_items_in_the_game = []
+        plandoed_items = set()
+
+        for v in self.multiworld.plando_items[self.player]:
+            if v.get("from_pool", True):
+                plandoed_items.update({self.items_by_name[i] for i in v.get("items", dict()).keys()
+                                       if i in self.items_by_name})
+                if "item" in v and v["item"] in self.items_by_name:
+                    plandoed_items.add(self.items_by_name[v["item"]])
 
         for symbol in self.items.GOOD_ITEMS:
             item = self.items_by_name[symbol]
-            if item in self.multiworld.itempool: # Only do this if the item is still in item pool (e.g. after plando)
+            if item in pool and item not in plandoed_items:
+                # for now, any item that is mentioned in any plando option, even if it's a list of items, is ineligible.
+                # Hopefully, in the future, plando gets resolved before create_items.
+                # I could also partially resolve lists myself, but this could introduce errors if not done carefully.
                 good_items_in_the_game.append(symbol)
 
         if good_items_in_the_game:
             random_good_item = self.multiworld.random.choice(good_items_in_the_game)
 
-            first_check = self.multiworld.get_location(
-                "Tutorial Gate Open", self.player
-            )
             item = self.items_by_name[random_good_item]
 
-            first_check.place_locked_item(item)
-            self.multiworld.itempool.remove(item)
+            if get_option_value(self.multiworld, self.player, "puzzle_randomization") == 1:
+                self.multiworld.local_early_items[self.player][random_good_item] = 1
+            else:
+                first_check = self.multiworld.get_location(
+                    "Tutorial Gate Open", self.player
+                )
+
+                first_check.place_locked_item(item)
+                pool.remove(item)
+
+        dog_check = self.multiworld.get_location(
+            "Town Pet the Dog", self.player
+        )
+
+        dog_check.place_locked_item(self.create_item("Puzzle Skip"))
+
+        # Fill rest of item pool with junk if there is room
+        if itempool_difference > 0:
+            for i in range(0, itempool_difference):
+                self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
+
+        # Remove junk, Functioning Brain, useful items (non-door), useful door items in that order until there is room
+        if itempool_difference < 0:
+            junk = [
+                item for item in pool
+                if item.classification in {ItemClassification.filler, ItemClassification.trap}
+                and item.name != "Functioning Brain"
+            ]
+
+            f_brain = [item for item in pool if item.name == "Functioning Brain"]
+
+            usefuls = [
+                item for item in pool
+                if item.classification == ItemClassification.useful
+                and item.name not in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT
+            ]
+
+            removable_doors = [
+                item for item in pool
+                if item.classification == ItemClassification.useful
+                and item.name in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT
+            ]
+
+            self.multiworld.per_slot_randoms[self.player].shuffle(junk)
+            self.multiworld.per_slot_randoms[self.player].shuffle(usefuls)
+            self.multiworld.per_slot_randoms[self.player].shuffle(removable_doors)
+
+            removed_junk = False
+            removed_usefuls = False
+            removed_doors = False
+
+            for i in range(itempool_difference, 0):
+                if junk:
+                    pool.remove(junk.pop())
+                    removed_junk = True
+                elif f_brain:
+                    pool.remove(f_brain.pop())
+                elif usefuls:
+                    pool.remove(usefuls.pop())
+                    removed_usefuls = True
+                elif removable_doors:
+                    pool.remove(removable_doors.pop())
+                    removed_doors = True
+
+            warn = make_warning_string(
+                removed_junk, removed_usefuls, removed_doors, not junk, not usefuls, not removable_doors
+            )
+
+            if warn:
+                warning(f"This Witness world has too few locations to place all its items."
+                        f" In order to make space, {warn} had to be removed.")
+
+        # Finally, add the generated pool to the overall itempool
+        self.multiworld.itempool += pool
 
     def set_rules(self):
         set_rules(self.multiworld, self.player, self.player_logic, self.locat)
