@@ -81,7 +81,7 @@ class VariaRandomizer:
     parser.add_argument('--param', '-p', help="the input parameters",
                         default=None, dest='paramsFileName')
     parser.add_argument('--dir',
-                        help="output directory for ROM and dot files",
+                        help="output directory for ROM and dot data",
                         dest='directory', nargs='?', default='.')
     parser.add_argument('--dot',
                         help="generate dot file with area graph",

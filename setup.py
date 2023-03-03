@@ -113,7 +113,7 @@ class BuildCommand(setuptools.command.build.build):
 class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
     user_options = cx_Freeze.command.build_exe.BuildEXE.user_options + [
         ('yes', 'y', 'Answer "yes" to all questions.'),
-        ('extra-data=', None, 'Additional files to add.'),
+        ('extra-data=', None, 'Additional data to add.'),
     ]
     yes: bool
     extra_data: Iterable  # [any] not available in 3.8
@@ -205,7 +205,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         for data in self.extra_data:
             self.installfile(Path(data))
 
-        # kivi data files
+        # kivi data data
         import kivy
         shutil.copytree(os.path.join(os.path.dirname(kivy.__file__), "data"),
                         self.buildfolder / "data",
@@ -241,10 +241,10 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         try:
             from maseya import z3pr
         except ImportError:
-            print("Maseya Palette Shuffle not found, skipping data files.")
+            print("Maseya Palette Shuffle not found, skipping data data.")
         else:
-            # maseya Palette Shuffle exists and needs its data files
-            print("Maseya Palette Shuffle found, including data files...")
+            # maseya Palette Shuffle exists and needs its data data
+            print("Maseya Palette Shuffle found, including data data...")
             file = z3pr.__file__
             self.installfile(Path(os.path.dirname(file)) / "data", keep_content=True)
 

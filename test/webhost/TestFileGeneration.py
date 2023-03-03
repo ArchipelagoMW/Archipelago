@@ -1,4 +1,4 @@
-"""Tests for successful generation of WebHost cached files. Can catch some other deeper errors."""
+"""Tests for successful generation of WebHost cached data. Can catch some other deeper errors."""
 
 import os
 import unittest

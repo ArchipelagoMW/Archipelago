@@ -118,8 +118,8 @@ def patch_rom(world, rom):
     # Add it to the extended object table
     add_to_extended_object_table(rom, 0x195, keyring_obj_file)
 
-    # Create the textures for pots/crates. Note: No copyrighted material can be distributed w/ the randomizer. Because of this, patch files are used to create the new textures from the original texture in ROM.
-    # Apply patches for custom textures for pots and crates and add as new files in rom
+    # Create the textures for pots/crates. Note: No copyrighted material can be distributed w/ the randomizer. Because of this, patch data are used to create the new textures from the original texture in ROM.
+    # Apply patches for custom textures for pots and crates and add as new data in rom
     # Crates are ci4 textures in the normal ROM but for pot/crate textures match contents were upgraded to ci8 to support more colors
     # Pot textures are rgba16
     # Get the texture table from rom (see textures.c)
@@ -152,7 +152,7 @@ def patch_rom(world, rom):
         texture_file.end = texture_file.start + len(texture_data) # Get size of the new texture
         update_dmadata(rom, texture_file) # Update DMA table with new file
 
-        # update the texture table with the rom addresses of the texture files
+        # update the texture table with the rom addresses of the texture data
         entry = read_rom_texture(rom, texture_id)
         entry['file_vrom_start'] = texture_file.start
         entry['file_size'] = texture_file.end - texture_file.start

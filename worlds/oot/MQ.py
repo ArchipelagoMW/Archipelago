@@ -36,7 +36,7 @@
 #
 # Finally:
 #
-# Scene and room files will be padded to the nearest 0x10 bytes
+# Scene and room data will be padded to the nearest 0x10 bytes
 #
 # Maps:
 # Jabu Jabu's B1 map contains no chests in the vanilla layout. Because of this,

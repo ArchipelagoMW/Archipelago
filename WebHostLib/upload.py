@@ -23,7 +23,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
         owner = session["_id"]
     infolist = zfile.infolist()
     if all(file.filename.endswith((".yaml", ".yml")) or file.is_dir() for file in infolist):
-        flash(Markup("Error: Your .zip file only contains .yaml files. "
+        flash(Markup("Error: Your .zip file only contains .yaml data. "
                      'Did you mean to <a href="/generate">generate a game</a>?'))
         return
     slots: typing.Set[Slot] = set()
@@ -31,7 +31,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
     files = {}
     multidata = None
 
-    # Load files.
+    # Load data.
     for file in infolist:
         handler = AutoPatchRegister.get_handler(file.filename)
         if file.filename.endswith(banned_zip_contents):
@@ -69,7 +69,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
             data = zfile.open(file, "r").read()
             files[int(slot_id[1:])] = data
 
-        # All other files using the standard MultiWorld.get_out_file_name_base method
+        # All other data using the standard MultiWorld.get_out_file_name_base method
         else:
             _, _, slot_id, *_ = file.filename.split('.')[0].split('_', 3)
             data = zfile.open(file, "r").read()

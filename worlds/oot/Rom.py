@@ -241,8 +241,8 @@ class Rom(BigStream):
             dma_start, dma_end, dma_size = self._get_dmadata_record(cur)
 
     # This will scan for any changes that have been made to the DMA table
-    # This assumes any changes here are new files, so this should only be called
-    # after patching in the new files, but before vanilla files are repointed
+    # This assumes any changes here are new data, so this should only be called
+    # after patching in the new data, but before vanilla data are repointed
     def scan_dmadata_update(self):
         cur = DMADATA_START
         dma_data_end = None

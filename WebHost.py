@@ -54,7 +54,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
 
     base_target_path = Utils.local_path("WebHostLib", "static", "generated", "docs")
     for game, world in worlds.items():
-        # copy files from world's docs folder to the generated folder
+        # copy data from world's docs folder to the generated folder
         target_path = os.path.join(base_target_path, game)
         os.makedirs(target_path, exist_ok=True)
 
@@ -81,7 +81,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
             current_tutorial = {
                 'name': tutorial.tutorial_name,
                 'description': tutorial.description,
-                'files': [{
+                'data': [{
                     'language': tutorial.language,
                     'filename': game + '/' + tutorial.file_name,
                     'link': f'{game}/{tutorial.link}',
@@ -92,7 +92,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
             # check if the name of the current guide exists already
             for guide in game_data['tutorials']:
                 if guide and tutorial.tutorial_name == guide['name']:
-                    guide['files'].append(current_tutorial['files'][0])
+                    guide['data'].append(current_tutorial['data'][0])
                     break
             else:
                 game_data['tutorials'].append(current_tutorial)
