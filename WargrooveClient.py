@@ -77,7 +77,7 @@ class WargrooveContext(CommonContext):
         self.send_index: int = 0
         self.syncing = False
         self.awaiting_bridge = False
-        # self.game_communication_path: files go in this path to pass data between us and the actual game
+        # self.game_communication_path: data go in this path to pass data between us and the actual game
         if "appdata" in os.environ:
             options = Utils.get_options()
             root_directory = os.path.join(options["wargroove_options"]["root_directory"])
@@ -98,7 +98,7 @@ class WargrooveContext(CommonContext):
             if not os.path.isdir(data_directory):
                 data_directory = dev_data_directory
             if not os.path.isdir(data_directory):
-                print_error_and_close("WargrooveClient couldn't find Wargoove mod and save files in install!")
+                print_error_and_close("WargrooveClient couldn't find Wargoove mod and save data in install!")
             shutil.copytree(data_directory, appdata_wargroove, dirs_exist_ok=True)
         else:
             print_error_and_close("WargrooveClient couldn't detect system type. "

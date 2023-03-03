@@ -58,7 +58,7 @@ the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/rel
 the "Players" folder.
 
 ```yaml
-description: Default Ocarina of Time Template # Used to describe your yaml. Useful if you have multiple files
+description: Default Ocarina of Time Template # Used to describe your yaml. Useful if you have multiple data
 # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
 name: YourName
 game:

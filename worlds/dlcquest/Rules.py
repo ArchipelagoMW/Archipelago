@@ -5,7 +5,7 @@ from BaseClasses import LocationProgressType, MultiWorld
 from ..generic.Rules import add_rule, set_rule
 from .Regions import DLCquestRegion
 
-def set_rules(world, player)
+def set_rules(world, player, option)
     set_rule(world.get_entrance("mouving", player),
              lambda state: state.has("Movement Pack", player))
     set_rule(world.get_entrance("tree", player),

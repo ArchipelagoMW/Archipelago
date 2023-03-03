@@ -55,7 +55,7 @@ Output Logs/
 /data/user.kv
 /datapackage
 
-# Byte-compiled / optimized / DLL files
+# Byte-compiled / optimized / DLL data
 __pycache__/
 *.py[cod]
 *$py.class
@@ -129,7 +129,7 @@ ipython_config.py
 # vim editor
 *.swp
 
-# SageMath parsed files
+# SageMath parsed data
 *.sage.py
 
 # Environments

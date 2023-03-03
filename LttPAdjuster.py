@@ -727,7 +727,7 @@ def get_rom_options_frame(parent=None):
     vars.auto_apply = StringVar(value=adjuster_settings.auto_apply)
     autoApplyFrame = Frame(romOptionsFrame)
     autoApplyFrame.grid(row=9, column=0, columnspan=2, sticky=W)
-    filler = Label(autoApplyFrame, text="Automatically apply last used settings on opening .aplttp files")
+    filler = Label(autoApplyFrame, text="Automatically apply last used settings on opening .aplttp data")
     filler.pack(side=TOP, expand=True, fill=X)
     askRadio = Radiobutton(autoApplyFrame, text='Ask', variable=vars.auto_apply, value='ask')
     askRadio.pack(side=LEFT, padx=5, pady=5)
@@ -947,7 +947,7 @@ class SpriteSelector():
             button.grid(row=i // self.spritesPerRow, column=i % self.spritesPerRow)
 
     def update_alttpr_sprites(self):
-        # need to wrap in try catch. We don't want errors getting the json or downloading the files to break us.
+        # need to wrap in try catch. We don't want errors getting the json or downloading the data to break us.
         self.window.destroy()
         self.parent.update()
 
@@ -964,8 +964,8 @@ class SpriteSelector():
     def browse_for_sprite(self):
         sprite = filedialog.askopenfilename(
             filetypes=[("All Sprite Sources", (".zspr", ".spr", ".sfc", ".smc")),
-                       ("ZSprite files", ".zspr"),
-                       ("Sprite files", ".spr"),
+                       ("ZSprite data", ".zspr"),
+                       ("Sprite data", ".spr"),
                        ("Rom Files", (".sfc", ".smc")),
                        ("All Files", "*")])
         try:

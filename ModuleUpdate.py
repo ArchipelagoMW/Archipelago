@@ -122,7 +122,7 @@ if __name__ == "__main__":
     parser.add_argument('-y', '--yes', dest='yes', action='store_true', help='answer "yes" to all questions')
     parser.add_argument('-f', '--force', dest='force', action='store_true', help='force update')
     parser.add_argument('-a', '--append', nargs="*", dest='additional_requirements',
-                        help='List paths to additional requirement files.')
+                        help='List paths to additional requirement data.')
     args = parser.parse_args()
     if args.additional_requirements:
         requirements_files.update(args.additional_requirements)

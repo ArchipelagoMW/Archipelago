@@ -31,7 +31,7 @@ class DLCqworld(World):
         create_regions(self.multiworld, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player)
+        set_rules(self.multiworld, self.player, self.option)
 
     def create_item(self, item: Union[str, ItemData]) -> DLCquestItem:
         if isinstance(item, str):
