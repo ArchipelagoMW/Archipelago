@@ -2,8 +2,8 @@ import math
 
 from BaseClasses import MultiWorld
 from .Names import LocationName, ItemName
-from ..AutoWorld import LogicMixin
-from ..generic.Rules import add_rule, set_rule
+from worlds.AutoWorld import LogicMixin
+from worlds.generic.Rules import add_rule, set_rule
 
 
 def set_rules(world: MultiWorld, player: int):

@@ -1,4 +1,4 @@
-from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification, RegionType
+from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification
 from .Items import item_table
 from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
@@ -38,7 +38,7 @@ class ArchipIDLEWorld(World):
     location_name_to_id = {}
     start_id = 9000
     for i in range(1, 101):
-        location_name_to_id[f"IDLE for at least {int(i / 2)} minutes {30 if (i % 2) > 0 else 0} seconds"] = start_id
+        location_name_to_id[f"IDLE for at least {int(i / 2)} minutes {30 if (i % 2) else 0} seconds"] = start_id
         start_id += 1
 
     def generate_basic(self):
@@ -78,8 +78,7 @@ class ArchipIDLEWorld(World):
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    region = Region(name, RegionType.Generic, name, player)
-    region.multiworld = world
+    region = Region(name, player, world)
     if locations:
         for location_name in locations.keys():
             location = ArchipIDLELocation(player, location_name, locations[location_name], region)
@@ -98,6 +97,3 @@ class ArchipIDLEItem(Item):
 
 class ArchipIDLELocation(Location):
     game: str = "ArchipIDLE"
-
-    def __init__(self, player: int, name: str, address=None, parent=None):
-        super(ArchipIDLELocation, self).__init__(player, name, address, parent)

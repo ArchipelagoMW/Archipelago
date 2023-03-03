@@ -18,7 +18,7 @@ from .Client import SMSNIClient
 from .Rom import get_base_rom_path, SM_ROM_MAX_PLAYERID, SM_ROM_PLAYERDATA_COUNT, SMDeltaPatch, get_sm_symbols
 import Utils
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, RegionType, CollectionState, Tutorial
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, Tutorial
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
 
 from logic.smboolmanager import SMBoolManager
@@ -107,7 +107,7 @@ class SMWorld(World):
         super().__init__(world, player)
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld: MultiWorld):
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
@@ -721,8 +721,7 @@ def create_locations(self, player: int):
 
 
 def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, RegionType.LightWorld, name, player)
-    ret.multiworld = world
+    ret = Region(name, player, world)
     if locations:
         for loc in locations:
             location = self.locations[loc]

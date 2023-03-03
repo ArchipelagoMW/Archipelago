@@ -1,8 +1,7 @@
-from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification, RegionType
+from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification
 from .Items import ChecksFinderItem, item_table, required_items
 from .Locations import ChecksFinderAdvancement, advancement_table, exclusion_table
 from .Options import checksfinder_options
-from .Regions import checksfinder_regions, link_checksfinder_structures
 from .Rules import set_rules, set_completion_rules
 from ..AutoWorld import World, WebWorld
 
@@ -38,7 +37,7 @@ class ChecksFinderWorld(World):
 
     def _get_checksfinder_data(self):
         return {
-            'world_seed': self.multiworld.slot_seeds[self.player].getrandbits(32),
+            'world_seed': self.multiworld.per_slot_randoms[self.player].getrandbits(32),
             'seed_name': self.multiworld.seed_name,
             'player_name': self.multiworld.get_player_name(self.player),
             'player_id': self.player,
@@ -68,17 +67,15 @@ class ChecksFinderWorld(World):
         set_completion_rules(self.multiworld, self.player)
 
     def create_regions(self):
-        def ChecksFinderRegion(region_name: str, exits=[]):
-            ret = Region(region_name, RegionType.Generic, region_name, self.player, self.multiworld)
-            ret.locations = [ChecksFinderAdvancement(self.player, loc_name, loc_data.id, ret)
-                for loc_name, loc_data in advancement_table.items()
-                if loc_data.region == region_name]
-            for exit in exits:
-                ret.exits.append(Entrance(self.player, exit, ret))
-            return ret
+        menu = Region("Menu", self.player, self.multiworld)
+        board = Region("Board", self.player, self.multiworld)
+        board.locations = [ChecksFinderAdvancement(self.player, loc_name, loc_data.id, board)
+                           for loc_name, loc_data in advancement_table.items() if loc_data.region == board.name]
 
-        self.multiworld.regions += [ChecksFinderRegion(*r) for r in checksfinder_regions]
-        link_checksfinder_structures(self.multiworld, self.player)
+        connection = Entrance(self.player, "New Board", menu)
+        menu.exits.append(connection)
+        connection.connect(board)
+        self.multiworld.regions += [menu, board]
 
     def fill_slot_data(self):
         slot_data = self._get_checksfinder_data()
