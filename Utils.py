@@ -12,7 +12,7 @@ import io
 import collections
 import importlib
 import logging
-from typing import BinaryIO, ClassVar, Coroutine, Optional, Set
+from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
 
 from yaml import load, load_all, dump, SafeLoader
 
@@ -38,7 +38,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.8"
+__version__ = "0.3.9"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -313,6 +313,8 @@ def get_default_options() -> OptionsType:
         "mmbn3_options": {
             "rom_file": "Mega Man Battle Network 3 - Blue Version (USA).gba",
             "rom_start": True
+        "wargroove_options": {
+            "root_directory": "C:/Program Files (x86)/Steam/steamapps/common/Wargroove"
         }
     }
     return options
@@ -666,7 +668,10 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
 
 def title_sorted(data: typing.Sequence, key=None, ignore: typing.Set = frozenset(("a", "the"))):
     """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
-    def sorter(element: str) -> str:
+    def sorter(element: Union[str, Dict[str, Any]]) -> str:
+        if (not isinstance(element, str)):
+            element = element["title"]
+
         parts = element.split(maxsplit=1)
         if parts[0].lower() in ignore:
             return parts[1].lower()

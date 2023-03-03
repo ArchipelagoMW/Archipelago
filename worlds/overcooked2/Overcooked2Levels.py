@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, IntEnum
 from typing import List
 
 
@@ -113,7 +113,7 @@ ITEMS_TO_EXCLUDE_IF_NO_DLC = [
     "Calmer Unbread",
 ]
 
-class Overcooked2GameWorld(Enum):
+class Overcooked2GameWorld(IntEnum):
     ONE = 1
     TWO = 2
     THREE = 3
@@ -127,7 +127,7 @@ class Overcooked2GameWorld(Enum):
         if self == Overcooked2GameWorld.KEVIN:
             return "Kevin"
 
-        return str(int(self.value))
+        return str(self.value)
 
     @property
     def sublevel_count(self) -> int:
@@ -141,7 +141,7 @@ class Overcooked2GameWorld(Enum):
         if self == Overcooked2GameWorld.ONE:
             return 1
 
-        prev = Overcooked2GameWorld(self.value - 1)
+        prev = Overcooked2GameWorld(self - 1)
         return prev.base_id + prev.sublevel_count
 
     @property
@@ -195,7 +195,7 @@ class Overcooked2Level:
         if self.sublevel > self.world.sublevel_count:
             if self.world == Overcooked2GameWorld.KEVIN:
                 raise StopIteration
-            self.world = Overcooked2GameWorld(self.world.value + 1)
+            self.world = Overcooked2GameWorld(self.world + 1)
             self.sublevel = 1
 
         return self
