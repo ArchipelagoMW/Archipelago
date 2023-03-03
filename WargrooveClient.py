@@ -80,14 +80,14 @@ class WargrooveContext(CommonContext):
         # self.game_communication_path: files go in this path to pass data between us and the actual game
         if "appdata" in os.environ:
             options = Utils.get_options()
-            root_directory = options["wargroove_options"]["root_directory"].replace("/", "\\")
-            data_directory = "lib\\worlds\\wargroove\\data\\"
-            dev_data_directory = "worlds\\wargroove\\data\\"
-            appdata_wargroove = os.path.expandvars("%APPDATA%\\Chucklefish\\Wargroove\\")
-            if not os.path.isfile(root_directory + "\\win64_bin\\wargroove64.exe"):
+            root_directory = os.path.join(options["wargroove_options"]["root_directory"])
+            data_directory = os.path.join("lib", "worlds", "wargroove", "data")
+            dev_data_directory = os.path.join("worlds", "wargroove", "data")
+            appdata_wargroove = os.path.expandvars(os.path.join("%APPDATA%", "Chucklefish", "Wargroove"))
+            if not os.path.isfile(os.path.join(root_directory, "win64_bin", "wargroove64.exe")):
                 print_error_and_close("WargrooveClient couldn't find wargroove64.exe. "
                                       "Unable to infer required game_communication_path")
-            self.game_communication_path = root_directory + "\\AP"
+            self.game_communication_path = os.path.join(root_directory, "AP")
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
             self.remove_communication_files()
