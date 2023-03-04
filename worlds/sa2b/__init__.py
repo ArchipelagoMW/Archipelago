@@ -174,7 +174,14 @@ class SA2BWorld(World):
         else:
             self.gate_bosses = get_gate_bosses(self.multiworld, self.player)
 
-    def generate_basic(self):
+    def create_regions(self):
+        self.mission_map       = get_mission_table(self.multiworld, self.player)
+        self.mission_count_map = get_mission_count_table(self.multiworld, self.player)
+
+        self.location_table = setup_locations(self.multiworld, self.player, self.mission_map, self.mission_count_map)
+        create_regions(self.multiworld, self.player, self.location_table)
+
+        # Not Generate Basic
         if self.multiworld.goal[self.player].value == 0 or self.multiworld.goal[self.player].value == 2:
             self.multiworld.get_location(LocationName.finalhazard, self.player).place_locked_item(self.create_item(ItemName.maria))
         elif self.multiworld.goal[self.player].value == 1:
@@ -339,13 +346,6 @@ class SA2BWorld(World):
                         musiclist_s[i] += 100
 
             self.music_map = dict(zip(musiclist_o, musiclist_s))
-
-    def create_regions(self):
-        self.mission_map       = get_mission_table(self.multiworld, self.player)
-        self.mission_count_map = get_mission_count_table(self.multiworld, self.player)
-
-        self.location_table = setup_locations(self.multiworld, self.player, self.mission_map, self.mission_count_map)
-        create_regions(self.multiworld, self.player, self.location_table)
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
