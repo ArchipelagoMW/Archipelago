@@ -53,9 +53,9 @@ When you join a multiworld game, you will be asked to provide your YAML file to 
 the host will provide you with either a link to download your data file, or with a zip file containing everyone's data
 files. Your data file should have a `.apadvn` extension.
 
-Double-click on your patch file to start your client and start the ROM patch process. Once the process is finished
-(this can take a while), the client and the emulator will be started automatically (if you set the emulator path 
-as recommended).
+Drag your patch file to the AdventureClient.exe to start your client and start the ROM patch process. Once the process 
+is finished (this can take a while), the client and the emulator will be started automatically (if you set the emulator 
+path as recommended).
 
 ### Connect to the Multiserver
 
