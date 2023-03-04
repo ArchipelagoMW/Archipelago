@@ -1,7 +1,21 @@
+from dataclasses import dataclass
 from typing import List, Tuple
 
-from worlds.stardew_valley.game_item import FishItem
 from . import region_data as region, season_data as season
+from .game_item import GameItem
+
+
+@dataclass(frozen=True)
+class FishItem(GameItem):
+    locations: Tuple[str]
+    seasons: Tuple[str]
+    difficulty: int
+
+    def __repr__(self):
+        return f"{self.name} [{self.item_id}] (Locations: {self.locations} |" \
+               f" Seasons: {self.seasons} |" \
+               f" Difficulty: {self.difficulty}) "
+
 
 fresh_water = (region.farm, region.forest, region.town, region.mountain)
 ocean = (region.beach,)

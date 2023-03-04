@@ -1,6 +1,22 @@
+from dataclasses import dataclass
 from typing import Set, List, FrozenSet
 
-from worlds.stardew_valley.game_item import Villager
+
+@dataclass(frozen=True)
+class Villager:
+    name: str
+    bachelor: bool
+    locations: FrozenSet[str]
+    birthday: str
+    gifts: FrozenSet[str]
+    available: bool
+
+    def __repr__(self):
+        return f"{self.name} [Bachelor: {self.bachelor}] [Available from start: {self.available}]" \
+               f"(Locations: {self.locations} |" \
+               f" Birthday: {self.birthday} |" \
+               f" Gifts: {self.gifts}) "
+
 
 none = set({})
 town = {"Town"}
@@ -109,12 +125,12 @@ caroline_loves = summer_spangle | tropical_curry  # | fish_taco | green_tea
 artichoke_dip = {"Artichoke Dip"}
 fiddlehead_risotto = {"Fiddlehead Risotto"}
 omni_geode = {"Omni Geode"}
-clint_loves = amethyst | aquamarine | artichoke_dip | emerald | fiddlehead_risotto | gold_bar | iridium_bar | jade |\
+clint_loves = amethyst | aquamarine | artichoke_dip | emerald | fiddlehead_risotto | gold_bar | iridium_bar | jade | \
               omni_geode | ruby | topaz
 # bean_hotpot = {"Bean Hotpot"}
 ice_cream = {"Ice Cream"}
 # rice_pudding = {"Rice Pudding"}
-demetrius_loves =  ice_cream | strawberry  # | bean_hotpot | rice_pudding
+demetrius_loves = ice_cream | strawberry  # | bean_hotpot | rice_pudding
 lemon_stone = {"Lemon Stone"}
 dwarf_loves = amethyst | aquamarine | emerald | jade | lemon_stone | omni_geode | ruby | topaz
 beet = {"Beet"}

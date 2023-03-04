@@ -5,40 +5,42 @@ from .. import data
 
 
 @dataclass(frozen=True)
-class SeedData:
+class SeedItem:
     name: str
     seasons: List[str]
     regions: List[str]
 
 
 @dataclass(frozen=True)
-class CropData:
+class CropItem:
     name: str
     farm_growth_seasons: List[str]
-    seed: SeedData
+    seed: SeedItem
 
 
 def load_crop_csv():
     import csv
-    from importlib.resources import path
+    try:
+        from importlib.resources import files
+    except ImportError:
+        from importlib_resources import files
 
-    with path(data, "crops.csv") as resource:
-        with open(resource) as file:
-            reader = csv.DictReader(file)
-            crops = []
-            seeds = []
+    with files(data).joinpath("crops.csv").open() as file:
+        reader = csv.DictReader(file)
+        crops = []
+        seeds = []
 
-            for item in reader:
-                seeds.append(SeedData(item["seed"],
-                                      [season for season in item["seed_seasons"].split(",")]
-                                      if item["seed_seasons"] else [],
-                                      [region for region in item["seed_regions"].split(",")]
-                                      if item["seed_regions"] else []))
-                crops.append(CropData(item["crop"],
-                                      [season for season in item["farm_growth_seasons"].split(",")]
-                                      if item["farm_growth_seasons"] else [],
-                                      seeds[-1]))
-            return crops, seeds
+        for item in reader:
+            seeds.append(SeedItem(item["seed"],
+                                  [season for season in item["seed_seasons"].split(",")]
+                                  if item["seed_seasons"] else [],
+                                  [region for region in item["seed_regions"].split(",")]
+                                  if item["seed_regions"] else []))
+            crops.append(CropItem(item["crop"],
+                                  [season for season in item["farm_growth_seasons"].split(",")]
+                                  if item["farm_growth_seasons"] else [],
+                                  seeds[-1]))
+        return crops, seeds
 
 
 # TODO Those two should probably be split to we can include rest of seeds

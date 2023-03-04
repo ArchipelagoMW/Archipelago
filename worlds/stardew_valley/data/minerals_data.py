@@ -1,6 +1,21 @@
+from dataclasses import dataclass
 from typing import Set, List, FrozenSet
 
-from worlds.stardew_valley.game_item import MuseumItem
+from .game_item import GameItem
+
+
+@dataclass(frozen=True)
+class MuseumItem(GameItem):
+    locations: FrozenSet[str]
+    geodes: FrozenSet[str]
+    monsters: FrozenSet[str]
+    difficulty: float
+
+    def __repr__(self):
+        return f"{self.name} [{self.item_id}] (Locations: {self.locations} |" \
+               f" Geodes: {self.geodes} |" \
+               f" Monsters: {self.monsters}) "
+
 
 none = set({})
 stardew = {"Stardew Valley"}
@@ -85,7 +100,6 @@ def artifact(name: str, item_id: int, difficulty: float, locations: Set[str], ge
 
 def mineral(name: str, item_id: int, locations: Set[str], geodes: Set[str],
             monsters: Set[str] = frozenset(), difficulty: float = -1) -> MuseumItem:
-
     if difficulty == -1:
         difficulty = 0
         if "Geode" in geodes:
@@ -153,9 +167,9 @@ palm_fossil = artifact("Palm Fossil", 588, 10.2, bone_desert_forest_beach, none)
 trilobite = artifact("Trilobite", 589, 7.4, bone_beach_forest_mountain, none)
 
 quartz = mineral("Quartz", 80, mines_20, none, stone_golem)
-fire_quartz = mineral("Fire Quartz", 82, mines_100, magma_omni_fishing, none, 1.0/12.0)
-frozen_tear = mineral("Frozen Tear", 84, mines_60, frozen_omni_fishing, unlikely, 1.0/12.0)
-earth_crystal = mineral("Earth Crystal", 86, mines_20, geode_omni_fishing, duggy, 1.0/12.0)
+fire_quartz = mineral("Fire Quartz", 82, mines_100, magma_omni_fishing, none, 1.0 / 12.0)
+frozen_tear = mineral("Frozen Tear", 84, mines_60, frozen_omni_fishing, unlikely, 1.0 / 12.0)
+earth_crystal = mineral("Earth Crystal", 86, mines_20, geode_omni_fishing, duggy, 1.0 / 12.0)
 emerald = mineral("Emerald", 60, mines_100, fishing)
 aquamarine = mineral("Aquamarine", 62, mines_60, fishing)
 ruby = mineral("Ruby", 64, mines_100, fishing)

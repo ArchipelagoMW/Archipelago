@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
+from worlds.stardew_valley.data.game_item import GameItem
 from . import fish_data, minerals_data
-from ..game_item import GameItem
 
 quality_dict = {
     0: "",

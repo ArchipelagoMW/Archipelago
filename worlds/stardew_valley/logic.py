@@ -4,12 +4,11 @@ from dataclasses import dataclass, field
 from typing import Dict, Union, Optional, Iterable, Sized, Tuple, List
 
 from . import options
-from .data import all_purchasable_seeds, SeedData, all_crops, CropData
+from .data import all_purchasable_seeds, SeedItem, all_crops, CropItem
 from .data.bundle_data import BundleItem
-from .data.fish_data import all_fish_items
-from .data.minerals_data import all_museum_items
+from .data.fish_data import all_fish_items, FishItem
+from .data.minerals_data import all_museum_items, MuseumItem
 from .data.villagers_data import all_villagers_by_name
-from .game_item import FishItem, MuseumItem
 from .items import all_items, Group
 from .options import StardewOptions
 from .stardew_rule import False_, Reach, Or, True_, Received, Count, And, Has, TotalReceived, StardewRule
@@ -649,7 +648,7 @@ class StardewLogic:
         skill_rule = self.has_skill_level("Fishing", 4)
         return self.has_max_fishing_rod() & skill_rule
 
-    def can_buy_seed(self, seed: SeedData):
+    def can_buy_seed(self, seed: SeedItem):
         if self.options[options.SeedShuffle] == options.SeedShuffle.option_disabled or seed.name == "Rare Seed":
             item_rule = True_()
         else:
@@ -658,7 +657,7 @@ class StardewLogic:
         region_rule = self.can_reach_any_region(seed.regions)
         return season_rule & region_rule & item_rule
 
-    def can_grow_crop(self, crop: CropData):
+    def can_grow_crop(self, crop: CropItem):
         season_rule = self.has_any_season(crop.farm_growth_seasons)
         seed_rule = self.has(crop.seed.name)
         farm_rule = self.can_reach_region("Farm") & season_rule
