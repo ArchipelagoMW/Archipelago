@@ -144,8 +144,8 @@ class TimespinnerWorld(World):
                 flooded_areas.append("Castle Courtyard")
             if self.precalculated_weights.flood_lake_desolation:
                 flooded_areas.append("Lake Desolation")
-            if self.precalculated_weights.dry_lake_serene:
-                flooded_areas.append("Dry Lake Serene")
+            if not self.precalculated_weights.dry_lake_serene:
+                flooded_areas.append("Lake Serene")
 
             if len(flooded_areas) == 0:
                 flooded_areas_string: str = "None"
