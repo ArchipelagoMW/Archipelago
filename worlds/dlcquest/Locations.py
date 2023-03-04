@@ -21,6 +21,5 @@ location_table = {
     "Night Map Pack": offset + 12,
     "Psychological Warfare Pack": offset + 13,
     "Horse Armor Pack": offset + 14,
-    "Finish the Fight Pack": offset + 15,
-    "Winning": None
+    "Finish the Fight Pack": offset + 15
 }
