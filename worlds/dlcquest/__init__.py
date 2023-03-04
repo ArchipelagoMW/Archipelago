@@ -1,17 +1,24 @@
-import typing
+from typing import Dict, Any, Iterable, Optional, Union
 from BaseClasses import Tutorial
 from worlds.AutoWorld import World, WebWorld
-from .Items import DLCquestItem, item_table, create_items
+from .Items import DLCquestItem, item_table, all_items, ItemData
 from .Locations import location_table, DLCquestLocation
 from .Options import DLCquest_options
 from .Rules import set_rules
+from .Regions import create_regions
 
 client_version = 0
 
 class DLCqwebworld(WebWorld):
     tutorials = [Tutorial(
-        "magic it is "
+        "magic it is ",
+        "a guide to not die",
+        "Mandarin",
+        "setup_en.md",
+        "setup/en",
+        ["axe_y"]
     )]
+
 
 class DLCqworld(World):
     """
@@ -19,7 +26,7 @@ class DLCqworld(World):
     """
     game: str = "DLCquest"
     topology_present = False
-    web = DLCqwebworld
+    web = DLCqwebworld()
 
     item_name_to_id = item_table
     location_name_to_id = location_table
@@ -32,7 +39,7 @@ class DLCqworld(World):
         create_regions(self.multiworld, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self.option)
+        set_rules(self.multiworld, self.player, self.option_definitions)
 
     def create_event(self, event: str):
         return DLCquestItem(event, True, None, self.player)
@@ -45,9 +52,7 @@ class DLCqworld(World):
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]]
 
-        created_items = create_items(self.create_item, locations_count + len(items_to_exclude), self.options,
-                                     self.multiworld.random)
-        created_items += create_items(self.create_item,)
+        created_items = all_items
         self.multiworld.itempool += created_items
 
 
@@ -57,6 +62,9 @@ class DLCqworld(World):
             item = item_table[item]
 
         return DLCquestItem(item.name, item.classification, item.code, self.player)
+
+    def generate_basic(self) -> None:
+        set_rules(self.multiworld, self.player, self.option_definitions )
 
 
 
