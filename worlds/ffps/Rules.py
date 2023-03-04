@@ -100,7 +100,8 @@ def set_rules(world: MultiWorld, player: int):
              lambda state: state.has("Catalogue 4 Unlock", player))
     set_rule(world.get_location("Buy Pickles Decor", player),
              lambda state: state.has("Catalogue 4 Unlock", player) and state.has("Funtime Chica Animatronic", player)
-                           and state.has("Music Man Animatronic", player) and state.has("El Chip Animatronic", player))
+                           and state.has("Music Man Animatronic", player) and state.has("El Chip Animatronic", player)
+                           and state.has("Stage Upgrade", player, 4))
     set_rule(world.get_location("Buy Cups Upgrade 4", player),
              lambda state: state.has("Catalogue 4 Unlock", player))
     set_rule(world.get_location("Unlocked Catalogue 3", player),

@@ -27,6 +27,42 @@ class FFPSCommandProcessor(ClientCommandProcessor):
                            ffps.data_path("patch.bsdiff"))
         self.output(f"Done!")
 
+    def _cmd_toggle_jumpscares(self):
+        """Disable or enable all jumpscares."""
+        path = os.path.expandvars("%appdata%/MMFApplications/FNAF6")
+        scare_set_to = "0"
+        if os.path.exists(path):
+            with open(path, "r") as f:
+                lines = f.read()
+                f.close()
+            with open(path, "w") as f:
+                if lines[lines.find("skipScare=") + 10] == "1":
+                    lines = lines.replace("skipScare=" + lines[lines.find("skipScare=") + 10],
+                                          "skipScare=0")
+                    self.output(f"Jumpscares enabled")
+                    scare_set_to = "0"
+                elif lines[lines.find("skipScare=") + 10] == "0":
+                    lines = lines.replace("skipScare=" + lines[lines.find("skipScare=") + 10],
+                                          "skipScare=1")
+                    self.output(f"Jumpscares disabled")
+                    scare_set_to = "1"
+                f.writelines(lines)
+                f.close()
+        path = os.path.expandvars("%appdata%/MMFApplications/FNAF6BOUGHT")
+        if os.path.exists(path):
+            with open(path, "r") as f:
+                lines = f.read()
+                f.close()
+            with open(path, "w") as f:
+                lines = lines.replace("skipScare=" + lines[lines.find("skipScare=") + 10],
+                                      "skipScare="+scare_set_to)
+                f.writelines(lines)
+                f.close()
+        else:
+            with open(path, "w") as f:
+                f.write("skipScare="+scare_set_to)
+                f.close()
+
 
 class FFPSContext(CommonContext):
     command_processor: int = FFPSCommandProcessor
@@ -68,6 +104,24 @@ async def process_ffps_cmd(ctx: FFPSContext, cmd: str, args: dict):
         path = os.path.expandvars("%appdata%/MMFApplications/FNAF6")
         if not os.path.exists(path):
             with open(path, "w") as f:
+                f.write("[FNAF6]\n")
+                f.write("stage=0\n")
+                f.write("cups=0\n")
+                f.write("speakers=0\n")
+                f.write("money=200\n")
+                f.write("skipScare=0\n")
+                f.write("diffap="+str(ctx.difficulty)+"\n")
+                f.close()
+        else:
+            with open(path, "r") as f:
+                lines = f.read()
+                f.close()
+            with open(path, "w") as f:
+                lines = lines.replace("diffap=" + lines[lines.find("diffap=") + 7],
+                                      "diffap=" + str(ctx.difficulty))
+                lines = lines.replace("skipScare=" + lines[lines.find("skipScare=") + 10],
+                                      "skipScare=0")
+                f.writelines(lines)
                 f.close()
 
     elif cmd == 'ReceivedItems':
@@ -228,8 +282,8 @@ async def game_watcher(ctx: FFPSContext):
                             f.write("night=1\n")
                         if not lines.__contains__("phase="):
                             f.write("phase=1\n")
-                        if not lines.__contains__("diffap="):
-                            f.write("diffap="+str(ctx.difficulty)+"\n")
+                        if not lines.__contains__("skipScare="):
+                            f.write("skipScare=0\n")
                         f.close()
                     break
                 except PermissionError:
