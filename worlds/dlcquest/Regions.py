@@ -1,5 +1,5 @@
-from BaseClasses import MultiWorld, Region, Location
-from .Locations import DLCquestLocation, location_table, Victory
+from BaseClasses import MultiWorld, Region, Location, Entrance
+from .Locations import DLCquestLocation, location_table
 
 DLCquestRegion =["Movement Pack", "Behind Tree", "Psychological Warfare", "Double Jump Left", "Double Jump Behind the Tree", "The Forest", "Final Room"]
 

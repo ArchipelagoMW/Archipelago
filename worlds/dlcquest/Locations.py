@@ -22,4 +22,5 @@ location_table = {
     "Psychological Warfare Pack": offset + 13,
     "Horse Armor Pack": offset + 14,
     "Finish the Fight Pack": offset + 15,
+    "Winning": None
 }

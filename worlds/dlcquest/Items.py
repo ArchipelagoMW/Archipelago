@@ -3,21 +3,24 @@ import enum
 import typing
 from BaseClasses import Item, ItemClassification
 from . import Options, data
+from dataclasses import dataclass, field
 
 class DLCquestItem(Item):
     game: str = "DLCquest"
 
 offset = 120_000
 
+
+
 class Group(enum.Enum):
     DLC = enum.auto()
 
 @dataclass(frozen=True)
 class ItemData:
-    code_without_offset: Optional[int]
+    code_without_offset: offset
     name: str
     classification: ItemClassification
-    groups: Set[Group] = field(default_factory=frozenset)
+    groups: set[Group] = field(default_factory=frozenset)
 
     def __post_init__(self):
         if not isinstance(self.groups, frozenset):
@@ -50,3 +53,8 @@ def load_item_csv():
 
 def initialize_item_table():
     item_table.update({item.name: item for item in all_items})
+
+
+
+item_table: dict[str, ItemData] = {}
+all_items: list[ItemData] = load_item_csv()
