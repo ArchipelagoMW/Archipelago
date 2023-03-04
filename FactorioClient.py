@@ -109,9 +109,10 @@ class FactorioContext(CommonContext):
 
     def on_print_json(self, args: dict):
         if self.rcon_client:
-            if not self.filter_item_sends or not self.is_uninteresting_item_send(args):
+            if (not self.filter_item_sends or not self.is_uninteresting_item_send(args)) \
+                    and not self.is_echoed_chat(args):
                 text = self.factorio_json_text_parser(copy.deepcopy(args["data"]))
-                if not text.startswith(self.player_names[self.slot] + ":"):
+                if not text.startswith(self.player_names[self.slot] + ":"): # TODO: Remove string heuristic in the future.
                     self.print_to_game(text)
         super(FactorioContext, self).on_print_json(args)
 

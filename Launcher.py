@@ -132,7 +132,8 @@ components: Iterable[Component] = (
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient'),
     # SNI
     Component('SNI Client', 'SNIClient',
-              file_identifier=SuffixIdentifier('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3', '.apdkc3', '.apsmw')),
+              file_identifier=SuffixIdentifier('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3', '.apdkc3',
+                                               '.apsmw', '.apl2ac')),
     Component('LttP Adjuster', 'LttPAdjuster'),
     # Factorio
     Component('Factorio Client', 'FactorioClient'),
@@ -151,6 +152,8 @@ components: Iterable[Component] = (
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
     Component('Starcraft 2 Client', 'Starcraft2Client'),
+    # Wargroove
+    Component('Wargroove Client', 'WargrooveClient'),
     # Zillion
     Component('Zillion Client', 'ZillionClient',
               file_identifier=SuffixIdentifier('.apzl')),

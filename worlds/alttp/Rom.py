@@ -20,7 +20,7 @@ import concurrent.futures
 import bsdiff4
 from typing import Optional, List
 
-from BaseClasses import CollectionState, Region, Location
+from BaseClasses import CollectionState, Region, Location, MultiWorld
 from worlds.alttp.Shops import ShopType, ShopPriceType
 from worlds.alttp.Dungeons import dungeon_music_addresses
 from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address
@@ -92,7 +92,7 @@ class LocalRom(object):
             # cause crash to provide traceback
             import xxtea
 
-        local_random = world.slot_seeds[player]
+        local_random = world.per_slot_randoms[player]
         key = bytes(local_random.getrandbits(8 * 16).to_bytes(16, 'big'))
         self.write_bytes(0x1800B0, bytearray(key))
         self.write_int16(0x180087, 1)
@@ -384,7 +384,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
 
     max_enemizer_tries = 5
     for i in range(max_enemizer_tries):
-        enemizer_seed = str(world.slot_seeds[player].randint(0, 999999999))
+        enemizer_seed = str(world.per_slot_randoms[player].randint(0, 999999999))
         enemizer_command = [os.path.abspath(enemizercli),
                             '--rom', randopatch_path,
                             '--seed', enemizer_seed,
@@ -414,7 +414,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
             continue
 
         for j in range(i + 1, max_enemizer_tries):
-            world.slot_seeds[player].randint(0, 999999999)
+            world.per_slot_randoms[player].randint(0, 999999999)
             # Sacrifice all remaining random numbers that would have been used for unused enemizer tries.
             # This allows for future enemizer bug fixes to NOT affect the rest of the seed's randomness
         break
@@ -765,8 +765,8 @@ def get_nonnative_item_sprite(item: str) -> int:
     # https://discord.com/channels/731205301247803413/827141303330406408/852102450822905886
 
 
-def patch_rom(world, rom, player, enemized):
-    local_random = world.slot_seeds[player]
+def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
+    local_random = world.per_slot_randoms[player]
 
     # patch items
 
@@ -1646,7 +1646,7 @@ def patch_rom(world, rom, player, enemized):
         rom.write_byte(0xFEE41, 0x2A)  # preopen bombable exit
 
     if world.tile_shuffle[player]:
-        tile_set = TileSet.get_random_tile_set(world.slot_seeds[player])
+        tile_set = TileSet.get_random_tile_set(world.per_slot_randoms[player])
         rom.write_byte(0x4BA21, tile_set.get_speed())
         rom.write_byte(0x4BA1D, tile_set.get_len())
         rom.write_bytes(0x4BA2A, tile_set.get_bytes())
@@ -1779,7 +1779,7 @@ def hud_format_text(text):
 def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, sprite: str, palettes_options,
                        world=None, player=1, allow_random_on_event=False, reduceflashing=False,
                        triforcehud: str = None, deathlink: bool = False, allowcollect: bool = False):
-    local_random = random if not world else world.slot_seeds[player]
+    local_random = random if not world else world.per_slot_randoms[player]
     disable_music: bool = not music
     # enable instant item menu
     if menuspeed == 'instant':
@@ -2105,7 +2105,7 @@ def write_string_to_rom(rom, target, string):
 
 def write_strings(rom, world, player):
     from . import ALTTPWorld
-    local_random = world.slot_seeds[player]
+    local_random = world.per_slot_randoms[player]
     w: ALTTPWorld = world.worlds[player]
 
     tt = TextTable()
@@ -2330,7 +2330,7 @@ def write_strings(rom, world, player):
     if world.worlds[player].has_progressive_bows and (world.difficulty_requirements[player].progressive_bow_limit >= 2 or (
             world.swordless[player] or world.logic[player] == 'noglitches')):
         prog_bow_locs = world.find_item_locations('Progressive Bow', player, True)
-        world.slot_seeds[player].shuffle(prog_bow_locs)
+        world.per_slot_randoms[player].shuffle(prog_bow_locs)
         found_bow = False
         found_bow_alt = False
         while prog_bow_locs and not (found_bow and found_bow_alt):

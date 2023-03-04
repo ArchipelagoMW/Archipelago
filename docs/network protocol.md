@@ -9,7 +9,7 @@ These steps should be followed in order to establish a gameplay connection with 
 5. Client sends [Connect](#Connect) packet in order to authenticate with the server.
 6. Server validates the client's packet and responds with [Connected](#Connected) or [ConnectionRefused](#ConnectionRefused).
 7. Server may send [ReceivedItems](#ReceivedItems) to the client, in the case that the client is missing items that are queued up for it.
-8. Server sends [Print](#Print) to all players to notify them of the new client connection.
+8. Server sends [PrintJSON](#PrintJSON) to all players to notify them of the new client connection.
 
 In the case that the client does not authenticate properly and receives a [ConnectionRefused](#ConnectionRefused) then the server will maintain the connection and allow for follow-up [Connect](#Connect) packet.
 
@@ -54,7 +54,6 @@ These packets are are sent from the multiworld server to the client. They are no
 * [ReceivedItems](#ReceivedItems)
 * [LocationInfo](#LocationInfo)
 * [RoomUpdate](#RoomUpdate)
-* [Print](#Print)
 * [PrintJSON](#PrintJSON)
 * [DataPackage](#DataPackage)
 * [Bounced](#Bounced)
@@ -160,35 +159,44 @@ The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring:
 
 All arguments for this packet are optional, only changes are sent.
 
-### Print
-Sent to clients purely to display a message to the player. 
-* *Deprecation warning: clients that connect with version 0.3.5 or higher will nolonger recieve Print packets, instead all messsages are send as [PrintJSON](#PrintJSON)*
-#### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| text | str | Message to display to player. |
-
 ### PrintJSON
-Sent to clients purely to display a message to the player. This packet differs from [Print](#Print) in that the data being sent with this packet allows for more configurable or specific messaging.
+Sent to clients purely to display a message to the player. While various message types provide additional arguments, clients only need to evaluate the `data` argument to construct the human-readable message text. All other arguments may be ignored safely.
 #### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| data | list\[[JSONMessagePart](#JSONMessagePart)\] | Type of this part of the message. |
-| type | str | May be present to indicate the [PrintJsonType](#PrintJsonType) of this message. |
-| receiving | int | Is present if type is Hint or ItemSend and marks the destination player's ID. |
-| item | [NetworkItem](#NetworkItem) | Is present if type is Hint or ItemSend and marks the source player id, location id, item id and item flags. |
-| found | bool | Is present if type is Hint, denotes whether the location hinted for was checked. |
-| countdown | int | Is present if type is `Countdown`, denotes the amount of seconds remaining on the countdown. |
+| Name | Type | Message Types | Contents |
+| ---- | ---- | ------------- | -------- |
+| data | list\[[JSONMessagePart](#JSONMessagePart)\] | (all) | Textual content of this message |
+| type | str | (any) | [PrintJsonType](#PrintJsonType) of this message (optional) |
+| receiving | int | ItemSend, ItemCheat, Hint | Destination player's ID |
+| item | [NetworkItem](#NetworkItem) | ItemSend, ItemCheat, Hint | Source player's ID, location ID, item ID and item flags |
+| found | bool | Hint | Whether the location hinted for was checked |
+| team | int | Join, Part, Chat, TagsChanged, Goal, Release, Collect, ItemCheat | Team of the triggering player |
+| slot | int | Join, Part, Chat, TagsChanged, Goal, Release, Collect | Slot of the triggering player |
+| message | str | Chat, ServerChat | Original chat message without sender prefix |
+| tags | list\[str\] | Join, TagsChanged | Tags of the triggering player |
+| countdown | int | Countdown | Amount of seconds remaining on the countdown |
 
-##### PrintJsonType
-PrintJsonType indicates the type of [PrintJson](#PrintJson) packet, different types can be handled differently by the client and can also contain additional arguments. When receiving an unknown type the data's list\[[JSONMessagePart](#JSONMessagePart)\] should still be printed as normal. 
+#### PrintJsonType
+PrintJsonType indicates the type of a [PrintJSON](#PrintJSON) packet. Different types can be handled differently by the client and can also contain additional arguments. When receiving an unknown or missing type, the `data`'s list\[[JSONMessagePart](#JSONMessagePart)\] should still be displayed to the player as normal text.
 
 Currently defined types are:
-| Type | Notes |
-| ---- | ----- |
-| ItemSend | The message is in response to a player receiving an item. |
-| Hint | The message is in response to a player hinting. |
-| Countdown | The message contains information about the current server Countdown. |
+
+| Type | Subject |
+| ---- | ------- |
+| ItemSend | A player received an item. |
+| ItemCheat | A player used the `!getitem` command. |
+| Hint | A player hinted. |
+| Join | A player connected. |
+| Part | A player disconnected. |
+| Chat | A player sent a chat message. |
+| ServerChat | The server broadcasted a message. |
+| Tutorial | The client has triggered a tutorial message, such as when first connecting. |
+| TagsChanged | A player changed their tags. |
+| CommandResult | Someone (usually the client) entered an `!` command. |
+| AdminCommandResult | The client entered an `!admin` command. |
+| Goal | A player reached their goal. |
+| Release | A player released the remaining items in their world. |
+| Collect | A player collected the remaining items for their world. |
+| Countdown | The current server countdown has progressed. |
 
 ### DataPackage
 Sent to clients to provide what is known as a 'data package' which contains information to enable a client to most easily communicate with the Archipelago server. Contents include things like location id to name mappings, among others; see [Data Package Contents](#Data-Package-Contents) for more info.
