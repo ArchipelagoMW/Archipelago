@@ -8,7 +8,7 @@ from Options import Choice, Option, DefaultOnToggle, DeathLink, Range, Toggle
 class FreeincarnateMax(Range):
     """How many maximum freeincarnate items to allow
 
-    When done generating items, and remaining item slots will be filled
+    When done generating items, any remaining item slots will be filled
     with freeincarnates, up to this maximum amount.  Any remaining item
     slots after that will be 'nothing' items placed locally, so in multigame
     multiworlds, keeping this value high will allow more items from other games
