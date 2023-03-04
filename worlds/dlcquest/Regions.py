@@ -18,7 +18,7 @@ def create_regions(world: MultiWorld, player: int):
     world.regions.append(Regmovpack)
 
     Regbtree = Region("Behind Tree", player, world)
-    Locbtree_name = ["Double Jump Pack", "Map Pack", "Horse Armor Pack"]
+    Locbtree_name = ["Double Jump Pack", "Map Pack"]
     Regbtree.exits =[ Entrance(player, "Behind Tree Double Jump", Regbtree), Entrance(player, "Forest Entrance", Regbtree)]
     Regbtree.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regbtree) for loc_name in Locbtree_name]
     world.regions.append(Regbtree)
