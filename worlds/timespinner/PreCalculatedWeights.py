@@ -93,9 +93,12 @@ class PreCalculatedWeights:
 
         default_weights: Dict[str, Dict[str, int]] = timespinner_options["RisingTidesOverrides"].default
 
-        for key, weights in default_weights.items():
-            if not key in weights_overrides_option:
-                weights_overrides_option[key] = weights
+        if not weights_overrides_option:
+            weights_overrides_option = default_weights
+        else:
+            for key, weights in default_weights.items():
+                if not key in weights_overrides_option:
+                    weights_overrides_option[key] = weights
 
         return weights_overrides_option 
 
