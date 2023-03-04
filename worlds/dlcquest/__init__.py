@@ -52,7 +52,10 @@ class DLCqworld(World):
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]]
 
-        created_items = all_items
+        created_items =[]
+        for item in all_items:
+            created_items.append(self.create_item (item))
+
         self.multiworld.itempool += created_items
 
 

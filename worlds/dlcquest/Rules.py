@@ -30,7 +30,7 @@ def set_rules(world, player, option):
     world.get_region("The Final Boss Room", player).locations.append(loc_win)
     loc_win.place_locked_item(create_event(player, "Victory"))
     set_rule(world.get_location("Winning", player), lambda state: state.can_reach("The Final Boss Room", 'Region', player) and
-                                                            state.has("Horse Armor Pack", player))
+                                                            state.has("Horse Armor Pack", player)) and state.has("Finish The Fight Pack")
     world.completion_condition[player] = lambda state: state.has("Victory", player)
 
 
