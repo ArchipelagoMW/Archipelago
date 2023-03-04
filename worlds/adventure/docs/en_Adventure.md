@@ -30,7 +30,8 @@ items around makes it somewhat unique in Archipelago.  Touching the item, wherev
 for wherever the item was originally placed.
 
 ## Which notable items are not randomized?
-The bat, dot, and map are not yet randomized
+The bat, dot, and map are not yet randomized.  If the chalice is local, it is randomized, but is always in either a 
+castle or the credits screen.  Forcing the chalice local in the yaml is recommended.
 
 ## What does another world's item look like in Adventure?
 It looks vaguely like a flashing Archipelago logo. 
@@ -40,8 +41,22 @@ A message is shown in the client log.  While empty handed, the player can press 
 order they were received.  Once an item is retrieved this way, it cannot be retrieved again until pressing select to 
 return to the 'GO' screen or doing a hard reset, either one of which will reset all items to their original positions.
 
+## What are recommended settings to tweak for beginners to the rando?
+Setting difficulty_switch_a and lowering the dragons' speeds makes the dragons easier to avoid.  Adding Chalice to 
+local_items guarantees you'll visit at least one of the interesting castles, as it can only be placed in a castle or
+the credits room.
+
 ## My yellow key is stuck in a wall!  Am I softlocked?
 Maybe!  That's all part of Adventure.  If you have access to the magnet, bridge, or bat, you might be able to retrieve
 it.  In general, since the bat always starts outside of castles, you should always be able to find it unless you lock
 it in a castle yourself.  This mod's inventory system allows you to quickly recover all the items
 you've collected after a hard reset or select-reset (except for the dot), so usually it's not as bad as in vanilla.
+
+## How do I get into the credits room?  There's a item I need in there.
+Searching for 'Adventure dot map' should bring up an AtariAge map with a good walkthrough, but here's the basics.
+Bring the bridge into the black castle.  Find the small room in the dungeon that cannot be reached without the bridge, 
+enter it, and push yourself into the bottom right corner to pick up the dot.  The dot color matches the background,
+so you won't be able to see it if it isn't in a wall, so be careful not to drop it.  Bring it to the room one south and
+one east of the yellow castle and drop it there. Bring 2-3 more objects (the bat and dragons also count for this) until 
+it lets you walk through the right wall.
+If the item is on the right side, you'll need the magnet to get it.
