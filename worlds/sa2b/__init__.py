@@ -71,7 +71,7 @@ class SA2BWorld(World):
 
     def _get_slot_data(self):
         return {
-            "ModVersion": 200,
+            "ModVersion": 201,
             "Goal": self.multiworld.goal[self.player].value,
             "MusicMap": self.music_map,
             "MissionMap": self.mission_map,
