@@ -23,6 +23,8 @@ jobs:
             os: windows-latest
           - python: {version: '3.10'}  # current
             os: windows-latest
+          - python: {version: '3.10'}  # current
+            os: macos-latest
 
     steps:
     - uses: actions/checkout@v2

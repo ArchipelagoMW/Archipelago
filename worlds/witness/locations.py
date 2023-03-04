@@ -13,13 +13,10 @@ class StaticWitnessLocations:
     """
     ID_START = 158000
 
-    EXTRA_LOCATIONS = {
+    GENERAL_LOCATIONS = {
         "Tutorial Front Left",
         "Tutorial Back Left",
         "Tutorial Back Right",
-    }
-
-    GENERAL_LOCATIONS = {
         "Tutorial Gate Open",
 
         "Outside Tutorial Vault Box",
@@ -48,9 +45,9 @@ class StaticWitnessLocations:
         "Desert Flood Room 6",
         "Desert Laser Panel",
 
-        "Quarry Mill Lower Row 6",
-        "Quarry Mill Upper Row 8",
-        "Quarry Mill Control Room Right",
+        "Quarry Stoneworks Lower Row 6",
+        "Quarry Stoneworks Upper Row 8",
+        "Quarry Stoneworks Control Room Right",
         "Quarry Boathouse Intro Right",
         "Quarry Boathouse Intro Left",
         "Quarry Boathouse Front Row 5",
@@ -128,7 +125,7 @@ class StaticWitnessLocations:
 
         "Mountaintop River Shape",
         "Tutorial Patio Floor",
-        "Quarry Mill Control Room Left",
+        "Quarry Stoneworks Control Room Left",
         "Theater Tutorial Video",
         "Theater Desert Video",
         "Theater Jungle Video",
@@ -170,11 +167,11 @@ class StaticWitnessLocations:
         "Quarry Rock Line EP",
         "Quarry Rock Line Reflection EP",
         "Quarry Railroad EP",
-        "Quarry Mill Ramp EP",
-        "Quarry Mill Lift EP",
+        "Quarry Stoneworks Ramp EP",
+        "Quarry Stoneworks Lift EP",
         "Quarry Boathouse Moving Ramp EP",
         "Quarry Boathouse Hook EP",
-        "Shadows Quarry Mill Rooftop Vent EP",
+        "Shadows Quarry Stoneworks Rooftop Vent EP",
         "Treehouse Beach Rock Shadow EP",
         "Treehouse Beach Sand Shadow EP",
         "Treehouse Beach Both Orange Bridges EP",
@@ -207,10 +204,10 @@ class StaticWitnessLocations:
         "Town Windmill First Blade EP",
         "Town Windmill Second Blade EP",
         "Town Windmill Third Blade EP",
-        "Town Tower Underside First EP",
-        "Town Tower Underside Second EP",
         "Town Tower Underside Third EP",
         "Town Tower Underside Fourth EP",
+        "Town Tower Underside First EP",
+        "Town Tower Underside Second EP",
         "Town RGB House Red EP",
         "Town RGB House Green EP",
         "Town Maze Bridge Underside EP",
@@ -302,6 +299,7 @@ class StaticWitnessLocations:
         "Quarry Obelisk Side 2",
         "Quarry Obelisk Side 3",
         "Quarry Obelisk Side 4",
+        "Quarry Obelisk Side 5",
         "Town Obelisk Side 1",
         "Town Obelisk Side 2",
         "Town Obelisk Side 3",
@@ -338,6 +336,7 @@ class StaticWitnessLocations:
         "Quarry Obelisk Side 2",
         "Quarry Obelisk Side 3",
         "Quarry Obelisk Side 4",
+        "Quarry Obelisk Side 5",
         "Town Obelisk Side 1",
         "Town Obelisk Side 2",
         "Town Obelisk Side 3",
