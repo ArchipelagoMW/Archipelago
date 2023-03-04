@@ -1,4 +1,4 @@
-# Setup Guide for Pokémon Red and Blue: Archipelago
+# Setup Guide for Adventure: Archipelago
 
 ## Important
 
