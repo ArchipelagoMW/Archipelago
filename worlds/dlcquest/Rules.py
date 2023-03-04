@@ -25,6 +25,7 @@ def set_rules(world, player, option):
              lambda state: state.has("Double jump Pack", player))
     set_rule(world.get_entrance("Behind Ogre", player),
              lambda state: state.has("Gun Pack", player))
+    
 
     loc_win = DLCquestLocation(player,"Winning", None, world.get_region("The Final Boss Room", player))
     world.get_region("The Final Boss Room", player).locations.append(loc_win)
