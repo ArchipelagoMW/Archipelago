@@ -112,9 +112,12 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     def current_key(self) -> str:
         return self.name_lookup[self.value]
 
+    def get_current_option_name(self) -> str:
+        """Deprecated. use current_option_name instead. TODO remove around 0.4"""
+
     @property
     def current_option_name(self) -> str:
-        """For display purposes."""
+        """For display purposes. In world should be using current_key."""
         return self.get_option_name(self.value)
 
     @classmethod
