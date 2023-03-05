@@ -88,7 +88,7 @@ class DarknessTrapWeight(BaseTrapWeight):
 
 class PongTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which forces you to play a Pong minigame
+    Likelihood of receiving a trap which forces you to play a Pong minigame
     """
     display_name = "Pong Trap Weight"
 
@@ -486,7 +486,7 @@ class RingLoss(Choice):
     How taking damage is handled
     Classic: You lose all of your rings when hit
     Modern: You lose 20 rings when hit
-    OHKO: You die immediately when hit (even with a shield)
+    OHKO: You die immediately when hit
     """
     display_name = "SADX Music"
     option_classic = 0
