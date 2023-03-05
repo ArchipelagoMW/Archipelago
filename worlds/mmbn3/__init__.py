@@ -387,26 +387,10 @@ class MMBN3World(World):
         """
         # place "Victory" at "Final Boss" and set collection as win condition
         self.multiworld.get_location(LocationName.Alpha_Defeated, self.player) \
-            .place_locked_item(self.create_event("Victory"))
+            .place_locked_item(self.create_event(ItemName.Victory))
         self.multiworld.completion_condition[self.player] = \
             lambda state: state.has(ItemName.Victory, self.player)
 
-    """
-    pre_fill, fill_hook and post_fill are called to modify item placement before, during and after the regular fill 
-    process, before generate_output.
-    """
-    def pre_fill(self) -> None:
-        pass
-
-    def fill_hook(cls,
-                  progitempool: typing.List["Item"],
-                  usefulitempool: typing.List["Item"],
-                  filleritempool: typing.List["Item"],
-                  fill_locations: typing.List["Location"]) -> None:
-        pass
-
-    def post_fill(self) -> None:
-        pass
 
     def generate_output(self, output_directory: str) -> None:
         try:
@@ -448,26 +432,15 @@ class MMBN3World(World):
                 os.unlink(rompath)
             self.rom_name_available_event.set()
 
-    """
-    fill_slot_data and modify_multidata can be used to modify the data that will be used by the server to host 
-    the MultiWorld.
-    """
-    def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
-        pass
+    @classmethod
+    def stage_assert_generate(cls, multiworld: "MultiWorld") -> None:
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
 
     def create_item(self, name: str) -> "Item":
         item = item_table[name]
         return MMBN3Item(item.itemName, item.progression, item.code, self.player)
-
-    def modify_multidata(self, multidata: typing.Dict[str, typing.Any]) -> None:
-        pass
-
-    def assert_generate(cls) -> None:
-        """
-        is a class method called at the start of generation to check the existence of prerequisite files, usually a ROM
-        for games which require one.
-        """
-        pass
 
     def create_event(self, event: str):
         # while we are at it, we can also add a helper to create events
@@ -478,6 +451,8 @@ class MMBN3World(World):
         Determine roughly how much of the game you can explore to make certain checks not restrict much movement
         """
         score = 0
+        if state.can_reach(RegionName.WWW_Island, "Region", self.player):
+            return 999
         if state.can_reach(RegionName.SciLab_Overworld, "Region", self.player):
             score += 3
         if state.can_reach(RegionName.SciLab_Cyberworld, "Region", self.player):
@@ -494,8 +469,6 @@ class MMBN3World(World):
             score += 2
         if state.can_reach(RegionName.Deep_Undernet, "Region", self.player):
             score += 1
-        if state.can_reach(RegionName.WWW_Island, "Region", self.player):
-            score += 999
         if state.can_reach(RegionName.Secret_Area, "Region", self.player):
             score += 1
         return score

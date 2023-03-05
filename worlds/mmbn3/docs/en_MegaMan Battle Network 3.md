@@ -7,11 +7,11 @@ The [player settings page for this game](../player-settings) contains all the op
 ## What does randomization do to this game?
 
 Items which the player would normally acquire throughout the game have been moved around. Logic remains, so the game is
-always able to be completed, but because of the item shuffle the player may need to access certain areas before they
+always able to be completed, but because of the item shuffle, the player may need to access certain areas before they
 would in the vanilla game.
 
 The game begins in "Open Mode", in a story state just before leaving for the WWW Base. All story progress leading up to
-that point have been auto completed. You will be given a starting Style Change upon starting, but will
+that point has been auto completed. You will be given a Style Change upon starting, but will
 have default MegaMan equipped, you can switch to your new style if you want through the Navi menu.
 
 Higsby's Chip Trader has been replaced with a shop interface where you can pay 500z to access the next item in the trader sequence.
@@ -61,4 +61,4 @@ Item pickups all retain their original appearance. Text Boxes for accessing an i
 
 ## When the player receives an item, what happens?
 
-Whenever you have an item pending, the next time you are not in a battle, menu, or dialog box, you will receive a message on screen notifying you of the item and recipient, and the item will be added directly to your inventory.
+Whenever you have an item pending, the next time you are not in a battle, menu, or dialog box, you will receive a message on screen notifying you of the item and sender, and the item will be added directly to your inventory.
