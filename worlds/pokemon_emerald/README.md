@@ -10,18 +10,21 @@ Many warps are actually two or three events acting as one logical warp. Doorways
 
 This is how warps are encoded:
 
-`{source_map}:{source_warp_ids}/{dest_map}:{dest_warp_id}`
+`{source_map}:{source_warp_ids}/{dest_map}:{dest_warp_ids}[!]`
 
 - `source_map`: The map the warp events are located in
 - `source_warp_ids`: The ids of all adjacent warp events in source_map which lead to the same destination (these must be in ascending order)
 - `dest_map`: The map of the warp event to which this one is connected
-- `dest_warp_id`: The id of the warp event in dest_map
+- `dest_warp_ids`: The ids of the warp events in dest_map
+- `[!]`: If the warp expects to lead to a destination which doesnot lead back to it, add a ! to the end
 
 Example: `MAP_LAVARIDGE_TOWN_HOUSE:0,1/MAP_LAVARIDGE_TOWN:4`
 
-Note: A warp must have its destination set to another warp event. However, that does not guarantee that the destination warp event will warp back to the source. There are (few) one-way warps.
+Example 2: `MAP_AQUA_HIDEOUT_B1F:14/MAP_AQUA_HIDEOUT_B1F:12!`
 
-Note 2: Some warp destinations go to the map `MAP_DYNAMIC` and have a warp id which is not a number, but refers to which piece of data holds the warp id. These edge cases are:
+Note: A warp must have its destination set to another warp event. However, that does not guarantee that the destination warp event will warp back to the source.
+
+Note 2: Some warp destinations go to the map `MAP_DYNAMIC` and have a special warp id. These edge cases are:
 
 - The Moving Truck
 - Terra Cave

@@ -558,19 +558,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: state.has("Devon Scope", player)
     )
 
-    # TODO: Check behavior of talking to Steven on Route 120 from west or
-    # interacting with the Kecleon while having the Devon Scope and without
-    # talking to Steven
-
     # Route 120
-    # set_rule(
-    #     multiworld.get_entrance("REGION_ROUTE120/NORTH -> REGION_ROUTE120/SOUTH", player),
-    #     lambda state: state.has("Devon Scope", player)
-    # )
-    # set_rule(
-    #     multiworld.get_entrance("REGION_ROUTE120/SOUTH -> REGION_ROUTE120/NORTH", player),
-    #     lambda state: state.has("Devon Scope", player)
-    # )
     set_rule(
         multiworld.get_entrance("REGION_ROUTE120/NORTH -> REGION_ROUTE120/NORTH_POND", player),
         lambda state: state.has("Devon Scope", player)
