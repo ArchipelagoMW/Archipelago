@@ -1,12 +1,9 @@
 import asyncio
-import base64
 import json
 import os
 import multiprocessing
 import subprocess
-import sys
 import zipfile
-import zlib
 
 from asyncio import StreamReader, StreamWriter
 
@@ -39,6 +36,7 @@ locations_checked = []
 items_sent = []
 itemIndex = 1
 
+
 class MMBN3CommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx):
         super().__init__(ctx)
@@ -53,6 +51,7 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
         global debugEnabled
         debugEnabled = not debugEnabled
         logger.info("Debug Overlay Enabled" if debugEnabled else "Debug Overlay Disabled")
+
 
 class MMBN3Context(CommonContext):
     command_processor = MMBN3CommandProcessor
@@ -69,19 +68,18 @@ class MMBN3Context(CommonContext):
         self.version_warning = False
         self.auth_name = None
 
-
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(MMBN3Context, self).server_auth(password_requested)
 
         if self.auth_name is None:
             self.awaiting_rom = True
-            logger.info('No ROM detected, awaiting conection to Bizhawk to authenticate to the multiworld server')
+            logger.info("No ROM detected, awaiting conection to Bizhawk to authenticate to the multiworld server")
             return
 
         logger.info("Attempting to decode from ROM... ")
         self.awaiting_rom = False
-        self.auth = self.auth_name.decode('utf8').replace('\x00', '')
+        self.auth = self.auth_name.decode("utf8").replace('\x00', '')
         logger.info("Connecting as "+self.auth)
         await self.send_connect(name=self.auth)
 
@@ -150,7 +148,7 @@ def get_payload(ctx: MMBN3Context):
 
 async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
     # Game completion handling
-    if payload['gameComplete'] and not ctx.finished_game:
+    if payload["gameComplete"] and not ctx.finished_game:
         await ctx.send_msgs([{
             "cmd": "StatusUpdate",
             "status": 30
@@ -158,8 +156,8 @@ async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
         ctx.finished_game = True
 
     # Locations handling
-    if ctx.location_table != payload['locations']:
-        ctx.location_table = payload['locations']
+    if ctx.location_table != payload["locations"]:
+        ctx.location_table = payload["locations"]
         await ctx.send_msgs([{
             "cmd": "LocationChecks",
             "locations": [mmbn3_loc_name_to_id[loc] for loc in ctx.location_table
@@ -191,9 +189,9 @@ async def gba_sync_task(ctx: MMBN3Context):
                     # 4. bool: whether the game currently registers as complete
                     data = await asyncio.wait_for(reader.readline(), timeout=10)
                     data_decoded = json.loads(data.decode())
-                    reported_version = data_decoded.get('scriptVersion', 0)
+                    reported_version = data_decoded.get("scriptVersion", 0)
                     if reported_version >= script_version:
-                        if ctx.game is not None and 'locations' in data_decoded:
+                        if ctx.game is not None and "locations" in data_decoded:
                             # Not just a keep alive ping, parse
                             asyncio.create_task((parse_payload(data_decoded, ctx, False)))
                         if not ctx.auth:
@@ -282,14 +280,14 @@ async def patch_and_run_game(apmmbn3_file):
 
     asyncio.create_task(run_game(patched_rom_file))
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     Utils.init_logging("MMBN3Client")
 
     async def main():
         multiprocessing.freeze_support()
         parser = get_base_parser()
-        parser.add_argument('patch_file', default="", type=str, nargs="?",
-                            help='Path to an APMMBN3 file')
+        parser.add_argument("patch_file", default="", type=str, nargs="?",
+                            help="Path to an APMMBN3 file")
         args = parser.parse_args()
         if args.patch_file:
             asyncio.create_task(patch_and_run_game(args.patch_file))
