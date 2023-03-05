@@ -39,69 +39,13 @@ class MMBN3World(World):
     game = "MegaMan Battle Network 3"
     option_definitions = MMBN3Options
     topology_present = False
-    remote_items = False
-    remote_start_inventory = False
 
-    data_version = 0
+    data_version = 1
 
-    base_id = 0xB31000
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {locData.name: locData.id for locData in all_locations}
 
     web = MMBN3Web()
-
-    def __init__(self, world: MultiWorld, player: int):
-        self.rom_name_available_event = threading.Event()
-        super().__init__(world, player)
-
-    def create_item(self, name: str) -> "Item":
-        item = item_table[name]
-        return MMBN3Item(item.itemName, item.progression, item.code, self.player)
-
-    def create_event(self, event: str):
-        # while we are at it, we can also add a helper to create events
-        return MMBN3Item(event, ItemClassification.progression, None, self.player)
-
-    def generate_output(self, output_directory: str) -> None:
-        try:
-            world = self.multiworld
-            player = self.player
-
-            rom = LocalRom(get_base_rom_path())
-            for location_name in location_table.keys():
-                location = world.get_location(location_name, player)
-                ap_item = location.item
-                item_id = ap_item.code
-                if item_id is not None:
-                    if ap_item.player != player or item_id not in items_by_id:
-                        item = ItemData(item_id, ap_item.name, ap_item.classification, ItemType.External)
-                        item = item._replace(recipient=self.multiworld.player_name[ap_item.player])
-                    else:
-                        item = items_by_id[item_id]
-
-                    location_data = location_data_table[location_name]
-                    # print("Placing item "+item.itemName+" at location "+location_data.name)
-                    rom.replace_item(location_data, item)
-            rom.inject_name(world.player_name[player])
-
-            outfilepname = f'_P{player}'
-            outfilepname += f"_{world.player_name[player].replace(' ','_')}"\
-                if world.player_name[player] != 'Player%d' % player else ''
-
-            rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.gba')
-            rom.write_changed_rom()
-            rom.write_to_file(rompath)
-            self.rom_name = rom.name
-
-            patch = MMBN3DeltaPatch(os.path.splitext(rompath)[0]+MMBN3DeltaPatch.patch_file_ending, player=player,
-                                    player_name=world.player_name[player], patched_path=rompath)
-            patch.write()
-        except:
-            raise
-        finally:
-            if os.path.exists(rompath):
-                os.unlink(rompath)
-            self.rom_name_available_event.set()
 
     def generate_early(self) -> None:
         """
@@ -204,7 +148,6 @@ class MMBN3World(World):
     def create_items(self) -> None:
         # First add in all progression and useful items
         required_items = []
-        x = len(all_items)
         for item in all_items:
             if item.progression != ItemClassification.filler:
                 freq = item_frequences[item.itemName] if item.itemName in item_frequences else 1
@@ -465,12 +408,56 @@ class MMBN3World(World):
     def post_fill(self) -> None:
         pass
 
+    def generate_output(self, output_directory: str) -> None:
+        try:
+            world = self.multiworld
+            player = self.player
+
+            rom = LocalRom(get_base_rom_path())
+            for location_name in location_table.keys():
+                location = world.get_location(location_name, player)
+                ap_item = location.item
+                item_id = ap_item.code
+                if item_id is not None:
+                    if ap_item.player != player or item_id not in items_by_id:
+                        item = ItemData(item_id, ap_item.name, ap_item.classification, ItemType.External)
+                        item = item._replace(recipient=self.multiworld.player_name[ap_item.player])
+                    else:
+                        item = items_by_id[item_id]
+
+                    location_data = location_data_table[location_name]
+                    # print("Placing item "+item.itemName+" at location "+location_data.name)
+                    rom.replace_item(location_data, item)
+            rom.inject_name(world.player_name[player])
+
+            outfilepname = f'_P{player}'
+            outfilepname += f"_{world.player_name[player].replace(' ','_')}"\
+                if world.player_name[player] != 'Player%d' % player else ''
+
+            rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.gba')
+            rom.write_changed_rom()
+            rom.write_to_file(rompath)
+
+            patch = MMBN3DeltaPatch(os.path.splitext(rompath)[0]+MMBN3DeltaPatch.patch_file_ending, player=player,
+                                    player_name=world.player_name[player], patched_path=rompath)
+            patch.write()
+        except:
+            raise
+        finally:
+            if os.path.exists(rompath):
+                os.unlink(rompath)
+            self.rom_name_available_event.set()
+
     """
     fill_slot_data and modify_multidata can be used to modify the data that will be used by the server to host 
     the MultiWorld.
     """
     def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
         pass
+
+    def create_item(self, name: str) -> "Item":
+        item = item_table[name]
+        return MMBN3Item(item.itemName, item.progression, item.code, self.player)
 
     def modify_multidata(self, multidata: typing.Dict[str, typing.Any]) -> None:
         pass
@@ -481,6 +468,10 @@ class MMBN3World(World):
         for games which require one.
         """
         pass
+
+    def create_event(self, event: str):
+        # while we are at it, we can also add a helper to create events
+        return MMBN3Item(event, ItemClassification.progression, None, self.player)
 
     def explore_score(self, state):
         """
