@@ -351,7 +351,7 @@ def process_pokemon_data(self):
 
     local_poke_data = deepcopy(poke_data.pokemon_data)
     learnsets = deepcopy(poke_data.learnsets)
-    tms_hms = poke_data.tm_moves + poke_data.hm_moves
+    tms_hms = self.local_tms + poke_data.hm_moves
 
 
     compat_hms = set()
@@ -458,41 +458,41 @@ def process_pokemon_data(self):
 
         def roll_tm_compat(roll_move):
             if self.local_move_data[roll_move]["type"] in [mon_data["type1"], mon_data["type2"]]:
-                if roll_move in poke_data.tm_moves:
-                    if self.multiworld.tm_same_type_compatibility[self.player].value == -1:
-                        return mon_data["tms"][int(flag / 8)]
-                    return self.multiworld.random.randint(1, 100) <= self.multiworld.tm_same_type_compatibility[self.player].value
-                elif roll_move in poke_data.hm_moves:
+                if roll_move in poke_data.hm_moves:
                     if self.multiworld.hm_same_type_compatibility[self.player].value == -1:
                         return mon_data["tms"][int(flag / 8)]
                     r = self.multiworld.random.randint(1, 100) <= self.multiworld.hm_same_type_compatibility[self.player].value
                     if r and mon not in poke_data.legendary_pokemon:
                         compat_hms.add(roll_move)
                     return r
-            elif self.local_move_data[roll_move]["type"] == "Normal" and "Normal" not in [mon_data["type1"], mon_data["type2"]]:
-                if roll_move in poke_data.tm_moves:
-                    if self.multiworld.tm_normal_type_compatibility[self.player].value == -1:
+                else:
+                    if self.multiworld.tm_same_type_compatibility[self.player].value == -1:
                         return mon_data["tms"][int(flag / 8)]
-                    return self.multiworld.random.randint(1, 100) <= self.multiworld.tm_normal_type_compatibility[self.player].value
-                elif roll_move in poke_data.hm_moves:
+                    return self.multiworld.random.randint(1, 100) <= self.multiworld.tm_same_type_compatibility[self.player].value
+            elif self.local_move_data[roll_move]["type"] == "Normal" and "Normal" not in [mon_data["type1"], mon_data["type2"]]:
+                if roll_move in poke_data.hm_moves:
                     if self.multiworld.hm_normal_type_compatibility[self.player].value == -1:
                         return mon_data["tms"][int(flag / 8)]
                     r = self.multiworld.random.randint(1, 100) <= self.multiworld.hm_normal_type_compatibility[self.player].value
                     if r and mon not in poke_data.legendary_pokemon:
                         compat_hms.add(roll_move)
                     return r
-            else:
-                if roll_move in poke_data.tm_moves:
-                    if self.multiworld.tm_other_type_compatibility[self.player].value == -1:
+                else:
+                    if self.multiworld.tm_normal_type_compatibility[self.player].value == -1:
                         return mon_data["tms"][int(flag / 8)]
-                    return self.multiworld.random.randint(1, 100) <= self.multiworld.tm_other_type_compatibility[self.player].value
-                elif roll_move in poke_data.hm_moves:
+                    return self.multiworld.random.randint(1, 100) <= self.multiworld.tm_normal_type_compatibility[self.player].value
+            else:
+                if roll_move in poke_data.hm_moves:
                     if self.multiworld.hm_other_type_compatibility[self.player].value == -1:
                         return mon_data["tms"][int(flag / 8)]
                     r = self.multiworld.random.randint(1, 100) <= self.multiworld.hm_other_type_compatibility[self.player].value
                     if r and mon not in poke_data.legendary_pokemon:
                         compat_hms.add(roll_move)
                     return r
+                else:
+                    if self.multiworld.tm_other_type_compatibility[self.player].value == -1:
+                        return mon_data["tms"][int(flag / 8)]
+                    return self.multiworld.random.randint(1, 100) <= self.multiworld.tm_other_type_compatibility[self.player].value
 
 
         for flag, tm_move in enumerate(tms_hms):
@@ -749,7 +749,7 @@ def generate_output(self, output_directory: str):
             continue
         address = rom_addresses["Move_Data"] + ((move_data["id"] - 1) * 6)
         write_bytes(data, bytearray([move_data["id"], move_data["effect"], move_data["power"],
-                    poke_data.type_ids[move_data["type"]], move_data["accuracy"], move_data["pp"]]), address)
+                    poke_data.type_ids[move_data["type"]], round(move_data["accuracy"] * 2.55), move_data["pp"]]), address)
 
     TM_IDs = bytearray([poke_data.moves[move]["id"] for move in self.local_tms])
     write_bytes(data, TM_IDs, rom_addresses["TM_Moves"])
