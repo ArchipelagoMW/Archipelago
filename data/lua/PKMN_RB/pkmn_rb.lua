@@ -237,7 +237,7 @@ function main()
                         if ItemsReceived[ItemIndex + 1] ~= nil then
                             item_id = ItemsReceived[ItemIndex + 1] - 172000000
                             if item_id > 255 then
-                                item_id -= 256
+                                item_id = item_id - 256
                             end
                             wU8(APItemAddress, item_id)
                         end
