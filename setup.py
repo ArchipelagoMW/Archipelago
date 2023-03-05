@@ -50,7 +50,8 @@ def download_SNI():
     }
     platform_name = platform.system().lower()
     machine_name = platform.machine().lower()
-    machine_name = machine_to_go.get(machine_name, machine_name)
+    # force amd64 on macos until we have universal2 sni, otherwise resolve to GOARCH
+    machine_name = "amd64" if platform_name == "darwin" else machine_to_go.get(machine_name, machine_name)
     with urllib.request.urlopen("https://api.github.com/repos/alttpo/sni/releases/latest") as request:
         data = json.load(request)
     files = data["assets"]
