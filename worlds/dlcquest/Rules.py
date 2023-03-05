@@ -16,16 +16,18 @@ def set_rules(world, player, option):
              lambda state: state.has("Time is Money Pack", player))
     set_rule(world.get_entrance("Cloud", player),
              lambda state: state.has("Psychological Warfare Pack", player))
-    set_rule(world.get_entrance("Behind Tree Double Jump", player),
-             lambda state: state.has("Double Jump Pack", player))
     set_rule(world.get_entrance("Forest Entrance", player),
              lambda state: state.has("Map Pack", player))
-    set_rule(world.get_entrance("Cloud Double Jump", player),
-             lambda state: state.has("Double Jump Pack", player))
     set_rule(world.get_entrance("Behind Ogre", player),
              lambda state: state.has("Gun Pack", player))
-    set_rule(world.get_entrance("Forest Double Jump", player),
-             lambda state: state.has("Double Jump Pack", player))
+    if world.FalseDoubleJump[player].value == 0 :
+        set_rule(world.get_entrance("Cloud Double Jump", player),
+                lambda state: state.has("Double Jump Pack", player))
+        set_rule(world.get_entrance("Forest Double Jump", player),
+                lambda state: state.has("Double Jump Pack", player))
+    if world.FalseDoubleJump[player].value < 2:
+        set_rule(world.get_entrance("Behind Tree Double Jump", player),
+                lambda state: state.has("Double Jump Pack", player))
 
     set_rule(world.get_location("Movement Pack", player),
              lambda state: state.has("Coin", player, 4))
