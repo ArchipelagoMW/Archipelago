@@ -71,6 +71,6 @@ server uses password, type in the bottom textfield `/connect <address>:<port> [p
 
 And remember, it won't work unless you shout to your computer:
 
-JACK IN!   
-[Your name]!   
-EXECUTE!
+> JACK IN! \
+> [Your name]!   
+> EXECUTE!

@@ -1,20 +1,6 @@
 from Options import Choice, Range, DefaultOnToggle
 
 
-class Goal(Choice):
-    """
-    Determines the goal of the seed
-    Alpha: Defeat Alpha at the WWW base
-    Serenade: Defeat Serenade in the Secret Area
-    Alpha Omega: Defeat Alpha Omega after collecting Seven Stars [NOT RECOMMENDED. VERY LONG]
-    """
-    display_name = "Goal"
-    option_alpha = 0
-    option_serenade = 1
-    option_alpha_omega = 2
-    default = 0
-
-
 class ExtraRanks(Range):
     """
     How many extra Undernet Ranks to add to the pool in place of filler items.
@@ -42,7 +28,6 @@ class IncludeJobs(DefaultOnToggle):
 
 
 MMBN3Options = {
-    "goal": Goal,
     "extra_ranks": ExtraRanks,
     # "job_progression": JobProgression
     "include_jobs": IncludeJobs

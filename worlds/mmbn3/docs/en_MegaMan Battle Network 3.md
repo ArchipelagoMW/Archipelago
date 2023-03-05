@@ -17,13 +17,15 @@ have default MegaMan equipped, you can switch to your new style if you want thro
 Higsby's Chip Trader has been replaced with a shop interface where you can pay 500z to access the next item in the trader sequence.
 Dialog has been rewritten for both the Trader and the hat kid next to the trader to explain it.
 
-The Secret Area is unlocked from the start, but still does require 100 or more Standard Chips in the Library to access. Jacking Out has been enabled in the Secret Area.
+The Nut-Wafer Chocolate Stand in the Yoka Metro has been replaced with a system for trading BugFrags for items. Dialog has been rewritten to give it a story reason for accepting BugFrags.
+
+The Secret Area is unlocked from the start, since the Library is filled automatically. Jacking Out has been enabled in the Secret Area.
 
 ## What is the goal of "MegaMan Battle Network 3 when randomized?
 
 Defeat Alpha on the WWW Base. You will not be able to access the Island until you have acquired the item `GigFreez`, which will be
 the eight item in the `progressive-undernet` item sequence. You will need to acquire Undernet Ranks 10, 9, 8, 7, 3, 2, and 1 before acquiring `GigFreez`
-(Note: The skipping of 6-4 is intentional and like that in the base game as well.)
+(Note: The skipping of 6-4 is intentional. They are skipped in the base game and as such, do not exist to be randomized.)
 
 ## What items and locations get shuffled?
 
@@ -32,11 +34,12 @@ Locations in which items can be found:
 - The rewards from all available Jobs (Note: The four "Tora" jobs are story progress, and therefore have been already completed). 
 - All overworld item pick ups, including Trades and Quizzes with NPCs
 - 31 Items from the Numberman Lottery Trader (which have been changed to require Zenny instead of lotto numbers)
+- 32 Items from the Nut-Wafer Chocolate stand in Yoka Metro Station (which have been changed to require BugFrags instead of Zenny)
 
 Items that are shuffled:
-- All of the original rewards from above (Note: Certain common chips and low amounts of zenny have been classified as "filler" and might be replaced with progression items)
-- All four Cybermetro passes, normally obtained through story progressioin
-- Eight Progressive Undernet Ranks, normally obtained through story progressioin
+- All of the original rewards from above (Note: Certain common chips and low amounts of Zenny have been classified as "filler" and might be replaced with progression items)
+- All four Cybermetro passes, normally obtained through story progression
+- Eight Progressive Undernet Ranks, normally obtained through story progression
 - Several chips required for specific Jobs or Trades that would normally be unobtainable without RNG
 - The NaviCust "Press" program, normally obtained through story progression
 - Two ExpMems and ModTools for the Navi Customizer, normally obtained through story progression
@@ -45,16 +48,17 @@ Items that are shuffled:
 ## What items are _not_ randomized?
 Certain Key Items are kept in their original locations:
 - All four of the ID Keys in the WWW-Comp machines on the WWW Base
-- All items in Undernet 7, including the Hammer and the very late game prizes behind the curtains
+- Items in Undernet 7 locked behind post-game progression gates, such as beating Serenade or gathering all chips
 
 ## Which items can be in another player's world?
 
 Any shuffled item can be in other players' worlds.
 
-## What does another world's item look like in "MegaMan Battle Network 3
 
-Items pickups all retain their original appearance. Text Boxes for accessing an item or given in dialog will mention what item and what player is receiving the item
+## What does another world's item look like in Mega Man Battle Network 3?
+
+Item pickups all retain their original appearance. Text Boxes for accessing an item or given in dialog will mention what item and what player is receiving the item
 
 ## When the player receives an item, what happens?
 
-Whenever you have an item pending, the next time you are not in a battle, menu, or dialog box, you will receive a dialog box notifying you of who sent you an item, then another text box that will give you the item
+Whenever you have an item pending, the next time you are not in a battle, menu, or dialog box, you will receive a message on screen notifying you of the item and recipient, and the item will be added directly to your inventory.

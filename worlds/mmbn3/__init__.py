@@ -250,7 +250,7 @@ class MMBN3World(World):
                 state.can_reach(RegionName.Beach_Overworld, "Region", self.player) and \
                 state.can_reach(RegionName.Undernet, "Region", self.player) and \
                 state.can_reach(RegionName.Deep_Undernet, "Region", self.player) and \
-                state.has_all([ItemName.Press, ItemName.Magnum1_A], self.player)
+                state.has_all({ItemName.Press, ItemName.Magnum1_A}, self.player)
         self.multiworld.get_location(LocationName.Legendary_Tomes_Treasure, self.player).access_rule = \
             lambda state: \
                 state.can_reach(RegionName.ACDC_Overworld, "Region", self.player) and \
