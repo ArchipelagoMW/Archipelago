@@ -6,9 +6,10 @@ from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, 
     LocationProgressType
 from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
 from ..AutoWorld import WebWorld, World
-from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequences, items_by_id, ItemType
+from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequencies, items_by_id, ItemType, \
+    player_item_frequencies
 from .Locations import Location, MMBN3Location, all_locations, setup_locations, location_table, location_data_table, \
-    excluded_locations
+    always_excluded_locations, player_excluded_locations
 from .Options import MMBN3Options
 from .Regions import regions, RegionName
 from .Names.ItemName import ItemName
@@ -47,15 +48,22 @@ class MMBN3World(World):
 
     web = MMBN3Web()
 
+    def __init__(self, world: MultiWorld, player: int):
+        self.rom_name_available_event = threading.Event()
+        super().__init__(world, player)
+
     def generate_early(self) -> None:
         """
         called per player before any items or locations are created. You can set properties on your world here.
         Already has access to player options and RNG.
         """
         if self.multiworld.extra_ranks[self.player] > 0:
-            item_frequences[ItemName.Progressive_Undernet_Rank] = 8 + self.multiworld.extra_ranks[self.player]
+            player_item_frequencies[self.player] = \
+                {ItemName.Progressive_Undernet_Rank: 8 + self.multiworld.extra_ranks[self.player]}
+
         if not self.multiworld.include_jobs[self.player]:
-            excluded_locations.extend([
+            excluded_locs = player_excluded_locations[self.player] if self.player in player_excluded_locations else []
+            excluded_locs.extend([
                 LocationName.Please_deliver_this,
                 LocationName.My_Navi_is_sick,
                 LocationName.Help_me_with_my_son,
@@ -83,6 +91,8 @@ class MMBN3World(World):
                 LocationName.Stamp_collecting,
                 LocationName.Help_with_a_will
             ])
+            # Since we possibly created a new empty list here we have to assign it
+            player_excluded_locations[self.player] = excluded_locs
 
     def create_regions(self) -> None:
         """
@@ -95,7 +105,7 @@ class MMBN3World(World):
             name_to_region[region_info.name] = region
             for location in region_info.locations:
                 loc = MMBN3Location(self.player, location, self.location_name_to_id.get(location, None), region)
-                if location in excluded_locations:
+                if location in always_excluded_locations or location in player_excluded_locations:
                     loc.progress_type = LocationProgressType.EXCLUDED
                 region.locations.append(loc)
             self.multiworld.regions.append(region)
@@ -150,7 +160,9 @@ class MMBN3World(World):
         required_items = []
         for item in all_items:
             if item.progression != ItemClassification.filler:
-                freq = item_frequences[item.itemName] if item.itemName in item_frequences else 1
+                freq = player_item_frequencies[self.player][item.itemName] \
+                    if self.player in player_item_frequencies and item.itemName in player_item_frequencies[self.player]\
+                    else item_frequencies[item.itemName] if item.itemName in item_frequencies else 1
                 required_items += [item.itemName] * freq
 
         for itemName in required_items:
@@ -160,7 +172,9 @@ class MMBN3World(World):
         filler_items = []
         for item in all_items:
             if item.progression == ItemClassification.filler:
-                freq = item_frequences[item.itemName] if item.itemName in item_frequences else 1
+                freq = player_item_frequencies[self.player][item.itemName] \
+                    if self.player in player_item_frequencies and item.itemName in player_item_frequencies[self.player] \
+                    else item_frequencies[item.itemName] if item.itemName in item_frequencies else 1
                 filler_items += [item.itemName] * freq
 
         remaining = len(all_locations) - len(required_items)

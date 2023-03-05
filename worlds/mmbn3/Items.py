@@ -318,7 +318,7 @@ bugFragList: typing.List[ItemData] = [
     ItemData(0xB310B6, ItemName.bugfrag_01, ItemClassification.filler, ItemType.BugFrag, count=1)
 ]
 
-item_frequences = {
+item_frequencies: typing.Dict[str, int] = {
     ItemName.Progressive_Undernet_Rank: 8,
     ItemName.ExpMem: 2,
     ItemName.Unlocker: 10,
@@ -344,3 +344,4 @@ all_items: typing.List[ItemData] = keyItemList + subChipList + chipList + progra
 item_table: typing.Dict[str, ItemData] = {item.itemName: item for item in all_items}
 items_by_id: typing.Dict[int, ItemData] = {item.code: item for item in all_items}
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
+player_item_frequencies: typing.Dict[int, typing.Dict[str, int]] = {}

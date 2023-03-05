@@ -325,7 +325,7 @@ chocolate_shop = [
     LocationData(LocationName.Chocolate_Shop_32, 0xb3110d, 0x20001c3, 0x01, 0x73F8FC, 181, [0]),
 ]
 
-excluded_locations = [
+always_excluded_locations = [
     LocationName.Undernet_7_PMD,
     LocationName.Undernet_7_Northeast_BMD,
     LocationName.Undernet_7_Northwest_BMD,
@@ -345,6 +345,7 @@ all_locations: typing.List[LocationData] = bmds + pmds + overworlds + jobs + num
 location_table: typing.Dict[str, int] = {locData.name: locData.id for locData in all_locations}
 location_data_table: typing.Dict[str, LocationData] = {locData.name: locData for locData in all_locations}
 locations_by_id: typing.Dict[int, LocationData] = {locData.id: locData for locData in all_locations}
+player_excluded_locations: typing.Dict[int, typing.List[str]] = {}
 
 
 def setup_locations(world, player: int):
