@@ -13,13 +13,10 @@ class StaticWitnessLocations:
     """
     ID_START = 158000
 
-    EXTRA_LOCATIONS = {
+    GENERAL_LOCATIONS = {
         "Tutorial Front Left",
         "Tutorial Back Left",
         "Tutorial Back Right",
-    }
-
-    GENERAL_LOCATIONS = {
         "Tutorial Gate Open",
 
         "Outside Tutorial Vault Box",
@@ -302,6 +299,7 @@ class StaticWitnessLocations:
         "Quarry Obelisk Side 2",
         "Quarry Obelisk Side 3",
         "Quarry Obelisk Side 4",
+        "Quarry Obelisk Side 5",
         "Town Obelisk Side 1",
         "Town Obelisk Side 2",
         "Town Obelisk Side 3",
@@ -338,6 +336,7 @@ class StaticWitnessLocations:
         "Quarry Obelisk Side 2",
         "Quarry Obelisk Side 3",
         "Quarry Obelisk Side 4",
+        "Quarry Obelisk Side 5",
         "Town Obelisk Side 1",
         "Town Obelisk Side 2",
         "Town Obelisk Side 3",

@@ -171,6 +171,7 @@ class PokemonRedBlueWorld(World):
         # damage being reduced by 1 which leads to a "not very effective" message appearing due to my changes
         # to the way effectiveness messages are generated.
         self.type_chart = sorted(chart, key=lambda matchup: -matchup[2])
+        self.multiworld.early_items[self.player]["Exp. All"] = 1
 
     def create_items(self) -> None:
         start_inventory = self.multiworld.start_inventory[self.player].value.copy()
