@@ -173,7 +173,7 @@ def fill_dungeons_restrictive(world):
                 if excluded_locations:
                     for location in excluded_locations:
                         location.progress_type = location.progress_type.DEFAULT
-                    fill_restrictive(world, all_state_base, locations, in_dungeon_items, True, True)
+                    fill_restrictive(world, all_state_base, excluded_locations, in_dungeon_items, True, True)
                     for location in excluded_locations:
                         if not location.item:
                             location.progress_type = location.progress_type.EXCLUDED
