@@ -39,10 +39,11 @@ def get_datapackage():
 
 @api_endpoints.route('/datapackage_version')
 @cache.cached()
+
 def get_datapackage_versions():
     from worlds import network_data_package, AutoWorldRegister
+
     version_package = {game: world.data_version for game, world in AutoWorldRegister.world_types.items()}
-    version_package["version"] = network_data_package["version"]
     return version_package
 
 

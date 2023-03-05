@@ -63,7 +63,14 @@ games you want settings for.
   using this to detail the intention of the file.
 
 * `name` is the player name you would like to use and is used for your slot data to connect with most games. This can
-  also be filled with multiple names each having a weight to it.
+  also be filled with multiple names each having a weight to it. Names can also contain certain keywords, surrounded by
+  curly-braces, which will be replaced on generation with a number:
+  
+  * `{player}` will be replaced with the player's slot number.
+  * `{PLAYER}` will be replaced with the player's slot number if that slot number is greater than 1, otherwise blank.
+  * `{number}` will be replaced with the counter value of the name.
+  * `{NUMBER}` will be replaced with the counter value of the name if the counter value is greater than 1, otherwise 
+  blank.
 
 * `game` is where either your chosen game goes or if you would like can be filled with multiple games each with
   different weights.

@@ -119,7 +119,8 @@ def set_rules(world, player):
         "Route 10 - Hidden Item Bush": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Rocket Hideout B1F - Hidden Item Pot Plant": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Rocket Hideout B3F - Hidden Item Near East Item": lambda state: state.pokemon_rb_can_get_hidden_items(player),
-        "Rocket Hideout B4F - Hidden Item Behind Giovanni": lambda state: state.pokemon_rb_can_get_hidden_items(player),
+        "Rocket Hideout B4F - Hidden Item Behind Giovanni (Lift Key)": lambda state:
+            state.pokemon_rb_can_get_hidden_items(player) and state.has("Lift Key", player),
         "Pokemon Tower 5F - Hidden Item Near West Staircase": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
         "Route 13 - Hidden Item Dead End Bush": lambda state: state.pokemon_rb_can_get_hidden_items(player),

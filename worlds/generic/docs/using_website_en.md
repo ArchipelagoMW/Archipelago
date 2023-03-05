@@ -8,7 +8,7 @@ should only take a couple of minutes to read.
 1. After gathering the YAML files together in one location, select all the files and compress them into a `.ZIP` file.
 2. Next go to the "Generate Game" page. Generate game
    page: [Archipelago Seed Generation Page](/generate). Here, you can adjust some server settings
-   such as forfeit rules and the cost for a player to use a hint before generation.
+   such as release rules and the cost for a player to use a hint before generation.
 3. After adjusting the host settings to your liking click on the Upload File button and using the explorer window that
    opens, navigate to the location where you zipped the player files and upload this zip. The page will generate your
    game and refresh multiple times to check on completion status.

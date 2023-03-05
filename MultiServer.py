@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import copy
 import functools
 import logging
 import zlib
@@ -16,10 +17,14 @@ import pickle
 import itertools
 import time
 import operator
+import hashlib
 
 import ModuleUpdate
 
 ModuleUpdate.update()
+
+if typing.TYPE_CHECKING:
+    import ssl
 
 import websockets
 import colorama
@@ -36,8 +41,29 @@ from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, Networ
     SlotType
 
 min_client_version = Version(0, 1, 6)
-print_command_compatability_threshold = Version(0, 3, 5) # Remove backwards compatibility around 0.3.7
 colorama.init()
+
+
+def remove_from_list(container, value):
+    try:
+        container.remove(value)
+    except ValueError:
+        pass
+    return container
+
+
+def pop_from_container(container, value):
+    try:
+        container.pop(value)
+    except ValueError:
+        pass
+    return container
+
+
+def update_dict(dictionary, entries):
+    dictionary.update(entries)
+    return dictionary
+
 
 # functions callable on storable data on the server by clients
 modify_functions = {
@@ -55,7 +81,17 @@ modify_functions = {
     "and": operator.and_,
     "left_shift": operator.lshift,
     "right_shift": operator.rshift,
+    # lists/dicts
+    "remove": remove_from_list,
+    "pop": pop_from_container,
+    "update": update_dict,
 }
+
+
+def get_saving_second(seed_name: str, interval: int = 60) -> int:
+    # save at expected times so other systems using savegame can expect it
+    # represents the target second of the auto_save_interval at which to save
+    return int(hashlib.sha256(seed_name.encode()).hexdigest(), 16) % interval
 
 
 class Client(Endpoint):
@@ -109,7 +145,7 @@ class Context:
                       "location_check_points": int,
                       "server_password": str,
                       "password": str,
-                      "forfeit_mode": str,
+                      "release_mode": str,
                       "remaining_mode": str,
                       "collect_mode": str,
                       "item_cheat": bool,
@@ -122,20 +158,20 @@ class Context:
     stored_data: typing.Dict[str, object]
     read_data: typing.Dict[str, object]
     stored_data_notification_clients: typing.Dict[str, typing.Set[Client]]
+    slot_info: typing.Dict[int, NetworkSlot]
 
     item_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')
     item_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
     location_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
-    forced_auto_forfeits: typing.Dict[str, bool]
     non_hintable_names: typing.Dict[str, typing.Set[str]]
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
-                 hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", collect_mode="disabled",
+                 hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
                  remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, compatibility: int = 2,
                  log_network: bool = False):
         super(Context, self).__init__()
-        self.slot_info: typing.Dict[int, NetworkSlot] = {}
+        self.slot_info = {}
         self.log_network = log_network
         self.endpoints = []
         self.clients = {}
@@ -147,9 +183,7 @@ class Context:
         self.player_names: typing.Dict[team_slot, str] = {}
         self.player_name_lookup: typing.Dict[str, team_slot] = {}
         self.connect_names = {}  # names of slots clients can connect to
-        self.allow_forfeits = {}
-        self.remote_items = set()
-        self.remote_start_inventory = set()
+        self.allow_releases = {}
         #                          player          location_id     item_id  target_player_id
         self.locations = {}
         self.host = host
@@ -166,7 +200,7 @@ class Context:
         self.location_check_points = location_check_points
         self.hints_used = collections.defaultdict(int)
         self.hints: typing.Dict[team_slot, typing.Set[NetUtils.Hint]] = collections.defaultdict(set)
-        self.forfeit_mode: str = forfeit_mode
+        self.release_mode: str = release_mode
         self.remaining_mode: str = remaining_mode
         self.collect_mode: str = collect_mode
         self.item_cheat = item_cheat
@@ -199,7 +233,6 @@ class Context:
         self.gamespackage = {}
         self.item_name_groups = {}
         self.all_item_and_group_names = {}
-        self.forced_auto_forfeits = collections.defaultdict(lambda: False)
         self.non_hintable_names = collections.defaultdict(frozenset)
 
         self._load_game_data()
@@ -212,7 +245,6 @@ class Context:
         self.item_name_groups = {world_name: world.item_name_groups for world_name, world in
                                  worlds.AutoWorldRegister.world_types.items()}
         for world_name, world in worlds.AutoWorldRegister.world_types.items():
-            self.forced_auto_forfeits[world_name] = world.forced_auto_forfeit
             self.non_hintable_names[world_name] = world.hint_blacklist
 
     def _init_game_data(self):
@@ -277,6 +309,10 @@ class Context:
         endpoints = (endpoint for endpoint in self.endpoints if endpoint.auth)
         async_start(self.broadcast_send_encoded_msgs(endpoints, msgs))
 
+    def broadcast_text_all(self, text: str, additional_arguments: dict = {}):
+        logging.info("Notice (all): %s" % text)
+        self.broadcast_all([{**{"cmd": "PrintJSON", "data": [{ "text": text }]}, **additional_arguments}])
+
     def broadcast_team(self, team: int, msgs: typing.List[dict]):
         msgs = self.dumper(msgs)
         endpoints = (endpoint for endpoint in itertools.chain.from_iterable(self.clients[team].values()))
@@ -293,29 +329,18 @@ class Context:
             self.clients[endpoint.team][endpoint.slot].remove(endpoint)
         await on_client_disconnected(self, endpoint)
 
-    # text
-
-    def notify_all(self, text: str):
-        logging.info("Notice (all): %s" % text)
-        broadcast_text_all(self, text)
-
-    def notify_client(self, client: Client, text: str):
+    def notify_client(self, client: Client, text: str, additional_arguments: dict = {}):
         if not client.auth:
             return
         logging.info("Notice (Player %s in team %d): %s" % (client.name, client.team + 1, text))
-        if client.version >= print_command_compatability_threshold:
-            async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }]}]))
-        else:
-            async_start(self.send_msgs(client, [{"cmd": "Print", "text": text}]))
+        async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}]))
 
-    def notify_client_multiple(self, client: Client, texts: typing.List[str]):
+    def notify_client_multiple(self, client: Client, texts: typing.List[str], additional_arguments: dict = {}):
         if not client.auth:
             return
-        if client.version >= print_command_compatability_threshold:
-            async_start(self.send_msgs(client, 
-                [{"cmd": "PrintJSON", "data": [{ "text": text }]} for text in texts]))
-        else:
-            async_start(self.send_msgs(client, [{"cmd": "Print", "text": text} for text in texts]))
+        async_start(self.send_msgs(client,
+                                   [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}
+                                    for text in texts]))
 
     # loading
 
@@ -354,20 +379,26 @@ class Context:
         for player, version in clients_ver.items():
             self.minimum_client_versions[player] = max(Utils.Version(*version), min_client_version)
 
-        self.clients = {}
-        for team, names in enumerate(decoded_obj['names']):
-            self.clients[team] = {}
-            for player, name in enumerate(names, 1):
-                self.clients[team][player] = []
-                self.player_names[team, player] = name
-                self.player_name_lookup[name] = team, player
-                self.read_data[f"hints_{team}_{player}"] = lambda local_team=team, local_player=player: \
-                    list(self.get_rechecked_hints(local_team, local_player))
+        self.slot_info = decoded_obj["slot_info"]
+        self.games = {slot: slot_info.game for slot, slot_info in self.slot_info.items()}
+        self.groups = {slot: slot_info.group_members for slot, slot_info in self.slot_info.items()
+                       if slot_info.type == SlotType.group}
+
+        self.clients = {0: {}}
+        slot_info: NetworkSlot
+        slot_id: int
+
+        team_0 = self.clients[0]
+        for slot_id, slot_info in self.slot_info.items():
+            team_0[slot_id] = []
+            self.player_names[0, slot_id] = slot_info.name
+            self.player_name_lookup[slot_info.name] = 0, slot_id
+            self.read_data[f"hints_{0}_{slot_id}"] = lambda local_team=0, local_player=slot_id: \
+                list(self.get_rechecked_hints(local_team, local_player))
+
         self.seed_name = decoded_obj["seed_name"]
         self.random.seed(self.seed_name)
         self.connect_names = decoded_obj['connect_names']
-        self.remote_items = decoded_obj['remote_items']
-        self.remote_start_inventory = decoded_obj.get('remote_start_inventory', decoded_obj['remote_items'])
         self.locations = decoded_obj['locations']
         self.slot_data = decoded_obj['slot_data']
         for slot, data in self.slot_data.items():
@@ -379,29 +410,9 @@ class Context:
         for slot, item_codes in decoded_obj["precollected_items"].items():
             self.start_inventory[slot] = [NetworkItem(item_code, -2, 0) for item_code in item_codes]
 
-        for team in range(len(decoded_obj['names'])):
-            for slot, hints in decoded_obj["precollected_hints"].items():
-                self.hints[team, slot].update(hints)
-        if "slot_info" in decoded_obj:
-            self.slot_info = decoded_obj["slot_info"]
-            self.games = {slot: slot_info.game for slot, slot_info in self.slot_info.items()}
-            self.groups = {slot: slot_info.group_members for slot, slot_info in self.slot_info.items()
-                           if slot_info.type == SlotType.group}
-        else:
-            self.games = decoded_obj["games"]
-            self.groups = {}
-            self.slot_info = {
-                slot: NetworkSlot(
-                    self.player_names[0, slot],
-                    self.games[slot],
-                    SlotType(int(bool(locations))))
-                for slot, locations in self.locations.items()
-            }
-            # locations may need converting
-            for slot, locations in self.locations.items():
-                for location, item_data in locations.items():
-                    if len(item_data) < 3:
-                        locations[location] = (*item_data, 0)
+        for slot, hints in decoded_obj["precollected_hints"].items():
+            self.hints[0, slot].update(hints)
+
         # declare slots that aren't players as done
         for slot, slot_info in self.slot_info.items():
             if slot_info.type.always_goal:
@@ -467,10 +478,16 @@ class Context:
     def _start_async_saving(self):
         if not self.auto_saver_thread:
             def save_regularly():
-                import time
+                # time.time() is platform dependent, so using the expensive datetime method instead
+                def get_datetime_second():
+                    now = datetime.datetime.now()
+                    return now.second + now.microsecond * 0.000001
+
+                second = get_saving_second(self.seed_name, self.auto_save_interval)
                 while not self.exit_event.is_set():
                     try:
-                        time.sleep(self.auto_save_interval)
+                        next_wakeup = (second - get_datetime_second()) % self.auto_save_interval
+                        time.sleep(max(1.0, next_wakeup))
                         if self.save_dirty:
                             logging.debug("Saving via thread.")
                             self._save()
@@ -504,9 +521,10 @@ class Context:
             "group_collected": dict(self.group_collected),
             "stored_data": self.stored_data,
             "game_options": {"hint_cost": self.hint_cost, "location_check_points": self.location_check_points,
-                             "server_password": self.server_password, "password": self.password, "forfeit_mode":
-                             self.forfeit_mode, "remaining_mode": self.remaining_mode, "collect_mode":
-                             self.collect_mode, "item_cheat": self.item_cheat, "compatibility": self.compatibility}
+                             "server_password": self.server_password, "password": self.password,
+                             "forfeit_mode": self.release_mode, "release_mode": self.release_mode,  # TODO remove forfeit_mode around 0.4
+                             "remaining_mode": self.remaining_mode, "collect_mode": self.collect_mode,
+                             "item_cheat": self.item_cheat, "compatibility": self.compatibility}
 
         }
 
@@ -537,7 +555,7 @@ class Context:
             self.location_check_points = savedata["game_options"]["location_check_points"]
             self.server_password = savedata["game_options"]["server_password"]
             self.password = savedata["game_options"]["password"]
-            self.forfeit_mode = savedata["game_options"]["forfeit_mode"]
+            self.release_mode = savedata["game_options"].get("release_mode", savedata["game_options"].get("forfeit_mode", "goal"))
             self.remaining_mode = savedata["game_options"]["remaining_mode"]
             self.collect_mode = savedata["game_options"]["collect_mode"]
             self.item_cheat = savedata["game_options"]["item_cheat"]
@@ -548,7 +566,7 @@ class Context:
 
         if "stored_data" in savedata:
             self.stored_data = savedata["stored_data"]
-        # count items and slots from lists for item_handling = remote
+        # count items and slots from lists for items_handling = remote
         logging.info(
             f'Loaded save file with {sum([len(v) for k, v in self.received_items.items() if k[2]])} received items '
             f'for {sum(k[2] for k in self.received_items)} players')
@@ -582,6 +600,8 @@ class Context:
 
     def _set_options(self, server_options: dict):
         for key, value in server_options.items():
+            if key == "forfeit_mode":
+                key = "release_mode"
             data_type = self.simple_options.get(key, None)
             if data_type is not None:
                 if value not in {False, True, None}:  # some can be boolean OR text, such as password
@@ -646,13 +666,11 @@ class Context:
     def on_goal_achieved(self, client: Client):
         finished_msg = f'{self.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1})' \
                        f' has completed their goal.'
-        self.notify_all(finished_msg)
+        self.broadcast_text_all(finished_msg, {"type": "Goal", "team": client.team, "slot": client.slot})
         if "auto" in self.collect_mode:
             collect_player(self, client.team, client.slot)
-        if "auto" in self.forfeit_mode:
-            forfeit_player(self, client.team, client.slot)
-        elif self.forced_auto_forfeits[self.games[client.slot]]:
-            forfeit_player(self, client.team, client.slot)
+        if "auto" in self.release_mode:
+            release_player(self, client.team, client.slot)
         self.save()  # save goal completion flag
 
     def on_new_hint(self, team: int, slot: int):
@@ -708,10 +726,7 @@ async def on_client_connected(ctx: Context, client: Client):
     await ctx.send_msgs(client, [{
         'cmd': 'RoomInfo',
         'password': bool(ctx.password),
-        # TODO remove around 0.4
-        'players': players,
-        # TODO convert to list of games present in 0.4
-        'games': [ctx.games[x] for x in range(1, len(ctx.games) + 1)],
+        'games': {ctx.games[x] for x in range(1, len(ctx.games) + 1)},
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ctx.tags,
@@ -719,8 +734,6 @@ async def on_client_connected(ctx: Context, client: Client):
         'permissions': get_permissions(ctx),
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
-        'datapackage_version': sum(game_data["version"] for game_data in ctx.gamespackage.values())
-        if all(game_data["version"] for game_data in ctx.gamespackage.values()) else 0,
         'datapackage_versions': {game: game_data["version"] for game, game_data
                                  in ctx.gamespackage.items()},
         'seed_name': ctx.seed_name,
@@ -730,7 +743,8 @@ async def on_client_connected(ctx: Context, client: Client):
 
 def get_permissions(ctx) -> typing.Dict[str, Permission]:
     return {
-        "forfeit": Permission.from_text(ctx.forfeit_mode),
+        "forfeit": Permission.from_text(ctx.release_mode),  # TODO remove around 0.4
+        "release": Permission.from_text(ctx.release_mode),
         "remaining": Permission.from_text(ctx.remaining_mode),
         "collect": Permission.from_text(ctx.collect_mode)
     }
@@ -745,53 +759,40 @@ async def on_client_joined(ctx: Context, client: Client):
     update_client_status(ctx, client, ClientStatus.CLIENT_CONNECTED)
     version_str = '.'.join(str(x) for x in client.version)
     verb = "tracking" if "Tracker" in client.tags else "playing"
-    ctx.notify_all(
+    ctx.broadcast_text_all(
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) "
         f"{verb} {ctx.games[client.slot]} has joined. "
-        f"Client({version_str}), {client.tags}).")
+        f"Client({version_str}), {client.tags}).",
+        {"type": "Join", "team": client.team, "slot": client.slot, "tags": client.tags})
     ctx.notify_client(client, "Now that you are connected, "
                               "you can use !help to list commands to run via the server. "
                               "If your client supports it, "
-                              "you may have additional local commands you can list with /help.")
+                              "you may have additional local commands you can list with /help.",
+                      {"type": "Tutorial"})
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 
 async def on_client_left(ctx: Context, client: Client):
     update_client_status(ctx, client, ClientStatus.CLIENT_UNKNOWN)
-    ctx.notify_all(
-        "%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1))
+    ctx.broadcast_text_all(
+        "%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1),
+        {"type": "Part", "team": client.team, "slot": client.slot})
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 
 async def countdown(ctx: Context, timer: int):
-    broadcast_countdown(ctx, timer, f"[Server]: Starting countdown of {timer}s")
+    ctx.broadcast_text_all(f"[Server]: Starting countdown of {timer}s", {"type": "Countdown", "countdown": timer})
     if ctx.countdown_timer:
         ctx.countdown_timer = timer  # timer is already running, set it to a different time
     else:
         ctx.countdown_timer = timer
         while ctx.countdown_timer > 0:
-            broadcast_countdown(ctx, ctx.countdown_timer, f"[Server]: {ctx.countdown_timer}")
+            ctx.broadcast_text_all(f"[Server]: {ctx.countdown_timer}",
+                {"type": "Countdown", "countdown": ctx.countdown_timer})
             ctx.countdown_timer -= 1
             await asyncio.sleep(1)
-        broadcast_countdown(ctx, 0, f"[Server]: GO")
+        ctx.broadcast_text_all(f"[Server]: GO", {"type": "Countdown", "countdown": 0})
         ctx.countdown_timer = 0
-
-
-def broadcast_text_all(ctx: Context, text: str, additional_arguments: dict = {}):
-    old_clients, new_clients = [], []
-
-    for teams in ctx.clients.values():
-        for clients in teams.values():
-            for client in clients:
-                new_clients.append(client) if client.version >= print_command_compatability_threshold \
-                    else old_clients.append(client)
-
-    ctx.broadcast(old_clients, [{"cmd": "Print", "text": text }])
-    ctx.broadcast(new_clients, [{**{"cmd": "PrintJSON", "data": [{ "text": text }]}, **additional_arguments}])
-
-
-def broadcast_countdown(ctx: Context, timer: int, message: str):
-    broadcast_text_all(ctx, message, {"type": "Countdown", "countdown": timer})
 
 
 def get_players_string(ctx: Context):
@@ -858,10 +859,12 @@ def update_checked_locations(ctx: Context, team: int, slot: int):
                   [{"cmd": "RoomUpdate", "checked_locations": get_checked_checks(ctx, team, slot)}])
 
 
-def forfeit_player(ctx: Context, team: int, slot: int):
+def release_player(ctx: Context, team: int, slot: int):
     """register any locations that are in the multidata"""
     all_locations = set(ctx.locations[slot])
-    ctx.notify_all("%s (Team #%d) has released all remaining items from their world." % (ctx.player_names[(team, slot)], team + 1))
+    ctx.broadcast_text_all("%s (Team #%d) has released all remaining items from their world."
+                           % (ctx.player_names[(team, slot)], team + 1),
+                           {"type": "Release", "team": team, "slot": slot})
     register_location_checks(ctx, team, slot, all_locations)
     update_checked_locations(ctx, team, slot)
 
@@ -874,7 +877,9 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
             if values[1] == slot:
                 all_locations[source_slot].add(location_id)
 
-    ctx.notify_all("%s (Team #%d) has collected their items from other worlds." % (ctx.player_names[(team, slot)], team + 1))
+    ctx.broadcast_text_all("%s (Team #%d) has collected their items from other worlds."
+                           % (ctx.player_names[(team, slot)], team + 1),
+                           {"type": "Collect", "team": team, "slot": slot})
     for source_player, location_ids in all_locations.items():
         register_location_checks(ctx, team, source_player, location_ids, count_activity=False)
         update_checked_locations(ctx, team, source_player)
@@ -1144,11 +1149,15 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     def __call__(self, raw: str) -> typing.Optional[bool]:
         if not raw.startswith("!admin"):
-            self.ctx.notify_all(self.ctx.get_aliased_name(self.client.team, self.client.slot) + ': ' + raw)
+            self.ctx.broadcast_text_all(self.ctx.get_aliased_name(self.client.team, self.client.slot) + ': ' + raw,
+                                        {"type": "Chat", "team": self.client.team, "slot": self.client.slot, "message": raw})
         return super(ClientMessageProcessor, self).__call__(raw)
 
-    def output(self, text):
-        self.ctx.notify_client(self.client, text)
+    def output(self, text: str):
+        self.ctx.notify_client(self.client, text, {"type": "CommandResult"})
+
+    def output_multiple(self, texts: typing.List[str]):
+        self.ctx.notify_client_multiple(self.client, texts, {"type": "CommandResult"})
 
     def default(self, raw: str):
         pass  # default is client sending just text
@@ -1171,9 +1180,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 # disallow others from knowing what the new remote administration password is.
                 "!admin /option server_password"):
             output = f"!admin /option server_password {('*' * random.randint(4, 16))}"
-        # Otherwise notify the others what is happening.
-        self.ctx.notify_all(self.ctx.get_aliased_name(self.client.team,
-                                                      self.client.slot) + ': ' + output)
+        self.ctx.broadcast_text_all(self.ctx.get_aliased_name(self.client.team, self.client.slot) + ': ' + output,
+                                    {"type": "Chat", "team": self.client.team, "slot": self.client.slot, "message": output})
 
         if not self.ctx.server_password:
             self.output("Sorry, Remote administration is disabled")
@@ -1210,7 +1218,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def _cmd_players(self) -> bool:
         """Get information about connected and missing players."""
         if len(self.ctx.player_names) < 10:
-            self.ctx.notify_all(get_players_string(self.ctx))
+            self.ctx.broadcast_text_all(get_players_string(self.ctx), {"type": "CommandResult"})
         else:
             self.output(get_players_string(self.ctx))
         return True
@@ -1224,23 +1232,19 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     def _cmd_release(self) -> bool:
         """Sends remaining items in your world to their recipients."""
-        return self._cmd_forfeit()
-
-    def _cmd_forfeit(self) -> bool:
-        """Surrender and send your remaining items out to their recipients. Use release in the future."""
-        if self.ctx.allow_forfeits.get((self.client.team, self.client.slot), False):
-            forfeit_player(self.ctx, self.client.team, self.client.slot)
+        if self.ctx.allow_releases.get((self.client.team, self.client.slot), False):
+            release_player(self.ctx, self.client.team, self.client.slot)
             return True
-        if "enabled" in self.ctx.forfeit_mode:
-            forfeit_player(self.ctx, self.client.team, self.client.slot)
+        if "enabled" in self.ctx.release_mode:
+            release_player(self.ctx, self.client.team, self.client.slot)
             return True
-        elif "disabled" in self.ctx.forfeit_mode:
+        elif "disabled" in self.ctx.release_mode:
             self.output("Sorry, client item releasing has been disabled on this server. "
                         "You can ask the server admin for a /release")
             return False
         else:  # is auto or goal
             if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
-                forfeit_player(self.ctx, self.client.team, self.client.slot)
+                release_player(self.ctx, self.client.team, self.client.slot)
                 return True
             else:
                 self.output(
@@ -1303,7 +1307,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if locations:
             texts = [f'Missing: {self.ctx.location_names[location]}' for location in locations]
             texts.append(f"Found {len(locations)} missing location checks")
-            self.ctx.notify_client_multiple(self.client, texts)
+            self.output_multiple(texts)
         else:
             self.output("No missing location checks found.")
         return True
@@ -1316,7 +1320,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if locations:
             texts = [f'Checked: {self.ctx.location_names[location]}' for location in locations]
             texts.append(f"Found {len(locations)} done location checks")
-            self.ctx.notify_client_multiple(self.client, texts)
+            self.output_multiple(texts)
         else:
             self.output("No done location checks found.")
         return True
@@ -1352,9 +1356,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 new_item = NetworkItem(names[item_name], -1, self.client.slot)
                 get_received_items(self.ctx, self.client.team, self.client.slot, False).append(new_item)
                 get_received_items(self.ctx, self.client.team, self.client.slot, True).append(new_item)
-                self.ctx.notify_all(
+                self.ctx.broadcast_text_all(
                     'Cheat console: sending "' + item_name + '" to ' + self.ctx.get_aliased_name(self.client.team,
-                                                                                                 self.client.slot))
+                                                                                                 self.client.slot),
+                    {"type": "ItemCheat", "team": self.client.team, "receiving": self.client.slot, "item": new_item})
                 send_new_items(self.ctx)
                 return True
             else:
@@ -1557,20 +1562,10 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             minver = min_client_version if ignore_game else ctx.minimum_client_versions[slot]
             if minver > args['version']:
                 errors.add('IncompatibleVersion')
-            if args.get('items_handling', None) is None:
-                # fall back to load from multidata
-                client.no_items = False
-                client.remote_items = slot in ctx.remote_items
-                client.remote_start_inventory = slot in ctx.remote_start_inventory
-                await ctx.send_msgs(client, [{
-                    "cmd": "Print", "text":
-                        "Warning: Client is not sending items_handling flags, "
-                        "which will not be supported in the future."}])
-            else:
-                try:
-                    client.items_handling = args['items_handling']
-                except (ValueError, TypeError):
-                    errors.add('InvalidItemsHandling')
+            try:
+                client.items_handling = args['items_handling']
+            except (ValueError, TypeError):
+                errors.add('InvalidItemsHandling')
 
         # only exact version match allowed
         if ctx.compatibility == 0 and args['version'] != version_tuple:
@@ -1663,9 +1658,10 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 client.tags = args["tags"]
                 if set(old_tags) != set(client.tags):
                     client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
-                    ctx.notify_all(
+                    ctx.broadcast_text_all(
                         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has changed tags "
-                        f"from {old_tags} to {client.tags}.")
+                        f"from {old_tags} to {client.tags}.",
+                        {"type": "TagsChanged", "team": client.team, "slot": client.slot, "tags": client.tags})
 
         elif cmd == 'Sync':
             start_inventory = get_start_inventory(ctx, client.slot, client.remote_start_inventory)
@@ -1747,7 +1743,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 return
             args["cmd"] = "SetReply"
             value = ctx.stored_data.get(args["key"], args.get("default", 0))
-            args["original_value"] = value
+            args["original_value"] = copy.copy(value)
             for operation in args["operations"]:
                 func = modify_functions[operation["operation"]]
                 value = func(value, operation["value"])
@@ -1783,11 +1779,11 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def output(self, text: str):
         if self.client:
-            self.ctx.notify_client(self.client, text)
+            self.ctx.notify_client(self.client, text, {"type": "AdminCommandResult"})
         super(ServerCommandProcessor, self).output(text)
 
     def default(self, raw: str):
-        self.ctx.notify_all('[Server]: ' + raw)
+        self.ctx.broadcast_text_all('[Server]: ' + raw, {"type": "ServerChat", "message": raw})
 
     def _cmd_save(self) -> bool:
         """Save current state to multidata"""
@@ -1879,27 +1875,22 @@ class ServerCommandProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_release(self, player_name: str) -> bool:
         """Send out the remaining items from a player to their intended recipients."""
-        return self._cmd_forfeit(player_name)
-
-    @mark_raw
-    def _cmd_forfeit(self, player_name: str) -> bool:
-        """Send out the remaining items from a player to their intended recipients."""
         player = self.resolve_player(player_name)
         if player:
             team, slot, _ = player
-            forfeit_player(self.ctx, team, slot)
+            release_player(self.ctx, team, slot)
             return True
 
         self.output(f"Could not find player {player_name} to release")
         return False
 
     @mark_raw
-    def _cmd_allow_forfeit(self, player_name: str) -> bool:
+    def _cmd_allow_release(self, player_name: str) -> bool:
         """Allow the specified player to use the !release command."""
         player = self.resolve_player(player_name)
         if player:
             team, slot, name = player
-            self.ctx.allow_forfeits[(team, slot)] = True
+            self.ctx.allow_releases[(team, slot)] = True
             self.output(f"Player {name} is now allowed to use the !release command at any time.")
             return True
 
@@ -1907,12 +1898,12 @@ class ServerCommandProcessor(CommonCommandProcessor):
         return False
 
     @mark_raw
-    def _cmd_forbid_forfeit(self, player_name: str) -> bool:
+    def _cmd_forbid_release(self, player_name: str) -> bool:
         """"Disallow the specified player from using the !release command."""
         player = self.resolve_player(player_name)
         if player:
             team, slot, name = player
-            self.ctx.allow_forfeits[(team, slot)] = False
+            self.ctx.allow_releases[(team, slot)] = False
             self.output(f"Player {name} has to follow the server restrictions on use of the !release command.")
             return True
 
@@ -1933,7 +1924,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 send_items_to(self.ctx, team, slot, *new_items)
 
                 send_new_items(self.ctx)
-                self.ctx.notify_all(
+                self.ctx.broadcast_text_all(
                     'Cheat console: sending ' + ('' if amount == 1 else f'{amount} of ') +
                     f'"{item_name}" to {self.ctx.get_aliased_name(team, slot)}')
                 return True
@@ -2067,7 +2058,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                     return input_text
             setattr(self.ctx, option_name, attrtype(option))
             self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
-            if option_name in {"forfeit_mode", "remaining_mode", "collect_mode"}:
+            if option_name in {"release_mode", "remaining_mode", "collect_mode"}:
                 self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
             elif option_name in {"hint_cost", "location_check_points"}:
                 self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
@@ -2107,19 +2098,21 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--password', default=defaults["password"])
     parser.add_argument('--savefile', default=defaults["savefile"])
     parser.add_argument('--disable_save', default=defaults["disable_save"], action='store_true')
+    parser.add_argument('--cert', help="Path to a SSL Certificate for encryption.")
+    parser.add_argument('--cert_key', help="Path to SSL Certificate Key file")
     parser.add_argument('--loglevel', default=defaults["loglevel"],
                         choices=['debug', 'info', 'warning', 'error', 'critical'])
     parser.add_argument('--location_check_points', default=defaults["location_check_points"], type=int)
     parser.add_argument('--hint_cost', default=defaults["hint_cost"], type=int)
     parser.add_argument('--disable_item_cheat', default=defaults["disable_item_cheat"], action='store_true')
-    parser.add_argument('--forfeit_mode', default=defaults["forfeit_mode"], nargs='?',
+    parser.add_argument('--release_mode', default=defaults["release_mode"], nargs='?',
                         choices=['auto', 'enabled', 'disabled', "goal", "auto-enabled"], help='''\
-                             Select !forfeit Accessibility. (default: %(default)s)
-                             auto:     Automatic "forfeit" on goal completion
-                             enabled:  !forfeit is always available
-                             disabled: !forfeit is never available
-                             goal:     !forfeit can be used after goal completion
-                             auto-enabled: !forfeit is available and automatically triggered on goal completion
+                             Select !release Accessibility. (default: %(default)s)
+                             auto:     Automatic "release" on goal completion
+                             enabled:  !release is always available
+                             disabled: !release is never available
+                             goal:     !release can be used after goal completion
+                             auto-enabled: !release is available and automatically triggered on goal completion
                              ''')
     parser.add_argument('--collect_mode', default=defaults["collect_mode"], nargs='?',
                         choices=['auto', 'enabled', 'disabled', "goal", "auto-enabled"], help='''\
@@ -2141,7 +2134,7 @@ def parse_args() -> argparse.Namespace:
                         help="automatically shut down the server after this many minutes without new location checks. "
                              "0 to keep running. Not yet implemented.")
     parser.add_argument('--use_embedded_options', action="store_true",
-                        help='retrieve forfeit, remaining and hint options from the multidata file,'
+                        help='retrieve release, remaining and hint options from the multidata file,'
                              ' instead of host.yaml')
     parser.add_argument('--compatibility', default=defaults["compatibility"], type=int,
                         help="""
@@ -2179,11 +2172,19 @@ async def auto_shutdown(ctx, to_cancel=None):
                 await asyncio.sleep(seconds)
 
 
+def load_server_cert(path: str, cert_key: typing.Optional[str]) -> "ssl.SSLContext":
+    import ssl
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    ssl_context.load_default_certs()
+    ssl_context.load_cert_chain(path, cert_key if cert_key else path)
+    return ssl_context
+
+
 async def main(args: argparse.Namespace):
     Utils.init_logging("Server", loglevel=args.loglevel.lower())
 
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
-                  args.hint_cost, not args.disable_item_cheat, args.forfeit_mode, args.collect_mode,
+                  args.hint_cost, not args.disable_item_cheat, args.release_mode, args.collect_mode,
                   args.remaining_mode,
                   args.auto_shutdown, args.compatibility, args.log_network)
     data_filename = args.multidata
@@ -2214,8 +2215,10 @@ async def main(args: argparse.Namespace):
 
     ctx.init_save(not args.disable_save)
 
+    ssl_context = load_server_cert(args.cert, args.cert_key) if args.cert else None
+
     ctx.server = websockets.serve(functools.partial(server, ctx=ctx), host=ctx.host, port=ctx.port, ping_timeout=None,
-                                  ping_interval=None)
+                                  ping_interval=None, ssl=ssl_context)
     ip = args.host if args.host else Utils.get_public_ipv4()
     logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port,
                                                  'No password' if not ctx.password else 'Password: %s' % ctx.password))

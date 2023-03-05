@@ -1,5 +1,7 @@
 const adjustTableHeight = () => {
     const tablesContainer = document.getElementById('tables-container');
+    if (!tablesContainer)
+        return;
     const upperDistance = tablesContainer.getBoundingClientRect().top;
 
     const containerHeight = window.innerHeight - upperDistance;
@@ -18,7 +20,8 @@ window.addEventListener('load', () => {
         info: false,
         dom: "t",
         stateSave: true,
-        stateSaveCallback: function(settings,data) {
+        stateSaveCallback: function(settings, data) {
+            delete data.search;
             localStorage.setItem(`DataTables_${settings.sInstance}_/tracker`, JSON.stringify(data));
         },
         stateLoadCallback: function(settings) {
@@ -70,15 +73,43 @@ window.addEventListener('load', () => {
         // the tbody and render two separate tables.
     });
 
-    document.getElementById('search').addEventListener('keyup', (event) => {
-        tables.search(event.target.value);
-        console.info(tables.search());
+    const searchBox = document.getElementById("search");
+    searchBox.value = tables.search();
+    searchBox.focus();
+    searchBox.select();
+    const doSearch = () => {
+        tables.search(searchBox.value);
         tables.draw();
+    };
+    searchBox.addEventListener("keyup", doSearch);
+    window.addEventListener("keydown", (event) => {
+        if (!event.ctrlKey && !event.altKey && event.key.length === 1 && document.activeElement !== searchBox) {
+            searchBox.focus();
+            searchBox.select();
+        }
+        if (!event.ctrlKey && !event.altKey && !event.shiftKey && event.key === "Escape") {
+            if (searchBox.value !== "") {
+                searchBox.value = "";
+                doSearch();
+            }
+            searchBox.blur();
+            if (!document.getElementById("tables-container"))
+                window.scroll(0, 0);
+            event.preventDefault();
+        }
     });
+    const tracker = document.getElementById('tracker-wrapper').getAttribute('data-tracker');
+    const target_second = document.getElementById('tracker-wrapper').getAttribute('data-second') + 3;
+
+    function getSleepTimeSeconds(){
+        // -40 % 60 is -40, which is absolutely wrong and should burn
+        var sleepSeconds = (((target_second - new Date().getSeconds()) % 60) + 60) % 60;
+        return sleepSeconds || 60;
+    }
 
     const update = () => {
         const target = $("<div></div>");
-        const tracker = document.getElementById('tracker-wrapper').getAttribute('data-tracker');
+        console.log("Updating Tracker...");
         target.load("/tracker/" + tracker, function (response, status) {
             if (status === "success") {
                 target.find(".table").each(function (i, new_table) {
@@ -97,9 +128,9 @@ window.addEventListener('load', () => {
                 console.log(response);
             }
         })
+        setTimeout(update, getSleepTimeSeconds()*1000);
     }
-
-    setInterval(update, 30000);
+    setTimeout(update, getSleepTimeSeconds()*1000);
 
     window.addEventListener('resize', () => {
         adjustTableHeight();
