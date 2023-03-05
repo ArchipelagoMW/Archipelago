@@ -10,7 +10,7 @@ from rando.ItemLocContainer import ItemLocation
 # Holds settings not related to graph layout.
 class RandoSettings(object):
     def __init__(self, maxDiff, progSpeed, progDiff, qty, restrictions,
-                 superFun, runtimeLimit_s, plandoSettings, minDiff):
+                 superFun, runtimeLimit_s, PlandoOptions, minDiff):
         self.progSpeed = progSpeed.lower()
         self.progDiff = progDiff.lower()
         self.maxDiff = maxDiff
@@ -20,7 +20,7 @@ class RandoSettings(object):
         self.runtimeLimit_s = runtimeLimit_s
         if self.runtimeLimit_s <= 0:
             self.runtimeLimit_s = sys.maxsize
-        self.plandoSettings = plandoSettings
+        self.PlandoOptions = PlandoOptions
         self.minDiff = minDiff
 
     def getSuperFun(self):
@@ -30,7 +30,7 @@ class RandoSettings(object):
         self.superFun = superFun[:]
 
     def isPlandoRando(self):
-        return self.plandoSettings is not None
+        return self.PlandoOptions is not None
 
     def getItemManager(self, smbm, nLocs):
         if not self.isPlandoRando():
@@ -43,20 +43,20 @@ class RandoSettings(object):
             return None
         exclude = {'alreadyPlacedItems': defaultdict(int), 'forbiddenItems': []}
         # locsItems is a dict {'loc name': 'item type'}
-        for locName,itemType in self.plandoSettings["locsItems"].items():
+        for locName,itemType in self.PlandoOptions["locsItems"].items():
             if not any(loc.Name == locName for loc in locations):
                 continue
             exclude['alreadyPlacedItems'][itemType] += 1
             exclude['alreadyPlacedItems']['total'] += 1
 
-        exclude['forbiddenItems'] = self.plandoSettings['forbiddenItems']
+        exclude['forbiddenItems'] = self.PlandoOptions['forbiddenItems']
 
         return exclude
 
     def collectAlreadyPlacedItemLocations(self, container):
         if not self.isPlandoRando():
             return
-        for locName,itemType in self.plandoSettings["locsItems"].items():
+        for locName,itemType in self.PlandoOptions["locsItems"].items():
             if not any(loc.Name == locName for loc in container.unusedLocations):
                 continue
             item = container.getNextItemInPool(itemType)

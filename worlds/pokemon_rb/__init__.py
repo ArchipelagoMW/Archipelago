@@ -40,7 +40,7 @@ class PokemonRedBlueWorld(World):
     game = "Pokemon Red and Blue"
     option_definitions = pokemon_rb_options
 
-    data_version = 4
+    data_version = 5
     required_client_version = (0, 3, 7)
 
     topology_present = False
@@ -65,11 +65,11 @@ class PokemonRedBlueWorld(World):
         self.traps = None
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld: MultiWorld):
         versions = set()
-        for player in world.player_ids:
-            if world.worlds[player].game == "Pokemon Red and Blue":
-                versions.add(world.game_version[player].current_key)
+        for player in multiworld.player_ids:
+            if multiworld.worlds[player].game == "Pokemon Red and Blue":
+                versions.add(multiworld.game_version[player].current_key)
         for version in versions:
             if not os.path.exists(get_base_rom_path(version)):
                 raise FileNotFoundError(get_base_rom_path(version))
@@ -171,6 +171,7 @@ class PokemonRedBlueWorld(World):
         # damage being reduced by 1 which leads to a "not very effective" message appearing due to my changes
         # to the way effectiveness messages are generated.
         self.type_chart = sorted(chart, key=lambda matchup: -matchup[2])
+        self.multiworld.early_items[self.player]["Exp. All"] = 1
 
     def create_items(self) -> None:
         start_inventory = self.multiworld.start_inventory[self.player].value.copy()
@@ -190,8 +191,9 @@ class PokemonRedBlueWorld(World):
                 item = self.create_filler()
             else:
                 item = self.create_item(location.original_item)
+                combined_traps = self.multiworld.poison_trap_weight[self.player].value + self.multiworld.fire_trap_weight[self.player].value + self.multiworld.paralyze_trap_weight[self.player].value + self.multiworld.ice_trap_weight[self.player].value
                 if (item.classification == ItemClassification.filler and self.multiworld.random.randint(1, 100)
-                        <= self.multiworld.trap_percentage[self.player].value):
+                        <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0):
                     item = self.create_item(self.select_trap())
             if location.event:
                 self.multiworld.get_location(location.name, self.player).place_locked_item(item)
@@ -317,7 +319,8 @@ class PokemonRedBlueWorld(World):
                 spoiler_handle.write(f"{matchup[0]} deals {matchup[2] * 10}% damage to {matchup[1]}\n")
 
     def get_filler_item_name(self) -> str:
-        if self.multiworld.random.randint(1, 100) <= self.multiworld.trap_percentage[self.player].value:
+        combined_traps = self.multiworld.poison_trap_weight[self.player].value + self.multiworld.fire_trap_weight[self.player].value + self.multiworld.paralyze_trap_weight[self.player].value + self.multiworld.ice_trap_weight[self.player].value
+        if self.multiworld.random.randint(1, 100) <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0:
             return self.select_trap()
 
         return self.multiworld.random.choice([item for item in item_table if item_table[
@@ -349,6 +352,7 @@ class PokemonRedBlueWorld(World):
             "elite_four_condition": self.multiworld.elite_four_condition[self.player].value,
             "victory_road_condition": self.multiworld.victory_road_condition[self.player].value,
             "viridian_gym_condition": self.multiworld.viridian_gym_condition[self.player].value,
+            "cerulean_cave_condition": self.multiworld.cerulean_cave_condition[self.player].value,
             "free_fly_map": self.fly_map_code,
             "extra_badges": self.extra_badges,
             "type_chart": self.type_chart,

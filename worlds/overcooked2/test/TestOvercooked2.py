@@ -17,7 +17,7 @@ class Overcooked2Test(unittest.TestCase):
         for item_name in item_table.keys():
             item: Item = item_table[item_name]
             self.assertGreaterEqual(item.code, oc2_base_id, "Overcooked Item ID out of range")
-            self.assertLessEqual(item.code, item_table["Calmer Unbread"].code, "Overcooked Item ID out of range")
+            self.assertLessEqual(item.code, item_table["Emote Wheel"].code, "Overcooked Item ID out of range")
 
             if previous_item is not None:
                 self.assertEqual(item.code, previous_item + 1,
@@ -31,7 +31,7 @@ class Overcooked2Test(unittest.TestCase):
             self.assertIn(item_name, item_table.keys(), "Unexpected Overcooked Item in item_frequencies")
 
         for item_name in item_name_to_config_name.keys():
-            self.assertIn(item_name, item_table.keys(), "Unexpected Overcooked Item in config mapping")
+            self.assertIn(item_name, item_table.keys(), "Unexpected config in item-config mapping")
 
         for config_name in item_name_to_config_name.values():
             self.assertIn(config_name, vanilla_values.keys(), "Unexpected Overcooked Item in default config mapping")
@@ -147,3 +147,26 @@ class Overcooked2Test(unittest.TestCase):
 
         for item in ITEMS_TO_EXCLUDE_IF_NO_DLC:
             self.assertIn(item, item_table.keys())
+
+    def testLevelCounts(self):
+        for dlc in Overcooked2Dlc:
+            level_id_range = range(dlc.start_level_id, dlc.end_level_id)
+            
+            for level_id in dlc.excluded_levels():
+                self.assertIn(level_id, level_id_range, f"Excluded level {dlc.name} - {level_id} out of range")
+            
+            for level_id in dlc.horde_levels():
+                self.assertIn(level_id, level_id_range, f"Horde level {dlc.name} - {level_id} out of range")
+            
+            for level_id in dlc.prep_levels():
+                self.assertIn(level_id, level_id_range, f"Prep level {dlc.name} - {level_id} out of range")
+
+            for level_id in level_id_range:
+                self.assertIn((dlc, level_id), level_id_to_shortname, "A valid level is not represented in level directory")
+            
+            count = 0
+            for (dlc_key, _) in level_id_to_shortname:
+                if dlc == dlc_key:
+                    count += 1
+            
+            self.assertEqual(count, len(level_id_range), f"Number of levels in {dlc.name} has discrepancy between level_id range and directory")

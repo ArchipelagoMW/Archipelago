@@ -1,24 +1,16 @@
 import typing
 
-from BaseClasses import MultiWorld, Region, RegionType, Entrance
+from BaseClasses import MultiWorld, Region, Entrance
 from .Locations import SMWLocation
 from .Levels import level_info_dict
 from .Names import LocationName, ItemName
-from ..generic.Rules import add_rule, set_rule
+from worlds.generic.Rules import add_rule, set_rule
 
 
 def create_regions(world, player: int, active_locations):
     menu_region = create_region(world, player, active_locations, 'Menu', None)
 
     yoshis_island_region = create_region(world, player, active_locations, LocationName.yoshis_island_region, None)
-    donut_plains_region = create_region(world, player, active_locations, LocationName.donut_plains_region, None)
-    vanilla_dome_region = create_region(world, player, active_locations, LocationName.vanilla_dome_region, None)
-    twin_bridges_region = create_region(world, player, active_locations, LocationName.twin_bridges_region, None)
-    forest_of_illusion_region = create_region(world, player, active_locations, LocationName.forest_of_illusion_region, None)
-    chocolate_island_region = create_region(world, player, active_locations, LocationName.chocolate_island_region, None)
-    valley_of_bowser_region = create_region(world, player, active_locations, LocationName.valley_of_bowser_region, None)
-    star_road_region = create_region(world, player, active_locations, LocationName.star_road_region, None)
-    special_zone_region = create_region(world, player, active_locations, LocationName.special_zone_region, None)
 
 
     yoshis_house_tile = create_region(world, player, active_locations, LocationName.yoshis_house_tile, None)
@@ -472,14 +464,6 @@ def create_regions(world, player: int, active_locations):
     world.regions += [
         menu_region,
         yoshis_island_region,
-        donut_plains_region,
-        vanilla_dome_region,
-        twin_bridges_region,
-        forest_of_illusion_region,
-        chocolate_island_region,
-        valley_of_bowser_region,
-        star_road_region,
-        special_zone_region,
         yoshis_house_tile,
         yoshis_house_region,
         yoshis_island_1_tile,
@@ -824,7 +808,7 @@ def create_regions(world, player: int, active_locations):
                                                (state.has(ItemName.yellow_switch_palace, player) or state.has(ItemName.red_switch_palace, player)))))
         add_location_to_region(world, player, active_locations, LocationName.chocolate_island_3_region, LocationName.chocolate_island_3_dragon)
         add_location_to_region(world, player, active_locations, LocationName.chocolate_island_4_region, LocationName.chocolate_island_4_dragon,
-                               lambda state: (state.has(ItemName.mario_run, player) and
+                               lambda state: (state.has(ItemName.p_switch, player) and
                                               state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(world, player, active_locations, LocationName.chocolate_island_5_region, LocationName.chocolate_island_5_dragon,
                                lambda state: (state.has(ItemName.mario_swim, player) or
@@ -866,6 +850,8 @@ def connect_regions(world, player, level_to_tile_dict):
     names: typing.Dict[str, int] = {}
 
     connect(world, player, names, "Menu", LocationName.yoshis_island_region)
+    connect(world, player, names, LocationName.yoshis_island_region, LocationName.yoshis_house_tile)
+    connect(world, player, names, LocationName.yoshis_house_tile, LocationName.donut_plains_top_secret)
     connect(world, player, names, LocationName.yoshis_island_region, LocationName.yoshis_island_1_tile)
     connect(world, player, names, LocationName.yoshis_island_region, LocationName.yoshis_island_2_tile)
 
@@ -1144,8 +1130,7 @@ def connect_regions(world, player, level_to_tile_dict):
 
 
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None):
-    ret = Region(name, RegionType.Generic, name, player)
-    ret.world = world
+    ret = Region(name, player, world)
     if locations:
         for locationName in locations:
             loc_id = active_locations.get(locationName, 0)
