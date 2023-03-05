@@ -17,7 +17,7 @@ have default MegaMan equipped, you can switch to your new style if you want thro
 Higsby's Chip Trader has been replaced with a shop interface where you can pay 500z to access the next item in the trader sequence.
 Dialog has been rewritten for both the Trader and the hat kid next to the trader to explain it.
 
-The Nut-Wafer Chocolate Stand in the Yoka Metro has been replaced with a system for trading BugFrags for items. DIalog has been rewritten to give it a story reason for accepting BugFrags.
+The Nut-Wafer Chocolate Stand in the Yoka Metro has been replaced with a system for trading BugFrags for items. Dialog has been rewritten to give it a story reason for accepting BugFrags.
 
 The Secret Area is unlocked from the start, since the Library is filled automatically. Jacking Out has been enabled in the Secret Area.
 
