@@ -1,6 +1,6 @@
 from enum import unique, Enum
 
-from BaseClasses import Region
+from BaseClasses import Region, MultiWorld
 from .Hints import HintArea
 
 
@@ -32,8 +32,8 @@ class TimeOfDay(object):
 class OOTRegion(Region):
     game: str = "Ocarina of Time"
 
-    def __init__(self, name: str, type, hint, player: int):
-        super(OOTRegion, self).__init__(name, type, hint, player)
+    def __init__(self, name: str, player: int, multiworld: MultiWorld):
+        super(OOTRegion, self).__init__(name, player, multiworld)
         self._oot_hint = None
         self.alt_hint = None
         self.price = None
@@ -45,7 +45,17 @@ class OOTRegion(Region):
         self.font_color = None
         self.is_boss_room = False
 
-    def get_scene(self): 
+    # This is too generic of a name to risk not breaking in the future.
+    # This lets us possibly switch it out later if AP starts using it.
+    @property
+    def hint(self):
+        return self._oot_hint
+
+    @hint.setter
+    def hint(self, value):
+        self._oot_hint = value
+
+    def get_scene(self):
         if self.scene: 
             return self.scene
         elif self.dungeon: 
@@ -70,10 +80,4 @@ class OOTRegion(Region):
             self._oot_hint = HintArea.for_dungeon(self.dungeon)
         else:
             self._oot_hint = HintArea[hint]
-        self.hint_text = str(self._oot_hint)
-
-    # This is too generic of a name to risk not breaking in the future.
-    # This lets us possibly switch it out later if AP starts using it.
-    @property
-    def hint(self):
-        return self._oot_hint
+        self._hint_text = str(self._oot_hint)
