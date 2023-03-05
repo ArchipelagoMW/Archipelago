@@ -98,7 +98,7 @@ class MMBN3Context(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 
-class item_info:
+class ItemInfo:
     id = 0x00
     sender = ""
     type = ""
@@ -133,7 +133,7 @@ def get_payload(ctx: MMBN3Context):
     items_sent = []
     for i, item in enumerate(ctx.items_received):
         item_data = items_by_id[item.item]
-        new_item = item_info(i, ctx.player_names[item.player], item_data.type)
+        new_item = ItemInfo(i, ctx.player_names[item.player], item_data.type)
         new_item.itemIndex = i+1
         new_item.itemName = item_data.itemName
         new_item.type = item_data.type

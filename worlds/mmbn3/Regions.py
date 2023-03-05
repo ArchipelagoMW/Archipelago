@@ -1,6 +1,6 @@
 import typing
-from .Names import LocationName
-from BaseClasses import CollectionState
+from .Names.LocationName import LocationName
+
 
 class RegionName:
     Menu = "Menu"
@@ -17,7 +17,8 @@ class RegionName:
     Secret_Area = "Secret Area"
     WWW_Island = "WWW Island"
 
-class region_info:
+
+class RegionInfo:
     name: str
     connections: typing.List[str]
     locations: typing.List[str]
@@ -29,10 +30,10 @@ class region_info:
 
 
 regions = [
-    region_info(RegionName.Menu, [RegionName.ACDC_Overworld], []),
-    region_info(RegionName.ACDC_Overworld,
-                [RegionName.ACDC_Cyberworld, RegionName.SciLab_Overworld, RegionName.Yoka_Overworld, RegionName.Beach_Overworld],
-                [
+    RegionInfo(RegionName.Menu, [RegionName.ACDC_Overworld], []),
+    RegionInfo(RegionName.ACDC_Overworld,
+               [RegionName.ACDC_Cyberworld, RegionName.SciLab_Overworld, RegionName.Yoka_Overworld, RegionName.Beach_Overworld],
+               [
                     LocationName.ACDC_SonicWav_W_Trade,
                     LocationName.ACDC_Bubbler_C_Trade,
                     LocationName.ACDC_Recov120_S_Trade,
@@ -97,9 +98,9 @@ regions = [
                     LocationName.Dexs_HP_BMD_2,
                     LocationName.Mayls_HP_PMD
                     ]),
-    region_info(RegionName.ACDC_Cyberworld,
-                [RegionName.SciLab_Cyberworld, RegionName.Yoka_Cyberworld, RegionName.Beach_Cyberworld],
-                [
+    RegionInfo(RegionName.ACDC_Cyberworld,
+               [RegionName.SciLab_Cyberworld, RegionName.Yoka_Cyberworld, RegionName.Beach_Cyberworld],
+               [
                     LocationName.ACDC_1_Southwest_BMD,
                     LocationName.ACDC_1_Northeast_BMD,
                     LocationName.ACDC_1_PMD,
@@ -108,9 +109,9 @@ regions = [
                     LocationName.ACDC_3_Southwest_BMD,
                     LocationName.ACDC_3_Northeast_BMD,
                 ]),
-    region_info(RegionName.SciLab_Overworld,
-                [RegionName.SciLab_Cyberworld, RegionName.ACDC_Overworld, RegionName.Yoka_Overworld, RegionName.Beach_Overworld],
-                [
+    RegionInfo(RegionName.SciLab_Overworld,
+               [RegionName.SciLab_Cyberworld, RegionName.ACDC_Overworld, RegionName.Yoka_Overworld, RegionName.Beach_Overworld],
+               [
                     LocationName.SciLab_Shake1_S_Trade,
                     LocationName.SciLab_Garbage_Can,
                     LocationName.SciLab_Vending_Machine_BMD,
@@ -149,17 +150,17 @@ regions = [
                     LocationName.Stamp_collecting,
                     LocationName.Help_with_a_will
                 ]),
-    region_info(RegionName.SciLab_Cyberworld,
-                [RegionName.ACDC_Cyberworld, RegionName.Yoka_Cyberworld, RegionName.Beach_Cyberworld,RegionName.Deep_Undernet],
-                [
+    RegionInfo(RegionName.SciLab_Cyberworld,
+               [RegionName.ACDC_Cyberworld, RegionName.Yoka_Cyberworld, RegionName.Beach_Cyberworld,RegionName.Deep_Undernet],
+               [
                     LocationName.SciLab_1_East_BMD,
                     LocationName.SciLab_1_WWW_BMD,
                     LocationName.SciLab_2_South_BMD,
                     LocationName.SciLab_2_West_BMD
                 ]),
-    region_info(RegionName.Yoka_Overworld,
-                [RegionName.Yoka_Cyberworld, RegionName.ACDC_Overworld, RegionName.SciLab_Overworld, RegionName.Beach_Overworld, RegionName.Secret_Area],
-                [
+    RegionInfo(RegionName.Yoka_Overworld,
+               [RegionName.Yoka_Cyberworld, RegionName.ACDC_Overworld, RegionName.SciLab_Overworld, RegionName.Beach_Overworld, RegionName.Secret_Area],
+               [
                     LocationName.Yoka_Mr_Quiz,
                     LocationName.Yoka_Quiz_Master,
                     LocationName.Yoka_FireSwrd_P_Trade,
@@ -221,18 +222,18 @@ regions = [
                     LocationName.Chocolate_Shop_31,
                     LocationName.Chocolate_Shop_32
                 ]),
-    region_info(RegionName.Yoka_Cyberworld,
-                [RegionName.ACDC_Cyberworld, RegionName.SciLab_Cyberworld, RegionName.Beach_Cyberworld],
-                [
+    RegionInfo(RegionName.Yoka_Cyberworld,
+               [RegionName.ACDC_Cyberworld, RegionName.SciLab_Cyberworld, RegionName.Beach_Cyberworld],
+               [
                     LocationName.Yoka_1_North_BMD,
                     LocationName.Yoka_1_WWW_BMD,
                     LocationName.Yoka_1_PMD,
                     LocationName.Yoka_2_Lower_BMD,
                     LocationName.Yoka_2_Upper_BMD,
                 ]),
-    region_info(RegionName.Beach_Overworld,
-                [RegionName.ACDC_Overworld, RegionName.SciLab_Overworld, RegionName.Yoka_Overworld, RegionName.WWW_Island],
-                [
+    RegionInfo(RegionName.Beach_Overworld,
+               [RegionName.ACDC_Overworld, RegionName.SciLab_Overworld, RegionName.Yoka_Overworld, RegionName.WWW_Island],
+               [
                     LocationName.Hospital_Quiz_Queen,
                     LocationName.Hades_Quiz_King,
                     LocationName.Hospital_DynaWav_V_Trade,
@@ -279,18 +280,18 @@ regions = [
                     LocationName.Beach_DNN_Main_Console_PMD,
                     LocationName.Undernet_6_TV_BMD
                 ]),
-    region_info(RegionName.Beach_Cyberworld,
-                [RegionName.ACDC_Cyberworld, RegionName.SciLab_Cyberworld, RegionName.Yoka_Cyberworld, RegionName.Undernet],
-                [
+    RegionInfo(RegionName.Beach_Cyberworld,
+               [RegionName.ACDC_Cyberworld, RegionName.SciLab_Cyberworld, RegionName.Yoka_Cyberworld, RegionName.Undernet],
+               [
                     LocationName.Beach_1_BMD,
                     LocationName.Beach_1_PMD,
                     LocationName.Beach_2_East_BMD,
                     LocationName.Beach_2_West_BMD,
                     LocationName.Villain
                 ]),
-    region_info(RegionName.Undernet,
-                [],
-                [
+    RegionInfo(RegionName.Undernet,
+               [],
+               [
                     LocationName.Undernet_1_South_BMD,
                     LocationName.Undernet_1_WWW_BMD,
                     LocationName.Undernet_2_Lower_BMD,
@@ -304,9 +305,9 @@ regions = [
                     LocationName.Undernet_5_Upper_BMD
 
                 ]),
-    region_info(RegionName.Deep_Undernet,
-                [],
-                [
+    RegionInfo(RegionName.Deep_Undernet,
+               [],
+               [
                     LocationName.Undernet_5_Lower_BMD,
                     LocationName.Undernet_6_East_BMD,
                     LocationName.Undernet_6_Central_BMD,
@@ -316,9 +317,9 @@ regions = [
                     LocationName.Undernet_7_Northwest_BMD,
                     LocationName.Undernet_7_Upper_BMD,
                 ]),
-    region_info(RegionName.WWW_Island,
-                [],
-                [
+    RegionInfo(RegionName.WWW_Island,
+               [],
+               [
                     LocationName.WWW_Control_Room_1_Screen,
                     LocationName.WWW_Wilys_Desk,
                     LocationName.WWW_Wall_BMD,
@@ -337,9 +338,9 @@ regions = [
                     #LocationName.WWW_4_East_BMD
                     LocationName.Alpha_Defeated
                 ]),
-    region_info(RegionName.Secret_Area,
-                [],
-                [
+    RegionInfo(RegionName.Secret_Area,
+               [],
+               [
                     LocationName.Secret_1_South_BMD,
                     LocationName.Secret_1_Northeast_BMD,
                     LocationName.Secret_1_Northwest_BMD,

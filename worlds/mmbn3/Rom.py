@@ -7,12 +7,13 @@ import bsdiff4
 from .lz10 import gba_decompress, gba_compress
 
 from .BN3RomUtils import ArchiveToReferences, read_u16_le, read_u32_le, int16_to_byte_list_le, int32_to_byte_list_le,\
-    generate_progressive_undernet, CompressedArchives, ArchiveToSizeComp, ArchiveToSizeUncomp, generate_item_message, \
+    generate_progressive_undernet, ArchiveToSizeComp, ArchiveToSizeUncomp, generate_item_message, \
     generate_external_item_message, generate_text_bytes, shorten_item_name
 
 from .Items import ItemType
 
 CHECKSUM_BLUE = "6fe31df0144759b34ad666badaacc442"
+
 
 def list_contains_subsequence(lst, sublist) -> bool:
     sub_index = 0
@@ -208,7 +209,7 @@ class LocalRom:
         if offset in self.changed_archives:
             archive = self.changed_archives[offset]
         else:
-            is_compressed = offset in CompressedArchives
+            is_compressed = offset in ArchiveToSizeComp.keys()
             size = ArchiveToSizeComp[offset] if is_compressed\
                 else ArchiveToSizeUncomp[offset]
             data = self.get_data_chunk(offset, size)

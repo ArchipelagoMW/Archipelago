@@ -78,7 +78,7 @@ def gba_compress(data: bytearray):
                 result.append(0)
                 continue
 
-            searchPos, searchLen = compressionSearch(data, current)
+            searchPos, searchLen = compression_search(data, current)
             searchDisp = current - searchPos - 1
 
             if searchLen > 2:
@@ -109,7 +109,8 @@ def gba_compress(data: bytearray):
     compressed[:0] = struct.pack('<I', (len(data) << 8) | 0x10)
     return bytes(compressed)
 
-def compressionSearch(data, pos):
+
+def compression_search(data, pos):
     start = max(0, pos - 0x1000)
 
     lower = 0

@@ -1,6 +1,5 @@
 import os
 import typing
-import math
 import threading
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, Entrance, \
@@ -12,8 +11,8 @@ from .Locations import Location, MMBN3Location, all_locations, setup_locations, 
     excluded_locations
 from .Options import MMBN3Options
 from .Regions import regions, RegionName
-from .Names import ItemName, LocationName
-from worlds.generic.Rules import add_rule, set_rule
+from .Names.ItemName import ItemName
+from .Names.LocationName import LocationName
 
 
 class MMBN3Web(WebWorld):
@@ -37,7 +36,7 @@ class MMBN3World(World):
     and utilize powerful Style Changes to grow strong enough to take on the greatest
     threat the Internet has ever faced!
     """
-    game: str = "MegaMan Battle Network 3"
+    game = "MegaMan Battle Network 3"
     option_definitions = MMBN3Options
     topology_present = False
     remote_items = False
@@ -46,7 +45,7 @@ class MMBN3World(World):
     data_version = 0
 
     base_id = 0xB31000
-    item_name_to_id: typing.Dict[str, int] = {name: data.code for name, data in item_table.items()}
+    item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {locData.name: locData.id for locData in all_locations}
 
     web = MMBN3Web()
@@ -246,7 +245,6 @@ class MMBN3World(World):
         self.multiworld.get_location(LocationName.Hades_South_BMD, self.player).access_rule = has_press
         self.multiworld.get_location(LocationName.Secret_3_BugFrag_BMD, self.player).access_rule = has_press
         self.multiworld.get_location(LocationName.Secret_3_Island_BMD, self.player).access_rule = has_press
-        self.multiworld.get_location(LocationName.Catching_gang_members, self.player).access_rule = has_press
 
         # Set Job additional area access
         self.multiworld.get_location(LocationName.Please_deliver_this, self.player).access_rule = \
@@ -438,7 +436,6 @@ class MMBN3World(World):
         self.multiworld.get_location(LocationName.WWW_Wall_BMD, self.player).item_rule = not_undernet
         self.multiworld.get_location(LocationName.WWW_Control_Room_1_Screen, self.player).item_rule = not_undernet
         self.multiworld.get_location(LocationName.WWW_Wilys_Desk, self.player).item_rule = not_undernet
-
 
     def generate_basic(self) -> None:
         """

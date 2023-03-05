@@ -1,7 +1,4 @@
-import typing
-
-from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice
+from Options import Choice, Range, DefaultOnToggle
 
 
 class Goal(Choice):
@@ -29,6 +26,7 @@ class ExtraRanks(Range):
     range_start = 0
     range_end = 16
     default = 0
+
 
 class IncludeJobs(DefaultOnToggle):
     """

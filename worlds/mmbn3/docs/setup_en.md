@@ -44,9 +44,8 @@ generate your game. Each player of a multiworld will provide their own YAML file
 an experience customized for their taste, and different players in the same multiworld can all have different options.
 
 ### Where do I get a YAML file?
-```
-TODO once options are available
-```
+
+You can customize your settings by visiting the [MegaMan Battle Network 3 Player Settings Page](/games/MMBN3/player-settings)
 
 ## Joining a MultiWorld Game
 

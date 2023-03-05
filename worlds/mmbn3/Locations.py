@@ -1,7 +1,8 @@
 import typing
 
 from BaseClasses import Location
-from .Names import LocationName
+from .Names.LocationName import LocationName
+
 
 class LocationData:
     name: str = ""
@@ -322,10 +323,6 @@ chocolate_shop = [
     LocationData(LocationName.Chocolate_Shop_30, 0xb3110b, 0x20001c3, 0x04, 0x73F8FC, 179, [0]),
     LocationData(LocationName.Chocolate_Shop_31, 0xb3110c, 0x20001c3, 0x02, 0x73F8FC, 180, [0]),
     LocationData(LocationName.Chocolate_Shop_32, 0xb3110d, 0x20001c3, 0x01, 0x73F8FC, 181, [0]),
-]
-
-victory = [
-    LocationData(LocationName.Alpha_Defeated, None, 0x2000433, 0x01, 0x7AE20C, 0, [0])
 ]
 
 excluded_locations = [
