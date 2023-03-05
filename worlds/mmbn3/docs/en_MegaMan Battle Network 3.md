@@ -37,9 +37,9 @@ Locations in which items can be found:
 - 32 Items from the Nut-Wafer Chocolate stand in Yoka Metro Station (which have been changed to require BugFrags instead of Zenny)
 
 Items that are shuffled:
-- All of the original rewards from above (Note: Certain common chips and low amounts of zenny have been classified as "filler" and might be replaced with progression items)
-- All four Cybermetro passes, normally obtained through story progressioin
-- Eight Progressive Undernet Ranks, normally obtained through story progressioin
+- All of the original rewards from above (Note: Certain common chips and low amounts of Zenny have been classified as "filler" and might be replaced with progression items)
+- All four Cybermetro passes, normally obtained through story progression
+- Eight Progressive Undernet Ranks, normally obtained through story progression
 - Several chips required for specific Jobs or Trades that would normally be unobtainable without RNG
 - The NaviCust "Press" program, normally obtained through story progression
 - Two ExpMems and ModTools for the Navi Customizer, normally obtained through story progression
@@ -54,9 +54,9 @@ Certain Key Items are kept in their original locations:
 
 Any shuffled item can be in other players' worlds.
 
-## What does another world's item look like in Mega Man Battle Network 3
+## What does another world's item look like in Mega Man Battle Network 3?
 
-Items pickups all retain their original appearance. Text Boxes for accessing an item or given in dialog will mention what item and what player is receiving the item
+Item pickups all retain their original appearance. Text Boxes for accessing an item or given in dialog will mention what item and what player is receiving the item
 
 ## When the player receives an item, what happens?
 
