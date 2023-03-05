@@ -121,7 +121,7 @@ item_table = {
     "TM09 Take Down": ItemData(209, ItemClassification.useful, ["Unique", "TMs"]),
     "TM10 Double Edge": ItemData(210, ItemClassification.useful, ["Unique", "TMs"]),
     "TM11 Bubble Beam": ItemData(211, ItemClassification.useful, ["Unique", "TMs"]),
-    "TM12 Water Gun": ItemData(212, ItemClassification.useful, ["Unique", "TMs"]),
+    "TM12 Water Gun": ItemData(212, ItemClassification.filler, ["Unique", "TMs"]),
     "TM13 Ice Beam": ItemData(213, ItemClassification.useful, ["Unique", "TMs"]),
     "TM14 Blizzard": ItemData(214, ItemClassification.useful, ["Unique", "TMs"]),
     "TM15 Hyper Beam": ItemData(215, ItemClassification.useful, ["Unique", "TMs"]),
@@ -165,6 +165,10 @@ item_table = {
     "Silph Co Liberated": ItemData(None, ItemClassification.progression, []),
     "Become Champion": ItemData(None, ItemClassification.progression, [])
 }
+
+item_table.update({f"TM{str(i).zfill(2)}": ItemData(i + 456, ItemClassification.filler, ["Unique", "TMs"])
+                   for i in range(1, 51)})
+
 item_table.update(
     {pokemon: ItemData(None, ItemClassification.progression, []) for pokemon in pokemon_data.keys()}
 )

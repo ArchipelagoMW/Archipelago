@@ -15,7 +15,7 @@ from .options import pokemon_rb_options
 from .rom_addresses import rom_addresses
 from .text import encode_text
 from .rom import generate_output, get_base_rom_bytes, get_base_rom_path, process_pokemon_data, process_wild_pokemon,\
-    process_static_pokemon
+    process_static_pokemon, process_move_data
 from .rules import set_rules
 
 import worlds.pokemon_rb.poke_data as poke_data
@@ -40,7 +40,7 @@ class PokemonRedBlueWorld(World):
     game = "Pokemon Red and Blue"
     option_definitions = pokemon_rb_options
 
-    data_version = 6
+    data_version = 7
     required_client_version = (0, 3, 7)
 
     topology_present = False
@@ -58,6 +58,8 @@ class PokemonRedBlueWorld(World):
         self.extra_badges = {}
         self.type_chart = None
         self.local_poke_data = None
+        self.local_move_data = None
+        self.local_tms = None
         self.learnsets = None
         self.trainer_name = None
         self.rival_name = None
@@ -113,6 +115,7 @@ class PokemonRedBlueWorld(World):
             for badge in badges_to_add:
                 self.extra_badges[hm_moves.pop()] = badge
 
+        process_move_data(self)
         process_pokemon_data(self)
 
         if self.multiworld.randomize_type_chart[self.player] == "vanilla":
@@ -186,6 +189,10 @@ class PokemonRedBlueWorld(World):
 
         locations = [location for location in location_data if location.type == "Item"]
         item_pool = []
+        combined_traps = (self.multiworld.poison_trap_weight[self.player].value
+                          + self.multiworld.fire_trap_weight[self.player].value
+                          + self.multiworld.paralyze_trap_weight[self.player].value
+                          + self.multiworld.ice_trap_weight[self.player].value)
         for location in locations:
             if not location.inclusion(self.multiworld, self.player):
                 continue
@@ -200,9 +207,13 @@ class PokemonRedBlueWorld(World):
                     self.multiworld.get_location(location.name, self.player).event = True
                     location.event = True
                     item = self.create_item("Pokedex")
+            elif location.original_item.startswith("TM"):
+                if self.multiworld.randomize_tm_moves[self.player]:
+                    item = self.create_item(location.original_item.split(" ")[0])
+                else:
+                    item = self.create_item(location.original_item)
             else:
                 item = self.create_item(location.original_item)
-                combined_traps = self.multiworld.poison_trap_weight[self.player].value + self.multiworld.fire_trap_weight[self.player].value + self.multiworld.paralyze_trap_weight[self.player].value + self.multiworld.ice_trap_weight[self.player].value
                 if (item.classification == ItemClassification.filler and self.multiworld.random.randint(1, 100)
                         <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0):
                     item = self.create_item(self.select_trap())

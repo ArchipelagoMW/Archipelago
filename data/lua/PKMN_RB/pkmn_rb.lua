@@ -235,7 +235,11 @@ function main()
                             deathlink_send = true
                         end
                         if ItemsReceived[ItemIndex + 1] ~= nil then
-                            wU8(APItemAddress, ItemsReceived[ItemIndex + 1] - 172000000)
+                            item_id = ItemsReceived[ItemIndex + 1] - 172000000
+                            if item_id > 255 then
+                                item_id -= 256
+                            end
+                            wU8(APItemAddress, item_id)
                         end
                     end
                     --wU8(OptionsAddress, options)

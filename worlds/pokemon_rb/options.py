@@ -407,11 +407,19 @@ class SameTypeAttackBonus(Toggle):
     default = 1
 
 
+class RandomizeTMMoves(Toggle):
+    """Randomize the moves taught by TMs.
+    All TM items will be flagged as 'filler' items regardless of how good the move they teach are."""
+    display_name = "Randomize TM Moves"
+
+
 class TMHMCompatibility(SpecialRange):
     range_start = -1
     range_end = 100
     special_range_names = {
-        "vanilla": -1
+        "vanilla": -1,
+        "none": 0,
+        "full": 100
     }
     default = -1
 
@@ -676,6 +684,7 @@ pokemon_rb_options = {
     "confine_transform_to_ditto": ConfineTranstormToDitto,
     "start_with_four_moves": StartWithFourMoves,
     "same_type_attack_bonus": SameTypeAttackBonus,
+    "randomize_tm_moves": RandomizeTMMoves,
     "tm_same_type_compatibility": TMSameTypeCompatibility,
     "tm_normal_type_compatibility": TMNormalTypeCompatibility,
     "tm_other_type_compatibility": TMOtherTypeCompatibility,
