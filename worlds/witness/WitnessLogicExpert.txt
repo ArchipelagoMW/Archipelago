@@ -270,7 +270,7 @@ Door - 0x0368A (Stairs) - 0x03677
 159413 - 0x00614 (Lift EP) - 0x275FF & 0x03675 - True
 
 Quarry Boathouse (Quarry Boathouse) - Quarry - True - Quarry Boathouse Upper Front - 0x03852 - Quarry Boathouse Behind Staircase - 0x2769B:
-158146 - 0x034D4 (Intro Left) - True - Stars & Eraser
+158146 - 0x034D4 (Intro Left) - True - Stars & Stars + Same Colored Symbol + Eraser
 158147 - 0x021D5 (Intro Right) - True - Shapers & Eraser
 158148 - 0x03852 (Ramp Height Control) - 0x034D4 & 0x021D5 - Rotated Shapers
 158166 - 0x17CA6 (Boat Spawn) - True - Boat
@@ -411,7 +411,7 @@ Keep Tower (Keep) - Keep - 0x04F8F:
 158206 - 0x0361B (Tower Shortcut Panel) - True - True
 Door - 0x04F8F (Tower Shortcut) - 0x0361B
 158704 - 0x0360E (Laser Panel Hedges) - 0x01A0F & 0x019E7 & 0x019DC & 0x00139 - True
-158705 - 0x03317 (Laser Panel Pressure Plates) - 0x01BE9 - Shapers & Rotated Shapers & Triangles & Stars & Stars + Same Colored Symbol & Colored Squares & Black/White Squares
+158705 - 0x03317 (Laser Panel Pressure Plates) - 0x033EA & 0x01BE9 & 0x01CD3 & 0x01D3F - Shapers & Rotated Shapers & Triangles & Stars & Stars + Same Colored Symbol & Colored Squares & Black/White Squares
 Laser - 0x014BB (Laser) - 0x0360E | 0x03317
 159240 - 0x033BE (Pressure Plates 1 EP) - 0x033EA - True
 159241 - 0x033BF (Pressure Plates 2 EP) - 0x01BE9 - True
@@ -909,7 +909,7 @@ Mountain Floor 2 (Mountain Floor 2) - Mountain Floor 2 Light Bridge Room Near - 
 158430 - 0x09FD8 (Near Row 5) - 0x09FD7 - Stars & Stars + Same Colored Symbol & Rotated Shapers & Eraser
 Door - 0x09FFB (Staircase Near) - 0x09FD8
 
-Mountain Floor 2 Blue Bridge (Mountain Floor 2) - Mountain Floor 2 Beyond Bridge - TrueOneWay - Mountain Floor 2 At Door - TrueOneWay:
+Mountain Floor 2 Blue Bridge (Mountain Floor 2) - Mountain Floor 2 Beyond Bridge - TrueOneWay - Mountain Floor 2 At Door - 0x09ED8:
 
 Mountain Floor 2 At Door (Mountain Floor 2) - Mountain Floor 2 Elevator Room - 0x09EDD:
 Door - 0x09EDD (Elevator Room Entry) - 0x09ED8 & 0x09E86
@@ -1113,8 +1113,9 @@ Obelisks (EPs) - Entry - True:
 159735 - 0xFFE35 (River Obelisk Side 6) - 0x035CB & 0x035CF - True
 159740 - 0xFFE40 (Quarry Obelisk Side 1) - 0x28A7B & 0x005F6 & 0x00859 & 0x17CB9 & 0x28A4A - True
 159741 - 0xFFE41 (Quarry Obelisk Side 2) - 0x334B6 & 0x00614 & 0x0069D & 0x28A4C - True
-159742 - 0xFFE42 (Quarry Obelisk Side 3) - 0x289CF & 0x289D1 & 0x33692 - True
-159743 - 0xFFE43 (Quarry Obelisk Side 4) - 0x03E77 & 0x03E7C - True
+159742 - 0xFFE42 (Quarry Obelisk Side 3) - 0x289CF & 0x289D1 - True
+159743 - 0xFFE43 (Quarry Obelisk Side 4) - 0x33692 - True
+159744 - 0xFFE44 (Quarry Obelisk Side 5) - 0x03E77 & 0x03E7C - True
 159750 - 0xFFE50 (Town Obelisk Side 1) - 0x035C7 - True
 159751 - 0xFFE51 (Town Obelisk Side 2) - 0x01848 & 0x03D06 & 0x33530 & 0x33600 & 0x28A2F & 0x28A37 & 0x334A3 & 0x3352F - True
 159752 - 0xFFE52 (Town Obelisk Side 3) - 0x33857 & 0x33879 & 0x03C19 - True
