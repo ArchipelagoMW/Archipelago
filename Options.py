@@ -1,5 +1,6 @@
 from __future__ import annotations
 import abc
+from copy import deepcopy
 import math
 import numbers
 import typing
@@ -125,14 +126,15 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
         return bool(self.value)
 
     @classmethod
+    @abc.abstractmethod
     def from_any(cls, data: typing.Any) -> Option[T]:
-        raise NotImplementedError
+        ...
 
     if typing.TYPE_CHECKING:
-        from Generate import PlandoSettings
+        from Generate import PlandoOptions
         from worlds.AutoWorld import World
 
-        def verify(self, world: World, player_name: str, plando_options: PlandoSettings) -> None:
+        def verify(self, world: World, player_name: str, plando_options: PlandoOptions) -> None:
             pass
     else:
         def verify(self, *args, **kwargs) -> None:
@@ -164,7 +166,7 @@ class FreeText(Option):
         return value
 
 
-class NumericOption(Option[int], numbers.Integral):
+class NumericOption(Option[int], numbers.Integral, abc.ABC):
     default = 0
     # note: some of the `typing.Any`` here is a result of unresolved issue in python standards
     # `int` is not a `numbers.Integral` according to the official typestubs
@@ -574,8 +576,8 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
     def verify(self, world, player_name: str, plando_options) -> None:
         if isinstance(self.value, int):
             return
-        from Generate import PlandoSettings
-        if not(PlandoSettings.bosses & plando_options):
+        from Generate import PlandoOptions
+        if not(PlandoOptions.bosses & plando_options):
             import logging
             # plando is disabled but plando options were given so pull the option and change it to an int
             option = self.value.split(";")[-1]
@@ -750,7 +752,7 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys):
     supports_weighting = False
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
-        self.value = value
+        self.value = deepcopy(value)
 
     @classmethod
     def from_any(cls, data: typing.Dict[str, typing.Any]) -> OptionDict:
@@ -781,7 +783,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     supports_weighting = False
 
     def __init__(self, value: typing.List[typing.Any]):
-        self.value = value or []
+        self.value = deepcopy(value)
         super(OptionList, self).__init__()
 
     @classmethod
@@ -803,11 +805,11 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
 
 class OptionSet(Option[typing.Set[str]], VerifyKeys):
-    default = frozenset()
+    default: typing.Union[typing.Set[str], typing.FrozenSet[str]] = frozenset()
     supports_weighting = False
 
-    def __init__(self, value: typing.Union[typing.Set[str, typing.Any], typing.List[str, typing.Any]]):
-        self.value = set(value)
+    def __init__(self, value: typing.Iterable[str]):
+        self.value = set(deepcopy(value))
         super(OptionSet, self).__init__()
 
     @classmethod
@@ -846,7 +848,7 @@ class Accessibility(Choice):
 
 class ProgressionBalancing(SpecialRange):
     """A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
-    [0-99, default 50] A lower setting means more getting stuck. A higher setting means less getting stuck."""
+    A lower setting means more getting stuck. A higher setting means less getting stuck."""
     default = 50
     range_start = 0
     range_end = 99
@@ -923,7 +925,8 @@ class ItemLinks(OptionList):
             Optional("exclude"): [And(str, len)],
             "replacement_item": Or(And(str, len), None),
             Optional("local_items"): [And(str, len)],
-            Optional("non_local_items"): [And(str, len)]
+            Optional("non_local_items"): [And(str, len)],
+            Optional("link_replacement"): Or(None, bool),
         }
     ])
 
@@ -946,6 +949,7 @@ class ItemLinks(OptionList):
         return pool
 
     def verify(self, world, player_name: str, plando_options) -> None:
+        link: dict
         super(ItemLinks, self).verify(world, player_name, plando_options)
         existing_links = set()
         for link in self.value:
@@ -970,7 +974,9 @@ class ItemLinks(OptionList):
 
             intersection = local_items.intersection(non_local_items)
             if intersection:
-                raise Exception(f"item_link {link['name']} has {intersection} items in both its local_items and non_local_items pool.")
+                raise Exception(f"item_link {link['name']} has {intersection} "
+                                f"items in both its local_items and non_local_items pool.")
+            link.setdefault("link_replacement", None)
 
 
 per_game_common_options = {
