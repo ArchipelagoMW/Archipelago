@@ -108,9 +108,9 @@ class MMBN3World(World):
         called per player before any items or locations are created. You can set properties on your world here.
         Already has access to player options and RNG.
         """
-        if self.multiworld.ExtraRanks[self.player] > 0:
-            item_frequences[ItemName.Progressive_Undernet_Rank] = 8 + self.multiworld.ExtraRanks[self.player]
-        if not self.multiworld.IncludeJobs[self.player]:
+        if self.multiworld.extra_ranks[self.player] > 0:
+            item_frequences[ItemName.Progressive_Undernet_Rank] = 8 + self.multiworld.extra_ranks[self.player]
+        if not self.multiworld.include_jobs[self.player]:
             excluded_locations.extend([
                 LocationName.Please_deliver_this,
                 LocationName.My_Navi_is_sick,

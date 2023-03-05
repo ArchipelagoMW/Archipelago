@@ -1,4 +1,4 @@
-# Mega Man Battle Network 3
+# "MegaMan Battle Network 3
 
 ## Where is the settings page?
 
@@ -19,7 +19,7 @@ Dialog has been rewritten for both the Trader and the hat kid next to the trader
 
 The Secret Area is unlocked from the start, but still does require 100 or more Standard Chips in the Library to access. Jacking Out has been enabled in the Secret Area.
 
-## What is the goal of Mega Man Battle Network 3 when randomized?
+## What is the goal of "MegaMan Battle Network 3 when randomized?
 
 Defeat Alpha on the WWW Base. You will not be able to access the Island until you have acquired the item `GigFreez`, which will be
 the eight item in the `progressive-undernet` item sequence. You will need to acquire Undernet Ranks 10, 9, 8, 7, 3, 2, and 1 before acquiring `GigFreez`
@@ -51,7 +51,7 @@ Certain Key Items are kept in their original locations:
 
 Any shuffled item can be in other players' worlds.
 
-## What does another world's item look like in Mega Man Battle Network 3
+## What does another world's item look like in "MegaMan Battle Network 3
 
 Items pickups all retain their original appearance. Text Boxes for accessing an item or given in dialog will mention what item and what player is receiving the item
 

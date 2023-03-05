@@ -190,10 +190,8 @@ class TextArchive:
 
 
 class LocalRom:
-    def __init__(self, file, patch=True, vanillaRom=None, name=None, hash=None):
+    def __init__(self, file, name=None):
         self.name = name
-        self.hash = hash
-        self.orig_buffer = None
         self.changed_archives = {}
 
         self.rom_data = bytearray(get_patched_rom_bytes(file))

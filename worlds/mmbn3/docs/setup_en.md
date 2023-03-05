@@ -1,4 +1,4 @@
-# Setup Guide for Mega Man Battle Network 3 Archipelago
+# Setup Guide for "MegaMan Battle Network 3 Archipelago
 
 ## Important
 
@@ -11,8 +11,8 @@ As we are using Bizhawk, this guide is only applicable to Windows and Linux syst
   - Detailed installation instructions for Bizhawk can be found at the above link.
   - Windows users must run the prereq installer first, which can also be found at the above link.
 - The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
-  (select `Mega Man Battle Network 3 Client` during installation).
-- A US Mega Man Battle Network 3 Blue Rom
+  (select `"MegaMan Battle Network 3 Client` during installation).
+- A US "MegaMan Battle Network 3 Blue Rom
 
 ## Configuring Bizhawk
 
