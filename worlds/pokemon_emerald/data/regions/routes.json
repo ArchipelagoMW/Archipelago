@@ -985,32 +985,33 @@
     "events": [],
     "exits": [
       "REGION_ROUTE119/MIDDLE",
-      "REGION_ROUTE119/LOWER_WEST_BANK",
+      "REGION_ROUTE119/LOWER_ACROSS_WATER",
+      "REGION_ROUTE119/LOWER_ACROSS_RAILS",
       "REGION_ROUTE118/EAST"
     ],
     "warps": [
       "MAP_ROUTE119:1/MAP_ROUTE119_HOUSE:0"
     ]
   },
-  "REGION_ROUTE119/LOWER_WEST_BANK": {
+  "REGION_ROUTE119/LOWER_ACROSS_WATER": {
     "parent_map": "MAP_ROUTE119",
     "locations": [
-      "ITEM_ROUTE_119_ZINC",
-      "HIDDEN_ITEM_ROUTE_119_CALCIUM"
+      "ITEM_ROUTE_119_ZINC"
     ],
     "events": [],
     "exits": [
-      "REGION_ROUTE119/LOWER",
-      "REGION_ROUTE119/LOWER_ACROSS_RAILS"
+      "REGION_ROUTE119/LOWER"
     ],
     "warps": []
   },
   "REGION_ROUTE119/LOWER_ACROSS_RAILS": {
     "parent_map": "MAP_ROUTE119",
-    "locations": [],
+    "locations": [
+      "HIDDEN_ITEM_ROUTE_119_CALCIUM"
+    ],
     "events": [],
     "exits": [
-      "REGION_ROUTE119/LOWER_WEST_BANK"
+      "REGION_ROUTE119/LOWER"
     ],
     "warps": []
   },

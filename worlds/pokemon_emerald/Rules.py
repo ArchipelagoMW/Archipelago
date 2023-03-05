@@ -508,19 +508,19 @@ def set_default_rules(multiworld: MultiWorld, player: int):
 
     # Route 119
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE119/LOWER -> REGION_ROUTE119/LOWER_WEST_BANK", player),
+        multiworld.get_entrance("REGION_ROUTE119/LOWER -> REGION_ROUTE119/LOWER_ACROSS_WATER", player),
         can_surf
     )
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE119/LOWER_WEST_BANK -> REGION_ROUTE119/LOWER", player),
+        multiworld.get_entrance("REGION_ROUTE119/LOWER_ACROSS_WATER -> REGION_ROUTE119/LOWER", player),
         can_surf
     )
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE119/LOWER_WEST_BANK -> REGION_ROUTE119/LOWER_ACROSS_RAILS", player),
+        multiworld.get_entrance("REGION_ROUTE119/LOWER -> REGION_ROUTE119/LOWER_ACROSS_RAILS", player),
         lambda state: _can_use_acro_bike(state, player)
     )
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE119/LOWER_ACROSS_RAILS -> REGION_ROUTE119/LOWER_WEST_BANK", player),
+        multiworld.get_entrance("REGION_ROUTE119/LOWER_ACROSS_RAILS -> REGION_ROUTE119/LOWER", player),
         lambda state: _can_use_acro_bike(state, player)
     )
     set_rule(
