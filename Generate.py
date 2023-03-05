@@ -466,7 +466,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             if option_key not in chain(Options.common_options, Options.per_game_common_options,
                                           AutoWorldRegister.world_types[ret.game].option_definitions,
                                        {*valid_trigger_names, "plando_connections", "plando_items", "plando_texts", "triggers"}):
-                raise ValueError(f"{option_key} not a valid option name for {ret.game} and not present in triggers")
+                logging.warning(f"{option_key} not a valid option name for {ret.game} and not present in triggers")
 
     ret.name = get_choice('name', weights)
     for option_key, option in Options.common_options.items():
