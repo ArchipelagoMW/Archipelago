@@ -37,6 +37,7 @@ Currently, the following games are supported:
 * Blasphemous
 * Wargroove
 * Stardew Valley
+* The Legend of Zelda
 * Undertale
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
