@@ -295,7 +295,17 @@
       "REGION_MAGMA_HIDEOUT_1F/ENTRANCE"
     ],
     "warps": [
-      "MAP_MAGMA_HIDEOUT_1F:1/MAP_MAGMA_HIDEOUT_2F_1R:1",
+      "MAP_MAGMA_HIDEOUT_1F:1/MAP_MAGMA_HIDEOUT_2F_1R:1"
+    ]
+  },
+  "REGION_MAGMA_HIDEOUT_1F/CENTER_EXIT": {
+    "parent_map": "MAP_MAGMA_HIDEOUT_1F",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_MAGMA_HIDEOUT_1F/MAIN"
+    ],
+    "warps": [
       "MAP_MAGMA_HIDEOUT_1F:3/MAP_MAGMA_HIDEOUT_2F_3R:0"
     ]
   },
