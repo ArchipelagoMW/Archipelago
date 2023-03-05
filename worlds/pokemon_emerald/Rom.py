@@ -25,7 +25,7 @@ def generate_output(multiworld, player, output_directory: str):
     extracted_data = get_extracted_data()
 
     base_rom = get_base_rom_as_bytes()
-    with open(os.path.join(os.path.dirname(__file__), f"base_patch.bsdiff4"), "rb") as stream:
+    with open(os.path.join(os.path.dirname(__file__), f"data/base_patch.bsdiff4"), "rb") as stream:
         base_patch = bytes(stream.read())
         patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
 
