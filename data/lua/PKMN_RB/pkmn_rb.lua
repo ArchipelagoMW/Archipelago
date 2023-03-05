@@ -91,6 +91,7 @@ function generateLocationsChecked()
 	events = uRange(EventFlagAddress, 0x140)
 	missables = uRange(MissableAddress, 0x20)
 	hiddenitems = uRange(HiddenItemsAddress, 0x0E)
+	dexsanity = uRange(DexSanityAddress, 19)
 	rod = u8(RodAddress)
 
 	data = {}
@@ -100,14 +101,9 @@ function generateLocationsChecked()
 	table.foreach(hiddenitems, function(k, v) table.insert(data, v) end)
 	table.insert(data, rod)
 
-    print("6")
-	if compat > 1 then
-	    dexsanity = uRange(DexSanityAddress, 19)
-        print(dexsanity)
+ 	if compat > 1 then
 	    table.foreach(dexsanity, function(k, v) table.insert(data, v) end)
-    end
-    print("8")
-
+     end
     return data
 end
 
@@ -165,18 +161,15 @@ function receive()
     seedName = newSeedName
     local retTable = {}
     retTable["scriptVersion"] = SCRIPT_VERSION
-    print("1")
+
     if compat == nil then
-        print("2")
         compat = u8(ClientCompatibilityAddress)
-        print("3")
         if compat < 2 then
-            print("4")
             InGameAddress = 0x1A71
             OptionsAddress = 0x1A72
         end
     end
-    print("5")
+
     retTable["clientCompatibilityVersion"] = compat
     retTable["playerName"] = playerName
     retTable["seedName"] = seedName
@@ -190,9 +183,12 @@ function receive()
         curstate = STATE_UNINITIALIZED
         return
     end
+
     retTable["deathLink"] = deathlink_send
+    deathlink_send = false
 
     options = bit.bor(u8(OptionsAddress), bit.band(options, 3))
+
     if bit.band(options, 240) == 0 then
         retTable["options"] = bit.band(options, 12)
     else
@@ -201,7 +197,6 @@ function receive()
         return
     end
 
-    deathlink_send = false
     msg = json.encode(retTable).."\n"
     local ret, error = gbSocket:send(msg)
     if ret == nil then
@@ -228,13 +223,9 @@ function main()
             prevstate = curstate
         end
         if (curstate == STATE_OK) or (curstate == STATE_INITIAL_CONNECTION_MADE) or (curstate == STATE_TENTATIVELY_CONNECTED) then
-            print("A")
             if (frame % 5 == 0) then
-                print("B")
                 receive()
-                print("C")
                 if u8(InGameAddress) == 0xAC then
-                    print("D")
                     if u8(APItemAddress) == 0x00 then
                         ItemIndex = u16(APIndex)
                         if deathlink_rec == true then

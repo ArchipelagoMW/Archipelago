@@ -179,7 +179,9 @@ class DexSanity(Toggle):
     """Adds a location check for each Pokemon flagged "Owned" on your Pokedex. If accessibility is set to `locations`
     and randomize_wild_pokemon is off, catch_em_all is not `all_pokemon` or randomize_legendary_pokemon is not `any`,
     accessibility will be forced to `items` instead, as not all Dexsanity locations can be guaranteed to be considered
-    in logic."""
+    reachable in logic.
+    Location checks occur automatically when you catch a Pokemon (if you have Pokedex or require_pokedex is off).
+    Others will be obtained by talking to Professor Oak directly or by evaluating your Pokedex through Oak's PC."""
     display_name = "Dexsanity"
     default = 0
 

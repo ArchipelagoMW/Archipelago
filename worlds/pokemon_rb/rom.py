@@ -271,15 +271,14 @@ def process_wild_pokemon(self):
         for mon in mons_to_add:
             stat_base = get_base_stat_total(mon)
             candidate_locations = get_encounter_slots(self)
-            if self.multiworld.randomize_wild_pokemon[self.player].value in [1, 3]:
-                candidate_locations = [slot for slot in candidate_locations if
-                    any([poke_data.pokemon_data[slot.original_item][ "type1"] in [self.local_poke_data[mon]["type1"],
-                    self.local_poke_data[mon]["type2"]], poke_data.pokemon_data[slot.original_item]["type2"] in
-                    [self.local_poke_data[mon]["type1"], self.local_poke_data[mon]["type2"]]])]
-            if not candidate_locations:
-                candidate_locations = get_encounter_slots(self)
+            if self.multiworld.randomize_wild_pokemon[self.player].current_key in ["match_base_stats", "match_types_and_base_stats"]:
+                candidate_locations.sort(key=lambda slot: abs(get_base_stat_total(slot.item.name) - stat_base))
+            if self.multiworld.randomize_wild_pokemon[self.player].current_key in ["match_types", "match_types_and_base_stats"]:
+                candidate_locations.sort(key=lambda slot: not any([poke_data.pokemon_data[slot.original_item]["type1"] in
+                     [self.local_poke_data[mon]["type1"], self.local_poke_data[mon]["type2"]],
+                     poke_data.pokemon_data[slot.original_item]["type2"] in
+                     [self.local_poke_data[mon]["type1"], self.local_poke_data[mon]["type2"]]]))
             candidate_locations = [self.multiworld.get_location(location.name, self.player) for location in candidate_locations]
-            candidate_locations.sort(key=lambda slot: abs(get_base_stat_total(slot.item.name) - stat_base))
             for location in candidate_locations:
                 zone = " - ".join(location.name.split(" - ")[:-1])
                 if self.multiworld.catch_em_all[self.player] == "all_pokemon" and self.multiworld.area_1_to_1_mapping[self.player]:
@@ -294,7 +293,8 @@ def process_wild_pokemon(self):
                             not in poke_data.evolves_from]:
                         continue
 
-                if placed_mons[location.item.name] < 1 and location.item.name not in poke_data.first_stage_pokemon:
+                if placed_mons[location.item.name] < 2 and (location.item.name in poke_data.first_stage_pokemon
+                                                            or self.multiworld.catch_em_all[self.player]):
                     continue
 
                 if self.multiworld.area_1_to_1_mapping[self.player]:
@@ -596,6 +596,11 @@ def generate_output(self, output_directory: str):
     if self.multiworld.old_man[self.player].value == 2:
         data[rom_addresses['Option_Old_Man']] = 0x11
         data[rom_addresses['Option_Old_Man_Lying']] = 0x15
+    if self.multiworld.require_pokedex[self.player]:
+        data[rom_addresses["Require_Pokedex_A"]] = 1
+        data[rom_addresses["Require_Pokedex_B"]] = 1
+    if self.multiworld.dexsanity[self.player]:
+        data[rom_addresses["Dexsanity_Enabled"]] = 1
     money = str(self.multiworld.starting_money[self.player].value).zfill(6)
     data[rom_addresses["Starting_Money_High"]] = int(money[:2], 16)
     data[rom_addresses["Starting_Money_Middle"]] = int(money[2:4], 16)
