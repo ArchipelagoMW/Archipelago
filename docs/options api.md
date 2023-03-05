@@ -26,12 +26,13 @@ create our option class (with a docstring), give it a `display_name`, and add it
 options:
 
 ```python
+# Options.py
 class StartingSword(Toggle):
     """Adds a sword to your starting inventory."""
     display_name = "Start With Sword"
 
 
-options = {
+example_options = {
     "starting_sword": StartingSword
 }
 ```
@@ -41,7 +42,9 @@ to our world's `__init__.py`:
 
 ```python
 from worlds.AutoWorld import World
-from .options import options
+from .Options import options
+
+
 class ExampleWorld(World):
     option_definitions = options
 ```
@@ -64,11 +67,11 @@ start_with_sword = bool(self.multiworld.starting_sword[self.player].value)
 
 ## Generic Option Classes
 These options are generically available to every game automatically, but can be overridden for slightly different
-behavior, if desired. See `worlds.soe.options.py` for an example.
+behavior, if desired. See `worlds/soe/Options.py` for an example.
 
 ### Accessibility
-Sets rules for availability of locations for the player. Items is for all items available but not necessarily all
-locations, such as self-locking keys, but needs to be done by world for this to be different from locations access.
+Sets rules for availability of locations for the player. `Items` is for all items available but not necessarily all
+locations, such as self-locking keys, but needs to be set by the world for this to be different from locations access.
 
 ### ProgressionBalancing
 Algorithm for moving progression items into earlier spheres to make the gameplay experience a bit smoother. Can be
@@ -117,7 +120,8 @@ if self.multiworld.sword_availability[self.player] == "early_sword":
 
 or:
 ```python
-from .options import SwordAvailability
+from .Options import SwordAvailability
+
 if self.multiworld.sword_availability[self.player] == SwordAvailability.option_early_sword:
     do_early_sword_things()
 ```
