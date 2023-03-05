@@ -54,6 +54,7 @@ apworlds: set = {
     "Timespinner",
 }
 
+
 def download_SNI():
     print("Updating SNI")
     machine_to_go = {
