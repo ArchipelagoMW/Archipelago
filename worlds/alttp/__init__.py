@@ -117,6 +117,10 @@ class ALTTPWorld(World):
     option_definitions = alttp_options
     topology_present = True
     item_name_groups = item_name_groups
+    location_name_groups = {
+        "Hype Cave": {"Hype Cave - Top", "Hype Cave - Middle Right", "Hype Cave - Middle Left",
+                      "Hype Cave - Bottom", "Hype Cave - Generous Guy"}
+    }
     hint_blacklist = {"Triforce"}
 
     item_name_to_id = {name: data.item_code for name, data in item_table.items() if type(data.item_code) == int}
