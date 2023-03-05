@@ -162,6 +162,7 @@ def create_regions(multiworld: MultiWorld, player: int, dragon_rooms: []) -> Non
 def determine_priority_locations(world: MultiWorld, dragon_slay_check: bool) -> {}:
     locations = []
     priority_locations = {}
+    priority_count = 0
     for name, location_data in location_table.items():
         if location_data.room_id is not None:
             locations.append(name)
@@ -171,20 +172,21 @@ def determine_priority_locations(world: MultiWorld, dragon_slay_check: bool) -> 
         return priority_locations
 
     hard_location_score = 0
-    priority_count = 0
-    if dragon_slay_check:
-        dragon_index = world.random.randint(0, 3)
-        hard_location_score = 1
-        priority_count = 1
-        if dragon_index == 0:
-            priority_locations["Slay Yorgle"] = True
-        elif dragon_index == 1:
-            priority_locations["Slay Grundle"] = True
-        elif dragon_index == 2:
-            priority_locations["Slay Rhindle"] = True
-        else:
-            priority_count = 0
-            hard_location_score = 0
+
+#    Has some trouble placing with large numbers of adventure worlds if a dragon is forced to be priority
+#    if dragon_slay_check:
+#        dragon_index = world.random.randint(0, 3)
+#        hard_location_score = 1
+#        priority_count = 1
+#        if dragon_index == 0:
+#            priority_locations["Slay Yorgle"] = True
+#        elif dragon_index == 1:
+#            priority_locations["Slay Grundle"] = True
+#        elif dragon_index == 2:
+#            priority_locations["Slay Rhindle"] = True
+#        else:
+#            priority_count = 0
+#            hard_location_score = 0
 
     priority_index = world.random.randint(0, 4)
 
@@ -196,36 +198,38 @@ def determine_priority_locations(world: MultiWorld, dragon_slay_check: bool) -> 
         priority_locations["Credits Left Side"] = True
         hard_location_score += 2
         priority_count += 1
-    priority_index = world.random.randint(hard_location_score, 7)
-    if priority_index < 3:
-        priority_locations["Dungeon Vault"] = True
-        hard_location_score += 2
-        priority_count += 1
-    elif priority_index == 4:
-        priority_locations["Dungeon3"] = True
-        priority_count += 1
-    elif priority_index == 5:
-        priority_locations["Dungeon1"] = True
-        priority_count += 1
-    elif priority_index == 6:
-        priority_locations["Dungeon0"] = True
-        priority_count += 1
-
-    priority_index = world.random.randint(0, 7)
-    if priority_index < 2:
-        priority_locations["RedMaze2"] = True
-        priority_count += 1
-    elif priority_index < 4:
-        priority_locations["Red Maze Vault"] = True
-        priority_count += 1
-    elif priority_index == 4:
-        priority_locations["RedMaze1"] = True
-        priority_count += 1
-    elif priority_index == 5:
-        priority_locations["RedMaze0"] = True
-        priority_count += 1
-    else:
-        priority_locations["RedMaze3"] = True
-        priority_count += 1
+    if priority_count < 2:
+        if world.random.randint(0, 1) == 0:
+            priority_index = world.random.randint(hard_location_score, 7)
+            if priority_index < 3:
+                priority_locations["Dungeon Vault"] = True
+                hard_location_score += 2
+                priority_count += 1
+            elif priority_index == 4:
+                priority_locations["Dungeon3"] = True
+                priority_count += 1
+            elif priority_index == 5:
+                priority_locations["Dungeon1"] = True
+                priority_count += 1
+            elif priority_index == 6:
+                priority_locations["Dungeon0"] = True
+                priority_count += 1
+        else:
+            priority_index = world.random.randint(0, 7)
+            if priority_index < 2:
+                priority_locations["RedMaze2"] = True
+                priority_count += 1
+            elif priority_index < 4:
+                priority_locations["Red Maze Vault"] = True
+                priority_count += 1
+            elif priority_index == 4:
+                priority_locations["RedMaze1"] = True
+                priority_count += 1
+            elif priority_index == 5:
+                priority_locations["RedMaze0"] = True
+                priority_count += 1
+            else:
+                priority_locations["RedMaze3"] = True
+                priority_count += 1
 
     return priority_locations
