@@ -80,7 +80,7 @@ def download_SNI():
         mode = "r:xz" if source_url.endswith(".tar.xz") else "r:gz"
         with urllib.request.urlopen(source_url) as download:
             sni_dir = None
-            with tarfile.open(fileobj=io.BytesIO(download.read()), mode="r:xz") as tf:
+            with tarfile.open(fileobj=io.BytesIO(download.read()), mode=mode) as tf:
                 for member in tf.getmembers():
                     if member.name.startswith("/") or "../" in member.name:
                         raise ValueError(f"Unexpected file '{member.name}' in {source_url}")
