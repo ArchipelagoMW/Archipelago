@@ -1,12 +1,17 @@
-import unittest
 import pathlib
+import typing
+import unittest
+from argparse import Namespace
 
 import Utils
+from test.general import gen_steps
+from worlds import AutoWorld
+from worlds.AutoWorld import call_all
 
 file_path = pathlib.Path(__file__).parent.parent
 Utils.local_path.cached_path = file_path
 
-from BaseClasses import MultiWorld, CollectionState, ItemClassification
+from BaseClasses import MultiWorld, CollectionState, ItemClassification, Item
 from worlds.alttp.Items import ItemFactory
 
 
@@ -92,3 +97,153 @@ class TestBase(unittest.TestCase):
         new_items.remove(missing_item)
         items = ItemFactory(new_items, 1)
         return self.get_state(items)
+
+
+class WorldTestBase(unittest.TestCase):
+    options: typing.Dict[str, typing.Any] = {}
+    multiworld: MultiWorld
+
+    game: typing.ClassVar[str]  # define game name in subclass, example "Secret of Evermore"
+    auto_construct: typing.ClassVar[bool] = True
+    """ automatically set up a world for each test in this class """
+
+    def setUp(self) -> None:
+        if self.auto_construct:
+            self.world_setup()
+
+    def world_setup(self, seed: typing.Optional[int] = None) -> None:
+        if type(self) is WorldTestBase or \
+                (hasattr(WorldTestBase, self._testMethodName)
+                 and not self.run_default_tests and
+                 getattr(self, self._testMethodName).__code__ is
+                 getattr(WorldTestBase, self._testMethodName, None).__code__):
+            return  # setUp gets called for tests defined in the base class. We skip world_setup here.
+        if not hasattr(self, "game"):
+            raise NotImplementedError("didn't define game name")
+        self.multiworld = MultiWorld(1)
+        self.multiworld.game[1] = self.game
+        self.multiworld.player_name = {1: "Tester"}
+        self.multiworld.set_seed(seed)
+        args = Namespace()
+        for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].option_definitions.items():
+            setattr(args, name, {
+                1: option.from_any(self.options.get(name, getattr(option, "default")))
+            })
+        self.multiworld.set_options(args)
+        self.multiworld.set_default_common_options()
+        for step in gen_steps:
+            call_all(self.multiworld, step)
+
+    # methods that can be called within tests
+    def collect_all_but(self, item_names: typing.Union[str, typing.Iterable[str]]) -> None:
+        """Collects all pre-placed items and items in the multiworld itempool except those provided"""
+        if isinstance(item_names, str):
+            item_names = (item_names,)
+        for item in self.multiworld.get_items():
+            if item.name not in item_names:
+                self.multiworld.state.collect(item)
+
+    def get_item_by_name(self, item_name: str) -> Item:
+        """Returns the first item found in placed items, or in the itempool with the matching name"""
+        for item in self.multiworld.get_items():
+            if item.name == item_name:
+                return item
+        raise ValueError("No such item")
+
+    def get_items_by_name(self, item_names: typing.Union[str, typing.Iterable[str]]) -> typing.List[Item]:
+        """Returns actual items from the itempool that match the provided name(s)"""
+        if isinstance(item_names, str):
+            item_names = (item_names,)
+        return [item for item in self.multiworld.itempool if item.name in item_names]
+
+    def collect_by_name(self, item_names: typing.Union[str, typing.Iterable[str]]) -> typing.List[Item]:
+        """ collect all of the items in the item pool that have the given names """
+        items = self.get_items_by_name(item_names)
+        self.collect(items)
+        return items
+
+    def collect(self, items: typing.Union[Item, typing.Iterable[Item]]) -> None:
+        """Collects the provided item(s) into state"""
+        if isinstance(items, Item):
+            items = (items,)
+        for item in items:
+            self.multiworld.state.collect(item)
+
+    def remove(self, items: typing.Union[Item, typing.Iterable[Item]]) -> None:
+        """Removes the provided item(s) from state"""
+        if isinstance(items, Item):
+            items = (items,)
+        for item in items:
+            if item.location and item.location.event and item.location in self.multiworld.state.events:
+                self.multiworld.state.events.remove(item.location)
+            self.multiworld.state.remove(item)
+
+    def can_reach_location(self, location: str) -> bool:
+        """Determines if the current state can reach the provide location name"""
+        return self.multiworld.state.can_reach(location, "Location", 1)
+
+    def can_reach_entrance(self, entrance: str) -> bool:
+        """Determines if the current state can reach the provided entrance name"""
+        return self.multiworld.state.can_reach(entrance, "Entrance", 1)
+
+    def count(self, item_name: str) -> int:
+        """Returns the amount of an item currently in state"""
+        return self.multiworld.state.count(item_name, 1)
+
+    def assertAccessDependency(self,
+                               locations: typing.List[str],
+                               possible_items: typing.Iterable[typing.Iterable[str]]) -> None:
+        """Asserts that the provided locations can't be reached without the listed items but can be reached with any
+         one of the provided combinations"""
+        all_items = [item_name for item_names in possible_items for item_name in item_names]
+
+        self.collect_all_but(all_items)
+        for location in self.multiworld.get_locations():
+            self.assertEqual(self.multiworld.state.can_reach(location), location.name not in locations)
+        for item_names in possible_items:
+            items = self.collect_by_name(item_names)
+            for location in locations:
+                self.assertTrue(self.can_reach_location(location))
+            self.remove(items)
+
+    def assertBeatable(self, beatable: bool):
+        """Asserts that the game can be beaten with the current state"""
+        self.assertEqual(self.multiworld.can_beat_game(self.multiworld.state), beatable)
+
+    # following tests are automatically run
+    @property
+    def run_default_tests(self) -> bool:
+        """Not possible or identical to the base test that's always being run already"""
+        return (self.options
+                or self.setUp.__code__ is not WorldTestBase.setUp.__code__
+                or self.world_setup.__code__ is not WorldTestBase.world_setup.__code__)
+
+    @property
+    def constructed(self) -> bool:
+        """A multiworld has been constructed by this point"""
+        return hasattr(self, "game") and hasattr(self, "multiworld")
+
+    def testAllStateCanReachEverything(self):
+        """Ensure all state can reach everything and complete the game with the defined options"""
+        if not (self.run_default_tests and self.constructed):
+            return
+        with self.subTest("Game", game=self.game):
+            excluded = self.multiworld.exclude_locations[1].value
+            state = self.multiworld.get_all_state(False)
+            for location in self.multiworld.get_locations():
+                if location.name not in excluded:
+                    with self.subTest("Location should be reached", location=location):
+                        self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
+            with self.subTest("Beatable"):
+                self.multiworld.state = state
+                self.assertBeatable(True)
+
+    def testEmptyStateCanReachSomething(self):
+        """Ensure empty state can reach at least one location with the defined options"""
+        if not (self.run_default_tests and self.constructed):
+            return
+        with self.subTest("Game", game=self.game):
+            state = CollectionState(self.multiworld)
+            locations = self.multiworld.get_reachable_locations(state, 1)
+            self.assertGreater(len(locations), 0,
+                               "Need to be able to reach at least one location to get started.")

@@ -1,7 +1,7 @@
 import zipfile
 from typing import *
 
-from flask import request, flash, redirect, url_for, render_template
+from flask import request, flash, redirect, url_for, render_template, Markup
 
 from WebHostLib import app
 
@@ -12,7 +12,7 @@ def allowed_file(filename):
     return filename.endswith(('.txt', ".yaml", ".zip"))
 
 
-from Generate import roll_settings, PlandoSettings
+from Generate import roll_settings, PlandoOptions
 from Utils import parse_yamls
 
 
@@ -25,7 +25,7 @@ def check():
         else:
             file = request.files['file']
             options = get_yaml_data(file)
-            if type(options) == str:
+            if isinstance(options, str):
                 flash(options)
             else:
                 results, _ = roll_options(options)
@@ -38,7 +38,7 @@ def mysterycheck():
     return redirect(url_for("check"), 301)
 
 
-def get_yaml_data(file) -> Union[Dict[str, str], str]:
+def get_yaml_data(file) -> Union[Dict[str, str], str, Markup]:
     options = {}
     # if user does not select file, browser also
     # submit an empty part without filename
@@ -49,6 +49,10 @@ def get_yaml_data(file) -> Union[Dict[str, str], str]:
 
             with zipfile.ZipFile(file, 'r') as zfile:
                 infolist = zfile.infolist()
+
+                if any(file.filename.endswith(".archipelago") for file in infolist):
+                    return Markup("Error: Your .zip file contains an .archipelago file. "
+                                 'Did you mean to <a href="/uploads">host a game</a>?')
 
                 for file in infolist:
                     if file.filename.endswith(banned_zip_contents):
@@ -65,7 +69,7 @@ def get_yaml_data(file) -> Union[Dict[str, str], str]:
 def roll_options(options: Dict[str, Union[dict, str]],
                  plando_options: Set[str] = frozenset({"bosses", "items", "connections", "texts"})) -> \
         Tuple[Dict[str, Union[str, bool]], Dict[str, dict]]:
-    plando_options = PlandoSettings.from_set(set(plando_options))
+    plando_options = PlandoOptions.from_set(set(plando_options))
     results = {}
     rolled_results = {}
     for filename, text in options.items():

@@ -71,7 +71,7 @@ def create():
 
         del file_data
 
-        with open(os.path.join(target_folder, 'configs', game_name + ".yaml"), "w") as f:
+        with open(os.path.join(target_folder, "configs", game_name + ".yaml"), "w", encoding="utf-8") as f:
             f.write(res)
 
         # Generate JSON files for player-settings pages
@@ -105,11 +105,6 @@ def create():
 
                     if sub_option_id == option.default:
                         this_option["defaultValue"] = sub_option_name
-
-                this_option["options"].append({
-                    "name": "Random",
-                    "value": "random",
-                })
 
                 if option.default == "random":
                     this_option["defaultValue"] = "random"

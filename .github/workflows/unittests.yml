@@ -23,6 +23,8 @@ jobs:
             os: windows-latest
           - python: {version: '3.10'}  # current
             os: windows-latest
+          - python: {version: '3.10'}  # current
+            os: macos-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -37,4 +39,4 @@ jobs:
         python ModuleUpdate.py --yes --force --append "WebHostLib/requirements.txt"
     - name: Unittests
       run: |
-        pytest test
+        pytest
