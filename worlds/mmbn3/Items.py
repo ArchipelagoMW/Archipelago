@@ -337,8 +337,7 @@ item_frequencies: typing.Dict[str, int] = {
     ItemName.zenny_800z: 2,
     ItemName.zenny_1000z: 2,
     ItemName.zenny_1200z: 2,
-    ItemName.bugfrag_01: 5
-
+    ItemName.bugfrag_01: 5,
 }
 all_items: typing.List[ItemData] = keyItemList + subChipList + chipList + programList + zennyList + bugFragList
 item_table: typing.Dict[str, ItemData] = {item.itemName: item for item in all_items}
