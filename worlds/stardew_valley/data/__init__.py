@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from typing import List
 
-from .. import data
-
 
 @dataclass(frozen=True)
 class SeedItem:
@@ -25,7 +23,7 @@ def load_crop_csv():
     except ImportError:
         from importlib_resources import files
 
-    with files(data).joinpath("crops.csv").open() as file:
+    with files(__package__).joinpath("crops.csv").open() as file:
         reader = csv.DictReader(file)
         crops = []
         seeds = []
