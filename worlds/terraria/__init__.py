@@ -61,6 +61,8 @@ class TerrariaWorld(World):
 
         for location in self.ter_locations:
             menu.locations.append(TerrariaLocation(self.player, location, location_name_to_id[location], menu))
+        for event in events:
+            menu.locations.append(TerrariaLocation(self.player, event, None, menu))
         self.multiworld.regions.append(menu)
 
     def create_items(self) -> None:

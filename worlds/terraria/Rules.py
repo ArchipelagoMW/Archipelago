@@ -154,11 +154,106 @@ def auric(s, p, c, pick_pow): return cosmic_anvil(s, p, c, pick_pow) and s.has("
 # 4
 def draedons_forge(s, p, c, pick_pow): return cosmic_anvil(s, p, c, pick_pow) and adamantite() and goblin_tinkerer(s, p) and auric(s, p, c, pick_pow) and exo() and ascendant_spirit()
 
-# s is state
-# p is player
-# c is config
+# Old stuff above
+
+def npc_count(x, count_pets = True, count_santa = True):
+    npcs = [
+        "Guide", "Golfer", "Merchant", "Nurse", "Dye Trader", "Demolitionist", "Tavernkeep",
+        "Stylist", "Painter", "Goblin Tinkerer", "Arms Dealer", "Angler", "Dryad", "Party Girl",
+        "Witch Doctor", "Clothier", "Mechanic", "Zoologist", "Wizard", "Truffle", "Tax Collector",
+        "Pirate", "Steampunker", "Cyborg", "Princess",
+    ]
+    # I don't want to do the logic for the bunny lol
+    if count_pets: npcs += ["Cat", "Dog"]
+    if count_santa: npcs.append("Santa Claus")
+
+    return x.count(npcs)
+
+def mech_boss_count(x):
+    return x.count(["Post-The Twins", "Post-The Destroyer", "Post-Skeletron Prime"])
+
+# `s` is state
+# `p` is player
+# `c` is config
+class Ctx:
+    def __init__(self, s, p, c):
+        self.s = s
+        self.p = p
+        self.c = c
+
+    def has(self, item):
+        self.s.has(item, self.p)
+
+    def count(self, items):
+        count = 0
+        for item in items:
+            if self.has(item):
+                count += 1
+        return count
+
 def get_rules(p, c):
+    # TODO It's probably really slow to create this dictionary so many times!
     return {
+        # Events
+        "Guide": lambda s: not c.alt or s.has("Post-King Slime", p),
+        "Golfer": lambda s: not c.alt or s.has("Post-King Slime", p),
+        "Merchant": lambda s: not c.alt or s.has("Post-Eye of Cthulhu", p),
+        "Nurse": lambda s: s.has("Merchant", p),
+        "Dye Trader": lambda s: npc_count(Ctx(s, p, c), True) >= 4,
+        "Dye Vat": lambda s: s.has("Dye Trader", p),
+        "Demolitionist": lambda s: s.has("Merchant", p),
+        "Tavernkeep": lambda s: s.has("Post-Evil Boss", p),
+        "Stylist": lambda s: not c.alt or s.has("Post-Evil Boss", p),
+        "Painter": lambda s: npc_count(Ctx(s, p, c), True) >= 8,
+        "Goblin Tinkerer": lambda s: s.has("Post-Goblin Army", p),
+        "Arms Dealer": lambda s: c.alt or s.has("Post-Goblin Army", p),
+        "Old Man": lambda s: (not c.alt or s.has("Post-Old One's Army Tier 1", p)),
+        "Angler": lambda s: (not c.alt or s.has("Post-Old One's Army Tier 1", p)),
+        "Hive": lambda s: not c.alt or s.has("Post-King Slime", p),
+        "Bee Wax": lambda s: s.can_reach("Queen Bee", "Location", p),
+        "Dryad": lambda s: s.has("Post-Queen Bee", p) or (not c.alt and s.has_any({
+            "Post-Eye of Cthulhu", "Post-Evil Boss", "Post-Skeletron",
+        }, p)),
+        "Party Girl": lambda s: npc_count(Ctx(s, p, c), True) >= 14, # Alt: Spawns as often as other NPCs
+        "Witch Doctor": lambda s: s.has("Post-Queen Bee", p),
+        "Clothier": lambda s: s.has("Post-Skeletron", p),
+        "Mechanic": lambda s: s.has("Post-Skeletron", p),
+        "Dungeon": lambda s: s.has("Post-Skeletron", p),
+        "Zoologist": lambda s: not c.alt or s.has("Post-Deerclops", p),
+        "Cat": lambda s: s.has("Zoologist", p),
+        "Dog": lambda s: s.has("Zoologist", p), # You can get a dog before any other items
+        "Wizard": lambda s: s.has("Hardmode", p), #
+        "Truffle": lambda s: s.has("Hardmode", p), #
+        "Tax Collector": lambda s: s.has_all({"Dryad", "Hardmode"}, p),
+        "Pirate": lambda s: s.has("Post-Pirate Invasion", p),
+        "Steampunker": lambda s: mech_boss_count(Ctx(s, p, c)) >= 1, #
+        "Cyborg": lambda s: s.has("Post-Plantera", p), #
+        "Princess": lambda s: s.has_all({
+            "Guide", "Golfer", "Merchant", "Nurse", "Dye Trader", "Demolitionist", "Tavernkeep",
+            "Stylist", "Painter", "Goblin Tinkerer", "Arms Dealer", "Old Man", "Angler", "Dryad",
+            "Party Girl", "Witch Doctor", "Clothier", "Mechanic", "Zoologist", "Wizard", "Truffle",
+            "Tax Collector", "Pirate", "Steampunker", "Cyborg",
+        }, p),
+        "Christmas": lambda s: s.can_reach("Frost Moon", "Location", p),
+        "Santa Claus": lambda s: s.has("Post-Frost Legion") and s.has("Christmas", p),
+
+        # Calamity Events
+        "Calamity Evil Boss Summon": lambda s: not c.alt or s.has("Post-Evil Boss", p),
+
+        # Solidifier: King Slime
+        # Dye Vat: Misc
+        # Tinkerer's Workshop: Post-Goblin Army
+        # Imbuing Station: Post-Queen Bee
+        # Alchemy Table: Post-Skeletron
+        # Crystal Ball: Hardmode, Post-Deerclops?
+        # Blend-O-Matic: Post-1 Mech Boss
+        # Steampunk Boiler: Post-1 Mech Boss, Post-Eye, Post-Evil, Post-Skeletron
+        # Chlorophyte Extractinator: Post-3 Mech Bosses
+        # Autohammer: Hardmode, Post-Plantera
+        # Lihzahrd Furnace: Post-Plantera or good pick
+        # Cauldron: Post-Queen Bee, Pumpkin Moon
+
+        # Locations
         "Timber!!": None,
         "Benched": None,
         "Stop! Hammer Time!": None,
@@ -181,45 +276,85 @@ def get_rules(p, c):
         "There are Some Who Call Him...": None,
         "Deceiver of Fools": None,
         "Pretty in Pink": None,
-        "Dye Hard": lambda s: dye_trader(s, p, c),
+        "Dye Hard": lambda s: s.has("Dye Trader", p),
         "Into Orbit": None,
         "Heliophobia": None,
         "A Rather Blustery Day": None,
-        "Servant-in-Training": None,
-        "10 Fishing Quests": None,
-        "Trout Monkey": None,
-        "Glorious Golden Pole": None,
-        "Fast and Fishious": None,
-        "Supreme Helper Minion!": None,
+        "Servant-in-Training": lambda s: s.has("Angler", p),
+        "10 Fishing Quests": lambda s: s.has("Angler", p),
+        "Trout Monkey": lambda s: s.has("Angler", p),
+        "Glorious Golden Pole": lambda s: s.has("Angler", p),
+        "Fast and Fishious": lambda s: s.has("Angler", p),
+        "Supreme Helper Minion!": lambda s: s.has("Angler", p),
         "Torch God": None,
         "Like a Boss": None,
         "Sticky Situation": None,
-        "King Slime": None,
+        "King Slime": lambda s: not c.alt or s.has("Dye Vat", p),
         "The Cavalry": None,
-        "Desert Scourge": None,
+        "Desert Scourge": lambda s: not c.alt or s.can_reach("King Slime", "Location", p),
         "Giant Clam": lambda s: s.has("Post-Desert Scourge", p),
         "Bloodbath": None,
         "Til Death...": None,
         "Quiet Neighborhood": None,
-        "Feeling Petty": None,
+        "Feeling Petty": lambda s: s.has_any({"Cat", "Dog"}, p),
         "Eye of Cthulhu": None,
         "Acid Rain Tier 1": lambda s: s.has("Post-Eye of Cthulhu", p),
         "Crabulon": None,
         "Smashing, Poppet!": None,
-        "Eater of Worlds or Brain of Cthulhu": None,
-        "Leading Landlord": None,
-        "Completely Awesome": None,
+        "Evil Boss": None,
+        "Leading Landlord": lambda s: s.has_all({"Guide", "Clothier", "Zoologist"}, p)
+            or s.has_all({"Merchant", "Golfer", "Nurse"}, p)
+            or s.has_all({"Zoologist", "Witch Doctor"}, p)
+            or s.has_all({"Golfer", "Angler"}, p)
+            or (s.has_all({"Nurse", "Arms Dealer"}, p) and s.has_any({"Wizard", "Hardmode"}, p))
+            or (
+                s.has_all({"Tavernkeep", "Demolitionist"}, p)
+                and s.has_any({"Goblin Tinkerer", "Hardmode"}, p)
+            )
+            or (s.has("Party Girl", p) and (
+                s.has_all({"Hardmode", "Wizard"}, p)
+                or s.has_all({"Hardmode", "Zoologist"}, p)
+                or s.has_all({"Wizard", "Zoologist"}, p)
+                or s.has_all({"Wizard", "Stylist"}, p)
+                or s.has_all({"Zoologist", "Stylist"}, p)
+            ))
+            or (s.has_all({"Wizard", "Golfer"}, p) and s.has_any({"Hardmode", "Merchant"}), p)
+            or s.has_all({"Demolitionist", "Tavernkeep"}, p)
+            or s.has_all({"Goblin Tinkerer", "Mechanic"}, p)
+            or s.has_all({"Clothier", "Truffle", "Tax Collector"}, p)
+            or s.has_all({"Dye Trader", "Arms Dealer", "Painter"}, p)
+            or s.has_all({"Arms Dealer", "Nurse"}, p)
+            or s.has_all({"Steampunker", "Cyborg"}, p)
+            or s.has_all({"Painter", "Dryad"}, p)
+            or s.has_all({"Witch Doctor", "Dryad", "Guide"}, p)
+            or s.has_all({"Stylist", "Dye Trader"}, p)
+            or (s.has("Angler", p) and (
+                s.has_all({"Demolitionist", "Party Girl"}, p)
+                or s.has_all({"Demolitionist", "Tax Collector"}, p)
+                or s.has_all({"Party Girl", "Tax Collector"}, p)
+            ))
+            or s.has_all({"Pirate", "Angler"}, p)
+            or s.has_all({"Mechanic", "Goblin Tinkerer"}, p)
+            or s.has_all({"Tax Collector", "Merchant"}, p)
+            or (s.has("Cyborg", p) and (
+                s.has_all({"Steampunker", "Pirate"}, p)
+                or s.has_all({"Steampunker", "Stylist"}, p)
+                or s.has_all({"Pirate", "Stylist"}, p)
+            ))
+            or s.has_all({"Truffle", "Guide"}, p)
+            or s.has("Princess", p),
+        "Completely Awesome": lambda s: s.has("Arms Dealer"),
         "Goblin Army": None,
-        "Old One's Army Tier 1": lambda s: tavernkeep(s, p),
+        "Old One's Army Tier 1": lambda s: s.has("Tavernkeep", p),
         "Archaeologist": None,
-        "Where's My Honey?": lambda s: hive(s, p, c),
-        "Queen Bee": lambda s: queen_bee(s, p, c),
-        "Not the Bees!": lambda s: queen_bee(s, p, c),
+        "Where's My Honey?": lambda s: s.has("Hive", p),
+        "Queen Bee": lambda s: s.has("Hive", p),
+        "Not the Bees!": lambda s: s.can_reach("Queen Bee", "Location", p) and s.has("Bee Wax", p),
         "The Frequent Flyer": None,
-        "The Hive Mind or The Perforators": lambda s: cyst(s, p, c),
-        "Skeletron": lambda s: skeletron(s, p, c),
-        "Dungeon Heist": lambda s: dungeon(s, p, c),
-        "Jolly Jamboree": lambda s: party_girl(s, p, c),
+        "Calamity Evil Boss": lambda s: s.has("Calamity Evil Boss Summon", p),
+        "Skeletron": lambda s: s.has("Old Man", p) or s.has_all({"Clothier", "Dungeon"}, p), # Alt: Clothier Voodoo Doll is much more common
+        "Dungeon Heist": lambda s: s.has("Dungeon", p),
+        "Jolly Jamboree": lambda s: s.has("Party Girl", p),
         "Deerclops": lambda s: None,
         "It's Getting Hot in Here": lambda s: None,
         "Rock Bottom": lambda s: None,
