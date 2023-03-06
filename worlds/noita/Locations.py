@@ -18,15 +18,23 @@ class LocationData(NamedTuple):
 
 class Orbs(IntEnum):
     main_path = 1
-    main_world = 2
-    parallel_worlds = 3
+    side_path = 2
+    main_world = 3
+    parallel_worlds = 4
 
 
 class Bosses(IntEnum):
     main_path = 1
-    main_world = 2
-    parallel_worlds = 3
-# flag 0 = none, flag 1 = main path, flag 2 = main world, flag 3 = parallel worlds
+    side_path = 2
+    main_world = 3
+    parallel_worlds = 4
+
+
+class HiddenChests(IntEnum):
+    main_path = 1
+    side_path = 2
+    main_world = 3
+    parallel_worlds = 4
 
 
 # todo: figure out how to add umlauts and stuff
@@ -100,6 +108,51 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Secret Shop Item 3": LocationData(111044),
         "Secret Shop Item 4": LocationData(111045),
     },
+    "Mines Hidden Chests": {
+        f"Mines Chest {i + 1}": LocationData(112000 + i, "hc", HiddenChests.main_path) for i in range(20)
+    },
+    "Collapsed Mines Hidden Chests": {
+        f"Collapsed Mines Chest {i + 1}": LocationData(112020 + i, "hc", HiddenChests.side_path) for i in range(20)
+    },
+    "Coal Pits Hidden Chests": {
+        f"Coal Pits Chest {i + 1}": LocationData(112040 + i, "hc", HiddenChests.main_path) for i in range(20)
+    },
+    "Fungal Caverns Hidden Chests": {
+        f"Fungal Caverns Chest {i + 1}": LocationData(112060 + i, "hc", HiddenChests.side_path) for i in range(20)
+    },
+    "Snowy Depths Hidden Chests": {
+        f"Snowy Depths Chest {i + 1}": LocationData(112080 + i, "hc", HiddenChests.main_path) for i in range(20)
+    },
+    "Hiisi Base Hidden Chests": {
+        f"Hiisi Base Chest {i + 1}": LocationData(112100 + i, "hc", HiddenChests.main_path) for i in range(20)
+    },
+    "Underground Jungle Hidden Chests": {
+        f"Underground Jungle Chest {i + 1}": LocationData(112120 + i, "hc", HiddenChests.main_path) for i in range(20)
+    },
+    "Lukki Lair Hidden Chests": {
+        f"Lukki Lair Chest {i + 1}": LocationData(112140 + i, "hc", HiddenChests.side_path) for i in range(20)
+    },
+    "Vault Hidden Chests": {
+        f"Vault Chest {i + 1}": LocationData(112160 + i, "hc", HiddenChests.main_path) for i in range(20)
+    },
+    "Temple of the Art Hidden Chests": {
+        f"Temple of the Art Chest {i + 1}": LocationData(112180 + i, "hc", HiddenChests.main_path) for i in range(20)
+    },
+    "Overgrown Cavern Hidden Chests": {
+        f"Overgrown Cavern Chest {i + 1}": LocationData(112200 + i, "hc", HiddenChests.main_world) for i in range(20)
+    },
+    "Wizards' Den Hidden Chests": {
+        f"Wizards' Den Chest {i + 1}": LocationData(112220 + i, "hc", HiddenChests.main_world) for i in range(20)
+    },
+    "Power Plant Hidden Chests": {
+        f"Power Plant Chest {i + 1}": LocationData(112240 + i, "hc", HiddenChests.main_world) for i in range(20)
+    },
+    "Frozen Vault Hidden Chests": {
+        f"Frozen Vault Chest {i + 1}": LocationData(112260 + i, "hc", HiddenChests.main_world) for i in range(20)
+    },
+    "The Tower Hidden Chests": {
+        f"The Tower Chest {i + 1}": LocationData(112280 + i, "hc", HiddenChests.main_world) for i in range(20)
+    },
     "Floating Island": {
         "Floating Island Orb": LocationData(110501, "orb", Orbs.main_path),
     },
@@ -115,29 +168,29 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Frozen Vault Orb": LocationData(110503, "orb", Orbs.main_world),
     },
     "Ancient Laboratory": {
-        "Ylialkemisti": LocationData(110700, "boss", Bosses.main_path),
+        "Ylialkemisti": LocationData(110700, "boss", Bosses.side_path),
     },
     "Abyss Orb Room": {
         "Sauvojen Tuntija": LocationData(110640, "boss", Bosses.main_path),
         "Abyss Orb": LocationData(110508, "orb", Orbs.main_path),
     },
     "Below Lava Lake": {
-        "Lava Lake Orb": LocationData(110504, "orb", Orbs.main_path),
+        "Lava Lake Orb": LocationData(110504, "orb", Orbs.side_path),
     },
     "Magical Temple": {
-        "Magical Temple Orb": LocationData(110506, "orb", Orbs.main_path),
+        "Magical Temple Orb": LocationData(110506, "orb", Orbs.side_path),
     },
     "Underground Jungle": {
         "Suomuhauki": LocationData(110620, "boss", Bosses.main_path),
     },
     "Lukki Lair": {
-        "Lukki Lair Orb": LocationData(110507, "orb", Orbs.main_path),
+        "Lukki Lair Orb": LocationData(110507, "orb", Orbs.side_path),
     },
     "Temple of the Art": {
         "Gate Guardian": LocationData(110660, "boss", Bosses.main_path),
     },
     "The Laboratory": {
-        "Kolmisilma": LocationData(110600, "boss", Bosses.main_path),
+        "Kolmisilma": LocationData(110600, "boss", Bosses.side_path),
     },
     "Snow Chasm": {
         "Unohdettu": LocationData(110670, "boss", Bosses.main_world),

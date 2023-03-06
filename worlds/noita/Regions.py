@@ -15,10 +15,20 @@ def create_region(world: MultiWorld, player: int, region_name: str) -> Region:
         location = Locations.NoitaLocation(player, location_name, location_data.id, new_region)
         opt_orbs = world.orbs_as_checks[player].value
         opt_bosses = world.bosses_as_checks[player].value
+        opt_paths = world.path_option[player].value
         ltype = location_data.ltype
         flag = location_data.flag
-        if flag == 0 or ltype == "orb" and flag <= opt_orbs or ltype == "boss" and flag <= opt_bosses:
+        if flag == 0 and ltype != "orb" or "boss":
             new_region.locations.append(location)
+        if opt_orbs and ltype == "orb":
+            if flag <= opt_paths:
+                new_region.locations.append(location)
+        if opt_bosses and ltype == "boss":
+            if flag <= opt_paths:
+                new_region.locations.append(location)
+        # todo: figure out what to do to put in the hidden chests
+        # if flag == 0 or ltype == "orb" and flag <= opt_orbs or ltype == "boss" and flag <= opt_bosses:
+        #     new_region.locations.append(location)
 
     return new_region
 
@@ -56,10 +66,10 @@ def create_connections(player: int, regions: Dict[str, Region]) -> None:
 
 def create_regions(world: MultiWorld, player: int) -> Dict[str, Region]:
     # NOTE: Forest hack is for chests
-    regions = { name: create_region(world, player, name) for name in noita_regions if name != "Forest" }
+    regions = {name: create_region(world, player, name) for name in noita_regions if name != "Forest"}
 
     num_locations = sum(len(region.locations) for region in regions.values())
-    regions.update({ "Forest": create_chests(world, player, num_locations) })
+    regions.update({"Forest": create_chests(world, player, num_locations)})
 
     return regions
 
@@ -73,7 +83,7 @@ def create_all_regions_and_connections(world: MultiWorld, player: int) -> None:
 
 
 noita_connections: Dict[str, Set[str]] = {
-    "Menu": {"Forest",},
+    "Menu": {"Forest"},
     "Forest": {"Mines", "Floating Island", "Desert", "Snowy Wasteland"},
     "Snowy Wasteland": {"Frozen Vault", "Lake", "Forest"},
     "Lake": {"Snowy Wasteland", "Desert"},

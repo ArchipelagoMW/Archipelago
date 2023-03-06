@@ -10,6 +10,14 @@ class TotalLocations(Range):
     default = 100
 
 
+class HiddenChests(Range):
+    """Number of hidden chest checks added to the applicable biomes."""
+    display_name = "Hidden Chest Locations"
+    range_start = 0
+    range_end = 20
+    default = 5
+
+
 class Traps(DefaultOnToggle):
     """Whether negative effects on the Noita world are added to the item pool."""
     display_name = "Traps"
@@ -27,29 +35,33 @@ class VictoryCondition(Choice):
     default = 0
 
 
-class OrbsAsChecks(Choice):
+class PathOption(Choice):
+    """Choose where you would like checks to be placed. This affects which bosses, orbs, and chest checks are enabled.
+    Main Path includes the main 7 biomes you typically go through to get to the final boss and .
+    Side Path includes areas off the main path, but not ones you need to go way out of your way for.
+    Main World includes the full world (excluding parallel worlds)."""
+    display_name = "Path Option"
+    option_main_path = 1
+    option_side_path = 2
+    option_main_world = 3
+    default = 1
+
+
+class OrbsAsChecks(Toggle):  # todo: rework this to work with the paths option
     """Decides whether finding the orbs that naturally spawn in the world count as checks.
-    The Main Path option includes only the floating island, lava lake, abyss orb room, magical temple, and lukki lair
-    orbs. If you are doing the Greed Ending, this option or the No Orbs option are recommended.
-    The Main World option makes only orbs found in the main world give checks. Recommended if doing the Pure Ending.
-    The Main and Parallel Worlds option makes orbs found in the east and west worlds count too. Recommended if doing the Peaceful Ending.
-    Note that the parallel lava lake orbs still do not spawn in the regular game, so there will be 31 orbs total."""
+    The orbs included is based off of your Path Option choice.
+    The Main Path option includes only the floating island and abyss orb room orbs.
+    The Side Path option includes the Main Path, magical temple, lukki lair, and lava lake orbs.
+    The Main World option includes all 11 orbs."""
     display_name = "Orbs as Location Checks"
-    option_no_orbs = 0
-    option_main_path = 1
-    option_main_world = 2
-    option_main_and_parallel_worlds = 3
-    default = 0
 
 
-class BossesAsChecks(Choice):
+class BossesAsChecks(Toggle):  # todo: rework this to work with the paths option
     """Makes bosses count as location checks. The boss only needs to die, you do not need the kill credit.
-    The Main Path option includes only the Kolmisilma, Sauvojen Tuntija, Ylialkemisti, Suomuhauki, and Gate Guardian."""
+    The Main Path option includes Gate Guardian, Suomuhauki, and Kolmisilma.
+    The Side Path option includes the Main Path bosses, Sauvojen Tuntija, and Ylialkemisti.
+    The Main World option includes all 12 bosses."""
     display_name = "Bosses as Location Checks"
-    option_no_bosses = 0
-    option_main_path = 1
-    option_all_bosses = 2
-    default = 0
 
 
 noita_options: Dict[str, type(Option)] = {
@@ -57,6 +69,7 @@ noita_options: Dict[str, type(Option)] = {
     "bad_effects": Traps,
     "death_link": DeathLink,
     "victory_condition": VictoryCondition,
+    "path_option": PathOption,
     "orbs_as_checks": OrbsAsChecks,
     "bosses_as_checks": BossesAsChecks,
 }
