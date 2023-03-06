@@ -81,10 +81,9 @@ class MessengerWorld(World):
             notes = self.multiworld.random.sample(NOTES, k=len(NOTES))
             precollected_notes_amount = NotesNeeded.range_end - self.multiworld.notes_needed[self.player]
             if precollected_notes_amount:
-                notes = notes[:precollected_notes_amount]
-                for note in notes:
+                for note in notes[:precollected_notes_amount]:
                     self.multiworld.push_precollected(self.create_item(note))
-                itempool += [self.create_item(note) for note in notes[precollected_notes_amount:]]
+            itempool += [self.create_item(note) for note in notes[precollected_notes_amount:]]
 
         itempool += [self.create_item(item)
                      for item in self.item_name_to_id

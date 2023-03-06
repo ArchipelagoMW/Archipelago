@@ -26,7 +26,7 @@ class MessengerRegion(Region):
         if self.multiworld.shuffle_seals[self.player] and self.name not in {"Searing Crags", "Tower HQ"}:
             for seal_loc in SEALS:
                 if seal_loc.startswith(self.name.split(" ")[0]):
-                    self.locations.append(MessengerLocation(seal_loc, self, name_to_id.get(loc, None)))
+                    self.locations.append(MessengerLocation(seal_loc, self, name_to_id.get(seal_loc, None)))
 
     def add_exits(self, exits: Set[str]) -> None:
         for exit in exits:
@@ -41,7 +41,7 @@ class MessengerLocation(Location):
     def __init__(self, name: str, parent: MessengerRegion, loc_id: Optional[int]):
         super().__init__(parent.player, name, loc_id, parent)
         if loc_id is None:
-            self.place_locked_item(parent.multiworld.worlds[self.player].create_item(name))
+            self.place_locked_item(MessengerItem(name, parent.player, None))
 
 
 class MessengerItem(Item):
