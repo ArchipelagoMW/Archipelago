@@ -56,7 +56,7 @@ class KH2Context(CommonContext):
                             "SoraInvo":          0x25CC, "DonaldInvo": 0x2678, "GoofyInvo": 0x278E}
         self.kh2seedname = None
         self.kh2slotdata = None
-        self.inventoryslot = {}
+        self.itemamount = {}
         if "localappdata" in os.environ:
             self.game_communication_path = os.path.expandvars(r"%localappdata%\KH2AP")
         self.amountOfPieces = 0
@@ -266,7 +266,7 @@ class KH2Context(CommonContext):
             itemcode = self.item_name_to_data[itemname]
             # cannot give items during loading screens
             # 0x8E9DA3=load 0xAB8BC7=black 0x2A148E8=controable 0x715568=room transition
-            while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Now, 1), "big") == 255:
+            while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Now, 1), "big") in {255,1}:
                 await asyncio.sleep(0.5)
             if itemcode.ability:
                 if char == "Donald":
@@ -311,10 +311,11 @@ class KH2Context(CommonContext):
                         or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Slot1 + 0x1B2, 1), "big") < 5:
                     await asyncio.sleep(1)
                 amount = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
-                if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0xAB9078, 1), "big") in {4,5}:
+                if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0xAB9078, 1), "big") in {1024, 1280}:
                     return
                 self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,
                                          (amount + 1).to_bytes(1, 'big'), 1)
+                self.itemamount.update({itemname: amount+1})
         except Exception as e:
             if self.kh2connected:
                 logger.info("Connection Lost.")
@@ -325,6 +326,8 @@ class KH2Context(CommonContext):
         while not self.kh2connected:
             await asyncio.sleep(1)
         try:
+            while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Now, 1), "big") in {255, 1}:
+                await asyncio.sleep(0.5)
             svestate = self.kh2.read_short(self.kh2.base_address + self.sveroom)
             await self.roomSave(args, svestate)
         except Exception as e:
@@ -340,26 +343,42 @@ class KH2Context(CommonContext):
                 # cannot give item on death screen so waits until they are not dead
                 while deathstate in {1024, 1280}:
                     deathstate = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.onDeath, 2), "big")
-                    await asyncio.sleep(0.5)
+                    await asyncio.sleep(0.2)
                 # checking if the player is out of battle. If player gets mickey/peter pan there is no need for them to get the item again.
                 if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A0EAC4 + 0x40, 1), "big") == 0:
                     # give item because they have not room saved and are dead
                     for item in args['items']:
-                        itemname = self.lookup_id_to_item[item.item]
-                        itemcode = self.item_name_to_data[itemname]
-                        #  magic is handled on its own due to being unique on obtaining
-                        if item.item in {0x130024, 0x130025, 0x130026, 0x130027, 0x130028, 0x130029}:
-                            continue
-                        if itemname in exclusionItem_table["Ability"] \
-                        and itemcode.memaddr not in {0x05E, 0x062, 0x066, 0x06A, 0x234}:
-                            self.kh2seedsave["SoraInvo"] += 2
-                        if itemname in DonaldAbility_Table.keys():
-                            asyncio.create_task(self.give_item(item, "Donald"))
-                        elif itemname in GoofyAbility_Table.keys():
-                            asyncio.create_task(self.give_item(item, "Goofy"))
-                        else:
-                            asyncio.create_task(self.give_item(item, "Sora"))
-            await asyncio.sleep(0.5)
+                        # if location is not already sent AND it is not from starting invo.
+                        # you should not die in the place you get the starting items.
+                        if item.location not in self.kh2seedsave["checked_locations"][str(item.player)] and item.location !=-2:
+                            itemname = self.lookup_id_to_item[item.item]
+                            itemcode = self.item_name_to_data[itemname]
+                            #  magic is handled on its own due to being unique on obtaining
+                            if item.item in {0x130024, 0x130025, 0x130026, 0x130027, 0x130028, 0x130029}:
+                                continue
+                            if itemname in exclusionItem_table["Ability"] \
+                                and itemcode.memaddr not in {0x05E, 0x062, 0x066, 0x06A, 0x234}:
+                                self.kh2seedsave["SoraInvo"] += 2
+                            if itemname in DonaldAbility_Table.keys():
+                                asyncio.create_task(self.give_item(item, "Donald"))
+                            elif itemname in GoofyAbility_Table.keys():
+                                asyncio.create_task(self.give_item(item, "Goofy"))
+                            else:
+                                asyncio.create_task(self.give_item(item, "Sora"))
+                                await asyncio.sleep(0.1)
+                                if itemname in self.itemamount:
+                                    currentItemAmount = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemcode.memaddr, 1), "big")
+                                    if currentItemAmount != self.itemamount[itemname]:
+                                        while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x8E9DA3, 1), "big") != 0 \
+                                                or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0xAB8BC7, 1) ,"big") != 0 \
+                                                or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A148E8, 1), "big") != 0 \
+                                                or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Now, 1), "big") == 0 \
+                                                or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x715568, 1), "big") == 0 \
+                                                or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Slot1 + 0x1B2, 1), "big") < 5:
+                                            await asyncio.sleep(1)
+                                    self.kh2.write_bytes(self.kh2.base_address + self.Save + itemcode.memaddr,
+                                                         (self.itemamount[itemname]).to_bytes(1, 'big'), 1)
+            await asyncio.sleep(0.2)
         try:
             for item in args['items']:
                 if item.location not in self.kh2seedsave["checked_locations"][str(item.player)] \
@@ -480,9 +499,10 @@ async def kh2_watcher(ctx: KH2Context):
                     if int.from_bytes(ctx.kh2.read_bytes(ctx.kh2.base_address + ctx.Save + 0x36B2, 1), "big") > 0 \
                             and int.from_bytes(ctx.kh2.read_bytes(ctx.kh2.base_address + ctx.Save + 0x36B3, 1), "big") > 0 \
                             and int.from_bytes(ctx.kh2.read_bytes(ctx.kh2.base_address + ctx.Save + 0x36B4, 1), "big") > 0:
-                        if ctx.kh2slotdata['FinalXemnas'] == 1 and ctx.finalxemnas:
-                            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                            ctx.finished_game = True
+                        if ctx.kh2slotdata['FinalXemnas'] == 1:
+                            if ctx.finalxemnas:
+                                await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                                ctx.finished_game = True
                         else:
                             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                             ctx.finished_game = True
@@ -493,9 +513,10 @@ async def kh2_watcher(ctx: KH2Context):
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B2, (1).to_bytes(1, 'big'), 1)
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B3, (1).to_bytes(1, 'big'), 1)
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B4, (1).to_bytes(1, 'big'), 1)
-                        if ctx.kh2slotdata['FinalXemnas'] == 1 and ctx.finalxemnas:
-                            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                            ctx.finished_game = True
+                        if ctx.kh2slotdata['FinalXemnas'] == 1:
+                            if ctx.finalxemnas:
+                                await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                                ctx.finished_game = True
                         else:
                             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                             ctx.finished_game = True
@@ -508,9 +529,10 @@ async def kh2_watcher(ctx: KH2Context):
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B2, (1).to_bytes(1, 'big'), 1)
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B3, (1).to_bytes(1, 'big'), 1)
                         ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B4, (1).to_bytes(1, 'big'), 1)
-                        if ctx.kh2slotdata['FinalXemnas'] == 1 and ctx.finalxemnas:
-                            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                            ctx.finished_game = True
+                        if ctx.kh2slotdata['FinalXemnas'] == 1:
+                            if ctx.finalxemnas:
+                                await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                                ctx.finished_game = True
                         else:
                             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                             ctx.finished_game = True
