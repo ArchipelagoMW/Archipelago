@@ -39,6 +39,7 @@ class RandomizeWildPokemon(Choice):
     """Randomizes the starter pokemon in Professor Birch's bag
     Vanilla: Starters are unchanged
     Completely Random: There are no restrictions"""
+    display_name = "Randomize Wild Pokemon"
     default = 0
     option_vanilla = 0
     option_completely_random = 1
@@ -47,6 +48,7 @@ class RandomizeStarters(Choice):
     """Randomizes the starter pokemon in Professor Birch's bag
     Vanilla: Starters are unchanged
     Completely Random: There are no restrictions"""
+    display_name = "Randomize Starters"
     default = 0
     option_vanilla = 0
     option_completely_random = 1
@@ -58,7 +60,7 @@ class MinCatchRate(Range):
     Legendaries are often in the single digits
     Fully evolved pokemon are often double digits
     Pidgey is 255"""
-    display_name = "Exp Modifier"
+    display_name = "Minimum Catch Rate"
     range_start = 3
     range_end = 255
     default = 3
@@ -83,6 +85,7 @@ class TmCompatibility(Choice):
     Vanilla: Compatibility is unchanged
     Fully Compatible: Every species can learn any TM
     Completely Random: Compatibility is 50/50 for every TM (does not remain consistent across evolution)"""
+    display_name = "TM Compatibility"
     default = 0
     option_vanilla = 0
     option_fully_compatible = 1
@@ -93,6 +96,7 @@ class HmCompatibility(Choice):
     Vanilla: Compatibility is unchanged
     Fully Compatible: Every species can learn any HM
     Completely Random: Compatibility is 50/50 for every HM (does not remain consistent across evolution)"""
+    display_name = "HM Compatibility"
     default = 0
     option_vanilla = 0
     option_fully_compatible = 1

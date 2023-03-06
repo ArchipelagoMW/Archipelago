@@ -7,7 +7,7 @@ from .Locations import PokemonEmeraldLocation, create_location_label_to_id_map, 
 from .Options import options, get_option_value
 from .Regions import create_regions
 from .Rom import generate_output
-from .Rules import set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules, add_hidden_item_itemfinder_rules
+from .Rules import set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules, add_hidden_item_itemfinder_rules, set_enable_ferry_rules
 from .SanityCheck import sanity_check
 
 
@@ -55,6 +55,7 @@ class PokemonEmeraldWorld(World):
         overworld_items_option = get_option_value(self.multiworld, self.player, "overworld_items")
         hidden_items_option = get_option_value(self.multiworld, self.player, "hidden_items")
         npc_gifts_option = get_option_value(self.multiworld, self.player, "npc_gifts")
+        enable_ferry_option = get_option_value(self.multiworld, self.player, "enable_ferry")
 
         tags = set(["Badge", "HM", "KeyItem", "Rod"])
         if (overworld_items_option == Toggle.option_true):
@@ -63,6 +64,8 @@ class PokemonEmeraldWorld(World):
             tags.add("HiddenItem")
         if (npc_gifts_option == Toggle.option_true):
             tags.add("NpcGift")
+        if (enable_ferry_option == Toggle.option_true):
+            tags.add("Ferry")
 
         create_regions(self.multiworld, self.player)
         create_locations_with_tags(self.multiworld, self.player, tags)
@@ -100,6 +103,8 @@ class PokemonEmeraldWorld(World):
             set_hidden_item_rules(self.multiworld, self.player)
         if (get_option_value(self.multiworld, self.player, "npc_gifts") == Toggle.option_true):
             set_npc_gift_rules(self.multiworld, self.player)
+        if (get_option_value(self.multiworld, self.player, "enable_ferry") == Toggle.option_true):
+            set_enable_ferry_rules(self.multiworld, self.player)
 
         if (get_option_value(self.multiworld, self.player, "require_itemfinder") == Toggle.option_true):
             add_hidden_item_itemfinder_rules(self.multiworld, self.player)

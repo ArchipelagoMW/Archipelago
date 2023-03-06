@@ -135,7 +135,7 @@
   },
   "NPC_GIFT_RECEIVED_SS_TICKET": {
     "label": "Littleroot Town - Gift from Norman",
-    "tags": ["KeyItem"]
+    "tags": ["Ferry"]
   },
 
   "NPC_GIFT_RECEIVED_OLD_ROD": {
