@@ -44,14 +44,28 @@ def generate_output(multiworld, player, output_directory: str):
     # Set encounter tables
     _randomize_encounter_tables(multiworld.per_slot_randoms[player], patched_rom)
 
-    # Set exp multiplier
-    numerator = min(get_option_value(multiworld, player, "exp_multiplier"), 2**16 - 1)
-    _set_bytes_little_endian(patched_rom, extracted_data["misc_rom_addresses"]["sExpMultiplier"], 2, numerator)
-    _set_bytes_little_endian(patched_rom, extracted_data["misc_rom_addresses"]["sExpMultiplier"] + 2, 2, 100)
+    # Options
+    # struct ArchipelagoOptions
+    # {
+    #     bool8 isFerryEnabled;
+    #     bool8 areTrainersBlind;
+    #     u16 expMultiplierNumerator;
+    #     u16 expMultiplierDenominator;
+    # } __attribute__((packed));
+    options_address = extracted_data["misc_rom_addresses"]["gArchipelagoOptions"]
+
+    # Set ferry enabled
+    enable_ferry = 1 if get_option_value(multiworld, player, "enable_ferry") == Toggle.option_true else 0
+    _set_bytes_little_endian(patched_rom, options_address + 0, 1, enable_ferry)
 
     # Set blind trainers
-    are_blind = 1 if get_option_value(multiworld, player, "blind_trainers") == Toggle.option_true else 0
-    _set_bytes_little_endian(patched_rom, extracted_data["misc_rom_addresses"]["sAreTrainersBlind"], 1, are_blind)
+    blind_trainers = 1 if get_option_value(multiworld, player, "blind_trainers") == Toggle.option_true else 0
+    _set_bytes_little_endian(patched_rom, options_address + 1, 1, blind_trainers)
+
+    # Set exp multiplier
+    numerator = min(get_option_value(multiworld, player, "exp_multiplier"), 2**16 - 1)
+    _set_bytes_little_endian(patched_rom, options_address + 2, 2, numerator)
+    _set_bytes_little_endian(patched_rom, options_address + 4, 2, 100)
 
     # Write Output
     outfile_player_name = f"_P{player}"
@@ -122,7 +136,6 @@ def _randomize_encounter_tables(random, patched_rom):
 
 def _create_randomized_encounter_table(random, default_slots):
     default_pokemon = [p_id for p_id in set(default_slots)]
-    new_pokemon = []
 
     new_pokemon_map: Dict[int, int] = {}
     for pokemon_id in default_pokemon:

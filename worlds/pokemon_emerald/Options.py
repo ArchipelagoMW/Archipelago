@@ -50,6 +50,10 @@ class BlindTrainers(Toggle):
     """Causes trainers to not start a battle with you unless you talk to them"""
     display_name = "Blind Trainers"
 
+class EnableFerry(Toggle):
+    """The ferry between Slateport, Lilycove, and the Battle Frontier can be used if you have the S.S. Ticket"""
+    display_name = "Enable Ferry"
+
 options: Dict[str, Option] = {
   "badges": Badges,
   "hms": HMs,
@@ -60,7 +64,8 @@ options: Dict[str, Option] = {
   "npc_gifts": NpcGifts,
   "require_itemfinder": HiddenItemsRequireItemfinder,
   "exp_multiplier": ExpMultiplier,
-  "blind_trainers": BlindTrainers
+  "blind_trainers": BlindTrainers,
+  "enable_ferry": EnableFerry
 }
 
 def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, Dict, List]:
