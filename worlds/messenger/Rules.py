@@ -1,6 +1,6 @@
-from typing import Dict, Callable, Optional, Tuple, Union, TYPE_CHECKING
+from typing import Dict, Callable, Optional, Tuple, Union, TYPE_CHECKING, List, Iterable
 
-from BaseClasses import CollectionState, MultiWorld, Location, Region, Entrance
+from BaseClasses import CollectionState, MultiWorld, Location, Region, Entrance, Item
 from .Options import Accessibility, Goal
 from .Constants import NOTES, PHOBEKINS
 from ..generic.Rules import add_rule, set_rule
@@ -120,23 +120,24 @@ def location_item_name(state: CollectionState, location: str, player: int) -> Op
     return location.item.name, location.item.player
 
 
-def allow_self_locking_items(spot: Union[Location, Region], *item_names: str) -> None:
+def allow_self_locking_items(spot: Union[Location, Region], *item_names: Union[str, Iterable[str]]) -> None:
     """
     Sets rules on the supplied spot, such that the supplied item_name(s) can possibly be placed there.
     :param spot: Location or Region that the item(s) are allowed to be placed in
     :param item_names: item name or names that are allowed to be placed in the Location or Region
     """
     player = spot.player
+    if isinstance(item_names[0], Iterable):
+        item_names = tuple(item_names[0])
 
-    def set_always_allow(location: Location, rule: Callable) -> None:
+    def set_always_allow(location: Location, rule: Callable[[CollectionState, Item], bool]) -> None:
         location.always_allow = rule
 
     def add_allowed_rules(area: Union[Location, Entrance], location: Location) -> None:
         for item_name in item_names:
             add_rule(area, lambda state, item_name=item_name:
                      location_item_name(state, location.name, player) == (item_name, player), "or")
-            set_always_allow(location, lambda state, item, item_name=item_name:
-                             item.name == item_name and item.player == player)
+        set_always_allow(location, lambda state, item: item.name in [item_name for item_name in item_names])
 
     if isinstance(spot, Region):
         for entrance in spot.entrances:
