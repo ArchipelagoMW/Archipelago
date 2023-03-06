@@ -11,12 +11,13 @@ import urllib.request
 import io
 import json
 import threading
-import platform
+import subprocess
+import pkg_resources
+
 from collections.abc import Iterable
 from hashlib import sha3_512
 from pathlib import Path
-import subprocess
-import pkg_resources
+
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 try:
