@@ -70,7 +70,8 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                         fill_restrictive(multiworld, base_state, excluded_locations,
                                          item_pool, single_player_placement, lock, swap, on_place)
                         for loc in excluded_locations:
-                            loc.progress_type = LocationProgressType.EXCLUDED
+                            if not loc.item:
+                                loc.progress_type = LocationProgressType.EXCLUDED
                 break
             item_to_place = items_to_place.pop(0)
 
