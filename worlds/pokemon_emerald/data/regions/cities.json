@@ -864,10 +864,11 @@
   },
   "REGION_MAUVILLE_CITY_BIKE_SHOP/MAIN": {
     "parent_map": "MAP_MAUVILLE_CITY_BIKE_SHOP",
-    "locations": [],
-    "events": [
-      "EVENT_RECEIVE_BIKE"
+    "locations": [
+      "NPC_GIFT_RECEIVED_ACRO_BIKE",
+      "NPC_GIFT_RECEIVED_MACH_BIKE"
     ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_MAUVILLE_CITY_BIKE_SHOP:0,1/MAP_MAUVILLE_CITY:2"

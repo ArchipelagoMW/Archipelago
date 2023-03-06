@@ -15,6 +15,10 @@ class RandomizeKeyItems(Toggle):
     a location or region (e.g. Devon Scope, Letter, Basement Key)"""
     display_name = "Randomize Key Items"
 
+class RandomizeBikes(Toggle):
+    """Adds the mach bike and acro bike to the pool"""
+    display_name = "Randomize Bikes"
+
 class RandomizeRods(Toggle):
     """Adds fishing rods to the pool"""
     display_name = "Randomize Fishing Rods"
@@ -110,6 +114,7 @@ options: Dict[str, Option] = {
   "badges": RandomizeBadges,
   "hms": RandomizeHms,
   "key_items": RandomizeKeyItems,
+  "bikes": RandomizeBikes,
   "rods": RandomizeRods,
   "overworld_items": RandomizeOverworldItems,
   "hidden_items": RandomizeHiddenItems,

@@ -65,6 +65,15 @@
     "tags": ["HM"]
   },
 
+  "NPC_GIFT_RECEIVED_ACRO_BIKE": {
+    "label": "Mauville City - Acro Bike",
+    "tags": ["Bike"]
+  },
+  "NPC_GIFT_RECEIVED_MACH_BIKE": {
+    "label": "Mauville City - Mach Bike",
+    "tags": ["Bike"]
+  },
+
   "NPC_GIFT_RECEIVED_WAILMER_PAIL": {
     "label": "Route 104 - Wailmer Pail from Flower Shop Lady",
     "tags": ["KeyItem"]
@@ -78,7 +87,7 @@
     "tags": ["KeyItem"]
   },
   "NPC_GIFT_RECEIVED_COIN_CASE": {
-    "label": "Mauville City - Gift from Woman in House",
+    "label": "Mauville City - Trade Harbor Mail with Woman in House",
     "tags": ["KeyItem"]
   },
   "NPC_GIFT_RECEIVED_METEORITE": {

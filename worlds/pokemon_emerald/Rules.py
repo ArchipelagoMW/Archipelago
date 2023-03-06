@@ -23,9 +23,9 @@ def _can_dive(state: CollectionState, player: int):
     return state.has("HM08 Dive", player) and state.has("Mind Badge", player)
 
 def _can_use_mach_bike(state: CollectionState, player: int):
-    return state.has("EVENT_RECEIVE_BIKE", player)
+    return state.has("Mach Bike", player)
 def _can_use_acro_bike(state: CollectionState, player: int):
-    return state.has("EVENT_RECEIVE_BIKE", player)
+    return state.has("Acro Bike", player)
 
 def _defeated_n_gym_leaders(state: CollectionState, player: int, n: int):
     num_gym_leaders_defeated = 0
@@ -334,6 +334,14 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     set_rule(
         multiworld.get_entrance("REGION_ROUTE110/MAIN -> REGION_ROUTE110/NORTH_WATER", player),
         can_surf
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE/WEST -> REGION_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE/EAST", player),
+        lambda state: _can_use_acro_bike(state, player) or _can_use_mach_bike(state, player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE/WEST -> REGION_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE/EAST", player),
+        lambda state: _can_use_acro_bike(state, player) or _can_use_mach_bike(state, player)
     )
 
     # Mauville City

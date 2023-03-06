@@ -57,7 +57,7 @@ class PokemonEmeraldWorld(World):
         npc_gifts_option = get_option_value(self.multiworld, self.player, "npc_gifts")
         enable_ferry_option = get_option_value(self.multiworld, self.player, "enable_ferry")
 
-        tags = set(["Badge", "HM", "KeyItem", "Rod"])
+        tags = set(["Badge", "HM", "KeyItem", "Rod", "Bike"])
         if (overworld_items_option == Toggle.option_true):
             tags.add("OverworldItem")
         if (hidden_items_option == Toggle.option_true):
@@ -76,6 +76,7 @@ class PokemonEmeraldWorld(World):
         hms_option = get_option_value(self.multiworld, self.player, "hms")
         key_items_option = get_option_value(self.multiworld, self.player, "key_items")
         rods_option = get_option_value(self.multiworld, self.player, "rods")
+        bikes_option = get_option_value(self.multiworld, self.player, "bikes")
 
         item_locations: List[PokemonEmeraldLocation] = []
         for region in self.multiworld.regions:
@@ -90,6 +91,8 @@ class PokemonEmeraldWorld(World):
                     item_locations = [location for location in item_locations if "KeyItem" not in location.tags]
                 if (rods_option == Toggle.option_false):
                     item_locations = [location for location in item_locations if "Rod" not in location.tags]
+                if (bikes_option == Toggle.option_false):
+                    item_locations = [location for location in item_locations if "Bike" not in location.tags]
 
         self.multiworld.itempool += [self.create_item_by_code(location.default_item_code) for location in item_locations]
 
@@ -127,6 +130,8 @@ class PokemonEmeraldWorld(World):
             convert_unrandomized_items_to_events("HM")
         if (get_option_value(self.multiworld, self.player, "rods") == Toggle.option_false):
             convert_unrandomized_items_to_events("Rod")
+        if (get_option_value(self.multiworld, self.player, "bikes") == Toggle.option_false):
+            convert_unrandomized_items_to_events("Bike")
         if (get_option_value(self.multiworld, self.player, "key_items") == Toggle.option_false):
             convert_unrandomized_items_to_events("KeyItem")
 
