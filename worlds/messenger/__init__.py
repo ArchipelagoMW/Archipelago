@@ -66,14 +66,9 @@ class MessengerWorld(World):
             self.required_seals = int(self.multiworld.percent_seals_required[self.player].value / 100 * self.total_seals)
 
     def create_regions(self) -> None:
-        for region in REGIONS:
-            MessengerRegion(region, self)
-
-        for reg_name, exits in REGION_CONNECTIONS.items():
-            region = self.multiworld.get_region(reg_name, self.player)
-            if type(region) is not MessengerRegion:
-                raise KeyError(f"Tried to get {region} for player {self.player} but isn't of type {MessengerRegion}")
-            region.add_exits(exits)
+        for region in [MessengerRegion(reg_name, self) for reg_name in REGIONS]:
+            if region.name in REGION_CONNECTIONS:
+                region.add_exits(REGION_CONNECTIONS[region.name])
 
     def create_items(self) -> None:
         itempool: List[MessengerItem] = []

@@ -27,8 +27,8 @@ class AllSealsRequired(MessengerTestBase):
     def testChestAccess(self) -> None:
         """Defaults to a total of 45 power seals in the pool and required."""
         with self.subTest("Access Dependency"):
-            self.assertEqual(len([seal for seal in self.multiworld.itempool if seal.name == "Power Seal"])
-                             , self.multiworld.total_seals[self.player])
+            self.assertEqual(len([seal for seal in self.multiworld.itempool if seal.name == "Power Seal"]),
+                             self.multiworld.total_seals[self.player])
             locations = ["Shop Chest"]
             items = [["Power Seal"]]
             self.assertAccessDependency(locations, items)

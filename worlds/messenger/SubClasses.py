@@ -1,4 +1,4 @@
-from typing import Set, TYPE_CHECKING, Optional
+from typing import Set, TYPE_CHECKING, Optional, Dict
 
 from BaseClasses import Region, Location, Item, ItemClassification, Entrance
 from .Constants import SEALS, NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
@@ -14,20 +14,19 @@ else:
 class MessengerRegion(Region):
     def __init__(self, name: str, world: MessengerWorld):
         super().__init__(name, world.player, world.multiworld)
-        self.locations_lookup = self.multiworld.worlds[self.player].location_name_to_id
-        self.add_locations()
+        self.add_locations(self.multiworld.worlds[self.player].location_name_to_id)
         world.multiworld.regions.append(self)
 
-    def add_locations(self) -> None:
+    def add_locations(self, name_to_id: Dict[str, int]) -> None:
         for loc in REGIONS[self.name]:
-            self.locations.append(MessengerLocation(loc, self))
+            self.locations.append(MessengerLocation(loc, self, name_to_id.get(loc, None)))
         if self.name == "The Shop" and self.multiworld.goal[self.player] > Goal.option_open_music_box:
-            self.locations.append(MessengerLocation("Shop Chest", self))
+            self.locations.append(MessengerLocation("Shop Chest", self, name_to_id.get("Shop Chest", None)))
         # putting some dumb special case for searing crags and ToT so i can split them into 2 regions
         if self.multiworld.shuffle_seals[self.player] and self.name not in {"Searing Crags", "Tower HQ"}:
             for seal_loc in SEALS:
                 if seal_loc.startswith(self.name.split(" ")[0]):
-                    self.locations.append(MessengerLocation(seal_loc, self))
+                    self.locations.append(MessengerLocation(seal_loc, self, name_to_id.get(loc, None)))
 
     def add_exits(self, exits: Set[str]) -> None:
         for exit in exits:
@@ -39,8 +38,7 @@ class MessengerRegion(Region):
 class MessengerLocation(Location):
     game = "The Messenger"
 
-    def __init__(self, name: str, parent: MessengerRegion):
-        loc_id = parent.locations_lookup[name] if name in parent.locations_lookup else None
+    def __init__(self, name: str, parent: MessengerRegion, loc_id: Optional[int]):
         super().__init__(parent.player, name, loc_id, parent)
         if loc_id is None:
             self.place_locked_item(parent.multiworld.worlds[self.player].create_item(name))
