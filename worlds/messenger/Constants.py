@@ -34,12 +34,6 @@ USEFUL_ITEMS = [
     "Windmill Shuriken"
 ]
 
-JUNK = [
-    "Time Shard",  # currently just send in quantity of 69. Need to engineer a way to send this in quantities.
-    "Candle",
-    "Seashell",
-]
-
 # item_name_to_id needs to be deterministic and match upstream
 ALL_ITEMS = [
     *NOTES,

@@ -1,4 +1,4 @@
-from typing import Set, TYPE_CHECKING
+from typing import Set, TYPE_CHECKING, Optional
 
 from BaseClasses import Region, Location, Item, ItemClassification, Entrance
 from .Constants import SEALS, NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
@@ -23,12 +23,11 @@ class MessengerRegion(Region):
             self.locations.append(MessengerLocation(loc, self))
         if self.name == "The Shop" and self.multiworld.goal[self.player] > Goal.option_open_music_box:
             self.locations.append(MessengerLocation("Shop Chest", self))
-        if self.multiworld.shuffle_seals[self.player]:
-            # putting some dumb special case for searing crags and ToT so i can split them into 2 regions
-            seal_locs = [loc for loc in SEALS
-                         if loc.startswith(self.name.split(" ")[0]) and self.name not in {"Searing Crags", "Tower HQ"}]
-            for seal_loc in seal_locs:
-                self.locations.append(MessengerLocation(seal_loc, self))
+        # putting some dumb special case for searing crags and ToT so i can split them into 2 regions
+        if self.multiworld.shuffle_seals[self.player] and self.name not in {"Searing Crags", "Tower HQ"}:
+            for seal_loc in SEALS:
+                if seal_loc.startswith(self.name.split(" ")[0]):
+                    self.locations.append(MessengerLocation(seal_loc, self))
 
     def add_exits(self, exits: Set[str]) -> None:
         for exit in exits:
@@ -50,7 +49,7 @@ class MessengerLocation(Location):
 class MessengerItem(Item):
     game = "The Messenger"
 
-    def __init__(self, name: str, player: int, item_id: int = None):
+    def __init__(self, name: str, player: int, item_id: Optional[int] = None):
         if name in {*NOTES, *PROG_ITEMS, *PHOBEKINS} or item_id is None:
             item_class = ItemClassification.progression
         elif name in USEFUL_ITEMS:

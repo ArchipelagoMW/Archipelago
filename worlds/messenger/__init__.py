@@ -2,7 +2,7 @@ from typing import Dict, Any, List, Optional
 
 from BaseClasses import Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS, JUNK, ALWAYS_LOCATIONS, SEALS, ALL_ITEMS
+from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS, ALWAYS_LOCATIONS, SEALS, ALL_ITEMS
 from .Options import messenger_options, NotesNeeded, Goal, PowerSeals
 from .Regions import REGIONS, REGION_CONNECTIONS
 from .Rules import MessengerRules, set_messenger_rules
@@ -35,11 +35,11 @@ class MessengerWorld(World):
     game = "The Messenger"
 
     item_name_groups = {
-        "Notes": NOTES,
-        "Keys": NOTES,
+        "Notes": set(NOTES),
+        "Keys": set(NOTES),
         "Crest": {"Sun Crest", "Moon Crest"},
-        "Phobe": PHOBEKINS,
-        "Phobekin": PHOBEKINS,
+        "Phobe": set(PHOBEKINS),
+        "Phobekin": set(PHOBEKINS),
         "Shuriken": {"Windmill Shuriken"},
     }
 
@@ -56,8 +56,8 @@ class MessengerWorld(World):
     web = MessengerWeb()
 
     rules: MessengerRules
-    total_seals: int = None
-    required_seals: int = None
+    total_seals: Optional[int] = None
+    required_seals: Optional[int] = None
 
     def generate_early(self) -> None:
         self.rules = MessengerRules(self.player)

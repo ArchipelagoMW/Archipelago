@@ -1,7 +1,7 @@
 from typing import Dict, Callable, Optional, Tuple, Union, TYPE_CHECKING, List, Iterable
 
 from BaseClasses import CollectionState, MultiWorld, Location, Region, Entrance, Item
-from .Options import Accessibility, Goal
+from .Options import MessengerAccessibility, Goal
 from .Constants import NOTES, PHOBEKINS
 from ..generic.Rules import add_rule, set_rule
 
@@ -17,7 +17,7 @@ class MessengerRules:
     def __init__(self, player: int):
         self.player = player
 
-        self.region_rules: Dict[str, Callable] = {
+        self.region_rules: Dict[str, Callable[[CollectionState], bool]] = {
             "Ninja Village": self.has_wingsuit,
             "Autumn Hills": self.has_wingsuit,
             "Catacombs": self.has_wingsuit,
@@ -31,7 +31,7 @@ class MessengerRules:
             "Music Box": lambda state: state.has_all(NOTES, player)
         }
 
-        self.location_rules: Dict[str, Callable] = {
+        self.location_rules: Dict[str, Callable[[CollectionState], bool]] = {
             # ninja village
             "Ninja Village Seal - Tree House": self.has_dart,
             # autumn hills
@@ -108,27 +108,25 @@ def set_messenger_rules(world: MessengerWorld) -> None:
     if multiworld.enable_logic[player]:
         multiworld.completion_condition[player] = lambda state: state.has("Rescue Phantom", player)
     else:
-        multiworld.accessibility[player].value = Accessibility.option_minimal
-    if multiworld.accessibility[player] > Accessibility.option_locations:
+        multiworld.accessibility[player].value = MessengerAccessibility.option_minimal
+    if multiworld.accessibility[player] > MessengerAccessibility.option_locations:
         set_self_locking_items(multiworld, player)
 
 
-def location_item_name(state: CollectionState, location: str, player: int) -> Optional[Tuple[str, int]]:
-    location = state.multiworld.get_location(location, player)
+def location_item_name(state: CollectionState, location_name: str, player: int) -> Optional[Tuple[str, int]]:
+    location = state.multiworld.get_location(location_name, player)
     if location.item is None:
         return None
     return location.item.name, location.item.player
 
 
-def allow_self_locking_items(spot: Union[Location, Region], *item_names: Union[str, Iterable[str]]) -> None:
+def allow_self_locking_items(spot: Union[Location, Region], *item_names: str) -> None:
     """
     Sets rules on the supplied spot, such that the supplied item_name(s) can possibly be placed there.
     :param spot: Location or Region that the item(s) are allowed to be placed in
     :param item_names: item name or names that are allowed to be placed in the Location or Region
     """
     player = spot.player
-    if isinstance(item_names[0], Iterable):
-        item_names = tuple(item_names[0])
 
     def set_always_allow(location: Location, rule: Callable[[CollectionState, Item], bool]) -> None:
         location.always_allow = rule
@@ -156,4 +154,4 @@ def set_self_locking_items(multiworld: MultiWorld, player: int) -> None:
     # add these locations when seals aren't shuffled
     if not multiworld.shuffle_seals[player]:
         allow_self_locking_items(multiworld.get_region("Cloud Ruins", player), "Ruxxtin's Amulet")
-        allow_self_locking_items(multiworld.get_region("Forlorn Temple", player), PHOBEKINS)
+        allow_self_locking_items(multiworld.get_region("Forlorn Temple", player), *PHOBEKINS)
