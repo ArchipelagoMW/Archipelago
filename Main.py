@@ -38,7 +38,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world = MultiWorld(args.multi)
 
     logger = logging.getLogger()
-    world.set_seed(seed, args.race, str(args.outputname if args.outputname else world.seed))
+    world.set_seed(seed, args.race, str(args.outputname) if args.outputname else None)
     world.plando_options = args.plando_options
 
     world.shuffle = args.shuffle.copy()
@@ -53,7 +53,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.enemy_damage = args.enemy_damage.copy()
     world.beemizer_total_chance = args.beemizer_total_chance.copy()
     world.beemizer_trap_chance = args.beemizer_trap_chance.copy()
-    world.timer = args.timer.copy()
     world.countdown_start_time = args.countdown_start_time.copy()
     world.red_clock_time = args.red_clock_time.copy()
     world.blue_clock_time = args.blue_clock_time.copy()
@@ -79,7 +78,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.state = CollectionState(world)
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, world.seed)
 
-    logger.info("Found World Types:")
+    logger.info(f"Found {len(AutoWorld.AutoWorldRegister.world_types)} World Types:")
     longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
 
     max_item = 0

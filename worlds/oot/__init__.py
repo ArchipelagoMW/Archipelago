@@ -85,7 +85,16 @@ class OOTWeb(WebWorld):
         setup.authors
     )
 
-    tutorials = [setup, setup_es]
+    setup_fr = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["TheLynk"]
+    )
+
+    tutorials = [setup, setup_es, setup_fr]
 
 
 class OOTWorld(World):

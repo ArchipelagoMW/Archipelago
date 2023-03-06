@@ -41,8 +41,8 @@ class SubnauticaWorld(World):
     location_name_to_id = all_locations
     option_definitions = Options.options
 
-    data_version = 8
-    required_client_version = (0, 3, 8)
+    data_version = 9
+    required_client_version = (0, 3, 9)
 
     creatures_to_scan: List[str]
 
@@ -70,23 +70,29 @@ class SubnauticaWorld(World):
                                [creature+Creatures.suffix for creature in self.creatures_to_scan])
         ]
 
-    # refer to Rules.py
-    set_rules = set_rules
-
-    def generate_basic(self):
         # Link regions
         self.multiworld.get_entrance("Lifepod 5", self.player).connect(self.multiworld.get_region("Planet 4546B", self.player))
 
+        for event in Locations.events:
+            self.multiworld.get_location(event, self.player).place_locked_item(
+                SubnauticaItem(event, ItemClassification.progression, None, player=self.player))
+        # make the goal event the victory "item"
+        self.multiworld.get_location(self.multiworld.goal[self.player].get_event_name(), self.player).item.name = "Victory"
+
+    # refer to Rules.py
+    set_rules = set_rules
+
+    def create_items(self):
         # Generate item pool
         pool = []
-        neptune_launch_platform = None
         extras = self.multiworld.creature_scans[self.player].value
         valuable = self.multiworld.item_pool[self.player] == Options.ItemPool.option_valuable
         for item in item_table.values():
             for i in range(item["count"]):
                 subnautica_item = self.create_item(item["name"])
                 if item["name"] == "Neptune Launch Platform":
-                    neptune_launch_platform = subnautica_item
+                    self.multiworld.get_location("Aurora - Captain Data Terminal", self.player).place_locked_item(
+                        subnautica_item)
                 elif valuable and ItemClassification.filler == item["classification"]:
                     extras += 1
                 else:
@@ -99,15 +105,6 @@ class SubnauticaWorld(World):
             pool.append(item)
 
         self.multiworld.itempool += pool
-
-        # Victory item
-        self.multiworld.get_location("Aurora - Captain Data Terminal", self.player).place_locked_item(
-            neptune_launch_platform)
-        for event in Locations.events:
-            self.multiworld.get_location(event, self.player).place_locked_item(
-                SubnauticaItem(event, ItemClassification.progression, None, player=self.player))
-        # make the goal event the victory "item"
-        self.multiworld.get_location(self.multiworld.goal[self.player].get_event_name(), self.player).item.name = "Victory"
 
     def fill_slot_data(self) -> Dict[str, Any]:
         goal: Options.Goal = self.multiworld.goal[self.player]

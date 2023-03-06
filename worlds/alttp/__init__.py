@@ -3,6 +3,7 @@ import os
 import random
 import threading
 import typing
+from collections import OrderedDict
 
 import Utils
 from BaseClasses import Item, CollectionState, Tutorial, MultiWorld
@@ -19,9 +20,10 @@ from .Client import ALTTPSNIClient
 from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
 from .Rules import set_rules
-from .Shops import create_shops, ShopSlotFill
-from .SubClasses import ALttPItem
+from .Shops import create_shops, ShopSlotFill, ShopType, price_rate_display, price_type_display_name
+from .SubClasses import ALttPItem, LTTPRegionType
 from worlds.AutoWorld import World, WebWorld, LogicMixin
+from .StateHelpers import can_buy_unlimited
 
 lttp_logger = logging.getLogger("A Link to the Past")
 
@@ -520,6 +522,126 @@ class ALTTPWorld(World):
                     else:
                         logging.warning(f"Could not trash fill Ganon's Tower for player {player}.")
 
+    def write_spoiler_header(self, spoiler_handle: typing.TextIO) -> None:
+        def bool_to_text(variable: typing.Union[bool, str]) -> str:
+            if type(variable) == str:
+                return variable
+            return "Yes" if variable else "No"
+
+        spoiler_handle.write('Logic:                           %s\n' % self.multiworld.logic[self.player])
+        spoiler_handle.write('Dark Room Logic:                 %s\n' % self.multiworld.dark_room_logic[self.player])
+        spoiler_handle.write('Mode:                            %s\n' % self.multiworld.mode[self.player])
+        spoiler_handle.write('Goal:                            %s\n' % self.multiworld.goal[self.player])
+        if "triforce" in self.multiworld.goal[self.player]:  # triforce hunt
+            spoiler_handle.write("Pieces available for Triforce:   %s\n" %
+                          self.multiworld.triforce_pieces_available[self.player])
+            spoiler_handle.write("Pieces required for Triforce:    %s\n" %
+                          self.multiworld.triforce_pieces_required[self.player])
+        spoiler_handle.write('Difficulty:                      %s\n' % self.multiworld.difficulty[self.player])
+        spoiler_handle.write('Item Functionality:              %s\n' % self.multiworld.item_functionality[self.player])
+        spoiler_handle.write('Entrance Shuffle:                %s\n' % self.multiworld.shuffle[self.player])
+        if self.multiworld.shuffle[self.player] != "vanilla":
+            spoiler_handle.write('Entrance Shuffle Seed            %s\n' % self.er_seed)
+        spoiler_handle.write('Shop inventory shuffle:          %s\n' %
+                             bool_to_text("i" in self.multiworld.shop_shuffle[self.player]))
+        spoiler_handle.write('Shop price shuffle:              %s\n' %
+                             bool_to_text("p" in self.multiworld.shop_shuffle[self.player]))
+        spoiler_handle.write('Shop upgrade shuffle:            %s\n' %
+                             bool_to_text("u" in self.multiworld.shop_shuffle[self.player]))
+        spoiler_handle.write('New Shop inventory:              %s\n' %
+                             bool_to_text("g" in self.multiworld.shop_shuffle[self.player] or
+                                          "f" in self.multiworld.shop_shuffle[self.player]))
+        spoiler_handle.write('Custom Potion Shop:              %s\n' %
+                             bool_to_text("w" in self.multiworld.shop_shuffle[self.player]))
+        spoiler_handle.write('Enemy health:                    %s\n' % self.multiworld.enemy_health[self.player])
+        spoiler_handle.write('Enemy damage:                    %s\n' % self.multiworld.enemy_damage[self.player])
+        spoiler_handle.write('Prize shuffle                    %s\n' % self.multiworld.shuffle_prizes[self.player])
+
+    def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
+        spoiler_handle.write("\n\nMedallions:\n")
+        spoiler_handle.write(f"\nMisery Mire ({self.multiworld.get_player_name(self.player)}):"
+                             f" {self.multiworld.required_medallions[self.player][0]}")
+        spoiler_handle.write(
+            f"\nTurtle Rock ({self.multiworld.get_player_name(self.player)}):"
+            f" {self.multiworld.required_medallions[self.player][1]}")
+
+        if self.multiworld.boss_shuffle[self.player] != "none":
+            def create_boss_map() -> typing.Dict:
+                boss_map = {
+                    "Eastern Palace": self.multiworld.get_dungeon("Eastern Palace", self.player).boss.name,
+                    "Desert Palace": self.multiworld.get_dungeon("Desert Palace", self.player).boss.name,
+                    "Tower Of Hera": self.multiworld.get_dungeon("Tower of Hera", self.player).boss.name,
+                    "Hyrule Castle": "Agahnim",
+                    "Palace Of Darkness": self.multiworld.get_dungeon("Palace of Darkness",
+                                                                              self.player).boss.name,
+                    "Swamp Palace": self.multiworld.get_dungeon("Swamp Palace", self.player).boss.name,
+                    "Skull Woods": self.multiworld.get_dungeon("Skull Woods", self.player).boss.name,
+                    "Thieves Town": self.multiworld.get_dungeon("Thieves Town", self.player).boss.name,
+                    "Ice Palace": self.multiworld.get_dungeon("Ice Palace", self.player).boss.name,
+                    "Misery Mire": self.multiworld.get_dungeon("Misery Mire", self.player).boss.name,
+                    "Turtle Rock": self.multiworld.get_dungeon("Turtle Rock", self.player).boss.name,
+                    "Ganons Tower": "Agahnim 2",
+                    "Ganon": "Ganon"
+                }
+                if self.multiworld.mode[self.player] != 'inverted':
+                    boss_map.update({
+                        "Ganons Tower Basement":
+                            self.multiworld.get_dungeon("Ganons Tower", self.player).bosses["bottom"].name,
+                        "Ganons Tower Middle": self.multiworld.get_dungeon("Ganons Tower", self.player).bosses[
+                            "middle"].name,
+                        "Ganons Tower Top": self.multiworld.get_dungeon("Ganons Tower", self.player).bosses[
+                            "top"].name
+                    })
+                else:
+                    boss_map.update({
+                        "Ganons Tower Basement": self.multiworld.get_dungeon("Inverted Ganons Tower", self.player).bosses["bottom"].name,
+                        "Ganons Tower Middle": self.multiworld.get_dungeon("Inverted Ganons Tower", self.player).bosses["middle"].name,
+                        "Ganons Tower Top": self.multiworld.get_dungeon("Inverted Ganons Tower", self.player).bosses["top"].name
+                    })
+                return boss_map
+
+            bossmap = create_boss_map()
+            spoiler_handle.write(
+                f'\n\nBosses{(f" ({self.multiworld.get_player_name(self.player)})" if self.multiworld.players > 1 else "")}:\n')
+            spoiler_handle.write('    ' + '\n    '.join([f'{x}: {y}' for x, y in bossmap.items()]))
+
+        def build_shop_info() -> typing.Dict:
+            shop = self.multiworld.shops[self.player]
+            if not shop.custom:
+                return None
+
+            shop_data = {
+                "location": str(shop.region),
+                "type": "Take Any" if shop.type == ShopType.TakeAny else "Shop"
+            }
+
+            for index, item in enumerate(shop.inventory):
+                if item is None:
+                    continue
+                price = item["price"] // price_rate_display.get(item["price_type"], 1)
+                shop_data["item_{}".format(index)] = f"{item['item']} - {price} {price_type_display_name[item['price_type']]}"
+                if item["player"]:
+                    shop_data["item_{}".format(index)] =\
+                        shop_data["item_{}".format(index)].replace("—", "(Player {}) — ".format(item["player"]))
+
+                if item["max"] == 0:
+                    continue
+                shop_data["item_{}".format(index)] += " x {}".format(item["max"])
+                if item["replacement"] is None:
+                    continue
+                shop_data["item_{}".format(index)] +=\
+                    f", {item['replacement']} - {item['replacement_price']}" \
+                    f" {price_type_display_name[item['replacement_price_type']]}"
+
+            return shop_data
+
+        shop_data = build_shop_info()
+        if shop_data is not None:
+            spoiler_handle.write('\n\nShops:\n\n')
+            spoiler_handle.write(''.join("{} [{}]\n    {}".format(shop_data['location'], shop_data['type'], "\n    ".join(
+                item for item in [shop_data.get('item_0', None), shop_data.get('item_1', None), shop_data.get('item_2', None)] if
+                item))))
+
     def get_filler_item_name(self) -> str:
         if self.multiworld.goal[self.player] == "icerodhunt":
             item = "Nothing"
@@ -552,5 +674,5 @@ class ALttPLogic(LogicMixin):
         if self.multiworld.logic[player] == 'nologic':
             return True
         if self.multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
-            return self.can_buy_unlimited('Small Key (Universal)', player)
+            return can_buy_unlimited(self, 'Small Key (Universal)', player)
         return self.prog_items[item, player] >= count
