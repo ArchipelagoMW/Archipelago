@@ -568,6 +568,10 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_ROUTE120/NORTH -> REGION_ROUTE120/NORTH_POND", player),
         lambda state: state.has("Devon Scope", player)
     )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE120/NORTH_POND -> REGION_ROUTE120/NORTH", player),
+        lambda state: state.has("Devon Scope", player)
+    )
 
     # Route 121
     set_rule(
@@ -1053,7 +1057,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     # )
     # set_rule(
     #     multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_EAST/MAIN -> REGION_BATTLE_FRONTIER_OUTSIDE_EAST/ABOVE_WATERFALL", player),
-    #     lambda state: state.has("ITEM_WAILMER_PAIL", player) and can_surf(state)
+    #     lambda state: state.has("Wailmer Pail", player) and can_surf(state)
     # )
     # set_rule(
     #     multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_EAST/ABOVE_WATERFALL -> REGION_BATTLE_FRONTIER_OUTSIDE_EAST/MAIN", player),

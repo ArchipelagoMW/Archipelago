@@ -7,7 +7,7 @@ from Patch import APDeltaPatch
 import Utils
 from .Data import get_extracted_data
 from .Items import reverse_offset_item_value
-from .Options import get_option_value
+from .Options import get_option_value, RandomizeWildPokemon, RandomizeStarters
 from .Pokemon import get_random_species
 
 
@@ -43,7 +43,12 @@ def generate_output(multiworld, player, output_directory: str):
             _set_bytes_little_endian(patched_rom, location.rom_address, 2, extracted_data["constants"]["ITEM_ARCHIPELAGO_PROGRESSION"])
 
     # Set encounter tables
-    _randomize_encounter_tables(multiworld.per_slot_randoms[player], patched_rom)
+    if (get_option_value(multiworld, player, "wild_pokemon") != RandomizeWildPokemon.option_vanilla):
+        _randomize_encounter_tables(multiworld.per_slot_randoms[player], patched_rom)
+
+    # Set starters
+    if (get_option_value(multiworld, player, "starters") != RandomizeStarters.option_vanilla):
+        _randomize_starters(multiworld.per_slot_randoms[player], patched_rom)
 
     # Options
     # struct ArchipelagoOptions
@@ -63,8 +68,8 @@ def generate_output(multiworld, player, output_directory: str):
     blind_trainers = 1 if get_option_value(multiworld, player, "blind_trainers") == Toggle.option_true else 0
     _set_bytes_little_endian(patched_rom, options_address + 1, 1, blind_trainers)
 
-    # Set exp multiplier
-    numerator = min(get_option_value(multiworld, player, "exp_multiplier"), 2**16 - 1)
+    # Set exp modifier
+    numerator = min(get_option_value(multiworld, player, "exp_modifier"), 2**16 - 1)
     _set_bytes_little_endian(patched_rom, options_address + 2, 2, numerator)
     _set_bytes_little_endian(patched_rom, options_address + 4, 2, 100)
 
@@ -117,7 +122,7 @@ def _set_bytes_little_endian(byte_array, address, size, value):
 # So if a table only has 2 species across multiple slots, it will
 # still have 2 species in the same respective slots after randomization.
 # TODO: Account for access to pokemon who can learn required HMs
-def _randomize_encounter_tables(random, patched_rom):
+def _randomize_encounter_tables(random, rom):
     extracted_data = get_extracted_data()
 
     for map_data in extracted_data["maps"].values():
@@ -126,13 +131,13 @@ def _randomize_encounter_tables(random, patched_rom):
         fishing_encounters = map_data["fishing_encounters"]
         if (not land_encounters == None):
             new_encounters = _create_randomized_encounter_table(random, land_encounters["encounter_slots"])
-            _replace_encounters(patched_rom, land_encounters["rom_address"], new_encounters)
+            _replace_encounters(rom, land_encounters["rom_address"], new_encounters)
         if (not water_encounters == None):
             new_encounters = _create_randomized_encounter_table(random, water_encounters["encounter_slots"])
-            _replace_encounters(patched_rom, water_encounters["rom_address"], new_encounters)
+            _replace_encounters(rom, water_encounters["rom_address"], new_encounters)
         if (not fishing_encounters == None):
             new_encounters = _create_randomized_encounter_table(random, fishing_encounters["encounter_slots"])
-            _replace_encounters(patched_rom, fishing_encounters["rom_address"], new_encounters)
+            _replace_encounters(rom, fishing_encounters["rom_address"], new_encounters)
 
 
 def _create_randomized_encounter_table(random, default_slots):
@@ -150,7 +155,7 @@ def _create_randomized_encounter_table(random, default_slots):
     return new_slots
 
 
-def _replace_encounters(data, table_address, encounter_slots):
+def _replace_encounters(rom, table_address, encounter_slots):
     """Encounter tables are lists of
     struct {
         min_level:  0x01 bytes,
@@ -160,4 +165,14 @@ def _replace_encounters(data, table_address, encounter_slots):
     """
     for slot_i, species_id in enumerate(encounter_slots):
         address = table_address + 2 + (4 * slot_i)
-        _set_bytes_little_endian(data, address, 2, species_id)
+        _set_bytes_little_endian(rom, address, 2, species_id)
+
+def _randomize_starters(random, rom):
+    address = get_extracted_data()["misc_rom_addresses"]["sStarterMon"]
+    starter_1 = get_random_species(random)
+    starter_2 = get_random_species(random)
+    starter_3 = get_random_species(random)
+
+    _set_bytes_little_endian(rom, address + 0, 2, starter_1.id)
+    _set_bytes_little_endian(rom, address + 2, 2, starter_2.id)
+    _set_bytes_little_endian(rom, address + 4, 2, starter_3.id)

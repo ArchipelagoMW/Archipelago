@@ -2,32 +2,32 @@ from BaseClasses import MultiWorld
 from typing import Dict, List, Union
 from Options import Option, Choice, DefaultOnToggle, Range, Toggle
 
-class Badges(DefaultOnToggle):
+class RandomizeBadges(DefaultOnToggle):
     """Adds Badges to the pool"""
     display_name = "Randomize Badges"
 
-class HMs(DefaultOnToggle):
+class RandomizeHms(DefaultOnToggle):
     """Adds HMs to the pool"""
     display_name = "Randomize HMs"
 
-class KeyItems(Toggle):
+class RandomizeKeyItems(Toggle):
     """Adds most key items to the pool. These are usually required to unlock
     a location or region (e.g. Devon Scope, Letter, Basement Key)"""
     display_name = "Randomize Key Items"
 
-class Rods(Toggle):
+class RandomizeRods(Toggle):
     """Adds fishing rods to the pool"""
     display_name = "Randomize Fishing Rods"
 
-class OverworldItems(DefaultOnToggle):
+class RandomizeOverworldItems(DefaultOnToggle):
     """Adds items on the ground with a Pokeball sprite to the pool"""
     display_name = "Randomize Overworld Items"
 
-class HiddenItems(Toggle):
+class RandomizeHiddenItems(Toggle):
     """Adds hidden items to the pool"""
     display_name = "Randomize Hidden Items"
 
-class NpcGifts(Toggle):
+class RandomizeNpcGifts(Toggle):
     """Adds most gifts received from NPCs to the pool (not including key items or HMs)"""
     display_name = "Randomize NPC Gifts"
 
@@ -35,13 +35,29 @@ class HiddenItemsRequireItemfinder(DefaultOnToggle):
     """The Itemfinder is logically required to pick up hidden items"""
     display_name = "Require Itemfinder"
 
-class ExpMultiplier(Range):
-    """Modifies gained experience by a percentage
+class RandomizeWildPokemon(Choice):
+    """Randomizes the starter pokemon in Professor Birch's bag
+    Vanilla: Starters are unchanged
+    Completely Random: There are no restrictions"""
+    default = 0
+    option_vanilla = 0
+    option_completely_random = 1
+
+class RandomizeStarters(Choice):
+    """Randomizes the starter pokemon in Professor Birch's bag
+    Vanilla: Starters are unchanged
+    Completely Random: There are no restrictions"""
+    default = 0
+    option_vanilla = 0
+    option_completely_random = 1
+
+class ExpModifier(Range):
+    """Multiplies gained experience by a percentage
     100 is default
     50 is half
     200 is double
     etc..."""
-    display_name = "Exp Multiplier"
+    display_name = "Exp Modifier"
     range_start = 50
     range_end = 10000
     default = 100
@@ -55,15 +71,17 @@ class EnableFerry(Toggle):
     display_name = "Enable Ferry"
 
 options: Dict[str, Option] = {
-  "badges": Badges,
-  "hms": HMs,
-  "key_items": KeyItems,
-  "rods": Rods,
-  "overworld_items": OverworldItems,
-  "hidden_items": HiddenItems,
-  "npc_gifts": NpcGifts,
+  "badges": RandomizeBadges,
+  "hms": RandomizeHms,
+  "key_items": RandomizeKeyItems,
+  "rods": RandomizeRods,
+  "overworld_items": RandomizeOverworldItems,
+  "hidden_items": RandomizeHiddenItems,
+  "npc_gifts": RandomizeNpcGifts,
   "require_itemfinder": HiddenItemsRequireItemfinder,
-  "exp_multiplier": ExpMultiplier,
+  "wild_pokemon": RandomizeWildPokemon,
+  "starters": RandomizeStarters,
+  "exp_modifier": ExpModifier,
   "blind_trainers": BlindTrainers,
   "enable_ferry": EnableFerry
 }
