@@ -2,8 +2,9 @@ from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice
 
 
 class MessengerAccessibility(Accessibility):
-    default = 0
+    default = Accessibility.option_locations
     # defaulting to locations accessibility since items makes certain items self-locking
+    __doc__ = Accessibility.__doc__.replace(f"default {Accessibility.default}", f"default {default}")
 
 
 class Logic(DefaultOnToggle):
@@ -38,6 +39,7 @@ class NotesNeeded(Range):
 
 class AmountSeals(Range):
     """Number of power seals that exist in the item pool when power seal hunt is the goal."""
+    display_name = "Total Power Seals"
     range_start = 1
     range_end = 45
     default = range_end
@@ -45,6 +47,7 @@ class AmountSeals(Range):
 
 class RequiredSeals(Range):
     """Percentage of total seals required to open the shop chest."""
+    display_name = "Percent Seals Required"
     range_start = 10
     range_end = 100
     default = range_end

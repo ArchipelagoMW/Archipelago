@@ -1,4 +1,4 @@
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 
 from BaseClasses import Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
@@ -131,5 +131,5 @@ class MessengerWorld(World):
         return "Time Shard"
 
     def create_item(self, name: str) -> MessengerItem:
-        item_id = self.item_name_to_id[name] if name in self.item_name_to_id else None
+        item_id: Optional[int] = self.item_name_to_id.get(name, None)
         return MessengerItem(name, self.player, item_id)

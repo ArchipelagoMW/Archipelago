@@ -1,6 +1,6 @@
 from typing import Dict, Set
 
-REGIONS: Dict[str, Set[str]] = {  # seal locations have the region in their name and may not be created so skip them here
+REGIONS: Dict[str, Set[str]] = {
     "Menu": {},
     "Tower HQ": {},
     "The Shop": {},
@@ -24,6 +24,7 @@ REGIONS: Dict[str, Set[str]] = {  # seal locations have the region in their name
     "Corrupted Future": {"Key of Courage"},
     "Music Box": {"Rescue Phantom"}
 }
+"""seal locations have the region in their name and may not need to be created so skip them here"""
 
 
 REGION_CONNECTIONS: Dict[str, Set[str]] = {
