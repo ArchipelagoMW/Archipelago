@@ -61,7 +61,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
             # if we have run out of locations to fill,break out of this loop
             if not locations:
                 unplaced_items += items_to_place
-                if unplaced_items and force_excluded:
+                if unplaced_items and force_excluded and not allow_partial:
                     excluded_locations = [loc for loc in locations
                                           if loc.progress_type == LocationProgressType.EXCLUDED and not loc.item]
                     if excluded_locations:
