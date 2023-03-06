@@ -1,6 +1,8 @@
 from BaseClasses import CollectionState, MultiWorld
 from worlds.generic.Rules import set_rule, add_rule
+from Options import Toggle
 from .Data import get_location_attributes
+from .Options import get_option_value
 
 
 def _can_cut(state: CollectionState, player: int):
@@ -311,10 +313,15 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_location("EVENT_AQUA_STEALS_SUBMARINE", player),
         lambda state: state.has("EVENT_RELEASE_GROUDON", player)
     )
-    # Consider enabling this entrance earlier
     set_rule(
         multiworld.get_entrance("REGION_SLATEPORT_CITY_HARBOR/MAIN -> REGION_LILYCOVE_CITY_HARBOR/MAIN", player),
-        lambda state: state.has("ITEM_SS_TICKET", player) and state.has("EVENT_DEFEAT_CHAMPION", player)
+        lambda state: state.has("ITEM_SS_TICKET", player) and
+            (state.has("EVENT_DEFEAT_CHAMPION", player) or get_option_value(multiworld, player, "enable_ferry") == Toggle.option_true)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SLATEPORT_CITY_HARBOR/MAIN -> REGION_BATTLE_FRONTIER_OUTSIDE_WEST/DOCK", player),
+        lambda state: state.has("ITEM_SS_TICKET", player) and
+            (state.has("EVENT_DEFEAT_CHAMPION", player) or get_option_value(multiworld, player, "enable_ferry") == Toggle.option_true)
     )
     
 
@@ -566,7 +573,11 @@ def set_default_rules(multiworld: MultiWorld, player: int):
 
     # Route 121
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE121/MAIN -> REGION_ROUTE122/SEA", player),
+        multiworld.get_entrance("REGION_ROUTE121/EAST -> REGION_ROUTE121/WEST", player),
+        can_cut
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE121/EAST -> REGION_ROUTE122/SEA", player),
         can_surf
     )
 
@@ -609,10 +620,15 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_LILYCOVE_CITY/SEA -> REGION_ROUTE124/MAIN", player),
         lambda state: state.has("EVENT_CLEAR_AQUA_HIDEOUT", player)
     )
-    # Consider enabling this entrance earlier
     set_rule(
         multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_SLATEPORT_CITY_HARBOR/MAIN", player),
-        lambda state: state.has("ITEM_SS_TICKET", player) and state.has("EVENT_DEFEAT_CHAMPION", player)
+        lambda state: state.has("ITEM_SS_TICKET", player) and
+            (state.has("EVENT_DEFEAT_CHAMPION", player) or get_option_value(multiworld, player, "enable_ferry") == Toggle.option_true)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_BATTLE_FRONTIER_OUTSIDE_WEST/DOCK", player),
+        lambda state: state.has("ITEM_SS_TICKET", player) and
+            (state.has("EVENT_DEFEAT_CHAMPION", player) or get_option_value(multiworld, player, "enable_ferry") == Toggle.option_true)
     )
 
     # Magma Hideout
@@ -1021,6 +1037,34 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     set_rule(
         multiworld.get_entrance("REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/MAIN -> REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/BEHIND_BADGE_CHECKERS", player),
         lambda state: _has_at_least_n_badges(state, player, 8)
+    )
+
+    # Battle Frontier
+    set_rule(
+        multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_WEST/DOCK -> REGION_LILYCOVE_CITY_HARBOR/MAIN", player),
+        lambda state: state.has("ITEM_SS_TICKET", player) and
+            (state.has("EVENT_DEFEAT_CHAMPION", player) or get_option_value(multiworld, player, "enable_ferry") == Toggle.option_true)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_WEST/DOCK -> REGION_SLATEPORT_CITY_HARBOR/MAIN", player),
+        lambda state: state.has("ITEM_SS_TICKET", player) and
+            (state.has("EVENT_DEFEAT_CHAMPION", player) or get_option_value(multiworld, player, "enable_ferry") == Toggle.option_true)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_WEST/CAVE_ENTRANCE -> REGION_BATTLE_FRONTIER_OUTSIDE_WEST/WATER", player),
+        can_surf
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_EAST/MAIN -> REGION_BATTLE_FRONTIER_OUTSIDE_EAST/ABOVE_WATERFALL", player),
+        lambda state: state.has("ITEM_WAILMER_PAIL", player) and can_surf(state)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_EAST/ABOVE_WATERFALL -> REGION_BATTLE_FRONTIER_OUTSIDE_EAST/MAIN", player),
+        lambda state: state.has("ITEM_WAILMER_PAIL", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_EAST/WATER -> REGION_BATTLE_FRONTIER_OUTSIDE_EAST/ABOVE_WATERFALL", player),
+        can_waterfall
     )
 
 

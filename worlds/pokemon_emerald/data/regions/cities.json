@@ -786,7 +786,8 @@
       "EVENT_TALK_TO_DOCK"
     ],
     "exits": [
-      "REGION_LILYCOVE_CITY_HARBOR/MAIN"
+      "REGION_LILYCOVE_CITY_HARBOR/MAIN",
+      "REGION_BATTLE_FRONTIER_OUTSIDE_WEST/DOCK"
     ],
     "warps": [
       "MAP_SLATEPORT_CITY_HARBOR:0,1/MAP_SLATEPORT_CITY:8",
@@ -1494,7 +1495,7 @@
       "EVENT_VISIT_LILYCOVE_CITY"
     ],
     "exits": [
-      "REGION_ROUTE121/MAIN",
+      "REGION_ROUTE121/EAST",
       "REGION_LILYCOVE_CITY/SEA"
     ],
     "warps": [
@@ -1736,7 +1737,8 @@
     "locations": [],
     "events": [],
     "exits": [
-      "REGION_SLATEPORT_CITY_HARBOR/MAIN"
+      "REGION_SLATEPORT_CITY_HARBOR/MAIN",
+      "REGION_BATTLE_FRONTIER_OUTSIDE_WEST/DOCK"
     ],
     "warps": [
       "MAP_LILYCOVE_CITY_HARBOR:0,1/MAP_LILYCOVE_CITY:12"

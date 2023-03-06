@@ -1151,26 +1151,37 @@
     "events": [],
     "exits": [
       "REGION_ROUTE120/NORTH",
-      "REGION_ROUTE121/MAIN"
+      "REGION_ROUTE121/WEST"
     ],
     "warps": [
       "MAP_ROUTE120:0/MAP_ANCIENT_TOMB:0"
     ]
   },
-  "REGION_ROUTE121/MAIN": {
+  "REGION_ROUTE121/WEST": {
+    "parent_map": "MAP_ROUTE121",
+    "locations": [
+      "HIDDEN_ITEM_ROUTE_121_HP_UP"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE121/EAST",
+      "REGION_ROUTE120/SOUTH"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE121/EAST": {
     "parent_map": "MAP_ROUTE121",
     "locations": [
       "ITEM_ROUTE_121_CARBOS",
       "ITEM_ROUTE_121_REVIVE",
       "ITEM_ROUTE_121_ZINC",
-      "HIDDEN_ITEM_ROUTE_121_HP_UP",
       "HIDDEN_ITEM_ROUTE_121_NUGGET",
       "HIDDEN_ITEM_ROUTE_121_FULL_HEAL",
       "HIDDEN_ITEM_ROUTE_121_MAX_REVIVE"
     ],
     "events": [],
     "exits": [
-      "REGION_ROUTE120/SOUTH",
+      "REGION_ROUTE121/WEST",
       "REGION_ROUTE122/SEA",
       "REGION_LILYCOVE_CITY/MAIN"
     ],
@@ -1279,7 +1290,7 @@
     "events": [],
     "exits": [
       "REGION_ROUTE122/MT_PYRE_ENTRANCE",
-      "REGION_ROUTE121/MAIN",
+      "REGION_ROUTE121/EAST",
       "REGION_ROUTE123/EAST"
     ],
     "warps": []

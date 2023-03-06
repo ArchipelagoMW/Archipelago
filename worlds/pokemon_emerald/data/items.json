@@ -168,7 +168,12 @@
     "tags": []
   },
   "ITEM_SS_TICKET": {
-    "label": "SS Ticket",
+    "label": "S.S. Ticket",
+    "classification": "PROGRESSION",
+    "tags": []
+  },
+  "ITEM_WAILMER_PAIL": {
+    "label": "Wailmer Pail",
     "classification": "PROGRESSION",
     "tags": []
   },
@@ -184,11 +189,6 @@
   },
   "ITEM_CONTEST_PASS": {
     "label": "Contest Pass",
-    "classification": "FILLER",
-    "tags": []
-  },
-  "ITEM_WAILMER_PAIL": {
-    "label": "Wailmer Pail",
     "classification": "FILLER",
     "tags": []
   },
