@@ -51,7 +51,7 @@ class MessengerWorld(World):
     location_name_to_id = {location: location_id
                            for location_id, location in enumerate([*ALWAYS_LOCATIONS, *SEALS], base_offset)}
 
-    data_version = 0
+    data_version = 1
 
     web = MessengerWeb()
 
