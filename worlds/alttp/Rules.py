@@ -299,7 +299,7 @@ def global_rules(world, player):
     set_rule(world.get_location('Skull Woods - Big Chest', player), lambda state: state.has('Big Key (Skull Woods)', player))
     if world.accessibility[player] != 'locations':
         allow_self_locking_items(world.get_location('Skull Woods - Big Chest', player), 'Big Key (Skull Woods)')
-    set_rule(world.get_entrance('Skull Woods Torch Room', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 3) and state.has('Fire Rod', player) and state.has_sword(state, player))  # sword required for curtain
+    set_rule(world.get_entrance('Skull Woods Torch Room', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 3) and state.has('Fire Rod', player) and has_sword(state, player))  # sword required for curtain
 
     set_rule(world.get_entrance('Ice Palace Entrance Room', player), lambda state: can_melt_things(state, player))
     set_rule(world.get_location('Ice Palace - Big Chest', player), lambda state: state.has('Big Key (Ice Palace)', player))
