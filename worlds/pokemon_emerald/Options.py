@@ -51,6 +51,18 @@ class RandomizeStarters(Choice):
     option_vanilla = 0
     option_completely_random = 1
 
+class MinCatchRate(Range):
+    """Sets the minimum catch rate a pokemon can have. Any pokemon with a
+    catch rate below this floor will have it raised to this value.
+    
+    Legendaries are often in the single digits
+    Fully evolved pokemon are often double digits
+    Pidgey is 255"""
+    display_name = "Exp Modifier"
+    range_start = 3
+    range_end = 255
+    default = 3
+
 class ExpModifier(Range):
     """Multiplies gained experience by a percentage
     100 is default
@@ -81,6 +93,7 @@ options: Dict[str, Option] = {
   "require_itemfinder": HiddenItemsRequireItemfinder,
   "wild_pokemon": RandomizeWildPokemon,
   "starters": RandomizeStarters,
+  "min_catch_rate": MinCatchRate,
   "exp_modifier": ExpModifier,
   "blind_trainers": BlindTrainers,
   "enable_ferry": EnableFerry

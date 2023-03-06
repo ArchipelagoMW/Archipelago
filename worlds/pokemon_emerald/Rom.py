@@ -2,13 +2,14 @@ import hashlib
 import bsdiff4
 import os
 from typing import Dict
+from BaseClasses import MultiWorld
 from Options import Toggle
 from Patch import APDeltaPatch
 import Utils
 from .Data import get_extracted_data
 from .Items import reverse_offset_item_value
 from .Options import get_option_value, RandomizeWildPokemon, RandomizeStarters
-from .Pokemon import get_random_species
+from .Pokemon import get_random_species, get_pokemon_species
 
 
 class PokemonEmeraldDeltaPatch(APDeltaPatch):
@@ -49,6 +50,9 @@ def generate_output(multiworld, player, output_directory: str):
     # Set starters
     if (get_option_value(multiworld, player, "starters") != RandomizeStarters.option_vanilla):
         _randomize_starters(multiworld.per_slot_randoms[player], patched_rom)
+
+    # Modify species
+    _modify_species_info(multiworld, player, patched_rom)
 
     # Options
     # struct ArchipelagoOptions
@@ -167,6 +171,7 @@ def _replace_encounters(rom, table_address, encounter_slots):
         address = table_address + 2 + (4 * slot_i)
         _set_bytes_little_endian(rom, address, 2, species_id)
 
+
 def _randomize_starters(random, rom):
     address = get_extracted_data()["misc_rom_addresses"]["sStarterMon"]
     starter_1 = get_random_species(random)
@@ -176,3 +181,16 @@ def _randomize_starters(random, rom):
     _set_bytes_little_endian(rom, address + 0, 2, starter_1.id)
     _set_bytes_little_endian(rom, address + 2, 2, starter_2.id)
     _set_bytes_little_endian(rom, address + 4, 2, starter_3.id)
+
+
+def _modify_species_info(multiworld: MultiWorld, player: int, rom: bytearray):
+    species_info_address = get_extracted_data()["misc_rom_addresses"]["gSpeciesInfo"]
+    size_of_info_struct = 28
+    catch_rate_offset = 8
+
+    min_catch_rate = min(get_option_value(multiworld, player, "min_catch_rate"), 255)
+
+    for species in get_pokemon_species().values():
+        if (species.catch_rate < min_catch_rate):
+            address = species_info_address + (species.id * size_of_info_struct) + catch_rate_offset
+            _set_bytes_little_endian(rom, address, 1, min_catch_rate)
