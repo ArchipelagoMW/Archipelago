@@ -107,7 +107,7 @@ factorio_options:
   filter_item_sends: false
   # Whether to send chat messages from players on the Factorio server to Archipelago.
   bridge_chat_out: true
-minecraft_options: 
+minecraft_options:
   forge_directory: "Minecraft Forge server"
   max_heap_size: "2G"
   # release channel, currently "release", or "beta"
@@ -124,6 +124,15 @@ soe_options:
   # File name of the SoE US ROM
   rom_file: "Secret of Evermore (USA).sfc"
 ffr_options:
+  display_msgs: true
+tloz_options:
+  # File name of the Zelda 1
+  rom_file: "Legend of Zelda, The (U) (PRG0) [!].nes"
+  # Set this to false to never autostart a rom (such as after patching)
+  #             true  for operating system default program
+  # Alternatively, a path to a program to open the .nes file with
+  rom_start: true
+  # Display message inside of Bizhawk
   display_msgs: true
 dkc3_options:
   # File name of the DKC3 US rom
