@@ -1,20 +1,28 @@
 import os
-from typing import Dict
+from typing import Dict, List, NamedTuple, Tuple
 from .Data import get_extracted_data, load_json
 
 
 all_pokemon_species = None
 
 
-class PokemonSpecies:
+class BaseStats(NamedTuple):
+    hp: int
+    attack: int
+    defense: int
+    speed: int
+    special_attack: int
+    special_defense: int
+
+
+class PokemonSpecies(NamedTuple):
     label: str
     id: int
     national_dex_number: int
-
-    def __init__(self, label: str, id: int, national_dex_number: int):
-        self.label = label
-        self.id = id
-        self.national_dex_number = national_dex_number
+    base_stats: BaseStats
+    types: Tuple[str, str]
+    abilities: Tuple[str, str]
+    catch_rate: int
 
 
 def get_random_species(random) -> PokemonSpecies:
@@ -39,12 +47,22 @@ def get_pokemon_species() -> Dict[str, PokemonSpecies]:
         extracted_data = get_extracted_data()
         pokemon_data = load_json(os.path.join(os.path.dirname(__file__), "data/pokemon.json"))
 
-        for species_name, species_data in pokemon_data.items():
-            all_pokemon_species[species_name] = \
-                PokemonSpecies(
+        for species_constant_name, species_data in pokemon_data.items():
+            all_pokemon_species[species_constant_name] = PokemonSpecies(
                     species_data["label"],
-                    extracted_data["constants"][species_name],
+                    extracted_data["constants"][species_constant_name],
                     species_data["national_dex_number"],
+                    BaseStats(
+                        species_data["base_hp"],
+                        species_data["base_attack"],
+                        species_data["base_defense"],
+                        species_data["base_speed"],
+                        species_data["base_special_attack"],
+                        species_data["base_special_defense"],
+                    ),
+                    [species_data["types"][0], species_data["types"][1]],
+                    [species_data["abilities"][0], species_data["abilities"][1]],
+                    species_data["catch_rate"]
                 )
-    
+
     return all_pokemon_species
