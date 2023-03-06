@@ -6,6 +6,7 @@
 - [Courier Github](https://github.com/Brokemia/Courier)
 - [The Messenger Randomizer Github](https://github.com/minous27/TheMessengerRandomizerMod)
 - [Jacksonbird8237's Item Tracker](https://github.com/Jacksonbird8237/TheMessengerItemTracker)
+- [PopTracker Pack](https://github.com/alwaysintreble/TheMessengerTrackPack)
 
 ## Required Software
 
