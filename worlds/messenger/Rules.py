@@ -13,9 +13,11 @@ else:
 
 class MessengerRules:
     player: int
+    world: MessengerWorld
 
-    def __init__(self, player: int):
-        self.player = player
+    def __init__(self, world: MessengerWorld):
+        self.player = world.player
+        self.world = world
 
         self.region_rules: Dict[str, Callable[[CollectionState], bool]] = {
             "Ninja Village": self.has_wingsuit,
@@ -23,12 +25,12 @@ class MessengerRules:
             "Catacombs": self.has_wingsuit,
             "Bamboo Creek": self.has_wingsuit,
             "Searing Crags Upper": self.has_vertical,
-            "Cloud Ruins": lambda state: self.has_wingsuit(state) and state.has("Ruxxtin's Amulet", player),
+            "Cloud Ruins": lambda state: self.has_wingsuit(state) and state.has("Ruxxtin's Amulet", self.player),
             "Underworld": self.has_tabi,
-            "Forlorn Temple": lambda state: state.has_all(PHOBEKINS, player) and self.has_wingsuit(state),
+            "Forlorn Temple": lambda state: state.has_all(PHOBEKINS, self.player) and self.has_wingsuit(state),
             "Glacial Peak": self.has_vertical,
-            "Elemental Skylands": lambda state: state.has("Fairy Bottle", player),
-            "Music Box": lambda state: state.has_all(NOTES, player)
+            "Elemental Skylands": lambda state: state.has("Fairy Bottle", self.player),
+            "Music Box": lambda state: state.has_all(NOTES, self.player)
         }
 
         self.location_rules: Dict[str, Callable[[CollectionState], bool]] = {
@@ -40,7 +42,7 @@ class MessengerRules:
             "Howling Grotto Seal - Windy Saws and Balls": self.has_wingsuit,
             "Howling Grotto Seal - Crushing Pits": lambda state: self.has_wingsuit(state) and self.has_dart(state),
             # searing crags
-            "Key of Strength": lambda state: state.has("Power Thistle", player),
+            "Key of Strength": lambda state: state.has("Power Thistle", self.player),
             # glacial peak
             "Glacial Peak Seal - Ice Climbers": self.has_dart,
             "Glacial Peak Seal - Projectile Spike Pit": self.has_vertical,
@@ -56,7 +58,7 @@ class MessengerRules:
             # sunken shrine
             "Sun Crest": self.has_tabi,
             "Moon Crest": self.has_tabi,
-            "Key of Love": lambda state: state.has_all({"Sun Crest", "Moon Crest"}, player),
+            "Key of Love": lambda state: state.has_all({"Sun Crest", "Moon Crest"}, self.player),
             "Sunken Shrine Seal - Waterfall Paradise": self.has_tabi,
             "Sunken Shrine Seal - Tabi Gauntlet": self.has_tabi,
             # riviere turquoise
@@ -68,7 +70,7 @@ class MessengerRules:
             "Elemental Skylands Seal - Water": self.has_dart,
             "Elemental Skylands Seal - Fire": self.has_dart,
             # corrupted future
-            "Key of Courage": lambda state: state.has_all({"Demon King Crown", "Fairy Bottle"}, player),
+            "Key of Courage": lambda state: state.has_all({"Demon King Crown", "Fairy Bottle"}, self.player),
             # the shop
             "Shop Chest": self.has_enough_seals
         }
@@ -89,28 +91,26 @@ class MessengerRules:
         required_seals = state.multiworld.worlds[self.player].required_seals
         return state.has("Power Seal", self.player, required_seals)
 
+    def set_messenger_rules(self) -> None:
+        multiworld = self.world.multiworld
 
-def set_messenger_rules(world: MessengerWorld) -> None:
-    multiworld = world.multiworld
-    player = world.player
+        for region in multiworld.get_regions(self.player):
+            if region.name in self.region_rules:
+                for entrance in region.entrances:
+                    entrance.access_rule = self.region_rules[region.name]
+            for loc in region.locations:
+                if loc.name in self.location_rules:
+                    loc.access_rule = self.location_rules[loc.name]
+        if multiworld.goal[self.player] == Goal.option_power_seal_hunt:
+            set_rule(multiworld.get_entrance("Tower HQ -> Music Box", self.player),
+                     lambda state: state.has("Shop Chest", self.player))
 
-    for region in multiworld.get_regions(player):
-        if region.name in world.rules.region_rules:
-            for entrance in region.entrances:
-                entrance.access_rule = world.rules.region_rules[region.name]
-        for loc in region.locations:
-            if loc.name in world.rules.location_rules:
-                loc.access_rule = world.rules.location_rules[loc.name]
-    if multiworld.goal[player] == Goal.option_power_seal_hunt:
-        set_rule(multiworld.get_entrance("Tower HQ -> Music Box", player),
-                 lambda state: state.has("Shop Chest", player))
-
-    if multiworld.enable_logic[player]:
-        multiworld.completion_condition[player] = lambda state: state.has("Rescue Phantom", player)
-    else:
-        multiworld.accessibility[player].value = MessengerAccessibility.option_minimal
-    if multiworld.accessibility[player] > MessengerAccessibility.option_locations:
-        set_self_locking_items(multiworld, player)
+        if multiworld.enable_logic[self.player]:
+            multiworld.completion_condition[self.player] = lambda state: state.has("Rescue Phantom", self.player)
+        else:
+            multiworld.accessibility[self.player].value = MessengerAccessibility.option_minimal
+        if multiworld.accessibility[self.player] > MessengerAccessibility.option_locations:
+            set_self_locking_items(multiworld, self.player)
 
 
 def location_item_name(state: CollectionState, location_name: str, player: int) -> Optional[Tuple[str, int]]:

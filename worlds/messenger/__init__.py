@@ -5,7 +5,7 @@ from worlds.AutoWorld import World, WebWorld
 from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS, ALWAYS_LOCATIONS, SEALS, ALL_ITEMS
 from .Options import messenger_options, NotesNeeded, Goal, PowerSeals
 from .Regions import REGIONS, REGION_CONNECTIONS
-from .Rules import MessengerRules, set_messenger_rules
+from .Rules import MessengerRules
 from .SubClasses import MessengerRegion, MessengerItem
 
 
@@ -60,7 +60,6 @@ class MessengerWorld(World):
     required_seals: Optional[int] = None
 
     def generate_early(self) -> None:
-        self.rules = MessengerRules(self.player)
         if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
             self.multiworld.shuffle_seals[self.player].value = PowerSeals.option_true
             self.total_seals = self.multiworld.total_seals[self.player].value
@@ -110,7 +109,8 @@ class MessengerWorld(World):
 
         self.multiworld.itempool += itempool
 
-    set_rules = set_messenger_rules
+    def set_rules(self) -> None:
+        MessengerRules(self).set_messenger_rules()
 
     def fill_slot_data(self) -> Dict[str, Any]:
         locations: Dict[int, List[str]] = {}
