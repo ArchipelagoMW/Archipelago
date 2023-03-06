@@ -22,12 +22,12 @@ def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item]
     return new_state
 
 
-def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
+def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
                      item_pool: typing.List[Item], single_player_placement: bool = False, lock: bool = False,
                      swap: bool = True, on_place: typing.Optional[typing.Callable[[Location], None]] = None,
-                     allow_partial: bool = False) -> None:
+                     allow_partial: bool = False, force_excluded: bool = False) -> None:
     """
-    :param world: Multiworld to be filled.
+    :param multiworld: Multiworld to be filled.
     :param base_state: State assumed before fill.
     :param locations: Locations to be filled with item_pool
     :param item_pool: Items to fill into the locations
@@ -36,6 +36,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
     :param swap: if true, swaps of already place items are done in the event of a dead end
     :param on_place: callback that is called when a placement happens
     :param allow_partial: only place what is possible. Remaining items will be in the item_pool list.
+    :param force_excluded: will fill all logically plausible locations, putting progression on excluded locations if necessary
     """
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
@@ -54,21 +55,31 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
         maximum_exploration_state = sweep_from_pool(
             base_state, item_pool + unplaced_items)
 
-        has_beaten_game = world.has_beaten_game(maximum_exploration_state)
+        has_beaten_game = multiworld.has_beaten_game(maximum_exploration_state)
 
         while items_to_place:
             # if we have run out of locations to fill,break out of this loop
             if not locations:
                 unplaced_items += items_to_place
+                if unplaced_items and force_excluded:
+                    excluded_locations = [loc for loc in locations
+                                          if loc.progress_type == LocationProgressType.EXCLUDED and not loc.item]
+                    if excluded_locations:
+                        for loc in excluded_locations:
+                            loc.progress_type = LocationProgressType.DEFAULT
+                        fill_restrictive(multiworld, base_state, excluded_locations,
+                                         item_pool, single_player_placement, lock, swap, on_place)
+                        for loc in excluded_locations:
+                            loc.progress_type = LocationProgressType.EXCLUDED
                 break
             item_to_place = items_to_place.pop(0)
 
             spot_to_fill: typing.Optional[Location] = None
 
             # if minimal accessibility, only check whether location is reachable if game not beatable
-            if world.accessibility[item_to_place.player] == 'minimal':
-                perform_access_check = not world.has_beaten_game(maximum_exploration_state,
-                                                                 item_to_place.player) \
+            if multiworld.accessibility[item_to_place.player] == 'minimal':
+                perform_access_check = not multiworld.has_beaten_game(maximum_exploration_state,
+                                                                      item_to_place.player) \
                     if single_player_placement else not has_beaten_game
             else:
                 perform_access_check = True
@@ -105,11 +116,11 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
                             # that want to not have both items. Left in until removal is proven useful.
                             prev_state = swap_state.copy()
                             prev_loc_count = len(
-                                world.get_reachable_locations(prev_state))
+                                multiworld.get_reachable_locations(prev_state))
 
                             swap_state.collect(item_to_place, True)
                             new_loc_count = len(
-                                world.get_reachable_locations(swap_state))
+                                multiworld.get_reachable_locations(swap_state))
 
                             if new_loc_count >= prev_loc_count:
                                 # Add this item to the existing placement, and
@@ -137,7 +148,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
                 else:
                     unplaced_items.append(item_to_place)
                     continue
-            world.push_item(spot_to_fill, item_to_place, False)
+            multiworld.push_item(spot_to_fill, item_to_place, False)
             spot_to_fill.locked = lock
             placements.append(spot_to_fill)
             spot_to_fill.event = item_to_place.advancement
@@ -146,7 +157,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
 
     if not allow_partial and len(unplaced_items) > 0 and len(locations) > 0:
         # There are leftover unplaceable items and locations that won't accept them
-        if world.can_beat_game():
+        if multiworld.can_beat_game():
             logging.warning(
                 f'Not all items placed. Game beatable anyway. (Could not place {unplaced_items})')
         else:
