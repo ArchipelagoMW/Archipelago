@@ -1,6 +1,6 @@
-from Fill import distribute_items_restrictive
 from . import MessengerTestBase
-from .. import NOTES, PHOBEKINS
+from ..Constants import NOTES, PHOBEKINS
+from ..Options import MessengerAccessibility
 
 
 class AccessTest(MessengerTestBase):
@@ -117,7 +117,7 @@ class AccessTest(MessengerTestBase):
 class ItemsAccessTest(MessengerTestBase):
     options = {
         "shuffle_seals": False,
-        "accessibility": "items"
+        "accessibility": MessengerAccessibility.option_items
     }
 
     def testSelfLockingItems(self):
@@ -129,15 +129,12 @@ class ItemsAccessTest(MessengerTestBase):
             "Acro": ["Ruxxtin's Amulet"],
             "Demon King Crown": PHOBEKINS
         }
-        for loc in location_lock_pairs:
-            item = self.multiworld.random.choice(location_lock_pairs[loc])
-            location = self.multiworld.get_location(loc, self.player)
-            self.multiworld.push_item(location, self.multiworld.worlds[self.player].create_item(item))
-            self.assertTrue(location.item.name, item)
 
-        with self.subTest("Fulfills Accessibility"):
-            distribute_items_restrictive(self.multiworld)
-            self.assertTrue(self.multiworld.fulfills_accessibility())
+        for loc in location_lock_pairs:
+            for item_name in location_lock_pairs[loc]:
+                item = self.get_item_by_name(item_name)
+                with self.subTest("Fulfills Accessibility", location=loc, item=item_name):
+                    self.assertTrue(self.multiworld.get_location(loc, self.player).can_fill(self.multiworld.state, item, True))
 
 
 class NoLogicTest(MessengerTestBase):

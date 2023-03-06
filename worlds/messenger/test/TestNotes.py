@@ -1,5 +1,5 @@
 from . import MessengerTestBase
-from .. import NOTES
+from ..Constants import NOTES
 
 
 class TwoNoteGoalTest(MessengerTestBase):

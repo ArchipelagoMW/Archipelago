@@ -1,6 +1,5 @@
 from BaseClasses import ItemClassification, CollectionState
 from . import MessengerTestBase
-from .. import PowerSeals
 
 
 class NoLogicTest(MessengerTestBase):
