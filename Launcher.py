@@ -148,6 +148,8 @@ components: Iterable[Component] = (
     Component('FF1 Client', 'FF1Client'),
     # Pokémon
     Component('Pokemon Client', 'PokemonClient', file_identifier=SuffixIdentifier('.apred', '.apblue')),
+    # TLoZ
+    Component('Zelda 1 Client', 'Zelda1Client'),
     # ChecksFinder
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
