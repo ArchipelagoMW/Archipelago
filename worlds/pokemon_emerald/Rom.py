@@ -6,6 +6,7 @@ from Options import Toggle
 from Patch import APDeltaPatch
 import Utils
 from .Data import get_extracted_data
+from .Items import reverse_offset_item_value
 from .Options import get_option_value
 from .Pokemon import get_random_species
 
@@ -37,9 +38,9 @@ def generate_output(multiworld, player, output_directory: str):
             continue
 
         if location.item and location.item.player == player:
-            _set_bytes_little_endian(patched_rom, location.address, 2, location.item.code)
+            _set_bytes_little_endian(patched_rom, location.rom_address, 2, reverse_offset_item_value(location.item.code))
         else:
-            _set_bytes_little_endian(patched_rom, location.address, 2, extracted_data["constants"]["ITEM_ARCHIPELAGO_PROGRESSION"])
+            _set_bytes_little_endian(patched_rom, location.rom_address, 2, extracted_data["constants"]["ITEM_ARCHIPELAGO_PROGRESSION"])
 
     # Set encounter tables
     _randomize_encounter_tables(multiworld.per_slot_randoms[player], patched_rom)

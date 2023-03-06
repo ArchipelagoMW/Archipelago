@@ -14,7 +14,7 @@ Regions must describe physical areas which are subsets of a `Map`. Every `Map` m
 
 Every `Map` has at least one region defined for it (with a couple exceptions for multiplayer rooms). At the time of writing, most haven't yet been broken down. These regions will need to be split into logical regions. In the example below, the region for `MAP_ROUTE103` was split into `REGION_ROUTE_103/WEST`, `REGION_ROUTE_103/WATER`, and `REGION_ROUTE_103/EAST`. Keeping the name consistent with the `Map` name and adding a label suffix for the subarea makes it clearer where we are in the world and where within a map we're describing.
 
-Every region (except `Menu`) is configured here. All files in this directory are appended to each other at runtime, and are only split and ordered for development convenience. Data for a single region looks like this:
+Every region (except `Menu`) is configured here. All files in this directory are appended to each other at runtime, and are only split and ordered for development convenience. Regions defined in `data/regions/unused` are entirely unused because they're not yet reachable in the randomizer. They're there for future reference in case we want to pull those maps in later. Any locations or warps in here should be blacklisted. Data for a single region looks like this:
 
 ```json
 "REGION_ROUTE103/EAST": {
@@ -57,9 +57,11 @@ This contains data automatically pulled from the base rom and its source code wh
 - `misc_ram_addresses`: RAM addresses for things the client will need to keep an eye on or write to.
 - `warps`: A list of all encoded warps. More on warps in `../README.md`.
 
-## `ignorable_warps.json`
+## `ignorable_locations.json` and `ignorable_warps.json`
 
-A list of special warps that can't easily or shouldn't be factored into logic, usually which involve dynamic destinations. More on warps in `../README.md`.
+A list of locations or warps that are pulled from `extracted_data.json` but aren't currently factored into logic. Usually these involve dynamic destinations (like Terra/Marine Cave or the Trick House), or they may be part of `Map`s/regions that aren't accessible in the randomizer (like event islands). More on warps in `../README.md`.
+
+Note: These lists suppress warnings, but don't actually filter anything. They're indications that the sanity check should not care whether they were included in any regions or not. If a location is claimed by a region and also listed in `ignorable_locations.json`, generation will carry on as if it were not listed in `ignorable_locations.json`.
 
 ## `items.json`
 

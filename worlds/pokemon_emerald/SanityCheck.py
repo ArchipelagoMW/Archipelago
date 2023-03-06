@@ -48,6 +48,7 @@ def _check_warps():
 
 def _check_locations():
     extracted_data = get_extracted_data()
+    ignorable_locations = load_json(os.path.join(os.path.dirname(__file__), "data/ignorable_locations.json"))
     claimed_locations = [location for region in get_region_data().values() for location in region.locations]
     claimed_location_map = {}
     for location_data in claimed_locations:
@@ -56,7 +57,7 @@ def _check_locations():
         claimed_location_map[location_data.name] = location_data
 
     for location_name, location_json in extracted_data["locations"].items():
-        if (not location_name in claimed_location_map):
+        if (not location_name in claimed_location_map and not location_name in ignorable_locations):
             _warn(f"Location [{location_name}] was not claimed by any region")
 
 

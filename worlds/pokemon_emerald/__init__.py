@@ -1,7 +1,7 @@
 from typing import List
-from BaseClasses import ItemClassification
+from BaseClasses import ItemClassification, Tutorial
 from Options import Toggle
-from ..AutoWorld import World
+from worlds.AutoWorld import World, WebWorld
 from .Items import PokemonEmeraldItem, create_item_label_to_id_map, get_item_classification
 from .Locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
 from .Options import options, get_option_value
@@ -11,11 +11,26 @@ from .Rules import set_default_rules, set_overworld_item_rules, set_hidden_item_
 from .SanityCheck import sanity_check
 
 
+class PokemonEmeraldWebWorld(WebWorld):
+    theme = "ocean"
+    setup_en = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing Pokémon Emerald with Archipelago.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Zunawe"]
+    )
+
+    tutorials = [setup_en]
+
+
 class PokemonEmeraldWorld(World):
     """
     Desc
     """
-    game: str = "Pokemon Emerald"
+    game = "Pokemon Emerald"
+    web = PokemonEmeraldWebWorld()
     option_definitions = options
     topology_present = True
 
@@ -62,7 +77,7 @@ class PokemonEmeraldWorld(World):
         item_locations: List[PokemonEmeraldLocation] = []
         for region in self.multiworld.regions:
             if (region.player == self.player):
-                item_locations += [location for location in region.locations if not location.id == None] # Filter events
+                item_locations += [location for location in region.locations if not location.address == None] # Filter events
 
                 if (badges_option == Toggle.option_false):
                     item_locations = [location for location in item_locations if "Badge" not in location.tags]
@@ -73,9 +88,9 @@ class PokemonEmeraldWorld(World):
                 if (rods_option == Toggle.option_false):
                     item_locations = [location for location in item_locations if "Rod" not in location.tags]
 
-        self.multiworld.itempool += [self.create_item_by_id(location.default_item_id) for location in item_locations]
-    
-    
+        self.multiworld.itempool += [self.create_item_by_code(location.default_item_code) for location in item_locations]
+
+
     def set_rules(self):
         set_default_rules(self.multiworld, self.player)
 
@@ -97,7 +112,7 @@ class PokemonEmeraldWorld(World):
         def convert_unrandomized_items_to_events(tag: str):
             for location in locations:
                 if (location.tags != None and tag in location.tags):
-                    location.place_locked_item(self.create_event(self.item_id_to_name[location.default_item_id]))
+                    location.place_locked_item(self.create_event(self.item_id_to_name[location.default_item_code]))
                     location.address = None
                     location.is_event = True
 
@@ -124,19 +139,19 @@ class PokemonEmeraldWorld(World):
         return slot_data
 
     def create_item(self, name: str) -> PokemonEmeraldItem:
-        item_id = self.item_name_to_id[name]
+        item_code = self.item_name_to_id[name]
         return PokemonEmeraldItem(
             name,
-            get_item_classification(item_id),
-            item_id,
+            get_item_classification(item_code),
+            item_code,
             self.player
         )
 
-    def create_item_by_id(self, item_id: int) -> PokemonEmeraldItem:
+    def create_item_by_code(self, item_code: int) -> PokemonEmeraldItem:
         return PokemonEmeraldItem(
-            self.item_id_to_name[item_id],
-            get_item_classification(item_id),
-            item_id,
+            self.item_id_to_name[item_code],
+            get_item_classification(item_code),
+            item_code,
             self.player
         )
 

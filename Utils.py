@@ -304,6 +304,9 @@ def get_default_options() -> OptionsType:
             "blue_rom_file": "Pokemon Blue (UE) [S][!].gb",
             "rom_start": True
         },
+        "pokemon_emerald_options": {
+            "rom_file": "Pokemon - Emerald Version (USA, Europe).gba"
+        },
         "ffr_options": {
             "display_msgs": True,
         },
