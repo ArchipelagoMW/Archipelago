@@ -163,15 +163,14 @@ def allow_self_locking_items(spot: typing.Union[Location, Region], *item_names: 
     item_names: item name or names that are allowed to be placed in the Location or Region
         """
     def add_allowed_rules(area: typing.Union[Location, Entrance], location: Location) -> None:
-        def add_always_allow(location: Location, rule: typing.Callable) -> None:
-            old_rule = location.always_allow
-            location.always_allow = old_rule or rule
+        def set_always_allow(location: Location, rule: typing.Callable) -> None:
+            location.always_allow = rule
 
         for item_name in item_names:
             add_rule(area, lambda state, item_name=item_name:
                      location_item_name(state, location.name, player) == (item_name, player), "or")
-            add_always_allow(location,
-                             lambda state, item, item_name=item_name: item.name == item_name and item.player == player)
+        set_always_allow(location, lambda state, item, item_names=item_names:
+                         item.player == player and item.name in [item_name for item_name in item_names])
 
     player = spot.player
     if isinstance(spot, Region):
