@@ -1280,7 +1280,9 @@ class Spoiler():
                 outfile.write('Game:                            %s\n' % self.multiworld.game[player])
                 for f_option, option in Options.per_game_common_options.items():
                     write_option(f_option, option)
-                options = self.multiworld.worlds[player].option_definitions
+                options = {option_name: option for option_name, option
+                           in self.multiworld.worlds[player].option_definitions.items()
+                           if option_name not in Options.per_game_common_options}
                 if options:
                     for f_option, option in options.items():
                         write_option(f_option, option)
