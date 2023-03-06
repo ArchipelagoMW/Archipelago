@@ -16,7 +16,8 @@
       "ABILITY_OVERGROW",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010011100000101011000010000100010000011110000010011100000000"
   },
   "SPECIES_IVYSAUR": {
     "label": "Ivysaur",
@@ -35,7 +36,8 @@
       "ABILITY_OVERGROW",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010011100000101011000010000100010000011110000010011100000000"
   },
   "SPECIES_VENUSAUR": {
     "label": "Venusaur",
@@ -54,7 +56,8 @@
       "ABILITY_OVERGROW",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000110011100010101011000110000100010000011110000010011100000000"
   },
   "SPECIES_CHARMANDER": {
     "label": "Charmander",
@@ -73,7 +76,8 @@
       "ABILITY_BLAZE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1100010001100000100010100011001100100101011110000110010100000000"
   },
   "SPECIES_CHARMELEON": {
     "label": "Charmeleon",
@@ -92,7 +96,8 @@
       "ABILITY_BLAZE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1100010001100000100010100011001100100101011110000110010100000000"
   },
   "SPECIES_CHARIZARD": {
     "label": "Charizard",
@@ -111,7 +116,8 @@
       "ABILITY_BLAZE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1100110001100010100010100111001100100101011110100111010100000000"
   },
   "SPECIES_SQUIRTLE": {
     "label": "Squirtle",
@@ -130,7 +136,8 @@
       "ABILITY_TORRENT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1010011001001100110010100011001100000000011110000000110111000000"
   },
   "SPECIES_WARTORTLE": {
     "label": "Wartortle",
@@ -149,7 +156,8 @@
       "ABILITY_TORRENT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1010011001001100110010100011001100000000011110000000110111000000"
   },
   "SPECIES_BLASTOISE": {
     "label": "Blastoise",
@@ -168,7 +176,8 @@
       "ABILITY_TORRENT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1010111001001110110010100111001100000000011110000000110111000000"
   },
   "SPECIES_CATERPIE": {
     "label": "Caterpie",
@@ -187,7 +196,8 @@
       "ABILITY_SHIELD_DUST",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_METAPOD": {
     "label": "Metapod",
@@ -206,7 +216,8 @@
       "ABILITY_SHED_SKIN",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_BUTTERFREE": {
     "label": "Butterfree",
@@ -225,7 +236,8 @@
       "ABILITY_COMPOUND_EYES",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001100010111111000010110100000001011111010000001000000000"
   },
   "SPECIES_WEEDLE": {
     "label": "Weedle",
@@ -244,7 +256,8 @@
       "ABILITY_SHIELD_DUST",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_KAKUNA": {
     "label": "Kakuna",
@@ -263,7 +276,8 @@
       "ABILITY_SHED_SKIN",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_BEEDRILL": {
     "label": "Beedrill",
@@ -282,7 +296,8 @@
       "ABILITY_SWARM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001100010101011000010001100010001011111000010000100000000"
   },
   "SPECIES_PIDGEY": {
     "label": "Pidgey",
@@ -301,7 +316,8 @@
       "ABILITY_KEEN_EYE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010001100000110010000010000100000001011111100001000000000000"
   },
   "SPECIES_PIDGEOTTO": {
     "label": "Pidgeotto",
@@ -320,7 +336,8 @@
       "ABILITY_KEEN_EYE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0000010001100000110010000010000100000001011111100001000000000000"
   },
   "SPECIES_PIDGEOT": {
     "label": "Pidgeot",
@@ -339,7 +356,8 @@
       "ABILITY_KEEN_EYE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001100010110010000010000100000001011111100001000000000000"
   },
   "SPECIES_RATTATA": {
     "label": "Rattata",
@@ -358,7 +376,8 @@
       "ABILITY_RUN_AWAY",
       "ABILITY_GUTS"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010001111100110010111011010101000000011111000010000100000000"
   },
   "SPECIES_RATICATE": {
     "label": "Raticate",
@@ -377,7 +396,8 @@
       "ABILITY_RUN_AWAY",
       "ABILITY_GUTS"
     ],
-    "catch_rate": 127
+    "catch_rate": 127,
+    "tm_hm_compatibility": "0000110001111110110010111011010101000000011111000010010100000000"
   },
   "SPECIES_SPEAROW": {
     "label": "Spearow",
@@ -396,7 +416,8 @@
       "ABILITY_KEEN_EYE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010001100000110010000010000100000001011111100001000000000000"
   },
   "SPECIES_FEAROW": {
     "label": "Fearow",
@@ -415,7 +436,8 @@
       "ABILITY_KEEN_EYE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "0000010001100010110010000010000100000001011111100001000000000000"
   },
   "SPECIES_EKANS": {
     "label": "Ekans",
@@ -434,7 +456,8 @@
       "ABILITY_INTIMIDATE",
       "ABILITY_SHED_SKIN"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010001100000111010100111000100010000111111001000010000000000"
   },
   "SPECIES_ARBOK": {
     "label": "Arbok",
@@ -453,7 +476,8 @@
       "ABILITY_INTIMIDATE",
       "ABILITY_SHED_SKIN"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "0000010001100010111010100111000100010000111111001000010000000000"
   },
   "SPECIES_PIKACHU": {
     "label": "Pikachu",
@@ -472,7 +496,8 @@
       "ABILITY_STATIC",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "1000010001000001110010111011001101000000011110000000011100000000"
   },
   "SPECIES_RAICHU": {
     "label": "Raichu",
@@ -491,7 +516,8 @@
       "ABILITY_STATIC",
       "ABILITY_NONE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "1000010001000011110010111011001101000000011111000000011100000000"
   },
   "SPECIES_SANDSHREW": {
     "label": "Sandshrew",
@@ -510,7 +536,8 @@
       "ABILITY_SAND_VEIL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "1000010001100000100010100111001100001011011111000010010100000000"
   },
   "SPECIES_SANDSLASH": {
     "label": "Sandslash",
@@ -529,7 +556,8 @@
       "ABILITY_SAND_VEIL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "1000010001100010100010100111001100001011011111000010010100000000"
   },
   "SPECIES_NIDORAN_F": {
     "label": "Nidoran♀",
@@ -548,7 +576,8 @@
       "ABILITY_POISON_POINT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 235
+    "catch_rate": 235,
+    "tm_hm_compatibility": "0010010001101100110010111011000101010001011111000010010100000000"
   },
   "SPECIES_NIDORINA": {
     "label": "Nidorina",
@@ -567,7 +596,8 @@
       "ABILITY_POISON_POINT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0010010001101100110010111011000101010001011111000010010100000000"
   },
   "SPECIES_NIDOQUEEN": {
     "label": "Nidoqueen",
@@ -586,7 +616,8 @@
       "ABILITY_POISON_POINT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1010110001111110110010111111011101111111111111000010110100000000"
   },
   "SPECIES_NIDORAN_M": {
     "label": "Nidoran♂",
@@ -605,7 +636,8 @@
       "ABILITY_POISON_POINT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 235
+    "catch_rate": 235,
+    "tm_hm_compatibility": "0010010001101100110010111011000101010000011111000010010100000000"
   },
   "SPECIES_NIDORINO": {
     "label": "Nidorino",
@@ -624,7 +656,8 @@
       "ABILITY_POISON_POINT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0010010001101100110010111011000101010000011111000010010100000000"
   },
   "SPECIES_NIDOKING": {
     "label": "Nidoking",
@@ -643,7 +676,8 @@
       "ABILITY_POISON_POINT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1010110001111110110010111111011101111110111111000010110100000000"
   },
   "SPECIES_CLEFAIRY": {
     "label": "Clefairy",
@@ -662,7 +696,8 @@
       "ABILITY_CUTE_CHARM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 150
+    "catch_rate": 150,
+    "tm_hm_compatibility": "1011010001101101110111111011111111100100011110001000011000000000"
   },
   "SPECIES_CLEFABLE": {
     "label": "Clefable",
@@ -681,7 +716,8 @@
       "ABILITY_CUTE_CHARM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 25
+    "catch_rate": 25,
+    "tm_hm_compatibility": "1011010001101111110111111011111111100100011110001000011000000000"
   },
   "SPECIES_VULPIX": {
     "label": "Vulpix",
@@ -700,7 +736,8 @@
       "ABILITY_FLASH_FIRE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0000110001100000100110100011000100100100011110000100000000000000"
   },
   "SPECIES_NINETALES": {
     "label": "Ninetales",
@@ -719,7 +756,8 @@
       "ABILITY_FLASH_FIRE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0000110001100010100110100011000100100100011110000100000000000000"
   },
   "SPECIES_JIGGLYPUFF": {
     "label": "Jigglypuff",
@@ -738,7 +776,8 @@
       "ABILITY_CUTE_CHARM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 170
+    "catch_rate": 170,
+    "tm_hm_compatibility": "1010010001101101110111011011111111100100011110001000011000000000"
   },
   "SPECIES_WIGGLYTUFF": {
     "label": "Wigglytuff",
@@ -757,7 +796,8 @@
       "ABILITY_CUTE_CHARM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 50
+    "catch_rate": 50,
+    "tm_hm_compatibility": "1010010001101111110111011011111111100100011110001000011000000000"
   },
   "SPECIES_ZUBAT": {
     "label": "Zubat",
@@ -776,7 +816,8 @@
       "ABILITY_INNER_FOCUS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010001110000111010000010010100010001111111101000000000000000"
   },
   "SPECIES_GOLBAT": {
     "label": "Golbat",
@@ -795,7 +836,8 @@
       "ABILITY_INNER_FOCUS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "0000010001110010111010000010010100010001111111101000000000000000"
   },
   "SPECIES_ODDISH": {
     "label": "Oddish",
@@ -814,7 +856,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010011100000101011000010000100010000011110000010001000000000"
   },
   "SPECIES_GLOOM": {
     "label": "Gloom",
@@ -833,7 +876,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0000010011100000101011000010000100010000011110000010001000000000"
   },
   "SPECIES_VILEPLUME": {
     "label": "Vileplume",
@@ -852,7 +896,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010011100010101011000010000100010000011110000010001000000000"
   },
   "SPECIES_PARAS": {
     "label": "Paras",
@@ -871,7 +916,8 @@
       "ABILITY_EFFECT_SPORE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0000010011100000101011000011000100010001011111000010001100000000"
   },
   "SPECIES_PARASECT": {
     "label": "Parasect",
@@ -890,7 +936,8 @@
       "ABILITY_EFFECT_SPORE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0000010011100010101011000011000100010001011111000010001100000000"
   },
   "SPECIES_VENONAT": {
     "label": "Venonat",
@@ -909,7 +956,8 @@
       "ABILITY_COMPOUND_EYES",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0000010001100000101011000010100100010000011111010000001000000000"
   },
   "SPECIES_VENOMOTH": {
     "label": "Venomoth",
@@ -928,7 +976,8 @@
       "ABILITY_SHIELD_DUST",
       "ABILITY_NONE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0000010001100010101011000010100100010001011111010000001000000000"
   },
   "SPECIES_DIGLETT": {
     "label": "Diglett",
@@ -947,7 +996,8 @@
       "ABILITY_SAND_VEIL",
       "ABILITY_ARENA_TRAP"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010001100000100010000111000100010011011111000010000100000000"
   },
   "SPECIES_DUGTRIO": {
     "label": "Dugtrio",
@@ -966,7 +1016,8 @@
       "ABILITY_SAND_VEIL",
       "ABILITY_ARENA_TRAP"
     ],
-    "catch_rate": 50
+    "catch_rate": 50,
+    "tm_hm_compatibility": "0000010001100010100010000111000100010011011111000010000100000000"
   },
   "SPECIES_MEOWTH": {
     "label": "Meowth",
@@ -985,7 +1036,8 @@
       "ABILITY_PICKUP",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0010010001110000110010111011010101000001111111001010001000000000"
   },
   "SPECIES_PERSIAN": {
     "label": "Persian",
@@ -1004,7 +1056,8 @@
       "ABILITY_LIMBER",
       "ABILITY_NONE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "0010110001110010110010111011010101000001111111001010001000000000"
   },
   "SPECIES_PSYDUCK": {
     "label": "Psyduck",
@@ -1023,7 +1076,8 @@
       "ABILITY_DAMP",
       "ABILITY_CLOUD_NINE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "1011011001001100110010100011001100000001011110000000111111000000"
   },
   "SPECIES_GOLDUCK": {
     "label": "Golduck",
@@ -1042,7 +1096,8 @@
       "ABILITY_DAMP",
       "ABILITY_CLOUD_NINE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "1011011001001110110010100011001100000001011110000000111111000000"
   },
   "SPECIES_MANKEY": {
     "label": "Mankey",
@@ -1061,7 +1116,8 @@
       "ABILITY_VITAL_SPIRIT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "1000010101110000110010111111001100000011011111000100010100000000"
   },
   "SPECIES_PRIMEAPE": {
     "label": "Primeape",
@@ -1080,7 +1136,8 @@
       "ABILITY_VITAL_SPIRIT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "1000010101110010110010111111001100000011011111000100010100000000"
   },
   "SPECIES_GROWLITHE": {
     "label": "Growlithe",
@@ -1099,7 +1156,8 @@
       "ABILITY_INTIMIDATE",
       "ABILITY_FLASH_FIRE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0000110001100000100010100011000100100101011111000100010100000000"
   },
   "SPECIES_ARCANINE": {
     "label": "Arcanine",
@@ -1118,7 +1176,8 @@
       "ABILITY_INTIMIDATE",
       "ABILITY_FLASH_FIRE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0000110001100010100010100011000100100101011111000100010100000000"
   },
   "SPECIES_POLIWAG": {
     "label": "Poliwag",
@@ -1137,7 +1196,8 @@
       "ABILITY_WATER_ABSORB",
       "ABILITY_DAMP"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0010011001001100110010000011100100000000011111000000100011000000"
   },
   "SPECIES_POLIWHIRL": {
     "label": "Poliwhirl",
@@ -1156,7 +1216,8 @@
       "ABILITY_WATER_ABSORB",
       "ABILITY_DAMP"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "1010011001001100110010000111101100000000011111000000110111000000"
   },
   "SPECIES_POLIWRATH": {
     "label": "Poliwrath",
@@ -1175,7 +1236,8 @@
       "ABILITY_WATER_ABSORB",
       "ABILITY_DAMP"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1010011101001110110010000111101100000010011111000000110111000000"
   },
   "SPECIES_ABRA": {
     "label": "Abra",
@@ -1194,7 +1256,8 @@
       "ABILITY_SYNCHRONIZE",
       "ABILITY_INNER_FOCUS"
     ],
-    "catch_rate": 200
+    "catch_rate": 200,
+    "tm_hm_compatibility": "1001010001110001110110100010110111000000111111011000001000000000"
   },
   "SPECIES_KADABRA": {
     "label": "Kadabra",
@@ -1213,7 +1276,8 @@
       "ABILITY_SYNCHRONIZE",
       "ABILITY_INNER_FOCUS"
     ],
-    "catch_rate": 100
+    "catch_rate": 100,
+    "tm_hm_compatibility": "1001010001110001110110100010110111000000111111011000001000000000"
   },
   "SPECIES_ALAKAZAM": {
     "label": "Alakazam",
@@ -1232,7 +1296,8 @@
       "ABILITY_SYNCHRONIZE",
       "ABILITY_INNER_FOCUS"
     ],
-    "catch_rate": 50
+    "catch_rate": 50,
+    "tm_hm_compatibility": "1001010001110011110110100010110111000000111111011000001000000000"
   },
   "SPECIES_MACHOP": {
     "label": "Machop",
@@ -1251,7 +1316,8 @@
       "ABILITY_GUTS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 180
+    "catch_rate": 180,
+    "tm_hm_compatibility": "1000010101100000110010000111001100100110011111000000010100000000"
   },
   "SPECIES_MACHOKE": {
     "label": "Machoke",
@@ -1270,7 +1336,8 @@
       "ABILITY_GUTS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "1000010101100000110010000111001100100110011111000000010100000000"
   },
   "SPECIES_MACHAMP": {
     "label": "Machamp",
@@ -1289,7 +1356,8 @@
       "ABILITY_GUTS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000010101100010110010000111001100100110011111000000010100000000"
   },
   "SPECIES_BELLSPROUT": {
     "label": "Bellsprout",
@@ -1308,7 +1376,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010011100000101011000010000100010000011111000010001000000000"
   },
   "SPECIES_WEEPINBELL": {
     "label": "Weepinbell",
@@ -1327,7 +1396,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0000010011100000101011000010000100010000011111000010001000000000"
   },
   "SPECIES_VICTREEBEL": {
     "label": "Victreebel",
@@ -1346,7 +1416,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010011100010101011000010000100010000011111000010001000000000"
   },
   "SPECIES_TENTACOOL": {
     "label": "Tentacool",
@@ -1365,7 +1436,8 @@
       "ABILITY_CLEAR_BODY",
       "ABILITY_LIQUID_OOZE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0010011001001100111010000010000100010000011111000010100011000000"
   },
   "SPECIES_TENTACRUEL": {
     "label": "Tentacruel",
@@ -1384,7 +1456,8 @@
       "ABILITY_CLEAR_BODY",
       "ABILITY_LIQUID_OOZE"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0010011001001110111010000010000100010000011111000010100011000000"
   },
   "SPECIES_GEODUDE": {
     "label": "Geodude",
@@ -1403,7 +1476,8 @@
       "ABILITY_ROCK_HEAD",
       "ABILITY_STURDY"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "1000010001100000100010000111001100101110011110000000010100000000"
   },
   "SPECIES_GRAVELER": {
     "label": "Graveler",
@@ -1422,7 +1496,8 @@
       "ABILITY_ROCK_HEAD",
       "ABILITY_STURDY"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "1000010001100000100010000111001100101110011110000000010100000000"
   },
   "SPECIES_GOLEM": {
     "label": "Golem",
@@ -1441,7 +1516,8 @@
       "ABILITY_ROCK_HEAD",
       "ABILITY_STURDY"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000110001100010100010000111001100101110011110000000010100000000"
   },
   "SPECIES_PONYTA": {
     "label": "Ponyta",
@@ -1460,7 +1536,8 @@
       "ABILITY_RUN_AWAY",
       "ABILITY_FLASH_FIRE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0000010001100000100011100010000100100100011110000100010000000000"
   },
   "SPECIES_RAPIDASH": {
     "label": "Rapidash",
@@ -1479,7 +1556,8 @@
       "ABILITY_RUN_AWAY",
       "ABILITY_FLASH_FIRE"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0000010001100010100011100010000100100100011110000100010000000000"
   },
   "SPECIES_SLOWPOKE": {
     "label": "Slowpoke",
@@ -1498,7 +1576,8 @@
       "ABILITY_OBLIVIOUS",
       "ABILITY_OWN_TEMPO"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0011011001101100110110100111110100100100011110010000111001000000"
   },
   "SPECIES_SLOWBRO": {
     "label": "Slowbro",
@@ -1517,7 +1596,8 @@
       "ABILITY_OBLIVIOUS",
       "ABILITY_OWN_TEMPO"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "1011011001101110110110100111111100100100011110010000111101000000"
   },
   "SPECIES_MAGNEMITE": {
     "label": "Magnemite",
@@ -1536,7 +1616,8 @@
       "ABILITY_MAGNET_PULL",
       "ABILITY_STURDY"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0000010001100000110010011010000111000000011100000000001000000000"
   },
   "SPECIES_MAGNETON": {
     "label": "Magneton",
@@ -1555,7 +1636,8 @@
       "ABILITY_MAGNET_PULL",
       "ABILITY_STURDY"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0000010001100010110010011010000111000000011100000000001000000000"
   },
   "SPECIES_FARFETCHD": {
     "label": "Farfetch'd",
@@ -1574,7 +1656,8 @@
       "ABILITY_KEEN_EYE",
       "ABILITY_INNER_FOCUS"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001100000100010100010000100000001011111100011000000000000"
   },
   "SPECIES_DODUO": {
     "label": "Doduo",
@@ -1593,7 +1676,8 @@
       "ABILITY_RUN_AWAY",
       "ABILITY_EARLY_BIRD"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0000010001100000100010000010000100000001011111100001000000000000"
   },
   "SPECIES_DODRIO": {
     "label": "Dodrio",
@@ -1612,7 +1696,8 @@
       "ABILITY_RUN_AWAY",
       "ABILITY_EARLY_BIRD"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001110010100010000010000100000001111111100001000000000000"
   },
   "SPECIES_SEEL": {
     "label": "Seel",
@@ -1631,7 +1716,8 @@
       "ABILITY_THICK_FAT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0010011001001100110110000010000100000000011111000000100011000000"
   },
   "SPECIES_DEWGONG": {
     "label": "Dewgong",
@@ -1650,7 +1736,8 @@
       "ABILITY_THICK_FAT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0010011001001110110110000010000100000000011111000000100011000000"
   },
   "SPECIES_GRIMER": {
     "label": "Grimer",
@@ -1669,7 +1756,8 @@
       "ABILITY_STENCH",
       "ABILITY_STICKY_HOLD"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0000010001110000111010011011000101110110111111000000000000000000"
   },
   "SPECIES_MUK": {
     "label": "Muk",
@@ -1688,7 +1776,8 @@
       "ABILITY_STENCH",
       "ABILITY_STICKY_HOLD"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "1000010001110010111010011011001101110110111111000000010100000000"
   },
   "SPECIES_SHELLDER": {
     "label": "Shellder",
@@ -1707,7 +1796,8 @@
       "ABILITY_SHELL_ARMOR",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0010011001001100110010000010000100000000011110000000100001000000"
   },
   "SPECIES_CLOYSTER": {
     "label": "Cloyster",
@@ -1726,7 +1816,8 @@
       "ABILITY_SHELL_ARMOR",
       "ABILITY_NONE"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0010011001001110110010000010000100000000111110000000100001000000"
   },
   "SPECIES_GASTLY": {
     "label": "Gastly",
@@ -1745,7 +1836,8 @@
       "ABILITY_LEVITATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0000010001110000111010010010110100010000111111011000000000000000"
   },
   "SPECIES_HAUNTER": {
     "label": "Haunter",
@@ -1764,7 +1856,8 @@
       "ABILITY_LEVITATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "0000010001110000111010010010110100010000111111011000000000000000"
   },
   "SPECIES_GENGAR": {
     "label": "Gengar",
@@ -1783,7 +1876,8 @@
       "ABILITY_LEVITATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000010001110010111010011010111100010000111111011000010100000000"
   },
   "SPECIES_ONIX": {
     "label": "Onix",
@@ -1802,7 +1896,8 @@
       "ABILITY_ROCK_HEAD",
       "ABILITY_STURDY"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000110001110000100010100111000100001010111110000000010100000000"
   },
   "SPECIES_DROWZEE": {
     "label": "Drowzee",
@@ -1821,7 +1916,8 @@
       "ABILITY_INSOMNIA",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "1001010001110001110110000010111110000000111111011000001000000000"
   },
   "SPECIES_HYPNO": {
     "label": "Hypno",
@@ -1840,7 +1936,8 @@
       "ABILITY_INSOMNIA",
       "ABILITY_NONE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "1001010001110011110110000010111110000000111111011000001000000000"
   },
   "SPECIES_KRABBY": {
     "label": "Krabby",
@@ -1859,7 +1956,8 @@
       "ABILITY_HYPER_CUTTER",
       "ABILITY_SHELL_ARMOR"
     ],
-    "catch_rate": 225
+    "catch_rate": 225,
+    "tm_hm_compatibility": "0010011001001100110010000011000100000010011111000010110101000000"
   },
   "SPECIES_KINGLER": {
     "label": "Kingler",
@@ -1878,7 +1976,8 @@
       "ABILITY_HYPER_CUTTER",
       "ABILITY_SHELL_ARMOR"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0010011001001110110010000011000100000010011111000010110101000000"
   },
   "SPECIES_VOLTORB": {
     "label": "Voltorb",
@@ -1897,7 +1996,8 @@
       "ABILITY_SOUNDPROOF",
       "ABILITY_STATIC"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0000010001010001110010011010000101000000111101000000001000000000"
   },
   "SPECIES_ELECTRODE": {
     "label": "Electrode",
@@ -1916,7 +2016,8 @@
       "ABILITY_SOUNDPROOF",
       "ABILITY_STATIC"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0000010001010011110010011010000101000000111101000000001000000000"
   },
   "SPECIES_EXEGGCUTE": {
     "label": "Exeggcute",
@@ -1935,7 +2036,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "0000010011100001101011000010100110010000011111010000011000000000"
   },
   "SPECIES_EXEGGUTOR": {
     "label": "Exeggutor",
@@ -1954,7 +2056,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010011100011101011000010100110010000011111010000011000000000"
   },
   "SPECIES_CUBONE": {
     "label": "Cubone",
@@ -1973,7 +2076,8 @@
       "ABILITY_ROCK_HEAD",
       "ABILITY_LIGHTNING_ROD"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "1000010001101100100010100111001100101111011111000000010100000000"
   },
   "SPECIES_MAROWAK": {
     "label": "Marowak",
@@ -1992,7 +2096,8 @@
       "ABILITY_ROCK_HEAD",
       "ABILITY_LIGHTNING_ROD"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "1000010001101110100010100111001100101111011111000000010100000000"
   },
   "SPECIES_HITMONLEE": {
     "label": "Hitmonlee",
@@ -2011,7 +2116,8 @@
       "ABILITY_LIMBER",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000010101100000110010000110001100000010011111000000010100000000"
   },
   "SPECIES_HITMONCHAN": {
     "label": "Hitmonchan",
@@ -2030,7 +2136,8 @@
       "ABILITY_KEEN_EYE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000010101100000110010000110001100000010011111000000010100000000"
   },
   "SPECIES_LICKITUNG": {
     "label": "Lickitung",
@@ -2049,7 +2156,8 @@
       "ABILITY_OWN_TEMPO",
       "ABILITY_OBLIVIOUS"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1010010001101110110011111111011101101110011111000010110100000000"
   },
   "SPECIES_KOFFING": {
     "label": "Koffing",
@@ -2068,7 +2176,8 @@
       "ABILITY_LEVITATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0000010001110000110010011010010101110100111111000000001000000000"
   },
   "SPECIES_WEEZING": {
     "label": "Weezing",
@@ -2087,7 +2196,8 @@
       "ABILITY_LEVITATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0000010001110010110010011010010101110100111111000000001000000000"
   },
   "SPECIES_RHYHORN": {
     "label": "Rhyhorn",
@@ -2106,7 +2216,8 @@
       "ABILITY_LIGHTNING_ROD",
       "ABILITY_ROCK_HEAD"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0000110001101100110010111111000101101110011111000000010100000000"
   },
   "SPECIES_RHYDON": {
     "label": "Rhydon",
@@ -2125,7 +2236,8 @@
       "ABILITY_LIGHTNING_ROD",
       "ABILITY_ROCK_HEAD"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "1000110001101110110010111111001101101110011111000010110100000000"
   },
   "SPECIES_CHANSEY": {
     "label": "Chansey",
@@ -2144,7 +2256,8 @@
       "ABILITY_NATURAL_CURE",
       "ABILITY_SERENE_GRACE"
     ],
-    "catch_rate": 30
+    "catch_rate": 30,
+    "tm_hm_compatibility": "1011011001101111110111111110111101101110011110011000011100000000"
   },
   "SPECIES_TANGELA": {
     "label": "Tangela",
@@ -2163,7 +2276,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010011100010101011000010000100010000011111000010001100000000"
   },
   "SPECIES_KANGASKHAN": {
     "label": "Kangaskhan",
@@ -2182,7 +2296,8 @@
       "ABILITY_EARLY_BIRD",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1010111001101110110011111111011101101111011111000010110100000000"
   },
   "SPECIES_HORSEA": {
     "label": "Horsea",
@@ -2201,7 +2316,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 225
+    "catch_rate": 225,
+    "tm_hm_compatibility": "0010011001001100110010000010000100000000011110000000100011000000"
   },
   "SPECIES_SEADRA": {
     "label": "Seadra",
@@ -2220,7 +2336,8 @@
       "ABILITY_POISON_POINT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0010011001001110110010000010000100000000011110000000100011000000"
   },
   "SPECIES_GOLDEEN": {
     "label": "Goldeen",
@@ -2239,7 +2356,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_WATER_VEIL"
     ],
-    "catch_rate": 225
+    "catch_rate": 225,
+    "tm_hm_compatibility": "0010011001001100110010000010000100000000011110000000100011000000"
   },
   "SPECIES_SEAKING": {
     "label": "Seaking",
@@ -2258,7 +2376,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_WATER_VEIL"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0010011001001110110010000010000100000000011110000000100011000000"
   },
   "SPECIES_STARYU": {
     "label": "Staryu",
@@ -2277,7 +2396,8 @@
       "ABILITY_ILLUMINATE",
       "ABILITY_NATURAL_CURE"
     ],
-    "catch_rate": 225
+    "catch_rate": 225,
+    "tm_hm_compatibility": "0010011001001101110010011010100110000000011100000000101011000000"
   },
   "SPECIES_STARMIE": {
     "label": "Starmie",
@@ -2296,7 +2416,8 @@
       "ABILITY_ILLUMINATE",
       "ABILITY_NATURAL_CURE"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0010011001001111110010011010100110000000011100010000101011000000"
   },
   "SPECIES_MR_MIME": {
     "label": "Mr. Mime",
@@ -2315,7 +2436,8 @@
       "ABILITY_SOUNDPROOF",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1001010001110011110111011010111111000000111111011000001000000000"
   },
   "SPECIES_SCYTHER": {
     "label": "Scyther",
@@ -2334,7 +2456,8 @@
       "ABILITY_SWARM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001100010110010000010000100000001011111100010000100000000"
   },
   "SPECIES_JYNX": {
     "label": "Jynx",
@@ -2353,7 +2476,8 @@
       "ABILITY_OBLIVIOUS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1011011001011111110010000010111110000000111111010000001000000000"
   },
   "SPECIES_ELECTABUZZ": {
     "label": "Electabuzz",
@@ -2372,7 +2496,8 @@
       "ABILITY_STATIC",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000010001000011110010111010101101000000011111000000011100000000"
   },
   "SPECIES_MAGMAR": {
     "label": "Magmar",
@@ -2391,7 +2516,8 @@
       "ABILITY_FLAME_BODY",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000010001100010100010100010101100100100011111000000010100000000"
   },
   "SPECIES_PINSIR": {
     "label": "Pinsir",
@@ -2410,7 +2536,8 @@
       "ABILITY_HYPER_CUTTER",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000010101100010110010000111001100000010011111000010010100000000"
   },
   "SPECIES_TAUROS": {
     "label": "Tauros",
@@ -2429,7 +2556,8 @@
       "ABILITY_INTIMIDATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010010001101110110011111110000101101110011110000000110100000000"
   },
   "SPECIES_MAGIKARP": {
     "label": "Magikarp",
@@ -2448,7 +2576,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_GYARADOS": {
     "label": "Gyarados",
@@ -2467,7 +2596,8 @@
       "ABILITY_INTIMIDATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010111001011110110010011110000100101100111110000000110111000000"
   },
   "SPECIES_LAPRAS": {
     "label": "Lapras",
@@ -2486,7 +2616,8 @@
       "ABILITY_WATER_ABSORB",
       "ABILITY_SHELL_ARMOR"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010111001001110110110111010100101000000011110000000110111000000"
   },
   "SPECIES_DITTO": {
     "label": "Ditto",
@@ -2505,7 +2636,8 @@
       "ABILITY_LIMBER",
       "ABILITY_NONE"
     ],
-    "catch_rate": 35
+    "catch_rate": 35,
+    "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_EEVEE": {
     "label": "Eevee",
@@ -2524,7 +2656,8 @@
       "ABILITY_RUN_AWAY",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001100000110010100011010100000000011110000000000000000000"
   },
   "SPECIES_VAPOREON": {
     "label": "Vaporeon",
@@ -2543,7 +2676,8 @@
       "ABILITY_WATER_ABSORB",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010111001101110110010100011010100000000011110000000100011000000"
   },
   "SPECIES_JOLTEON": {
     "label": "Jolteon",
@@ -2562,7 +2696,8 @@
       "ABILITY_VOLT_ABSORB",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000110001100010110010111011010101000000011110000000001000000000"
   },
   "SPECIES_FLAREON": {
     "label": "Flareon",
@@ -2581,7 +2716,8 @@
       "ABILITY_FLASH_FIRE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000110001100010110010100011010100100100011110000100000000000000"
   },
   "SPECIES_PORYGON": {
     "label": "Porygon",
@@ -2600,7 +2736,8 @@
       "ABILITY_TRACE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001101110110011111010110101000001011101000000001000000000"
   },
   "SPECIES_OMANYTE": {
     "label": "Omanyte",
@@ -2619,7 +2756,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_SHELL_ARMOR"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010011001001100110010000010000100001010011111000000100111000000"
   },
   "SPECIES_OMASTAR": {
     "label": "Omastar",
@@ -2638,7 +2776,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_SHELL_ARMOR"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010011001001110110010000010000100001010011111000000100111000000"
   },
   "SPECIES_KABUTO": {
     "label": "Kabuto",
@@ -2657,7 +2796,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_BATTLE_ARMOR"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010011001001100111010000011000100001011011111000000100110000000"
   },
   "SPECIES_KABUTOPS": {
     "label": "Kabutops",
@@ -2676,7 +2816,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_BATTLE_ARMOR"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010011001001110111010000011001100001011011111000010100111000000"
   },
   "SPECIES_AERODACTYL": {
     "label": "Aerodactyl",
@@ -2695,7 +2836,8 @@
       "ABILITY_ROCK_HEAD",
       "ABILITY_PRESSURE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0100110001110010110010100110000100101111111111100001010100000000"
   },
   "SPECIES_SNORLAX": {
     "label": "Snorlax",
@@ -2714,7 +2856,8 @@
       "ABILITY_IMMUNITY",
       "ABILITY_THICK_FAT"
     ],
-    "catch_rate": 25
+    "catch_rate": 25,
+    "tm_hm_compatibility": "1010010001101110110011011110111101101110011110000000110000000000"
   },
   "SPECIES_ARTICUNO": {
     "label": "Articuno",
@@ -2733,7 +2876,8 @@
       "ABILITY_PRESSURE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "0010111001101110110010000010000110001001011100100001000100000000"
   },
   "SPECIES_ZAPDOS": {
     "label": "Zapdos",
@@ -2752,7 +2896,8 @@
       "ABILITY_PRESSURE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "0000110001100011110010011010000101001001011100100001001100000000"
   },
   "SPECIES_MOLTRES": {
     "label": "Moltres",
@@ -2771,7 +2916,8 @@
       "ABILITY_PRESSURE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "0000110001100010110110000010000100101101011100100101000100000000"
   },
   "SPECIES_DRATINI": {
     "label": "Dratini",
@@ -2790,7 +2936,8 @@
       "ABILITY_SHED_SKIN",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010011001101110110110111010000101100100011110000000100010000000"
   },
   "SPECIES_DRAGONAIR": {
     "label": "Dragonair",
@@ -2809,7 +2956,8 @@
       "ABILITY_SHED_SKIN",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010011001101110110110111010000101100100011110000000100010000000"
   },
   "SPECIES_DRAGONITE": {
     "label": "Dragonite",
@@ -2828,7 +2976,8 @@
       "ABILITY_INNER_FOCUS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1110111001101110110110111110001101101111011110100011110111000000"
   },
   "SPECIES_MEWTWO": {
     "label": "Mewtwo",
@@ -2847,7 +2996,8 @@
       "ABILITY_PRESSURE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "1011011101111111110111111110111111101111111100011000011100000000"
   },
   "SPECIES_MEW": {
     "label": "Mew",
@@ -2866,7 +3016,8 @@
       "ABILITY_SYNCHRONIZE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1111111111111111111111111111111111111111111111111111111111000000"
   },
   "SPECIES_CHIKORITA": {
     "label": "Chikorita",
@@ -2885,7 +3036,8 @@
       "ABILITY_OVERGROW",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010011100001101111100010000110000000011110000010001000000000"
   },
   "SPECIES_BAYLEEF": {
     "label": "Bayleaf",
@@ -2904,7 +3056,8 @@
       "ABILITY_OVERGROW",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010011100001101111100010000110000000011110000010011100000000"
   },
   "SPECIES_MEGANIUM": {
     "label": "Meganium",
@@ -2923,7 +3076,8 @@
       "ABILITY_OVERGROW",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010011100011101111100110000110000000011110000010011100000000"
   },
   "SPECIES_CYNDAQUIL": {
     "label": "Cindaquil",
@@ -2942,7 +3096,8 @@
       "ABILITY_BLAZE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001100000100010000011000100100101011110000110000000000000"
   },
   "SPECIES_QUILAVA": {
     "label": "Quilava",
@@ -2961,7 +3116,8 @@
       "ABILITY_BLAZE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000110001100000100010000011001100100101011110000110010100000000"
   },
   "SPECIES_TYPHLOSION": {
     "label": "Typhlosion",
@@ -2980,7 +3136,8 @@
       "ABILITY_BLAZE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000110001100010100010000111001100100101011110000110010100000000"
   },
   "SPECIES_TOTODILE": {
     "label": "Totodile",
@@ -2999,7 +3156,8 @@
       "ABILITY_TORRENT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1010011001001100110010100011001100000001011110000010100011000000"
   },
   "SPECIES_CROCONAW": {
     "label": "Croconaw",
@@ -3018,7 +3176,8 @@
       "ABILITY_TORRENT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1010111001001100110010100011001100000001011110000010110111000000"
   },
   "SPECIES_FERALIGATR": {
     "label": "Feraligatr",
@@ -3037,7 +3196,8 @@
       "ABILITY_TORRENT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1110111001001110110010100111001100000001011110000010110111000000"
   },
   "SPECIES_SENTRET": {
     "label": "Sentret",
@@ -3056,7 +3216,8 @@
       "ABILITY_RUN_AWAY",
       "ABILITY_KEEN_EYE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "1010010001101000110011110011011101100000011111000010100000000000"
   },
   "SPECIES_FURRET": {
     "label": "Furret",
@@ -3075,7 +3236,8 @@
       "ABILITY_RUN_AWAY",
       "ABILITY_KEEN_EYE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "1010010001101110110011111011011101100000011111000010110100000000"
   },
   "SPECIES_HOOTHOOT": {
     "label": "Hoothoot",
@@ -3094,7 +3256,8 @@
       "ABILITY_INSOMNIA",
       "ABILITY_KEEN_EYE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010001100000110010000010110110000001011111100001001000000000"
   },
   "SPECIES_NOCTOWL": {
     "label": "Noctowl",
@@ -3113,7 +3276,8 @@
       "ABILITY_INSOMNIA",
       "ABILITY_KEEN_EYE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "0000010001100010110010000010110110000001011111100001001000000000"
   },
   "SPECIES_LEDYBA": {
     "label": "Ledyba",
@@ -3132,7 +3296,8 @@
       "ABILITY_SWARM",
       "ABILITY_EARLY_BIRD"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "1000010001100001101111000011001110000001011111000000001000000000"
   },
   "SPECIES_LEDIAN": {
     "label": "Ledian",
@@ -3151,7 +3316,8 @@
       "ABILITY_SWARM",
       "ABILITY_EARLY_BIRD"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "1000010001100011101111000011001110000001011111000000001000000000"
   },
   "SPECIES_SPINARAK": {
     "label": "Spinarak",
@@ -3170,7 +3336,8 @@
       "ABILITY_SWARM",
       "ABILITY_INSOMNIA"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010001100000101011000011100100010000011111000000001000000000"
   },
   "SPECIES_ARIADOS": {
     "label": "Ariados",
@@ -3189,7 +3356,8 @@
       "ABILITY_SWARM",
       "ABILITY_INSOMNIA"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "0000010001100010101011000011100100010000011111000000001000000000"
   },
   "SPECIES_CROBAT": {
     "label": "Crobat",
@@ -3208,7 +3376,8 @@
       "ABILITY_INNER_FOCUS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "0000010001110010111010000010010100010001111111101001000000000000"
   },
   "SPECIES_CHINCHOU": {
     "label": "Chinchou",
@@ -3227,7 +3396,8 @@
       "ABILITY_VOLT_ABSORB",
       "ABILITY_ILLUMINATE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0010011001001100110010011010000101000000011110000000101011000000"
   },
   "SPECIES_LANTURN": {
     "label": "Lanturn",
@@ -3246,7 +3416,8 @@
       "ABILITY_VOLT_ABSORB",
       "ABILITY_ILLUMINATE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0010011001001110110010011010000101000000011110000000101011000000"
   },
   "SPECIES_PICHU": {
     "label": "Pichu",
@@ -3265,7 +3436,8 @@
       "ABILITY_STATIC",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0000010001000001110010111010000101000000011110000000001000000000"
   },
   "SPECIES_CLEFFA": {
     "label": "Cleffa",
@@ -3284,7 +3456,8 @@
       "ABILITY_CUTE_CHARM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 150
+    "catch_rate": 150,
+    "tm_hm_compatibility": "0010010001100001110111100011110111100100011110000000001000000000"
   },
   "SPECIES_IGGLYBUFF": {
     "label": "Igglybuff",
@@ -3303,7 +3476,8 @@
       "ABILITY_CUTE_CHARM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 170
+    "catch_rate": 170,
+    "tm_hm_compatibility": "0010010001100001110111000011110111100100011110000000001000000000"
   },
   "SPECIES_TOGEPI": {
     "label": "Togepi",
@@ -3322,7 +3496,8 @@
       "ABILITY_HUSTLE",
       "ABILITY_SERENE_GRACE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0010010001100001110111000010110111100100011110000000001100000000"
   },
   "SPECIES_TOGETIC": {
     "label": "Togetic",
@@ -3341,7 +3516,8 @@
       "ABILITY_HUSTLE",
       "ABILITY_SERENE_GRACE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "1010010001100011110111000010111111100101011110100001001100000000"
   },
   "SPECIES_NATU": {
     "label": "Natu",
@@ -3360,7 +3536,8 @@
       "ABILITY_SYNCHRONIZE",
       "ABILITY_EARLY_BIRD"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0001010001100001111011000010110110000001011111110000001000000000"
   },
   "SPECIES_XATU": {
     "label": "Xatu",
@@ -3379,7 +3556,8 @@
       "ABILITY_SYNCHRONIZE",
       "ABILITY_EARLY_BIRD"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0001010001100011111011000010110110000001011111110001001000000000"
   },
   "SPECIES_MAREEP": {
     "label": "Mareep",
@@ -3398,7 +3576,8 @@
       "ABILITY_STATIC",
       "ABILITY_NONE"
     ],
-    "catch_rate": 235
+    "catch_rate": 235,
+    "tm_hm_compatibility": "0000010001000001110010111010000101000000011110000000001000000000"
   },
   "SPECIES_FLAAFFY": {
     "label": "Flaafy",
@@ -3417,7 +3596,8 @@
       "ABILITY_STATIC",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "1000010001000001110010111010001101000000011110000000011100000000"
   },
   "SPECIES_AMPHAROS": {
     "label": "Ampharos",
@@ -3436,7 +3616,8 @@
       "ABILITY_STATIC",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000010001000011110010111010001101000000011110000000011100000000"
   },
   "SPECIES_BELLOSSOM": {
     "label": "Bellossom",
@@ -3455,7 +3636,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010011100010101111000010000100010000011110000010001000000000"
   },
   "SPECIES_MARILL": {
     "label": "Marill",
@@ -3474,7 +3656,8 @@
       "ABILITY_THICK_FAT",
       "ABILITY_HUGE_POWER"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "1010011001001100110010100011001100000000011110000000110111000000"
   },
   "SPECIES_AZUMARILL": {
     "label": "Azumarill",
@@ -3493,7 +3676,8 @@
       "ABILITY_THICK_FAT",
       "ABILITY_HUGE_POWER"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "1010011001001110110010100011001100000000011110000000110111000000"
   },
   "SPECIES_SUDOWOODO": {
     "label": "Sudowoodo",
@@ -3512,7 +3696,8 @@
       "ABILITY_STURDY",
       "ABILITY_ROCK_HEAD"
     ],
-    "catch_rate": 65
+    "catch_rate": 65,
+    "tm_hm_compatibility": "1001010001110000100010000111001100001010011111000000010100000000"
   },
   "SPECIES_POLITOED": {
     "label": "Politoed",
@@ -3531,7 +3716,8 @@
       "ABILITY_WATER_ABSORB",
       "ABILITY_DAMP"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1010011001001110110010000111101100000000011111000000110111000000"
   },
   "SPECIES_HOPPIP": {
     "label": "Hoppip",
@@ -3550,7 +3736,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010011100000101011000010000100000001011110000000001000000000"
   },
   "SPECIES_SKIPLOOM": {
     "label": "Skiploom",
@@ -3569,7 +3756,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0000010011100000101011000010000100000001011110000000001000000000"
   },
   "SPECIES_JUMPLUFF": {
     "label": "Jumpluff",
@@ -3588,7 +3776,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010011100010101011000010000100000001011110000000001000000000"
   },
   "SPECIES_AIPOM": {
     "label": "Aipom",
@@ -3607,7 +3796,8 @@
       "ABILITY_RUN_AWAY",
       "ABILITY_PICKUP"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1010010001110000110011111011011101000001011111001010010100000000"
   },
   "SPECIES_SUNKERN": {
     "label": "Sunkern",
@@ -3626,7 +3816,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 235
+    "catch_rate": 235,
+    "tm_hm_compatibility": "0000010011100001101111000010000100010000011110000010001000000000"
   },
   "SPECIES_SUNFLORA": {
     "label": "Sunflora",
@@ -3645,7 +3836,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0000010011100011101111000010000100010000011110000010001000000000"
   },
   "SPECIES_YANMA": {
     "label": "Yanma",
@@ -3664,7 +3856,8 @@
       "ABILITY_SPEED_BOOST",
       "ABILITY_COMPOUND_EYES"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0000010001100000101011000010110100000001011111100000001000000000"
   },
   "SPECIES_WOOPER": {
     "label": "Wooper",
@@ -3683,7 +3876,8 @@
       "ABILITY_DAMP",
       "ABILITY_WATER_ABSORB"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0010011001001100110010100111000100011000011110000000101111000000"
   },
   "SPECIES_QUAGSIRE": {
     "label": "Quagsire",
@@ -3702,7 +3896,8 @@
       "ABILITY_DAMP",
       "ABILITY_WATER_ABSORB"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "1010011001001110110010100111001100011010011110000000111111000000"
   },
   "SPECIES_ESPEON": {
     "label": "Espeon",
@@ -3721,7 +3916,8 @@
       "ABILITY_SYNCHRONIZE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0001010001100011110010100011110110000000011110010010001000000000"
   },
   "SPECIES_UMBREON": {
     "label": "Umbreon",
@@ -3740,7 +3936,8 @@
       "ABILITY_SYNCHRONIZE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001110010110010100011110100000000111110001010001000000000"
   },
   "SPECIES_MURKROW": {
     "label": "Murkrow",
@@ -3759,7 +3956,8 @@
       "ABILITY_INSOMNIA",
       "ABILITY_NONE"
     ],
-    "catch_rate": 30
+    "catch_rate": 30,
+    "tm_hm_compatibility": "0001010001110000110010000010010100000001111111101001000000000000"
   },
   "SPECIES_SLOWKING": {
     "label": "Slowking",
@@ -3778,7 +3976,8 @@
       "ABILITY_OBLIVIOUS",
       "ABILITY_OWN_TEMPO"
     ],
-    "catch_rate": 70
+    "catch_rate": 70,
+    "tm_hm_compatibility": "1011011001101110110110100111111100100100011110010000111101000000"
   },
   "SPECIES_MISDREAVUS": {
     "label": "Misdreavus",
@@ -3797,7 +3996,8 @@
       "ABILITY_LEVITATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0001010001110000110010011010110101000001111111011000001000000000"
   },
   "SPECIES_UNOWN": {
     "label": "Unown",
@@ -3816,7 +4016,8 @@
       "ABILITY_LEVITATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 225
+    "catch_rate": 225,
+    "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_WOBBUFFET": {
     "label": "Wobbuffet",
@@ -3835,7 +4036,8 @@
       "ABILITY_SHADOW_TAG",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_GIRAFARIG": {
     "label": "Girafarig",
@@ -3854,7 +4056,8 @@
       "ABILITY_INNER_FOCUS",
       "ABILITY_EARLY_BIRD"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0001010001100001110010111110110111000000011111010000011100000000"
   },
   "SPECIES_PINECO": {
     "label": "Pineco",
@@ -3873,7 +4076,8 @@
       "ABILITY_STURDY",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0000010001100001101011000111000110001000011110000000010100000000"
   },
   "SPECIES_FORRETRESS": {
     "label": "Forretress",
@@ -3892,7 +4096,8 @@
       "ABILITY_STURDY",
       "ABILITY_NONE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0000010001100011101011000111000110001000011110000000010100000000"
   },
   "SPECIES_DUNSPARCE": {
     "label": "Dunsparce",
@@ -3911,7 +4116,8 @@
       "ABILITY_SERENE_GRACE",
       "ABILITY_RUN_AWAY"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0011010001101100110011111111010101100110011111000000010100000000"
   },
   "SPECIES_GLIGAR": {
     "label": "Gligar",
@@ -3930,7 +4136,8 @@
       "ABILITY_HYPER_CUTTER",
       "ABILITY_SAND_VEIL"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0000010001100000110010100111000100011011011111100010010100000000"
   },
   "SPECIES_STEELIX": {
     "label": "Steelix",
@@ -3949,7 +4156,8 @@
       "ABILITY_ROCK_HEAD",
       "ABILITY_STURDY"
     ],
-    "catch_rate": 25
+    "catch_rate": 25,
+    "tm_hm_compatibility": "0000110001110010100010100111000100001010111110000010010100000000"
   },
   "SPECIES_SNUBBULL": {
     "label": "Snubbull",
@@ -3968,7 +4176,8 @@
       "ABILITY_INTIMIDATE",
       "ABILITY_RUN_AWAY"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "1010110101110000110011011111011101110100111111000100010100000000"
   },
   "SPECIES_GRANBULL": {
     "label": "Granbull",
@@ -3987,7 +4196,8 @@
       "ABILITY_INTIMIDATE",
       "ABILITY_INTIMIDATE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "1010110101110010110011111111011101110110111111000100010100000000"
   },
   "SPECIES_QWILFISH": {
     "label": "Qwilfish",
@@ -4006,7 +4216,8 @@
       "ABILITY_POISON_POINT",
       "ABILITY_SWIFT_SWIM"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010011001001100110010000010010101010000011110000000100011000000"
   },
   "SPECIES_SCIZOR": {
     "label": "Scizor",
@@ -4025,7 +4236,8 @@
       "ABILITY_SWARM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 25
+    "catch_rate": 25,
+    "tm_hm_compatibility": "0000010001100010110010000010000100001001011111100010010100000000"
   },
   "SPECIES_SHUCKLE": {
     "label": "Shuckle",
@@ -4044,7 +4256,8 @@
       "ABILITY_STURDY",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0000010001100000100110000111000100011010011110000000011100000000"
   },
   "SPECIES_HERACROSS": {
     "label": "Heracross",
@@ -4063,7 +4276,8 @@
       "ABILITY_SWARM",
       "ABILITY_GUTS"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000010101100010110010000111001100000010011111000010010100000000"
   },
   "SPECIES_SNEASEL": {
     "label": "Sneasel",
@@ -4082,7 +4296,8 @@
       "ABILITY_INNER_FOCUS",
       "ABILITY_KEEN_EYE"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "1001011001111100110010100011011100000001111111001010110100000000"
   },
   "SPECIES_TEDDIURSA": {
     "label": "Teddiursa",
@@ -4101,7 +4316,8 @@
       "ABILITY_PICKUP",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "1000110101110000110010000111001100000001111111000010010100000000"
   },
   "SPECIES_URSARING": {
     "label": "Ursaring",
@@ -4120,7 +4336,8 @@
       "ABILITY_GUTS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "1000110101110010110010000111001100000011111111000010010100000000"
   },
   "SPECIES_SLUGMA": {
     "label": "Slugma",
@@ -4139,7 +4356,8 @@
       "ABILITY_MAGMA_ARMOR",
       "ABILITY_FLAME_BODY"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0000010001100001100010000010000110100100011110000100000100000000"
   },
   "SPECIES_MAGCARGO": {
     "label": "Magcargo",
@@ -4158,7 +4376,8 @@
       "ABILITY_MAGMA_ARMOR",
       "ABILITY_FLAME_BODY"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0000010001100011100010000110000110101110011110000100010100000000"
   },
   "SPECIES_SWINUB": {
     "label": "Swinub",
@@ -4177,7 +4396,8 @@
       "ABILITY_OBLIVIOUS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 225
+    "catch_rate": 225,
+    "tm_hm_compatibility": "0000111001001101110010000111000110001010011110000000010100000000"
   },
   "SPECIES_PILOSWINE": {
     "label": "Piloswine",
@@ -4196,7 +4416,8 @@
       "ABILITY_OBLIVIOUS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0000111001001111110010000111000110001010011110000000010100000000"
   },
   "SPECIES_CORSOLA": {
     "label": "Corsola",
@@ -4215,7 +4436,8 @@
       "ABILITY_HUSTLE",
       "ABILITY_NATURAL_CURE"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0011011001101101110110000111110110001010011110000000110100000000"
   },
   "SPECIES_REMORAID": {
     "label": "Remoraid",
@@ -4234,7 +4456,8 @@
       "ABILITY_HUSTLE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0010010001101110110010000010100100100100011111000000100011000000"
   },
   "SPECIES_OCTILLERY": {
     "label": "Octillery",
@@ -4253,7 +4476,8 @@
       "ABILITY_SUCTION_CUPS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0010010011101110110010000010100100110100011111000000100011000000"
   },
   "SPECIES_DELIBIRD": {
     "label": "Delibird",
@@ -4272,7 +4496,8 @@
       "ABILITY_VITAL_SPIRIT",
       "ABILITY_HUSTLE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1010011001001100110010000010000100000001011111000001000000000000"
   },
   "SPECIES_MANTINE": {
     "label": "Mantine",
@@ -4291,7 +4516,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_WATER_ABSORB"
     ],
-    "catch_rate": 25
+    "catch_rate": 25,
+    "tm_hm_compatibility": "0010011001001100110010000110000100000001011110000000100011000000"
   },
   "SPECIES_SKARMORY": {
     "label": "Skarmory",
@@ -4310,7 +4536,8 @@
       "ABILITY_KEEN_EYE",
       "ABILITY_STURDY"
     ],
-    "catch_rate": 25
+    "catch_rate": 25,
+    "tm_hm_compatibility": "0000110001110000100010000010000100001001111111100011000100000000"
   },
   "SPECIES_HOUNDOUR": {
     "label": "Houndour",
@@ -4329,7 +4556,8 @@
       "ABILITY_EARLY_BIRD",
       "ABILITY_FLASH_FIRE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0000110001110000100011100010010100110100111111001100000100000000"
   },
   "SPECIES_HOUNDOOM": {
     "label": "Houndoom",
@@ -4348,7 +4576,8 @@
       "ABILITY_EARLY_BIRD",
       "ABILITY_FLASH_FIRE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000110001110010100011100010010100110100111111001100010100000000"
   },
   "SPECIES_KINGDRA": {
     "label": "Kingdra",
@@ -4367,7 +4596,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010011001001110110010000010000100000000011110000000100011000000"
   },
   "SPECIES_PHANPY": {
     "label": "Phanpy",
@@ -4386,7 +4616,8 @@
       "ABILITY_PICKUP",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0000110001100000100010100110000100001010011110000000010100000000"
   },
   "SPECIES_DONPHAN": {
     "label": "Donphan",
@@ -4405,7 +4636,8 @@
       "ABILITY_STURDY",
       "ABILITY_NONE"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0000110001100010100010100110000100001010011110000000010100000000"
   },
   "SPECIES_PORYGON2": {
     "label": "Porygon2",
@@ -4424,7 +4656,8 @@
       "ABILITY_TRACE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001101110110011111010110101000001011101000000001000000000"
   },
   "SPECIES_STANTLER": {
     "label": "Stantler",
@@ -4443,7 +4676,8 @@
       "ABILITY_INTIMIDATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0001110001100001110011111110110111000000011111010000001000000000"
   },
   "SPECIES_SMEARGLE": {
     "label": "Smeargle",
@@ -4462,7 +4696,8 @@
       "ABILITY_OWN_TEMPO",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_TYROGUE": {
     "label": "Tyrogue",
@@ -4481,7 +4716,8 @@
       "ABILITY_GUTS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0000010101100000110010000110001100000000011111000000010100000000"
   },
   "SPECIES_HITMONTOP": {
     "label": "Hitmontop",
@@ -4500,7 +4736,8 @@
       "ABILITY_INTIMIDATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010101100000110010000111001100001000011111000000010100000000"
   },
   "SPECIES_SMOOCHUM": {
     "label": "Smoochum",
@@ -4519,7 +4756,8 @@
       "ABILITY_OBLIVIOUS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0011011001001101110010000010110110000000011111010000001000000000"
   },
   "SPECIES_ELEKID": {
     "label": "Elekid",
@@ -4538,7 +4776,8 @@
       "ABILITY_STATIC",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000010001000001110010011010101101000000011111000000001100000000"
   },
   "SPECIES_MAGBY": {
     "label": "Magby",
@@ -4557,7 +4796,8 @@
       "ABILITY_FLAME_BODY",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000010001100000100010100010101100100100011111000000000100000000"
   },
   "SPECIES_MILTANK": {
     "label": "Miltank",
@@ -4576,7 +4816,8 @@
       "ABILITY_THICK_FAT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1010010001101110110011111110011101001010011110000000110100000000"
   },
   "SPECIES_BLISSEY": {
     "label": "Blissey",
@@ -4595,7 +4836,8 @@
       "ABILITY_NATURAL_CURE",
       "ABILITY_SERENE_GRACE"
     ],
-    "catch_rate": 30
+    "catch_rate": 30,
+    "tm_hm_compatibility": "1011011001101111110111111110111101101110011110011000011100000000"
   },
   "SPECIES_RAIKOU": {
     "label": "Raikou",
@@ -4614,7 +4856,8 @@
       "ABILITY_PRESSURE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "0001110001100010110010111011000111001000011100000010011100000000"
   },
   "SPECIES_ENTEI": {
     "label": "Entei",
@@ -4633,7 +4876,8 @@
       "ABILITY_PRESSURE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "0001110001100010110011100011000110101100011100000010011100000000"
   },
   "SPECIES_SUICUNE": {
     "label": "Suicune",
@@ -4652,7 +4896,8 @@
       "ABILITY_PRESSURE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "0011111001101110110010100011000110001000011100000010100111000000"
   },
   "SPECIES_LARVITAR": {
     "label": "Larvitar",
@@ -4671,7 +4916,8 @@
       "ABILITY_GUTS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001110010110010000111001100001000111110000000000100000000"
   },
   "SPECIES_PUPITAR": {
     "label": "Pupitar",
@@ -4690,7 +4936,8 @@
       "ABILITY_SHED_SKIN",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001110010110010000111001100001000111110000000000100000000"
   },
   "SPECIES_TYRANITAR": {
     "label": "Tyranitar",
@@ -4709,7 +4956,8 @@
       "ABILITY_SAND_STREAM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1110110001111110110010111111001101101111111110000010110100000000"
   },
   "SPECIES_LUGIA": {
     "label": "Lugia",
@@ -4728,7 +4976,8 @@
       "ABILITY_PRESSURE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "0011111001101111111110111110110111001001011100110001110111000000"
   },
   "SPECIES_HO_OH": {
     "label": "Ho-oh",
@@ -4747,7 +4996,8 @@
       "ABILITY_PRESSURE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "0001110001100011111111011110110111101101011100100101011100000000"
   },
   "SPECIES_CELEBI": {
     "label": "Celebi",
@@ -4766,7 +5016,8 @@
       "ABILITY_NATURAL_CURE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0011010001100011111111000010110111001001011100010010001000000000"
   },
   "SPECIES_TREECKO": {
     "label": "Treecko",
@@ -4785,7 +5036,8 @@
       "ABILITY_OVERGROW",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000010011100000101111100011001100000011011110000010011100000000"
   },
   "SPECIES_GROVYLE": {
     "label": "Grovyle",
@@ -4804,7 +5056,8 @@
       "ABILITY_OVERGROW",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000010011100000101111100011001100000011011110000010011100000000"
   },
   "SPECIES_SCEPTILE": {
     "label": "Sceptile",
@@ -4823,7 +5076,8 @@
       "ABILITY_OVERGROW",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1100110011100010101111100111001100000011011110000010011100000000"
   },
   "SPECIES_TORCHIC": {
     "label": "Torchic",
@@ -4842,7 +5096,8 @@
       "ABILITY_BLAZE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001100000100010000011000100100111011110000110010100000000"
   },
   "SPECIES_COMBUSKEN": {
     "label": "Combusken",
@@ -4861,7 +5116,8 @@
       "ABILITY_BLAZE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000010101100000100010000011001100100111011110000110010100000000"
   },
   "SPECIES_BLAZIKEN": {
     "label": "Blaziken",
@@ -4880,7 +5136,8 @@
       "ABILITY_BLAZE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000110101100010100010000111001100100111011110000110010100000000"
   },
   "SPECIES_MUDKIP": {
     "label": "Mudkip",
@@ -4899,7 +5156,8 @@
       "ABILITY_TORRENT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010011001001100110010100011000100000010011110000000110111000000"
   },
   "SPECIES_MARSHTOMP": {
     "label": "Marshtomp",
@@ -4918,7 +5176,8 @@
       "ABILITY_TORRENT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010011001001100110010100111000100000010011110000000110111000000"
   },
   "SPECIES_SWAMPERT": {
     "label": "Swampert",
@@ -4937,7 +5196,8 @@
       "ABILITY_TORRENT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1010111001001110110010100111001100000010011110000000110111000000"
   },
   "SPECIES_POOCHYENA": {
     "label": "Poochyena",
@@ -4956,7 +5216,8 @@
       "ABILITY_RUN_AWAY",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000110001110000110010100011010100000000111111001000000100000000"
   },
   "SPECIES_MIGHTYENA": {
     "label": "Mightyena",
@@ -4975,7 +5236,8 @@
       "ABILITY_INTIMIDATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 127
+    "catch_rate": 127,
+    "tm_hm_compatibility": "0000110001110010110010100011010100000000111111001000010100000000"
   },
   "SPECIES_ZIGZAGOON": {
     "label": "Zigzagoon",
@@ -4994,7 +5256,8 @@
       "ABILITY_PICKUP",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0010010001101100110010111011010101000000011111000010100100000000"
   },
   "SPECIES_LINOONE": {
     "label": "Linoon",
@@ -5013,7 +5276,8 @@
       "ABILITY_PICKUP",
       "ABILITY_NONE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "0010110001101110110010111011010101000000011111000010110100000000"
   },
   "SPECIES_WURMPLE": {
     "label": "Wurmple",
@@ -5032,7 +5296,8 @@
       "ABILITY_SHIELD_DUST",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_SILCOON": {
     "label": "Silcoon",
@@ -5051,7 +5316,8 @@
       "ABILITY_SHED_SKIN",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_BEAUTIFLY": {
     "label": "Beautifly",
@@ -5070,7 +5336,8 @@
       "ABILITY_SWARM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001100010101111000010110100000001011111000000001000000000"
   },
   "SPECIES_CASCOON": {
     "label": "Cascoon",
@@ -5089,7 +5356,8 @@
       "ABILITY_SHED_SKIN",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_DUSTOX": {
     "label": "Dustox",
@@ -5108,7 +5376,8 @@
       "ABILITY_SHIELD_DUST",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001100011101011000010110100010001011111000000001000000000"
   },
   "SPECIES_LOTAD": {
     "label": "Lotad",
@@ -5127,7 +5396,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_RAIN_DISH"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0010011011101100111011000010000100000000011111000000101000000000"
   },
   "SPECIES_LOMBRE": {
     "label": "Lombre",
@@ -5146,7 +5416,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_RAIN_DISH"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0010011011101100111011000010001100000000011111000000111111000000"
   },
   "SPECIES_LUDICOLO": {
     "label": "Ludicolo",
@@ -5165,7 +5436,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_RAIN_DISH"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1010011011101110111011000010001100000000011111000000111111000000"
   },
   "SPECIES_SEEDOT": {
     "label": "Seedot",
@@ -5184,7 +5456,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_EARLY_BIRD"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010011100000101011000011010100000000011110000000001100000000"
   },
   "SPECIES_NUZLEAF": {
     "label": "Nuzleaf",
@@ -5203,7 +5476,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_EARLY_BIRD"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0000010011100010101011000011011100000010111111000010011100000000"
   },
   "SPECIES_SHIFTRY": {
     "label": "Shiftry",
@@ -5222,7 +5496,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_EARLY_BIRD"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010011100010101011000011011100000011111111000010011100000000"
   },
   "SPECIES_NINCADA": {
     "label": "Nincada",
@@ -5241,7 +5516,8 @@
       "ABILITY_COMPOUND_EYES",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010001100000101011000011010100001001011100000010001000000000"
   },
   "SPECIES_NINJASK": {
     "label": "Ninjask",
@@ -5260,7 +5536,8 @@
       "ABILITY_SPEED_BOOST",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0000010001100010101011000011010100001001011111000010001000000000"
   },
   "SPECIES_SHEDINJA": {
     "label": "Shedinja",
@@ -5279,7 +5556,8 @@
       "ABILITY_WONDER_GUARD",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001100010101011000011010100001001011101000010001000000000"
   },
   "SPECIES_TAILLOW": {
     "label": "Taillow",
@@ -5298,7 +5576,8 @@
       "ABILITY_GUTS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 200
+    "catch_rate": 200,
+    "tm_hm_compatibility": "0000010001100000110010000010000100000001011111100001000000000000"
   },
   "SPECIES_SWELLOW": {
     "label": "Swellow",
@@ -5317,7 +5596,8 @@
       "ABILITY_GUTS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010001100010110010000010000100000001011111100001000000000000"
   },
   "SPECIES_SHROOMISH": {
     "label": "Shroomish",
@@ -5336,7 +5616,8 @@
       "ABILITY_EFFECT_SPORE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010011100000101111000010000100010000011110001000001000000000"
   },
   "SPECIES_BRELOOM": {
     "label": "Breloom",
@@ -5355,7 +5636,8 @@
       "ABILITY_EFFECT_SPORE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "1000010111100010101111100010001100010000011110001010011100000000"
   },
   "SPECIES_SPINDA": {
     "label": "Spinda",
@@ -5374,7 +5656,8 @@
       "ABILITY_OWN_TEMPO",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "1011010001100000110110000011111101000010011111011000011100000000"
   },
   "SPECIES_WINGULL": {
     "label": "Wingull",
@@ -5393,7 +5676,8 @@
       "ABILITY_KEEN_EYE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0010011001001100110010000010000101000001011111100001000000000000"
   },
   "SPECIES_PELIPPER": {
     "label": "Pelipper",
@@ -5412,7 +5696,8 @@
       "ABILITY_KEEN_EYE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010011001001110110010000010000101000001011111100001100000000000"
   },
   "SPECIES_SURSKIT": {
     "label": "Surskit",
@@ -5431,7 +5716,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 200
+    "catch_rate": 200,
+    "tm_hm_compatibility": "0010010001101100111011000010010100000000011111000000001000000000"
   },
   "SPECIES_MASQUERAIN": {
     "label": "Masquerain",
@@ -5450,7 +5736,8 @@
       "ABILITY_INTIMIDATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0010010001101110111011000010010100000001011111000000001000000000"
   },
   "SPECIES_WAILMER": {
     "label": "Wailmer",
@@ -5469,7 +5756,8 @@
       "ABILITY_WATER_VEIL",
       "ABILITY_OBLIVIOUS"
     ],
-    "catch_rate": 125
+    "catch_rate": 125,
+    "tm_hm_compatibility": "0010111001001100110010000110000100000010011110000000110111000000"
   },
   "SPECIES_WAILORD": {
     "label": "Wailord",
@@ -5488,7 +5776,8 @@
       "ABILITY_WATER_VEIL",
       "ABILITY_OBLIVIOUS"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0010111001001110110010000110000100000010011110000000110111000000"
   },
   "SPECIES_SKITTY": {
     "label": "Skitty",
@@ -5507,7 +5796,8 @@
       "ABILITY_CUTE_CHARM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0011010001101100110111111011010101000000011110000000001000000000"
   },
   "SPECIES_DELCATTY": {
     "label": "Delcatty",
@@ -5526,7 +5816,8 @@
       "ABILITY_CUTE_CHARM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0011010001101110110111111011010101000000011110000000011100000000"
   },
   "SPECIES_KECLEON": {
     "label": "Kecleon",
@@ -5545,7 +5836,8 @@
       "ABILITY_COLOR_CHANGE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 200
+    "catch_rate": 200,
+    "tm_hm_compatibility": "1010010001101100110011111011011101100111011111011010011100000000"
   },
   "SPECIES_BALTOY": {
     "label": "Baltoy",
@@ -5564,7 +5856,8 @@
       "ABILITY_LEVITATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010001101001110011000111110110001010011100010000001000000000"
   },
   "SPECIES_CLAYDOL": {
     "label": "Claydol",
@@ -5583,7 +5876,8 @@
       "ABILITY_LEVITATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "0000010001101011110011000111110110001010011100010000011100000000"
   },
   "SPECIES_NOSEPASS": {
     "label": "Nosepass",
@@ -5602,7 +5896,8 @@
       "ABILITY_STURDY",
       "ABILITY_MAGNET_PULL"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010001110000100010011110000101001010111110000000010100000000"
   },
   "SPECIES_TORKOAL": {
     "label": "Torkoal",
@@ -5621,7 +5916,8 @@
       "ABILITY_WHITE_SMOKE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "0000010001100000100010100010000100110100011110000100010100000000"
   },
   "SPECIES_SABLEYE": {
     "label": "Sableye",
@@ -5640,7 +5936,8 @@
       "ABILITY_KEEN_EYE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1011010001110000110010000011111101000011111111001010001100000000"
   },
   "SPECIES_BARBOACH": {
     "label": "Barboach",
@@ -5659,7 +5956,8 @@
       "ABILITY_OBLIVIOUS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0010011001001100110010000110000100001010011110000000100011000000"
   },
   "SPECIES_WHISCASH": {
     "label": "Whiscash",
@@ -5678,7 +5976,8 @@
       "ABILITY_OBLIVIOUS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0010011001001110110010000110000100001010011110000000110111000000"
   },
   "SPECIES_LUVDISC": {
     "label": "Luvdisc",
@@ -5697,7 +5996,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 225
+    "catch_rate": 225,
+    "tm_hm_compatibility": "0010011001001100110110000010000100000000011110000000100011000000"
   },
   "SPECIES_CORPHISH": {
     "label": "Corphish",
@@ -5716,7 +6016,8 @@
       "ABILITY_HYPER_CUTTER",
       "ABILITY_SHELL_ARMOR"
     ],
-    "catch_rate": 205
+    "catch_rate": 205,
+    "tm_hm_compatibility": "0010011001011100110010000011001100010011011110000010110110000000"
   },
   "SPECIES_CRAWDAUNT": {
     "label": "Crawdaunt",
@@ -5735,7 +6036,8 @@
       "ABILITY_HYPER_CUTTER",
       "ABILITY_SHELL_ARMOR"
     ],
-    "catch_rate": 155
+    "catch_rate": 155,
+    "tm_hm_compatibility": "0010011001011110110010000011001100010011011110000010110111000000"
   },
   "SPECIES_FEEBAS": {
     "label": "Feebas",
@@ -5754,7 +6056,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0010011001001100110010000010000100000000011110000000100011000000"
   },
   "SPECIES_MILOTIC": {
     "label": "Milotic",
@@ -5773,7 +6076,8 @@
       "ABILITY_MARVEL_SCALE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0010011001001110110110100010000100000000011110000000100011000000"
   },
   "SPECIES_CARVANHA": {
     "label": "Carvanha",
@@ -5792,7 +6096,8 @@
       "ABILITY_ROUGH_SKIN",
       "ABILITY_NONE"
     ],
-    "catch_rate": 225
+    "catch_rate": 225,
+    "tm_hm_compatibility": "0010011001011100110010000010000100000000111111000000100011000000"
   },
   "SPECIES_SHARPEDO": {
     "label": "Sharpedo",
@@ -5811,7 +6116,8 @@
       "ABILITY_ROUGH_SKIN",
       "ABILITY_NONE"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0010111001011110110010000110000100000010111111000000110111000000"
   },
   "SPECIES_TRAPINCH": {
     "label": "Trapinch",
@@ -5830,7 +6136,8 @@
       "ABILITY_HYPER_CUTTER",
       "ABILITY_ARENA_TRAP"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010001100010101011000111000100001010011110000000010100000000"
   },
   "SPECIES_VIBRAVA": {
     "label": "Vibrava",
@@ -5849,7 +6156,8 @@
       "ABILITY_LEVITATE",
       "ABILITY_LEVITATE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0000010001100010101011000111000100001010011110100001010100000000"
   },
   "SPECIES_FLYGON": {
     "label": "Flygon",
@@ -5868,7 +6176,8 @@
       "ABILITY_LEVITATE",
       "ABILITY_LEVITATE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0100010001100010101011100111000100101110011110100001010100000000"
   },
   "SPECIES_MAKUHITA": {
     "label": "Makuhita",
@@ -5887,7 +6196,8 @@
       "ABILITY_THICK_FAT",
       "ABILITY_GUTS"
     ],
-    "catch_rate": 180
+    "catch_rate": 180,
+    "tm_hm_compatibility": "1000010101100000110010000111001100000010011110000000110100000000"
   },
   "SPECIES_HARIYAMA": {
     "label": "Hariyama",
@@ -5906,7 +6216,8 @@
       "ABILITY_THICK_FAT",
       "ABILITY_GUTS"
     ],
-    "catch_rate": 200
+    "catch_rate": 200,
+    "tm_hm_compatibility": "1000010101100010110010000111001100000010011110000000110100000000"
   },
   "SPECIES_ELECTRIKE": {
     "label": "Electrike",
@@ -5925,7 +6236,8 @@
       "ABILITY_STATIC",
       "ABILITY_LIGHTNING_ROD"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0000110001000000110010111010000101000000011111000000011000000000"
   },
   "SPECIES_MANECTRIC": {
     "label": "Manectric",
@@ -5944,7 +6256,8 @@
       "ABILITY_STATIC",
       "ABILITY_LIGHTNING_ROD"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000110001000010110010111010000101000000011111000000011000000000"
   },
   "SPECIES_NUMEL": {
     "label": "Numel",
@@ -5963,7 +6276,8 @@
       "ABILITY_OBLIVIOUS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010001100000100010000111000100101110011110000100010100000000"
   },
   "SPECIES_CAMERUPT": {
     "label": "Camerupt",
@@ -5982,7 +6296,8 @@
       "ABILITY_MAGMA_ARMOR",
       "ABILITY_NONE"
     ],
-    "catch_rate": 150
+    "catch_rate": 150,
+    "tm_hm_compatibility": "0000110001100010100010000111000100101110011110000100010100000000"
   },
   "SPECIES_SPHEAL": {
     "label": "Spheal",
@@ -6001,7 +6316,8 @@
       "ABILITY_THICK_FAT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0010011001001100110010100110000100000010011110000000110111000000"
   },
   "SPECIES_SEALEO": {
     "label": "Sealeo",
@@ -6020,7 +6336,8 @@
       "ABILITY_THICK_FAT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0010111001001100110010100110000100000010011110000000110111000000"
   },
   "SPECIES_WALREIN": {
     "label": "Walrein",
@@ -6039,7 +6356,8 @@
       "ABILITY_THICK_FAT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010111001001110110010100110000100000010011110000000110111000000"
   },
   "SPECIES_CACNEA": {
     "label": "Cacnea",
@@ -6058,7 +6376,8 @@
       "ABILITY_SAND_VEIL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "1000010011100000101011000010000100001000011110000010001000000000"
   },
   "SPECIES_CACTURNE": {
     "label": "Cacturne",
@@ -6077,7 +6396,8 @@
       "ABILITY_SAND_VEIL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "1000010011100010101011000010000100001000011110000010011000000000"
   },
   "SPECIES_SNORUNT": {
     "label": "Snorunt",
@@ -6096,7 +6416,8 @@
       "ABILITY_INNER_FOCUS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0010011001001101110110000010010100000000011110000000001000000000"
   },
   "SPECIES_GLALIE": {
     "label": "Glalie",
@@ -6115,7 +6436,8 @@
       "ABILITY_INNER_FOCUS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0010011001011111110110000110010100000000111110000000001000000000"
   },
   "SPECIES_LUNATONE": {
     "label": "Lunatone",
@@ -6134,7 +6456,8 @@
       "ABILITY_LEVITATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0001010001001011110110000110110110001010011100010000001000000000"
   },
   "SPECIES_SOLROCK": {
     "label": "Solrock",
@@ -6153,7 +6476,8 @@
       "ABILITY_LEVITATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0001010001100011100111000110110110101110011100010100001000000000"
   },
   "SPECIES_AZURILL": {
     "label": "Azurill",
@@ -6172,7 +6496,8 @@
       "ABILITY_THICK_FAT",
       "ABILITY_HUGE_POWER"
     ],
-    "catch_rate": 150
+    "catch_rate": 150,
+    "tm_hm_compatibility": "0010011001001100110010100010000100000000011110000000100010000000"
   },
   "SPECIES_SPOINK": {
     "label": "Spoink",
@@ -6191,7 +6516,8 @@
       "ABILITY_THICK_FAT",
       "ABILITY_OWN_TEMPO"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0001010001110001110010100010110111000000111111011000001000000000"
   },
   "SPECIES_GRUMPIG": {
     "label": "Grumpig",
@@ -6210,7 +6536,8 @@
       "ABILITY_THICK_FAT",
       "ABILITY_OWN_TEMPO"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "1001010001110011110010100010110111000000111111011000001000000000"
   },
   "SPECIES_PLUSLE": {
     "label": "Plusle",
@@ -6229,7 +6556,8 @@
       "ABILITY_PLUS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 200
+    "catch_rate": 200,
+    "tm_hm_compatibility": "0000010001000001110010111010000101000000011110000000001000000000"
   },
   "SPECIES_MINUN": {
     "label": "Minun",
@@ -6248,7 +6576,8 @@
       "ABILITY_MINUS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 200
+    "catch_rate": 200,
+    "tm_hm_compatibility": "0000010001000001110010111010000101000000011110000000001000000000"
   },
   "SPECIES_MAWILE": {
     "label": "Mawile",
@@ -6267,7 +6596,8 @@
       "ABILITY_HYPER_CUTTER",
       "ABILITY_INTIMIDATE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1000010001111010110011000010001100111110111110000000010100000000"
   },
   "SPECIES_MEDITITE": {
     "label": "Meditite",
@@ -6286,7 +6616,8 @@
       "ABILITY_PURE_POWER",
       "ABILITY_NONE"
     ],
-    "catch_rate": 180
+    "catch_rate": 180,
+    "tm_hm_compatibility": "1001010101100001110010000010111110000010011110000000011100000000"
   },
   "SPECIES_MEDICHAM": {
     "label": "Medicham",
@@ -6305,7 +6636,8 @@
       "ABILITY_PURE_POWER",
       "ABILITY_NONE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "1001010101100011110010000010111110000010011110000000011100000000"
   },
   "SPECIES_SWABLU": {
     "label": "Swablu",
@@ -6324,7 +6656,8 @@
       "ABILITY_NATURAL_CURE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0000010001101000110111000010000100000001011111100001000000000000"
   },
   "SPECIES_ALTARIA": {
     "label": "Altaria",
@@ -6343,7 +6676,8 @@
       "ABILITY_NATURAL_CURE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0100110001101010110111100110000100100101011111100001000100000000"
   },
   "SPECIES_WYNAUT": {
     "label": "Wynaut",
@@ -6362,7 +6696,8 @@
       "ABILITY_SHADOW_TAG",
       "ABILITY_NONE"
     ],
-    "catch_rate": 125
+    "catch_rate": 125,
+    "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_DUSKULL": {
     "label": "Duskull",
@@ -6381,7 +6716,8 @@
       "ABILITY_LEVITATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0001010001111100110010000010110100000000111111011000001000000000"
   },
   "SPECIES_DUSCLOPS": {
     "label": "Dusclops",
@@ -6400,7 +6736,8 @@
       "ABILITY_PRESSURE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "1001010001111110110010000110110100000010111111011000011100000000"
   },
   "SPECIES_ROSELIA": {
     "label": "Roselia",
@@ -6419,7 +6756,8 @@
       "ABILITY_NATURAL_CURE",
       "ABILITY_POISON_POINT"
     ],
-    "catch_rate": 150
+    "catch_rate": 150,
+    "tm_hm_compatibility": "0000010011100000101011000010010100010000011110000010001000000000"
   },
   "SPECIES_SLAKOTH": {
     "label": "Slakoth",
@@ -6438,7 +6776,8 @@
       "ABILITY_TRUANT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "1010010101101100110011011010011101100101011110000010010100000000"
   },
   "SPECIES_VIGOROTH": {
     "label": "Vigoroth",
@@ -6457,7 +6796,8 @@
       "ABILITY_VITAL_SPIRIT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "1010110101111100110011011110011101100101011110000010010100000000"
   },
   "SPECIES_SLAKING": {
     "label": "Slaking",
@@ -6476,7 +6816,8 @@
       "ABILITY_TRUANT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1010110101111110110011011110011101100101011110000010010100000000"
   },
   "SPECIES_GULPIN": {
     "label": "Gulpin",
@@ -6495,7 +6836,8 @@
       "ABILITY_LIQUID_OOZE",
       "ABILITY_STICKY_HOLD"
     ],
-    "catch_rate": 225
+    "catch_rate": 225,
+    "tm_hm_compatibility": "0010010011101000111011000010010101010000011110001000010100000000"
   },
   "SPECIES_SWALOT": {
     "label": "Swalot",
@@ -6514,7 +6856,8 @@
       "ABILITY_LIQUID_OOZE",
       "ABILITY_STICKY_HOLD"
     ],
-    "catch_rate": 75
+    "catch_rate": 75,
+    "tm_hm_compatibility": "0010010011101010111011000010010101010000011110001000010100000000"
   },
   "SPECIES_TROPIUS": {
     "label": "Tropius",
@@ -6533,7 +6876,8 @@
       "ABILITY_CHLOROPHYLL",
       "ABILITY_NONE"
     ],
-    "catch_rate": 200
+    "catch_rate": 200,
+    "tm_hm_compatibility": "0000110011100010101111000110000100000001011110100011011100000000"
   },
   "SPECIES_WHISMUR": {
     "label": "Whismur",
@@ -6552,7 +6896,8 @@
       "ABILITY_SOUNDPROOF",
       "ABILITY_NONE"
     ],
-    "catch_rate": 190
+    "catch_rate": 190,
+    "tm_hm_compatibility": "0010110001101100110011000010010101100100011110000000000000000000"
   },
   "SPECIES_LOUDRED": {
     "label": "Loudred",
@@ -6571,7 +6916,8 @@
       "ABILITY_SOUNDPROOF",
       "ABILITY_NONE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0010110001111100110011000110011101100100111110000100010100000000"
   },
   "SPECIES_EXPLOUD": {
     "label": "Exploud",
@@ -6590,7 +6936,8 @@
       "ABILITY_SOUNDPROOF",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010110001111110110011000110011101100100111110000100010100000000"
   },
   "SPECIES_CLAMPERL": {
     "label": "Clamperl",
@@ -6609,7 +6956,8 @@
       "ABILITY_SHELL_ARMOR",
       "ABILITY_NONE"
     ],
-    "catch_rate": 255
+    "catch_rate": 255,
+    "tm_hm_compatibility": "0010011001001100110010000010000100000000011110000000100011000000"
   },
   "SPECIES_HUNTAIL": {
     "label": "Huntail",
@@ -6628,7 +6976,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0010011001001110110010000010000100000010011110001000100011000000"
   },
   "SPECIES_GOREBYSS": {
     "label": "Gorebyss",
@@ -6647,7 +6996,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_NONE"
     ],
-    "catch_rate": 60
+    "catch_rate": 60,
+    "tm_hm_compatibility": "0010011001001110110110000010110100000000011110000000100011000000"
   },
   "SPECIES_ABSOL": {
     "label": "Absol",
@@ -6666,7 +7016,8 @@
       "ABILITY_PRESSURE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 30
+    "catch_rate": 30,
+    "tm_hm_compatibility": "0011011001111110110010111010010101101101111111001010011100000000"
   },
   "SPECIES_SHUPPET": {
     "label": "Shuppet",
@@ -6685,7 +7036,8 @@
       "ABILITY_INSOMNIA",
       "ABILITY_NONE"
     ],
-    "catch_rate": 225
+    "catch_rate": 225,
+    "tm_hm_compatibility": "0001010001110000110010011010110101000000111111011000001000000000"
   },
   "SPECIES_BANETTE": {
     "label": "Banette",
@@ -6704,7 +7056,8 @@
       "ABILITY_INSOMNIA",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0001010001110010110010011010110101000000111111011000001000000000"
   },
   "SPECIES_SEVIPER": {
     "label": "Seviper",
@@ -6723,7 +7076,8 @@
       "ABILITY_SHED_SKIN",
       "ABILITY_NONE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "0000010001110000111010100111000100110000011111001000010100000000"
   },
   "SPECIES_ZANGOOSE": {
     "label": "Zangoose",
@@ -6742,7 +7096,8 @@
       "ABILITY_IMMUNITY",
       "ABILITY_NONE"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "1010110001111100111011111011011101100101011111000000010100000000"
   },
   "SPECIES_RELICANTH": {
     "label": "Relicanth",
@@ -6761,7 +7116,8 @@
       "ABILITY_SWIFT_SWIM",
       "ABILITY_ROCK_HEAD"
     ],
-    "catch_rate": 25
+    "catch_rate": 25,
+    "tm_hm_compatibility": "0011011001001110110110000110000100001010011110000000100111000000"
   },
   "SPECIES_ARON": {
     "label": "Aron",
@@ -6780,7 +7136,8 @@
       "ABILITY_STURDY",
       "ABILITY_ROCK_HEAD"
     ],
-    "catch_rate": 180
+    "catch_rate": 180,
+    "tm_hm_compatibility": "0010110001100000110010100111000101001011011110000010010100000000"
   },
   "SPECIES_LAIRON": {
     "label": "Lairon",
@@ -6799,7 +7156,8 @@
       "ABILITY_STURDY",
       "ABILITY_ROCK_HEAD"
     ],
-    "catch_rate": 90
+    "catch_rate": 90,
+    "tm_hm_compatibility": "0010110001100000110010100111000101001011011110000010010100000000"
   },
   "SPECIES_AGGRON": {
     "label": "Aggron",
@@ -6818,7 +7176,8 @@
       "ABILITY_STURDY",
       "ABILITY_ROCK_HEAD"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "1110110001111110110011111111001101101111011110000010110100000000"
   },
   "SPECIES_CASTFORM": {
     "label": "Castform",
@@ -6837,7 +7196,8 @@
       "ABILITY_FORECAST",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010011001101100110011011010010101101100011111000000001000000000"
   },
   "SPECIES_VOLBEAT": {
     "label": "Volbeat",
@@ -6856,7 +7216,8 @@
       "ABILITY_ILLUMINATE",
       "ABILITY_SWARM"
     ],
-    "catch_rate": 150
+    "catch_rate": 150,
+    "tm_hm_compatibility": "1010010001100001111011011010011101000001011111000000001000000000"
   },
   "SPECIES_ILLUMISE": {
     "label": "Illumise",
@@ -6875,7 +7236,8 @@
       "ABILITY_OBLIVIOUS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 150
+    "catch_rate": 150,
+    "tm_hm_compatibility": "1010010001100001111011011010011101000001011111000000001000000000"
   },
   "SPECIES_LILEEP": {
     "label": "Lileep",
@@ -6894,7 +7256,8 @@
       "ABILITY_SUCTION_CUPS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010011100000101011000010000100011000011110000000000000000000"
   },
   "SPECIES_CRADILY": {
     "label": "Cradily",
@@ -6913,7 +7276,8 @@
       "ABILITY_SUCTION_CUPS",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0000010011100010101011000110000100011010011110000000010100000000"
   },
   "SPECIES_ANORITH": {
     "label": "Anorith",
@@ -6932,7 +7296,8 @@
       "ABILITY_BATTLE_ARMOR",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010010001100000100010000011001100001011011110000010000100000000"
   },
   "SPECIES_ARMALDO": {
     "label": "Armaldo",
@@ -6951,7 +7316,8 @@
       "ABILITY_BATTLE_ARMOR",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0010010001100010100010100111001100001011011110000010010100000000"
   },
   "SPECIES_RALTS": {
     "label": "Ralts",
@@ -6970,7 +7336,8 @@
       "ABILITY_SYNCHRONIZE",
       "ABILITY_TRACE"
     ],
-    "catch_rate": 235
+    "catch_rate": 235,
+    "tm_hm_compatibility": "0001010001110001110110010010110111000000111111011000001000000000"
   },
   "SPECIES_KIRLIA": {
     "label": "Kirlia",
@@ -6989,7 +7356,8 @@
       "ABILITY_SYNCHRONIZE",
       "ABILITY_TRACE"
     ],
-    "catch_rate": 120
+    "catch_rate": 120,
+    "tm_hm_compatibility": "0001010001110001110110010010110111000000111111011000001000000000"
   },
   "SPECIES_GARDEVOIR": {
     "label": "Gardevoir",
@@ -7008,7 +7376,8 @@
       "ABILITY_SYNCHRONIZE",
       "ABILITY_TRACE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0001010001110011110110010010110111000000111111011000001000000000"
   },
   "SPECIES_BAGON": {
     "label": "Bagon",
@@ -7027,7 +7396,8 @@
       "ABILITY_ROCK_HEAD",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0100110001100000110010000010001100100111011110000010010100000000"
   },
   "SPECIES_SHELGON": {
     "label": "Shelgon",
@@ -7046,7 +7416,8 @@
       "ABILITY_ROCK_HEAD",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0100110001100000110010000010001100100111011110000010010100000000"
   },
   "SPECIES_SALAMENCE": {
     "label": "Salamence",
@@ -7065,7 +7436,8 @@
       "ABILITY_INTIMIDATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0100110001100010110010100110001100100111011110100011010100000000"
   },
   "SPECIES_BELDUM": {
     "label": "Beldum",
@@ -7084,7 +7456,8 @@
       "ABILITY_CLEAR_BODY",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_METANG": {
     "label": "Metang",
@@ -7103,7 +7476,8 @@
       "ABILITY_CLEAR_BODY",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "0000010001100011110010000110111110011011011100000010011100000000"
   },
   "SPECIES_METAGROSS": {
     "label": "Metagross",
@@ -7122,7 +7496,8 @@
       "ABILITY_CLEAR_BODY",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "0000010001100011110010000110111110011011011100000010011100000000"
   },
   "SPECIES_REGIROCK": {
     "label": "Regirock",
@@ -7141,7 +7516,8 @@
       "ABILITY_CLEAR_BODY",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "1000010001100010100110011111001101001010011100000000010100000000"
   },
   "SPECIES_REGICE": {
     "label": "Regice",
@@ -7160,7 +7536,8 @@
       "ABILITY_CLEAR_BODY",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "1000011001001110110110011110001101000000011100000000010100000000"
   },
   "SPECIES_REGISTEEL": {
     "label": "Registeel",
@@ -7179,7 +7556,8 @@
       "ABILITY_CLEAR_BODY",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "1000010001100010110110011110001101001011011100000000010100000000"
   },
   "SPECIES_KYOGRE": {
     "label": "Kyogre",
@@ -7198,7 +7576,8 @@
       "ABILITY_DRIZZLE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 5
+    "catch_rate": 5,
+    "tm_hm_compatibility": "0011111001001110110110011110001101000010011100000000110111000000"
   },
   "SPECIES_GROUDON": {
     "label": "Groudon",
@@ -7217,7 +7596,8 @@
       "ABILITY_DROUGHT",
       "ABILITY_NONE"
     ],
-    "catch_rate": 5
+    "catch_rate": 5,
+    "tm_hm_compatibility": "0100110101100010100111111111001101101111011100000110010100000000"
   },
   "SPECIES_RAYQUAZA": {
     "label": "Rayquaza",
@@ -7236,7 +7616,8 @@
       "ABILITY_AIR_LOCK",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "0110110101101110110011111110001101101101011100000101110111000000"
   },
   "SPECIES_LATIAS": {
     "label": "Latias",
@@ -7255,7 +7636,8 @@
       "ABILITY_LEVITATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "0111110001101011110111011110110111001001011110100011101011000000"
   },
   "SPECIES_LATIOS": {
     "label": "Latios",
@@ -7274,7 +7656,8 @@
       "ABILITY_LEVITATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "0111110001101011110111011110110111001001011110100011101011000000"
   },
   "SPECIES_JIRACHI": {
     "label": "Jirachi",
@@ -7293,7 +7676,8 @@
       "ABILITY_SERENE_GRACE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "0011010001100011110110011010110111001001011100010000001000000000"
   },
   "SPECIES_DEOXYS": {
     "label": "Deoxys",
@@ -7312,7 +7696,8 @@
       "ABILITY_PRESSURE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 3
+    "catch_rate": 3,
+    "tm_hm_compatibility": "1011010001111011110111011010111111000011111100011010011100000000"
   },
   "SPECIES_CHIMECHO": {
     "label": "Chimecho",
@@ -7331,6 +7716,7 @@
       "ABILITY_LEVITATE",
       "ABILITY_NONE"
     ],
-    "catch_rate": 45
+    "catch_rate": 45,
+    "tm_hm_compatibility": "0001010001110001110110000010110111000000111110011000001000000000"
   }
 }

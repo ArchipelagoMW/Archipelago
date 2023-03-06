@@ -78,6 +78,26 @@ class BlindTrainers(Toggle):
     """Causes trainers to not start a battle with you unless you talk to them"""
     display_name = "Blind Trainers"
 
+class TmCompatibility(Choice):
+    """Modifies the compatability of TMs with species
+    Vanilla: Compatibility is unchanged
+    Fully Compatible: Every species can learn any TM
+    Completely Random: Compatibility is 50/50 for every TM (does not remain consistent across evolution)"""
+    default = 0
+    option_vanilla = 0
+    option_fully_compatible = 1
+    option_completely_random = 2
+
+class HmCompatibility(Choice):
+    """Modifies the compatability of HMs with species
+    Vanilla: Compatibility is unchanged
+    Fully Compatible: Every species can learn any HM
+    Completely Random: Compatibility is 50/50 for every HM (does not remain consistent across evolution)"""
+    default = 0
+    option_vanilla = 0
+    option_fully_compatible = 1
+    option_completely_random = 2
+
 class EnableFerry(Toggle):
     """The ferry between Slateport, Lilycove, and the Battle Frontier can be used if you have the S.S. Ticket"""
     display_name = "Enable Ferry"
@@ -96,6 +116,8 @@ options: Dict[str, Option] = {
   "min_catch_rate": MinCatchRate,
   "exp_modifier": ExpModifier,
   "blind_trainers": BlindTrainers,
+  "tm_compatibility": TmCompatibility,
+  "hm_compatibility": HmCompatibility,
   "enable_ferry": EnableFerry
 }
 

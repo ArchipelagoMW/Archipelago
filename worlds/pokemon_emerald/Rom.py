@@ -1,14 +1,14 @@
 import hashlib
 import bsdiff4
 import os
-from typing import Dict
+from typing import Dict, List
 from BaseClasses import MultiWorld
 from Options import Toggle
 from Patch import APDeltaPatch
 import Utils
 from .Data import get_extracted_data
 from .Items import reverse_offset_item_value
-from .Options import get_option_value, RandomizeWildPokemon, RandomizeStarters
+from .Options import get_option_value, RandomizeWildPokemon, RandomizeStarters, TmCompatibility, HmCompatibility
 from .Pokemon import get_random_species, get_pokemon_species
 
 
@@ -53,6 +53,9 @@ def generate_output(multiworld, player, output_directory: str):
 
     # Modify species
     _modify_species_info(multiworld, player, patched_rom)
+
+    # Modify TM/HM compatibility
+    _modify_tmhm_compatibility(multiworld, player, patched_rom)
 
     # Options
     # struct ArchipelagoOptions
@@ -194,3 +197,50 @@ def _modify_species_info(multiworld: MultiWorld, player: int, rom: bytearray):
         if (species.catch_rate < min_catch_rate):
             address = species_info_address + (species.id * size_of_info_struct) + catch_rate_offset
             _set_bytes_little_endian(rom, address, 1, min_catch_rate)
+
+
+def _modify_tmhm_compatibility(multiworld: MultiWorld, player: int, rom: bytearray):
+    random = multiworld.per_slot_randoms[player]
+
+    learnsets_address = get_extracted_data()["misc_rom_addresses"]["gTMHMLearnsets"]
+    size_of_learnset = 8
+
+    tm_compatibility = get_option_value(multiworld, player, "tm_compatibility")
+    hm_compatibility = get_option_value(multiworld, player, "hm_compatibility")
+
+    for species in get_pokemon_species().values():
+        compatibility_array = [False if bit == "0" else True for bit in list(species.tm_hm_compatibility)]
+
+        tm_compatibility_array = compatibility_array[0:50]
+        if (tm_compatibility == TmCompatibility.option_fully_compatible):
+            tm_compatibility_array = [True for i in tm_compatibility_array]
+        elif (tm_compatibility == TmCompatibility.option_completely_random):
+            tm_compatibility_array = [random.choice([True, False]) for i in tm_compatibility_array]
+
+        hm_compatibility_array = compatibility_array[50:58]
+        if (hm_compatibility == HmCompatibility.option_fully_compatible):
+            hm_compatibility_array = [True for i in hm_compatibility_array]
+        elif (hm_compatibility == HmCompatibility.option_completely_random):
+            hm_compatibility_array = [random.choice([True, False]) for i in hm_compatibility_array]
+
+        compatibility_array = [] + tm_compatibility_array + hm_compatibility_array + [False, False, False, False, False, False]
+        compatibility_bytes = _tmhm_compatibility_array_to_bytearray(compatibility_array)
+
+        for i, byte in enumerate(compatibility_bytes):
+            address = learnsets_address + (species.id * size_of_learnset) + i
+            _set_bytes_little_endian(rom, address, 1, byte)
+
+
+def _tmhm_compatibility_array_to_bytearray(compatibility: List[bool]) -> bytearray:
+    bits = [1 if bit else 0 for bit in compatibility]
+    bits.reverse()
+
+    bytes = []
+    while (len(bits) > 0):
+        byte = 0
+        for i in range(8):
+            byte += bits.pop() << i
+        
+        bytes.append(byte)
+
+    return bytearray(bytes)

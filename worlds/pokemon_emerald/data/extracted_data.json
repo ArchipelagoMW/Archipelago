@@ -10378,6 +10378,7 @@
   "misc_rom_addresses": {
     "gArchipelagoOptions": 5863704,
     "gSpeciesInfo": 3278772,
+    "gTMHMLearnsets": 3271808,
     "sStarterMon": 5972456
   },
   "warps": [

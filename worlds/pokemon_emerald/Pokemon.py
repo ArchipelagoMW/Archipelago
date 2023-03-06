@@ -23,6 +23,7 @@ class PokemonSpecies(NamedTuple):
     types: Tuple[str, str]
     abilities: Tuple[str, str]
     catch_rate: int
+    tm_hm_compatibility: str
 
 
 def get_random_species(random) -> PokemonSpecies:
@@ -58,11 +59,12 @@ def get_pokemon_species() -> Dict[str, PokemonSpecies]:
                         species_data["base_defense"],
                         species_data["base_speed"],
                         species_data["base_special_attack"],
-                        species_data["base_special_defense"],
+                        species_data["base_special_defense"]
                     ),
                     [species_data["types"][0], species_data["types"][1]],
                     [species_data["abilities"][0], species_data["abilities"][1]],
-                    species_data["catch_rate"]
+                    species_data["catch_rate"],
+                    species_data["tm_hm_compatibility"]
                 )
 
     return all_pokemon_species
