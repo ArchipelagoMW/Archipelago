@@ -1,7 +1,7 @@
 # The Messenger
 
 ## Quick Links
-- [Main Page](../../../../games/The%20Messenger/info/en)
+- [Setup](../../../../games/The%20Messenger/setup/en)
 - [Settings Page](../../../../games/The%20Messenger/player-settings)
 - [Courier Github](https://github.com/Brokemia/Courier)
 - [The Messenger Randomizer Github](https://github.com/minous27/TheMessengerRandomizerMod)

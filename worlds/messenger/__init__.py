@@ -76,23 +76,20 @@ class MessengerWorld(World):
             region.add_exits(exits)
 
     def create_items(self) -> None:
-        itempool = []
+        itempool: List[MessengerItem] = []
         if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
             seals = [self.create_item("Power Seal") for _ in range(self.total_seals)]
             for i in range(self.required_seals):
                 seals[i].classification = ItemClassification.progression_skip_balancing
             itempool += seals
         else:
-            precollected_notes_amount = NotesNeeded.range_end - self.multiworld.notes_needed[self.player].value
+            notes = self.multiworld.random.sample(NOTES, k=len(NOTES))
+            precollected_notes_amount = NotesNeeded.range_end - self.multiworld.notes_needed[self.player]
             if precollected_notes_amount:
-                notes = NOTES.copy()
-                self.multiworld.random.shuffle(notes)
                 notes = notes[:precollected_notes_amount]
                 for note in notes:
                     self.multiworld.push_precollected(self.create_item(note))
-                itempool += [self.create_item(note) for note in NOTES if note not in notes]
-            else:
-                itempool += [self.create_item(note) for note in NOTES]
+                itempool += [self.create_item(note) for note in notes[precollected_notes_amount:]]
 
         itempool += [self.create_item(item)
                      for item in self.item_name_to_id
@@ -103,7 +100,7 @@ class MessengerWorld(World):
                          # this is a set and currently won't create items for anything that appears in here at all
                          # if we get in a position where this can have duplicates of items that aren't Power Seals
                          # or Time shards, this will need to be redone.
-                      }]
+                     }]
         itempool += [self.create_filler()
                      for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool))]
 
