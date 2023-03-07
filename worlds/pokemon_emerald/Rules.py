@@ -478,19 +478,19 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         can_dive
     )
     set_rule(
+        multiworld.get_entrance("MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:0/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:0", player),
+        lambda state: state.has("Room 1 Key", player)
+    )
+    set_rule(
+        multiworld.get_entrance("MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:1/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:2", player),
+        lambda state: state.has("Room 2 Key", player)
+    )
+    set_rule(
         multiworld.get_entrance("MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:3/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:6", player),
         lambda state: state.has("Room 4 Key", player)
     )
     set_rule(
-        multiworld.get_entrance("MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:1/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:2", player),
-        lambda state: state.has("Room 1 Key", player)
-    )
-    set_rule(
-        multiworld.get_entrance("MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:2/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:4", player),
-        lambda state: state.has("Room 2 Key", player)
-    )
-    set_rule(
-        multiworld.get_entrance("MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:4/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:7", player),
+        multiworld.get_entrance("MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:5/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:8", player),
         lambda state: state.has("Room 6 Key", player)
     )
     set_rule(
