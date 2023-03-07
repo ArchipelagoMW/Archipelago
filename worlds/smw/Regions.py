@@ -4,7 +4,7 @@ from BaseClasses import MultiWorld, Region, Entrance
 from .Locations import SMWLocation
 from .Levels import level_info_dict
 from .Names import LocationName, ItemName
-from ..generic.Rules import add_rule, set_rule
+from worlds.generic.Rules import add_rule, set_rule
 
 
 def create_regions(world, player: int, active_locations):
