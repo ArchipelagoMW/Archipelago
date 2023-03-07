@@ -580,9 +580,14 @@ if False:  # turn to True to export for Subnautica mod
     with open("locations.json", "w") as f:
         json.dump(payload, f)
 
-    def radiated(pos: Vector):
-        aurora_dist = math.sqrt((pos["x"] - 1038.0) ** 2 + (pos["y"] - -3.4) ** 2 + (pos["y"] - -163.1) ** 2)
+    # copy-paste from Rules
+    def is_radiated(x: float, y: float, z: float) -> bool:
+        aurora_dist = math.sqrt((x - 1038.0) ** 2 + y ** 2 + (z - -163.1) ** 2)
         return aurora_dist < 950
+    # end of copy-paste
+
+    def radiated(pos: Vector):
+        return is_radiated(pos["x"], pos["y"], pos["z"])
 
     def far_away(pos: Vector):
         return (pos["x"] ** 2 + pos["z"] ** 2) > (800 ** 2)
