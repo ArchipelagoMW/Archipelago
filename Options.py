@@ -1,5 +1,6 @@
 from __future__ import annotations
 import abc
+import logging
 from copy import deepcopy
 import math
 import numbers
@@ -114,10 +115,13 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
 
     def get_current_option_name(self) -> str:
         """Deprecated. use current_option_name instead. TODO remove around 0.4"""
+        logging.warning(DeprecationWarning(f"get_current_option_name for {self.__class__.__name__} is deprecated."
+                                           f" use current_option_name instead. Worlds should use {self}.current_key"))
+        return self.current_option_name
 
     @property
     def current_option_name(self) -> str:
-        """For display purposes. In world should be using current_key."""
+        """For display purposes. Worlds should be using current_key."""
         return self.get_option_name(self.value)
 
     @classmethod
@@ -583,7 +587,6 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
             return
         from BaseClasses import PlandoOptions
         if not(PlandoOptions.bosses & plando_options):
-            import logging
             # plando is disabled but plando options were given so pull the option and change it to an int
             option = self.value.split(";")[-1]
             self.value = self.options[option]
