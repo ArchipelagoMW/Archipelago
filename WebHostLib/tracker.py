@@ -1315,11 +1315,11 @@ def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dic
                            custom_items=custom_items, custom_locations=custom_locations)
 
 
-def getEnabledMultiworldTrackers(room: Room, current: str):
+def get_enabled_multiworld_trackers(room: Room, current: str):
     enabled = [
         {
             "name": "Generic",
-            "endpoint": "getMultiworldTracker",
+            "endpoint": "get_multiworld_tracker",
             "current": current == "Generic"
          }
     ]
@@ -1327,7 +1327,7 @@ def getEnabledMultiworldTrackers(room: Room, current: str):
     if any(slot.game == "A Link to the Past" for slot in room.seed.slots) or current == "A Link to the Past":
         enabled.append({
             "name": "A Link to the Past",
-            "endpoint": "getLttpMultiworldTracker",
+            "endpoint": "get_LttP_multiworld_tracker",
             "current": current == "A Link to the Past"}
         )
 
@@ -1335,8 +1335,8 @@ def getEnabledMultiworldTrackers(room: Room, current: str):
 
 
 @app.route('/tracker/<suuid:tracker>')
-@cache.memoize(timeout=1)  # multisave is currently created at most every minute
-def getMultiworldTracker(tracker: UUID):
+@cache.memoize(timeout=60)  # multisave is currently created at most every minute
+def get_multiworld_tracker(tracker: UUID):
     room: Room = Room.get(tracker=tracker)
     if not room:
         abort(404)
@@ -1386,7 +1386,7 @@ def getMultiworldTracker(tracker: UUID):
     for (team, player), data in multisave.get("video", []):
         video[(team, player)] = data
 
-    enabled_multiworld_trackers = getEnabledMultiworldTrackers(room, "Generic")
+    enabled_multiworld_trackers = get_enabled_multiworld_trackers(room, "Generic")
 
     return render_template("multiTracker.html", player_names=player_names, room=room, checks_done=checks_done,
                            percent_total_checks_done=percent_total_checks_done, checks_in_area=seed_checks_in_area,
@@ -1395,8 +1395,8 @@ def getMultiworldTracker(tracker: UUID):
 
 
 @app.route('/tracker/<suuid:tracker>/lttp')
-@cache.memoize(timeout=1)  # multisave is currently created at most every minute
-def getLttpMultiworldTracker(tracker: UUID):
+@cache.memoize(timeout=60)  # multisave is currently created at most every minute
+def get_LttP_multiworld_tracker(tracker: UUID):
     room: Room = Room.get(tracker=tracker)
     if not room:
         abort(404)
@@ -1425,7 +1425,8 @@ def getLttpMultiworldTracker(tracker: UUID):
         for (team, slot), slot_hints in multisave["hints"].items():
             hints[team] |= set(slot_hints)
 
-    def attribute_item(inventory, team, recipient, item):
+    def attribute_item(team: int, recipient: int, item: int):
+        nonlocal inventory
         target_item = links.get(item, item)
         if item in levels:  # non-progressive
             inventory[team][recipient][target_item] = max(inventory[team][recipient][target_item], levels[item])
@@ -1439,17 +1440,16 @@ def getLttpMultiworldTracker(tracker: UUID):
         if precollected_items:
             precollected = precollected_items[player]
             for item_id in precollected:
-                attribute_item(inventory, team, player, item_id)
+                attribute_item(team, player, item_id)
         for location in locations_checked:
             if location not in player_locations or location not in player_location_to_area[player]:
                 continue
-
             item, recipient, flags = player_locations[location]
-
-            if recipient in names:
-                attribute_item(inventory, team, recipient, item)
-            checks_done[team][player][player_location_to_area[player][location]] += 1
-            checks_done[team][player]["Total"] += 1
+            recipients = groups.get(recipient, [recipient])
+            for recipient in recipients:
+                attribute_item(team, recipient, item)
+                checks_done[team][player][player_location_to_area[player][location]] += 1
+                checks_done[team][player]["Total"] += 1
         percent_total_checks_done[team][player] = int(
             checks_done[team][player]["Total"] / seed_checks_in_area[player]["Total"] * 100) if \
         seed_checks_in_area[player]["Total"] else 100
@@ -1494,7 +1494,7 @@ def getLttpMultiworldTracker(tracker: UUID):
     for (team, player), data in multisave.get("video", []):
         video[(team, player)] = data
 
-    enabled_multiworld_trackers = getEnabledMultiworldTrackers(room, "A Link to the Past")
+    enabled_multiworld_trackers = get_enabled_multiworld_trackers(room, "A Link to the Past")
 
     return render_template("lttpMultiTracker.html", inventory=inventory, get_item_name_from_id=lookup_any_item_id_to_name,
                            lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
