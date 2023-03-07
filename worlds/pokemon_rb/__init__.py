@@ -337,8 +337,6 @@ class PokemonRedBlueWorld(World):
                         unplaced_items.append(item)
             self.multiworld.itempool += unplaced_items
 
-
-
     def create_regions(self):
         if self.multiworld.free_fly_location[self.player].value:
             if self.multiworld.old_man[self.player].value == 0:
@@ -404,6 +402,21 @@ class PokemonRedBlueWorld(World):
             self.traps += ["Paralyze Trap"] * self.multiworld.paralyze_trap_weight[self.player].value
             self.traps += ["Ice Trap"] * self.multiworld.ice_trap_weight[self.player].value
         return self.multiworld.random.choice(self.traps)
+
+    def extend_hint_information(self, hint_data):
+        if self.multiworld.dexsanity[self.player]:
+            hint_data[self.player] = {}
+            mon_locations = {mon: set() for mon in poke_data.pokemon_data.keys()}
+            for loc in location_data: #self.multiworld.get_locations(self.player):
+                if loc.type in ["Wild Encounter", "Static Pokemon", "Legendary Pokemon", "Missable Pokemon"]:
+                    mon = self.multiworld.get_location(loc.name, self.player).item.name
+                    if mon.startswith("Static ") or mon.startswith("Missable "):
+                        mon = " ".join(mon.split(" ")[1:])
+                    mon_locations[mon].add(loc.name.split(" -")[0])
+            for mon in mon_locations:
+                if mon_locations[mon]:
+                    hint_data[self.player][self.multiworld.get_location(f"Pokedex - {mon}", self.player).address] = \
+                        ", ".join(mon_locations[mon])
 
     def fill_slot_data(self) -> dict:
         return {
