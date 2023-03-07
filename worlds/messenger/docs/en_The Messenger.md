@@ -59,6 +59,7 @@ is recommended to quit to title and reload the save
 ## Currently known issues
 * Necro cutscene will sometimes not play correctly, but will still reward the item
 * Ruxxtin Coffin cutscene will sometimes not play correctly, but will still reward the item
+* If you receive the Fairy Bottle while in Quillshroom Marsh, The Decurse Queen cutscene will not play
 * If you defeat Barma'thazël, the cutscene afterward will not play correctly since that is what normally transitions
 you to 2nd quest. The game will not kill you if you fall here, so you can teleport to HQ at any point after defeating him.
 * Sometimes upon teleporting back to HQ, Ninja will run left and enter a different portal than the one entered by the
@@ -66,7 +67,7 @@ player.
 * If playing the game in non-english, sometimes the text entry menus will say "What is your name?" in local language
 instead of the correct text. This can be fixed by going into the game options and selecting your language in the menu.
 It does not need to be changed to something else and back.
-* Text entry menus don't accept controller input.
+* Text entry menus don't accept controller input
 
 ## What do I do if I have a problem?
 
