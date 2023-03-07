@@ -9,11 +9,12 @@ import tempfile
 import zipfile
 from typing import Dict, List, Tuple, Optional, Set
 
-from BaseClasses import Item, MultiWorld, CollectionState, Region, RegionType, LocationProgressType, Location
+from BaseClasses import Item, MultiWorld, CollectionState, Region, LocationProgressType, Location
 import worlds
+from worlds.alttp.SubClasses import LTTPRegionType
 from worlds.alttp.Regions import is_main_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
-from worlds.alttp.Shops import SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
+from worlds.alttp.Shops import FillDisabledShopSlots
 from Utils import output_path, get_options, __version__, version_tuple
 from worlds.generic.Rules import locality_rules, exclusion_rules
 from worlds import AutoWorld
@@ -37,7 +38,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world = MultiWorld(args.multi)
 
     logger = logging.getLogger()
-    world.set_seed(seed, args.race, str(args.outputname if args.outputname else world.seed))
+    world.set_seed(seed, args.race, str(args.outputname) if args.outputname else None)
     world.plando_options = args.plando_options
 
     world.shuffle = args.shuffle.copy()
@@ -52,7 +53,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.enemy_damage = args.enemy_damage.copy()
     world.beemizer_total_chance = args.beemizer_total_chance.copy()
     world.beemizer_trap_chance = args.beemizer_trap_chance.copy()
-    world.timer = args.timer.copy()
     world.countdown_start_time = args.countdown_start_time.copy()
     world.red_clock_time = args.red_clock_time.copy()
     world.blue_clock_time = args.blue_clock_time.copy()
@@ -78,7 +78,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.state = CollectionState(world)
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, world.seed)
 
-    logger.info("Found World Types:")
+    logger.info(f"Found {len(AutoWorld.AutoWorldRegister.world_types)} World Types:")
     longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
 
     max_item = 0
@@ -191,7 +191,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 new_item.classification |= classifications[item_name]
                 new_itempool.append(new_item)
 
-        region = Region("Menu", RegionType.Generic, "ItemLink", group_id, world)
+        region = Region("Menu", group_id, world, "ItemLink")
         world.regions.append(region)
         locations = region.locations = []
         for item in world.itempool:
@@ -290,13 +290,13 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                                            'Inverted Ganons Tower': 'Ganons Tower'} \
                                 .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
                             checks_in_area[location.player][dungeonname].append(location.address)
-                        elif location.parent_region.type == RegionType.LightWorld:
+                        elif location.parent_region.type == LTTPRegionType.LightWorld:
                             checks_in_area[location.player]["Light World"].append(location.address)
-                        elif location.parent_region.type == RegionType.DarkWorld:
+                        elif location.parent_region.type == LTTPRegionType.DarkWorld:
                             checks_in_area[location.player]["Dark World"].append(location.address)
-                        elif main_entrance.parent_region.type == RegionType.LightWorld:
+                        elif main_entrance.parent_region.type == LTTPRegionType.LightWorld:
                             checks_in_area[location.player]["Light World"].append(location.address)
-                        elif main_entrance.parent_region.type == RegionType.DarkWorld:
+                        elif main_entrance.parent_region.type == LTTPRegionType.DarkWorld:
                             checks_in_area[location.player]["Dark World"].append(location.address)
                     checks_in_area[location.player]["Total"] += 1
 
@@ -365,8 +365,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 multidata = {
                     "slot_data": slot_data,
                     "slot_info": slot_info,
-                    "names": names,  # TODO: remove around 0.2.5 in favor of slot_info
-                    "games": games,  # TODO: remove around 0.2.5 in favor of slot_info
+                    "names": names,  # TODO: remove after 0.3.9
                     "connect_names": {name: (0, player) for player, name in world.player_name.items()},
                     "locations": locations_data,
                     "checks_in_area": checks_in_area,

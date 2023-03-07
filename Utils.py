@@ -12,7 +12,7 @@ import io
 import collections
 import importlib
 import logging
-from typing import BinaryIO, ClassVar, Coroutine, Optional, Set
+from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
 
 from yaml import load, load_all, dump, SafeLoader
 
@@ -38,7 +38,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.8"
+__version__ = "0.3.9"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -260,7 +260,7 @@ def get_default_options() -> OptionsType:
             "disable_item_cheat": False,
             "location_check_points": 1,
             "hint_cost": 10,
-            "forfeit_mode": "goal",
+            "release_mode": "goal",
             "collect_mode": "disabled",
             "remaining_mode": "goal",
             "auto_shutdown": 0,
@@ -290,8 +290,6 @@ def get_default_options() -> OptionsType:
         "dkc3_options": {
             "rom_file": "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc",
         },
-        "yoshis_island_options": {
-            "rom_file": "Super Mario World 2 - Yoshi's Island (U).sfc"},
         "smw_options": {
             "rom_file": "Super Mario World (USA).sfc",
         },
@@ -312,10 +310,14 @@ def get_default_options() -> OptionsType:
         "lufia2ac_options": {
             "rom_file": "Lufia II - Rise of the Sinistrals (USA).sfc",
         },
-        "cv64_options": {
-            "rom_file": "Castlevania (USA).z64",
+        "tloz_options": {
+            "rom_file": "Legend of Zelda, The (U) (PRG0) [!].nes",
             "rom_start": True,
+            "display_msgs": True,
         },
+        "wargroove_options": {
+            "root_directory": "C:/Program Files (x86)/Steam/steamapps/common/Wargroove"
+        }
     }
     return options
 
@@ -668,7 +670,10 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
 
 def title_sorted(data: typing.Sequence, key=None, ignore: typing.Set = frozenset(("a", "the"))):
     """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
-    def sorter(element: str) -> str:
+    def sorter(element: Union[str, Dict[str, Any]]) -> str:
+        if (not isinstance(element, str)):
+            element = element["title"]
+
         parts = element.split(maxsplit=1)
         if parts[0].lower() in ignore:
             return parts[1].lower()

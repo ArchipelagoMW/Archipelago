@@ -63,7 +63,7 @@ class ClientCommandProcessor(CommandProcessor):
 
     def _cmd_received(self) -> bool:
         """List all received items"""
-        logger.info(f'{len(self.ctx.items_received)} received items:')
+        self.output(f'{len(self.ctx.items_received)} received items:')
         for index, item in enumerate(self.ctx.items_received, 1):
             self.output(f"{self.ctx.item_names[item.item]} from {self.ctx.player_names[item.player]}")
         return True
@@ -340,6 +340,11 @@ class CommonContext:
         if slot in self.slot_info:
             return self.slot in self.slot_info[slot].group_members
         return False
+
+    def is_echoed_chat(self, print_json_packet: dict) -> bool:
+        return print_json_packet.get("type", "") == "Chat" \
+            and print_json_packet.get("team", None) == self.team \
+            and print_json_packet.get("slot", None) == self.slot
 
     def is_uninteresting_item_send(self, print_json_packet: dict) -> bool:
         """Helper function for filtering out ItemSend prints that do not concern the local player."""
