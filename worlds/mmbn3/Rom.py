@@ -255,7 +255,7 @@ class LocalRom:
             if item.recipient != 'Myself':
                 item_name_text = item.recipient + "'s " + item_name_text
 
-            archive.inject_item_text(item.itemName)
+            archive.inject_item_text(item_name_text)
 
     def inject_name(self, player):
         authname = player
