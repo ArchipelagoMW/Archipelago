@@ -18,7 +18,7 @@ def create_region(world: MultiWorld, player: int, region_name: str) -> Region:
         opt_paths = world.path_option[player].value
         ltype = location_data.ltype
         flag = location_data.flag
-        if flag == 0 and ltype != "orb" or "boss":
+        if flag == 0 and ltype not in ["orb", "boss"]:
             new_region.locations.append(location)
         if opt_orbs and ltype == "orb":
             if flag <= opt_paths:
