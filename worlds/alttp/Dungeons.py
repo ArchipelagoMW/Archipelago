@@ -162,21 +162,7 @@ def fill_dungeons_restrictive(world):
                                  (5 if (item.player, item.name) in dungeon_specific else 0))
             for item in in_dungeon_items:
                 all_state_base.remove(item)
-            fill_restrictive(world, all_state_base, locations, in_dungeon_items, True, True, allow_partial=True)
-            # partial fill
-            if in_dungeon_items:
-                # check if partial fill is the result of excluded locations, in which case allow dungeon locked items
-                excluded_locations = [
-                    location for location in locations
-                    if location.progress_type == location.progress_type.EXCLUDED and not location.item
-                ]
-                if excluded_locations:
-                    for location in excluded_locations:
-                        location.progress_type = location.progress_type.DEFAULT
-                    fill_restrictive(world, all_state_base, excluded_locations, in_dungeon_items, True, True)
-                    for location in excluded_locations:
-                        if not location.item:
-                            location.progress_type = location.progress_type.EXCLUDED
+            fill_restrictive(world, all_state_base, locations, in_dungeon_items, True, True, allow_excluded=True)
 
 
 dungeon_music_addresses = {'Eastern Palace - Prize': [0x1559A],
