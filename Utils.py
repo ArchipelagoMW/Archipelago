@@ -310,6 +310,11 @@ def get_default_options() -> OptionsType:
         "lufia2ac_options": {
             "rom_file": "Lufia II - Rise of the Sinistrals (USA).sfc",
         },
+        "tloz_options": {
+            "rom_file": "Legend of Zelda, The (U) (PRG0) [!].nes",
+            "rom_start": True,
+            "display_msgs": True,
+        },
         "wargroove_options": {
             "root_directory": "C:/Program Files (x86)/Steam/steamapps/common/Wargroove"
         }
