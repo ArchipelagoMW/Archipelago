@@ -3,9 +3,10 @@ import typing
 from enum import IntEnum
 from BaseClasses import Item, ItemClassification
 from .Names.ItemName import ItemName
+from enum import Enum
 
 
-class ItemType:
+class ItemType(str, Enum):
     Undernet = "undernet"
     Chip = "chip"
     KeyItem = "key"
@@ -15,6 +16,7 @@ class ItemType:
     BugFrag = "bugfrag"
     External = "External"
 
+    __str__ = str.__str__
 
 class ProgramColor(IntEnum):
     White = 1
@@ -39,10 +41,10 @@ class ItemData(typing.NamedTuple):
     itemName: str
     progression: ItemClassification
     type: str
-    itemID: typing.Optional[int] = 0x00
-    subItemID: typing.Optional[int] = 0x00
-    count: typing.Optional[int] = 1
-    recipient: typing.Optional[str] = "Myself"
+    itemID: int = 0x00
+    subItemID: int = 0x00
+    count: int = 1
+    recipient: str = "Myself"
 
 
 class MMBN3Item(Item):
@@ -50,7 +52,7 @@ class MMBN3Item(Item):
     
 
 keyItemList: typing.List[ItemData] = [
-    ItemData(0xB31000, ItemName.Progressive_Undernet_Rank, ItemClassification.progression, ItemType.Undernet, 27),
+    ItemData(0xB31000, ItemName.Progressive_Undernet_Rank, ItemClassification.progression_skip_balancing, ItemType.Undernet, 27),
     ItemData(0xB31001, ItemName.CACDCPas,                  ItemClassification.progression, ItemType.KeyItem,  92),
     ItemData(0xB31002, ItemName.CSciPas,                   ItemClassification.progression, ItemType.KeyItem,  93),
     ItemData(0xB31003, ItemName.CYokaPas,                  ItemClassification.progression, ItemType.KeyItem,  94),
@@ -337,8 +339,7 @@ item_frequencies: typing.Dict[str, int] = {
     ItemName.zenny_800z: 2,
     ItemName.zenny_1000z: 2,
     ItemName.zenny_1200z: 2,
-    ItemName.bugfrag_01: 5
-
+    ItemName.bugfrag_01: 5,
 }
 all_items: typing.List[ItemData] = keyItemList + subChipList + chipList + programList + zennyList + bugFragList
 item_table: typing.Dict[str, ItemData] = {item.itemName: item for item in all_items}
