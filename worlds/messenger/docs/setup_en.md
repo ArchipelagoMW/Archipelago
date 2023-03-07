@@ -21,7 +21,7 @@
 2. Download and install the randomizer mod
      * Download the latest `TheMessengerRandomizer.zip`
      * Extract the zip file to `TheMessenger/Mods/` of your game's install location
-     * Backup your save game
+     * Optionally, Backup your save game
        1. Press `Windows Key + R` to open run
        2. Type `%appdata%` to access AppData
        3. Navigate to `AppData/locallow/SabotageStudios/The Messenger`
@@ -32,15 +32,14 @@
 1. Launch the game
 2. Navigate to `Options > Third Party Mod Options`
 3. Select `Reset Randomizer File Slots`
-   * This will setup all of your save slots with new randomizer save files. You
-can have up to 3 randomizer files at a time, but must do this step again to
-start new runs afterwards.
+   * This will set up all of your save slots with new randomizer save files. You can have up to 3 randomizer files at a
+time, but must do this step again to start new runs afterwards.
 4. Enter connection info using the relevant option buttons
    * **The game is limited to alphanumerical characters and `-` so when entering the host name replace `.` with ` ` and
 ensure that your player name when generating a settings file follows these constrictions**
 5. Select the `Connect to Archipelago` button
-   * If you've connected successfully, the buttons will be removed from the
-menu, which you can confirm by leaving and re-entering it.
+   * If you've connected successfully, the buttons will be removed from the menu, which you can confirm by leaving and
+re-entering it.
 6. Navigate to save file selection
 7. Select a new valid randomizer save
 

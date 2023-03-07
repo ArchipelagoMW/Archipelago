@@ -55,7 +55,6 @@ class MessengerWorld(World):
 
     web = MessengerWeb()
 
-    rules: MessengerRules
     total_seals: Optional[int] = None
     required_seals: Optional[int] = None
 
