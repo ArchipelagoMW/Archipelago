@@ -1,5 +1,7 @@
 const adjustTableHeight = () => {
     const tablesContainer = document.getElementById('tables-container');
+    if (!tablesContainer)
+        return;
     const upperDistance = tablesContainer.getBoundingClientRect().top;
 
     const containerHeight = window.innerHeight - upperDistance;
