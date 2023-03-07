@@ -28,7 +28,7 @@ class DLCqworld(World):
     topology_present = False
     web = DLCqwebworld()
 
-    item_name_to_id = item_table
+    item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
 
     data_version = 0
@@ -54,9 +54,10 @@ class DLCqworld(World):
 
         created_items =[]
         for item in all_items:
-            created_items.append(self.create_item (item))
+            created_items.append(self.create_item(item))
 
         self.multiworld.itempool += created_items
+
 
 
 
