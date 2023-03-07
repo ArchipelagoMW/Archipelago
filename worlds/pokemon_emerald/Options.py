@@ -40,22 +40,26 @@ class HiddenItemsRequireItemfinder(DefaultOnToggle):
     display_name = "Require Itemfinder"
 
 class RandomizeWildPokemon(Choice):
-    """Randomizes the starter pokemon in Professor Birch's bag
-    Vanilla: Starters are unchanged
+    """Randomizes wild pokemon encounters (grass, caves, water, fishing)
+    Vanilla: Wild encounters are unchanged
+    Match Base Stats: Wild pokemon are replaced with species with approximately the same bst
     Completely Random: There are no restrictions"""
     display_name = "Randomize Wild Pokemon"
     default = 0
     option_vanilla = 0
-    option_completely_random = 1
+    option_match_base_stats = 1
+    option_completely_random = 2
 
 class RandomizeStarters(Choice):
     """Randomizes the starter pokemon in Professor Birch's bag
     Vanilla: Starters are unchanged
+    Match Base Stats: Starters are replaced with species with approximately the same bst
     Completely Random: There are no restrictions"""
     display_name = "Randomize Starters"
     default = 0
     option_vanilla = 0
-    option_completely_random = 1
+    option_match_base_stats = 1
+    option_completely_random = 2
 
 class MinCatchRate(Range):
     """Sets the minimum catch rate a pokemon can have. Any pokemon with a

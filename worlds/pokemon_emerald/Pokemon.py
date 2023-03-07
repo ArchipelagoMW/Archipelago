@@ -1,5 +1,5 @@
 import os
-from typing import Dict, List, NamedTuple, Tuple
+from typing import Dict, List, NamedTuple, Tuple, Optional
 from .Data import get_extracted_data, load_json
 
 
@@ -26,8 +26,10 @@ class PokemonSpecies(NamedTuple):
     tm_hm_compatibility: str
 
 
-def get_random_species(random) -> PokemonSpecies:
+def get_random_species(random, nearby_bst: Optional[int] = None) -> PokemonSpecies:
     pokemon_species_list = [species for species in get_pokemon_species().values()]
+    if (nearby_bst != None):
+        pokemon_species_list = [species for species in pokemon_species_list if abs(sum(species.base_stats) - nearby_bst) < (nearby_bst / 10)]
     return pokemon_species_list[random.randint(0, len(pokemon_species_list) - 1)]
 
 

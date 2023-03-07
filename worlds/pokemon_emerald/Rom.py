@@ -9,7 +9,7 @@ import Utils
 from .Data import get_extracted_data
 from .Items import reverse_offset_item_value
 from .Options import get_option_value, RandomizeWildPokemon, RandomizeStarters, TmCompatibility, HmCompatibility
-from .Pokemon import get_random_species, get_pokemon_species
+from .Pokemon import get_random_species, get_pokemon_species, get_species_by_id, get_species_by_name
 
 
 class PokemonEmeraldDeltaPatch(APDeltaPatch):
@@ -45,11 +45,11 @@ def generate_output(multiworld, player, output_directory: str):
 
     # Set encounter tables
     if (get_option_value(multiworld, player, "wild_pokemon") != RandomizeWildPokemon.option_vanilla):
-        _randomize_encounter_tables(multiworld.per_slot_randoms[player], patched_rom)
+        _randomize_encounter_tables(multiworld, player, patched_rom)
 
     # Set starters
     if (get_option_value(multiworld, player, "starters") != RandomizeStarters.option_vanilla):
-        _randomize_starters(multiworld.per_slot_randoms[player], patched_rom)
+        _randomize_starters(multiworld, player, patched_rom)
 
     # Modify species
     _modify_species_info(multiworld, player, patched_rom)
@@ -129,30 +129,35 @@ def _set_bytes_little_endian(byte_array, address, size, value):
 # So if a table only has 2 species across multiple slots, it will
 # still have 2 species in the same respective slots after randomization.
 # TODO: Account for access to pokemon who can learn required HMs
-def _randomize_encounter_tables(random, rom):
+def _randomize_encounter_tables(multiworld, player, rom):
     extracted_data = get_extracted_data()
+    random = multiworld.per_slot_randoms[player]
 
     for map_data in extracted_data["maps"].values():
         land_encounters = map_data["land_encounters"]
         water_encounters = map_data["water_encounters"]
         fishing_encounters = map_data["fishing_encounters"]
         if (not land_encounters == None):
-            new_encounters = _create_randomized_encounter_table(random, land_encounters["encounter_slots"])
+            new_encounters = _create_randomized_encounter_table(multiworld, player, land_encounters["encounter_slots"])
             _replace_encounters(rom, land_encounters["rom_address"], new_encounters)
         if (not water_encounters == None):
-            new_encounters = _create_randomized_encounter_table(random, water_encounters["encounter_slots"])
+            new_encounters = _create_randomized_encounter_table(multiworld, player, water_encounters["encounter_slots"])
             _replace_encounters(rom, water_encounters["rom_address"], new_encounters)
         if (not fishing_encounters == None):
-            new_encounters = _create_randomized_encounter_table(random, fishing_encounters["encounter_slots"])
+            new_encounters = _create_randomized_encounter_table(multiworld, player, fishing_encounters["encounter_slots"])
             _replace_encounters(rom, fishing_encounters["rom_address"], new_encounters)
 
 
-def _create_randomized_encounter_table(random, default_slots):
+def _create_randomized_encounter_table(multiworld, player, default_slots):
+    random = multiworld.per_slot_randoms[player]
+    match_bst = get_option_value(multiworld, player, "wild_pokemon") == RandomizeWildPokemon.option_match_base_stats
+
     default_pokemon = [p_id for p_id in set(default_slots)]
 
     new_pokemon_map: Dict[int, int] = {}
     for pokemon_id in default_pokemon:
-        new_pokemon_id = get_random_species(random).id
+        bst = None if not match_bst else sum(get_species_by_id(pokemon_id).base_stats)
+        new_pokemon_id = get_random_species(random, bst).id
         new_pokemon_map[pokemon_id] = new_pokemon_id
 
     new_slots = []
@@ -175,11 +180,15 @@ def _replace_encounters(rom, table_address, encounter_slots):
         _set_bytes_little_endian(rom, address, 2, species_id)
 
 
-def _randomize_starters(random, rom):
+def _randomize_starters(multiworld, player, rom):
+    match_bst = get_option_value(multiworld, player, "starters") == RandomizeStarters.option_match_base_stats
+    starter_bst = None if not match_bst else sum(get_species_by_name("Treecko").base_stats)
+    random = multiworld.per_slot_randoms[player]
+
     address = get_extracted_data()["misc_rom_addresses"]["sStarterMon"]
-    starter_1 = get_random_species(random)
-    starter_2 = get_random_species(random)
-    starter_3 = get_random_species(random)
+    starter_1 = get_random_species(random, starter_bst)
+    starter_2 = get_random_species(random, starter_bst)
+    starter_3 = get_random_species(random, starter_bst)
 
     _set_bytes_little_endian(rom, address + 0, 2, starter_1.id)
     _set_bytes_little_endian(rom, address + 2, 2, starter_2.id)
