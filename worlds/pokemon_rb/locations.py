@@ -2106,7 +2106,6 @@ for i, location in enumerate(location_data):
         location.address = loc_id_start + i
 
 
-
 class PokemonRBLocation(Location):
     game = "Pokemon Red and Blue"
 

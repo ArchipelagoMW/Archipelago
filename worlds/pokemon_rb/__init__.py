@@ -40,7 +40,7 @@ class PokemonRedBlueWorld(World):
     game = "Pokemon Red and Blue"
     option_definitions = pokemon_rb_options
 
-    data_version = 7
+    data_version = 0 #7
     required_client_version = (0, 3, 7)
 
     topology_present = False
@@ -271,7 +271,7 @@ class PokemonRedBlueWorld(World):
             # as you will require cut to access celadon gyn
             if (self.multiworld.accessibility[self.player].current_key != "minimal" or ((not
                 self.multiworld.badgesanity[self.player]) and max(self.multiworld.elite_four_condition[self.player],
-                                                                 self.multiworld.victory_road_conditions) > 7)):
+                                                                 self.multiworld.victory_road_condition[self.player]) > 7)):
                 if not test_state.pokemon_rb_can_cut(self.player):
                     intervene_move = "Cut"
             if (self.multiworld.accessibility[self.player].current_key != "minimal" and

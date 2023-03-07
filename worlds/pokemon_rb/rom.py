@@ -445,8 +445,11 @@ def process_pokemon_data(self):
                 else:
                     learnsets[mon].append(move)
             learnsets[mon].sort(key=lambda move: self.local_move_data[move]["power"])
-            for move in non_power_moves:
-                learnsets[mon].insert(self.multiworld.random.randint(1, len(learnsets[mon])), move)
+            if learnsets[mon]:
+                for move in non_power_moves:
+                    learnsets[mon].insert(self.multiworld.random.randint(1, len(learnsets[mon])), move)
+            else:
+                learnsets[mon] = non_power_moves
             for i in range(1, 5):
                 if mon_data[f"start move {i}"] != "No Move" or self.multiworld.start_with_four_moves[self.player]:
                     mon_data[f"start move {i}"] = learnsets[mon].pop(0)
@@ -524,7 +527,7 @@ def process_pokemon_data(self):
     hm_verify = ["Surf", "Strength"]
     if self.multiworld.accessibility[self.player] != "minimal" or ((not
                 self.multiworld.badgesanity[self.player]) and max(self.multiworld.elite_four_condition[self.player],
-                                                                 self.multiworld.victory_road_conditions) > 7):
+                                                                 self.multiworld.victory_road_condition[self.player]) > 7):
         hm_verify += ["Cut"]
     if self.multiworld.accessibility[self.player] != "minimal" and (self.multiworld.trainersanity[self.player] or
                                                                     self.multiworld.extra_key_items[self.player]):
@@ -756,7 +759,7 @@ def generate_output(self, output_directory: str):
 
     if self.multiworld.randomize_rock_tunnel[self.player]:
         seed = randomize_rock_tunnel(data, random)
-        encode_text(data, "SEED: <LINE>" + seed, rom_addresses["Rock_Tunnel_Sign"])
+        write_bytes(data, encode_text(f"SEED: <LINE>{seed}"), rom_addresses["Text_Rock_Tunnel_Sign"])
 
     mons = [mon["id"] for mon in poke_data.pokemon_data.values()]
     random.shuffle(mons)

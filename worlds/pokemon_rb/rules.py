@@ -18,9 +18,11 @@ def set_rules(world, player):
 
     if world.accessibility[player] != "locations":
         world.get_location("Cerulean City - Bicycle Shop", player).always_allow = (lambda state, item:
-                                                                                   item == "Bike Voucher")
+                                                                                   item.name == "Bike Voucher"
+                                                                                   and item.player == player)
         world.get_location("Fuchsia City - Safari Zone Warden", player).always_allow = (lambda state, item:
-                                                                                        item == "Gold Teeth")
+                                                                                        item.name == "Gold Teeth" and
+                                                                                        item.player == player)
 
     access_rules = {
         "Pallet Town - Rival's Sister": lambda state: state.has("Oak's Parcel", player),
@@ -227,5 +229,6 @@ def set_rules(world, player):
         if loc.name.startswith("Pokedex"):
             mon = loc.name.split(" - ")[1]
             add_rule(loc, lambda state, i=mon: (state.has("Pokedex", player) or not
-                     state.multiworld.require_pokedex[player]) and state.has(i, player))
+                     state.multiworld.require_pokedex[player]) and (state.has(i, player)
+                                                                    or state.has(f"Static {i}", player)))
 
