@@ -260,7 +260,7 @@ def get_default_options() -> OptionsType:
             "disable_item_cheat": False,
             "location_check_points": 1,
             "hint_cost": 10,
-            "release_mode": "goal",
+            "forfeit_mode": "goal",
             "collect_mode": "disabled",
             "remaining_mode": "goal",
             "auto_shutdown": 0,
@@ -290,6 +290,8 @@ def get_default_options() -> OptionsType:
         "dkc3_options": {
             "rom_file": "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc",
         },
+        "yoshis_island_options": {
+            "rom_file": "Super Mario World 2 - Yoshi's Island (U).sfc"},
         "smw_options": {
             "rom_file": "Super Mario World (USA).sfc",
         },
