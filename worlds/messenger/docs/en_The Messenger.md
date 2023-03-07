@@ -26,8 +26,7 @@ assumes you already have all shop upgrades.
 
 ## Where can I find items?
 
-You can find items wherever items can be picked up in the original game. This
-includes:
+You can find items wherever items can be picked up in the original game. This includes:
 * Shopkeeper dialog where the player originally gains movement items
 * Quest Item pickups
 * Music Box notes
@@ -71,6 +70,5 @@ It does not need to be changed to something else and back.
 
 ## What do I do if I have a problem?
 
-If you believe something happened that isn't intended, please get the `log.txt`
-from the folder of your game installation and send a bug report either on github
-or the [Archipelago Discord Server](http://archipelago.gg/discord)
+If you believe something happened that isn't intended, please get the `log.txt`from the folder of your game installation
+and send a bug report either on github or the [Archipelago Discord Server](http://archipelago.gg/discord)
