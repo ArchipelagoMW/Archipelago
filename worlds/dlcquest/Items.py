@@ -39,7 +39,7 @@ def load_item_csv():
     try:
         from importlib.resources import files
     except ImportError:
-        from importlib_resources import files
+        from importlib_resources import files  # noqa
 
     items = []
     with files(data).joinpath("items.csv").open() as file:
@@ -58,3 +58,4 @@ def initialize_item_table():
 
 item_table: dict[str, ItemData] = {}
 all_items: list[ItemData] = load_item_csv()
+initialize_item_table()
