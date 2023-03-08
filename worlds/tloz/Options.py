@@ -3,7 +3,7 @@ from Options import Option, DefaultOnToggle, Choice
 
 
 class ExpandedPool(DefaultOnToggle):
-    """Puts room clear drops into the pool of items and locations."""
+    """Puts room clear drops and take any caves into the pool of items and locations."""
     display_name = "Expanded Item Pool"
 
 
