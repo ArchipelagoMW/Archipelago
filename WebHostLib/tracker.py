@@ -838,7 +838,7 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
         timespinner_location_ids["Past"].append(1337176)
     if(slot_data["LoreChecks"]):
         timespinner_location_ids["Present"] += [
-                                                                           1337177, 1337178, 1337179, 
+                                                                           1337177, 1337178, 1337179,
             1337180, 1337181, 1337182, 1337183, 1337184, 1337185, 1337186, 1337187]
         timespinner_location_ids["Past"] += [
                                                                                     1337188, 1337189,
@@ -1219,6 +1219,84 @@ def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             **display_data)
 
+def __renderChecksfinder(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+                             inventory: Counter, team: int, player: int, playerName: str,
+                             seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict, saving_second: int) -> str:
+
+    icons = {
+        "Checks Available": "https://0rganics.org/archipelago/cf/spr_tiles_3.png",
+        "Map Width": "https://0rganics.org/archipelago/cf/spr_tiles_4.png",
+        "Map Height": "https://0rganics.org/archipelago/cf/spr_tiles_5.png",
+        "Map Bombs": "https://0rganics.org/archipelago/cf/spr_tiles_6.png",
+
+        "Nothing": "",
+    }
+
+    checksfinder_location_ids = {
+        "Tile 1": 81000,
+        "Tile 2": 81001,
+        "Tile 3": 81002,
+        "Tile 4": 81003,
+        "Tile 5": 81004,
+        "Tile 6": 81005,
+        "Tile 7": 81006,
+        "Tile 8": 81007,
+        "Tile 9": 81008,
+        "Tile 10": 81009,
+        "Tile 11": 81010,
+        "Tile 12": 81011,
+        "Tile 13": 81012,
+        "Tile 14": 81013,
+        "Tile 15": 81014,
+        "Tile 16": 81015,
+        "Tile 17": 81016,
+        "Tile 18": 81017,
+        "Tile 19": 81018,
+        "Tile 20": 81019,
+        "Tile 21": 81020,
+        "Tile 22": 81021,
+        "Tile 23": 81022,
+        "Tile 24": 81023,
+        "Tile 25": 81024,
+    }
+
+    display_data = {}
+
+    # Multi-items
+    multi_items = {
+        "Map Width": 80000,
+        "Map Height": 80001,
+        "Map Bombs": 80002
+    }
+    for item_name, item_id in multi_items.items():
+        base_name = item_name.split()[-1].lower()
+        count = inventory[item_id]
+        display_data[base_name + "_count"] = count
+        display_data[base_name + "_display"] = count + 5
+
+    # Get location info
+    checked_locations = multisave.get("location_checks", {}).get((team, player), set())
+    lookup_name = lambda id: lookup_any_location_id_to_name[id]
+    location_info = {tile_name: {lookup_name(tile_location): (tile_location in checked_locations)} for tile_name, tile_location in checksfinder_location_ids.items() if tile_location in set(locations[player])}
+    checks_done = {tile_name: len([tile_location]) for tile_name, tile_location in checksfinder_location_ids.items() if tile_location in checked_locations and tile_location in set(locations[player])}
+    checks_done['Total'] = len(checked_locations)
+    checks_in_area = checks_done
+
+    # Calculate checks available
+    display_data["checks_unlocked"] = min(display_data["width_count"] + display_data["height_count"] + display_data["bombs_count"] + 5, 25)
+    display_data["checks_available"] = max(display_data["checks_unlocked"] - len(checked_locations), 0)
+
+    # Victory condition
+    game_state = multisave.get("client_game_state", {}).get((team, player), 0)
+    display_data['game_finished'] = game_state == 30
+
+    return render_template("checksfinderTracker.html",
+                            inventory=inventory, icons=icons,
+                            acquired_items={lookup_any_item_id_to_name[id] for id in inventory if
+                                            id in lookup_any_item_id_to_name},
+                            player=player, team=team, room=room, player_name=playerName,
+                            checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
+                            **display_data)
 
 def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                            inventory: Counter, team: int, player: int, playerName: str,
@@ -1351,6 +1429,7 @@ game_specific_trackers: typing.Dict[str, typing.Callable] = {
     "Ocarina of Time": __renderOoTTracker,
     "Timespinner": __renderTimespinnerTracker,
     "A Link to the Past": __renderAlttpTracker,
+    "ChecksFinder": __renderChecksfinder,
     "Super Metroid": __renderSuperMetroidTracker,
     "Starcraft 2 Wings of Liberty": __renderSC2WoLTracker
 }
