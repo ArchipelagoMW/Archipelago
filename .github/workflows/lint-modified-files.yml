@@ -1,0 +1,35 @@
+name: lint modified files
+
+on: pull_request
+
+env:
+  BASE_SHA: ${{ github.event.pull_request.base.sha }}
+  HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - run: |
+          git fetch origin $BASE_SHA $HEAD_SHA
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - run: |
+          python -m pip install --upgrade pip flake8
+
+      - name: Lint modified files with flake8
+        run: |
+          DIFF=$(git diff --diff-filter=d --name-only $BASE_SHA...$HEAD_SHA -- "*.py")
+          echo changed files:
+          echo $DIFF
+          
+          if [ -z "$DIFF" ]; then exit 0; fi
+          
+          echo flake8 results:
+          flake8 --count --max-complexity=10 --max-doc-length=120 --max-line-length=120 --statistics $DIFF
