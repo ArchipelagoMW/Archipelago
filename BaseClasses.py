@@ -843,7 +843,6 @@ class Region:
         if location_type is None:
             location_type = Location
         for location, address in locations.items():
-            assert isinstance(address, Union[int, None]), f"location {location} has an invalid address {address}"
             self.locations.append(location_type(self.player, location, address, self))
 
     def add_exits(self, exits: Dict[str, List[str, Optional[Callable]]]) -> None:
