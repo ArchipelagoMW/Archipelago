@@ -51,7 +51,7 @@ def set_rules(world, player, option):
              lambda state: state.has("Coin", player, 140))
     set_rule(world.get_location("Gun Pack", player),
              lambda state: state.has("Coin", player, 75))
-    set_rule(world.get_location("Zombie Pack", player),
+    set_rule(world.get_location("The Zombie Pack", player),
              lambda state: state.has("Coin", player, 5))
     set_rule(world.get_location("Night Map Pack", player),
              lambda state: state.has("Coin", player, 75))

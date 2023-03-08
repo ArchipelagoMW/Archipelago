@@ -62,7 +62,7 @@ def create_regions(world: MultiWorld, player: int):
     world.regions.append(Regforest)
 
     Regforestdoublejump = Region("The Forest whit double Jump", player, world)
-    Locforestdoublejump_name = [ "Zombie Pack"]
+    Locforestdoublejump_name = [ "The Zombie Pack"]
     Regforestdoublejump.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regforestdoublejump) for loc_name in
                             Locforestdoublejump_name]
     had_coin(Regforestdoublejump, 279, player)
