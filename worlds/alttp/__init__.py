@@ -118,7 +118,7 @@ class ALTTPWorld(World):
     topology_present = True
     item_name_groups = item_name_groups
     location_name_groups = {
-        "Blinds Hideout": {"Blind's Hideout - Top", "Blind's Hideout - Left", "Blind's Hideout - Right",
+        "Blind's Hideout": {"Blind's Hideout - Top", "Blind's Hideout - Left", "Blind's Hideout - Right",
                            "Blind's Hideout - Far Left", "Blind's Hideout - Far Right"},
         "Kakariko Well": {"Kakariko Well - Top", "Kakariko Well - Left", "Kakariko Well - Middle",
                           "Kakariko Well - Right", "Kakariko Well - Bottom"},
