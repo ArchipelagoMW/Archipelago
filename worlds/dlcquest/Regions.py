@@ -19,7 +19,7 @@ def create_regions(world: MultiWorld, player: int):
 
 
     Regmovpack =Region("Movement Pack", player, world)
-    Locmovpack_name = ["Time is Money Pack", "Psychological Warfare Pack","Horse Armor Pack"]
+    Locmovpack_name = ["Time is Money Pack", "Psychological Warfare Pack","Armor for your Horse Pack"]
     Regmovpack.exits =[ Entrance(player, "Tree", Regmovpack), Entrance(player, "Cloud", Regmovpack)]
     Regmovpack.locations += [DLCquestLocation(player, loc_name, location_table[loc_name],Regmovpack)for loc_name in Locmovpack_name ]
     had_coin(Regmovpack, 46, player)
@@ -63,10 +63,18 @@ def create_regions(world: MultiWorld, player: int):
 
     Regforestdoublejump = Region("The Forest whit double Jump", player, world)
     Locforestdoublejump_name = [ "The Zombie Pack"]
+    Regforestdoublejump.exits = [Entrance(player, "Forest True Double Jump", Regforestdoublejump)]
     Regforestdoublejump.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regforestdoublejump) for loc_name in
                             Locforestdoublejump_name]
     had_coin(Regforestdoublejump, 279, player)
     world.regions.append(Regforestdoublejump)
+
+    Regforesttruedoublejump = Region("The Forest whit double Jump Part 2", player, world)
+    Locforesttruedoublejump_name = []
+    Regforesttruedoublejump.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regforesttruedoublejump)
+                                      for loc_name in
+                                      Locforesttruedoublejump_name]
+    world.regions.append(Regforesttruedoublejump)
 
     Regfinalroom = Region("The Final Boss Room", player, world)
     Locfinalroom_name = [ "Finish the Fight Pack"]
@@ -89,3 +97,5 @@ def create_regions(world: MultiWorld, player: int):
     world.get_entrance("Behind Ogre", player).connect(world.get_region("The Final Boss Room", player))
 
     world.get_entrance("Forest Double Jump", player).connect(world.get_region("The Forest whit double Jump", player))
+
+    world.get_entrance("Forest True Double Jump", player).connect(world.get_region("The Forest whit double Jump Part 2", player))
