@@ -21,7 +21,7 @@ from .Items import item_table, ItemData, nothing_item_id, event_table, Adventure
 from .Locations import location_table, base_location_id, LocationData, get_random_room_in_regions
 from .Offsets import static_item_data_location, items_ram_start, static_item_element_size, item_position_table, \
     static_first_dragon_index, connector_port_offset, yorgle_speed_data_location, grundle_speed_data_location, \
-    rhindle_speed_data_location
+    rhindle_speed_data_location, item_ram_addresses
 from .Regions import create_regions
 from .Rules import set_rules
 
@@ -38,10 +38,8 @@ class AdventureWeb(WebWorld):
     theme = "dirt"
 
 
-def get_item_position_data_start(rom_bytearray: bytearray, table_index: int):
-    item_table_offset = table_index * static_item_element_size
-    static_item = static_item_data_location + item_table_offset
-    item_ram_address = rom_bytearray[static_item]
+def get_item_position_data_start(table_index: int):
+    item_ram_address = item_ram_addresses[table_index];
     return item_position_table + item_ram_address - items_ram_start
 
 
@@ -250,7 +248,7 @@ class AdventureWorld(World):
     def place_dragons(self, rom_bytearray: bytearray):
         for i in range(3):
             table_index = static_first_dragon_index + i
-            item_position_data_start = get_item_position_data_start(rom_bytearray, table_index)
+            item_position_data_start = get_item_position_data_start(table_index)
             rom_bytearray[item_position_data_start:item_position_data_start + 1] = \
                 self.dragon_rooms[i].to_bytes(1, "little")
 
@@ -323,7 +321,7 @@ class AdventureWorld(World):
                                                                                    location_data.room_id))
             # Adventure items that are in another world get put in an invalid room until needed
             for unplaced_item_name, unplaced_item in unplaced_local_items.items():
-                item_position_data_start = get_item_position_data_start(rom_bytearray, unplaced_item.table_index)
+                item_position_data_start = get_item_position_data_start(unplaced_item.table_index)
                 rom_bytearray[item_position_data_start:item_position_data_start + 1] = 0xff.to_bytes(1, "little")
 
             if self.multiworld.connector_multi_slot[self.player].value:
