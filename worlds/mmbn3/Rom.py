@@ -285,7 +285,11 @@ class MMBN3DeltaPatch(APDeltaPatch):
 def get_base_rom_path(file_name: str = "") -> str:
     options = Utils.get_options()
     if not file_name:
-        file_name = options["mmbn3_options"]["rom_file"]
+        bn3_options = options.get("mmbn3_options", None)
+        if bn3_options is None:
+            file_name = "Mega Man Battle Network 3 - Blue Version (USA).gba"
+        else:
+            file_name = bn3_options["rom_file"]
     if not os.path.exists(file_name):
         file_name = Utils.local_path(file_name)
     return file_name

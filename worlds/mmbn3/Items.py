@@ -1,9 +1,8 @@
 import typing
 
-from enum import IntEnum
+from enum import IntEnum, Enum
 from BaseClasses import Item, ItemClassification
 from .Names.ItemName import ItemName
-from enum import Enum
 
 
 class ItemType(str, Enum):
