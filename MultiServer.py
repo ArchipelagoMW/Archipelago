@@ -1299,27 +1299,41 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     "Sorry, !remaining requires you to have beaten the game on this server")
                 return False
 
-    def _cmd_missing(self) -> bool:
-        """List all missing location checks from the server's perspective"""
+    def _cmd_missing(self, filter_text="") -> bool:
+        """List all missing location checks from the server's perspective.
+        Can be given text, which will be used as filter."""
 
         locations = get_missing_checks(self.ctx, self.client.team, self.client.slot)
 
         if locations:
-            texts = [f'Missing: {self.ctx.location_names[location]}' for location in locations]
-            texts.append(f"Found {len(locations)} missing location checks")
+            names = [self.ctx.location_names[location] for location in locations]
+            if filter_text:
+                names = [name for name in names if filter_text in name]
+            texts = [f'Missing: {name}' for name in names]
+            if filter_text:
+                texts.append(f"Found {len(locations)} missing location checks, displaying {len(names)} of them.")
+            else:
+                texts.append(f"Found {len(locations)} missing location checks")
             self.output_multiple(texts)
         else:
             self.output("No missing location checks found.")
         return True
 
-    def _cmd_checked(self) -> bool:
-        """List all done location checks from the server's perspective"""
+    def _cmd_checked(self, filter_text="") -> bool:
+        """List all done location checks from the server's perspective.
+        Can be given text, which will be used as filter."""
 
         locations = get_checked_checks(self.ctx, self.client.team, self.client.slot)
 
         if locations:
-            texts = [f'Checked: {self.ctx.location_names[location]}' for location in locations]
-            texts.append(f"Found {len(locations)} done location checks")
+            names = [self.ctx.location_names[location] for location in locations]
+            if filter_text:
+                names = [name for name in names if filter_text in name]
+            texts = [f'Checked: {name}' for name in names]
+            if filter_text:
+                texts.append(f"Found {len(locations)} done location checks, displaying {len(names)} of them.")
+            else:
+                texts.append(f"Found {len(locations)} done location checks")
             self.output_multiple(texts)
         else:
             self.output("No done location checks found.")
