@@ -8,8 +8,8 @@ from Patch import APDeltaPatch
 import Utils
 from .Data import get_extracted_data
 from .Items import reverse_offset_item_value
-from .Options import get_option_value, RandomizeWildPokemon, RandomizeStarters, TmCompatibility, HmCompatibility
-from .Pokemon import get_random_species, get_pokemon_species, get_species_by_id, get_species_by_name
+from .Options import get_option_value, RandomizeWildPokemon, RandomizeStarters, TmCompatibility, HmCompatibility, LevelUpMoves
+from .Pokemon import get_random_species, get_pokemon_species, get_species_by_id, get_species_by_name, get_random_damaging_move, get_random_move
 
 
 class PokemonEmeraldDeltaPatch(APDeltaPatch):
@@ -46,6 +46,9 @@ def generate_output(multiworld, player, output_directory: str):
     # Set encounter tables
     if (get_option_value(multiworld, player, "wild_pokemon") != RandomizeWildPokemon.option_vanilla):
         _randomize_encounter_tables(multiworld, player, patched_rom)
+
+    if (get_option_value(multiworld, player, "level_up_moves") != LevelUpMoves.option_vanilla):
+        _randomize_learnsets(multiworld, player, patched_rom)
 
     # Set starters
     if (get_option_value(multiworld, player, "starters") != RandomizeStarters.option_vanilla):
@@ -193,6 +196,45 @@ def _randomize_starters(multiworld, player, rom):
     _set_bytes_little_endian(rom, address + 0, 2, starter_1.id)
     _set_bytes_little_endian(rom, address + 2, 2, starter_2.id)
     _set_bytes_little_endian(rom, address + 4, 2, starter_3.id)
+
+
+def _randomize_learnsets(multiworld: MultiWorld, player: int, rom: bytearray):
+    random = multiworld.per_slot_randoms[player]
+
+    for pokemon_id, learnset_info in enumerate(get_extracted_data()["learnsets"]):
+        new_learnset: List[int] = []
+
+        i = 0
+
+        # Replace filler MOVE_NONEs at start of list
+        while (learnset_info["moves"][i]["move_id"] == 0):
+            if (get_option_value(multiworld, player, "level_up_moves") == LevelUpMoves.option_start_with_four_moves):
+                new_learnset.append(
+                    learnset_info["moves"][i]["level"] << 9 | get_random_move(random)
+                )
+            else:
+                new_learnset.append(learnset_info["moves"][i]["level"] << 9)
+            i += 1
+
+        while (i < len(learnset_info["moves"])):
+            new_move = get_random_move(random)
+
+            # Guarantees the starter can defeat the Zigzagoon and gain XP
+            if (i == 3):
+                new_move = get_random_damaging_move(random)
+
+            new_learnset.append(
+                learnset_info["moves"][i]["level"] << 9 | new_move
+            )
+
+            i += 1
+        
+        _replace_learnset(learnset_info["rom_address"], new_learnset, rom)
+
+
+def _replace_learnset(learnset_address: int, new_learnset: List[int], rom: bytearray):
+    for i, level_move in enumerate(new_learnset):
+        _set_bytes_little_endian(rom, learnset_address + (i * 2), 2, level_move)
 
 
 def _modify_species_info(multiworld: MultiWorld, player: int, rom: bytearray):

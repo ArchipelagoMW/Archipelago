@@ -62,9 +62,7 @@ class RandomizeStarters(Choice):
     option_completely_random = 2
 
 class MinCatchRate(Range):
-    """Sets the minimum catch rate a pokemon can have. Any pokemon with a
-    catch rate below this floor will have it raised to this value.
-    
+    """Sets the minimum catch rate a pokemon can have. Any pokemon with a catch rate below this floor will have it raised to this value.
     Legendaries are often in the single digits
     Fully evolved pokemon are often double digits
     Pidgey is 255"""
@@ -87,6 +85,17 @@ class ExpModifier(Range):
 class BlindTrainers(Toggle):
     """Causes trainers to not start a battle with you unless you talk to them"""
     display_name = "Blind Trainers"
+
+class LevelUpMoves(Choice):
+    """Randomizes the moves a pokemon learns when they reach a level where they would learn a move. Your starter is guaranteed to have a move with which it can gain experience.
+    Vanilla: Learnset is unchanged
+    Randomized: Moves are randomized
+    Start with Four Moves: Moves are randomized and all Pokemon have 4 starting moves"""
+    display_name = "Level Up Moves"
+    default = 0
+    option_vanilla = 0
+    option_randomized = 1
+    option_start_with_four_moves = 2
 
 class TmCompatibility(Choice):
     """Modifies the compatability of TMs with species
@@ -129,6 +138,7 @@ options: Dict[str, Option] = {
   "min_catch_rate": MinCatchRate,
   "exp_modifier": ExpModifier,
   "blind_trainers": BlindTrainers,
+  "level_up_moves": LevelUpMoves,
   "tm_compatibility": TmCompatibility,
   "hm_compatibility": HmCompatibility,
   "enable_ferry": EnableFerry
