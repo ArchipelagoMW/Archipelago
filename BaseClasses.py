@@ -835,8 +835,8 @@ class Region:
         for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
             return entrance.parent_region.get_connecting_entrance(is_main_entrance)
 
-    def add_locations(self, locations: Dict[str, Optional[str]], location_type: Optional[typing.Type[Location]] = None) -> None:
-        """Adds locations to the Region object, where LocationType is your Location class and locations is a dict of
+    def add_locations(self, locations: Dict[str, Optional[int]], location_type: Optional[typing.Type[Location]] = None) -> None:
+        """Adds locations to the Region object, where location_type is your Location class and locations is a dict of
         location names to address."""
         if location_type is None:
             location_type = Location
