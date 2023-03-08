@@ -4,9 +4,8 @@ from dataclasses import dataclass, field
 from typing import Dict, Union, Optional, Iterable, Sized, Tuple, List
 
 from . import options
-from .data import all_purchasable_seeds, SeedItem, all_crops, CropItem
+from .data import all_fish, FishItem, all_purchasable_seeds, SeedItem, all_crops, CropItem
 from .data.bundle_data import BundleItem
-from .data.fish_data import all_fish_items, FishItem
 from .data.minerals_data import all_museum_items, MuseumItem
 from .data.villagers_data import all_villagers_by_name
 from .items import all_items, Group
@@ -110,7 +109,7 @@ class StardewLogic:
     quest_rules: Dict[str, StardewRule] = field(default_factory=dict)
 
     def __post_init__(self):
-        self.fish_rules.update({fish.name: self.can_catch_fish(fish) for fish in all_fish_items})
+        self.fish_rules.update({fish.name: self.can_catch_fish(fish) for fish in all_fish})
         self.museum_rules.update({donation.name: self.can_find_museum_item(donation) for donation in all_museum_items})
 
         self.tree_fruit_rules.update({
@@ -674,7 +673,7 @@ class StardewLogic:
 
     def can_catch_every_fish(self) -> StardewRule:
         rules = [self.has_skill_level("Fishing", 10), self.has_max_fishing_rod()]
-        for fish in all_fish_items:
+        for fish in all_fish:
             rules.append(self.can_catch_fish(fish))
         return And(rules)
 

@@ -19,4 +19,6 @@ sewers = "Sewers"
 mutant_bug_lair = "Mutant Bug Lair"
 witch_swamp = "Witch's Swamp"
 ginger_island = "Ginger Island"
+pirate_cove = ginger_island
+dig_site = ginger_island
 perfect_skull_cavern = "Skull Cavern Floor 100"

@@ -5,7 +5,7 @@ from random import Random
 from typing import Optional, Dict, Protocol, List, FrozenSet
 
 from . import options, data
-from .data.fish_data import legendary_fish, special_fish, all_fish_items
+from .data.fish_data import legendary_fish, special_fish, all_fish
 from .data.minerals_data import all_museum_items
 from .data.villagers_data import all_villagers
 
@@ -138,9 +138,9 @@ def extend_fishsanity_locations(randomized_locations: List[LocationData], fishsa
         randomized_locations.extend(location_table[f"{prefix}{special.name}"] for special in special_fish)
     elif fishsanity == options.Fishsanity.option_random_selection:
         randomized_locations.extend(location_table[f"{prefix}{fish.name}"]
-                                    for fish in all_fish_items if random.random() < 0.4)
+                                    for fish in all_fish if random.random() < 0.4)
     elif fishsanity == options.Fishsanity.option_all:
-        randomized_locations.extend(location_table[f"{prefix}{fish.name}"] for fish in all_fish_items)
+        randomized_locations.extend(location_table[f"{prefix}{fish.name}"] for fish in all_fish)
 
 
 def extend_museumsanity_locations(randomized_locations: List[LocationData], museumsanity: int, random: Random):

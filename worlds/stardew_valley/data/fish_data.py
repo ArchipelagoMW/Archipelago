@@ -34,8 +34,9 @@ witch_swamp = (region.witch_swamp,)
 night_market = (region.beach,)
 ginder_island_ocean = (region.ginger_island,)
 ginger_island_river = (region.ginger_island,)
-pirate_cove = (region.ginger_island,)
-all_fish_items: List[FishItem] = []
+pirate_cove = (region.pirate_cove,)
+
+all_fish: List[FishItem] = []
 
 
 def fish(name: str, item_id: int, locations: Tuple[str, ...], seasons: Tuple[str, ...], difficulty: int) -> FishItem:
@@ -43,7 +44,7 @@ def fish(name: str, item_id: int, locations: Tuple[str, ...], seasons: Tuple[str
         seasons = (seasons,)
 
     fish_item = FishItem(name, item_id, locations, seasons, difficulty)
-    all_fish_items.append(fish_item)
+    all_fish.append(fish_item)
     return fish_item
 
 
@@ -119,6 +120,3 @@ snail = fish("Snail", 721, fresh_water, season.all_seasons, -1)
 
 legendary_fish = [crimsonfish, angler, legend, glacierfish, mutant_carp]
 special_fish = [*legendary_fish, blob_fish, lava_eel, octopus, scorpion_carp, ice_pip, super_cucumber, dorado]
-
-all_fish_items_by_name = {fish.name: fish for fish in all_fish_items}
-all_fish_items_by_id = {fish.item_id: fish for fish in all_fish_items}
