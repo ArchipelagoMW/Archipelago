@@ -37,28 +37,27 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
             self.output("Patched.")
 
     @mark_raw
-    def _cmd_auto_patch(self, steaminstall: str):
+    def _cmd_auto_patch(self, steaminstall: typing.Optional[str] = None):
         """Patch the game automatically."""
         if isinstance(self.ctx, UndertaleContext):
-            if steaminstall == "" or not os.path.exists(steaminstall):
-                steaminstall = "C:\\Program Files (x86)\\Steam"
-                if not os.path.exists("C:\\Program Files (x86)\\Steam"):
-                    steaminstall = "C:\\Program Files\\Steam"
-            if not os.path.exists(steaminstall) or not os.path.exists(steaminstall+"\\steamapps\\common\\Undertale\\"):
-                self.output("ERROR: Folder does not exists. Please make sure you put the steam directory in this"
+            tempInstall = steaminstall
+            if tempInstall is None:
+                tempInstall = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale"
+                if not os.path.exists("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale"):
+                    tempInstall = "C:\\Program Files\\Steam\\steamapps\\common\\Undertale"
+            elif not os.path.exists(tempInstall):
+                tempInstall = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale"
+                if not os.path.exists("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale"):
+                    tempInstall = "C:\\Program Files\\Steam\\steamapps\\common\\Undertale"
+            if not os.path.exists(tempInstall) or not os.path.exists(tempInstall):
+                self.output("ERROR: Cannot find Undertale. Please rerun the command with the correct folder."
                             " command. \"/auto_patch (Steam directory)\".")
             else:
-                for file_name in os.listdir(steaminstall+"\\steamapps\\common\\Undertale\\"):
+                for file_name in os.listdir(tempInstall):
                     if file_name != "steam_api.dll":
-                        copier(steaminstall+"\\steamapps\\common\\Undertale\\"+file_name,
+                        copier(tempInstall+"\\"+file_name,
                                os.getcwd() + "\\Undertale\\" + file_name)
                 self.ctx.patch_game()
-                os.makedirs(name=os.getcwd() + "\\Undertale\\" + "Custom Sprites", exist_ok=True)
-                with open(os.path.expandvars(os.getcwd() + "\\Undertale\\" + "Custom Sprites\\" +
-                                             "Which Character.txt"), "w") as f:
-                    f.writelines(["// Put the folder name of the sprites you want to play as, make sure it is the only "
-                                  "line other than this one.\n", "frisk"])
-                    f.close()
                 self.output("Patching successful!")
 
     def _cmd_online(self):
@@ -106,6 +105,12 @@ class UndertaleContext(CommonContext):
             patchedFile = bsdiff4.patch(f.read(), undertale.data_path("patch.bsdiff"))
         with open(os.getcwd() + "/Undertale/data.win", "wb") as f:
             f.write(patchedFile)
+        os.makedirs(name=os.getcwd() + "\\Undertale\\" + "Custom Sprites", exist_ok=True)
+        with open(os.path.expandvars(os.getcwd() + "\\Undertale\\" + "Custom Sprites\\" +
+                                     "Which Character.txt"), "w") as f:
+            f.writelines(["// Put the folder name of the sprites you want to play as, make sure it is the only "
+                          "line other than this one.\n", "frisk"])
+            f.close()
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -389,8 +394,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                     else:
                         f.write(str(NetworkItem(*item).item-11000))
                     f.close()
-                if id > -1:
-                    ctx.items_received.append(NetworkItem(*item))
+                ctx.items_received.append(NetworkItem(*item))
                 if [item.item for item in ctx.items_received].count(77000) >= ctx.pieces_needed > 0:
                     filename = f"{str(-99999)}PLR{str(0)}.item"
                     with open(os.path.expandvars(r"%localappdata%/UNDERTALE/" + filename), "w") as f:
