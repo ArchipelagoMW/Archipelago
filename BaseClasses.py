@@ -361,11 +361,11 @@ class MultiWorld():
     def get_regions(self, player=None):
         return self.regions if player is None else self._region_cache[player].values()
 
-    def create_region(self, name: str, player: int, region_type: RegionType = None, hint: str = None) -> Region:
+    def create_region(self, name: str, player: int, hint: str = None) -> Region:
         """Creates and returns a region with the given parameters"""
         if not hint:
             hint = name
-        return Region(name, region_type, hint, player, self)
+        return Region(name, player, self, hint)
 
     def get_region(self, regionname: str, player: int) -> Region:
         try:
@@ -837,21 +837,24 @@ class Region:
         for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
             return entrance.parent_region.get_connecting_entrance(is_main_entrance)
 
-    def add_locations(self, LocationType: Optional[typing.Type[Location]] = None, locations: Dict[str, Any] = {}) -> None:
+    def add_locations(self, locations: Dict[str, Optional[str]], location_type: Optional[typing.Type[Location]] = None) -> None:
         """Adds locations to the Region object, where LocationType is your Location class and locations is a dict of
         location names to address."""
+        if location_type is None:
+            location_type = Location
         for location, address in locations.items():
-            assert isinstance(address, int), f"{address} is not a valid address to use for location {location}"
-            self.locations.append(LocationType(self.player, location, address, self))
+            assert isinstance(address, Union[int, None]), f"location {location} has an invalid address {address}"
+            self.locations.append(location_type(self.player, location, address, self))
 
-    def add_exits(self, exits: Dict[str, Optional[Callable]]) -> None:
-        """Connects current region to regions in exit dictionary. All regions must exist first."""
-        for exit, rule in exits.items():
-            ret = Entrance(self.player, exit, self)
-            if rule:
-                ret.access_rule = rule
+    def add_exits(self, exits: Dict[str, List[str, Optional[Callable]]]) -> None:
+        """Connects current region to regions in exit dictionary. Passed region names must exist first.
+        :param exits: exits from the region. format is {"connecting_region": ["exit_name", rule]}"""
+        for exiting_region, pair in exits.items():
+            ret = Entrance(self.player, pair[0], self)
+            if len(pair) > 1:
+                ret.access_rule = pair[1]
             self.exits.append(ret)
-            ret.connect(self.world.get_region(exit, self.player))
+            ret.connect(self.multiworld.get_region(exiting_region, self.player))
 
     def __repr__(self):
         return self.__str__()
