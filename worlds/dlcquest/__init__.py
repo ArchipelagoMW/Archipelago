@@ -24,7 +24,7 @@ class DLCqworld(World):
     """
     DLCquest is a metroid ish game where everything is an in-game dlc.
     """
-    game: str = "DLCquest"
+    game = "DLCquest"
     topology_present = False
     web = DLCqwebworld()
 
@@ -57,6 +57,7 @@ class DLCqworld(World):
             created_items.append(self.create_item(item))
 
         self.multiworld.itempool += created_items
+
 
 
 
