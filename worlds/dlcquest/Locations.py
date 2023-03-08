@@ -20,6 +20,6 @@ location_table = {
     "The Zombie Pack": offset + 11,
     "Night Map Pack": offset + 12,
     "Psychological Warfare Pack": offset + 13,
-    "Horse Armor Pack": offset + 14,
+    "Armor for your Horse Pack": offset + 14,
     "Finish the Fight Pack": offset + 15
 }
