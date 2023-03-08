@@ -23,7 +23,7 @@ class PokemonEmeraldDeltaPatch(APDeltaPatch):
         return get_base_rom_as_bytes()
 
 
-def generate_output(multiworld, player, output_directory: str):
+def generate_output(multiworld: MultiWorld, player: int, output_directory: str):
     extracted_data = get_extracted_data()
 
     base_rom = get_base_rom_as_bytes()
@@ -67,6 +67,7 @@ def generate_output(multiworld, player, output_directory: str):
     #     bool8 areTrainersBlind;
     #     u16 expMultiplierNumerator;
     #     u16 expMultiplierDenominator;
+    #     u16 birchPokemon;
     # } __attribute__((packed));
     options_address = extracted_data["misc_rom_addresses"]["gArchipelagoOptions"]
 
@@ -82,6 +83,9 @@ def generate_output(multiworld, player, output_directory: str):
     numerator = min(get_option_value(multiworld, player, "exp_modifier"), 2**16 - 1)
     _set_bytes_little_endian(patched_rom, options_address + 2, 2, numerator)
     _set_bytes_little_endian(patched_rom, options_address + 4, 2, 100)
+
+    # Set Birch pokemon
+    _set_bytes_little_endian(patched_rom, options_address + 6, 1, get_random_species(multiworld.per_slot_randoms[player]).id)
 
     # Write Output
     outfile_player_name = f"_P{player}"
