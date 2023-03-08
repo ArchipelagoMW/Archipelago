@@ -363,8 +363,6 @@ class MultiWorld():
 
     def create_region(self, name: str, player: int, hint: str = None) -> Region:
         """Creates and returns a region with the given parameters"""
-        if not hint:
-            hint = name
         return Region(name, player, self, hint)
 
     def get_region(self, regionname: str, player: int) -> Region:
