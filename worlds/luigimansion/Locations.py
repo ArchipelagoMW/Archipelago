@@ -1,4 +1,4 @@
-from typing import List, Tuple, Optional, Callable, NamedTuple
+from typing import List, Tuple, Optional, Callable, NamedTuple, Union, Dict
 from BaseClasses import MultiWorld, Location
 
 EventId: Optional[int] = None
@@ -79,20 +79,37 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData('Parlor', 'Parlor Clear Chest', 8546),
         LocationData('Cold Storage', 'Cold Storage Clear Chest', 8542,
                      rule=lambda state: state.has("Fire Element Medal", player)),
+        LocationData('Breaker Room', 'Breaker Room Clear Chest', 8543,
+                     rule=lambda state: state.has("Breaker Key", player)),
 
         # Ghost Affected Clear Chests. Rules applied to region entrances
-        LocationData('Study', 'Study Clear Chest', 8501),
+        LocationData('Wardrobe', 'Wardrobe Shelf Key', 8501),
+        LocationData('Hidden Room', 'Hidden Room Clear Chest', 8501),
+        LocationData('Mirror Room', 'Mirror Room Clear Chest', 8501),
+        LocationData('Kitchen', 'Kitchen Clear Chest', 8501),
+        LocationData('1F Bathroom', '1F Bathroom Shelf Key', 8501),
+        LocationData('Courtyard', 'Courtyard Clear Chest', 8501),
+        LocationData('Tea Room', 'Tea Room Clear Chest', 8501),
+        LocationData('2F Washroom', '2F Washroom Clear Chest', 8501),
+        LocationData('Projection Room', 'Projection Room Clear Chest', 8501),
+        LocationData('Safari Room', 'Safari Room Clear Chest', 8501),
+        LocationData('Cellar', 'Cellar Clear Chest', 8501),
+        LocationData('Roof', 'Roof Clear Chest', 8501),
+        LocationData('Sealed Room', 'Sealed Room Clear Chest', 8501),
+        LocationData('Armory', 'Armory Clear Chest', 8501),
+        LocationData('Pipe Room', 'Pipe Room Clear Chest', 8501,
+                     rule=lambda state: state.has("Ice Element Medal", player)),
 
         # Game Event Locations
-        LocationData('Balcony', 'Boolossus', None, "Blackout", lambda state: state.has("Ice Element Medal", player)),
+        LocationData('Balcony', 'Diamond Door', None, "Blackout", lambda state: state.has("Diamond Key", player)),
         LocationData('Storage Room', 'Storage Room Cage', None, "Boo Release"),
         # LocationData('Nursery', 'Chauncey',  None),
         # LocationData('Graveyard', 'Bogmire',  None),
-        # LocationData('Secret Altar', 'King Boo', None, "Mario") How does make Mario a victory?
+        LocationData('Secret Altar', name="King Boo", code=None, locked_item="Mario's Painting")
     ]
 
     # Adds all waterable plants as locations
-    if multiworld.Plants[player] == True:
+    if not multiworld or is_option_enabled(multiworld, player, "Plantsanity"):
         location_table += (
             LocationData('Wardrobe Balcony', 'Wardrobe Balcony Plant 1', 1337156,
                          rule=lambda state: state.has("Water Element Medal", player)),
@@ -153,12 +170,12 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         )
 
     # Adds the myriad shackable objects as locations
-    if multiworld.Interactables[player] == True:
+    if not multiworld or is_option_enabled(multiworld, player, "Interactables"):
         location_table += (
             LocationData('Left Side forest Caves', 'Lake Serene: Cantoran', 1337176),
         )
     # Adds Toads as locations
-    if multiworld.Toadsanity[player] == True:
+    if not multiworld or is_option_enabled(multiworld, player, "Toadsanity"):
         location_table += (
             LocationData('Foyer', 'Foyer Toad', 1337176),
             LocationData('Wardrobe', 'Wardrobe Balcony Toad', 1337176),
@@ -167,7 +184,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         )
 
     # Adds Portrait Ghosts as locations
-    if multiworld.PortraitGhosts[player] == True:
+    if not multiworld or is_option_enabled(multiworld, player, "PortraitGhosts"):
         location_table += (
             LocationData('Study', 'Neville, the Bookish Father', 1337176),
             LocationData('Master Bedroom', 'Lydia, the Mirror-Gazing Mother', 1337176),
@@ -205,7 +222,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         )
 
     # Adds Blue Ghosts and Gold Mice as locations
-    if multiworld.SpeedySpirits[player] == True:
+    if not multiworld or is_option_enabled(multiworld, player, "SpeedySpirits"):
         location_table += (
             LocationData('Lower lake desolation', 'Lake Desolation: Memory - Coyote Jump (Time Messenger)', 1337177),
             LocationData('Library', 'Library: Memory - Waterway (A Message)', 1337178),
@@ -252,7 +269,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
     # 1337199 - 1337236 Reserved for future use
 
     # Turns Boos into check locations and adds Boos as items
-    if multiworld.Boosanity[player] == True:
+    if not multiworld or is_option_enabled(multiworld, player, "Boosanity"):
         location_table += (
             LocationData('Parlor', 'Parlor Boo', 1337237),
             LocationData('Anteroom', 'Anteroom Boo', 1337238),
@@ -260,15 +277,20 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
             LocationData('Study', 'Study Boo', 1337240),
             LocationData('Master Bedroom', 'Master Bedroom Boo', 1337241),
             LocationData('Nursery', 'Nursery Boo', 1337242),
-            LocationData('Twins\' Room', 'Twins\' Room Boo', 1337245),
+            LocationData('Twins\' Room', 'Twins\' Room Boo', 1337245,
+                         rule=lambda state: state.has_group("Medal", player)),
             LocationData('Laundry Room', 'Laundry Room Boo', 1337243),
-            LocationData('Butler\'s Room', 'Butler\'s Room Boo', 1337244),
+            LocationData('Butler\'s Room', 'Butler\'s Room Boo', 1337244,
+                         rule=lambda state: state.has("Fire Element Medal", player) and state.has("Boo Release",
+                                                                                                  player)),
             LocationData('Hidden Room', 'Hidden Room Boo', 1337245),
-            LocationData('Fortune-Teller\'s Room', 'Fortune-Teller\'s Room Boo', 1337245),
+            LocationData('Fortune-Teller\'s Room', 'Fortune-Teller\'s Room Boo', 1337245,
+                         rule=lambda state: state.has_group("Mario Item", player, multiworld.MarioItems[player])),
             LocationData('Mirror Room', 'Mirror Room Boo', 1337245),
             LocationData('Ballroom', 'Ballroom Boo', 1337245),
             LocationData('Storage Room', 'Storage Room Boo', 1337245),
-            LocationData('Dining Room', 'Dining Room Boo', 1337245),
+            LocationData('Dining Room', 'Dining Room Boo', 1337245,
+                         rule=lambda state: state.has("Fire Element Medal", player)),
             LocationData('Kitchen', 'Kitchen Boo', 1337245),
             LocationData('Conservatory', 'Conservatory Boo', 1337245),
             LocationData('Rec Room', 'Rec Room Boo', 1337245),
@@ -276,19 +298,27 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
             LocationData('Projection Room', 'Projection Room Boo', 1337245),
             LocationData('Tea Room', 'Tea Room Boo', 1337245),
             LocationData('Nana\'s Room', 'Nana\'s Room Boo', 1337245),
-            LocationData('Sitting Room', 'Sitting Room Boo', 1337245),
-            LocationData('Guest Room', 'Guest Room Boo', 1337245),
+            LocationData('Sitting Room', 'Sitting Room Boo', 1337245,
+                         rule=lambda state: state.has("Fire Element Medal", player) and state.has("Water Element Medal",
+                                                                                                  player)
+                         ),
+            LocationData('Guest Room', 'Guest Room Boo', 1337245,
+                         rule=lambda state: state.has("Water Element Medal", player)),
             LocationData('Safari Room', 'Safari Room Boo', 1337245),
             LocationData('Artist\'s Studio', 'Artist\'s Studio Boo', 1337245),
             LocationData('Armory', 'Armory Boo', 1337245),
-            LocationData('Ceramics Studio', 'Ceramics Studio Boo', 1337245),
+            LocationData('Ceramics Studio', 'Ceramics Studio Boo', 1337245,
+                         rule=lambda state: state.has("Ice Element Medal", player)),
             LocationData('Telephone Room', 'Telephone Room Boo', 1337245),
             LocationData('Clockwork Room', 'Clockwork Room Boo', 1337245),
-            LocationData('Astral Hall', 'Astral Hall Boo', 1337245),
-            LocationData('Breaker Room', 'Breaker Room Boo', 1337245),
+            LocationData('Astral Hall', 'Astral Hall Boo', 1337245,
+                         rule=lambda state: state.has("Fire Element Medal", player)),
+            LocationData('Breaker Room', 'Breaker Room Boo', 1337245,
+                         rule=lambda state: state.has("Blackout", player)),
             LocationData('Cellar', 'Cellar Boo', 1337245),
             LocationData('Pipe Room', 'Pipe Room Boo', 1337245),
-            LocationData('Cold Storage', 'Cold Storage Boo', 1337245)
+            LocationData('Cold Storage', 'Cold Storage Boo', 1337245,
+                         rule=lambda state: state.has("Fire Element Medal", player))
 
         )
     else:
@@ -300,15 +330,20 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
             LocationData('Study', 'Study Boo', None, "Boo"),
             LocationData('Master Bedroom', 'Master Bedroom Boo', None, "Boo"),
             LocationData('Nursery', 'Nursery Boo', None, "Boo"),
-            LocationData('Twins\' Room', 'Twins\' Room Boo', None, "Boo"),
+            LocationData('Twins\' Room', 'Twins\' Room Boo', None, "Boo",
+                         rule=lambda state: state.has_group("Medal", player)),
             LocationData('Laundry Room', 'Laundry Room Boo', None, "Boo"),
-            LocationData('Butler\'s Room', 'Butler\'s Room Boo', None, "Boo"),
+            LocationData('Butler\'s Room', 'Butler\'s Room Boo', None, "Boo",
+                         rule=lambda state: state.has("Fire Element Medal", player) and state.has("Boo Release",
+                                                                                                  player)),
             LocationData('Hidden Room', 'Hidden Room Boo', None, "Boo"),
-            LocationData('Fortune-Teller\'s Room', 'Fortune-Teller\'s Room Boo', None, "Boo"),
+            LocationData('Fortune-Teller\'s Room', 'Fortune-Teller\'s Room Boo', None, "Boo",
+                         rule=lambda state: state.has_group("Mario Item", player, multiworld.MarioItems[player])),
             LocationData('Mirror Room', 'Mirror Room Boo', None, "Boo"),
             LocationData('Ballroom', 'Ballroom Boo', None, "Boo"),
             LocationData('Storage Room', 'Storage Room Boo', None, "Boo"),
-            LocationData('Dining Room', 'Dining Room Boo', None, "Boo"),
+            LocationData('Dining Room', 'Dining Room Boo', None, "Boo",
+                         rule=lambda state: state.has("Fire Element Medal", player)),
             LocationData('Kitchen', 'Kitchen Boo', None, "Boo"),
             LocationData('Conservatory', 'Conservatory Boo', None, "Boo"),
             LocationData('Rec Room', 'Rec Room Boo', None, "Boo"),
@@ -316,18 +351,37 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
             LocationData('Projection Room', 'Projection Room Boo', None, "Boo"),
             LocationData('Tea Room', 'Tea Room Boo', None, "Boo"),
             LocationData('Nana\'s Room', 'Nana\'s Room Boo', None, "Boo"),
-            LocationData('Sitting Room', 'Sitting Room Boo', None, "Boo"),
-            LocationData('Guest Room', 'Guest Room Boo', None, "Boo"),
+            LocationData('Sitting Room', 'Sitting Room Boo', None, "Boo",
+                         rule=lambda state: state.has("Fire Element Medal", player) and state.has("Water Element Medal",
+                                                                                                  player)),
+            LocationData('Guest Room', 'Guest Room Boo', None, "Boo",
+                         rule=lambda state: state.has("Water Element Medal", player)),
             LocationData('Safari Room', 'Safari Room Boo', None, "Boo"),
             LocationData('Artist\'s Studio', 'Artist\'s Studio Boo', None, "Boo"),
             LocationData('Armory', 'Armory Boo', None, "Boo"),
-            LocationData('Ceramics Studio', 'Ceramics Studio Boo', None, "Boo"),
+            LocationData('Ceramics Studio', 'Ceramics Studio Boo', None, "Boo",
+                         rule=lambda state: state.has("Ice Element Medal", player)),
             LocationData('Telephone Room', 'Telephone Room Boo', None, "Boo"),
             LocationData('Clockwork Room', 'Clockwork Room Boo', None, "Boo"),
-            LocationData('Astral Hall', 'Astral Hall Boo', None, "Boo"),
-            LocationData('Breaker Room', 'Breaker Room Boo', None, "Boo"),
+            LocationData('Astral Hall', 'Astral Hall Boo', None, "Boo",
+                         rule=lambda state: state.has("Fire Element Medal", player)),
+            LocationData('Breaker Room', 'Breaker Room Boo', None, "Boo",
+                         rule=lambda state: state.has("Blackout", player)),
             LocationData('Cellar', 'Cellar Boo', None, "Boo"),
             LocationData('Pipe Room', 'Pipe Room Boo', None, "Boo"),
-            LocationData('Cold Storage', 'Cold Storage Boo', None, "Boo")
+            LocationData('Cold Storage', 'Cold Storage Boo', None, "Boo",
+                         lambda state: state.has("Fire Element Medal", player))
         )
     return tuple(location_table)
+
+
+def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
+    return get_option_value(world, player, name) > 0
+
+
+def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, Dict, List]:
+    option = getattr(world, name, None)
+    if option == None:
+        return 0
+
+    return option[player].value

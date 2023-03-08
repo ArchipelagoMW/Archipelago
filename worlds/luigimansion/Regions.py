@@ -1,6 +1,6 @@
 from typing import List, Set, Dict, Tuple, Optional, Callable, Union
 from BaseClasses import MultiWorld, Region, Entrance, Location, ItemClassification
-from . import LMItem
+from .Items import LMItem
 from .Locations import LocationData
 from worlds.generic.Rules import add_rule
 
@@ -124,7 +124,8 @@ def create_regions(multiworld: MultiWorld, player: int, locations: tuple[Locatio
     connect(multiworld, player, "Boneyard -> Graveyard", 'Boneyard', 'Graveyard',
             lambda state: state.has("Water Element Medal", player))
     connect(multiworld, player, "Billiards Room -> Projection Room", 'Billiards Room', 'Projection Room')
-    connect(multiworld, player, "Fortune-Teller's Room -> Mirror Room", 'Fortune-Teller\'s Room', 'Mirror Room')
+    connect(multiworld, player, "Fortune-Teller's Room -> Mirror Room", 'Fortune-Teller\'s Room', 'Mirror Room',
+            lambda state: state.has("Fire Element Medal", player))
     connect(multiworld, player, "Laundry Room -> Butler's Room", 'Laundry Room', 'Butler\'s Room')
     connect(multiworld, player, "Butler's Room -> Hidden Room", 'Butler\'s Room', 'Hidden Room')
     connect(multiworld, player, "Courtyard -> The Well", 'Courtyard', 'The Well')
@@ -143,7 +144,8 @@ def create_regions(multiworld: MultiWorld, player: int, locations: tuple[Locatio
             lambda state: state.has("Safari Key", player))
     connect(multiworld, player, "Astral Hall -> Observatory", 'Astral Hall', 'Observatory',
             lambda state: state.has("Fire Element Medal", player))
-    connect(multiworld, player, "Sitting Room -> Guest Room", 'Sitting Room', 'Guest Room')
+    connect(multiworld, player, "Sitting Room -> Guest Room", 'Sitting Room', 'Guest Room',
+            lambda state: state.has("Fire Element Medal", player) and state.has("Water Element Medal", player))
     connect(multiworld, player, "Safari Room -> 3F Right Hallway", 'Safari Room', '3F Right Hallway')
     connect(multiworld, player, "3F Right Hallway -> Artist's Studio", '3F Right Hallway', 'Artist\'s Studio',
             lambda state: state.has("Art Studio Key", player))
@@ -222,13 +224,13 @@ def connect(multiworld: MultiWorld, player: int, name: str, source: str, target:
     if rule:
         connection.access_rule = rule
 
-    for region_to_type in multiworld.ghost_affected_regions:
+    for region_to_type in multiworld.worlds[player].ghost_affected_regions:
         if region_to_type == target_region.name:
-            if multiworld.ghost_affected_regions[region_to_type] == "Fire":
+            if multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Fire":
                 add_rule(connection, lambda state: state.has("Water Element Medal", player), "and")
-            elif multiworld.ghost_affected_regions[region_to_type] == "Water":
+            elif multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Water":
                 add_rule(connection, lambda state: state.has("Ice Element Medal", player), "and")
-            elif multiworld.ghost_affected_regions[region_to_type] == "Ice":
+            elif multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Ice":
                 add_rule(connection, lambda state: state.has("Fire Element Medal", player), "and")
 
     source_region.exits.append(connection)

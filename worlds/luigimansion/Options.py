@@ -1,4 +1,4 @@
-from typing import Dict, Union
+from typing import Dict
 
 from Options import Toggle, Range, Option
 
@@ -108,7 +108,8 @@ luigimansion_options: Dict[str, Option] = {
     "MarioItems": MarioItems,
     "WashroomBooCount": WashroomBooCount,
     "BalconyBooCount": BalconyBooCount,
+    "FinalBooCount": FinalBooCount,
     "Boosanity": Boosanity,
     "PortraitGhosts": PortraitGhosts,
-    "Enemizer": Enemizer,
+    "Enemizer": Enemizer
 }

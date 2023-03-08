@@ -1,7 +1,10 @@
-from typing import Dict, NamedTuple
+from typing import Dict, NamedTuple, Set
 
-from BaseClasses import ItemClassification
+from BaseClasses import ItemClassification, Item
 
+
+class LMItem(Item):
+    game = "Luigi's Mansion"
 
 class ItemData(NamedTuple):
     group: str
@@ -51,6 +54,7 @@ item_table: Dict[str, ItemData] = {
     "Mario's Shoe": ItemData('Mario Item', 8537, ItemClassification.progression),
     "Boo": ItemData('Boo', 8538, ItemClassification.progression, count=50),
     "Boo Radar": ItemData('Upgrade', 8539, ItemClassification.progression),
+    # does the Boo release cutscene trigger the butler, or is it acquiring the boo radar?
     "Poltergust 4000": ItemData('Upgrade', 8540, ItemClassification.useful),
     "Treasure Bundle": ItemData('Filler', 8541, ItemClassification.filler),
     "Poison Mushroom": ItemData('Trap', 8542, ItemClassification.trap),
@@ -59,5 +63,23 @@ item_table: Dict[str, ItemData] = {
     "Small Heart": ItemData('Filler', 8546, ItemClassification.filler),
     "Medium Heart": ItemData('Filler', 8547, ItemClassification.filler),
     "Large Heart": ItemData('Filler', 8548, ItemClassification.filler)
-
 }
+
+filler_items: Dict[str, ItemData] = {
+    "Treasure Bundle": ItemData('Filler', 8541, ItemClassification.filler),
+    "Poison Mushroom": ItemData('Trap', 8542, ItemClassification.trap),
+    "Ghost": ItemData('Trap', 8543, ItemClassification.trap),
+    "Nothing": ItemData('Filler', 8544, ItemClassification.filler),
+    "Small Heart": ItemData('Filler', 8546, ItemClassification.filler),
+    "Medium Heart": ItemData('Filler', 8547, ItemClassification.filler),
+    "Large Heart": ItemData('Filler', 8548, ItemClassification.filler)
+}
+
+
+def get_item_names_per_category() -> Dict[str, Set[str]]:
+    categories: Dict[str, Set[str]] = {}
+
+    for name, data in item_table.items():
+        categories.setdefault(data.group, set()).add(name)
+
+    return categories
