@@ -3,7 +3,6 @@ import functools
 from enum import IntEnum
 from typing import Dict, List, Union, Set, NamedTuple, Optional
 from BaseClasses import Location
-from .Options import TotalLocations
 
 
 class NoitaLocation(Location):
@@ -37,15 +36,17 @@ class HiddenChests(IntEnum):
     parallel_worlds = 4
 
 
+class Pedestals(IntEnum):
+    main_path = 1
+    side_path = 2
+    main_world = 3
+    parallel_worlds = 4
+
+
 # todo: figure out how to add umlauts and stuff
 # 111000 - 111034
 # Mapping of items in each region
 location_region_mapping: Dict[str, Dict[str, LocationData]] = {
-    "Forest": {
-    #     # 110000 - 110500
-    #     # Just putting these here for now
-        f"Chest{i+1}": LocationData(110000+i) for i in range(TotalLocations.range_end)
-    },
     "Holy Mountain 1 (To Coal Pits)": {
         "Holy Mountain 1 (To Coal Pits) Shop Item 1": LocationData(111000),
         "Holy Mountain 1 (To Coal Pits) Shop Item 2": LocationData(111001),
@@ -118,6 +119,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
     },
     "Overgrown Cavern": {
         "Overgrown Cavern Chest": LocationData(112200, "hc", HiddenChests.main_world),
+        "Overgrown Cavern Pedestal": LocationData(112700, "peds", Pedestals.main_world),
     },
     "Lake": {
         "Syvaolento": LocationData(110650, "boss", Bosses.main_world),
@@ -125,18 +127,21 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
     "Frozen Vault": {
         "Frozen Vault Orb": LocationData(110503, "orb", Orbs.main_world),
         "Frozen Vault Chest": LocationData(112260, "hc", HiddenChests.main_world),
+        "Frozen Vault Pedestal": LocationData(112760, "peds", Pedestals.main_world),
     },
     "Mines": {
         "Mines Chest": LocationData(112000, "hc", HiddenChests.main_path),
+        "Mines Pedestal": LocationData(112500, "peds", Pedestals.main_path),
     },
     "Collapsed Mines": {
         "Collapsed Mines Chest": LocationData(112020, "hc", HiddenChests.side_path),
+        "Collapsed Mines Pedestal": LocationData(112520, "peds", Pedestals.side_path),
     },
     "Ancient Laboratory": {
         "Ylialkemisti": LocationData(110700, "boss", Bosses.side_path),
     },
     "Abyss Orb Room": {
-        "Sauvojen Tuntija": LocationData(110640, "boss", Bosses.main_path),
+        "Sauvojen Tuntija": LocationData(110640, "boss", Bosses.side_path),
         "Abyss Orb": LocationData(110508, "orb", Orbs.main_path),
     },
     "Below Lava Lake": {
@@ -144,45 +149,56 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
     },
     "Coal Pits": {
         "Coal Pits Chest": LocationData(112040, "hc", HiddenChests.main_path),
+        "Coal Pits Pedestal": LocationData(112540, "peds", Pedestals.main_path),
     },
     "Fungal Caverns": {
         "Fungal Caverns Chest": LocationData(112060, "hc", HiddenChests.side_path),
+        "Fungal Caverns Pedestal": LocationData(112560, "peds", Pedestals.side_path),
     },
     "Snowy Depths": {
         "Snowy Depths Chest": LocationData(112080, "hc", HiddenChests.main_path),
+        "Snowy Depths Pedestal": LocationData(112580, "peds", Pedestals.main_path),
     },
     "Magical Temple": {
         "Magical Temple Orb": LocationData(110506, "orb", Orbs.side_path),
     },
     "Hiisi Base": {
-        "Hiisi Base Chest": LocationData(112100, "hc", HiddenChests.main_path)
+        "Hiisi Base Chest": LocationData(112100, "hc", HiddenChests.main_path),
+        "Hiisi Base Pedestal": LocationData(112600, "peds", Pedestals.main_path),
     },
     "Underground Jungle": {
         "Suomuhauki": LocationData(110620, "boss", Bosses.main_path),
         "Underground Jungle Chest": LocationData(112120, "hc", HiddenChests.main_path),
+        "Underground Jungle Pedestal": LocationData(112620, "peds", Pedestals.main_path),
     },
     "Lukki Lair": {
         "Lukki Lair Orb": LocationData(110507, "orb", Orbs.side_path),
         "Lukki Lair Chest": LocationData(112140, "hc", HiddenChests.side_path),
+        "Lukki Lair Pedestal": LocationData(112640, "peds", Pedestals.side_path),
     },
     "Vault": {
         "Vault Chest": LocationData(112160, "hc", HiddenChests.main_path),
+        "Vault Pedestal": LocationData(112660, "peds", Pedestals.main_path),
     },
     "Temple of the Art": {
         "Gate Guardian": LocationData(110660, "boss", Bosses.main_path),
         "Temple of the Art Chest": LocationData(112180, "hc", HiddenChests.main_path),
+        "Temple of the Art Pedestal": LocationData(112680, "peds", Pedestals.main_path),
     },
     "The Tower": {
         "The Tower Chest": LocationData(112280, "hc", HiddenChests.main_world),
+        "The Tower Pedestal": LocationData(112780, "peds", Pedestals.main_world),
     },
     "Wizard's Den": {
         "Mestarien mestari": LocationData(110700, "boss", Bosses.main_world),
         "Wizard's Den Orb": LocationData(110511, "orb", Orbs.main_world),
         "Wizards' Den Chest": LocationData(112220, "hc", HiddenChests.main_world),
+        "Wizards' Den Pedestal": LocationData(112720, "peds", Pedestals.main_world),
     },
     "Powerplant": {
         "Kolmisilman silma": LocationData(110710, "boss", Bosses.main_world),
         "Power Plant Chest": LocationData(112240, "hc", HiddenChests.main_world),
+        "Power Plant Pedestal": LocationData(112740, "peds", Pedestals.main_world),
     },
     "Snow Chasm": {
         "Unohdettu": LocationData(110670, "boss", Bosses.main_world),
@@ -192,28 +208,17 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Limatoukka": LocationData(110610, "boss", Bosses.main_world),
     },
     "The Laboratory": {
-        "Kolmisilma": LocationData(110600, "boss", Bosses.side_path),
+        "Kolmisilma": LocationData(110600, "boss", Bosses.main_path),
     },
     "Friend Cave": {
         "Toveri": LocationData(110680, "boss", Bosses.main_world),
     },
-
     "The Work (Hell)": {
         "The Work (Hell) Orb": LocationData(110509, "orb", Orbs.main_world),
     },
 }
 
-# # todo: find a way to get these location counts without manually reading through, or remove the need for them
-num_static_locations = sum([len(locs) for locs in location_region_mapping.values()]) - TotalLocations.range_end  # 58
-total_locations_generated = sum([len(locs) for locs in location_region_mapping.values()]) - num_static_locations  # 500
-orb_mp_locations = 5
-orb_mw_locations = 6
-boss_mp_locations = 5
-boss_mw_locations = 7
-shop_locations = 35
-hc_locations = 75  # use 5 on the slider and main world for now
 
-# length of 558 entries
 location_name_to_id: Dict[str, int] = {}
 for location_group in location_region_mapping.values():
     for locname, locinfo in location_group.items():

@@ -22,8 +22,7 @@ def create_item(player: int, name: str) -> Item:
 
 def create_all_items(world: MultiWorld, player: int) -> None:
     pool_option = world.bad_effects[player].value
-    total_locations = world.total_locations[player].value
-    # todo: get rid of total_locations option, find a way to get the total number of locations in a different way
+    sum_locations = len(world.get_unfilled_locations(player))
 
     # Generate fixed item pool, these are items with a specific fixed quantity that must be added
     itempool: List = []
@@ -44,7 +43,7 @@ def create_all_items(world: MultiWorld, player: int) -> None:
 
     # Create any non-progression repeat items (referred to as junk regardless of whether it's useful)
     junk_pool = item_pool_weights[pool_option]
-    random_count = total_locations - len(itempool)
+    random_count = sum_locations - len(itempool)
 
     itempool += world.random.choices(
         population=list(junk_pool.keys()),
