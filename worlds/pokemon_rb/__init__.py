@@ -65,6 +65,7 @@ class PokemonRedBlueWorld(World):
         self.rival_name = None
         self.type_chart = None
         self.traps = None
+        self.trade_mons = {}
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
@@ -382,7 +383,6 @@ class PokemonRedBlueWorld(World):
         for location in self.multiworld.get_locations(self.player):
             if location.name in pokemon_locs:
                 spoiler_handle.write(location.name + ": " + location.item.name + "\n")
-
 
 
     def get_filler_item_name(self) -> str:

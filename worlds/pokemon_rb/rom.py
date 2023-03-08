@@ -544,6 +544,94 @@ def process_pokemon_data(self):
     self.learnsets = learnsets
 
 
+def write_quizzes(self, data, random):
+
+    def get_quiz(q, a):
+        if q == 0:
+            mon = self.trade_mons["Trade_Dux"]
+            if not a:
+                answers.append(0)
+                old_mon = mon
+                while old_mon == mon:
+                    mon = random.choice(list(poke_data.pokemon_data.keys()))
+            return encode_text(f"Someone in<LINE>Vermilion City<CONT>was looking for a<CONT>{mon}?<DONE>")
+        elif q == 1:
+            for location in self.multiworld.get_filled_locations():
+                if location.item.name == "Secret Key" and location.item.player == self.player:
+                    break
+            if location.player == self.player:
+                player_name = "yourself"
+            else:
+                player_name = self.multiworld.player_names[location.player]
+            if not a:
+                if len(self.multiworld.player_name) > 1:
+                    old_name = player_name
+                    while old_name == player_name:
+                        player_name = random.choice(list(self.multiworld.player_name.values()))
+                else:
+                    return encode_text("You're playing<LINE>in a multiworld<CONT>with other<CONT>players?<DONE>")
+            return encode_text(f"The Secret Key was<LINE>found by<CONT>{player_name[:17]}?<DONE>")
+        elif q == 2:
+            if a:
+                return encode_text(f"#mon is<LINE>pronounced<CONT>Po-kay-mon?<DONE>")
+            else:
+                if random.randint(0, 1):
+                    return encode_text(f"#mon is<LINE>pronounced<CONT>Po-key-mon?<DONE>")
+                else:
+                    return encode_text(f"#mon is<LINE>pronounced<CONT>Po-kuh-mon?<DONE>")
+        elif q == 3:
+            starters = [" ".join(self.multiworld.get_location(
+                f"Pallet Town - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
+            mon = random.choice(starters)
+            nots = random.choice(range(8, 16, 2))
+            if not answers[3]:
+                while mon in starters:
+                    mon = random.choice(list(poke_data.pokemon_data.keys()))
+                nots += 1
+            text = f"{mon} was<LINE>"
+            while nots > 0:
+                i = random.randint(1, min(4, nots))
+                text += ("not " * i) + "<CONT>"
+                nots -= i
+            text += "a starter choice?<DONE>"
+            return encode_text(text)
+        elif q == 4:
+            if a:
+                tm_text = self.local_tms[27]
+            else:
+                if self.multiworld.randomize_tm_moves[self.player]:
+                    wrong_tms = self.local_tms.copy()
+                    wrong_tms.pop(27)
+                    tm_text = random.choice(wrong_tms)
+                else:
+                    tm_text = "TOMBSTONER"
+            return encode_text(f"TM28 contains<LINE>{tm_text.upper()}?<DONE>")
+        elif q == 5:
+            i = 8
+            while not a and i in [1, 8]:
+                i = random.randint(0, 99999999)
+            return encode_text(f"There are {i}<LINE>certified #MON<CONT>LEAGUE BADGEs?<DONE>")
+        elif q == 6:
+            i = 2
+            while not a and i in [1, 2]:
+                i = random.randint(0, 99)
+            return encode_text(f"POLIWAG evolves {i}<LINE>times?<DONE>")
+
+    answers = [random.randint(0, 1), random.randint(0, 1), random.randint(0, 1),
+               random.randint(0, 1), random.randint(0, 1), random.randint(0, 1)]
+
+    answers = [0,0,0,0,0,0]
+
+    questions = random.sample((range(0, 7)), 6)
+    question_texts = []
+    for i, question in enumerate(questions):
+        question_texts.append(get_quiz(question, answers[i]))
+
+    for i, quiz in enumerate(["A", "B", "C", "D", "E", "F"]):
+        data[rom_addresses[f"Quiz_Answer_{quiz}"]] = int(not answers[i]) << 4 | (i + 1)
+        write_bytes(data, question_texts[i], rom_addresses[f"Text_Quiz_{quiz}"])
+
+
 def generate_output(self, output_directory: str):
     random = self.multiworld.per_slot_randoms[self.player]
     game_version = self.multiworld.game_version[self.player].current_key
@@ -579,7 +667,9 @@ def generate_output(self, output_directory: str):
             data[location.rom_address] = 0x2C  # AP Item
 
     def set_trade_mon(address, loc):
-        data[rom_addresses[address]] = poke_data.pokemon_data[self.multiworld.get_location(loc, self.player).item.name]["id"]
+        mon = self.multiworld.get_location(loc, self.player).item.name
+        data[rom_addresses[address]] = poke_data.pokemon_data[mon]["id"]
+        self.trade_mons[address] = mon
 
     if game_version == "red":
         set_trade_mon("Trade_Terry", "Safari Zone Center - Wild Pokemon - 5")
@@ -645,6 +735,7 @@ def generate_output(self, output_directory: str):
     write_bytes(data, encode_text(
         " ".join(self.multiworld.get_location("Route 3 - Pokemon For Sale", self.player).item.name.upper().split()[1:])),
                 rom_addresses["Text_Magikarp_Salesman"])
+    write_quizzes(self, data, random)
 
     if self.multiworld.badges_needed_for_hm_moves[self.player].value == 0:
         for hm_move in poke_data.hm_moves:
