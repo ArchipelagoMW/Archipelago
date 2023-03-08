@@ -47,25 +47,36 @@ class PathOption(Choice):
     default = 1
 
 
-class OrbsAsChecks(Toggle):  # todo: rework this to work with the paths option
+class OrbsAsChecks(Choice):  # todo: rework this to work with the paths option
     """Decides whether finding the orbs that naturally spawn in the world count as checks.
     The orbs included is based off of your Path Option choice.
     The Main Path option includes only the floating island and abyss orb room orbs.
     The Side Path option includes the Main Path, magical temple, lukki lair, and lava lake orbs.
     The Main World option includes all 11 orbs."""
     display_name = "Orbs as Location Checks"
+    option_no_orbs = 0
+    option_main_path = 1
+    option_side_path = 2
+    option_main_world = 3
+    default = 0
 
 
-class BossesAsChecks(Toggle):  # todo: rework this to work with the paths option
+class BossesAsChecks(Choice):  # todo: rework this to work with the paths option
     """Makes bosses count as location checks. The boss only needs to die, you do not need the kill credit.
     The Main Path option includes Gate Guardian, Suomuhauki, and Kolmisilma.
     The Side Path option includes the Main Path bosses, Sauvojen Tuntija, and Ylialkemisti.
     The Main World option includes all 12 bosses."""
     display_name = "Bosses as Location Checks"
+    option_no_bosses = 0
+    option_main_path = 1
+    option_side_path = 2
+    option_all_bosses = 3
+    default = 0
 
 
 noita_options: Dict[str, type(Option)] = {
     "total_locations": TotalLocations,
+    "hidden_chests": HiddenChests,
     "bad_effects": Traps,
     "death_link": DeathLink,
     "victory_condition": VictoryCondition,

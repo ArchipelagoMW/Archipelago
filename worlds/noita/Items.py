@@ -23,6 +23,7 @@ def create_item(player: int, name: str) -> Item:
 def create_all_items(world: MultiWorld, player: int) -> None:
     pool_option = world.bad_effects[player].value
     total_locations = world.total_locations[player].value
+    # todo: get rid of total_locations option, find a way to get the total number of locations in a different way
 
     # Generate fixed item pool, these are items with a specific fixed quantity that must be added
     itempool: List = []
