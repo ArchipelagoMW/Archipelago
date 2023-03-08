@@ -159,7 +159,7 @@ class HintAmount(Range):
 
 
 class DeathLink(Toggle):
-    """If on: Whenever you fail a puzzle (with some exceptions), everyone dies.
+    """If on: Whenever you fail a puzzle (with some exceptions), everyone who is also on Death Link dies.
     The effect of a "death" in The Witness is a Power Surge."""
     display_name = "Death Link"
 
