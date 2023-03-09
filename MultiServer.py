@@ -373,7 +373,7 @@ class Context:
             with open(multidatapath, 'rb') as f:
                 data = f.read()
 
-        self._load(self.decompress(data), use_embedded_server_options)
+        self._load(self.decompress(data), {}, use_embedded_server_options)
         self.data_filename = multidatapath
 
     @staticmethod
@@ -383,7 +383,8 @@ class Context:
             raise Utils.VersionException("Incompatible multidata.")
         return restricted_loads(zlib.decompress(data[1:]))
 
-    def _load(self, decoded_obj: dict, use_embedded_server_options: bool):
+    def _load(self, decoded_obj: dict, game_data_packages: typing.Dict[str, typing.Any],
+              use_embedded_server_options: bool):
         self.read_data = {}
         mdata_ver = decoded_obj["minimum_versions"]["server"]
         if mdata_ver > Utils.version_tuple:
@@ -440,6 +441,8 @@ class Context:
 
         # custom datapackage
         for game_name, data in decoded_obj.get("datapackage", {}).items():
+            if game_name in game_data_packages:
+                data = game_data_packages[game_name]
             logging.info(f"Loading custom datapackage for game {game_name}")
             self.gamespackage[game_name] = data
             self.item_name_groups[game_name] = data["item_name_groups"]

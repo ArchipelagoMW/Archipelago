@@ -19,7 +19,7 @@ import Utils
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor, load_server_cert
 from Utils import get_public_ipv4, get_public_ipv6, restricted_loads, cache_argsless
-from .models import Room, Command, db
+from .models import Command, GameDataPackage, Room, db
 
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
@@ -92,7 +92,14 @@ class WebHostContext(Context):
         else:
             self.port = get_random_port()
 
-        return self._load(self.decompress(room.seed.multidata), True)
+        multidata = self.decompress(room.seed.multidata)
+        game_data_packages = {}
+        for game, game_data in multidata["datapackage"].items():
+            if "checksum" in game_data:
+                data = Utils.restricted_loads(GameDataPackage.get(game=game, checksum=game_data["checksum"]).data)
+                game_data_packages[game] = data
+
+        return self._load(multidata, game_data_packages, True)
 
     @db_session
     def init_save(self, enabled: bool = True):

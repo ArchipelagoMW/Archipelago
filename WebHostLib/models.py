@@ -1,6 +1,6 @@
 from datetime import datetime
 from uuid import UUID, uuid4
-from pony.orm import Database, PrimaryKey, Required, Set, Optional, buffer, LongStr
+from pony.orm import Database, PrimaryKey, Required, Set, Optional, buffer, LongStr, composite_key
 
 db = Database()
 
@@ -56,3 +56,11 @@ class Generation(db.Entity):
     options = Required(buffer, lazy=True)
     meta = Required(LongStr, default=lambda: "{\"race\": false}")
     state = Required(int, default=0, index=True)
+
+
+class GameDataPackage(db.Entity):
+    id = PrimaryKey(int, auto=True)
+    game = Required(str)
+    checksum = Required(str)
+    data = Required(bytes)
+    composite_key(game, checksum)
