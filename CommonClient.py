@@ -400,31 +400,39 @@ class CommonContext:
 
     # DataPackage
     async def prepare_datapackage(self, relevant_games: typing.Set[str],
-                                  remote_datepackage_versions: typing.Dict[str, int]):
+                                  remote_datepackage_versions: typing.Dict[str, int],
+                                  remote_datapackage_checksums: typing.Dict[str, str]):
         """Validate that all data is present for the current multiworld.
         Download, assimilate and cache missing data from the server."""
         # by documentation any game can use Archipelago locations/items -> always relevant
         relevant_games.add("Archipelago")
 
-        cache_package = Utils.persistent_load().get("datapackage", {}).get("games", {})
         needed_updates: typing.Set[str] = set()
         for game in relevant_games:
-            if game not in remote_datepackage_versions:
+            if game not in remote_datepackage_versions and game not in remote_datapackage_checksums:
                 continue
-            remote_version: int = remote_datepackage_versions[game]
 
-            if remote_version == 0:  # custom datapackage for this game
+            remote_version: int = remote_datepackage_versions.get(game, 0)
+            remote_checksum: typing.Optional[str] = remote_datapackage_checksums.get(game)
+
+            if remote_version == 0 and not remote_checksum:  # custom datapackage and no checksum for this game
                 needed_updates.add(game)
                 continue
+
             local_version: int = network_data_package["games"].get(game, {}).get("version", 0)
+            local_checksum: typing.Optional[str] = network_data_package["games"].get(game, {}).get("checksum")
             # no action required if local version is new enough
-            if remote_version > local_version:
-                cache_version: int = cache_package.get(game, {}).get("version", 0)
+            if (not remote_checksum and (remote_version > local_version or remote_version == 0)) \
+                    or remote_checksum != local_checksum:
+                cached_game = Utils.load_datapackage_with_checksum(game, remote_checksum)
+                cache_version: int = cached_game.get("version", 0)
+                cache_checksum: typing.Optional[str] = cached_game.get("checksum")
                 # download remote version if cache is not new enough
-                if remote_version > cache_version:
+                if (not remote_checksum and (remote_version > cache_version or remote_version == 0)) \
+                        or remote_checksum != cache_checksum:
                     needed_updates.add(game)
                 else:
-                    self.update_game(cache_package[game])
+                    self.update_game(cached_game)
         if needed_updates:
             await self.send_msgs([{"cmd": "GetDataPackage", "games": list(needed_updates)}])
 
@@ -443,6 +451,8 @@ class CommonContext:
         current_cache = Utils.persistent_load().get("datapackage", {}).get("games", {})
         current_cache.update(data_package["games"])
         Utils.persistent_store("datapackage", "games", current_cache)
+        for game, gamedata in data_package["games"].items():
+            Utils.store_datapackage_with_checksum(game, gamedata)
 
     # DeathLink hooks
 
@@ -662,7 +672,9 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
                         logger.info('    %s (Player %d)' % (network_player.alias, network_player.slot))
 
             # update datapackage
-            await ctx.prepare_datapackage(set(args["games"]), args["datapackage_versions"])
+            datapackage_versions = args.get("datapackage_versions", {})
+            datapackage_checksums = args.get("datapackage_checksums", {})
+            await ctx.prepare_datapackage(set(args["games"]), datapackage_versions, datapackage_checksums)
 
             await ctx.server_auth(args['password'])
 

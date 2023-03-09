@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import typing
 import builtins
 import os
@@ -383,6 +384,43 @@ def persistent_load() -> typing.Dict[str, dict]:
         storage = {}
     persistent_load.storage = storage
     return storage
+
+
+def load_datapackage_with_checksum(game: str, checksum: typing.Optional[str]):
+    def is_filename_safe(s):
+        return "/" not in s and "\\" not in s and ":" not in s
+
+    if checksum and is_filename_safe(game) and is_filename_safe(checksum):
+        path = user_path(os.path.join("datapackage", game, f"{checksum}.json"))
+        if os.path.exists(path):
+            try:
+                with open(path, "r", encoding="utf-8-sig") as f:
+                    return json.load(f)
+            except Exception as e:
+                logging.debug(f"Could not load datapackage: {e}")
+
+    # fall back to old cache
+    cache = persistent_load().get("datapackage", {}).get("games", {}).get(game, {})
+    if cache.get("checksum") == checksum:
+        return cache
+
+    # cache does not match
+    return {}
+
+
+def store_datapackage_with_checksum(game: str, data: typing.Dict[str, Any]):
+    def is_filename_safe(s):
+        return "/" not in s and "\\" not in s and ":" not in s
+
+    checksum = data.get("checksum")
+    if checksum and is_filename_safe(game) and is_filename_safe(checksum):
+        game_folder = user_path(os.path.join("datapackage", game))
+        os.makedirs(game_folder, exist_ok=True)
+        try:
+            with open(os.path.join(game_folder, f"{checksum}.json"), "w", encoding="utf-8-sig") as f:
+                json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
+        except Exception as e:
+            logging.debug(f"Could not store datapackage: {e}")
 
 
 def get_adjuster_settings(game_name: str) -> typing.Dict[str, typing.Any]:
