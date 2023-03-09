@@ -2,19 +2,19 @@ from __future__ import annotations
 
 import copy
 import functools
-import json
 import logging
 import random
 import secrets
 import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
-from collections import OrderedDict, Counter, deque
-from enum import unique, IntEnum, IntFlag
+from collections import OrderedDict, Counter, deque, ChainMap
+from enum import IntEnum, IntFlag
 from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable, NamedTuple
 
 import NetUtils
 import Options
 import Utils
+
 
 class Group(TypedDict, total=False):
     name: str
@@ -1278,12 +1278,11 @@ class Spoiler():
                 if self.multiworld.players > 1:
                     outfile.write('\nPlayer %d: %s\n' % (player, self.multiworld.get_player_name(player)))
                 outfile.write('Game:                            %s\n' % self.multiworld.game[player])
-                for f_option, option in Options.per_game_common_options.items():
+
+                options = ChainMap(Options.per_game_common_options, self.multiworld.worlds[player].option_definitions)
+                for f_option, option in options.items():
                     write_option(f_option, option)
-                options = self.multiworld.worlds[player].option_definitions
-                if options:
-                    for f_option, option in options.items():
-                        write_option(f_option, option)
+
                 AutoWorld.call_single(self.multiworld, "write_spoiler_header", player, outfile)
 
             if self.entrances:
