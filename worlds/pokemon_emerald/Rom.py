@@ -85,7 +85,8 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str):
     _set_bytes_little_endian(patched_rom, options_address + 4, 2, 100)
 
     # Set Birch pokemon
-    _set_bytes_little_endian(patched_rom, options_address + 6, 1, get_random_species(multiworld.per_slot_randoms[player]).id)
+    # TODO: Sometimes crashes game
+    # _set_bytes_little_endian(patched_rom, options_address + 6, 1, get_random_species(multiworld.per_slot_randoms[player]).id)
 
     # Write Output
     outfile_player_name = f"_P{player}"
