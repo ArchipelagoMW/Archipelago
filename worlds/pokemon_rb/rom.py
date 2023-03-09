@@ -204,12 +204,17 @@ def process_static_pokemon(self):
         location = self.multiworld.get_location(slot.name, self.player)
         randomize_type = self.multiworld.randomize_starter_pokemon[self.player].value
         slot_type = "Missable"
+        chosen_mons = set()
         if not randomize_type:
             location.place_locked_item(self.create_item(slot_type + " " + slot.original_item))
         else:
-            location.place_locked_item(self.create_item(slot_type + " " +
-                                       randomize_pokemon(self, slot.original_item, mons_list, randomize_type,
-                                                         self.multiworld.random)))
+            mon = self.create_item(slot_type + " " + randomize_pokemon(self, slot.original_item, mons_list,
+                                                                       randomize_type, self.multiworld.random))
+            while mon.name in chosen_mons:
+                mon = self.create_item(slot_type + " " + randomize_pokemon(self, slot.original_item, mons_list,
+                                                                           randomize_type, self.multiworld.random))
+            chosen_mons.add(mon.name)
+            location.place_locked_item(mon)
 
 
 def process_wild_pokemon(self):
@@ -584,9 +589,12 @@ def write_quizzes(self, data, random):
                 f"Pallet Town - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
             mon = random.choice(starters)
             nots = random.choice(range(8, 16, 2))
-            if not answers[3]:
+            if random.randint(0, 1):
                 while mon in starters:
                     mon = random.choice(list(poke_data.pokemon_data.keys()))
+                    if a:
+                        nots += 1
+            elif not a:
                 nots += 1
             text = f"{mon} was<LINE>"
             while nots > 0:
@@ -723,6 +731,8 @@ def generate_output(self, output_directory: str):
         data[rom_addresses["Require_Pokedex_B"]] = 1
     if self.multiworld.dexsanity[self.player]:
         data[rom_addresses["Dexsanity_Enabled"]] = 1
+    if self.multiworld.all_pokemon_seen[self.player]:
+        data[rom_addresses["Option_Pokedex_Seen"]] = 1
     money = str(self.multiworld.starting_money[self.player].value).zfill(6)
     data[rom_addresses["Starting_Money_High"]] = int(money[:2], 16)
     data[rom_addresses["Starting_Money_Middle"]] = int(money[2:4], 16)
@@ -810,8 +820,8 @@ def generate_output(self, output_directory: str):
     if self.multiworld.reusable_tms[self.player].value:
         data[rom_addresses["Option_Reusable_TMs"]] = 0xC9
 
-    data[rom_addresses["Option_Trainersanity"]] = self.multiworld.trainersanity[self.player].value
-    data[rom_addresses["Option_Trainersanity2"]] = self.multiworld.trainersanity[self.player].value
+    for i in range(1, 10):
+        data[rom_addresses[f"Option_Trainersanity{i}"]] = self.multiworld.trainersanity[self.player].value
 
     data[rom_addresses["Option_Always_Half_STAB"]] = int(not self.multiworld.same_type_attack_bonus[self.player].value)
 

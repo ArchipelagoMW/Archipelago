@@ -6,7 +6,7 @@ def set_rules(world, player):
 
     item_rules = {
         "Pallet Town - Player's PC": (lambda i: i.player == player and "Badge" not in i.name and "Trap" not in i.name
-                                      and i.name != "Pokedex")
+                                      and i.name != "Pokedex" and "Coins" not in i.name)
     }
 
     if world.prizesanity[player]:

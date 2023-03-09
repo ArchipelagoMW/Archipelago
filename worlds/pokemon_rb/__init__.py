@@ -41,12 +41,13 @@ class PokemonRedBlueWorld(World):
     option_definitions = pokemon_rb_options
 
     data_version = 0 #7
-    required_client_version = (0, 3, 7)
+    required_client_version = (0, 3, 9)
 
     topology_present = False
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
-    location_name_to_id = {location.name: location.address for location in location_data if location.type == "Item"}
+    location_name_to_id = {location.name: location.address for location in location_data if location.type == "Item"
+                           and location.address is not None}
     item_name_groups = item_groups
 
     web = PokemonWebWorld()

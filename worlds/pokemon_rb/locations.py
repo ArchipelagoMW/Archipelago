@@ -725,6 +725,13 @@ location_data = [
     LocationData("Indigo Plateau", "Bruno", None, rom_addresses["Trainersanity_EVENT_BEAT_BRUNOS_ROOM_TRAINER_0_ITEM"], EventFlag(20), inclusion=trainersanity),
     LocationData("Indigo Plateau", "Agatha", None, rom_addresses["Trainersanity_EVENT_BEAT_AGATHAS_ROOM_TRAINER_0_ITEM"], EventFlag(19), inclusion=trainersanity),
     LocationData("Indigo Plateau", "Lance", None, rom_addresses["Trainersanity_EVENT_BEAT_LANCES_ROOM_TRAINER_0_ITEM"], EventFlag(18), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Burglar 1", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_A_ITEM"], EventFlag(374), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Super Nerd 1", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_B_ITEM"], EventFlag(373), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Super Nerd 2", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_2_ITEM"], EventFlag(372), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Burglar 2", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_3_ITEM"], EventFlag(371), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Super Nerd 3", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_4_ITEM"], EventFlag(370), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Super Nerd 4", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_5_ITEM"], EventFlag(369), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Super Nerd 5", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_6_ITEM"], EventFlag(368), inclusion=trainersanity),
 
     LocationData("Celadon Prize Corner", "Item Prize 1", "TM23 Dragon Rage", rom_addresses["Prize_Item_A"], EventFlag(0x69a), inclusion=prizesanity),
     LocationData("Celadon Prize Corner", "Item Prize 2", "TM15 Hyper Beam", rom_addresses["Prize_Item_B"], EventFlag(0x69B), inclusion=prizesanity),
@@ -745,6 +752,9 @@ location_data = [
     LocationData("Celadon Game Corner", "Hidden Item Near Hooked Guy (Coin Case)", "10 Coins", rom_addresses["Hidden_Item_Game_Corner_9"], Hidden(62), inclusion=hidden_items),
     LocationData("Celadon Game Corner", "Hidden Item at End of Horizontal Machine Row (Coin Case)", "20 Coins", rom_addresses["Hidden_Item_Game_Corner_10"], Hidden(63), inclusion=hidden_items),
     LocationData("Celadon Game Corner", "Hidden Item in Front of Horizontal Machine Row (Coin Case)", "100 Coins", rom_addresses["Hidden_Item_Game_Corner_11"], Hidden(64), inclusion=hidden_items),
+
+    *[LocationData("Pokedex", mon, None, rom_addresses["Dexsanity_Items"] + i, DexSanityFlag(i),
+                   type="Item", inclusion=dexsanity) for (mon, i) in zip(pokemon_data.keys(), range(0, 152))],
 
     LocationData("Indigo Plateau", "Become Champion", "Become Champion", event=True),
     LocationData("Pokemon Tower 7F", "Fuji Saved", "Fuji Saved", event=True),
@@ -2095,15 +2105,15 @@ location_data = [
 
 ]
 
-for i, mon in enumerate(pokemon_data.keys()):
-    location_data.append(LocationData("Pokedex", mon, None, rom_addresses["Dexsanity_Items"] + i, DexSanityFlag(i),
-                                      type="Item", inclusion=dexsanity))
 
-for i, location in enumerate(location_data):
+
+i = 0
+for location in location_data:
     if location.event or location.rom_address is None:
         location.address = None
     else:
         location.address = loc_id_start + i
+        i += 1
 
 
 class PokemonRBLocation(Location):

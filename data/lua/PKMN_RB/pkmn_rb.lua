@@ -176,7 +176,7 @@ function receive()
     memDomain.wram()
 
     in_game = u8(InGameAddress)
-    if in_game == 0xAC then
+    if in_game == 0x2A or in_game == 0xAC then
         retTable["locations"] = generateLocationsChecked()
     elseif in_game ~= 0 then
         print("Game may have crashed")
@@ -225,7 +225,8 @@ function main()
         if (curstate == STATE_OK) or (curstate == STATE_INITIAL_CONNECTION_MADE) or (curstate == STATE_TENTATIVELY_CONNECTED) then
             if (frame % 5 == 0) then
                 receive()
-                if u8(InGameAddress) == 0xAC then
+                in_game = u8(InGameAddress)
+                if in_game == 0x2A or in_game == 0xAC then
                     if u8(APItemAddress) == 0x00 then
                         ItemIndex = u16(APIndex)
                         if deathlink_rec == true then

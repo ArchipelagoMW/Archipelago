@@ -175,6 +175,12 @@ class RequirePokedex(Toggle):
     default = 1
 
 
+class AllPokemonSeen(Toggle):
+    """Start with all Pokemon "seen" in your Pokedex. This allows you to see where Pokemon can be encountered in the
+    wild. Pokemon found by fishing or in the Cerulean Cave are not displayed."""
+    default = 0
+
+
 class DexSanity(Toggle):
     """Adds a location check for each Pokemon flagged "Owned" on your Pokedex. If accessibility is set to `locations`
     and randomize_wild_pokemon is off, catch_em_all is not `all_pokemon` or randomize_legendary_pokemon is not `any`,
@@ -658,6 +664,7 @@ pokemon_rb_options = {
     "prizesanity": PrizeSanity,
     "trainersanity": TrainerSanity,
     "require_pokedex": RequirePokedex,
+    "all_pokemon_seen": AllPokemonSeen,
     "dexsanity": DexSanity,
     "oaks_aide_rt_2": OaksAidRt2,
     "oaks_aide_rt_11": OaksAidRt11,
