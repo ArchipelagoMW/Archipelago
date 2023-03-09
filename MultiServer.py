@@ -1308,8 +1308,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if locations:
             names = [self.ctx.location_names[location] for location in locations]
             if filter_text:
-                filter_values = [filter_text, filter_text.lower(), filter_text.upper(), filter_text.lower().title()]
-                names = [name for filter_value in filter_values for name in names if filter_value in name]
+                names = [name for name in names if filter_text.lower() in name.lower()]
             texts = [f'Missing: {name}' for name in names]
             if filter_text:
                 texts.append(f"Found {len(locations)} missing location checks, displaying {len(names)} of them.")
@@ -1329,8 +1328,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if locations:
             names = [self.ctx.location_names[location] for location in locations]
             if filter_text:
-                filter_values = [filter_text, filter_text.lower(), filter_text.upper(), filter_text.lower().title()]
-                names = [name for filter_value in filter_values for name in names if filter_value in name]
+                names = [name for name in names if filter_text.lower() in name.lower()]
             texts = [f'Checked: {name}' for name in names]
             if filter_text:
                 texts.append(f"Found {len(locations)} done location checks, displaying {len(names)} of them.")
