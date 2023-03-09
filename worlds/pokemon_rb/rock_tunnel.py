@@ -14,23 +14,23 @@ def randomize_rock_tunnel(data, random):
 
     map1f = []
     map2f = []
-    with open("C:\\src\\pokered\\maps\\RockTunnel1F.blk", "br") as file:
-        f = file.read()
 
+    address = rom_addresses["Map_Rock_Tunnel1F"]
     for y in range(0, 18):
         row = []
         for x in range(0, 20):
-            row.append(f[0])
-            f = f[1:]
+            row.append(data[address])
+            address += 1
         map1f.append(row)
-    with open("C:\\src\\pokered\\maps\\RockTunnelB1F.blk", "br") as file:
-        f = file.read()
+
+    address = rom_addresses["Map_Rock_TunnelB1F"]
     for y in range(0, 18):
         row = []
         for x in range(0, 20):
-            row.append(f[0])
-            f = f[1:]
+            row.append(data[address])
+            address += 1
         map2f.append(row)
+
     current_map = map1f
 
     def floor(x, y):
