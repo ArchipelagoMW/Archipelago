@@ -131,6 +131,8 @@ def get_static_server_data() -> dict:
         "gamespackage": worlds.network_data_package["games"],
         "item_name_groups": {world_name: world.item_name_groups for world_name, world in
                              worlds.AutoWorldRegister.world_types.items()},
+        "location_name_groups": {world_name: world.location_name_groups for world_name, world in
+                                 worlds.AutoWorldRegister.world_types.items()},
     }
 
     for world_name, world in worlds.AutoWorldRegister.world_types.items():
