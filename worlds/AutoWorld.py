@@ -352,11 +352,12 @@ class World(metaclass=AutoWorldRegister):
 
     @classmethod
     def datapackage_checksum(cls) -> str:
+        from NetUtils import encode
         datapackage = {
             "items": cls.item_name_to_id,
             "locations": cls.location_name_to_id,
         }
-        dump = json.dumps(datapackage)
+        dump = encode(datapackage)
         return hashlib.sha1(dump.encode()).hexdigest()
 
 
