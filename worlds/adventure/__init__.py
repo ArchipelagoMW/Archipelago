@@ -245,20 +245,16 @@ class AdventureWorld(World):
                 overworld_locations_copy.remove(loc)
             self.multiworld.itempool.remove(item)
 
-    def place_dragons(self, rom_bytearray: bytearray):
+    def place_dragons(self, rom_deltas: {int, int}):
         for i in range(3):
             table_index = static_first_dragon_index + i
             item_position_data_start = get_item_position_data_start(table_index)
-            rom_bytearray[item_position_data_start:item_position_data_start + 1] = \
-                self.dragon_rooms[i].to_bytes(1, "little")
+            rom_deltas[item_position_data_start] = self.dragon_rooms[i]
 
-    def set_dragon_speeds(self, rom_bytearray: bytearray):
-        rom_bytearray[yorgle_speed_data_location:yorgle_speed_data_location + 1] = \
-            self.yorgle_speed.to_bytes(1, "little")
-        rom_bytearray[grundle_speed_data_location:grundle_speed_data_location + 1] = \
-            self.grundle_speed.to_bytes(1, "little")
-        rom_bytearray[rhindle_speed_data_location:rhindle_speed_data_location + 1] = \
-            self.rhindle_speed.to_bytes(1, "little")
+    def set_dragon_speeds(self, rom_deltas: {int, int}):
+        rom_deltas[yorgle_speed_data_location] = self.yorgle_speed
+        rom_deltas[grundle_speed_data_location] = self.grundle_speed
+        rom_deltas[rhindle_speed_data_location] = self.rhindle_speed
 
     def generate_output(self, output_directory: str) -> None:
         rom_path: str = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.bin")
@@ -268,9 +264,9 @@ class AdventureWorld(World):
         bat_no_touch_locs: [LocationData] = []
         bat_logic: int = self.multiworld.bat_logic[self.player].value
         try:
-            rom_bytearray = bytearray(apply_basepatch(get_base_rom_bytes()))
-            self.place_dragons(rom_bytearray)
-            self.set_dragon_speeds(rom_bytearray)
+            rom_deltas: { int, int } = {}
+            self.place_dragons(rom_deltas)
+            self.set_dragon_speeds(rom_deltas)
             # start and stop indices are offsets in the ROM file, not Adventure ROM addresses (which start at f000)
 
             # This places the local items (I still need to make it easy to inject the offset data)
@@ -289,8 +285,7 @@ class AdventureWorld(World):
                         location.item.code <= standard_item_max:
                     # I need many of the intermediate values here.
                     item_table_offset = item_table[location.item.name].table_index * static_item_element_size
-                    static_item = static_item_data_location + item_table_offset
-                    item_ram_address = rom_bytearray[static_item]
+                    item_ram_address = item_ram_addresses[item_table[location.item.name].table_index]
                     item_position_data_start = item_position_table + item_ram_address - items_ram_start
                     location_data = location_table[location.name]
                     room_x, room_y = location_data.get_position(self.multiworld.per_slot_randoms[self.player])
@@ -300,12 +295,9 @@ class AdventureWorld(World):
                         bat_no_touch_locs.append(copied_location)
                     del unplaced_local_items[location.item.name]
 
-                    rom_bytearray[item_position_data_start:item_position_data_start + 1] = \
-                        location_data.room_id.to_bytes(1, "little")
-                    rom_bytearray[item_position_data_start + 1: item_position_data_start + 2] = \
-                        room_x.to_bytes(1, "little")
-                    rom_bytearray[item_position_data_start + 2: item_position_data_start + 3] = \
-                        room_y.to_bytes(1, "little")
+                    rom_deltas[item_position_data_start] = location_data.room_id
+                    rom_deltas[item_position_data_start + 1] = room_x
+                    rom_deltas[item_position_data_start + 2] = room_y
                     local_item_to_location[item_table_offset] = self.location_name_to_id[location.name] \
                                                               - base_location_id
                 # items from other worlds, and non-standard Adventure items handled by script, like difficulty switches
@@ -322,25 +314,23 @@ class AdventureWorld(World):
             # Adventure items that are in another world get put in an invalid room until needed
             for unplaced_item_name, unplaced_item in unplaced_local_items.items():
                 item_position_data_start = get_item_position_data_start(unplaced_item.table_index)
-                rom_bytearray[item_position_data_start:item_position_data_start + 1] = 0xff.to_bytes(1, "little")
+                rom_deltas[item_position_data_start] = 0xff
 
             if self.multiworld.connector_multi_slot[self.player].value:
-                rom_bytearray[connector_port_offset:connector_port_offset + 1] = \
-                    (self.player & 0xff).to_bytes(1, "little")
+                rom_deltas[connector_port_offset] = (self.player & 0xff)
             else:
-                rom_bytearray[connector_port_offset:connector_port_offset + 1] = (0).to_bytes(1, "little")
-            with open(rom_path, "wb") as f:
-                f.write(rom_bytearray)
+                rom_deltas[connector_port_offset] = 0
         except Exception as e:
             raise e
         else:
             patch = AdventureDeltaPatch(os.path.splitext(rom_path)[0] + AdventureDeltaPatch.patch_file_ending,
                                         player=self.player, player_name=self.multiworld.player_name[self.player],
-                                        patched_path=rom_path, locations=foreign_item_locations,
+                                        locations=foreign_item_locations,
                                         autocollect=auto_collect_locations, local_item_locations=local_item_to_location,
                                         dragon_speed_reducer_info=self.dragon_speed_reducer_info,
                                         diff_a_mode=self.difficulty_switch_a, diff_b_mode=self.difficulty_switch_b,
                                         bat_logic=bat_logic, bat_no_touch_locations=bat_no_touch_locs,
+                                        rom_deltas=rom_deltas,
                                         seed_name=bytes(self.multiworld.seed_name, encoding="ascii"))
             patch.write()
         finally:

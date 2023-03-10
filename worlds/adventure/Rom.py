@@ -7,7 +7,7 @@ from typing import Optional, Any
 import Utils
 from .Locations import AdventureLocation, LocationData
 from Utils import OptionsType
-from worlds.Files import APDeltaPatch, AutoPatchRegister
+from worlds.Files import APDeltaPatch, AutoPatchRegister, APContainer
 from itertools import chain
 
 import bsdiff4
@@ -79,11 +79,11 @@ class BatNoTouchLocation:
         return ret_dict
 
 
-class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
+class AdventureDeltaPatch(APContainer, metaclass=AutoPatchRegister):
     hash = ADVENTUREHASH
     game = "Adventure"
     patch_file_ending = ".apadvn"
-    zip_version: int = 1
+    zip_version: int = 2
 
     # locations: [], autocollect: [], seed_name: bytes,
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -101,6 +101,7 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
             self.diff_b_mode: int = kwargs["diff_b_mode"]
             self.bat_logic: int = kwargs["bat_logic"]
             self.bat_no_touch_locations: [LocationData] = kwargs["bat_no_touch_locations"]
+            self.rom_deltas: {int, int} = kwargs["rom_deltas"]
             del kwargs["locations"]
             del kwargs["autocollect"]
             del kwargs["seed_name"]
@@ -110,13 +111,8 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
             del kwargs["diff_b_mode"]
             del kwargs["bat_logic"]
             del kwargs["bat_no_touch_locations"]
+            del kwargs["rom_deltas"]
         super(AdventureDeltaPatch, self).__init__(*args, **kwargs)
-        if not patch_only:
-            with open(self.patched_path, "rb") as file:
-                patched_rom_bytes = bytes(file.read())
-                patchedsha256 = hashlib.sha256()
-                patchedsha256.update(patched_rom_bytes)
-                self.patched_rom_sha256: str = patchedsha256.hexdigest()
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile):
         super(AdventureDeltaPatch, self).write_contents(opened_zipfile)
@@ -142,10 +138,6 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
             opened_zipfile.writestr("adventure_autocollect",
                                     bytes(loc_bytes),
                                     compress_type=zipfile.ZIP_LZMA)
-        if self.patched_rom_sha256 is not None:
-            opened_zipfile.writestr("hash",
-                                    bytes(self.patched_rom_sha256, encoding="ascii"),
-                                    compress_type=zipfile.ZIP_STORED)
         if self.player_name is not None:
             opened_zipfile.writestr("player",
                                     self.player_name,  # UTF-8
@@ -185,6 +177,13 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
             opened_zipfile.writestr("bat_no_touch_locations",
                                     bytes(loc_bytes),
                                     compress_type=zipfile.ZIP_LZMA)
+        if self.rom_deltas is not None:
+            # this is not an efficient way to do this AT ALL, but Adventure's data is so tiny it shouldn't matter
+            # if you're looking at doing something like this for another game, consider encoding your rom changes
+            # in a more efficient way
+            opened_zipfile.writestr("rom_deltas",
+                                    json.dumps(self.rom_deltas),
+                                    compress_type=zipfile.ZIP_LZMA)
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile):
         super(AdventureDeltaPatch, self).read_contents(opened_zipfile)
@@ -207,11 +206,10 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
 
     @classmethod
     def read_rom_info(cls, opened_zipfile: zipfile.ZipFile) -> (bytes, bytes, str):
-        hashbytes: bytes = opened_zipfile.read("hash")
         seedbytes: bytes = opened_zipfile.read("seedName")
         namebytes: bytes = opened_zipfile.read("player")
         namestr: str = namebytes.decode("utf-8")
-        return hashbytes, seedbytes, namestr
+        return seedbytes, namestr
 
     @classmethod
     def read_difficulty_switch_info(cls, opened_zipfile: zipfile.ZipFile) -> (int, int):
@@ -281,9 +279,23 @@ class AdventureDeltaPatch(APDeltaPatch, metaclass=AutoPatchRegister):
         readstr: str = readbytes.decode()
         return json.loads(readstr)
 
+    @classmethod
+    def read_rom_deltas(cls, opened_zipfile: zipfile.ZipFile) -> {int, int}:
+        readbytes: bytes = opened_zipfile.read("rom_deltas")
+        readstr: str = readbytes.decode()
+        return json.loads(readstr)
+
+    @classmethod
+    def apply_rom_deltas(cls, base_bytes: bytes, rom_deltas: {int, int}) -> bytearray:
+        rom_bytes = bytearray(base_bytes)
+        for offset, value in rom_deltas.items():
+            int_offset = int(offset)
+            rom_bytes[int_offset:int_offset+1] = int.to_bytes(value, 1, "little")
+        return rom_bytes
+
 
 def apply_basepatch(base_rom_bytes: bytes) -> bytes:
-    with open(os.path.join(os.path.dirname(__file__), "adventure_basepatch.bsdiff4"), "rb") as basepatch:
+    with open(os.path.join(os.path.dirname(__file__), "../../data/adventure_basepatch.bsdiff4"), "rb") as basepatch:
         delta: bytes = basepatch.read()
     return bsdiff4.patch(base_rom_bytes, delta)
 

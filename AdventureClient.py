@@ -1,4 +1,5 @@
 import asyncio
+import hashlib
 import json
 import time
 import os
@@ -16,11 +17,10 @@ from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandP
     get_base_parser
 from worlds.adventure import AdventureDeltaPatch
 
-from worlds.adventure.Locations import location_table, base_location_id
+from worlds.adventure.Locations import base_location_id
 from worlds.adventure.Rom import AdventureForeignItemInfo, AdventureAutoCollectLocation, BatNoTouchLocation
 from worlds.adventure.Items import base_adventure_item_id, standard_item_max, item_table
-from worlds.adventure.Offsets import static_item_data_location, static_item_element_size, rom_address_space_start, \
-    connector_port_offset
+from worlds.adventure.Offsets import static_item_element_size, connector_port_offset
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -302,18 +302,19 @@ async def atari_sync_task(ctx: AdventureContext):
                         data = await asyncio.wait_for(reader.readline(), timeout=5)
                         data_decoded = json.loads(data.decode())
                         if 'scriptVersion' not in data_decoded or data_decoded['scriptVersion'] != SCRIPT_VERSION:
-                            msg = "You are connecting with an incompatible Lua script version. Ensure your connector Lua " \
-                                "and AdventureClient are from the same Archipelago installation."
+                            msg = "You are connecting with an incompatible Lua script version. Ensure your connector " \
+                                  "Lua and AdventureClient are from the same Archipelago installation."
                             logger.info(msg, extra={'compact_gui': True})
                             ctx.gui_error('Error', msg)
                             error_status = CONNECTION_RESET_STATUS
                         if ctx.seed_name and bytes(ctx.seed_name, encoding='ASCII') != ctx.seed_name_from_data:
-                            msg = "The server is running a different multiworld than your client is. (invalid seed_name)"
+                            msg = "The server is running a different multiworld than your client is. " \
+                                  "(invalid seed_name)"
                             logger.info(msg, extra={'compact_gui': True})
                             ctx.gui_error('Error', msg)
                             error_status = CONNECTION_RESET_STATUS
                         if 'romhash' in data_decoded:
-                            if ctx.rom_hash.decode().upper() != data_decoded['romhash'].upper():
+                            if ctx.rom_hash.upper() != data_decoded['romhash'].upper():
                                 msg = "The rom hash does not match the client rom hash data"
                                 print("got " + data_decoded['romhash'])
                                 print("expected " + str(ctx.rom_hash))
@@ -329,15 +330,15 @@ async def atari_sync_task(ctx: AdventureContext):
                             # Not just a keep alive ping, parse
                             async_start(parse_locations(data_decoded['locations'], ctx))
                         if 'deathLink' in data_decoded and data_decoded['deathLink'] > 0 and 'DeathLink' in ctx.tags:
-                            dragonName = "a dragon"
+                            dragon_name = "a dragon"
                             if data_decoded['deathLink'] == 1:
-                                dragonName = "Rhindle"
+                                dragon_name = "Rhindle"
                             elif data_decoded['deathLink'] == 2:
-                                dragonName = "Yorgle"
+                                dragon_name = "Yorgle"
                             elif data_decoded['deathLink'] == 3:
-                                dragonName = "Grundle"
-                            print (ctx.auth + " has been eaten by " + dragonName )
-                            await ctx.send_death(ctx.auth + " has been eaten by " + dragonName)
+                                dragon_name = "Grundle"
+                            print (ctx.auth + " has been eaten by " + dragon_name )
+                            await ctx.send_death(ctx.auth + " has been eaten by " + dragon_name)
                             # TODO - also if player reincarnates with a dragon onscreen ' dies to avoid being eaten by '
                         if 'victory' in data_decoded and not ctx.finished_game:
                             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
@@ -436,22 +437,31 @@ async def patch_and_run_game(patch_file, ctx):
         logger.info(msg, extra={'compact_gui': True})
         ctx.gui_error('Error', msg)
 
+    with open("data/adventure_basepatch.bsdiff4", "rb") as file:
+        basepatch = bytes(file.read())
+
+    base_patched_rom_data = bsdiff4.patch(base_rom, basepatch)
+
     with zipfile.ZipFile(patch_file, 'r') as patch_archive:
         if not AdventureDeltaPatch.check_version(patch_archive):
             logger.error("apadvn version doesn't match this client.  Make sure your generator and client are the same")
             raise Exception("apadvn version doesn't match this client.")
-        with patch_archive.open('delta.bsdiff4', 'r') as stream:
-            patch = stream.read()
+
         ctx.foreign_items = AdventureDeltaPatch.read_foreign_items(patch_archive)
         ctx.autocollect_items = AdventureDeltaPatch.read_autocollect_items(patch_archive)
         ctx.local_item_locations = AdventureDeltaPatch.read_local_item_locations(patch_archive)
         ctx.dragon_speed_info = AdventureDeltaPatch.read_dragon_speed_info(patch_archive)
-        ctx.rom_hash, ctx.seed_name_from_data, ctx.player_name = AdventureDeltaPatch.read_rom_info(patch_archive)
+        ctx.seed_name_from_data, ctx.player_name = AdventureDeltaPatch.read_rom_info(patch_archive)
         ctx.diff_a_mode, ctx.diff_b_mode = AdventureDeltaPatch.read_difficulty_switch_info(patch_archive)
         ctx.bat_logic = AdventureDeltaPatch.read_bat_logic(patch_archive)
         ctx.bat_no_touch_locations = AdventureDeltaPatch.read_bat_no_touch(patch_archive)
+        ctx.rom_deltas = AdventureDeltaPatch.read_rom_deltas(patch_archive)
         ctx.auth = ctx.player_name
-    patched_rom_data = bsdiff4.patch(base_rom, patch)
+
+    patched_rom_data = AdventureDeltaPatch.apply_rom_deltas(base_patched_rom_data, ctx.rom_deltas)
+    rom_hash = hashlib.sha256()
+    rom_hash.update(patched_rom_data)
+    ctx.rom_hash = rom_hash.hexdigest()
     ctx.port_offset = patched_rom_data[connector_port_offset]
 
     with open(comp_path, "wb") as patched_rom_file:
