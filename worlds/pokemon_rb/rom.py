@@ -76,8 +76,8 @@ def randomize_pokemon(self, mon, mons_list, randomize_type, random):
     return mon
 
 
-def set_mon_pallets(self, random, data):
-    if self.multiworld.randomize_pokemon_pallets[self.player] == "vanilla":
+def set_mon_palettes(self, random, data):
+    if self.multiworld.randomize_pokemon_palettes[self.player] == "vanilla":
         return
     pallet_map = {
         "Poison": 0x0F,
@@ -96,18 +96,18 @@ def set_mon_pallets(self, random, data):
         "Fighting": 0x21,
         "Bug": 0x22
     }
-    pallets = []
+    palettes = []
     for mon in poke_data.pokemon_data:
-        if self.multiworld.randomize_pokemon_pallets[self.player] == "primary_type":
+        if self.multiworld.randomize_pokemon_palettes[self.player] == "primary_type":
             pallet = pallet_map[self.local_poke_data[mon]["type1"]]
-        elif (self.multiworld.randomize_pokemon_pallets[self.player] == "follow_evolutions" and mon in
+        elif (self.multiworld.randomize_pokemon_palettes[self.player] == "follow_evolutions" and mon in
               poke_data.evolves_from and poke_data.evolves_from[mon] != "Eevee"):
-            pallet = pallets[-1]
+            pallet = palettes[-1]
         else:  # completely_random or follow_evolutions and it is not an evolved form (except eeveelutions)
             pallet = random.choice(list(pallet_map.values()))
-        pallets.append(pallet)
-    address = rom_addresses["Mon_Pallets"]
-    for pallet in pallets:
+        palettes.append(pallet)
+    address = rom_addresses["Mon_Palettes"]
+    for pallet in palettes:
         data[address] = pallet
         address += 1
 
@@ -845,7 +845,7 @@ def generate_output(self, output_directory: str):
         if data[rom_addresses["Start_Inventory"] + item.code - 172000000] < 255:
             data[rom_addresses["Start_Inventory"] + item.code - 172000000] += 1
 
-    set_mon_pallets(self, random, data)
+    set_mon_palettes(self, random, data)
     process_trainer_data(self, data, random)
 
     for move_data in self.local_move_data.values():

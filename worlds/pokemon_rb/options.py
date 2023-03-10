@@ -632,11 +632,11 @@ class IceTrapWeight(TrapWeight):
     default = 0
 
 
-class RandomizePokemonPallets(Choice):
-    """Modify pallets of Pokemon. Primary Type will set Pokemons' pallets based on their primary type, Follow
-    Evolutions will randomize pallets but pallets will remain the same through evolutions (except Eeveelutions),
-    Completely Random will randomize all Pokemons' pallets individually"""
-    display_name = "Randomize Pokemon Pallets"
+class RandomizePokemonPalettes(Choice):
+    """Modify palettes of Pokemon. Primary Type will set Pokemons' palettes based on their primary type, Follow
+    Evolutions will randomize palettes but palettes will remain the same through evolutions (except Eeveelutions),
+    Completely Random will randomize all Pokemons' palettes individually"""
+    display_name = "Randomize Pokemon Palettes"
     option_vanilla = 0
     option_primary_type = 1
     option_follow_evolutions = 2
@@ -718,6 +718,6 @@ pokemon_rb_options = {
     "fire_trap_weight": FireTrapWeight,
     "paralyze_trap_weight": ParalyzeTrapWeight,
     "ice_trap_weight": IceTrapWeight,
-    "randomize_pokemon_pallets": RandomizePokemonPallets,
+    "randomize_pokemon_palettes": RandomizePokemonPalettes,
     "death_link": DeathLink
 }

@@ -919,7 +919,7 @@ rom_addresses = {
     "Trade_Doris": 0x71bdd,
     "Trade_Crinkles": 0x71beb,
     "Trade_Spot": 0x71bf9,
-    "Mon_Pallets": 0x725c9,
+    "Mon_Palettes": 0x725c9,
     "Badge_Viridian_Gym": 0x749f7,
     "Event_Viridian_Gym": 0x74a0b,
     "Trainersanity_EVENT_BEAT_VIRIDIAN_GYM_TRAINER_0_ITEM": 0x74a66,
