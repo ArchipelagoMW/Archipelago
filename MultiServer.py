@@ -745,10 +745,11 @@ async def on_client_connected(ctx: Context, client: Client):
                     NetworkPlayer(team, slot,
                                   ctx.name_aliases.get((team, slot), name), name)
                 )
+    games = {ctx.games[x] for x in range(1, len(ctx.games) + 1)}
     await ctx.send_msgs(client, [{
         'cmd': 'RoomInfo',
         'password': bool(ctx.password),
-        'games': {ctx.games[x] for x in range(1, len(ctx.games) + 1)},
+        'games': games,
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ctx.tags,
@@ -757,9 +758,9 @@ async def on_client_connected(ctx: Context, client: Client):
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
         'datapackage_versions': {game: game_data["version"] for game, game_data
-                                 in ctx.gamespackage.items()},
+                                 in ctx.gamespackage.items() if game in games},
         'datapackage_checksums': {game: game_data["checksum"] for game, game_data
-                                 in ctx.gamespackage.items()},
+                                  in ctx.gamespackage.items() if game in games},
         'seed_name': ctx.seed_name,
         'time': time.time(),
     }])
