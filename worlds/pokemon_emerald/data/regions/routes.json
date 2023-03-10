@@ -24,9 +24,7 @@
   "REGION_ROUTE103/WEST": {
     "parent_map": "MAP_ROUTE103",
     "locations": [],
-    "events": [
-      "EVENT_DEFEAT_RIVAL_ROUTE_103"
-    ],
+    "events": [],
     "exits": [
       "REGION_ROUTE103/WATER",
       "REGION_OLDALE_TOWN/MAIN"

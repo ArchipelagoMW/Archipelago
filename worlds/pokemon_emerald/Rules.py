@@ -129,12 +129,6 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: state.has("EVENT_VISITED_EVER_GRANDE_CITY", player)
     )
 
-    # Oldale Town
-    set_rule(
-        multiworld.get_entrance("REGION_OLDALE_TOWN/MAIN -> REGION_ROUTE102/MAIN", player),
-        lambda state: state.has("EVENT_DEFEAT_RIVAL_ROUTE_103", player)
-    )
-
     # Route 103
     set_rule(
         multiworld.get_entrance("REGION_ROUTE103/EAST -> REGION_ROUTE103/WATER", player),
