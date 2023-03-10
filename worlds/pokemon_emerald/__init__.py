@@ -8,7 +8,7 @@ from .Locations import PokemonEmeraldLocation, create_location_label_to_id_map, 
 from .Options import RandomizeBadges, RandomizeHms, options, get_option_value
 from .Regions import create_regions
 from .Rom import generate_output
-from .Rules import set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules, add_hidden_item_itemfinder_rules, set_enable_ferry_rules
+from .Rules import set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules, add_hidden_item_itemfinder_rules, add_flash_rules, set_enable_ferry_rules
 from .SanityCheck import sanity_check
 
 
@@ -113,6 +113,9 @@ class PokemonEmeraldWorld(World):
 
         if (get_option_value(self.multiworld, self.player, "require_itemfinder") == Toggle.option_true):
             add_hidden_item_itemfinder_rules(self.multiworld, self.player)
+
+        if (get_option_value(self.multiworld, self.player, "require_flash") == Toggle.option_true):
+            add_flash_rules(self.multiworld, self.player)
 
 
     def pre_fill(self):

@@ -53,6 +53,10 @@ class HiddenItemsRequireItemfinder(DefaultOnToggle):
     """The Itemfinder is logically required to pick up hidden items"""
     display_name = "Require Itemfinder"
 
+class DarkCavesRequireFlash(DefaultOnToggle):
+    """The lower floors of Granite Cave and Victory Road logically require use of HM05 Flash"""
+    display_name = "Require Flash"
+
 class RandomizeWildPokemon(Choice):
     """Randomizes wild pokemon encounters (grass, caves, water, fishing)
     Vanilla: Wild encounters are unchanged
@@ -147,6 +151,7 @@ options: Dict[str, Option] = {
   "hidden_items": RandomizeHiddenItems,
   "npc_gifts": RandomizeNpcGifts,
   "require_itemfinder": HiddenItemsRequireItemfinder,
+  "require_flash": DarkCavesRequireFlash,
   "wild_pokemon": RandomizeWildPokemon,
   "starters": RandomizeStarters,
   "min_catch_rate": MinCatchRate,
