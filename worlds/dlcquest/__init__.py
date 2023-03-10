@@ -70,10 +70,6 @@ class DLCqworld(World):
 
 
 
-
-
-
-
     def create_item(self, item: Union[str, ItemData]) -> DLCquestItem:
         if isinstance(item, str):
             item = item_table[item]

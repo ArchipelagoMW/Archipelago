@@ -68,22 +68,20 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
         set_rule(world.get_location("Finish the Fight Pack", player),
                  lambda state: state.has("Coin", player, 5))
 
-        loc_win = DLCquestLocation(player,"Winning", None, world.get_region("The Final Boss Room", player))
+        loc_win = DLCquestLocation(player, "Winning Basic", None, world.get_region("The Final Boss Room", player))
         world.get_region("The Final Boss Room", player).locations.append(loc_win)
         loc_win.place_locked_item(create_event(player, "Victory Basic"))
         if World_Options[Options.EndingChoice] == Options.EndingChoice.option_any:
-            set_rule(world.get_location("Winning", player), lambda state:
-                     state.has("Finish The Fight Pack", player))
+            set_rule(world.get_location("Winning Basic", player), lambda state: state.has("Finish the Fight Pack", player))
         if World_Options[Options.EndingChoice] == Options.EndingChoice.option_true:
-            set_rule(world.get_location("Winning", player), lambda state:
-                     state.has("Armor for your Horse Pack", player) and state.has("Finish The Fight Pack", player))
+            set_rule(world.get_location("Winning Basic", player), lambda state: state.has("Armor for your Horse Pack", player) and state.has("Finish the Fight Pack", player))
 
 
     if World_Options[Options.Campaign] == Options.Campaign.option_live_freemium_or_die or World_Options[Options.Campaign] == Options.Campaign.option_both:
         set_rule(world.get_entrance("Vines", player),
                  lambda state: state.has("Incredibly Important Pack", player))
         set_rule(world.get_entrance("Wall Jump Entrance", player),
-                 lambda state: state.has("Wall Jump Pack,progression", player))
+                 lambda state: state.has("Wall Jump Pack", player))
         set_rule(world.get_entrance("Harmless Plants", player),
                  lambda state: state.has("Harmless Plants Pack", player))
         set_rule(world.get_entrance("Pickaxe Hard Cave", player),
@@ -97,7 +95,7 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
         set_rule(world.get_entrance("Blizzard", player),
                  lambda state: state.has("Season Pass", player))
         set_rule(world.get_entrance("Boss Door", player),
-                 lambda state: state.has("Coin_freemium", player, 889))
+                 lambda state: state.has("Coin_Freemium", player, 889))
 
         set_rule(world.get_location("Particles Pack", player),
                  lambda state: state.has("Coin_Freemium", player, 5))
