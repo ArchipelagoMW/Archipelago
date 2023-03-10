@@ -2,14 +2,8 @@ from dataclasses import dataclass
 
 from worlds.stardew_valley.data.game_item import GameItem
 from . import fish_data
+from .common_data import quality_dict
 from .museum_data import Mineral
-
-quality_dict = {
-    0: "",
-    1: "Silver",
-    2: "Gold",
-    3: "Iridium"
-}
 
 
 @dataclass(frozen=True)
