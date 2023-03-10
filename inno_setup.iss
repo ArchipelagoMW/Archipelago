@@ -516,8 +516,8 @@ begin
 
   Result.Add(
     'Location of ROM file:',
-    'A2600 ROM files|*.a26;*.BIN|All files|*.*',
-    '.a26');
+    'A2600 ROM files|*.BIN;*.a26|All files|*.*',
+    '.BIN');
 end;
 
 function NextButtonClick(CurPageID: Integer): Boolean;
@@ -810,7 +810,7 @@ begin
 
   advnrom := CheckSMSRom('ADVNTURE.BIN', '157bddb7192754a45372be196797f284');
   if Length(advnrom) = 0 then
-    AdvnROMFilePage:= AddBINPage('ADVNTURE.BIN');
+    AdvnROMFilePage:= AddA26Page('ADVNTURE.BIN');
 end;
 
 
