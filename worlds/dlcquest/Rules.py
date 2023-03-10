@@ -96,6 +96,8 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
                  lambda state: state.has("Season Pass", player))
         set_rule(world.get_entrance("Boss Door", player),
                  lambda state: state.has("Coin_Freemium", player, 889))
+        set_rule(world.get_entrance("Boss Door", player),
+                 lambda state: state.has("Big Sword Pack", player) and state.has("Really Big Sword Pack", player) and state.has("Unfathomable Sword Pack", player))
 
         set_rule(world.get_location("Particles Pack", player),
                  lambda state: state.has("Coin_Freemium", player, 5))
