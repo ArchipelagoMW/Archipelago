@@ -1,6 +1,21 @@
-import typing
-from Options import Option, DeathLink, Choice
+from typing import Union, Dict, runtime_checkable, Protocol
+from Options import Option, DeathLink, Choice, Toggle
+from dataclasses import dataclass
 
+
+
+@runtime_checkable
+class DLCQuestOption(Protocol):
+    internal_name: str
+@dataclass
+class DLCQuestOptions:
+    options: Dict[str, Union[bool, int]]
+
+    def __getitem__(self, item: Union[str, DLCQuestOption]) -> Union[bool, int]:
+        if isinstance(item, DLCQuestOption):
+            item = item.internal_name
+
+        return self.options.get(item, None)
 class FalseDoubleJump(Choice):
     """If you can do a double jump without the pack for it (glitch)."""
     internal_name = "double_jump_glitch"
@@ -21,17 +36,54 @@ class TimeIsMoney(Choice):
 
 class CoinSanity(Choice):
     """This is for the insane it can be 825 check, it is coin sanity"""
-    internal_name = "coin_sanity"
-    display_name = "Coin Sanity"
+    internal_name = "coinsanity"
+    display_name = "CoinSanity"
     option_none = 0
     option_region = 1
     option_coin = 2
     default = 0
 
+class EndingChoice(Choice):
+    """This is for the ending type of the basic game"""
+    internal_name = "ending_choice"
+    display_name = "Ending Choice"
+    option_any = 0
+    option_true = 1
+    default = 1
 
-DLCquest_options: typing.Dict[str,type(Option)] = {
-    "double_jump_glitch": FalseDoubleJump,
-    "coin_sanity": CoinSanity,
-    "time_is_money": TimeIsMoney,
-    "death_link": DeathLink
+class Campaign(Choice):
+    """Whitch game you wana play to end"""
+    internal_name = "campaign"
+    display_name = "Campaign"
+    option_basic = 0
+    option_live_freemium_or_die = 1
+    option_both = 2
+    default = 0
+
+
+DLCquest_options: Dict[str, type(Option)] = {
+    option.internal_name: option
+    for option in [
+    FalseDoubleJump,
+    CoinSanity,
+    TimeIsMoney,
+    EndingChoice,
+    Campaign,
+    ]
 }
+default_options = {option.internal_name: option.default for option in DLCquest_options.values()}
+DLCquest_options["death_link"] = DeathLink
+
+
+def fetch_options(world, player: int) -> DLCQuestOptions:
+    return DLCQuestOptions({option: get_option_value(world, player, option) for option in DLCquest_options})
+
+
+def get_option_value(world, player: int, name: str) -> Union[bool, int]:
+    assert name in DLCquest_options, f"{name} is not a valid option for DLC Quest."
+
+    value = getattr(world, name)
+
+    if issubclass(DLCquest_options[name], Toggle):
+        return bool(value[player].value)
+    return value[player].value
