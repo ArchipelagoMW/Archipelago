@@ -107,7 +107,7 @@ class Crystals(Range):
 
 
 class CrystalsTower(Crystals):
-    """Number of crystals needed to climb Ganon's Tower"""
+    """Number of crystals needed to open Ganon's Tower"""
     display_name = "Crystals for GT"
     default = 7
 
@@ -209,7 +209,7 @@ class Enemies(Choice):
 
 
 class Progressive(Choice):
-    """How items that are usually considered progressive should be rewarded. Bows/swords/etc."""
+    """How item types that have multiple tiers (armor, bows, gloves, shields, and swords) should be rewarded"""
     display_name = "Progressive Items"
     option_off = 0
     option_grouped_random = 1
@@ -318,7 +318,7 @@ class OWPalette(Palette):
 
 
 class UWPalette(Palette):
-    """The type of palette shuffle to use for the underworld. caves/dungeons/etc"""
+    """The type of palette shuffle to use for the underworld (caves, dungeons, etc.)"""
     display_name = "Underworld Palette"
 
 
@@ -382,7 +382,7 @@ class Music(DefaultOnToggle):
 
 
 class ReduceFlashing(DefaultOnToggle):
-    """Reduces flashing for certain scenes"""
+    """Reduces flashing for certain scenes such as the Misery Mire and Ganon's Tower opening cutscenes"""
     display_name = "Reduce Screen Flashes"
 
 
@@ -396,7 +396,7 @@ class TriforceHud(Choice):
 
 
 class GlitchBoots(DefaultOnToggle):
-    """If this is enabled, the player will start with boots when playing with overworld glitches or harder logic."""
+    """If this is enabled, the player will start with Pegasus Boots when playing with overworld glitches or harder logic."""
     display_name = "Glitched Starting Boots"
 
 
