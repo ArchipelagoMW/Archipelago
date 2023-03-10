@@ -149,6 +149,9 @@ class World(metaclass=AutoWorldRegister):
     item_name_groups: ClassVar[Dict[str, Set[str]]] = {}
     """maps item group names to sets of items. Example: {"Weapons": {"Sword", "Bow"}}"""
 
+    location_name_groups: ClassVar[Dict[str, Set[str]]] = {}
+    """maps location group names to sets of locations. Example: {"Sewer": {"Sewer Key Drop 1", "Sewer Key Drop 2"}}"""
+
     data_version: ClassVar[int] = 1
     """
     increment this every time something in your world's names/id mappings changes.

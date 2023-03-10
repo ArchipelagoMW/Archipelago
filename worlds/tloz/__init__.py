@@ -14,7 +14,7 @@ from .Locations import location_table, level_locations, major_locations, shop_lo
     standard_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations
 from .Options import tloz_options
 from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_early, first_quest_dungeon_items_late
-from  .Rules import set_rules
+from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule
 
@@ -134,6 +134,11 @@ class TLoZWorld(World):
         self.multiworld.regions.append(menu)
         self.multiworld.regions.append(overworld)
 
+    def create_items(self):
+        # refer to ItemPool.py
+        generate_itempool(self)
+
+    # refer to Rules.py
     set_rules = set_rules
 
     def generate_basic(self):
@@ -144,9 +149,7 @@ class TLoZWorld(World):
         self.multiworld.get_location("Zelda", self.player).place_locked_item(self.create_event("Rescued Zelda!"))
         add_rule(self.multiworld.get_location("Zelda", self.player),
                  lambda state: ganon in state.locations_checked)
-
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Rescued Zelda!", self.player)
-        generate_itempool(self)
 
     def apply_base_patch(self, rom):
         # The base patch source is on a different repo, so here's the summary of changes:
