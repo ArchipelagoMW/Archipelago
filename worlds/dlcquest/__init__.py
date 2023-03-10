@@ -1,9 +1,9 @@
 from typing import Dict, Any, Iterable, Optional, Union
 from BaseClasses import Tutorial
 from worlds.AutoWorld import World, WebWorld
-from .Items import DLCquestItem, item_table, all_items, ItemData
+from .Items import DLCquestItem, item_table, ItemData, create_items
 from .Locations import location_table, DLCquestLocation
-from .Options import DLCquest_options
+from .Options import DLCquest_options, DLCQuestOptions, fetch_options
 from .Rules import set_rules
 from .Regions import create_regions
 
@@ -31,15 +31,24 @@ class DLCqworld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
 
+
     data_version = 0
 
     option_definitions = DLCquest_options
 
+    def generate_early(self):
+        self.options = fetch_options(self.multiworld, self.player)
+
     def create_regions(self):
-        create_regions(self.multiworld, self.player)
+        create_regions(self.multiworld, self.player, self.options)
+
+
+
+
+
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self.option_definitions)
+        set_rules(self.multiworld, self.player, self.options)
 
     def create_event(self, event: str):
         return DLCquestItem(event, True, None, self.player)
@@ -52,11 +61,14 @@ class DLCqworld(World):
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]]
 
-        created_items =[]
-        for item in all_items:
-            created_items.append(self.create_item(item))
+        created_items = create_items(self, self.options)
+
 
         self.multiworld.itempool += created_items
+
+
+
+
 
 
 
@@ -68,13 +80,10 @@ class DLCqworld(World):
 
         return DLCquestItem(item.name, item.classification, item.code, self.player)
 
-    def generate_basic(self) -> None:
-        set_rules(self.multiworld, self.player, self.option_definitions )
-
-
-
     def fill_slot_data(self):
         return {
-            "DeathLink": self.multiworld.death_link[self.player].value
+            "death_link": self.multiworld.death_link[self.player].value,
+            "ending_choice": self.multiworld.ending_choice[self.player].value,
+            "campaign": self.multiworld.campaign[self.player].value
         }
 
