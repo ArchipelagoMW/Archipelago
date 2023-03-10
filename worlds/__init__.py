@@ -75,16 +75,9 @@ games: typing.Dict[str, GamesPackage] = {}
 
 from .AutoWorld import AutoWorldRegister
 
-# Build the datapackage for each game.
+# Build the data package for each game.
 for world_name, world in AutoWorldRegister.world_types.items():
-    games[world_name] = {
-        "version": world.data_version,
-        "checksum": world.datapackage_checksum(),
-        "item_name_to_id": world.item_name_to_id,
-        "location_name_to_id": world.location_name_to_id,
-        # seems clients don't actually want this. Keeping it here in case someone changes their mind.
-        # "item_name_groups": {name: tuple(items) for name, items in world.item_name_groups.items()}
-    }
+    games[world_name] = world.get_data_package_data()
     lookup_any_item_id_to_name.update(world.item_id_to_name)
     lookup_any_location_id_to_name.update(world.location_id_to_name)
 

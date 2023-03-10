@@ -386,7 +386,7 @@ def persistent_load() -> typing.Dict[str, dict]:
     return storage
 
 
-def load_datapackage_with_checksum(game: str, checksum: typing.Optional[str]):
+def load_data_package_for_checksum(game: str, checksum: typing.Optional[str]):
     def is_filename_safe(s):
         return "/" not in s and "\\" not in s and ":" not in s
 
@@ -397,7 +397,7 @@ def load_datapackage_with_checksum(game: str, checksum: typing.Optional[str]):
                 with open(path, "r", encoding="utf-8-sig") as f:
                     return json.load(f)
             except Exception as e:
-                logging.debug(f"Could not load datapackage: {e}")
+                logging.debug(f"Could not load data package: {e}")
 
     # fall back to old cache
     cache = persistent_load().get("datapackage", {}).get("games", {}).get(game, {})
@@ -408,7 +408,7 @@ def load_datapackage_with_checksum(game: str, checksum: typing.Optional[str]):
     return {}
 
 
-def store_datapackage_with_checksum(game: str, data: typing.Dict[str, Any]):
+def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]):
     def is_filename_safe(s):
         return "/" not in s and "\\" not in s and ":" not in s
 
@@ -420,7 +420,7 @@ def store_datapackage_with_checksum(game: str, data: typing.Dict[str, Any]):
             with open(os.path.join(game_folder, f"{checksum}.json"), "w", encoding="utf-8-sig") as f:
                 json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
         except Exception as e:
-            logging.debug(f"Could not store datapackage: {e}")
+            logging.debug(f"Could not store data package: {e}")
 
 
 def get_adjuster_settings(game_name: str) -> typing.Dict[str, typing.Any]:

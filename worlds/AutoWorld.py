@@ -351,17 +351,34 @@ class World(metaclass=AutoWorldRegister):
         return self.create_item(self.get_filler_item_name())
 
     @classmethod
-    def datapackage_checksum(cls) -> str:
-        from NetUtils import encode
-        datapackage = {
-            "items": cls.item_name_to_id,
-            "locations": cls.location_name_to_id,
+    def get_data_package_data(cls) -> Dict[str, Any]:
+        sorted_item_name_groups = {
+            name: sorted(cls.item_name_groups[name]) for name in sorted(cls.item_name_groups)
         }
-        dump = encode(datapackage)
-        return hashlib.sha1(dump.encode()).hexdigest()
+        sorted_location_name_groups = {
+            name: sorted(cls.location_name_groups[name]) for name in sorted(cls.location_name_groups)
+        }
+        res = {
+            # sorted alphabetically
+            "item_name_groups": sorted_item_name_groups,
+            "item_name_to_id": cls.item_name_to_id,
+            "location_name_groups": sorted_location_name_groups,
+            "location_name_to_id": cls.location_name_to_id,
+            "version": cls.data_version,
+        }
+        res["checksum"] = data_package_checksum(res)
+        return res
 
 
 # any methods attached to this can be used as part of CollectionState,
 # please use a prefix as all of them get clobbered together
 class LogicMixin(metaclass=AutoLogicRegister):
     pass
+
+
+def data_package_checksum(data: Dict[str, Any]) -> str:
+    """Calculates the data package checksum for a game from a dict"""
+    assert "checksum" not in data, "Checksum already in data"
+    assert sorted(data) == list(data), "Data not ordered"
+    from NetUtils import encode
+    return hashlib.sha1(encode(data).encode()).hexdigest()

@@ -246,7 +246,7 @@ class Context:
 
         self._load_game_data()
 
-    # Datapackage retrieval
+    # Data package retrieval
     def _load_game_data(self):
         import worlds
         self.gamespackage = worlds.network_data_package["games"]
@@ -439,15 +439,15 @@ class Context:
             server_options = decoded_obj.get("server_options", {})
             self._set_options(server_options)
 
-        # custom datapackage
+        # embedded data package
         for game_name, data in decoded_obj.get("datapackage", {}).items():
             if game_name in game_data_packages:
                 data = game_data_packages[game_name]
-            logging.info(f"Loading custom datapackage for game {game_name}")
+            logging.info(f"Loading embedded data package for game {game_name}")
             self.gamespackage[game_name] = data
             self.item_name_groups[game_name] = data["item_name_groups"]
             self.location_name_groups[game_name] = data["location_name_groups"]
-            del data["item_name_groups"]  # remove from datapackage, but keep in self.item_name_groups
+            del data["item_name_groups"]  # remove from data package, but keep in self.item_name_groups
             del data["location_name_groups"]
         self._init_game_data()
         for game_name, data in self.item_name_groups.items():
