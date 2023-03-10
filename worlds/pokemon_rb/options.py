@@ -186,8 +186,10 @@ class DexSanity(Toggle):
     and randomize_wild_pokemon is off, catch_em_all is not `all_pokemon` or randomize_legendary_pokemon is not `any`,
     accessibility will be forced to `items` instead, as not all Dexsanity locations can be guaranteed to be considered
     reachable in logic.
-    Currently location checks are obtained by talking to Professor Oak directly or by evaluating your Pokedex through
-    Oak's PC."""
+    If you have your Pokedex or do not require it, you will receive items upon catching, evolving, or receiving most
+    Pokemon. Some others, such as starters and those received in trades, will not yet automatically trigger the check.
+    For these or for any Pokemon received before obtaining the Pokedex (if required) you can get the items by talking
+    to Professor Oak or evaluating your Pokedex with Oak's PC."""
     display_name = "Dexsanity"
     default = 0
 

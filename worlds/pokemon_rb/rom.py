@@ -748,7 +748,8 @@ def generate_output(self, output_directory: str):
         data[rom_addresses["Require_Pokedex_A"]] = 1
         data[rom_addresses["Require_Pokedex_B"]] = 1
     if self.multiworld.dexsanity[self.player]:
-        data[rom_addresses["Dexsanity_Enabled"]] = 1
+        data[rom_addresses["Option_Dexsanity_A"]] = 1
+        data[rom_addresses["Option_Dexsanity_B"]] = 1
     if self.multiworld.all_pokemon_seen[self.player]:
         data[rom_addresses["Option_Pokedex_Seen"]] = 1
     money = str(self.multiworld.starting_money[self.player].value).zfill(6)
