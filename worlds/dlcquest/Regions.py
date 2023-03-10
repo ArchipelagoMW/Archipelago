@@ -7,9 +7,9 @@ DLCquestRegion =["Movement Pack", "Behind Tree", "Psychological Warfare", "Doubl
 
 def add_coin_freemium(region : Region, Coin: int, player: int):
     for i in range(Coin):
-        location =DLCquestLocation(player, "Coin_freemium", None, region)
+        location =DLCquestLocation(player, "Coin_Freemium", None, region)
         region.locations.append(location)
-        location.place_locked_item(create_event(player, "Coin_freemium"))
+        location.place_locked_item(create_event(player, "Coin_Freemium"))
 
 def add_coin_dlcquest(region : Region, Coin: int, player: int):
     for i in range(Coin):
