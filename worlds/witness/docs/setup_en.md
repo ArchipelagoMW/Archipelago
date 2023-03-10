@@ -3,7 +3,7 @@
 ## Required Software
 
 - [The Witness for 64-bit Windows (e.g. Steam version)](https://store.steampowered.com/app/210970/The_Witness/)
-- [The Witness Archipelago Randomizer](https://github.com/NewSoupVi/The-Witness-Randomizer-for-Archipelago/releases)
+- [The Witness Archipelago Randomizer](https://github.com/NewSoupVi/The-Witness-Randomizer-for-Archipelago/releases/latest)
 
 ## Optional Software
 
@@ -14,7 +14,7 @@
 
 1. Launch The Witness
 2. Start a fresh save
-3. Launch [The Witness Archipelago Randomizer](https://github.com/NewSoupVi/The-Witness-Randomizer-for-Archipelago)
+3. Launch [The Witness Archipelago Randomizer](https://github.com/NewSoupVi/The-Witness-Randomizer-for-Archipelago/releases/latest)
 4. Enter the Archipelago address, slot name and password
 5. Press "Connect"
 6. Enjoy!
@@ -23,7 +23,7 @@ To continue an earlier game:
 
 1. Launch The Witness
 2. Load the save you last played this world on, if it's not the one you loaded into automatically
-3. Launch [The Witness Archipelago Randomizer](https://github.com/NewSoupVi/The-Witness-Randomizer-for-Archipelago)
+3. Launch [The Witness Archipelago Randomizer](https://github.com/NewSoupVi/The-Witness-Randomizer-for-Archipelago/releases/latest)
 4. Press "Load Credentials" (or type them in manually)
 5. Press "Connect"
 
