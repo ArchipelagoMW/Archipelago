@@ -65,7 +65,6 @@ Name: "generator/pkmn_r"; Description: "Pokemon Red ROM Setup"; Types: full host
 Name: "generator/pkmn_b"; Description: "Pokemon Blue ROM Setup"; Types: full hosting
 Name: "generator/ladx";   Description: "Link's Awakening DX ROM Setup"; Types: full hosting
 Name: "generator/tloz";   Description: "The Legend of Zelda ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 135168; Flags: disablenouninstallwarning
-Name: "generator/advn";   Description: "Adventure ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 150000; Flags: disablenouninstallwarning
 Name: "server";           Description: "Server"; Types: full hosting
 Name: "client";           Description: "Clients"; Types: full playing
 Name: "client/la";        Description: "Links Awakening DX Client"; Types: full playing
