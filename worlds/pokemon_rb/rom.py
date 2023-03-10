@@ -553,13 +553,26 @@ def write_quizzes(self, data, random):
 
     def get_quiz(q, a):
         if q == 0:
-            mon = self.trade_mons["Trade_Dux"]
+            r = random.randint(0, 3)
+            if r == 0:
+                mon = self.trade_mons["Trade_Dux"]
+                text = "A woman in<LINE>Vermilion City<CONT>"
+            elif r == 1:
+                mon = self.trade_mons["Trade_Lola"]
+                text = "A man in<LINE>Cerulean City<CONT>"
+            elif r == 2:
+                mon = self.trade_mons["Trade_Marcel"]
+                text = "Someone on Route 2<LINE>"
+            elif r == 3:
+                mon = self.trade_mons["Trade_Spot"]
+                text = "Someone on Route 5<LINE>"
             if not a:
                 answers.append(0)
                 old_mon = mon
                 while old_mon == mon:
                     mon = random.choice(list(poke_data.pokemon_data.keys()))
-            return encode_text(f"Someone in<LINE>Vermilion City<CONT>was looking for a<CONT>{mon}?<DONE>")
+
+            return encode_text(f"{text}was looking for<CONT>{mon}?<DONE>")
         elif q == 1:
             for location in self.multiworld.get_filled_locations():
                 if location.item.name == "Secret Key" and location.item.player == self.player:
@@ -624,17 +637,22 @@ def write_quizzes(self, data, random):
             while not a and i in [1, 2]:
                 i = random.randint(0, 99)
             return encode_text(f"POLIWAG evolves {i}<LINE>times?<DONE>")
+        elif q == 7:
+            entity = "Motor Carrier"
+            if not a:
+                entity = random.choice(["Driver", "Shipper"])
+            return encode_text("Title 49 of the<LINE>U.S. Code of<CONT>Federal<CONT>Regulations part<CONT>397.67 states"
+                               f"<CONT>that the<CONT>{entity}<CONT>is responsible<CONT>for planning<CONT>routes when"
+                               "<CONT>hazardous<CONT>materials are<CONT>transported?<DONE>")
 
     answers = [random.randint(0, 1), random.randint(0, 1), random.randint(0, 1),
                random.randint(0, 1), random.randint(0, 1), random.randint(0, 1)]
 
-    answers = [0,0,0,0,0,0]
-
-    questions = random.sample((range(0, 7)), 6)
+    questions = random.sample((range(0, 8)), 6)
     question_texts = []
     for i, question in enumerate(questions):
         question_texts.append(get_quiz(question, answers[i]))
-
+    print(questions)
     for i, quiz in enumerate(["A", "B", "C", "D", "E", "F"]):
         data[rom_addresses[f"Quiz_Answer_{quiz}"]] = int(not answers[i]) << 4 | (i + 1)
         write_bytes(data, question_texts[i], rom_addresses[f"Text_Quiz_{quiz}"])
