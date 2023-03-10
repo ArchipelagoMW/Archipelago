@@ -169,6 +169,7 @@ cython_debug/
 jdk*/
 minecraft*/
 minecraft_versions.json
+!worlds/minecraft/
 
 # pyenv
 .python-version
