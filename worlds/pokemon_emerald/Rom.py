@@ -73,8 +73,8 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str):
     options_address = extracted_data["misc_rom_addresses"]["gArchipelagoOptions"]
 
     # Set hold A to advance text
-    # TODO: Option for hold A
-    _set_bytes_little_endian(patched_rom, options_address + 0, 1, 1)
+    turbo_a = 1 if get_option_value(multiworld, player, "turbo_a") == Toggle.option_true else 0
+    _set_bytes_little_endian(patched_rom, options_address + 0, 1, turbo_a)
 
     # Set ferry enabled
     enable_ferry = 1 if get_option_value(multiworld, player, "enable_ferry") == Toggle.option_true else 0

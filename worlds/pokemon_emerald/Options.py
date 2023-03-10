@@ -141,6 +141,10 @@ class EnableFerry(Toggle):
     """The ferry between Slateport, Lilycove, and the Battle Frontier can be used if you have the S.S. Ticket"""
     display_name = "Enable Ferry"
 
+class TurboA(Toggle):
+    """Holding A will advance most text automatically"""
+    display_name = "Turbo A"
+
 options: Dict[str, Option] = {
   "badges": RandomizeBadges,
   "hms": RandomizeHms,
@@ -160,7 +164,8 @@ options: Dict[str, Option] = {
   "level_up_moves": LevelUpMoves,
   "tm_compatibility": TmCompatibility,
   "hm_compatibility": HmCompatibility,
-  "enable_ferry": EnableFerry
+  "enable_ferry": EnableFerry,
+  "turbo_a": TurboA
 }
 
 def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, Dict, List]:
