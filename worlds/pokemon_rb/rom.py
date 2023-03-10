@@ -652,7 +652,7 @@ def write_quizzes(self, data, random):
     question_texts = []
     for i, question in enumerate(questions):
         question_texts.append(get_quiz(question, answers[i]))
-    print(questions)
+
     for i, quiz in enumerate(["A", "B", "C", "D", "E", "F"]):
         data[rom_addresses[f"Quiz_Answer_{quiz}"]] = int(not answers[i]) << 4 | (i + 1)
         write_bytes(data, question_texts[i], rom_addresses[f"Text_Quiz_{quiz}"])
