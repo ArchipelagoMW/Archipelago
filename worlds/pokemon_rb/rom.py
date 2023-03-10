@@ -200,11 +200,11 @@ def process_static_pokemon(self):
                                                                            randomize_type, self.multiworld.random))
             location.place_locked_item(mon)
 
+    chosen_mons = set()
     for slot in starter_slots:
         location = self.multiworld.get_location(slot.name, self.player)
         randomize_type = self.multiworld.randomize_starter_pokemon[self.player].value
         slot_type = "Missable"
-        chosen_mons = set()
         if not randomize_type:
             location.place_locked_item(self.create_item(slot_type + " " + slot.original_item))
         else:
