@@ -115,7 +115,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
             flush()  # commit slots
 
         if recompress:
-            multidata = multidata[0] + zlib.compress(pickle.dumps(decompressed_multidata), 9)
+            multidata = multidata[0:1] + zlib.compress(pickle.dumps(decompressed_multidata), 9)
 
         seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=owner, meta=json.dumps(meta),
                     id=sid if sid else uuid.uuid4())
