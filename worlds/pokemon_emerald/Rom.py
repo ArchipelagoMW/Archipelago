@@ -63,6 +63,7 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str):
     # Options
     # struct ArchipelagoOptions
     # {
+    #     bool8 advanceTextWithHoldA;
     #     bool8 isFerryEnabled;
     #     bool8 areTrainersBlind;
     #     u16 expMultiplierNumerator;
@@ -71,21 +72,25 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str):
     # } __attribute__((packed));
     options_address = extracted_data["misc_rom_addresses"]["gArchipelagoOptions"]
 
+    # Set hold A to advance text
+    # TODO: Option for hold A
+    _set_bytes_little_endian(patched_rom, options_address + 0, 1, 1)
+
     # Set ferry enabled
     enable_ferry = 1 if get_option_value(multiworld, player, "enable_ferry") == Toggle.option_true else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0, 1, enable_ferry)
+    _set_bytes_little_endian(patched_rom, options_address + 1, 1, enable_ferry)
 
     # Set blind trainers
     blind_trainers = 1 if get_option_value(multiworld, player, "blind_trainers") == Toggle.option_true else 0
-    _set_bytes_little_endian(patched_rom, options_address + 1, 1, blind_trainers)
+    _set_bytes_little_endian(patched_rom, options_address + 2, 1, blind_trainers)
 
     # Set exp modifier
     numerator = min(get_option_value(multiworld, player, "exp_modifier"), 2**16 - 1)
-    _set_bytes_little_endian(patched_rom, options_address + 2, 2, numerator)
-    _set_bytes_little_endian(patched_rom, options_address + 4, 2, 100)
+    _set_bytes_little_endian(patched_rom, options_address + 3, 2, numerator)
+    _set_bytes_little_endian(patched_rom, options_address + 5, 2, 100)
 
     # Set Birch pokemon
-    _set_bytes_little_endian(patched_rom, options_address + 6, 2, get_random_species(multiworld.per_slot_randoms[player]).id)
+    _set_bytes_little_endian(patched_rom, options_address + 7, 2, get_random_species(multiworld.per_slot_randoms[player]).id)
 
     # Write Output
     outfile_player_name = f"_P{player}"
@@ -205,22 +210,23 @@ def _randomize_starters(multiworld, player, rom):
 def _randomize_learnsets(multiworld: MultiWorld, player: int, rom: bytearray):
     random = multiworld.per_slot_randoms[player]
 
-    for pokemon_id, learnset_info in enumerate(get_extracted_data()["learnsets"]):
+    for species_data in get_extracted_data()["species"]:
+        old_learnset = species_data["learnset"]["moves"]
         new_learnset: List[int] = []
 
         i = 0
 
         # Replace filler MOVE_NONEs at start of list
-        while (learnset_info["moves"][i]["move_id"] == 0):
+        while (old_learnset[i]["move_id"] == 0):
             if (get_option_value(multiworld, player, "level_up_moves") == LevelUpMoves.option_start_with_four_moves):
                 new_learnset.append(
-                    learnset_info["moves"][i]["level"] << 9 | get_random_move(random)
+                    old_learnset[i]["level"] << 9 | get_random_move(random)
                 )
             else:
-                new_learnset.append(learnset_info["moves"][i]["level"] << 9)
+                new_learnset.append(old_learnset[i]["level"] << 9)
             i += 1
 
-        while (i < len(learnset_info["moves"])):
+        while (i < len(old_learnset)):
             new_move = get_random_move(random)
 
             # Guarantees the starter can defeat the Zigzagoon and gain XP
@@ -228,12 +234,12 @@ def _randomize_learnsets(multiworld: MultiWorld, player: int, rom: bytearray):
                 new_move = get_random_damaging_move(random)
 
             new_learnset.append(
-                learnset_info["moves"][i]["level"] << 9 | new_move
+                old_learnset[i]["level"] << 9 | new_move
             )
 
             i += 1
         
-        _replace_learnset(learnset_info["rom_address"], new_learnset, rom)
+        _replace_learnset(species_data["learnset"]["rom_address"], new_learnset, rom)
 
 
 def _replace_learnset(learnset_address: int, new_learnset: List[int], rom: bytearray):

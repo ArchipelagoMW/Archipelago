@@ -60,25 +60,28 @@ def get_pokemon_species() -> Dict[str, PokemonSpecies]:
         all_pokemon_species = {}
 
         extracted_data = get_extracted_data()
-        pokemon_data = load_json(os.path.join(os.path.dirname(__file__), "data/pokemon.json"))
+        pokemon_attributes = load_json(os.path.join(os.path.dirname(__file__), "data/pokemon.json"))
 
-        for species_constant_name, species_data in pokemon_data.items():
+        for species_constant_name, species_attributes in pokemon_attributes.items():
+            species_id = extracted_data["constants"][species_constant_name]
+            species_data = extracted_data["species"][species_id]
+
             all_pokemon_species[species_constant_name] = PokemonSpecies(
-                    species_data["label"],
-                    extracted_data["constants"][species_constant_name],
-                    species_data["national_dex_number"],
+                    species_attributes["label"],
+                    species_id,
+                    species_attributes["national_dex_number"],
                     BaseStats(
-                        species_data["base_hp"],
-                        species_data["base_attack"],
-                        species_data["base_defense"],
-                        species_data["base_speed"],
-                        species_data["base_special_attack"],
-                        species_data["base_special_defense"]
+                        species_data["base_stats"][0],
+                        species_data["base_stats"][1],
+                        species_data["base_stats"][2],
+                        species_data["base_stats"][3],
+                        species_data["base_stats"][4],
+                        species_data["base_stats"][5]
                     ),
                     [species_data["types"][0], species_data["types"][1]],
                     [species_data["abilities"][0], species_data["abilities"][1]],
                     species_data["catch_rate"],
-                    species_data["tm_hm_compatibility"]
+                    species_attributes["tm_hm_compatibility"]
                 )
 
     return all_pokemon_species

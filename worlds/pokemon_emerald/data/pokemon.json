@@ -2,7721 +2,1931 @@
   "SPECIES_BULBASAUR": {
     "label": "Bulbasaur",
     "national_dex_number": 1,
-    "base_hp": 45,
-    "base_attack": 49,
-    "base_defense": 49,
-    "base_speed": 45,
-    "base_special_attack": 65,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_OVERGROW",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010011100000101011000010000100010000011110000010011100000000"
   },
   "SPECIES_IVYSAUR": {
     "label": "Ivysaur",
     "national_dex_number": 2,
-    "base_hp": 60,
-    "base_attack": 62,
-    "base_defense": 63,
-    "base_speed": 60,
-    "base_special_attack": 80,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_OVERGROW",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010011100000101011000010000100010000011110000010011100000000"
   },
   "SPECIES_VENUSAUR": {
     "label": "Venusaur",
     "national_dex_number": 3,
-    "base_hp": 80,
-    "base_attack": 82,
-    "base_defense": 83,
-    "base_speed": 80,
-    "base_special_attack": 100,
-    "base_special_defense": 100,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_OVERGROW",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000110011100010101011000110000100010000011110000010011100000000"
   },
   "SPECIES_CHARMANDER": {
     "label": "Charmander",
     "national_dex_number": 4,
-    "base_hp": 39,
-    "base_attack": 52,
-    "base_defense": 43,
-    "base_speed": 65,
-    "base_special_attack": 60,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_BLAZE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1100010001100000100010100011001100100101011110000110010100000000"
   },
   "SPECIES_CHARMELEON": {
     "label": "Charmeleon",
     "national_dex_number": 5,
-    "base_hp": 58,
-    "base_attack": 64,
-    "base_defense": 58,
-    "base_speed": 80,
-    "base_special_attack": 80,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_BLAZE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1100010001100000100010100011001100100101011110000110010100000000"
   },
   "SPECIES_CHARIZARD": {
     "label": "Charizard",
     "national_dex_number": 6,
-    "base_hp": 78,
-    "base_attack": 84,
-    "base_defense": 78,
-    "base_speed": 100,
-    "base_special_attack": 109,
-    "base_special_defense": 85,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_BLAZE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1100110001100010100010100111001100100101011110100111010100000000"
   },
   "SPECIES_SQUIRTLE": {
     "label": "Squirtle",
     "national_dex_number": 7,
-    "base_hp": 44,
-    "base_attack": 48,
-    "base_defense": 65,
-    "base_speed": 43,
-    "base_special_attack": 50,
-    "base_special_defense": 64,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_TORRENT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1010011001001100110010100011001100000000011110000000110111000000"
   },
   "SPECIES_WARTORTLE": {
     "label": "Wartortle",
     "national_dex_number": 8,
-    "base_hp": 59,
-    "base_attack": 63,
-    "base_defense": 80,
-    "base_speed": 58,
-    "base_special_attack": 65,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_TORRENT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1010011001001100110010100011001100000000011110000000110111000000"
   },
   "SPECIES_BLASTOISE": {
     "label": "Blastoise",
     "national_dex_number": 9,
-    "base_hp": 79,
-    "base_attack": 83,
-    "base_defense": 100,
-    "base_speed": 78,
-    "base_special_attack": 85,
-    "base_special_defense": 105,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_TORRENT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1010111001001110110010100111001100000000011110000000110111000000"
   },
   "SPECIES_CATERPIE": {
     "label": "Caterpie",
     "national_dex_number": 10,
-    "base_hp": 45,
-    "base_attack": 30,
-    "base_defense": 35,
-    "base_speed": 45,
-    "base_special_attack": 20,
-    "base_special_defense": 20,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_BUG"
-    ],
-    "abilities": [
-      "ABILITY_SHIELD_DUST",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_METAPOD": {
     "label": "Metapod",
     "national_dex_number": 11,
-    "base_hp": 50,
-    "base_attack": 20,
-    "base_defense": 55,
-    "base_speed": 30,
-    "base_special_attack": 25,
-    "base_special_defense": 25,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_BUG"
-    ],
-    "abilities": [
-      "ABILITY_SHED_SKIN",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_BUTTERFREE": {
     "label": "Butterfree",
     "national_dex_number": 12,
-    "base_hp": 60,
-    "base_attack": 45,
-    "base_defense": 50,
-    "base_speed": 70,
-    "base_special_attack": 80,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_COMPOUND_EYES",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001100010111111000010110100000001011111010000001000000000"
   },
   "SPECIES_WEEDLE": {
     "label": "Weedle",
     "national_dex_number": 13,
-    "base_hp": 40,
-    "base_attack": 35,
-    "base_defense": 30,
-    "base_speed": 50,
-    "base_special_attack": 20,
-    "base_special_defense": 20,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_SHIELD_DUST",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_KAKUNA": {
     "label": "Kakuna",
     "national_dex_number": 14,
-    "base_hp": 45,
-    "base_attack": 25,
-    "base_defense": 50,
-    "base_speed": 35,
-    "base_special_attack": 25,
-    "base_special_defense": 25,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_SHED_SKIN",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_BEEDRILL": {
     "label": "Beedrill",
     "national_dex_number": 15,
-    "base_hp": 65,
-    "base_attack": 80,
-    "base_defense": 40,
-    "base_speed": 75,
-    "base_special_attack": 45,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_SWARM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001100010101011000010001100010001011111000010000100000000"
   },
   "SPECIES_PIDGEY": {
     "label": "Pidgey",
     "national_dex_number": 16,
-    "base_hp": 40,
-    "base_attack": 45,
-    "base_defense": 40,
-    "base_speed": 56,
-    "base_special_attack": 35,
-    "base_special_defense": 35,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_KEEN_EYE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010001100000110010000010000100000001011111100001000000000000"
   },
   "SPECIES_PIDGEOTTO": {
     "label": "Pidgeotto",
     "national_dex_number": 17,
-    "base_hp": 63,
-    "base_attack": 60,
-    "base_defense": 55,
-    "base_speed": 71,
-    "base_special_attack": 50,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_KEEN_EYE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0000010001100000110010000010000100000001011111100001000000000000"
   },
   "SPECIES_PIDGEOT": {
     "label": "Pidgeot",
     "national_dex_number": 18,
-    "base_hp": 83,
-    "base_attack": 80,
-    "base_defense": 75,
-    "base_speed": 91,
-    "base_special_attack": 70,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_KEEN_EYE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001100010110010000010000100000001011111100001000000000000"
   },
   "SPECIES_RATTATA": {
     "label": "Rattata",
     "national_dex_number": 19,
-    "base_hp": 30,
-    "base_attack": 56,
-    "base_defense": 35,
-    "base_speed": 72,
-    "base_special_attack": 25,
-    "base_special_defense": 35,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_RUN_AWAY",
-      "ABILITY_GUTS"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010001111100110010111011010101000000011111000010000100000000"
   },
   "SPECIES_RATICATE": {
     "label": "Raticate",
     "national_dex_number": 20,
-    "base_hp": 55,
-    "base_attack": 81,
-    "base_defense": 60,
-    "base_speed": 97,
-    "base_special_attack": 50,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_RUN_AWAY",
-      "ABILITY_GUTS"
-    ],
-    "catch_rate": 127,
     "tm_hm_compatibility": "0000110001111110110010111011010101000000011111000010010100000000"
   },
   "SPECIES_SPEAROW": {
     "label": "Spearow",
     "national_dex_number": 21,
-    "base_hp": 40,
-    "base_attack": 60,
-    "base_defense": 30,
-    "base_speed": 70,
-    "base_special_attack": 31,
-    "base_special_defense": 31,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_KEEN_EYE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010001100000110010000010000100000001011111100001000000000000"
   },
   "SPECIES_FEAROW": {
     "label": "Fearow",
     "national_dex_number": 22,
-    "base_hp": 65,
-    "base_attack": 90,
-    "base_defense": 65,
-    "base_speed": 100,
-    "base_special_attack": 61,
-    "base_special_defense": 61,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_KEEN_EYE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "0000010001100010110010000010000100000001011111100001000000000000"
   },
   "SPECIES_EKANS": {
     "label": "Ekans",
     "national_dex_number": 23,
-    "base_hp": 35,
-    "base_attack": 60,
-    "base_defense": 44,
-    "base_speed": 55,
-    "base_special_attack": 40,
-    "base_special_defense": 54,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_INTIMIDATE",
-      "ABILITY_SHED_SKIN"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010001100000111010100111000100010000111111001000010000000000"
   },
   "SPECIES_ARBOK": {
     "label": "Arbok",
     "national_dex_number": 24,
-    "base_hp": 60,
-    "base_attack": 85,
-    "base_defense": 69,
-    "base_speed": 80,
-    "base_special_attack": 65,
-    "base_special_defense": 79,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_INTIMIDATE",
-      "ABILITY_SHED_SKIN"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "0000010001100010111010100111000100010000111111001000010000000000"
   },
   "SPECIES_PIKACHU": {
     "label": "Pikachu",
     "national_dex_number": 25,
-    "base_hp": 35,
-    "base_attack": 55,
-    "base_defense": 30,
-    "base_speed": 90,
-    "base_special_attack": 50,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_STATIC",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "1000010001000001110010111011001101000000011110000000011100000000"
   },
   "SPECIES_RAICHU": {
     "label": "Raichu",
     "national_dex_number": 26,
-    "base_hp": 60,
-    "base_attack": 90,
-    "base_defense": 55,
-    "base_speed": 100,
-    "base_special_attack": 90,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_STATIC",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "1000010001000011110010111011001101000000011111000000011100000000"
   },
   "SPECIES_SANDSHREW": {
     "label": "Sandshrew",
     "national_dex_number": 27,
-    "base_hp": 50,
-    "base_attack": 75,
-    "base_defense": 85,
-    "base_speed": 40,
-    "base_special_attack": 20,
-    "base_special_defense": 30,
-    "types": [
-      "TYPE_GROUND",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_SAND_VEIL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "1000010001100000100010100111001100001011011111000010010100000000"
   },
   "SPECIES_SANDSLASH": {
     "label": "Sandslash",
     "national_dex_number": 28,
-    "base_hp": 75,
-    "base_attack": 100,
-    "base_defense": 110,
-    "base_speed": 65,
-    "base_special_attack": 45,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_GROUND",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_SAND_VEIL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "1000010001100010100010100111001100001011011111000010010100000000"
   },
   "SPECIES_NIDORAN_F": {
     "label": "Nidoran♀",
     "national_dex_number": 29,
-    "base_hp": 55,
-    "base_attack": 47,
-    "base_defense": 52,
-    "base_speed": 41,
-    "base_special_attack": 40,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_POISON_POINT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 235,
     "tm_hm_compatibility": "0010010001101100110010111011000101010001011111000010010100000000"
   },
   "SPECIES_NIDORINA": {
     "label": "Nidorina",
     "national_dex_number": 30,
-    "base_hp": 70,
-    "base_attack": 62,
-    "base_defense": 67,
-    "base_speed": 56,
-    "base_special_attack": 55,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_POISON_POINT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0010010001101100110010111011000101010001011111000010010100000000"
   },
   "SPECIES_NIDOQUEEN": {
     "label": "Nidoqueen",
     "national_dex_number": 31,
-    "base_hp": 90,
-    "base_attack": 82,
-    "base_defense": 87,
-    "base_speed": 76,
-    "base_special_attack": 75,
-    "base_special_defense": 85,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_POISON_POINT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1010110001111110110010111111011101111111111111000010110100000000"
   },
   "SPECIES_NIDORAN_M": {
     "label": "Nidoran♂",
     "national_dex_number": 32,
-    "base_hp": 46,
-    "base_attack": 57,
-    "base_defense": 40,
-    "base_speed": 50,
-    "base_special_attack": 40,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_POISON_POINT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 235,
     "tm_hm_compatibility": "0010010001101100110010111011000101010000011111000010010100000000"
   },
   "SPECIES_NIDORINO": {
     "label": "Nidorino",
     "national_dex_number": 33,
-    "base_hp": 61,
-    "base_attack": 72,
-    "base_defense": 57,
-    "base_speed": 65,
-    "base_special_attack": 55,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_POISON_POINT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0010010001101100110010111011000101010000011111000010010100000000"
   },
   "SPECIES_NIDOKING": {
     "label": "Nidoking",
     "national_dex_number": 34,
-    "base_hp": 81,
-    "base_attack": 92,
-    "base_defense": 77,
-    "base_speed": 85,
-    "base_special_attack": 85,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_POISON_POINT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1010110001111110110010111111011101111110111111000010110100000000"
   },
   "SPECIES_CLEFAIRY": {
     "label": "Clefairy",
     "national_dex_number": 35,
-    "base_hp": 70,
-    "base_attack": 45,
-    "base_defense": 48,
-    "base_speed": 35,
-    "base_special_attack": 60,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_CUTE_CHARM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 150,
     "tm_hm_compatibility": "1011010001101101110111111011111111100100011110001000011000000000"
   },
   "SPECIES_CLEFABLE": {
     "label": "Clefable",
     "national_dex_number": 36,
-    "base_hp": 95,
-    "base_attack": 70,
-    "base_defense": 73,
-    "base_speed": 60,
-    "base_special_attack": 85,
-    "base_special_defense": 90,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_CUTE_CHARM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 25,
     "tm_hm_compatibility": "1011010001101111110111111011111111100100011110001000011000000000"
   },
   "SPECIES_VULPIX": {
     "label": "Vulpix",
     "national_dex_number": 37,
-    "base_hp": 38,
-    "base_attack": 41,
-    "base_defense": 40,
-    "base_speed": 65,
-    "base_special_attack": 50,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_FLASH_FIRE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0000110001100000100110100011000100100100011110000100000000000000"
   },
   "SPECIES_NINETALES": {
     "label": "Ninetales",
     "national_dex_number": 38,
-    "base_hp": 73,
-    "base_attack": 76,
-    "base_defense": 75,
-    "base_speed": 100,
-    "base_special_attack": 81,
-    "base_special_defense": 100,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_FLASH_FIRE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0000110001100010100110100011000100100100011110000100000000000000"
   },
   "SPECIES_JIGGLYPUFF": {
     "label": "Jigglypuff",
     "national_dex_number": 39,
-    "base_hp": 115,
-    "base_attack": 45,
-    "base_defense": 20,
-    "base_speed": 20,
-    "base_special_attack": 45,
-    "base_special_defense": 25,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_CUTE_CHARM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 170,
     "tm_hm_compatibility": "1010010001101101110111011011111111100100011110001000011000000000"
   },
   "SPECIES_WIGGLYTUFF": {
     "label": "Wigglytuff",
     "national_dex_number": 40,
-    "base_hp": 140,
-    "base_attack": 70,
-    "base_defense": 45,
-    "base_speed": 45,
-    "base_special_attack": 75,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_CUTE_CHARM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 50,
     "tm_hm_compatibility": "1010010001101111110111011011111111100100011110001000011000000000"
   },
   "SPECIES_ZUBAT": {
     "label": "Zubat",
     "national_dex_number": 41,
-    "base_hp": 40,
-    "base_attack": 45,
-    "base_defense": 35,
-    "base_speed": 55,
-    "base_special_attack": 30,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_INNER_FOCUS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010001110000111010000010010100010001111111101000000000000000"
   },
   "SPECIES_GOLBAT": {
     "label": "Golbat",
     "national_dex_number": 42,
-    "base_hp": 75,
-    "base_attack": 80,
-    "base_defense": 70,
-    "base_speed": 90,
-    "base_special_attack": 65,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_INNER_FOCUS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "0000010001110010111010000010010100010001111111101000000000000000"
   },
   "SPECIES_ODDISH": {
     "label": "Oddish",
     "national_dex_number": 43,
-    "base_hp": 45,
-    "base_attack": 50,
-    "base_defense": 55,
-    "base_speed": 30,
-    "base_special_attack": 75,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010011100000101011000010000100010000011110000010001000000000"
   },
   "SPECIES_GLOOM": {
     "label": "Gloom",
     "national_dex_number": 44,
-    "base_hp": 60,
-    "base_attack": 65,
-    "base_defense": 70,
-    "base_speed": 40,
-    "base_special_attack": 85,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0000010011100000101011000010000100010000011110000010001000000000"
   },
   "SPECIES_VILEPLUME": {
     "label": "Vileplume",
     "national_dex_number": 45,
-    "base_hp": 75,
-    "base_attack": 80,
-    "base_defense": 85,
-    "base_speed": 50,
-    "base_special_attack": 100,
-    "base_special_defense": 90,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010011100010101011000010000100010000011110000010001000000000"
   },
   "SPECIES_PARAS": {
     "label": "Paras",
     "national_dex_number": 46,
-    "base_hp": 35,
-    "base_attack": 70,
-    "base_defense": 55,
-    "base_speed": 25,
-    "base_special_attack": 45,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_EFFECT_SPORE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0000010011100000101011000011000100010001011111000010001100000000"
   },
   "SPECIES_PARASECT": {
     "label": "Parasect",
     "national_dex_number": 47,
-    "base_hp": 60,
-    "base_attack": 95,
-    "base_defense": 80,
-    "base_speed": 30,
-    "base_special_attack": 60,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_EFFECT_SPORE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0000010011100010101011000011000100010001011111000010001100000000"
   },
   "SPECIES_VENONAT": {
     "label": "Venonat",
     "national_dex_number": 48,
-    "base_hp": 60,
-    "base_attack": 55,
-    "base_defense": 50,
-    "base_speed": 45,
-    "base_special_attack": 40,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_COMPOUND_EYES",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0000010001100000101011000010100100010000011111010000001000000000"
   },
   "SPECIES_VENOMOTH": {
     "label": "Venomoth",
     "national_dex_number": 49,
-    "base_hp": 70,
-    "base_attack": 65,
-    "base_defense": 60,
-    "base_speed": 90,
-    "base_special_attack": 90,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_SHIELD_DUST",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0000010001100010101011000010100100010001011111010000001000000000"
   },
   "SPECIES_DIGLETT": {
     "label": "Diglett",
     "national_dex_number": 50,
-    "base_hp": 10,
-    "base_attack": 55,
-    "base_defense": 25,
-    "base_speed": 95,
-    "base_special_attack": 35,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_GROUND",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_SAND_VEIL",
-      "ABILITY_ARENA_TRAP"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010001100000100010000111000100010011011111000010000100000000"
   },
   "SPECIES_DUGTRIO": {
     "label": "Dugtrio",
     "national_dex_number": 51,
-    "base_hp": 35,
-    "base_attack": 80,
-    "base_defense": 50,
-    "base_speed": 120,
-    "base_special_attack": 50,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_GROUND",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_SAND_VEIL",
-      "ABILITY_ARENA_TRAP"
-    ],
-    "catch_rate": 50,
     "tm_hm_compatibility": "0000010001100010100010000111000100010011011111000010000100000000"
   },
   "SPECIES_MEOWTH": {
     "label": "Meowth",
     "national_dex_number": 52,
-    "base_hp": 40,
-    "base_attack": 45,
-    "base_defense": 35,
-    "base_speed": 90,
-    "base_special_attack": 40,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_PICKUP",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0010010001110000110010111011010101000001111111001010001000000000"
   },
   "SPECIES_PERSIAN": {
     "label": "Persian",
     "national_dex_number": 53,
-    "base_hp": 65,
-    "base_attack": 70,
-    "base_defense": 60,
-    "base_speed": 115,
-    "base_special_attack": 65,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_LIMBER",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "0010110001110010110010111011010101000001111111001010001000000000"
   },
   "SPECIES_PSYDUCK": {
     "label": "Psyduck",
     "national_dex_number": 54,
-    "base_hp": 50,
-    "base_attack": 52,
-    "base_defense": 48,
-    "base_speed": 55,
-    "base_special_attack": 65,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_DAMP",
-      "ABILITY_CLOUD_NINE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "1011011001001100110010100011001100000001011110000000111111000000"
   },
   "SPECIES_GOLDUCK": {
     "label": "Golduck",
     "national_dex_number": 55,
-    "base_hp": 80,
-    "base_attack": 82,
-    "base_defense": 78,
-    "base_speed": 85,
-    "base_special_attack": 95,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_DAMP",
-      "ABILITY_CLOUD_NINE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "1011011001001110110010100011001100000001011110000000111111000000"
   },
   "SPECIES_MANKEY": {
     "label": "Mankey",
     "national_dex_number": 56,
-    "base_hp": 40,
-    "base_attack": 80,
-    "base_defense": 35,
-    "base_speed": 70,
-    "base_special_attack": 35,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_FIGHTING",
-      "TYPE_FIGHTING"
-    ],
-    "abilities": [
-      "ABILITY_VITAL_SPIRIT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "1000010101110000110010111111001100000011011111000100010100000000"
   },
   "SPECIES_PRIMEAPE": {
     "label": "Primeape",
     "national_dex_number": 57,
-    "base_hp": 65,
-    "base_attack": 105,
-    "base_defense": 60,
-    "base_speed": 95,
-    "base_special_attack": 60,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_FIGHTING",
-      "TYPE_FIGHTING"
-    ],
-    "abilities": [
-      "ABILITY_VITAL_SPIRIT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "1000010101110010110010111111001100000011011111000100010100000000"
   },
   "SPECIES_GROWLITHE": {
     "label": "Growlithe",
     "national_dex_number": 58,
-    "base_hp": 55,
-    "base_attack": 70,
-    "base_defense": 45,
-    "base_speed": 60,
-    "base_special_attack": 70,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_INTIMIDATE",
-      "ABILITY_FLASH_FIRE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0000110001100000100010100011000100100101011111000100010100000000"
   },
   "SPECIES_ARCANINE": {
     "label": "Arcanine",
     "national_dex_number": 59,
-    "base_hp": 90,
-    "base_attack": 110,
-    "base_defense": 80,
-    "base_speed": 95,
-    "base_special_attack": 100,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_INTIMIDATE",
-      "ABILITY_FLASH_FIRE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0000110001100010100010100011000100100101011111000100010100000000"
   },
   "SPECIES_POLIWAG": {
     "label": "Poliwag",
     "national_dex_number": 60,
-    "base_hp": 40,
-    "base_attack": 50,
-    "base_defense": 40,
-    "base_speed": 90,
-    "base_special_attack": 40,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_WATER_ABSORB",
-      "ABILITY_DAMP"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0010011001001100110010000011100100000000011111000000100011000000"
   },
   "SPECIES_POLIWHIRL": {
     "label": "Poliwhirl",
     "national_dex_number": 61,
-    "base_hp": 65,
-    "base_attack": 65,
-    "base_defense": 65,
-    "base_speed": 90,
-    "base_special_attack": 50,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_WATER_ABSORB",
-      "ABILITY_DAMP"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "1010011001001100110010000111101100000000011111000000110111000000"
   },
   "SPECIES_POLIWRATH": {
     "label": "Poliwrath",
     "national_dex_number": 62,
-    "base_hp": 90,
-    "base_attack": 85,
-    "base_defense": 95,
-    "base_speed": 70,
-    "base_special_attack": 70,
-    "base_special_defense": 90,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_FIGHTING"
-    ],
-    "abilities": [
-      "ABILITY_WATER_ABSORB",
-      "ABILITY_DAMP"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1010011101001110110010000111101100000010011111000000110111000000"
   },
   "SPECIES_ABRA": {
     "label": "Abra",
     "national_dex_number": 63,
-    "base_hp": 25,
-    "base_attack": 20,
-    "base_defense": 15,
-    "base_speed": 90,
-    "base_special_attack": 105,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_SYNCHRONIZE",
-      "ABILITY_INNER_FOCUS"
-    ],
-    "catch_rate": 200,
     "tm_hm_compatibility": "1001010001110001110110100010110111000000111111011000001000000000"
   },
   "SPECIES_KADABRA": {
     "label": "Kadabra",
     "national_dex_number": 64,
-    "base_hp": 40,
-    "base_attack": 35,
-    "base_defense": 30,
-    "base_speed": 105,
-    "base_special_attack": 120,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_SYNCHRONIZE",
-      "ABILITY_INNER_FOCUS"
-    ],
-    "catch_rate": 100,
     "tm_hm_compatibility": "1001010001110001110110100010110111000000111111011000001000000000"
   },
   "SPECIES_ALAKAZAM": {
     "label": "Alakazam",
     "national_dex_number": 65,
-    "base_hp": 55,
-    "base_attack": 50,
-    "base_defense": 45,
-    "base_speed": 120,
-    "base_special_attack": 135,
-    "base_special_defense": 85,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_SYNCHRONIZE",
-      "ABILITY_INNER_FOCUS"
-    ],
-    "catch_rate": 50,
     "tm_hm_compatibility": "1001010001110011110110100010110111000000111111011000001000000000"
   },
   "SPECIES_MACHOP": {
     "label": "Machop",
     "national_dex_number": 66,
-    "base_hp": 70,
-    "base_attack": 80,
-    "base_defense": 50,
-    "base_speed": 35,
-    "base_special_attack": 35,
-    "base_special_defense": 35,
-    "types": [
-      "TYPE_FIGHTING",
-      "TYPE_FIGHTING"
-    ],
-    "abilities": [
-      "ABILITY_GUTS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 180,
     "tm_hm_compatibility": "1000010101100000110010000111001100100110011111000000010100000000"
   },
   "SPECIES_MACHOKE": {
     "label": "Machoke",
     "national_dex_number": 67,
-    "base_hp": 80,
-    "base_attack": 100,
-    "base_defense": 70,
-    "base_speed": 45,
-    "base_special_attack": 50,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_FIGHTING",
-      "TYPE_FIGHTING"
-    ],
-    "abilities": [
-      "ABILITY_GUTS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "1000010101100000110010000111001100100110011111000000010100000000"
   },
   "SPECIES_MACHAMP": {
     "label": "Machamp",
     "national_dex_number": 68,
-    "base_hp": 90,
-    "base_attack": 130,
-    "base_defense": 80,
-    "base_speed": 55,
-    "base_special_attack": 65,
-    "base_special_defense": 85,
-    "types": [
-      "TYPE_FIGHTING",
-      "TYPE_FIGHTING"
-    ],
-    "abilities": [
-      "ABILITY_GUTS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000010101100010110010000111001100100110011111000000010100000000"
   },
   "SPECIES_BELLSPROUT": {
     "label": "Bellsprout",
     "national_dex_number": 69,
-    "base_hp": 50,
-    "base_attack": 75,
-    "base_defense": 35,
-    "base_speed": 40,
-    "base_special_attack": 70,
-    "base_special_defense": 30,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010011100000101011000010000100010000011111000010001000000000"
   },
   "SPECIES_WEEPINBELL": {
     "label": "Weepinbell",
     "national_dex_number": 70,
-    "base_hp": 65,
-    "base_attack": 90,
-    "base_defense": 50,
-    "base_speed": 55,
-    "base_special_attack": 85,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0000010011100000101011000010000100010000011111000010001000000000"
   },
   "SPECIES_VICTREEBEL": {
     "label": "Victreebel",
     "national_dex_number": 71,
-    "base_hp": 80,
-    "base_attack": 105,
-    "base_defense": 65,
-    "base_speed": 70,
-    "base_special_attack": 100,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010011100010101011000010000100010000011111000010001000000000"
   },
   "SPECIES_TENTACOOL": {
     "label": "Tentacool",
     "national_dex_number": 72,
-    "base_hp": 40,
-    "base_attack": 40,
-    "base_defense": 35,
-    "base_speed": 70,
-    "base_special_attack": 50,
-    "base_special_defense": 100,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_CLEAR_BODY",
-      "ABILITY_LIQUID_OOZE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0010011001001100111010000010000100010000011111000010100011000000"
   },
   "SPECIES_TENTACRUEL": {
     "label": "Tentacruel",
     "national_dex_number": 73,
-    "base_hp": 80,
-    "base_attack": 70,
-    "base_defense": 65,
-    "base_speed": 100,
-    "base_special_attack": 80,
-    "base_special_defense": 120,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_CLEAR_BODY",
-      "ABILITY_LIQUID_OOZE"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0010011001001110111010000010000100010000011111000010100011000000"
   },
   "SPECIES_GEODUDE": {
     "label": "Geodude",
     "national_dex_number": 74,
-    "base_hp": 40,
-    "base_attack": 80,
-    "base_defense": 100,
-    "base_speed": 20,
-    "base_special_attack": 30,
-    "base_special_defense": 30,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_ROCK_HEAD",
-      "ABILITY_STURDY"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "1000010001100000100010000111001100101110011110000000010100000000"
   },
   "SPECIES_GRAVELER": {
     "label": "Graveler",
     "national_dex_number": 75,
-    "base_hp": 55,
-    "base_attack": 95,
-    "base_defense": 115,
-    "base_speed": 35,
-    "base_special_attack": 45,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_ROCK_HEAD",
-      "ABILITY_STURDY"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "1000010001100000100010000111001100101110011110000000010100000000"
   },
   "SPECIES_GOLEM": {
     "label": "Golem",
     "national_dex_number": 76,
-    "base_hp": 80,
-    "base_attack": 110,
-    "base_defense": 130,
-    "base_speed": 45,
-    "base_special_attack": 55,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_ROCK_HEAD",
-      "ABILITY_STURDY"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000110001100010100010000111001100101110011110000000010100000000"
   },
   "SPECIES_PONYTA": {
     "label": "Ponyta",
     "national_dex_number": 77,
-    "base_hp": 50,
-    "base_attack": 85,
-    "base_defense": 55,
-    "base_speed": 90,
-    "base_special_attack": 65,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_RUN_AWAY",
-      "ABILITY_FLASH_FIRE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0000010001100000100011100010000100100100011110000100010000000000"
   },
   "SPECIES_RAPIDASH": {
     "label": "Rapidash",
     "national_dex_number": 78,
-    "base_hp": 65,
-    "base_attack": 100,
-    "base_defense": 70,
-    "base_speed": 105,
-    "base_special_attack": 80,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_RUN_AWAY",
-      "ABILITY_FLASH_FIRE"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0000010001100010100011100010000100100100011110000100010000000000"
   },
   "SPECIES_SLOWPOKE": {
     "label": "Slowpoke",
     "national_dex_number": 79,
-    "base_hp": 90,
-    "base_attack": 65,
-    "base_defense": 65,
-    "base_speed": 15,
-    "base_special_attack": 40,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_OBLIVIOUS",
-      "ABILITY_OWN_TEMPO"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0011011001101100110110100111110100100100011110010000111001000000"
   },
   "SPECIES_SLOWBRO": {
     "label": "Slowbro",
     "national_dex_number": 80,
-    "base_hp": 95,
-    "base_attack": 75,
-    "base_defense": 110,
-    "base_speed": 30,
-    "base_special_attack": 100,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_OBLIVIOUS",
-      "ABILITY_OWN_TEMPO"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "1011011001101110110110100111111100100100011110010000111101000000"
   },
   "SPECIES_MAGNEMITE": {
     "label": "Magnemite",
     "national_dex_number": 81,
-    "base_hp": 25,
-    "base_attack": 35,
-    "base_defense": 70,
-    "base_speed": 45,
-    "base_special_attack": 95,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_STEEL"
-    ],
-    "abilities": [
-      "ABILITY_MAGNET_PULL",
-      "ABILITY_STURDY"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0000010001100000110010011010000111000000011100000000001000000000"
   },
   "SPECIES_MAGNETON": {
     "label": "Magneton",
     "national_dex_number": 82,
-    "base_hp": 50,
-    "base_attack": 60,
-    "base_defense": 95,
-    "base_speed": 70,
-    "base_special_attack": 120,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_STEEL"
-    ],
-    "abilities": [
-      "ABILITY_MAGNET_PULL",
-      "ABILITY_STURDY"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0000010001100010110010011010000111000000011100000000001000000000"
   },
   "SPECIES_FARFETCHD": {
     "label": "Farfetch'd",
     "national_dex_number": 83,
-    "base_hp": 52,
-    "base_attack": 65,
-    "base_defense": 55,
-    "base_speed": 60,
-    "base_special_attack": 58,
-    "base_special_defense": 62,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_KEEN_EYE",
-      "ABILITY_INNER_FOCUS"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001100000100010100010000100000001011111100011000000000000"
   },
   "SPECIES_DODUO": {
     "label": "Doduo",
     "national_dex_number": 84,
-    "base_hp": 35,
-    "base_attack": 85,
-    "base_defense": 45,
-    "base_speed": 75,
-    "base_special_attack": 35,
-    "base_special_defense": 35,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_RUN_AWAY",
-      "ABILITY_EARLY_BIRD"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0000010001100000100010000010000100000001011111100001000000000000"
   },
   "SPECIES_DODRIO": {
     "label": "Dodrio",
     "national_dex_number": 85,
-    "base_hp": 60,
-    "base_attack": 110,
-    "base_defense": 70,
-    "base_speed": 100,
-    "base_special_attack": 60,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_RUN_AWAY",
-      "ABILITY_EARLY_BIRD"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001110010100010000010000100000001111111100001000000000000"
   },
   "SPECIES_SEEL": {
     "label": "Seel",
     "national_dex_number": 86,
-    "base_hp": 65,
-    "base_attack": 45,
-    "base_defense": 55,
-    "base_speed": 45,
-    "base_special_attack": 45,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_THICK_FAT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0010011001001100110110000010000100000000011111000000100011000000"
   },
   "SPECIES_DEWGONG": {
     "label": "Dewgong",
     "national_dex_number": 87,
-    "base_hp": 90,
-    "base_attack": 70,
-    "base_defense": 80,
-    "base_speed": 70,
-    "base_special_attack": 70,
-    "base_special_defense": 95,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_ICE"
-    ],
-    "abilities": [
-      "ABILITY_THICK_FAT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0010011001001110110110000010000100000000011111000000100011000000"
   },
   "SPECIES_GRIMER": {
     "label": "Grimer",
     "national_dex_number": 88,
-    "base_hp": 80,
-    "base_attack": 80,
-    "base_defense": 50,
-    "base_speed": 25,
-    "base_special_attack": 40,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_STENCH",
-      "ABILITY_STICKY_HOLD"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0000010001110000111010011011000101110110111111000000000000000000"
   },
   "SPECIES_MUK": {
     "label": "Muk",
     "national_dex_number": 89,
-    "base_hp": 105,
-    "base_attack": 105,
-    "base_defense": 75,
-    "base_speed": 50,
-    "base_special_attack": 65,
-    "base_special_defense": 100,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_STENCH",
-      "ABILITY_STICKY_HOLD"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "1000010001110010111010011011001101110110111111000000010100000000"
   },
   "SPECIES_SHELLDER": {
     "label": "Shellder",
     "national_dex_number": 90,
-    "base_hp": 30,
-    "base_attack": 65,
-    "base_defense": 100,
-    "base_speed": 40,
-    "base_special_attack": 45,
-    "base_special_defense": 25,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_SHELL_ARMOR",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0010011001001100110010000010000100000000011110000000100001000000"
   },
   "SPECIES_CLOYSTER": {
     "label": "Cloyster",
     "national_dex_number": 91,
-    "base_hp": 50,
-    "base_attack": 95,
-    "base_defense": 180,
-    "base_speed": 70,
-    "base_special_attack": 85,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_ICE"
-    ],
-    "abilities": [
-      "ABILITY_SHELL_ARMOR",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0010011001001110110010000010000100000000111110000000100001000000"
   },
   "SPECIES_GASTLY": {
     "label": "Gastly",
     "national_dex_number": 92,
-    "base_hp": 30,
-    "base_attack": 35,
-    "base_defense": 30,
-    "base_speed": 80,
-    "base_special_attack": 100,
-    "base_special_defense": 35,
-    "types": [
-      "TYPE_GHOST",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_LEVITATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0000010001110000111010010010110100010000111111011000000000000000"
   },
   "SPECIES_HAUNTER": {
     "label": "Haunter",
     "national_dex_number": 93,
-    "base_hp": 45,
-    "base_attack": 50,
-    "base_defense": 45,
-    "base_speed": 95,
-    "base_special_attack": 115,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_GHOST",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_LEVITATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "0000010001110000111010010010110100010000111111011000000000000000"
   },
   "SPECIES_GENGAR": {
     "label": "Gengar",
     "national_dex_number": 94,
-    "base_hp": 60,
-    "base_attack": 65,
-    "base_defense": 60,
-    "base_speed": 110,
-    "base_special_attack": 130,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_GHOST",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_LEVITATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000010001110010111010011010111100010000111111011000010100000000"
   },
   "SPECIES_ONIX": {
     "label": "Onix",
     "national_dex_number": 95,
-    "base_hp": 35,
-    "base_attack": 45,
-    "base_defense": 160,
-    "base_speed": 70,
-    "base_special_attack": 30,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_ROCK_HEAD",
-      "ABILITY_STURDY"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000110001110000100010100111000100001010111110000000010100000000"
   },
   "SPECIES_DROWZEE": {
     "label": "Drowzee",
     "national_dex_number": 96,
-    "base_hp": 60,
-    "base_attack": 48,
-    "base_defense": 45,
-    "base_speed": 42,
-    "base_special_attack": 43,
-    "base_special_defense": 90,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_INSOMNIA",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "1001010001110001110110000010111110000000111111011000001000000000"
   },
   "SPECIES_HYPNO": {
     "label": "Hypno",
     "national_dex_number": 97,
-    "base_hp": 85,
-    "base_attack": 73,
-    "base_defense": 70,
-    "base_speed": 67,
-    "base_special_attack": 73,
-    "base_special_defense": 115,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_INSOMNIA",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "1001010001110011110110000010111110000000111111011000001000000000"
   },
   "SPECIES_KRABBY": {
     "label": "Krabby",
     "national_dex_number": 98,
-    "base_hp": 30,
-    "base_attack": 105,
-    "base_defense": 90,
-    "base_speed": 50,
-    "base_special_attack": 25,
-    "base_special_defense": 25,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_HYPER_CUTTER",
-      "ABILITY_SHELL_ARMOR"
-    ],
-    "catch_rate": 225,
     "tm_hm_compatibility": "0010011001001100110010000011000100000010011111000010110101000000"
   },
   "SPECIES_KINGLER": {
     "label": "Kingler",
     "national_dex_number": 99,
-    "base_hp": 55,
-    "base_attack": 130,
-    "base_defense": 115,
-    "base_speed": 75,
-    "base_special_attack": 50,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_HYPER_CUTTER",
-      "ABILITY_SHELL_ARMOR"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0010011001001110110010000011000100000010011111000010110101000000"
   },
   "SPECIES_VOLTORB": {
     "label": "Voltorb",
     "national_dex_number": 100,
-    "base_hp": 40,
-    "base_attack": 30,
-    "base_defense": 50,
-    "base_speed": 100,
-    "base_special_attack": 55,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_SOUNDPROOF",
-      "ABILITY_STATIC"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0000010001010001110010011010000101000000111101000000001000000000"
   },
   "SPECIES_ELECTRODE": {
     "label": "Electrode",
     "national_dex_number": 101,
-    "base_hp": 60,
-    "base_attack": 50,
-    "base_defense": 70,
-    "base_speed": 140,
-    "base_special_attack": 80,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_SOUNDPROOF",
-      "ABILITY_STATIC"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0000010001010011110010011010000101000000111101000000001000000000"
   },
   "SPECIES_EXEGGCUTE": {
     "label": "Exeggcute",
     "national_dex_number": 102,
-    "base_hp": 60,
-    "base_attack": 40,
-    "base_defense": 80,
-    "base_speed": 40,
-    "base_special_attack": 60,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "0000010011100001101011000010100110010000011111010000011000000000"
   },
   "SPECIES_EXEGGUTOR": {
     "label": "Exeggutor",
     "national_dex_number": 103,
-    "base_hp": 95,
-    "base_attack": 95,
-    "base_defense": 85,
-    "base_speed": 55,
-    "base_special_attack": 125,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010011100011101011000010100110010000011111010000011000000000"
   },
   "SPECIES_CUBONE": {
     "label": "Cubone",
     "national_dex_number": 104,
-    "base_hp": 50,
-    "base_attack": 50,
-    "base_defense": 95,
-    "base_speed": 35,
-    "base_special_attack": 40,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_GROUND",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_ROCK_HEAD",
-      "ABILITY_LIGHTNING_ROD"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "1000010001101100100010100111001100101111011111000000010100000000"
   },
   "SPECIES_MAROWAK": {
     "label": "Marowak",
     "national_dex_number": 105,
-    "base_hp": 60,
-    "base_attack": 80,
-    "base_defense": 110,
-    "base_speed": 45,
-    "base_special_attack": 50,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_GROUND",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_ROCK_HEAD",
-      "ABILITY_LIGHTNING_ROD"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "1000010001101110100010100111001100101111011111000000010100000000"
   },
   "SPECIES_HITMONLEE": {
     "label": "Hitmonlee",
     "national_dex_number": 106,
-    "base_hp": 50,
-    "base_attack": 120,
-    "base_defense": 53,
-    "base_speed": 87,
-    "base_special_attack": 35,
-    "base_special_defense": 110,
-    "types": [
-      "TYPE_FIGHTING",
-      "TYPE_FIGHTING"
-    ],
-    "abilities": [
-      "ABILITY_LIMBER",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000010101100000110010000110001100000010011111000000010100000000"
   },
   "SPECIES_HITMONCHAN": {
     "label": "Hitmonchan",
     "national_dex_number": 107,
-    "base_hp": 50,
-    "base_attack": 105,
-    "base_defense": 79,
-    "base_speed": 76,
-    "base_special_attack": 35,
-    "base_special_defense": 110,
-    "types": [
-      "TYPE_FIGHTING",
-      "TYPE_FIGHTING"
-    ],
-    "abilities": [
-      "ABILITY_KEEN_EYE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000010101100000110010000110001100000010011111000000010100000000"
   },
   "SPECIES_LICKITUNG": {
     "label": "Lickitung",
     "national_dex_number": 108,
-    "base_hp": 90,
-    "base_attack": 55,
-    "base_defense": 75,
-    "base_speed": 30,
-    "base_special_attack": 60,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_OWN_TEMPO",
-      "ABILITY_OBLIVIOUS"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1010010001101110110011111111011101101110011111000010110100000000"
   },
   "SPECIES_KOFFING": {
     "label": "Koffing",
     "national_dex_number": 109,
-    "base_hp": 40,
-    "base_attack": 65,
-    "base_defense": 95,
-    "base_speed": 35,
-    "base_special_attack": 60,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_LEVITATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0000010001110000110010011010010101110100111111000000001000000000"
   },
   "SPECIES_WEEZING": {
     "label": "Weezing",
     "national_dex_number": 110,
-    "base_hp": 65,
-    "base_attack": 90,
-    "base_defense": 120,
-    "base_speed": 60,
-    "base_special_attack": 85,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_LEVITATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0000010001110010110010011010010101110100111111000000001000000000"
   },
   "SPECIES_RHYHORN": {
     "label": "Rhyhorn",
     "national_dex_number": 111,
-    "base_hp": 80,
-    "base_attack": 85,
-    "base_defense": 95,
-    "base_speed": 25,
-    "base_special_attack": 30,
-    "base_special_defense": 30,
-    "types": [
-      "TYPE_GROUND",
-      "TYPE_ROCK"
-    ],
-    "abilities": [
-      "ABILITY_LIGHTNING_ROD",
-      "ABILITY_ROCK_HEAD"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0000110001101100110010111111000101101110011111000000010100000000"
   },
   "SPECIES_RHYDON": {
     "label": "Rhydon",
     "national_dex_number": 112,
-    "base_hp": 105,
-    "base_attack": 130,
-    "base_defense": 120,
-    "base_speed": 40,
-    "base_special_attack": 45,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_GROUND",
-      "TYPE_ROCK"
-    ],
-    "abilities": [
-      "ABILITY_LIGHTNING_ROD",
-      "ABILITY_ROCK_HEAD"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "1000110001101110110010111111001101101110011111000010110100000000"
   },
   "SPECIES_CHANSEY": {
     "label": "Chansey",
     "national_dex_number": 113,
-    "base_hp": 250,
-    "base_attack": 5,
-    "base_defense": 5,
-    "base_speed": 50,
-    "base_special_attack": 35,
-    "base_special_defense": 105,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_NATURAL_CURE",
-      "ABILITY_SERENE_GRACE"
-    ],
-    "catch_rate": 30,
     "tm_hm_compatibility": "1011011001101111110111111110111101101110011110011000011100000000"
   },
   "SPECIES_TANGELA": {
     "label": "Tangela",
     "national_dex_number": 114,
-    "base_hp": 65,
-    "base_attack": 55,
-    "base_defense": 115,
-    "base_speed": 60,
-    "base_special_attack": 100,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010011100010101011000010000100010000011111000010001100000000"
   },
   "SPECIES_KANGASKHAN": {
     "label": "Kangaskhan",
     "national_dex_number": 115,
-    "base_hp": 105,
-    "base_attack": 95,
-    "base_defense": 80,
-    "base_speed": 90,
-    "base_special_attack": 40,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_EARLY_BIRD",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1010111001101110110011111111011101101111011111000010110100000000"
   },
   "SPECIES_HORSEA": {
     "label": "Horsea",
     "national_dex_number": 116,
-    "base_hp": 30,
-    "base_attack": 40,
-    "base_defense": 70,
-    "base_speed": 60,
-    "base_special_attack": 70,
-    "base_special_defense": 25,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 225,
     "tm_hm_compatibility": "0010011001001100110010000010000100000000011110000000100011000000"
   },
   "SPECIES_SEADRA": {
     "label": "Seadra",
     "national_dex_number": 117,
-    "base_hp": 55,
-    "base_attack": 65,
-    "base_defense": 95,
-    "base_speed": 85,
-    "base_special_attack": 95,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_POISON_POINT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0010011001001110110010000010000100000000011110000000100011000000"
   },
   "SPECIES_GOLDEEN": {
     "label": "Goldeen",
     "national_dex_number": 118,
-    "base_hp": 45,
-    "base_attack": 67,
-    "base_defense": 60,
-    "base_speed": 63,
-    "base_special_attack": 35,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_WATER_VEIL"
-    ],
-    "catch_rate": 225,
     "tm_hm_compatibility": "0010011001001100110010000010000100000000011110000000100011000000"
   },
   "SPECIES_SEAKING": {
     "label": "Seaking",
     "national_dex_number": 119,
-    "base_hp": 80,
-    "base_attack": 92,
-    "base_defense": 65,
-    "base_speed": 68,
-    "base_special_attack": 65,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_WATER_VEIL"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0010011001001110110010000010000100000000011110000000100011000000"
   },
   "SPECIES_STARYU": {
     "label": "Staryu",
     "national_dex_number": 120,
-    "base_hp": 30,
-    "base_attack": 45,
-    "base_defense": 55,
-    "base_speed": 85,
-    "base_special_attack": 70,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_ILLUMINATE",
-      "ABILITY_NATURAL_CURE"
-    ],
-    "catch_rate": 225,
     "tm_hm_compatibility": "0010011001001101110010011010100110000000011100000000101011000000"
   },
   "SPECIES_STARMIE": {
     "label": "Starmie",
     "national_dex_number": 121,
-    "base_hp": 60,
-    "base_attack": 75,
-    "base_defense": 85,
-    "base_speed": 115,
-    "base_special_attack": 100,
-    "base_special_defense": 85,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_ILLUMINATE",
-      "ABILITY_NATURAL_CURE"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0010011001001111110010011010100110000000011100010000101011000000"
   },
   "SPECIES_MR_MIME": {
     "label": "Mr. Mime",
     "national_dex_number": 122,
-    "base_hp": 40,
-    "base_attack": 45,
-    "base_defense": 65,
-    "base_speed": 90,
-    "base_special_attack": 100,
-    "base_special_defense": 120,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_SOUNDPROOF",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1001010001110011110111011010111111000000111111011000001000000000"
   },
   "SPECIES_SCYTHER": {
     "label": "Scyther",
     "national_dex_number": 123,
-    "base_hp": 70,
-    "base_attack": 110,
-    "base_defense": 80,
-    "base_speed": 105,
-    "base_special_attack": 55,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_SWARM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001100010110010000010000100000001011111100010000100000000"
   },
   "SPECIES_JYNX": {
     "label": "Jynx",
     "national_dex_number": 124,
-    "base_hp": 65,
-    "base_attack": 50,
-    "base_defense": 35,
-    "base_speed": 95,
-    "base_special_attack": 115,
-    "base_special_defense": 95,
-    "types": [
-      "TYPE_ICE",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_OBLIVIOUS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1011011001011111110010000010111110000000111111010000001000000000"
   },
   "SPECIES_ELECTABUZZ": {
     "label": "Electabuzz",
     "national_dex_number": 125,
-    "base_hp": 65,
-    "base_attack": 83,
-    "base_defense": 57,
-    "base_speed": 105,
-    "base_special_attack": 95,
-    "base_special_defense": 85,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_STATIC",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000010001000011110010111010101101000000011111000000011100000000"
   },
   "SPECIES_MAGMAR": {
     "label": "Magmar",
     "national_dex_number": 126,
-    "base_hp": 65,
-    "base_attack": 95,
-    "base_defense": 57,
-    "base_speed": 93,
-    "base_special_attack": 100,
-    "base_special_defense": 85,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_FLAME_BODY",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000010001100010100010100010101100100100011111000000010100000000"
   },
   "SPECIES_PINSIR": {
     "label": "Pinsir",
     "national_dex_number": 127,
-    "base_hp": 65,
-    "base_attack": 125,
-    "base_defense": 100,
-    "base_speed": 85,
-    "base_special_attack": 55,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_BUG"
-    ],
-    "abilities": [
-      "ABILITY_HYPER_CUTTER",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000010101100010110010000111001100000010011111000010010100000000"
   },
   "SPECIES_TAUROS": {
     "label": "Tauros",
     "national_dex_number": 128,
-    "base_hp": 75,
-    "base_attack": 100,
-    "base_defense": 95,
-    "base_speed": 110,
-    "base_special_attack": 40,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_INTIMIDATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010010001101110110011111110000101101110011110000000110100000000"
   },
   "SPECIES_MAGIKARP": {
     "label": "Magikarp",
     "national_dex_number": 129,
-    "base_hp": 20,
-    "base_attack": 10,
-    "base_defense": 55,
-    "base_speed": 80,
-    "base_special_attack": 15,
-    "base_special_defense": 20,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_GYARADOS": {
     "label": "Gyarados",
     "national_dex_number": 130,
-    "base_hp": 95,
-    "base_attack": 125,
-    "base_defense": 79,
-    "base_speed": 81,
-    "base_special_attack": 60,
-    "base_special_defense": 100,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_INTIMIDATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010111001011110110010011110000100101100111110000000110111000000"
   },
   "SPECIES_LAPRAS": {
     "label": "Lapras",
     "national_dex_number": 131,
-    "base_hp": 130,
-    "base_attack": 85,
-    "base_defense": 80,
-    "base_speed": 60,
-    "base_special_attack": 85,
-    "base_special_defense": 95,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_ICE"
-    ],
-    "abilities": [
-      "ABILITY_WATER_ABSORB",
-      "ABILITY_SHELL_ARMOR"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010111001001110110110111010100101000000011110000000110111000000"
   },
   "SPECIES_DITTO": {
     "label": "Ditto",
     "national_dex_number": 132,
-    "base_hp": 48,
-    "base_attack": 48,
-    "base_defense": 48,
-    "base_speed": 48,
-    "base_special_attack": 48,
-    "base_special_defense": 48,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_LIMBER",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 35,
     "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_EEVEE": {
     "label": "Eevee",
     "national_dex_number": 133,
-    "base_hp": 55,
-    "base_attack": 55,
-    "base_defense": 50,
-    "base_speed": 55,
-    "base_special_attack": 45,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_RUN_AWAY",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001100000110010100011010100000000011110000000000000000000"
   },
   "SPECIES_VAPOREON": {
     "label": "Vaporeon",
     "national_dex_number": 134,
-    "base_hp": 130,
-    "base_attack": 65,
-    "base_defense": 60,
-    "base_speed": 65,
-    "base_special_attack": 110,
-    "base_special_defense": 95,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_WATER_ABSORB",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010111001101110110010100011010100000000011110000000100011000000"
   },
   "SPECIES_JOLTEON": {
     "label": "Jolteon",
     "national_dex_number": 135,
-    "base_hp": 65,
-    "base_attack": 65,
-    "base_defense": 60,
-    "base_speed": 130,
-    "base_special_attack": 110,
-    "base_special_defense": 95,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_VOLT_ABSORB",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000110001100010110010111011010101000000011110000000001000000000"
   },
   "SPECIES_FLAREON": {
     "label": "Flareon",
     "national_dex_number": 136,
-    "base_hp": 65,
-    "base_attack": 130,
-    "base_defense": 60,
-    "base_speed": 65,
-    "base_special_attack": 95,
-    "base_special_defense": 110,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_FLASH_FIRE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000110001100010110010100011010100100100011110000100000000000000"
   },
   "SPECIES_PORYGON": {
     "label": "Porygon",
     "national_dex_number": 137,
-    "base_hp": 65,
-    "base_attack": 60,
-    "base_defense": 70,
-    "base_speed": 40,
-    "base_special_attack": 85,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_TRACE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001101110110011111010110101000001011101000000001000000000"
   },
   "SPECIES_OMANYTE": {
     "label": "Omanyte",
     "national_dex_number": 138,
-    "base_hp": 35,
-    "base_attack": 40,
-    "base_defense": 100,
-    "base_speed": 35,
-    "base_special_attack": 90,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_SHELL_ARMOR"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010011001001100110010000010000100001010011111000000100111000000"
   },
   "SPECIES_OMASTAR": {
     "label": "Omastar",
     "national_dex_number": 139,
-    "base_hp": 70,
-    "base_attack": 60,
-    "base_defense": 125,
-    "base_speed": 55,
-    "base_special_attack": 115,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_SHELL_ARMOR"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010011001001110110010000010000100001010011111000000100111000000"
   },
   "SPECIES_KABUTO": {
     "label": "Kabuto",
     "national_dex_number": 140,
-    "base_hp": 30,
-    "base_attack": 80,
-    "base_defense": 90,
-    "base_speed": 55,
-    "base_special_attack": 55,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_BATTLE_ARMOR"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010011001001100111010000011000100001011011111000000100110000000"
   },
   "SPECIES_KABUTOPS": {
     "label": "Kabutops",
     "national_dex_number": 141,
-    "base_hp": 60,
-    "base_attack": 115,
-    "base_defense": 105,
-    "base_speed": 80,
-    "base_special_attack": 65,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_BATTLE_ARMOR"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010011001001110111010000011001100001011011111000010100111000000"
   },
   "SPECIES_AERODACTYL": {
     "label": "Aerodactyl",
     "national_dex_number": 142,
-    "base_hp": 80,
-    "base_attack": 105,
-    "base_defense": 65,
-    "base_speed": 130,
-    "base_special_attack": 60,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_ROCK_HEAD",
-      "ABILITY_PRESSURE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0100110001110010110010100110000100101111111111100001010100000000"
   },
   "SPECIES_SNORLAX": {
     "label": "Snorlax",
     "national_dex_number": 143,
-    "base_hp": 160,
-    "base_attack": 110,
-    "base_defense": 65,
-    "base_speed": 30,
-    "base_special_attack": 65,
-    "base_special_defense": 110,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_IMMUNITY",
-      "ABILITY_THICK_FAT"
-    ],
-    "catch_rate": 25,
     "tm_hm_compatibility": "1010010001101110110011011110111101101110011110000000110000000000"
   },
   "SPECIES_ARTICUNO": {
     "label": "Articuno",
     "national_dex_number": 144,
-    "base_hp": 90,
-    "base_attack": 85,
-    "base_defense": 100,
-    "base_speed": 85,
-    "base_special_attack": 95,
-    "base_special_defense": 125,
-    "types": [
-      "TYPE_ICE",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_PRESSURE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "0010111001101110110010000010000110001001011100100001000100000000"
   },
   "SPECIES_ZAPDOS": {
     "label": "Zapdos",
     "national_dex_number": 145,
-    "base_hp": 90,
-    "base_attack": 90,
-    "base_defense": 85,
-    "base_speed": 100,
-    "base_special_attack": 125,
-    "base_special_defense": 90,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_PRESSURE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "0000110001100011110010011010000101001001011100100001001100000000"
   },
   "SPECIES_MOLTRES": {
     "label": "Moltres",
     "national_dex_number": 146,
-    "base_hp": 90,
-    "base_attack": 100,
-    "base_defense": 90,
-    "base_speed": 90,
-    "base_special_attack": 125,
-    "base_special_defense": 85,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_PRESSURE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "0000110001100010110110000010000100101101011100100101000100000000"
   },
   "SPECIES_DRATINI": {
     "label": "Dratini",
     "national_dex_number": 147,
-    "base_hp": 41,
-    "base_attack": 64,
-    "base_defense": 45,
-    "base_speed": 50,
-    "base_special_attack": 50,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_DRAGON",
-      "TYPE_DRAGON"
-    ],
-    "abilities": [
-      "ABILITY_SHED_SKIN",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010011001101110110110111010000101100100011110000000100010000000"
   },
   "SPECIES_DRAGONAIR": {
     "label": "Dragonair",
     "national_dex_number": 148,
-    "base_hp": 61,
-    "base_attack": 84,
-    "base_defense": 65,
-    "base_speed": 70,
-    "base_special_attack": 70,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_DRAGON",
-      "TYPE_DRAGON"
-    ],
-    "abilities": [
-      "ABILITY_SHED_SKIN",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010011001101110110110111010000101100100011110000000100010000000"
   },
   "SPECIES_DRAGONITE": {
     "label": "Dragonite",
     "national_dex_number": 149,
-    "base_hp": 91,
-    "base_attack": 134,
-    "base_defense": 95,
-    "base_speed": 80,
-    "base_special_attack": 100,
-    "base_special_defense": 100,
-    "types": [
-      "TYPE_DRAGON",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_INNER_FOCUS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1110111001101110110110111110001101101111011110100011110111000000"
   },
   "SPECIES_MEWTWO": {
     "label": "Mewtwo",
     "national_dex_number": 150,
-    "base_hp": 106,
-    "base_attack": 110,
-    "base_defense": 90,
-    "base_speed": 130,
-    "base_special_attack": 154,
-    "base_special_defense": 90,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_PRESSURE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "1011011101111111110111111110111111101111111100011000011100000000"
   },
   "SPECIES_MEW": {
     "label": "Mew",
     "national_dex_number": 151,
-    "base_hp": 100,
-    "base_attack": 100,
-    "base_defense": 100,
-    "base_speed": 100,
-    "base_special_attack": 100,
-    "base_special_defense": 100,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_SYNCHRONIZE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1111111111111111111111111111111111111111111111111111111111000000"
   },
   "SPECIES_CHIKORITA": {
     "label": "Chikorita",
     "national_dex_number": 152,
-    "base_hp": 45,
-    "base_attack": 49,
-    "base_defense": 65,
-    "base_speed": 45,
-    "base_special_attack": 49,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_OVERGROW",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010011100001101111100010000110000000011110000010001000000000"
   },
   "SPECIES_BAYLEEF": {
     "label": "Bayleaf",
     "national_dex_number": 153,
-    "base_hp": 60,
-    "base_attack": 62,
-    "base_defense": 80,
-    "base_speed": 60,
-    "base_special_attack": 63,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_OVERGROW",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010011100001101111100010000110000000011110000010011100000000"
   },
   "SPECIES_MEGANIUM": {
     "label": "Meganium",
     "national_dex_number": 154,
-    "base_hp": 80,
-    "base_attack": 82,
-    "base_defense": 100,
-    "base_speed": 80,
-    "base_special_attack": 83,
-    "base_special_defense": 100,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_OVERGROW",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010011100011101111100110000110000000011110000010011100000000"
   },
   "SPECIES_CYNDAQUIL": {
     "label": "Cindaquil",
     "national_dex_number": 155,
-    "base_hp": 39,
-    "base_attack": 52,
-    "base_defense": 43,
-    "base_speed": 65,
-    "base_special_attack": 60,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_BLAZE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001100000100010000011000100100101011110000110000000000000"
   },
   "SPECIES_QUILAVA": {
     "label": "Quilava",
     "national_dex_number": 156,
-    "base_hp": 58,
-    "base_attack": 64,
-    "base_defense": 58,
-    "base_speed": 80,
-    "base_special_attack": 80,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_BLAZE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000110001100000100010000011001100100101011110000110010100000000"
   },
   "SPECIES_TYPHLOSION": {
     "label": "Typhlosion",
     "national_dex_number": 157,
-    "base_hp": 78,
-    "base_attack": 84,
-    "base_defense": 78,
-    "base_speed": 100,
-    "base_special_attack": 109,
-    "base_special_defense": 85,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_BLAZE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000110001100010100010000111001100100101011110000110010100000000"
   },
   "SPECIES_TOTODILE": {
     "label": "Totodile",
     "national_dex_number": 158,
-    "base_hp": 50,
-    "base_attack": 65,
-    "base_defense": 64,
-    "base_speed": 43,
-    "base_special_attack": 44,
-    "base_special_defense": 48,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_TORRENT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1010011001001100110010100011001100000001011110000010100011000000"
   },
   "SPECIES_CROCONAW": {
     "label": "Croconaw",
     "national_dex_number": 159,
-    "base_hp": 65,
-    "base_attack": 80,
-    "base_defense": 80,
-    "base_speed": 58,
-    "base_special_attack": 59,
-    "base_special_defense": 63,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_TORRENT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1010111001001100110010100011001100000001011110000010110111000000"
   },
   "SPECIES_FERALIGATR": {
     "label": "Feraligatr",
     "national_dex_number": 160,
-    "base_hp": 85,
-    "base_attack": 105,
-    "base_defense": 100,
-    "base_speed": 78,
-    "base_special_attack": 79,
-    "base_special_defense": 83,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_TORRENT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1110111001001110110010100111001100000001011110000010110111000000"
   },
   "SPECIES_SENTRET": {
     "label": "Sentret",
     "national_dex_number": 161,
-    "base_hp": 35,
-    "base_attack": 46,
-    "base_defense": 34,
-    "base_speed": 20,
-    "base_special_attack": 35,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_RUN_AWAY",
-      "ABILITY_KEEN_EYE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "1010010001101000110011110011011101100000011111000010100000000000"
   },
   "SPECIES_FURRET": {
     "label": "Furret",
     "national_dex_number": 162,
-    "base_hp": 85,
-    "base_attack": 76,
-    "base_defense": 64,
-    "base_speed": 90,
-    "base_special_attack": 45,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_RUN_AWAY",
-      "ABILITY_KEEN_EYE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "1010010001101110110011111011011101100000011111000010110100000000"
   },
   "SPECIES_HOOTHOOT": {
     "label": "Hoothoot",
     "national_dex_number": 163,
-    "base_hp": 60,
-    "base_attack": 30,
-    "base_defense": 30,
-    "base_speed": 50,
-    "base_special_attack": 36,
-    "base_special_defense": 56,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_INSOMNIA",
-      "ABILITY_KEEN_EYE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010001100000110010000010110110000001011111100001001000000000"
   },
   "SPECIES_NOCTOWL": {
     "label": "Noctowl",
     "national_dex_number": 164,
-    "base_hp": 100,
-    "base_attack": 50,
-    "base_defense": 50,
-    "base_speed": 70,
-    "base_special_attack": 76,
-    "base_special_defense": 96,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_INSOMNIA",
-      "ABILITY_KEEN_EYE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "0000010001100010110010000010110110000001011111100001001000000000"
   },
   "SPECIES_LEDYBA": {
     "label": "Ledyba",
     "national_dex_number": 165,
-    "base_hp": 40,
-    "base_attack": 20,
-    "base_defense": 30,
-    "base_speed": 55,
-    "base_special_attack": 40,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_SWARM",
-      "ABILITY_EARLY_BIRD"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "1000010001100001101111000011001110000001011111000000001000000000"
   },
   "SPECIES_LEDIAN": {
     "label": "Ledian",
     "national_dex_number": 166,
-    "base_hp": 55,
-    "base_attack": 35,
-    "base_defense": 50,
-    "base_speed": 85,
-    "base_special_attack": 55,
-    "base_special_defense": 110,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_SWARM",
-      "ABILITY_EARLY_BIRD"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "1000010001100011101111000011001110000001011111000000001000000000"
   },
   "SPECIES_SPINARAK": {
     "label": "Spinarak",
     "national_dex_number": 167,
-    "base_hp": 40,
-    "base_attack": 60,
-    "base_defense": 40,
-    "base_speed": 30,
-    "base_special_attack": 40,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_SWARM",
-      "ABILITY_INSOMNIA"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010001100000101011000011100100010000011111000000001000000000"
   },
   "SPECIES_ARIADOS": {
     "label": "Ariados",
     "national_dex_number": 168,
-    "base_hp": 70,
-    "base_attack": 90,
-    "base_defense": 70,
-    "base_speed": 40,
-    "base_special_attack": 60,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_SWARM",
-      "ABILITY_INSOMNIA"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "0000010001100010101011000011100100010000011111000000001000000000"
   },
   "SPECIES_CROBAT": {
     "label": "Crobat",
     "national_dex_number": 169,
-    "base_hp": 85,
-    "base_attack": 90,
-    "base_defense": 80,
-    "base_speed": 130,
-    "base_special_attack": 70,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_INNER_FOCUS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "0000010001110010111010000010010100010001111111101001000000000000"
   },
   "SPECIES_CHINCHOU": {
     "label": "Chinchou",
     "national_dex_number": 170,
-    "base_hp": 75,
-    "base_attack": 38,
-    "base_defense": 38,
-    "base_speed": 67,
-    "base_special_attack": 56,
-    "base_special_defense": 56,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_VOLT_ABSORB",
-      "ABILITY_ILLUMINATE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0010011001001100110010011010000101000000011110000000101011000000"
   },
   "SPECIES_LANTURN": {
     "label": "Lanturn",
     "national_dex_number": 171,
-    "base_hp": 125,
-    "base_attack": 58,
-    "base_defense": 58,
-    "base_speed": 67,
-    "base_special_attack": 76,
-    "base_special_defense": 76,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_VOLT_ABSORB",
-      "ABILITY_ILLUMINATE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0010011001001110110010011010000101000000011110000000101011000000"
   },
   "SPECIES_PICHU": {
     "label": "Pichu",
     "national_dex_number": 172,
-    "base_hp": 20,
-    "base_attack": 40,
-    "base_defense": 15,
-    "base_speed": 60,
-    "base_special_attack": 35,
-    "base_special_defense": 35,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_STATIC",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0000010001000001110010111010000101000000011110000000001000000000"
   },
   "SPECIES_CLEFFA": {
     "label": "Cleffa",
     "national_dex_number": 173,
-    "base_hp": 50,
-    "base_attack": 25,
-    "base_defense": 28,
-    "base_speed": 15,
-    "base_special_attack": 45,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_CUTE_CHARM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 150,
     "tm_hm_compatibility": "0010010001100001110111100011110111100100011110000000001000000000"
   },
   "SPECIES_IGGLYBUFF": {
     "label": "Igglybuff",
     "national_dex_number": 174,
-    "base_hp": 90,
-    "base_attack": 30,
-    "base_defense": 15,
-    "base_speed": 15,
-    "base_special_attack": 40,
-    "base_special_defense": 20,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_CUTE_CHARM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 170,
     "tm_hm_compatibility": "0010010001100001110111000011110111100100011110000000001000000000"
   },
   "SPECIES_TOGEPI": {
     "label": "Togepi",
     "national_dex_number": 175,
-    "base_hp": 35,
-    "base_attack": 20,
-    "base_defense": 65,
-    "base_speed": 20,
-    "base_special_attack": 40,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_HUSTLE",
-      "ABILITY_SERENE_GRACE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0010010001100001110111000010110111100100011110000000001100000000"
   },
   "SPECIES_TOGETIC": {
     "label": "Togetic",
     "national_dex_number": 176,
-    "base_hp": 55,
-    "base_attack": 40,
-    "base_defense": 85,
-    "base_speed": 40,
-    "base_special_attack": 80,
-    "base_special_defense": 105,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_HUSTLE",
-      "ABILITY_SERENE_GRACE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "1010010001100011110111000010111111100101011110100001001100000000"
   },
   "SPECIES_NATU": {
     "label": "Natu",
     "national_dex_number": 177,
-    "base_hp": 40,
-    "base_attack": 50,
-    "base_defense": 45,
-    "base_speed": 70,
-    "base_special_attack": 70,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_SYNCHRONIZE",
-      "ABILITY_EARLY_BIRD"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0001010001100001111011000010110110000001011111110000001000000000"
   },
   "SPECIES_XATU": {
     "label": "Xatu",
     "national_dex_number": 178,
-    "base_hp": 65,
-    "base_attack": 75,
-    "base_defense": 70,
-    "base_speed": 95,
-    "base_special_attack": 95,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_SYNCHRONIZE",
-      "ABILITY_EARLY_BIRD"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0001010001100011111011000010110110000001011111110001001000000000"
   },
   "SPECIES_MAREEP": {
     "label": "Mareep",
     "national_dex_number": 179,
-    "base_hp": 55,
-    "base_attack": 40,
-    "base_defense": 40,
-    "base_speed": 35,
-    "base_special_attack": 65,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_STATIC",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 235,
     "tm_hm_compatibility": "0000010001000001110010111010000101000000011110000000001000000000"
   },
   "SPECIES_FLAAFFY": {
     "label": "Flaafy",
     "national_dex_number": 180,
-    "base_hp": 70,
-    "base_attack": 55,
-    "base_defense": 55,
-    "base_speed": 45,
-    "base_special_attack": 80,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_STATIC",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "1000010001000001110010111010001101000000011110000000011100000000"
   },
   "SPECIES_AMPHAROS": {
     "label": "Ampharos",
     "national_dex_number": 181,
-    "base_hp": 90,
-    "base_attack": 75,
-    "base_defense": 75,
-    "base_speed": 55,
-    "base_special_attack": 115,
-    "base_special_defense": 90,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_STATIC",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000010001000011110010111010001101000000011110000000011100000000"
   },
   "SPECIES_BELLOSSOM": {
     "label": "Bellossom",
     "national_dex_number": 182,
-    "base_hp": 75,
-    "base_attack": 80,
-    "base_defense": 85,
-    "base_speed": 50,
-    "base_special_attack": 90,
-    "base_special_defense": 100,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010011100010101111000010000100010000011110000010001000000000"
   },
   "SPECIES_MARILL": {
     "label": "Marill",
     "national_dex_number": 183,
-    "base_hp": 70,
-    "base_attack": 20,
-    "base_defense": 50,
-    "base_speed": 40,
-    "base_special_attack": 20,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_THICK_FAT",
-      "ABILITY_HUGE_POWER"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "1010011001001100110010100011001100000000011110000000110111000000"
   },
   "SPECIES_AZUMARILL": {
     "label": "Azumarill",
     "national_dex_number": 184,
-    "base_hp": 100,
-    "base_attack": 50,
-    "base_defense": 80,
-    "base_speed": 50,
-    "base_special_attack": 50,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_THICK_FAT",
-      "ABILITY_HUGE_POWER"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "1010011001001110110010100011001100000000011110000000110111000000"
   },
   "SPECIES_SUDOWOODO": {
     "label": "Sudowoodo",
     "national_dex_number": 185,
-    "base_hp": 70,
-    "base_attack": 100,
-    "base_defense": 115,
-    "base_speed": 30,
-    "base_special_attack": 30,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_ROCK"
-    ],
-    "abilities": [
-      "ABILITY_STURDY",
-      "ABILITY_ROCK_HEAD"
-    ],
-    "catch_rate": 65,
     "tm_hm_compatibility": "1001010001110000100010000111001100001010011111000000010100000000"
   },
   "SPECIES_POLITOED": {
     "label": "Politoed",
     "national_dex_number": 186,
-    "base_hp": 90,
-    "base_attack": 75,
-    "base_defense": 75,
-    "base_speed": 70,
-    "base_special_attack": 90,
-    "base_special_defense": 100,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_WATER_ABSORB",
-      "ABILITY_DAMP"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1010011001001110110010000111101100000000011111000000110111000000"
   },
   "SPECIES_HOPPIP": {
     "label": "Hoppip",
     "national_dex_number": 187,
-    "base_hp": 35,
-    "base_attack": 35,
-    "base_defense": 40,
-    "base_speed": 50,
-    "base_special_attack": 35,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010011100000101011000010000100000001011110000000001000000000"
   },
   "SPECIES_SKIPLOOM": {
     "label": "Skiploom",
     "national_dex_number": 188,
-    "base_hp": 55,
-    "base_attack": 45,
-    "base_defense": 50,
-    "base_speed": 80,
-    "base_special_attack": 45,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0000010011100000101011000010000100000001011110000000001000000000"
   },
   "SPECIES_JUMPLUFF": {
     "label": "Jumpluff",
     "national_dex_number": 189,
-    "base_hp": 75,
-    "base_attack": 55,
-    "base_defense": 70,
-    "base_speed": 110,
-    "base_special_attack": 55,
-    "base_special_defense": 85,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010011100010101011000010000100000001011110000000001000000000"
   },
   "SPECIES_AIPOM": {
     "label": "Aipom",
     "national_dex_number": 190,
-    "base_hp": 55,
-    "base_attack": 70,
-    "base_defense": 55,
-    "base_speed": 85,
-    "base_special_attack": 40,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_RUN_AWAY",
-      "ABILITY_PICKUP"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1010010001110000110011111011011101000001011111001010010100000000"
   },
   "SPECIES_SUNKERN": {
     "label": "Sunkern",
     "national_dex_number": 191,
-    "base_hp": 30,
-    "base_attack": 30,
-    "base_defense": 30,
-    "base_speed": 30,
-    "base_special_attack": 30,
-    "base_special_defense": 30,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 235,
     "tm_hm_compatibility": "0000010011100001101111000010000100010000011110000010001000000000"
   },
   "SPECIES_SUNFLORA": {
     "label": "Sunflora",
     "national_dex_number": 192,
-    "base_hp": 75,
-    "base_attack": 75,
-    "base_defense": 55,
-    "base_speed": 30,
-    "base_special_attack": 105,
-    "base_special_defense": 85,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0000010011100011101111000010000100010000011110000010001000000000"
   },
   "SPECIES_YANMA": {
     "label": "Yanma",
     "national_dex_number": 193,
-    "base_hp": 65,
-    "base_attack": 65,
-    "base_defense": 45,
-    "base_speed": 95,
-    "base_special_attack": 75,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_SPEED_BOOST",
-      "ABILITY_COMPOUND_EYES"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0000010001100000101011000010110100000001011111100000001000000000"
   },
   "SPECIES_WOOPER": {
     "label": "Wooper",
     "national_dex_number": 194,
-    "base_hp": 55,
-    "base_attack": 45,
-    "base_defense": 45,
-    "base_speed": 15,
-    "base_special_attack": 25,
-    "base_special_defense": 25,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_DAMP",
-      "ABILITY_WATER_ABSORB"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0010011001001100110010100111000100011000011110000000101111000000"
   },
   "SPECIES_QUAGSIRE": {
     "label": "Quagsire",
     "national_dex_number": 195,
-    "base_hp": 95,
-    "base_attack": 85,
-    "base_defense": 85,
-    "base_speed": 35,
-    "base_special_attack": 65,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_DAMP",
-      "ABILITY_WATER_ABSORB"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "1010011001001110110010100111001100011010011110000000111111000000"
   },
   "SPECIES_ESPEON": {
     "label": "Espeon",
     "national_dex_number": 196,
-    "base_hp": 65,
-    "base_attack": 65,
-    "base_defense": 60,
-    "base_speed": 110,
-    "base_special_attack": 130,
-    "base_special_defense": 95,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_SYNCHRONIZE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0001010001100011110010100011110110000000011110010010001000000000"
   },
   "SPECIES_UMBREON": {
     "label": "Umbreon",
     "national_dex_number": 197,
-    "base_hp": 95,
-    "base_attack": 65,
-    "base_defense": 110,
-    "base_speed": 65,
-    "base_special_attack": 60,
-    "base_special_defense": 130,
-    "types": [
-      "TYPE_DARK",
-      "TYPE_DARK"
-    ],
-    "abilities": [
-      "ABILITY_SYNCHRONIZE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001110010110010100011110100000000111110001010001000000000"
   },
   "SPECIES_MURKROW": {
     "label": "Murkrow",
     "national_dex_number": 198,
-    "base_hp": 60,
-    "base_attack": 85,
-    "base_defense": 42,
-    "base_speed": 91,
-    "base_special_attack": 85,
-    "base_special_defense": 42,
-    "types": [
-      "TYPE_DARK",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_INSOMNIA",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 30,
     "tm_hm_compatibility": "0001010001110000110010000010010100000001111111101001000000000000"
   },
   "SPECIES_SLOWKING": {
     "label": "Slowking",
     "national_dex_number": 199,
-    "base_hp": 95,
-    "base_attack": 75,
-    "base_defense": 80,
-    "base_speed": 30,
-    "base_special_attack": 100,
-    "base_special_defense": 110,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_OBLIVIOUS",
-      "ABILITY_OWN_TEMPO"
-    ],
-    "catch_rate": 70,
     "tm_hm_compatibility": "1011011001101110110110100111111100100100011110010000111101000000"
   },
   "SPECIES_MISDREAVUS": {
     "label": "Misdreavus",
     "national_dex_number": 200,
-    "base_hp": 60,
-    "base_attack": 60,
-    "base_defense": 60,
-    "base_speed": 85,
-    "base_special_attack": 85,
-    "base_special_defense": 85,
-    "types": [
-      "TYPE_GHOST",
-      "TYPE_GHOST"
-    ],
-    "abilities": [
-      "ABILITY_LEVITATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0001010001110000110010011010110101000001111111011000001000000000"
   },
   "SPECIES_UNOWN": {
     "label": "Unown",
     "national_dex_number": 201,
-    "base_hp": 48,
-    "base_attack": 72,
-    "base_defense": 48,
-    "base_speed": 48,
-    "base_special_attack": 72,
-    "base_special_defense": 48,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_LEVITATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 225,
     "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_WOBBUFFET": {
     "label": "Wobbuffet",
     "national_dex_number": 202,
-    "base_hp": 190,
-    "base_attack": 33,
-    "base_defense": 58,
-    "base_speed": 33,
-    "base_special_attack": 33,
-    "base_special_defense": 58,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_SHADOW_TAG",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_GIRAFARIG": {
     "label": "Girafarig",
     "national_dex_number": 203,
-    "base_hp": 70,
-    "base_attack": 80,
-    "base_defense": 65,
-    "base_speed": 85,
-    "base_special_attack": 90,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_INNER_FOCUS",
-      "ABILITY_EARLY_BIRD"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0001010001100001110010111110110111000000011111010000011100000000"
   },
   "SPECIES_PINECO": {
     "label": "Pineco",
     "national_dex_number": 204,
-    "base_hp": 50,
-    "base_attack": 65,
-    "base_defense": 90,
-    "base_speed": 15,
-    "base_special_attack": 35,
-    "base_special_defense": 35,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_BUG"
-    ],
-    "abilities": [
-      "ABILITY_STURDY",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0000010001100001101011000111000110001000011110000000010100000000"
   },
   "SPECIES_FORRETRESS": {
     "label": "Forretress",
     "national_dex_number": 205,
-    "base_hp": 75,
-    "base_attack": 90,
-    "base_defense": 140,
-    "base_speed": 40,
-    "base_special_attack": 60,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_STEEL"
-    ],
-    "abilities": [
-      "ABILITY_STURDY",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0000010001100011101011000111000110001000011110000000010100000000"
   },
   "SPECIES_DUNSPARCE": {
     "label": "Dunsparce",
     "national_dex_number": 206,
-    "base_hp": 100,
-    "base_attack": 70,
-    "base_defense": 70,
-    "base_speed": 45,
-    "base_special_attack": 65,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_SERENE_GRACE",
-      "ABILITY_RUN_AWAY"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0011010001101100110011111111010101100110011111000000010100000000"
   },
   "SPECIES_GLIGAR": {
     "label": "Gligar",
     "national_dex_number": 207,
-    "base_hp": 65,
-    "base_attack": 75,
-    "base_defense": 105,
-    "base_speed": 85,
-    "base_special_attack": 35,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_GROUND",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_HYPER_CUTTER",
-      "ABILITY_SAND_VEIL"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0000010001100000110010100111000100011011011111100010010100000000"
   },
   "SPECIES_STEELIX": {
     "label": "Steelix",
     "national_dex_number": 208,
-    "base_hp": 75,
-    "base_attack": 85,
-    "base_defense": 200,
-    "base_speed": 30,
-    "base_special_attack": 55,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_STEEL",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_ROCK_HEAD",
-      "ABILITY_STURDY"
-    ],
-    "catch_rate": 25,
     "tm_hm_compatibility": "0000110001110010100010100111000100001010111110000010010100000000"
   },
   "SPECIES_SNUBBULL": {
     "label": "Snubbull",
     "national_dex_number": 209,
-    "base_hp": 60,
-    "base_attack": 80,
-    "base_defense": 50,
-    "base_speed": 30,
-    "base_special_attack": 40,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_INTIMIDATE",
-      "ABILITY_RUN_AWAY"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "1010110101110000110011011111011101110100111111000100010100000000"
   },
   "SPECIES_GRANBULL": {
     "label": "Granbull",
     "national_dex_number": 210,
-    "base_hp": 90,
-    "base_attack": 120,
-    "base_defense": 75,
-    "base_speed": 45,
-    "base_special_attack": 60,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_INTIMIDATE",
-      "ABILITY_INTIMIDATE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "1010110101110010110011111111011101110110111111000100010100000000"
   },
   "SPECIES_QWILFISH": {
     "label": "Qwilfish",
     "national_dex_number": 211,
-    "base_hp": 65,
-    "base_attack": 95,
-    "base_defense": 75,
-    "base_speed": 85,
-    "base_special_attack": 55,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_POISON_POINT",
-      "ABILITY_SWIFT_SWIM"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010011001001100110010000010010101010000011110000000100011000000"
   },
   "SPECIES_SCIZOR": {
     "label": "Scizor",
     "national_dex_number": 212,
-    "base_hp": 70,
-    "base_attack": 130,
-    "base_defense": 100,
-    "base_speed": 65,
-    "base_special_attack": 55,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_STEEL"
-    ],
-    "abilities": [
-      "ABILITY_SWARM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 25,
     "tm_hm_compatibility": "0000010001100010110010000010000100001001011111100010010100000000"
   },
   "SPECIES_SHUCKLE": {
     "label": "Shuckle",
     "national_dex_number": 213,
-    "base_hp": 20,
-    "base_attack": 10,
-    "base_defense": 230,
-    "base_speed": 5,
-    "base_special_attack": 10,
-    "base_special_defense": 230,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_ROCK"
-    ],
-    "abilities": [
-      "ABILITY_STURDY",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0000010001100000100110000111000100011010011110000000011100000000"
   },
   "SPECIES_HERACROSS": {
     "label": "Heracross",
     "national_dex_number": 214,
-    "base_hp": 80,
-    "base_attack": 125,
-    "base_defense": 75,
-    "base_speed": 85,
-    "base_special_attack": 40,
-    "base_special_defense": 95,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_FIGHTING"
-    ],
-    "abilities": [
-      "ABILITY_SWARM",
-      "ABILITY_GUTS"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000010101100010110010000111001100000010011111000010010100000000"
   },
   "SPECIES_SNEASEL": {
     "label": "Sneasel",
     "national_dex_number": 215,
-    "base_hp": 55,
-    "base_attack": 95,
-    "base_defense": 55,
-    "base_speed": 115,
-    "base_special_attack": 35,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_DARK",
-      "TYPE_ICE"
-    ],
-    "abilities": [
-      "ABILITY_INNER_FOCUS",
-      "ABILITY_KEEN_EYE"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "1001011001111100110010100011011100000001111111001010110100000000"
   },
   "SPECIES_TEDDIURSA": {
     "label": "Teddiursa",
     "national_dex_number": 216,
-    "base_hp": 60,
-    "base_attack": 80,
-    "base_defense": 50,
-    "base_speed": 40,
-    "base_special_attack": 50,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_PICKUP",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "1000110101110000110010000111001100000001111111000010010100000000"
   },
   "SPECIES_URSARING": {
     "label": "Ursaring",
     "national_dex_number": 217,
-    "base_hp": 90,
-    "base_attack": 130,
-    "base_defense": 75,
-    "base_speed": 55,
-    "base_special_attack": 75,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_GUTS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "1000110101110010110010000111001100000011111111000010010100000000"
   },
   "SPECIES_SLUGMA": {
     "label": "Slugma",
     "national_dex_number": 218,
-    "base_hp": 40,
-    "base_attack": 40,
-    "base_defense": 40,
-    "base_speed": 20,
-    "base_special_attack": 70,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_MAGMA_ARMOR",
-      "ABILITY_FLAME_BODY"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0000010001100001100010000010000110100100011110000100000100000000"
   },
   "SPECIES_MAGCARGO": {
     "label": "Magcargo",
     "national_dex_number": 219,
-    "base_hp": 50,
-    "base_attack": 50,
-    "base_defense": 120,
-    "base_speed": 30,
-    "base_special_attack": 80,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_ROCK"
-    ],
-    "abilities": [
-      "ABILITY_MAGMA_ARMOR",
-      "ABILITY_FLAME_BODY"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0000010001100011100010000110000110101110011110000100010100000000"
   },
   "SPECIES_SWINUB": {
     "label": "Swinub",
     "national_dex_number": 220,
-    "base_hp": 50,
-    "base_attack": 50,
-    "base_defense": 40,
-    "base_speed": 50,
-    "base_special_attack": 30,
-    "base_special_defense": 30,
-    "types": [
-      "TYPE_ICE",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_OBLIVIOUS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 225,
     "tm_hm_compatibility": "0000111001001101110010000111000110001010011110000000010100000000"
   },
   "SPECIES_PILOSWINE": {
     "label": "Piloswine",
     "national_dex_number": 221,
-    "base_hp": 100,
-    "base_attack": 100,
-    "base_defense": 80,
-    "base_speed": 50,
-    "base_special_attack": 60,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_ICE",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_OBLIVIOUS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0000111001001111110010000111000110001010011110000000010100000000"
   },
   "SPECIES_CORSOLA": {
     "label": "Corsola",
     "national_dex_number": 222,
-    "base_hp": 55,
-    "base_attack": 55,
-    "base_defense": 85,
-    "base_speed": 35,
-    "base_special_attack": 65,
-    "base_special_defense": 85,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_ROCK"
-    ],
-    "abilities": [
-      "ABILITY_HUSTLE",
-      "ABILITY_NATURAL_CURE"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0011011001101101110110000111110110001010011110000000110100000000"
   },
   "SPECIES_REMORAID": {
     "label": "Remoraid",
     "national_dex_number": 223,
-    "base_hp": 35,
-    "base_attack": 65,
-    "base_defense": 35,
-    "base_speed": 65,
-    "base_special_attack": 65,
-    "base_special_defense": 35,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_HUSTLE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0010010001101110110010000010100100100100011111000000100011000000"
   },
   "SPECIES_OCTILLERY": {
     "label": "Octillery",
     "national_dex_number": 224,
-    "base_hp": 75,
-    "base_attack": 105,
-    "base_defense": 75,
-    "base_speed": 45,
-    "base_special_attack": 105,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_SUCTION_CUPS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0010010011101110110010000010100100110100011111000000100011000000"
   },
   "SPECIES_DELIBIRD": {
     "label": "Delibird",
     "national_dex_number": 225,
-    "base_hp": 45,
-    "base_attack": 55,
-    "base_defense": 45,
-    "base_speed": 75,
-    "base_special_attack": 65,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_ICE",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_VITAL_SPIRIT",
-      "ABILITY_HUSTLE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1010011001001100110010000010000100000001011111000001000000000000"
   },
   "SPECIES_MANTINE": {
     "label": "Mantine",
     "national_dex_number": 226,
-    "base_hp": 65,
-    "base_attack": 40,
-    "base_defense": 70,
-    "base_speed": 70,
-    "base_special_attack": 80,
-    "base_special_defense": 140,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_WATER_ABSORB"
-    ],
-    "catch_rate": 25,
     "tm_hm_compatibility": "0010011001001100110010000110000100000001011110000000100011000000"
   },
   "SPECIES_SKARMORY": {
     "label": "Skarmory",
     "national_dex_number": 227,
-    "base_hp": 65,
-    "base_attack": 80,
-    "base_defense": 140,
-    "base_speed": 70,
-    "base_special_attack": 40,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_STEEL",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_KEEN_EYE",
-      "ABILITY_STURDY"
-    ],
-    "catch_rate": 25,
     "tm_hm_compatibility": "0000110001110000100010000010000100001001111111100011000100000000"
   },
   "SPECIES_HOUNDOUR": {
     "label": "Houndour",
     "national_dex_number": 228,
-    "base_hp": 45,
-    "base_attack": 60,
-    "base_defense": 30,
-    "base_speed": 65,
-    "base_special_attack": 80,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_DARK",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_EARLY_BIRD",
-      "ABILITY_FLASH_FIRE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0000110001110000100011100010010100110100111111001100000100000000"
   },
   "SPECIES_HOUNDOOM": {
     "label": "Houndoom",
     "national_dex_number": 229,
-    "base_hp": 75,
-    "base_attack": 90,
-    "base_defense": 50,
-    "base_speed": 95,
-    "base_special_attack": 110,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_DARK",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_EARLY_BIRD",
-      "ABILITY_FLASH_FIRE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000110001110010100011100010010100110100111111001100010100000000"
   },
   "SPECIES_KINGDRA": {
     "label": "Kingdra",
     "national_dex_number": 230,
-    "base_hp": 75,
-    "base_attack": 95,
-    "base_defense": 95,
-    "base_speed": 85,
-    "base_special_attack": 95,
-    "base_special_defense": 95,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_DRAGON"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010011001001110110010000010000100000000011110000000100011000000"
   },
   "SPECIES_PHANPY": {
     "label": "Phanpy",
     "national_dex_number": 231,
-    "base_hp": 90,
-    "base_attack": 60,
-    "base_defense": 60,
-    "base_speed": 40,
-    "base_special_attack": 40,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_GROUND",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_PICKUP",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0000110001100000100010100110000100001010011110000000010100000000"
   },
   "SPECIES_DONPHAN": {
     "label": "Donphan",
     "national_dex_number": 232,
-    "base_hp": 90,
-    "base_attack": 120,
-    "base_defense": 120,
-    "base_speed": 50,
-    "base_special_attack": 60,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_GROUND",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_STURDY",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0000110001100010100010100110000100001010011110000000010100000000"
   },
   "SPECIES_PORYGON2": {
     "label": "Porygon2",
     "national_dex_number": 233,
-    "base_hp": 85,
-    "base_attack": 80,
-    "base_defense": 90,
-    "base_speed": 60,
-    "base_special_attack": 105,
-    "base_special_defense": 95,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_TRACE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001101110110011111010110101000001011101000000001000000000"
   },
   "SPECIES_STANTLER": {
     "label": "Stantler",
     "national_dex_number": 234,
-    "base_hp": 73,
-    "base_attack": 95,
-    "base_defense": 62,
-    "base_speed": 85,
-    "base_special_attack": 85,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_INTIMIDATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0001110001100001110011111110110111000000011111010000001000000000"
   },
   "SPECIES_SMEARGLE": {
     "label": "Smeargle",
     "national_dex_number": 235,
-    "base_hp": 55,
-    "base_attack": 20,
-    "base_defense": 35,
-    "base_speed": 75,
-    "base_special_attack": 20,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_OWN_TEMPO",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_TYROGUE": {
     "label": "Tyrogue",
     "national_dex_number": 236,
-    "base_hp": 35,
-    "base_attack": 35,
-    "base_defense": 35,
-    "base_speed": 35,
-    "base_special_attack": 35,
-    "base_special_defense": 35,
-    "types": [
-      "TYPE_FIGHTING",
-      "TYPE_FIGHTING"
-    ],
-    "abilities": [
-      "ABILITY_GUTS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0000010101100000110010000110001100000000011111000000010100000000"
   },
   "SPECIES_HITMONTOP": {
     "label": "Hitmontop",
     "national_dex_number": 237,
-    "base_hp": 50,
-    "base_attack": 95,
-    "base_defense": 95,
-    "base_speed": 70,
-    "base_special_attack": 35,
-    "base_special_defense": 110,
-    "types": [
-      "TYPE_FIGHTING",
-      "TYPE_FIGHTING"
-    ],
-    "abilities": [
-      "ABILITY_INTIMIDATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010101100000110010000111001100001000011111000000010100000000"
   },
   "SPECIES_SMOOCHUM": {
     "label": "Smoochum",
     "national_dex_number": 238,
-    "base_hp": 45,
-    "base_attack": 30,
-    "base_defense": 15,
-    "base_speed": 65,
-    "base_special_attack": 85,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_ICE",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_OBLIVIOUS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0011011001001101110010000010110110000000011111010000001000000000"
   },
   "SPECIES_ELEKID": {
     "label": "Elekid",
     "national_dex_number": 239,
-    "base_hp": 45,
-    "base_attack": 63,
-    "base_defense": 37,
-    "base_speed": 95,
-    "base_special_attack": 65,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_STATIC",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000010001000001110010011010101101000000011111000000001100000000"
   },
   "SPECIES_MAGBY": {
     "label": "Magby",
     "national_dex_number": 240,
-    "base_hp": 45,
-    "base_attack": 75,
-    "base_defense": 37,
-    "base_speed": 83,
-    "base_special_attack": 70,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_FLAME_BODY",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000010001100000100010100010101100100100011111000000000100000000"
   },
   "SPECIES_MILTANK": {
     "label": "Miltank",
     "national_dex_number": 241,
-    "base_hp": 95,
-    "base_attack": 80,
-    "base_defense": 105,
-    "base_speed": 100,
-    "base_special_attack": 40,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_THICK_FAT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1010010001101110110011111110011101001010011110000000110100000000"
   },
   "SPECIES_BLISSEY": {
     "label": "Blissey",
     "national_dex_number": 242,
-    "base_hp": 255,
-    "base_attack": 10,
-    "base_defense": 10,
-    "base_speed": 55,
-    "base_special_attack": 75,
-    "base_special_defense": 135,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_NATURAL_CURE",
-      "ABILITY_SERENE_GRACE"
-    ],
-    "catch_rate": 30,
     "tm_hm_compatibility": "1011011001101111110111111110111101101110011110011000011100000000"
   },
   "SPECIES_RAIKOU": {
     "label": "Raikou",
     "national_dex_number": 243,
-    "base_hp": 90,
-    "base_attack": 85,
-    "base_defense": 75,
-    "base_speed": 115,
-    "base_special_attack": 115,
-    "base_special_defense": 100,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_PRESSURE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "0001110001100010110010111011000111001000011100000010011100000000"
   },
   "SPECIES_ENTEI": {
     "label": "Entei",
     "national_dex_number": 244,
-    "base_hp": 115,
-    "base_attack": 115,
-    "base_defense": 85,
-    "base_speed": 100,
-    "base_special_attack": 90,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_PRESSURE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "0001110001100010110011100011000110101100011100000010011100000000"
   },
   "SPECIES_SUICUNE": {
     "label": "Suicune",
     "national_dex_number": 245,
-    "base_hp": 100,
-    "base_attack": 75,
-    "base_defense": 115,
-    "base_speed": 85,
-    "base_special_attack": 90,
-    "base_special_defense": 115,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_PRESSURE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "0011111001101110110010100011000110001000011100000010100111000000"
   },
   "SPECIES_LARVITAR": {
     "label": "Larvitar",
     "national_dex_number": 246,
-    "base_hp": 50,
-    "base_attack": 64,
-    "base_defense": 50,
-    "base_speed": 41,
-    "base_special_attack": 45,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_GUTS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001110010110010000111001100001000111110000000000100000000"
   },
   "SPECIES_PUPITAR": {
     "label": "Pupitar",
     "national_dex_number": 247,
-    "base_hp": 70,
-    "base_attack": 84,
-    "base_defense": 70,
-    "base_speed": 51,
-    "base_special_attack": 65,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_SHED_SKIN",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001110010110010000111001100001000111110000000000100000000"
   },
   "SPECIES_TYRANITAR": {
     "label": "Tyranitar",
     "national_dex_number": 248,
-    "base_hp": 100,
-    "base_attack": 134,
-    "base_defense": 110,
-    "base_speed": 61,
-    "base_special_attack": 95,
-    "base_special_defense": 100,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_DARK"
-    ],
-    "abilities": [
-      "ABILITY_SAND_STREAM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1110110001111110110010111111001101101111111110000010110100000000"
   },
   "SPECIES_LUGIA": {
     "label": "Lugia",
     "national_dex_number": 249,
-    "base_hp": 106,
-    "base_attack": 90,
-    "base_defense": 130,
-    "base_speed": 110,
-    "base_special_attack": 90,
-    "base_special_defense": 154,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_PRESSURE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "0011111001101111111110111110110111001001011100110001110111000000"
   },
   "SPECIES_HO_OH": {
     "label": "Ho-oh",
     "national_dex_number": 250,
-    "base_hp": 106,
-    "base_attack": 130,
-    "base_defense": 90,
-    "base_speed": 90,
-    "base_special_attack": 110,
-    "base_special_defense": 154,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_PRESSURE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "0001110001100011111111011110110111101101011100100101011100000000"
   },
   "SPECIES_CELEBI": {
     "label": "Celebi",
     "national_dex_number": 251,
-    "base_hp": 100,
-    "base_attack": 100,
-    "base_defense": 100,
-    "base_speed": 100,
-    "base_special_attack": 100,
-    "base_special_defense": 100,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_NATURAL_CURE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0011010001100011111111000010110111001001011100010010001000000000"
   },
   "SPECIES_TREECKO": {
     "label": "Treecko",
     "national_dex_number": 252,
-    "base_hp": 40,
-    "base_attack": 45,
-    "base_defense": 35,
-    "base_speed": 70,
-    "base_special_attack": 65,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_OVERGROW",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000010011100000101111100011001100000011011110000010011100000000"
   },
   "SPECIES_GROVYLE": {
     "label": "Grovyle",
     "national_dex_number": 253,
-    "base_hp": 50,
-    "base_attack": 65,
-    "base_defense": 45,
-    "base_speed": 95,
-    "base_special_attack": 85,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_OVERGROW",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000010011100000101111100011001100000011011110000010011100000000"
   },
   "SPECIES_SCEPTILE": {
     "label": "Sceptile",
     "national_dex_number": 254,
-    "base_hp": 70,
-    "base_attack": 85,
-    "base_defense": 65,
-    "base_speed": 120,
-    "base_special_attack": 105,
-    "base_special_defense": 85,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_OVERGROW",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1100110011100010101111100111001100000011011110000010011100000000"
   },
   "SPECIES_TORCHIC": {
     "label": "Torchic",
     "national_dex_number": 255,
-    "base_hp": 45,
-    "base_attack": 60,
-    "base_defense": 40,
-    "base_speed": 45,
-    "base_special_attack": 70,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_BLAZE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001100000100010000011000100100111011110000110010100000000"
   },
   "SPECIES_COMBUSKEN": {
     "label": "Combusken",
     "national_dex_number": 256,
-    "base_hp": 60,
-    "base_attack": 85,
-    "base_defense": 60,
-    "base_speed": 55,
-    "base_special_attack": 85,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIGHTING"
-    ],
-    "abilities": [
-      "ABILITY_BLAZE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000010101100000100010000011001100100111011110000110010100000000"
   },
   "SPECIES_BLAZIKEN": {
     "label": "Blaziken",
     "national_dex_number": 257,
-    "base_hp": 80,
-    "base_attack": 120,
-    "base_defense": 70,
-    "base_speed": 80,
-    "base_special_attack": 110,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIGHTING"
-    ],
-    "abilities": [
-      "ABILITY_BLAZE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000110101100010100010000111001100100111011110000110010100000000"
   },
   "SPECIES_MUDKIP": {
     "label": "Mudkip",
     "national_dex_number": 258,
-    "base_hp": 50,
-    "base_attack": 70,
-    "base_defense": 50,
-    "base_speed": 40,
-    "base_special_attack": 50,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_TORRENT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010011001001100110010100011000100000010011110000000110111000000"
   },
   "SPECIES_MARSHTOMP": {
     "label": "Marshtomp",
     "national_dex_number": 259,
-    "base_hp": 70,
-    "base_attack": 85,
-    "base_defense": 70,
-    "base_speed": 50,
-    "base_special_attack": 60,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_TORRENT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010011001001100110010100111000100000010011110000000110111000000"
   },
   "SPECIES_SWAMPERT": {
     "label": "Swampert",
     "national_dex_number": 260,
-    "base_hp": 100,
-    "base_attack": 110,
-    "base_defense": 90,
-    "base_speed": 60,
-    "base_special_attack": 85,
-    "base_special_defense": 90,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_TORRENT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1010111001001110110010100111001100000010011110000000110111000000"
   },
   "SPECIES_POOCHYENA": {
     "label": "Poochyena",
     "national_dex_number": 261,
-    "base_hp": 35,
-    "base_attack": 55,
-    "base_defense": 35,
-    "base_speed": 35,
-    "base_special_attack": 30,
-    "base_special_defense": 30,
-    "types": [
-      "TYPE_DARK",
-      "TYPE_DARK"
-    ],
-    "abilities": [
-      "ABILITY_RUN_AWAY",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000110001110000110010100011010100000000111111001000000100000000"
   },
   "SPECIES_MIGHTYENA": {
     "label": "Mightyena",
     "national_dex_number": 262,
-    "base_hp": 70,
-    "base_attack": 90,
-    "base_defense": 70,
-    "base_speed": 70,
-    "base_special_attack": 60,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_DARK",
-      "TYPE_DARK"
-    ],
-    "abilities": [
-      "ABILITY_INTIMIDATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 127,
     "tm_hm_compatibility": "0000110001110010110010100011010100000000111111001000010100000000"
   },
   "SPECIES_ZIGZAGOON": {
     "label": "Zigzagoon",
     "national_dex_number": 263,
-    "base_hp": 38,
-    "base_attack": 30,
-    "base_defense": 41,
-    "base_speed": 60,
-    "base_special_attack": 30,
-    "base_special_defense": 41,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_PICKUP",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0010010001101100110010111011010101000000011111000010100100000000"
   },
   "SPECIES_LINOONE": {
     "label": "Linoon",
     "national_dex_number": 264,
-    "base_hp": 78,
-    "base_attack": 70,
-    "base_defense": 61,
-    "base_speed": 100,
-    "base_special_attack": 50,
-    "base_special_defense": 61,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_PICKUP",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "0010110001101110110010111011010101000000011111000010110100000000"
   },
   "SPECIES_WURMPLE": {
     "label": "Wurmple",
     "national_dex_number": 265,
-    "base_hp": 45,
-    "base_attack": 45,
-    "base_defense": 35,
-    "base_speed": 20,
-    "base_special_attack": 20,
-    "base_special_defense": 30,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_BUG"
-    ],
-    "abilities": [
-      "ABILITY_SHIELD_DUST",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_SILCOON": {
     "label": "Silcoon",
     "national_dex_number": 266,
-    "base_hp": 50,
-    "base_attack": 35,
-    "base_defense": 55,
-    "base_speed": 15,
-    "base_special_attack": 25,
-    "base_special_defense": 25,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_BUG"
-    ],
-    "abilities": [
-      "ABILITY_SHED_SKIN",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_BEAUTIFLY": {
     "label": "Beautifly",
     "national_dex_number": 267,
-    "base_hp": 60,
-    "base_attack": 70,
-    "base_defense": 50,
-    "base_speed": 65,
-    "base_special_attack": 90,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_SWARM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001100010101111000010110100000001011111000000001000000000"
   },
   "SPECIES_CASCOON": {
     "label": "Cascoon",
     "national_dex_number": 268,
-    "base_hp": 50,
-    "base_attack": 35,
-    "base_defense": 55,
-    "base_speed": 15,
-    "base_special_attack": 25,
-    "base_special_defense": 25,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_BUG"
-    ],
-    "abilities": [
-      "ABILITY_SHED_SKIN",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_DUSTOX": {
     "label": "Dustox",
     "national_dex_number": 269,
-    "base_hp": 60,
-    "base_attack": 50,
-    "base_defense": 70,
-    "base_speed": 65,
-    "base_special_attack": 50,
-    "base_special_defense": 90,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_SHIELD_DUST",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001100011101011000010110100010001011111000000001000000000"
   },
   "SPECIES_LOTAD": {
     "label": "Lotad",
     "national_dex_number": 270,
-    "base_hp": 40,
-    "base_attack": 30,
-    "base_defense": 30,
-    "base_speed": 30,
-    "base_special_attack": 40,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_RAIN_DISH"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0010011011101100111011000010000100000000011111000000101000000000"
   },
   "SPECIES_LOMBRE": {
     "label": "Lombre",
     "national_dex_number": 271,
-    "base_hp": 60,
-    "base_attack": 50,
-    "base_defense": 50,
-    "base_speed": 50,
-    "base_special_attack": 60,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_RAIN_DISH"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0010011011101100111011000010001100000000011111000000111111000000"
   },
   "SPECIES_LUDICOLO": {
     "label": "Ludicolo",
     "national_dex_number": 272,
-    "base_hp": 80,
-    "base_attack": 70,
-    "base_defense": 70,
-    "base_speed": 70,
-    "base_special_attack": 90,
-    "base_special_defense": 100,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_RAIN_DISH"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1010011011101110111011000010001100000000011111000000111111000000"
   },
   "SPECIES_SEEDOT": {
     "label": "Seedot",
     "national_dex_number": 273,
-    "base_hp": 40,
-    "base_attack": 40,
-    "base_defense": 50,
-    "base_speed": 30,
-    "base_special_attack": 30,
-    "base_special_defense": 30,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_EARLY_BIRD"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010011100000101011000011010100000000011110000000001100000000"
   },
   "SPECIES_NUZLEAF": {
     "label": "Nuzleaf",
     "national_dex_number": 274,
-    "base_hp": 70,
-    "base_attack": 70,
-    "base_defense": 40,
-    "base_speed": 60,
-    "base_special_attack": 60,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_DARK"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_EARLY_BIRD"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0000010011100010101011000011011100000010111111000010011100000000"
   },
   "SPECIES_SHIFTRY": {
     "label": "Shiftry",
     "national_dex_number": 275,
-    "base_hp": 90,
-    "base_attack": 100,
-    "base_defense": 60,
-    "base_speed": 80,
-    "base_special_attack": 90,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_DARK"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_EARLY_BIRD"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010011100010101011000011011100000011111111000010011100000000"
   },
   "SPECIES_NINCADA": {
     "label": "Nincada",
     "national_dex_number": 290,
-    "base_hp": 31,
-    "base_attack": 45,
-    "base_defense": 90,
-    "base_speed": 40,
-    "base_special_attack": 30,
-    "base_special_defense": 30,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_COMPOUND_EYES",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010001100000101011000011010100001001011100000010001000000000"
   },
   "SPECIES_NINJASK": {
     "label": "Ninjask",
     "national_dex_number": 291,
-    "base_hp": 61,
-    "base_attack": 90,
-    "base_defense": 45,
-    "base_speed": 160,
-    "base_special_attack": 50,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_SPEED_BOOST",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0000010001100010101011000011010100001001011111000010001000000000"
   },
   "SPECIES_SHEDINJA": {
     "label": "Shedinja",
     "national_dex_number": 292,
-    "base_hp": 1,
-    "base_attack": 90,
-    "base_defense": 45,
-    "base_speed": 40,
-    "base_special_attack": 30,
-    "base_special_defense": 30,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_GHOST"
-    ],
-    "abilities": [
-      "ABILITY_WONDER_GUARD",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001100010101011000011010100001001011101000010001000000000"
   },
   "SPECIES_TAILLOW": {
     "label": "Taillow",
     "national_dex_number": 276,
-    "base_hp": 40,
-    "base_attack": 55,
-    "base_defense": 30,
-    "base_speed": 85,
-    "base_special_attack": 30,
-    "base_special_defense": 30,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_GUTS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 200,
     "tm_hm_compatibility": "0000010001100000110010000010000100000001011111100001000000000000"
   },
   "SPECIES_SWELLOW": {
     "label": "Swellow",
     "national_dex_number": 277,
-    "base_hp": 60,
-    "base_attack": 85,
-    "base_defense": 60,
-    "base_speed": 125,
-    "base_special_attack": 50,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_GUTS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010001100010110010000010000100000001011111100001000000000000"
   },
   "SPECIES_SHROOMISH": {
     "label": "Shroomish",
     "national_dex_number": 285,
-    "base_hp": 60,
-    "base_attack": 40,
-    "base_defense": 60,
-    "base_speed": 35,
-    "base_special_attack": 40,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_EFFECT_SPORE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010011100000101111000010000100010000011110001000001000000000"
   },
   "SPECIES_BRELOOM": {
     "label": "Breloom",
     "national_dex_number": 286,
-    "base_hp": 60,
-    "base_attack": 130,
-    "base_defense": 80,
-    "base_speed": 70,
-    "base_special_attack": 60,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_FIGHTING"
-    ],
-    "abilities": [
-      "ABILITY_EFFECT_SPORE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "1000010111100010101111100010001100010000011110001010011100000000"
   },
   "SPECIES_SPINDA": {
     "label": "Spinda",
     "national_dex_number": 327,
-    "base_hp": 60,
-    "base_attack": 60,
-    "base_defense": 60,
-    "base_speed": 60,
-    "base_special_attack": 60,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_OWN_TEMPO",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "1011010001100000110110000011111101000010011111011000011100000000"
   },
   "SPECIES_WINGULL": {
     "label": "Wingull",
     "national_dex_number": 278,
-    "base_hp": 40,
-    "base_attack": 30,
-    "base_defense": 30,
-    "base_speed": 85,
-    "base_special_attack": 55,
-    "base_special_defense": 30,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_KEEN_EYE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0010011001001100110010000010000101000001011111100001000000000000"
   },
   "SPECIES_PELIPPER": {
     "label": "Pelipper",
     "national_dex_number": 279,
-    "base_hp": 60,
-    "base_attack": 50,
-    "base_defense": 100,
-    "base_speed": 65,
-    "base_special_attack": 85,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_KEEN_EYE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010011001001110110010000010000101000001011111100001100000000000"
   },
   "SPECIES_SURSKIT": {
     "label": "Surskit",
     "national_dex_number": 283,
-    "base_hp": 40,
-    "base_attack": 30,
-    "base_defense": 32,
-    "base_speed": 65,
-    "base_special_attack": 50,
-    "base_special_defense": 52,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 200,
     "tm_hm_compatibility": "0010010001101100111011000010010100000000011111000000001000000000"
   },
   "SPECIES_MASQUERAIN": {
     "label": "Masquerain",
     "national_dex_number": 284,
-    "base_hp": 70,
-    "base_attack": 60,
-    "base_defense": 62,
-    "base_speed": 60,
-    "base_special_attack": 80,
-    "base_special_defense": 82,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_INTIMIDATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0010010001101110111011000010010100000001011111000000001000000000"
   },
   "SPECIES_WAILMER": {
     "label": "Wailmer",
     "national_dex_number": 320,
-    "base_hp": 130,
-    "base_attack": 70,
-    "base_defense": 35,
-    "base_speed": 60,
-    "base_special_attack": 70,
-    "base_special_defense": 35,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_WATER_VEIL",
-      "ABILITY_OBLIVIOUS"
-    ],
-    "catch_rate": 125,
     "tm_hm_compatibility": "0010111001001100110010000110000100000010011110000000110111000000"
   },
   "SPECIES_WAILORD": {
     "label": "Wailord",
     "national_dex_number": 321,
-    "base_hp": 170,
-    "base_attack": 90,
-    "base_defense": 45,
-    "base_speed": 60,
-    "base_special_attack": 90,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_WATER_VEIL",
-      "ABILITY_OBLIVIOUS"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0010111001001110110010000110000100000010011110000000110111000000"
   },
   "SPECIES_SKITTY": {
     "label": "Skitty",
     "national_dex_number": 300,
-    "base_hp": 50,
-    "base_attack": 45,
-    "base_defense": 45,
-    "base_speed": 50,
-    "base_special_attack": 35,
-    "base_special_defense": 35,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_CUTE_CHARM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0011010001101100110111111011010101000000011110000000001000000000"
   },
   "SPECIES_DELCATTY": {
     "label": "Delcatty",
     "national_dex_number": 301,
-    "base_hp": 70,
-    "base_attack": 65,
-    "base_defense": 65,
-    "base_speed": 70,
-    "base_special_attack": 55,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_CUTE_CHARM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0011010001101110110111111011010101000000011110000000011100000000"
   },
   "SPECIES_KECLEON": {
     "label": "Kecleon",
     "national_dex_number": 352,
-    "base_hp": 60,
-    "base_attack": 90,
-    "base_defense": 70,
-    "base_speed": 40,
-    "base_special_attack": 60,
-    "base_special_defense": 120,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_COLOR_CHANGE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 200,
     "tm_hm_compatibility": "1010010001101100110011111011011101100111011111011010011100000000"
   },
   "SPECIES_BALTOY": {
     "label": "Baltoy",
     "national_dex_number": 343,
-    "base_hp": 40,
-    "base_attack": 40,
-    "base_defense": 55,
-    "base_speed": 55,
-    "base_special_attack": 40,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_GROUND",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_LEVITATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010001101001110011000111110110001010011100010000001000000000"
   },
   "SPECIES_CLAYDOL": {
     "label": "Claydol",
     "national_dex_number": 344,
-    "base_hp": 60,
-    "base_attack": 70,
-    "base_defense": 105,
-    "base_speed": 75,
-    "base_special_attack": 70,
-    "base_special_defense": 120,
-    "types": [
-      "TYPE_GROUND",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_LEVITATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "0000010001101011110011000111110110001010011100010000011100000000"
   },
   "SPECIES_NOSEPASS": {
     "label": "Nosepass",
     "national_dex_number": 299,
-    "base_hp": 30,
-    "base_attack": 45,
-    "base_defense": 135,
-    "base_speed": 30,
-    "base_special_attack": 45,
-    "base_special_defense": 90,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_ROCK"
-    ],
-    "abilities": [
-      "ABILITY_STURDY",
-      "ABILITY_MAGNET_PULL"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010001110000100010011110000101001010111110000000010100000000"
   },
   "SPECIES_TORKOAL": {
     "label": "Torkoal",
     "national_dex_number": 324,
-    "base_hp": 70,
-    "base_attack": 85,
-    "base_defense": 140,
-    "base_speed": 20,
-    "base_special_attack": 85,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_FIRE"
-    ],
-    "abilities": [
-      "ABILITY_WHITE_SMOKE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "0000010001100000100010100010000100110100011110000100010100000000"
   },
   "SPECIES_SABLEYE": {
     "label": "Sableye",
     "national_dex_number": 302,
-    "base_hp": 50,
-    "base_attack": 75,
-    "base_defense": 75,
-    "base_speed": 50,
-    "base_special_attack": 65,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_DARK",
-      "TYPE_GHOST"
-    ],
-    "abilities": [
-      "ABILITY_KEEN_EYE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1011010001110000110010000011111101000011111111001010001100000000"
   },
   "SPECIES_BARBOACH": {
     "label": "Barboach",
     "national_dex_number": 339,
-    "base_hp": 50,
-    "base_attack": 48,
-    "base_defense": 43,
-    "base_speed": 60,
-    "base_special_attack": 46,
-    "base_special_defense": 41,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_OBLIVIOUS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0010011001001100110010000110000100001010011110000000100011000000"
   },
   "SPECIES_WHISCASH": {
     "label": "Whiscash",
     "national_dex_number": 340,
-    "base_hp": 110,
-    "base_attack": 78,
-    "base_defense": 73,
-    "base_speed": 60,
-    "base_special_attack": 76,
-    "base_special_defense": 71,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_OBLIVIOUS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0010011001001110110010000110000100001010011110000000110111000000"
   },
   "SPECIES_LUVDISC": {
     "label": "Luvdisc",
     "national_dex_number": 370,
-    "base_hp": 43,
-    "base_attack": 30,
-    "base_defense": 55,
-    "base_speed": 97,
-    "base_special_attack": 40,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 225,
     "tm_hm_compatibility": "0010011001001100110110000010000100000000011110000000100011000000"
   },
   "SPECIES_CORPHISH": {
     "label": "Corphish",
     "national_dex_number": 341,
-    "base_hp": 43,
-    "base_attack": 80,
-    "base_defense": 65,
-    "base_speed": 35,
-    "base_special_attack": 50,
-    "base_special_defense": 35,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_HYPER_CUTTER",
-      "ABILITY_SHELL_ARMOR"
-    ],
-    "catch_rate": 205,
     "tm_hm_compatibility": "0010011001011100110010000011001100010011011110000010110110000000"
   },
   "SPECIES_CRAWDAUNT": {
     "label": "Crawdaunt",
     "national_dex_number": 342,
-    "base_hp": 63,
-    "base_attack": 120,
-    "base_defense": 85,
-    "base_speed": 55,
-    "base_special_attack": 90,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_DARK"
-    ],
-    "abilities": [
-      "ABILITY_HYPER_CUTTER",
-      "ABILITY_SHELL_ARMOR"
-    ],
-    "catch_rate": 155,
     "tm_hm_compatibility": "0010011001011110110010000011001100010011011110000010110111000000"
   },
   "SPECIES_FEEBAS": {
     "label": "Feebas",
     "national_dex_number": 349,
-    "base_hp": 20,
-    "base_attack": 15,
-    "base_defense": 20,
-    "base_speed": 80,
-    "base_special_attack": 10,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0010011001001100110010000010000100000000011110000000100011000000"
   },
   "SPECIES_MILOTIC": {
     "label": "Milotic",
     "national_dex_number": 350,
-    "base_hp": 95,
-    "base_attack": 60,
-    "base_defense": 79,
-    "base_speed": 81,
-    "base_special_attack": 100,
-    "base_special_defense": 125,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_MARVEL_SCALE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0010011001001110110110100010000100000000011110000000100011000000"
   },
   "SPECIES_CARVANHA": {
     "label": "Carvanha",
     "national_dex_number": 318,
-    "base_hp": 45,
-    "base_attack": 90,
-    "base_defense": 20,
-    "base_speed": 65,
-    "base_special_attack": 65,
-    "base_special_defense": 20,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_DARK"
-    ],
-    "abilities": [
-      "ABILITY_ROUGH_SKIN",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 225,
     "tm_hm_compatibility": "0010011001011100110010000010000100000000111111000000100011000000"
   },
   "SPECIES_SHARPEDO": {
     "label": "Sharpedo",
     "national_dex_number": 319,
-    "base_hp": 70,
-    "base_attack": 120,
-    "base_defense": 40,
-    "base_speed": 95,
-    "base_special_attack": 95,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_DARK"
-    ],
-    "abilities": [
-      "ABILITY_ROUGH_SKIN",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0010111001011110110010000110000100000010111111000000110111000000"
   },
   "SPECIES_TRAPINCH": {
     "label": "Trapinch",
     "national_dex_number": 328,
-    "base_hp": 45,
-    "base_attack": 100,
-    "base_defense": 45,
-    "base_speed": 10,
-    "base_special_attack": 45,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_GROUND",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_HYPER_CUTTER",
-      "ABILITY_ARENA_TRAP"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010001100010101011000111000100001010011110000000010100000000"
   },
   "SPECIES_VIBRAVA": {
     "label": "Vibrava",
     "national_dex_number": 329,
-    "base_hp": 50,
-    "base_attack": 70,
-    "base_defense": 50,
-    "base_speed": 70,
-    "base_special_attack": 50,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_GROUND",
-      "TYPE_DRAGON"
-    ],
-    "abilities": [
-      "ABILITY_LEVITATE",
-      "ABILITY_LEVITATE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0000010001100010101011000111000100001010011110100001010100000000"
   },
   "SPECIES_FLYGON": {
     "label": "Flygon",
     "national_dex_number": 330,
-    "base_hp": 80,
-    "base_attack": 100,
-    "base_defense": 80,
-    "base_speed": 100,
-    "base_special_attack": 80,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_GROUND",
-      "TYPE_DRAGON"
-    ],
-    "abilities": [
-      "ABILITY_LEVITATE",
-      "ABILITY_LEVITATE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0100010001100010101011100111000100101110011110100001010100000000"
   },
   "SPECIES_MAKUHITA": {
     "label": "Makuhita",
     "national_dex_number": 296,
-    "base_hp": 72,
-    "base_attack": 60,
-    "base_defense": 30,
-    "base_speed": 25,
-    "base_special_attack": 20,
-    "base_special_defense": 30,
-    "types": [
-      "TYPE_FIGHTING",
-      "TYPE_FIGHTING"
-    ],
-    "abilities": [
-      "ABILITY_THICK_FAT",
-      "ABILITY_GUTS"
-    ],
-    "catch_rate": 180,
     "tm_hm_compatibility": "1000010101100000110010000111001100000010011110000000110100000000"
   },
   "SPECIES_HARIYAMA": {
     "label": "Hariyama",
     "national_dex_number": 297,
-    "base_hp": 144,
-    "base_attack": 120,
-    "base_defense": 60,
-    "base_speed": 50,
-    "base_special_attack": 40,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_FIGHTING",
-      "TYPE_FIGHTING"
-    ],
-    "abilities": [
-      "ABILITY_THICK_FAT",
-      "ABILITY_GUTS"
-    ],
-    "catch_rate": 200,
     "tm_hm_compatibility": "1000010101100010110010000111001100000010011110000000110100000000"
   },
   "SPECIES_ELECTRIKE": {
     "label": "Electrike",
     "national_dex_number": 309,
-    "base_hp": 40,
-    "base_attack": 45,
-    "base_defense": 40,
-    "base_speed": 65,
-    "base_special_attack": 65,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_STATIC",
-      "ABILITY_LIGHTNING_ROD"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0000110001000000110010111010000101000000011111000000011000000000"
   },
   "SPECIES_MANECTRIC": {
     "label": "Manectric",
     "national_dex_number": 310,
-    "base_hp": 70,
-    "base_attack": 75,
-    "base_defense": 60,
-    "base_speed": 105,
-    "base_special_attack": 105,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_STATIC",
-      "ABILITY_LIGHTNING_ROD"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000110001000010110010111010000101000000011111000000011000000000"
   },
   "SPECIES_NUMEL": {
     "label": "Numel",
     "national_dex_number": 322,
-    "base_hp": 60,
-    "base_attack": 60,
-    "base_defense": 40,
-    "base_speed": 35,
-    "base_special_attack": 65,
-    "base_special_defense": 45,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_OBLIVIOUS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010001100000100010000111000100101110011110000100010100000000"
   },
   "SPECIES_CAMERUPT": {
     "label": "Camerupt",
     "national_dex_number": 323,
-    "base_hp": 70,
-    "base_attack": 100,
-    "base_defense": 70,
-    "base_speed": 40,
-    "base_special_attack": 105,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_FIRE",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_MAGMA_ARMOR",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 150,
     "tm_hm_compatibility": "0000110001100010100010000111000100101110011110000100010100000000"
   },
   "SPECIES_SPHEAL": {
     "label": "Spheal",
     "national_dex_number": 363,
-    "base_hp": 70,
-    "base_attack": 40,
-    "base_defense": 50,
-    "base_speed": 25,
-    "base_special_attack": 55,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_ICE",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_THICK_FAT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0010011001001100110010100110000100000010011110000000110111000000"
   },
   "SPECIES_SEALEO": {
     "label": "Sealeo",
     "national_dex_number": 364,
-    "base_hp": 90,
-    "base_attack": 60,
-    "base_defense": 70,
-    "base_speed": 45,
-    "base_special_attack": 75,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_ICE",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_THICK_FAT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0010111001001100110010100110000100000010011110000000110111000000"
   },
   "SPECIES_WALREIN": {
     "label": "Walrein",
     "national_dex_number": 365,
-    "base_hp": 110,
-    "base_attack": 80,
-    "base_defense": 90,
-    "base_speed": 65,
-    "base_special_attack": 95,
-    "base_special_defense": 90,
-    "types": [
-      "TYPE_ICE",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_THICK_FAT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010111001001110110010100110000100000010011110000000110111000000"
   },
   "SPECIES_CACNEA": {
     "label": "Cacnea",
     "national_dex_number": 331,
-    "base_hp": 50,
-    "base_attack": 85,
-    "base_defense": 40,
-    "base_speed": 35,
-    "base_special_attack": 85,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_SAND_VEIL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "1000010011100000101011000010000100001000011110000010001000000000"
   },
   "SPECIES_CACTURNE": {
     "label": "Cacturne",
     "national_dex_number": 332,
-    "base_hp": 70,
-    "base_attack": 115,
-    "base_defense": 60,
-    "base_speed": 55,
-    "base_special_attack": 115,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_DARK"
-    ],
-    "abilities": [
-      "ABILITY_SAND_VEIL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "1000010011100010101011000010000100001000011110000010011000000000"
   },
   "SPECIES_SNORUNT": {
     "label": "Snorunt",
     "national_dex_number": 361,
-    "base_hp": 50,
-    "base_attack": 50,
-    "base_defense": 50,
-    "base_speed": 50,
-    "base_special_attack": 50,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_ICE",
-      "TYPE_ICE"
-    ],
-    "abilities": [
-      "ABILITY_INNER_FOCUS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0010011001001101110110000010010100000000011110000000001000000000"
   },
   "SPECIES_GLALIE": {
     "label": "Glalie",
     "national_dex_number": 362,
-    "base_hp": 80,
-    "base_attack": 80,
-    "base_defense": 80,
-    "base_speed": 80,
-    "base_special_attack": 80,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_ICE",
-      "TYPE_ICE"
-    ],
-    "abilities": [
-      "ABILITY_INNER_FOCUS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0010011001011111110110000110010100000000111110000000001000000000"
   },
   "SPECIES_LUNATONE": {
     "label": "Lunatone",
     "national_dex_number": 337,
-    "base_hp": 70,
-    "base_attack": 55,
-    "base_defense": 65,
-    "base_speed": 70,
-    "base_special_attack": 95,
-    "base_special_defense": 85,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_LEVITATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0001010001001011110110000110110110001010011100010000001000000000"
   },
   "SPECIES_SOLROCK": {
     "label": "Solrock",
     "national_dex_number": 338,
-    "base_hp": 70,
-    "base_attack": 95,
-    "base_defense": 85,
-    "base_speed": 70,
-    "base_special_attack": 55,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_LEVITATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0001010001100011100111000110110110101110011100010100001000000000"
   },
   "SPECIES_AZURILL": {
     "label": "Azurill",
     "national_dex_number": 298,
-    "base_hp": 50,
-    "base_attack": 20,
-    "base_defense": 40,
-    "base_speed": 20,
-    "base_special_attack": 20,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_THICK_FAT",
-      "ABILITY_HUGE_POWER"
-    ],
-    "catch_rate": 150,
     "tm_hm_compatibility": "0010011001001100110010100010000100000000011110000000100010000000"
   },
   "SPECIES_SPOINK": {
     "label": "Spoink",
     "national_dex_number": 325,
-    "base_hp": 60,
-    "base_attack": 25,
-    "base_defense": 35,
-    "base_speed": 60,
-    "base_special_attack": 70,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_THICK_FAT",
-      "ABILITY_OWN_TEMPO"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0001010001110001110010100010110111000000111111011000001000000000"
   },
   "SPECIES_GRUMPIG": {
     "label": "Grumpig",
     "national_dex_number": 326,
-    "base_hp": 80,
-    "base_attack": 45,
-    "base_defense": 65,
-    "base_speed": 80,
-    "base_special_attack": 90,
-    "base_special_defense": 110,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_THICK_FAT",
-      "ABILITY_OWN_TEMPO"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "1001010001110011110010100010110111000000111111011000001000000000"
   },
   "SPECIES_PLUSLE": {
     "label": "Plusle",
     "national_dex_number": 311,
-    "base_hp": 60,
-    "base_attack": 50,
-    "base_defense": 40,
-    "base_speed": 95,
-    "base_special_attack": 85,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_PLUS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 200,
     "tm_hm_compatibility": "0000010001000001110010111010000101000000011110000000001000000000"
   },
   "SPECIES_MINUN": {
     "label": "Minun",
     "national_dex_number": 312,
-    "base_hp": 60,
-    "base_attack": 40,
-    "base_defense": 50,
-    "base_speed": 95,
-    "base_special_attack": 75,
-    "base_special_defense": 85,
-    "types": [
-      "TYPE_ELECTRIC",
-      "TYPE_ELECTRIC"
-    ],
-    "abilities": [
-      "ABILITY_MINUS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 200,
     "tm_hm_compatibility": "0000010001000001110010111010000101000000011110000000001000000000"
   },
   "SPECIES_MAWILE": {
     "label": "Mawile",
     "national_dex_number": 303,
-    "base_hp": 50,
-    "base_attack": 85,
-    "base_defense": 85,
-    "base_speed": 50,
-    "base_special_attack": 55,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_STEEL",
-      "TYPE_STEEL"
-    ],
-    "abilities": [
-      "ABILITY_HYPER_CUTTER",
-      "ABILITY_INTIMIDATE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1000010001111010110011000010001100111110111110000000010100000000"
   },
   "SPECIES_MEDITITE": {
     "label": "Meditite",
     "national_dex_number": 307,
-    "base_hp": 30,
-    "base_attack": 40,
-    "base_defense": 55,
-    "base_speed": 60,
-    "base_special_attack": 40,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_FIGHTING",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_PURE_POWER",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 180,
     "tm_hm_compatibility": "1001010101100001110010000010111110000010011110000000011100000000"
   },
   "SPECIES_MEDICHAM": {
     "label": "Medicham",
     "national_dex_number": 308,
-    "base_hp": 60,
-    "base_attack": 60,
-    "base_defense": 75,
-    "base_speed": 80,
-    "base_special_attack": 60,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_FIGHTING",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_PURE_POWER",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "1001010101100011110010000010111110000010011110000000011100000000"
   },
   "SPECIES_SWABLU": {
     "label": "Swablu",
     "national_dex_number": 333,
-    "base_hp": 45,
-    "base_attack": 40,
-    "base_defense": 60,
-    "base_speed": 50,
-    "base_special_attack": 40,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_NATURAL_CURE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0000010001101000110111000010000100000001011111100001000000000000"
   },
   "SPECIES_ALTARIA": {
     "label": "Altaria",
     "national_dex_number": 334,
-    "base_hp": 75,
-    "base_attack": 70,
-    "base_defense": 90,
-    "base_speed": 80,
-    "base_special_attack": 70,
-    "base_special_defense": 105,
-    "types": [
-      "TYPE_DRAGON",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_NATURAL_CURE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0100110001101010110111100110000100100101011111100001000100000000"
   },
   "SPECIES_WYNAUT": {
     "label": "Wynaut",
     "national_dex_number": 360,
-    "base_hp": 95,
-    "base_attack": 23,
-    "base_defense": 48,
-    "base_speed": 23,
-    "base_special_attack": 23,
-    "base_special_defense": 48,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_SHADOW_TAG",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 125,
     "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_DUSKULL": {
     "label": "Duskull",
     "national_dex_number": 355,
-    "base_hp": 20,
-    "base_attack": 40,
-    "base_defense": 90,
-    "base_speed": 25,
-    "base_special_attack": 30,
-    "base_special_defense": 90,
-    "types": [
-      "TYPE_GHOST",
-      "TYPE_GHOST"
-    ],
-    "abilities": [
-      "ABILITY_LEVITATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0001010001111100110010000010110100000000111111011000001000000000"
   },
   "SPECIES_DUSCLOPS": {
     "label": "Dusclops",
     "national_dex_number": 356,
-    "base_hp": 40,
-    "base_attack": 70,
-    "base_defense": 130,
-    "base_speed": 25,
-    "base_special_attack": 60,
-    "base_special_defense": 130,
-    "types": [
-      "TYPE_GHOST",
-      "TYPE_GHOST"
-    ],
-    "abilities": [
-      "ABILITY_PRESSURE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "1001010001111110110010000110110100000010111111011000011100000000"
   },
   "SPECIES_ROSELIA": {
     "label": "Roselia",
     "national_dex_number": 315,
-    "base_hp": 50,
-    "base_attack": 60,
-    "base_defense": 45,
-    "base_speed": 65,
-    "base_special_attack": 100,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_NATURAL_CURE",
-      "ABILITY_POISON_POINT"
-    ],
-    "catch_rate": 150,
     "tm_hm_compatibility": "0000010011100000101011000010010100010000011110000010001000000000"
   },
   "SPECIES_SLAKOTH": {
     "label": "Slakoth",
     "national_dex_number": 287,
-    "base_hp": 60,
-    "base_attack": 60,
-    "base_defense": 60,
-    "base_speed": 30,
-    "base_special_attack": 35,
-    "base_special_defense": 35,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_TRUANT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "1010010101101100110011011010011101100101011110000010010100000000"
   },
   "SPECIES_VIGOROTH": {
     "label": "Vigoroth",
     "national_dex_number": 288,
-    "base_hp": 80,
-    "base_attack": 80,
-    "base_defense": 80,
-    "base_speed": 90,
-    "base_special_attack": 55,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_VITAL_SPIRIT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "1010110101111100110011011110011101100101011110000010010100000000"
   },
   "SPECIES_SLAKING": {
     "label": "Slaking",
     "national_dex_number": 289,
-    "base_hp": 150,
-    "base_attack": 160,
-    "base_defense": 100,
-    "base_speed": 100,
-    "base_special_attack": 95,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_TRUANT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1010110101111110110011011110011101100101011110000010010100000000"
   },
   "SPECIES_GULPIN": {
     "label": "Gulpin",
     "national_dex_number": 316,
-    "base_hp": 70,
-    "base_attack": 43,
-    "base_defense": 53,
-    "base_speed": 40,
-    "base_special_attack": 43,
-    "base_special_defense": 53,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_LIQUID_OOZE",
-      "ABILITY_STICKY_HOLD"
-    ],
-    "catch_rate": 225,
     "tm_hm_compatibility": "0010010011101000111011000010010101010000011110001000010100000000"
   },
   "SPECIES_SWALOT": {
     "label": "Swalot",
     "national_dex_number": 317,
-    "base_hp": 100,
-    "base_attack": 73,
-    "base_defense": 83,
-    "base_speed": 55,
-    "base_special_attack": 73,
-    "base_special_defense": 83,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_LIQUID_OOZE",
-      "ABILITY_STICKY_HOLD"
-    ],
-    "catch_rate": 75,
     "tm_hm_compatibility": "0010010011101010111011000010010101010000011110001000010100000000"
   },
   "SPECIES_TROPIUS": {
     "label": "Tropius",
     "national_dex_number": 357,
-    "base_hp": 99,
-    "base_attack": 68,
-    "base_defense": 83,
-    "base_speed": 51,
-    "base_special_attack": 72,
-    "base_special_defense": 87,
-    "types": [
-      "TYPE_GRASS",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_CHLOROPHYLL",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 200,
     "tm_hm_compatibility": "0000110011100010101111000110000100000001011110100011011100000000"
   },
   "SPECIES_WHISMUR": {
     "label": "Whismur",
     "national_dex_number": 293,
-    "base_hp": 64,
-    "base_attack": 51,
-    "base_defense": 23,
-    "base_speed": 28,
-    "base_special_attack": 51,
-    "base_special_defense": 23,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_SOUNDPROOF",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 190,
     "tm_hm_compatibility": "0010110001101100110011000010010101100100011110000000000000000000"
   },
   "SPECIES_LOUDRED": {
     "label": "Loudred",
     "national_dex_number": 294,
-    "base_hp": 84,
-    "base_attack": 71,
-    "base_defense": 43,
-    "base_speed": 48,
-    "base_special_attack": 71,
-    "base_special_defense": 43,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_SOUNDPROOF",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0010110001111100110011000110011101100100111110000100010100000000"
   },
   "SPECIES_EXPLOUD": {
     "label": "Exploud",
     "national_dex_number": 295,
-    "base_hp": 104,
-    "base_attack": 91,
-    "base_defense": 63,
-    "base_speed": 68,
-    "base_special_attack": 91,
-    "base_special_defense": 63,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_SOUNDPROOF",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010110001111110110011000110011101100100111110000100010100000000"
   },
   "SPECIES_CLAMPERL": {
     "label": "Clamperl",
     "national_dex_number": 366,
-    "base_hp": 35,
-    "base_attack": 64,
-    "base_defense": 85,
-    "base_speed": 32,
-    "base_special_attack": 74,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_SHELL_ARMOR",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 255,
     "tm_hm_compatibility": "0010011001001100110010000010000100000000011110000000100011000000"
   },
   "SPECIES_HUNTAIL": {
     "label": "Huntail",
     "national_dex_number": 367,
-    "base_hp": 55,
-    "base_attack": 104,
-    "base_defense": 105,
-    "base_speed": 52,
-    "base_special_attack": 94,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0010011001001110110010000010000100000010011110001000100011000000"
   },
   "SPECIES_GOREBYSS": {
     "label": "Gorebyss",
     "national_dex_number": 368,
-    "base_hp": 55,
-    "base_attack": 84,
-    "base_defense": 105,
-    "base_speed": 52,
-    "base_special_attack": 114,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 60,
     "tm_hm_compatibility": "0010011001001110110110000010110100000000011110000000100011000000"
   },
   "SPECIES_ABSOL": {
     "label": "Absol",
     "national_dex_number": 359,
-    "base_hp": 65,
-    "base_attack": 130,
-    "base_defense": 60,
-    "base_speed": 75,
-    "base_special_attack": 75,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_DARK",
-      "TYPE_DARK"
-    ],
-    "abilities": [
-      "ABILITY_PRESSURE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 30,
     "tm_hm_compatibility": "0011011001111110110010111010010101101101111111001010011100000000"
   },
   "SPECIES_SHUPPET": {
     "label": "Shuppet",
     "national_dex_number": 353,
-    "base_hp": 44,
-    "base_attack": 75,
-    "base_defense": 35,
-    "base_speed": 45,
-    "base_special_attack": 63,
-    "base_special_defense": 33,
-    "types": [
-      "TYPE_GHOST",
-      "TYPE_GHOST"
-    ],
-    "abilities": [
-      "ABILITY_INSOMNIA",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 225,
     "tm_hm_compatibility": "0001010001110000110010011010110101000000111111011000001000000000"
   },
   "SPECIES_BANETTE": {
     "label": "Banette",
     "national_dex_number": 354,
-    "base_hp": 64,
-    "base_attack": 115,
-    "base_defense": 65,
-    "base_speed": 65,
-    "base_special_attack": 83,
-    "base_special_defense": 63,
-    "types": [
-      "TYPE_GHOST",
-      "TYPE_GHOST"
-    ],
-    "abilities": [
-      "ABILITY_INSOMNIA",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0001010001110010110010011010110101000000111111011000001000000000"
   },
   "SPECIES_SEVIPER": {
     "label": "Seviper",
     "national_dex_number": 336,
-    "base_hp": 73,
-    "base_attack": 100,
-    "base_defense": 60,
-    "base_speed": 65,
-    "base_special_attack": 100,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_POISON",
-      "TYPE_POISON"
-    ],
-    "abilities": [
-      "ABILITY_SHED_SKIN",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "0000010001110000111010100111000100110000011111001000010100000000"
   },
   "SPECIES_ZANGOOSE": {
     "label": "Zangoose",
     "national_dex_number": 335,
-    "base_hp": 73,
-    "base_attack": 115,
-    "base_defense": 60,
-    "base_speed": 90,
-    "base_special_attack": 60,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_IMMUNITY",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "1010110001111100111011111011011101100101011111000000010100000000"
   },
   "SPECIES_RELICANTH": {
     "label": "Relicanth",
     "national_dex_number": 369,
-    "base_hp": 100,
-    "base_attack": 90,
-    "base_defense": 130,
-    "base_speed": 55,
-    "base_special_attack": 45,
-    "base_special_defense": 65,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_ROCK"
-    ],
-    "abilities": [
-      "ABILITY_SWIFT_SWIM",
-      "ABILITY_ROCK_HEAD"
-    ],
-    "catch_rate": 25,
     "tm_hm_compatibility": "0011011001001110110110000110000100001010011110000000100111000000"
   },
   "SPECIES_ARON": {
     "label": "Aron",
     "national_dex_number": 304,
-    "base_hp": 50,
-    "base_attack": 70,
-    "base_defense": 100,
-    "base_speed": 30,
-    "base_special_attack": 40,
-    "base_special_defense": 40,
-    "types": [
-      "TYPE_STEEL",
-      "TYPE_ROCK"
-    ],
-    "abilities": [
-      "ABILITY_STURDY",
-      "ABILITY_ROCK_HEAD"
-    ],
-    "catch_rate": 180,
     "tm_hm_compatibility": "0010110001100000110010100111000101001011011110000010010100000000"
   },
   "SPECIES_LAIRON": {
     "label": "Lairon",
     "national_dex_number": 305,
-    "base_hp": 60,
-    "base_attack": 90,
-    "base_defense": 140,
-    "base_speed": 40,
-    "base_special_attack": 50,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_STEEL",
-      "TYPE_ROCK"
-    ],
-    "abilities": [
-      "ABILITY_STURDY",
-      "ABILITY_ROCK_HEAD"
-    ],
-    "catch_rate": 90,
     "tm_hm_compatibility": "0010110001100000110010100111000101001011011110000010010100000000"
   },
   "SPECIES_AGGRON": {
     "label": "Aggron",
     "national_dex_number": 306,
-    "base_hp": 70,
-    "base_attack": 110,
-    "base_defense": 180,
-    "base_speed": 50,
-    "base_special_attack": 60,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_STEEL",
-      "TYPE_ROCK"
-    ],
-    "abilities": [
-      "ABILITY_STURDY",
-      "ABILITY_ROCK_HEAD"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "1110110001111110110011111111001101101111011110000010110100000000"
   },
   "SPECIES_CASTFORM": {
     "label": "Castform",
     "national_dex_number": 351,
-    "base_hp": 70,
-    "base_attack": 70,
-    "base_defense": 70,
-    "base_speed": 70,
-    "base_special_attack": 70,
-    "base_special_defense": 70,
-    "types": [
-      "TYPE_NORMAL",
-      "TYPE_NORMAL"
-    ],
-    "abilities": [
-      "ABILITY_FORECAST",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010011001101100110011011010010101101100011111000000001000000000"
   },
   "SPECIES_VOLBEAT": {
     "label": "Volbeat",
     "national_dex_number": 313,
-    "base_hp": 65,
-    "base_attack": 73,
-    "base_defense": 55,
-    "base_speed": 85,
-    "base_special_attack": 47,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_BUG"
-    ],
-    "abilities": [
-      "ABILITY_ILLUMINATE",
-      "ABILITY_SWARM"
-    ],
-    "catch_rate": 150,
     "tm_hm_compatibility": "1010010001100001111011011010011101000001011111000000001000000000"
   },
   "SPECIES_ILLUMISE": {
     "label": "Illumise",
     "national_dex_number": 314,
-    "base_hp": 65,
-    "base_attack": 47,
-    "base_defense": 55,
-    "base_speed": 85,
-    "base_special_attack": 73,
-    "base_special_defense": 75,
-    "types": [
-      "TYPE_BUG",
-      "TYPE_BUG"
-    ],
-    "abilities": [
-      "ABILITY_OBLIVIOUS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 150,
     "tm_hm_compatibility": "1010010001100001111011011010011101000001011111000000001000000000"
   },
   "SPECIES_LILEEP": {
     "label": "Lileep",
     "national_dex_number": 345,
-    "base_hp": 66,
-    "base_attack": 41,
-    "base_defense": 77,
-    "base_speed": 23,
-    "base_special_attack": 61,
-    "base_special_defense": 87,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_SUCTION_CUPS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010011100000101011000010000100011000011110000000000000000000"
   },
   "SPECIES_CRADILY": {
     "label": "Cradily",
     "national_dex_number": 346,
-    "base_hp": 86,
-    "base_attack": 81,
-    "base_defense": 97,
-    "base_speed": 43,
-    "base_special_attack": 81,
-    "base_special_defense": 107,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_GRASS"
-    ],
-    "abilities": [
-      "ABILITY_SUCTION_CUPS",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0000010011100010101011000110000100011010011110000000010100000000"
   },
   "SPECIES_ANORITH": {
     "label": "Anorith",
     "national_dex_number": 347,
-    "base_hp": 45,
-    "base_attack": 95,
-    "base_defense": 50,
-    "base_speed": 75,
-    "base_special_attack": 40,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_BUG"
-    ],
-    "abilities": [
-      "ABILITY_BATTLE_ARMOR",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010010001100000100010000011001100001011011110000010000100000000"
   },
   "SPECIES_ARMALDO": {
     "label": "Armaldo",
     "national_dex_number": 348,
-    "base_hp": 75,
-    "base_attack": 125,
-    "base_defense": 100,
-    "base_speed": 45,
-    "base_special_attack": 70,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_BUG"
-    ],
-    "abilities": [
-      "ABILITY_BATTLE_ARMOR",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0010010001100010100010100111001100001011011110000010010100000000"
   },
   "SPECIES_RALTS": {
     "label": "Ralts",
     "national_dex_number": 280,
-    "base_hp": 28,
-    "base_attack": 25,
-    "base_defense": 25,
-    "base_speed": 40,
-    "base_special_attack": 45,
-    "base_special_defense": 35,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_SYNCHRONIZE",
-      "ABILITY_TRACE"
-    ],
-    "catch_rate": 235,
     "tm_hm_compatibility": "0001010001110001110110010010110111000000111111011000001000000000"
   },
   "SPECIES_KIRLIA": {
     "label": "Kirlia",
     "national_dex_number": 281,
-    "base_hp": 38,
-    "base_attack": 35,
-    "base_defense": 35,
-    "base_speed": 50,
-    "base_special_attack": 65,
-    "base_special_defense": 55,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_SYNCHRONIZE",
-      "ABILITY_TRACE"
-    ],
-    "catch_rate": 120,
     "tm_hm_compatibility": "0001010001110001110110010010110111000000111111011000001000000000"
   },
   "SPECIES_GARDEVOIR": {
     "label": "Gardevoir",
     "national_dex_number": 282,
-    "base_hp": 68,
-    "base_attack": 65,
-    "base_defense": 65,
-    "base_speed": 80,
-    "base_special_attack": 125,
-    "base_special_defense": 115,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_SYNCHRONIZE",
-      "ABILITY_TRACE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0001010001110011110110010010110111000000111111011000001000000000"
   },
   "SPECIES_BAGON": {
     "label": "Bagon",
     "national_dex_number": 371,
-    "base_hp": 45,
-    "base_attack": 75,
-    "base_defense": 60,
-    "base_speed": 50,
-    "base_special_attack": 40,
-    "base_special_defense": 30,
-    "types": [
-      "TYPE_DRAGON",
-      "TYPE_DRAGON"
-    ],
-    "abilities": [
-      "ABILITY_ROCK_HEAD",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0100110001100000110010000010001100100111011110000010010100000000"
   },
   "SPECIES_SHELGON": {
     "label": "Shelgon",
     "national_dex_number": 372,
-    "base_hp": 65,
-    "base_attack": 95,
-    "base_defense": 100,
-    "base_speed": 50,
-    "base_special_attack": 60,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_DRAGON",
-      "TYPE_DRAGON"
-    ],
-    "abilities": [
-      "ABILITY_ROCK_HEAD",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0100110001100000110010000010001100100111011110000010010100000000"
   },
   "SPECIES_SALAMENCE": {
     "label": "Salamence",
     "national_dex_number": 373,
-    "base_hp": 95,
-    "base_attack": 135,
-    "base_defense": 80,
-    "base_speed": 100,
-    "base_special_attack": 110,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_DRAGON",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_INTIMIDATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0100110001100010110010100110001100100111011110100011010100000000"
   },
   "SPECIES_BELDUM": {
     "label": "Beldum",
     "national_dex_number": 374,
-    "base_hp": 40,
-    "base_attack": 55,
-    "base_defense": 80,
-    "base_speed": 30,
-    "base_special_attack": 35,
-    "base_special_defense": 60,
-    "types": [
-      "TYPE_STEEL",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_CLEAR_BODY",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "SPECIES_METANG": {
     "label": "Metang",
     "national_dex_number": 375,
-    "base_hp": 60,
-    "base_attack": 75,
-    "base_defense": 100,
-    "base_speed": 50,
-    "base_special_attack": 55,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_STEEL",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_CLEAR_BODY",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "0000010001100011110010000110111110011011011100000010011100000000"
   },
   "SPECIES_METAGROSS": {
     "label": "Metagross",
     "national_dex_number": 376,
-    "base_hp": 80,
-    "base_attack": 135,
-    "base_defense": 130,
-    "base_speed": 70,
-    "base_special_attack": 95,
-    "base_special_defense": 90,
-    "types": [
-      "TYPE_STEEL",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_CLEAR_BODY",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "0000010001100011110010000110111110011011011100000010011100000000"
   },
   "SPECIES_REGIROCK": {
     "label": "Regirock",
     "national_dex_number": 377,
-    "base_hp": 80,
-    "base_attack": 100,
-    "base_defense": 200,
-    "base_speed": 50,
-    "base_special_attack": 50,
-    "base_special_defense": 100,
-    "types": [
-      "TYPE_ROCK",
-      "TYPE_ROCK"
-    ],
-    "abilities": [
-      "ABILITY_CLEAR_BODY",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "1000010001100010100110011111001101001010011100000000010100000000"
   },
   "SPECIES_REGICE": {
     "label": "Regice",
     "national_dex_number": 378,
-    "base_hp": 80,
-    "base_attack": 50,
-    "base_defense": 100,
-    "base_speed": 50,
-    "base_special_attack": 100,
-    "base_special_defense": 200,
-    "types": [
-      "TYPE_ICE",
-      "TYPE_ICE"
-    ],
-    "abilities": [
-      "ABILITY_CLEAR_BODY",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "1000011001001110110110011110001101000000011100000000010100000000"
   },
   "SPECIES_REGISTEEL": {
     "label": "Registeel",
     "national_dex_number": 379,
-    "base_hp": 80,
-    "base_attack": 75,
-    "base_defense": 150,
-    "base_speed": 50,
-    "base_special_attack": 75,
-    "base_special_defense": 150,
-    "types": [
-      "TYPE_STEEL",
-      "TYPE_STEEL"
-    ],
-    "abilities": [
-      "ABILITY_CLEAR_BODY",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "1000010001100010110110011110001101001011011100000000010100000000"
   },
   "SPECIES_KYOGRE": {
     "label": "Kyogre",
     "national_dex_number": 382,
-    "base_hp": 100,
-    "base_attack": 100,
-    "base_defense": 90,
-    "base_speed": 90,
-    "base_special_attack": 150,
-    "base_special_defense": 140,
-    "types": [
-      "TYPE_WATER",
-      "TYPE_WATER"
-    ],
-    "abilities": [
-      "ABILITY_DRIZZLE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 5,
     "tm_hm_compatibility": "0011111001001110110110011110001101000010011100000000110111000000"
   },
   "SPECIES_GROUDON": {
     "label": "Groudon",
     "national_dex_number": 383,
-    "base_hp": 100,
-    "base_attack": 150,
-    "base_defense": 140,
-    "base_speed": 90,
-    "base_special_attack": 100,
-    "base_special_defense": 90,
-    "types": [
-      "TYPE_GROUND",
-      "TYPE_GROUND"
-    ],
-    "abilities": [
-      "ABILITY_DROUGHT",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 5,
     "tm_hm_compatibility": "0100110101100010100111111111001101101111011100000110010100000000"
   },
   "SPECIES_RAYQUAZA": {
     "label": "Rayquaza",
     "national_dex_number": 384,
-    "base_hp": 105,
-    "base_attack": 150,
-    "base_defense": 90,
-    "base_speed": 95,
-    "base_special_attack": 150,
-    "base_special_defense": 90,
-    "types": [
-      "TYPE_DRAGON",
-      "TYPE_FLYING"
-    ],
-    "abilities": [
-      "ABILITY_AIR_LOCK",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "0110110101101110110011111110001101101101011100000101110111000000"
   },
   "SPECIES_LATIAS": {
     "label": "Latias",
     "national_dex_number": 380,
-    "base_hp": 80,
-    "base_attack": 80,
-    "base_defense": 90,
-    "base_speed": 110,
-    "base_special_attack": 110,
-    "base_special_defense": 130,
-    "types": [
-      "TYPE_DRAGON",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_LEVITATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "0111110001101011110111011110110111001001011110100011101011000000"
   },
   "SPECIES_LATIOS": {
     "label": "Latios",
     "national_dex_number": 381,
-    "base_hp": 80,
-    "base_attack": 90,
-    "base_defense": 80,
-    "base_speed": 110,
-    "base_special_attack": 130,
-    "base_special_defense": 110,
-    "types": [
-      "TYPE_DRAGON",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_LEVITATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "0111110001101011110111011110110111001001011110100011101011000000"
   },
   "SPECIES_JIRACHI": {
     "label": "Jirachi",
     "national_dex_number": 385,
-    "base_hp": 100,
-    "base_attack": 100,
-    "base_defense": 100,
-    "base_speed": 100,
-    "base_special_attack": 100,
-    "base_special_defense": 100,
-    "types": [
-      "TYPE_STEEL",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_SERENE_GRACE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "0011010001100011110110011010110111001001011100010000001000000000"
   },
   "SPECIES_DEOXYS": {
     "label": "Deoxys",
     "national_dex_number": 386,
-    "base_hp": 50,
-    "base_attack": 150,
-    "base_defense": 50,
-    "base_speed": 150,
-    "base_special_attack": 150,
-    "base_special_defense": 50,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_PRESSURE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 3,
     "tm_hm_compatibility": "1011010001111011110111011010111111000011111100011010011100000000"
   },
   "SPECIES_CHIMECHO": {
     "label": "Chimecho",
     "national_dex_number": 358,
-    "base_hp": 65,
-    "base_attack": 50,
-    "base_defense": 70,
-    "base_speed": 65,
-    "base_special_attack": 95,
-    "base_special_defense": 80,
-    "types": [
-      "TYPE_PSYCHIC",
-      "TYPE_PSYCHIC"
-    ],
-    "abilities": [
-      "ABILITY_LEVITATE",
-      "ABILITY_NONE"
-    ],
-    "catch_rate": 45,
     "tm_hm_compatibility": "0001010001110001110110000010110111000000111110011000001000000000"
   }
 }
