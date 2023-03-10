@@ -6,7 +6,7 @@ from typing import Dict, Union, Optional, Iterable, Sized, Tuple, List
 from . import options
 from .data import all_fish, FishItem, all_purchasable_seeds, SeedItem, all_crops, CropItem
 from .data.bundle_data import BundleItem
-from .data.minerals_data import all_museum_items, MuseumItem
+from .data.museum_data import all_museum_items, MuseumItem
 from .data.villagers_data import all_villagers_by_name
 from .items import all_items, Group
 from .options import StardewOptions

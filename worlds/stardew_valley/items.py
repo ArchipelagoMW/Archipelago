@@ -139,7 +139,7 @@ def load_item_csv():
     try:
         from importlib.resources import files
     except ImportError:
-        from importlib_resources import files
+        from importlib_resources import files  # noqa
 
     items = []
     with files(data).joinpath("items.csv").open() as file:
@@ -156,7 +156,7 @@ def load_resource_pack_csv() -> List[ResourcePackData]:
     try:
         from importlib.resources import files
     except ImportError:
-        from importlib_resources import files
+        from importlib_resources import files  # noqa
 
     resource_packs = []
     with files(data).joinpath("resource_packs.csv").open() as file:

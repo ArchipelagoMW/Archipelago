@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 
 from worlds.stardew_valley.data.game_item import GameItem
-from . import fish_data, minerals_data
+from . import fish_data
+from .museum_data import Mineral
 
 quality_dict = {
     0: "",
@@ -218,16 +219,16 @@ iridium_bar = BundleItem.item_bundle("Iridium Bar", 337, 1, 0)
 refined_quartz = BundleItem.item_bundle("Refined Quartz", 338, 2, 0)
 coal = BundleItem.item_bundle("Coal", 382, 5, 0)
 
-quartz = BundleItem(minerals_data.quartz, 1, 0)
-fire_quartz = BundleItem(minerals_data.fire_quartz, 1, 0)
-frozen_tear = BundleItem(minerals_data.frozen_tear, 1, 0)
-earth_crystal = BundleItem(minerals_data.earth_crystal, 1, 0)
-emerald = BundleItem(minerals_data.emerald, 1, 0)
-aquamarine = BundleItem(minerals_data.aquamarine, 1, 0)
-ruby = BundleItem(minerals_data.ruby, 1, 0)
-amethyst = BundleItem(minerals_data.amethyst, 1, 0)
-topaz = BundleItem(minerals_data.topaz, 1, 0)
-jade = BundleItem(minerals_data.jade, 1, 0)
+quartz = BundleItem(Mineral.quartz, 1, 0)
+fire_quartz = BundleItem(Mineral.fire_quartz, 1, 0)
+frozen_tear = BundleItem(Mineral.frozen_tear, 1, 0)
+earth_crystal = BundleItem(Mineral.earth_crystal, 1, 0)
+emerald = BundleItem(Mineral.emerald, 1, 0)
+aquamarine = BundleItem(Mineral.aquamarine, 1, 0)
+ruby = BundleItem(Mineral.ruby, 1, 0)
+amethyst = BundleItem(Mineral.amethyst, 1, 0)
+topaz = BundleItem(Mineral.topaz, 1, 0)
+jade = BundleItem(Mineral.jade, 1, 0)
 
 slime = BundleItem.item_bundle("Slime", 766, 99, 0)
 bug_meat = BundleItem.item_bundle("Bug Meat", 684, 10, 0)

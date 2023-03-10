@@ -12,8 +12,7 @@ from typing import List
 
 from worlds.stardew_valley import LocationData
 from worlds.stardew_valley.items import load_item_csv, Group, ItemData, load_resource_pack_csv, friendship_pack
-from worlds.stardew_valley.locations import load_location_csv, LocationTags
-from worlds.stardew_valley.data.minerals_data import all_museum_items
+from worlds.stardew_valley.locations import load_location_csv
 
 RESOURCE_PACK_CODE_OFFSET = 5000
 script_folder = Path(__file__)

@@ -5,7 +5,7 @@ from BaseClasses import MultiWorld
 from worlds.generic import Rules as MultiWorldRules
 from . import options, locations
 from .bundles import Bundle
-from .data.minerals_data import all_museum_items, all_mineral_items, all_artifact_items, \
+from .data.museum_data import all_museum_items, all_mineral_items, all_artifact_items, \
     dwarf_scrolls, skeleton_front, \
     skeleton_middle, skeleton_back, all_museum_items_by_name
 from .locations import LocationTags

@@ -6,7 +6,7 @@ from typing import Optional, Dict, Protocol, List, FrozenSet
 
 from . import options, data
 from .data.fish_data import legendary_fish, special_fish, all_fish
-from .data.minerals_data import all_museum_items
+from .data.museum_data import all_museum_items
 from .data.villagers_data import all_villagers
 
 LOCATION_CODE_OFFSET = 717000
