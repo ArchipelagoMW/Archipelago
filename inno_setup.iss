@@ -108,7 +108,7 @@ Source: "{code:GetRedROMPath}"; DestDir: "{app}"; DestName: "Pokemon Red (UE) [S
 Source: "{code:GetBlueROMPath}"; DestDir: "{app}"; DestName: "Pokemon Blue (UE) [S][!].gb"; Flags: external; Components: client/pkmn/blue or generator/pkmn_b
 Source: "{code:GetLADXROMPath}"; DestDir: "{app}"; DestName: "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"; Flags: external; Components: client/ladx or generator/ladx
 Source: "{code:GetTLoZROMPath}"; DestDir: "{app}"; DestName: "Legend of Zelda, The (U) (PRG0) [!].nes"; Flags: external; Components: client/tloz or generator/tloz
-Source: "{code:GetAdvnROMPath}"; DestDir: "{app}"; DestName: "ADVNTURE.BIN"; Flags: external; Components: client/advn or generator/advn
+Source: "{code:GetAdvnROMPath}"; DestDir: "{app}"; DestName: "ADVNTURE.BIN"; Flags: external; Components: client/advn
 Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#source_path}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/sni
 Source: "{#source_path}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator/lttp
@@ -842,5 +842,5 @@ begin
   if (assigned(TLoZROMFilePage)) and (PageID = TLoZROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/tloz') or WizardIsComponentSelected('client/tloz'));
   if (assigned(AdvnROMFilePage)) and (PageID = AdvnROMFilePage.ID) then
-    Result := not (WizardIsComponentSelected('generator/advn') or WizardIsComponentSelected('client/advn'));
+    Result := not WizardIsComponentSelected('client/advn'));
 end;
