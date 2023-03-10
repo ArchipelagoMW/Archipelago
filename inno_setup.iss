@@ -505,7 +505,7 @@ begin
     '.z64');
 end;
 
-function AddBINPage(name: string): TInputFileWizardPage;
+function AddA26Page(name: string): TInputFileWizardPage;
 begin
   Result :=
     CreateInputFilePage(
@@ -516,8 +516,8 @@ begin
 
   Result.Add(
     'Location of ROM file:',
-    'BIN files|*.BIN;*.BIN|All files|*.*',
-    '.BIN');
+    'A2600 ROM files|*.a26;*.BIN|All files|*.*',
+    '.a26');
 end;
 
 function NextButtonClick(CurPageID: Integer): Boolean;
@@ -842,5 +842,5 @@ begin
   if (assigned(TLoZROMFilePage)) and (PageID = TLoZROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/tloz') or WizardIsComponentSelected('client/tloz'));
   if (assigned(AdvnROMFilePage)) and (PageID = AdvnROMFilePage.ID) then
-    Result := not WizardIsComponentSelected('client/advn'));
+    Result := not (WizardIsComponentSelected('client/advn'));
 end;
