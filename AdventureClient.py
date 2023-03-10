@@ -87,6 +87,8 @@ class AdventureContext(CommonContext):
         if password_requested and not self.password:
             await super(AdventureContext, self).server_auth(password_requested)
         if not self.auth:
+            self.auth = self.player_name
+        if not self.auth:
             self.awaiting_rom = True
             logger.info('Awaiting connection to adventure_connector to get Player information')
             return
@@ -429,7 +431,7 @@ async def run_game(romfile):
 
 async def patch_and_run_game(patch_file, ctx):
     base_name = os.path.splitext(patch_file)[0]
-    comp_path = base_name + '.BIN'
+    comp_path = base_name + '.a26'
     try:
         base_rom = AdventureDeltaPatch.get_source_data()
     except Exception as msg:
