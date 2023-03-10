@@ -94,10 +94,16 @@ class WebHostContext(Context):
 
         multidata = self.decompress(room.seed.multidata)
         game_data_packages = {}
-        for game, game_data in multidata["datapackage"].items():
+        for game in list(multidata["datapackage"]):
+            game_data = multidata["datapackage"][game]
             if "checksum" in game_data:
-                data = Utils.restricted_loads(GameDataPackage.get(game=game, checksum=game_data["checksum"]).data)
-                game_data_packages[game] = data
+                if self.gamespackage.get(game, {}).get("checksum") == game_data["checksum"]:
+                    # non-custom. remove from multidata
+                    # games package could be dropped from static data once all rooms embed data package
+                    del multidata["datapackage"][game]
+                else:
+                    data = Utils.restricted_loads(GameDataPackage.get(game=game, checksum=game_data["checksum"]).data)
+                    game_data_packages[game] = data
 
         return self._load(multidata, game_data_packages, True)
 
