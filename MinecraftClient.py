@@ -81,43 +81,30 @@ def update_mod(forge_dir, url: str):
     """Check mod version, download new mod from GitHub releases page if needed. """
     ap_randomizer = find_ap_randomizer_jar(forge_dir)
     os.path.basename(url)
-    client_releases_endpoint = "https://api.github.com/repos/KonoTyran/Minecraft_AP_Randomizer/releases"
-    resp = requests.get(client_releases_endpoint)
-    if resp.status_code == 200:  # OK
-        try:
-            if ap_randomizer is not None:
-                logging.info(f"Your current mod is {ap_randomizer}.")
-            else:
-                logging.info(f"You do not have the AP randomizer mod installed.")
-
-            if ap_randomizer != os.path.basename(url):
-                logging.info(f"A new release of the Minecraft AP randomizer mod was found: "
-                             f"{os.path.basename(url)}")
-                if prompt_yes_no("Would you like to update?"):
-                    old_ap_mod = os.path.join(forge_dir, 'mods', ap_randomizer) if ap_randomizer is not None else None
-                    new_ap_mod = os.path.join(forge_dir, 'mods', os.path.basename(url))
-                    logging.info("Downloading AP randomizer mod. This may take a moment...")
-                    apmod_resp = requests.get(url)
-                    if apmod_resp.status_code == 200:
-                        with open(new_ap_mod, 'wb') as f:
-                            f.write(apmod_resp.content)
-                            logging.info(f"Wrote new mod file to {new_ap_mod}")
-                        if old_ap_mod is not None:
-                            os.remove(old_ap_mod)
-                            logging.info(f"Removed old mod file from {old_ap_mod}")
-                    else:
-                        logging.error(f"Error retrieving the randomizer mod (status code {apmod_resp.status_code}).")
-                        logging.error(f"Please report this issue on the Archipelago Discord server.")
-                        sys.exit(1)
-        except StopIteration:
-            logging.warning(f"Unable to find download path {url}.")
-            if not prompt_yes_no("Run server anyway?"):
-                sys.exit(0)
+    if ap_randomizer is not None:
+        logging.info(f"Your current mod is {ap_randomizer}.")
     else:
-        logging.error(f"Error checking for randomizer mod updates (status code {resp.status_code}).")
-        logging.error(f"If this was not expected, please report this issue on the Archipelago Discord server.")
-        if not prompt_yes_no("Continue anyways?"):
-            sys.exit(0)
+        logging.info(f"You do not have the AP randomizer mod installed.")
+
+    if ap_randomizer != os.path.basename(url):
+        logging.info(f"A new release of the Minecraft AP randomizer mod was found: "
+                     f"{os.path.basename(url)}")
+        if prompt_yes_no("Would you like to update?"):
+            old_ap_mod = os.path.join(forge_dir, 'mods', ap_randomizer) if ap_randomizer is not None else None
+            new_ap_mod = os.path.join(forge_dir, 'mods', os.path.basename(url))
+            logging.info("Downloading AP randomizer mod. This may take a moment...")
+            apmod_resp = requests.get(url)
+            if apmod_resp.status_code == 200:
+                with open(new_ap_mod, 'wb') as f:
+                    f.write(apmod_resp.content)
+                    logging.info(f"Wrote new mod file to {new_ap_mod}")
+                if old_ap_mod is not None:
+                    os.remove(old_ap_mod)
+                    logging.info(f"Removed old mod file from {old_ap_mod}")
+            else:
+                logging.error(f"Error retrieving the randomizer mod (status code {apmod_resp.status_code}).")
+                logging.error(f"Please report this issue on the Archipelago Discord server.")
+                sys.exit(1)
 
 
 def check_eula(forge_dir):
