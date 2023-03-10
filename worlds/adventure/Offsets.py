@@ -16,6 +16,10 @@ rhindle_speed_data_location = 0x709
 # in case I need to place a rom address in the rom
 rom_address_space_start = 0xf000
 
+start_castle_offset = 0x39c
+start_castle_values = [0x11, 0x10, 0x0F]
+"""yellow, black, white castle gate rooms"""
+
 # indexed by static item table index.  0x00 indicates the position data is in ROM and is irrelevant to the randomizer
 item_ram_addresses = [
     0xD9,  # lamp

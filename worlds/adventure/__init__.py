@@ -21,7 +21,7 @@ from .Items import item_table, ItemData, nothing_item_id, event_table, Adventure
 from .Locations import location_table, base_location_id, LocationData, get_random_room_in_regions
 from .Offsets import static_item_data_location, items_ram_start, static_item_element_size, item_position_table, \
     static_first_dragon_index, connector_port_offset, yorgle_speed_data_location, grundle_speed_data_location, \
-    rhindle_speed_data_location, item_ram_addresses
+    rhindle_speed_data_location, item_ram_addresses, start_castle_values, start_castle_offset
 from .Regions import create_regions
 from .Rules import set_rules
 
@@ -78,6 +78,7 @@ class AdventureWorld(World):
         self.rhindle_min_speed: Optional[int] = 3
         self.difficulty_switch_a: Optional[int] = 0
         self.difficulty_switch_b: Optional[int] = 0
+        self.start_castle: Optional[int] = 0
         # dict of item names -> list of speed deltas
         self.dragon_speed_reducer_info: {} = {}
         self.created_items: int = 0
@@ -107,6 +108,7 @@ class AdventureWorld(World):
         self.rhindle_min_speed = self.multiworld.rhindle_min_speed[self.player].value
         self.difficulty_switch_a = self.multiworld.difficulty_switch_a[self.player].value
         self.difficulty_switch_b = self.multiworld.difficulty_switch_b[self.player].value
+        self.start_castle = self.multiworld.start_castle[self.player].value
         self.created_items = 0
 
         if self.dragon_slay_check == 0:
@@ -255,6 +257,10 @@ class AdventureWorld(World):
         rom_deltas[grundle_speed_data_location] = self.grundle_speed
         rom_deltas[rhindle_speed_data_location] = self.rhindle_speed
 
+    def set_start_castle(self, rom_deltas):
+        start_castle_value = start_castle_values[self.start_castle]
+        rom_deltas[start_castle_offset] = start_castle_value
+
     def generate_output(self, output_directory: str) -> None:
         rom_path: str = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.bin")
         foreign_item_locations: [LocationData] = []
@@ -266,6 +272,7 @@ class AdventureWorld(World):
             rom_deltas: { int, int } = {}
             self.place_dragons(rom_deltas)
             self.set_dragon_speeds(rom_deltas)
+            self.set_start_castle(rom_deltas)
             # start and stop indices are offsets in the ROM file, not Adventure ROM addresses (which start at f000)
 
             # This places the local items (I still need to make it easy to inject the offset data)

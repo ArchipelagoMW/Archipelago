@@ -254,7 +254,6 @@ def send_ap_foreign_items(adventure_context):
         }
     )
     print("sending foreign items")
-    print(payload)
     msg = payload.encode()
     (reader, writer) = adventure_context.atari_streams
     writer.write(msg)

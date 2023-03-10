@@ -205,6 +205,25 @@ class DifficultySwitchB(Choice):
     default = option_hard_with_unlock_item
 
 
+class StartCastle(Choice):
+    """Choose or randomize which castle to start in front of.
+
+    This affects both normal start and reincarnation.  Starting
+    at the black castle may give easy dot runs, while starting
+    at the white castle may make them more dangerous!  Also, not
+    starting at the yellow castle can make delivering the chalice
+    with a full inventory slightly less trivial.
+
+    This doesn't affect logic since all the castles are reachable
+    from each other.
+    """
+    display_name = "Start Castle"
+    option_yellow = 0
+    option_black = 1
+    option_white = 2
+    default = option_yellow
+
+
 adventure_option_definitions: Dict[str, type(Option)] = {
     "dragon_slay_check": DragonSlayCheck,
     "death_link": DeathLink,
@@ -220,5 +239,6 @@ adventure_option_definitions: Dict[str, type(Option)] = {
     "rhindle_min_speed": RhindleMinimumSpeed,
     "difficulty_switch_a": DifficultySwitchA,
     "difficulty_switch_b": DifficultySwitchB,
+    "start_castle": StartCastle,
 
 }
