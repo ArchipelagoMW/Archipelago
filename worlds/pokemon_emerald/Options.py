@@ -6,16 +6,23 @@ class RandomizeBadges(Choice):
     """Adds Badges to the pool
     Vanilla: Gym leaders give their own badge
     Shuffle: Gym leaders give a random badge
-    Badgesanity: Badges can be found anywhere"""
+    Completely Random: Badges can be found anywhere"""
     display_name = "Randomize Badges"
     default = 2
     option_vanilla = 0
     option_shuffle = 1
-    option_badgesanity = 2
+    option_completely_random = 2
 
-class RandomizeHms(DefaultOnToggle):
-    """Adds HMs to the pool"""
+class RandomizeHms(Choice):
+    """Adds HMs to the pool
+    Vanilla: HMs are at their vanilla locations
+    Shuffle: HMs are shuffled among vanilla HM locations
+    Completely Random: HMs can be found anywhere"""
     display_name = "Randomize HMs"
+    default = 2
+    option_vanilla = 0
+    option_shuffle = 1
+    option_completely_random = 2
 
 class RandomizeKeyItems(Toggle):
     """Adds most key items to the pool. These are usually required to unlock
