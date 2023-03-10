@@ -43,14 +43,19 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str):
         else:
             _set_bytes_little_endian(patched_rom, location.rom_address, 2, extracted_data["constants"]["ITEM_ARCHIPELAGO_PROGRESSION"])
 
-    # Set encounter tables
+    # Randomize encounter tables
     if (get_option_value(multiworld, player, "wild_pokemon") != RandomizeWildPokemon.option_vanilla):
         _randomize_encounter_tables(multiworld, player, patched_rom)
 
+    # Randomize abilities
+    if (get_option_value(multiworld, player, "abilities") == Toggle.option_true):
+        _randomize_abilities(multiworld, player, patched_rom)
+
+    # Randomize learnsets
     if (get_option_value(multiworld, player, "level_up_moves") != LevelUpMoves.option_vanilla):
         _randomize_learnsets(multiworld, player, patched_rom)
 
-    # Set starters
+    # Randomize starters
     if (get_option_value(multiworld, player, "starters") != RandomizeStarters.option_vanilla):
         _randomize_starters(multiworld, player, patched_rom)
 
@@ -205,6 +210,21 @@ def _randomize_starters(multiworld, player, rom):
     _set_bytes_little_endian(rom, address + 0, 2, starter_1.id)
     _set_bytes_little_endian(rom, address + 2, 2, starter_2.id)
     _set_bytes_little_endian(rom, address + 4, 2, starter_3.id)
+
+
+def _randomize_abilities(multiworld: MultiWorld, player: int, rom: bytearray):
+    random = multiworld.per_slot_randoms[player]
+
+    num_abilities = get_extracted_data()["constants"]["ABILITIES_COUNT"]
+
+    for species_data in get_extracted_data()["species"]:
+        old_abilities = species_data["abilities"]
+        new_abilities = [random.randrange(0, num_abilities), random.randrange(0, num_abilities)]
+
+        if (old_abilities[0] != 0):
+            _set_bytes_little_endian(rom, species_data["rom_address"] + 22, 1, new_abilities[0])
+        if (old_abilities[1] != 0):
+            _set_bytes_little_endian(rom, species_data["rom_address"] + 23, 1, new_abilities[1])
 
 
 def _randomize_learnsets(multiworld: MultiWorld, player: int, rom: bytearray):

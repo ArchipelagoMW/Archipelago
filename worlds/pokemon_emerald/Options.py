@@ -79,6 +79,10 @@ class RandomizeStarters(Choice):
     option_match_base_stats = 1
     option_completely_random = 2
 
+class RandomizeAbilities(Toggle):
+    """Randomizes the abilities of every pokemon (each species will have the same number of abilities)"""
+    display_name = "Randomize Abilities"
+
 class MinCatchRate(Range):
     """Sets the minimum catch rate a pokemon can have. Any pokemon with a catch rate below this floor will have it raised to this value.
     Legendaries are often in the single digits
@@ -158,6 +162,7 @@ options: Dict[str, Option] = {
   "require_flash": DarkCavesRequireFlash,
   "wild_pokemon": RandomizeWildPokemon,
   "starters": RandomizeStarters,
+  "abilities": RandomizeAbilities,
   "min_catch_rate": MinCatchRate,
   "exp_modifier": ExpModifier,
   "blind_trainers": BlindTrainers,

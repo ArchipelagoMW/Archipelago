@@ -31,7 +31,7 @@ def get_random_species(random: random, nearby_bst: Optional[int] = None) -> Poke
     pokemon_species_list = [species for species in get_pokemon_species().values()]
     if (nearby_bst != None):
         pokemon_species_list = [species for species in pokemon_species_list if abs(sum(species.base_stats) - nearby_bst) < (nearby_bst / 10)]
-    return pokemon_species_list[random.randint(0, len(pokemon_species_list) - 1)]
+    return pokemon_species_list[random.randrange(0, len(pokemon_species_list))]
 
 
 def get_random_move(random: random) -> int:
