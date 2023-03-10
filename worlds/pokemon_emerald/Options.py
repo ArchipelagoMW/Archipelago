@@ -2,9 +2,16 @@ from BaseClasses import MultiWorld
 from typing import Dict, List, Union
 from Options import Option, Choice, DefaultOnToggle, Range, Toggle
 
-class RandomizeBadges(DefaultOnToggle):
-    """Adds Badges to the pool"""
+class RandomizeBadges(Choice):
+    """Adds Badges to the pool
+    Vanilla: Gym leaders give their own badge
+    Shuffle: Gym leaders give a random badge
+    Badgesanity: Badges can be found anywhere"""
     display_name = "Randomize Badges"
+    default = 2
+    option_vanilla = 0
+    option_shuffle = 1
+    option_badgesanity = 2
 
 class RandomizeHms(DefaultOnToggle):
     """Adds HMs to the pool"""

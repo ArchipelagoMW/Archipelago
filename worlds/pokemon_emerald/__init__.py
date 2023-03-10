@@ -1,10 +1,11 @@
 from typing import List
 from BaseClasses import ItemClassification, Tutorial
+from Fill import fill_restrictive
 from Options import Toggle
 from worlds.AutoWorld import World, WebWorld
 from .Items import PokemonEmeraldItem, create_item_label_to_id_map, get_item_classification
 from .Locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
-from .Options import options, get_option_value
+from .Options import RandomizeBadges, options, get_option_value
 from .Regions import create_regions
 from .Rom import generate_output
 from .Rules import set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules, add_hidden_item_itemfinder_rules, set_enable_ferry_rules
@@ -83,7 +84,8 @@ class PokemonEmeraldWorld(World):
             if (region.player == self.player):
                 item_locations += [location for location in region.locations if not location.address == None] # Filter events
 
-                if (badges_option == Toggle.option_false):
+                # Filter out items that aren't randomized
+                if (badges_option == RandomizeBadges.option_vanilla):
                     item_locations = [location for location in item_locations if "Badge" not in location.tags]
                 if (hms_option == Toggle.option_false):
                     item_locations = [location for location in item_locations if "HM" not in location.tags]
@@ -112,10 +114,25 @@ class PokemonEmeraldWorld(World):
         if (get_option_value(self.multiworld, self.player, "require_itemfinder") == Toggle.option_true):
             add_hidden_item_itemfinder_rules(self.multiworld, self.player)
 
+
+    def pre_fill(self):
+        locations: List[PokemonEmeraldLocation] = self.multiworld.get_locations(self.player)
+
+        badges_option = get_option_value(self.multiworld, self.player, "badges")
+        if (badges_option == RandomizeBadges.option_shuffle):
+            badge_locations = [location for location in locations if location.tags != None and "Badge" in location.tags]
+            badge_items = [item for item in self.multiworld.itempool if item.player == self.player and item.tags != None and "Badge" in item.tags]
+
+            for item in badge_items:
+                self.multiworld.itempool.remove(item)
+
+            fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), badge_locations, badge_items, True, True, True)
+
+
     def generate_basic(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
-        locations = self.multiworld.get_locations(self.player)
+        locations: List[PokemonEmeraldLocation] = self.multiworld.get_locations(self.player)
 
         def convert_unrandomized_items_to_events(tag: str):
             for location in locations:
