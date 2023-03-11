@@ -26,7 +26,7 @@ def download_patch(room_id, patch_id):
             with zipfile.ZipFile(filelike, "a") as zf:
                 with zf.open("archipelago.json", "r") as f:
                     manifest = json.load(f)
-                manifest["server"] = f"{app.config['PATCH_TARGET']}:{last_port}" if last_port else None
+                manifest["server"] = f"{app.config['HOST_ADDRESS']}:{last_port}" if last_port else None
                 with zipfile.ZipFile(new_file, "w") as new_zip:
                     for file in zf.infolist():
                         if file.filename == "archipelago.json":
@@ -64,7 +64,7 @@ def download_slot_file(room_id, player_id: int):
         if slot_data.game == "Minecraft":
             from worlds.minecraft import mc_update_output
             fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_P{slot_data.player_id}_{slot_data.player_name}.apmc"
-            data = mc_update_output(slot_data.data, server=app.config['PATCH_TARGET'], port=room.last_port)
+            data = mc_update_output(slot_data.data, server=app.config['HOST_ADDRESS'], port=room.last_port)
             return send_file(io.BytesIO(data), as_attachment=True, download_name=fname)
         elif slot_data.game == "Factorio":
             with zipfile.ZipFile(io.BytesIO(slot_data.data)) as zf:

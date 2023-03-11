@@ -158,6 +158,12 @@ class HintAmount(Range):
     default = 10
 
 
+class DeathLink(Toggle):
+    """If on: Whenever you fail a puzzle (with some exceptions), everyone who is also on Death Link dies.
+    The effect of a "death" in The Witness is a Power Surge."""
+    display_name = "Death Link"
+
+
 the_witness_options: Dict[str, type] = {
     "puzzle_randomization": PuzzleRandomization,
     "shuffle_symbols": ShuffleSymbols,
@@ -176,6 +182,7 @@ the_witness_options: Dict[str, type] = {
     "trap_percentage": TrapPercentage,
     "puzzle_skip_amount": PuzzleSkipAmount,
     "hint_amount": HintAmount,
+    "death_link": DeathLink,
 }
 
 

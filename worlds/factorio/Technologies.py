@@ -422,7 +422,7 @@ for root in sorted_rows:
     progressive = progressive_rows[root]
     assert all(tech in tech_table for tech in progressive), "declared a progressive technology without base technology"
     factorio_id += 1
-    progressive_technology = Technology(root, technology_table[progressive_rows[root][0]].ingredients, factorio_id,
+    progressive_technology = Technology(root, technology_table[progressive[0]].ingredients, factorio_id,
                                         progressive,
                                         has_modifier=any(technology_table[tech].has_modifier for tech in progressive),
                                         unlocks=any(technology_table[tech].unlocks for tech in progressive))
