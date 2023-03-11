@@ -236,9 +236,7 @@ class PokemonRedBlueWorld(World):
             if location.name in pokemon_locs:
                  location.show_in_spoiler = False
 
-
         def intervene(move):
-            last_intervene = move
             accessible_slots = [loc for loc in self.multiworld.get_reachable_locations(test_state, self.player) if loc.type == "Wild Encounter"]
             move_bit = pow(2, poke_data.hm_moves.index(move) + 2)
             viable_mons = [mon for mon in self.local_poke_data if self.local_poke_data[mon]["tms"][6] & move_bit]
@@ -283,7 +281,6 @@ class PokemonRedBlueWorld(World):
             if intervene_move:
                 if intervene_move == last_intervene:
                     raise Exception(f"Caught in infinite loop attempting to ensure {intervene_move} is available to player {self.player}")
-                print("intervening: " + intervene_move)
                 intervene(intervene_move)
                 last_intervene = intervene_move
             else:
