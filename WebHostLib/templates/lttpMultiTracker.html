@@ -1,14 +1,16 @@
 {% extends 'tablepage.html' %}
 {% block head %}
     {{ super() }}
-    <title>Multiworld Tracker</title>
+    <title>ALttP Multiworld Tracker</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/tracker.css") }}"/>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/jquery.scrollsync.js") }}"></script>
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/tracker.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/lttpMultiTracker.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/trackerCommon.js") }}"></script>
 {% endblock %}
 
 {% block body %}
     {% include 'header/dirtHeader.html' %}
+    {% include 'multiTrackerNavigation.html' %}
     <div id="tracker-wrapper" data-tracker="{{ room.tracker|suuid }}">
         <div id="tracker-header-bar">
             <input placeholder="Search" id="search"/>

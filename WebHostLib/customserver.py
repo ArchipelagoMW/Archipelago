@@ -131,6 +131,8 @@ def get_static_server_data() -> dict:
         "gamespackage": worlds.network_data_package["games"],
         "item_name_groups": {world_name: world.item_name_groups for world_name, world in
                              worlds.AutoWorldRegister.world_types.items()},
+        "location_name_groups": {world_name: world.location_name_groups for world_name, world in
+                                 worlds.AutoWorldRegister.world_types.items()},
     }
 
     for world_name, world in worlds.AutoWorldRegister.world_types.items():
@@ -140,7 +142,8 @@ def get_static_server_data() -> dict:
 
 
 def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
-                       cert_file: typing.Optional[str], cert_key_file: typing.Optional[str]):
+                       cert_file: typing.Optional[str], cert_key_file: typing.Optional[str],
+                       host: str):
     # establish DB connection for multidata and multisave
     db.bind(**ponyconfig)
     db.generate_mapping(check_tables=False)
@@ -165,17 +168,18 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
         for wssocket in ctx.server.ws_server.sockets:
             socketname = wssocket.getsockname()
             if wssocket.family == socket.AF_INET6:
-                logging.info(f'Hosting game at [{get_public_ipv6()}]:{socketname[1]}')
                 # Prefer IPv4, as most users seem to not have working ipv6 support
                 if not port:
                     port = socketname[1]
             elif wssocket.family == socket.AF_INET:
-                logging.info(f'Hosting game at {get_public_ipv4()}:{socketname[1]}')
                 port = socketname[1]
         if port:
+            logging.info(f'Hosting game at {host}:{port}')
             with db_session:
                 room = Room.get(id=ctx.room_id)
                 room.last_port = port
+        else:
+            logging.exception("Could not determine port. Likely hosting failure.")
         with db_session:
             ctx.auto_shutdown = Room.get(id=room_id).timeout
         ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
