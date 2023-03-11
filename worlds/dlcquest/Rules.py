@@ -79,7 +79,7 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
 
     if World_Options[Options.Campaign] == Options.Campaign.option_live_freemium_or_die or World_Options[Options.Campaign] == Options.Campaign.option_both:
         set_rule(world.get_entrance("Vines", player),
-                 lambda state: state.has("Incredibly Important Pack", player))
+                 lambda state: state.has("Incredibly Important Pack", player) or state.has("Pickaxe", player))
         set_rule(world.get_entrance("Wall Jump Entrance", player),
                  lambda state: state.has("Wall Jump Pack", player))
         set_rule(world.get_entrance("Harmless Plants", player),
