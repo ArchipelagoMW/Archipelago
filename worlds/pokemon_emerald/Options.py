@@ -79,6 +79,17 @@ class RandomizeStarters(Choice):
     option_match_base_stats = 1
     option_completely_random = 2
 
+class RandomizeTrainerParties(Choice):
+    """Randomizes the parties of all trainers
+    Vanilla: Parties are unchanged
+    Match Base Stats: Trainer pokemon are replaced with species with approximately the same bst
+    Completely Random: There are no restrictions"""
+    display_name = "Randomize Trainer Parties"
+    default = 0
+    option_vanilla = 0
+    option_match_base_stats = 1
+    option_completely_random = 2
+
 class RandomizeAbilities(Toggle):
     """Randomizes the abilities of every pokemon (each species will have the same number of abilities)"""
     display_name = "Randomize Abilities"
@@ -162,6 +173,7 @@ options: Dict[str, Option] = {
   "require_flash": DarkCavesRequireFlash,
   "wild_pokemon": RandomizeWildPokemon,
   "starters": RandomizeStarters,
+  "trainer_parties": RandomizeTrainerParties,
   "abilities": RandomizeAbilities,
   "min_catch_rate": MinCatchRate,
   "exp_modifier": ExpModifier,

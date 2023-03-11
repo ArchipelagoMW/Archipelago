@@ -12,7 +12,8 @@ _move_blacklist = frozenset([
     127, # Waterfall
     148, # Flash
     70,  # Strength
-    19   # Fly
+    19,  # Fly
+    291  # Dive
 ])
 
 
@@ -43,7 +44,7 @@ def get_random_species(random: random, nearby_bst: Optional[int] = None) -> Poke
     return pokemon_species_list[random.randrange(0, len(pokemon_species_list))]
 
 
-def get_random_move(random: random, blacklist: Optional[FrozenSet[int]]) -> int:
+def get_random_move(random: random, blacklist: Optional[FrozenSet[int]] = None) -> int:
     expanded_blacklist = _move_blacklist | (blacklist if blacklist != None else set())
     num_moves = get_extracted_data()["constants"]["MOVES_COUNT"]
 
@@ -54,7 +55,7 @@ def get_random_move(random: random, blacklist: Optional[FrozenSet[int]]) -> int:
     return move
 
 
-def get_random_damaging_move(random: random, blacklist: Optional[FrozenSet[int]]) -> int:
+def get_random_damaging_move(random: random, blacklist: Optional[FrozenSet[int]] = None) -> int:
     expanded_blacklist = _move_blacklist | (blacklist if blacklist != None else set())
 
     move = random.choice(damaging_moves)

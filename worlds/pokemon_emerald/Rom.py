@@ -8,7 +8,7 @@ from Patch import APDeltaPatch
 import Utils
 from .Data import get_extracted_data
 from .Items import reverse_offset_item_value
-from .Options import get_option_value, RandomizeWildPokemon, RandomizeStarters, TmCompatibility, HmCompatibility, LevelUpMoves
+from .Options import get_option_value, RandomizeWildPokemon, RandomizeStarters, RandomizeTrainerParties, TmCompatibility, HmCompatibility, LevelUpMoves
 from .Pokemon import get_random_species, get_pokemon_species, get_species_by_id, get_species_by_name, get_random_damaging_move, get_random_move
 
 
@@ -54,6 +54,10 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str):
     # Randomize learnsets
     if (get_option_value(multiworld, player, "level_up_moves") != LevelUpMoves.option_vanilla):
         _randomize_learnsets(multiworld, player, patched_rom)
+
+    # Randomize opponents
+    if (get_option_value(multiworld, player, "trainer_parties") != RandomizeTrainerParties.option_vanilla):
+        _randomize_opponents(multiworld, player, patched_rom)
 
     # Randomize starters
     if (get_option_value(multiworld, player, "starters") != RandomizeStarters.option_vanilla):
@@ -195,6 +199,50 @@ def _replace_encounters(rom, table_address, encounter_slots):
     for slot_i, species_id in enumerate(encounter_slots):
         address = table_address + 2 + (4 * slot_i)
         _set_bytes_little_endian(rom, address, 2, species_id)
+
+
+def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray):
+    random = multiworld.per_slot_randoms[player]
+    trainers_json = get_extracted_data()["trainers"]
+    match_bst = get_option_value(multiworld, player, "trainer_parties") == RandomizeTrainerParties.option_match_base_stats
+
+    for i, trainer_data in enumerate(trainers_json):
+        party_address = trainer_data["party_rom_address"]
+
+        pokemon_data_size: int
+        if (
+            trainer_data["pokemon_data_type"] == "NO_ITEM_DEFAULT_MOVES" or
+            trainer_data["pokemon_data_type"] == "ITEM_DEFAULT_MOVES"
+        ):
+            pokemon_data_size = 8
+        else: # Custom Moves
+            pokemon_data_size = 16
+
+        new_party = []
+        for pokemon_data in trainer_data["party"]:
+            bst = sum(get_species_by_id(pokemon_data["species"]).base_stats) if match_bst else None
+            new_party.append(get_random_species(random, bst))
+
+        for j, species in enumerate(new_party):
+            pokemon_address = party_address + (j * pokemon_data_size)
+
+            # Replace custom moves if applicable
+            # TODO: This replaces custom moves with a random move regardless of whether that move
+            # is learnable by that species. Should eventually be able to pick and choose from
+            # the level up learnset and learnable tms/hms instead. Especially if moves aren't randomized
+            if (trainer_data["pokemon_data_type"] == "NO_ITEM_CUSTOM_MOVES"):
+                _set_bytes_little_endian(rom, pokemon_address + 0x06, 2, get_random_move(random))
+                _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, get_random_move(random))
+                _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, get_random_move(random))
+                _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, get_random_move(random))
+            elif (trainer_data["pokemon_data_type"] == "ITEM_CUSTOM_MOVES"):
+                _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, get_random_move(random))
+                _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, get_random_move(random))
+                _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, get_random_move(random))
+                _set_bytes_little_endian(rom, pokemon_address + 0x0D, 2, get_random_move(random))
+
+            # Replace species
+            _set_bytes_little_endian(rom, pokemon_address + 0x04, 2, species.id)
 
 
 def _randomize_starters(multiworld, player, rom):
