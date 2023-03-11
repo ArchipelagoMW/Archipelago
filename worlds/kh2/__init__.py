@@ -1,6 +1,6 @@
-import typing
 
-from BaseClasses import Item, Tutorial, ItemClassification
+
+from BaseClasses import Tutorial, ItemClassification
 
 from .Items import *
 from .Locations import all_locations, setup_locations, exclusion_table
@@ -24,6 +24,7 @@ class KingdomHearts2Web(WebWorld):
     )]
 
 
+# noinspection PyUnresolvedReferences
 class KH2World(World):
     """
     Kingdom Hearts II is an action role-playing game developed and published by Square Enix and released in 2005.
@@ -43,6 +44,7 @@ class KH2World(World):
         self.BountiesRequired = None
         self.BountiesAmount = None
         self.hitlist = None
+        self.progressionLocations = {}
         self.RandomSuperBoss = list()
         self.filler_items = list()
         self.item_quantity_dict = {}
@@ -55,22 +57,19 @@ class KH2World(World):
         for x in range(4):
             self.growth_list.extend(Movement_Table.keys())
         self.visitlockingitem = list()
-        self.visitlockingitem.extend(exclusionItem_table["AllVisitLocking"])
-
-    @staticmethod
-    def _get_slot_data(self):
-        return {"hitlist": self.hitlist}
+        self.visitlockingitem.extend(Progression_Dicts["AllVisitLocking"])
 
     def fill_slot_data(self) -> dict:
-        slot_data = self._get_slot_data(self)
-        for option_name in KH2_Options:
-            option = getattr(self.multiworld, option_name)[self.player]
-            slot_data[option_name] = option.value
-        return slot_data
+        return {"hitlist": self.hitlist,
+                "progression": self.progressionLocations,
+                "Goal": self.multiworld.Goal[self.player].value,
+                "FinalXemnas": self.multiworld.FinalXemnas[self.player].value,
+                "LuckyEmblemsRequired":  self.multiworld.LuckyEmblemsRequired[self.player].value,
+                "BountyRequired": self.multiworld.BountyRequired[self.player].value}
 
     def create_item(self, name: str, ) -> Item:
         data = item_dictionary_table[name]
-        if name in ProgressionItems or name in Misc_Table or name in Staffs_Table or name in Shields_Table:
+        if name in Progression_Dicts["Progression"]:
             item_classification = ItemClassification.progression
         else:
             item_classification = ItemClassification.filler
@@ -107,7 +106,6 @@ class KH2World(World):
         for ability in self.multiworld.BlacklistKeyblade[self.player].value:
             if ability in self.sora_keyblade_ability_pool:
                 self.sora_keyblade_ability_pool.remove(ability)
-
 
         # Option to turn off all superbosses. Can do this individually but its like 20+ checks
         if self.multiworld.SuperBosses[self.player].value == 0 and not self.multiworld.Goal[self.player].value == 2:
@@ -171,24 +169,24 @@ class KH2World(World):
             for x in range(data):
                 self.donald_ability_pool.append(item)
             self.item_quantity_dict.update({item: 0})
-        while len(self.donald_ability_pool) < len(Locations.Donald_Checks.keys()):
-            self.donald_ability_pool.append(
-                    self.multiworld.per_slot_randoms[self.player].choice(self.donald_ability_pool))
+            # 32 is the amount of donald abilities
+        while len(self.donald_ability_pool) < 32:
+            self.donald_ability_pool.append(self.multiworld.per_slot_randoms[self.player].choice(self.donald_ability_pool))
 
         for item in GoofyAbility_Table.keys():
             data = self.item_quantity_dict[item]
             for x in range(data):
                 self.goofy_ability_pool.append(item)
             self.item_quantity_dict.update({item: 0})
-        while len(self.goofy_ability_pool) < len(GoofyAbility_Table.keys()):
-            self.goofy_ability_pool.append(
-                self.multiworld.per_slot_randoms[self.player].choice(self.goofy_ability_pool))
+            # 32 is the amount of goofy abilities
+        while len(self.goofy_ability_pool) < 33:
+            self.goofy_ability_pool.append(self.multiworld.per_slot_randoms[self.player].choice(self.goofy_ability_pool))
 
     def generate_basic(self):
         itempool: typing.List[KH2Item] = []
 
         self.hitlist = list()
-        self.filler_items.extend(exclusionItem_table["Filler"])
+        self.filler_items.extend(item_groups["Filler"])
 
         if self.multiworld.FinalXemnas[self.player].value == 1:
             self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(
@@ -265,7 +263,7 @@ class KH2World(World):
 
         # first and second visit locking
         elif self.multiworld.Visitlocking[self.player].value in {1}:
-            for item in exclusionItem_table["2VisitLocking"]:
+            for item in Progression_Dicts["2VisitLocking"]:
                 self.item_quantity_dict.update({item: item_dictionary_table[item].quantity - 1})
                 self.multiworld.push_precollected(self.create_item(item))
                 self.visitlockingitem.remove(item)

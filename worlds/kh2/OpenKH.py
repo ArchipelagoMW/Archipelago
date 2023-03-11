@@ -3,8 +3,8 @@ import os
 import Utils
 import zipfile
 
-from .Items import item_dictionary_table
-from .Locations import all_locations,SoraLevels,exclusion_table
+from .Items import item_dictionary_table, Progression_Table, CheckDupingItems
+from .Locations import all_locations, SoraLevels, exclusion_table
 from .XPValues import lvlStats, formExp, soraExp
 from worlds.Files import APContainer
 
@@ -13,27 +13,25 @@ class KH2Container(APContainer):
     game: str = 'Kingdom Hearts 2'
 
     def __init__(self, patch_data: dict, base_path: str, output_directory: str,
-                 player = None, player_name: str = "", server: str = ""):
+                 player=None, player_name: str = "", server: str = ""):
         self.patch_data = patch_data
         self.file_path = base_path
         container_path = os.path.join(output_directory, base_path + ".zip")
         super().__init__(container_path, player, player_name, server)
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
-        for filename,yml in self.patch_data.items():
+        for filename, yml in self.patch_data.items():
             opened_zipfile.writestr(filename, yml)
         for root, dirs, files in os.walk(os.path.join(os.path.dirname(__file__), "mod_template")):
             for file in files:
                 opened_zipfile.write(os.path.join(root, file),
                                      os.path.relpath(os.path.join(root, file),
                                                      os.path.join(os.path.dirname(__file__), "mod_template")))
-        #opened_zipfile.writestr(self.zpf_path, self.patch_data)
+        # opened_zipfile.writestr(self.zpf_path, self.patch_data)
         super().write_contents(opened_zipfile)
-        
 
 
 def patch_kh2(self, output_directory):
-
     def increaseStat(i):
         if lvlStats[i] == "str":
             self.strength += 2
@@ -55,85 +53,104 @@ def patch_kh2(self, output_directory):
     self.magic = 6
     self.defense = 2
     self.ap = 50
-    formexp=None
-    formName=None
-    levelsetting=list()
+    self.dblbonus = 0
+    formexp = None
+    formName = None
+    levelsetting = list()
+    slotDataDuping = set()
+    # for key in CheckDupingItems.keys():
+    #    if type(CheckDupingItems[key]) == set:
+    #        for item in CheckDupingItems[key]:
+    #            slotDataDuping.add(item)
+    #    else:
+    #        for key2 in CheckDupingItems[key].keys():
+    #            for item in CheckDupingItems[key][key2]:
+    #                slotDataDuping.add(item)
+    for values in CheckDupingItems.values():
+        if isinstance(values, set):
+            slotDataDuping |= values
+        else:
+            for inner_values in values.values():
+                slotDataDuping |= inner_values
 
-    if self.multiworld.Keyblade_Minimum[self.player].value>self.multiworld.Keyblade_Maximum[self.player].value:
-        print(f"{self.multiworld.get_file_safe_player_name(self.player)} has Keyblade Minimum greater than Keyblade Maximum")
-        keyblademin=self.multiworld.Keyblade_Maximum[self.player].value
-        keyblademax=self.multiworld.Keyblade_Minimum[self.player].value
+    if self.multiworld.Keyblade_Minimum[self.player].value > self.multiworld.Keyblade_Maximum[self.player].value:
+        print(
+            f"{self.multiworld.get_file_safe_player_name(self.player)} has Keyblade Minimum greater than Keyblade Maximum")
+        keyblademin = self.multiworld.Keyblade_Maximum[self.player].value
+        keyblademax = self.multiworld.Keyblade_Minimum[self.player].value
     else:
-        keyblademin=self.multiworld.Keyblade_Minimum[self.player].value
-        keyblademax=self.multiworld.Keyblade_Maximum[self.player].value
+        keyblademin = self.multiworld.Keyblade_Minimum[self.player].value
+        keyblademax = self.multiworld.Keyblade_Maximum[self.player].value
 
-    if self.multiworld.LevelDepth[self.player]==0:
+    if self.multiworld.LevelDepth[self.player] == 0:
         levelsetting.extend(exclusion_table["Level50"])
-    elif self.multiworld.LevelDepth[self.player]==1:
-        levelsetting.extend(exclusion_table["Level99"])
-    elif self.multiworld.LevelDepth[self.player] in {2,3}:
-        levelsetting.extend(exclusion_table["Level50Sanity"])
-        if self.multiworld.LevelDepth[self.player]==3:
-            levelsetting.extend(exclusion_table["Level99Sanity"])
 
+    elif self.multiworld.LevelDepth[self.player] == 1:
+        levelsetting.extend(exclusion_table["Level99"])
+
+    else:
+        levelsetting.extend(exclusion_table["Level50Sanity"])
+
+        if self.multiworld.LevelDepth[self.player] == 3:
+            levelsetting.extend(exclusion_table["Level99Sanity"])
 
     mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
 
     for location in self.multiworld.get_filled_locations(self.player):
 
         data = all_locations[location.name]
-        if location.item.player==self.player:
+        if location.item.player == self.player:
             itemcode = item_dictionary_table[location.item.name].kh2id
+            if location.item.name in slotDataDuping and \
+                    location.name not in exclusion_table["WeaponSlots"].keys():
+                self.progressionLocations.update({location.address: item_dictionary_table[location.item.name].code})
         else:
-            #filling in lists for how to check if a chest is opened
             itemcode = 461
 
-        if data.yml=="Chest":
-            self.formattedTrsr[data.locid] = {"ItemId":itemcode}
-
+        if data.yml == "Chest":
+            self.formattedTrsr[data.locid] = {"ItemId": itemcode}
 
         elif data.yml in ["Get Bonus", "Double Get Bonus", "Second Get Bonus"]:
             if data.yml == "Get Bonus":
-                dblbonus = 0
+                self.dblbonus = 0
             # if double bonus then addresses dbl bonus so the next check gets 2 items on it
             if data.yml == "Double Get Bonus":
-                dblbonus = itemcode
+                self.dblbonus = itemcode
                 continue
-            if not data.locid in self.formattedBons.keys():
+            if data.locid not in self.formattedBons.keys():
                 self.formattedBons[data.locid] = {}
             self.formattedBons[data.locid][data.charName] = {
-                "RewardId": data.locid,
-                "CharacterId": data.charNumber,
-                "HpIncrease": 0,
-                "MpIncrease": 0,
-                "DriveGaugeUpgrade": 0,
-                "ItemSlotUpgrade": 0,
+                "RewardId":             data.locid,
+                "CharacterId":          data.charNumber,
+                "HpIncrease":           0,
+                "MpIncrease":           0,
+                "DriveGaugeUpgrade":    0,
+                "ItemSlotUpgrade":      0,
                 "AccessorySlotUpgrade": 0,
-                "ArmorSlotUpgrade": 0,
-                "BonusItem1": itemcode,
-                "BonusItem2": dblbonus,
-                "Padding": 0
+                "ArmorSlotUpgrade":     0,
+                "BonusItem1":           itemcode,
+                "BonusItem2":           self.dblbonus,
+                "Padding":              0
+
             }
             # putting dbl bonus at 0 again, so we don't have the same item placed multiple time
-            dblbonus = 0
-
-
+            self.dblbonus = 0
         elif data.yml == "Keyblade":
             self.formattedItem["Stats"].append({
-                "Id": data.locid,
-                "Attack": self.multiworld.per_slot_randoms[self.player].randint(keyblademin,keyblademax),
-                "Magic": self.multiworld.per_slot_randoms[self.player].randint(keyblademin,keyblademax),
-                "Defense": 0,
-                "Ability": itemcode,
-                "AbilityPoints": 0,
-                "Unknown08": 100,
-                "FireResistance": 100,
-                "IceResistance": 100,
+                "Id":                  data.locid,
+                "Attack":              self.multiworld.per_slot_randoms[self.player].randint(keyblademin, keyblademax),
+                "Magic":               self.multiworld.per_slot_randoms[self.player].randint(keyblademin, keyblademax),
+                "Defense":             0,
+                "Ability":             itemcode,
+                "AbilityPoints":       0,
+                "Unknown08":           100,
+                "FireResistance":      100,
+                "IceResistance":       100,
                 "LightningResistance": 100,
-                "DarkResistance": 100,
-                "Unknown0d": 100,
-                "GeneralResistance": 100,
-                "Unknown": 0
+                "DarkResistance":      100,
+                "Unknown0d":           100,
+                "GeneralResistance":   100,
+                "Unknown":             0
             })
 
         elif data.yml == "Forms":
@@ -141,77 +158,77 @@ def patch_kh2(self, output_directory):
             # char name is the form name number :)
             if data.locid == 2:
                 formDict = {1: "Valor", 2: "Wisdom", 3: "Limit", 4: "Master", 5: "Final"}
-                formDictExp = {1: self.multiworld.Valor_Form_EXP[self.player].value,
-                               2: self.multiworld.Wisdom_Form_EXP[self.player].value
-                    , 3: self.multiworld.Limit_Form_EXP[self.player].value,
-                               4: self.multiworld.Master_Form_EXP[self.player].value
-                    , 5: self.multiworld.Final_Form_EXP[self.player].value}
+                formDictExp = {
+                    1: self.multiworld.Valor_Form_EXP[self.player].value,
+                    2: self.multiworld.Wisdom_Form_EXP[self.player].value,
+                    3: self.multiworld.Limit_Form_EXP[self.player].value,
+                    4: self.multiworld.Master_Form_EXP[self.player].value,
+                    5: self.multiworld.Final_Form_EXP[self.player].value}
                 formexp = formDictExp[data.charName]
                 formName = formDict[data.charName]
                 self.formattedFmlv[formName] = []
                 self.formattedFmlv[formName].append({
-                            "Ability": 1,
-                            "Experience": int(formExp[data.charName][data.locid] / formexp),
-                            "FormId": data.charName,
-                            "FormLevel": 1,
-                            "GrowthAbilityLevel": 0,
-                        })
+                    "Ability":            1,
+                    "Experience":         int(formExp[data.charName][data.locid] / formexp),
+                    "FormId":             data.charName,
+                    "FormLevel":          1,
+                    "GrowthAbilityLevel": 0,
+                })
             # row is form column is lvl
             self.formattedFmlv[formName].append({
-                "Ability": itemcode,
-                "Experience": int(formExp[data.charName][data.locid] / formexp),
-                "FormId": data.charName,
-                "FormLevel": data.locid,
+                "Ability":            itemcode,
+                "Experience":         int(formExp[data.charName][data.locid] / formexp),
+                "FormId":             data.charName,
+                "FormLevel":          data.locid,
                 "GrowthAbilityLevel": 0,
             })
 
-        elif data.yml == "Critical" and location.item.player==self.player:
-             self.multiworld.push_precollected(self.create_item(location.item.name))
-
-
+        elif data.yml == "Critical" and location.item.player == self.player:
+            self.multiworld.push_precollected(self.create_item(location.item.name))
 
     # Summons have no checks on them so done fully locally
     self.formattedFmlv["Summon"] = []
     for x in range(1, 7):
         self.formattedFmlv["Summon"].append({
-            "Ability": 123,
-            "Experience": int(formExp[0][x] / self.multiworld.Summon_EXP[self.player].value),
-            "FormId": 0,
-            "FormLevel": x,
+            "Ability":            123,
+            "Experience":         int(formExp[0][x] / self.multiworld.Summon_EXP[self.player].value),
+            "FormId":             0,
+            "FormLevel":          x,
             "GrowthAbilityLevel": 0,
         })
-    #levels done down here because of optional settings that can take locations out of the pool.
-    self.i=1
+    # levels done down here because of optional settings that can take locations out of the pool.
+    self.i = 1
     for location in SoraLevels:
         increaseStat(self.multiworld.per_slot_randoms[self.player].randint(0, 3))
         if location in levelsetting:
-            data=self.multiworld.get_location(location,self.player)
-            if data.item.player==self.player: 
-                itemcode=item_dictionary_table[data.item.name].kh2id
+            data = self.multiworld.get_location(location, self.player)
+            if data.item.player == self.player:
+                itemcode = item_dictionary_table[data.item.name].kh2id
             else:
-                itemcode=461
+                itemcode = 461
         else:
             increaseStat(self.multiworld.per_slot_randoms[self.player].randint(0, 3))
-            itemcode=0
+            itemcode = 0
         self.formattedLvup["Sora"][self.i] = {
-            "Exp": int(soraExp[self.i] / self.multiworld.Sora_Level_EXP[self.player].value),
-            "Strength": self.strength,
-            "Magic": self.magic,
-            "Defense": self.defense,
-            "Ap": self.ap,
-            "SwordAbility": itemcode,
+            "Exp":           int(soraExp[self.i] / self.multiworld.Sora_Level_EXP[self.player].value),
+            "Strength":      self.strength,
+            "Magic":         self.magic,
+            "Defense":       self.defense,
+            "Ap":            self.ap,
+            "SwordAbility":  itemcode,
             "ShieldAbility": itemcode,
-            "StaffAbility": itemcode,
-            "Padding": 0,
-            "Character": "Sora",
-            "Level": self.i
-            }
-        self.i+=1
-    for x in {122,144,145,}:
+            "StaffAbility":  itemcode,
+            "Padding":       0,
+            "Character":     "Sora",
+            "Level":         self.i
+        }
+        self.i += 1
+    # averaging stats for the struggle bats
+    for x in {122, 144, 145}:
         self.formattedItem["Stats"].append({
             "Id":                  x,
-            "Attack":              int((keyblademin+keyblademax)/2),
-            "Magic":               int((keyblademin+keyblademax)/2),
+            "Attack":              int((keyblademin + keyblademax) / 2),
+            "Magic":               int((keyblademin + keyblademax) / 2),
             "Defense":             0,
             "Ability":             405,
             "AbilityPoints":       0,
@@ -226,18 +243,13 @@ def patch_kh2(self, output_directory):
         })
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
 
-
-
-    
     openkhmod = {
-        "TrsrList.yml": yaml.dump(self.formattedTrsr,line_break="\n"),
-        "LvupList.yml": yaml.dump(self.formattedLvup,line_break="\n"),
-        "BonsList.yml": yaml.dump(self.formattedBons,line_break="\n"),
-        "ItemList.yml": yaml.dump(self.formattedItem,line_break="\n"),
-        "FmlvList.yml": yaml.dump(self.formattedFmlv,line_break="\n"),
-        }
-    mod = KH2Container(openkhmod, mod_dir, output_directory,self.player,self.multiworld.get_file_safe_player_name(self.player))
+        "TrsrList.yml": yaml.dump(self.formattedTrsr, line_break="\n"),
+        "LvupList.yml": yaml.dump(self.formattedLvup, line_break="\n"),
+        "BonsList.yml": yaml.dump(self.formattedBons, line_break="\n"),
+        "ItemList.yml": yaml.dump(self.formattedItem, line_break="\n"),
+        "FmlvList.yml": yaml.dump(self.formattedFmlv, line_break="\n"),
+    }
+    mod = KH2Container(openkhmod, mod_dir, output_directory, self.player,
+                       self.multiworld.get_file_safe_player_name(self.player))
     mod.write()
-
-
-
