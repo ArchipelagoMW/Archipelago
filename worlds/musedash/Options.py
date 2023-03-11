@@ -1,5 +1,4 @@
-from typing import Dict, Union
-from BaseClasses import MultiWorld
+from typing import Dict
 from Options import Toggle, Option, Range, Choice, DeathLink
 
 # Should this be default on or off?
@@ -29,8 +28,8 @@ class AdditionalSongs(Range):
     - Final count may be lower due to other settings.
     """
     range_start = 15
-    range_end = 400  # Todo: Add song count here
-    default = 31
+    range_end = 500 #Note will probably not reach this high if any other settings are done.
+    default = 50
     display_name = "Additional Song Count"
 
 
@@ -87,16 +86,16 @@ class GradeNeeded(Choice):
 class MusicSheetCount(Range):
     """The amount of Music Sheets spread around this seed. Music Sheets are required to unlock the final song."""
     range_start = 1
-    range_end = 12
-    default = 6
+    range_end = 40
+    default = 10
     display_name = "Music Sheet Count"
 
 
 class MusicSheetWinCount(Range):
     """The number of Music Sheets needed to unlock the winning song."""
     range_start = 1
-    range_end = 12
-    default = 4
+    range_end = 40
+    default = 7
     display_name = "Music Sheets Needed to Win"
 
 class AdditionalItemPercentage(Range):
@@ -104,7 +103,7 @@ class AdditionalItemPercentage(Range):
     If there are not enough locations to place Music Sheets, extra locations will be added."""
     display_name = "Additional Item %"
     range_start = 0
-    default = 33
+    default = 50
     range_end = 100
 
 
