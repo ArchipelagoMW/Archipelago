@@ -46,6 +46,7 @@ class Pedestals(IntEnum):
 # todo: figure out how to add umlauts and stuff
 # 111000 - 111034
 # Mapping of items in each region
+# Only the first Hidden Chest and Pedestal are mapped here, the others are created in Regions
 location_region_mapping: Dict[str, Dict[str, LocationData]] = {
     "Holy Mountain 1 (To Coal Pits)": {
         "Holy Mountain 1 (To Coal Pits) Shop Item 1": LocationData(111000),
@@ -222,4 +223,8 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
 location_name_to_id: Dict[str, int] = {}
 for location_group in location_region_mapping.values():
     for locname, locinfo in location_group.items():
-        location_name_to_id.update({locname: locinfo.id})
+        if locname.endswith("Chest") or locname.endswith("Pedestal"):
+            for i in range(20):
+                location_name_to_id.update({f"{locname} {i + 1}": locinfo.id + i})
+        else:
+            location_name_to_id.update({locname: locinfo.id})
