@@ -208,7 +208,7 @@ class PokemonRedBlueWorld(World):
                 if self.multiworld.randomize_pokedex[self.player] == "vanilla":
                     self.multiworld.get_location(location.name, self.player).event = True
                     location.event = True
-                    item = self.create_item("Pokedex")
+                item = self.create_item("Pokedex")
             elif location.original_item.startswith("TM"):
                 if self.multiworld.randomize_tm_moves[self.player]:
                     item = self.create_item(location.original_item.split(" ")[0])
