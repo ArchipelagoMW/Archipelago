@@ -498,6 +498,11 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_ROUTE118/EAST -> REGION_ROUTE118/WATER", player),
         can_surf
     )
+    # TODO: Make a decision on whether to keep this behavior
+    add_rule(
+        multiworld.get_entrance("REGION_ROUTE118/WEST -> REGION_ROUTE118/WATER", player),
+        can_fly
+    )
 
     # Route 119
     set_rule(
@@ -1182,6 +1187,11 @@ def set_enable_ferry_rules(multiworld: MultiWorld, player: int):
     set_rule(
         multiworld.get_entrance("REGION_SLATEPORT_CITY_HARBOR/MAIN -> REGION_SS_TIDAL_CORRIDOR/MAIN", player),
         lambda state: state.has("S.S. Ticket", player)
+    )
+    # TODO: Make a decision on whether to keep this behavior
+    add_rule(
+        multiworld.get_entrance("REGION_SLATEPORT_CITY_HARBOR/MAIN -> REGION_SS_TIDAL_CORRIDOR/MAIN", player),
+        lambda state: _can_fly(state, player)
     )
     set_rule(
         multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_SS_TIDAL_CORRIDOR/MAIN", player),

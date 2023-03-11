@@ -159,7 +159,7 @@ class HmCompatibility(Choice):
     Fully Compatible: Every species can learn any HM
     Completely Random: Compatibility is 50/50 for every HM (does not remain consistent across evolution)"""
     display_name = "HM Compatibility"
-    default = 0
+    default = 1
     option_vanilla = 0
     option_fully_compatible = 1
     option_completely_random = 2
