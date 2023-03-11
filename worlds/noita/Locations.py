@@ -47,6 +47,7 @@ class Pedestals(IntEnum):
 # 111000 - 111034
 # Mapping of items in each region
 # Only the first Hidden Chest and Pedestal are mapped here, the others are created in Regions
+# ltype key: "hc" = Hidden Chests, "peds" = Pedestals, "boss" = Boss, "orb" = Orb.
 location_region_mapping: Dict[str, Dict[str, LocationData]] = {
     "Holy Mountain 1 (To Coal Pits)": {
         "Holy Mountain 1 (To Coal Pits) Shop Item 1": LocationData(111000),
@@ -223,7 +224,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
 location_name_to_id: Dict[str, int] = {}
 for location_group in location_region_mapping.values():
     for locname, locinfo in location_group.items():
-        if locname.endswith("Chest") or locname.endswith("Pedestal"):
+        if locinfo.ltype in ["hc", "peds"]:
             for i in range(20):
                 location_name_to_id.update({f"{locname} {i + 1}": locinfo.id + i})
         else:

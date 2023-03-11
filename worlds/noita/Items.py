@@ -1,7 +1,6 @@
 import itertools
 from typing import Dict, NamedTuple, Optional, List, Set
 from BaseClasses import Item, ItemClassification, MultiWorld
-from . import Regions, Locations
 
 
 class ItemData(NamedTuple):
