@@ -18,7 +18,6 @@ local HiddenItemsAddress = 0x16DE
 local RodAddress = 0x1716
 local DexSanityAddress = 0x1A71
 local InGameAddress = 0x1A84
-local OptionsAddress = 0x1A85
 local ClientCompatibilityAddress = 0xFF00
 
 local ItemsReceived = nil
@@ -32,7 +31,6 @@ local prevstate = ""
 local curstate =  STATE_UNINITIALIZED
 local gbSocket = nil
 local frame = 0
-local options = 0
 
 local u8 = nil
 local wU8 = nil
@@ -144,7 +142,6 @@ function receive()
                 ItemsReceived = itemsBlock
             end
             deathlink_rec = block["deathlink"]
-            options = bit.bor(block["options"], bit.band(options, 12))
 
         end
     end
@@ -166,7 +163,6 @@ function receive()
         compat = u8(ClientCompatibilityAddress)
         if compat < 2 then
             InGameAddress = 0x1A71
-            OptionsAddress = 0x1A72
         end
     end
 
@@ -186,16 +182,6 @@ function receive()
 
     retTable["deathLink"] = deathlink_send
     deathlink_send = false
-
-    options = bit.bor(u8(OptionsAddress), bit.band(options, 3))
-
-    if bit.band(options, 240) == 0 then
-        retTable["options"] = bit.band(options, 12)
-    else
-        print("Game may have crashed")
-        curstate = STATE_UNINITIALIZED
-        return
-    end
 
     msg = json.encode(retTable).."\n"
     local ret, error = gbSocket:send(msg)
@@ -243,7 +229,6 @@ function main()
                             wU8(APItemAddress, item_id)
                         end
                     end
-                    --wU8(OptionsAddress, options)
                 end
             end
         elseif (curstate == STATE_UNINITIALIZED) then
