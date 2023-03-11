@@ -239,26 +239,23 @@ def _randomize_learnsets(multiworld: MultiWorld, player: int, rom: bytearray):
         # Replace filler MOVE_NONEs at start of list
         while (old_learnset[i]["move_id"] == 0):
             if (get_option_value(multiworld, player, "level_up_moves") == LevelUpMoves.option_start_with_four_moves):
-                new_learnset.append(
-                    old_learnset[i]["level"] << 9 | get_random_move(random)
-                )
+                new_learnset.append(get_random_move(random, set(new_learnset)))
             else:
-                new_learnset.append(old_learnset[i]["level"] << 9)
+                new_learnset.append(0)
             i += 1
 
         while (i < len(old_learnset)):
-            new_move = get_random_move(random)
-
             # Guarantees the starter can defeat the Zigzagoon and gain XP
             if (i == 3):
-                new_move = get_random_damaging_move(random)
+                new_move = get_random_damaging_move(random, set(new_learnset))
+            else:
+                new_move = get_random_move(random, set(new_learnset))
 
-            new_learnset.append(
-                old_learnset[i]["level"] << 9 | new_move
-            )
+            new_learnset.append(new_move)
 
             i += 1
-        
+
+        new_learnset = [old_learnset[i]["level"] << 9 | move_id for i, move_id in enumerate(new_learnset)]
         _replace_learnset(species_data["learnset"]["rom_address"], new_learnset, rom)
 
 
@@ -268,16 +265,12 @@ def _replace_learnset(learnset_address: int, new_learnset: List[int], rom: bytea
 
 
 def _modify_species_info(multiworld: MultiWorld, player: int, rom: bytearray):
-    species_info_address = get_extracted_data()["misc_rom_addresses"]["gSpeciesInfo"]
-    size_of_info_struct = 28
-    catch_rate_offset = 8
-
     min_catch_rate = min(get_option_value(multiworld, player, "min_catch_rate"), 255)
 
     for species in get_pokemon_species().values():
+        species_info_address = get_extracted_data()["species"][species.id]["rom_address"]
         if (species.catch_rate < min_catch_rate):
-            address = species_info_address + (species.id * size_of_info_struct) + catch_rate_offset
-            _set_bytes_little_endian(rom, address, 1, min_catch_rate)
+            _set_bytes_little_endian(rom, species_info_address + 8, 1, min_catch_rate)
 
 
 def _modify_tmhm_compatibility(multiworld: MultiWorld, player: int, rom: bytearray):

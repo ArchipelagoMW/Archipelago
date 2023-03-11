@@ -1,10 +1,19 @@
 import os
 import random
-from typing import Dict, List, NamedTuple, Tuple, Optional
+from typing import Dict, List, NamedTuple, Tuple, Optional, FrozenSet
 from .Data import get_extracted_data, load_json
 
 
 all_pokemon_species = None
+_move_blacklist = frozenset([
+    165, # Struggle
+    57,  # Surf
+    249, # Rock Smash
+    127, # Waterfall
+    148, # Flash
+    70,  # Strength
+    19   # Fly
+])
 
 
 class BaseStats(NamedTuple):
@@ -34,15 +43,25 @@ def get_random_species(random: random, nearby_bst: Optional[int] = None) -> Poke
     return pokemon_species_list[random.randrange(0, len(pokemon_species_list))]
 
 
-def get_random_move(random: random) -> int:
-    move = random.randrange(1, get_extracted_data()["constants"]["MOVES_COUNT"])
-    while (move == 165):
-        move = random.randrange(1, get_extracted_data()["constants"]["MOVES_COUNT"])
+def get_random_move(random: random, blacklist: Optional[FrozenSet[int]]) -> int:
+    expanded_blacklist = _move_blacklist | (blacklist if blacklist != None else set())
+    num_moves = get_extracted_data()["constants"]["MOVES_COUNT"]
+
+    move = random.randrange(1, num_moves)
+    while (move in expanded_blacklist):
+        move = random.randrange(1, num_moves)
+
     return move
 
 
-def get_random_damaging_move(random: random) -> int:
-    return random.choice(damaging_moves)
+def get_random_damaging_move(random: random, blacklist: Optional[FrozenSet[int]]) -> int:
+    expanded_blacklist = _move_blacklist | (blacklist if blacklist != None else set())
+
+    move = random.choice(damaging_moves)
+    while (move in expanded_blacklist):
+        move = random.choice(damaging_moves)
+
+    return move
 
 
 def get_species_by_id(id: int) -> PokemonSpecies:
