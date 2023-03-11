@@ -20,7 +20,7 @@ PROG_ITEMS = [
     "Sun Crest",
     "Moon Crest",
     # "Astral Seed",
-    # "Astral Tea Leaves",
+    # "Astral Tea Leaves"
 ]
 
 PHOBEKINS = [
@@ -87,7 +87,7 @@ ALWAYS_LOCATIONS = [
     "Necro",
     "Pyro",
     "Claustro",
-    "Acro",
+    "Acro"
 ]
 
 SEALS = [

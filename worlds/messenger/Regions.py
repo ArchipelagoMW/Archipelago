@@ -1,28 +1,28 @@
-from typing import Dict, Set
+from typing import Dict, Set, List
 
-REGIONS: Dict[str, Set[str]] = {
-    "Menu": set(),
-    "Tower HQ": set(),
-    "The Shop": set(),
-    "Tower of Time": set(),
-    "Ninja Village": {"Candle", "Astral Seed"},
-    "Autumn Hills": {"Climbing Claws", "Key of Hope"},
-    "Forlorn Temple": {"Demon King Crown"},
-    "Catacombs": {"Necro", "Ruxxtin's Amulet"},
-    "Bamboo Creek": {"Claustro"},
-    "Howling Grotto": {"Wingsuit"},
-    "Quillshroom Marsh": {"Seashell"},
-    "Searing Crags": {"Rope Dart"},
-    "Searing Crags Upper": {"Power Thistle", "Key of Strength", "Astral Tea Leaves"},
-    "Glacial Peak": set(),
-    "Cloud Ruins": {"Acro"},
-    "Underworld": {"Pyro", "Key of Chaos"},
-    "Dark Cave": set(),
-    "Riviere Turquoise": {"Fairy Bottle"},
-    "Sunken Shrine": {"Ninja Tabi", "Sun Crest", "Moon Crest", "Key of Love"},
-    "Elemental Skylands": {"Key of Symbiosis"},
-    "Corrupted Future": {"Key of Courage"},
-    "Music Box": {"Rescue Phantom"}
+REGIONS: Dict[str, List[str]] = {
+    "Menu": [],
+    "Tower HQ": [],
+    "The Shop": [],
+    "Tower of Time": [],
+    "Ninja Village": ["Candle", "Astral Seed"],
+    "Autumn Hills": ["Climbing Claws", "Key of Hope"],
+    "Forlorn Temple": ["Demon King Crown"],
+    "Catacombs": ["Necro", "Ruxxtin's Amulet"],
+    "Bamboo Creek": ["Claustro"],
+    "Howling Grotto": ["Wingsuit"],
+    "Quillshroom Marsh": ["Seashell"],
+    "Searing Crags": ["Rope Dart"],
+    "Searing Crags Upper": ["Power Thistle", "Key of Strength", "Astral Tea Leaves"],
+    "Glacial Peak": [],
+    "Cloud Ruins": ["Acro"],
+    "Underworld": ["Pyro", "Key of Chaos"],
+    "Dark Cave": [],
+    "Riviere Turquoise": ["Fairy Bottle"],
+    "Sunken Shrine": ["Ninja Tabi", "Sun Crest", "Moon Crest", "Key of Love"],
+    "Elemental Skylands": ["Key of Symbiosis"],
+    "Corrupted Future": ["Key of Courage"],
+    "Music Box": ["Rescue Phantom"]
 }
 """seal locations have the region in their name and may not need to be created so skip them here"""
 
@@ -47,6 +47,6 @@ REGION_CONNECTIONS: Dict[str, Set[str]] = {
     "Dark Cave": {"Catacombs", "Riviere Turquoise"},
     "Riviere Turquoise": set(),
     "Sunken Shrine": {"Howling Grotto"},
-    "Elemental Skylands": set(),
+    "Elemental Skylands": set()
 }
 """Vanilla layout mapping with all Tower HQ portals open. from -> to"""
