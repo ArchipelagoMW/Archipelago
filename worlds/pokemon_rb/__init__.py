@@ -314,8 +314,18 @@ class PokemonRedBlueWorld(World):
             else:
                 raise FillError(f"Failed to place badges for player {self.player}")
 
+        # Place local items in some locations to prevent save-scumming. Also Oak's PC to prevent an "AP Item" from
+        # entering the player's inventory.
+
         locs = [self.multiworld.get_location("Fossil - Choice A", self.player),
                 self.multiworld.get_location("Fossil - Choice B", self.player)]
+
+        if self.multiworld.dexsanity[self.player]:
+            for starter_mon in [" ".join(self.multiworld.get_location(
+                    f"Pallet Town - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]:
+                loc = self.multiworld.get_location(f"Pokedex - {starter_mon}", self.player)
+                if loc.item is None:
+                    locs.append(loc)
 
         loc = self.multiworld.get_location("Pallet Town - Player's PC", self.player)
         if loc.item is None:
