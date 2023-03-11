@@ -1,7 +1,6 @@
 import itertools
 from typing import Dict, NamedTuple, Optional, List, Set
 from BaseClasses import Item, ItemClassification, MultiWorld
-from . import Regions, Locations
 
 
 class ItemData(NamedTuple):
@@ -22,7 +21,7 @@ def create_item(player: int, name: str) -> Item:
 
 def create_all_items(world: MultiWorld, player: int) -> None:
     pool_option = world.bad_effects[player].value
-    total_locations = world.total_locations[player].value
+    sum_locations = len(world.get_unfilled_locations(player))
 
     # Generate fixed item pool, these are items with a specific fixed quantity that must be added
     itempool: List = []
@@ -43,7 +42,7 @@ def create_all_items(world: MultiWorld, player: int) -> None:
 
     # Create any non-progression repeat items (referred to as junk regardless of whether it's useful)
     junk_pool = item_pool_weights[pool_option]
-    random_count = total_locations - len(itempool)
+    random_count = sum_locations - len(itempool)
 
     itempool += world.random.choices(
         population=list(junk_pool.keys()),
@@ -95,15 +94,15 @@ item_table: Dict[str, ItemData] = {
 # todo: test rates, make sure it's fun
 default_weights: Dict[str, int] = {
     "Wand (Tier 1)":    10,
-    "Potion":           35,
-    "Spell Refresher":  25,
+    "Potion":           45,
+    "Spell Refresher":  35,
     "Extra Max HP":     25,
-    "Wand (Tier 2)":    9,
-    "Wand (Tier 3)":    8,
+    "Wand (Tier 2)":    8,
+    "Wand (Tier 3)":    7,
     "Trap":             15,
     "Gold (200)":       15,
-    "Wand (Tier 4)":    7,
-    "Wand (Tier 5)":    6,
+    "Wand (Tier 4)":    6,
+    "Wand (Tier 5)":    5,
     "Gold (1000)":      5,
     "Wand (Tier 6)":    4,
     "Perk (Extra Life)": 4,

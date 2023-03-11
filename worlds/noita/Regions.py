@@ -15,27 +15,30 @@ def create_region(world: MultiWorld, player: int, region_name: str) -> Region:
         location = Locations.NoitaLocation(player, location_name, location_data.id, new_region)
         opt_orbs = world.orbs_as_checks[player].value
         opt_bosses = world.bosses_as_checks[player].value
+        opt_paths = world.path_option[player].value
+        opt_hc = world.hidden_chests[player].value
+        # opt_peds = world.pedestal_checks[player].value
         ltype = location_data.ltype
         flag = location_data.flag
+
         if flag == 0 or ltype == "orb" and flag <= opt_orbs or ltype == "boss" and flag <= opt_bosses:
             new_region.locations.append(location)
 
-    return new_region
+        if ltype == "hc" and flag <= opt_paths:
+            for i in range(opt_hc):
+                location_name_num = f"{location_name} {i+1}"
+                location_id = location_data.id + i
+                location = Locations.NoitaLocation(player, location_name_num, location_id, new_region)
+                location.progress_type = LocationProgressType.DEFAULT
+                new_region.locations.append(location)
 
-
-# Creates chest locations in the Forest region (HACK), making sure not to generate more locations than requested
-def create_chests(world: MultiWorld, player: int, num_locations: int) -> Region:
-    new_region = Region("Forest", player, world)
-    total_locations = world.total_locations[player].value - num_locations
-
-    for i in range(total_locations):
-        location_name = f"Chest{i+1}"
-        location_id = 110000+i
-
-        location = Locations.NoitaLocation(player, location_name, location_id, new_region)
-        location.progress_type = LocationProgressType.DEFAULT
-
-        new_region.locations.append(location)
+        # if ltype == "peds" and flag <= opt_paths:
+        #     for i in range(opt_peds):
+        #         location_name_num = f"{location_name} {i+1}"
+        #         location_id = location_data.id + i
+        #         location = Locations.NoitaLocation(player, location_name_num, location_id, new_region)
+        #         location.progress_type = LocationProgressType.DEFAULT
+        #         new_region.locations.append(location)
 
     return new_region
 
@@ -55,12 +58,7 @@ def create_connections(player: int, regions: Dict[str, Region]) -> None:
 
 
 def create_regions(world: MultiWorld, player: int) -> Dict[str, Region]:
-    # NOTE: Forest hack is for chests
-    regions = { name: create_region(world, player, name) for name in noita_regions if name != "Forest" }
-
-    num_locations = sum(len(region.locations) for region in regions.values())
-    regions.update({ "Forest": create_chests(world, player, num_locations) })
-
+    regions = {name: create_region(world, player, name) for name in noita_regions}
     return regions
 
 
@@ -73,13 +71,16 @@ def create_all_regions_and_connections(world: MultiWorld, player: int) -> None:
 
 
 noita_connections: Dict[str, Set[str]] = {
-    "Menu": {"Forest",},
+    "Menu": {"Forest"},
     "Forest": {"Mines", "Floating Island", "Desert", "Snowy Wasteland"},
     "Snowy Wasteland": {"Frozen Vault", "Lake", "Forest"},
+    "Frozen Vault": {"Snowy Wasteland"},
     "Lake": {"Snowy Wasteland", "Desert"},
-    "Desert": {"Lake", "Pyramid"},
+    "Desert": {"Lake", "Pyramid", "Overgrown Cavern"},
     "Floating Island": {"Forest"},
     "Pyramid": {"Desert"},
+    "Overgrown Cavern": {"Sandcave"},
+    "Sandcave": {"Powerplant"},
 
     "Mines": {"Collapsed Mines", "Holy Mountain 1 (To Coal Pits)", "Lava Lake", "Forest"},
     "Collapsed Mines": {"Mines", "Holy Mountain 1 (To Coal Pits)", "Dark Cave"},
@@ -110,7 +111,8 @@ noita_connections: Dict[str, Set[str]] = {
     "Underground Jungle": {"Holy Mountain 4 (To Underground Jungle)", "Dragoncave", "Holy Mountain 5 (To The Vault)",
                            "Lukki Lair"},
     "Dragoncave": {"Underground Jungle"},
-    "Lukki Lair": {"Underground Jungle", "The Vault"},
+    "Lukki Lair": {"Underground Jungle", "The Vault", "Snow Chasm"},
+    "Snow Chasm": {},
 
     ###
     "Holy Mountain 5 (To The Vault)": {"The Vault"},
@@ -119,12 +121,11 @@ noita_connections: Dict[str, Set[str]] = {
     ###
     "Holy Mountain 6 (To Temple of the Art)": {"Temple of the Art"},
     "Temple of the Art": {"Holy Mountain 6 (To Temple of the Art)", "Holy Mountain 7 (To The Laboratory)", "The Tower",
-                          "Wizard's Den", "Snow Chasm"},
+                          "Wizard's Den"},
     "Wizard's Den": {"Temple of the Art", "Powerplant"},
     "Powerplant": {"Wizard's Den", "Deep Underground"},
     "The Tower": {"Forest"},
     "Deep Underground": {},
-    "Snow Chasm": {},
 
     ###
     "Holy Mountain 7 (To The Laboratory)": {"The Laboratory"},
