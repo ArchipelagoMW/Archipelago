@@ -47,6 +47,7 @@
                                     <td>{{ player_names[(team, loop.index)]|e }}</td>
                                     <td>{{ games[player] }}</td>
                                     {% block custom_table_row scoped %}
+                                    {# implement this block in game-specific multi trackers #}
                                     {% endblock %}
                                     <td class="center-column">{{ checks["Total"] }}/{{ checks_in_area[player]["Total"] }}</td>
                                     <td class="center-column">{{ percent_total_checks_done[team][player] }}</td>
