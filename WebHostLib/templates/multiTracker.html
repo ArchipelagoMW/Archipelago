@@ -30,6 +30,9 @@
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
+                                <th>Game</th>
+                                {% block custom_table_headers %}
+                                {% endblock %}
                                 <th class="center-column">Checks</th>
                                 <th class="center-column">&percnt;</th>
                                 <th class="center-column hours">Last<br>Activity</th>
@@ -41,6 +44,9 @@
                                     <td><a href="{{ url_for("get_player_tracker", tracker=room.tracker,
                                     tracked_team=team, tracked_player=player)}}">{{ loop.index }}</a></td>
                                     <td>{{ player_names[(team, loop.index)]|e }}</td>
+                                    <td>{{ games[player] }}</td>
+                                    {% block custom_table_row scoped %}
+                                    {% endblock %}
                                     <td class="center-column">{{ checks["Total"] }}/{{ checks_in_area[player]["Total"] }}</td>
                                     <td class="center-column">{{ percent_total_checks_done[team][player] }}</td>
                                     {%- if activity_timers[(team, player)] -%}
