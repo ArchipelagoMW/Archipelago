@@ -14,7 +14,7 @@
             <br />
         {% endif %}
         {% if room.tracker %}
-            This room has a <a href="{{ url_for("getTracker", tracker=room.tracker) }}">Multiworld Tracker</a> enabled.
+            This room has a <a href="{{ url_for("get_multiworld_tracker", tracker=room.tracker) }}">Multiworld Tracker</a> enabled.
             <br />
         {% endif %}
         The server for this room will be paused after {{ room.timeout//60//60 }} hours of inactivity.
@@ -25,8 +25,8 @@
             The most likely failure reason is that the multiworld is too old to be loaded now.
         {% elif room.last_port %}
             You can connect to this room by using <span class="interactive"
-            data-tooltip="This means address/ip is {{ config['PATCH_TARGET'] }} and port is {{ room.last_port }}.">
-            '/connect {{ config['PATCH_TARGET'] }}:{{ room.last_port }}'
+            data-tooltip="This means address/ip is {{ config['HOST_ADDRESS'] }} and port is {{ room.last_port }}.">
+            '/connect {{ config['HOST_ADDRESS'] }}:{{ room.last_port }}'
             </span>
             in the <a href="{{ url_for("tutorial_landing")}}">client</a>.<br>
         {% endif %}

@@ -458,11 +458,11 @@ def shuffle_random_entrances(ootworld):
         one_way_entrance_pools['OwlDrop'] = ootworld.get_shufflable_entrances(type='OwlDrop')
     if ootworld.warp_songs:
         one_way_entrance_pools['WarpSong'] = ootworld.get_shufflable_entrances(type='WarpSong')
-        if ootworld.logic_rules == 'glitchless':
-            one_way_priorities['Bolero'] = priority_entrance_table['Bolero']
-            one_way_priorities['Nocturne'] = priority_entrance_table['Nocturne']
-            if not ootworld.shuffle_dungeon_entrances and not ootworld.shuffle_overworld_entrances:
-                one_way_priorities['Requiem'] = priority_entrance_table['Requiem']
+        # No more exceptions for NL here, causes cascading failures later
+        one_way_priorities['Bolero'] = priority_entrance_table['Bolero']
+        one_way_priorities['Nocturne'] = priority_entrance_table['Nocturne']
+        if not ootworld.shuffle_dungeon_entrances and not ootworld.shuffle_overworld_entrances:
+            one_way_priorities['Requiem'] = priority_entrance_table['Requiem']
     if ootworld.spawn_positions:
         one_way_entrance_pools['Spawn'] = ootworld.get_shufflable_entrances(type='Spawn')
         if 'child' not in ootworld.spawn_positions:
@@ -480,7 +480,7 @@ def shuffle_random_entrances(ootworld):
     if ootworld.shuffle_dungeon_entrances:
         entrance_pools['Dungeon'] = ootworld.get_shufflable_entrances(type='Dungeon', only_primary=True)
         if ootworld.open_forest == 'closed':
-            entrance_pools['Dungeon'].remove(ootworld.get_entrance('KF Outside Deku Tree -> Deku Tree Lobby', player))
+            entrance_pools['Dungeon'].remove(ootworld.get_entrance('KF Outside Deku Tree -> Deku Tree Lobby'))
         if ootworld.shuffle_special_dungeon_entrances:
             entrance_pools['Dungeon'] += ootworld.get_shufflable_entrances(type='DungeonSpecial', only_primary=True)
         if ootworld.decouple_entrances:
@@ -500,7 +500,7 @@ def shuffle_random_entrances(ootworld):
         exclude_overworld_reverse = ootworld.mix_entrance_pools == 'all' and not ootworld.decouple_entrances
         entrance_pools['Overworld'] = ootworld.get_shufflable_entrances(type='Overworld', only_primary=exclude_overworld_reverse)
         if not ootworld.decouple_entrances:
-            entrance_pools['Overworld'].remove(world.get_entrance('GV Lower Stream -> Lake Hylia', player))
+            entrance_pools['Overworld'].remove(ootworld.get_entrance('GV Lower Stream -> Lake Hylia'))
 
     # Mark shuffled entrances
     for entrance in chain(chain.from_iterable(one_way_entrance_pools.values()), chain.from_iterable(entrance_pools.values())):
@@ -822,7 +822,7 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
                     raise EntranceShuffleError(f'{entrance.name} potentially accessible as adult')
 
     # Check if all locations are reachable if not NL
-    if ootworld.logic_rules != 'no_logic' and locations_to_ensure_reachable:
+    if locations_to_ensure_reachable:
         for loc in locations_to_ensure_reachable:
             if not all_state.can_reach(loc, 'Location', player):
                 raise EntranceShuffleError(f'{loc} is unreachable')

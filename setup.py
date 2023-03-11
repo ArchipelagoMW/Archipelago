@@ -7,26 +7,21 @@ import sys
 import sysconfig
 import typing
 import zipfile
+import urllib.request
+import io
+import json
+import threading
+import subprocess
+import pkg_resources
+
 from collections.abc import Iterable
 from hashlib import sha3_512
 from pathlib import Path
 
-import setuptools
-
-from Launcher import components, icon_paths
-from Utils import version_tuple, is_windows, is_linux
-
-apworlds: set = {
-    "Subnautica",
-    "Factorio",
-    "Rogue Legacy",
-}
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
-import subprocess
-import pkg_resources
-requirement = 'cx-Freeze>=6.13.1'
 try:
+    requirement = 'cx-Freeze>=6.14.1'
     pkg_resources.require(requirement)
     import cx_Freeze
 except pkg_resources.ResolutionError:
@@ -35,12 +30,100 @@ except pkg_resources.ResolutionError:
     subprocess.call([sys.executable, '-m', 'pip', 'install', requirement, '--upgrade'])
     import cx_Freeze
 
+# .build only exists if cx-Freeze is the right version, so we have to update/install that first before this line
+import setuptools.command.build
+
+if __name__ == "__main__":
+    # need to run this early to import from Utils and Launcher
+    # TODO: move stuff to not require this
+    import ModuleUpdate
+    ModuleUpdate.update(yes="--yes" in sys.argv or "-y" in sys.argv)
+    ModuleUpdate.update_ran = False  # restore for later
+
+from Launcher import components, icon_paths
+from Utils import version_tuple, is_windows, is_linux
+
+
+# On  Python < 3.10 LogicMixin is not currently supported.
+apworlds: set = {
+    "Subnautica",
+    "Factorio",
+    "Rogue Legacy",
+    "Donkey Kong Country 3",
+    "Super Mario World",
+    "Stardew Valley",
+    "Timespinner",
+    "Minecraft",
+}
+
+
+def download_SNI():
+    print("Updating SNI")
+    machine_to_go = {
+        "x86_64": "amd64",
+        "aarch64": "arm64",
+        "armv7l": "arm"
+    }
+    platform_name = platform.system().lower()
+    machine_name = platform.machine().lower()
+    # force amd64 on macos until we have universal2 sni, otherwise resolve to GOARCH
+    machine_name = "amd64" if platform_name == "darwin" else machine_to_go.get(machine_name, machine_name)
+    with urllib.request.urlopen("https://api.github.com/repos/alttpo/sni/releases/latest") as request:
+        data = json.load(request)
+    files = data["assets"]
+
+    source_url = None
+
+    for file in files:
+        download_url: str = file["browser_download_url"]
+        machine_match = download_url.rsplit("-", 1)[1].split(".", 1)[0] == machine_name
+        if platform_name in download_url and machine_match:
+            # prefer "many" builds
+            if "many" in download_url:
+                source_url = download_url
+                break
+            source_url = download_url
+
+    if source_url and source_url.endswith(".zip"):
+        with urllib.request.urlopen(source_url) as download:
+            with zipfile.ZipFile(io.BytesIO(download.read()), "r") as zf:
+                for member in zf.infolist():
+                    zf.extract(member, path="SNI")
+        print(f"Downloaded SNI from {source_url}")
+
+    elif source_url and (source_url.endswith(".tar.xz") or source_url.endswith(".tar.gz")):
+        import tarfile
+        mode = "r:xz" if source_url.endswith(".tar.xz") else "r:gz"
+        with urllib.request.urlopen(source_url) as download:
+            sni_dir = None
+            with tarfile.open(fileobj=io.BytesIO(download.read()), mode=mode) as tf:
+                for member in tf.getmembers():
+                    if member.name.startswith("/") or "../" in member.name:
+                        raise ValueError(f"Unexpected file '{member.name}' in {source_url}")
+                    elif member.isdir() and not sni_dir:
+                        sni_dir = member.name
+                    elif member.isfile() and not sni_dir or not member.name.startswith(sni_dir):
+                        raise ValueError(f"Expected folder before '{member.name}' in {source_url}")
+                    elif member.isfile() and sni_dir:
+                        tf.extract(member)
+            # sadly SNI is in its own folder on non-windows, so we need to rename
+            shutil.rmtree("SNI", True)
+            os.rename(sni_dir, "SNI")
+        print(f"Downloaded SNI from {source_url}")
+
+    elif source_url:
+        print(f"Don't know how to extract SNI from {source_url}")
+
+    else:
+        print(f"No SNI found for system spec {platform_name} {machine_name}")
+
 
 if os.path.exists("X:/pw.txt"):
     print("Using signtool")
     with open("X:/pw.txt", encoding="utf-8-sig") as f:
         pw = f.read()
-    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p "' + pw + r'" /fd sha256 /tr http://timestamp.digicert.com/ '
+    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p "' + pw + \
+               r'" /fd sha256 /tr http://timestamp.digicert.com/ '
 else:
     signtool = None
 
@@ -63,6 +146,7 @@ exes = [
 ]
 
 extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml", "SNI"]
+extra_libs = ["libssl.so", "libcrypto.so"] if is_linux else []
 
 
 def remove_sprites_from_folder(folder):
@@ -78,7 +162,7 @@ def _threaded_hash(filepath):
 
 
 # cx_Freeze's build command runs other commands. Override to accept --yes and store that.
-class BuildCommand(cx_Freeze.command.build.Build):
+class BuildCommand(setuptools.command.build.build):
     user_options = [
         ('yes', 'y', 'Answer "yes" to all questions.'),
     ]
@@ -102,6 +186,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
     ]
     yes: bool
     extra_data: Iterable  # [any] not available in 3.8
+    extra_libs: Iterable  # work around broken include_files
 
     buildfolder: Path
     libfolder: Path
@@ -112,6 +197,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         super().initialize_options()
         self.yes = BuildCommand.last_yes
         self.extra_data = []
+        self.extra_libs = []
 
     def finalize_options(self):
         super().finalize_options()
@@ -157,6 +243,10 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         print("Created Manifest")
 
     def run(self):
+        # start downloading sni asap
+        sni_thread = threading.Thread(target=download_SNI, name="SNI Downloader")
+        sni_thread.start()
+
         # pre build steps
         print(f"Outputting to: {self.buildfolder}")
         os.makedirs(self.buildfolder, exist_ok=True)
@@ -168,17 +258,25 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         self.buildtime = datetime.datetime.utcnow()
         super().run()
 
-        # include_files seems to be broken with this setup. implement here
+        # need to finish download before copying
+        sni_thread.join()
+
+        # include_files seems to not be done automatically. implement here
         for src, dst in self.include_files:
-            print('copying', src, '->', self.buildfolder / dst)
+            print(f"copying {src} -> {self.buildfolder / dst}")
+            shutil.copyfile(src, self.buildfolder / dst, follow_symlinks=False)
+
+        # now that include_files is completely broken, run find_libs here
+        for src, dst in find_libs(*self.extra_libs):
+            print(f"copying {src} -> {self.buildfolder / dst}")
             shutil.copyfile(src, self.buildfolder / dst, follow_symlinks=False)
 
         # post build steps
-        if sys.platform == "win32":  # kivy_deps is win32 only, linux picks them up automatically
+        if is_windows:  # kivy_deps is win32 only, linux picks them up automatically
             from kivy_deps import sdl2, glew
             for folder in sdl2.dep_bins + glew.dep_bins:
                 shutil.copytree(folder, self.libfolder, dirs_exist_ok=True)
-                print('copying', folder, '->', self.libfolder)
+                print(f"copying {folder} -> {self.libfolder}")
 
         for data in self.extra_data:
             self.installfile(Path(data))
@@ -379,6 +477,9 @@ $APPDIR/$exe "$@"
 
 def find_libs(*args: str) -> typing.Sequence[typing.Tuple[str, str]]:
     """Try to find system libraries to be included."""
+    if not args:
+        return []
+
     arch = build_arch.replace('_', '-')
     libc = 'libc6'  # we currently don't support musl
 
@@ -445,12 +546,13 @@ cx_Freeze.setup(
                          "pandas"],
             "zip_include_packages": ["*"],
             "zip_exclude_packages": ["worlds", "sc2"],
-            "include_files": find_libs("libssl.so", "libcrypto.so") if is_linux else [],
+            "include_files": [],  # broken in cx 6.14.0, we use more special sauce now
             "include_msvcr": False,
-            "replace_paths": [("*", "")],
+            "replace_paths": ["*."],
             "optimize": 1,
             "build_exe": buildfolder,
             "extra_data": extra_data,
+            "extra_libs": extra_libs,
             "bin_includes": ["libffi.so", "libcrypt.so"] if is_linux else []
         },
         "bdist_appimage": {

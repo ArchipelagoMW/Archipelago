@@ -1,6 +1,7 @@
 from typing import TextIO
 import os
 import logging
+from copy import deepcopy
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from Fill import fill_restrictive, FillError, sweep_from_pool
@@ -39,12 +40,10 @@ class PokemonRedBlueWorld(World):
     game = "Pokemon Red and Blue"
     option_definitions = pokemon_rb_options
 
-    data_version = 3
+    data_version = 5
     required_client_version = (0, 3, 7)
 
     topology_present = False
-
-
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = {location.name: location.address for location in location_data if location.type == "Item"}
@@ -62,13 +61,15 @@ class PokemonRedBlueWorld(World):
         self.learnsets = None
         self.trainer_name = None
         self.rival_name = None
+        self.type_chart = None
+        self.traps = None
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld: MultiWorld):
         versions = set()
-        for player in world.player_ids:
-            if world.worlds[player].game == "Pokemon Red and Blue":
-                versions.add(world.game_version[player].current_key)
+        for player in multiworld.player_ids:
+            if multiworld.worlds[player].game == "Pokemon Red and Blue":
+                versions.add(multiworld.game_version[player].current_key)
         for version in versions:
             if not os.path.exists(get_base_rom_path(version)):
                 raise FileNotFoundError(get_base_rom_path(version))
@@ -108,6 +109,70 @@ class PokemonRedBlueWorld(World):
 
         process_pokemon_data(self)
 
+        if self.multiworld.randomize_type_chart[self.player] == "vanilla":
+            chart = deepcopy(poke_data.type_chart)
+        elif self.multiworld.randomize_type_chart[self.player] == "randomize":
+            types = poke_data.type_names.values()
+            matchups = []
+            for type1 in types:
+                for type2 in types:
+                    matchups.append([type1, type2])
+            self.multiworld.random.shuffle(matchups)
+            immunities = self.multiworld.immunity_matchups[self.player].value
+            super_effectives = self.multiworld.super_effective_matchups[self.player].value
+            not_very_effectives = self.multiworld.not_very_effective_matchups[self.player].value
+            normals = self.multiworld.normal_matchups[self.player].value
+            while super_effectives + not_very_effectives + normals < 225 - immunities:
+                super_effectives += self.multiworld.super_effective_matchups[self.player].value
+                not_very_effectives += self.multiworld.not_very_effective_matchups[self.player].value
+                normals += self.multiworld.normal_matchups[self.player].value
+            if super_effectives + not_very_effectives + normals > 225 - immunities:
+                total = super_effectives + not_very_effectives + normals
+                excess = total - (225 - immunities)
+                subtract_amounts = (
+                    int((excess / (super_effectives + not_very_effectives + normals)) * super_effectives),
+                    int((excess / (super_effectives + not_very_effectives + normals)) * not_very_effectives),
+                    int((excess / (super_effectives + not_very_effectives + normals)) * normals))
+                super_effectives -= subtract_amounts[0]
+                not_very_effectives -= subtract_amounts[1]
+                normals -= subtract_amounts[2]
+                while super_effectives + not_very_effectives + normals > 225 - immunities:
+                    r = self.multiworld.random.randint(0, 2)
+                    if r == 0:
+                        super_effectives -= 1
+                    elif r == 1:
+                        not_very_effectives -= 1
+                    else:
+                        normals -= 1
+            chart = []
+            for matchup_list, matchup_value in zip([immunities, normals, super_effectives, not_very_effectives],
+                                                   [0, 10, 20, 5]):
+                for _ in range(matchup_list):
+                    matchup = matchups.pop()
+                    matchup.append(matchup_value)
+                    chart.append(matchup)
+        elif self.multiworld.randomize_type_chart[self.player] == "chaos":
+            types = poke_data.type_names.values()
+            matchups = []
+            for type1 in types:
+                for type2 in types:
+                    matchups.append([type1, type2])
+            chart = []
+            values = list(range(21))
+            self.multiworld.random.shuffle(matchups)
+            self.multiworld.random.shuffle(values)
+            for matchup in matchups:
+                value = values.pop(0)
+                values.append(value)
+                matchup.append(value)
+                chart.append(matchup)
+        # sort so that super-effective matchups occur first, to prevent dual "not very effective" / "super effective"
+        # matchups from leading to damage being ultimately divided by 2 and then multiplied by 2, which can lead to
+        # damage being reduced by 1 which leads to a "not very effective" message appearing due to my changes
+        # to the way effectiveness messages are generated.
+        self.type_chart = sorted(chart, key=lambda matchup: -matchup[2])
+        self.multiworld.early_items[self.player]["Exp. All"] = 1
+
     def create_items(self) -> None:
         start_inventory = self.multiworld.start_inventory[self.player].value.copy()
         if self.multiworld.randomize_pokedex[self.player] == "start_with":
@@ -126,10 +191,10 @@ class PokemonRedBlueWorld(World):
                 item = self.create_filler()
             else:
                 item = self.create_item(location.original_item)
+                combined_traps = self.multiworld.poison_trap_weight[self.player].value + self.multiworld.fire_trap_weight[self.player].value + self.multiworld.paralyze_trap_weight[self.player].value + self.multiworld.ice_trap_weight[self.player].value
                 if (item.classification == ItemClassification.filler and self.multiworld.random.randint(1, 100)
-                        <= self.multiworld.trap_percentage[self.player].value):
-                    item = self.create_item(self.multiworld.random.choice([item for item in item_table if
-                                            item_table[item].classification == ItemClassification.trap]))
+                        <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0):
+                    item = self.create_item(self.select_trap())
             if location.event:
                 self.multiworld.get_location(location.name, self.player).place_locked_item(item)
             elif "Badge" not in item.name or self.multiworld.badgesanity[self.player].value:
@@ -254,13 +319,22 @@ class PokemonRedBlueWorld(World):
                 spoiler_handle.write(f"{matchup[0]} deals {matchup[2] * 10}% damage to {matchup[1]}\n")
 
     def get_filler_item_name(self) -> str:
-        if self.multiworld.random.randint(1, 100) <= self.multiworld.trap_percentage[self.player].value:
-            return self.multiworld.random.choice([item for item in item_table if
-                                            item_table[item].classification == ItemClassification.trap])
+        combined_traps = self.multiworld.poison_trap_weight[self.player].value + self.multiworld.fire_trap_weight[self.player].value + self.multiworld.paralyze_trap_weight[self.player].value + self.multiworld.ice_trap_weight[self.player].value
+        if self.multiworld.random.randint(1, 100) <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0:
+            return self.select_trap()
 
         return self.multiworld.random.choice([item for item in item_table if item_table[
             item].classification == ItemClassification.filler and item not in item_groups["Vending Machine Drinks"] +
                                               item_groups["Unique"]])
+
+    def select_trap(self):
+        if self.traps is None:
+            self.traps = []
+            self.traps += ["Poison Trap"] * self.multiworld.poison_trap_weight[self.player].value
+            self.traps += ["Fire Trap"] * self.multiworld.fire_trap_weight[self.player].value
+            self.traps += ["Paralyze Trap"] * self.multiworld.paralyze_trap_weight[self.player].value
+            self.traps += ["Ice Trap"] * self.multiworld.ice_trap_weight[self.player].value
+        return self.multiworld.random.choice(self.traps)
 
     def fill_slot_data(self) -> dict:
         return {
@@ -278,6 +352,7 @@ class PokemonRedBlueWorld(World):
             "elite_four_condition": self.multiworld.elite_four_condition[self.player].value,
             "victory_road_condition": self.multiworld.victory_road_condition[self.player].value,
             "viridian_gym_condition": self.multiworld.viridian_gym_condition[self.player].value,
+            "cerulean_cave_condition": self.multiworld.cerulean_cave_condition[self.player].value,
             "free_fly_map": self.fly_map_code,
             "extra_badges": self.extra_badges,
             "type_chart": self.type_chart,

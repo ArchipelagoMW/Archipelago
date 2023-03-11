@@ -157,17 +157,17 @@ basic_units = {
     'Vulture'
 }
 
-advanced_basic_units = {
+advanced_basic_units = basic_units.union({
     'Reaper',
     'Goliath',
     'Diamondback',
     'Viking'
-}
+})
 
 
-def get_basic_units(world: MultiWorld, player: int) -> typing.Set[str]:
-    if get_option_value(world, player, 'required_tactics') > 0:
-        return basic_units.union(advanced_basic_units)
+def get_basic_units(multiworld: MultiWorld, player: int) -> typing.Set[str]:
+    if get_option_value(multiworld, player, 'required_tactics') > 0:
+        return advanced_basic_units
     else:
         return basic_units
 
@@ -182,9 +182,11 @@ filler_items: typing.Tuple[str, ...] = (
     '+15 Starting Vespene'
 )
 
+# Defense rating table
+# Commented defense ratings are handled in LogicMixin
 defense_ratings = {
     "Siege Tank": 5,
-    "Maelstrom Rounds": 2,
+    # "Maelstrom Rounds": 2,
     "Planetary Fortress": 3,
     # Bunker w/ Marine/Marauder: 3,
     "Perdition Turret": 2,
@@ -193,7 +195,7 @@ defense_ratings = {
 }
 zerg_defense_ratings = {
     "Perdition Turret": 2,
-    # Bunker w/ Firebat
+    # Bunker w/ Firebat: 2,
     "Hive Mind Emulator": 3,
     "Psi Disruptor": 3
 }

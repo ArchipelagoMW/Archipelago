@@ -22,7 +22,7 @@
             {% for patch in room.seed.slots|list|sort(attribute="player_id") %}
                 <tr>
                     <td>{{ patch.player_id }}</td>
-                    <td data-tooltip="Connect via TextClient"><a href="archipelago://{{ patch.player_name | e}}:@{{ config['PATCH_TARGET'] }}:{{ room.last_port }}">{{ patch.player_name }}<a/></td>
+                    <td data-tooltip="Connect via TextClient"><a href="archipelago://{{ patch.player_name | e}}:@{{ config['HOST_ADDRESS'] }}:{{ room.last_port }}">{{ patch.player_name }}</a></td>
                     <td>{{ patch.game }}</td>
                     <td>
                         {% if patch.game == "Minecraft" %}
@@ -50,7 +50,7 @@
                             No file to download for this game.
                         {% endif %}
                     </td>
-                    <td><a href="{{ url_for("getPlayerTracker", tracker=room.tracker, tracked_team=0, tracked_player=patch.player_id) }}">Tracker</a></td>
+                    <td><a href="{{ url_for("get_player_tracker", tracker=room.tracker, tracked_team=0, tracked_player=patch.player_id) }}">Tracker</a></td>
                 </tr>
             {% endfor %}
             </tbody>

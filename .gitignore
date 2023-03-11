@@ -4,9 +4,11 @@
 *_Spoiler.txt
 *.bmbp
 *.apbp
+*.apl2ac
 *.apm3
 *.apmc
 *.apz5
+*.aptloz
 *.pyc
 *.pyd
 *.sfc
@@ -49,6 +51,7 @@ Output Logs/
 /Archipelago.zip
 /setup.ini
 /installdelete.iss
+/data/user.kv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -135,6 +138,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.code-workspace
+shell.nix
 
 # Spyder project settings
 .spyderproject
@@ -164,6 +169,7 @@ cython_debug/
 jdk*/
 minecraft*/
 minecraft_versions.json
+!worlds/minecraft/
 
 # pyenv
 .python-version

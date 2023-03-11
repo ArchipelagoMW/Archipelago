@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, IntEnum
 from typing import List
 
 
@@ -32,16 +32,16 @@ class Overcooked2Dlc(Enum):
         assert False
 
     # inclusive
+    @property
     def start_level_id(self) -> int:
-        if self == Overcooked2Dlc.STORY:
-            return 1
         return 0
 
     # exclusive
+    @property
     def end_level_id(self) -> int:
         id = None
         if self == Overcooked2Dlc.STORY:
-            id = 6*6 + 8  # world_count*level_count + kevin count
+            id = 1 + 6*6 + 8 # tutorial + world_count*level_count + kevin count
         if self == Overcooked2Dlc.SURF_N_TURF:
             id = 3*4 + 1
         if self == Overcooked2Dlc.CAMPFIRE_COOK_OFF:
@@ -51,9 +51,9 @@ class Overcooked2Dlc(Enum):
         if self == Overcooked2Dlc.CARNIVAL_OF_CHAOS:
             id = 3*4 + 3
         if self == Overcooked2Dlc.SEASONAL:
-            id = 31
+            id = 31 + 1
 
-        return self.start_level_id() + id
+        return self.start_level_id + id
 
     # Tutorial + Horde Levels + Endgame
     def excluded_levels(self) -> List[int]:
@@ -87,8 +87,33 @@ class Overcooked2Dlc(Enum):
 
         return []
 
+    def exclusive_items(self) -> List[str]:
+        """Returns list of items exclusive to this DLC"""
+        if self == Overcooked2Dlc.SURF_N_TURF:
+            return ["Bellows"]
+        if self == Overcooked2Dlc.CAMPFIRE_COOK_OFF:
+            return ["Wood"]
+        if self == Overcooked2Dlc.NIGHT_OF_THE_HANGRY_HORDE:
+            return ["Coal Bucket"]
+        if self == Overcooked2Dlc.CARNIVAL_OF_CHAOS:
+            return ["Faster Condiment/Drink Switch"]
+        if self == Overcooked2Dlc.SEASONAL:
+            return ["Wok Wheels"]
 
-class Overcooked2GameWorld(Enum):
+        return []
+
+ITEMS_TO_EXCLUDE_IF_NO_DLC = [
+    "Wood",
+    "Coal Bucket",
+    "Bellows",
+    "Coin Purse",
+    "Wok Wheels",
+    "Lightweight Backpack",
+    "Faster Condiment/Drink Switch",
+    "Calmer Unbread",
+]
+
+class Overcooked2GameWorld(IntEnum):
     ONE = 1
     TWO = 2
     THREE = 3
@@ -102,7 +127,7 @@ class Overcooked2GameWorld(Enum):
         if self == Overcooked2GameWorld.KEVIN:
             return "Kevin"
 
-        return str(int(self.value))
+        return str(self.value)
 
     @property
     def sublevel_count(self) -> int:
@@ -116,7 +141,7 @@ class Overcooked2GameWorld(Enum):
         if self == Overcooked2GameWorld.ONE:
             return 1
 
-        prev = Overcooked2GameWorld(self.value - 1)
+        prev = Overcooked2GameWorld(self - 1)
         return prev.base_id + prev.sublevel_count
 
     @property
@@ -170,7 +195,7 @@ class Overcooked2Level:
         if self.sublevel > self.world.sublevel_count:
             if self.world == Overcooked2GameWorld.KEVIN:
                 raise StopIteration
-            self.world = Overcooked2GameWorld(self.world.value + 1)
+            self.world = Overcooked2GameWorld(self.world + 1)
             self.sublevel = 1
 
         return self

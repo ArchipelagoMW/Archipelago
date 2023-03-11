@@ -6,7 +6,7 @@ BK Sudoku is not a typical Archipelago game; instead, it is a generic Sudoku cli
 
 ## What hints are unlocked?
 
-After completing a Sudoku puzzle, the game will unlock 1 random hint for an unchecked location in the slot you are connected to. It is possible to hint a location that was previously hinted for using the !hint command.
+After completing a Sudoku puzzle, the game will unlock 1 random hint for an unchecked location in the slot you are connected to.
 
 ## Where is the settings page?
 

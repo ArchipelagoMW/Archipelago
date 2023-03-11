@@ -52,14 +52,20 @@ world_sources.sort()
 for world_source in world_sources:
     if world_source.is_zip:
         importer = zipimport.zipimporter(os.path.join(folder, world_source.path))
-        spec = importer.find_spec(world_source.path.split(".", 1)[0])
-        mod = importlib.util.module_from_spec(spec)
+        if hasattr(importer, "find_spec"):  # new in Python 3.10
+            spec = importer.find_spec(world_source.path.split(".", 1)[0])
+            mod = importlib.util.module_from_spec(spec)
+        else:  # TODO: remove with 3.8 support
+            mod = importer.load_module(world_source.path.split(".", 1)[0])
+
         mod.__package__ = f"worlds.{mod.__package__}"
         mod.__name__ = f"worlds.{mod.__name__}"
         sys.modules[mod.__name__] = mod
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", message="__package__ != __spec__.parent")
-            importer.exec_module(mod)
+            # Found no equivalent for < 3.10
+            if hasattr(importer, "exec_module"):
+                importer.exec_module(mod)
     else:
         importlib.import_module(f".{world_source.path}", "worlds")
 
