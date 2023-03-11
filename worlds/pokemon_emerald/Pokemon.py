@@ -31,16 +31,18 @@ class PokemonSpecies(NamedTuple):
     id: int
     national_dex_number: int
     base_stats: BaseStats
-    types: Tuple[str, str]
-    abilities: Tuple[str, str]
+    types: Tuple[int, int]
+    abilities: Tuple[int, int]
     catch_rate: int
     tm_hm_compatibility: str
 
 
-def get_random_species(random: random, nearby_bst: Optional[int] = None) -> PokemonSpecies:
+def get_random_species(random: random, nearby_bst: Optional[int] = None, type: Optional[int] = None) -> PokemonSpecies:
     pokemon_species_list = [species for species in get_pokemon_species().values()]
     if (nearby_bst != None):
         pokemon_species_list = [species for species in pokemon_species_list if abs(sum(species.base_stats) - nearby_bst) < (nearby_bst / 10)]
+    if (type != None):
+        pokemon_species_list = [species for species in pokemon_species_list if type in species.types]
     return pokemon_species_list[random.randrange(0, len(pokemon_species_list))]
 
 

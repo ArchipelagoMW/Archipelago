@@ -61,34 +61,46 @@ class RandomizeWildPokemon(Choice):
     """Randomizes wild pokemon encounters (grass, caves, water, fishing)
     Vanilla: Wild encounters are unchanged
     Match Base Stats: Wild pokemon are replaced with species with approximately the same bst
+    Match Type: Wild pokemon are replaced with species that share a type with the original
+    Match Base Stats and Type: Apply both Match Base Stats and Match Type
     Completely Random: There are no restrictions"""
     display_name = "Randomize Wild Pokemon"
     default = 0
     option_vanilla = 0
     option_match_base_stats = 1
-    option_completely_random = 2
+    option_match_type = 2
+    option_match_base_stats_and_type = 3
+    option_completely_random = 4
 
 class RandomizeStarters(Choice):
     """Randomizes the starter pokemon in Professor Birch's bag
     Vanilla: Starters are unchanged
     Match Base Stats: Starters are replaced with species with approximately the same bst
+    Match Type: Starters are replaced with species that share a type with the original
+    Match Base Stats and Type: Apply both Match Base Stats and Match Type
     Completely Random: There are no restrictions"""
     display_name = "Randomize Starters"
     default = 0
     option_vanilla = 0
     option_match_base_stats = 1
-    option_completely_random = 2
+    option_match_type = 2
+    option_match_base_stats_and_type = 3
+    option_completely_random = 4
 
 class RandomizeTrainerParties(Choice):
     """Randomizes the parties of all trainers
     Vanilla: Parties are unchanged
     Match Base Stats: Trainer pokemon are replaced with species with approximately the same bst
+    Match Type: Trainer pokemon are replaced with species that share a type with the original
+    Match Base Stats and Type: Apply both Match Base Stats and Match Type
     Completely Random: There are no restrictions"""
     display_name = "Randomize Trainer Parties"
     default = 0
     option_vanilla = 0
     option_match_base_stats = 1
-    option_completely_random = 2
+    option_match_type = 2
+    option_match_base_stats_and_type = 3
+    option_completely_random = 4
 
 class RandomizeAbilities(Toggle):
     """Randomizes the abilities of every pokemon (each species will have the same number of abilities)"""

@@ -169,16 +169,18 @@ def _randomize_encounter_tables(multiworld, player, rom):
             _replace_encounters(rom, fishing_encounters["rom_address"], new_encounters)
 
 
-def _create_randomized_encounter_table(multiworld, player, default_slots):
+def _create_randomized_encounter_table(multiworld: MultiWorld, player: int, default_slots):
     random = multiworld.per_slot_randoms[player]
-    match_bst = get_option_value(multiworld, player, "wild_pokemon") == RandomizeWildPokemon.option_match_base_stats
+    match_bst = get_option_value(multiworld, player, "wild_pokemon") in [RandomizeWildPokemon.option_match_base_stats, RandomizeWildPokemon.option_match_base_stats_and_type]
+    match_type = get_option_value(multiworld, player, "wild_pokemon") in [RandomizeWildPokemon.option_match_type, RandomizeWildPokemon.option_match_base_stats_and_type]
 
     default_pokemon = [p_id for p_id in set(default_slots)]
 
     new_pokemon_map: Dict[int, int] = {}
     for pokemon_id in default_pokemon:
         bst = None if not match_bst else sum(get_species_by_id(pokemon_id).base_stats)
-        new_pokemon_id = get_random_species(random, bst).id
+        type = None if not match_type else random.choice(get_species_by_id(pokemon_id).types)
+        new_pokemon_id = get_random_species(random, bst, type).id
         new_pokemon_map[pokemon_id] = new_pokemon_id
 
     new_slots = []
@@ -204,7 +206,8 @@ def _replace_encounters(rom, table_address, encounter_slots):
 def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray):
     random = multiworld.per_slot_randoms[player]
     trainers_json = get_extracted_data()["trainers"]
-    match_bst = get_option_value(multiworld, player, "trainer_parties") == RandomizeTrainerParties.option_match_base_stats
+    match_bst = get_option_value(multiworld, player, "trainer_parties") in [RandomizeTrainerParties.option_match_base_stats, RandomizeTrainerParties.option_match_base_stats_and_type]
+    match_type = get_option_value(multiworld, player, "trainer_parties") in [RandomizeTrainerParties.option_match_type, RandomizeTrainerParties.option_match_base_stats_and_type]
 
     for i, trainer_data in enumerate(trainers_json):
         party_address = trainer_data["party_rom_address"]
@@ -221,7 +224,8 @@ def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray):
         new_party = []
         for pokemon_data in trainer_data["party"]:
             bst = sum(get_species_by_id(pokemon_data["species"]).base_stats) if match_bst else None
-            new_party.append(get_random_species(random, bst))
+            type = random.choice(get_species_by_id(pokemon_data["species"]).types) if match_type else None
+            new_party.append(get_random_species(random, bst, type))
 
         for j, species in enumerate(new_party):
             pokemon_address = party_address + (j * pokemon_data_size)
@@ -246,14 +250,23 @@ def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray):
 
 
 def _randomize_starters(multiworld, player, rom):
-    match_bst = get_option_value(multiworld, player, "starters") == RandomizeStarters.option_match_base_stats
-    starter_bst = None if not match_bst else sum(get_species_by_name("Treecko").base_stats)
     random = multiworld.per_slot_randoms[player]
 
+    match_bst = get_option_value(multiworld, player, "starters") in [RandomizeStarters.option_match_base_stats, RandomizeStarters.option_match_base_stats_and_type]
+    match_type = get_option_value(multiworld, player, "starters") in [RandomizeStarters.option_match_type, RandomizeStarters.option_match_base_stats_and_type]
+
+    starter_1_bst = None if not match_bst else sum(get_species_by_name("Treecko").base_stats)
+    starter_2_bst = None if not match_bst else sum(get_species_by_name("Torchic").base_stats)
+    starter_3_bst = None if not match_bst else sum(get_species_by_name("Mudkip").base_stats)
+
+    starter_1_type = None if not match_type else random.choice(get_species_by_name("Treecko").types)
+    starter_2_type = None if not match_type else random.choice(get_species_by_name("Torchic").types)
+    starter_3_type = None if not match_type else random.choice(get_species_by_name("Mudkip").types)
+
     address = get_extracted_data()["misc_rom_addresses"]["sStarterMon"]
-    starter_1 = get_random_species(random, starter_bst)
-    starter_2 = get_random_species(random, starter_bst)
-    starter_3 = get_random_species(random, starter_bst)
+    starter_1 = get_random_species(random, starter_1_bst, starter_1_type)
+    starter_2 = get_random_species(random, starter_2_bst, starter_2_type)
+    starter_3 = get_random_species(random, starter_3_bst, starter_3_type)
 
     _set_bytes_little_endian(rom, address + 0, 2, starter_1.id)
     _set_bytes_little_endian(rom, address + 2, 2, starter_2.id)
