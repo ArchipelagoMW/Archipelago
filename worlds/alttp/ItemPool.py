@@ -80,7 +80,7 @@ difficulties = {
         basicglove=basicgloves,
         alwaysitems=alwaysitems,
         legacyinsanity=legacyinsanity,
-        universal_keys=['Small Key (Universal)'] * 28,
+        universal_keys=['Small Key (Universal)'] * 29,
         extras=[easyfirst15extra, easysecond15extra, easythird10extra, easyfourth5extra, easyfinal25extra],
         progressive_sword_limit=8,
         progressive_shield_limit=6,
@@ -112,7 +112,7 @@ difficulties = {
         basicglove=basicgloves,
         alwaysitems=alwaysitems,
         legacyinsanity=legacyinsanity,
-        universal_keys=['Small Key (Universal)'] * 18 + ['Rupees (20)'] * 10,
+        universal_keys=['Small Key (Universal)'] * 19 + ['Rupees (20)'] * 10,
         extras=[normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit=4,
         progressive_shield_limit=3,
@@ -144,7 +144,7 @@ difficulties = {
         basicglove=basicgloves,
         alwaysitems=alwaysitems,
         legacyinsanity=legacyinsanity,
-        universal_keys=['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 16,
+        universal_keys=['Small Key (Universal)'] * 13 + ['Rupees (5)'] * 16,
         extras=[normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit=3,
         progressive_shield_limit=2,
@@ -176,7 +176,7 @@ difficulties = {
         basicglove=basicgloves,
         alwaysitems=alwaysitems,
         legacyinsanity=legacyinsanity,
-        universal_keys=['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 16,
+        universal_keys=['Small Key (Universal)'] * 13 + ['Rupees (5)'] * 16,
         extras=[normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit=2,
         progressive_shield_limit=1,
@@ -212,7 +212,7 @@ for diff in {'easy', 'normal', 'hard', 'expert'}:
         basicglove=['Nothing'] * 2,
         alwaysitems=['Ice Rod'] + ['Nothing'] * 19,
         legacyinsanity=['Nothing'] * 2,
-        universal_keys=['Nothing'] * 28,
+        universal_keys=['Nothing'] * 29,
         extras=[['Nothing'] * 15, ['Nothing'] * 15, ['Nothing'] * 10, ['Nothing'] * 5, ['Nothing'] * 25],
         progressive_sword_limit=difficulties[diff].progressive_sword_limit,
         progressive_shield_limit=difficulties[diff].progressive_shield_limit,
@@ -251,8 +251,8 @@ def generate_itempool(world):
         world.push_item(loc, ItemFactory('Triforce Piece', player), False)
         world.treasure_hunt_count[player] = 1
         if world.boss_shuffle[player] != 'none':
-            if 'turtle rock-' not in world.boss_shuffle[player]:
-                world.boss_shuffle[player] = f'Turtle Rock-Trinexx;{world.boss_shuffle[player]}'
+            if 'turtle rock-' not in world.boss_shuffle[player].bosses:
+                world.boss_shuffle[player].bosses = f'Turtle Rock-Trinexx;{world.boss_shuffle[player].bosses}'
             else:
                 logging.warning(f'Cannot guarantee that Trinexx is the boss of Turtle Rock for player {player}')
         loc.event = True
@@ -279,7 +279,6 @@ def generate_itempool(world):
         itempool.extend(['Arrows (10)'] * 7)
         if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             itempool.extend(itemdiff.universal_keys)
-            itempool.append('Small Key (Universal)')
 
         for item in itempool:
             world.push_precollected(ItemFactory(item, player))
@@ -663,14 +662,25 @@ def get_pool_core(world, player: int):
         pool = ['Rupees (5)' if item in replace else item for item in pool]
     if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
         pool.extend(diff.universal_keys)
-        item_to_place = 'Small Key (Universal)' if goal != 'icerodhunt' else 'Nothing'
         if mode == 'standard':
-            key_location = world.random.choice(
-                ['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest',
-                 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
-            place_item(key_location, item_to_place)
-        else:
-            pool.extend([item_to_place])
+            if world.key_drop_shuffle[player] and world.goal[player] != 'icerodhunt':
+                key_locations = ['Secret Passage', 'Hyrule Castle - Map Guard Key Drop']
+                key_location = world.random.choice(key_locations)
+                key_locations.remove(key_location)
+                place_item(key_location, "Small Key (Universal)")
+                key_locations += ['Hyrule Castle - Boomerang Guard Key Drop', 'Hyrule Castle - Boomerang Chest',
+                                  'Hyrule Castle - Map Chest']
+                key_location = world.random.choice(key_locations)
+                key_locations.remove(key_location)
+                place_item(key_location, "Small Key (Universal)")
+                key_locations += ['Hyrule Castle - Big Key Drop', 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross']
+                key_location = world.random.choice(key_locations)
+                key_locations.remove(key_location)
+                place_item(key_location, "Small Key (Universal)")
+                key_locations += ['Sewers - Key Rat Key Drop']
+                key_location = world.random.choice(key_locations)
+                place_item(key_location, "Small Key (Universal)")
+                pool = pool[:-3]
         if world.key_drop_shuffle[player]:
             pass # pool.extend([item_to_place] * (len(key_drop_data) - 1))
 

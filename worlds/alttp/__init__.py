@@ -259,6 +259,8 @@ class ALTTPWorld(World):
                 world.local_items[player].value |= self.item_name_groups[option.item_name_group]
             elif option == "different_world":
                 world.non_local_items[player].value |= self.item_name_groups[option.item_name_group]
+                if world.mode[player] == "standard":
+                    world.non_local_items[player].value -= {"Small Key (Hyrule Castle)"}
             elif option.in_dungeon:
                 self.dungeon_local_item_names |= self.item_name_groups[option.item_name_group]
                 if option == "original_dungeon":
@@ -432,11 +434,16 @@ class ALTTPWorld(World):
             break
         else:
             raise FillError('Unable to place dungeon prizes')
+        if world.mode[player] == 'standard' and world.smallkey_shuffle[player] \
+                and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal and \
+                world.smallkey_shuffle[player] != smallkey_shuffle.option_own_dungeons:
+            world.local_early_items[player]["Small Key (Hyrule Castle)"] = 1
 
     @classmethod
     def stage_pre_fill(cls, world):
         from .Dungeons import fill_dungeons_restrictive
         fill_dungeons_restrictive(world)
+
 
     @classmethod
     def stage_post_fill(cls, world):
@@ -533,12 +540,11 @@ class ALTTPWorld(World):
     @classmethod
     def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
         trash_counts = {}
-        standard_keyshuffle_players = set()
         for player in world.get_game_players("A Link to the Past"):
             if world.mode[player] == 'standard' and world.smallkey_shuffle[player] \
                     and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal and \
                     world.smallkey_shuffle[player] != smallkey_shuffle.option_own_dungeons:
-                standard_keyshuffle_players.add(player)
+                pass
             if not world.ganonstower_vanilla[player] or \
                     world.logic[player] in {'owglitches', 'hybridglitches', "nologic"}:
                 pass
@@ -548,30 +554,30 @@ class ALTTPWorld(World):
             else:
                 trash_counts[player] = world.random.randint(0, world.crystals_needed_for_gt[player] * 2)
 
-        # Make sure the escape small key is placed first in standard with key shuffle to prevent running out of spots
-        # TODO: this might be worthwhile to introduce as generic option for various games and then optimize it
-        if standard_keyshuffle_players:
-            viable = {}
-            for location in world.get_locations():
-                if location.player in standard_keyshuffle_players \
-                        and location.item is None \
-                        and location.can_reach(world.state):
-                    viable.setdefault(location.player, []).append(location)
-
-            for player in standard_keyshuffle_players:
-                loc = world.random.choice(viable[player])
-                key = world.create_item("Small Key (Hyrule Castle)", player)
-                loc.place_locked_item(key)
-                fill_locations.remove(loc)
-            world.random.shuffle(fill_locations)
-            # TODO: investigate not creating the keys in the first place
-            progitempool[:] = [item for item in progitempool if
-                               item.player not in standard_keyshuffle_players or
-                               item.name != "Small Key (Hyrule Castle)"]
-            # this is definitely not the best way to deal with this...
-            if world.key_drop_shuffle[player]:
-                for _ in range(3):
-                    progitempool.append(world.create_item("Small Key (Hyrule Castle)", player))
+        # # Make sure the escape small key is placed first in standard with key shuffle to prevent running out of spots
+        # # TODO: this might be worthwhile to introduce as generic option for various games and then optimize it
+        # if standard_keyshuffle_players:
+        #     viable = {}
+        #     for location in world.get_locations():
+        #         if location.player in standard_keyshuffle_players \
+        #                 and location.item is None \
+        #                 and location.can_reach(world.state):
+        #             viable.setdefault(location.player, []).append(location)
+        #
+        #     for player in standard_keyshuffle_players:
+        #         loc = world.random.choice(viable[player])
+        #         key = world.create_item("Small Key (Hyrule Castle)", player)
+        #         loc.place_locked_item(key)
+        #         fill_locations.remove(loc)
+        #     world.random.shuffle(fill_locations)
+        #     # TODO: investigate not creating the keys in the first place
+        #     progitempool[:] = [item for item in progitempool if
+        #                        item.player not in standard_keyshuffle_players or
+        #                        item.name != "Small Key (Hyrule Castle)"]
+        #     # this is definitely not the best way to deal with this...
+        #     if world.key_drop_shuffle[player]:
+        #         for _ in range(3):
+        #             progitempool.append(world.create_item("Small Key (Hyrule Castle)", player))
 
 
         if trash_counts:

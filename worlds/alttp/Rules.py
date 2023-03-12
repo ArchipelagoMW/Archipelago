@@ -356,7 +356,7 @@ def global_rules(world, player):
         (state.multiworld.can_take_damage[player] or state.has('Hookshot', player) or state.has('Cape', player) or state.has('Cane of Byrna', player)))
     set_rule(world.get_entrance('Ice Palace (East Top)', player), lambda state: can_lift_rocks(state, player) and state.has('Hammer', player))
 
-    set_rule(world.get_entrance('Misery Mire Entrance Gap', player), lambda state: (state.has('Pegasus Boots', player) or state.has('Hookshot', player)) and (has_sword(state, player) or state.has('Fire Rod', player) or state.has('Ice Rod', player) or state.has('Hammer', player) or state.has('Cane of Somaria', player) or state.can_shoot_arrows(player)))  # need to defeat wizzrobes, bombs don't work ...
+    set_rule(world.get_entrance('Misery Mire Entrance Gap', player), lambda state: (state.has('Pegasus Boots', player) or state.has('Hookshot', player)) and (has_sword(state, player) or state.has('Fire Rod', player) or state.has('Ice Rod', player) or state.has('Hammer', player) or state.has('Cane of Somaria', player) or can_shoot_arrows(state, player)))  # need to defeat wizzrobes, bombs don't work ...
     set_rule(world.get_location('Misery Mire - Fishbone Pot Key', player), lambda state: state.has('Big Key (Misery Mire)', player) or state._lttp_has_key('Small Key (Misery Mire)', player, 4))
 
     set_rule(world.get_location('Misery Mire - Big Chest', player), lambda state: state.has('Big Key (Misery Mire)', player))
@@ -887,11 +887,14 @@ def add_conditional_lamps(world, player):
 
 
 def open_rules(world, player):
-    # softlock protection as you can reach the sewers small key door with a guard drop key
-    set_rule(world.get_location('Hyrule Castle - Boomerang Guard Key Drop', player),
-             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3))
-    set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player),
-             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3))
+    def basement_key_rule(state):
+        if item_name(state, 'Sewers - Key Rat Key Drop', player) == ("Small Key (Hyrule Castle)", player):
+            return state._lttp_has_key("Small Key (Hyrule Castle)", player, 2)
+        else:
+            return state._lttp_has_key("Small Key (Hyrule Castle)", player, 3)
+
+    set_rule(world.get_location('Hyrule Castle - Boomerang Guard Key Drop', player), basement_key_rule)
+    set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player), basement_key_rule)
 
     set_rule(world.get_location('Sewers - Key Rat Key Drop', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3))
@@ -938,19 +941,20 @@ def standard_rules(world, player):
     set_rule(world.get_entrance('Links House S&Q', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
     set_rule(world.get_entrance('Sanctuary S&Q', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
 
-    set_rule(world.get_location('Hyrule Castle - Boomerang Guard Key Drop', player),
-             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1))
-    set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player),
-             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1))
+    if world.smallkey_shuffle[player] != smallkey_shuffle.option_universal:
+        set_rule(world.get_location('Hyrule Castle - Boomerang Guard Key Drop', player),
+                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1))
+        set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player),
+                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1))
 
-    set_rule(world.get_location('Hyrule Castle - Big Key Drop', player),
-             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2))
-    set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest', player),
-             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2) and
-                           state.has('Big Key (Hyrule Castle', player))
+        set_rule(world.get_location('Hyrule Castle - Big Key Drop', player),
+                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2))
+        set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest', player),
+                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2) and
+                               state.has('Big Key (Hyrule Castle)', player))
 
-    set_rule(world.get_location('Sewers - Key Rat Key Drop', player),
-             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3))
+        set_rule(world.get_location('Sewers - Key Rat Key Drop', player),
+                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3))
 
 def toss_junk_item(world, player):
     items = ['Rupees (20)', 'Bombs (3)', 'Arrows (10)', 'Rupees (5)', 'Rupee (1)', 'Bombs (10)',
