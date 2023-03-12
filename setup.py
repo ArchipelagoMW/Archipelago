@@ -54,6 +54,7 @@ apworlds: set = {
     "Stardew Valley",
     "Timespinner",
     "Minecraft",
+    "The Messenger",
 }
 
 

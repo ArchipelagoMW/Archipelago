@@ -666,7 +666,6 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
     }
     for item_name, item_id in multi_items.items():
         base_name = item_name.split()[-1].lower()
-        count = inventory[item_id]
         display_data[base_name+"_count"] = inventory[item_id]
 
     # Gather dungeon locations
@@ -1323,24 +1322,22 @@ def get_enabled_multiworld_trackers(room: Room, current: str):
             "current": current == "Generic"
          }
     ]
-
-    if any(slot.game == "A Link to the Past" for slot in room.seed.slots) or current == "A Link to the Past":
-        enabled.append({
-            "name": "A Link to the Past",
-            "endpoint": "get_LttP_multiworld_tracker",
-            "current": current == "A Link to the Past"}
-        )
-
+    for game_name, endpoint in multi_trackers.items():
+        if any(slot.game == game_name for slot in room.seed.slots) or current == game_name:
+            enabled.append({
+                "name": game_name,
+                "endpoint": endpoint.__name__,
+                "current": current == game_name}
+            )
     return enabled
 
 
-@app.route('/tracker/<suuid:tracker>')
-@cache.memoize(timeout=60)  # multisave is currently created at most every minute
-def get_multiworld_tracker(tracker: UUID):
+def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[str, typing.Any]]:
     room: Room = Room.get(tracker=tracker)
     if not room:
-        abort(404)
-    locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
+        return None
+
+    locations, names, use_door_tracker, checks_in_area, player_location_to_area, \
         precollected_items, games, slot_data, groups, saving_second, custom_locations, custom_items = \
         get_static_room_data(room)
 
@@ -1366,7 +1363,9 @@ def get_multiworld_tracker(tracker: UUID):
             continue
         player_locations = locations[player]
         checks_done[team][player]["Total"] = sum(1 for loc in locations_checked if loc in player_locations)
-        percent_total_checks_done[team][player] = int(checks_done[team][player]["Total"] / seed_checks_in_area[player]["Total"] * 100) if seed_checks_in_area[player]["Total"] else 100
+        percent_total_checks_done[team][player] = int(checks_done[team][player]["Total"] /
+                                                      checks_in_area[player]["Total"] * 100) \
+            if checks_in_area[player]["Total"] else 100
 
     activity_timers = {}
     now = datetime.datetime.utcnow()
@@ -1386,15 +1385,61 @@ def get_multiworld_tracker(tracker: UUID):
     for (team, player), data in multisave.get("video", []):
         video[(team, player)] = data
 
-    enabled_multiworld_trackers = get_enabled_multiworld_trackers(room, "Generic")
+    return dict(player_names=player_names, room=room, checks_done=checks_done,
+                percent_total_checks_done=percent_total_checks_done, checks_in_area=checks_in_area,
+                activity_timers=activity_timers, video=video, hints=hints,
+                long_player_names=long_player_names,
+                multisave=multisave, precollected_items=precollected_items, groups=groups,
+                locations=locations, games=games)
 
-    return render_template("multiTracker.html", player_names=player_names, room=room, checks_done=checks_done,
-                           percent_total_checks_done=percent_total_checks_done, checks_in_area=seed_checks_in_area,
-                           activity_timers=activity_timers, video=video, hints=hints,
-                           long_player_names=long_player_names, enabled_multiworld_trackers=enabled_multiworld_trackers)
+
+def _get_inventory_data(data: typing.Dict[str, typing.Any]) -> typing.Dict[int, typing.Dict[int, int]]:
+    inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in team_data}
+                 for teamnumber, team_data in data["checks_done"].items()}
+
+    groups = data["groups"]
+
+    for (team, player), locations_checked in data["multisave"].get("location_checks", {}).items():
+        if player in data["groups"]:
+            continue
+        player_locations = data["locations"][player]
+        precollected = data["precollected_items"][player]
+        for item_id in precollected:
+            inventory[team][player][item_id] += 1
+        for location in locations_checked:
+            item_id, recipient, flags = player_locations[location]
+            recipients = groups.get(recipient, [recipient])
+            for recipient in recipients:
+                inventory[team][recipient][item_id] += 1
+    return inventory
 
 
-@app.route('/tracker/<suuid:tracker>/lttp')
+@app.route('/tracker/<suuid:tracker>')
+@cache.memoize(timeout=60)  # multisave is currently created at most every minute
+def get_multiworld_tracker(tracker: UUID):
+    data = _get_multiworld_tracker_data(tracker)
+    if not data:
+        abort(404)
+
+    data["enabled_multiworld_trackers"] = get_enabled_multiworld_trackers(data["room"], "Generic")
+
+    return render_template("multiTracker.html", **data)
+
+
+@app.route('/tracker/<suuid:tracker>/Factorio')
+@cache.memoize(timeout=60)  # multisave is currently created at most every minute
+def get_Factorio_multiworld_tracker(tracker: UUID):
+    data = _get_multiworld_tracker_data(tracker)
+    if not data:
+        abort(404)
+
+    data["inventory"] = _get_inventory_data(data)
+    data["enabled_multiworld_trackers"] = get_enabled_multiworld_trackers(data["room"], "Factorio")
+
+    return render_template("multiFactorioTracker.html", **data)
+
+
+@app.route('/tracker/<suuid:tracker>/A Link to the Past')
 @cache.memoize(timeout=60)  # multisave is currently created at most every minute
 def get_LttP_multiworld_tracker(tracker: UUID):
     room: Room = Room.get(tracker=tracker)
@@ -1517,4 +1562,9 @@ game_specific_trackers: typing.Dict[str, typing.Callable] = {
     "ChecksFinder": __renderChecksfinder,
     "Super Metroid": __renderSuperMetroidTracker,
     "Starcraft 2 Wings of Liberty": __renderSC2WoLTracker
+}
+
+multi_trackers: typing.Dict[str, typing.Callable] = {
+    "A Link to the Past": get_LttP_multiworld_tracker,
+    "Factorio": get_Factorio_multiworld_tracker,
 }
