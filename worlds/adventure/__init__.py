@@ -61,7 +61,7 @@ class AdventureWorld(World):
     # #   "Blue chest items": {name for name, data in adventure_item_table.items() if data.type is ItemType.BLUE_CHEST},
     # # }
     data_version: ClassVar[int] = 1
-    required_client_version: Tuple[int, int, int] = (0, 3, 6)
+    required_client_version: Tuple[int, int, int] = (0, 3, 9)
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
