@@ -250,8 +250,8 @@ def generate_itempool(world):
         world.push_item(loc, ItemFactory('Triforce Piece', player), False)
         world.treasure_hunt_count[player] = 1
         if world.boss_shuffle[player] != 'none':
-            if isinstance(world.boss_shuffle[player].value, str) and 'turtle rock-' not in world.boss_shuffle[player]:
-                world.boss_shuffle[player] = LTTPBosses.from_text(f'Turtle Rock-Trinexx;{world.boss_shuffle[player]}')
+            if isinstance(world.boss_shuffle[player].value, str) and 'turtle rock-' not in world.boss_shuffle[player].value:
+                world.boss_shuffle[player] = LTTPBosses.from_text(f'Turtle Rock-Trinexx;{world.boss_shuffle[player].current_key}')
             elif isinstance(world.boss_shuffle[player].value, int):
                 world.boss_shuffle[player] = LTTPBosses.from_text(f'Turtle Rock-Trinexx;{world.boss_shuffle[player].current_key}')
             else:
