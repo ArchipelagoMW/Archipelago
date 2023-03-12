@@ -78,7 +78,8 @@ def create_regions(multiworld: MultiWorld, player: int, locations: tuple[Locatio
 
     connect(multiworld, player, "Menu -> Foyer", 'Menu', 'Foyer')  # name all connections
     connect(multiworld, player, "Foyer -> Parlor", 'Foyer', 'Parlor')
-    connect(multiworld, player, "Parlor -> Anteroom", 'Parlor', 'Anteroom')
+    connect(multiworld, player, "Parlor -> Anteroom", 'Parlor', 'Anteroom',
+            lambda state: state.has("Anteroom Key", player))
     connect(multiworld, player, "Anteroom -> Wardrobe", 'Anteroom', 'Wardrobe')
     connect(multiworld, player, "Wardrobe -> Wardrobe Balcony", 'Wardrobe', 'Wardrobe Balcony')
     connect(multiworld, player, "Foyer -> 2F Front Hallway", 'Foyer', '2F Front Hallway',
@@ -209,6 +210,8 @@ def create_region(multiworld: MultiWorld, player: int, locations_per_region: Dic
     if name in locations_per_region:
         for location_data in locations_per_region[name]:
             location = create_location(player, location_data, region, location_cache)
+            if location.locked == True:
+                multiworld.worlds[player].locked_locations.append(location.name)
             region.locations.append(location)
 
     return region

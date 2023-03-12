@@ -66,13 +66,13 @@ item_table: Dict[str, ItemData] = {
 }
 
 filler_items: Dict[str, ItemData] = {
-    "Treasure Bundle": ItemData('Filler', 8541, ItemClassification.filler),
-    "Poison Mushroom": ItemData('Trap', 8542, ItemClassification.trap),
-    "Ghost": ItemData('Trap', 8543, ItemClassification.trap),
-    "Nothing": ItemData('Filler', 8544, ItemClassification.filler),
-    "Small Heart": ItemData('Filler', 8546, ItemClassification.filler),
-    "Medium Heart": ItemData('Filler', 8547, ItemClassification.filler),
-    "Large Heart": ItemData('Filler', 8548, ItemClassification.filler)
+    "Treasure Bundle": ItemData('Filler', 8549, ItemClassification.filler),
+    "Poison Mushroom": ItemData('Trap', 8550, ItemClassification.trap),
+    "Ghost": ItemData('Trap', 8551, ItemClassification.trap),
+    "Nothing": ItemData('Filler', 8552, ItemClassification.filler),
+    "Small Heart": ItemData('Filler', 8553, ItemClassification.filler),
+    "Medium Heart": ItemData('Filler', 8554, ItemClassification.filler),
+    "Large Heart": ItemData('Filler', 8555, ItemClassification.filler)
 }
 
 
