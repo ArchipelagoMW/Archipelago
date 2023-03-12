@@ -322,7 +322,7 @@ class Overcooked2World(World):
 
             level_access_rule: Callable[[CollectionState], bool] = \
                 lambda state, level_name=level.level_name, previous_level_completed_event_name=previous_level_completed_event_name, required_star_count=required_star_count: \
-                has_requirements_for_level_access(state, level_name, previous_level_completed_event_name, required_star_count, self.player)
+                has_requirements_for_level_access(state, level_name, previous_level_completed_event_name, required_star_count, self.options["RampTricks"], self.player)
             self.connect_regions("Overworld", level.level_name, level_access_rule)
 
             # Level --> Overworld
