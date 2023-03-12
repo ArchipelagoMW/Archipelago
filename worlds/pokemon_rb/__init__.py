@@ -269,7 +269,7 @@ class PokemonRedBlueWorld(World):
                 intervene_move = "Strength"
             # cut may not be needed if accessibility is minimal, unless you need all 8 badges and badgesanity is off,
             # as you will require cut to access celadon gyn
-            if (self.multiworld.accessibility[self.player].current_key != "minimal" or ((not
+            if (self.multiworld.accessibility[self.player] != "minimal" or ((not
                 self.multiworld.badgesanity[self.player]) and max(self.multiworld.elite_four_condition[self.player],
                                                                  self.multiworld.victory_road_condition[self.player]) > 7)):
                 if not test_state.pokemon_rb_can_cut(self.player):
