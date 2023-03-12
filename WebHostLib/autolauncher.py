@@ -1,14 +1,14 @@
 from __future__ import annotations
-import logging
-import json
-import multiprocessing
-import threading
-from datetime import timedelta, datetime
 
-import sys
-import typing
-import time
+import json
+import logging
+import multiprocessing
 import os
+import sys
+import threading
+import time
+import typing
+from datetime import timedelta, datetime
 
 from pony.orm import db_session, select, commit
 
@@ -154,8 +154,10 @@ def autogen(config: dict):
                     while 1:
                         time.sleep(0.1)
                         with db_session:
+                            # for update locks the database row(s) during transaction, preventing writes from elsewhere
                             to_start = select(
-                                generation for generation in Generation if generation.state == STATE_QUEUED)
+                                generation for generation in Generation
+                                if generation.state == STATE_QUEUED).for_update()
                             for generation in to_start:
                                 launch_generator(generator_pool, generation)
         except AlreadyRunningException:
@@ -175,6 +177,9 @@ class MultiworldInstance():
         with guardian_lock:
             multiworlds[self.room_id] = self
         self.ponyconfig = config["PONY"]
+        self.cert = config["SELFLAUNCHCERT"]
+        self.key = config["SELFLAUNCHKEY"]
+        self.host = config["HOST_ADDRESS"]
 
     def start(self):
         if self.process and self.process.is_alive():
@@ -182,7 +187,8 @@ class MultiworldInstance():
 
         logging.info(f"Spinning up {self.room_id}")
         process = multiprocessing.Process(group=None, target=run_server_process,
-                                          args=(self.room_id, self.ponyconfig),
+                                          args=(self.room_id, self.ponyconfig, get_static_server_data(),
+                                                self.cert, self.key, self.host),
                                           name="MultiHost")
         process.start()
         # bind after start to prevent thread sync issues with guardian.
@@ -236,5 +242,5 @@ def run_guardian():
 
 
 from .models import Room, Generation, STATE_QUEUED, STATE_STARTED, STATE_ERROR, db, Seed
-from .customserver import run_server_process
+from .customserver import run_server_process, get_static_server_data
 from .generate import gen_game

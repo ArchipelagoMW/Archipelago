@@ -26,14 +26,16 @@ ModuleUpdate.update()
 from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings, get_base_rom_bytes
 from Utils import output_path, local_path, user_path, open_file, get_cert_none_ssl_context, persistent_store, \
     get_adjuster_settings, tkinter_center_window, init_logging
-from Patch import GAME_ALTTP
+
+
+GAME_ALTTP = "A Link to the Past"
 
 
 class AdjusterWorld(object):
     def __init__(self, sprite_pool):
         import random
         self.sprite_pool = {1: sprite_pool}
-        self.slot_seeds = {1: random}
+        self.per_slot_randoms = {1: random}
 
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
@@ -47,7 +49,7 @@ def main():
 
     parser.add_argument('rom', nargs="?", default='AP_LttP.sfc', help='Path to an ALttP rom to adjust.')
     parser.add_argument('--baserom', default='Zelda no Densetsu - Kamigami no Triforce (Japan).sfc',
-                        help='Path to an ALttP JAP(1.0) rom to use as a base.')
+                        help='Path to an ALttP Japan(1.0) rom to use as a base.')
     parser.add_argument('--loglevel', default='info', const='info', nargs='?',
                         choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
     parser.add_argument('--menuspeed', default='normal', const='normal', nargs='?',
@@ -83,9 +85,9 @@ def main():
     parser.add_argument('--ow_palettes', default='default',
                         choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
                                  'sick'])
-    parser.add_argument('--link_palettes', default='default',
-                        choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
-                                 'sick'])
+    # parser.add_argument('--link_palettes', default='default',
+    #                     choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
+    #                              'sick'])
     parser.add_argument('--shield_palettes', default='default',
                         choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
                                  'sick'])
@@ -139,7 +141,7 @@ def adjust(args):
     vanillaRom = args.baserom
     if not os.path.exists(vanillaRom) and not os.path.isabs(vanillaRom):
         vanillaRom = local_path(vanillaRom)
-    if os.path.splitext(args.rom)[-1].lower() in {'.apbp', '.aplttp'}:
+    if os.path.splitext(args.rom)[-1].lower() == '.aplttp':
         import Patch
         meta, args.rom = Patch.create_rom_file(args.rom)
 
@@ -195,7 +197,7 @@ def adjustGUI():
     romEntry2 = Entry(romDialogFrame, textvariable=romVar2)
 
     def RomSelect2():
-        rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc", ".apbp")), ("All Files", "*")])
+        rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc", ".aplttp")), ("All Files", "*")])
         romVar2.set(rom)
 
     romSelectButton2 = Button(romDialogFrame, text='Select Rom', command=RomSelect2)
@@ -289,7 +291,7 @@ def run_sprite_update():
     else:
         top.withdraw()
         task = BackgroundTaskProgress(top, update_sprites, "Updating Sprites", lambda succesful, resultmessage: done.set())
-    while not done.isSet():
+    while not done.is_set():
         task.do_events()
     logging.info("Done updating sprites")
 
@@ -300,6 +302,7 @@ def update_sprites(task, on_finish=None):
     sprite_dir = user_path("data", "sprites", "alttpr")
     os.makedirs(sprite_dir, exist_ok=True)
     ctx = get_cert_none_ssl_context()
+
     def finished():
         task.close_window()
         if on_finish:
@@ -724,7 +727,7 @@ def get_rom_options_frame(parent=None):
     vars.auto_apply = StringVar(value=adjuster_settings.auto_apply)
     autoApplyFrame = Frame(romOptionsFrame)
     autoApplyFrame.grid(row=9, column=0, columnspan=2, sticky=W)
-    filler = Label(autoApplyFrame, text="Automatically apply last used settings on opening .apbp files")
+    filler = Label(autoApplyFrame, text="Automatically apply last used settings on opening .aplttp files")
     filler.pack(side=TOP, expand=True, fill=X)
     askRadio = Radiobutton(autoApplyFrame, text='Ask', variable=vars.auto_apply, value='ask')
     askRadio.pack(side=LEFT, padx=5, pady=5)
@@ -751,6 +754,7 @@ class SpriteSelector():
         self.window['pady'] = 5
         self.spritesPerRow = 32
         self.all_sprites = []
+        self.invalid_sprites = []
         self.sprite_pool = spritePool
 
         def open_custom_sprite_dir(_evt):
@@ -832,6 +836,13 @@ class SpriteSelector():
         self.window.focus()
         tkinter_center_window(self.window)
 
+        if self.invalid_sprites:
+            invalid = sorted(self.invalid_sprites)
+            logging.warning(f"The following sprites are invalid: {', '.join(invalid)}")
+            msg = f"{invalid[0]} "
+            msg += f"and {len(invalid)-1} more are invalid" if len(invalid) > 1 else "is invalid"
+            messagebox.showerror("Invalid sprites detected", msg, parent=self.window)
+
     def remove_from_sprite_pool(self, button, spritename):
         self.callback(("remove", spritename))
         self.spritePoolButtons.buttons.remove(button)
@@ -896,7 +907,13 @@ class SpriteSelector():
         sprites = []
 
         for file in os.listdir(path):
-            sprites.append((file, Sprite(os.path.join(path, file))))
+            if file == '.gitignore':
+                continue
+            sprite = Sprite(os.path.join(path, file))
+            if sprite.valid:
+                sprites.append((file, sprite))
+            else:
+                self.invalid_sprites.append(file)
 
         sprites.sort(key=lambda s: str.lower(s[1].name or "").strip())
 

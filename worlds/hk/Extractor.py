@@ -74,7 +74,7 @@ class Absorber(ast.NodeTransformer):
         self.truth_values = truth_values
         self.truth_values |= {"True", "None", "ANY", "ITEMRANDO"}
         self.false_values = false_values
-        self.false_values |= {"False", "NONE", "RANDOMELEVATORS"}
+        self.false_values |= {"False", "NONE"}
 
         super(Absorber, self).__init__()
 
@@ -203,7 +203,58 @@ logic_folder = os.path.join(resources_source, "Logic")
 logic_options: typing.Dict[str, str] = hk_loads(os.path.join(data_folder, "logic_settings.json"))
 for logic_key, logic_value in logic_options.items():
     logic_options[logic_key] = logic_value.split(".", 1)[-1]
-del (logic_options["RANDOMELEVATORS"])
+
+vanilla_cost_data: typing.Dict[str, typing.Dict[str, typing.Any]] = hk_loads(os.path.join(data_folder, "costs.json"))
+vanilla_location_costs = {
+    key: {
+        value["term"]: int(value["amount"])
+    }
+    for key, value in vanilla_cost_data.items()
+    if value["amount"] > 0 and value["term"] == "GEO"
+}
+
+salubra_geo_costs_by_charm_count = {
+    5: 120,
+    10: 500,
+    18: 900,
+    25: 1400,
+    40: 800
+}
+
+# Can't extract this data, so supply it ourselves.  Source: the wiki
+vanilla_shop_costs = {
+    ('Sly', 'Simple_Key'): [{'GEO': 950}],
+    ('Sly', 'Rancid_Egg'): [{'GEO': 60}],
+    ('Sly', 'Lumafly_Lantern'): [{'GEO': 1800}],
+    ('Sly', 'Gathering_Swarm'): [{'GEO': 300}],
+    ('Sly', 'Stalwart_Shell'): [{'GEO': 200}],
+    ('Sly', 'Mask_Shard'): [
+        {'GEO': 150},
+        {'GEO': 500},
+    ],
+    ('Sly', 'Vessel_Fragment'): [{'GEO': 550}],
+    ('Sly_(Key)', 'Heavy_Blow'): [{'GEO': 350}],
+    ('Sly_(Key)', 'Elegant_Key'): [{'GEO': 800}],
+    ('Sly_(Key)', 'Mask_Shard'): [
+        {'GEO': 800},
+        {'GEO': 1500},
+    ],
+    ('Sly_(Key)', 'Vessel_Fragment'): [{'GEO': 900}],
+    ('Sly_(Key)', 'Sprintmaster'): [{'GEO': 400}],
+
+    ('Iselda', 'Wayward_Compass'): [{'GEO': 220}],
+    ('Iselda', 'Quill'): [{'GEO': 120}],
+
+    ('Salubra', 'Lifeblood_Heart'): [{'GEO': 250}],
+    ('Salubra', 'Longnail'): [{'GEO': 300}],
+    ('Salubra', 'Steady_Body'): [{'GEO': 120}],
+    ('Salubra', 'Shaman_Stone'): [{'GEO': 220}],
+    ('Salubra', 'Quick_Focus'): [{'GEO': 800}],
+
+    ('Leg_Eater', 'Fragile_Heart'): [{'GEO': 350}],
+    ('Leg_Eater', 'Fragile_Greed'): [{'GEO': 250}],
+    ('Leg_Eater', 'Fragile_Strength'): [{'GEO': 600}],
+}
 extra_pool_options: typing.List[typing.Dict[str, typing.Any]] = hk_loads(os.path.join(data_folder, "pools.json"))
 pool_options: typing.Dict[str, typing.Tuple[typing.List[str], typing.List[str]]] = {}
 for option in extra_pool_options:
@@ -213,8 +264,23 @@ for option in extra_pool_options:
         for pairing in option["Vanilla"]:
             items.append(pairing["item"])
             location_name = pairing["location"]
-            if any(cost_entry["term"] == "CHARMS" for cost_entry in pairing.get("costs", [])):
-                location_name += "_(Requires_Charms)"
+            item_costs = pairing.get("costs", [])
+            if item_costs:
+                if any(cost_entry["term"] == "CHARMS" for cost_entry in item_costs):
+                    location_name += "_(Requires_Charms)"
+                #vanilla_shop_costs[pairing["location"], pairing["item"]] = \
+                cost = {
+                    entry["term"]: int(entry["amount"]) for entry in item_costs
+                }
+                # Rando4 doesn't include vanilla geo costs for Salubra charms, so dirty hardcode here.
+                if 'CHARMS' in cost:
+                    geo = salubra_geo_costs_by_charm_count.get(cost['CHARMS'])
+                    if geo:
+                        cost['GEO'] = geo
+
+                key = (pairing["location"], pairing["item"])
+                vanilla_shop_costs.setdefault(key, []).append(cost)
+
             locations.append(location_name)
         if option["Path"]:
             # basename carries over from prior entry if no Path given
@@ -228,6 +294,12 @@ for option in extra_pool_options:
             else:
                 pool_options[basename] = items, locations
 del extra_pool_options
+
+# reverse all the vanilla shop costs (really, this is just for Salubra).
+# When we use these later, we pop off the end of the list so this ensures they are still sorted.
+vanilla_shop_costs = {
+    k: list(reversed(v)) for k, v in vanilla_shop_costs.items()
+}
 
 # items
 items: typing.Dict[str, typing.Dict] = hk_loads(os.path.join(data_folder, "items.json"))
@@ -364,9 +436,15 @@ for event in events:
 event_rules.update(connectors_rules)
 connectors_rules = {}
 
+
+# Apply some final fixes
+item_effects.update({
+    'Left_Mothwing_Cloak': {'LEFTDASH': 1},
+    'Right_Mothwing_Cloak': {'RIGHTDASH': 1},
+})
 names = sorted({"logic_options", "starts", "pool_options", "locations", "multi_locations", "location_to_region_lookup",
                 "event_names", "item_effects", "items", "logic_items", "region_names",
-                "exits", "connectors", "one_ways"})
+                "exits", "connectors", "one_ways", "vanilla_shop_costs", "vanilla_location_costs"})
 warning = "# This module is written by Extractor.py, do not edit manually!.\n\n"
 with open(os.path.join(os.path.dirname(__file__), "ExtractedData.py"), "wt") as py:
     py.write(warning)
@@ -385,6 +463,6 @@ rules_template = template_env.get_template("RulesTemplate.pyt")
 rules = rules_template.render(location_rules=location_rules, one_ways=one_ways, connectors_rules=connectors_rules,
                               event_rules=event_rules)
 
-with open("Rules.py", "wt") as py:
+with open("GeneratedRules.py", "wt") as py:
     py.write(warning)
     py.write(rules)

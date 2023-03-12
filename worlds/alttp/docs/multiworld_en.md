@@ -75,7 +75,7 @@ client, and will also create your ROM in the same place as your patch file.
 When the client launched automatically, SNI should have also automatically launched in the background. If this is its
 first time launching, you may be prompted to allow it to communicate through the Windows Firewall.
 
-##### snes9x Multitroid
+##### snes9x-rr
 
 1. Load your ROM file if it hasn't already been loaded.
 2. Click on the File menu and hover on **Lua Scripting**
@@ -97,9 +97,9 @@ the lua you are using in your file explorer and copy the `socket.dll` to the bas
 3. Click on the Tools menu and click on **Lua Console**
 4. Click Script -> Open Script...
 5. Select the `Connector.lua` file you downloaded above
-    - SuperNintendoClient users should download `sniConnector.lua` from the client download page
-    - SNIClient users should look in their Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
-      emulator is 64-bit or 32-bit.
+    - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
+      emulator is 64-bit or 32-bit. Please note the most recent versions of BizHawk are 64-bit only.
+
 
 ##### RetroArch 1.10.1 or newer
 

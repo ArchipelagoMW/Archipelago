@@ -4,15 +4,21 @@
 *_Spoiler.txt
 *.bmbp
 *.apbp
+*.apl2ac
 *.apm3
 *.apmc
 *.apz5
+*.aptloz
 *.pyc
 *.pyd
 *.sfc
 *.z64
 *.n64
 *.nes
+*.sms
+*.gb
+*.gbc
+*.gba
 *.wixobj
 *.lck
 *.db3
@@ -28,6 +34,7 @@ README.html
 .vs/
 EnemizerCLI/
 /Players/
+/SNI/
 /options.yaml
 /config.yaml
 /logs/
@@ -43,7 +50,8 @@ Output Logs/
 /freeze_requirements.txt
 /Archipelago.zip
 /setup.ini
-
+/installdelete.iss
+/data/user.kv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -116,17 +124,22 @@ target/
 profile_default/
 ipython_config.py
 
+# vim editor
+*.swp
+
 # SageMath parsed files
 *.sage.py
 
 # Environments
 .env
-.venv
+.venv*
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+.code-workspace
+shell.nix
 
 # Spyder project settings
 .spyderproject
@@ -152,10 +165,18 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-#minecraft server stuff
+# minecraft server stuff
 jdk*/
 minecraft*/
 minecraft_versions.json
+!worlds/minecraft/
 
-#pyenv
+# pyenv
 .python-version
+
+# OS General Files
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+[Dd]esktop.ini

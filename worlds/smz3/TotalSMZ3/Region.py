@@ -5,12 +5,19 @@ from worlds.smz3.TotalSMZ3.Item import Item, ItemType
 
 class RewardType(Enum):
     Null = 0
-    Agahnim = 1
-    PendantGreen = 2
-    PendantNonGreen = 3
-    CrystalBlue = 4
-    CrystalRed = 5
-    GoldenFourBoss = 6
+    Agahnim = 1 << 0
+    PendantGreen = 1 << 1
+    PendantNonGreen = 1 << 2
+    CrystalBlue = 1 << 3
+    CrystalRed = 1 << 4
+    BossTokenKraid = 1 << 5
+    BossTokenPhantoon = 1 << 6
+    BossTokenDraygon = 1 << 7
+    BossTokenRidley = 1 << 8
+
+    AnyPendant = PendantGreen | PendantNonGreen
+    AnyCrystal = CrystalBlue | CrystalRed
+    AnyBossToken = BossTokenKraid | BossTokenPhantoon | BossTokenDraygon | BossTokenRidley
 
 class IReward:
     Reward: RewardType
@@ -18,7 +25,7 @@ class IReward:
         pass
 
 class IMedallionAccess:
-    Medallion: object
+    Medallion = None
 
 class Region:
     import worlds.smz3.TotalSMZ3.Location as Location
