@@ -249,10 +249,12 @@ def get_minecraft_versions(version, release_channel="release"):
             return next(filter(lambda entry: entry["version"] == version, data[release_channel]))
         else:
             return resp.json()[release_channel][0]
-    except StopIteration:
+    except (StopIteration, KeyError):
         logging.error(f"No compatible mod version found for client version {version} on \"{release_channel}\" channel.")
-    except KeyError:
-        logging.error(f"No Mods found on \"{release_channel}\" channel.  Consider switching \"release_channel\" in your Host.yaml file")
+        if release_channel != "release":
+            logging.error("Consider switching \"release_channel\" to \"release\" in your Host.yaml file")
+        else:
+            logging.error("No suitable mod found on the \"release\" channel. Please Contact us on discord to report this error.")
         sys.exit(0)
 
 
@@ -291,7 +293,7 @@ if __name__ == '__main__':
     if apmc_file is None and not args.install:
         apmc_file = Utils.open_filename('Select APMC file', (('APMC File', ('.apmc',)),))
 
-    if apmc_file is not None:
+    if apmc_file is not None and data_version is None:
         apmc_data = read_apmc_file(apmc_file)
         data_version = apmc_data.get('client_version', '')
 
