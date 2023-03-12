@@ -243,7 +243,7 @@ def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray):
                 _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, get_random_move(random))
                 _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, get_random_move(random))
                 _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, get_random_move(random))
-                _set_bytes_little_endian(rom, pokemon_address + 0x0D, 2, get_random_move(random))
+                _set_bytes_little_endian(rom, pokemon_address + 0x0E, 2, get_random_move(random))
 
             # Replace species
             _set_bytes_little_endian(rom, pokemon_address + 0x04, 2, species.id)
