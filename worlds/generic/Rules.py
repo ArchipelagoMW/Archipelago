@@ -161,7 +161,7 @@ def allow_self_locking_items(spot: typing.Union[Location, Region], *item_names: 
 
     spot: Location or Region that the item(s) are allowed to be placed in
     item_names: item name or names that are allowed to be placed in the Location or Region
-        """
+    """
     player = spot.player
 
     def add_allowed_rules(area: typing.Union[Location, Entrance], location: Location) -> None:
