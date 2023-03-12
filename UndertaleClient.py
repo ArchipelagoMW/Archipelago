@@ -6,7 +6,7 @@ import urllib.parse
 import sys
 import typing
 import bsdiff4
-import zipimport
+import shutil
 
 import Utils
 
@@ -55,7 +55,7 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
             else:
                 for file_name in os.listdir(tempInstall):
                     if file_name != "steam_api.dll":
-                        copier(tempInstall+"\\"+file_name,
+                        shutil.copy(tempInstall+"\\"+file_name,
                                os.getcwd() + "\\Undertale\\" + file_name)
                 self.ctx.patch_game()
                 self.output("Patching successful!")
@@ -88,6 +88,7 @@ class UndertaleContext(CommonContext):
     pieces_needed = None
     completed_routes = None
     completed_count = 0
+    save_game_folder = os.path.expandvars(r"%localappdata%/UNDERTALE")
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
@@ -119,36 +120,15 @@ class UndertaleContext(CommonContext):
         await self.send_connect()
 
     def clear_undertale_files(self):
-        path = os.path.expandvars(r"%localappdata%/UNDERTALE")
+        path = self.save_game_folder
         self.finished_game = False
         for root, dirs, files in os.walk(path):
             for file in files:
-                if file.find("check") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".item") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".victory") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".route") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".playerspot") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".mad") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".youDied") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".LV") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".mine") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".flag") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find("scout") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".hint") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".spot") > -1:
-                    os.remove(root+"/"+file)
+                if "check" in file or "scout" in file:
+                    os.remove(os.path.join(root, file))
+                elif file.endswith((".item", ".victory", ".route", ".playerspot", ".mad", 
+                                            ".youDied", ".LV", ".mine", ".flag", ".hint", ".spot")):
+                    os.remove(os.path.join(root, file))
 
     async def connect(self, address: typing.Optional[str] = None):
         self.clear_undertale_files()
@@ -218,8 +198,8 @@ def to_room_name(place_name: str):
 
 async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
     if cmd == "Connected":
-        if not os.path.exists(os.path.expandvars(r"%localappdata%/UNDERTALE")):
-            os.mkdir(os.path.expandvars(r"%localappdata%/UNDERTALE"))
+        if not os.path.exists(ctx.save_game_folder):
+            os.mkdir(ctx.save_game_folder)
         ctx.route = args["slot_data"]["route"]
         ctx.pieces_needed = args["slot_data"]["key_pieces"]
         ctx.tem_armor = args["slot_data"]["temy_armor_include"]
@@ -230,63 +210,62 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         await ctx.send_msgs([{"cmd": "SetNotify", "keys": [str(ctx.slot)+" RoutesDone neutral",
                                                            str(ctx.slot)+" RoutesDone pacifist",
                                                            str(ctx.slot)+" RoutesDone genocide"]}])
-        print(ctx.slot)
         if args["slot_data"]["only_flakes"]:
-            with open(os.path.expandvars(r"%localappdata%/UNDERTALE/GenoNoChest.flag"), "w") as f:
+            with open(os.path.join(ctx.save_game_folder, "GenoNoChest.flag"), "w") as f:
                 f.close()
         if not args["slot_data"]["key_hunt"]:
             ctx.pieces_needed = 0
         if args["slot_data"]["rando_love"]:
             filename = f"LOVErando.LV"
-            with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), "w") as f:
+            with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                 f.close()
         if args["slot_data"]["rando_stats"]:
             filename = f"STATrando.LV"
-            with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), "w") as f:
+            with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                 f.close()
         filename = f"{ctx.route}.route"
-        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), "w") as f:
+        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
             f.close()
         for ss in ctx.checked_locations:
             filename = f"check {ss-12000}.spot"
-            with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), "w") as f:
+            with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                 f.close()
         filename = f"area0"
-        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), "w") as f:
+        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
             f.write(to_room_name(args["slot_data"]["Old Home Exit"]))
             f.close()
         filename = f"area1"
-        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), "w") as f:
+        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
             f.write(to_room_name(args["slot_data"]["Snowdin Town Exit"]))
             f.close()
         filename = f"area2"
-        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), "w") as f:
+        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
             f.write(to_room_name(args["slot_data"]["Waterfall Exit"]))
             f.close()
         filename = f"area3"
-        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), "w") as f:
+        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
             f.write(to_room_name(args["slot_data"]["Hotland Exit"]))
             f.close()
         filename = f"area0.back"
-        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), "w") as f:
+        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
             f.write(to_room_name(args["slot_data"]["Snowdin Forest"]))
             f.close()
         filename = f"area1.back"
-        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), "w") as f:
+        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
             f.write(to_room_name(args["slot_data"]["Waterfall"]))
             f.close()
         filename = f"area2.back"
-        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), "w") as f:
+        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
             f.write(to_room_name(args["slot_data"]["Hotland"]))
             f.close()
         filename = f"area3.back"
-        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), "w") as f:
+        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
             f.write(to_room_name(args["slot_data"]["Core"]))
             f.close()
     elif cmd == "LocationInfo":
         locationid = args["locations"][0].location
         filename = f"{str(locationid-12000)}.hint"
-        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/" + filename), "w") as f:
+        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
             toDraw = ""
             for i in range(20):
                 if i < len(str(ctx.item_names[args["locations"][0].item])):
@@ -327,21 +306,17 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
             await ctx.send_msgs(sync_msg)
         if start_index == len(ctx.items_received):
             counter = -1
-            while counter > -99:
-                if os.path.exists(os.path.expandvars(r"%localappdata%/UNDERTALE/" +
-                                                     f"{str(counter)}PLR{str(ctx.slot)}.item")):
-                    os.remove(os.path.expandvars(r"%localappdata%/UNDERTALE/"+f"{str(counter)}PLR{str(ctx.slot)}.item"))
-                counter -= 1
             placedWeapon = 0
             placedArmor = 0
             for item in args["items"]:
                 id = NetworkItem(*item).location
                 while NetworkItem(*item).location < 0 and \
-                        os.path.isfile(os.path.expandvars(r"%localappdata%/UNDERTALE/" +
-                                                          f"{str(id)}PLR{str(NetworkItem(*item).player)}.item")):
+                        counter <= id:
                     id -= 1
+                if NetworkItem(*item).location < 0:
+                    counter -= 1
                 filename = f"{str(id)}PLR{str(NetworkItem(*item).player)}.item"
-                with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), "w") as f:
+                with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                     if NetworkItem(*item).item == 77701:
                         if placedWeapon == 0:
                             f.write(str(77013-11000))
@@ -397,11 +372,11 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                 ctx.items_received.append(NetworkItem(*item))
                 if [item.item for item in ctx.items_received].count(77000) >= ctx.pieces_needed > 0:
                     filename = f"{str(-99999)}PLR{str(0)}.item"
-                    with open(os.path.expandvars(r"%localappdata%/UNDERTALE/" + filename), "w") as f:
+                    with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                         f.write(str(77787 - 11000))
                         f.close()
                     filename = f"{str(-99998)}PLR{str(0)}.item"
-                    with open(os.path.expandvars(r"%localappdata%/UNDERTALE/" + filename), "w") as f:
+                    with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                         f.write(str(77789 - 11000))
                         f.close()
         ctx.watcher_event.set()
@@ -410,7 +385,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         if "checked_locations" in args:
             for ss in ctx.checked_locations:
                 filename = f"check {ss-12000}.spot"
-                with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), "w") as f:
+                with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                     f.close()
 
     elif cmd == "Bounced":
@@ -419,7 +394,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
             data = args.get("data", [])
             if data["player"] != ctx.slot and data["player"] is not None:
                 filename = f"FRISK" + str(data["player"]) + ".playerspot"
-                with open(os.path.expandvars(r"%localappdata%/UNDERTALE/" + filename), "w") as f:
+                with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                     f.write(str(data["x"]) + str(data["y"]) + str(data["room"]) + str(
                         data["spr"]) + str(data["frm"]))
                     f.close()
@@ -427,10 +402,10 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
 
 async def multi_watcher(ctx: UndertaleContext):
     while not ctx.exit_event.is_set():
-        path = os.path.expandvars(r"%localappdata%/UNDERTALE")
+        path = ctx.save_game_folder
         for root, dirs, files in os.walk(path):
             for file in files:
-                if file.find("spots.mine") > -1 and "Online" in ctx.tags:
+                if "spots.mine" in file and "Online" in ctx.tags:
                     with open(root + "/" + file) as mine:
                         this_x = mine.readline()
                         this_y = mine.readline()
@@ -449,11 +424,11 @@ async def multi_watcher(ctx: UndertaleContext):
 async def game_watcher(ctx: UndertaleContext):
     while not ctx.exit_event.is_set():
         await ctx.update_death_link(ctx.deathlink_status)
-        path = os.path.expandvars(r"%localappdata%/UNDERTALE")
+        path = ctx.save_game_folder
         if ctx.syncing:
             for root, dirs, files in os.walk(path):
                 for file in files:
-                    if file.find(".item") > -1:
+                    if ".item" in file:
                         os.remove(root+"/"+file)
             sync_msg = [{"cmd": "Sync"}]
             if ctx.locations_checked:
@@ -462,42 +437,42 @@ async def game_watcher(ctx: UndertaleContext):
             ctx.syncing = False
         if ctx.got_deathlink:
             ctx.got_deathlink = False
-            with open(os.path.expandvars(r"%localappdata%/UNDERTALE/WelcomeToTheDead.youDied"), "w") as f:
+            with open(os.path.join(ctx.save_game_folder, "/WelcomeToTheDead.youDied"), "w") as f:
                 f.close()
         sending = []
         victory = False
         found_routes = 0
         for root, dirs, files in os.walk(path):
             for file in files:
-                if file.find("DontBeMad.mad") > -1 and "DeathLink" in ctx.tags:
+                if "DontBeMad.mad" in file and "DeathLink" in ctx.tags:
                     os.remove(root+"/"+file)
                     await ctx.send_death()
-                if file.find("scout.") > -1:
+                if "scout." in file:
                     if ctx.server_locations.__contains__(int(file.split(".")[1])+12000):
                         await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [int(file.split(".")[1])+12000],
                                               "create_as_hint": int(2)}])
                     os.remove(root+"/"+file)
-                if file.find("check ") > -1:
+                if "check " in file:
                     st = file.split("check ", -1)[1]
                     st = st.split(".spot", -1)[0]
                     sending = sending+[(int(st))+12000]
                     message = [{"cmd": "LocationChecks", "locations": sending}]
                     await ctx.send_msgs(message)
-                if file.find("victory") > -1 and file.find(str(ctx.route)) > -1:
+                if "victory" in file and str(ctx.route) in file:
                     victory = True
-                if file.find(".playerspot") > -1 and "Online" not in ctx.tags:
+                if ".playerspot" in file and "Online" not in ctx.tags:
                     os.remove(root+"/"+file)
-                if file.find("victory") > -1:
+                if "victory" in file:
                     if str(ctx.route) == "all_routes":
-                        if file.find("neutral") > -1 and ctx.completed_routes["neutral"] != 1:
+                        if "neutral" in file and ctx.completed_routes["neutral"] != 1:
                             await ctx.send_msgs([{"cmd": "Set", "key": str(ctx.slot)+" RoutesDone neutral",
                                                   "default": 0, "want_reply": True, "operations": [{"operation": "max",
                                                                                                     "value": 1}]}])
-                        elif file.find("pacifist") > -1 and ctx.completed_routes["pacifist"] != 1:
+                        elif "pacifist" in file and ctx.completed_routes["pacifist"] != 1:
                             await ctx.send_msgs([{"cmd": "Set", "key": str(ctx.slot)+" RoutesDone pacifist",
                                                   "default": 0, "want_reply": True, "operations": [{"operation": "max",
                                                                                                     "value": 1}]}])
-                        elif file.find("genocide") > -1 and ctx.completed_routes["genocide"] != 1:
+                        elif "genocide" in file and ctx.completed_routes["genocide"] != 1:
                             await ctx.send_msgs([{"cmd": "Set", "key": str(ctx.slot)+" RoutesDone genocide",
                                                   "default": 0, "want_reply": True, "operations": [{"operation": "max",
                                                                                                     "value": 1}]}])
@@ -512,23 +487,6 @@ async def game_watcher(ctx: UndertaleContext):
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
         await asyncio.sleep(0.1)
-
-
-def copier(_src, _dst):
-    if not os.path.exists(_src):
-        return False
-
-    _src_fp = open(_src, "rb")
-    _dst_fp = open(_dst, "wb")
-
-    line = _src_fp.readline()
-    while line:
-        _dst_fp.write(line)
-        line = _src_fp.readline()
-    _src_fp.close()
-    _dst_fp.close()
-
-    return True
 
 
 if __name__ == "__main__":
@@ -570,7 +528,7 @@ if __name__ == "__main__":
         if not os.path.exists(os.getcwd() + r"/Undertale"):
             os.mkdir(os.getcwd() + r"/Undertale")
         logging.info(args.install)
-        copier(args.install+"/data.win", os.getcwd() + r"/Undertale/data.win")
+        shutil.copy(args.install+"/data.win", os.getcwd() + r"/Undertale/data.win")
         bsdiff4.file_patch_inplace(os.getcwd() + r"/Undertale/data.win", undertale.data_path("patch.bsdiff"))
         sys.exit(0)
     if not os.path.exists(os.getcwd() + r"/Undertale"):
