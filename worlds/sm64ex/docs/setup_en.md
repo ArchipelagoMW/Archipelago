@@ -113,7 +113,7 @@ You can manually delete these old saves in-game before starting a new game, but 
 
 `start sm64.us.f3dex2e.exe --sm64ap_file %1`
 
-This extra line deletes any previous save data before opening the game. Don't worry about lost stars or checks - the AP server (or in the case of offline, the `.save` file) keeps track of your star count, unlocked keys/caps/cannons, and which locations have already been checked, so you won't have to redo them. At worst you'll have to rewatch the door unlocking animations, and catch rabbit Mips twice for his first star again if you haven't yet collected the second one.
+This extra line deletes any previous save data before opening the game. Don't worry about lost stars or checks - the AP server (or in the case of offline, the `.save` file) keeps track of your star count, unlocked keys/caps/cannons, and which locations have already been checked, so you won't have to redo them. At worst you'll have to rewatch the door unlocking animations, and catch the rabbit Mips twice for his first star again if you haven't yet collected the second one.
 
 ## Installation Troubleshooting
 
