@@ -961,7 +961,7 @@ class Location:
         self.parent_region = parent
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
-        return (self.always_allow(state, item)
+        return ((self.always_allow(state, item) and item.name not in state.multiworld.non_local_items[item.player])
                 or ((self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
                     and self.item_rule(item)
                     and (not check_access or self.can_reach(state))))
