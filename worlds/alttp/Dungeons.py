@@ -133,10 +133,11 @@ def fill_dungeons_restrictive(world):
     dungeon_specific: set = set()
     for subworld in world.get_game_worlds("A Link to the Past"):
         player = subworld.player
-        localized |= {(player, item_name) for item_name in
-                      subworld.dungeon_local_item_names}
-        dungeon_specific |= {(player, item_name) for item_name in
-                             subworld.dungeon_specific_item_names}
+        if player not in world.groups:
+            localized |= {(player, item_name) for item_name in
+                          subworld.dungeon_local_item_names}
+            dungeon_specific |= {(player, item_name) for item_name in
+                                 subworld.dungeon_specific_item_names}
 
     if localized:
         in_dungeon_items = [item for item in get_dungeon_item_pool(world) if (item.player, item.name) in localized]
@@ -167,14 +168,11 @@ def fill_dungeons_restrictive(world):
             for item in in_dungeon_items:
                 all_state_base.remove(item)
             for (player, key_drop_shuffle) in enumerate(world.key_drop_shuffle.values(), start=1):
-                if not key_drop_shuffle:
+                if not key_drop_shuffle and player not in world.groups:
                     for key_loc in key_drop_data:
                         key_data = key_drop_data[key_loc]
                         all_state_base.remove(ItemFactory(key_data[3], player))
-                        try:
-                            loc = world.get_location(key_loc, player)
-                        except:
-                            pass
+                        loc = world.get_location(key_loc, player)
 
                         if loc in all_state_base.events:
                             all_state_base.events.remove(loc)

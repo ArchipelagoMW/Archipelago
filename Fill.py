@@ -704,6 +704,8 @@ def distribute_planned(world: MultiWorld) -> None:
         else:  # not reachable with swept state
             non_early_locations[loc.player].append(loc.name)
 
+    world_name_lookup = world.world_name_lookup
+
     block_value = typing.Union[typing.List[str], typing.Dict[str, typing.Any], str]
     plando_blocks: typing.List[typing.Dict[str, typing.Any]] = []
     player_ids = set(world.player_ids)
