@@ -250,8 +250,8 @@ def generate_itempool(world):
         world.push_item(loc, ItemFactory('Triforce Piece', player), False)
         world.treasure_hunt_count[player] = 1
         if world.boss_shuffle[player] != 'none':
-            if 'turtle rock-' not in world.boss_shuffle[player]:
-                world.boss_shuffle[player] = f'Turtle Rock-Trinexx;{world.boss_shuffle[player]}'
+            if 'turtle rock-' not in world.boss_shuffle[player].bosses:
+                world.boss_shuffle[player].bosses = f'Turtle Rock-Trinexx;{world.boss_shuffle[player].bosses}'
             else:
                 logging.warning(f'Cannot guarantee that Trinexx is the boss of Turtle Rock for player {player}')
         loc.event = True
