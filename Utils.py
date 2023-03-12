@@ -195,11 +195,11 @@ def get_public_ipv4() -> str:
     ip = socket.gethostbyname(socket.gethostname())
     ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen("https://checkip.amazonaws.com/", context=ctx).read().decode("utf8").strip()
+        ip = urllib.request.urlopen("https://checkip.amazonaws.com/", context=ctx, timeout=10).read().decode("utf8").strip()
     except Exception as e:
         # noinspection PyBroadException
         try:
-            ip = urllib.request.urlopen("https://v4.ident.me", context=ctx).read().decode("utf8").strip()
+            ip = urllib.request.urlopen("https://v4.ident.me", context=ctx, timeout=10).read().decode("utf8").strip()
         except Exception:
             logging.exception(e)
             pass  # we could be offline, in a local game, so no point in erroring out
@@ -213,7 +213,7 @@ def get_public_ipv6() -> str:
     ip = socket.gethostbyname(socket.gethostname())
     ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen("https://v6.ident.me", context=ctx).read().decode("utf8").strip()
+        ip = urllib.request.urlopen("https://v6.ident.me", context=ctx, timeout=10).read().decode("utf8").strip()
     except Exception as e:
         logging.exception(e)
         pass  # we could be offline, in a local game, or ipv6 may not be available

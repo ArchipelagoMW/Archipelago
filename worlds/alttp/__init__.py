@@ -20,7 +20,7 @@ from .Client import ALTTPSNIClient
 from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
 from .Rules import set_rules
-from .Shops import create_shops, ShopSlotFill, ShopType, price_rate_display, price_type_display_name
+from .Shops import create_shops, Shop, ShopSlotFill, ShopType, price_rate_display, price_type_display_name
 from .SubClasses import ALttPItem, LTTPRegionType
 from worlds.AutoWorld import World, WebWorld, LogicMixin
 from .StateHelpers import can_buy_unlimited
@@ -117,6 +117,75 @@ class ALTTPWorld(World):
     option_definitions = alttp_options
     topology_present = True
     item_name_groups = item_name_groups
+    location_name_groups = {
+        "Blind's Hideout": {"Blind's Hideout - Top", "Blind's Hideout - Left", "Blind's Hideout - Right",
+                           "Blind's Hideout - Far Left", "Blind's Hideout - Far Right"},
+        "Kakariko Well": {"Kakariko Well - Top", "Kakariko Well - Left", "Kakariko Well - Middle",
+                          "Kakariko Well - Right", "Kakariko Well - Bottom"},
+        "Mini Moldorm Cave": {"Mini Moldorm Cave - Far Left", "Mini Moldorm Cave - Left", "Mini Moldorm Cave - Right",
+                              "Mini Moldorm Cave - Far Right", "Mini Moldorm Cave - Generous Guy"},
+        "Paradox Cave": {"Paradox Cave Lower - Far Left", "Paradox Cave Lower - Left", "Paradox Cave Lower - Right",
+                         "Paradox Cave Lower - Far Right", "Paradox Cave Lower - Middle", "Paradox Cave Upper - Left",
+                         "Paradox Cave Upper - Right"},
+        "Hype Cave": {"Hype Cave - Top", "Hype Cave - Middle Right", "Hype Cave - Middle Left",
+                      "Hype Cave - Bottom", "Hype Cave - Generous Guy"},
+        "Hookshot Cave": {"Hookshot Cave - Top Right", "Hookshot Cave - Top Left", "Hookshot Cave - Bottom Right",
+                          "Hookshot Cave - Bottom Left"},
+        "Hyrule Castle": {"Hyrule Castle - Boomerang Chest", "Hyrule Castle - Map Chest",
+                          "Hyrule Castle - Zelda's Chest", "Sewers - Dark Cross", "Sewers - Secret Room - Left",
+                          "Sewers - Secret Room - Middle", "Sewers - Secret Room - Right"},
+        "Eastern Palace": {"Eastern Palace - Compass Chest", "Eastern Palace - Big Chest",
+                           "Eastern Palace - Cannonball Chest", "Eastern Palace - Big Key Chest",
+                           "Eastern Palace - Map Chest", "Eastern Palace - Boss"},
+        "Desert Palace": {"Desert Palace - Big Chest", "Desert Palace - Torch", "Desert Palace - Map Chest",
+                          "Desert Palace - Compass Chest", "Desert Palace Big Key Chest", "Desert Palace - Boss"},
+        "Tower of Hera": {"Tower of Hera - Basement Cage", "Tower of Hera - Map Chest", "Tower of Hera - Big Key Chest",
+                          "Tower of Hera - Compass Chest", "Tower of Hera - Big Chest", "Tower of Hera - Boss"},
+        "Palace of Darkness": {"Palace of Darkness - Shooter Room", "Palace of Darkness - The Arena - Bridge",
+                               "Palace of Darkness - Stalfos Basement", "Palace of Darkness - Big Key Chest",
+                               "Palace of Darkness - The Arena - Ledge", "Palace of Darkness - Map Chest",
+                               "Palace of Darkness - Compass Chest", "Palace of Darkness - Dark Basement - Left",
+                               "Palace of Darkness - Dark Basement - Right", "Palace of Darkness - Dark Maze - Top",
+                               "Palace of Darkness - Dark Maze - Bottom", "Palace of Darkness - Big Chest",
+                               "Palace of Darkness - Harmless Hellway", "Palace of Darkness - Boss"},
+        "Swamp Palace": {"Swamp Palace - Entrance", "Swamp Palace - Swamp Palace - Map Chest",
+                         "Swamp Palace - Big Chest", "Swamp Palace - Compass Chest", "Swamp Palace - Big Key Chest",
+                         "Swamp Palace - West Chest", "Swamp Palace - Flooded Room - Left",
+                         "Swamp Palace - Flooded Room - Right", "Swamp Palace - Waterfall Room", "Swamp Palace - Boss"},
+        "Thieves' Town": {"Thieves' Town - Big Key Chest", "Thieves' Town - Map Chest", "Thieves' Town - Compass Chest",
+                          "Thieves' Town - Ambush Chest", "Thieves' Town - Attic", "Thieves' Town - Big Chest",
+                          "Thieves' Town - Blind's Cell", "Thieves' Town - Boss"},
+        "Skull Woods": {"Skull Woods - Map Chest", "Skull Woods - Pinball Room", "Skull Woods - Compass Chest",
+                        "Skull Woods - Pot Prison", "Skull Woods - Big Chest", "Skull Woods - Big Key Chest",
+                        "Skull Woods - Bridge Room", "Skull Woods - Boss"},
+        "Ice Palace": {"Ice Palace - Compass Chest", "Ice Palace - Freezor Chest", "Ice Palace - Big Chest",
+                       "Ice Palace - Freezor Chest", "Ice Palace - Big Chest", "Ice Palace - Iced T Room",
+                       "Ice Palace - Spike Room", "Ice Palace - Big Key Chest", "Ice Palace - Map Chest",
+                       "Ice Palace - Boss"},
+        "Misery Mire": {"Misery Mire - Big Chest", "Misery Mire - Map Chest", "Misery Mire - Main Lobby",
+                        "Misery Mire - Bridge Chest", "Misery Mire - Spike Chest", "Misery Mire - Compass Chest",
+                        "Misery Mire - Big Key Chest", "Misery Mire - Boss"},
+        "Turtle Rock": {"Turtle Rock - Compass Chest", "Turtle Rock - Roller Room - Left",
+                        "Turtle Rock - Roller Room - Right", "Turtle Room - Chain Chomps", "Turtle Rock - Big Key Chest",
+                        "Turtle Rock - Big Chest", "Turtle Rock - Crystaroller Room",
+                        "Turtle Rock - Eye Bridge - Bottom Left", "Turtle Rock - Eye Bridge - Bottom Right",
+                        "Turtle Rock - Eye Bridge - Top Left", "Turtle Rock - Eye Bridge - Top Right", "Turtle Rock - Boss"},
+        "Ganons Tower": {"Ganons Tower - Bob's Torch", "Ganon's Tower - Hope Room - Left",
+                         "Ganons Tower - Hope Room - Right", "Ganons Tower - Tile Room",
+                         "Ganons Tower - Compass Room - Top Left", "Ganons Tower - Compass Room - Top Right",
+                         "Ganons Tower - Compass Room - Bottom Left", "Ganons Tower - Compass Room - Bottom Left",
+                         "Ganons Tower - DMs Room - Top Left", "Ganons Tower - DMs Room - Top Right",
+                         "Ganons Tower - DMs Room - Bottom Left", "Ganons Tower - DMs Room - Bottom Right",
+                         "Ganons Tower - Map Chest", "Ganons Tower - Firesnake Room",
+                         "Ganons Tower - Randomizer Room - Top Left", "Ganons Tower - Randomizer Room - Top Right",
+                         "Ganons Tower - Randomizer Room - Bottom Left", "Ganons Tower - Randomizer Room - Bottom Right",
+                         "Ganons Tower - Bob's Chest", "Ganons Tower - Big Chest", "Ganons Tower - Big Key Room - Left",
+                         "Ganons Tower - Big Key Room - Right", "Ganons Tower - Big Key Chest",
+                         "Ganons Tower - Mini Helmasaur Room - Left", "Ganons Tower - Mini Helmasaur Room - Right",
+                         "Ganons Tower - Pre-Moldorm Room", "Ganons Tower - Validation Chest"},
+        "Ganons Tower Climb": {"Ganons Tower - Mini Helmasaur Room - Left", "Ganons Tower - Mini Helmasaur Room - Right",
+                               "Ganons Tower - Pre-Moldorm Room", "Ganons Tower - Validation Chest"},
+    }
     hint_blacklist = {"Triforce"}
 
     item_name_to_id = {name: data.item_code for name, data in item_table.items() if type(data.item_code) == int}
@@ -605,11 +674,7 @@ class ALTTPWorld(World):
                 f'\n\nBosses{(f" ({self.multiworld.get_player_name(self.player)})" if self.multiworld.players > 1 else "")}:\n')
             spoiler_handle.write('    ' + '\n    '.join([f'{x}: {y}' for x, y in bossmap.items()]))
 
-        def build_shop_info() -> typing.Dict:
-            shop = self.multiworld.shops[self.player]
-            if not shop.custom:
-                return None
-
+        def build_shop_info(shop: Shop) -> typing.Dict[str, str]:
             shop_data = {
                 "location": str(shop.region),
                 "type": "Take Any" if shop.type == ShopType.TakeAny else "Shop"
@@ -635,12 +700,12 @@ class ALTTPWorld(World):
 
             return shop_data
 
-        shop_data = build_shop_info()
-        if shop_data is not None:
+        if shop_info := [build_shop_info(shop) for shop in self.multiworld.shops if shop.custom]:
             spoiler_handle.write('\n\nShops:\n\n')
-            spoiler_handle.write(''.join("{} [{}]\n    {}".format(shop_data['location'], shop_data['type'], "\n    ".join(
+        for shop_data in shop_info:
+            spoiler_handle.write("{} [{}]\n    {}\n".format(shop_data['location'], shop_data['type'], "\n    ".join(
                 item for item in [shop_data.get('item_0', None), shop_data.get('item_1', None), shop_data.get('item_2', None)] if
-                item))))
+                item)))
 
     def get_filler_item_name(self) -> str:
         if self.multiworld.goal[self.player] == "icerodhunt":
