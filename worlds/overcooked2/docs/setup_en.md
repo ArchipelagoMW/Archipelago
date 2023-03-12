@@ -82,3 +82,13 @@ To completely remove *OC2-Modding*, navigate to your game's installation folder 
 Since the goal of randomizer isn't necessarily to achieve new personal high scores, players may find themselves waiting for a level timer to expire once they've met their objective. A new feature called *Auto-Complete* has been added to automatically complete levels once a target star count has been achieved.
 
 To enable *Auto-Complete*, press the **Show** button near the top of your screen to expand the modding controls. Then, repeatedly press the **Auto-Complete** button until it shows the desired setting.
+
+## Overworld Sequence Breaking
+
+In the world's settings, there is an option called "Overworld Tricks" which allows the generator to make games which require doing tricks with the food truck to complete. This includes:
+
+- Dashing across gaps
+
+- "Wiggling" up ledges
+
+- Going out of bounds [See Video](https://youtu.be/VdOGhi6XPu4)
