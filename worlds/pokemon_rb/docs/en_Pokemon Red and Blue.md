@@ -33,6 +33,8 @@ fossil scientist. This may require reviving a number of fossils, depending on yo
 * If the Old Man is blocking your way through Viridian City, you do not have Oak's Parcel in your inventory, and you've
 exhausted your money and Poké Balls, you can get a free Poké Ball from your mom.
 * HM moves can be overwritten if you have the HM for it in your bag.
+* The NPC on the left behind the Celadon Game Corner counter will sell 1500 coins at once instead of giving information
+about the Prize Corner
 
 ## What items and locations get shuffled?
 
