@@ -1,4 +1,6 @@
-from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice
+from dataclasses import dataclass
+
+from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice, PerGameCommonOptions
 
 
 class MessengerAccessibility(Accessibility):
@@ -53,14 +55,14 @@ class RequiredSeals(Range):
     default = range_end
 
 
-messenger_options = {
-    "accessibility": MessengerAccessibility,
-    "enable_logic": Logic,
-    "shuffle_seals": PowerSeals,
-    "goal": Goal,
-    "music_box": MusicBox,
-    "notes_needed": NotesNeeded,
-    "total_seals": AmountSeals,
-    "percent_seals_required": RequiredSeals,
-    "death_link": DeathLink,
-}
+@dataclass
+class MessengerOptions(PerGameCommonOptions):
+    accessibility: MessengerAccessibility
+    enable_logic: Logic
+    shuffle_seals: PowerSeals
+    goal: Goal
+    music_box: MusicBox
+    notes_needed: NotesNeeded
+    total_seals: AmountSeals
+    percent_seals_required: RequiredSeals
+    death_link: DeathLink

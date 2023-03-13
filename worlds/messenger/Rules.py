@@ -88,11 +88,12 @@ class MessengerRules:
         return self.has_wingsuit(state) or self.has_dart(state)
 
     def has_enough_seals(self, state: CollectionState) -> bool:
-        required_seals = state.multiworld.worlds[self.player].required_seals
+        required_seals = self.world.required_seals
         return state.has("Power Seal", self.player, required_seals)
 
     def set_messenger_rules(self) -> None:
         multiworld = self.world.multiworld
+        options = self.world.o
 
         for region in multiworld.get_regions(self.player):
             if region.name in self.region_rules:
@@ -101,16 +102,16 @@ class MessengerRules:
             for loc in region.locations:
                 if loc.name in self.location_rules:
                     loc.access_rule = self.location_rules[loc.name]
-        if multiworld.goal[self.player] == Goal.option_power_seal_hunt:
+        if options.goal == Goal.option_power_seal_hunt:
             set_rule(multiworld.get_entrance("Tower HQ -> Music Box", self.player),
                      lambda state: state.has("Shop Chest", self.player))
 
-        if multiworld.enable_logic[self.player]:
+        if options.enable_logic:
             multiworld.completion_condition[self.player] = lambda state: state.has("Rescue Phantom", self.player)
         else:
             multiworld.accessibility[self.player].value = MessengerAccessibility.option_minimal
         if multiworld.accessibility[self.player] > MessengerAccessibility.option_locations:
-            set_self_locking_items(multiworld, self.player)
+            set_self_locking_items(self.world, self.player)
 
 
 def location_item_name(state: CollectionState, location_name: str, player: int) -> Optional[Tuple[str, int]]:
@@ -146,13 +147,15 @@ def allow_self_locking_items(spot: Union[Location, Region], *item_names: str) ->
         add_allowed_rules(spot, spot)
 
 
-def set_self_locking_items(multiworld: MultiWorld, player: int) -> None:
+def set_self_locking_items(world: MessengerWorld, player: int) -> None:
+    multiworld = world.multiworld
+
     # do the ones for seal shuffle on and off first
     allow_self_locking_items(multiworld.get_location("Key of Strength", player), "Power Thistle")
     allow_self_locking_items(multiworld.get_location("Key of Love", player), "Sun Crest", "Moon Crest")
     allow_self_locking_items(multiworld.get_location("Key of Courage", player), "Demon King Crown")
 
     # add these locations when seals aren't shuffled
-    if not multiworld.shuffle_seals[player]:
+    if not world.o.shuffle_seals:
         allow_self_locking_items(multiworld.get_region("Cloud Ruins", player), "Ruxxtin's Amulet")
         allow_self_locking_items(multiworld.get_region("Forlorn Temple", player), *PHOBEKINS)

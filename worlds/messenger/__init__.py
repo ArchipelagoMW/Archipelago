@@ -3,7 +3,7 @@ from typing import Dict, Any, List, Optional
 from BaseClasses import Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS, ALWAYS_LOCATIONS, SEALS, ALL_ITEMS
-from .Options import messenger_options, NotesNeeded, Goal, PowerSeals
+from .Options import MessengerOptions, NotesNeeded, Goal, PowerSeals
 from .Regions import REGIONS, REGION_CONNECTIONS
 from .Rules import MessengerRules
 from .SubClasses import MessengerRegion, MessengerItem
@@ -43,7 +43,8 @@ class MessengerWorld(World):
         "Shuriken": {"Windmill Shuriken"},
     }
 
-    option_definitions = messenger_options
+    options_dataclass = MessengerOptions
+    o: MessengerOptions
 
     base_offset = 0xADD_000
     item_name_to_id = {item: item_id
@@ -59,10 +60,10 @@ class MessengerWorld(World):
     required_seals: Optional[int] = None
 
     def generate_early(self) -> None:
-        if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
-            self.multiworld.shuffle_seals[self.player].value = PowerSeals.option_true
-            self.total_seals = self.multiworld.total_seals[self.player].value
-            self.required_seals = int(self.multiworld.percent_seals_required[self.player].value / 100 * self.total_seals)
+        if self.o.goal == Goal.option_power_seal_hunt:
+            self.o.shuffle_seals.value = PowerSeals.option_true
+            self.total_seals = self.o.total_seals.value
+            self.required_seals = int(self.o.percent_seals_required.value / 100 * self.total_seals)
 
     def create_regions(self) -> None:
         for region in [MessengerRegion(reg_name, self) for reg_name in REGIONS]:
@@ -71,14 +72,14 @@ class MessengerWorld(World):
 
     def create_items(self) -> None:
         itempool: List[MessengerItem] = []
-        if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
+        if self.o.goal == Goal.option_power_seal_hunt:
             seals = [self.create_item("Power Seal") for _ in range(self.total_seals)]
             for i in range(self.required_seals):
                 seals[i].classification = ItemClassification.progression_skip_balancing
             itempool += seals
         else:
             notes = self.multiworld.random.sample(NOTES, k=len(NOTES))
-            precollected_notes_amount = NotesNeeded.range_end - self.multiworld.notes_needed[self.player]
+            precollected_notes_amount = NotesNeeded.range_end - self.o.notes_needed
             if precollected_notes_amount:
                 for note in notes[:precollected_notes_amount]:
                     self.multiworld.push_precollected(self.create_item(note))
@@ -109,12 +110,12 @@ class MessengerWorld(World):
                 locations[loc.address] = [loc.item.name, self.multiworld.player_name[loc.item.player]]
 
         return {
-            "deathlink": self.multiworld.death_link[self.player].value,
-            "goal": self.multiworld.goal[self.player].current_key,
-            "music_box": self.multiworld.music_box[self.player].value,
+            "deathlink": self.o.death_link.value,
+            "goal": self.o.goal.current_key,
+            "music_box": self.o.music_box.value,
             "required_seals": self.required_seals,
             "locations": locations,
-            "settings": {"Difficulty": "Basic" if not self.multiworld.shuffle_seals[self.player] else "Advanced"}
+            "settings": {"Difficulty": "Basic" if not self.o.shuffle_seals else "Advanced"}
         }
 
     def get_filler_item_name(self) -> str:
