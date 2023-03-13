@@ -1,5 +1,6 @@
 from BaseClasses import ItemClassification
 from .Locations import level_locations, all_level_locations, standard_level_locations, shop_locations
+from .Options import TriforceLocations, StartingPosition
 
 # Swords are in starting_weapons
 overworld_items = {
@@ -92,10 +93,11 @@ def get_pool_core(world):
 
     # Starting Weapon
     starting_weapon = random.choice(starting_weapons)
-    if world.multiworld.StartingPosition[world.player] == 0:
+    if world.multiworld.StartingPosition[world.player] == StartingPosition.option_safe:
         placed_items[starting_weapon_locations[0]] = starting_weapon
-    elif world.multiworld.StartingPosition[world.player] in [1, 2]:
-        if world.multiworld.StartingPosition[world.player] == 2:
+    elif world.multiworld.StartingPosition[world.player] in \
+            [StartingPosition.option_unsafe, StartingPosition.option_dangerous]:
+        if world.multiworld.StartingPosition[world.player] == StartingPosition.option_dangerous:
             for location in dangerous_weapon_locations:
                 if world.multiworld.ExpandedPool[world.player] or "Drop" not in location:
                     starting_weapon_locations.append(location)
@@ -115,9 +117,9 @@ def get_pool_core(world):
         possible_level_locations = [location for location in standard_level_locations
                                     if location not in level_locations[8]]
     for level in range(1, 9):
-        if world.multiworld.TriforceLocations[world.player] == 0:
+        if world.multiworld.TriforceLocations[world.player] == TriforceLocations.option_vanilla:
             placed_items[f"Level {level} Triforce"] = fragment
-        elif world.multiworld.TriforceLocations[world.player] == 1:
+        elif world.multiworld.TriforceLocations[world.player] == TriforceLocations.option_dungeons:
             placed_items[possible_level_locations.pop(random.randint(0, len(possible_level_locations) - 1))] = fragment
         else:
             pool.append(fragment)

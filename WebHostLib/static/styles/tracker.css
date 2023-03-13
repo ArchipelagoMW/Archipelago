@@ -119,6 +119,33 @@ img.alttp-sprite {
     background-color: #d3c97d;
 }
 
+#tracker-navigation {
+    display: inline-flex;
+    background-color: #b0a77d;
+    margin: 0.5rem;
+    border-radius: 4px;
+}
+
+.tracker-navigation-button {
+    display: block;
+    margin: 4px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 14px;
+    color: #000;
+    font-weight: lighter;
+}
+
+.tracker-navigation-button:hover {
+    background-color: #e2eabb !important;
+}
+
+.tracker-navigation-button.selected {
+    background-color: rgb(220, 226, 189);
+}
+
 @media all and (max-width: 1700px) {
     table.dataTable thead th.upper-row{
         position: -webkit-sticky;

@@ -2,19 +2,19 @@ from __future__ import annotations
 
 import copy
 import functools
-import json
 import logging
 import random
 import secrets
 import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
-from collections import OrderedDict, Counter, deque
-from enum import unique, IntEnum, IntFlag
+from collections import OrderedDict, Counter, deque, ChainMap
+from enum import IntEnum, IntFlag
 from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable, NamedTuple
 
 import NetUtils
 import Options
 import Utils
+
 
 class Group(TypedDict, total=False):
     name: str
@@ -71,6 +71,11 @@ class MultiWorld():
     completion_condition: Dict[int, Callable[[CollectionState], bool]]
     indirect_connections: Dict[Region, Set[Entrance]]
     exclude_locations: Dict[int, Options.ExcludeLocations]
+    priority_locations: Dict[int, Options.PriorityLocations]
+    start_inventory: Dict[int, Options.StartInventory]
+    start_hints: Dict[int, Options.StartHints]
+    start_location_hints: Dict[int, Options.StartLocationHints]
+    item_links: Dict[int, Options.ItemLinks]
 
     game: Dict[int, str]
 
@@ -1248,7 +1253,7 @@ class Spoiler():
             res = getattr(self.multiworld.worlds[player].o, option_key)
             display_name = getattr(option_obj, "display_name", option_key)
             try:
-                outfile.write(f'{display_name + ":":33}{res.get_current_option_name()}\n')
+                outfile.write(f'{display_name + ":":33}{res.current_option_name}\n')
             except:
                 raise Exception
 
