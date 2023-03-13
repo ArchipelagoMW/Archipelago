@@ -210,14 +210,6 @@ del data
 del item
 
 
-def attribute_item(inventory, team, recipient, item):
-    target_item = links.get(item, item)
-    if item in levels:  # non-progressive
-        inventory[team][recipient][target_item] = max(inventory[team][recipient][target_item], levels[item])
-    else:
-        inventory[team][recipient][target_item] += 1
-
-
 def attribute_item_solo(inventory, item):
     """Adds item to inventory counter, converts everything to progressive."""
     target_item = links.get(item, item)
@@ -486,7 +478,7 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
         "Water Bottle": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/75/Water_Bottle_JE2_BE2.png",
         "Spyglass": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c1/Spyglass_JE2_BE1.png",
         "Dragon Egg Shard": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/38/Dragon_Egg_JE4.png",
-        "Lead": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/1/1f/Lead_JE2_BE2.png", 
+        "Lead": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/1/1f/Lead_JE2_BE2.png",
         "Saddle": "https://i.imgur.com/2QtDyR0.png",
         "Channeling Book": "https://i.imgur.com/J3WsYZw.png",
         "Silk Touch Book": "https://i.imgur.com/iqERxHQ.png",
@@ -494,7 +486,7 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
     }
 
     minecraft_location_ids = {
-        "Story": [42073, 42023, 42027, 42039, 42002, 42009, 42010, 42070, 
+        "Story": [42073, 42023, 42027, 42039, 42002, 42009, 42010, 42070,
                   42041, 42049, 42004, 42031, 42025, 42029, 42051, 42077],
         "Nether": [42017, 42044, 42069, 42058, 42034, 42060, 42066, 42076, 42064, 42071, 42021,
                    42062, 42008, 42061, 42033, 42011, 42006, 42019, 42000, 42040, 42001, 42015, 42104, 42014],
@@ -656,7 +648,7 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
 
         if base_name == "hookshot":
             display_data['hookshot_length'] = {0: '', 1: 'H', 2: 'L'}.get(level)
-        if base_name == "wallet": 
+        if base_name == "wallet":
             display_data['wallet_size'] = {0: '99', 1: '200', 2: '500', 3: '999'}.get(level)
 
     # Determine display for bottles. Show letter if it's obtained, determine bottle count
@@ -674,7 +666,6 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
     }
     for item_name, item_id in multi_items.items():
         base_name = item_name.split()[-1].lower()
-        count = inventory[item_id]
         display_data[base_name+"_count"] = inventory[item_id]
 
     # Gather dungeon locations
@@ -804,7 +795,7 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
     }
 
     timespinner_location_ids = {
-        "Present": [ 
+        "Present": [
             1337000, 1337001, 1337002, 1337003, 1337004, 1337005, 1337006, 1337007, 1337008, 1337009,
             1337010, 1337011, 1337012, 1337013, 1337014, 1337015, 1337016, 1337017, 1337018, 1337019,
             1337020, 1337021, 1337022, 1337023, 1337024, 1337025, 1337026, 1337027, 1337028, 1337029,
@@ -825,20 +816,20 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
             1337150, 1337151, 1337152, 1337153, 1337154, 1337155,
                      1337171, 1337172, 1337173, 1337174, 1337175],
         "Ancient Pyramid": [
-                                                                  1337236, 
+                                                                  1337236,
                                                                   1337246, 1337247, 1337248, 1337249]
     }
 
     if(slot_data["DownloadableItems"]):
         timespinner_location_ids["Present"] += [
                                                                   1337156, 1337157,          1337159,
-            1337160, 1337161, 1337162, 1337163, 1337164, 1337165, 1337166, 1337167, 1337168, 1337169, 
+            1337160, 1337161, 1337162, 1337163, 1337164, 1337165, 1337166, 1337167, 1337168, 1337169,
             1337170]
     if(slot_data["Cantoran"]):
         timespinner_location_ids["Past"].append(1337176)
     if(slot_data["LoreChecks"]):
         timespinner_location_ids["Present"] += [
-                                                                           1337177, 1337178, 1337179, 
+                                                                           1337177, 1337178, 1337179,
             1337180, 1337181, 1337182, 1337183, 1337184, 1337185, 1337186, 1337187]
         timespinner_location_ids["Past"] += [
                                                                                     1337188, 1337189,
@@ -1219,6 +1210,84 @@ def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             **display_data)
 
+def __renderChecksfinder(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+                             inventory: Counter, team: int, player: int, playerName: str,
+                             seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict, saving_second: int) -> str:
+
+    icons = {
+        "Checks Available": "https://0rganics.org/archipelago/cf/spr_tiles_3.png",
+        "Map Width": "https://0rganics.org/archipelago/cf/spr_tiles_4.png",
+        "Map Height": "https://0rganics.org/archipelago/cf/spr_tiles_5.png",
+        "Map Bombs": "https://0rganics.org/archipelago/cf/spr_tiles_6.png",
+
+        "Nothing": "",
+    }
+
+    checksfinder_location_ids = {
+        "Tile 1": 81000,
+        "Tile 2": 81001,
+        "Tile 3": 81002,
+        "Tile 4": 81003,
+        "Tile 5": 81004,
+        "Tile 6": 81005,
+        "Tile 7": 81006,
+        "Tile 8": 81007,
+        "Tile 9": 81008,
+        "Tile 10": 81009,
+        "Tile 11": 81010,
+        "Tile 12": 81011,
+        "Tile 13": 81012,
+        "Tile 14": 81013,
+        "Tile 15": 81014,
+        "Tile 16": 81015,
+        "Tile 17": 81016,
+        "Tile 18": 81017,
+        "Tile 19": 81018,
+        "Tile 20": 81019,
+        "Tile 21": 81020,
+        "Tile 22": 81021,
+        "Tile 23": 81022,
+        "Tile 24": 81023,
+        "Tile 25": 81024,
+    }
+
+    display_data = {}
+
+    # Multi-items
+    multi_items = {
+        "Map Width": 80000,
+        "Map Height": 80001,
+        "Map Bombs": 80002
+    }
+    for item_name, item_id in multi_items.items():
+        base_name = item_name.split()[-1].lower()
+        count = inventory[item_id]
+        display_data[base_name + "_count"] = count
+        display_data[base_name + "_display"] = count + 5
+
+    # Get location info
+    checked_locations = multisave.get("location_checks", {}).get((team, player), set())
+    lookup_name = lambda id: lookup_any_location_id_to_name[id]
+    location_info = {tile_name: {lookup_name(tile_location): (tile_location in checked_locations)} for tile_name, tile_location in checksfinder_location_ids.items() if tile_location in set(locations[player])}
+    checks_done = {tile_name: len([tile_location]) for tile_name, tile_location in checksfinder_location_ids.items() if tile_location in checked_locations and tile_location in set(locations[player])}
+    checks_done['Total'] = len(checked_locations)
+    checks_in_area = checks_done
+
+    # Calculate checks available
+    display_data["checks_unlocked"] = min(display_data["width_count"] + display_data["height_count"] + display_data["bombs_count"] + 5, 25)
+    display_data["checks_available"] = max(display_data["checks_unlocked"] - len(checked_locations), 0)
+
+    # Victory condition
+    game_state = multisave.get("client_game_state", {}).get((team, player), 0)
+    display_data['game_finished'] = game_state == 30
+
+    return render_template("checksfinderTracker.html",
+                            inventory=inventory, icons=icons,
+                            acquired_items={lookup_any_item_id_to_name[id] for id in inventory if
+                                            id in lookup_any_item_id_to_name},
+                            player=player, team=team, room=room, player_name=playerName,
+                            checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
+                            **display_data)
 
 def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                            inventory: Counter, team: int, player: int, playerName: str,
@@ -1245,18 +1314,32 @@ def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dic
                            custom_items=custom_items, custom_locations=custom_locations)
 
 
-@app.route('/tracker/<suuid:tracker>')
-@cache.memoize(timeout=1)  # multisave is currently created at most every minute
-def getTracker(tracker: UUID):
+def get_enabled_multiworld_trackers(room: Room, current: str):
+    enabled = [
+        {
+            "name": "Generic",
+            "endpoint": "get_multiworld_tracker",
+            "current": current == "Generic"
+         }
+    ]
+    for game_name, endpoint in multi_trackers.items():
+        if any(slot.game == game_name for slot in room.seed.slots) or current == game_name:
+            enabled.append({
+                "name": game_name,
+                "endpoint": endpoint.__name__,
+                "current": current == game_name}
+            )
+    return enabled
+
+
+def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[str, typing.Any]]:
     room: Room = Room.get(tracker=tracker)
     if not room:
-        abort(404)
-    locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
+        return None
+
+    locations, names, use_door_tracker, checks_in_area, player_location_to_area, \
         precollected_items, games, slot_data, groups, saving_second, custom_locations, custom_items = \
         get_static_room_data(room)
-
-    inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1) if playernumber not in groups}
-                 for teamnumber, team in enumerate(names)}
 
     checks_done = {teamnumber: {playernumber: {loc_name: 0 for loc_name in default_locations}
                                 for playernumber in range(1, len(team) + 1) if playernumber not in groups}
@@ -1266,7 +1349,6 @@ def getTracker(tracker: UUID):
                                 for playernumber in range(1, len(team) + 1) if playernumber not in groups}
                     for teamnumber, team in enumerate(names)}
 
-    
     hints = {team: set() for team in range(len(names))}
     if room.multisave:
         multisave = restricted_loads(room.multisave)
@@ -1280,21 +1362,142 @@ def getTracker(tracker: UUID):
         if player in groups:
             continue
         player_locations = locations[player]
+        checks_done[team][player]["Total"] = sum(1 for loc in locations_checked if loc in player_locations)
+        percent_total_checks_done[team][player] = int(checks_done[team][player]["Total"] /
+                                                      checks_in_area[player]["Total"] * 100) \
+            if checks_in_area[player]["Total"] else 100
+
+    activity_timers = {}
+    now = datetime.datetime.utcnow()
+    for (team, player), timestamp in multisave.get("client_activity_timers", []):
+        activity_timers[team, player] = now - datetime.datetime.utcfromtimestamp(timestamp)
+
+    player_names = {}
+    for team, names in enumerate(names):
+        for player, name in enumerate(names, 1):
+            player_names[(team, player)] = name
+    long_player_names = player_names.copy()
+    for (team, player), alias in multisave.get("name_aliases", {}).items():
+        player_names[(team, player)] = alias
+        long_player_names[(team, player)] = f"{alias} ({long_player_names[(team, player)]})"
+
+    video = {}
+    for (team, player), data in multisave.get("video", []):
+        video[(team, player)] = data
+
+    return dict(player_names=player_names, room=room, checks_done=checks_done,
+                percent_total_checks_done=percent_total_checks_done, checks_in_area=checks_in_area,
+                activity_timers=activity_timers, video=video, hints=hints,
+                long_player_names=long_player_names,
+                multisave=multisave, precollected_items=precollected_items, groups=groups,
+                locations=locations, games=games)
+
+
+def _get_inventory_data(data: typing.Dict[str, typing.Any]) -> typing.Dict[int, typing.Dict[int, int]]:
+    inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in team_data}
+                 for teamnumber, team_data in data["checks_done"].items()}
+
+    groups = data["groups"]
+
+    for (team, player), locations_checked in data["multisave"].get("location_checks", {}).items():
+        if player in data["groups"]:
+            continue
+        player_locations = data["locations"][player]
+        precollected = data["precollected_items"][player]
+        for item_id in precollected:
+            inventory[team][player][item_id] += 1
+        for location in locations_checked:
+            item_id, recipient, flags = player_locations[location]
+            recipients = groups.get(recipient, [recipient])
+            for recipient in recipients:
+                inventory[team][recipient][item_id] += 1
+    return inventory
+
+
+@app.route('/tracker/<suuid:tracker>')
+@cache.memoize(timeout=60)  # multisave is currently created at most every minute
+def get_multiworld_tracker(tracker: UUID):
+    data = _get_multiworld_tracker_data(tracker)
+    if not data:
+        abort(404)
+
+    data["enabled_multiworld_trackers"] = get_enabled_multiworld_trackers(data["room"], "Generic")
+
+    return render_template("multiTracker.html", **data)
+
+
+@app.route('/tracker/<suuid:tracker>/Factorio')
+@cache.memoize(timeout=60)  # multisave is currently created at most every minute
+def get_Factorio_multiworld_tracker(tracker: UUID):
+    data = _get_multiworld_tracker_data(tracker)
+    if not data:
+        abort(404)
+
+    data["inventory"] = _get_inventory_data(data)
+    data["enabled_multiworld_trackers"] = get_enabled_multiworld_trackers(data["room"], "Factorio")
+
+    return render_template("multiFactorioTracker.html", **data)
+
+
+@app.route('/tracker/<suuid:tracker>/A Link to the Past')
+@cache.memoize(timeout=60)  # multisave is currently created at most every minute
+def get_LttP_multiworld_tracker(tracker: UUID):
+    room: Room = Room.get(tracker=tracker)
+    if not room:
+        abort(404)
+    locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
+        precollected_items, games, slot_data, groups, saving_second, custom_locations, custom_items = \
+        get_static_room_data(room)
+
+    inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1) if
+                              playernumber not in groups}
+                 for teamnumber, team in enumerate(names)}
+
+    checks_done = {teamnumber: {playernumber: {loc_name: 0 for loc_name in default_locations}
+                                for playernumber in range(1, len(team) + 1) if playernumber not in groups}
+                   for teamnumber, team in enumerate(names)}
+
+    percent_total_checks_done = {teamnumber: {playernumber: 0
+                                              for playernumber in range(1, len(team) + 1) if playernumber not in groups}
+                                 for teamnumber, team in enumerate(names)}
+
+    hints = {team: set() for team in range(len(names))}
+    if room.multisave:
+        multisave = restricted_loads(room.multisave)
+    else:
+        multisave = {}
+    if "hints" in multisave:
+        for (team, slot), slot_hints in multisave["hints"].items():
+            hints[team] |= set(slot_hints)
+
+    def attribute_item(team: int, recipient: int, item: int):
+        nonlocal inventory
+        target_item = links.get(item, item)
+        if item in levels:  # non-progressive
+            inventory[team][recipient][target_item] = max(inventory[team][recipient][target_item], levels[item])
+        else:
+            inventory[team][recipient][target_item] += 1
+
+    for (team, player), locations_checked in multisave.get("location_checks", {}).items():
+        if player in groups:
+            continue
+        player_locations = locations[player]
         if precollected_items:
             precollected = precollected_items[player]
             for item_id in precollected:
-                attribute_item(inventory, team, player, item_id)
+                attribute_item(team, player, item_id)
         for location in locations_checked:
             if location not in player_locations or location not in player_location_to_area[player]:
                 continue
-
             item, recipient, flags = player_locations[location]
-
-            if recipient in names:
-                attribute_item(inventory, team, recipient, item)
-            checks_done[team][player][player_location_to_area[player][location]] += 1
-            checks_done[team][player]["Total"] += 1
-        percent_total_checks_done[team][player] = int(checks_done[team][player]["Total"] / seed_checks_in_area[player]["Total"] * 100) if seed_checks_in_area[player]["Total"] else 100
+            recipients = groups.get(recipient, [recipient])
+            for recipient in recipients:
+                attribute_item(team, recipient, item)
+                checks_done[team][player][player_location_to_area[player][location]] += 1
+                checks_done[team][player]["Total"] += 1
+        percent_total_checks_done[team][player] = int(
+            checks_done[team][player]["Total"] / seed_checks_in_area[player]["Total"] * 100) if \
+        seed_checks_in_area[player]["Total"] else 100
 
     for (team, player), game_state in multisave.get("client_game_state", {}).items():
         if player in groups:
@@ -1336,14 +1539,19 @@ def getTracker(tracker: UUID):
     for (team, player), data in multisave.get("video", []):
         video[(team, player)] = data
 
-    return render_template("tracker.html", inventory=inventory, get_item_name_from_id=lookup_any_item_id_to_name,
+    enabled_multiworld_trackers = get_enabled_multiworld_trackers(room, "A Link to the Past")
+
+    return render_template("lttpMultiTracker.html", inventory=inventory, get_item_name_from_id=lookup_any_item_id_to_name,
                            lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
                            tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=alttp_icons,
-                           multi_items=multi_items, checks_done=checks_done, percent_total_checks_done=percent_total_checks_done,
-                           ordered_areas=ordered_areas, checks_in_area=seed_checks_in_area, activity_timers=activity_timers,
+                           multi_items=multi_items, checks_done=checks_done,
+                           percent_total_checks_done=percent_total_checks_done,
+                           ordered_areas=ordered_areas, checks_in_area=seed_checks_in_area,
+                           activity_timers=activity_timers,
                            key_locations=group_key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids,
                            video=video, big_key_locations=group_big_key_locations,
-                           hints=hints, long_player_names=long_player_names)
+                           hints=hints, long_player_names=long_player_names,
+                           enabled_multiworld_trackers=enabled_multiworld_trackers)
 
 
 game_specific_trackers: typing.Dict[str, typing.Callable] = {
@@ -1351,6 +1559,12 @@ game_specific_trackers: typing.Dict[str, typing.Callable] = {
     "Ocarina of Time": __renderOoTTracker,
     "Timespinner": __renderTimespinnerTracker,
     "A Link to the Past": __renderAlttpTracker,
+    "ChecksFinder": __renderChecksfinder,
     "Super Metroid": __renderSuperMetroidTracker,
     "Starcraft 2 Wings of Liberty": __renderSC2WoLTracker
+}
+
+multi_trackers: typing.Dict[str, typing.Callable] = {
+    "A Link to the Past": get_LttP_multiworld_tracker,
+    "Factorio": get_Factorio_multiworld_tracker,
 }

@@ -840,8 +840,7 @@ def distribute_planned(world: MultiWorld) -> None:
             maxcount = placement['count']['target']
             from_pool = placement['from_pool']
 
-            candidates = list(location for location in world.get_unfilled_locations_for_players(locations,
-                                                                                                worlds))
+            candidates = list(world.get_unfilled_locations_for_players(locations, sorted(worlds)))
             world.random.shuffle(candidates)
             world.random.shuffle(items)
             count = 0

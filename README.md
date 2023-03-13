@@ -37,6 +37,8 @@ Currently, the following games are supported:
 * Blasphemous
 * Wargroove
 * Stardew Valley
+* The Legend of Zelda
+* The Messenger
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled

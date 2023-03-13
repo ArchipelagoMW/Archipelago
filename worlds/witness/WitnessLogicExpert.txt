@@ -14,7 +14,7 @@ Tutorial (Tutorial) - Outside Tutorial - True:
 158005 - 0x0A3B5 (Back Left) - True - Dots & Full Dots
 158006 - 0x0A3B2 (Back Right) - True - Dots & Full Dots
 158007 - 0x03629 (Gate Open) - 0x002C2 - Symmetry & Dots
-158008 - 0x03505 (Gate Close) - 0x2FAF6 - False
+158008 - 0x03505 (Gate Close) - 0x2FAF6 & 0x03629 - False
 158009 - 0x0C335 (Pillar) - True - Triangles
 158010 - 0x0C373 (Patio Floor) - 0x0C335 - Dots
 159512 - 0x33530 (Cloud EP) - True - True
@@ -270,7 +270,7 @@ Door - 0x0368A (Stairs) - 0x03677
 159413 - 0x00614 (Lift EP) - 0x275FF & 0x03675 - True
 
 Quarry Boathouse (Quarry Boathouse) - Quarry - True - Quarry Boathouse Upper Front - 0x03852 - Quarry Boathouse Behind Staircase - 0x2769B:
-158146 - 0x034D4 (Intro Left) - True - Stars & Stars + Same Colored Symbol + Eraser
+158146 - 0x034D4 (Intro Left) - True - Stars & Stars + Same Colored Symbol & Eraser
 158147 - 0x021D5 (Intro Right) - True - Shapers & Eraser
 158148 - 0x03852 (Ramp Height Control) - 0x034D4 & 0x021D5 - Rotated Shapers
 158166 - 0x17CA6 (Boat Spawn) - True - Boat
