@@ -976,7 +976,9 @@
       "ITEM_NEW_MAUVILLE_FULL_HEAL",
       "ITEM_NEW_MAUVILLE_PARALYZE_HEAL"
     ],
-    "events": [],
+    "events": [
+      "EVENT_TURN_OFF_GENERATOR"
+    ],
     "exits": [],
     "warps": [
       "MAP_NEW_MAUVILLE_INSIDE:0/MAP_NEW_MAUVILLE_ENTRANCE:1"
