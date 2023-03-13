@@ -14,7 +14,7 @@ class LocationData(NamedTuple):
     rule: Callable[[CollectionState], bool] = lambda state: True
 
 
-def get_locations(world: Optional[MultiWorld], player: Optional[int], 
+def get_location_datas(world: Optional[MultiWorld], player: Optional[int], 
                   precalculated_weights: PreCalculatedWeights) -> Tuple[LocationData, ...]:
 
     flooded: PreCalculatedWeights = precalculated_weights
