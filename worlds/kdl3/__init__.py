@@ -170,7 +170,8 @@ class KDL3World(World):
         set_rule(self.multiworld.get_location(LocationName.ripple_field_toad, self.player),
                  lambda state: state.has("Needle", self.player))
         set_rule(self.multiworld.get_location(LocationName.ripple_field_mama_pitch, self.player),
-                 lambda state: state.has("Pitch", self.player) and state.has("Kine", self.player))
+                 lambda state: state.has("Pitch", self.player) and state.has("Kine", self.player)
+                            and state.has("Burning", self.player) and state.has("Stone", self.player))
         set_rule(self.multiworld.get_entrance("To Level 3", self.player),
                  lambda state: state.can_reach(LocationName.ripple_field_6, "Location", self.player))
 
