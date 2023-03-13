@@ -176,6 +176,8 @@ class KDL3World(World):
                  lambda state: state.can_reach(LocationName.ripple_field_6, "Location", self.player))
 
         # Level 3
+        add_rule(self.multiworld.get_location(LocationName.sand_canyon_5, self.player),
+                 lambda state: state.has("Cutter", self.player))
         set_rule(self.multiworld.get_location(LocationName.sand_canyon_auntie, self.player),
                  lambda state: state.has("Clean", self.player))
         set_rule(self.multiworld.get_location(LocationName.sand_canyon_nyupun, self.player),
