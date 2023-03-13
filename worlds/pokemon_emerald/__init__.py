@@ -1,13 +1,17 @@
+import hashlib
+import os
 from typing import List
-from BaseClasses import ItemClassification, Tutorial
+
+from BaseClasses import ItemClassification, Tutorial, MultiWorld
 from Fill import fill_restrictive
 from Options import Toggle
 from worlds.AutoWorld import World, WebWorld
+
 from .Items import PokemonEmeraldItem, create_item_label_to_id_map, get_item_classification
 from .Locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
 from .Options import RandomizeBadges, RandomizeHms, options, get_option_value
 from .Regions import create_regions
-from .Rom import generate_output
+from .Rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path
 from .Rules import set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules, add_hidden_item_itemfinder_rules, add_flash_rules, set_enable_ferry_rules
 from .SanityCheck import sanity_check
 
@@ -50,9 +54,23 @@ class PokemonEmeraldWorld(World):
         }
 
 
-    def create_regions(self):
-        if (sanity_check() == False): raise AssertionError("Sanity check failed")
+    @classmethod
+    def stage_assert_generate(cls, multiworld: MultiWorld):
+        rom_path = get_base_rom_path()
+        if not os.path.exists(rom_path):
+            raise FileNotFoundError(rom_path)
 
+        with open(rom_path, "rb") as infile:
+            local_hash = hashlib.sha256()
+            local_hash.update(bytes(infile.read()))
+
+            if (not local_hash.hexdigest() == PokemonEmeraldDeltaPatch.hash):
+                raise AssertionError("Base ROM for Pokemon Emerald does not match expected hash. Please get Pokemon Emerald Version (USA, Europe) and dump it.")
+
+        if (sanity_check() == False): raise AssertionError("Pokemon Emerald sanity check failed. See log for details.")
+
+
+    def create_regions(self):
         overworld_items_option = get_option_value(self.multiworld, self.player, "overworld_items")
         hidden_items_option = get_option_value(self.multiworld, self.player, "hidden_items")
         npc_gifts_option = get_option_value(self.multiworld, self.player, "npc_gifts")

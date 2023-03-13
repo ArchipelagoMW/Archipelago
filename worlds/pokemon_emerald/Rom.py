@@ -1,4 +1,3 @@
-import hashlib
 import bsdiff4
 import os
 from typing import Dict, List
@@ -119,12 +118,6 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str):
 def get_base_rom_as_bytes() -> bytes:
     with open(get_base_rom_path(), "rb") as infile:
         base_rom_bytes = bytes(infile.read())
-
-        local_hash = hashlib.sha256()
-        local_hash.update(base_rom_bytes)
-
-        if (not local_hash.hexdigest() == PokemonEmeraldDeltaPatch.hash):
-            raise AssertionError("Base ROM does not match expected hash. Please get Pokemon Emerald Version (USA, Europe) and dump it.")
 
     return base_rom_bytes
     
