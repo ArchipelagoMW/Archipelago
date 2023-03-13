@@ -37,7 +37,7 @@ class GBAContext(CommonContext):
             await super(GBAContext, self).server_auth(password_requested)
         await self.get_username()
         await self.send_connect()
-    
+
     def run_gui(self):
         from kvui import GameManager
 
@@ -49,34 +49,35 @@ class GBAContext(CommonContext):
 
 
 def create_payload(ctx: GBAContext):
-    payload = json.dumps(
-        {
-            "items": ctx.items_received
-        }
-    )
+    payload = json.dumps({
+        "items": [(item.item - 3860000, item.location - 3860000) for item in ctx.items_received]
+    })
+
     return payload
 
 
 async def handle_read_data(data, ctx: GBAContext):
     local_checked_locations = set()
 
-    # If flag is set and corresponds to a location, add to local_checked_locations
-    for byte_i, byte in enumerate(data["flag_bytes"]):
-        for i in range(8):
-            if (byte & (1 << i) != 0):
-                flag_id = byte_i * 8 + i
-                location_id = flag_id + 3860000
-                if (location_id in ctx.server_locations):
-                    local_checked_locations.add(location_id)
+    if ("flag_bytes" in data):
+        # If flag is set and corresponds to a location, add to local_checked_locations
+        for byte_i, byte in enumerate(data["flag_bytes"]):
+            for i in range(8):
+                if (byte & (1 << i) != 0):
+                    flag_id = byte_i * 8 + i
+                    location_id = flag_id + 3860000
+                    if (location_id in ctx.server_locations):
+                        local_checked_locations.add(location_id)
 
-    if (local_checked_locations != ctx.local_checked_locations):
-        ctx.local_checked_locations = local_checked_locations
 
-        if (local_checked_locations != None):
-            await ctx.send_msgs([{
-                "cmd": "LocationChecks",
-                "locations": list(local_checked_locations)
-            }])
+        if (local_checked_locations != ctx.local_checked_locations):
+            ctx.local_checked_locations = local_checked_locations
+
+            if (local_checked_locations != None):
+                await ctx.send_msgs([{
+                    "cmd": "LocationChecks",
+                    "locations": list(local_checked_locations)
+                }])
 
 
 async def gba_send_receive_task(ctx: GBAContext):
