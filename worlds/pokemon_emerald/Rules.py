@@ -1145,7 +1145,7 @@ def set_npc_gift_rules(multiworld: MultiWorld, player: int):
     )
     set_rule(
         multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_COIN_CASE"), player),
-        lambda state: state.can_reach("REGION_SLATEPORT_CITY_MART/MAIN", "Region", player)
+        lambda state: state.has("EVENT_BUY_HARBOR_MAIL", player)
     )
 
     # Fallarbor Town
