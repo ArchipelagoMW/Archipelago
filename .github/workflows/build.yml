@@ -25,9 +25,9 @@ jobs:
   build-win-py38: # RCs will still be built and signed by hand
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: '3.8'
       - name: Download run-time dependencies
@@ -57,14 +57,14 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       # - copy code below to release.yml -
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install base dependencies
         run: |
           sudo apt update
           sudo apt -y install build-essential p7zip xz-utils wget libglib2.0-0
           sudo apt -y install python3-gi libgirepository1.0-dev  # should pull dependencies for gi installation below
       - name: Get a recent python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
       - name: Install build-time dependencies

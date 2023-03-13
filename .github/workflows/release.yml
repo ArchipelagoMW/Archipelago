@@ -35,14 +35,14 @@ jobs:
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       # - code below copied from build.yml -
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install base dependencies
         run: |
           sudo apt update
           sudo apt -y install build-essential p7zip xz-utils wget libglib2.0-0
           sudo apt -y install python3-gi libgirepository1.0-dev  # should pull dependencies for gi installation below
       - name: Get a recent python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
       - name: Install build-time dependencies
