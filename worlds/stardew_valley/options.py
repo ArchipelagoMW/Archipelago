@@ -23,8 +23,8 @@ class StardewOptions:
 class Goal(Choice):
     """What's your goal with this play-through?
     With Community Center, the world will be completed once you complete the Community Center.
-    With Grandpa's Evaluation, the world will be completed once 4 candles are lit around Grandpa's Shrine.
-    With Bottom of the Mines, the world will be completed once you reach level 120 in the local mineshaft.
+    With Grandpa's Evaluation, the world will be completed once 4 candles are lit at Grandpa's Shrine.
+    With Bottom of the Mines, the world will be completed once you reach level 120 in the mineshaft.
     With Cryptic Note, the world will be completed once you complete the quest "Cryptic Note" where Mr Qi asks you to
         reach floor 100 in the Skull Cavern.
     With Master Angler, the world will be completed once you have caught every fish in the game. Pairs well with
@@ -72,9 +72,8 @@ class StartingMoney(SpecialRange):
 
 
 class ResourcePackMultiplier(SpecialRange):
-    """How many items will be in the resource pack. A lower setting mean fewer resources in each pack.
-    A higher setting means more resources in each pack. Easy (200) doubles the default quantity.
-    This also include Friendship bonuses that replace the one from the Bulletin Board."""
+    """How many items will be in the resource packs. A lower setting mean fewer resources in each pack.
+    A higher setting means more resources in each pack. Easy (200) doubles the default quantity"""
     internal_name = "resource_pack_multiplier"
     default = 100
     range_start = 0
@@ -127,6 +126,9 @@ class EntranceRandomization(Choice):
     # With Buildings, All buildings in the world are randomized with each other
     # With Everything, All buildings and areas are randomized with each other
     # With Chaos, same as everything, but the buildings are shuffled again every in-game day. You can't learn it!
+    # With Buildings One-way, Entrance pairs are disconnected, they aren't two-way!
+    # With Everything One-way, Entrance pairs are disconnected, and every entrance is in the shuffle
+    # With Chaos One-way, Entrance pairs are disconnected, and they change every day!
 
     internal_name = "entrance_randomization"
     display_name = "Entrance Randomization"
@@ -137,14 +139,17 @@ class EntranceRandomization(Choice):
     # option_buildings = 3
     # option_everything = 4
     # option_chaos = 4
+    # option_buildings_one_way = 5
+    # option_everything_one_way = 6
+    # option_chaos_one_way = 7
 
 
 class SeasonRandomization(Choice):
     """Should seasons be randomized?
     All settings allow you to choose which season you want to play next (from those unlocked) at the end of a season.
-    With Disabled, you will start with Spring and with all seasons unlocked.
+    With Disabled, you will start in Spring with all seasons unlocked.
     With Randomized, the seasons will be unlocked randomly through Archipelago items.
-    With Randomized Not Winter, the seasons are randomized, but you're guarantied not to start with winter.
+    With Randomized Not Winter, the seasons are randomized, but you're guaranteed not to start with winter.
     With Progressive, you will unlock the seasons in order.
     """
     internal_name = "season_randomization"
@@ -172,9 +177,9 @@ class SeedShuffle(Choice):
 
 class BackpackProgression(Choice):
     """How is the backpack progression handled?
-    With Vanilla, you can buy them at Pierre's.
-    With Progressive, you will randomly find Progressive Backpack to upgrade.
-    With Early Progressive, you can expect you first Backpack in your world in sphere 1.
+    With Vanilla, you can buy them at Pierre's General Store.
+    With Progressive, you will randomly find Progressive Backpack upgrades.
+    With Early Progressive, you can expect your first Backpack in sphere 1.
     """
     internal_name = "backpack_progression"
     display_name = "Backpack Progression"
@@ -187,8 +192,7 @@ class BackpackProgression(Choice):
 class ToolProgression(Choice):
     """How is the tool progression handled?
     With Vanilla, Clint will upgrade your tools with ore.
-    With Progressive, you will randomly find Progressive Tool to upgrade.
-    With World Checks, the tools of different quality will be found in the world."""
+    With Progressive, you will randomly find Progressive Tool upgrades."""
     internal_name = "tool_progression"
     display_name = "Tool Progression"
     default = 1
@@ -201,8 +205,8 @@ class TheMinesElevatorsProgression(Choice):
     With Vanilla, you will unlock a new elevator floor every 5 floor in the mine.
     With Progressive, you will randomly find Progressive Mine Elevator to go deeper. Location are sent for reaching
         every level multiple of 5.
-    With Progressive from previous floor, you will randomly find Progressive Mine Elevator to go deeper. Location are
-        sent for taking the ladder or stair to every level multiple of 5, taking the elevator does not count."""
+    With Progressive from previous floor, Locations are sent for taking the ladder or stair to every level multiple of 5,
+		taking the elevator does not count."""
     internal_name = "elevator_progression"
     display_name = "Elevator Progression"
     default = 2
@@ -214,8 +218,8 @@ class TheMinesElevatorsProgression(Choice):
 class SkillProgression(Choice):
     """How is the skill progression handled?
     With Vanilla, you will level up and get the normal reward at each level.
-    With Progressive, the xp will be counted internally, locations will be sent when you gain a virtual level. Your real
-        levels will be scattered around the world."""
+    With Progressive, the xp will be counted internally, locations will be sent when you earn a level. Your real
+        levels will be scattered around the multiworld."""
     internal_name = "skill_progression"
     display_name = "Skill Progression"
     default = 1
@@ -225,11 +229,10 @@ class SkillProgression(Choice):
 
 class BuildingProgression(Choice):
     """How is the building progression handled?
-    With Vanilla, you will buy each building and upgrade one at the time.
-    With Progressive, you will receive the buildings and will be able to build the first one of each building for free,
+    With Vanilla, you will buy each building normally.
+    With Progressive, you will receive the buildings and will be able to build the first one of each type for free,
         once it is received. If you want more of the same building, it will cost the vanilla price.
-        This option INCLUDES the shipping bin as a building you need to receive.
-    With Progressive early shipping bin, you can expect to receive the shipping bin before the end of the first season.
+    With Progressive early shipping bin, you can expect your shipping bin in sphere 1.
     """
     internal_name = "building_progression"
     display_name = "Building Progression"
@@ -259,7 +262,7 @@ class ArcadeMachineLocations(Choice):
 
 
 class HelpWantedLocations(SpecialRange):
-    """How many "Help Wanted" quests need to be completed as ArchipelagoLocations
+    """How many "Help Wanted" quests need to be completed as Archipelago Locations
     Out of every 7 quests, 4 will be item deliveries, and then 1 of each for: Fishing, Gathering and Slaying Monsters.
     Choosing a multiple of 7 is recommended."""
     internal_name = "help_wanted_locations"
@@ -281,9 +284,9 @@ class HelpWantedLocations(SpecialRange):
 class Fishsanity(Choice):
     """Locations for catching fish?
     With None, there are no locations for catching fish
-    With Legendaries, each of the 5 legendary fish are locations that contain items
-    With Special, a curated selection of strong fish are locations that contain items
-    With Random Selection, a random selection of fish are locations that contain items
+    With Legendaries, each of the 5 legendary fish are checks
+    With Special, a curated selection of strong fish are checks
+    With Random, a random selection of fish are checks
     With All, every single fish in the game is a location that contains an item. Pairs well with the Master Angler Goal
     """
     internal_name = "fishsanity"
@@ -292,29 +295,29 @@ class Fishsanity(Choice):
     option_none = 0
     option_legendaries = 1
     option_special = 2
-    option_random_selection = 3
+    option_random = 3
     option_all = 4
 
 
 class Museumsanity(Choice):
-    """Locations for museum donation?
+    """Locations for museum donations?
     With None, there are no locations for donating artifacts and minerals to the museum
-    With Milestones, the donation milestones from the vanilla game will contain AP checks
-    With Random Selection, a random selection of minerals and artifacts are locations that contain items
-    With All, every single donation will be an AP check
+    With Milestones, the donation milestones from the vanilla game are checks
+    With Random, a random selection of minerals and artifacts are checks
+    With All, every single donation will be a check
     """
     internal_name = "museumsanity"
     display_name = "Museumsanity"
     default = 1
     option_none = 0
     option_milestones = 1
-    option_random_selection = 2
+    option_random = 2
     option_all = 3
 
 
 class Friendsanity(Choice):
     """Locations for friendships?
-    With None, there are no locations for befriending villagers
+    With None, there are no checks for befriending villagers
     With Bachelors, each heart of a bachelor is a check
     With Starting NPCs, each heart for npcs that are immediately available is a check
     With All, every heart with every NPC is a check, including Leo, Kent, Sandy, etc
@@ -344,14 +347,14 @@ class NumberOfPlayerBuffs(Range):
 
 
 class MultipleDaySleepEnabled(Toggle):
-    """Should you be able to sleep automatically multiple day strait?"""
+    """Should you be able to sleep automatically for multiple day straight?"""
     internal_name = "multiple_day_sleep_enabled"
     display_name = "Multiple Day Sleep Enabled"
     default = 1
 
 
 class MultipleDaySleepCost(SpecialRange):
-    """How must gold it cost to sleep through multiple days? You will have to pay that amount for each day slept."""
+    """How much gold does it cost to sleep through multiple days? You will have to pay that amount for each day skipped."""
     internal_name = "multiple_day_sleep_cost"
     display_name = "Multiple Day Sleep Cost"
     range_start = 0
@@ -367,7 +370,7 @@ class MultipleDaySleepCost(SpecialRange):
 
 
 class ExperienceMultiplier(SpecialRange):
-    """How fast do you want to level up. A lower setting mean less experience.
+    """How fast do you want to earn skill experience. A lower setting mean less experience.
     A higher setting means more experience."""
     internal_name = "experience_multiplier"
     display_name = "Experience Multiplier"
@@ -386,7 +389,7 @@ class ExperienceMultiplier(SpecialRange):
 
 
 class FriendshipMultiplier(SpecialRange):
-    """How fast do you want to befriend villagers.
+    """How fast do you want to earn friendship points with villagers.
     A lower setting mean less friendship per action.
     A higher setting means more friendship per action."""
     internal_name = "friendship_multiplier"

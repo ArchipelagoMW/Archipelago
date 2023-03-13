@@ -136,7 +136,7 @@ def extend_fishsanity_locations(randomized_locations: List[LocationData], fishsa
         randomized_locations.extend(location_table[f"{prefix}{legendary.name}"] for legendary in legendary_fish)
     elif fishsanity == options.Fishsanity.option_special:
         randomized_locations.extend(location_table[f"{prefix}{special.name}"] for special in special_fish)
-    elif fishsanity == options.Fishsanity.option_random_selection:
+    elif fishsanity == options.Fishsanity.option_random:
         randomized_locations.extend(location_table[f"{prefix}{fish.name}"]
                                     for fish in all_fish if random.random() < 0.4)
     elif fishsanity == options.Fishsanity.option_all:
@@ -149,7 +149,7 @@ def extend_museumsanity_locations(randomized_locations: List[LocationData], muse
         return
     elif museumsanity == options.Museumsanity.option_milestones:
         randomized_locations.extend(locations_by_tag[LocationTags.MUSEUM_MILESTONES])
-    elif museumsanity == options.Museumsanity.option_random_selection:
+    elif museumsanity == options.Museumsanity.option_random:
         randomized_locations.extend(location_table[f"{prefix}{museum_item.name}"]
                                     for museum_item in all_museum_items if random.random() < 0.4)
     elif museumsanity == options.Museumsanity.option_all:
