@@ -77,6 +77,9 @@ class KDL3SNIClient(SNIClient):
         halken = await snes_read(ctx, WRAM_START, 6)
         if halken != b"halken":
             return
+        current_bgm = await snes_read(ctx, KDL3_CURRENT_BGM, 1)
+        if current_bgm[0] in (0x00, 0x21, 0x22, 0x23, 0x25):
+            return  # title screen, opening, save select
         is_debug = await snes_read(ctx, KDL3_DEBUG, 1)
         if is_debug[0]:
             return  # just in case someone tries to get smart
@@ -89,6 +92,8 @@ class KDL3SNIClient(SNIClient):
         current_save = await snes_read(ctx, KDL3_GAME_SAVE, 1)
         goal = await snes_read(ctx, KDL3_GOAL_ADDR, 1)
         boss_butch_status = await snes_read(ctx, KDL3_BOSS_BUTCH_STATUS + (current_save[0] * 2), 1)
+        if boss_butch_status[0] == 0xFF:
+            return  # save file is not created, ignore
         if (goal[0] == 0x00 and boss_butch_status[0] == 0x01) or (goal[0] == 0x01 and boss_butch_status[0] == 0x03):
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
@@ -97,6 +102,8 @@ class KDL3SNIClient(SNIClient):
         # level completion status
         world_unlocks = await snes_read(ctx, KDL3_WORLD_UNLOCK, 1)
         level_unlocks = await snes_read(ctx, KDL3_LEVEL_UNLOCK, 1)
+        if world_unlocks[0] > 0x06:
+            return  # save is not loaded, ignore
         if world_unlocks[0] >= self.latest_world and level_unlocks[0] > self.latest_level:
             for loc_id in range(1, ((world_unlocks[0] - 1) * 6) + level_unlocks[0]):
                 if loc_id + 0x770000 not in ctx.checked_locations:
@@ -104,6 +111,7 @@ class KDL3SNIClient(SNIClient):
             self.latest_level = level_unlocks[0]
         if world_unlocks[0] > self.latest_world:
             self.latest_world = world_unlocks[0]
+            self.latest_level = 1  # reset after beating the boss
         # heart star status
         heart_stars = await snes_read(ctx, KDL3_HEART_STARS, 35)
         for i in range(5):
