@@ -878,6 +878,12 @@ class ProgressionBalancing(SpecialRange):
 
 
 class OptionsMetaProperty(type):
+    def __new__(mcs, name, bases, attrs):
+        for attr, attr_type in attrs.items():
+            assert not isinstance(attr_type, AssembleOptions),\
+                f"Options for {name} should be type hinted on the class, not assigned"
+        return super().__new__(mcs, name, bases, attrs)
+
     @property
     @functools.lru_cache(maxsize=None)
     def type_hints(cls) -> typing.Dict[str, AssembleOptions]:
