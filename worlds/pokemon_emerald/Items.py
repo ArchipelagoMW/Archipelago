@@ -1,6 +1,6 @@
 from typing import FrozenSet, Optional, Union
 from BaseClasses import Item, ItemClassification
-from .Data import get_item_attributes
+from .Data import get_item_attributes, get_config
 
 
 class PokemonEmeraldItem(Item):
@@ -18,12 +18,12 @@ class PokemonEmeraldItem(Item):
 
 def offset_item_value(item_value: Union[int, None]) -> Union[int, None]:
     if (item_value == None): return None
-    return item_value + 3860000
+    return item_value + get_config()["ap_offset"]
 
 
 def reverse_offset_item_value(id: Union[int, None]) -> Union[int, None]:
     if (id == None): return None
-    return id - 3860000
+    return id - get_config()["ap_offset"]
 
 
 def create_item_label_to_id_map():

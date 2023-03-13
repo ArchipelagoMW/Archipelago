@@ -11,6 +11,7 @@ item_attributes = None
 location_attributes = None
 warp_to_region_map = None
 location_to_region_map = None
+_config = None
 
 
 class ItemData(NamedTuple):
@@ -114,6 +115,14 @@ def load_json(filepath):
         for line in infile.readlines():
             json_string += line
     return json.loads(json_string)
+
+
+def get_config() -> Dict[str, any]:
+    global _config
+    if (_config == None):
+        _config = load_json(os.path.join(os.path.dirname(__file__), "data/config.json"))
+
+    return _config
 
 
 def get_extracted_data() -> Dict[str, any]:

@@ -1,7 +1,7 @@
 local socket = require("socket")
 local json = require("json")
 
-local GBA_PORT = 43053
+local SOCKET_PORT = 43053
 
 local STATE_UNINITIALIZED = 0
 local STATE_INITIAL_CONNECTION_MADE = 1
@@ -18,6 +18,14 @@ local previous_state = STATE_UNINITIALIZED
 
 local current_game_state = GAME_STATE_UNSAFE
 
+local received_items = {}
+
+-- TODO: Addresses may change any time the base rom is updated.
+-- Could pull addresses from extracted_data.json, but would have to rely
+-- on relative paths. Could have client send address info in payload, but
+-- that's a lot of wasted data. Could have client send address info on first
+-- connection, but lazy. Could deal with it and wait for generalized SNI to replace this.
+
 -- Offsets and sizes
 local iwram_start = 0x3000000
 local ewram_start = 0x2000000
@@ -27,28 +35,29 @@ local flags_offset = 0x1450
 local flags_size = 0x12C
 
 -- IWRAM Addresses
-local save_block_ptr_address = 0x5D8C
-local cb2_address = 0x22C0 + 4
-local locked_controls_address = 0x0F2C
+local save_block_ptr_address = 0x5D8C              -- gSaveBlock1Ptr
+local cb2_address = 0x22C0 + 4                     -- gMain + offset
+local locked_controls_address = 0x0F2C             -- sLockFieldControls
 
 -- EWRAM Addresses
-local archipelago_received_item_address = 0x3A028
+local archipelago_received_item_address = 0x3A028  -- gArchipelagoReceivedItem
 
 -- ROM addresses
-local cb2_overworld_address = 0x8085DDC + 1
+local cb2_overworld_func_address = 0x8085DDC + 1   -- CB2_Overworld + 1
 
-local received_items = {}
-
+-- Set us as safe if we're in the overworld and player has control
 function check_game_state ()
     local cb2_value = memory.read_u32_le(cb2_address, "IWRAM")
     local locked_controls_value = memory.read_u32_le(locked_controls_address, "IWRAM")
-    if (cb2_value == cb2_overworld_address and locked_controls_value ~= 0) then
+
+    if (cb2_value == cb2_overworld_func_address and locked_controls_value ~= 0) then
         current_game_state = GAME_STATE_SAFE
     else
         current_game_state = GAME_STATE_UNSAFE
     end
 end
 
+-- Process data received from AP client
 function process_data (data)
     if (data == nil) then
         return
@@ -59,18 +68,17 @@ function process_data (data)
     end
 end
 
+-- Try to fill the received item struct with the next item
 function try_write_next_item ()
     if (current_game_state == GAME_STATE_SAFE) then
         local is_filled = memory.read_u8(archipelago_received_item_address + 4, "EWRAM")
 
-        if (is_filled ~= 0) then return end
+        if (is_filled ~= 0) then return end -- Currently filled item still not consumed
 
         local save_block_address = memory.read_u32_le(save_block_ptr_address, "IWRAM") - ewram_start
         local last_received_item_index = memory.read_u16_le(save_block_address + last_received_item_index_offset, "EWRAM")
 
         next_item = received_items[last_received_item_index + 1]
-        print(last_received_item_index)
-        print(next_item)
         if (next_item ~= nil) then
             memory.write_u16_le(archipelago_received_item_address + 0, next_item,                    "EWRAM")
             memory.write_u16_le(archipelago_received_item_address + 2, last_received_item_index + 1, "EWRAM")
@@ -79,6 +87,8 @@ function try_write_next_item ()
     end
 end
 
+-- Send relevant data to AP client (flags indicating checked locations)
+-- AP client will deterimine which flags are important
 function create_message ()
     local data = {}
 
@@ -94,6 +104,7 @@ function create_message ()
     return json.encode(data).."\n"
 end
 
+-- Receive data from AP client and send message back
 function send_receive ()
     local message, err = ap_socket:receive()
 
@@ -138,7 +149,7 @@ function main ()
 
     local frame = 0
 
-    local server, err = socket.bind("localhost", GBA_PORT)
+    local server, err = socket.bind("localhost", SOCKET_PORT)
     if (err ~= nil) then
         print(err)
         return
@@ -167,7 +178,7 @@ function main ()
                 end
             end
         else
-            if (frame % 5 == 0) then
+            if (frame % 10 == 0) then
                 check_game_state()
                 send_receive()
                 try_write_next_item()

@@ -5,8 +5,10 @@ from typing import Optional, Set, Tuple
 from CommonClient import CommonContext, get_base_parser, gui_enabled, logger
 from Utils import async_start, init_logging
 
+from worlds.pokemon_emerald.Data import get_config
 
-GBA_PORT = 43053
+
+GBA_SOCKET_PORT = 43053
 
 # TODO: Update messages
 CONNECTION_STATUS_TIMING_OUT = "Connection timing out. Please restart your emulator, then restart pkmn_rb.lua"
@@ -50,7 +52,7 @@ class GBAContext(CommonContext):
 
 def create_payload(ctx: GBAContext):
     payload = json.dumps({
-        "items": [item.item - 3860000 for item in ctx.items_received]
+        "items": [item.item - get_config()["ap_offset"] for item in ctx.items_received]
     })
 
     return payload
@@ -65,7 +67,7 @@ async def handle_read_data(data, ctx: GBAContext):
             for i in range(8):
                 if (byte & (1 << i) != 0):
                     flag_id = byte_i * 8 + i
-                    location_id = flag_id + 3860000
+                    location_id = flag_id + get_config()["ap_offset"]
                     if (location_id in ctx.server_locations):
                         local_checked_locations.add(location_id)
 
@@ -88,7 +90,7 @@ async def gba_send_receive_task(ctx: GBAContext):
             # Make initial connection
             try:
                 logger.debug("Attempting to connect to GBA...")
-                ctx.gba_streams = await asyncio.wait_for(asyncio.open_connection("localhost", GBA_PORT), timeout=10)
+                ctx.gba_streams = await asyncio.wait_for(asyncio.open_connection("localhost", GBA_SOCKET_PORT), timeout=10)
                 logger.info("Connected to GBA")
                 ctx.gba_status = CONNECTION_STATUS_TENTATIVE
             except TimeoutError:

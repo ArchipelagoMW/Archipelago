@@ -1,6 +1,6 @@
 from typing import Optional, FrozenSet, Union
 from BaseClasses import Location, MultiWorld, Region
-from .Data import get_region_data
+from .Data import get_region_data, get_config
 from .Items import offset_item_value
 
 
@@ -23,12 +23,12 @@ class PokemonEmeraldLocation(Location):
 
 def offset_flag(flag: Union[int, None]) -> Union[int, None]:
     if (flag == None): return None
-    return flag + 3860000
+    return flag + get_config()["ap_offset"]
 
 
 def reverse_offset_flag(id: Union[int, None]) -> Union[int, None]:
     if (id == None): return None
-    return id - 3860000
+    return id - get_config()["ap_offset"]
 
 
 def create_locations_with_tags(multiworld: MultiWorld, player: int, tags):
