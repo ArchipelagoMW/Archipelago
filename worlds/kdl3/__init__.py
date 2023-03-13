@@ -158,6 +158,8 @@ class KDL3World(World):
                  lambda state: state.has("Stone", self.player))
         set_rule(self.multiworld.get_location(LocationName.grass_land_mine, self.player),
                  lambda state: state.has("Kine", self.player))
+        set_rule(self.multiworld.get_entrance("To Level 2", self.player),
+                 lambda state: state.can_reach(LocationName.grass_land_6, "Location", self.player))
         # Level 2
         add_rule(self.multiworld.get_location(LocationName.ripple_field_5, self.player),
                  lambda state: state.has("Kine", self.player))
@@ -169,6 +171,10 @@ class KDL3World(World):
                  lambda state: state.has("Needle", self.player))
         set_rule(self.multiworld.get_location(LocationName.ripple_field_mama_pitch, self.player),
                  lambda state: state.has("Pitch", self.player) and state.has("Kine", self.player))
+        set_rule(self.multiworld.get_entrance("To Level 3", self.player),
+                 lambda state: state.can_reach(LocationName.ripple_field_6, "Location", self.player))
+
+        # Level 3
         set_rule(self.multiworld.get_location(LocationName.sand_canyon_auntie, self.player),
                  lambda state: state.has("Clean", self.player))
         set_rule(self.multiworld.get_location(LocationName.sand_canyon_nyupun, self.player),
@@ -178,6 +184,10 @@ class KDL3World(World):
                                and state.has("Parasol", self.player)
                                and state.has("Stone", self.player)
                  )
+        set_rule(self.multiworld.get_entrance("To Level 4", self.player),
+                 lambda state: state.can_reach(LocationName.sand_canyon_6, "Location", self.player))
+
+        # Level 4
         set_rule(self.multiworld.get_location(LocationName.cloudy_park_hibanamodoki, self.player),
                  lambda state: state.has("Coo", self.player) and state.has("Clean", self.player))
         set_rule(self.multiworld.get_location(LocationName.cloudy_park_piyokeko, self.player),
@@ -186,6 +196,10 @@ class KDL3World(World):
                  lambda state: state.has("Coo", self.player))
         set_rule(self.multiworld.get_location(LocationName.cloudy_park_pick, self.player),
                  lambda state: state.has("Rick", self.player))
+        set_rule(self.multiworld.get_entrance("To Level 5", self.player),
+                 lambda state: state.can_reach(LocationName.cloudy_park_6, "Location", self.player))
+
+        # Level 5
         set_rule(self.multiworld.get_location(LocationName.iceberg_kogoesou, self.player),
                  lambda state: state.has("Burning", self.player))
         set_rule(self.multiworld.get_location(LocationName.iceberg_samus, self.player),
