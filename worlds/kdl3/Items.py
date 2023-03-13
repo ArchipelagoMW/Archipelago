@@ -37,6 +37,13 @@ misc_item_table = {
     "Heart Star": ItemData(0x770020, True, True),
     "1-Up": ItemData(0x770021, False),
     "Maxim Tomato": ItemData(0x770022, False),
+    "Invincible Candy": ItemData(0x770023, False),
+}
+
+filler_item_weights = {
+    "1-Up": 4,
+    "Maxim Tomato": 2,
+    "Invincible Candy": 2
 }
 
 item_table = {
