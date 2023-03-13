@@ -12,35 +12,37 @@ local GAME_STATE_UNSAFE = 0
 local GAME_STATE_SAFE = 1
 
 local ap_socket = nil
+
 local current_state = STATE_UNINITIALIZED
 local previous_state = STATE_UNINITIALIZED
 
 local current_game_state = GAME_STATE_UNSAFE
 
 -- Offsets and sizes
-local iwram_offset = 0x3000000
-local ewram_offset = 0x2000000
-local flags_offset = 0x13B0
+local iwram_start = 0x3000000
+local ewram_start = 0x2000000
+
+local last_received_item_index_offset = 0x3778
+local flags_offset = 0x1450
 local flags_size = 0x12C
-local archipelago_flags_offset = 0x36D8
-local archipelago_flags_size = 0x180
 
 -- IWRAM Addresses
 local save_block_ptr_address = 0x5D8C
 local cb2_address = 0x22C0 + 4
+local locked_controls_address = 0x0F2C
 
 -- EWRAM Addresses
-local archipelago_received_item_address = 0x39F88
+local archipelago_received_item_address = 0x3A028
 
 -- ROM addresses
-local cb2_overworld_address = 0x8085dd0 + 1
+local cb2_overworld_address = 0x8085DDC + 1
 
 local received_items = {}
-local acknowledged_items = {}
 
 function check_game_state ()
     local cb2_value = memory.read_u32_le(cb2_address, "IWRAM")
-    if (cb2_value == cb2_overworld_address) then
+    local locked_controls_value = memory.read_u32_le(locked_controls_address, "IWRAM")
+    if (cb2_value == cb2_overworld_address and locked_controls_value ~= 0) then
         current_game_state = GAME_STATE_SAFE
     else
         current_game_state = GAME_STATE_UNSAFE
@@ -57,40 +59,23 @@ function process_data (data)
     end
 end
 
-function update_acknowledged_items ()
+function try_write_next_item ()
     if (current_game_state == GAME_STATE_SAFE) then
-        local save_block_address = memory.read_u32_le(save_block_ptr_address, "IWRAM") - ewram_offset
+        local is_filled = memory.read_u8(archipelago_received_item_address + 4, "EWRAM")
 
-        local archipelago_flag_bytes = memory.read_bytes_as_array(save_block_address + archipelago_flags_offset, archipelago_flags_size, "EWRAM")
-        for byte_i, byte in ipairs(archipelago_flag_bytes) do
-            for i = 0,8,1 do
-                if (bit.check(byte, i) == 1) then
-                    flag_id = (byte_i * 8) + i
-                    acknowledged_items[flag_id] = true
-                end
-            end
+        if (is_filled ~= 0) then return end
+
+        local save_block_address = memory.read_u32_le(save_block_ptr_address, "IWRAM") - ewram_start
+        local last_received_item_index = memory.read_u16_le(save_block_address + last_received_item_index_offset, "EWRAM")
+
+        next_item = received_items[last_received_item_index + 1]
+        print(last_received_item_index)
+        print(next_item)
+        if (next_item ~= nil) then
+            memory.write_u16_le(archipelago_received_item_address + 0, next_item,                    "EWRAM")
+            memory.write_u16_le(archipelago_received_item_address + 2, last_received_item_index + 1, "EWRAM")
+            memory.write_u8(    archipelago_received_item_address + 4, 1,                            "EWRAM")
         end
-    end
-end
-
-function try_write_item ()
-    local is_filled = memory.read_u8(archipelago_received_item_address + 4, "EWRAM")
-    
-    if (is_filled) then return end
-
-    unacknowledged_item = nil
-    for _, item in ipairs(received_items) do
-        print("Items: "..item[0]..item[1])
-        if (acknowledged_items[item[1]] ~= true) then
-            unacknowledged_item = item
-            break
-        end
-    end
-
-    if (unacknowledged_item ~= nil) then
-        memory.write_u16_le(archipelago_received_item_address + 0, unacknowledged_item[0], "EWRAM")
-        memory.write_u16_le(archipelago_received_item_address + 2, unacknowledged_item[1], "EWRAM")
-        memory.write_u8(archipelago_received_item_address + 4, 1, "EWRAM")
     end
 end
 
@@ -100,7 +85,7 @@ function create_message ()
     data["script_version"] = 1
 
     if (current_game_state == GAME_STATE_SAFE) then
-        local save_block_address = memory.read_u32_le(save_block_ptr_address, "IWRAM") - ewram_offset
+        local save_block_address = memory.read_u32_le(save_block_ptr_address, "IWRAM") - ewram_start
 
         local flag_bytes = memory.read_bytes_as_array(save_block_address + flags_offset, flags_size, "EWRAM")
         data["flag_bytes"] = flag_bytes
@@ -183,9 +168,9 @@ function main ()
             end
         else
             if (frame % 5 == 0) then
+                check_game_state()
                 send_receive()
-                update_acknowledged_items()
-                try_write_item()
+                try_write_next_item()
             end
         end
 
