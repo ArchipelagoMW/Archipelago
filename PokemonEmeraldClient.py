@@ -50,7 +50,7 @@ class GBAContext(CommonContext):
 
 def create_payload(ctx: GBAContext):
     payload = json.dumps({
-        "items": [(item.item - 3860000, item.location - 3860000) for item in ctx.items_received]
+        "items": [item.item - 3860000 for item in ctx.items_received]
     })
 
     return payload
@@ -89,14 +89,14 @@ async def gba_send_receive_task(ctx: GBAContext):
             try:
                 logger.debug("Attempting to connect to GBA...")
                 ctx.gba_streams = await asyncio.wait_for(asyncio.open_connection("localhost", GBA_PORT), timeout=10)
-                logger.debug("Connected to GBA")
+                logger.info("Connected to GBA")
                 ctx.gba_status = CONNECTION_STATUS_TENTATIVE
             except TimeoutError:
-                logger.debug("Connection timed out. Retrying.")
+                logger.debug("Connection to GBA timed out. Retrying.")
                 ctx.gba_status = CONNECTION_STATUS_TIMING_OUT
                 continue
             except ConnectionRefusedError:
-                logger.debug("Connection timed out. Retrying.")
+                logger.debug("Connection to GBA refused. Retrying.")
                 ctx.gba_status = CONNECTION_STATUS_REFUSED
                 continue
         else:
@@ -110,12 +110,12 @@ async def gba_send_receive_task(ctx: GBAContext):
             try:
                 await asyncio.wait_for(writer.drain(), timeout=1.5)
             except TimeoutError:
-                logger.debug("Connection timed out. Reconnecting.")
+                logger.debug("Connection to GBA timed out. Reconnecting.")
                 error_status = CONNECTION_STATUS_TIMING_OUT
                 writer.close()
                 ctx.gba_streams = None
             except ConnectionResetError:
-                logger.debug("Connection lost. Reconnecting.")
+                logger.debug("Connection to GBA lost. Reconnecting.")
                 error_status = CONNECTION_STATUS_RESET
                 writer.close()
                 ctx.gba_streams = None
@@ -126,12 +126,12 @@ async def gba_send_receive_task(ctx: GBAContext):
                 data = json.loads(data_bytes.decode())
                 async_start(handle_read_data(data, ctx))
             except TimeoutError:
-                logger.debug("Connection timed out during read. Reconnecting.")
+                logger.debug("Connection to GBA timed out during read. Reconnecting.")
                 error_status = CONNECTION_STATUS_TIMING_OUT
                 writer.close()
                 ctx.gba_streams = None
             except ConnectionResetError:
-                logger.debug("Connection lost during read. Reconnecting.")
+                logger.debug("Connection to GBA lost during read. Reconnecting.")
                 error_status = CONNECTION_STATUS_RESET
                 writer.close()
                 ctx.gba_streams = None
