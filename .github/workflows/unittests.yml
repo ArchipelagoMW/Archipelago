@@ -3,7 +3,19 @@
 
 name: unittests
 
-on: [push, pull_request]
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - 'setup.py'
+      - '*.iss'
+      - '.gitignore'
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - 'setup.py'
+      - '*.iss'
+      - '.gitignore'
 
 jobs:
   build:
