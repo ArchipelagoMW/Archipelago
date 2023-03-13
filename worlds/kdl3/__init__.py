@@ -138,6 +138,7 @@ class KDL3World(World):
         for i in range(4):
             requirements.append(self.multiworld.per_slot_randoms[self.player].randint(
                 min(3, required_heart_stars), required_heart_stars))
+        self.multiworld.per_slot_randoms[self.player].shuffle(requirements)
         self.boss_requirements[self.player] = requirements
         itempool.extend([self.create_item("Heart Star") for _ in range(required_heart_stars)])
         itempool.extend([self.create_item(self.get_filler_item_name())
