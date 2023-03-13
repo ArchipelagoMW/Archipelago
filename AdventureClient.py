@@ -161,8 +161,6 @@ class AdventureContext(CommonContext):
 
     async def used_freeincarnate(self) -> None:
         if self.server and not self.server.socket.closed:
-            # send message
-            # f"zillion-{self.auth}-doors"]
             await self.send_msgs([{"cmd": "Set", "key": f"adventure_{self.auth}_freeincarnates_used",
                                    "default": 0, "want_reply": True,
                                    "operations": [{"operation": "add", "value": 1}]}])
