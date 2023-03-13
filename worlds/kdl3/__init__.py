@@ -171,7 +171,7 @@ class KDL3World(World):
                  lambda state: state.has("Needle", self.player))
         set_rule(self.multiworld.get_location(LocationName.ripple_field_mama_pitch, self.player),
                  lambda state: state.has("Pitch", self.player) and state.has("Kine", self.player)
-                            and state.has("Burning", self.player) and state.has("Stone", self.player))
+                               and state.has("Burning", self.player) and state.has("Stone", self.player))
         set_rule(self.multiworld.get_entrance("To Level 3", self.player),
                  lambda state: state.can_reach(LocationName.ripple_field_6, "Location", self.player))
 
@@ -181,7 +181,7 @@ class KDL3World(World):
         set_rule(self.multiworld.get_location(LocationName.sand_canyon_nyupun, self.player),
                  lambda state: state.has("ChuChu", self.player))
         set_rule(self.multiworld.get_location(LocationName.sand_canyon_rob, self.player),
-                 lambda state: (state.has("Kine", self.player) or state.has("Coo", self.player))
+                 lambda state: (state.has("Kine", self.player) and state.has("Coo", self.player))
                                and state.has("Parasol", self.player)
                                and state.has("Stone", self.player)
                  )
@@ -270,8 +270,8 @@ class KDL3World(World):
             rom.write_to_file(rompath)
             self.rom_name = rom.name
 
-            patch = KDL3DeltaPatch(os.path.splitext(rompath)[0]+KDL3DeltaPatch.patch_file_ending, player=player,
-                                  player_name=world.player_name[player], patched_path=rompath)
+            patch = KDL3DeltaPatch(os.path.splitext(rompath)[0] + KDL3DeltaPatch.patch_file_ending, player=player,
+                                   player_name=world.player_name[player], patched_path=rompath)
             patch.write()
         except:
             raise
