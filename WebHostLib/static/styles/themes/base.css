@@ -40,6 +40,7 @@ html{
 #base-header #site-title img{
     height: 38px;
     margin-top: 4px;
+    width: 90%
 }
 
 #base-header a, #base-header-mobile-menu a{
@@ -87,7 +88,7 @@ html{
     height: 3rem;
 }
 
-@media all and (max-width: 1580px){
+@media all and (max-width: 1580px) and (orientation: portrait){
     html{
         padding-top: 260px;
         scroll-padding-top: 230px;

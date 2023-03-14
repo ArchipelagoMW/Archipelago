@@ -20,9 +20,8 @@ html{
     margin-left: auto;
     margin-right: auto;
     margin-top: 10px;
-    height: 140px;
-    z-index: 10;
-}
+    width: 80%
+    }
 
 #landing-header h4{
     color: #ffffff;
@@ -223,7 +222,7 @@ html{
 }
 
 #landing{
-    width: 700px;
+    width: 50%;
     min-height: 280px;
     margin-left: auto;
     margin-right: auto;
