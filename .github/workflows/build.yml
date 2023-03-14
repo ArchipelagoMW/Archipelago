@@ -5,12 +5,12 @@ name: Build
 on:
   push:
     paths:
-      - '.github/workflows/build.yaml'
+      - '.github/workflows/build.yml'
       - 'setup.py'
       - 'requirements.txt'
   pull_request:
     paths:
-      - '.github/workflows/build.yaml'
+      - '.github/workflows/build.yml'
       - 'setup.py'
       - 'requirements.txt'
   workflow_dispatch:

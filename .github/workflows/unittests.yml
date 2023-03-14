@@ -5,17 +5,23 @@ name: unittests
 
 on:
   push:
-    paths-ignore:
-      - 'docs/**'
-      - 'setup.py'
-      - '*.iss'
-      - '.gitignore'
+    paths:
+      - '**'
+      - '!docs/**'
+      - '!setup.py'
+      - '!*.iss'
+      - '!.gitignore'
+      - '!.github/workflows/**'
+      - '.github/workflows/unittests.yml'
   pull_request:
-    paths-ignore:
-      - 'docs/**'
-      - 'setup.py'
-      - '*.iss'
-      - '.gitignore'
+    paths:
+      - '**'
+      - '!docs/**'
+      - '!setup.py'
+      - '!*.iss'
+      - '!.gitignore'
+      - '!.github/workflows/**'
+      - '.github/workflows/unittests.yml'
 
 jobs:
   build:
