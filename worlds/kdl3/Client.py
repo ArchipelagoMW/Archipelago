@@ -134,7 +134,7 @@ class KDL3SNIClient(SNIClient):
             new_checks.append(0x770201)
         if boss_flag & 32 > 0 and 0x770202 not in ctx.checked_locations:
             new_checks.append(0x770202)
-        if boss_flag & 18 > 0 and 0x770203 not in ctx.checked_locations:
+        if boss_flag & 128 > 0 and 0x770203 not in ctx.checked_locations:
             new_checks.append(0x770203)
         if boss_flag & 512 > 0 and 0x770204 not in ctx.checked_locations:
             new_checks.append(0x770204)
