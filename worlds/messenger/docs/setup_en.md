@@ -31,12 +31,12 @@
 2. Navigate to `Options > Third Party Mod Options`
 3. Select `Reset Randomizer File Slots`
    * This will set up all of your save slots with new randomizer save files. You can have up to 3 randomizer files at a
-time, but must do this step again to start new runs afterwards.
+     time, but must do this step again to start new runs afterwards.
 4. Enter connection info using the relevant option buttons
    * **The game is limited to alphanumerical characters and `-` so when entering the host name replace `.` with ` ` and
-ensure that your player name when generating a settings file follows these constrictions**
+     ensure that your player name when generating a settings file follows these constrictions**
    * This defaults to `archipelago.gg` and does not need to be manually changed if connecting to a game hosted on the
-website.
+     website.
 5. Select the `Connect to Archipelago` button
 6. Navigate to save file selection
 7. Select a new valid randomizer save
