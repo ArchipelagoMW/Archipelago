@@ -1,31 +1,29 @@
 # The Messenger Randomizer Setup Guide
 
 ## Quick Links
-- [Main Page](../../../../games/The%20Messenger/info/en)
+- [Game Info](../../../../games/The%20Messenger/info/en)
 - [Settings Page](../../../../games/The%20Messenger/player-settings)
 - [Courier Github](https://github.com/Brokemia/Courier)
 - [The Messenger Randomizer Github](https://github.com/minous27/TheMessengerRandomizerMod)
 - [Jacksonbird8237's Item Tracker](https://github.com/Jacksonbird8237/TheMessengerItemTracker)
 - [PopTracker Pack](https://github.com/alwaysintreble/TheMessengerTrackPack)
 
-## Required Software
-
-- [The Messenger](https://store.steampowered.com/app/764790/The_Messenger/)
-  - Only Steam version is currently supported.
-- [Courier Mod Loader](https://github.com/Brokemia/Courier/releases)
-- [The Messenger Randomizer Mod](https://github.com/minous27/TheMessengerRandomizerMod/releases)
-
 ## Installation
 
 1. Download and install Courier Mod Loader using the instructions on the release page
+   * [Latest release is currently 0.7.1](https://github.com/Brokemia/Courier/releases)
 2. Download and install the randomizer mod
-     * Download the latest `TheMessengerRandomizer.zip`
-     * Extract the zip file to `TheMessenger/Mods/` of your game's install location
-     * Optionally, Backup your save game
+   1. Download the latest [TheMessengerRandomizer.zip](https://github.com/minous27/TheMessengerRandomizerMod/releases)
+   2. Extract the zip file to `TheMessenger/Mods/` of your game's install location
+   3. Optionally, Backup your save game
+     * On Windows
        1. Press `Windows Key + R` to open run
        2. Type `%appdata%` to access AppData
        3. Navigate to `AppData/locallow/SabotageStudios/The Messenger`
        4. Rename `SaveGame.txt` to any name of your choice
+     * On Linux
+       1. Navigate to `steamapps/compatdata/764790/pfx/drive_c/users/steamuser/AppData/LocalLow/Sabotage Studio/The Messenger`
+       2. Rename `SaveGame.txt` to any name of your choice
 
 ## Joining a MultiWorld Game
 
