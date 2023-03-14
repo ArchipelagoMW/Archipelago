@@ -392,6 +392,7 @@ class Context:
         self.games = {slot: slot_info.game for slot, slot_info in self.slot_info.items()}
         self.groups = {slot: slot_info.group_members for slot, slot_info in self.slot_info.items()
                        if slot_info.type == SlotType.group}
+        # TODO: around 0.4.2 or so, remove the if/else backwards compatibility check.
         self.allow_collect = {slot: slot_info.allow_collect if type(slot_info.allow_collect) is bool else True
                               for slot, slot_info in self.slot_info.items()}
 
