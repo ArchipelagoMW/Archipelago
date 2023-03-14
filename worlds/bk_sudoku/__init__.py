@@ -29,5 +29,5 @@ class Bk_SudokuWorld(World):
     location_name_to_id: Dict[str, int] = {}
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld):
         raise Exception("BK Sudoku cannot be used for generating worlds, the client can instead connect to any other world")

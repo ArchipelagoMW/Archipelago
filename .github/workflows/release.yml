@@ -8,7 +8,6 @@ on:
       - '*.*.*'
 
 env:
-  SNI_VERSION: v0.0.88
   ENEMIZER_VERSION: 7.1
   APPIMAGETOOL_VERSION: 13
 
@@ -36,14 +35,14 @@ jobs:
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       # - code below copied from build.yml -
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install base dependencies
         run: |
           sudo apt update
           sudo apt -y install build-essential p7zip xz-utils wget libglib2.0-0
           sudo apt -y install python3-gi libgirepository1.0-dev  # should pull dependencies for gi installation below
       - name: Get a recent python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
       - name: Install build-time dependencies
@@ -56,10 +55,6 @@ jobs:
           chmod a+rx appimagetool
       - name: Download run-time dependencies
         run: |
-          wget -nv https://github.com/alttpo/sni/releases/download/$SNI_VERSION/sni-$SNI_VERSION-manylinux2014-amd64.tar.xz
-          tar xf sni-*.tar.xz
-          rm sni-*.tar.xz
-          mv sni-* SNI
           wget -nv https://github.com/Ijwu/Enemizer/releases/download/$ENEMIZER_VERSION/ubuntu.16.04-x64.7z
           7za x -oEnemizerCLI/ ubuntu.16.04-x64.7z
       - name: Build

@@ -12,7 +12,7 @@ import io
 import collections
 import importlib
 import logging
-from typing import BinaryIO, Coroutine, Optional, Set
+from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
 
 from yaml import load, load_all, dump, SafeLoader
 
@@ -195,11 +195,11 @@ def get_public_ipv4() -> str:
     ip = socket.gethostbyname(socket.gethostname())
     ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen("https://checkip.amazonaws.com/", context=ctx).read().decode("utf8").strip()
+        ip = urllib.request.urlopen("https://checkip.amazonaws.com/", context=ctx, timeout=10).read().decode("utf8").strip()
     except Exception as e:
         # noinspection PyBroadException
         try:
-            ip = urllib.request.urlopen("https://v4.ident.me", context=ctx).read().decode("utf8").strip()
+            ip = urllib.request.urlopen("https://v4.ident.me", context=ctx, timeout=10).read().decode("utf8").strip()
         except Exception:
             logging.exception(e)
             pass  # we could be offline, in a local game, so no point in erroring out
@@ -213,7 +213,7 @@ def get_public_ipv6() -> str:
     ip = socket.gethostbyname(socket.gethostname())
     ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen("https://v6.ident.me", context=ctx).read().decode("utf8").strip()
+        ip = urllib.request.urlopen("https://v6.ident.me", context=ctx, timeout=10).read().decode("utf8").strip()
     except Exception as e:
         logging.exception(e)
         pass  # we could be offline, in a local game, or ipv6 may not be available
@@ -310,6 +310,14 @@ def get_default_options() -> OptionsType:
         "lufia2ac_options": {
             "rom_file": "Lufia II - Rise of the Sinistrals (USA).sfc",
         },
+        "tloz_options": {
+            "rom_file": "Legend of Zelda, The (U) (PRG0) [!].nes",
+            "rom_start": True,
+            "display_msgs": True,
+        },
+        "wargroove_options": {
+            "root_directory": "C:/Program Files (x86)/Steam/steamapps/common/Wargroove"
+        }
     }
     return options
 
@@ -662,7 +670,10 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
 
 def title_sorted(data: typing.Sequence, key=None, ignore: typing.Set = frozenset(("a", "the"))):
     """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
-    def sorter(element: str) -> str:
+    def sorter(element: Union[str, Dict[str, Any]]) -> str:
+        if (not isinstance(element, str)):
+            element = element["title"]
+
         parts = element.split(maxsplit=1)
         if parts[0].lower() in ignore:
             return parts[1].lower()
