@@ -876,7 +876,9 @@ class ProgressionBalancing(SpecialRange):
 
 
 class AllowCollect(DefaultOnToggle):
-    """Controls whether items are collected from the slot when a player does a !collect or not."""
+    """Controls whether items are collected from the slot when a player does a !collect or not.
+    The impact for the collecting player is that the collector might not get all of their items, until
+     the player(s) that has disallowed collection actually completes or releases their location checks."""
     display_name = "Allow Collect"
 
 
