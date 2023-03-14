@@ -753,8 +753,9 @@ location_data = [
     LocationData("Celadon Game Corner", "Hidden Item at End of Horizontal Machine Row (Coin Case)", "20 Coins", rom_addresses["Hidden_Item_Game_Corner_10"], Hidden(63), inclusion=hidden_items),
     LocationData("Celadon Game Corner", "Hidden Item in Front of Horizontal Machine Row (Coin Case)", "100 Coins", rom_addresses["Hidden_Item_Game_Corner_11"], Hidden(64), inclusion=hidden_items),
 
-    *[LocationData("Pokedex", mon, None, rom_addresses["Dexsanity_Items"] + i, DexSanityFlag(i),
-                   type="Item", inclusion=dexsanity) for (mon, i) in zip(pokemon_data.keys(), range(0, 152))],
+    *[LocationData("Pokedex", mon, ball, rom_addresses["Dexsanity_Items"] + i, DexSanityFlag(i), type="Item",
+                   inclusion=dexsanity) for (mon, i, ball) in zip(pokemon_data.keys(), range(0, 152),
+                                                                  ["Poke Ball", "Great Ball", "Ultra Ball"]* 51)],
 
     LocationData("Indigo Plateau", "Become Champion", "Become Champion", event=True),
     LocationData("Pokemon Tower 7F", "Fuji Saved", "Fuji Saved", event=True),
