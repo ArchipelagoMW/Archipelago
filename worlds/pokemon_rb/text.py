@@ -1,6 +1,7 @@
 special_chars = {
     "PKMN": 0x4A,
     "LINE": 0x4F,
+    "PARA": 0x51,
     "CONT": 0x55,
     "DONE": 0x57,
     "PROMPT": 0x58,

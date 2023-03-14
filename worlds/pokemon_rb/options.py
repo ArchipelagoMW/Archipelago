@@ -234,6 +234,10 @@ class OaksAidRt15(Range):
     default = 30
 
 
+class Stonesanity(Toggle):
+    pass
+
+
 class ExpModifier(SpecialRange):
     """Modifier for EXP gained. When specifying a number, exp is multiplied by this amount and divided by 16."""
     display_name = "Exp Modifier"
@@ -669,6 +673,7 @@ pokemon_rb_options = {
     "oaks_aide_rt_2": OaksAidRt2,
     "oaks_aide_rt_11": OaksAidRt11,
     "oaks_aide_rt_15": OaksAidRt15,
+    "stonesanity": Stonesanity,
     "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
     "free_fly_location": FreeFlyLocation,
     "randomize_rock_tunnel": RandomizeRockTunnel,

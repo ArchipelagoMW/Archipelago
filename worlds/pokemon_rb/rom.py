@@ -718,6 +718,9 @@ def generate_output(self, output_directory: str):
         data[rom_addresses["Guard_Drink_List"]] = 0x54
         data[rom_addresses["Guard_Drink_List"] + 1] = 0
         data[rom_addresses["Guard_Drink_List"] + 2] = 0
+        write_bytes(data,encode_text("<LINE>Gee, I have the<CONT>worst caffeine<CONT>headache though."
+                                     "<PARA>Oh wait there,<LINE>the road's closed.<DONE>"),
+                    rom_addresses["Text_Saffron_Gate"])
 
     data[rom_addresses["Fossils_Needed_For_Second_Item"]] = (
         self.multiworld.second_fossil_check_condition[self.player].value)
@@ -844,7 +847,7 @@ def generate_output(self, output_directory: str):
 
     data[rom_addresses["Option_Always_Half_STAB"]] = int(not self.multiworld.same_type_attack_bonus[self.player].value)
 
-    if self.multiworld.better_shops[self.player].value:
+    if self.multiworld.better_shops[self.player]:
         inventory = ["Poke Ball", "Great Ball", "Ultra Ball"]
         if self.multiworld.better_shops[self.player].value == 2:
             inventory.append("Master Ball")
@@ -856,6 +859,9 @@ def generate_output(self, output_directory: str):
         shop_data.append(0xFF)
         for shop in range(1, 10):
             write_bytes(data, shop_data, rom_addresses[f"Shop{shop}"])
+    if self.multiworld.stonesanity[self.player]:
+        write_bytes(data, bytearray([0xFE, 1, item_table["Poke Doll"].id]), rom_addresses[f"Shop_Stones"])
+
     price = str(self.multiworld.master_ball_price[self.player].value).zfill(6)
     price = bytearray([int(price[:2], 16), int(price[2:4], 16), int(price[4:], 16)])
     write_bytes(data, price, rom_addresses["Price_Master_Ball"])  # Money values in Red and Blue are weird
