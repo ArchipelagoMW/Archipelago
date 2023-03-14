@@ -260,7 +260,7 @@ event_rules: dict[str, Optional[Callable[[Ctx], bool]]] = {
     "Luminite Hamaxe": lambda x: x.has_all({"Ancient Manipulator", "Fragment", "Luminite Bar"}),
     "Terrarian": lambda x: x.can_reach("Moon Lord"),
     "Meowmere": lambda x: x.can_reach("Moon Lord"),
-    "Star Wrath": lambda x: 0 / 0,# x.can_reach("Moon Lord"),
+    "Star Wrath": lambda x: x.can_reach("Moon Lord"),
 }
 
 calamity_event_rules: dict[str, Optional[Callable[[Ctx], bool]]] = {
