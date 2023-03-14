@@ -8,7 +8,7 @@ import Utils
 from .Data import get_extracted_data
 from .Items import reverse_offset_item_value
 from .Options import get_option_value, RandomizeWildPokemon, RandomizeStarters, RandomizeTrainerParties, TmCompatibility, HmCompatibility, LevelUpMoves
-from .Pokemon import get_random_species, get_pokemon_species, get_species_by_id, get_species_by_name, get_random_damaging_move, get_random_move
+from .Pokemon import get_random_species, get_species_by_id, get_species_by_name, get_random_damaging_move, get_random_move, species_data
 
 
 class PokemonEmeraldDeltaPatch(APDeltaPatch):
@@ -145,9 +145,11 @@ def _set_bytes_little_endian(byte_array, address, size, value):
 # TODO: Account for access to pokemon who can learn required HMs
 def _randomize_encounter_tables(multiworld, player, rom):
     extracted_data = get_extracted_data()
-    random = multiworld.per_slot_randoms[player]
 
-    for map_data in extracted_data["maps"].values():
+    # Sort alphabetically by map key for reproducibility
+    maps_json = [m[1] for m in sorted(extracted_data["maps"].items(), key=lambda m: m[0])]
+
+    for map_data in maps_json:
         land_encounters = map_data["land_encounters"]
         water_encounters = map_data["water_encounters"]
         fishing_encounters = map_data["fishing_encounters"]
@@ -321,7 +323,7 @@ def _replace_learnset(learnset_address: int, new_learnset: List[int], rom: bytea
 def _modify_species_info(multiworld: MultiWorld, player: int, rom: bytearray):
     min_catch_rate = min(get_option_value(multiworld, player, "min_catch_rate"), 255)
 
-    for species in get_pokemon_species().values():
+    for species in species_data:
         species_info_address = get_extracted_data()["species"][species.id]["rom_address"]
         if (species.catch_rate < min_catch_rate):
             _set_bytes_little_endian(rom, species_info_address + 8, 1, min_catch_rate)
@@ -336,7 +338,7 @@ def _modify_tmhm_compatibility(multiworld: MultiWorld, player: int, rom: bytearr
     tm_compatibility = get_option_value(multiworld, player, "tm_compatibility")
     hm_compatibility = get_option_value(multiworld, player, "hm_compatibility")
 
-    for species in get_pokemon_species().values():
+    for species in species_data:
         compatibility_array = [False if bit == "0" else True for bit in list(species.tm_hm_compatibility)]
 
         tm_compatibility_array = compatibility_array[0:50]
