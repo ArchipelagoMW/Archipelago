@@ -111,7 +111,7 @@ html{
     z-index: 1
 }
 
-@media only screen and (max-width: 1580px) and (orientation: portrait){
+@media all and (max-width: 1580px) and (orientation: portrait){
     html{
         padding-top: 260px;
         scroll-padding-top: 230px;
@@ -126,7 +126,6 @@ html{
         height: calc(38px * 2);
         margin-top: 30px;
         margin-left: 20px;
-        width: 80%;
     }
 
     #base-header-right{
