@@ -187,6 +187,8 @@ class KDL3World(World):
                  lambda state: (state.has("Kine", self.player) and state.has("Coo", self.player))
                                and state.has("Parasol", self.player)
                                and state.has("Stone", self.player)
+                               and (state.has("Clean", self.player) or state.has("Spark", self.player))
+                               and (state.has("Ice", self.player) or state.has("Needle", self.player))
                  )
         set_rule(self.multiworld.get_entrance("To Level 4", self.player),
                  lambda state: state.can_reach(LocationName.sand_canyon_6, "Location", self.player))
@@ -276,7 +278,7 @@ class KDL3World(World):
             patch = KDL3DeltaPatch(os.path.splitext(rompath)[0] + KDL3DeltaPatch.patch_file_ending, player=player,
                                    player_name=world.player_name[player], patched_path=rompath)
             patch.write()
-        except:
+        except Exception:
             raise
         finally:
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
