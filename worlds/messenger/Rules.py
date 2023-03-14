@@ -123,6 +123,6 @@ def set_self_locking_items(world: MessengerWorld, player: int) -> None:
     allow_self_locking_items(multiworld.get_location("Key of Courage", player), "Demon King Crown")
 
     # add these locations when seals aren't shuffled
-    if not world.o.shuffle_seals:
+    if not world.options.shuffle_seals:
         allow_self_locking_items(multiworld.get_region("Cloud Ruins", player), "Ruxxtin's Amulet")
         allow_self_locking_items(multiworld.get_region("Forlorn Temple", player), *PHOBEKINS)
