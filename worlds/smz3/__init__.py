@@ -509,7 +509,7 @@ class SMZ3World(World):
             return self.smz3DungeonItems
         else:
             return []
-        
+
     def post_fill(self):
         # some small or big keys (those always_allow) can be unreachable in-game
         # while logic still collects some of them (probably to simulate the player collecting pot keys in the logic), some others don't
@@ -524,7 +524,7 @@ class SMZ3World(World):
                     loc.item.classification = ItemClassification.filler
                     loc.item.item.Progression = False
                     loc.item.location.event = False
-                    self.unreachable.append(loc)  
+                    self.unreachable.append(loc)
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(self.junkItemsNames)
