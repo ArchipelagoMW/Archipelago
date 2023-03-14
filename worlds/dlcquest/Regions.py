@@ -1,3 +1,4 @@
+import math
 from BaseClasses import MultiWorld, Region, Location, Entrance, ItemClassification
 from .Locations import DLCquestLocation, location_table
 from .Rules import create_event
@@ -33,6 +34,12 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Regmoveright.exits =[Entrance(player, "Moving", Regmoveright)]
         Regmoveright.locations += [DLCquestLocation(player, loc_name, location_table[loc_name],Regmoveright) for loc_name in Locmoveright_name]
         add_coin_dlcquest(Regmoveright, 4, player)
+        if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
+            coin_bundle_needed = math.floor(825 / World_Options[Options.CoinSanityRange])
+            for i in range(coin_bundle_needed):
+                item_coin = "Coin Bundle Basic"
+                item_coin_loc = item_coin + str(i + 1)
+                Regmoveright.locations +=[DLCquestLocation(player, item_coin_loc, location_table[item_coin_loc], Regmoveright)]
         world.regions.append(Regmoveright)
 
 
@@ -128,6 +135,12 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Regfreemiumstart.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regfreemiumstart) for loc_name in
             Locfreemiumstart_name]
         add_coin_freemium(Regfreemiumstart, 50, player)
+        if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
+            coin_bundle_needed = math.floor(889 / Options.CoinSanityRange.value)
+            for i in range(coin_bundle_needed):
+                item_coin_freemium = "Coin Bundle Freemium"
+                item_coin_freemium_loc = item_coin_freemium + str(i + 1)
+                Regmoveright.locations +=[DLCquestLocation(player, item_coin_freemium_loc, location_table[item_coin_freemium_loc], Regfreemiumstart)]
         world.regions.append(Regfreemiumstart)
 
 

@@ -1,5 +1,5 @@
 from typing import Union, Dict, runtime_checkable, Protocol
-from Options import Option, DeathLink, Choice, Toggle
+from Options import Option, DeathLink, Choice, Toggle, SpecialRange
 from dataclasses import dataclass
 
 
@@ -43,6 +43,14 @@ class CoinSanity(Choice):
     option_coin = 2
     default = 0
 
+class CoinSanityRange(SpecialRange):
+    """This is the amount of coin in a coin bundle"""
+    internal_name = "coinbundlequantity"
+    display_name = "Coin Bundle Quantity"
+    range_start = 1
+    range_end = 100
+    default = 20
+
 class EndingChoice(Choice):
     """This is for the ending type of the basic game"""
     internal_name = "ending_choice"
@@ -66,6 +74,7 @@ DLCquest_options: Dict[str, type(Option)] = {
     for option in [
     FalseDoubleJump,
     CoinSanity,
+    CoinSanityRange,
     TimeIsMoney,
     EndingChoice,
     Campaign,

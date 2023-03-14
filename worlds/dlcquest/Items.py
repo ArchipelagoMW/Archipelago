@@ -1,5 +1,6 @@
 import csv
 import enum
+import math
 from typing import Protocol, Union, Dict, List
 from BaseClasses import Item, ItemClassification
 from . import Options, data
@@ -17,6 +18,7 @@ class Group(enum.Enum):
     DLCQuest = enum.auto()
     Freemium = enum.auto()
     Item = enum.auto()
+    Coin = enum.auto()
 
 
 
@@ -77,10 +79,26 @@ def create_items(world, World_Options: Options.DLCQuestOptions):
     created_items = []
     if World_Options[Options.Campaign] == Options.Campaign.option_basic or World_Options[Options.Campaign] == Options.Campaign.option_both:
         for item in items_by_group[Group.DLCQuest]:
-            created_items.append(world.create_item(item))
+            if item.has_any_group(Group.DLC):
+                created_items.append(world.create_item(item))
+        if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
+            coin_bundle_needed = math.floor(825 / World_Options[Options.CoinSanityRange])
+            for item in items_by_group[Group.DLCQuest]:
+                if item.has_any_group(Group.Coin):
+                    for i in range(coin_bundle_needed):
+                        created_items.append(world.create_item(item))
     if World_Options[Options.Campaign] == Options.Campaign.option_live_freemium_or_die or World_Options[Options.Campaign] == Options.Campaign.option_both:
         for item in items_by_group[Group.Freemium]:
-            created_items.append(world.create_item(item))
+            if item.has_any_group(Group.DLC) or item.has_any_group(Group.Item):
+                created_items.append(world.create_item(item))
+        if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
+            coin_bundle_needed = math.floor(889 / Options.CoinSanityRange.value)
+            for item in items_by_group[Group.Freemium]:
+                if item.has_any_group(Group.Coin):
+                    for i in range(coin_bundle_needed):
+                        created_items.append(world.create_item(item))
+
+
     return created_items
 
 
