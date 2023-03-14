@@ -13,10 +13,26 @@ if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial
 
 
+class WorldVersionIncompatible(Exception):
+    pass
+
+
 class AutoWorldRegister(type):
     world_types: Dict[str, Type[World]] = {}
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
+        if dct.get("required_archipelago_version", None):
+            from Utils import version_tuple
+            if dct["required_archipelago_version"] > version_tuple:
+                raise WorldVersionIncompatible(
+                    f"World {name} for game {dct.get('game', None)} "
+                    f"requires Archipelago {dct['required_archipelago_version']}, but this is {version_tuple}")
+        if dct.get("highest_archipelago_version", None):
+            from Utils import version_tuple
+            if version_tuple > dct["highest_archipelago_version"]:
+                raise WorldVersionIncompatible(
+                    f"World {name} for {dct.get('game', None)} "
+                    f"supports Archipelago up to {dct['required_archipelago_version']}, but this is {version_tuple}")
         if "web" in dct:
             assert isinstance(dct["web"], WebWorld), "WebWorld has to be instantiated."
         # filter out any events
@@ -168,6 +184,14 @@ class World(metaclass=AutoWorldRegister):
 
     required_server_version: Tuple[int, int, int] = (0, 2, 4)
     """update this if the resulting multidata breaks forward-compatibility of the server"""
+
+    required_archipelago_version: ClassVar[Optional[Tuple[int, int, int]]] = None
+    """Optional. Enter the minimum required Archipelago version that can use this world. 
+    Typically for version checking when distributing as apworld."""
+
+    highest_archipelago_version: ClassVar[Optional[Tuple[int, int, int]]] = None
+    """Optional. Enter the highest Archipelago version that can use this world. 
+    Typically for version checking when distributing as apworld."""
 
     hint_blacklist: ClassVar[FrozenSet[str]] = frozenset()
     """any names that should not be hintable"""
