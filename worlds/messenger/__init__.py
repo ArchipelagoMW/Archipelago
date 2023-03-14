@@ -44,7 +44,7 @@ class MessengerWorld(World):
     }
 
     options_dataclass = MessengerOptions
-    o: MessengerOptions
+    options: MessengerOptions
 
     base_offset = 0xADD_000
     item_name_to_id = {item: item_id
@@ -60,10 +60,10 @@ class MessengerWorld(World):
     required_seals: Optional[int] = None
 
     def generate_early(self) -> None:
-        if self.o.goal == Goal.option_power_seal_hunt:
-            self.o.shuffle_seals.value = PowerSeals.option_true
-            self.total_seals = self.o.total_seals.value
-            self.required_seals = int(self.o.percent_seals_required.value / 100 * self.total_seals)
+        if self.options.goal == Goal.option_power_seal_hunt:
+            self.options.shuffle_seals.value = PowerSeals.option_true
+            self.total_seals = self.options.total_seals.value
+            self.required_seals = int(self.options.percent_seals_required.value / 100 * self.total_seals)
 
     def create_regions(self) -> None:
         for region in [MessengerRegion(reg_name, self) for reg_name in REGIONS]:
@@ -72,14 +72,14 @@ class MessengerWorld(World):
 
     def create_items(self) -> None:
         itempool: List[MessengerItem] = []
-        if self.o.goal == Goal.option_power_seal_hunt:
+        if self.options.goal == Goal.option_power_seal_hunt:
             seals = [self.create_item("Power Seal") for _ in range(self.total_seals)]
             for i in range(self.required_seals):
                 seals[i].classification = ItemClassification.progression_skip_balancing
             itempool += seals
         else:
             notes = self.multiworld.random.sample(NOTES, k=len(NOTES))
-            precollected_notes_amount = NotesNeeded.range_end - self.o.notes_needed
+            precollected_notes_amount = NotesNeeded.range_end - self.options.notes_needed
             if precollected_notes_amount:
                 for note in notes[:precollected_notes_amount]:
                     self.multiworld.push_precollected(self.create_item(note))
@@ -110,12 +110,12 @@ class MessengerWorld(World):
                 locations[loc.address] = [loc.item.name, self.multiworld.player_name[loc.item.player]]
 
         return {
-            "deathlink": self.o.death_link.value,
-            "goal": self.o.goal.current_key,
-            "music_box": self.o.music_box.value,
+            "deathlink": self.options.death_link.value,
+            "goal": self.options.goal.current_key,
+            "music_box": self.options.music_box.value,
             "required_seals": self.required_seals,
             "locations": locations,
-            "settings": {"Difficulty": "Basic" if not self.o.shuffle_seals else "Advanced"}
+            "settings": {"Difficulty": "Basic" if not self.options.shuffle_seals else "Advanced"}
         }
 
     def get_filler_item_name(self) -> str:

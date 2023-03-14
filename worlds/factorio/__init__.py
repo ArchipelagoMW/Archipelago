@@ -73,9 +73,9 @@ class Factorio(World):
     generate_output = generate_mod
 
     def generate_early(self) -> None:
-        self.o.max_tech_cost = max(self.o.max_tech_cost, self.o.min_tech_cost)
-        self.tech_mix = self.o.tech_cost_mix
-        self.skip_silo = self.o.silo.value == Silo.option_spawn
+        self.options.max_tech_cost = max(self.options.max_tech_cost, self.options.min_tech_cost)
+        self.tech_mix = self.options.tech_cost_mix
+        self.skip_silo = self.options.silo.value == Silo.option_spawn
 
     def create_regions(self):
         player = self.player

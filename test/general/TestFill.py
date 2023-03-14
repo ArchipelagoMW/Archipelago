@@ -29,8 +29,8 @@ def generate_multi_world(players: int = 1) -> MultiWorld:
             else:
                 setattr(multi_world, option_key, {player_id: option.from_any(getattr(option, "default"))})
         # TODO - remove this loop once all worlds use options dataclasses
-        world.o = world.options_dataclass(**{option_key: getattr(multi_world, option_key)[player_id]
-                                             for option_key in world.options_dataclass.type_hints})
+        world.options = world.options_dataclass(**{option_key: getattr(multi_world, option_key)[player_id]
+                                                   for option_key in world.options_dataclass.type_hints})
 
     multi_world.set_seed(0)
 
@@ -197,7 +197,7 @@ class TestFillRestrictive(unittest.TestCase):
         items = player1.prog_items
         locations = player1.locations
 
-        multi_world.worlds[player1.id].o.accessibility = Accessibility.from_any(Accessibility.option_minimal)
+        multi_world.worlds[player1.id].options.accessibility = Accessibility.from_any(Accessibility.option_minimal)
         multi_world.completion_condition[player1.id] = lambda state: state.has(
             items[1].name, player1.id)
         set_rule(locations[1], lambda state: state.has(

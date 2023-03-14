@@ -30,7 +30,7 @@ class RiskOfRainWorld(World):
     """
     game = "Risk of Rain 2"
     options_dataclass = ROR2Options
-    o: ROR2Options
+    options: ROR2Options
     topology_present = False
 
     item_name_to_id = item_table
@@ -43,44 +43,44 @@ class RiskOfRainWorld(World):
 
     def generate_early(self) -> None:
         # figure out how many revivals should exist in the pool
-        if self.o.goal == "classic":
-            total_locations = self.o.total_locations.value
+        if self.options.goal == "classic":
+            total_locations = self.options.total_locations.value
         else:
             total_locations = len(
                 orderedstage_location.get_locations(
-                    chests=self.o.chests_per_stage.value,
-                    shrines=self.o.shrines_per_stage.value,
-                    scavengers=self.o.scavengers_per_stage.value,
-                    scanners=self.o.scanner_per_stage.value,
-                    altars=self.o.altars_per_stage.value,
-                    dlc_sotv=self.o.dlc_sotv.value
+                    chests=self.options.chests_per_stage.value,
+                    shrines=self.options.shrines_per_stage.value,
+                    scavengers=self.options.scavengers_per_stage.value,
+                    scanners=self.options.scanner_per_stage.value,
+                    altars=self.options.altars_per_stage.value,
+                    dlc_sotv=self.options.dlc_sotv.value
                 )
             )
-        self.total_revivals = int(self.o.total_revivals.value / 100 *
+        self.total_revivals = int(self.options.total_revivals.value / 100 *
                                   total_locations)
-        if self.o.start_with_revive:
+        if self.options.start_with_revive:
             self.total_revivals -= 1
 
     def create_items(self) -> None:
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend
-        if self.o.start_with_revive:
+        if self.options.start_with_revive:
             self.multiworld.push_precollected(self.multiworld.create_item("Dio's Best Friend", self.player))
 
         environments_pool = {}
         # only mess with the environments if they are set as items
-        if self.o.goal == "explore":
+        if self.options.goal == "explore":
 
             # figure out all available ordered stages for each tier
             environment_available_orderedstages_table = environment_vanilla_orderedstages_table
-            if self.o.dlc_sotv:
+            if self.options.dlc_sotv:
                 environment_available_orderedstages_table = collapse_dict_list_vertical(environment_available_orderedstages_table, environment_sotv_orderedstages_table)
 
             environments_pool = shift_by_offset(environment_vanilla_table, environment_offest)
 
-            if self.o.dlc_sotv:
+            if self.options.dlc_sotv:
                 environment_offset_table = shift_by_offset(environment_sotv_table, environment_offest)
                 environments_pool = {**environments_pool, **environment_offset_table}
-            environments_to_precollect = 5 if self.o.begin_with_loop else 1
+            environments_to_precollect = 5 if self.options.begin_with_loop else 1
             # percollect environments for each stage (or just stage 1)
             for i in range(environments_to_precollect):
                 unlock = self.multiworld.random.choices(list(environment_available_orderedstages_table[i].keys()), k=1)
@@ -88,9 +88,9 @@ class RiskOfRainWorld(World):
                 environments_pool.pop(unlock[0])
 
         # if presets are enabled generate junk_pool from the selected preset
-        pool_option = self.o.item_weights.value
+        pool_option = self.options.item_weights.value
         junk_pool: Dict[str, int] = {}
-        if self.o.item_pool_presets:
+        if self.options.item_pool_presets:
             # generate chaos weights if the preset is chosen
             if pool_option == ItemWeights.option_chaos:
                 for name, max_value in item_pool_weights[pool_option].items():
@@ -99,24 +99,24 @@ class RiskOfRainWorld(World):
                 junk_pool = item_pool_weights[pool_option].copy()
         else:  # generate junk pool from user created presets
             junk_pool = {
-                "Item Scrap, Green": self.o.green_scrap.value,
-                "Item Scrap, Red": self.o.red_scrap.value,
-                "Item Scrap, Yellow": self.o.yellow_scrap.value,
-                "Item Scrap, White": self.o.white_scrap.value,
-                "Common Item": self.o.common_item.value,
-                "Uncommon Item": self.o.uncommon_item.value,
-                "Legendary Item": self.o.legendary_item.value,
-                "Boss Item": self.o.boss_item.value,
-                "Lunar Item": self.o.lunar_item.value,
-                "Void Item": self.o.void_item.value,
-                "Equipment": self.o.equipment.value
+                "Item Scrap, Green": self.options.green_scrap.value,
+                "Item Scrap, Red": self.options.red_scrap.value,
+                "Item Scrap, Yellow": self.options.yellow_scrap.value,
+                "Item Scrap, White": self.options.white_scrap.value,
+                "Common Item": self.options.common_item.value,
+                "Uncommon Item": self.options.uncommon_item.value,
+                "Legendary Item": self.options.legendary_item.value,
+                "Boss Item": self.options.boss_item.value,
+                "Lunar Item": self.options.lunar_item.value,
+                "Void Item": self.options.void_item.value,
+                "Equipment": self.options.equipment.value
             }
 
         # remove lunar items from the pool if they're disabled in the yaml unless lunartic is rolled
-        if not self.o.enable_lunar or pool_option == ItemWeights.option_lunartic:
+        if not self.options.enable_lunar or pool_option == ItemWeights.option_lunartic:
             junk_pool.pop("Lunar Item")
         # remove void items from the pool
-        if not self.o.dlc_sotv or pool_option == ItemWeights.option_void:
+        if not self.options.dlc_sotv or pool_option == ItemWeights.option_void:
             junk_pool.pop("Void Item")
 
         # Generate item pool
@@ -129,19 +129,19 @@ class RiskOfRainWorld(World):
 
         # precollected environments are popped from the pool so counting like this is valid
         nonjunk_item_count = self.total_revivals + len(environments_pool)
-        if self.o.goal == "classic":
+        if self.options.goal == "classic":
             # classic mode
-            total_locations = self.o.total_locations.value
+            total_locations = self.options.total_locations.value
         else:
             # explore mode
             total_locations = len(
                 orderedstage_location.get_locations(
-                    chests=self.o.chests_per_stage.value,
-                    shrines=self.o.shrines_per_stage.value,
-                    scavengers=self.o.scavengers_per_stage.value,
-                    scanners=self.o.scanner_per_stage.value,
-                    altars=self.o.altars_per_stage.value,
-                    dlc_sotv=self.o.dlc_sotv.value
+                    chests=self.options.chests_per_stage.value,
+                    shrines=self.options.shrines_per_stage.value,
+                    scavengers=self.options.scavengers_per_stage.value,
+                    scanners=self.options.scanner_per_stage.value,
+                    altars=self.options.altars_per_stage.value,
+                    dlc_sotv=self.options.dlc_sotv.value
                 )
             )
         junk_item_count = total_locations - nonjunk_item_count
@@ -158,7 +158,7 @@ class RiskOfRainWorld(World):
 
     def create_regions(self) -> None:
 
-        if self.o.goal == "classic":
+        if self.options.goal == "classic":
             # classic mode
             menu = create_region(self.multiworld, self.player, "Menu")
             self.multiworld.regions.append(menu)
@@ -167,7 +167,7 @@ class RiskOfRainWorld(World):
             victory_region = create_region(self.multiworld, self.player, "Victory")
             self.multiworld.regions.append(victory_region)
             petrichor = create_region(self.multiworld, self.player, "Petrichor V",
-                                      get_classic_item_pickups(self.o.total_locations.value))
+                                      get_classic_item_pickups(self.options.total_locations.value))
             self.multiworld.regions.append(petrichor)
 
             # classic mode can get to victory from the beginning of the game
@@ -185,7 +185,7 @@ class RiskOfRainWorld(World):
         create_events(self.multiworld, self.player)
 
     def fill_slot_data(self):
-        options_dict = self.o.as_dict("item_pickup_step", "shrine_use_step", "goal", "total_locations",
+        options_dict = self.options.as_dict("item_pickup_step", "shrine_use_step", "goal", "total_locations",
                                       "chests_per_stage", "shrines_per_stage", "scavengers_per_stage",
                                       "scanner_per_stage", "altars_per_stage", "total_revivals", "start_with_revive",
                                       "final_stage_death", "death_link")
@@ -225,12 +225,12 @@ class RiskOfRainWorld(World):
 
 
 def create_events(world: MultiWorld, player: int) -> None:
-    total_locations = world.total_locations[player].value
+    total_locations = world.worlds[player].options.total_locations.value
     num_of_events = total_locations // 25
     if total_locations / 25 == num_of_events:
         num_of_events -= 1
     world_region = world.get_region("Petrichor V", player)
-    if world.goal[player] == "classic":
+    if world.worlds[player].options.goal == "classic":
         # only setup Pickups when using classic_mode
         for i in range(num_of_events):
             event_loc = RiskOfRainLocation(player, f"Pickup{(i + 1) * 25}", None, world_region)
@@ -238,7 +238,7 @@ def create_events(world: MultiWorld, player: int) -> None:
             event_loc.access_rule = \
                 lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", "Location", player)
             world_region.locations.append(event_loc)
-    elif world.goal[player] == "explore":
+    elif world.worlds[player].options.goal == "explore":
         for n in range(1, 6):
 
             event_region = world.get_region(f"OrderedStage_{n}", player)

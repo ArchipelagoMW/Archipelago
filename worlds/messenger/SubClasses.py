@@ -23,10 +23,10 @@ class MessengerRegion(Region):
     def add_locations(self, name_to_id: Dict[str, int]) -> None:
         for loc in REGIONS[self.name]:
             self.locations.append(MessengerLocation(loc, self, name_to_id.get(loc, None)))
-        if self.name == "The Shop" and self.world.o.goal > Goal.option_open_music_box:
+        if self.name == "The Shop" and self.world.options.goal > Goal.option_open_music_box:
             self.locations.append(MessengerLocation("Shop Chest", self, name_to_id.get("Shop Chest", None)))
         # putting some dumb special case for searing crags and ToT so i can split them into 2 regions
-        if self.world.o.shuffle_seals and self.name not in {"Searing Crags", "Tower HQ"}:
+        if self.world.options.shuffle_seals and self.name not in {"Searing Crags", "Tower HQ"}:
             for seal_loc in SEALS:
                 if seal_loc.startswith(self.name.split(" ")[0]):
                     self.locations.append(MessengerLocation(seal_loc, self, name_to_id.get(seal_loc, None)))

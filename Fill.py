@@ -56,7 +56,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             spot_to_fill: typing.Optional[Location] = None
 
             # if minimal accessibility, only check whether location is reachable if game not beatable
-            if world.worlds[item_to_place.player].o.accessibility == Accessibility.option_minimal:
+            if world.worlds[item_to_place.player].options.accessibility == Accessibility.option_minimal:
                 perform_access_check = not world.has_beaten_game(maximum_exploration_state,
                                                                  item_to_place.player) \
                     if single_player_placement else not has_beaten_game
@@ -221,7 +221,7 @@ def fast_fill(world: MultiWorld,
 
 def accessibility_corrections(world: MultiWorld, state: CollectionState, locations, pool=[]):
     maximum_exploration_state = sweep_from_pool(state, pool)
-    minimal_players = {player for player in world.player_ids if world.worlds[player].o.accessibility == "minimal"}
+    minimal_players = {player for player in world.player_ids if world.worlds[player].options.accessibility == "minimal"}
     unreachable_locations = [location for location in world.get_locations() if location.player in minimal_players and
                              not location.can_reach(maximum_exploration_state)]
     for location in unreachable_locations:
@@ -244,7 +244,7 @@ def inaccessible_location_rules(world: MultiWorld, state: CollectionState, locat
     unreachable_locations = [location for location in locations if not location.can_reach(maximum_exploration_state)]
     if unreachable_locations:
         def forbid_important_item_rule(item: Item):
-            return not ((item.classification & 0b0011) and world.worlds[item.player].o.accessibility != 'minimal')
+            return not ((item.classification & 0b0011) and world.worlds[item.player].options.accessibility != 'minimal')
 
         for location in unreachable_locations:
             add_item_rule(location, forbid_important_item_rule)
@@ -487,9 +487,9 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
     # If other players are below the threshold value, swap progression in this sphere into earlier spheres,
     #   which gives more locations available by this sphere.
     balanceable_players: typing.Dict[int, float] = {
-        player: world.worlds[player].o.progression_balancing / 100
+        player: world.worlds[player].options.progression_balancing / 100
         for player in world.player_ids
-        if world.worlds[player].o.progression_balancing > 0
+        if world.worlds[player].options.progression_balancing > 0
     }
     if not balanceable_players:
         logging.info('Skipping multiworld progression balancing.')

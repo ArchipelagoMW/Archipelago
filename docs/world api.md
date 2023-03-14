@@ -336,17 +336,19 @@ class MyGameOptions(PerGameCommonOptions):
     final_boss_hp: FinalBossHP
     fix_xyz_glitch: FixXYZGlitch
 ```
+
 ```python
 # __init__.py
 
 from worlds.AutoWorld import World
 from .Options import MyGameOptions  # import the options dataclass
 
+
 class MyGameWorld(World):
-    #...
+    # ...
     options_dataclass = MyGameOptions  # assign the options dataclass to the world
-    o: MyGameOptions  # typing for option results
-    #...
+    options: MyGameOptions  # typing for option results
+    # ...
 ```
 
 ### A World Class Skeleton
@@ -361,17 +363,20 @@ from worlds.AutoWorld import World
 from BaseClasses import Region, Location, Entrance, Item, RegionType, ItemClassification
 from Utils import get_options, output_path
 
+
 class MyGameItem(Item):  # or from Items import MyGameItem
     game = "My Game"  # name of the game/world this item is from
 
+
 class MyGameLocation(Location):  # or from Locations import MyGameLocation
     game = "My Game"  # name of the game/world this location is in
+
 
 class MyGameWorld(World):
     """Insert description of the world/game here."""
     game: str = "My Game"  # name of the game/world
     options_dataclass = MyGameOptions  # options the player can set
-    o: MyGameOptions  # typing for option results
+    options: MyGameOptions  # typing for option results
     topology_present: bool = True  # show path to required location checks in spoiler
 
     # data_version is used to signal that items, locations or their names
@@ -451,7 +456,7 @@ In addition, the following methods can be implemented and are called in this ord
 ```python
 def generate_early(self) -> None:
     # read player settings to world instance
-    self.final_boss_hp = self.o.final_boss_hp.value
+    self.final_boss_hp = self.options.final_boss_hp.value
 ```
 
 #### create_item
@@ -666,7 +671,7 @@ def generate_output(self, output_directory: str):
         "seed": self.multiworld.seed_name,  # to verify the server's multiworld
         "slot": self.multiworld.player_name[self.player],  # to connect to server
         "items": {location.name: location.item.name
-                  if location.item.player == self.player else "Remote"
+        if location.item.player == self.player else "Remote"
                   for location in self.multiworld.get_filled_locations(self.player)},
         # store start_inventory from player's .yaml
         # make sure to mark as not remote_start_inventory when connecting if stored in rom/mod
@@ -674,9 +679,9 @@ def generate_output(self, output_directory: str):
                           in self.multiworld.precollected_items[self.player]],
         "final_boss_hp": self.final_boss_hp,
         # store option name "easy", "normal" or "hard" for difficuly
-        "difficulty": self.o.difficulty.current_key,
+        "difficulty": self.options.difficulty.current_key,
         # store option value True or False for fixing a glitch
-        "fix_xyz_glitch": self.o.fix_xyz_glitch.value
+        "fix_xyz_glitch": self.options.fix_xyz_glitch.value
     }
     # point to a ROM specified by the installation
     src = Utils.get_options()["mygame_options"]["rom_file"]

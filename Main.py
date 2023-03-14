@@ -112,7 +112,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     logger.info('')
 
     for player in world.player_ids:
-        for item_name, count in world.worlds[player].o.start_inventory.value.items():
+        for item_name, count in world.worlds[player].options.start_inventory.value.items():
             for _ in range(count):
                 world.push_precollected(world.create_item(item_name, player))
 
@@ -130,21 +130,21 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     for player in world.player_ids:
         # items can't be both local and non-local, prefer local
-        world.worlds[player].o.non_local_items.value -= world.worlds[player].o.local_items.value
-        world.worlds[player].o.non_local_items.value -= set(world.local_early_items[player])
+        world.worlds[player].options.non_local_items.value -= world.worlds[player].options.local_items.value
+        world.worlds[player].options.non_local_items.value -= set(world.local_early_items[player])
 
     if world.players > 1:
         locality_rules(world)
     else:
-        world.worlds[1].o.non_local_items.value = set()
-        world.worlds[1].o.local_items.value = set()
+        world.worlds[1].options.non_local_items.value = set()
+        world.worlds[1].options.local_items.value = set()
 
     AutoWorld.call_all(world, "set_rules")
 
     for player in world.player_ids:
-        exclusion_rules(world, player, world.worlds[player].o.exclude_locations.value)
-        world.worlds[player].o.priority_locations.value -= world.worlds[player].o.exclude_locations.value
-        for location_name in world.worlds[player].o.priority_locations.value:
+        exclusion_rules(world, player, world.worlds[player].options.exclude_locations.value)
+        world.worlds[player].options.priority_locations.value -= world.worlds[player].options.exclude_locations.value
+        for location_name in world.worlds[player].options.priority_locations.value:
             world.get_location(location_name, player).progress_type = LocationProgressType.PRIORITY
 
     AutoWorld.call_all(world, "generate_basic")
@@ -347,11 +347,11 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                                                                f" {location}"
                         locations_data[location.player][location.address] = \
                             location.item.code, location.item.player, location.item.flags
-                        if location.name in world.worlds[location.player].o.start_location_hints:
+                        if location.name in world.worlds[location.player].options.start_location_hints:
                             precollect_hint(location)
-                        elif location.item.name in world.worlds[location.item.player].o.start_hints:
+                        elif location.item.name in world.worlds[location.item.player].options.start_hints:
                             precollect_hint(location)
-                        elif any([location.item.name in world.worlds[player].o.start_hints
+                        elif any([location.item.name in world.worlds[player].options.start_hints
                                   for player in world.groups.get(location.item.player, {}).get("players", [])]):
                             precollect_hint(location)
 

@@ -140,7 +140,7 @@ class World(metaclass=AutoWorldRegister):
 
     options_dataclass: Type[GameOptions] = PerGameCommonOptions
     """link your Options mapping"""
-    o: PerGameCommonOptions
+    options: PerGameCommonOptions
     """resulting options for the player of this world"""
 
     game: ClassVar[str]

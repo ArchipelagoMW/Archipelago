@@ -237,14 +237,14 @@ class MultiWorld():
                 setattr(self, option_key, option_values)
                 # TODO - remove this loop once all worlds use options dataclasses
             options_dataclass: typing.Type[Options.GameOptions] = self.worlds[player].options_dataclass
-            self.worlds[player].o = options_dataclass(**{option_key: getattr(args, option_key)[player]
-                                                         for option_key in options_dataclass.type_hints})
+            self.worlds[player].options = options_dataclass(**{option_key: getattr(args, option_key)[player]
+                                                               for option_key in options_dataclass.type_hints})
 
     def set_item_links(self):
         item_links = {}
         replacement_prio = [False, True, None]
         for player in self.player_ids:
-            for item_link in self.worlds[player].o.item_links.value:
+            for item_link in self.worlds[player].options.item_links.value:
                 if item_link["name"] in item_links:
                     if item_links[item_link["name"]]["game"] != self.game[player]:
                         raise Exception(f"Cannot ItemLink across games. Link: {item_link['name']}")
@@ -1250,7 +1250,7 @@ class Spoiler():
 
     def to_file(self, filename: str):
         def write_option(option_key: str, option_obj: type(Options.Option)):
-            res = getattr(self.multiworld.worlds[player].o, option_key)
+            res = getattr(self.multiworld.worlds[player].options, option_key)
             display_name = getattr(option_obj, "display_name", option_key)
             try:
                 outfile.write(f'{display_name + ":":33}{res.current_option_name}\n')

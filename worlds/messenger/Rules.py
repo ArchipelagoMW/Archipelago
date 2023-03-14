@@ -93,7 +93,7 @@ class MessengerRules:
 
     def set_messenger_rules(self) -> None:
         multiworld = self.world.multiworld
-        options = self.world.o
+        options = self.world.options
 
         for region in multiworld.get_regions(self.player):
             if region.name in self.region_rules:
