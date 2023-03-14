@@ -11,7 +11,7 @@ on:
       - '!setup.py'
       - '!*.iss'
       - '!.gitignore'
-      - '!.github'
+      - '!.github/workflows/**'
       - '.github/workflows/unittests.yml'
   pull_request:
     paths:
@@ -20,7 +20,7 @@ on:
       - '!setup.py'
       - '!*.iss'
       - '!.gitignore'
-      - '!.github'
+      - '!.github/workflows/**'
       - '.github/workflows/unittests.yml'
 
 jobs:
