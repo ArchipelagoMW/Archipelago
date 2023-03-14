@@ -16,10 +16,6 @@ def set_rules(world, player):
         item_rules["Celadon Prize Corner - Item Prize 2"] = prize_rule
         item_rules["Celadon Prize Corner - Item Prize 3"] = prize_rule
 
-    if world.accessibility[player] != "locations":
-        allow_self_locking_items(world.get_location("Cerulean City - Bicycle Shop", player), "Bike Voucher")
-        allow_self_locking_items(world.get_location("Fuchsia City - Safari Zone Warden", player), "Gold Teeth")
-
     access_rules = {
         "Pallet Town - Rival's Sister": lambda state: state.has("Oak's Parcel", player),
         "Pallet Town - Oak's Post-Route-22-Rival Gift": lambda state: state.has("Oak's Parcel", player),
@@ -225,4 +221,8 @@ def set_rules(world, player):
             add_rule(loc, lambda state, i=mon: (state.has("Pokedex", player) or not
                      state.multiworld.require_pokedex[player]) and (state.has(i, player)
                                                                     or state.has(f"Static {i}", player)))
+
+    if world.accessibility[player] != "locations":
+        allow_self_locking_items(world.get_location("Cerulean City - Bicycle Shop", player), "Bike Voucher")
+        allow_self_locking_items(world.get_location("Fuchsia City - Safari Zone Warden", player), "Gold Teeth")
 
