@@ -41,23 +41,6 @@ class TradeQuest(DefaultOffToggle, LADXROption):
     """
     ladxr_name = "tradequest"
 
-
-#            Setting('forwardfactor', 'Main', 'F', 'Forward Factor', default=0.0,
-#                description="Forward item weight adjustment factor, lower values generate more rear heavy seeds while higher values generate front heavy seeds. Default is 0.5."),
-#            Setting('accessibility', 'Main', 'A', 'Accessibility', options=[('all', 'a', '100% Locations'), ('goal', 'g', 'Beatable')], default='all',
-#                description="""
-#[100% Locations] guaranteed that every single item can be reached and gained.
-#[Beatable] only guarantees that the game is beatable. Certain items/chests might never be reachable."""),
-#            Setting('race', 'Main', 'V', 'Race mode', default=False, multiworld=False,
-#                description="""
-#Spoiler logs can not be generated for ROMs generated with race mode enabled, and seed generation is slightly different."""),
-#             Setting('spoilerformat', 'Main', 'Spoiler Format', options=[('none', 'None'), ('text', 'Text'), ('json', 'JSON')], default='none', multiworld=False,
-#                 description="""Affects how the spoiler log is generated.
-# [None] No spoiler log is generated. One can still be manually dumped later.
-# [Text] Creates a .txt file meant for a human to read.
-# [JSON] Creates a .json file with a little more information and meant for a computer to read.""")
-
-
 class Boomerang(Choice):
     """
     [Normal], requires Magnifying Lens to get the boomerang.
