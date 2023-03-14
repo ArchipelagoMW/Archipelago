@@ -12,10 +12,10 @@ class Ctx:
         self.clam = config.clam
 
     def has(self, item: str) -> bool:
-        self.state.has(item, self.player)
+        return self.state.has(item, self.player)
 
     def has_all(self, items: set[str]) -> bool:
-        self.state.has_all(items, self.player)
+        return self.state.has_all(items, self.player)
 
     def count(self, items: list[str]) -> int:
         count = 0
@@ -25,8 +25,10 @@ class Ctx:
         return count
     
     def can_reach(self, location: str) -> bool:
-        self.state.can_reach(location, "Location", self.player)
-        # self.s.multiworld.get_location(location, self.p).access_rule(self.s)
+        rule = location_rules[location]
+        if rule is None:
+            return True
+        return rule(self)
 
 def npc_count(x: Ctx, count_pets = True, count_santa = True, count_old_man = True) -> int:
     npcs = [

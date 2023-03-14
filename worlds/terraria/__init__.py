@@ -39,6 +39,11 @@ class TerrariaWorld(World):
             self.multiworld.achievements[self.player].value,
             self.multiworld.fill_extra_checks_with[self.player].value
         )
+        # TEMP
+        self.ter_items.remove("Post-Old One's Army Tier 1")
+        self.ter_locations.remove("Old One's Army Tier 1")
+        print(self.ter_items)
+        print(self.ter_locations)
 
     def create_item(self, name: str, event: bool) -> TerrariaItem:
         classification = ItemClassification.progression#useful
@@ -71,11 +76,14 @@ class TerrariaWorld(World):
         menu = Region("Menu", self.player, self.multiworld)
 
         for location in self.ter_locations:
+            print((location, location_name_to_id[location]))
             menu.locations.append(TerrariaLocation(self.player, location, location_name_to_id[location], menu))
         for event in event_rules:
+            print((event, None))
             menu.locations.append(TerrariaLocation(self.player, event, None, menu))
         if self.calamity:
             for event in calamity_event_rules:
+                print((event, None))
                 menu.locations.append(TerrariaLocation(self.player, event, None, menu))
             
         self.multiworld.regions.append(menu)
@@ -126,6 +134,8 @@ class TerrariaWorld(World):
         if self.calamity:
             for event in event_rules:
                 self.multiworld.get_location(event, self.player).place_locked_item(self.create_item(event, True))
+
+        print(goal_location)
 
         self.multiworld.get_location(goal_location, self.player).place_locked_item(self.create_item("Victory", True))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
