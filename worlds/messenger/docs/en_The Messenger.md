@@ -50,9 +50,9 @@ for it. The groups you can use for The Messenger are:
 * The player can return to the Tower of Time HQ at any point by selecting the button from the options menu
   * This can cause issues if used at specific times. Current known:
     * During Boss fights
-      * After Courage Note collection (Corrupted Future chase)
-        * This is currently an expected action in logic. If you do need to teleport during this chase sequence, it
-          is recommended to quit to title and reload the save
+    * After Courage Note collection (Corrupted Future chase)
+      * This is currently an expected action in logic. If you do need to teleport during this chase sequence, it
+        is recommended to quit to title and reload the save
 * After reaching ninja village a teleport option is added to the menu to reach it quickly
 * Toggle Windmill Shuriken button is added to option menu once the item is received
 
