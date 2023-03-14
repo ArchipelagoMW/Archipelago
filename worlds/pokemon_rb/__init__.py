@@ -287,8 +287,12 @@ class PokemonRedBlueWorld(World):
             else:
                 break
 
-        if self.multiworld.old_man[self.player].value == 1:
+        if self.multiworld.old_man[self.player] == "early_parcel":
             self.multiworld.local_early_items[self.player]["Oak's Parcel"] = 1
+            if self.multiworld.dexsanity[self.player]:
+                for location in [self.multiworld.get_location(f"Pokedex - {mon}", self.player)
+                                 for mon in poke_data.pokemon_data.keys()]:
+                    add_item_rule(location, lambda item: item.name != "Oak's Parcel" or item.player != self.player)
 
         if not self.multiworld.badgesanity[self.player].value:
             self.multiworld.non_local_items[self.player].value -= self.item_name_groups["Badges"]
