@@ -45,3 +45,14 @@ location_table ={
         "Unfathomable Sword Pack": offset + 35,
         "Pickaxe": offset + 36,
 }
+
+for i in range(825):
+        item_coin = "Coin Bundle Basic"
+        item_coin_loc = item_coin + str(i+1)
+        location_table.update({item_coin_loc: offset + 37 +i})
+
+for i in range(889):
+        item_coin_freemium = "Coin Bundle Freemium"
+        item_coin_loc_freemium = item_coin_freemium +str(i+1)
+        location_table.update({item_coin_loc_freemium: offset + 825 +37 + i})
+

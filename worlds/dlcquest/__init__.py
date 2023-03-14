@@ -80,6 +80,8 @@ class DLCqworld(World):
         return {
             "death_link": self.multiworld.death_link[self.player].value,
             "ending_choice": self.multiworld.ending_choice[self.player].value,
-            "campaign": self.multiworld.campaign[self.player].value
+            "campaign": self.multiworld.campaign[self.player].value,
+            "coinsanity": self.multiworld.coinsanity[self.player].value,
+            "coinbundlerange": self.multiworld.coinbundlequantity[self.player].value
         }
 

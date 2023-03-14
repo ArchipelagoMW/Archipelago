@@ -1,3 +1,5 @@
+import math
+
 from .Locations import DLCquestLocation
 from ..generic.Rules import add_rule, set_rule
 from .Items import DLCquestItem
@@ -9,6 +11,7 @@ def create_event(player, event: str):
     return DLCquestItem(event, ItemClassification.progression, None, player)
 
 def set_rules(world, player,World_Options: Options.DLCQuestOptions):
+
     if World_Options[Options.Campaign] == Options.Campaign.option_basic or World_Options[Options.Campaign] == Options.Campaign.option_both:
         set_rule(world.get_entrance("Moving", player),
                  lambda state: state.has("Movement Pack", player))
@@ -35,38 +38,78 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
             set_rule(world.get_entrance("Behind Tree Double Jump", player),
                     lambda state: state.has("Double Jump Pack", player))
 
-        set_rule(world.get_location("Movement Pack", player),
-                 lambda state: state.has("Coin", player, 4))
-        set_rule(world.get_location("Animation Pack", player),
-                 lambda state: state.has("Coin", player, 5))
-        set_rule(world.get_location("Audio Pack", player),
-                 lambda state: state.has("Coin", player, 5))
-        set_rule(world.get_location("Pause Menu Pack", player),
-                 lambda state: state.has("Coin", player, 5))
-        set_rule(world.get_location("Time is Money Pack", player),
-                 lambda state: state.has("Coin", player, 20))
-        set_rule(world.get_location("Double Jump Pack", player),
-                 lambda state: state.has("Coin", player, 100))
-        set_rule(world.get_location("Pet Pack", player),
-                 lambda state: state.has("Coin", player, 5))
-        set_rule(world.get_location("Sexy Outfits Pack", player),
-                 lambda state: state.has("Coin", player, 5))
-        set_rule(world.get_location("Top Hat Pack", player),
-                 lambda state: state.has("Coin", player, 5))
-        set_rule(world.get_location("Map Pack", player),
-                 lambda state: state.has("Coin", player, 140))
-        set_rule(world.get_location("Gun Pack", player),
-                 lambda state: state.has("Coin", player, 75))
-        set_rule(world.get_location("The Zombie Pack", player),
-                 lambda state: state.has("Coin", player, 5))
-        set_rule(world.get_location("Night Map Pack", player),
-                 lambda state: state.has("Coin", player, 75))
-        set_rule(world.get_location("Psychological Warfare Pack", player),
-                 lambda state: state.has("Coin", player, 50))
-        set_rule(world.get_location("Armor for your Horse Pack", player),
-                 lambda state: state.has("Coin", player, 250))
-        set_rule(world.get_location("Finish the Fight Pack", player),
-                 lambda state: state.has("Coin", player, 5))
+        if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
+            number_of_bundle = math.floor(825 / World_Options[Options.CoinSanityRange])
+            for i in range(number_of_bundle):
+                set_rule(world.get_location("Coin Bundle Basic"+str(i+1),player),
+                         lambda state: state.has("Coin", player, World_Options[Options.CoinSanityRange]*(i+1)))
+            set_rule(world.get_location("Movement Pack", player),
+                     lambda state: state.has("Coin Bundle Basic", player, math.ceil(4/World_Options[Options.CoinSanityRange])))
+            set_rule(world.get_location("Animation Pack", player),
+                     lambda state: state.has("Coin Bundle Basic", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+            set_rule(world.get_location("Audio Pack", player),
+                     lambda state: state.has("Coin Bundle Basic", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+            set_rule(world.get_location("Pause Menu Pack", player),
+                     lambda state: state.has("Coin Bundle Basic", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+            set_rule(world.get_location("Time is Money Pack", player),
+                     lambda state: state.has("Coin Bundle Basic", player, math.ceil(20/World_Options[Options.CoinSanityRange])))
+            set_rule(world.get_location("Double Jump Pack", player),
+                     lambda state: state.has("Coin Bundle Basic", player, math.ceil(100/World_Options[Options.CoinSanityRange])))
+            set_rule(world.get_location("Pet Pack", player),
+                     lambda state: state.has("Coin Bundle Basic", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+            set_rule(world.get_location("Sexy Outfits Pack", player),
+                     lambda state: state.has("Coin Bundle Basic", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+            set_rule(world.get_location("Top Hat Pack", player),
+                     lambda state: state.has("Coin Bundle Basic", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+            set_rule(world.get_location("Map Pack", player),
+                     lambda state: state.has("Coin Bundle Basic", player, math.ceil(140/World_Options[Options.CoinSanityRange])))
+            set_rule(world.get_location("Gun Pack", player),
+                     lambda state: state.has("Coin Bundle Basic", player, math.ceil(75/World_Options[Options.CoinSanityRange])))
+            set_rule(world.get_location("The Zombie Pack", player),
+                     lambda state: state.has("Coin Bundle Basic", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+            set_rule(world.get_location("Night Map Pack", player),
+                     lambda state: state.has("Coin Bundle Basic", player, math.ceil(75/World_Options[Options.CoinSanityRange])))
+            set_rule(world.get_location("Psychological Warfare Pack", player),
+                     lambda state: state.has("Coin Bundle Basic", player, math.ceil(50/World_Options[Options.CoinSanityRange])))
+            set_rule(world.get_location("Armor for your Horse Pack", player),
+                     lambda state: state.has("Coin Bundle Basic", player, math.ceil(250/World_Options[Options.CoinSanityRange])))
+            set_rule(world.get_location("Finish the Fight Pack", player),
+                     lambda state: state.has("Coin Bundle Basic", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+
+
+        if World_Options[Options.CoinSanity] == Options.CoinSanity.option_none:
+            set_rule(world.get_location("Movement Pack", player),
+                     lambda state: state.has("Coin", player, 4))
+            set_rule(world.get_location("Animation Pack", player),
+                     lambda state: state.has("Coin", player, 5))
+            set_rule(world.get_location("Audio Pack", player),
+                     lambda state: state.has("Coin", player, 5))
+            set_rule(world.get_location("Pause Menu Pack", player),
+                     lambda state: state.has("Coin", player, 5))
+            set_rule(world.get_location("Time is Money Pack", player),
+                     lambda state: state.has("Coin", player, 20))
+            set_rule(world.get_location("Double Jump Pack", player),
+                     lambda state: state.has("Coin", player, 100))
+            set_rule(world.get_location("Pet Pack", player),
+                     lambda state: state.has("Coin", player, 5))
+            set_rule(world.get_location("Sexy Outfits Pack", player),
+                     lambda state: state.has("Coin", player, 5))
+            set_rule(world.get_location("Top Hat Pack", player),
+                     lambda state: state.has("Coin", player, 5))
+            set_rule(world.get_location("Map Pack", player),
+                     lambda state: state.has("Coin", player, 140))
+            set_rule(world.get_location("Gun Pack", player),
+                     lambda state: state.has("Coin", player, 75))
+            set_rule(world.get_location("The Zombie Pack", player),
+                     lambda state: state.has("Coin", player, 5))
+            set_rule(world.get_location("Night Map Pack", player),
+                     lambda state: state.has("Coin", player, 75))
+            set_rule(world.get_location("Psychological Warfare Pack", player),
+                     lambda state: state.has("Coin", player, 50))
+            set_rule(world.get_location("Armor for your Horse Pack", player),
+                     lambda state: state.has("Coin", player, 250))
+            set_rule(world.get_location("Finish the Fight Pack", player),
+                     lambda state: state.has("Coin", player, 5))
 
         loc_win = DLCquestLocation(player, "Winning Basic", None, world.get_region("The Final Boss Room", player))
         world.get_region("The Final Boss Room", player).locations.append(loc_win)
