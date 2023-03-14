@@ -711,6 +711,48 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: state.has("EVENT_DEFEAT_TATE_AND_LIZA", player)
     )
 
+    # Shoal Cave
+    set_rule(
+        multiworld.get_entrance("REGION_SHOAL_CAVE_ENTRANCE_ROOM/SOUTH -> REGION_SHOAL_CAVE_ENTRANCE_ROOM/HIGH_TIDE_WATER", player),
+        can_surf
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SHOAL_CAVE_ENTRANCE_ROOM/NORTH_WEST_CORNER -> REGION_SHOAL_CAVE_ENTRANCE_ROOM/HIGH_TIDE_WATER", player),
+        can_surf
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SHOAL_CAVE_ENTRANCE_ROOM/NORTH_EAST_CORNER -> REGION_SHOAL_CAVE_ENTRANCE_ROOM/HIGH_TIDE_WATER", player),
+        can_surf
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SHOAL_CAVE_INNER_ROOM/HIGH_TIDE_EAST_MIDDLE_GROUND -> REGION_SHOAL_CAVE_INNER_ROOM/SOUTH_EAST_WATER", player),
+        can_surf
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SHOAL_CAVE_INNER_ROOM/HIGH_TIDE_EAST_MIDDLE_GROUND -> REGION_SHOAL_CAVE_INNER_ROOM/EAST_WATER", player),
+        can_surf
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SHOAL_CAVE_INNER_ROOM/HIGH_TIDE_EAST_MIDDLE_GROUND -> REGION_SHOAL_CAVE_INNER_ROOM/NORTH_WEST_WATER", player),
+        can_surf
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SHOAL_CAVE_INNER_ROOM/SOUTH_WEST_CORNER -> REGION_SHOAL_CAVE_INNER_ROOM/NORTH_WEST_WATER", player),
+        can_surf
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SHOAL_CAVE_INNER_ROOM/RARE_CANDY_PLATFORM -> REGION_SHOAL_CAVE_INNER_ROOM/SOUTH_EAST_WATER", player),
+        can_surf
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM/NORTH_WEST -> REGION_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM/EAST", player),
+        can_strength
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM/EAST -> REGION_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM/NORTH_WEST", player),
+        can_strength
+    )
+
     # Route 126
     set_rule(
         multiworld.get_entrance("REGION_ROUTE126/MAIN -> REGION_UNDERWATER_ROUTE126/MAIN", player),
