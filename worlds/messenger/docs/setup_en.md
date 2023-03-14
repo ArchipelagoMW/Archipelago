@@ -13,7 +13,7 @@
 1. Download and install Courier Mod Loader using the instructions on the release page
    * [Latest release is currently 0.7.1](https://github.com/Brokemia/Courier/releases)
 2. Download and install the randomizer mod
-   1. Download the latest [TheMessengerRandomizer.zip](https://github.com/minous27/TheMessengerRandomizerMod/releases)
+   1. Download the latest TheMessengerRandomizer.zip from the [The Messenger Randomizer Mod releases page](https://github.com/minous27/TheMessengerRandomizerMod/releases)
    2. Extract the zip file to `TheMessenger/Mods/` of your game's install location
    3. Optionally, Backup your save game
      * On Windows
