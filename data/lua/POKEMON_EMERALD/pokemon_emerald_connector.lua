@@ -37,7 +37,6 @@ local flags_size = 0x12C
 -- IWRAM Addresses
 local save_block_ptr_address = 0x5D8C              -- gSaveBlock1Ptr
 local cb2_address = 0x22C0 + 4                     -- gMain + offset
-local locked_controls_address = 0x0F2C             -- sLockFieldControls
 
 -- EWRAM Addresses
 local archipelago_received_item_address = 0x3A028  -- gArchipelagoReceivedItem
@@ -48,9 +47,8 @@ local cb2_overworld_func_address = 0x8085DDC + 1   -- CB2_Overworld + 1
 -- Set us as safe if we're in the overworld and player has control
 function check_game_state ()
     local cb2_value = memory.read_u32_le(cb2_address, "IWRAM")
-    local locked_controls_value = memory.read_u32_le(locked_controls_address, "IWRAM")
 
-    if (cb2_value == cb2_overworld_func_address and locked_controls_value ~= 0) then
+    if (cb2_value == cb2_overworld_func_address) then
         current_game_state = GAME_STATE_SAFE
     else
         current_game_state = GAME_STATE_UNSAFE
@@ -117,8 +115,8 @@ function send_receive ()
         return
     elseif (err == "timeout") then
         return
-    elseif e ~= nil then
-        print(e)
+    elseif err ~= nil then
+        print(err)
         current_state = STATE_UNINITIALIZED
         return
     end
@@ -159,7 +157,6 @@ function main ()
         frame = frame + 1
 
         if not (current_state == previous_state) then
-            print("Current state: "..current_state)
             previous_state = current_state
         end
 
