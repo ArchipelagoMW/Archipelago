@@ -1,9 +1,9 @@
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_rule
-from BaseClasses import Region, RegionType, ItemClassification, Tutorial
+from BaseClasses import Region, ItemClassification, Tutorial
 from .Checks import item_name_to_id, location_name_to_id, TerrariaItem, TerrariaLocation, precollected, get_items_locations
 from .Options import options
-from .Rules import get_rules
+from .Rules import event_rules, calamity_event_rules, location_rules, RuleConfig, Ctx
 
 class TerrariaWeb(WebWorld):
     tutorials = [Tutorial(
@@ -27,19 +27,24 @@ class TerrariaWorld(World):
     # data_version is used to signal that items, locations or their names
     # changed. Set this to 0 during development so other games' clients do not
     # cache any texts, then increase by 1 for each release that makes changes.
-    data_version = 2
+    data_version = 0
 
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
+    calamity = False
 
     def generate_early(self) -> None:
-        self.ter_items, self.ter_locations = get_items_locations(self.multiworld.goal[self.player].value, self.multiworld.achievements[self.player].value, self.multiworld.fill_extra_checks_with[self.player].value)
+        self.ter_items, self.ter_locations = get_items_locations(
+            self.multiworld.goal[self.player].value,
+            self.multiworld.achievements[self.player].value,
+            self.multiworld.fill_extra_checks_with[self.player].value
+        )
 
-    def create_item(self, name: str) -> TerrariaItem:
-        classification = ItemClassification.useful
+    def create_item(self, name: str, event: bool) -> TerrariaItem:
+        classification = ItemClassification.progression#useful
         if name in {
             "Post-Goblin Army",
-            "Post-Eater of Worlds or Brain of Cthulhu",
+            "Post-Evil Boss",
             "Post-Queen Bee",
             "Post-Skeletron",
             "Hardmode",
@@ -54,15 +59,25 @@ class TerrariaWorld(World):
             classification = ItemClassification.progression
         if name == "50 Silver":
             classification = ItemClassification.filler
-        return TerrariaItem(name, classification, item_name_to_id[name], self.player)
+        
+        if event:
+            id = None
+        else:
+            id = item_name_to_id[name]
+
+        return TerrariaItem(name, classification, id, self.player)
 
     def create_regions(self) -> None:
-        menu = Region("Menu", RegionType.Generic, "Menu", self.player, self.multiworld)
+        menu = Region("Menu", self.player, self.multiworld)
 
         for location in self.ter_locations:
             menu.locations.append(TerrariaLocation(self.player, location, location_name_to_id[location], menu))
-        for event in events:
+        for event in event_rules:
             menu.locations.append(TerrariaLocation(self.player, event, None, menu))
+        if self.calamity:
+            for event in calamity_event_rules:
+                menu.locations.append(TerrariaLocation(self.player, event, None, menu))
+            
         self.multiworld.regions.append(menu)
 
     def create_items(self) -> None:
@@ -72,20 +87,28 @@ class TerrariaWorld(World):
         for _ in range(len(precollected)):
             items_to_create.append("50 Silver")
         
-        for item in map(self.create_item, items_to_create):
-            self.multiworld.itempool.append(item)
+        for item in items_to_create:
+            self.multiworld.itempool.append(self.create_item(item, False))
 
     def set_rules(self) -> None:
-        rules = get_rules(self.player, self.multiworld.achievements[self.player].value == 3)
+        player = self.player
+        config = RuleConfig(self.calamity)
 
         for location in self.ter_locations:
-            rule = rules[location]
+            rule = location_rules[location]
             if rule != None:
-                add_rule(self.multiworld.get_location(location, self.player), rule)
+                add_rule(self.multiworld.get_location(location, self.player), lambda state: rule(Ctx(state, player, config)))
+        for event, rule in event_rules.items():
+            if rule != None:
+                add_rule(self.multiworld.get_location(event, self.player), lambda state: rule(Ctx(state, player, config)))
+        if config.clam:
+            for event, rule in event_rules.items():
+                if rule != None:
+                    add_rule(self.multiworld.get_location(event, self.player), lambda state: rule(Ctx(state, player, config)))
 
     def generate_basic(self) -> None:
         for item in precollected:
-            self.multiworld.push_precollected(self.create_item(item))
+            self.multiworld.push_precollected(self.create_item(item, False))
         
         goal = self.multiworld.goal[self.player].value
 
@@ -98,5 +121,11 @@ class TerrariaWorld(World):
         elif goal == 3:
             goal_location = "Zenith"
 
-        self.multiworld.get_location(goal_location, self.player).place_locked_item(self.create_item("Victory"))
+        for event in event_rules:
+            self.multiworld.get_location(event, self.player).place_locked_item(self.create_item(event, True))
+        if self.calamity:
+            for event in event_rules:
+                self.multiworld.get_location(event, self.player).place_locked_item(self.create_item(event, True))
+
+        self.multiworld.get_location(goal_location, self.player).place_locked_item(self.create_item("Victory", True))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)

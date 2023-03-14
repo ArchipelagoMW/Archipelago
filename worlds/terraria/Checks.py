@@ -1,4 +1,4 @@
-from BaseClasses import Location, Item
+from BaseClasses import Location, Item, Region
 
 misc_items = [
     "50 Silver",
@@ -10,7 +10,7 @@ prehardmode_items = [
     "Post-Goblin Army",
     "Post-King Slime",
     "Post-Eye of Cthulhu",
-    "Post-Eater of Worlds or Brain of Cthulhu",
+    "Post-Evil Boss",
     "Post-Old One's Army Tier 1",
     "Post-Queen Bee",
     "Post-Skeletron",
@@ -21,7 +21,7 @@ calamity_prehardmode_items = [
     "Post-Desert Scourge",
     "Post-Giant Clam",
     "Post-Crabulon",
-    "Post-The Hive Mind or The Perforators",
+    "Post-Calamity Evil Boss",
     "Post-The Slime God",
     "Post-Leviathan and Anahita",
     "Post-Colossal Squid",
@@ -47,7 +47,7 @@ calamity_post_wall_of_flesh_items = [
     "Post-Aquatic Scourge",
     "Post-Cragmaw Mire",
     "Post-Brimstone Elemental",
-    "Post-Calamitas",
+    "Post-Calamitas Clone",
     "Post-Astrum Aureus",
     "Post-Astrum Deus",
     "Post-Adult Eidolon Wyrm",
@@ -76,7 +76,7 @@ calamity_post_plantera_items = [
     "Post-The Plaguebringer Goliath",
     "Post-Ravager",
     "Post-The Dragonfolly",
-    "Post-Jungle Dragon, Yharon",
+    "Post-Yharon, Dragon of Rebirth",
 ]
 
 post_moon_lord_items = [
@@ -95,7 +95,7 @@ calamity_post_moon_lord_items = [
     "Post-The Old Duke",
     "Post-The Devourer of Gods",
     "Post-Exo Mechs",
-    "Post-Supreme Calamitas",
+    "Post-Supreme Witch, Calamitas",
 ]
 
 item_items = [
@@ -182,7 +182,7 @@ prehardmode_locations = [
     "Goblin Army",
     "King Slime",
     "Eye of Cthulhu",
-    "Eater of Worlds or Brain of Cthulhu",
+    "Evil Boss",
     "Old One's Army Tier 1",
     "Queen Bee",
     "Skeletron",
@@ -194,7 +194,7 @@ calamity_prehardmode_locations = [
     "Desert Scourge",
     "Giant Clam",
     "Crabulon",
-    "The Hive Mind or The Perforators",
+    "Calamity Evil Boss",
     "The Slime God",
     "Aquatic Scourge",
     "Leviathan and Anahita",
@@ -220,7 +220,7 @@ calamity_post_wall_of_flesh_locations = [
     "Cryogen",
     "Cragmaw Mire",
     "Brimstone Elemental",
-    "Calamitas",
+    "Calamitas Clone",
     "Astrum Aureus",
     "Astrum Deus",
     "Adult Eidolon Wyrm",
@@ -249,7 +249,7 @@ calamity_post_plantera_locations = [
     "The Plaguebringer Goliath",
     "Ravager",
     "The Dragonfolly",
-    "Jungle Dragon, Yharon",
+    "Yharon, Dragon of Rebirth",
 ]
 
 post_moon_lord_locations = [
@@ -268,7 +268,7 @@ calamity_post_moon_lord_locations = [
     "The Old Duke",
     "The Devourer of Gods",
     "Exo Mechs",
-    "Supreme Calamitas",
+    "Supreme Witch, Calamitas",
 ]
 
 prehardmode_achievements = [
@@ -422,7 +422,7 @@ class TerrariaItem(Item):
 class TerrariaLocation(Location):
     game = "Terraria"
 
-def get_items_locations(goal, achievements_opt, extra_checks):
+def get_items_locations(goal: int, achievements_opt: int, extra_checks: int) -> tuple[list[str], list[str]]:
     items = prehardmode_items.copy()
     if goal > 0:
         items += post_wall_of_flesh_items
