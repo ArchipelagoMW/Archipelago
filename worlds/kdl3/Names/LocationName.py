@@ -70,7 +70,7 @@ iceberg_samus = "Iceberg 2 - Samus"
 iceberg_kawasaki = "Iceberg 3 - Chef Kawasaki"
 iceberg_name = "Iceberg 4 - Name"
 iceberg_shiro = "Iceberg 5 - Shiro"
-iceberg_angel = "Iceberg 6 - Complete"
+iceberg_angel = "Iceberg 6 - Angel"
 iceberg_dedede = "Iceberg - Dedede Purified"
 
 # World 6
