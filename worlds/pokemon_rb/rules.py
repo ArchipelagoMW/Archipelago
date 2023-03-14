@@ -1,4 +1,4 @@
-from ..generic.Rules import add_item_rule, add_rule, item_name
+from worlds.generic.Rules import add_item_rule, add_rule, allow_self_locking_items
 from .items import item_groups
 
 
@@ -17,12 +17,8 @@ def set_rules(world, player):
         item_rules["Celadon Prize Corner - Item Prize 3"] = prize_rule
 
     if world.accessibility[player] != "locations":
-        world.get_location("Cerulean City - Bicycle Shop", player).always_allow = (lambda state, item:
-                                                                                   item.name == "Bike Voucher"
-                                                                                   and item.player == player)
-        world.get_location("Fuchsia City - Safari Zone Warden", player).always_allow = (lambda state, item:
-                                                                                        item.name == "Gold Teeth" and
-                                                                                        item.player == player)
+        allow_self_locking_items(world.get_location("Cerulean City - Bicycle Shop", player), "Bike Voucher")
+        allow_self_locking_items(world.get_location("Fuchsia City - Safari Zone Warden", player), "Gold Teeth")
 
     access_rules = {
         "Pallet Town - Rival's Sister": lambda state: state.has("Oak's Parcel", player),
@@ -30,16 +26,14 @@ def set_rules(world, player):
         "Viridian City - Sleepy Guy": lambda state: state.pokemon_rb_can_cut(player) or state.pokemon_rb_can_surf(player),
         "Route 2 - Oak's Aide": lambda state: state.pokemon_rb_oaks_aide(state.multiworld.oaks_aide_rt_2[player].value + 5, player),
         "Pewter City - Museum": lambda state: state.pokemon_rb_can_cut(player),
-        "Cerulean City - Bicycle Shop": lambda state: state.has("Bike Voucher", player)
-            or item_name(state, "Cerulean City - Bicycle Shop", player) == ("Bike Voucher", player),
+        "Cerulean City - Bicycle Shop": lambda state: state.has("Bike Voucher", player),
         "Lavender Town - Mr. Fuji": lambda state: state.has("Fuji Saved", player),
         "Vermilion Gym - Lt. Surge 1": lambda state: state.pokemon_rb_can_cut(player or state.pokemon_rb_can_surf(player)),
         "Vermilion Gym - Lt. Surge 2": lambda state: state.pokemon_rb_can_cut(player or state.pokemon_rb_can_surf(player)),
         "Route 11 - Oak's Aide": lambda state: state.pokemon_rb_oaks_aide(state.multiworld.oaks_aide_rt_11[player].value + 5, player),
         "Celadon City - Stranded Man": lambda state: state.pokemon_rb_can_surf(player),
         "Silph Co 11F - Silph Co President (Card Key)": lambda state: state.has("Card Key", player),
-        "Fuchsia City - Safari Zone Warden": lambda state: state.has("Gold Teeth", player)
-            or item_name(state, "Fuchsia City - Safari Zone Warden", player) == ("Gold Teeth", player),
+        "Fuchsia City - Safari Zone Warden": lambda state: state.has("Gold Teeth", player),
         "Route 12 - Island Item": lambda state: state.pokemon_rb_can_surf(player),
         "Route 12 - Item Behind Cuttable Tree": lambda state: state.pokemon_rb_can_cut(player),
         "Route 15 - Oak's Aide": lambda state: state.pokemon_rb_oaks_aide(state.multiworld.oaks_aide_rt_15[player].value + 5, player),
