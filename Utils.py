@@ -337,8 +337,7 @@ def get_default_options() -> OptionsType:
             "rom_file": "ADVNTURE.BIN",
             "display_msgs": True,
             "rom_start": True,
-            "rom_args": "",
-            "display_msgs": True
+            "rom_args": ""
         },
     }
     return options
