@@ -259,15 +259,13 @@ class VariaRandomizer:
         # args.startLocation = to_pascal_case_with_space(world.startLocation[player].current_key)
 
         if args.output is None and args.rom is None:
-            print("Need --output or --rom parameter")
-            sys.exit(-1)
+            raise Exception("Need --output or --rom parameter")
+
         elif args.output is not None and args.rom is not None:
-            print("Can't have both --output and --rom parameters")
-            sys.exit(-1)
+            raise Exception("Can't have both --output and --rom parameters")
 
         if args.plandoRando is not None and args.output is None:
-            print("plandoRando param requires output param")
-            sys.exit(-1)
+            raise Exception("plandoRando param requires output param")
 
         log.init(args.debug)
         logger = log.get('Rando')
@@ -334,8 +332,7 @@ class VariaRandomizer:
 
         if args.raceMagic is not None:
             if args.raceMagic <= 0 or args.raceMagic >= 0x10000:
-                print("Invalid magic")
-                sys.exit(-1)
+                raise Exception("Invalid magic")
 
         # if no max diff, set it very high
         if args.maxDifficulty:
@@ -459,10 +456,10 @@ class VariaRandomizer:
                     # intersection between user whishes and reality
                     possibleStartAPs = sorted(list(set(possibleStartAPs).intersection(set(startLocationList))))
                     if len(possibleStartAPs) == 0:
-                        optErrMsgs += ["%s : %s" % (apName, cause) for apName, cause in reasons.items() if apName in startLocationList]
-                        optErrMsgs.append('Invalid start locations list with your settings.')
-                        dumpErrorMsgs(args.output, optErrMsgs)
-                        sys.exit(-1)
+                        #optErrMsgs += ["%s : %s" % (apName, cause) for apName, cause in reasons.items() if apName in startLocationList]
+                        raise Exception("Invalid start locations list with your settings." + 
+                                        "%s : %s" % (apName, cause) for apName, cause in reasons.items() if apName in startLocationList)
+                        #dumpErrorMsgs(args.output, optErrMsgs)
                 args.startLocation = random.choice(possibleStartAPs)
             elif args.startLocation not in possibleStartAPs:
                 args.startLocation = 'Landing Site'
@@ -470,7 +467,6 @@ class VariaRandomizer:
                 #optErrMsgs.append('Invalid start location: {}.  {}'.format(args.startLocation, reasons[args.startLocation]))
                 #optErrMsgs.append('Possible start locations with these settings: {}'.format(possibleStartAPs))
                 #dumpErrorMsgs(args.output, optErrMsgs)
-                #sys.exit(-1)
         ap = getAccessPoint(args.startLocation)
         if 'forcedEarlyMorph' in ap.Start and ap.Start['forcedEarlyMorph'] == True:
             forceArg('morphPlacement', 'early', "'Morph Placement' forced to early for custom start location")
@@ -682,14 +678,10 @@ class VariaRandomizer:
         #    import traceback
         #    traceback.print_exc(file=sys.stdout)
         #    dumpErrorMsg(args.output, "Error: {}".format(e))
-        #    sys.exit(-1)
 
         if stuck == True:
-            dumpErrorMsg(args.output, self.randoExec.errorMsg)
-            print("Can't generate " + self.fileName + " with the given parameters: {}".format(self.randoExec.errorMsg))
-            # in vcr mode we still want the seed to be generated to analyze it
-            if args.vcr == False:
-                sys.exit(-1)
+            #dumpErrorMsg(args.output, self.randoExec.errorMsg)
+            raise Exception("Can't generate " + self.fileName + " with the given parameters: {}".format(self.randoExec.errorMsg))
 
     def PatchRom(self, outputFilename, customPrePatchApply = None, customPostPatchApply = None):
         args = self.args
@@ -720,7 +712,6 @@ class VariaRandomizer:
         # if plandoSettings is not None:
         #     with open(args.output, 'w') as jsonFile:
         #         json.dump({"itemLocs": [il.json() for il in itemLocs], "errorMsg": randoExec.errorMsg}, jsonFile)
-        #     sys.exit(0)
 
         # # generate extended stats
         # if args.extStatsFilename is not None:
@@ -808,9 +799,8 @@ class VariaRandomizer:
         except Exception as e:
             import traceback
             traceback.print_exc(file=sys.stdout)
-            msg = "Error patching {}: ({}: {})".format(outputFilename, type(e).__name__, e)
-            dumpErrorMsg(args.output, msg)
-            sys.exit(-1)
+            raise Exception("Error patching {}: ({}: {})".format(outputFilename, type(e).__name__, e))
+            #dumpErrorMsg(args.output, msg)
 
 #        if stuck == True:
 #            print("Rom generated for debug purpose: {}".format(self.fileName))
