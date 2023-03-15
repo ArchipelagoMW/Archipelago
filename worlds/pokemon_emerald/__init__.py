@@ -61,7 +61,7 @@ class PokemonEmeraldWorld(World):
             raise FileNotFoundError(rom_path)
 
         with open(rom_path, "rb") as infile:
-            local_hash = hashlib.sha256()
+            local_hash = hashlib.md5()
             local_hash.update(bytes(infile.read()))
 
             if (not local_hash.hexdigest() == PokemonEmeraldDeltaPatch.hash):

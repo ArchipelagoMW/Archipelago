@@ -13,7 +13,7 @@ from .Pokemon import get_random_species, get_species_by_id, get_species_by_name,
 
 class PokemonEmeraldDeltaPatch(APDeltaPatch):
     game = "Pokemon Emerald"
-    hash = "a9dec84dfe7f62ab2220bafaef7479da0929d066ece16a6885f6226db19085af"
+    hash = "605b89b67018abcea91e693a4dd25be3"
     patch_file_ending = ".apemerald"
     result_file_ending = ".gba"
 
