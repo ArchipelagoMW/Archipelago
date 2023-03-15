@@ -180,8 +180,4 @@ all_locations = {
 
 location_table = {**all_locations}
 
-def setup_locations(world, player: int):
-	location_table = {**box_location_table, **boss_location_table}
-	return location_table
-
 lookup_id_to_name: typing.Dict[int, str] = {id: name for name, _ in all_locations.items()}

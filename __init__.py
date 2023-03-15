@@ -4,11 +4,12 @@ from BaseClasses import Item, ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
 
 from .Items import WL4Item, item_table
-from .Locations import all_locations, setup_locations
+from .Locations import all_locations
 from .Logic import WL4Logic
 from .Names import ItemName, LocationName
 from .Options import wl4_options
 from .Regions import connect_regions, create_regions
+from .Rom import LocalRom, WL4DeltaPatch, get_base_rom_path, patch_rom 
 
 
 class WL4Web(WebWorld):
@@ -75,11 +76,32 @@ class WL4World(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.victory, self.player)
     
     def generate_output(self, output_directory: str):
-        # TODO
-        ...
+        from pathlib import Path
+        output_directory: Path = Path(output_directory)
+
+        try:
+            world = self.multiworld
+            player = self.player
+
+            rom = LocalRom(get_base_rom_path())
+            patch_rom(self.multiworld, rom, self.player)
+
+            rompath = output_directory / f"{world.get_out_file_name_base(player)}.gba"
+            rom.write_to_file(rompath)
+            self.rom_name = rom.name
+
+            patch = WL4DeltaPatch(
+                rompath.with_suffix(WL4DeltaPatch.patch_file_ending),
+                player=player,
+                player_name = world.player_name[player],
+                patched_path = rompath
+            )
+            patch.write()
+        finally:
+            if rompath.exists():
+                rompath.unlink()
 
     def create_regions(self):
-        location_table = setup_locations(self.multiworld, self.player)
         create_regions(self.multiworld, self.player)
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
