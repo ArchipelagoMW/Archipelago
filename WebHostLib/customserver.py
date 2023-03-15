@@ -102,7 +102,7 @@ class WebHostContext(Context):
                     # games package could be dropped from static data once all rooms embed data package
                     del multidata["datapackage"][game]
                 else:
-                    data = Utils.restricted_loads(GameDataPackage.get(game=game, checksum=game_data["checksum"]).data)
+                    data = Utils.restricted_loads(GameDataPackage.get(checksum=game_data["checksum"]).data)
                     game_data_packages[game] = data
 
         return self._load(multidata, game_data_packages, True)

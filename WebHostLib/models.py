@@ -59,8 +59,5 @@ class Generation(db.Entity):
 
 
 class GameDataPackage(db.Entity):
-    id = PrimaryKey(int, auto=True)
-    game = Required(str)
-    checksum = Required(str)
+    checksum = PrimaryKey(str)
     data = Required(bytes)
-    composite_key(game, checksum)

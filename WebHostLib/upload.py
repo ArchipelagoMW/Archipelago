@@ -88,7 +88,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
             game_data_packages: typing.List[GameDataPackage] = []
             for game, game_data in decompressed_multidata["datapackage"].items():
                 if game_data.get("checksum"):
-                    game_data_package = GameDataPackage(game=game, checksum=game_data["checksum"],
+                    game_data_package = GameDataPackage(checksum=game_data["checksum"],
                                                         data=pickle.dumps(game_data))
                     decompressed_multidata["datapackage"][game] = {
                         "version": game_data.get("version", 0),
