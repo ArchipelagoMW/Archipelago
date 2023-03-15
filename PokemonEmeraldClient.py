@@ -3,9 +3,10 @@ import json
 from typing import Optional, Set, Tuple
 
 from CommonClient import CommonContext, get_base_parser, gui_enabled, logger
+from NetUtils import ClientStatus
 from Utils import async_start, init_logging
 
-from worlds.pokemon_emerald.Data import get_config
+from worlds.pokemon_emerald.Data import get_config, get_extracted_data
 
 
 GBA_SOCKET_PORT = 43053
@@ -18,6 +19,7 @@ CONNECTION_STATUS_TENTATIVE = "Initial connection made"
 CONNECTION_STATUS_CONNECTED = "Connected"
 CONNECTION_STATUS_INITIAL = "Connection has not been initiated"
 
+GAME_CLEAR_FLAG = get_extracted_data()["constants"]["FLAG_SYS_GAME_CLEAR"]
 
 class GBAContext(CommonContext):
     game = "Pokemon Emerald"
@@ -60,6 +62,7 @@ def create_payload(ctx: GBAContext):
 
 async def handle_read_data(data, ctx: GBAContext):
     local_checked_locations = set()
+    game_clear = False
 
     if ("flag_bytes" in data):
         # If flag is set and corresponds to a location, add to local_checked_locations
@@ -70,6 +73,8 @@ async def handle_read_data(data, ctx: GBAContext):
                     location_id = flag_id + get_config()["ap_offset"]
                     if (location_id in ctx.server_locations):
                         local_checked_locations.add(location_id)
+                    elif location_id == GAME_CLEAR_FLAG:
+                        game_clear = True
 
 
         if (local_checked_locations != ctx.local_checked_locations):
@@ -79,6 +84,11 @@ async def handle_read_data(data, ctx: GBAContext):
                 await ctx.send_msgs([{
                     "cmd": "LocationChecks",
                     "locations": list(local_checked_locations)
+                }])
+            if not ctx.finished_game and game_clear:
+                await ctx.send_msgs([{
+                    "cmd": "StatusUpdate",
+                    "status": ClientStatus.CLIENT_GOAL
                 }])
 
 
