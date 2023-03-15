@@ -136,7 +136,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
             Locfreemiumstart_name]
         add_coin_freemium(Regfreemiumstart, 50, player)
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
-            coin_bundle_needed = math.floor(889 / Options.CoinSanityRange.value)
+            coin_bundle_needed = math.floor(889 / World_Options[Options.CoinSanityRange])
             for i in range(coin_bundle_needed):
                 item_coin_freemium = "Coin Bundle Freemium"
                 item_coin_freemium_loc = item_coin_freemium + str(i + 1)

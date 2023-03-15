@@ -92,7 +92,7 @@ def create_items(world, World_Options: Options.DLCQuestOptions):
             if item.has_any_group(Group.DLC) or item.has_any_group(Group.Item):
                 created_items.append(world.create_item(item))
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
-            coin_bundle_needed = math.floor(889 / Options.CoinSanityRange.value)
+            coin_bundle_needed = math.floor(889 / World_Options[Options.CoinSanityRange])
             for item in items_by_group[Group.Freemium]:
                 if item.has_any_group(Group.Coin):
                     for i in range(coin_bundle_needed):
