@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import hashlib
-import json
 import logging
 import pathlib
 import sys
@@ -18,6 +17,8 @@ if TYPE_CHECKING:
 
 class AutoWorldRegister(type):
     world_types: Dict[str, Type[World]] = {}
+    __file__: str
+    zip_path: Optional[str]
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
@@ -359,7 +360,7 @@ class World(metaclass=AutoWorldRegister):
         sorted_location_name_groups = {
             name: sorted(cls.location_name_groups[name]) for name in sorted(cls.location_name_groups)
         }
-        res: "GamesPackage" = {  # type: ignore[typeddict-item]
+        res: "GamesPackage" = {
             # sorted alphabetically
             "item_name_groups": sorted_item_name_groups,
             "item_name_to_id": cls.item_name_to_id,

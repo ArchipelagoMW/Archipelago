@@ -20,12 +20,15 @@ if typing.TYPE_CHECKING:
     from .AutoWorld import World
 
 
-class GamesPackage(typing.TypedDict):
+class GamesData(typing.TypedDict):
     item_name_groups: typing.Dict[str, typing.List[str]]
     item_name_to_id: typing.Dict[str, int]
     location_name_groups: typing.Dict[str, typing.List[str]]
     location_name_to_id: typing.Dict[str, int]
     version: int
+
+
+class GamesPackage(GamesData, total=False):
     checksum: str
 
 
