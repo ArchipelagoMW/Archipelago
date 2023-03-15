@@ -41,8 +41,12 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
             number_of_bundle = math.floor(825 / World_Options[Options.CoinSanityRange])
             for i in range(number_of_bundle):
-                set_rule(world.get_location("Coin Bundle Basic"+str(i+1),player),
-                         lambda state: state.has("Coin", player, World_Options[Options.CoinSanityRange]*(i+1)))
+                def create_rule(coin):
+                    return lambda state: state.has("Coin", player, coin)
+
+                set_rule(world.get_location("Coin Bundle Basic"+str(i+1), player),
+                         create_rule(World_Options[Options.CoinSanityRange] * (i + 1)))
+
             set_rule(world.get_location("Movement Pack", player),
                      lambda state: state.has("Coin Bundle Basic", player, math.ceil(4/World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Animation Pack", player),
