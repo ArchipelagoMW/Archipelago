@@ -781,6 +781,10 @@ async def on_client_joined(ctx: Context, client: Client):
                               "If your client supports it, "
                               "you may have additional local commands you can list with /help.",
                       {"type": "Tutorial"})
+    ctx.broadcast(ctx.clients[client.team][client.slot], [{
+        "cmd": "RoomUpdate",
+        "hint_points": get_slot_points(ctx, client.team, client.slot)
+    }])
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 
@@ -1489,6 +1493,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
                                     f"You have {points_available} points and need at least "
                                     f"{self.ctx.get_hint_cost(self.client.slot)}.")
                 self.ctx.notify_hints(self.client.team, hints)
+                self.ctx.broadcast(self.ctx.clients[self.client.team][self.client.slot], [{
+                    "cmd": "RoomUpdate",
+                    "hint_points": get_slot_points(self.ctx, self.client.team, self.client.slot)
+                }])
                 self.ctx.save()
                 return True
 
