@@ -5,10 +5,11 @@ from Options import Option, Choice, DefaultOnToggle, Range, Toggle, DeathLink
 class CharacterStages(Choice):
     """Whether to include Reinhardt-only stages, Carrie-only stages, or both."""
     display_name = "Character Stages"
-    option_reinhardt_only = 0
-    option_carrie_only = 1
-    option_both = 2
-    default = 2
+    option_both = 0
+    option_both_no_branches = 1
+    option_reinhardt_only = 2
+    option_carrie_only = 3
+    default = 0
 
 
 class StageShuffle(Toggle):

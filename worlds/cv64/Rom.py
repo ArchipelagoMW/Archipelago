@@ -6,7 +6,7 @@ import hashlib
 import os
 
 from .Names import Patches, RName
-from .Stages import stage_dict
+from .Stages import all_stages
 
 USHASH = '1cc5cf3b4d29d8c3ade957648b529dc1'
 BSUSHASH = '0bbaa6de2b9cbb822f8b4d85c1d5497b'
@@ -222,10 +222,10 @@ def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp
     # Change the Stage Select menu options
     rom.write_bytes(0xADF64, Patches.warp_menu_rewrite)
     rom.write_bytes(0x10E0C8, Patches.warp_pointer_table)
-    rom.write_byte(0xADF67, stage_dict[active_stage_list[0]].start_map_id)
+    rom.write_byte(0xADF67, all_stages[active_stage_list[0]].start_map_id)
     for warp in range(len(active_warp_list)):
-        rom.write_byte(warp_scene_offsets[warp], stage_dict[active_warp_list[warp]].mid_map_id)
-        rom.write_byte(warp_scene_offsets[warp] + 4, stage_dict[active_warp_list[warp]].mid_spawn_id)
+        rom.write_byte(warp_scene_offsets[warp], all_stages[active_warp_list[warp]].mid_map_id)
+        rom.write_byte(warp_scene_offsets[warp] + 4, all_stages[active_warp_list[warp]].mid_spawn_id)
 
     # Play the "teleportation" sound effect when teleporting
     rom.write_bytes(0xAE088, [0x08, 0x00, 0x4F, 0xAB,   # J 0x80013EAC
@@ -329,11 +329,11 @@ def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp
 
     stage_number = 0x01
     for stage in range(len(active_stage_list) - 1):
-        for offset in stage_dict[active_stage_list[stage]].stage_number_offset_list:
+        for offset in all_stages[active_stage_list[stage]].stage_number_offset_list:
             rom.write_byte(offset, stage_number)
-        if active_stage_list[stage - 2] == RegionName.castle_center:
+        if active_stage_list[stage - 2] == RName.castle_center:
             stage_number -= 1
-        elif active_stage_list[stage - 1] != RegionName.villa:
+        elif active_stage_list[stage - 1] != RName.villa:
             stage_number += 1
 
     # Top elevator switch check
@@ -548,7 +548,7 @@ def get_base_rom_path(file_name: str = "") -> str:
     return file_name
 
 
-def cv64_text_converter(cv64text, a_advance) -> list:
+def cv64_text_converter(cv64text: str, a_advance: bool) -> list:
     char_dict = {"\n": 0x01, " ": 0x02, "!": 0x03, '"': 0x04, "#": 0x05, "$": 0x06, "%": 0x07, "&": 0x08, "'": 0x09,
                  "(": 0x0A, ")": 0x0B, "*": 0x0C, "+": 0x0D, ",": 0x0E, "-": 0x0F, ".": 0x10, "/": 0x11, "0": 0x12,
                  "1": 0x13, "2": 0x14, "3": 0x15, "4": 0x16, "5": 0x17, "6": 0x18, "7": 0x19, "8": 0x1A, "9": 0x1B,

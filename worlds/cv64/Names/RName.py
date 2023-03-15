@@ -1,12 +1,3 @@
-menu                     = "Menu"
-warp1                    = "Warp 1"
-warp2                    = "Warp 2"
-warp3                    = "Warp 3"
-warp4                    = "Warp 4"
-warp5                    = "Warp 5"
-warp6                    = "Warp 6"
-warp7                    = "Warp 7"
-
 forest_of_silence        = "Forest of Silence"
 forest_start             = "Forest of Silence: first half"
 forest_mid               = "Forest of Silence: second half"
@@ -70,14 +61,6 @@ ck_main                  = "Castle Keep: exterior"
 ck_drac_chamber          = "Castle Keep: Dracula's chamber"
 
 regions_to_stages = {
-    menu:                None,
-    warp1:               None,
-    warp2:               None,
-    warp3:               None,
-    warp4:               None,
-    warp5:               None,
-    warp6:               None,
-    warp7:               None,
     forest_start:        forest_of_silence,
     forest_mid:          forest_of_silence,
     forest_end:          forest_of_silence,

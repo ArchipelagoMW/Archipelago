@@ -2,7 +2,7 @@ import typing
 
 from BaseClasses import Entrance
 from .Names import IName, RName
-from .Stages import stage_dict
+from .Stages import all_stages
 
 
 class EntranceData(typing.NamedTuple):
@@ -14,69 +14,25 @@ class EntranceData(typing.NamedTuple):
     carrie_entrance: bool = False
 
 
-def create_entrances(multiworld, player: int, active_stage_list, active_warp_list, required_special2s, active_regions):
+def create_entrances(multiworld, player: int, active_stage_exits, active_warp_list, required_special2s, active_regions):
+    def get_prev_stage_start(source_stage):
+        if source_stage in active_stage_exits:
+            return all_stages[active_stage_exits[source_stage][0]]
+        return "Menu"
+
     def get_next_stage_start(source_stage):
-        if source_stage in active_stage_list:
-            if multiworld.character_stages[player].value == 2:
-                if active_stage_list[active_stage_list.index(source_stage) - 1] == RName.villa:
-                    return stage_dict[active_stage_list[active_stage_list.index(source_stage) + 2]].start_region_name
-                elif active_stage_list[active_stage_list.index(source_stage) - 2] == RName.castle_center:
-                    return stage_dict[active_stage_list[active_stage_list.index(source_stage) + 3]].start_region_name
-
-            return stage_dict[active_stage_list[active_stage_list.index(source_stage) + 1]].start_region_name
-
+        if source_stage in active_stage_exits:
+            return all_stages[active_stage_exits[source_stage][1]]
         return "Menu"
-    
+
     def get_alt_stage_start(source_stage):
-        if multiworld.character_stages[player].value == 2:
-            if source_stage == RName.villa:
-                return stage_dict[active_stage_list[active_stage_list.index(RName.villa) + 2]].start_region_name
-            return stage_dict[active_stage_list[active_stage_list.index(RName.castle_center) + 3]].start_region_name
-        
-        return "Menu"
-
-    def get_prev_stage_end(source_stage):
-        if source_stage in active_stage_list:
-            if active_stage_list.index(source_stage) - 1 >= 0:
-                if multiworld.character_stages[player].value == 2:
-                    if active_stage_list[active_stage_list.index(source_stage) - 2] == RName.villa:
-                        return stage_dict[RName.villa].end_region_name
-                    elif active_stage_list[active_stage_list.index(source_stage) - 3] == RName.castle_center:
-                        return stage_dict[RName.castle_center].end_region_name
-                    elif active_stage_list[active_stage_list.index(source_stage) - 3] == RName.villa:
-                        return stage_dict[active_stage_list[active_stage_list.index(source_stage) - 2]].end_region_name
-                    elif active_stage_list[active_stage_list.index(source_stage) - 5] == RName.castle_center:
-                        return stage_dict[active_stage_list[active_stage_list.index(source_stage) - 3]].end_region_name
-
-                return stage_dict[active_stage_list[active_stage_list.index(source_stage) - 1]].end_region_name
-
+        if source_stage in active_stage_exits:
+            return all_stages[active_stage_exits[source_stage][2]]
         return "Menu"
 
     s1s_per_warp = multiworld.special1s_per_warp[player].value
 
     all_entrances = [
-        EntranceData(RName.menu, stage_dict[active_stage_list[0]].start_region_name),
-        EntranceData(RName.menu, RName.warp1,
-                     lambda state: state.has(IName.special_one, player, s1s_per_warp)),
-        EntranceData(RName.menu, RName.warp2,
-                     lambda state: state.has(IName.special_one, player, s1s_per_warp * 2)),
-        EntranceData(RName.menu, RName.warp3,
-                     lambda state: state.has(IName.special_one, player, s1s_per_warp * 3)),
-        EntranceData(RName.menu, RName.warp4,
-                     lambda state: state.has(IName.special_one, player, s1s_per_warp * 4)),
-        EntranceData(RName.menu, RName.warp5,
-                     lambda state: state.has(IName.special_one, player, s1s_per_warp * 5)),
-        EntranceData(RName.menu, RName.warp6,
-                     lambda state: state.has(IName.special_one, player, s1s_per_warp * 6)),
-        EntranceData(RName.menu, RName.warp7,
-                     lambda state: state.has(IName.special_one, player, s1s_per_warp * 7)),
-        EntranceData(RName.warp1, stage_dict[active_warp_list[0]].mid_region_name),
-        EntranceData(RName.warp2, stage_dict[active_warp_list[1]].mid_region_name),
-        EntranceData(RName.warp3, stage_dict[active_warp_list[2]].mid_region_name),
-        EntranceData(RName.warp4, stage_dict[active_warp_list[3]].mid_region_name),
-        EntranceData(RName.warp5, stage_dict[active_warp_list[4]].mid_region_name),
-        EntranceData(RName.warp6, stage_dict[active_warp_list[5]].mid_region_name),
-        EntranceData(RName.warp7, stage_dict[active_warp_list[6]].mid_region_name),
         # Forest of Silence
         EntranceData(RName.forest_start, RName.forest_mid),
         EntranceData(RName.forest_mid, RName.forest_end),
@@ -124,18 +80,18 @@ def create_entrances(multiworld, player: int, active_stage_list, active_warp_lis
                      lambda state: (state.has(IName.magical_nitro, player, 2)
                                     and state.has(IName.mandragora, player, 2))),
         EntranceData(RName.cc_crystal, RName.cc_elev_top),
-        EntranceData(RName.castle_center, get_next_stage_start(RName.castle_center)),
-        EntranceData(RName.castle_center, get_alt_stage_start(RName.castle_center)),
+        EntranceData(RName.cc_elev_top, get_next_stage_start(RName.castle_center)),
+        EntranceData(RName.cc_elev_top, get_alt_stage_start(RName.castle_center)),
         # Duel Tower
-        EntranceData(RName.dt_main, get_prev_stage_end(RName.duel_tower)),
+        EntranceData(RName.dt_main, get_prev_stage_start(RName.duel_tower)),
         EntranceData(RName.dt_main, get_next_stage_start(RName.duel_tower)),
         # Tower of Execution
-        EntranceData(RName.toe_main, get_prev_stage_end(RName.tower_of_execution)),
+        EntranceData(RName.toe_main, get_prev_stage_start(RName.tower_of_execution)),
         EntranceData(RName.toe_main, RName.toe_ledge,
                      lambda state: state.has(IName.execution_key, player), easy_rule=True),
         EntranceData(RName.toe_main, get_next_stage_start(RName.tower_of_execution)),
         # Tower of Science
-        EntranceData(RName.tosci_start, get_prev_stage_end(RName.tower_of_science)),
+        EntranceData(RName.tosci_start, get_prev_stage_start(RName.tower_of_science)),
         EntranceData(RName.tosci_start, RName.tosci_three_doors,
                      lambda state: state.has(IName.science_key_one, player)),
         EntranceData(RName.tosci_start, RName.tosci_conveyors,
@@ -146,7 +102,7 @@ def create_entrances(multiworld, player: int, active_stage_list, active_warp_lis
                      lambda state: state.has(IName.science_key_three, player)),
         EntranceData(RName.tosci_conveyors, get_next_stage_start(RName.tower_of_science)),
         # Tower of Sorcery
-        EntranceData(RName.tosor_main, get_prev_stage_end(RName.tower_of_sorcery)),
+        EntranceData(RName.tosor_main, get_prev_stage_start(RName.tower_of_sorcery)),
         EntranceData(RName.tosor_main, get_next_stage_start(RName.tower_of_sorcery)),
         # Room of Clocks
         EntranceData(RName.roc_main, get_next_stage_start(RName.room_of_clocks)),
@@ -167,6 +123,15 @@ def create_entrances(multiworld, player: int, active_stage_list, active_warp_lis
                      lambda state: state.has(IName.special_two, player, required_special2s))
     ]
 
+    # Set up the starting stage and warp entrances
+    for i in range(len(active_warp_list)):
+        menu_entrance = Entrance(player, active_warp_list[i], active_regions["Menu"])
+        if i > 0:
+            menu_entrance.access_rule = lambda state: state.has(IName.special_one, player, s1s_per_warp * i)
+        menu_entrance.connect(active_warp_list[i])
+        active_regions["Menu"].exits.append(menu_entrance)
+
+    # Set up the in-stage entrances
     for data in all_entrances:
         entrance_not_too_hard: bool = multiworld.hard_logic[player].value == 1 or data.hard_entrance is False
         doable_as_pref_char: bool = multiworld.carrie_logic[player].value == 1 or data.carrie_entrance is False
