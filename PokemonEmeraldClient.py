@@ -150,7 +150,7 @@ async def gba_send_receive_task(ctx: GBAContext):
 
 
 if __name__ == "__main__":
-    init_logging("PokemonEmeraldClient", loglevel="debug")
+    init_logging("PokemonEmeraldClient")
 
     async def main(args):
         ctx = GBAContext(args.connect, args.password)
