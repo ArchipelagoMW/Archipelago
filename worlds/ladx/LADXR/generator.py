@@ -61,7 +61,6 @@ from ..Options import TrendyGame, Palette
 
 # Function to generate a final rom, this patches the rom with all required patches
 def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=None, player_name=None, player_names=[], player_id = 0):
-    print("Loading: %s" % (args.input_filename))
     rom = ROMWithTables(args.input_filename)
     rom.player_names = player_names
     pymods = []
