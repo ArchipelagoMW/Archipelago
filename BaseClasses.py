@@ -331,7 +331,7 @@ class MultiWorld():
         return self.player_name[player]
 
     def get_file_safe_player_name(self, player: int) -> str:
-        return ''.join(c for c in self.get_player_name(player) if c not in '<>:"/\\|?*')
+        return Utils.get_file_safe_name(self.get_player_name(player))
 
     def get_out_file_name_base(self, player: int) -> str:
         """ the base name (without file extension) for each player's output file for a seed """

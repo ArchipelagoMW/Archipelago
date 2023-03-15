@@ -386,12 +386,16 @@ def persistent_load() -> typing.Dict[str, dict]:
     return storage
 
 
-def load_data_package_for_checksum(game: str, checksum: typing.Optional[str]):
-    def is_filename_safe(s):
-        return "/" not in s and "\\" not in s and ":" not in s
+def get_file_safe_name(name: str) -> str:
+    return "".join(c for c in name if c not in '<>:"/\\|?*')
 
-    if checksum and is_filename_safe(game) and is_filename_safe(checksum):
-        path = user_path(os.path.join("datapackage", game, f"{checksum}.json"))
+
+def load_data_package_for_checksum(game: str, checksum: typing.Optional[str]) -> Dict[str, Any]:
+    if checksum and game:
+        if checksum != get_file_safe_name(checksum):
+            raise ValueError(f"Bad symbols in checksum: {checksum}")
+        game_folder = user_path(os.path.join("datapackage", get_file_safe_name(game)))
+        path = os.path.join(game_folder, f"{checksum}.json")
         if os.path.exists(path):
             try:
                 with open(path, "r", encoding="utf-8-sig") as f:
@@ -408,13 +412,12 @@ def load_data_package_for_checksum(game: str, checksum: typing.Optional[str]):
     return {}
 
 
-def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]):
-    def is_filename_safe(s):
-        return "/" not in s and "\\" not in s and ":" not in s
-
+def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> None:
     checksum = data.get("checksum")
-    if checksum and is_filename_safe(game) and is_filename_safe(checksum):
-        game_folder = user_path(os.path.join("datapackage", game))
+    if checksum and game:
+        if checksum != get_file_safe_name(checksum):
+            raise ValueError(f"Bad symbols in checksum: {checksum}")
+        game_folder = user_path(os.path.join("datapackage", get_file_safe_name(game)))
         os.makedirs(game_folder, exist_ok=True)
         try:
             with open(os.path.join(game_folder, f"{checksum}.json"), "w", encoding="utf-8-sig") as f:
