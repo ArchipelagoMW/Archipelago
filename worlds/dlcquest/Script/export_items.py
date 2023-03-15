@@ -2,7 +2,7 @@
 This script can be used to export all the AP items into a json file in the output folder. This file is used by the tests
 of the mod to ensure it can handle all possible items.
 
-To run the script, use `python -m worlds.stardew_valley.scripts.export_items` from the repository root.
+To run the script, use `python -m worlds.dlcquest.Script.export_items` from the repository root.
 """
 
 import json
