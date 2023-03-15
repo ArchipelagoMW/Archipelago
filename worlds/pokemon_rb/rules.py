@@ -1,26 +1,45 @@
-from ..generic.Rules import add_item_rule, add_rule
+from ..generic.Rules import add_item_rule, add_rule, location_item_name
+from .items import item_groups
+
 
 def set_rules(world, player):
 
-    add_item_rule(world.get_location("Pallet Town - Player's PC", player),
-                  lambda i: i.player == player and "Badge" not in i.name and "Trap" not in i.name and
-                            i.name != "Pokedex")
+    item_rules = {
+        "Pallet Town - Player's PC": (lambda i: i.player == player and "Badge" not in i.name and "Trap" not in i.name
+                                      and i.name != "Pokedex" and "Coins" not in i.name)
+    }
+
+    if world.prizesanity[player]:
+        def prize_rule(i):
+            return i.player != player or i.name in item_groups["Unique"]
+        item_rules["Celadon Prize Corner - Item Prize 1"] = prize_rule
+        item_rules["Celadon Prize Corner - Item Prize 2"] = prize_rule
+        item_rules["Celadon Prize Corner - Item Prize 3"] = prize_rule
+
+    if world.accessibility[player] != "locations":
+        world.get_location("Cerulean City - Bicycle Shop", player).always_allow = (lambda state, item:
+                                                                                   item.name == "Bike Voucher"
+                                                                                   and item.player == player)
+        world.get_location("Fuchsia City - Safari Zone Warden", player).always_allow = (lambda state, item:
+                                                                                        item.name == "Gold Teeth" and
+                                                                                        item.player == player)
 
     access_rules = {
-
         "Pallet Town - Rival's Sister": lambda state: state.has("Oak's Parcel", player),
         "Pallet Town - Oak's Post-Route-22-Rival Gift": lambda state: state.has("Oak's Parcel", player),
         "Viridian City - Sleepy Guy": lambda state: state.pokemon_rb_can_cut(player) or state.pokemon_rb_can_surf(player),
         "Route 2 - Oak's Aide": lambda state: state.pokemon_rb_oaks_aide(state.multiworld.oaks_aide_rt_2[player].value + 5, player),
         "Pewter City - Museum": lambda state: state.pokemon_rb_can_cut(player),
-        "Cerulean City - Bicycle Shop": lambda state: state.has("Bike Voucher", player),
+        "Cerulean City - Bicycle Shop": lambda state: state.has("Bike Voucher", player)
+            or location_item_name(state, "Cerulean City - Bicycle Shop", player) == ("Bike Voucher", player),
         "Lavender Town - Mr. Fuji": lambda state: state.has("Fuji Saved", player),
         "Vermilion Gym - Lt. Surge 1": lambda state: state.pokemon_rb_can_cut(player or state.pokemon_rb_can_surf(player)),
         "Vermilion Gym - Lt. Surge 2": lambda state: state.pokemon_rb_can_cut(player or state.pokemon_rb_can_surf(player)),
         "Route 11 - Oak's Aide": lambda state: state.pokemon_rb_oaks_aide(state.multiworld.oaks_aide_rt_11[player].value + 5, player),
         "Celadon City - Stranded Man": lambda state: state.pokemon_rb_can_surf(player),
-        "Silph Co 11F - Silph Co President": lambda state: state.has("Card Key", player),
-        "Fuchsia City - Safari Zone Warden": lambda state: state.has("Gold Teeth", player),
+        "Silph Co 11F - Silph Co President (Card Key)": lambda state: state.has("Card Key", player),
+        "Fuchsia City - Safari Zone Warden": lambda state: state.has("Gold Teeth", player)
+            or location_item_name(state, "Fuchsia City - Safari Zone Warden", player) == ("Gold Teeth", player),
         "Route 12 - Island Item": lambda state: state.pokemon_rb_can_surf(player),
         "Route 12 - Item Behind Cuttable Tree": lambda state: state.pokemon_rb_can_cut(player),
         "Route 15 - Oak's Aide": lambda state: state.pokemon_rb_oaks_aide(state.multiworld.oaks_aide_rt_15[player].value + 5, player),
@@ -38,6 +57,23 @@ def set_rules(world, player):
         "Silph Co 6F - Southwest Item (Card Key)": lambda state: state.has("Card Key", player),
         "Silph Co 7F - East Item (Card Key)": lambda state: state.has("Card Key", player),
         "Safari Zone Center - Island Item": lambda state: state.pokemon_rb_can_surf(player),
+        "Celadon Prize Corner - Item Prize 1": lambda state: state.has("Coin Case", player),
+        "Celadon Prize Corner - Item Prize 2": lambda state: state.has("Coin Case", player),
+        "Celadon Prize Corner - Item Prize 3": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - West Gambler's Gift (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Center Gambler's Gift (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - East Gambler's Gift (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item Northwest By Counter (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item Southwest Corner (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item Near Rumor Man (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item Near Speculating Woman (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item Near West Gifting Gambler (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item Near Wonderful Time Woman (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item Near Failing Gym Information Guy (Coin Case)": lambda state: state.has( "Coin Case", player),
+        "Celadon Game Corner - Hidden Item Near East Gifting Gambler (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item Near Hooked Guy (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item at End of Horizontal Machine Row (Coin Case)": lambda state: state.has("Coin Case", player),
+        "Celadon Game Corner - Hidden Item in Front of Horizontal Machine Row (Coin Case)": lambda state: state.has("Coin Case", player),
 
         "Silph Co 11F - Silph Co Liberated": lambda state: state.has("Card Key", player),
 
@@ -88,6 +124,16 @@ def set_rules(world, player):
         "Route 16 - Sleeping Pokemon": lambda state: state.has("Poke Flute", player),
         "Seafoam Islands B4F - Legendary Pokemon": lambda state: state.pokemon_rb_can_strength(player),
         "Vermilion City - Legendary Pokemon": lambda state: state.pokemon_rb_can_surf(player) and state.has("S.S. Ticket", player),
+
+        "Route 2 - Marcel Trade": lambda state: state.can_reach("Route 24 - Wild Pokemon - 6", "Location", player),
+        "Underground Tunnel West-East - Spot Trade": lambda state: state.can_reach("Route 24 - Wild Pokemon - 6", "Location", player),
+        "Route 11 - Terry Trade": lambda state: state.can_reach("Safari Zone Center - Wild Pokemon - 5", "Location", player),
+        "Route 18 - Marc Trade": lambda state: state.can_reach("Route 23 - Super Rod Pokemon - 1", "Location", player),
+        "Cinnabar Island - Sailor Trade": lambda state: state.can_reach("Pokemon Mansion 1F - Wild Pokemon - 3", "Location", player),
+        "Cinnabar Island - Crinkles Trade": lambda state: state.can_reach("Route 12 - Wild Pokemon - 4", "Location", player),
+        "Cinnabar Island - Doris Trade": lambda state: state.can_reach("Cerulean Cave 1F - Wild Pokemon - 9", "Location", player),
+        "Vermilion City - Dux Trade": lambda state: state.can_reach("Route 3 - Wild Pokemon - 2", "Location", player),
+        "Cerulean City - Lola Trade": lambda state: state.can_reach("Route 10 - Super Rod Pokemon - 1", "Location", player),
 
         # Pokédex check
         "Pallet Town - Oak's Parcel Reward": lambda state: state.has("Oak's Parcel", player),
@@ -142,7 +188,7 @@ def set_rules(world, player):
         "Pokemon Mansion 1F - Hidden Item Block Near Entrance Carpet": lambda
             state: state.pokemon_rb_can_get_hidden_items(player),
         "Pokemon Mansion 3F - Hidden Item Behind Burglar": lambda state: state.pokemon_rb_can_get_hidden_items(player),
-        "Route 23 - Hidden Item Rocks Before Final Guard": lambda state: state.pokemon_rb_can_get_hidden_items(
+        "Route 23 - Hidden Item Rocks Before Victory Road": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
         "Route 23 - Hidden Item East Bush After Water": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
@@ -178,3 +224,11 @@ def set_rules(world, player):
     for loc in world.get_locations(player):
         if loc.name in access_rules:
             add_rule(loc, access_rules[loc.name])
+        if loc.name in item_rules:
+            add_item_rule(loc, item_rules[loc.name])
+        if loc.name.startswith("Pokedex"):
+            mon = loc.name.split(" - ")[1]
+            add_rule(loc, lambda state, i=mon: (state.has("Pokedex", player) or not
+                     state.multiworld.require_pokedex[player]) and (state.has(i, player)
+                                                                    or state.has(f"Static {i}", player)))
+
