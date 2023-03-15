@@ -1,9 +1,9 @@
-from typing import Dict, Callable, Optional, Tuple, Union, TYPE_CHECKING, List, Iterable
+from typing import Dict, Callable, TYPE_CHECKING
 
-from BaseClasses import CollectionState, MultiWorld, Location, Region, Entrance, Item
+from BaseClasses import CollectionState, MultiWorld
+from worlds.generic.Rules import set_rule, allow_self_locking_items
 from .Options import MessengerAccessibility, Goal
 from .Constants import NOTES, PHOBEKINS
-from ..generic.Rules import add_rule, set_rule
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -111,39 +111,6 @@ class MessengerRules:
             multiworld.accessibility[self.player].value = MessengerAccessibility.option_minimal
         if multiworld.accessibility[self.player] > MessengerAccessibility.option_locations:
             set_self_locking_items(multiworld, self.player)
-
-
-def location_item_name(state: CollectionState, location_name: str, player: int) -> Optional[Tuple[str, int]]:
-    location = state.multiworld.get_location(location_name, player)
-    if location.item is None:
-        return None
-    return location.item.name, location.item.player
-
-
-def allow_self_locking_items(spot: Union[Location, Region], *item_names: str) -> None:
-    """
-    Sets rules on the supplied spot, such that the supplied item_name(s) can possibly be placed there.
-    :param spot: Location or Region that the item(s) are allowed to be placed in
-    :param item_names: item name or names that are allowed to be placed in the Location or Region
-    """
-    player = spot.player
-
-    def set_always_allow(location: Location, rule: Callable[[CollectionState, Item], bool]) -> None:
-        location.always_allow = rule
-
-    def add_allowed_rules(area: Union[Location, Entrance], location: Location) -> None:
-        for item_name in item_names:
-            add_rule(area, lambda state, item_name=item_name:
-                     location_item_name(state, location.name, player) == (item_name, player), "or")
-        set_always_allow(location, lambda state, item:
-                         item.player == player and item.name in [item_name for item_name in item_names])
-
-    if isinstance(spot, Region):
-        for entrance in spot.entrances:
-            for location in spot.locations:
-                add_allowed_rules(entrance, location)
-    else:
-        add_allowed_rules(spot, spot)
 
 
 def set_self_locking_items(multiworld: MultiWorld, player: int) -> None:

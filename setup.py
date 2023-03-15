@@ -21,7 +21,7 @@ from pathlib import Path
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 try:
-    requirement = 'cx-Freeze>=6.14.1'
+    requirement = 'cx-Freeze>=6.14.7'
     pkg_resources.require(requirement)
     import cx_Freeze
 except pkg_resources.ResolutionError:
