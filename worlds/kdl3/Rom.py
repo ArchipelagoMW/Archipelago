@@ -4,6 +4,7 @@ import hashlib
 import os
 import struct
 from worlds.Files import APDeltaPatch
+from .Aesthetics import get_palette_bytes, kirby_target_palettes, get_kirby_palette
 
 KDL3UHASH = "201e7658f6194458a3869dde36bf8ec2"
 
@@ -155,6 +156,13 @@ def patch_rom(multiworld, player, rom, boss_requirements, shuffled_levels):
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
     rom.write_byte(0x7FD9, multiworld.game_language[player].value)
+
+    # handle palette
+    if multiworld.kirby_flavor_preset[player].value != 0:
+        for addr in kirby_target_palettes:
+            target = kirby_target_palettes[addr]
+            palette = get_kirby_palette(multiworld, player)
+            rom.write_bytes(addr, get_palette_bytes(palette, target[0], target[1]))
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:

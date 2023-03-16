@@ -110,11 +110,12 @@ class KDL3SNIClient(SNIClient):
         # level completion status
         world_unlocks = await snes_read(ctx, KDL3_WORLD_UNLOCK, 1)
         level_unlocks = await snes_read(ctx, KDL3_LEVEL_UNLOCK, 1)
-        current_world = world_unlocks[0]
+        current_world = world_unlocks[0] - 1
+        current_level = level_unlocks[0] - 1
         if world_unlocks[0] > 0x06:
             return  # save is not loaded, ignore
-        for i in range(world_unlocks[0] + 1):
-            for j in range(7 if current_world > i else level_unlocks[0]):
+        for i in range(0, world_unlocks[0]):
+            for j in range(0, 6 if current_world > i else current_level):
                 loc_id = 0x770000 + self.levels[i][j]
                 if loc_id not in ctx.checked_locations:
                     new_checks.append(loc_id)

@@ -16,14 +16,15 @@ default_levels = {
 }
 
 first_stage_blacklist = {
-    0x77000B, # 2-5 needs Kine
-    0x770012, # 3-5 needs Cutter
-    0x77001C, # 5-4 needs Burning
+    0x77000B,  # 2-5 needs Kine
+    0x770012,  # 3-5 needs Cutter
+    0x77001C,  # 5-4 needs Burning
 }
+
 
 def generate_valid_level(level, stage, possible_stages, slot_random):
     new_stage = slot_random.choice(possible_stages)
-    if level == 1 and stage == 1 and new_stage in first_stage_blacklist:
+    if level == 1 and stage == 0 and new_stage in first_stage_blacklist:
         return generate_valid_level(level, stage, possible_stages, slot_random)
     else:
         return new_stage
@@ -84,6 +85,11 @@ def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bo
                 loc, boss = option.split("-")
                 levels[LocationName.level_names[loc]][6] = LocationName.boss_names[boss]
                 plando_bosses.append(boss)
+            else:
+                for level in levels:
+                    if levels[level][6] is None:
+                        levels[level][6] = LocationName.boss_names[option]
+                        plando_bosses.append(option)
 
     if boss_shuffle > 0:
         if boss_shuffle == 2:

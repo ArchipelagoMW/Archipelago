@@ -70,7 +70,8 @@ class BossShuffle(PlandoBosses):
     display_name = "Boss Shuffle"
     option_none = 0
     option_shuffled = 1
-    option_singularity = 2
+    option_full = 2
+    option_singularity = 3
 
 
 class BossRequirementRandom(Toggle):
@@ -118,12 +119,15 @@ class KirbyFlavorPreset(Choice):
     #option_orange = 11
     #option_kiwi = 12
     #option_lavender = 13
+    option_custom = 14
     default = 0
 
-# class KirbyFlavor(OptionDict):
+
+class KirbyFlavor(OptionDict):
     """
     A custom color for Kirby.
     """
+    default = {}
 
 
 class GooeyFlavorPreset(Choice):
