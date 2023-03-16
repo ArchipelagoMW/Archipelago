@@ -6,7 +6,7 @@
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from .Items import BumpStikItem, item_table, item_groups
 from .Locations import location_table
-from .Options import bumpstik_options, RainbowTrap, SpinnerTrap, KillerTrap
+from .Options import *
 from .Regions import create_regions
 from ..AutoWorld import World, WebWorld
 from ..generic.Rules import forbid_item
@@ -47,9 +47,13 @@ class BumpStikWorld(World):
 
     def __init__(self, world: MultiWorld, player: int):
         super(BumpStikWorld, self).__init__(world, player)
-        self.rainbow_traps = RainbowTrap.default
-        self.spinner_traps = SpinnerTrap.default
-        self.killer_traps = KillerTrap.default
+        self.task_advances = TaskAdvances.default
+        self.turners = Turners.default
+        self.paint_cans = PaintCans.default
+        self.traps = Traps.default
+        self.rainbow_trap_weight = RainbowTrapWeight.default
+        self.spinner_trap_weight = SpinnerTrapWeight.default
+        self.killer_trap_weight = KillerTrapWeight.default
 
     def create_item(self, name: str) -> Item:
         return BumpStikItem(name, ItemClassification.filler, item_table[name], self.player)
@@ -60,22 +64,43 @@ class BumpStikWorld(World):
     def _create_item_in_quantities(self, name: str, qty: int) -> [Item]:
         return [self.create_item(name) for _ in range(0, qty)]
 
+    def _create_traps(self):
+        max_weight = self.rainbow_trap_weight + \
+            self.spinner_trap_weight + self.killer_trap_weight
+        rainbow_threshold = self.rainbow_trap_weight
+        spinner_threshold = self.rainbow_trap_weight + self.spinner_trap_weight
+        trap_return = [0, 0, 0]
+
+        for i in range(self.traps):
+            draw = self.multiworld.random.randrange(0, max_weight)
+            if draw < rainbow_threshold:
+                trap_return[0] += 1
+            elif draw < spinner_threshold:
+                trap_return[1] += 1
+            else:
+                trap_return[2] += 1
+
+        return trap_return
+
     def get_filler_item_name(self) -> str:
         return "Nothing"
 
     def generate_early(self):
-        self.rainbow_traps = self.multiworld.rainbow_traps[self.player].value
-        self.spinner_traps = self.multiworld.spinner_traps[self.player].value
-        self.killer_traps = self.multiworld.killer_traps[self.player].value
+        self.task_advances = self.multiworld.task_advances[self.player].value
+        self.turners = self.multiworld.turners[self.player].value
+        self.paint_cans = self.multiworld.paint_cans[self.player].value
+        self.traps = self.multiworld.trap_count[self.player].value
+        self.rainbow_trap_weight = self.multiworld.rainbow_trap_weight[self.player].value
+        self.spinner_trap_weight = self.multiworld.spinner_trap_weight[self.player].value
+        self.killer_trap_weight = self.multiworld.killer_trap_weight[self.player].value
 
     def create_regions(self):
         create_regions(self.multiworld, self.player)
 
     def create_items(self):
         frequencies = [
-            0, 0, 5, 3, 0, 4, 5, 25, 33,
-            self.rainbow_traps, self.spinner_traps, self.killer_traps
-        ]
+            0, 0, self.task_advances, self.turners, 0, self.paint_cans, 5, 25, 33
+        ] + self._create_traps()
         item_pool = []
 
         for i, name in enumerate(item_table):
