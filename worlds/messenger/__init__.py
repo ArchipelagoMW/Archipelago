@@ -3,10 +3,10 @@ from typing import Dict, Any, List, Optional
 from BaseClasses import Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS, ALWAYS_LOCATIONS, SEALS, ALL_ITEMS
-from .Options import messenger_options, NotesNeeded, Goal, PowerSeals
+from .Options import messenger_options, NotesNeeded, Goal, PowerSeals, Logic
 from .Regions import REGIONS, REGION_CONNECTIONS
-from .Rules import MessengerRules
 from .SubClasses import MessengerRegion, MessengerItem
+from . import Rules
 
 
 class MessengerWeb(WebWorld):
@@ -100,7 +100,20 @@ class MessengerWorld(World):
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
-        MessengerRules(self).set_messenger_rules()
+        logic = self.multiworld.logic_level[self.player]
+        tricks = self.multiworld.logic_tricks[self.player].value
+        if logic == Logic.option_normal:
+            Rules.MessengerRules(self).set_messenger_rules()
+        elif logic == Logic.option_hard:
+            Rules.MessengerHardRules(self).set_messenger_rules()
+        elif logic == Logic.option_challenging:
+            Rules.MessengerChallengeRules(self).set_messenger_rules()
+        elif logic == Logic.option_impossible:
+            Rules.MessengerImpossibleRules(self).set_messenger_rules()
+        else:
+            Rules.MessengerOOBRules(self).set_messenger_rules()
+        if tricks:
+            Rules.MessengerLogicTricks(self).add_trick_logic()
 
     def fill_slot_data(self) -> Dict[str, Any]:
         locations: Dict[int, List[str]] = {}

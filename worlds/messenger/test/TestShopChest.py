@@ -4,7 +4,7 @@ from . import MessengerTestBase
 
 class NoLogicTest(MessengerTestBase):
     options = {
-        "enable_logic": "false",
+        "logic_level": "none",
         "goal": "power_seal_hunt",
     }
 

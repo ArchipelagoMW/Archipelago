@@ -116,8 +116,8 @@ class AccessTest(MessengerTestBase):
 
 class ItemsAccessTest(MessengerTestBase):
     options = {
-        "shuffle_seals": False,
-        "accessibility": MessengerAccessibility.option_items
+        "shuffle_seals": "false",
+        "accessibility": "items"
     }
 
     def testSelfLockingItems(self) -> None:
@@ -139,11 +139,11 @@ class ItemsAccessTest(MessengerTestBase):
 
 class NoLogicTest(MessengerTestBase):
     options = {
-        "enable_logic": "false"
+        "logic_level": "none"
     }
 
     def testNoLogic(self) -> None:
-        """Test some funny locations to make sure they aren't reachable but we can still win"""
+        """Test some funny locations to make sure they aren't reachable, but we can still win"""
         self.assertEqual(self.can_reach_location("Pyro"), False)
         self.assertEqual(self.can_reach_location("Rescue Phantom"), False)
         self.assertBeatable(True)

@@ -1,4 +1,4 @@
-from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice
+from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice, OptionList
 
 
 class MessengerAccessibility(Accessibility):
@@ -7,9 +7,32 @@ class MessengerAccessibility(Accessibility):
     __doc__ = Accessibility.__doc__.replace(f"default {Accessibility.default}", f"default {default}")
 
 
-class Logic(DefaultOnToggle):
-    """Whether the seed should be guaranteed completable."""
-    display_name = "Use Logic"
+class Logic(Choice):
+    """
+    The level of logic to use when determining what locations in your world are accessible.
+    Normal can require damage boosts, but otherwise approachable for someone who's beaten the game.
+    Hard has some more difficult tricks in logic, but should be easier for speedrunners.
+    Challenging contains more medium difficulty speedrunning tricks.
+    Impossible contains all of the above as well as incredibly difficult speedrunning tricks in logic.
+    None places everything with the minimum amount of rules possible. Expect to do OoB.
+    """
+    display_name = "Logic Level"
+    option_normal = 0
+    option_hard = 1
+    option_challenging = 2
+    option_impossible = 3
+    option_none = 4
+
+
+class LogicTricks(OptionList):
+    """Tricks that you're comfortable putting in logic, without increasing the logic level."""
+    display_name = "Logic Tricks"
+    valid_keys = {
+        "leashing",
+        "time manipulation",
+        "DASH",
+        "DASH-S",
+    }
 
 
 class PowerSeals(DefaultOnToggle):
@@ -55,7 +78,8 @@ class RequiredSeals(Range):
 
 messenger_options = {
     "accessibility": MessengerAccessibility,
-    "enable_logic": Logic,
+    "logic_level": Logic,
+    "logic_tricks": LogicTricks,
     "shuffle_seals": PowerSeals,
     "goal": Goal,
     "music_box": MusicBox,
