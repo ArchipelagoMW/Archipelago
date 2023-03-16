@@ -295,7 +295,7 @@ class Fishsanity(Choice):
     option_none = 0
     option_legendaries = 1
     option_special = 2
-    option_random = 3
+    option_randomized = 3
     option_all = 4
 
 
@@ -311,7 +311,7 @@ class Museumsanity(Choice):
     default = 1
     option_none = 0
     option_milestones = 1
-    option_random = 2
+    option_randomized = 2
     option_all = 3
 
 
