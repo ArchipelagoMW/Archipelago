@@ -19,7 +19,6 @@ class LADXROption:
 
 class Logic(Choice, LADXROption):
     """Affects where items are allowed to be placed.
-    [Casual] Same as normal, except that a few more complex options are removed, like removing bushes with powder and killing enemies with powder or bombs.
     [Normal] Playable without using any tricks or glitches. Can require knowledge from a vanilla playthrough, such as how to open Color Dungeon.
     [Hard] More advanced techniques may be required, but glitches are not. Examples include tricky jumps, killing enemies with only pots.
     [Glitched] Advanced glitches and techniques may be required, but extremely difficult or tedious tricks are not required. Examples include Bomb Triggers, Super Jumps and Jesus Jumps.
@@ -40,23 +39,6 @@ class TradeQuest(DefaultOffToggle, LADXROption):
     Off - (default) doesn't add them
     """
     ladxr_name = "tradequest"
-
-
-#            Setting('forwardfactor', 'Main', 'F', 'Forward Factor', default=0.0,
-#                description="Forward item weight adjustment factor, lower values generate more rear heavy seeds while higher values generate front heavy seeds. Default is 0.5."),
-#            Setting('accessibility', 'Main', 'A', 'Accessibility', options=[('all', 'a', '100% Locations'), ('goal', 'g', 'Beatable')], default='all',
-#                description="""
-#[100% Locations] guaranteed that every single item can be reached and gained.
-#[Beatable] only guarantees that the game is beatable. Certain items/chests might never be reachable."""),
-#            Setting('race', 'Main', 'V', 'Race mode', default=False, multiworld=False,
-#                description="""
-#Spoiler logs can not be generated for ROMs generated with race mode enabled, and seed generation is slightly different."""),
-#             Setting('spoilerformat', 'Main', 'Spoiler Format', options=[('none', 'None'), ('text', 'Text'), ('json', 'JSON')], default='none', multiworld=False,
-#                 description="""Affects how the spoiler log is generated.
-# [None] No spoiler log is generated. One can still be manually dumped later.
-# [Text] Creates a .txt file meant for a human to read.
-# [JSON] Creates a .json file with a little more information and meant for a computer to read.""")
-
 
 class Boomerang(Choice):
     """

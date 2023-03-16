@@ -429,10 +429,9 @@ def create_task_log_exception(awaitable) -> asyncio.Task:
 
 class LinksAwakeningContext(CommonContext):
     tags = {"AP"}
-    game = "Links Awakening DX"  # empty matches any game since 0.3.2
-    items_handling = 0b101  # receive all items for /received
-    want_slot_data = True  # Can't use game specific slot_data
-    # slot = 1
+    game = "Links Awakening DX"
+    items_handling = 0b101
+    want_slot_data = True
     la_task = None
     client = None
     # TODO: does this need to re-read on reset?

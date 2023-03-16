@@ -75,9 +75,6 @@ class LinksAwakeningWorld(World):
 
     player_options = None
 
-    def create_item(self, item: str) -> LinksAwakeningItem:
-        assert(False)
-
     def convert_ap_options_to_ladxr_logic(self):
         self.player_options = {
             option: getattr(self.multiworld, option)[self.player] for option in self.option_definitions
