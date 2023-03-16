@@ -4,9 +4,8 @@ import pytest
 
 from BaseClasses import ItemClassification, MultiWorld
 from Options import SpecialRange
-from worlds.stardew_valley import StardewItem
 from . import setup_solo_multiworld
-from .. import options
+from .. import StardewItem, options
 from ..options import StardewOption, stardew_valley_option_classes
 
 SEASONS = {"Spring", "Summer", "Fall", "Winter"}

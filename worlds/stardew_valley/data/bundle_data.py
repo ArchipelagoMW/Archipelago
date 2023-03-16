@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from worlds.stardew_valley.data.game_item import GameItem
 from . import fish_data
 from .common_data import quality_dict
+from .game_item import GameItem
 from .museum_data import Mineral
 
 

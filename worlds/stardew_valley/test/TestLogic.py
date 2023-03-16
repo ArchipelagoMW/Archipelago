@@ -1,8 +1,8 @@
 import pytest
 
 from test.general import setup_solo_multiworld
-from worlds.stardew_valley.data.bundle_data import BundleItem, all_bundle_items_except_money
 from .. import StardewValleyWorld, StardewLocation
+from ..data.bundle_data import BundleItem, all_bundle_items_except_money
 from ..stardew_rule import MISSING_ITEM, False_
 
 multi_world = setup_solo_multiworld(StardewValleyWorld)
