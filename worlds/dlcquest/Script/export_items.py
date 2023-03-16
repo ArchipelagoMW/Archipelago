@@ -14,7 +14,7 @@ if not os.path.isdir("output"):
     os.mkdir("output")
 
 if __name__ == "__main__":
-    with open("output/DLC_Quest_item_table.json", "w+") as f:
+    with open("output/dlc_quest_item_table.json", "w+") as f:
         items = {
             item.name: {
                 "code": item.code,

@@ -1,5 +1,6 @@
 from BaseClasses import Location, MultiWorld
 from . import Options
+import re
 
 class DLCquestLocation(Location):
     game: str = "DLCquest"
@@ -47,12 +48,12 @@ location_table ={
 }
 
 for i in range(825):
-        item_coin = "Coin Bundle Basic"
-        item_coin_loc = item_coin + str(i+1)
+        item_coin = "DLC Quest: number Coin"
+        item_coin_loc = re.sub("number", str(i+1), item_coin)
         location_table.update({item_coin_loc: offset + 37 +i})
 
 for i in range(889):
-        item_coin_freemium = "Coin Bundle Freemium"
-        item_coin_loc_freemium = item_coin_freemium +str(i+1)
+        item_coin_freemium = "Live Freemium or Die: number Coin"
+        item_coin_loc_freemium = re.sub("number", str(i+1), item_coin_freemium)
         location_table.update({item_coin_loc_freemium: offset + 825 +37 + i})
 

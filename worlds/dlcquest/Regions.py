@@ -1,4 +1,5 @@
 import math
+import re
 from BaseClasses import MultiWorld, Region, Location, Entrance, ItemClassification
 from .Locations import DLCquestLocation, location_table
 from .Rules import create_event
@@ -37,9 +38,11 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
             coin_bundle_needed = math.floor(825 / World_Options[Options.CoinSanityRange])
             for i in range(coin_bundle_needed):
-                item_coin = "Coin Bundle Basic"
-                item_coin_loc = item_coin + str(i + 1)
+                item_coin = "DLC Quest: number Coin"
+                item_coin_loc = re.sub("number", str(World_Options[Options.CoinSanityRange] * (i + 1)), item_coin)
                 Regmoveright.locations +=[DLCquestLocation(player, item_coin_loc, location_table[item_coin_loc], Regmoveright)]
+            if 825 % World_Options[Options.CoinSanityRange] != 0:
+                Regmoveright.locations += [DLCquestLocation(player, "DLC Quest: 825 Coin", location_table["DLC Quest: 825 Coin"], Regmoveright)]
         world.regions.append(Regmoveright)
 
 
@@ -138,9 +141,14 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
             coin_bundle_needed = math.floor(889 / World_Options[Options.CoinSanityRange])
             for i in range(coin_bundle_needed):
-                item_coin_freemium = "Coin Bundle Freemium"
-                item_coin_freemium_loc = item_coin_freemium + str(i + 1)
-                Regmoveright.locations +=[DLCquestLocation(player, item_coin_freemium_loc, location_table[item_coin_freemium_loc], Regfreemiumstart)]
+                item_coin_freemium = "Live Freemium or Die: number Coin"
+                item_coin_loc_freemium = re.sub("number", str(World_Options[Options.CoinSanityRange] * (i + 1)), item_coin_freemium)
+                Regfreemiumstart.locations += [
+                    DLCquestLocation(player, item_coin_loc_freemium, location_table[item_coin_loc_freemium], Regfreemiumstart)]
+            if 889 % World_Options[Options.CoinSanityRange] != 0:
+                Regfreemiumstart.locations += [
+                    DLCquestLocation(player, "Live Freemium or Die: 889 Coin", location_table["Live Freemium or Die: 889 Coin"],
+                                     Regfreemiumstart)]
         world.regions.append(Regfreemiumstart)
 
 

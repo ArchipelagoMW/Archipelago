@@ -87,6 +87,10 @@ def create_items(world, World_Options: Options.DLCQuestOptions):
                 if item.has_any_group(Group.Coin):
                     for i in range(coin_bundle_needed):
                         created_items.append(world.create_item(item))
+                    if 825 % World_Options[Options.CoinSanityRange] != 0:
+                        created_items.append(world.create_item(item))
+
+
     if World_Options[Options.Campaign] == Options.Campaign.option_live_freemium_or_die or World_Options[Options.Campaign] == Options.Campaign.option_both:
         for item in items_by_group[Group.Freemium]:
             if item.has_any_group(Group.DLC) or item.has_any_group(Group.Item):
@@ -96,6 +100,8 @@ def create_items(world, World_Options: Options.DLCQuestOptions):
             for item in items_by_group[Group.Freemium]:
                 if item.has_any_group(Group.Coin):
                     for i in range(coin_bundle_needed):
+                        created_items.append(world.create_item(item))
+                    if 889 % World_Options[Options.CoinSanityRange] != 0:
                         created_items.append(world.create_item(item))
 
 
