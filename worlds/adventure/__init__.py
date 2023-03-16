@@ -32,7 +32,7 @@ class AdventureWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["word_fcuk"]
+        ["JusticePS"]
     )]
     theme = "dirt"
 
