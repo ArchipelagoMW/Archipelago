@@ -57,9 +57,6 @@ class AdventureWorld(World):
     option_definitions: ClassVar[Dict[str, AssembleOptions]] = adventure_option_definitions
     item_name_to_id: ClassVar[Dict[str, int]] = {name: data.id for name, data in item_table.items()}
     location_name_to_id: ClassVar[Dict[str, int]] = {name: data.location_id for name, data in location_table.items()}
-    # # item_name_groups: ClassVar[Dict[str, Set[str]]] = {
-    # #   "Blue chest items": {name for name, data in adventure_item_table.items() if data.type is ItemType.BLUE_CHEST},
-    # # }
     data_version: ClassVar[int] = 1
     required_client_version: Tuple[int, int, int] = (0, 3, 9)
 
