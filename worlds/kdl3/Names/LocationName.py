@@ -95,9 +95,9 @@ level_names = {
 
 # Boss Names
 boss_names = {
-        "whispy woods": 0x770200,
-        "acro": 0x770201,
-        "pon & con": 0x770202,
-        "ado": 0x770203,
-        "king dedede": 0x770204
+        "Whispy Woods": 0x770200,
+        "Acro": 0x770201,
+        "Pon & Con": 0x770202,
+        "Ado": 0x770203,
+        "King Dedede": 0x770204
     }

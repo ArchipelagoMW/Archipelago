@@ -29,7 +29,7 @@ class HeartStarsRequired(Range):
     Percentage of heart stars required to purify the five bosses and reach Zero.
     Each boss will require a differing amount of heart stars to purify.
     """
-    display_name = "Max Heart Stars"
+    display_name = "Required Heart Stars"
     range_start = 1
     range_end = 100
     default = 50

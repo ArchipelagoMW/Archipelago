@@ -63,7 +63,7 @@ def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bo
                 if levels[level][stage] is None:
                     stage_candidates = [candidate for candidate in possible_stages
                                         if (enforce_world and candidate in default_levels[level])
-                                        or (enforce_pattern and candidate % 6 == (stage if stage > 6 else 0))
+                                        or (enforce_pattern and candidate % 6 == stage)
                                         or (enforce_pattern == enforce_world)
                                         ]
                     new_stage = generate_valid_level(level, stage, stage_candidates,
@@ -83,6 +83,8 @@ def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bo
         for option in options:
             if "-" in option:
                 loc, boss = option.split("-")
+                loc = loc.title()
+                boss = boss.title()
                 levels[LocationName.level_names[loc]][6] = LocationName.boss_names[boss]
                 plando_bosses.append(boss)
             else:
