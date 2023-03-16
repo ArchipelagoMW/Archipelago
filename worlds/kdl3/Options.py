@@ -1,5 +1,6 @@
-from Options import Option, DeathLink, Choice, DefaultOnToggle, OptionDict, Range
+from Options import Option, DeathLink, Choice, Toggle, OptionDict, Range, PlandoBosses
 import typing
+from .Names import LocationName
 
 
 class Goal(Choice):
@@ -36,21 +37,54 @@ class HeartStarsRequired(Range):
 
 class LevelShuffle(Choice):
     """
-    None: No level shuffling.
-    Same World: shuffles levels around their world.
-    Shuffled: shuffles levels across all worlds.
+    None: No stage shuffling.
+    Same World: shuffles stages around their world.
+    Pattern: shuffles stages according to the stage pattern (stage 3 will always be a minigame stage, etc.)
+    Shuffled: shuffles stages across all worlds.
     """
-    display_name = "Level Shuffle"
+    display_name = "Stage Shuffle"
     option_none = 0
     option_same_world = 1
-    option_shuffled = 2
+    option_pattern = 2
+    option_shuffled = 3
     default = 0
+
+
+class BossShuffle(PlandoBosses):
+    """
+    None: Bosses will remain in their vanilla locations
+    Shuffled: Bosses will be shuffled amongst each other
+    Singularity: All (non-Zero) bosses will be replaced with a single boss
+    Supports plando placement.
+    """
+    bosses = LocationName.boss_names.keys()
+
+    locations = LocationName.level_names.keys()
+
+    duplicate_bosses = True
+    @classmethod
+    def can_place_boss(cls, boss: str, location: str) -> bool:
+        # Kirby has no logic about requiring bosses in specific locations (since we load in their stage)
+        return True
+
+    display_name = "Boss Shuffle"
+    option_none = 0
+    option_shuffled = 1
+    option_singularity = 2
+
+
+class BossRequirementRandom(Toggle):
+    """
+    If enabled, boss purification will unlock in any order, not sequentially.
+    """
+    display_name = "Randomize Purification Order"
 
 
 class GameLanguage(Choice):
     """
     The language that the game should display. This does not have to match the given rom.
     """
+    display_name = "Game Language"
     option_japanese = 0
     option_english = 1
     default = 1
@@ -70,7 +104,7 @@ class KirbyFlavorPreset(Choice):
     The color of Kirby, from a list of presets.
     """
     display_name = "Kirby Flavor"
-    #option_default = 0
+    option_default = 0
     #option_bubblegum = 1
     #option_cherry = 2
     option_blueberry = 3
@@ -121,6 +155,9 @@ kdl3_options: typing.Dict[str, type(Option)] = {
     "total_heart_stars": TotalHeartStars,
     "heart_stars_required": HeartStarsRequired,
     "filler_percentage": FillerPercentage,
+    "stage_shuffle": LevelShuffle,
+    "boss_shuffle": BossShuffle,
+    "boss_requirement_random": BossRequirementRandom,
     "kirby_flavor_preset": KirbyFlavorPreset,
     # "kirby_flavor": KirbyFlavor,
     "gooey_flavor_preset": GooeyFlavorPreset,

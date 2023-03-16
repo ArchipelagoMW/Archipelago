@@ -18,6 +18,7 @@ KDL3_DEBUG = ROM_START + 0x387E
 KDL3_ROMNAME = ROM_START + 0x7FC0
 KDL3_DEATH_LINK_ADDR = ROM_START + 0x3D010
 KDL3_GOAL_ADDR = ROM_START + 0x3D012
+KDL3_LEVEL_ADDR = ROM_START + 0x3D020
 
 KDL3_GAME_STATE = SRAM_1_START + 0x36D0
 KDL3_GAME_SAVE = SRAM_1_START + 0x3617
@@ -39,6 +40,7 @@ class KDL3SNIClient(SNIClient):
     game = "Kirby's Dream Land 3"
     latest_world = 0x01
     latest_level = 0x01
+    levels = None
 
     async def deathlink_kill_player(self, ctx) -> None:
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
@@ -98,20 +100,24 @@ class KDL3SNIClient(SNIClient):
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
 
+        if self.levels is None:
+            self.levels = dict()
+            for i in range(5):
+                level_data = await snes_read(ctx, KDL3_LEVEL_ADDR + (14 * i), 14)
+                self.levels[i] = unpack("HHHHHHH", level_data)
+
         new_checks = []
         # level completion status
         world_unlocks = await snes_read(ctx, KDL3_WORLD_UNLOCK, 1)
         level_unlocks = await snes_read(ctx, KDL3_LEVEL_UNLOCK, 1)
+        current_world = world_unlocks[0]
         if world_unlocks[0] > 0x06:
             return  # save is not loaded, ignore
-        if world_unlocks[0] >= self.latest_world and level_unlocks[0] > self.latest_level:
-            for loc_id in range(1, ((world_unlocks[0] - 1) * 6) + level_unlocks[0]):
-                if loc_id + 0x770000 not in ctx.checked_locations:
-                    new_checks.append(loc_id + 0x770000)
-            self.latest_level = level_unlocks[0]
-        if world_unlocks[0] > self.latest_world:
-            self.latest_world = world_unlocks[0]
-            self.latest_level = 1  # reset after beating the boss
+        for i in range(world_unlocks[0] + 1):
+            for j in range(7 if current_world > i else level_unlocks[0]):
+                loc_id = 0x770000 + self.levels[i][j]
+                if loc_id not in ctx.checked_locations:
+                    new_checks.append(loc_id)
         # heart star status
         heart_stars = await snes_read(ctx, KDL3_HEART_STARS, 35)
         for i in range(5):

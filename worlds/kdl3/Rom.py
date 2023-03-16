@@ -34,6 +34,43 @@ animal_friends = {  # individual spawn addresses for each animal friend
     ],
 }
 
+level_pointers = {
+    0x770001: 0x0084,
+    0x770002: 0x009C,
+    0x770003: 0x00B8,
+    0x770004: 0x00D8,
+    0x770005: 0x0104,
+    0x770006: 0x0124,
+    0x770007: 0x014C,
+    0x770008: 0x0170,
+    0x770009: 0x0190,
+    0x77000A: 0x01B0,
+    0x77000B: 0x01E8,
+    0x77000C: 0x0218,
+    0x77000D: 0x024C,
+    0x77000E: 0x0270,
+    0x77000F: 0x02A0,
+    0x770010: 0x02C4,
+    0x770011: 0x02EC,
+    0x770012: 0x0314,
+    0x770013: 0x03CC,
+    0x770014: 0x0404,
+    0x770015: 0x042C,
+    0x770016: 0x044C,
+    0x770017: 0x0478,
+    0x770018: 0x049C,
+    0x770019: 0x04E4,
+    0x77001A: 0x0504,
+    0x77001B: 0x0530,
+    0x77001C: 0x0554,
+    0x77001D: 0x05A8,
+    0x77001E: 0x0640,
+    0x770200: 0x0148,
+    0x770201: 0x0248,
+    0x770202: 0x03C8,
+    0x770203: 0x04E0,
+    0x770204: 0x06A4,
+}
 
 class KDL3DeltaPatch(APDeltaPatch):
     hash = KDL3UHASH
@@ -75,7 +112,7 @@ def handle_animal_friends(rom):
             rom.write_byte(address, 3)
 
 
-def patch_rom(multiworld, player, rom, boss_requirements):
+def patch_rom(multiworld, player, rom, boss_requirements, shuffled_levels):
     # handle animal friends first
     handle_animal_friends(rom)
 
@@ -105,6 +142,13 @@ def patch_rom(multiworld, player, rom, boss_requirements):
                                          boss_requirements[3], boss_requirements[4]))
     rom.write_byte(0x3D010, multiworld.death_link[player].value)
     rom.write_byte(0x3D012, multiworld.goal[player].value)
+
+    for level in shuffled_levels:
+        for i in range(len(shuffled_levels[level])):
+            rom.write_bytes(0x3F002E + ((level - 1) * 14) + (i * 2),
+                            struct.pack("H", level_pointers[shuffled_levels[level][i]]))
+            rom.write_bytes(0x3D020 + (level - 1) * 14 + (i * 2),
+                            struct.pack("H", shuffled_levels[level][i] & 0x00FFFF))
 
     from Main import __version__
     rom.name = bytearray(f'KDL3{__version__.replace(".", "")[0:3]}_{player}_{multiworld.seed:11}\0', 'utf8')[:21]
