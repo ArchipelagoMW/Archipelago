@@ -1615,7 +1615,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 "missing_locations": get_missing_checks(ctx, team, slot),
                 "checked_locations": get_checked_checks(ctx, team, slot),
                 "slot_info": ctx.slot_info,
-                "hint_points": get_slot_points(ctx, team, slot)
+                "hint_points": get_slot_points(ctx, team, slot),
             }
             reply = [connected_packet]
             start_inventory = get_start_inventory(ctx, slot, client.remote_start_inventory)
