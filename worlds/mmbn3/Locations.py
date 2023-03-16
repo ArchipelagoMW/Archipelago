@@ -347,7 +347,9 @@ location_data_table: typing.Dict[str, LocationData] = {locData.name: locData for
 player_excluded_locations: typing.Dict[int, typing.List[str]] = {}
 
 
+"""
 def setup_locations(world, player: int):
     # If we later include options to change what gets added to the random pool,
     # this is where they would be changed
     return {locData.name: locData.id for locData in all_locations}
+"""

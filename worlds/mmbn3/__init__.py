@@ -5,11 +5,11 @@ import threading
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, Entrance, \
     LocationProgressType
 from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
-from ..AutoWorld import WebWorld, World
+from worlds.AutoWorld import WebWorld, World
 from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequencies, items_by_id, ItemType, \
     player_item_frequencies
-from .Locations import Location, MMBN3Location, all_locations, setup_locations, location_table, location_data_table, \
-    always_excluded_locations, player_excluded_locations
+from .Locations import Location, MMBN3Location, all_locations, location_table, location_data_table, \
+    always_excluded_locations, player_excluded_locations, jobs
 from .Options import MMBN3Options
 from .Regions import regions, RegionName
 from .Names.ItemName import ItemName
@@ -44,12 +44,14 @@ class MMBN3World(World):
     data_version = 1
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = {locData.name: locData.id for locData in all_locations}
+    location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
+
+    excluded_locations: typing.List[str]
+    item_frequencies: typing.Dict[str, int]
 
     web = MMBN3Web()
 
     def __init__(self, world: MultiWorld, player: int):
-        self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
 
     def generate_early(self) -> None:
@@ -57,43 +59,14 @@ class MMBN3World(World):
         called per player before any items or locations are created. You can set properties on your world here.
         Already has access to player options and RNG.
         """
+        self.item_frequencies = item_frequencies
         if self.multiworld.extra_ranks[self.player] > 0:
-            player_item_frequencies[self.player] = \
-                {ItemName.Progressive_Undernet_Rank: 8 + self.multiworld.extra_ranks[self.player]}
+            self.item_frequencies[ItemName.Progressive_Undernet_Rank] = 8 + self.multiworld.extra_ranks[self.player]
 
         if not self.multiworld.include_jobs[self.player]:
-            excluded_locs = player_excluded_locations[self.player] if self.player in player_excluded_locations else []
-            excluded_locs.extend([
-                LocationName.Please_deliver_this,
-                LocationName.My_Navi_is_sick,
-                LocationName.Help_me_with_my_son,
-                LocationName.Transmission_error,
-                LocationName.Chip_Prices,
-                LocationName.Im_broke,
-                LocationName.Rare_chips_for_cheap,
-                LocationName.Be_my_boyfriend,
-                LocationName.Will_you_deliver,
-                LocationName.Somebody_please_help,
-                LocationName.Looking_for_condor,
-                LocationName.Help_with_rehab,
-                LocationName.Old_Master,
-                LocationName.Catching_gang_members,
-                LocationName.Please_adopt_a_virus,
-                LocationName.Legendary_Tomes,
-                LocationName.Legendary_Tomes_Treasure,
-                LocationName.Hide_and_seek_First_Child,
-                LocationName.Hide_and_seek_Second_Child,
-                LocationName.Hide_and_seek_Third_Child,
-                LocationName.Hide_and_seek_Fourth_Child,
-                LocationName.Hide_and_seek_Completion,
-                LocationName.Finding_the_blue_Navi,
-                LocationName.Give_your_support,
-                LocationName.Stamp_collecting,
-                LocationName.Help_with_a_will
-            ])
-            # Since we possibly created a new empty list here we have to assign it
-            player_excluded_locations[self.player] = excluded_locs
-
+            self.excluded_locations = always_excluded_locations + [job.name for job in jobs]
+        else:
+            self.excluded_locations = always_excluded_locations
     def create_regions(self) -> None:
         """
         called to place player's regions into the MultiWorld's regions list. If it's hard to separate, this can be done
@@ -105,7 +78,7 @@ class MMBN3World(World):
             name_to_region[region_info.name] = region
             for location in region_info.locations:
                 loc = MMBN3Location(self.player, location, self.location_name_to_id.get(location, None), region)
-                if location in always_excluded_locations or location in player_excluded_locations:
+                if location in self.excluded_locations:
                     loc.progress_type = LocationProgressType.EXCLUDED
                 region.locations.append(loc)
             self.multiworld.regions.append(region)
@@ -160,9 +133,7 @@ class MMBN3World(World):
         required_items = []
         for item in all_items:
             if item.progression != ItemClassification.filler:
-                freq = player_item_frequencies[self.player][item.itemName] \
-                    if self.player in player_item_frequencies and item.itemName in player_item_frequencies[self.player]\
-                    else item_frequencies[item.itemName] if item.itemName in item_frequencies else 1
+                freq = self.item_frequencies[item.itemName] if item.itemName in self.item_frequencies else 1
                 required_items += [item.itemName] * freq
 
         for itemName in required_items:
@@ -407,11 +378,14 @@ class MMBN3World(World):
 
 
     def generate_output(self, output_directory: str) -> None:
+        rompath: str = ""
+
         try:
             world = self.multiworld
             player = self.player
 
             rom = LocalRom(get_base_rom_path())
+
             for location_name in location_table.keys():
                 location = world.get_location(location_name, player)
                 ap_item = location.item
@@ -428,11 +402,8 @@ class MMBN3World(World):
                     rom.replace_item(location_data, item)
             rom.inject_name(world.player_name[player])
 
-            outfilepname = f'_P{player}'
-            outfilepname += f"_{world.player_name[player].replace(' ','_')}"\
-                if world.player_name[player] != 'Player%d' % player else ''
+            rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gba")
 
-            rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.gba')
             rom.write_changed_rom()
             rom.write_to_file(rompath)
 
@@ -444,7 +415,6 @@ class MMBN3World(World):
         finally:
             if os.path.exists(rompath):
                 os.unlink(rompath)
-            self.rom_name_available_event.set()
 
     @classmethod
     def stage_assert_generate(cls, multiworld: "MultiWorld") -> None:

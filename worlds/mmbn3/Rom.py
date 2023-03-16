@@ -148,8 +148,6 @@ class TextArchive:
             self.scripts[script_index].messageBoxes[index] = []
 
     def inject_into_rom(self, modified_rom_data):
-        original_size = self.compressedSize if self.compressed else self.uncompressedSize
-
         working_data = self.generate_data(self.compressed)
 
         # It needs to start on a byte divisible by 4. If the rom data is not, add an FF
@@ -167,7 +165,7 @@ class TextArchive:
             # As far as I know, this should literally not be possible.
             # Every script I've looked at has dozens of unused indices, so finding 9 (8 plus one "ending" script)
             # should be no problem. We re-use these so we don't have to worry about an area getting tons of these
-            raise "Error in generation -- not enough room for progressive undernet in archive "+self.startOffset
+            raise AssertionError("Error in generation -- not enough room for progressive undernet in archive "+self.startOffset)
         for i in range(9):  # There are 8 progressive undernet ranks
             new_script_index = self.unused_indices[i]
             new_script = ArchiveScript(new_script_index, generate_progressive_undernet(i, self.unused_indices[i+1]))
@@ -300,7 +298,6 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
     if not base_rom_bytes:
         file_name = get_base_rom_path(file_name)
         base_rom_bytes = bytes(open(file_name, "rb").read())
-        rom_data = base_rom_bytes
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)

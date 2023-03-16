@@ -1,4 +1,4 @@
-# "MegaMan Battle Network 3
+# MegaMan Battle Network 3
 
 ## Where is the settings page?
 
@@ -21,7 +21,7 @@ The Nut-Wafer Chocolate Stand in the Yoka Metro has been replaced with a system 
 
 The Secret Area is unlocked from the start, since the Library is filled automatically. Jacking Out has been enabled in the Secret Area.
 
-## What is the goal of "MegaMan Battle Network 3 when randomized?
+## What is the goal of MegaMan Battle Network 3 when randomized?
 
 Defeat Alpha on the WWW Base. You will not be able to access the Island until you have acquired the item `GigFreez`, which will be
 the eight item in the `progressive-undernet` item sequence. You will need to acquire Undernet Ranks 10, 9, 8, 7, 3, 2, and 1 before acquiring `GigFreez`
