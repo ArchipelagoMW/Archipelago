@@ -71,6 +71,11 @@ class MultiWorld():
     completion_condition: Dict[int, Callable[[CollectionState], bool]]
     indirect_connections: Dict[Region, Set[Entrance]]
     exclude_locations: Dict[int, Options.ExcludeLocations]
+    priority_locations: Dict[int, Options.PriorityLocations]
+    start_inventory: Dict[int, Options.StartInventory]
+    start_hints: Dict[int, Options.StartHints]
+    start_location_hints: Dict[int, Options.StartLocationHints]
+    item_links: Dict[int, Options.ItemLinks]
 
     game: Dict[int, str]
 
@@ -961,7 +966,7 @@ class Location:
         self.parent_region = parent
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
-        return (self.always_allow(state, item)
+        return ((self.always_allow(state, item) and item.name not in state.multiworld.non_local_items[item.player])
                 or ((self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
                     and self.item_rule(item)
                     and (not check_access or self.can_reach(state))))
