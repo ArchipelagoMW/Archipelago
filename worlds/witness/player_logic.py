@@ -40,7 +40,7 @@ class WitnessPlayerLogic:
         Panels outside of the same region will still be checked manually.
         """
 
-        if panel_hex in self.COMPLETELY_DISABLED_CHECKS:
+        if panel_hex in self.COMPLETELY_DISABLED_CHECKS or panel_hex in self.PRECOMPLETED_LOCATIONS:
             return frozenset()
 
         check_obj = self.REFERENCE_LOGIC.CHECKS_BY_HEX[panel_hex]
