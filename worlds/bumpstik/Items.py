@@ -116,3 +116,9 @@ ALTTPWorld.sickkid_credit_texts.update({item_table[name]: texts.sickkid for name
 ALTTPWorld.magicshop_credit_texts.update({item_table[name]: texts.magicshop for name, texts in LttPCreditsText.items()})
 ALTTPWorld.zora_credit_texts.update({item_table[name]: texts.zora for name, texts in LttPCreditsText.items()})
 ALTTPWorld.fluteboy_credit_texts.update({item_table[name]: texts.fluteboy for name, texts in LttPCreditsText.items()})
+
+item_groups = {
+    "Helpers": ["Task Advance", "Starting Turner", "Starting Paint Can"],
+    "Targets": ["Treasure Bumper", "Booster Bumper", "Hazard Bumper"],
+    "Traps": ["Rainbow Trap", "Spinner Trap", "Killer Trap"]
+}

@@ -4,7 +4,7 @@
 # https://opensource.org/licenses/MIT
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from .Items import BumpStikItem, item_table
+from .Items import BumpStikItem, item_table, item_groups
 from .Locations import location_table
 from .Options import bumpstik_options, RainbowTrap, SpinnerTrap, KillerTrap
 from .Regions import create_regions
@@ -37,7 +37,7 @@ class BumpStikWorld(World):
 
     item_name_to_id = item_table
     location_name_to_id = location_table
-    # item_name_groups = item_groups
+    item_name_groups = item_groups
 
     data_version = 0
 
