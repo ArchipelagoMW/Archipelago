@@ -17,7 +17,7 @@ import base64
 
 
 class KDL3WebWorld(WebWorld):
-    theme = "party"
+    theme = "partyTime"
     """
     tutorials = [
         

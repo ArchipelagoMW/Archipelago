@@ -95,6 +95,7 @@ class FillerPercentage(Range):
     """
     Percentage of non-required Heart Stars to be converted to filler items (1-Ups, Maxim Tomatoes, Invincibility Candy).
     """
+    display_name = "Filler Percentage"
     range_start = 0
     range_end = 100
     default = 50
@@ -163,6 +164,6 @@ kdl3_options: typing.Dict[str, type(Option)] = {
     "boss_shuffle": BossShuffle,
     "boss_requirement_random": BossRequirementRandom,
     "kirby_flavor_preset": KirbyFlavorPreset,
-    # "kirby_flavor": KirbyFlavor,
+    "kirby_flavor": KirbyFlavor,
     "gooey_flavor_preset": GooeyFlavorPreset,
 }
