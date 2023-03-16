@@ -32,7 +32,7 @@ class AutoWorldRegister(type):
             if version_tuple > dct["highest_archipelago_version"]:
                 raise WorldVersionIncompatible(
                     f"World {name} for {dct.get('game', None)} "
-                    f"supports Archipelago up to {dct['required_archipelago_version']}, but this is {version_tuple}")
+                    f"supports Archipelago up to {dct['highest_archipelago_version']}, but this is {version_tuple}")
         if "web" in dct:
             assert isinstance(dct["web"], WebWorld), "WebWorld has to be instantiated."
         # filter out any events
