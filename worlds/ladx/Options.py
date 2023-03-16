@@ -19,7 +19,6 @@ class LADXROption:
 
 class Logic(Choice, LADXROption):
     """Affects where items are allowed to be placed.
-    [Casual] Same as normal, except that a few more complex options are removed, like removing bushes with powder and killing enemies with powder or bombs.
     [Normal] Playable without using any tricks or glitches. Can require knowledge from a vanilla playthrough, such as how to open Color Dungeon.
     [Hard] More advanced techniques may be required, but glitches are not. Examples include tricky jumps, killing enemies with only pots.
     [Glitched] Advanced glitches and techniques may be required, but extremely difficult or tedious tricks are not required. Examples include Bomb Triggers, Super Jumps and Jesus Jumps.
