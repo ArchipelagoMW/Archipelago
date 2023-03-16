@@ -690,6 +690,10 @@ class Context:
         targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
         if targets:
             self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.hints[team, slot]}])
+        self.broadcast(self.clients[team][slot], [{
+            "cmd": "RoomUpdate",
+            "hint_points": get_slot_points(self, team, slot)
+        }])
 
 
 def update_aliases(ctx: Context, team: int):
@@ -1489,10 +1493,6 @@ class ClientMessageProcessor(CommonCommandProcessor):
                                     f"You have {points_available} points and need at least "
                                     f"{self.ctx.get_hint_cost(self.client.slot)}.")
                 self.ctx.notify_hints(self.client.team, hints)
-                self.ctx.broadcast(self.ctx.clients[self.client.team][self.client.slot], [{
-                    "cmd": "RoomUpdate",
-                    "hint_points": get_slot_points(self.ctx, self.client.team, self.client.slot)
-                }])
                 self.ctx.save()
                 return True
 
