@@ -781,10 +781,6 @@ async def on_client_joined(ctx: Context, client: Client):
                               "If your client supports it, "
                               "you may have additional local commands you can list with /help.",
                       {"type": "Tutorial"})
-    ctx.broadcast(ctx.clients[client.team][client.slot], [{
-        "cmd": "RoomUpdate",
-        "hint_points": get_slot_points(ctx, client.team, client.slot)
-    }])
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 
@@ -1618,7 +1614,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 "players": ctx.get_players_package(),
                 "missing_locations": get_missing_checks(ctx, team, slot),
                 "checked_locations": get_checked_checks(ctx, team, slot),
-                "slot_info": ctx.slot_info
+                "slot_info": ctx.slot_info,
+                "hint_points": get_slot_points(ctx, team, slot)
             }
             reply = [connected_packet]
             start_inventory = get_start_inventory(ctx, slot, client.remote_start_inventory)
