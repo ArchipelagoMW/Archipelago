@@ -20,12 +20,13 @@ html{
     margin-left: auto;
     margin-right: auto;
     margin-top: 10px;
-    width: 80%
+    width: 80%;
+    min-width: 280px;
     }
 
 #landing-header h4{
     color: #ffffff;
-    font-size: 36px;
+    font-size: 34px;
     margin-top: -10px;
     margin-bottom: 0;
     text-shadow: 1px 1px 7px #000000;
@@ -222,7 +223,7 @@ html{
 }
 
 #landing{
-    width: 50%;
+    width: 700px;
     min-height: 280px;
     margin-left: auto;
     margin-right: auto;
@@ -298,5 +299,32 @@ html{
 
     .landing-deco{
         display: none;
+    }
+}
+
+@media all and (max-width: 1152px) {
+    #landing-header #landing-logo {
+        width: 80%;
+    }
+    #landing {
+        width: 60%;
+    }
+}
+@media all and (max-width: 700px) {
+    #landing-header h4{
+        font-size: 31px;
+        font-size: 4.8vw;
+    }
+}
+@media all and (max-width: 640px) {
+    #landing-header h4{
+        font-size: 27px;
+        font-size: 4.8vw;
+    }
+}
+@media all and (max-width: 512px) {
+    #landing-header h4{
+        font-size: 23px;
+        font-size: max(1em, 4.8vw);
     }
 }
