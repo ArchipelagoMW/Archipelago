@@ -12,6 +12,13 @@ SEASONS = {"Spring", "Summer", "Fall", "Winter"}
 TOOLS = {"Hoe", "Pickaxe", "Axe", "Watering Can", "Trash Can", "Fishing Rod"}
 
 
+def basic_checks(multi_world: MultiWorld):
+    assert StardewItem("Victory", ItemClassification.progression, None, 1) in multi_world.get_items()
+    assert_can_win(multi_world)
+    assert len(multi_world.itempool) == len(
+        [location for location in multi_world.get_locations() if not location.event])
+
+
 def assert_can_win(multi_world: MultiWorld):
     for item in multi_world.get_items():
         multi_world.state.collect(item)
@@ -23,33 +30,30 @@ def assert_can_win(multi_world: MultiWorld):
                                            for option in stardew_valley_option_classes
                                            if issubclass(option, SpecialRange)
                                            for value in option.special_range_names])
-def test_given_special_range_when_generate_then_can_win(option: (SpecialRange, StardewOption), value):
+def test_given_special_range_when_generate_then_basic_checks(option: (SpecialRange, StardewOption), value):
     multi_world = setup_solo_multiworld({option.internal_name: option.special_range_names[value]})
 
-    assert StardewItem("Victory", ItemClassification.progression, None, 1) in multi_world.get_items()
-    assert_can_win(multi_world)
+    basic_checks(multi_world)
 
 
 @pytest.mark.parametrize("option, value", [(option, value)
                                            for option in stardew_valley_option_classes
                                            if option.options
                                            for value in option.options])
-def test_given_choice_when_generate_then_can_win(option, value):
+def test_given_choice_when_generate_then_basic_checks(option, value):
     multi_world = setup_solo_multiworld({option.internal_name: option.options[value]})
 
-    assert StardewItem("Victory", ItemClassification.progression, None, 1) in multi_world.get_items()
-    assert_can_win(multi_world)
+    basic_checks(multi_world)
 
 
 @pytest.mark.parametrize("option_combination",
                          [{options.Goal.internal_name: options.Goal.option_master_angler,
                            options.ToolProgression.internal_name: options.ToolProgression.option_vanilla}],
                          ids=["Master Angler + Vanilla tools"])
-def test_given_option_combination_when_generate_then_can_win(option_combination):
+def test_given_option_combination_when_generate_then_basic_checks(option_combination):
     multi_world = setup_solo_multiworld(option_combination)
 
-    assert StardewItem("Victory", ItemClassification.progression, None, 1) in multi_world.get_items()
-    assert_can_win(multi_world)
+    basic_checks(multi_world)
 
 
 class TestGoal:

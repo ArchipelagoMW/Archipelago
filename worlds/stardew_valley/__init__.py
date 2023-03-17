@@ -95,6 +95,10 @@ class StardewValleyWorld(World):
                             if not item_table[excluded_items.name].has_any_group(Group.RESOURCE_PACK,
                                                                                  Group.FRIENDSHIP_PACK)]
 
+        if self.options[options.SeasonRandomization] == options.SeasonRandomization.option_disabled:
+            items_to_exclude = [item for item in items_to_exclude
+                                if item_table[item.name] not in items_by_group[Group.SEASON]]
+
         locations_count = len([location
                                for location in self.multiworld.get_locations(self.player)
                                if not location.event])
