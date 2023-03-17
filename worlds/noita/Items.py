@@ -36,7 +36,6 @@ def create_all_items(world: MultiWorld, player: int) -> None:
     for i in range(orb_count):
         itempool += ["Orb"]
 
-    # todo: put a rule in that says this perk can't be placed at Toveri
     if world.bosses_as_checks[player].value >= 2:
         itempool += ["Perk (Spatial Awareness)"]
 
