@@ -42,6 +42,8 @@ class HardLogicTest(MessengerTestBase):
             "Fairy Bottle", "Riviere Turquoise Seal - Flower Power",
             # elemental skylands
             "Elemental Skylands Seal - Air", "Elemental Skylands Seal - Water", "Elemental Skylands Seal - Fire",
+            # phantom
+            "Rescue Phantom",
         ]
         items = [["Wingsuit", "Rope Dart"]]
         self.assertAccessDependency(locations, items)

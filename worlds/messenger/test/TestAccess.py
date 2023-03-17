@@ -46,22 +46,22 @@ class AccessTest(MessengerTestBase):
                      "Glacial Peak Seal - Ice Climbers", "Tower of Time Seal - Time Waster Seal",
                      "Underworld Seal - Rising Fanta", "Key of Symbiosis",
                      "Elemental Skylands Seal - Water", "Elemental Skylands Seal - Fire", "Candle",
-                     "Ninja Village Seal - Tree House", "Climbing Claws", "Key of Hope",
-                     "Autumn Hills Seal - Trip Saws", "Autumn Hills Seal - Double Swing Saws",
-                     "Autumn Hills Seal - Spike Ball Swing", "Autumn Hills Seal - Spike Ball Darts", "Necro",
-                     "Ruxxtin's Amulet", "Catacombs Seal - Triple Spike Crushers", "Catacombs Seal - Crusher Gauntlet",
+                     "Climbing Claws", "Key of Hope", "Autumn Hills Seal - Trip Saws",
+                     "Autumn Hills Seal - Double Swing Saws", "Autumn Hills Seal - Spike Ball Swing",
+                     "Autumn Hills Seal - Spike Ball Darts", "Necro", "Ruxxtin's Amulet",
+                     "Catacombs Seal - Triple Spike Crushers", "Catacombs Seal - Crusher Gauntlet",
                      "Catacombs Seal - Dirty Pond", "Claustro", "Acro", "Bamboo Creek Seal - Spike Crushers and Doors",
                      "Bamboo Creek Seal - Spike Ball Pits", "Bamboo Creek Seal - Spike Crushers and Doors v2",
                      "Howling Grotto Seal - Crushing Pits", "Howling Grotto Seal - Windy Saws and Balls",
-                     "Tower of Time Seal - Lantern Climb", "Demon King Crown", "Cloud Ruins Seal - Ghost Pit",
-                     "Cloud Ruins Seal - Toothbrush Alley", "Cloud Ruins Seal - Saw Pit", "Cloud Ruins Seal - Money Farm Room",
+                     "Demon King Crown", "Cloud Ruins Seal - Ghost Pit", "Cloud Ruins Seal - Toothbrush Alley",
+                     "Cloud Ruins Seal - Saw Pit", "Cloud Ruins Seal - Money Farm Room",
                      "Tower of Time Seal - Lantern Climb", "Tower of Time Seal - Arcane Orbs",
                      "Underworld Seal - Sharp and Windy Climb", "Underworld Seal - Fireball Wave",
                      "Elemental Skylands Seal - Air", "Forlorn Temple Seal - Rocket Maze", "Forlorn Temple Seal - Rocket Sunset",
                      "Power Thistle", "Key of Strength", "Glacial Peak Seal - Projectile Spike Pit",
                      "Glacial Peak Seal - Glacial Air Swag", "Fairy Bottle", "Riviere Turquoise Seal - Flower Power",
                      "Searing Crags Seal - Triple Ball Spinner", "Searing Crags Seal - Raining Rocks",
-                     "Searing Crags Seal - Rhythm Rocks", "Astral Seed", "Astral Tea Leaves"]
+                     "Searing Crags Seal - Rhythm Rocks", "Astral Seed", "Astral Tea Leaves", "Rescue Phantom"]
         items = [["Wingsuit", "Rope Dart"]]
         self.assertAccessDependency(locations, items)
 

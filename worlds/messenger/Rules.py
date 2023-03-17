@@ -32,7 +32,7 @@ class MessengerRules:
             "Forlorn Temple": lambda state: state.has_all({"Wingsuit", *PHOBEKINS}, self.player),
             "Glacial Peak": self.has_vertical,
             "Elemental Skylands": lambda state: state.has("Fairy Bottle", self.player),
-            "Music Box": lambda state: state.has_all(set(NOTES), self.player)
+            "Music Box": lambda state: state.has_all(set(NOTES), self.player) and self.has_vertical(state)
         }
 
         self.location_rules = {
