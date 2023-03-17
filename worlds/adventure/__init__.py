@@ -222,45 +222,47 @@ class AdventureWorld(World):
                     overworld_locations_copy.remove(loc)
 
         # guarantee at least one overworld location, so we can for sure get a key somewhere
-        saved_overworld_loc = self.multiworld.random.choice(overworld_locations_copy)
-        locations_copy.remove(saved_overworld_loc)
-        overworld_locations_copy.remove(saved_overworld_loc)
-
-        # if we have few items, enforce another overworld slot, fill a hard slot, and ensure we have
-        # at least one hard slot available
-        if self.created_items < 15:
-            hard_locations = []
-            for loc in locations_copy:
-                if "Vault" in loc.name or "Credits" in loc.name:
-                    hard_locations.append(loc)
-            force_empty_item_count -= 1
-            loc = self.multiworld.random.choice(hard_locations)
-            loc.place_locked_item(self.create_item('nothing'))
-            hard_locations.remove(loc)
-            locations_copy.remove(loc)
-
-            loc = self.multiworld.random.choice(hard_locations)
-            locations_copy.remove(loc)
-            hard_locations.remove(loc)
-
+        # if too much stuff is plando'd though, just let it go
+        if len(overworld_locations_copy) >= 3:
             saved_overworld_loc = self.multiworld.random.choice(overworld_locations_copy)
             locations_copy.remove(saved_overworld_loc)
             overworld_locations_copy.remove(saved_overworld_loc)
 
-        # if we have very few items, fill another two difficult slots
-        if self.created_items < 10:
-            for i in range(2):
+            # if we have few items, enforce another overworld slot, fill a hard slot, and ensure we have
+            # at least one hard slot available
+            if self.created_items < 15:
+                hard_locations = []
+                for loc in locations_copy:
+                    if "Vault" in loc.name or "Credits" in loc.name:
+                        hard_locations.append(loc)
                 force_empty_item_count -= 1
                 loc = self.multiworld.random.choice(hard_locations)
                 loc.place_locked_item(self.create_item('nothing'))
                 hard_locations.remove(loc)
                 locations_copy.remove(loc)
 
-        # for the absolute minimum number of items, enforce a third overworld slot
-        if self.created_items <= 7:
-            saved_overworld_loc = self.multiworld.random.choice(overworld_locations_copy)
-            locations_copy.remove(saved_overworld_loc)
-            overworld_locations_copy.remove(saved_overworld_loc)
+                loc = self.multiworld.random.choice(hard_locations)
+                locations_copy.remove(loc)
+                hard_locations.remove(loc)
+
+                saved_overworld_loc = self.multiworld.random.choice(overworld_locations_copy)
+                locations_copy.remove(saved_overworld_loc)
+                overworld_locations_copy.remove(saved_overworld_loc)
+
+            # if we have very few items, fill another two difficult slots
+            if self.created_items < 10:
+                for i in range(2):
+                    force_empty_item_count -= 1
+                    loc = self.multiworld.random.choice(hard_locations)
+                    loc.place_locked_item(self.create_item('nothing'))
+                    hard_locations.remove(loc)
+                    locations_copy.remove(loc)
+
+            # for the absolute minimum number of items, enforce a third overworld slot
+            if self.created_items <= 7:
+                saved_overworld_loc = self.multiworld.random.choice(overworld_locations_copy)
+                locations_copy.remove(saved_overworld_loc)
+                overworld_locations_copy.remove(saved_overworld_loc)
 
         # finally, place nothing items
         while force_empty_item_count > 0 and locations_copy:
