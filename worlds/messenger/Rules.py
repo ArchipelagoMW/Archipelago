@@ -215,19 +215,6 @@ class MessengerHardRules(MessengerRules):
 class MessengerChallengeRules(MessengerHardRules):
     def __init__(self, world: MessengerWorld):
         super().__init__(world)
-        self.extra_rules.update({
-            "Key of Hope": self.has_wingsuit,
-            "Key of Symbiosis": lambda state: self.has_dart(state) or self.has_windmill(state),
-            "Fairy Bottle": self.true,
-            "Underworld Seal - Sharp and Windy Climb": lambda state: self.has_wingsuit(state) or self.has_tabi(state),
-            "Riviere Turquoise Seal - Flower Power": self.true,
-        })
-
-
-class MessengerImpossibleRules(MessengerChallengeRules):
-    def __init__(self, world: MessengerWorld):
-        super().__init__(world)
-
         self.region_rules.update({
             "Forlorn Temple": lambda state: (self.has_vertical(state) and state.has_all(set(PHOBEKINS)))
                                             or state.has_all({"Wingsuit", "Windmill Shuriken"}, self.player),
@@ -236,7 +223,10 @@ class MessengerImpossibleRules(MessengerChallengeRules):
         self.extra_rules.update({
             "Key of Hope": self.has_vertical,
             "Key of Symbiosis": lambda state: self.has_vertical(state) or self.has_windmill(state),
+            "Fairy Bottle": self.true,
             "Howling Grotto Seal - Crushing Pits": self.true,
+            "Underworld Seal - Sharp and Windy Climb": lambda state: self.has_wingsuit(state) or self.has_tabi(state),
+            "Riviere Turquoise Seal - Flower Power": self.true,
         })
 
 

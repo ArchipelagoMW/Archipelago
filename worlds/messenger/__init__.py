@@ -108,8 +108,6 @@ class MessengerWorld(World):
             Rules.MessengerHardRules(self).set_messenger_rules()
         elif logic == Logic.option_challenging:
             Rules.MessengerChallengeRules(self).set_messenger_rules()
-        elif logic == Logic.option_impossible:
-            Rules.MessengerImpossibleRules(self).set_messenger_rules()
         else:
             Rules.MessengerOOBRules(self).set_messenger_rules()
         # if tricks:
