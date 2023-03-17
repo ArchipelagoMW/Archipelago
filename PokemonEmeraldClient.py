@@ -27,7 +27,7 @@ CONNECTION_STATUS_INITIAL = "Connection has not been initiated"
 GAME_CLEAR_FLAG = get_extracted_data()["constants"]["FLAG_SYS_GAME_CLEAR"]
 
 
-class GBCommandProcessor(ClientCommandProcessor):
+class GBACommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx: CommonContext):
         super().__init__(ctx)
 
@@ -39,6 +39,7 @@ class GBCommandProcessor(ClientCommandProcessor):
 
 class GBAContext(CommonContext):
     game = "Pokemon Emerald"
+    command_processor = GBACommandProcessor
     items_handling = 0b001
     gba_streams: Optional[Tuple[asyncio.StreamReader, asyncio.StreamWriter]]
     gba_status: Optional[str]
@@ -48,7 +49,7 @@ class GBAContext(CommonContext):
     def __init__(self, server_address: Optional[str], password: Optional[str]):
         super().__init__(server_address, password)
         self.gba_streams = None
-        self.gba_status = None
+        self.gba_status = CONNECTION_STATUS_INITIAL
         self.gba_push_pull_task = None
         self.local_checked_locations = set()
 
