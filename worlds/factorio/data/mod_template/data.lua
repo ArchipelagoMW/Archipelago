@@ -14,9 +14,9 @@ local energy_bridge = table.deepcopy(data.raw["accumulator"]["accumulator"])
 energy_bridge.name = "ap-energy-bridge"
 energy_bridge.minable.result = "ap-energy-bridge"
 energy_bridge.localised_name = "Archipelago EnergyLink Bridge"
-energy_bridge.energy_source.buffer_capacity = "5MJ"
-energy_bridge.energy_source.input_flow_limit = "1MW"
-energy_bridge.energy_source.output_flow_limit = "1MW"
+energy_bridge.energy_source.buffer_capacity = "50MJ"
+energy_bridge.energy_source.input_flow_limit = "10MW"
+energy_bridge.energy_source.output_flow_limit = "10MW"
 tint_icon(energy_bridge, energy_bridge_tint())
 energy_bridge.picture.layers[1].tint = energy_bridge_tint()
 energy_bridge.picture.layers[1].hr_version.tint = energy_bridge_tint()
