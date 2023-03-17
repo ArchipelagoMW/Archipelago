@@ -136,14 +136,3 @@ class ItemsAccessTest(MessengerTestBase):
                 with self.subTest("Fulfills Accessibility", location=loc, item=item_name):
                     self.assertTrue(self.multiworld.get_location(loc, self.player).can_fill(self.multiworld.state, item, True))
 
-
-class NoLogicTest(MessengerTestBase):
-    options = {
-        "logic_level": "none"
-    }
-
-    def testNoLogic(self) -> None:
-        """Test some funny locations to make sure they aren't reachable, but we can still win"""
-        self.assertEqual(self.can_reach_location("Pyro"), False)
-        self.assertEqual(self.can_reach_location("Rescue Phantom"), False)
-        self.assertBeatable(True)

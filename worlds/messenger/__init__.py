@@ -133,4 +133,6 @@ class MessengerWorld(World):
 
     def create_item(self, name: str) -> MessengerItem:
         item_id: Optional[int] = self.item_name_to_id.get(name, None)
-        return MessengerItem(name, self.player, item_id)
+        override_prog = name in {"Windmill Shuriken"} and getattr(self, "multiworld", None) \
+            and self.multiworld.logic_level[self.player] > Logic.option_normal
+        return MessengerItem(name, self.player, item_id, override_prog)
