@@ -1,20 +1,25 @@
 import asyncio
+import bsdiff4
 import json
+import os
+import subprocess
 from typing import Optional, Set, Tuple
+import zipfile
 
 from CommonClient import CommonContext, get_base_parser, gui_enabled, logger
 from NetUtils import ClientStatus
-from Utils import async_start, init_logging
+from Utils import async_start, init_logging, get_options
 
 from worlds.pokemon_emerald.Data import get_config, get_extracted_data
+from worlds.pokemon_emerald.Rom import PokemonEmeraldDeltaPatch
 
 
 GBA_SOCKET_PORT = 43053
 
 # TODO: Update messages
-CONNECTION_STATUS_TIMING_OUT = "Connection timing out. Please restart your emulator, then restart pkmn_rb.lua"
-CONNECTION_STATUS_REFUSED = "Connection refused. Please start your emulator and make sure pkmn_rb.lua is running"
-CONNECTION_STATUS_RESET = "Connection was reset. Please restart your emulator, then restart pkmn_rb.lua"
+CONNECTION_STATUS_TIMING_OUT = "Connection timing out. Please restart your emulator, then restart pokemon_emerald_connector.lua"
+CONNECTION_STATUS_REFUSED = "Connection refused. Please start your emulator and make sure pokemon_emerald_connector.lua is running"
+CONNECTION_STATUS_RESET = "Connection was reset. Please restart your emulator, then restart pokemon_emerald_connector.lua"
 CONNECTION_STATUS_TENTATIVE = "Initial connection made"
 CONNECTION_STATUS_CONNECTED = "Connected"
 CONNECTION_STATUS_INITIAL = "Connection has not been initiated"
@@ -149,6 +154,37 @@ async def gba_send_receive_task(ctx: GBAContext):
                 ctx.gba_streams = None
 
 
+async def run_game(rom_file_path):
+    auto_start = get_options()["pokemon_emerald_options"].get("rom_start", True)
+    if auto_start is True:
+        import webbrowser
+        webbrowser.open(rom_file_path)
+    elif os.path.isfile(auto_start):
+        subprocess.Popen([auto_start, rom_file_path],
+                         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
+async def patch_and_run_game(patch_file_path, ctx):
+    base_name = os.path.splitext(patch_file_path)[0]
+    output_file_path = base_name + '.gba'
+
+    try:
+        base_rom = PokemonEmeraldDeltaPatch.get_source_data()
+    except Exception as msg:
+        logger.info(msg, extra={'compact_gui': True})
+        ctx.gui_error('Error', msg)
+
+    with zipfile.ZipFile(patch_file_path, 'r') as patch_archive:
+        with patch_archive.open('delta.bsdiff4', 'r') as stream:
+            patch = stream.read()
+    patched_rom_data = bsdiff4.patch(base_rom, patch)
+
+    with open(output_file_path, "wb") as patched_rom_file:
+        patched_rom_file.write(patched_rom_data)
+
+    async_start(run_game(output_file_path))
+
+
 if __name__ == "__main__":
     init_logging("PokemonEmeraldClient")
 
@@ -159,6 +195,10 @@ if __name__ == "__main__":
         if (gui_enabled):
             ctx.run_gui()
         ctx.run_cli()
+
+        if args.apemerald_file:
+            logger.info("Beginning patching process...")
+            async_start(patch_and_run_game(args.apemerald_file, ctx))
 
         ctx.gba_push_pull_task = asyncio.create_task(gba_send_receive_task(ctx), name="GBA Push/Pull")
 

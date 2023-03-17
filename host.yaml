@@ -142,6 +142,7 @@ pokemon_rb_options:
 
 pokemon_emerald_options:
   rom_file: "Pokemon - Emerald Version (USA, Europe).gba"
+  rom_start: true
 
 wargroove_options:
   # Locate the Wargroove root directory on your system.
