@@ -200,7 +200,8 @@ class WorldTestBase(unittest.TestCase):
         self.collect_all_but(all_items)
         for location in self.multiworld.get_locations():
             self.assertEqual(self.multiworld.state.can_reach(location), location.name not in locations,
-                             f"{location.name} is not accessible without all items provided")
+                             f"{location.name} is either not accessible without all items provided, or is accessible "
+                             f"without all provided items")
         for item_names in possible_items:
             items = self.collect_by_name(item_names)
             for location in locations:
