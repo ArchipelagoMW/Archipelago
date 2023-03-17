@@ -221,9 +221,6 @@ class AdventureWorld(World):
                 if loc in overworld_locations_copy:
                     overworld_locations_copy.remove(loc)
 
-        # unfilled_locations = len(locations_copy)
-        # filled_locations = len(overworld.locations) - unfilled_locations
-
         # guarantee at least one overworld location, so we can for sure get a key somewhere
         saved_overworld_loc = self.multiworld.random.choice(overworld_locations_copy)
         locations_copy.remove(saved_overworld_loc)
@@ -265,6 +262,7 @@ class AdventureWorld(World):
             locations_copy.remove(saved_overworld_loc)
             overworld_locations_copy.remove(saved_overworld_loc)
 
+        # finally, place nothing items
         while force_empty_item_count > 0 and locations_copy:
             force_empty_item_count -= 1
             # prefer somewhat to thin out the overworld.

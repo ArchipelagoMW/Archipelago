@@ -28,7 +28,6 @@ def create_regions(multiworld: MultiWorld, player: int, dragon_rooms: []) -> Non
     for name, locdata in location_table.items():
         locdata.get_position(multiworld.random)
 
-    # TODO: Check the names against what's in the manual, it might have some official names
     menu = Region("Menu", player, multiworld)
 
     menu.exits.append(Entrance(player, "GameStart", menu))
