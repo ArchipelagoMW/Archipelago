@@ -143,6 +143,17 @@ def user_path(*path: str) -> str:
     return os.path.join(user_path.cached_path, *path)
 
 
+def cache_path(*path: str) -> str:
+    """Returns path to a file in the user's Archipelago cache directory."""
+    if hasattr(cache_path, "cached_path"):
+        pass
+    else:
+        import appdirs
+        cache_path.cached_path = appdirs.user_cache_dir("Archipelago", False)
+
+    return os.path.join(cache_path.cached_path, *path)
+
+
 def output_path(*path: str) -> str:
     if hasattr(output_path, 'cached_path'):
         return os.path.join(output_path.cached_path, *path)
@@ -394,8 +405,7 @@ def load_data_package_for_checksum(game: str, checksum: typing.Optional[str]) ->
     if checksum and game:
         if checksum != get_file_safe_name(checksum):
             raise ValueError(f"Bad symbols in checksum: {checksum}")
-        game_folder = user_path(os.path.join("datapackage", get_file_safe_name(game)))
-        path = os.path.join(game_folder, f"{checksum}.json")
+        path = cache_path("datapackage", get_file_safe_name(game), f"{checksum}.json")
         if os.path.exists(path):
             try:
                 with open(path, "r", encoding="utf-8-sig") as f:
@@ -417,7 +427,7 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
     if checksum and game:
         if checksum != get_file_safe_name(checksum):
             raise ValueError(f"Bad symbols in checksum: {checksum}")
-        game_folder = user_path(os.path.join("datapackage", get_file_safe_name(game)))
+        game_folder = cache_path("datapackage", get_file_safe_name(game))
         os.makedirs(game_folder, exist_ok=True)
         try:
             with open(os.path.join(game_folder, f"{checksum}.json"), "w", encoding="utf-8-sig") as f:
