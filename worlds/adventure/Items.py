@@ -40,6 +40,7 @@ item_table = {
     "Slow Rhindle": ItemData(0x105, ItemClassification.filler),
     # this should only be enabled if opted into?  For now, I'll just exclude them
     "Revive Dragons": ItemData(0x106, ItemClassification.trap),
+    "nothing": ItemData(0x0, ItemClassification.filler)
     # Bat Trap
     # Bat Time Out
     # "Revive Dragons": ItemData(0x110, ItemClassification.trap)

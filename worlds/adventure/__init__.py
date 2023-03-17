@@ -130,17 +130,15 @@ class AdventureWorld(World):
             self.place_random_dragon(2)
 
     def create_items(self) -> None:
-        self.item_name_to_id["nothing"] = nothing_item_id
-        self.item_id_to_name[nothing_item_id] = "nothing"
         for event in map(self.create_item, event_table):
             self.multiworld.itempool.append(event)
         exclude = [item for item in self.multiworld.precollected_items[self.player]]
         self.created_items = 0
         for item in map(self.create_item, item_table):
+            if item.code == nothing_item_id:
+                continue
             if item in exclude and item.code <= standard_item_max:
                 exclude.remove(item)  # this is destructive. create unique list above
-                self.multiworld.itempool.append(self.create_item("nothing"))
-                self.created_items += 1
             else:
                 if item.code <= standard_item_max:
                     self.multiworld.itempool.append(item)
@@ -178,9 +176,6 @@ class AdventureWorld(World):
         self.multiworld.itempool += [self.create_item("Freeincarnate") for _ in range(actual_freeincarnates)]
         self.created_items += actual_freeincarnates
 
-        extra_filler_count = num_locations - self.created_items
-        self.multiworld.itempool += [self.create_item("nothing") for _ in range(extra_filler_count)]
-
     def create_dragon_slow_items(self, min_speed: int, speed: int, item_name: str, maximum_items: int):
         if min_speed < speed:
             delta = speed - min_speed
@@ -209,10 +204,17 @@ class AdventureWorld(World):
     def pre_fill(self):
         # Place empty items in filler locations here, to limit
         # the number of exported empty items and the density of stuff in overworld.
+        max_location_count = len(location_table) - 1
+        if self.dragon_slay_check == 0:
+            max_location_count -= 3
+
+        force_empty_item_count = (max_location_count - self.created_items)
+        if force_empty_item_count <= 0:
+            return
         overworld = self.multiworld.get_region("Overworld", self.player)
         overworld_locations_copy = overworld.locations.copy()
         all_locations = self.multiworld.get_locations(self.player)
-        total_location_count = len(all_locations)
+
         locations_copy = all_locations.copy()
         for loc in all_locations:
             if loc.item is not None or loc.progress_type != LocationProgressType.DEFAULT:
@@ -222,25 +224,22 @@ class AdventureWorld(World):
 
         # unfilled_locations = len(locations_copy)
         # filled_locations = len(overworld.locations) - unfilled_locations
-        force_empty_item_count = (total_location_count - self.created_items)
-        nothing_items = list(filter(lambda i: i.name == "nothing", self.multiworld.itempool))
+
         # guarantee at least one overworld location, so we can for sure get a key somewhere
         saved_overworld_loc = self.multiworld.random.choice(overworld_locations_copy)
         locations_copy.remove(saved_overworld_loc)
         overworld_locations_copy.remove(saved_overworld_loc)
-        while force_empty_item_count > 0 and len(locations_copy) > 0 and len(nothing_items) > 0:
+        while force_empty_item_count > 0 and len(locations_copy) > 0:
             force_empty_item_count -= 1
             # prefer somewhat to thin out the overworld.
             if len(overworld_locations_copy) > 0 and self.multiworld.random.randint(0, 10) < 4:
                 loc = self.multiworld.random.choice(overworld_locations_copy)
             else:
                 loc = self.multiworld.random.choice(locations_copy)
-            item = nothing_items.pop()
-            loc.place_locked_item(item)
+            loc.place_locked_item(self.create_item('nothing'))
             locations_copy.remove(loc)
             if loc in overworld_locations_copy:
                 overworld_locations_copy.remove(loc)
-            self.multiworld.itempool.remove(item)
 
     def place_dragons(self, rom_deltas: {int, int}):
         for i in range(3):
@@ -272,7 +271,8 @@ class AdventureWorld(World):
             # start and stop indices are offsets in the ROM file, not Adventure ROM addresses (which start at f000)
 
             # This places the local items (I still need to make it easy to inject the offset data)
-            unplaced_local_items = dict(filter(lambda x: x[1].id <= standard_item_max, item_table.items()))
+            unplaced_local_items = dict(filter(lambda x: nothing_item_id < x[1].id <= standard_item_max,
+                                               item_table.items()))
             for location in self.multiworld.get_locations(self.player):
                 # 'nothing' items, which are autocollected when the room is entered
                 if location.item.player == self.player and \
@@ -342,8 +342,6 @@ class AdventureWorld(World):
     # end of ordered Main.py calls
 
     def create_item(self, name: str) -> Item:
-        if name == "nothing":
-            return AdventureItem(name, ItemClassification.filler, nothing_item_id, self.player)
         item_data: ItemData = item_table.get(name)
         return AdventureItem(name, item_data.classification, item_data.id, self.player)
 
