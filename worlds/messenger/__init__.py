@@ -125,7 +125,8 @@ class MessengerWorld(World):
             "music_box": self.multiworld.music_box[self.player].value,
             "required_seals": self.required_seals,
             "locations": locations,
-            "settings": {"Difficulty": "Basic" if not self.multiworld.shuffle_seals[self.player] else "Advanced"}
+            "settings": {"Difficulty": "Basic" if not self.multiworld.shuffle_seals[self.player] else "Advanced"},
+            "logic": self.multiworld.logic_level[self.player].current_key,
         }
 
     def get_filler_item_name(self) -> str:
