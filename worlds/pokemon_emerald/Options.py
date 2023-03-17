@@ -1,6 +1,6 @@
 from BaseClasses import MultiWorld
 from typing import Dict, List, Union
-from Options import Option, Choice, DefaultOnToggle, Range, Toggle
+from Options import Option, Choice, DefaultOnToggle, Range, Toggle, OptionList
 
 class RandomizeBadges(Choice):
     """Adds Badges to the pool
@@ -106,6 +106,14 @@ class RandomizeAbilities(Toggle):
     """Randomizes the abilities of every pokemon (each species will have the same number of abilities)"""
     display_name = "Randomize Abilities"
 
+# TODO: Pull this from json. Currently trying to import load_json it might cause a circular dependency
+ability_names = ["Stench", "Drizzle", "Speed Boost", "Battle Armor", "Sturdy", "Damp", "Limber", "Sand Veil", "Static", "Volt Absorb", "Water Absorb", "Oblivious", "Cloud Nine", "Compound Eyes", "Insomnia", "Color Change", "Immunity", "Flash Fire", "Shield Dust", "Own Tempo", "Suction Cups", "Intimidate", "Shadow Tag", "Rough Skin", "Wonder Guard", "Levitate", "Effect Spore", "Synchronize", "Clear Body", "Natural Cure", "Lightning Rod", "Serene Grace", "Swift Swim", "Chlorophyll", "Illuminate", "Trace", "Huge Power", "Poison Point", "Inner Focus", "Magma Armor", "Water Veil", "Magnet Pull", "Soundproof", "Rain Dish", "Sand Stream", "Pressure", "Thick Fat", "Early Bird", "Flame Body", "Run Away", "Keen Eye", "Hyper Cutter", "Pickup", "Truant", "Hustle", "Cute Charm", "Plus", "Minus", "Forecast", "Sticky Hold", "Shed Skin", "Guts", "Marvel Scale", "Liquid Ooze", "Overgrow", "Blaze", "Torrent", "Swarm", "Rock Head", "Drought", "Arena Trap", "Vital Spirit", "White Smoke", "Pure Power", "Shell Armor", "Cacophony", "Air Lock"]
+class AbilityBlacklist(OptionList):
+    """A list of abilities which no pokemon should have if abilities are randomized. For example, you could exclude Wonder Guard and Pressure like this:
+    ["Wonder Guard", Pressure]"""
+    display_name = "Ability Blacklist"
+    valid_keys = frozenset(ability_names)
+
 class MinCatchRate(Range):
     """Sets the minimum catch rate a pokemon can have. Any pokemon with a catch rate below this floor will have it raised to this value.
     Legendaries are often in the single digits
@@ -187,6 +195,7 @@ options: Dict[str, Option] = {
   "starters": RandomizeStarters,
   "trainer_parties": RandomizeTrainerParties,
   "abilities": RandomizeAbilities,
+  "ability_blacklist": AbilityBlacklist,
   "min_catch_rate": MinCatchRate,
   "exp_modifier": ExpModifier,
   "blind_trainers": BlindTrainers,

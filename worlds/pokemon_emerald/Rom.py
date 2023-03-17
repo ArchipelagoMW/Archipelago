@@ -5,7 +5,7 @@ from BaseClasses import MultiWorld
 from Options import Toggle
 from Patch import APDeltaPatch
 import Utils
-from .Data import get_extracted_data
+from .Data import get_extracted_data, load_json
 from .Items import reverse_offset_item_value
 from .Options import get_option_value, RandomizeWildPokemon, RandomizeStarters, RandomizeTrainerParties, TmCompatibility, HmCompatibility, LevelUpMoves
 from .Pokemon import get_random_species, get_species_by_id, get_species_by_name, get_random_damaging_move, get_random_move, species_data
@@ -270,12 +270,24 @@ def _randomize_starters(multiworld, player, rom):
 
 def _randomize_abilities(multiworld: MultiWorld, player: int, rom: bytearray):
     random = multiworld.per_slot_randoms[player]
+    extracted_data = get_extracted_data()
+    abilities_json = load_json(os.path.join(os.path.dirname(__file__), "data/abilities.json"))
+    ability_label_to_value = {data["label"].lower(): extracted_data["constants"][constant_name] for (constant_name, data) in abilities_json.items()}
 
-    num_abilities = get_extracted_data()["constants"]["ABILITIES_COUNT"]
+    ability_blacklist_labels = set(["cacophony"])
+    option_ability_blacklist = get_option_value(multiworld, player, "ability_blacklist")
+    if option_ability_blacklist != None:
+        ability_blacklist_labels |= set([ability.lower() for ability in option_ability_blacklist])
+
+    ability_blacklist = set([ability_label_to_value[label] for label in ability_blacklist_labels])
+    ability_whitelist = []
+    for i in range(1, extracted_data["constants"]["ABILITIES_COUNT"]):
+        if i not in ability_blacklist:
+            ability_whitelist.append(i)
 
     for species_data in get_extracted_data()["species"]:
         old_abilities = species_data["abilities"]
-        new_abilities = [random.randrange(0, num_abilities), random.randrange(0, num_abilities)]
+        new_abilities = [random.choice(ability_whitelist), random.choice(ability_whitelist)]
 
         if (old_abilities[0] != 0):
             _set_bytes_little_endian(rom, species_data["rom_address"] + 22, 1, new_abilities[0])
