@@ -25,8 +25,7 @@ the Archipelago mod.
 ### Configure Archipelago Mod
 
 In the Options menu, select Mod Settings. Under the Archipelago drop down, you will see the options for Hostname, Port,
-and Slot name, where you can fill in the relevant information. There are also options to toggle redelivery of items when
-starting a new run and the number of kills required to spawn a chest.
+and Slot name, where you can fill in the relevant information.
 
 Once you start a new run in Noita, you should see "Connected to Archipelago server" in the bottom left of the screen. If
 you do not see this message, ensure that the mod is enabled and installed per the instructions above.
@@ -37,5 +36,5 @@ You can see the [basic multiworld setup guide](/tutorial/Archipelago/setup/en) h
 about why Archipelago uses YAML files and what they're for.
 
 ### Where do I get a YAML?
-You can use the [game settings page for Noita](/games/Noita/player-settings) here on the  Archipelago website to 
+You can use the [game settings page for Noita](/games/Noita/player-settings) here on the Archipelago website to 
 generate a YAML using a graphical interface.
