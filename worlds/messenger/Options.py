@@ -79,7 +79,6 @@ class RequiredSeals(Range):
 messenger_options = {
     "accessibility": MessengerAccessibility,
     "logic_level": Logic,
-    "logic_tricks": LogicTricks,
     "shuffle_seals": PowerSeals,
     "goal": Goal,
     "music_box": MusicBox,
