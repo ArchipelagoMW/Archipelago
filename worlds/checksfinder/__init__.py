@@ -53,10 +53,10 @@ class ChecksFinderWorld(World):
         for (name, num) in required_items.items():
             itempool += [name] * num
         # Add the map width and height stuff
-        itempool += ["Map Width"] * (10 - 5)
-        itempool += ["Map Height"] * (10 - 5)
+        itempool += ["Map Width"] * (10-5)
+        itempool += ["Map Height"] * (10-5)
         # Add the map bombs
-        itempool += ["Map Bombs"] * (20 - 5)
+        itempool += ["Map Bombs"] * (20-5)
         # Convert itempool into real items
         itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
 
@@ -70,7 +70,7 @@ class ChecksFinderWorld(World):
         menu = Region("Menu", self.player, self.multiworld)
         board = Region("Board", self.player, self.multiworld)
         board.locations = [ChecksFinderAdvancement(self.player, loc_name, loc_data.id, board)
-                           for loc_name, loc_data in advancement_table.items() if loc_data.Region == board.name]
+                           for loc_name, loc_data in advancement_table.items() if loc_data.region == board.name]
 
         connection = Entrance(self.player, "New Board", menu)
         menu.exits.append(connection)

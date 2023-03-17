@@ -1,14 +1,13 @@
 from __future__ import annotations
-
-import logging
 from enum import unique, IntEnum
 from typing import List, Optional, Set, NamedTuple, Dict
+import logging
 
-from Utils import int16_as_bytes
+from worlds.alttp.SubClasses import ALttPLocation
 from worlds.alttp.EntranceShuffle import door_addresses
 from worlds.alttp.Items import item_name_groups, item_table, ItemFactory, trap_replaceable, GetBeemizerItem
 from worlds.alttp.Options import smallkey_shuffle
-from worlds.alttp.SubClasses import ALttPLocation
+from Utils import int16_as_bytes
 
 logger = logging.getLogger("Shops")
 
@@ -148,7 +147,6 @@ class TakeAny(Shop):
         1: "",
         2: ""
     }
-
 
 class UpgradeShop(Shop):
     type = ShopType.UpgradeShop
@@ -422,7 +420,7 @@ def set_up_shops(world, player: int):
 
     if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal or world.retro_bow[player]:
         for shop in world.random.sample([s for s in world.shops if
-                                         s.custom and not s.locked and s.type == ShopType.Shop and s.Region.player == player],
+                                         s.custom and not s.locked and s.type == ShopType.Shop and s.region.player == player],
                                         5):
             shop.locked = True
             slots = [0, 1, 2]
@@ -451,8 +449,8 @@ def shuffle_shops(world, items, player: int):
 
         capacityshop: Optional[Shop] = None
         for shop in world.shops:
-            if shop.type == ShopType.UpgradeShop and shop.Region.player == player and \
-                    shop.Region.name == "Capacity Upgrade":
+            if shop.type == ShopType.UpgradeShop and shop.region.player == player and \
+                    shop.region.name == "Capacity Upgrade":
                 shop.clear_inventory()
                 capacityshop = shop
 
@@ -481,7 +479,7 @@ def shuffle_shops(world, items, player: int):
         upgrade_shops = []
         total_inventory = []
         for shop in world.shops:
-            if shop.Region.player == player:
+            if shop.region.player == player:
                 if shop.type == ShopType.UpgradeShop:
                     upgrade_shops.append(shop)
                 elif shop.type == ShopType.Shop and not shop.locked:
@@ -603,18 +601,18 @@ def price_to_funny_price(world, item: dict, player: int):
 
 def create_dynamic_shop_locations(world, player):
     for shop in world.shops:
-        if shop.Region.player == player:
+        if shop.region.player == player:
             for i, item in enumerate(shop.inventory):
                 if item is None:
                     continue
                 if item['create_location']:
-                    slot_name = f"{shop.Region.name}{shop.slot_names[i]}"
+                    slot_name = f"{shop.region.name}{shop.slot_names[i]}"
                     loc = ALttPLocation(player, slot_name,
-                                        address=shop_table_by_location[slot_name], parent=shop.Region)
+                                        address=shop_table_by_location[slot_name], parent=shop.region)
                     loc.place_locked_item(ItemFactory(item['item'], player))
                     if shop.type == ShopType.TakeAny:
                         loc.shop_slot_disabled = True
-                    shop.Region.locations.append(loc)
+                    shop.region.locations.append(loc)
                     world.clear_location_cache()
 
                     loc.shop_slot = i

@@ -23,7 +23,7 @@ from typing import Optional, List
 from BaseClasses import CollectionState, Region, Location, MultiWorld
 from worlds.alttp.Shops import ShopType, ShopPriceType
 from worlds.alttp.Dungeons import dungeon_music_addresses
-from worlds.alttp.Regions import old_location_address_to_new_location_address
+from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address
 from worlds.alttp.Text import MultiByteTextMapper, text_addresses, Credits, TextTable
 from worlds.alttp.Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, \
     Blind_texts, \
@@ -33,8 +33,7 @@ from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts
     DeathMountain_texts, \
     LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from Utils import local_path, user_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen, parse_yaml, \
-    read_snes_rom
+from Utils import local_path, user_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen, parse_yaml, read_snes_rom
 from worlds.alttp.Items import ItemFactory, item_table, item_name_groups, progression_items
 from worlds.alttp.EntranceShuffle import door_addresses
 from worlds.alttp.Options import smallkey_shuffle
@@ -848,8 +847,8 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
                                           'Palace of Darkness Exit', 'Swamp Palace Exit', 'Ganons Tower Exit',
                                           'Desert Palace Exit (North)', 'Agahnims Tower Exit', 'Spiral Cave Exit (Top)',
                                           'Superbunny Cave Exit (Bottom)', 'Turtle Rock Ledge Exit (East)'} and \
-                            (world.logic[player] not in ['hybridglitches', 'nologic'] or
-                             exit.name not in {'Palace of Darkness Exit', 'Tower of Hera Exit', 'Swamp Palace Exit'}):
+                            (world.logic[player] not in ['hybridglitches', 'nologic'] or 
+                                exit.name not in {'Palace of Darkness Exit', 'Tower of Hera Exit', 'Swamp Palace Exit'}):
                         # For exits that connot be reached from another, no need to apply offset fixes.
                         rom.write_int16(0x15DB5 + 2 * offset, link_y)  # same as final else
                     elif room_id == 0x0059 and world.fix_skullwoods_exit[player]:
@@ -1145,8 +1144,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         0x12, 0x01, 0x35, 0xFF,  # lamp -> 5 rupees
         0x51, 0x06, 0x52, 0xFF,  # 6 +5 bomb upgrades -> +10 bomb upgrade
         0x53, 0x06, 0x54, 0xFF,  # 6 +5 arrow upgrades -> +10 arrow upgrade
-        0x58, 0x01, 0x36 if world.retro_bow[player] else 0x43, 0xFF,
-        # silver arrows -> single arrow (red 20 in retro mode)
+        0x58, 0x01, 0x36 if world.retro_bow[player] else 0x43, 0xFF,  # silver arrows -> single arrow (red 20 in retro mode)
         0x3E, difficulty.boss_heart_container_limit, 0x47, 0xff,  # boss heart -> green 20
         0x17, difficulty.heart_piece_limit, 0x47, 0xff,  # piece of heart -> green 20
         0xFF, 0xFF, 0xFF, 0xFF,  # end of table sentinel
@@ -1262,8 +1260,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_bytes(0x50563, [0x3F, 0x14])  # disable below ganon chest
     rom.write_byte(0x50599, 0x00)  # disable below ganon chest
     rom.write_bytes(0xE9A5, [0x7E, 0x00, 0x24])  # disable below ganon chest
-    rom.write_byte(0x18008B,
-                   0x01 if world.open_pyramid[player].to_bool(world, player) else 0x00)  # pre-open Pyramid Hole
+    rom.write_byte(0x18008B, 0x01 if world.open_pyramid[player].to_bool(world, player) else 0x00)  # pre-open Pyramid Hole
     rom.write_byte(0x18008C, 0x01 if world.crystals_needed_for_gt[
                                          player] == 0 else 0x00)  # GT pre-opened if crystal requirement is 0
     rom.write_byte(0xF5D73, 0xF0)  # bees are catchable
@@ -1569,15 +1566,13 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_byte(0x180176, 0x0A if world.retro_bow[player] else 0x00)  # wood arrow cost
     rom.write_byte(0x180178, 0x32 if world.retro_bow[player] else 0x00)  # silver arrow cost
     rom.write_byte(0x301FC, 0xDA if world.retro_bow[player] else 0xE1)  # rupees replace arrows under pots
-    rom.write_byte(0x30052,
-                   0xDB if world.retro_bow[player] else 0xE2)  # replace arrows in fish prize from bottle merchant
+    rom.write_byte(0x30052, 0xDB if world.retro_bow[player] else 0xE2)  # replace arrows in fish prize from bottle merchant
     rom.write_bytes(0xECB4E, [0xA9, 0x00, 0xEA, 0xEA] if world.retro_bow[player] else [0xAF, 0x77, 0xF3,
-                                                                                       0x7E])  # Thief steals rupees instead of arrows
+                                                                                   0x7E])  # Thief steals rupees instead of arrows
     rom.write_bytes(0xF0D96, [0xA9, 0x00, 0xEA, 0xEA] if world.retro_bow[player] else [0xAF, 0x77, 0xF3,
-                                                                                       0x7E])  # Pikit steals rupees instead of arrows
+                                                                                   0x7E])  # Pikit steals rupees instead of arrows
     rom.write_bytes(0xEDA5,
-                    [0x35, 0x41] if world.retro_bow[player] else [0x43,
-                                                                  0x44])  # Chest game gives rupees instead of arrows
+                    [0x35, 0x41] if world.retro_bow[player] else [0x43, 0x44])  # Chest game gives rupees instead of arrows
     digging_game_rng = local_random.randint(1, 30)  # set rng for digging game
     rom.write_byte(0x180020, digging_game_rng)
     rom.write_byte(0xEFD95, digging_game_rng)
@@ -1706,7 +1701,7 @@ def get_price_data(price: int, price_type: int) -> List[int]:
 
 
 def write_custom_shops(rom, world, player):
-    shops = sorted([shop for shop in world.shops if shop.custom and shop.Region.player == player],
+    shops = sorted([shop for shop in world.shops if shop.custom and shop.region.player == player],
                    key=lambda shop: shop.sram_offset)
 
     shop_data = bytearray()
@@ -1727,8 +1722,8 @@ def write_custom_shops(rom, world, player):
             if item is None:
                 break
             if world.shop_item_slots[player] or shop.type == ShopType.TakeAny:
-                count_shop = (shop.Region.name != 'Potion Shop' or 'w' in world.shop_shuffle[player]) and \
-                             shop.Region.name != 'Capacity Upgrade'
+                count_shop = (shop.region.name != 'Potion Shop' or 'w' in world.shop_shuffle[player]) and \
+                             shop.region.name != 'Capacity Upgrade'
                 rom.write_byte(0x186560 + shop.sram_offset + slot, 1 if count_shop else 0)
             if item['item'] == 'Single Arrow' and item['player'] == 0:
                 arrow_mask |= 1 << index
@@ -1750,8 +1745,7 @@ def write_custom_shops(rom, world, player):
 
             item_data = [shop_id, item_code] + price_data + \
                         [item['max'], ItemFactory(item['replacement'], player).code if item['replacement'] else 0xFF] + \
-                        replacement_price_data + [
-                            0 if item['player'] == player else min(ROM_PLAYER_LIMIT, item['player'])]
+                        replacement_price_data + [0 if item['player'] == player else min(ROM_PLAYER_LIMIT, item['player'])]
             items_data.extend(item_data)
 
     rom.write_bytes(0x184800, shop_data)
@@ -1920,7 +1914,7 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
 
     rom.write_byte(0x18008D, (0b00000001 if deathlink else 0) |
                    #          0b00000010 is already used for death_link_allow_survive in super metroid.
-                   (0b00000100 if allowcollect else 0))
+                             (0b00000100 if allowcollect else 0))
 
     apply_random_sprite_on_event(rom, sprite, local_random, allow_random_on_event,
                                  world.sprite_pool[player] if world else [])
@@ -1955,9 +1949,8 @@ def default_ow_palettes(rom):
 
 def randomize_ow_palettes(rom, local_random):
     grass, grass2, grass3, dirt, dirt2, water, clouds, dwdirt, \
-        dwgrass, dwwater, dwdmdirt, dwdmgrass, dwdmclouds1, dwdmclouds2 = [
-        [local_random.randint(60, 215) for _ in range(3)]
-        for _ in range(14)]
+    dwgrass, dwwater, dwdmdirt, dwdmgrass, dwdmclouds1, dwdmclouds2 = [[local_random.randint(60, 215) for _ in range(3)]
+                                                                       for _ in range(14)]
     dwtree = [c + local_random.randint(-20, 10) for c in dwgrass]
     treeleaf = [c + local_random.randint(-20, 10) for c in grass]
 
@@ -2254,8 +2247,7 @@ def write_strings(rom, world, player):
                     else:
                         second_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
                         first_item = hint_text(world.get_location('Swamp Palace - Big Key Chest', player).item)
-                    this_hint = (
-                                'The westmost chests in Swamp Palace contain ' + first_item + ' and ' + second_item + '.')
+                    this_hint = ('The westmost chests in Swamp Palace contain ' + first_item + ' and ' + second_item + '.')
                     tt[hint_locations.pop(0)] = this_hint
                 elif location == 'Mire Left':
                     if local_random.randint(0, 1):
@@ -2264,8 +2256,7 @@ def write_strings(rom, world, player):
                     else:
                         second_item = hint_text(world.get_location('Misery Mire - Compass Chest', player).item)
                         first_item = hint_text(world.get_location('Misery Mire - Big Key Chest', player).item)
-                    this_hint = (
-                                'The westmost chests in Misery Mire contain ' + first_item + ' and ' + second_item + '.')
+                    this_hint = ('The westmost chests in Misery Mire contain ' + first_item + ' and ' + second_item + '.')
                     tt[hint_locations.pop(0)] = this_hint
                 elif location == 'Tower of Hera - Big Key Chest':
                     this_hint = 'Waiting in the Tower of Hera basement leads to ' + hint_text(
@@ -2336,8 +2327,7 @@ def write_strings(rom, world, player):
             ' %s?' % hint_text(silverarrows[0]).replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
     tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
     tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
-    if world.worlds[player].has_progressive_bows and (
-            world.difficulty_requirements[player].progressive_bow_limit >= 2 or (
+    if world.worlds[player].has_progressive_bows and (world.difficulty_requirements[player].progressive_bow_limit >= 2 or (
             world.swordless[player] or world.logic[player] == 'noglitches')):
         prog_bow_locs = world.find_item_locations('Progressive Bow', player, True)
         world.per_slot_randoms[player].shuffle(prog_bow_locs)
@@ -2907,9 +2897,10 @@ InconvenientLocations = ['Spike Cave',
 InconvenientVanillaLocations = ['Graveyard Cave',
                                 'Mimic Cave']
 
-RelevantItems = progression_items - {"Triforce", "Activated Flute"} - item_name_groups["Small Keys"] - item_name_groups[
-    "Big Keys"] \
-                | item_name_groups["Mails"] | item_name_groups["Shields"]
+
+RelevantItems = progression_items - {"Triforce", "Activated Flute"} - item_name_groups["Small Keys"] - item_name_groups["Big Keys"] \
+             | item_name_groups["Mails"] | item_name_groups["Shields"]
+
 
 hash_alphabet = [
     "Bow", "Boomerang", "Hookshot", "Bomb", "Mushroom", "Powder", "Rod", "Pendant", "Bombos", "Ether", "Quake",
