@@ -6,7 +6,7 @@ import subprocess
 from typing import Optional, Set, Tuple
 import zipfile
 
-from CommonClient import CommonContext, get_base_parser, gui_enabled, logger
+from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, gui_enabled, logger
 from NetUtils import ClientStatus
 from Utils import async_start, init_logging, get_options
 
@@ -25,6 +25,17 @@ CONNECTION_STATUS_CONNECTED = "Connected"
 CONNECTION_STATUS_INITIAL = "Connection has not been initiated"
 
 GAME_CLEAR_FLAG = get_extracted_data()["constants"]["FLAG_SYS_GAME_CLEAR"]
+
+
+class GBCommandProcessor(ClientCommandProcessor):
+    def __init__(self, ctx: CommonContext):
+        super().__init__(ctx)
+
+    def _cmd_gba(self):
+        """Check GBA Connection State"""
+        if isinstance(self.ctx, GBAContext):
+            logger.info(f"GBA Status: {self.ctx.gba_status}")
+
 
 class GBAContext(CommonContext):
     game = "Pokemon Emerald"
@@ -98,6 +109,7 @@ async def handle_read_data(data, ctx: GBAContext):
 
 
 async def gba_send_receive_task(ctx: GBAContext):
+    logger.info("Starting GBA connector. Use /gba for status information")
     while (not ctx.exit_event.is_set()):
         error_status: Optional[str] = None
 
@@ -106,7 +118,6 @@ async def gba_send_receive_task(ctx: GBAContext):
             try:
                 logger.debug("Attempting to connect to GBA...")
                 ctx.gba_streams = await asyncio.wait_for(asyncio.open_connection("localhost", GBA_SOCKET_PORT), timeout=10)
-                logger.info("Connected to GBA")
                 ctx.gba_status = CONNECTION_STATUS_TENTATIVE
             except TimeoutError:
                 logger.debug("Connection to GBA timed out. Retrying.")
@@ -122,6 +133,13 @@ async def gba_send_receive_task(ctx: GBAContext):
             message = create_payload(ctx).encode()
             writer.write(message)
             writer.write(b"\n")
+
+            if error_status:
+                ctx.gb_status = error_status
+                logger.info("Lost connection to GBA and attempting to reconnect. Use /gba for status updates")
+            elif ctx.gba_status == CONNECTION_STATUS_TENTATIVE:
+                logger.info("Connected to GBA")
+                ctx.gba_status = CONNECTION_STATUS_CONNECTED
 
             # Write
             try:
