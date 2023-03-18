@@ -178,9 +178,9 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Lukki Lair Chest": LocationData(112140, "hc", HiddenChests.side_path),
         "Lukki Lair Pedestal": LocationData(112640, "peds", Pedestals.side_path),
     },
-    "Vault": {
-        "Vault Chest": LocationData(112160, "hc", HiddenChests.main_path),
-        "Vault Pedestal": LocationData(112660, "peds", Pedestals.main_path),
+    "The Vault": {
+        "The Vault Chest": LocationData(112160, "hc", HiddenChests.main_path),
+        "The Vault Pedestal": LocationData(112660, "peds", Pedestals.main_path),
     },
     "Temple of the Art": {
         "Gate Guardian": LocationData(110660, "boss", Bosses.main_path),

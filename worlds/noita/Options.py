@@ -22,13 +22,12 @@ class HiddenChests(Range):
     default = 5
 
 
-# commented out until pedestals are implemented on the mod side
-# class PedestalChecks(Range):
-#     """Number of checks that will spawn on pedestals in the applicable biomes."""
-#     display_name = "Pedestal Checks"  # feel free to rename/redescribe this, edit ranges, etc.
-#     range_start = 0
-#     range_end = 20
-#     default = 5
+class PedestalChecks(Range):
+    """Number of checks that will spawn on pedestals in the applicable biomes."""
+    display_name = "Pedestal Checks per Biome"
+    range_start = 0
+    range_end = 20
+    default = 5
 
 
 class Traps(DefaultOnToggle):
@@ -78,7 +77,7 @@ class VictoryCondition(Choice):
 noita_options: Dict[str, type(Option)] = {
     "path_option": PathOption,
     "hidden_chests": HiddenChests,
-    # "pedestal_checks": PedestalChecks,
+    "pedestal_checks": PedestalChecks,
     "bad_effects": Traps,
     "death_link": DeathLink,
     "orbs_as_checks": OrbsAsChecks,
