@@ -178,9 +178,9 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Lukki Lair Chest": LocationData(112140, "hc", HiddenChests.side_path),
         "Lukki Lair Pedestal": LocationData(112640, "peds", Pedestals.side_path),
     },
-    "Vault": {
-        "Vault Chest": LocationData(112160, "hc", HiddenChests.main_path),
-        "Vault Pedestal": LocationData(112660, "peds", Pedestals.main_path),
+    "The Vault": {
+        "The Vault Chest": LocationData(112160, "hc", HiddenChests.main_path),
+        "The Vault Pedestal": LocationData(112660, "peds", Pedestals.main_path),
     },
     "Temple of the Art": {
         "Gate Guardian": LocationData(110660, "boss", Bosses.main_path),
@@ -226,6 +226,6 @@ for location_group in location_region_mapping.values():
     for locname, locinfo in location_group.items():
         if locinfo.ltype in ["hc", "peds"]:
             for i in range(20):
-                location_name_to_id.update({f"{locname} {i + 1}": locinfo.id + i})
+                location_name_to_id.update({f"{locname} {i + 1}": locinfo.id + i - 1})
         else:
             location_name_to_id.update({locname: locinfo.id})
