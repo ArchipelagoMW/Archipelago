@@ -16,7 +16,7 @@ class PathOption(Choice):
 
 class HiddenChests(Range):
     """Number of hidden chest checks added to the applicable biomes."""
-    display_name = "Hidden Chest Locations"
+    display_name = "Hidden Chests per Biome"
     range_start = 0
     range_end = 20
     default = 5
