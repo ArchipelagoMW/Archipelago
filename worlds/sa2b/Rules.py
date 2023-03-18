@@ -3,8 +3,8 @@ import typing
 from BaseClasses import MultiWorld
 from .Names import LocationName, ItemName
 from .Locations import boss_gate_set
-from ..AutoWorld import LogicMixin
-from ..generic.Rules import add_rule, set_rule, CollectionRule
+from worlds.AutoWorld import LogicMixin
+from worlds.generic.Rules import add_rule, set_rule, CollectionRule
 from .GateBosses import boss_has_requirement
 from .Missions import stage_name_prefixes, mission_orders
 
@@ -1227,6 +1227,10 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
         add_rule(world.get_location(LocationName.eternal_engine_omo_2, player),
                  lambda state: state.has(ItemName.tails_booster, player))
 
+        add_rule(world.get_location(LocationName.weapons_bed_omo_2, player),
+                 lambda state: state.has(ItemName.eggman_jet_engine, player) or
+                               state.has(ItemName.eggman_large_cannon, player))
+
         add_rule(world.get_location(LocationName.hidden_base_omo_3, player),
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(world.get_location(LocationName.eternal_engine_omo_3, player),
@@ -1370,11 +1374,12 @@ def set_rules(world: MultiWorld, player: int, gate_bosses: typing.Dict[int, int]
     # Mission Progression Rules (Mission 1 begets Mission 2, etc.)
     set_mission_progress_rules(world, player, mission_map, mission_count_map)
 
-    # Upgrade Requirements for each mission location
-    if world.logic_difficulty[player].value == 0:
-        set_mission_upgrade_rules_standard(world, player)
-    elif world.logic_difficulty[player].value == 1:
-        set_mission_upgrade_rules_hard(world, player)
+    if world.goal[player].value != 3:
+        # Upgrade Requirements for each mission location
+        if world.logic_difficulty[player].value == 0:
+            set_mission_upgrade_rules_standard(world, player)
+        elif world.logic_difficulty[player].value == 1:
+            set_mission_upgrade_rules_hard(world, player)
 
     # Upgrade Requirements for each boss gate
     set_boss_gate_rules(world, player, gate_bosses)

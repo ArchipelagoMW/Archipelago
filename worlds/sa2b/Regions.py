@@ -974,6 +974,59 @@ def create_regions(world, player: int, active_locations):
     chao_garden_expert_region = create_region(world, player, active_locations, LocationName.chao_garden_expert_region,
                                               chao_garden_expert_region_locations)
 
+    kart_race_beginner_region_locations = []
+    if world.kart_race_checks[player] == 2:
+        kart_race_beginner_region_locations.extend([
+            LocationName.kart_race_beginner_sonic,
+            LocationName.kart_race_beginner_tails,
+            LocationName.kart_race_beginner_knuckles,
+            LocationName.kart_race_beginner_shadow,
+            LocationName.kart_race_beginner_eggman,
+            LocationName.kart_race_beginner_rouge,
+        ])
+    if world.kart_race_checks[player] == 1:
+        kart_race_beginner_region_locations.append(LocationName.kart_race_beginner)
+    kart_race_beginner_region = create_region(world, player, active_locations, LocationName.kart_race_beginner_region,
+                                              kart_race_beginner_region_locations)
+
+    kart_race_standard_region_locations = []
+    if world.kart_race_checks[player] == 2:
+        kart_race_standard_region_locations.extend([
+            LocationName.kart_race_standard_sonic,
+            LocationName.kart_race_standard_tails,
+            LocationName.kart_race_standard_knuckles,
+            LocationName.kart_race_standard_shadow,
+            LocationName.kart_race_standard_eggman,
+            LocationName.kart_race_standard_rouge,
+        ])
+    if world.kart_race_checks[player] == 1:
+        kart_race_standard_region_locations.append(LocationName.kart_race_standard)
+    kart_race_standard_region = create_region(world, player, active_locations, LocationName.kart_race_standard_region,
+                                              kart_race_standard_region_locations)
+
+    kart_race_expert_region_locations = []
+    if world.kart_race_checks[player] == 2:
+        kart_race_expert_region_locations.extend([
+            LocationName.kart_race_expert_sonic,
+            LocationName.kart_race_expert_tails,
+            LocationName.kart_race_expert_knuckles,
+            LocationName.kart_race_expert_shadow,
+            LocationName.kart_race_expert_eggman,
+            LocationName.kart_race_expert_rouge,
+        ])
+    if world.kart_race_checks[player] == 1:
+        kart_race_expert_region_locations.append(LocationName.kart_race_expert)
+    kart_race_expert_region = create_region(world, player, active_locations, LocationName.kart_race_expert_region,
+                                            kart_race_expert_region_locations)
+
+    if world.goal[player] == 3:
+        grand_prix_region_locations = [
+            LocationName.grand_prix,
+        ]
+        grand_prix_region = create_region(world, player, active_locations, LocationName.grand_prix_region,
+                                          grand_prix_region_locations)
+        world.regions += [grand_prix_region]
+
     if world.goal[player] == 0 or world.goal[player] == 2:
         biolizard_region_locations = [
             LocationName.finalhazard,
@@ -1030,6 +1083,9 @@ def create_regions(world, player: int, active_locations):
         chao_garden_beginner_region,
         chao_garden_intermediate_region,
         chao_garden_expert_region,
+        kart_race_beginner_region,
+        kart_race_standard_region,
+        kart_race_expert_region,
     ]
 
 
@@ -1059,6 +1115,8 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
                                state.has(ItemName.blue_emerald, player)))
         if world.goal[player] == 2:
             connect(world, player, names, LocationName.green_hill_region, LocationName.biolizard_region)
+    elif world.goal[player] == 3:
+        connect(world, player, names, LocationName.kart_race_expert_region, LocationName.grand_prix_region)
 
     for i in range(len(gates[0].gate_levels)):
         connect(world, player, names, LocationName.gate_0_region, shuffleable_regions[gates[0].gate_levels[i]])
@@ -1133,26 +1191,50 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_expert_region)
+
+        connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_beginner_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_standard_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_expert_region)
     elif gates_len == 2:
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_expert_region)
+
+        connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_beginner_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_standard_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_expert_region)
     elif gates_len == 3:
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_expert_region)
+
+        connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_beginner_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_standard_region)
+        connect(world, player, names, LocationName.gate_2_region, LocationName.kart_race_expert_region)
     elif gates_len == 4:
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_3_region, LocationName.chao_garden_expert_region)
+
+        connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_beginner_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_standard_region)
+        connect(world, player, names, LocationName.gate_3_region, LocationName.kart_race_expert_region)
     elif gates_len == 5:
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_3_region, LocationName.chao_garden_expert_region)
+
+        connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_beginner_region)
+        connect(world, player, names, LocationName.gate_2_region, LocationName.kart_race_standard_region)
+        connect(world, player, names, LocationName.gate_3_region, LocationName.kart_race_expert_region)
     elif gates_len >= 6:
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_4_region, LocationName.chao_garden_expert_region)
+
+        connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_beginner_region)
+        connect(world, player, names, LocationName.gate_2_region, LocationName.kart_race_standard_region)
+        connect(world, player, names, LocationName.gate_4_region, LocationName.kart_race_expert_region)
 
 
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None):

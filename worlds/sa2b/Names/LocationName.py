@@ -710,6 +710,30 @@ chao_standard_karate = "Chao Karate - Standard"
 chao_expert_karate   = "Chao Karate - Expert"
 chao_super_karate    = "Chao Karate - Super"
 
+# Kart Race Definitions
+kart_race_beginner_sonic    = "Kart Race - Beginner - Sonic"
+kart_race_beginner_tails    = "Kart Race - Beginner - Tails"
+kart_race_beginner_knuckles = "Kart Race - Beginner - Knuckles"
+kart_race_beginner_shadow   = "Kart Race - Beginner - Shadow"
+kart_race_beginner_eggman   = "Kart Race - Beginner - Eggman"
+kart_race_beginner_rouge    = "Kart Race - Beginner - Rouge"
+kart_race_standard_sonic    = "Kart Race - Standard - Sonic"
+kart_race_standard_tails    = "Kart Race - Standard - Tails"
+kart_race_standard_knuckles = "Kart Race - Standard - Knuckles"
+kart_race_standard_shadow   = "Kart Race - Standard - Shadow"
+kart_race_standard_eggman   = "Kart Race - Standard - Eggman"
+kart_race_standard_rouge    = "Kart Race - Standard - Rouge"
+kart_race_expert_sonic      = "Kart Race - Expert - Sonic"
+kart_race_expert_tails      = "Kart Race - Expert - Tails"
+kart_race_expert_knuckles   = "Kart Race - Expert - Knuckles"
+kart_race_expert_shadow     = "Kart Race - Expert - Shadow"
+kart_race_expert_eggman     = "Kart Race - Expert - Eggman"
+kart_race_expert_rouge      = "Kart Race - Expert - Rouge"
+
+kart_race_beginner = "Kart Race - Beginner"
+kart_race_standard = "Kart Race - Standard"
+kart_race_expert   = "Kart Race - Expert"
+
 # Other Definitions
 green_hill        = "Green Hill"
 green_hill_chao_1 = "Green Hill - Chao Key 1"
@@ -774,6 +798,13 @@ biolizard_region = "Biolizard"
 
 green_hill_region  = "Green Hill"
 
+grand_prix        = "Grand Prix"
+grand_prix_region = "Grand Prix"
+
 chao_garden_beginner_region     = "Chao Garden - Beginner"
 chao_garden_intermediate_region = "Chao Garden - Intermediate"
 chao_garden_expert_region       = "Chao Garden - Expert"
+
+kart_race_beginner_region = "Kart Race - Beginner"
+kart_race_standard_region = "Kart Race - Intermediate"
+kart_race_expert_region   = "Kart Race - Expert"
