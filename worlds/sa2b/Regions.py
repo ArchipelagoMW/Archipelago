@@ -1019,11 +1019,13 @@ def create_regions(world, player: int, active_locations):
     kart_race_expert_region = create_region(world, player, active_locations, LocationName.kart_race_expert_region,
                                             kart_race_expert_region_locations)
 
-    grand_prix_region_locations = [
-        LocationName.grand_prix,
-    ]
-    grand_prix_region = create_region(world, player, active_locations, LocationName.grand_prix_region,
-                                      grand_prix_region_locations)
+    if world.goal[player] == 3:
+        grand_prix_region_locations = [
+            LocationName.grand_prix,
+        ]
+        grand_prix_region = create_region(world, player, active_locations, LocationName.grand_prix_region,
+                                          grand_prix_region_locations)
+        world.regions += [grand_prix_region]
 
     if world.goal[player] == 0 or world.goal[player] == 2:
         biolizard_region_locations = [
@@ -1084,7 +1086,6 @@ def create_regions(world, player: int, active_locations):
         kart_race_beginner_region,
         kart_race_standard_region,
         kart_race_expert_region,
-        grand_prix_region,
     ]
 
 
