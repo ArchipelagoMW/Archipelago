@@ -36,7 +36,7 @@ def create_all_items(world: MultiWorld, player: int) -> None:
     for i in range(orb_count):
         itempool += ["Orb"]
 
-    if world.bosses_as_checks[player].value >= 2:
+    if world.bosses_as_checks[player].value >= 3:
         itempool += ["Perk (Spatial Awareness)"]
 
     # Create any non-progression repeat items (referred to as junk regardless of whether it's useful)

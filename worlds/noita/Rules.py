@@ -56,6 +56,7 @@ def create_all_rules(world: MultiWorld, player: int) -> None:
         forbid_items_at_location(world, location_name, wands_to_forbid, player)
 
     # Prevent the Map perk from being on Toveri
-    for location_name in Locations.location_name_to_id.keys():
-        if "Toveri" not in location_name: continue
-        forbid_items_at_location(world, location_name, {"Perk (Spatial Awareness)"}, player)
+    if world.bosses_as_checks[player].value >= 3:
+        for location_name in Locations.location_name_to_id.keys():
+            if "Toveri" not in location_name: continue
+            forbid_items_at_location(world, location_name, {"Perk (Spatial Awareness)"}, player)
