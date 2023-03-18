@@ -151,7 +151,7 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
                 choices = KERRIGAN_ACTIVES[tier]
                 if len(choices) == 0:
                     continue
-                choices.remove(multiworld.random.choice(choices))
+                choices.remove(multiworld.random.choice(list(choices)))
                 excluded_items.update(choices)
 
     for item in multiworld.precollected_items[player]:
