@@ -24,7 +24,7 @@ class HiddenChests(Range):
 
 class PedestalChecks(Range):
     """Number of checks that will spawn on pedestals in the applicable biomes."""
-    display_name = "Pedestal Checks"  # feel free to rename/redescribe this, edit ranges, etc.
+    display_name = "Pedestal Checks per Biome"
     range_start = 0
     range_end = 20
     default = 5
