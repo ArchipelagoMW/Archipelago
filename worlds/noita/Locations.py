@@ -226,6 +226,6 @@ for location_group in location_region_mapping.values():
     for locname, locinfo in location_group.items():
         if locinfo.ltype in ["hc", "peds"]:
             for i in range(20):
-                location_name_to_id.update({f"{locname} {i + 1}": locinfo.id + i - 1})
+                location_name_to_id.update({f"{locname} {i + 1}": locinfo.id + i})
         else:
             location_name_to_id.update({locname: locinfo.id})
