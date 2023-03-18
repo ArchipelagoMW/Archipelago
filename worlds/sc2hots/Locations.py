@@ -124,7 +124,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Infested", "Infested: Victory", SC2HOTS_LOC_ID_OFFSET + 1300,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and
                                    ((state._sc2hots_has_good_antiair(multiworld, player) and state.has('Infestor', player)) or
-                                   (logic_level > 0 and state._sc2host_has_minimal_antiair(multiworld, player)))),
+                                   (logic_level > 0 and state._sc2hots_has_minimal_antiair(multiworld, player)))),
         LocationData("Infested", "Infested: East Science Facility", SC2HOTS_LOC_ID_OFFSET + 1301,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player) and
