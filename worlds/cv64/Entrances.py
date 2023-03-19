@@ -2,7 +2,7 @@ import typing
 
 from BaseClasses import Entrance
 from .Names import IName, RName
-from .Stages import all_stages
+from .Stages import stage_info
 
 
 class EntranceData(typing.NamedTuple):
@@ -17,17 +17,18 @@ class EntranceData(typing.NamedTuple):
 def create_entrances(multiworld, player: int, active_stage_exits, active_warp_list, required_special2s, active_regions):
     def get_prev_stage_start(source_stage):
         if source_stage in active_stage_exits:
-            return all_stages[active_stage_exits[source_stage][0]]
+            if active_stage_exits[source_stage][0] != "Menu":
+                return stage_info[active_stage_exits[source_stage][0]].end_region_name
         return "Menu"
 
     def get_next_stage_start(source_stage):
         if source_stage in active_stage_exits:
-            return all_stages[active_stage_exits[source_stage][1]]
+            return stage_info[active_stage_exits[source_stage][1]].start_region_name
         return "Menu"
 
     def get_alt_stage_start(source_stage):
         if source_stage in active_stage_exits:
-            return all_stages[active_stage_exits[source_stage][2]]
+            return stage_info[active_stage_exits[source_stage][2]].start_region_name
         return "Menu"
 
     s1s_per_warp = multiworld.special1s_per_warp[player].value
@@ -58,8 +59,7 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
                      lambda state: state.has(IName.garden_key, player)),
         EntranceData(RName.villa_maze, RName.villa_crypt,
                      lambda state: state.has(IName.copper_key, player), easy_rule=True),
-        EntranceData(RName.villa_servants, RName.villa_main,
-                     lambda state: state.has(IName.garden_key, player)),
+        EntranceData(RName.villa_servants, RName.villa_main),
         EntranceData(RName.villa_crypt, RName.villa_maze),
         EntranceData(RName.villa_crypt, get_next_stage_start(RName.villa)),
         EntranceData(RName.villa_crypt, get_alt_stage_start(RName.villa)),
@@ -76,7 +76,7 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
         EntranceData(RName.cc_main, RName.cc_library,
                      lambda state: (state.has(IName.magical_nitro, player)
                                     and state.has(IName.mandragora, player))),
-        EntranceData(RName.castle_center, RName.cc_crystal,
+        EntranceData(RName.cc_main, RName.cc_crystal,
                      lambda state: (state.has(IName.magical_nitro, player, 2)
                                     and state.has(IName.mandragora, player, 2))),
         EntranceData(RName.cc_crystal, RName.cc_elev_top),
@@ -125,10 +125,10 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
 
     # Set up the starting stage and warp entrances
     for i in range(len(active_warp_list)):
-        menu_entrance = Entrance(player, active_warp_list[i], active_regions["Menu"])
+        menu_entrance = Entrance(player, stage_info[active_warp_list[i]].start_region_name, active_regions["Menu"])
         if i > 0:
             menu_entrance.access_rule = lambda state: state.has(IName.special_one, player, s1s_per_warp * i)
-        menu_entrance.connect(active_warp_list[i])
+        menu_entrance.connect(active_regions[stage_info[active_warp_list[i]].start_region_name])
         active_regions["Menu"].exits.append(menu_entrance)
 
     # Set up the in-stage entrances

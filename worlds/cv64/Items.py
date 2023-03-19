@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import Item, ItemClassification
+from BaseClasses import Item
 from .Names import IName
 
 
@@ -15,7 +15,7 @@ class CV64Item(Item):
 
 
 # Separate tables for each type of item.
-junk_table = {
+tier1_junk_table = {
     IName.red_jewel_s:        ItemData(0xC64002, False),
     IName.red_jewel_l:        ItemData(0xC64003, False),
     IName.five_hundred_gold:  ItemData(0xC6401A, False),
@@ -23,23 +23,20 @@ junk_table = {
     IName.one_hundred_gold:   ItemData(0xC6401C, False),
 }
 
-special_table = {
-    IName.special_one: ItemData(0xC64004, True),
-    IName.special_two: ItemData(0xC64005, True),
-}
-
-main_table = {
+tier2_junk_table = {
     IName.roast_chicken:        ItemData(0xC64006, False),
     IName.roast_beef:           ItemData(0xC64007, False),
     IName.healing_kit:          ItemData(0xC64008, False),
     IName.purifying:            ItemData(0xC64009, False),
     IName.cure_ampoule:         ItemData(0xC6400A, False),
     IName.powerup:              ItemData(0xC6400C, False),
-    IName.magical_nitro:        ItemData(0xC64015, True),
-    IName.mandragora:           ItemData(0xC64016, True),
     IName.sun_card:             ItemData(0xC64017, False),
     IName.moon_card:            ItemData(0xC64018, False),
-    IName.five_hundred_gold:    ItemData(0xC6401A, False),
+}
+
+key_table = {
+    IName.magical_nitro:        ItemData(0xC64015, True),
+    IName.mandragora:           ItemData(0xC64016, True),
     IName.archives_key:         ItemData(0xC6401D, True),
     IName.left_tower_key:       ItemData(0xC6401E, True),
     IName.storeroom_key:        ItemData(0xC6401F, True),
@@ -55,16 +52,21 @@ main_table = {
     IName.clocktower_key_three: ItemData(0xC64029, True),
 }
 
+special_table = {
+    IName.special_one: ItemData(0xC64004, True),
+    IName.special_two: ItemData(0xC64005, True),
+}
+
 event_table = {
     IName.victory:          ItemData(None, True),
 }
 
 # Complete item table.
 item_table = {
-    **junk_table,
+    **tier1_junk_table,
+    **tier2_junk_table,
     **special_table,
-    **main_table,
-    **event_table,
+    **key_table,
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}

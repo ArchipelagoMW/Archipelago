@@ -6,7 +6,7 @@ import hashlib
 import os
 
 from .Names import Patches, RName
-from .Stages import all_stages
+from .Stages import stage_info
 
 USHASH = '1cc5cf3b4d29d8c3ade957648b529dc1'
 BSUSHASH = '0bbaa6de2b9cbb822f8b4d85c1d5497b'
@@ -222,10 +222,10 @@ def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp
     # Change the Stage Select menu options
     rom.write_bytes(0xADF64, Patches.warp_menu_rewrite)
     rom.write_bytes(0x10E0C8, Patches.warp_pointer_table)
-    rom.write_byte(0xADF67, all_stages[active_stage_list[0]].start_map_id)
+    rom.write_byte(0xADF67, stage_info[active_stage_list[0]].start_map_id)
     for warp in range(len(active_warp_list)):
-        rom.write_byte(warp_scene_offsets[warp], all_stages[active_warp_list[warp]].mid_map_id)
-        rom.write_byte(warp_scene_offsets[warp] + 4, all_stages[active_warp_list[warp]].mid_spawn_id)
+        rom.write_byte(warp_scene_offsets[warp], stage_info[active_warp_list[warp]].mid_map_id)
+        rom.write_byte(warp_scene_offsets[warp] + 4, stage_info[active_warp_list[warp]].mid_spawn_id)
 
     # Play the "teleportation" sound effect when teleporting
     rom.write_bytes(0xAE088, [0x08, 0x00, 0x4F, 0xAB,   # J 0x80013EAC
@@ -329,7 +329,7 @@ def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp
 
     stage_number = 0x01
     for stage in range(len(active_stage_list) - 1):
-        for offset in all_stages[active_stage_list[stage]].stage_number_offset_list:
+        for offset in stage_info[active_stage_list[stage]].stage_number_offset_list:
             rom.write_byte(offset, stage_number)
         if active_stage_list[stage - 2] == RName.castle_center:
             stage_number -= 1

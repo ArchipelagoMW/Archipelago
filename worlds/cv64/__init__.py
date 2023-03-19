@@ -4,11 +4,11 @@ import typing
 import threading
 
 from BaseClasses import Item, Region, Entrance, Location, MultiWorld, Tutorial, ItemClassification
-from .Items import CV64Item, ItemData, item_table, junk_table, main_table
-from .Locations import CV64Location, all_locations, create_locations
+from .Items import CV64Item, ItemData, item_table, tier1_junk_table, tier2_junk_table, key_table, special_table
+from .Locations import CV64Location, all_locations, create_locations, boss_table
 from .Entrances import create_entrances
 from .Options import cv64_options
-from .Stages import CV64Stage, all_stages, get_stage_exits, vanilla_stage_order
+from .Stages import CV64Stage, stage_info, shuffle_stages, vanilla_stage_order, vanilla_stage_exits
 from .Names import IName, LName, RName
 from ..AutoWorld import WebWorld, World
 from .Rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch, rom_sub_weapon_offsets
@@ -47,7 +47,7 @@ class CV64World(World):
 
     active_stage_list: typing.List[str]
     active_warp_list: typing.List[str]
-    active_stage_exits: typing.Dict[str, typing.Any]
+    active_stage_exits: typing.Dict[str, typing.List]
     sub_weapon_dict: typing.Dict[int, int]
     # music_dict: typing.Dict[int, int]
     # TODO: Make a list of every instance of the music changing for music rando.
@@ -66,22 +66,33 @@ class CV64World(World):
 
     def generate_early(self):
         self.active_stage_list = vanilla_stage_order.copy()
-        self.sub_weapon_dict = rom_sub_weapon_offsets.copy()
-        main_stages = []
-        reinhardt_stages = None
-        carrie_stages = None
+        self.active_stage_exits = vanilla_stage_exits.copy()
 
         stage_1_blacklist = []
 
-        # Remove character stages from the stage list if they're not enabled
+        # Prevent Clock Tower from being Stage 1 if more than 4 S1s are needed to warp out of it.
+        if self.multiworld.special1s_per_warp[self.player].value > 4:
+            stage_1_blacklist += RName.clock_tower
+
+        # Remove character stages from the stage list and exits dict if they're not enabled
         if self.multiworld.character_stages[self.player].value == 2:
             self.active_stage_list.remove(RName.underground_waterway)
             self.active_stage_list.remove(RName.tower_of_science)
             self.active_stage_list.remove(RName.tower_of_sorcery)
+            del(self.active_stage_exits[RName.underground_waterway])
+            del(self.active_stage_exits[RName.tower_of_science])
+            del(self.active_stage_exits[RName.tower_of_sorcery])
         elif self.multiworld.character_stages[self.player].value == 3:
             self.active_stage_list.remove(RName.tunnel)
             self.active_stage_list.remove(RName.duel_tower)
             self.active_stage_list.remove(RName.tower_of_execution)
+            del(self.active_stage_exits[RName.tunnel])
+            del(self.active_stage_exits[RName.duel_tower])
+            del(self.active_stage_exits[RName.tower_of_execution])
+
+        if self.multiworld.stage_shuffle[self.player]:
+            shuffle_stages(self.multiworld, self.player, self.active_stage_list, self.active_stage_exits,
+                           stage_1_blacklist)
 
         # Create a list of warps from the active stage list. They are in a random order by default.
         self.active_warp_list = self.multiworld.random.sample(self.active_stage_list, 7)
@@ -100,40 +111,6 @@ class CV64World(World):
                 if warp not in self.active_warp_list:
                     new_list.remove(warp)
             self.active_warp_list = new_list
-
-        # Clock Tower will be prevented from being Stage 1 if more than 4 S1s are needed to warp out
-        if self.multiworld.special1s_per_warp[self.player].value > 4:
-            stage_1_blacklist += RName.clock_tower
-
-        def check_first_stage(stage_list):
-            # Move the first stage in the list somewhere else if it's blacklisted from being first.
-            while stage_list[0] in stage_1_blacklist:
-                stage_list.insert(self.multiworld.random.randint(2, len(stage_list)), stage_list[0].copy())
-                del[stage_list[0]]
-
-        # Handle Stage Shuffle here
-        if self.multiworld.stage_shuffle[self.player]:
-            self.active_stage_list.remove(RName.castle_keep)
-            self.multiworld.random.shuffle(self.active_stage_list)
-            check_first_stage(self.active_stage_list)
-            # If branching paths, create separate lists for the character stages without Villa and CC and shuffle again.
-            if self.multiworld.character_stages[self.player].value == 0:
-                main_stages = self.active_stage_list.copy()
-                main_stages.remove(RName.villa)
-                main_stages.remove(RName.castle_center)
-                reinhardt_stages = main_stages[0:3].copy()
-                carrie_stages = main_stages[3:6].copy()
-                del[main_stages[0:5]]
-                main_stages.append(RName.villa)
-                main_stages.append(RName.castle_center)
-                self.multiworld.random.shuffle(main_stages)
-                check_first_stage(main_stages)
-                main_stages.append(RName.castle_keep)
-
-            self.active_stage_list.append(RName.castle_keep)
-
-        self.active_stage_exits = get_stage_exits(self, self.active_stage_list, main_stages, reinhardt_stages,
-                                                  carrie_stages)
 
         self.active_warp_list.insert(0, self.active_stage_list[0])
 
@@ -174,15 +151,15 @@ class CV64World(World):
     def create_items(self):
         item_counts = {}
         junk_count = 0
-        progress_item_pool: typing.List[CV64Item] = []
-        common_item_pool: typing.List[CV64Item] = []
+        progress_item_pool = []
+        common_item_pool = []
 
         for stage in self.active_stage_list:
-            for item in all_stages[stage].stage_item_counts:
+            for item in stage_info[stage].stage_item_counts:
                 if item not in item_counts:
                     item_counts[item] = 0
-                item_counts[item] += all_stages[stage].stage_item_counts[item]
-            junk_count += all_stages[stage].stage_junk_count
+                item_counts[item] += stage_info[stage].stage_item_counts[item]
+            junk_count += stage_info[stage].stage_junk_count
 
         if self.multiworld.carrie_logic[self.player]:
             item_counts[IName.roast_beef] += 1
@@ -240,57 +217,9 @@ class CV64World(World):
 
         self.multiworld.itempool += progress_item_pool + common_item_pool
 
-        total_required_locations = 210
-
-        self.multiworld.get_location(LName.the_end, self.player).place_locked_item(self.create_item(IName.victory))
-
-        total_available_bosses = 14
-
-        if self.multiworld.draculas_condition[self.player].value == 1:
-            self.required_s2s = 1
-            self.multiworld.get_location(LName.cc_behind_the_seal, self.player) \
-                .place_locked_item(self.create_item(IName.special_two))
-        elif self.multiworld.draculas_condition[self.player].value == 2:
-            self.required_s2s = self.multiworld.bosses_required[self.player].value
-            self.multiworld.get_location(LName.forest_boss_one, self.player) \
-                .place_locked_item(self.create_item(IName.special_two))
-            self.multiworld.get_location(LName.forest_boss_two, self.player) \
-                .place_locked_item(self.create_item(IName.special_two))
-            self.multiworld.get_location(LName.forest_boss_three, self.player) \
-                .place_locked_item(self.create_item(IName.special_two))
-            self.multiworld.get_location(LName.cw_boss, self.player) \
-                .place_locked_item(self.create_item(IName.special_two))
-            self.multiworld.get_location(LName.villa_boss_one, self.player) \
-                .place_locked_item(self.create_item(IName.special_two))
-            self.multiworld.get_location(LName.villa_boss_two, self.player) \
-                .place_locked_item(self.create_item(IName.special_two))
-            self.multiworld.get_location(LName.uw_boss, self.player) \
-                .place_locked_item(self.create_item(IName.special_two))
-            self.multiworld.get_location(LName.cc_boss_one, self.player) \
-                .place_locked_item(self.create_item(IName.special_two))
-            self.multiworld.get_location(LName.cc_boss_two, self.player) \
-                .place_locked_item(self.create_item(IName.special_two))
-            self.multiworld.get_location(LName.dt_boss_one, self.player) \
-                .place_locked_item(self.create_item(IName.special_two))
-            self.multiworld.get_location(LName.dt_boss_two, self.player) \
-                .place_locked_item(self.create_item(IName.special_two))
-            self.multiworld.get_location(LName.dt_boss_three, self.player) \
-                .place_locked_item(self.create_item(IName.special_two))
-            self.multiworld.get_location(LName.dt_boss_four, self.player) \
-                .place_locked_item(self.create_item(IName.special_two))
-            self.multiworld.get_location(LName.roc_boss, self.player) \
-                .place_locked_item(self.create_item(IName.special_two))
-            if self.multiworld.renon_fight_condition[self.player].value != 0:
-                self.multiworld.get_location(LName.ck_boss_one, self.player) \
-                    .place_locked_item(self.create_item(IName.special_two))
-                total_available_bosses += 1
-            if self.multiworld.vincent_fight_condition[self.player].value != 0:
-                self.multiworld.get_location(LName.ck_boss_two, self.player) \
-                    .place_locked_item(self.create_item(IName.special_two))
-                total_available_bosses += 1
-            if self.required_s2s > total_available_bosses:
-                raise Exception(f"More bosses required than there are for player {self.multiworld.get_player_name(self.player)}. "
-                                f"Need {self.required_s2s - total_available_bosses} more enabled.")
+    def generate_basic(self):
+        # Handle sub-weapon shuffle here.
+        self.sub_weapon_dict = rom_sub_weapon_offsets.copy()
 
         if self.multiworld.sub_weapon_shuffle[self.player]:
             sub_bytes = list(self.sub_weapon_dict.values())
@@ -298,6 +227,34 @@ class CV64World(World):
             self.sub_weapon_dict = dict(zip(self.sub_weapon_dict, sub_bytes))
 
     def set_rules(self):
+        self.multiworld.get_location(LName.the_end, self.player).place_locked_item(self.create_item(IName.victory))
+
+        if self.multiworld.draculas_condition[self.player].value == 1:
+            self.required_s2s = 1
+            self.multiworld.get_location(LName.cc_behind_the_seal, self.player).place_locked_item(
+                self.create_item(IName.special_two))
+        elif self.multiworld.draculas_condition[self.player].value == 2:
+            self.required_s2s = self.multiworld.bosses_required[self.player].value
+            for boss_loc in boss_table:
+                try:
+                    self.multiworld.get_location(boss_loc, self.player).place_locked_item(
+                        self.create_item(IName.special_two))
+                except KeyError:
+                    continue
+
+            # Verify enough bosses are available in the player's world. If there aren't, an exception will be raised.
+            total_available_bosses = 0
+            for stage in self.active_stage_list:
+                total_available_bosses += stage_info[stage].boss_count
+
+            if self.multiworld.renon_fight_condition[self.player].value == 0:
+                total_available_bosses -= 1
+            if self.multiworld.vincent_fight_condition[self.player].value == 0:
+                total_available_bosses -= 1
+            if self.required_s2s > total_available_bosses:
+                raise Exception(f"{self.required_s2s - total_available_bosses} more boss(es) required than there are "
+                                f"for player {self.multiworld.get_player_name(self.player)}.")
+
         self.multiworld.completion_condition[self.player] = lambda state: state.has(IName.victory, self.player)
 
     def pre_fill(self):
@@ -349,55 +306,55 @@ class CV64World(World):
 
         # Loading zones
         if self.multiworld.stage_shuffle[self.player]:
-            offsets_to_ids[0xB73308] = all_stages[self.active_stage_list[0]].start_map_id
-            offsets_to_ids[0xD9DAB] = all_stages[
+            offsets_to_ids[0xB73308] = stage_info[self.active_stage_list[0]].start_map_id
+            offsets_to_ids[0xD9DAB] = stage_info[
                 self.active_stage_list[self.active_stage_list.index(RName.villa) + 2]].start_map_id
-            offsets_to_ids[0x109CCF] = all_stages[
+            offsets_to_ids[0x109CCF] = stage_info[
                 self.active_stage_list[self.active_stage_list.index(RName.castle_center) + 3]].start_map_id
             for stage in range(len(self.active_stage_list) - 1):
                 if self.active_stage_list[stage - 1] == RName.villa:
-                    offsets_to_ids[all_stages[self.active_stage_list[stage]].endzone_map_offset] = all_stages[
+                    offsets_to_ids[stage_info[self.active_stage_list[stage]].endzone_map_offset] = stage_info[
                         self.active_stage_list[stage + 2]].start_map_id
-                    offsets_to_ids[all_stages[self.active_stage_list[stage]].endzone_spawn_offset] = all_stages[
+                    offsets_to_ids[stage_info[self.active_stage_list[stage]].endzone_spawn_offset] = stage_info[
                         self.active_stage_list[stage + 2]].start_spawn_id
                 elif self.active_stage_list[stage - 2] == RName.castle_center:
-                    offsets_to_ids[all_stages[self.active_stage_list[stage]].endzone_map_offset] = all_stages[
+                    offsets_to_ids[stage_info[self.active_stage_list[stage]].endzone_map_offset] = stage_info[
                         self.active_stage_list[stage + 3]].start_spawn_id
-                    offsets_to_ids[all_stages[self.active_stage_list[stage]].endzone_spawn_offset] = all_stages[
+                    offsets_to_ids[stage_info[self.active_stage_list[stage]].endzone_spawn_offset] = stage_info[
                         self.active_stage_list[stage + 3]].start_spawn_id
                 else:
-                    offsets_to_ids[all_stages[self.active_stage_list[stage]].endzone_map_offset] = all_stages[
+                    offsets_to_ids[stage_info[self.active_stage_list[stage]].endzone_map_offset] = stage_info[
                         self.active_stage_list[stage + 1]].start_map_id
-                    offsets_to_ids[all_stages[self.active_stage_list[stage]].endzone_spawn_offset] = all_stages[
+                    offsets_to_ids[stage_info[self.active_stage_list[stage]].endzone_spawn_offset] = stage_info[
                         self.active_stage_list[stage + 1]].start_spawn_id
 
-                if all_stages[self.active_stage_list[stage]].startzone_map_offset != 0xFFFFFF:
+                if stage_info[self.active_stage_list[stage]].startzone_map_offset != 0xFFFFFF:
                     if stage - 1 < 0:
-                        offsets_to_ids[all_stages[self.active_stage_list[stage]].startzone_map_offset] = all_stages[
+                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_map_offset] = stage_info[
                             self.active_stage_list[stage]].start_map_id
-                        offsets_to_ids[all_stages[self.active_stage_list[stage]].startzone_spawn_offset] = \
-                            all_stages[self.active_stage_list[stage]].start_spawn_id
+                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_spawn_offset] = \
+                            stage_info[self.active_stage_list[stage]].start_spawn_id
                     elif self.active_stage_list[stage - 2] == RName.villa:
-                        offsets_to_ids[all_stages[self.active_stage_list[stage]].startzone_map_offset] = 0x1A
-                        offsets_to_ids[all_stages[self.active_stage_list[stage]].startzone_spawn_offset] = 0x03
+                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_map_offset] = 0x1A
+                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_spawn_offset] = 0x03
                     elif self.active_stage_list[stage - 3] == RName.villa:
-                        offsets_to_ids[all_stages[self.active_stage_list[stage]].startzone_map_offset] = all_stages[
+                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_map_offset] = stage_info[
                             self.active_stage_list[stage - 2]].end_map_id
-                        offsets_to_ids[all_stages[self.active_stage_list[stage]].startzone_spawn_offset] = \
-                            all_stages[self.active_stage_list[stage - 2]].end_spawn_id
+                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_spawn_offset] = \
+                            stage_info[self.active_stage_list[stage - 2]].end_spawn_id
                     elif self.active_stage_list[stage - 3] == RName.castle_center:
-                        offsets_to_ids[all_stages[self.active_stage_list[stage]].startzone_map_offset] = 0x0F
-                        offsets_to_ids[all_stages[self.active_stage_list[stage]].startzone_spawn_offset] = 0x03
+                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_map_offset] = 0x0F
+                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_spawn_offset] = 0x03
                     elif self.active_stage_list[stage - 5] == RName.castle_center:
-                        offsets_to_ids[all_stages[self.active_stage_list[stage]].startzone_map_offset] = all_stages[
+                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_map_offset] = stage_info[
                             self.active_stage_list[stage - 3]].end_map_id
-                        offsets_to_ids[all_stages[self.active_stage_list[stage]].startzone_spawn_offset] = \
-                            all_stages[self.active_stage_list[stage - 3]].end_spawn_id
+                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_spawn_offset] = \
+                            stage_info[self.active_stage_list[stage - 3]].end_spawn_id
                     else:
-                        offsets_to_ids[all_stages[self.active_stage_list[stage]].startzone_map_offset] = all_stages[
+                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_map_offset] = stage_info[
                             self.active_stage_list[stage - 1]].end_map_id
-                        offsets_to_ids[all_stages[self.active_stage_list[stage]].startzone_spawn_offset] = \
-                            all_stages[self.active_stage_list[stage - 1]].end_spawn_id
+                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_spawn_offset] = \
+                            stage_info[self.active_stage_list[stage - 1]].end_spawn_id
 
         return offsets_to_ids
     
@@ -425,7 +382,8 @@ class CV64World(World):
                                    player_name=world.player_name[player], patched_path=rompath)
             patch.write()
         except:
-            print("D'oh, something went wrong in CV64's generate_output!")
+            print("D'oh, something went wrong in CV64's generate_output!"
+                  " Tell my future self to fix his nonsense, ok?")
             raise
         finally:
             if os.path.exists(rompath):
@@ -465,7 +423,7 @@ class CV64World(World):
             spoiler_handle.writelines(text)
 
     def fill_slot_data(self) -> dict:
-        slot_data = self._get_slot_data()
+        slot_data = {"death_link": self.multiworld.death_link[self.player].value}
         for option_name in cv64_options:
             option = getattr(self.multiworld, option_name)[self.player]
             slot_data[option_name] = option.value

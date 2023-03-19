@@ -295,9 +295,6 @@ all_locations = {
     **main_location_table,
     **carrie_only_location_table,
     **cc_lizard_generator_table,
-    **boss_table,
-    **crystal_table,
-    **end_table
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {id: name for name, _ in all_locations.items()}
@@ -311,6 +308,7 @@ def create_locations(world, player: int, active_regions):
         location_table.update({**crystal_table})
     elif world.draculas_condition[player].value == 2:
         location_table.update({**boss_table})
+        # Delete Vincent and/or Renon from the active locations if disabled completely.
         if world.vincent_fight_condition[player].value == 0:
             del location_table[LName.ck_boss_two]
         if world.renon_fight_condition[player].value == 0:
