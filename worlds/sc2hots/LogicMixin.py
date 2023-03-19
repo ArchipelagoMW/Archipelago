@@ -48,7 +48,7 @@ class SC2HotSLogic(LogicMixin):
     
     def _sc2hots_has_competent_defense(self, multiworld: MultiWorld, player: int) -> bool:
         return self._sc2hots_has_common_unit(multiworld, player) and \
-            ((self.has('Swarm Host', player) or self._sc2hots_has_brood_lord(multiworld, player) or self.has_any({'Lurker', 'Impaler'}, player)) or \
+            ((self.has('Swarm Host', player) or self._sc2hots_has_brood_lord(multiworld, player) or self._sc2hots_has_impaler_or_lurker(multiworld, player)) or \
             (get_option_value(multiworld, player, 'required_tactics') > 0 and (self._sc2hots_has_viper(multiworld, player) or self.has('Spine Crawler', player))))
     
     def _sc2hots_has_two_kerrigan_actives(self, multiworld: MultiWorld, player: int) -> bool:
