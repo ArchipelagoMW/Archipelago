@@ -33,7 +33,7 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
                          lambda state: state.has("Time is Money Pack", player))
 
 
-        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_item:
+        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             set_rule(world.get_entrance("Behind Ogre", player),
                      lambda state: state.has("Gun", player))
             set_rule(world.get_entrance("Tree", player),
@@ -169,7 +169,7 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
             set_rule(world.get_entrance("Behind Rocks", player),
                      lambda state: state.can_reach("Cut Content", 'region', player))
 
-        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_item:
+        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             set_rule(world.get_entrance("Vines", player),
                      lambda state: state.has("Live Freemium or Die Sword", player) or state.has("Pickaxe", player))
             set_rule(world.get_entrance("Behind Rocks", player),

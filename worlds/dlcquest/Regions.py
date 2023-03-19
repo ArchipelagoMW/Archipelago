@@ -48,7 +48,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
 
         Regmovpack =Region("Movement Pack", player, world)
         Locmovpack_name = ["Time is Money Pack", "Psychological Warfare Pack","Armor for your Horse Pack"]
-        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_item:
+        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             Locmovpack_name += ["DLC Quest Sword"]
         Regmovpack.exits =[ Entrance(player, "Tree", Regmovpack), Entrance(player, "Cloud", Regmovpack)]
         Regmovpack.locations += [DLCquestLocation(player, loc_name, location_table[loc_name],Regmovpack)for loc_name in Locmovpack_name ]
@@ -57,7 +57,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
 
         Regbtree = Region("Behind Tree", player, world)
         Locbtree_name = ["Double Jump Pack", "Map Pack"]
-        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_item:
+        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             Locmovpack_name += ["Gun"]
         Regbtree.exits =[ Entrance(player, "Behind Tree Double Jump", Regbtree), Entrance(player, "Forest Entrance", Regbtree)]
         Regbtree.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regbtree) for loc_name in Locbtree_name]
@@ -145,7 +145,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
 
         Regfreemiumstart = Region("Freemium Start", player, world)
         Locfreemiumstart_name = ["Particles Pack","Day One Patch Pack","Checkpoint Pack","Incredibly Important Pack"]
-        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_item:
+        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             Locfreemiumstart_name += ["Live Freemium or Die Sword"]
         Regfreemiumstart.exits = [Entrance(player, "Vines", Regfreemiumstart)]
         Regfreemiumstart.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regfreemiumstart) for loc_name in
@@ -167,7 +167,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
 
         Regbehindvine = Region("Behind the Vines", player, world)
         Locbehindvine_name =["Wall Jump Pack","Health Bar Pack","Parallax Pack"]
-        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_item:
+        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             Locbehindvine_name += ["Pickaxe"]
         Regbehindvine.exits = [Entrance(player, "Wall Jump Entrance", Regbehindvine)]
         Regbehindvine.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regbehindvine) for loc_name in Locbehindvine_name]
@@ -200,7 +200,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
 
         Regcutcontent = Region("Cut Content", player, world)
         Loccutcontent_name = []
-        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_item:
+        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             Loccutcontent_name += ["Humble Indie Bindle"]
         Regcutcontent.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regcutcontent) for
                                      loc_name in Loccutcontent_name]
@@ -209,7 +209,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
 
         Regnamechange = Region("Name Change", player, world)
         Locnamechange_name = []
-        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_item:
+        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             Locnamechange_name += ["Box of Various Supplies"]
         Regnamechange.exits = [Entrance(player, "Behind Rocks", Regnamechange)]
         Regnamechange.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regnamechange) for
