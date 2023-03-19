@@ -42,7 +42,7 @@ class PokemonEmeraldWorld(World):
     item_name_to_id = create_item_label_to_id_map()
     location_name_to_id = create_location_label_to_id_map()
 
-    data_version = 4
+    data_version = 0
 
     def _get_pokemon_emerald_data(self):
         return {
