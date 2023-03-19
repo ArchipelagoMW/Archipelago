@@ -24,6 +24,7 @@ KDL3_GAME_STATE = SRAM_1_START + 0x36D0
 KDL3_GAME_SAVE = SRAM_1_START + 0x3617
 KDL3_LIFE_COUNT = SRAM_1_START + 0x39CF
 KDL3_KIRBY_HP = SRAM_1_START + 0x39D1
+KDL3_LIFE_VISUAL = SRAM_1_START + 0x39E3
 KDL3_HEART_STARS = SRAM_1_START + 0x53A7
 KDL3_WORLD_UNLOCK = SRAM_1_START + 0x53CB
 KDL3_LEVEL_UNLOCK = SRAM_1_START + 0x53CD
@@ -32,6 +33,7 @@ KDL3_INVINCIBILITY_TIMER = SRAM_1_START + 0x54B1
 KDL3_BOSS_BUTCH_STATUS = SRAM_1_START + 0x5EEA
 KDL3_CURRENT_BGM = SRAM_1_START + 0x733E
 KDL3_ABILITY_ARRAY = SRAM_1_START + 0x7F50
+KDL3_SOUND_FX = SRAM_1_START + 0x7F62
 KDL3_RECV_COUNT = SRAM_1_START + 0x7F70
 KDL3_HEART_STAR_COUNT = SRAM_1_START + 0x7F80
 
@@ -41,6 +43,7 @@ class KDL3SNIClient(SNIClient):
     latest_world = 0x01
     latest_level = 0x01
     levels = None
+    item_queue = []
 
     async def deathlink_kill_player(self, ctx) -> None:
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
@@ -73,6 +76,39 @@ class KDL3SNIClient(SNIClient):
             await ctx.update_death_link(bool(death_link[0] & 0b1))
 
         return True
+
+    async def pop_item(self, ctx):
+        from SNIClient import snes_buffered_write, snes_read
+        if len(self.item_queue) > 0:
+            item = self.item_queue.pop()
+            # special handling for the remaining three
+            item = item.item & 0x00000F
+            if item == 0:
+                # Heart Star
+                heart_star_count = await snes_read(ctx, KDL3_HEART_STAR_COUNT, 1)
+                snes_buffered_write(ctx, KDL3_HEART_STAR_COUNT, pack("H", heart_star_count[0] + 1))
+                snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x16]))
+            elif item == 1:
+                # 1-Up
+                life_count = await snes_read(ctx, KDL3_LIFE_COUNT, 1)
+                life_bytes = pack("H", life_count[0] + 1)
+                snes_buffered_write(ctx, KDL3_LIFE_COUNT, life_bytes)
+                snes_buffered_write(ctx, KDL3_LIFE_VISUAL, life_bytes)
+                snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x33]))
+            elif item == 2:
+                # Maxim Tomato
+                # Check for Gooey
+                gooey_hp = await snes_read(ctx, KDL3_KIRBY_HP + 2, 1)
+                snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x26]))
+                if gooey_hp[0] > 0x00:
+                    snes_buffered_write(ctx, KDL3_KIRBY_HP, bytes([0x08]))
+                    snes_buffered_write(ctx, KDL3_KIRBY_HP + 2, bytes([0x08]))
+                else:
+                    snes_buffered_write(ctx, KDL3_KIRBY_HP, bytes([0x0A]))
+            elif item == 3:
+                # Invincibility Candy
+                snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x26]))
+                snes_buffered_write(ctx, KDL3_INVINCIBILITY_TIMER, bytes([0x75, 0x03]))
 
     async def game_watcher(self, ctx) -> None:
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
@@ -158,6 +194,11 @@ class KDL3SNIClient(SNIClient):
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
 
         # KDL3_TODO: make the game show items received visually
+
+        if game_state[0] != 0xFF:
+            await self.pop_item(ctx)
+
+        from .Rom import animal_friends
         recv_count = await snes_read(ctx, KDL3_RECV_COUNT, 1)
         recv_amount = recv_count[0]
         if recv_amount < len(ctx.items_received):
@@ -169,35 +210,16 @@ class KDL3SNIClient(SNIClient):
                 ctx.location_names[item.location], recv_amount, len(ctx.items_received)))
 
             snes_buffered_write(ctx, KDL3_RECV_COUNT, pack("H", recv_amount))
-            from .Rom import animal_friends
             if item.item & 0x000030 == 0:
                 ability = item.item & 0x00000F
                 snes_buffered_write(ctx, KDL3_ABILITY_ARRAY + (ability * 2), pack("H", ability))
+                snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x32]))
             elif item.item & 0x000010 > 0:
                 friend = item.item
+                snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x32]))
                 for addr in animal_friends[friend]:
                     snes_buffered_write(ctx, ROM_START + addr, bytes([0x02]))
             else:
-                # special handling for the remaining three
-                item = item.item & 0x00000F
-                if item == 0:
-                    # Heart Star
-                    heart_star_count = await snes_read(ctx, KDL3_HEART_STAR_COUNT, 1)
-                    snes_buffered_write(ctx, KDL3_HEART_STAR_COUNT, pack("H", heart_star_count[0] + 1))
-                elif item == 1:
-                    # 1-Up
-                    life_count = await snes_read(ctx, KDL3_LIFE_COUNT, 1)
-                    snes_buffered_write(ctx, KDL3_LIFE_COUNT, pack("H", life_count[0] + 1))
-                elif item == 2:
-                    # Maxim Tomato
-                    # Check for Gooey
-                    gooey_hp = await snes_read(ctx, KDL3_KIRBY_HP + 2, 1)
-                    if gooey_hp[0] > 0x00:
-                        snes_buffered_write(ctx, KDL3_KIRBY_HP, bytes([0x08]))
-                        snes_buffered_write(ctx, KDL3_KIRBY_HP + 2, bytes([0x08]))
-                    else:
-                        snes_buffered_write(ctx, KDL3_KIRBY_HP, bytes([0x0A]))
-                elif item == 3:
-                    # Invincibility Candy
-                    snes_buffered_write(ctx, KDL3_INVINCIBILITY_TIMER, bytes([0x75, 0x03]))
+                self.item_queue.append(item)
+
         await snes_flush_writes(ctx)

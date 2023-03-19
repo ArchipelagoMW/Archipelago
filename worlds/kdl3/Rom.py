@@ -136,6 +136,13 @@ def patch_rom(multiworld, player, rom, boss_requirements, shuffled_levels):
     rom.write_bytes(0x39A00, [0x8A, 0xC9, 0x00, 0x00, 0xF0, 0x03, 0x4A, 0x4A, 0x1A, 0xAA, 0xBF, 0x00, 0xD0, 0x07, 0xCD,
                               0x80, 0x7F, 0x10, 0x02, 0x38, 0x6B, 0x18, 0x6B, ])
 
+    # Check for Sound on Main Loop
+    rom.write_bytes(0x6AE4, [0x22, 0x00, 0x9B, 0x07, 0xEA])
+
+    # Play Sound Effect at given address
+    rom.write_bytes(0x39B00, [0x85, 0xD4, 0xEE, 0x24, 0x35, 0xEA, 0xAD, 0x62, 0x7F, 0xF0, 0x07, 0x22, 0x27, 0xD9,
+                              0x00, 0x9C, 0x62, 0x7F, 0x6B])
+
     # base patch done, write relevant slot info
 
     # boss requirements
@@ -162,7 +169,7 @@ def patch_rom(multiworld, player, rom, boss_requirements, shuffled_levels):
         for addr in kirby_target_palettes:
             target = kirby_target_palettes[addr]
             palette = get_kirby_palette(multiworld, player)
-            rom.write_bytes(addr, get_palette_bytes(palette, target[0], target[1]))
+            rom.write_bytes(addr, get_palette_bytes(palette, target[0], target[1], target[2]))
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:

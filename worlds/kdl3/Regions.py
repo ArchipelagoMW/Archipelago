@@ -88,6 +88,7 @@ def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bo
                 levels[LocationName.level_names[loc]][6] = LocationName.boss_names[boss]
                 plando_bosses.append(boss)
             else:
+                option = option.title()
                 for level in levels:
                     if levels[level][6] is None:
                         levels[level][6] = LocationName.boss_names[option]
@@ -134,7 +135,7 @@ def create_levels(world: World) -> None:
         5: level5,
     }
     start.connect(level1)
-    level_shuffle = world.multiworld.stage_shuffle[world.player].value
+    level_shuffle = world.multiworld.stage_shuffle[world.player]
     if level_shuffle != 0:
         world.player_levels[world.player] = generate_valid_levels(
             world,
