@@ -140,14 +140,14 @@ def create():
                     "description": get_html_doc(option),
                 }
 
-            elif issubclass(option, Options.OptionList) or issubclass(option, Options.OptionSet):
-                if option.valid_keys:
-                    game_options[option_name] = {
-                        "type": "custom-list",
-                        "displayName": option.display_name if hasattr(option, "display_name") else option_name,
-                        "description": get_html_doc(option),
-                        "options": list(option.valid_keys),
-                    }
+            # elif issubclass(option, Options.OptionList) or issubclass(option, Options.OptionSet):
+            #     if option.valid_keys:
+            #         game_options[option_name] = {
+            #             "type": "custom-list",
+            #             "displayName": option.display_name if hasattr(option, "display_name") else option_name,
+            #             "description": get_html_doc(option),
+            #             "options": list(option.valid_keys),
+            #         }
 
             else:
                 logging.debug(f"{option} not exported to Web Settings.")
