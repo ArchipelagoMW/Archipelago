@@ -45,15 +45,21 @@ location_table ={
         "Really Big Sword Pack": offset + 34,
         "Unfathomable Sword Pack": offset + 35,
         "Pickaxe": offset + 36,
+        "Gun": offset + 37,
+        "DLC Quest Sword": offset + 38,
+        "Live Freemium or Die Sword": offset + 39,
+        "Box of Various Supplies": offset + 40,
+        "Humble Indie Bindle": offset + 41,
+
 }
 
 for i in range(825):
         item_coin = "DLC Quest: number Coin"
         item_coin_loc = re.sub("number", str(i+1), item_coin)
-        location_table.update({item_coin_loc: offset + 37 +i})
+        location_table.update({item_coin_loc: offset + 42 +i})
 
 for i in range(889):
         item_coin_freemium = "Live Freemium or Die: number Coin"
         item_coin_loc_freemium = re.sub("number", str(i+1), item_coin_freemium)
-        location_table.update({item_coin_loc_freemium: offset + 825 +37 + i})
+        location_table.update({item_coin_loc_freemium: offset + 825 +42 + i})
 
