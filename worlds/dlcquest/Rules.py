@@ -37,12 +37,12 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
             set_rule(world.get_entrance("Behind Ogre", player),
                      lambda state: state.has("Gun", player))
             set_rule(world.get_entrance("Tree", player),
-                     lambda state: state.has("DLC Quest Sword", player) or state.has("Gun", player))
+                     lambda state: state.has("Sword", player) or state.has("Gun", player))
             set_rule(world.get_entrance("Cave Tree", player),
-                     lambda state: state.has("DLC Quest Sword", player) or state.has("Gun", player))
+                     lambda state: state.has("Sword", player) or state.has("Gun", player))
 
             if World_Options[Options.TimeIsMoney] == Options.TimeIsMoney.option_I_want_speed:
-                set_rule(world.get_location("DLC Quest Sword", player),
+                set_rule(world.get_location("Sword", player),
                          lambda state: state.has("Time is Money Pack", player))
 
         if World_Options[Options.FalseDoubleJump] == Options.FalseDoubleJump.option_none :
@@ -171,7 +171,7 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
 
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             set_rule(world.get_entrance("Vines", player),
-                     lambda state: state.has("Live Freemium or Die Sword", player) or state.has("Pickaxe", player))
+                     lambda state: state.has("Wooden Sword", player) or state.has("Pickaxe", player))
             set_rule(world.get_entrance("Behind Rocks", player),
                      lambda state: state.has("Pickaxe", player))
 
