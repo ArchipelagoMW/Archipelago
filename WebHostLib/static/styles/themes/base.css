@@ -105,6 +105,9 @@ html{
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     padding: 12px 16px;
+    margin-left: -16px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
     z-index: 1
 }
 
