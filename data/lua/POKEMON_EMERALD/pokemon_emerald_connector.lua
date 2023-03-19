@@ -11,6 +11,9 @@ local STATE_OK = 3
 local GAME_STATE_UNSAFE = 0
 local GAME_STATE_SAFE = 1
 
+local bizhawk_version = client.getversion()
+local is27To28 = (bizhawk_version:sub(1,3)=="2.7") or (bizhawk_version:sub(1,3)=="2.8")
+
 local ap_socket = nil
 
 local current_state = STATE_UNINITIALIZED
@@ -140,8 +143,8 @@ function send_receive ()
 end
 
 function main ()
-    if ((is23Or24Or25 or is26To28) == false) then
-        print("Must use a version of bizhawk 2.3.1 or higher")
+    if (is27To28 == false) then
+        print("Must use a version of bizhawk 2.7.0 or higher")
         return
     end
 
