@@ -39,8 +39,7 @@ class CoinSanity(Choice):
     internal_name = "coinsanity"
     display_name = "CoinSanity"
     option_none = 0
-    option_region = 1
-    option_coin = 2
+    option_coin = 1
     default = 0
 
 class CoinSanityRange(SpecialRange):
@@ -68,6 +67,13 @@ class Campaign(Choice):
     option_both = 2
     default = 0
 
+class InventoryItem(Choice):
+    """If you want object to be split from dlc"""
+    internal_name = "inventory_item"
+    display_name = "Inventory item"
+    option_none = 0
+    option_item = 1
+    default = 0
 
 DLCquest_options: Dict[str, type(Option)] = {
     option.internal_name: option
@@ -78,6 +84,7 @@ DLCquest_options: Dict[str, type(Option)] = {
     TimeIsMoney,
     EndingChoice,
     Campaign,
+    InventoryItem,
     ]
 }
 default_options = {option.internal_name: option.default for option in DLCquest_options.values()}

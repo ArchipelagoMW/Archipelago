@@ -19,14 +19,31 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
                  lambda state: state.has("Psychological Warfare Pack", player))
         set_rule(world.get_entrance("Forest Entrance", player),
                  lambda state: state.has("Map Pack", player))
-        set_rule(world.get_entrance("Behind Ogre", player),
-                 lambda state: state.has("Gun Pack", player))
         set_rule(world.get_entrance("Forest True Double Jump", player),
                  lambda state: state.has("Double Jump Pack", player))
 
-        if World_Options[Options.TimeIsMoney] == Options.TimeIsMoney.option_I_want_speed :
+        if World_Options[Options.InventoryItem] == Options.InventoryItem.option_none:
+            set_rule(world.get_entrance("Behind Ogre", player),
+                     lambda state: state.has("Gun Pack", player))
+
+            if World_Options[Options.TimeIsMoney] == Options.TimeIsMoney.option_I_want_speed :
+                set_rule(world.get_entrance("Tree", player),
+                         lambda state: state.has("Time is Money Pack", player))
+                set_rule(world.get_entrance("Cave Tree", player),
+                         lambda state: state.has("Time is Money Pack", player))
+
+
+        if World_Options[Options.InventoryItem] == Options.InventoryItem.option_item:
+            set_rule(world.get_entrance("Behind Ogre", player),
+                     lambda state: state.has("Gun", player))
             set_rule(world.get_entrance("Tree", player),
-                     lambda state: state.has("Time is Money Pack", player))
+                     lambda state: state.has("DLC Quest Sword", player) or state.has("Gun", player))
+            set_rule(world.get_entrance("Cave Tree", player),
+                     lambda state: state.has("DLC Quest Sword", player) or state.has("Gun", player))
+
+            if World_Options[Options.TimeIsMoney] == Options.TimeIsMoney.option_I_want_speed:
+                set_rule(world.get_location("DLC Quest Sword", player),
+                         lambda state: state.has("Time is Money Pack", player))
 
         if World_Options[Options.FalseDoubleJump] == Options.FalseDoubleJump.option_none :
             set_rule(world.get_entrance("Cloud Double Jump", player),
@@ -130,8 +147,6 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
 
 
     if World_Options[Options.Campaign] == Options.Campaign.option_live_freemium_or_die or World_Options[Options.Campaign] == Options.Campaign.option_both:
-        set_rule(world.get_entrance("Vines", player),
-                 lambda state: state.has("Incredibly Important Pack", player) or state.has("Pickaxe", player))
         set_rule(world.get_entrance("Wall Jump Entrance", player),
                  lambda state: state.has("Wall Jump Pack", player))
         set_rule(world.get_entrance("Harmless Plants", player),
@@ -142,12 +157,31 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
                  lambda state: state.has("Name Change Pack", player))
         set_rule(world.get_entrance("Cut Content Entrance", player),
                  lambda state: state.has("Cut Content Pack", player))
-        set_rule(world.get_entrance("Behind Rocks", player),
-                 lambda state: state.has("Pickaxe", player))
         set_rule(world.get_entrance("Blizzard", player),
                  lambda state: state.has("Season Pass", player))
         set_rule(world.get_entrance("Boss Door", player),
                  lambda state: state.has("Big Sword Pack", player) and state.has("Really Big Sword Pack", player) and state.has("Unfathomable Sword Pack", player))
+
+
+        if World_Options[Options.InventoryItem] == Options.InventoryItem.option_none:
+            set_rule(world.get_entrance("Vines", player),
+                     lambda state: state.has("Incredibly Important Pack", player))
+            set_rule(world.get_entrance("Behind Rocks", player),
+                     lambda state: state.can_reach("Cut Content", 'region', player))
+
+        if World_Options[Options.InventoryItem] == Options.InventoryItem.option_item:
+            set_rule(world.get_entrance("Vines", player),
+                     lambda state: state.has("Live Freemium or Die Sword", player) or state.has("Pickaxe", player))
+            set_rule(world.get_entrance("Behind Rocks", player),
+                     lambda state: state.has("Pickaxe", player))
+
+            set_rule(world.get_location("Pickaxe", player),
+                     lambda state: state.has("Humble Indie Bindle", player))
+            set_rule(world.get_location("Humble Indie Bindle", player),
+                     lambda state: state.has("Box of Various Supplies", player) and state.can_reach("Cut Content", 'region', player))
+            set_rule(world.get_location("Box of Various Supplies", player),
+                     lambda state: state.can_reach("Cut Content", 'region', player))
+
 
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
             number_of_bundle = math.floor(889 / World_Options[Options.CoinSanityRange])
