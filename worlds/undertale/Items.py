@@ -90,7 +90,7 @@ item_table = {
     "Key Piece": ItemData(77000, ItemClassification.progression),
     "100G": ItemData(77999, ItemClassification.useful),
     "500G": ItemData(77998, ItemClassification.useful),
-    "1000G": ItemData(77997, ItemClassification.useful),
+    "1000G": ItemData(77997, ItemClassification.progression),
     "ATK Up": ItemData(77065, ItemClassification.useful),
     "DEF Up": ItemData(77066, ItemClassification.useful),
     "HP Up": ItemData(77067, ItemClassification.useful),

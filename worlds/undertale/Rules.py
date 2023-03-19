@@ -338,7 +338,7 @@ def set_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location("TemmieShop 3", player),
              lambda state: state.can_reach("Waterfall", "Region", player))
     set_rule(multiworld.get_location("TemmieShop 4", player),
-             lambda state: state.can_reach("Waterfall", "Region", player))
+             lambda state: state.can_reach("Waterfall", "Region", player) and state.has("1000G", player, 2))
     set_rule(multiworld.get_location("Noodles Fridge", player),
              lambda state: state.can_reach("Hotland", "Region", player))
     set_rule(multiworld.get_location("Pan Hidden", player),
