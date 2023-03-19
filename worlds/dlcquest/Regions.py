@@ -49,7 +49,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Regmovpack =Region("Movement Pack", player, world)
         Locmovpack_name = ["Time is Money Pack", "Psychological Warfare Pack","Armor for your Horse Pack"]
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
-            Locmovpack_name += ["DLC Quest Sword"]
+            Locmovpack_name += ["Sword"]
         Regmovpack.exits =[ Entrance(player, "Tree", Regmovpack), Entrance(player, "Cloud", Regmovpack)]
         Regmovpack.locations += [DLCquestLocation(player, loc_name, location_table[loc_name],Regmovpack)for loc_name in Locmovpack_name ]
         add_coin_dlcquest(Regmovpack, 46, player)
@@ -146,7 +146,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Regfreemiumstart = Region("Freemium Start", player, world)
         Locfreemiumstart_name = ["Particles Pack","Day One Patch Pack","Checkpoint Pack","Incredibly Important Pack"]
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
-            Locfreemiumstart_name += ["Live Freemium or Die Sword"]
+            Locfreemiumstart_name += ["Wooden Sword"]
         Regfreemiumstart.exits = [Entrance(player, "Vines", Regfreemiumstart)]
         Regfreemiumstart.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regfreemiumstart) for loc_name in
             Locfreemiumstart_name]

@@ -46,8 +46,8 @@ location_table ={
         "Unfathomable Sword Pack": offset + 35,
         "Pickaxe": offset + 36,
         "Gun": offset + 37,
-        "DLC Quest Sword": offset + 38,
-        "Live Freemium or Die Sword": offset + 39,
+        "Sword": offset + 38,
+        "Wooden Sword": offset + 39,
         "Box of Various Supplies": offset + 40,
         "Humble Indie Bindle": offset + 41,
 
