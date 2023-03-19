@@ -115,8 +115,11 @@ def skip_cutscenes(rom: LocalRom):
     rom.write_word(0x91DA8, 0x08091DD8)  # ReadySet_SelectKey(): Don't play car engine sound
 
     # TODO Autosave tutorial
-    # TODO Pyramid opening
     # TODO Jewel cutscene
+
+    # Post-boss cutscenes
+    rom.write_halfword(0x79FDC, 0x2001)  # movs r0, #1  ; MainGameLoop(): Pyramid appears
+    rom.write_halfword(0x7A030, 0x2000)  # movs r0, #0  ; MainGameLoop(): Pyramid opens
 
 
 def improve_qol(rom: LocalRom):

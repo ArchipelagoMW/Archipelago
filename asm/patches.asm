@@ -8,19 +8,19 @@ unusedrom equ 0x0878F97C
 
 
 ; Variables
-CurrentRoomId equ 0x3000024
-EntityLeftOverStateList equ 0x3000564
-LevelStatusTable equ 0x03000A68
-HasKeyzer equ 0x03000C0C
+.definelabel CurrentRoomId, 0x3000024
+.definelabel EntityLeftOverStateList, 0x3000564
+.definelabel LevelStatusTable, 0x03000A68
+.definelabel HasKeyzer, 0x03000C0C
 
-HasFullHealthItem equ unusedram + 0
+.definelabel HasFullHealthItem, unusedram + 0
 
 ; Functions
-EnemyChildSet equ 0x801E328
-EntityAI_Q_K5_Hip_COM_takarabako equ 0x80292BC
+.definelabel EnemyChildSet, 0x801E328
+.definelabel EntityAI_Q_K5_Hip_COM_takarabako, 0x80292BC
 
 ; ROM data
-zako_takara_box_Anm_11 equ 0x83B5004
+.definelabel zako_takara_box_Anm_11, 0x83B5004
 
 
 .open input,output,0x08000000

@@ -5,7 +5,7 @@
 
 ; EntityAI_0x8B_Tmain_takara_bainomi()
 .org 0x802A39C
-@@PlaySound equ 0x802A3C0
+.definelabel @@PlaySound, 0x802A3C0
 .region @@PlaySound-.
     mov r0, #2
     ldr r1, =HasFullHealthItem
@@ -21,7 +21,7 @@
 
 ; Hook into EntityAI_0x05_Tmain_takarabako_bainomi(), switch case 18
 .org 0x8029EFE
-@@Case50 equ 0x8029F2A
+.definelabel @@Case50, 0x8029F2A
 .region @@Case50-.
     ldr r0, =@@Case50 | 1
     mov lr, r0
@@ -98,7 +98,7 @@ FullHealthLocationCheck:
 
 ; Hook into ItemGetFlgSet_LoadSavestateInfo2RAM()
 .org 0x8075F10
-@@BranchNoKeyzer equ 0x8075F20
+.definelabel @@BranchNoKeyzer, 0x8075F20
 .region @@BranchNoKeyzer-.
     ldr r0, =@@BranchNoKeyzer | 1
     mov lr, r0
@@ -151,7 +151,7 @@ ItemGetFlagFullHealth:
 
 ; Hook into SeisanSave() where it checks Keyzer
 .org 0x8081262
-@@HighScore equ 0x8081285
+.definelabel @@HighScore, 0x8081285
 .region @@HighScore-.
     ldr r0, =@@HighScore | 1
     mov lr, r0
