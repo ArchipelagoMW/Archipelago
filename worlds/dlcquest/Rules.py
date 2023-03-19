@@ -22,7 +22,7 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
         set_rule(world.get_entrance("Forest True Double Jump", player),
                  lambda state: state.has("Double Jump Pack", player))
 
-        if World_Options[Options.InventoryItem] == Options.InventoryItem.option_none:
+        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_disabled:
             set_rule(world.get_entrance("Behind Ogre", player),
                      lambda state: state.has("Gun Pack", player))
 
@@ -33,7 +33,7 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
                          lambda state: state.has("Time is Money Pack", player))
 
 
-        if World_Options[Options.InventoryItem] == Options.InventoryItem.option_item:
+        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_item:
             set_rule(world.get_entrance("Behind Ogre", player),
                      lambda state: state.has("Gun", player))
             set_rule(world.get_entrance("Tree", player),
@@ -163,13 +163,13 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
                  lambda state: state.has("Big Sword Pack", player) and state.has("Really Big Sword Pack", player) and state.has("Unfathomable Sword Pack", player))
 
 
-        if World_Options[Options.InventoryItem] == Options.InventoryItem.option_none:
+        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_disabled:
             set_rule(world.get_entrance("Vines", player),
                      lambda state: state.has("Incredibly Important Pack", player))
             set_rule(world.get_entrance("Behind Rocks", player),
                      lambda state: state.can_reach("Cut Content", 'region', player))
 
-        if World_Options[Options.InventoryItem] == Options.InventoryItem.option_item:
+        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_item:
             set_rule(world.get_entrance("Vines", player),
                      lambda state: state.has("Live Freemium or Die Sword", player) or state.has("Pickaxe", player))
             set_rule(world.get_entrance("Behind Rocks", player),

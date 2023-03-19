@@ -81,7 +81,7 @@ def create_items(world, World_Options: Options.DLCQuestOptions):
         for item in items_by_group[Group.DLCQuest]:
             if item.has_any_group(Group.DLC):
                 created_items.append(world.create_item(item))
-            if item.has_any_group(Group.Item) and World_Options[Options.InventoryItem] == Options.InventoryItem.option_item:
+            if item.has_any_group(Group.Item) and World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_item:
                 created_items.append(world.create_item(item))
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
             coin_bundle_needed = math.floor(825 / World_Options[Options.CoinSanityRange])
@@ -97,7 +97,7 @@ def create_items(world, World_Options: Options.DLCQuestOptions):
         for item in items_by_group[Group.Freemium]:
             if item.has_any_group(Group.DLC):
                 created_items.append(world.create_item(item))
-            if item.has_any_group(Group.Item) and World_Options[Options.InventoryItem] == Options.InventoryItem.option_item:
+            if item.has_any_group(Group.Item) and World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_item:
                 created_items.append(world.create_item(item))
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
             coin_bundle_needed = math.floor(889 / World_Options[Options.CoinSanityRange])
