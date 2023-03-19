@@ -1,8 +1,10 @@
 import hashlib
 from pathlib import Path
-from BaseClasses import MultiWorld
+
+import bsdiff4
 
 import Utils
+from BaseClasses import MultiWorld
 from Patch import APDeltaPatch
 
 
@@ -24,9 +26,11 @@ class LocalRom():
         self.name = name
         self.hash = hash
 
-
-        with open(file, "rb") as stream:
-            self.buffer = bytearray(stream.read())
+        patch_path = Path(__file__).parent / "data" / "basepatch.bsdiff"
+        with open(file, "rb") as rom_file, open(patch_path, "rb") as patch_file:
+            rom_bytes = rom_file.read()
+            patch_bytes = patch_file.read()
+            self.buffer = bytearray(bsdiff4.patch(rom_bytes, patch_bytes))
 
     def read_bit(self, address: int, bit_number: int) -> bool:
         bitflag = (1 << bit_number)
@@ -39,12 +43,12 @@ class LocalRom():
         return self.buffer[startaddress:startaddress + length]
     
     def read_halfword(self, address: int) -> int:
-        assert address % 2 == 0, "Misaligned halfword address"
+        assert address % 2 == 0, f"Misaligned halfword address: {address:x}"
         halfword = self.read_bytes(address, 2)
         return int.from_bytes(halfword, "little")
     
     def read_word(self, address: int) -> int:
-        assert address % 4 == 0, "Misaligned word address"
+        assert address % 4 == 0, f"Misaligned word address: {address:x}"
         word = self.read_bytes(address, 4)
         return int.from_bytes(word, "little")
 
@@ -55,12 +59,12 @@ class LocalRom():
         self.buffer[startaddress:startaddress + len(values)] = values
     
     def write_halfword(self, address: int, value: int):
-        assert address % 2 == 0, "Misaligned halfword address"
+        assert address % 2 == 0, f"Misaligned halfword address: {address:x}"
         halfword = value.to_bytes(2, "little")
         self.write_bytes(address, halfword)
     
     def write_word(self, address: int, value: int):
-        assert address % 4 == 0, "Misaligned word address"
+        assert address % 4 == 0, f"Misaligned word address: {address:x}"
         word = value.to_bytes(4, "little")
         self.write_bytes(address, word)
 
@@ -69,73 +73,63 @@ class LocalRom():
             stream.write(self.buffer)
 
 
-def patch_rom(world: MultiWorld, rom: LocalRom, player: int):
-    class Halfword(int):
-        pass
-    class Word(int):
-        pass
+def patch_save_data(rom: LocalRom):
+    # Use the second byte of each level state word to store the boxes that have
+    # been opened and looted, keeping the actual world status in the least
+    # significant byte
 
-    add_location_save_data = {
-        # Level states are in save data as 32-bit numbers, but only the lower 6 bits
-        # are used in vanilla, so we can use the second byte to store check data.
+    # ItemGetFlgSet_LoadSavestateInfo2RAM()
+    rom.write_halfword(0x75E4E, 0x7849)  # ldrb r1, [r1, #1]  ; Jewel piece 1
+    rom.write_halfword(0x75E78, 0x7849)  # ldrb r1, [r1, #1]  ; Jewel piece 2
+    rom.write_halfword(0x75EA0, 0x7849)  # ldrb r1, [r1, #1]  ; Jewel piece 3
+    rom.write_halfword(0x75EC8, 0x7849)  # ldrb r1, [r1, #1]  ; Jewel piece 4
+    rom.write_halfword(0x75EF0, 0x7849)  # ldrb r1, [r1, #1]  ; CD
 
-        # Load checked location data from bits 13:8 in ItemGetFlgSet_LoadSavestateInfo2RAM()
-        0x75E4E: Halfword(0x7849),  # ldrb r1, [r1, #1]  ; Jewel piece 1
-        0x75E78: Halfword(0x7849),  # ldrb r1, [r1, #1]  ; Jewel piece 2
-        0x75EA0: Halfword(0x7849),  # ldrb r1, [r1, #1]  ; Jewel piece 3
-        0x75EC8: Halfword(0x7849),  # ldrb r1, [r1, #1]  ; Jewel piece 4
-        0x75EF0: Halfword(0x7849),  # ldrb r1, [r1, #1]  ; CD
+    # SeisanSave()
+    rom.write_halfword(0x811D0, 0x7848)  # ldrb r0, [r1, #1]  ; Jewel piece 1
+    rom.write_halfword(0x811D6, 0x7048)  # strb r0, [r1, #1]  ; Jewel piece 1
+    rom.write_halfword(0x811F4, 0x7848)  # ldrb r0, [r1, #1]  ; Jewel piece 2
+    rom.write_halfword(0x811FA, 0x7048)  # strb r0, [r1, #1]  ; Jewel piece 2
+    rom.write_halfword(0x81216, 0x7848)  # ldrb r0, [r1, #1]  ; Jewel piece 3
+    rom.write_halfword(0x8121C, 0x7048)  # strb r0, [r1, #1]  ; Jewel piece 3
+    rom.write_halfword(0x81238, 0x7848)  # ldrb r0, [r1, #1]  ; Jewel piece 4
+    rom.write_halfword(0x8123E, 0x7048)  # strb r0, [r1, #1]  ; Jewel piece 4
+    rom.write_halfword(0x8125A, 0x7848)  # ldrb r0, [r1, #1]  ; CD
+    rom.write_halfword(0x81260, 0x7048)  # strb r0, [r1, #1]  ; CD
 
-        # Save checked location data to bits 13:8 in SeisanSave()
-        0x811D0: Halfword(0x7848),  # ldrb r0, [r1, #1]  ; Jewel piece 1
-        0x811D6: Halfword(0x7048),  # strb r0, [r1, #1]  ; Jewel piece 1
-        0x811F4: Halfword(0x7848),  # ldrb r0, [r1, #1]  ; Jewel piece 2
-        0x811FA: Halfword(0x7048),  # strb r0, [r1, #1]  ; Jewel piece 2
-        0x81216: Halfword(0x7848),  # ldrb r0, [r1, #1]  ; Jewel piece 3
-        0x8121C: Halfword(0x7048),  # strb r0, [r1, #1]  ; Jewel piece 3
-        0x81238: Halfword(0x7848),  # ldrb r0, [r1, #1]  ; Jewel piece 4
-        0x8123E: Halfword(0x7048),  # strb r0, [r1, #1]  ; Jewel piece 4
-        0x8125A: Halfword(0x7848),  # ldrb r0, [r1, #1]  ; CD
-        0x81260: Halfword(0x7048),  # strb r0, [r1, #1]  ; CD
-    }
 
-    skip_cutscenes = {
-        # Intro cutscene
-        # This does three things:
-        #  1: Prevent the cutscene from starting
-        #  2: Stop the title music playing
-        #  3: Don't play the car engine sound
-        # Each of these is a separate event due to the way the cutscene is timed
-        0x00312: Halfword(0x2001),  # movs r0, #1  ; 1: Assume data exists in MainGameLoop()
-        0x91944: Halfword(0x0000),  # movs r0, r0  ; 2: Never branch in GameReady()
-        0x91DA8: Word(0x8091DD8),   # 3: Modify jump table in ReadySet_SelectKey()
+# Unused; written only for my future reference
+def shuffle_keyzer(rom: LocalRom, world: MultiWorld, player: int):
+    # Use setting world.keyzer[player]
+    rom.write_halfword(0x75F18, 0x7849)  # ldrb r1, [r1, #1]  ; ItemGetFlgSet_LoadSavestateInfo2RAM()
+    rom.write_halfword(0x8127C, 0x7848)  # ldrb r0, [r1, #1]  ; SeisanSave()
+    rom.write_halfword(0x81282, 0x7048)  # strb r0, [r1, #1]  ; SeisanSave()
 
-        # TODO Autosave tutorial
-        # TODO Jewel cutscene
-    }
+    # TODO skip cutscene so Wario doesn't walk through locked doors
 
-    # TODO more rando check logic
 
-    # Currently unused but what's written here was convenient enough to handle now
-    keysanity = {
-        # Check data
-        0x75F18: Halfword(0x7849),  # ldrb r1, [r1, #1]  ; ItemGetFlgSet_LoadSavestateInfo2RAM()
-        0x8127C: Halfword(0x7848),  # ldrb r0, [r1, #1]  ; SeisanSave()
-        0x81282: Halfword(0x7048),  # strb r0, [r1, #1]  ; SeisanSave()
+def skip_cutscenes(rom: LocalRom):
+    # Intro cutscene
+    rom.write_halfword(0x00312, 0x2001)  # movs r0, #1  ; MainGameLoop(): Prevent cutscene start
+    rom.write_halfword(0x91944, 0x0000)  # movs r0, r0  ; GameReady(): Stop title music
+    rom.write_word(0x91DA8, 0x08091DD8)  # ReadySet_SelectKey(): Don't play car engine sound
 
-        # TODO skip cutscene
-    }
+    # TODO Autosave tutorial
+    # TODO Pyramid opening
+    # TODO Jewel cutscene
 
-    patches = {
-        **add_location_save_data,
-        **skip_cutscenes
-    }
-    
-    for address, value in patches.items():
-        if type(value) == Halfword:
-            rom.write_halfword(address, value)
-        if type(value) == Word:
-            rom.write_word(address, value)
+
+def improve_qol(rom: LocalRom):
+    # Always allow S-Hard
+    rom.write_halfword(0x91F8E, 0x2001)  # movs r0, r1  ; ReadySub_Level(): Allow selection 
+    rom.write_halfword(0x92268, 0x2001)  # movs r0, #1  ; ReadyObj_Win1Set(): Display option 
+
+
+def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
+    patch_save_data(rom)
+    skip_cutscenes(rom)
+    improve_qol(rom)
+
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)

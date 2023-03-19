@@ -84,7 +84,7 @@ class WL4World(World):
             player = self.player
 
             rom = LocalRom(get_base_rom_path())
-            patch_rom(self.multiworld, rom, self.player)
+            patch_rom(rom, self.multiworld, self.player)
 
             rompath = output_directory / f"{world.get_out_file_name_base(player)}.gba"
             rom.write_to_file(rompath)
