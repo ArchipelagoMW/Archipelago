@@ -58,7 +58,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Regbtree = Region("Behind Tree", player, world)
         Locbtree_name = ["Double Jump Pack", "Map Pack"]
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
-            Locmovpack_name += ["Gun"]
+            Locbtree_name += ["Gun"]
         Regbtree.exits =[ Entrance(player, "Behind Tree Double Jump", Regbtree), Entrance(player, "Forest Entrance", Regbtree)]
         Regbtree.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regbtree) for loc_name in Locbtree_name]
         add_coin_dlcquest(Regbtree, 60, player)

@@ -175,6 +175,8 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
             set_rule(world.get_entrance("Behind Rocks", player),
                      lambda state: state.has("Pickaxe", player))
 
+            set_rule(world.get_location("Wooden Sword", player),
+                     lambda state: state.has("Incredibly Important Pack", player))
             set_rule(world.get_location("Pickaxe", player),
                      lambda state: state.has("Humble Indie Bindle", player))
             set_rule(world.get_location("Humble Indie Bindle", player),
