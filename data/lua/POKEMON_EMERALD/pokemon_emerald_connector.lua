@@ -125,7 +125,7 @@ function send_receive ()
     end
 
     -- Process received data
-    if (message ~= nil) then
+    if (message ~= nil and message ~= "") then
         process_data(json.decode(message))
     end
 
