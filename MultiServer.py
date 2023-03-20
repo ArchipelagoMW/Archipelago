@@ -7,17 +7,20 @@ import functools
 import logging
 import zlib
 import collections
-import typing
-import inspect
-import weakref
 import datetime
-import threading
-import random
-import pickle
-import itertools
-import time
-import operator
+import functools
 import hashlib
+import inspect
+import itertools
+import logging
+import operator
+import pickle
+import random
+import threading
+import time
+import typing
+import weakref
+import zlib
 
 import ModuleUpdate
 
@@ -160,10 +163,13 @@ class Context:
     stored_data_notification_clients: typing.Dict[str, typing.Set[Client]]
     slot_info: typing.Dict[int, NetworkSlot]
 
+    checksums: typing.Dict[str, str]
     item_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')
     item_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
     location_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')
+    location_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
+    all_location_and_group_names: typing.Dict[str, typing.Set[str]]
     non_hintable_names: typing.Dict[str, typing.Set[str]]
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
@@ -231,30 +237,38 @@ class Context:
 
         # init empty to satisfy linter, I suppose
         self.gamespackage = {}
+        self.checksums = {}
         self.item_name_groups = {}
+        self.location_name_groups = {}
         self.all_item_and_group_names = {}
+        self.all_location_and_group_names = {}
         self.non_hintable_names = collections.defaultdict(frozenset)
 
         self._load_game_data()
 
-    # Datapackage retrieval
+    # Data package retrieval
     def _load_game_data(self):
         import worlds
         self.gamespackage = worlds.network_data_package["games"]
 
         self.item_name_groups = {world_name: world.item_name_groups for world_name, world in
                                  worlds.AutoWorldRegister.world_types.items()}
+        self.location_name_groups = {world_name: world.location_name_groups for world_name, world in
+                                     worlds.AutoWorldRegister.world_types.items()}
         for world_name, world in worlds.AutoWorldRegister.world_types.items():
             self.non_hintable_names[world_name] = world.hint_blacklist
 
     def _init_game_data(self):
         for game_name, game_package in self.gamespackage.items():
+            self.checksums[game_name] = game_package["checksum"]
             for item_name, item_id in game_package["item_name_to_id"].items():
                 self.item_names[item_id] = item_name
             for location_name, location_id in game_package["location_name_to_id"].items():
                 self.location_names[location_id] = location_name
             self.all_item_and_group_names[game_name] = \
                 set(game_package["item_name_to_id"]) | set(self.item_name_groups[game_name])
+            self.all_location_and_group_names[game_name] = \
+                set(game_package["location_name_to_id"]) | set(self.location_name_groups[game_name])
 
     def item_names_for_game(self, game: str) -> typing.Optional[typing.Dict[str, int]]:
         return self.gamespackage[game]["item_name_to_id"] if game in self.gamespackage else None
@@ -342,6 +356,7 @@ class Context:
                                    [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}
                                     for text in texts]))
 
+
     # loading
 
     def load(self, multidatapath: str, use_embedded_server_options: bool = False):
@@ -358,7 +373,7 @@ class Context:
             with open(multidatapath, 'rb') as f:
                 data = f.read()
 
-        self._load(self.decompress(data), use_embedded_server_options)
+        self._load(self.decompress(data), {}, use_embedded_server_options)
         self.data_filename = multidatapath
 
     @staticmethod
@@ -368,7 +383,8 @@ class Context:
             raise Utils.VersionException("Incompatible multidata.")
         return restricted_loads(zlib.decompress(data[1:]))
 
-    def _load(self, decoded_obj: dict, use_embedded_server_options: bool):
+    def _load(self, decoded_obj: dict, game_data_packages: typing.Dict[str, typing.Any],
+              use_embedded_server_options: bool):
         self.read_data = {}
         mdata_ver = decoded_obj["minimum_versions"]["server"]
         if mdata_ver > Utils.version_tuple:
@@ -423,15 +439,21 @@ class Context:
             server_options = decoded_obj.get("server_options", {})
             self._set_options(server_options)
 
-        # custom datapackage
+        # embedded data package
         for game_name, data in decoded_obj.get("datapackage", {}).items():
-            logging.info(f"Loading custom datapackage for game {game_name}")
+            if game_name in game_data_packages:
+                data = game_data_packages[game_name]
+            logging.info(f"Loading embedded data package for game {game_name}")
             self.gamespackage[game_name] = data
             self.item_name_groups[game_name] = data["item_name_groups"]
-            del data["item_name_groups"]  # remove from datapackage, but keep in self.item_name_groups
+            self.location_name_groups[game_name] = data["location_name_groups"]
+            del data["item_name_groups"]  # remove from data package, but keep in self.item_name_groups
+            del data["location_name_groups"]
         self._init_game_data()
         for game_name, data in self.item_name_groups.items():
             self.read_data[f"item_name_groups_{game_name}"] = lambda lgame=game_name: self.item_name_groups[lgame]
+        for game_name, data in self.location_name_groups.items():
+            self.read_data[f"location_name_groups_{game_name}"] = lambda lgame=game_name: self.location_name_groups[lgame]
 
     # saving
 
@@ -723,10 +745,11 @@ async def on_client_connected(ctx: Context, client: Client):
                     NetworkPlayer(team, slot,
                                   ctx.name_aliases.get((team, slot), name), name)
                 )
+    games = {ctx.games[x] for x in range(1, len(ctx.games) + 1)}
     await ctx.send_msgs(client, [{
         'cmd': 'RoomInfo',
         'password': bool(ctx.password),
-        'games': {ctx.games[x] for x in range(1, len(ctx.games) + 1)},
+        'games': games,
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ctx.tags,
@@ -735,7 +758,9 @@ async def on_client_connected(ctx: Context, client: Client):
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
         'datapackage_versions': {game: game_data["version"] for game, game_data
-                                 in ctx.gamespackage.items()},
+                                 in ctx.gamespackage.items() if game in games},
+        'datapackage_checksums': {game: game_data["checksum"] for game, game_data
+                                  in ctx.gamespackage.items() if game in games},
         'seed_name': ctx.seed_name,
         'time': time.time(),
     }])
@@ -1403,7 +1428,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             if game not in self.ctx.all_item_and_group_names:
                 self.output("Can't look up item/location for unknown game. Hint for ID instead.")
                 return False
-            names = self.ctx.location_names_for_game(game) \
+            names = self.ctx.all_location_and_group_names[game] \
                 if for_location else \
                 self.ctx.all_item_and_group_names[game]
             hint_name, usable, response = get_intended_text(input_text, names)
@@ -1419,6 +1444,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
                             hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item_name))
                 elif not for_location and hint_name in self.ctx.item_names_for_game(game):  # item name
                     hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_name)
+                elif hint_name in self.ctx.location_name_groups[game]:  # location group name
+                    hints = []
+                    for loc_name in self.ctx.location_name_groups[game][hint_name]:
+                        if loc_name in self.ctx.location_names_for_game(game):
+                            hints.extend(collect_hint_location_name(self.ctx, self.client.team, self.client.slot, loc_name))
                 else:  # location name
                     hints = collect_hint_location_name(self.ctx, self.client.team, self.client.slot, hint_name)
 

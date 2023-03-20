@@ -42,7 +42,7 @@ html{
     margin-top: 4px;
 }
 
-#base-header a{
+#base-header a, #base-header-mobile-menu a{
     color: #2f6b83;
     text-decoration: none;
     cursor: pointer;
@@ -50,4 +50,65 @@ html{
     font-size: 22px;
     font-family: LondrinaSolid-Light, sans-serif;
     text-transform: uppercase;
+}
+
+#base-header-right-mobile{
+    display: none;
+    margin-top: 2rem;
+    margin-right: 1rem;
+}
+
+#base-header-mobile-menu{
+    display: none;
+    flex-direction: column;
+    background-color: #ffffff;
+    text-align: center;
+    overflow-y: auto;
+    z-index: 10000;
+    width: 100vw;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+    position: absolute;
+    top: 7rem;
+    right: 0;
+    padding-top: 1rem;
+}
+
+#base-header-mobile-menu a{
+    padding: 4rem 2rem;
+    font-size: 5rem;
+    line-height: 5rem;
+    color: #699ca8;
+    border-top: 1px solid #d3d3d3;
+}
+
+#base-header-right-mobile img{
+    height: 3rem;
+}
+
+@media all and (max-width: 1580px){
+    html{
+        padding-top: 260px;
+        scroll-padding-top: 230px;
+    }
+
+    #base-header{
+        height: 200px;
+        background-size: auto 200px;
+    }
+
+    #base-header #site-title img{
+        height: calc(38px * 2);
+        margin-top: 30px;
+        margin-left: 20px;
+    }
+
+    #base-header-right{
+        display: none;
+    }
+
+    #base-header-right-mobile{
+        display: unset;
+    }
 }
