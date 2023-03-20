@@ -4,11 +4,6 @@ import typing
 class Goal(Choice):
     """The victory condition for your run. Stuff after the goal will not be shuffled."""
     display_name = "Goal"
-    option_wall_of_flesh = 0
-    option_plantera = 1
-    option_moon_lord = 2
-    option_zenith = 3
-    default = 2
 
 class Achievements(Choice):
     """
@@ -28,11 +23,11 @@ class FillExtraChecksWith(Choice):
     Items are rewarded to all players in your Terraria world.
     """
     display_name = "Fill Extra Checks With"
-    option_filler_items = 0
+    option_coins = 0
     option_useful_items = 1
     default = 1
 
-options: typing.Dict[str, type(Option)] = {
+options: typing.Dict[str, type(Option)] = { # type: ignore
     "goal": Goal,
     "achievements": Achievements,
     "fill_extra_checks_with": FillExtraChecksWith,

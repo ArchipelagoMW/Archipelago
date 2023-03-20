@@ -3,7 +3,6 @@ from worlds.generic.Rules import add_rule
 from BaseClasses import Region, ItemClassification, Tutorial
 from .Checks import item_name_to_id, location_name_to_id, TerrariaItem, TerrariaLocation, get_items_locations
 from .Options import options
-from .Rules import event_rules, calamity_event_rules, location_rules, RuleConfig, Ctx
 
 class TerrariaWeb(WebWorld):
     tutorials = [Tutorial(
@@ -31,7 +30,6 @@ class TerrariaWorld(World):
 
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
-    calamity = False
 
     def generate_early(self) -> None:
         self.ter_items, self.ter_locations = get_items_locations(

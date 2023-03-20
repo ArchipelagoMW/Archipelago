@@ -29,25 +29,25 @@ You Can Do It!;                     Achievement;
 
 // Surface exploration
 Aglet;
-Heliophobia;                        Achievement;
+Heliophobia;                        Achievement, Grindy;
 Blighted Gel;                       Calamity;
-Archaeologist;                      Achievement;
+Archaeologist;                      Achievement, Grindy;
 Zoologist;                          Npc;
 Cat;                                Npc;                                        Zoologist;
 Feeling Petty;                      Achievement;                                Cat | Dog;
 Dog;                                Npc;                                        Zoologist;
 // I don't want to do the bunny logic lol
-A Rather Blustery Day;              Achievement;
+A Rather Blustery Day;              Achievement, Grindy;
 Enchanted Sword;
-Pretty in Pink;                     Achievement;
-Marathon Medalist;                  Achievement;
+Pretty in Pink;                     Achievement, Grindy;
+Marathon Medalist;                  Achievement, Grindy;
 Angler;                             Npc;
-Servant-in-Training;                Achievement;                                Angler;
-10 Fishing Quests;                  Achievement;                                Angler;
-Trout Monkey;                       Achievement;                                Angler;
-Glorious Golden Pole;               Achievement;                                Angler;
-Fast and Fishious;                  Achievement;                                Angler;
-Supreme Helper Minion!;             Achievement;                                Angler;
+Servant-in-Training;                Achievement, Fishing;                       Angler;
+10 Fishing Quests;                  Achievement, Fishing;                       Angler;
+Trout Monkey;                       Achievement, Fishing;                       Angler;
+Glorious Golden Pole;               Achievement, Fishing;                       Angler;
+Fast and Fishious;                  Achievement, Fishing;                       Angler;
+Supreme Helper Minion!;             Achievement, Fishing;                       Angler;
 Water Walking Boots;
 Painter;                            Npc;                                        @npc(8);
 
@@ -74,14 +74,14 @@ Like a Boss;                        Achievement;
 Hermes Boots;
 Jeepers Creepers;                   Achievement;
 Stylist;                            Npc;
-Deceiver of Fools;                  Achievement;
+Deceiver of Fools;                  Achievement, Grindy;
 Dead Men Tell No Tales;             Achievement, Grindy;
 Bulldozer;                          Achievement, Grindy;
 
 // Cavern
 Obsidian;
 Obsidian Skull;                                                                 Obsidian;
-There are Some Who Call Him...;     Achievement;
+There are Some Who Call Him...;     Achievement, Grindy;
 Lava Charm;
 Demonite Ore;
 Demonite Bar;                                                                   Demonite Ore;
@@ -108,12 +108,12 @@ Obsidian Rose;
 // Evil
 Smashing, Poppet!                   Achievement;
 Arms Dealer;                        Npc;
-Leading Landlord;                   Achievement;
+Leading Landlord;                   Achievement;                                Nurse * Arms Dealer; // The logic is way more complex, but that doesn't affect anything
 Completely Awesome;                 Achievement;                                Arms Dealer;
 
 // King Slime
 King Slime;                         Location, Item;
-Sticky Situation;                   Achievement;
+Sticky Situation;                   Achievement, Grindy;
 The Cavalry;                        Achievement;
 Solidifier;                                                                     #King Slime;
 
@@ -139,7 +139,7 @@ Dryad;                              Npc;                                        
 Pumpkin Seeds;                                                                  Dryad;
 Purification Powder;                                                            Dryad; // Shimmered from Evil Powder in 1.4.4. Not bought from Dryad in get fixed boi.
 Party Girl;                         Npc;                                        @npc(14);
-Jolly Jamboree;                     Achievement;                                Party Girl;
+Jolly Jamboree;                     Achievement, Grindy;                        Party Girl;
 Acid Rain Tier 1;                   Calamity, Location, Item;                   Post-Eye of Cthulhu;
 
 // Crabulon
@@ -304,7 +304,7 @@ Pickaxe Axe;                        Pickaxe(200);                               
 Drax Attax;                         Achievement;
 True Night's Edge;                                                              Hardmode Anvil & Night's Edge & Soul of Fright & Soul of Might & Soul of Sight;
 Chlorophyte Ore;                                                                Hardmode & @pickaxe(200);
-Photosyntesis;                      Achievement;                                Chlorophyte;
+Photosyntesis;                      Achievement;                                Chlorophyte Ore;
 Chlorophyte Bar;                                                                Hardmode Forge & Chlorophyte Ore;
 True Excalibur;                                                                 Hardmode Anvil & Excalibur & Chlorophyte Bar;
 Chlorophyte Pickaxe;                Pickaxe(200);                               Hardmode Anvil & Chlorophyte Bar;
@@ -439,7 +439,7 @@ Astral Pickaxe;                     Calamity, Pickaxe(220);                     
 // Moon Lord
 Moon Lord;                          Location, Item, Goal;                       #Lunar Events;
 # moon_lord
-Slayer of Worlds;                   Achievements;                               #Evil Boss & #The Destroyer & #Duke Fishron & #Eye of Cthulhu & #Golem & #King Slime & #Lunatic Cultist & #Moon Lord & # Plantera & #Queen Bee & #Skeletron & #Skeletron Prime & #The Twins & #Wall of Flesh;
+Slayer of Worlds;                   Achievement;                                #Evil Boss & #The Destroyer & #Duke Fishron & #Eye of Cthulhu & #Golem & #King Slime & #Lunatic Cultist & #Moon Lord & # Plantera & #Queen Bee & #Skeletron & #Skeletron Prime & #The Twins & #Wall of Flesh;
 Luminite;                                                                       #Moon Lord;
 Luminite Bar;                                                                   Ancient Manipulator & Luminite;
 Luminite Hamaxe;                    Hammer(100);                                Ancient Manipulator & Fragment & Luminite Bar;
