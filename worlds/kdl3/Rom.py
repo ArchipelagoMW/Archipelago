@@ -118,9 +118,30 @@ def patch_rom(multiworld, player, rom, boss_requirements, shuffled_levels):
     handle_animal_friends(rom)
 
     # Copy Ability
-    rom.write_bytes(0x399A0, [0xB9, 0xF3, 0x54, 0x48, 0x0A, 0xAA, 0x68, 0xDD, 0x50, 0x7F, 0xEA, 0xEA, 0xF0, 0x03, 0xA9,
-    0x00, 0x00, 0x99, 0xA9, 0x54, 0x6B, 0xEA, 0xEA, 0xEA, 0xEA, 0x48, 0x0A, 0xA8, 0x68, 0xD9, 0x50, 0x7F,
-    0xEA, 0xF0, 0x03, 0xA9, 0x00, 0x00, 0x9D, 0xA9, 0x54, 0x9D, 0xDF, 0x39, 0x6B, ])
+    rom.write_bytes(0x399A0, [0xB9, 0xF3, 0x54,  # LDA $54F3
+                              0x48,  # PHA
+                              0x0A,  # ASL
+                              0xAA,  # TAX
+                              0x68,  # PLA
+                              0xDD, 0x50, 0x7F,  # CMP $7F50, X
+                              0xEA, 0xEA,  # NOP NOP
+                              0xF0, 0x03,  # BEQ $0799B1
+                              0xA9, 0x00, 0x00,  # LDA #$0000
+                              0x99, 0xA9, 0x54,  # STA $54A9, Y
+                              0x6B,  # RET
+                              0xEA, 0xEA, 0xEA, 0xEA,  # NOPs to fill gap
+                              0x48,  # PHA
+                              0x0A,  # ASL
+                              0xA8,  # TAX
+                              0x68,  # PLA
+                              0xD9, 0x50, 0x7F,  # CMP $7F50, Y
+                              0xEA,  # NOP
+                              0xF0, 0x03,  # BEQ $0799C6
+                              0xA9, 0x00, 0x00,  # LDA #$0000
+                              0x9D, 0xA9, 0x54,  # STA $54A9, X
+                              0x9D, 0xDF, 0x39,  # STA $39DF, X
+                              0x6B,  # RET
+                              ])
 
     # Kirby/Gooey Copy Ability
     rom.write_bytes(0xAFC8, [0x22, 0x00, 0x9A, 0x07,
@@ -143,6 +164,19 @@ def patch_rom(multiworld, player, rom, boss_requirements, shuffled_levels):
     rom.write_bytes(0x39B00, [0x85, 0xD4, 0xEE, 0x24, 0x35, 0xEA, 0xAD, 0x62, 0x7F, 0xF0, 0x07, 0x22, 0x27, 0xD9,
                               0x00, 0x9C, 0x62, 0x7F, 0x6B])
 
+    # Dedede - Remove bad ending
+    rom.write_byte(0xB013, 0x38)  # Change CLC to SEC
+
+    # Heart Star Graphics Fix
+    rom.write_bytes(0x39B50, [0xDA, 0x5A, 0xAE, 0x3F, 0x36, 0xAC, 0x41, 0x36, 0xE0, 0x00, 0x00, 0xF0, 0x09, 0x1A, 0x1A,
+                              0x1A, 0x1A, 0x1A, 0x1A, 0xCA, 0x80, 0xF2, 0xC0, 0x00, 0x00, 0xF0, 0x04, 0x1A, 0x88, 0x80,
+                              0xF7, 0x0A, 0xAA, 0xBF, 0x80, 0xD0, 0x07, 0xC9, 0x03, 0x00, 0xF0, 0x03, 0x18, 0x80, 0x01,
+                              0x38, 0x7A, 0xFA, 0x6B, ])
+
+    # Reroute Heart Star Graphic Check
+    rom.write_bytes(0x4A01F, [0x22, 0x50, 0x9B, 0x07, 0xEA, 0xEA, 0xB0, ])  # 1-Ups
+    rom.write_bytes(0x4A0AE, [0x22, 0x50, 0x9B, 0x07, 0xEA, 0xEA, 0x90, ])  # Heart Stars
+
     # base patch done, write relevant slot info
 
     # boss requirements
@@ -157,6 +191,9 @@ def patch_rom(multiworld, player, rom, boss_requirements, shuffled_levels):
                             struct.pack("H", level_pointers[shuffled_levels[level][i]]))
             rom.write_bytes(0x3D020 + (level - 1) * 14 + (i * 2),
                             struct.pack("H", shuffled_levels[level][i] & 0x00FFFF))
+            if (i == 0) or (i > 0 and i % 6 != 0):
+                rom.write_bytes(0x3D080 + (level - 1) * 12 + (i * 2),
+                                struct.pack("H", (shuffled_levels[level][i] & 0x00FFFF) % 6))
 
     from Main import __version__
     rom.name = bytearray(f'KDL3{__version__.replace(".", "")[0:3]}_{player}_{multiworld.seed:11}\0', 'utf8')[:21]
@@ -165,7 +202,7 @@ def patch_rom(multiworld, player, rom, boss_requirements, shuffled_levels):
     rom.write_byte(0x7FD9, multiworld.game_language[player].value)
 
     # handle palette
-    if multiworld.kirby_flavor_preset[player].value != 0:
+    if multiworld.kirby_flavor_preset[player] != 0:
         for addr in kirby_target_palettes:
             target = kirby_target_palettes[addr]
             palette = get_kirby_palette(multiworld, player)
