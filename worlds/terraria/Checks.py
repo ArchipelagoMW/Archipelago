@@ -15,6 +15,7 @@ prehardmode_items = [
     "Post-Queen Bee",
     "Post-Skeletron",
     "Post-Deerclops",
+    "Hardmode",
 ]
 
 calamity_prehardmode_items = [
@@ -30,7 +31,6 @@ calamity_prehardmode_items = [
 ]
 
 post_wall_of_flesh_items = [
-    "Hardmode",
     "Post-Pirate Invasion",
     "Post-Queen Slime",
     "Post-The Twins",
@@ -38,6 +38,7 @@ post_wall_of_flesh_items = [
     "Post-Skeletron Prime",
     "Post-Old One's Army Tier 2",
     "Post-Duke Fishron",
+    "Post-Plantera",
 ]
 
 calamity_post_wall_of_flesh_items = [
@@ -55,7 +56,6 @@ calamity_post_wall_of_flesh_items = [
 
 post_plantera_items = [
     "Post-Frost Legion",
-    "Post-Plantera",
     "Post-Golem",
     "Post-Old One's Army Tier 3",
     "Post-Martian Madness",
@@ -67,6 +67,7 @@ post_plantera_items = [
     "Post-Empress of Light",
     "Post-Lunatic Cultist",
     "Post-Lunar Events",
+    "Post-Moon Lord"
 ]
 
 calamity_post_plantera_items = [
@@ -80,7 +81,7 @@ calamity_post_plantera_items = [
 ]
 
 post_moon_lord_items = [
-    "Post-Moon Lord"
+    "Has Zenith"
 ]
 
 calamity_post_moon_lord_items = [
@@ -173,9 +174,6 @@ item_items = [
     "Gold Ring",
     "Lucky Coin",
 ]
-
-# Debugging utility
-precollected = []
 
 prehardmode_locations = [
     "Torch God",
@@ -428,7 +426,7 @@ def get_items_locations(goal: int, achievements_opt: int, extra_checks: int) -> 
         items += post_wall_of_flesh_items
     if goal > 1:
         items += post_plantera_items
-    if goal > 2:
+    if goal == 3:
         items += post_moon_lord_items
 
     locations = prehardmode_locations.copy()
@@ -436,7 +434,7 @@ def get_items_locations(goal: int, achievements_opt: int, extra_checks: int) -> 
         locations += post_wall_of_flesh_locations
     if goal > 1:
         locations += post_plantera_locations
-    if goal > 2:
+    if goal == 3:
         locations += post_moon_lord_locations
     if achievements_opt > 0:
         locations += prehardmode_achievements
@@ -458,13 +456,13 @@ def get_items_locations(goal: int, achievements_opt: int, extra_checks: int) -> 
         locations += post_moon_lord_achievements
 
     # Subtract one from location counts, since the goal does not need an associated item
-    if extra_checks == 1 and len(items) < len(locations) - 1:
-        if len(locations) - len(items) - 1 < len(item_items):
-            items += item_items[:len(locations) - len(items) - 1]
+    if extra_checks == 1 and len(items) < len(locations):
+        if len(locations) - len(items) < len(item_items):
+            items += item_items[:len(locations) - len(items)]
         else:
             items += item_items
 
-    if len(items) < len(locations) - 1:
-        items += ["50 Silver"] * (len(locations) - len(items) - 1)
+    if len(items) < len(locations):
+        items += ["50 Silver"] * (len(locations) - len(items))
 
     return items, locations

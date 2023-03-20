@@ -122,6 +122,8 @@ def mech_boss_count(x: Ctx) -> int:
 # TODO Typing
 # TODO Hook up to world
 
+# "Name": ()
+
 event_rules: dict[str, Optional[Callable[[Ctx], bool]]] = {
     # Events
     "Copper Shortsword": None,
@@ -228,7 +230,6 @@ event_rules: dict[str, Optional[Callable[[Ctx], bool]]] = {
     "True Excalibur": lambda x: x.has_all({"Hardmode Anvil", "Excalibur", "Chlorophyte Bar"}),
     "Chlorophyte Pickaxe": lambda x: x.has_all({"Hardmode Anvil", "Chlorophyte Bar"}),
     "Chlorophyte Warhammer": lambda x: x.has_all({"Hardmode Anvil", "Chlorophyte Bar"}),
-    "Ashes of Calamity": lambda x: x.can_reach("Calamitas Clone"),
     "The Axe": lambda x: x.can_reach("Plantera"),
     "Cyborg": lambda x: x.has("Post-Plantera"),
     "Princess": lambda x: x.npc_count(x, False, False, False) >= 24,
@@ -313,6 +314,7 @@ calamity_event_rules: dict[str, Optional[Callable[[Ctx], bool]]] = {
     "Abyssal Warhammer": lambda x: x.has_all({"Hardmode Anvil", "Cryonic Bar"}),
     "Inferna Cutter": lambda x:
         x.has_all({"Hardmode Anvil", "Axe of Purity", "Soul of Fright", "Essence of Havoc"}),
+    "Ashes of Calamity": lambda x: x.can_reach("Calamitas Clone"),
     "Perennial Ore": lambda x: x.has("Post-Plantera"),
     "Perennial Bar": lambda x: x.has_all({"Hardmode Forge", "Perennial Ore"})
         or x.has_any({"Fleshy Geode", "Necromantic Geode"}),

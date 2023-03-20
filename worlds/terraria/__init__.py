@@ -1,7 +1,7 @@
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_rule
 from BaseClasses import Region, ItemClassification, Tutorial
-from .Checks import item_name_to_id, location_name_to_id, TerrariaItem, TerrariaLocation, precollected, get_items_locations
+from .Checks import item_name_to_id, location_name_to_id, TerrariaItem, TerrariaLocation, get_items_locations
 from .Options import options
 from .Rules import event_rules, calamity_event_rules, location_rules, RuleConfig, Ctx
 
@@ -39,14 +39,25 @@ class TerrariaWorld(World):
             self.multiworld.achievements[self.player].value,
             self.multiworld.fill_extra_checks_with[self.player].value
         )
-        # TEMP
-        self.ter_items.remove("Post-Old One's Army Tier 1")
-        self.ter_locations.remove("Old One's Army Tier 1")
-        print(self.ter_items)
-        print(self.ter_locations)
+
+        goal = self.multiworld.goal[self.player].value
+
+        if goal == 0:
+            self.goal_location_id = "Wall of Flesh"
+            self.goal_item_id = "Hardmode"
+        elif goal == 1:
+            self.goal_location_id = "Plantera"
+            self.goal_item_id = "Post-Plantera"
+        elif goal == 2:
+            self.goal_location_id = "Moon Lord"
+            self.goal_item_id = "Post-Moon Lord"
+        elif goal == 3:
+            self.goal_location_id = "Zenith"
+            self.goal_item_id = "Has Zenith"
+
 
     def create_item(self, name: str, event: bool) -> TerrariaItem:
-        classification = ItemClassification.progression#useful
+        classification = ItemClassification.useful
         if name in {
             "Post-Goblin Army",
             "Post-Evil Boss",
@@ -76,24 +87,18 @@ class TerrariaWorld(World):
         menu = Region("Menu", self.player, self.multiworld)
 
         for location in self.ter_locations:
-            print((location, location_name_to_id[location]))
             menu.locations.append(TerrariaLocation(self.player, location, location_name_to_id[location], menu))
         for event in event_rules:
-            print((event, None))
             menu.locations.append(TerrariaLocation(self.player, event, None, menu))
         if self.calamity:
             for event in calamity_event_rules:
-                print((event, None))
                 menu.locations.append(TerrariaLocation(self.player, event, None, menu))
             
         self.multiworld.regions.append(menu)
 
     def create_items(self) -> None:
         items_to_create = self.ter_items.copy()
-        for item in precollected:
-            items_to_create.remove(item)
-        for _ in range(len(precollected)):
-            items_to_create.append("50 Silver")
+        items_to_create.remove(self.goal_item_id)
         
         for item in items_to_create:
             self.multiworld.itempool.append(self.create_item(item, False))
@@ -115,27 +120,11 @@ class TerrariaWorld(World):
                     add_rule(self.multiworld.get_location(event, self.player), lambda state: rule(Ctx(state, player, config)))
 
     def generate_basic(self) -> None:
-        for item in precollected:
-            self.multiworld.push_precollected(self.create_item(item, False))
-        
-        goal = self.multiworld.goal[self.player].value
-
-        if goal == 0:
-            goal_location = "Wall of Flesh"
-        elif goal == 1:
-            goal_location = "Plantera"
-        elif goal == 2:
-            goal_location = "Moon Lord"
-        elif goal == 3:
-            goal_location = "Zenith"
-
         for event in event_rules:
             self.multiworld.get_location(event, self.player).place_locked_item(self.create_item(event, True))
         if self.calamity:
             for event in event_rules:
                 self.multiworld.get_location(event, self.player).place_locked_item(self.create_item(event, True))
 
-        print(goal_location)
-
-        self.multiworld.get_location(goal_location, self.player).place_locked_item(self.create_item("Victory", True))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+        self.multiworld.get_location(self.goal_location_id, self.player).place_locked_item(self.create_item(self.goal_item_id, False))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(self.goal_item_id, self.player)
