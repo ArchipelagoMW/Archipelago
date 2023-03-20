@@ -61,7 +61,7 @@ class KH2Context(CommonContext):
                             "starting_inventory": self.hasStartingInvo,
 
                             #  Character: [back of invo, front of invo]
-                            "SoraInvo":           [0x25CC, 0x2544],
+                            "SoraInvo":           [0x25CC, 0x2546],
                             "DonaldInvo":         [0x2678, 0x2658],
                             "GoofyInvo":          [0x278E, 0x276C],
                             "AmountInvo":         {
