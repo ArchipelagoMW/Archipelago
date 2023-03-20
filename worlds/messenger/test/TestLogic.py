@@ -48,7 +48,7 @@ class HardLogicTest(MessengerTestBase):
         items = [["Wingsuit", "Rope Dart"]]
         self.assertAccessDependency(locations, items)
 
-    def testWindmill(self):
+    def testWindmill(self) -> None:
         """Windmill Shuriken isn't progression on normal difficulty, so test it's marked correctly and required."""
         self.assertEqual(ItemClassification.progression, self.get_item_by_name("Windmill Shuriken").classification)
         windmill_locs = [
@@ -66,13 +66,13 @@ class HardLogicTest(MessengerTestBase):
             with self.subTest("can reach with Windmill", location=loc):
                 self.assertTrue(self.can_reach_location(loc))
 
-        special_loc = self.multiworld.get_location("Autumn Hills Seal - Spike Ball Darts", self.player)
+        special_loc = "Autumn Hills Seal - Spike Ball Darts"
         item = self.get_item_by_name("Wingsuit")
         self.collect(item)
         self.assertTrue(self.can_reach_location(special_loc))
         self.remove(item)
 
-        item = self.get_items_by_name("Rope Dart")
+        item = self.get_item_by_name("Rope Dart")
         self.collect(item)
         self.assertTrue(self.can_reach_location(special_loc))
 

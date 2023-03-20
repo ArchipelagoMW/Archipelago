@@ -27,9 +27,9 @@ class DefaultGoalTest(MessengerTestBase):
     def testGoal(self) -> None:
         self.assertBeatable(False)
         self.collect_by_name(NOTES)
-        item = self.get_item_by_name("Rope Dart")
-        self.collect(item)
+        rope_dart = self.get_item_by_name("Rope Dart")
+        self.collect(rope_dart)
         self.assertBeatable(True)
-        self.remove(item)
+        self.remove(rope_dart)
         self.collect_by_name("Wingsuit")
         self.assertBeatable(True)
