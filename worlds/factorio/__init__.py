@@ -15,6 +15,9 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies, \
     fluids, stacking_items, valid_ingredients, progressive_rows
 from .Locations import location_pools, location_table
+from worlds.LauncherComponents import Component, components
+
+components.append(Component("Factorio Client", "FactorioClient"))
 
 
 class FactorioWeb(WebWorld):
