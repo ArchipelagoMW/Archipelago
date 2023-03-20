@@ -218,7 +218,7 @@ class MessengerChallengeRules(MessengerHardRules):
         super().__init__(world)
 
         self.region_rules.update({
-            "Forlorn Temple": lambda state: (self.has_vertical(state) and state.has_all(set(PHOBEKINS)))
+            "Forlorn Temple": lambda state: (self.has_vertical(state) and state.has_all(set(PHOBEKINS), self.player))
                                             or state.has_all({"Wingsuit", "Windmill Shuriken"}, self.player),
             "Elemental Skylands": lambda state: self.has_wingsuit(state) or state.has("Fairy Bottle", self.player)
         })
