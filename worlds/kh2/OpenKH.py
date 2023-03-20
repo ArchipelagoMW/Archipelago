@@ -10,7 +10,6 @@ from .XPValues import lvlStats, formExp, soraExp
 from worlds.Files import APContainer
 
 
-
 class KH2Container(APContainer):
     game: str = 'Kingdom Hearts 2'
 
@@ -69,7 +68,7 @@ def patch_kh2(self, output_directory):
 
     if self.multiworld.Keyblade_Minimum[self.player].value > self.multiworld.Keyblade_Maximum[self.player].value:
         print(
-            f"{self.multiworld.get_file_safe_player_name(self.player)} has Keyblade Minimum greater than Keyblade Maximum")
+                f"{self.multiworld.get_file_safe_player_name(self.player)} has Keyblade Minimum greater than Keyblade Maximum")
         keyblademin = self.multiworld.Keyblade_Maximum[self.player].value
         keyblademax = self.multiworld.Keyblade_Minimum[self.player].value
     else:
@@ -97,9 +96,9 @@ def patch_kh2(self, output_directory):
             itemcode = item_dictionary_table[location.item.name].kh2id
             if location.item.name in slotDataDuping and \
                     location.name not in AllWeaponSlot:
-                self.LocalItems[location.address]= item_dictionary_table[location.item.name].code
+                self.LocalItems[location.address] = item_dictionary_table[location.item.name].code
         else:
-            itemcode = 90 #castle map
+            itemcode = 90  # castle map
 
         if data.yml == "Chest":
             self.formattedTrsr[data.locid] = {"ItemId": itemcode}
@@ -176,10 +175,6 @@ def patch_kh2(self, output_directory):
                 "FormLevel":          data.locid,
                 "GrowthAbilityLevel": 0,
             })
-
-        elif data.yml == "Critical" and location.item.player == self.player:
-            #self.multiworld.push_precollected(self.create_item(location.item.name))
-            pass
 
     # Summons have no checks on them so done fully locally
     self.formattedFmlv["Summon"] = []

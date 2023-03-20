@@ -64,24 +64,6 @@ class KH2Context(CommonContext):
                             "SoraInvo":           [0x25CC, 0x2544],
                             "DonaldInvo":         [0x2678, 0x2658],
                             "GoofyInvo":          [0x278E, 0x276C],
-                            #  ability:{itemname:[where in inventory]
-                            #  "Ability:{draw:[0x2542,0x2544]}
-                            #  amount:{itemname:amount}
-                            #  "Amount":{Ice Cream: 2}
-                            #  growth:{growth:amount}
-                            #  "Growth:{High Jump:2}
-                            #  "Bitmask: list of items.
-                            #  Bitmask items can only have one ever since they are just a bit flip
-                            # Weapon:{Character:[List of their weapons]} They should only have one of a weapon
-                            # Equipment:[] They should only have one equipment. This is for both accessories and Armor
-                            # Magic:{Magic Name:Amount}. Magic is handled weird so into another dict is goes
-                            # StatIncrease:{NameOfBoost:Amount}
-                            # Boost: {StatBoost:amount}
-                            # Ap boost:2
-
-                            # Local Items  Amount have {Item:[Amount,Location]}
-
-                            # Local Ability:Abilityname:{slot:location that they are in}
                             "AmountInvo":         {
                                 "ServerItems": {
                                     "Ability":      {},
@@ -611,9 +593,6 @@ class KH2Context(CommonContext):
                 amountOfItems = 0
                 if itemName in local_amount:
                     amountOfItems += self.kh2seedsave["AmountInvo"]["LocalItems"]["Amount"][itemName]
-                    # for location in self.kh2seedsave["AmountInvo"]["LocalItems"]["Amount"][itemName][1]:
-                    #    if not self.verifyLocation(location):
-                    #        amountOfItems -= 1
                 if itemName in server_amount:
                     amountOfItems += self.kh2seedsave["AmountInvo"]["ServerItems"]["Amount"][itemName]
 
@@ -632,11 +611,6 @@ class KH2Context(CommonContext):
 
             for itemName in master_keyblade:
                 itemData = self.item_name_to_data[itemName]
-                # isChecked = True
-                # if itemName in local_keyblade:
-                # for location in self.kh2seedsave["AmountInvo"]["LocalItems"]["Weapon"]["Sora"][itemName]:
-                #    if not self.verifyLocation(location):
-                #        isChecked = False
                 # if isChecked:
                 # if the inventory slot for that keyblade is less than the amount they should have
                 if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
@@ -652,12 +626,6 @@ class KH2Context(CommonContext):
                         self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
                                              (1).to_bytes(1, 'big'), 1)
             for itemName in master_staff:
-                # isChecked = True
-                # if itemName in local_keyblade:
-                #    for location in self.kh2seedsave["AmountInvo"]["LocalItems"]["Weapon"]["Donald"][itemName]:
-                #        if not self.verifyLocation(location):
-                #            isChecked = False
-                # if isChecked:
                 itemData = self.item_name_to_data[itemName]
                 if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
                                   "big") != 1 \
@@ -667,12 +635,6 @@ class KH2Context(CommonContext):
 
             for itemName in master_shield:
                 itemData = self.item_name_to_data[itemName]
-                # isChecked = True
-                # if itemName in local_keyblade:
-                #    for location in self.kh2seedsave["AmountInvo"]["LocalItems"]["Weapon"]["Goofy"][itemName]:
-                #        if not self.verifyLocation(location):
-                #            isChecked = False
-                # if isChecked:
                 if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
                                   "big") != 1 \
                         and self.kh2.read_short(self.kh2.base_address + self.Save + 0x2718) != itemData.kh2id:
@@ -683,8 +645,6 @@ class KH2Context(CommonContext):
                 itemData = self.item_name_to_data[itemName]
                 ability_slot = []
                 if itemName in local_ability:
-                    # for location in self.kh2seedsave["AmountInvo"]["LocalItems"]["Amount"][itemName][1]:
-                    #    if not self.verifyLocation(location):
                     ability_slot += self.kh2seedsave["AmountInvo"]["LocalItems"]["Ability"][itemName]
                 if itemName in server_ability:
                     ability_slot += self.kh2seedsave["AmountInvo"]["ServerItems"]["Ability"][itemName]
@@ -730,10 +690,9 @@ class KH2Context(CommonContext):
                     Equipment_Anchor_List = self.Equipment_Anchor_Dict["Accessories"]
                 else:
                     Equipment_Anchor_List = self.Equipment_Anchor_Dict["Armor"]
-                # if the inventory slot for that keyblade is less than the amount they should have
                 if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
                                   "big") != 1:
-                    # Checking form anchors for the keyblade
+                    # Checking form anchors for the equipment
                     for slot in Equipment_Anchor_List:
                         if self.kh2.read_short(self.kh2.base_address + self.Save + slot) == itemData.kh2id:
                             isThere = True
@@ -785,6 +744,7 @@ class KH2Context(CommonContext):
                 amountOfUsedBoosts = int.from_bytes(
                         self.kh2.read_bytes(self.kh2.base_address + self.Save + self.boost_to_anchor_dict[itemName], 1),
                         "big")
+                # Ap Boots start at +50 for some reason
                 if itemName == "AP Boost":
                     amountOfUsedBoosts -= 50
                 if (amountOfBoostsInInvo + amountOfUsedBoosts) <= amountOfItems and amountOfBoostsInInvo < 255:
@@ -875,10 +835,6 @@ async def kh2_watcher(ctx: KH2Context):
                     if location in ctx.kh2LocalItems:
                         item = ctx.kh2slotdata["LocalItems"][str(location)]
                         await asyncio.create_task(ctx.give_item(item, "LocalItems"))
-                # items_to_give = [ctx.kh2slotdata["LocalItems"][str(location_id)]for location_id in
-                #                 location_ids if location_id in ctx.kh2LocalItems.keys()]
-                # for item in items_to_give:
-                #    await asyncio.create_task(ctx.give_item(item, "LocalItems"))
                 await ctx.send_msgs(message)
             elif not ctx.kh2connected and ctx.serverconneced:
                 logger.info("Game is not open. Disconnecting from Server.")
