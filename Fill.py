@@ -145,15 +145,6 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             if on_place:
                 on_place(spot_to_fill)
 
-    if not allow_partial and not allow_excluded and len(unplaced_items) > 0 and len(locations) > 0:
-        # There are leftover unplaceable items and locations that won't accept them
-        if world.can_beat_game():
-            logging.warning(
-                f'Not all items placed. Game beatable anyway. (Could not place {unplaced_items})')
-        else:
-            raise FillError(f'No more spots to place {unplaced_items}, locations {locations} are invalid. '
-                            f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
-
     if allow_excluded:
         # check if partial fill is the result of excluded locations, in which case retry
         excluded_locations = [
@@ -168,9 +159,15 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             for location in excluded_locations:
                 if not location.item:
                     location.progress_type = location.progress_type.EXCLUDED
-            if unplaced_items and not allow_partial:
-                raise FillError(f'No more spots to place {unplaced_items}, locations {locations} are invalid. '
-                                f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
+
+    if not allow_partial and len(unplaced_items) > 0 and len(locations) > 0:
+        # There are leftover unplaceable items and locations that won't accept them
+        if world.can_beat_game():
+            logging.warning(
+                f'Not all items placed. Game beatable anyway. (Could not place {unplaced_items})')
+        else:
+            raise FillError(f'No more spots to place {unplaced_items}, locations {locations} are invalid. '
+                            f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
 
     item_pool.extend(unplaced_items)
 
