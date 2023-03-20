@@ -22,7 +22,7 @@
             {% for patch in room.seed.slots|list|sort(attribute="player_id") %}
                 <tr>
                     <td>{{ patch.player_id }}</td>
-                    <td data-tooltip="Connect via TextClient"><a href="archipelago://{{ patch.player_name | e}}:@{{ config['PATCH_TARGET'] }}:{{ room.last_port }}">{{ patch.player_name }}</a></td>
+                    <td data-tooltip="Connect via TextClient"><a href="archipelago://{{ patch.player_name | e}}:@{{ config['HOST_ADDRESS'] }}:{{ room.last_port }}">{{ patch.player_name }}</a></td>
                     <td>{{ patch.game }}</td>
                     <td>
                         {% if patch.game == "Minecraft" %}
@@ -31,6 +31,9 @@
                         {% elif patch.game == "Factorio" %}
                         <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
                             Download Factorio Mod...</a>
+                        {% elif patch.game == "Kingdom Hearts 2" %}
+                        <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
+                            Download Kingdom Hearts 2 Mod...</a>
                         {% elif patch.game == "Ocarina of Time" %}
                         <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
                             Download APZ5 File...</a>
