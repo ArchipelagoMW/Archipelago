@@ -2,10 +2,10 @@ import typing
 
 
 class JewelPieces(typing.NamedTuple):
-    nw: str
     ne: str
+    nw: str
     sw: str
     se: str
 
-    locations = tuple("Top Left/Top Right/Bottom Left/Bottom Right".split("/"))
+    locations = tuple("Top Right/Top Left/Bottom Left/Bottom Right".split("/"))
 
