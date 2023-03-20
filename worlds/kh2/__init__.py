@@ -102,7 +102,7 @@ class KH2World(World):
                 self.item_quantity_dict[item] -= value
 
         # Option to turn off Promise Charm Item
-        if self.multiworld.Promise_Charm[self.player]:
+        if not self.multiworld.Promise_Charm[self.player]:
             self.item_quantity_dict[ItemName.PromiseCharm] = 0
 
         for ability in self.multiworld.BlacklistKeyblade[self.player].value:
