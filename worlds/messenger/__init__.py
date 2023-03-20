@@ -101,7 +101,6 @@ class MessengerWorld(World):
 
     def set_rules(self) -> None:
         logic = self.multiworld.logic_level[self.player]
-        # tricks = self.multiworld.logic_tricks[self.player].value
         if logic == Logic.option_normal:
             Rules.MessengerRules(self).set_messenger_rules()
         elif logic == Logic.option_hard:
@@ -110,8 +109,6 @@ class MessengerWorld(World):
             Rules.MessengerChallengeRules(self).set_messenger_rules()
         else:
             Rules.MessengerOOBRules(self).set_messenger_rules()
-        # if tricks:
-        #     Rules.MessengerLogicTricks(self).add_trick_logic()
 
     def fill_slot_data(self) -> Dict[str, Any]:
         locations: Dict[int, List[str]] = {}

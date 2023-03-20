@@ -115,58 +115,6 @@ class MessengerRules:
             set_self_locking_items(multiworld, self.player)
 
 
-class MessengerLogicTricks(MessengerRules):
-    logic_tricks: Dict[str, List[str]]
-    trick_rules: Dict[str, Callable[[CollectionState], bool]]
-
-    def __init__(self, world: MessengerWorld) -> None:
-        self.player = world.player
-        self.world = world
-
-        self.logic_tricks = {
-            "leashing": [
-                "Key of Strength",
-                "Key of Symbiosis",
-                "Pyro",
-                "Elemental Skylands Seal - Water Seal",
-                "Elemental Skylands Seal - Fire"
-            ],
-            "time manipulation": [
-                "Power Thistle",
-                "Astral Tea Leaves",
-                "Searing Crags Seal - Raining Rocks",
-            ],
-            "DASH": [
-
-            ],
-            "DASH-S": [
-                "Forlorn Temple Seal - Rocket Maze",
-            ],
-            "downward oob": [
-
-            ]
-        }
-
-        self.trick_rules = {
-            "leashing": self.has_dart,
-            "downward oob": self.has_dart
-        }
-
-    def add_trick_logic(self) -> None:
-        multiworld = self.world.multiworld
-
-        for trick in multiworld.logic_tricks[self.player].value:
-            for loc in self.logic_tricks[trick]:
-                try:
-                    location = multiworld.get_location(loc, self.player)
-                except KeyError:
-                    continue
-                rule = True
-                if trick in self.trick_rules:
-                    rule = self.trick_rules[trick]
-                add_rule(location, rule, "or")
-
-
 class MessengerHardRules(MessengerRules):
     extra_rules: Dict[str, Callable[[CollectionState], bool]]
 

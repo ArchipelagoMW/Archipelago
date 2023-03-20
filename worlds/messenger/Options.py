@@ -22,17 +22,6 @@ class Logic(Choice):
     option_oob = 3
 
 
-class LogicTricks(OptionList):
-    """Tricks that you're comfortable putting in logic, without increasing the logic level."""
-    display_name = "Logic Tricks"
-    valid_keys = {
-        "leashing",
-        "time manipulation",
-        "DASH",
-        "DASH-S",
-    }
-
-
 class PowerSeals(DefaultOnToggle):
     """Whether power seal locations should be randomized."""
     display_name = "Shuffle Seals"
