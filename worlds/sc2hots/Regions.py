@@ -235,13 +235,24 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
                 slot_offset += 1
 
         # Loop through missions to create requirements table and connect regions
-        # TODO: Handle 'and' connections
         mission_req_table = {}
+
+        def build_connection_rule(mission_names: List[str], missions_req: int) -> Callable:
+            if len(mission_names) > 1:
+                return lambda state: state.has_all({f"Beat {name}" for name in mission_names}, player) and \
+                    state._sc2hots_cleared_missions(multiworld, player, missions_req)
+            else:
+                return lambda state: state.has(f"Beat {mission_names[0]}", player) and \
+                    state._sc2hots_cleared_missions(multiworld, player, missions_req)
 
         for i, mission in enumerate(missions):
             if mission is None:
                 continue
             connections = []
+            all_connections = []
+            for connection in mission_order[i].connect_to:
+                if missions[connection] is not None and connection != -1:
+                    all_connections.append(missions[connection])
             for connection in mission_order[i].connect_to:
                 required_mission = missions[connection]
                 if connection == -1:
@@ -249,11 +260,9 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
                 elif required_mission is None:
                     continue
                 else:
+                    required_missions = [required_mission] if mission_order[i].or_requirements else all_connections
                     connect(multiworld, player, names, required_mission, mission,
-                            (lambda name, missions_req: (lambda state: state.has(f"Beat {name}", player) and
-                                                                       state._sc2hots_cleared_missions(multiworld, player,
-                                                                                                      missions_req)))
-                            (missions[connection], mission_order[i].number))
+                            build_connection_rule(required_missions, mission_order[i].number))
                     connections.append(slot_map[connection])
 
             mission_req_table.update({mission: MissionInfo(
