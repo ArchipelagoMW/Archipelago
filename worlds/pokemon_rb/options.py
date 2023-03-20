@@ -65,7 +65,7 @@ class CeruleanCaveCondition(Range):
     If extra_key_items is turned on, the number chosen will be increased by 4."""
     display_name = "Cerulean Cave Condition"
     range_start = 0
-    range_end = 25
+    range_end = 26
     default = 20
 
 
@@ -155,6 +155,12 @@ class RandomizeHiddenItems(Choice):
     default = 0
 
 
+class PrizeSanity(Toggle):
+    """Shuffles the TM prizes at the Celadon Prize Corner into the item pool."""
+    display_name = "Prizesanity"
+    default = 0
+
+
 class TrainerSanity(Toggle):
     """Add a location check to every trainer in the game, which can be obtained by talking to a trainer after defeating
     them. Does not affect gym leaders and some scripted event battles (including all Rival, Giovanni, and
@@ -163,10 +169,42 @@ class TrainerSanity(Toggle):
     default = 0
 
 
+class RequirePokedex(Toggle):
+    """Require the Pokedex to obtain items from Oak's Aides or from Dexsanity checks."""
+    display_name = "Require Pokedex"
+    default = 1
+
+
+class AllPokemonSeen(Toggle):
+    """Start with all Pokemon "seen" in your Pokedex. This allows you to see where Pokemon can be encountered in the
+    wild. Pokemon found by fishing or in the Cerulean Cave are not displayed."""
+    default = 0
+
+
+class DexSanity(Toggle):
+    """Adds a location check for each Pokemon flagged "Owned" on your Pokedex. If accessibility is set to `locations`
+    and randomize_wild_pokemon is off, catch_em_all is not `all_pokemon` or randomize_legendary_pokemon is not `any`,
+    accessibility will be forced to `items` instead, as not all Dexsanity locations can be guaranteed to be considered
+    reachable in logic.
+    If Pokedex is required, the items for Pokemon acquired before acquiring the Pokedex can be found by talking to
+    Professor Oak or evaluating the Pokedex via Oak's PC."""
+    display_name = "Dexsanity"
+    default = 0
+
+
 class FreeFlyLocation(Toggle):
     """One random fly destination will be unlocked by default."""
     display_name = "Free Fly Location"
     default = 1
+
+
+class RandomizeRockTunnel(Toggle):
+    """Randomize the layout of Rock Tunnel. This is highly experimental, if you encounter any issues (items or trainers
+     unreachable, trainers walking over walls, inability to reach end of tunnel, anything looking strange) to
+     Alchav#8826 in the Archipelago Discord (directly or in #pkmn-red-blue) along with the seed number found on the
+     signs outside the tunnel."""
+    display_name = "Randomize Rock Tunnel"
+    default = 0
 
 
 class OaksAidRt2(Range):
@@ -227,6 +265,12 @@ class RandomizeWildPokemon(Choice):
     option_match_base_stats = 2
     option_match_types_and_base_stats = 3
     option_completely_random = 4
+
+
+class Area1To1Mapping(Toggle):
+    """When randomizing wild Pokemon, for each zone, all instances of a particular Pokemon will be replaced with the
+    same Pokemon, resulting in fewer Pokemon in each area."""
+    default = 1
 
 
 class RandomizeStarterPokemon(Choice):
@@ -334,6 +378,13 @@ class MinimumCatchRate(Range):
     default = 3
 
 
+class MoveBalancing(Toggle):
+    """All one-hit-KO moves and fixed-damage moves become normal damaging moves.
+    Blizzard, and moves that cause sleep have their accuracy reduced."""
+    display_name = "Move Balancing"
+    default = 0
+
+
 class RandomizePokemonMovesets(Choice):
     """Randomize the moves learned by Pokemon. prefer_types will prefer moves that match the type of the Pokemon."""
     display_name = "Randomize Pokemon Movesets"
@@ -342,6 +393,12 @@ class RandomizePokemonMovesets(Choice):
     option_completely_random = 2
     default = 0
 
+
+class ConfineTranstormToDitto(Toggle):
+    """Regardless of moveset randomization, will keep Ditto's first move as Transform no others will learn it.
+    If an enemy Pokemon uses transform before you catch it, it will permanently change to Ditto after capture."""
+    display_name = "Confine Transform to Ditto"
+    default = 1
 
 class StartWithFourMoves(Toggle):
     """If movesets are randomized, this will give all Pokemon 4 starting moves."""
@@ -356,30 +413,62 @@ class SameTypeAttackBonus(Toggle):
     default = 1
 
 
-class TMCompatibility(Choice):
-    """Randomize which Pokemon can learn each TM. prefer_types: 90% chance if Pokemon's type matches the move,
-    50% chance if move is Normal type and the Pokemon is not, and 25% chance otherwise. Pokemon will retain the same
-    TM compatibility when they evolve if the evolved form has the same type(s). Mew will always be able to learn
-    every TM."""
-    display_name = "TM Compatibility"
-    default = 0
-    option_vanilla = 0
-    option_prefer_types = 1
-    option_completely_random = 2
-    option_full_compatibility = 3
+class RandomizeTMMoves(Toggle):
+    """Randomize the moves taught by TMs.
+    All TM items will be flagged as 'filler' items regardless of how good the move they teach are."""
+    display_name = "Randomize TM Moves"
 
 
-class HMCompatibility(Choice):
-    """Randomize which Pokemon can learn each HM. prefer_types: 100% chance if Pokemon's type matches the move,
-    75% chance if move is Normal type and the Pokemon is not, and 25% chance otherwise. Pokemon will retain the same
-    HM compatibility when they evolve if the evolved form has the same type(s). Mew will always be able to learn
-    every HM."""
-    display_name = "HM Compatibility"
-    default = 0
-    option_vanilla = 0
-    option_prefer_types = 1
-    option_completely_random = 2
-    option_full_compatibility = 3
+class TMHMCompatibility(SpecialRange):
+    range_start = -1
+    range_end = 100
+    special_range_names = {
+        "vanilla": -1,
+        "none": 0,
+        "full": 100
+    }
+    default = -1
+
+
+class TMSameTypeCompatibility(TMHMCompatibility):
+    """Chance of each TM being usable on each Pokemon whose type matches the move."""
+    display_name = "TM Same-Type Compatibility"
+
+
+class TMNormalTypeCompatibility(TMHMCompatibility):
+    """Chance of each TM being usable on each Pokemon if the move is Normal type and the Pokemon is not."""
+    display_name = "TM Normal-Type Compatibility"
+
+
+class TMOtherTypeCompatibility(TMHMCompatibility):
+    """Chance of each TM being usable on each Pokemon if the move a type other than Normal or one of the Pokemon's types."""
+    display_name = "TM Other-Type Compatibility"
+
+
+class HMSameTypeCompatibility(TMHMCompatibility):
+    """Chance of each HM being usable on each Pokemon whose type matches the move.
+    At least one Pokemon will always be able to learn the moves needed to meet your accessibility requirements."""
+    display_name = "HM Same-Type Compatibility"
+
+
+class HMNormalTypeCompatibility(TMHMCompatibility):
+    """Chance of each HM being usable on each Pokemon if the move is Normal type and the Pokemon is not.
+    At least one Pokemon will always be able to learn the moves needed to meet your accessibility requirements."""
+    display_name = "HM Normal-Type Compatibility"
+
+
+class HMOtherTypeCompatibility(TMHMCompatibility):
+    """Chance of each HM being usable on each Pokemon if the move a type other than Normal or one of the Pokemon's types.
+    At least one Pokemon will always be able to learn the moves needed to meet your accessibility requirements."""
+    display_name = "HM Other-Type Compatibility"
+
+
+class InheritTMHMCompatibility(Toggle):
+    """If on, evolved Pokemon will inherit their pre-evolved form's TM and HM compatibilities.
+    They will then roll the above set chances again at a 50% lower rate for all TMs and HMs their predecessor could not
+    learn, unless the evolved form has additional or different types, then moves of those new types will be rolled
+    at the full set chance."""
+    display_name = "Inherit TM/HM Compatibility"
 
 
 class RandomizePokemonTypes(Choice):
@@ -543,6 +632,17 @@ class IceTrapWeight(TrapWeight):
     default = 0
 
 
+class RandomizePokemonPalettes(Choice):
+    """Modify palettes of Pokemon. Primary Type will set Pokemons' palettes based on their primary type, Follow
+    Evolutions will randomize palettes but palettes will remain the same through evolutions (except Eeveelutions),
+    Completely Random will randomize all Pokemons' palettes individually"""
+    display_name = "Randomize Pokemon Palettes"
+    option_vanilla = 0
+    option_primary_type = 1
+    option_follow_evolutions = 2
+    option_completely_random = 3
+
+
 pokemon_rb_options = {
     "game_version": GameVersion,
     "trainer_name": TrainerName,
@@ -561,16 +661,22 @@ pokemon_rb_options = {
     "extra_strength_boulders": ExtraStrengthBoulders,
     "require_item_finder": RequireItemFinder,
     "randomize_hidden_items": RandomizeHiddenItems,
+    "prizesanity": PrizeSanity,
     "trainersanity": TrainerSanity,
-    "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
-    "free_fly_location": FreeFlyLocation,
+    "require_pokedex": RequirePokedex,
+    "all_pokemon_seen": AllPokemonSeen,
+    "dexsanity": DexSanity,
     "oaks_aide_rt_2": OaksAidRt2,
     "oaks_aide_rt_11": OaksAidRt11,
     "oaks_aide_rt_15": OaksAidRt15,
+    "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
+    "free_fly_location": FreeFlyLocation,
+    "randomize_rock_tunnel": RandomizeRockTunnel,
     "blind_trainers": BlindTrainers,
     "minimum_steps_between_encounters": MinimumStepsBetweenEncounters,
     "exp_modifier": ExpModifier,
     "randomize_wild_pokemon": RandomizeWildPokemon,
+    "area_1_to_1_mapping": Area1To1Mapping,
     "randomize_starter_pokemon": RandomizeStarterPokemon,
     "randomize_static_pokemon": RandomizeStaticPokemon,
     "randomize_legendary_pokemon": RandomizeLegendaryPokemon,
@@ -580,11 +686,19 @@ pokemon_rb_options = {
     "minimum_catch_rate": MinimumCatchRate,
     "randomize_trainer_parties": RandomizeTrainerParties,
     "trainer_legendaries": TrainerLegendaries,
+    "move_balancing": MoveBalancing,
     "randomize_pokemon_movesets": RandomizePokemonMovesets,
+    "confine_transform_to_ditto": ConfineTranstormToDitto,
     "start_with_four_moves": StartWithFourMoves,
     "same_type_attack_bonus": SameTypeAttackBonus,
-    "tm_compatibility": TMCompatibility,
-    "hm_compatibility": HMCompatibility,
+    "randomize_tm_moves": RandomizeTMMoves,
+    "tm_same_type_compatibility": TMSameTypeCompatibility,
+    "tm_normal_type_compatibility": TMNormalTypeCompatibility,
+    "tm_other_type_compatibility": TMOtherTypeCompatibility,
+    "hm_same_type_compatibility": HMSameTypeCompatibility,
+    "hm_normal_type_compatibility": HMNormalTypeCompatibility,
+    "hm_other_type_compatibility": HMOtherTypeCompatibility,
+    "inherit_tm_hm_compatibility": InheritTMHMCompatibility,
     "randomize_pokemon_types": RandomizePokemonTypes,
     "secondary_type_chance": SecondaryTypeChance,
     "randomize_type_chart": RandomizeTypeChart,
@@ -604,5 +718,6 @@ pokemon_rb_options = {
     "fire_trap_weight": FireTrapWeight,
     "paralyze_trap_weight": ParalyzeTrapWeight,
     "ice_trap_weight": IceTrapWeight,
+    "randomize_pokemon_palettes": RandomizePokemonPalettes,
     "death_link": DeathLink
 }

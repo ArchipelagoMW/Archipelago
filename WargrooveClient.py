@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import atexit
 import os
 import sys
 import asyncio
@@ -78,17 +80,18 @@ class WargrooveContext(CommonContext):
         # self.game_communication_path: files go in this path to pass data between us and the actual game
         if "appdata" in os.environ:
             options = Utils.get_options()
-            root_directory = options["wargroove_options"]["root_directory"].replace("/", "\\")
-            data_directory = "lib\\worlds\\wargroove\\data\\"
-            dev_data_directory = "worlds\\wargroove\\data\\"
-            appdata_wargroove = os.path.expandvars("%APPDATA%\\Chucklefish\\Wargroove\\")
-            if not os.path.isfile(root_directory + "\\win64_bin\\wargroove64.exe"):
+            root_directory = os.path.join(options["wargroove_options"]["root_directory"])
+            data_directory = os.path.join("lib", "worlds", "wargroove", "data")
+            dev_data_directory = os.path.join("worlds", "wargroove", "data")
+            appdata_wargroove = os.path.expandvars(os.path.join("%APPDATA%", "Chucklefish", "Wargroove"))
+            if not os.path.isfile(os.path.join(root_directory, "win64_bin", "wargroove64.exe")):
                 print_error_and_close("WargrooveClient couldn't find wargroove64.exe. "
                                       "Unable to infer required game_communication_path")
-            self.game_communication_path = root_directory + "\\AP"
+            self.game_communication_path = os.path.join(root_directory, "AP")
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
-
+            self.remove_communication_files()
+            atexit.register(self.remove_communication_files)
             if not os.path.isdir(appdata_wargroove):
                 print_error_and_close("WargrooveClient couldn't find Wargoove in appdata!"
                                       "Boot Wargroove and then close it to attempt to fix this error")
@@ -109,10 +112,7 @@ class WargrooveContext(CommonContext):
 
     async def connection_closed(self):
         await super(WargrooveContext, self).connection_closed()
-        for root, dirs, files in os.walk(self.game_communication_path):
-            for file in files:
-                if file.find("obtain") <= -1:
-                    os.remove(root + "/" + file)
+        self.remove_communication_files()
 
     @property
     def endpoints(self):
@@ -123,10 +123,12 @@ class WargrooveContext(CommonContext):
 
     async def shutdown(self):
         await super(WargrooveContext, self).shutdown()
+        self.remove_communication_files()
+
+    def remove_communication_files(self):
         for root, dirs, files in os.walk(self.game_communication_path):
             for file in files:
-                if file.find("obtain") <= -1:
-                    os.remove(root+"/"+file)
+                os.remove(root + "/" + file)
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:

@@ -150,6 +150,8 @@ components: Iterable[Component] = (
     Component('FF1 Client', 'FF1Client'),
     # Pokémon
     Component('Pokemon Client', 'PokemonClient', file_identifier=SuffixIdentifier('.apred', '.apblue')),
+    # TLoZ
+    Component('Zelda 1 Client', 'Zelda1Client'),
     # ChecksFinder
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
@@ -159,6 +161,8 @@ components: Iterable[Component] = (
     # Zillion
     Component('Zillion Client', 'ZillionClient',
               file_identifier=SuffixIdentifier('.apzl')),
+    #Kingdom Hearts 2
+    Component('KH2 Client', "KH2Client"),
     # Functions
     Component('Open host.yaml', func=open_host_yaml),
     Component('Open Patch', func=open_patch),
