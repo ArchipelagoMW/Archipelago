@@ -9,7 +9,7 @@ class Goal(Choice):
     Biolizard: Finish Cannon's Core and defeat the Biolizard and Finalhazard
     Chaos Emerald Hunt: Find the Seven Chaos Emeralds and reach Green Hill Zone
     Finalhazard Chaos Emerald Hunt: Find the Seven Chaos Emeralds and reach Green Hill Zone, then defeat Finalhazard
-    Grand Prix: Win every race in Kart Race Mode (with every character!)
+    Grand Prix: Win every race in Kart Race Mode
     """
     display_name = "Goal"
     option_biolizard = 0
@@ -180,7 +180,7 @@ class Omosanity(Toggle):
 class KartRaceChecks(Choice):
     """
     Determines whether Kart Race Mode grants checks
-    None: No Kart Races checks
+    None: No Kart Races grant checks
     Mini: Each Kart Race difficulty must be beaten only once
     Full: Every Character must separately beat each Kart Race difficulty
     """
