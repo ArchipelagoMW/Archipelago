@@ -48,13 +48,11 @@ class MessengerItem(Item):
     game = "The Messenger"
 
     def __init__(self, name: str, player: int, item_id: Optional[int] = None, override_progression: bool = False):
-        if name in {*NOTES, *PROG_ITEMS, *PHOBEKINS} or item_id is None:
+        if name in {*NOTES, *PROG_ITEMS, *PHOBEKINS} or item_id is None or override_progression:
             item_class = ItemClassification.progression
         elif name in USEFUL_ITEMS:
             item_class = ItemClassification.useful
         else:
             item_class = ItemClassification.filler
-        if override_progression:
-            item_class = ItemClassification.progression
         super().__init__(name, item_class, item_id, player)
 

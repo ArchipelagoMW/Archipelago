@@ -10,16 +10,16 @@ class MessengerAccessibility(Accessibility):
 class Logic(Choice):
     """
     The level of logic to use when determining what locations in your world are accessible.
-    Normal can require damage boosts, but otherwise approachable for someone who's beaten the game.
-    Hard has some more difficult tricks in logic, but should be easier for speedrunners.
+    Normal can require damage boosts, but otherwise approachable for someone who has beaten the game.
+    Hard has some easier speedrunning tricks in logic. May need to leash.
     Challenging contains more medium and hard difficulty speedrunning tricks.
-    None places everything with the minimum amount of rules possible. Expect to do OoB.
+    OoB places everything with the minimum amount of rules possible. Expect to do OoB. Not guaranteed completable.
     """
     display_name = "Logic Level"
     option_normal = 0
     option_hard = 1
     option_challenging = 2
-    option_none = 3
+    option_oob = 3
 
 
 class LogicTricks(OptionList):

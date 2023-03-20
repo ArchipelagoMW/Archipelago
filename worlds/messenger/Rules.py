@@ -90,7 +90,7 @@ class MessengerRules:
         return self.has_wingsuit(state) or self.has_dart(state)
 
     def has_enough_seals(self, state: CollectionState) -> bool:
-        return state.has("Power Seal", self.player, self.world.required_seals)
+        return not self.world.required_seals or state.has("Power Seal", self.player, self.world.required_seals)
 
     def true(self, state: CollectionState) -> bool:
         """I know this is stupid, but it's easier to read in the dicts."""
