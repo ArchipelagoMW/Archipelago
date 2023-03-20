@@ -17,7 +17,7 @@ class MessengerRules:
     region_rules: Dict[str, Callable[[CollectionState], bool]]
     location_rules: Dict[str, Callable[[CollectionState], bool]]
 
-    def __init__(self, world: MessengerWorld):
+    def __init__(self, world: MessengerWorld) -> None:
         self.player = world.player
         self.world = world
 
@@ -119,7 +119,7 @@ class MessengerLogicTricks(MessengerRules):
     logic_tricks: Dict[str, List[str]]
     trick_rules: Dict[str, Callable[[CollectionState], bool]]
 
-    def __init__(self, world: MessengerWorld):
+    def __init__(self, world: MessengerWorld) -> None:
         self.player = world.player
         self.world = world
 
@@ -170,7 +170,7 @@ class MessengerLogicTricks(MessengerRules):
 class MessengerHardRules(MessengerRules):
     extra_rules: Dict[str, Callable[[CollectionState], bool]]
 
-    def __init__(self, world: MessengerWorld):
+    def __init__(self, world: MessengerWorld) -> None:
         super().__init__(world)
 
         self.region_rules.update({
@@ -214,7 +214,7 @@ class MessengerHardRules(MessengerRules):
 
 
 class MessengerChallengeRules(MessengerHardRules):
-    def __init__(self, world: MessengerWorld):
+    def __init__(self, world: MessengerWorld) -> None:
         super().__init__(world)
 
         self.region_rules.update({
@@ -237,7 +237,7 @@ class MessengerChallengeRules(MessengerHardRules):
 
 
 class MessengerOOBRules(MessengerRules):
-    def __init__(self, world: MessengerWorld):
+    def __init__(self, world: MessengerWorld) -> None:
         self.world = world
         self.player = world.player
 
