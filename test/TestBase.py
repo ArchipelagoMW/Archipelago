@@ -206,7 +206,7 @@ class WorldTestBase(unittest.TestCase):
             items = self.collect_by_name(item_names)
             for location in locations:
                 self.assertTrue(self.can_reach_location(location),
-                                f"{location} not reachable with {[item for item in item_names]}")
+                                f"{location} not reachable with {item_names}")
             self.remove(items)
 
     def assertBeatable(self, beatable: bool):
