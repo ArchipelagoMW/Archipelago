@@ -40,6 +40,9 @@ class WorldSource(typing.NamedTuple):
     path: str  # typically relative path from this module
     is_zip: bool = False
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.path}, is_zip={self.is_zip})"
+
 
 # find potential world containers, currently folders and zip-importable .apworld's
 world_sources: typing.List[WorldSource] = []
@@ -55,24 +58,35 @@ for file in os.scandir(folder):
 # import all submodules to trigger AutoWorldRegister
 world_sources.sort()
 for world_source in world_sources:
-    if world_source.is_zip:
-        importer = zipimport.zipimporter(os.path.join(folder, world_source.path))
-        if hasattr(importer, "find_spec"):  # new in Python 3.10
-            spec = importer.find_spec(world_source.path.split(".", 1)[0])
-            mod = importlib.util.module_from_spec(spec)
-        else:  # TODO: remove with 3.8 support
-            mod = importer.load_module(world_source.path.split(".", 1)[0])
+    try:
+        if world_source.is_zip:
+            importer = zipimport.zipimporter(os.path.join(folder, world_source.path))
+            if hasattr(importer, "find_spec"):  # new in Python 3.10
+                spec = importer.find_spec(world_source.path.split(".", 1)[0])
+                mod = importlib.util.module_from_spec(spec)
+            else:  # TODO: remove with 3.8 support
+                mod = importer.load_module(world_source.path.split(".", 1)[0])
 
-        mod.__package__ = f"worlds.{mod.__package__}"
-        mod.__name__ = f"worlds.{mod.__name__}"
-        sys.modules[mod.__name__] = mod
-        with warnings.catch_warnings():
-            warnings.filterwarnings("ignore", message="__package__ != __spec__.parent")
-            # Found no equivalent for < 3.10
-            if hasattr(importer, "exec_module"):
-                importer.exec_module(mod)
-    else:
-        importlib.import_module(f".{world_source.path}", "worlds")
+            mod.__package__ = f"worlds.{mod.__package__}"
+            mod.__name__ = f"worlds.{mod.__name__}"
+            sys.modules[mod.__name__] = mod
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore", message="__package__ != __spec__.parent")
+                # Found no equivalent for < 3.10
+                if hasattr(importer, "exec_module"):
+                    importer.exec_module(mod)
+        else:
+            importlib.import_module(f".{world_source.path}", "worlds")
+    except Exception as e:
+        # A single world failing can still mean enough is working for the user, log and carry on
+        import traceback
+        import io
+        file_like = io.StringIO()
+        print(f"Could not load world {world_source}:", file=file_like)
+        traceback.print_exc(file=file_like)
+        file_like.seek(0)
+        import logging
+        logging.exception(file_like.read())
 
 lookup_any_item_id_to_name = {}
 lookup_any_location_id_to_name = {}
