@@ -64,6 +64,7 @@ Name: "generator/zl";     Description: "Zillion ROM Setup"; Types: full hosting;
 Name: "generator/pkmn_r"; Description: "Pokemon Red ROM Setup"; Types: full hosting
 Name: "generator/pkmn_b"; Description: "Pokemon Blue ROM Setup"; Types: full hosting
 Name: "generator/ladx";   Description: "Link's Awakening DX ROM Setup"; Types: full hosting
+Name: "generator/tloz";   Description: "The Legend of Zelda ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 135168; Flags: disablenouninstallwarning
 Name: "server";           Description: "Server"; Types: full hosting
 Name: "client";           Description: "Clients"; Types: full playing
 Name: "client/la";        Description: "Links Awakening DX Client"; Types: full playing
@@ -84,6 +85,7 @@ Name: "client/ladx";      Description: "Link's Awakening Client"; Types: full pl
 Name: "client/cf";        Description: "ChecksFinder"; Types: full playing
 Name: "client/sc2";       Description: "Starcraft 2"; Types: full playing
 Name: "client/zl";        Description: "Zillion"; Types: full playing
+Name: "client/tloz";      Description: "The Legend of Zelda"; Types: full playing
 Name: "client/text";      Description: "Text, to !command and chat"; Types: full playing
 
 [Dirs]
@@ -101,6 +103,7 @@ Source: "{code:GetZlROMPath}"; DestDir: "{app}"; DestName: "Zillion (UE) [!].sms
 Source: "{code:GetRedROMPath}"; DestDir: "{app}"; DestName: "Pokemon Red (UE) [S][!].gb"; Flags: external; Components: client/pkmn/red or generator/pkmn_r
 Source: "{code:GetBlueROMPath}"; DestDir: "{app}"; DestName: "Pokemon Blue (UE) [S][!].gb"; Flags: external; Components: client/pkmn/blue or generator/pkmn_b
 Source: "{code:GetLADXROMPath}"; DestDir: "{app}"; DestName: "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"; Flags: external; Components: client/ladx or generator/ladx
+Source: "{code:GetTLoZROMPath}"; DestDir: "{app}"; DestName: "Legend of Zelda, The (U) (PRG0) [!].nes"; Flags: external; Components: client/tloz or generator/tloz
 Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#source_path}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/sni
 Source: "{#source_path}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator/lttp
@@ -120,6 +123,7 @@ Source: "{#source_path}\ArchipelagoFF1Client.exe"; DestDir: "{app}"; Flags: igno
 Source: "{#source_path}\ArchipelagoPokemonClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/pkmn
 Source: "{#source_path}\ArchipelagoChecksFinderClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/cf
 Source: "{#source_path}\ArchipelagoStarcraft2Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sc2
+Source: "{#source_path}\ArchipelagoZelda1Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/tloz
 Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
 [Icons]
@@ -135,6 +139,7 @@ Name: "{group}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\Archipelag
 Name: "{group}\{#MyAppName} Pokemon Client"; Filename: "{app}\ArchipelagoPokemonClient.exe"; Components: client/pkmn
 Name: "{group}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoChecksFinderClient.exe"; Components: client/cf
 Name: "{group}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Components: client/sc2
+Name: "{group}\{#MyAppName} The Legend of Zelda Client"; Filename: "{app}\ArchipelagoZelda1Client.exe"; Components: client/tloz
 
 Name: "{commondesktop}\{#MyAppName} Folder"; Filename: "{app}"; Tasks: desktopicon
 Name: "{commondesktop}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; Components: server
@@ -147,6 +152,7 @@ Name: "{commondesktop}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\Ar
 Name: "{commondesktop}\{#MyAppName} Pokemon Client"; Filename: "{app}\ArchipelagoPokemonClient.exe"; Tasks: desktopicon; Components: client/pkmn
 Name: "{commondesktop}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoChecksFinderClient.exe"; Tasks: desktopicon; Components: client/cf
 Name: "{commondesktop}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Tasks: desktopicon; Components: client/sc2
+Name: "{commondesktop}\{#MyAppName} The Legend of Zelda Client"; Filename: "{app}\ArchipelagoZelda1Client.exe"; Tasks: desktopicon; Components: client/tloz
 
 [Run]
 
@@ -229,6 +235,11 @@ Root: HKCR; Subkey: "{#MyAppName}ladxpatch";                     ValueData: "Arc
 Root: HKCR; Subkey: "{#MyAppName}ladxpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoLinksAwakeningClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/ladx
 Root: HKCR; Subkey: "{#MyAppName}ladxpatch\shell\open\command";  ValueData: """{app}\ArchipelagoLinksAwakeningClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/ladx
 
+Root: HKCR; Subkey: ".aptloz";                                    ValueData: "{#MyAppName}tlozpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/tloz
+Root: HKCR; Subkey: "{#MyAppName}tlozpatch";                     ValueData: "Archipelago The Legend of Zelda Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/tloz
+Root: HKCR; Subkey: "{#MyAppName}tlozpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoZelda1Client.exe,0";                           ValueType: string;  ValueName: ""; Components: client/tloz
+Root: HKCR; Subkey: "{#MyAppName}tlozpatch\shell\open\command";  ValueData: """{app}\ArchipelagoZelda1Client.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/tloz
+
 Root: HKCR; Subkey: ".archipelago";                              ValueData: "{#MyAppName}multidata";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: server
 Root: HKCR; Subkey: "{#MyAppName}multidata";                     ValueData: "Archipelago Server Data";       Flags: uninsdeletekey;  ValueType: string;  ValueName: ""; Components: server
 Root: HKCR; Subkey: "{#MyAppName}multidata\DefaultIcon";         ValueData: "{app}\ArchipelagoServer.exe,0";                         ValueType: string;  ValueName: ""; Components: server
@@ -299,6 +310,9 @@ var BlueROMFilePage:  TInputFileWizardPage;
 var ladxrom: string;
 var LADXROMFilePage:  TInputFileWizardPage;
 
+var tlozrom: string;
+var TLoZROMFilePage:  TInputFileWizardPage;
+
 function GetSNESMD5OfFile(const rom: string): string;
 var data: AnsiString;
 begin
@@ -341,6 +355,25 @@ begin
 end;
 
 function CheckSMSRom(name: string; hash: string): string;
+var rom: string;
+begin
+  log('Handling ' + name)
+  rom := FileSearch(name, WizardDirValue());
+  if Length(rom) > 0 then
+    begin
+      log('existing ROM found');
+      log(IntToStr(CompareStr(GetSMSMD5OfFile(rom), hash)));
+      if CompareStr(GetSMSMD5OfFile(rom), hash) = 0 then
+        begin
+        log('existing ROM verified');
+        Result := rom;
+        exit;
+        end;
+      log('existing ROM failed verification');
+    end;
+end;
+
+function CheckNESRom(name: string; hash: string): string;
 var rom: string;
 begin
   log('Handling ' + name)
@@ -405,6 +438,21 @@ begin
     '.sms');
 end;
 
+function AddNESRomPage(name: string): TInputFileWizardPage;
+begin
+  Result :=
+    CreateInputFilePage(
+      wpSelectComponents,
+      'Select ROM File',
+      'Where is your ' + name + ' located?',
+      'Select the file, then click Next.');
+
+  Result.Add(
+    'Location of ROM file:',
+    'NES ROM files|*.nes|All files|*.*',
+    '.nes');
+end;
+
 procedure AddOoTRomPage();
 begin
   ootrom := FileSearch('The Legend of Zelda - Ocarina of Time.z64', WizardDirValue());
@@ -459,6 +507,8 @@ begin
     Result := not (BlueROMFilePage.Values[0] = '')
   else if (assigned(LADXROMFilePage)) and (CurPageID = LADXROMFilePage.ID) then
     Result := not (LADXROMFilePage.Values[0] = '')
+  else if (assigned(TLoZROMFilePage)) and (CurPageID = TLoZROMFilePage.ID) then
+    Result := not (TLoZROMFilePage.Values[0] = '')
   else
     Result := True;
 end;
@@ -622,6 +672,22 @@ begin
   else
     Result := '';
  end;
+ 
+function GetTLoZROMPath(Param: string): string;
+begin
+  if Length(tlozrom) > 0 then
+    Result := tlozrom
+  else if Assigned(TLoZROMFilePage) then
+    begin
+      R := CompareStr(GetMD5OfFile(TLoZROMFilePage.Values[0]), '337bd6f1a1163df31bf2633665589ab0');
+      if R <> 0 then
+        MsgBox('The Legend of Zelda ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := TLoZROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+end;
 
 function GetLADXROMPath(Param: string): string;
 begin
@@ -682,6 +748,10 @@ begin
   l2acrom := CheckRom('Lufia II - Rise of the Sinistrals (USA).sfc', '6efc477d6203ed2b3b9133c1cd9e9c5d');
   if Length(l2acrom) = 0 then
     L2ACROMFilePage:= AddRomPage('Lufia II - Rise of the Sinistrals (USA).sfc');
+    
+  tlozrom := CheckNESROM('Legend of Zelda, The (U) (PRG0) [!].nes', '337bd6f1a1163df31bf2633665589ab0');
+  if Length(tlozrom) = 0 then
+    TLoZROMFilePage:= AddNESRomPage('Legend of Zelda, The (U) (PRG0) [!].nes');
 end;
 
 
@@ -710,4 +780,6 @@ begin
     Result := not (WizardIsComponentSelected('generator/pkmn_b') or WizardIsComponentSelected('client/pkmn/blue'));
   if (assigned(LADXROMFilePage)) and (PageID = LADXROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/ladx') or WizardIsComponentSelected('client/ladx'));
+  if (assigned(TLoZROMFilePage)) and (PageID = TLoZROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('generator/tloz') or WizardIsComponentSelected('client/tloz'));
 end;
