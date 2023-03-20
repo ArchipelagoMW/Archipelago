@@ -79,13 +79,13 @@ class HardLogicTest(MessengerTestBase):
 
 class ChallengingLogicTest(MessengerTestBase):
     options = {
-        "logic_level": "hard"
+        "logic_level": "challenging"
     }
 
 
 class NoLogicTest(MessengerTestBase):
     options = {
-        "logic_level": "none"
+        "logic_level": "oob"
     }
 
     def testAccess(self) -> None:
