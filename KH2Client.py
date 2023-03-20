@@ -293,7 +293,6 @@ class KH2Context(CommonContext):
             start_index = args["index"]
             if start_index != len(self.items_received):
                 for item in args['items']:
-                    itemname = self.lookup_id_to_item[item.item]
                     # starting invo from server
                     if item.location in {-2}:
                         if not self.kh2seedsave["starting_inventory"]:
@@ -365,7 +364,6 @@ class KH2Context(CommonContext):
                 logger.info("Connection Lost.")
                 self.kh2connected = False
             logger.info(e)
-            # checks for items that has checks on their item slot
 
     async def checkSlots(self):
         try:
