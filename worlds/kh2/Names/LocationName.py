@@ -25,7 +25,6 @@ ThroneRoomQueenRecipe                        =  "(LoD2) Throne Room Queen Recipe
 ThroneRoomAPBoost2                           =  "(LoD2) Throne Room AP Boost 2"
 ThroneRoomOgreShield                         =  "(LoD2) Throne Room Ogre Shield"
 ThroneRoomMythrilCrystal                     =  "(LoD2) Throne Room Mythril Crystal"
-ThroneRoomMythrilCrystal                     =  "(LoD2) Throne Room Mythril Crystal"
 ThroneRoomOrichalcum                         =  "(LoD2) Throne Room Orichalcum"
 StormRider                                   =  "(LoD2) Storm Rider Bonus: Sora Slot 1"
 XigbarDataDefenseBoost                       =  "Data Xigbar"

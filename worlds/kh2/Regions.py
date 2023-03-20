@@ -2,7 +2,7 @@ import typing
 
 from BaseClasses import MultiWorld, Region, Entrance
 
-from .Locations import KH2Location,RegionTable
+from .Locations import KH2Location, RegionTable
 from .Names import LocationName, ItemName, RegionName
 
 
@@ -967,7 +967,7 @@ def create_regions(world, player: int, active_locations):
     levelVL24 = []
     levelVL26 = []
     # level 50
-    if world.LevelDepth[player] == 0:
+    if world.LevelDepth[player] == "level_50":
         levelVL1 = [LocationName.Lvl2, LocationName.Lvl4, LocationName.Lvl7, LocationName.Lvl9, LocationName.Lvl10]
         levelVL3 = [LocationName.Lvl12, LocationName.Lvl14, LocationName.Lvl15, LocationName.Lvl17,
                     LocationName.Lvl20, ]
@@ -976,7 +976,7 @@ def create_regions(world, player: int, active_locations):
         levelVL12 = [LocationName.Lvl44, LocationName.Lvl46, LocationName.Lvl48]
         levelVL15 = [LocationName.Lvl50]
     # level 99
-    elif world.LevelDepth[player] == 1:
+    elif world.LevelDepth[player] == "level_99":
         levelVL1 = [LocationName.Lvl7, LocationName.Lvl9, ]
         levelVL3 = [LocationName.Lvl12, LocationName.Lvl15, LocationName.Lvl17, LocationName.Lvl20]
         levelVL6 = [LocationName.Lvl23, LocationName.Lvl25, LocationName.Lvl28]
@@ -988,7 +988,8 @@ def create_regions(world, player: int, active_locations):
         levelVL24 = [LocationName.Lvl85]
         levelVL26 = [LocationName.Lvl99]
     # level sanity
-    elif world.LevelDepth[player] in {2, 3}:
+    # has to be [] instead of {} for in
+    elif world.LevelDepth[player] in ["level_50_sanity", "level_99_sanity"]:
         levelVL1 = [LocationName.Lvl2, LocationName.Lvl3, LocationName.Lvl4, LocationName.Lvl5, LocationName.Lvl6,
                     LocationName.Lvl7, LocationName.Lvl8, LocationName.Lvl9, LocationName.Lvl10]
         levelVL3 = [LocationName.Lvl11, LocationName.Lvl12, LocationName.Lvl13, LocationName.Lvl14, LocationName.Lvl15,
@@ -1000,7 +1001,7 @@ def create_regions(world, player: int, active_locations):
         levelVL12 = [LocationName.Lvl41, LocationName.Lvl42, LocationName.Lvl43, LocationName.Lvl44, LocationName.Lvl45,
                      LocationName.Lvl46, LocationName.Lvl47, LocationName.Lvl48, LocationName.Lvl49, LocationName.Lvl50]
         # level 99 sanity
-        if world.LevelDepth[player] == 3:
+        if world.LevelDepth[player] == "level_99_sanity":
             levelVL15 = [LocationName.Lvl51, LocationName.Lvl52, LocationName.Lvl53, LocationName.Lvl54,
                          LocationName.Lvl55, LocationName.Lvl56, LocationName.Lvl57, LocationName.Lvl58,
                          LocationName.Lvl59, LocationName.Lvl60]
@@ -1061,7 +1062,6 @@ def connect_regions(world: MultiWorld, player: int):
     connect(world, player, names, RegionName.Oc2_Region, RegionName.Zexion_Region,
             lambda state: state.kh_datazexion(player))
 
-
     connect(world, player, names, RegionName.Oc2_Region, RegionName.Oc2_pain_and_panic_Region,
             lambda state: state.kh_painandpanic(player))
     connect(world, player, names, RegionName.Oc2_Region, RegionName.Oc2_cerberus_Region,
@@ -1070,7 +1070,6 @@ def connect_regions(world: MultiWorld, player: int):
             lambda state: state.kh_titan(player))
     connect(world, player, names, RegionName.Oc2_Region, RegionName.Oc2_gof_Region,
             lambda state: state.kh_gof(player))
-
 
     connect(world, player, names, RegionName.GoA_Region, RegionName.Ag_Region,
             lambda state: state.kh_ag_unlocked(player, 1))
@@ -1141,7 +1140,7 @@ def connect_regions(world: MultiWorld, player: int):
             lambda state: state.kh_pl_unlocked(player, 1))
     connect(world, player, names, RegionName.Pl_Region, RegionName.Pl2_Region,
             lambda state: state.kh_pl_unlocked(player, 2) and (
-                        state.has(ItemName.BerserkCharge, player) or state.kh_reflect(player)))
+                    state.has(ItemName.BerserkCharge, player) or state.kh_reflect(player)))
 
     connect(world, player, names, RegionName.GoA_Region, RegionName.STT_Region,
             lambda state: state.kh_stt_unlocked(player, 1))
@@ -1159,7 +1158,7 @@ def connect_regions(world: MultiWorld, player: int):
             lambda state: state.kh_roxastools(player))
     connect(world, player, names, RegionName.Twtnw_PostRoxas, RegionName.Twtnw_PostXigbar,
             lambda state: state.kh_basetools(player) and (state.kh_donaldlimit(player) or (
-                        state.has(ItemName.FinalForm, player) and state.has(ItemName.FireElement, player))))
+                    state.has(ItemName.FinalForm, player) and state.has(ItemName.FireElement, player))))
     connect(world, player, names, RegionName.Twtnw_PostRoxas, RegionName.Twtnw2_Region,
             lambda state: state.kh_twtnw_unlocked(player, 1))
 

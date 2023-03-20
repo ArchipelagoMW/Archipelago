@@ -56,18 +56,18 @@ def set_rules(world: MultiWorld, player: int):
             location = world.get_location(formLogicTable[form][i], player)
             set_rule(location, lambda state, i=i + 1, form=form: state.kh_amount_of_forms(player, i, form))
 
-    if world.Goal[player].value == 0:
+    if world.Goal[player] == "three_proofs":
         add_rule(world.get_location(LocationName.FinalXemnas, player),
                  lambda state: state.kh_three_proof_unlocked(player))
-        if world.FinalXemnas[player].value == 1:
+        if world.FinalXemnas[player]:
             world.completion_condition[player] = lambda state: state.kh_victory(player)
         else:
             world.completion_condition[player] = lambda state: state.kh_three_proof_unlocked(player)
     # lucky emblem hunt
-    elif world.Goal[player].value == 1:
+    elif world.Goal[player] == "lucky_emblem_hunt":
         add_rule(world.get_location(LocationName.FinalXemnas, player),
                  lambda state: state.kh_lucky_emblem_unlocked(player, world.LuckyEmblemsRequired[player].value))
-        if world.FinalXemnas[player].value == 1:
+        if world.FinalXemnas[player]:
             world.completion_condition[player] = lambda state: state.kh_victory(player)
         else:
             world.completion_condition[player] = lambda state: state.kh_lucky_emblem_unlocked(player, world.LuckyEmblemsRequired[player].value)
@@ -75,7 +75,7 @@ def set_rules(world: MultiWorld, player: int):
     else:
         add_rule(world.get_location(LocationName.FinalXemnas, player),
                  lambda state: state.kh_hitlist(player, world.BountyRequired[player].value))
-        if world.FinalXemnas[player].value == 1:
+        if world.FinalXemnas[player]:
             world.completion_condition[player] = lambda state: state.kh_victory(player)
         else:
             world.completion_condition[player] = lambda state: state.kh_hitlist(player, world.BountyRequired[player].value)

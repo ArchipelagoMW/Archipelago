@@ -207,8 +207,8 @@ Armor_Table = {
     ItemName.GrandRibbon:      ItemData(0x13009F, 1, 157, 0x35D4),
 }
 Usefull_Table = {
-    ItemName.MickyMunnyPouch:  ItemData(0x1300A0, 1, 535, 0x3695),
-    ItemName.OletteMunnyPouch: ItemData(0x1300A1, 1, 362, 0x363C),
+    ItemName.MickyMunnyPouch:  ItemData(0x1300A0, 3, 535, 0x3695),  # 5000 munny per
+    ItemName.OletteMunnyPouch: ItemData(0x1300A1, 6, 362, 0x363C),  # 2500 munny per
     ItemName.HadesCupTrophy:   ItemData(0x1300A2, 1, 537, 0x3696),
     ItemName.UnknownDisk:      ItemData(0x1300A3, 1, 462, 0x365F),
     ItemName.OlympusStone:     ItemData(0x1300A4, 1, 370, 0x3644),
@@ -286,78 +286,68 @@ ActionAbility_Table = {
     ItemName.TrinityLimit:     ItemData(0x1300E8, 1, 198, 0x0C6, 0, True),
 }
 Items_Table = {
-    ItemName.Potion:            ItemData(0x1300E9, 1, 1, 0x3580),
-    ItemName.HiPotion:          ItemData(0x1300EA, 1, 2, 0x3581),
-    ItemName.Ether:             ItemData(0x1300EB, 1, 3, 0x3582),
-    ItemName.Elixir:            ItemData(0x1300EC, 1, 4, 0x3583),
-    ItemName.MegaPotion:        ItemData(0x1300ED, 1, 5, 0x3584),
-    ItemName.MegaEther:         ItemData(0x1300EE, 1, 6, 0x3585),
-    ItemName.Megalixir:         ItemData(0x1300EF, 1, 7, 0x3586),
-    ItemName.Tent:              ItemData(0x1300F0, 1, 131, 0x35E1),
-    ItemName.DriveRecovery:     ItemData(0x1300F1, 1, 274, 0x3664),
-    ItemName.HighDriveRecovery: ItemData(0x1300F2, 1, 275, 0x3665),
-    ItemName.PowerBoost:        ItemData(0x1300F3, 1, 276, 0x3666),
-    ItemName.MagicBoost:        ItemData(0x1300F4, 1, 277, 0x3667),
-    ItemName.DefenseBoost:      ItemData(0x1300F5, 1, 278, 0x3668),
-    ItemName.APBoost:           ItemData(0x1300F6, 1, 279, 0x3669),
+    ItemName.PowerBoost:   ItemData(0x1300E9, 1, 276, 0x3666),
+    ItemName.MagicBoost:   ItemData(0x1300EA, 1, 277, 0x3667),
+    ItemName.DefenseBoost: ItemData(0x1300EB, 1, 278, 0x3668),
+    ItemName.APBoost:      ItemData(0x1300EC, 1, 279, 0x3669),
 }
 
 # These items cannot be in other games so these are done locally in kh2
 DonaldAbility_Table = {
-    ItemName.DonaldFire:          ItemData(0x1300F7, 1, 165, 0x0A5, 0, True),
-    ItemName.DonaldBlizzard:      ItemData(0x1300F8, 1, 166, 0x0A6, 0, True),
-    ItemName.DonaldThunder:       ItemData(0x1300F9, 1, 167, 0x0A7, 0, True),
-    ItemName.DonaldCure:          ItemData(0x1300FA, 1, 168, 0x0A8, 0, True),
-    ItemName.Fantasia:            ItemData(0x1300FB, 1, 199, 0x0C7, 0, True),
-    ItemName.FlareForce:          ItemData(0x1300FC, 1, 200, 0x0C8, 0, True),
-    ItemName.DonaldMPRage:        ItemData(0x1300FD, 3, 412, 0x19C, 0, True),
-    ItemName.DonaldJackpot:       ItemData(0x1300FE, 1, 406, 0x196, 0, True),
-    ItemName.DonaldLuckyLucky:    ItemData(0x1300FF, 3, 407, 0x197, 0, True),
-    ItemName.DonaldFireBoost:     ItemData(0x130100, 2, 408, 0x198, 0, True),
-    ItemName.DonaldBlizzardBoost: ItemData(0x130101, 2, 409, 0x199, 0, True),
-    ItemName.DonaldThunderBoost:  ItemData(0x130102, 2, 410, 0x19A, 0, True),
-    ItemName.DonaldMPHaste:       ItemData(0x130103, 1, 413, 0x19D, 0, True),
-    ItemName.DonaldMPHastera:     ItemData(0x130104, 2, 421, 0x1A5, 0, True),
-    ItemName.DonaldMPHastega:     ItemData(0x130105, 2, 422, 0x1A6, 0, True),
-    ItemName.DonaldAutoLimit:     ItemData(0x130106, 1, 417, 0x1A1, 0, True),
-    ItemName.DonaldHyperHealing:  ItemData(0x130107, 2, 419, 0x1A3, 0, True),
-    ItemName.DonaldAutoHealing:   ItemData(0x130108, 1, 420, 0x1A4, 0, True),
-    ItemName.DonaldItemBoost:     ItemData(0x130109, 1, 411, 0x19B, 0, True),
-    ItemName.DonaldDamageControl: ItemData(0x13010A, 2, 542, 0x21E, 0, True),
-    ItemName.DonaldDraw:          ItemData(0x13010B, 1, 405, 0x195, 0, True),
+    ItemName.DonaldFire:          ItemData(0x1300ED, 1, 165, 0xA5, 0, True),
+    ItemName.DonaldBlizzard:      ItemData(0x1300EE, 1, 166, 0xA6, 0, True),
+    ItemName.DonaldThunder:       ItemData(0x1300EF, 1, 167, 0xA7, 0, True),
+    ItemName.DonaldCure:          ItemData(0x1300F0, 1, 168, 0xA8, 0, True),
+    ItemName.Fantasia:            ItemData(0x1300F1, 1, 199, 0xC7, 0, True),
+    ItemName.FlareForce:          ItemData(0x1300F2, 1, 200, 0xC8, 0, True),
+    ItemName.DonaldMPRage:        ItemData(0x1300F3, 3, 412, 0x19C, 0, True),
+    ItemName.DonaldJackpot:       ItemData(0x1300F4, 1, 406, 0x196, 0, True),
+    ItemName.DonaldLuckyLucky:    ItemData(0x1300F5, 3, 407, 0x197, 0, True),
+    ItemName.DonaldFireBoost:     ItemData(0x1300F6, 2, 408, 0x198, 0, True),
+    ItemName.DonaldBlizzardBoost: ItemData(0x1300F7, 2, 409, 0x199, 0, True),
+    ItemName.DonaldThunderBoost:  ItemData(0x1300F8, 2, 410, 0x19A, 0, True),
+    ItemName.DonaldMPHaste:       ItemData(0x1300F9, 1, 413, 0x19D, 0, True),
+    ItemName.DonaldMPHastera:     ItemData(0x1300FA, 2, 421, 0x1A5, 0, True),
+    ItemName.DonaldMPHastega:     ItemData(0x1300FB, 2, 422, 0x1A6, 0, True),
+    ItemName.DonaldAutoLimit:     ItemData(0x1300FC, 1, 417, 0x1A1, 0, True),
+    ItemName.DonaldHyperHealing:  ItemData(0x1300FD, 2, 419, 0x1A3, 0, True),
+    ItemName.DonaldAutoHealing:   ItemData(0x1300FE, 1, 420, 0x1A4, 0, True),
+    ItemName.DonaldItemBoost:     ItemData(0x1300FF, 1, 411, 0x19B, 0, True),
+    ItemName.DonaldDamageControl: ItemData(0x130100, 2, 542, 0x21E, 0, True),
+    ItemName.DonaldDraw:          ItemData(0x130101, 1, 405, 0x195, 0, True),
 }
 GoofyAbility_Table = {
-    ItemName.GoofyTornado:       ItemData(0x13010C, 1, 423, 0x1A7, 0, True),
-    ItemName.GoofyTurbo:         ItemData(0x13010D, 1, 425, 0x1A9, 0, True),
-    ItemName.GoofyBash:          ItemData(0x13010E, 1, 429, 0x1AD, 0, True),
-    ItemName.TornadoFusion:      ItemData(0x13010F, 1, 201, 0x0C9, 0, True),
-    ItemName.Teamwork:           ItemData(0x130110, 1, 202, 0x0CA, 0, True),
-    ItemName.GoofyDraw:          ItemData(0x130111, 1, 405, 0x195, 0, True),
-    ItemName.GoofyJackpot:       ItemData(0x130112, 1, 406, 0x196, 0, True),
-    ItemName.GoofyLuckyLucky:    ItemData(0x130113, 1, 407, 0x197, 0, True),
-    ItemName.GoofyItemBoost:     ItemData(0x130114, 2, 411, 0x19B, 0, True),
-    ItemName.GoofyMPRage:        ItemData(0x130115, 2, 412, 0x19C, 0, True),
-    ItemName.GoofyDefender:      ItemData(0x130116, 2, 414, 0x19E, 0, True),
-    ItemName.GoofyDamageControl: ItemData(0x130117, 3, 542, 0x21E, 0, True),
-    ItemName.GoofyAutoLimit:     ItemData(0x130118, 1, 417, 0x1A1, 0, True),
-    ItemName.GoofySecondChance:  ItemData(0x130119, 1, 415, 0x19F, 0, True),
-    ItemName.GoofyOnceMore:      ItemData(0x13011A, 1, 416, 0x1A0, 0, True),
-    ItemName.GoofyAutoChange:    ItemData(0x13011B, 1, 418, 0x1A2, 0, True),
-    ItemName.GoofyHyperHealing:  ItemData(0x13011C, 2, 419, 0x1A3, 0, True),
-    ItemName.GoofyAutoHealing:   ItemData(0x13011D, 1, 420, 0x1A4, 0, True),
-    ItemName.GoofyMPHaste:       ItemData(0x13011E, 1, 413, 0x19D, 0, True),
-    ItemName.GoofyMPHastera:     ItemData(0x13011F, 1, 421, 0x1A5, 0, True),
-    ItemName.GoofyMPHastega:     ItemData(0x130120, 1, 422, 0x1A6, 0, True),
-    ItemName.GoofyProtect:       ItemData(0x130121, 2, 596, 0x254, 0, True),
-    ItemName.GoofyProtera:       ItemData(0x130122, 2, 597, 0x255, 0, True),
-    ItemName.GoofyProtega:       ItemData(0x130123, 2, 598, 0x256, 0, True),
+    ItemName.GoofyTornado:       ItemData(0x130102, 1, 423, 0x1A7, 0, True),
+    ItemName.GoofyTurbo:         ItemData(0x130103, 1, 425, 0x1A9, 0, True),
+    ItemName.GoofyBash:          ItemData(0x130104, 1, 429, 0x1AD, 0, True),
+    ItemName.TornadoFusion:      ItemData(0x130105, 1, 201, 0xC9, 0, True),
+    ItemName.Teamwork:           ItemData(0x130106, 1, 202, 0xCA, 0, True),
+    ItemName.GoofyDraw:          ItemData(0x130107, 1, 405, 0x195, 0, True),
+    ItemName.GoofyJackpot:       ItemData(0x130108, 1, 406, 0x196, 0, True),
+    ItemName.GoofyLuckyLucky:    ItemData(0x130109, 1, 407, 0x197, 0, True),
+    ItemName.GoofyItemBoost:     ItemData(0x13010A, 2, 411, 0x19B, 0, True),
+    ItemName.GoofyMPRage:        ItemData(0x13010B, 2, 412, 0x19C, 0, True),
+    ItemName.GoofyDefender:      ItemData(0x13010C, 2, 414, 0x19E, 0, True),
+    ItemName.GoofyDamageControl: ItemData(0x13010D, 3, 542, 0x21E, 0, True),
+    ItemName.GoofyAutoLimit:     ItemData(0x13010E, 1, 417, 0x1A1, 0, True),
+    ItemName.GoofySecondChance:  ItemData(0x13010F, 1, 415, 0x19F, 0, True),
+    ItemName.GoofyOnceMore:      ItemData(0x130110, 1, 416, 0x1A0, 0, True),
+    ItemName.GoofyAutoChange:    ItemData(0x130111, 1, 418, 0x1A2, 0, True),
+    ItemName.GoofyHyperHealing:  ItemData(0x130112, 2, 419, 0x1A3, 0, True),
+    ItemName.GoofyAutoHealing:   ItemData(0x130113, 1, 420, 0x1A4, 0, True),
+    ItemName.GoofyMPHaste:       ItemData(0x130114, 1, 413, 0x19D, 0, True),
+    ItemName.GoofyMPHastera:     ItemData(0x130115, 1, 421, 0x1A5, 0, True),
+    ItemName.GoofyMPHastega:     ItemData(0x130116, 1, 422, 0x1A6, 0, True),
+    ItemName.GoofyProtect:       ItemData(0x130117, 2, 596, 0x254, 0, True),
+    ItemName.GoofyProtera:       ItemData(0x130118, 2, 597, 0x255, 0, True),
+    ItemName.GoofyProtega:       ItemData(0x130119, 2, 598, 0x256, 0, True),
 
 }
 
 Misc_Table = {
-    ItemName.LuckyEmblem: ItemData(0x130124, 0, 367, 0x3641),  # letter item
-    ItemName.Victory:     ItemData(0x130125, 0, 263, 0x111),
-    ItemName.Bounty:      ItemData(0x130126, 0, 90, 0x36C1, 0),  # Castle Map
+    ItemName.LuckyEmblem: ItemData(0x13011A, 0, 367, 0x3641),  # letter item
+    ItemName.Victory:     ItemData(0x13011B, 0, 263, 0x111),
+    ItemName.Bounty:      ItemData(0x13011C, 0, 461, 0, 0),  # Dummy 14
     # ItemName.UniversalKey:ItemData(0x130129,0,365,0x363F,0)#Tournament Poster
 
 }
@@ -368,6 +358,9 @@ Misc_Table = {
 # Equipped abilities have an offset of 0x8000 so check for if whatever || whatever+0x8000
 CheckDupingItems = {
     "Items":          {
+        ItemName.ProofofConnection,
+        ItemName.ProofofNonexistence,
+        ItemName.ProofofPeace,
         ItemName.PromiseCharm,
         ItemName.NamineSketches,
         ItemName.CastleKey,
@@ -384,6 +377,44 @@ CheckDupingItems = {
         ItemName.IdentityDisk,
         ItemName.TornPages,
         ItemName.LuckyEmblem,
+        ItemName.MickyMunnyPouch,
+        ItemName.OletteMunnyPouch,
+        ItemName.HadesCupTrophy,
+        ItemName.UnknownDisk,
+        ItemName.OlympusStone,
+    },
+    "Magic":          {
+        ItemName.FireElement,
+        ItemName.BlizzardElement,
+        ItemName.ThunderElement,
+        ItemName.CureElement,
+        ItemName.MagnetElement,
+        ItemName.ReflectElement,
+    },
+    "Bitmask":        {
+        ItemName.ValorForm,
+        ItemName.WisdomForm,
+        ItemName.LimitForm,
+        ItemName.MasterForm,
+        ItemName.FinalForm,
+        ItemName.Genie,
+        ItemName.PeterPan,
+        ItemName.Stitch,
+        ItemName.ChickenLittle,
+        ItemName.SecretAnsemsReport1,
+        ItemName.SecretAnsemsReport2,
+        ItemName.SecretAnsemsReport3,
+        ItemName.SecretAnsemsReport4,
+        ItemName.SecretAnsemsReport5,
+        ItemName.SecretAnsemsReport6,
+        ItemName.SecretAnsemsReport7,
+        ItemName.SecretAnsemsReport8,
+        ItemName.SecretAnsemsReport9,
+        ItemName.SecretAnsemsReport10,
+        ItemName.SecretAnsemsReport11,
+        ItemName.SecretAnsemsReport12,
+        ItemName.SecretAnsemsReport13,
+
     },
     "Weapons":        {
         "Keyblades": {
@@ -580,6 +611,11 @@ CheckDupingItems = {
             ItemName.AutoFinal,
             ItemName.AutoSummon,
             ItemName.TrinityLimit,
+            ItemName.HighJump,
+            ItemName.QuickRun,
+            ItemName.DodgeRoll,
+            ItemName.AerialDodge,
+            ItemName.Glide,
         },
         "Donald": {
             ItemName.DonaldFire,
@@ -642,7 +678,7 @@ CheckDupingItems = {
 Progression_Dicts = {
     # Items that are classified as progression
     "Progression":     {
-        #Wincons
+        # Wincons
         ItemName.Victory,
         ItemName.LuckyEmblem,
         ItemName.Bounty,
@@ -976,12 +1012,9 @@ item_groups: typing.Dict[str, list] = {"Drive Form":      [item_name for item_na
                                        "Reflect":         [ItemName.ReflectElement],
                                        "Proof":           [ItemName.ProofofNonexistence, ItemName.ProofofPeace,
                                                            ItemName.ProofofConnection],
-                                       "Filler":          [ItemName.Potion, ItemName.HiPotion, ItemName.Ether,
-                                                           ItemName.Elixir,
-                                                           ItemName.Megalixir, ItemName.Tent, ItemName.DriveRecovery,
-                                                           ItemName.HighDriveRecovery,
-                                                           ItemName.PowerBoost, ItemName.MagicBoost,
-                                                           ItemName.DefenseBoost, ItemName.APBoost]
+                                       "Filler":          [
+                                           ItemName.PowerBoost, ItemName.MagicBoost,
+                                           ItemName.DefenseBoost, ItemName.APBoost]
                                        }
 
 # lookup_kh2id_to_name: typing.Dict[int, str] = {data.kh2id: item_name for item_name, data in

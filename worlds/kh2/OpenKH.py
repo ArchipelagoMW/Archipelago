@@ -3,10 +3,12 @@ import os
 import Utils
 import zipfile
 
-from .Items import item_dictionary_table, Progression_Table, CheckDupingItems
-from .Locations import all_locations, SoraLevels, exclusion_table
+from .Items import item_dictionary_table, CheckDupingItems
+from .Locations import all_locations, SoraLevels, exclusion_table, AllWeaponSlot
+from .Names import LocationName
 from .XPValues import lvlStats, formExp, soraExp
 from worlds.Files import APContainer
+
 
 
 class KH2Container(APContainer):
@@ -52,20 +54,12 @@ def patch_kh2(self, output_directory):
     self.strength = 2
     self.magic = 6
     self.defense = 2
-    self.ap = 50
+    self.ap = 0
     self.dblbonus = 0
     formexp = None
     formName = None
     levelsetting = list()
     slotDataDuping = set()
-    # for key in CheckDupingItems.keys():
-    #    if type(CheckDupingItems[key]) == set:
-    #        for item in CheckDupingItems[key]:
-    #            slotDataDuping.add(item)
-    #    else:
-    #        for key2 in CheckDupingItems[key].keys():
-    #            for item in CheckDupingItems[key][key2]:
-    #                slotDataDuping.add(item)
     for values in CheckDupingItems.values():
         if isinstance(values, set):
             slotDataDuping |= values
@@ -82,16 +76,16 @@ def patch_kh2(self, output_directory):
         keyblademin = self.multiworld.Keyblade_Minimum[self.player].value
         keyblademax = self.multiworld.Keyblade_Maximum[self.player].value
 
-    if self.multiworld.LevelDepth[self.player] == 0:
+    if self.multiworld.LevelDepth[self.player] == "level_50":
         levelsetting.extend(exclusion_table["Level50"])
 
-    elif self.multiworld.LevelDepth[self.player] == 1:
+    elif self.multiworld.LevelDepth[self.player] == "level_99":
         levelsetting.extend(exclusion_table["Level99"])
 
-    else:
+    elif self.multiworld.LevelDepth[self.player] in ["level_50_sanity", "level_99_sanity"]:
         levelsetting.extend(exclusion_table["Level50Sanity"])
 
-        if self.multiworld.LevelDepth[self.player] == 3:
+        if self.multiworld.LevelDepth[self.player] == "level_99_sanity":
             levelsetting.extend(exclusion_table["Level99Sanity"])
 
     mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
@@ -102,10 +96,10 @@ def patch_kh2(self, output_directory):
         if location.item.player == self.player:
             itemcode = item_dictionary_table[location.item.name].kh2id
             if location.item.name in slotDataDuping and \
-                    location.name not in exclusion_table["WeaponSlots"].keys():
-                self.progressionLocations.update({location.address: item_dictionary_table[location.item.name].code})
+                    location.name not in AllWeaponSlot:
+                self.LocalItems[location.address]= item_dictionary_table[location.item.name].code
         else:
-            itemcode = 461
+            itemcode = 90 #castle map
 
         if data.yml == "Chest":
             self.formattedTrsr[data.locid] = {"ItemId": itemcode}
@@ -184,7 +178,8 @@ def patch_kh2(self, output_directory):
             })
 
         elif data.yml == "Critical" and location.item.player == self.player:
-            self.multiworld.push_precollected(self.create_item(location.item.name))
+            #self.multiworld.push_precollected(self.create_item(location.item.name))
+            pass
 
     # Summons have no checks on them so done fully locally
     self.formattedFmlv["Summon"] = []
@@ -250,6 +245,7 @@ def patch_kh2(self, output_directory):
         "ItemList.yml": yaml.dump(self.formattedItem, line_break="\n"),
         "FmlvList.yml": yaml.dump(self.formattedFmlv, line_break="\n"),
     }
+
     mod = KH2Container(openkhmod, mod_dir, output_directory, self.player,
                        self.multiworld.get_file_safe_player_name(self.player))
     mod.write()

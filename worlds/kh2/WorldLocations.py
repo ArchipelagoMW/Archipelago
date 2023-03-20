@@ -587,7 +587,6 @@ TWTNW_Checks = {
     LocationName.Xemnas1:                               WorldLocationData(0x3707, 2),
     LocationName.Xemnas1GetBonus:                       WorldLocationData(0x3707, 2),
     LocationName.Xemnas1SecretAnsemReport13:            WorldLocationData(0x1ED4, 5),
-    # this is probably not the right room value for final xemnas
     LocationName.FinalXemnas:                           WorldLocationData(0x1ED8, 1),
     LocationName.XemnasDataPowerBoost:                  WorldLocationData(0x1EDA, 2),
     LocationName.XigbarDataDefenseBoost:                WorldLocationData(0x1ED9, 7),
@@ -807,7 +806,15 @@ formSlots = {
     LocationName.DetectionSaberSlot: WorldLocationData(0x36C0, 6),
     LocationName.EdgeofUltimaSlot:   WorldLocationData(0x36C0, 4),
 }
-all_world_locations={
+
+tornPageLocks = {
+    "TornPage1": WorldLocationData(0x1DB7, 4),  # --Scenario_1_start
+    "TornPage2": WorldLocationData(0x1DB7, 7),  # --Scenario_2_start
+    "TornPage3": WorldLocationData(0x1DB8, 2),  # --Scenario_3_start
+    "TornPage4": WorldLocationData(0x1DB8, 4),  # --Scenario_4_start
+    "TornPage5": WorldLocationData(0x1DB8, 7),  # --Scenario_5_start
+}
+all_world_locations = {
     **TWTNW_Checks,
     **TT_Checks,
     **TT_Checks,
@@ -819,7 +826,6 @@ all_world_locations={
     **HundredAcreChecks,
     **PL_Checks,
     **DC_Checks,
-    **DC_Checks,
     **TR_Checks,
     **HT_Checks,
     **HB_Checks,
@@ -827,4 +833,13 @@ all_world_locations={
     **SP_Checks,
     **TWTNW_Checks,
     **HB_Checks,
+}
+
+levels_locations = {
+    **SoraLevels,
+    **ValorLevels,
+    **WisdomLevels,
+    **LimitLevels,
+    **MasterLevels,
+    **FinalLevels,
 }
