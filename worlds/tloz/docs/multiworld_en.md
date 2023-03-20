@@ -7,6 +7,11 @@
 - The BizHawk emulator. Versions 2.3.1 and higher are supported. Version 2.7 is recommended
     - [BizHawk Official Website](http://tasvideos.org/BizHawk.html)
 
+## Optional Software
+
+- [Map Tracker](https://github.com/Br00ty/tloz_brooty/releases/latest)
+    - Used alongside [Poptracker](https://github.com/black-sliver/PopTracker) to keep track of what items/checks you've gotten. Uses auto-tracking by connecting to the Archipelago server. 
+
 ## Installation Procedures
 
 1. Download and install the latest version of Archipelago.
