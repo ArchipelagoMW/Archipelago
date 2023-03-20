@@ -47,9 +47,7 @@ def jewel_id(passage, quadrant):
     return item_id(passage << 2 | quadrant)
 
 def cd_id(track_no):
-    level_id = track_no & 0xC
-    passage_id = track_no - level_id
-    return item_id(1 << 6 | passage_id + 1 << 2 | level_id)
+    return item_id(1 << 6 | track_no + (1 << 2))
 
 def keyzer_id(level):
     return 1 << 4 | cd_id(level)
@@ -57,50 +55,50 @@ def keyzer_id(level):
 box_table = {
     # Entry Passage
     ItemName.entry_passage_jewel.ne: ItemData(jewel_id(0, 0), True),
-    ItemName.entry_passage_jewel.nw: ItemData(jewel_id(0, 1), True),
+    ItemName.entry_passage_jewel.se: ItemData(jewel_id(0, 1), True),
     ItemName.entry_passage_jewel.sw: ItemData(jewel_id(0, 2), True),
-    ItemName.entry_passage_jewel.se: ItemData(jewel_id(0, 3), True),
+    ItemName.entry_passage_jewel.nw: ItemData(jewel_id(0, 3), True),
     # Emerald Passage
     ItemName.emerald_passage_jewel.ne: ItemData(jewel_id(1, 0), True, 4),
-    ItemName.emerald_passage_jewel.nw: ItemData(jewel_id(1, 1), True, 4),
+    ItemName.emerald_passage_jewel.se: ItemData(jewel_id(1, 1), True, 4),
     ItemName.emerald_passage_jewel.sw: ItemData(jewel_id(1, 2), True, 4),
-    ItemName.emerald_passage_jewel.se: ItemData(jewel_id(1, 3), True, 4),
+    ItemName.emerald_passage_jewel.nw: ItemData(jewel_id(1, 3), True, 4),
     ItemName.palm_tree_paradise.cd:    ItemData(cd_id(0), False),
     ItemName.wildflower_fields.cd:     ItemData(cd_id(1), False),
     ItemName.mystic_lake.cd:           ItemData(cd_id(2), False),
     ItemName.monsoon_jungle.cd:        ItemData(cd_id(3), False),
     # Ruby Passage
     ItemName.ruby_passage_jewel.ne: ItemData(jewel_id(2, 0), True, 4),
-    ItemName.ruby_passage_jewel.nw: ItemData(jewel_id(2, 1), True, 4),
+    ItemName.ruby_passage_jewel.se: ItemData(jewel_id(2, 1), True, 4),
     ItemName.ruby_passage_jewel.sw: ItemData(jewel_id(2, 2), True, 4),
-    ItemName.ruby_passage_jewel.se: ItemData(jewel_id(2, 3), True, 4),
+    ItemName.ruby_passage_jewel.nw: ItemData(jewel_id(2, 3), True, 4),
     ItemName.curious_factory.cd:    ItemData(cd_id(4), False),
     ItemName.toxic_landfill.cd:     ItemData(cd_id(5), False),
     ItemName.forty_below_fridge.cd: ItemData(cd_id(6), False),
     ItemName.pinball_zone.cd:       ItemData(cd_id(7), False),
     # Topaz Passage
     ItemName.topaz_passage_jewel.ne: ItemData(jewel_id(3, 0), True, 4),
-    ItemName.topaz_passage_jewel.nw: ItemData(jewel_id(3, 1), True, 4),
+    ItemName.topaz_passage_jewel.se: ItemData(jewel_id(3, 1), True, 4),
     ItemName.topaz_passage_jewel.sw: ItemData(jewel_id(3, 2), True, 4),
-    ItemName.topaz_passage_jewel.se: ItemData(jewel_id(3, 3), True, 4),
+    ItemName.topaz_passage_jewel.nw: ItemData(jewel_id(3, 3), True, 4),
     ItemName.toy_block_tower.cd:     ItemData(cd_id(8), False),
     ItemName.big_board.cd:           ItemData(cd_id(9), False),
     ItemName.doodle_woods.cd:        ItemData(cd_id(10), False),
     ItemName.domino_row.cd:          ItemData(cd_id(11), False),
     # Sapphire Passage
     ItemName.sapphire_passage_jewel.ne: ItemData(jewel_id(4, 0), True, 4),
-    ItemName.sapphire_passage_jewel.nw: ItemData(jewel_id(4, 1), True, 4),
+    ItemName.sapphire_passage_jewel.se: ItemData(jewel_id(4, 1), True, 4),
     ItemName.sapphire_passage_jewel.sw: ItemData(jewel_id(4, 2), True, 4),
-    ItemName.sapphire_passage_jewel.se: ItemData(jewel_id(4, 3), True, 4),
+    ItemName.sapphire_passage_jewel.nw: ItemData(jewel_id(4, 3), True, 4),
     ItemName.crescent_moon_village.cd:  ItemData(cd_id(12), False),
     ItemName.arabian_night.cd:          ItemData(cd_id(13), False),
     ItemName.fiery_cavern.cd:           ItemData(cd_id(14), False),
     ItemName.hotel_horror.cd:           ItemData(cd_id(15), False),
     # Golden Pyramid
     ItemName.golden_pyramid_jewel.ne: ItemData(jewel_id(5, 0), True),
-    ItemName.golden_pyramid_jewel.nw: ItemData(jewel_id(5, 1), True),
+    ItemName.golden_pyramid_jewel.se: ItemData(jewel_id(5, 1), True),
     ItemName.golden_pyramid_jewel.sw: ItemData(jewel_id(5, 2), True),
-    ItemName.golden_pyramid_jewel.se: ItemData(jewel_id(5, 3), True),
+    ItemName.golden_pyramid_jewel.nw: ItemData(jewel_id(5, 3), True),
     # Full Health Item
     ItemName.full_health: ItemData(item_id(0x80), False, 17),
 }

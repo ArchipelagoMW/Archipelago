@@ -166,8 +166,6 @@ SeisanSaveFullHealthItem:
     ldr r3, =LevelStatusTable
     ldrb r1, [r6]
     lsl r1, r1, #2
-    ldrb r1, [r6]
-    lsl r1, r1, #2
     ldrb r2, [r5]
     lsl r0, r2, #1
     add r0, r0, r2

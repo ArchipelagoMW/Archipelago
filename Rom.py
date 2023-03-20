@@ -128,8 +128,25 @@ def improve_qol(rom: LocalRom):
     rom.write_halfword(0x92268, 0x2001)  # movs r0, #1  ; ReadyObj_Win1Set(): Display option 
 
 
+def fill_items(rom: LocalRom, world: MultiWorld, player: int):
+    for location in world.get_locations(player):
+        
+        itemid = location.item.code if location.item is not None else ...
+        locationid = location.address
+        if itemid is None or locationid is None:
+            continue
+        locationid = locationid & 0xFF
+
+        if location.native_item:
+            itemid = itemid & 0xFF
+            offset = 0x78F97C + locationid
+            rom.write_byte(offset, itemid)
+        else:
+            pass
+
 def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     patch_save_data(rom)
+    fill_items(rom, world, player)
     skip_cutscenes(rom)
     improve_qol(rom)
 
