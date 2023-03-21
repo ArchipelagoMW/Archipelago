@@ -8,16 +8,20 @@ from . import Options
 DLCquestRegion =["Movement Pack", "Behind Tree", "Psychological Warfare", "Double Jump Left", "Double Jump Behind the Tree", "The Forest", "Final Room"]
 
 def add_coin_freemium(region : Region, Coin: int, player: int):
-    for i in range(Coin):
-        location =DLCquestLocation(player, "Coin_Freemium", None, region)
-        region.locations.append(location)
-        location.place_locked_item(create_event(player, "Coin_Freemium"))
+    name_coin = "number coins freemium"
+    number_coin = re.sub("number", str(Coin), name_coin)
+    location_coin = re.sub("number", region.name, name_coin)
+    location = DLCquestLocation(player, location_coin, None, region)
+    region.locations.append(location)
+    location.place_locked_item(create_event(player, number_coin))
 
 def add_coin_dlcquest(region : Region, Coin: int, player: int):
-    for i in range(Coin):
-        location =DLCquestLocation(player, "Coin", None, region)
-        region.locations.append(location)
-        location.place_locked_item(create_event(player, "Coin"))
+    name_coin = "number coins"
+    number_coin = re.sub("number", str(Coin), name_coin)
+    location_coin = re.sub("number", region.name, name_coin)
+    location =DLCquestLocation(player, location_coin, None, region)
+    region.locations.append(location)
+    location.place_locked_item(create_event(player, number_coin))
 def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQuestOptions):
 
     Regmenu = Region("Menu", player, world)
