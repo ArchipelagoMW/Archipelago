@@ -89,6 +89,9 @@ GiveItem:
 .pool
 .endautoregion
 
+
+; Give the player their progression items from what they collected in the level.
+
 ; Hook into SeisanSave() where the high score is recorded
 hook 0x808134C, 0x808135C, CheckLocations
 
