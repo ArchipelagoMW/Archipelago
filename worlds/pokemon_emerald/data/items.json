@@ -2,242 +2,242 @@
   "ITEM_BADGE_1": {
     "label": "Stone Badge",
     "classification": "PROGRESSION",
-    "tags": ["Badge"]
+    "tags": ["Badge", "Unique"]
   },
   "ITEM_BADGE_2": {
     "label": "Knuckle Badge",
     "classification": "PROGRESSION",
-    "tags": ["Badge"]
+    "tags": ["Badge", "Unique"]
   },
   "ITEM_BADGE_3": {
     "label": "Dynamo Badge",
     "classification": "PROGRESSION",
-    "tags": ["Badge"]
+    "tags": ["Badge", "Unique"]
   },
   "ITEM_BADGE_4": {
     "label": "Heat Badge",
     "classification": "PROGRESSION",
-    "tags": ["Badge"]
+    "tags": ["Badge", "Unique"]
   },
   "ITEM_BADGE_5": {
     "label": "Balance Badge",
     "classification": "PROGRESSION",
-    "tags": ["Badge"]
+    "tags": ["Badge", "Unique"]
   },
   "ITEM_BADGE_6": {
     "label": "Feather Badge",
     "classification": "PROGRESSION",
-    "tags": ["Badge"]
+    "tags": ["Badge", "Unique"]
   },
   "ITEM_BADGE_7": {
     "label": "Mind Badge",
     "classification": "PROGRESSION",
-    "tags": ["Badge"]
+    "tags": ["Badge", "Unique"]
   },
   "ITEM_BADGE_8": {
     "label": "Rain Badge",
     "classification": "PROGRESSION",
-    "tags": ["Badge"]
+    "tags": ["Badge", "Unique"]
   },
 
 
   "ITEM_HM01_CUT": {
     "label": "HM01 Cut",
     "classification": "PROGRESSION",
-    "tags": ["HM"]
+    "tags": ["HM", "Unique"]
   },
   "ITEM_HM02_FLY": {
     "label": "HM02 Fly",
     "classification": "PROGRESSION",
-    "tags": ["HM"]
+    "tags": ["HM", "Unique"]
   },
   "ITEM_HM03_SURF": {
     "label": "HM03 Surf",
     "classification": "PROGRESSION",
-    "tags": ["HM"]
+    "tags": ["HM", "Unique"]
   },
   "ITEM_HM04_STRENGTH": {
     "label": "HM04 Strength",
     "classification": "PROGRESSION",
-    "tags": ["HM"]
+    "tags": ["HM", "Unique"]
   },
   "ITEM_HM05_FLASH": {
     "label": "HM05 Flash",
     "classification": "PROGRESSION",
-    "tags": ["HM"]
+    "tags": ["HM", "Unique"]
   },
   "ITEM_HM06_ROCK_SMASH": {
     "label": "HM06 Rock Smash",
     "classification": "PROGRESSION",
-    "tags": ["HM"]
+    "tags": ["HM", "Unique"]
   },
   "ITEM_HM07_WATERFALL": {
     "label": "HM07 Waterfall",
     "classification": "PROGRESSION",
-    "tags": ["HM"]
+    "tags": ["HM", "Unique"]
   },
   "ITEM_HM08_DIVE": {
     "label": "HM08 Dive",
     "classification": "PROGRESSION",
-    "tags": ["HM"]
+    "tags": ["HM", "Unique"]
   },
 
 
   "ITEM_MACH_BIKE": {
     "label": "Mach Bike",
     "classification": "PROGRESSION",
-    "tags": ["Bike"]
+    "tags": ["Bike", "Unique"]
   },
   "ITEM_ACRO_BIKE": {
     "label": "Acro Bike",
     "classification": "PROGRESSION",
-    "tags": ["Bike"]
+    "tags": ["Bike", "Unique"]
   },
 
 
   "ITEM_DEVON_GOODS": {
     "label": "Devon Goods",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_LETTER": {
     "label": "Letter",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_ITEMFINDER": {
     "label": "Itemfinder",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_METEORITE": {
     "label": "Meteorite",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_GO_GOGGLES": {
     "label": "Go Goggles",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_ROOM_1_KEY": {
     "label": "Room 1 Key",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_ROOM_2_KEY": {
     "label": "Room 2 Key",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_ROOM_4_KEY": {
     "label": "Room 4 Key",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_ROOM_6_KEY": {
     "label": "Room 6 Key",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_STORAGE_KEY": {
     "label": "Storage Key",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_SCANNER": {
     "label": "Scanner",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_BASEMENT_KEY": {
     "label": "Basement Key",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_DEVON_SCOPE": {
     "label": "Devon Scope",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_MAGMA_EMBLEM": {
     "label": "Magma Emblem",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_POKEBLOCK_CASE": {
     "label": "Pokeblock Case",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_SS_TICKET": {
     "label": "S.S. Ticket",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_WAILMER_PAIL": {
     "label": "Wailmer Pail",
     "classification": "PROGRESSION",
-    "tags": []
+    "tags": ["Unique"]
   },
 
 
   "ITEM_POWDER_JAR": {
     "label": "Powder Jar",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_COIN_CASE": {
     "label": "Coin Case",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_CONTEST_PASS": {
     "label": "Contest Pass",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_SOOT_SACK": {
     "label": "Soot Sack",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_ROOT_FOSSIL": {
     "label": "Root Fossil",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_CLAW_FOSSIL": {
     "label": "Claw Fossil",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_EON_TICKET": {
     "label": "Eon Ticket",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Unique"]
   },
   "ITEM_OLD_SEA_MAP": {
     "label": "Old Sea Map",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Unique"]
   },
 
 
   "ITEM_OLD_ROD": {
     "label": "Old Rod",
     "classification": "PROGRESSION",
-    "tags": ["Rod"]
+    "tags": ["Rod", "Unique"]
   },
   "ITEM_GOOD_ROD": {
     "label": "Good Rod",
     "classification": "PROGRESSION",
-    "tags": ["Rod"]
+    "tags": ["Rod", "Unique"]
   },
   "ITEM_SUPER_ROD": {
     "label": "Super Rod",
     "classification": "PROGRESSION",
-    "tags": ["Rod"]
+    "tags": ["Rod", "Unique"]
   },
 
 
@@ -967,7 +967,7 @@
   "ITEM_ENIGMA_BERRY": {
     "label": "Enigma Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Unique"]
   },
 
 

@@ -49,6 +49,17 @@ class RandomizeNpcGifts(Toggle):
     """Adds most gifts received from NPCs to the pool (not including key items or HMs)"""
     display_name = "Randomize NPC Gifts"
 
+class ItemPoolType(Choice):
+    """Determines which non-progression items get put into the item pool
+    Shuffled: Randomized items are removed from their default locations and added to the pool
+    Diverse: Randomized items are replaced by any non-unique item
+    Diverse Exclude Berries: Diverse, but no berries are added, even if a berry would have been shuffled"""
+    display_name = "Item Pool Type"
+    default = 0
+    option_shuffled = 0
+    option_diverse = 1
+    option_diverse_exclude_berries = 1
+
 class HiddenItemsRequireItemfinder(DefaultOnToggle):
     """The Itemfinder is logically required to pick up hidden items"""
     display_name = "Require Itemfinder"
@@ -189,6 +200,7 @@ options: Dict[str, Option] = {
   "overworld_items": RandomizeOverworldItems,
   "hidden_items": RandomizeHiddenItems,
   "npc_gifts": RandomizeNpcGifts,
+  "item_pool_type": ItemPoolType,
   "require_itemfinder": HiddenItemsRequireItemfinder,
   "require_flash": DarkCavesRequireFlash,
   "wild_pokemon": RandomizeWildPokemon,

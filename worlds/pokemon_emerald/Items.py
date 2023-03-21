@@ -11,7 +11,7 @@ class PokemonEmeraldItem(Item):
         super().__init__(name, classification, code, player)
 
         if (code == None):
-            self.tags = set(["Event"])
+            self.tags = frozenset(["Event"])
         else:
             self.tags = get_item_attributes()[reverse_offset_item_value(code)].tags
 

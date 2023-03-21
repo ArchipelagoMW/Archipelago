@@ -9,7 +9,7 @@ from worlds.AutoWorld import World, WebWorld
 
 from .Items import PokemonEmeraldItem, create_item_label_to_id_map, get_item_classification
 from .Locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
-from .Options import RandomizeBadges, RandomizeHms, options, get_option_value
+from .Options import RandomizeBadges, RandomizeHms, ItemPoolType, options, get_option_value
 from .Regions import create_regions
 from .Rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path
 from .Rules import set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules, add_hidden_item_itemfinder_rules, add_flash_rules, set_enable_ferry_rules
@@ -96,6 +96,7 @@ class PokemonEmeraldWorld(World):
         key_items_option = get_option_value(self.multiworld, self.player, "key_items")
         rods_option = get_option_value(self.multiworld, self.player, "rods")
         bikes_option = get_option_value(self.multiworld, self.player, "bikes")
+        item_pool_type_option = get_option_value(self.multiworld, self.player, "item_pool_type")
 
         item_locations: List[PokemonEmeraldLocation] = []
         for region in self.multiworld.regions:
@@ -114,7 +115,10 @@ class PokemonEmeraldWorld(World):
                 if (bikes_option == Toggle.option_false):
                     item_locations = [location for location in item_locations if "Bike" not in location.tags]
 
-        self.multiworld.itempool += [self.create_item_by_code(location.default_item_code) for location in item_locations]
+        if item_pool_type_option == ItemPoolType.option_shuffled:
+            self.multiworld.itempool += [self.create_item_by_code(location.default_item_code) for location in item_locations]
+        elif item_pool_type_option == ItemPoolType.option_shuffled:
+            raise NotImplementedError()
 
 
     def set_rules(self):
