@@ -30,6 +30,7 @@ from worlds.LauncherComponents import Component, components, SuffixIdentifier
 # Adventure
 components.append(Component('Adventure Client', 'AdventureClient', file_identifier=SuffixIdentifier('.apadvn')))
 
+
 class AdventureWeb(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
