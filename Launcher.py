@@ -144,6 +144,7 @@ def run_gui():
         _clients = {c.display_name: c for c in components if c.type == Type.CLIENT and isfile(get_exe(c)[-1])}
         _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER and isfile(get_exe(c)[-1])}
         _funcs = {c.display_name: c for c in components if c.type == Type.FUNC}
+        _external = {c.display_name: c for c in components if c.type == Type.EXTERNAL and isfile(get_exe(c)[-1])}
 
         def __init__(self, ctx=None):
             self.title = self.base_title

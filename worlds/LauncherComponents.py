@@ -1,3 +1,5 @@
+import os
+from json import load as json_load
 from enum import Enum, auto
 from typing import Optional, Callable, List, Iterable
 
@@ -9,6 +11,7 @@ class Type(Enum):
     FUNC = auto()  # not a real component
     CLIENT = auto()
     ADJUSTER = auto()
+    EXTERNAL = auto()
 
 
 class Component:
@@ -34,7 +37,9 @@ class Component:
             None if not display_name else \
             Type.FUNC if func else \
             Type.CLIENT if 'Client' in display_name else \
-            Type.ADJUSTER if 'Adjuster' in display_name else Type.TOOL
+            Type.ADJUSTER if 'Adjuster' in display_name else \
+            Type.EXTERNAL if component_type == Type.EXTERNAL else \
+            Type.TOOL
         self.func = func
         self.file_identifier = file_identifier
         self.file_path = file_path
@@ -106,3 +111,23 @@ icon_paths = {
     'icon': local_path('data', 'icon.ico' if is_windows else 'icon.png'),
     'mcicon': local_path('data', 'mcicon.ico')
 }
+
+
+data_files = [os.path.join(root, name)
+              for root, dirs, files in os.walk(os.path.join(os.path.dirname(__file__), "launcher_data"))
+              for name in files if name.endswith(".json")]
+
+for file in data_files:
+    component_data = json_load(open(file))
+    new_component = Component(
+        component_data.get("display_name"),
+        component_data.get("script_name", None),
+        component_data.get("frozen_name", None),
+        component_data.get("cli", False),
+        component_data.get("icon", "icon"),
+        Type.__getitem__(component_data.get("component_type", None)),
+        component_data.get("func", None),
+        component_data.get("file_identifier", None),
+        component_data.get("file_path", None),
+    )
+    components.append(new_component)
