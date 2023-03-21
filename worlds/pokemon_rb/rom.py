@@ -580,7 +580,7 @@ def write_quizzes(self, data, random):
             if location.player == self.player:
                 player_name = "yourself"
             else:
-                player_name = self.multiworld.player_names[location.player]
+                player_name = self.multiworld.player_name[location.player]
             if not a:
                 if len(self.multiworld.player_name) > 1:
                     old_name = player_name
