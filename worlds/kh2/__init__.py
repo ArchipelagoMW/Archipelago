@@ -128,9 +128,11 @@ class KH2World(World):
             luckyemblemamount = self.multiworld.LuckyEmblemsAmount[self.player].value
             luckyemblemrequired = self.multiworld.LuckyEmblemsRequired[self.player].value
             if luckyemblemamount < luckyemblemrequired:
+                print(f"Lucky Emblem Amount {self.multiworld.LuckyEmblemsAmount[self.player].value} is less than required "
+                      f"{self.multiworld.LuckyEmblemsRequired[self.player].value} for player {self.multiworld.get_file_safe_player_name(self.player)}")
                 luckyemblemamount = max(luckyemblemamount, luckyemblemrequired)
-                print(f"Lucky Emblem Amount {self.multiworld.LuckyEmblemsAmount[self.player].value} is less than required \
-            {self.multiworld.LuckyEmblemsRequired[self.player].value} for player {self.multiworld.get_file_safe_player_name(self.player)}")
+                self.multiworld.LuckyEmblemsAmount[self.player].value = luckyemblemamount
+
             self.item_quantity_dict[ItemName.LuckyEmblem] = item_dictionary_table[ItemName.LuckyEmblem].quantity + luckyemblemamount
             # give this proof to unlock the final door once the player has the amount of lucky emblem required
             self.item_quantity_dict[ItemName.ProofofNonexistence] = 0
@@ -148,17 +150,18 @@ class KH2World(World):
             if len(self.RandomSuperBoss) < self.BountiesAmount:
                 print(f"{self.multiworld.get_file_safe_player_name(self.player)} has too many bounties than bosses")
                 self.BountiesAmount = len(self.RandomSuperBoss)
-                self.multiworld.BountyAmount[self.player].value = len(self.RandomSuperBoss)
+                self.multiworld.BountyAmount[self.player].value = self.BountiesAmount
 
             if len(self.RandomSuperBoss) < self.BountiesRequired:
                 print(f"{self.multiworld.get_file_safe_player_name(self.player)} has too many required bounties")
                 self.BountiesRequired = len(self.RandomSuperBoss)
-                self.multiworld.BountyRequired[self.player].value = len(self.RandomSuperBoss)
+                self.multiworld.BountyRequired[self.player].value = self.BountiesRequired
 
             if self.BountiesAmount < self.BountiesRequired:
+                print(f"Bounties Amount {self.multiworld.BountyAmount[self.player].value} is less than required "
+                      f"{self.multiworld.BountyRequired[self.player].value} for player {self.multiworld.get_file_safe_player_name(self.player)}")
                 self.BountiesAmount = max(self.BountiesAmount, self.BountiesRequired)
-                print(f"Bounties Amount {self.multiworld.BountyAmount[self.player].value} is less than required \
-                        {self.multiworld.BountyRequired[self.player].value} for player {self.multiworld.get_file_safe_player_name(self.player)}")
+                self.multiworld.BountyAmount[self.player].value = self.BountiesAmount
 
             self.multiworld.start_hints[self.player].value.add(ItemName.Bounty)
             self.item_quantity_dict[ItemName.ProofofNonexistence] = 0
