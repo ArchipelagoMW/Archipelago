@@ -1384,24 +1384,26 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
         activity_timers[team, player] = now - datetime.datetime.utcfromtimestamp(timestamp)
 
     player_names = {}
+    states: typing.Dict[typing.Tuple[int, int], int] = {}
     for team, names in enumerate(names):
         for player, name in enumerate(names, 1):
-            player_names[(team, player)] = name
+            player_names[team, player] = name
+            states[team, player] = multisave.get("client_game_state", {}).get((team, player), 0)
     long_player_names = player_names.copy()
     for (team, player), alias in multisave.get("name_aliases", {}).items():
-        player_names[(team, player)] = alias
-        long_player_names[(team, player)] = f"{alias} ({long_player_names[(team, player)]})"
+        player_names[team, player] = alias
+        long_player_names[(team, player)] = f"{alias} ({long_player_names[team, player]})"
 
     video = {}
     for (team, player), data in multisave.get("video", []):
-        video[(team, player)] = data
+        video[team, player] = data
 
     return dict(player_names=player_names, room=room, checks_done=checks_done,
                 percent_total_checks_done=percent_total_checks_done, checks_in_area=checks_in_area,
                 activity_timers=activity_timers, video=video, hints=hints,
                 long_player_names=long_player_names,
                 multisave=multisave, precollected_items=precollected_items, groups=groups,
-                locations=locations, games=games)
+                locations=locations, games=games, states=states)
 
 
 def _get_inventory_data(data: typing.Dict[str, typing.Any]) -> typing.Dict[int, typing.Dict[int, int]]:
