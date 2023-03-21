@@ -81,6 +81,13 @@ LttPCreditsText = {
 }
 
 
+item_groups = {
+    "Helpers": ["Task Advance", "Starting Turner", "Starting Paint Can"],
+    "Targets": ["Treasure Bumper", "Booster Bumper", "Hazard Bumper"],
+    "Traps": ["Rainbow Trap", "Spinner Trap", "Killer Trap"]
+}
+
+
 class BumpStikItem(Item):
     game = "Bumper Stickers"
     type: str
@@ -91,14 +98,14 @@ class BumpStikItem(Item):
 
         if code is None:
             self.type = "Event"
-        elif "Trap" in name:
+        elif name in item_groups["Traps"]:
             self.type = "Trap"
             self.classification = ItemClassification.trap
-        elif name in ["Booster Bumper", "Treasure Bumper"]:
-            self.type = "Special"
+        elif name in item_groups["Targets"]:
+            self.type = "Target"
             self.classification = ItemClassification.progression
-        elif name in ["Starting Turner", "Starting Paint Can", "Task Advance"]:
-            self.type = "Utility"
+        elif name in item_groups["Helpers"]:
+            self.type = "Helper"
             self.classification = ItemClassification.useful
         else:
             self.type = "Other"
@@ -112,13 +119,11 @@ item_table = {
 
 ALTTPWorld.pedestal_credit_texts.update({item_table[name]: f"and the {texts.pedestal}"
                                          for name, texts in LttPCreditsText.items()})
-ALTTPWorld.sickkid_credit_texts.update({item_table[name]: texts.sickkid for name, texts in LttPCreditsText.items()})
-ALTTPWorld.magicshop_credit_texts.update({item_table[name]: texts.magicshop for name, texts in LttPCreditsText.items()})
-ALTTPWorld.zora_credit_texts.update({item_table[name]: texts.zora for name, texts in LttPCreditsText.items()})
-ALTTPWorld.fluteboy_credit_texts.update({item_table[name]: texts.fluteboy for name, texts in LttPCreditsText.items()})
-
-item_groups = {
-    "Helpers": ["Task Advance", "Starting Turner", "Starting Paint Can"],
-    "Targets": ["Treasure Bumper", "Booster Bumper", "Hazard Bumper"],
-    "Traps": ["Rainbow Trap", "Spinner Trap", "Killer Trap"]
-}
+ALTTPWorld.sickkid_credit_texts.update(
+    {item_table[name]: texts.sickkid for name, texts in LttPCreditsText.items()})
+ALTTPWorld.magicshop_credit_texts.update(
+    {item_table[name]: texts.magicshop for name, texts in LttPCreditsText.items()})
+ALTTPWorld.zora_credit_texts.update(
+    {item_table[name]: texts.zora for name, texts in LttPCreditsText.items()})
+ALTTPWorld.fluteboy_credit_texts.update(
+    {item_table[name]: texts.fluteboy for name, texts in LttPCreditsText.items()})
