@@ -946,10 +946,15 @@ class StardewLogic:
         return region_rule & season_rule & difficulty_rule
 
     def can_catch_every_fish(self) -> StardewRule:
-        rules = [self.has_skill_level("Fishing", 10), self.received("Progressive Fishing Rod", 4)]
+        rules = [self.has_skill_level("Fishing", 10), self.has_max_fishing_rod()]
         for fish in all_fish_items:
             rules.append(self.can_catch_fish(fish))
         return _And(rules)
+
+    def has_max_fishing_rod(self) -> StardewRule:
+        if self.options[options.ToolProgression] == options.ToolProgression.option_progressive:
+            return self.received("Progressive Fishing Rod", 4)
+        return self.can_get_fishing_xp()
 
     def can_cook(self) -> StardewRule:
         return self.has_house(1) or self.has_skill_level("Foraging", 9)
