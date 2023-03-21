@@ -83,7 +83,8 @@ class CliqueWorld(World):
             self.multiworld.completion_condition[self.player] = lambda state: \
                 state.has("Button Key", self.player)
         else:
-            self.multiworld.completion_condition[self.player] = lambda state: True
+            self.multiworld.completion_condition[self.player] = lambda state: \
+                state.has("The feeling of satisfaction.", self.player)
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
