@@ -40,6 +40,7 @@
     "tags": ["Badge"]
   },
 
+
   "ITEM_HM01_CUT": {
     "label": "HM01 Cut",
     "classification": "PROGRESSION",
@@ -81,6 +82,7 @@
     "tags": ["HM"]
   },
 
+
   "ITEM_MACH_BIKE": {
     "label": "Mach Bike",
     "classification": "PROGRESSION",
@@ -91,6 +93,7 @@
     "classification": "PROGRESSION",
     "tags": ["Bike"]
   },
+
 
   "ITEM_DEVON_GOODS": {
     "label": "Devon Goods",
@@ -177,6 +180,8 @@
     "classification": "PROGRESSION",
     "tags": []
   },
+
+
   "ITEM_POWDER_JAR": {
     "label": "Powder Jar",
     "classification": "FILLER",
@@ -218,6 +223,7 @@
     "tags": []
   },
 
+
   "ITEM_OLD_ROD": {
     "label": "Old Rod",
     "classification": "PROGRESSION",
@@ -234,9 +240,10 @@
     "tags": ["Rod"]
   },
 
+
   "ITEM_MASTER_BALL": {
     "label": "Master Ball",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_ULTRA_BALL": {
@@ -294,6 +301,7 @@
     "classification": "FILLER",
     "tags": []
   },
+
 
   "ITEM_POTION": {
     "label": "Potion",
@@ -426,6 +434,7 @@
     "tags": []
   },
 
+
   "ITEM_BERRY_JUICE": {
     "label": "Berry Juice",
     "classification": "FILLER",
@@ -433,7 +442,7 @@
   },
   "ITEM_SACRED_ASH": {
     "label": "Sacred Ash",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_SHOAL_SALT": {
@@ -467,6 +476,7 @@
     "tags": []
   },
 
+
   "ITEM_HP_UP": {
     "label": "HP Up",
     "classification": "FILLER",
@@ -494,7 +504,7 @@
   },
   "ITEM_RARE_CANDY": {
     "label": "Rare Candy",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_PP_UP": {
@@ -512,6 +522,7 @@
     "classification": "FILLER",
     "tags": []
   },
+
 
   "ITEM_GUARD_SPEC": {
     "label": "Guard Spec",
@@ -548,6 +559,7 @@
     "classification": "FILLER",
     "tags": []
   },
+
 
   "ITEM_REPEL": {
     "label": "Repel",
@@ -610,36 +622,38 @@
     "tags": []
   },
 
+
   "ITEM_SUN_STONE": {
     "label": "Sun Stone",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_MOON_STONE": {
     "label": "Moon Stone",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_FIRE_STONE": {
     "label": "Fire Stone",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_THUNDER_STONE": {
     "label": "Thunder Stone",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_WATER_STONE": {
     "label": "Water Stone",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_LEAF_STONE": {
     "label": "Leaf Stone",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
+
 
   "ITEM_TINY_MUSHROOM": {
     "label": "Tiny Mushroom",
@@ -677,6 +691,7 @@
     "tags": []
   },
 
+
   "ITEM_ORANGE_MAIL": {
     "label": "Orange Mail",
     "classification": "FILLER",
@@ -684,7 +699,7 @@
   },
   "ITEM_HARBOR_MAIL": {
     "label": "Harbor Mail",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": []
   },
   "ITEM_GLITTER_MAIL": {
@@ -737,6 +752,7 @@
     "classification": "FILLER",
     "tags": []
   },
+
 
   "ITEM_CHERI_BERRY": {
     "label": "Cheri Berry",
@@ -954,84 +970,85 @@
     "tags": []
   },
 
+
   "ITEM_BRIGHT_POWDER": {
     "label": "Bright Powder",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_WHITE_HERB": {
     "label": "White Herb",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_MACHO_BRACE": {
     "label": "Macho Brace",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_EXP_SHARE": {
     "label": "Exp. Share",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_QUICK_CLAW": {
     "label": "Quick Claw",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_SOOTHE_BELL": {
     "label": "Soothe Bell",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_MENTAL_HERB": {
     "label": "Mental Herb",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_CHOICE_BAND": {
     "label": "Choice Band",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_KINGS_ROCK": {
     "label": "King's Rock",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_SILVER_POWDER": {
     "label": "Silver Powder",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_AMULET_COIN": {
     "label": "Amulet Coin",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_CLEANSE_TAG": {
     "label": "Cleanse Tag",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_SOUL_DEW": {
     "label": "Soul Dew",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_DEEP_SEA_TOOTH": {
     "label": "Deep Sea Tooth",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_DEEP_SEA_SCALE": {
     "label": "Deep Sea Scale",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_SMOKE_BALL": {
     "label": "Smoke Ball",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_EVERSTONE": {
@@ -1041,147 +1058,147 @@
   },
   "ITEM_FOCUS_BAND": {
     "label": "Focus Band",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_LUCKY_EGG": {
     "label": "Lucky Egg",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_SCOPE_LENS": {
     "label": "Scope Lens",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_METAL_COAT": {
     "label": "Metal Coat",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_LEFTOVERS": {
     "label": "Leftovers",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_DRAGON_SCALE": {
     "label": "Dragon Scale",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_LIGHT_BALL": {
     "label": "Light Ball",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_SOFT_SAND": {
     "label": "Soft Sand",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_HARD_STONE": {
     "label": "Hard Stone",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_MIRACLE_SEED": {
     "label": "Miracle Seed",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_BLACK_GLASSES": {
     "label": "Black Glasses",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_BLACK_BELT": {
     "label": "Black Belt",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_MAGNET": {
     "label": "Magnet",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_MYSTIC_WATER": {
     "label": "Mystic Water",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_SHARP_BEAK": {
     "label": "Sharp Beak",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_POISON_BARB": {
     "label": "Poison Barb",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_NEVER_MELT_ICE": {
     "label": "Never-Melt Ice",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_SPELL_TAG": {
     "label": "Spell Tag",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TWISTED_SPOON": {
     "label": "Twisted Spoon",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_CHARCOAL": {
     "label": "Charcoal",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_DRAGON_FANG": {
     "label": "Dragon Fang",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_SILK_SCARF": {
     "label": "Silk Scarf",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_UP_GRADE": {
     "label": "Up-Grade",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_SHELL_BELL": {
     "label": "Shell Bell",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_SEA_INCENSE": {
     "label": "Sea Incense",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_LAX_INCENSE": {
     "label": "Lax Incense",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_LUCKY_PUNCH": {
     "label": "Lucky Punch",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_METAL_POWDER": {
     "label": "Metal Powder",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_THICK_CLUB": {
     "label": "Thick Club",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_STICK": {
@@ -1215,254 +1232,255 @@
     "tags": []
   },
 
+
   "ITEM_TM01_FOCUS_PUNCH": {
     "label": "TM01 Focus Punch",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM02_DRAGON_CLAW": {
     "label": "TM02 Dragon Claw",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM03_WATER_PULSE": {
     "label": "TM03 Water Pulse",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM04_CALM_MIND": {
     "label": "TM04 Calm Mind",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM05_ROAR": {
     "label": "TM05 Roar",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM06_TOXIC": {
     "label": "TM06 Toxic",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM07_HAIL": {
     "label": "TM07 Hail",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM08_BULK_UP": {
     "label": "TM08 Bulk Up",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM09_BULLET_SEED": {
     "label": "TM09 Bullet Seed",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM10_HIDDEN_POWER": {
     "label": "TM10 Hidden Power",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM11_SUNNY_DAY": {
     "label": "TM11 Sunny Day",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM12_TAUNT": {
     "label": "TM12 Taunt",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM13_ICE_BEAM": {
     "label": "TM13 Ice Beam",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM14_BLIZZARD": {
     "label": "TM14 Blizzard",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM15_HYPER_BEAM": {
     "label": "TM15 Hyper Beam",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM16_LIGHT_SCREEN": {
     "label": "TM16 Light Screen",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM17_PROTECT": {
     "label": "TM17 Protect",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM18_RAIN_DANCE": {
     "label": "TM18 Rain Dance",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM19_GIGA_DRAIN": {
     "label": "TM19 Giga Drain",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM20_SAFEGUARD": {
     "label": "TM20 Safeguard",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM21_FRUSTRATION": {
     "label": "TM21 Frustration",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM22_SOLAR_BEAM": {
     "label": "TM22 Solar Beam",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM23_IRON_TAIL": {
     "label": "TM23 Iron Tail",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM24_THUNDERBOLT": {
     "label": "TM24 Thunderbolt",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM25_THUNDER": {
     "label": "TM25 Thunder",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM26_EARTHQUAKE": {
     "label": "TM26 Earthquake",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM27_RETURN": {
     "label": "TM27 Return",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM28_DIG": {
     "label": "TM28 Dig",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM29_PSYCHIC": {
     "label": "TM29 Psychic",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM30_SHADOW_BALL": {
     "label": "TM30 Shadow Ball",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM31_BRICK_BREAK": {
     "label": "TM31 Brick Break",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM32_DOUBLE_TEAM": {
     "label": "TM32 Double Team",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM33_REFLECT": {
     "label": "TM33 Reflect",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM34_SHOCK_WAVE": {
     "label": "TM34 Shock Wave",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM35_FLAMETHROWER": {
     "label": "TM35 Flamethrower",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM36_SLUDGE_BOMB": {
     "label": "TM36 Sludge Bomb",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM37_SANDSTORM": {
     "label": "TM37 Sandstorm",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM38_FIRE_BLAST": {
     "label": "TM38 Fire Blast",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM39_ROCK_TOMB": {
     "label": "TM39 Rock Tomb",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM40_AERIAL_ACE": {
     "label": "TM40 Aerial Ace",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM41_TORMENT": {
     "label": "TM41 Torment",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM42_FACADE": {
     "label": "TM42 Facade",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM43_SECRET_POWER": {
     "label": "TM43 Secret Power",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM44_REST": {
     "label": "TM44 Rest",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM45_ATTRACT": {
     "label": "TM45 Attract",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM46_THIEF": {
     "label": "TM46 Thief",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM47_STEEL_WING": {
     "label": "TM47 Steel Wing",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM48_SKILL_SWAP": {
     "label": "TM48 Skill Swap",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM49_SNATCH": {
     "label": "TM49 Snatch",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   },
   "ITEM_TM50_OVERHEAT": {
     "label": "TM50 Overheat",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": []
   }
 }
