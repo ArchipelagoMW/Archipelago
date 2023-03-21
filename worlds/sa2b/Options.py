@@ -486,7 +486,7 @@ class RingLoss(Choice):
     How taking damage is handled
     Classic: You lose all of your rings when hit
     Modern: You lose 20 rings when hit
-    OHKO: You die immediately when hit
+    OHKO: You die immediately when hit (NOTE: Some Hard Logic tricks require damage boosts!)
     """
     display_name = "SADX Music"
     option_classic = 0
