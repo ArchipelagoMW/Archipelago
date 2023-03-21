@@ -42,7 +42,7 @@ html{
     margin-top: 4px;
 }
 
-#base-header a, #base-header-mobile-menu a{
+#base-header a, #base-header-mobile-menu a, #dropdown #dropdown-text{
     color: #2f6b83;
     text-decoration: none;
     cursor: pointer;
@@ -86,19 +86,14 @@ html{
 #base-header-right-mobile img{
     height: 3rem;
 }
-.dropdown {
+#dropdown {
     display: inline-block;
 }
-.dropdown:hover .dropdown-games {
+
+#dropdown:hover #dropdown-menu {
     display: block;
 }
-.dropdown:hover .dropdown-start-playing {
-    display: block;
-}
-.dropdown:hover .dropdown-support {
-    display: block;
-}
-.dropdown-games, .dropdown-start-playing, .dropdown-support {
+#dropdown-games, #dropdown-menu{
     display: none;
     position: absolute;
     background-color: #f9f9f9;
@@ -116,7 +111,7 @@ html{
     margin-left: 2px;
 }
 
-@media all and (max-width: 1580px) and (orientation: portrait){
+@media all and (max-width: 1580px){
     html{
         padding-top: 260px;
         scroll-padding-top: 230px;

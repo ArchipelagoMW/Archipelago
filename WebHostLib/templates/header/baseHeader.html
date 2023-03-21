@@ -11,36 +11,19 @@
             </a>
         </div>
         <div id="base-header-right">
-            <div class="dropdown">
-                <a href="/start-playing">start playing
+            <div id="dropdown">
+                <span id="dropdown-text">start playing
                     <img id="dropdown-icon" src="/static/static/button-images/dropdown.png"></img>
-                </a>
-                <span class="dropdown-start-playing">
-                    <div><a href="/generate">generate randomized game</a></div>
-                    <div><a href="/uploads">host pre-generated game</a></div>
-                    <div><a href="/user-content">previously generated games</a></div>
                 </span>
-            </div>
-            <div class="dropdown">
-                <a href="/games">games
-                    <img id="dropdown-icon" src="/static/static/button-images/dropdown.png"></img>
-                </a>
-                <span class="dropdown-games">
+                <span id="dropdown-menu">
                     <div><a href="/games">supported games</a></div>
+                    <div><a href="/generate">generate game</a></div>
+                    <div><a href="/uploads">upload game</a></div>
+                    <div><a href="/user-content">user content</a></div>
                     <div><a href="/tutorial">setup guides</a></div>
                 </span>
             </div>
-            <div class="dropdown">
-                <a href="/faq/en">Support
-                    <img id="dropdown-icon" src="/static/static/button-images/dropdown.png"></img>
-                </a>
-                <span class="dropdown-support">
-                    <div><a href="/faq/en">f.a.q.</a></div>
-                    <div><a href="/check">yaml validator</a></div>
-                    <div><a href="https://github.com/ArchipelagoMW/Archipelago/tree/main/docs">developer docs</a></div>
-                </span>
-            </div>
-
+            <a href="/faq/en">f.a.q</a>
             <a href="https://discord.gg/8Z65BR2" target="_blank">discord</a>
         </div>
         <div id="base-header-right-mobile">
@@ -52,8 +35,10 @@
     <div id="base-header-mobile-menu">
         <a href="/games">supported games</a>
         <a href="/tutorial">setup guides</a>
-        <a href="/start-playing">start playing</a>
         <a href="/faq/en">f.a.q.</a>
+        <a href="/generate">generate game</a>
+        <a href="/user-content">user content</a>
+        <a href="/uploads">upload game</a>
         <a href="https://discord.gg/8Z65BR2" target="_blank">discord</a>
     </div>
 {% endblock %}
