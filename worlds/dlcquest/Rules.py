@@ -10,9 +10,36 @@ from . import Options
 def create_event(player, event: str):
     return DLCquestItem(event, ItemClassification.progression, None, player)
 
-def set_rules(world, player,World_Options: Options.DLCQuestOptions):
 
-    if World_Options[Options.Campaign] == Options.Campaign.option_basic or World_Options[Options.Campaign] == Options.Campaign.option_both:
+def set_rules(world, player, World_Options: Options.DLCQuestOptions):
+    def has_enough_coin(player: int, coin: int):
+        def has_coin(state, player: int, coins: int):
+            coin_possessed = 0
+            for i in range(1, 250):
+                name_coin = "number coins"
+                number_coin = re.sub("number", str(i), name_coin)
+                number_of_coin = state.count(number_coin, player)
+                coin_possessed += number_of_coin*i
+
+            return coin_possessed >= coins
+
+        return lambda state: has_coin(state, player, coin)
+
+    def has_enough_coin_freemium(player: int, coin: int):
+        def has_coin(state, player: int, coins: int):
+            coin_possessed = 0
+            for i in range(1, 250):
+                name_coin = "number coins freemium"
+                number_coin = re.sub("number", str(i), name_coin)
+                number_of_coin = state.count(number_coin, player)
+                coin_possessed += number_of_coin*i
+
+            return coin_possessed >= coins
+
+        return lambda state: has_coin(state, player, coin)
+
+    if World_Options[Options.Campaign] == Options.Campaign.option_basic or World_Options[
+        Options.Campaign] == Options.Campaign.option_both:
         set_rule(world.get_entrance("Moving", player),
                  lambda state: state.has("Movement Pack", player))
         set_rule(world.get_entrance("Cloud", player),
@@ -26,12 +53,11 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
             set_rule(world.get_entrance("Behind Ogre", player),
                      lambda state: state.has("Gun Pack", player))
 
-            if World_Options[Options.TimeIsMoney] == Options.TimeIsMoney.option_I_want_speed :
+            if World_Options[Options.TimeIsMoney] == Options.TimeIsMoney.option_I_want_speed:
                 set_rule(world.get_entrance("Tree", player),
                          lambda state: state.has("Time is Money Pack", player))
                 set_rule(world.get_entrance("Cave Tree", player),
                          lambda state: state.has("Time is Money Pack", player))
-
 
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             set_rule(world.get_entrance("Behind Ogre", player),
@@ -45,21 +71,22 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
                 set_rule(world.get_location("Sword", player),
                          lambda state: state.has("Time is Money Pack", player))
 
-        if World_Options[Options.FalseDoubleJump] == Options.FalseDoubleJump.option_none :
+        if World_Options[Options.FalseDoubleJump] == Options.FalseDoubleJump.option_none:
             set_rule(world.get_entrance("Cloud Double Jump", player),
-                    lambda state: state.has("Double Jump Pack", player))
+                     lambda state: state.has("Double Jump Pack", player))
             set_rule(world.get_entrance("Forest Double Jump", player),
-                    lambda state: state.has("Double Jump Pack", player))
+                     lambda state: state.has("Double Jump Pack", player))
 
-        if World_Options[Options.FalseDoubleJump] == Options.FalseDoubleJump.option_none or World_Options[Options.FalseDoubleJump] == Options.FalseDoubleJump.option_simple:
+        if World_Options[Options.FalseDoubleJump] == Options.FalseDoubleJump.option_none or World_Options[
+            Options.FalseDoubleJump] == Options.FalseDoubleJump.option_simple:
             set_rule(world.get_entrance("Behind Tree Double Jump", player),
-                    lambda state: state.has("Double Jump Pack", player))
+                     lambda state: state.has("Double Jump Pack", player))
 
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
             number_of_bundle = math.floor(825 / World_Options[Options.CoinSanityRange])
             for i in range(number_of_bundle):
                 def create_rule(coin):
-                    return lambda state: state.has("Coin", player, coin)
+                    return has_enough_coin(player, coin)
 
                 item_coin = "DLC Quest: number Coin"
                 item_coin_loc = re.sub("number", str(World_Options[Options.CoinSanityRange] * (i + 1)), item_coin)
@@ -70,83 +97,101 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
                              create_rule(825))
 
             set_rule(world.get_location("Movement Pack", player),
-                     lambda state: state.has("DLC Quest: Coin Bundle", player, math.ceil(4/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("DLC Quest: Coin Bundle", player,
+                                             math.ceil(4 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Animation Pack", player),
-                     lambda state: state.has("DLC Quest: Coin Bundle", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("DLC Quest: Coin Bundle", player,
+                                             math.ceil(5 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Audio Pack", player),
-                     lambda state: state.has("DLC Quest: Coin Bundle", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("DLC Quest: Coin Bundle", player,
+                                             math.ceil(5 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Pause Menu Pack", player),
-                     lambda state: state.has("DLC Quest: Coin Bundle", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("DLC Quest: Coin Bundle", player,
+                                             math.ceil(5 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Time is Money Pack", player),
-                     lambda state: state.has("DLC Quest: Coin Bundle", player, math.ceil(20/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("DLC Quest: Coin Bundle", player,
+                                             math.ceil(20 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Double Jump Pack", player),
-                     lambda state: state.has("DLC Quest: Coin Bundle", player, math.ceil(100/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("DLC Quest: Coin Bundle", player,
+                                             math.ceil(100 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Pet Pack", player),
-                     lambda state: state.has("DLC Quest: Coin Bundle", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("DLC Quest: Coin Bundle", player,
+                                             math.ceil(5 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Sexy Outfits Pack", player),
-                     lambda state: state.has("DLC Quest: Coin Bundle", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("DLC Quest: Coin Bundle", player,
+                                             math.ceil(5 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Top Hat Pack", player),
-                     lambda state: state.has("DLC Quest: Coin Bundle", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("DLC Quest: Coin Bundle", player,
+                                             math.ceil(5 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Map Pack", player),
-                     lambda state: state.has("DLC Quest: Coin Bundle", player, math.ceil(140/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("DLC Quest: Coin Bundle", player,
+                                             math.ceil(140 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Gun Pack", player),
-                     lambda state: state.has("DLC Quest: Coin Bundle", player, math.ceil(75/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("DLC Quest: Coin Bundle", player,
+                                             math.ceil(75 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("The Zombie Pack", player),
-                     lambda state: state.has("DLC Quest: Coin Bundle", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("DLC Quest: Coin Bundle", player,
+                                             math.ceil(5 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Night Map Pack", player),
-                     lambda state: state.has("DLC Quest: Coin Bundle", player, math.ceil(75/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("DLC Quest: Coin Bundle", player,
+                                             math.ceil(75 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Psychological Warfare Pack", player),
-                     lambda state: state.has("DLC Quest: Coin Bundle", player, math.ceil(50/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("DLC Quest: Coin Bundle", player,
+                                             math.ceil(50 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Armor for your Horse Pack", player),
-                     lambda state: state.has("DLC Quest: Coin Bundle", player, math.ceil(250/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("DLC Quest: Coin Bundle", player,
+                                             math.ceil(250 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Finish the Fight Pack", player),
-                     lambda state: state.has("DLC Quest: Coin Bundle", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
-
+                     lambda state: state.has("DLC Quest: Coin Bundle", player,
+                                             math.ceil(5 / World_Options[Options.CoinSanityRange])))
 
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_none:
             set_rule(world.get_location("Movement Pack", player),
-                     lambda state: state.has("Coin", player, 4))
+                     has_enough_coin(player, 4))
             set_rule(world.get_location("Animation Pack", player),
-                     lambda state: state.has("Coin", player, 5))
+                     has_enough_coin(player, 5))
             set_rule(world.get_location("Audio Pack", player),
-                     lambda state: state.has("Coin", player, 5))
+                     has_enough_coin(player, 5))
             set_rule(world.get_location("Pause Menu Pack", player),
-                     lambda state: state.has("Coin", player, 5))
+                     has_enough_coin(player, 5))
             set_rule(world.get_location("Time is Money Pack", player),
-                     lambda state: state.has("Coin", player, 20))
+                     has_enough_coin(player, 20))
             set_rule(world.get_location("Double Jump Pack", player),
-                     lambda state: state.has("Coin", player, 100))
+                     has_enough_coin(player, 100))
             set_rule(world.get_location("Pet Pack", player),
-                     lambda state: state.has("Coin", player, 5))
+                     has_enough_coin(player, 5))
             set_rule(world.get_location("Sexy Outfits Pack", player),
-                     lambda state: state.has("Coin", player, 5))
+                     has_enough_coin(player, 5))
             set_rule(world.get_location("Top Hat Pack", player),
-                     lambda state: state.has("Coin", player, 5))
+                     has_enough_coin(player, 5))
             set_rule(world.get_location("Map Pack", player),
-                     lambda state: state.has("Coin", player, 140))
+                     has_enough_coin(player, 140))
             set_rule(world.get_location("Gun Pack", player),
-                     lambda state: state.has("Coin", player, 75))
+                     has_enough_coin(player, 75))
             set_rule(world.get_location("The Zombie Pack", player),
-                     lambda state: state.has("Coin", player, 5))
+                     has_enough_coin(player, 5))
             set_rule(world.get_location("Night Map Pack", player),
-                     lambda state: state.has("Coin", player, 75))
+                     has_enough_coin(player, 75))
             set_rule(world.get_location("Psychological Warfare Pack", player),
-                     lambda state: state.has("Coin", player, 50))
+                     has_enough_coin(player, 50))
             set_rule(world.get_location("Armor for your Horse Pack", player),
-                     lambda state: state.has("Coin", player, 250))
+                     has_enough_coin(player, 250))
             set_rule(world.get_location("Finish the Fight Pack", player),
-                     lambda state: state.has("Coin", player, 5))
+                     has_enough_coin(player, 5))
 
         loc_win = DLCquestLocation(player, "Winning Basic", None, world.get_region("The Final Boss Room", player))
         world.get_region("The Final Boss Room", player).locations.append(loc_win)
         loc_win.place_locked_item(create_event(player, "Victory Basic"))
         if World_Options[Options.EndingChoice] == Options.EndingChoice.option_any:
-            set_rule(world.get_location("Winning Basic", player), lambda state: state.has("Finish the Fight Pack", player))
+            set_rule(world.get_location("Winning Basic", player),
+                     lambda state: state.has("Finish the Fight Pack", player))
         if World_Options[Options.EndingChoice] == Options.EndingChoice.option_true:
-            set_rule(world.get_location("Winning Basic", player), lambda state: state.has("Armor for your Horse Pack", player) and state.has("Finish the Fight Pack", player))
+            set_rule(world.get_location("Winning Basic", player),
+                     lambda state: state.has("Armor for your Horse Pack", player) and state.has("Finish the Fight Pack",
+                                                                                                player))
 
-
-    if World_Options[Options.Campaign] == Options.Campaign.option_live_freemium_or_die or World_Options[Options.Campaign] == Options.Campaign.option_both:
+    if World_Options[Options.Campaign] == Options.Campaign.option_live_freemium_or_die or World_Options[
+        Options.Campaign] == Options.Campaign.option_both:
         set_rule(world.get_entrance("Wall Jump Entrance", player),
                  lambda state: state.has("Wall Jump Pack", player))
         set_rule(world.get_entrance("Harmless Plants", player),
@@ -160,8 +205,9 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
         set_rule(world.get_entrance("Blizzard", player),
                  lambda state: state.has("Season Pass", player))
         set_rule(world.get_entrance("Boss Door", player),
-                 lambda state: state.has("Big Sword Pack", player) and state.has("Really Big Sword Pack", player) and state.has("Unfathomable Sword Pack", player))
-
+                 lambda state: state.has("Big Sword Pack", player) and state.has("Really Big Sword Pack",
+                                                                                 player) and state.has(
+                     "Unfathomable Sword Pack", player))
 
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_disabled:
             set_rule(world.get_entrance("Vines", player),
@@ -180,19 +226,20 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
             set_rule(world.get_location("Pickaxe", player),
                      lambda state: state.has("Humble Indie Bindle", player))
             set_rule(world.get_location("Humble Indie Bindle", player),
-                     lambda state: state.has("Box of Various Supplies", player) and state.can_reach("Cut Content", 'region', player))
+                     lambda state: state.has("Box of Various Supplies", player) and state.can_reach("Cut Content",
+                                                                                                    'region', player))
             set_rule(world.get_location("Box of Various Supplies", player),
                      lambda state: state.can_reach("Cut Content", 'region', player))
-
 
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
             number_of_bundle = math.floor(889 / World_Options[Options.CoinSanityRange])
             for i in range(number_of_bundle):
                 def create_rule(coin):
-                    return lambda state: state.has("Coin_Freemium", player, coin)
+                    return has_enough_coin_freemium(player, coin)
 
                 item_coin_freemium = "Live Freemium or Die: number Coin"
-                item_coin_loc_freemium = re.sub("number", str(World_Options[Options.CoinSanityRange] * (i + 1)), item_coin_freemium)
+                item_coin_loc_freemium = re.sub("number", str(World_Options[Options.CoinSanityRange] * (i + 1)),
+                                                item_coin_freemium)
                 set_rule(world.get_location(item_coin_loc_freemium, player),
                          create_rule(World_Options[Options.CoinSanityRange] * (i + 1)))
                 if 889 % World_Options[Options.CoinSanityRange] != 0:
@@ -200,82 +247,99 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
                              create_rule(889))
 
             set_rule(world.get_entrance("Boss Door", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(889/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(889 / World_Options[Options.CoinSanityRange])))
 
             set_rule(world.get_location("Particles Pack", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(5 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Day One Patch Pack", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(5 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Checkpoint Pack", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(5 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Incredibly Important Pack", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(15/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(15 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Wall Jump Pack", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(35/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(35 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Health Bar Pack", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(5 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Parallax Pack", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(5/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(5 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Harmless Plants Pack", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(130/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(130 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Death of Comedy Pack", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(15/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(15 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Canadian Dialog Pack", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(10/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(10 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("DLC NPC Pack", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(15/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(15 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Cut Content Pack", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(40/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(40 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Name Change Pack", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(150/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(150 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Season Pass", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(199/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(199 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("High Definition Next Gen Pack", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(20/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(20 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Increased HP Pack", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(10/World_Options[Options.CoinSanityRange])))
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(10 / World_Options[Options.CoinSanityRange])))
             set_rule(world.get_location("Remove Ads Pack", player),
-                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player, math.ceil(25/World_Options[Options.CoinSanityRange])))
-
+                     lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
+                                             math.ceil(25 / World_Options[Options.CoinSanityRange])))
 
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_none:
             set_rule(world.get_entrance("Boss Door", player),
-                     lambda state: state.has("Coin_Freemium", player, 889))
+                     has_enough_coin_freemium(player, 889))
 
             set_rule(world.get_location("Particles Pack", player),
-                     lambda state: state.has("Coin_Freemium", player, 5))
+                     has_enough_coin_freemium(player, 5))
             set_rule(world.get_location("Day One Patch Pack", player),
-                     lambda state: state.has("Coin_Freemium", player, 5))
+                     has_enough_coin_freemium(player, 5))
             set_rule(world.get_location("Checkpoint Pack", player),
-                     lambda state: state.has("Coin_Freemium", player, 5))
+                     has_enough_coin_freemium(player, 5))
             set_rule(world.get_location("Incredibly Important Pack", player),
-                     lambda state: state.has("Coin_Freemium", player, 15))
+                     has_enough_coin_freemium(player, 15))
             set_rule(world.get_location("Wall Jump Pack", player),
-                     lambda state: state.has("Coin_Freemium", player, 35))
+                     has_enough_coin_freemium(player, 35))
             set_rule(world.get_location("Health Bar Pack", player),
-                     lambda state: state.has("Coin_Freemium", player, 5))
+                     has_enough_coin_freemium(player, 5))
             set_rule(world.get_location("Parallax Pack", player),
-                     lambda state: state.has("Coin_Freemium", player, 5))
+                     has_enough_coin_freemium(player, 5))
             set_rule(world.get_location("Harmless Plants Pack", player),
-                     lambda state: state.has("Coin_Freemium", player, 130))
+                     has_enough_coin_freemium(player, 130))
             set_rule(world.get_location("Death of Comedy Pack", player),
-                     lambda state: state.has("Coin_Freemium", player, 15))
+                     has_enough_coin_freemium(player, 15))
             set_rule(world.get_location("Canadian Dialog Pack", player),
-                     lambda state: state.has("Coin_Freemium", player, 10))
+                     has_enough_coin_freemium(player, 10))
             set_rule(world.get_location("DLC NPC Pack", player),
-                     lambda state: state.has("Coin_Freemium", player, 15))
+                     has_enough_coin_freemium(player, 15))
             set_rule(world.get_location("Cut Content Pack", player),
-                     lambda state: state.has("Coin_Freemium", player, 40))
+                     has_enough_coin_freemium(player, 40))
             set_rule(world.get_location("Name Change Pack", player),
-                     lambda state: state.has("Coin_Freemium", player, 150))
+                     has_enough_coin_freemium(player, 150))
             set_rule(world.get_location("Season Pass", player),
-                     lambda state: state.has("Coin_Freemium", player, 199))
+                     has_enough_coin_freemium(player, 199))
             set_rule(world.get_location("High Definition Next Gen Pack", player),
-                     lambda state: state.has("Coin_Freemium", player, 20))
+                     has_enough_coin_freemium(player, 20))
             set_rule(world.get_location("Increased HP Pack", player),
-                     lambda state: state.has("Coin_Freemium", player, 10))
+                     has_enough_coin_freemium(player, 10))
             set_rule(world.get_location("Remove Ads Pack", player),
-                     lambda state: state.has("Coin_Freemium", player, 25))
+                     has_enough_coin_freemium(player, 25))
 
         set_rule(world.get_location("Pickaxe", player), lambda state: state.can_reach("Cut Content", 'region', player))
 
@@ -290,4 +354,5 @@ def set_rules(world, player,World_Options: Options.DLCQuestOptions):
         world.completion_condition[player] = lambda state: state.has("Victory Freemium", player)
 
     if World_Options[Options.Campaign] == Options.Campaign.option_both:
-        world.completion_condition[player] = lambda state: state.has("Victory Basic", player) and state.has("Victory Freemium", player)
+        world.completion_condition[player] = lambda state: state.has("Victory Basic", player) and state.has(
+            "Victory Freemium", player)
