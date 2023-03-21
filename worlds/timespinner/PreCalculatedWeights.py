@@ -20,7 +20,7 @@ class PreCalculatedWeights:
     dry_lake_serene: bool
 
     def __init__(self, world: MultiWorld, player: int):
-        if is_option_enabled(world, player, "RisingTides"):
+        if world and is_option_enabled(world, player, "RisingTides"):
             weights_overrrides: Dict[str, Union[str, Dict[str, int]]] = self.get_flood_weights_overrides(world, player)
 
             self.flood_basement, self.flood_basement_high = \
@@ -41,7 +41,7 @@ class PreCalculatedWeights:
             self.flood_maw = False
             self.flood_pyramid_shaft = False
             self.flood_pyramid_back = False
-            self.flood_moat =False
+            self.flood_moat = False
             self.flood_courtyard = False
             self.flood_lake_desolation = False
             self.dry_lake_serene = False 
