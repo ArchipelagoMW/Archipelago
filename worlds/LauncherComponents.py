@@ -125,7 +125,7 @@ for file in data_files:
         component_data.get("frozen_name", None),
         component_data.get("cli", False),
         component_data.get("icon", "icon"),
-        Type.__getitem__(component_data.get("component_type", None)),
+        Type.__getitem__(component_data.get("component_type", "TOOL")),
         component_data.get("func", None),
         component_data.get("file_identifier", None),
         component_data.get("file_path", None),
