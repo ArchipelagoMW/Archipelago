@@ -154,7 +154,8 @@ def run_gui():
 
         def build(self):
             self.container = ContainerLayout()
-            self.grid = GridLayout(cols=3)
+            columns = 3 if self._external else 2
+            self.grid = GridLayout(cols=columns)
             self.container.add_widget(self.grid)
 
             button_layout = self.grid  # make buttons fill the window
@@ -177,12 +178,13 @@ def run_gui():
                     button_layout.add_widget(button)
                 else:
                     button_layout.add_widget(Label())
+                # column 3
                 if external:
                     button = Button(text=external[0])
                     button.component = external[1]
                     button.bind(on_press=self.component_action)
                     button_layout.add_widget(button)
-                else:
+                elif self._external:  # only build these buttons if external clients exist
                     button_layout.add_widget(Label())
 
             return self.container
