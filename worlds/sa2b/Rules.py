@@ -1156,9 +1156,6 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
                                state.has(ItemName.knuckles_hammer_gloves, player))
         add_rule(world.get_location(LocationName.eternal_engine_pipe_3, player),
                  lambda state: state.has(ItemName.tails_booster, player))
-        add_rule(world.get_location(LocationName.crazy_gadget_pipe_3, player),
-                 lambda state: state.has(ItemName.sonic_bounce_bracelet, player) or
-                               state.has(ItemName.sonic_mystic_melody, player))
 
         add_rule(world.get_location(LocationName.weapons_bed_pipe_3, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))

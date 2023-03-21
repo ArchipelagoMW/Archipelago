@@ -9,7 +9,7 @@ class Goal(Choice):
     Biolizard: Finish Cannon's Core and defeat the Biolizard and Finalhazard
     Chaos Emerald Hunt: Find the Seven Chaos Emeralds and reach Green Hill Zone
     Finalhazard Chaos Emerald Hunt: Find the Seven Chaos Emeralds and reach Green Hill Zone, then defeat Finalhazard
-    Grand Prix: Win every race in Kart Race Mode
+    Grand Prix: Win every race in Kart Race Mode (all standard levels are disabled)
     """
     display_name = "Goal"
     option_biolizard = 0
