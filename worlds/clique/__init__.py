@@ -33,7 +33,7 @@ class CliqueWorld(World):
 
     game = "Clique"
     topology_present = False
-    data_version = 0
+    data_version = 1
     web = CliqueWebWorld()
     option_definitions = clique_options
 
