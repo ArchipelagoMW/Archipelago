@@ -23,9 +23,9 @@ def sanity_check():
 def _check_exits():
     region_data = get_region_data()
     for name, region in region_data.items():
-        for exit in region.exits:
-            if (not exit in region_data):
-                _error(f"Region [{exit}] referenced by [{name}] was not defined")
+        for region_exit in region.exits:
+            if region_exit not in region_data:
+                _error(f"Region [{region_exit}] referenced by [{name}] was not defined")
 
 
 def _check_warps():
@@ -34,15 +34,16 @@ def _check_warps():
     for warp_source, warp_dest in warp_map.items():
         can_ignore = False
         for ignorable_warp in ignorable_warps:
-            if (warp_source == ignorable_warp):
+            if warp_source == ignorable_warp:
                 can_ignore = True
-        if (can_ignore): continue
+        if can_ignore:
+            continue
 
-        if (warp_dest == None):
+        if warp_dest is None:
             _error(f"Warp [{warp_source}] has no destination")
-        elif (not warps_connect_ltr(warp_dest, warp_source) and not Warp(warp_source).is_one_way):
+        elif not warps_connect_ltr(warp_dest, warp_source) and not Warp(warp_source).is_one_way:
             _error(f"Warp [{warp_source}] appears to be a one-way warp but was not marked as one")
-        elif (get_warp_region_name(warp_source) == None):
+        elif get_warp_region_name(warp_source) is None:
             _warn(f"Warp [{warp_source}] was not claimed by any region")
 
 
@@ -52,11 +53,11 @@ def _check_locations():
     claimed_locations = [location for region in get_region_data().values() for location in region.locations]
     claimed_location_map = {}
     for location_data in claimed_locations:
-        if (location_data.name in claimed_location_map):
+        if location_data.name in claimed_location_map:
             _error(f"Location [{location_data.name}] was claimed by multiple regions")
         claimed_location_map[location_data.name] = location_data
 
-    for location_name, location_json in extracted_data["locations"].items():
+    for location_name in extracted_data["locations"]:
         if (not location_name in claimed_location_map and not location_name in ignorable_locations):
             _warn(f"Location [{location_name}] was not claimed by any region")
 
@@ -71,7 +72,7 @@ def _finish():
         logging.warning(message)
     for message in _error_messages:
         logging.error(message)
-    logging.debug(f"Sanity check done. Found {len(_error_messages)} errors and {len(_warn_messages)} warnings.")
+    logging.debug("Sanity check done. Found %s errors and %s warnings.", len(_error_messages), len(_warn_messages))
     return not _failed
 
 

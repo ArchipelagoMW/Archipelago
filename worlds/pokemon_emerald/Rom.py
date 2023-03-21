@@ -1,6 +1,6 @@
-import bsdiff4
-import os
 from typing import Dict, List
+import os
+import bsdiff4
 from BaseClasses import MultiWorld
 from Options import Toggle
 from Patch import APDeltaPatch
@@ -43,23 +43,23 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str):
             _set_bytes_little_endian(patched_rom, location.rom_address, 2, extracted_data["constants"]["ITEM_ARCHIPELAGO_PROGRESSION"])
 
     # Randomize encounter tables
-    if (get_option_value(multiworld, player, "wild_pokemon") != RandomizeWildPokemon.option_vanilla):
+    if get_option_value(multiworld, player, "wild_pokemon") != RandomizeWildPokemon.option_vanilla:
         _randomize_encounter_tables(multiworld, player, patched_rom)
 
     # Randomize abilities
-    if (get_option_value(multiworld, player, "abilities") == Toggle.option_true):
+    if get_option_value(multiworld, player, "abilities") == Toggle.option_true:
         _randomize_abilities(multiworld, player, patched_rom)
 
     # Randomize learnsets
-    if (get_option_value(multiworld, player, "level_up_moves") != LevelUpMoves.option_vanilla):
+    if get_option_value(multiworld, player, "level_up_moves") != LevelUpMoves.option_vanilla:
         _randomize_learnsets(multiworld, player, patched_rom)
 
     # Randomize opponents
-    if (get_option_value(multiworld, player, "trainer_parties") != RandomizeTrainerParties.option_vanilla):
+    if get_option_value(multiworld, player, "trainer_parties") != RandomizeTrainerParties.option_vanilla:
         _randomize_opponents(multiworld, player, patched_rom)
 
     # Randomize starters
-    if (get_option_value(multiworld, player, "starters") != RandomizeStarters.option_vanilla):
+    if get_option_value(multiworld, player, "starters") != RandomizeStarters.option_vanilla:
         _randomize_starters(multiworld, player, patched_rom)
 
     # Modify species
@@ -120,7 +120,7 @@ def get_base_rom_as_bytes() -> bytes:
         base_rom_bytes = bytes(infile.read())
 
     return base_rom_bytes
-    
+
 
 def get_base_rom_path() -> str:
     options = Utils.get_options()
@@ -132,7 +132,7 @@ def get_base_rom_path() -> str:
 
 def _set_bytes_little_endian(byte_array, address, size, value):
     offset = 0
-    while (size > 0):
+    while size > 0:
         byte_array[address + offset] = value & 0xFF
         value = value >> 8
         offset += 1
@@ -153,13 +153,13 @@ def _randomize_encounter_tables(multiworld, player, rom):
         land_encounters = map_data["land_encounters"]
         water_encounters = map_data["water_encounters"]
         fishing_encounters = map_data["fishing_encounters"]
-        if (not land_encounters == None):
+        if land_encounters is not None:
             new_encounters = _create_randomized_encounter_table(multiworld, player, land_encounters["encounter_slots"])
             _replace_encounters(rom, land_encounters["rom_address"], new_encounters)
-        if (not water_encounters == None):
+        if water_encounters is not None:
             new_encounters = _create_randomized_encounter_table(multiworld, player, water_encounters["encounter_slots"])
             _replace_encounters(rom, water_encounters["rom_address"], new_encounters)
-        if (not fishing_encounters == None):
+        if fishing_encounters is not None:
             new_encounters = _create_randomized_encounter_table(multiworld, player, fishing_encounters["encounter_slots"])
             _replace_encounters(rom, fishing_encounters["rom_address"], new_encounters)
 
@@ -229,12 +229,12 @@ def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray):
             # TODO: This replaces custom moves with a random move regardless of whether that move
             # is learnable by that species. Should eventually be able to pick and choose from
             # the level up learnset and learnable tms/hms instead. Especially if moves aren't randomized
-            if (trainer_data["pokemon_data_type"] == "NO_ITEM_CUSTOM_MOVES"):
+            if trainer_data["pokemon_data_type"] == "NO_ITEM_CUSTOM_MOVES":
                 _set_bytes_little_endian(rom, pokemon_address + 0x06, 2, get_random_move(random))
                 _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, get_random_move(random))
                 _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, get_random_move(random))
                 _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, get_random_move(random))
-            elif (trainer_data["pokemon_data_type"] == "ITEM_CUSTOM_MOVES"):
+            elif trainer_data["pokemon_data_type"] == "ITEM_CUSTOM_MOVES":
                 _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, get_random_move(random))
                 _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, get_random_move(random))
                 _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, get_random_move(random))
@@ -276,7 +276,7 @@ def _randomize_abilities(multiworld: MultiWorld, player: int, rom: bytearray):
 
     ability_blacklist_labels = set(["cacophony"])
     option_ability_blacklist = get_option_value(multiworld, player, "ability_blacklist")
-    if option_ability_blacklist != None:
+    if option_ability_blacklist is not None:
         ability_blacklist_labels |= set([ability.lower() for ability in option_ability_blacklist])
 
     ability_blacklist = set([ability_label_to_value[label] for label in ability_blacklist_labels])
@@ -289,9 +289,9 @@ def _randomize_abilities(multiworld: MultiWorld, player: int, rom: bytearray):
         old_abilities = species_data["abilities"]
         new_abilities = [random.choice(ability_whitelist), random.choice(ability_whitelist)]
 
-        if (old_abilities[0] != 0):
+        if old_abilities[0] != 0:
             _set_bytes_little_endian(rom, species_data["rom_address"] + 22, 1, new_abilities[0])
-        if (old_abilities[1] != 0):
+        if old_abilities[1] != 0:
             _set_bytes_little_endian(rom, species_data["rom_address"] + 23, 1, new_abilities[1])
 
 
@@ -305,16 +305,16 @@ def _randomize_learnsets(multiworld: MultiWorld, player: int, rom: bytearray):
         i = 0
 
         # Replace filler MOVE_NONEs at start of list
-        while (old_learnset[i]["move_id"] == 0):
-            if (get_option_value(multiworld, player, "level_up_moves") == LevelUpMoves.option_start_with_four_moves):
+        while old_learnset[i]["move_id"] == 0:
+            if get_option_value(multiworld, player, "level_up_moves") == LevelUpMoves.option_start_with_four_moves:
                 new_learnset.append(get_random_move(random, set(new_learnset)))
             else:
                 new_learnset.append(0)
             i += 1
 
-        while (i < len(old_learnset)):
+        while i < len(old_learnset):
             # Guarantees the starter can defeat the Zigzagoon and gain XP
-            if (i == 3):
+            if i == 3:
                 new_move = get_random_damaging_move(random, set(new_learnset))
             else:
                 new_move = get_random_move(random, set(new_learnset))
@@ -337,7 +337,7 @@ def _modify_species_info(multiworld: MultiWorld, player: int, rom: bytearray):
 
     for species in species_data:
         species_info_address = get_extracted_data()["species"][species.id]["rom_address"]
-        if (species.catch_rate < min_catch_rate):
+        if species.catch_rate < min_catch_rate:
             _set_bytes_little_endian(rom, species_info_address + 8, 1, min_catch_rate)
 
 
@@ -354,15 +354,15 @@ def _modify_tmhm_compatibility(multiworld: MultiWorld, player: int, rom: bytearr
         compatibility_array = [False if bit == "0" else True for bit in list(species.tm_hm_compatibility)]
 
         tm_compatibility_array = compatibility_array[0:50]
-        if (tm_compatibility == TmCompatibility.option_fully_compatible):
+        if tm_compatibility == TmCompatibility.option_fully_compatible:
             tm_compatibility_array = [True for i in tm_compatibility_array]
-        elif (tm_compatibility == TmCompatibility.option_completely_random):
+        elif tm_compatibility == TmCompatibility.option_completely_random:
             tm_compatibility_array = [random.choice([True, False]) for i in tm_compatibility_array]
 
         hm_compatibility_array = compatibility_array[50:58]
-        if (hm_compatibility == HmCompatibility.option_fully_compatible):
+        if hm_compatibility == HmCompatibility.option_fully_compatible:
             hm_compatibility_array = [True for i in hm_compatibility_array]
-        elif (hm_compatibility == HmCompatibility.option_completely_random):
+        elif hm_compatibility == HmCompatibility.option_completely_random:
             hm_compatibility_array = [random.choice([True, False]) for i in hm_compatibility_array]
 
         compatibility_array = [] + tm_compatibility_array + hm_compatibility_array + [False, False, False, False, False, False]
@@ -378,11 +378,11 @@ def _tmhm_compatibility_array_to_bytearray(compatibility: List[bool]) -> bytearr
     bits.reverse()
 
     bytes = []
-    while (len(bits) > 0):
+    while len(bits) > 0:
         byte = 0
         for i in range(8):
             byte += bits.pop() << i
-        
+
         bytes.append(byte)
 
     return bytearray(bytes)

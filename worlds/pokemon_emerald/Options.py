@@ -1,5 +1,5 @@
-from BaseClasses import MultiWorld
 from typing import Dict, List, Union
+from BaseClasses import MultiWorld
 from Options import Option, Choice, DefaultOnToggle, Range, Toggle, OptionList
 
 class RandomizeBadges(Choice):
@@ -58,7 +58,7 @@ class ItemPoolType(Choice):
     default = 0
     option_shuffled = 0
     option_diverse = 1
-    option_diverse_exclude_berries = 1
+    option_diverse_exclude_berries = 2
 
 class HiddenItemsRequireItemfinder(DefaultOnToggle):
     """The Itemfinder is logically required to pick up hidden items"""
@@ -220,7 +220,7 @@ options: Dict[str, Option] = {
 
 def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, Dict, List]:
     option = getattr(world, name, None)
-    if option == None:
+    if option is None:
         return 0
 
     return option[player].value

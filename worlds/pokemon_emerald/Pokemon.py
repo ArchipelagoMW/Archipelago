@@ -1,6 +1,6 @@
 import os
 import random
-from typing import Dict, List, NamedTuple, Tuple, Optional, FrozenSet
+from typing import List, NamedTuple, Tuple, Optional, FrozenSet
 from .Data import get_extracted_data, load_json
 
 
@@ -61,22 +61,20 @@ def get_species_by_name(name: str) -> Optional[PokemonSpecies]:
 def get_random_species(random: random, nearby_bst: Optional[int] = None, type: Optional[int] = None) -> PokemonSpecies:
     pokemon_species_list = species_data
 
-    if (nearby_bst != None):
-        has_nearby_bst = lambda s: abs(sum(s.base_stats) - nearby_bst) < nearby_bst / 10
+    if nearby_bst is not None:
+        def has_nearby_bst(species: PokemonSpecies):
+            return abs(sum(species.base_stats) - nearby_bst) < nearby_bst / 10
+
         pokemon_species_list = list(filter(has_nearby_bst, pokemon_species_list))
-    if (type != None):
+    if type is not None:
         pokemon_species_list = [species for species in pokemon_species_list if type in species.types]
 
-    try:
-        return pokemon_species_list[random.randrange(0, len(pokemon_species_list))]
-    except ValueError:
-        print(pokemon_species_list)
-        raise Exception(len(pokemon_species_list))
+    return pokemon_species_list[random.randrange(0, len(pokemon_species_list))]
 
 
 def get_random_move(random: random, blacklist: Optional[FrozenSet[int]] = None) -> int:
     global _move_blacklist
-    expanded_blacklist = _move_blacklist | (blacklist if blacklist != None else set())
+    expanded_blacklist = _move_blacklist | (blacklist if blacklist is not None else set())
     num_moves = get_extracted_data()["constants"]["MOVES_COUNT"]
 
     move = random.randrange(1, num_moves)
@@ -89,7 +87,7 @@ def get_random_move(random: random, blacklist: Optional[FrozenSet[int]] = None) 
 def get_random_damaging_move(random: random, blacklist: Optional[FrozenSet[int]] = None) -> int:
     global _move_blacklist
     global _damaging_moves
-    expanded_blacklist = _move_blacklist | (blacklist if blacklist != None else set())
+    expanded_blacklist = _move_blacklist | (blacklist if blacklist is not None else set())
 
     move_options = list(_damaging_moves)
 

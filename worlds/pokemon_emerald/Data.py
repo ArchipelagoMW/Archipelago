@@ -1,7 +1,7 @@
 from enum import Enum
 import json
 import os
-from typing import Dict, List, MutableSet, NamedTuple, Optional, NamedTuple
+from typing import Dict, List, MutableSet, NamedTuple, Optional
 from BaseClasses import ItemClassification
 
 
@@ -107,11 +107,11 @@ class EncounterData:
     land_encounters: Optional[EncounterTableData]
     water_encounters: Optional[EncounterTableData]
     fishing_encounters: Optional[EncounterTableData]
-    
+
 
 def load_json(filepath):
     json_string = ""
-    with open(filepath, "r") as infile:
+    with open(filepath, "r", encoding="utf-8") as infile:
         for line in infile.readlines():
             json_string += line
     return json.loads(json_string)
@@ -119,7 +119,7 @@ def load_json(filepath):
 
 def get_config() -> Dict[str, any]:
     global _config
-    if (_config == None):
+    if _config is None:
         _config = load_json(os.path.join(os.path.dirname(__file__), "data/config.json"))
 
     return _config
@@ -127,7 +127,7 @@ def get_config() -> Dict[str, any]:
 
 def get_extracted_data() -> Dict[str, any]:
     global extracted_data
-    if (extracted_data == None):
+    if extracted_data is None:
         extracted_data = load_json(os.path.join(os.path.dirname(__file__), "data/extracted_data.json"))
     
     return extracted_data
@@ -135,7 +135,7 @@ def get_extracted_data() -> Dict[str, any]:
 
 def get_region_data():
     global region_data
-    if (region_data == None):
+    if region_data is None:
         region_data = create_region_data()
 
     return region_data
@@ -158,7 +158,7 @@ def create_region_data() -> Dict[str, RegionData]:
 
         # Locations
         for location_name in region_json["locations"]:
-            if (location_name in location_to_region_map):
+            if location_name in location_to_region_map:
                 raise AssertionError(f"Location [{location_name}] was claimed by multiple regions")
             location_to_region_map[location_name] = region_name
 
@@ -167,12 +167,12 @@ def create_region_data() -> Dict[str, RegionData]:
             new_region.events.append(EventData(event, region_name))
 
         # Exits
-        for exit in region_json["exits"]:
-            new_region.exits.append(exit)
+        for region_exit in region_json["exits"]:
+            new_region.exits.append(region_exit)
 
         # Warps
         for encoded_warp in region_json["warps"]:
-            if (encoded_warp in location_to_region_map):
+            if encoded_warp in location_to_region_map:
                 raise AssertionError(f"Warp [{encoded_warp}] was claimed by multiple regions")
             warp_to_region_map[encoded_warp] = region_name
             new_region.warps.append(encoded_warp)
@@ -190,7 +190,7 @@ def create_region_data() -> Dict[str, RegionData]:
             location_json["flag"]
         )
         regions[new_location.region_name].locations.append(new_location)
-    
+
     return regions
 
 
@@ -202,7 +202,7 @@ def load_region_jsons() -> List[Dict[str, any]]:
     for file in os.listdir(regions_dir):
         if os.path.isfile(os.path.join(regions_dir, file)):
             region_jsons.append(load_json(os.path.join(regions_dir, file)))
-    
+
     return region_jsons
 
 
@@ -211,21 +211,21 @@ def merge_region_jsons(region_jsons: List[Dict[str, any]]) -> Dict[str, any]:
 
     for region_subset in region_jsons:
         for region_name, region_data in region_subset.items():
-            if (region_name in merged_regions):
+            if region_name in merged_regions:
                 raise AssertionError("Region [{region_name}] was defined multiple times")
             merged_regions[region_name] = region_data
-    
+
     return merged_regions
 
 
 def get_location_to_region_map() -> Dict[str, str]:
-    if (location_to_region_map == None):
+    if location_to_region_map is None:
         raise AssertionError("Cannot get_location_to_region_map before region data has been loaded")
     return location_to_region_map
 
 
 def get_warp_to_region_map() -> Dict[str, str]:
-    if (warp_to_region_map == None):
+    if warp_to_region_map is None:
         raise AssertionError("Cannot get_warp_to_region_map before region data has been loaded")
     return warp_to_region_map
 
@@ -233,7 +233,7 @@ def get_warp_to_region_map() -> Dict[str, str]:
 def get_item_attributes() -> Dict[int, ItemData]:
     global item_attributes
     extracted_data = get_extracted_data()
-    if (item_attributes == None):
+    if item_attributes is None:
         item_attributes = {}
         items_json = load_json(os.path.join(os.path.dirname(__file__), "data/items.json"))
 
@@ -250,7 +250,7 @@ def get_item_attributes() -> Dict[int, ItemData]:
 
 def get_location_attributes() -> Dict[str, LocationAttributes]:
     global location_attributes
-    if (location_attributes == None):
+    if location_attributes is None:
         location_attributes = {}
         locations_json = load_json(os.path.join(os.path.dirname(__file__), "data/locations.json"))
 
@@ -264,12 +264,11 @@ def get_location_attributes() -> Dict[str, LocationAttributes]:
 
 
 def _str_to_item_classification(string):
-    if (string == "PROGRESSION"):
+    if string == "PROGRESSION":
         return ItemClassification.progression
-    if (string == "USEFUL"):
+    elif string == "USEFUL":
         return ItemClassification.useful
-    elif (string == "FILLER"):
+    elif string == "FILLER":
         return ItemClassification.filler
-    elif (string == "TRAP"):
+    elif string == "TRAP":
         return ItemClassification.trap
-

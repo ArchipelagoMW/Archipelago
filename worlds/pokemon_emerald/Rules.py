@@ -1,8 +1,6 @@
 from BaseClasses import CollectionState, MultiWorld
 from worlds.generic.Rules import set_rule, add_rule
-from Options import Toggle
 from .Data import get_location_attributes
-from .Options import get_option_value, RandomizeBadges
 
 
 def _can_cut(state: CollectionState, player: int):
@@ -285,7 +283,6 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_SLATEPORT_CITY/MAIN -> REGION_ROUTE134/WEST", player),
         can_surf
     )
-    # TODO: This is not enforced in-game
     set_rule(
         multiworld.get_location("EVENT_TALK_TO_DOCK", player),
         lambda state: state.has("Devon Goods", player)
@@ -1232,7 +1229,7 @@ def set_enable_ferry_rules(multiworld: MultiWorld, player: int):
 
 def add_hidden_item_itemfinder_rules(multiworld: MultiWorld, player: int):
     for location in multiworld.get_locations(player):
-        if (location.tags != None and "HiddenItem" in location.tags):
+        if location.tags is not None and "HiddenItem" in location.tags:
             add_rule(
                 location,
                 lambda state: state.has("Itemfinder", player)

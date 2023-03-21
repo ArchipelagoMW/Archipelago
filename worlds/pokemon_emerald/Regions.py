@@ -18,12 +18,12 @@ def create_regions(multiworld, player):
             event.place_locked_item(PokemonEmeraldItem(event_data.name, ItemClassification.progression, None, player))
             new_region.locations.append(event)
 
-        for exit in region_data.exits:
-            connections.append((f"{region_name} -> {exit}", region_name, exit))
+        for region_exit in region_data.exits:
+            connections.append((f"{region_name} -> {region_exit}", region_name, region_exit))
 
         for warp in region_data.warps:
             destination_region_name = get_warp_region_name(get_warp_destination(warp))
-            if (destination_region_name == None):
+            if destination_region_name is None:
                 continue
             connections.append((warp, region_name, destination_region_name))
 

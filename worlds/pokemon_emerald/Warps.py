@@ -13,7 +13,7 @@ class Warp:
     dest_ids: int
 
     def __init__(self, encoded_string: Optional[str] = None) -> None:
-        if (encoded_string != None):
+        if encoded_string is not None:
             decoded_warp = Warp.decode(encoded_string)
             self.is_one_way = decoded_warp.is_one_way
             self.source_map = decoded_warp.source_map
@@ -28,8 +28,8 @@ class Warp:
             source_ids_string += str(id) + ","
         source_ids_string = source_ids_string[:-1] # Remove last ","
 
-        return f"{self.source_map}:{source_ids_string}/{self.dest_map}:{self.dest_id}"
-    
+        return f"{self.source_map}:{source_ids_string}/{self.dest_map}:{self.dest_ids}"
+
     def connects_to(self, other: 'Warp'):
         return self.dest_map == other.source_map and set(self.dest_ids) <= set(other.source_ids)
 
@@ -37,7 +37,7 @@ class Warp:
     def decode(encoded_string: str) -> 'Warp':
         warp = Warp()
         warp.is_one_way = encoded_string.endswith("!")
-        if (warp.is_one_way):
+        if warp.is_one_way:
             encoded_string = encoded_string[:-1]
 
         warp_source, warp_dest = encoded_string.split("/")
@@ -59,18 +59,19 @@ def warps_connect_ltr(warp_1: str, warp_2: str) -> bool:
 
 def get_warp_map() -> Dict[str, Optional[str]]:
     global _warp_map
-    if (_warp_map == None):
+    if _warp_map is None:
         _warp_map = {}
         warps_json = get_extracted_data()["warps"]
         for warp in warps_json:
             for other_warp in warps_json:
-                if (warp in _warp_map): continue
-                if (warps_connect_ltr(warp, other_warp)):
+                if warp in _warp_map:
+                    continue
+                if warps_connect_ltr(warp, other_warp):
                     _warp_map[warp] = other_warp
-            
-            if (not warp in _warp_map):
+
+            if not warp in _warp_map:
                 _warp_map[warp] = None
-    
+
     return _warp_map
 
 
@@ -81,6 +82,6 @@ def get_warp_destination(warp: str) -> Optional[str]:
 
 def get_warp_region_name(warp: str) -> Optional[str]:
     warp_to_region_map = get_warp_to_region_map()
-    if (not warp in warp_to_region_map):
+    if warp not in warp_to_region_map:
         return None
     return warp_to_region_map[warp]

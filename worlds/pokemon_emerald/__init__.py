@@ -7,12 +7,12 @@ from Fill import fill_restrictive
 from Options import Toggle
 from worlds.AutoWorld import World, WebWorld
 
+from . import Rules
 from .Items import PokemonEmeraldItem, create_item_label_to_id_map, get_item_classification
 from .Locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
 from .Options import RandomizeBadges, RandomizeHms, ItemPoolType, options, get_option_value
 from .Regions import create_regions
 from .Rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path
-from .Rules import set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules, add_hidden_item_itemfinder_rules, add_flash_rules, set_enable_ferry_rules
 from .SanityCheck import sanity_check
 
 
@@ -64,10 +64,11 @@ class PokemonEmeraldWorld(World):
             local_hash = hashlib.md5()
             local_hash.update(bytes(infile.read()))
 
-            if (not local_hash.hexdigest() == PokemonEmeraldDeltaPatch.hash):
+            if local_hash.hexdigest() != PokemonEmeraldDeltaPatch.hash:
                 raise AssertionError("Base ROM for Pokemon Emerald does not match expected hash. Please get Pokemon Emerald Version (USA, Europe) and dump it.")
 
-        if (sanity_check() == False): raise AssertionError("Pokemon Emerald sanity check failed. See log for details.")
+        if sanity_check() is False:
+            raise AssertionError("Pokemon Emerald sanity check failed. See log for details.")
 
 
     def create_regions(self):
@@ -77,13 +78,13 @@ class PokemonEmeraldWorld(World):
         enable_ferry_option = get_option_value(self.multiworld, self.player, "enable_ferry")
 
         tags = set(["Badge", "HM", "KeyItem", "Rod", "Bike"])
-        if (overworld_items_option == Toggle.option_true):
+        if overworld_items_option == Toggle.option_true:
             tags.add("OverworldItem")
-        if (hidden_items_option == Toggle.option_true):
+        if hidden_items_option == Toggle.option_true:
             tags.add("HiddenItem")
-        if (npc_gifts_option == Toggle.option_true):
+        if npc_gifts_option == Toggle.option_true:
             tags.add("NpcGift")
-        if (enable_ferry_option == Toggle.option_true):
+        if enable_ferry_option == Toggle.option_true:
             tags.add("Ferry")
 
         create_regions(self.multiworld, self.player)
@@ -100,19 +101,20 @@ class PokemonEmeraldWorld(World):
 
         item_locations: List[PokemonEmeraldLocation] = []
         for region in self.multiworld.regions:
-            if (region.player == self.player):
-                item_locations += [location for location in region.locations if not location.address == None] # Filter events
+            if region.player == self.player:
+                # Filter events
+                item_locations += [location for location in region.locations if location.address is not None]
 
                 # Filter out items that aren't randomized
-                if (badges_option == RandomizeBadges.option_vanilla):
+                if badges_option == RandomizeBadges.option_vanilla:
                     item_locations = [location for location in item_locations if "Badge" not in location.tags]
-                if (hms_option == RandomizeHms.option_vanilla):
+                if hms_option == RandomizeHms.option_vanilla:
                     item_locations = [location for location in item_locations if "HM" not in location.tags]
-                if (key_items_option == Toggle.option_false):
+                if key_items_option == Toggle.option_false:
                     item_locations = [location for location in item_locations if "KeyItem" not in location.tags]
-                if (rods_option == Toggle.option_false):
+                if rods_option == Toggle.option_false:
                     item_locations = [location for location in item_locations if "Rod" not in location.tags]
-                if (bikes_option == Toggle.option_false):
+                if bikes_option == Toggle.option_false:
                     item_locations = [location for location in item_locations if "Bike" not in location.tags]
 
         if item_pool_type_option == ItemPoolType.option_shuffled:
@@ -122,31 +124,31 @@ class PokemonEmeraldWorld(World):
 
 
     def set_rules(self):
-        set_default_rules(self.multiworld, self.player)
+        Rules.set_default_rules(self.multiworld, self.player)
 
-        if (get_option_value(self.multiworld, self.player, "overworld_items") == Toggle.option_true):
-            set_overworld_item_rules(self.multiworld, self.player)
-        if (get_option_value(self.multiworld, self.player, "hidden_items") == Toggle.option_true):
-            set_hidden_item_rules(self.multiworld, self.player)
-        if (get_option_value(self.multiworld, self.player, "npc_gifts") == Toggle.option_true):
-            set_npc_gift_rules(self.multiworld, self.player)
-        if (get_option_value(self.multiworld, self.player, "enable_ferry") == Toggle.option_true):
-            set_enable_ferry_rules(self.multiworld, self.player)
+        if get_option_value(self.multiworld, self.player, "overworld_items") == Toggle.option_true:
+            Rules.set_overworld_item_rules(self.multiworld, self.player)
+        if get_option_value(self.multiworld, self.player, "hidden_items") == Toggle.option_true:
+            Rules.set_hidden_item_rules(self.multiworld, self.player)
+        if get_option_value(self.multiworld, self.player, "npc_gifts") == Toggle.option_true:
+            Rules.set_npc_gift_rules(self.multiworld, self.player)
+        if get_option_value(self.multiworld, self.player, "enable_ferry") == Toggle.option_true:
+            Rules.set_enable_ferry_rules(self.multiworld, self.player)
 
-        if (get_option_value(self.multiworld, self.player, "require_itemfinder") == Toggle.option_true):
-            add_hidden_item_itemfinder_rules(self.multiworld, self.player)
+        if get_option_value(self.multiworld, self.player, "require_itemfinder") == Toggle.option_true:
+            Rules.add_hidden_item_itemfinder_rules(self.multiworld, self.player)
 
-        if (get_option_value(self.multiworld, self.player, "require_flash") == Toggle.option_true):
-            add_flash_rules(self.multiworld, self.player)
+        if get_option_value(self.multiworld, self.player, "require_flash") == Toggle.option_true:
+            Rules.add_flash_rules(self.multiworld, self.player)
 
 
     def pre_fill(self):
         locations: List[PokemonEmeraldLocation] = self.multiworld.get_locations(self.player)
 
         badges_option = get_option_value(self.multiworld, self.player, "badges")
-        if (badges_option == RandomizeBadges.option_shuffle):
-            badge_locations = [location for location in locations if location.tags != None and "Badge" in location.tags]
-            badge_items = [item for item in self.multiworld.itempool if item.player == self.player and item.tags != None and "Badge" in item.tags]
+        if badges_option == RandomizeBadges.option_shuffle:
+            badge_locations = [location for location in locations if location.tags is not None and "Badge" in location.tags]
+            badge_items = [item for item in self.multiworld.itempool if item.player == self.player and item.tags is not None and "Badge" in item.tags]
 
             for item in badge_items:
                 self.multiworld.itempool.remove(item)
@@ -154,9 +156,9 @@ class PokemonEmeraldWorld(World):
             fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), badge_locations, badge_items, True, True, True)
 
         hms_option = get_option_value(self.multiworld, self.player, "hms")
-        if (hms_option == RandomizeBadges.option_shuffle):
-            hm_locations = [location for location in locations if location.tags != None and "HM" in location.tags]
-            hm_items = [item for item in self.multiworld.itempool if item.player == self.player and item.tags != None and "HM" in item.tags]
+        if hms_option == RandomizeBadges.option_shuffle:
+            hm_locations = [location for location in locations if location.tags is not None and "HM" in location.tags]
+            hm_items = [item for item in self.multiworld.itempool if item.player == self.player and item.tags is not None and "HM" in item.tags]
 
             for item in hm_items:
                 self.multiworld.itempool.remove(item)
@@ -171,20 +173,20 @@ class PokemonEmeraldWorld(World):
 
         def convert_unrandomized_items_to_events(tag: str):
             for location in locations:
-                if (location.tags != None and tag in location.tags):
+                if location.tags is not None and tag in location.tags:
                     location.place_locked_item(self.create_event(self.item_id_to_name[location.default_item_code]))
                     location.address = None
                     location.is_event = True
 
-        if (get_option_value(self.multiworld, self.player, "badges") == RandomizeBadges.option_vanilla):
+        if get_option_value(self.multiworld, self.player, "badges") == RandomizeBadges.option_vanilla:
             convert_unrandomized_items_to_events("Badge")
-        if (get_option_value(self.multiworld, self.player, "hms") == RandomizeHms.option_vanilla):
+        if get_option_value(self.multiworld, self.player, "hms") == RandomizeHms.option_vanilla:
             convert_unrandomized_items_to_events("HM")
-        if (get_option_value(self.multiworld, self.player, "rods") == Toggle.option_false):
+        if get_option_value(self.multiworld, self.player, "rods") == Toggle.option_false:
             convert_unrandomized_items_to_events("Rod")
-        if (get_option_value(self.multiworld, self.player, "bikes") == Toggle.option_false):
+        if get_option_value(self.multiworld, self.player, "bikes") == Toggle.option_false:
             convert_unrandomized_items_to_events("Bike")
-        if (get_option_value(self.multiworld, self.player, "key_items") == Toggle.option_false):
+        if get_option_value(self.multiworld, self.player, "key_items") == Toggle.option_false:
             convert_unrandomized_items_to_events("KeyItem")
 
 

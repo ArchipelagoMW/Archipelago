@@ -22,12 +22,14 @@ class PokemonEmeraldLocation(Location):
 
 
 def offset_flag(flag: Union[int, None]) -> Union[int, None]:
-    if (flag == None): return None
+    if flag is None:
+        return None
     return flag + get_config()["ap_offset"]
 
 
 def reverse_offset_flag(id: Union[int, None]) -> Union[int, None]:
-    if (id == None): return None
+    if id is None:
+        return None
     return id - get_config()["ap_offset"]
 
 
@@ -45,9 +47,9 @@ def create_locations_with_tags(multiworld: MultiWorld, player: int, tags):
 def create_location_label_to_id_map():
     region_data = get_region_data()
 
-    map = {}
+    label_to_id_map = {}
     for region_data in region_data.values():
         for location_data in region_data.locations:
-            map[location_data.label] = offset_flag(location_data.flag)
+            label_to_id_map[location_data.label] = offset_flag(location_data.flag)
 
-    return map
+    return label_to_id_map

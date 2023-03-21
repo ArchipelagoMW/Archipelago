@@ -10,30 +10,32 @@ class PokemonEmeraldItem(Item):
     def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int):
         super().__init__(name, classification, code, player)
 
-        if (code == None):
+        if code is None:
             self.tags = frozenset(["Event"])
         else:
             self.tags = get_item_attributes()[reverse_offset_item_value(code)].tags
 
 
 def offset_item_value(item_value: Union[int, None]) -> Union[int, None]:
-    if (item_value == None): return None
+    if item_value is None:
+        return None
     return item_value + get_config()["ap_offset"]
 
 
 def reverse_offset_item_value(id: Union[int, None]) -> Union[int, None]:
-    if (id == None): return None
+    if id is None:
+        return None
     return id - get_config()["ap_offset"]
 
 
 def create_item_label_to_id_map():
     items = get_item_attributes()
 
-    map = {}
+    label_to_id_map = {}
     for item_value, attributes in items.items():
-        map[attributes.label] = offset_item_value(item_value)
+        label_to_id_map[attributes.label] = offset_item_value(item_value)
 
-    return map
+    return label_to_id_map
 
 
 def get_item_classification(item_code: int):
