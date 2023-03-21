@@ -22,6 +22,11 @@ from worlds.adventure.Rom import AdventureForeignItemInfo, AdventureAutoCollectL
 from worlds.adventure.Items import base_adventure_item_id, standard_item_max, item_table
 from worlds.adventure.Offsets import static_item_element_size, connector_port_offset
 
+from worlds.LauncherComponents import Component, components, SuffixIdentifier
+
+# Adventure
+components.append(Component('Adventure Client', 'AdventureClient', file_identifier=SuffixIdentifier('.apadvn')))
+
 SYSTEM_MESSAGE_ID = 0
 
 CONNECTION_TIMING_OUT_STATUS = \
