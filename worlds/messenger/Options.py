@@ -1,4 +1,4 @@
-from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice, OptionList
+from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice
 
 
 class MessengerAccessibility(Accessibility):

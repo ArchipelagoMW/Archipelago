@@ -1,8 +1,8 @@
-from typing import Dict, Callable, TYPE_CHECKING, List
+from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState, MultiWorld
 from worlds.generic.Rules import set_rule, allow_self_locking_items, add_rule
-from .Options import MessengerAccessibility, Goal, LogicTricks
+from .Options import MessengerAccessibility, Goal
 from .Constants import NOTES, PHOBEKINS
 
 if TYPE_CHECKING:

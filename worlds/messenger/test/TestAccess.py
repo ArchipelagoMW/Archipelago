@@ -1,6 +1,5 @@
 from . import MessengerTestBase
 from ..Constants import NOTES, PHOBEKINS
-from ..Options import MessengerAccessibility
 
 
 class AccessTest(MessengerTestBase):
