@@ -21,7 +21,7 @@ from pathlib import Path
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 try:
-    requirement = 'cx-Freeze>=6.14.1'
+    requirement = 'cx-Freeze>=6.14.7'
     pkg_resources.require(requirement)
     import cx_Freeze
 except pkg_resources.ResolutionError:
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     ModuleUpdate.update(yes="--yes" in sys.argv or "-y" in sys.argv)
     ModuleUpdate.update_ran = False  # restore for later
 
-from Launcher import components, icon_paths
+from worlds.LauncherComponents import components, icon_paths
 from Utils import version_tuple, is_windows, is_linux
 
 
@@ -49,6 +49,7 @@ apworlds: set = {
     "Subnautica",
     "Factorio",
     "Rogue Legacy",
+    "Sonic Adventure 2 Battle",
     "Donkey Kong Country 3",
     "Super Mario World",
     "Stardew Valley",
