@@ -1140,7 +1140,7 @@ def set_npc_gift_rules(multiworld: MultiWorld, player: int):
     # Littleroot Town
     set_rule(
         multiworld.get_location(name_to_label("NPC_GIFT_RECEIVED_AMULET_COIN"), player),
-        lambda state: state.has("Balance Badge", player)
+        lambda state: state.has("EVENT_TALK_TO_MR_STONE", player) and state.has("Balance Badge", player)
     )
 
     # Petalburg City
