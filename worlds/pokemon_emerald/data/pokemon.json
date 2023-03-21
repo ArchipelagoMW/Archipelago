@@ -140,7 +140,7 @@
     "tm_hm_compatibility": "1000010001100010100010100111001100001011011111000010010100000000"
   },
   "SPECIES_NIDORAN_F": {
-    "label": "Nidoran♀",
+    "label": "Nidoran Female",
     "national_dex_number": 29,
     "tm_hm_compatibility": "0010010001101100110010111011000101010001011111000010010100000000"
   },
@@ -155,7 +155,7 @@
     "tm_hm_compatibility": "1010110001111110110010111111011101111111111111000010110100000000"
   },
   "SPECIES_NIDORAN_M": {
-    "label": "Nidoran♂",
+    "label": "Nidoran Male",
     "national_dex_number": 32,
     "tm_hm_compatibility": "0010010001101100110010111011000101010000011111000010010100000000"
   },
