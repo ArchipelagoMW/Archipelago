@@ -106,6 +106,8 @@ def get_exe(component: Union[str, Component]) -> Optional[Sequence[str]]:
                 break
         if not component:
             return None
+    if component.file_path is not None:
+        return [component.file_path]
     if is_frozen():
         suffix = '.exe' if is_windows else ''
         return [local_path(f'{component.frozen_name}{suffix}')]

@@ -20,10 +20,11 @@ class Component:
     cli: bool
     func: Optional[Callable]
     file_identifier: Optional[Callable[[str], bool]]
+    file_path: Optional[str]
 
     def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
                  cli: bool = False, icon: str = 'icon', component_type: Type = None, func: Optional[Callable] = None,
-                 file_identifier: Optional[Callable[[str], bool]] = None):
+                 file_identifier: Optional[Callable[[str], bool]] = None, file_path: Optional[str] = None):
         self.display_name = display_name
         self.script_name = script_name
         self.frozen_name = frozen_name or f'Archipelago{script_name}' if script_name else None
@@ -36,6 +37,7 @@ class Component:
             Type.ADJUSTER if 'Adjuster' in display_name else Type.TOOL
         self.func = func
         self.file_identifier = file_identifier
+        self.file_path = file_path
 
     def handles_file(self, path: str):
         return self.file_identifier(path) if self.file_identifier else False
