@@ -304,7 +304,7 @@ class KH2Context(CommonContext):
                         if item.location not in self.kh2seedsave["checked_locations"][str(item.player)] \
                                 and item.location not in {-1, -2}:
                             self.kh2seedsave["checked_locations"][str(item.player)].append(item.location)
-                if not self.kh2seedsave["starting_inventory"] and self.kh2connected:
+                if not self.kh2seedsave["starting_inventory"]:
                     self.kh2seedsave["starting_inventory"] = True
 
         if cmd in {"RoomUpdate"}:
@@ -442,16 +442,9 @@ class KH2Context(CommonContext):
         return isChecked
 
     async def give_item(self, item, ItemType="ServerItems"):
-        while not self.kh2connected:
-            await asyncio.sleep(1)
         try:
             itemname = self.lookup_id_to_item[item]
             itemcode = self.item_name_to_data[itemname]
-            # cannot give items during loading screens
-            # 0x8E9DA3=load 0xAB8BC7=black 0x2A148E8=controllable 0x715568=room transition
-            while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Now, 1), "big") in {255, 1}:
-                await asyncio.sleep(1)
-
             if itemcode.ability:
                 abilityInvoType = 0
                 TwilightZone = 2
@@ -459,7 +452,6 @@ class KH2Context(CommonContext):
                     abilityInvoType = 1
                     TwilightZone = -2
                 if itemname in {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}:
-
                     self.kh2seedsave["AmountInvo"][ItemType]["Growth"][itemname] += 1
                     return
 
