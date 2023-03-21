@@ -154,12 +154,13 @@ def run_gui():
 
         def build(self):
             self.container = ContainerLayout()
-            self.grid = GridLayout(cols=2)
+            self.grid = GridLayout(cols=3)
             self.container.add_widget(self.grid)
 
             button_layout = self.grid  # make buttons fill the window
-            for (tool, client) in itertools.zip_longest(itertools.chain(
-                    self._tools.items(), self._funcs.items(), self._adjusters.items()), self._clients.items()):
+            for (tool, client, external) in itertools.zip_longest(itertools.chain(
+                    self._tools.items(), self._funcs.items(), self._adjusters.items()), self._clients.items(),
+                    self._external.items()):
                 # column 1
                 if tool:
                     button = Button(text=tool[0])
@@ -172,6 +173,13 @@ def run_gui():
                 if client:
                     button = Button(text=client[0])
                     button.component = client[1]
+                    button.bind(on_press=self.component_action)
+                    button_layout.add_widget(button)
+                else:
+                    button_layout.add_widget(Label())
+                if external:
+                    button = Button(text=external[0])
+                    button.component = external[1]
                     button.bind(on_press=self.component_action)
                     button_layout.add_widget(button)
                 else:
