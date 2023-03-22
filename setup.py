@@ -49,6 +49,7 @@ apworlds: set = {
     "Subnautica",
     "Factorio",
     "Rogue Legacy",
+    "Sonic Adventure 2 Battle",
     "Donkey Kong Country 3",
     "Super Mario World",
     "Stardew Valley",
