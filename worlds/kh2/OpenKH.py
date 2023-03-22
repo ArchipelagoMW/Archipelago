@@ -195,7 +195,7 @@ def patch_kh2(self, output_directory):
             if data.item.player == self.player:
                 itemcode = item_dictionary_table[data.item.name].kh2id
             else:
-                itemcode = 461
+                itemcode = 90  # castle map
         else:
             increaseStat(self.multiworld.per_slot_randoms[self.player].randint(0, 3))
             itemcode = 0
