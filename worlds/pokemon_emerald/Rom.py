@@ -5,7 +5,7 @@ from BaseClasses import MultiWorld
 from Options import Toggle
 from Patch import APDeltaPatch
 import Utils
-from .Data import SpeciesData, data, extracted_data, load_json
+from .Data import SpeciesData, TrainerPokemonDataTypeEnum, data
 from .Items import reverse_offset_item_value
 from .Options import get_option_value, RandomizeWildPokemon, RandomizeStarters, RandomizeTrainerParties, TmCompatibility, HmCompatibility, LevelUpMoves
 from .Pokemon import get_random_species, get_species_by_id, get_species_by_name, get_random_damaging_move, get_random_move
@@ -140,38 +140,31 @@ def _set_bytes_little_endian(byte_array, address, size, value):
 # For every encounter table, replace each unique species.
 # So if a table only has 2 species across multiple slots, it will
 # still have 2 species in the same respective slots after randomization.
-# TODO: Account for access to pokemon who can learn required HMs
 def _randomize_encounter_tables(multiworld, player, rom):
-    # Sort alphabetically by map key for reproducibility
-    maps_json = [m[1] for m in sorted(extracted_data["maps"].items(), key=lambda m: m[0])]
-
-    for map_data in maps_json:
-        land_encounters = map_data["land_encounters"]
-        water_encounters = map_data["water_encounters"]
-        fishing_encounters = map_data["fishing_encounters"]
-        if land_encounters is not None:
-            new_encounters = _create_randomized_encounter_table(multiworld, player, land_encounters["encounter_slots"])
-            _replace_encounters(rom, land_encounters["rom_address"], new_encounters)
-        if water_encounters is not None:
-            new_encounters = _create_randomized_encounter_table(multiworld, player, water_encounters["encounter_slots"])
-            _replace_encounters(rom, water_encounters["rom_address"], new_encounters)
-        if fishing_encounters is not None:
-            new_encounters = _create_randomized_encounter_table(multiworld, player, fishing_encounters["encounter_slots"])
-            _replace_encounters(rom, fishing_encounters["rom_address"], new_encounters)
+    for map_data in data.maps:
+        if map_data.land_encounters is not None:
+            new_encounters = _create_randomized_encounter_table(multiworld, player, map_data.land_encounters.slots)
+            _replace_encounters(rom, map_data.land_encounters.rom_address, new_encounters)
+        if map_data.water_encounters is not None:
+            new_encounters = _create_randomized_encounter_table(multiworld, player, map_data.water_encounters.slots)
+            _replace_encounters(rom, map_data.water_encounters.rom_address, new_encounters)
+        if map_data.fishing_encounters is not None:
+            new_encounters = _create_randomized_encounter_table(multiworld, player, map_data.fishing_encounters.slots)
+            _replace_encounters(rom, map_data.fishing_encounters.rom_address, new_encounters)
 
 
-def _create_randomized_encounter_table(multiworld: MultiWorld, player: int, default_slots):
+def _create_randomized_encounter_table(multiworld: MultiWorld, player: int, default_slots: List[int]):
     random = multiworld.per_slot_randoms[player]
-    match_bst = get_option_value(multiworld, player, "wild_pokemon") in [RandomizeWildPokemon.option_match_base_stats, RandomizeWildPokemon.option_match_base_stats_and_type]
-    match_type = get_option_value(multiworld, player, "wild_pokemon") in [RandomizeWildPokemon.option_match_type, RandomizeWildPokemon.option_match_base_stats_and_type]
+    should_match_bst = get_option_value(multiworld, player, "wild_pokemon") in [RandomizeWildPokemon.option_match_base_stats, RandomizeWildPokemon.option_match_base_stats_and_type]
+    should_match_type = get_option_value(multiworld, player, "wild_pokemon") in [RandomizeWildPokemon.option_match_type, RandomizeWildPokemon.option_match_base_stats_and_type]
 
     default_pokemon = [p_id for p_id in set(default_slots)]
 
     new_pokemon_map: Dict[int, int] = {}
     for pokemon_id in default_pokemon:
-        bst = None if not match_bst else sum(get_species_by_id(pokemon_id).base_stats)
-        type = None if not match_type else random.choice(get_species_by_id(pokemon_id).types)
-        new_pokemon_id = get_random_species(random, bst, type).species_id
+        target_bst = sum(get_species_by_id(pokemon_id).base_stats) if should_match_bst else None
+        target_type = random.choice(get_species_by_id(pokemon_id).types) if should_match_type else None
+        new_pokemon_id = get_random_species(random, target_bst, target_type).species_id
         new_pokemon_map[pokemon_id] = new_pokemon_id
 
     new_slots = []
@@ -196,41 +189,40 @@ def _replace_encounters(rom, table_address, encounter_slots):
 
 def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray):
     random = multiworld.per_slot_randoms[player]
-    trainers_json = extracted_data["trainers"]
-    match_bst = get_option_value(multiworld, player, "trainer_parties") in [RandomizeTrainerParties.option_match_base_stats, RandomizeTrainerParties.option_match_base_stats_and_type]
-    match_type = get_option_value(multiworld, player, "trainer_parties") in [RandomizeTrainerParties.option_match_type, RandomizeTrainerParties.option_match_base_stats_and_type]
+    should_match_bst = get_option_value(multiworld, player, "trainer_parties") in [RandomizeTrainerParties.option_match_base_stats, RandomizeTrainerParties.option_match_base_stats_and_type]
+    should_match_type = get_option_value(multiworld, player, "trainer_parties") in [RandomizeTrainerParties.option_match_type, RandomizeTrainerParties.option_match_base_stats_and_type]
 
-    for trainer_data in trainers_json:
-        party_address = trainer_data["party_rom_address"]
+    for trainer_data in data.trainers:
+        party_address = trainer_data.party.rom_address
 
         pokemon_data_size: int
         if (
-            trainer_data["pokemon_data_type"] == "NO_ITEM_DEFAULT_MOVES" or
-            trainer_data["pokemon_data_type"] == "ITEM_DEFAULT_MOVES"
+            trainer_data.party.pokemon_data_type == TrainerPokemonDataTypeEnum.NO_ITEM_DEFAULT_MOVES or
+            trainer_data.party.pokemon_data_type == TrainerPokemonDataTypeEnum.ITEM_DEFAULT_MOVES
         ):
             pokemon_data_size = 8
         else: # Custom Moves
             pokemon_data_size = 16
 
         new_party: List[SpeciesData] = []
-        for pokemon_data in trainer_data["party"]:
-            bst = sum(get_species_by_id(pokemon_data["species"]).base_stats) if match_bst else None
-            type = random.choice(get_species_by_id(pokemon_data["species"]).types) if match_type else None
-            new_party.append(get_random_species(random, bst, type))
+        for pokemon_data in trainer_data.party.pokemon:
+            target_bst = sum(get_species_by_id(pokemon_data.species_id).base_stats) if should_match_bst else None
+            target_type = random.choice(get_species_by_id(pokemon_data.species_id).types) if should_match_type else None
+            new_party.append(get_random_species(random, target_bst, target_type))
 
-        for j, species in enumerate(new_party):
-            pokemon_address = party_address + (j * pokemon_data_size)
+        for i, species in enumerate(new_party):
+            pokemon_address = party_address + (i * pokemon_data_size)
 
             # Replace custom moves if applicable
             # TODO: This replaces custom moves with a random move regardless of whether that move
             # is learnable by that species. Should eventually be able to pick and choose from
             # the level up learnset and learnable tms/hms instead. Especially if moves aren't randomized
-            if trainer_data["pokemon_data_type"] == "NO_ITEM_CUSTOM_MOVES":
+            if trainer_data.party.pokemon_data_type == TrainerPokemonDataTypeEnum.NO_ITEM_CUSTOM_MOVES:
                 _set_bytes_little_endian(rom, pokemon_address + 0x06, 2, get_random_move(random))
                 _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, get_random_move(random))
                 _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, get_random_move(random))
                 _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, get_random_move(random))
-            elif trainer_data["pokemon_data_type"] == "ITEM_CUSTOM_MOVES":
+            elif trainer_data.party.pokemon_data_type == TrainerPokemonDataTypeEnum.ITEM_CUSTOM_MOVES:
                 _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, get_random_move(random))
                 _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, get_random_move(random))
                 _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, get_random_move(random))
@@ -243,16 +235,16 @@ def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray):
 def _randomize_starters(multiworld, player, rom):
     random = multiworld.per_slot_randoms[player]
 
-    match_bst = get_option_value(multiworld, player, "starters") in [RandomizeStarters.option_match_base_stats, RandomizeStarters.option_match_base_stats_and_type]
-    match_type = get_option_value(multiworld, player, "starters") in [RandomizeStarters.option_match_type, RandomizeStarters.option_match_base_stats_and_type]
+    should_match_bst = get_option_value(multiworld, player, "starters") in [RandomizeStarters.option_match_base_stats, RandomizeStarters.option_match_base_stats_and_type]
+    should_match_type = get_option_value(multiworld, player, "starters") in [RandomizeStarters.option_match_type, RandomizeStarters.option_match_base_stats_and_type]
 
-    starter_1_bst = None if not match_bst else sum(get_species_by_name("Treecko").base_stats)
-    starter_2_bst = None if not match_bst else sum(get_species_by_name("Torchic").base_stats)
-    starter_3_bst = None if not match_bst else sum(get_species_by_name("Mudkip").base_stats)
+    starter_1_bst = sum(get_species_by_name("Treecko").base_stats) if should_match_bst else None
+    starter_2_bst = sum(get_species_by_name("Torchic").base_stats) if should_match_bst else None
+    starter_3_bst = sum(get_species_by_name("Mudkip").base_stats)  if should_match_bst else None
 
-    starter_1_type = None if not match_type else random.choice(get_species_by_name("Treecko").types)
-    starter_2_type = None if not match_type else random.choice(get_species_by_name("Torchic").types)
-    starter_3_type = None if not match_type else random.choice(get_species_by_name("Mudkip").types)
+    starter_1_type = random.choice(get_species_by_name("Treecko").types) if should_match_type else None
+    starter_2_type = random.choice(get_species_by_name("Torchic").types) if should_match_type else None
+    starter_3_type = random.choice(get_species_by_name("Mudkip").types)  if should_match_type else None
 
     address = data.rom_addresses["sStarterMon"]
     starter_1 = get_random_species(random, starter_1_bst, starter_1_type)
@@ -266,19 +258,15 @@ def _randomize_starters(multiworld, player, rom):
 
 def _randomize_abilities(multiworld: MultiWorld, player: int, rom: bytearray):
     random = multiworld.per_slot_randoms[player]
-    abilities_json = load_json(os.path.join(os.path.dirname(__file__), "data/abilities.json"))
-    ability_label_to_value = {ability_json["label"].lower(): data.constants[constant_name] for (constant_name, ability_json) in abilities_json.items()}
+    ability_label_to_value = {ability.label.lower(): ability.ability_id for ability in data.abilities}
 
     ability_blacklist_labels = set(["cacophony"])
     option_ability_blacklist = get_option_value(multiworld, player, "ability_blacklist")
     if option_ability_blacklist is not None:
-        ability_blacklist_labels |= set([ability.lower() for ability in option_ability_blacklist])
+        ability_blacklist_labels |= set([ability_label.lower() for ability_label in option_ability_blacklist])
 
     ability_blacklist = set([ability_label_to_value[label] for label in ability_blacklist_labels])
-    ability_whitelist = []
-    for i in range(1, data.constants["ABILITIES_COUNT"]):
-        if i not in ability_blacklist:
-            ability_whitelist.append(i)
+    ability_whitelist = [ability.ability_id for ability in data.abilities if ability.ability_id not in ability_blacklist]
 
     for species in data.species:
         old_abilities = species.abilities

@@ -131,6 +131,58 @@ class SpeciesData(NamedTuple):
     rom_address: int
 
 
+class AbilityData(NamedTuple):
+    ability_id: int
+    label: str
+
+
+class EncounterTableData(NamedTuple):
+    slots: List[int]
+    rom_address: int
+
+
+class MapData(NamedTuple):
+    name: str
+    land_encounters: Optional[EncounterTableData]
+    water_encounters: Optional[EncounterTableData]
+    fishing_encounters: Optional[EncounterTableData]
+
+
+class TrainerPokemonDataTypeEnum(Enum):
+    NO_ITEM_DEFAULT_MOVES = 0
+    ITEM_DEFAULT_MOVES = 1
+    NO_ITEM_CUSTOM_MOVES = 2
+    ITEM_CUSTOM_MOVES = 3
+
+
+def _str_to_pokemon_data_type(string: str) -> TrainerPokemonDataTypeEnum:
+    if string == "NO_ITEM_DEFAULT_MOVES":
+        return TrainerPokemonDataTypeEnum.NO_ITEM_DEFAULT_MOVES
+    if string == "ITEM_DEFAULT_MOVES":
+        return TrainerPokemonDataTypeEnum.ITEM_DEFAULT_MOVES
+    if string == "NO_ITEM_CUSTOM_MOVES":
+        return TrainerPokemonDataTypeEnum.NO_ITEM_CUSTOM_MOVES
+    if string == "ITEM_CUSTOM_MOVES":
+        return TrainerPokemonDataTypeEnum.ITEM_CUSTOM_MOVES
+
+
+class TrainerPokemonData(NamedTuple):
+    species_id: int
+    moves: Optional[Tuple[int, int, int, int]]
+
+
+class TrainerPartyData(NamedTuple):
+    pokemon: List[TrainerPokemonData]
+    pokemon_data_type: TrainerPokemonDataTypeEnum
+    rom_address: int
+
+
+class TrainerData(NamedTuple):
+    trainer_id: int
+    party: TrainerPartyData
+    rom_address: int
+
+
 class PokemonEmeraldData:
     constants: Dict[str, int]
     rom_addresses: Dict[str, int]
@@ -138,8 +190,11 @@ class PokemonEmeraldData:
     locations: Dict[str, LocationData]
     items: Dict[int, ItemData]
     species: List[SpeciesData]
+    abilities: List[AbilityData]
+    maps: List[MapData]
     warps: Dict[str, Warp]
     warp_map: Dict[str, Optional[str]]
+    trainers: List[TrainerData]
 
     def __init__(self):
         self.constants = {}
@@ -148,8 +203,11 @@ class PokemonEmeraldData:
         self.locations = {}
         self.items = {}
         self.species = []
+        self.abilities = []
+        self.maps = []
         self.warps = {}
         self.warp_map = {}
+        self.trainers = []
 
 
 def load_json(filepath):
@@ -166,8 +224,8 @@ def load_json(filepath):
 config: Dict[str, any] = load_json(os.path.join(os.path.dirname(__file__), "data/config.json"))
 data = PokemonEmeraldData()
 
-extracted_data: Dict[str, any] = load_json(os.path.join(os.path.dirname(__file__), "data/extracted_data.json"))
 def _init():
+    extracted_data: Dict[str, any] = load_json(os.path.join(os.path.dirname(__file__), "data/extracted_data.json"))
     data.constants = extracted_data["constants"]
     data.rom_addresses = extracted_data["misc_rom_addresses"]
 
@@ -256,16 +314,6 @@ def _init():
             set(attributes["tags"])
         )
 
-    # Create warp map
-    for encoded_warp, warp in data.warps.items():
-        for encoded_other_warp, other_warp in data.warps.items():
-            if warp.connects_to(other_warp):
-                data.warp_map[encoded_warp] = encoded_other_warp
-                break
-
-        if encoded_warp not in data.warp_map:
-            data.warp_map[encoded_warp] = None
-
     # Create species data
     species_json = load_json(os.path.join(os.path.dirname(__file__), "data/pokemon.json"))
     for species_name, species_attributes in species_json.items():
@@ -298,5 +346,70 @@ def _init():
 
     data.species = sorted(data.species, key=lambda species: species.species_id)
 
+    # Create ability data
+    abilities_json = load_json(os.path.join(os.path.dirname(__file__), "data/abilities.json"))
+    for ability_name, ability_json in abilities_json.items():
+        data.abilities.append(AbilityData(
+            data.constants[ability_name],
+            ability_json["label"]
+        ))
+
+    # Create map data
+    for map_name, map_json in extracted_data["maps"].items():
+        land_encounters = None
+        water_encounters = None
+        fishing_encounters = None
+
+        if map_json["land_encounters"] is not None:
+            land_encounters = EncounterTableData(
+                map_json["land_encounters"]["encounter_slots"],
+                map_json["land_encounters"]["rom_address"]
+            )
+        if map_json["water_encounters"] is not None:
+            water_encounters = EncounterTableData(
+                map_json["water_encounters"]["encounter_slots"],
+                map_json["water_encounters"]["rom_address"]
+            )
+        if map_json["fishing_encounters"] is not None:
+            fishing_encounters = EncounterTableData(
+                map_json["fishing_encounters"]["encounter_slots"],
+                map_json["fishing_encounters"]["rom_address"]
+            )
+
+        data.maps.append(MapData(
+            map_name,
+            land_encounters,
+            water_encounters,
+            fishing_encounters
+        ))
+
+    data.maps = sorted(data.maps, key=lambda map: map.name)
+
+    # Create warp map
+    for encoded_warp, warp in data.warps.items():
+        for encoded_other_warp, other_warp in data.warps.items():
+            if warp.connects_to(other_warp):
+                data.warp_map[encoded_warp] = encoded_other_warp
+                break
+
+        if encoded_warp not in data.warp_map:
+            data.warp_map[encoded_warp] = None
+
+    # Create trainer data
+    for i, trainer_json in enumerate(extracted_data["trainers"]):
+        party_json = trainer_json["party"]
+        pokemon_data_type = _str_to_pokemon_data_type(trainer_json["pokemon_data_type"]),
+        data.trainers.append(TrainerData(
+            i,
+            TrainerPartyData(
+                [TrainerPokemonData(
+                    p["species"],
+                    (p["moves"][0], p["moves"][1], p["moves"][2], p["moves"][3])
+                ) for p in party_json],
+                pokemon_data_type,
+                trainer_json["party_rom_address"]
+            ),
+            trainer_json["rom_address"]
+        ))
 
 _init()

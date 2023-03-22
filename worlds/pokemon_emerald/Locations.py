@@ -1,4 +1,4 @@
-from typing import Dict, Optional, FrozenSet, Union
+from typing import Dict, Optional, FrozenSet
 from BaseClasses import Location, MultiWorld, Region
 from .Data import data, config
 from .Items import offset_item_value
@@ -21,16 +21,16 @@ class PokemonEmeraldLocation(Location):
         self.tags = tags
 
 
-def offset_flag(flag: Union[int, None]) -> Union[int, None]:
+def offset_flag(flag: Optional[int]) -> Optional[int]:
     if flag is None:
         return None
     return flag + config["ap_offset"]
 
 
-def reverse_offset_flag(id: Union[int, None]) -> Union[int, None]:
-    if id is None:
+def reverse_offset_flag(location_id: Optional[int]) -> Optional[int]:
+    if location_id is None:
         return None
-    return id - config["ap_offset"]
+    return location_id - config["ap_offset"]
 
 
 def create_locations_with_tags(multiworld: MultiWorld, player: int, tags):
