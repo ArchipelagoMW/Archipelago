@@ -199,6 +199,9 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         world.regions.append(Reghardcave)
 
         Reghardcavewalljump = Region("Hard Cave Wall Jump", player, world)
+        Lochardcavewalljump_name = ["Increased HP Pack"]
+        Reghardcavewalljump.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Reghardcavewalljump) for
+                                     loc_name in Lochardcavewalljump_name]
         add_coin_freemium(Reghardcavewalljump, 0, player)
         world.regions.append(Reghardcavewalljump)
 
@@ -221,7 +224,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         world.regions.append(Regnamechange)
 
         Regtopright = Region("Top Right", player, world)
-        Loctopright_name = ["Season Pass", "High Definition Next Gen Pack", "Increased HP Pack"]
+        Loctopright_name = ["Season Pass", "High Definition Next Gen Pack"]
         Regtopright.exits = [Entrance(player, "Blizzard", Regtopright)]
         Regtopright.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regtopright) for
                                   loc_name in Loctopright_name]
