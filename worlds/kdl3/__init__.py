@@ -156,7 +156,7 @@ class KDL3World(World):
         add_rule(self.multiworld.get_location(LocationName.sand_canyon_auntie, self.player),
                  lambda state: state.has("Clean", self.player))
         add_rule(self.multiworld.get_location(LocationName.sand_canyon_nyupun, self.player),
-                 lambda state: state.has("ChuChu", self.player))
+                 lambda state: state.has("ChuChu", self.player) and state.has("Cutter", self.player))
         add_rule(self.multiworld.get_location(LocationName.sand_canyon_rob, self.player),
                  lambda state: (state.has("Kine", self.player) and state.has("Coo", self.player))
                                and state.has("Parasol", self.player)
