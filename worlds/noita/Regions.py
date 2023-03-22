@@ -1,8 +1,7 @@
 # Regions are areas in your game that you travel to.
-import itertools
-from typing import Dict, List, Set
+from typing import Dict, Set
 from BaseClasses import Region, Entrance, LocationProgressType, MultiWorld
-from . import Locations, Items
+from . import Locations
 
 
 # Creates a new Region with the locations found in `location_region_mapping`
@@ -70,6 +69,7 @@ def create_all_regions_and_connections(world: MultiWorld, player: int) -> None:
     world.regions += created_regions.values()
 
 
+# Oh, what a tangled web we weave
 noita_connections: Dict[str, Set[str]] = {
     "Menu": {"Forest"},
     "Forest": {"Mines", "Floating Island", "Desert", "Snowy Wasteland"},
@@ -82,6 +82,7 @@ noita_connections: Dict[str, Set[str]] = {
     "Overgrown Cavern": {"Sandcave"},
     "Sandcave": {"Powerplant"},
 
+    ###
     "Mines": {"Collapsed Mines", "Holy Mountain 1 (To Coal Pits)", "Lava Lake", "Forest"},
     "Collapsed Mines": {"Mines", "Holy Mountain 1 (To Coal Pits)", "Dark Cave"},
     "Lava Lake": {"Mines", "Shaft", "Abyss Orb Room", "Below Lava Lake"},

@@ -2,7 +2,7 @@ from BaseClasses import MultiWorld
 from typing import List, Set
 
 from ..generic import Rules as GenericRules
-from . import Locations, Items, Regions
+from . import Locations
 
 
 holy_mountain_regions: List[str] = [

@@ -21,7 +21,7 @@ def create_locked_location_event(world: MultiWorld, player: int, region_name: st
 
 
 def create_victory_events(world: MultiWorld, player: int) -> None:
-    # Generate Victory shenanigans (TODO this is temporary)
+    # Generate Victory shenanigans
     create_locked_location_event(world, player, "The Work", "Victory")
     world.completion_condition[player] = lambda state: state.has("Victory", player)
 

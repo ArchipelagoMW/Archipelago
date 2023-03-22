@@ -1,5 +1,3 @@
-import string
-
 from BaseClasses import Tutorial
 from worlds.AutoWorld import World, WebWorld
 
@@ -27,7 +25,8 @@ class NoitaWorld(World):
     Noita is a magical action roguelite set in a world where every pixel is physically simulated. Fight, explore, melt,
     burn, freeze, and evaporate your way through the procedurally generated world using wands you've created yourself.
     """
-    game: str = "Noita"
+
+    game = "Noita"
     option_definitions = Options.noita_options
     topology_present = True
 

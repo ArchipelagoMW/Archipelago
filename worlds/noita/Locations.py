@@ -1,7 +1,6 @@
 # Locations are specific points that you would obtain an item at.
-import functools
 from enum import IntEnum
-from typing import Dict, List, Union, Set, NamedTuple, Optional
+from typing import Dict, NamedTuple, Optional
 from BaseClasses import Location
 
 
@@ -221,6 +220,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
 }
 
 
+# Iterating the hidden chest and pedestal locations here to avoid clutter above
 location_name_to_id: Dict[str, int] = {}
 for location_group in location_region_mapping.values():
     for locname, locinfo in location_group.items():
