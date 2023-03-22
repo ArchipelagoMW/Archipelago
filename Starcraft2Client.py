@@ -52,9 +52,9 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         """Overrides the current difficulty set for the seed.  Takes the argument casual, normal, hard, or brutal"""
         options = difficulty.split()
         num_options = len(options)
-        difficulty_choice = options[0].lower()
 
         if num_options > 0:
+            difficulty_choice = options[0].lower()
             if difficulty_choice == "casual":
                 self.ctx.difficulty_override = 0
             elif difficulty_choice == "normal":
@@ -71,7 +71,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             return True
 
         else:
-            self.output("Difficulty needs to be specified in the command.")
+            if self.ctx.difficulty == -1:
+                self.output("Please connect to a seed before checking difficulty.")
+            else:
+                self.output("Current difficulty: " + ["Casual", "Normal", "Hard", "Brutal"][self.ctx.difficulty])
+            self.output("To change the difficulty, add the name of the difficulty after the command.")
             return False
 
     def _cmd_disable_mission_check(self) -> bool:

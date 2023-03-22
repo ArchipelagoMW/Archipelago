@@ -1,15 +1,16 @@
 from collections import namedtuple
 import logging
 
-from BaseClasses import Region, RegionType, ItemClassification
-from worlds.alttp.SubClasses import ALttPLocation
+from BaseClasses import ItemClassification
+from worlds.alttp.SubClasses import ALttPLocation, LTTPRegion, LTTPRegionType
 from worlds.alttp.Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops, create_dynamic_shop_locations
 from worlds.alttp.Bosses import place_bosses
 from worlds.alttp.Dungeons import get_dungeon_item_pool_player
 from worlds.alttp.EntranceShuffle import connect_entrance
 from Fill import FillError
 from worlds.alttp.Items import ItemFactory, GetBeemizerItem
-from worlds.alttp.Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle
+from worlds.alttp.Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle, LTTPBosses
+from .StateHelpers import has_triforce_pieces, has_melee_weapon
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 # Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
@@ -249,8 +250,10 @@ def generate_itempool(world):
         world.push_item(loc, ItemFactory('Triforce Piece', player), False)
         world.treasure_hunt_count[player] = 1
         if world.boss_shuffle[player] != 'none':
-            if 'turtle rock-' not in world.boss_shuffle[player]:
-                world.boss_shuffle[player] = f'Turtle Rock-Trinexx;{world.boss_shuffle[player]}'
+            if isinstance(world.boss_shuffle[player].value, str) and 'turtle rock-' not in world.boss_shuffle[player].value:
+                world.boss_shuffle[player] = LTTPBosses.from_text(f'Turtle Rock-Trinexx;{world.boss_shuffle[player].current_key}')
+            elif isinstance(world.boss_shuffle[player].value, int):
+                world.boss_shuffle[player] = LTTPBosses.from_text(f'Turtle Rock-Trinexx;{world.boss_shuffle[player].current_key}')
             else:
                 logging.warning(f'Cannot guarantee that Trinexx is the boss of Turtle Rock for player {player}')
         loc.event = True
@@ -286,7 +289,7 @@ def generate_itempool(world):
         region = world.get_region('Light World', player)
 
         loc = ALttPLocation(player, "Murahdahla", parent=region)
-        loc.access_rule = lambda state: state.has_triforce_pieces(state.multiworld.treasure_hunt_count[player], player)
+        loc.access_rule = lambda state: has_triforce_pieces(state, player)
 
         region.locations.append(loc)
         world.clear_location_cache()
@@ -327,7 +330,7 @@ def generate_itempool(world):
     for item in precollected_items:
         world.push_precollected(ItemFactory(item, player))
 
-    if world.mode[player] == 'standard' and not world.state.has_melee_weapon(player):
+    if world.mode[player] == 'standard' and not has_melee_weapon(world.state, player):
         if "Link's Uncle" not in placed_items:
             found_sword = False
             found_bow = False
@@ -471,7 +474,7 @@ def set_up_take_anys(world, player):
 
     regions = world.random.sample(take_any_locs, 5)
 
-    old_man_take_any = Region("Old Man Sword Cave", RegionType.Cave, 'the sword cave', player)
+    old_man_take_any = LTTPRegion("Old Man Sword Cave", LTTPRegionType.Cave, 'the sword cave', player, world)
     world.regions.append(old_man_take_any)
 
     reg = regions.pop()
@@ -491,7 +494,7 @@ def set_up_take_anys(world, player):
         old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 0, create_location=True)
 
     for num in range(4):
-        take_any = Region("Take-Any #{}".format(num+1), RegionType.Cave, 'a cave of choice', player)
+        take_any = LTTPRegion("Take-Any #{}".format(num+1), LTTPRegionType.Cave, 'a cave of choice', player, world)
         world.regions.append(take_any)
 
         target, room_id = world.random.choice([(0x58, 0x0112), (0x60, 0x010F), (0x46, 0x011F)])
