@@ -168,7 +168,7 @@ class KH2World(World):
                 self.BountiesAmount = max(self.BountiesAmount, self.BountiesRequired)
                 self.multiworld.BountyAmount[self.player].value = self.BountiesAmount
 
-            self.multiworld.start_hints[self.player].value.add(ItemName.Bounty)
+            self.multiworld.start_hints[self.player].value[ItemName.Bounty] = self.BountiesAmount
             self.item_quantity_dict[ItemName.ProofofNonexistence] = 0
 
         while len(self.sora_keyblade_ability_pool) < len(self.keyblade_slot_copy):
