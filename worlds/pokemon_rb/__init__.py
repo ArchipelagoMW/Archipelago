@@ -345,8 +345,9 @@ class PokemonRedBlueWorld(World):
             for item in reversed(self.multiworld.itempool):
                 if item.player == self.player and loc.can_fill(self.multiworld.state, item, False):
                     self.multiworld.itempool.remove(item)
-                    state = sweep_from_pool(self.multiworld.state, self.multiworld.itempool + unplaced_items)
-                    if state.can_reach(loc, "Location", self.player):
+                    if item.advancement:
+                        state = sweep_from_pool(self.multiworld.state, self.multiworld.itempool + unplaced_items)
+                    if (not item.advancement) or state.can_reach(loc, "Location", self.player):
                         loc.place_locked_item(item)
                         break
                     else:
