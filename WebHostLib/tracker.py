@@ -11,10 +11,10 @@ from werkzeug.exceptions import abort
 from MultiServer import Context, get_saving_second
 from NetUtils import SlotType
 from Utils import restricted_loads
-from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
+from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name, network_data_package
 from worlds.alttp import Items
 from . import app, cache
-from .models import Room
+from .models import GameDataPackage, Room
 
 alttp_icons = {
     "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
@@ -229,14 +229,15 @@ def render_timedelta(delta: datetime.timedelta):
 
 @pass_context
 def get_location_name(context: runtime.Context, loc: int) -> str:
+    # once all rooms embed data package, the chain lookup can be dropped
     context_locations = context.get("custom_locations", {})
-    return collections.ChainMap(lookup_any_location_id_to_name, context_locations).get(loc, loc)
+    return collections.ChainMap(context_locations, lookup_any_location_id_to_name).get(loc, loc)
 
 
 @pass_context
 def get_item_name(context: runtime.Context, item: int) -> str:
     context_items = context.get("custom_items", {})
-    return collections.ChainMap(lookup_any_item_id_to_name, context_items).get(item, item)
+    return collections.ChainMap(context_items, lookup_any_item_id_to_name).get(item, item)
 
 
 app.jinja_env.filters["location_name"] = get_location_name
@@ -274,11 +275,21 @@ def get_static_room_data(room: Room):
                   if slot_info.type == SlotType.group}
 
         for game in games.values():
-            if game in multidata["datapackage"]:
-                custom_locations.update(
-                    {id: name for name, id in multidata["datapackage"][game]["location_name_to_id"].items()})
-                custom_items.update(
-                    {id: name for name, id in multidata["datapackage"][game]["item_name_to_id"].items()})
+            if game not in multidata["datapackage"]:
+                continue
+            game_data = multidata["datapackage"][game]
+            if "checksum" in game_data:
+                if network_data_package["games"].get(game, {}).get("checksum") == game_data["checksum"]:
+                    # non-custom. remove from multidata
+                    # network_data_package import could be skipped once all rooms embed data package
+                    del multidata["datapackage"][game]
+                    continue
+                else:
+                    game_data = restricted_loads(GameDataPackage.get(checksum=game_data["checksum"]).data)
+            custom_locations.update(
+                {id_: name for name, id_ in game_data["location_name_to_id"].items()})
+            custom_items.update(
+                {id_: name for name, id_ in game_data["item_name_to_id"].items()})
     elif "games" in multidata:
         games = multidata["games"]
     seed_checks_in_area = checks_in_area.copy()
@@ -1373,24 +1384,26 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
         activity_timers[team, player] = now - datetime.datetime.utcfromtimestamp(timestamp)
 
     player_names = {}
+    states: typing.Dict[typing.Tuple[int, int], int] = {}
     for team, names in enumerate(names):
         for player, name in enumerate(names, 1):
-            player_names[(team, player)] = name
+            player_names[team, player] = name
+            states[team, player] = multisave.get("client_game_state", {}).get((team, player), 0)
     long_player_names = player_names.copy()
     for (team, player), alias in multisave.get("name_aliases", {}).items():
-        player_names[(team, player)] = alias
-        long_player_names[(team, player)] = f"{alias} ({long_player_names[(team, player)]})"
+        player_names[team, player] = alias
+        long_player_names[(team, player)] = f"{alias} ({long_player_names[team, player]})"
 
     video = {}
     for (team, player), data in multisave.get("video", []):
-        video[(team, player)] = data
+        video[team, player] = data
 
     return dict(player_names=player_names, room=room, checks_done=checks_done,
                 percent_total_checks_done=percent_total_checks_done, checks_in_area=checks_in_area,
                 activity_timers=activity_timers, video=video, hints=hints,
                 long_player_names=long_player_names,
                 multisave=multisave, precollected_items=precollected_items, groups=groups,
-                locations=locations, games=games)
+                locations=locations, games=games, states=states)
 
 
 def _get_inventory_data(data: typing.Dict[str, typing.Any]) -> typing.Dict[int, typing.Dict[int, int]]:
