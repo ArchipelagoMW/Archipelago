@@ -85,16 +85,14 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
             number_of_bundle = math.floor(825 / World_Options[Options.CoinSanityRange])
             for i in range(number_of_bundle):
-                def create_rule(coin):
-                    return has_enough_coin(player, coin)
 
                 item_coin = "DLC Quest: number Coin"
                 item_coin_loc = re.sub("number", str(World_Options[Options.CoinSanityRange] * (i + 1)), item_coin)
                 set_rule(world.get_location(item_coin_loc, player),
-                         create_rule(World_Options[Options.CoinSanityRange] * (i + 1)))
+                         has_enough_coin(player, World_Options[Options.CoinSanityRange] * (i + 1)))
                 if 825 % World_Options[Options.CoinSanityRange] != 0:
                     set_rule(world.get_location("DLC Quest: 825 Coin", player),
-                             create_rule(825))
+                             has_enough_coin(player, 825))
 
             set_rule(world.get_location("Movement Pack", player),
                      lambda state: state.has("DLC Quest: Coin Bundle", player,
@@ -234,17 +232,16 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
             number_of_bundle = math.floor(889 / World_Options[Options.CoinSanityRange])
             for i in range(number_of_bundle):
-                def create_rule(coin):
-                    return has_enough_coin_freemium(player, coin)
+
 
                 item_coin_freemium = "Live Freemium or Die: number Coin"
                 item_coin_loc_freemium = re.sub("number", str(World_Options[Options.CoinSanityRange] * (i + 1)),
                                                 item_coin_freemium)
                 set_rule(world.get_location(item_coin_loc_freemium, player),
-                         create_rule(World_Options[Options.CoinSanityRange] * (i + 1)))
+                         has_enough_coin_freemium(player, World_Options[Options.CoinSanityRange] * (i + 1)))
                 if 889 % World_Options[Options.CoinSanityRange] != 0:
                     set_rule(world.get_location("Live Freemium or Die: 889 Coin", player),
-                             create_rule(889))
+                             has_enough_coin_freemium(player, 889))
 
             set_rule(world.get_entrance("Boss Door", player),
                      lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
