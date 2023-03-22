@@ -153,7 +153,8 @@ class ServerLabel(HovererableLabel):
                             "location checks."
                 elif ctx.hint_cost == 0:
                     text += "\n!hint is free to use."
-
+                if getattr(self.ctx, "hint_points", None) is not None:
+                    text += f"\nYou currently have {ctx.hint_points} points."
             else:
                 text += f"\nYou are not authenticated yet."
 
