@@ -1,21 +1,5 @@
 .gba
 
-; Change the full health item to check the location instead of filling
-; Wario's hearts
-
-; EntityAI_0x8B_Tmain_takara_bainomi()
-.org 0x802A39C
-.definelabel @@PlaySound, 0x802A3C0
-.region @@PlaySound-.
-    mov r0, #2
-    ldr r1, =HasFullHealthItem
-    strb r0, [r1]
-    ldr r0, =0x13B  ; a1
-    b @@PlaySound
-.pool
-.endregion
-
-
 ; Add the full health item to the load routine
 
 ; Hook into ItemGetFlgSet_LoadSavestateInfo2RAM()

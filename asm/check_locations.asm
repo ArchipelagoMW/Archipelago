@@ -75,7 +75,7 @@ GiveItem:
     add r1, r1, r2
     add r1, r1, r4
     ldr r2, [r1]
-    mov r3, #0x20
+    mov r3, #0x10
     orr r2, r3
     str r2, [r1]
 
@@ -87,6 +87,39 @@ GiveItem:
     pop r4-r5, pc
 
 .pool
+
+
+FillWarioHealthBar:
+    push lr
+
+    ldr r1, =WarioHeart
+    ldrb r0, [r1, #1]
+    add r0, #8
+    strb r0, [r1, #1]
+    ldrb r2, [r1]
+    ldrb r0, [r1, #1]
+    add r0, r2, r0
+    cmp r0, #8
+    ble @@Return
+    mov r0, #8
+    sub r0, r0, r2
+    strb r0, [r1, #1]
+
+@@Return:
+    ldrb r0, [r1, #1]
+    lsl r0, r0, #3
+    strb r0, [r1, #2]
+    mov r0, #0
+    strb r0, [r1, #3]
+
+    ldr r0, =0x143  ; a1
+    call_using r1, m4aSongNumStart
+
+    pop r0
+    bx r0
+
+.pool
+
 .endautoregion
 
 

@@ -21,6 +21,7 @@ unusedrom equ 0x0878F97C
 .definelabel HasCD, 0x3000C0B
 .definelabel HasKeyzer, 0x3000C0C
 .definelabel Wario_ucReact, 0x3001898
+.definelabel WarioHeart, 0x3001910
 
 .definelabel HasFullHealthItem, unusedram + 0  ; byte
 

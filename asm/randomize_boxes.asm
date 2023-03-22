@@ -204,7 +204,6 @@ LoadRandomItemAnimation:
     .word takara_Anm_00  ; CD
     .word takara_Anm_01  ; Full health item
 
-; This is unbelievably hacky.
 .align 2
 @@JewelPaletteTable:
     .halfword 0x7B3E, 0x723C, 0x6576, 0x58B0, 0x4C07  ; Entry passage
@@ -213,4 +212,95 @@ LoadRandomItemAnimation:
     .halfword 0x6BDF, 0x23DF, 0x139B, 0x1274, 0x0DAE  ; Topaz passage
     .halfword 0x7F5A, 0x7E94, 0x7D29, 0x50A5, 0x38A5  ; Sapphire passage
     .halfword 0x579F, 0x3B1F, 0x1A7F, 0x05DE, 0x00FB  ; Golden pyramid
+.endautoregion
+
+
+; Make the items do what they look like they do
+; FIXME If the full health item is in one of the other boxes, the icon for when
+; you've collected it doesn't go away until the room is reloaded
+
+hook 0x8029FBA, 0x8029FD6, CollectRandomItem  ; NE jewel
+hook 0x802A07E, 0x802A09C, CollectRandomItem  ; SE jewel
+hook 0x802A142, 0x802A160, CollectRandomItem  ; SW jewel
+hook 0x802A206, 0x802A224, CollectRandomItem  ; NW jewel
+hook 0x802A2CA, 0x802A2EA, CollectRandomItem  ; CD
+hook 0x802A38A, 0x802A3C4, CollectRandomItem  ; Full health item
+
+.autoregion
+CollectRandomItem:
+    push r4-r6, lr
+
+    ldr r4, =CurrentEnemyData
+    ldrb r5, [r4, @global_id]
+    sub r5, 0x86
+
+; Get pointer to "has item"
+; The full health item uses a new variable so it's handled separately
+    cmp r5, #0x05
+    beq @@FullHealthCheck
+    
+; For jewel pieces/CDs, the relevant locations are adjacent in memory
+    ldr r6, =HasJewelPiece1
+    add r6, r6, r5
+    b @@GetItem
+
+@@FullHealthCheck:
+    ldr r6, =HasFullHealthItem
+
+@@GetItem:
+; Kill the item entity
+    ldr r3, =EntityLeftOverStateList
+    ldr r0, =CurrentRoomId
+    ldrb r0, [r0]
+    lsl r0, r0, #6
+    ldrb r4, [r4, @room_entity_slot_id]
+    add r0, r0, r4
+    add r0, r0, r3
+    mov r3, 0x21
+    strb r3, [r0]
+
+; Get and decode
+    mov r0, r5
+    bl GetItemAtLocation
+    mov r5, r0
+
+; Junk items
+    lsr r0, r5, #7
+    cmp r0, #0
+    bne @@JunkItem
+
+; Jewel/CD
+    lsr r1, r5, #6
+    cmp r1, #0
+    bne @@CD
+
+; Jewel piece
+    ldr r0, =0x13B  ; a1
+    b @@SetCheckLocation
+
+@@CD:
+    ldr r0, =0x13C  ; a1
+
+@@SetCheckLocation:
+    call_using r1, m4aSongNumStart
+
+; Set "has X" variable
+    mov r0, #1
+    strb r0, [r6]
+    b @@Return
+
+@@JunkItem:
+; Full health item
+    cmp r5, #0x80
+    beq @@FullHealthItem
+    b @@Return
+
+@@FullHealthItem:
+    bl FillWarioHealthBar
+
+@@Return:
+    pop r4-r6, lr
+
+.pool
+
 .endautoregion
