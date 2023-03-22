@@ -87,6 +87,7 @@ Name: "client/sc2";       Description: "Starcraft 2"; Types: full playing
 Name: "client/wargroove"; Description: "Wargroove"; Types: full playing
 Name: "client/zl";        Description: "Zillion"; Types: full playing
 Name: "client/tloz";      Description: "The Legend of Zelda"; Types: full playing
+Name: "client/advn";      Description: "Adventure"; Types: full playing
 Name: "client/text";      Description: "Text, to !command and chat"; Types: full playing
 
 [Dirs]
@@ -105,6 +106,7 @@ Source: "{code:GetRedROMPath}"; DestDir: "{app}"; DestName: "Pokemon Red (UE) [S
 Source: "{code:GetBlueROMPath}"; DestDir: "{app}"; DestName: "Pokemon Blue (UE) [S][!].gb"; Flags: external; Components: client/pkmn/blue or generator/pkmn_b
 Source: "{code:GetLADXROMPath}"; DestDir: "{app}"; DestName: "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"; Flags: external; Components: client/ladx or generator/ladx
 Source: "{code:GetTLoZROMPath}"; DestDir: "{app}"; DestName: "Legend of Zelda, The (U) (PRG0) [!].nes"; Flags: external; Components: client/tloz or generator/tloz
+Source: "{code:GetAdvnROMPath}"; DestDir: "{app}"; DestName: "ADVNTURE.BIN"; Flags: external; Components: client/advn
 Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#source_path}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/sni
 Source: "{#source_path}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator/lttp
@@ -128,6 +130,7 @@ Source: "{#source_path}\ArchipelagoStarcraft2Client.exe"; DestDir: "{app}"; Flag
 Source: "{#source_path}\ArchipelagoZelda1Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/tloz
 Source: "{#source_path}\ArchipelagoWargrooveClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/wargroove
 Source: "{#source_path}\ArchipelagoKH2Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/kh2
+Source: "{#source_path}\ArchipelagoAdventureClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/advn
 Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
 [Icons]
@@ -145,6 +148,7 @@ Name: "{group}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoCh
 Name: "{group}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Components: client/sc2
 Name: "{group}\{#MyAppName} The Legend of Zelda Client"; Filename: "{app}\ArchipelagoZelda1Client.exe"; Components: client/tloz
 Name: "{group}\{#MyAppName} Kingdom Hearts 2 Client"; Filename: "{app}\ArchipelagoKH2Client.exe"; Components: client/kh2
+Name: "{group}\{#MyAppName} Adventure Client"; Filename: "{app}\ArchipelagoAdventureClient.exe"; Components: client/advn
 
 Name: "{commondesktop}\{#MyAppName} Folder"; Filename: "{app}"; Tasks: desktopicon
 Name: "{commondesktop}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; Components: server
@@ -160,6 +164,7 @@ Name: "{commondesktop}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\Archip
 Name: "{commondesktop}\{#MyAppName} The Legend of Zelda Client"; Filename: "{app}\ArchipelagoZelda1Client.exe"; Tasks: desktopicon; Components: client/tloz
 Name: "{commondesktop}\{#MyAppName} Wargroove Client"; Filename: "{app}\ArchipelagoWargrooveClient.exe"; Tasks: desktopicon; Components: client/wargroove
 Name: "{commondesktop}\{#MyAppName} Kingdom Hearts 2 Client"; Filename: "{app}\ArchipelagoKH2Client.exe"; Tasks: desktopicon; Components: client/kh2
+Name: "{commondesktop}\{#MyAppName} Adventure Client"; Filename: "{app}\ArchipelagoAdventureClient.exe"; Tasks: desktopicon; Components: client/advn
 
 [Run]
 
@@ -247,6 +252,11 @@ Root: HKCR; Subkey: "{#MyAppName}tlozpatch";                     ValueData: "Arc
 Root: HKCR; Subkey: "{#MyAppName}tlozpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoZelda1Client.exe,0";                           ValueType: string;  ValueName: ""; Components: client/tloz
 Root: HKCR; Subkey: "{#MyAppName}tlozpatch\shell\open\command";  ValueData: """{app}\ArchipelagoZelda1Client.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/tloz
 
+Root: HKCR; Subkey: ".apadvn";                                   ValueData: "{#MyAppName}advnpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/advn
+Root: HKCR; Subkey: "{#MyAppName}advnpatch";                     ValueData: "Archipelago Adventure Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/advn
+Root: HKCR; Subkey: "{#MyAppName}advnpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoAdventureClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/advn
+Root: HKCR; Subkey: "{#MyAppName}advnpatch\shell\open\command";  ValueData: """{app}\ArchipelagoAdventureClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/advn
+
 Root: HKCR; Subkey: ".archipelago";                              ValueData: "{#MyAppName}multidata";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: server
 Root: HKCR; Subkey: "{#MyAppName}multidata";                     ValueData: "Archipelago Server Data";       Flags: uninsdeletekey;  ValueType: string;  ValueName: ""; Components: server
 Root: HKCR; Subkey: "{#MyAppName}multidata\DefaultIcon";         ValueData: "{app}\ArchipelagoServer.exe,0";                         ValueType: string;  ValueName: ""; Components: server
@@ -319,6 +329,9 @@ var LADXROMFilePage:  TInputFileWizardPage;
 
 var tlozrom: string;
 var TLoZROMFilePage:  TInputFileWizardPage;
+
+var advnrom: string;
+var AdvnROMFilePage:  TInputFileWizardPage;
 
 function GetSNESMD5OfFile(const rom: string): string;
 var data: AnsiString;
@@ -490,6 +503,21 @@ begin
     '.z64');
 end;
 
+function AddA26Page(name: string): TInputFileWizardPage;
+begin
+  Result :=
+    CreateInputFilePage(
+      wpSelectComponents,
+      'Select ROM File',
+      'Where is your ' + name + ' located?',
+      'Select the file, then click Next.');
+
+  Result.Add(
+    'Location of ROM file:',
+    'A2600 ROM files|*.BIN;*.a26|All files|*.*',
+    '.BIN');
+end;
+
 function NextButtonClick(CurPageID: Integer): Boolean;
 begin
   if (assigned(LttPROMFilePage)) and (CurPageID = LttPROMFilePage.ID) then
@@ -516,6 +544,8 @@ begin
     Result := not (LADXROMFilePage.Values[0] = '')
   else if (assigned(TLoZROMFilePage)) and (CurPageID = TLoZROMFilePage.ID) then
     Result := not (TLoZROMFilePage.Values[0] = '')
+  else if (assigned(AdvnROMFilePage)) and (CurPageID = AdvnROMFilePage.ID) then
+    Result := not (AdvnROMFilePage.Values[0] = '')
   else
     Result := True;
 end;
@@ -712,6 +742,22 @@ begin
     Result := '';
  end;
 
+function GetAdvnROMPath(Param: string): string;
+begin
+  if Length(advnrom) > 0 then
+    Result := advnrom
+  else if Assigned(AdvnROMFilePage) then
+    begin
+      R := CompareStr(GetMD5OfFile(AdvnROMFilePage.Values[0]), '157bddb7192754a45372be196797f284');
+      if R <> 0 then
+        MsgBox('Adventure ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := AdvnROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+end;
+
 procedure InitializeWizard();
 begin
   AddOoTRomPage();
@@ -755,10 +801,14 @@ begin
   l2acrom := CheckRom('Lufia II - Rise of the Sinistrals (USA).sfc', '6efc477d6203ed2b3b9133c1cd9e9c5d');
   if Length(l2acrom) = 0 then
     L2ACROMFilePage:= AddRomPage('Lufia II - Rise of the Sinistrals (USA).sfc');
-    
+
   tlozrom := CheckNESROM('Legend of Zelda, The (U) (PRG0) [!].nes', '337bd6f1a1163df31bf2633665589ab0');
   if Length(tlozrom) = 0 then
     TLoZROMFilePage:= AddNESRomPage('Legend of Zelda, The (U) (PRG0) [!].nes');
+
+  advnrom := CheckSMSRom('ADVNTURE.BIN', '157bddb7192754a45372be196797f284');
+  if Length(advnrom) = 0 then
+    AdvnROMFilePage:= AddA26Page('ADVNTURE.BIN');
 end;
 
 
@@ -789,4 +839,6 @@ begin
     Result := not (WizardIsComponentSelected('generator/ladx') or WizardIsComponentSelected('client/ladx'));
   if (assigned(TLoZROMFilePage)) and (PageID = TLoZROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/tloz') or WizardIsComponentSelected('client/tloz'));
+  if (assigned(AdvnROMFilePage)) and (PageID = AdvnROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('client/advn'));
 end;
