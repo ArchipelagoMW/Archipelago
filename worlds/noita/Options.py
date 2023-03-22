@@ -1,5 +1,5 @@
 from typing import Dict
-from Options import Option, DeathLink, DefaultOnToggle, Range, Choice, Toggle
+from Options import Option, DeathLink, DefaultOnToggle, Range, Choice
 
 
 class PathOption(Choice):
@@ -35,7 +35,7 @@ class Traps(DefaultOnToggle):
     display_name = "Traps"
 
 
-class OrbsAsChecks(Choice):  # todo: rework this to work with the paths option
+class OrbsAsChecks(Choice):
     """Decides whether finding the orbs that naturally spawn in the world count as checks.
     The orbs included is based off of your Path Option choice.
     The Main Path option includes only the floating island and abyss orb room orbs.
@@ -66,7 +66,8 @@ class VictoryCondition(Choice):
     """Greed is to get to the bottom, beat the boss, and win the game.
     Pure is to get the 11 orbs in the main world, grab the sampo, and bring it to the mountain altar.
     Peaceful is to get all 33 orbs in main + parallel, grab the sampo, and bring it to the mountain altar.
-    Please note that the orbs will be placed in the archipelago item pool -- the regular orbs will not count for this."""
+    Orbs will be added to the randomizer pool according to what victory condition you chose.
+    The base game orbs will not count towards these victory conditions."""
     display_name = "Victory Condition"
     option_greed_ending = 0
     option_pure_ending = 1
@@ -75,12 +76,12 @@ class VictoryCondition(Choice):
 
 
 noita_options: Dict[str, type(Option)] = {
+    "death_link": DeathLink,
+    "bad_effects": Traps,
+    "victory_condition": VictoryCondition,
     "path_option": PathOption,
     "hidden_chests": HiddenChests,
     "pedestal_checks": PedestalChecks,
-    "bad_effects": Traps,
-    "death_link": DeathLink,
     "orbs_as_checks": OrbsAsChecks,
     "bosses_as_checks": BossesAsChecks,
-    "victory_condition": VictoryCondition,
 }
