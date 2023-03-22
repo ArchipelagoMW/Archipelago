@@ -1,11 +1,10 @@
 import os
 import asyncio
 import ModuleUpdate
-import typing
 import json
 import Utils
 from pymem import pymem
-from worlds.kh2.Items import DonaldAbility_Table, GoofyAbility_Table, exclusionItem_table, CheckDupingItems
+from worlds.kh2.Items import exclusionItem_table, CheckDupingItems
 from worlds.kh2 import all_locations, item_dictionary_table, exclusion_table
 
 from worlds.kh2.WorldLocations import *
@@ -89,6 +88,7 @@ class KH2Context(CommonContext):
                                     "StatIncrease": {},
                                     "Boost":        {},
                                 }},
+                            #  1,3,255 are in this list in case the player gets locations in those "worlds" and I need to still have them checked
                             "worldIdChecks":      {
                                 "1":   [],  # world of darkness (story cutscenes)
                                 "2":   [],
@@ -136,9 +136,9 @@ class KH2Context(CommonContext):
         self.game_connected = False
         self.finalxemnas = False
         self.worldid = {
-            1:   TWTNW_Checks,  # world of darkness (story cutscenes)
+            #  1:   {},  # world of darkness (story cutscenes)
             2:   TT_Checks,
-            3:   TT_Checks,  # destiny island doesn't have checks to ima put tt checks here
+            #  3:   {},  # destiny island doesn't have checks to ima put tt checks here
             4:   HB_Checks,
             5:   BC_Checks,
             6:   Oc_Checks,
@@ -154,7 +154,7 @@ class KH2Context(CommonContext):
             16:  PR_Checks,
             17:  SP_Checks,
             18:  TWTNW_Checks,
-            255: HB_Checks,  # starting screen
+            #  255: {},  # starting screen
         }
         # 0x2A09C00+0x40 is the sve anchor. +1 is the last saved room
         self.sveroom = 0x2A09C00 + 0x41
@@ -304,22 +304,22 @@ class KH2Context(CommonContext):
                         if item.location not in self.kh2seedsave["checked_locations"][str(item.player)] \
                                 and item.location not in {-1, -2}:
                             self.kh2seedsave["checked_locations"][str(item.player)].append(item.location)
-                if not self.kh2seedsave["starting_inventory"] and self.kh2connected:
+                if not self.kh2seedsave["starting_inventory"]:
                     self.kh2seedsave["starting_inventory"] = True
 
         if cmd in {"RoomUpdate"}:
             if "checked_locations" in args:
                 new_locations = set(args["checked_locations"])
                 # TODO: make this take locations from other players on the same slot so proper coop happens
-                #items_to_give = [self.kh2slotdata["LocalItems"][str(location_id)] for location_id in new_locations if
+                #  items_to_give = [self.kh2slotdata["LocalItems"][str(location_id)] for location_id in new_locations if
                 #                 location_id in self.kh2LocalItems.keys()]
                 self.checked_locations |= new_locations
 
     async def checkWorldLocations(self):
         try:
             currentworldint = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x0714DB8, 1), "big")
-            curworldid = self.worldid[currentworldint]
-            if currentworldint != 1:
+            if currentworldint in self.worldid:
+                curworldid = self.worldid[currentworldint]
                 for location, data in curworldid.items():
                     if location not in self.locations_checked \
                             and (int.from_bytes(
@@ -442,16 +442,9 @@ class KH2Context(CommonContext):
         return isChecked
 
     async def give_item(self, item, ItemType="ServerItems"):
-        while not self.kh2connected:
-            await asyncio.sleep(1)
         try:
             itemname = self.lookup_id_to_item[item]
             itemcode = self.item_name_to_data[itemname]
-            # cannot give items during loading screens
-            # 0x8E9DA3=load 0xAB8BC7=black 0x2A148E8=controllable 0x715568=room transition
-            while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Now, 1), "big") in {255, 1}:
-                await asyncio.sleep(1)
-
             if itemcode.ability:
                 abilityInvoType = 0
                 TwilightZone = 2
@@ -459,7 +452,6 @@ class KH2Context(CommonContext):
                     abilityInvoType = 1
                     TwilightZone = -2
                 if itemname in {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}:
-
                     self.kh2seedsave["AmountInvo"][ItemType]["Growth"][itemname] += 1
                     return
 
@@ -609,7 +601,6 @@ class KH2Context(CommonContext):
 
             for itemName in master_keyblade:
                 itemData = self.item_name_to_data[itemName]
-                # if isChecked:
                 # if the inventory slot for that keyblade is less than the amount they should have
                 if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
                                   "big") <= 0:

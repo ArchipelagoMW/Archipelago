@@ -746,6 +746,7 @@ async def on_client_connected(ctx: Context, client: Client):
                                   ctx.name_aliases.get((team, slot), name), name)
                 )
     games = {ctx.games[x] for x in range(1, len(ctx.games) + 1)}
+    games.add("Archipelago")
     await ctx.send_msgs(client, [{
         'cmd': 'RoomInfo',
         'password': bool(ctx.password),
