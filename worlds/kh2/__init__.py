@@ -1,6 +1,6 @@
 
-
 from BaseClasses import Tutorial, ItemClassification
+import logging
 
 from .Items import *
 from .Locations import all_locations, setup_locations, exclusion_table
@@ -97,7 +97,7 @@ class KH2World(World):
             if item in ActionAbility_Table.keys() or item in SupportAbility_Table.keys():
                 # cannot have more than the quantity for abilties
                 if value > item_dictionary_table[item].quantity:
-                    print(f"{self.multiworld.get_file_safe_player_name(self.player)} cannot have more than {item_dictionary_table[item].quantity} of {item}")
+                    logging.info(f"{self.multiworld.get_file_safe_player_name(self.player)} cannot have more than {item_dictionary_table[item].quantity} of {item}")
                     value = item_dictionary_table[item].quantity
                 self.item_quantity_dict[item] -= value
 
@@ -128,8 +128,8 @@ class KH2World(World):
             luckyemblemamount = self.multiworld.LuckyEmblemsAmount[self.player].value
             luckyemblemrequired = self.multiworld.LuckyEmblemsRequired[self.player].value
             if luckyemblemamount < luckyemblemrequired:
-                print(f"Lucky Emblem Amount {self.multiworld.LuckyEmblemsAmount[self.player].value} is less than required "
-                      f"{self.multiworld.LuckyEmblemsRequired[self.player].value} for player {self.multiworld.get_file_safe_player_name(self.player)}")
+                logging.info(f"Lucky Emblem Amount {self.multiworld.LuckyEmblemsAmount[self.player].value} is less than required "
+                             f"{self.multiworld.LuckyEmblemsRequired[self.player].value} for player {self.multiworld.get_file_safe_player_name(self.player)}")
                 luckyemblemamount = max(luckyemblemamount, luckyemblemrequired)
                 self.multiworld.LuckyEmblemsAmount[self.player].value = luckyemblemamount
 
@@ -148,18 +148,18 @@ class KH2World(World):
                     self.RandomSuperBoss.remove(location)
             #  Testing if the player has the right amount of Bounties for Completion.
             if len(self.RandomSuperBoss) < self.BountiesAmount:
-                print(f"{self.multiworld.get_file_safe_player_name(self.player)} has too many bounties than bosses")
+                logging.info(f"{self.multiworld.get_file_safe_player_name(self.player)} has too many bounties than bosses")
                 self.BountiesAmount = len(self.RandomSuperBoss)
                 self.multiworld.BountyAmount[self.player].value = self.BountiesAmount
 
             if len(self.RandomSuperBoss) < self.BountiesRequired:
-                print(f"{self.multiworld.get_file_safe_player_name(self.player)} has too many required bounties")
+                logging.info(f"{self.multiworld.get_file_safe_player_name(self.player)} has too many required bounties")
                 self.BountiesRequired = len(self.RandomSuperBoss)
                 self.multiworld.BountyRequired[self.player].value = self.BountiesRequired
 
             if self.BountiesAmount < self.BountiesRequired:
-                print(f"Bounties Amount {self.multiworld.BountyAmount[self.player].value} is less than required "
-                      f"{self.multiworld.BountyRequired[self.player].value} for player {self.multiworld.get_file_safe_player_name(self.player)}")
+                logging.info(f"Bounties Amount {self.multiworld.BountyAmount[self.player].value} is less than required "
+                             f"{self.multiworld.BountyRequired[self.player].value} for player {self.multiworld.get_file_safe_player_name(self.player)}")
                 self.BountiesAmount = max(self.BountiesAmount, self.BountiesRequired)
                 self.multiworld.BountyAmount[self.player].value = self.BountiesAmount
 
