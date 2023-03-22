@@ -67,7 +67,6 @@ Name: "generator/ladx";   Description: "Link's Awakening DX ROM Setup"; Types: f
 Name: "generator/tloz";   Description: "The Legend of Zelda ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 135168; Flags: disablenouninstallwarning
 Name: "server";           Description: "Server"; Types: full hosting
 Name: "client";           Description: "Clients"; Types: full playing
-Name: "client/la";        Description: "Links Awakening DX Client"; Types: full playing
 Name: "client/sni";       Description: "SNI Client"; Types: full playing
 Name: "client/sni/lttp";  Description: "SNI Client - A Link to the Past Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/sni/sm";    Description: "SNI Client - Super Metroid Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
@@ -116,7 +115,7 @@ Source: "{#source_path}\ArchipelagoServer.exe"; DestDir: "{app}"; Flags: ignorev
 Source: "{#source_path}\ArchipelagoFactorioClient.exe";  DestDir: "{app}"; Flags: ignoreversion; Components: client/factorio
 Source: "{#source_path}\ArchipelagoTextClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/text
 Source: "{#source_path}\ArchipelagoSNIClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sni
-Source: "{#source_path}\ArchipelagoLinksAwakeningClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/la
+Source: "{#source_path}\ArchipelagoLinksAwakeningClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/ladx
 Source: "{#source_path}\ArchipelagoLttPAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sni/lttp or generator/lttp
 Source: "{#source_path}\ArchipelagoMinecraftClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/minecraft
 Source: "{#source_path}\ArchipelagoOoTClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/oot
