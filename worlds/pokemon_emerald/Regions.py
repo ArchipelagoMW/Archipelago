@@ -1,16 +1,18 @@
 from BaseClasses import Region, Entrance, ItemClassification
-from .Data import get_region_data
+from .Data import data
 from .Items import PokemonEmeraldItem
 from .Locations import PokemonEmeraldLocation
-from .Warps import get_warp_region_name, get_warp_destination
 
 
 def create_regions(multiworld, player):
+    """
+    Iterates through regions created from JSON to create regions and adds them to the multiworld.
+    Also creates and places events and connects regions via warps and the exits defined in the JSON.
+    """
     regions = {}
-    region_data = get_region_data()
 
     connections = []
-    for region_name, region_data in region_data.items():
+    for region_name, region_data in data.regions.items():
         new_region = Region(region_name, player, multiworld)
 
         for event_data in region_data.events:
@@ -22,10 +24,10 @@ def create_regions(multiworld, player):
             connections.append((f"{region_name} -> {region_exit}", region_name, region_exit))
 
         for warp in region_data.warps:
-            destination_region_name = get_warp_region_name(get_warp_destination(warp))
-            if destination_region_name is None:
+            dest_warp = data.warps[data.warp_map[warp]]
+            if dest_warp.parent_region is None:
                 continue
-            connections.append((warp, region_name, destination_region_name))
+            connections.append((warp, region_name, dest_warp.parent_region))
 
         regions[region_name] = new_region
 

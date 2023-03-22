@@ -8,7 +8,7 @@ from Options import Toggle
 from worlds.AutoWorld import World, WebWorld
 
 from . import Rules
-from .Items import PokemonEmeraldItem, create_item_label_to_id_map, get_item_classification
+from .Items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification
 from .Locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
 from .Options import RandomizeBadges, RandomizeHms, ItemPoolType, options, get_option_value
 from .Regions import create_regions
@@ -39,7 +39,7 @@ class PokemonEmeraldWorld(World):
     option_definitions = options
     topology_present = True
 
-    item_name_to_id = create_item_label_to_id_map()
+    item_name_to_id = create_item_label_to_code_map()
     location_name_to_id = create_location_label_to_id_map()
 
     data_version = 0

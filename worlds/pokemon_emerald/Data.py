@@ -1,73 +1,97 @@
 from enum import Enum
 import json
 import os
-from typing import Dict, List, MutableSet, NamedTuple, Optional
+from typing import Dict, List, Optional, Set, NamedTuple, Tuple
 from BaseClasses import ItemClassification
 
 
-extracted_data = None
-region_data = None
-item_attributes = None
-location_attributes = None
-warp_to_region_map = None
-location_to_region_map = None
-_config = None
+class Warp:
+    """
+    Represents warp events in the game like doorways or warp pads
+    """
+    is_one_way: bool
+    source_map: str
+    source_ids: List[int]
+    dest_map: str
+    dest_ids: int
+    parent_region: Optional[str]
+
+    def __init__(self, encoded_string: Optional[str] = None, parent_region: Optional[str] = None) -> None:
+        if encoded_string is not None:
+            decoded_warp = Warp.decode(encoded_string)
+            self.is_one_way = decoded_warp.is_one_way
+            self.source_map = decoded_warp.source_map
+            self.source_ids = decoded_warp.source_ids
+            self.dest_map = decoded_warp.dest_map
+            self.dest_ids = decoded_warp.dest_ids
+        self.parent_region = parent_region
+
+    def encode(self) -> str:
+        """
+        Returns a string encoding of this warp
+        """
+        source_ids_string = ""
+        for source_id in self.source_ids:
+            source_ids_string += str(source_id) + ","
+        source_ids_string = source_ids_string[:-1] # Remove last ","
+
+        return f"{self.source_map}:{source_ids_string}/{self.dest_map}:{self.dest_ids}{'!' if self.is_one_way else ''}"
+
+    def connects_to(self, other: 'Warp') -> bool:
+        """
+        Returns true if this warp sends the player to `other`
+        """
+        return self.dest_map == other.source_map and set(self.dest_ids) <= set(other.source_ids)
+
+    @staticmethod
+    def decode(encoded_string: str) -> 'Warp':
+        """
+        Create a Warp object from an encoded string
+        """
+        warp = Warp()
+        warp.is_one_way = encoded_string.endswith("!")
+        if warp.is_one_way:
+            encoded_string = encoded_string[:-1]
+
+        warp_source, warp_dest = encoded_string.split("/")
+        warp_source_map, warp_source_indices = warp_source.split(":")
+        warp_dest_map, warp_dest_indices = warp_dest.split(":")
+
+        warp.source_map = warp_source_map
+        warp.dest_map = warp_dest_map
+
+        warp.source_ids = [int(index) for index in warp_source_indices.split(",")]
+        warp.dest_ids = [int(index) for index in warp_dest_indices.split(",")]
+
+        return warp
 
 
 class ItemData(NamedTuple):
     label: str
     classification: ItemClassification
-    tags: MutableSet[str]
+    tags: Set[str]
 
 
-class LocationAttributes(NamedTuple):
-    label: str
-    tags: MutableSet[str]
-
-
-class LocationData:
+class LocationData(NamedTuple):
     name: str
     label: str
-    region_name: str
+    parent_region: str
     default_item: int
-    rom_address: Optional[int]
+    rom_address: int
     flag: int
-    tags: MutableSet[str]
-
-    def __init__(self, name: str, region_name: str, default_item: int, rom_address: Optional[int], flag: int):
-        attributes = get_location_attributes()[name]
-        self.name = name
-        self.label = attributes.label
-        self.region_name = region_name
-        self.default_item = default_item
-        self.rom_address = rom_address
-        self.flag = flag
-        self.tags = attributes.tags
+    tags: Set[str]
 
 
-class EventData:
+class EventData(NamedTuple):
     name: str
-    region_name: str
-
-    def __init__(self, name: str, region_name: str):
-        self.name = name
-        self.region_name = region_name
-
-
-class WarpData:
-    region_name: str
-    encoded_string: str
-
-    def __init__(self, encoded_string: str, region_name: str):
-        self.encoded_string = encoded_string
-        self.region_name = region_name
+    parent_region: str
 
 
 class RegionData:
     name: str
     exits: List[str]
     warps: List[str]
-    locations: List[LocationData]
+    locations: List[str]
     events: List[EventData]
 
     def __init__(self, name: str):
@@ -78,38 +102,60 @@ class RegionData:
         self.events = []
 
 
-# Not currently reading encounter data until output.
-# But we will eventually need to in order to logically check
-# that players can obtain a pokemon that can use required HMs
-class EncounterType(Enum):
-    LAND = 1
-    WATER = 2
-    FISHING = 3
-    # STATIC = 4
+class BaseStats(NamedTuple):
+    hp: int
+    attack: int
+    defense: int
+    speed: int
+    special_attack: int
+    special_defense: int
 
 
-class EncounterTableData:
-    encounter_type: EncounterType
-    map_name: str
-    encounter_slots: List[int]
-    ram_address: int
+class LearnsetMove(NamedTuple):
+    level: int
+    move_id: int
+
+
+class SpeciesData(NamedTuple):
+    name: str
+    label: str
+    species_id: int
+    national_dex_number: int
+    base_stats: BaseStats
+    types: Tuple[int, int]
+    abilities: Tuple[int, int]
+    catch_rate: int
+    learnset: List[LearnsetMove]
+    tm_hm_compatibility: str
+    learnset_rom_address: int
     rom_address: int
 
-    def __init__(self, encounter_type: EncounterType, map_name: str, encounter_slots: List[int], ram_address: int, rom_address: int):
-        self.encounter_type = encounter_type
-        self.map_name = map_name
-        self.encounter_slots = encounter_slots
-        self.ram_address = ram_address
-        self.rom_address = rom_address
 
+class PokemonEmeraldData:
+    constants: Dict[str, int]
+    rom_addresses: Dict[str, int]
+    regions: Dict[str, RegionData]
+    locations: Dict[str, LocationData]
+    items: Dict[int, ItemData]
+    species: List[SpeciesData]
+    warps: Dict[str, Warp]
+    warp_map: Dict[str, Optional[str]]
 
-class EncounterData:
-    land_encounters: Optional[EncounterTableData]
-    water_encounters: Optional[EncounterTableData]
-    fishing_encounters: Optional[EncounterTableData]
+    def __init__(self):
+        self.constants = {}
+        self.rom_addresses = {}
+        self.regions = {}
+        self.locations = {}
+        self.items = {}
+        self.species = []
+        self.warps = {}
+        self.warp_map = {}
 
 
 def load_json(filepath):
+    """
+    Reads a JSON file from `filepath` and returns the parsed object
+    """
     json_string = ""
     with open(filepath, "r", encoding="utf-8") as infile:
         for line in infile.readlines():
@@ -117,50 +163,57 @@ def load_json(filepath):
     return json.loads(json_string)
 
 
-def get_config() -> Dict[str, any]:
-    global _config
-    if _config is None:
-        _config = load_json(os.path.join(os.path.dirname(__file__), "data/config.json"))
+config: Dict[str, any] = load_json(os.path.join(os.path.dirname(__file__), "data/config.json"))
+data = PokemonEmeraldData()
 
-    return _config
+extracted_data: Dict[str, any] = load_json(os.path.join(os.path.dirname(__file__), "data/extracted_data.json"))
+def _init():
+    data.constants = extracted_data["constants"]
+    data.rom_addresses = extracted_data["misc_rom_addresses"]
 
+    location_attributes_json = load_json(os.path.join(os.path.dirname(__file__), "data/locations.json"))
 
-def get_extracted_data() -> Dict[str, any]:
-    global extracted_data
-    if extracted_data is None:
-        extracted_data = load_json(os.path.join(os.path.dirname(__file__), "data/extracted_data.json"))
-    
-    return extracted_data
+    # Load/merge region json files
+    regions_dir = os.path.join(os.path.dirname(__file__), "data/regions")
 
+    region_json_list = []
+    for file in os.listdir(regions_dir):
+        if os.path.isfile(os.path.join(regions_dir, file)):
+            region_json_list.append(load_json(os.path.join(regions_dir, file)))
 
-def get_region_data():
-    global region_data
-    if region_data is None:
-        region_data = create_region_data()
+    regions_json = {}
+    for region_subset in region_json_list:
+        for region_name, region_json in region_subset.items():
+            if region_name in regions_json:
+                raise AssertionError("Region [{region_name}] was defined multiple times")
+            regions_json[region_name] = region_json
 
-    return region_data
+    # Create region data
+    claimed_locations: Set[str] = set()
+    claimed_warps: Set[str] = set()
 
-
-def create_region_data() -> Dict[str, RegionData]:
-    global location_to_region_map
-    global warp_to_region_map
-    location_to_region_map = {}
-    warp_to_region_map = {}
-
-    extracted_data = get_extracted_data()
-    region_jsons = load_region_jsons()
-    regions_json = merge_region_jsons(region_jsons)
-
-    # RegionDatas
-    regions = {}
+    data.regions = {}
     for region_name, region_json in regions_json.items():
         new_region = RegionData(region_name)
 
         # Locations
         for location_name in region_json["locations"]:
-            if location_name in location_to_region_map:
+            if location_name in claimed_locations:
                 raise AssertionError(f"Location [{location_name}] was claimed by multiple regions")
-            location_to_region_map[location_name] = region_name
+
+            location_json = extracted_data["locations"][location_name]
+            new_location = LocationData(
+                location_name,
+                location_attributes_json[location_name]["label"],
+                region_name,
+                location_json["default_item"],
+                location_json["rom_address"],
+                location_json["flag"],
+                set(location_attributes_json[location_name]["tags"])
+            )
+            new_region.locations.append(location_name)
+            data.locations[location_name] = new_location
+            claimed_locations.add(location_name)
 
         # Events
         for event in region_json["events"]:
@@ -172,103 +225,78 @@ def create_region_data() -> Dict[str, RegionData]:
 
         # Warps
         for encoded_warp in region_json["warps"]:
-            if encoded_warp in location_to_region_map:
+            if encoded_warp in claimed_warps:
                 raise AssertionError(f"Warp [{encoded_warp}] was claimed by multiple regions")
-            warp_to_region_map[encoded_warp] = region_name
             new_region.warps.append(encoded_warp)
+            data.warps[encoded_warp] = Warp(encoded_warp, region_name)
+            claimed_warps.add(encoded_warp)
 
-        regions[region_name] = new_region
+        data.regions[region_name] = new_region
 
-    # LocationDatas
-    for location_name, region_name in location_to_region_map.items():
-        location_json = extracted_data["locations"][location_name]
-        new_location = LocationData(
-            location_name,
-            location_to_region_map[location_name],
-            location_json["default_item"],
-            location_json["rom_address"],
-            location_json["flag"]
+    # Create item data
+    items_json = load_json(os.path.join(os.path.dirname(__file__), "data/items.json"))
+
+    data.items = {}
+    for item_constant_name, attributes in items_json.items():
+        item_classification = None
+        if attributes["classification"] == "PROGRESSION":
+            item_classification = ItemClassification.progression
+        elif attributes["classification"] == "USEFUL":
+            item_classification = ItemClassification.useful
+        elif attributes["classification"] == "FILLER":
+            item_classification = ItemClassification.filler
+        elif attributes["classification"] == "TRAP":
+            item_classification = ItemClassification.trap
+        else:
+            raise ValueError(f"Unknown classification {attributes['classification']} for item {item_constant_name}")
+
+        data.items[data.constants[item_constant_name]] = ItemData(
+            attributes["label"],
+            item_classification,
+            set(attributes["tags"])
         )
-        regions[new_location.region_name].locations.append(new_location)
 
-    return regions
+    # Create warp map
+    for encoded_warp, warp in data.warps.items():
+        for encoded_other_warp, other_warp in data.warps.items():
+            if warp.connects_to(other_warp):
+                data.warp_map[encoded_warp] = encoded_other_warp
+                break
 
+        if encoded_warp not in data.warp_map:
+            data.warp_map[encoded_warp] = None
 
-def load_region_jsons() -> List[Dict[str, any]]:
-    regions_dir = os.path.join(os.path.dirname(__file__), "data/regions")
+    # Create species data
+    species_json = load_json(os.path.join(os.path.dirname(__file__), "data/pokemon.json"))
+    for species_name, species_attributes in species_json.items():
+        species_id = data.constants[species_name]
+        individual_species_json = extracted_data["species"][species_id]
 
-    region_jsons = []
+        learnset = [LearnsetMove(item["level"], item["move_id"]) for item in individual_species_json["learnset"]["moves"]]
 
-    for file in os.listdir(regions_dir):
-        if os.path.isfile(os.path.join(regions_dir, file)):
-            region_jsons.append(load_json(os.path.join(regions_dir, file)))
+        data.species.append(SpeciesData(
+            species_name,
+            species_attributes["label"],
+            data.constants[species_name],
+            species_attributes["national_dex_number"],
+            BaseStats(
+                individual_species_json["base_stats"][0],
+                individual_species_json["base_stats"][1],
+                individual_species_json["base_stats"][2],
+                individual_species_json["base_stats"][3],
+                individual_species_json["base_stats"][4],
+                individual_species_json["base_stats"][5]
+            ),
+            (individual_species_json["types"][0], individual_species_json["types"][1]),
+            (individual_species_json["abilities"][0], individual_species_json["abilities"][1]),
+            individual_species_json["catch_rate"],
+            learnset,
+            species_attributes["tm_hm_compatibility"],
+            individual_species_json["learnset"]["rom_address"],
+            individual_species_json["rom_address"]
+        ))
 
-    return region_jsons
-
-
-def merge_region_jsons(region_jsons: List[Dict[str, any]]) -> Dict[str, any]:
-    merged_regions = {}
-
-    for region_subset in region_jsons:
-        for region_name, region_data in region_subset.items():
-            if region_name in merged_regions:
-                raise AssertionError("Region [{region_name}] was defined multiple times")
-            merged_regions[region_name] = region_data
-
-    return merged_regions
-
-
-def get_location_to_region_map() -> Dict[str, str]:
-    if location_to_region_map is None:
-        raise AssertionError("Cannot get_location_to_region_map before region data has been loaded")
-    return location_to_region_map
-
-
-def get_warp_to_region_map() -> Dict[str, str]:
-    if warp_to_region_map is None:
-        raise AssertionError("Cannot get_warp_to_region_map before region data has been loaded")
-    return warp_to_region_map
-
-
-def get_item_attributes() -> Dict[int, ItemData]:
-    global item_attributes
-    extracted_data = get_extracted_data()
-    if item_attributes is None:
-        item_attributes = {}
-        items_json = load_json(os.path.join(os.path.dirname(__file__), "data/items.json"))
-
-        for item_constant_name, attributes in items_json.items():
-            item_id = extracted_data["constants"][item_constant_name]
-            item_attributes[item_id] = ItemData(
-                attributes["label"],
-                _str_to_item_classification(attributes["classification"]),
-                set(attributes["tags"])
-            )
-
-    return item_attributes
+    data.species = sorted(data.species, key=lambda species: species.species_id)
 
 
-def get_location_attributes() -> Dict[str, LocationAttributes]:
-    global location_attributes
-    if location_attributes is None:
-        location_attributes = {}
-        locations_json = load_json(os.path.join(os.path.dirname(__file__), "data/locations.json"))
-
-        for location_constant_name, attributes in locations_json.items():
-            location_attributes[location_constant_name] = LocationAttributes(
-                attributes["label"],
-                set(attributes["tags"])
-            )
-
-    return location_attributes
-
-
-def _str_to_item_classification(string):
-    if string == "PROGRESSION":
-        return ItemClassification.progression
-    elif string == "USEFUL":
-        return ItemClassification.useful
-    elif string == "FILLER":
-        return ItemClassification.filler
-    elif string == "TRAP":
-        return ItemClassification.trap
+_init()

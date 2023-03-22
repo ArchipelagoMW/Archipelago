@@ -1,6 +1,6 @@
-from typing import Optional, FrozenSet, Union
+from typing import Dict, Optional, FrozenSet, Union
 from BaseClasses import Location, MultiWorld, Region
-from .Data import get_region_data, get_config
+from .Data import data, config
 from .Items import offset_item_value
 
 
@@ -17,39 +17,48 @@ class PokemonEmeraldLocation(Location):
         self.flag = flag
         self.default_item_code = offset_item_value(default_item_value)
         self.rom_address = rom_address
-        self.is_event = flag == None
+        self.is_event = flag is None
         self.tags = tags
 
 
 def offset_flag(flag: Union[int, None]) -> Union[int, None]:
     if flag is None:
         return None
-    return flag + get_config()["ap_offset"]
+    return flag + config["ap_offset"]
 
 
 def reverse_offset_flag(id: Union[int, None]) -> Union[int, None]:
     if id is None:
         return None
-    return id - get_config()["ap_offset"]
+    return id - config["ap_offset"]
 
 
 def create_locations_with_tags(multiworld: MultiWorld, player: int, tags):
-    region_data = get_region_data()
     tags = set(tags)
 
-    for region_name, region_data in region_data.items():
+    for region_name, region_data in data.regions.items():
         region = multiworld.get_region(region_name, player)
-        for location_data in [location for location in region_data.locations if len(tags & location.tags) > 0]:
-            location = PokemonEmeraldLocation(player, location_data.label, location_data.flag, region, location_data.rom_address, location_data.default_item, location_data.tags)
+        filtered_locations = [l for l in region_data.locations if len(tags & data.locations[l].tags) > 0]
+
+        for location_name in filtered_locations:
+            location_data = data.locations[location_name]
+            location = PokemonEmeraldLocation(
+                player,
+                location_data.label,
+                location_data.flag,
+                region,
+                location_data.rom_address,
+                location_data.default_item,
+                location_data.tags
+            )
             region.locations.append(location)
 
 
-def create_location_label_to_id_map():
-    region_data = get_region_data()
-
-    label_to_id_map = {}
-    for region_data in region_data.values():
-        for location_data in region_data.locations:
+def create_location_label_to_id_map() -> Dict[str, int]:
+    label_to_id_map: Dict[str, int] = {}
+    for region_data in data.regions.values():
+        for location_name in region_data.locations:
+            location_data = data.locations[location_name]
             label_to_id_map[location_data.label] = offset_flag(location_data.flag)
 
     return label_to_id_map
