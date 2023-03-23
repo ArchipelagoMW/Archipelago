@@ -394,7 +394,7 @@ class LinksAwakeningWorld(World):
             args,
             self.laxdr_options,
             self.player_options,
-            bytes.fromhex(self.multiworld.seed_name),
+            bytes.fromhex(self.multiworld.seed_name[-20:]),
             self.ladxr_logic,
             rnd=self.multiworld.per_slot_randoms[self.player],
             player_name=name_for_rom,
@@ -411,7 +411,7 @@ class LinksAwakeningWorld(World):
             os.unlink(rompath)
 
     def generate_multi_key(self):
-        return bytes.fromhex(self.multiworld.seed_name) + self.player.to_bytes(2, 'big')
+        return bytes.fromhex(self.multiworld.seed_name[-20:]) + self.player.to_bytes(2, 'big')
 
     def modify_multidata(self, multidata: dict):
         multi_key = binascii.hexlify(self.generate_multi_key()).decode()
