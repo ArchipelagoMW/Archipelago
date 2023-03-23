@@ -1,6 +1,6 @@
 from BaseClasses import ItemClassification
 from test.TestBase import WorldTestBase
-from worlds.pokemon_emerald.Items import PokemonEmeraldItem
+from worlds.pokemon_emerald.items import PokemonEmeraldItem
 
 class TestOverworld(WorldTestBase):
     game = "Pokemon Emerald"
