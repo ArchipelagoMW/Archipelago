@@ -108,8 +108,12 @@ html{
     }
 
     #base-header-mobile-menu{
-        top: 3rem;
+        top: 3.3rem;
         width: unset;
+        border-left: 2px solid #d0ebe6;
+        border-bottom: 2px solid #d0ebe6;
+        filter: drop-shadow(-6px 6px 2px #2e3e83);
+        border-top-left-radius: 10px;
     }
 
     #base-header-mobile-menu a{
