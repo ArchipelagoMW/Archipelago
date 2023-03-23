@@ -415,7 +415,7 @@ class LinksAwakeningWorld(World):
             os.unlink(rompath)
 
     def generate_multi_key(self):
-        return self.multiworld.random.randbytes(10) + self.player.to_bytes(2, 'big')
+        return bytearray(self.multiworld.random.getrandbits(8) for _ in range(10)) + self.player.to_bytes(2, 'big')
 
     def modify_multidata(self, multidata: dict):
         multidata["connect_names"][binascii.hexlify(self.multi_key).decode()] = multidata["connect_names"][self.multiworld.player_name[self.player]]
