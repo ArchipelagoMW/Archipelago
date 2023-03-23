@@ -279,6 +279,8 @@ def _init():
             data.locations[location_name] = new_location
             claimed_locations.add(location_name)
 
+        new_region.locations.sort()
+
         # Events
         for event in region_json["events"]:
             new_region.events.append(EventData(event, region_name))
@@ -294,6 +296,8 @@ def _init():
             new_region.warps.append(encoded_warp)
             data.warps[encoded_warp] = Warp(encoded_warp, region_name)
             claimed_warps.add(encoded_warp)
+
+        new_region.warps.sort()
 
         data.regions[region_name] = new_region
 
