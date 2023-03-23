@@ -213,6 +213,8 @@ class LinksAwakeningWorld(World):
                         self.multiworld.itempool.append(item)
 
     def pre_fill(self):
+        self.multi_key = self.generate_multi_key()
+
         dungeon_locations = []
         dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]
         all_state = self.multiworld.get_all_state(use_cache=False)
@@ -390,11 +392,13 @@ class LinksAwakeningWorld(World):
         name_for_rom = self.multiworld.player_name[self.player]
 
         all_names = [self.multiworld.player_name[i + 1] for i in range(len(self.multiworld.player_name))]
+
         rom = generator.generateRom(
             args,
             self.laxdr_options,
             self.player_options,
-            bytes.fromhex(self.multiworld.seed_name[-20:]),
+            self.multi_key,
+            self.multiworld.seed_name,
             self.ladxr_logic,
             rnd=self.multiworld.per_slot_randoms[self.player],
             player_name=name_for_rom,
@@ -411,8 +415,7 @@ class LinksAwakeningWorld(World):
             os.unlink(rompath)
 
     def generate_multi_key(self):
-        return bytes.fromhex(self.multiworld.seed_name[-20:]) + self.player.to_bytes(2, 'big')
+        return self.multiworld.random.randbytes(10) + self.player.to_bytes(2, 'big')
 
     def modify_multidata(self, multidata: dict):
-        multi_key = binascii.hexlify(self.generate_multi_key()).decode()
-        multidata["connect_names"][multi_key] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+        multidata["connect_names"][binascii.hexlify(self.multi_key).decode()] = multidata["connect_names"][self.multiworld.player_name[self.player]]
