@@ -709,6 +709,10 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_location("EVENT_DEFEAT_MAXIE_AT_SPACE_STATION", player),
         lambda state: state.has("EVENT_DEFEAT_TATE_AND_LIZA", player)
     )
+    set_rule(
+        multiworld.get_location("EVENT_STEVEN_GIVES_DIVE", player),
+        lambda state: state.has("EVENT_DEFEAT_MAXIE_AT_SPACE_STATION", player)
+    )
 
     # Shoal Cave
     set_rule(
