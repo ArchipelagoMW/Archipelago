@@ -1886,7 +1886,7 @@ function main()
                     ootSocket = client
                     ootSocket:settimeout(0)
                 else
-                    print('Connection failed, ensure OoTClient is running and rerun oot_connector.lua')
+                    print('Connection failed, ensure OoTClient is running and rerun connector_oot.lua')
                     return
                 end
             end
