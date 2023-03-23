@@ -125,8 +125,10 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
 
     # Set up the starting stage and warp entrances
     for i in range(len(active_warp_list)):
-        menu_entrance = Entrance(player, stage_info[active_warp_list[i]].start_region_name, active_regions["Menu"])
-        if i > 0:
+        if i == 0:
+            menu_entrance = Entrance(player, stage_info[active_warp_list[i]].start_region_name, active_regions["Menu"])
+        else:
+            menu_entrance = Entrance(player, stage_info[active_warp_list[i]].mid_region_name, active_regions["Menu"])
             menu_entrance.access_rule = lambda state: state.has(IName.special_one, player, s1s_per_warp * i)
         menu_entrance.connect(active_regions[stage_info[active_warp_list[i]].start_region_name])
         active_regions["Menu"].exits.append(menu_entrance)

@@ -2,9 +2,10 @@ import os
 import typing
 # import math
 import threading
+import copy
 
 from BaseClasses import Item, Region, Entrance, Location, MultiWorld, Tutorial, ItemClassification
-from .Items import CV64Item, ItemData, item_table, tier1_junk_table, tier2_junk_table, key_table, special_table
+from .Items import CV64Item, item_table, tier1_junk_table, tier2_junk_table, key_table, special_table
 from .Locations import CV64Location, all_locations, create_locations, boss_table
 from .Entrances import create_entrances
 from .Options import cv64_options
@@ -42,7 +43,7 @@ class CV64World(World):
     data_version = 0
     remote_items = False
 
-    item_name_to_id = {name: data.code for name, data in item_table.items()}
+    item_name_to_id = {name: code for name, code in item_table.items()}
     location_name_to_id = {name: data.code for name, data in all_locations.items()}
 
     active_stage_list: typing.List[str]
@@ -59,14 +60,14 @@ class CV64World(World):
         super().__init__(world, player)
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, world) -> None:
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
 
-    def generate_early(self):
+    def generate_early(self) -> None:
         self.active_stage_list = vanilla_stage_order.copy()
-        self.active_stage_exits = vanilla_stage_exits.copy()
+        self.active_stage_exits = copy.deepcopy(vanilla_stage_exits)
 
         stage_1_blacklist = []
 
@@ -93,9 +94,16 @@ class CV64World(World):
         if self.multiworld.stage_shuffle[self.player]:
             shuffle_stages(self.multiworld, self.player, self.active_stage_list, self.active_stage_exits,
                            stage_1_blacklist)
+        elif self.multiworld.character_stages[self.player].value != 0:
+            # Update the stage numbers here if we have branching paths disabled and not shuffling stages.
+            for i in range(len(self.active_stage_list)):
+                self.active_stage_exits[self.active_stage_list[i]][3] = i + 1
 
-        # Create a list of warps from the active stage list. They are in a random order by default.
-        self.active_warp_list = self.multiworld.random.sample(self.active_stage_list, 7)
+        # Create a list of warps from the active stage list. They are in a random order by default and will never
+        # include the starting stage.
+        possible_warps = self.active_stage_list.copy()
+        del(possible_warps[0])
+        self.active_warp_list = self.multiworld.random.sample(possible_warps, 7)
 
         if self.multiworld.warp_shuffle[self.player].value == 0:
             # Arrange the warps to be in the seed's stage order
@@ -112,9 +120,10 @@ class CV64World(World):
                     new_list.remove(warp)
             self.active_warp_list = new_list
 
+        # Insert the starting stage at the start of the warp list
         self.active_warp_list.insert(0, self.active_stage_list[0])
 
-    def create_regions(self):
+    def create_regions(self) -> None:
         active_regions = {"Menu": Region("Menu", self.player, self.multiworld)}
 
         for name, stage in RName.regions_to_stages.items():
@@ -131,93 +140,132 @@ class CV64World(World):
             self.multiworld.regions.append(active_regions[region])
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
-        data = item_table[name]
-
         if force_non_progression:
             classification = ItemClassification.filler
-        elif name == IName.special_two:
+        elif name in special_table:
             classification = ItemClassification.progression_skip_balancing
-        elif data.progression:
+        elif name in key_table:
             classification = ItemClassification.progression
         else:
             classification = ItemClassification.filler
 
-        created_item = CV64Item(name, classification, data.code, self.player)
+        code = item_table[name]
+
+        created_item = CV64Item(name, classification, code, self.player)
         if self.multiworld.draculas_condition[self.player].value != 3 and created_item.name == IName.special_two:
             created_item.code = None
 
         return created_item
 
-    def create_items(self):
-        item_counts = {}
-        junk_count = 0
-        progress_item_pool = []
-        common_item_pool = []
+    def create_items(self) -> None:
+        item_counts = {
+            "tier1_junk_counts": {name: 0 for name in tier1_junk_table.keys()},
+            "tier2_junk_counts": {name: 0 for name in tier2_junk_table.keys()},
+            "key_counts": {name: 0 for name in key_table.keys()},
+            "special_counts": {name: 0 for name in special_table.keys()},
+        }
+        extras_count = 0
 
+        def add_tier1_junk(number_to_add):
+            for index in range(number_to_add):
+                item_to_add = self.multiworld.random.choice(list(tier1_junk_table.keys()))
+                if item_to_add not in item_counts["tier1_junk_counts"]:
+                    item_counts["tier1_junk_counts"][item_to_add] = 0
+                item_counts["tier1_junk_counts"][item_to_add] += 1
+
+        # Add up all the item counts per stage
         for stage in self.active_stage_list:
-            for item in stage_info[stage].stage_item_counts:
-                if item not in item_counts:
-                    item_counts[item] = 0
-                item_counts[item] += stage_info[stage].stage_item_counts[item]
-            junk_count += stage_info[stage].stage_junk_count
+            for item in stage_info[stage].stage_key_counts:
+                if item not in item_counts["key_counts"]:
+                    item_counts["key_counts"][item] = 0
+                item_counts["key_counts"][item] += stage_info[stage].stage_key_counts[item]
 
-        if self.multiworld.carrie_logic[self.player]:
-            item_counts[IName.roast_beef] += 1
-            item_counts[IName.moon_card] += 1
+            for item in stage_info[stage].stage_tier2_junk_counts:
+                if item not in item_counts["tier2_junk_counts"]:
+                    item_counts["tier2_junk_counts"][item] = 0
+                item_counts["tier2_junk_counts"][item] += stage_info[stage].stage_tier2_junk_counts[item]
 
-        if self.multiworld.lizard_generator_items[self.player]:
-            item_counts[IName.powerup] += 1
-            item_counts[IName.sun_card] += 1
-            junk_count += 4
+            add_tier1_junk(stage_info[stage].stage_tier1_junk_count)
 
-        item_counts[IName.special_one] = self.multiworld.total_special1s[self.player].value
+        # Put in the Carrie-only items if applicable
+        if self.multiworld.carrie_logic[self.player] and RName.underground_waterway in self.active_stage_list:
+            item_counts["tier2_junk_counts"][IName.roast_beef] += 1
+            item_counts["tier2_junk_counts"][IName.moon_card] += 1
+
+        # Put in the lizard-man generator items if applicable
+        if self.multiworld.lizard_generator_items[self.player] and RName.castle_center in self.active_stage_list:
+            item_counts["tier2_junk_counts"][IName.powerup] += 1
+            item_counts["tier2_junk_counts"][IName.sun_card] += 1
+            add_tier1_junk(4)
+
+        # Determine the S1 count
+        item_counts["special_counts"][IName.special_one] = self.multiworld.total_special1s[self.player].value
+        extras_count += item_counts["special_counts"][IName.special_one]
         required_s1s = self.multiworld.special1s_per_warp[self.player].value * 7
-        if required_s1s > item_counts[IName.special_one]:
+        if required_s1s > item_counts["special_counts"][IName.special_one]:
+            needed_s1s = required_s1s - item_counts["special_counts"][IName.special_one]
             raise Exception(f"Not enough Special1 jewels for player {self.multiworld.get_player_name(self.player)} to "
-                            f"use the whole warp menu. Need {required_s1s - item_counts[IName.special_one]} more.")
-        junk_count -= item_counts[IName.special_one]
+                            f"use the whole warp menu. Need {needed_s1s} more.")
 
+        # Determine the S2 count if applicable
         if self.multiworld.draculas_condition[self.player].value == 3:
-            item_counts[IName.special_two] = self.multiworld.total_special2s[self.player].value
+            item_counts["special_counts"][IName.special_two] = self.multiworld.total_special2s[self.player].value
+            extras_count += item_counts["special_counts"][IName.special_two]
             self.required_s2s = self.multiworld.special2s_required[self.player].value
-            if self.required_s2s > item_counts[IName.special_two]:
+            if self.required_s2s > item_counts["special_counts"][IName.special_two]:
+                needed_s2s = self.required_s2s - item_counts["special_counts"][IName.special_two]
                 raise Exception(f"More Special2 jewels required than there are for player"
-                                f"{self.multiworld.get_player_name(self.player)}. Need "
-                                f"{self.required_s2s - item_counts[IName.special_two]} more.")
-            junk_count -= item_counts[IName.special_two]
+                                f"{self.multiworld.get_player_name(self.player)}. Need {needed_s2s} more.")
 
+        # Determine the extra key counts if applicable
         if self.multiworld.extra_keys[self.player].value == 1:
-            for item in item_counts:
-                if item_table[item].progression and item in main_table:
-                    item_counts[item] += 1
-                    junk_count -= 1
+            for key in item_counts["key_counts"]:
+                extra_copies = item_counts["key_counts"][key] * 2
+                item_counts["key_counts"][key] += extra_copies
+                extras_count += extra_copies
         elif self.multiworld.extra_keys[self.player].value == 2:
-            for item in item_counts:
-                extra_count = self.multiworld.random.randint(0, 1)
-                if item_table[item].progression and item in main_table:
-                    item_counts[item] += extra_count
-                    junk_count -= extra_count
+            for key in item_counts["key_counts"]:
+                extra_copies = 0
+                if item_counts["key_counts"][key] > 0:
+                    for i in range(item_counts["key_counts"][key]):
+                        extra_copies += self.multiworld.random.randint(0, 1)
+                item_counts["key_counts"][key] += extra_copies
+                extras_count += extra_copies
 
-        for item_name in item_counts:
-            while item_counts[item_name] != 0:
-                created_item = self.create_item(item_name)
-                if created_item.classification == ItemClassification.progression:
-                    progress_item_pool.append(created_item)
-                else:
-                    common_item_pool.append(created_item)
-                item_counts[item_name] -= 1
+        # Subtract from the junk tables the total number of "extra" items we're adding. Tier 1 will be subtracted from
+        # first until it runs out, at which point we'll start subtracting from Tier 2. If Tier 2 also runs out then
+        # there's simply not enough locations.
+        total_tier1_junk = 0
+        total_tier2_junk = 0
+        for junk in item_counts["tier1_junk_counts"]:
+            total_tier1_junk += item_counts["tier1_junk_counts"][junk]
+        for junk in item_counts["tier2_junk_counts"]:
+            total_tier2_junk += item_counts["tier2_junk_counts"][junk]
 
-        # Delete common items if we have more items than locations
-        while junk_count < 0:
-            del(common_item_pool[self.multiworld.random.randint(0, len(common_item_pool))])
-            junk_count += 1
+        for i in range(extras_count):
+            if total_tier1_junk > 0:
+                table = "tier1_junk_counts"
+                total_tier1_junk -= 1
+            elif total_tier2_junk > 0:
+                table = "tier2_junk_counts"
+                total_tier2_junk -= 1
+            else:
+                raise Exception(f"Not enough replaceable junk for player "
+                                f"{self.multiworld.get_player_name(self.player)}. Need {extras_count - i} "
+                                f"more locations.")
 
-        for junk_item in self.multiworld.random.choices(list(junk_table.keys()), k=junk_count):
-            common_item_pool.append(self.create_item(junk_item))
+            item_to_subtract = self.multiworld.random.choice(list(item_counts[table].keys()))
+            while item_counts[table][item_to_subtract] == 0:
+                item_to_subtract = self.multiworld.random.choice(list(item_counts[table].keys()))
+            item_counts[table][item_to_subtract] -= 1
 
-        self.multiworld.itempool += progress_item_pool + common_item_pool
+        # Set up the items correctly
+        for table in item_counts:
+            for item in item_counts[table]:
+                for i in range(item_counts[table][item]):
+                    self.multiworld.itempool.append(self.create_item(item))
 
-    def generate_basic(self):
+    def generate_basic(self) -> None:
         # Handle sub-weapon shuffle here.
         self.sub_weapon_dict = rom_sub_weapon_offsets.copy()
 
@@ -226,7 +274,7 @@ class CV64World(World):
             self.multiworld.random.shuffle(sub_bytes)
             self.sub_weapon_dict = dict(zip(self.sub_weapon_dict, sub_bytes))
 
-    def set_rules(self):
+    def set_rules(self) -> None:
         self.multiworld.get_location(LName.the_end, self.player).place_locked_item(self.create_item(IName.victory))
 
         if self.multiworld.draculas_condition[self.player].value == 1:
@@ -257,7 +305,7 @@ class CV64World(World):
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has(IName.victory, self.player)
 
-    def pre_fill(self):
+    def pre_fill(self) -> None:
         if self.active_stage_list[0] == RName.tower_of_science:
             if self.multiworld.special1s_per_warp[self.player].value > 3:
                 self.multiworld.local_early_items[self.player][IName.science_key_two] = 1
@@ -265,110 +313,71 @@ class CV64World(World):
             if self.multiworld.special1s_per_warp[self.player].value > 2:
                 self.multiworld.local_early_items[self.player][IName.clocktower_key_one] = 1
 
-    def get_offsets_and_ids(self):
-        offsets_to_ids = {}
-
-        # Items
-        active_locations = self.location_name_to_id.copy()
-
-        if not self.multiworld.carrie_logic[self.player]:
-            del active_locations[LName.uw_carrie1]
-            del active_locations[LName.uw_carrie2]
-
-        if not self.multiworld.lizard_generator_items[self.player]:
-            del active_locations[LName.ccff_lizard_coffin_fl]
-            del active_locations[LName.ccff_lizard_coffin_fr]
-            del active_locations[LName.ccff_lizard_coffin_nfl]
-            del active_locations[LName.ccff_lizard_coffin_nfr]
-            del active_locations[LName.ccff_lizard_coffin_nml]
-            del active_locations[LName.ccff_lizard_coffin_nmr]
-        
-        for location_name in active_locations:
-            loc = self.multiworld.get_location(location_name, self.player)
-            if loc.item.game == "Castlevania 64" and loc.cv64_loc_type != "event":
-                if loc.item.player == self.player:
-                    offsets_to_ids[loc.cv64_rom_offset] = loc.item.code - 0xC64000
-                    if loc.cv64_loc_type == "npc":
-                        if 0x19 < offsets_to_ids[loc.cv64_rom_offset] < 0x1D:
-                            offsets_to_ids[loc.cv64_rom_offset] += 0x0D
-                        elif offsets_to_ids[loc.cv64_rom_offset] > 0x1C:
-                            offsets_to_ids[loc.cv64_rom_offset] -= 0x03
-                else:
-                    if loc.item.classification == ItemClassification.progression:
-                        offsets_to_ids[loc.cv64_rom_offset] = 0x11
-                    else:
-                        offsets_to_ids[loc.cv64_rom_offset] = 0x12
-
-        # Sub-weapons
-        if self.multiworld.sub_weapon_shuffle[self.player]:
-            for offset, sub_id in self.sub_weapon_dict.items():
-                offsets_to_ids[offset] = sub_id
-
-        # Loading zones
-        if self.multiworld.stage_shuffle[self.player]:
-            offsets_to_ids[0xB73308] = stage_info[self.active_stage_list[0]].start_map_id
-            offsets_to_ids[0xD9DAB] = stage_info[
-                self.active_stage_list[self.active_stage_list.index(RName.villa) + 2]].start_map_id
-            offsets_to_ids[0x109CCF] = stage_info[
-                self.active_stage_list[self.active_stage_list.index(RName.castle_center) + 3]].start_map_id
-            for stage in range(len(self.active_stage_list) - 1):
-                if self.active_stage_list[stage - 1] == RName.villa:
-                    offsets_to_ids[stage_info[self.active_stage_list[stage]].endzone_map_offset] = stage_info[
-                        self.active_stage_list[stage + 2]].start_map_id
-                    offsets_to_ids[stage_info[self.active_stage_list[stage]].endzone_spawn_offset] = stage_info[
-                        self.active_stage_list[stage + 2]].start_spawn_id
-                elif self.active_stage_list[stage - 2] == RName.castle_center:
-                    offsets_to_ids[stage_info[self.active_stage_list[stage]].endzone_map_offset] = stage_info[
-                        self.active_stage_list[stage + 3]].start_spawn_id
-                    offsets_to_ids[stage_info[self.active_stage_list[stage]].endzone_spawn_offset] = stage_info[
-                        self.active_stage_list[stage + 3]].start_spawn_id
-                else:
-                    offsets_to_ids[stage_info[self.active_stage_list[stage]].endzone_map_offset] = stage_info[
-                        self.active_stage_list[stage + 1]].start_map_id
-                    offsets_to_ids[stage_info[self.active_stage_list[stage]].endzone_spawn_offset] = stage_info[
-                        self.active_stage_list[stage + 1]].start_spawn_id
-
-                if stage_info[self.active_stage_list[stage]].startzone_map_offset != 0xFFFFFF:
-                    if stage - 1 < 0:
-                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_map_offset] = stage_info[
-                            self.active_stage_list[stage]].start_map_id
-                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_spawn_offset] = \
-                            stage_info[self.active_stage_list[stage]].start_spawn_id
-                    elif self.active_stage_list[stage - 2] == RName.villa:
-                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_map_offset] = 0x1A
-                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_spawn_offset] = 0x03
-                    elif self.active_stage_list[stage - 3] == RName.villa:
-                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_map_offset] = stage_info[
-                            self.active_stage_list[stage - 2]].end_map_id
-                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_spawn_offset] = \
-                            stage_info[self.active_stage_list[stage - 2]].end_spawn_id
-                    elif self.active_stage_list[stage - 3] == RName.castle_center:
-                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_map_offset] = 0x0F
-                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_spawn_offset] = 0x03
-                    elif self.active_stage_list[stage - 5] == RName.castle_center:
-                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_map_offset] = stage_info[
-                            self.active_stage_list[stage - 3]].end_map_id
-                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_spawn_offset] = \
-                            stage_info[self.active_stage_list[stage - 3]].end_spawn_id
-                    else:
-                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_map_offset] = stage_info[
-                            self.active_stage_list[stage - 1]].end_map_id
-                        offsets_to_ids[stage_info[self.active_stage_list[stage]].startzone_spawn_offset] = \
-                            stage_info[self.active_stage_list[stage - 1]].end_spawn_id
-
-        return offsets_to_ids
-    
-    def generate_output(self, output_directory: str):
+    def generate_output(self, output_directory: str) -> None:
         try:
             world = self.multiworld
             player = self.player
 
             rom = LocalRom(get_base_rom_path())
 
-            offsets_to_ids = self.get_offsets_and_ids()
+            offsets_to_ids = {}
 
-            patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.active_stage_list, self.active_warp_list,
-                      self.required_s2s)
+            # Figure out the item location bytes
+            active_locations = self.multiworld.get_locations(self.player)
+
+            for loc in active_locations:
+                if loc.item.game == "Castlevania 64" and loc.cv64_loc_type != "event":
+                    if loc.item.player == self.player:
+                        offsets_to_ids[loc.cv64_rom_offset] = loc.item.code - 0xC64000
+                        if loc.cv64_loc_type == "npc":
+                            if 0x19 < offsets_to_ids[loc.cv64_rom_offset] < 0x1D:
+                                offsets_to_ids[loc.cv64_rom_offset] += 0x0D
+                            elif offsets_to_ids[loc.cv64_rom_offset] > 0x1C:
+                                offsets_to_ids[loc.cv64_rom_offset] -= 0x03
+                    else:
+                        if loc.item.classification == ItemClassification.progression:
+                            offsets_to_ids[loc.cv64_rom_offset] = 0x11
+                        else:
+                            offsets_to_ids[loc.cv64_rom_offset] = 0x12
+
+            # Figure out the sub-weapon bytes
+            if self.multiworld.sub_weapon_shuffle[self.player]:
+                for offset, sub_id in self.sub_weapon_dict.items():
+                    offsets_to_ids[offset] = sub_id
+
+            # Figure out the loading zone bytes
+
+            if self.multiworld.stage_shuffle[self.player]:
+                offsets_to_ids[0xB73308] = stage_info[self.active_stage_list[0]].start_map_id
+            for stage in self.active_stage_exits:
+                # Start loading zones
+                saw_cc_end = False
+                if self.active_stage_exits[stage][0] and self.active_stage_exits[stage][0] != "Menu":
+                    offsets_to_ids[stage_info[stage].startzone_map_offset] = stage_info[
+                        self.active_stage_exits[stage][0]].end_map_id
+                    offsets_to_ids[stage_info[stage].startzone_spawn_offset] = stage_info[
+                        self.active_stage_exits[stage][0]].end_spawn_id
+                    # Change CC's end-spawn ID to put you at Carrie's exit if appropriate
+                    if self.active_stage_exits[stage][0] == RName.castle_center:
+                        if self.multiworld.character_stages[self.player].value == 3 or \
+                                (self.active_stage_list[self.active_stage_list.index(RName.castle_center) + 3] == stage
+                                 and self.multiworld.character_stages[self.player].value == 0):
+                            offsets_to_ids[stage_info[stage].startzone_spawn_offset] += 1
+                # End loading zones
+                if self.active_stage_exits[stage][1]:
+                    offsets_to_ids[stage_info[stage].endzone_map_offset] = stage_info[
+                        self.active_stage_exits[stage][1]].start_map_id
+                    offsets_to_ids[stage_info[stage].endzone_spawn_offset] = stage_info[
+                        self.active_stage_exits[stage][1]].start_spawn_id
+                # Alternate end loading zones
+                if self.active_stage_exits[stage][2]:
+                    offsets_to_ids[stage_info[stage].altzone_map_offset] = stage_info[
+                        self.active_stage_exits[stage][2]].start_map_id
+                    offsets_to_ids[stage_info[stage].altzone_spawn_offset] = stage_info[
+                        self.active_stage_exits[stage][2]].start_spawn_id
+
+            patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.active_stage_list,
+                      self.active_stage_exits, self.active_warp_list, self.required_s2s)
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
@@ -382,45 +391,30 @@ class CV64World(World):
                                    player_name=world.player_name[player], patched_path=rompath)
             patch.write()
         except:
-            print("D'oh, something went wrong in CV64's generate_output!"
-                  " Tell my future self to fix his nonsense, ok?")
+            print("D'oh, something went wrong in CV64's generate_output!")
             raise
         finally:
             if os.path.exists(rompath):
                 os.unlink(rompath)
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
 
-    def write_spoiler(self, spoiler_handle: typing.TextIO):
-        stage_count = 1
-        spoiler_handle.write("\n")
-        header_text = "Castlevania 64 stage order:\n"
-        header_text = header_text.format(self.multiworld.player_name[self.player])
-        spoiler_handle.write(header_text)
-        for x in range(len(self.active_stage_list)):
-            if self.active_stage_list[x - 2] == RName.villa or self.active_stage_list[x - 3] \
-                    == RName.castle_center or self.active_stage_list[x - 4] == RName.castle_center:
-                path = "'"
+    def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
+        # Write the stage order to the spoiler log
+        spoiler_handle.write(f"\nCastlevania 64 stage order for {self.multiworld.player_name[self.player]}:\n")
+        used_numbers = []
+        for stage in self.active_stage_list:
+            num = str(self.active_stage_exits[stage][3]).zfill(2)
+            if self.active_stage_exits[stage][3] in used_numbers:
+                alt_stage = "'"
             else:
-                path = " "
+                alt_stage = " "
+                used_numbers.append(self.active_stage_exits[stage][3])
+            spoiler_handle.writelines(f"Stage {num}{alt_stage}:\t{stage}\n")
 
-            if self.active_stage_list[x - 2] == RName.villa:
-                stage_count -= 1
-            elif self.active_stage_list[x - 3] == RName.castle_center:
-                stage_count -= 2
-
-            if stage_count < 10:
-                text = "Stage {0}{1}:\t{2}\n"
-            else:
-                text = "Stage {0}:\t{2}\n"
-            text = text.format(stage_count, path, self.active_stage_list[x])
-            spoiler_handle.writelines(text)
-            stage_count += 1
-
-        spoiler_handle.writelines("\nStart :\t" + self.active_stage_list[0])
-        for x in range(len(self.active_warp_list)):
-            text = "\nWarp {0}:\t{1}"
-            text = text.format(x + 1, self.active_warp_list[x])
-            spoiler_handle.writelines(text)
+        # Write the warp order to the spoiler log
+        spoiler_handle.writelines(f"\nStart :\t{self.active_stage_list[0]}\n")
+        for i in range(1, len(self.active_warp_list)):
+            spoiler_handle.writelines(f"Warp {i}:\t{self.active_warp_list[i]}\n")
 
     def fill_slot_data(self) -> dict:
         slot_data = {"death_link": self.multiworld.death_link[self.player].value}
@@ -430,7 +424,7 @@ class CV64World(World):
 
         return slot_data
 
-    def modify_multidata(self, multidata: dict):
+    def modify_multidata(self, multidata: dict) -> None:
         import base64
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()

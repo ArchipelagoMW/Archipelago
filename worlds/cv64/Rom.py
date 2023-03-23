@@ -1,11 +1,13 @@
 import Utils
+
 from Utils import read_snes_rom
 from worlds.Files import APDeltaPatch
 
 import hashlib
 import os
 
-from .Names import Patches, RName
+from . import Patches
+from .Names import RName
 from .Stages import stage_info
 
 USHASH = '1cc5cf3b4d29d8c3ade957648b529dc1'
@@ -98,7 +100,7 @@ rom_invis_item_bytes = {
     "Clocktower Key3": 0x9A,
 }
 
-warp_scene_offsets = [0xADF77, 0xADF87, 0xADF97, 0xADFA7, 0xADFBB, 0xADFCB, 0xADFDF]
+warp_map_offsets = [0xADF67, 0xADF77, 0xADF87, 0xADF97, 0xADFA7, 0xADFBB, 0xADFCB, 0xADFDF]
 
 
 class LocalRom(object):
@@ -142,16 +144,17 @@ class LocalRom(object):
             self.buffer = bytearray(stream.read())
 
 
-def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp_list, required_s2s):
-    # local_random = world.slot_seeds[player]
+def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active_stage_exits, active_warp_list,
+              required_s2s):
+    # local_random = multiworld.slot_seeds[player]
 
-    w1 = str(world.special1s_per_warp[player]).zfill(2)
-    w2 = str(world.special1s_per_warp[player] * 2).zfill(2)
-    w3 = str(world.special1s_per_warp[player] * 3).zfill(2)
-    w4 = str(world.special1s_per_warp[player] * 4).zfill(2)
-    w5 = str(world.special1s_per_warp[player] * 5).zfill(2)
-    w6 = str(world.special1s_per_warp[player] * 6).zfill(2)
-    w7 = str(world.special1s_per_warp[player] * 7).zfill(2)
+    w1 = str(multiworld.special1s_per_warp[player]).zfill(2)
+    w2 = str(multiworld.special1s_per_warp[player] * 2).zfill(2)
+    w3 = str(multiworld.special1s_per_warp[player] * 3).zfill(2)
+    w4 = str(multiworld.special1s_per_warp[player] * 4).zfill(2)
+    w5 = str(multiworld.special1s_per_warp[player] * 5).zfill(2)
+    w6 = str(multiworld.special1s_per_warp[player] * 6).zfill(2)
+    w7 = str(multiworld.special1s_per_warp[player] * 7).zfill(2)
 
     # NOP out the CRC BNEs
     rom.write_bytes(0x66C, [0x00, 0x00, 0x00, 0x00])
@@ -182,9 +185,15 @@ def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp
     rom.write_bytes(0xD9D84, [0x08, 0x0F, 0xF1, 0x4D])  # J 0x803FC534
     rom.write_bytes(0xBFC534, Patches.coffin_time_checker)
 
-    # Fix both Castle Center elevator bridges for both characters
-    rom.write_bytes(0x6CEAA0, [0x24, 0x0B, 0x00, 0x01])
-    rom.write_bytes(0x6CEAA4, [0x24, 0x0D, 0x00, 0x01])
+    # Fix both Castle Center elevator bridges for both characters unless enabling only one character's stages. At which
+    # point one bridge will be always broken and one always repaired instead.
+    if multiworld.character_stages[player].value == 2:
+        rom.write_bytes(0x6CEAA0, [0x24, 0x0B, 0x00, 0x00])  # ADDIU T3, R0, 0x0000
+    elif multiworld.character_stages[player].value == 3:
+        rom.write_bytes(0x6CEAA0, [0x24, 0x0B, 0x00, 0x01])  # ADDIU T3, R0, 0x0001
+    else:
+        rom.write_bytes(0x6CEAA0, [0x24, 0x0B, 0x00, 0x01])  # ADDIU T3, R0, 0x0001
+        rom.write_bytes(0x6CEAA4, [0x24, 0x0D, 0x00, 0x01])  # ADDIU T5, R0, 0x0001
 
     # Were-bull arena flag hack
     rom.write_bytes(0x6E38F0, [0x0C, 0x0F, 0xF1, 0x57])
@@ -222,40 +231,39 @@ def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp
     # Change the Stage Select menu options
     rom.write_bytes(0xADF64, Patches.warp_menu_rewrite)
     rom.write_bytes(0x10E0C8, Patches.warp_pointer_table)
-    rom.write_byte(0xADF67, stage_info[active_stage_list[0]].start_map_id)
     for warp in range(len(active_warp_list)):
-        rom.write_byte(warp_scene_offsets[warp], stage_info[active_warp_list[warp]].mid_map_id)
-        rom.write_byte(warp_scene_offsets[warp] + 4, stage_info[active_warp_list[warp]].mid_spawn_id)
+        rom.write_byte(warp_map_offsets[warp], stage_info[active_warp_list[warp]].mid_map_id)
+        rom.write_byte(warp_map_offsets[warp] + 4, stage_info[active_warp_list[warp]].mid_spawn_id)
 
     # Play the "teleportation" sound effect when teleporting
     rom.write_bytes(0xAE088, [0x08, 0x00, 0x4F, 0xAB,   # J 0x80013EAC
                               0x24, 0x04, 0x01, 0x9E])  # ADDIU A0, R0, 0x019E
 
     # Change the Stage Select menu's text to reflect its new purpose
-    rom.write_bytes(0xEFAD0, cv64_text_converter(f"Where to...?\t{active_stage_list[0]}\t"
-                                                 f"`{w1} {active_warp_list[0]}\t"
-                                                 f"`{w2} {active_warp_list[1]}\t"
-                                                 f"`{w3} {active_warp_list[2]}\t"
-                                                 f"`{w4} {active_warp_list[3]}\t"
-                                                 f"`{w5} {active_warp_list[4]}\t"
-                                                 f"`{w6} {active_warp_list[5]}\t"
-                                                 f"`{w7} {active_warp_list[6]}", False))
+    rom.write_bytes(0xEFAD0, cv64_text_converter(f"Where to...?\t{active_warp_list[0]}\t"
+                                                 f"`{w1} {active_warp_list[1]}\t"
+                                                 f"`{w2} {active_warp_list[2]}\t"
+                                                 f"`{w3} {active_warp_list[3]}\t"
+                                                 f"`{w4} {active_warp_list[4]}\t"
+                                                 f"`{w5} {active_warp_list[5]}\t"
+                                                 f"`{w6} {active_warp_list[6]}\t"
+                                                 f"`{w7} {active_warp_list[7]}", False))
 
     # Lizard-man save proofing
     rom.write_bytes(0xA99AC, [0x08, 0x0F, 0xF0, 0xB8])  # J 0x803FC2E0
     rom.write_bytes(0xBFC2E0, Patches.boss_save_stopper)
 
     # Disable or guarantee vampire Vincent's fight
-    if world.vincent_fight_condition[player] == "never":
+    if multiworld.vincent_fight_condition[player] == "never":
         rom.write_bytes(0xAACC0, [0x24, 0x01, 0x00, 0x01])  # ADDIU AT, R0, 0x0001
-    elif world.vincent_fight_condition[player] == "always":
+    elif multiworld.vincent_fight_condition[player] == "always":
         rom.write_bytes(0xAACE0, [0x24, 0x18, 0x00, 0x10])  # ADDIU	T8, R0, 0x0010
     else:
         rom.write_bytes(0xAACE0, [0x24, 0x18, 0x00, 0x00])  # ADDIU	T8, R0, 0x0000
 
     # Disable or guarantee Renon's fight
     rom.write_bytes(0xAACB4, [0x08, 0x0F, 0xF1, 0xA4])  # J 0x803FC690
-    if world.renon_fight_condition[player] == "never":
+    if multiworld.renon_fight_condition[player] == "never":
         rom.write_byte(0xB804F0, 0x00)
         rom.write_byte(0xB80632, 0x00)
         rom.write_byte(0xB807E3, 0x00)
@@ -263,7 +271,7 @@ def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp
         rom.write_byte(0xB816BD, 0xB8)
         rom.write_byte(0xB817CF, 0x00)
         rom.write_bytes(0xBFC690, Patches.renon_cutscene_checker_jr)
-    elif world.renon_fight_condition[player] == "always":
+    elif multiworld.renon_fight_condition[player] == "always":
         rom.write_byte(0xB804F0, 0x0C)
         rom.write_byte(0xB80632, 0x0C)
         rom.write_byte(0xB807E3, 0x0C)
@@ -276,9 +284,9 @@ def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp
         rom.write_bytes(0xBFC690, Patches.renon_cutscene_checker)
 
     # Disable or guarantee the Bad Ending
-    if world.bad_ending_condition[player] == "never":
+    if multiworld.bad_ending_condition[player] == "never":
         rom.write_bytes(0xAEE5C6, [0x3C, 0x0A, 0x00, 0x00])  # LUI  T2, 0x0000
-    elif world.bad_ending_condition[player] == "always":
+    elif multiworld.bad_ending_condition[player] == "always":
         rom.write_bytes(0xAEE5C6, [0x3C, 0x0A, 0x00, 0x40])  # LUI  T2, 0x0040
 
     # Play Castle Keep's song if teleporting in front of Dracula's door outside the escape sequence
@@ -286,7 +294,7 @@ def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp
     rom.write_bytes(0xBFC4B8, Patches.ck_door_music_player)
 
     # Increase item capacity to 100
-    if world.increase_item_limit[player]:
+    if multiworld.increase_item_limit[player]:
         rom.write_byte(0xBF30B, 0x64)  # Most items
         rom.write_byte(0xBF3F7, 0x64)  # Sun/Moon cards
     rom.write_byte(0xBF353, 0x64)  # Keys (increase regardless)
@@ -327,25 +335,20 @@ def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp
     rom.write_byte(0x104A99, 0x01)
     rom.write_byte(0x104AA1, 0x01)
 
-    stage_number = 0x01
-    for stage in range(len(active_stage_list) - 1):
-        for offset in stage_info[active_stage_list[stage]].stage_number_offset_list:
-            rom.write_byte(offset, stage_number)
-        if active_stage_list[stage - 2] == RName.castle_center:
-            stage_number -= 1
-        elif active_stage_list[stage - 1] != RName.villa:
-            stage_number += 1
+    for stage in active_stage_list:
+        for offset in stage_info[stage].stage_number_offset_list:
+            rom.write_byte(offset, active_stage_exits[stage][3])
 
     # Top elevator switch check
     rom.write_bytes(0x6CF0A0, [0x0C, 0x0F, 0xF0, 0xAF])  # JAL 0x803FC2BC
     rom.write_bytes(0xBFC2BC, Patches.elevator_flag_checker)
 
     # Waterway brick platforms skip
-    if world.skip_waterway_platforms[player]:
+    if multiworld.skip_waterway_platforms[player]:
         rom.write_bytes(0x6C7E2C, [0x00, 0x00, 0x00, 0x00])  # NOP
 
     # Disable time restrictions
-    if world.disable_time_restrictions[player]:
+    if multiworld.disable_time_restrictions[player]:
         # Fountain
         rom.write_bytes(0x6C2340, [0x00, 0x00, 0x00, 0x00])  # NOP
         rom.write_bytes(0x6C257C, [0x10, 0x00, 0x00, 0x23])  # B [forward 0x23]
@@ -393,7 +396,7 @@ def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp
     # Warp menu Special1 restriction
     rom.write_bytes(0xADD68, [0x0C, 0x04, 0xAB, 0x12])  # JAL 0x8012AC48
     rom.write_bytes(0xADE28, Patches.stage_select_overwrite)
-    rom.write_byte(0xADE47, world.special1s_per_warp[player])
+    rom.write_byte(0xADE47, multiworld.special1s_per_warp[player])
 
     # Dracula's door text pointer hijack
     rom.write_bytes(0xD69F0, [0x08, 0x0F, 0xF1, 0x41])  # J 0x803FC504
@@ -405,7 +408,7 @@ def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp
     rom.write_bytes(0xBFCC3C, [0xA0, 0x00, 0xFF, 0xFF, 0xA0, 0x01, 0xFF, 0xFF, 0xA0, 0x02, 0xFF, 0xFF, 0xA0, 0x03, 0xFF,
                                0xFF, 0xA0, 0x04, 0xFF, 0xFF, 0xA0, 0x05, 0xFF, 0xFF, 0xA0, 0x06, 0xFF, 0xFF, 0xA0, 0x07,
                                0xFF, 0xFF, 0xA0, 0x08, 0xFF, 0xFF, 0xA0, 0x09])
-    if world.draculas_condition[player] == 1:
+    if multiworld.draculas_condition[player] == 1:
         rom.write_bytes(0x6C8A54, [0x0C, 0x0F, 0xF0, 0x89])  # JAL 0x803FC224
         rom.write_bytes(0xBFC224, Patches.crystal_special2_giver)
         rom.write_byte(0xADE8F, 0x01)
@@ -413,17 +416,17 @@ def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp
                                                       f"You'll need the power\n"
                                                       f"of the basement crystal\n"
                                                       f"to undo the seal.", True))
-    elif world.draculas_condition[player] == 2:
+    elif multiworld.draculas_condition[player] == 2:
         rom.write_bytes(0xBBD50, [0x08, 0x0F, 0xF1, 0x8C])  # J	0x803FC630
         rom.write_bytes(0xBFC630, Patches.boss_special2_giver)
         rom.write_bytes(0xBFC55C, Patches.werebull_flag_unsetter_special2_electric_boogaloo)
-        rom.write_byte(0xADE8F, world.bosses_required[player].value)
+        rom.write_byte(0xADE8F, multiworld.bosses_required[player].value)
         rom.write_bytes(0xBFCC62, cv64_text_converter(f"It won't budge!\n"
                                                       f"You'll need to defeat\n"
                                                       f"{required_s2s} powerful monsters\n"
                                                       f"to undo the seal.", True))
-    elif world.draculas_condition[player] == 3:
-        rom.write_byte(0xADE8F, world.special2s_required[player].value)
+    elif multiworld.draculas_condition[player] == 3:
+        rom.write_byte(0xADE8F, multiworld.special2s_required[player].value)
         rom.write_bytes(0xBFCC62, cv64_text_converter(f"It won't budge!\n"
                                                       f"You'll need to find\n"
                                                       f"{required_s2s} Special2 jewels\n"
@@ -440,7 +443,7 @@ def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp
     rom.write_bytes(0xEAB04, [0x08, 0x0F, 0xF2, 0x40])  # J 0x803FC900
     rom.write_bytes(0xBFC8F8, Patches.scene_data_modifiers)
 
-    # Fix locked doors to check the key counters instead of their vanilla key locations' flags
+    # Fix locked doors to check the key counters instead of their vanilla key locations' bitflags
     # Pickup flag check modifications:
     rom.write_bytes(0x10B2D8, [0x00, 0x00, 0x00, 0x02])  # Left Tower Door
     rom.write_bytes(0x10B2F0, [0x00, 0x00, 0x00, 0x03])  # Storeroom Door
@@ -485,7 +488,7 @@ def patch_rom(world, rom, player, offsets_to_ids, active_stage_list, active_warp
     rom.write_byte(0x9B518F, 0x01)
 
     # Slightly move some once-invisible freestanding items to be more visible
-    # if world.reveal_invisible_items[player]:
+    # if multiworld.reveal_invisible_items[player]:
     rom.write_byte(0x7C7F95, 0xEF)  # Forest dirge maiden statue
     rom.write_byte(0x7C7FA8, 0xAB)  # Forest werewolf statue
     rom.write_byte(0x8099C4, 0x8C)  # Villa courtyard tombstone
