@@ -26,6 +26,7 @@
 *multisave
 *.archipelago
 *.apsave
+*.BIN
 
 build
 bundle/components.wxs
@@ -52,6 +53,7 @@ Output Logs/
 /setup.ini
 /installdelete.iss
 /data/user.kv
+/datapackage
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
