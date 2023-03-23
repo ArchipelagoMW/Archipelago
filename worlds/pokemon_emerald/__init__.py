@@ -110,20 +110,30 @@ class PokemonEmeraldWorld(World):
         item_locations: List[PokemonEmeraldLocation] = []
         for region in self.multiworld.regions:
             if region.player == self.player:
-                # Filter events
-                item_locations += [location for location in region.locations if location.address is not None]
+                item_locations += [location for location in region.locations]
 
-                # Filter out items that aren't randomized
-                if badges_option == RandomizeBadges.option_vanilla:
-                    item_locations = [location for location in item_locations if "Badge" not in location.tags]
-                if hms_option == RandomizeHms.option_vanilla:
-                    item_locations = [location for location in item_locations if "HM" not in location.tags]
-                if key_items_option == Toggle.option_false:
-                    item_locations = [location for location in item_locations if "KeyItem" not in location.tags]
-                if rods_option == Toggle.option_false:
-                    item_locations = [location for location in item_locations if "Rod" not in location.tags]
-                if bikes_option == Toggle.option_false:
-                    item_locations = [location for location in item_locations if "Bike" not in location.tags]
+        # Filter events
+        item_locations = filter(lambda location: not location.is_event, item_locations)
+
+        # Filter progression items which shouldn't be shuffled into the itempool. Their locations
+        # still exist, but event items will be placed and locked at their vanilla locations instead.
+        filter_tags = set()
+
+        if key_items_option == Toggle.option_false:
+            filter_tags.add("KeyItem")
+        if rods_option == Toggle.option_false:
+            filter_tags.add("Rod")
+        if bikes_option == Toggle.option_false:
+            filter_tags.add("Bike")
+
+        # Filter badges and HMs the same way. But in addition, if badges/hms are set to option_shuffle,
+        # they will be created and placed in pre_fill, and so shouldn't be added to the item pool.
+        if badges_option in [RandomizeBadges.option_vanilla, RandomizeBadges.option_shuffle]:
+            filter_tags.add("Badge")
+        if hms_option in [RandomizeHms.option_vanilla, RandomizeHms.option_shuffle]:
+            filter_tags.add("HM")
+
+        item_locations = filter(lambda location: len(filter_tags & location.tags) == 0, item_locations)
 
         if item_pool_type_option == ItemPoolType.option_shuffled:
             self.multiworld.itempool += [self.create_item_by_code(location.default_item_code) for location in item_locations]
@@ -156,20 +166,14 @@ class PokemonEmeraldWorld(World):
         badges_option = get_option_value(self.multiworld, self.player, "badges")
         if badges_option == RandomizeBadges.option_shuffle:
             badge_locations = [location for location in locations if location.tags is not None and "Badge" in location.tags]
-            badge_items = [item for item in self.multiworld.itempool if item.player == self.player and item.tags is not None and "Badge" in item.tags]
-
-            for item in badge_items:
-                self.multiworld.itempool.remove(item)
+            badge_items = [self.create_item_by_code(location.default_item_code) for location in badge_locations]
 
             fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), badge_locations, badge_items, True, True, True)
 
         hms_option = get_option_value(self.multiworld, self.player, "hms")
         if hms_option == RandomizeBadges.option_shuffle:
             hm_locations = [location for location in locations if location.tags is not None and "HM" in location.tags]
-            hm_items = [item for item in self.multiworld.itempool if item.player == self.player and item.tags is not None and "HM" in item.tags]
-
-            for item in hm_items:
-                self.multiworld.itempool.remove(item)
+            hm_items = [self.create_item_by_code(location.default_item_code) for location in hm_locations]
 
             fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), hm_locations, hm_items, True, True, True)
 
