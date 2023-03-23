@@ -2,8 +2,9 @@
 Option definitions for Pokemon Emerald
 """
 from typing import Dict, List, Union
+
 from BaseClasses import MultiWorld
-from Options import Option, Choice, DefaultOnToggle, Range, Toggle, OptionList
+from Options import Choice, DefaultOnToggle, Option, OptionSet, Range, Toggle
 
 from .data import data
 
@@ -168,7 +169,7 @@ class RandomizeAbilities(Toggle):
     display_name = "Randomize Abilities"
 
 
-class AbilityBlacklist(OptionList):
+class AbilityBlacklist(OptionSet):
     """
     A list of abilities which no pokemon should have if abilities are randomized. For example, you could exclude Wonder Guard and Pressure like this:
     ["Wonder Guard", Pressure]
@@ -267,7 +268,7 @@ class TurboA(Toggle):
     display_name = "Turbo A"
 
 
-options: Dict[str, Option] = {
+option_definitions: Dict[str, Option] = {
   "badges": RandomizeBadges,
   "hms": RandomizeHms,
   "key_items": RandomizeKeyItems,
@@ -301,6 +302,6 @@ def get_option_value(multiworld: MultiWorld, player: int, option_name: str) -> U
     """
     option = getattr(multiworld, option_name, None)
     if option is None:
-        return options[option_name].default
+        return option_definitions[option_name].default
 
     return option[player].value

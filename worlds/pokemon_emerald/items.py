@@ -2,8 +2,10 @@
 Classes and functions related to AP items for Pokemon Emerald
 """
 from typing import Dict, FrozenSet, Optional, Union
+
 from BaseClasses import Item, ItemClassification
-from .data import data, config
+
+from .data import config, data
 
 
 class PokemonEmeraldItem(Item):

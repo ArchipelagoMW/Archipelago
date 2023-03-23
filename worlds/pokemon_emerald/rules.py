@@ -2,7 +2,9 @@
 Logic rule definitions for Pokemon Emerald
 """
 from BaseClasses import CollectionState, MultiWorld
-from worlds.generic.Rules import set_rule, add_rule
+
+from worlds.generic.Rules import add_rule, set_rule
+
 from .data import data
 
 

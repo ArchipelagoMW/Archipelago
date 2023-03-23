@@ -3,6 +3,7 @@ Classes and functions related to creating a ROM patch
 """
 from typing import Dict, List
 import os
+
 import bsdiff4
 
 from BaseClasses import MultiWorld

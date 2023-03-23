@@ -5,15 +5,15 @@ import hashlib
 import os
 from typing import List
 
-from BaseClasses import ItemClassification, Tutorial, MultiWorld
+from BaseClasses import ItemClassification, MultiWorld, Tutorial
 from Fill import fill_restrictive
 from Options import Toggle
-from worlds.AutoWorld import World, WebWorld
+from worlds.AutoWorld import WebWorld, World
 
 from . import rules
 from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification
 from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
-from .options import RandomizeBadges, RandomizeHms, ItemPoolType, options, get_option_value
+from .options import RandomizeBadges, RandomizeHms, ItemPoolType, get_option_value, option_definitions
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path
 from .sanity_check import sanity_check
@@ -44,7 +44,7 @@ class PokemonEmeraldWorld(World):
     """
     game = "Pokemon Emerald"
     web = PokemonEmeraldWebWorld()
-    option_definitions = options
+    option_definitions = option_definitions
     topology_present = True
 
     item_name_to_id = create_item_label_to_code_map()
@@ -208,7 +208,7 @@ class PokemonEmeraldWorld(World):
 
     def fill_slot_data(self):
         slot_data = self._get_pokemon_emerald_data()
-        for option_name in options:
+        for option_name in option_definitions:
             option = getattr(self.multiworld, option_name)[self.player]
             if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)

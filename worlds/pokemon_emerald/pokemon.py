@@ -2,7 +2,8 @@
 Functions related to pokemon species and moves
 """
 import random
-from typing import Optional, FrozenSet
+from typing import Set, Optional
+
 from .data import SpeciesData, data
 
 
@@ -70,7 +71,7 @@ def get_random_species(rand: random, nearby_bst: Optional[int] = None, species_t
     return candidate_species[rand.randrange(0, len(candidate_species))]
 
 
-def get_random_move(rand: random, blacklist: Optional[FrozenSet[int]] = None) -> int:
+def get_random_move(rand: random, blacklist: Optional[Set[int]] = None) -> int:
     expanded_blacklist = _move_blacklist | (blacklist if blacklist is not None else set())
     num_moves = data.constants["MOVES_COUNT"]
 
@@ -81,7 +82,7 @@ def get_random_move(rand: random, blacklist: Optional[FrozenSet[int]] = None) ->
     return move
 
 
-def get_random_damaging_move(rand: random, blacklist: Optional[FrozenSet[int]] = None) -> int:
+def get_random_damaging_move(rand: random, blacklist: Optional[Set[int]] = None) -> int:
     expanded_blacklist = _move_blacklist | (blacklist if blacklist is not None else set())
 
     move_options = list(_damaging_moves)

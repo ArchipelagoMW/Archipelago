@@ -7,7 +7,8 @@ and sorting, and Warp methods.
 from enum import Enum
 import json
 import os
-from typing import Dict, List, Optional, Set, NamedTuple, Tuple
+from typing import Dict, List, NamedTuple, Optional, Set, Tuple
+
 from BaseClasses import ItemClassification
 
 

@@ -4,7 +4,8 @@ duplicate claims and give warnings for unused and unignored locations or warps.
 """
 import logging
 import os
-from .data import data, load_json
+
+from .data import load_json, data
 
 
 _error_messages = []

@@ -1,7 +1,8 @@
 """
 Functions related to AP regions for Pokemon Emerald (see ./data/regions for region definitions)
 """
-from BaseClasses import Region, Entrance, ItemClassification
+from BaseClasses import Entrance, ItemClassification, Region
+
 from .data import data
 from .items import PokemonEmeraldItem
 from .locations import PokemonEmeraldLocation
