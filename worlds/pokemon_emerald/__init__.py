@@ -1,3 +1,6 @@
+"""
+Archipelago World definition for Pokemon Emerald Version
+"""
 import hashlib
 import os
 from typing import List
@@ -7,16 +10,19 @@ from Fill import fill_restrictive
 from Options import Toggle
 from worlds.AutoWorld import World, WebWorld
 
-from . import Rules
-from .Items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification
-from .Locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
-from .Options import RandomizeBadges, RandomizeHms, ItemPoolType, options, get_option_value
-from .Regions import create_regions
-from .Rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path
-from .SanityCheck import sanity_check
+from . import rules
+from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification
+from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
+from .options import RandomizeBadges, RandomizeHms, ItemPoolType, options, get_option_value
+from .regions import create_regions
+from .rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path
+from .sanity_check import sanity_check
 
 
 class PokemonEmeraldWebWorld(WebWorld):
+    """
+    Webhost info for Pokemon Emerald
+    """
     theme = "ocean"
     setup_en = Tutorial(
         "Multiworld Setup Guide",
@@ -32,7 +38,9 @@ class PokemonEmeraldWebWorld(WebWorld):
 
 class PokemonEmeraldWorld(World):
     """
-    Desc
+    Pokémon Emerald is the definitive gen 3 Pokémon game and one of the most beloved in the franchise.
+    Catch, train, and battle Pokémon, explore the Hoenn region, and thwart the plots
+    of Team Magma and Team Aqua, challenge gyms, and become the Pokémon champion!
     """
     game = "Pokemon Emerald"
     web = PokemonEmeraldWebWorld()
@@ -124,22 +132,22 @@ class PokemonEmeraldWorld(World):
 
 
     def set_rules(self):
-        Rules.set_default_rules(self.multiworld, self.player)
+        rules.set_default_rules(self.multiworld, self.player)
 
         if get_option_value(self.multiworld, self.player, "overworld_items") == Toggle.option_true:
-            Rules.set_overworld_item_rules(self.multiworld, self.player)
+            rules.set_overworld_item_rules(self.multiworld, self.player)
         if get_option_value(self.multiworld, self.player, "hidden_items") == Toggle.option_true:
-            Rules.set_hidden_item_rules(self.multiworld, self.player)
+            rules.set_hidden_item_rules(self.multiworld, self.player)
         if get_option_value(self.multiworld, self.player, "npc_gifts") == Toggle.option_true:
-            Rules.set_npc_gift_rules(self.multiworld, self.player)
+            rules.set_npc_gift_rules(self.multiworld, self.player)
         if get_option_value(self.multiworld, self.player, "enable_ferry") == Toggle.option_true:
-            Rules.set_enable_ferry_rules(self.multiworld, self.player)
+            rules.set_enable_ferry_rules(self.multiworld, self.player)
 
         if get_option_value(self.multiworld, self.player, "require_itemfinder") == Toggle.option_true:
-            Rules.add_hidden_item_itemfinder_rules(self.multiworld, self.player)
+            rules.add_hidden_item_itemfinder_rules(self.multiworld, self.player)
 
         if get_option_value(self.multiworld, self.player, "require_flash") == Toggle.option_true:
-            Rules.add_flash_rules(self.multiworld, self.player)
+            rules.add_flash_rules(self.multiworld, self.player)
 
 
     def pre_fill(self):

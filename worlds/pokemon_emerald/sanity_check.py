@@ -1,6 +1,10 @@
+"""
+Looks through data object to double-check it makes sense. Will fail for missing or duplicate definitions or
+duplicate claims and give warnings for unused and unignored locations or warps.
+"""
 import logging
 import os
-from .Data import data, load_json
+from .data import data, load_json
 
 
 _error_messages = []
@@ -47,15 +51,12 @@ def _check_locations():
             _error(f"Location [{location_name}] was claimed by multiple regions")
         claimed_locations_set.add(location_name)
 
-    for location_name in data.locations.keys():
+    for location_name in data.locations:
         if location_name not in claimed_locations and location_name not in ignorable_locations:
             _warn(f"Location [{location_name}] was not claimed by any region")
 
 
 def _finish():
-    global _error_messages
-    global _warn_messages
-    global _failed
     _warn_messages.sort()
     _error_messages.sort()
     for message in _warn_messages:
@@ -67,12 +68,10 @@ def _finish():
 
 
 def _error(message):
-    global _error_messages
     global _failed
     _failed = True
     _error_messages.append(message)
 
 
 def _warn(message):
-    global _warn_messages
     _warn_messages.append(message)

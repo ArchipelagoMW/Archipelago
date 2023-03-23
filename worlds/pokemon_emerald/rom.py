@@ -1,14 +1,21 @@
+"""
+Classes and functions related to creating a ROM patch
+"""
 from typing import Dict, List
 import os
 import bsdiff4
+
 from BaseClasses import MultiWorld
 from Options import Toggle
 from Patch import APDeltaPatch
 import Utils
-from .Data import SpeciesData, TrainerPokemonDataTypeEnum, data
-from .Items import reverse_offset_item_value
-from .Options import get_option_value, RandomizeWildPokemon, RandomizeStarters, RandomizeTrainerParties, TmCompatibility, HmCompatibility, LevelUpMoves
-from .Pokemon import get_random_species, get_species_by_id, get_species_by_name, get_random_damaging_move, get_random_move
+
+from .data import SpeciesData, TrainerPokemonDataTypeEnum, data
+from .items import reverse_offset_item_value
+from .options import (RandomizeWildPokemon, RandomizeStarters, RandomizeTrainerParties, TmCompatibility,
+    HmCompatibility, LevelUpMoves, get_option_value)
+from .pokemon import (get_random_species, get_species_by_id, get_species_by_name,
+    get_random_damaging_move, get_random_move)
 
 
 class PokemonEmeraldDeltaPatch(APDeltaPatch):
@@ -22,7 +29,7 @@ class PokemonEmeraldDeltaPatch(APDeltaPatch):
         return get_base_rom_as_bytes()
 
 
-def generate_output(multiworld: MultiWorld, player: int, output_directory: str):
+def generate_output(multiworld: MultiWorld, player: int, output_directory: str) -> None:
     base_rom = get_base_rom_as_bytes()
     with open(os.path.join(os.path.dirname(__file__), "data/base_patch.bsdiff4"), "rb") as stream:
         base_patch = bytes(stream.read())
@@ -128,7 +135,7 @@ def get_base_rom_path() -> str:
     return file_name
 
 
-def _set_bytes_little_endian(byte_array, address, size, value):
+def _set_bytes_little_endian(byte_array, address, size, value) -> None:
     offset = 0
     while size > 0:
         byte_array[address + offset] = value & 0xFF
@@ -137,10 +144,12 @@ def _set_bytes_little_endian(byte_array, address, size, value):
         size -= 1
 
 
-# For every encounter table, replace each unique species.
-# So if a table only has 2 species across multiple slots, it will
-# still have 2 species in the same respective slots after randomization.
-def _randomize_encounter_tables(multiworld, player, rom):
+def _randomize_encounter_tables(multiworld, player, rom) -> None:
+    """
+    For every encounter table, replace each unique species.
+    So if a table only has 2 species across multiple slots, it will
+    still have 2 species in the same respective slots after randomization.
+    """
     for map_data in data.maps:
         if map_data.land_encounters is not None:
             new_encounters = _create_randomized_encounter_table(multiworld, player, map_data.land_encounters.slots)
@@ -153,7 +162,7 @@ def _randomize_encounter_tables(multiworld, player, rom):
             _replace_encounters(rom, map_data.fishing_encounters.rom_address, new_encounters)
 
 
-def _create_randomized_encounter_table(multiworld: MultiWorld, player: int, default_slots: List[int]):
+def _create_randomized_encounter_table(multiworld: MultiWorld, player: int, default_slots: List[int]) -> List[int]:
     random = multiworld.per_slot_randoms[player]
     should_match_bst = get_option_value(multiworld, player, "wild_pokemon") in [RandomizeWildPokemon.option_match_base_stats, RandomizeWildPokemon.option_match_base_stats_and_type]
     should_match_type = get_option_value(multiworld, player, "wild_pokemon") in [RandomizeWildPokemon.option_match_type, RandomizeWildPokemon.option_match_base_stats_and_type]
@@ -167,14 +176,14 @@ def _create_randomized_encounter_table(multiworld: MultiWorld, player: int, defa
         new_pokemon_id = get_random_species(random, target_bst, target_type).species_id
         new_pokemon_map[pokemon_id] = new_pokemon_id
 
-    new_slots = []
+    new_slots: List[int] = []
     for slot in default_slots:
         new_slots.append(new_pokemon_map[slot])
 
     return new_slots
 
 
-def _replace_encounters(rom, table_address, encounter_slots):
+def _replace_encounters(rom, table_address, encounter_slots) -> None:
     """Encounter tables are lists of
     struct {
         min_level:  0x01 bytes,
@@ -187,7 +196,7 @@ def _replace_encounters(rom, table_address, encounter_slots):
         _set_bytes_little_endian(rom, address, 2, species_id)
 
 
-def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray):
+def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
     random = multiworld.per_slot_randoms[player]
     should_match_bst = get_option_value(multiworld, player, "trainer_parties") in [RandomizeTrainerParties.option_match_base_stats, RandomizeTrainerParties.option_match_base_stats_and_type]
     should_match_type = get_option_value(multiworld, player, "trainer_parties") in [RandomizeTrainerParties.option_match_type, RandomizeTrainerParties.option_match_base_stats_and_type]
@@ -232,7 +241,7 @@ def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray):
             _set_bytes_little_endian(rom, pokemon_address + 0x04, 2, species.species_id)
 
 
-def _randomize_starters(multiworld, player, rom):
+def _randomize_starters(multiworld, player, rom) -> None:
     random = multiworld.per_slot_randoms[player]
 
     should_match_bst = get_option_value(multiworld, player, "starters") in [RandomizeStarters.option_match_base_stats, RandomizeStarters.option_match_base_stats_and_type]
@@ -256,7 +265,7 @@ def _randomize_starters(multiworld, player, rom):
     _set_bytes_little_endian(rom, address + 4, 2, starter_3.species_id)
 
 
-def _randomize_abilities(multiworld: MultiWorld, player: int, rom: bytearray):
+def _randomize_abilities(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
     random = multiworld.per_slot_randoms[player]
     ability_label_to_value = {ability.label.lower(): ability.ability_id for ability in data.abilities}
 
@@ -278,7 +287,7 @@ def _randomize_abilities(multiworld: MultiWorld, player: int, rom: bytearray):
             _set_bytes_little_endian(rom, species.rom_address + 23, 1, new_abilities[1])
 
 
-def _randomize_learnsets(multiworld: MultiWorld, player: int, rom: bytearray):
+def _randomize_learnsets(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
     random = multiworld.per_slot_randoms[player]
 
     for species in data.species:
@@ -310,12 +319,12 @@ def _randomize_learnsets(multiworld: MultiWorld, player: int, rom: bytearray):
         _replace_learnset(species.learnset_rom_address, new_learnset, rom)
 
 
-def _replace_learnset(learnset_address: int, new_learnset: List[int], rom: bytearray):
+def _replace_learnset(learnset_address: int, new_learnset: List[int], rom: bytearray) -> None:
     for i, level_move in enumerate(new_learnset):
         _set_bytes_little_endian(rom, learnset_address + (i * 2), 2, level_move)
 
 
-def _modify_species_info(multiworld: MultiWorld, player: int, rom: bytearray):
+def _modify_species_info(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
     min_catch_rate = min(get_option_value(multiworld, player, "min_catch_rate"), 255)
 
     for species in data.species:
@@ -323,7 +332,7 @@ def _modify_species_info(multiworld: MultiWorld, player: int, rom: bytearray):
             _set_bytes_little_endian(rom, species.rom_address + 8, 1, min_catch_rate)
 
 
-def _modify_tmhm_compatibility(multiworld: MultiWorld, player: int, rom: bytearray):
+def _modify_tmhm_compatibility(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
     random = multiworld.per_slot_randoms[player]
 
     learnsets_address = data.rom_addresses["gTMHMLearnsets"]

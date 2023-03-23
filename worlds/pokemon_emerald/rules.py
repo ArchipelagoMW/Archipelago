@@ -1,6 +1,9 @@
+"""
+Logic rule definitions for Pokemon Emerald
+"""
 from BaseClasses import CollectionState, MultiWorld
 from worlds.generic.Rules import set_rule, add_rule
-from .Data import data
+from .data import data
 
 
 def _can_cut(state: CollectionState, player: int):
@@ -59,7 +62,6 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     can_fly = lambda state: _can_fly(state, player)
     can_surf = lambda state: _can_surf(state, player)
     can_strength = lambda state: _can_strength(state, player)
-    can_flash = lambda state: _can_flash(state, player)
     can_rock_smash = lambda state: _can_rock_smash(state, player)
     can_waterfall = lambda state: _can_waterfall(state, player)
     can_dive = lambda state: _can_dive(state, player)
@@ -1049,13 +1051,9 @@ def set_default_rules(multiworld: MultiWorld, player: int):
 
 def set_overworld_item_rules(multiworld: MultiWorld, player: int):
     can_cut = lambda state: _can_cut(state, player)
-    can_fly = lambda state: _can_fly(state, player)
     can_surf = lambda state: _can_surf(state, player)
     can_strength = lambda state: _can_strength(state, player)
-    can_flash = lambda state: _can_flash(state, player)
     can_rock_smash = lambda state: _can_rock_smash(state, player)
-    can_waterfall = lambda state: _can_waterfall(state, player)
-    can_dive = lambda state: _can_dive(state, player)
 
     # Route 103
     set_rule(
@@ -1112,13 +1110,6 @@ def set_overworld_item_rules(multiworld: MultiWorld, player: int):
 
 def set_hidden_item_rules(multiworld: MultiWorld, player: int):
     can_cut = lambda state: _can_cut(state, player)
-    can_fly = lambda state: _can_fly(state, player)
-    can_surf = lambda state: _can_surf(state, player)
-    can_strength = lambda state: _can_strength(state, player)
-    can_flash = lambda state: _can_flash(state, player)
-    can_rock_smash = lambda state: _can_rock_smash(state, player)
-    can_waterfall = lambda state: _can_waterfall(state, player)
-    can_dive = lambda state: _can_dive(state, player)
 
     # Route 120
     set_rule(

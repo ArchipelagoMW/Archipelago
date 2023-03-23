@@ -1,7 +1,10 @@
+"""
+Classes and functions related to AP locations for Pokemon Emerald
+"""
 from typing import Dict, Optional, FrozenSet
 from BaseClasses import Location, MultiWorld, Region
-from .Data import data, config
-from .Items import offset_item_value
+from .data import data, config
+from .items import offset_item_value
 
 
 class PokemonEmeraldLocation(Location):
@@ -12,7 +15,15 @@ class PokemonEmeraldLocation(Location):
     is_event: bool
     tags: Optional[FrozenSet[str]]
 
-    def __init__(self, player: int, name: str, flag: Optional[int], parent: Optional[Region] = None, rom_address: Optional[int] = None, default_item_value: Optional[int] = None, tags: Optional[FrozenSet[str]] = None):
+    def __init__(
+            self,
+            player: int,
+            name: str,
+            flag: Optional[int],
+            parent: Optional[Region] = None,
+            rom_address: Optional[int] = None,
+            default_item_value: Optional[int] = None,
+            tags: Optional[FrozenSet[str]] = None) -> None:
         super().__init__(player, name, offset_flag(flag), parent)
         self.flag = flag
         self.default_item_code = offset_item_value(default_item_value)
@@ -22,18 +33,28 @@ class PokemonEmeraldLocation(Location):
 
 
 def offset_flag(flag: Optional[int]) -> Optional[int]:
+    """
+    Returns the AP location id (address) for a given flag
+    """
     if flag is None:
         return None
     return flag + config["ap_offset"]
 
 
 def reverse_offset_flag(location_id: Optional[int]) -> Optional[int]:
+    """
+    Returns the flag id for a given AP location id (address)
+    """
     if location_id is None:
         return None
     return location_id - config["ap_offset"]
 
 
-def create_locations_with_tags(multiworld: MultiWorld, player: int, tags):
+def create_locations_with_tags(multiworld: MultiWorld, player: int, tags) -> None:
+    """
+    Iterates through region data and adds locations to the multiworld if
+    those locations include any of the provided tags.
+    """
     tags = set(tags)
 
     for region_name, region_data in data.regions.items():
@@ -55,6 +76,9 @@ def create_locations_with_tags(multiworld: MultiWorld, player: int, tags):
 
 
 def create_location_label_to_id_map() -> Dict[str, int]:
+    """
+    Creates a map from location labels to their AP location id (address)
+    """
     label_to_id_map: Dict[str, int] = {}
     for region_data in data.regions.values():
         for location_name in region_data.locations:

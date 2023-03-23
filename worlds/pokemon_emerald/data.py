@@ -1,3 +1,9 @@
+"""
+Pulls data from JSON files in worlds/pokemon_emerald/data/ into classes.
+This also includes marrying automatically extracted data with manually
+defined data (like location labels or usable pokemon species), some cleanup
+and sorting, and Warp methods.
+"""
 from enum import Enum
 import json
 import os
@@ -344,7 +350,7 @@ def _init():
             individual_species_json["rom_address"]
         ))
 
-    data.species = sorted(data.species, key=lambda species: species.species_id)
+    data.species.sort(key=lambda species: species.species_id)
 
     # Create ability data
     abilities_json = load_json(os.path.join(os.path.dirname(__file__), "data/abilities.json"))
@@ -383,7 +389,7 @@ def _init():
             fishing_encounters
         ))
 
-    data.maps = sorted(data.maps, key=lambda map: map.name)
+    data.maps.sort(key=lambda map: map.name)
 
     # Create warp map
     for encoded_warp, warp in data.warps.items():
