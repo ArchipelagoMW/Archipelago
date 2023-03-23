@@ -6,11 +6,9 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import Deque, Dict, FrozenSet, Iterable, List, Optional, Set, Tuple
 
-import numpy as np
-
-from sc2.pixel_map import PixelMap
-from sc2.player import Player, Race
-from sc2.position import Point2, Rect, Size
+from .pixel_map import PixelMap
+from .player import Player, Race
+from .position import Point2, Rect, Size
 
 
 @dataclass
@@ -235,29 +233,6 @@ class GameInfo:
             Point2.from_proto(sl).round(decimals=1) for sl in self._proto.start_raw.start_locations
         ]
         self.player_start_location: Point2 = None  # Filled later by BotAI._prepare_first_step
-
-    def _find_ramps_and_vision_blockers(self) -> Tuple[List[Ramp], FrozenSet[Point2]]:
-        """Calculate points that are pathable but not placeable.
-        Then divide them into ramp points if not all points around the points are equal height
-        and into vision blockers if they are."""
-
-        def equal_height_around(tile):
-            # mask to slice array 1 around tile
-            sliced = self.terrain_height.data_numpy[tile[1] - 1:tile[1] + 2, tile[0] - 1:tile[0] + 2]
-            return len(np.unique(sliced)) == 1
-
-        map_area = self.playable_area
-        # all points in the playable area that are pathable but not placable
-        points = [
-            Point2((a, b)) for (b, a), value in np.ndenumerate(self.pathing_grid.data_numpy)
-            if value == 1 and map_area.x <= a < map_area.x + map_area.width and map_area.y <= b < map_area.y +
-            map_area.height and self.placement_grid[(a, b)] == 0
-        ]
-        # divide points into ramp points and vision blockers
-        ramp_points = [point for point in points if not equal_height_around(point)]
-        vision_blockers = frozenset(point for point in points if equal_height_around(point))
-        ramps = [Ramp(group, self) for group in self._find_groups(ramp_points)]
-        return ramps, vision_blockers
 
     def _find_groups(self, points: FrozenSet[Point2], minimum_points_per_group: int = 8) -> Iterable[FrozenSet[Point2]]:
         """

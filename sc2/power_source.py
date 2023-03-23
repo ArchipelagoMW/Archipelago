@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from sc2.position import Point2
+from .position import Point2
 
 
 @dataclass

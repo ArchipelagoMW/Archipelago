@@ -2,7 +2,7 @@ import datetime
 
 from s2clientprotocol import score_pb2 as score_pb
 
-from sc2.position import Point2
+from .position import Point2
 
 
 class Renderer:

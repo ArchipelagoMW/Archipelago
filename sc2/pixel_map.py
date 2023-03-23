@@ -1,9 +1,7 @@
 from pathlib import Path
 from typing import Callable, FrozenSet, List, Set, Tuple, Union
 
-import numpy as np
-
-from sc2.position import Point2
+from .position import Point2
 
 
 class PixelMap:
@@ -20,10 +18,6 @@ class PixelMap:
         assert self.width * self.height == (8 if in_bits else 1) * len(
             self._proto.data
         ), f"{self.width * self.height} {(8 if in_bits else 1)*len(self._proto.data)}"
-        buffer_data = np.frombuffer(self._proto.data, dtype=np.uint8)
-        if in_bits:
-            buffer_data = np.unpackbits(buffer_data)
-        self.data_numpy = buffer_data.reshape(self._proto.size.y, self._proto.size.x)
 
     @property
     def width(self) -> int:
@@ -103,18 +97,3 @@ class PixelMap:
                 print("#" if self.is_set((x, y)) else " ", end=(" " if wide else ""))
             print("")
 
-    def save_image(self, filename: Union[str, Path]):
-        data = [(0, 0, self[x, y]) for y in range(self.height) for x in range(self.width)]
-        # pylint: disable=C0415
-        from PIL import Image
-
-        im = Image.new("RGB", (self.width, self.height))
-        im.putdata(data)  # type: ignore
-        im.save(filename)
-
-    def plot(self):
-        # pylint: disable=C0415
-        import matplotlib.pyplot as plt
-
-        plt.imshow(self.data_numpy, origin="lower")
-        plt.show()

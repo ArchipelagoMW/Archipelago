@@ -8,8 +8,8 @@ from typing import TYPE_CHECKING, Iterable, List, Set, Tuple, Union
 from s2clientprotocol import common_pb2 as common_pb
 
 if TYPE_CHECKING:
-    from sc2.unit import Unit
-    from sc2.units import Units
+    from .unit import Unit
+    from .units import Units
 
 EPSILON = 10**-8
 

@@ -7,7 +7,7 @@ from pathlib import Path
 
 from loguru import logger
 
-from sc2 import wsl
+from . import wsl
 
 BASEDIR = {
     "Windows": "C:/Program Files (x86)/StarCraft II",

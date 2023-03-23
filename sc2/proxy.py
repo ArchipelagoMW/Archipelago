@@ -10,9 +10,9 @@ from aiohttp import WSMsgType, web
 from loguru import logger
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
-from sc2.controller import Controller
-from sc2.data import Result, Status
-from sc2.player import BotProcess
+from .controller import Controller
+from .data import Result, Status
+from .player import BotProcess
 
 
 class Proxy:

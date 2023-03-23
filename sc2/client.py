@@ -9,17 +9,14 @@ from s2clientprotocol import raw_pb2 as raw_pb
 from s2clientprotocol import sc2api_pb2 as sc_pb
 from s2clientprotocol import spatial_pb2 as spatial_pb
 
-from sc2.action import combine_actions
-from sc2.data import ActionResult, ChatChannel, Race, Result, Status
-from sc2.game_data import AbilityData, GameData
-from sc2.game_info import GameInfo
-from sc2.ids.ability_id import AbilityId
-from sc2.ids.unit_typeid import UnitTypeId
-from sc2.position import Point2, Point3
-from sc2.protocol import ConnectionAlreadyClosed, Protocol, ProtocolError
-from sc2.renderer import Renderer
-from sc2.unit import Unit
-from sc2.units import Units
+from .data import ActionResult, ChatChannel, Race, Result, Status
+from .game_data import AbilityData, GameData
+from .game_info import GameInfo
+from .position import Point2, Point3
+from .protocol import ConnectionAlreadyClosed, Protocol, ProtocolError
+from .renderer import Renderer
+from .unit import Unit
+from .units import Units
 
 
 # pylint: disable=R0904
@@ -186,23 +183,6 @@ class Client(Protocol):
         result = await self._execute(game_info=sc_pb.RequestGameInfo())
         return GameInfo(result.game_info)
 
-    async def actions(self, actions, return_successes=False):
-        if not actions:
-            return None
-        if not isinstance(actions, list):
-            actions = [actions]
-
-        # On realtime=True, might get an error here: sc2.protocol.ProtocolError: ['Not in a game']
-        try:
-            res = await self._execute(
-                action=sc_pb.RequestAction(actions=(sc_pb.Action(action_raw=a) for a in combine_actions(actions)))
-            )
-        except ProtocolError:
-            return []
-        if return_successes:
-            return [ActionResult(r) for r in res.action.result]
-        return [ActionResult(r) for r in res.action.result if ActionResult(r) != ActionResult.Success]
-
     async def query_pathing(self, start: Union[Unit, Point2, Point3],
                             end: Union[Point2, Point3]) -> Optional[Union[int, float]]:
         """Caution: returns "None" when path not found
@@ -244,28 +224,6 @@ class Client(Protocol):
         results = await self._execute(query=query_pb.RequestQuery(pathing=path))
         return [float(d.distance) for d in results.query.pathing]
 
-    async def _query_building_placement_fast(
-        self, ability: AbilityId, positions: List[Union[Point2, Point3]], ignore_resources: bool = True
-    ) -> List[bool]:
-        """
-        Returns a list of booleans. Return True for positions that are valid, False otherwise.
-
-        :param ability:
-        :param positions:
-        :param ignore_resources:
-        """
-        result = await self._execute(
-            query=query_pb.RequestQuery(
-                placements=(
-                    query_pb.RequestQueryBuildingPlacement(ability_id=ability.value, target_pos=position.as_Point2D)
-                    for position in positions
-                ),
-                ignore_resource_requirements=ignore_resources,
-            )
-        )
-        # Success enum value is 1, see https://github.com/Blizzard/s2client-proto/blob/9906df71d6909511907d8419b33acc1a3bd51ec0/s2clientprotocol/error.proto#L7
-        return [p.result == 1 for p in result.query.placements]
-
     async def query_building_placement(
         self,
         ability: AbilityData,
@@ -290,99 +248,12 @@ class Client(Protocol):
         # Unnecessary converting to ActionResult?
         return [ActionResult(p.result) for p in result.query.placements]
 
-    async def query_available_abilities(
-        self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
-    ) -> List[List[AbilityId]]:
-        """ Query abilities of multiple units """
-        input_was_a_list = True
-        if not isinstance(units, list):
-            """ Deprecated, accepting a single unit may be removed in the future, query a list of units instead """
-            assert isinstance(units, Unit)
-            units = [units]
-            input_was_a_list = False
-        assert units
-        result = await self._execute(
-            query=query_pb.RequestQuery(
-                abilities=(query_pb.RequestQueryAvailableAbilities(unit_tag=unit.tag) for unit in units),
-                ignore_resource_requirements=ignore_resource_requirements,
-            )
-        )
-        """ Fix for bots that only query a single unit, may be removed soon """
-        if not input_was_a_list:
-            return [[AbilityId(a.ability_id) for a in b.abilities] for b in result.query.abilities][0]
-        return [[AbilityId(a.ability_id) for a in b.abilities] for b in result.query.abilities]
-
-    async def query_available_abilities_with_tag(
-        self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
-    ) -> Dict[int, Set[AbilityId]]:
-        """ Query abilities of multiple units """
-
-        result = await self._execute(
-            query=query_pb.RequestQuery(
-                abilities=(query_pb.RequestQueryAvailableAbilities(unit_tag=unit.tag) for unit in units),
-                ignore_resource_requirements=ignore_resource_requirements,
-            )
-        )
-        return {b.unit_tag: {AbilityId(a.ability_id) for a in b.abilities} for b in result.query.abilities}
-
     async def chat_send(self, message: str, team_only: bool):
         """ Writes a message to the chat """
         ch = ChatChannel.Team if team_only else ChatChannel.Broadcast
         await self._execute(
             action=sc_pb.RequestAction(
                 actions=[sc_pb.Action(action_chat=sc_pb.ActionChat(channel=ch.value, message=message))]
-            )
-        )
-
-    async def toggle_autocast(self, units: Union[List[Unit], Units], ability: AbilityId):
-        """Toggle autocast of all specified units
-
-        :param units:
-        :param ability:"""
-        assert units
-        assert isinstance(units, list)
-        assert all(isinstance(u, Unit) for u in units)
-        assert isinstance(ability, AbilityId)
-
-        await self._execute(
-            action=sc_pb.RequestAction(
-                actions=[
-                    sc_pb.Action(
-                        action_raw=raw_pb.ActionRaw(
-                            toggle_autocast=raw_pb.
-                            ActionRawToggleAutocast(ability_id=ability.value, unit_tags=(u.tag for u in units))
-                        )
-                    )
-                ]
-            )
-        )
-
-    async def debug_create_unit(self, unit_spawn_commands: List[List[Union[UnitTypeId, int, Point2, Point3]]]):
-        """Usage example (will spawn 5 marines in the center of the map for player ID 1):
-        await self._client.debug_create_unit([[UnitTypeId.MARINE, 5, self._game_info.map_center, 1]])
-
-        :param unit_spawn_commands:"""
-        assert isinstance(unit_spawn_commands, list)
-        assert unit_spawn_commands
-        assert isinstance(unit_spawn_commands[0], list)
-        assert len(unit_spawn_commands[0]) == 4
-        assert isinstance(unit_spawn_commands[0][0], UnitTypeId)
-        assert unit_spawn_commands[0][1] > 0  # careful, in realtime=True this function may create more units
-        assert isinstance(unit_spawn_commands[0][2], (Point2, Point3))
-        assert 1 <= unit_spawn_commands[0][3] <= 2
-
-        await self._execute(
-            debug=sc_pb.RequestDebug(
-                debug=(
-                    debug_pb.DebugCommand(
-                        create_unit=debug_pb.DebugCreateUnit(
-                            unit_type=unit_type.value,
-                            owner=owner_id,
-                            pos=position.as_Point2D,
-                            quantity=amount_of_units,
-                        )
-                    ) for unit_type, amount_of_units, position, owner_id in unit_spawn_commands
-                )
             )
         )
 

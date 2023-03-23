@@ -8,18 +8,16 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, List, Union
 
-from sc2.bot_ai_internal import BotAIInternal
-from sc2.data import Alert, Result
-from sc2.game_data import GameData
-from sc2.ids.ability_id import AbilityId
-from sc2.ids.upgrade_id import UpgradeId
-from sc2.position import Point2
-from sc2.unit import Unit
-from sc2.units import Units
+from .bot_ai_internal import BotAIInternal
+from .data import Alert, Result
+from .game_data import GameData
+from .position import Point2
+from .unit import Unit
+from .units import Units
 
 if TYPE_CHECKING:
-    from sc2.client import Client
-    from sc2.game_info import GameInfo
+    from .client import Client
+    from .game_info import GameInfo
 
 
 class ObserverAI(BotAIInternal):
@@ -105,23 +103,6 @@ class ObserverAI(BotAIInternal):
         """Possible start locations for enemies."""
         return self.game_info.start_locations
 
-    async def get_available_abilities(
-        self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
-    ) -> List[List[AbilityId]]:
-        """Returns available abilities of one or more units. Right now only checks cooldown, energy cost, and whether the ability has been researched.
-
-        Examples::
-
-            units_abilities = await self.get_available_abilities(self.units)
-
-        or::
-
-            units_abilities = await self.get_available_abilities([self.units.random])
-
-        :param units:
-        :param ignore_resource_requirements:"""
-        return await self.client.query_available_abilities(units, ignore_resource_requirements)
-
     async def on_unit_destroyed(self, unit_tag: int):
         """
         Override this in your bot class.
@@ -150,13 +131,6 @@ class ObserverAI(BotAIInternal):
         construction is completed.
 
         :param unit:
-        """
-
-    async def on_upgrade_complete(self, upgrade: UpgradeId):
-        """
-        Override this in your bot class. This function is called with the upgrade id of an upgrade that was not finished last step and is now.
-
-        :param upgrade:
         """
 
     async def on_start(self):

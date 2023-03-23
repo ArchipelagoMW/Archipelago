@@ -5,12 +5,11 @@ import random
 from itertools import chain
 from typing import TYPE_CHECKING, Any, Callable, Generator, Iterable, List, Optional, Set, Tuple, Union
 
-from sc2.ids.unit_typeid import UnitTypeId
-from sc2.position import Point2
-from sc2.unit import Unit
+from .position import Point2
+from .unit import Unit
 
 if TYPE_CHECKING:
-    from sc2.bot_ai import BotAI
+    from .bot_ai import BotAI
 
 
 # pylint: disable=R0904
@@ -530,107 +529,6 @@ class Units(list):
         :param other:
         """
         return self.filter(lambda unit: unit.tag not in other)
-
-    def of_type(self, other: Union[UnitTypeId, Iterable[UnitTypeId]]) -> Units:
-        """Filters all units that are of a specific type
-
-        Example::
-
-            # Use a set instead of lists in the argument
-            some_attack_units = self.units.of_type({ZERGLING, ROACH, HYDRALISK, BROODLORD})
-
-        :param other:
-        """
-        if isinstance(other, UnitTypeId):
-            other = {other}
-        elif isinstance(other, list):
-            other = set(other)
-        return self.filter(lambda unit: unit.type_id in other)
-
-    def exclude_type(self, other: Union[UnitTypeId, Iterable[UnitTypeId]]) -> Units:
-        """Filters all units that are not of a specific type
-
-        Example::
-
-            # Use a set instead of lists in the argument
-            ignore_units = self.enemy_units.exclude_type({LARVA, EGG, OVERLORD})
-
-        :param other:
-        """
-        if isinstance(other, UnitTypeId):
-            other = {other}
-        elif isinstance(other, list):
-            other = set(other)
-        return self.filter(lambda unit: unit.type_id not in other)
-
-    def same_tech(self, other: Set[UnitTypeId]) -> Units:
-        """Returns all structures that have the same base structure.
-
-        Untested: This should return the equivalents for WarpPrism, Observer, Overseer, SupplyDepot and others
-
-        Example::
-
-            # All command centers, flying command centers, orbital commands, flying orbital commands, planetary fortress
-            terran_townhalls = self.townhalls.same_tech(UnitTypeId.COMMANDCENTER)
-
-            # All hatcheries, lairs and hives
-            zerg_townhalls = self.townhalls.same_tech({UnitTypeId.HATCHERY})
-
-            # All spires and greater spires
-            spires = self.townhalls.same_tech({UnitTypeId.SPIRE})
-            # The following returns the same
-            spires = self.townhalls.same_tech({UnitTypeId.GREATERSPIRE})
-
-            # This also works with multiple unit types
-            zerg_townhalls_and_spires = self.structures.same_tech({UnitTypeId.HATCHERY, UnitTypeId.SPIRE})
-
-        :param other:
-        """
-        assert isinstance(other, set), (
-            "Please use a set as this filter function is already fairly slow. For example" +
-            " 'self.units.same_tech({UnitTypeId.LAIR})'"
-        )
-        tech_alias_types: Set[int] = {u.value for u in other}
-        unit_data = self._bot_object.game_data.units
-        for unit_type in other:
-            for same in unit_data[unit_type.value]._proto.tech_alias:
-                tech_alias_types.add(same)
-        return self.filter(
-            lambda unit: unit._proto.unit_type in tech_alias_types or
-            any(same in tech_alias_types for same in unit._type_data._proto.tech_alias)
-        )
-
-    def same_unit(self, other: Union[UnitTypeId, Iterable[UnitTypeId]]) -> Units:
-        """Returns all units that have the same base unit while being in different modes.
-
-        Untested: This should return the equivalents for WarpPrism, Observer, Overseer, SupplyDepot and other units that have different modes but still act as the same unit
-
-        Example::
-
-            # All command centers on the ground and flying
-            ccs = self.townhalls.same_unit(UnitTypeId.COMMANDCENTER)
-
-            # All orbital commands on the ground and flying
-            ocs = self.townhalls.same_unit(UnitTypeId.ORBITALCOMMAND)
-
-            # All roaches and burrowed roaches
-            roaches = self.units.same_unit(UnitTypeId.ROACH)
-            # This is useful because roach has a different type id when burrowed
-            burrowed_roaches = self.units(UnitTypeId.ROACHBURROWED)
-
-        :param other:
-        """
-        if isinstance(other, UnitTypeId):
-            other = {other}
-        unit_alias_types: Set[int] = {u.value for u in other}
-        unit_data = self._bot_object.game_data.units
-        for unit_type in other:
-            unit_alias_types.add(unit_data[unit_type.value]._proto.unit_alias)
-        unit_alias_types.discard(0)
-        return self.filter(
-            lambda unit: unit._proto.unit_type in unit_alias_types or unit._type_data._proto.unit_alias in
-            unit_alias_types
-        )
 
     @property
     def center(self) -> Point2:

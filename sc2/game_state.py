@@ -3,25 +3,16 @@ from __future__ import annotations
 from dataclasses import dataclass
 from functools import cached_property
 from itertools import chain
-from typing import List, Optional, Set, Union
+from typing import List, Set
 
 from loguru import logger
 
-from sc2.constants import IS_ENEMY, IS_MINE, FakeEffectID, FakeEffectRadii
-from sc2.data import Alliance, DisplayType
-from sc2.ids.ability_id import AbilityId
-from sc2.ids.effect_id import EffectId
-from sc2.ids.upgrade_id import UpgradeId
-from sc2.pixel_map import PixelMap
-from sc2.position import Point2, Point3
-from sc2.power_source import PsionicMatrix
-from sc2.score import ScoreDetails
-
-try:
-    from sc2.dicts.generic_redirect_abilities import GENERIC_REDIRECT_ABILITIES
-except ImportError:
-    logger.info('Unable to import "GENERIC_REDIRECT_ABILITIES"')
-    GENERIC_REDIRECT_ABILITIES = {}
+from .constants import IS_ENEMY, IS_MINE
+from .data import Alliance, DisplayType
+from .pixel_map import PixelMap
+from .position import Point2, Point3
+from .power_source import PsionicMatrix
+from .score import ScoreDetails
 
 
 class Blip:
@@ -102,13 +93,6 @@ class EffectData:
         self.fake = fake
 
     @property
-    def id(self) -> Union[EffectId, str]:
-        if self.fake:
-            # Returns the string from constants.py, e.g. "KD8CHARGE"
-            return FakeEffectID[self._proto.unit_type]
-        return EffectId(self._proto.effect_id)
-
-    @property
     def positions(self) -> Set[Point2]:
         if self.fake:
             return {Point2.from_proto(self._proto.pos)}
@@ -134,8 +118,6 @@ class EffectData:
 
     @property
     def radius(self) -> float:
-        if self.fake:
-            return FakeEffectRadii[self._proto.unit_type]
         return self._proto.radius
 
     def __repr__(self) -> str:
@@ -149,48 +131,9 @@ class ChatMessage:
 
 
 @dataclass
-class AbilityLookupTemplateClass:
-
-    @property
-    def exact_id(self) -> AbilityId:
-        return AbilityId(self.ability_id)
-
-    @property
-    def generic_id(self) -> AbilityId:
-        """
-        See https://github.com/BurnySc2/python-sc2/blob/511c34f6b7ae51bd11e06ba91b6a9624dc04a0c0/sc2/dicts/generic_redirect_abilities.py#L13
-        """
-        return GENERIC_REDIRECT_ABILITIES.get(self.exact_id, self.exact_id)
-
-
-@dataclass
-class ActionRawUnitCommand(AbilityLookupTemplateClass):
-    game_loop: int
-    ability_id: int
-    unit_tags: List[int]
-    queue_command: bool
-    target_world_space_pos: Optional[Point2]
-    target_unit_tag: Optional[int] = None
-
-
-@dataclass
-class ActionRawToggleAutocast(AbilityLookupTemplateClass):
-    game_loop: int
-    ability_id: int
-    unit_tags: List[int]
-
-
-@dataclass
 class ActionRawCameraMove:
     center_world_space: Point2
 
-
-@dataclass
-class ActionError(AbilityLookupTemplateClass):
-    ability_id: int
-    unit_tag: int
-    # See here for the codes of 'result': https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/error.proto#L6
-    result: int
 
 
 class GameState:
@@ -261,85 +204,3 @@ class GameState:
         if self.previous_observation:
             return list(chain(self.previous_observation.observation.alerts, self.observation.alerts))
         return self.observation.alerts
-
-    @cached_property
-    def actions(self) -> List[Union[ActionRawUnitCommand, ActionRawToggleAutocast, ActionRawCameraMove]]:
-        """
-        List of successful actions since last frame.
-        See https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L630-L637
-
-        Each action is converted into Python dataclasses: ActionRawUnitCommand, ActionRawToggleAutocast, ActionRawCameraMove
-        """
-        previous_frame_actions = self.previous_observation.actions if self.previous_observation else []
-        actions = []
-        for action in chain(previous_frame_actions, self.response_observation.actions):
-            action_raw = action.action_raw
-            game_loop = action.game_loop
-            if action_raw.HasField("unit_command"):
-                # Unit commands
-                raw_unit_command = action_raw.unit_command
-                if raw_unit_command.HasField("target_world_space_pos"):
-                    # Actions that have a point as target
-                    actions.append(
-                        ActionRawUnitCommand(
-                            game_loop,
-                            raw_unit_command.ability_id,
-                            raw_unit_command.unit_tags,
-                            raw_unit_command.queue_command,
-                            Point2.from_proto(raw_unit_command.target_world_space_pos),
-                        )
-                    )
-                else:
-                    # Actions that have a unit as target
-                    actions.append(
-                        ActionRawUnitCommand(
-                            game_loop,
-                            raw_unit_command.ability_id,
-                            raw_unit_command.unit_tags,
-                            raw_unit_command.queue_command,
-                            None,
-                            raw_unit_command.target_unit_tag,
-                        )
-                    )
-            elif action_raw.HasField("toggle_autocast"):
-                # Toggle autocast actions
-                raw_toggle_autocast_action = action_raw.toggle_autocast
-                actions.append(
-                    ActionRawToggleAutocast(
-                        game_loop,
-                        raw_toggle_autocast_action.ability_id,
-                        raw_toggle_autocast_action.unit_tags,
-                    )
-                )
-            else:
-                # Camera move actions
-                actions.append(ActionRawCameraMove(Point2.from_proto(action.action_raw.camera_move.center_world_space)))
-        return actions
-
-    @cached_property
-    def actions_unit_commands(self) -> List[ActionRawUnitCommand]:
-        """
-        List of successful unit actions since last frame.
-        See https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/raw.proto#L185-L193
-        """
-        return list(filter(lambda action: isinstance(action, ActionRawUnitCommand), self.actions))
-
-    @cached_property
-    def actions_toggle_autocast(self) -> List[ActionRawToggleAutocast]:
-        """
-        List of successful autocast toggle actions since last frame.
-        See https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/raw.proto#L199-L202
-        """
-        return list(filter(lambda action: isinstance(action, ActionRawToggleAutocast), self.actions))
-
-    @cached_property
-    def action_errors(self) -> List[ActionError]:
-        """
-        List of erroneous actions since last frame.
-        See https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L648-L652
-        """
-        previous_frame_errors = self.previous_observation.action_errors if self.previous_observation else []
-        return [
-            ActionError(error.ability_id, error.unit_tag, error.result)
-            for error in chain(self.response_observation.action_errors, previous_frame_errors)
-        ]
