@@ -1,4 +1,4 @@
-from logic.smbool import SMBool
+from worlds.sm.variaRandomizer.logic.smbool import SMBool
 import os
 import sys
 from pathlib import Path
@@ -61,7 +61,7 @@ def diff4solver(difficulty):
         return "mania"
 
 # allow multiple local repo
-appDir = os.path.join(os.path.dirname(sys.executable), "lib") if getattr(sys, "frozen", False) else Path(__file__).parents[4]
+appDir = Path(__file__).parents[4]
 
 def isKnows(knows):
     return knows[0:len('__')] != '__' and knows[0] == knows[0].upper()
