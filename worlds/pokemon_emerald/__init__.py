@@ -151,6 +151,7 @@ class PokemonEmeraldWorld(World):
             for item in badge_items:
                 self.multiworld.itempool.remove(item)
 
+            self.multiworld.random.shuffle(badge_items)
             fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), badge_locations, badge_items, True, True, True)
 
         hms_option = get_option_value(self.multiworld, self.player, "hms")
@@ -161,6 +162,7 @@ class PokemonEmeraldWorld(World):
             for item in hm_items:
                 self.multiworld.itempool.remove(item)
 
+            self.multiworld.random.shuffle(hm_items)
             fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), hm_locations, hm_items, True, True, True)
 
 

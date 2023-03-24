@@ -16,7 +16,6 @@ from worlds.pokemon_emerald.Rom import PokemonEmeraldDeltaPatch
 
 GBA_SOCKET_PORT = 43053
 
-# TODO: Update messages
 CONNECTION_STATUS_TIMING_OUT = "Connection timing out. Please restart your emulator, then restart pokemon_emerald_connector.lua"
 CONNECTION_STATUS_REFUSED = "Connection refused. Please start your emulator and make sure pokemon_emerald_connector.lua is running"
 CONNECTION_STATUS_RESET = "Connection was reset. Please restart your emulator, then restart pokemon_emerald_connector.lua"
@@ -24,7 +23,8 @@ CONNECTION_STATUS_TENTATIVE = "Initial connection made"
 CONNECTION_STATUS_CONNECTED = "Connected"
 CONNECTION_STATUS_INITIAL = "Connection has not been initiated"
 
-GAME_CLEAR_FLAG = get_extracted_data()["constants"]["FLAG_SYS_GAME_CLEAR"]
+GAME_CLEAR_FLAG = get_extracted_data()["constants"]["FLAG_IS_CHAMPION"]
+DEFEATED_STEVEN_FLAG = 2084
 
 
 class GBACommandProcessor(ClientCommandProcessor):
