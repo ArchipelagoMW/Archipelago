@@ -100,6 +100,45 @@ rom_invis_item_bytes = {
     "Clocktower Key3": 0x9A,
 }
 
+rom_looping_music_fade_ins = {
+    0x10: None,
+    0x11: None,
+    0x12: None,
+    0x13: None,
+    0x14: None,
+    0x15: None,
+    0x16: 0x17,
+    0x18: 0x19,
+    0x1A: 0x1B,
+    0x21: 0x23,
+    0x27: 0x75,
+    0x2E: None,
+    0x39: None,
+    0x45: 0x63,
+    0x56: None,
+    0x57: 0x58,
+    0x59: None,
+    0x5A: None,
+    0x5B: 0x5C,
+    0x5D: None,
+    0x5E: None,
+    0x5F: None,
+    0x60: 0x61,
+    0x62: None,
+    0x64: None,
+    0x65: None,
+    0x66: None,
+    0x68: None,
+    0x69: None,
+    0x6D: 0x78,
+    0x6E: None,
+    0x6F: None,
+    0x73: None,
+    0x74: None,
+    0x77: None,
+    0x79: None
+}
+
 warp_map_offsets = [0xADF67, 0xADF77, 0xADF87, 0xADF97, 0xADFA7, 0xADFBB, 0xADFCB, 0xADFDF]
 
 
@@ -145,9 +184,7 @@ class LocalRom(object):
 
 
 def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active_stage_exits, active_warp_list,
-              required_s2s):
-    # local_random = multiworld.slot_seeds[player]
-
+              required_s2s, music_list):
     w1 = str(multiworld.special1s_per_warp[player]).zfill(2)
     w2 = str(multiworld.special1s_per_warp[player] * 2).zfill(2)
     w3 = str(multiworld.special1s_per_warp[player] * 3).zfill(2)
@@ -508,6 +545,12 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
 
     # Change bitflag on item in upper coffin in Forest final switch gate tomb to one that's not used by something else
     rom.write_bytes(0x10C77C, [0x00, 0x00, 0x00, 0x02])
+
+    # Write the randomized (or disabled) music ID list and its associated code
+    if multiworld.background_music[player] != 0:
+        rom.write_bytes(0x7BE64, [0x0C, 0x0F, 0xF3, 0x44])  # JAL 0x803FCD10
+        rom.write_bytes(0xBFCD10, Patches.music_modifier)
+        rom.write_bytes(0xBFCD30, music_list)
 
     # Write all the new item and loading zone bytes
     for offset, item_id in offsets_to_ids.items():

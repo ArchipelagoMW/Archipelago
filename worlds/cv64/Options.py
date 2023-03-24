@@ -169,6 +169,16 @@ class SkipWaterwayPlatforms(Toggle):
     display_name = "Skip Waterway Platforms"
 
 
+class BackgroundMusic(Choice):
+    """Randomizes or disables the music heard throughout the game. Randomized music is split into two pools: songs that
+    loop and songs that don't."""
+    display_name = "Background Music"
+    option_normal = 0
+    option_off = 1
+    option_randomized = 2
+    default = 0
+
+
 cv64_options: Dict[str, Option] = {
     "character_stages": CharacterStages,
     "stage_shuffle": StageShuffle,
@@ -191,5 +201,6 @@ cv64_options: Dict[str, Option] = {
     # "reveal_invisible_items": RevealInvisibleItems,
     "disable_time_restrictions": DisableTimeRestrictions,
     "skip_waterway_platforms": SkipWaterwayPlatforms,
+    "background_music": BackgroundMusic,
     "death_link": DeathLink,
 }
