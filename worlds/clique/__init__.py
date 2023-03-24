@@ -4,8 +4,8 @@ from worlds.generic.Rules import set_rule
 from .Options import clique_options
 
 item_table = {
-    "The feeling of satisfaction.": 69696969,
-    "Button Key": 69696968,
+    "Feeling of Satisfaction": 69696969,
+    "Button Unlock": 69696968,
 }
 
 location_table = {
@@ -33,7 +33,7 @@ class CliqueWorld(World):
 
     game = "Clique"
     topology_present = False
-    data_version = 1
+    data_version = 2
     web = CliqueWebWorld()
     option_definitions = clique_options
 
@@ -50,10 +50,11 @@ class CliqueWorld(World):
         return {option_name: self.get_setting(option_name).value for option_name in self.option_definitions}
 
     def generate_basic(self) -> None:
-        self.multiworld.itempool.append(self.create_item("The feeling of satisfaction."))
+        self.multiworld.itempool.append(self.create_item("Feeling of Satisfaction"))
+        self.multiworld.priority_locations[self.player].value.add("The Button")
 
         if self.multiworld.hard_mode[self.player]:
-            self.multiworld.itempool.append(self.create_item("Button Key"))
+            self.multiworld.itempool.append(self.create_item("Button Unlock"))
 
     def create_regions(self) -> None:
         if self.multiworld.hard_mode[self.player]:
@@ -77,14 +78,10 @@ class CliqueWorld(World):
         if self.multiworld.hard_mode[self.player]:
             set_rule(
                 self.multiworld.get_location("The Button", self.player),
-                lambda state: state.has("Button Key", self.player)
-            )
+                lambda state: state.has("Button Unlock", self.player))
 
-            self.multiworld.completion_condition[self.player] = lambda state: \
-                state.has("Button Key", self.player)
-        else:
-            self.multiworld.completion_condition[self.player] = lambda state: \
-                state.has("The feeling of satisfaction.", self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: \
+            state.has("Feeling of Satisfaction", self.player)
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
