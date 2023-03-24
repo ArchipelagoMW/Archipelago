@@ -153,7 +153,7 @@ class MessengerHardRules(MessengerRules):
     def set_messenger_rules(self) -> None:
         super().set_messenger_rules()
         for loc, rule in self.extra_rules.items():
-            if "Seal" in loc and not self.world.multiworld.shuffle_seals[self.player]:
+            if not self.world.multiworld.shuffle_seals[self.player] and "Seal" in loc:
                 continue
             add_rule(self.world.multiworld.get_location(loc, self.player), rule, "or")
 
