@@ -148,9 +148,11 @@ class ServerLabel(HovererableLabel):
                     for permission_name, permission_data in ctx.permissions.items():
                         text += f"\n    {permission_name}: {permission_data}"
                 if ctx.hint_cost is not None and ctx.total_locations:
+                    min_cost = int(ctx.server_version >= (0, 3, 9))
                     text += f"\nA new !hint <itemname> costs {ctx.hint_cost}% of checks made. " \
-                            f"For you this means every {max(0, int(ctx.hint_cost * 0.01 * ctx.total_locations))} " \
-                            "location checks."
+                            f"For you this means every " \
+                            f"{max(min_cost, int(ctx.hint_cost * 0.01 * ctx.total_locations))}" \
+                            f" location checks."
                 elif ctx.hint_cost == 0:
                     text += "\n!hint is free to use."
 
