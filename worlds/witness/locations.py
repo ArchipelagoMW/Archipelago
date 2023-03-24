@@ -387,6 +387,9 @@ class StaticWitnessLocations:
         "Mountain Floor 2 Near Row 5",
         "Mountain Floor 2 Far Row 6",
 
+        "Mountain Floor 2 Light Bridge Controller Near",
+        "Mountain Floor 2 Light Bridge Controller Far",
+
         "Mountain Bottom Floor Yellow Bridge EP",
         "Mountain Bottom Floor Blue Bridge EP",
         "Mountain Floor 2 Pink Bridge EP",
