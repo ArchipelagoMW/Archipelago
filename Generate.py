@@ -662,10 +662,6 @@ def failure_gui(*args) -> None:
 
 
 if __name__ == '__main__':
-    import atexit
-    confirmation = atexit.register(input, "Press enter to close.")
     if not __debug__:
         sys.excepthook = parsing_failure_gui
     main()
-    # in case of error-free exit should not need confirmation
-    atexit.unregister(confirmation)
