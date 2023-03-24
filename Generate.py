@@ -7,6 +7,7 @@ import random
 import string
 import sys
 import types
+import typing
 import urllib.parse
 import urllib.request
 from collections import Counter, ChainMap
@@ -225,6 +226,8 @@ def main(args=None, callback=ERmain):
         with open(os.path.join(args.outputpath if args.outputpath else ".", f"generate_{seed_name}.yaml"), "wt") as f:
             yaml.dump(important, f)
 
+    if not __debug__:
+        sys.excepthook = failure_gui
     callback(erargs, seed)
 
 
@@ -639,13 +642,20 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                         ret.sprite_pool += [key] * int(value)
 
 
-def popup_bug_gui(type: BaseException, value: BaseException, traceback: types.TracebackType) -> None:
+def parsing_failure_gui(type: typing.Type[BaseException], value: BaseException, traceback: types.TracebackType) -> None:
     import tkinter.messagebox as message
-    from traceback import format_tb
+    from traceback import format_exception_only, format_exception
     message.showerror(
         f"Generation Failed",
-        f"\n{type}: {value}" +
-        f"\nTraceback (most recent call last): \n{''.join(format_tb(traceback))}" +
+        f"{''.join(format_exception(type, value, traceback.tb_next, 0)[0])}" +
+        f"\n{format_exception_only(type, value)[0]}"
+    )
+
+
+def failure_gui(*args) -> None:
+    import tkinter.messagebox as message
+    message.showerror(
+        f"Generation Failed",
         f"Please attach log from {Utils.local_path('logs')}" +
         f"\nand all used player files in a bug report."
     )
@@ -655,7 +665,7 @@ if __name__ == '__main__':
     import atexit
     confirmation = atexit.register(input, "Press enter to close.")
     if not __debug__:
-        sys.excepthook = popup_bug_gui
+        sys.excepthook = parsing_failure_gui
     main()
     # in case of error-free exit should not need confirmation
     atexit.unregister(confirmation)
