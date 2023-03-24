@@ -11,7 +11,8 @@ from Options import Toggle
 from worlds.AutoWorld import WebWorld, World
 
 from . import rules
-from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification
+from .data import data as emerald_data
+from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification, offset_item_value
 from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
 from .options import RandomizeBadges, RandomizeHms, ItemPoolType, get_option_value, option_definitions
 from .regions import create_regions
@@ -137,8 +138,23 @@ class PokemonEmeraldWorld(World):
 
         if item_pool_type_option == ItemPoolType.option_shuffled:
             self.multiworld.itempool += [self.create_item_by_code(location.default_item_code) for location in item_locations]
-        elif item_pool_type_option == ItemPoolType.option_shuffled:
-            raise NotImplementedError()
+        elif item_pool_type_option in [ItemPoolType.option_diverse, ItemPoolType.option_diverse_exclude_berries]:
+            fill_item_candidates = [item for item in emerald_data.items.values()]
+
+            fill_item_candidates = [item for item in fill_item_candidates if "Unique" not in item.tags]
+            if item_pool_type_option == ItemPoolType.option_diverse_exclude_berries:
+                fill_item_candidates = [item for item in fill_item_candidates if "Berry" not in item.tags]
+
+            fill_item_candidates = [item.item_id for item in fill_item_candidates]
+            fill_item_candidates.sort()
+            fill_item_candidates = [offset_item_value(item_id) for item_id in fill_item_candidates]
+
+            for item_location in item_locations:
+                item = self.create_item_by_code(item_location.default_item_code)
+                if item.classification != ItemClassification.progression:
+                    item = self.create_item_by_code(self.multiworld.per_slot_randoms[self.player].choice(fill_item_candidates))
+
+                self.multiworld.itempool.append(item)
 
 
     def set_rules(self):
@@ -160,29 +176,13 @@ class PokemonEmeraldWorld(World):
             rules.add_flash_rules(self.multiworld, self.player)
 
 
-    def pre_fill(self):
-        locations: List[PokemonEmeraldLocation] = self.multiworld.get_locations(self.player)
-
-        badges_option = get_option_value(self.multiworld, self.player, "badges")
-        if badges_option == RandomizeBadges.option_shuffle:
-            badge_locations = [location for location in locations if location.tags is not None and "Badge" in location.tags]
-            badge_items = [self.create_item_by_code(location.default_item_code) for location in badge_locations]
-
-            fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), badge_locations, badge_items, True, True, True)
-
-        hms_option = get_option_value(self.multiworld, self.player, "hms")
-        if hms_option == RandomizeBadges.option_shuffle:
-            hm_locations = [location for location in locations if location.tags is not None and "HM" in location.tags]
-            hm_items = [self.create_item_by_code(location.default_item_code) for location in hm_locations]
-
-            fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), hm_locations, hm_items, True, True, True)
-
-
     def generate_basic(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
         locations: List[PokemonEmeraldLocation] = self.multiworld.get_locations(self.player)
 
+        # Key items which are considered in access rules but not randomized are converted to events and placed
+        # in their vanilla locations so that the player can have them in their inventory for logic.
         def convert_unrandomized_items_to_events(tag: str):
             for location in locations:
                 if location.tags is not None and tag in location.tags:
@@ -200,6 +200,25 @@ class PokemonEmeraldWorld(World):
             convert_unrandomized_items_to_events("Bike")
         if get_option_value(self.multiworld, self.player, "key_items") == Toggle.option_false:
             convert_unrandomized_items_to_events("KeyItem")
+
+
+    def pre_fill(self):
+        locations: List[PokemonEmeraldLocation] = self.multiworld.get_locations(self.player)
+
+        # Items which are shuffled between their own locations
+        badges_option = get_option_value(self.multiworld, self.player, "badges")
+        if badges_option == RandomizeBadges.option_shuffle:
+            badge_locations = [location for location in locations if location.tags is not None and "Badge" in location.tags]
+            badge_items = [self.create_item_by_code(location.default_item_code) for location in badge_locations]
+            self.multiworld.random.shuffle(badge_items)
+            fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), badge_locations, badge_items, True, True, True)
+
+        hms_option = get_option_value(self.multiworld, self.player, "hms")
+        if hms_option == RandomizeBadges.option_shuffle:
+            hm_locations = [location for location in locations if location.tags is not None and "HM" in location.tags]
+            hm_items = [self.create_item_by_code(location.default_item_code) for location in hm_locations]
+            self.multiworld.random.shuffle(hm_items)
+            fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), hm_locations, hm_items, True, True, True)
 
 
     def generate_output(self, output_directory: str):

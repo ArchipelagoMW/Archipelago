@@ -75,6 +75,7 @@ class Warp:
 
 class ItemData(NamedTuple):
     label: str
+    item_id: int
     classification: ItemClassification
     tags: Set[str]
 
@@ -321,6 +322,7 @@ def _init():
 
         data.items[data.constants[item_constant_name]] = ItemData(
             attributes["label"],
+            data.constants[item_constant_name],
             item_classification,
             set(attributes["tags"])
         )
