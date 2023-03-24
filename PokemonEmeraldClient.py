@@ -1,17 +1,18 @@
 import asyncio
-import bsdiff4
 import json
 import os
 import subprocess
 from typing import Optional, Set, Tuple
 import zipfile
 
-from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, gui_enabled, logger
+import bsdiff4
+
+from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, gui_enabled, logger
 from NetUtils import ClientStatus
 from Utils import async_start, init_logging, get_options
 
-from worlds.pokemon_emerald.Data import get_config, get_extracted_data
-from worlds.pokemon_emerald.Rom import PokemonEmeraldDeltaPatch
+from worlds.pokemon_emerald.data import data, config
+from worlds.pokemon_emerald.rom import PokemonEmeraldDeltaPatch
 
 
 GBA_SOCKET_PORT = 43053
@@ -23,14 +24,11 @@ CONNECTION_STATUS_TENTATIVE = "Initial connection made"
 CONNECTION_STATUS_CONNECTED = "Connected"
 CONNECTION_STATUS_INITIAL = "Connection has not been initiated"
 
-GAME_CLEAR_FLAG = get_extracted_data()["constants"]["FLAG_IS_CHAMPION"]
+GAME_CLEAR_FLAG = data.constants["FLAG_IS_CHAMPION"]
 DEFEATED_STEVEN_FLAG = 2084
 
 
 class GBACommandProcessor(ClientCommandProcessor):
-    def __init__(self, ctx: CommonContext):
-        super().__init__(ctx)
-
     def _cmd_gba(self):
         """Check GBA Connection State"""
         if isinstance(self.ctx, GBAContext):
@@ -64,40 +62,40 @@ class GBAContext(CommonContext):
 
         class GBAManager(GameManager):
             base_title = "Archipelago Pokémon Emerald Client"
-        
+
         self.ui = GBAManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 
 def create_payload(ctx: GBAContext):
     payload = json.dumps({
-        "items": [item.item - get_config()["ap_offset"] for item in ctx.items_received]
+        "items": [item.item - config["ap_offset"] for item in ctx.items_received]
     })
 
     return payload
 
 
-async def handle_read_data(data, ctx: GBAContext):
+async def handle_read_data(gba_data, ctx: GBAContext):
     local_checked_locations = set()
     game_clear = False
 
-    if ("flag_bytes" in data):
+    if "flag_bytes" in gba_data:
         # If flag is set and corresponds to a location, add to local_checked_locations
-        for byte_i, byte in enumerate(data["flag_bytes"]):
+        for byte_i, byte in enumerate(gba_data["flag_bytes"]):
             for i in range(8):
-                if (byte & (1 << i) != 0):
+                if byte & (1 << i) != 0:
                     flag_id = byte_i * 8 + i
-                    location_id = flag_id + get_config()["ap_offset"]
-                    if (location_id in ctx.server_locations):
+                    location_id = flag_id + config["ap_offset"]
+                    if location_id in ctx.server_locations:
                         local_checked_locations.add(location_id)
                     elif location_id == GAME_CLEAR_FLAG:
                         game_clear = True
 
 
-        if (local_checked_locations != ctx.local_checked_locations):
+        if local_checked_locations != ctx.local_checked_locations:
             ctx.local_checked_locations = local_checked_locations
 
-            if (local_checked_locations != None):
+            if local_checked_locations is not None:
                 await ctx.send_msgs([{
                     "cmd": "LocationChecks",
                     "locations": list(local_checked_locations)
@@ -111,10 +109,10 @@ async def handle_read_data(data, ctx: GBAContext):
 
 async def gba_send_receive_task(ctx: GBAContext):
     logger.info("Starting GBA connector. Use /gba for status information")
-    while (not ctx.exit_event.is_set()):
+    while not ctx.exit_event.is_set():
         error_status: Optional[str] = None
 
-        if (ctx.gba_streams == None):
+        if ctx.gba_streams is None:
             # Make initial connection
             try:
                 logger.debug("Attempting to connect to GBA...")
@@ -159,8 +157,8 @@ async def gba_send_receive_task(ctx: GBAContext):
             # Read
             try:
                 data_bytes = await asyncio.wait_for(reader.readline(), timeout=5)
-                data = json.loads(data_bytes.decode())
-                async_start(handle_read_data(data, ctx))
+                data_decoded = json.loads(data_bytes.decode())
+                async_start(handle_read_data(data_decoded, ctx))
             except TimeoutError:
                 logger.debug("Connection to GBA timed out during read. Reconnecting.")
                 error_status = CONNECTION_STATUS_TIMING_OUT
@@ -209,9 +207,9 @@ if __name__ == "__main__":
 
     async def main(args):
         ctx = GBAContext(args.connect, args.password)
-        ctx.server_task
+        ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
-        if (gui_enabled):
+        if gui_enabled:
             ctx.run_gui()
         ctx.run_cli()
 
