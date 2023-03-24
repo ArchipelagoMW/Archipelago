@@ -641,7 +641,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
 def popup_bug_gui(type: BaseException, value: BaseException, traceback: types.TracebackType) -> None:
     import tkinter.messagebox as message
-    from traceback import format_exc, format_exception, format_tb, format_list, format_stack, format_exception_only
+    from traceback import format_tb
     message.showerror(
         f"Generation Failed",
         f"\n{type}: {value}" +
