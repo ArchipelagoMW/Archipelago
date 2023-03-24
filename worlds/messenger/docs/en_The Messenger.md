@@ -66,6 +66,7 @@ for it. The groups you can use for The Messenger are:
 * Sometimes upon teleporting back to HQ, Ninja will run left and enter a different portal than the one entered by the
   player.
 * Text entry menus don't accept controller input
+* Opening the shop chest in power seal hunt mode from the tower of time HQ will soft lock the game.
 
 ## What do I do if I have a problem?
 
