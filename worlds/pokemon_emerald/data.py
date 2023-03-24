@@ -4,7 +4,7 @@ This also includes marrying automatically extracted data with manually
 defined data (like location labels or usable pokemon species), some cleanup
 and sorting, and Warp methods.
 """
-from enum import Enum
+from enum import IntEnum
 import json
 import os
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple
@@ -156,7 +156,7 @@ class MapData(NamedTuple):
     fishing_encounters: Optional[EncounterTableData]
 
 
-class TrainerPokemonDataTypeEnum(Enum):
+class TrainerPokemonDataTypeEnum(IntEnum):
     NO_ITEM_DEFAULT_MOVES = 0
     ITEM_DEFAULT_MOVES = 1
     NO_ITEM_CUSTOM_MOVES = 2
@@ -411,7 +411,7 @@ def _init():
     # Create trainer data
     for i, trainer_json in enumerate(extracted_data["trainers"]):
         party_json = trainer_json["party"]
-        pokemon_data_type = _str_to_pokemon_data_type(trainer_json["pokemon_data_type"]),
+        pokemon_data_type = _str_to_pokemon_data_type(trainer_json["pokemon_data_type"])
         data.trainers.append(TrainerData(
             i,
             TrainerPartyData(

@@ -80,6 +80,7 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
     #     bool8 advanceTextWithHoldA;
     #     bool8 isFerryEnabled;
     #     bool8 areTrainersBlind;
+    #     bool8 canFlyWithoutBadge
     #     u16 expMultiplierNumerator;
     #     u16 expMultiplierDenominator;
     #     u16 birchPokemon;
@@ -98,13 +99,17 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
     blind_trainers = 1 if get_option_value(multiworld, player, "blind_trainers") == Toggle.option_true else 0
     _set_bytes_little_endian(patched_rom, options_address + 2, 1, blind_trainers)
 
+    # Set fly without badge
+    fly_without_badge = 1 if get_option_value(multiworld, player, "fly_without_badge") == Toggle.option_true else 0
+    _set_bytes_little_endian(patched_rom, options_address + 3, 1, fly_without_badge)
+
     # Set exp modifier
     numerator = min(get_option_value(multiworld, player, "exp_modifier"), 2**16 - 1)
-    _set_bytes_little_endian(patched_rom, options_address + 3, 2, numerator)
-    _set_bytes_little_endian(patched_rom, options_address + 5, 2, 100)
+    _set_bytes_little_endian(patched_rom, options_address + 4, 2, numerator)
+    _set_bytes_little_endian(patched_rom, options_address + 6, 2, 100)
 
     # Set Birch pokemon
-    _set_bytes_little_endian(patched_rom, options_address + 7, 2, get_random_species(multiworld.per_slot_randoms[player]).species_id)
+    _set_bytes_little_endian(patched_rom, options_address + 8, 2, get_random_species(multiworld.per_slot_randoms[player]).species_id)
 
     # Write Output
     outfile_player_name = f"_P{player}"

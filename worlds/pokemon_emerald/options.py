@@ -261,6 +261,13 @@ class EnableFerry(Toggle):
     display_name = "Enable Ferry"
 
 
+class FlyWithoutBadge(Toggle):
+    """
+    Fly does not require the Feather Badge to use in the field
+    """
+    display_name = "Fly Without Badge"
+
+
 class TurboA(Toggle):
     """
     Holding A will advance most text automatically
@@ -292,6 +299,7 @@ option_definitions: Dict[str, Option] = {
   "tm_compatibility": TmCompatibility,
   "hm_compatibility": HmCompatibility,
   "enable_ferry": EnableFerry,
+  "fly_without_badge": FlyWithoutBadge,
   "turbo_a": TurboA
 }
 
