@@ -251,15 +251,21 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
             connections = []
             all_connections = []
             for connection in mission_order[i].connect_to:
-                if missions[connection] is not None and connection != -1:
-                    all_connections.append(missions[connection])
+                if connection == -1:
+                    continue
+                while missions[connection] is None:
+                    connection -= 1
+                all_connections.append(missions[connection])
             for connection in mission_order[i].connect_to:
                 required_mission = missions[connection]
                 if connection == -1:
                     connect(multiworld, player, names, "Menu", mission)
-                elif required_mission is None:
-                    continue
                 else:
+                    if required_mission is None and not mission_order[i].completion_critical:  # Drop non-critical null slots
+                        continue
+                    while required_mission is None:  # Substituting null slot with prior slot
+                        connection -= 1
+                        required_mission = missions[connection]
                     required_missions = [required_mission] if mission_order[i].or_requirements else all_connections
                     connect(multiworld, player, names, required_mission, mission,
                             build_connection_rule(required_missions, mission_order[i].number))

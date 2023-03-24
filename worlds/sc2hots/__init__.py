@@ -8,8 +8,8 @@ from .Items import StarcraftHotSItem, item_table, filler_items, item_name_groups
 from .Locations import get_locations
 from .Regions import create_regions
 from .Options import sc2hots_options, get_option_value
-from .LogicMixin import SC2HotSLogic
-from .PoolFilter import filter_missions, filter_items, get_item_upgrades, UPGRADABLE_ITEMS, KERRIGAN_ACTIVES, KERRIGAN_PASSIVES, KERRIGAN_ONLY_PASSIVES
+from .LogicMixin import SC2HotSLogic, KERRIGAN_ACTIVES, KERRIGAN_PASSIVES, KERRIGAN_ONLY_PASSIVES
+from .PoolFilter import filter_missions, filter_items, get_item_upgrades, UPGRADABLE_ITEMS
 from .MissionTables import starting_mission_locations, MissionInfo
 
 

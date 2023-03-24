@@ -6,12 +6,26 @@ from .Items import get_basic_units, defense_ratings, zerg_defense_ratings
 KERRIGAN_ACTIVES = [
     {'Kinetic Blast (Kerrigan Tier 1)', 'Leaping Strike (Kerrigan Tier 1)'},
     {'Crushing Grip (Kerrigan Tier 2)', 'Psionic Shift (Kerrigan Tier 2)'},
-    {},
+    set(),
     {'Wild Mutation (Kerrigan Tier 4)', 'Spawn Banelings (Kerrigan Tier 4)', 'Mend (Kerrigan Tier 4)'},
-    {},
-    {},
+    set(),
+    set(),
     {'Apocalypse (Kerrigan Tier 7)', 'Spawn Leviathan (Kerrigan Tier 7)', 'Drop-Pods (Kerrigan Tier 7)'},
 ]
+
+KERRIGAN_PASSIVES = [
+    {"Heroic Fortitude (Kerrigan Tier 1)"},
+    {"Chain Reaction (Kerrigan Tier 2)"},
+    {"Zergling Reconstitution (Kerrigan Tier 3)", "Improved Overlords (Kerrigan Tier 3)", "Automated Extractors (Kerrigan Tier 3)"},
+    set(),
+    {"Twin Drones (Kerrigan Tier 5)", "Malignant Creep (Kerrigan Tier 5)", "Vespene Efficiency (Kerrigan Tier 5)"},
+    {"Infest Broodlings (Kerrigan Tier 6)", "Fury (Kerrigan Tier 6)", "Ability Efficiency (Kerrigan Tier 6)"},
+    set(),
+]
+KERRIGAN_ONLY_PASSIVES = {
+    "Heroic Fortitude (Kerrigan Tier 1)", "Chain Reaction (Kerrigan Tier 2)",
+    "Infest Broodlings (Kerrigan Tier 6)", "Fury (Kerrigan Tier 6)", "Ability Efficiency (Kerrigan Tier 6)"
+}
 
 class SC2HotSLogic(LogicMixin):
     def _sc2hots_has_common_unit(self, multiworld: MultiWorld, player: int) -> bool:
@@ -34,14 +48,18 @@ class SC2HotSLogic(LogicMixin):
 
     def _sc2hots_has_impaler_or_lurker(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has('Hydralisk', player) and self.has_any({'Impaler Strain (Hydralisk)', 'Lurker Strain (Hydralisk)'}, player)
-    
+
     def _sc2hots_has_competent_comp(self, multiworld: MultiWorld, player: int) -> bool:
-        advanced = (get_option_value(multiworld, player, 'kerriganless') > 0 and self.has('Drop-Pods (Kerrigan Tier 7)', player)) or \
-            ((self.has('Infestor', player) or self._sc2hots_has_viper(multiworld, player)) and \
-            (self.has('Swarm Host', player) or self._sc2hots_has_brood_lord(multiworld, player) or self._sc2hots_has_impaler_or_lurker(multiworld, player)))
-        standard = self.has_any({'Roach', 'Aberration', 'Ultralisk'}, player) and \
-            (self.has_any({'Hydralisk', 'Zergling', 'Swarm Queen'}, player) or self._sc2hots_has_brood_lord(multiworld, player))
-        return standard or (get_option_value(multiworld, player, 'required_tactics') > 0 and advanced)
+        advanced = get_option_value(multiworld, player, 'required_tactics') > 0
+        core_unit = self.has_any({'Roach', 'Aberration', 'Zergling'}, player)
+        support_unit = self.has_any({'Swarm Queen', 'Hydralisk'}, player) \
+                       or self._sc2hots_has_brood_lord(multiworld, player) \
+                       or advanced and (self.has('Infestor', player) or self._sc2hots_has_viper(multiworld, player))
+        if core_unit and support_unit:
+            return True
+        vespene_unit = self.has_any({'Ultralisk', 'Aberration'}, player) \
+                       or advanced and self.has('Mutalisk', player)
+        return vespene_unit and self.has_any({'Zergling', 'Swarm Queen'}, player)
     
     def _sc2hots_can_spread_creep(self, multiworld: MultiWorld, player: int) -> bool:
         return get_option_value(multiworld, player, 'required_tactics') > 0 or self.has('Swarm Queen', player)
@@ -50,13 +68,34 @@ class SC2HotSLogic(LogicMixin):
         return self._sc2hots_has_common_unit(multiworld, player) and \
             ((self.has('Swarm Host', player) or self._sc2hots_has_brood_lord(multiworld, player) or self._sc2hots_has_impaler_or_lurker(multiworld, player)) or \
             (get_option_value(multiworld, player, 'required_tactics') > 0 and (self._sc2hots_has_viper(multiworld, player) or self.has('Spine Crawler', player))))
-    
+
+    def _sc2hots_has_basic_kerrigan(self, multiworld: MultiWorld, player: int) -> bool:
+        # One active ability that can be used to defeat enemies directly
+        if self.has_any({'Kinetic Blast (Kerrigan Tier 1)', 'Leaping Strike (Kerrigan Tier 1)',
+                         'Crushing Grip (Kerrigan Tier 2)', 'Psionic Shift (Kerrigan Tier 2)',
+                         'Spawn Banelings (Kerrigan Tier 4)'}, player):
+            return True
+        # Or two passive combat abilities
+        count = 0
+        for item in ("Heroic Fortitude (Kerrigan Tier 1)", "Chain Reaction (Kerrigan Tier 2)",
+                     "Infest Broodlings (Kerrigan Tier 6)", "Fury (Kerrigan Tier 6)"):
+            if self.has(item, player):
+                count += 1
+        return count >= 2
+
     def _sc2hots_has_two_kerrigan_actives(self, multiworld: MultiWorld, player: int) -> bool:
         count = 0
         for i in range(7):
             if self.has_any(KERRIGAN_ACTIVES[i], player):
                 count += 1
         return count >= 2
+
+    def _sc2hots_has_low_tech(self, multiworld: MultiWorld, player: int) -> bool:
+        return self.has_any({'Zergling', 'Swarm Queen', 'Spine Crawler'}, player) \
+               or self._sc2hots_has_common_unit(multiworld, player) and (
+                       self._sc2hots_has_basic_kerrigan(multiworld, player)
+                       or get_option_value(multiworld, player, 'required_tactics') > 0
+               )
 
     # def _sc2wol_has_air(self, multiworld: MultiWorld, player: int) -> bool:
     #     return self.has_any({'Viking', 'Wraith', 'Banshee'}, player) or get_option_value(multiworld, player, 'required_tactics') > 0 \
