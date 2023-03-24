@@ -300,7 +300,7 @@ class Objective(OptionList):
     https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/sm/utils/objectives.py
     """
     display_name = "Objectives"
-    default = "kill all G4"
+    default = ["kill all G4"]
     valid_keys = frozenset({name: goal for (name, goal) in _goals.items()})
     #valid_keys_casefold = True
 
