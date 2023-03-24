@@ -705,14 +705,14 @@ class SMWorld(World):
                          if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
                          'ArchipelagoItem'],
                          locationsDict[itemLoc.name], itemLoc.item.player, True)
-            for itemLoc in self.multiworld.get_locations() if itemLoc.player == self.player
+            for itemLoc in self.multiworld.get_locations(self.player)
         ]
         self.progItemLocs = [
             ItemLocation(ItemManager.Items[itemLoc.item.type
                          if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
                          'ArchipelagoItem'],
                          locationsDict[itemLoc.name], itemLoc.item.player, True)
-            for itemLoc in self.multiworld.get_locations() if itemLoc.player == self.player and itemLoc.item.advancement == True
+            for itemLoc in self.multiworld.get_locations(self.player) if itemLoc.item.advancement
         ]
         for itemLoc in self.itemLocs:
             if itemLoc.Item.Class == "Boss":
