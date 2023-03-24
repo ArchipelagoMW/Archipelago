@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import typing
 import builtins
 import os
@@ -142,6 +143,17 @@ def user_path(*path: str) -> str:
     return os.path.join(user_path.cached_path, *path)
 
 
+def cache_path(*path: str) -> str:
+    """Returns path to a file in the user's Archipelago cache directory."""
+    if hasattr(cache_path, "cached_path"):
+        pass
+    else:
+        import appdirs
+        cache_path.cached_path = appdirs.user_cache_dir("Archipelago", False)
+
+    return os.path.join(cache_path.cached_path, *path)
+
+
 def output_path(*path: str) -> str:
     if hasattr(output_path, 'cached_path'):
         return os.path.join(output_path.cached_path, *path)
@@ -248,6 +260,9 @@ def get_default_options() -> OptionsType:
         "lttp_options": {
             "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
         },
+        "ladx_options": {
+            "rom_file": "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc",
+        },
         "server_options": {
             "host": None,
             "port": 38281,
@@ -317,7 +332,13 @@ def get_default_options() -> OptionsType:
         },
         "wargroove_options": {
             "root_directory": "C:/Program Files (x86)/Steam/steamapps/common/Wargroove"
-        }
+        },
+        "adventure_options": {
+            "rom_file": "ADVNTURE.BIN",
+            "display_msgs": True,
+            "rom_start": True,
+            "rom_args": ""
+        },
     }
     return options
 
@@ -383,6 +404,45 @@ def persistent_load() -> typing.Dict[str, dict]:
         storage = {}
     persistent_load.storage = storage
     return storage
+
+
+def get_file_safe_name(name: str) -> str:
+    return "".join(c for c in name if c not in '<>:"/\\|?*')
+
+
+def load_data_package_for_checksum(game: str, checksum: typing.Optional[str]) -> Dict[str, Any]:
+    if checksum and game:
+        if checksum != get_file_safe_name(checksum):
+            raise ValueError(f"Bad symbols in checksum: {checksum}")
+        path = cache_path("datapackage", get_file_safe_name(game), f"{checksum}.json")
+        if os.path.exists(path):
+            try:
+                with open(path, "r", encoding="utf-8-sig") as f:
+                    return json.load(f)
+            except Exception as e:
+                logging.debug(f"Could not load data package: {e}")
+
+    # fall back to old cache
+    cache = persistent_load().get("datapackage", {}).get("games", {}).get(game, {})
+    if cache.get("checksum") == checksum:
+        return cache
+
+    # cache does not match
+    return {}
+
+
+def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> None:
+    checksum = data.get("checksum")
+    if checksum and game:
+        if checksum != get_file_safe_name(checksum):
+            raise ValueError(f"Bad symbols in checksum: {checksum}")
+        game_folder = cache_path("datapackage", get_file_safe_name(game))
+        os.makedirs(game_folder, exist_ok=True)
+        try:
+            with open(os.path.join(game_folder, f"{checksum}.json"), "w", encoding="utf-8-sig") as f:
+                json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
+        except Exception as e:
+            logging.debug(f"Could not store data package: {e}")
 
 
 def get_adjuster_settings(game_name: str) -> typing.Dict[str, typing.Any]:
