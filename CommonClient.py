@@ -163,6 +163,7 @@ class CommonContext:
     server_address: typing.Optional[str]
     password: typing.Optional[str]
     hint_cost: typing.Optional[int]
+    hint_points: typing.Optional[int]
     player_names: typing.Dict[int, str]
 
     finished_game: bool
@@ -720,8 +721,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             await ctx.send_msgs(msgs)
         if ctx.finished_game:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-        if "hint_points" in args:
-            ctx.hint_points = args["hint_points"]
+        ctx.hint_points = args.get("hint_points", 0)
 
         # Get the server side view of missing as of time of connecting.
         # This list is used to only send to the server what is reported as ACTUALLY Missing.
