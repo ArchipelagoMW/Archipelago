@@ -126,6 +126,13 @@ class RandomizeWildPokemon(Choice):
     option_completely_random = 4
 
 
+class AllowWildLegendaries(DefaultOnToggle):
+    """
+    Wild encounters can be replaced by legendaries. Only applied if Randomize Wild Pokemon is not Vanilla.
+    """
+    display_name = "Allow Wild Legendaries"
+
+
 class RandomizeStarters(Choice):
     """
     Randomizes the starter pokemon in Professor Birch's bag
@@ -144,6 +151,13 @@ class RandomizeStarters(Choice):
     option_completely_random = 4
 
 
+class AllowStarterLegendaries(DefaultOnToggle):
+    """
+    Starters can be replaced by legendaries. Only applied if Randomize Starters is not Vanilla.
+    """
+    display_name = "Allow Starter Legendaries"
+
+
 class RandomizeTrainerParties(Choice):
     """
     Randomizes the parties of all trainers
@@ -160,6 +174,13 @@ class RandomizeTrainerParties(Choice):
     option_match_type = 2
     option_match_base_stats_and_type = 3
     option_completely_random = 4
+
+
+class AllowTrainerLegendaries(DefaultOnToggle):
+    """
+    Enemy trainer pokemon can be replaced by legendaries. Only applied if Randomize Trainer Parties is not Vanilla.
+    """
+    display_name = "Allow Trainer Legendaries"
 
 
 class RandomizeAbilities(Toggle):
@@ -288,8 +309,11 @@ option_definitions: Dict[str, Option] = {
   "require_itemfinder": HiddenItemsRequireItemfinder,
   "require_flash": DarkCavesRequireFlash,
   "wild_pokemon": RandomizeWildPokemon,
+  "allow_wild_legendaries": AllowWildLegendaries,
   "starters": RandomizeStarters,
+  "allow_starter_legendaries": AllowStarterLegendaries,
   "trainer_parties": RandomizeTrainerParties,
+  "allow_trainer_legendaries": AllowTrainerLegendaries,
   "abilities": RandomizeAbilities,
   "ability_blacklist": AbilityBlacklist,
   "min_catch_rate": MinCatchRate,

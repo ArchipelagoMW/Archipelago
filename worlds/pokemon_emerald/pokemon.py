@@ -38,6 +38,28 @@ _move_blacklist = frozenset([
     291, # Dive
     127  # Waterfall
 ])
+_legendary_pokemon = frozenset([
+    'Mew',
+    'Mewtwo',
+    'Articuno',
+    'Zapdos',
+    'Moltres',
+    'Lugia',
+    'Ho-oh',
+    'Raikou',
+    'Suicune',
+    'Entei',
+    'Celebi',
+    'Groudon',
+    'Kyogre',
+    'Rayquaza',
+    'Latios',
+    'Latias',
+    'Registeel',
+    'Regirock',
+    'Regice',
+    'Jirachi'
+])
 
 
 def get_species_by_id(species_id: int) -> Optional[SpeciesData]:
@@ -56,7 +78,11 @@ def get_species_by_name(name: str) -> Optional[SpeciesData]:
     return None
 
 
-def get_random_species(rand: random, nearby_bst: Optional[int] = None, species_type: Optional[int] = None) -> SpeciesData:
+def get_random_species(
+        rand: random,
+        nearby_bst: Optional[int] = None,
+        species_type: Optional[int] = None,
+        allow_legendaries: bool = True) -> SpeciesData:
     candidate_species = data.species
 
     if nearby_bst is not None:
@@ -67,6 +93,9 @@ def get_random_species(rand: random, nearby_bst: Optional[int] = None, species_t
 
     if species_type is not None:
         candidate_species = [species for species in candidate_species if type in species.types]
+
+    if not allow_legendaries:
+        candidate_species = [species for species in candidate_species if species.label not in _legendary_pokemon]
 
     return candidate_species[rand.randrange(0, len(candidate_species))]
 

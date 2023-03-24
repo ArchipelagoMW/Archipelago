@@ -170,8 +170,10 @@ def _randomize_encounter_tables(multiworld, player, rom) -> None:
 
 def _create_randomized_encounter_table(multiworld: MultiWorld, player: int, default_slots: List[int]) -> List[int]:
     random = multiworld.per_slot_randoms[player]
+
     should_match_bst = get_option_value(multiworld, player, "wild_pokemon") in [RandomizeWildPokemon.option_match_base_stats, RandomizeWildPokemon.option_match_base_stats_and_type]
     should_match_type = get_option_value(multiworld, player, "wild_pokemon") in [RandomizeWildPokemon.option_match_type, RandomizeWildPokemon.option_match_base_stats_and_type]
+    should_allow_legendaries = get_option_value(multiworld, player, "allow_wild_legendaries") == Toggle.option_true
 
     default_pokemon = [p_id for p_id in set(default_slots)]
 
@@ -179,7 +181,7 @@ def _create_randomized_encounter_table(multiworld: MultiWorld, player: int, defa
     for pokemon_id in default_pokemon:
         target_bst = sum(get_species_by_id(pokemon_id).base_stats) if should_match_bst else None
         target_type = random.choice(get_species_by_id(pokemon_id).types) if should_match_type else None
-        new_pokemon_id = get_random_species(random, target_bst, target_type).species_id
+        new_pokemon_id = get_random_species(random, target_bst, target_type, should_allow_legendaries).species_id
         new_pokemon_map[pokemon_id] = new_pokemon_id
 
     new_slots: List[int] = []
@@ -206,6 +208,7 @@ def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray) ->
     random = multiworld.per_slot_randoms[player]
     should_match_bst = get_option_value(multiworld, player, "trainer_parties") in [RandomizeTrainerParties.option_match_base_stats, RandomizeTrainerParties.option_match_base_stats_and_type]
     should_match_type = get_option_value(multiworld, player, "trainer_parties") in [RandomizeTrainerParties.option_match_type, RandomizeTrainerParties.option_match_base_stats_and_type]
+    should_allow_legendaries = get_option_value(multiworld, player, "allow_trainer_legendaries") == Toggle.option_true
 
     for trainer_data in data.trainers:
         party_address = trainer_data.party.rom_address
@@ -223,7 +226,7 @@ def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray) ->
         for pokemon_data in trainer_data.party.pokemon:
             target_bst = sum(get_species_by_id(pokemon_data.species_id).base_stats) if should_match_bst else None
             target_type = random.choice(get_species_by_id(pokemon_data.species_id).types) if should_match_type else None
-            new_party.append(get_random_species(random, target_bst, target_type))
+            new_party.append(get_random_species(random, target_bst, target_type, should_allow_legendaries))
 
         for i, species in enumerate(new_party):
             pokemon_address = party_address + (i * pokemon_data_size)
@@ -250,8 +253,50 @@ def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray) ->
 def _randomize_starters(multiworld, player, rom) -> None:
     random = multiworld.per_slot_randoms[player]
 
+    # TODO: Follow evolution pattern if possible. Needs evolution data
+    # (trainer_name, starter_index_in_team, is_evolved_form)
+    rival_teams = [
+        [
+            ("TRAINER_BRENDAN_ROUTE_103_TREECKO", 0, False),
+            ("TRAINER_BRENDAN_RUSTBORO_TREECKO",  1, False),
+            ("TRAINER_BRENDAN_ROUTE_110_TREECKO", 2, True ),
+            ("TRAINER_BRENDAN_ROUTE_119_TREECKO", 2, True ),
+            ("TRAINER_BRENDAN_LILYCOVE_TREECKO",  3, True ),
+            ("TRAINER_MAY_ROUTE_103_TREECKO",     0, True ),
+            ("TRAINER_MAY_RUSTBORO_TREECKO",      1, True ),
+            ("TRAINER_MAY_ROUTE_110_TREECKO",     2, True ),
+            ("TRAINER_MAY_ROUTE_119_TREECKO",     2, True ),
+            ("TRAINER_MAY_LILYCOVE_TREECKO",      3, True )
+        ],
+        [
+            ("TRAINER_BRENDAN_ROUTE_103_TORCHIC", 0, False),
+            ("TRAINER_BRENDAN_RUSTBORO_TORCHIC",  1, False),
+            ("TRAINER_BRENDAN_ROUTE_110_TORCHIC", 2, True ),
+            ("TRAINER_BRENDAN_ROUTE_119_TORCHIC", 2, True ),
+            ("TRAINER_BRENDAN_LILYCOVE_TORCHIC",  3, True ),
+            ("TRAINER_MAY_ROUTE_103_TORCHIC",     0, True ),
+            ("TRAINER_MAY_RUSTBORO_TORCHIC",      1, True ),
+            ("TRAINER_MAY_ROUTE_110_TORCHIC",     2, True ),
+            ("TRAINER_MAY_ROUTE_119_TORCHIC",     2, True ),
+            ("TRAINER_MAY_LILYCOVE_TORCHIC",      3, True )
+        ],
+        [
+            ("TRAINER_BRENDAN_ROUTE_103_MUDKIP", 0, False),
+            ("TRAINER_BRENDAN_RUSTBORO_MUDKIP",  1, False),
+            ("TRAINER_BRENDAN_ROUTE_110_MUDKIP", 2, True ),
+            ("TRAINER_BRENDAN_ROUTE_119_MUDKIP", 2, True ),
+            ("TRAINER_BRENDAN_LILYCOVE_MUDKIP",  3, True ),
+            ("TRAINER_MAY_ROUTE_103_MUDKIP",     0, True ),
+            ("TRAINER_MAY_RUSTBORO_MUDKIP",      1, True ),
+            ("TRAINER_MAY_ROUTE_110_MUDKIP",     2, True ),
+            ("TRAINER_MAY_ROUTE_119_MUDKIP",     2, True ),
+            ("TRAINER_MAY_LILYCOVE_MUDKIP",      3, True )
+        ]
+    ]
+
     should_match_bst = get_option_value(multiworld, player, "starters") in [RandomizeStarters.option_match_base_stats, RandomizeStarters.option_match_base_stats_and_type]
     should_match_type = get_option_value(multiworld, player, "starters") in [RandomizeStarters.option_match_type, RandomizeStarters.option_match_base_stats_and_type]
+    should_allow_legendaries = get_option_value(multiworld, player, "allow_starter_legendaries") == Toggle.option_true
 
     starter_1_bst = sum(get_species_by_name("Treecko").base_stats) if should_match_bst else None
     starter_2_bst = sum(get_species_by_name("Torchic").base_stats) if should_match_bst else None
@@ -262,13 +307,20 @@ def _randomize_starters(multiworld, player, rom) -> None:
     starter_3_type = random.choice(get_species_by_name("Mudkip").types)  if should_match_type else None
 
     address = data.rom_addresses["sStarterMon"]
-    starter_1 = get_random_species(random, starter_1_bst, starter_1_type)
-    starter_2 = get_random_species(random, starter_2_bst, starter_2_type)
-    starter_3 = get_random_species(random, starter_3_bst, starter_3_type)
+    starter_1 = get_random_species(random, starter_1_bst, starter_1_type, should_allow_legendaries)
+    starter_2 = get_random_species(random, starter_2_bst, starter_2_type, should_allow_legendaries)
+    starter_3 = get_random_species(random, starter_3_bst, starter_3_type, should_allow_legendaries)
 
     _set_bytes_little_endian(rom, address + 0, 2, starter_1.species_id)
     _set_bytes_little_endian(rom, address + 2, 2, starter_2.species_id)
     _set_bytes_little_endian(rom, address + 4, 2, starter_3.species_id)
+
+    # Override starter onto rival's teams
+    for i, starter in enumerate([starter_2, starter_3, starter_1]):
+        for trainer_name, starter_position, is_evolved in rival_teams[i]:
+            trainer_data = data.trainers[data.constants[trainer_name]]
+            pokemon_address = trainer_data.party.rom_address + (starter_position * 8) # All rivals have default moves
+            _set_bytes_little_endian(rom, pokemon_address + 0x04, 2, starter.species_id)
 
 
 def _randomize_abilities(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
@@ -370,6 +422,7 @@ def _modify_tmhm_compatibility(multiworld: MultiWorld, player: int, rom: bytearr
             _set_bytes_little_endian(rom, address, 1, byte)
 
 
+# TODO: Read compatibility from ROM during extraction
 def _tmhm_compatibility_array_to_bytearray(compatibility: List[bool]) -> bytearray:
     bits = [1 if bit else 0 for bit in compatibility]
     bits.reverse()
