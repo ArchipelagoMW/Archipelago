@@ -5,7 +5,7 @@ import hashlib
 import os
 from typing import List
 
-from BaseClasses import ItemClassification, MultiWorld, Tutorial
+from BaseClasses import ItemClassification, MultiWorld, Tutorial, Counter
 from Fill import fill_restrictive
 from Options import Toggle
 from worlds.AutoWorld import WebWorld, World
@@ -135,24 +135,46 @@ class PokemonEmeraldWorld(World):
             filter_tags.add("HM")
 
         item_locations = filter(lambda location: len(filter_tags & location.tags) == 0, item_locations)
+        default_itempool = [self.create_item_by_code(location.default_item_code) for location in item_locations]
 
         if item_pool_type_option == ItemPoolType.option_shuffled:
-            self.multiworld.itempool += [self.create_item_by_code(location.default_item_code) for location in item_locations]
-        elif item_pool_type_option in [ItemPoolType.option_diverse, ItemPoolType.option_diverse_exclude_berries]:
+            self.multiworld.itempool += default_itempool
+
+        elif item_pool_type_option in [ItemPoolType.option_diverse, ItemPoolType.option_diverse_balanced]:
+            item_categories = ["Ball", "Heal", "Vitamin", "EvoStone", "Money", "TM", "Held", "Misc"]
+
+            # Count occurrences of types of vanilla items in pool
+            item_category_counter = Counter()
+            for item in default_itempool:
+                if item.classification != ItemClassification.progression:
+                    item_category_counter.update([tag for tag in item.tags if tag in item_categories])
+
+            item_category_weights = [item_category_counter.get(category) for category in item_categories]
+
+            # Create lists of item codes that can be used to fill
             fill_item_candidates = [item for item in emerald_data.items.values()]
 
             fill_item_candidates = [item for item in fill_item_candidates if "Unique" not in item.tags]
-            if item_pool_type_option == ItemPoolType.option_diverse_exclude_berries:
-                fill_item_candidates = [item for item in fill_item_candidates if "Berry" not in item.tags]
 
-            fill_item_candidates = [item.item_id for item in fill_item_candidates]
-            fill_item_candidates.sort()
-            fill_item_candidates = [offset_item_value(item_id) for item_id in fill_item_candidates]
+            fill_item_candidates_by_category = {category: [] for category in item_categories}
+            for item in fill_item_candidates:
+                for category in item_categories:
+                    if category in item.tags:
+                        fill_item_candidates_by_category[category].append(offset_item_value(item.item_id))
 
-            for item_location in item_locations:
-                item = self.create_item_by_code(item_location.default_item_code)
+            for category in fill_item_candidates_by_category:
+                fill_item_candidates_by_category[category].sort()
+
+            # Ignore vanilla occurrences and pick completely randomly
+            if item_pool_type_option == ItemPoolType.option_diverse:
+                item_category_weights = [len(category_list) for category_list in fill_item_candidates_by_category.values()]
+
+            # Create items
+            for item in default_itempool:
                 if item.classification != ItemClassification.progression:
-                    item = self.create_item_by_code(self.multiworld.per_slot_randoms[self.player].choice(fill_item_candidates))
+                    category = self.multiworld.random.choices(item_categories, item_category_weights)[0]
+                    item_code = self.multiworld.random.choice(fill_item_candidates_by_category[category])
+                    item = self.create_item_by_code(item_code)
 
                 self.multiworld.itempool.append(item)
 

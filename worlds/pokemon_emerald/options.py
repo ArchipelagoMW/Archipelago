@@ -83,15 +83,15 @@ class RandomizeNpcGifts(Toggle):
 class ItemPoolType(Choice):
     """
     Determines which non-progression items get put into the item pool
-    Shuffled: Randomized items are removed from their default locations and added to the pool
-    Diverse: Randomized items are replaced by any non-unique item
-    Diverse Exclude Berries: Diverse, but no berries are added, even if a berry would have been shuffled
+    Shuffled: Item pool consists of shuffled vanilla items
+    Diverse Balanced: Item pool consists of random items approximately proportioned according to what they're replacing (i.e. more pokeballs, fewer X items, etc...)
+    Diverse: Item pool consists of uniformly random (non-unique) items
     """
     display_name = "Item Pool Type"
     default = 0
     option_shuffled = 0
-    option_diverse = 1
-    option_diverse_exclude_berries = 2
+    option_diverse_balanced = 1
+    option_diverse = 2
 
 
 class HiddenItemsRequireItemfinder(DefaultOnToggle):
