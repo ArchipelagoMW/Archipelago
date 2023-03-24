@@ -9,7 +9,7 @@ from .Regions import create_regions, shuffleable_regions, connect_regions, Level
     gate_0_blacklist_regions
 from .Rules import set_rules
 from .Names import ItemName, LocationName
-from ..AutoWorld import WebWorld, World
+from worlds.AutoWorld import WebWorld, World
 from .GateBosses import get_gate_bosses, get_boss_name
 from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions
 import Patch
@@ -52,7 +52,7 @@ class SA2BWorld(World):
     game: str = "Sonic Adventure 2 Battle"
     option_definitions = sa2b_options
     topology_present = False
-    data_version = 4
+    data_version = 5
 
     item_name_groups = item_groups
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -71,17 +71,21 @@ class SA2BWorld(World):
 
     def _get_slot_data(self):
         return {
-            "ModVersion": 200,
+            "ModVersion": 201,
             "Goal": self.multiworld.goal[self.player].value,
             "MusicMap": self.music_map,
             "MissionMap": self.mission_map,
             "MissionCountMap": self.mission_count_map,
             "MusicShuffle": self.multiworld.music_shuffle[self.player].value,
             "Narrator": self.multiworld.narrator[self.player].value,
+            "MinigameTrapDifficulty": self.multiworld.minigame_trap_difficulty[self.player].value,
+            "RingLoss": self.multiworld.ring_loss[self.player].value,
             "RequiredRank": self.multiworld.required_rank[self.player].value,
             "ChaoKeys": self.multiworld.keysanity[self.player].value,
             "Whistlesanity": self.multiworld.whistlesanity[self.player].value,
             "GoldBeetles": self.multiworld.beetlesanity[self.player].value,
+            "OmochaoChecks": self.multiworld.omosanity[self.player].value,
+            "KartRaceChecks": self.multiworld.kart_race_checks[self.player].value,
             "ChaoRaceChecks": self.multiworld.chao_race_checks[self.player].value,
             "ChaoGardenDifficulty": self.multiworld.chao_garden_difficulty[self.player].value,
             "DeathLink": self.multiworld.death_link[self.player].value,
@@ -145,13 +149,45 @@ class SA2BWorld(World):
         return levels_per_gate
 
     def generate_early(self):
-        self.gate_bosses = get_gate_bosses(self.multiworld, self.player)
+        if self.multiworld.goal[self.player].value == 3:
+            # Turn off everything else for Grand Prix goal
+            self.multiworld.number_of_level_gates[self.player].value = 0
+            self.multiworld.emblem_percentage_for_cannons_core[self.player].value = 0
+            self.multiworld.junk_fill_percentage[self.player].value = 100
+            self.multiworld.trap_fill_percentage[self.player].value = 100
+            self.multiworld.omochao_trap_weight[self.player].value = 0
+            self.multiworld.timestop_trap_weight[self.player].value = 0
+            self.multiworld.confusion_trap_weight[self.player].value = 0
+            self.multiworld.tiny_trap_weight[self.player].value = 0
+            self.multiworld.gravity_trap_weight[self.player].value = 0
 
-    def generate_basic(self):
+            valid_trap_weights = self.multiworld.exposition_trap_weight[self.player].value + self.multiworld.pong_trap_weight[self.player].value
+
+            if valid_trap_weights == 0:
+                self.multiworld.exposition_trap_weight[self.player].value = 4
+                self.multiworld.pong_trap_weight[self.player].value = 4
+
+            if self.multiworld.kart_race_checks[self.player].value == 0:
+                self.multiworld.kart_race_checks[self.player].value = 2
+
+            self.gate_bosses = {}
+        else:
+            self.gate_bosses = get_gate_bosses(self.multiworld, self.player)
+
+    def create_regions(self):
+        self.mission_map       = get_mission_table(self.multiworld, self.player)
+        self.mission_count_map = get_mission_count_table(self.multiworld, self.player)
+
+        self.location_table = setup_locations(self.multiworld, self.player, self.mission_map, self.mission_count_map)
+        create_regions(self.multiworld, self.player, self.location_table)
+
+        # Not Generate Basic
         if self.multiworld.goal[self.player].value == 0 or self.multiworld.goal[self.player].value == 2:
             self.multiworld.get_location(LocationName.finalhazard, self.player).place_locked_item(self.create_item(ItemName.maria))
         elif self.multiworld.goal[self.player].value == 1:
             self.multiworld.get_location(LocationName.green_hill, self.player).place_locked_item(self.create_item(ItemName.maria))
+        elif self.multiworld.goal[self.player].value == 3:
+            self.multiworld.get_location(LocationName.grand_prix, self.player).place_locked_item(self.create_item(ItemName.maria))
 
         itempool: typing.List[SA2BItem] = []
 
@@ -159,18 +195,19 @@ class SA2BWorld(World):
         total_required_locations = len(self.location_table)
         total_required_locations -= 1; # Locked Victory Location
 
-        # Fill item pool with all required items
-        for item in {**upgrades_table}:
-            itempool += self._create_items(item)
-
-        if self.multiworld.goal[self.player].value == 1 or self.multiworld.goal[self.player].value == 2:
-            # Some flavor of Chaos Emerald Hunt
-            for item in {**emeralds_table}:
+        if self.multiworld.goal[self.player].value != 3:
+            # Fill item pool with all required items
+            for item in {**upgrades_table}:
                 itempool += self._create_items(item)
 
-        # Cap at 180 Emblems
+            if self.multiworld.goal[self.player].value == 1 or self.multiworld.goal[self.player].value == 2:
+                # Some flavor of Chaos Emerald Hunt
+                for item in {**emeralds_table}:
+                    itempool += self._create_items(item)
+
+        # Cap at 250 Emblems
         raw_emblem_count = total_required_locations - len(itempool)
-        total_emblem_count = min(raw_emblem_count, 180)
+        total_emblem_count = min(raw_emblem_count, 250)
         extra_junk_count = raw_emblem_count - total_emblem_count
 
         self.emblems_for_cannons_core = math.floor(
@@ -234,6 +271,7 @@ class SA2BWorld(World):
         trap_weights += ([ItemName.gravity_trap] * self.multiworld.gravity_trap_weight[self.player].value)
         trap_weights += ([ItemName.exposition_trap] * self.multiworld.exposition_trap_weight[self.player].value)
         #trap_weights += ([ItemName.darkness_trap] * self.multiworld.darkness_trap_weight[self.player].value)
+        trap_weights += ([ItemName.pong_trap] * self.multiworld.pong_trap_weight[self.player].value)
 
         junk_count += extra_junk_count
         trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.multiworld.trap_fill_percentage[self.player].value / 100.0))
@@ -308,13 +346,6 @@ class SA2BWorld(World):
                         musiclist_s[i] += 100
 
             self.music_map = dict(zip(musiclist_o, musiclist_s))
-
-    def create_regions(self):
-        self.mission_map       = get_mission_table(self.multiworld, self.player)
-        self.mission_count_map = get_mission_count_table(self.multiworld, self.player)
-
-        self.location_table = setup_locations(self.multiworld, self.player, self.mission_map, self.mission_count_map)
-        create_regions(self.multiworld, self.player, self.location_table)
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
