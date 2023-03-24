@@ -143,15 +143,15 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
                     if len(choices) == 0:
                         continue
                 else:
-                    choices = KERRIGAN_ACTIVES[tier].union(KERRIGAN_PASSIVES[tier])
-                choices.remove(multiworld.random.choice(list(choices)))
+                    choices = sorted(KERRIGAN_ACTIVES[tier].union(KERRIGAN_PASSIVES[tier]))
+                choices.remove(multiworld.random.choice(choices))
                 excluded_items.update(choices)
         elif kerriganless == 0: # if Kerrigan exists, pick a random active ability per tier and remove the other active abilities
             for tier in range(7):
                 choices = sorted(KERRIGAN_ACTIVES[tier])
                 if len(choices) == 0:
                     continue
-                choices.remove(multiworld.random.choice(list(choices)))
+                choices.remove(multiworld.random.choice(choices))
                 excluded_items.update(choices)
 
     for item in multiworld.precollected_items[player]:
