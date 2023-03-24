@@ -757,217 +757,212 @@
   "ITEM_CHERI_BERRY": {
     "label": "Cheri Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_CHESTO_BERRY": {
     "label": "Chesto Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_PECHA_BERRY": {
     "label": "Pecha Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_RAWST_BERRY": {
     "label": "Rawst Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_ASPEAR_BERRY": {
     "label": "Aspear Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_LEPPA_BERRY": {
     "label": "Leppa Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_ORAN_BERRY": {
     "label": "Oran Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_PERSIM_BERRY": {
     "label": "Persim Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_LUM_BERRY": {
     "label": "Lum Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_SITRUS_BERRY": {
     "label": "Sitrus Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_FIGY_BERRY": {
     "label": "Figy Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_WIKI_BERRY": {
     "label": "Wiki Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_MAGO_BERRY": {
     "label": "Mago Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_AGUAV_BERRY": {
     "label": "Aguav Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_IAPAPA_BERRY": {
     "label": "Iapapa Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_RAZZ_BERRY": {
     "label": "Razz Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_BLUK_BERRY": {
     "label": "Bluk Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_NANAB_BERRY": {
     "label": "Nanab Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_WEPEAR_BERRY": {
     "label": "Wepear Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_PINAP_BERRY": {
     "label": "Pinap Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_POMEG_BERRY": {
     "label": "Pomeg Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_KELPSY_BERRY": {
     "label": "Kelpsy Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_QUALOT_BERRY": {
     "label": "Qualot Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_HONDEW_BERRY": {
     "label": "Hondew Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_GREPA_BERRY": {
     "label": "Grepa Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_TAMATO_BERRY": {
     "label": "Tamato Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_CORNN_BERRY": {
     "label": "Cornn Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_MAGOST_BERRY": {
     "label": "Magost Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_RABUTA_BERRY": {
     "label": "Rabuta Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_NOMEL_BERRY": {
     "label": "Nomel Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_SPELON_BERRY": {
     "label": "Spelon Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_PAMTRE_BERRY": {
     "label": "Pamtre Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_WATMEL_BERRY": {
     "label": "Watmel Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_DURIN_BERRY": {
     "label": "Durin Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_BELUE_BERRY": {
     "label": "Belue Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_LIECHI_BERRY": {
     "label": "Liechi Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_GANLON_BERRY": {
     "label": "Ganlon Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_SALAC_BERRY": {
     "label": "Salac Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_PETAYA_BERRY": {
     "label": "Petaya Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_APICOT_BERRY": {
     "label": "Apicot Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_LANSAT_BERRY": {
     "label": "Lansat Berry",
     "classification": "FILLER",
-    "tags": []
+    "tags": ["Berry"]
   },
   "ITEM_STARF_BERRY": {
     "label": "Starf Berry",
     "classification": "FILLER",
-    "tags": []
-  },
-  "ITEM_ENIGMA_BERRY": {
-    "label": "Enigma Berry",
-    "classification": "FILLER",
-    "tags": ["Unique"]
+    "tags": ["Berry"]
   },
 
 

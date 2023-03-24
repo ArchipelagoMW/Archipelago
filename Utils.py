@@ -305,7 +305,8 @@ def get_default_options() -> OptionsType:
             "rom_start": True
         },
         "pokemon_emerald_options": {
-            "rom_file": "Pokemon - Emerald Version (USA, Europe).gba"
+            "rom_file": "Pokemon - Emerald Version (USA, Europe).gba",
+            "rom_start": True
         },
         "ffr_options": {
             "display_msgs": True,
