@@ -228,7 +228,7 @@ LoadRandomItemAnimation:
 
 
 ; Make the items do what they look like they do
-; FIXME If the full health item is in one of the other boxes, the icon for when
+; FIXME If a full health item is in one of the other boxes, the icon for when
 ; you've collected it doesn't go away until the room is reloaded
 
 hook 0x8029FBA, 0x8029FD6, CollectRandomItem  ; NE jewel

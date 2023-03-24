@@ -15,8 +15,6 @@ GiveItem:
     cmp r0, #0xFF
     beq @@Return
 
-    ; TODO Archipelago items
-
     lsr r1, r0, #6
     cmp r1, #0
     bne @@JunkItem
@@ -140,7 +138,8 @@ hook 0x808134C, 0x808135C, CheckLocations
 .endmacro
 
 CheckLocations:
-    push r2, r4, lr
+    push lr
+    push r2, r4
 
 ; Calculate level ID as [PassageID] * 4 + [InPassageLevelID] and store in r4
     ldr r0, =PassageID
@@ -167,6 +166,9 @@ CheckLocations:
     check_has_item HasCD, CDLocationTable
     check_has_item HasFullHealthItem, HealthLocationTable
 
+; Return
+    pop r2, r4
+
 ; Replaced code
     ldrb r0, [r6]
     lsl r0, r0, #2
@@ -176,8 +178,8 @@ CheckLocations:
     add r0, r9
     ldr r0, [r0]
     cmp r0, r2
-; Return
-    pop r2, r4, pc
+
+    pop pc
 
 .pool
 .endautoregion

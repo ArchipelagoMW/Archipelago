@@ -33,6 +33,12 @@ ItemGetFlagFullHealth:
     mov r2, #0
 
 @@CheckKeyzer:
+    add r1, r4, r6
+    lsl r1, r1, #3
+    add r1, r3, r1
+    add r1, r12
+    ldrb r1, [r1]
+
     str r2, [r3]
     lsl r2, r1, #26
     lsr r2, r2, #31

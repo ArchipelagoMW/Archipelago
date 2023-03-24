@@ -95,7 +95,7 @@ unusedrom equ 0x0878F97C
 .region 0x0E010000-.
 
 ; Player's name, up to 16 characters
-Player_Name: .fill 16, 0
+PlayerName: .fill 16, 0
 
 ; 24 available level IDs, not all of which are used.
 @levels equ 6 * 4
