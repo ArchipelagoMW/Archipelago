@@ -2,7 +2,7 @@ map = "Pyramid map"
 
 # Entry Passage
 entry_passage = "Entry Passage"
-hall_of_hieroglyphs = "Hall of Heiroglyphs"
+hall_of_hieroglyphs = "Hall of Hieroglyphs"
 spoiled_rotten = "Spoiled Rotten"
 
 # Emerald Passage

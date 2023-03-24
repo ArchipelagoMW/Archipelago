@@ -139,16 +139,20 @@ def fill_items(rom: LocalRom, world: MultiWorld, player: int):
 
         if location.native_item:
             itemid = itemid & 0xFF
-            offset = 0x78F97C + locationid
-            rom.write_byte(offset, itemid)
+            if location.item.player != player:
+                itemid = itemid & 1 << 7
         else:
-            pass
+            itemid = 0xC1
+            
+        offset = 0x78F98C + locationid
+        rom.write_byte(offset, itemid)
 
 def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     patch_save_data(rom)
     fill_items(rom, world, player)
     skip_cutscenes(rom)
     improve_qol(rom)
+    rom.write_bytes(0x78F97C, bytes(world.player_name[player], "utf-8"))
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:

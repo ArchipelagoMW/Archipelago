@@ -23,7 +23,18 @@ unusedrom equ 0x0878F97C
 .definelabel Wario_ucReact, 0x3001898
 .definelabel WarioHeart, 0x3001910
 
+; Extends the existing box system to include full health boxes
 .definelabel HasFullHealthItem, unusedram + 0  ; byte
+
+; Items can be received one at a time w/o issue
+.definelabel IncomingItemID, unusedram + 1  ; byte
+
+.definelabel ReceivedItemCount, unusedram + 2  ; halfword
+.definelabel DeathlinkEnabled, unusedram + 4  ; byte
+
+.definelabel QueuedFullHealthItems, unusedram + 10  ; byte
+.definelabel QueuedDamageTraps, unusedram + 11  ; byte
+.definelabel QueuedFormTraps, unusedram + 12  ; byte
 
 ; Functions
 .definelabel m4aSongNumStart, 0x8001DA4
@@ -83,6 +94,9 @@ unusedrom equ 0x0878F97C
 .org unusedrom
 .region 0x0E010000-.
 
+; Player's name, up to 16 characters
+Player_Name: .fill 16, 0
+
 ; 24 available level IDs, not all of which are used.
 @levels equ 6 * 4
 
@@ -91,6 +105,7 @@ invalid_item equ 0xFF
 ; Maps locations to the 8-bit IDs of the items they contain.
 ; After Archipelago patches the ROM, the "invalid" value should only be in
 ; locations that don't exist
+.align 4
 ItemLocationTable:
     Jewel1LocationTable: .fill @levels, invalid_item
     Jewel2LocationTable: .fill @levels, invalid_item
@@ -98,7 +113,6 @@ ItemLocationTable:
     Jewel4LocationTable: .fill @levels, invalid_item
     CDLocationTable:     .fill @levels, invalid_item
     HealthLocationTable: .fill @levels, invalid_item
-
 
 ; Retrieve the item ID at the location specified in r0 in this level.
 ; Return the encoded ID in r0

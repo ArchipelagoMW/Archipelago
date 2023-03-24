@@ -17,7 +17,7 @@ GiveItem:
 
     ; TODO Archipelago items
 
-    lsr r1, r0, #7
+    lsr r1, r0, #6
     cmp r1, #0
     bne @@JunkItem
 
@@ -35,8 +35,8 @@ GiveItem:
     lsl r2, r0, #31-1
     lsr r2, r2, #31-1
 
-    ; Check bit 6 to determine CD/Jewel piece
-    lsr r3, r0, #6
+    ; Check bit 5 to determine CD/Jewel piece
+    lsr r3, r0, #5
     cmp r3, #0
     bne @@CD
 

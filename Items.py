@@ -17,12 +17,14 @@ class ItemData(typing.NamedTuple):
 # Items are encoded as 8-bit numbers as follows:
 #                   | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
 # Jewel pieces:     | 0   0   0 |  passage  | qdrnt |
-# CD:               | 0   1   0 |  passage  | level |
+# CD:               | 0   0   1 |  passage  | level |
 #
-# Full health item: | 1   0   0   0   0   0   0   0 |
-# Wario form trap:  | 1   0   0   1   0   0   0   0 |
-# Heart/Lightning:  | 1   0   1   0   0   0   0 | ? |
-# Coin:             | 1   0   1   1 |  denomination |
+# Full health item: | 0   1   0   0   0   0   0   0 |
+# Wario form trap:  | 0   1   0   1   0   0   0   0 |
+# Heart/Lightning:  | 0   1   1   0   0   0   0 | ? |
+# Coin:             | 0   1   1   1 |  denomination |
+# 
+# AP item:          | 1   1   0   0   0   0   0   1 |
 #
 # For jewel pieces:
 #  - passage = 0-5 for entry/emerald/ruby/topaz/sapphire/golden
@@ -47,7 +49,7 @@ def jewel_id(passage, quadrant):
     return item_id(passage << 2 | quadrant)
 
 def cd_id(track_no):
-    return item_id(1 << 6 | track_no + (1 << 2))
+    return item_id(1 << 5 | track_no + (1 << 2))
 
 def keyzer_id(level):
     return 1 << 4 | cd_id(level)
@@ -100,7 +102,7 @@ box_table = {
     ItemName.golden_pyramid_jewel.sw: ItemData(jewel_id(5, 2), True),
     ItemName.golden_pyramid_jewel.nw: ItemData(jewel_id(5, 3), True),
     # Full Health Item
-    ItemName.full_health: ItemData(item_id(0x80), False, 17),
+    ItemName.full_health: ItemData(item_id(0x40), False, 17),
 }
 
 event_table = {

@@ -39,7 +39,7 @@ SpawnRandomizedItemFromBox:
     
 ; For jewel pieces/CDs, the relevant locations are adjacent in memory
     ldr r1, =HasJewelPiece1
-    add r1, r1, r0
+    add r5, r1, r0
 
 ; Change opening animation if CD
     cmp r0, #4
@@ -48,7 +48,7 @@ SpawnRandomizedItemFromBox:
     b @@CheckLocation
 
 @@FullHealthBox:
-    ldr r1, =HasFullHealthItem
+    ldr r5, =HasFullHealthItem
     ldr r2, =zako_takara_box_Anm_11
     b @@SetAnimation
 
@@ -60,7 +60,12 @@ SpawnRandomizedItemFromBox:
     str r2, [r4, @oam_animation_pointer]
 
 @@CheckLocation:
-    ldrb r1, [r1]
+    bl GetItemAtLocation
+    lsr r0, r0, #31-6
+    cmp r0, #1  ; If it's your own junk item, always release
+    beq @@HasNotChecked
+
+    ldrb r1, [r5]
     cmp r1, #0
     beq @@HasNotChecked
 
@@ -134,8 +139,12 @@ LoadRandomItemAnimation:
     bl GetItemAtLocation
     mov r6, r0
 
+; AP items
+    cmp r6, #0xC1
+    beq @@APItem
+
 ; Junk items
-    lsr r0, r6, #7
+    lsr r0, r6, #6
     cmp r0, #0
     bne @@JunkItem
 
@@ -177,8 +186,11 @@ LoadRandomItemAnimation:
     b @@SetAnimation
 
 @@JunkItem:
-    ; cmp r6, #0x80
-    ; beq @@FullHealthItem
+    cmp r6, #0x40
+    beq @@FullHealthItem
+
+@@APItem:
+    ; TODO
 
 @@FullHealthItem:
     mov r6, #0x05
@@ -265,12 +277,12 @@ CollectRandomItem:
     mov r5, r0
 
 ; Junk items
-    lsr r0, r5, #7
+    lsr r0, r5, #6
     cmp r0, #0
     bne @@JunkItem
 
 ; Jewel/CD
-    lsr r1, r5, #6
+    lsr r1, r5, #5
     cmp r1, #0
     bne @@CD
 
@@ -280,6 +292,14 @@ CollectRandomItem:
 
 @@CD:
     ldr r0, =0x13C  ; a1
+    b @@SetCheckLocation
+
+@@JunkItem:
+    cmp r5, #0x40
+    bne @@SetCheckLocation
+
+; Full health item
+    bl FillWarioHealthBar
 
 @@SetCheckLocation:
     call_using r1, m4aSongNumStart
@@ -288,15 +308,6 @@ CollectRandomItem:
     mov r0, #1
     strb r0, [r6]
     b @@Return
-
-@@JunkItem:
-; Full health item
-    cmp r5, #0x80
-    beq @@FullHealthItem
-    b @@Return
-
-@@FullHealthItem:
-    bl FillWarioHealthBar
 
 @@Return:
     pop r4-r6, lr
