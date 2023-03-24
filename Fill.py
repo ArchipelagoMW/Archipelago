@@ -23,15 +23,27 @@ def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item]
 
 
 def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
-                     itempool: typing.List[Item], single_player_placement: bool = False, lock: bool = False,
+                     item_pool: typing.List[Item], single_player_placement: bool = False, lock: bool = False,
                      swap: bool = True, on_place: typing.Optional[typing.Callable[[Location], None]] = None,
-                     allow_partial: bool = False) -> None:
+                     allow_partial: bool = False, allow_excluded: bool = False) -> None:
+    """
+    :param world: Multiworld to be filled.
+    :param base_state: State assumed before fill.
+    :param locations: Locations to be filled with item_pool
+    :param item_pool: Items to fill into the locations
+    :param single_player_placement: if true, can speed up placement if everything belongs to a single player
+    :param lock: locations are set to locked as they are filled
+    :param swap: if true, swaps of already place items are done in the event of a dead end
+    :param on_place: callback that is called when a placement happens
+    :param allow_partial: only place what is possible. Remaining items will be in the item_pool list.
+    :param allow_excluded: if true and placement fails, it is re-attempted while ignoring excluded on Locations
+    """
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
 
     swapped_items: typing.Counter[typing.Tuple[int, str]] = Counter()
     reachable_items: typing.Dict[int, typing.Deque[Item]] = {}
-    for item in itempool:
+    for item in item_pool:
         reachable_items.setdefault(item.player, deque()).append(item)
 
     while any(reachable_items.values()) and locations:
@@ -39,9 +51,9 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
         items_to_place = [items.pop()
                           for items in reachable_items.values() if items]
         for item in items_to_place:
-            itempool.remove(item)
+            item_pool.remove(item)
         maximum_exploration_state = sweep_from_pool(
-            base_state, itempool + unplaced_items)
+            base_state, item_pool + unplaced_items)
 
         has_beaten_game = world.has_beaten_game(maximum_exploration_state)
 
@@ -111,7 +123,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
 
                                 reachable_items[placed_item.player].appendleft(
                                     placed_item)
-                                itempool.append(placed_item)
+                                item_pool.append(placed_item)
 
                                 break
 
@@ -133,6 +145,21 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             if on_place:
                 on_place(spot_to_fill)
 
+    if allow_excluded:
+        # check if partial fill is the result of excluded locations, in which case retry
+        excluded_locations = [
+            location for location in locations
+            if location.progress_type == location.progress_type.EXCLUDED and not location.item
+        ]
+        if excluded_locations:
+            for location in excluded_locations:
+                location.progress_type = location.progress_type.DEFAULT
+            fill_restrictive(world, base_state, excluded_locations, unplaced_items, single_player_placement, lock,
+                             swap, on_place, allow_partial, False)
+            for location in excluded_locations:
+                if not location.item:
+                    location.progress_type = location.progress_type.EXCLUDED
+
     if not allow_partial and len(unplaced_items) > 0 and len(locations) > 0:
         # There are leftover unplaceable items and locations that won't accept them
         if world.can_beat_game():
@@ -142,7 +169,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             raise FillError(f'No more spots to place {unplaced_items}, locations {locations} are invalid. '
                             f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
 
-    itempool.extend(unplaced_items)
+    item_pool.extend(unplaced_items)
 
 
 def remaining_fill(world: MultiWorld,
