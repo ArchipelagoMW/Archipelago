@@ -5,6 +5,8 @@ import logging
 import os
 import random
 import string
+import sys
+import types
 import urllib.parse
 import urllib.request
 from collections import Counter, ChainMap
@@ -637,9 +639,23 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                         ret.sprite_pool += [key] * int(value)
 
 
+def popup_bug_gui(type: BaseException, value: BaseException, traceback: types.TracebackType) -> None:
+    import tkinter.messagebox as message
+    from traceback import format_exc, format_exception, format_tb, format_list, format_stack, format_exception_only
+    message.showerror(
+        f"Generation Failed",
+        f"\n{type}: {value}" +
+        f"\nTraceback (most recent call last): \n{''.join(format_tb(traceback))}" +
+        f"Please attach log from {Utils.local_path('logs')}" +
+        f"\nand all used player files in a bug report."
+    )
+
+
 if __name__ == '__main__':
     import atexit
     confirmation = atexit.register(input, "Press enter to close.")
+    if not __debug__:
+        sys.excepthook = popup_bug_gui
     main()
     # in case of error-free exit should not need confirmation
     atexit.unregister(confirmation)
