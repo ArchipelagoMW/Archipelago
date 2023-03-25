@@ -12,7 +12,6 @@ import io
 import json
 import threading
 import subprocess
-import pkg_resources
 
 from collections.abc import Iterable
 from hashlib import sha3_512
@@ -22,12 +21,27 @@ from pathlib import Path
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 try:
     requirement = 'cx-Freeze>=6.14.7'
-    pkg_resources.require(requirement)
-    import cx_Freeze
-except pkg_resources.ResolutionError:
+    import pkg_resources
+    try:
+        pkg_resources.require(requirement)
+        install_cx_freeze = False
+    except pkg_resources.ResolutionError:
+        install_cx_freeze = True
+except ImportError:
+    install_cx_freeze = True
+    pkg_resources = None
+
+if install_cx_freeze:
+    # check if pip is available
+    try:
+        import pip
+    except ImportError:
+        raise RuntimeError("pip not available. Please install pip.")
+    # install and import cx_freeze
     if '--yes' not in sys.argv and '-y' not in sys.argv:
         input(f'Requirement {requirement} is not satisfied, press enter to install it')
     subprocess.call([sys.executable, '-m', 'pip', 'install', requirement, '--upgrade'])
+    import pkg_resources
     import cx_Freeze
 
 # .build only exists if cx-Freeze is the right version, so we have to update/install that first before this line
