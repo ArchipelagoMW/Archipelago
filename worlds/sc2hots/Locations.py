@@ -21,63 +21,66 @@ class LocationData(NamedTuple):
 def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tuple[LocationData, ...]:
     # Note: rules which are ended with or True are rules identified as needed later when restricted units is an option
     logic_level = get_option_value(multiworld, player, 'required_tactics')
+    kerriganless = get_option_value(multiworld, player, 'kerriganless') > 0
     location_table: List[LocationData] = [
         LocationData("Lab Rat", "Lab Rat: Victory", SC2HOTS_LOC_ID_OFFSET + 100),
         LocationData("Lab Rat", "Lab Rat: Gather Minerals", SC2HOTS_LOC_ID_OFFSET + 101),
         LocationData("Lab Rat", "Lab Rat: South Zergling Group", SC2HOTS_LOC_ID_OFFSET + 102),
         LocationData("Lab Rat", "Lab Rat: East Zergling Group", SC2HOTS_LOC_ID_OFFSET + 103),
         LocationData("Lab Rat", "Lab Rat: West Zergling Group", SC2HOTS_LOC_ID_OFFSET + 104),
-        LocationData("Back in the Saddle", "Back in the Saddle: Victory", SC2HOTS_LOC_ID_OFFSET + 200),
-        LocationData("Back in the Saddle", "Back in the Saddle: Defend the Tram", SC2HOTS_LOC_ID_OFFSET + 201),
+        LocationData("Back in the Saddle", "Back in the Saddle: Victory", SC2HOTS_LOC_ID_OFFSET + 200,
+                     lambda state: state._sc2hots_has_basic_kerrigan(multiworld, player) or kerriganless),
+        LocationData("Back in the Saddle", "Back in the Saddle: Kinetic Blast", SC2HOTS_LOC_ID_OFFSET + 202),
+        LocationData("Back in the Saddle", "Back in the Saddle: Crushing Grip", SC2HOTS_LOC_ID_OFFSET + 203),
+        LocationData("Back in the Saddle", "Back in the Saddle: Defend the Tram", SC2HOTS_LOC_ID_OFFSET + 201,
+                     lambda state: state._sc2hots_has_basic_kerrigan(multiworld, player) or kerriganless),
         LocationData("Rendezvous", "Rendezvous: Victory", SC2HOTS_LOC_ID_OFFSET + 300,
-                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
+                     lambda state: state._sc2hots_has_low_tech(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player)),
         LocationData("Rendezvous", "Rendezvous: Right Queen", SC2HOTS_LOC_ID_OFFSET + 301,
-                     lambda state: state._sc2hots_has_common_unit(multiworld, player)),
+                     lambda state: state._sc2hots_has_low_tech(multiworld, player)),
         LocationData("Rendezvous", "Rendezvous: Center Queen", SC2HOTS_LOC_ID_OFFSET + 302,
-                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
+                     lambda state: state._sc2hots_has_low_tech(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player)),
         LocationData("Rendezvous", "Rendezvous: Left Queen", SC2HOTS_LOC_ID_OFFSET + 303,
-                     lambda state: state._sc2hots_has_common_unit(multiworld, player)),
+                     lambda state: state._sc2hots_has_low_tech(multiworld, player)),
         LocationData("Harvest of Screams", "Harvest of Screams: Victory", SC2HOTS_LOC_ID_OFFSET + 400,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player)),
         LocationData("Harvest of Screams", "Harvest of Screams: First Ursadon Matriarch", SC2HOTS_LOC_ID_OFFSET + 401),
         LocationData("Harvest of Screams", "Harvest of Screams: North Ursadon Matriarch", SC2HOTS_LOC_ID_OFFSET + 402,
-                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player)),
         LocationData("Harvest of Screams", "Harvest of Screams: West Ursadon Matriarch", SC2HOTS_LOC_ID_OFFSET + 403,
-                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player)),
         LocationData("Shoot the Messenger", "Shoot the Messenger: Victory", SC2HOTS_LOC_ID_OFFSET + 500,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and
                                    state._sc2hots_has_good_antiair(multiworld, player)),
         LocationData("Shoot the Messenger", "Shoot the Messenger: East Stasis Chamber", SC2HOTS_LOC_ID_OFFSET + 501,
-                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and state._sc2hots_has_minimal_antiair(multiworld, player)
+                                    or logic_level > 0),
         LocationData("Shoot the Messenger", "Shoot the Messenger: Center Stasis Chamber", SC2HOTS_LOC_ID_OFFSET + 502,
-                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and state._sc2hots_has_minimal_antiair(multiworld, player)
+                                    or logic_level > 0),
         LocationData("Shoot the Messenger", "Shoot the Messenger: West Stasis Chamber", SC2HOTS_LOC_ID_OFFSET + 503,
-                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and state._sc2hots_has_minimal_antiair(multiworld, player)
+                                    or logic_level > 0),
         LocationData("Enemy Within", "Enemy Within: Victory", SC2HOTS_LOC_ID_OFFSET + 600),
+        LocationData("Enemy Within", "Enemy Within: First Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 602),
+        LocationData("Enemy Within", "Enemy Within: Second Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 603),
+        LocationData("Enemy Within", "Enemy Within: Third Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 604),
         LocationData("Enemy Within", "Enemy Within: Infest Giant Ursadon", SC2HOTS_LOC_ID_OFFSET + 601),
         LocationData("Domination", "Domination: Victory", SC2HOTS_LOC_ID_OFFSET + 700,
-                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player)),
+        LocationData("Domination", "Domination: Repel Zagara", SC2HOTS_LOC_ID_OFFSET + 703),
         LocationData("Domination", "Domination: Center Infested Command Center", SC2HOTS_LOC_ID_OFFSET + 701,
-                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player)),
         LocationData("Domination", "Domination: North Infested Command Center", SC2HOTS_LOC_ID_OFFSET + 702,
-                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player)),
         LocationData("Fire in the Sky", "Fire in the Sky: Victory", SC2HOTS_LOC_ID_OFFSET + 800,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player) and
                                    state._sc2hots_can_spread_creep(multiworld, player)),
-        LocationData("Fire in the Sky", "Fire in the Sky: West Biomass", SC2HOTS_LOC_ID_OFFSET + 801,
-                     lambda state: state._sc2hots_has_common_unit(multiworld, player) or logic_level > 0),
+        LocationData("Fire in the Sky", "Fire in the Sky: West Biomass", SC2HOTS_LOC_ID_OFFSET + 801),
         LocationData("Fire in the Sky", "Fire in the Sky: North Biomass", SC2HOTS_LOC_ID_OFFSET + 802,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player) and
@@ -128,15 +131,15 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Infested", "Infested: East Science Facility", SC2HOTS_LOC_ID_OFFSET + 1301,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player) and
-                                   (logic_level > 0 or state._sc2hots_can_spread_creep(multiworld, player))),
+                                   state._sc2hots_can_spread_creep(multiworld, player)),
         LocationData("Infested", "Infested: Center Science Facility", SC2HOTS_LOC_ID_OFFSET + 1302,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player) and
-                                   (logic_level > 0 or state._sc2hots_can_spread_creep(multiworld, player))),
+                                   state._sc2hots_can_spread_creep(multiworld, player)),
         LocationData("Infested", "Infested: West Science Facility", SC2HOTS_LOC_ID_OFFSET + 1303,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player) and
-                                   (logic_level > 0 or state._sc2hots_can_spread_creep(multiworld, player))),
+                                   state._sc2hots_can_spread_creep(multiworld, player)),
         LocationData("Hand of Darkness", "Hand of Darkness: Victory", SC2HOTS_LOC_ID_OFFSET + 1400,
                      lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player)),
@@ -148,48 +151,43 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                                    state._sc2hots_has_minimal_antiair(multiworld, player)),
         LocationData("Phantoms of the Void", "Phantoms of the Void: Victory", SC2HOTS_LOC_ID_OFFSET + 1500,
                      lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+                                   (state._sc2hots_has_good_antiair(multiworld, player) or logic_level > 0)),
         LocationData("Phantoms of the Void", "Phantoms of the Void: Northwest Crystal", SC2HOTS_LOC_ID_OFFSET + 1501,
                      lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+                                   (state._sc2hots_has_good_antiair(multiworld, player) or logic_level > 0)),
         LocationData("Phantoms of the Void", "Phantoms of the Void: Northeast Crystal", SC2HOTS_LOC_ID_OFFSET + 1502,
                      lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
-        LocationData("Phantoms of the Void", "Phantoms of the Void: South Crystal", SC2HOTS_LOC_ID_OFFSET + 1503,
-                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+                                   (state._sc2hots_has_good_antiair(multiworld, player) or logic_level > 0)),
+        LocationData("Phantoms of the Void", "Phantoms of the Void: South Crystal", SC2HOTS_LOC_ID_OFFSET + 1503),
         LocationData("With Friends Like These", "With Friends Like These: Victory", SC2HOTS_LOC_ID_OFFSET + 1600),
         LocationData("With Friends Like These", "With Friends Like These: Pirate Capital Ship", SC2HOTS_LOC_ID_OFFSET + 1601),
         LocationData("With Friends Like These", "With Friends Like These: First Mineral Patch", SC2HOTS_LOC_ID_OFFSET + 1602),
         LocationData("With Friends Like These", "With Friends Like These: Second Mineral Patch", SC2HOTS_LOC_ID_OFFSET + 1603),
         LocationData("With Friends Like These", "With Friends Like These: Third Mineral Patch", SC2HOTS_LOC_ID_OFFSET + 1604),
         LocationData("Conviction", "Conviction: Victory", SC2HOTS_LOC_ID_OFFSET + 1700,
-                     lambda state: state._sc2hots_has_two_kerrigan_actives(multiworld, player) or
-                                   get_option_value(multiworld, player, 'kerriganless') > 0),
+                     lambda state: state._sc2hots_has_two_kerrigan_actives(multiworld, player) or kerriganless),
         LocationData("Conviction", "Conviction: First Secret Documents", SC2HOTS_LOC_ID_OFFSET + 1701,
-                     lambda state: state._sc2hots_has_two_kerrigan_actives(multiworld, player) or
-                                   get_option_value(multiworld, player, 'kerriganless') > 0),
+                     lambda state: state._sc2hots_has_two_kerrigan_actives(multiworld, player) or kerriganless),
+        LocationData("Conviction", "Conviction: Power Coupling", SC2HOTS_LOC_ID_OFFSET + 1703,
+                     lambda state: state._sc2hots_has_two_kerrigan_actives(multiworld, player) or kerriganless),
         LocationData("Conviction", "Conviction: Second Secret Documents", SC2HOTS_LOC_ID_OFFSET + 1702,
-                     lambda state: state._sc2hots_has_two_kerrigan_actives(multiworld, player) or
-                                   get_option_value(multiworld, player, 'kerriganless') > 0),
+                     lambda state: state._sc2hots_has_two_kerrigan_actives(multiworld, player) or kerriganless),
         LocationData("Planetfall", "Planetfall: Victory", SC2HOTS_LOC_ID_OFFSET + 1800,
                      lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
         LocationData("Planetfall", "Planetfall: East Gate", SC2HOTS_LOC_ID_OFFSET + 1801,
                      lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
         LocationData("Planetfall", "Planetfall: Northeast Gate", SC2HOTS_LOC_ID_OFFSET + 1802,
                      lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
         LocationData("Planetfall", "Planetfall: North Gate", SC2HOTS_LOC_ID_OFFSET + 1803,
                      lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
         LocationData("Death From Above", "Death From Above: Victory", SC2HOTS_LOC_ID_OFFSET + 1900,
                      lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
                                    state._sc2hots_has_good_antiair(multiworld, player)),
-        LocationData("Death From Above", "Death From Above: First Power Link", SC2HOTS_LOC_ID_OFFSET + 1901,
-                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
-                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("Death From Above", "Death From Above: First Power Link", SC2HOTS_LOC_ID_OFFSET + 1901),
         LocationData("Death From Above", "Death From Above: Second Power Link", SC2HOTS_LOC_ID_OFFSET + 1902,
                      lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
                                    state._sc2hots_has_good_antiair(multiworld, player)),

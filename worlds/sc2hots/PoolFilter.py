@@ -1,7 +1,7 @@
 from typing import Callable, Dict, List, Set
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
 from .Items import item_table
-from .MissionTables import no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list,\
+from .MissionTables import no_build_regions_list, starter_regions_list, easy_regions_list, medium_regions_list, hard_regions_list,\
     mission_orders, MissionInfo, alt_final_mission_locations, MissionPools
 from .Options import get_option_value
 from .LogicMixin import SC2HotSLogic
@@ -17,29 +17,6 @@ UPGRADABLE_ITEMS = [
     "Zergling", "Roach", "Hydralisk", "Baneling", "Mutalisk", "Swarm Host", "Ultralisk"
 ]
 
-KERRIGAN_ACTIVES = [
-    {"Kinetic Blast (Kerrigan Tier 1)", "Leaping Strike (Kerrigan Tier 1)"},
-    {"Crushing Grip (Kerrigan Tier 2)", "Psionic Shift (Kerrigan Tier 2)"},
-    set(),
-    {"Wild Mutation (Kerrigan Tier 4)", "Spawn Banelings (Kerrigan Tier 4)", "Mend (Kerrigan Tier 4)"},
-    set(),
-    set(),
-    {"Apocalypse (Kerrigan Tier 7)", "Spawn Leviathan (Kerrigan Tier 7)", "Drop-Pods (Kerrigan Tier 7)"},
-]
-KERRIGAN_PASSIVES = [
-    {"Heroic Fortitude (Kerrigan Tier 1)"},
-    {"Chain Reaction (Kerrigan Tier 2)"},
-    {"Zergling Reconstitution (Kerrigan Tier 3)", "Improved Overlords (Kerrigan Tier 3)", "Automated Extractors (Kerrigan Tier 3)"},
-    set(),
-    {"Twin Drones (Kerrigan Tier 5)", "Malignant Creep (Kerrigan Tier 5)", "Vespene Efficiency (Kerrigan Tier 5)"},
-    {"Infest Broodlings (Kerrigan Tier 6)", "Fury (Kerrigan Tier 6)", "Ability Efficiency (Kerrigan Tier 6)"},
-    set(),
-]
-KERRIGAN_ONLY_PASSIVES = {
-    "Heroic Fortitude (Kerrigan Tier 1)", "Chain Reaction (Kerrigan Tier 2)",
-    "Infest Broodlings (Kerrigan Tier 6)", "Fury (Kerrigan Tier 6)", "Ability Efficiency (Kerrigan Tier 6)"
-}
-
 # BARRACKS_UNITS = {"Marine", "Medic", "Firebat", "Marauder", "Reaper", "Ghost", "Spectre"}
 # FACTORY_UNITS = {"Hellion", "Vulture", "Goliath", "Diamondback", "Siege Tank", "Thor", "Predator"}
 # STARPORT_UNITS = {"Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "Hercules", "Science Vessel", "Raven"}
@@ -54,11 +31,13 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
 
     mission_order_type = get_option_value(multiworld, player, "mission_order")
     shuffle_no_build = get_option_value(multiworld, player, "shuffle_no_build")
+    kerriganless = get_option_value(multiworld, player, "kerriganless") > 0
+    logic_level = get_option_value(multiworld, player, "required_tactics")
     # shuffle_protoss = get_option_value(multiworld, player, "shuffle_protoss")
     excluded_missions = get_option_value(multiworld, player, "excluded_missions")
     mission_count = len(mission_orders[mission_order_type]) - 1
     mission_pools = {
-        MissionPools.STARTER: no_build_regions_list[:],
+        MissionPools.STARTER: starter_regions_list[:],
         MissionPools.EASY: easy_regions_list[:],
         MissionPools.MEDIUM: medium_regions_list[:],
         MissionPools.HARD: hard_regions_list[:],
@@ -93,21 +72,22 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
         if mission_name in mission_pools[current_pool]:
             mission_pools[current_pool].remove(mission_name)
             mission_pools[new_pool].append(mission_name)
-    # This is a no-build mission but requires Kerrigan abilities
-    move_mission("Conviction", MissionPools.STARTER, MissionPools.EASY)
-    if not get_option_value(multiworld, player, 'shuffle_no_build'):
-        # Replacing No Build missions with Easy missions
+    if len(mission_pools[MissionPools.STARTER]) < 2 and not kerriganless or logic_level > 0:
+        # Conditionally moving Easy missions to Starter
         move_mission("Harvest of Screams", MissionPools.EASY, MissionPools.STARTER)
-        move_mission("Lab Rat", MissionPools.EASY, MissionPools.STARTER)
-        # Pushing extra Normal missions to Easy
-        move_mission("Domination", MissionPools.MEDIUM, MissionPools.EASY)
-        move_mission("Planetfall", MissionPools.MEDIUM, MissionPools.EASY)
-        # Additional changes on Advanced Tactics
-        if get_option_value(multiworld, player, "required_tactics") > 0:
-            move_mission("Fire in the Sky", MissionPools.HARD, MissionPools.STARTER)
-            move_mission("Old Soldiers", MissionPools.MEDIUM, MissionPools.STARTER)
-            move_mission("Waking the Ancient", MissionPools.HARD, MissionPools.MEDIUM)
-            move_mission("Shoot the Messenger", MissionPools.MEDIUM, MissionPools.EASY)
+        move_mission("Domination", MissionPools.EASY, MissionPools.STARTER)
+    if logic_level > 0:
+        # Easy -> Starter
+        move_mission("Shoot the Messenger", MissionPools.EASY, MissionPools.STARTER)
+        # Medium -> Easy
+        for mission in ("Fire in the Sky", "Old Soldiers", "Waking the Ancient", "Conviction"):
+            move_mission(mission, MissionPools.MEDIUM, MissionPools.EASY)
+        # Hard -> Medium
+        move_mission("Phantoms of the Void", MissionPools.HARD, MissionPools.MEDIUM)
+        if not kerriganless:
+            # Additional starter missions assuming player starts with minimal anti-air
+            move_mission("Fire in the Sky", MissionPools.EASY, MissionPools.STARTER)
+            move_mission("Waking the Ancient", MissionPools.EASY, MissionPools.STARTER)
 
     return mission_pools
 
@@ -234,7 +214,9 @@ class ValidInventory:
         # self._sc2wol_has_protoss_common_units = lambda world, player: SC2HotSLogic._sc2wol_has_protoss_common_units(self, world, player)
         # self._sc2wol_has_protoss_medium_units = lambda world, player: SC2HotSLogic._sc2wol_has_protoss_medium_units(self, world, player)
         # self._sc2wol_has_mm_upgrade = lambda world, player: SC2HotSLogic._sc2wol_has_mm_upgrade(self, world, player)
+        self._sc2hots_has_basic_kerrigan = lambda world, player: SC2HotSLogic._sc2hots_has_basic_kerrigan(self, world, player)
         self._sc2hots_has_two_kerrigan_actives = lambda world, player: SC2HotSLogic._sc2hots_has_two_kerrigan_actives(self, world, player)
+        self._sc2hots_has_low_tech = lambda world, player: SC2HotSLogic._sc2hots_has_low_tech(self, world, player)
         self._sc2hots_cleared_missions = lambda world, player, number: SC2HotSLogic._sc2hots_cleared_missions(self, world, player, number)
 
     def __init__(self, multiworld: MultiWorld, player: int, item_pool: List[Item],

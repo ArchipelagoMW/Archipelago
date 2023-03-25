@@ -11,10 +11,10 @@ from enum import IntEnum
 #                      "Shatter the Sky"]
 
 no_build_regions_list = ["Back in the Saddle", "Enemy Within", "Supreme", "With Friends Like These", "Conviction"]
-easy_regions_list = ["Lab Rat", "Harvest of Screams", "Rendezvous", "Domination"]
-medium_regions_list = ["Shoot the Messenger", "Old Soldiers", "Infested", "Hand of Darkness", "Planetfall",
-                       "Fire in the Sky"]
-hard_regions_list = ["Death From Above", "Waking the Ancient", "The Crucible", "Phantoms of the Void"]
+starter_regions_list = ["Lab Rat", "Back in the Saddle", "Enemy Within", "With Friends Like These"]
+easy_regions_list = ["Rendezvous", "Harvest of Screams", "Shoot the Messenger", "Domination"]
+medium_regions_list = ["Fire in the Sky", "Old Soldiers", "Waking the Ancient", "The Crucible", "Supreme", "Infested", "Conviction"]
+hard_regions_list = ["Hand of Darkness", "Phantoms of the Void", "Planetfall", "Death From Above"]
 
 class MissionPools(IntEnum):
     STARTER = 0
@@ -46,23 +46,23 @@ class FillMission(NamedTuple):
 vanilla_shuffle_order = [
     FillMission(MissionPools.STARTER, [-1], "Umoja", completion_critical=True),
     FillMission(MissionPools.EASY, [0], "Umoja", completion_critical=True),
-    FillMission(MissionPools.EASY, [1], "Umoja", completion_critical=True),
+    FillMission(MissionPools.EASY, [1], "Umoja", completion_critical=True, removal_priority=1),
     FillMission(MissionPools.EASY, [2], "Kaldir", completion_critical=True),
-    FillMission(MissionPools.MEDIUM, [3], "Kaldir", completion_critical=True, removal_priority=1),
+    FillMission(MissionPools.MEDIUM, [3], "Kaldir", completion_critical=True, removal_priority=2),
     FillMission(MissionPools.MEDIUM, [4], "Kaldir", completion_critical=True),
     FillMission(MissionPools.EASY, [2], "Char", completion_critical=True),
-    FillMission(MissionPools.MEDIUM, [6], "Char", completion_critical=True, removal_priority=2),
+    FillMission(MissionPools.MEDIUM, [6], "Char", completion_critical=True, removal_priority=3),
     FillMission(MissionPools.MEDIUM, [7], "Char", completion_critical=True),
     FillMission(MissionPools.MEDIUM, [5,8], "Zerus", completion_critical=True, or_requirements=True),
-    FillMission(MissionPools.MEDIUM, [9], "Zerus", completion_critical=True, removal_priority=3),
+    FillMission(MissionPools.MEDIUM, [9], "Zerus", completion_critical=True, removal_priority=4),
     FillMission(MissionPools.MEDIUM, [10], "Zerus", completion_critical=True),
     FillMission(MissionPools.MEDIUM, [5, 8, 11], "Skygeirr Station", completion_critical=True),
-    FillMission(MissionPools.HARD, [12], "Skygeirr Station", completion_critical=True, removal_priority=4),
+    FillMission(MissionPools.HARD, [12], "Skygeirr Station", completion_critical=True, removal_priority=5),
     FillMission(MissionPools.HARD, [13], "Skygeirr Station", completion_critical=True),
     FillMission(MissionPools.MEDIUM, [5, 8, 11], "Dominion Space", completion_critical=True),
     FillMission(MissionPools.HARD, [15], "Dominion Space", completion_critical=True),
     FillMission(MissionPools.HARD, [14,16], "Korhal", completion_critical=True),
-    FillMission(MissionPools.HARD, [17], "Korhal", completion_critical=True, removal_priority=5),
+    FillMission(MissionPools.HARD, [17], "Korhal", completion_critical=True),
     FillMission(MissionPools.FINAL, [18], "Korhal", completion_critical=True),
     
     # FillMission(MissionPools.STARTER, [-1], "Mar Sara", completion_critical=True),
@@ -267,6 +267,8 @@ starting_mission_locations = {
     "Lab Rat": "Lab Rat: Gather Minerals",
     "Back in the Saddle": "Back in the Saddle: Victory",
     "Harvest of Screams": "Harvest of Screams: First Ursadon Matriarch",
+    "Shoot the Messenger": "Shoot the Messenger: Center Stasis Chamber",
+    "Domination": "Domination: Repel Zagara",
     "Fire in the Sky": "Fire in the Sky: West Biomass",
     "Old Soldiers": "Old Soldiers: Get Nuked",
     "Enemy Within": "Enemy Within: Victory",

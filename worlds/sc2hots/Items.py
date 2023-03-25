@@ -29,7 +29,7 @@ item_table = {
     "Swarm Queen": ItemData(1 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 1, classification=ItemClassification.progression),
     "Roach": ItemData(2 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 2, classification=ItemClassification.progression),
     "Hydralisk": ItemData(3 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 3, classification=ItemClassification.progression),
-    "Baneling": ItemData(4 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 4, classification=ItemClassification.progression),
+    "Baneling": ItemData(4 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 4, classification=ItemClassification.progression, parent_item="Zergling"),
     "Aberration": ItemData(5 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 5, classification=ItemClassification.progression),
     "Mutalisk": ItemData(6 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 6, classification=ItemClassification.progression),
     "Swarm Host": ItemData(7 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 7, classification=ItemClassification.progression),
@@ -149,23 +149,23 @@ item_table = {
     # "330mm Barrage Cannon (Thor)": ItemData(324 + SC2HOTS_ITEM_ID_OFFSET, "Armory 2", 24, classification=ItemClassification.filler, parent_item="Thor"),
     # "Immortality Protocol (Thor)": ItemData(325 + SC2HOTS_ITEM_ID_OFFSET, "Armory 2", 25, classification=ItemClassification.filler, parent_item="Thor"),
 
-    "Kinetic Blast (Kerrigan Tier 1)": ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 0),
-    "Heroic Fortitude (Kerrigan Tier 1)": ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 1, classification=ItemClassification.filler),
-    "Leaping Strike (Kerrigan Tier 1)": ItemData(402 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 2),
-    "Crushing Grip (Kerrigan Tier 2)": ItemData(403 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 3),
-    "Chain Reaction (Kerrigan Tier 2)": ItemData(404 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 4),
-    "Psionic Shift (Kerrigan Tier 2)": ItemData(405 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 5),
+    "Kinetic Blast (Kerrigan Tier 1)": ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 0, classification=ItemClassification.progression),
+    "Heroic Fortitude (Kerrigan Tier 1)": ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 1, classification=ItemClassification.progression),
+    "Leaping Strike (Kerrigan Tier 1)": ItemData(402 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 2, classification=ItemClassification.progression),
+    "Crushing Grip (Kerrigan Tier 2)": ItemData(403 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 3, classification=ItemClassification.progression),
+    "Chain Reaction (Kerrigan Tier 2)": ItemData(404 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 4, classification=ItemClassification.progression),
+    "Psionic Shift (Kerrigan Tier 2)": ItemData(405 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 5, classification=ItemClassification.progression),
     "Zergling Reconstitution (Kerrigan Tier 3)": ItemData(406 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 6, classification=ItemClassification.filler),
     "Improved Overlords (Kerrigan Tier 3)": ItemData(407 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 7),
-    "Automated Extractors (Kerrigan Tier 3)": ItemData(408 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 8, classification=ItemClassification.filler),
+    "Automated Extractors (Kerrigan Tier 3)": ItemData(408 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 8),
     "Wild Mutation (Kerrigan Tier 4)": ItemData(409 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 9, classification=ItemClassification.progression),
     "Spawn Banelings (Kerrigan Tier 4)": ItemData(410 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 10, classification=ItemClassification.progression),
     "Mend (Kerrigan Tier 4)": ItemData(411 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 11, classification=ItemClassification.progression),
     "Twin Drones (Kerrigan Tier 5)": ItemData(412 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 12),
     "Malignant Creep (Kerrigan Tier 5)": ItemData(413 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 13),
     "Vespene Efficiency (Kerrigan Tier 5)": ItemData(414 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 14),
-    "Infest Broodlings (Kerrigan Tier 6)": ItemData(415 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 15, classification=ItemClassification.filler),
-    "Fury (Kerrigan Tier 6)": ItemData(416 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 16),
+    "Infest Broodlings (Kerrigan Tier 6)": ItemData(415 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 15, classification=ItemClassification.progression),
+    "Fury (Kerrigan Tier 6)": ItemData(416 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 16, classification=ItemClassification.progression),
     "Ability Efficiency (Kerrigan Tier 6)": ItemData(417 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 17),
     "Apocalypse (Kerrigan Tier 7)": ItemData(418 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 18, classification=ItemClassification.progression),
     "Spawn Leviathan (Kerrigan Tier 7)": ItemData(419 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 19, classification=ItemClassification.progression),
@@ -241,6 +241,7 @@ item_table = {
 # }
 basic_units = {
     'Zergling',
+    'Swarm Queen',
     'Roach',
     'Hydralisk'
 }
@@ -253,8 +254,7 @@ basic_units = {
 # })
 advanced_basic_units = basic_units.union({
     'Infestor',
-    'Aberration',
-    'Swarm Queen'
+    'Aberration'
 })
 
 
