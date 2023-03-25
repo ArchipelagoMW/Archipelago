@@ -106,60 +106,57 @@ def setup_events(player: int, locked_locations: typing.List[str], location_cache
 
 
 def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
-    excluded_items: Set[str] = set()
-
+    excluded_items: Set[str] = set(get_option_value(multiworld, player, 'excluded_items'))
+    for item in multiworld.precollected_items[player]:
+        excluded_items.add(item.name)
+    locked_items: Set[str] = set(get_option_value(multiworld, player, 'locked_items'))
     # pick a random mutation & strain for each unit and exclude the rest
     mutation_count = get_option_value(multiworld, player, "include_mutations")
     strain_count = get_option_value(multiworld, player, "include_strains")
+
+    def smart_exclude(item_choices: Set[str], choices_to_keep: int):
+        expected_choices = len(item_choices)
+        if expected_choices == 0:
+            return
+        item_choices = set(item_choices)
+        excluded_choices = item_choices.intersection(excluded_items)
+        item_choices.difference_update(excluded_choices)
+        item_choices.difference_update(locked_items)
+        candidates = sorted(item_choices)
+        exclude_amount = min(expected_choices - choices_to_keep - len(excluded_choices), len(candidates))
+        if exclude_amount > 0:
+            excluded_items.update(multiworld.random.sample(candidates, exclude_amount))
+
     for name in UPGRADABLE_ITEMS:
-        choices = [item for item in item_table if item_table[item].parent_item == name and item_table[item].type == "Mutation"]
-        for _ in range(mutation_count):
-                choices.remove(multiworld.random.choice(choices))
-        excluded_items.update(choices)
-        choices = [item for item in item_table if item_table[item].parent_item == name and item_table[item].type == "Strain"]
-        for _ in range(strain_count):
-                choices.remove(multiworld.random.choice(choices))
-        excluded_items.update(choices)
+        mutations = {child_name for child_name, item in item_table.items()
+                   if item.parent_item == name and item.type == "Mutation"}
+        smart_exclude(mutations, mutation_count)
+        strains = {child_name for child_name, item in item_table.items()
+                   if item.parent_item == name and item.type == "Strain" and child_name not in excluded_items}
+        smart_exclude(strains, strain_count)
 
     kerriganless = get_option_value(multiworld, player, "kerriganless")
     # no Kerrigan & remove all passives => remove all abilities
     if kerriganless == 2:
         for tier in range(7):
-            abilities = KERRIGAN_ACTIVES[tier].union(KERRIGAN_PASSIVES[tier])
-            excluded_items.update(abilities)
+            smart_exclude(KERRIGAN_ACTIVES[tier].union(KERRIGAN_PASSIVES[tier]), 0)
     else:
         # no Kerrigan, but keep non-Kerrigan passives
         if kerriganless == 1:
-            excluded_items.update(KERRIGAN_ONLY_PASSIVES)
+            smart_exclude(KERRIGAN_ONLY_PASSIVES, 0)
             for tier in range(7):
-                excluded_items.update(KERRIGAN_ACTIVES[tier])
+                smart_exclude(KERRIGAN_ACTIVES[tier], 0)
         # pick a random ability per tier and remove all others
         if get_option_value(multiworld, player, "include_all_kerrigan_abilities") == 0:
             for tier in range(7):
-                choices = set()
                 # ignore active abilities if Kerrigan is off
                 if kerriganless == 1:
-                    choices = sorted(KERRIGAN_PASSIVES[tier])
-                    if len(choices) == 0:
-                        continue
+                    smart_exclude(KERRIGAN_PASSIVES[tier], 0)
                 else:
-                    choices = sorted(KERRIGAN_ACTIVES[tier].union(KERRIGAN_PASSIVES[tier]))
-                choices.remove(multiworld.random.choice(choices))
-                excluded_items.update(choices)
-        elif kerriganless == 0: # if Kerrigan exists, pick a random active ability per tier and remove the other active abilities
+                    smart_exclude(KERRIGAN_ACTIVES[tier].union(KERRIGAN_PASSIVES[tier]), 1)
+        elif kerriganless == 0:  # if Kerrigan exists, pick a random active ability per tier and remove the other active abilities
             for tier in range(7):
-                choices = sorted(KERRIGAN_ACTIVES[tier])
-                if len(choices) == 0:
-                    continue
-                choices.remove(multiworld.random.choice(choices))
-                excluded_items.update(choices)
-
-    for item in multiworld.precollected_items[player]:
-        excluded_items.add(item.name)
-
-    excluded_items_option = getattr(multiworld, 'excluded_items', [])
-
-    excluded_items.update(excluded_items_option[player].value)
+                smart_exclude(KERRIGAN_ACTIVES[tier], 1)
 
     return excluded_items
 
