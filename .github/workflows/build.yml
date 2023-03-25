@@ -94,6 +94,9 @@ jobs:
           echo "APPIMAGE_NAME=$APPIMAGE_NAME" >> $GITHUB_ENV
           echo "TAR_NAME=$TAR_NAME" >> $GITHUB_ENV
       # - copy code above to release.yml -
+      - name: Build Again
+        run: |
+          python setup.py build_exe --yes
       - name: Store AppImage
         uses: actions/upload-artifact@v3
         with:
