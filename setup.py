@@ -29,7 +29,7 @@ try:
         install_cx_freeze = True
 except ImportError:
     install_cx_freeze = True
-    pkg_resources = None
+    pkg_resources = None  # type: ignore [assignment]
 
 if install_cx_freeze:
     # check if pip is available
@@ -134,6 +134,7 @@ def download_SNI():
         print(f"No SNI found for system spec {platform_name} {machine_name}")
 
 
+signtool: typing.Optional[str]
 if os.path.exists("X:/pw.txt"):
     print("Using signtool")
     with open("X:/pw.txt", encoding="utf-8-sig") as f:
@@ -158,7 +159,7 @@ exes = [
         target_name=c.frozen_name + (".exe" if is_windows else ""),
         icon=icon_paths[c.icon],
         base="Win32GUI" if is_windows and not c.cli else None
-    ) for c in components if c.script_name
+    ) for c in components if c.script_name and c.frozen_name
 ]
 
 extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml", "SNI"]
@@ -399,7 +400,8 @@ class AppImageCommand(setuptools.Command):
     yes: bool
 
     def write_desktop(self):
-        desktop_filename = self.app_dir / f'{self.app_id}.desktop'
+        assert self.app_dir, "Invalid app_dir"
+        desktop_filename = self.app_dir / f"{self.app_id}.desktop"
         with open(desktop_filename, 'w', encoding="utf-8") as f:
             f.write("\n".join((
                 "[Desktop Entry]",
@@ -413,7 +415,8 @@ class AppImageCommand(setuptools.Command):
         desktop_filename.chmod(0o755)
 
     def write_launcher(self, default_exe: Path):
-        launcher_filename = self.app_dir / f'AppRun'
+        assert self.app_dir, "Invalid app_dir"
+        launcher_filename = self.app_dir / "AppRun"
         with open(launcher_filename, 'w', encoding="utf-8") as f:
             f.write(f"""#!/bin/sh
 exe="{default_exe}"
@@ -435,6 +438,7 @@ $APPDIR/$exe "$@"
         launcher_filename.chmod(0o755)
 
     def install_icon(self, src: Path, name: typing.Optional[str] = None, symlink: typing.Optional[Path] = None):
+        assert self.app_dir, "Invalid app_dir"
         try:
             from PIL import Image
         except ModuleNotFoundError:
@@ -516,8 +520,12 @@ def find_libs(*args: str) -> typing.Sequence[typing.Tuple[str, str]]:
         return (lib, lib_arch, lib_libc), path
 
     if not hasattr(find_libs, "cache"):
-        data = subprocess.run([shutil.which('ldconfig'), '-p'], capture_output=True, text=True).stdout.split('\n')[1:]
-        find_libs.cache = {k: v for k, v in (parse(line) for line in data if '=>' in line)}
+        ldconfig = shutil.which("ldconfig")
+        assert ldconfig, "Make sure ldconfig is in PATH"
+        data = subprocess.run([ldconfig, "-p"], capture_output=True, text=True).stdout.split("\n")[1:]
+        find_libs.cache = {  # type: ignore [attr-defined]
+            k: v for k, v in (parse(line) for line in data if "=>" in line)
+        }
 
     def find_lib(lib, arch, libc):
         for k, v in find_libs.cache.items():
