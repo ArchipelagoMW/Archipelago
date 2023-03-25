@@ -9,6 +9,7 @@ from .Regions import create_regions
 
 client_version = 0
 
+
 class DLCqwebworld(WebWorld):
     tutorials = [Tutorial(
         "magic it is ",
@@ -31,7 +32,6 @@ class DLCqworld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
 
-
     data_version = 0
 
     option_definitions = DLCquest_options
@@ -41,11 +41,6 @@ class DLCqworld(World):
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, self.options)
-
-
-
-
-
 
     def set_rules(self):
         set_rules(self.multiworld, self.player, self.options)
@@ -61,14 +56,12 @@ class DLCqworld(World):
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]]
 
-        created_items = create_items(self, self.options)
-
+        created_items = create_items(self, self.options, locations_count + len(items_to_exclude), self.multiworld.random)
 
         self.multiworld.itempool += created_items
 
-
-
-
+        for item in items_to_exclude:
+            self.multiworld.itempool.remove(item)
 
     def create_item(self, item: Union[str, ItemData]) -> DLCquestItem:
         if isinstance(item, str):
@@ -85,4 +78,3 @@ class DLCqworld(World):
             "coinbundlerange": self.multiworld.coinbundlequantity[self.player].value,
             "item_shuffle": self.multiworld.item_shuffle[self.player].value
         }
-

@@ -50,16 +50,28 @@ location_table ={
         "Wooden Sword": offset + 39,
         "Box of Various Supplies": offset + 40,
         "Humble Indie Bindle": offset + 41,
-
+        "Double Jump Alcove Sheep": offset + 42,
+        "Double Jump Floating Sheep": offset + 43,
+        "Sexy Outfits Sheep": offset + 44,
+        "Forest High Sheep": offset + 45,
+        "Forest Low Sheep": offset + 46,
+        "Between Trees Sheep": offset + 47,
+        "Hole in the Wall Sheep": offset + 48,
+        "Shepherd Sheep": offset + 49,
+        "Top Hat Sheep": offset + 50,
+        "North West Ceiling Sheep": offset + 51,
+        "North West Alcove Sheep": offset + 52,
+        "West Cave Sheep": offset + 53,
+        "Cutscene Sheep": offset + 54,
 }
 
 for i in range(825):
         item_coin = "DLC Quest: number Coin"
         item_coin_loc = re.sub("number", str(i+1), item_coin)
-        location_table.update({item_coin_loc: offset + 42 +i})
+        location_table.update({item_coin_loc: offset + 55 + i})
 
 for i in range(889):
         item_coin_freemium = "Live Freemium or Die: number Coin"
         item_coin_loc_freemium = re.sub("number", str(i+1), item_coin_freemium)
-        location_table.update({item_coin_loc_freemium: offset + 825 +42 + i})
+        location_table.update({item_coin_loc_freemium: offset + 825 + 55 + i})
 

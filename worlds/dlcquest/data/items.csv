@@ -43,3 +43,6 @@ id,name,classification,groups
 41,Humble Indie Bindle,progression,"Item,Freemium"
 42,DLC Quest: Coin Bundle,progression,"Coin,DLCQuest"
 43,Live Freemium or Die: Coin Bundle,progression,"Coin,Freemium"
+44,Zombie Sheep,trap,Trap
+45,Temporary Spike,trap,Trap
+46,Loading Screen,trap,Trap
