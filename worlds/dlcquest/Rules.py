@@ -15,11 +15,11 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
     def has_enough_coin(player: int, coin: int):
         def has_coin(state, player: int, coins: int):
             coin_possessed = 0
-            for i in range(1, 250):
+            for i in [4, 7, 9, 10, 46, 50, 60, 76, 89, 100, 169, 203]:
                 name_coin = "number coins"
                 number_coin = re.sub("number", str(i), name_coin)
-                number_of_coin = state.count(number_coin, player)
-                coin_possessed += number_of_coin*i
+                if state.has(number_coin, player):
+                    coin_possessed += i
 
             return coin_possessed >= coins
 
@@ -28,11 +28,11 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
     def has_enough_coin_freemium(player: int, coin: int):
         def has_coin(state, player: int, coins: int):
             coin_possessed = 0
-            for i in range(1, 250):
+            for i in [20, 50, 90, 95, 130, 150, 154, 200]:
                 name_coin = "number coins freemium"
                 number_coin = re.sub("number", str(i), name_coin)
-                number_of_coin = state.count(number_coin, player)
-                coin_possessed += number_of_coin*i
+                if state.has(number_coin, player):
+                    coin_possessed += i
 
             return coin_possessed >= coins
 
@@ -58,6 +58,14 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
                          lambda state: state.has("Time is Money Pack", player))
                 set_rule(world.get_entrance("Cave Tree", player),
                          lambda state: state.has("Time is Money Pack", player))
+                set_rule(world.get_location("Shepherd Sheep", player),
+                         lambda state: state.has("Time is Money Pack", player))
+                set_rule(world.get_location("North West Ceiling Sheep", player),
+                         lambda state: state.has("Time is Money Pack", player))
+                set_rule(world.get_location("North West Alcove Sheep", player),
+                         lambda state: state.has("Time is Money Pack", player))
+                set_rule(world.get_location("West Cave Sheep", player),
+                         lambda state: state.has("Time is Money Pack", player))
 
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             set_rule(world.get_entrance("Behind Ogre", player),
@@ -65,6 +73,16 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
             set_rule(world.get_entrance("Tree", player),
                      lambda state: state.has("Sword", player) or state.has("Gun", player))
             set_rule(world.get_entrance("Cave Tree", player),
+                     lambda state: state.has("Sword", player) or state.has("Gun", player))
+            set_rule(world.get_entrance("True Double Jump", player),
+                     lambda state: state.has("Double Jump Pack", player))
+            set_rule(world.get_location("Shepherd Sheep", player),
+                     lambda state: state.has("Sword", player) or state.has("Gun", player))
+            set_rule(world.get_location("North West Ceiling Sheep", player),
+                     lambda state: state.has("Sword", player) or state.has("Gun", player))
+            set_rule(world.get_location("North West Alcove Sheep", player),
+                     lambda state: state.has("Sword", player) or state.has("Gun", player))
+            set_rule(world.get_location("West Cave Sheep", player),
                      lambda state: state.has("Sword", player) or state.has("Gun", player))
 
             if World_Options[Options.TimeIsMoney] == Options.TimeIsMoney.option_I_want_speed:
@@ -80,6 +98,8 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
         if World_Options[Options.FalseDoubleJump] == Options.FalseDoubleJump.option_none or World_Options[
             Options.FalseDoubleJump] == Options.FalseDoubleJump.option_simple:
             set_rule(world.get_entrance("Behind Tree Double Jump", player),
+                     lambda state: state.has("Double Jump Pack", player))
+            set_rule(world.get_entrance("Cave Roof", player),
                      lambda state: state.has("Double Jump Pack", player))
 
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:

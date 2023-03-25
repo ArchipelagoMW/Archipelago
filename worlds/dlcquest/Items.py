@@ -5,12 +5,14 @@ from typing import Protocol, Union, Dict, List
 from BaseClasses import Item, ItemClassification
 from . import Options, data
 from dataclasses import dataclass, field
+from random import Random
+
 
 class DLCquestItem(Item):
     game: str = "DLCquest"
 
-offset = 120_000
 
+offset = 120_000
 
 
 class Group(enum.Enum):
@@ -19,7 +21,7 @@ class Group(enum.Enum):
     Freemium = enum.auto()
     Item = enum.auto()
     Coin = enum.auto()
-
+    Trap = enum.auto()
 
 
 @dataclass(frozen=True)
@@ -41,6 +43,7 @@ class ItemData:
         groups = set(group)
         return bool(groups.intersection(self.groups))
 
+
 def load_item_csv():
     try:
         from importlib.resources import files
@@ -57,11 +60,15 @@ def load_item_csv():
             items.append(ItemData(id, item["name"], classification, groups))
     return items
 
+
 all_items: List[ItemData] = load_item_csv()
 item_table: Dict[str, ItemData] = {}
 items_by_group: Dict[Group, List[ItemData]] = {}
+
+
 def initialize_item_table():
     item_table.update({item.name: item for item in all_items})
+
 
 def initialize_groups():
     for item in all_items:
@@ -75,13 +82,24 @@ initialize_item_table()
 initialize_groups()
 
 
-def create_items(world, World_Options: Options.DLCQuestOptions):
+def create_trap_items(world, World_Options: Options.DLCQuestOptions, trap_needed: int, random: Random) -> List[Item]:
+    traps = []
+    for i in range(trap_needed):
+        trap = random.choice(items_by_group[Group.Trap])
+        traps.append(world.create_item(trap))
+
+    return traps
+
+
+def create_items(world, World_Options: Options.DLCQuestOptions, locations_count: int, random: Random):
     created_items = []
-    if World_Options[Options.Campaign] == Options.Campaign.option_basic or World_Options[Options.Campaign] == Options.Campaign.option_both:
+    if World_Options[Options.Campaign] == Options.Campaign.option_basic or World_Options[
+        Options.Campaign] == Options.Campaign.option_both:
         for item in items_by_group[Group.DLCQuest]:
             if item.has_any_group(Group.DLC):
                 created_items.append(world.create_item(item))
-            if item.has_any_group(Group.Item) and World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
+            if item.has_any_group(Group.Item) and World_Options[
+                Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
                 created_items.append(world.create_item(item))
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
             coin_bundle_needed = math.floor(825 / World_Options[Options.CoinSanityRange])
@@ -92,12 +110,13 @@ def create_items(world, World_Options: Options.DLCQuestOptions):
                     if 825 % World_Options[Options.CoinSanityRange] != 0:
                         created_items.append(world.create_item(item))
 
-
-    if World_Options[Options.Campaign] == Options.Campaign.option_live_freemium_or_die or World_Options[Options.Campaign] == Options.Campaign.option_both:
+    if World_Options[Options.Campaign] == Options.Campaign.option_live_freemium_or_die or World_Options[
+        Options.Campaign] == Options.Campaign.option_both:
         for item in items_by_group[Group.Freemium]:
             if item.has_any_group(Group.DLC):
                 created_items.append(world.create_item(item))
-            if item.has_any_group(Group.Item) and World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
+            if item.has_any_group(Group.Item) and World_Options[
+                Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
                 created_items.append(world.create_item(item))
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
             coin_bundle_needed = math.floor(889 / World_Options[Options.CoinSanityRange])
@@ -108,10 +127,7 @@ def create_items(world, World_Options: Options.DLCQuestOptions):
                     if 889 % World_Options[Options.CoinSanityRange] != 0:
                         created_items.append(world.create_item(item))
 
+    trap_items = create_trap_items(world, World_Options, locations_count - len(created_items), random)
+    created_items += trap_items
 
     return created_items
-
-
-
-
-
