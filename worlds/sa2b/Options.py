@@ -86,6 +86,13 @@ class DarknessTrapWeight(BaseTrapWeight):
     display_name = "Darkness Trap Weight"
 
 
+class IceTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which makes the world slippery
+    """
+    display_name = "Ice Trap Weight"
+
+
 class PongTrapWeight(BaseTrapWeight):
     """
     Likelihood of receiving a trap which forces you to play a Pong minigame
@@ -486,9 +493,9 @@ class RingLoss(Choice):
     How taking damage is handled
     Classic: You lose all of your rings when hit
     Modern: You lose 20 rings when hit
-    OHKO: You die immediately when hit (NOTE: Some Hard Logic tricks require damage boosts!)
+    OHKO: You die immediately when hit (NOTE: Some Hard Logic tricks may require damage boosts!)
     """
-    display_name = "SADX Music"
+    display_name = "Ring Loss"
     option_classic = 0
     option_modern = 1
     option_ohko = 2
@@ -597,6 +604,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "gravity_trap_weight": GravityTrapWeight,
     "exposition_trap_weight": ExpositionTrapWeight,
     #"darkness_trap_weight": DarknessTrapWeight,
+    "ice_trap_weight": IceTrapWeight,
     "pong_trap_weight": PongTrapWeight,
     "minigame_trap_difficulty": MinigameTrapDifficulty,
     "ring_loss": RingLoss,
