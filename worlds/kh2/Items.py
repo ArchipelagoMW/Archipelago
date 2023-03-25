@@ -159,7 +159,7 @@ Accessory_Table = {
     ItemName.FencerEarring:   ItemData(0x130071, 1, 46, 0x35A7),
     ItemName.MageEarring:     ItemData(0x130072, 1, 47, 0x35A8),
     ItemName.SlayerEarring:   ItemData(0x130073, 1, 48, 0x35AC),
-    ItemName.Medal:           ItemData(0x130074, 1, 53, 0x35B2),
+    ItemName.Medal:           ItemData(0x130074, 1, 53, 0x35B0),
     ItemName.MoonAmulet:      ItemData(0x130075, 1, 35, 0x359C),
     ItemName.StarCharm:       ItemData(0x130076, 1, 36, 0x359E),
     ItemName.CosmicArts:      ItemData(0x130077, 1, 56, 0x35B1),
