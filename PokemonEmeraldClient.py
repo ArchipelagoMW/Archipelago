@@ -88,7 +88,7 @@ async def handle_read_data(gba_data, ctx: GBAContext):
                     location_id = flag_id + config["ap_offset"]
                     if location_id in ctx.server_locations:
                         local_checked_locations.add(location_id)
-                    elif location_id == GAME_CLEAR_FLAG:
+                    if flag_id == GAME_CLEAR_FLAG:
                         game_clear = True
 
 
