@@ -603,7 +603,7 @@ class KH2Context(CommonContext):
                 itemData = self.item_name_to_data[itemName]
                 # if the inventory slot for that keyblade is less than the amount they should have
                 if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
-                                  "big") <= 0:
+                                  "big") != 0 and int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x1CFF, 1), "big") != 13:
                     # Checking form anchors for the keyblade
                     if self.kh2.read_short(self.kh2.base_address + self.Save + 0x24F0) == itemData.kh2id \
                             or self.kh2.read_short(self.kh2.base_address + self.Save + 0x32F4) == itemData.kh2id \
