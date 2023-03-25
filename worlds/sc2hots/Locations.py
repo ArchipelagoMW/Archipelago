@@ -101,7 +101,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Old Soldiers", "Old Soldiers: Get Nuked", SC2HOTS_LOC_ID_OFFSET + 903),
         LocationData("Waking the Ancient", "Waking the Ancient: Victory", SC2HOTS_LOC_ID_OFFSET + 1000,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
         LocationData("Waking the Ancient", "Waking the Ancient: Center Essence Pool", SC2HOTS_LOC_ID_OFFSET + 1001),
         LocationData("Waking the Ancient", "Waking the Ancient: East Essence Pool", SC2HOTS_LOC_ID_OFFSET + 1002,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and
@@ -111,7 +111,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                                    state._sc2hots_has_minimal_antiair(multiworld, player)),
         LocationData("Waking the Ancient", "Waking the Ancient: Finish Feeding", SC2HOTS_LOC_ID_OFFSET + 1004,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and
-                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
         LocationData("The Crucible", "The Crucible: Victory", SC2HOTS_LOC_ID_OFFSET + 1100,
                      lambda state: state._sc2hots_has_competent_defense(multiworld, player) and
                                    state._sc2hots_has_good_antiair(multiworld, player)),
