@@ -150,6 +150,7 @@ class PokemonEmeraldWorld(World):
                     item_category_counter.update([tag for tag in item.tags if tag in item_categories])
 
             item_category_weights = [item_category_counter.get(category) for category in item_categories]
+            item_category_weights = [weight if weight is not None else 0 for weight in item_category_weights]
 
             # Create lists of item codes that can be used to fill
             fill_item_candidates = [item for item in emerald_data.items.values()]
