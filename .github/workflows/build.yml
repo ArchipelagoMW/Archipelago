@@ -96,6 +96,7 @@ jobs:
       # - copy code above to release.yml -
       - name: Build Again
         run: |
+          source venv/bin/activate
           python setup.py build_exe --yes
       - name: Store AppImage
         uses: actions/upload-artifact@v3
