@@ -226,6 +226,10 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
                  lambda state: state.has("Big Sword Pack", player) and state.has("Really Big Sword Pack",
                                                                                  player) and state.has(
                      "Unfathomable Sword Pack", player))
+        set_rule(world.get_location("I Get That Reference!", player),
+                 lambda state: state.has("Death of Comedy Pack", player))
+        set_rule(world.get_location("Story is Important", player),
+                 lambda state: state.has("DLC NPC Pack", player))
 
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_disabled:
             set_rule(world.get_entrance("Vines", player),
@@ -357,8 +361,6 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
                      has_enough_coin_freemium(player, 10))
             set_rule(world.get_location("Remove Ads Pack", player),
                      has_enough_coin_freemium(player, 25))
-
-        set_rule(world.get_location("Pickaxe", player), lambda state: state.can_reach("Cut Content", 'region', player))
 
         loc_wining = DLCquestLocation(player, "Winning Freemium", None, world.get_region("Final Boss", player))
         world.get_region("Final Boss", player).locations.append(loc_wining)

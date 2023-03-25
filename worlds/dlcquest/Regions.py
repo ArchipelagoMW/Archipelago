@@ -170,7 +170,8 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
     if World_Options[Options.Campaign] == Options.Campaign.option_live_freemium_or_die or World_Options[Options.Campaign] == Options.Campaign.option_both:
 
         Regfreemiumstart = Region("Freemium Start", player, world)
-        Locfreemiumstart_name = ["Particles Pack","Day One Patch Pack","Checkpoint Pack","Incredibly Important Pack"]
+        Locfreemiumstart_name = ["Particles Pack", "Day One Patch Pack", "Checkpoint Pack", "Incredibly Important Pack",
+                                 "Nice Try", "Story is Important", "I Get That Reference!"]
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             Locfreemiumstart_name += ["Wooden Sword"]
         Regfreemiumstart.exits = [Entrance(player, "Vines", Regfreemiumstart)]
@@ -254,7 +255,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         world.regions.append(Regtopright)
 
         Regseason = Region("Season", player, world)
-        Locseason_name = ["Remove Ads Pack"]
+        Locseason_name = ["Remove Ads Pack", "Not Exactly Noble"]
         Regseason.exits = [Entrance(player, "Boss Door", Regseason)]
         Regseason.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regseason) for
                                   loc_name in Locseason_name]
