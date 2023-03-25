@@ -66,7 +66,7 @@ location_table ={
         "Not Exactly Noble": offset + 55,
         "Story is Important": offset + 56,
         "Nice Try": offset + 57,
-        "I Get That Reference!": offset +58,
+        "I Get That Reference!": offset + 58,
 }
 
 for i in range(825):
