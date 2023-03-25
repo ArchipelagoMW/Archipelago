@@ -13,7 +13,7 @@
 1. Download and install Courier Mod Loader using the instructions on the release page
    * [Latest release is currently 0.7.1](https://github.com/Brokemia/Courier/releases)
 2. Download and install the randomizer mod
-   1. Download the latest TheMessengerRandomizer.zip from the
+   1. Download the latest TheMessengerRandomizerAP.zip from the
       [The Messenger Randomizer Mod AP releases page](https://github.com/alwaysintreble/TheMessengerRandomizerModAP/releases)
    2. Extract the zip file to `TheMessenger/Mods/` of your game's install location
       * You can have both the non AP randomizer and the AP randomizer installed, but the AP randomizer is backwards
@@ -43,6 +43,16 @@
 5. Select the `Connect to Archipelago` button
 6. Navigate to save file selection
 7. Select a new valid randomizer save
+
+## Continuing a MultiWorld Game
+
+At any point while playing, it is completely safe to quit. Returning to the title screen or closing the game will
+disconnect you from the server. To reconnect to an in progress MultiWorld, simply load the correct save file for that
+MultiWorld.
+
+If the reconnection fails, the message on screen will state you are disconnected. If this happens, you can return to the
+main menu and connect to the server as in [Joining a Multiworld Game](#joining-a-multiworld-game), then load the correct
+save file.
 
 ## Troubleshooting
 
