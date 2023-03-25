@@ -37,7 +37,7 @@ from worlds.sc2hots.MissionTables import lookup_id_to_mission
 from worlds.sc2hots.Regions import MissionInfo
 
 import colorama
-from NetUtils import ClientStatus, NetworkItem, RawJSONtoTextParser
+from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart
 from MultiServer import mark_raw
 
 nest_asyncio.apply()
@@ -155,6 +155,22 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             return False
         return True
 
+class SC2JSONtoTextParser(JSONtoTextParser):
+    def __init__(self, ctx):
+        self.handlers = {
+            "ItemSend": self._handle_color,
+            "ItemCheat": self._handle_color,
+            "Hint": self._handle_color,
+        }
+        super().__init__(ctx)
+
+    def _handle_color(self, node: JSONMessagePart):
+        codes = node["color"].split(";")
+        buffer = "".join(self.color_code(code) for code in codes if code in self.color_codes)
+        return buffer + self._handle_text(node) + '</c>'
+    
+    def color_code(self, code: str):
+        return '<c val="' + self.color_codes[code] + '">'
 
 class SC2Context(CommonContext):
     command_processor = StarcraftClientProcessor
@@ -176,7 +192,7 @@ class SC2Context(CommonContext):
 
     def __init__(self, *args, **kwargs):
         super(SC2Context, self).__init__(*args, **kwargs)
-        self.raw_text_parser = RawJSONtoTextParser(self)
+        self.text_parser = SC2JSONtoTextParser(self)
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -226,7 +242,7 @@ class SC2Context(CommonContext):
             relevant = False
 
         if relevant:
-            self.announcements.put(self.raw_text_parser(copy.deepcopy(args["data"])))
+            self.announcements.put(self.text_parser(copy.deepcopy(args["data"])))
 
         super(SC2Context, self).on_print_json(args)
 
