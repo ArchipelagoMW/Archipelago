@@ -70,7 +70,7 @@ golden_pyramid_jewel = jewel_pieces(RegionName.golden_pyramid)
 
 # Junk/traps from The Big Board
 health = "Heart"
-wario_form = "Status Trap"
+wario_form = "Wario Form Trap"
 lightning = "Lightning Trap"
 
 # Other items

@@ -140,7 +140,7 @@ LoadRandomItemAnimation:
     mov r6, r0
 
 ; AP items
-    cmp r6, #0xC1
+    cmp r6, #0xFE
     beq @@APItem
 
 ; Junk items
@@ -155,6 +155,14 @@ LoadRandomItemAnimation:
 ; Get passage
     lsl r0, r6, #31-4
     lsr r0, r0, #31-2
+
+; Use CD graphic for AP items until I get a custom sprite made
+; This looks super disorganized, but I want to remove this later without leaving
+; artifacts like unnecessary jumps or labels
+    b @@LoadPalette
+@@APItem:
+    mov r0, #6
+@@LoadPalette:
 
 ; Load palette
     ldr r1, =@@JewelPaletteTable
@@ -189,9 +197,6 @@ LoadRandomItemAnimation:
     cmp r6, #0x40
     beq @@FullHealthItem
 
-@@APItem:
-    ; TODO
-
 @@FullHealthItem:
     mov r6, #0x05
 
@@ -224,6 +229,7 @@ LoadRandomItemAnimation:
     .halfword 0x6BDF, 0x23DF, 0x139B, 0x1274, 0x0DAE  ; Topaz passage
     .halfword 0x7F5A, 0x7E94, 0x7D29, 0x50A5, 0x38A5  ; Sapphire passage
     .halfword 0x579F, 0x3B1F, 0x1A7F, 0x05DE, 0x00FB  ; Golden pyramid
+    .halfword 0x7FFF, 0x72F5, 0x560E, 0x4169, 0x0000  ; Archipelago item
 .endautoregion
 
 
@@ -276,6 +282,11 @@ CollectRandomItem:
     bl GetItemAtLocation
     mov r5, r0
 
+; Multiplayer items
+    lsr r0, r5, #7
+    cmp r0, #0
+    bne @@MultiplayerItem
+
 ; Junk items
     lsr r0, r5, #6
     cmp r0, #0
@@ -286,7 +297,8 @@ CollectRandomItem:
     cmp r1, #0
     bne @@CD
 
-; Jewel piece
+; Jewel piece or other world's item
+@@MultiplayerItem:
     ldr r0, =0x13B  ; a1
     b @@SetCheckLocation
 
@@ -299,7 +311,8 @@ CollectRandomItem:
     bne @@SetCheckLocation
 
 ; Full health item
-    bl FillWarioHealthBar
+    mov r0, #8
+    bl GiveWarioHearts
 
 @@SetCheckLocation:
     call_using r1, m4aSongNumStart

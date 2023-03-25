@@ -172,7 +172,7 @@ def fill_items(rom: LocalRom, world: MultiWorld, player: int):
             if location.item.player != player:
                 itemid = itemid & 1 << 7
         else:
-            itemid = 0xC1
+            itemid = 0xFE
             
         offset = symbols["itemlocationtable"] + locationid
         rom.write_byte(offset, itemid)

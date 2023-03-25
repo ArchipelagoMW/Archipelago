@@ -6,18 +6,20 @@
 .autoregion
 
 .align 2
-; Gives the player the item in r0.
+; Gives the player the item in r0. If the item is junk, it will be stored to be
+; given to Wario next time a level loads.
+;
 ; See Items.py
 GiveItem:
     push {r4-r5, lr}
 
-    ; TODO signal something's wrong if it encounters 0xFF
+    ; 0xFF means no item, so immediately return
     cmp r0, #0xFF
     beq @@Return
 
     lsr r1, r0, #6
     cmp r1, #0
-    bne @@JunkItem
+    bne @@JunkOrMultiplayer
 
 ; Progression item
     ldr r4, =LevelStatusTable
@@ -79,42 +81,23 @@ GiveItem:
 
     b @@Return
 
-@@JunkItem:
+@@JunkOrMultiplayer:
+; If another world's item, it'll be handled outside the game
+    lsr r1, r1, #7
+    cmp r1, #1
+    beq @@Return
+
+; If your world's item, queue it by incrementing the appropriate variable
+    lsl r1, r0, #31-3
+    lsr r1, r1, #31-3
+    ldr r2, =QueuedJunk
+    add r1, r1, r2
+    ldrb r2, [r1]
+    add r2, r2, #1
+    strb r2, [r1]
 
 @@Return:
     pop r4-r5, pc
-
-.pool
-
-
-FillWarioHealthBar:
-    push lr
-
-    ldr r1, =WarioHeart
-    ldrb r0, [r1, #1]
-    add r0, #8
-    strb r0, [r1, #1]
-    ldrb r2, [r1]
-    ldrb r0, [r1, #1]
-    add r0, r2, r0
-    cmp r0, #8
-    ble @@Return
-    mov r0, #8
-    sub r0, r0, r2
-    strb r0, [r1, #1]
-
-@@Return:
-    ldrb r0, [r1, #1]
-    lsl r0, r0, #3
-    strb r0, [r1, #2]
-    mov r0, #0
-    strb r0, [r1, #3]
-
-    ldr r0, =0x143  ; a1
-    call_using r1, m4aSongNumStart
-
-    pop r0
-    bx r0
 
 .pool
 
@@ -130,11 +113,22 @@ hook 0x808134C, 0x808135C, CheckLocations
 .align 2
 
 ; Get the item at level r4's position in LocationTable and give it
+; If it's your own junk item, don't do anything because you would've gotten it
+; in the level already.
 .macro check, LocationTable
     ldr r0, =LocationTable
     add r0, r0, r4  ; get entry for this level
     ldrb r0, [r0]  ; a1
+
+    ; If the first two bits are 01, then this item is yours and junk
+    lsr r1, r0, #6
+    cmp r1, #1
+    beq @@Junk
+
+    ; TODO Do something if there's no item in that spot?
     bl GiveItem
+
+@@Junk:
 .endmacro
 
 CheckLocations:

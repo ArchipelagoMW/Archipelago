@@ -11,17 +11,25 @@ unusedrom equ 0x0878F97C
 .definelabel PassageID, 0x3000002
 .definelabel InPassageLevelID, 0x3000003
 .definelabel CurrentRoomId, 0x3000024
+.definelabel ucFlashLoop, 0x3000044
 .definelabel EntityLeftOverStateList, 0x3000564
 .definelabel CurrentEnemyData, 0x3000A24
-.definelabel LevelStatusTable, 0x03000A68
+.definelabel LevelStatusTable, 0x3000A68
 .definelabel HasJewelPiece1, 0x3000C07
 .definelabel HasJewelPiece2, 0x3000C08
 .definelabel HasJewelPiece3, 0x3000C09
 .definelabel HasJewelPiece4, 0x3000C0A
 .definelabel HasCD, 0x3000C0B
 .definelabel HasKeyzer, 0x3000C0C
+.definelabel GlobalTimer, 0x3000C41
 .definelabel Wario_ucReact, 0x3001898
+.definelabel Wario_ucMiss, 0x300189C
 .definelabel WarioHeart, 0x3001910
+
+; This is the upper halfword of entry passage level 3.
+; This level doesn't actually exist, so we can sneak this bit of extra save data
+; in there.
+.definelabel ReceivedItemCount, LevelStatusTable + 14  ; halfword
 
 ; Extends the existing box system to include full health boxes
 .definelabel HasFullHealthItem, unusedram + 0  ; byte
@@ -29,20 +37,32 @@ unusedrom equ 0x0878F97C
 ; Items can be received one at a time w/o issue
 .definelabel IncomingItemID, unusedram + 1  ; byte
 
-.definelabel ReceivedItemCount, unusedram + 2  ; halfword
-.definelabel DeathlinkEnabled, unusedram + 4  ; byte
+.definelabel DeathlinkEnabled, unusedram + 2  ; byte
 
-.definelabel QueuedFullHealthItems, unusedram + 10  ; byte
-.definelabel QueuedDamageTraps, unusedram + 11  ; byte
-.definelabel QueuedFormTraps, unusedram + 12  ; byte
+.definelabel QueuedJunk, unusedram + 16  ; bytes
+    .definelabel QueuedFullHealthItem, QueuedJunk + 0
+    .definelabel QueuedFormTraps, QueuedJunk + 1
+    .definelabel QueuedHearts, QueuedJunk + 2
+    .definelabel QueuedLightningTraps, QueuedJunk + 3
+
 
 ; Functions
 .definelabel m4aSongNumStart, 0x8001DA4
+.definelabel WarioHitMain, 0x801009c
 .definelabel EnemyChildSet, 0x801E328
+.definelabel ChangeWarioReact_Fire, 0x801EA3C
+.definelabel ChangeWarioReact_Fat, 0x801EA64
+.definelabel ChangeWarioReact_Puffy, 0x801EADC
+.definelabel ChangeWarioReact_Spring, 0x801EB04
+.definelabel ChangeWarioReact_Frozen, 0x801EB54
 .definelabel KillChildWhenParentDies, 0x80268DC
 .definelabel EntityAI_Q_K5_Hip_COM_takarabako, 0x80292BC
 .definelabel EntityAI_INITIAL_takara_kakera, 0x802932C
 .definelabel TOptObjSet, 0x80766E8
+.definelabel WarioCoinSet, 0x80768B8
+.definelabel MiniRandomCreate, 0x8089B80
+.definelabel modsi3, 0x8094ED0
+.definelabel WarioChng_React, 0x82DECA0
 
 ; ROM data
 .definelabel takara_Anm_00, 0x83B4BC8
@@ -92,7 +112,7 @@ unusedrom equ 0x0878F97C
 
 ; Allocate space at ROM end
 .org unusedrom
-.region 0x0E010000-.
+.region 0x0E000000-.
 
 ; Player's name, up to 16 characters
 PlayerName: .fill 16, 0
@@ -143,7 +163,9 @@ GetItemAtLocation:
 .endregion
 
 .include "worlds/wl4/asm/check_locations.asm"
+.include "worlds/wl4/asm/item_effects.asm"
 .include "worlds/wl4/asm/randomize_boxes.asm"
-.include "worlds/wl4/asm/full_health_shuffle.asm"
+.include "worlds/wl4/asm/save_full_health.asm"
+.include "worlds/wl4/asm/item_queue.asm"
 
 .close

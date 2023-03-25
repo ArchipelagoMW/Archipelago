@@ -19,18 +19,20 @@ ItemGetFlagFullHealth:
 ; original branch when this returns.
 ; Some other code gets to one of those branches, which is why we can't replace
 ; it here.
-    ldr r3, =HasFullHealthItem
     lsl r2, r1, #25
     lsr r2, r2, #31
     cmp r2, #0
     beq @@NoFullHealth
 
 ; Already got the full-health check
-    mov r2, #2
+    ldr r2, =HasFullHealthItem
+    mov r1, #2
+    strb r1, [r2, #1]
     b @@CheckKeyzer
 
-@@NoFullHealth:
-    mov r2, #0
+@@NoFullhealth:
+    ldr r1, =HasFullHealthItem
+    strb r2, [r1, #1]
 
 @@CheckKeyzer:
     add r1, r4, r6
@@ -38,8 +40,6 @@ ItemGetFlagFullHealth:
     add r1, r3, r1
     add r1, r12
     ldrb r1, [r1]
-
-    str r2, [r3]
     lsl r2, r1, #26
     lsr r2, r2, #31
 

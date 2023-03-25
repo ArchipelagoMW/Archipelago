@@ -16,15 +16,11 @@ class ItemData(typing.NamedTuple):
 
 # Items are encoded as 8-bit numbers as follows:
 #                   | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
-# Jewel pieces:     | 0   0   0 |  passage  | qdrnt |
-# CD:               | 0   0   1 |  passage  | level |
+# Jewel pieces:     | W | 0   0 |  passage  | qdrnt |
+# CD:               | W | 0   1 |  passage  | level |
 #
-# Full health item: | 0   1   0   0   0   0   0   0 |
-# Wario form trap:  | 0   1   0   1   0   0   0   0 |
-# Heart/Lightning:  | 0   1   1   0   0   0   0 | ? |
-# Coin:             | 0   1   1   1 |  denomination |
-# 
-# AP item:          | 1   1   0   0   0   0   0   1 |
+# Junk items:       | W | 1   0   0 |     type      |
+# AP item:          | 1 | 1   1   1   1   1   1   0 |
 #
 # For jewel pieces:
 #  - passage = 0-5 for entry/emerald/ruby/topaz/sapphire/golden
@@ -34,10 +30,15 @@ class ItemData(typing.NamedTuple):
 #  - passage = 0-5 same as jewel pieces, but only 1-4 has a CD
 #  - level = increasing as the level goes deeper
 #
-# For junk items:
-#  - The full health item is unique (as in, all are identical)
-#  - Same with Wario form traps (which form you get is random)
-#  - Heart/lightning: ? is 0 if heart, 1 if lightning
+# Type for junk items:
+#  - 0 = Full health item
+#  - 1 = Wario form trap
+#  - 2 = Single heart recovery
+#  - 3 = Single heart damage
+#
+# Bit 7 determines whose world the item belongs in. If set, it's someone else's
+# item, either WL4 or local. If clear, it's your own WL4 item. AP items always
+# have this bit set.
 #
 # For Archipelago, the IDs are the encoded values appended to 0xEC, which is
 # Wario Land 4's checksum.
@@ -111,9 +112,9 @@ event_table = {
 }
 
 junk_table = {
-    ItemName.wario_form: ItemData(item_id(0x90), False),
-    ItemName.health:     ItemData(item_id(0xA0), False),
-    ItemName.lightning:  ItemData(item_id(0xA1), False),
+    ItemName.wario_form: ItemData(item_id(0x41), False),
+    ItemName.health:     ItemData(item_id(0x42), False),
+    ItemName.lightning:  ItemData(item_id(0x43), False),
 }
 
 item_table = {
