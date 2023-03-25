@@ -203,6 +203,11 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
     with Locker(room_id):
         try:
             asyncio.run(main())
+        except KeyboardInterrupt:
+            with db_session:
+                room = Room.get(id=room_id)
+                # ensure the Room does not spin up again on its own, minute of safety buffer
+                room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
         except:
             with db_session:
                 room = Room.get(id=room_id)
