@@ -40,10 +40,16 @@ class ShiversWorld(World):
     def create_regions(self):
         # Create regions
         for region_name, exits in Constants.region_info["regions"]:
-            r = Region(region_name, "", self.player, self.multiworld)
+            r = Region(region_name, self.player, self.multiworld)
             for exit_name in exits:
                 r.exits.append(Entrance(self.player, exit_name, r))
             self.multiworld.regions.append(r)
+
+        # Bind mandatory connections
+        for entr_name, region_name in Constants.region_info["mandatory_connections"]:
+            e = self.multiworld.get_entrance(entr_name, self.player)
+            r = self.multiworld.get_region(region_name, self.player)
+            e.connect(r)
 
         # Add locations
         for region_name, locations in Constants.location_info["locations_by_region"].items():
