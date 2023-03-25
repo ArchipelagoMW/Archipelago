@@ -76,5 +76,6 @@ class DLCqworld(World):
             "campaign": self.multiworld.campaign[self.player].value,
             "coinsanity": self.multiworld.coinsanity[self.player].value,
             "coinbundlerange": self.multiworld.coinbundlequantity[self.player].value,
-            "item_shuffle": self.multiworld.item_shuffle[self.player].value
+            "item_shuffle": self.multiworld.item_shuffle[self.player].value,
+            "seed": self.multiworld.per_slot_randoms[self.player].randrange(99999999)
         }
