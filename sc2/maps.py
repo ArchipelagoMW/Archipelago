@@ -4,7 +4,7 @@ from pathlib import Path
 
 from loguru import logger
 
-from sc2.paths import Paths
+from .paths import Paths
 
 
 def get(name: str) -> Map:

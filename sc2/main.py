@@ -19,17 +19,17 @@ from aiohttp import ClientSession, ClientWebSocketResponse
 from loguru import logger
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
-from sc2.bot_ai import BotAI
-from sc2.client import Client
-from sc2.controller import Controller
-from sc2.data import CreateGameError, Result, Status
-from sc2.game_state import GameState
-from sc2.maps import Map
-from sc2.player import AbstractPlayer, Bot, BotProcess, Human
-from sc2.portconfig import Portconfig
-from sc2.protocol import ConnectionAlreadyClosed, ProtocolError
-from sc2.proxy import Proxy
-from sc2.sc2process import SC2Process, kill_switch
+from .bot_ai import BotAI
+from .client import Client
+from .controller import Controller
+from .data import CreateGameError, Result, Status
+from .game_state import GameState
+from .maps import Map
+from .player import AbstractPlayer, Bot, BotProcess, Human
+from .portconfig import Portconfig
+from .protocol import ConnectionAlreadyClosed, ProtocolError
+from .proxy import Proxy
+from .sc2process import SC2Process, kill_switch
 
 # Set the global logging level
 logger.remove()

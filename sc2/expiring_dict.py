@@ -5,7 +5,7 @@ from threading import RLock
 from typing import TYPE_CHECKING, Any, Iterable, Union
 
 if TYPE_CHECKING:
-    from sc2.bot_ai import BotAI
+    from .bot_ai import BotAI
 
 
 class ExpiringDict(OrderedDict):

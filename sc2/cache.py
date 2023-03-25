@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Callable, Hashable, TypeVar
 
 if TYPE_CHECKING:
-    from sc2.bot_ai import BotAI
+    from .bot_ai import BotAI
 
 T = TypeVar("T")
 

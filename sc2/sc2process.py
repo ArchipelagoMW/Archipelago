@@ -14,10 +14,10 @@ import aiohttp
 import portpicker
 from loguru import logger
 
-from sc2 import paths, wsl
-from sc2.controller import Controller
-from sc2.paths import Paths
-from sc2.versions import VERSIONS
+from . import paths, wsl
+from .controller import Controller
+from .paths import Paths
+from .versions import VERSIONS
 
 
 class kill_switch:

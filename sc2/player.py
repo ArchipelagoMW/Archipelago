@@ -2,8 +2,8 @@ from abc import ABC
 from pathlib import Path
 from typing import List, Union
 
-from sc2.bot_ai import BotAI
-from sc2.data import AIBuild, Difficulty, PlayerType, Race
+from .bot_ai import BotAI
+from .data import AIBuild, Difficulty, PlayerType, Race
 
 
 class AbstractPlayer(ABC):
