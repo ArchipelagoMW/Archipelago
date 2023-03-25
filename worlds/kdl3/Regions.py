@@ -63,7 +63,7 @@ def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bo
                 if levels[level][stage] is None:
                     stage_candidates = [candidate for candidate in possible_stages
                                         if (enforce_world and candidate in default_levels[level])
-                                        or (enforce_pattern and candidate % 6 == stage)
+                                        or (enforce_pattern and ((candidate - 1) & 0x00FFFF) % 6 == stage)
                                         or (enforce_pattern == enforce_world)
                                         ]
                     new_stage = generate_valid_level(level, stage, stage_candidates,

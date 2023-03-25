@@ -7,6 +7,7 @@ from worlds.Files import APDeltaPatch
 from .Aesthetics import get_palette_bytes, kirby_target_palettes, get_kirby_palette
 
 KDL3UHASH = "201e7658f6194458a3869dde36bf8ec2"
+KDL3JHASH = "b2f2d004ea640c3db66df958fce122b2"
 
 animal_friends = {  # individual spawn addresses for each animal friend
     0x770010: [  # Rick
@@ -73,8 +74,9 @@ level_pointers = {
     0x770204: 0x06A4,
 }
 
+
 class KDL3DeltaPatch(APDeltaPatch):
-    hash = KDL3UHASH
+    hash = {KDL3UHASH, KDL3JHASH}
     game = "Kirby's Dream Land 3"
     patch_file_ending = ".apkdl3"
 
@@ -85,7 +87,7 @@ class KDL3DeltaPatch(APDeltaPatch):
 
 class RomData:
     def __init__(self, file, name=None):
-        self.file = bytes()
+        self.file = bytearray()
         self.read_from_file(file)
         self.name = name
 
@@ -217,8 +219,8 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
-        if KDL3UHASH != basemd5.hexdigest():
-            raise Exception("Supplied Base Rom does not match known MD5 for US release. "
+        if basemd5.hexdigest() not in {KDL3UHASH, KDL3JHASH}:
+            raise Exception("Supplied Base Rom does not match known MD5 for US or JP release. "
                             "Get the correct game and version, then dump it")
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
