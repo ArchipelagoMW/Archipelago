@@ -163,6 +163,7 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
 
 def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]) -> List[Item]:
     non_local_items = multiworld.non_local_items[player].value
+    starter_items = []
     if get_option_value(multiworld, player, "early_unit"):
         local_basic_unit = sorted(item for item in get_basic_units(multiworld, player) if item not in non_local_items and item not in excluded_items)
         if not local_basic_unit:
@@ -177,9 +178,27 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
         else:
             first_location = first_mission + ": Victory"
 
-        return [assign_starter_item(multiworld, player, excluded_items, locked_locations, first_location, local_basic_unit)]
-    else:
-        return []
+        starter_items.append(assign_starter_item(multiworld, player, excluded_items, locked_locations, first_location, local_basic_unit))
+    starter_abilities = get_option_value(multiworld, player, 'start_primary_abilities')
+    if starter_abilities:
+        ability_count = starter_abilities
+        ability_tiers = [0, 1, 3]
+        multiworld.random.shuffle(ability_tiers)
+        if ability_count > 3:
+            ability_tiers.append(6)
+        for tier in ability_tiers:
+            abilities = KERRIGAN_ACTIVES[tier].union(KERRIGAN_PASSIVES[tier]).difference(excluded_items)
+            if abilities:
+                ability_count -= 1
+                ability = multiworld.random.choice(sorted(abilities))
+                ability_item = create_item_with_correct_settings(player, ability)
+                multiworld.push_precollected(ability_item)
+                excluded_items.add(ability)
+                starter_items.append(ability_item)
+                if ability_count == 0:
+                    break
+
+    return starter_items
 
 
 def assign_starter_item(multiworld: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str],

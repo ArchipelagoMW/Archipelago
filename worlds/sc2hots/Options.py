@@ -62,21 +62,20 @@ class UnitsAlwaysHaveUpgrades(DefaultOnToggle):
     display_name = "Units Always Have Upgrades"
 
 
-class IncludeMutations(Choice):
+class IncludeMutations(Range):
     """Determines how many of the 3 mutations for the 7 units that have them can appear."""
     display_name = "Include Mutations"
-    option_none = 0
-    option_one = 1
-    option_two = 2
-    option_three = 3
+    range_start = 0
+    range_end = 3
+    default = 1
 
 
-class IncludeStrains(Choice):
+class IncludeStrains(Range):
     """Determines how many of the 2 strains for the 7 units that have them can appear."""
     display_name = "Include Strains"
-    option_none = 0
-    option_one = 1
-    option_two = 2
+    range_start = 0
+    range_end = 2
+    default = 1
 
 
 class Kerriganless(Choice):
@@ -122,6 +121,14 @@ class IncludeAllKerriganAbilities(Toggle):
     If turned off, one random passive or active ability per tier will be included."""
     display_name = "Include All Kerrigan Abilities"
 
+
+class StartPrimaryAbilities(Range):
+    """Number of Primary Abilities (Kerrigan Tier 1, 2, and 4) to start the game with.
+    """
+    display_name = "Starting Primary Abilities"
+    range_start = 0
+    range_end = 4
+    default = 0
 
 # class UpgradeBonus(Choice):
 #     """Determines what lab upgrade to use, whether it is Ultra-Capacitors which boost attack speed with every weapon
@@ -186,6 +193,7 @@ sc2hots_options: Dict[str, Option] = {
     "kerriganless": Kerriganless,
     "kerrigan_level_distribution": KerriganLevelDistribution,
     "include_all_kerrigan_abilities": IncludeAllKerriganAbilities,
+    "start_primary_abilities": StartPrimaryAbilities,
     # "upgrade_bonus": UpgradeBonus,
     # "bunker_upgrade": BunkerUpgrade,
     # "all_in_map": AllInMap,
