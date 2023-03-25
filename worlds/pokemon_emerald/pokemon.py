@@ -92,7 +92,7 @@ def get_random_species(
         candidate_species = list(filter(has_nearby_bst, candidate_species))
 
     if species_type is not None:
-        candidate_species = [species for species in candidate_species if type in species.types]
+        candidate_species = [species for species in candidate_species if species_type in species.types]
 
     if not allow_legendaries:
         candidate_species = [species for species in candidate_species if species.label not in _legendary_pokemon]
