@@ -1,9 +1,9 @@
 
-import utils.log, random, copy
-
-from graph.graph_utils import GraphUtils, vanillaTransitions, vanillaBossesTransitions, escapeSource, escapeTargets
-from logic.logic import Logic
-from graph.graph import AccessGraphRando as AccessGraph
+import random, copy
+from worlds.sm.variaRandomizer.utils import log
+from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils, vanillaTransitions, vanillaBossesTransitions, escapeSource, escapeTargets
+from worlds.sm.variaRandomizer.logic.logic import Logic
+from worlds.sm.variaRandomizer.graph.graph import AccessGraphRando as AccessGraph
 
 # creates graph and handles randomized escape
 class GraphBuilder(object):
@@ -13,7 +13,7 @@ class GraphBuilder(object):
         self.bossRando = graphSettings.bossRando
         self.escapeRando = graphSettings.escapeRando
         self.minimizerN = graphSettings.minimizerN
-        self.log = utils.log.get('GraphBuilder')
+        self.log = log.get('GraphBuilder')
 
     # builds everything but escape transitions
     def createGraph(self):
