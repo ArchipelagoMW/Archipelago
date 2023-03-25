@@ -191,7 +191,21 @@ class KDL3World(World):
         add_rule(self.multiworld.get_location(LocationName.iceberg_name, self.player),
                  lambda state: state.has("Coo", self.player) and state.has("Burning", self.player))
         add_rule(self.multiworld.get_location(LocationName.iceberg_shiro, self.player),
-                 lambda state: state.has("Nago", self.player))
+                 lambda state: state.has("Nago", self.player) and
+                               (state.can_reach(LocationName.grass_land_1, "Location", self.player)
+                                or state.can_reach(LocationName.grass_land_5, "Location", self.player)
+                                or state.can_reach(LocationName.grass_land_6, "Location", self.player)
+                                or state.can_reach(LocationName.ripple_field_1, "Location", self.player)
+                                or state.can_reach(LocationName.ripple_field_4, "Location", self.player)
+                                or state.can_reach(LocationName.ripple_field_6, "Location", self.player)
+                                or state.can_reach(LocationName.sand_canyon_4, "Location", self.player)
+                                or state.can_reach(LocationName.sand_canyon_6, "Location", self.player)
+                                or state.can_reach(LocationName.cloudy_park_1, "Location", self.player)
+                                or state.can_reach(LocationName.cloudy_park_2, "Location", self.player)
+                                or state.can_reach(LocationName.cloudy_park_6, "Location", self.player)
+                                or state.can_reach(LocationName.iceberg_2, "Location", self.player)
+                                or state.can_reach(LocationName.iceberg_3, "Location", self.player)
+                                or state.can_reach(LocationName.iceberg_6, "Location", self.player)))
         add_rule(self.multiworld.get_location(LocationName.iceberg_angel, self.player),
                  lambda state: state.count_group("Copy Ability", self.player))  # easier than writing out 8 ands
 

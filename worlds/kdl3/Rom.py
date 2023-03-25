@@ -76,7 +76,7 @@ level_pointers = {
 
 
 class KDL3DeltaPatch(APDeltaPatch):
-    hash = {KDL3UHASH, KDL3JHASH}
+    hash = [KDL3UHASH, KDL3JHASH]
     game = "Kirby's Dream Land 3"
     patch_file_ending = ".apkdl3"
 
