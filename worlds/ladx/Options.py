@@ -18,7 +18,8 @@ class LADXROption:
 
 
 class Logic(Choice, LADXROption):
-    """Affects where items are allowed to be placed.
+    """
+    Affects where items are allowed to be placed.
     [Normal] Playable without using any tricks or glitches. Can require knowledge from a vanilla playthrough, such as how to open Color Dungeon.
     [Hard] More advanced techniques may be required, but glitches are not. Examples include tricky jumps, killing enemies with only pots.
     [Glitched] Advanced glitches and techniques may be required, but extremely difficult or tedious tricks are not required. Examples include Bomb Triggers, Super Jumps and Jesus Jumps.
@@ -35,32 +36,33 @@ class Logic(Choice, LADXROption):
 
 class TradeQuest(DefaultOffToggle, LADXROption):
     """
-    On - adds the trade items to the pool (the trade locations will always be local items)
-    Off - (default) doesn't add them
+    [On] adds the trade items to the pool (the trade locations will always be local items)
+    [Off] (default) doesn't add them
     """
     ladxr_name = "tradequest"
 
 class Boomerang(Choice):
     """
-    [Normal], requires Magnifying Lens to get the boomerang.
-    [Gift], The boomerang salesman will give you a random item, and the boomerang is shuffled.
+    [Normal] requires Magnifying Lens to get the boomerang.
+    [Gift] The boomerang salesman will give you a random item, and the boomerang is shuffled.
     """
 
     normal = 0
     gift = 1
     default = gift
 
-# TODO: translate to lttp parlance
 class EntranceShuffle(Choice, LADXROption):
     """
-    [WARNING] Experimental, may break generation
+    [WARNING] Experimental, may fail to fill
     Randomizes where overworld entrances lead to.
     [Simple] Single-entrance caves/houses that have items are shuffled amongst each other.
-    [Advanced] Simple, but two-way connector caves are shuffled in their own pool as well.
-    [Expert] Advanced, but caves/houses without items are also shuffled into the Simple entrance pool.
-    [Insanity] Expert, but the Raft Minigame hut and Mamu's cave are added to the non-connector pool.
     If random start location and/or dungeon shuffle is enabled, then these will be shuffled with all the non-connector entrance pool.
     Note, some entrances can lead into water, use the warp-to-home from the save&quit menu to escape this."""
+
+    #[Advanced] Simple, but two-way connector caves are shuffled in their own pool as well.
+    #[Expert] Advanced, but caves/houses without items are also shuffled into the Simple entrance pool.
+    #[Insanity] Expert, but the Raft Minigame hut and Mamu's cave are added to the non-connector pool.
+
     option_none = 0
     option_simple = 1
     #option_advanced = 2
@@ -71,8 +73,8 @@ class EntranceShuffle(Choice, LADXROption):
 
 class DungeonShuffle(DefaultOffToggle, LADXROption):
     """
-    [WARNING] Experimental, may break generation
-    Randomizes
+    [WARNING] Experimental, may fail to fill
+    Randomizes dungeon entrances within eachother
     """
     ladxr_name = "dungeonshuffle"
 
@@ -97,30 +99,60 @@ class DungeonItemShuffle(Choice):
 class ShuffleNightmareKeys(DungeonItemShuffle):
     """
     Shuffle Nightmare Keys
+    [Original Dungeon] The item will be within its original dungeon
+    [Own Dungeons] The item will be within a dungeon in your world
+    [Own World] The item will be somewhere in your world
+    [Any World] The item could be anywhere
+    [Different World] The item will be somewhere in another world
     """
     ladxr_item = "NIGHTMARE_KEY"
+
 class ShuffleSmallKeys(DungeonItemShuffle):
     """
     Shuffle Small Keys
+    [Original Dungeon] The item will be within its original dungeon
+    [Own Dungeons] The item will be within a dungeon in your world
+    [Own World] The item will be somewhere in your world
+    [Any World] The item could be anywhere
+    [Different World] The item will be somewhere in another world 
     """
     ladxr_item = "KEY"
 class ShuffleMaps(DungeonItemShuffle):
     """
     Shuffle Dungeon Maps
+    [Original Dungeon] The item will be within its original dungeon
+    [Own Dungeons] The item will be within a dungeon in your world
+    [Own World] The item will be somewhere in your world
+    [Any World] The item could be anywhere
+    [Different World] The item will be somewhere in another world
     """
     ladxr_item = "MAP"
+
 class ShuffleCompasses(DungeonItemShuffle):
     """
     Shuffle Dungeon Compasses
+    [Original Dungeon] The item will be within its original dungeon
+    [Own Dungeons] The item will be within a dungeon in your world
+    [Own World] The item will be somewhere in your world
+    [Any World] The item could be anywhere
+    [Different World] The item will be somewhere in another world
     """
     ladxr_item = "COMPASS"
+
 class ShuffleStoneBeaks(DungeonItemShuffle):
     """
     Shuffle Owl Beaks
+    [Original Dungeon] The item will be within its original dungeon
+    [Own Dungeons] The item will be within a dungeon in your world
+    [Own World] The item will be somewhere in your world
+    [Any World] The item could be anywhere
+    [Different World] The item will be somewhere in another world
     """
     ladxr_item = "STONE_BEAK"
+
 class Goal(Choice, LADXROption):
     """
+    The Goal of the game
     [Instruments] The Wind Fish's Egg will only open if you have the required number of Instruments of the Sirens, and play the Ballad of the Wind Fish.
     [Seashells] The Egg will open when you bring 20 seashells. The Ballad and Ocarina are not needed.
     [Open] The Egg will start pre-opened.  
@@ -133,41 +165,21 @@ class Goal(Choice, LADXROption):
     
     default = option_instruments
 
-
     def to_ladxr_option(self, all_options):
-
         if self.value == self.option_instruments:
             return ("goal", all_options["instrument_count"])
         else:
             return LADXROption.to_ladxr_option(self, all_options)
 
 class InstrumentCount(Range, LADXROption):
+    """
+    Sets the number of instruments required to open the Egg
+    """
     ladxr_name = None
     range_start = 0
     range_end = 8
     default = 8
 
-#class SeashellCount(Range):
-#    range_start = 0
-#    range_end = 20
-#    default = 20
-
-#             Setting('goal', 'Gameplay', 'G', 'Goal', options=[('8', '8', '8 instruments'), ('7', '7', '7 instruments'), ('6', '6', '6 instruments'),
-#                                                          ('5', '5', '5 instruments'), ('4', '4', '4 instruments'), ('3', '3', '3 instruments'),
-#                                                          ('2', '2', '2 instruments'), ('1', '1', '1 instrument'), ('0', '0', 'No instruments'),
-#                                                          ('open', 'O', 'Egg already open'), ('random', 'R', 'Random instrument count'),
-#                                                          ('open-4', '<', 'Random short game (0-4)'), ('5-8', '>', 'Random long game (5-8)'),
-#                                                          ('seashells', 'S', 'Seashell hunt (20)'), ('bingo', 'b', 'Bingo!'),
-#                                                          ('bingo-full', 'B', 'Bingo-25!')], default='8',
-#                 description="""Changes the goal of the game.
-# [1-8 instruments], number of instruments required to open the egg.
-# [No instruments] open the egg without instruments, still requires the ocarina with the balled of the windfish
-# [Egg already open] the egg is already open, just head for it once you have the items needed to defeat the boss.
-# [Randomized instrument count] random number of instruments required to open the egg, between 0 and 8.
-# [Random short/long game] random number of instruments required to open the egg, chosen between 0-4 and 5-8 respectively.
-# [Seashell hunt] egg will open once you collected 20 seashells. Instruments are replaced by seashells and shuffled.
-# [Bingo] Generate a 5x5 bingo board with various goals. Complete one row/column or diagonal to win!
-# [Bingo-25] Bingo, but need to fill the whole bingo card to win!"""),
 class ItemPool(Choice):
     """Effects which items are shuffled.
 [Casual] Places multiple copies of key items.
@@ -220,10 +232,6 @@ class Overworld(Choice, LADXROption):
     # option_shuffled = 3
     default = option_normal
 
-# Ugh, this will change what 'progression' means??
-#Setting('owlstatues', 'Special', 'o', 'Owl statues', options=[('', '', 'Never'), ('dungeon', 'D', 'In dungeons'), ('overworld', 'O', 'On the overworld'), ('both', 'B', 'Dungeons and Overworld')], default='',
-#    description='Replaces the hints from owl statues with additional randomized items'),
-
 #Setting('superweapons', 'Special', 'q', 'Enable super weapons', default=False,
 #    description='All items will be more powerful, faster, harder, bigger stronger. You name it.'),
 #Setting('quickswap', 'User options', 'Q', 'Quickswap', options=[('none', '', 'Disabled'), ('a', 'a', 'Swap A button'), ('b', 'b', 'Swap B button')], default='none',
@@ -258,6 +266,7 @@ class Overworld(Choice, LADXROption):
 
 class LinkPalette(Choice, LADXROption):
     """
+    Sets link's palette
     A-D are color palettes usually used during the damage animation and can change based on where you are.
     """
     display_name = "Links Palette"
@@ -280,10 +289,10 @@ class TrendyGame(Choice):
     """
     [Easy] All of the items hold still for you
     [Normal] The vanilla behavior
-    [Hard] ?
-    [Harder] ???
-    [Hardest] ????
-    [Impossible] ?????
+    [Hard] The trade item also moves
+    [Harder] The items move faster
+    [Hardest] The items move diagonally
+    [Impossible] The items move impossibly fast, may scroll on and off the screen
     """
     option_easy = 0
     option_normal = 1
@@ -295,7 +304,8 @@ class TrendyGame(Choice):
 
 class GfxMod(FreeText, LADXROption):
     """
-    options here correlate with sprite and name files in data/sprites/ladx
+    Sets the sprite for link, among other things
+    The option should be the same name as a with sprite (and optional name) file in data/sprites/ladx
     """
     display_name = "GFX Modification"
     ladxr_name = "gfxmod"
@@ -327,6 +337,16 @@ class GfxMod(FreeText, LADXROption):
         return None, None
 
 class Palette(Choice):
+    """
+    Sets the palette for the game. 
+    Note: A few places aren't patched, such as the menu and a few color dungeon tiles.
+    [Normal] The vanilla palette
+    [1-Bit] One bit of color per channel
+    [2-Bit] Two bits of color per channel
+    [Greyscale] Shades of grey
+    [Pink] Aesthetic
+    [Inverted] Inverted
+    """
     option_normal = 0
     option_1bit = 1
     option_2bit = 2

@@ -9,11 +9,13 @@ class Goal(Choice):
     Biolizard: Finish Cannon's Core and defeat the Biolizard and Finalhazard
     Chaos Emerald Hunt: Find the Seven Chaos Emeralds and reach Green Hill Zone
     Finalhazard Chaos Emerald Hunt: Find the Seven Chaos Emeralds and reach Green Hill Zone, then defeat Finalhazard
+    Grand Prix: Win every race in Kart Race Mode (all standard levels are disabled)
     """
     display_name = "Goal"
     option_biolizard = 0
     option_chaos_emerald_hunt = 1
     option_finalhazard_chaos_emerald_hunt = 2
+    option_grand_prix = 3
     default = 0
 
 
@@ -84,6 +86,24 @@ class DarknessTrapWeight(BaseTrapWeight):
     display_name = "Darkness Trap Weight"
 
 
+class PongTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Pong minigame
+    """
+    display_name = "Pong Trap Weight"
+
+
+class MinigameTrapDifficulty(Choice):
+    """
+    How difficult any Minigame-style traps are
+    """
+    display_name = "Minigame Trap Difficulty"
+    option_easy = 0
+    option_medium = 1
+    option_hard = 2
+    default = 1
+
+
 class JunkFillPercentage(Range):
     """
     Replace a percentage of non-required emblems in the item pool with random junk items
@@ -148,6 +168,27 @@ class Beetlesanity(Toggle):
     Determines whether destroying Gold Beetles grants checks
     """
     display_name = "Beetlesanity"
+
+
+class Omosanity(Toggle):
+    """
+    Determines whether activating Omochao grants checks
+    """
+    display_name = "Omosanity"
+
+
+class KartRaceChecks(Choice):
+    """
+    Determines whether Kart Race Mode grants checks
+    None: No Kart Races grant checks
+    Mini: Each Kart Race difficulty must be beaten only once
+    Full: Every Character must separately beat each Kart Race difficulty
+    """
+    display_name = "Kart Race Checks"
+    option_none = 0
+    option_mini = 1
+    option_full = 2
+    default = 0
 
 
 class EmblemPercentageForCannonsCore(Range):
@@ -440,6 +481,27 @@ class CannonsCoreMission5(DefaultOnToggle):
     display_name = "Cannon's Core Mission 5"
 
 
+class RingLoss(Choice):
+    """
+    How taking damage is handled
+    Classic: You lose all of your rings when hit
+    Modern: You lose 20 rings when hit
+    OHKO: You die immediately when hit (NOTE: Some Hard Logic tricks may require damage boosts!)
+    """
+    display_name = "Ring Loss"
+    option_classic = 0
+    option_modern = 1
+    option_ohko = 2
+    default = 0
+
+    @classmethod
+    def get_option_name(cls, value) -> str:
+        if cls.auto_display_name and value == 2:
+            return cls.name_lookup[value].upper()
+        else:
+            return cls.name_lookup[value]
+
+
 class SADXMusic(Choice):
     """
     Whether the randomizer will include Sonic Adventure DX Music in the music pool
@@ -515,6 +577,8 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "keysanity": Keysanity,
     "whistlesanity": Whistlesanity,
     "beetlesanity": Beetlesanity,
+    "omosanity": Omosanity,
+    "kart_race_checks": KartRaceChecks,
     "required_rank": RequiredRank,
     "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
     "required_cannons_core_missions": RequiredCannonsCoreMissions,
@@ -533,6 +597,9 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "gravity_trap_weight": GravityTrapWeight,
     "exposition_trap_weight": ExpositionTrapWeight,
     #"darkness_trap_weight": DarknessTrapWeight,
+    "pong_trap_weight": PongTrapWeight,
+    "minigame_trap_difficulty": MinigameTrapDifficulty,
+    "ring_loss": RingLoss,
     "sadx_music": SADXMusic,
     "music_shuffle": MusicShuffle,
     "narrator": Narrator,
