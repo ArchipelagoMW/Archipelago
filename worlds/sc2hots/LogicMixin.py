@@ -58,7 +58,7 @@ class SC2HotSLogic(LogicMixin):
         if core_unit and support_unit:
             return True
         vespene_unit = self.has_any({'Ultralisk', 'Aberration'}, player) \
-                       or advanced and self.has('Mutalisk', player)
+                       or advanced and self._sc2hots_has_viper(multiworld, player)
         return vespene_unit and self.has_any({'Zergling', 'Swarm Queen'}, player)
     
     def _sc2hots_can_spread_creep(self, multiworld: MultiWorld, player: int) -> bool:
