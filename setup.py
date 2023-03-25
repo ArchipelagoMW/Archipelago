@@ -34,7 +34,7 @@ except ImportError:
 if install_cx_freeze:
     # check if pip is available
     try:
-        import pip
+        import pip  # noqa: F401
     except ImportError:
         raise RuntimeError("pip not available. Please install pip.")
     # install and import cx_freeze
@@ -321,7 +321,6 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
                 # which should be ok
                 with zipfile.ZipFile(self.libfolder / "worlds" / (file_name + ".apworld"), "x", zipfile.ZIP_DEFLATED,
                                      compresslevel=9) as zf:
-                    entry: os.DirEntry
                     for path in world_directory.rglob("*.*"):
                         relative_path = os.path.join(*path.parts[path.parts.index("worlds")+1:])
                         zf.write(path, relative_path)
@@ -344,9 +343,9 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
             for exe in self.distribution.executables:
                 print(f"Signing {exe.target_name}")
                 os.system(signtool + os.path.join(self.buildfolder, exe.target_name))
-            print(f"Signing SNI")
+            print("Signing SNI")
             os.system(signtool + os.path.join(self.buildfolder, "SNI", "SNI.exe"))
-            print(f"Signing OoT Utils")
+            print("Signing OoT Utils")
             for exe_path in (("Compress", "Compress.exe"), ("Decompress", "Decompress.exe")):
                 os.system(signtool + os.path.join(self.buildfolder, "lib", "worlds", "oot", "data", *exe_path))
 
@@ -440,7 +439,7 @@ $APPDIR/$exe "$@"
             from PIL import Image
         except ModuleNotFoundError:
             if not self.yes:
-                input(f'Requirement PIL is not satisfied, press enter to install it')
+                input("Requirement PIL is not satisfied, press enter to install it")
             subprocess.call([sys.executable, '-m', 'pip', 'install', 'Pillow', '--upgrade'])
             from PIL import Image
         im = Image.open(src)

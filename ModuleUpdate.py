@@ -24,7 +24,7 @@ if not update_ran:
 def check_pip():
     # detect if pip is available
     try:
-        import pip
+        import pip  # noqa: F401
     except ImportError:
         raise RuntimeError("pip not available. Please install pip.")
 
@@ -45,7 +45,7 @@ def update_command():
 
 def install_pkg_resources(yes=False):
     try:
-        import pkg_resources
+        import pkg_resources  # noqa: F401
     except ImportError:
         check_pip()
         if not yes:
@@ -83,7 +83,7 @@ def update(yes=False, force=False):
                             egg = egg.split(";", 1)[0].rstrip()
                             if any(compare in egg for compare in ("==", ">=", ">", "<", "<=", "!=")):
                                 warnings.warn(f"Specifying version as #egg={egg} will become unavailable in pip 25.0. "
-                                               "Use name @ url#version instead.", DeprecationWarning)
+                                              "Use name @ url#version instead.", DeprecationWarning)
                                 line = egg
                         else:
                             egg = ""
