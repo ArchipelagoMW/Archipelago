@@ -16,8 +16,8 @@
    1. Download the latest TheMessengerRandomizerAP.zip from the
       [The Messenger Randomizer Mod AP releases page](https://github.com/alwaysintreble/TheMessengerRandomizerModAP/releases)
    2. Extract the zip file to `TheMessenger/Mods/` of your game's install location
-      * You can have both the non AP randomizer and the AP randomizer installed, but the AP randomizer is backwards
-        compatible, so it can be safely removed.
+      * You can have both the non-AP randomizer and the AP randomizer installed at the same time, but the AP randomizer
+        is backwards compatible, so the non-AP one can be safely removed.
    3. Optionally, Backup your save game
       * On Windows
         1. Press `Windows Key + R` to open run
