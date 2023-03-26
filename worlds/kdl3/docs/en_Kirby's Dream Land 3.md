@@ -16,7 +16,7 @@ as Heart Stars, 1-Ups, and Invincibility Candy will be shuffled into the pool fo
  (indicated by their portrait flashing in the level select)
 
 ## When the player receives an item, what happens?
-Kirby will immediately receive the effects of that item, such as being able to receive Copy Abilities from enemies that 
+A sound effect will play, and Kirby will immediately receive the effects of that item, such as being able to receive Copy Abilities from enemies that 
 give said Copy Ability. Animal Friends will require leaving the room you are currently in before they will appear.
 
 ## What is the goal of Kirby's Dream Land 3?

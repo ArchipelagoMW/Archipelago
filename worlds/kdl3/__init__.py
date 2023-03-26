@@ -18,18 +18,17 @@ import base64
 
 class KDL3WebWorld(WebWorld):
     theme = "partyTime"
-    """
     tutorials = [
-        
-        Tutorial(
-            "Multiworld Setup Guide",
-            "A guide to setting up the Kirby's Dream Land 3 randomizer connected to an Archipelago Multiworld.",
-            "English",
-            "setup_en.md",
-            "setup/en",
-            ["Silvris"]
-        )
-    ]"""
+
+        #Tutorial(
+        #    "Multiworld Setup Guide",
+        #    "A guide to setting up the Kirby's Dream Land 3 randomizer connected to an Archipelago Multiworld.",
+        #    "English",
+        #    "setup_en.md",
+        #    "setup/en",
+        #    ["Silvris"]
+        #)
+    ]
 
 
 class KDL3World(World):
