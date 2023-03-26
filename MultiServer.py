@@ -7,17 +7,20 @@ import functools
 import logging
 import zlib
 import collections
-import typing
-import inspect
-import weakref
 import datetime
-import threading
-import random
-import pickle
-import itertools
-import time
-import operator
+import functools
 import hashlib
+import inspect
+import itertools
+import logging
+import operator
+import pickle
+import random
+import threading
+import time
+import typing
+import weakref
+import zlib
 
 import ModuleUpdate
 
@@ -160,6 +163,7 @@ class Context:
     stored_data_notification_clients: typing.Dict[str, typing.Set[Client]]
     slot_info: typing.Dict[int, NetworkSlot]
 
+    checksums: typing.Dict[str, str]
     item_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')
     item_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
     location_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')
@@ -233,6 +237,7 @@ class Context:
 
         # init empty to satisfy linter, I suppose
         self.gamespackage = {}
+        self.checksums = {}
         self.item_name_groups = {}
         self.location_name_groups = {}
         self.all_item_and_group_names = {}
@@ -241,7 +246,7 @@ class Context:
 
         self._load_game_data()
 
-    # Datapackage retrieval
+    # Data package retrieval
     def _load_game_data(self):
         import worlds
         self.gamespackage = worlds.network_data_package["games"]
@@ -255,6 +260,7 @@ class Context:
 
     def _init_game_data(self):
         for game_name, game_package in self.gamespackage.items():
+            self.checksums[game_name] = game_package["checksum"]
             for item_name, item_id in game_package["item_name_to_id"].items():
                 self.item_names[item_id] = item_name
             for location_name, location_id in game_package["location_name_to_id"].items():
@@ -350,6 +356,7 @@ class Context:
                                    [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}
                                     for text in texts]))
 
+
     # loading
 
     def load(self, multidatapath: str, use_embedded_server_options: bool = False):
@@ -366,7 +373,7 @@ class Context:
             with open(multidatapath, 'rb') as f:
                 data = f.read()
 
-        self._load(self.decompress(data), use_embedded_server_options)
+        self._load(self.decompress(data), {}, use_embedded_server_options)
         self.data_filename = multidatapath
 
     @staticmethod
@@ -376,7 +383,8 @@ class Context:
             raise Utils.VersionException("Incompatible multidata.")
         return restricted_loads(zlib.decompress(data[1:]))
 
-    def _load(self, decoded_obj: dict, use_embedded_server_options: bool):
+    def _load(self, decoded_obj: dict, game_data_packages: typing.Dict[str, typing.Any],
+              use_embedded_server_options: bool):
         self.read_data = {}
         mdata_ver = decoded_obj["minimum_versions"]["server"]
         if mdata_ver > Utils.version_tuple:
@@ -431,13 +439,15 @@ class Context:
             server_options = decoded_obj.get("server_options", {})
             self._set_options(server_options)
 
-        # custom datapackage
+        # embedded data package
         for game_name, data in decoded_obj.get("datapackage", {}).items():
-            logging.info(f"Loading custom datapackage for game {game_name}")
+            if game_name in game_data_packages:
+                data = game_data_packages[game_name]
+            logging.info(f"Loading embedded data package for game {game_name}")
             self.gamespackage[game_name] = data
             self.item_name_groups[game_name] = data["item_name_groups"]
             self.location_name_groups[game_name] = data["location_name_groups"]
-            del data["item_name_groups"]  # remove from datapackage, but keep in self.item_name_groups
+            del data["item_name_groups"]  # remove from data package, but keep in self.item_name_groups
             del data["location_name_groups"]
         self._init_game_data()
         for game_name, data in self.item_name_groups.items():
@@ -587,7 +597,7 @@ class Context:
 
     def get_hint_cost(self, slot):
         if self.hint_cost:
-            return max(0, int(self.hint_cost * 0.01 * len(self.locations[slot])))
+            return max(1, int(self.hint_cost * 0.01 * len(self.locations[slot])))
         return 0
 
     def recheck_hints(self, team: typing.Optional[int] = None, slot: typing.Optional[int] = None):
@@ -735,10 +745,12 @@ async def on_client_connected(ctx: Context, client: Client):
                     NetworkPlayer(team, slot,
                                   ctx.name_aliases.get((team, slot), name), name)
                 )
+    games = {ctx.games[x] for x in range(1, len(ctx.games) + 1)}
+    games.add("Archipelago")
     await ctx.send_msgs(client, [{
         'cmd': 'RoomInfo',
         'password': bool(ctx.password),
-        'games': {ctx.games[x] for x in range(1, len(ctx.games) + 1)},
+        'games': games,
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ctx.tags,
@@ -747,7 +759,9 @@ async def on_client_connected(ctx: Context, client: Client):
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
         'datapackage_versions': {game: game_data["version"] for game, game_data
-                                 in ctx.gamespackage.items()},
+                                 in ctx.gamespackage.items() if game in games},
+        'datapackage_checksums': {game: game_data["checksum"] for game, game_data
+                                  in ctx.gamespackage.items() if game in games},
         'seed_name': ctx.seed_name,
         'time': time.time(),
     }])
@@ -768,7 +782,8 @@ async def on_client_disconnected(ctx: Context, client: Client):
 
 
 async def on_client_joined(ctx: Context, client: Client):
-    update_client_status(ctx, client, ClientStatus.CLIENT_CONNECTED)
+    if ctx.client_game_state[client.team, client.slot] == ClientStatus.CLIENT_UNKNOWN:
+        update_client_status(ctx, client, ClientStatus.CLIENT_CONNECTED)
     version_str = '.'.join(str(x) for x in client.version)
     verb = "tracking" if "Tracker" in client.tags else "playing"
     ctx.broadcast_text_all(
@@ -785,11 +800,12 @@ async def on_client_joined(ctx: Context, client: Client):
 
 
 async def on_client_left(ctx: Context, client: Client):
-    update_client_status(ctx, client, ClientStatus.CLIENT_UNKNOWN)
+    if len(ctx.clients[client.team][client.slot]) < 1:
+        update_client_status(ctx, client, ClientStatus.CLIENT_UNKNOWN)
+        ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
     ctx.broadcast_text_all(
         "%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1),
         {"type": "Part", "team": client.team, "slot": client.slot})
-    ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 
 async def countdown(ctx: Context, timer: int):

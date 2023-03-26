@@ -20,7 +20,7 @@ from .Client import ALTTPSNIClient
 from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
 from .Rules import set_rules
-from .Shops import create_shops, ShopSlotFill, ShopType, price_rate_display, price_type_display_name
+from .Shops import create_shops, Shop, ShopSlotFill, ShopType, price_rate_display, price_type_display_name
 from .SubClasses import ALttPItem, LTTPRegionType
 from worlds.AutoWorld import World, WebWorld, LogicMixin
 from .StateHelpers import can_buy_unlimited
@@ -674,11 +674,7 @@ class ALTTPWorld(World):
                 f'\n\nBosses{(f" ({self.multiworld.get_player_name(self.player)})" if self.multiworld.players > 1 else "")}:\n')
             spoiler_handle.write('    ' + '\n    '.join([f'{x}: {y}' for x, y in bossmap.items()]))
 
-        def build_shop_info() -> typing.Dict:
-            shop = self.multiworld.shops[self.player]
-            if not shop.custom:
-                return None
-
+        def build_shop_info(shop: Shop) -> typing.Dict[str, str]:
             shop_data = {
                 "location": str(shop.region),
                 "type": "Take Any" if shop.type == ShopType.TakeAny else "Shop"
@@ -704,12 +700,12 @@ class ALTTPWorld(World):
 
             return shop_data
 
-        shop_data = build_shop_info()
-        if shop_data is not None:
+        if shop_info := [build_shop_info(shop) for shop in self.multiworld.shops if shop.custom]:
             spoiler_handle.write('\n\nShops:\n\n')
-            spoiler_handle.write(''.join("{} [{}]\n    {}".format(shop_data['location'], shop_data['type'], "\n    ".join(
+        for shop_data in shop_info:
+            spoiler_handle.write("{} [{}]\n    {}\n".format(shop_data['location'], shop_data['type'], "\n    ".join(
                 item for item in [shop_data.get('item_0', None), shop_data.get('item_1', None), shop_data.get('item_2', None)] if
-                item))))
+                item)))
 
     def get_filler_item_name(self) -> str:
         if self.multiworld.goal[self.player] == "icerodhunt":

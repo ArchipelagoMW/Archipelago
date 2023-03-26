@@ -364,14 +364,9 @@ class MyGameLocation(Location):  # or from Locations import MyGameLocation
 
 class MyGameWorld(World):
     """Insert description of the world/game here."""
-    game: str = "My Game"  # name of the game/world
+    game = "My Game"  # name of the game/world
     option_definitions = mygame_options  # options the player can set
-    topology_present: bool = True  # show path to required location checks in spoiler
-
-    # data_version is used to signal that items, locations or their names
-    # changed. Set this to 0 during development so other games' clients do not
-    # cache any texts, then increase by 1 for each release that makes changes.
-    data_version = 0
+    topology_present = True  # show path to required location checks in spoiler
 
     # ID of first item and location, could be hard-coded but code may be easier
     # to read with this as a propery.

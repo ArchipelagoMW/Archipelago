@@ -1,11 +1,11 @@
 # object to handle the smbools and optimize them
 
-from logic.cache import Cache
-from logic.smbool import SMBool, smboolFalse
-from logic.helpers import Bosses
-from logic.logic import Logic
-from utils.doorsmanager import DoorsManager
-from utils.parameters import Knows, isKnows
+from worlds.sm.variaRandomizer.logic.cache import Cache
+from worlds.sm.variaRandomizer.logic.smbool import SMBool, smboolFalse
+from worlds.sm.variaRandomizer.logic.helpers import Bosses
+from worlds.sm.variaRandomizer.logic.logic import Logic
+from worlds.sm.variaRandomizer.utils.doorsmanager import DoorsManager
+from worlds.sm.variaRandomizer.utils.parameters import Knows, isKnows
 import logging
 import sys
 

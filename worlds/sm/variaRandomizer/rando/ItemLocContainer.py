@@ -1,8 +1,8 @@
 
-import copy, utils.log
-
-from logic.smbool import SMBool, smboolFalse
-from logic.smboolmanager import SMBoolManager
+import copy
+from worlds.sm.variaRandomizer.utils import log
+from worlds.sm.variaRandomizer.logic.smbool import SMBool, smboolFalse
+from worlds.sm.variaRandomizer.logic.smboolmanager import SMBoolManager
 from collections import Counter
 
 class ItemLocation(object):
@@ -58,7 +58,7 @@ class ItemLocContainer(object):
         self.itemPool = itemPool
         self.itemPoolBackup = None
         self.unrestrictedItems = set()
-        self.log = utils.log.get('ItemLocContainer')
+        self.log = log.get('ItemLocContainer')
         self.checkConsistency()
 
     def checkConsistency(self):
