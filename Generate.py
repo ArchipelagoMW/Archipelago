@@ -648,18 +648,19 @@ def parsing_failure_gui(type: typing.Type[BaseException], value: BaseException, 
     exception_text = format_exception(type, value, traceback.tb_next, 0)
     error_message = "".join(exception_text[0])
     error_message += "" if len(exception_text) <= 1 else f"\n{format_exception_only(type, value)[0]}"
-    message.showerror(
-        f"Generation Failed", f"{error_message}"
-    )
+
+    message.showerror(f"Generation Failed", f"{error_message}")
 
 
-def failure_gui(*args) -> None:
+def failure_gui(type: typing.Type[BaseException], value: BaseException, traceback: types.TracebackType) -> None:
     import tkinter.messagebox as message
-    message.showerror(
-        f"Generation Failed",
-        f"Please attach log from {Utils.local_path('logs')}" +
-        f"\nand all used player files in a bug report."
-    )
+    from traceback import format_exception_only, format_exception
+    exception_text = f"Please attach log from {Utils.local_path('logs')}\nand all used player files in a bug report."
+    if type is FileNotFoundError:
+        logging.exception(format_exception(type, value, traceback.tb_next))
+        exception_text = format_exception(type, value, traceback.tb_next, 0)[0]
+
+    message.showerror(f"Generation Failed", exception_text)
 
 
 if __name__ == '__main__':
