@@ -657,9 +657,8 @@ def failure_gui(type: typing.Type[BaseException], value: BaseException, tracebac
     from traceback import format_exception_only, format_exception
     exception_text = f"Please attach log from {Utils.local_path('logs')}\nand all used player files in a bug report."
     if type is FileNotFoundError:
-        logging.exception(format_exception(type, value, traceback.tb_next))
         exception_text = format_exception(type, value, traceback.tb_next, 0)[0]
-
+    logging.exception("".join(format_exception(type, value, traceback.tb_next)))
     message.showerror(f"Generation Failed", exception_text)
 
 
