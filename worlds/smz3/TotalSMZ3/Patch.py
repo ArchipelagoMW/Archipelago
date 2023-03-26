@@ -373,7 +373,7 @@ class Patch:
                 "X-Ray Scope": ItemType.XRay, "Space Jump": ItemType.SpaceJump, "Screw Attack": ItemType.ScrewAttack,
                 "Nothing": ItemType.Something, "No Energy": ItemType.Something, "Generic": ItemType.Something
             }
-            return SMNameToSMZ3Code[location.APLocation.item.name].value
+            return SMNameToSMZ3Code.get(location.APLocation.item.name, ItemType.Something).value
         else:
             return ItemType.Something.value
 
