@@ -20,19 +20,31 @@ class PreCalculatedWeights:
     dry_lake_serene: bool
 
     def __init__(self, world: MultiWorld, player: int):
-        weights_overrrides: Dict[str, Union[str, Dict[str, int]]] = self.get_flood_weights_overrides(world, player)
+        if world and is_option_enabled(world, player, "RisingTides"):
+            weights_overrrides: Dict[str, Union[str, Dict[str, int]]] = self.get_flood_weights_overrides(world, player)
 
-        self.flood_basement, self.flood_basement_high = \
-            self.roll_flood_setting(world, player, weights_overrrides, "CastleBasement")
-        self.flood_xarion, _ = self.roll_flood_setting(world, player, weights_overrrides, "Xarion")
-        self.flood_maw, _ = self.roll_flood_setting(world, player, weights_overrrides, "Maw")
-        self.flood_pyramid_shaft, _ = self.roll_flood_setting(world, player, weights_overrrides, "AncientPyramidShaft")
-        self.flood_pyramid_back, _ = self.roll_flood_setting(world, player, weights_overrrides, "Sandman")
-        self.flood_moat, _ = self.roll_flood_setting(world, player, weights_overrrides, "CastleMoat")
-        self.flood_courtyard, _ = self.roll_flood_setting(world, player, weights_overrrides, "CastleCourtyard")
-        self.flood_lake_desolation, _ = self.roll_flood_setting(world, player, weights_overrrides, "LakeDesolation")
-        flood_lake_serene, _ = self.roll_flood_setting(world, player, weights_overrrides, "LakeSerene")
-        self.dry_lake_serene = not flood_lake_serene 
+            self.flood_basement, self.flood_basement_high = \
+                self.roll_flood_setting(world, player, weights_overrrides, "CastleBasement")
+            self.flood_xarion, _ = self.roll_flood_setting(world, player, weights_overrrides, "Xarion")
+            self.flood_maw, _ = self.roll_flood_setting(world, player, weights_overrrides, "Maw")
+            self.flood_pyramid_shaft, _ = self.roll_flood_setting(world, player, weights_overrrides, "AncientPyramidShaft")
+            self.flood_pyramid_back, _ = self.roll_flood_setting(world, player, weights_overrrides, "Sandman")
+            self.flood_moat, _ = self.roll_flood_setting(world, player, weights_overrrides, "CastleMoat")
+            self.flood_courtyard, _ = self.roll_flood_setting(world, player, weights_overrrides, "CastleCourtyard")
+            self.flood_lake_desolation, _ = self.roll_flood_setting(world, player, weights_overrrides, "LakeDesolation")
+            flood_lake_serene, _ = self.roll_flood_setting(world, player, weights_overrrides, "LakeSerene")
+            self.dry_lake_serene = not flood_lake_serene 
+        else:
+            self.flood_basement = False
+            self.flood_basement_high = False
+            self.flood_xarion = False
+            self.flood_maw = False
+            self.flood_pyramid_shaft = False
+            self.flood_pyramid_back = False
+            self.flood_moat = False
+            self.flood_courtyard = False
+            self.flood_lake_desolation = False
+            self.dry_lake_serene = False 
 
         self.pyramid_keys_unlock, self.present_key_unlock, self.past_key_unlock, self.time_key_unlock = \
             self.get_pyramid_keys_unlocks(world, player, self.flood_maw)
@@ -105,9 +117,6 @@ class PreCalculatedWeights:
     @staticmethod
     def roll_flood_setting(world: MultiWorld, player: int,
             all_weights: Dict[str, Union[Dict[str, int], str]], key: str) -> Tuple[bool, bool]:
-
-        if not world or not is_option_enabled(world, player, "RisingTides"):
-            return False, False
 
         weights: Union[Dict[str, int], str] = all_weights[key]
 

@@ -22,15 +22,15 @@ class L2ACDeltaPatch(APDeltaPatch):
 def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes: Optional[bytes] = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
-        file_name: str = get_base_rom_path(file_name)
-        base_rom_bytes = bytes(Utils.read_snes_rom(open(file_name, "rb")))
+        file_path: str = get_base_rom_path(file_name)
+        base_rom_bytes = bytes(Utils.read_snes_rom(open(file_path, "rb")))
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
         if L2USHASH != basemd5.hexdigest():
             raise Exception("Supplied Base Rom does not match known MD5 for US release. "
                             "Get the correct game and version, then dump it")
-        get_base_rom_bytes.base_rom_bytes = base_rom_bytes
+        setattr(get_base_rom_bytes, "base_rom_bytes", base_rom_bytes)
     return base_rom_bytes
 
 
