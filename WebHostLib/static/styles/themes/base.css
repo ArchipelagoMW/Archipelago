@@ -84,7 +84,7 @@ html{
     border-top: 1px solid #d3d3d3;
 }
 
-#base-header-mobile-menu a.first-link{
+#base-header-mobile-menu :first-child, #base-header-popover-menu :first-child{
     border-top: none;
 }
 
@@ -113,10 +113,6 @@ html{
     line-height: 3rem;
     margin-right: 2px;
     padding: 0.25rem 1rem;
-}
-
-#base-header-popover-menu a.first-link{
-    border-top: none;
 }
 
 #base-header-popover-icon {
