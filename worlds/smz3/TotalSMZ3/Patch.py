@@ -353,7 +353,15 @@ class Patch:
             return value.value
         elif (location.APLocation.item.game == "A Link to the Past"):
             if location.APLocation.item.code + 84000 in lookup_id_to_name:
-                return location.APLocation.item.code
+                ALTTPBottleContentCodeToSMZ3ItemCode = {
+                    ItemType.RedContent.value: ItemType.BottleWithRedPotion.value,
+                    ItemType.GreenContent.value: ItemType.BottleWithGreenPotion.value,
+                    ItemType.BlueContent.value: ItemType.BottleWithBluePotion.value,
+                    ItemType.BeeContent.value: ItemType.BottleWithBee.value,
+                }
+                return ALTTPBottleContentCodeToSMZ3ItemCode.get(location.APLocation.item.code, location.APLocation.item.code)
+            else:
+                return ItemType.Something.value
             else:
                 return ItemType.Something.value
         elif (location.APLocation.item.game == "Super Metroid"):
