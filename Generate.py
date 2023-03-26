@@ -645,10 +645,11 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 def parsing_failure_gui(type: typing.Type[BaseException], value: BaseException, traceback: types.TracebackType) -> None:
     import tkinter.messagebox as message
     from traceback import format_exception_only, format_exception
+    exception_text = format_exception(type, value, traceback.tb_next, 0)
+    error_message = "".join(exception_text[0])
+    error_message += "" if len(exception_text) <= 1 else f"\n{format_exception_only(type, value)[0]}"
     message.showerror(
-        f"Generation Failed",
-        f"{''.join(format_exception(type, value, traceback.tb_next, 0)[0])}" +
-        f"\n{format_exception_only(type, value)[0]}"
+        f"Generation Failed", f"{error_message}"
     )
 
 
