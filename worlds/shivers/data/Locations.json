@@ -1,150 +1,150 @@
 {
     "all_locations": [
-        "Puzzle Solved: Gears",
-        "Puzzle Solved: Stone Henge",
-        "Puzzle Solved: Workshop Drawers",
-        "Puzzle Solved: Library Statue",
-        "Puzzle Solved: Theater Door",
-        "Puzzle Solved: Geoffrey Door",
-        "Puzzle Solved: Clock Chains",
-        "Puzzle Solved: Atlantist",
-        "Puzzle Solved: Organ",
-        "Puzzle Solved: Maze Door",
-        "Puzzle Solved: Columns of RA",
-        "Puzzle Solved: Burial Door",
-        "Puzzle Solved: Chinese Solitaire",
-        "Puzzle Solved: Tiki Drums",
-        "Puzzle Solved: Lyre",
-        "Puzzle Solved: Red Door",
-        "Puzzle Solved: Fortune Teller Door",
-        "Puzzle Solved: Alchemy",
-        "Puzzle Solved: UFO Symbols",
-        "Puzzle Solved: Anansi Musicbox",
-        "Puzzle Solved: Gallows",
-        "Puzzle Solved: Mastermind",
-        "Puzzle Solved: Marble Flipper",
-        "Flashback Memory Obtained: Beth's Ghost",
-        "Flashback Memory Obtained: Merrick's Ghost",
-        "Flashback Memory Obtained: Windlenot's Ghost",
-        "Flashback Memory Obtained: Ancient Astrology",
-        "Flashback Memory Obtained: Scrapbook",
-        "Flashback Memory Obtained: Museum Brochure",
-        "Flashback Memory Obtained: In Search of the Unexplained",
-        "Flashback Memory Obtained: Egyptian Hieroglyphics Explained",
-        "Flashback Memory Obtained: South American Pictographs",
-        "Flashback Memory Obtained: Mythology of the Stars",
-        "Flashback Memory Obtained: Black Book",
-        "Flashback Memory Obtained: Theater Movie",
-        "Flashback Memory Obtained: Museum Blueprints",
-        "Flashback Memory Obtained: Beth's Address Book",
-        "Flashback Memory Obtained: Merick's Notebook",
-        "Flashback Memory Obtained: Professor Windlenot's Diary"
+        "Puzzle Solved Gears",
+        "Puzzle Solved Stone Henge",
+        "Puzzle Solved Workshop Drawers",
+        "Puzzle Solved Library Statue",
+        "Puzzle Solved Theater Door",
+        "Puzzle Solved Geoffrey Door",
+        "Puzzle Solved Clock Chains",
+        "Puzzle Solved Atlantist",
+        "Puzzle Solved Organ",
+        "Puzzle Solved Maze Door",
+        "Puzzle Solved Columns of RA",
+        "Puzzle Solved Burial Door",
+        "Puzzle Solved Chinese Solitaire",
+        "Puzzle Solved Tiki Drums",
+        "Puzzle Solved Lyre",
+        "Puzzle Solved Red Door",
+        "Puzzle Solved Fortune Teller Door",
+        "Puzzle Solved Alchemy",
+        "Puzzle Solved UFO Symbols",
+        "Puzzle Solved Anansi Musicbox",
+        "Puzzle Solved Gallows",
+        "Puzzle Solved Mastermind",
+        "Puzzle Solved Marble Flipper",
+        "Flashback Memory Obtained Beth's Ghost",
+        "Flashback Memory Obtained Merrick's Ghost",
+        "Flashback Memory Obtained Windlenot's Ghost",
+        "Flashback Memory Obtained Ancient Astrology",
+        "Flashback Memory Obtained Scrapbook",
+        "Flashback Memory Obtained Museum Brochure",
+        "Flashback Memory Obtained In Search of the Unexplained",
+        "Flashback Memory Obtained Egyptian Hieroglyphics Explained",
+        "Flashback Memory Obtained South American Pictographs",
+        "Flashback Memory Obtained Mythology of the Stars",
+        "Flashback Memory Obtained Black Book",
+        "Flashback Memory Obtained Theater Movie",
+        "Flashback Memory Obtained Museum Blueprints",
+        "Flashback Memory Obtained Beth's Address Book",
+        "Flashback Memory Obtained Merick's Notebook",
+        "Flashback Memory Obtained Professor Windlenot's Diary"
     ],
     "locations_by_region": {
         "Outside": [
-            "Puzzle Solved: Gears",
-            "Puzzle Solved: Stone Henge"
+            "Puzzle Solved Gears",
+            "Puzzle Solved Stone Henge"
         ],
         "Underground Lake": [
-            "Flashback Memory Obtained: Windlenot's Ghost",
-            "Flashback Memory Obtained: Egyptian Hieroglyphics Explained"
+            "Flashback Memory Obtained Windlenot's Ghost",
+            "Flashback Memory Obtained Egyptian Hieroglyphics Explained"
         ],
         "Office": [
-            "Flashback Memory Obtained: Scrapbook"
+            "Flashback Memory Obtained Scrapbook"
         ],
         "Workshop": [
-            "Puzzle Solved: Workshop Drawers"
+            "Puzzle Solved Workshop Drawers"
         ],
         "Bedroom": [
-            "Flashback Memory Obtained: Professor Windlenot's Diary"
+            "Flashback Memory Obtained Professor Windlenot's Diary"
         ],
         "Library": [
-            "Puzzle Solved: Library Statue",
-            "Flashback Memory Obtained: In Search of the Unexplained",
-            "Flashback Memory Obtained: South American Pictographs",
-            "Flashback Memory Obtained: Mythology of the Stars",
-            "Flashback Memory Obtained: Black Book"
+            "Puzzle Solved Library Statue",
+            "Flashback Memory Obtained In Search of the Unexplained",
+            "Flashback Memory Obtained South American Pictographs",
+            "Flashback Memory Obtained Mythology of the Stars",
+            "Flashback Memory Obtained Black Book"
         ],
         "Maintenance Tunnels": [
-            "Flashback Memory Obtained: Beth's Address Book"
+            "Flashback Memory Obtained Beth's Address Book"
         ],
         "Lobby": [
             "Puzzle Solved: Theater Door",
-            "Flashback Memory Obtained: Museum Brochure"
+            "Flashback Memory Obtained Museum Brochure"
         ],
         "Theater Back Hallways": [
-            "Puzzle Solved: Geoffrey Door"
+            "Puzzle Solved Geoffrey Door"
         ],
         "Clock Tower Staircase": [
-            "Puzzle Solved: Clock Chains"
+            "Puzzle Solved Clock Chains"
         ],
         "Clock Tower": [
-            "Flashback Memory Obtained: Beth's Ghost"
+            "Flashback Memory Obtained Beth's Ghost"
         ],
         "Projector Room": [
-            "Flashback Memory Obtained: Theater Movie"
+            "Flashback Memory Obtained Theater Movie"
         ],
         "Ocean": [
-            "Puzzle Solved: Atlantist",
-            "Puzzle Solved: Organ",
+            "Puzzle Solved Atlantist",
+            "Puzzle Solved Organ",
             "Flashback Memory Obtained: Museum Blueprints"
         ],
         "Maze Staircase": [
-            "Puzzle Solved: Maze Door"
+            "Puzzle Solved Maze Door"
         ],
         "Egypt": [
-            "Puzzle Solved: Columns of RA",
-            "Puzzle Solved: Burial Door"
+            "Puzzle Solved Columns of RA",
+            "Puzzle Solved Burial Door"
         ],
         "Burial": [
-            "Puzzle Solved: Chinese Solitaire",
-            "Flashback Memory Obtained: Merick's Notebook"
+            "Puzzle Solved Chinese Solitaire",
+            "Flashback Memory Obtained Merick's Notebook"
         ],
         "Tiki": [
-            "Puzzle Solved: Tiki Drums"
+            "Puzzle Solved Tiki Drums"
         ],
         "Gods Room": [
-            "Puzzle Solved: Lyre",
-            "Puzzle Solved: Red Door"
+            "Puzzle Solved Lyre",
+            "Puzzle Solved Red Door"
         ],
         "Blue Maze": [
-            "Puzzle Solved: Fortune Teller Door"
+            "Puzzle Solved Fortune Teller Door"
         ],
         "Fortune Teller": [
-            "Flashback Memory Obtained: Merrick's Ghost"
+            "Flashback Memory Obtained Merrick's Ghost"
         ],
         "Inventions": [
-            "Puzzle Solved: Alchemy"
+            "Puzzle Solved Alchemy"
         ],
         "UFO": [
-            "Puzzle Solved: UFO Symbols"
+            "Puzzle Solved UFO Symbols"
         ],
         "Anansi": [
-            "Puzzle Solved: Anansi Musicbox",
-            "Flashback Memory Obtained: Ancient Astrology"
+            "Puzzle Solved Anansi Musicbox",
+            "Flashback Memory Obtained Ancient Astrology"
         ],
         "Torture": [
-            "Puzzle Solved: Gallows"
+            "Puzzle Solved Gallows"
         ],
         "Puzzle Room Mastermind": [
-            "Puzzle Solved: Mastermind"
+            "Puzzle Solved Mastermind"
         ],
         "Puzzle Room Marbles": [
-            "Puzzle Solved: Marble Flipper"
+            "Puzzle Solved Marble Flipper"
         ]
     },
 	"future locations": [
-	    "Puzzle Solved: Skull Dial",
-        "Puzzle Solved: Final Riddle",
-		"Ixupi Captured: Water",
-        "Ixupi Captured: Wax",
-        "Ixupi Captured: Ash",
-        "Ixupi Captured: Oil",
-        "Ixupi Captured: Cloth",
-        "Ixupi Captured: Wood ",
-        "Ixupi Captured: Crystal",
-        "Ixupi Captured: Lightning",
-        "Ixupi Captured: Sand",
-        "Ixupi Captured: Metal"
+	    "Puzzle Solved Skull Dial",
+        "Puzzle Solved Final Riddle",
+		"Ixupi Captured Water",
+        "Ixupi Captured Wax",
+        "Ixupi Captured Ash",
+        "Ixupi Captured Oil",
+        "Ixupi Captured Cloth",
+        "Ixupi Captured Wood ",
+        "Ixupi Captured Crystal",
+        "Ixupi Captured Lightning",
+        "Ixupi Captured Sand",
+        "Ixupi Captured Metal"
 	]
 }   

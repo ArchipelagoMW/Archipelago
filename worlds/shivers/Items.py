@@ -38,27 +38,25 @@ item_table = {
     "Metal Top": ItemData(SHIVERS_ITEM_ID_OFFSET + 19, "pot"),
 
     #Keys
-    "Elevator Key: Office": ItemData(SHIVERS_ITEM_ID_OFFSET + 20, "key"),
-    "Elevator Key: Bedroom": ItemData(SHIVERS_ITEM_ID_OFFSET + 21, "key"),
-    "Elevator Key: Three Floor": ItemData(SHIVERS_ITEM_ID_OFFSET + 22, "key"),
-    "Key: Workshop": ItemData(SHIVERS_ITEM_ID_OFFSET + 23, "key"),
-    "Key: Prehistoric Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 24, "key"),
-    "Key: Plants Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 25, "key"),
-    "Key: Ocean Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 26, "key"),
-    "Key: Projector Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 27, "key"),
-    "Key: Generator Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 28, "key"),
-    "Key: Library Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 29, "key"),
-    "Key: Tiki Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 30, "key"),
-    "Key: UFO Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 31, "key"),
-    "Key: Torture Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 32, "key"),
-    "Key: Puzzle Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 33, "key"),
-    "Key: Bedroom Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 34, "key"),
-    "Key: Underground Lake Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 35, "key"),
+    "Key for Office Elevator": ItemData(SHIVERS_ITEM_ID_OFFSET + 20, "key"),
+    "Key for Bedroom Elevator": ItemData(SHIVERS_ITEM_ID_OFFSET + 21, "key"),
+    "Key for Three Floor Elevator": ItemData(SHIVERS_ITEM_ID_OFFSET + 22, "key"),
+    "Key for Workshop": ItemData(SHIVERS_ITEM_ID_OFFSET + 23, "key"),
+    "Key for Lobby": ItemData(SHIVERS_ITEM_ID_OFFSET + 24, "key"),
+    "Key for Prehistoric Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 25, "key"),
+    "Key for Plants Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 26, "key"),
+    "Key for Ocean Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 27, "key"),
+    "Key for Projector Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 28, "key"),
+    "Key for Generator Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 29, "key"),
+    "Key for Egypt Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 30, "key"),
+    "Key for Library Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 31, "key"),
+    "Key for Tiki Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 32, "key"),
+    "Key for UFO Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 33, "key"),
+    "Key for Torture Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 34, "key"),
+    "Key for Puzzle Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 35, "key"),
+    "Key for Bedroom Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 36, "key"),
+    "Key for Underground Lake Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 37, "key"),
 
     #Abilities
     "Crawling": ItemData(SHIVERS_ITEM_ID_OFFSET + 50, "ability"),
-
-    #Filler
-    "Filler 1": ItemData(SHIVERS_ITEM_ID_OFFSET + 70, "filler"),
-    "Filler 2": ItemData(SHIVERS_ITEM_ID_OFFSET + 71, "filler")
 }

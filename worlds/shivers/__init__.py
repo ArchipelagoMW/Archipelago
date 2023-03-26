@@ -1,7 +1,7 @@
 import typing
 from .Items import item_table, ShiversItem, get_full_item_list
 #from .Options import Shivers_options
-#from .Rules import set_rules
+from .Rules import set_rules
 from BaseClasses import Item, Tutorial, Region, Entrance, Location
 from ..AutoWorld import World, WebWorld
 from . import Constants
@@ -78,15 +78,16 @@ class ShiversWorld(World):
         
         # Add abilities
         abilities = [self.create_item(name) for name, data in item_table.items() if data.type == 'ability']
-                
-        # Add filler
-        filler = [self.create_item(name) for name, data in item_table.items() if data.type == 'filler']
-
         
         self.multiworld.itempool += pots
         self.multiworld.itempool += keys
         self.multiworld.itempool += abilities
-        self.multiworld.itempool += filler
+
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Ash Pot Top", self.player)
+
+    set_rules = set_rules
+
+    def _place_events(self):
 
 
 class ShiversLocation(Location):
