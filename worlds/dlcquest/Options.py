@@ -29,8 +29,8 @@ class TimeIsMoney(Choice):
     """Is your time worth the money, are you ready to grind your sword by hand?"""
     internal_name = "time_is_money"
     display_name = "Time Is Money"
-    option_I_want_speed = 0
-    option_I_can_grind = 1
+    option_required = 0
+    option_optional = 1
     default = 0
 
 

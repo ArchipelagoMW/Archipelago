@@ -53,7 +53,7 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
             set_rule(world.get_entrance("Behind Ogre", player),
                      lambda state: state.has("Gun Pack", player))
 
-            if World_Options[Options.TimeIsMoney] == Options.TimeIsMoney.option_I_want_speed:
+            if World_Options[Options.TimeIsMoney] == Options.TimeIsMoney.option_required:
                 set_rule(world.get_entrance("Tree", player),
                          lambda state: state.has("Time is Money Pack", player))
                 set_rule(world.get_entrance("Cave Tree", player),
@@ -85,7 +85,7 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
             set_rule(world.get_location("West Cave Sheep", player),
                      lambda state: state.has("Sword", player) or state.has("Gun", player))
 
-            if World_Options[Options.TimeIsMoney] == Options.TimeIsMoney.option_I_want_speed:
+            if World_Options[Options.TimeIsMoney] == Options.TimeIsMoney.option_required:
                 set_rule(world.get_location("Sword", player),
                          lambda state: state.has("Time is Money Pack", player))
 
