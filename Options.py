@@ -1,37 +1,35 @@
 import typing
-from Options import Choice, Option, Toggle, Range, DeathLink
+from Options import Choice, Option, DeathLink
 
 
-class Keysanity(Choice):
-	"""
-	Whether to shuffle the doors Keyzers unlock
-	Off: Keyzer unlocks the next door in this passage
-	Simple: Keyzer unlocks the next door in a random passage
-	Full: Keyzer unlocks a random door
-	"""
-	display_name = "Shuffle Keyzers"
-	option_off = 0
-	option_simple = 1
-	option_full = 2
-	default = 0
+class Difficulty(Choice):
+    """
+    The game's difficulty level.
+    Hard and S-Hard have slightly less locations to check since some Full Health item boxes are missing on those difficulties.
+    """
+    display_name = "Difficulty"
+    option_normal = 0
+    option_hard = 1
+    option_s_hard = 2
+    default = 0
 
 
 class MusicShuffle(Choice):
-	"""
-	Music shuffle type
-	None: Music is not shuffled
-	Levels only: Only shuffle music between the main levels besides the Golden Passage
-	Full: Shuffle all music
-	"""
-	display_name = "Music Shuffle"
-	option_none = 0
-	option_levels_only = 1
-	option_full = 2
-	default = 0
+    """
+    Music shuffle type
+    None: Music is not shuffled
+    Levels only: Only shuffle music between the main levels besides the Golden Passage
+    Full: Shuffle all music
+    """
+    display_name = "Music Shuffle"
+    option_none = 0
+    option_levels_only = 1
+    option_full = 2
+    default = 0
 
 
-wl4_options: typing.Dict[str, type(Option)] = {
-	"death_link": DeathLink
-	# "keyzer": Keysanity
-	# "music_shuffle": MusicShuffle
+wl4_options: typing.Dict[str, type[Option]] = {
+    "difficulty": Difficulty,
+    "death_link": DeathLink,
+    #"music_shuffle": MusicShuffle,
 }

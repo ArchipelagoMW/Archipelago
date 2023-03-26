@@ -43,6 +43,14 @@ class Level(typing.NamedTuple):
             None,
             name_format.substitute(level=name, check="Full Health Item Box"),
         )
+    
+    @classmethod
+    def without_health(cls, name):
+        return cls._with_cd_health(
+            name,
+            name_format.substitute(level=name, check="CD Box"),
+            None
+        )
 
     @classmethod
     def jewels_only(cls, name):
@@ -64,24 +72,24 @@ monsoon_jungle = Level.from_region(RegionName.monsoon_jungle)
 cractus = boss_format.substitute(boss=RegionName.cractus)
 
 # Ruby Passage
-curious_factory = Level.from_region(RegionName.curious_factory)
+curious_factory = Level.without_health(RegionName.curious_factory)
 toxic_landfill = Level.from_region(RegionName.toxic_landfill)
-forty_below_fridge = Level.from_region(RegionName.forty_below_fridge)
+forty_below_fridge = Level.without_health(RegionName.forty_below_fridge)
 pinball_zone = Level.from_region(RegionName.pinball_zone)
 cuckoo_condor = boss_format.substitute(boss=RegionName.cuckoo_condor)
 
 # Topaz Passage
 toy_block_tower = Level.from_region(RegionName.toy_block_tower)
 big_board = Level.from_region(RegionName.big_board)
-doodle_woods = Level.from_region(RegionName.doodle_woods)
-domino_row = Level.from_region(RegionName.domino_row)
+doodle_woods = Level.without_health(RegionName.doodle_woods)
+domino_row = Level.without_health(RegionName.domino_row)
 aerodent = boss_format.substitute(boss=RegionName.aerodent)
 
 # Sapphire Passage
-crescent_moon_village = Level.from_region(RegionName.crescent_moon_village)
-arabian_night = Level.from_region(RegionName.arabian_night)
-fiery_cavern = Level.from_region(RegionName.fiery_cavern)
-hotel_horror = Level.from_region(RegionName.hotel_horror)
+crescent_moon_village = Level.without_health(RegionName.crescent_moon_village)
+arabian_night = Level.without_health(RegionName.arabian_night)
+fiery_cavern = Level.without_health(RegionName.fiery_cavern)
+hotel_horror = Level.without_health(RegionName.hotel_horror)
 catbat = boss_format.substitute(boss=RegionName.catbat)
 
 # Golden Pyramid

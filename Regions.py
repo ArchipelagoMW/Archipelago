@@ -2,166 +2,220 @@ import typing
 
 from BaseClasses import MultiWorld, Region, Entrance
 
-from .Locations import WL4Location, all_locations
+from .Locations import WL4Location
 from .Names import LocationName, ItemName, RegionName
 
 
-def create_regions(world: MultiWorld, player: int):
-    menu_region = create_region(world, player, "Menu")
-    map_region = create_region(world, player, RegionName.map)
+def create_regions(world: MultiWorld, player: int, location_table: dict):
+    menu_region = create_region(world, player, location_table, "Menu")
+    map_region = create_region(world, player, location_table, RegionName.map)
 
-    entry_passage = create_region(world, player, RegionName.entry_passage)
+    entry_passage = create_region(
+        world,
+        player,
+        location_table,
+        RegionName.entry_passage
+    )
     hall_of_hieroglyphs = create_region(
         world,
         player,
+        location_table,
         RegionName.hall_of_hieroglyphs,
         LocationName.hall_of_hieroglyphs.locations(),
     )
     spoiled_rotten = create_region(
         world,
         player,
+        location_table,
         RegionName.spoiled_rotten,
         [LocationName.spoiled_rotten],
     )
 
-    emerald_passage = create_region(world, player, RegionName.emerald_passage)
+    emerald_passage = create_region(
+        world,
+        player,
+        location_table,
+        RegionName.emerald_passage
+    )
     palm_tree_paradise = create_region(
         world,
         player,
+        location_table,
         RegionName.palm_tree_paradise,
         LocationName.palm_tree_paradise.locations(),
     )
     wildflower_fields = create_region(
         world,
         player,
+        location_table,
         RegionName.wildflower_fields,
         LocationName.wildflower_fields.locations(),
     )
     mystic_lake = create_region(
         world,
         player,
+        location_table,
         RegionName.mystic_lake,
         LocationName.mystic_lake.locations(),
     )
     monsoon_jungle = create_region(
         world,
         player,
+        location_table,
         RegionName.monsoon_jungle,
         LocationName.monsoon_jungle.locations(),
     )
     cractus = create_region(
         world,
         player,
+        location_table,
         RegionName.cractus,
         [LocationName.cractus],
     )
 
-    ruby_passage = create_region(world, player, RegionName.ruby_passage)
+    ruby_passage = create_region(
+        world,
+        player,
+        location_table,
+        RegionName.ruby_passage
+    )
     curious_factory = create_region(
         world,
         player,
+        location_table,
         RegionName.curious_factory,
         LocationName.curious_factory.locations(),
     )
     toxic_landfill = create_region(
         world,
         player,
+        location_table,
         RegionName.toxic_landfill,
         LocationName.toxic_landfill.locations(),
     )
     forty_below_fridge = create_region(
         world,
         player,
+        location_table,
         RegionName.forty_below_fridge,
         LocationName.forty_below_fridge.locations(),
     )
     pinball_zone = create_region(
         world,
         player,
+        location_table,
         RegionName.pinball_zone,
         LocationName.pinball_zone.locations(),
     )
     cuckoo_condor = create_region(
         world,
         player,
+        location_table,
         RegionName.cuckoo_condor,
         [LocationName.cuckoo_condor],
     )
 
-    topaz_passage = create_region(world, player, RegionName.topaz_passage)
+    topaz_passage = create_region(
+        world,
+        player,
+        location_table,
+        RegionName.topaz_passage
+    )
     toy_block_tower = create_region(
         world,
         player,
+        location_table,
         RegionName.toy_block_tower,
         LocationName.toy_block_tower.locations(),
     )
     big_board = create_region(
         world,
         player,
+        location_table,
         RegionName.big_board,
         LocationName.big_board.locations(),
     )
     doodle_woods = create_region(
         world,
         player,
+        location_table,
         RegionName.doodle_woods,
         LocationName.doodle_woods.locations(),
     )
     domino_row = create_region(
         world,
         player,
+        location_table,
         RegionName.domino_row,
         LocationName.domino_row.locations(),
     )
     aerodent = create_region(
         world,
         player,
+        location_table,
         RegionName.aerodent,
         [LocationName.aerodent],
     )
 
-    sapphire_passage = create_region(world, player, RegionName.sapphire_passage)
+    sapphire_passage = create_region(
+        world,
+        player,
+        location_table,
+        RegionName.sapphire_passage
+    )
     crescent_moon_village = create_region(
         world,
         player,
+        location_table,
         RegionName.crescent_moon_village,
         LocationName.crescent_moon_village.locations(),
     )
     arabian_night = create_region(
         world,
         player,
+        location_table,
         RegionName.arabian_night,
         LocationName.arabian_night.locations(),
     )
     fiery_cavern = create_region(
         world,
         player,
+        location_table,
         RegionName.fiery_cavern,
         LocationName.fiery_cavern.locations(),
     )
     hotel_horror = create_region(
         world,
         player,
+        location_table,
         RegionName.hotel_horror,
         LocationName.hotel_horror.locations(),
     )
     catbat = create_region(
         world,
         player,
+        location_table,
         RegionName.catbat,
         [LocationName.catbat],
     )
 
-    golden_pyramid = create_region(world, player, RegionName.golden_pyramid)
+    golden_pyramid = create_region(
+        world,
+        player,
+        location_table,
+        RegionName.golden_pyramid
+    )
     golden_passage = create_region(
         world,
         player,
+        location_table,
         RegionName.golden_passage,
         LocationName.golden_passage.jewels,
     )
     golden_diva = create_region(
         world,
         player,
+        location_table,
         RegionName.golden_diva,
         [LocationName.golden_diva],
     )
@@ -252,12 +306,19 @@ def connect_regions(world, player):
 
 
 def create_region(
-    world: MultiWorld, player: int, name: str, locations: typing.Sequence[str] = ()
+    world: MultiWorld,
+    player: int,
+    location_table: dict,
+    name: str,
+    locations: typing.Sequence[str] = ()
 ):
     region = Region(name, player, world)
     for location in locations:
-        id = all_locations[location]
-        region.locations.append(WL4Location(player, location, id, region))
+        try:
+            id = location_table[location]
+            region.locations.append(WL4Location(player, location, id, region))
+        except KeyError:
+            pass
     return region
 
 

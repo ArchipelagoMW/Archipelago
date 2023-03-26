@@ -4,7 +4,7 @@ from BaseClasses import Item, ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
 
 from .Items import WL4Item, item_table
-from .Locations import all_locations
+from .Locations import all_locations, setup_locations
 from .Logic import WL4Logic
 from .Names import ItemName, LocationName
 from .Options import wl4_options
@@ -26,6 +26,7 @@ class WL4Web(WebWorld):
     
     tutorials = [setup_en]
 
+
 class WL4World(World):
     game: str = "Wario Land 4"
     option_definitions = wl4_options
@@ -45,12 +46,15 @@ class WL4World(World):
 
         diamond_pieces = 18 * 4
         cds = 16
-        full_health_items = 17
+        full_health_items = (9, 7, 5)[self.multiworld.difficulty[self.player].value]
         total_required_locations = diamond_pieces + cds + full_health_items
 
         for item, data in Items.box_table.items():
             for _ in range(data.quantity):
                 itempool.append(self.create_item(item))
+        
+        for _ in range(full_health_items):
+            itempool.append(self.create_item(ItemName.full_health))
 
         junk_count = total_required_locations - len(itempool)
         assert junk_count == 0, f"Mismatched location counts: {junk_count} empty checks"
@@ -63,17 +67,15 @@ class WL4World(World):
             LocationName.catbat,
         ]
         for location_name in boss_location_names:
-            self.multiworld.get_location(location_name, self.player).place_locked_item(
-                self.create_event(ItemName.defeated_boss)
-            )
+            (self.multiworld
+                .get_location(location_name, self.player)
+                .place_locked_item(self.create_event(ItemName.defeated_boss)))
 
-        self.multiworld.get_location(
-            LocationName.golden_diva, self.player
-        ).place_locked_item(self.create_event(ItemName.victory))
+        (self.multiworld
+            .get_location(LocationName.golden_diva, self.player)
+            .place_locked_item(self.create_event(ItemName.victory)))
 
         self.multiworld.itempool += itempool
-
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.victory, self.player)
     
     def generate_output(self, output_directory: str):
         from pathlib import Path
@@ -102,17 +104,16 @@ class WL4World(World):
                 rompath.unlink()
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player)
+        location_table = setup_locations(self.multiworld, self.player)
+        create_regions(self.multiworld, self.player, location_table)
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
 
         if force_non_progression:
             classification = ItemClassification.filler
-        elif data.progression:
-            classification = ItemClassification.progression
         else:
-            classification = ItemClassification.filler
+            classification = data.classification
 
         created_item = WL4Item(name, classification, data.code, self.player)
 
@@ -120,3 +121,6 @@ class WL4World(World):
     
     def create_event(self, name: str):
         return WL4Item(name, ItemClassification.progression, None, self.player)
+    
+    def set_rules(self):
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.victory, self.player)

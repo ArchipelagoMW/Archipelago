@@ -138,7 +138,7 @@ def shuffle_keyzer(rom: LocalRom, world: MultiWorld, player: int):
 def skip_cutscenes(rom: LocalRom):
     # Intro cutscene
     rom.write_halfword(0x00312, 0x2001)  # movs r0, #1  ; MainGameLoop(): Prevent cutscene start
-    rom.write_halfword(0x91944, 0x0000)  # movs r0, r0  ; GameReady(): Stop title music
+    rom.write_halfword(0x91944, 0x46C0)  # nop  ; GameReady(): Stop title music
     rom.write_word(0x91DA8, 0x08091DD8)  # ReadySet_SelectKey(): Don't play car engine sound
 
     # Autosave tutorial
@@ -150,12 +150,6 @@ def skip_cutscenes(rom: LocalRom):
     # Post-boss cutscenes
     rom.write_halfword(0x79FDC, 0x2001)  # movs r0, #1  ; MainGameLoop(): Pyramid appears
     rom.write_halfword(0x7A030, 0x2000)  # movs r0, #0  ; MainGameLoop(): Pyramid opens
-
-
-def improve_qol(rom: LocalRom):
-    # Always allow S-Hard
-    rom.write_halfword(0x91F8E, 0x2001)  # movs r0, r1  ; ReadySub_Level(): Allow selection 
-    rom.write_halfword(0x92268, 0x2001)  # movs r0, #1  ; ReadyObj_Win1Set(): Display option 
 
 
 def fill_items(rom: LocalRom, world: MultiWorld, player: int):
@@ -182,9 +176,22 @@ def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     patch_save_data(rom)
     fill_items(rom, world, player)
     skip_cutscenes(rom)
-    improve_qol(rom)
+
+    # Write player name
     rom.write_bytes(symbols["playername"],
                     bytes(world.player_name[player], "utf-8"))
+    
+    # Force difficulty level
+    mov_r0 = 0x2000 | world.difficulty[player].value # mov r0, #(world.difficulty[player].value)
+    rom.write_halfword(0x91558, mov_r0)  # SramtoWork_Load(): Force difficulty (anti-cheese)
+
+    rom.write_halfword(0x91F8E, 0x2001)  # movs r0, r1  ; ReadySub_Level(): Allow selecting S-Hard 
+    rom.write_halfword(0x91FCC, 0x46C0)  # nop  ; ReadySub_Level(): Force cursor to difficulty
+    rom.write_halfword(0x91FD2, 0xE007)  # b 0x8091FE4
+    cmp_r0 = 0x2800 | world.difficulty[player].value  # cmp r0, #(world.difficulty[player].value)
+    rom.write_halfword(0x91FE4, cmp_r0)
+
+    rom.write_halfword(0x92268, 0x2001)  # movs r0, #1  ; ReadyObj_Win1Set(): Display S-Hard
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:
