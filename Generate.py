@@ -654,7 +654,7 @@ def parsing_failure_gui(type: typing.Type[BaseException], value: BaseException, 
 
 def failure_gui(type: typing.Type[BaseException], value: BaseException, traceback: types.TracebackType) -> None:
     import tkinter.messagebox as message
-    from traceback import format_exception_only, format_exception
+    from traceback import format_exception
     exception_text = f"Please attach log from {Utils.local_path('logs')}\nand all used player files in a bug report."
     if type is FileNotFoundError:
         exception_text = format_exception(type, value, traceback.tb_next, 0)[0]
