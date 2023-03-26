@@ -101,7 +101,7 @@ class LinksAwakeningWorld(World):
         # Connect Menu -> Start
         start = None
         for region in regions:
-            if region.name == "Start House":
+            if region.name == "Tarin's House":
                 start = region
                 break
 
