@@ -387,7 +387,7 @@ class World:
 
         multichest_cave = IndoorLocation("Five Chest Cave")
         multichest_cave_secret = IndoorLocation("Five Chest Cave Secret").connect(multichest_cave, BOMB)
-        water_cave_hole = OverworldLocation("Damp Cave Hole")  # Location with the hole that drops you onto the hearth piece under water
+        water_cave_hole = OverworldLocation("Outside Wet Cave Hole")  # Location with the hole that drops you onto the hearth piece under water
         if options.logic != "casual":
             water_cave_hole.connect(heartpiece_swim_cave, FLIPPERS, one_way=True)
         multichest_outside = OverworldLocation("Outside Five Chest Game").add(Chest(0x01D))  # chest after multichest puzzle outside
