@@ -39,6 +39,13 @@ class WL4World(World):
 
     web = WL4Web()
 
+    def generate_early(self):
+        if self.multiworld.early_entry_jewels[self.player]:
+            self.multiworld.local_early_items[self.player][ItemName.entry_passage_jewel.ne] = 1
+            self.multiworld.local_early_items[self.player][ItemName.entry_passage_jewel.se] = 1
+            self.multiworld.local_early_items[self.player][ItemName.entry_passage_jewel.sw] = 1
+            self.multiworld.local_early_items[self.player][ItemName.entry_passage_jewel.nw] = 1
+
     def generate_basic(self) -> None:
         itempool: typing.List[WL4Item] = []
 

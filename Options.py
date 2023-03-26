@@ -1,5 +1,5 @@
 import typing
-from Options import Choice, Option, DeathLink
+from Options import Choice, Option, DefaultOnToggle, DeathLink
 
 
 class Difficulty(Choice):
@@ -12,6 +12,14 @@ class Difficulty(Choice):
     option_hard = 1
     option_s_hard = 2
     default = 0
+
+
+class EarlyEntryJewels(DefaultOnToggle):
+    """
+    Force the Entry Passage Jewel Pieces to appear early in the seed as a local item.
+    Recommended to prevent early BK
+    """
+    display_name = "Early Entry Passage Jewels"
 
 
 class MusicShuffle(Choice):
@@ -30,6 +38,7 @@ class MusicShuffle(Choice):
 
 wl4_options: typing.Dict[str, type[Option]] = {
     "difficulty": Difficulty,
+    "early_entry_jewels": EarlyEntryJewels,
     "death_link": DeathLink,
     #"music_shuffle": MusicShuffle,
 }
