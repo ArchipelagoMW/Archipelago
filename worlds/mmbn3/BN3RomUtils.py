@@ -53,10 +53,7 @@ def int16_to_byte_list_le(x) -> bytearray:
 
 
 def generate_text_bytes(message) -> bytearray:
-    byte_list = []
-    for c in message:
-        byte_list.append(charDict[c])
-    return bytearray(byte_list)
+    return bytearray(charDict[c] for c in message)
 
 
 def generate_chip_get(chip, code, amt) -> bytearray:
@@ -90,14 +87,14 @@ def generate_sub_chip_get(subchip, amt) -> bytearray:
 
 def generate_zenny_get(amt) -> bytearray:
     zenny_bytes = int32_to_byte_list_le(amt)
-    byte_list = [0xF6, 0x30, zenny_bytes[0], zenny_bytes[1], zenny_bytes[2], zenny_bytes[3], 0xFF, 0xFF, 0xFF]
-    byte_list.extend(generate_text_bytes("Got \n\"" + str(amt) + " Zennys\"!!"))
+    byte_list = [0xF6, 0x30, *zenny_bytes, 0xFF, 0xFF, 0xFF]
+    byte_list.extend(generate_text_bytes(f"Got \n\"{amt} Zennys\"!!"))
     return bytearray(byte_list)
 
 
 def generate_program_get(program, color, amt) -> bytearray:
-    # Programs are bit shifted twice to generate the "give" bit. So we multiply by 4 here
-    byte_list = [0xF6, 0x40, (program * 4), amt, color]
+    # Programs are bit shifted twice to generate the "give" bit
+    byte_list = [0xF6, 0x40, program << 2, amt, color]
     byte_list.extend(generate_text_bytes("Got a Navi\nCustomizer Program:\n\""))
     byte_list.extend([0xF9, 0x00, program, 0x05])
     return bytearray(byte_list)
@@ -132,7 +129,7 @@ def generate_progressive_undernet(progression_index, next_script) -> bytearray:
 def generate_get_for_item(item) -> bytearray:
     if item.type == "undernet":
         return generate_text_bytes("Got the next\n\"Undernet Rank\"!!")
-    if item.type == "chip":
+    elif item.type == "chip":
         return generate_chip_get(item.itemID, item.subItemID, item.count)
     elif item.type == "key":
         return generate_key_item_get(item.itemID, item.count)
@@ -142,7 +139,7 @@ def generate_get_for_item(item) -> bytearray:
         return generate_zenny_get(item.count)
     elif item.type == "program":
         return generate_program_get(item.itemID, item.subItemID, item.count)
-    elif item.type == "bugfrag":
+    elif item.type == ItemType.BugFrag:
         return generate_bugfrag_get(item.count)
 
     return generate_text_bytes("Empty Message")

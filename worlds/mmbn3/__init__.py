@@ -67,6 +67,7 @@ class MMBN3World(World):
             self.excluded_locations = always_excluded_locations + [job.name for job in jobs]
         else:
             self.excluded_locations = always_excluded_locations
+
     def create_regions(self) -> None:
         """
         called to place player's regions into the MultiWorld's regions list. If it's hard to separate, this can be done

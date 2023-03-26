@@ -39,7 +39,7 @@ class ItemData(typing.NamedTuple):
     code: int
     itemName: str
     progression: ItemClassification
-    type: str
+    type: ItemType
     itemID: int = 0x00
     subItemID: int = 0x00
     count: int = 1
