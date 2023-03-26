@@ -179,7 +179,7 @@ table.insert(new_tree_copy.effects, {type = "nothing", effect_description = "Ing
 copy_factorio_icon(new_tree_copy, "{{ progressive_technology_table[item.name][0] }}")
 {%- else -%}
 {#- use default AP icon if no Factorio graphics exist -#}
-{% if item.advancement or not tech_tree_information %}set_ap_icon(new_tree_copy){% else %}set_ap_unimportant_icon(new_tree_copy){% endif %}
+{% if tech_tree_information in [0, 2] or tech_tree_information in [1, 3] and item.advancement %}set_ap_icon(new_tree_copy){% else %}set_ap_unimportant_icon(new_tree_copy){% endif %}
 {%- endif -%}
 {#- connect Technology  #}
 {%- if location in tech_tree_layout_prerequisites %}
