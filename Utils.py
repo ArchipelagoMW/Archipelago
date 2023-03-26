@@ -332,7 +332,13 @@ def get_default_options() -> OptionsType:
         },
         "wargroove_options": {
             "root_directory": "C:/Program Files (x86)/Steam/steamapps/common/Wargroove"
-        }
+        },
+        "adventure_options": {
+            "rom_file": "ADVNTURE.BIN",
+            "display_msgs": True,
+            "rom_start": True,
+            "rom_args": ""
+        },
     }
     return options
 
