@@ -77,8 +77,8 @@ html{
 }
 
 #base-header-mobile-menu a{
-    padding: 4rem 2rem;
-    font-size: 5rem;
+    padding: 3rem 1.5rem;
+    font-size: 4rem;
     line-height: 5rem;
     color: #699ca8;
     border-top: 1px solid #d3d3d3;
@@ -102,6 +102,7 @@ html{
     border-radius: 10px;
     border-left: 2px solid #d0ebe6;
     border-bottom: 2px solid #d0ebe6;
+    border-right: 1px solid #d0ebe6;
     filter: drop-shadow(-6px 6px 2px #2e3e83);
 }
 
