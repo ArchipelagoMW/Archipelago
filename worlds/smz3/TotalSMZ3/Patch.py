@@ -362,8 +362,6 @@ class Patch:
                 return ALTTPBottleContentCodeToSMZ3ItemCode.get(location.APLocation.item.code, location.APLocation.item.code)
             else:
                 return ItemType.Something.value
-            else:
-                return ItemType.Something.value
         elif (location.APLocation.item.game == "Super Metroid"):
             SMNameToSMZ3Code = {
                 "Energy Tank": ItemType.ETank, "Missile": ItemType.Missile, "Super Missile": ItemType.Super,
