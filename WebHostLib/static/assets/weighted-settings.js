@@ -78,8 +78,6 @@ const createDefaultSettings = (settingData) => {
             break;
           case 'range':
           case 'special_range':
-            newSettings[game][gameSetting][setting.min] = 0;
-            newSettings[game][gameSetting][setting.max] = 0;
             newSettings[game][gameSetting]['random'] = 0;
             newSettings[game][gameSetting]['random-low'] = 0;
             newSettings[game][gameSetting]['random-high'] = 0;
