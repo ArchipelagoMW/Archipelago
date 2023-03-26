@@ -12,7 +12,7 @@ from . import Rules
 class MessengerWeb(WebWorld):
     theme = "ocean"
 
-    bug_report_page = "https://github.com/minous27/TheMessengerRandomizerMod/issues"
+    bug_report_page = "https://github.com/alwaysintreble/TheMessengerRandomizerModAP/issues"
 
     tut_en = Tutorial(
         "Multiworld Setup Tutorial",
