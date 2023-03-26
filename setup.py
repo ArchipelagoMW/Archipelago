@@ -42,7 +42,8 @@ if install_cx_freeze:
         input(f'Requirement {requirement} is not satisfied, press enter to install it')
     subprocess.call([sys.executable, '-m', 'pip', 'install', requirement, '--upgrade'])
     import pkg_resources
-    import cx_Freeze
+
+import cx_Freeze
 
 # .build only exists if cx-Freeze is the right version, so we have to update/install that first before this line
 import setuptools.command.build
