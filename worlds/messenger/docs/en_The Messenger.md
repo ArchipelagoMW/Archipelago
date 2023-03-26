@@ -5,6 +5,7 @@
 - [Settings Page](../../../../games/The%20Messenger/player-settings)
 - [Courier Github](https://github.com/Brokemia/Courier)
 - [The Messenger Randomizer Github](https://github.com/minous27/TheMessengerRandomizerMod)
+- [The Messenger Randomizer AP Github](https://github.com/alwaysintreble/TheMessengerRandomizerModAP)
 - [Jacksonbird8237's Item Tracker](https://github.com/Jacksonbird8237/TheMessengerItemTracker)
 - [PopTracker Pack](https://github.com/alwaysintreble/TheMessengerTrackPack)
 
