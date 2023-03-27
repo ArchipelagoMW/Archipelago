@@ -161,8 +161,8 @@ class ProgressiveFormations(Choice):
 
 
 class DoomCastle(Choice):
-    """Change how you reach the Dark King. With standard, you need to defeat all four bosses and their floors to reach
-    the Dark King. With boss_rush, only the bosses are blocking your way in the corridor to the Dark King's room.
+    """Configure how you reach the Dark King. With standard, you need to defeat all four bosses and their floors to
+    reach the Dark King. With boss_rush, only the bosses are blocking your way in the corridor to the Dark King's room.
     With dark_king_only, the way to the Dark King is free of any obstacle."""
     display_name = "Doom Castle"
     option_standard = 0
@@ -225,6 +225,7 @@ class RandomizeMusic(Toggle):
     """Shuffle the music tracks."""
     display_name = "Randomize Music"
 
+
 option_definitions = {
     "logic": Logic,
     "prioritize_chests": OriginalChests,
@@ -250,8 +251,8 @@ option_definitions = {
     "leveling_curve": LevelingCurve,
     "shuffle_battlefield_rewards": ShuffleBattlefieldRewards,
     "battlefields_battles_quantities": BattlefieldsBattlesQuantities,
-    "randomize_benjamins_palette": RandomizeBenjaminsPalette,
-    "randomize_music": RandomizeMusic
+    # "randomize_benjamins_palette": RandomizeBenjaminsPalette,
+    # "randomize_music": RandomizeMusic
 
 
 }
