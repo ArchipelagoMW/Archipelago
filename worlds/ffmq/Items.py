@@ -197,10 +197,14 @@ def create_items(self) -> None:
                 if item_name in self.item_name_groups[item_group]:
                     item_name = prog_map[item_group]
                     break
-        if item_name == "Sky Coin" and self.multiworld.sky_coin_mode[self.player] == "shattered":
-            for _ in range(40):
-                items.append(self.create_item("Sky Fragment"))
-            return
+        if item_name == "Sky Coin":
+            if self.multiworld.sky_coin_mode[self.player] == "shattered":
+                for _ in range(40):
+                    items.append(self.create_item("Sky Fragment"))
+                return
+            elif self.multiworld.sky_coin_mode[self.player] == "save_the_crystals":
+                items.append(self.create_filler())
+                return
         i = self.create_item(item_name)
         if i in self.multiworld.precollected_items:
             items.append(self.create_filler())
