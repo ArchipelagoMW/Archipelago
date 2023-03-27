@@ -57,6 +57,7 @@ class KH2World(World):
         self.growth_list = list()
         for x in range(4):
             self.growth_list.extend(Movement_Table.keys())
+        self.visitlocking_dict = Progression_Dicts["AllVisitLocking"]
 
     def fill_slot_data(self) -> dict:
         return {"hitlist": self.hitlist,
@@ -93,7 +94,7 @@ class KH2World(World):
             self.sora_keyblade_ability_pool.extend(SupportAbility_Table.keys())
 
         for item, value in self.multiworld.start_inventory[self.player].value.items():
-            if item in ActionAbility_Table.keys() or item in SupportAbility_Table.keys():
+            if item in ActionAbility_Table.keys() or item in SupportAbility_Table.keys() or exclusionItem_table["StatUps"]:
                 # cannot have more than the quantity for abilties
                 if value > item_dictionary_table[item].quantity:
                     logging.info(f"{self.multiworld.get_file_safe_player_name(self.player)} cannot have more than {item_dictionary_table[item].quantity} of {item}"
@@ -278,21 +279,29 @@ class KH2World(World):
                 for _ in range(amount):
                     self.multiworld.push_precollected(self.create_item(item))
                     self.item_quantity_dict[item] -= 1
+                    if self.visitlocking_dict[item] == 0:
+                        self.visitlocking_dict.pop(item)
+                    self.visitlocking_dict[item] -= 1
 
         # first and second visit locking
         elif self.multiworld.Visitlocking[self.player] == "second_visit_locking":
             for item in Progression_Dicts["2VisitLocking"]:
                 self.item_quantity_dict[item] -= 1
+                self.visitlocking_dict[item] -= 1
+                if self.visitlocking_dict[item] == 0:
+                    self.visitlocking_dict.pop(item)
                 self.multiworld.push_precollected(self.create_item(item))
-                self.visitlockingitem.remove(item)
 
         for _ in range(self.multiworld.RandomVisitLockingItem[self.player].value):
-            if len(self.visitlockingitem) <= 0:
+            if sum(self.visitlocking_dict.values()) <= 0:
                 break
-            item = self.multiworld.per_slot_randoms[self.player].choice(self.visitlockingitem)
+            visitlocking_set = list(self.visitlocking_dict.keys())
+            item = self.multiworld.per_slot_randoms[self.player].choice(visitlocking_set)
             self.item_quantity_dict[item] -= 1
+            self.visitlocking_dict[item] -= 1
+            if self.visitlocking_dict[item] == 0:
+                self.visitlocking_dict.pop(item)
             self.multiworld.push_precollected(self.create_item(item))
-            self.visitlockingitem.remove(item)
 
         # there are levels but level 1 is there to keep code clean
         if self.multiworld.LevelDepth[self.player] == "level_99_sanity":

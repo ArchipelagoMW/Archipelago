@@ -109,7 +109,7 @@ class RandomVisitLockingItem(Range):
     """Start with random amount of visit locking items."""
     display_name = "Random Visit Locking Item"
     range_start = 0
-    range_end = 27
+    range_end = 25
     default = 3
 
 
