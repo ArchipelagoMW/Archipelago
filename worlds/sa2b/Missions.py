@@ -190,7 +190,7 @@ stage_name_prefixes: typing.List[str] = [
     "Mad Space - ",
     "Cosmic Wall - ",
     "Final Chase - ",
-    "Cannon Core - ",
+    "Cannon's Core - ",
 ]
 
 def get_mission_count_table(multiworld: MultiWorld, player: int):

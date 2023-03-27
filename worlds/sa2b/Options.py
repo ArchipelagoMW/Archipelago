@@ -184,6 +184,13 @@ class Omosanity(Toggle):
     display_name = "Omosanity"
 
 
+class Animalsanity(Toggle):
+    """
+    Determines whether picking up counted small animals grants checks
+    """
+    display_name = "Animalsanity"
+
+
 class KartRaceChecks(Choice):
     """
     Determines whether Kart Race Mode grants checks
@@ -585,6 +592,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "whistlesanity": Whistlesanity,
     "beetlesanity": Beetlesanity,
     "omosanity": Omosanity,
+    "animalsanity": Animalsanity,
     "kart_race_checks": KartRaceChecks,
     "required_rank": RequiredRank,
     "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
