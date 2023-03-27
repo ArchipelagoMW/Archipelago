@@ -59,7 +59,7 @@ class SummonEXP(Range):
 
 
 class Schmovement(Choice):
-    """Level of Growth You Start With"""
+    """Level of Progressive Movement You Start With"""
     display_name = "Schmovement"
     option_level_0 = 0
     option_level_1 = 1
@@ -106,9 +106,10 @@ class Visitlocking(Choice):
 
 
 class RandomVisitLockingItem(Range):
+    """Start with random amount of visit locking items."""
     display_name = "Random Visit Locking Item"
     range_start = 0
-    range_end = 27
+    range_end = 25
     default = 3
 
 
@@ -191,7 +192,7 @@ class LuckyEmblemsRequired(Range):
     """Number of Lucky Emblems to collect to Open The Final Door bosses.
     If Goal is not Lucky Emblem Hunt this does nothing."""
     display_name = "Lucky Emblems Required"
-    range_start = 0
+    range_start = 1
     range_end = 60
     default = 25
 
@@ -200,7 +201,7 @@ class LuckyEmblemsAmount(Range):
     """Number of Lucky Emblems that are in the pool.
     If Goal is not Lucky Emblem Hunt this does nothing."""
     display_name = "Lucky Emblems Available"
-    range_start = 0
+    range_start = 1
     range_end = 60
     default = 40
 
@@ -209,7 +210,7 @@ class BountyRequired(Range):
     """Number of Bounties that are Required.
         If Goal is not Hitlist this does nothing."""
     display_name = "Bounties Required"
-    range_start = 0
+    range_start = 1
     range_end = 24
     default = 7
 
@@ -218,7 +219,7 @@ class BountyAmount(Range):
     """Number of Bounties that are in the pool.
         If Goal is not Hitlist this does nothing."""
     display_name = "Bounties Available"
-    range_start = 0
+    range_start = 1
     range_end = 24
     default = 13
 
