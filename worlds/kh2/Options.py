@@ -59,7 +59,7 @@ class SummonEXP(Range):
 
 
 class Schmovement(Choice):
-    """Level of Growth You Start With"""
+    """Level of Progressive Movement You Start With"""
     display_name = "Schmovement"
     option_level_0 = 0
     option_level_1 = 1
@@ -106,6 +106,7 @@ class Visitlocking(Choice):
 
 
 class RandomVisitLockingItem(Range):
+    """Start with random amount of visit locking items."""
     display_name = "Random Visit Locking Item"
     range_start = 0
     range_end = 27
