@@ -274,14 +274,14 @@ def process_wild_pokemon(self):
         for mon in mons_to_add:
             stat_base = get_base_stat_total(mon)
             candidate_locations = get_encounter_slots(self)
-            candidate_locations = [self.multiworld.get_location(location.name, self.player) for location in candidate_locations]
             if self.multiworld.randomize_wild_pokemon[self.player].current_key in ["match_base_stats", "match_types_and_base_stats"]:
-                candidate_locations.sort(key=lambda slot: abs(get_base_stat_total(slot.item.name) - stat_base))
+                candidate_locations.sort(key=lambda slot: abs(get_base_stat_total(slot.original_item) - stat_base))
             if self.multiworld.randomize_wild_pokemon[self.player].current_key in ["match_types", "match_types_and_base_stats"]:
                 candidate_locations.sort(key=lambda slot: not any([poke_data.pokemon_data[slot.original_item]["type1"] in
                      [self.local_poke_data[mon]["type1"], self.local_poke_data[mon]["type2"]],
                      poke_data.pokemon_data[slot.original_item]["type2"] in
                      [self.local_poke_data[mon]["type1"], self.local_poke_data[mon]["type2"]]]))
+            candidate_locations = [self.multiworld.get_location(location.name, self.player) for location in candidate_locations]
             for location in candidate_locations:
                 zone = " - ".join(location.name.split(" - ")[:-1])
                 if self.multiworld.catch_em_all[self.player] == "all_pokemon" and self.multiworld.area_1_to_1_mapping[self.player]:
@@ -580,7 +580,7 @@ def write_quizzes(self, data, random):
             if location.player == self.player:
                 player_name = "yourself"
             else:
-                player_name = self.multiworld.player_names[location.player]
+                player_name = self.multiworld.player_name[location.player]
             if not a:
                 if len(self.multiworld.player_name) > 1:
                     old_name = player_name
