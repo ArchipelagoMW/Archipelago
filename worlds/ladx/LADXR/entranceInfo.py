@@ -71,7 +71,7 @@ ENTRANCE_INFO = {
     "castle_jump_cave":             EntranceInfo(0x78, target=0x1fd, type="single"),
     "castle_main_entrance":         EntranceInfo(0x69, target=0x2d3, type="connector"),
     "castle_upper_left":            EntranceInfo(0x59, target=0x2d5, type="connector", index=0),
-    "castle_upper_right":           EntranceInfo(0x59, target=0x2d6, type="single", index=1),
+    "castle_upper_right":           EntranceInfo(0x59, target=0x2d6, type="connector", index=1),
     "castle_secret_exit":           EntranceInfo(0x49, target=0x1eb, type="connector"),
     "castle_secret_entrance":       EntranceInfo(0x4A, target=0x1ec, type="connector"),
     "castle_phone":                 EntranceInfo(0x4B, target=0x2cc, type="dummy"),

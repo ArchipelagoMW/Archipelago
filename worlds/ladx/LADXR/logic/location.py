@@ -11,15 +11,15 @@ class LocationType(Enum):
     Indoor = 3
 
 class Location:
-    def __init__(self, name=None, location_type=None, dungeon=None):
+    def __init__(self, name=None, location_type=LocationType.Unknown, dungeon=None):
         self.name = name
         self.items = []  # type: typing.List[ItemInfo]
         self.dungeon = dungeon
         if self.dungeon != None:
-            assert location_type == None or location_type == LocationType.Dungeon
+            assert location_type == location_type.Unknown or location_type == LocationType.Dungeon
             location_type = LocationType.Dungeon
-        if location_type is not None:
-            self.location_type = location_type 
+        
+        self.location_type = location_type 
         self.__connected_to = set()
         self.simple_connections = []
         self.gated_connections = []

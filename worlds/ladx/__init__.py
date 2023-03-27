@@ -4,6 +4,7 @@ import os
 from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
+from .LADXR.logic.requirements import RequirementsSettings
 
 from .Common import *
 from .Items import (DungeonItemData, DungeonItemType, LinksAwakeningItem,
@@ -22,6 +23,8 @@ from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id)
 from .Options import links_awakening_options
 from .Rom import LADXDeltaPatch
+
+from .LADXR.logic.location import LocationType
 
 DEVELOPER_MODE = False
 
@@ -86,11 +89,187 @@ class LinksAwakeningWorld(World):
         self.laxdr_options = LADXRSettings(self.player_options)
         
         self.laxdr_options.validate()
-        world_setup = LADXRWorldSetup()
-        world_setup.randomize(self.laxdr_options, self.multiworld.random)
-        self.ladxr_logic = LAXDRLogic(configuration_options=self.laxdr_options, world_setup=world_setup)
+        self.world_setup = LADXRWorldSetup()
+        self.world_setup.randomize(self.laxdr_options, self.multiworld.random)
+        self.randomize_entrances()
+        self.ladxr_logic = LAXDRLogic(configuration_options=self.laxdr_options, world_setup=self.world_setup)
         self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.laxdr_options, self.multiworld.random).toDict()
+        
+    def randomize_entrances(self):
+        from .LADXR.logic.overworld import World
+        
+        random = self.multiworld.per_slot_randoms[self.player]
+        world = World(self.laxdr_options, self.world_setup, RequirementsSettings(self.laxdr_options))
 
+        # NOTE: this code uses LADXR terms for things where:
+        # Region -> Location
+        # Location -> ItemInfo
+        # Item -> ...also Item? but not used here
+        # Helper to apply function to every ladxr region
+        def walk_locations(callback, n, filter=lambda _: True, walked=None):
+            walked = walked or set()
+            if n in walked:
+                return
+            if not filter(n):
+                return
+            callback(n)
+            walked.add(n)
+
+            for o, req in n.simple_connections:
+                walk_locations(callback, o, filter, walked)
+            for o, req in n.gated_connections:
+                walk_locations(callback, o, filter, walked)
+
+
+        from .Locations import connector_info
+
+        from .LADXR.entranceInfo import ENTRANCE_INFO
+        
+        ################################################################################################
+        # First shuffle the start location, if needed
+        start = world.start
+        import copy
+
+        # Get the list of all unseen locations
+        def shuffleable(entrance_name, location):
+            return ENTRANCE_INFO[entrance_name].type == "connector"
+
+        unshuffled_connectors = copy.copy(connector_info)
+        random.shuffle(unshuffled_connectors)
+
+        unseen_entrances = set(k for k,v in world.overworld_entrance.items() if shuffleable(k, v.location))
+
+        location_to_entrances = {}
+        for k,v in world.overworld_entrance.items():
+            location_to_entrances.setdefault(v.location,[]).append(k)
+
+        unshuffled_entrances = copy.copy(unseen_entrances)
+        seen_locations = set()
+        def mark_location(l):
+            if l in location_to_entrances:
+                for entrance in location_to_entrances[l]:
+                    seen_locations.add(entrance)
+                    if entrance in unseen_entrances:
+                        unseen_entrances.remove(entrance)
+
+        # TODO: we can reuse our walked location cache
+        walk_locations(callback=mark_location, n=start)
+
+        while unseen_entrances:
+            # Find the places we haven't yet seen
+            # Pick one
+            unseen_entrance_to_connect = random.choice(list(unseen_entrances))
+
+            # Pick an unshuffled seen entrance
+            seen_entrance_to_connect = random.choice(list(seen_locations.intersection(unshuffled_entrances)))
+            
+            # Pick a connector
+            connector = unshuffled_connectors.pop()
+
+            # Pick the connector direction
+            entrances = connector.entrances
+            if not connector.oneway:
+                entrances = list(entrances)
+                random.shuffle(entrances)
+            else:
+                assert len(connector.entrances) == 2
+            A = connector.entrances[0]
+            B = connector.entrances[1]
+            C = len(connector.entrances) > 2 and connector.entrances[2] or None
+
+            # Flag the two doors as connected
+            self.world_setup.entrance_mapping[seen_entrance_to_connect] = A            
+            self.world_setup.entrance_mapping[unseen_entrance_to_connect] = B
+            # Walk the new locations
+            walk_locations(callback=mark_location, n=world.overworld_entrance[unseen_entrance_to_connect].location)
+            assert unseen_entrance_to_connect not in unseen_entrances
+            unshuffled_entrances.remove(seen_entrance_to_connect)
+            unshuffled_entrances.remove(unseen_entrance_to_connect)
+            if C:
+                third_entrance_to_connect = random.choice(list(unshuffled_entrances))
+                self.world_setup.entrance_mapping[third_entrance_to_connect] = C
+                walk_locations(callback=mark_location, n=world.overworld_entrance[third_entrance_to_connect].location)
+                unshuffled_entrances.remove(third_entrance_to_connect)
+
+        # Shuffle the remainder
+        unshuffled_entrances = list(unshuffled_entrances)
+        random.shuffle(unshuffled_entrances)
+        random.shuffle(unshuffled_connectors)
+        while unshuffled_entrances:
+            connector = unshuffled_connectors.pop()
+            for entrance in connector.entrances:
+                self.world_setup.entrance_mapping[unshuffled_entrances.pop()] = entrance
+
+        x = set()
+        y = set()
+        for k, v in self.world_setup.entrance_mapping.items():
+            assert k not in x, k
+            assert v not in y, v
+            x.add(k)
+            y.add(v)
+        ################################################################################################
+        # Next build the reachable regions from start
+
+        ################################################################################################
+        # Next pick a region that we haven't found yet that has an entrance with a connector
+
+        ################################################################################################
+        # ...and build up the region list some more
+        
+        ################################################################################################
+        # loop :)
+
+        ################################################################################################
+        # Once we've done that, shuffle the rest of the connectors
+
+        
+
+
+
+
+
+
+        return
+
+
+
+
+        ################################################################################################
+        # First generate the list of overworld regions
+
+        
+        island_map = {}
+        all_islands = []
+
+        while ow_locations:
+            candidate = next(iter(ow_locations))
+            current_island = set([candidate])
+            found_existing_island = False
+            def build_island(l):
+                # If this location already has an island, merge them
+                if l in island_map:
+                    # I've never seen this code get hit before, but a oneway dropdown or similar could hit it
+                    assert False
+                    found_island = island_map[l]
+                    found_island |= current_island
+                    for new_location in current_island:
+                        island_map[new_location] = found_island
+                    found_existing_island = True
+                else:
+                    if l not in ow_locations:
+                        print(l.name)
+                    ow_locations.remove(l)
+                    current_island.add(l)
+
+            walk_locations(build_island, candidate, lambda l: l.location_type == LocationType.Overworld and not found_existing_island)
+            
+            if not found_existing_island:
+                for l in current_island:
+                    island_map[l] = current_island
+                all_islands.append(current_island)
+            
+        ################################################################################################
+        # Next shuffle the start location   
 
     def create_regions(self) -> None:
         # Initialize
