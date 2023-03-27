@@ -185,7 +185,7 @@
   - target_room: 5
     entrance: 0
     teleporter: [0, 0]
-    access: []
+    access: ["DragonClaw", "MegaGrenade"]
 - name: Doom Castle - Aero Room
   id: 2
   game_objects:
@@ -3595,15 +3595,15 @@
   - target_room: 197
     entrance: 430
     teleporter: [209, 0]
-    access: []
+    access: ["StoneGolem"]
   - target_room: 198
     entrance: 431
     teleporter: [211, 0]
-    access: []
+    access: ["StoneGolem", "TwinheadWyvern"]
   - target_room: 199
     entrance: 432
     teleporter: [13, 2]
-    access: []
+    access: ["StoneGolem", "TwinheadWyvern", "Zuh"]
 - name: Doom Castle Ice Floor
   id: 196
   game_objects:
@@ -3623,6 +3623,11 @@
     object_id: 0xEA
     type: "Box"
     access: ["Sword", "DragonClaw"]
+  - name: "Stone Golem"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["StoneGolem"]
+    access: ["Sword", "DragonClaw"]
   links:
   - target_room: 195
     entrance: 433
@@ -3634,19 +3639,24 @@
   - name: "Doom Castle Lava Floor 01"
     object_id: 0xEB
     type: "Box"
-    access: []
+    access: ["DragonClaw"]
   - name: "Doom Castle Lava Floor 02"
     object_id: 0xEC
     type: "Box"
-    access: []
+    access: ["DragonClaw"]
   - name: "Doom Castle Lava Floor 03"
     object_id: 0xED
     type: "Box"
-    access: []
+    access: ["DragonClaw"]
   - name: "Doom Castle Lava Floor 04"
     object_id: 0xEE
     type: "Box"
-    access: []
+    access: ["DragonClaw"]
+  - name: "Twinhead Wyvern"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["TwinheadWyvern"]
+    access: ["DragonClaw"]
   links:
   - target_room: 195
     entrance: 434
@@ -3662,6 +3672,11 @@
   - name: "Doom Castle Sky Floor 02"
     object_id: 0xF0
     type: "Box"
+    access: []
+  - name: "Zuh"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Zuh"]
     access: []
   links:
   - target_room: 195
