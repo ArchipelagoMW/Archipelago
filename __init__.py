@@ -130,4 +130,5 @@ class WL4World(World):
         return WL4Item(name, ItemClassification.progression, None, self.player)
     
     def set_rules(self):
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.victory, self.player)
+        self.multiworld.completion_condition[self.player] = (
+            lambda state: state.has(ItemName.victory, self.player))

@@ -181,6 +181,9 @@ def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     rom.write_bytes(symbols["playername"],
                     bytes(world.player_name[player], "utf-8"))
     
+    # Set deathlink
+    rom.write_byte(symbols["deathlinkflag"], world.death_link[player].value)
+    
     # Force difficulty level
     mov_r0 = 0x2000 | world.difficulty[player].value # mov r0, #(world.difficulty[player].value)
     rom.write_halfword(0x91558, mov_r0)  # SramtoWork_Load(): Force difficulty (anti-cheese)

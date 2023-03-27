@@ -21,10 +21,15 @@ unusedrom equ 0x0878F97C
 .definelabel HasJewelPiece4, 0x3000C0A
 .definelabel HasCD, 0x3000C0B
 .definelabel HasKeyzer, 0x3000C0C
+.definelabel sGameSeq, 0x3000C3C
 .definelabel GlobalTimer, 0x3000C41
+.definelabel KeyPressContinuous, 0x3001844
+.definelabel KeyPressPrevious, 0x3001846
+.definelabel usTrg_KeyPress1Frame, 0x3001848
 .definelabel Wario_ucReact, 0x3001898
 .definelabel Wario_ucMiss, 0x300189C
 .definelabel WarioHeart, 0x3001910
+.definelabel usWarStopFlg, 0x30019F6
 
 ; This is the upper halfword of entry passage level 3.
 ; This level doesn't actually exist, so we can sneak this bit of extra save data
@@ -47,6 +52,7 @@ unusedrom equ 0x0878F97C
 
 
 ; Functions
+.definelabel MainGameLoop, 0x80001CC
 .definelabel m4aSongNumStart, 0x8001DA4
 .definelabel WarioHitMain, 0x801009c
 .definelabel EnemyChildSet, 0x801E328
@@ -134,6 +140,9 @@ ItemLocationTable:
     CDLocationTable:     .fill @levels, invalid_item
     HealthLocationTable: .fill @levels, invalid_item
 
+DeathLinkFlag: .byte 0
+
+.align 2
 ; Retrieve the item ID at the location specified in r0 in this level.
 ; Return the encoded ID in r0
 GetItemAtLocation:
@@ -167,5 +176,6 @@ GetItemAtLocation:
 .include "worlds/wl4/asm/randomize_boxes.asm"
 .include "worlds/wl4/asm/save_full_health.asm"
 .include "worlds/wl4/asm/item_queue.asm"
+.include "worlds/wl4/asm/pre_game_loop.asm"
 
 .close

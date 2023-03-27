@@ -59,6 +59,12 @@ ReceiveItemsInLevel:
     bl ReceiveNextItem
     bl GiveItem
 
+; If Wario isn't in a playable state, don't bother with the junk items yet
+    ldr r0, =usWarStopFlg
+    ldrh r0, [r0]
+    cmp r0, #0
+    bne @@Return
+
 ; Check full health items
     ldr r3, =QueuedFullHealthItem
     ldrb r2, [r3]
@@ -126,7 +132,7 @@ ReceiveItemsInLevel:
 
 @@EndCheckTraps:
 
-; Return
+@@Return:
     ldr r0, =0x801B950
     mov pc, r0
 .pool
