@@ -237,9 +237,10 @@ def create_regions_from_ladxr(player, multiworld, logic):
 
 
 class ConnectorInfo:
-    def __init__(self, entrances, oneway=False) -> None:
+    def __init__(self, entrances, oneway=False, castle_button=False) -> None:
         self.entrances = entrances
         self.oneway = oneway
+        self.castle_button = castle_button
 
 connector_info = [
     ConnectorInfo(("fire_cave_entrance", "fire_cave_exit")),
@@ -254,7 +255,7 @@ connector_info = [
     ConnectorInfo(("raft_return_enter", "raft_return_exit"), True),
     ConnectorInfo(("toadstool_entrance", "toadstool_exit")),
     ConnectorInfo(("graveyard_cave_left", "graveyard_cave_right")),
-    ConnectorInfo(("castle_main_entrance", "castle_upper_left", "castle_upper_right")),
+    ConnectorInfo(("castle_main_entrance", "castle_upper_left", "castle_upper_right"), castle_button=True),
     ConnectorInfo(("castle_secret_entrance", "castle_secret_exit")),
     ConnectorInfo(("papahl_house_left", "papahl_house_right")),
     ConnectorInfo(("prairie_right_cave_top", "prairie_right_cave_bottom", "prairie_right_cave_high")),

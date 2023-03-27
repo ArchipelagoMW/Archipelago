@@ -1,7 +1,7 @@
 import binascii
 import os
 import copy
-
+import itertools
 from .Locations import connector_info
 from .LADXR.entranceInfo import ENTRANCE_INFO
 from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial
@@ -27,7 +27,6 @@ from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
 from .Options import links_awakening_options
 from .Rom import LADXDeltaPatch
 
-from .LADXR.logic.location import LocationType
 
 DEVELOPER_MODE = False
 
@@ -101,8 +100,12 @@ class LinksAwakeningWorld(World):
     # Failing seeds -
     # Generating for 1 player, 61797097351729839299 Seed 3526789157814043126 with plando: bosses
     # Generating for 1 player, 08916103583371570033 Seed 34316645283856452042 with plando: bosses
+
+    # TODO: this needs to handle castle button - don't allow walking through gate unless you've found the castle connector
     def randomize_entrances(self):
         from .LADXR.logic.overworld import World
+
+        has_castle_button = False
 
         random = self.multiworld.per_slot_randoms[self.player]
         world = World(self.laxdr_options, self.world_setup, RequirementsSettings(self.laxdr_options))
@@ -112,6 +115,15 @@ class LinksAwakeningWorld(World):
         # Location -> ItemInfo
         # Item -> ...also Item? but not used here
         # Helper to apply function to every ladxr region
+
+        # If we haven't found the castle button, don't allow going back and forth over the gate
+        def check_castle_button(a, b):
+            if has_castle_button:
+                return True
+            gate_names = ("Kanalet Castle Front Door", "Ukuku Prairie")
+            return a.name not in gate_names or b.name not in gate_names
+
+        walked_cache = set()
         def walk_locations(callback, n, filter=lambda _: True, walked=None):
             walked = walked or set()
             if n in walked:
@@ -121,10 +133,10 @@ class LinksAwakeningWorld(World):
             callback(n)
             walked.add(n)
 
-            for o, req in n.simple_connections:
-                walk_locations(callback, o, filter, walked)
-            for o, req in n.gated_connections:
-                walk_locations(callback, o, filter, walked)
+            for o, req in itertools.chain(n.simple_connections, n.gated_connections):
+                if check_castle_button(n, o):
+                    walk_locations(callback, o, filter, walked)
+
 
 
 
@@ -168,7 +180,8 @@ class LinksAwakeningWorld(World):
             
             # Pick a connector
             connector = unshuffled_connectors.pop()
-
+            if connector.castle_button:
+                has_castle_button = True
             # Pick the connector direction
             entrances = connector.entrances
             if not connector.oneway:
