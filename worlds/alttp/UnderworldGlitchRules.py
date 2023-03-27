@@ -1,6 +1,8 @@
 
 from BaseClasses import Entrance
+from .SubClasses import LTTPRegion
 from worlds.generic.Rules import set_rule, add_rule
+from .StateHelpers import can_bomb_clip, has_sword, has_beam_sword, has_fire_source, can_melt_things, has_misery_mire_medallion
 
 # We actually need the logic to properly "mark" these regions as Light or Dark world. 
 # Therefore we need to make these connections during the normal link_entrances stage, rather than during set_rules. 
@@ -46,9 +48,9 @@ def dungeon_reentry_rules(world, player, clip: Entrance, dungeon_region: str, du
         if dungeon_entrance.name == 'Skull Woods Final Section': 
             set_rule(clip, lambda state: False) # entrance doesn't exist until you fire rod it from the other side
         elif dungeon_entrance.name == 'Misery Mire': 
-            add_rule(clip, lambda state: state.has_sword(player) and state.has_misery_mire_medallion(player)) # open the dungeon
+            add_rule(clip, lambda state: has_sword(state, player) and has_misery_mire_medallion(state, player)) # open the dungeon
         elif dungeon_entrance.name == 'Agahnims Tower': 
-            add_rule(clip, lambda state: state.has('Cape', player) or state.has_beam_sword(player) or state.has('Beat Agahnim 1', player)) # kill/bypass barrier
+            add_rule(clip, lambda state: state.has('Cape', player) or has_beam_sword(state, player) or state.has('Beat Agahnim 1', player)) # kill/bypass barrier
         # Then we set a restriction on exiting the dungeon, so you can't leave unless you got in normally. 
         add_rule(world.get_entrance(dungeon_exit, player), lambda state: dungeon_entrance.can_reach(state))
     elif not fix_fake_worlds: # full, dungeonsfull; fixed dungeon exits, but no fake worlds fix
@@ -66,21 +68,21 @@ def underworld_glitches_rules(world, player):
 
     # Ice Palace Entrance Clip
     # This is the easiest one since it's a simple internal clip. Just need to also add melting to freezor chest since it's otherwise assumed. 
-    add_rule(world.get_entrance('Ice Palace Entrance Room', player), lambda state: state.can_bomb_clip(world.get_region('Ice Palace (Entrance)', player), player), combine='or')
-    add_rule(world.get_location('Ice Palace - Freezor Chest', player), lambda state: state.can_melt_things(player))
+    add_rule(world.get_entrance('Ice Palace Entrance Room', player), lambda state: can_bomb_clip(state, world.get_region('Ice Palace (Entrance)', player), player), combine='or')
+    add_rule(world.get_location('Ice Palace - Freezor Chest', player), lambda state: can_melt_things(state, player))
 
 
     # Kiki Skip
     kikiskip = world.get_entrance('Kiki Skip', player)
-    set_rule(kikiskip, lambda state: state.can_bomb_clip(kikiskip.parent_region, player))
+    set_rule(kikiskip, lambda state: can_bomb_clip(state, kikiskip.parent_region, player))
     dungeon_reentry_rules(world, player, kikiskip, 'Palace of Darkness (Entrance)', 'Palace of Darkness Exit')
 
 
     # Mire -> Hera -> Swamp
     # Using mire keys on other dungeon doors
     mire = world.get_region('Misery Mire (West)', player)
-    mire_clip = lambda state: state.can_reach('Misery Mire (West)', 'Region', player) and state.can_bomb_clip(mire, player) and state.has_fire_source(player)
-    hera_clip = lambda state: state.can_reach('Tower of Hera (Top)', 'Region', player) and state.can_bomb_clip(world.get_region('Tower of Hera (Top)', player), player)
+    mire_clip = lambda state: state.can_reach('Misery Mire (West)', 'Region', player) and can_bomb_clip(state, mire, player) and has_fire_source(state, player)
+    hera_clip = lambda state: state.can_reach('Tower of Hera (Top)', 'Region', player) and can_bomb_clip(state, world.get_region('Tower of Hera (Top)', player), player)
     add_rule(world.get_entrance('Tower of Hera Big Key Door', player), lambda state: mire_clip(state) and state.has('Big Key (Misery Mire)', player), combine='or')
     add_rule(world.get_entrance('Swamp Palace Small Key Door', player), lambda state: mire_clip(state), combine='or')
     add_rule(world.get_entrance('Swamp Palace (Center)', player), lambda state: mire_clip(state) or hera_clip(state), combine='or')

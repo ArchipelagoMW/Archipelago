@@ -7,22 +7,43 @@ import sys
 import sysconfig
 import typing
 import zipfile
+import urllib.request
+import io
+import json
+import threading
+import subprocess
+
 from collections.abc import Iterable
 from hashlib import sha3_512
 from pathlib import Path
-import subprocess
-import pkg_resources
+
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 try:
-    requirement = 'cx-Freeze>=6.14.1'
-    pkg_resources.require(requirement)
-    import cx_Freeze
-except pkg_resources.ResolutionError:
+    requirement = 'cx-Freeze>=6.14.7'
+    import pkg_resources
+    try:
+        pkg_resources.require(requirement)
+        install_cx_freeze = False
+    except pkg_resources.ResolutionError:
+        install_cx_freeze = True
+except ImportError:
+    install_cx_freeze = True
+    pkg_resources = None  # type: ignore [assignment]
+
+if install_cx_freeze:
+    # check if pip is available
+    try:
+        import pip  # noqa: F401
+    except ImportError:
+        raise RuntimeError("pip not available. Please install pip.")
+    # install and import cx_freeze
     if '--yes' not in sys.argv and '-y' not in sys.argv:
         input(f'Requirement {requirement} is not satisfied, press enter to install it')
     subprocess.call([sys.executable, '-m', 'pip', 'install', requirement, '--upgrade'])
-    import cx_Freeze
+    import pkg_resources
+
+import cx_Freeze
 
 # .build only exists if cx-Freeze is the right version, so we have to update/install that first before this line
 import setuptools.command.build
@@ -34,7 +55,7 @@ if __name__ == "__main__":
     ModuleUpdate.update(yes="--yes" in sys.argv or "-y" in sys.argv)
     ModuleUpdate.update_ran = False  # restore for later
 
-from Launcher import components, icon_paths
+from worlds.LauncherComponents import components, icon_paths
 from Utils import version_tuple, is_windows, is_linux
 
 
@@ -43,12 +64,78 @@ apworlds: set = {
     "Subnautica",
     "Factorio",
     "Rogue Legacy",
+    "Sonic Adventure 2 Battle",
     "Donkey Kong Country 3",
     "Super Mario World",
     "Stardew Valley",
     "Timespinner",
+    "Minecraft",
+    "The Messenger",
 }
 
+
+def download_SNI():
+    print("Updating SNI")
+    machine_to_go = {
+        "x86_64": "amd64",
+        "aarch64": "arm64",
+        "armv7l": "arm"
+    }
+    platform_name = platform.system().lower()
+    machine_name = platform.machine().lower()
+    # force amd64 on macos until we have universal2 sni, otherwise resolve to GOARCH
+    machine_name = "amd64" if platform_name == "darwin" else machine_to_go.get(machine_name, machine_name)
+    with urllib.request.urlopen("https://api.github.com/repos/alttpo/sni/releases/latest") as request:
+        data = json.load(request)
+    files = data["assets"]
+
+    source_url = None
+
+    for file in files:
+        download_url: str = file["browser_download_url"]
+        machine_match = download_url.rsplit("-", 1)[1].split(".", 1)[0] == machine_name
+        if platform_name in download_url and machine_match:
+            # prefer "many" builds
+            if "many" in download_url:
+                source_url = download_url
+                break
+            source_url = download_url
+
+    if source_url and source_url.endswith(".zip"):
+        with urllib.request.urlopen(source_url) as download:
+            with zipfile.ZipFile(io.BytesIO(download.read()), "r") as zf:
+                for member in zf.infolist():
+                    zf.extract(member, path="SNI")
+        print(f"Downloaded SNI from {source_url}")
+
+    elif source_url and (source_url.endswith(".tar.xz") or source_url.endswith(".tar.gz")):
+        import tarfile
+        mode = "r:xz" if source_url.endswith(".tar.xz") else "r:gz"
+        with urllib.request.urlopen(source_url) as download:
+            sni_dir = None
+            with tarfile.open(fileobj=io.BytesIO(download.read()), mode=mode) as tf:
+                for member in tf.getmembers():
+                    if member.name.startswith("/") or "../" in member.name:
+                        raise ValueError(f"Unexpected file '{member.name}' in {source_url}")
+                    elif member.isdir() and not sni_dir:
+                        sni_dir = member.name
+                    elif member.isfile() and not sni_dir or not member.name.startswith(sni_dir):
+                        raise ValueError(f"Expected folder before '{member.name}' in {source_url}")
+                    elif member.isfile() and sni_dir:
+                        tf.extract(member)
+            # sadly SNI is in its own folder on non-windows, so we need to rename
+            shutil.rmtree("SNI", True)
+            os.rename(sni_dir, "SNI")
+        print(f"Downloaded SNI from {source_url}")
+
+    elif source_url:
+        print(f"Don't know how to extract SNI from {source_url}")
+
+    else:
+        print(f"No SNI found for system spec {platform_name} {machine_name}")
+
+
+signtool: typing.Optional[str]
 if os.path.exists("X:/pw.txt"):
     print("Using signtool")
     with open("X:/pw.txt", encoding="utf-8-sig") as f:
@@ -73,7 +160,7 @@ exes = [
         target_name=c.frozen_name + (".exe" if is_windows else ""),
         icon=icon_paths[c.icon],
         base="Win32GUI" if is_windows and not c.cli else None
-    ) for c in components if c.script_name
+    ) for c in components if c.script_name and c.frozen_name
 ]
 
 extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml", "SNI"]
@@ -174,6 +261,10 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         print("Created Manifest")
 
     def run(self):
+        # start downloading sni asap
+        sni_thread = threading.Thread(target=download_SNI, name="SNI Downloader")
+        sni_thread.start()
+
         # pre build steps
         print(f"Outputting to: {self.buildfolder}")
         os.makedirs(self.buildfolder, exist_ok=True)
@@ -184,6 +275,9 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         # regular cx build
         self.buildtime = datetime.datetime.utcnow()
         super().run()
+
+        # need to finish download before copying
+        sni_thread.join()
 
         # include_files seems to not be done automatically. implement here
         for src, dst in self.include_files:
@@ -229,7 +323,6 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
                 # which should be ok
                 with zipfile.ZipFile(self.libfolder / "worlds" / (file_name + ".apworld"), "x", zipfile.ZIP_DEFLATED,
                                      compresslevel=9) as zf:
-                    entry: os.DirEntry
                     for path in world_directory.rglob("*.*"):
                         relative_path = os.path.join(*path.parts[path.parts.index("worlds")+1:])
                         zf.write(path, relative_path)
@@ -252,9 +345,9 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
             for exe in self.distribution.executables:
                 print(f"Signing {exe.target_name}")
                 os.system(signtool + os.path.join(self.buildfolder, exe.target_name))
-            print(f"Signing SNI")
+            print("Signing SNI")
             os.system(signtool + os.path.join(self.buildfolder, "SNI", "SNI.exe"))
-            print(f"Signing OoT Utils")
+            print("Signing OoT Utils")
             for exe_path in (("Compress", "Compress.exe"), ("Decompress", "Decompress.exe")):
                 os.system(signtool + os.path.join(self.buildfolder, "lib", "worlds", "oot", "data", *exe_path))
 
@@ -308,7 +401,8 @@ class AppImageCommand(setuptools.Command):
     yes: bool
 
     def write_desktop(self):
-        desktop_filename = self.app_dir / f'{self.app_id}.desktop'
+        assert self.app_dir, "Invalid app_dir"
+        desktop_filename = self.app_dir / f"{self.app_id}.desktop"
         with open(desktop_filename, 'w', encoding="utf-8") as f:
             f.write("\n".join((
                 "[Desktop Entry]",
@@ -322,7 +416,8 @@ class AppImageCommand(setuptools.Command):
         desktop_filename.chmod(0o755)
 
     def write_launcher(self, default_exe: Path):
-        launcher_filename = self.app_dir / f'AppRun'
+        assert self.app_dir, "Invalid app_dir"
+        launcher_filename = self.app_dir / "AppRun"
         with open(launcher_filename, 'w', encoding="utf-8") as f:
             f.write(f"""#!/bin/sh
 exe="{default_exe}"
@@ -344,11 +439,12 @@ $APPDIR/$exe "$@"
         launcher_filename.chmod(0o755)
 
     def install_icon(self, src: Path, name: typing.Optional[str] = None, symlink: typing.Optional[Path] = None):
+        assert self.app_dir, "Invalid app_dir"
         try:
             from PIL import Image
         except ModuleNotFoundError:
             if not self.yes:
-                input(f'Requirement PIL is not satisfied, press enter to install it')
+                input("Requirement PIL is not satisfied, press enter to install it")
             subprocess.call([sys.executable, '-m', 'pip', 'install', 'Pillow', '--upgrade'])
             from PIL import Image
         im = Image.open(src)
@@ -425,8 +521,12 @@ def find_libs(*args: str) -> typing.Sequence[typing.Tuple[str, str]]:
         return (lib, lib_arch, lib_libc), path
 
     if not hasattr(find_libs, "cache"):
-        data = subprocess.run([shutil.which('ldconfig'), '-p'], capture_output=True, text=True).stdout.split('\n')[1:]
-        find_libs.cache = {k: v for k, v in (parse(line) for line in data if '=>' in line)}
+        ldconfig = shutil.which("ldconfig")
+        assert ldconfig, "Make sure ldconfig is in PATH"
+        data = subprocess.run([ldconfig, "-p"], capture_output=True, text=True).stdout.split("\n")[1:]
+        find_libs.cache = {  # type: ignore [attr-defined]
+            k: v for k, v in (parse(line) for line in data if "=>" in line)
+        }
 
     def find_lib(lib, arch, libc):
         for k, v in find_libs.cache.items():

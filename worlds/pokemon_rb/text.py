@@ -1,5 +1,9 @@
 special_chars = {
     "PKMN": 0x4A,
+    "LINE": 0x4F,
+    "CONT": 0x55,
+    "DONE": 0x57,
+    "PROMPT": 0x58,
     "'d": 0xBB,
     "'l": 0xBC,
     "'t": 0xBE,
@@ -105,7 +109,7 @@ char_map = {
     "9": 0xFF,
 }
 
-unsafe_chars = ["@", "#", "PKMN"]
+unsafe_chars = ["@", "#", "PKMN", "LINE", "DONE", "CONT", "PROMPT"]
 
 
 def encode_text(text: str, length: int=0, whitespace=False, force=False, safety=False):

@@ -357,7 +357,7 @@ class RisingTidesOverrides(OptionDict):
         "CastleBasement": { "Dry": 66, "Flooded": 17, "FloodedWithSavePointAvailable": 17 },
         "CastleCourtyard": { "Dry": 67, "Flooded": 33 },
         "LakeDesolation": { "Dry": 67, "Flooded": 33 },
-        "LakeSerene": { "Dry": 67, "Flooded": 33 },
+        "LakeSerene": { "Dry": 33, "Flooded": 67 },
     }
 
 

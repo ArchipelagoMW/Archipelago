@@ -1,14 +1,15 @@
-import copy, utils.log, random
+import copy, random
 
-from utils.utils import randGaussBounds
-from logic.smbool import SMBool, smboolFalse
-from logic.smboolmanager import SMBoolManager
-from logic.helpers import Bosses
-from graph.graph_utils import getAccessPoint, GraphUtils
-from rando.Filler import FrontFiller
-from rando.ItemLocContainer import ItemLocContainer, getLocListStr, ItemLocation, getItemListStr
-from rando.Restrictions import Restrictions
-from utils.parameters import infinity
+from worlds.sm.variaRandomizer.utils import log
+from worlds.sm.variaRandomizer.utils.utils import randGaussBounds
+from worlds.sm.variaRandomizer.logic.smbool import SMBool, smboolFalse
+from worlds.sm.variaRandomizer.logic.smboolmanager import SMBoolManager
+from worlds.sm.variaRandomizer.logic.helpers import Bosses
+from worlds.sm.variaRandomizer.graph.graph_utils import getAccessPoint, GraphUtils
+from worlds.sm.variaRandomizer.rando.Filler import FrontFiller
+from worlds.sm.variaRandomizer.rando.ItemLocContainer import ItemLocContainer, getLocListStr, ItemLocation, getItemListStr
+from worlds.sm.variaRandomizer.rando.Restrictions import Restrictions
+from worlds.sm.variaRandomizer.utils.parameters import infinity
 
 # checks init conditions for the randomizer: processes super fun settings, graph, start location, special restrictions
 # the entry point is createItemLocContainer
@@ -49,7 +50,7 @@ class RandoSetup(object):
         # we have to use item manager only once, otherwise pool will change
         self.itemManager.createItemPool(exclude)
         self.basePool = self.itemManager.getItemPool()[:]
-        self.log = utils.log.get('RandoSetup')
+        self.log = log.get('RandoSetup')
         if len(locations) != len(self.locations):
             self.log.debug("inaccessible locations :"+getLocListStr([loc for loc in locations if loc not in self.locations]))
 

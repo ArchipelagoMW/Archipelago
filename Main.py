@@ -38,7 +38,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world = MultiWorld(args.multi)
 
     logger = logging.getLogger()
-    world.set_seed(seed, args.race, str(args.outputname if args.outputname else world.seed))
+    world.set_seed(seed, args.race, str(args.outputname) if args.outputname else None)
     world.plando_options = args.plando_options
 
     world.shuffle = args.shuffle.copy()
@@ -53,7 +53,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.enemy_damage = args.enemy_damage.copy()
     world.beemizer_total_chance = args.beemizer_total_chance.copy()
     world.beemizer_trap_chance = args.beemizer_trap_chance.copy()
-    world.timer = args.timer.copy()
     world.countdown_start_time = args.countdown_start_time.copy()
     world.red_clock_time = args.red_clock_time.copy()
     world.blue_clock_time = args.blue_clock_time.copy()
@@ -356,12 +355,11 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                                   for player in world.groups.get(location.item.player, {}).get("players", [])]):
                             precollect_hint(location)
 
-                # custom datapackage
-                datapackage = {}
-                for game_world in world.worlds.values():
-                    if game_world.data_version == 0 and game_world.game not in datapackage:
-                        datapackage[game_world.game] = worlds.network_data_package["games"][game_world.game]
-                        datapackage[game_world.game]["item_name_groups"] = game_world.item_name_groups
+                # embedded data package
+                data_package = {
+                    game_world.game: worlds.network_data_package["games"][game_world.game]
+                    for game_world in world.worlds.values()
+                }
 
                 multidata = {
                     "slot_data": slot_data,
@@ -378,7 +376,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "tags": ["AP"],
                     "minimum_versions": minimum_versions,
                     "seed_name": world.seed_name,
-                    "datapackage": datapackage,
+                    "datapackage": data_package,
                 }
                 AutoWorld.call_all(world, "modify_multidata", multidata)
 
