@@ -27,6 +27,18 @@ class FFMQWorld(World):
     def generate_early(self):
         if self.multiworld.sky_coin_mode[self.player] == "shattered":
             self.multiworld.brown_boxes[self.player] = self.multiworld.brown_boxes[self.player].from_text("include")
+        if self.multiworld.enemies_scaling_lower[self.player].value > \
+                self.multiworld.enemies_scaling_upper[self.player].value:
+            (self.multiworld.enemies_scaling_lower[self.player].value,
+             self.multiworld.enemies_scaling_upper[self.player].value) =\
+                (self.multiworld.enemies_scaling_upper[self.player].value,
+                 self.multiworld.enemies_scaling_lower[self.player].value)
+        if self.multiworld.bosses_scaling_lower[self.player].value > \
+                self.multiworld.bosses_scaling_upper[self.player].value:
+            (self.multiworld.bosses_scaling_lower[self.player].value,
+             self.multiworld.bosses_scaling_upper[self.player].value) =\
+                (self.multiworld.bosses_scaling_upper[self.player].value,
+                 self.multiworld.bosses_scaling_lower[self.player].value)
 
     @classmethod
     def stage_generate_early(cls, multiworld):
