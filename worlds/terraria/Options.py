@@ -1,9 +1,26 @@
 from Options import Choice, Option
 import typing
 
+# TODO: Remove calamity goals
 class Goal(Choice):
     """The victory condition for your run. Stuff after the goal will not be shuffled."""
     display_name = "Goal"
+    option_mechanical_bosses = 0
+    option_calamitas_clone = 1
+    option_plantera = 2
+    option_golem = 3
+    option_empress_of_light = 4
+    option_lunatic_cultist = 5
+    option_astrum_deus = 6
+    option_moon_lord = 7
+    option_zenith = 8
+    option_providence_the_profaned_goddess = 9
+    option_devourer_of_gods = 10
+    option_yharon_dragon_of_rebirth = 11
+    option_exo_mechs = 12
+    option_supreme_witch_calamitas = 13
+    option_adult_eidolon_wyrm = 14
+    default = 0
 
 class Achievements(Choice):
     """

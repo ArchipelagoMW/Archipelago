@@ -1,7 +1,8 @@
+# Look at `Rules.dsv` first to get an idea for how this works
+
 from worlds.AutoWorld import WebWorld, World
-from worlds.generic.Rules import add_rule
 from BaseClasses import Region, ItemClassification, Tutorial
-from .Checks import item_name_to_id, location_name_to_id, TerrariaItem, TerrariaLocation, get_items_locations
+from .Checks import TerrariaItem, TerrariaLocation, goals, rules, rule_indices, labels, rewards, item_name_to_id, location_name_to_id, COND_ITEM, COND_LOC, COND_FN, COND_GROUP, npcs, pickaxes, hammers, mech_bosses, progression
 from .Options import options
 
 class TerrariaWeb(WebWorld):
@@ -31,98 +32,176 @@ class TerrariaWorld(World):
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
 
+    # Turn into an option when calamity is supported in the mod
+    calamity = False
+
     def generate_early(self) -> None:
-        self.ter_items, self.ter_locations = get_items_locations(
-            self.multiworld.goal[self.player].value,
-            self.multiworld.achievements[self.player].value,
-            self.multiworld.fill_extra_checks_with[self.player].value
-        )
+        goal, goal_items = goals[self.multiworld.goal[self.player].value]
 
-        goal = self.multiworld.goal[self.player].value
+        achievements = self.multiworld.achievements[self.player].value
+        location_count = 0
+        locations = []
+        for rule, flags, _, _ in rules[:goal]:
+            if ((not self.calamity and "Calamity" in flags)
+                or (achievements < 1 and "Achievement" in flags)
+                or (achievements < 2 and "Grindy" in flags)
+                or (achievements < 3 and "Fishing" in flags)
+            ):
+                continue
+            if "Location" in flags or ("Achievement" in flags and achievements >= 1):
+                # Location
+                location_count += 1
+                locations.append(rule)
+            elif ("Achievement" not in flags and "Location" not in flags and "Item" not in flags):
+                # Event
+                locations.append(rule)
 
-        if goal == 0:
-            self.goal_location_id = "Wall of Flesh"
-            self.goal_item_id = "Hardmode"
-        elif goal == 1:
-            self.goal_location_id = "Plantera"
-            self.goal_item_id = "Post-Plantera"
-        elif goal == 2:
-            self.goal_location_id = "Moon Lord"
-            self.goal_item_id = "Post-Moon Lord"
-        elif goal == 3:
-            self.goal_location_id = "Zenith"
-            self.goal_item_id = "Has Zenith"
+        item_count = len(goal_items)
+        items = []
+        for rule, flags, _, _ in rules[:goal]:
+            if (not self.calamity and "Calamity" in flags):
+                continue
+            if "Item" in flags:
+                # Item
+                item_count += 1
+                items.append(rule)
+            elif ("Achievement" not in flags and "Location" not in flags and "Item" not in flags):
+                # Event
+                items.append(rule)
 
+        extra_checks = self.multiworld.fill_extra_checks_with[self.player].value
+        ordered_rewards = [reward for reward in labels["ordered"] if self.calamity or "Calamity" not in rewards[reward]]
+        while extra_checks == 1 and item_count < location_count and ordered_rewards:
+            items.append(ordered_rewards.pop(0))
+            item_count += 1
 
-    def create_item(self, name: str, event: bool) -> TerrariaItem:
-        classification = ItemClassification.useful
-        if name in {
-            "Post-Goblin Army",
-            "Post-Evil Boss",
-            "Post-Queen Bee",
-            "Post-Skeletron",
-            "Hardmode",
-            "Post-Pirate Invasion",
-            "Post-The Twins",
-            "Post-The Destroyer",
-            "Post-Skeletron Prime",
-            "Post-Plantera",
-            "Post-Golem",
-            "Victory",
-        }:
-            classification = ItemClassification.progression
-        if name == "50 Silver":
-            classification = ItemClassification.filler
-        
-        if event:
-            id = None
-        else:
-            id = item_name_to_id[name]
+        random_rewards = [reward for reward in labels["random"] if self.calamity or "Calamity" not in rewards[reward]]
+        self.multiworld.random.shuffle(random_rewards)
+        while extra_checks == 1 and item_count < location_count and random_rewards:
+            items.append(random_rewards.pop(0))
+            item_count += 1
 
-        return TerrariaItem(name, classification, id, self.player)
+        while item_count < location_count:
+            items.append("Coins")
+            item_count += 1
+
+        self.ter_items = items
+        self.ter_locations = locations
+
+        self.goal_items = goal_items
 
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
 
         for location in self.ter_locations:
-            menu.locations.append(TerrariaLocation(self.player, location, location_name_to_id[location], menu))
-        for event in event_rules:
-            menu.locations.append(TerrariaLocation(self.player, event, None, menu))
-        if self.calamity:
-            for event in calamity_event_rules:
-                menu.locations.append(TerrariaLocation(self.player, event, None, menu))
+            menu.locations.append(TerrariaLocation(self.player, location, location_name_to_id.get(location), menu))
             
         self.multiworld.regions.append(menu)
 
     def create_items(self) -> None:
-        items_to_create = self.ter_items.copy()
-        items_to_create.remove(self.goal_item_id)
-        
-        for item in items_to_create:
-            self.multiworld.itempool.append(self.create_item(item, False))
+        for item in self.ter_items:
+            if (rule_index := rule_indices.get(item)) is not None:
+                _, flags, _, _ = rules[rule_index]
+                if "Item" in flags:
+                    name = flags.get("Item") or f"Post-{item}"
+                else:
+                    continue
+            else:
+                name = f"Reward: {item}"
+
+            if item in progression:
+                classification = ItemClassification.progression
+            else:
+                classification = ItemClassification.useful
+
+            self.multiworld.itempool.append(TerrariaItem(name, classification, item_name_to_id[name], self.player))
+
+    def check_condition(self, state, sign: bool, ty: int, condition: str | tuple[bool | None, list], arg: str | int | None) -> bool:
+        if ty == COND_ITEM:
+            _, flags, _, _ = rules[rule_indices[condition]]
+            if "Item" in flags:
+                name = flags.get("Item") or f"Post-{condition}"
+            else:
+                name = condition
+            return sign == state.has(name, self.player)
+        elif ty == COND_LOC:
+            _, _, operator, conditions = rules[rule_indices[condition]]
+            return sign == self.check_conditions(state, operator, conditions)
+        elif ty == COND_FN:
+            if condition == "npc":
+                if type(arg) is not int:
+                    raise Exception("@npc requires an integer argument")
+                npc_count = 0
+                for npc in npcs:
+                    if state.has(npc, self.player):
+                        npc_count += 1
+                        if npc_count >= arg:
+                            return sign
+                return not sign
+            elif condition == "calamity":
+                return sign == self.calamity
+            elif condition == "pickaxe":
+                if type(arg) is not int:
+                    raise Exception("@pickaxe requires an integer argument")
+                for pickaxe, power in pickaxes.items():
+                    if power >= arg and state.has(pickaxe, self.player):
+                        return sign
+                return not sign
+            elif condition == "hammer":
+                if type(arg) is not int:
+                    raise Exception("@hammer requires an integer argument")
+                for hammer, power in hammers.items():
+                    if power >= arg and state.has(hammer, self.player):
+                        return sign
+                return not sign
+            elif condition == "mech_boss":
+                if type(arg) is not int:
+                    raise Exception("@mech_boss requires an integer argument")
+                boss_count = 0
+                for boss in mech_bosses:
+                    if state.has(boss, self.player):
+                        boss_count += 1
+                        if boss_count >= arg:
+                            return sign
+                return not sign
+            else:
+                raise Exception(f"Unknown function {condition}")
+        elif ty == COND_GROUP:
+            operator, conditions = condition
+            return sign == self.check_conditions(state, operator, conditions)
+
+    def check_conditions(self, state, operator: bool | None, conditions: list[tuple[bool, int, str | tuple[bool | None, list], str | int | None]]) -> bool:
+        if operator is None:
+            if len(conditions) == 0:
+                return True
+            if len(conditions) > 1:
+                raise Exception("Found multiple conditions without an operator")
+            return self.check_condition(state, *conditions[0])
+        elif operator:
+            return any(self.check_condition(state, *condition) for condition in conditions)
+        else:
+            return all(self.check_condition(state, *condition) for condition in conditions)
 
     def set_rules(self) -> None:
-        player = self.player
-        config = RuleConfig(self.calamity)
-
         for location in self.ter_locations:
-            rule = location_rules[location]
-            if rule != None:
-                add_rule(self.multiworld.get_location(location, self.player), lambda state: rule(Ctx(state, player, config)))
-        for event, rule in event_rules.items():
-            if rule != None:
-                add_rule(self.multiworld.get_location(event, self.player), lambda state: rule(Ctx(state, player, config)))
-        if config.clam:
-            for event, rule in event_rules.items():
-                if rule != None:
-                    add_rule(self.multiworld.get_location(event, self.player), lambda state: rule(Ctx(state, player, config)))
+            def check(state, location=location):
+                _, _, operator, conditions = rules[rule_indices[location]]
+                found = self.check_conditions(state, operator, conditions)
+                return found
+
+            self.multiworld.get_location(location, self.player).access_rule = check
 
     def generate_basic(self) -> None:
-        for event in event_rules:
-            self.multiworld.get_location(event, self.player).place_locked_item(self.create_item(event, True))
-        if self.calamity:
-            for event in event_rules:
-                self.multiworld.get_location(event, self.player).place_locked_item(self.create_item(event, True))
+        for location in self.ter_locations:
+            _, flags, _, _ = rules[rule_indices[location]]
+            if not "Location" in flags and not "Achievement" in flags:
+                if location in progression:
+                    classification = ItemClassification.progression
+                else:
+                    classification = ItemClassification.useful
+                self.multiworld.get_location(location, self.player).place_locked_item(TerrariaItem(location, classification, None, self.player))
+        
+        for goal in self.goal_items:
+            self.multiworld.get_location(goal, self.player).place_locked_item(TerrariaItem("Victory", ItemClassification.progression, item_name_to_id["Victory"], self.player))
 
-        self.multiworld.get_location(self.goal_location_id, self.player).place_locked_item(self.create_item(self.goal_item_id, False))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(self.goal_item_id, self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player, len(self.goal_items))
