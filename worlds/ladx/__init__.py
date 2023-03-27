@@ -1,6 +1,9 @@
 import binascii
 import os
+import copy
 
+from .Locations import connector_info
+from .LADXR.entranceInfo import ENTRANCE_INFO
 from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
@@ -94,10 +97,13 @@ class LinksAwakeningWorld(World):
         self.randomize_entrances()
         self.ladxr_logic = LAXDRLogic(configuration_options=self.laxdr_options, world_setup=self.world_setup)
         self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.laxdr_options, self.multiworld.random).toDict()
-        
+    
+    # Failing seeds -
+    # Generating for 1 player, 61797097351729839299 Seed 3526789157814043126 with plando: bosses
+    # Generating for 1 player, 08916103583371570033 Seed 34316645283856452042 with plando: bosses
     def randomize_entrances(self):
         from .LADXR.logic.overworld import World
-        
+
         random = self.multiworld.per_slot_randoms[self.player]
         world = World(self.laxdr_options, self.world_setup, RequirementsSettings(self.laxdr_options))
 
@@ -121,14 +127,9 @@ class LinksAwakeningWorld(World):
                 walk_locations(callback, o, filter, walked)
 
 
-        from .Locations import connector_info
 
-        from .LADXR.entranceInfo import ENTRANCE_INFO
-        
-        ################################################################################################
         # First shuffle the start location, if needed
         start = world.start
-        import copy
 
         # Get the list of all unseen locations
         def shuffleable(entrance_name, location):
@@ -137,7 +138,7 @@ class LinksAwakeningWorld(World):
         unshuffled_connectors = copy.copy(connector_info)
         random.shuffle(unshuffled_connectors)
 
-        unseen_entrances = set(k for k,v in world.overworld_entrance.items() if shuffleable(k, v.location))
+        unseen_entrances = [k for k,v in world.overworld_entrance.items() if shuffleable(k, v.location)]
 
         location_to_entrances = {}
         for k,v in world.overworld_entrance.items():
@@ -158,10 +159,12 @@ class LinksAwakeningWorld(World):
         while unseen_entrances:
             # Find the places we haven't yet seen
             # Pick one
-            unseen_entrance_to_connect = random.choice(list(unseen_entrances))
+            unseen_entrance_to_connect = random.choice(unseen_entrances)
 
             # Pick an unshuffled seen entrance
-            seen_entrance_to_connect = random.choice(list(seen_locations.intersection(unshuffled_entrances)))
+            l = list(seen_locations.intersection(unshuffled_entrances))
+            l.sort()
+            seen_entrance_to_connect = random.choice(l)
             
             # Pick a connector
             connector = unshuffled_connectors.pop()
@@ -207,70 +210,7 @@ class LinksAwakeningWorld(World):
             assert v not in y, v
             x.add(k)
             y.add(v)
-        ################################################################################################
-        # Next build the reachable regions from start
-
-        ################################################################################################
-        # Next pick a region that we haven't found yet that has an entrance with a connector
-
-        ################################################################################################
-        # ...and build up the region list some more
         
-        ################################################################################################
-        # loop :)
-
-        ################################################################################################
-        # Once we've done that, shuffle the rest of the connectors
-
-        
-
-
-
-
-
-
-        return
-
-
-
-
-        ################################################################################################
-        # First generate the list of overworld regions
-
-        
-        island_map = {}
-        all_islands = []
-
-        while ow_locations:
-            candidate = next(iter(ow_locations))
-            current_island = set([candidate])
-            found_existing_island = False
-            def build_island(l):
-                # If this location already has an island, merge them
-                if l in island_map:
-                    # I've never seen this code get hit before, but a oneway dropdown or similar could hit it
-                    assert False
-                    found_island = island_map[l]
-                    found_island |= current_island
-                    for new_location in current_island:
-                        island_map[new_location] = found_island
-                    found_existing_island = True
-                else:
-                    if l not in ow_locations:
-                        print(l.name)
-                    ow_locations.remove(l)
-                    current_island.add(l)
-
-            walk_locations(build_island, candidate, lambda l: l.location_type == LocationType.Overworld and not found_existing_island)
-            
-            if not found_existing_island:
-                for l in current_island:
-                    island_map[l] = current_island
-                all_islands.append(current_island)
-            
-        ################################################################################################
-        # Next shuffle the start location   
-
     def create_regions(self) -> None:
         # Initialize
         self.convert_ap_options_to_ladxr_logic()
