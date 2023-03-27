@@ -143,6 +143,10 @@ LoadRandomItemAnimation:
     cmp r6, #0xFE
     beq @@APItem
 
+; Clear bit 7
+    lsl r6, r6, #31-6
+    lsr r6, r6, #31-6
+
 ; Junk items
     lsr r0, r6, #6
     cmp r0, #0
@@ -151,7 +155,6 @@ LoadRandomItemAnimation:
 ; Jewel piece or CD
 
 ; Change the palette
-; HACK oh my god
 ; Get passage
     lsl r0, r6, #31-4
     lsr r0, r0, #31-2

@@ -144,8 +144,8 @@ def skip_cutscenes(rom: LocalRom):
     # Autosave tutorial
     rom.write_halfword(0x80C5C, 0x2001)  # movs r0, #1  ; GameSelectSeisan()
 
-    # Jewel cutscene
-    rom.write_halfword(0x79C48, 0x2100)  # movs r1, #0  ; GameSelect(), case 10
+    # Jewel cutscene and jewel door opening
+    rom.write_halfword(0x80FA8, 0x4C60)  # nop  ; DoraGetItemHantei()
 
     # Post-boss cutscenes
     rom.write_halfword(0x79FDC, 0x2001)  # movs r0, #1  ; MainGameLoop(): Pyramid appears
@@ -164,7 +164,7 @@ def fill_items(rom: LocalRom, world: MultiWorld, player: int):
         if location.native_item:
             itemid = itemid & 0xFF
             if location.item.player != player:
-                itemid = itemid & 1 << 7
+                itemid = itemid | 1 << 7
         else:
             itemid = 0xFE
             
