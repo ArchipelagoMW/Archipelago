@@ -179,11 +179,22 @@ class PokemonEmeraldWorld(World):
             if item_pool_type_option == ItemPoolType.option_diverse:
                 item_category_weights = [len(category_list) for category_list in fill_item_candidates_by_category.values()]
 
+            # TMs should not have duplicates until every TM has been used already
+            all_tm_choices = fill_item_candidates_by_category["TM"].copy()
+            def refresh_tm_choices():
+                fill_item_candidates_by_category["TM"] = all_tm_choices.copy()
+                self.multiworld.random.shuffle(fill_item_candidates_by_category["TM"])
+
             # Create items
             for item in default_itempool:
                 if item.classification != ItemClassification.progression:
                     category = self.multiworld.random.choices(item_categories, item_category_weights)[0]
-                    item_code = self.multiworld.random.choice(fill_item_candidates_by_category[category])
+                    if category == "TM":
+                        if len(fill_item_candidates_by_category["TM"]) == 0:
+                            refresh_tm_choices()
+                        item_code = fill_item_candidates_by_category["TM"].pop()
+                    else:
+                        item_code = self.multiworld.random.choice(fill_item_candidates_by_category[category])
                     item = self.create_item_by_code(item_code)
 
                 self.multiworld.itempool.append(item)
