@@ -212,6 +212,13 @@ class MinCatchRate(Range):
     default = 3
 
 
+class GuaranteedCatch(Toggle):
+    """
+    Every throw is guaranteed to catch a wild pokemon
+    """
+    display_name = "Guaranteed Catch"
+
+
 class ExpModifier(Range):
     """
     Multiplies gained experience by a percentage
@@ -282,6 +289,13 @@ class EnableFerry(Toggle):
     display_name = "Enable Ferry"
 
 
+class BetterShops(Toggle):
+    """
+    Pokemarts sell every item that can be obtained in a pokemart (except mail, which is still unique to the relevant city)
+    """
+    display_name = "Better Shops"
+
+
 class FlyWithoutBadge(Toggle):
     """
     Fly does not require the Feather Badge to use in the field
@@ -317,12 +331,14 @@ option_definitions: Dict[str, Option] = {
   "abilities": RandomizeAbilities,
   "ability_blacklist": AbilityBlacklist,
   "min_catch_rate": MinCatchRate,
+  "guaranteed_catch": GuaranteedCatch,
   "exp_modifier": ExpModifier,
   "blind_trainers": BlindTrainers,
   "level_up_moves": LevelUpMoves,
   "tm_compatibility": TmCompatibility,
   "hm_compatibility": HmCompatibility,
   "enable_ferry": EnableFerry,
+  "better_shops": BetterShops,
   "fly_without_badge": FlyWithoutBadge,
   "turbo_a": TurboA
 }

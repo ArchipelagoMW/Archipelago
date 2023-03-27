@@ -84,6 +84,8 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
     #     u16 expMultiplierNumerator;
     #     u16 expMultiplierDenominator;
     #     u16 birchPokemon;
+    #     bool8 guaranteedCatch;
+    #     bool8 betterShopsEnabled;
     # } __attribute__((packed));
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
@@ -110,6 +112,14 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
 
     # Set Birch pokemon
     _set_bytes_little_endian(patched_rom, options_address + 8, 2, get_random_species(multiworld.per_slot_randoms[player]).species_id)
+
+    # Set guaranteed catch
+    guaranteed_catch = 1 if get_option_value(multiworld, player, "guaranteed_catch") == Toggle.option_true else 0
+    _set_bytes_little_endian(patched_rom, options_address + 10, 1, guaranteed_catch)
+
+    # Set better shops
+    better_shops = 1 if get_option_value(multiworld, player, "better_shops") == Toggle.option_true else 0
+    _set_bytes_little_endian(patched_rom, options_address + 11, 1, better_shops)
 
     # Write Output
     outfile_player_name = f"_P{player}"
