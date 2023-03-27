@@ -38,7 +38,6 @@ def generate_output(self, output_directory):
     option_writes = {
                    "enemies_density": cc(mw.enemies_density[p]),
                    "chests_shuffle": "Include",
-                   "boxes_shuffle": "Exclude" if mw.brown_boxes[p] != "include" else "Include",
                    "shuffle_boxes_content": True if mw.brown_boxes[p] == "shuffle" else False,
                    "npcs_shuffle": "Include",
                    "battlefields_shuffle": "Include",

@@ -1,7 +1,7 @@
 import yaml
 from pathlib import Path
 from BaseClasses import Region, MultiWorld, Entrance, Location, LocationProgressType
-from worlds.generic.Rules import add_rule, exclusion_rules
+from worlds.generic.Rules import add_rule
 from .Items import item_groups
 
 base_path = Path(__file__).parent
@@ -206,9 +206,8 @@ def set_rules(self) -> None:
     elif self.multiworld.sky_coin_mode[self.player] == "save_the_crystals":
         self.multiworld.get_entrance("Focus Tower 1F SkyCoin Room to Doom Castle Corridor of Destiny").access_rule = \
             lambda state: state.can_reach("Rex Chest", "Location", self.player) and \
-                          state.has("DualheadHydra", self.player) and \
-                          state.can_reach("Pazuzu Chest", "Location", self.player) and \
-                          state.has("IceGolem", self.player)
+            state.has("DualheadHydra", self.player) and state.has("IceGolem", self.player) and \
+            state.can_reach("Pazuzu Chest", "Location", self.player)
 
 
 
