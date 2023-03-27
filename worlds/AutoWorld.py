@@ -331,6 +331,9 @@ class World(metaclass=AutoWorldRegister):
             return item.name
         return None
 
+    def create_filler(self) -> "Item":
+        return self.create_item(self.get_filler_item_name())
+
     # called to create all_state, return Items that are created during pre_fill
     def get_pre_fill_items(self) -> List["Item"]:
         return []
@@ -351,9 +354,6 @@ class World(metaclass=AutoWorldRegister):
                 del (state.prog_items[name, self.player])
             return True
         return False
-
-    def create_filler(self) -> "Item":
-        return self.create_item(self.get_filler_item_name())
 
     @classmethod
     def get_data_package_data(cls) -> "GamesPackage":
