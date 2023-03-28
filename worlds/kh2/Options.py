@@ -1,4 +1,4 @@
-from Options import Choice, Option, Range, Toggle, OptionList
+from Options import Choice, Option, Range, Toggle, OptionSet
 import typing
 
 from worlds.kh2 import SupportAbility_Table, ActionAbility_Table
@@ -165,7 +165,7 @@ class KeybladeAbilities(Choice):
     default = 2
 
 
-class BlacklistKeyblade(OptionList):
+class BlacklistKeyblade(OptionSet):
     """Black List these Abilities on Keyblades"""
     display_name = "Blacklist Keyblade Abilities"
     valid_keys = set(SupportAbility_Table.keys()).union(ActionAbility_Table.keys())
