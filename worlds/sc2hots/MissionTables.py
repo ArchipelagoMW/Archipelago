@@ -108,7 +108,7 @@ mini_campaign_order = [
     FillMission(MissionPools.HARD, [7], "Skygeirr Station"),
     FillMission(MissionPools.HARD, [6], "Dominion Space", number=5),
     FillMission(MissionPools.HARD, [9], "Dominion Space"),
-    FillMission(MissionPools.HARD, [5], "Korhal", completion_critical=True, number=8),
+    FillMission(MissionPools.HARD, [6], "Korhal", completion_critical=True, number=8),
     FillMission(MissionPools.FINAL, [11], "Korhal", completion_critical=True),
 
     # FillMission(MissionPools.STARTER, [-1], "Mar Sara", completion_critical=True),
