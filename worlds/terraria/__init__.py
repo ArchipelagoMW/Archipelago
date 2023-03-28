@@ -36,7 +36,14 @@ class TerrariaWorld(World):
     calamity = False
 
     def generate_early(self) -> None:
-        goal, goal_items = goals[self.multiworld.goal[self.player].value]
+        goal, goal_locations = goals[self.multiworld.goal[self.player].value]
+        ter_goals = {}
+        goal_items = set()
+        for location in goal_locations:
+            _, flags, _, _ = rules[rule_indices[location]]
+            item = flags.get("Item") or f"Post-{location}"
+            ter_goals[item] = location
+            goal_items.add(item)
 
         achievements = self.multiworld.achievements[self.player].value
         location_count = 0
@@ -56,7 +63,7 @@ class TerrariaWorld(World):
                 # Event
                 locations.append(rule)
 
-        item_count = len(goal_items)
+        item_count = 0
         items = []
         for rule, flags, _, _ in rules[:goal]:
             if (not self.calamity and "Calamity" in flags):
@@ -64,7 +71,8 @@ class TerrariaWorld(World):
             if "Item" in flags:
                 # Item
                 item_count += 1
-                items.append(rule)
+                if rule not in goal_locations:
+                    items.append(rule)
             elif ("Achievement" not in flags and "Location" not in flags and "Item" not in flags):
                 # Event
                 items.append(rule)
@@ -88,6 +96,7 @@ class TerrariaWorld(World):
         self.ter_items = items
         self.ter_locations = locations
 
+        self.ter_goals = ter_goals
         self.goal_items = goal_items
 
     def create_regions(self) -> None:
@@ -95,7 +104,7 @@ class TerrariaWorld(World):
 
         for location in self.ter_locations:
             menu.locations.append(TerrariaLocation(self.player, location, location_name_to_id.get(location), menu))
-            
+
         self.multiworld.regions.append(menu)
 
     def create_items(self) -> None:
@@ -123,6 +132,7 @@ class TerrariaWorld(World):
                 name = flags.get("Item") or f"Post-{condition}"
             else:
                 name = condition
+
             return sign == state.has(name, self.player)
         elif ty == COND_LOC:
             _, _, operator, conditions = rules[rule_indices[condition]]
@@ -131,28 +141,34 @@ class TerrariaWorld(World):
             if condition == "npc":
                 if type(arg) is not int:
                     raise Exception("@npc requires an integer argument")
+
                 npc_count = 0
                 for npc in npcs:
                     if state.has(npc, self.player):
                         npc_count += 1
                         if npc_count >= arg:
                             return sign
+
                 return not sign
             elif condition == "calamity":
                 return sign == self.calamity
             elif condition == "pickaxe":
                 if type(arg) is not int:
                     raise Exception("@pickaxe requires an integer argument")
+
                 for pickaxe, power in pickaxes.items():
                     if power >= arg and state.has(pickaxe, self.player):
                         return sign
+
                 return not sign
             elif condition == "hammer":
                 if type(arg) is not int:
                     raise Exception("@hammer requires an integer argument")
+
                 for hammer, power in hammers.items():
                     if power >= arg and state.has(hammer, self.player):
                         return sign
+
                 return not sign
             elif condition == "mech_boss":
                 if type(arg) is not int:
@@ -186,8 +202,7 @@ class TerrariaWorld(World):
         for location in self.ter_locations:
             def check(state, location=location):
                 _, _, operator, conditions = rules[rule_indices[location]]
-                found = self.check_conditions(state, operator, conditions)
-                return found
+                return self.check_conditions(state, operator, conditions)
 
             self.multiworld.get_location(location, self.player).access_rule = check
 
@@ -201,7 +216,7 @@ class TerrariaWorld(World):
                     classification = ItemClassification.useful
                 self.multiworld.get_location(location, self.player).place_locked_item(TerrariaItem(location, classification, None, self.player))
         
-        for goal in self.goal_items:
-            self.multiworld.get_location(goal, self.player).place_locked_item(TerrariaItem("Victory", ItemClassification.progression, item_name_to_id["Victory"], self.player))
+        for item, location in self.ter_goals.items():
+            self.multiworld.get_location(location, self.player).place_locked_item(TerrariaItem(item, ItemClassification.progression, item_name_to_id[item], self.player))
 
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player, len(self.goal_items))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has_all(self.goal_items, self.player)

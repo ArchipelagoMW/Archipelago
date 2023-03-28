@@ -212,7 +212,7 @@ Gelpick;                            Calamity | Pickaxe(100);                    
 
 // Wall of Flesh
 Wall of Flesh;                      Location | Item(Hardmode);
-Pwnhammer;                          ;                                           #Wall of Flesh;
+Pwnhammer;                          Hammer(80);                                 #Wall of Flesh;
 Wizard;                             Npc;                                        Wall of Flesh;
 Tax Collector;                      Npc;                                        Purification Powder & Wall of Flesh;
 Altar;                              ;                                           Wall of Flesh & @hammer(80);
@@ -294,7 +294,7 @@ Abyssal Warhammer;                  Calamity | Hammer(88);                      
 Shardlight Pickaxe;                 Calamity | Pickaxe(180);                    Hardmode Anvil & Cryonic Bar;
 
 // Skeletron Prime
-Skeletron Prime;                    Location | Item | Mech Boss;                Hardmode Anvil & Soul of Night;
+Skeletron Prime;                    Location | Item | Mech Boss;                Hardmode Anvil & Soul of Night & Soul of Light & Bone;
 Soul of Fright;                     ;                                           #Skeletron Prime;
 Inferna Cutter;                     Calamity;                                   Hardmode Anvil & Axe of Purity & Soul of Fright & Essence of Havoc;
 Buckets of Bolts;                   Achievement;                                @mech_boss(3); // TODO Check
