@@ -759,7 +759,7 @@ class Patch:
 
         self.stringTable.SetTowerRequirementText(f"You need {towerCrystals} crystals to enter Ganon's Tower.")
         if (goal == Goal.AllDungeonsDefeatMotherBrain):
-            self.stringTable.SetGanonRequirementText(f"You need to complete all the dungeons to defeat Ganon.")
+            self.stringTable.SetGanonRequirementText(f"You need to complete all the dungeons and bosses to defeat Ganon.")
         else:
             self.stringTable.SetGanonRequirementText(f"You need {ganonCrystals} crystals to defeat Ganon.")
 
