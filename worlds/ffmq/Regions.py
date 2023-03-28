@@ -3,18 +3,84 @@ from pathlib import Path
 from BaseClasses import Region, MultiWorld, Entrance, Location, LocationProgressType
 from worlds.generic.Rules import add_rule
 from .Items import item_groups
+from copy import deepcopy
 
 base_path = Path(__file__).parent
 file_path = (base_path / "data/rooms.yaml").resolve()
 with open(file_path) as file:
     rooms = yaml.load(file, yaml.Loader)
+# file_path = (base_path / "data/shufflingdata.yaml").resolve()
+# with open(file_path) as file:
+#     shuffling_data = yaml.load(file, yaml.Loader)
+# file_path = (base_path / "data/entrancespairs.yaml").resolve()
+# with open(file_path) as file:
+#     entrance_pairs = yaml.load(file, yaml.Loader)
+#
+# teleports_to = {}
+# dead_ends = []
+# connectors = []
+# branches = []
+#
+#
+# for room in rooms:
+#     for link in room["links"]:
+#         if "teleporter" in link:
+#             if link["target_room"] not in teleports_to:
+#                 teleports_to[link["target_room"]] = []
+#             teleports_to[link["target_room"]].append(link["teleporter"])
+#     # if len(room["links"]) == 1:
+#     #     dead_ends.append(room["id"])
+#     # elif len(room["links"]) == 2:
+#     #     connectors.append(room["id"])
+#     # else:
+#     #     branches.append(room["id"])
+#
+# room_sets = []
+# entrance_pairs_copy = deepcopy(entrance_pairs)
+# def add_room(room_set, rooms, id):
+#     for room in room_sets:
+#         if id in room:
+#             break
+#     else:
+#         for room in rooms:
+#             if room["id"] == id:
+#                 break
+#         else:
+#             raise Exception
+#     if room in rooms:
+#         rooms.remove(room)
+#     room_set.append(room["id"])
+#     for link in room["links"]:
+#         if link["target_room"] not in room_set:
+#             if "teleporter" not in link or link["entrance"] in shuffling_data["fixed_entrances"]:
+#                 add_room(room_set, rooms, link["target_room"])
+#         # for pair in entrance_pairs_copy:
+#         #     if link["entrance"] in pair:
+#         #         pair.remove(link["entrance"])
+#         #         add_room()
+#
+#
+# rooms_copy = deepcopy(rooms)
+#
+# while rooms_copy:
+#     room_set = []
+#     add_room(room_set, rooms_copy, rooms_copy[0]["id"])
+#     room_sets.append(room_set)
+#
+# breakpoint()
+
+
+
+
 
 location_table = {}
+object_id_table = {}
 index = 0x420000
 for room in rooms:
     for object in room["game_objects"]:
         if object["type"] in ("Chest", "NPC", "Battlefield", "Box") and "Hero Chest" not in object["name"]:
             location_table[object["name"]] = index
+            object_id_table[object["name"]] = object["object_id"]
             index += 1
 
 
@@ -60,7 +126,27 @@ def create_region(world: MultiWorld, player: int, name: str, room_id=None, locat
 
 
 def create_regions(self):
-    self.multiworld.regions.append(create_region(self.multiworld, self.player, "Menu"))
+    menu_region = create_region(self.multiworld, self.player, "Menu")
+    self.multiworld.regions.append(menu_region)
+    menu_region.locations.append(FFMQLocation(self.player, "Starting Weapon", None, "Trigger",
+        event=self.create_item(self.multiworld.starting_weapon[self.player].current_key.title().replace("_", " "))))
+    menu_region.locations[-1].parent_region = menu_region
+    menu_region.locations.append(FFMQLocation(self.player, "Starting Armor", None, "Trigger",
+        event=self.create_item("Steel Armor")))
+    menu_region.locations[-1].parent_region = menu_region
+
+
+    # if self.multiworld.map_shuffle[self.player]:
+    #     self.rooms = rooms.deepcopy()
+    #     local_connectors = connectors.copy()
+    #     local_branches = branches.copy()
+    #     local_dead_ends = dead_ends.copy()
+    #
+    #     # dungeon floor shuffle
+    #     if self.multiworld.map_shuffle[self.player] in ("everything", "dungeons", "overworld_and_dungeons"):
+    #         map_sets = [[] for _ in range(35)]
+    #         while branches:
+    #             map = self.random.randint(len(map_sets))
 
     for room in rooms:
         if room["id"] == 0:
@@ -103,7 +189,6 @@ def create_regions(self):
             ["Ship Dock Access", "Ship Steering Wheel", "Ship Loaned"], self.player),
         }
 
-    menu_region = self.multiworld.get_region("Menu", self.player)
     for region in ow_regions:
         connection = Entrance(self.player, f"Enter Overworld Subregion: {region}", menu_region)
         connection.connect(self.multiworld.get_region(region, self.player))

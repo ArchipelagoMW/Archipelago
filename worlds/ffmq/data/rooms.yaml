@@ -3677,7 +3677,7 @@
     object_id: 0
     type: "Trigger"
     on_trigger: ["Zuh"]
-    access: []
+    access: ["DragonClaw"]
   links:
   - target_room: 195
     entrance: 435

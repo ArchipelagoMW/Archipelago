@@ -5,7 +5,8 @@ from .Items import item_table, item_groups, create_items, FFMQItem
 from .Output import generate_output
 from .Options import option_definitions
 from BaseClasses import LocationProgressType
-
+import base64
+import threading
 
 class FFMQWorld(World):
     """ffmq description here"""
@@ -23,6 +24,10 @@ class FFMQWorld(World):
     create_items = create_items
     create_regions = create_regions
     set_rules = set_rules
+
+    # def __init__(self, world, player: int):
+    #     self.rom_name_available_event = threading.Event()
+    #     super().__init__(world, player)
 
     def generate_early(self):
         if self.multiworld.sky_coin_mode[self.player] == "shattered":
@@ -57,6 +62,10 @@ class FFMQWorld(World):
                 # not enough useful items. This shouldn't happen unless other games are also pulling items from the
                 # pool early
                 location.progress_type = LocationProgressType.PRIORITY
+
+    # def modify_multidata(self, multidata) -> None:
+    #     b64_name: str = base64.b64encode(bytes(self.rom_name)).decode()
+    #     multidata["connect_names"][b64_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
     def create_item(self, name: str):
         return FFMQItem(name, self.player)

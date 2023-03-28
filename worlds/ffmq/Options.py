@@ -178,9 +178,18 @@ class TweakFrustratingDungeons(Toggle):
 
 
 class MapShuffle(Choice):
-    """"""
+    """none: No shuffle. overworld: Only shuffle the Overworld locations. dungeons: Only shuffle the dungeons' floors
+    amongst themselves. Temples and Towns aren't included. overworld_and_dungeons: Shuffle the Overworld and dungeons
+    at the same time. everything: Shuffle the Overworld, dungeons, temples and towns all amongst each others.
+    When dungeons are shuffled, defeating Pazuzu won't teleport you to the 7th floor, you have to get there normally to
+    save the Crystal and get Pazuzu's Chest."""
     display_name = "Map Shuffle"
     option_none = 0
+    option_overworld = 1
+    option_dungeons = 2
+    option_overworld_and_dungeons = 3
+    option_everything = 4
+    default = 0
 
 
 class CrestShuffle(Toggle):

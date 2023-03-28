@@ -118,6 +118,10 @@ item_table = {
     "Ship Liberated": ItemData(None, ItemClassification.progression, ["Events"]),
     "Ship Loaned": ItemData(None, ItemClassification.progression, ["Events"]),
     "Ship Dock Access": ItemData(None, ItemClassification.progression, ["Events"]),
+    "Stone Golem": ItemData(None, ItemClassification.progression, ["Events"]),
+    "Twinhead Wyvern": ItemData(None, ItemClassification.progression, ["Events"]),
+    "Zuh": ItemData(None, ItemClassification.progression, ["Events"]),
+
     "Libra Temple Crest Tile": ItemData(None, ItemClassification.progression, ["Events"]),
     "Life Temple Crest Tile": ItemData(None, ItemClassification.progression, ["Events"]),
     "Aquaria Vendor Crest Tile": ItemData(None, ItemClassification.progression, ["Events"]),
@@ -181,14 +185,14 @@ for item, data in item_table.items():
 
 def create_items(self) -> None:
     items = []
-    self.multiworld.push_precollected(self.create_item(self.multiworld.starting_weapon[self.player].current_key.title().replace("_", " ")))
-    self.multiworld.push_precollected(self.create_item("Steel Armor"))
+    #self.multiworld.push_precollected(self.create_item(self.multiworld.starting_weapon[self.player].current_key.title().replace("_", " ")))
+    #self.multiworld.push_precollected(self.create_item("Steel Armor"))
     if self.multiworld.sky_coin_mode[self.player] == "start_with":
         self.multiworld.push_precollected(self.create_item("Sky Coin"))
 
 
     def add_item(item_name):
-        if item_name == "Steel Armor" or "Progressive" in item_name:
+        if item_name in ["Steel Armor", "Sky Fragment"] or "Progressive" in item_name:
             return
         if item_name.lower().replace(" ", "_") == self.multiworld.starting_weapon[self.player].current_key:
             return

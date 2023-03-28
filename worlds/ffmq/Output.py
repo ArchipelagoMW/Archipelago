@@ -3,7 +3,7 @@ import os
 import zipfile
 from pathlib import Path
 from copy import deepcopy
-
+from .Regions import object_id_table
 
 base_path = Path(__file__).parent
 file_path = (base_path / "data/settings.yaml").resolve()
@@ -14,11 +14,11 @@ def generate_output(self, output_directory):
     item_placement = []
     for location in self.multiworld.get_locations(self.player):
         if location.type != "Trigger":
-            if location.item.code > 0x420000 + 256: #"Progressive" in item_name:
+            if location.item.code > 0x420000 + 256:
                 item_name = self.item_id_to_name[location.item.code - 256]
             else:
                 item_name = location.item.name
-            item_placement.append({"object_id": location.address, "type": location.type, "content":
+            item_placement.append({"object_id": object_id_table[location.name], "type": location.type, "content":
                 "".join(item_name.split(" ")) if location.item.player == self.player else "APItem"})
 
 
@@ -72,15 +72,18 @@ def generate_output(self, output_directory):
                }
     for option, data in option_writes.items():
         options["Final Fantasy Mystic Quest"][option][data] = 1
-    options["Final Fantasy Mystic Quest"]["seed"] = mw.per_slot_randoms[p].randint(0, int("FFFFFFFF", 16))
-    options["Final Fantasy Mystic Quest"]["starting_items"] = [item.name.title().replace(" ", "") for item in
-                                                               self.multiworld.precollected_items[self.player]]
+    options["seed"] = hex(mw.per_slot_randoms[p].randint(0, int("FFFFFFFF", 16)))
+    #options["Final Fantasy Mystic Quest"]["starting_items"] = [item.name.title().replace(" ", "") for item in
+    #                                                           self.multiworld.precollected_items[self.player]]
         #
         # [
         # self.multiworld.starting_weapon[self.player].current_key.title().replace("_", ""), "SteelArmor"]
 
-    file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.zip")
+    starting_items = [self.multiworld.starting_weapon[self.player].current_key.title().replace("_", ""), "SteelArmor"]
+
+    file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.apmq")
     with zipfile.ZipFile(file_path, mode="w", compression=zipfile.ZIP_DEFLATED,
                          compresslevel=9) as zf:
         zf.writestr("itemplacement.yaml", yaml.dump(item_placement))
-        zf.writestr("settings.yaml", yaml.dump(options))
+        zf.writestr("flagset.yaml", yaml.dump(options))
+        zf.writestr("startingitems.yaml", yaml.dump(starting_items))
