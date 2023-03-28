@@ -324,17 +324,22 @@ class GfxMod(FreeText, LADXROption):
                 if extension in self.extensions:
                     GfxMod.__spriteFiles[name].append(file)
                     
+    def verify(self, world, player_name: str, plando_options) -> None:
+        if self.value == "Link" or self.value in GfxMod.__spriteFiles:
+            return
+        raise Exception(f"LADX Sprite '{self.value}' not found. Possible sprites are: {['Link'] + list(GfxMod.__spriteFiles.keys())}")
+            
 
     def to_ladxr_option(self, all_options):
         if self.value == -1 or self.value == "Link":
             return None, None
-        elif self.value in GfxMod.__spriteFiles:
-            if len(GfxMod.__spriteFiles[self.value]) > 1:
-                logger.warning(f"{self.value} does not uniquely identify a file. Possible matches: {GfxMod.__spriteFiles[self.value]}. Using {GfxMod.__spriteFiles[self.value][0]}")
-                return self.ladxr_name, GfxMod.__spriteFiles[self.value][0]
-            return self.ladxr_name, GfxMod.__spriteFiles[self.value][0]
-        logger.error(f"Spritesheet {self.value} not found. Falling back to default sprite.")
-        return None, None
+
+        assert self.value in GfxMod.__spriteFiles
+
+        if len(GfxMod.__spriteFiles[self.value]) > 1:
+            logger.warning(f"{self.value} does not uniquely identify a file. Possible matches: {GfxMod.__spriteFiles[self.value]}. Using {GfxMod.__spriteFiles[self.value][0]}")
+
+        return self.ladxr_name, GfxMod.__spriteFiles[self.value][0]
 
 class Palette(Choice):
     """
