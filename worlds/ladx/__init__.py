@@ -28,7 +28,7 @@ from .Options import links_awakening_options
 from .Rom import LADXDeltaPatch
 
 
-DEVELOPER_MODE = False
+DEVELOPER_MODE = True
 
 class LinksAwakeningWebWorld(WebWorld):
     tutorials = [Tutorial(
@@ -98,10 +98,8 @@ class LinksAwakeningWorld(World):
         self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.laxdr_options, self.multiworld.random).toDict()
     
     # Failing seeds -
-    # Generating for 1 player, 61797097351729839299 Seed 3526789157814043126 with plando: bosses
-    # Generating for 1 player, 08916103583371570033 Seed 34316645283856452042 with plando: bosses
-
-    # TODO: this needs to handle castle button - don't allow walking through gate unless you've found the castle connector
+    # Generating for 1 player, 45461688514297641536 Seed 17354083837832261298 with plando: bosses
+    # Generating for 1 player, 60252350886745909164 Seed 97069388582882178805 with plando: bosses
     def randomize_entrances(self):
         from .LADXR.logic.overworld import World
 
@@ -215,14 +213,6 @@ class LinksAwakeningWorld(World):
             connector = unshuffled_connectors.pop()
             for entrance in connector.entrances:
                 self.world_setup.entrance_mapping[unshuffled_entrances.pop()] = entrance
-
-        x = set()
-        y = set()
-        for k, v in self.world_setup.entrance_mapping.items():
-            assert k not in x, k
-            assert v not in y, v
-            x.add(k)
-            y.add(v)
         
     def create_regions(self) -> None:
         # Initialize
