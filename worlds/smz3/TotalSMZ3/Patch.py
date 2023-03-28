@@ -122,7 +122,7 @@ class Patch:
 
         self.WriteGanonInvicible(config.Goal)
         self.WritePreOpenPyramid(config.Goal)
-        self.WriteCrystalsNeeded(self.myWorld.TowerCrystals, self.myWorld.GanonCrystals)
+        self.WriteCrystalsNeeded(self.myWorld.TowerCrystals, self.myWorld.GanonCrystals, config.Goal)
         self.WriteBossesNeeded(self.myWorld.TourianBossTokens)
         self.WriteRngBlock()
 
@@ -753,12 +753,15 @@ class Patch:
     def WriteBossesNeeded(self, tourianBossTokens):
         self.patches.append((Snes(0xF47200), getWordArray(tourianBossTokens)))
 
-    def WriteCrystalsNeeded(self, towerCrystals, ganonCrystals):
+    def WriteCrystalsNeeded(self, towerCrystals, ganonCrystals, goal: Goal):
         self.patches.append((Snes(0x30805E), [towerCrystals]))
         self.patches.append((Snes(0x30805F), [ganonCrystals]))
 
         self.stringTable.SetTowerRequirementText(f"You need {towerCrystals} crystals to enter Ganon's Tower.")
-        self.stringTable.SetGanonRequirementText(f"You need {ganonCrystals} crystals to defeat Ganon.")
+        if (goal == Goal.AllDungeonsDefeatMotherBrain):
+            self.stringTable.SetGanonRequirementText(f"You need to complete all the dungeons to defeat Ganon.")
+        else:
+            self.stringTable.SetGanonRequirementText(f"You need {ganonCrystals} crystals to defeat Ganon.")
 
     def WriteRngBlock(self):
         #/* Repoint RNG Block */
