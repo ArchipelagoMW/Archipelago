@@ -1,8 +1,8 @@
 import os, json, re, random
 
-from utils.parameters import Knows, Settings, Controller, isKnows, isSettings, isButton
-from utils.parameters import easy, medium, hard, harder, hardcore, mania, text2diff
-from logic.smbool import SMBool
+from worlds.sm.variaRandomizer.utils.parameters import Knows, Settings, Controller, isKnows, isSettings, isButton
+from worlds.sm.variaRandomizer.utils.parameters import easy, medium, hard, harder, hardcore, mania, text2diff
+from worlds.sm.variaRandomizer.logic.smbool import SMBool
 
 def isStdPreset(preset):
     return preset in ['newbie', 'casual', 'regular', 'veteran', 'expert', 'master', 'samus', 'solution', 'Season_Races', 'SMRAT2021']
@@ -264,7 +264,7 @@ class PresetLoaderDict(PresetLoader):
         super(PresetLoaderDict, self).__init__()
 
 def getDefaultMultiValues():
-    from graph.graph_utils import GraphUtils
+    from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils
     defaultMultiValues = {
         'startLocation': GraphUtils.getStartAccessPointNames(),
         'majorsSplit': ['Full', 'FullWithHUD', 'Major', 'Chozo', 'Scavenger'],

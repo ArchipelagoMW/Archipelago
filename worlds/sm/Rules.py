@@ -1,10 +1,7 @@
 from ..generic.Rules import set_rule, add_rule
 
-from graph.vanilla.graph_locations import locationsDict
-from graph.graph_utils import vanillaTransitions, getAccessPoint
-from logic.logic import Logic
-from rom.rom_patches import RomPatches
-from utils.doorsmanager import DoorsManager
+from worlds.sm.variaRandomizer.graph.vanilla.graph_locations import locationsDict
+from worlds.sm.variaRandomizer.logic.logic import Logic
 
 def evalSMBool(smbool, maxDiff):
     return smbool.bool == True and smbool.difficulty <= maxDiff

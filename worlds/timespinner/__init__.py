@@ -1,6 +1,7 @@
 from typing import Dict, List, Set, Tuple, TextIO, Union
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from .Items import get_item_names_per_category, item_table, starter_melee_weapons, starter_spells, filler_items
+from .Items import get_item_names_per_category
+from .Items import item_table, starter_melee_weapons, starter_spells, filler_items, starter_progression_items
 from .Locations import get_location_datas, EventId
 from .Options import is_option_enabled, get_option_value, timespinner_options
 from .PreCalculatedWeights import PreCalculatedWeights
@@ -70,6 +71,7 @@ class TimespinnerWorld(World):
         excluded_items: Set[str] = self.get_excluded_items()
 
         self.assign_starter_items(excluded_items)
+        self.place_first_progression_item(excluded_items)
 
         self.multiworld.itempool += self.get_item_pool(excluded_items)
 
@@ -241,9 +243,32 @@ class TimespinnerWorld(World):
     def assign_starter_item(self, excluded_items: Set[str], location: str, item_list: Tuple[str, ...]) -> None:
         item_name = self.multiworld.random.choice(item_list)
 
-        excluded_items.add(item_name)
+        self.place_locked_item(excluded_items, location, item_name)
 
-        item = self.create_item(item_name)
+    def place_first_progression_item(self, excluded_items: Set[str]) -> None:
+        if self.is_option_enabled("QuickSeed") or self.is_option_enabled("Inverted") \
+                or self.precalculated_weights.flood_lake_desolation:
+            return
+
+        for item in self.multiworld.precollected_items[self.player]:
+            if item.name in starter_progression_items and not item.name in excluded_items:
+                return
+
+        local_starter_progression_items = tuple(
+            item for item in starter_progression_items 
+                if item not in excluded_items and item not in self.multiworld.non_local_items[self.player].value)
+
+        if not local_starter_progression_items:
+            return
+
+        progression_item = self.multiworld.random.choice(local_starter_progression_items)
+
+        self.multiworld.local_early_items[self.player][progression_item] = 1
+
+    def place_locked_item(self, excluded_items: Set[str], location: str, item: str) -> None:
+        excluded_items.add(item)
+
+        item = self.create_item(item)
 
         self.multiworld.get_location(location, self.player).place_locked_item(item)
 
