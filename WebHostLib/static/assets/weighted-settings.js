@@ -136,7 +136,11 @@ const buildUI = (settingData) => {
     expandButton.classList.add('invisible');
     gameDiv.appendChild(expandButton);
 
-    const weightedSettingsDiv = buildWeightedSettingsDiv(game, settingData.games[game].gameSettings);
+    settingData.games[game].gameItems.sort((a, b) => (a > b ? 1 : (a < b ? -1 : 0)));
+    settingData.games[game].gameLocations.sort((a, b) => (a > b ? 1 : (a < b ? -1 : 0)));
+
+    const weightedSettingsDiv = buildWeightedSettingsDiv(game, settingData.games[game].gameSettings,
+      settingData.games[game].gameItems, settingData.games[game].gameLocations);
     gameDiv.appendChild(weightedSettingsDiv);
 
     const itemsDiv = buildItemsDiv(game, settingData.games[game].gameItems);
@@ -226,7 +230,7 @@ const buildGameChoice = (games) => {
   gameChoiceDiv.appendChild(table);
 };
 
-const buildWeightedSettingsDiv = (game, settings) => {
+const buildWeightedSettingsDiv = (game, settings, gameItems, gameLocations) => {
   const currentSettings = JSON.parse(localStorage.getItem('weighted-settings'));
   const settingsWrapper = document.createElement('div');
   settingsWrapper.classList.add('settings-wrapper');
@@ -268,7 +272,7 @@ const buildWeightedSettingsDiv = (game, settings) => {
           range.setAttribute('data-type', setting.type);
           range.setAttribute('min', 0);
           range.setAttribute('max', 50);
-          range.addEventListener('change', updateGameSetting);
+          range.addEventListener('change', updateRangeSetting);
           range.value = currentSettings[game][settingName][option.value];
           tdMiddle.appendChild(range);
           tr.appendChild(tdMiddle);
@@ -309,7 +313,7 @@ const buildWeightedSettingsDiv = (game, settings) => {
             range.setAttribute('data-option', i);
             range.setAttribute('min', 0);
             range.setAttribute('max', 50);
-            range.addEventListener('change', updateGameSetting);
+            range.addEventListener('change', updateRangeSetting);
             range.value = currentSettings[game][settingName][i] || 0;
             tdMiddle.appendChild(range);
             tr.appendChild(tdMiddle);
@@ -377,7 +381,7 @@ const buildWeightedSettingsDiv = (game, settings) => {
             range.setAttribute('data-option', option);
             range.setAttribute('min', 0);
             range.setAttribute('max', 50);
-            range.addEventListener('change', updateGameSetting);
+            range.addEventListener('change', updateRangeSetting);
             range.value = currentSettings[game][settingName][parseInt(option, 10)];
             tdMiddle.appendChild(range);
             tr.appendChild(tdMiddle);
@@ -428,7 +432,7 @@ const buildWeightedSettingsDiv = (game, settings) => {
               range.setAttribute('data-option', option);
               range.setAttribute('min', 0);
               range.setAttribute('max', 50);
-              range.addEventListener('change', updateGameSetting);
+              range.addEventListener('change', updateRangeSetting);
               range.value = currentSettings[game][settingName][parseInt(option, 10)];
               tdMiddle.appendChild(range);
               tr.appendChild(tdMiddle);
@@ -475,7 +479,7 @@ const buildWeightedSettingsDiv = (game, settings) => {
             range.setAttribute('data-option', option);
             range.setAttribute('min', 0);
             range.setAttribute('max', 50);
-            range.addEventListener('change', updateGameSetting);
+            range.addEventListener('change', updateRangeSetting);
             range.value = currentSettings[game][settingName][option];
             tdMiddle.appendChild(range);
             tr.appendChild(tdMiddle);
@@ -493,15 +497,108 @@ const buildWeightedSettingsDiv = (game, settings) => {
         break;
 
       case 'items-list':
-        // TODO
+        const itemsList = document.createElement('div');
+        itemsList.classList.add('simple-list');
+
+        Object.values(gameItems).forEach((item) => {
+          const itemRow = document.createElement('div');
+          itemRow.classList.add('list-row');
+
+          const itemLabel = document.createElement('label');
+          itemLabel.setAttribute('for', `${game}-${settingName}-${item}`)
+
+          const itemCheckbox = document.createElement('input');
+          itemCheckbox.setAttribute('id', `${game}-${settingName}-${item}`);
+          itemCheckbox.setAttribute('type', 'checkbox');
+          itemCheckbox.setAttribute('data-game', game);
+          itemCheckbox.setAttribute('data-setting', settingName);
+          itemCheckbox.setAttribute('data-option', item.toString());
+          itemCheckbox.addEventListener('change', updateListSetting);
+          if (currentSettings[game][settingName].includes(item)) {
+            itemCheckbox.setAttribute('checked', '1');
+          }
+
+          const itemName = document.createElement('span');
+          itemName.innerText = item.toString();
+
+          itemLabel.appendChild(itemCheckbox);
+          itemLabel.appendChild(itemName);
+
+          itemRow.appendChild(itemLabel);
+          itemsList.appendChild((itemRow));
+        });
+
+        settingWrapper.appendChild(itemsList);
         break;
 
       case 'locations-list':
-        // TODO
+        const locationsList = document.createElement('div');
+        locationsList.classList.add('simple-list');
+
+        Object.values(gameLocations).forEach((location) => {
+          const locationRow = document.createElement('div');
+          locationRow.classList.add('list-row');
+
+          const locationLabel = document.createElement('label');
+          locationLabel.setAttribute('for', `${game}-${settingName}-${location}`)
+
+          const locationCheckbox = document.createElement('input');
+          locationCheckbox.setAttribute('id', `${game}-${settingName}-${location}`);
+          locationCheckbox.setAttribute('type', 'checkbox');
+          locationCheckbox.setAttribute('data-game', game);
+          locationCheckbox.setAttribute('data-setting', settingName);
+          locationCheckbox.setAttribute('data-option', location.toString());
+          locationCheckbox.addEventListener('change', updateListSetting);
+          if (currentSettings[game][settingName].includes(location)) {
+            locationCheckbox.setAttribute('checked', '1');
+          }
+
+          const locationName = document.createElement('span');
+          locationName.innerText = location.toString();
+
+          locationLabel.appendChild(locationCheckbox);
+          locationLabel.appendChild(locationName);
+
+          locationRow.appendChild(locationLabel);
+          locationsList.appendChild((locationRow));
+        });
+
+        settingWrapper.appendChild(locationsList);
         break;
 
       case 'custom-list':
-        // TODO
+        const customList = document.createElement('div');
+        customList.classList.add('simple-list');
+
+        Object.values(settings[settingName].options).forEach((listItem) => {
+          const customListRow = document.createElement('div');
+          customListRow.classList.add('list-row');
+
+          const customItemLabel = document.createElement('label');
+          customItemLabel.setAttribute('for', `${game}-${settingName}-${listItem}`)
+
+          const customItemCheckbox = document.createElement('input');
+          customItemCheckbox.setAttribute('id', `${game}-${settingName}-${listItem}`);
+          customItemCheckbox.setAttribute('type', 'checkbox');
+          customItemCheckbox.setAttribute('data-game', game);
+          customItemCheckbox.setAttribute('data-setting', settingName);
+          customItemCheckbox.setAttribute('data-option', listItem.toString());
+          customItemCheckbox.addEventListener('change', updateListSetting);
+          if (currentSettings[game][settingName].includes(listItem)) {
+            customItemCheckbox.setAttribute('checked', '1');
+          }
+
+          const customItemName = document.createElement('span');
+          customItemName.innerText = listItem.toString();
+
+          customItemLabel.appendChild(customItemCheckbox);
+          customItemLabel.appendChild(customItemName);
+
+          customListRow.appendChild(customItemLabel);
+          customList.appendChild((customListRow));
+        });
+
+        settingWrapper.appendChild(customList);
         break;
 
       default:
@@ -906,7 +1003,7 @@ const updateBaseSetting = (event) => {
   localStorage.setItem('weighted-settings', JSON.stringify(settings));
 };
 
-const updateGameSetting = (evt) => {
+const updateRangeSetting = (evt) => {
   const options = JSON.parse(localStorage.getItem('weighted-settings'));
   const game = evt.target.getAttribute('data-game');
   const setting = evt.target.getAttribute('data-setting');
@@ -917,6 +1014,26 @@ const updateGameSetting = (evt) => {
     delete options[game][setting][option];
   } else {
     options[game][setting][option] = parseInt(evt.target.value, 10);
+  }
+  localStorage.setItem('weighted-settings', JSON.stringify(options));
+};
+
+const updateListSetting = (evt) => {
+  const options = JSON.parse(localStorage.getItem('weighted-settings'));
+  const game = evt.target.getAttribute('data-game');
+  const setting = evt.target.getAttribute('data-setting');
+  const option = evt.target.getAttribute('data-option');
+
+  if (evt.target.checked) {
+    // If the option is to be enabled and it is already enabled, do nothing
+    if (options[game][setting].includes(option)) { return; }
+
+    options[game][setting].push(option);
+  } else {
+    // If the option is to be disabled and it is already disabled, do nothing
+    if (!options[game][setting].includes(option)) { return; }
+
+    options[game][setting].splice(options[game][setting].indexOf(option), 1);
   }
   localStorage.setItem('weighted-settings', JSON.stringify(options));
 };

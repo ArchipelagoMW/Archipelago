@@ -280,6 +280,30 @@ html{
     flex-direction: column;
 }
 
+#weighted-settings .simple-list{
+    display: flex;
+    flex-direction: column;
+
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ffffff;
+    border-radius: 4px;
+}
+
+#weighted-settings .simple-list .list-row label{
+    display: block;
+    width: calc(100% - 1rem);
+    padding: 0.125rem 0.5rem;
+}
+
+#weighted-settings .simple-list .list-row label:hover{
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+#weighted-settings .simple-list .list-row label input[type=checkbox]{
+    margin-right: 0.5rem;
+}
+
 #weighted-settings .invisible{
     display: none;
 }
