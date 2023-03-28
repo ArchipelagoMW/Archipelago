@@ -17,7 +17,7 @@ class ShopItem(ItemInfo):
     def patch(self, rom, option, *, multiworld=None):
         mw_text = ""
         if multiworld:
-            mw_text = f" for player {rom.player_names[multiworld - 1].encode('latin1', 'replace').decode()}"
+            mw_text = f" for player {rom.player_names[multiworld - 1].encode('ascii', 'replace').decode()}"
 
         
         if self.custom_item_name:
