@@ -126,21 +126,21 @@ def create():
                     for key, val in option.special_range_names.items():
                         game_options[option_name]["value_names"][key] = val
 
-            elif getattr(option, "verify_item_name", False):
+            elif issubclass(option, Options.ItemSet):
                 game_options[option_name] = {
                     "type": "items-list",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                     "description": get_html_doc(option),
                 }
 
-            elif getattr(option, "verify_location_name", False):
+            elif issubclass(option, Options.LocationSet):
                 game_options[option_name] = {
                     "type": "locations-list",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                     "description": get_html_doc(option),
                 }
 
-            elif issubclass(option, Options.OptionList) or issubclass(option, Options.OptionSet):
+            elif issubclass(option, Options.VerifyKeys):
                 if option.valid_keys:
                     game_options[option_name] = {
                         "type": "custom-list",
