@@ -1,6 +1,6 @@
 import base64
 
-from rom.ips import IPS_Patch
+from worlds.sm.variaRandomizer.rom.ips import IPS_Patch
 
 def pc_to_snes(pcaddress):
     snesaddress=(((pcaddress<<1)&0x7F0000)|(pcaddress&0x7FFF)|0x8000)|0x800000

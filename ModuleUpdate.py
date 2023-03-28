@@ -1,7 +1,6 @@
 import os
 import sys
 import subprocess
-import pkg_resources
 import warnings
 
 local_dir = os.path.dirname(__file__)
@@ -22,18 +21,50 @@ if not update_ran:
                     requirements_files.add(req_file)
 
 
+def check_pip():
+    # detect if pip is available
+    try:
+        import pip  # noqa: F401
+    except ImportError:
+        raise RuntimeError("pip not available. Please install pip.")
+
+
+def confirm(msg: str):
+    try:
+        input(f"\n{msg}")
+    except KeyboardInterrupt:
+        print("\nAborting")
+        sys.exit(1)
+
+
 def update_command():
+    check_pip()
     for file in requirements_files:
-        subprocess.call([sys.executable, '-m', 'pip', 'install', '-r', file, '--upgrade'])
+        subprocess.call([sys.executable, "-m", "pip", "install", "-r", file, "--upgrade"])
+
+
+def install_pkg_resources(yes=False):
+    try:
+        import pkg_resources  # noqa: F401
+    except ImportError:
+        check_pip()
+        if not yes:
+            confirm("pkg_resources not found, press enter to install it")
+        subprocess.call([sys.executable, "-m", "pip", "install", "--upgrade", "setuptools"])
 
 
 def update(yes=False, force=False):
     global update_ran
     if not update_ran:
         update_ran = True
+
         if force:
             update_command()
             return
+
+        install_pkg_resources(yes=yes)
+        import pkg_resources
+
         for req_file in requirements_files:
             path = os.path.join(os.path.dirname(sys.argv[0]), req_file)
             if not os.path.exists(path):
@@ -52,7 +83,7 @@ def update(yes=False, force=False):
                             egg = egg.split(";", 1)[0].rstrip()
                             if any(compare in egg for compare in ("==", ">=", ">", "<", "<=", "!=")):
                                 warnings.warn(f"Specifying version as #egg={egg} will become unavailable in pip 25.0. "
-                                               "Use name @ url#version instead.", DeprecationWarning)
+                                              "Use name @ url#version instead.", DeprecationWarning)
                                 line = egg
                         else:
                             egg = ""
@@ -79,11 +110,7 @@ def update(yes=False, force=False):
                             if not yes:
                                 import traceback
                                 traceback.print_exc()
-                                try:
-                                    input(f"\nRequirement {requirement} is not satisfied, press enter to install it")
-                                except KeyboardInterrupt:
-                                    print("\nAborting")
-                                    sys.exit(1)
+                                confirm(f"Requirement {requirement} is not satisfied, press enter to install it")
                             update_command()
                             return
 

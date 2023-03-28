@@ -1,6 +1,6 @@
 
-
 from BaseClasses import Tutorial, ItemClassification
+import logging
 
 from .Items import *
 from .Locations import all_locations, setup_locations, exclusion_table
@@ -52,12 +52,12 @@ class KH2World(World):
         self.goofy_ability_pool = list()
         self.sora_keyblade_ability_pool = list()
         self.keyblade_slot_copy = list(Locations.Keyblade_Slots.keys())
+        self.keyblade_slot_copy.remove(LocationName.KingdomKeySlot)
         self.totalLocations = len(all_locations.items())
         self.growth_list = list()
         for x in range(4):
             self.growth_list.extend(Movement_Table.keys())
-        self.visitlockingitem = list()
-        self.visitlockingitem.extend(Progression_Dicts["AllVisitLocking"])
+        self.visitlocking_dict = Progression_Dicts["AllVisitLocking"]
 
     def fill_slot_data(self) -> dict:
         return {"hitlist": self.hitlist,
@@ -94,10 +94,11 @@ class KH2World(World):
             self.sora_keyblade_ability_pool.extend(SupportAbility_Table.keys())
 
         for item, value in self.multiworld.start_inventory[self.player].value.items():
-            if item in ActionAbility_Table.keys() or item in SupportAbility_Table.keys():
+            if item in ActionAbility_Table.keys() or item in SupportAbility_Table.keys() or exclusionItem_table["StatUps"]:
                 # cannot have more than the quantity for abilties
                 if value > item_dictionary_table[item].quantity:
-                    print(f"{self.multiworld.get_file_safe_player_name(self.player)} cannot have more than {item_dictionary_table[item].quantity} of {item}")
+                    logging.info(f"{self.multiworld.get_file_safe_player_name(self.player)} cannot have more than {item_dictionary_table[item].quantity} of {item}"
+                                 f"Changing the amount to the max amount")
                     value = item_dictionary_table[item].quantity
                 self.item_quantity_dict[item] -= value
 
@@ -128,9 +129,12 @@ class KH2World(World):
             luckyemblemamount = self.multiworld.LuckyEmblemsAmount[self.player].value
             luckyemblemrequired = self.multiworld.LuckyEmblemsRequired[self.player].value
             if luckyemblemamount < luckyemblemrequired:
+                logging.info(f"Lucky Emblem Amount {self.multiworld.LuckyEmblemsAmount[self.player].value} is less than required "
+                             f"{self.multiworld.LuckyEmblemsRequired[self.player].value} for player {self.multiworld.get_file_safe_player_name(self.player)}."
+                             f" Setting amount to {self.multiworld.LuckyEmblemsRequired[self.player].value}")
                 luckyemblemamount = max(luckyemblemamount, luckyemblemrequired)
-                print(f"Lucky Emblem Amount {self.multiworld.LuckyEmblemsAmount[self.player].value} is less than required \
-            {self.multiworld.LuckyEmblemsRequired[self.player].value} for player {self.multiworld.get_file_safe_player_name(self.player)}")
+                self.multiworld.LuckyEmblemsAmount[self.player].value = luckyemblemamount
+
             self.item_quantity_dict[ItemName.LuckyEmblem] = item_dictionary_table[ItemName.LuckyEmblem].quantity + luckyemblemamount
             # give this proof to unlock the final door once the player has the amount of lucky emblem required
             self.item_quantity_dict[ItemName.ProofofNonexistence] = 0
@@ -146,19 +150,23 @@ class KH2World(World):
                     self.RandomSuperBoss.remove(location)
             #  Testing if the player has the right amount of Bounties for Completion.
             if len(self.RandomSuperBoss) < self.BountiesAmount:
-                print(f"{self.multiworld.get_file_safe_player_name(self.player)} has too many bounties than bosses")
+                logging.info(f"{self.multiworld.get_file_safe_player_name(self.player)} has too many bounties than bosses."
+                             f" Setting total bounties to {len(self.RandomSuperBoss)}")
                 self.BountiesAmount = len(self.RandomSuperBoss)
-                self.multiworld.BountyAmount[self.player].value = len(self.RandomSuperBoss)
+                self.multiworld.BountyAmount[self.player].value = self.BountiesAmount
 
             if len(self.RandomSuperBoss) < self.BountiesRequired:
-                print(f"{self.multiworld.get_file_safe_player_name(self.player)} has too many required bounties")
+                logging.info(f"{self.multiworld.get_file_safe_player_name(self.player)} has too many required bounties."
+                             f" Setting required bounties to {len(self.RandomSuperBoss)}")
                 self.BountiesRequired = len(self.RandomSuperBoss)
-                self.multiworld.BountyRequired[self.player].value = len(self.RandomSuperBoss)
+                self.multiworld.BountyRequired[self.player].value = self.BountiesRequired
 
             if self.BountiesAmount < self.BountiesRequired:
+                logging.info(f"Bounties Amount {self.multiworld.BountyAmount[self.player].value} is less than required "
+                             f"{self.multiworld.BountyRequired[self.player].value} for player {self.multiworld.get_file_safe_player_name(self.player)}."
+                             f" Setting amount to {self.multiworld.BountyRequired[self.player].value}")
                 self.BountiesAmount = max(self.BountiesAmount, self.BountiesRequired)
-                print(f"Bounties Amount {self.multiworld.BountyAmount[self.player].value} is less than required \
-                        {self.multiworld.BountyRequired[self.player].value} for player {self.multiworld.get_file_safe_player_name(self.player)}")
+                self.multiworld.BountyAmount[self.player].value = self.BountiesAmount
 
             self.multiworld.start_hints[self.player].value.add(ItemName.Bounty)
             self.item_quantity_dict[ItemName.ProofofNonexistence] = 0
@@ -207,6 +215,15 @@ class KH2World(World):
                 self.hitlist.append(self.location_name_to_id[randomBoss])
                 self.RandomSuperBoss.remove(randomBoss)
                 self.totalLocations -= 1
+
+        #  Kingdom Key cannot have No Experience so plandoed here instead of checking 26 times if its kingdom key
+        random_ability = self.multiworld.per_slot_randoms[self.player].choice(self.sora_keyblade_ability_pool)
+        while random_ability == ItemName.NoExperience:
+            random_ability = self.multiworld.per_slot_randoms[self.player].choice(self.sora_keyblade_ability_pool)
+        self.multiworld.get_location(LocationName.KingdomKeySlot, self.player).place_locked_item(self.create_item(random_ability))
+        self.item_quantity_dict[random_ability] -= 1
+        self.sora_keyblade_ability_pool.remove(random_ability)
+        self.totalLocations -= 1
 
         # plando keyblades because they can only have abilities
         for keyblade in self.keyblade_slot_copy:
@@ -258,25 +275,33 @@ class KH2World(World):
 
         # no visit locking
         if self.multiworld.Visitlocking[self.player] == "no_visit_locking":
-            for item in self.visitlockingitem:
-                self.multiworld.push_precollected(self.create_item(item))
-                self.item_quantity_dict[item] -= 1
-                self.visitlockingitem.remove(item)
+            for item, amount in Progression_Dicts["AllVisitLocking"].items():
+                for _ in range(amount):
+                    self.multiworld.push_precollected(self.create_item(item))
+                    self.item_quantity_dict[item] -= 1
+                    if self.visitlocking_dict[item] == 0:
+                        self.visitlocking_dict.pop(item)
+                    self.visitlocking_dict[item] -= 1
 
         # first and second visit locking
         elif self.multiworld.Visitlocking[self.player] == "second_visit_locking":
             for item in Progression_Dicts["2VisitLocking"]:
                 self.item_quantity_dict[item] -= 1
+                self.visitlocking_dict[item] -= 1
+                if self.visitlocking_dict[item] == 0:
+                    self.visitlocking_dict.pop(item)
                 self.multiworld.push_precollected(self.create_item(item))
-                self.visitlockingitem.remove(item)
 
         for _ in range(self.multiworld.RandomVisitLockingItem[self.player].value):
-            if len(self.visitlockingitem) <= 0:
+            if sum(self.visitlocking_dict.values()) <= 0:
                 break
-            item = self.multiworld.per_slot_randoms[self.player].choice(self.visitlockingitem)
+            visitlocking_set = list(self.visitlocking_dict.keys())
+            item = self.multiworld.per_slot_randoms[self.player].choice(visitlocking_set)
             self.item_quantity_dict[item] -= 1
+            self.visitlocking_dict[item] -= 1
+            if self.visitlocking_dict[item] == 0:
+                self.visitlocking_dict.pop(item)
             self.multiworld.push_precollected(self.create_item(item))
-            self.visitlockingitem.remove(item)
 
         # there are levels but level 1 is there to keep code clean
         if self.multiworld.LevelDepth[self.player] == "level_99_sanity":
