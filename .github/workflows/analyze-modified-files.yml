@@ -1,0 +1,48 @@
+name: Analyze modified files
+
+on:
+  pull_request:
+    paths:
+      - "**.py"
+
+env:
+  BASE_SHA: ${{ github.event.pull_request.base.sha }}
+  HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+
+jobs:
+  flake8-and-mypy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: "Determine modified files"
+        run: |
+          git fetch origin $BASE_SHA $HEAD_SHA
+          DIFF=$(git diff --diff-filter=d --name-only $BASE_SHA...$HEAD_SHA -- "*.py")
+          echo "modified files:"
+          echo "$DIFF"
+          echo "diff=${DIFF//$'\n'/$' '}" >> $GITHUB_ENV
+
+      - uses: actions/setup-python@v4
+        if: env.diff != ''
+        with:
+          python-version: 3.8
+
+      - name: "Install dependencies"
+        if: env.diff != ''
+        run: |
+          python -m pip install --upgrade pip flake8 mypy
+          python ModuleUpdate.py --append "WebHostLib/requirements.txt" --force --yes
+
+      - name: "flake8: Lint modified files"
+        continue-on-error: true
+        if: env.diff != ''
+        run: |
+          flake8 --count --max-complexity=10 --max-doc-length=120 --max-line-length=120 --statistics ${{ env.diff }}
+
+      - name: "mypy: Type check modified files"
+        continue-on-error: true
+        if: env.diff != ''
+        run: |
+          mypy --follow-imports=silent --install-types --non-interactive --strict ${{ env.diff }}
