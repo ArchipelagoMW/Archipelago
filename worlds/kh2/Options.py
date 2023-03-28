@@ -1,5 +1,7 @@
-from Options import Choice, Option, Range, Toggle, OptionSet
+from Options import Choice, Option, Range, Toggle, OptionList
 import typing
+
+from worlds.kh2 import SupportAbility_Table, ActionAbility_Table
 
 
 class SoraEXP(Range):
@@ -163,11 +165,10 @@ class KeybladeAbilities(Choice):
     default = 2
 
 
-class BlacklistKeyblade(OptionSet):
+class BlacklistKeyblade(OptionList):
     """Black List these Abilities on Keyblades"""
     display_name = "Blacklist Keyblade Abilities"
-    verify_item_name = True
-
+    valid_keys = set(SupportAbility_Table.keys()).union(ActionAbility_Table.keys())
 
 class Goal(Choice):
     """Win Condition
