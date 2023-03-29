@@ -10,13 +10,14 @@ from Fill import fill_restrictive
 from Options import Toggle
 from worlds.AutoWorld import WebWorld, World
 
-from . import rules
 from .data import data as emerald_data
 from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification, offset_item_value
 from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
 from .options import RandomizeBadges, RandomizeHms, ItemPoolType, get_option_value, option_definitions
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path
+from .rules import (set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules,
+    set_enable_ferry_rules, add_hidden_item_itemfinder_rules, add_flash_rules)
 from .sanity_check import sanity_check
 
 
@@ -201,22 +202,22 @@ class PokemonEmeraldWorld(World):
 
 
     def set_rules(self):
-        rules.set_default_rules(self.multiworld, self.player)
+        set_default_rules(self.multiworld, self.player)
 
         if get_option_value(self.multiworld, self.player, "overworld_items") == Toggle.option_true:
-            rules.set_overworld_item_rules(self.multiworld, self.player)
+            set_overworld_item_rules(self.multiworld, self.player)
         if get_option_value(self.multiworld, self.player, "hidden_items") == Toggle.option_true:
-            rules.set_hidden_item_rules(self.multiworld, self.player)
+            set_hidden_item_rules(self.multiworld, self.player)
         if get_option_value(self.multiworld, self.player, "npc_gifts") == Toggle.option_true:
-            rules.set_npc_gift_rules(self.multiworld, self.player)
+            set_npc_gift_rules(self.multiworld, self.player)
         if get_option_value(self.multiworld, self.player, "enable_ferry") == Toggle.option_true:
-            rules.set_enable_ferry_rules(self.multiworld, self.player)
+            set_enable_ferry_rules(self.multiworld, self.player)
 
         if get_option_value(self.multiworld, self.player, "require_itemfinder") == Toggle.option_true:
-            rules.add_hidden_item_itemfinder_rules(self.multiworld, self.player)
+            add_hidden_item_itemfinder_rules(self.multiworld, self.player)
 
         if get_option_value(self.multiworld, self.player, "require_flash") == Toggle.option_true:
-            rules.add_flash_rules(self.multiworld, self.player)
+            add_flash_rules(self.multiworld, self.player)
 
 
     def generate_basic(self):
