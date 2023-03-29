@@ -116,6 +116,12 @@ def handle_animal_friends(rom):
 
 
 def patch_rom(multiworld, player, rom, boss_requirements, shuffled_levels):
+    # increase BWRAM by 0x8000
+    rom.write_byte(0x7FD8, 0x06)
+
+    # initialize new BWRAM size
+    rom.write_bytes(0x36, [0xA9, 0xFD, 0x9F])
+
     # handle animal friends first
     handle_animal_friends(rom)
 
@@ -178,6 +184,9 @@ def patch_rom(multiworld, player, rom, boss_requirements, shuffled_levels):
     # Reroute Heart Star Graphic Check
     rom.write_bytes(0x4A01F, [0x22, 0x50, 0x9B, 0x07, 0xEA, 0xEA, 0xB0, ])  # 1-Ups
     rom.write_bytes(0x4A0AE, [0x22, 0x50, 0x9B, 0x07, 0xEA, 0xEA, 0x90, ])  # Heart Stars
+
+    # Write checks for 1up-sanity
+    # rom.write_bytes(0x30037
 
     # base patch done, write relevant slot info
 

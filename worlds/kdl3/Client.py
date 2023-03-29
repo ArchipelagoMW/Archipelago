@@ -108,7 +108,7 @@ class KDL3SNIClient(SNIClient):
             elif item == 3:
                 # Invincibility Candy
                 snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x26]))
-                snes_buffered_write(ctx, KDL3_INVINCIBILITY_TIMER, bytes([0x75, 0x03]))
+                snes_buffered_write(ctx, KDL3_INVINCIBILITY_TIMER, bytes([0x84, 0x03]))
 
     async def game_watcher(self, ctx) -> None:
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
