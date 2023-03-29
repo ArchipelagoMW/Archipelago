@@ -50,7 +50,7 @@ def find_ap_randomizer_jar(forge_dir):
 
 
 def replace_apmc_files(forge_dir, apmc_file):
-    """Create APData folder if needed; clean .apmc data from APData; copy given .apmc into directory."""
+    """Create APData folder if needed; clean .apmc files from APData; copy given .apmc into directory."""
     if apmc_file is None:
         return
     apdata_dir = os.path.join(forge_dir, 'APData')

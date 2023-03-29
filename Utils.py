@@ -367,7 +367,7 @@ def get_options() -> OptionsType:
     filenames = ("options.yaml", "host.yaml")
     locations: typing.List[str] = []
     if os.path.join(os.getcwd()) != local_path():
-        locations += filenames  # use data from cwd only if it's not the local_path
+        locations += filenames  # use files from cwd only if it's not the local_path
     locations += [user_path(filename) for filename in filenames]
 
     for location in locations:

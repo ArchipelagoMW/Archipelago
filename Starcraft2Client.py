@@ -127,8 +127,8 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         return False
 
     def _cmd_download_data(self) -> bool:
-        """Download the most recent release of the necessary data for playing SC2 with
-        Archipelago. Will overwrite existing data."""
+        """Download the most recent release of the necessary files for playing SC2 with
+        Archipelago. Will overwrite existing files."""
         if "SC2PATH" not in os.environ:
             check_game_install_path()
 
@@ -206,9 +206,9 @@ class SC2Context(CommonContext):
                 with open(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt", "r") as f:
                     current_ver = f.read()
                 if is_mod_update_available("TheCondor07", "Starcraft2ArchipelagoData", current_ver):
-                    sc2_logger.info("NOTICE: Update for required data found. Run /download_data to install.")
+                    sc2_logger.info("NOTICE: Update for required files found. Run /download_data to install.")
             elif maps_present:
-                sc2_logger.warning("NOTICE: Your map data may be outdated (version number not found). "
+                sc2_logger.warning("NOTICE: Your map files may be outdated (version number not found). "
                                    "Run /download_data to update them.")
 
 
@@ -904,7 +904,7 @@ def check_game_install_path() -> bool:
 
 
 def is_mod_installed_correctly() -> bool:
-    """Searches for all required data."""
+    """Searches for all required files."""
     if "SC2PATH" not in os.environ:
         check_game_install_path()
 
@@ -927,12 +927,12 @@ def is_mod_installed_correctly() -> bool:
         if not os.path.isfile(mapdir / mapfile):
             missing_maps.append(mapfile)
     if len(missing_maps) >= 19:
-        sc2_logger.warning(f"All map data missing from {mapdir}.")
+        sc2_logger.warning(f"All map files missing from {mapdir}.")
         needs_files = True
     elif len(missing_maps) > 0:
         for map in missing_maps:
             sc2_logger.debug(f"Missing {map} from {mapdir}.")
-            sc2_logger.warning(f"Missing {len(missing_maps)} map data.")
+            sc2_logger.warning(f"Missing {len(missing_maps)} map files.")
         needs_files = True
     else:  # Must be no maps missing
         sc2_logger.info(f"All maps found in {mapdir}.")
@@ -946,7 +946,7 @@ def is_mod_installed_correctly() -> bool:
 
     # Final verdict.
     if needs_files:
-        sc2_logger.warning(f"Required data are missing. Run /download_data to acquire them.")
+        sc2_logger.warning(f"Required files are missing. Run /download_data to acquire them.")
         return False
     else:
         return True

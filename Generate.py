@@ -43,7 +43,7 @@ def mystery_argparse():
     parser.add_argument('--samesettings', help='Rolls settings per weights file rather than per player',
                         action='store_true')
     parser.add_argument('--player_files_path', default=resolve_path(defaults["player_files_path"], user_path),
-                        help="Input directory for player data.")
+                        help="Input directory for player files.")
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=defaults["players"], type=lambda value: max(int(value), 1))
     parser.add_argument('--spoiler', type=int, default=defaults["spoiler"])
@@ -130,7 +130,7 @@ def main(args=None, callback=ERmain):
           f"{args.plando}")
 
     if not weights_cache:
-        raise Exception(f"No weights found. Provide a general weights file ({args.weights_file_path}) or individual player data. "
+        raise Exception(f"No weights found. Provide a general weights file ({args.weights_file_path}) or individual player files. "
                         f"A mix is also permitted.")
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed

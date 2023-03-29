@@ -34,7 +34,7 @@ class ChecksFinderContext(CommonContext):
         self.send_index: int = 0
         self.syncing = False
         self.awaiting_bridge = False
-        # self.game_communication_path: data go in this path to pass data between us and the actual game
+        # self.game_communication_path: files go in this path to pass data between us and the actual game
         if "localappdata" in os.environ:
             self.game_communication_path = os.path.expandvars(r"%localappdata%/ChecksFinder")
         else:
