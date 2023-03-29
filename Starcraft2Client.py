@@ -12,6 +12,7 @@ import typing
 import queue
 import zipfile
 import io
+import random
 from pathlib import Path
 
 # CommonClient import first to trigger ModuleUpdater
@@ -77,6 +78,28 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                 self.output("Current difficulty: " + ["Casual", "Normal", "Hard", "Brutal"][self.ctx.difficulty])
             self.output("To change the difficulty, add the name of the difficulty after the command.")
             return False
+
+    def _cmd_color(self, color: str = "") -> bool:
+        player_colors = [
+            "White", "Red", "Blue", "Teal",
+            "Purple", "Yellow", "Orange", "Green",
+            "LightPink", "Violet", "LightGrey", "DarkGreen",
+            "Brown", "LightGreen", "DarkGrey", "Pink",
+            "Rainbow", "Random"
+        ]
+        match_colors = [player_color.lower() for player_color in player_colors]
+        if color:
+            if color.lower() not in match_colors:
+                self.output(color + " is not a valid color.  Available colors: " + ', '.join(player_colors))
+                return False
+            if color.lower() == "random":
+                color = random.choice(player_colors[:16])
+            self.ctx.player_color = match_colors.index(color.lower())
+            self.output("Color set to " + player_colors[self.ctx.player_color])
+        else:
+            self.output("Current player color: " + player_colors[self.ctx.player_color])
+            self.output("To change your colors, add the name of the color after the command.")
+            self.output("Available colors: " + ', '.join(player_colors))
 
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
@@ -162,6 +185,7 @@ class SC2Context(CommonContext):
     difficulty = -1
     all_in_choice = 0
     mission_order = 0
+    player_color = 2
     mission_req_table: typing.Dict[str, MissionInfo] = {}
     final_mission: int = 29
     announcements = queue.Queue()
@@ -197,6 +221,7 @@ class SC2Context(CommonContext):
             }
             self.mission_order = args["slot_data"].get("mission_order", 0)
             self.final_mission = args["slot_data"].get("final_mission", 29)
+            self.player_color = args["slot_data"].get("player_color", 2)
 
             self.build_location_to_mission_mapping()
 
@@ -557,7 +582,6 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     mission_id: int
     want_close: bool = False
     can_read_game = False
-
     last_received_update: int = 0
 
     def __init__(self, ctx: SC2Context, mission_id):
@@ -587,6 +611,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                 start_items[0], start_items[1], start_items[2], start_items[3], start_items[4],
                 start_items[5], start_items[6], start_items[7], start_items[8], start_items[9],
                 self.ctx.all_in_choice, start_items[10]))
+            await self.chat_send("SetColor " + str(self.ctx.player_color))
             self.last_received_update = len(self.ctx.items_received)
 
         else:
