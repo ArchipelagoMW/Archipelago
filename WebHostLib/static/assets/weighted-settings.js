@@ -930,6 +930,43 @@ const buildLocationsDiv = (game, locations) => {
   const locationsContainer = document.createElement('div');
   locationsContainer.classList.add('locations-container');
 
+  // Priority Locations
+  const priorityLocationsWrapper = document.createElement('div');
+  priorityLocationsWrapper.classList.add('locations-wrapper');
+  priorityLocationsWrapper.innerText = 'Priority Locations';
+
+  const priorityLocationsDiv = document.createElement('div');
+  priorityLocationsDiv.classList.add('simple-list');
+  locations.forEach((location) => {
+    const locationRow = document.createElement('div');
+    locationRow.classList.add('list-row');
+
+    const locationLabel = document.createElement('label');
+    locationLabel.setAttribute('for', `${game}-priority_locations-${location}`);
+
+    const locationCheckbox = document.createElement('input');
+    locationCheckbox.setAttribute('type', 'checkbox');
+    locationCheckbox.setAttribute('id', `${game}-priority_locations-${location}`);
+    locationCheckbox.setAttribute('data-game', game);
+    locationCheckbox.setAttribute('data-setting', 'priority_locations');
+    locationCheckbox.setAttribute('data-option', location);
+    if (currentSettings[game].priority_locations.includes(location)) {
+      locationCheckbox.setAttribute('checked', '1');
+    }
+    locationCheckbox.addEventListener('change', updateListSetting);
+    locationLabel.appendChild(locationCheckbox);
+
+    const locationName = document.createElement('span');
+    locationName.innerText = location;
+    locationLabel.appendChild(locationName);
+
+    locationRow.appendChild(locationLabel);
+    priorityLocationsDiv.appendChild(locationRow);
+  });
+
+  priorityLocationsWrapper.appendChild(priorityLocationsDiv);
+  locationsContainer.appendChild(priorityLocationsWrapper);
+
   // Exclude Locations
   const excludeLocationsWrapper = document.createElement('div');
   excludeLocationsWrapper.classList.add('locations-wrapper');
@@ -966,43 +1003,6 @@ const buildLocationsDiv = (game, locations) => {
 
   excludeLocationsWrapper.appendChild(excludeLocationsDiv);
   locationsContainer.appendChild(excludeLocationsWrapper);
-
-  // Priority Locations
-  const priorityLocationsWrapper = document.createElement('div');
-  priorityLocationsWrapper.classList.add('locations-wrapper');
-  priorityLocationsWrapper.innerText = 'Exclude Locations';
-
-  const priorityLocationsDiv = document.createElement('div');
-  priorityLocationsDiv.classList.add('simple-list');
-  locations.forEach((location) => {
-    const locationRow = document.createElement('div');
-    locationRow.classList.add('list-row');
-
-    const locationLabel = document.createElement('label');
-    locationLabel.setAttribute('for', `${game}-priority_locations-${location}`);
-
-    const locationCheckbox = document.createElement('input');
-    locationCheckbox.setAttribute('type', 'checkbox');
-    locationCheckbox.setAttribute('id', `${game}-priority_locations-${location}`);
-    locationCheckbox.setAttribute('data-game', game);
-    locationCheckbox.setAttribute('data-setting', 'priority_locations');
-    locationCheckbox.setAttribute('data-option', location);
-    if (currentSettings[game].priority_locations.includes(location)) {
-      locationCheckbox.setAttribute('checked', '1');
-    }
-    locationCheckbox.addEventListener('change', updateListSetting);
-    locationLabel.appendChild(locationCheckbox);
-
-    const locationName = document.createElement('span');
-    locationName.innerText = location;
-    locationLabel.appendChild(locationName);
-
-    locationRow.appendChild(locationLabel);
-    priorityLocationsDiv.appendChild(locationRow);
-  });
-
-  priorityLocationsWrapper.appendChild(priorityLocationsDiv);
-  locationsContainer.appendChild(priorityLocationsWrapper);
 
   locationsDiv.appendChild(locationsContainer);
   return locationsDiv;
