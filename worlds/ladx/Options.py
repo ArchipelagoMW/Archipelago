@@ -180,17 +180,22 @@ class InstrumentCount(Range, LADXROption):
     range_end = 8
     default = 8
 
-class ItemPool(Choice):
-    """Effects which items are shuffled.
-[Casual] Places multiple copies of key items.
-[More keys] Adds additional small/nightmare keys so that dungeons are faster.
-[Path of Pain]. Adds negative heart containers to the item pool."""
-    casual = 0
-    more_keys = 1
-    normal = 2
-    painful = 3
-    default = normal
+class NagMessages(DefaultOffToggle, LADXROption):
+    """
+    Controls if nag messages are shown when rocks and crystals are touched. Useful for glitches, annoying for everyone else.
+    """
 
+    ladxr_name = "nagmessages"
+
+class MusicChangeCondition(Choice):
+    """
+    Controls how the music changes.
+    [Sword] When you pick up a sword, the music changes
+    [Always] You always have the post-sword music
+    """
+    option_sword = 0
+    option_always = 1
+    default = option_always
 #             Setting('hpmode', 'Gameplay', 'm', 'Health mode', options=[('default', '', 'Normal'), ('inverted', 'i', 'Inverted'), ('1', '1', 'Start with 1 heart'), ('low', 'l', 'Low max')], default='default',
 #                 description="""
 # [Normal} health works as you would expect.
@@ -388,4 +393,6 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'shuffle_maps': ShuffleMaps,
     'shuffle_compasses': ShuffleCompasses,
     'shuffle_stone_beaks': ShuffleStoneBeaks,
+    'music_change_condition': MusicChangeCondition,
+    'nag_messages': NagMessages
 }
