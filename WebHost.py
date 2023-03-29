@@ -97,7 +97,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
             # check if the name of the current guide exists already
             for guide in game_data['tutorials']:
                 if guide and tutorial.tutorial_name == guide['name']:
-                    guide['files'].append(current_tutorial['data'][0])
+                    guide['files'].append(current_tutorial['files'][0])
                     break
             else:
                 game_data['tutorials'].append(current_tutorial)

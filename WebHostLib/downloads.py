@@ -21,7 +21,7 @@ def download_patch(room_id, patch_id):
         filelike = BytesIO(patch.data)
         greater_than_version_3 = zipfile.is_zipfile(filelike)
         if greater_than_version_3:
-            # Python's zipfile module cannot overwrite/delete data in a zip, so we recreate the whole thing in ram
+            # Python's zipfile module cannot overwrite/delete files in a zip, so we recreate the whole thing in ram
             new_file = BytesIO()
             with zipfile.ZipFile(filelike, "a") as zf:
                 with zf.open("archipelago.json", "r") as f:

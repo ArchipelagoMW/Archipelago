@@ -9,7 +9,7 @@ from NetUtils import SlotType
 
 class GenericWeb(WebWorld):
     advanced_settings = Tutorial('Advanced YAML Guide',
-                                 'A guide to reading YAML data and editing them to fully customize your game.',
+                                 'A guide to reading YAML files and editing them to fully customize your game.',
                                  'English', 'advanced_settings_en.md', 'advanced_settings/en',
                                  ['alwaysintreble', 'Alchav'])
     commands = Tutorial('Archipelago Server and Client Commands',

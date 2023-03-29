@@ -112,13 +112,13 @@ def create_patch_file(rom, xor_range=(0x00B8AD30, 0x00F029A0)):
         patch_data.append_int32(start)
         patch_data.append_int24(size)
 
-        # We don't trust data that have modified DMA to have their
+        # We don't trust files that have modified DMA to have their
         # changed addresses tracked correctly, so we invalidate the
         # entire file
         for address in range(start, start + size):
             rom.changed_address[address] = rom.buffer[address]
 
-        # Simulate moving the data to know which addresses have changed
+        # Simulate moving the files to know which addresses have changed
         if from_file >= 0:
             old_dma_start, old_dma_end, old_size = rom.original.get_dmadata_record_by_key(from_file)
             copy_size = min(size, old_size)
@@ -201,7 +201,7 @@ def apply_patch_file(rom, file, sub_file=None):
     xor_range = (patch_data.read_int32(), patch_data.read_int32())
     xor_address = patch_data.read_int32()
 
-    # Load all the DMA table updates. This will move the data around.
+    # Load all the DMA table updates. This will move the files around.
     # A key thing is that some of these entries will list a source file
     # that they are from, so we know where to copy from, no matter where
     # in the DMA table this file has been moved to. Also important if a file
