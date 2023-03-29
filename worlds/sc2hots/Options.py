@@ -32,6 +32,51 @@ class MissionOrder(Choice):
     option_gauntlet = 6
 
 
+class PlayerColor(Choice):
+    """Determines in-game team color before Kerrigan becomes Primal Kerrigan."""
+    display_name = "Player Color"
+    option_white = 0
+    option_red = 1
+    option_blue = 2
+    option_teal = 3
+    option_purple = 4
+    option_yellow = 5
+    option_orange = 6
+    option_green = 7
+    option_light_pink = 8
+    option_violet = 9
+    option_light_grey = 10
+    option_dark_green = 11
+    option_brown = 12
+    option_light_green = 13
+    option_dark_grey = 14
+    option_pink = 15
+    option_rainbow = 16
+    default = option_orange
+
+
+class PlayerColorPrimal(Choice):
+    """Determines in-game team color when Kerrigan becomes Primal Kerrigan."""
+    display_name = "Player Color (Primal)"
+    option_white = 0
+    option_red = 1
+    option_blue = 2
+    option_teal = 3
+    option_purple = 4
+    option_yellow = 5
+    option_orange = 6
+    option_green = 7
+    option_light_pink = 8
+    option_violet = 9
+    option_light_grey = 10
+    option_dark_green = 11
+    option_brown = 12
+    option_light_green = 13
+    option_dark_grey = 14
+    option_pink = 15
+    option_rainbow = 16
+    default = option_purple
+
 class ShuffleNoBuild(DefaultOnToggle):
     """Determines if the 5 no-build missions are included in the shuffle if Vanilla or Vanilla Shuffled mission order is not enabled.
     If turned off with reduced mission settings, the 5 no-build missions will not appear."""
@@ -184,6 +229,8 @@ class ExcludedMissions(OptionSet):
 sc2hots_options: Dict[str, Option] = {
     "game_difficulty": GameDifficulty,
     "mission_order": MissionOrder,
+    "player_color": PlayerColor,
+    "player_color_primal": PlayerColorPrimal,
     "shuffle_no_build": ShuffleNoBuild,
     "early_unit": EarlyUnit,
     "required_tactics": RequiredTactics,
