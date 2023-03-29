@@ -11,7 +11,7 @@ from Utils import __version__, local_path
 from worlds.AutoWorld import AutoWorldRegister
 
 handled_in_js = {"start_inventory", "local_items", "non_local_items", "start_hints", "start_location_hints",
-                 "exclude_locations"}
+                 "exclude_locations", "priority_locations"}
 
 
 def create():
