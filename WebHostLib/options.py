@@ -11,7 +11,7 @@ from Utils import __version__, local_path
 from worlds.AutoWorld import AutoWorldRegister
 
 handled_in_js = {"start_inventory", "local_items", "non_local_items", "start_hints", "start_location_hints",
-                 "exclude_locations"}
+                 "exclude_locations", "priority_locations"}
 
 
 def create():
@@ -88,7 +88,7 @@ def create():
             if option_name in handled_in_js:
                 pass
 
-            elif option.options:
+            elif issubclass(option, Options.Choice) or issubclass(option, Options.TextChoice):
                 game_options[option_name] = this_option = {
                     "type": "select",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
@@ -97,6 +97,7 @@ def create():
                     "options": []
                 }
 
+                has_random_option = False
                 for sub_option_id, sub_option_name in option.name_lookup.items():
                     this_option["options"].append({
                         "name": option.get_option_name(sub_option_id),
@@ -105,6 +106,15 @@ def create():
 
                     if sub_option_id == option.default:
                         this_option["defaultValue"] = sub_option_name
+
+                    if sub_option_name == "random":
+                        has_random_option = True
+
+                if not has_random_option:
+                    this_option["options"].append({
+                        "name": "random",
+                        "value": 'random',
+                    })
 
                 if option.default == "random":
                     this_option["defaultValue"] = "random"
@@ -126,21 +136,21 @@ def create():
                     for key, val in option.special_range_names.items():
                         game_options[option_name]["value_names"][key] = val
 
-            elif getattr(option, "verify_item_name", False):
+            elif issubclass(option, Options.ItemSet):
                 game_options[option_name] = {
                     "type": "items-list",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                     "description": get_html_doc(option),
                 }
 
-            elif getattr(option, "verify_location_name", False):
+            elif issubclass(option, Options.LocationSet):
                 game_options[option_name] = {
                     "type": "locations-list",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                     "description": get_html_doc(option),
                 }
 
-            elif issubclass(option, Options.OptionList) or issubclass(option, Options.OptionSet):
+            elif issubclass(option, Options.VerifyKeys):
                 if option.valid_keys:
                     game_options[option_name] = {
                         "type": "custom-list",
