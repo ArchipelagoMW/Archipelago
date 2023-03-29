@@ -257,7 +257,6 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
             number_of_bundle = math.floor(889 / World_Options[Options.CoinSanityRange])
             for i in range(number_of_bundle):
 
-
                 item_coin_freemium = "Live Freemium or Die: number Coin"
                 item_coin_loc_freemium = re.sub("number", str(World_Options[Options.CoinSanityRange] * (i + 1)),
                                                 item_coin_freemium)
