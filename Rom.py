@@ -178,8 +178,10 @@ def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     skip_cutscenes(rom)
 
     # Write player name
-    rom.write_bytes(symbols["playername"],
-                    bytes(world.player_name[player], "utf-8"))
+    player_name = bytes(world.player_name[player], "utf-8")
+    if len(player_name) > 16:
+        player_name = player_name[:16]
+    rom.write_bytes(symbols["playername"], player_name)
     
     # Set deathlink
     rom.write_byte(symbols["deathlinkflag"], world.death_link[player].value)

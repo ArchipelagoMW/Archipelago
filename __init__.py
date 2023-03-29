@@ -13,7 +13,7 @@ from .Rom import LocalRom, WL4DeltaPatch, get_base_rom_path, patch_rom
 
 
 class WL4Web(WebWorld):
-    theme = "grass"
+    theme = "jungle"
 
     setup_en = Tutorial(
         "Multiworld Setup Guide",
@@ -28,6 +28,12 @@ class WL4Web(WebWorld):
 
 
 class WL4World(World):
+    """
+    A golden pyramid has been discovered deep in the jungle, and Wario, has set
+    out to rob it. But to make off with its legendary treasure, he has to first
+    defeat the five passage bosses and the pyramid's evil ruler, the Golden Diva.
+    """
+
     game: str = "Wario Land 4"
     option_definitions = wl4_options
     topology_present = False
