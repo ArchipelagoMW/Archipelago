@@ -3,10 +3,11 @@ from Options import Option, DeathLink, Choice, Toggle, SpecialRange
 from dataclasses import dataclass
 
 
-
 @runtime_checkable
 class DLCQuestOption(Protocol):
     internal_name: str
+
+
 @dataclass
 class DLCQuestOptions:
     options: Dict[str, Union[bool, int]]
@@ -16,6 +17,8 @@ class DLCQuestOptions:
             item = item.internal_name
 
         return self.options.get(item, None)
+
+
 class FalseDoubleJump(Choice):
     """If you can do a double jump without the pack for it (glitch)."""
     internal_name = "double_jump_glitch"
@@ -24,6 +27,7 @@ class FalseDoubleJump(Choice):
     option_simple = 1
     option_all = 2
     default = 0
+
 
 class TimeIsMoney(Choice):
     """Is your time worth the money, are you ready to grind your sword by hand?"""
@@ -42,6 +46,7 @@ class CoinSanity(Choice):
     option_coin = 1
     default = 0
 
+
 class CoinSanityRange(SpecialRange):
     """This is the amount of coin in a coin bundle"""
     internal_name = "coinbundlequantity"
@@ -50,6 +55,7 @@ class CoinSanityRange(SpecialRange):
     range_end = 100
     default = 20
 
+
 class EndingChoice(Choice):
     """This is for the ending type of the basic game"""
     internal_name = "ending_choice"
@@ -57,6 +63,7 @@ class EndingChoice(Choice):
     option_any = 0
     option_true = 1
     default = 1
+
 
 class Campaign(Choice):
     """Whitch game you wana play to end"""
@@ -67,6 +74,7 @@ class Campaign(Choice):
     option_both = 2
     default = 0
 
+
 class ItemShuffle(Choice):
     """Should Inventory Items be separate from their DLCs and shuffled in the item pool"""
     internal_name = "item_shuffle"
@@ -75,16 +83,27 @@ class ItemShuffle(Choice):
     option_shuffled = 1
     default = 0
 
+
+class DayOnePatchLag(Choice):
+    """If the day one patch is needed for lag reduction on coin pick up"""
+    internal_name = "day_one_patch_lag"
+    display_name = "Day One Patch Lag"
+    option_disabled = 0
+    option_enabled = 1
+    default = 1
+
+
 DLCquest_options: Dict[str, type(Option)] = {
     option.internal_name: option
     for option in [
-    FalseDoubleJump,
-    CoinSanity,
-    CoinSanityRange,
-    TimeIsMoney,
-    EndingChoice,
-    Campaign,
-    ItemShuffle,
+        FalseDoubleJump,
+        CoinSanity,
+        CoinSanityRange,
+        TimeIsMoney,
+        EndingChoice,
+        Campaign,
+        ItemShuffle,
+        DayOnePatchLag,
     ]
 }
 default_options = {option.internal_name: option.default for option in DLCquest_options.values()}

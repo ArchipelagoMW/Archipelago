@@ -77,5 +77,6 @@ class DLCqworld(World):
             "coinsanity": self.multiworld.coinsanity[self.player].value,
             "coinbundlerange": self.multiworld.coinbundlequantity[self.player].value,
             "item_shuffle": self.multiworld.item_shuffle[self.player].value,
-            "seed": self.multiworld.per_slot_randoms[self.player].randrange(99999999)
+            "day_one_patch_lag": self.multiworld.day_one_patch_lag[self.player].value,
+            "seed": self.multiworld.per_slot_randoms[self.player].randrange(99999999),
         }
