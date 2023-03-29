@@ -9,33 +9,6 @@ from .Aesthetics import get_palette_bytes, kirby_target_palettes, get_kirby_pale
 KDL3UHASH = "201e7658f6194458a3869dde36bf8ec2"
 KDL3JHASH = "b2f2d004ea640c3db66df958fce122b2"
 
-animal_friends = {  # individual spawn addresses for each animal friend
-    0x770010: [  # Rick
-        2960854, 2973713, 3047772, 3109906, 3072123, 2971412, 3164056, 2956485, 3057740, 2977125,
-        3078359, 2994412, 3604390, 3132841, 3068643, 3038404, 3072609, 3022489, 3015498, 3197815
-    ],
-    0x770011: [  # Kine
-        2979317, 2966655, 3084295, 3072115, 3042583, 3026835, 3207394, 2977117, 3039009, 2994404, 3038412, 3022481,
-        3040192, 3198638
-    ],
-    0x770012: [  # Coo
-        2979325, 2966663, 3023113, 3109914, 2954719, 2952942, 2965879, 2977109, 3039001, 3075075, 3604398, 3132833,
-        3019973, 3370321, 3070133, 3040200, 3197823
-    ],
-    0x770013: [  # Nago
-        2960846, 3043722, 2973705, 3023105, 2956052, 3042591, 2971396, 2956501, 2976367, 3063027, 2984649, 3132825,
-        3058280, 3019981, 3197831
-    ],
-    0x770014: [  # ChuChu
-        3059881, 3043714, 3047780, 3084303, 3042575, 2952934, 2965887, 3044296, 2976359, 2954276, 2984665, 2994420,
-        3075091, 3370313, 3026223, 3015506, 3198646
-    ],
-    0x770015: [  # Pitch
-        3059889, 2956044, 3044878, 2971404, 3164064, 2965871, 2956493, 2976375, 3078817, 2984657, 3068635, 3058288,
-        3019965, 3370329, 3026215, 3198654
-    ],
-}
-
 level_pointers = {
     0x770001: 0x0084,
     0x770002: 0x009C,
@@ -109,21 +82,13 @@ class RomData:
             self.file = bytearray(stream.read())
 
 
-def handle_animal_friends(rom):
-    for friend in animal_friends:
-        for address in animal_friends[friend]:
-            rom.write_byte(address, 3)
-
 
 def patch_rom(multiworld, player, rom, boss_requirements, shuffled_levels):
     # increase BWRAM by 0x8000
     rom.write_byte(0x7FD8, 0x06)
 
     # initialize new BWRAM size
-    rom.write_bytes(0x36, [0xA9, 0xFD, 0x9F])
-
-    # handle animal friends first
-    handle_animal_friends(rom)
+    rom.write_bytes(0x36, [0xA9, 0xFD, 0x9F, ])
 
     # Copy Ability
     rom.write_bytes(0x399A0, [0xB9, 0xF3, 0x54,  # LDA $54F3
@@ -157,6 +122,13 @@ def patch_rom(multiworld, player, rom, boss_requirements, shuffled_levels):
 
     # Animal Copy Ability
     rom.write_bytes(0x507E8, [0x22, 0xB9, 0x99, 0x07, 0xEA, 0xEA, ])
+
+    # Entity Spawn
+    rom.write_bytes(0x21CD7, [0x22, 0x00, 0x9D, 0x07, ])
+
+    # Check Spawn Animal
+    rom.write_bytes(0x39D00, [0x48, 0xE0, 0x02, 0x00, 0xD0, 0x0C, 0xEB, 0x48, 0x0A, 0xA8, 0x68, 0x1A, 0xD9, 0x00, 0x80,
+                              0xF0, 0x01, 0xE8, 0x7A, 0xA9, 0x99, 0x99, 0x6B, ])
 
     # Allow Purification
     rom.write_bytes(0x30518, [0x22, 0xA0, 0x99, 0xC3, 0xEA, 0xEA, ])

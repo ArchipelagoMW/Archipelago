@@ -36,6 +36,7 @@ KDL3_ABILITY_ARRAY = SRAM_1_START + 0x7F50
 KDL3_SOUND_FX = SRAM_1_START + 0x7F62
 KDL3_RECV_COUNT = SRAM_1_START + 0x7F70
 KDL3_HEART_STAR_COUNT = SRAM_1_START + 0x7F80
+KDL3_ANIMAL_FRIENDS = SRAM_1_START + 0x8000
 
 
 class KDL3SNIClient(SNIClient):
@@ -198,7 +199,6 @@ class KDL3SNIClient(SNIClient):
         if game_state[0] != 0xFF:
             await self.pop_item(ctx)
 
-        from .Rom import animal_friends
         recv_count = await snes_read(ctx, KDL3_RECV_COUNT, 1)
         recv_amount = recv_count[0]
         if recv_amount < len(ctx.items_received):
@@ -215,10 +215,9 @@ class KDL3SNIClient(SNIClient):
                 snes_buffered_write(ctx, KDL3_ABILITY_ARRAY + (ability * 2), pack("H", ability))
                 snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x32]))
             elif item.item & 0x000010 > 0:
-                friend = item.item
+                friend = (item.item & 0x00000F)
                 snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x32]))
-                for addr in animal_friends[friend]:
-                    snes_buffered_write(ctx, ROM_START + addr, bytes([0x02]))
+                snes_buffered_write(ctx, KDL3_ANIMAL_FRIENDS + (friend << 1), bytes([friend + 1]))
             else:
                 self.item_queue.append(item)
 
