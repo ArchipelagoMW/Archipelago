@@ -924,7 +924,7 @@ const buildLocationsDiv = (game, locations) => {
   const locationsDescription = document.createElement('p');
   locationsDescription.classList.add('setting-description');
   locationsDescription.innerText = 'Priority locations guarantee a progression item will be placed there while ' +
-    'excluded locations will not contain progression or helpful items.';
+    'excluded locations will not contain progression or useful items.';
   locationsDiv.appendChild(locationsDescription);
 
   const locationsContainer = document.createElement('div');
