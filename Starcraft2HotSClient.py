@@ -637,12 +637,11 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
             else:
                 difficulty = calc_difficulty(self.ctx.difficulty)
-            await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {}".format(
+            await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
                 difficulty,
                 start_items[0], start_items[1], start_items[2], start_items[3], start_items[4],
                 start_items[5], start_items[6], start_items[7], start_items[8],
-                self.ctx.kerriganless))
-            await self.chat_send("SetColor " + str(self.ctx.player_color) + ' ' + str(self.ctx.player_color_primal))
+                self.ctx.kerriganless, self.ctx.player_color, self.ctx.player_color_primal))
             self.last_received_update = len(self.ctx.items_received)
 
         else:
