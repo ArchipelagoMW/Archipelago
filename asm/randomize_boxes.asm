@@ -183,7 +183,7 @@ LoadRandomItemAnimation:
     change_palette_entry #4
 
 ; Jewel/CD branch
-    lsr r1, r6, #6
+    lsr r1, r6, #5
     cmp r1, #0 
     bne @@CD
 
@@ -237,14 +237,12 @@ LoadRandomItemAnimation:
 
 
 ; Make the items do what they look like they do
-; FIXME If a full health item is in one of the other boxes, the icon for when
-; you've collected it doesn't go away until the room is reloaded
 
-hook 0x8029FBA, 0x8029FD6, CollectRandomItem  ; NE jewel
-hook 0x802A07E, 0x802A09C, CollectRandomItem  ; SE jewel
-hook 0x802A142, 0x802A160, CollectRandomItem  ; SW jewel
-hook 0x802A206, 0x802A224, CollectRandomItem  ; NW jewel
-hook 0x802A2CA, 0x802A2EA, CollectRandomItem  ; CD
+hook 0x8029FBA, 0x802A012, CollectRandomItem  ; NE jewel
+hook 0x802A07E, 0x802A0D6, CollectRandomItem  ; SE jewel
+hook 0x802A142, 0x802A19A, CollectRandomItem  ; SW jewel
+hook 0x802A206, 0x802A25E, CollectRandomItem  ; NW jewel
+hook 0x802A2CA, 0x802A31E, CollectRandomItem  ; CD
 hook 0x802A38A, 0x802A3C4, CollectRandomItem  ; Full health item
 
 .autoregion
