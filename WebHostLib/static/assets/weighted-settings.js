@@ -78,8 +78,6 @@ const createDefaultSettings = (settingData) => {
             break;
           case 'range':
           case 'special_range':
-            newSettings[game][gameSetting][setting.min] = 0;
-            newSettings[game][gameSetting][setting.max] = 0;
             newSettings[game][gameSetting]['random'] = 0;
             newSettings[game][gameSetting]['random-low'] = 0;
             newSettings[game][gameSetting]['random-high'] = 0;
@@ -296,33 +294,33 @@ const buildWeightedSettingsDiv = (game, settings) => {
         if (((setting.max - setting.min) + 1) < 11) {
           for (let i=setting.min; i <= setting.max; ++i) {
             const tr = document.createElement('tr');
-              const tdLeft = document.createElement('td');
-              tdLeft.classList.add('td-left');
-              tdLeft.innerText = i;
-              tr.appendChild(tdLeft);
+            const tdLeft = document.createElement('td');
+            tdLeft.classList.add('td-left');
+            tdLeft.innerText = i;
+            tr.appendChild(tdLeft);
 
-              const tdMiddle = document.createElement('td');
-              tdMiddle.classList.add('td-middle');
-              const range = document.createElement('input');
-              range.setAttribute('type', 'range');
-              range.setAttribute('id', `${game}-${settingName}-${i}-range`);
-              range.setAttribute('data-game', game);
-              range.setAttribute('data-setting', settingName);
-              range.setAttribute('data-option', i);
-              range.setAttribute('min', 0);
-              range.setAttribute('max', 50);
-              range.addEventListener('change', updateGameSetting);
-              range.value = currentSettings[game][settingName][i];
-              tdMiddle.appendChild(range);
-              tr.appendChild(tdMiddle);
+            const tdMiddle = document.createElement('td');
+            tdMiddle.classList.add('td-middle');
+            const range = document.createElement('input');
+            range.setAttribute('type', 'range');
+            range.setAttribute('id', `${game}-${settingName}-${i}-range`);
+            range.setAttribute('data-game', game);
+            range.setAttribute('data-setting', settingName);
+            range.setAttribute('data-option', i);
+            range.setAttribute('min', 0);
+            range.setAttribute('max', 50);
+            range.addEventListener('change', updateGameSetting);
+            range.value = currentSettings[game][settingName][i] || 0;
+            tdMiddle.appendChild(range);
+            tr.appendChild(tdMiddle);
 
-              const tdRight = document.createElement('td');
-              tdRight.setAttribute('id', `${game}-${settingName}-${i}`)
-              tdRight.classList.add('td-right');
-              tdRight.innerText = range.value;
-              tr.appendChild(tdRight);
+            const tdRight = document.createElement('td');
+            tdRight.setAttribute('id', `${game}-${settingName}-${i}`)
+            tdRight.classList.add('td-right');
+            tdRight.innerText = range.value;
+            tr.appendChild(tdRight);
 
-              rangeTbody.appendChild(tr);
+            rangeTbody.appendChild(tr);
           }
         } else {
           const hintText = document.createElement('p');
