@@ -56,7 +56,7 @@ class PlayerColor(Choice):
 
 
 class PlayerColorPrimal(Choice):
-    """Determines in-game team color when Kerrigan becomes Primal Kerrigan."""
+    """Determines in-game team color after Kerrigan becomes Primal Kerrigan."""
     display_name = "Player Color (Primal)"
     option_white = 0
     option_red = 1
