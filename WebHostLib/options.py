@@ -106,6 +106,9 @@ def create():
                     if sub_option_id == option.default:
                         this_option["defaultValue"] = sub_option_name
 
+                if not this_option["defaultValue"]:
+                    this_option["defaultValue"] = "random"
+
             elif issubclass(option, Options.Range):
                 game_options[option_name] = {
                     "type": "range",
@@ -157,6 +160,14 @@ def create():
             json.dump(player_settings, f, indent=2, separators=(',', ': '))
 
         if not world.hidden and world.web.settings_page is True:
+            # Add the random option to Choice, TextChoice, and Toggle settings
+            for option in game_options.values():
+                if option["type"] == "select":
+                    option["options"].append({"name": "Random", "value": "random"})
+
+                    if not option["defaultValue"]:
+                        option["defaultValue"] = "random"
+
             weighted_settings["baseOptions"]["game"][game_name] = 0
             weighted_settings["games"][game_name] = {}
             weighted_settings["games"][game_name]["gameSettings"] = game_options
