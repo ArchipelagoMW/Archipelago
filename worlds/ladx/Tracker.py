@@ -160,25 +160,26 @@ class MagpieBridge:
                     await self.send_all_inventory()
                 if "checks" in message["features"]:
                     await self.send_all_checks()
+    # Translate renamed IDs back to LADXR IDs
+    @staticmethod
+    def fixup_id(the_id):
+        if the_id == "0x2A1":
+            return "0x2A1-0"
+        if the_id == "0x2A7":
+            return "0x2A1-1"
+        return the_id
 
     async def send_all_checks(self):
         while self.checks == None:
             await asyncio.sleep(0.1)
         logger.info("sending all checks to magpie")
-        # Translate renamed IDs back to LADXR IDs
-        def fixup_id(the_id):
-            if the_id == "0x2A1":
-                return "0x2A1-0"
-            if the_id == "0x2A7":
-                return "0x2A1-1"
-            return the_id
 
         message = {
             "type": "check",
             "refresh":  True,
             "version": "1.0",
             "diff": False,
-            "checks": [{"id": fixup_id(check.id), "checked": check.value} for check in self.checks]
+            "checks": [{"id": self.fixup_id(check.id), "checked": check.value} for check in self.checks]
         }
 
         await self.ws.send(json.dumps(message))
@@ -193,7 +194,7 @@ class MagpieBridge:
             "refresh": True,
             "version": "1.0",
             "diff": True,
-            "checks": [{"id": check, "checked": True} for check in checks]
+            "checks": [{"id": self.fixup_id(check), "checked": True} for check in checks]
         }
 
         await self.ws.send(json.dumps(message))
