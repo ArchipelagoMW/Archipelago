@@ -3,6 +3,7 @@ import typing
 import logging
 from Options import Choice, Option, Toggle, DefaultOnToggle, Range, FreeText
 from collections import defaultdict
+import Utils
 
 DefaultOffToggle = Toggle
 
@@ -313,7 +314,7 @@ class GfxMod(FreeText, LADXROption):
     default = 'Link'
 
     __spriteFiles: typing.DefaultDict[str, typing.List[str]] = defaultdict(list)
-    __spriteDir = os.path.join('data', 'sprites','ladx')
+    __spriteDir = Utils.local_path(os.path.join('data', 'sprites','ladx'))
 
     extensions = [".bin", ".bdiff", ".png", ".bmp"]
     def __init__(self, value: str):
@@ -339,7 +340,7 @@ class GfxMod(FreeText, LADXROption):
         if len(GfxMod.__spriteFiles[self.value]) > 1:
             logger.warning(f"{self.value} does not uniquely identify a file. Possible matches: {GfxMod.__spriteFiles[self.value]}. Using {GfxMod.__spriteFiles[self.value][0]}")
 
-        return self.ladxr_name, GfxMod.__spriteFiles[self.value][0]
+        return self.ladxr_name, self.__spriteDir + "/" + GfxMod.__spriteFiles[self.value][0]
 
 class Palette(Choice):
     """
