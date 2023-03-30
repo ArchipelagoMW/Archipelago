@@ -17,9 +17,8 @@ class Goal(Choice):
     option_providence_the_profaned_goddess = 9
     option_devourer_of_gods = 10
     option_yharon_dragon_of_rebirth = 11
-    option_exo_mechs = 12
-    option_supreme_witch_calamitas = 13
-    option_adult_eidolon_wyrm = 14
+    option_calamity_final_bosses = 12
+    option_adult_eidolon_wyrm = 13
     default = 0
 
 class Achievements(Choice):

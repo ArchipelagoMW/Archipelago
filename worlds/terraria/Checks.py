@@ -199,6 +199,8 @@ def read_data() -> tuple[
     dict[str, int],
     # Mechanical bosses
     list[str],
+    # Calamity final bosses
+    list[str],
     # Progression rules
     set[str],
 ]:
@@ -215,6 +217,8 @@ def read_data() -> tuple[
     hammers = {}
     mech_boss_loc = []
     mech_bosses = []
+    final_boss_loc = []
+    final_bosses = []
 
     progression = set()
 
@@ -419,7 +423,7 @@ def read_data() -> tuple[
                         unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
 
             if pos != NAME and pos != FLAG_OR_SEMI and pos != COND_OR_SEMI and pos != END:
-                unexpected(line, char + 1, END_OF_LINE, None, pos)
+                unexpected(line, char + 1, END_OF_LINE, None, pos, POS_FMT, "Rules.dsv")
 
             if name:
                 if name in rule_indices:
@@ -447,6 +451,10 @@ def read_data() -> tuple[
                     mech_bosses.append(flags["Item"] or f"Post-{name}")
                     mech_boss_loc.append(name)
 
+                if "Final Boss" in flags:
+                    final_bosses.append(flags["Item"] or f"Post-{name}")
+                    final_boss_loc.append(name)
+
             if goal:
                 if goal in goal_indices:
                     raise Exception(f"goal `{goal}` on line `{line + 1}` shadows a previous goal")
@@ -460,6 +468,9 @@ def read_data() -> tuple[
 
     _, mech_boss_items = goals[goal_indices["mechanical_bosses"]]
     mech_boss_items.update(mech_boss_loc)
+
+    _, final_boss_items = goals[goal_indices["calamity_final_bosses"]]
+    final_boss_items.update(final_boss_loc)
     
     for name, _, _, conditions in rules:
         validate_conditions(name, rule_indices, conditions)
@@ -554,6 +565,6 @@ def read_data() -> tuple[
             location_name_to_id[name] = next_id
             next_id += 1
 
-    return goals, rules, rule_indices, labels, rewards, item_name_to_id, location_name_to_id, npcs, pickaxes, hammers, mech_bosses, progression
+    return goals, rules, rule_indices, labels, rewards, item_name_to_id, location_name_to_id, npcs, pickaxes, hammers, mech_bosses, final_bosses, progression
 
-goals, rules, rule_indices, labels, rewards, item_name_to_id, location_name_to_id, npcs, pickaxes, hammers, mech_bosses, progression = read_data()
+goals, rules, rule_indices, labels, rewards, item_name_to_id, location_name_to_id, npcs, pickaxes, hammers, mech_bosses, final_bosses, progression = read_data()
