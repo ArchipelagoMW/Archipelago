@@ -137,8 +137,23 @@ class Kerriganless(Choice):
     option_on_without_passives = 2
 
 
+class KerriganLevelGain(Choice):
+    """Determines how Kerrigan gains levels.  Kerrigan's maximum level is always 70.
+
+    By Items:  The seed will contain Kerrigan level items giving Kerrigan levels when found.
+    One Per Check:  When a location is checked, Kerrigan gains a level.
+    Two Per Check:  When a location is checked, Kerrigan gains two levels.
+    Three Per Check:  When a location is checked, Kerrigan gains three levels."""
+    display_name = "Kerrigan Level Gain"
+    option_by_items = 0
+    option_one_per_check = 1
+    option_two_per_check = 2
+    option_three_per_check = 3
+
+
 class KerriganLevelDistribution(Choice):
-    """Determines the amount and size of Kerrigan level items.  Kerrigan's maximum level is 70.
+    """Determines the amount and size of Kerrigan level items.  Kerrigan's maximum level is always 70.  
+    Does nothing if Kerrigan Level Gain is not set to By Items.
 
     Vanilla:  Uses the distribution in the vanilla campaign.
     This entails 32 individual levels and 6 packs of varying sizes.
@@ -244,6 +259,7 @@ sc2hots_options: Dict[str, Option] = {
     "include_mutations": IncludeMutations,
     "include_strains": IncludeStrains,
     "kerriganless": Kerriganless,
+    "kerrigan_level_gain": KerriganLevelGain,
     "kerrigan_level_distribution": KerriganLevelDistribution,
     "include_all_kerrigan_abilities": IncludeAllKerriganAbilities,
     "start_primary_abilities": StartPrimaryAbilities,

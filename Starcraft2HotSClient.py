@@ -222,6 +222,7 @@ class SC2Context(CommonContext):
     last_loc_list = None
     difficulty_override = -1
     kerriganless = 0
+    levels_per_check = 0
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
     last_bot: typing.Optional[ArchipelagoBot] = None
 
@@ -252,6 +253,7 @@ class SC2Context(CommonContext):
             self.player_color_primal = args["slot_data"].get("player_color_primal", 4)
             if args["slot_data"].get("kerriganless", 0) > 0:
                 self.kerriganless = 1
+            self.levels_per_check = args["slot_data"].get("kerrigan_level_gain", 0)
 
             self.build_location_to_mission_mapping()
 
@@ -559,7 +561,8 @@ maps_table = [
 # ]
 
 
-def calculate_items(items: typing.List[NetworkItem]) -> typing.List[int]:
+def calculate_items(ctx: SC2Context) -> typing.List[int]:
+    items = ctx.items_received
     network_item: NetworkItem
     accumulators: typing.List[int] = [0 for _ in type_flaggroups]
 
@@ -578,6 +581,9 @@ def calculate_items(items: typing.List[NetworkItem]) -> typing.List[int]:
         # sum
         else:
             accumulators[type_flaggroups[item_data.type]] += item_data.number
+
+    # Kerrigan levels per check
+    accumulators[type_flaggroups["Level"]] += len(ctx.checked_locations) * ctx.levels_per_check
 
     return accumulators
 
@@ -632,7 +638,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
         game_state = 0
         if not self.setup_done:
             self.setup_done = True
-            start_items = calculate_items(self.ctx.items_received)
+            start_items = calculate_items(self.ctx)
             if self.ctx.difficulty_override >= 0:
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
             else:
@@ -661,7 +667,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                                      "Starcraft 2 (This is likely a map issue)")
 
             if self.last_received_update < len(self.ctx.items_received):
-                current_items = calculate_items(self.ctx.items_received)
+                current_items = calculate_items(self.ctx)
                 await self.chat_send("UpdateTech {} {} {} {} {} {}".format(
                     current_items[0], current_items[1], current_items[2], current_items[3], current_items[4],
                     current_items[5]))
@@ -691,6 +697,12 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                                 [{"cmd": 'LocationChecks',
                                   "locations": [SC2HOTS_LOC_ID_OFFSET + victory_modulo * self.mission_id + x + 1]}])
                             self.boni[x] = True
+                            # Kerrigan level needs manual updating if the check's receiver isn't the local player
+                            if self.last_received_update == len(self.ctx.items_received):
+                                current_items = calculate_items(self.ctx)
+                                await self.chat_send("UpdateTech {} {} {} {} {} {}".format(
+                                    current_items[0], current_items[1], current_items[2], current_items[3], current_items[4],
+                                    current_items[5]))
 
                 else:
                     await self.chat_send("LostConnection - Lost connection to game.")

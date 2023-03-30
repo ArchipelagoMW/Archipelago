@@ -267,7 +267,7 @@ def create_item_with_correct_settings(player: int, name: str) -> Item:
     return item
 
 def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_pool: List[Item]):
-    if get_option_value(multiworld, player, "kerriganless") > 0:
+    if get_option_value(multiworld, player, "kerriganless") > 0 or get_option_value(multiworld, player, "kerrigan_level_gain") > 0:
         return
 
     distribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
