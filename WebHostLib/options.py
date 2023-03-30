@@ -103,8 +103,10 @@ def create():
                             "name": option.get_option_name(sub_option_id),
                             "value": sub_option_name,
                         })
-                    if sub_option_id == option.default or sub_option_name == option.default:
+                    if sub_option_id == option.default:
                         this_option["defaultValue"] = sub_option_name
+                if option.default == "random":
+                    this_option["defaultValue"] = "random"
 
             elif issubclass(option, Options.Range):
                 game_options[option_name] = {
