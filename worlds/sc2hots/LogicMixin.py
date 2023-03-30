@@ -92,10 +92,7 @@ class SC2HotSLogic(LogicMixin):
 
     def _sc2hots_has_low_tech(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has_any({'Zergling', 'Swarm Queen', 'Spine Crawler'}, player) \
-               or self._sc2hots_has_common_unit(multiworld, player) and (
-                       self._sc2hots_has_basic_kerrigan(multiworld, player)
-                       or get_option_value(multiworld, player, 'required_tactics') > 0
-               )
+               or self._sc2hots_has_common_unit(multiworld, player) and self._sc2hots_has_basic_kerrigan(multiworld, player)
 
     # def _sc2wol_has_air(self, multiworld: MultiWorld, player: int) -> bool:
     #     return self.has_any({'Viking', 'Wraith', 'Banshee'}, player) or get_option_value(multiworld, player, 'required_tactics') > 0 \

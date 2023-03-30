@@ -38,12 +38,14 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2hots_has_low_tech(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player)),
         LocationData("Rendezvous", "Rendezvous: Right Queen", SC2HOTS_LOC_ID_OFFSET + 301,
-                     lambda state: state._sc2hots_has_low_tech(multiworld, player)),
+                     lambda state: state._sc2hots_has_low_tech(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
         LocationData("Rendezvous", "Rendezvous: Center Queen", SC2HOTS_LOC_ID_OFFSET + 302,
                      lambda state: state._sc2hots_has_low_tech(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player)),
         LocationData("Rendezvous", "Rendezvous: Left Queen", SC2HOTS_LOC_ID_OFFSET + 303,
-                     lambda state: state._sc2hots_has_low_tech(multiworld, player)),
+                     lambda state: state._sc2hots_has_low_tech(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
         LocationData("Harvest of Screams", "Harvest of Screams: Victory", SC2HOTS_LOC_ID_OFFSET + 400,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player)),
