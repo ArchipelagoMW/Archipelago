@@ -16,9 +16,8 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
         def has_coin(state, player: int, coins: int):
             coin_possessed = 0
             for i in [4, 7, 9, 10, 46, 50, 60, 76, 89, 100, 169, 203]:
-                name_coin = "number coins"
-                number_coin = re.sub("number", str(i), name_coin)
-                if state.has(number_coin, player):
+                name_coin = f"{i} coins"
+                if state.has(name_coin, player):
                     coin_possessed += i
 
             return coin_possessed >= coins
@@ -29,9 +28,8 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
         def has_coin(state, player: int, coins: int):
             coin_possessed = 0
             for i in [20, 50, 90, 95, 130, 150, 154, 200]:
-                name_coin = "number coins freemium"
-                number_coin = re.sub("number", str(i), name_coin)
-                if state.has(number_coin, player):
+                name_coin = f"{i} coins freemium"
+                if state.has(name_coin, player):
                     coin_possessed += i
 
             return coin_possessed >= coins
