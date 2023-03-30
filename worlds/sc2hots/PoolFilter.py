@@ -77,8 +77,6 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
         move_mission("Harvest of Screams", MissionPools.EASY, MissionPools.STARTER)
         move_mission("Domination", MissionPools.EASY, MissionPools.STARTER)
     if logic_level > 0:
-        # Easy -> Starter
-        move_mission("Shoot the Messenger", MissionPools.EASY, MissionPools.STARTER)
         # Medium -> Easy
         for mission in ("Fire in the Sky", "Old Soldiers", "Waking the Ancient", "Conviction"):
             move_mission(mission, MissionPools.MEDIUM, MissionPools.EASY)
