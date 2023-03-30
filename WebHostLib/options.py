@@ -103,7 +103,7 @@ def create():
                             "name": option.get_option_name(sub_option_id),
                             "value": sub_option_name,
                         })
-                    if sub_option_id == option.default:
+                    if sub_option_id == option.default or sub_option_name == option.default:
                         this_option["defaultValue"] = sub_option_name
 
             elif issubclass(option, Options.Range):
