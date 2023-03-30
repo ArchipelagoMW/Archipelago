@@ -53,6 +53,7 @@ class TerrariaWorld(World):
                 or (achievements < 1 and "Achievement" in flags)
                 or (achievements < 2 and "Grindy" in flags)
                 or (achievements < 3 and "Fishing" in flags)
+                or (rule == "Zenith" and self.multiworld.goal[self.player].value != 11) # Bad hardcoding
             ):
                 continue
             if "Location" in flags or ("Achievement" in flags and achievements >= 1):
@@ -66,7 +67,7 @@ class TerrariaWorld(World):
         item_count = 0
         items = []
         for rule, flags, _, _ in rules[:goal]:
-            if (not self.calamity and "Calamity" in flags):
+            if (not self.calamity and "Calamity" in flags) or rule == "Zenith":
                 continue
             if "Item" in flags:
                 # Item

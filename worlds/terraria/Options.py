@@ -13,10 +13,10 @@ class Goal(Choice):
     option_lunatic_cultist = 5
     option_astrum_deus = 6
     option_moon_lord = 7
-    option_zenith = 8
-    option_providence_the_profaned_goddess = 9
-    option_devourer_of_gods = 10
-    option_yharon_dragon_of_rebirth = 11
+    option_providence_the_profaned_goddess = 8
+    option_devourer_of_gods = 9
+    option_yharon_dragon_of_rebirth = 10
+    option_zenith = 11
     option_calamity_final_bosses = 12
     option_adult_eidolon_wyrm = 13
     default = 0

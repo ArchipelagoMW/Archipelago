@@ -16,6 +16,7 @@ to speed up gameplay.
 Mods known to be incompatible:
 
 * Boss Checklist
+* Magic Storage
 
 ## Configuring your YAML File
 

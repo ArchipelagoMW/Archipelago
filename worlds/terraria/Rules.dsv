@@ -201,6 +201,9 @@ Decryption Computer;                Calamity;                                   
 Actuator;                           ;                                           Mechanic;
 Muramasa;                           ;                                           Dungeon;
 
+// Deerclops
+Deerclops;                          Location | Item;
+
 // The Slime God
 The Slime God;                      Calamity | Location | Item;
 Purified Gel;                       Calamity;                                   #The Slime God;
@@ -515,7 +518,7 @@ Yharon, Dragon of Rebirth;          Calamity | Location | Item | Goal;          
 Yharon Soul Fragment;               Calamity;                                   #Yharon, Dragon of Rebirth;
 Auric Ore;                          Calamity;                                   Yharon, Dragon of Rebirth & @pickaxe(250);
 Auric Bar;                          Calamity;                                   Cosmic Anvil & Auric Ore & Yharon Soul Fragment;
-Zenith;                             Location;                                   Hardmode Anvil & Terra Blade & Meowmere & Star Wrath & Influx Waver & The Horseman's Blade & Seedler & Starfury & Bee Keeper & Enchanted Sword & Copper Shortsword & (~@calamity | Auric Bar);
+Zenith;                             Location | Item(Has Zenith) | Goal;         Hardmode Anvil & Terra Blade & Meowmere & Star Wrath & Influx Waver & The Horseman's Blade & Seedler & Starfury & Bee Keeper & Enchanted Sword & Copper Shortsword & (~@calamity | Auric Bar);
 # zenith
 
 // Exo Mechs
