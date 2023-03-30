@@ -4,6 +4,7 @@ from .Regions import rooms, create_regions, location_table, set_rules
 from .Items import item_table, item_groups, create_items, FFMQItem
 from .Output import generate_output
 from .Options import option_definitions
+from .Client import FFMQClient
 from BaseClasses import LocationProgressType
 import base64
 import threading
@@ -25,9 +26,10 @@ class FFMQWorld(World):
     create_regions = create_regions
     set_rules = set_rules
 
-    # def __init__(self, world, player: int):
-    #     self.rom_name_available_event = threading.Event()
-    #     super().__init__(world, player)
+    def __init__(self, world, player: int):
+        self.rom_name_available_event = threading.Event()
+        self.rom_name = None
+        super().__init__(world, player)
 
     def generate_early(self):
         if self.multiworld.sky_coin_mode[self.player] == "shattered":
@@ -80,8 +82,15 @@ class FFMQWorld(World):
             return self.item_id_to_name[i]
         return item.name if item.advancement else None
 
-
-
+    def modify_multidata(self, multidata):
+        # wait for self.rom_name to be available.
+        self.rom_name_available_event.wait()
+        rom_name = getattr(self, "rom_name", None)
+        # we skip in case of error, so that the original error in the output thread is the one that gets raised
+        if rom_name:
+            new_name = base64.b64encode(bytes(self.rom_name)).decode()
+            payload = multidata["connect_names"][self.multiworld.player_name[self.player]]
+            multidata["connect_names"][new_name] = payload
 
 
 

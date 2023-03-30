@@ -9,6 +9,7 @@ base_path = Path(__file__).parent
 file_path = (base_path / "data/rooms.yaml").resolve()
 with open(file_path) as file:
     rooms = yaml.load(file, yaml.Loader)
+
 # file_path = (base_path / "data/shufflingdata.yaml").resolve()
 # with open(file_path) as file:
 #     shuffling_data = yaml.load(file, yaml.Loader)
@@ -69,32 +70,32 @@ with open(file_path) as file:
 #
 # breakpoint()
 
-
-
-
-
-location_table = {}
 object_id_table = {}
-index = 0x420000
+object_type_table = {}
+offset = {"Chest": 0x420000, "Box": 0x420000, "NPC": 0x420000 + 300, "Battlefield": 0x420000 + 350}
 for room in rooms:
     for object in room["game_objects"]:
         if object["type"] in ("Chest", "NPC", "Battlefield", "Box") and "Hero Chest" not in object["name"]:
-            location_table[object["name"]] = index
+        #     location_table[object["name"]] = index
             object_id_table[object["name"]] = object["object_id"]
-            index += 1
+            object_type_table[object["name"]] = object["type"]
+        #     index += 1
+location_table = {loc_name: offset[object_type_table[loc_name]] + obj_id for loc_name, obj_id in object_id_table.items()}
 
 
-def add_spaces(text):
+def yaml_item(text):
+    if text == "CaptainCap":
+        return "Captain's Cap"
     return "".join([(" " + c if (c.isupper() or c.isnumeric()) and not (text[i-1].isnumeric() and c == "F") else c) for
                     i, c in enumerate(text)]).strip()
 
 
 ow_regions = {
     "Earth Region": ([*range(445, 450)], ([2, 6], [25, 0], [31, 0], [36, 0], [37, 0]), [2]),
-    "Water Region": ([*range(450, 454), *range(455, 457)], ([4, 6], [13, 6], [8, 6], [49, 0], [53, 0], [56, 0]), (6, 10)),
+    "Water Region": ([*range(450, 454), *range(455, 457)], ([4, 6], [13, 6], [8, 6], [49, 0], [53, 0], [56, 0]), [6]),
     "Fire Region": ([*range(460, 466)], ([6, 6], [9, 6], [98, 0], [16, 6], [103, 0], [104, 0]), (13, 16)),
     "Wind Region": ([*range(466, 475)], ([3, 6], [140, 0], [142, 0], [18, 6], [173, 0], [174, 0], [10, 6], [184, 0]), ()),
-    "Frozen Strip": ([*range(458, 460)], ([5, 6], [15, 6]), ()),
+    "Frozen Strip": ([*range(458, 460)], ([5, 6], [15, 6]), [10]),
     "Spencer's Place": ([457], ([7, 6]), ()),
     "Inaccessible": ([454, 475, 477], ([19, 6], [17, 6], [14, 6]), ()),
     "Mac's Ship": ([*range(478, 480)], ([37, 8]), ()),
@@ -108,7 +109,7 @@ def process_rules(spot, access):
     for weapon in weapons:
         if weapon in access:
             add_rule(spot, lambda state, w=weapon: state.has_any(item_groups[w + "s"], spot.player))
-    access = [add_spaces(rule) for rule in access if rule not in weapons]
+    access = [yaml_item(rule) for rule in access if rule not in weapons]
     add_rule(spot, lambda state: state.has_all(access, spot.player))
 
 
@@ -152,7 +153,7 @@ def create_regions(self):
         if room["id"] == 0:
             for region in ow_regions:
                 self.multiworld.regions.append(create_region(self.multiworld, self.player, region, 0,
-                    [FFMQLocation(self.player, object["name"], object["object_id"], object["type"]) for object in
+                    [FFMQLocation(self.player, object["name"], location_table[object["name"]], object["type"]) for object in
                     room["game_objects"] if object["object_id"] in ow_regions[region][2]], [link for link in
                     room["links"] if link["entrance"] in ow_regions[region][0]]))
         else:
@@ -163,8 +164,8 @@ def create_regions(self):
             self.multiworld.regions.append(create_region(self.multiworld, self.player, room["name"], room["id"],
                  [FFMQLocation(self.player, object["name"], location_table[object["name"]] if object["name"] in
                  location_table else None, object["type"], object["access"],
-                 self.create_item(add_spaces(object["on_trigger"][0])) if object["type"] == "Trigger" else None) for
-                 object in room["game_objects"] if "Hero Chest" not in object["name"] and (object["type"] != "Box" or
+                               self.create_item(yaml_item(object["on_trigger"][0])) if object["type"] == "Trigger" else None) for
+                  object in room["game_objects"] if "Hero Chest" not in object["name"] and (object["type"] != "Box" or
                  self.multiworld.brown_boxes[self.player] == "include")], room["links"]))
 
     dark_king_room = self.multiworld.get_region("Doom Castle Dark King Room", self.player)

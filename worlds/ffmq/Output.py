@@ -4,6 +4,8 @@ import zipfile
 from pathlib import Path
 from copy import deepcopy
 from .Regions import object_id_table
+from Main import __version__
+from BaseClasses import ItemClassification
 
 base_path = Path(__file__).parent
 file_path = (base_path / "data/settings.yaml").resolve()
@@ -14,12 +16,22 @@ def generate_output(self, output_directory):
     item_placement = []
     for location in self.multiworld.get_locations(self.player):
         if location.type != "Trigger":
-            if location.item.code > 0x420000 + 256:
-                item_name = self.item_id_to_name[location.item.code - 256]
+            if location.item.player == self.player:
+                if location.item.code > 0x420000 + 256:
+                    item_name = self.item_id_to_name[location.item.code - 256]
+                else:
+                    item_name = location.item.name
+                item_name = "".join(item_name.split(" "))
             else:
-                item_name = location.item.name
+                if location.item.advancement or location.item.useful:
+                    item_name = "APItem"
+                else:
+                    item_name = "APItemFiller"
+            if item_name == "Captain'sCap":
+                item_name = "CaptainCap"
             item_placement.append({"object_id": object_id_table[location.name], "type": location.type, "content":
-                "".join(item_name.split(" ")) if location.item.player == self.player else "APItem"})
+                item_name, "player": self.multiworld.player_name[location.item.player], "item_name": location.item.name}
+                                  )
 
 
     def cc(option):
@@ -63,21 +75,19 @@ def generate_output(self, output_directory):
                    "enable_spoilers": False,
                    "progressive_formations": cc(mw.progressive_formations[p]),
                    "map_shuffling": "None",
-                   "crest_shuffle": tf(mw.crest_shuffle[p]),
-                   # "seed": mw.per_slot_randoms[p].randint(0, int("FFFFFFFF", 16)),
-                   # "starting_items": [self.multiworld.starting_weapon[self.player].current_key.title().replace("_", ""),
-                   #                    "SteelArmor"]
-                   #item.name.replace(" ", "") for item in
-                   # self.multiworld.precollected_items[self.player]]
+                   "crest_shuffle": False, #tf(mw.crest_shuffle[p]),
                }
     for option, data in option_writes.items():
         options["Final Fantasy Mystic Quest"][option][data] = 1
-    options["seed"] = hex(mw.per_slot_randoms[p].randint(0, int("FFFFFFFF", 16)))
-    #options["Final Fantasy Mystic Quest"]["starting_items"] = [item.name.title().replace(" ", "") for item in
-    #                                                           self.multiworld.precollected_items[self.player]]
-        #
-        # [
-        # self.multiworld.starting_weapon[self.player].current_key.title().replace("_", ""), "SteelArmor"]
+
+    rom_name = f'MQ{__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}'[:21]
+    #rom_name.extend([0] * (21 - len(self.rom_name)))
+    self.rom_name = bytearray(rom_name,
+                              'utf8')
+    self.rom_name_available_event.set()
+
+    setup = {"version": "1.4", "name": mw.player_name[p], "romname": rom_name, "seed":
+        hex(mw.per_slot_randoms[p].randint(0, int("FFFFFFFF", 16))).split("0x")[1].upper()}
 
     starting_items = [self.multiworld.starting_weapon[self.player].current_key.title().replace("_", ""), "SteelArmor"]
 
@@ -87,3 +97,4 @@ def generate_output(self, output_directory):
         zf.writestr("itemplacement.yaml", yaml.dump(item_placement))
         zf.writestr("flagset.yaml", yaml.dump(options))
         zf.writestr("startingitems.yaml", yaml.dump(starting_items))
+        zf.writestr("setup.yaml", yaml.dump(setup))

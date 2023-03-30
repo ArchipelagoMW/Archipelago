@@ -19,7 +19,7 @@ item_table = {
     "Mask": ItemData(5, ItemClassification.progression, ["Key Items"]),
     "Magic Mirror": ItemData(6, ItemClassification.progression, ["Key Items"]),
     "Thunder Rock": ItemData(7, ItemClassification.progression, ["Key Items"]),
-    "Captain Cap": ItemData(8, ItemClassification.progression_skip_balancing, ["Key Items"]),
+    "Captain's Cap": ItemData(8, ItemClassification.progression_skip_balancing, ["Key Items"]),
     "Libra Crest": ItemData(9, ItemClassification.progression, ["Key Items"]),
     "Gemini Crest": ItemData(10, ItemClassification.progression, ["Key Items"]),
     "Mobius Crest": ItemData(11, ItemClassification.progression, ["Key Items"]),
