@@ -319,12 +319,13 @@ class GfxMod(FreeText, LADXROption):
     default = 'Link'
 
     __spriteFiles: typing.DefaultDict[str, typing.List[str]] = defaultdict(list)
-    __spriteDir = Utils.local_path(os.path.join('data', 'sprites','ladx'))
+    __spriteDir: str = None
 
     extensions = [".bin", ".bdiff", ".png", ".bmp"]
     def __init__(self, value: str):
         super().__init__(value)
-        if not GfxMod.__spriteFiles:
+        if not GfxMod.__spriteDir:
+            GfxMod.__spriteDir = Utils.local_path(os.path.join('data', 'sprites','ladx'))
             for file in os.listdir(GfxMod.__spriteDir):
                 name, extension = os.path.splitext(file)
                 if extension in self.extensions:
