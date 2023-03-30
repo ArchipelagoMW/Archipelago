@@ -338,6 +338,7 @@ def create_museum_items(item_factory: StardewItemFactory, world_options: Stardew
     items.append(item_factory("Ancient Seeds Recipe"))
     items.append(item_factory("Stardrop"))
     items.append(item_factory("Rusty Key"))
+    items.append(item_factory("Dwarvish Translation Guide"))
 
 
 def create_friendsanity_items(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
