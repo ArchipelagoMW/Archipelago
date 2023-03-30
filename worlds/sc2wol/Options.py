@@ -55,6 +55,29 @@ class MissionOrder(Choice):
     option_gauntlet = 6
 
 
+class PlayerColor(Choice):
+    """Determines in-game team color."""
+    display_name = "Player Color"
+    option_white = 0
+    option_red = 1
+    option_blue = 2
+    option_teal = 3
+    option_purple = 4
+    option_yellow = 5
+    option_orange = 6
+    option_green = 7
+    option_light_pink = 8
+    option_violet = 9
+    option_light_grey = 10
+    option_dark_green = 11
+    option_brown = 12
+    option_light_green = 13
+    option_dark_grey = 14
+    option_pink = 15
+    option_rainbow = 16
+    default = option_blue
+
+
 class ShuffleProtoss(DefaultOnToggle):
     """Determines if the 3 protoss missions are included in the shuffle if Vanilla mission order is not enabled.
     If turned off with Vanilla Shuffled, the 3 protoss missions will be in their normal position on the Prophecy chain
@@ -121,6 +144,7 @@ sc2wol_options: Dict[str, Option] = {
     "bunker_upgrade": BunkerUpgrade,
     "all_in_map": AllInMap,
     "mission_order": MissionOrder,
+    "player_color": PlayerColor,
     "shuffle_protoss": ShuffleProtoss,
     "shuffle_no_build": ShuffleNoBuild,
     "early_unit": EarlyUnit,

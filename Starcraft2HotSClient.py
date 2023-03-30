@@ -12,6 +12,7 @@ import typing
 import queue
 import zipfile
 import io
+import random
 from pathlib import Path
 
 # CommonClient import first to trigger ModuleUpdater
@@ -77,6 +78,38 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                 self.output("Current difficulty: " + ["Casual", "Normal", "Hard", "Brutal"][self.ctx.difficulty])
             self.output("To change the difficulty, add the name of the difficulty after the command.")
             return False
+
+    def _cmd_color(self, normal_color: str = "", primal_color: str = "") -> bool:
+        player_colors = [
+            "White", "Red", "Blue", "Teal",
+            "Purple", "Yellow", "Orange", "Green",
+            "LightPink", "Violet", "LightGrey", "DarkGreen",
+            "Brown", "LightGreen", "DarkGrey", "Pink",
+            "Rainbow", "Random"
+        ]
+        match_colors = [player_color.lower() for player_color in player_colors]
+        if normal_color:
+            if not primal_color:
+                primal_color = normal_color
+            if normal_color.lower() not in match_colors:
+                self.output(normal_color + " is not a valid color.  Available colors: " + ', '.join(player_colors))
+                return False
+            if primal_color.lower() not in match_colors:
+                self.output(primal_color + " is not a valid color.  Available colors: " + ', '.join(player_colors))
+                return False
+            if normal_color.lower() == "random":
+                normal_color = random.choice(player_colors[:16])
+            if primal_color.lower() == "random":
+                primal_color = random.choice(player_colors[:16])
+            self.ctx.player_color = match_colors.index(normal_color.lower())
+            self.output("Normal color set to " + player_colors[self.ctx.player_color])
+            self.ctx.player_color_primal = match_colors.index(primal_color.lower())
+            self.output("Primal color set to " + player_colors[self.ctx.player_color_primal])
+        else:
+            self.output("Current Normal color: " + player_colors[self.ctx.player_color])
+            self.output("Current Primal color: " + player_colors[self.ctx.player_color_primal])
+            self.output("To change your colors, add the names of both your standard and primal colors after the command.")
+            self.output("Available colors: " + ', '.join(player_colors))
 
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
@@ -178,6 +211,8 @@ class SC2Context(CommonContext):
     items_handling = 0b111
     difficulty = -1
     mission_order = 0
+    player_color = 6
+    player_color_primal = 4
     mission_req_table: typing.Dict[str, MissionInfo] = {}
     final_mission: int = 20
     announcements = queue.Queue()
@@ -213,6 +248,8 @@ class SC2Context(CommonContext):
             }
             self.mission_order = args["slot_data"].get("mission_order", 0)
             self.final_mission = args["slot_data"].get("final_mission", 20)
+            self.player_color = args["slot_data"].get("player_color", 6)
+            self.player_color_primal = args["slot_data"].get("player_color_primal", 4)
             if args["slot_data"].get("kerriganless", 0) > 0:
                 self.kerriganless = 1
 
@@ -600,11 +637,11 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
             else:
                 difficulty = calc_difficulty(self.ctx.difficulty)
-            await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {}".format(
+            await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
                 difficulty,
                 start_items[0], start_items[1], start_items[2], start_items[3], start_items[4],
                 start_items[5], start_items[6], start_items[7], start_items[8],
-                self.ctx.kerriganless))
+                self.ctx.kerriganless, self.ctx.player_color, self.ctx.player_color_primal))
             self.last_received_update = len(self.ctx.items_received)
 
         else:
