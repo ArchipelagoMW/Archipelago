@@ -488,6 +488,10 @@ class GameManager(App):
         if hasattr(self, "energy_link_label"):
             self.energy_link_label.text = f"EL: {Utils.format_SI_prefix(self.ctx.current_energy_link_value)}J"
 
+    # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
+    def open_settings(self, *largs):
+        pass
+
 
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
@@ -608,7 +612,7 @@ class KivyJSONtoTextParser(JSONtoTextParser):
 ExceptionManager.add_handler(E())
 
 Builder.load_file(Utils.local_path("data", "client.kv"))
-user_file = Utils.local_path("data", "user.kv")
+user_file = Utils.user_path("data", "user.kv")
 if os.path.exists(user_file):
     logging.info("Loading user.kv into builder.")
     Builder.load_file(user_file)
