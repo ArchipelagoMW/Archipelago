@@ -12,9 +12,9 @@ client_version = 0
 
 class DLCqwebworld(WebWorld):
     tutorials = [Tutorial(
-        "magic it is ",
-        "a guide to not die",
-        "Mandarin",
+        "Multiworld Setup Tutorial",
+        "A guide to setting up the Archipelago DLCQuest game on your computer.",
+        "English",
         "setup_en.md",
         "setup/en",
         ["axe_y"]
@@ -25,7 +25,7 @@ class DLCqworld(World):
     """
     DLCquest is a metroid ish game where everything is an in-game dlc.
     """
-    game = "DLCquest"
+    game = "DLCQuest"
     topology_present = False
     web = DLCqwebworld()
 

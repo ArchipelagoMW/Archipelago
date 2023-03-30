@@ -162,6 +162,10 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
                                    Locfinalroom_name]
         world.regions.append(Regfinalroom)
 
+        loc_win = DLCquestLocation(player, "Winning Basic", None, world.get_region("The Final Boss Room", player))
+        world.get_region("The Final Boss Room", player).locations.append(loc_win)
+        loc_win.place_locked_item(create_event(player, "Victory Basic"))
+
         world.get_entrance("DLC Quest Basic", player).connect(world.get_region("Move Right", player))
 
         world.get_entrance("Moving", player).connect(world.get_region("Movement Pack", player))
@@ -299,6 +303,10 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Regfinalboss.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regfinalboss) for
                                    loc_name in Locfinalboss_name]
         world.regions.append(Regfinalboss)
+
+        loc_wining = DLCquestLocation(player, "Winning Freemium", None, world.get_region("Final Boss", player))
+        world.get_region("Final Boss", player).locations.append(loc_wining)
+        loc_wining.place_locked_item(create_event(player, "Victory Freemium"))
 
         world.get_entrance("Live Freemium or Die", player).connect(world.get_region("Freemium Start", player))
 

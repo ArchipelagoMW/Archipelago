@@ -197,9 +197,7 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
             set_rule(world.get_location("Finish the Fight Pack", player),
                      has_enough_coin(player, 5))
 
-        loc_win = DLCquestLocation(player, "Winning Basic", None, world.get_region("The Final Boss Room", player))
-        world.get_region("The Final Boss Room", player).locations.append(loc_win)
-        loc_win.place_locked_item(create_event(player, "Victory Basic"))
+
         if World_Options[Options.EndingChoice] == Options.EndingChoice.option_any:
             set_rule(world.get_location("Winning Basic", player),
                      lambda state: state.has("Finish the Fight Pack", player))
@@ -361,9 +359,7 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
             set_rule(world.get_location("Remove Ads Pack", player),
                      has_enough_coin_freemium(player, 25))
 
-        loc_wining = DLCquestLocation(player, "Winning Freemium", None, world.get_region("Final Boss", player))
-        world.get_region("Final Boss", player).locations.append(loc_wining)
-        loc_wining.place_locked_item(create_event(player, "Victory Freemium"))
+
 
     if World_Options[Options.Campaign] == Options.Campaign.option_basic:
         world.completion_condition[player] = lambda state: state.has("Victory Basic", player)
