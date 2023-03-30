@@ -34,7 +34,7 @@ def set_rules(tloz_world: "TLoZWorld"):
                                         state.has("Heart Container", player, int(hearts / 2))) or
                                        (state.has("Red Ring", player) and
                                         state.has("Heart Container", player, int(hearts / 4))))
-            if "Pols Voice" in location:  # This enemy needs specific weapons
+            if "Pols Voice" in location.name:  # This enemy needs specific weapons
                 add_rule(world.get_location(location.name, player),
                          lambda state: state.has_group("swords", player) or state.has("Bow", player))
 
