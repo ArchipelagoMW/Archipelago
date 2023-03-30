@@ -23,7 +23,7 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a YAML file?
 
-You can customize your settings by visiting the [Stardew Valley Player Settings Page](/games/Stardew Valley/player-settings)
+You can customize your settings by visiting the [Stardew Valley Player Settings Page](../player-settings)
 
 ## Joining a MultiWorld Game
 
