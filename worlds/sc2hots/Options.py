@@ -173,7 +173,7 @@ class KerriganLevelDistribution(Choice):
     option_smooth = 1
     option_1x70 = 2
     option_2x35 = 3
-    option_5x15 = 4
+    option_5x14 = 4
     option_7x10 = 5
     option_10x7 = 6
     option_14x5 = 7
