@@ -63,7 +63,7 @@ class SkyCoinMode(Choice):
     default = 0
 
 
-class ShatteredSkyCoinQuantity(Range):
+class ShatteredSkyCoinQuantity(Choice):
     """Configure the number of the 40 Sky Coin Fragments required to enter the Doom Castle. Only has an effect if
     sky_coin_mode is set to shattered. low: 16. mid: 24. high: 32. random_narrow: random between 16 and 32.
     random_wide: random between 10 and 38"""
