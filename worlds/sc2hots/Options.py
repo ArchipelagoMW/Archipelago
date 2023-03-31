@@ -161,7 +161,7 @@ class KerriganLevelDistribution(Choice):
     intended to fit more levels into settings with little room for filler while keeping some variance in level gains.
     1x70:  Uses 1 items worth 70 levels.
     2x35:  Uses 2 items worth 35 levels each.
-    5x15:  Uses 5 items worth 15 levels each.
+    5x14:  Uses 5 items worth 14 levels each.
     7x10:  Uses 7 items worth 10 levels each.
     10x7:  Uses 10 items worth 7 levels each.
     14x5:  Uses 14 items worth 5 levels each.
