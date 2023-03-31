@@ -154,6 +154,15 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
                     smart_exclude(KERRIGAN_PASSIVES[tier], 0)
                 else:
                     smart_exclude(KERRIGAN_ACTIVES[tier].union(KERRIGAN_PASSIVES[tier]), 1)
+            # ensure Kerrigan has an active T1 or T2 ability for no-build missions on Standard
+            if get_option_value(multiworld, player, "required_tactics") == 0 and get_option_value(multiworld, player, "shuffle_no_build"):
+                active_t1_t2 = KERRIGAN_ACTIVES[0].union(KERRIGAN_ACTIVES[1])
+                if active_t1_t2.issubset(excluded_items):
+                    # all T1 and T2 actives were excluded
+                    tier = multiworld.random.choice(0, 1)
+                    excluded_items.update(KERRIGAN_PASSIVES[tier])
+                    active_ability = multiworld.random.choice(sorted(KERRIGAN_ACTIVES[tier]))
+                    excluded_items.remove(active_ability)
         elif kerriganless == 0:  # if Kerrigan exists, pick a random active ability per tier and remove the other active abilities
             for tier in range(7):
                 smart_exclude(KERRIGAN_ACTIVES[tier], 1)

@@ -70,18 +70,21 @@ class SC2HotSLogic(LogicMixin):
             (get_option_value(multiworld, player, 'required_tactics') > 0 and (self._sc2hots_has_viper(multiworld, player) or self.has('Spine Crawler', player))))
 
     def _sc2hots_has_basic_kerrigan(self, multiworld: MultiWorld, player: int) -> bool:
-        # One active ability that can be used to defeat enemies directly
-        if self.has_any({'Kinetic Blast (Kerrigan Tier 1)', 'Leaping Strike (Kerrigan Tier 1)',
-                         'Crushing Grip (Kerrigan Tier 2)', 'Psionic Shift (Kerrigan Tier 2)',
-                         'Spawn Banelings (Kerrigan Tier 4)'}, player):
-            return True
-        # Or two passive combat abilities
+        # One active ability that can be used to defeat enemies directly on Standard
+        if get_option_value(multiworld, player, "required_tactics") == 0 and \
+            not self.has_any({"Kinetic Blast (Kerrigan Tier 1)", "Leaping Strike (Kerrigan Tier 1)",
+                              "Crushing Grip (Kerrigan Tier 2)", "Psionic Shift (Kerrigan Tier 2)"}, player):
+            return False
+        # Two non-ultimate abilities
         count = 0
-        for item in ("Heroic Fortitude (Kerrigan Tier 1)", "Chain Reaction (Kerrigan Tier 2)",
-                     "Infest Broodlings (Kerrigan Tier 6)", "Fury (Kerrigan Tier 6)"):
+        for item in ("Kinetic Blast (Kerrigan Tier 1)", "Leaping Strike (Kerrigan Tier 1)", "Heroic Fortitude (Kerrigan Tier 1)",
+                     "Chain Reaction (Kerrigan Tier 2)", "Crushing Grip (Kerrigan Tier 2)", "Psionic Shift (Kerrigan Tier 2)",
+                     "Spawn Banelings (Kerrigan Tier 4)", "Infest Broodlings (Kerrigan Tier 6)", "Fury (Kerrigan Tier 6)"):
             if self.has(item, player):
                 count += 1
-        return count >= 2
+            if count >= 2:
+                return True
+        return False
 
     def _sc2hots_has_two_kerrigan_actives(self, multiworld: MultiWorld, player: int) -> bool:
         count = 0
