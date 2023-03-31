@@ -23,11 +23,15 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
     logic_level = get_option_value(multiworld, player, 'required_tactics')
     kerriganless = get_option_value(multiworld, player, 'kerriganless') > 0
     location_table: List[LocationData] = [
-        LocationData("Lab Rat", "Lab Rat: Victory", SC2HOTS_LOC_ID_OFFSET + 100),
+        LocationData("Lab Rat", "Lab Rat: Victory", SC2HOTS_LOC_ID_OFFSET + 100,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player)),
         LocationData("Lab Rat", "Lab Rat: Gather Minerals", SC2HOTS_LOC_ID_OFFSET + 101),
-        LocationData("Lab Rat", "Lab Rat: South Zergling Group", SC2HOTS_LOC_ID_OFFSET + 102),
-        LocationData("Lab Rat", "Lab Rat: East Zergling Group", SC2HOTS_LOC_ID_OFFSET + 103),
-        LocationData("Lab Rat", "Lab Rat: West Zergling Group", SC2HOTS_LOC_ID_OFFSET + 104),
+        LocationData("Lab Rat", "Lab Rat: South Zergling Group", SC2HOTS_LOC_ID_OFFSET + 102,
+                     lambda state: logic_level > 0 or state._sc2hots_has_common_unit(multiworld, player)),
+        LocationData("Lab Rat", "Lab Rat: East Zergling Group", SC2HOTS_LOC_ID_OFFSET + 103,
+                     lambda state: logic_level > 0 or state._sc2hots_has_common_unit(multiworld, player)),
+        LocationData("Lab Rat", "Lab Rat: West Zergling Group", SC2HOTS_LOC_ID_OFFSET + 104,
+                     lambda state: logic_level > 0 or state._sc2hots_has_common_unit(multiworld, player)),
         LocationData("Back in the Saddle", "Back in the Saddle: Victory", SC2HOTS_LOC_ID_OFFSET + 200,
                      lambda state: state._sc2hots_has_basic_kerrigan(multiworld, player) or kerriganless),
         LocationData("Back in the Saddle", "Back in the Saddle: Kinetic Blast", SC2HOTS_LOC_ID_OFFSET + 202),
@@ -69,7 +73,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Enemy Within", "Enemy Within: Third Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 604),
         LocationData("Enemy Within", "Enemy Within: Infest Giant Ursadon", SC2HOTS_LOC_ID_OFFSET + 601),
         LocationData("Domination", "Domination: Victory", SC2HOTS_LOC_ID_OFFSET + 700,
-                     lambda state: state._sc2hots_has_common_unit(multiworld, player)),
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and state._sc2hots_has_minimal_antiair(multiworld, player)),
         LocationData("Domination", "Domination: Repel Zagara", SC2HOTS_LOC_ID_OFFSET + 703),
         LocationData("Domination", "Domination: Center Infested Command Center", SC2HOTS_LOC_ID_OFFSET + 701,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player)),
