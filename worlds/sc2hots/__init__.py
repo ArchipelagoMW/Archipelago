@@ -1,6 +1,7 @@
 import typing
 
 from typing import List, Set, Tuple, Dict
+from math import floor, ceil
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 from .Items import StarcraftHotSItem, item_table, filler_items, item_name_groups, get_full_item_list, \
@@ -267,37 +268,33 @@ def create_item_with_correct_settings(player: int, name: str) -> Item:
     return item
 
 def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_pool: List[Item]):
-    if get_option_value(multiworld, player, "kerriganless") > 0 or get_option_value(multiworld, player, "kerrigan_level_gain") > 0:
+    total_levels = get_option_value(multiworld, player, "kerrigan_total_levels")
+    if get_option_value(multiworld, player, "kerriganless") > 0 \
+        or total_levels == 0:
         return
-
-    distribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    option = get_option_value(multiworld, player, "kerrigan_level_distribution")
-    if option == 0: # vanilla
-        distribution = [32, 0, 0, 1, 3, 0, 0, 0, 1, 1]
-    elif option == 1: # smooth
-        distribution = [0, 0, 0, 1, 1, 2, 2, 2, 1, 1]
-    elif option == 2: # 1x70
-        item_pool.append(create_item_with_correct_settings(player, "70 Kerrigan Levels"))
-    elif option == 3: # 2x35
-        item_pool.append(create_item_with_correct_settings(player, "35 Kerrigan Levels"))
-        item_pool.append(create_item_with_correct_settings(player, "35 Kerrigan Levels"))
-    elif option == 4: # 5x14
-        for _ in range(5):
-            item_pool.append(create_item_with_correct_settings(player, "14 Kerrigan Levels"))
-    elif option == 5: # 7x10
-        distribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 7]
-    elif option == 6: # 10x7
-        distribution = [0, 0, 0, 0, 0, 0, 10, 0, 0, 0]
-    elif option == 7: # 14x5
-        distribution = [0, 0, 0, 0, 14, 0, 0, 0, 0, 0]
-    elif option == 8: # 35x2
-        distribution = [0, 35, 0, 0, 0, 0, 0, 0, 0, 0]
-    elif option == 9: # 70x1
-        distribution = [70, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     
-    for tier in range(len(distribution)):
+    def add_kerrigan_level_items(tier: int, amount: int):
         name = f"{tier + 1} Kerrigan Level"
         if tier > 0:
             name += "s"
-        for _ in range(distribution[tier]):
+        for _ in range(amount):
             item_pool.append(create_item_with_correct_settings(player, name))
+
+    sizes = [70, 35, 14, 10, 7, 5, 2, 1]
+    option = get_option_value(multiworld, player, "kerrigan_level_distribution")
+    if option < 2:
+        distribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        if option == 0: # vanilla
+            distribution = [32, 0, 0, 1, 3, 0, 0, 0, 1, 1]
+        elif option == 1: # smooth
+            distribution = [0, 0, 0, 1, 1, 2, 2, 2, 1, 1]
+        for tier in range(len(distribution)):
+            add_kerrigan_level_items(tier, distribution[tier])
+    else:
+        size = sizes[option - 2]
+        round_func = round
+        if total_levels > 70:
+            round_func = floor
+        else:
+            round_func = ceil
+        add_kerrigan_level_items(size, round_func(float(total_levels) / size))
