@@ -9,6 +9,7 @@ if __name__ == "__main__":
 import asyncio
 import base64
 import binascii
+import datetime
 import io
 import logging
 import select
@@ -81,6 +82,7 @@ class LAClientConstants:
     wLinkHealth = 0xDB5A
     wLinkGiveItem = 0xDDF8  # RW
     wLinkGiveItemFrom = 0xDDF9  # RW
+    wLinkIsThief = 0xDB6E
     # All of these six bytes are unused, we can repurpose
     # wLinkSendItemRoomHigh = 0xDDFA  # RO
     # wLinkSendItemRoomLow = 0xDDFB  # RO
@@ -278,6 +280,7 @@ class LinksAwakeningClient():
     tracker = None
     auth = None
     game_crc = None
+    alias = None
     pending_deathlink = False
     deathlink_debounce = True
     recvd_checks = {}
@@ -377,7 +380,10 @@ class LinksAwakeningClient():
     async def is_victory(self):
         return (await self.gameboy.read_memory_cache([LAClientConstants.wGameplayType]))[LAClientConstants.wGameplayType] == 1
 
-    async def main_tick(self, item_get_cb, win_cb, deathlink_cb):
+    async def is_thief(self):
+        return (await self.gameboy.read_memory_cache([LAClientConstants.wLinkIsThief]))[LAClientConstants.wLinkIsThief] != 0
+
+    async def main_tick(self, item_get_cb, win_cb, deathlink_cb, thief_cb):
         await self.tracker.readChecks(item_get_cb)
         await self.item_tracker.readItems()
         await self.gps_tracker.read_location()
@@ -403,6 +409,10 @@ class LinksAwakeningClient():
 
         if await self.is_victory():
             await win_cb()
+
+        today = datetime.date.today()
+        if today.month == 3 and today.day == 31 and self.alias != None and "THIEF" not in self.alias and await self.is_thief():       
+            await thief_cb()
 
         recv_index = (await self.gameboy.async_read_memory_safe(LAClientConstants.wRecvIndex))[0]
 
@@ -518,8 +528,16 @@ class LinksAwakeningContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
+
+        if cmd == "Connected" or cmd == "RoomUpdate":
+            for player in args["players"]:
+                if player.slot == self.slot:
+                    self.client.alias = player.alias
+                    break
+            else:
+                self.client.alias = None
         # TODO - use watcher_event
-        if cmd == "ReceivedItems":
+        elif cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], args["index"]):
                 self.client.recvd_checks[index] = item
 
@@ -536,6 +554,10 @@ class LinksAwakeningContext(CommonContext):
 
         async def deathlink():
             await self.send_deathlink()
+        
+        async def thief():
+            message = [{"cmd": "Say", "text": "!alias THIEF"}]
+            await self.send_msgs(message)
 
         self.magpie_task = asyncio.create_task(self.magpie.serve())
         
@@ -552,7 +574,7 @@ class LinksAwakeningContext(CommonContext):
                 await self.client.wait_and_init_tracker()
 
                 while True:
-                    await self.client.main_tick(on_item_get, victory, deathlink)
+                    await self.client.main_tick(on_item_get, victory, deathlink, thief)
                     await asyncio.sleep(0.1)
                     now = time.time()
                     if self.last_resend + 5.0 < now:
