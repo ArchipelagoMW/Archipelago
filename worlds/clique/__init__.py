@@ -40,7 +40,7 @@ class CliqueWorld(World):
     def create_item(self, name: str) -> Item:
         return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
 
-    def generate_basic(self) -> None:
+    def create_items(self) -> None:
         self.multiworld.itempool.append(self.create_item("Feeling of Satisfaction"))
         self.multiworld.priority_locations[self.player].value.add("The Big Red Button")
 
@@ -81,6 +81,7 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
     if locations:
         for location_name in locations.keys():
             location = Location(player, location_name, locations[location_name], region)
+            location.game = "Clique"
             region.locations.append(location)
 
     if exits:
