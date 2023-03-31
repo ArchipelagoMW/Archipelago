@@ -78,13 +78,12 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
         move_mission("Domination", MissionPools.EASY, MissionPools.STARTER)
     if logic_level > 0:
         # Medium -> Easy
-        for mission in ("Fire in the Sky", "Old Soldiers", "Waking the Ancient", "Conviction"):
+        for mission in ("Fire in the Sky", "Waking the Ancient", "Conviction"):
             move_mission(mission, MissionPools.MEDIUM, MissionPools.EASY)
         # Hard -> Medium
         move_mission("Phantoms of the Void", MissionPools.HARD, MissionPools.MEDIUM)
         if not kerriganless:
-            # Additional starter missions assuming player starts with minimal anti-air
-            move_mission("Fire in the Sky", MissionPools.EASY, MissionPools.STARTER)
+            # Additional starter mission assuming player starts with minimal anti-air
             move_mission("Waking the Ancient", MissionPools.EASY, MissionPools.STARTER)
 
     return mission_pools
@@ -205,6 +204,7 @@ class ValidInventory:
         self._sc2hots_has_viper = lambda world, player: SC2HotSLogic._sc2hots_has_viper(self, world, player)
         self._sc2hots_has_impaler_or_lurker = lambda world, player: SC2HotSLogic._sc2hots_has_impaler_or_lurker(self, world, player)
         self._sc2hots_has_competent_comp = lambda world, player: SC2HotSLogic._sc2hots_has_competent_comp(self, world, player)
+        self._sc2hots_has_basic_comp = lambda world, player: SC2HotSLogic._sc2hots_has_basic_comp(self, world, player)
         # self._sc2wol_has_train_killers = lambda world, player: SC2HotSLogic._sc2wol_has_train_killers(self, world, player)
         self._sc2hots_can_spread_creep = lambda world, player: SC2HotSLogic._sc2hots_can_spread_creep(self, world, player)
         self._sc2hots_has_competent_defense = lambda world, player: SC2HotSLogic._sc2hots_has_competent_defense(self, world, player)

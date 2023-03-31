@@ -80,16 +80,16 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Domination", "Domination: North Infested Command Center", SC2HOTS_LOC_ID_OFFSET + 702,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player)),
         LocationData("Fire in the Sky", "Fire in the Sky: Victory", SC2HOTS_LOC_ID_OFFSET + 800,
-                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
+                     lambda state: state._sc2hots_has_basic_comp(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player) and
                                    state._sc2hots_can_spread_creep(multiworld, player)),
         LocationData("Fire in the Sky", "Fire in the Sky: West Biomass", SC2HOTS_LOC_ID_OFFSET + 801),
         LocationData("Fire in the Sky", "Fire in the Sky: North Biomass", SC2HOTS_LOC_ID_OFFSET + 802,
-                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
+                     lambda state: state._sc2hots_has_basic_comp(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player) and
                                    state._sc2hots_can_spread_creep(multiworld, player)),
         LocationData("Fire in the Sky", "Fire in the Sky: South Biomass", SC2HOTS_LOC_ID_OFFSET + 803,
-                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
+                     lambda state: state._sc2hots_has_basic_comp(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player) and
                                    state._sc2hots_can_spread_creep(multiworld, player)),
         LocationData("Old Soldiers", "Old Soldiers: Victory", SC2HOTS_LOC_ID_OFFSET + 900,

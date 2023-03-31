@@ -60,7 +60,15 @@ class SC2HotSLogic(LogicMixin):
         vespene_unit = self.has_any({'Ultralisk', 'Aberration'}, player) \
                        or advanced and self._sc2hots_has_viper(multiworld, player)
         return vespene_unit and self.has_any({'Zergling', 'Swarm Queen'}, player)
-    
+
+    def _sc2hots_has_basic_comp(self, multiworld: MultiWorld, player: int) -> bool:
+        if get_option_value(multiworld, player, 'game_difficulty') < 3 \
+           or self._sc2hots_has_basic_kerrigan(multiworld, player) \
+           or self._sc2hots_has_two_kerrigan_actives(multiworld, player):
+            return self._sc2hots_has_common_unit(multiworld, player)
+        else:
+            return self._sc2hots_has_competent_comp(multiworld, player)
+
     def _sc2hots_can_spread_creep(self, multiworld: MultiWorld, player: int) -> bool:
         return get_option_value(multiworld, player, 'required_tactics') > 0 or self.has('Swarm Queen', player)
     
