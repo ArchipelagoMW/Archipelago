@@ -64,7 +64,7 @@ class CliqueWorld(World):
             .connect(self.multiworld.get_region("The realm of the button.", self.player))
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(item_table)
+        return self.multiworld.random.choice(self.item_name_to_id)
 
     def set_rules(self) -> None:
         if self.multiworld.hard_mode[self.player]:
