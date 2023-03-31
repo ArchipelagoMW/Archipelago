@@ -78,6 +78,7 @@ With the help of Shananas, Num, and ZakTheRobot we have many QoL features such a
     - If you don't want to have a save in the GoA. Disconnect the client, load the auto save, and then reconnect the client after it loads the auto save.
 - Recommended to set fps limit to 60fps.
 - Recommended to run the game in windows/borderless windowed mode. Fullscreen is stable but the game can crash if you alt-tab out.
+- Recommend viewing [Requirements/logic sheet](https://docs.google.com/spreadsheets/d/1Embae0t7pIrbzvX-NRywk7bTHHEvuFzzQBUUpSUL7Ak/edit?usp=sharing)
 
 <h2 style="text-transform:none";>F.A.Q.</h2>
 
