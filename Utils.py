@@ -151,8 +151,8 @@ def cache_path(*path: str) -> str:
     if hasattr(cache_path, "cached_path"):
         pass
     else:
-        import appdirs
-        cache_path.cached_path = appdirs.user_cache_dir("Archipelago", False)
+        import platformdirs
+        cache_path.cached_path = platformdirs.user_cache_dir("Archipelago", False)
 
     return os.path.join(cache_path.cached_path, *path)
 

@@ -267,7 +267,7 @@ def create_item_with_correct_settings(player: int, name: str) -> Item:
     return item
 
 def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_pool: List[Item]):
-    if get_option_value(multiworld, player, "kerriganless") > 0:
+    if get_option_value(multiworld, player, "kerriganless") > 0 or get_option_value(multiworld, player, "kerrigan_level_gain") > 0:
         return
 
     distribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -276,15 +276,23 @@ def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_poo
         distribution = [32, 0, 0, 1, 3, 0, 0, 0, 1, 1]
     elif option == 1: # smooth
         distribution = [0, 0, 0, 1, 1, 2, 2, 2, 1, 1]
-    elif option == 2: # 7x10
+    elif option == 2: # 1x70
+        item_pool.append(create_item_with_correct_settings(player, "70 Kerrigan Levels"))
+    elif option == 3: # 2x35
+        item_pool.append(create_item_with_correct_settings(player, "35 Kerrigan Levels"))
+        item_pool.append(create_item_with_correct_settings(player, "35 Kerrigan Levels"))
+    elif option == 4: # 5x15
+        for _ in range(5):
+            item_pool.append(create_item_with_correct_settings(player, "15 Kerrigan Levels"))
+    elif option == 5: # 7x10
         distribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 7]
-    elif option == 3: # 10x7
+    elif option == 6: # 10x7
         distribution = [0, 0, 0, 0, 0, 0, 10, 0, 0, 0]
-    elif option == 4: # 14x5
+    elif option == 7: # 14x5
         distribution = [0, 0, 0, 0, 14, 0, 0, 0, 0, 0]
-    elif option == 5: # 35x2
+    elif option == 8: # 35x2
         distribution = [0, 35, 0, 0, 0, 0, 0, 0, 0, 0]
-    elif option == 6: # 70x1
+    elif option == 9: # 70x1
         distribution = [70, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     
     for tier in range(len(distribution)):

@@ -300,4 +300,13 @@ item_table = (
     'Roomba with a Knife',
     'Wet Cat',
     'The missing moderator, Frostwares',
+    '1,793 Crossbows',
+    'Holographic First Edition Charizard (Gen 1)',
+    'VR Headset',
+    'Archipelago 1.0 Release Date',
+    'Strand of Galadriel\'s Hair',
+    'Can of Meow-Mix',
+    'Shake-Weight',
+    'DVD Collection of Billy Mays Infomercials',
+    'Old CD Key',
 )
