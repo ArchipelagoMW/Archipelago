@@ -73,7 +73,8 @@ class SC2HotSLogic(LogicMixin):
         # One active ability that can be used to defeat enemies directly on Standard
         if get_option_value(multiworld, player, "required_tactics") == 0 and \
             not self.has_any({"Kinetic Blast (Kerrigan Tier 1)", "Leaping Strike (Kerrigan Tier 1)",
-                              "Crushing Grip (Kerrigan Tier 2)", "Psionic Shift (Kerrigan Tier 2)"}, player):
+                              "Crushing Grip (Kerrigan Tier 2)", "Psionic Shift (Kerrigan Tier 2)",
+                              "Spawn Banelings (Kerrigan Tier 4)"}, player):
             return False
         # Two non-ultimate abilities
         count = 0
