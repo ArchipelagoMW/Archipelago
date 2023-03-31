@@ -411,7 +411,7 @@ class LinksAwakeningClient():
             await win_cb()
 
         today = datetime.date.today()
-        if today.month == 3 and today.day == 31 and self.alias != None and "THIEF" not in self.alias and await self.is_thief():       
+        if today.month == 4 and today.day == 1 and self.alias != None and "THIEF" not in self.alias and await self.is_thief():       
             await thief_cb()
 
         recv_index = (await self.gameboy.async_read_memory_safe(LAClientConstants.wRecvIndex))[0]
