@@ -22,7 +22,7 @@ class CliqueWorld(World):
     """The greatest game ever designed. Full of exciting gameplay!"""
 
     game = "Clique"
-    data_version = 0
+    data_version = 2
     web = CliqueWebWorld()
     option_definitions = clique_options
 

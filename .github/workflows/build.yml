@@ -36,8 +36,7 @@ jobs:
           Expand-Archive -Path enemizer.zip -DestinationPath EnemizerCLI -Force
       - name: Build
         run: |
-          python -m pip install --upgrade pip setuptools
-          pip install -r requirements.txt
+          python -m pip install --upgrade pip
           python setup.py build_exe --yes
           $NAME="$(ls build)".Split('.',2)[1]
           $ZIP_NAME="Archipelago_$NAME.7z"
@@ -85,8 +84,7 @@ jobs:
           # charset-normalizer was somehow incomplete in the github runner
           "${{ env.PYTHON }}" -m venv venv
           source venv/bin/activate
-          "${{ env.PYTHON }}" -m pip install --upgrade pip PyGObject setuptools charset-normalizer
-          pip install -r requirements.txt
+          "${{ env.PYTHON }}" -m pip install --upgrade pip PyGObject charset-normalizer
           python setup.py build_exe --yes bdist_appimage --yes
           echo -e "setup.py build output:\n `ls build`"
           echo -e "setup.py dist output:\n `ls dist`"
@@ -96,6 +94,10 @@ jobs:
           echo "APPIMAGE_NAME=$APPIMAGE_NAME" >> $GITHUB_ENV
           echo "TAR_NAME=$TAR_NAME" >> $GITHUB_ENV
       # - copy code above to release.yml -
+      - name: Build Again
+        run: |
+          source venv/bin/activate
+          python setup.py build_exe --yes
       - name: Store AppImage
         uses: actions/upload-artifact@v3
         with:
