@@ -27,7 +27,8 @@ def generate_output(self, output_directory):
                     item_name = "APItem"
                 else:
                     item_name = "APItemFiller"
-            if item_name == "Captain'sCap":
+            item_name = "".join(item_name.split("'"))
+            if item_name == "CaptainsCap":
                 item_name = "CaptainCap"
             item_placement.append({"object_id": object_id_table[location.name], "type": location.type, "content":
                 item_name, "player": self.multiworld.player_name[location.item.player], "item_name": location.item.name}
