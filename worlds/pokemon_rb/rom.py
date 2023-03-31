@@ -577,10 +577,7 @@ def write_quizzes(self, data, random):
             for location in self.multiworld.get_filled_locations():
                 if location.item.name == "Secret Key" and location.item.player == self.player:
                     break
-            if location.player == self.player:
-                player_name = "yourself"
-            else:
-                player_name = self.multiworld.player_name[location.player]
+            player_name = self.multiworld.player_name[location.player]
             if not a:
                 if len(self.multiworld.player_name) > 1:
                     old_name = player_name
@@ -588,7 +585,10 @@ def write_quizzes(self, data, random):
                         player_name = random.choice(list(self.multiworld.player_name.values()))
                 else:
                     return encode_text("You're playing<LINE>in a multiworld<CONT>with other<CONT>players?<DONE>")
-            return encode_text(f"The Secret Key was<LINE>found by<CONT>{player_name[:17]}?<DONE>")
+            if player_name == self.multiworld.player_name[self.player]:
+                player_name = "yourself"
+            player_name = encode_text(player_name, force=True, safety=True)
+            return encode_text(f"The Secret Key was<LINE>found by<CONT>") + player_name + encode_text("<DONE>")
         elif q == 2:
             if a:
                 return encode_text(f"#mon is<LINE>pronounced<CONT>Po-kay-mon?<DONE>")
@@ -955,7 +955,7 @@ def get_base_rom_path(game_version: str) -> str:
     options = Utils.get_options()
     file_name = options["pokemon_rb_options"][f"{game_version}_rom_file"]
     if not os.path.exists(file_name):
-        file_name = Utils.local_path(file_name)
+        file_name = Utils.user_path(file_name)
     return file_name
 
 
