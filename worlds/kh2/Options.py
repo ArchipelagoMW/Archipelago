@@ -144,8 +144,8 @@ class LevelDepth(Choice):
     Level 50:23 checks spread through 50 levels.
     Level 99:23 checks spread through 99 levels.
 
-    Level 50 sanity:50 checks spread through 50 levels.
-    Level 99 sanity:99 checks spread through 99 levels.
+    Level 50 sanity: 49 checks spread through 50 levels.
+    Level 99 sanity: 98 checks spread through 99 levels.
 
     Level 1: no checks on levels(checks are replaced with stats)"""
     display_name = "Level Depth"
@@ -187,9 +187,9 @@ class Goal(Choice):
     """Win Condition
     Three Proofs: Get a Gold Crown on Sora's Head.
 
-    Lucky Emblem Hunt: Find Lucky Emblems to unlock the final door.
+    Lucky Emblem Hunt: Find Required Amount of Lucky Emblems .
 
-    Hitlist (Bounty Hunt): Find Bounties on late locations to unlock the final door."""
+    Hitlist (Bounty Hunt): Find Required Amount of Bounties"""
     display_name = "Goal"
     option_three_proofs = 0
     option_lucky_emblem_hunt = 1
@@ -205,7 +205,7 @@ class FinalXemnas(Toggle):
 
 
 class LuckyEmblemsRequired(Range):
-    """Number of Lucky Emblems to collect to Open The Final Door bosses.
+    """Number of Lucky Emblems to collect to Win/Unlock Final Xemnas Door.
 
     If Goal is not Lucky Emblem Hunt this does nothing."""
     display_name = "Lucky Emblems Required"
@@ -225,7 +225,7 @@ class LuckyEmblemsAmount(Range):
 
 
 class BountyRequired(Range):
-    """Number of Bounties to collect to Open The Final Door bosses.
+    """Number of Bounties to collect to Win/Unlock Final Xemnas Door.
 
     If Goal is not Hitlist this does nothing."""
     display_name = "Bounties Required"
