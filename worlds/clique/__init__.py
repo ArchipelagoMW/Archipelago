@@ -3,16 +3,6 @@ from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import set_rule
 from .Options import clique_options
 
-item_table = {
-    "Feeling of Satisfaction": 69696969,
-    "Button Unlock": 69696968,
-}
-
-location_table = {
-    "The Button": 69696969,
-    "The Desk": 69696968,
-}
-
 
 class CliqueWebWorld(WebWorld):
     theme = "partyTime"
@@ -37,10 +27,17 @@ class CliqueWorld(World):
     web = CliqueWebWorld()
     option_definitions = clique_options
 
-    location_name_to_id = location_table
-    item_name_to_id = item_table
+    location_name_to_id = {
+        "The Button": 69696969,
+        "The Desk":   69696968,
+    }
+    
+    item_name_to_id = {
+        "Feeling of Satisfaction": 69696969,
+        "Button Unlock":           69696968,
+    }
 
-    def create_item(self, name: str) -> "Item":
+    def create_item(self, name: str) -> Item:
         return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
 
     def get_setting(self, name: str):
@@ -68,7 +65,7 @@ class CliqueWorld(World):
                 create_region(self.multiworld, self.player, "THE BUTTON", {"The Button": 69696969})
             ]
 
-        self.multiworld.get_entrance("Entrance to THE BUTTON", self.player)\
+        self.multiworld.get_entrance("Entrance to THE BUTTON", self.player) \
             .connect(self.multiworld.get_region("THE BUTTON", self.player))
 
     def get_filler_item_name(self) -> str:
