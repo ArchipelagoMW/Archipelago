@@ -88,7 +88,7 @@ def create():
             if option_name in handled_in_js:
                 pass
 
-            elif issubclass(option, Options.Choice) or issubclass(option, Options.TextChoice):
+            elif issubclass(option, Options.Choice) or issubclass(option, Options.Toggle):
                 game_options[option_name] = this_option = {
                     "type": "select",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
@@ -97,26 +97,16 @@ def create():
                     "options": []
                 }
 
-                has_random_option = False
                 for sub_option_id, sub_option_name in option.name_lookup.items():
-                    this_option["options"].append({
-                        "name": option.get_option_name(sub_option_id),
-                        "value": sub_option_name,
-                    })
-
+                    if sub_option_name != "random":
+                        this_option["options"].append({
+                            "name": option.get_option_name(sub_option_id),
+                            "value": sub_option_name,
+                        })
                     if sub_option_id == option.default:
                         this_option["defaultValue"] = sub_option_name
 
-                    if sub_option_name == "random":
-                        has_random_option = True
-
-                if not has_random_option:
-                    this_option["options"].append({
-                        "name": "random",
-                        "value": 'random',
-                    })
-
-                if option.default == "random":
+                if not this_option["defaultValue"]:
                     this_option["defaultValue"] = "random"
 
             elif issubclass(option, Options.Range):
@@ -170,6 +160,14 @@ def create():
             json.dump(player_settings, f, indent=2, separators=(',', ': '))
 
         if not world.hidden and world.web.settings_page is True:
+            # Add the random option to Choice, TextChoice, and Toggle settings
+            for option in game_options.values():
+                if option["type"] == "select":
+                    option["options"].append({"name": "Random", "value": "random"})
+
+                    if not option["defaultValue"]:
+                        option["defaultValue"] = "random"
+
             weighted_settings["baseOptions"]["game"][game_name] = 0
             weighted_settings["games"][game_name] = {}
             weighted_settings["games"][game_name]["gameSettings"] = game_options
