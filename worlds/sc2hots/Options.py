@@ -169,6 +169,7 @@ class KerriganLevelDistribution(Choice):
     This distribution always adds up to 70, ignoring the above setting.
     Smooth:  Uses a custom, condensed distribution of items between sizes 4 and 10,
     intended to fit more levels into settings with little room for filler while keeping some variance in level gains.
+    This distribution always adds up to 70, ignoring the above setting.
     Size 70:  Uses items worth 70 levels each.
     Size 35:  Uses items worth 35 levels each.
     Size 14:  Uses items worth 14 levels each.
