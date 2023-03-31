@@ -50,18 +50,18 @@ class CliqueWorld(World):
     def create_regions(self) -> None:
         if self.multiworld.hard_mode[self.player]:
             self.multiworld.regions += [
-                create_region(self.multiworld, self.player, "Menu", None, ["The realm of the button."]),
+                create_region(self.multiworld, self.player, "Menu", None, ["The entrance to the button."]),
                 create_region(self.multiworld, self.player, "The realm of the button.", self.location_name_to_id)
             ]
         else:
             self.multiworld.regions += [
-                create_region(self.multiworld, self.player, "Menu", None, ["The realm of the button."]),
+                create_region(self.multiworld, self.player, "Menu", None, ["The entrance to the button."]),
                 create_region(self.multiworld, self.player, "The realm of the button.", {
                     "The Big Red Button": 69696969
                 })]
 
-        self.multiworld.get_entrance("The realm of the button.", self.player) \
-            .connect(self.multiworld.get_region("The Big Red Button", self.player))
+        self.multiworld.get_entrance("The entrance to the button.", self.player) \
+            .connect(self.multiworld.get_region("The realm of the button.", self.player))
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(item_table)
