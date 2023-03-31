@@ -184,7 +184,7 @@ item_table = {
     "3 Kerrigan Levels": ItemData(507 + SC2HOTS_ITEM_ID_OFFSET, "Level", 3, quantity=0, classification=ItemClassification.filler),
     "2 Kerrigan Levels": ItemData(508 + SC2HOTS_ITEM_ID_OFFSET, "Level", 2, quantity=0, classification=ItemClassification.filler),
     "1 Kerrigan Level": ItemData(509 + SC2HOTS_ITEM_ID_OFFSET, "Level", 1, quantity=0, classification=ItemClassification.filler),
-    "15 Kerrigan Levels": ItemData(510 + SC2HOTS_ITEM_ID_OFFSET, "Level", 15, quantity=0),
+    "14 Kerrigan Levels": ItemData(510 + SC2HOTS_ITEM_ID_OFFSET, "Level", 14, quantity=0),
     "35 Kerrigan Levels": ItemData(511 + SC2HOTS_ITEM_ID_OFFSET, "Level", 35, quantity=0),
     "70 Kerrigan Levels": ItemData(512 + SC2HOTS_ITEM_ID_OFFSET, "Level", 70, quantity=0),
     # "War Pigs": ItemData(500 + SC2HOTS_ITEM_ID_OFFSET, "Mercenary", 0, classification=ItemClassification.progression),

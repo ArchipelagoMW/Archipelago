@@ -281,9 +281,9 @@ def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_poo
     elif option == 3: # 2x35
         item_pool.append(create_item_with_correct_settings(player, "35 Kerrigan Levels"))
         item_pool.append(create_item_with_correct_settings(player, "35 Kerrigan Levels"))
-    elif option == 4: # 5x15
+    elif option == 4: # 5x14
         for _ in range(5):
-            item_pool.append(create_item_with_correct_settings(player, "15 Kerrigan Levels"))
+            item_pool.append(create_item_with_correct_settings(player, "154 Kerrigan Levels"))
     elif option == 5: # 7x10
         distribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 7]
     elif option == 6: # 10x7
