@@ -282,11 +282,11 @@ def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_poo
         or total_levels == 0:
         return
     
-    def add_kerrigan_level_items(tier: int, amount: int):
-        name = f"{tier + 1} Kerrigan Level"
-        if tier > 0:
+    def add_kerrigan_level_items(level_amount: int, item_amount: int):
+        name = f"{level_amount} Kerrigan Level"
+        if level_amount > 1:
             name += "s"
-        for _ in range(amount):
+        for _ in range(item_amount):
             item_pool.append(create_item_with_correct_settings(player, name))
 
     sizes = [70, 35, 14, 10, 7, 5, 2, 1]
@@ -298,7 +298,7 @@ def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_poo
         elif option == 1: # smooth
             distribution = [0, 0, 0, 1, 1, 2, 2, 2, 1, 1]
         for tier in range(len(distribution)):
-            add_kerrigan_level_items(tier, distribution[tier])
+            add_kerrigan_level_items(tier + 1, distribution[tier])
     else:
         size = sizes[option - 2]
         round_func = round
