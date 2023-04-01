@@ -5,7 +5,7 @@ import random
 import threading
 from typing import Dict, Set, TextIO
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, RegionType, CollectionState, \
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, \
     Tutorial
 from worlds.generic.Rules import set_rule
 from worlds.smz3.TotalSMZ3.Item import ItemType
@@ -181,7 +181,7 @@ class SMZ3World(World):
         return itemType in progressionTypes
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld: MultiWorld):
         base_combined_rom = get_base_rom_bytes()
 
     def generate_early(self):
@@ -508,7 +508,7 @@ class SMZ3World(World):
             return self.smz3DungeonItems
         else:
             return []
-        
+
     def post_fill(self):
         # some small or big keys (those always_allow) can be unreachable in-game
         # while logic still collects some of them (probably to simulate the player collecting pot keys in the logic), some others don't
@@ -523,7 +523,7 @@ class SMZ3World(World):
                     loc.item.classification = ItemClassification.filler
                     loc.item.item.Progression = False
                     loc.item.location.event = False
-                    self.unreachable.append(loc)  
+                    self.unreachable.append(loc)
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(self.junkItemsNames)
@@ -636,8 +636,7 @@ class SMZ3World(World):
             self.smz3World.locationLookup[name].APLocation = newLoc
 
     def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):
-        ret = Region(name, RegionType.LightWorld, name, player)
-        ret.multiworld = world
+        ret = Region(name, player, world)
         if locations:
             for loc in locations:
                 location = self.locations[loc]

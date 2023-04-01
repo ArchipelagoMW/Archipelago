@@ -1,10 +1,10 @@
 import copy
 import random
-from logic.logic import Logic
-from utils.parameters import Knows
-from graph.location import locationsDict
-from rom.rom import snes_to_pc
-import utils.log
+from worlds.sm.variaRandomizer.logic.logic import Logic
+from worlds.sm.variaRandomizer.utils.parameters import Knows
+from worlds.sm.variaRandomizer.graph.location import locationsDict
+from worlds.sm.variaRandomizer.rom.rom import snes_to_pc
+from worlds.sm.variaRandomizer.utils import log
 
 # order expected by ROM patches
 graphAreas = [
@@ -89,7 +89,7 @@ def getAccessPoint(apName, apList=None):
     return next(ap for ap in apList if ap.Name == apName)
 
 class GraphUtils:
-    log = utils.log.get('GraphUtils')
+    log = log.get('GraphUtils')
 
     def getStartAccessPointNames():
         return [ap.Name for ap in Logic.accessPoints if ap.Start is not None]
