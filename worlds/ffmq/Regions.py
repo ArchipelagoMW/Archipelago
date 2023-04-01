@@ -4,10 +4,16 @@ from BaseClasses import Region, MultiWorld, Entrance, Location, LocationProgress
 from worlds.generic.Rules import add_rule
 from .Items import item_groups
 from copy import deepcopy
+from . import data
+
+try:
+    from importlib.resources import files
+except ImportError:
+    from importlib_resources import files
 
 base_path = Path(__file__).parent
 file_path = (base_path / "data/rooms.yaml").resolve()
-with open(file_path) as file:
+with files(data).joinpath("rooms.yaml").open() as file:
     rooms = yaml.load(file, yaml.Loader)
 
 # file_path = (base_path / "data/shufflingdata.yaml").resolve()
@@ -163,11 +169,11 @@ def create_regions(self):
                                                                                            "Doom Castle Sky Floor"):
                 continue
             self.multiworld.regions.append(create_region(self.multiworld, self.player, room["name"], room["id"],
-                 [FFMQLocation(self.player, object["name"], location_table[object["name"]] if object["name"] in
-                 location_table else None, object["type"], object["access"],
-                               self.create_item(yaml_item(object["on_trigger"][0])) if object["type"] == "Trigger" else None) for
-                  object in room["game_objects"] if "Hero Chest" not in object["name"] and (object["type"] != "Box" or
-                 self.multiworld.brown_boxes[self.player] == "include")], room["links"]))
+                [FFMQLocation(self.player, object["name"], location_table[object["name"]] if object["name"] in
+                location_table else None, object["type"], object["access"],
+                self.create_item(yaml_item(object["on_trigger"][0])) if object["type"] == "Trigger" else None) for
+                object in room["game_objects"] if "Hero Chest" not in object["name"] and (object["type"] != "Box" or
+                self.multiworld.brown_boxes[self.player] == "include")], room["links"]))
 
     dark_king_room = self.multiworld.get_region("Doom Castle Dark King Room", self.player)
     dark_king = FFMQLocation(self.player, "Dark King", None, "Trigger", [])
