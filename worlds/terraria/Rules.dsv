@@ -1,5 +1,3 @@
-// TODO Source code and wiki pass
-
 // Starting gear
 Copper Shortsword;
 Guide;                              Npc;
@@ -33,7 +31,6 @@ Zoologist;                          Npc;
 Cat;                                Npc;                                        Zoologist;
 Feeling Petty;                      Achievement;                                Cat | Dog;
 Dog;                                Npc;                                        Zoologist;
-// I don't want to do the bunny logic lol
 A Rather Blustery Day;              Achievement | Grindy;
 Enchanted Sword;
 Pretty in Pink;                     Achievement | Grindy;
@@ -159,7 +156,7 @@ Fiery Greatsword;                   ;                                           
 Molten Hamaxe;                      Hammer(70);                                 Hellstone Bar;
 Molten Pickaxe;                     Pickaxe(100);                               Hellstone Bar;
 Miner for Fire;                     Achievement;                                Molten Pickaxe;
-Hot Reels!;                         Achievement;                                // TODO
+Hot Reels!;                         Achievement;                                Hellstone Bar & Bug Net; // TODO Calamity
 Brimstone Slag;                     Calamity;                                   @pickaxe(100);
 
 // Goblin Army
@@ -205,7 +202,7 @@ Muramasa;                           ;                                           
 Deerclops;                          Location | Item;
 
 // The Slime God
-The Slime God;                      Calamity | Location | Item;
+The Slime God;                      Calamity | Location | Item;                 Blighted Gel;
 Purified Gel;                       Calamity;                                   #The Slime God;
 Static Refiner;                     Calamity;                                   Purified Gel & Solidifier;
 Gelpick;                            Calamity | Pickaxe(100);                    Static Refiner & Purified Gel & Blighted Gel;
@@ -222,7 +219,6 @@ Cobalt Ore;                         ;                                           
 Extra Shiny!;                       Achievement;                                Cobalt Ore | Mythril Ore | Adamantite Ore | Chlorophyte Ore;
 Cobalt Bar;                         ;                                           Cobalt Ore;
 Cobalt Pickaxe;                     Pickaxe(110);                               Cobalt Bar;
-Head in the Cloud;                  Achievement;                                // TODO
 Soul of Night;                      ;                                           Wall of Flesh | (@calamity & Altar);
 Hallow;                             ;                                           Wall of Flesh;
 Pixie Dust;                         ;                                           Hallow;
@@ -233,6 +229,9 @@ Soul of Light;                      ;                                           
 Blessed Apple;                      ;                                           Hallow;
 Rod of Discord;                     ;                                           Hallow;
 Gelatin World Tour;                 Achievement;                                Dungeon & Wall of Flesh & Hallow & #King Slime;
+Soul of Flight;                     ;                                           Wall of Flesh;
+Head in the Clouds;                 Achievement;                                (Soul of Flight & ((Hardmode Anvil & (Soul of Light | Soul of Night | Pixie Dust | Wall of Flesh | Solar Eclipse | @mech_boss(1) | Plantera | Spectre Bar | #Golem)) | (Shroomite Bar & Autohammer) | #Mourning Wood | #Pumpking)) | Steampunker | (Wall of Flesh & Witch Doctor) | (Solar Eclipse & Plantera) | #Everscream | #Old One's Army Tier 3 | #Empress of Light | #Duke Fishron | (Fragment & Luminite Bar & Ancient Manipulator); // Leaf Wings are Post-Plantera in 1.4.4
+Bunny;                              Npc;                                        Zoologist & Wall of Flesh; // Extremely simplified
 Forbidden Fragment;                 ;                                           Sandstorm & Wall of Flesh;
 Astral Infection;                   Calamity;                                   Wall of Flesh;
 Stardust;                           Calamity;                                   Astral Infection | #Astrum Aureus | #Astrum Deus;
@@ -270,7 +269,7 @@ Rainbow Rod;                        ;                                           
 Prismancer;                         Achievement;                                Rainbow Rod;
 Long Ranged Sensor Array;           Calamity;                                   Hardmode Anvil & Mysterious Circuitry & Dubious Plating & Mythril Bar & Wire & Decryption Computer & Codebreaker Base;
 Hydraulic Volt Crusher;             Calamity;                                   Hardmode Anvil & Hardmode Anvil & Mysterious Circuitry & Dubious Plating & Mythril Bar & Soul of Sight;
-Life Fruit;                         ;                                           @mech_boss(1) | (@calamity & (Living Shard | Wall of Flesh)); // TODO Check
+Life Fruit;                         ;                                           (@mech_boss(1) & Wall of Flesh) | (@calamity & (Living Shard | Wall of Flesh));
 Get a Life;                         Achievement;                                Life Fruit;
 Topped Off;                         Achievement;                                Life Fruit;
 Old One's Army Tier 2;              Location | Item;                            #Old One's Army Tier 1 & (@mech_boss(1) | #Old One's Army Tier 3); // TODO Check
@@ -299,12 +298,12 @@ Shardlight Pickaxe;                 Calamity | Pickaxe(180);                    
 Skeletron Prime;                    Location | Item | Mech Boss;                (@calamity | Hardmode Anvil) & Soul of Night & Soul of Light & Bone;
 Soul of Fright;                     ;                                           #Skeletron Prime;
 Inferna Cutter;                     Calamity;                                   Hardmode Anvil & Axe of Purity & Soul of Fright & Essence of Havoc;
-Buckets of Bolts;                   Achievement;                                @mech_boss(3); // TODO Check
-Mecha Mayhem;                       Achievement;                                #The Twins & #The Destroyer & #Skeletron Prime; // TODO Check
+Buckets of Bolts;                   Achievement;                                #The Twins & #The Destroyer & #Skeletron Prime;
+Mecha Mayhem;                       Achievement;                                #The Twins & #The Destroyer & #Skeletron Prime;
 Hallowed Bar;                       ;                                           (#The Twins | #The Destroyer | #Skeletron Prime) & (~@calamity | @mech_boss(3)); // Can't count on Hallowed Ore, since the player may be in prehardmode (TODO Check this)
 Excalibur;                          ;                                           Hardmode Anvil & Hallowed Bar;
 Pickaxe Axe;                        Pickaxe(200);                               Hardmode Anvil & Hallowed Bar & Soul of Fright & Soul of Might & Soul of Sight;
-Drax Attax;                         Achievement;
+Drax Attax;                         Achievement;                                Pickaxe Axe;
 True Night's Edge;                  ;                                           Hardmode Anvil & Night's Edge & Soul of Fright & Soul of Might & Soul of Sight;
 Chlorophyte Ore;                    ;                                           Wall of Flesh & @pickaxe(200);
 Photosyntesis;                      Achievement;                                Chlorophyte Ore;
@@ -319,7 +318,7 @@ Calamitas Clone;                    Calamity | Location | Item | Goal;          
 Ashes of Calamity;                  Calamity;                                   #Calamitas Clone;
 
 // Plantera
-Plantera;                           Location | Item | Goal;                     @mech_boss(3) | (@calamity & (Wall of Flesh | (Hardmode Anvil & Trapper Bulb))); // TODO Check
+Plantera;                           Location | Item | Goal;                     Wall of Flesh & (@mech_boss(3) | (@calamity & Hardmode Anvil & Trapper Bulb));
 The Axe;                            Hammer(100);                                #Plantera;
 Seedler;                            ;                                           #Plantera;
 Living Shard;                       Calamity;                                   #Plantera;
@@ -327,12 +326,12 @@ Cyborg;                             Npc;                                        
 Funkytown;                          Achievement;
 Truffle;                            Npc;                                        Wall of Flesh;
 It Can Talk?!;                      Achievement;                                Truffle;
-Autohammer;                         ;                                           Truffle & Plantera; // TODO Check
+Autohammer;                         ;                                           Truffle & Plantera;
 Shroomite Bar;                      ;                                           Autohammer & Chlorophyte Bar;
 Shroomite Digging Claw;             Pickaxe(200);                               Hardmode Anvil & Shroomite Bar;
 Princess;                           Npc;                                        Guide & Merchant & Nurse & Demolitionist & Dye Trader & Zoologist & Angler & Painter & Stylist & Golfer & Arms Dealer & Dryad & Party Girl & Tavernkeep & Goblin Tinkerer & Witch Doctor & Clothier & Wizard & Truffle & Tax Collector & Pirate & Steampunker & Cyborg;
 Real Estate Agent;                  Achievement;                                Princess;
-Ectoplasm;                          ;                                           (Plantera & Dungeon) | (@calamity & Plantera); // TODO Check
+Ectoplasm;                          ;                                           ((Dungeon & Wall of Flesh) | @calamity) & Plantera;
 Core of Sunlight;                   Calamity;                                   (Hardmode Anvil & Essence of Sunlight & Ectoplasm) | Fleshy Geode | Necromantic Geode;
 Core of Eleum;                      Calamity;                                   (Hardmode Anvil & Essence of Eleum & Ectoplasm) | Fleshy Geode | Necromantic Geode;
 Core of Havoc;                      Calamity;                                   (Hardmode Anvil & Essence of Havoc & Ectoplasm) | Fleshy Geode | Necromantic Geode;
@@ -357,9 +356,9 @@ Armored Digger;                     Calamity | Location | Item;                 
 # plantera
 
 // Solar Eclipse
-Temple Raider;                      Achievement;                                #Plantera; // TODO Check
-Lihzahrd Temple;                    ;                                           #Plantera | (Plantera & Actuator) | @pickaxe(210) | (@calamity & Hardmode Anvil & Soul of Light & Soul of Night); // TODO Check
-Solar Eclipse;                      ;                                           Lihzahrd Temple;
+Temple Raider;                      Achievement;                                #Plantera;
+Lihzahrd Temple;                    ;                                           #Plantera | (Plantera & Actuator) | @pickaxe(210) | (@calamity & Hardmode Anvil & Soul of Light & Soul of Night);
+Solar Eclipse;                      ;                                           Lihzahrd Temple & Wall of Flesh;
 Broken Hero Sword;                  ;                                           (Solar Eclipse & Plantera) | (@calamity & #Calamitas Clone);
 Terra Blade;                        ;                                           Hardmode Anvil & True Night's Edge & True Excalibur & Broken Hero Sword & (~@calamity | Living Shard);
 Sword of the Hero;                  Achievement;                                Terra Blade;
@@ -375,7 +374,7 @@ Leviathan and Anahita;              Calamity | Location | Item;
 Astrum Aureus;                      Calamity | Location | Item;                 Hardmode Anvil & Stardust;
 
 // Golem
-Golem;                              Location | Item | Goal;                     (Plantera & Lihzahrd Temple) | (@calamity & Hardmode Anvil & Lihzahrd Temple & Essence of Sunlight);
+Golem;                              Location | Item | Goal;                     (Wall of Flesh & Plantera & Lihzahrd Temple) | (@calamity & Hardmode Anvil & Lihzahrd Temple & Essence of Sunlight);
 # golem
 Picksaw;                            Pickaxe(210);                               #Golem;
 Lihzahrd Brick;                     ;                                           @pickaxe(210);
@@ -387,12 +386,12 @@ Advanced Display;                   Calamity;                                   
 Old One's Army Tier 3;              Location | Item;                            #Old One's Army Tier 1 & Golem;
 
 // Martian Madness
-Martian Madness;                    Location | Item;                            Golem;
+Martian Madness;                    Location | Item;                            Wall of Flesh & Golem;
 Influx Waver;                       ;                                           #Martian Madness;
 
 // The Plaguebringer Goliath
 Plague Cell Canister;               Calamity;                                   Golem;
-Plaguebringer;                      Location | Item;                            Golem;
+Plaguebringer;                      Calamity | Location | Item;                 Golem;
 The Plaguebringer Goliath;          Calamity | Location | Item;                 Hardmode Anvil & Plague Cell Canister;
 
 // Duke Fishron
@@ -422,11 +421,11 @@ Ravager;                            Calamity | Location | Item;                 
 Fleshy Geode;                       Calamity;                                   #Ravager;
 
 // Empress of Light
-Empress of Light;                   Location | Item | Goal;                     Hallow & (@calamity | Plantera);
+Empress of Light;                   Location | Item | Goal;                     Wall of Flesh & Hallow & (@calamity | Plantera);
 # empress_of_light
 
 // Lunatic Cultist
-Lunatic Cultist;                    Location | Item;                            (Dungeon & Golem) | (@calamity & Wall of Flesh); // TODO Check
+Lunatic Cultist;                    Location | Item;                            (@calamity | (Dungeon & Golem)) & Wall of Flesh;
 Ancient Manipulator;                ;                                           #Lunatic Cultist;
 
 // Lunar Events
@@ -458,7 +457,7 @@ Terrarian;                          ;                                           
 Sick Throw;                         Achievement;                                Terrarian;
 Meowmere;                           ;                                           #Moon Lord;
 Star Wrath;                         ;                                           #Moon Lord;
-You and What Army?;                 Achievement;                                // TODO
+You and What Army?;                 Achievement;                                Ancient Manipulator & Fragment & Luminite Bar & Witch Doctor & (#Mourning Wood | Dungeon);
 Exodium Cluster;                    Calamity;                                   Moon Lord & @pickaxe(225);
 Normality Relocator;                Calamity;                                   Ancient Manipulator & Rod of Discord & Exodium Cluster & Fragment;
 Unholy Essence;                     Calamity;                                   Moon Lord | #Providence, the Profaned Goddess;
