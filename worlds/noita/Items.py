@@ -1,6 +1,7 @@
 import itertools
 from typing import Dict, NamedTuple, Optional, List, Set
 from BaseClasses import Item, ItemClassification, MultiWorld
+from .Options import BossesAsChecks, VictoryCondition
 
 
 class ItemData(NamedTuple):
@@ -30,12 +31,14 @@ def create_all_items(world: MultiWorld, player: int) -> None:
     # Generate items based on victory condition settings (Orbs)
     vic = world.victory_condition[player].value
     orb_count = 0
-    if vic == 1: orb_count = 11
-    if vic == 2: orb_count = 33
+    if vic == VictoryCondition.option_pure_ending:
+        orb_count = 11
+    if vic == VictoryCondition.option_peaceful_ending:
+        orb_count = 33
     for i in range(orb_count):
         itempool += ["Orb"]
 
-    if world.bosses_as_checks[player].value >= 3:
+    if world.bosses_as_checks[player].value >= BossesAsChecks.option_all_bosses:
         itempool += ["Perk (Spatial Awareness)"]
 
     # Create any non-progression repeat items (referred to as junk regardless of whether it's useful)
