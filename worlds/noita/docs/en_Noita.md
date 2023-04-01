@@ -51,7 +51,8 @@ Traps consist of all "Bad" and "Awful" events from Noita's native stream integra
 
 ### How many items are there?
 
-The number of items is dependent on the settings you choose. Please check the information boxes next to the settings when setting up your YAML for more information.
+The number of items is dependent on the settings you choose. Please check the information boxes next to the settings
+when setting up your YAML for more information.
 
 ## What does another world's item look like in Noita?
 
