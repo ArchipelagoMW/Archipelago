@@ -260,7 +260,8 @@ class Context:
 
     def _init_game_data(self):
         for game_name, game_package in self.gamespackage.items():
-            self.checksums[game_name] = game_package["checksum"]
+            if "checksum" in game_package:
+                self.checksums[game_name] = game_package["checksum"]
             for item_name, item_id in game_package["item_name_to_id"].items():
                 self.item_names[item_id] = item_name
             for location_name, location_id in game_package["location_name_to_id"].items():
