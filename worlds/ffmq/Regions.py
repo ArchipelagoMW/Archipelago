@@ -4,17 +4,11 @@ from BaseClasses import Region, MultiWorld, Entrance, Location, LocationProgress
 from worlds.generic.Rules import add_rule
 from .Items import item_groups
 from copy import deepcopy
-from . import data
+import pkgutil
 
-try:
-    from importlib.resources import files
-except ImportError:
-    from importlib_resources import files
-
-base_path = Path(__file__).parent
-file_path = (base_path / "data/rooms.yaml").resolve()
-with files(data).joinpath("rooms.yaml").open() as file:
-    rooms = yaml.load(file, yaml.Loader)
+# base_path = Path(__file__).parent
+# file_path = (base_path / "data/rooms.yaml").resolve()
+rooms = yaml.load(pkgutil.get_data(__name__, "data/rooms.yaml"), yaml.Loader)
 
 # file_path = (base_path / "data/shufflingdata.yaml").resolve()
 # with open(file_path) as file:

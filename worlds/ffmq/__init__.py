@@ -1,4 +1,4 @@
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 from Fill import remaining_fill
 from .Regions import rooms, create_regions, location_table, set_rules
 from .Items import item_table, item_groups, create_items, FFMQItem

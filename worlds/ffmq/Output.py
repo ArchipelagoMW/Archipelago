@@ -1,16 +1,13 @@
 import yaml
 import os
 import zipfile
-from pathlib import Path
 from copy import deepcopy
 from .Regions import object_id_table
 from Main import __version__
-from BaseClasses import ItemClassification
+from . import data
+import pkgutil
 
-base_path = Path(__file__).parent
-file_path = (base_path / "data/settings.yaml").resolve()
-with open(file_path) as file:
-    settings_template = yaml.load(file, yaml.Loader)
+settings_template = yaml.load(pkgutil.get_data(__name__, "data/settings.yaml"), yaml.Loader)
 
 def generate_output(self, output_directory):
     item_placement = []
