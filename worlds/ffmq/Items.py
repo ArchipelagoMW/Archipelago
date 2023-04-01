@@ -237,6 +237,11 @@ def create_items(self) -> None:
         else:
             fillers = {"Cure Potion": 61, "Heal Potion": 52, "Refresher": 2, "Seed": 17, "Bomb Refill": 19,
                        "Projectile Refill": 50}
+        if self.multiworld.doom_castle[self.player] != "standard":
+            fillers["Cure Potion"] -= 3
+            fillers["Heal Potion"] -= 3
+            fillers["Projectile Refill"] -= 3
+            fillers["Bomb Refill"] -= 1
         for item, count in fillers.items():
             items += [self.create_item(item) for _ in range(count)]
 

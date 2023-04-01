@@ -207,6 +207,7 @@ class LevelingCurve(Choice):
     option_double_and_half = 4
     option_triple = 5
     option_quadruple = 6
+    default = 4
 
 
 class ShuffleBattlefieldRewards(Toggle):

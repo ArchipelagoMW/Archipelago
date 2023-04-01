@@ -164,17 +164,18 @@ def create_regions(self):
                     room["game_objects"] if object["object_id"] in ow_regions[region][2]], [link for link in
                     room["links"] if link["entrance"] in ow_regions[region][0]]))
         else:
-            if self.multiworld.doom_castle[self.player] != "standard" and room["name"] in ("Doom Castle Ice Floor",
-                                                                                           "Doom Castle Lava Floor",
-                                                                                           "Doom Castle Sky Floor"):
-                continue
             self.multiworld.regions.append(create_region(self.multiworld, self.player, room["name"], room["id"],
                 [FFMQLocation(self.player, object["name"], location_table[object["name"]] if object["name"] in
                 location_table else None, object["type"], object["access"],
                 self.create_item(yaml_item(object["on_trigger"][0])) if object["type"] == "Trigger" else None) for
                 object in room["game_objects"] if "Hero Chest" not in object["name"] and (object["type"] != "Box" or
                 self.multiworld.brown_boxes[self.player] == "include")], room["links"]))
-
+            if self.multiworld.doom_castle[self.player] != "standard" and room["name"] in ("Doom Castle Ice Floor",
+                                                                                           "Doom Castle Lava Floor",
+                                                                                           "Doom Castle Sky Floor"):
+                self.multiworld.regions[-1].locations = [location for location in self.multiworld.regions[-1].locations
+                                                         if location.type == "Trigger"]
+                continue
     dark_king_room = self.multiworld.get_region("Doom Castle Dark King Room", self.player)
     dark_king = FFMQLocation(self.player, "Dark King", None, "Trigger", [])
     dark_king.parent_region = dark_king_room
