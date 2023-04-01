@@ -328,11 +328,12 @@ async def track_locations(ctx, roomid, roomdata) -> bool:
 
     def new_check(location_id):
         new_locations.append(location_id)
-        if location_id in ctx.missing_locations:
-            ctx.locations_checked.add(location_id)
+        ctx.locations_checked.add(location_id)
         location = ctx.location_names[location_id]
         snes_logger.info(
-            f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+            f'New Check: {location} ' +
+            f'({len(ctx.checked_locations + 1 if ctx.checked_locations else ctx.locations_checked)}/' +
+            f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
 
     try:
         shop_data = await snes_read(ctx, SHOP_ADDR, SHOP_LEN)
