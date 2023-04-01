@@ -38,7 +38,8 @@ def create_all_rules(world: MultiWorld, player: int) -> None:
 
     # Prevent gold and potions from appearing as purchasable items in shops
     for location_name in Locations.location_name_to_id.keys():
-        if "Shop Item" not in location_name: continue
+        if "Shop Item" not in location_name:
+            continue
         forbid_items_at_location(world, location_name, items_hidden_from_shops, player)
 
     # Prevent high tier wands from appearing in early Holy Mountain shops
@@ -58,5 +59,6 @@ def create_all_rules(world: MultiWorld, player: int) -> None:
     # Prevent the Map perk from being on Toveri
     if world.bosses_as_checks[player].value >= 3:
         for location_name in Locations.location_name_to_id.keys():
-            if "Toveri" not in location_name: continue
+            if "Toveri" not in location_name:
+                continue
             forbid_items_at_location(world, location_name, {"Perk (Spatial Awareness)"}, player)

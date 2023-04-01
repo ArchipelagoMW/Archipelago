@@ -31,8 +31,12 @@ def create_all_items(world: MultiWorld, player: int) -> None:
     # Generate items based on victory condition settings (Orbs)
     vic = world.victory_condition[player].value
     orb_count = 0
-    if vic == 1: orb_count = 11
-    if vic == 2: orb_count = 33
+    if vic == 1:
+        orb_count = 11
+
+    if vic == 2:
+        orb_count = 33
+
     for i in range(orb_count):
         itempool += ["Orb"]
 
