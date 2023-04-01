@@ -42,7 +42,7 @@ normalfirst15extra = ['Rupees (100)', 'Rupees (300)', 'Rupees (50)'] + ['Arrows 
 normalsecond15extra = ['Bombs (3)'] * 10 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupee (1)']
 normalthird10extra = ['Rupees (50)'] * 4 + ['Rupees (20)'] * 3 + ['Arrows (10)', 'Rupee (1)', 'Rupees (5)']
 normalfourth5extra = ['Arrows (10)'] * 2 + ['Rupees (20)'] * 2 + ['Rupees (5)']
-normalfinal25extra = ['Rupees (20)'] * 23 + ['Rupees (5)'] * 2
+normalfinal25extra = ['Moon Pearl'] * 23 + ['Rupees (5)'] * 2
 
 Difficulty = namedtuple('Difficulty',
                         ['baseitems', 'bottles', 'bottle_count', 'same_bottle', 'progressiveshield',
