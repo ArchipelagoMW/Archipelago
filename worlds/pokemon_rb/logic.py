@@ -45,14 +45,13 @@ class PokemonLogic(LogicMixin):
                     ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge", "Marsh Badge",
                      "Volcano Badge", "Earth Badge", "Bicycle", "Silph Scope", "Item Finder", "Super Rod", "Good Rod",
                      "Old Rod", "Lift Key", "Card Key", "Town Map", "Coin Case", "S.S. Ticket", "Secret Key",
-                     "Mansion Key", "Safari Pass", "Plant Key", "Hideout Key", "HM01 Cut", "HM02 Fly", "HM03 Surf",
-                     "HM04 Strength", "HM05 Flash"] if self.has(item, player)]) >= count
+                     "Poke Flute", "Mansion Key", "Safari Pass", "Plant Key", "Hideout Key", "HM01 Cut", "HM02 Fly",
+                     "HM03 Surf", "HM04 Strength", "HM05 Flash"] if self.has(item, player)]) >= count
 
     def pokemon_rb_can_pass_guards(self, player):
         if self.multiworld.tea[player].value:
             return self.has("Tea", player)
         else:
-            # this could just be "True", but you never know what weird options I might introduce later ;)
             return self.can_reach("Celadon City - Counter Man", "Location", player)
 
     def pokemon_rb_has_badges(self, count, player):
@@ -60,13 +59,8 @@ class PokemonLogic(LogicMixin):
                                       "Soul Badge", "Volcano Badge", "Earth Badge"] if self.has(item, player)]) >= count
 
     def pokemon_rb_oaks_aide(self, count, player):
-        if self.multiworld.randomize_pokedex[player].value > 0:
-            if not self.has("Pokedex", player):
-                return False
-        else:
-            if not self.has("Oak's Parcel", player):
-                return False
-        return self.pokemon_rb_has_pokemon(count, player)
+        return ((not self.multiworld.require_pokedex[player] or self.has("Pokedex", player))
+                and self.pokemon_rb_has_pokemon(count, player))
 
     def pokemon_rb_has_pokemon(self, count, player):
         obtained_pokemon = set()

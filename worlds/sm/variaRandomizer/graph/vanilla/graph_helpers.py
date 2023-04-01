@@ -1,11 +1,11 @@
 from math import ceil
 
-from logic.smbool import SMBool
-from logic.helpers import Helpers, Bosses
-from logic.cache import Cache
-from rom.rom_patches import RomPatches
-from graph.graph_utils import getAccessPoint
-from utils.parameters import Settings
+from worlds.sm.variaRandomizer.logic.smbool import SMBool
+from worlds.sm.variaRandomizer.logic.helpers import Helpers, Bosses
+from worlds.sm.variaRandomizer.logic.cache import Cache
+from worlds.sm.variaRandomizer.rom.rom_patches import RomPatches
+from worlds.sm.variaRandomizer.graph.graph_utils import getAccessPoint
+from worlds.sm.variaRandomizer.utils.parameters import Settings
 
 class HelpersGraph(Helpers):
     def __init__(self, smbm):
