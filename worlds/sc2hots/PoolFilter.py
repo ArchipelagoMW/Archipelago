@@ -193,8 +193,29 @@ class ValidInventory:
                             self.logical_inventory.add(transient_item.name)
             else:
                 attempt_removal(item)
+        # Removing extra dependencies (HotS)
+        if "Baneling" in self.logical_inventory and\
+           "Zergling" not in self.logical_inventory and\
+           "Spawn Banelings (Kerrigan Tier 4)" not in self.logical_inventory:
+            inventory = [item for item in inventory if "Baneling" not in item.name]
+        if "Mutalisk" not in self.logical_inventory:
+            inventory = [item for item in inventory if not item.name.startswith("Progressive Flyer")]
+            locked_items = [item for item in locked_items if not item.name.startswith("Progressive Flyer")]
 
-        return inventory + locked_items
+        # Cull finished, adding locked items back into inventory
+        inventory += locked_items
+
+        # Replacing empty space with generically useful items
+        replacement_items = [item for item in self.item_pool
+                             if item not in inventory and
+                             item not in self.locked_items and
+                             item_table[item.name].type in ("Ability", "Level")]
+        self.multiworld.random.shuffle(replacement_items)
+        while len(inventory) < inventory_size and len(replacement_items) > 0:
+            item = replacement_items.pop()
+            inventory.append(item)
+
+        return inventory
 
     def _read_logic(self):
         self._sc2hots_has_common_unit = lambda world, player: SC2HotSLogic._sc2hots_has_common_unit(self, world, player)
