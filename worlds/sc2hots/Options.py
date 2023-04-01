@@ -207,6 +207,26 @@ class StartPrimaryAbilities(Range):
     range_end = 4
     default = 0
 
+
+class KerriganPrimalStatus(Choice):
+    """Determines when Kerrigan appears in her Primal Zerg form.  
+    This halves her maximum energy, but greatly increases her energy regeneration.
+    
+    Vanilla:  Kerrigan is human in missions that canonically appear before The Crucible, 
+    and zerg thereafter.
+    Always Zerg:  Kerrigan is always zerg.
+    Always Human:  Kerrigan is always human.
+    Level 35:  Kerrigan is human until reaching level 35, and zerg thereafter.
+    Half Completion:  Kerrigan is human until half of the missions in the seed are completed, 
+    and zerg thereafter."""
+    display_name = "Kerrigan Primal Status"
+    option_vanilla = 0
+    option_always_zerg = 1
+    option_always_human = 2
+    option_level_35 = 3
+    option_half_completion = 4
+
+
 # class UpgradeBonus(Choice):
 #     """Determines what lab upgrade to use, whether it is Ultra-Capacitors which boost attack speed with every weapon
 #     upgrade or Vanadium Plating which boosts life with every armor upgrade."""
@@ -276,6 +296,7 @@ sc2hots_options: Dict[str, Option] = {
     "kerrigan_level_distribution": KerriganLevelDistribution,
     "include_all_kerrigan_abilities": IncludeAllKerriganAbilities,
     "start_primary_abilities": StartPrimaryAbilities,
+    "kerrigan_primal_status": KerriganPrimalStatus,
     # "upgrade_bonus": UpgradeBonus,
     # "bunker_upgrade": BunkerUpgrade,
     # "all_in_map": AllInMap,
