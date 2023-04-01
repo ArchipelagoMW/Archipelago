@@ -104,7 +104,7 @@ class WebHostContext(Context):
                 else:
                     row = GameDataPackage.get(checksum=game_data["checksum"])
                     if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8. multidata should be complete
-                        game_data_packages[game] = row.data
+                        game_data_packages[game] = Utils.restricted_loads(row.data)
 
         return self._load(multidata, game_data_packages, True)
 
