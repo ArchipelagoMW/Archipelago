@@ -170,13 +170,15 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("With Friends Like These", "With Friends Like These: Second Mineral Patch", SC2HOTS_LOC_ID_OFFSET + 1603),
         LocationData("With Friends Like These", "With Friends Like These: Third Mineral Patch", SC2HOTS_LOC_ID_OFFSET + 1604),
         LocationData("Conviction", "Conviction: Victory", SC2HOTS_LOC_ID_OFFSET + 1700,
-                     lambda state: state._sc2hots_has_two_kerrigan_actives(multiworld, player) or kerriganless),
+                     lambda state: state._sc2hots_has_two_kerrigan_actives(multiworld, player) and
+                                   state._sc2hots_has_basic_kerrigan(multiworld, player) or kerriganless),
         LocationData("Conviction", "Conviction: First Secret Documents", SC2HOTS_LOC_ID_OFFSET + 1701,
                      lambda state: state._sc2hots_has_two_kerrigan_actives(multiworld, player) or kerriganless),
         LocationData("Conviction", "Conviction: Power Coupling", SC2HOTS_LOC_ID_OFFSET + 1703,
                      lambda state: state._sc2hots_has_two_kerrigan_actives(multiworld, player) or kerriganless),
         LocationData("Conviction", "Conviction: Second Secret Documents", SC2HOTS_LOC_ID_OFFSET + 1702,
-                     lambda state: state._sc2hots_has_two_kerrigan_actives(multiworld, player) or kerriganless),
+                     lambda state: state._sc2hots_has_two_kerrigan_actives(multiworld, player) and
+                                   state._sc2hots_has_basic_kerrigan(multiworld, player) or kerriganless),
         LocationData("Planetfall", "Planetfall: Victory", SC2HOTS_LOC_ID_OFFSET + 1800,
                      lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
                                    state._sc2hots_has_good_antiair(multiworld, player)),
