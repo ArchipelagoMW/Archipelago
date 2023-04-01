@@ -41,7 +41,8 @@ import colorama
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart
 from MultiServer import mark_raw
 
-nest_asyncio.apply()
+loop = asyncio.get_event_loop_policy().new_event_loop()
+nest_asyncio.apply(loop)
 max_bonus: int = 8
 victory_modulo: int = 100
 
