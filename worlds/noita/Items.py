@@ -74,7 +74,7 @@ item_table: Dict[str, ItemData] = {
     "Perk (Explosion Immunity)":            ItemData(110016, "Perks", ItemClassification.progression, 1),
     "Perk (Melee Immunity)":                ItemData(110017, "Perks", ItemClassification.progression, 1),
     "Perk (Electricity Immunity)":          ItemData(110018, "Perks", ItemClassification.progression, 1),
-    "Perk (Tinker With Wands Everywhere)":  ItemData(110019, "Perks", ItemClassification.progression, 1),
+    "Perk (Tinker with Wands Everywhere)":  ItemData(110019, "Perks", ItemClassification.progression, 1),
     "Perk (All-Seeing Eye)":                ItemData(110020, "Perks", ItemClassification.progression, 1),
     "Perk (Extra Life)":                    ItemData(110021, "Repeatable Perks", ItemClassification.useful),
     "Orb":                                  ItemData(110022, "Orbs", ItemClassification.progression_skip_balancing),
