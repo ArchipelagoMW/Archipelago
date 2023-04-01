@@ -76,18 +76,20 @@ offset = {"Chest": 0x420000, "Box": 0x420000, "NPC": 0x420000 + 300, "Battlefiel
 for room in rooms:
     for object in room["game_objects"]:
         if object["type"] in ("Chest", "NPC", "Battlefield", "Box") and "Hero Chest" not in object["name"]:
-        #     location_table[object["name"]] = index
+            #     location_table[object["name"]] = index
             object_id_table[object["name"]] = object["object_id"]
             object_type_table[object["name"]] = object["type"]
         #     index += 1
-location_table = {loc_name: offset[object_type_table[loc_name]] + obj_id for loc_name, obj_id in object_id_table.items()}
+location_table = {loc_name: offset[object_type_table[loc_name]] + obj_id for loc_name, obj_id in
+                  object_id_table.items()}
 
 
 def yaml_item(text):
     if text == "CaptainCap":
         return "Captain's Cap"
-    return "".join([(" " + c if (c.isupper() or c.isnumeric()) and not (text[i-1].isnumeric() and c == "F") else c) for
-                    i, c in enumerate(text)]).strip()
+    return "".join(
+        [(" " + c if (c.isupper() or c.isnumeric()) and not (text[i - 1].isnumeric() and c == "F") else c) for
+         i, c in enumerate(text)]).strip()
 
 
 ow_regions = {
@@ -133,9 +135,8 @@ def create_regions(self):
         event=self.create_item(self.multiworld.starting_weapon[self.player].current_key.title().replace("_", " "))))
     menu_region.locations[-1].parent_region = menu_region
     menu_region.locations.append(FFMQLocation(self.player, "Starting Armor", None, "Trigger",
-        event=self.create_item("Steel Armor")))
+                                              event=self.create_item("Steel Armor")))
     menu_region.locations[-1].parent_region = menu_region
-
 
     # if self.multiworld.map_shuffle[self.player]:
     #     self.rooms = rooms.deepcopy()
@@ -188,7 +189,7 @@ def create_regions(self):
         "Inaccessible": lambda state: False,
         "Doom Castle": lambda state: state.has_all(
             ["Ship Dock Access", "Ship Steering Wheel", "Ship Loaned"], self.player),
-        }
+    }
 
     for region in ow_regions:
         connection = Entrance(self.player, f"Enter Overworld Subregion: {region}", menu_region)
@@ -241,38 +242,49 @@ def create_regions(self):
 
 
 def set_rules(self) -> None:
-
     self.multiworld.completion_condition[self.player] = lambda state: state.has("Dark King", self.player)
-    # if self.multiworld.doom_castle[self.player] != "Standard"
-    # self.multiworld.
+
+    # need to add this to aquaria and fireburg bosses if they're in foresta region when entrance shuffle added
+    def hard_boss_logic(state):
+        return state.has_all(["River Coin", "Sand Coin"], self.player)
+
+    add_rule(self.multiworld.get_location("Pazuzu 1F", self.player), hard_boss_logic)
+    add_rule(self.multiworld.get_location("Gidrah", self.player), hard_boss_logic)
+    add_rule(self.multiworld.get_location("Dullahan", self.player), hard_boss_logic)
 
     if self.multiworld.logic[self.player] == "friendly":
+        process_rules(self.multiworld.get_entrance("Earth Region to Bone Dungeon 1F", self.player),
+                      ["Bomb"])
+        process_rules(self.multiworld.get_entrance("Water Region to Wintry Cave 1F - East Ledge", self.player),
+                      ["Bomb", "Claw"])
+        process_rules(self.multiworld.get_entrance("Water Region to Ice Pyramid 1F Maze Lobby", self.player),
+                      ["Bomb", "Claw"])
+        process_rules(self.multiworld.get_entrance("Fire Region to Mine Exterior North West Platforms", self.player),
+                      ["MegaGrenade", "Claw", "Reuben1"])
+        process_rules(self.multiworld.get_entrance("Fire Region to Lava Dome Inner Ring Main Loop", self.player),
+                      ["MegaGrenade"])
+        process_rules(self.multiworld.get_entrance("Wind Region to Giant Tree 1F Main Area", self.player),
+                      ["DragonClaw", "Axe"])
+        process_rules(self.multiworld.get_entrance("Wind Region to Mount Gale", self.player),
+                      ["DragonClaw"])
+        process_rules(self.multiworld.get_entrance("Wind Region to Pazuzu Tower 1F Main Lobby", self.player),
+                      ["DragonClaw", "Bomb"])
+        # currently these entrances have the same name. probably should fix that
+        process_rules(self.multiworld.get_region("Mac's Ship", self.player).exits[0],
+                 ["DragonClaw", "CaptainCap"])
+        process_rules(self.multiworld.get_region("Mac's Ship", self.player).exits[1],
+                 ["DragonClaw", "CaptainCap"])
         for region in self.multiworld.get_regions(self.player):
-            new_rules = []
             if "Ice Pyramid" in region.name:
-                new_rules.append("Magic Mirror")
+                new_rule = "Magic Mirror"
             elif "Volcano" in region.name:
-                new_rules.append("Mask")
-
-            if self.multiworld.map_shuffle[self.player] != "none" and self.multiworld.map_shuffle[self.player] != "overworld":
-                if "Bone Dungeon" in region.name:
-                    new_rules.append("Bomb")
-                elif "Wintry Cave" in region.name or "Ice Pyramid" in region.name:
-                    new_rules += ["Bomb", "Claw"]
-                elif "Mine" in region.name:
-                    new_rules += ["Mega Grenade", "Claw", "Reuben 1"]
-                elif "Lava Dome" in region.name:
-                    new_rules.append("Mega Grenade")
-                elif "Giant Tree" in region.name:
-                    new_rules += ["Axe", "Dragon Claw"]
-                elif "Mount Gale" in region.name:
-                    new_rules.append("Dragon Claw")
-                elif "Pazuzu" in region.name:
-                    new_rules += ["Dragon Claw", "Bomb"]
-                elif "Mac" in region.name:
-                    new_rules += ["Dragon Claw", "Captain Cap"]
+                new_rule = "Mask"
+            else:
+                continue
             for location in region.locations:
-                process_rules(location, new_rules)
+                add_rule(location, lambda state, item=new_rule: state.has(item, self.player))
+            for entrance in region.exits:
+                add_rule(entrance, lambda state, item=new_rule: state.has(item, self.player))
     elif self.multiworld.logic[self.player] == "expert":
         if self.multiworld.map_shuffle[self.player] == "none" and not self.multiworld.crest_shuffle[self.player]:
             inner_room = self.multiworld.get_region("Wintry Temple Inner Room", self.player)
