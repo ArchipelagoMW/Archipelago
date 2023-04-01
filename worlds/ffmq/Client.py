@@ -84,7 +84,7 @@ class FFMQClient(SNIClient):
 
         old_locations_checked = ctx.locations_checked.copy()
 
-        for container in range(248):
+        for container in range(256):
             if get_flag(game_flags, (0x20 * 8) + container): #game_flags[byte] & bit:
                 ctx.locations_checked.add(offset["Chest"] + container)
 
