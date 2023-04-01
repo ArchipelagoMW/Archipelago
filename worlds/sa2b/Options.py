@@ -250,6 +250,18 @@ class LevelGateCosts(Choice):
     default = 2
 
 
+class MaximumEmblemCap(Range):
+    """
+    Determines the maximum number of emblems that can be in the item pool.
+    If fewer available locations exist in the pool than this number, the number of available locations will be used instead.
+    Gate and Cannon's Core costs will be calculated based off of that number.
+    """
+    display_name = "Max Emblem Cap"
+    range_start = 50
+    range_end = 500
+    default = 180
+
+
 class RequiredRank(Choice):
     """
     Determines what minimum Rank is required to send a check for a mission
@@ -600,6 +612,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "number_of_level_gates": NumberOfLevelGates,
     "level_gate_distribution": LevelGateDistribution,
     "level_gate_costs": LevelGateCosts,
+    "max_emblem_cap": MaximumEmblemCap,
     "chao_garden_difficulty": ChaoGardenDifficulty,
     "include_chao_karate": IncludeChaoKarate,
     "chao_race_checks": ChaoRaceChecks,

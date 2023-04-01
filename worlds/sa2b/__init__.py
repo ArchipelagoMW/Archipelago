@@ -207,9 +207,9 @@ class SA2BWorld(World):
                 for item in {**emeralds_table}:
                     itempool += self._create_items(item)
 
-        # Cap at 250 Emblems
+        # Cap at player-specified Emblem count
         raw_emblem_count = total_required_locations - len(itempool)
-        total_emblem_count = min(raw_emblem_count, 250)
+        total_emblem_count = min(raw_emblem_count, self.multiworld.max_emblem_cap[self.player].value)
         extra_junk_count = raw_emblem_count - total_emblem_count
 
         self.emblems_for_cannons_core = math.floor(
