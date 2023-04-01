@@ -1,20 +1,24 @@
 from __future__ import annotations
 
+import hashlib
 import logging
-import sys
 import pathlib
-from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Type, Union, TYPE_CHECKING, \
-    ClassVar
+import sys
+from typing import Any, Callable, ClassVar, Dict, FrozenSet, List, Optional, Set, TYPE_CHECKING, TextIO, Tuple, Type, \
+    Union
 
-from Options import AssembleOptions
 from BaseClasses import CollectionState
+from Options import AssembleOptions
 
 if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial
+    from . import GamesPackage
 
 
 class AutoWorldRegister(type):
     world_types: Dict[str, Type[World]] = {}
+    __file__: str
+    zip_path: Optional[str]
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
@@ -32,6 +36,9 @@ class AutoWorldRegister(type):
                                    in dct.get("item_name_groups", {}).items()}
         dct["item_name_groups"]["Everything"] = dct["item_names"]
         dct["location_names"] = frozenset(dct["location_name_to_id"])
+        dct["location_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
+                                       in dct.get("location_name_groups", {}).items()}
+        dct["location_name_groups"]["Everywhere"] = dct["location_names"]
         dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
 
         # move away from get_required_client_version function
@@ -154,9 +161,14 @@ class World(metaclass=AutoWorldRegister):
 
     data_version: ClassVar[int] = 1
     """
-    increment this every time something in your world's names/id mappings changes.
-    While this is set to 0, this world's DataPackage is considered in testing mode and will be inserted to the multidata
-    and retrieved by clients on every connection.
+    Increment this every time something in your world's names/id mappings changes.
+
+    When this is set to 0, that world's DataPackage is considered in "testing mode", which signals to servers/clients
+    that it should not be cached, and clients should request that world's DataPackage every connection. Not
+    recommended for production-ready worlds.
+
+    Deprecated. Clients should utilize `checksum` to determine if DataPackage has changed since last connection and
+    request a new DataPackage, if necessary.
     """
 
     required_client_version: Tuple[int, int, int] = (0, 1, 6)
@@ -343,8 +355,35 @@ class World(metaclass=AutoWorldRegister):
     def create_filler(self) -> "Item":
         return self.create_item(self.get_filler_item_name())
 
+    @classmethod
+    def get_data_package_data(cls) -> "GamesPackage":
+        sorted_item_name_groups = {
+            name: sorted(cls.item_name_groups[name]) for name in sorted(cls.item_name_groups)
+        }
+        sorted_location_name_groups = {
+            name: sorted(cls.location_name_groups[name]) for name in sorted(cls.location_name_groups)
+        }
+        res: "GamesPackage" = {
+            # sorted alphabetically
+            "item_name_groups": sorted_item_name_groups,
+            "item_name_to_id": cls.item_name_to_id,
+            "location_name_groups": sorted_location_name_groups,
+            "location_name_to_id": cls.location_name_to_id,
+            "version": cls.data_version,
+        }
+        res["checksum"] = data_package_checksum(res)
+        return res
+
 
 # any methods attached to this can be used as part of CollectionState,
 # please use a prefix as all of them get clobbered together
 class LogicMixin(metaclass=AutoLogicRegister):
     pass
+
+
+def data_package_checksum(data: "GamesPackage") -> str:
+    """Calculates the data package checksum for a game from a dict"""
+    assert "checksum" not in data, "Checksum already in data"
+    assert sorted(data) == list(data), "Data not ordered"
+    from NetUtils import encode
+    return hashlib.sha1(encode(data).encode()).hexdigest()

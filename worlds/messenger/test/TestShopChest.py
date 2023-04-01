@@ -4,11 +4,11 @@ from . import MessengerTestBase
 
 class NoLogicTest(MessengerTestBase):
     options = {
-        "enable_logic": "false",
+        "logic_level": "oob",
         "goal": "power_seal_hunt",
     }
 
-    def testChestAccess(self):
+    def testChestAccess(self) -> None:
         """Test to make sure we can win even though we can't reach the chest."""
         self.assertEqual(self.can_reach_location("Shop Chest"), False)
         self.assertBeatable(True)

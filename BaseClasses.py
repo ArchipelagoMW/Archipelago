@@ -336,7 +336,7 @@ class MultiWorld():
         return self.player_name[player]
 
     def get_file_safe_player_name(self, player: int) -> str:
-        return ''.join(c for c in self.get_player_name(player) if c not in '<>:"/\\|?*')
+        return Utils.get_file_safe_name(self.get_player_name(player))
 
     def get_out_file_name_base(self, player: int) -> str:
         """ the base name (without file extension) for each player's output file for a seed """
@@ -1208,7 +1208,7 @@ class Spoiler():
                 raise RuntimeError(f'Not all required items reachable. Unreachable locations: {required_locations}')
 
         # we can finally output our playthrough
-        self.playthrough = {"0": sorted([str(item) for item in
+        self.playthrough = {"0": sorted([self.multiworld.get_name_string_for_object(item) for item in
                                          chain.from_iterable(multiworld.precollected_items.values())
                                          if item.advancement])}
 
