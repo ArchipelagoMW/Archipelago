@@ -375,7 +375,7 @@ class MyGameLocation(Location):  # or from Locations import MyGameLocation
 class MyGameWorld(World):
     """Insert description of the world/game here."""
     game = "My Game"  # name of the game/world
-    options_dataclass = MyGameOptions # options the player can set
+    options_dataclass = MyGameOptions  # options the player can set
     options: MyGameOptions  # typing hints for option results
     topology_present = True  # show path to required location checks in spoiler
 
