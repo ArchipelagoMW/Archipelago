@@ -122,7 +122,7 @@ class MinecraftWorld(World):
         for region_name, exits in Constants.region_info["regions"]:
             r = Region(region_name, self.player, self.multiworld)
             for exit_name in exits:
-                r.exits.append(Entrance(self.player, exit_name, r))
+                Entrance(self.player, exit_name, r)
             self.multiworld.regions.append(r)
 
         # Bind mandatory connections

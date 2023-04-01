@@ -97,7 +97,6 @@ class TLoZWorld(World):
             self.levels.append(level)
             new_entrance = Entrance(self.player, f"Level {i}", overworld)
             new_entrance.connect(level)
-            overworld.exits.append(new_entrance)
             self.multiworld.regions.append(level)
 
         for i, level in enumerate(level_locations):
@@ -129,7 +128,6 @@ class TLoZWorld(World):
         self.levels[9].locations.append(ganon)
         self.levels[9].locations.append(zelda)
         begin_game = Entrance(self.player, "Begin Game", menu)
-        menu.exits.append(begin_game)
         begin_game.connect(overworld)
         self.multiworld.regions.append(menu)
         self.multiworld.regions.append(overworld)

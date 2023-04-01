@@ -241,7 +241,6 @@ def create_regions_from_ladxr(player, multiworld, logic):
             # TODO: This name ain't gonna work for entrance rando, we need to cross reference with logic.world.overworld_entrance
             entrance = LinksAwakeningEntrance(
                 player, f"{region_a.name} -> {region_b.name}", region_a, connection_condition)
-            region_a.exits.append(entrance)
             entrance.connect(region_b)
 
     return list(regions.values())

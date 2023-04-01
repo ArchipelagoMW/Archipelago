@@ -30,9 +30,7 @@ class MessengerRegion(Region):
 
     def add_exits(self, exits: Set[str]) -> None:
         for exit in exits:
-            ret = Entrance(self.player, f"{self.name} -> {exit}", self)
-            self.exits.append(ret)
-            ret.connect(self.multiworld.get_region(exit, self.player))
+            Entrance(self.player, f"{self.name} -> {exit}", self).connect(self.multiworld.get_region(exit, self.player))
 
 
 class MessengerLocation(Location):

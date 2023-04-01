@@ -18,7 +18,6 @@ def connect(world: MultiWorld, player: int, source: str, target: str, rule: call
 
     connection.access_rule = rule
 
-    source_region.exits.append(connection)
     connection.connect(target_region)
     if not one_way:
         connect(world, player, target, source, rule, True)
@@ -30,50 +29,50 @@ def create_regions(multiworld: MultiWorld, player: int, dragon_rooms: []) -> Non
 
     menu = Region("Menu", player, multiworld)
 
-    menu.exits.append(Entrance(player, "GameStart", menu))
+    Entrance(player, "GameStart", menu)
     multiworld.regions.append(menu)
 
     overworld = Region("Overworld", player, multiworld)
-    overworld.exits.append(Entrance(player, "YellowCastlePort", overworld))
-    overworld.exits.append(Entrance(player, "WhiteCastlePort", overworld))
-    overworld.exits.append(Entrance(player, "BlackCastlePort", overworld))
-    overworld.exits.append(Entrance(player, "CreditsWall", overworld))
+    Entrance(player, "YellowCastlePort", overworld)
+    Entrance(player, "WhiteCastlePort", overworld)
+    Entrance(player, "BlackCastlePort", overworld)
+    Entrance(player, "CreditsWall", overworld)
     multiworld.regions.append(overworld)
 
     yellow_castle = Region("YellowCastle", player, multiworld, "Yellow Castle")
-    yellow_castle.exits.append(Entrance(player, "YellowCastleExit", yellow_castle))
+    Entrance(player, "YellowCastleExit", yellow_castle)
     multiworld.regions.append(yellow_castle)
 
     white_castle = Region("WhiteCastle", player, multiworld, "White Castle")
-    white_castle.exits.append(Entrance(player, "WhiteCastleExit", white_castle))
-    white_castle.exits.append(Entrance(player, "WhiteCastleSecretPassage", white_castle))
-    white_castle.exits.append(Entrance(player, "WhiteCastlePeekPassage", white_castle))
+    Entrance(player, "WhiteCastleExit", white_castle)
+    Entrance(player, "WhiteCastleSecretPassage", white_castle)
+    Entrance(player, "WhiteCastlePeekPassage", white_castle)
     multiworld.regions.append(white_castle)
 
     white_castle_pre_vault_peek = Region("WhiteCastlePreVaultPeek", player, multiworld, "White Castle Secret Peek")
-    white_castle_pre_vault_peek.exits.append(Entrance(player, "WhiteCastleFromPeek", white_castle_pre_vault_peek))
+    Entrance(player, "WhiteCastleFromPeek", white_castle_pre_vault_peek)
     multiworld.regions.append(white_castle_pre_vault_peek)
 
     white_castle_secret_room = Region("WhiteCastleVault", player, multiworld, "White Castle Vault",)
-    white_castle_secret_room.exits.append(Entrance(player, "WhiteCastleReturnPassage", white_castle_secret_room))
+    Entrance(player, "WhiteCastleReturnPassage", white_castle_secret_room)
     multiworld.regions.append(white_castle_secret_room)
 
     black_castle = Region("BlackCastle", player, multiworld, "Black Castle")
-    black_castle.exits.append(Entrance(player, "BlackCastleExit", black_castle))
-    black_castle.exits.append(Entrance(player, "BlackCastleVaultEntrance", black_castle))
+    Entrance(player, "BlackCastleExit", black_castle)
+    Entrance(player, "BlackCastleVaultEntrance", black_castle)
     multiworld.regions.append(black_castle)
 
     black_castle_secret_room = Region("BlackCastleVault", player, multiworld, "Black Castle Vault")
-    black_castle_secret_room.exits.append(Entrance(player, "BlackCastleReturnPassage", black_castle_secret_room))
+    Entrance(player, "BlackCastleReturnPassage", black_castle_secret_room)
     multiworld.regions.append(black_castle_secret_room)
 
     credits_room = Region("CreditsRoom", player, multiworld, "Credits Room")
-    credits_room.exits.append(Entrance(player, "CreditsExit", credits_room))
-    credits_room.exits.append(Entrance(player, "CreditsToFarSide", credits_room))
+    Entrance(player, "CreditsExit", credits_room)
+    Entrance(player, "CreditsToFarSide", credits_room)
     multiworld.regions.append(credits_room)
 
     credits_room_far_side = Region("CreditsRoomFarSide", player, multiworld, "Credits Far Side")
-    credits_room_far_side.exits.append(Entrance(player, "CreditsFromFarSide", credits_room_far_side))
+    Entrance(player, "CreditsFromFarSide", credits_room_far_side)
     multiworld.regions.append(credits_room_far_side)
 
     dragon_slay_check = multiworld.dragon_slay_check[player].value

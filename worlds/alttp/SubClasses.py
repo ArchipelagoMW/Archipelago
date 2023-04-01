@@ -1,8 +1,9 @@
 """Module extending BaseClasses.py for aLttP"""
-from typing import Optional
+from typing import Optional, Tuple, List
 from enum import IntEnum
 
-from BaseClasses import Location, Item, ItemClassification, Region, MultiWorld
+from BaseClasses import Location, Item, ItemClassification, Region, MultiWorld, Entrance
+
 
 class ALttPLocation(Location):
     game: str = "A Link to the Past"
@@ -79,6 +80,7 @@ class LTTPRegionType(IntEnum):
 
 class LTTPRegion(Region):
     type: LTTPRegionType
+    entrances: List["LttPEntrance"]
 
     # will be set after making connections.
     is_light_world: bool = False
@@ -96,15 +98,14 @@ class LTTPRegion(Region):
             if entrance.parent_region.type in (LTTPRegionType.DarkWorld, LTTPRegionType.LightWorld):
                 return entrance
         for entrance in self.entrances:
-            return entrance.parent_region.get_entrance
+            return entrance.parent_region.entrance
 
 
-
-class ALttPEntrance(Entrance):
+class LttPEntrance(Entrance):
     addresses = None
     target = None
 
-    def connect(self, region: Region, addresses: typing.Tuple[int] = None, target: typing.Tuple[int] = None) -> None:
+    def connect(self, region: Region, addresses: Tuple[int] = None, target: Tuple[int] = None) -> None:
         self.connected_region = region
         self.target = target
         self.addresses = addresses

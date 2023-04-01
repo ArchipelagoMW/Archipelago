@@ -2,7 +2,7 @@
 Helper functions to deliver entrance/exit/region sets to OWG rules.
 """
 
-from worlds.alttp.SubClasses import ALttPEntrance
+from worlds.alttp.SubClasses import LttPEntrance
 
 from .StateHelpers import can_lift_heavy_rocks, can_boots_clip_lw, can_boots_clip_dw, can_get_glitched_speed_dw
 
@@ -296,14 +296,14 @@ def create_no_logic_connections(player, world, connections):
     for entrance, parent_region, target_region, *rule_override in connections:
         parent = world.get_region(parent_region, player)
         target = world.get_region(target_region, player)
-        connection = ALttPEntrance(player, entrance, parent)
+        connection = LttPEntrance(player, entrance, parent)
         connection.connect(target)
 
 def create_owg_connections(player, world, connections):
     for entrance, parent_region, target_region, *rule_override in connections:
         parent = world.get_region(parent_region, player)
         target = world.get_region(target_region, player)
-        connection = ALttPEntrance(player, entrance, parent)
+        connection = LttPEntrance(player, entrance, parent)
         connection.connect(target)
 
 def set_owg_connection_rules(player, world, connections, default_rule):

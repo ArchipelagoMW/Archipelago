@@ -317,7 +317,6 @@ class BlasphemousWorld(World):
                 if ename == rname:
                     for i in exits:
                         ent = Entrance(player, i, reg)
-                        reg.exits.append(ent)
 
                         for e, r in exit_lookup_table.items():
                             if i == e:

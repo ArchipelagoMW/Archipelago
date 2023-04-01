@@ -108,7 +108,7 @@ class LinksAwakeningWorld(World):
         assert(start)
 
         menu_region = LinksAwakeningRegion("Menu", None, "Menu", self.player, self.multiworld)        
-        menu_region.exits = [Entrance(self.player, "Start Game", menu_region)]
+        Entrance(self.player, "Start Game", menu_region)
         menu_region.exits[0].connect(start)
         
         self.multiworld.regions.append(menu_region)
