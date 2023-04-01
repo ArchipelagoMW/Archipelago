@@ -134,22 +134,17 @@ class MessengerHardRules(MessengerRules):
         self.location_rules.update({
             "Howling Grotto Seal - Windy Saws and Balls": self.true,
             "Glacial Peak Seal - Projectile Spike Pit": self.true,
+            "Claustro": self.has_wingsuit,
         })
 
         self.extra_rules = {
-            "Climbing Claws": self.has_dart,
-            "Astral Seed": self.has_dart,
-            "Candle": self.has_dart,
-            "Key of Strength": lambda state: state.has("Power Thistle", self.player) or
-                                             self.has_dart(state) or
-                                             self.has_windmill(state),
+            "Key of Strength": lambda state: self.has_dart(state) or self.has_windmill(state),
             "Key of Symbiosis": self.has_windmill,
             "Autumn Hills Seal - Spike Ball Darts": lambda state: (self.has_dart(state) and self.has_windmill(state))
                                                                   or self.has_wingsuit(state),
             "Glacial Peak Seal - Glacial Air Swag": self.has_windmill,
-            "Underworld Seal - Fireball Wave": lambda state: self.has_wingsuit(state)
-                                                             or state.has_all({"Ninja Tabi", "Windmill Shuriken"},
-                                                                              self.player),
+            "Underworld Seal - Fireball Wave": lambda state: state.has_all({"Ninja Tabi", "Windmill Shuriken"},
+                                                                           self.player),
         }
 
     def has_windmill(self, state: CollectionState) -> bool:
@@ -158,6 +153,8 @@ class MessengerHardRules(MessengerRules):
     def set_messenger_rules(self) -> None:
         super().set_messenger_rules()
         for loc, rule in self.extra_rules.items():
+            if not self.world.multiworld.shuffle_seals[self.player] and "Seal" in loc:
+                continue
             add_rule(self.world.multiworld.get_location(loc, self.player), rule, "or")
 
 
@@ -196,7 +193,7 @@ class MessengerOOBRules(MessengerRules):
 
         self.location_rules = {
             "Claustro": self.has_wingsuit,
-            "Key of Strength": self.has_wingsuit,
+            "Key of Strength": lambda state: self.has_vertical(state) or state.has("Power Thistle", self.player),
             "Key of Love": lambda state: state.has_all({"Sun Crest", "Moon Crest"}, self.player),
             "Pyro": self.has_tabi,
             "Key of Chaos": self.has_tabi,

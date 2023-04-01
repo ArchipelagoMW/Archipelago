@@ -1,4 +1,5 @@
 import binascii
+import Utils
 
 b2h = binascii.hexlify
 h2b = binascii.unhexlify
@@ -6,7 +7,7 @@ h2b = binascii.unhexlify
 
 class ROM:
     def __init__(self, filename):
-        data = open(filename, "rb").read()
+        data = open(Utils.local_path(filename), "rb").read()
         #assert len(data) == 1024 * 1024
         self.banks = []
         for n in range(0x40):
