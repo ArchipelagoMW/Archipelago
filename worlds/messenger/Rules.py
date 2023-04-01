@@ -98,7 +98,6 @@ class MessengerRules:
 
     def set_messenger_rules(self) -> None:
         multiworld = self.world.multiworld
-        options = self.world.options
 
         for region in multiworld.get_regions(self.player):
             if region.name in self.region_rules:
@@ -107,7 +106,7 @@ class MessengerRules:
             for loc in region.locations:
                 if loc.name in self.location_rules:
                     loc.access_rule = self.location_rules[loc.name]
-        if options.goal == Goal.option_power_seal_hunt:
+        if self.world.options.goal == Goal.option_power_seal_hunt:
             set_rule(multiworld.get_entrance("Tower HQ -> Music Box", self.player),
                      lambda state: state.has("Shop Chest", self.player))
 
@@ -154,7 +153,7 @@ class MessengerHardRules(MessengerRules):
     def set_messenger_rules(self) -> None:
         super().set_messenger_rules()
         for loc, rule in self.extra_rules.items():
-            if not self.world.multiworld.shuffle_seals[self.player] and "Seal" in loc:
+            if not self.world.options.shuffle_seals and "Seal" in loc:
                 continue
             add_rule(self.world.multiworld.get_location(loc, self.player), rule, "or")
 
@@ -210,7 +209,7 @@ class MessengerOOBRules(MessengerRules):
     def set_messenger_rules(self) -> None:
         super().set_messenger_rules()
         self.world.multiworld.completion_condition[self.player] = lambda state: True
-        self.world.multiworld.accessibility[self.player].value = MessengerAccessibility.option_minimal
+        self.world.options.accessibility.value = MessengerAccessibility.option_minimal
 
 
 def set_self_locking_items(world: MessengerWorld, player: int) -> None:
