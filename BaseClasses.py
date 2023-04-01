@@ -81,6 +81,7 @@ class MultiWorld():
 
     random: random.Random
     per_slot_randoms: Dict[int, random.Random]
+    """Deprecated. Please use `self.random` instead."""
 
     class AttributeProxy():
         def __init__(self, rule):
@@ -230,6 +231,8 @@ class MultiWorld():
         self.seed_name = name if name else str(self.seed)
         self.per_slot_randoms = {player: random.Random(self.random.getrandbits(64)) for player in
                                  range(1, self.players + 1)}
+        for player in range(1, self.players + 1):
+            self.worlds[player].random = random.Random(self.random.getrandbits(64))
 
     def set_options(self, args: Namespace) -> None:
         for option_key in Options.common_options:
