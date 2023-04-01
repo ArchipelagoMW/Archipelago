@@ -77,7 +77,7 @@ class MessengerWorld(World):
                 seals[i].classification = ItemClassification.progression_skip_balancing
             itempool += seals
         else:
-            notes = self.multiworld.random.sample(NOTES, k=len(NOTES))
+            notes = self.random.sample(NOTES, k=len(NOTES))
             precollected_notes_amount = NotesNeeded.range_end - self.multiworld.notes_needed[self.player]
             if precollected_notes_amount:
                 for note in notes[:precollected_notes_amount]:
