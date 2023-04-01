@@ -3,7 +3,7 @@ from Options import Option, DeathLink, DefaultOnToggle, Range, Choice
 
 
 class PathOption(Choice):
-    """Choose where you would like checks to be placed. This affects which bosses, orbs, and chest checks are enabled.
+    """Choose where you would like Hidden Chest and Pedestal checks to be placed.
     Main Path includes the main 7 biomes you typically go through to get to the final boss.
     Side Path includes areas off the main path, but not ones you need to go way out of your way for. 10 biomes total.
     Main World includes the full world (excluding parallel worlds). 15 biomes total."""
@@ -37,7 +37,6 @@ class Traps(DefaultOnToggle):
 
 class OrbsAsChecks(Choice):
     """Decides whether finding the orbs that naturally spawn in the world count as checks.
-    The orbs included is based off of your Path Option choice.
     The Main Path option includes only the floating island and abyss orb room orbs.
     The Side Path option includes the Main Path, magical temple, lukki lair, and lava lake orbs.
     The Main World option includes all 11 orbs."""
@@ -53,7 +52,7 @@ class BossesAsChecks(Choice):
     """Makes bosses count as location checks. The boss only needs to die, you do not need the kill credit.
     The Main Path option includes Gate Guardian, Suomuhauki, and Kolmisilma.
     The Side Path option includes the Main Path bosses, Sauvojen Tuntija, and Ylialkemisti.
-    The Main World option includes all 12 bosses."""
+    The All Bosses option includes all 12 bosses."""
     display_name = "Bosses as Location Checks"
     option_no_bosses = 0
     option_main_path = 1
