@@ -186,7 +186,7 @@ class WitnessWorld(World):
         if itempool_difference < 0:
             junk = [
                 item for item in pool
-                if item.classification in {ItemClassification.filler, ItemClassification.trap}
+                if item.classification in {Philler, ItemClassification.trap}
                 and item.name != "Functioning Brain"
             ]
 
@@ -299,7 +299,7 @@ class WitnessWorld(World):
         elif item.never_exclude:
             classification = ItemClassification.useful
         else:
-            classification = ItemClassification.filler
+            classification = ItemClassification.Philler
 
         new_item = WitnessItem(
             name, classification, item.code, player=self.player

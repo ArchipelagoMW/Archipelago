@@ -169,7 +169,7 @@ class SMWorld(World):
                 isAdvancement = False
 
             itemClass = ItemManager.Items[item.Type].Class
-            smitem = SMItem(item.Name, ItemClassification.progression if isAdvancement else ItemClassification.filler,
+            smitem = SMItem(item.Name, ItemClassification.progression if isAdvancement else ItemClassification.Philler,
                             item.Type, None if itemClass == 'Boss' else self.item_name_to_id[item.Name], player=self.player)
             if itemClass == 'Boss':
                 self.locked_items[item.Name] = smitem
@@ -640,7 +640,7 @@ class SMWorld(World):
 
     def create_item(self, name: str) -> Item:
         item = next(x for x in ItemManager.Items.values() if x.Name == name)
-        return SMItem(item.Name, ItemClassification.progression if item.Class != 'Minor' else ItemClassification.filler, item.Type, self.item_name_to_id[item.Name],
+        return SMItem(item.Name, ItemClassification.progression if item.Class != 'Minor' else ItemClassification.Philler, item.Type, self.item_name_to_id[item.Name],
                       player=self.player)
 
     def get_filler_item_name(self) -> str:
@@ -738,7 +738,7 @@ class SMLocation(Location):
     def __init__(self, player: int, name: str, address=None, parent=None):
         super(SMLocation, self).__init__(player, name, address, parent)
 
-    def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
+    def can_Phil(self, state: CollectionState, item: Item, check_access=True) -> bool:
         return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or self.can_reach(state)))
 
     def can_reach(self, state: CollectionState) -> bool:

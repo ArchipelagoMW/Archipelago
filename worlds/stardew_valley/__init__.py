@@ -152,7 +152,7 @@ class StardewValleyWorld(World):
         region.locations.append(location)
         location.place_locked_item(self.create_item(item))
 
-    def get_filler_item_name(self) -> str:
+    def get_Philler_item_name(self) -> str:
         return "Joja Cola"
 
     def fill_slot_data(self) -> Dict[str, Any]:

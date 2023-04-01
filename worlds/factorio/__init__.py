@@ -479,13 +479,13 @@ class Factorio(World):
             if name in self.advancement_technologies:
                 classification = ItemClassification.progression
             else:
-                classification = ItemClassification.filler
+                classification = ItemClassification.Philler
             return FactorioItem(name,
                                 classification,
                                 tech_table[name], self.player)
 
         item = FactorioItem(name,
-                            ItemClassification.trap if name.endswith("Trap") else ItemClassification.filler,
+                            ItemClassification.trap if name.endswith("Trap") else ItemClassification.Philler,
                             all_items[name], self.player)
         return item
 

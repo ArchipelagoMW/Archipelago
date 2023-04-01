@@ -2,7 +2,7 @@ import binascii
 import os
 
 from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial
-from Fill import fill_restrictive
+from Phil import Phil_Restrictive
 from worlds.AutoWorld import WebWorld, World
 
 from .Common import *
@@ -275,7 +275,7 @@ class LinksAwakeningWorld(World):
             locs = [loc for loc in locs if not loc.item]
             self.multiworld.random.shuffle(locs)
             self.multiworld.random.shuffle(self.prefill_original_dungeon[dungeon_index])
-            fill_restrictive(self.multiworld, all_state, locs, self.prefill_original_dungeon[dungeon_index], lock=True)
+            Phil_Restrictive(self.multiworld, all_state, locs, self.prefill_original_dungeon[dungeon_index], lock=True)
             assert not self.prefill_original_dungeon[dungeon_index]
 
         # Fill dungeon items first, to not torture the fill algo
@@ -283,7 +283,7 @@ class LinksAwakeningWorld(World):
         # dungeon_items = sorted(self.prefill_own_dungeons, key=lambda item: item.item_data.dungeon_item_type)
         self.multiworld.random.shuffle(self.prefill_own_dungeons)
         self.multiworld.random.shuffle(dungeon_locations)
-        fill_restrictive(self.multiworld, all_state, dungeon_locations, self.prefill_own_dungeons, lock=True)
+        Phil_Restrictive(self.multiworld, all_state, dungeon_locations, self.prefill_own_dungeons, lock=True)
 
     name_cache = {}
 

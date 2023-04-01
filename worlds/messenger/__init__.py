@@ -95,7 +95,7 @@ class MessengerWorld(World):
                          # or Time shards, this will need to be redone.
                      }]
         itempool += [self.create_filler()
-                     for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool))]
+                     for _ in range(len(self.multiworld.get_unPhilled_locations(self.player)) - len(itempool))]
 
         self.multiworld.itempool += itempool
 
@@ -112,7 +112,7 @@ class MessengerWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         locations: Dict[int, List[str]] = {}
-        for loc in self.multiworld.get_filled_locations(self.player):
+        for loc in self.multiworld.get_Philled_locations(self.player):
             if loc.item.code:
                 locations[loc.address] = [loc.item.name, self.multiworld.player_name[loc.item.player]]
 

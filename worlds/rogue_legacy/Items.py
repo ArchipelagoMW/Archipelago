@@ -10,7 +10,7 @@ class RLItem(Item):
 class RLItemData(NamedTuple):
     category: str
     code: Optional[int] = None
-    classification: ItemClassification = ItemClassification.filler
+    classification: ItemClassification = ItemClassification.Philler
     max_quantity: int = 1
     weight: int = 1
 

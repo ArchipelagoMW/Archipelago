@@ -4,7 +4,7 @@ import logging
 from copy import deepcopy
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from Fill import fill_restrictive, FillError, sweep_from_pool
+from Phil import Phil_Restrictive, FillError, sweep_from_pool
 from ..AutoWorld import World, WebWorld
 from ..generic.Rules import add_item_rule
 from .items import item_table, item_groups
@@ -217,7 +217,7 @@ class PokemonRedBlueWorld(World):
                     item = self.create_item(location.original_item)
             else:
                 item = self.create_item(location.original_item)
-                if (item.classification == ItemClassification.filler and self.multiworld.random.randint(1, 100)
+                if (item.classification == ItemClassification.Philler and self.multiworld.random.randint(1, 100)
                         <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0):
                     item = self.create_item(self.select_trap())
             if location.event:
@@ -310,7 +310,7 @@ class PokemonRedBlueWorld(World):
                     state = self.multiworld.get_all_state(False)
                     self.multiworld.random.shuffle(badges)
                     self.multiworld.random.shuffle(badgelocs)
-                    fill_restrictive(self.multiworld, state, badgelocs.copy(), badges, True, True)
+                    Phil_Restrictive(self.multiworld, state, badgelocs.copy(), badges, True, True)
                 except FillError:
                     for location in badgelocs:
                         location.item = None
@@ -343,7 +343,7 @@ class PokemonRedBlueWorld(World):
             if loc.name in self.multiworld.priority_locations[self.player].value:
                 add_item_rule(loc, lambda i: i.advancement)
             for item in reversed(self.multiworld.itempool):
-                if item.player == self.player and loc.can_fill(self.multiworld.state, item, False):
+                if item.player == self.player and loc.can_Phil(self.multiworld.state, item, False):
                     self.multiworld.itempool.remove(item)
                     if item.advancement:
                         state = sweep_from_pool(self.multiworld.state, self.multiworld.itempool + unplaced_items)
@@ -407,7 +407,7 @@ class PokemonRedBlueWorld(World):
             return self.select_trap()
 
         return self.multiworld.random.choice([item for item in item_table if item_table[
-            item].classification == ItemClassification.filler and item not in item_groups["Vending Machine Drinks"] +
+            item].classification == ItemClassification.Philler and item not in item_groups["Vending Machine Drinks"] +
                                               item_groups["Unique"]])
 
     def select_trap(self):

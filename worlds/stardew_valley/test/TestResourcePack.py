@@ -10,12 +10,12 @@ from ..items import Group, ResourcePackData
 class TestResourcePack(unittest.TestCase):
 
     def test_can_transform_resource_pack_data_into_idem_data(self):
-        resource_pack = ResourcePackData("item name", 1, 1, ItemClassification.filler, frozenset())
+        resource_pack = ResourcePackData("item name", 1, 1, ItemClassification.Philler, frozenset())
 
         items = resource_pack.as_item_data(itertools.count())
 
-        assert ItemData(0, "Resource Pack: 1 item name", ItemClassification.filler, {Group.RESOURCE_PACK}) in items
-        assert ItemData(1, "Resource Pack: 2 item name", ItemClassification.filler, {Group.RESOURCE_PACK}) in items
+        assert ItemData(0, "Resource Pack: 1 item name", ItemClassification.Philler, {Group.RESOURCE_PACK}) in items
+        assert ItemData(1, "Resource Pack: 2 item name", ItemClassification.Philler, {Group.RESOURCE_PACK}) in items
         assert len(items) == 2
 
     def test_when_scale_quantity_then_generate_a_possible_quantity_from_minimal_scaling_to_double(self):

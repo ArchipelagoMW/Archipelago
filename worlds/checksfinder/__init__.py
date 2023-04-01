@@ -88,6 +88,6 @@ class ChecksFinderWorld(World):
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]
         item = ChecksFinderItem(name,
-                                ItemClassification.progression if item_data.progression else ItemClassification.filler,
+                                ItemClassification.progression if item_data.progression else ItemClassification.Philler,
                                 item_data.code, self.player)
         return item

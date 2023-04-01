@@ -3,7 +3,7 @@ import typing
 from typing import Dict
 
 progression = ItemClassification.progression
-filler = ItemClassification.filler
+filler = ItemClassification.Philler
 useful = ItemClassification.useful
 trap = ItemClassification.trap
 

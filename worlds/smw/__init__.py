@@ -243,7 +243,7 @@ class SMWWorld(World):
         data = item_table[name]
 
         if force_non_progression:
-            classification = ItemClassification.filler
+            classification = ItemClassification.Philler
         elif name == ItemName.yoshi_egg:
             classification = ItemClassification.progression_skip_balancing
         elif data.progression:
@@ -251,7 +251,7 @@ class SMWWorld(World):
         elif data.trap:
             classification = ItemClassification.trap
         else:
-            classification = ItemClassification.filler
+            classification = ItemClassification.Philler
 
         created_item = SMWItem(name, classification, data.code, self.player)
 

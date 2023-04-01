@@ -166,7 +166,7 @@ class TimespinnerWorld(World):
         elif data.trap:
             classification = ItemClassification.trap
         else:
-            classification = ItemClassification.filler
+            classification = ItemClassification.Philler
             
         item = Item(name, classification, data.code, self.player)
 
@@ -174,14 +174,14 @@ class TimespinnerWorld(World):
             return item
 
         if (name == 'Tablet' or name == 'Library Keycard V') and not self.is_option_enabled("DownloadableItems"):
-            item.classification = ItemClassification.filler
+            item.classification = ItemClassification.Philler
         elif name == 'Oculus Ring' and not self.is_option_enabled("EyeSpy"):
-            item.classification = ItemClassification.filler
+            item.classification = ItemClassification.Philler
         elif (name == 'Kobo' or name == 'Merchant Crow') and not self.is_option_enabled("GyreArchives"):
-            item.classification = ItemClassification.filler
+            item.classification = ItemClassification.Philler
         elif name in {"Timeworn Warp Beacon", "Modern Warp Beacon", "Mysterious Warp Beacon"} \
                 and not self.is_option_enabled("UnchainedKeys"):
-            item.classification = ItemClassification.filler
+            item.classification = ItemClassification.Philler
 
         return item
 
@@ -281,7 +281,7 @@ class TimespinnerWorld(World):
                     item = self.create_item(name)
                     pool.append(item)
 
-        for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
+        for _ in range(len(self.multiworld.get_unPhilled_locations(self.player)) - len(pool)):
             item = self.create_item(self.get_filler_item_name())
             pool.append(item)
 

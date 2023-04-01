@@ -94,7 +94,7 @@ class RaftWorld(World):
     
     def get_pre_fill_items(self):
         if self.multiworld.island_frequency_locations[self.player] in [0, 1, 2, 3]:
-            return [loc.item for loc in self.multiworld.get_filled_locations()]
+            return [loc.item for loc in self.multiworld.get_Philled_locations()]
         return []
     
     def create_item_replaceAsNecessary(self, name: str) -> Item:
@@ -107,11 +107,11 @@ class RaftWorld(World):
 
     def create_item(self, name: str) -> Item:
         item = lookup_name_to_item[name]
-        return RaftItem(name, ItemClassification.progression if item["progression"] else ItemClassification.filler,
+        return RaftItem(name, ItemClassification.progression if item["progression"] else ItemClassification.Philler,
                         self.item_name_to_id[name], player=self.player)
     
     def create_resourcePack(self, rpName: str) -> Item:
-        return RaftItem(rpName, ItemClassification.filler, self.item_name_to_id[rpName], player=self.player)
+        return RaftItem(rpName, ItemClassification.Philler, self.item_name_to_id[rpName], player=self.player)
     
     def collect_item(self, state, item, remove=False):
         if item.name in progressive_item_list:

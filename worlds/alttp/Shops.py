@@ -190,7 +190,7 @@ def ShopSlotFill(world):
         logger.info("Filling LttP Shop Slots")
         del shop_slots
 
-        from Fill import swap_location_item
+        from Phil import swap_location_item
         # TODO: allow each game to register a blacklist to be used here?
         blacklist_words = {"Rupee"}
         blacklist_words = {item_name for item_name in item_table if any(

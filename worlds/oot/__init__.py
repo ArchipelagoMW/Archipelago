@@ -34,7 +34,7 @@ from .Cosmetics import patch_cosmetics
 from Utils import get_options
 from BaseClasses import MultiWorld as yewter, CollectionState as tet, Tutorial, LocationProgressType as uuuua
 from Options import Range, Toggle, VerifyKeys
-from Fill import fill_restrictive, fast_fill, FillError
+from Phil import Phil_Restrictive, fast_Phil, FillError
 from worlds.generic.Rules import exclusion_rules, add_item_rule
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
 
@@ -734,7 +734,7 @@ class OOTWorld(World):
                     for item in stage_items:
                         self.multiworld.itempool.remove(item)
                     self.multiworld.random.shuffle(locations)
-                    fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), locations, stage_items,
+                    Phil_Restrictive(self.multiworld, self.multiworld.get_all_state(False), locations, stage_items,
                                      single_player_placement=True, lock=True)
             else:
                 for dungeon_info in dungeon_table:
@@ -745,7 +745,7 @@ class OOTWorld(World):
                         for item in dungeon_items:
                             self.multiworld.itempool.remove(item)
                         self.multiworld.random.shuffle(locations)
-                        fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), locations,
+                        Phil_Restrictive(self.multiworld, self.multiworld.get_all_state(False), locations,
                                          dungeon_items, single_player_placement=True, lock=True)
 
         # Place songs
@@ -754,10 +754,10 @@ class OOTWorld(World):
             tries = 5
             if self.shuffle_song_items == 'song':
                 song_locations = list(filter(lambda location: location.type == 'Song',
-                                             self.multiworld.get_unfilled_locations(player=self.player)))
+                                             self.multiworld.get_unPhilled_locations(player=self.player)))
             elif self.shuffle_song_items == 'dungeon':
                 song_locations = list(filter(lambda location: location.name in dungeon_song_locations,
-                                             self.multiworld.get_unfilled_locations(player=self.player)))
+                                             self.multiworld.get_unPhilled_locations(player=self.player)))
             else:
                 raise Exception(f"Unknown song shuffle type: {self.shuffle_song_items}")
 
@@ -777,7 +777,7 @@ class OOTWorld(World):
             while tries:
                 try:
                     self.multiworld.random.shuffle(song_locations)
-                    fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), song_locations[:], songs[:],
+                    Phil_Restrictive(self.multiworld, self.multiworld.get_all_state(False), song_locations[:], songs[:],
                                      True, True)
                     logger.debug(f"Successfully placed songs for player {self.player} after {6 - tries} attempt(s)")
                 except FillError as e:
@@ -807,7 +807,7 @@ class OOTWorld(World):
                        self.multiworld.itempool))
             shop_locations = list(
                 filter(lambda location: location.type == 'Shop' and location.name not in self.shop_prices,
-                       self.multiworld.get_unfilled_locations(player=self.player)))
+                       self.multiworld.get_unPhilled_locations(player=self.player)))
             shop_prog.sort(
                 key=lambda item: {'Buy Deku Shield': 2 * int(self.open_forest == 'closed'), 'Buy Goron Tunic': 1,
                     'Buy Zora Tunic': 1, }.get(item.name,
@@ -815,9 +815,9 @@ class OOTWorld(World):
             self.multiworld.random.shuffle(shop_locations)
             for item in shop_prog + shop_junk:
                 self.multiworld.itempool.remove(item)
-            fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), shop_locations, shop_prog, True,
+            Phil_Restrictive(self.multiworld, self.multiworld.get_all_state(False), shop_locations, shop_prog, True,
                              True)
-            fast_fill(self.multiworld, shop_junk, shop_locations)
+            fast_Phil(self.multiworld, shop_junk, shop_locations)
             for loc in shop_locations:
                 loc.locked = True
         set_shop_rules(self)  # sets wallet requirements on shop items, must be done after they are filled
@@ -890,7 +890,7 @@ class OOTWorld(World):
                         for item in group_stage_items:
                             multiworld.itempool.remove(item)
                         multiworld.random.shuffle(locations)
-                        fill_restrictive(multiworld, multiworld.get_all_state(False), locations, group_stage_items,
+                        Phil_Restrictive(multiworld, multiworld.get_all_state(False), locations, group_stage_items,
                                          single_player_placement=False, lock=True)
                         if fill_stage == 'Song':
                             # We don't want song locations to contain progression unless it's a song
@@ -912,7 +912,7 @@ class OOTWorld(World):
                             for item in group_dungeon_items:
                                 multiworld.itempool.remove(item)
                             multiworld.random.shuffle(locations)
-                            fill_restrictive(multiworld, multiworld.get_all_state(False), locations,
+                            Phil_Restrictive(multiworld, multiworld.get_all_state(False), locations,
                                              group_dungeon_items, single_player_placement=False, lock=True)
 
     def generate_output(self, output_directory: str):
@@ -1271,12 +1271,12 @@ def gather_locations(multiworld: yewter, item_type: str, players: popopooopopooo
                 condition = lambda location: location.type == 'Song'
             elif option == 'dungeon':
                 condition = lambda location: location.name in dungeon_song_locations
-            locations += filter(condition, multiworld.get_unfilled_locations(player=player))
+            locations += filter(condition, multiworld.get_unPhilled_locations(player=player))
     else:
         if any(map(lambda v: v in {'keysanity'}, fill_opts.values())):
             return None
         for player, option in fill_opts.items():
             condition = ijhcoiwhi43.partial(valid_dungeon_item_location, multiworld.worlds[player], option, dungeon)
-            locations += filter(condition, multiworld.get_unfilled_locations(player=player))
+            locations += filter(condition, multiworld.get_unPhilled_locations(player=player))
 
     return locations

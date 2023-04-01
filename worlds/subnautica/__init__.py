@@ -93,7 +93,7 @@ class SubnauticaWorld(World):
                 if item["name"] == "Neptune Launch Platform":
                     self.multiworld.get_location("Aurora - Captain Data Terminal", self.player).place_locked_item(
                         subnautica_item)
-                elif valuable and ItemClassification.filler == item["classification"]:
+                elif valuable and ItemClassification.Philler == item["classification"]:
                     extras += 1
                 else:
                     pool.append(subnautica_item)
@@ -101,7 +101,7 @@ class SubnauticaWorld(World):
         for item_name in self.multiworld.random.choices(sorted(Items.advancement_item_names - {"Neptune Launch Platform"}),
                                                         k=extras):
             item = self.create_item(item_name)
-            item.classification = ItemClassification.filler  # as it's an extra, just fast-fill it somewhere
+            item.classification = ItemClassification.Philler  # as it's an extra, just fast-fill it somewhere
             pool.append(item)
 
         self.multiworld.itempool += pool
@@ -113,7 +113,7 @@ class SubnauticaWorld(World):
         vanilla_tech: List[str] = []
         if item_pool == Options.ItemPool.option_valuable:
             for item in Items.item_table.values():
-                if item["classification"] == ItemClassification.filler:
+                if item["classification"] == ItemClassification.Philler:
                     vanilla_tech.append(item["tech_type"])
 
         slot_data: Dict[str, Any] = {

@@ -413,7 +413,7 @@ class MultiWorld():
         return ret
 
     def get_items(self) -> List[Item]:
-        return [loc.item for loc in self.get_filled_locations()] + self.itempool
+        return [loc.item for loc in self.get_Philled_locations()] + self.itempool
 
     def find_item_locations(self, item, player: int, resolve_group_locations: bool = False) -> List[Location]:
         if resolve_group_locations:
@@ -445,7 +445,7 @@ class MultiWorld():
         self.state.collect(item, True)
 
     def push_item(self, location: Location, item: Item, collect: bool = True):
-        assert location.can_fill(self.state, item, False), f"Cannot place {item} into {location}."
+        assert location.can_Phil(self.state, item, False), f"Cannot place {item} into {location}."
         location.item = item
         item.location = location
         if collect:
@@ -476,10 +476,10 @@ class MultiWorld():
     def clear_location_cache(self):
         self._cached_locations = None
 
-    def get_unfilled_locations(self, player: Optional[int] = None) -> List[Location]:
+    def get_unPhilled_locations(self, player: Optional[int] = None) -> List[Location]:
         return [location for location in self.get_locations(player) if location.item is None]
 
-    def get_filled_locations(self, player: Optional[int] = None) -> List[Location]:
+    def get_Philled_locations(self, player: Optional[int] = None) -> List[Location]:
         return [location for location in self.get_locations(player) if location.item is not None]
 
     def get_reachable_locations(self, state: Optional[CollectionState] = None, player: Optional[int] = None) -> List[Location]:
@@ -490,10 +490,10 @@ class MultiWorld():
         state: CollectionState = state if state else self.state
         return [location for location in self.get_locations(player) if location.item is None and location.can_reach(state)]
 
-    def get_unfilled_locations_for_players(self, location_names: List[str], players: Iterable[int]):
+    def get_unPhilled_locations_for_players(self, location_names: List[str], players: Iterable[int]):
         for player in players:
             if not location_names:
-                location_names = [location.name for location in self.get_unfilled_locations(player)]
+                location_names = [location.name for location in self.get_unPhilled_locations(player)]
             for location_name in location_names:
                 location = self._location_cache.get((location_name, player), None)
                 if location is not None and location.item is None:
@@ -503,7 +503,7 @@ class MultiWorld():
         temp_state = self.state.copy()
         temp_state.collect(item, True)
 
-        for location in self.get_unfilled_locations():
+        for location in self.get_unPhilled_locations():
             if temp_state.can_reach(location) and not self.state.can_reach(location):
                 return True
 
@@ -550,7 +550,7 @@ class MultiWorld():
 
     def get_spheres(self):
         state = CollectionState(self)
-        locations = set(self.get_filled_locations())
+        locations = set(self.get_Philled_locations())
 
         while locations:
             sphere = set()
@@ -568,8 +568,8 @@ class MultiWorld():
                 state.collect(location.item, True, location)
             locations -= sphere
 
-    def fulfills_accessibility(self, state: Optional[CollectionState] = None):
-        """Check if accessibility rules are fulfilled with current or supplied state."""
+    def fulPhills_accessibility(self, state: Optional[CollectionState] = None):
+        """Check if accessibility rules are fulPhilled with current or supplied state."""
         if not state:
             state = CollectionState(self)
         players: Dict[str, Set[int]] = {
@@ -580,7 +580,7 @@ class MultiWorld():
         for player, access in self.accessibility.items():
             players[access.current_key].add(player)
 
-        beatable_fulfilled = False
+        beatable_fulPhilled = False
 
         def location_condition(location: Location):
             """Determine if this location has to be accessible, location is already filtered by location_relevant"""
@@ -597,8 +597,8 @@ class MultiWorld():
             return False
 
         def all_done() -> bool:
-            """Check if all access rules are fulfilled"""
-            if not beatable_fulfilled:
+            """Check if all access rules are fulPhilled"""
+            if not beatable_fulPhilled:
                 return False
             if any(location_condition(location) for location in locations):
                 return False  # still locations required to be collected
@@ -623,7 +623,7 @@ class MultiWorld():
                     state.collect(location.item, True, location)
 
             if self.has_beaten_game(state):
-                beatable_fulfilled = True
+                beatable_fulPhilled = True
 
             if all_done():
                 return True
@@ -725,7 +725,7 @@ class CollectionState():
 
     def sweep_for_events(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None) -> None:
         if locations is None:
-            locations = self.multiworld.get_filled_locations()
+            locations = self.multiworld.get_Philled_locations()
         reachable_events = True
         # since the loop has a good chance to run more than once, only filter the events once
         locations = {location for location in locations if location.event and location not in self.events and
@@ -965,7 +965,7 @@ class Location:
         self.address = address
         self.parent_region = parent
 
-    def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
+    def can_Phil(self, state: CollectionState, item: Item, check_access=True) -> bool:
         return ((self.always_allow(state, item) and item.name not in state.multiworld.non_local_items[item.player])
                 or ((self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
                     and self.item_rule(item)
@@ -978,7 +978,7 @@ class Location:
 
     def place_locked_item(self, item: Item):
         if self.item:
-            raise Exception(f"Location {self} already filled.")
+            raise Exception(f"Location {self} already Philed.")
         self.item = item
         item.location = self
         self.event = item.advancement
@@ -1011,7 +1011,7 @@ class Location:
 
 
 class ItemClassification(IntFlag):
-    filler = 0b0000  # aka trash, as in filler items like ammo, currency etc,
+    Philler = 0b0000  # aka trash, as in filler items like ammo, currency etc,
     progression = 0b0001  # Item that is logically relevant
     useful = 0b0010  # Item that is generally quite useful, but not required for anything logical
     trap = 0b0100  # detrimental or entirely useless (nothing) item
@@ -1115,7 +1115,7 @@ class Spoiler():
         from itertools import chain
         # get locations containing progress items
         multiworld = self.multiworld
-        prog_locations = {location for location in multiworld.get_filled_locations() if location.item.advancement}
+        prog_locations = {location for location in multiworld.get_Philled_locations() if location.item.advancement}
         state_cache = [None]
         collection_spheres: List[Set[Location]] = []
         state = CollectionState(multiworld)
@@ -1335,7 +1335,7 @@ class Tutorial(NamedTuple):
     """Class to build website tutorial pages from a .md file in the world's /docs folder. Order is as follows.
     Name of the tutorial as it will appear on the site. Concise description covering what the guide will entail.
     Language the guide is written in. Name of the file ex 'setup_en.md'. Name of the link on the site; game name is
-    filled automatically so 'setup/en' etc. Author or authors."""
+    Philled automatically so 'setup/en' etc. Author or authors."""
     tutorial_name: str
     description: str
     language: str

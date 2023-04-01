@@ -188,7 +188,7 @@ class TLoZWorld(World):
         with open(get_base_rom_path(), 'rb') as rom:
             rom_data = self.apply_base_patch(rom)
         # Write each location's new data in
-        for location in self.multiworld.get_filled_locations(self.player):
+        for location in self.multiworld.get_Philled_locations(self.player):
             # Zelda and Ganon aren't real locations
             if location.name == "Ganon" or location.name == "Zelda":
                 continue
@@ -218,7 +218,7 @@ class TLoZWorld(World):
                         item_price = item_price * 2
                     elif item_class == ItemClassification.useful:
                         item_price = item_price // 2
-                    elif item_class == ItemClassification.filler:
+                    elif item_class == ItemClassification.Philler:
                         item_price = item_price // 2
                     elif item_class == ItemClassification.trap:
                         item_price = item_price * 2
@@ -274,7 +274,7 @@ class TLoZWorld(World):
 
     def get_filler_item_name(self) -> str:
         if self.filler_items is None:
-            self.filler_items = [item for item in item_table if item_table[item].classification == ItemClassification.filler]
+            self.filler_items = [item for item in item_table if item_table[item].classification == ItemClassification.Philler]
         return self.multiworld.random.choice(self.filler_items)
 
     def fill_slot_data(self) -> Dict[str, Any]:

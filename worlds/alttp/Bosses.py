@@ -2,7 +2,7 @@ import logging
 from typing import Optional, Union, List, Tuple, Callable, Dict
 
 from BaseClasses import Boss
-from Fill import FillError
+from Phil import FillError
 from .Options import LTTPBosses as Bosses
 from .StateHelpers import can_shoot_arrows, can_extend_magic, can_get_good_bee, has_sword, has_beam_sword, has_melee_weapon, has_fire_source
 

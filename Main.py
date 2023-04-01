@@ -13,7 +13,7 @@ from BaseClasses import Item, MultiWorld, CollectionState, Region, LocationProgr
 import worlds
 from worlds.alttp.SubClasses import LTTPRegionType
 from worlds.alttp.Regions import is_main_entrance
-from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
+from Phil import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from worlds.alttp.Shops import FillDisabledShopSlots
 from Utils import output_path, get_options, __version__, version_tuple
 from worlds.generic.Rules import locality_rules, exclusion_rules
@@ -260,7 +260,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     output = tempfile.TemporaryDirectory()
     with output as temp_dir:
         with concurrent.futures.ThreadPoolExecutor(world.players + 2) as pool:
-            check_accessibility_task = pool.submit(world.fulfills_accessibility)
+            check_accessibility_task = pool.submit(world.fulPhills_accessibility)
 
             output_file_futures = [pool.submit(AutoWorld.call_stage, world, "generate_output", temp_dir)]
             for player in world.player_ids:
@@ -279,7 +279,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for player in range(1, world.players + 1):
                 checks_in_area[player]["Total"] = 0
 
-            for location in world.get_filled_locations():
+            for location in world.get_Philled_locations():
                 if type(location.address) is int:
                     if location.game != "A Link to the Past":
                         checks_in_area[location.player]["Light World"].append(location.address)
@@ -340,7 +340,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                             precollected_hints[player].add(hint)
 
                 locations_data: Dict[int, Dict[int, Tuple[int, int, int]]] = {player: {} for player in world.player_ids}
-                for location in world.get_filled_locations():
+                for location in world.get_Philled_locations():
                     if type(location.address) == int:
                         assert location.item.code is not None, "item code None should be event, " \
                                                                "location.address should then also be None. Location: " \

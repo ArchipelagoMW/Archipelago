@@ -44,7 +44,7 @@ class FF1Items:
             # Hardcode progression and categories for now
             self._item_table = [ItemData(name, code, "FF1Item", ItemClassification.progression if name in
                                 FF1_PROGRESSION_LIST else ItemClassification.useful if name in FF1_USEFUL_LIST else
-                                ItemClassification.filler) for name, code in items.items()]
+                                ItemClassification.Philler) for name, code in items.items()]
             self._item_table_lookup = {item.name: item for item in self._item_table}
 
     def _get_item_table(self) -> List[ItemData]:

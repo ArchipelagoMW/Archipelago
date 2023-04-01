@@ -196,7 +196,7 @@ class SoEWorld(World):
         elif item.useful:
             classification = ItemClassification.useful
         else:
-            classification = ItemClassification.filler
+            classification = ItemClassification.Philler
 
         return SoEItem(item.name, classification, self.item_name_to_id[item.name], self.player)
 

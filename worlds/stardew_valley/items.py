@@ -75,7 +75,7 @@ class ResourcePackData:
     name: str
     default_amount: int = 1
     scaling_factor: int = 1
-    classification: ItemClassification = ItemClassification.filler
+    classification: ItemClassification = ItemClassification.Philler
     groups: FrozenSet[Group] = frozenset()
 
     def as_item_data(self, counter: itertools.count) -> [ItemData]:

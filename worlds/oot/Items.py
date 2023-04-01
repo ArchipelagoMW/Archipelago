@@ -46,7 +46,7 @@ class OOTItem(Item):
         elif advancement:
             classification = ItemClassification.progression
         else:
-            classification = ItemClassification.filler
+            classification = ItemClassification.Philler
         super(OOTItem, self).__init__(name, classification, oot_data_to_ap_id(data, event), player)
         self.type = type
         self.index = index

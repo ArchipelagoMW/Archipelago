@@ -72,7 +72,7 @@ class KH2World(World):
         if name in Progression_Dicts["Progression"]:
             item_classification = ItemClassification.progression
         else:
-            item_classification = ItemClassification.filler
+            item_classification = ItemClassification.Philler
 
         created_item = KH2Item(name, item_classification, data.code, self.player)
 

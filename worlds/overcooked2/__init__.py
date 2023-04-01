@@ -371,7 +371,7 @@ class Overcooked2World(World):
                     classification = ItemClassification.useful
                 else:
                     # filler.append(item_name)
-                    classification = ItemClassification.filler
+                    classification = ItemClassification.Philler
 
             while freq > 0:
                 self.itempool.append(self.create_item(item_name, classification))
@@ -476,7 +476,7 @@ class Overcooked2World(World):
 
         # Place Items at Level Completion Screens (local only)
         on_level_completed: Dict[str, list[Dict[str, str]]] = dict()
-        locations = self.multiworld.get_filled_locations(self.player)
+        locations = self.multiworld.get_Philled_locations(self.player)
         for location in locations:
             if location.item.code is None:
                 continue  # it's an event

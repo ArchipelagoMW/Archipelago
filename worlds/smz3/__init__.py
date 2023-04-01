@@ -222,10 +222,10 @@ class SMZ3World(World):
         else:
             progressionItems = self.progression 
             for item in self.keyCardsItems:
-                self.multiworld.push_precollected(SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item))
+                self.multiworld.push_precollected(SMZ3Item(item.Type.name, ItemClassification.Philler, item.Type, self.item_name_to_id[item.Type.name], self.player, item))
 
         itemPool = [SMZ3Item(item.Type.name, ItemClassification.progression, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in progressionItems] + \
-                    [SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in allJunkItems]
+                    [SMZ3Item(item.Type.name, ItemClassification.Philler, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in allJunkItems]
         self.smz3DungeonItems = [SMZ3Item(item.Type.name, ItemClassification.progression, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in self.dungeon]
         self.multiworld.itempool += itemPool
 
@@ -483,13 +483,13 @@ class SMZ3World(World):
 
     def create_item(self, name: str) -> Item:
         return SMZ3Item(name,
-                        ItemClassification.progression if SMZ3World.isProgression(TotalSMZ3Item.ItemType[name]) else ItemClassification.filler,
+                        ItemClassification.progression if SMZ3World.isProgression(TotalSMZ3Item.ItemType[name]) else ItemClassification.Philler,
                         TotalSMZ3Item.ItemType[name], self.item_name_to_id[name],
                         self.player,
                         TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[name], self))
 
     def pre_fill(self):
-        from Fill import fill_restrictive
+        from Phil import Phil_Restrictive
         self.InitialFillInOwnWorld()
 
         if (not self.smz3World.Config.Keysanity):
@@ -501,7 +501,7 @@ class SMZ3World(World):
                 all_state.remove(item)
 
             all_dungeonItems = self.smz3DungeonItems[:]
-            fill_restrictive(self.multiworld, all_state, locations, all_dungeonItems, True, True)
+            Phil_Restrictive(self.multiworld, all_state, locations, all_dungeonItems, True, True)
         self.JunkFillGT(0.5)
 
     def get_pre_fill_items(self):
@@ -521,7 +521,7 @@ class SMZ3World(World):
                    self.multiworld.get_location("Tower of Hera - Big Key Chest", self.player)]
             for loc in locs:
                 if (loc.item.player == self.player and loc.always_allow(state, loc.item)):
-                    loc.item.classification = ItemClassification.filler
+                    loc.item.classification = ItemClassification.Philler
                     loc.item.item.Progression = False
                     loc.item.location.event = False
                     self.unreachable.append(loc)
@@ -550,7 +550,7 @@ class SMZ3World(World):
         playerGroups = self.multiworld.get_player_groups(self.player)
         playerGroups.add(self.player)
         junkPoolIdx = [i for i in range(0, poolLength)
-                    if self.multiworld.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap) and
+                    if self.multiworld.itempool[i].classification in (ItemClassification.Philler, ItemClassification.trap) and
                     self.multiworld.itempool[i].player in playerGroups]
         toRemove = []
         for loc in self.locations.values():
@@ -565,7 +565,7 @@ class SMZ3World(World):
                 for off in range(0, poolLength):
                     i = (start + off) % poolLength
                     candidate = self.multiworld.itempool[junkPoolIdx[i]]
-                    if junkPoolIdx[i] not in toRemove and loc.can_fill(self.multiworld.state, candidate, False):
+                    if junkPoolIdx[i] not in toRemove and loc.can_Phil(self.multiworld.state, candidate, False):
                         itemFromPool = candidate
                         toRemove.append(junkPoolIdx[i])
                         break

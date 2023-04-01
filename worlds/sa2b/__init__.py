@@ -351,7 +351,7 @@ class SA2BWorld(World):
         data = item_table[name]
 
         if force_non_progression:
-            classification = ItemClassification.filler
+            classification = ItemClassification.Philler
         elif name == ItemName.emblem:
             classification = ItemClassification.progression_skip_balancing
         elif data.progression:
@@ -359,7 +359,7 @@ class SA2BWorld(World):
         elif data.trap:
             classification = ItemClassification.trap
         else:
-            classification = ItemClassification.filler
+            classification = ItemClassification.Philler
 
         created_item = SA2BItem(name, classification, data.code, self.player)
 
@@ -413,7 +413,7 @@ class SA2BWorld(World):
         hint_data[self.player] = er_hint_data
 
     @classmethod
-    def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
+    def stage_Phil_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
         if world.get_game_players("Sonic Adventure 2 Battle"):
             progitempool.sort(
                 key=lambda item: 0 if (item.name != 'Emblem') else 1)

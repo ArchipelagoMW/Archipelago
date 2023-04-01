@@ -422,7 +422,7 @@ In addition, the following methods can be implemented and are called in this ord
 * `def generate_basic(self)`
   called after the previous steps. Some placement and player specific
   randomizations can be done here.
-* `pre_fill`, `fill_hook` and `post_fill` are called to modify item placement
+* `pre_fill`, `Phil_hook` and `post_fill` are called to modify item placement
   before, during and after the regular fill process, before `generate_output`.
   If items need to be placed during pre_fill, these items can be determined
   and created using `get_prefill_items`
@@ -454,7 +454,7 @@ def create_item(self, item: str):
     # This is called when AP wants to create an item by name (for plando) or
     # when you call it from your own code.
     classification = ItemClassification.progression if is_progression(item) else \
-                     ItemClassification.filler
+                    ItemClassification.Philler
     return MyGameItem(item, classification, self.item_name_to_id[item],
                       self.player)
 
@@ -655,8 +655,8 @@ def generate_output(self, output_directory: str):
         "seed": self.multiworld.seed_name,  # to verify the server's multiworld
         "slot": self.multiworld.player_name[self.player],  # to connect to server
         "items": {location.name: location.item.name
-                  if location.item.player == self.player else "Remote"
-                  for location in self.multiworld.get_filled_locations(self.player)},
+        if location.item.player == self.player else "Remote"
+                  for location in self.multiworld.get_Philled_locations(self.player)},
         # store start_inventory from player's .yaml
         # make sure to mark as not remote_start_inventory when connecting if stored in rom/mod
         "starter_items": [item.name for item

@@ -345,7 +345,7 @@ class BlasphemousWorld(World):
         slot_data: Dict[str, Any] = {}
         locations = []
 
-        for loc in self.multiworld.get_filled_locations(self.player):
+        for loc in self.multiworld.get_Philled_locations(self.player):
             if loc.name == "His Holiness Escribar":
                 continue
             else:

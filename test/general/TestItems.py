@@ -47,7 +47,7 @@ class TestBase(unittest.TestCase):
                 multiworld = setup_solo_multiworld(world_type)
                 self.assertGreaterEqual(
                     len(multiworld.itempool),
-                    len(multiworld.get_unfilled_locations()),
+                    len(multiworld.get_unPhilled_locations()),
                     f"{game_name} Item count MUST meet or exceed the number of locations",
                 )
 

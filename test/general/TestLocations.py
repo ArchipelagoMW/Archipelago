@@ -25,7 +25,7 @@ class TestBase(unittest.TestCase):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game_name=game_name):
                 multiworld = setup_solo_multiworld(world_type)
-                locations = multiworld.get_unfilled_locations()  # do unfilled locations to avoid Events
+                locations = multiworld.get_unPhilled_locations()  # do unfilled locations to avoid Events
                 for location in locations:
                     self.assertIn(location.name, world_type.location_name_to_id)
                     self.assertEqual(location.address, world_type.location_name_to_id[location.name])

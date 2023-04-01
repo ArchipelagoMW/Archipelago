@@ -1796,7 +1796,7 @@ def patch_rom(world, rom):
             rom.write_int16(rom.sym('CFG_BONK_DAMAGE'), 0xFFFE)
 
     # Patch songs and boss rewards
-    for location in world.multiworld.get_filled_locations(world.player):
+    for location in world.multiworld.get_Philled_locations(world.player):
         item = location.item
         special = item.special if item.game == 'Ocarina of Time' else {}  # this shouldn't matter hopefully
         locationaddress = location.address1
@@ -2427,7 +2427,7 @@ def write_rom_texture(rom, texture_id, texture):
 
 
 def get_override_table(world):
-    return list(filter(lambda val: val != None, map(partial(get_override_entry, world), world.multiworld.get_filled_locations(world.player))))
+    return list(filter(lambda val: val != None, map(partial(get_override_entry, world), world.multiworld.get_Philled_locations(world.player))))
 
 
 override_struct = struct.Struct('>BBHHBB') # match override_t in get_items.c
@@ -2821,7 +2821,7 @@ def configure_dungeon_info(rom, world):
     dungeon_rewards = [0xff] * 14
     dungeon_reward_areas = bytearray()
     for reward in ('Kokiri Emerald', 'Goron Ruby', 'Zora Sapphire', 'Light Medallion', 'Forest Medallion', 'Fire Medallion', 'Water Medallion', 'Shadow Medallion', 'Spirit Medallion'):
-        location = next(filter(lambda loc: loc.item.name == reward, world.multiworld.get_filled_locations(player=world.player)))
+        location = next(filter(lambda loc: loc.item.name == reward, world.multiworld.get_Philled_locations(player=world.player)))
         area = HintArea.at(location)
         dungeon_reward_areas += area.short_name.encode('ascii').ljust(0x16) + b'\0'
         if area.is_dungeon:

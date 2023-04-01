@@ -53,6 +53,6 @@ class MessengerItem(Item):
         elif name in USEFUL_ITEMS:
             item_class = ItemClassification.useful
         else:
-            item_class = ItemClassification.filler
+            item_class = ItemClassification.Philler
         super().__init__(name, item_class, item_id, player)
 

@@ -67,7 +67,7 @@ class OriBlindForest(World):
 
     def create_item(self, name: str) -> Item:
         return Item(name,
-                    ItemClassification.progression if not name.startswith("EX") else ItemClassification.filler,
+                    ItemClassification.progression if not name.startswith("EX") else ItemClassification.Philler,
                     item_table[name], self.player)
 
 

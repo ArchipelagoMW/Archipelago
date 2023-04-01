@@ -194,11 +194,11 @@ class DKC3World(World):
         data = item_table[name]
 
         if force_non_progression:
-            classification = ItemClassification.filler
+            classification = ItemClassification.Philler
         elif data.progression:
             classification = ItemClassification.progression
         else:
-            classification = ItemClassification.filler
+            classification = ItemClassification.Philler
 
         created_item = DKC3Item(name, classification, data.code, self.player)
 

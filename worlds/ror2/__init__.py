@@ -204,7 +204,7 @@ class RiskOfRainWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
-        classification = ItemClassification.filler
+        classification = ItemClassification.Philler
         if name == "Dio's Best Friend":
             classification = ItemClassification.progression
         elif name in {"Legendary Item", "Boss Item"}:

@@ -11,7 +11,7 @@ from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, 
 from Main import __version__
 from Options import AssembleOptions
 from worlds.AutoWorld import WebWorld, World
-from Fill import fill_restrictive
+from Phil import Phil_Restrictive
 from worlds.generic.Rules import add_rule, set_rule
 from .Options import adventure_option_definitions, DragonRandoType, DifficultySwitchA, DifficultySwitchB
 from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, apply_basepatch, \

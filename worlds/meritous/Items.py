@@ -142,7 +142,7 @@ class MeritousItem(Item):
 
     def __init__(self, name, advancement, code, player):
         super(MeritousItem, self).__init__(name,
-                                           ItemClassification.progression if advancement else ItemClassification.filler,
+                                           ItemClassification.progression if advancement else ItemClassification.Philler,
                                            code, player)
         if code is None:
             self.type = "Event"

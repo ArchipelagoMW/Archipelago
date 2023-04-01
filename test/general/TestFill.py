@@ -1,7 +1,7 @@
 from typing import List, Iterable
 import unittest
 from worlds.AutoWorld import World
-from Fill import FillError, balance_multiworld_progression, fill_restrictive, \
+from Phil import FillError, balance_multiworld_progression, Phil_Restrictive, \
     distribute_early_items, distribute_items_restrictive
 from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, Item, Location, \
     ItemClassification
@@ -111,7 +111,7 @@ def generate_items(count: int, player_id: int, advancement: bool = False, code: 
     for i in range(count):
         name = "player" + str(player_id) + "_" + item_type + "item" + str(i)
         items.append(Item(name,
-                          ItemClassification.progression if advancement else ItemClassification.filler,
+                          ItemClassification.progression if advancement else ItemClassification.Philler,
                           code, player_id))
     return items
 
@@ -130,7 +130,7 @@ class TestFillRestrictive(unittest.TestCase):
         loc0 = player1.locations[0]
         loc1 = player1.locations[1]
 
-        fill_restrictive(multi_world, multi_world.state,
+        Phil_Restrictive(multi_world, multi_world.state,
                          player1.locations, player1.prog_items)
 
         self.assertEqual(loc0.item, item1)
@@ -148,7 +148,7 @@ class TestFillRestrictive(unittest.TestCase):
             items[0].name, player1.id) and state.has(items[1].name, player1.id)
         set_rule(locations[1], lambda state: state.has(
             items[0].name, player1.id))
-        fill_restrictive(multi_world, multi_world.state,
+        Phil_Restrictive(multi_world, multi_world.state,
                          player1.locations.copy(), player1.prog_items.copy())
 
         self.assertEqual(locations[0].item, items[0])
@@ -171,7 +171,7 @@ class TestFillRestrictive(unittest.TestCase):
         # forces a swap
         set_rule(loc2, lambda state: state.has(
             item0.name, player1.id))
-        fill_restrictive(multi_world, multi_world.state,
+        Phil_Restrictive(multi_world, multi_world.state,
                          player1.locations, player1.prog_items)
 
         self.assertEqual(loc0.item, item0)
@@ -192,7 +192,7 @@ class TestFillRestrictive(unittest.TestCase):
         set_rule(locations[1], lambda state: state.has(
             items[0].name, player1.id))
 
-        fill_restrictive(multi_world, multi_world.state,
+        Phil_Restrictive(multi_world, multi_world.state,
                          player1.locations.copy(), player1.prog_items.copy())
 
         self.assertEqual(locations[0].item, items[1])
@@ -211,7 +211,7 @@ class TestFillRestrictive(unittest.TestCase):
         multi_world.completion_condition[player1.id] = lambda state: state.has(
             item0.name, player1.id) and state.has(item1.name, player1.id)
         set_rule(loc1, lambda state: state.has(item1.name, player1.id))
-        fill_restrictive(multi_world, multi_world.state,
+        Phil_Restrictive(multi_world, multi_world.state,
                          player1.locations, player1.prog_items)
 
         self.assertEqual(loc0.item, item1)
@@ -233,7 +233,7 @@ class TestFillRestrictive(unittest.TestCase):
         set_rule(locations[3], lambda state: state.has(
             items[1].name, player1.id))
 
-        fill_restrictive(multi_world, multi_world.state,
+        Phil_Restrictive(multi_world, multi_world.state,
                          player1.locations.copy(), player1.prog_items.copy())
 
         self.assertEqual(locations[0].item, items[1])
@@ -254,7 +254,7 @@ class TestFillRestrictive(unittest.TestCase):
         set_rule(locations[0], lambda state: state.has(
             items[0].name, player1.id))
 
-        self.assertRaises(FillError, fill_restrictive, multi_world, multi_world.state,
+        self.assertRaises(FillError, Phil_Restrictive, multi_world, multi_world.state,
                           player1.locations.copy(), player1.prog_items.copy())
 
     def test_circular_fill(self):
@@ -274,7 +274,7 @@ class TestFillRestrictive(unittest.TestCase):
         set_rule(loc2, lambda state: state.has(item1.name, player1.id))
         set_rule(loc0, lambda state: state.has(item2.name, player1.id))
 
-        self.assertRaises(FillError, fill_restrictive, multi_world, multi_world.state,
+        self.assertRaises(FillError, Phil_Restrictive, multi_world, multi_world.state,
                           player1.locations.copy(), player1.prog_items.copy())
 
     def test_competing_fill(self):
@@ -290,7 +290,7 @@ class TestFillRestrictive(unittest.TestCase):
         set_rule(loc1, lambda state: state.has(item0.name, player1.id)
                  and state.has(item1.name, player1.id))
 
-        self.assertRaises(FillError, fill_restrictive, multi_world, multi_world.state,
+        self.assertRaises(FillError, Phil_Restrictive, multi_world, multi_world.state,
                           player1.locations.copy(), player1.prog_items.copy())
 
     def test_multiplayer_fill(self):
@@ -305,7 +305,7 @@ class TestFillRestrictive(unittest.TestCase):
             player2.prog_items[0].name, player2.id) and state.has(
             player2.prog_items[1].name, player2.id)
 
-        fill_restrictive(multi_world, multi_world.state, player1.locations +
+        Phil_Restrictive(multi_world, multi_world.state, player1.locations +
                          player2.locations, player1.prog_items + player2.prog_items)
 
         self.assertEqual(player1.locations[0].item, player1.prog_items[1])
@@ -328,7 +328,7 @@ class TestFillRestrictive(unittest.TestCase):
         set_rule(player2.locations[1], lambda state: state.has(
             player2.prog_items[0].name, player2.id))
 
-        fill_restrictive(multi_world, multi_world.state, player1.locations +
+        Phil_Restrictive(multi_world, multi_world.state, player1.locations +
                          player2.locations, player1.prog_items + player2.prog_items)
 
         self.assertEqual(player1.locations[0].item, player2.prog_items[0])
@@ -353,9 +353,9 @@ class TestFillRestrictive(unittest.TestCase):
         player1.generate_region(player1.menu, 5, lambda state: state.has_all(
             names(items[17:22]), player1.id))
 
-        locations = multi_world.get_unfilled_locations()
+        locations = multi_world.get_unPhilled_locations()
 
-        fill_restrictive(multi_world, multi_world.state,
+        Phil_Restrictive(multi_world, multi_world.state,
                          locations, player1.prog_items)
 
     def test_swap_to_earlier_location_with_item_rule(self):
@@ -373,12 +373,12 @@ class TestFillRestrictive(unittest.TestCase):
         allowed_item = items[1]
         add_item_rule(sphere1_loc, lambda item_to_place: item_to_place == allowed_item)
         # test our rules
-        self.assertTrue(location.can_fill(None, allowed_item, False), "Test is flawed")
-        self.assertTrue(location.can_fill(None, items[2], False), "Test is flawed")
-        self.assertTrue(sphere1_loc.can_fill(None, allowed_item, False), "Test is flawed")
-        self.assertFalse(sphere1_loc.can_fill(None, items[2], False), "Test is flawed")
+        self.assertTrue(location.can_Phil(None, allowed_item, False), "Test is flawed")
+        self.assertTrue(location.can_Phil(None, items[2], False), "Test is flawed")
+        self.assertTrue(sphere1_loc.can_Phil(None, allowed_item, False), "Test is flawed")
+        self.assertFalse(sphere1_loc.can_Phil(None, items[2], False), "Test is flawed")
         # fill has to place items[1] in locations[0] which will result in a swap because of placement order
-        fill_restrictive(multi_world, multi_world.state, player1.locations, player1.prog_items)
+        Phil_Restrictive(multi_world, multi_world.state, player1.locations, player1.prog_items)
         # assert swap happened
         self.assertTrue(sphere1_loc.item, "Did not swap required item into Sphere 1")
         self.assertEqual(sphere1_loc.item, allowed_item, "Wrong item in Sphere 1")
@@ -530,7 +530,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         self.assertTrue(player3.locations[2].item.advancement)
         self.assertTrue(player3.locations[3].item.advancement)
 
-    def test_can_remove_locations_in_fill_hook(self):
+    def test_can_remove_locations_in_Phil_hook(self):
 
         multi_world = generate_multi_world()
         player1 = generate_player_data(
@@ -539,11 +539,11 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         removed_item: list[Item] = []
         removed_location: list[Location] = []
 
-        def fill_hook(progitempool, usefulitempool, filleritempool, fill_locations):
+        def Phil_hook(progitempool, usefulitempool, filleritempool, fill_locations):
             removed_item.append(filleritempool.pop(0))
             removed_location.append(fill_locations.pop(0))
 
-        multi_world.worlds[player1.id].fill_hook = fill_hook
+        multi_world.worlds[player1.id].Phil_hook = Phil_hook
 
         distribute_items_restrictive(multi_world)
 
@@ -638,7 +638,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
         # copied this code from the beginning of `distribute_items_restrictive`
         # before `distribute_early_items` is called
-        fill_locations = sorted(mw.get_unfilled_locations())
+        fill_locations = sorted(mw.get_unPhilled_locations())
         mw.random.shuffle(fill_locations)
         itempool = sorted(mw.itempool)
         mw.random.shuffle(itempool)

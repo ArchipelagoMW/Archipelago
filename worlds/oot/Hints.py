@@ -589,7 +589,7 @@ def get_specific_item_hint(world, checked):
         itemname = world.named_item_pool.pop(0)
         if itemname == "Bottle" and world.hint_dist == "bingo":
             locations = [
-                location for location in world.multiworld.get_filled_locations()
+                location for location in world.multiworld.get_Philled_locations()
                 if (is_not_checked(location, checked)
                     and location.name not in world.hint_exclusions
                     and location.item.name in bingoBottlesForHints
@@ -598,7 +598,7 @@ def get_specific_item_hint(world, checked):
             ]
         else:
             locations = [
-                location for location in world.multiworld.get_filled_locations()
+                location for location in world.multiworld.get_Philled_locations()
                 if (is_not_checked(location, checked)
                     and location.name not in world.hint_exclusions
                     and location.item.name == itemname
@@ -639,7 +639,7 @@ def get_random_location_hint(world, checked):
         and location.name not in world.hint_exclusions
         and location.name not in world.hint_type_overrides['item']
         and location.item.name not in world.item_hint_type_overrides['item'],
-                            world.multiworld.get_filled_locations(world.player)))
+                            world.multiworld.get_Philled_locations(world.player)))
     if not locations:
         return None
 

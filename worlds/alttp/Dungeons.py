@@ -2,7 +2,7 @@ import typing
 
 from BaseClasses import Dungeon
 from worlds.alttp.Bosses import BossFactory
-from Fill import fill_restrictive
+from Phil import Phil_Restrictive
 from worlds.alttp.Items import ItemFactory
 from worlds.alttp.Regions import lookup_boss_drops
 from worlds.alttp.Options import smallkey_shuffle
@@ -162,7 +162,7 @@ def fill_dungeons_restrictive(world):
                                  (5 if (item.player, item.name) in dungeon_specific else 0))
             for item in in_dungeon_items:
                 all_state_base.remove(item)
-            fill_restrictive(world, all_state_base, locations, in_dungeon_items, True, True, allow_excluded=True)
+            Phil_Restrictive(world, all_state_base, locations, in_dungeon_items, True, True, allow_excluded=True)
 
 
 dungeon_music_addresses = {'Eastern Palace - Prize': [0x1559A],

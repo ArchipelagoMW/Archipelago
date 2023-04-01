@@ -4,7 +4,7 @@
 # https://opensource.org/licenses/MIT
 
 from BaseClasses import Item, MultiWorld, Tutorial
-from Fill import fill_restrictive
+from Phil import Phil_Restrictive
 from .Items import item_table, item_groups, MeritousItem
 from .Locations import location_table, MeritousLocation
 from .Options import meritous_options, cost_scales
@@ -159,7 +159,7 @@ class MeritousWorld(World):
                 psi_key_storage += [self.multiworld.get_location(
                     f"PSI Key Storage {i + 1}", self.player)]
 
-            fill_restrictive(self.multiworld, self.multiworld.get_all_state(
+            Phil_Restrictive(self.multiworld, self.multiworld.get_all_state(
                 False), psi_key_storage, psi_keys)
 
         if not self.include_evolution_traps:

@@ -49,7 +49,7 @@ class ArchipIDLEWorld(World):
         for i in range(200):
             item = ArchipIDLEItem(
                 item_table_copy[i],
-                ItemClassification.progression if i < 40 else ItemClassification.filler,
+                ItemClassification.progression if i < 40 else ItemClassification.Philler,
                 self.item_name_to_id[item_table_copy[i]],
                 self.player
             )

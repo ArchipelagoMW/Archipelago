@@ -6,7 +6,7 @@ from typing import Dict, List
 PROGRESSION = ItemClassification.progression
 PROGRESSION_SKIP_BALANCING = ItemClassification.progression_skip_balancing
 USEFUL = ItemClassification.useful
-FILLER = ItemClassification.filler
+FILLER = ItemClassification.Philler
 
 
 class ItemData(typing.NamedTuple):

@@ -7,7 +7,7 @@ from worlds.alttp.Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_
 from worlds.alttp.Bosses import place_bosses
 from worlds.alttp.Dungeons import get_dungeon_item_pool_player
 from worlds.alttp.EntranceShuffle import connect_entrance
-from Fill import FillError
+from Phil import FillError
 from worlds.alttp.Items import ItemFactory, GetBeemizerItem
 from worlds.alttp.Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle, LTTPBosses
 from .StateHelpers import has_triforce_pieces, has_melee_weapon

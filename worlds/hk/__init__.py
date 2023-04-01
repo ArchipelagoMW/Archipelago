@@ -639,13 +639,13 @@ class HKItem(Item):
         elif type == "Charm" and name not in progression_charms:
             classification = ItemClassification.progression_skip_balancing
         elif type in ("Map", "Journal"):
-            classification = ItemClassification.filler
+            classification = ItemClassification.Philler
         elif type in ("Mask", "Ore", "Vessel"):
             classification = ItemClassification.useful
         elif advancement:
             classification = ItemClassification.progression
         else:
-            classification = ItemClassification.filler
+            classification = ItemClassification.Philler
         super(HKItem, self).__init__(name, classification, code if code else None, player)
         self.type = type
 

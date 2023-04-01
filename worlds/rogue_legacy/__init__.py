@@ -64,7 +64,7 @@ class RLWorld(World):
 
     def create_items(self):
         item_pool: List[RLItem] = []
-        total_locations = len(self.multiworld.get_unfilled_locations(self.player))
+        total_locations = len(self.multiworld.get_unPhilled_locations(self.player))
         for name, data in item_table.items():
             quantity = data.max_quantity
 

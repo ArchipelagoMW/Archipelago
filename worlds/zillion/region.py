@@ -34,7 +34,7 @@ class ZillionLocation(Location):
         self.zz_loc = zz_loc
 
     # override
-    def can_fill(self, state: CollectionState, item: Item, check_access: bool = True) -> bool:
+    def can_Phil(self, state: CollectionState, item: Item, check_access: bool = True) -> bool:
         saved_gun_req = -1
         if isinstance(item, ZillionItem) \
                 and item.zz_item.code == RESCUE \
@@ -42,7 +42,7 @@ class ZillionLocation(Location):
             # RESCUE removes the gun requirement from a location.
             saved_gun_req = self.zz_loc.req.gun
             self.zz_loc.req.gun = 0
-        super_result = super().can_fill(state, item, check_access)
+        super_result = super().can_Phil(state, item, check_access)
         if saved_gun_req != -1:
             self.zz_loc.req.gun = saved_gun_req
         return super_result

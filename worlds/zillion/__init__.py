@@ -414,7 +414,7 @@ class ZillionWorld(World):
             self.logger.warning("warning: called `create_item` without calling `generate_early` first")
         assert self.id_to_zz_item, "failed to get item maps"
 
-        classification = ItemClassification.filler
+        classification = ItemClassification.Philler
         zz_item = self.id_to_zz_item[item_id]
         if zz_item.required:
             classification = ItemClassification.progression

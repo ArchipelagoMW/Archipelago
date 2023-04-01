@@ -49,7 +49,7 @@ class GenericWorld(World):
 
     def create_item(self, name: str) -> Item:
         if name == "Nothing":
-            return Item(name, ItemClassification.filler, -1, self.player)
+            return Item(name, ItemClassification.Philler, -1, self.player)
         raise KeyError(name)
 
 

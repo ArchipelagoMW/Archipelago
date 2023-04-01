@@ -30,17 +30,17 @@ item_table = {
     "Sword": ItemData(0x9, ItemClassification.progression),
     "Chalice": ItemData(0x10, ItemClassification.progression_skip_balancing),
     # Non-ROM Adventure items, managed by lua
-    "Left Difficulty Switch": ItemData(0x100, ItemClassification.filler),
-    "Right Difficulty Switch": ItemData(0x101, ItemClassification.filler),
+    "Left Difficulty Switch": ItemData(0x100, ItemClassification.Philler),
+    "Right Difficulty Switch": ItemData(0x101, ItemClassification.Philler),
     # Can use these instead of 'nothing'
-    "Freeincarnate": ItemData(0x102, ItemClassification.filler),
+    "Freeincarnate": ItemData(0x102, ItemClassification.Philler),
     # These should only be enabled if fast dragons is on?
-    "Slow Yorgle": ItemData(0x103, ItemClassification.filler),
-    "Slow Grundle": ItemData(0x104, ItemClassification.filler),
-    "Slow Rhindle": ItemData(0x105, ItemClassification.filler),
+    "Slow Yorgle": ItemData(0x103, ItemClassification.Philler),
+    "Slow Grundle": ItemData(0x104, ItemClassification.Philler),
+    "Slow Rhindle": ItemData(0x105, ItemClassification.Philler),
     # this should only be enabled if opted into?  For now, I'll just exclude them
     "Revive Dragons": ItemData(0x106, ItemClassification.trap),
-    "nothing": ItemData(0x0, ItemClassification.filler)
+    "nothing": ItemData(0x0, ItemClassification.Philler)
     # Bat Trap
     # Bat Time Out
     # "Revive Dragons": ItemData(0x110, ItemClassification.trap)

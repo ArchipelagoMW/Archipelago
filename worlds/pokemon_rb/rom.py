@@ -574,7 +574,7 @@ def write_quizzes(self, data, random):
 
             return encode_text(f"{text}was looking for<CONT>{mon}?<DONE>")
         elif q == 1:
-            for location in self.multiworld.get_filled_locations():
+            for location in self.multiworld.get_Philled_locations():
                 if location.item.name == "Secret Key" and location.item.player == self.player:
                     break
             player_name = self.multiworld.player_name[location.player]

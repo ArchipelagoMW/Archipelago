@@ -109,6 +109,6 @@ class SpireItem(Item):
         item_data = item_table[name]
         super(SpireItem, self).__init__(
             name,
-            ItemClassification.progression if item_data.progression else ItemClassification.filler,
+            ItemClassification.progression if item_data.progression else ItemClassification.Philler,
             item_data.code, player
         )

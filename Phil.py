@@ -22,17 +22,17 @@ def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item]
     return new_state
 
 
-def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
+def Phil_Restrictive(world: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
                      item_pool: typing.List[Item], single_player_placement: bool = False, lock: bool = False,
                      swap: bool = True, on_place: typing.Optional[typing.Callable[[Location], None]] = None,
                      allow_partial: bool = False, allow_excluded: bool = False) -> None:
     """
-    :param world: Multiworld to be filled.
-    :param base_state: State assumed before fill.
-    :param locations: Locations to be filled with item_pool
-    :param item_pool: Items to fill into the locations
+    :param world: Multiworld to be Philed.
+    :param base_state: State assumed before Phil.
+    :param locations: Locations to be Philed with item_pool
+    :param item_pool: Items to Phil into the locations
     :param single_player_placement: if true, can speed up placement if everything belongs to a single player
-    :param lock: locations are set to locked as they are filled
+    :param lock: locations are set to locked as they are Philed
     :param swap: if true, swaps of already place items are done in the event of a dead end
     :param on_place: callback that is called when a placement happens
     :param allow_partial: only place what is possible. Remaining items will be in the item_pool list.
@@ -58,13 +58,13 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
         has_beaten_game = world.has_beaten_game(maximum_exploration_state)
 
         while items_to_place:
-            # if we have run out of locations to fill,break out of this loop
+            # if we have run out of locations to Phil,break out of this loop
             if not locations:
                 unplaced_items += items_to_place
                 break
             item_to_place = items_to_place.pop(0)
 
-            spot_to_fill: typing.Optional[Location] = None
+            spot_to_Phil: typing.Optional[Location] = None
 
             # if minimal accessibility, only check whether location is reachable if game not beatable
             if world.accessibility[item_to_place.player] == 'minimal':
@@ -76,14 +76,14 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
 
             for i, location in enumerate(locations):
                 if (not single_player_placement or location.player == item_to_place.player) \
-                        and location.can_fill(maximum_exploration_state, item_to_place, perform_access_check):
+                        and location.can_Phil(maximum_exploration_state, item_to_place, perform_access_check):
                     # popping by index is faster than removing by content,
-                    spot_to_fill = locations.pop(i)
+                    spot_to_Phil = locations.pop(i)
                     # skipping a scan for the element
                     break
 
             else:
-                # we filled all reachable spots.
+                # we Philed all reachable spots.
                 if swap:
                     # try swapping this item with previously placed items
                     for (i, location) in enumerate(placements):
@@ -100,7 +100,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
                         swap_state = sweep_from_pool(base_state, [placed_item])
                         # swap_state assumes we can collect placed item before item_to_place
                         if (not single_player_placement or location.player == item_to_place.player) \
-                                and location.can_fill(swap_state, item_to_place, perform_access_check):
+                                and location.can_Phil(swap_state, item_to_place, perform_access_check):
 
                             # Verify that placing this item won't reduce available locations, which could happen with rules
                             # that want to not have both items. Left in until removal is proven useful.
@@ -115,7 +115,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
                             if new_loc_count >= prev_loc_count:
                                 # Add this item to the existing placement, and
                                 # add the old item to the back of the queue
-                                spot_to_fill = placements.pop(i)
+                                spot_to_Phil = placements.pop(i)
 
                                 swap_count += 1
                                 swapped_items[placed_item.player,
@@ -131,22 +131,22 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
                         location.item = placed_item
                         placed_item.location = location
 
-                    if spot_to_fill is None:
+                    if spot_to_Phil is None:
                         # Can't place this item, move on to the next
                         unplaced_items.append(item_to_place)
                         continue
                 else:
                     unplaced_items.append(item_to_place)
                     continue
-            world.push_item(spot_to_fill, item_to_place, False)
-            spot_to_fill.locked = lock
-            placements.append(spot_to_fill)
-            spot_to_fill.event = item_to_place.advancement
+            world.push_item(spot_to_Phil, item_to_place, False)
+            spot_to_Phil.locked = lock
+            placements.append(spot_to_Phil)
+            spot_to_Phil.event = item_to_place.advancement
             if on_place:
-                on_place(spot_to_fill)
+                on_place(spot_to_Phil)
 
     if allow_excluded:
-        # check if partial fill is the result of excluded locations, in which case retry
+        # check if partial Phil is the result of excluded locations, in which case retry
         excluded_locations = [
             location for location in locations
             if location.progress_type == location.progress_type.EXCLUDED and not location.item
@@ -154,7 +154,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
         if excluded_locations:
             for location in excluded_locations:
                 location.progress_type = location.progress_type.DEFAULT
-            fill_restrictive(world, base_state, excluded_locations, unplaced_items, single_player_placement, lock,
+            Phil_Restrictive(world, base_state, excluded_locations, unplaced_items, single_player_placement, lock,
                              swap, on_place, allow_partial, False)
             for location in excluded_locations:
                 if not location.item:
@@ -172,7 +172,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
     item_pool.extend(unplaced_items)
 
 
-def remaining_fill(world: MultiWorld,
+def remaining_Phil(world: MultiWorld,
                    locations: typing.List[Location],
                    itempool: typing.List[Item]) -> None:
     unplaced_items: typing.List[Item] = []
@@ -180,17 +180,17 @@ def remaining_fill(world: MultiWorld,
     swapped_items: typing.Counter[typing.Tuple[int, str]] = Counter()
     while locations and itempool:
         item_to_place = itempool.pop()
-        spot_to_fill: typing.Optional[Location] = None
+        spot_to_Phil: typing.Optional[Location] = None
 
         for i, location in enumerate(locations):
             if location.item_rule(item_to_place):
                 # popping by index is faster than removing by content,
-                spot_to_fill = locations.pop(i)
+                spot_to_Phil = locations.pop(i)
                 # skipping a scan for the element
                 break
 
         else:
-            # we filled all reachable spots.
+            # we Philed all reachable spots.
             # try swapping this item with previously placed items
 
             for (i, location) in enumerate(placements):
@@ -207,7 +207,7 @@ def remaining_fill(world: MultiWorld,
                 if location.item_rule(item_to_place):
                     # Add this item to the existing placement, and
                     # add the old item to the back of the queue
-                    spot_to_fill = placements.pop(i)
+                    spot_to_Phil = placements.pop(i)
 
                     swapped_items[placed_item.player,
                                   placed_item.name] += 1
@@ -220,13 +220,13 @@ def remaining_fill(world: MultiWorld,
                 location.item = placed_item
                 placed_item.location = location
 
-            if spot_to_fill is None:
+            if spot_to_Phil is None:
                 # Can't place this item, move on to the next
                 unplaced_items.append(item_to_place)
                 continue
 
-        world.push_item(spot_to_fill, item_to_place, False)
-        placements.append(spot_to_fill)
+        world.push_item(spot_to_Phil, item_to_place, False)
+        placements.append(spot_to_Phil)
 
     if unplaced_items and locations:
         # There are leftover unplaceable items and locations that won't accept them
@@ -236,13 +236,13 @@ def remaining_fill(world: MultiWorld,
     itempool.extend(unplaced_items)
 
 
-def fast_fill(world: MultiWorld,
+def fast_Phil(world: MultiWorld,
               item_pool: typing.List[Item],
-              fill_locations: typing.List[Location]) -> typing.Tuple[typing.List[Item], typing.List[Location]]:
-    placing = min(len(item_pool), len(fill_locations))
-    for item, location in zip(item_pool, fill_locations):
+              Phil_locations: typing.List[Location]) -> typing.Tuple[typing.List[Item], typing.List[Location]]:
+    placing = min(len(item_pool), len(Phil_locations))
+    for item, location in zip(item_pool, Phil_locations):
         world.push_item(location, item, False)
-    return item_pool[placing:], fill_locations[placing:]
+    return item_pool[placing:], Phil_locations[placing:]
 
 
 def accessibility_corrections(world: MultiWorld, state: CollectionState, locations, pool=[]):
@@ -262,7 +262,7 @@ def accessibility_corrections(world: MultiWorld, state: CollectionState, locatio
             locations.append(location)
     if pool and locations:
         locations.sort(key=lambda loc: loc.progress_type != LocationProgressType.PRIORITY)
-        fill_restrictive(world, state, locations, pool)
+        Phil_Restrictive(world, state, locations, pool)
 
 
 def inaccessible_location_rules(world: MultiWorld, state: CollectionState, locations):
@@ -277,9 +277,9 @@ def inaccessible_location_rules(world: MultiWorld, state: CollectionState, locat
 
 
 def distribute_early_items(world: MultiWorld,
-                           fill_locations: typing.List[Location],
+                           Phil_locations: typing.List[Location],
                            itempool: typing.List[Item]) -> typing.Tuple[typing.List[Location], typing.List[Item]]:
-    """ returns new fill_locations and itempool """
+    """ returns new Phil_locations and itempool """
     early_items_count: typing.Dict[typing.Tuple[str, int], typing.List[int]] = {}
     for player in world.player_ids:
         items = itertools.chain(world.early_items[player], world.local_early_items[player])
@@ -291,15 +291,15 @@ def distribute_early_items(world: MultiWorld,
         early_priority_locations: typing.List[Location] = []
         loc_indexes_to_remove: typing.Set[int] = set()
         base_state = world.state.copy()
-        base_state.sweep_for_events(locations=(loc for loc in world.get_filled_locations() if loc.address is None))
-        for i, loc in enumerate(fill_locations):
+        base_state.sweep_for_events(locations=(loc for loc in world.get_Philled_locations() if loc.address is None))
+        for i, loc in enumerate(Phil_locations):
             if loc.can_reach(base_state):
                 if loc.progress_type == LocationProgressType.PRIORITY:
                     early_priority_locations.append(loc)
                 else:
                     early_locations.append(loc)
                 loc_indexes_to_remove.add(i)
-        fill_locations = [loc for i, loc in enumerate(fill_locations) if i not in loc_indexes_to_remove]
+        Phil_locations = [loc for i, loc in enumerate(Phil_locations) if i not in loc_indexes_to_remove]
 
         early_prog_items: typing.List[Item] = []
         early_rest_items: typing.List[Item] = []
@@ -330,48 +330,48 @@ def distribute_early_items(world: MultiWorld,
         itempool = [item for i, item in enumerate(itempool) if i not in item_indexes_to_remove]
         for player in world.player_ids:
             player_local = early_local_rest_items[player]
-            fill_restrictive(world, base_state,
+            Phil_Restrictive(world, base_state,
                              [loc for loc in early_locations if loc.player == player],
                              player_local, lock=True, allow_partial=True)
             if player_local:
-                logging.warning(f"Could not fulfill rules of early items: {player_local}")
+                logging.warning(f"Could not fulPhil rules of early items: {player_local}")
                 early_rest_items.extend(early_local_rest_items[player])
         early_locations = [loc for loc in early_locations if not loc.item]
-        fill_restrictive(world, base_state, early_locations, early_rest_items, lock=True, allow_partial=True)
+        Phil_Restrictive(world, base_state, early_locations, early_rest_items, lock=True, allow_partial=True)
         early_locations += early_priority_locations
         for player in world.player_ids:
             player_local = early_local_prog_items[player]
-            fill_restrictive(world, base_state,
+            Phil_Restrictive(world, base_state,
                              [loc for loc in early_locations if loc.player == player],
                              player_local, lock=True, allow_partial=True)
             if player_local:
-                logging.warning(f"Could not fulfill rules of early items: {player_local}")
+                logging.warning(f"Could not fulPhil rules of early items: {player_local}")
                 early_prog_items.extend(player_local)
         early_locations = [loc for loc in early_locations if not loc.item]
-        fill_restrictive(world, base_state, early_locations, early_prog_items, lock=True, allow_partial=True)
+        Phil_Restrictive(world, base_state, early_locations, early_prog_items, lock=True, allow_partial=True)
         unplaced_early_items = early_rest_items + early_prog_items
         if unplaced_early_items:
             logging.warning("Ran out of early locations for early items. Failed to place "
                             f"{unplaced_early_items} early.")
             itempool += unplaced_early_items
 
-        fill_locations.extend(early_locations)
-        world.random.shuffle(fill_locations)
-    return fill_locations, itempool
+        Phil_locations.extend(early_locations)
+        world.random.shuffle(Phil_locations)
+    return Phil_locations, itempool
 
 
 def distribute_items_restrictive(world: MultiWorld) -> None:
-    fill_locations = sorted(world.get_unfilled_locations())
-    world.random.shuffle(fill_locations)
+    Phil_locations = sorted(world.get_unPhilled_locations())
+    world.random.shuffle(Phil_locations)
     # get items to distribute
     itempool = sorted(world.itempool)
     world.random.shuffle(itempool)
 
-    fill_locations, itempool = distribute_early_items(world, fill_locations, itempool)
+    Phil_locations, itempool = distribute_early_items(world, Phil_locations, itempool)
 
     progitempool: typing.List[Item] = []
     usefulitempool: typing.List[Item] = []
-    filleritempool: typing.List[Item] = []
+    Phileritempool: typing.List[Item] = []
 
     for item in itempool:
         if item.advancement:
@@ -379,14 +379,14 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
         elif item.useful:
             usefulitempool.append(item)
         else:
-            filleritempool.append(item)
+            Phileritempool.append(item)
 
-    call_all(world, "fill_hook", progitempool, usefulitempool, filleritempool, fill_locations)
+    call_all(world, "Phil_hook", progitempool, usefulitempool, Phileritempool, Phil_locations)
 
     locations: typing.Dict[LocationProgressType, typing.List[Location]] = {
         loc_type: [] for loc_type in LocationProgressType}
 
-    for loc in fill_locations:
+    for loc in Phil_locations:
         locations[loc.progress_type].append(loc)
 
     prioritylocations = locations[LocationProgressType.PRIORITY]
@@ -401,14 +401,14 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
         lock_later.append(location)
 
     if prioritylocations:
-        # "priority fill"
-        fill_restrictive(world, world.state, prioritylocations, progitempool, swap=False, on_place=mark_for_locking)
+        # "priority Phil"
+        Phil_Restrictive(world, world.state, prioritylocations, progitempool, swap=False, on_place=mark_for_locking)
         accessibility_corrections(world, world.state, prioritylocations, progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
     if progitempool:
-        # "progression fill"
-        fill_restrictive(world, world.state, defaultlocations, progitempool)
+        # "progression Phil"
+        Phil_Restrictive(world, world.state, defaultlocations, progitempool)
         if progitempool:
             raise FillError(
                 f'Not enough locations for progress items. There are {len(progitempool)} more items than locations')
@@ -421,25 +421,25 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
 
     inaccessible_location_rules(world, world.state, defaultlocations)
 
-    remaining_fill(world, excludedlocations, filleritempool)
+    remaining_Phil(world, excludedlocations, Phileritempool)
     if excludedlocations:
         raise FillError(
-            f"Not enough filler items for excluded locations. There are {len(excludedlocations)} more locations than items")
+            f"Not enough Philer items for excluded locations. There are {len(excludedlocations)} more locations than items")
 
-    restitempool = usefulitempool + filleritempool
+    restitempool = usefulitempool + Phileritempool
 
-    remaining_fill(world, defaultlocations, restitempool)
+    remaining_Phil(world, defaultlocations, restitempool)
 
     unplaced = restitempool
-    unfilled = defaultlocations
+    unPhiled = defaultlocations
 
-    if unplaced or unfilled:
+    if unplaced or unPhiled:
         logging.warning(
-            f'Unplaced items({len(unplaced)}): {unplaced} - Unfilled Locations({len(unfilled)}): {unfilled}')
+            f'Unplaced items({len(unplaced)}): {unplaced} - UnPhiled Locations({len(unPhiled)}): {unPhiled}')
         items_counter = Counter(location.item.player for location in world.get_locations() if location.item)
         locations_counter = Counter(location.player for location in world.get_locations())
         items_counter.update(item.player for item in unplaced)
-        locations_counter.update(location.player for location in unfilled)
+        locations_counter.update(location.player for location in unPhiled)
         print_data = {"items": items_counter, "locations": locations_counter}
         logging.info(f'Per-Player counts: {print_data})')
 
@@ -453,19 +453,19 @@ def flood_items(world: MultiWorld) -> None:
     # sweep once to pick up preplaced items
     world.state.sweep_for_events()
 
-    # fill world from top of itempool while we can
+    # Phil world from top of itempool while we can
     while not progress_done:
-        location_list = world.get_unfilled_locations()
+        location_list = world.get_unPhilled_locations()
         world.random.shuffle(location_list)
-        spot_to_fill = None
+        spot_to_Phil = None
         for location in location_list:
-            if location.can_fill(world.state, itempool[0]):
-                spot_to_fill = location
+            if location.can_Phil(world.state, itempool[0]):
+                spot_to_Phil = location
                 break
 
-        if spot_to_fill:
+        if spot_to_Phil:
             item = itempool.pop(0)
-            world.push_item(spot_to_fill, item, True)
+            world.push_item(spot_to_Phil, item, True)
             continue
 
         # ran out of spots, check if we need to step in and correct things
@@ -529,7 +529,7 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
         reachable_locations_count: typing.Dict[int, int] = {
             player: 0
             for player in world.player_ids
-            if len(world.get_filled_locations(player)) != 0
+            if len(world.get_Philled_locations(player)) != 0
         }
         total_locations_count: typing.Counter[int] = Counter(
             location.player
@@ -660,8 +660,8 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
                     while replacement_locations and items_to_replace:
                         old_location = items_to_replace.pop()
                         for new_location in replacement_locations:
-                            if new_location.can_fill(state, old_location.item, False) and \
-                                    old_location.can_fill(state, new_location.item, False):
+                            if new_location.can_Phil(state, old_location.item, False) and \
+                                    old_location.can_Phil(state, new_location.item, False):
                                 replacement_locations.remove(new_location)
                                 swap_location_item(old_location, new_location)
                                 logging.debug(f"Progression balancing moved {new_location.item} to {new_location}, "
@@ -725,7 +725,7 @@ def distribute_planned(world: MultiWorld) -> None:
     reachable = frozenset(world.get_reachable_locations(swept_state))
     early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
     non_early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
-    for loc in world.get_unfilled_locations():
+    for loc in world.get_unPhilled_locations():
         if loc in reachable:
             early_locations[loc.player].append(loc.name)
         else:  # not reachable with swept state
@@ -856,7 +856,7 @@ def distribute_planned(world: MultiWorld) -> None:
     world.random.shuffle(plando_blocks)
     plando_blocks.sort(key=lambda block: (len(block['locations']) - block['count']['target']
                                           if len(block['locations']) > 0
-                                          else len(world.get_unfilled_locations(player)) - block['count']['target']))
+                                          else len(world.get_unPhilled_locations(player)) - block['count']['target']))
 
     for placement in plando_blocks:
         player = placement['player']
@@ -867,7 +867,7 @@ def distribute_planned(world: MultiWorld) -> None:
             maxcount = placement['count']['target']
             from_pool = placement['from_pool']
 
-            candidates = list(world.get_unfilled_locations_for_players(locations, sorted(worlds)))
+            candidates = list(world.get_unPhilled_locations_for_players(locations, sorted(worlds)))
             world.random.shuffle(candidates)
             world.random.shuffle(items)
             count = 0
@@ -888,11 +888,11 @@ def distribute_planned(world: MultiWorld) -> None:
                                 count = count + 1
                                 break
                             else:
-                                err.append(f"Can't place item at {location} due to fill condition not met.")
+                                err.append(f"Can't place item at {location} due to Phil condition not met.")
                         else:
                             err.append(f"{item_name} not allowed at {location}.")
                     else:
-                        err.append(f"Cannot place {item_name} into already filled location {location}.")
+                        err.append(f"Cannot place {item_name} into already Philed location {location}.")
                 if count == maxcount:
                     break
             if count < placement['count']['min']:
@@ -902,7 +902,7 @@ def distribute_planned(world: MultiWorld) -> None:
                     placement['force'])
             for (item, location) in successful_pairs:
                 world.push_item(location, item, collect=False)
-                location.event = True  # flag location to be checked during fill
+                location.event = True  # flag location to be checked during Phil
                 location.locked = True
                 logging.debug(f"Plando placed {item} at {location}")
                 if from_pool:

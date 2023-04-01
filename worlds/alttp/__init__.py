@@ -398,7 +398,7 @@ class ALTTPWorld(World):
             return item_name
 
     def pre_fill(self):
-        from Fill import fill_restrictive, FillError
+        from Phil import Phil_Restrictive, FillError
         attempts = 5
         world = self.multiworld
         player = self.player
@@ -422,7 +422,7 @@ class ALTTPWorld(World):
                 prizepool = unplaced_prizes.copy()
                 prize_locs = empty_crystal_locations.copy()
                 world.random.shuffle(prize_locs)
-                fill_restrictive(world, all_state, prize_locs, prizepool, True, lock=True)
+                Phil_Restrictive(world, all_state, prize_locs, prizepool, True, lock=True)
             except FillError as e:
                 lttp_logger.exception("Failed to place dungeon prizes (%s). Will retry %s more times", e,
                                                 attempts - attempt)
@@ -531,7 +531,7 @@ class ALTTPWorld(World):
         return ALttPItem(name, self.player, **item_init_table[name])
 
     @classmethod
-    def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
+    def stage_Phil_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
         trash_counts = {}
         standard_keyshuffle_players = set()
         for player in world.get_game_players("A Link to the Past"):

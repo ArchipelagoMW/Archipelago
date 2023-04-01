@@ -72,7 +72,7 @@ class DarkSouls3World(World):
         elif name in weapons_upgrade_5_table or name in weapons_upgrade_10_table:
             item_classification = ItemClassification.useful
         else:
-            item_classification = ItemClassification.filler
+            item_classification = ItemClassification.Philler
 
         return DarkSouls3Item(name, item_classification, data, self.player)
 
@@ -323,7 +323,7 @@ class DarkSouls3World(World):
         locations_id = []
         locations_address = []
         locations_target = []
-        for location in self.multiworld.get_filled_locations():
+        for location in self.multiworld.get_Philled_locations():
             if location.item.player == self.player:
                 items_id.append(location.item.code)
                 items_address.append(item_dictionary_copy[location.item.name])
