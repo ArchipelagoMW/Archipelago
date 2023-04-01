@@ -15,6 +15,7 @@ class TestInvertedBombRules(unittest.TestCase):
 
     def setUp(self):
         self.multiworld = MultiWorld(1)
+        self.multiworld.set_seed(None)
         self.multiworld.mode[1] = "inverted"
         args = Namespace
         for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
