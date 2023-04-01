@@ -26,6 +26,7 @@
 *multisave
 *.archipelago
 *.apsave
+*.BIN
 
 build
 bundle/components.wxs

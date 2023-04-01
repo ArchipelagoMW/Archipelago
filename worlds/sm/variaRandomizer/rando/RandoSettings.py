@@ -1,9 +1,9 @@
 
 import sys, random
 from collections import defaultdict
-from rando.Items import ItemManager
-from utils.utils import getRangeDict, chooseFromRange
-from rando.ItemLocContainer import ItemLocation
+from worlds.sm.variaRandomizer.rando.Items import ItemManager
+from worlds.sm.variaRandomizer.utils.utils import getRangeDict, chooseFromRange
+from worlds.sm.variaRandomizer.rando.ItemLocContainer import ItemLocation
 
 # Holder for settings and a few utility functions related to them
 # (especially for plando/rando).

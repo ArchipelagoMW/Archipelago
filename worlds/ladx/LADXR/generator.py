@@ -56,11 +56,11 @@ from . import hints
 from .locations.keyLocation import KeyLocation
 from .patches import bank34
 
-from ..Options import TrendyGame, Palette
+from ..Options import TrendyGame, Palette, MusicChangeCondition
 
 
 # Function to generate a final rom, this patches the rom with all required patches
-def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=None, player_name=None, player_names=[], player_id = 0):
+def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, multiworld=None, player_name=None, player_names=[], player_id = 0):
     rom = ROMWithTables(args.input_filename)
     rom.player_names = player_names
     pymods = []
@@ -119,7 +119,7 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
     patches.core.easyColorDungeonAccess(rom)
     patches.owl.removeOwlEvents(rom)
     patches.enemies.fixArmosKnightAsMiniboss(rom)
-    patches.bank3e.addBank3E(rom, seed, player_id, player_names)
+    patches.bank3e.addBank3E(rom, auth, player_id, player_names)
     patches.bank3f.addBank3F(rom)
     patches.bank34.addBank34(rom, item_list)
     patches.core.removeGhost(rom)
@@ -181,7 +181,8 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
     # patches.reduceRNG.slowdownThreeOfAKind(rom)
     patches.reduceRNG.fixHorseHeads(rom)
     patches.bomb.onlyDropBombsWhenHaveBombs(rom)
-    # patches.aesthetics.noSwordMusic(rom)
+    if ap_settings['music_change_condition'] == MusicChangeCondition.option_always:
+        patches.aesthetics.noSwordMusic(rom)
     patches.aesthetics.reduceMessageLengths(rom, rnd)
     patches.aesthetics.allowColorDungeonSpritesEverywhere(rom)
     if settings.music == 'random':
@@ -269,7 +270,7 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
         patches.core.addFrameCounter(rom, len(item_list))
 
     patches.core.warpHome(rom)  # Needs to be done after setting the start location.
-    patches.titleScreen.setRomInfo(rom, binascii.hexlify(seed).decode("ascii").upper(), settings, player_name, player_id)
+    patches.titleScreen.setRomInfo(rom, auth, seed_name, settings, player_name, player_id)
     patches.endscreen.updateEndScreen(rom)
     patches.aesthetics.updateSpriteData(rom)
     if args.doubletrouble:
@@ -411,13 +412,9 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
                 rom.banks[bank][address + 1] = packed >> 8
 
     SEED_LOCATION = 0x0134
-    SEED_SIZE = 10
-
-    # TODO: pass this in
     # Patch over the title
-    assert(len(seed) == SEED_SIZE)
-    gameid = seed + player_id.to_bytes(2, 'big')
-    rom.patch(0x00, SEED_LOCATION, None, binascii.hexlify(gameid))
+    assert(len(auth) == 12)
+    rom.patch(0x00, SEED_LOCATION, None, binascii.hexlify(auth))
 
 
     for pymod in pymods:

@@ -621,7 +621,7 @@ function receive()
 
     -- Determine Message to send back
     memDomain.rom()
-    local playerName = uRange(0x1F, 0x10)
+    local playerName = uRange(0x1F, 0x11)
     playerName[0] = nil
     local retTable = {}
     retTable["playerName"] = playerName
