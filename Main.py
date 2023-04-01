@@ -355,13 +355,11 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                                   for player in world.groups.get(location.item.player, {}).get("players", [])]):
                             precollect_hint(location)
 
-                # custom datapackage
-                datapackage = {}
-                for game_world in world.worlds.values():
-                    if game_world.data_version == 0 and game_world.game not in datapackage:
-                        datapackage[game_world.game] = worlds.network_data_package["games"][game_world.game]
-                        datapackage[game_world.game]["item_name_groups"] = game_world.item_name_groups
-                        datapackage[game_world.game]["location_name_groups"] = game_world.location_name_groups
+                # embedded data package
+                data_package = {
+                    game_world.game: worlds.network_data_package["games"][game_world.game]
+                    for game_world in world.worlds.values()
+                }
 
                 multidata = {
                     "slot_data": slot_data,
@@ -378,7 +376,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "tags": ["AP"],
                     "minimum_versions": minimum_versions,
                     "seed_name": world.seed_name,
-                    "datapackage": datapackage,
+                    "datapackage": data_package,
                 }
                 AutoWorld.call_all(world, "modify_multidata", multidata)
 

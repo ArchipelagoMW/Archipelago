@@ -3,16 +3,16 @@ from typing import Dict, Any, List, Optional
 from BaseClasses import Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS, ALWAYS_LOCATIONS, SEALS, ALL_ITEMS
-from .Options import MessengerOptions, NotesNeeded, Goal, PowerSeals
+from .Options import MessengerOptions, NotesNeeded, Goal, PowerSeals, Logic
 from .Regions import REGIONS, REGION_CONNECTIONS
-from .Rules import MessengerRules
 from .SubClasses import MessengerRegion, MessengerItem
+from . import Rules
 
 
 class MessengerWeb(WebWorld):
     theme = "ocean"
 
-    bug_report_page = "https://github.com/minous27/TheMessengerRandomizerMod/issues"
+    bug_report_page = "https://github.com/alwaysintreble/TheMessengerRandomizerModAP/issues"
 
     tut_en = Tutorial(
         "Multiworld Setup Tutorial",
@@ -101,7 +101,15 @@ class MessengerWorld(World):
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
-        MessengerRules(self).set_messenger_rules()
+        logic = self.multiworld.logic_level[self.player]
+        if logic == Logic.option_normal:
+            Rules.MessengerRules(self).set_messenger_rules()
+        elif logic == Logic.option_hard:
+            Rules.MessengerHardRules(self).set_messenger_rules()
+        elif logic == Logic.option_challenging:
+            Rules.MessengerChallengeRules(self).set_messenger_rules()
+        else:
+            Rules.MessengerOOBRules(self).set_messenger_rules()
 
     def fill_slot_data(self) -> Dict[str, Any]:
         locations: Dict[int, List[str]] = {}
@@ -115,7 +123,8 @@ class MessengerWorld(World):
             "music_box": self.options.music_box.value,
             "required_seals": self.required_seals,
             "locations": locations,
-            "settings": {"Difficulty": "Basic" if not self.options.shuffle_seals else "Advanced"}
+            "settings": {"Difficulty": "Basic" if not self.options.shuffle_seals else "Advanced"},
+            "logic": self.options.logic_level.current_key,
         }
 
     def get_filler_item_name(self) -> str:
@@ -123,4 +132,6 @@ class MessengerWorld(World):
 
     def create_item(self, name: str) -> MessengerItem:
         item_id: Optional[int] = self.item_name_to_id.get(name, None)
-        return MessengerItem(name, self.player, item_id)
+        override_prog = name in {"Windmill Shuriken"} and getattr(self, "multiworld") is not None \
+            and self.multiworld.logic_level[self.player] > Logic.option_normal
+        return MessengerItem(name, self.player, item_id, override_prog)

@@ -1,8 +1,8 @@
 def create_regions(self, world, player: int):
     from . import create_region
     from BaseClasses import Entrance
-    from logic.logic import Logic
-    from graph.vanilla.graph_locations import locationsDict
+    from worlds.sm.variaRandomizer.logic.logic import Logic
+    from worlds.sm.variaRandomizer.graph.vanilla.graph_locations import locationsDict
 
     regions = []
     for accessPoint in Logic.accessPoints:

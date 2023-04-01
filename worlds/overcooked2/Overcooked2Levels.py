@@ -372,3 +372,62 @@ level_id_to_shortname = {
     (Overcooked2Dlc.SEASONAL                  , 30 ): "Moon 1-4"      ,
     (Overcooked2Dlc.SEASONAL                  , 31 ): "Moon 1-5"      ,
 }
+
+class OverworldRegion(IntEnum):
+    main = 0
+    yellow_island = 1
+    sky_shelf = 2
+    stonehenge_mountain = 3
+    tip_of_the_map = 4
+    pink_island = 5
+    mars_shelf = 6
+    dark_green_mountain = 7
+    kevin_eight_island = 8
+    out_of_bounds = 9
+
+overworld_region_by_level = {
+    "1-1": OverworldRegion.main,
+    "1-2": OverworldRegion.main,
+    "1-3": OverworldRegion.main,
+    "1-4": OverworldRegion.main,
+    "1-5": OverworldRegion.yellow_island,
+    "1-6": OverworldRegion.yellow_island,
+    "2-1": OverworldRegion.main,
+    "2-2": OverworldRegion.sky_shelf,
+    "2-3": OverworldRegion.sky_shelf,
+    "2-4": OverworldRegion.main,
+    "2-5": OverworldRegion.main,
+    "2-6": OverworldRegion.main,
+    "3-1": OverworldRegion.main,
+    "3-2": OverworldRegion.main,
+    "3-3": OverworldRegion.main,
+    "3-4": OverworldRegion.main,
+    "3-5": OverworldRegion.main,
+    "3-6": OverworldRegion.main,
+    "4-1": OverworldRegion.main,
+    "4-2": OverworldRegion.main,
+    "4-3": OverworldRegion.main,
+    "4-4": OverworldRegion.main,
+    "4-5": OverworldRegion.main,
+    "4-6": OverworldRegion.main,
+    "5-1": OverworldRegion.main,
+    "5-2": OverworldRegion.sky_shelf,
+    "5-3": OverworldRegion.main,
+    "5-4": OverworldRegion.tip_of_the_map,
+    "5-5": OverworldRegion.tip_of_the_map,
+    "5-6": OverworldRegion.tip_of_the_map,
+    "6-1": OverworldRegion.pink_island,
+    "6-2": OverworldRegion.tip_of_the_map,
+    "6-3": OverworldRegion.tip_of_the_map,
+    "6-4": OverworldRegion.sky_shelf,
+    "6-5": OverworldRegion.mars_shelf,
+    "6-6": OverworldRegion.mars_shelf,
+    "Kevin-1": OverworldRegion.dark_green_mountain,
+    "Kevin-2": OverworldRegion.main,
+    "Kevin-3": OverworldRegion.main,
+    "Kevin-4": OverworldRegion.main,
+    "Kevin-5": OverworldRegion.main,
+    "Kevin-6": OverworldRegion.main,
+    "Kevin-7": OverworldRegion.tip_of_the_map,
+    "Kevin-8": OverworldRegion.kevin_eight_island,
+}

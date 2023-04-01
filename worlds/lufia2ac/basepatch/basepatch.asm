@@ -3,13 +3,13 @@ lorom
 
 org $DFFFFD  ; expand ROM to 3MB
     DB "EOF"
-org $80FFD8  ; expand SRAM to 16KB
-    DB $04                  ; overwrites DB $03
+org $80FFD8  ; expand SRAM to 32KB
+    DB $05                  ; overwrites DB $03
 
 org $80809A  ; patch copy protection
-    CMP $704000             ; overwrites CMP $702000
+    CMP $710000             ; overwrites CMP $702000
 org $8080A6  ; patch copy protection
-    CMP $704000             ; overwrites CMP $702000
+    CMP $710000             ; overwrites CMP $702000
 
 
 
@@ -34,8 +34,8 @@ org $8AF681  ; skip gruberik lexis dialogue
 
 org $8EA349  ; skip ancient cave entrance dialogue
     DB $1C,$B0,$01          ; L2SASM JMP $8EA1AD+$01B0
-org $8EA384  ; skip ancient cave exit dialogue
-    DB $1C,$2B,$02          ; L2SASM JMP $8EA1AD+$022B
+org $8EA384  ; reset architect mode, skip ancient cave exit dialogue
+    DB $1B,$E1,$1C,$2B,$02  ; clear flag $E1, L2SASM JMP $8EA1AD+$022B
 org $8EA565  ; skip ancient cave leaving dialogue
     DB $1C,$E9,$03          ; L2SASM JMP $8EA1AD+$03E9
 
@@ -108,11 +108,13 @@ Init:
     STX $4302               ; A-bus destination address $F02000 (SRAM)
     LDA.b #$F0
     STA $4304
-    STX $4305               ; transfer 8kB
+    LDX.w #$6000
+    STX $4305               ; transfer 24kB
     LDA.b #$01
     STA $420B               ; start DMA channel 1
 ; sign expanded SRAM
     PHB
+    TDC
     LDA.b #$3F
     LDX.w #$8000
     LDY.w #$2000
@@ -213,6 +215,8 @@ RX:
     JSR SpecialItemGet
     SEP #$20
     JSL $8EC1EF             ; call chest opening routine (but without chest opening animation)
+    STZ $A7                 ; cleanup
+    JSL $83AB4F             ; cleanup
 +:  SEP #$20
     RTS
 
@@ -268,11 +272,15 @@ SpecialItemUse:
     SBC.w #$01B1            ; party member items range from $01B2 to $01B7
     BMI +
     ASL
+    TAX
     ASL
     ASL
     ADC.w #$FD2E
     STA $09B7               ; set pointer to L2SASM join script
     SEP #$20
+    LDA $8ED8C7,X           ; load predefined bitmask with a single bit set
+    BIT $077E               ; check against EV flags $02 to $07 (party member flags)
+    BNE +                   ; abort if character already present
     LDA $07A9               ; load EV register $11 (party counter)
     CMP.b #$03
     BPL +                   ; abort if party full
@@ -593,18 +601,16 @@ FinalFloor:
 pushpc
 org $8488BB
     ; DB=$84, x=0, m=0
-    SEC                     ; {carry clear = disable this feature, carry set = enable this feature}
     JSL Providence          ; overwrites LDX.w #$1402 : STX $0A8D
-    NOP                     ;
+    NOP #2
 pullpc
 
 Providence:
     LDX.w #$1402            ; (overwritten instruction)
     STX $0A8D               ; (overwritten instruction) add Potion x10
-    BCC +
-    LDX.w #$022D            ;
+    LDX.w #$022D
     STX $0A8F               ; add Providence
-+:  RTL
+    RTL
 
 
 
@@ -642,6 +648,142 @@ StartInventory:
     DEX
     BPL -
 ++: SEP #$20
+    RTL
+
+
+
+; architect mode
+pushpc
+org $8EA1E7
+base = $8EA1AD  ; ancient cave entrance script base
+    DB $15,$E1 : DW .locked-base  ; L2SASM JMP .locked if flag $E1 set
+    DB $08,"Did you like the layout",$03, \
+           "of the last cave? I can",$03, \
+           "lock it down and prevent",$03, \
+           "the cave from changing.",$01
+    DB $08,"Do you want to lock",$03, \
+           "the cave layout?",$01
+    DB $10,$02 : DW .cancel-base,.lock-base  ; setup 2 choices: .cancel and .lock
+    DB $08,"Cancel",$0F,"LOCK IT DOWN!",$0B
+.cancel:
+    DB $4C,$54,$00  ; play sound $54, END
+.lock:
+    DB $5A,$05,$03,$7F,$37,$28,$56,$4C,$6B,$1A,$E1  ; shake, delay $28 f, stop shake, play sound $6B, set flag $E1
+.locked:
+    DB $08,"It's locked down.",$00
+    warnpc $8EA344
+org $839018
+    ; DB=$83, x=0, m=1
+    JSL ArchitectMode       ; overwrites LDA.b #$7E : PHA : PLB
+pullpc
+
+ArchitectMode:
+; check current mode
+    LDA $079A
+    BIT.b #$02
+    BEQ +                   ; go to write mode if flag $E1 (i.e., bit $02 in $079A) not set
+; read mode (replaying the locked down layout)
+    JSR ArchitectBlockAddress
+    LDA $F00000,X           ; check if current block is marked as filled
+    BEQ +                   ; go to write mode if block unused
+    TDC
+    LDA.b #$36
+    LDY.w #$0521
+    INX
+    MVN $7E,$F0             ; restore 55 RNG values from $F00000,X to $7E0521
+    INX
+    LDA $F00000,X
+    STA $0559               ; restore current RNG index from $F00000,X to $7E0559
+    BRA ++
+; write mode (recording the layout)
++:  JSR ArchitectClearBlocks
+    JSR ArchitectBlockAddress
+    LDA $7FE696
+    STA $F00000,X           ; mark block as used
+    TDC
+    LDA.b #$36
+    LDX.w #$0521
+    INY
+    MVN $F0,$7E             ; backup 55 RNG values from $7E0521 to $F00000,Y
+    INY
+    LDA $7E0559
+    STA $0000,Y             ; backup current RNG index from $7E0559 to $F00000,Y
+    LDA.b #$7E              ; (overwritten instruction) set DB=$7E
+    PHA                     ; (overwritten instruction)
+    PLB                     ; (overwritten instruction)
+++: RTL
+
+ArchitectClearBlocks:
+    LDA $7FE696             ; read next floor number
+    CMP $D08015             ; compare initial floor number
+    BEQ +
+    BRL ++                  ; skip if not initial floor
++:  LDA.b #$F0
+    PHA
+    PLB
+    !floor = 1
+    while !floor < 99       ; mark all blocks as unused
+        STZ !floor*$40+$6000
+        !floor #= !floor+1
+    endwhile
+++: RTS
+
+ArchitectBlockAddress:
+; calculate target SRAM address
+    TDC
+    LDA $7FE696             ; read next floor number
+    REP #$20
+    ASL #6
+    ADC.w #$6000            ; target SRAM address = next_floor * $40 + $6000
+    TAX
+    TAY
+    SEP #$20
+    RTS
+
+
+
+; for architect mode: make red chest behavior for iris treasure replacements independent of current inventory
+; by ensuring the same number of RNG calls, no matter if you have the iris item already or not
+; (done by prefilling *all* chests first and potentially overwriting one of them with an iris item afterwards,
+; instead of checking the iris item first and then potentially filling *one fewer* regular chest)
+pushpc
+org $8390C9
+    ; DB=$96, x=0, m=1
+    NOP                     ; overwrites LDY.w #$0000
+    BRA +                   ; go to regular red chest generation
+-:                          ; iris treasure handling happens below
+org $839114
+    ; DB=$7F, x=0, m=1
+    NOP #36                 ; overwrites all of providence handling
+    LDA.b #$83              ; (overwritten instruction from org $8391E9) set DB=$83 for floor layout generation
+    PHA                     ; (overwritten instruction from org $8391E9)
+    PLB                     ; (overwritten instruction from org $8391E9)
+    BRL ++                  ; go to end
++:  LDY.w #$0000            ; (overwritten instruction from org $8390C9) initialize chest index
+                            ; red chests are filled below
+org $8391E9
+    ; DB=$7F, x=0, m=1
+    NOP                     ; overwrites LDA.b #$83 : PHA : PLB
+    BRL -                   ; go to iris treasure handling
+++:                         ; floor layout generation happens below
+pullpc
+
+
+
+; for architect mode: make red chest behavior for spell replacements independent of currently learned spells
+; by ensuring the same number of RNG calls, no matter if you have the spell already or not
+pushpc
+org $8391A6
+    ; DB=$7F, x=0, m=1
+    JSL SpellRNG            ; overwrites LDA.b #$80 : STA $E747,Y
+    NOP
+pullpc
+
+SpellRNG:
+    LDA.b #$80              ; (overwritten instruction) mark chest item as spell
+    STA $E747,Y             ; (overwritten instruction)
+    JSL $8082C7             ;
+    JSL $8082C7             ; advance RNG twice
     RTL
 
 
@@ -891,3 +1033,4 @@ pullpc
 ; $F02800   2   received counter
 ; $F02802   2   processed counter
 ; $F02804   inf list of received items
+; $F06000   inf architect mode RNG state backups

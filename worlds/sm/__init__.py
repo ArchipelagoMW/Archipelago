@@ -7,8 +7,6 @@ import threading
 import base64
 from typing import Any, Dict, Iterable, List, Set, TextIO, TypedDict
 
-from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils
-
 logger = logging.getLogger("Super Metroid")
 
 from .Regions import create_regions
@@ -21,16 +19,17 @@ import Utils
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, Tutorial
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
 
-from logic.smboolmanager import SMBoolManager
-from graph.vanilla.graph_locations import locationsDict
-from graph.graph_utils import getAccessPoint
-from rando.ItemLocContainer import ItemLocation
-from rando.Items import ItemManager
-from utils.parameters import *
-from logic.logic import Logic
-from randomizer import VariaRandomizer
-from utils.doorsmanager import DoorsManager
-from rom.rom_patches import RomPatches
+from worlds.sm.variaRandomizer.logic.smboolmanager import SMBoolManager
+from worlds.sm.variaRandomizer.graph.vanilla.graph_locations import locationsDict
+from worlds.sm.variaRandomizer.graph.graph_utils import getAccessPoint
+from worlds.sm.variaRandomizer.rando.ItemLocContainer import ItemLocation
+from worlds.sm.variaRandomizer.rando.Items import ItemManager
+from worlds.sm.variaRandomizer.utils.parameters import *
+from worlds.sm.variaRandomizer.logic.logic import Logic
+from worlds.sm.variaRandomizer.randomizer import VariaRandomizer
+from worlds.sm.variaRandomizer.utils.doorsmanager import DoorsManager
+from worlds.sm.variaRandomizer.rom.rom_patches import RomPatches
+from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils
 
 
 class SMCollectionState(metaclass=AutoLogicRegister):

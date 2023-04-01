@@ -19,7 +19,7 @@ import Utils
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor, load_server_cert
 from Utils import get_public_ipv4, get_public_ipv6, restricted_loads, cache_argsless
-from .models import Room, Command, db
+from .models import Command, GameDataPackage, Room, db
 
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
@@ -92,7 +92,20 @@ class WebHostContext(Context):
         else:
             self.port = get_random_port()
 
-        return self._load(self.decompress(room.seed.multidata), True)
+        multidata = self.decompress(room.seed.multidata)
+        game_data_packages = {}
+        for game in list(multidata["datapackage"]):
+            game_data = multidata["datapackage"][game]
+            if "checksum" in game_data:
+                if self.gamespackage.get(game, {}).get("checksum") == game_data["checksum"]:
+                    # non-custom. remove from multidata
+                    # games package could be dropped from static data once all rooms embed data package
+                    del multidata["datapackage"][game]
+                else:
+                    data = Utils.restricted_loads(GameDataPackage.get(checksum=game_data["checksum"]).data)
+                    game_data_packages[game] = data
+
+        return self._load(multidata, game_data_packages, True)
 
     @db_session
     def init_save(self, enabled: bool = True):
@@ -190,6 +203,11 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
     with Locker(room_id):
         try:
             asyncio.run(main())
+        except KeyboardInterrupt:
+            with db_session:
+                room = Room.get(id=room_id)
+                # ensure the Room does not spin up again on its own, minute of safety buffer
+                room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
         except:
             with db_session:
                 room = Room.get(id=room_id)

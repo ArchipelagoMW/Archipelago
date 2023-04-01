@@ -14,7 +14,7 @@ else:
 class MessengerRegion(Region):
     world: MessengerWorld
 
-    def __init__(self, name: str, world: MessengerWorld):
+    def __init__(self, name: str, world: MessengerWorld) -> None:
         super().__init__(name, world.player, world.multiworld)
         self.world = world
         self.add_locations(world.location_name_to_id)
@@ -41,7 +41,7 @@ class MessengerRegion(Region):
 class MessengerLocation(Location):
     game = "The Messenger"
 
-    def __init__(self, name: str, parent: MessengerRegion, loc_id: Optional[int]):
+    def __init__(self, name: str, parent: MessengerRegion, loc_id: Optional[int]) -> None:
         super().__init__(parent.player, name, loc_id, parent)
         if loc_id is None:
             self.place_locked_item(MessengerItem(name, parent.player, None))
@@ -50,8 +50,8 @@ class MessengerLocation(Location):
 class MessengerItem(Item):
     game = "The Messenger"
 
-    def __init__(self, name: str, player: int, item_id: Optional[int] = None):
-        if name in {*NOTES, *PROG_ITEMS, *PHOBEKINS} or item_id is None:
+    def __init__(self, name: str, player: int, item_id: Optional[int] = None, override_progression: bool = False) -> None:
+        if name in {*NOTES, *PROG_ITEMS, *PHOBEKINS} or item_id is None or override_progression:
             item_class = ItemClassification.progression
         elif name in USEFUL_ITEMS:
             item_class = ItemClassification.useful
