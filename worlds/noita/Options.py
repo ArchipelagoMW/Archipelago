@@ -19,7 +19,7 @@ class HiddenChests(Range):
     display_name = "Hidden Chests per Biome"
     range_start = 0
     range_end = 20
-    default = 5
+    default = 3
 
 
 class PedestalChecks(Range):
@@ -27,7 +27,7 @@ class PedestalChecks(Range):
     display_name = "Pedestal Checks per Biome"
     range_start = 0
     range_end = 20
-    default = 5
+    default = 6
 
 
 class Traps(DefaultOnToggle):
