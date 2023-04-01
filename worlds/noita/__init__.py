@@ -14,7 +14,7 @@ class NoitaWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["DaftBrit"]
+        ["DaftBrit, Heinermann, ScipioWright"]
     )]
     theme = "partyTime"
 
@@ -35,7 +35,6 @@ class NoitaWorld(World):
 
     item_name_groups = Items.item_name_groups
 
-    data_version = 1
     web = NoitaWeb()
 
     def get_option(self, name):

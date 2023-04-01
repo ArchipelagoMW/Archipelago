@@ -56,7 +56,7 @@ def create_all_items(world: MultiWorld, player: int) -> None:
 # 110000 - 110021
 item_table: Dict[str, ItemData] = {
     "Trap":                                 ItemData(110000, "Traps", ItemClassification.trap),
-    "Extra Max HP":                         ItemData(110001, "Pickups", ItemClassification.filler),
+    "Extra Max HP":                         ItemData(110001, "Pickups", ItemClassification.useful),
     "Spell Refresher":                      ItemData(110002, "Pickups", ItemClassification.filler),
     "Potion":                               ItemData(110003, "Items", ItemClassification.filler),
     "Gold (10)":                            ItemData(110004, "Gold", ItemClassification.filler),
@@ -94,7 +94,7 @@ item_table: Dict[str, ItemData] = {
 default_weights: Dict[str, int] = {
     "Wand (Tier 1)":    10,
     "Potion":           45,
-    "Spell Refresher":  35,
+    "Spell Refresher":  30,
     "Extra Max HP":     25,
     "Wand (Tier 2)":    8,
     "Wand (Tier 3)":    7,
@@ -119,7 +119,7 @@ default_weights: Dict[str, int] = {
 no_bad_weights: Dict[str, int] = {
     "Wand (Tier 1)":    10,
     "Potion":           45,
-    "Spell Refresher":  35,
+    "Spell Refresher":  30,
     "Extra Max HP":     25,
     "Wand (Tier 2)":    8,
     "Wand (Tier 3)":    7,
