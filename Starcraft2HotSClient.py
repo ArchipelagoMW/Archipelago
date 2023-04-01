@@ -223,6 +223,7 @@ class SC2Context(CommonContext):
     last_loc_list = None
     difficulty_override = -1
     kerriganless = 0
+    kerrigan_primal_status = 0
     levels_per_check = 0
     checks_per_level = 1
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
@@ -257,6 +258,7 @@ class SC2Context(CommonContext):
                 self.kerriganless = 1
             self.levels_per_check = args["slot_data"].get("kerrigan_level_gain", 0)
             self.checks_per_level = args["slot_data"].get("kerrigan_checks_per_level_pack", 0)
+            self.kerrigan_primal_status = args["slot_data"].get("kerrigan_primal_status", 0)
 
             self.build_location_to_mission_mapping()
 
@@ -590,6 +592,31 @@ def calculate_items(ctx: SC2Context) -> typing.List[int]:
 
     return accumulators
 
+def calculate_options(ctx: SC2Context, items: typing.List[int]) -> int:
+    options = 0
+    if ctx.kerriganless > 0:
+        options |= 1 << 0
+    
+    if ctx.kerrigan_primal_status > 0:
+        options |= 1 << 1
+        primal = False
+        match ctx.kerrigan_primal_status:
+            case 1: # Always Zerg
+                primal = True
+            case 2: # Always Human
+                primal = False
+            case 3: # Level 35
+                primal = items[type_flaggroups["Level"]] >= 35
+            case 4: # Half Completion
+                total_missions = len(ctx.mission_id_to_location_ids)
+                completed = len([(mission_id * victory_modulo + SC2HOTS_LOC_ID_OFFSET) in ctx.checked_locations
+                    for mission_id in ctx.mission_id_to_location_ids])
+                primal = completed >= (total_missions / 2)
+        if primal:
+            options |= 1 << 2
+    
+    return options
+
 
 def calc_difficulty(difficulty):
     if difficulty == 0:
@@ -642,6 +669,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
         if not self.setup_done:
             self.setup_done = True
             start_items = calculate_items(self.ctx)
+            options = calculate_options(self.ctx, start_items)
             if self.ctx.difficulty_override >= 0:
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
             else:
@@ -650,7 +678,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                 difficulty,
                 start_items[0], start_items[1], start_items[2], start_items[3], start_items[4],
                 start_items[5], start_items[6], start_items[7], start_items[8],
-                self.ctx.kerriganless, self.ctx.player_color, self.ctx.player_color_primal))
+                options, self.ctx.player_color, self.ctx.player_color_primal))
             self.last_received_update = len(self.ctx.items_received)
 
         else:
