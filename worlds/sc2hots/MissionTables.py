@@ -220,10 +220,10 @@ vanilla_mission_req_table = {
     "Waking the Ancient": MissionInfo(10, [6, 9], "Zerus", completion_critical=True, or_requirements=True),
     "The Crucible": MissionInfo(11, [10], "Zerus", completion_critical=True),
     "Supreme": MissionInfo(12, [11], "Zerus", completion_critical=True),
-    "Infested": MissionInfo(13, [12], "Skygeirr Station", or_requirements=True), # should have and requirement (6, 9, 12)
+    "Infested": MissionInfo(13, [6, 9, 12], "Skygeirr Station"),
     "Hand of Darkness": MissionInfo(14, [13], "Skygeirr Station"),
     "Phantoms of the Void": MissionInfo(15, [14], "Skygeirr Station"),
-    "With Friends Like These": MissionInfo(16, [12], "Dominion Space", or_requirements=True), # should have and requirement (6, 9, 12)
+    "With Friends Like These": MissionInfo(16, [6, 9, 12], "Dominion Space"),
     "Conviction": MissionInfo(17, [16], "Dominion Space"),
     "Planetfall": MissionInfo(18, [15, 17], "Korhal", completion_critical=True),
     "Death From Above": MissionInfo(19, [18], "Korhal", completion_critical=True),
