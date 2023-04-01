@@ -94,7 +94,7 @@ class WebHostContext(Context):
 
         multidata = self.decompress(room.seed.multidata)
         game_data_packages = {}
-        for game in list(multidata["datapackage"]):
+        for game in list(multidata.get("datapackage", {})):
             game_data = multidata["datapackage"][game]
             if "checksum" in game_data:
                 if self.gamespackage.get(game, {}).get("checksum") == game_data["checksum"]:
