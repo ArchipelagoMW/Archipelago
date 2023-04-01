@@ -4,10 +4,12 @@ import zipfile
 from copy import deepcopy
 from .Regions import object_id_table
 from Main import __version__
+from worlds.Files import APContainer
 from . import data
 import pkgutil
 
 settings_template = yaml.load(pkgutil.get_data(__name__, "data/settings.yaml"), yaml.Loader)
+
 
 def generate_output(self, output_directory):
     item_placement = []
@@ -30,7 +32,6 @@ def generate_output(self, output_directory):
             item_placement.append({"object_id": object_id_table[location.name], "type": location.type, "content":
                 item_name, "player": self.multiworld.player_name[location.item.player], "item_name": location.item.name}
                                   )
-
 
     def cc(option):
         return option.current_key.title().replace("_", "")
@@ -90,9 +91,21 @@ def generate_output(self, output_directory):
     starting_items = [self.multiworld.starting_weapon[self.player].current_key.title().replace("_", ""), "SteelArmor"]
 
     file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.apmq")
+    APMQ = APMQFile(file_path, player=self.player, player_name=self.multiworld.player_name[self.player])
     with zipfile.ZipFile(file_path, mode="w", compression=zipfile.ZIP_DEFLATED,
                          compresslevel=9) as zf:
         zf.writestr("itemplacement.yaml", yaml.dump(item_placement))
         zf.writestr("flagset.yaml", yaml.dump(options))
         zf.writestr("startingitems.yaml", yaml.dump(starting_items))
         zf.writestr("setup.yaml", yaml.dump(setup))
+
+        APMQ.write_contents(zf)
+
+
+class APMQFile(APContainer):
+    game = "Final Fantasy Mystic Quest"
+
+    def get_manifest(self):
+        manifest = super().get_manifest()
+        manifest["patch_file_ending"] = ".apmq"
+        return manifest
