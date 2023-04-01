@@ -269,7 +269,7 @@ class Context:
             self.all_item_and_group_names[game_name] = \
                 set(game_package["item_name_to_id"]) | set(self.item_name_groups[game_name])
             self.all_location_and_group_names[game_name] = \
-                set(game_package["location_name_to_id"]) | set(self.location_name_groups[game_name])
+                set(game_package["location_name_to_id"]) | set(self.location_name_groups.get(game_name, []))
 
     def item_names_for_game(self, game: str) -> typing.Optional[typing.Dict[str, int]]:
         return self.gamespackage[game]["item_name_to_id"] if game in self.gamespackage else None
