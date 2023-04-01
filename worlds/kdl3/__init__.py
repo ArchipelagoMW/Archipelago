@@ -79,7 +79,7 @@ class KDL3World(World):
         required_percentage = self.multiworld.heart_stars_required[self.player].value / 100.0
         remaining_items = len(location_table) - len(itempool)
         total_heart_stars = self.multiworld.total_heart_stars[self.player].value
-        required_heart_stars = math.floor(total_heart_stars * required_percentage)
+        required_heart_stars = max(math.floor(total_heart_stars * required_percentage), 1)  # ensure at least 1 heart star required
         filler_items = total_heart_stars - required_heart_stars
         filler_amount = math.floor(filler_items * (self.multiworld.filler_percentage[self.player].value / 100.0))
         nonrequired_heart_stars = filler_items - filler_amount
