@@ -470,7 +470,17 @@ const buildWeightedSettingsDiv = (game, settings, gameItems, gameLocations) => {
           const tr = document.createElement('tr');
             const tdLeft = document.createElement('td');
             tdLeft.classList.add('td-left');
-            tdLeft.innerText = option;
+            switch(option){
+              case 'random':
+                tdLeft.innerText = 'Random';
+                break;
+              case 'random-low':
+                tdLeft.innerText = "Random (Low)";
+                break;
+              case 'random-high':
+                tdLeft.innerText = "Random (High)";
+                break;
+            }
             tr.appendChild(tdLeft);
 
             const tdMiddle = document.createElement('td');

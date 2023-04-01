@@ -137,48 +137,59 @@ class Kerriganless(Choice):
     option_on_without_passives = 2
 
 
-class KerriganLevelGain(Choice):
-    """Determines how Kerrigan gains levels.  Kerrigan's maximum level is always 70.
+class KerriganLevelsPerCheck(Range):
+    """Determines how many levels Kerrigan gains per checked location.  Kerrigan's maximum level is always 70."""
+    display_name = "Kerrigan Levels Per Check"
+    range_start = 0
+    range_end = 5
+    default = 0
 
-    By Items:  The seed will contain Kerrigan level items giving Kerrigan levels when found.
-    One Per Check:  When a location is checked, Kerrigan gains a level.
-    Two Per Check:  When a location is checked, Kerrigan gains two levels.
-    Three Per Check:  When a location is checked, Kerrigan gains three levels."""
-    display_name = "Kerrigan Level Gain"
-    option_by_items = 0
-    option_one_per_check = 1
-    option_two_per_check = 2
-    option_three_per_check = 3
+
+class KerriganChecksPerLevelPacks(Range):
+    """Determines how many locations need to be checked for the above level gain.  Kerrigan's maximum level is always 70."""
+    display_name = "Checks Per Kerrigan Level Packs"
+    range_start = 1
+    range_end = 5
+    default = 1
+
+
+class KerriganTotalLevels(Range):
+    """Determines the sum of the level items in the seed.  This does not change Kerrigan's maximum level of 70."""
+    display_name = "Total Kerrigan Levels"
+    range_start = 0
+    range_end = 140
+    default = 70
 
 
 class KerriganLevelDistribution(Choice):
-    """Determines the amount and size of Kerrigan level items.  Kerrigan's maximum level is always 70.  
-    Does nothing if Kerrigan Level Gain is not set to By Items.
+    """Determines the amount and size of Kerrigan level items.  Kerrigan's maximum level is always 70.
 
     Vanilla:  Uses the distribution in the vanilla campaign.
     This entails 32 individual levels and 6 packs of varying sizes.
-    Smooth:  Uses a custom, condensed distribution of 10 total items,
+    This distribution always adds up to 70, ignoring the above setting.
+    Smooth:  Uses a custom, condensed distribution of items between sizes 4 and 10,
     intended to fit more levels into settings with little room for filler while keeping some variance in level gains.
-    1x70:  Uses 1 items worth 70 levels.
-    2x35:  Uses 2 items worth 35 levels each.
-    5x15:  Uses 5 items worth 15 levels each.
-    7x10:  Uses 7 items worth 10 levels each.
-    10x7:  Uses 10 items worth 7 levels each.
-    14x5:  Uses 14 items worth 5 levels each.
-    35x2:  Uses 35 items worth 2 level eachs.
-    70x1:  Uses 70 individual levels.  As there are not enough locations in the game for this distribution,
-    this will result in a greatly reduced maximum level, and is likely to remove many other items."""
+    This distribution always adds up to 70, ignoring the above setting.
+    Size 70:  Uses items worth 70 levels each.
+    Size 35:  Uses items worth 35 levels each.
+    Size 14:  Uses items worth 14 levels each.
+    Size 10:  Uses items worth 10 levels each.
+    Size 7:  Uses items worth 7 levels each.
+    Size 5:  Uses items worth 5 levels each.
+    Size 2:  Uses items worth 2 level eachs.
+    Size 1:  Uses individual levels.  As there are not enough locations in the game for this distribution,
+    this will result in a greatly reduced total level, and is likely to remove many other items."""
     display_name = "Kerrigan Level Distribution"
     option_vanilla = 0
     option_smooth = 1
-    option_1x70 = 2
-    option_2x35 = 3
-    option_5x15 = 4
-    option_7x10 = 5
-    option_10x7 = 6
-    option_14x5 = 7
-    option_35x2 = 8
-    option_70x1 = 9
+    option_size_70 = 2
+    option_size_35 = 3
+    option_size_14 = 4
+    option_size_10 = 5
+    option_size_7 = 6
+    option_size_5 = 7
+    option_size_2 = 8
+    option_size_1 = 9
 
 
 class IncludeAllKerriganAbilities(Toggle):
@@ -190,7 +201,7 @@ class IncludeAllKerriganAbilities(Toggle):
 
 class StartPrimaryAbilities(Range):
     """Number of Primary Abilities (Kerrigan Tier 1, 2, and 4) to start the game with.
-    """
+    If set to 4, a Tier 7 ability is also included."""
     display_name = "Starting Primary Abilities"
     range_start = 0
     range_end = 4
@@ -259,7 +270,9 @@ sc2hots_options: Dict[str, Option] = {
     "include_mutations": IncludeMutations,
     "include_strains": IncludeStrains,
     "kerriganless": Kerriganless,
-    "kerrigan_level_gain": KerriganLevelGain,
+    "kerrigan_levels_per_check": KerriganLevelsPerCheck,
+    "kerrigan_checks_per_level_pack": KerriganChecksPerLevelPacks,
+    "kerrigan_total_levels": KerriganTotalLevels,
     "kerrigan_level_distribution": KerriganLevelDistribution,
     "include_all_kerrigan_abilities": IncludeAllKerriganAbilities,
     "start_primary_abilities": StartPrimaryAbilities,

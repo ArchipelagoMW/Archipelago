@@ -41,7 +41,8 @@ import colorama
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart
 from MultiServer import mark_raw
 
-nest_asyncio.apply()
+loop = asyncio.get_event_loop_policy().new_event_loop()
+nest_asyncio.apply(loop)
 max_bonus: int = 8
 victory_modulo: int = 100
 
@@ -223,6 +224,7 @@ class SC2Context(CommonContext):
     difficulty_override = -1
     kerriganless = 0
     levels_per_check = 0
+    checks_per_level = 1
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
     last_bot: typing.Optional[ArchipelagoBot] = None
 
@@ -254,6 +256,7 @@ class SC2Context(CommonContext):
             if args["slot_data"].get("kerriganless", 0) > 0:
                 self.kerriganless = 1
             self.levels_per_check = args["slot_data"].get("kerrigan_level_gain", 0)
+            self.checks_per_level = args["slot_data"].get("kerrigan_checks_per_level_pack", 0)
 
             self.build_location_to_mission_mapping()
 
@@ -583,7 +586,7 @@ def calculate_items(ctx: SC2Context) -> typing.List[int]:
             accumulators[type_flaggroups[item_data.type]] += item_data.number
 
     # Kerrigan levels per check
-    accumulators[type_flaggroups["Level"]] += len(ctx.checked_locations) * ctx.levels_per_check
+    accumulators[type_flaggroups["Level"]] += (len(ctx.checked_locations) / ctx.checks_per_level) * ctx.levels_per_check
 
     return accumulators
 
