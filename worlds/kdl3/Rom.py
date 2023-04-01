@@ -82,8 +82,7 @@ class RomData:
             self.file = bytearray(stream.read())
 
 
-
-def patch_rom(multiworld, player, rom, boss_requirements, shuffled_levels):
+def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, shuffled_levels):
     # increase BWRAM by 0x8000
     rom.write_byte(0x7FD8, 0x06)
 
@@ -133,9 +132,11 @@ def patch_rom(multiworld, player, rom, boss_requirements, shuffled_levels):
     # Allow Purification
     rom.write_bytes(0x30518, [0x22, 0xA0, 0x99, 0xC3, 0xEA, 0xEA, ])
 
-    # Check Purification
-    rom.write_bytes(0x39A00, [0x8A, 0xC9, 0x00, 0x00, 0xF0, 0x03, 0x4A, 0x4A, 0x1A, 0xAA, 0xBF, 0x00, 0xD0, 0x07, 0xCD,
-                              0x80, 0x7F, 0x10, 0x02, 0x38, 0x6B, 0x18, 0x6B, ])
+    # Check Purification and Enable Sub-games
+    rom.write_bytes(0x39A00, [0x8A, 0xC9, 0x00, 0x00, 0xF0, 0x03, 0x4A, 0x4A, 0x1A, 0xAA, 0xAD, 0x80, 0x7F, 0x18, 0xCF,
+                              0x0A, 0xD0, 0x07, 0x90, 0x17, 0xDA, 0xA9, 0x14, 0x00, 0x8D, 0x62, 0x7F, 0xA9, 0x01, 0x00,
+                              0xAE, 0x17, 0x36, 0x9D, 0xDD, 0x53, 0x9D, 0xDF, 0x53, 0x9D, 0xE1, 0x53, 0xFA, 0xBF, 0x00,
+                              0xD0, 0x07, 0xCD, 0x80, 0x7F, 0x10, 0x02, 0x38, 0x6B, 0x18, 0x6B, ])
 
     # Check for Sound on Main Loop
     rom.write_bytes(0x6AE4, [0x22, 0x00, 0x9B, 0x07, 0xEA])
@@ -167,6 +168,8 @@ def patch_rom(multiworld, player, rom, boss_requirements, shuffled_levels):
                                          boss_requirements[3], boss_requirements[4]))
     rom.write_byte(0x3D010, multiworld.death_link[player].value)
     rom.write_byte(0x3D012, multiworld.goal[player].value)
+    rom.write_bytes(0x3D00A, struct.pack("H", heart_stars_required if multiworld.goal[player] > 0
+                                         else [0xFF, 0xFF]))
 
     for level in shuffled_levels:
         for i in range(len(shuffled_levels[level])):
@@ -177,6 +180,10 @@ def patch_rom(multiworld, player, rom, boss_requirements, shuffled_levels):
             if (i == 0) or (i > 0 and i % 6 != 0):
                 rom.write_bytes(0x3D080 + (level - 1) * 12 + (i * 2),
                                 struct.pack("H", (shuffled_levels[level][i] & 0x00FFFF) % 6))
+
+    # write jumping goal
+    rom.write_bytes(0x94F8, struct.pack("H", multiworld.jumping_target[player]))
+    rom.write_bytes(0x944E, struct.pack("H", multiworld.jumping_target[player]))
 
     from Main import __version__
     rom.name = bytearray(f'KDL3{__version__.replace(".", "")[0:3]}_{player}_{multiworld.seed:11}\0', 'utf8')[:21]

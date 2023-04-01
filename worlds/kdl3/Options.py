@@ -6,11 +6,15 @@ from .Names import LocationName
 class Goal(Choice):
     """
     Zero: collect the Heart Stars, purify the five bosses, and defeat Zero in the Hyper Zone.
-    Boss Butch: purify the five bosses, and then complete the boss rematches in the Boss Butch mode.
+    Boss Butch: collect the Heart Stars, and then complete the boss rematches in the Boss Butch mode.
+    MG5: collect the Heart Stars, and then complete a perfect run through the minigame gauntlet within the MG5
+    Jumping: collect the Heart Stars, and then reach a designated score within the Jumping sub-game
     """
     display_name = "Goal"
     option_zero = 0
     option_boss_butch = 1
+    option_mg5 = 2
+    option_jumping = 3
     default = 0
 
 
@@ -79,6 +83,16 @@ class BossRequirementRandom(Toggle):
     If enabled, boss purification will unlock in any order, not sequentially.
     """
     display_name = "Randomize Purification Order"
+
+
+class JumpingTarget(Range):
+    """
+    The required score needed to complete the Jumping minigame.
+    """
+    display_name = "Jumping Target Score"
+    range_start = 1
+    range_end = 25
+    default = 10
 
 
 class GameLanguage(Choice):
@@ -160,6 +174,7 @@ kdl3_options: typing.Dict[str, type(Option)] = {
     "total_heart_stars": TotalHeartStars,
     "heart_stars_required": HeartStarsRequired,
     "filler_percentage": FillerPercentage,
+    "jumping_target": JumpingTarget,
     "stage_shuffle": LevelShuffle,
     "boss_shuffle": BossShuffle,
     "boss_requirement_random": BossRequirementRandom,

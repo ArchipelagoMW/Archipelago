@@ -43,6 +43,7 @@ class KDL3World(World):
     item_name_groups = item_names
     data_version = 0
     web = KDL3WebWorld()
+    required_heart_stars = dict()
     boss_requirements = dict()
     player_levels = dict()
     topology_present = False
@@ -82,6 +83,7 @@ class KDL3World(World):
         filler_items = total_heart_stars - required_heart_stars
         filler_amount = math.floor(filler_items * (self.multiworld.filler_percentage[self.player].value / 100.0))
         nonrequired_heart_stars = filler_items - filler_amount
+        self.required_heart_stars[self.player] = required_heart_stars
         # handle boss requirements here
         requirements = [required_heart_stars]
         for i in range(4):
@@ -240,17 +242,19 @@ class KDL3World(World):
                                and state.can_reach(stage_locations[self.player_levels[self.player][5][5]], "Location", self.player))
 
         set_rule(self.multiworld.get_entrance("To Level 6", self.player),
-                 lambda state: state.has("Level 1 Boss Purified", self.player)
-                               and state.has("Level 2 Boss Purified", self.player)
-                               and state.has("Level 3 Boss Purified", self.player)
-                               and state.has("Level 4 Boss Purified", self.player)
-                               and state.has("Level 5 Boss Purified", self.player))
+                 lambda state: state.has("Heart Star", self.player, self.required_heart_stars[self.player]))
+        if self.multiworld.goal[self.player] == 0:
+            add_rule(self.multiworld.get_entrance("To Level 6", self.player),
+                     lambda state: state.has("Level 1 Boss Purified", self.player)
+                                   and state.has("Level 2 Boss Purified", self.player)
+                                   and state.has("Level 3 Boss Purified", self.player)
+                                   and state.has("Level 4 Boss Purified", self.player)
+                                   and state.has("Level 5 Boss Purified", self.player))
 
     def generate_basic(self) -> None:
         self.topology_present = self.multiworld.stage_shuffle[self.player].value > 0
         goal = self.multiworld.goal[self.player].value
-        goal_location = self.multiworld.get_location(LocationName.boss_butch, self.player) \
-            if goal == 1 else self.multiworld.get_location(LocationName.hyper_zone, self.player)
+        goal_location = self.multiworld.get_location(LocationName.goals[goal], self.player)
         goal_location.place_locked_item(KDL3Item("Love-Love Rod", ItemClassification.progression, None, self.player))
         self.multiworld.get_location("Level 1 Boss", self.player) \
             .place_locked_item(KDL3Item("Level 1 Boss Purified", ItemClassification.progression, None, self.player))
@@ -271,7 +275,8 @@ class KDL3World(World):
             player = self.player
 
             rom = RomData(get_base_rom_path())
-            patch_rom(self.multiworld, self.player, rom, self.boss_requirements[self.player],
+            patch_rom(self.multiworld, self.player, rom, self.required_heart_stars[self.player],
+                      self.boss_requirements[self.player],
                       self.player_levels[self.player])
 
             rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")

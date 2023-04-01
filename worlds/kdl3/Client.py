@@ -30,7 +30,9 @@ KDL3_WORLD_UNLOCK = SRAM_1_START + 0x53CB
 KDL3_LEVEL_UNLOCK = SRAM_1_START + 0x53CD
 KDL3_BOSS_STATUS = SRAM_1_START + 0x53D5
 KDL3_INVINCIBILITY_TIMER = SRAM_1_START + 0x54B1
+KDL3_MG5_STATUS = SRAM_1_START + 0x5EE4
 KDL3_BOSS_BUTCH_STATUS = SRAM_1_START + 0x5EEA
+KDL3_JUMPING_STATUS = SRAM_1_START + 0x5EF0
 KDL3_CURRENT_BGM = SRAM_1_START + 0x733E
 KDL3_ABILITY_ARRAY = SRAM_1_START + 0x7F50
 KDL3_SOUND_FX = SRAM_1_START + 0x7F62
@@ -84,12 +86,7 @@ class KDL3SNIClient(SNIClient):
             item = self.item_queue.pop()
             # special handling for the remaining three
             item = item.item & 0x00000F
-            if item == 0:
-                # Heart Star
-                heart_star_count = await snes_read(ctx, KDL3_HEART_STAR_COUNT, 1)
-                snes_buffered_write(ctx, KDL3_HEART_STAR_COUNT, pack("H", heart_star_count[0] + 1))
-                snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x16]))
-            elif item == 1:
+            if item == 1:
                 # 1-Up
                 life_count = await snes_read(ctx, KDL3_LIFE_COUNT, 1)
                 life_bytes = pack("H", life_count[0] + 1)
@@ -116,32 +113,65 @@ class KDL3SNIClient(SNIClient):
         halken = await snes_read(ctx, WRAM_START, 6)
         if halken != b"halken":
             return
-        current_bgm = await snes_read(ctx, KDL3_CURRENT_BGM, 1)
-        if current_bgm[0] in (0x00, 0x21, 0x22, 0x23, 0x25):
-            return  # title screen, opening, save select
         is_debug = await snes_read(ctx, KDL3_DEBUG, 1)
         if is_debug[0]:
             return  # just in case someone tries to get smart
+        current_save = await snes_read(ctx, KDL3_GAME_SAVE, 1)
+        goal = await snes_read(ctx, KDL3_GOAL_ADDR, 1)
+        boss_butch_status = await snes_read(ctx, KDL3_BOSS_BUTCH_STATUS + (current_save[0] * 2), 1)
+        mg5_status = await snes_read(ctx, KDL3_MG5_STATUS + (current_save[0] * 2), 1)
+        jumping_status = await snes_read(ctx, KDL3_JUMPING_STATUS + (current_save[0] * 2), 1)
+        if boss_butch_status[0] == 0xFF:
+            return  # save file is not created, ignore
+        if (goal[0] == 0x00 and boss_butch_status[0] == 0x01) \
+                or (goal[0] == 0x01 and boss_butch_status[0] == 0x03)\
+                or (goal[0] == 0x02 and mg5_status[0] == 0x03)\
+                or (goal[0] == 0x03 and jumping_status[0] == 0x03):
+            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            ctx.finished_game = True
+        current_bgm = await snes_read(ctx, KDL3_CURRENT_BGM, 1)
+        if current_bgm[0] in (0x00, 0x21, 0x22, 0x23, 0x25):
+            return  # title screen, opening, save select
         game_state = await snes_read(ctx, KDL3_GAME_STATE, 1)
         current_hp = await snes_read(ctx, KDL3_KIRBY_HP, 1)
         if "DeathLink" in ctx.tags and game_state[0] == 0x00 and ctx.last_death_link + 1 < time.time():
             currently_dead = current_hp[0] == 0x00
             await ctx.handle_deathlink_state(currently_dead)
 
-        current_save = await snes_read(ctx, KDL3_GAME_SAVE, 1)
-        goal = await snes_read(ctx, KDL3_GOAL_ADDR, 1)
-        boss_butch_status = await snes_read(ctx, KDL3_BOSS_BUTCH_STATUS + (current_save[0] * 2), 1)
-        if boss_butch_status[0] == 0xFF:
-            return  # save file is not created, ignore
-        if (goal[0] == 0x00 and boss_butch_status[0] == 0x01) or (goal[0] == 0x01 and boss_butch_status[0] == 0x03):
-            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-            ctx.finished_game = True
-
         if self.levels is None:
             self.levels = dict()
             for i in range(5):
                 level_data = await snes_read(ctx, KDL3_LEVEL_ADDR + (14 * i), 14)
                 self.levels[i] = unpack("HHHHHHH", level_data)
+
+        recv_count = await snes_read(ctx, KDL3_RECV_COUNT, 1)
+        recv_amount = recv_count[0]
+        if recv_amount < len(ctx.items_received):
+            item = ctx.items_received[recv_amount]
+            recv_amount += 1
+            logging.info('Received %s from %s (%s) (%d/%d in list)' % (
+                color(ctx.item_names[item.item], 'red', 'bold'),
+                color(ctx.player_names[item.player], 'yellow'),
+                ctx.location_names[item.location], recv_amount, len(ctx.items_received)))
+
+            snes_buffered_write(ctx, KDL3_RECV_COUNT, pack("H", recv_amount))
+            if item.item & 0x000030 == 0:
+                ability = item.item & 0x00000F
+                snes_buffered_write(ctx, KDL3_ABILITY_ARRAY + (ability * 2), pack("H", ability))
+                snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x32]))
+            elif item.item & 0x000010 > 0:
+                friend = (item.item & 0x00000F)
+                snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x32]))
+                snes_buffered_write(ctx, KDL3_ANIMAL_FRIENDS + (friend << 1), bytes([friend + 1]))
+            elif item.item == 0x770020:
+                # Heart Star
+                heart_star_count = await snes_read(ctx, KDL3_HEART_STAR_COUNT, 1)
+                snes_buffered_write(ctx, KDL3_HEART_STAR_COUNT, pack("H", heart_star_count[0] + 1))
+                snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x16]))
+            else:
+                self.item_queue.append(item)
+
+        await snes_flush_writes(ctx)
 
         new_checks = []
         # level completion status
@@ -198,27 +228,3 @@ class KDL3SNIClient(SNIClient):
 
         if game_state[0] != 0xFF:
             await self.pop_item(ctx)
-
-        recv_count = await snes_read(ctx, KDL3_RECV_COUNT, 1)
-        recv_amount = recv_count[0]
-        if recv_amount < len(ctx.items_received):
-            item = ctx.items_received[recv_amount]
-            recv_amount += 1
-            logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                color(ctx.item_names[item.item], 'red', 'bold'),
-                color(ctx.player_names[item.player], 'yellow'),
-                ctx.location_names[item.location], recv_amount, len(ctx.items_received)))
-
-            snes_buffered_write(ctx, KDL3_RECV_COUNT, pack("H", recv_amount))
-            if item.item & 0x000030 == 0:
-                ability = item.item & 0x00000F
-                snes_buffered_write(ctx, KDL3_ABILITY_ARRAY + (ability * 2), pack("H", ability))
-                snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x32]))
-            elif item.item & 0x000010 > 0:
-                friend = (item.item & 0x00000F)
-                snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x32]))
-                snes_buffered_write(ctx, KDL3_ANIMAL_FRIENDS + (friend << 1), bytes([friend + 1]))
-            else:
-                self.item_queue.append(item)
-
-        await snes_flush_writes(ctx)

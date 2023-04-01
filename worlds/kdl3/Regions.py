@@ -160,10 +160,7 @@ def create_levels(world: World) -> None:
     level3.locations.append(KDL3Location(world.player, "Level 3 Boss", None, level3))
     level4.locations.append(KDL3Location(world.player, "Level 4 Boss", None, level4))
     level5.locations.append(KDL3Location(world.player, "Level 5 Boss", None, level5))
-    if world.multiworld.goal[world.player] == 1:
-        level6.locations.append(KDL3Location(world.player, LocationName.boss_butch, None, level6))
-    else:
-        level6.locations.append(KDL3Location(world.player, LocationName.hyper_zone, None, level6))
+    level6.locations.append(KDL3Location(world.player, LocationName.goals[world.multiworld.goal[world.player]], None, level6))
     tlv2 = Entrance(world.player, "To Level 2", level1)
     level1.exits.append(tlv2)
     tlv2.connect(level2)

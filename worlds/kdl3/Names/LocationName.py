@@ -78,11 +78,8 @@ hyper_zone = "Hyper Zone - Zero"
 
 # Extras
 boss_butch = "Boss Butch"
-mg5_1 = "Minigame 5 - 1"
-mg5_2 = "Minigame 5 - 2"
-mg5_3 = "Minigame 5 - 3"
-mg5_4 = "Minigame 5 - 4"
-mg5_5 = "Minigame 5 - 5"
+mg5_p = "Minigame 5 - Perfect"
+jumping_clear = "Jumping - Target Score Reached"
 
 # Level Names
 level_names = {
@@ -101,3 +98,10 @@ boss_names = {
         "Ado": 0x770203,
         "King Dedede": 0x770204
     }
+
+goals = {
+    0: hyper_zone,
+    1: boss_butch,
+    2: mg5_p,
+    3: jumping_clear
+}
