@@ -52,39 +52,73 @@ class Boomerang(Choice):
     gift = 1
     default = gift
 
-class EntranceShuffle(Choice, LADXROption):
-    """
-    [WARNING] Experimental, may fail to fill
-    Randomizes where overworld entrances lead to.
-    [Simple] Single-entrance caves/houses that have items are shuffled amongst each other.
-    If random start location and/or dungeon shuffle is enabled, then these will be shuffled with all the non-connector entrance pool.
-    Note, some entrances can lead into water, use the warp-to-home from the save&quit menu to escape this."""
-
-    #[Advanced] Simple, but two-way connector caves are shuffled in their own pool as well.
-    #[Expert] Advanced, but caves/houses without items are also shuffled into the Simple entrance pool.
-    #[Insanity] Expert, but the Raft Minigame hut and Mamu's cave are added to the non-connector pool.
-
-    option_none = 0
-    option_simple = 1
-    #option_advanced = 2
-    #option_expert = 3    
-    #option_insanity = 4
-    default = option_none
-    ladxr_name = "entranceshuffle"
-
-class DungeonShuffle(DefaultOffToggle, LADXROption):
-    """
-    [WARNING] Experimental, may fail to fill
-    Randomizes dungeon entrances within eachother
-    """
-    ladxr_name = "dungeonshuffle"
-
 class BossShuffle(Choice):
     none = 0
     shuffle = 1
     random = 2
     default = none
 
+class EntranceShuffle(Choice):
+    option_vanilla = 0
+    option_simple = 1
+    option_mixed = 2
+    alias_false = option_vanilla
+
+class StartShuffle(EntranceShuffle):
+    """
+    Shuffle Start Location
+    [Vanilla] No changes
+    [Simple] Your start location will be mixed with the single pool, or swapped with a "single" entrance (if there is no single shuffle)
+    [Mixed] Your start location will be shuffled among all other non-connector entrances, or swapped with a random non-connector (if there are no other shuffles enabled)
+    """
+
+class SingleEntranceShuffle(EntranceShuffle):
+    """
+    Shuffle Single Entrances (non connectors with checks inside)
+    [Vanilla] No changes
+    [Simple] The entrances will be shuffled amongst themselves
+    [Mixed] The entrances will be shuffled among all other entrances
+    """
+
+class DummyEntranceShuffle(EntranceShuffle):
+    """
+    Shuffle Dummy Entrances (non connectors with no checks inside)
+    [Vanilla] No changes
+    [Simple] The entrances will be shuffled amongst themselves
+    [Mixed] The entrances will be shuffled among all other entrances
+    """
+
+class InsanityEntranceShuffle(EntranceShuffle):
+    """
+    Shuffle Insanity Entrances (entrances that will be really annoying if moved - mamu or raft house)
+    [Vanilla] No changes
+    [Simple] The entrances will be shuffled amongst themselves
+    [Mixed] The entrances will be shuffled among all other entrances
+    """
+
+class InsanityEntranceShuffle(EntranceShuffle):
+    """
+    Shuffle Insanity Entrances (entrances that will be really annoying if moved - mamu or raft house)
+    [Vanilla] No changes
+    [Simple] The entrances will be shuffled amongst themselves
+    [Mixed] The entrances will be shuffled among all other entrances
+    """
+
+class ConnectorEntranceShuffle(EntranceShuffle):
+    """
+    Shuffle Connector Entrances
+    [Vanilla] No changes
+    [Simple] The entrances will be shuffled amongst themselves
+    [Mixed] The entrances will be shuffled among all other entrances
+    """
+
+class DungeonEntranceShuffle(EntranceShuffle):
+    """
+    Shuffle Dungeon Entrances
+    [Vanilla] No changes
+    [Simple] The entrances will be shuffled amongst themselves
+    [Mixed] The entrances will be shuffled among other entrances
+    """
 
 class DungeonItemShuffle(Choice):
     option_original_dungeon = 0
@@ -377,8 +411,13 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     # 'rooster': DefaultOnToggle, # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),                
     # 'boomerang': Boomerang,
     # 'randomstartlocation': DefaultOffToggle, # 'Randomize where your starting house is located'),
-    'experimental_dungeon_shuffle': DungeonShuffle, # 'Randomizes the dungeon that each dungeon entrance leads to'),
-    'experimental_entrance_shuffle': EntranceShuffle,
+    'start_shuffle': StartShuffle,
+    'single_entrance_shuffle': SingleEntranceShuffle,
+    'dummy_entrance_shuffle': DummyEntranceShuffle,
+    'insanity_entrance_shuffle': InsanityEntranceShuffle,
+    'insanity_entrance_shuffle': InsanityEntranceShuffle,
+    'connector_entrance_shuffle': ConnectorEntranceShuffle,
+    'dungeon_entrance_shuffle': DungeonEntranceShuffle,
     # 'bossshuffle': BossShuffle,
     # 'minibossshuffle': BossShuffle,
     'goal': Goal,
