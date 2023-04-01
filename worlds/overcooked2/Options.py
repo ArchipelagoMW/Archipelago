@@ -1,6 +1,6 @@
 from enum import IntEnum
 from typing import TypedDict
-from Options import DefaultOnToggle, Range, Choice
+from Options import Toggle, DefaultOnToggle, Range, Choice
 
 
 class LocationBalancingMode(IntEnum):
@@ -21,6 +21,12 @@ class OC2OnToggle(DefaultOnToggle):
         return bool(self.value)
 
 
+class OC2Toggle(Toggle):
+    @property
+    def result(self) -> bool:
+        return bool(self.value)
+
+
 class LocationBalancing(Choice):
     """Location balancing affects the density of progression items found in your world relative to other wordlds. This setting changes nothing for solo games.
 
@@ -36,6 +42,10 @@ class LocationBalancing(Choice):
     option_full = LocationBalancingMode.full.value
     default = LocationBalancingMode.compromise.value
 
+class RampTricks(OC2Toggle):
+    """If enabled, generated games may require sequence breaks on the overworld map. This includes crossing small gaps and escaping out of bounds."""
+    display_name = "Overworld Tricks"
+    
 
 class DeathLink(Choice):
     """DeathLink is an opt-in feature for Multiworlds where individual death events are propogated to all games with DeathLink enabled.
@@ -66,7 +76,7 @@ class AlwaysPreserveCookingProgress(OC2OnToggle):
     display_name = "Preserve Cooking/Mixing Progress"
 
 
-class DisplayLeaderboardScores(OC2OnToggle):
+class DisplayLeaderboardScores(OC2Toggle):
     """Modifies the Overworld map to fetch and display the current world records for each level. Press number keys 1-4
     to view leaderboard scores for that number of players."""
     display_name = "Display Leaderboard Scores"
@@ -153,6 +163,7 @@ class StarThresholdScale(Range):
 overcooked_options = {
     # generator options
     "location_balancing": LocationBalancing,
+    "ramp_tricks": RampTricks,
 
     # deathlink
     "deathlink": DeathLink,

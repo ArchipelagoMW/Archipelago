@@ -1,22 +1,17 @@
 from BaseClasses import CollectionState
-from .Overcooked2Levels import Overcooked2GenericLevel, Overcooked2Dlc, Overcooked2Level
+from .Overcooked2Levels import Overcooked2GenericLevel, Overcooked2Dlc, Overcooked2Level, OverworldRegion, overworld_region_by_level
 from typing import Dict
 from random import Random
 
-
 def has_requirements_for_level_access(state: CollectionState, level_name: str, previous_level_completed_event_name: str,
-                                      required_star_count: int, player: int) -> bool:
-    # Check if the ramps in the overworld are set correctly
-    if level_name in ramp_logic:
-        (ramp_reqs, level_reqs) = ramp_logic[level_name]
+                                      required_star_count: int, allow_ramp_tricks: bool, player: int) -> bool:
 
-        for req in level_reqs:
-            if not state.has(req + " Level Complete", player):
-                return False  # This level needs another to be beaten first
-
-        for req in ramp_reqs:
-            if not state.has(req + " Ramp", player):
-                return False  # The player doesn't have the pre-requisite ramp button
+    # Must have correct ramp buttons and pre-requisite levels, or tricks to sequence break
+    overworld_region = overworld_region_by_level[level_name]
+    overworld_logic = overworld_region_logic[overworld_region]
+    visited = list()
+    if not overworld_logic(state, player, allow_ramp_tricks, visited):
+        return False
 
     # Kevin Levels Need to have the corresponding items
     if level_name.startswith("K"):
@@ -81,8 +76,9 @@ def is_item_progression(item_name, level_mapping, include_kevin):
     if item_name.endswith("Emote"):
         return False
 
-    if "Kevin" in item_name or "Ramp" in item_name:
-        return True  # always progression
+    for item_identifier in ["Kevin", "Ramp", "Dash"]:
+        if item_identifier in item_name:
+            return True # These things are always progression because they can have overworld implications
 
     def item_in_logic(shortname, _item_name):
         for star in range(0, 3):
@@ -214,28 +210,128 @@ def is_completable_no_items(level: Overcooked2GenericLevel) -> bool:
 
     return len(exclusive) == 0 and len(additive) == 0
 
+def can_reach_main(state: CollectionState, player: int, allow_tricks: bool, visited: list) -> bool:
+    if OverworldRegion.main in visited:
+        return False
+    visited.append(OverworldRegion.main)
 
-# If key missing, doesn't require a ramp to access (or the logic is handled by a preceeding level)
-#
-# If empty, a ramp is required to access, but the ramp button is garunteed accessible
-#
-# If populated, ramp(s) are required to access and the button requires all levels in the
-# list to be compelted before it can be pressed
-#
-ramp_logic = {
-    "1-5": (["Yellow"], []),
-    "2-2": (["Green"], []),
-    "3-1": (["Blue"], []),
-    "5-2": (["Purple"], []),
-    "6-1": (["Pink"], []),
-    "6-2": (["Red", "Purple"], ["5-1"]),  # 5-1 spawns blue button, blue button gets you to red button
-    "Kevin-1": (["Dark Green"], []),
-    "Kevin-7": (["Purple"], ["5-1"]), # 5-1 spawns blue button,
-                                    # press blue button,
-                                    # climb blue ramp,
-                                    # jump the gap,
-                                    # climb wood ramps
-    "Kevin-8": (["Red", "Blue"], ["5-1", "6-2"]),  # Same as above, but 6-2 spawns the ramp to K8
+    return True
+
+def can_reach_yellow_island(state: CollectionState, player: int, allow_tricks: bool, visited: list) -> bool:
+    if OverworldRegion.yellow_island in visited:
+        return False
+    visited.append(OverworldRegion.yellow_island)
+
+    return state.has("Yellow Ramp", player)
+
+def can_reach_dark_green_mountain(state: CollectionState, player: int, allow_tricks: bool, visited: list) -> bool:
+    if OverworldRegion.dark_green_mountain in visited:
+        return False
+    visited.append(OverworldRegion.dark_green_mountain)
+
+    return state.has_all({"Dark Green Ramp", "Kevin-1"}, player)
+
+def can_reach_out_of_bounds(state: CollectionState, player: int, allow_tricks: bool, visited: list) -> bool:
+    if OverworldRegion.out_of_bounds in visited:
+        return False
+    visited.append(OverworldRegion.out_of_bounds)
+
+    return allow_tricks and state.has("Progressive Dash", player) and can_reach_dark_green_mountain(state, player, allow_tricks, visited)
+
+def can_reach_stonehenge_mountain(state: CollectionState, player: int, allow_tricks: bool, visited: list) -> bool:
+    if OverworldRegion.stonehenge_mountain in visited:
+        return False
+    visited.append(OverworldRegion.stonehenge_mountain)
+
+    if state.has("Blue Ramp", player):
+        return True
+    
+    if can_reach_out_of_bounds(state, player, allow_tricks, visited):
+        return True
+
+    return False
+
+def can_reach_sky_shelf(state: CollectionState, player: int, allow_tricks: bool, visited: list) -> bool:
+    if OverworldRegion.sky_shelf in visited:
+        return False
+    visited.append(OverworldRegion.sky_shelf)
+
+    if state.has("Green Ramp", player):
+        return True
+
+    if state.has_all({"5-1 Level Complete", "Purple Ramp"}, player):
+        return True
+
+    if allow_tricks and can_reach_pink_island(state, player, allow_tricks, visited) and state.has("Progressive Dash", player):
+        return True
+
+    if can_reach_tip_of_the_map(state, player, allow_tricks, visited):
+        return True
+
+    return False
+
+def can_reach_pink_island(state: CollectionState, player: int, allow_tricks: bool, visited: list) -> bool:
+    if OverworldRegion.pink_island in visited:
+        return False
+    visited.append(OverworldRegion.pink_island)
+
+    if state.has("Pink Ramp", player):
+        return True
+
+    if allow_tricks and state.has("Progressive Dash", player) and can_reach_sky_shelf(state, player, allow_tricks, visited):
+        return True
+    
+    return False
+
+def can_reach_tip_of_the_map(state: CollectionState, player: int, allow_tricks: bool, visited: list) -> bool:
+    if OverworldRegion.tip_of_the_map in visited:
+        return False
+    visited.append(OverworldRegion.tip_of_the_map)
+
+    if state.has_all({"5-1 Level Complete", "Purple Ramp"}, player):
+        return True
+    
+    if can_reach_out_of_bounds(state, player, allow_tricks, visited):
+        return True
+
+    if allow_tricks and can_reach_sky_shelf(state, player, allow_tricks, visited):
+        return True
+
+    return False
+
+def can_reach_mars_shelf(state: CollectionState, player: int, allow_tricks: bool, visited: list) -> bool:
+    if OverworldRegion.mars_shelf in visited:
+        return False
+    visited.append(OverworldRegion.mars_shelf)
+
+    tip_of_the_map = can_reach_tip_of_the_map(state, player, allow_tricks, visited)
+
+    if tip_of_the_map and allow_tricks:
+        return True
+
+    if tip_of_the_map and state.has_all({"6-1 Level Complete", "Red Ramp"}, player):
+        return True
+
+    return False
+
+def can_reach_kevin_eight_island(state: CollectionState, player: int, allow_tricks: bool, visited: list) -> bool:
+    if OverworldRegion.kevin_eight_island in visited:
+        return False
+    visited.append(OverworldRegion.kevin_eight_island)
+
+    return can_reach_mars_shelf(state, player, allow_tricks, visited)
+
+
+overworld_region_logic = {
+    OverworldRegion.main               : can_reach_main               ,
+    OverworldRegion.yellow_island      : can_reach_yellow_island      ,
+    OverworldRegion.sky_shelf          : can_reach_sky_shelf          ,
+    OverworldRegion.stonehenge_mountain: can_reach_stonehenge_mountain,
+    OverworldRegion.tip_of_the_map     : can_reach_tip_of_the_map     ,
+    OverworldRegion.pink_island        : can_reach_pink_island        ,
+    OverworldRegion.mars_shelf         : can_reach_mars_shelf         ,
+    OverworldRegion.dark_green_mountain: can_reach_dark_green_mountain,
+    OverworldRegion.kevin_eight_island : can_reach_kevin_eight_island ,
 }
 
 horde_logic = {  # Additive
