@@ -551,6 +551,8 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
         rom.write_bytes(0x7BE64, [0x0C, 0x0F, 0xF3, 0x44])  # JAL 0x803FCD10
         rom.write_bytes(0xBFCD10, Patches.music_modifier)
         rom.write_bytes(0xBFCD30, music_list)
+        rom.write_bytes(0x156DC, [0x0C, 0x0F, 0xF3, 0x6E])  # JAL 0x803FCDB8
+        rom.write_bytes(0xBFCDB8, Patches.music_comparer_modifier)
 
     # Write all the new item and loading zone bytes
     for offset, item_id in offsets_to_ids.items():

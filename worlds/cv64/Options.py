@@ -179,6 +179,15 @@ class BackgroundMusic(Choice):
     default = 0
 
 
+class MapLighting(Choice):
+    """Randomizes the lighting color RGB values on every map during every time of day to be literally anything.
+    The colors and/or shading of the following things are affected: fog, maps, player, enemies, and some objects."""
+    display_name = "Map Lighting"
+    option_normal = 0
+    option_randomized = 1
+    default = 0
+
+
 cv64_options: Dict[str, Option] = {
     "character_stages": CharacterStages,
     "stage_shuffle": StageShuffle,
@@ -202,5 +211,6 @@ cv64_options: Dict[str, Option] = {
     "disable_time_restrictions": DisableTimeRestrictions,
     "skip_waterway_platforms": SkipWaterwayPlatforms,
     "background_music": BackgroundMusic,
+    "map_lighting": MapLighting,
     "death_link": DeathLink,
 }

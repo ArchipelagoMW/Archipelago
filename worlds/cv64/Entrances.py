@@ -119,19 +119,23 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
                      lambda state: state.has(IName.clocktower_key_three, player)),
         # Castle Keep
         EntranceData(RName.ck_main, RName.roc_main, hard_entrance=True),
-        EntranceData(RName.ck_main, RName.ck_drac_chamber,
-                     lambda state: state.has(IName.special_two, player, required_special2s))
+        EntranceData(RName.ck_main, RName.ck_drac_chamber)
     ]
 
     # Set up the starting stage and warp entrances
     for i in range(len(active_warp_list)):
         if i == 0:
-            menu_entrance = Entrance(player, stage_info[active_warp_list[i]].start_region_name, active_regions["Menu"])
+            menu_exit = Entrance(player, stage_info[active_warp_list[i]].start_region_name, active_regions["Menu"])
+            active_regions["Menu"].exits.append(menu_exit)
+            menu_exit.connect(active_regions[stage_info[active_warp_list[i]].start_region_name])
         else:
-            menu_entrance = Entrance(player, stage_info[active_warp_list[i]].mid_region_name, active_regions["Menu"])
-            menu_entrance.access_rule = lambda state: state.has(IName.special_one, player, s1s_per_warp * i)
-        menu_entrance.connect(active_regions[stage_info[active_warp_list[i]].start_region_name])
-        active_regions["Menu"].exits.append(menu_entrance)
+            menu_exit = Entrance(player, f"Warp {i}", active_regions["Menu"])
+            warp_exit = Entrance(player, stage_info[active_warp_list[i]].mid_region_name, active_regions[f"Warp {i}"])
+            menu_exit.access_rule = lambda state: state.has(IName.special_one, player, s1s_per_warp * i)
+            active_regions["Menu"].exits.append(menu_exit)
+            active_regions[f"Warp {i}"].exits.append(warp_exit)
+            menu_exit.connect(active_regions[f"Warp {i}"])
+            warp_exit.connect(active_regions[stage_info[active_warp_list[i]].mid_region_name])
 
     # Set up the in-stage entrances
     for data in all_entrances:

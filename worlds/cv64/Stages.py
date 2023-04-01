@@ -107,7 +107,7 @@ stage_info = {
                                        IName.purifying: 9,
                                        IName.powerup: 1,
                                        IName.sun_card: 1,
-                                       IName.moon_card: 2}, 28,
+                                       IName.moon_card: 2}, 29,
                                       32, False),
 
     "Tunnel":               CV64Stage(RName.tunnel_start, None, None, 0x07, 0x00,

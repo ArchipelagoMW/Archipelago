@@ -1,4 +1,5 @@
 import os
+import random
 import typing
 # import math
 import threading
@@ -49,8 +50,6 @@ class CV64World(World):
     active_stage_list: typing.List[str]
     active_warp_list: typing.List[str]
     active_stage_exits: typing.Dict[str, typing.List]
-    sub_weapon_dict: typing.Dict[int, int]
-    music_list: typing.List[int]
     required_s2s = 0
     web = CV64Web()
 
@@ -124,6 +123,8 @@ class CV64World(World):
 
     def create_regions(self) -> None:
         active_regions = {"Menu": Region("Menu", self.player, self.multiworld)}
+        for i in range(1, len(self.active_warp_list)):
+            active_regions[f"Warp {i}"] = Region(f"Warp {i}", self.player, self.multiworld)
 
         for name, stage in RName.regions_to_stages.items():
             if stage in self.active_stage_list or stage is None:
@@ -135,6 +136,9 @@ class CV64World(World):
                          self.required_s2s, active_regions)
 
         # Set up the regions correctly
+        this_is_a_test = active_regions["Menu"].exits[0]
+        this_is_also_a_test = active_regions["Menu"].exits[1]
+
         for region in active_regions:
             self.multiworld.regions.append(active_regions[region])
 
@@ -294,58 +298,8 @@ class CV64World(World):
                                 f"for player {self.multiworld.get_player_name(self.player)}.")
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has(IName.victory, self.player)
-
-    def generate_basic(self) -> None:
-        # Handle sub-weapon shuffle here.
-        self.sub_weapon_dict = rom_sub_weapon_offsets.copy()
-
-        if self.multiworld.sub_weapon_shuffle[self.player]:
-            sub_bytes = list(self.sub_weapon_dict.values())
-            self.multiworld.random.shuffle(sub_bytes)
-            self.sub_weapon_dict = dict(zip(self.sub_weapon_dict, sub_bytes))
-
-        # Handle music shuffle/disable here.
-        self.music_list = [0]*0x7A
-        if self.multiworld.background_music[self.player].value == 2:
-            looping_songs = []
-            non_looping_songs = []
-            fade_in_songs = {}
-            # Create shuffle-able lists of all the looping, non-looping, and fade-in track IDs
-            for i in range(0x10, len(self.music_list)):
-                if i not in rom_looping_music_fade_ins.keys() and i not in rom_looping_music_fade_ins.values() and \
-                        i != 0x72:  # Credits song is blacklisted
-                    non_looping_songs.append(i)
-                elif i in rom_looping_music_fade_ins.keys():
-                    looping_songs.append(i)
-                elif i in rom_looping_music_fade_ins.values():
-                    fade_in_songs[i] = i
-            # Shuffle the looping songs
-            rando_looping_songs = looping_songs.copy()
-            self.multiworld.random.shuffle(rando_looping_songs)
-            looping_songs = dict(zip(looping_songs, rando_looping_songs))
-            # Shuffle the non-looping songs
-            rando_non_looping_songs = non_looping_songs.copy()
-            self.multiworld.random.shuffle(rando_non_looping_songs)
-            non_looping_songs = dict(zip(non_looping_songs, rando_non_looping_songs))
-            non_looping_songs[0x72] = 0x72
-            # Figure out the new fade-in songs if applicable
-            for vanilla_song in looping_songs:
-                if rom_looping_music_fade_ins[vanilla_song]:
-                    if rom_looping_music_fade_ins[looping_songs[vanilla_song]]:
-                        fade_in_songs[rom_looping_music_fade_ins[vanilla_song]] = rom_looping_music_fade_ins[
-                            looping_songs[vanilla_song]]
-                    else:
-                        fade_in_songs[rom_looping_music_fade_ins[vanilla_song]] = looping_songs[vanilla_song]
-            # Build the new music list
-            for i in range(0x10, len(self.music_list)):
-                if i in looping_songs.keys():
-                    self.music_list[i] = looping_songs[i]
-                elif i in non_looping_songs.keys():
-                    self.music_list[i] = non_looping_songs[i]
-                else:
-                    self.music_list[i] = fade_in_songs[i]
-        del(self.music_list[0x00: 0x10])
-        print("Yes!")
+        self.multiworld.get_region(RName.ck_main, self.player).exits[0].access_rule = \
+            lambda state: state.has(IName.special_two, self.player, self.required_s2s)
 
     def pre_fill(self) -> None:
         if self.active_stage_list[0] == RName.tower_of_science:
@@ -357,12 +311,73 @@ class CV64World(World):
 
     def generate_output(self, output_directory: str) -> None:
         try:
+            # Use the world's slot seed for the slot-specific random elements
+            random.seed(self.multiworld.per_slot_randoms[self.player])
+
+            # Handle sub-weapon shuffle here.
+            sub_weapon_dict = rom_sub_weapon_offsets.copy()
+
+            if self.multiworld.sub_weapon_shuffle[self.player]:
+                sub_bytes = list(sub_weapon_dict.values())
+                random.shuffle(sub_bytes)
+                sub_weapon_dict = dict(zip(sub_weapon_dict, sub_bytes))
+
+            # Handle music shuffle/disable here.
+            music_list = [0] * 0x7A
+            if self.multiworld.background_music[self.player].value == 2:
+                looping_songs = []
+                non_looping_songs = []
+                fade_in_songs = {}
+                # Create shuffle-able lists of all the looping, non-looping, and fade-in track IDs
+                for i in range(0x10, len(music_list)):
+                    if i not in rom_looping_music_fade_ins.keys() and i not in rom_looping_music_fade_ins.values() and \
+                            i != 0x72:  # Credits song is blacklisted
+                        non_looping_songs.append(i)
+                    elif i in rom_looping_music_fade_ins.keys():
+                        looping_songs.append(i)
+                    elif i in rom_looping_music_fade_ins.values():
+                        fade_in_songs[i] = i
+                # Shuffle the looping songs
+                rando_looping_songs = looping_songs.copy()
+                random.shuffle(rando_looping_songs)
+                looping_songs = dict(zip(looping_songs, rando_looping_songs))
+                # Shuffle the non-looping songs
+                rando_non_looping_songs = non_looping_songs.copy()
+                random.shuffle(rando_non_looping_songs)
+                non_looping_songs = dict(zip(non_looping_songs, rando_non_looping_songs))
+                non_looping_songs[0x72] = 0x72
+                # Figure out the new fade-in songs if applicable
+                for vanilla_song in looping_songs:
+                    if rom_looping_music_fade_ins[vanilla_song]:
+                        if rom_looping_music_fade_ins[looping_songs[vanilla_song]]:
+                            fade_in_songs[rom_looping_music_fade_ins[vanilla_song]] = rom_looping_music_fade_ins[
+                                looping_songs[vanilla_song]]
+                        else:
+                            fade_in_songs[rom_looping_music_fade_ins[vanilla_song]] = looping_songs[vanilla_song]
+                # Build the new music list
+                for i in range(0x10, len(music_list)):
+                    if i in looping_songs.keys():
+                        music_list[i] = looping_songs[i]
+                    elif i in non_looping_songs.keys():
+                        music_list[i] = non_looping_songs[i]
+                    else:
+                        music_list[i] = fade_in_songs[i]
+            del (music_list[0x00: 0x10])
+
+            offsets_to_ids = {}
+
+            # Handle map lighting rando here.
+            if self.multiworld.map_lighting[self.player].value == 1:
+                for entry in range(65):
+                    for sub_entry in range(19):
+                        if sub_entry not in [3, 7, 11, 15]:
+                            offsets_to_ids[0x1091BC + (entry * 27) + sub_entry] = \
+                                random.randint(0, 255)
+
             world = self.multiworld
             player = self.player
 
             rom = LocalRom(get_base_rom_path())
-
-            offsets_to_ids = {}
 
             # Figure out the item location bytes
             active_locations = self.multiworld.get_locations(self.player)
@@ -384,7 +399,7 @@ class CV64World(World):
 
             # Figure out the sub-weapon bytes
             if self.multiworld.sub_weapon_shuffle[self.player]:
-                for offset, sub_id in self.sub_weapon_dict.items():
+                for offset, sub_id in sub_weapon_dict.items():
                     offsets_to_ids[offset] = sub_id
 
             # Figure out the loading zone bytes
@@ -393,8 +408,9 @@ class CV64World(World):
                 offsets_to_ids[0xB73308] = stage_info[self.active_stage_list[0]].start_map_id
             for stage in self.active_stage_exits:
                 # Start loading zones
-                saw_cc_end = False
-                if self.active_stage_exits[stage][0] and self.active_stage_exits[stage][0] != "Menu":
+                if self.active_stage_exits[stage][0] == "Menu":
+                    offsets_to_ids[stage_info[stage].startzone_map_offset] = stage_info[stage].start_map_id
+                elif self.active_stage_exits[stage][0]:
                     offsets_to_ids[stage_info[stage].startzone_map_offset] = stage_info[
                         self.active_stage_exits[stage][0]].end_map_id
                     offsets_to_ids[stage_info[stage].startzone_spawn_offset] = stage_info[
@@ -405,12 +421,14 @@ class CV64World(World):
                                 (self.active_stage_list[self.active_stage_list.index(RName.castle_center) + 3] == stage
                                  and self.multiworld.character_stages[self.player].value == 0):
                             offsets_to_ids[stage_info[stage].startzone_spawn_offset] += 1
+
                 # End loading zones
                 if self.active_stage_exits[stage][1]:
                     offsets_to_ids[stage_info[stage].endzone_map_offset] = stage_info[
                         self.active_stage_exits[stage][1]].start_map_id
                     offsets_to_ids[stage_info[stage].endzone_spawn_offset] = stage_info[
                         self.active_stage_exits[stage][1]].start_spawn_id
+
                 # Alternate end loading zones
                 if self.active_stage_exits[stage][2]:
                     offsets_to_ids[stage_info[stage].altzone_map_offset] = stage_info[
@@ -419,7 +437,7 @@ class CV64World(World):
                         self.active_stage_exits[stage][2]].start_spawn_id
 
             patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.active_stage_list,
-                      self.active_stage_exits, self.active_warp_list, self.required_s2s, self.music_list)
+                      self.active_stage_exits, self.active_warp_list, self.required_s2s, music_list)
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
