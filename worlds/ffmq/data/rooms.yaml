@@ -2967,7 +2967,7 @@
 - name: Windia Old People House Basement
   id: 162
   game_objects:
-  - name: "Windia 04"
+  - name: "Windia 06"
     object_id: 0xC8
     type: "Box"
     access: []
