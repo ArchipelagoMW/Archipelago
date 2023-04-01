@@ -77,16 +77,13 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
         move_mission("Harvest of Screams", MissionPools.EASY, MissionPools.STARTER)
         move_mission("Domination", MissionPools.EASY, MissionPools.STARTER)
     if logic_level > 0:
-        # Easy -> Starter
-        move_mission("Shoot the Messenger", MissionPools.EASY, MissionPools.STARTER)
         # Medium -> Easy
-        for mission in ("Fire in the Sky", "Old Soldiers", "Waking the Ancient", "Conviction"):
+        for mission in ("Fire in the Sky", "Waking the Ancient", "Conviction"):
             move_mission(mission, MissionPools.MEDIUM, MissionPools.EASY)
         # Hard -> Medium
         move_mission("Phantoms of the Void", MissionPools.HARD, MissionPools.MEDIUM)
         if not kerriganless:
-            # Additional starter missions assuming player starts with minimal anti-air
-            move_mission("Fire in the Sky", MissionPools.EASY, MissionPools.STARTER)
+            # Additional starter mission assuming player starts with minimal anti-air
             move_mission("Waking the Ancient", MissionPools.EASY, MissionPools.STARTER)
 
     return mission_pools
@@ -196,8 +193,29 @@ class ValidInventory:
                             self.logical_inventory.add(transient_item.name)
             else:
                 attempt_removal(item)
+        # Removing extra dependencies (HotS)
+        if "Baneling" in self.logical_inventory and\
+           "Zergling" not in self.logical_inventory and\
+           "Spawn Banelings (Kerrigan Tier 4)" not in self.logical_inventory:
+            inventory = [item for item in inventory if "Baneling" not in item.name]
+        if "Mutalisk" not in self.logical_inventory:
+            inventory = [item for item in inventory if not item.name.startswith("Progressive Flyer")]
+            locked_items = [item for item in locked_items if not item.name.startswith("Progressive Flyer")]
 
-        return inventory + locked_items
+        # Cull finished, adding locked items back into inventory
+        inventory += locked_items
+
+        # Replacing empty space with generically useful items
+        replacement_items = [item for item in self.item_pool
+                             if item not in inventory and
+                             item not in self.locked_items and
+                             item_table[item.name].type in ("Ability", "Level")]
+        self.multiworld.random.shuffle(replacement_items)
+        while len(inventory) < inventory_size and len(replacement_items) > 0:
+            item = replacement_items.pop()
+            inventory.append(item)
+
+        return inventory
 
     def _read_logic(self):
         self._sc2hots_has_common_unit = lambda world, player: SC2HotSLogic._sc2hots_has_common_unit(self, world, player)
@@ -207,6 +225,7 @@ class ValidInventory:
         self._sc2hots_has_viper = lambda world, player: SC2HotSLogic._sc2hots_has_viper(self, world, player)
         self._sc2hots_has_impaler_or_lurker = lambda world, player: SC2HotSLogic._sc2hots_has_impaler_or_lurker(self, world, player)
         self._sc2hots_has_competent_comp = lambda world, player: SC2HotSLogic._sc2hots_has_competent_comp(self, world, player)
+        self._sc2hots_has_basic_comp = lambda world, player: SC2HotSLogic._sc2hots_has_basic_comp(self, world, player)
         # self._sc2wol_has_train_killers = lambda world, player: SC2HotSLogic._sc2wol_has_train_killers(self, world, player)
         self._sc2hots_can_spread_creep = lambda world, player: SC2HotSLogic._sc2hots_can_spread_creep(self, world, player)
         self._sc2hots_has_competent_defense = lambda world, player: SC2HotSLogic._sc2hots_has_competent_defense(self, world, player)

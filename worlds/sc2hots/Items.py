@@ -29,7 +29,7 @@ item_table = {
     "Swarm Queen": ItemData(1 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 1, classification=ItemClassification.progression),
     "Roach": ItemData(2 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 2, classification=ItemClassification.progression),
     "Hydralisk": ItemData(3 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 3, classification=ItemClassification.progression),
-    "Baneling": ItemData(4 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 4, classification=ItemClassification.progression, parent_item="Zergling"),
+    "Baneling": ItemData(4 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 4, classification=ItemClassification.progression),
     "Aberration": ItemData(5 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 5, classification=ItemClassification.progression),
     "Mutalisk": ItemData(6 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 6, classification=ItemClassification.progression),
     "Swarm Host": ItemData(7 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 7, classification=ItemClassification.progression),
