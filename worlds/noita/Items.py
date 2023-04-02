@@ -42,7 +42,7 @@ def create_all_items(world: MultiWorld, player: int) -> None:
         itempool += ["Perk (Spatial Awareness)"]
 
     # Create any non-progression repeat items (referred to as junk regardless of whether it's useful)
-    filler_pool = filler_weights
+    filler_pool = filler_weights.copy()
     if world.bad_effects[player].value == 0:
         del filler_pool["Trap"]
     random_count = sum_locations - len(itempool)
