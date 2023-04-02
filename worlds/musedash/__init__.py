@@ -41,15 +41,15 @@ class MuseDashWorld(World):
     music_sheet_name: str = "Music Sheet"
 
     # Necessary Data
-    museDashCollection = MuseDashCollections(2900000, 2)
+    muse_dash_collection = MuseDashCollections(2900000, 2)
 
     item_name_to_id = {
-        name: data.code for name, data in museDashCollection.album_items.items() | museDashCollection.song_items.items()
+        name: data.code for name, data in muse_dash_collection.album_items.items() | muse_dash_collection.song_items.items()
     }
-    item_name_to_id[music_sheet_name] = museDashCollection.MUSIC_SHEET_CODE
+    item_name_to_id[music_sheet_name] = muse_dash_collection.MUSIC_SHEET_CODE
 
     location_name_to_id = {
-        name: id for name, id in museDashCollection.album_locations.items() | museDashCollection.song_locations.items()
+        name: id for name, id in muse_dash_collection.album_locations.items() | muse_dash_collection.song_locations.items()
     }
 
     # Working Data
@@ -67,7 +67,7 @@ class MuseDashWorld(World):
 
         diff_threshold = self.get_difficulty_range()
 
-        available_song_keys = self.museDashCollection.get_all_songs_with_settings(dlc_songs, streamer_mode, diff_threshold[0], diff_threshold[1])
+        available_song_keys = self.muse_dash_collection.get_all_songs_with_settings(dlc_songs, streamer_mode, diff_threshold[0], diff_threshold[1])
         self.create_song_pool(available_song_keys)
 
         #Todo: where should we have pre collected items?
@@ -115,9 +115,9 @@ class MuseDashWorld(World):
 
     def create_item(self, name: str) -> Item:
         if (name == self.music_sheet_name):
-            return MuseDashFixedItem(name, ItemClassification.progression_skip_balancing, self.museDashCollection.MUSIC_SHEET_CODE, self.player)
+            return MuseDashFixedItem(name, ItemClassification.progression_skip_balancing, self.muse_dash_collection.MUSIC_SHEET_CODE, self.player)
 
-        song = self.museDashCollection.song_items.get(name)
+        song = self.muse_dash_collection.song_items.get(name)
         if (song != None):
             return MuseDashSongItem(name, self.player, song)
 
@@ -192,11 +192,11 @@ class MuseDashWorld(World):
 
             # 2 Locations are defined per song
             location_name = name + "-0"
-            region.locations.append(MuseDashLocation(self.player, location_name, self.museDashCollection.song_locations[location_name], region))
+            region.locations.append(MuseDashLocation(self.player, location_name, self.muse_dash_collection.song_locations[location_name], region))
 
             if (i < two_item_location_count):
                 location_name = name + "-1"
-                region.locations.append(MuseDashLocation(self.player, location_name, self.museDashCollection.song_locations[location_name], region))
+                region.locations.append(MuseDashLocation(self.player, location_name, self.muse_dash_collection.song_locations[location_name], region))
 
             region_exit = Entrance(self.player, name, song_select_region)
             song_select_region.exits.append(region_exit)

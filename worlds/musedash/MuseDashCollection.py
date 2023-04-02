@@ -67,7 +67,6 @@ class MuseDashCollections:
                 location_id_index += 1
 
 
-
     def get_all_songs_with_settings(self, dlc_songs: bool, streamer_mode_active: bool, diff_lower : int, diff_higher : int) -> list:
         """Gets a list of all songs that match the filter settings. Difficulty thresholds are inclusive."""
         filtered_list = list()

@@ -1,11 +1,8 @@
 import unittest
-import logging
-
-
 from ..MuseDashCollection import MuseDashCollections
 
-class NamesTest(unittest.TestCase):
 
+class NamesTest(unittest.TestCase):
     def test_all_names_are_ascii(self) -> None:
         bad_names = list()
         collection = MuseDashCollections(0, 1)

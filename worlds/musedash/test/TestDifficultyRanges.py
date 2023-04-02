@@ -1,21 +1,18 @@
-import unittest
-import logging
-
 from . import MuseDashTestBase
 
 class DifficultyRanges(MuseDashTestBase):
     def test_all_difficulty_ranges(self) -> None:
-        museDashWorld = self.multiworld.worlds[1]
-        difficultyChoice = self.multiworld.song_difficulty_mode[1]
-        difficultyMin = self.multiworld.song_difficulty_min[1]
-        difficultyMax = self.multiworld.song_difficulty_max[1]
+        muse_dash_world = self.multiworld.worlds[1]
+        difficulty_choice = self.multiworld.song_difficulty_mode[1]
+        difficulty_min = self.multiworld.song_difficulty_min[1]
+        difficulty_max = self.multiworld.song_difficulty_max[1]
 
         def test_range(inputRange, lower, upper):
             assert inputRange[0] == lower and inputRange[1] == upper, f"Output incorrect. Got: {inputRange[0]} to {inputRange[1]}. Expected: {lower} to {upper}"
-            songs = museDashWorld.museDashCollection.get_all_songs_with_settings(True, False, inputRange[0], inputRange[1])
+            songs = muse_dash_world.muse_dash_collection.get_all_songs_with_settings(True, False, inputRange[0], inputRange[1])
 
             for songKey in songs:
-                song = museDashWorld.museDashCollection.SongItems[songKey]
+                song = muse_dash_world.muse_dash_collection.song_items[songKey]
                 if (song.easy is not None and inputRange[0] <= song.easy <= inputRange[1]):
                     continue
 
@@ -28,34 +25,42 @@ class DifficultyRanges(MuseDashTestBase):
                 assert False, f"Invalid song '{songKey}' was given for range '{inputRange[0]} to {inputRange[1]}'"
 
         #auto ranges
-        difficultyChoice.value = 0
-        test_range(museDashWorld.get_difficulty_range(), 1, 12)
-        difficultyChoice.value = 1
-        test_range(museDashWorld.get_difficulty_range(), 1, 3)
-        difficultyChoice.value = 2
-        test_range(museDashWorld.get_difficulty_range(), 4, 5)
-        difficultyChoice.value = 3
-        test_range(museDashWorld.get_difficulty_range(), 6, 7)
-        difficultyChoice.value = 4
-        test_range(museDashWorld.get_difficulty_range(), 8, 9)
-        difficultyChoice.value = 5
-        test_range(museDashWorld.get_difficulty_range(), 10, 12)
+        difficulty_choice.value = 0
+        test_range(muse_dash_world.get_difficulty_range(), 1, 12)
+        difficulty_choice.value = 1
+        test_range(muse_dash_world.get_difficulty_range(), 1, 3)
+        difficulty_choice.value = 2
+        test_range(muse_dash_world.get_difficulty_range(), 4, 5)
+        difficulty_choice.value = 3
+        test_range(muse_dash_world.get_difficulty_range(), 6, 7)
+        difficulty_choice.value = 4
+        test_range(muse_dash_world.get_difficulty_range(), 8, 9)
+        difficulty_choice.value = 5
+        test_range(muse_dash_world.get_difficulty_range(), 10, 12)
 
         #manual ranges
-        difficultyChoice.value = 6
+        difficulty_choice.value = 6
 
-        difficultyMin.value = 1
-        difficultyMax.value = 11
-        test_range(museDashWorld.get_difficulty_range(), 1, 11)
+        difficulty_min.value = 1
+        difficulty_max.value = 11
+        test_range(muse_dash_world.get_difficulty_range(), 1, 11)
 
-        difficultyMin.value = 1
-        difficultyMax.value = 1
-        test_range(museDashWorld.get_difficulty_range(), 1, 1)
+        difficulty_min.value = 1
+        difficulty_max.value = 1
+        test_range(muse_dash_world.get_difficulty_range(), 1, 1)
 
-        difficultyMin.value = 11
-        difficultyMax.value = 11
-        test_range(museDashWorld.get_difficulty_range(), 11, 11)
+        difficulty_min.value = 11
+        difficulty_max.value = 11
+        test_range(muse_dash_world.get_difficulty_range(), 11, 11)
 
-        difficultyMin.value = 4
-        difficultyMax.value = 6
-        test_range(museDashWorld.get_difficulty_range(), 4, 6)
+        difficulty_min.value = 4
+        difficulty_max.value = 6
+        test_range(muse_dash_world.get_difficulty_range(), 4, 6)
+
+    def test_songs_have_difficulty(self) -> None:
+        muse_dash_world = self.multiworld.worlds[1]
+
+        for song_name in muse_dash_world.muse_dash_collection.DIFF_OVERRIDES:
+            song = muse_dash_world.muse_dash_collection.song_items[song_name]
+
+            assert song.easy != None and song.hard != None and song.master != None, f"Song '{song_name}' difficulty not set when it should be."
