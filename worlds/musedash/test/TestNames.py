@@ -6,7 +6,7 @@ class NamesTest(unittest.TestCase):
     def test_all_names_are_ascii(self) -> None:
         bad_names = list()
         collection = MuseDashCollections(0, 1)
-        for name in collection.SongItems.keys():
+        for name in collection.song_items.keys():
             for c in name:
                 if (0 <= ord(c) <= 127):
                     continue
