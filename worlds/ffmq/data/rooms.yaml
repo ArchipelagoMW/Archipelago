@@ -189,7 +189,7 @@
 - name: Doom Castle - Aero Room
   id: 2
   game_objects:
-  - name: "Doom Castle B2 - Sun Coin Chest"
+  - name: "Doom Castle B2 - Sun Door Chest"
     object_id: 0x00
     type: "Chest"
     access: []
@@ -301,7 +301,7 @@
 - name: Focus Tower 2F - Sand Coin Passage
   id: 10
   game_objects:
-  - name: "Focus Tower 2F - Sand Coin Chest"
+  - name: "Focus Tower 2F - Sand Door Chest"
     object_id: 0x03
     type: "Chest"
     access: []
@@ -914,7 +914,7 @@
 - name: Wintry Cave 1F - Central Space
   id: 46
   game_objects:
-  - name: "Wintry Cave - Scenic Overlook Box"
+  - name: "Wintry Cave 1F - Scenic Overlook Box"
     object_id: 0x45
     type: "Box"
     access: ["Claw"]
@@ -936,19 +936,19 @@
 - name: Wintry Cave 2F
   id: 48
   game_objects:
-  - name: "Wintry Cave - West Left Box"
+  - name: "Wintry Cave 2F - West Left Box"
     object_id: 0x47
     type: "Box"
     access: []
-  - name: "Wintry Cave - West Right Box"
+  - name: "Wintry Cave 2F - West Right Box"
     object_id: 0x48
     type: "Box"
     access: []
-  - name: "Wintry Cave - East Left Box"
+  - name: "Wintry Cave 2F - East Left Box"
     object_id: 0x49
     type: "Box"
     access: []
-  - name: "Wintry Cave - East Right Box"
+  - name: "Wintry Cave 2F - East Right Box"
     object_id: 0x4A
     type: "Box"
     access: []
@@ -980,7 +980,7 @@
 - name: Wintry Cave 3F Bottom
   id: 50
   game_objects:
-  - name: "Wintry Cave - Squidite Chest"
+  - name: "Wintry Cave 3F - Squidite Chest"
     object_id: 0x09
     type: "Chest"
     access: ["Phanquid"]
