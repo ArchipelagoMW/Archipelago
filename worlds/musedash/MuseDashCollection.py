@@ -19,7 +19,6 @@ class MuseDashCollections:
     song_items: Dict[str, SongData] = {}
     song_locations: Dict[str, int] = {}
 
-
     def __init__(self, start_item_id: int, items_per_location: int):
         self.MUSIC_SHEET_CODE = start_item_id
 
@@ -51,7 +50,8 @@ class MuseDashCollections:
                 diff_of_hard = self.parse_song_difficulty(sections[4])
                 diff_of_master = self.parse_song_difficulty(sections[5])
 
-            self.song_items[song_name] = SongData(item_id_index, song_is_free, steamer_mode, diff_of_easy, diff_of_hard, diff_of_master)
+            self.song_items[song_name] = SongData(item_id_index, song_is_free, steamer_mode,
+                                                  diff_of_easy, diff_of_hard, diff_of_master)
             item_id_index += 1
 
         for name in self.album_items.keys():
@@ -66,8 +66,8 @@ class MuseDashCollections:
                 self.song_locations[new_name] = location_id_index
                 location_id_index += 1
 
-
-    def get_all_songs_with_settings(self, dlc_songs: bool, streamer_mode_active: bool, diff_lower : int, diff_higher : int) -> list:
+    def get_songs_with_settings(self, dlc_songs: bool, streamer_mode_active: bool,
+                                    diff_lower: int, diff_higher: int) -> list:
         """Gets a list of all songs that match the filter settings. Difficulty thresholds are inclusive."""
         filtered_list = list()
 
@@ -92,8 +92,7 @@ class MuseDashCollections:
 
         return filtered_list
 
-
-    def parse_song_difficulty(self, difficulty : str) -> Optional[int]:
+    def parse_song_difficulty(self, difficulty: str) -> Optional[int]:
         """Attempts to parse the song difficulty."""
         if (len(difficulty) <= 0 or difficulty == "?" or difficulty == "¿"):
             return None

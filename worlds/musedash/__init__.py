@@ -1,6 +1,6 @@
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule
-from BaseClasses import Region, Item, ItemClassification, MultiWorld, Entrance, Tutorial
+from BaseClasses import Region, Item, ItemClassification, Entrance, Tutorial
 
 from math import floor
 
@@ -8,8 +8,6 @@ from .Options import musedash_options
 from .Items import MuseDashSongItem, MuseDashFixedItem
 from .Locations import MuseDashLocation
 from .MuseDashCollection import MuseDashCollections
-
-client_version = 1
 
 
 class MuseDashWebWorld(WebWorld):
@@ -27,9 +25,10 @@ class MuseDashWebWorld(WebWorld):
 
     tutorials = [setup_en]
 
+
 class MuseDashWorld(World):
-    """Muse Dash is a rhythm game, where you hit objects to the beat of one of 400+ songs.
-    Have fun playing as cute girls, while you go through randomly chosen songs, until you reach the goal."""
+    """Muse Dash is a game where you hit objects to the beat of one of 400+ songs.
+    You'll play through randomly chosen songs, collecting music sheets, until you have enough to play the final song!"""
 
     # World Options
     game: str = "Muse Dash"
@@ -54,35 +53,35 @@ class MuseDashWorld(World):
 
     # Working Data
     victory_song_name: str = ""
-    starting_songs: list #Todo: Update to list[str] when python 3.8 is no longer used
-    included_songs: list #Todo: Update to list[str] when python 3.8 is no longer used
+    starting_songs: list  # Todo: Update to list[str] when python 3.8 is no longer used
+    included_songs: list  # Todo: Update to list[str] when python 3.8 is no longer used
     needed_token_count: int
     location_count: int
 
     def generate_early(self):
-        #Todo: Support Plando stuff? i.e. Starting Items, Goal Item etc
+        # Todo: Support Plando stuff? i.e. Starting Items, Goal Item etc
 
         dlc_songs = self.multiworld.allow_just_as_planned_dlc_songs[self.player]
         streamer_mode = self.multiworld.streamer_mode_enabled[self.player]
 
         diff_threshold = self.get_difficulty_range()
 
-        available_song_keys = self.muse_dash_collection.get_all_songs_with_settings(dlc_songs, streamer_mode, diff_threshold[0], diff_threshold[1])
+        available_song_keys = self.muse_dash_collection.get_songs_with_settings(dlc_songs, streamer_mode, diff_threshold[0], diff_threshold[1])
         self.create_song_pool(available_song_keys)
 
         #Todo: where should we have pre collected items?
         for song in self.starting_songs:
             self.multiworld.push_precollected(self.create_item(song))
 
+    def create_song_pool(self, available_song_keys: list):
+        # Todo: Update this to list[str] when python 3.8 stops being used
 
-    def create_song_pool(self, available_song_keys: list): #Todo: Update this to list[str] when python 3.8 stops being used
         # First, lets do some sanity checks to ensure we can even generate.
         total_available_songs = len(available_song_keys)
 
         startingSongCount = self.multiworld.starting_song_count[self.player]
-        if (total_available_songs < startingSongCount + 2): # Needs Starting Songs + Victory Song + At least 1 intermediary song
+        if (total_available_songs < startingSongCount + 2):  # Needs Starting Songs + Victory Song + At least 1 intermediary song
             raise Exception("Not enough songs available to satify the starting song count.")
-
 
         self.victory_song_name = self.pop_random_item(available_song_keys)
 
@@ -105,17 +104,17 @@ class MuseDashWorld(World):
         if (self.location_count < minimum_location_count):
             self.location_count = minimum_location_count
 
-
-    def pop_random_item(self, list: list) -> str: #Todo: Update this to list[str] when python 3.8 stops being used
+    def pop_random_item(self, list: list) -> str:
+        # Todo: Update this to list[str] when python 3.8 stops being used
         index = self.multiworld.random.randrange(0, len(list))
         choice = list[index]
         list.pop(index)
         return choice
 
-
     def create_item(self, name: str) -> Item:
         if (name == self.music_sheet_name):
-            return MuseDashFixedItem(name, ItemClassification.progression_skip_balancing, self.muse_dash_collection.MUSIC_SHEET_CODE, self.player)
+            return MuseDashFixedItem(name, ItemClassification.progression_skip_balancing,
+                                     self.muse_dash_collection.MUSIC_SHEET_CODE, self.player)
 
         song = self.muse_dash_collection.song_items.get(name)
         if (song != None):
@@ -127,7 +126,6 @@ class MuseDashWorld(World):
         #    return MuseDashSongItem(name, self.player, album)
 
         return MuseDashFixedItem(name, ItemClassification.filler, None, self.player)
-
 
     def create_items(self) -> None:
         song_keys_in_pool = list(self.included_songs)
@@ -156,7 +154,6 @@ class MuseDashWorld(World):
                 self.multiworld.itempool.append(self.create_item(song_keys_in_pool[i]))
 
             item_count = needed_item_count
-
 
     def create_regions(self) -> None:
         # Basic Region Setup: Menu -> Song Select -> Songs
@@ -192,17 +189,18 @@ class MuseDashWorld(World):
 
             # 2 Locations are defined per song
             location_name = name + "-0"
-            region.locations.append(MuseDashLocation(self.player, location_name, self.muse_dash_collection.song_locations[location_name], region))
+            region.locations.append(MuseDashLocation(self.player, location_name,
+                                                     self.muse_dash_collection.song_locations[location_name], region))
 
             if (i < two_item_location_count):
                 location_name = name + "-1"
-                region.locations.append(MuseDashLocation(self.player, location_name, self.muse_dash_collection.song_locations[location_name], region))
+                region.locations.append(MuseDashLocation(self.player, location_name,
+                                                         self.muse_dash_collection.song_locations[location_name], region))
 
             region_exit = Entrance(self.player, name, song_select_region)
             song_select_region.exits.append(region_exit)
             region_exit.connect(region)
             self.multiworld.regions.append(region)
-
 
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: state.has(self.music_sheet_name, self.player, self.get_music_sheet_win_count())
@@ -214,7 +212,6 @@ class MuseDashWorld(World):
             else:
                 set_rule(location, lambda state, place=item_name: state.has(place, self.player))
 
-
     def get_music_sheet_count(self) -> int:
         multiplier = self.multiworld.music_sheet_count_percentage[self.player].value / 100.0
         song_count = len(self.starting_songs) + len(self.included_songs)
@@ -225,7 +222,8 @@ class MuseDashWorld(World):
         sheet_count = self.get_music_sheet_count()
         return max(1, floor(sheet_count * multiplier))
 
-    def get_difficulty_range(self) -> list: #Todo: Update to list[int] when python 3.8 is no longer used.
+    def get_difficulty_range(self) -> list:
+        # Todo: Update to list[int] when python 3.8 is no longer used.
         difficulty_mode = self.multiworld.song_difficulty_mode[self.player]
 
         difficulty_bounds = [1, 12]
@@ -250,7 +248,6 @@ class MuseDashWorld(World):
             difficulty_bounds[1] = max(minimum_difficulty, maximum_difficulty)
 
         return difficulty_bounds
-
 
     def fill_slot_data(self):
         return {

@@ -1,7 +1,7 @@
 from typing import Dict
 from Options import Toggle, Option, Range, Choice, DeathLink
 
-# Should this be default on or off?
+
 class AllowJustAsPlannedDLCSongs(Toggle):
     """Whether or not Just as Planned DLC songs, and all the DLCs along with it, will be included in the randomiser.
     Note: The newest DLC songs will most likely not be included in any randomisation."""
@@ -9,7 +9,8 @@ class AllowJustAsPlannedDLCSongs(Toggle):
 
 
 class StreamerModeEnabled(Toggle):
-    """Whether or not the randomisation will take into account Streamer Mode. If enabled, only songs available in Streamer Mode will be randomised."""
+    """Whether or not the randomisation will take into account Streamer Mode.
+    If enabled, only songs available in Streamer Mode will be randomised."""
     display_name = "Streamer Mode Only Songs"
 
 
@@ -28,12 +29,11 @@ class AdditionalSongs(Range):
     - Final count may be lower due to other settings.
     """
     range_start = 15
-    range_end = 500 #Note will probably not reach this high if any other settings are done.
+    range_end = 500  # Note will probably not reach this high if any other settings are done.
     default = 50
     display_name = "Additional Song Count"
 
 
-#Todo: Get feedback on these ranges.
 class DifficultyMode(Choice):
     """Ensures that at any chosen song as at least 1 value falling within these values.
     - Easy: 1, 2 or 3
@@ -52,11 +52,13 @@ class DifficultyMode(Choice):
     option_Manual = 6
     default = 0
 
+
 class DifficultyModeOverrideMin(Range):
     """Ensures that 1 song has at least 1 song this value or higher."""
     range_start = 1
     range_end = 11
     default = 4
+
 
 class DifficultyModeOverrideMax(Range):
     """Ensures that 1 song has at least 1 song this value or lower."""
@@ -64,14 +66,15 @@ class DifficultyModeOverrideMax(Range):
     range_end = 11
     default = 8
 
+
 class GradeNeeded(Choice):
     """Requires a grade of this or higher in order to get items.
     Grades are as follows:
-    Silver S (SS): >= 95% accuracy
-    Pink S (S): >= 90% accuracy
-    A: >= 80% or a Full Combo
-    B: >= 70%
-    C: >= 60%
+    - Silver S (SS): >= 95% accuracy
+    - Pink S (S): >= 90% accuracy
+    - A: >= 80% or a Full Combo
+    - B: >= 70%
+    - C: >= 60%
     """
     display_name = "Grade Needed"
     option_Any = 0
@@ -98,6 +101,7 @@ class MusicSheetWinCountPercentage(Range):
     range_end = 100
     default = 80
     display_name = "Music Sheets Needed to Win"
+
 
 class AdditionalItemPercentage(Range):
     """What percentage of songs will have 2 items instead of 1. Starting Songs will always have 2 locations."""

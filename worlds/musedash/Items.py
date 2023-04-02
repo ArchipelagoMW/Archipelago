@@ -11,7 +11,7 @@ class SongData(NamedTuple):
     easy: str = Optional[int]
     hard: int = Optional[int]
     master: int = Optional[int]
-    secret: int = Optional[int] #Note: Secret diffs can be Harder, but it can also just be "different". (See Heracles and Super Battleworm Insomniac for "different")
+    secret: int = Optional[int]
 
 
 class AlbumData(NamedTuple):
