@@ -160,7 +160,7 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
                 active_t1_t2 = KERRIGAN_ACTIVES[0].union(KERRIGAN_ACTIVES[1])
                 if active_t1_t2.issubset(excluded_items):
                     # all T1 and T2 actives were excluded
-                    tier = multiworld.random.choice(0, 1)
+                    tier = multiworld.random.choice([0, 1])
                     excluded_items.update(KERRIGAN_PASSIVES[tier])
                     active_ability = multiworld.random.choice(sorted(KERRIGAN_ACTIVES[tier]))
                     excluded_items.remove(active_ability)
