@@ -761,7 +761,7 @@ async def on_client_connected(ctx: Context, client: Client):
         'datapackage_versions': {game: game_data["version"] for game, game_data
                                  in ctx.gamespackage.items() if game in games},
         'datapackage_checksums': {game: game_data["checksum"] for game, game_data
-                                  in ctx.gamespackage.items() if game in games},
+                                  in ctx.gamespackage.items() if game in games and "checksum" in game_data},
         'seed_name': ctx.seed_name,
         'time': time.time(),
     }])
