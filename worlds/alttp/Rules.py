@@ -11,7 +11,8 @@ from .Bosses import GanonDefeatRule
 from .Items import ItemFactory, item_name_groups, item_table, progression_items
 from .Options import smallkey_shuffle
 from .OverworldGlitchRules import no_logic_rules, overworld_glitches_rules
-from .Regions import LTTPRegionType, LttPEntrance, location_table
+from .Regions import location_table
+from .SubClasses import LTTPRegionType, LttPEntrance
 from .StateHelpers import (can_extend_magic, can_kill_most_things,
                            can_lift_heavy_rocks, can_lift_rocks,
                            can_melt_things, can_retrieve_tablet,

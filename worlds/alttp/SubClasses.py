@@ -78,9 +78,20 @@ class LTTPRegionType(IntEnum):
         return self in (LTTPRegionType.Cave, LTTPRegionType.Dungeon)
 
 
+class LttPEntrance(Entrance):
+    addresses = None
+    target = None
+
+    def connect(self, region: Region, addresses: Tuple[int] = None, target: Tuple[int] = None) -> None:
+        self.connected_region = region
+        self.target = target
+        self.addresses = addresses
+        region.entrances.append(self)
+
+
 class LTTPRegion(Region):
     type: LTTPRegionType
-    entrances: List["LttPEntrance"]
+    entrances: List[LttPEntrance]
 
     # will be set after making connections.
     is_light_world: bool = False
@@ -99,14 +110,3 @@ class LTTPRegion(Region):
                 return entrance
         for entrance in self.entrances:
             return entrance.parent_region.entrance
-
-
-class LttPEntrance(Entrance):
-    addresses = None
-    target = None
-
-    def connect(self, region: Region, addresses: Tuple[int] = None, target: Tuple[int] = None) -> None:
-        self.connected_region = region
-        self.target = target
-        self.addresses = addresses
-        region.entrances.append(self)
