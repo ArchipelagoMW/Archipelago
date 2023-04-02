@@ -204,7 +204,7 @@ def create_items(self) -> None:
                     item_name = prog_map[item_group]
                     break
         if item_name == "Sky Coin":
-            if self.multiworld.sky_coin_mode[self.player] == "shattered":
+            if self.multiworld.sky_coin_mode[self.player] == "shattered_sky_coin":
                 for _ in range(40):
                     items.append(self.create_item("Sky Fragment"))
                 return
@@ -243,7 +243,7 @@ def create_items(self) -> None:
         filler_items = []
         for item, count in fillers.items():
             filler_items += [self.create_item(item) for _ in range(count)]
-        if self.multiworld.sky_coin_mode[self.player] == "shattered":
+        if self.multiworld.sky_coin_mode[self.player] == "shattered_sky_coin":
             self.multiworld.random.shuffle(filler_items)
             filler_items = filler_items[39:]
         items += filler_items

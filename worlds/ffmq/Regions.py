@@ -289,10 +289,10 @@ def set_rules(self) -> None:
             inner_room.exits.append(connection)
         for region in ow_regions:
             for entrance in self.multiworld.get_region(region, self.player).entrances:
-                if entrance.parent_region != "Menu":
+                if entrance.parent_region.name != "Menu":
                     entrance.access_rule = lambda state: False
 
-    if self.multiworld.sky_coin_mode[self.player] == "shattered":
+    if self.multiworld.sky_coin_mode[self.player] == "shattered_sky_coin":
         logic_coins = [16, 24, 32, 32, 38][self.multiworld.shattered_sky_coin_quantity[self.player].value]
         self.multiworld.get_entrance("Focus Tower 1F SkyCoin Room to Doom Castle Corridor of Destiny", self.player).access_rule = \
             lambda state: state.has("Sky Fragment", self.player, logic_coins)

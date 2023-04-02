@@ -5,7 +5,6 @@ from copy import deepcopy
 from .Regions import object_id_table
 from Main import __version__
 from worlds.Files import APContainer
-from . import data
 import pkgutil
 
 settings_template = yaml.load(pkgutil.get_data(__name__, "data/settings.yaml"), yaml.Loader)
@@ -63,7 +62,7 @@ def generate_output(self, output_directory):
                    "battles_quantity": cc(mw.battlefields_battles_quantities[p]) if
                                         mw.battlefields_battles_quantities[p].value < 5 else "RandomLow" if
                                         mw.battlefields_battles_quantities[p].value == 5 else "RandomHigh",
-                   "shuffle_battlefield_rewards": tf(mw.shuffle_battlefield_rewards[p]),
+                   "shuffle_battlefield_rewards": False, # tf(mw.shuffle_battlefield_rewards[p]),
                    "random_starting_weapon": True,
                    "progressive_gear": tf(mw.progressive_gear[p]),
                    "tweaked_dungeons": tf(mw.tweak_frustrating_dungeons[p]),
