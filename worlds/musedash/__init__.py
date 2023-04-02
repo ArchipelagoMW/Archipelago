@@ -54,10 +54,8 @@ class MuseDashWorld(World):
 
     # Working Data
     victory_song_name: str = ""
-    #starting_songs: list[str]
-    starting_songs: list
-    #included_songs: list[str]
-    included_songs: list
+    starting_songs: list #Todo: Update to list[str] when python 3.8 is no longer used
+    included_songs: list #Todo: Update to list[str] when python 3.8 is no longer used
     needed_token_count: int
     location_count: int
 
@@ -77,28 +75,27 @@ class MuseDashWorld(World):
             self.multiworld.push_precollected(self.create_item(song))
 
 
-    #def create_song_pool(self, available_song_keys: list[str]):
-    def create_song_pool(self, available_song_keys: list):
-        # Sanity checks to ensure we can even generate
+    def create_song_pool(self, available_song_keys: list): #Todo: Update this to list[str] when python 3.8 stops being used
+        # First, lets do some sanity checks to ensure we can even generate.
         total_available_songs = len(available_song_keys)
 
         startingSongCount = self.multiworld.starting_song_count[self.player]
         if (total_available_songs < startingSongCount + 2): # Needs Starting Songs + Victory Song + At least 1 intermediary song
             raise Exception("Not enough songs available to satify the starting song count.")
 
-        self.included_songs = list()
+
+        self.victory_song_name = self.pop_random_item(available_song_keys)
+
         self.starting_songs = list()
-
-        self.victory_song_name = self.get_random_item_and_remove(available_song_keys)
-
         for _ in range(0, startingSongCount):
-            self.starting_songs.append(self.get_random_item_and_remove(available_song_keys))
+            self.starting_songs.append(self.pop_random_item(available_song_keys))
 
+        self.included_songs = list()
         for _ in range(0, self.multiworld.additional_song_count[self.player]):
             if (len(available_song_keys) <= 0):
                 break
 
-            self.included_songs.append(self.get_random_item_and_remove(available_song_keys))
+            self.included_songs.append(self.pop_random_item(available_song_keys))
 
         self.location_count = len(self.starting_songs) + len(self.included_songs)
         location_multiplier = 1 + (self.multiworld.additional_item_percentage[self.player] / 100.0)
@@ -109,8 +106,7 @@ class MuseDashWorld(World):
             self.location_count = minimum_location_count
 
 
-    #def get_random_item_and_remove(self, list: list[str]) -> str:
-    def get_random_item_and_remove(self, list: list) -> str:
+    def pop_random_item(self, list: list) -> str: #Todo: Update this to list[str] when python 3.8 stops being used
         index = self.multiworld.random.randrange(0, len(list))
         choice = list[index]
         list.pop(index)
@@ -125,9 +121,10 @@ class MuseDashWorld(World):
         if (song != None):
             return MuseDashItem(name, self.player, song)
 
-        album = self.museDashCollection.AlbumItems.get(name)
-        if (album != None):
-            return MuseDashItem(name, self.player, album)
+        # Todo: Album Mode
+        # album = self.museDashCollection.AlbumItems.get(name)
+        # if (album != None):
+        #    return MuseDashItem(name, self.player, album)
 
         #Todo: Are items like this usually just return None?
         return MuseDashFixedItem(name, ItemClassification.filler, self.player, None)
@@ -136,46 +133,50 @@ class MuseDashWorld(World):
     def create_items(self) -> None:
         song_keys_in_pool = list(self.included_songs)
 
-        created_item_count = self.multiworld.music_sheet_count[self.player].value # Note: this does not count anything from Plando
+        # Note: this does not count anything from Plando
+        item_count = self.get_music_sheet_count()
 
         # First add all goal song tokens
-        for _ in range(0, created_item_count):
+        for _ in range(0, item_count):
             self.multiworld.itempool.append(self.create_item(self.music_sheet_name))
 
         # Next fill all remaining slots with song items
         needed_item_count = self.location_count
-        while (created_item_count < needed_item_count):
+        while (item_count < needed_item_count):
             # If we have more items needed than keys, just iterate the list and add them all
-            if (len(song_keys_in_pool) <= needed_item_count - created_item_count):
+            if (len(song_keys_in_pool) <= needed_item_count - item_count):
                 for key in song_keys_in_pool:
                     self.multiworld.itempool.append(self.create_item(key))
 
-                created_item_count += len(song_keys_in_pool)
+                item_count += len(song_keys_in_pool)
                 continue
 
             # Otherwise add a random assortment of songs
             self.multiworld.random.shuffle(song_keys_in_pool)
-            for i in range(0, needed_item_count - created_item_count):
+            for i in range(0, needed_item_count - item_count):
                 self.multiworld.itempool.append(self.create_item(song_keys_in_pool[i]))
 
-            created_item_count = needed_item_count
+            item_count = needed_item_count
 
 
     def create_regions(self) -> None:
         # Basic Region Setup: Menu -> Song Select -> Songs
-        mainMenu = Region("Menu", self.player, self.multiworld)
-        songSelect = Region("Song Select", self.player, self.multiworld)
+        menu_region = Region("Menu", self.player, self.multiworld)
+        song_select_region = Region("Song Select", self.player, self.multiworld)
 
-        songSelectExit = Entrance(self.player, "Song Select Entrance", mainMenu)
+        song_select_entrance = Entrance(self.player, "Song Select Entrance", menu_region)
 
-        mainMenu.exits.append(songSelectExit)
-        songSelectExit.connect(songSelect)
+        menu_region.exits.append(song_select_entrance)
+        song_select_entrance.connect(song_select_region)
 
-        self.multiworld.regions.append(mainMenu)
-        self.multiworld.regions.append(songSelect)
+        self.multiworld.regions.append(menu_region)
+        self.multiworld.regions.append(song_select_region)
 
-        # Make a collection of all songs available for this rando
-        # Final Song is excluded as it doesn't matter
+        # Make a collection of all songs available for this rando. Done in this order to make a better rando
+        # 1. All starting songs
+        # 2. All other songs shuffled
+        # Final song is excluded as for the purpose of this rando, it doesn't matter.
+
         all_selected_locations = list(self.starting_songs)
         included_song_copy = list(self.included_songs)
 
@@ -197,9 +198,9 @@ class MuseDashWorld(World):
                 location_name = name + "-1"
                 region.locations.append(MuseDashLocation(self.player, location_name, self.museDashCollection.SongLocations[location_name], region))
 
-            regionExit = Entrance(self.player, name, songSelect)
-            songSelect.exits.append(regionExit)
-            regionExit.connect(region)
+            region_exit = Entrance(self.player, name, song_select_region)
+            song_select_region.exits.append(region_exit)
+            region_exit.connect(region)
             self.multiworld.regions.append(region)
 
 
@@ -207,43 +208,48 @@ class MuseDashWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has(self.music_sheet_name, self.player, self.get_number_of_music_sheets_to_win())
 
         for location in self.multiworld.get_locations(self.player):
-            itemName = location.name[0:(len(location.name) - 2)]
-            if (itemName == self.victory_song_name):
+            item_name = location.name[0:(len(location.name) - 2)]
+            if (item_name == self.victory_song_name):
                 set_rule(location, lambda state: state.has(self.music_sheet_name, self.player, self.get_number_of_music_sheets_to_win()))
             else:
-                set_rule(location, lambda state, place=itemName: state.has(place, self.player))
+                set_rule(location, lambda state, place=item_name: state.has(place, self.player))
 
 
-    def get_number_of_music_sheets_to_win(self) -> int:
-        return min(self.multiworld.music_sheet_win_count[self.player].value, self.multiworld.music_sheet_count[self.player].value)
+    def get_music_sheet_count(self) -> int:
+        multiplier = self.multiworld.music_sheet_count_percentage[self.player].value / 100.0
+        song_count = len(self.starting_songs) + len(self.included_songs)
+        return max(1, floor(song_count * multiplier))
 
-    #def get_difficulty_range(self) -> list[int]:
-    def get_difficulty_range(self) -> list:
-        difficultyMode = self.multiworld.song_difficulty_mode[self.player]
+    def get_music_sheet_win_count(self) -> int:
+        multiplier = self.multiworld.music_sheet_count_percentage[self.player].value / 100.0
+        sheet_count = self.get_music_sheet_count()
+        return max(1, floor(sheet_count * multiplier))
 
-        diffThreshold = [1, 12]
-        if (difficultyMode == 1):
-            diffThreshold[1] = 3
-        elif (difficultyMode == 2):
-            diffThreshold[0] = 4
-            diffThreshold[1] = 5
-        elif (difficultyMode == 3):
-            diffThreshold[0] = 6
-            diffThreshold[1] = 7
-        elif (difficultyMode == 4):
-            diffThreshold[0] = 8
-            diffThreshold[1] = 9
-        elif (difficultyMode == 5):
-            diffThreshold[0] = 10
-        elif (difficultyMode == 6):
-            minDiff = self.multiworld.song_difficulty_min[self.player].value
-            maxDiff = self.multiworld.song_difficulty_max[self.player].value
+    def get_difficulty_range(self) -> list: #Todo: Update to list[int] when python 3.8 is no longer used.
+        difficulty_mode = self.multiworld.song_difficulty_mode[self.player]
 
-            #Cover for stupidity
-            diffThreshold[0] = min(minDiff, maxDiff)
-            diffThreshold[1] = max(minDiff, maxDiff)
+        difficulty_bounds = [1, 12]
+        if (difficulty_mode == 1):
+            difficulty_bounds[1] = 3
+        elif (difficulty_mode == 2):
+            difficulty_bounds[0] = 4
+            difficulty_bounds[1] = 5
+        elif (difficulty_mode == 3):
+            difficulty_bounds[0] = 6
+            difficulty_bounds[1] = 7
+        elif (difficulty_mode == 4):
+            difficulty_bounds[0] = 8
+            difficulty_bounds[1] = 9
+        elif (difficulty_mode == 5):
+            difficulty_bounds[0] = 10
+        elif (difficulty_mode == 6):
+            minimum_difficulty = self.multiworld.song_difficulty_min[self.player].value
+            maximum_difficulty = self.multiworld.song_difficulty_max[self.player].value
 
-        return diffThreshold
+            difficulty_bounds[0] = min(minimum_difficulty, maximum_difficulty)
+            difficulty_bounds[1] = max(minimum_difficulty, maximum_difficulty)
+
+        return difficulty_bounds
 
 
     def fill_slot_data(self):

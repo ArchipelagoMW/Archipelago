@@ -83,27 +83,27 @@ class GradeNeeded(Choice):
     default = 0
 
 
-class MusicSheetCount(Range):
-    """The amount of Music Sheets spread around this seed. Music Sheets are required to unlock the final song."""
-    range_start = 1
-    range_end = 40
-    default = 10
-    display_name = "Music Sheet Count"
+class MusicSheetCountPercentage(Range):
+    """Music sheets are what you need to win Muse Dash. This controls how many sheets are in the item pool.
+    This is based on the number of songs in the pool."""
+    range_start = 5
+    range_end = 25
+    default = 15
+    display_name = "Music Sheet Percentage"
 
 
-class MusicSheetWinCount(Range):
-    """The number of Music Sheets needed to unlock the winning song."""
-    range_start = 1
-    range_end = 40
-    default = 7
+class MusicSheetWinCountPercentage(Range):
+    """The percentage of Music Sheets needed to unlock the winning song."""
+    range_start = 50
+    range_end = 100
+    default = 80
     display_name = "Music Sheets Needed to Win"
 
 class AdditionalItemPercentage(Range):
-    """What percentage of songs will have 2 items instead of 1. Starting Songs are always first in line to have extra locations.
-    If there are not enough locations to place Music Sheets, extra locations will be added."""
+    """What percentage of songs will have 2 items instead of 1. Starting Songs will always have 2 locations."""
     display_name = "Additional Item %"
-    range_start = 0
-    default = 50
+    range_start = 50
+    default = 80
     range_end = 100
 
 
@@ -117,7 +117,7 @@ musedash_options: Dict[str, type(Option)] = {
     "song_difficulty_min": DifficultyModeOverrideMin,
     "song_difficulty_max": DifficultyModeOverrideMax,
     "grade_needed": GradeNeeded,
-    "music_sheet_count": MusicSheetCount,
-    "music_sheet_win_count": MusicSheetWinCount,
+    "music_sheet_count_percentage": MusicSheetCountPercentage,
+    "music_sheet_win_count_percentage": MusicSheetWinCountPercentage,
     "death_link": DeathLink
 }
