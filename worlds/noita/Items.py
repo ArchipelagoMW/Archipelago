@@ -1,6 +1,7 @@
 import itertools
 from typing import Dict, NamedTuple, Optional, List, Set
 from BaseClasses import Item, ItemClassification, MultiWorld
+from .Options import BossesAsChecks, VictoryCondition
 
 
 class ItemData(NamedTuple):
@@ -20,7 +21,6 @@ def create_item(player: int, name: str) -> Item:
 
 
 def create_all_items(world: MultiWorld, player: int) -> None:
-    pool_option = world.bad_effects[player].value
     sum_locations = len(world.get_unfilled_locations(player))
 
     # Generate fixed item pool, these are items with a specific fixed quantity that must be added
@@ -31,25 +31,27 @@ def create_all_items(world: MultiWorld, player: int) -> None:
     # Generate items based on victory condition settings (Orbs)
     vic = world.victory_condition[player].value
     orb_count = 0
-    if vic == 1:
-        orb_count = 11
 
-    if vic == 2:
+    if vic == VictoryCondition.option_pure_ending:
+        orb_count = 11
+    if vic == VictoryCondition.option_peaceful_ending:
         orb_count = 33
 
     for i in range(orb_count):
         itempool += ["Orb"]
 
-    if world.bosses_as_checks[player].value >= 3:
+    if world.bosses_as_checks[player].value >= BossesAsChecks.option_all_bosses:
         itempool += ["Perk (Spatial Awareness)"]
 
     # Create any non-progression repeat items (referred to as junk regardless of whether it's useful)
-    junk_pool = item_pool_weights[pool_option]
+    filler_pool = filler_weights.copy()
+    if world.bad_effects[player].value == 0:
+        del filler_pool["Trap"]
     random_count = sum_locations - len(itempool)
 
     itempool += world.random.choices(
-        population=list(junk_pool.keys()),
-        weights=list(junk_pool.values()),
+        population=list(filler_pool.keys()),
+        weights=list(filler_pool.values()),
         k=random_count
     )
 
@@ -94,8 +96,7 @@ item_table: Dict[str, ItemData] = {
     "Perk (Spatial Awareness)":             ItemData(110032, "Perks", ItemClassification.progression)
 }
 
-# todo: test rates, make sure it's fun
-default_weights: Dict[str, int] = {
+filler_weights: Dict[str, int] = {
     "Wand (Tier 1)":    10,
     "Potion":           45,
     "Spell Refresher":  30,
@@ -118,36 +119,6 @@ default_weights: Dict[str, int] = {
     "Sadekivi":         3,
     "Broken Wand":      10,
     "Powder Pouch":     10,
-}
-
-no_bad_weights: Dict[str, int] = {
-    "Wand (Tier 1)":    10,
-    "Potion":           45,
-    "Spell Refresher":  30,
-    "Extra Max HP":     25,
-    "Wand (Tier 2)":    8,
-    "Wand (Tier 3)":    7,
-    "Trap":             0,
-    "Gold (200)":       15,
-    "Wand (Tier 4)":    6,
-    "Wand (Tier 5)":    5,
-    "Gold (1000)":      6,
-    "Wand (Tier 6)":    4,
-    "Perk (Extra Life)": 4,
-    "Random Potion":    7,
-    "Secret Potion":    7,
-    "Chaos Die":        4,
-    "Greed Die":        4,
-    "Kammi":            4,
-    "Refreshing Gourd": 4,
-    "Sadekivi":         3,
-    "Broken Wand":      10,
-    "Powder Pouch":     10,
-}
-
-item_pool_weights: Dict[int, Dict[str, int]] = {
-    0:      no_bad_weights,
-    1:      default_weights
 }
 
 
