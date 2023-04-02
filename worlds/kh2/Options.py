@@ -141,8 +141,8 @@ class Cups(Choice):
 class LevelDepth(Choice):
     """Determines How many locations you want on levels
 
-    Level 50:23 checks spread through 50 levels.
-    Level 99:23 checks spread through 99 levels.
+    Level 50: 23 checks spread through 50 levels.
+    Level 99: 23 checks spread through 99 levels.
 
     Level 50 sanity: 49 checks spread through 50 levels.
     Level 99 sanity: 98 checks spread through 99 levels.
