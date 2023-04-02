@@ -93,6 +93,13 @@ class IceTrapWeight(BaseTrapWeight):
     display_name = "Ice Trap Weight"
 
 
+class SlowTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which makes you gotta go slow
+    """
+    display_name = "Slow Trap Weight"
+
+
 class PongTrapWeight(BaseTrapWeight):
     """
     Likelihood of receiving a trap which forces you to play a Pong minigame
@@ -626,6 +633,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "exposition_trap_weight": ExpositionTrapWeight,
     #"darkness_trap_weight": DarknessTrapWeight,
     "ice_trap_weight": IceTrapWeight,
+    "slow_trap_weight": SlowTrapWeight,
     "pong_trap_weight": PongTrapWeight,
     "minigame_trap_difficulty": MinigameTrapDifficulty,
     "ring_loss": RingLoss,

@@ -162,6 +162,7 @@ class SA2BWorld(World):
             self.multiworld.tiny_trap_weight[self.player].value = 0
             self.multiworld.gravity_trap_weight[self.player].value = 0
             self.multiworld.ice_trap_weight[self.player].value = 0
+            self.multiworld.slow_trap_weight[self.player].value = 0
 
             valid_trap_weights = self.multiworld.exposition_trap_weight[self.player].value + self.multiworld.pong_trap_weight[self.player].value
 
@@ -274,6 +275,7 @@ class SA2BWorld(World):
         trap_weights += ([ItemName.exposition_trap] * self.multiworld.exposition_trap_weight[self.player].value)
         #trap_weights += ([ItemName.darkness_trap] * self.multiworld.darkness_trap_weight[self.player].value)
         trap_weights += ([ItemName.ice_trap] * self.multiworld.ice_trap_weight[self.player].value)
+        trap_weights += ([ItemName.slow_trap] * self.multiworld.slow_trap_weight[self.player].value)
         trap_weights += ([ItemName.pong_trap] * self.multiworld.pong_trap_weight[self.player].value)
 
         junk_count += extra_junk_count
