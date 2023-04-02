@@ -101,7 +101,7 @@ class MuseDashWorld(World):
         location_multiplier = 1 + (self.multiworld.additional_item_percentage[self.player] / 100.0)
         self.location_count = floor(self.location_count * location_multiplier)
 
-        minimum_location_count = len(self.included_songs) + self.multiworld.music_sheet_count[self.player].value
+        minimum_location_count = len(self.included_songs) + self.get_music_sheet_count()
         if (self.location_count < minimum_location_count):
             self.location_count = minimum_location_count
 
@@ -172,9 +172,10 @@ class MuseDashWorld(World):
         self.multiworld.regions.append(menu_region)
         self.multiworld.regions.append(song_select_region)
 
-        # Make a collection of all songs available for this rando. Done in this order to make a better rando
+        # Make a collection of all songs available for this rando.
         # 1. All starting songs
         # 2. All other songs shuffled
+        # Doing it in this order ensures that starting songs are first in line to getting 2 locations.
         # Final song is excluded as for the purpose of this rando, it doesn't matter.
 
         all_selected_locations = list(self.starting_songs)
@@ -205,12 +206,12 @@ class MuseDashWorld(World):
 
 
     def set_rules(self) -> None:
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(self.music_sheet_name, self.player, self.get_number_of_music_sheets_to_win())
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(self.music_sheet_name, self.player, self.get_music_sheet_win_count())
 
         for location in self.multiworld.get_locations(self.player):
             item_name = location.name[0:(len(location.name) - 2)]
             if (item_name == self.victory_song_name):
-                set_rule(location, lambda state: state.has(self.music_sheet_name, self.player, self.get_number_of_music_sheets_to_win()))
+                set_rule(location, lambda state: state.has(self.music_sheet_name, self.player, self.get_music_sheet_win_count()))
             else:
                 set_rule(location, lambda state, place=item_name: state.has(place, self.player))
 
@@ -221,7 +222,7 @@ class MuseDashWorld(World):
         return max(1, floor(song_count * multiplier))
 
     def get_music_sheet_win_count(self) -> int:
-        multiplier = self.multiworld.music_sheet_count_percentage[self.player].value / 100.0
+        multiplier = self.multiworld.music_sheet_win_count_percentage[self.player].value / 100.0
         sheet_count = self.get_music_sheet_count()
         return max(1, floor(sheet_count * multiplier))
 
@@ -256,6 +257,6 @@ class MuseDashWorld(World):
         return {
             "victoryLocation": self.victory_song_name,
             "deathLink": self.multiworld.death_link[self.player].value,
-            "musicSheetWinCount": self.get_number_of_music_sheets_to_win(),
+            "musicSheetWinCount": self.get_music_sheet_win_count(),
             "gradeNeeded" : self.multiworld.grade_needed[self.player].value
         }
