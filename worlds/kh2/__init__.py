@@ -178,7 +178,6 @@ class KH2World(World):
         self.goofy_fill()
         self.keyblade_fill()
 
-        self.hitlist = list()
         self.filler_items.extend(item_groups["Filler"])
 
         if self.multiworld.FinalXemnas[self.player]:
