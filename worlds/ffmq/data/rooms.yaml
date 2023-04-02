@@ -165,15 +165,15 @@
 - name: Doom Castle - Sand Floor
   id: 1
   game_objects:
-  - name: "Sand Floor Chest"
+  - name: "Doom Castle B2 - Sand Floor Chest"
     object_id: 0x01
     type: "Chest"
     access: ["Bomb"]
-  - name: "Sand Floor 01"
+  - name: "Doom Castle B2 - Bone Ledge Box"
     object_id: 0x1E
     type: "Box"
     access: []
-  - name: "Sand Floor 02"
+  - name: "Doom Castle B2 - Hook Platform Box"
     object_id: 0x1F
     type: "Box"
     access: ["DragonClaw"]
@@ -189,7 +189,7 @@
 - name: Doom Castle - Aero Room
   id: 2
   game_objects:
-  - name: "Sun Coin Chest"
+  - name: "Doom Castle B2 - Sun Coin Chest"
     object_id: 0x00
     type: "Chest"
     access: []
@@ -237,7 +237,7 @@
 - name: Focus Tower 1F Main Lobby
   id: 6
   game_objects:
-  - name: "Focus Tower 01"
+  - name: "Focus Tower 1F - Main Lobby Box"
     object_id: 0x21
     type: "Box"
     access: []
@@ -301,7 +301,7 @@
 - name: Focus Tower 2F - Sand Coin Passage
   id: 10
   game_objects:
-  - name: "Focus Tower SandCoin Chest"
+  - name: "Focus Tower 2F - Sand Coin Chest"
     object_id: 0x03
     type: "Chest"
     access: []
@@ -329,11 +329,11 @@
 - name: Focus Tower 2F - Venus Chest Room
   id: 12
   game_objects:
-  - name: "Focus Tower Back Door Chest"
+  - name: "Focus Tower 2F - Back Door Chest"
     object_id: 0x02
     type: "Chest"
     access: []
-  - name: "Venus Chest"
+  - name: "Focus Tower 2F - Venus Chest"
     object_id: 9
     type: "NPC"
     access: ["Bomb", "VenusKey"]
@@ -345,7 +345,7 @@
 - name: Focus Tower 3F - Lower Floor
   id: 13
   game_objects:
-  - name: "Focus Tower 02"
+  - name: "Focus Tower 3F - Box"
     object_id: 0x22
     type: "Box"
     access: []
@@ -373,23 +373,23 @@
 - name: Level Forest
   id: 15
   game_objects:
-  - name: "LevelForest01"
+  - name: "Level Forest - Northwest Box"
     object_id: 0x28
     type: "Box"
     access: ["Axe"]
-  - name: "LevelForest02"
+  - name: "Level Forest - Northeast Box"
     object_id: 0x29
     type: "Box"
     access: ["Axe"]
-  - name: "LevelForest03"
+  - name: "Level Forest - Middle Box"
     object_id: 0x2A
     type: "Box"
     access: []
-  - name: "LevelForest04"
+  - name: "Level Forest - Southwest Box"
     object_id: 0x2B
     type: "Box"
     access: ["Axe"]
-  - name: "LevelForest05"
+  - name: "Level Forest - Southeast Box"
     object_id: 0x2C
     type: "Box"
     access: ["Axe"]
@@ -398,11 +398,11 @@
     type: "Trigger"
     on_trigger: ["Minotaur"]
     access: ["Kaeli1"]
-  - name: "Old Man Level Forest"
+  - name: "Level Forest - Old Man"
     object_id: 0
     type: "NPC"
     access: []
-  - name: "Kaeli Level Forest"
+  - name: "Level Forest - Kaeli"
     object_id: 1
     type: "NPC"
     access: ["Kaeli1", "Minotaur"]
@@ -414,7 +414,7 @@
 - name: Foresta
   id: 16
   game_objects:
-  - name: "Foresta01"
+  - name: "Foresta - Outside Box"
     object_id: 0x2D
     type: "Box"
     access: ["Axe"]
@@ -442,7 +442,7 @@
 - name: Kaeli's House
   id: 17
   game_objects:
-  - name: "Kaeli's House 01"
+  - name: "Foresta - Kaeli's House Box"
     object_id: 0x2E
     type: "Box"
     access: []
@@ -474,7 +474,7 @@
 - name: Foresta Houses - Old Man's House Back
   id: 19
   game_objects:
-  - name: "Old Man House Chest"
+  - name: "Foresta - Old Man House Chest"
     object_id: 0x05
     type: "Chest"
     access: []
@@ -493,7 +493,7 @@
 - name: Foresta Houses - Rest House
   id: 20
   game_objects:
-  - name: "Rest House 01"
+  - name: "Foresta - Rest House Box"
     object_id: 0x2F
     type: "Box"
     access: []
@@ -505,7 +505,7 @@
 - name: Libra Treehouse
   id: 21
   game_objects:
-  - name: "Libra Treehouse 01"
+  - name: "Alive Forest - Libra Treehouse Box"
     object_id: 0x32
     type: "Box"
     access: []
@@ -517,7 +517,7 @@
 - name: Gemini Treehouse
   id: 22
   game_objects:
-  - name: "Gemini Treehouse 01"
+  - name: "Alive Forest - Gemini Treehouse Box"
     object_id: 0x33
     type: "Box"
     access: []
@@ -529,11 +529,11 @@
 - name: Mobius Treehouse
   id: 23
   game_objects:
-  - name: "Mobius Treehouse 01"
+  - name: "Alive Forest - Mobius Treehouse West Box"
     object_id: 0x30
     type: "Box"
     access: []
-  - name: "Mobius Treehouse 02"
+  - name: "Alive Forest - Mobius Treehouse East Box"
     object_id: 0x31
     type: "Box"
     access: []
@@ -558,15 +558,15 @@
 - name: Bone Dungeon 1F
   id: 25
   game_objects:
-  - name: "Bone Dungeon 1F 01"
+  - name: "Bone Dungeon 1F - Entrance Room West Box"
     object_id: 0x35
     type: "Box"
     access: []
-  - name: "Bone Dungeon 1F 02"
+  - name: "Bone Dungeon 1F - Entrance Room Middle Box"
     object_id: 0x36
     type: "Box"
     access: []
-  - name: "Bone Dungeon 1F 03"
+  - name: "Bone Dungeon 1F - Entrance Room East Box"
     object_id: 0x37
     type: "Box"
     access: []
@@ -582,11 +582,11 @@
 - name: Bone Dungeon B1 - Waterway
   id: 26
   game_objects:
-  - name: "Bone Dungeon Skull Chest"
+  - name: "Bone Dungeon B1 - Skull Chest"
     object_id: 0x06
     type: "Chest"
     access: ["Bomb"]
-  - name: "Tristam"
+  - name: "Bone Dungeon B1 - Tristam"
     object_id: 2
     type: "NPC"
     access: ["Tristam"]
@@ -602,7 +602,7 @@
 - name: Bone Dungeon B1 - Checker Room
   id: 28
   game_objects:
-  - name: "Bone Dungeon B1 01"
+  - name: "Bone Dungeon B1 - Checker Room Box"
     object_id: 0x38
     type: "Box"
     access: ["Bomb"]
@@ -618,7 +618,7 @@
 - name: Bone Dungeon B1 - Hidden Room
   id: 29
   game_objects:
-  - name: "Bone Dungeon B1 02"
+  - name: "Bone Dungeon B1 - Ribcage Waterway Box"
     object_id: 0x39
     type: "Box"
     access: []
@@ -630,7 +630,7 @@
 - name: Bone Dungeon B2 - Exploding Skull Room - First Room
   id: 30
   game_objects:
-  - name: "Bone Dungeon B1 03"
+  - name: "Bone Dungeon B2 - Spines Room Alcove Box"
     object_id: 0x3B
     type: "Box"
     access: []
@@ -649,7 +649,7 @@
 - name: Bone Dungeon B2 - Exploding Skull Room - Second Room
   id: 31
   game_objects:
-  - name: "Bone Dungeon B1 04"
+  - name: "Bone Dungeon B2 - Spines Room Looped Hallway Box"
     object_id: 0x3A
     type: "Box"
     access: []
@@ -680,7 +680,7 @@
 - name: Bone Dungeon B2 - Box Room
   id: 33
   game_objects:
-  - name: "Bone Dungeon B2 02"
+  - name: "Bone Dungeon B2 - Lone Room Box"
     object_id: 0x3D
     type: "Box"
     access: []
@@ -692,7 +692,7 @@
 - name: Bone Dungeon B2 - Quake Room
   id: 34
   game_objects:
-  - name: "Penultimate Room Chest"
+  - name: "Bone Dungeon B2 - Penultimate Room Chest"
     object_id: 0x07
     type: "Chest"
     access: []
@@ -704,7 +704,7 @@
 - name: Bone Dungeon B2 - Two Skulls Room - First Room
   id: 35
   game_objects:
-  - name: "Bone Dungeon B2 01"
+  - name: "Bone Dungeon B2 - Two Skulls Room Box"
     object_id: 0x3C
     type: "Box"
     access: []
@@ -754,19 +754,19 @@
 - name: Bone Dungeon B2 - Boss Room
   id: 38
   game_objects:
-  - name: "Bone Dungeon Boss 01"
+  - name: "Bone Dungeon B2 - North Box"
     object_id: 0x3E
     type: "Box"
     access: []
-  - name: "Bone Dungeon Boss 02"
+  - name: "Bone Dungeon B2 - South Box"
     object_id: 0x3F
     type: "Box"
     access: []
-  - name: "Rex Chest"
+  - name: "Bone Dungeon B2 - Flamerus Rex Chest"
     object_id: 0x08
     type: "Chest"
     access: []
-  - name: "Tristam's Treasure"
+  - name: "Bone Dungeon B2 - Tristam's Treasure Chest"
     object_id: 0x04
     type: "Chest"
     access: []
@@ -778,7 +778,7 @@
 - name: Libra Temple
   id: 39
   game_objects:
-  - name: "Libra Temple 01"
+  - name: "Libra Temple - Box"
     object_id: 0x40
     type: "Box"
     access: []
@@ -832,7 +832,7 @@
 - name: Phoebe's House
   id: 41
   game_objects:
-  - name: "Aquaria 01"
+  - name: "Aquaria - Phoebe's House Chest"
     object_id: 0x41
     type: "Box"
     access: []
@@ -844,11 +844,11 @@
 - name: Aquaria Vendor House
   id: 42
   game_objects:
-  - name: "Aquaria Vendor Girl"
+  - name: "Aquaria - Vendor"
     object_id: 4
     type: "NPC"
     access: []
-  - name: "Aquaria 02"
+  - name: "Aquaria - Vendor House Box"
     object_id: 0x42
     type: "Box"
     access: []
@@ -884,19 +884,19 @@
 - name: Wintry Cave 1F - East Ledge
   id: 45
   game_objects:
-  - name: "Wintry Cave 02"
+  - name: "Wintry Cave 1F - North Box"
     object_id: 0x43
     type: "Box"
     access: []
-  - name: "Wintry Cave 05"
+  - name: "Wintry Cave 1F - Entrance Box"
     object_id: 0x46
     type: "Box"
     access: []
-  - name: "Wintry Cave 03"
+  - name: "Wintry Cave 1F - Slippery Cliff Box"
     object_id: 0x44
     type: "Box"
     access: ["Claw"]
-  - name: "Phoebe Wintry Cave"
+  - name: "Wintry Cave 1F - Phoebe"
     object_id: 5
     type: "NPC"
     access: ["Phoebe1"]
@@ -914,7 +914,7 @@
 - name: Wintry Cave 1F - Central Space
   id: 46
   game_objects:
-  - name: "Wintry Cave 04"
+  - name: "Wintry Cave - Scenic Overlook Box"
     object_id: 0x45
     type: "Box"
     access: ["Claw"]
@@ -936,19 +936,19 @@
 - name: Wintry Cave 2F
   id: 48
   game_objects:
-  - name: "Wintry Cave 06"
+  - name: "Wintry Cave - West Left Box"
     object_id: 0x47
     type: "Box"
     access: []
-  - name: "Wintry Cave 07"
+  - name: "Wintry Cave - West Right Box"
     object_id: 0x48
     type: "Box"
     access: []
-  - name: "Wintry Cave 08"
+  - name: "Wintry Cave - East Left Box"
     object_id: 0x49
     type: "Box"
     access: []
-  - name: "Wintry Cave 09"
+  - name: "Wintry Cave - East Right Box"
     object_id: 0x4A
     type: "Box"
     access: []
@@ -964,11 +964,11 @@
 - name: Wintry Cave 3F Top
   id: 49
   game_objects:
-  - name: "Wintry Cave 10"
+  - name: "Wintry Cave 3F - West Box"
     object_id: 0x4B
     type: "Box"
     access: []
-  - name: "Wintry Cave 11"
+  - name: "Wintry Cave 3F - East Box"
     object_id: 0x4C
     type: "Box"
     access: []
@@ -980,7 +980,7 @@
 - name: Wintry Cave 3F Bottom
   id: 50
   game_objects:
-  - name: "Wintry Squid Chest"
+  - name: "Wintry Cave - Squidite Chest"
     object_id: 0x09
     type: "Chest"
     access: ["Phanquid"]
@@ -989,7 +989,7 @@
     type: "Trigger"
     on_trigger: ["Phanquid"]
     access: []
-  - name: "Wintry Cave 12"
+  - name: "Wintry Cave 3F - Before Boss Box"
     object_id: 0x4D
     type: "Box"
     access: []
@@ -1001,11 +1001,11 @@
 - name: Life Temple
   id: 51
   game_objects:
-  - name: "Life Temple 01"
+  - name: "Life Temple - Box"
     object_id: 0x4E
     type: "Box"
     access: []
-  - name: "Mysterious Man"
+  - name: "Life Temple - Mysterious Man"
     object_id: 6
     type: "NPC"
     access: []
@@ -1021,7 +1021,7 @@
 - name: Fall Basin
   id: 52
   game_objects:
-  - name: "Crab Chest"
+  - name: "Falls Basin - Snow Crab Chest"
     object_id: 0x0A
     type: "Chest"
     access: ["FreezerCrab"]
@@ -1030,7 +1030,7 @@
     type: "Trigger"
     on_trigger: ["FreezerCrab"]
     access: []
-  - name: "Fall Basin 01"
+  - name: "Falls Basin - Box"
     object_id: 0x4F
     type: "Box"
     access: []
@@ -1042,19 +1042,19 @@
 - name: Ice Pyramid B1 Taunt Room
   id: 53
   game_objects:
-  - name: "Taunt Room Chest"
+  - name: "Ice Pyramid B1 - Chest"
     object_id: 0x0B
     type: "Chest"
     access: []
-  - name: "Taunt Room Box 01"
+  - name: "Ice Pyramid B1 - West Box"
     object_id: 0x50
     type: "Box"
     access: []
-  - name: "Taunt Room Box 02"
+  - name: "Ice Pyramid B1 - North Box"
     object_id: 0x51
     type: "Box"
     access: []
-  - name: "Taunt Room Box 03"
+  - name: "Ice Pyramid B1 - East Box"
     object_id: 0x52
     type: "Box"
     access: []
@@ -1081,19 +1081,19 @@
 - name: Ice Pyramid 1F Maze
   id: 55
   game_objects:
-  - name: "Maze Chest"
+  - name: "Ice Pyramid 1F - East Alcove Chest"
     object_id: 0x0D
     type: "Chest"
     access: []
-  - name: "Ice Pyramid 1F 01"
+  - name: "Ice Pyramid 1F - Sandwiched Alcove Box"
     object_id: 0x53
     type: "Box"
     access: []
-  - name: "Ice Pyramid 1F 02"
+  - name: "Ice Pyramid 1F - Southwest Left Box"
     object_id: 0x54
     type: "Box"
     access: []
-  - name: "Ice Pyramid 1F 03"
+  - name: "Ice Pyramid 1F - Southwest Right Box"
     object_id: 0x55
     type: "Box"
     access: []
@@ -1123,11 +1123,11 @@
 - name: Ice Pyramid 2F South Tiled Room
   id: 56
   game_objects:
-  - name: "Ice Pyramid 2F 02"
+  - name: "Ice Pyramid 2F - South Side Glass Door Box"
     object_id: 0x57
     type: "Box"
     access: ["Sword"]
-  - name: "Ice Pyramid 2F 06"
+  - name: "Ice Pyramid 2F - South Side East Box"
     object_id: 0x5B
     type: "Box"
     access: []
@@ -1143,7 +1143,7 @@
 - name: Ice Pyramid 2F West Room
   id: 57
   game_objects:
-  - name: "Ice Pyramid 2F 05"
+  - name: "Ice Pyramid 2F - Northwest Room Box"
     object_id: 0x5A
     type: "Box"
     access: []
@@ -1155,7 +1155,7 @@
 - name: Ice Pyramid 2F Center Room
   id: 58
   game_objects:
-  - name: "Ice Pyramid 2F 01"
+  - name: "Ice Pyramid 2F - Center Room Box"
     object_id: 0x56
     type: "Box"
     access: []
@@ -1167,7 +1167,7 @@
 - name: Ice Pyramid 2F Small North Room
   id: 59
   game_objects:
-  - name: "Ice Pyramid 2F 03"
+  - name: "Ice Pyramid 2F - North Room Glass Door Box"
     object_id: 0x58
     type: "Box"
     access: ["Sword"]
@@ -1179,7 +1179,7 @@
 - name: Ice Pyramid 2F North Corridor
   id: 60
   game_objects:
-  - name: "Ice Pyramid 2F 04"
+  - name: "Ice Pyramid 2F - North Corridor Glass Door Box"
     object_id: 0x59
     type: "Box"
     access: ["Sword"]
@@ -1195,11 +1195,11 @@
 - name: Ice Pyramid 3F Two Boxes Room
   id: 61
   game_objects:
-  - name: "Ice Pyramid 3F 03"
+  - name: "Ice Pyramid 3F - Staircase Dead End Left Box"
     object_id: 0x5E
     type: "Box"
     access: []
-  - name: "Ice Pyramid 3F 04"
+  - name: "Ice Pyramid 3F - Staircase Dead End Right Box"
     object_id: 0x5F
     type: "Box"
     access: []
@@ -1211,19 +1211,19 @@
 - name: Ice Pyramid 3F Main Loop
   id: 62
   game_objects:
-  - name: "Ice Pyramid 3F 01"
+  - name: "Ice Pyramid 3F - Inner Room North Box"
     object_id: 0x5C
     type: "Box"
     access: []
-  - name: "Ice Pyramid 3F 02"
+  - name: "Ice Pyramid 3F - Inner Room South Box"
     object_id: 0x5D
     type: "Box"
     access: []
-  - name: "Ice Pyramid 3F 05"
+  - name: "Ice Pyramid 3F - East Alcove Box"
     object_id: 0x60
     type: "Box"
     access: []
-  - name: "Ice Pyramid 3F 06"
+  - name: "Ice Pyramid 3F - Leapfrog Box"
     object_id: 0x61
     type: "Box"
     access: []
@@ -1266,35 +1266,35 @@
 - name: Ice Pyramid 4F Treasure Room
   id: 65
   game_objects:
-  - name: "Treasure Room Chest"
+  - name: "Ice Pyramid 4F - Chest"
     object_id: 0x0C
     type: "Chest"
     access: []
-  - name: "Ice Pyramid 4F 01"
+  - name: "Ice Pyramid 4F - Northwest Box"
     object_id: 0x62
     type: "Box"
     access: []
-  - name: "Ice Pyramid 4F 02"
+  - name: "Ice Pyramid 4F - West Left Box"
     object_id: 0x63
     type: "Box"
     access: []
-  - name: "Ice Pyramid 4F 03"
+  - name: "Ice Pyramid 4F - West Right Box"
     object_id: 0x64
     type: "Box"
     access: []
-  - name: "Ice Pyramid 4F 04"
+  - name: "Ice Pyramid 4F - South Left Box"
     object_id: 0x65
     type: "Box"
     access: []
-  - name: "Ice Pyramid 4F 05"
+  - name: "Ice Pyramid 4F - South Right Box"
     object_id: 0x66
     type: "Box"
     access: []
-  - name: "Ice Pyramid 4F 06"
+  - name: "Ice Pyramid 4F - East Left Box"
     object_id: 0x67
     type: "Box"
     access: []
-  - name: "Ice Pyramid 4F 07"
+  - name: "Ice Pyramid 4F - East Right Box"
     object_id: 0x68
     type: "Box"
     access: []
@@ -1309,27 +1309,27 @@
 - name: Ice Pyramid 5F Leap of Faith Room
   id: 66
   game_objects:
-  - name: "Ice Pyramid 5F 01"
+  - name: "Ice Pyramid 5F - Glass Door Left Box"
     object_id: 0x69
     type: "Box"
     access: ["IcePyramid5FStatue"]
-  - name: "Ice Pyramid 5F 02"
+  - name: "Ice Pyramid 5F - West Ledge Box"
     object_id: 0x6A
     type: "Box"
     access: []
-  - name: "Ice Pyramid 5F 03"
+  - name: "Ice Pyramid 5F - South Shelf Box"
     object_id: 0x6B
     type: "Box"
     access: []
-  - name: "Ice Pyramid 5F 04"
+  - name: "Ice Pyramid 5F - South Leapfrog Box"
     object_id: 0x6C
     type: "Box"
     access: []
-  - name: "Ice Pyramid 5F 05"
+  - name: "Ice Pyramid 5F - Glass Door Right Box"
     object_id: 0x6D
     type: "Box"
     access: ["IcePyramid5FStatue"]
-  - name: "Ice Pyramid 5F 06"
+  - name: "Ice Pyramid 5F - North Box"
     object_id: 0x6E
     type: "Box"
     access: []
@@ -1384,7 +1384,7 @@
 - name: Ice Pyramid Ice Golem Room
   id: 70
   game_objects:
-  - name: "Ice Golem Chest"
+  - name: "Ice Pyramid 6F - Ice Golem Chest"
     object_id: 0x0E
     type: "Chest"
     access: ["IceGolem"]
@@ -1419,15 +1419,15 @@
 - name: Spencer Cave Normal Main
   id: 72
   game_objects:
-  - name: "Spencer Cave 01"
+  - name: "Spencer's Cave - Box"
     object_id: 0x6F
     type: "Box"
     access: ["Claw"]
-  - name: "Spencer"
+  - name: "Spencer's Cave - Spencer"
     object_id: 8
     type: "NPC"
     access: []
-  - name: "Tristam's Chest"
+  - name: "Spencer's Cave - Locked Chest"
     object_id: 13
     type: "NPC"
     access: ["VenusKey"]
@@ -1499,7 +1499,7 @@
 - name: Spencer Cave Caved In Mobius Chest
   id: 207
   game_objects:
-  - name: "Mobius Chest"
+  - name: "Spencer's Cave - Mobius Chest"
     object_id: 0x0F
     type: "Chest"
     access: []
@@ -1521,11 +1521,11 @@
 - name: Wintry Temple Inner Room
   id: 75
   game_objects:
-  - name: "Wintry Temple 01"
+  - name: "Wintry Temple - West Box"
     object_id: 0x70
     type: "Box"
     access: []
-  - name: "Wintry Temple 02"
+  - name: "Wintry Temple - North Box"
     object_id: 0x71
     type: "Box"
     access: []
@@ -1559,7 +1559,7 @@
 - name: Fireburg Lower Plaza
   id: 208
   game_objects:
-  - name: "Fireburg01"
+  - name: "Fireburg - Hidden Tunnel Box"
     object_id: 0x74
     type: "Box"
     access: []
@@ -1573,7 +1573,7 @@
 - name: Reuben's House
   id: 77
   game_objects:
-  - name: "Arion"
+  - name: "Fireburg - Reuben's House Arion"
     object_id: 14
     type: "NPC"
     access: ["ReubenDadSaved"]
@@ -1582,7 +1582,7 @@
     type: "Trigger"
     on_trigger: ["Reuben1"]
     access: []
-  - name: "Fireburg 02"
+  - name: "Fireburg - Reuben's House Box"
     object_id: 0x75
     type: "Box"
     access: []
@@ -1594,7 +1594,7 @@
 - name: GrenadeMan's House
   id: 78
   game_objects:
-  - name: "MegaGrenade Dude"
+  - name: "Fireburg - Stolen Goods"
     object_id: 12
     type: "NPC"
     access: []
@@ -1650,7 +1650,7 @@
 - name: Fireburg Hotel Lobby
   id: 82
   game_objects:
-  - name: "Fireburg Tristam"
+  - name: "Fireburg - Tristam"
     object_id: 10
     type: "NPC"
     access: []
@@ -1734,11 +1734,11 @@
 - name: Mine Parallel Room
   id: 88
   game_objects:
-  - name: "Mine 02"
+  - name: "Mine - Parallel Room West Box"
     object_id: 0x77
     type: "Box"
     access: ["Claw"]
-  - name: "Mine 03"
+  - name: "Mine - Parallel Room East Box"
     object_id: 0x78
     type: "Box"
     access: ["Claw"]
@@ -1750,7 +1750,7 @@
 - name: Mine Crescent Room
   id: 89
   game_objects:
-  - name: "Mine Chest"
+  - name: "Mine - Crescent Room Chest"
     object_id: 0x10
     type: "Chest"
     access: []
@@ -1762,7 +1762,7 @@
 - name: Mine Climbing Room
   id: 90
   game_objects:
-  - name: "Mine 01"
+  - name: "Mine - Glitchy Collision Cave Box"
     object_id: 0x76
     type: "Box"
     access: ["Claw"]
@@ -1774,23 +1774,23 @@
 - name: Mine Cliff
   id: 91
   game_objects:
-  - name: "Mine Cliff 01"
+  - name: "Mine - Cliff Southwest Box"
     object_id: 0x79
     type: "Box"
     access: []
-  - name: "Mine Cliff 02"
+  - name: "Mine - Cliff Northwest Box"
     object_id: 0x7A
     type: "Box"
     access: []
-  - name: "Mine Cliff 03"
+  - name: "Mine - Cliff Northeast Box"
     object_id: 0x7B
     type: "Box"
     access: []
-  - name: "Mine Cliff 04"
+  - name: "Mine - Cliff Southeast Box"
     object_id: 0x7C
     type: "Box"
     access: []
-  - name: "Reuben Mine"
+  - name: "Mine - Reuben"
     object_id: 7
     type: "NPC"
     access: ["Reuben1"]
@@ -1807,11 +1807,11 @@
 - name: Sealed Temple
   id: 92
   game_objects:
-  - name: "Sealed Temple 01"
+  - name: "Sealed Temple - West Box"
     object_id: 0x7D
     type: "Box"
     access: []
-  - name: "Sealed Temple 02"
+  - name: "Sealed Temple - East Box"
     object_id: 0x7E
     type: "Box"
     access: []
@@ -1827,19 +1827,19 @@
 - name: Volcano Base
   id: 93
   game_objects:
-  - name: "Volcano Base Chest"
+  - name: "Volcano - Base Chest"
     object_id: 0x11
     type: "Chest"
     access: []
-  - name: "Volcano Base 02"
+  - name: "Volcano - Base West Box"
     object_id: 0x7F
     type: "Box"
     access: []
-  - name: "Volcano Base 03"
+  - name: "Volcano - Base East Left Box"
     object_id: 0x80
     type: "Box"
     access: []
-  - name: "Volcano Base 04"
+  - name: "Volcano - Base East Right Box"
     object_id: 0x81
     type: "Box"
     access: []
@@ -1859,7 +1859,7 @@
 - name: Volcano Top Left
   id: 94
   game_objects:
-  - name: "Medusa Chest"
+  - name: "Volcano - Medusa Chest"
     object_id: 0x12
     type: "Chest"
     access: ["Medusa"]
@@ -1868,7 +1868,7 @@
     type: "Trigger"
     on_trigger: ["Medusa"]
     access: []
-  - name: "Volcano Top 02"
+  - name: "Volcano - Behind Medusa Box"
     object_id: 0x82
     type: "Box"
     access: []
@@ -1880,11 +1880,11 @@
 - name: Volcano Top Right
   id: 95
   game_objects:
-  - name: "Volcano Top 03"
+  - name: "Volcano - Top of the Volcano Left Box"
     object_id: 0x83
     type: "Box"
     access: []
-  - name: "Volcano Top 04"
+  - name: "Volcano - Top of the Volcano Right Box"
     object_id: 0x84
     type: "Box"
     access: []
@@ -1896,7 +1896,7 @@
 - name: Volcano Right Path
   id: 96
   game_objects:
-  - name: "Volcano Right 01"
+  - name: "Volcano - Right Path Box"
     object_id: 0x87
     type: "Box"
     access: []
@@ -1908,7 +1908,7 @@
 - name: Volcano Left Path
   id: 98
   game_objects:
-  - name: "Volcano Left 01"
+  - name: "Volcano - Left Path Box"
     object_id: 0x86
     type: "Box"
     access: []
@@ -1940,7 +1940,7 @@
 - name: Volcano Cross Right-Left
   id: 209
   game_objects:
-  - name: "Volcano Right-Left 01"
+  - name: "Volcano - Crossover Section Box"
     object_id: 0x85
     type: "Box"
     access: []
@@ -1956,11 +1956,11 @@
 - name: Lava Dome Inner Ring Main Loop
   id: 100
   game_objects:
-  - name: "Lava Dome Exterior 01"
+  - name: "Lava Dome - Exterior Caldera Near Switch Cliff Box"
     object_id: 0x88
     type: "Box"
     access: []
-  - name: "Lava Dome Exterior 02"
+  - name: "Lava Dome - Exterior South Cliff Box"
     object_id: 0x89
     type: "Box"
     access: []
@@ -1988,7 +1988,7 @@
 - name: Lava Dome Inner Ring Center Ledge
   id: 101
   game_objects:
-  - name: "Lava Dome Exterior 03"
+  - name: "Lava Dome - Exterior Center Dropoff Ledge Box"
     object_id: 0x8A
     type: "Box"
     access: []
@@ -2053,7 +2053,7 @@
 - name: Lava Dome Inner Ring Tiny Bottom Ledge
   id: 106
   game_objects:
-  - name: "Lava Dome Exterior 04"
+  - name: "Lava Dome - Exterior Dead End Caldera Box"
     object_id: 0x8B
     type: "Box"
     access: []
@@ -2065,27 +2065,27 @@
 - name: Lava Dome Jump Maze II
   id: 107
   game_objects:
-  - name: "Lava Dome Jump Maze II 01"
+  - name: "Lava Dome - Gold Maze Northwest Box"
     object_id: 0x8C
     type: "Box"
     access: []
-  - name: "Lava Dome Jump Maze II 02"
+  - name: "Lava Dome - Gold Maze Southwest Box"
     object_id: 0xF6
     type: "Box"
     access: []
-  - name: "Lava Dome Jump Maze II 03"
+  - name: "Lava Dome - Gold Maze Northeast Box"
     object_id: 0xF7
     type: "Box"
     access: []
-  - name: "Lava Dome Jump Maze II 04"
+  - name: "Lava Dome - Gold Maze North Box"
     object_id: 0xF8
     type: "Box"
     access: []
-  - name: "Lava Dome Jump Maze II 05"
+  - name: "Lava Dome - Gold Maze Center Box"
     object_id: 0xF9
     type: "Box"
     access: []
-  - name: "Lava Dome Jump Maze II 06"
+  - name: "Lava Dome - Gold Maze Southeast Box"
     object_id: 0xFA
     type: "Box"
     access: []
@@ -2117,19 +2117,19 @@
 - name: Lava Dome Jump Maze I
   id: 109
   game_objects:
-  - name: "Lava Dome Jump Maze I 01"
+  - name: "Lava Dome - Bare Maze Leapfrog Alcove North Box"
     object_id: 0x8D
     type: "Box"
     access: []
-  - name: "Lava Dome Jump Maze I 02"
+  - name: "Lava Dome - Bare Maze Leapfrog Alcove South Box"
     object_id: 0x8E
     type: "Box"
     access: []
-  - name: "Lava Dome Jump Maze I 03"
+  - name: "Lava Dome - Bare Maze Center Box"
     object_id: 0x8F
     type: "Box"
     access: []
-  - name: "Lava Dome Jump Maze I 04"
+  - name: "Lava Dome - Bare Maze Southwest Box"
     object_id: 0x90
     type: "Box"
     access: []
@@ -2153,11 +2153,11 @@
 - name: Lava Dome Lower Moon Helm Room
   id: 111
   game_objects:
-  - name: "Lava Dome Moon Helm 02"
+  - name: "Lava Dome - U-Bend Room North Box"
     object_id: 0x92
     type: "Box"
     access: []
-  - name: "Lava Dome Moon Helm 03"
+  - name: "Lava Dome - U-Bend Room South Box"
     object_id: 0x93
     type: "Box"
     access: []
@@ -2173,11 +2173,11 @@
 - name: Lava Dome Moon Helm Room
   id: 112
   game_objects:
-  - name: "Lava Dome Left Path Chest"
+  - name: "Lava Dome - Beyond River Room Chest"
     object_id: 0x13
     type: "Chest"
     access: []
-  - name: "Lava Dome Moon Helm 01"
+  - name: "Lava Dome - Beyond River Room Box"
     object_id: 0x91
     type: "Box"
     access: []
@@ -2189,7 +2189,7 @@
 - name: Lava Dome Three Jumps Room
   id: 113
   game_objects:
-  - name: "Lava Dome Three Jumps 01"
+  - name: "Lava Dome - Three Jumps Room Box"
     object_id: 0x96
     type: "Box"
     access: []
@@ -2201,7 +2201,7 @@
 - name: Lava Dome Life Chest Room Lower Ledge
   id: 114
   game_objects:
-  - name: "Lava Dome Right Path Chest"
+  - name: "Lava Dome - Gold Bar Room Boulder Chest"
     object_id: 0x1C
     type: "Chest"
     access: ["MegaGrenade"]
@@ -2215,11 +2215,11 @@
 - name: Lava Dome Life Chest Room Upper Ledge
   id: 115
   game_objects:
-  - name: "Lava Dome Life Chest Room 01"
+  - name: "Lava Dome - Gold Bar Room Leapfrog Alcove Box West"
     object_id: 0x94
     type: "Box"
     access: []
-  - name: "Lava Dome Life Chest Room 02"
+  - name: "Lava Dome - Gold Bar Room Leapfrog Alcove Box East"
     object_id: 0x95
     type: "Box"
     access: []
@@ -2233,15 +2233,15 @@
 - name: Lava Dome Big Jump Room Main Area
   id: 116
   game_objects:
-  - name: "Lava Dome Big Jump 01"
+  - name: "Lava Dome - Lava River Room North Box"
     object_id: 0x98
     type: "Box"
     access: []
-  - name: "Lava Dome Big Jump 02"
+  - name: "Lava Dome - Lava River Room East Box"
     object_id: 0x99
     type: "Box"
     access: []
-  - name: "Lava Dome Big Jump 03"
+  - name: "Lava Dome - Lava River Room South Box"
     object_id: 0x9A
     type: "Box"
     access: []
@@ -2269,7 +2269,7 @@
 - name: Lava Dome Split Corridor
   id: 118
   game_objects:
-  - name: "Lava Dome Split Corridor 01"
+  - name: "Lava Dome - Split Corridor Box"
     object_id: 0x97
     type: "Box"
     access: []
@@ -2297,19 +2297,19 @@
 - name: Lava Dome Four Boxes Stairs
   id: 120
   game_objects:
-  - name: "Lava Dome Four Boxes 01"
+  - name: "Lava Dome - Caldera Stairway West Left Box"
     object_id: 0x9B
     type: "Box"
     access: []
-  - name: "Lava Dome Four Boxes 02"
+  - name: "Lava Dome - Caldera Stairway West Right Box"
     object_id: 0x9C
     type: "Box"
     access: []
-  - name: "Lava Dome Four Boxes 03"
+  - name: "Lava Dome - Caldera Stairway East Left Box"
     object_id: 0x9D
     type: "Box"
     access: []
-  - name: "Lava Dome Four Boxes 04"
+  - name: "Lava Dome - Caldera Stairway East Right Box"
     object_id: 0x9E
     type: "Box"
     access: []
@@ -2325,7 +2325,7 @@
 - name: Lava Dome Hydra Room
   id: 121
   game_objects:
-  - name: "Hydra Chest"
+  - name: "Lava Dome - Dualhead Hydra Chest"
     object_id: 0x14
     type: "Chest"
     access: ["DualheadHydra"]
@@ -2334,11 +2334,11 @@
     type: "Trigger"
     on_trigger: ["DualheadHydra"]
     access: []
-  - name: "Lava Dome Hydra Room 01"
+  - name: "Lava Dome - Hydra Room Northwest Box"
     object_id: 0x9F
     type: "Box"
     access: []
-  - name: "Lava Dome Hydra Room 02"
+  - name: "Lava Dome - Hydra Room Southweast Box"
     object_id: 0xA0
     type: "Box"
     access: []
@@ -2362,11 +2362,11 @@
 - name: Rope Bridge
   id: 123
   game_objects:
-  - name: "Rope Bridge 01"
+  - name: "Rope Bridge - West Box"
     object_id: 0xA3
     type: "Box"
     access: []
-  - name: "Rope Bridge 02"
+  - name: "Rope Bridge - East Box"
     object_id: 0xA4
     type: "Box"
     access: []
@@ -2378,19 +2378,19 @@
 - name: Alive Forest
   id: 124
   game_objects:
-  - name: "Alive Forest Chest"
+  - name: "Alive Forest - Tree Stump Chest"
     object_id: 0x15
     type: "Chest"
     access: ["Axe"]
-  - name: "Alive Forest 02"
+  - name: "Alive Forest - Neat Entrance Box"
     object_id: 0xA5
     type: "Box"
     access: ["Axe"]
-  - name: "Alive Forest 03"
+  - name: "Alive Forest - After Bridge Box"
     object_id: 0xA6
     type: "Box"
     access: ["Axe"]
-  - name: "Alive Forest 04"
+  - name: "Alive Forest - Gemini Stump Box"
     object_id: 0xA7
     type: "Box"
     access: ["Axe"]
@@ -2418,19 +2418,19 @@
 - name: Giant Tree 1F Main Area
   id: 125
   game_objects:
-  - name: "Giant Tree 1F 01"
+  - name: "Giant Tree 1F - Northwest Box"
     object_id: 0xA8
     type: "Box"
     access: []
-  - name: "Giant Tree 1F 02"
+  - name: "Giant Tree 1F - Southwest Box"
     object_id: 0xA9
     type: "Box"
     access: []
-  - name: "Giant Tree 1F 03"
+  - name: "Giant Tree 1F - Center Box"
     object_id: 0xAA
     type: "Box"
     access: []
-  - name: "Giant Tree 1F 04"
+  - name: "Giant Tree 1F - East Box"
     object_id: 0xAB
     type: "Box"
     access: []
@@ -2460,7 +2460,7 @@
 - name: Giant Tree 2F Main Lobby
   id: 127
   game_objects:
-  - name: "Giant Tree 2F 01"
+  - name: "Giant Tree 2F - North Box"
     object_id: 0xAC
     type: "Box"
     access: []
@@ -2480,7 +2480,7 @@
 - name: Giant Tree 2F West Ledge
   id: 128
   game_objects:
-  - name: "Giant Tree 2F 03"
+  - name: "Giant Tree 2F - Dropdown Ledge Box"
     object_id: 0xAE
     type: "Box"
     access: []
@@ -2494,7 +2494,7 @@
 - name: Giant Tree 2F Lower Area
   id: 129
   game_objects:
-  - name: "Giant Tree 2F 02"
+  - name: "Giant Tree 2F - South Box"
     object_id: 0xAD
     type: "Box"
     access: []
@@ -2524,7 +2524,7 @@
 - name: Giant Tree 2F Meteor Chest Room
   id: 132
   game_objects:
-  - name: "Gidrah Chest"
+  - name: "Giant Tree 2F - Gidrah Chest"
     object_id: 0x16
     type: "Chest"
     access: []
@@ -2536,11 +2536,11 @@
 - name: Giant Tree 2F Mushroom Room
   id: 133
   game_objects:
-  - name: "Giant Tree Mushroom 01"
+  - name: "Giant Tree 2F - Mushroom Tunnel West Box"
     object_id: 0xAF
     type: "Box"
     access: ["Axe"]
-  - name: "Giant Tree Mushroom 02"
+  - name: "Giant Tree 2F - Mushroom Tunnel East Box"
     object_id: 0xB0
     type: "Box"
     access: ["Axe"]
@@ -2556,7 +2556,7 @@
 - name: Giant Tree 3F Central Island
   id: 135
   game_objects:
-  - name: "Giant Tree 3F 01"
+  - name: "Giant Tree 3F - Central Island Box"
     object_id: 0xB3
     type: "Box"
     access: []
@@ -2572,11 +2572,11 @@
 - name: Giant Tree 3F Central Area
   id: 136
   game_objects:
-  - name: "Giant Tree 3F 02"
+  - name: "Giant Tree 3F - Center North Box"
     object_id: 0xB1
     type: "Box"
     access: []
-  - name: "Giant Tree 3F 03"
+  - name: "Giant Tree 3F - Center West Box"
     object_id: 0xB2
     type: "Box"
     access: []
@@ -2600,7 +2600,7 @@
 - name: Giant Tree 3F West Area
   id: 138
   game_objects:
-  - name: "Giant Tree 3F 04"
+  - name: "Giant Tree 3F - West Side Box"
     object_id: 0xB4
     type: "Box"
     access: []
@@ -2644,11 +2644,11 @@
 - name: Giant Tree Worm Room Upper Ledge
   id: 142
   game_objects:
-  - name: "Giant Tree Worm 01"
+  - name: "Giant Tree 3F - Worm Room North Box"
     object_id: 0xB5
     type: "Box"
     access: ["Axe"]
-  - name: "Giant Tree Worm 02"
+  - name: "Giant Tree 3F - Worm Room South Box"
     object_id: 0xB6
     type: "Box"
     access: ["Axe"]
@@ -2690,11 +2690,11 @@
 - name: Giant Tree 4F Middle Floor
   id: 144
   game_objects:
-  - name: "Giant Tree 4F 01"
+  - name: "Giant Tree 4F - Highest Platform South Box"
     object_id: 0xB7
     type: "Box"
     access: []
-  - name: "Giant Tree 4F 02"
+  - name: "Giant Tree 4F - Highest Platform North Box"
     object_id: 0xB8
     type: "Box"
     access: []
@@ -2720,11 +2720,11 @@
 - name: Giant Tree 4F South Ledge
   id: 146
   game_objects:
-  - name: "Giant Tree 4F 03"
+  - name: "Giant Tree 4F - Hook Ledge Northeast Box"
     object_id: 0xB9
     type: "Box"
     access: []
-  - name: "Giant Tree 4F 04"
+  - name: "Giant Tree 4F - Hook Ledge Southwest Box"
     object_id: 0xBA
     type: "Box"
     access: []
@@ -2734,7 +2734,7 @@
 - name: Giant Tree 4F Slime Room East Area
   id: 147
   game_objects:
-  - name: "Giant Tree 4F Slime 01"
+  - name: "Giant Tree 4F - East Slime Room Box"
     object_id: 0xBC
     type: "Box"
     access: ["Axe"]
@@ -2760,7 +2760,7 @@
 - name: Giant Tree 4F Slime Room Platform
   id: 149
   game_objects:
-  - name: "Giant Tree 4F Slime 02"
+  - name: "Giant Tree 4F - West Slime Room Box"
     object_id: 0xBB
     type: "Box"
     access: []
@@ -2774,19 +2774,19 @@
 - name: Giant Tree 5F Lower Area
   id: 150
   game_objects:
-  - name: "Giant Tree 5F 01"
+  - name: "Giant Tree 5F - Northwest Left Box"
     object_id: 0xBD
     type: "Box"
     access: []
-  - name: "Giant Tree 5F 02"
+  - name: "Giant Tree 5F - Northwest Right Box"
     object_id: 0xBE
     type: "Box"
     access: []
-  - name: "Giant Tree 5F 03"
+  - name: "Giant Tree 5F - South Left Box"
     object_id: 0xBF
     type: "Box"
     access: []
-  - name: "Giant Tree 5F 04"
+  - name: "Giant Tree 5F - South Right Box"
     object_id: 0xC0
     type: "Box"
     access: []
@@ -2823,7 +2823,7 @@
 - name: Kaidge Temple Upper Ledge
   id: 153
   game_objects:
-  - name: "Kaidge Temple 01"
+  - name: "Kaidge Temple - Box"
     object_id: 0xC1
     type: "Box"
     access: []
@@ -2837,7 +2837,7 @@
 - name: Windhole Temple
   id: 154
   game_objects:
-  - name: "Windhole Temple 01"
+  - name: "Windhole Temple - Box"
     object_id: 0xC2
     type: "Box"
     access: []
@@ -2849,7 +2849,7 @@
 - name: Mount Gale
   id: 155
   game_objects:
-  - name: "Dullahan Chest"
+  - name: "Mount Gale - Dullahan Chest"
     object_id: 0x17
     type: "Chest"
     access: ["DragonClaw", "Dullahan"]
@@ -2858,11 +2858,11 @@
     type: "Trigger"
     on_trigger: ["Dullahan"]
     access: ["DragonClaw"]
-  - name: "Mount Gale 01"
+  - name: "Mount Gale - East Box"
     object_id: 0xC3
     type: "Box"
     access: ["DragonClaw"]
-  - name: "Mount Gale 02"
+  - name: "Mount Gale - West Box"
     object_id: 0xC4
     type: "Box"
     access: []
@@ -2919,7 +2919,7 @@
 - name: Otto's Attic
   id: 158
   game_objects:
-  - name: "Windia 01"
+  - name: "Windia - Otto's Attic Box"
     object_id: 0xC5
     type: "Box"
     access: []
@@ -2967,11 +2967,11 @@
 - name: Windia Old People House Basement
   id: 162
   game_objects:
-  - name: "Windia 06"
+  - name: "Windia - Mobius Basement West Box"
     object_id: 0xC8
     type: "Box"
     access: []
-  - name: "Windia 05"
+  - name: "Windia - Mobius Basement East Box"
     object_id: 0xC9
     type: "Box"
     access: []
@@ -2999,15 +2999,15 @@
 - name: Windia Inn Beds
   id: 164
   game_objects:
-  - name: "Windia 03"
+  - name: "Windia - Inn Bedroom North Box"
     object_id: 0xC6
     type: "Box"
     access: []
-  - name: "Windia 04"
+  - name: "Windia - Inn Bedroom South Box"
     object_id: 0xC7
     type: "Box"
     access: []
-  - name: "Windia Kaeli"
+  - name: "Windia - Kaeli"
     object_id: 15
     type: "NPC"
     access: ["Kaeli2"]
@@ -3019,7 +3019,7 @@
 - name: Windia Vendor House
   id: 165
   game_objects:
-  - name: "Windia Vendor Girl"
+  - name: "Windia - Vendor"
     object_id: 16
     type: "NPC"
     access: []
@@ -3048,19 +3048,19 @@
 - name: Pazuzu Tower 1F Boxes Room
   id: 167
   game_objects:
-  - name: "Pazuzu 1F 01"
+  - name: "Pazuzu's Tower 1F - Descent Bomb Wall West Box"
     object_id: 0xCA
     type: "Box"
     access: ["Bomb"]
-  - name: "Pazuzu 1F 02"
+  - name: "Pazuzu's Tower 1F - Descent Bomb Wall Center Box"
     object_id: 0xCB
     type: "Box"
     access: ["Bomb"]
-  - name: "Pazuzu 1F 03"
+  - name: "Pazuzu's Tower 1F - Descent Bomb Wall East Box"
     object_id: 0xCC
     type: "Box"
     access: ["Bomb"]
-  - name: "Pazuzu 1F 04"
+  - name: "Pazuzu's Tower 1F - Descent Box"
     object_id: 0xCD
     type: "Box"
     access: []
@@ -3082,11 +3082,11 @@
 - name: Pazuzu 2F
   id: 169
   game_objects:
-  - name: "Pazuzu 2F 01"
+  - name: "Pazuzu's Tower 2F - East Room West Box"
     object_id: 0xCE
     type: "Box"
     access: []
-  - name: "Pazuzu 2F 02"
+  - name: "Pazuzu's Tower 2F - East Room East Box"
     object_id: 0xCF
     type: "Box"
     access: []
@@ -3120,11 +3120,11 @@
 - name: Pazuzu 3F Main Room
   id: 170
   game_objects:
-  - name: "Pazuzu 3F 01"
+  - name: "Pazuzu's Tower 3F - Guest Room West Box"
     object_id: 0xD0
     type: "Box"
     access: []
-  - name: "Pazuzu 3F 02"
+  - name: "Pazuzu's Tower 3F - Guest Room East Box"
     object_id: 0xD1
     type: "Box"
     access: []
@@ -3157,7 +3157,7 @@
 - name: Pazuzu 3F Southern Island
   id: 172
   game_objects:
-  - name: "Pazuzu 3F 03"
+  - name: "Pazuzu's Tower 3F - South Ledge Box"
     object_id: 0xD2
     type: "Box"
     access: []
@@ -3171,15 +3171,15 @@
 - name: Pazuzu 4F
   id: 173
   game_objects:
-  - name: "Pazuzu 4F 01"
+  - name: "Pazuzu's Tower 4F - Elevator West Box"
     object_id: 0xD3
     type: "Box"
     access: ["Bomb"]
-  - name: "Pazuzu 4F 02"
+  - name: "Pazuzu's Tower 4F - Elevator East Box"
     object_id: 0xD4
     type: "Box"
     access: ["Bomb"]
-  - name: "Pazuzu 4F Chest"
+  - name: "Pazuzu's Tower 4F - East Storage Room Chest"
     object_id: 0x18
     type: "Chest"
     access: []
@@ -3230,11 +3230,11 @@
 - name: Pazuzu 5F Upper Loop
   id: 175
   game_objects:
-  - name: "Pazuzu 5F 01"
+  - name: "Pazuzu's Tower 5F - North Box"
     object_id: 0xD5
     type: "Box"
     access: []
-  - name: "Pazuzu 5F 02"
+  - name: "Pazuzu's Tower 5F - South Box"
     object_id: 0xD6
     type: "Box"
     access: []
@@ -3250,11 +3250,11 @@
 - name: Pazuzu 6F
   id: 176
   game_objects:
-  - name: "Pazuzu 6F 01"
+  - name: "Pazuzu's Tower 6F - Box"
     object_id: 0xD7
     type: "Box"
     access: []
-  - name: "Pazuzu 6F Chest"
+  - name: "Pazuzu's Tower 6F - Chest"
     object_id: 0x19
     type: "Chest"
     access: []
@@ -3314,7 +3314,7 @@
 - name: Pazuzu 7F Sky Room
   id: 179
   game_objects:
-  - name: "Pazuzu Chest"
+  - name: "Pazuzu's Tower 7F - Pazuzu Chest"
     object_id: 0x1A
     type: "Chest"
     access: []
@@ -3384,7 +3384,7 @@
 - name: Light Temple
   id: 185
   game_objects:
-  - name: "Light Temple 01"
+  - name: "Light Temple - Box"
     object_id: 0xD8
     type: "Box"
     access: []
@@ -3422,15 +3422,15 @@
     type: "Trigger"
     on_trigger: ["ShipSteeringWheel"]
     access: []
-  - name: "Mac Ship Deck 01"
+  - name: "Mac's Ship Deck - North Box"
     object_id: 0xD9
     type: "Box"
     access: []
-  - name: "Mac Ship Deck 02"
+  - name: "Mac's Ship Deck - Center Box"
     object_id: 0xDA
     type: "Box"
     access: []
-  - name: "Mac Ship Deck 03"
+  - name: "Mac's Ship Deck - South Box"
     object_id: 0xDB
     type: "Box"
     access: []
@@ -3458,11 +3458,11 @@
 - name: Mac Ship B1 Outer Ring
   id: 188
   game_objects:
-  - name: "Mac Ship 01"
+  - name: "Mac's Ship B1 - Northwest Hook Platform Box"
     object_id: 0xE4
     type: "Box"
     access: ["DragonClaw"]
-  - name: "Mac Ship 02"
+  - name: "Mac's Ship B1 - Center Hook Platform Box"
     object_id: 0xE5
     type: "Box"
     access: ["DragonClaw"]
@@ -3500,7 +3500,7 @@
 - name: Mac Ship B1 Central Corridor
   id: 190
   game_objects:
-  - name: "Mac Ship 03"
+  - name: "Mac's Ship B1 - Central Corridor Box"
     object_id: 0xE6
     type: "Box"
     access: []
@@ -3542,19 +3542,19 @@
 - name: Mac Ship B2 Outer Ring
   id: 193
   game_objects:
-  - name: "Mac Ship 04"
+  - name: "Mac's Ship B2 - Barrel Room South Box"
     object_id: 0xDF
     type: "Box"
     access: []
-  - name: "Mac Ship 05"
+  - name: "Mac's Ship B2 - Barrel Room North Box"
     object_id: 0xE0
     type: "Box"
     access: []
-  - name: "Mac Ship 06"
+  - name: "Mac's Ship B2 - Southwest Room Box"
     object_id: 0xE1
     type: "Box"
     access: []
-  - name: "Mac Ship 07"
+  - name: "Mac's Ship B2 - Southeast Room Box"
     object_id: 0xE2
     type: "Box"
     access: []
@@ -3566,7 +3566,7 @@
 - name: Mac Ship B1 Mac Room
   id: 194
   game_objects:
-  - name: "Mac Ship Chest"
+  - name: "Mac's Ship B1 - Mac Room Chest"
     object_id: 0x1B
     type: "Chest"
     access: []
@@ -3607,19 +3607,19 @@
 - name: Doom Castle Ice Floor
   id: 196
   game_objects:
-  - name: "Doom Castle Ice Floor 01"
+  - name: "Doom Castle 4F - Northwest Room Box"
     object_id: 0xE7
     type: "Box"
     access: ["Sword", "DragonClaw"]
-  - name: "Doom Castle Ice Floor 02"
+  - name: "Doom Castle 4F - Southwest Room Box"
     object_id: 0xE8
     type: "Box"
     access: ["Sword", "DragonClaw"]
-  - name: "Doom Castle Ice Floor 03"
+  - name: "Doom Castle 4F - Northeast Room Box"
     object_id: 0xE9
     type: "Box"
     access: ["Sword"]
-  - name: "Doom Castle Ice Floor 04"
+  - name: "Doom Castle 4F - Southeast Room Box"
     object_id: 0xEA
     type: "Box"
     access: ["Sword", "DragonClaw"]
@@ -3636,19 +3636,19 @@
 - name: Doom Castle Lava Floor
   id: 197
   game_objects:
-  - name: "Doom Castle Lava Floor 01"
+  - name: "Doom Castle 5F - North Left Box"
     object_id: 0xEB
     type: "Box"
     access: ["DragonClaw"]
-  - name: "Doom Castle Lava Floor 02"
+  - name: "Doom Castle 5F - North Right Box"
     object_id: 0xEC
     type: "Box"
     access: ["DragonClaw"]
-  - name: "Doom Castle Lava Floor 03"
+  - name: "Doom Castle 5F - South Left Box"
     object_id: 0xED
     type: "Box"
     access: ["DragonClaw"]
-  - name: "Doom Castle Lava Floor 04"
+  - name: "Doom Castle 5F - South Right Box"
     object_id: 0xEE
     type: "Box"
     access: ["DragonClaw"]
@@ -3665,11 +3665,11 @@
 - name: Doom Castle Sky Floor
   id: 198
   game_objects:
-  - name: "Doom Castle Sky Floor 01"
+  - name: "Doom Castle 6F - West Box"
     object_id: 0xEF
     type: "Box"
     access: []
-  - name: "Doom Castle Sky Floor 02"
+  - name: "Doom Castle 6F - East Box"
     object_id: 0xF0
     type: "Box"
     access: []
