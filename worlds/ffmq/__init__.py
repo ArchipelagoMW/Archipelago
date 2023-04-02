@@ -1,7 +1,7 @@
 from worlds.AutoWorld import World, WebWorld
 from Fill import remaining_fill
 from .Regions import rooms, create_regions, location_table, set_rules
-from .Items import item_table, item_groups, create_items, FFMQItem
+from .Items import item_table, item_groups, create_items, FFMQItem, fillers
 from .Output import generate_output
 from .Options import option_definitions
 from .Client import FFMQClient
@@ -47,23 +47,23 @@ class FFMQWorld(World):
                 (self.multiworld.bosses_scaling_upper[self.player].value,
                  self.multiworld.bosses_scaling_lower[self.player].value)
 
-    @classmethod
-    def stage_generate_early(cls, multiworld):
-        multiworld.ffmq_useful_locations = []
-
-    @classmethod
-    def stage_fill_hook(cls, multiworld, progitempool, usefulitempool, filleritempool, fill_locations):
-        # this is the only real safe way to ensure a location has a 'useful' item in it. Attempting to accomplish
-        # this with an item rule could cause a very long swap loop
-        remaining_fill(multiworld, multiworld.ffmq_useful_locations.copy(), usefulitempool)
-        for location in multiworld.ffmq_useful_locations:
-            if location.item:
-                fill_locations.remove(location)
-                location.locked = True
-            else:
-                # not enough useful items. This shouldn't happen unless other games are also pulling items from the
-                # pool early
-                location.progress_type = LocationProgressType.PRIORITY
+    # @classmethod
+    # def stage_generate_early(cls, multiworld):
+    #     multiworld.ffmq_useful_locations = []
+    #
+    # @classmethod
+    # def stage_fill_hook(cls, multiworld, progitempool, usefulitempool, filleritempool, fill_locations):
+    #     # this is the only real safe way to ensure a location has a 'useful' item in it. Attempting to accomplish
+    #     # this with an item rule could cause a very long swap loop
+    #     remaining_fill(multiworld, multiworld.ffmq_useful_locations.copy(), usefulitempool)
+    #     for location in multiworld.ffmq_useful_locations:
+    #         if location.item:
+    #             fill_locations.remove(location)
+    #             location.locked = True
+    #         else:
+    #             # not enough useful items. This shouldn't happen unless other games are also pulling items from the
+    #             # pool early
+    #             location.progress_type = LocationProgressType.PRIORITY
 
     # def modify_multidata(self, multidata) -> None:
     #     b64_name: str = base64.b64encode(bytes(self.rom_name)).decode()
@@ -92,6 +92,9 @@ class FFMQWorld(World):
             payload = multidata["connect_names"][self.multiworld.player_name[self.player]]
             multidata["connect_names"][new_name] = payload
 
-
-
-
+    def get_filler_item_name(self):
+        r = self.multiworld.random.randint(0, 201)
+        for item in fillers:
+            r -= fillers[item]
+            if r < 0:
+                return item

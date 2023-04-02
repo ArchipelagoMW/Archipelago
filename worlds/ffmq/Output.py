@@ -91,6 +91,7 @@ def generate_output(self, output_directory):
     starting_items = [self.multiworld.starting_weapon[self.player].current_key.title().replace("_", ""), "SteelArmor"]
 
     file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.apmq")
+
     APMQ = APMQFile(file_path, player=self.player, player_name=self.multiworld.player_name[self.player])
     with zipfile.ZipFile(file_path, mode="w", compression=zipfile.ZIP_DEFLATED,
                          compresslevel=9) as zf:

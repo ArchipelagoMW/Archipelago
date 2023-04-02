@@ -1,5 +1,7 @@
 from BaseClasses import ItemClassification, Item
 
+fillers = {"Cure Potion": 61, "Heal Potion": 52, "Refresher": 2, "Seed": 17, "Bomb Refill": 19,
+           "Projectile Refill": 50}
 
 class ItemData:
     def __init__(self, item_id, classification, groups=[]):
@@ -51,7 +53,7 @@ item_table = {
     "Progressive Axe": ItemData(35 + 256, ItemClassification.progression, ["Weapons", "Axes"]),
     "Axe": ItemData(35, ItemClassification.progression, ["Weapons", "Axes"]),
     "Battle Axe": ItemData(36, ItemClassification.progression_skip_balancing, ["Weapons", "Axes"]),
-    "Giants Axe": ItemData(37, ItemClassification.progression_skip_balancing, ["Weapons", "Axes"]),
+    "Giant's Axe": ItemData(37, ItemClassification.progression_skip_balancing, ["Weapons", "Axes"]),
     "Progressive Claw": ItemData(38 + 256, ItemClassification.progression, ["Weapons", "Axes"]),
     "Cat Claw": ItemData(38, ItemClassification.progression, ["Weapons", "Claws"]),
     "Charm Claw": ItemData(39, ItemClassification.progression_skip_balancing, ["Weapons", "Claws"]),
@@ -231,19 +233,20 @@ def create_items(self) -> None:
     # print(x)
 
     if self.multiworld.brown_boxes[self.player] == "include":
-        if self.multiworld.sky_coin_mode[self.player] == "shattered":
-            fillers = {"Cure Potion": 49, "Heal Potion": 42, "Refresher": 2, "Seed": 13, "Bomb Refill": 15,
-                       "Projectile Refill": 40}
-        else:
-            fillers = {"Cure Potion": 61, "Heal Potion": 52, "Refresher": 2, "Seed": 17, "Bomb Refill": 19,
-                       "Projectile Refill": 50}
-        if self.multiworld.doom_castle[self.player] != "standard":
-            fillers["Cure Potion"] -= 3
-            fillers["Heal Potion"] -= 3
-            fillers["Projectile Refill"] -= 3
-            fillers["Bomb Refill"] -= 1
+        # fillers = filler_counts.copy()
+        # if self.multiworld.sky_coin_mode[self.player] == "shattered":
+        #     fillers["Cure Potion"] -= 12
+        #     fillers["Heal Potion"] -= 10
+        #     fillers["Seed"] -= 4
+        #     fillers["Bomb Refill"] -= 4
+        #     fillers["Projectile Refill"] -= 10
+        filler_items = []
         for item, count in fillers.items():
-            items += [self.create_item(item) for _ in range(count)]
+            filler_items += [self.create_item(item) for _ in range(count)]
+        if self.multiworld.sky_coin_mode[self.player] == "shattered":
+            self.multiworld.random.shuffle(filler_items)
+            filler_items = filler_items[39:]
+        items += filler_items
 
     self.multiworld.itempool += items
 

@@ -164,12 +164,6 @@ def create_regions(self):
                 self.create_item(yaml_item(object["on_trigger"][0])) if object["type"] == "Trigger" else None) for
                 object in room["game_objects"] if "Hero Chest" not in object["name"] and (object["type"] != "Box" or
                 self.multiworld.brown_boxes[self.player] == "include")], room["links"]))
-            if self.multiworld.doom_castle[self.player] != "standard" and room["name"] in ("Doom Castle Ice Floor",
-                                                                                           "Doom Castle Lava Floor",
-                                                                                           "Doom Castle Sky Floor"):
-                self.multiworld.regions[-1].locations = [location for location in self.multiworld.regions[-1].locations
-                                                         if location.type == "Trigger"]
-                continue
     dark_king_room = self.multiworld.get_region("Doom Castle Dark King Room", self.player)
     dark_king = FFMQLocation(self.player, "Dark King", None, "Trigger", [])
     dark_king.parent_region = dark_king_room
@@ -219,27 +213,27 @@ def create_regions(self):
                     connection.connect(connect_room)
                     break
 
-    prioritized_locations = []
-    non_prioritized_locations = []
-    for location in self.multiworld.get_locations(self.player):
-        if (location.type == "Battlefield" and self.multiworld.prioritize_battlefields[self.player] or location.type ==
-                "NPC" and self.multiworld.prioritize_npcs[self.player] or location.type == "Chest" and
-                self.multiworld.prioritize_chests[self.player]):
-            prioritized_locations.append(location)
-        elif location.type == "Box":
-            non_prioritized_locations.append(location)
-    if prioritized_locations:
-        self.multiworld.random.shuffle(prioritized_locations)
-        self.multiworld.random.shuffle(non_prioritized_locations)
-        non_prioritized_locations = non_prioritized_locations[:len(prioritized_locations) * 3]
-        friendly = 2 if self.multiworld.logic[self.player] == "friendly" else 0
-        useful_locations = prioritized_locations[int(len(prioritized_locations) / 2) + friendly:]
-        prioritized_locations = prioritized_locations[:int(len(prioritized_locations) / 2) + friendly]
-        for location in prioritized_locations:
-            location.progress_type = LocationProgressType.PRIORITY
-        for location in non_prioritized_locations:
-            location.progress_type = LocationProgressType.EXCLUDED
-        self.multiworld.ffmq_useful_locations += useful_locations
+    # prioritized_locations = []
+    # non_prioritized_locations = []
+    # for location in self.multiworld.get_locations(self.player):
+    #     if (location.type == "Battlefield" and self.multiworld.prioritize_battlefields[self.player] or location.type ==
+    #             "NPC" and self.multiworld.prioritize_npcs[self.player] or location.type == "Chest" and
+    #             self.multiworld.prioritize_chests[self.player]):
+    #         prioritized_locations.append(location)
+    #     elif location.type == "Box":
+    #         non_prioritized_locations.append(location)
+    # if prioritized_locations:
+    #     self.multiworld.random.shuffle(prioritized_locations)
+    #     self.multiworld.random.shuffle(non_prioritized_locations)
+    #     non_prioritized_locations = non_prioritized_locations[:len(prioritized_locations) * 3]
+    #     friendly = 2 if self.multiworld.logic[self.player] == "friendly" else 0
+    #     useful_locations = prioritized_locations[int(len(prioritized_locations) / 2) + friendly:]
+    #     prioritized_locations = prioritized_locations[:int(len(prioritized_locations) / 2) + friendly]
+    #     for location in prioritized_locations:
+    #         location.progress_type = LocationProgressType.PRIORITY
+    #     for location in non_prioritized_locations:
+    #         location.progress_type = LocationProgressType.EXCLUDED
+    #     self.multiworld.ffmq_useful_locations += useful_locations
 
 
 def set_rules(self) -> None:
@@ -300,14 +294,13 @@ def set_rules(self) -> None:
 
     if self.multiworld.sky_coin_mode[self.player] == "shattered":
         logic_coins = [16, 24, 32, 32, 38][self.multiworld.shattered_sky_coin_quantity[self.player].value]
-        self.multiworld.get_entrance("Focus Tower 1F SkyCoin Room to Doom Castle Corridor of Destiny").access_rule = \
+        self.multiworld.get_entrance("Focus Tower 1F SkyCoin Room to Doom Castle Corridor of Destiny", self.player).access_rule = \
             lambda state: state.has("Sky Fragment", self.player, logic_coins)
     elif self.multiworld.sky_coin_mode[self.player] == "save_the_crystals":
-        self.multiworld.get_entrance("Focus Tower 1F SkyCoin Room to Doom Castle Corridor of Destiny").access_rule = \
-            lambda state: state.can_reach("Rex Chest", "Location", self.player) and \
-            state.has("DualheadHydra", self.player) and state.has("IceGolem", self.player) and \
-            state.can_reach("Pazuzu Chest", "Location", self.player)
-
+        self.multiworld.get_entrance("Focus Tower 1F SkyCoin Room to Doom Castle Corridor of Destiny", self.player).access_rule = \
+            lambda state: state.can_reach("Bone Dungeon B2 - Flamerus Rex Chest", "Location", self.player) and \
+            state.has("Dualhead Hydra", self.player) and state.has("Ice Golem", self.player) and \
+            state.can_reach("Pazuzu's Tower 7F - Pazuzu Chest", "Location", self.player)
 
 
 
