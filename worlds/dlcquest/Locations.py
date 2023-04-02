@@ -2,8 +2,8 @@ from BaseClasses import Location, MultiWorld
 from . import Options
 
 
-class DLCquestLocation(Location):
-    game: str = "DLCquest"
+class DLCQuestLocation(Location):
+    game: str = "DLCQuest"
 
 
 offset = 120_000

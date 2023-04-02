@@ -8,8 +8,8 @@ from dataclasses import dataclass, field
 from random import Random
 
 
-class DLCquestItem(Item):
-    game: str = "DLCquest"
+class DLCQuestItem(Item):
+    game: str = "DLCQuest"
 
 
 offset = 120_000

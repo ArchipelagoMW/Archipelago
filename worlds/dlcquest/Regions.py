@@ -1,11 +1,11 @@
 import math
 import re
 from BaseClasses import MultiWorld, Region, Location, Entrance, ItemClassification
-from .Locations import DLCquestLocation, location_table
+from .Locations import DLCQuestLocation, location_table
 from .Rules import create_event
 from . import Options
 
-DLCquestRegion = ["Movement Pack", "Behind Tree", "Psychological Warfare", "Double Jump Left",
+DLCQuestRegion = ["Movement Pack", "Behind Tree", "Psychological Warfare", "Double Jump Left",
                   "Double Jump Behind the Tree", "The Forest", "Final Room"]
 
 
@@ -13,7 +13,7 @@ def add_coin_freemium(region: Region, Coin: int, player: int):
     name_coin = "number coins freemium"
     number_coin = re.sub("number", str(Coin), name_coin)
     location_coin = re.sub("number", region.name, name_coin)
-    location = DLCquestLocation(player, location_coin, None, region)
+    location = DLCQuestLocation(player, location_coin, None, region)
     region.locations.append(location)
     location.place_locked_item(create_event(player, number_coin))
 
@@ -22,7 +22,7 @@ def add_coin_dlcquest(region: Region, Coin: int, player: int):
     name_coin = "number coins"
     number_coin = re.sub("number", str(Coin), name_coin)
     location_coin = re.sub("number", region.name, name_coin)
-    location = DLCquestLocation(player, location_coin, None, region)
+    location = DLCQuestLocation(player, location_coin, None, region)
     region.locations.append(location)
     location.place_locked_item(create_event(player, number_coin))
 
@@ -43,7 +43,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Regmoveright = Region("Move Right", player, world, "Start of the basic game")
         Locmoveright_name = ["Movement Pack", "Animation Pack", "Audio Pack", "Pause Menu Pack"]
         Regmoveright.exits = [Entrance(player, "Moving", Regmoveright)]
-        Regmoveright.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regmoveright) for
+        Regmoveright.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regmoveright) for
                                    loc_name in Locmoveright_name]
         add_coin_dlcquest(Regmoveright, 4, player)
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
@@ -52,10 +52,10 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
                 item_coin = "DLC Quest: number Coin"
                 item_coin_loc = re.sub("number", str(World_Options[Options.CoinSanityRange] * (i + 1)), item_coin)
                 Regmoveright.locations += [
-                    DLCquestLocation(player, item_coin_loc, location_table[item_coin_loc], Regmoveright)]
+                    DLCQuestLocation(player, item_coin_loc, location_table[item_coin_loc], Regmoveright)]
             if 825 % World_Options[Options.CoinSanityRange] != 0:
                 Regmoveright.locations += [
-                    DLCquestLocation(player, "DLC Quest: 825 Coin", location_table["DLC Quest: 825 Coin"],
+                    DLCQuestLocation(player, "DLC Quest: 825 Coin", location_table["DLC Quest: 825 Coin"],
                                      Regmoveright)]
         world.regions.append(Regmoveright)
 
@@ -65,7 +65,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             Locmovpack_name += ["Sword"]
         Regmovpack.exits = [Entrance(player, "Tree", Regmovpack), Entrance(player, "Cloud", Regmovpack)]
-        Regmovpack.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regmovpack) for loc_name
+        Regmovpack.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regmovpack) for loc_name
                                  in Locmovpack_name]
         add_coin_dlcquest(Regmovpack, 46, player)
         world.regions.append(Regmovpack)
@@ -76,7 +76,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
             Locbtree_name += ["Gun"]
         Regbtree.exits = [Entrance(player, "Behind Tree Double Jump", Regbtree),
                           Entrance(player, "Forest Entrance", Regbtree)]
-        Regbtree.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regbtree) for loc_name in
+        Regbtree.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regbtree) for loc_name in
                                Locbtree_name]
         add_coin_dlcquest(Regbtree, 60, player)
         world.regions.append(Regbtree)
@@ -84,14 +84,14 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Regpsywarfare = Region("Psychological Warfare", player, world)
         Locpsywarfare_name = ["West Cave Sheep"]
         Regpsywarfare.exits = [Entrance(player, "Cloud Double Jump", Regpsywarfare)]
-        Regpsywarfare.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regpsywarfare) for
+        Regpsywarfare.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regpsywarfare) for
                                     loc_name in Locpsywarfare_name]
         add_coin_dlcquest(Regpsywarfare, 100, player)
         world.regions.append(Regpsywarfare)
 
         Regdoubleleft = Region("Double Jump Total Left", player, world)
         Locdoubleleft_name = ["Pet Pack", "Top Hat Pack", "North West Alcove Sheep"]
-        Regdoubleleft.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regdoubleleft) for
+        Regdoubleleft.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regdoubleleft) for
                                     loc_name in
                                     Locdoubleleft_name]
         Regdoubleleft.exits = [Entrance(player, "Cave Tree", Regdoubleleft),
@@ -101,21 +101,21 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
 
         Regdoubleleftcave = Region("Double Jump Total Left Cave", player, world)
         Locdoubleleftcave_name = ["Top Hat Sheep"]
-        Regdoubleleftcave.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regdoubleleftcave)
+        Regdoubleleftcave.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regdoubleleftcave)
                                         for loc_name in Locdoubleleftcave_name]
         add_coin_dlcquest(Regdoubleleftcave, 9, player)
         world.regions.append(Regdoubleleftcave)
 
         Regdoubleleftroof = Region("Double Jump Total Left Roof", player, world)
         Locdoubleleftroof_name = ["North West Ceiling Sheep"]
-        Regdoubleleftroof.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regdoubleleftroof)
+        Regdoubleleftroof.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regdoubleleftroof)
                                         for loc_name in Locdoubleleftroof_name]
         add_coin_dlcquest(Regdoubleleftroof, 10, player)
         world.regions.append(Regdoubleleftroof)
 
         Regdoubletree = Region("Double Jump Behind Tree", player, world)
         Locdoubletree_name = ["Sexy Outfits Pack", "Double Jump Alcove Sheep", "Sexy Outfits Sheep"]
-        Regdoubletree.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regdoubletree) for
+        Regdoubletree.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regdoubletree) for
                                     loc_name in
                                     Locdoubletree_name]
         Regdoubletree.exits = [Entrance(player, "True Double Jump", Regdoubletree)]
@@ -124,7 +124,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
 
         Regtruedoublejump = Region("True Double Jump Behind Tree", player, world)
         Loctruedoublejump_name = ["Double Jump Floating Sheep", "Cutscene Sheep"]
-        Regtruedoublejump.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regtruedoublejump)
+        Regtruedoublejump.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regtruedoublejump)
                                         for loc_name in Loctruedoublejump_name]
         add_coin_dlcquest(Regtruedoublejump, 7, player)
         world.regions.append(Regtruedoublejump)
@@ -133,7 +133,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Locforest_name = ["Gun Pack", "Night Map Pack"]
         Regforest.exits = [Entrance(player, "Behind Ogre", Regforest),
                            Entrance(player, "Forest Double Jump", Regforest)]
-        Regforest.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regforest) for loc_name in
+        Regforest.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regforest) for loc_name in
                                 Locforest_name]
         add_coin_dlcquest(Regforest, 169, player)
         world.regions.append(Regforest)
@@ -142,7 +142,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Locforestdoublejump_name = ["The Zombie Pack", "Forest Low Sheep"]
         Regforestdoublejump.exits = [Entrance(player, "Forest True Double Jump", Regforestdoublejump)]
         Regforestdoublejump.locations += [
-            DLCquestLocation(player, loc_name, location_table[loc_name], Regforestdoublejump) for loc_name in
+            DLCQuestLocation(player, loc_name, location_table[loc_name], Regforestdoublejump) for loc_name in
             Locforestdoublejump_name]
         add_coin_dlcquest(Regforestdoublejump, 76, player)
         world.regions.append(Regforestdoublejump)
@@ -150,19 +150,19 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Regforesttruedoublejump = Region("The Forest whit double Jump Part 2", player, world)
         Locforesttruedoublejump_name = ["Forest High Sheep"]
         Regforesttruedoublejump.locations += [
-            DLCquestLocation(player, loc_name, location_table[loc_name], Regforesttruedoublejump)
+            DLCQuestLocation(player, loc_name, location_table[loc_name], Regforesttruedoublejump)
             for loc_name in Locforesttruedoublejump_name]
         add_coin_dlcquest(Regforesttruedoublejump, 203, player)
         world.regions.append(Regforesttruedoublejump)
 
         Regfinalroom = Region("The Final Boss Room", player, world)
         Locfinalroom_name = ["Finish the Fight Pack"]
-        Regfinalroom.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regfinalroom) for
+        Regfinalroom.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regfinalroom) for
                                    loc_name in
                                    Locfinalroom_name]
         world.regions.append(Regfinalroom)
 
-        loc_win = DLCquestLocation(player, "Winning Basic", None, world.get_region("The Final Boss Room", player))
+        loc_win = DLCQuestLocation(player, "Winning Basic", None, world.get_region("The Final Boss Room", player))
         world.get_region("The Final Boss Room", player).locations.append(loc_win)
         loc_win.place_locked_item(create_event(player, "Victory Basic"))
 
@@ -204,7 +204,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             Locfreemiumstart_name += ["Wooden Sword"]
         Regfreemiumstart.exits = [Entrance(player, "Vines", Regfreemiumstart)]
-        Regfreemiumstart.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regfreemiumstart)
+        Regfreemiumstart.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regfreemiumstart)
                                        for loc_name in
                                        Locfreemiumstart_name]
         add_coin_freemium(Regfreemiumstart, 50, player)
@@ -215,11 +215,11 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
                 item_coin_loc_freemium = re.sub("number", str(World_Options[Options.CoinSanityRange] * (i + 1)),
                                                 item_coin_freemium)
                 Regfreemiumstart.locations += [
-                    DLCquestLocation(player, item_coin_loc_freemium, location_table[item_coin_loc_freemium],
+                    DLCQuestLocation(player, item_coin_loc_freemium, location_table[item_coin_loc_freemium],
                                      Regfreemiumstart)]
             if 889 % World_Options[Options.CoinSanityRange] != 0:
                 Regfreemiumstart.locations += [
-                    DLCquestLocation(player, "Live Freemium or Die: 889 Coin",
+                    DLCQuestLocation(player, "Live Freemium or Die: 889 Coin",
                                      location_table["Live Freemium or Die: 889 Coin"],
                                      Regfreemiumstart)]
         world.regions.append(Regfreemiumstart)
@@ -229,7 +229,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             Locbehindvine_name += ["Pickaxe"]
         Regbehindvine.exits = [Entrance(player, "Wall Jump Entrance", Regbehindvine)]
-        Regbehindvine.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regbehindvine) for
+        Regbehindvine.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regbehindvine) for
                                     loc_name in Locbehindvine_name]
         add_coin_freemium(Regbehindvine, 95, player)
         world.regions.append(Regbehindvine)
@@ -238,7 +238,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Locwalljump_name = ["Harmless Plants Pack", "Death of Comedy Pack", "Canadian Dialog Pack", "DLC NPC Pack"]
         Regwalljump.exits = [Entrance(player, "Harmless Plants", Regwalljump),
                              Entrance(player, "Pickaxe Hard Cave", Regwalljump)]
-        Regwalljump.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regwalljump) for
+        Regwalljump.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regwalljump) for
                                   loc_name in Locwalljump_name]
         add_coin_freemium(Regwalljump, 150, player)
         world.regions.append(Regwalljump)
@@ -247,7 +247,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Locfakeending_name = ["Cut Content Pack", "Name Change Pack"]
         Regfakeending.exits = [Entrance(player, "Name Change Entrance", Regfakeending),
                                Entrance(player, "Cut Content Entrance", Regfakeending)]
-        Regfakeending.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regfakeending) for
+        Regfakeending.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regfakeending) for
                                     loc_name in Locfakeending_name]
         world.regions.append(Regfakeending)
 
@@ -259,7 +259,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Reghardcavewalljump = Region("Hard Cave Wall Jump", player, world)
         Lochardcavewalljump_name = ["Increased HP Pack"]
         Reghardcavewalljump.locations += [
-            DLCquestLocation(player, loc_name, location_table[loc_name], Reghardcavewalljump) for
+            DLCQuestLocation(player, loc_name, location_table[loc_name], Reghardcavewalljump) for
             loc_name in Lochardcavewalljump_name]
         add_coin_freemium(Reghardcavewalljump, 130, player)
         world.regions.append(Reghardcavewalljump)
@@ -268,7 +268,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Loccutcontent_name = []
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             Loccutcontent_name += ["Humble Indie Bindle"]
-        Regcutcontent.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regcutcontent) for
+        Regcutcontent.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regcutcontent) for
                                     loc_name in Loccutcontent_name]
         add_coin_freemium(Regcutcontent, 200, player)
         world.regions.append(Regcutcontent)
@@ -278,14 +278,14 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             Locnamechange_name += ["Box of Various Supplies"]
         Regnamechange.exits = [Entrance(player, "Behind Rocks", Regnamechange)]
-        Regnamechange.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regnamechange) for
+        Regnamechange.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regnamechange) for
                                     loc_name in Locnamechange_name]
         world.regions.append(Regnamechange)
 
         Regtopright = Region("Top Right", player, world)
         Loctopright_name = ["Season Pass", "High Definition Next Gen Pack"]
         Regtopright.exits = [Entrance(player, "Blizzard", Regtopright)]
-        Regtopright.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regtopright) for
+        Regtopright.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regtopright) for
                                   loc_name in Loctopright_name]
         add_coin_freemium(Regtopright, 90, player)
         world.regions.append(Regtopright)
@@ -293,18 +293,18 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Regseason = Region("Season", player, world)
         Locseason_name = ["Remove Ads Pack", "Not Exactly Noble"]
         Regseason.exits = [Entrance(player, "Boss Door", Regseason)]
-        Regseason.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regseason) for
+        Regseason.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regseason) for
                                 loc_name in Locseason_name]
         add_coin_freemium(Regseason, 154, player)
         world.regions.append(Regseason)
 
         Regfinalboss = Region("Final Boss", player, world)
         Locfinalboss_name = ["Big Sword Pack", "Really Big Sword Pack", "Unfathomable Sword Pack"]
-        Regfinalboss.locations += [DLCquestLocation(player, loc_name, location_table[loc_name], Regfinalboss) for
+        Regfinalboss.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regfinalboss) for
                                    loc_name in Locfinalboss_name]
         world.regions.append(Regfinalboss)
 
-        loc_wining = DLCquestLocation(player, "Winning Freemium", None, world.get_region("Final Boss", player))
+        loc_wining = DLCQuestLocation(player, "Winning Freemium", None, world.get_region("Final Boss", player))
         world.get_region("Final Boss", player).locations.append(loc_wining)
         loc_wining.place_locked_item(create_event(player, "Victory Freemium"))
 

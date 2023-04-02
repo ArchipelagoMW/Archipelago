@@ -1,14 +1,14 @@
 import math
 import re
-from .Locations import DLCquestLocation
+from .Locations import DLCQuestLocation
 from ..generic.Rules import add_rule, set_rule
-from .Items import DLCquestItem
+from .Items import DLCQuestItem
 from BaseClasses import ItemClassification
 from . import Options
 
 
 def create_event(player, event: str):
-    return DLCquestItem(event, ItemClassification.progression, None, player)
+    return DLCQuestItem(event, ItemClassification.progression, None, player)
 
 
 def set_rules(world, player, World_Options: Options.DLCQuestOptions):

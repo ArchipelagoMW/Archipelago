@@ -93,7 +93,7 @@ class DayOnePatchLag(Choice):
     default = 1
 
 
-DLCquest_options: Dict[str, type(Option)] = {
+DLCQuest_options: Dict[str, type(Option)] = {
     option.internal_name: option
     for option in [
         FalseDoubleJump,
@@ -106,19 +106,19 @@ DLCquest_options: Dict[str, type(Option)] = {
         DayOnePatchLag,
     ]
 }
-default_options = {option.internal_name: option.default for option in DLCquest_options.values()}
-DLCquest_options["death_link"] = DeathLink
+default_options = {option.internal_name: option.default for option in DLCQuest_options.values()}
+DLCQuest_options["death_link"] = DeathLink
 
 
 def fetch_options(world, player: int) -> DLCQuestOptions:
-    return DLCQuestOptions({option: get_option_value(world, player, option) for option in DLCquest_options})
+    return DLCQuestOptions({option: get_option_value(world, player, option) for option in DLCQuest_options})
 
 
 def get_option_value(world, player: int, name: str) -> Union[bool, int]:
-    assert name in DLCquest_options, f"{name} is not a valid option for DLC Quest."
+    assert name in DLCQuest_options, f"{name} is not a valid option for DLC Quest."
 
     value = getattr(world, name)
 
-    if issubclass(DLCquest_options[name], Toggle):
+    if issubclass(DLCQuest_options[name], Toggle):
         return bool(value[player].value)
     return value[player].value

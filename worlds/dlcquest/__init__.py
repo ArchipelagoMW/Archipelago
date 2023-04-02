@@ -1,9 +1,9 @@
 from typing import Dict, Any, Iterable, Optional, Union
 from BaseClasses import Tutorial
 from worlds.AutoWorld import World, WebWorld
-from .Items import DLCquestItem, item_table, ItemData, create_items
-from .Locations import location_table, DLCquestLocation
-from .Options import DLCquest_options, DLCQuestOptions, fetch_options
+from .Items import DLCQuestItem, item_table, ItemData, create_items
+from .Locations import location_table, DLCQuestLocation
+from .Options import DLCQuest_options, DLCQuestOptions, fetch_options
 from .Rules import set_rules
 from .Regions import create_regions
 
@@ -23,7 +23,7 @@ class DLCqwebworld(WebWorld):
 
 class DLCqworld(World):
     """
-    DLCquest is a metroid ish game where everything is an in-game dlc.
+    DLCQuest is a metroid ish game where everything is an in-game dlc.
     """
     game = "DLCQuest"
     topology_present = False
@@ -34,7 +34,7 @@ class DLCqworld(World):
 
     data_version = 0
 
-    option_definitions = DLCquest_options
+    option_definitions = DLCQuest_options
 
     def generate_early(self):
         self.options = fetch_options(self.multiworld, self.player)
@@ -46,7 +46,7 @@ class DLCqworld(World):
         set_rules(self.multiworld, self.player, self.options)
 
     def create_event(self, event: str):
-        return DLCquestItem(event, True, None, self.player)
+        return DLCQuestItem(event, True, None, self.player)
 
     def create_items(self):
         locations_count = len([location
@@ -61,13 +61,14 @@ class DLCqworld(World):
         self.multiworld.itempool += created_items
 
         for item in items_to_exclude:
-            self.multiworld.itempool.remove(item)
+            if item in self.multiworld.itempool:
+                self.multiworld.itempool.remove(item)
 
-    def create_item(self, item: Union[str, ItemData]) -> DLCquestItem:
+    def create_item(self, item: Union[str, ItemData]) -> DLCQuestItem:
         if isinstance(item, str):
             item = item_table[item]
 
-        return DLCquestItem(item.name, item.classification, item.code, self.player)
+        return DLCQuestItem(item.name, item.classification, item.code, self.player)
 
     def fill_slot_data(self):
         return {
