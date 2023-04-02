@@ -2,7 +2,7 @@ import collections
 import logging
 from typing import Iterator, Set
 
-from BaseClasses import Entrance, MultiWorld
+from BaseClasses import MultiWorld
 from worlds.generic.Rules import (add_item_rule, add_rule, forbid_item,
                                   item_in_locations, location_item_name, set_rule, allow_self_locking_items)
 
@@ -11,7 +11,7 @@ from .Bosses import GanonDefeatRule
 from .Items import ItemFactory, item_name_groups, item_table, progression_items
 from .Options import smallkey_shuffle
 from .OverworldGlitchRules import no_logic_rules, overworld_glitches_rules
-from .Regions import LTTPRegionType, location_table
+from .Regions import LTTPRegionType, LttPEntrance, location_table
 from .StateHelpers import (can_extend_magic, can_kill_most_things,
                            can_lift_heavy_rocks, can_lift_rocks,
                            can_melt_things, can_retrieve_tablet,
@@ -845,8 +845,8 @@ def swordless_rules(world, player):
 def add_connection(parent_name, target_name, entrance_name, world, player):
     parent = world.get_region(parent_name, player)
     target = world.get_region(target_name, player)
-    connection = ALttPEntrance(player, entrance_name, parent)
-    connection.connect(target)
+    LttPEntrance(player, entrance_name, parent).connect(target)
+
 
 def standard_rules(world, player):
     add_connection('Menu', 'Hyrule Castle Secret Entrance', 'Uncle S&Q', world, player)
@@ -855,6 +855,7 @@ def standard_rules(world, player):
     set_rule(world.get_entrance('Hyrule Castle Exit (West)', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
     set_rule(world.get_entrance('Links House S&Q', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
     set_rule(world.get_entrance('Sanctuary S&Q', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
+
 
 def toss_junk_item(world, player):
     items = ['Rupees (20)', 'Bombs (3)', 'Arrows (10)', 'Rupees (5)', 'Rupee (1)', 'Bombs (10)',
