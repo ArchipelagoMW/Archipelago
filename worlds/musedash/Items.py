@@ -1,11 +1,10 @@
-from typing import Dict, NamedTuple, Optional, Union
+from typing import NamedTuple, Optional, Union
 from BaseClasses import Item, ItemClassification
 
-"""
-The data for each song. Contains the value of each difficulty to make filtering per-difficulty easier.
-Note: -1 means difficulty missing. -2 means "?" difficulty
-"""
+
 class SongData(NamedTuple):
+    """Special data continer to contain the metadata of each song to make filtering work."""
+
     code: Optional[int]
     song_is_free: bool
     streamer_mode: bool
@@ -14,19 +13,22 @@ class SongData(NamedTuple):
     master: int = Optional[int]
     secret: int = Optional[int] #Note: Secret diffs can be Harder, but it can also just be "different". (See Heracles and Super Battleworm Insomniac for "different")
 
-"""
-The data for each album.
-"""
+
 class AlbumData(NamedTuple):
+    """Special data continer to contain the metadata of each album to make filtering work. Currently not used."""
+
     code: Optional[int]
 
-class MuseDashItem(Item):
+
+class MuseDashSongItem(Item):
     game: str = "Muse Dash"
 
     def __init__(self, name: str, player: int, data: Union[SongData, AlbumData]) -> None:
-        super().__init__(name, ItemClassification.progression, data.code, player) #Todo: Should these be skip balancing?
+        super().__init__(name, ItemClassification.progression, data.code, player)
+
 
 class MuseDashFixedItem(Item):
     game: str = "Muse Dash"
-    def __init__(self, name: str, classification: ItemClassification, player: int, code: Optional[int]) -> None:
+
+    def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int) -> None:
         super().__init__(name, classification, code, player)

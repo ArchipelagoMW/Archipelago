@@ -73,6 +73,13 @@ Frightfully-insane Flan-chan's frightful song|Just as Planned  Plus|False|5|7|10
 snooze|Just as Planned  Plus|False|5|7|10|
 Kuishinbo Hacker feat.Kuishinbo Akachan|Just as Planned  Plus|True|5|7|9|
 Inu no outa|Just as Planned  Plus|True|3|5|7|
+Prism Fountain|Just as Planned  Plus|True|7|9|11|
+MuseDash ka nanika hi|Ola Dash|True|?|?|¿|
+Aleph-0|Ola Dash|True|7|9|11|
+Buttoba Supernova|Ola Dash|False|5|7|10|11
+Rush-Hour|Ola Dash|False|IG|Jh|a2|Eh
+3rd Avenue|Ola Dash|False|3|5|〇|
+WORLDINVADER|Ola Dash|True|5|8|10|
 N3V3R G3T OV3R|maimai DX Limited-time Suite|True|4|7|10|
 Oshama Scramble!|maimai DX Limited-time Suite|True|5|7|10|
 Valsqotch|maimai DX Limited-time Suite|True|5|9|11|

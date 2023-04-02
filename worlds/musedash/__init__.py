@@ -5,7 +5,7 @@ from BaseClasses import Region, Item, ItemClassification, MultiWorld, Entrance, 
 from math import floor
 
 from .Options import musedash_options
-from .Items import MuseDashItem, MuseDashFixedItem
+from .Items import MuseDashSongItem, MuseDashFixedItem
 from .Locations import MuseDashLocation
 from .MuseDashCollection import MuseDashCollections
 
@@ -41,15 +41,15 @@ class MuseDashWorld(World):
     music_sheet_name: str = "Music Sheet"
 
     # Necessary Data
-    museDashCollection = MuseDashCollections(290000, 2)
+    museDashCollection = MuseDashCollections(2900000, 2)
 
     item_name_to_id = {
-        name: data.code for name, data in museDashCollection.AlbumItems.items() | museDashCollection.SongItems.items()
+        name: data.code for name, data in museDashCollection.album_items.items() | museDashCollection.song_items.items()
     }
-    item_name_to_id[music_sheet_name] = museDashCollection.MusicSheetID
+    item_name_to_id[music_sheet_name] = museDashCollection.MUSIC_SHEET_CODE
 
     location_name_to_id = {
-        name: id for name, id in museDashCollection.AlbumLocations.items() | museDashCollection.SongLocations.items()
+        name: id for name, id in museDashCollection.album_locations.items() | museDashCollection.song_locations.items()
     }
 
     # Working Data
@@ -115,19 +115,18 @@ class MuseDashWorld(World):
 
     def create_item(self, name: str) -> Item:
         if (name == self.music_sheet_name):
-            return MuseDashFixedItem(name, ItemClassification.progression_skip_balancing, self.player, self.museDashCollection.MusicSheetID)
+            return MuseDashFixedItem(name, ItemClassification.progression_skip_balancing, self.museDashCollection.MUSIC_SHEET_CODE, self.player)
 
-        song = self.museDashCollection.SongItems.get(name)
+        song = self.museDashCollection.song_items.get(name)
         if (song != None):
-            return MuseDashItem(name, self.player, song)
+            return MuseDashSongItem(name, self.player, song)
 
         # Todo: Album Mode
-        # album = self.museDashCollection.AlbumItems.get(name)
+        # album = self.museDashCollection.album_items.get(name)
         # if (album != None):
-        #    return MuseDashItem(name, self.player, album)
+        #    return MuseDashSongItem(name, self.player, album)
 
-        #Todo: Are items like this usually just return None?
-        return MuseDashFixedItem(name, ItemClassification.filler, self.player, None)
+        return MuseDashFixedItem(name, ItemClassification.filler, None, self.player)
 
 
     def create_items(self) -> None:
@@ -193,11 +192,11 @@ class MuseDashWorld(World):
 
             # 2 Locations are defined per song
             location_name = name + "-0"
-            region.locations.append(MuseDashLocation(self.player, location_name, self.museDashCollection.SongLocations[location_name], region))
+            region.locations.append(MuseDashLocation(self.player, location_name, self.museDashCollection.song_locations[location_name], region))
 
             if (i < two_item_location_count):
                 location_name = name + "-1"
-                region.locations.append(MuseDashLocation(self.player, location_name, self.museDashCollection.SongLocations[location_name], region))
+                region.locations.append(MuseDashLocation(self.player, location_name, self.museDashCollection.song_locations[location_name], region))
 
             region_exit = Entrance(self.player, name, song_select_region)
             song_select_region.exits.append(region_exit)
