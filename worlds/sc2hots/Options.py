@@ -190,6 +190,7 @@ class KerriganLevelDistribution(Choice):
     option_size_5 = 7
     option_size_2 = 8
     option_size_1 = 9
+    default = option_smooth
 
 
 class IncludeAllKerriganAbilities(Toggle):
