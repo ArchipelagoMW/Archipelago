@@ -8,8 +8,8 @@
 
 - Windows 10+
 - Muse Dash: [Available on Steam](https://store.steampowered.com/app/774171/Muse_Dash/)
-- Just As Planned DLC: [Available on Steam](https://store.steampowered.com/app/1055810/Muse_Dash__Just_as_planned/)
-- Melon Loader v0.5.7 Open-Beta or Newer: [GitHub](https://github.com/LavaGang/MelonLoader/releases/latest)
+- \[Optional\] Just As Planned DLC: [Available on Steam](https://store.steampowered.com/app/1055810/Muse_Dash__Just_as_planned/)
+- Melon Loader v0.5.7: [GitHub](https://github.com/LavaGang/MelonLoader/releases/latest) (Note: v0.6 is not compatible with this mod.)
 - Muse Dash Archipelago Mod: [GitHub](https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest)
 
 ## Installing the Archipelago mod to Muse Dash

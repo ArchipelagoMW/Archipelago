@@ -1,4 +1,4 @@
-# Overcooked! 2
+# Muse Dash
 
 ## Quick Links
 - [Setup Guide](../../../../tutorial/Muse%20Dash/setup/en)
@@ -6,22 +6,28 @@
 
 ## What Does Randomisation do to this Game?
 
-//Todo: Rewrite to reflect other added goals
+Muse Dash has undergone numerous changes in order to fit into the Archipelago system.
 
-Muse Dash, being a rhythm game, does not have much randomisation. In order to facilitate Archipelago, the available choices of songs are limited. Upon completing songs, you will get multiple checks, which may include more songs to play.
+- You will be given a number of starting songs.
+- Completing any song will give you 1-2 rewards.
+- Rewards range from New Songs, Duplicate Song and **Music Sheets**.
 
-To help make more interesting runs, each song will give 2 items, instead of the typical 1.
+Other changes have also been made to make playing Muse Dash as fun as possible. These changes have been listed below.
 
-## What is the goal of Muse Dash in Archipelago
+## What is the Goal of Muse Dash in Archipelago
 
-//Todo: Add other goals
+The goal of Muse Dash, is to collect a number of **Music Sheets**. Once you've collected enough Music Sheets, the final song will be unlocked. Completing the final song will allow you to complete your seed.
 
-The goal of Muse Dash in Archipelago is to complete the song marked as "Goal". The goal is always visible, and is always marked, but cannot be played until it is unlocked by another song.
+## What is Required to Play the Game in Archipelago?
 
-## What is required to play the game?
+Only the base Muse Dash game is required, in order to play this game.
 
-The **Just as Planned DLC** is required in order to play this randomiser. //Todo: possibly allow the base game under limited options
+However the **Just as Planned DLC** is recommended as the number of possible songs increases to over 400 songs.
 
-### What Adjustments have been made to the Base Game?
-- The ability to play all songs regardless of level
-- //Todo: More adjustments will probably be made
+### What Other Adjustments have been made to the Base Game?
+
+- Several song select filters have been added to make finding songs to play easy.
+- Selecting Random while playing a seed will give you a random song you haven't finished yet.
+- Master difficulties are always unlocked while playing a seed.
+- Hints are shown in song select.
+- You can hint for songs and music sheets from song select.
