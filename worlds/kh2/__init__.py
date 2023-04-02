@@ -294,7 +294,7 @@ class KH2World(World):
                 self.item_quantity_dict[item] -= value
 
     def emblem_verify(self):
-        if self.luckyemblemamount < luckyemblemrequired:
+        if self.luckyemblemamount < self.luckyemblemrequired:
             logging.info(
                     f"Lucky Emblem Amount {self.multiworld.LuckyEmblemsAmount[self.player].value} is less than required "
                     f"{self.multiworld.LuckyEmblemsRequired[self.player].value} for player {self.multiworld.get_file_safe_player_name(self.player)}."
