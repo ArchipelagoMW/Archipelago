@@ -3,6 +3,7 @@ from typing import List, Set
 
 from ..generic import Rules as GenericRules
 from . import Locations
+from .Options import BossesAsChecks
 
 
 holy_mountain_regions: List[str] = [
@@ -57,7 +58,7 @@ def create_all_rules(world: MultiWorld, player: int) -> None:
         forbid_items_at_location(world, location_name, wands_to_forbid, player)
 
     # Prevent the Map perk from being on Toveri
-    if world.bosses_as_checks[player].value >= 3:
+    if world.bosses_as_checks[player].value >= BossesAsChecks.option_all_bosses:
         for location_name in Locations.location_name_to_id.keys():
             if "Toveri" not in location_name:
                 continue
