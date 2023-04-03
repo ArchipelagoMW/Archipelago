@@ -78,11 +78,15 @@ class LTTPRegionType(IntEnum):
         return self in (LTTPRegionType.Cave, LTTPRegionType.Dungeon)
 
 
-class LttPEntrance(Entrance):
-    addresses = None
-    target = None
+Addresses = Union[int, List[int], Tuple[int, int, int, int, int, int, int, int, int, int, int, int, int]]
+"""int if connecting a door to the underworld, list if it's a dropdown, or tuple if connecting to the overworld"""
 
-    def connect(self, region: Region, addresses: Tuple[int] = None, target: Tuple[int] = None) -> None:
+
+class LttPEntrance(Entrance):
+    addresses: Optional[Addresses] = None
+    target: Optional[int] = None
+
+    def connect(self, region: Region, addresses: Optional[Addresses] = None, target: Optional[int] = None) -> None:
         self.connected_region = region
         self.target = target
         self.addresses = addresses
