@@ -58,7 +58,7 @@ class MMBN3World(World):
         called per player before any items or locations are created. You can set properties on your world here.
         Already has access to player options and RNG.
         """
-        self.item_frequencies = item_frequencies
+        self.item_frequencies = item_frequencies.copy()
         if self.multiworld.extra_ranks[self.player] > 0:
             self.item_frequencies[ItemName.Progressive_Undernet_Rank] = 8 + self.multiworld.extra_ranks[self.player]
 
