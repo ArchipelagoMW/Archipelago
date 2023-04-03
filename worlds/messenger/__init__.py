@@ -1,3 +1,4 @@
+import logging
 from typing import Dict, Any, Optional
 
 from BaseClasses import Tutorial, ItemClassification
@@ -69,6 +70,10 @@ class MessengerWorld(World):
         if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
             self.multiworld.shuffle_seals[self.player].value = PowerSeals.option_true
             self.total_seals = self.multiworld.total_seals[self.player].value
+            if not self.multiworld.shuffle_shards[self.player]:
+                self.total_seals = min(45, self.multiworld.total_seals[self.player].value)
+                if self.multiworld.total_seals[self.player] > 45:
+                    logging.warning("Total Seals was adjusted to 45")
             self.required_seals = int(self.multiworld.percent_seals_required[self.player].value / 100 * self.total_seals)
 
     def create_regions(self) -> None:

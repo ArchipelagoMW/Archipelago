@@ -56,8 +56,8 @@ class AmountSeals(Range):
     """Number of power seals that exist in the item pool when power seal hunt is the goal."""
     display_name = "Total Power Seals"
     range_start = 1
-    range_end = 45
-    default = range_end
+    range_end = 85
+    default = 45
 
 
 class RequiredSeals(Range):
