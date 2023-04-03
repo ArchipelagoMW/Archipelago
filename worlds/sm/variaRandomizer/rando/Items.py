@@ -1,5 +1,6 @@
-from utils.utils import randGaussBounds, getRangeDict, chooseFromRange
-import utils.log, logging, copy, random
+from worlds.sm.variaRandomizer.utils.utils import randGaussBounds, getRangeDict, chooseFromRange
+from worlds.sm.variaRandomizer.utils import log
+import logging, copy, random
 
 class Item:
     __slots__ = ( 'Category', 'Class', 'Name', 'Code', 'Type', 'BeamBits', 'ItemBits', 'Id' )
@@ -392,7 +393,7 @@ class ItemPoolGenerator(object):
         self.maxItems = 105 # 100 item locs and 5 bosses
         self.maxEnergy = 18 # 14E, 4R
         self.maxDiff = maxDiff
-        self.log = utils.log.get('ItemPool')
+        self.log = log.get('ItemPool')
 
     def isUltraSparseNoTanks(self):
         # if low stuff botwoon is not known there is a hard energy req of one tank, even

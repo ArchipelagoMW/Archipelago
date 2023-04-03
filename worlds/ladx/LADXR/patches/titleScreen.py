@@ -20,27 +20,22 @@ def _encode(s):
     return result
 
 
-def setRomInfo(rom, seed, settings, player_name, player_id):
-    #try:
-    #    version = subprocess.run(['git', 'describe', '--tags', '--dirty=-D'], stdout=subprocess.PIPE).stdout.strip().decode("ascii", "replace")
-    #except:
-    #    version = ""
-
+def setRomInfo(rom, seed, seed_name, settings, player_name, player_id):
     try:
         seednr = int(seed, 16)
     except:
         import hashlib
-        seednr = int(hashlib.md5(seed.encode('ascii', 'replace')).hexdigest(), 16)
+        seednr = int(hashlib.md5(seed).hexdigest(), 16)
 
     if settings.race:
-        seed = "Race"
+        seed_name = "Race"
         if isinstance(settings.race, str):
-            seed += " " + settings.race
+            seed_name += " " + settings.race
         rom.patch(0x00, 0x07, "00", "01")
     else:
         rom.patch(0x00, 0x07, "00", "52")
 
-    line_1_hex = _encode(seed)
+    line_1_hex = _encode(seed_name[:20])
     #line_2_hex = _encode(seed[16:])
     BASE_DRAWING_AREA = 0x98a0
     LINE_WIDTH = 0x20

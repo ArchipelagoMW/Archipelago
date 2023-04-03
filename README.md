@@ -39,6 +39,10 @@ Currently, the following games are supported:
 * Stardew Valley
 * The Legend of Zelda
 * The Messenger
+* Kingdom Hearts 2
+* The Legend of Zelda: Link's Awakening DX
+* Clique
+* Adventure
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled

@@ -1,3 +1,5 @@
+import logging
+
 import yaml
 import os
 import Utils
@@ -61,13 +63,13 @@ def patch_kh2(self, output_directory):
     slotDataDuping = set()
     for values in CheckDupingItems.values():
         if isinstance(values, set):
-            slotDataDuping |= values
+            slotDataDuping = slotDataDuping.union(values)
         else:
             for inner_values in values.values():
-                slotDataDuping |= inner_values
+                slotDataDuping = slotDataDuping.union(inner_values)
 
     if self.multiworld.Keyblade_Minimum[self.player].value > self.multiworld.Keyblade_Maximum[self.player].value:
-        print(
+        logging.info(
                 f"{self.multiworld.get_file_safe_player_name(self.player)} has Keyblade Minimum greater than Keyblade Maximum")
         keyblademin = self.multiworld.Keyblade_Maximum[self.player].value
         keyblademax = self.multiworld.Keyblade_Minimum[self.player].value
@@ -195,7 +197,7 @@ def patch_kh2(self, output_directory):
             if data.item.player == self.player:
                 itemcode = item_dictionary_table[data.item.name].kh2id
             else:
-                itemcode = 461
+                itemcode = 90  # castle map
         else:
             increaseStat(self.multiworld.per_slot_randoms[self.player].randint(0, 3))
             itemcode = 0

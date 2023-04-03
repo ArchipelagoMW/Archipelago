@@ -70,7 +70,7 @@ Sent to clients when they connect to an Archipelago server.
 | tags                  | list\[str\]                                   | Denotes special features or capabilities that the sender is capable of. Example: `WebHost`                                                                                                                                            |
 | password              | bool                                          | Denoted whether a password is required to join this room.                                                                                                                                                                             |
 | permissions           | dict\[str, [Permission](#Permission)\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "release", "collect" and "remaining".                                                                                                                              |
-| hint_cost             | int                                           | The amount of points it costs to receive a hint from the server.                                                                                                                                                                      |
+| hint_cost             | int                                           | The percentage of total locations that need to be checked to receive a hint from the server.                                                                                                                                                                      |
 | location_check_points | int                                           | The amount of hint points you receive per item/location check completed.                                                                                                                                                              |
 | games                 | list\[str\]                                   | List of games present in this multiworld.                                                                                                                                                                                             |
 | datapackage_versions  | dict\[str, int\]                              | Data versions of the individual games' data packages the server will send. Used to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents). **Deprecated. Use `datapackage_checksums` instead.** |
@@ -555,12 +555,16 @@ Color options:
 `flags` contains the [NetworkItem](#NetworkItem) flags that belong to the item
 
 ### Client States
-An enumeration containing the possible client states that may be used to inform the server in [StatusUpdate](#StatusUpdate).
+An enumeration containing the possible client states that may be used to inform
+the server in [StatusUpdate](#StatusUpdate). The MultiServer automatically sets
+the client state to `ClientStatus.CLIENT_CONNECTED` on the first active connection
+to a slot.
 
 ```python
 import enum
 class ClientStatus(enum.IntEnum):
     CLIENT_UNKNOWN = 0
+    CLIENT_CONNECTED = 5
     CLIENT_READY = 10
     CLIENT_PLAYING = 20
     CLIENT_GOAL = 30

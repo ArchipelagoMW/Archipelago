@@ -451,34 +451,35 @@ AddDungeonItem:
     ret
 
 AddRupees20:
-    xor  a
-    ld   h, $14
+    ld   hl, $0014
     jr   AddRupees
 
 AddRupees50:
-    xor  a
-    ld   h, $32
+    ld   hl, $0032
     jr   AddRupees
 
 AddRupees100:
-    xor  a
-    ld   h, $64
+    ld   hl, $0064
     jr   AddRupees
 
 AddRupees200:
-    xor  a
-    ld   h, $C8
+    ld   hl, $00C8
     jr   AddRupees
 
 AddRupees500:
-    ld   a, $01
-    ld   h, $F4
+    ld   hl, $01F4
     jr   AddRupees
 
 AddRupees:
-    ld   [$DB8F], a
-    ld   a, h
-    ld   [$DB90], a
+    ld  a, [$DB8F]
+    ld  d, a
+    ld  a, [$DB90]
+    ld  e, a
+    add hl, de
+    ld  a, h
+    ld  [$DB8F], a
+    ld  a, l
+    ld  [$DB90], a
     ld   a, $18
     ld   [$C3CE], a
     ret
