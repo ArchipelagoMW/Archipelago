@@ -23,6 +23,8 @@ charDict = {
     "BowneGlobal10": 0x7D, "BowneGlobal11": 0x7E, '\n': 0xE8, 'ω': 0x6C
 }
 
+undernet_item_indices = [27, 28, 29, 30, 31, 32, 58, 34, 34]
+
 
 def read_u16_le(data, offset) -> int:
     low_byte = data[offset]
@@ -107,21 +109,22 @@ def generate_bugfrag_get(amt) -> bytearray:
     return bytearray(byte_list)
 
 
+# This one is meant to be "silent". The text box has already been displayed.
+# So this one just gives the item using the text box syntax
 def generate_progressive_undernet(progression_index, next_script) -> bytearray:
-    # This one is meant to be "silent". The text box has already been displayed.
-    # So this one just gives bytes
-    item_indices = [27, 28, 29, 30, 31, 32, 58, 34, 34]
 
-    # CheckItem for the current index. If we have it, move on to the next script.
-    byte_list = [0xf6, 0x03, item_indices[progression_index], 0x01, next_script, next_script, 0xFF, 0xE9]
+    # F6 03 - Check for item. If you have it, load next_script, otherwise, continue
+    byte_list = [0xf6, 0x03, undernet_item_indices[progression_index], 0x01, next_script, next_script, 0xFF, 0xE9]
 
-    # Otherwise, give the item
+    # Otherwise, give the item, with different code depending on if we're at max rank already or not
     if progression_index >= 8:
+        # If we're at max rank, give bugfrags instead
         frag_bytes = int32_to_byte_list_le(20)
         byte_list = [0xF6, 0x50, frag_bytes[0], frag_bytes[1], frag_bytes[2], frag_bytes[3], 0xFF, 0xFF, 0xFF]
         byte_list.extend(generate_text_bytes("The extra data\ndecompiles into:\n\"20 BugFrags\"!!"))
     else:
-        byte_list.extend(generate_key_item_get(item_indices[progression_index], 1))
+        # If there's still ranks to give, give the next item in the list
+        byte_list.extend(generate_key_item_get(undernet_item_indices[progression_index], 1))
     byte_list.extend([0xEB, 0xE7]) # End the message
     return bytearray(byte_list)
 
