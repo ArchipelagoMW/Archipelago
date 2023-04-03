@@ -6,10 +6,9 @@ from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, 
     LocationProgressType
 from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
 from worlds.AutoWorld import WebWorld, World
-from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequencies, items_by_id, ItemType, \
-    player_item_frequencies
+from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequencies, items_by_id, ItemType
 from .Locations import Location, MMBN3Location, all_locations, location_table, location_data_table, \
-    always_excluded_locations, player_excluded_locations, jobs
+    always_excluded_locations, jobs
 from .Options import MMBN3Options
 from .Regions import regions, RegionName
 from .Names.ItemName import ItemName
@@ -144,9 +143,9 @@ class MMBN3World(World):
         filler_items = []
         for item in all_items:
             if item.progression == ItemClassification.filler:
-                freq = player_item_frequencies[self.player][item.itemName] \
-                    if self.player in player_item_frequencies and item.itemName in player_item_frequencies[self.player] \
-                    else item_frequencies[item.itemName] if item.itemName in item_frequencies else 1
+                freq = self.item_frequencies[item.itemName] \
+                    if item.itemName in self.item_frequencies \
+                    else 1
                 filler_items += [item.itemName] * freq
 
         remaining = len(all_locations) - len(required_items)
