@@ -5,10 +5,6 @@ from BaseClasses import MultiWorld
 from .SubClasses import LTTPRegion, LTTPRegionType, LttPEntrance
 
 
-def is_main_entrance(entrance: LttPEntrance) -> bool:
-    return entrance.parent_region.type in {LTTPRegionType.DarkWorld, LTTPRegionType.LightWorld} if entrance.parent_region.type else True
-
-
 def create_regions(world, player):
 
     world.regions += [
