@@ -112,18 +112,16 @@ def generate_bugfrag_get(amt) -> bytearray:
 # This one is meant to be "silent". The text box has already been displayed.
 # So this one just gives the item using the text box syntax
 def generate_progressive_undernet(progression_index, next_script) -> bytearray:
-
-    # F6 03 - Check for item. If you have it, load next_script, otherwise, continue
-    byte_list = [0xf6, 0x03, undernet_item_indices[progression_index], 0x01, next_script, next_script, 0xFF, 0xE9]
-
-    # Otherwise, give the item, with different code depending on if we're at max rank already or not
     if progression_index >= 8:
         # If we're at max rank, give bugfrags instead
         frag_bytes = int32_to_byte_list_le(20)
         byte_list = [0xF6, 0x50, frag_bytes[0], frag_bytes[1], frag_bytes[2], frag_bytes[3], 0xFF, 0xFF, 0xFF]
         byte_list.extend(generate_text_bytes("The extra data\ndecompiles into:\n\"20 BugFrags\"!!"))
     else:
-        # If there's still ranks to give, give the next item in the list
+        # F6 03 - Check for item. If you have it, load next_script, otherwise, continue
+        byte_list = [0xf6, 0x03, undernet_item_indices[progression_index], 0x01, next_script, next_script, 0xFF, 0xE9]
+
+        # Otherwise, give the item, with different code depending on if we're at max rank already or not
         byte_list.extend(generate_key_item_get(undernet_item_indices[progression_index], 1))
     byte_list.extend([0xEB, 0xE7]) # End the message
     return bytearray(byte_list)
