@@ -123,7 +123,10 @@ class MessengerWorld(World):
             "music_box": self.multiworld.music_box[self.player].value,
             "required_seals": self.required_seals,
             "locations": locations,
-            "settings": {"Difficulty": "Basic" if not self.multiworld.shuffle_seals[self.player] else "Advanced"},
+            "settings": {
+                "Difficulty": "Basic" if not self.multiworld.shuffle_seals[self.player] else "Advanced",
+                "Mega Shards": self.multiworld.shuffle_shards[self.player].value
+            },
             "logic": self.multiworld.logic_level[self.player].current_key,
         }
 

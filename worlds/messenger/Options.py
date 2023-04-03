@@ -1,4 +1,4 @@
-from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice
+from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice, Toggle
 
 
 class MessengerAccessibility(Accessibility):
@@ -25,6 +25,11 @@ class Logic(Choice):
 class PowerSeals(DefaultOnToggle):
     """Whether power seal locations should be randomized."""
     display_name = "Shuffle Seals"
+
+
+class MegaShards(Toggle):
+    """Whether mega shards should be item locations."""
+    display_name = "Shuffle Mega Time Shards"
 
 
 class Goal(Choice):
@@ -67,6 +72,7 @@ messenger_options = {
     "accessibility": MessengerAccessibility,
     "logic_level": Logic,
     "shuffle_seals": PowerSeals,
+    "shuffle_shards": MegaShards,
     "goal": Goal,
     "music_box": MusicBox,
     "notes_needed": NotesNeeded,

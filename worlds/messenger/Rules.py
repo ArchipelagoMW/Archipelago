@@ -227,5 +227,5 @@ def set_self_locking_items(multiworld: MultiWorld, player: int) -> None:
 
     # add these locations when seals aren't shuffled
     if not multiworld.shuffle_seals[player] and not multiworld.shuffle_shards[player]:
-        allow_self_locking_items(multiworld.get_region("Cloud Ruins", player), "Ruxxtin's Amulet")
+        allow_self_locking_items(multiworld.get_region("Cloud Ruins Right", player), "Ruxxtin's Amulet")
         allow_self_locking_items(multiworld.get_region("Forlorn Temple", player), *PHOBEKINS)

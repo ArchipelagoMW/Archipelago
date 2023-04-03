@@ -3,7 +3,7 @@ from typing import Set, TYPE_CHECKING, Optional, Dict
 from BaseClasses import Region, Location, Item, ItemClassification, Entrance
 from .Constants import SEALS, NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
 from .Options import Goal
-from .Regions import REGIONS
+from .Regions import REGIONS, MEGA_SHARDS
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -27,6 +27,9 @@ class MessengerRegion(Region):
             for seal_loc in SEALS:
                 if seal_loc.startswith(self.name.split(" ")[0]):
                     self.locations.append(MessengerLocation(seal_loc, self, name_to_id.get(seal_loc, None)))
+        if self.multiworld.shuffle_shards[self.player] and self.name in MEGA_SHARDS:
+            for shard in MEGA_SHARDS[self.name]:
+                self.locations.append(MessengerLocation(shard, self, name_to_id.get(shard, None)))
 
     def add_exits(self, exits: Set[str]) -> None:
         for exit in exits:
