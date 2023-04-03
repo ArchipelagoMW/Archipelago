@@ -165,7 +165,7 @@
 - name: Doom Castle - Sand Floor
   id: 1
   game_objects:
-  - name: "Doom Castle B2 - Sand Floor Chest"
+  - name: "Doom Castle B2 - Southeast Chest"
     object_id: 0x01
     type: "Chest"
     access: ["Bomb"]
@@ -345,7 +345,7 @@
 - name: Focus Tower 3F - Lower Floor
   id: 13
   game_objects:
-  - name: "Focus Tower 3F - Box"
+  - name: "Focus Tower 3F - River Door Box"
     object_id: 0x22
     type: "Box"
     access: []
@@ -2382,7 +2382,7 @@
     object_id: 0x15
     type: "Chest"
     access: ["Axe"]
-  - name: "Alive Forest - Neat Entrance Box"
+  - name: "Alive Forest - Near Entrance Box"
     object_id: 0xA5
     type: "Box"
     access: ["Axe"]
@@ -2690,11 +2690,11 @@
 - name: Giant Tree 4F Middle Floor
   id: 144
   game_objects:
-  - name: "Giant Tree 4F - Highest Platform South Box"
+  - name: "Giant Tree 4F - Highest Platform North Box"
     object_id: 0xB7
     type: "Box"
     access: []
-  - name: "Giant Tree 4F - Highest Platform North Box"
+  - name: "Giant Tree 4F - Highest Platform South Box"
     object_id: 0xB8
     type: "Box"
     access: []
