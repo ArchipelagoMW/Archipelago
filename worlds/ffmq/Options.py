@@ -13,31 +13,7 @@ class Logic(Choice):
     option_standard = 1
     option_expert = 2
     default = 1
-
-
-class OriginalChests(Toggle):
-    """Prioritize the original 29 red chest locations. Does not include the Venus Key Chest in Focus Tower or the new
-    locked chest in Spencer's Place. If enabled, they will all be guaranteed to have progression or useful items.
-    However, if brown boxes are also included, 87 non-prioritized locations will be forced to contain unimportant filler
-    items."""
-    default = 0
-
-
-class NPCs(Toggle):
-    """Prioritize the 16 NPC locations. These include the NPC locations from the original game, as well as the new
-    Rueben item in the Mine, the Venus Key Chest in Focus Tower, and the new locked chest in Spencer's Place.
-    If enabled, they will all be guaranteed to have progression or useful items. However, if brown boxes
-    are also included, 48 non-prioritized locations will be forced to contain unimportant filler items"""
-    default = 0
-
-
-class Battlefields(Toggle):
-    """Prioritize the 5 Battlefield locations. Battlefields are all the battlefields that gave a quest item in the
-    original game. If Shuffle Battlefields Rewards is enabled, the locations will change, but the same number of
-    battlefields will offer an item. If enabled, they will all be guaranteed to have progression or useful items.
-    However, if brown boxes are also included, 15 non-prioritized locations will be forced to contain unimportant
-    filler items"""
-    default = 0
+    display_name = "Logic"
 
 
 class BrownBoxes(Choice):
@@ -48,6 +24,7 @@ class BrownBoxes(Choice):
     option_include = 1
     option_shuffle = 2
     default = 2
+    display_name = "Brown Boxes"
 
 
 class SkyCoinMode(Choice):
@@ -60,21 +37,25 @@ class SkyCoinMode(Choice):
     option_save_the_crystals = 2
     option_shattered_sky_coin = 3
     default = 0
+    display_name = "Sky Coin Mode"
 
 
 class ShatteredSkyCoinQuantity(Choice):
     """Configure the number of the 40 Sky Coin Fragments required to enter the Doom Castle. Only has an effect if
     sky_coin_mode is set to shattered. low: 16. mid: 24. high: 32. random_narrow: random between 16 and 32.
-    random_wide: random between 10 and 38"""
+    random_wide: random between 10 and 38."""
     option_low_16 = 0
     option_mid_24 = 1
     option_high_32 = 2
     option_random_narrow = 3
     option_random_wide = 4
     default = 1
+    display_name = "Shattered Sky Coin"
 
 
 class StartingWeapon(Choice):
+    """Choose your starting weapon."""
+    display_name = "Starting Weapon"
     option_steel_sword = 0
     option_axe = 1
     option_cat_claw = 2
@@ -83,7 +64,8 @@ class StartingWeapon(Choice):
 
 
 class ProgressiveGear(Toggle):
-    """"""
+    display_name = "Progressive Gear"
+    """Pieces of gear are always acquired from weakest to strongest in a set."""
 
 
 class EnemiesDensity(Choice):
@@ -109,21 +91,27 @@ class EnemyScaling(Choice):
 
 
 class EnemiesScalingLower(EnemyScaling):
+    """Randomly adjust enemies stats by the selected range percentage. Include mini-bosses' weaker clones."""
     display_name = "Enemies Scaling Lower"
     default = 0
 
 
 class EnemiesScalingUpper(EnemyScaling):
+    """Randomly adjust enemies stats by the selected range percentage. Include mini-bosses' weaker clones."""
     display_name = "Enemies Scaling Upper"
     default = 4
 
 
 class BossesScalingLower(EnemyScaling):
+    """Randomly adjust bosses stats by the selected range percentage. Include Mini-Bosses, Bosses, Bosses' refights and
+    the Dark King."""
     display_name = "Bosses Scaling Lower"
     default = 0
 
 
 class BossesScalingUpper(EnemyScaling):
+    """Randomly adjust bosses stats by the selected range percentage. Include Mini-Bosses, Bosses, Bosses' refights and
+    the Dark King."""
     display_name = "Bosses Scaling Upper"
     default = 4
 
@@ -150,13 +138,13 @@ class ShuffleEnemiesPositions(Toggle):
 
 class ProgressiveFormations(Choice):
     """Enemies' formations are selected by regions, with the weakest formations always selected in Foresta and the
-    strongest in Windia. disabled: Standard formations are used. by_regions_strict: Formations will come exclusively
-    from the current region, whatever the map is. by_regions_keep_type: Formations will keep the original formation type
+    strongest in Windia. disabled: Standard formations are used. regions_strict: Formations will come exclusively
+    from the current region, whatever the map is. regions_keep_type: Formations will keep the original formation type
     and match with the nearest power level."""
     display_name = "Progressive Formations"
     option_disabled = 0
-    option_by_regions_strict = 1
-    option_by_regions_keep_type = 2
+    option_regions_strict = 1
+    option_regions_keep_type = 2
 
 
 class DoomCastle(Choice):
@@ -167,6 +155,12 @@ class DoomCastle(Choice):
     option_standard = 0
     option_boss_rush = 1
     option_dark_king_only = 2
+
+
+class DoomCastleShortcut(Toggle):
+    """Create a shortcut granting access from the start to Doom Castle at Focus Tower's entrance.
+    Also modify the Desert floor so it can be navigated without the Mega Grenades and the Dragon Claw."""
+    display_name = "Doom Castle Shortcut"
 
 
 class TweakFrustratingDungeons(Toggle):
@@ -216,6 +210,8 @@ class ShuffleBattlefieldRewards(Toggle):
 
 
 class BattlefieldsBattlesQuantities(Choice):
+    """Adjust the number of battles that need to be fought to get a battlefield's reward."""
+    display_name = "Battlefields Battles Quantity"
     option_ten = 0
     option_seven = 1
     option_five = 2
@@ -237,9 +233,6 @@ class RandomizeMusic(Toggle):
 
 option_definitions = {
     "logic": Logic,
-    # "prioritize_chests": OriginalChests,
-    # "prioritize_npcs": NPCs,
-    # "prioritize_battlefields": Battlefields,
     "brown_boxes": BrownBoxes,
     "sky_coin_mode": SkyCoinMode,
     "shattered_sky_coin_quantity": ShatteredSkyCoinQuantity,
@@ -253,15 +246,14 @@ option_definitions = {
     "enemizer_attacks": EnemizerAttacks,
     "shuffle_enemies_position": ShuffleEnemiesPositions,
     "progressive_formations": ProgressiveFormations,
-    "doom_castle": DoomCastle,
+    "doom_castle_mode": DoomCastle,
+    "doom_castle_shortcut": DoomCastleShortcut,
     "tweak_frustrating_dungeons": TweakFrustratingDungeons,
     "map_shuffle": MapShuffle,
     "crest_shuffle": CrestShuffle,
     "leveling_curve": LevelingCurve,
     "shuffle_battlefield_rewards": ShuffleBattlefieldRewards,
     "battlefields_battles_quantities": BattlefieldsBattlesQuantities,
-    # "randomize_benjamins_palette": RandomizeBenjaminsPalette,
-    # "randomize_music": RandomizeMusic
 
 
 }
