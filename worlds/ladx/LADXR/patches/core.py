@@ -1,6 +1,6 @@
 from ..assembler import ASM
 from ..entranceInfo import ENTRANCE_INFO
-from ..roomEditor import RoomEditor, ObjectWarp, ObjectHorizontal
+from ..roomEditor import RoomEditor, Object, ObjectWarp, ObjectHorizontal
 from ..backgroundEditor import BackgroundEditor
 from .. import utils
 
@@ -537,3 +537,13 @@ OAMData:
         gfx_low = "\n".join([line.split(" ")[n] for line in tile_graphics.split("\n")[8:]])
         rom.banks[0x38][0x1400+n*0x20:0x1410+n*0x20] = utils.createTileData(gfx_high)
         rom.banks[0x38][0x1410+n*0x20:0x1420+n*0x20] = utils.createTileData(gfx_low)
+
+# For the D7 exit, make it so that we can exit it properly in ER
+def fixD7exit(rom):
+    re = RoomEditor(rom, 0x0E)
+    for x in [0, 1, 2, 8, 9]:
+        for y in range(3):
+            re.removeObject(x, y)
+    re.objects.append(Object(5, 2, 0xE1))
+    re.objects.append(Object(5, 3, 0x4A))
+    re.store(rom)
