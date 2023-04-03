@@ -7,15 +7,18 @@ import logging
 snes_logger = logging.getLogger("SNES")
 
 ROM_NAME = (0x7FC0, 0x7FD4 + 1 - 0x7FC0)
-GAME_FLAGS = (0xF50EA8, 0xF50EE7 + 1 - 0xF50EA8)
+
+READ_DATA_START = 0xF50EA8
+READ_DATA_END = 0xF50FE7 + 1
+
+GAME_FLAGS = (0xF50EA8, 64)
 COMPLETED_GAME = (0xF50F22, 1)
-BATTLEFIELD_DATA = (0xF50FD4, 0xF50FE7 + 1 - 0xF50FD4)
 RECEIVED_DATA = (0xF50FD0, 3)
+BATTLEFIELD_DATA = (0xF50FD4, 20)
 
 ITEM_CODE_START = 0x420000
 
 IN_GAME_FLAG = (4 * 8) + 2
-
 
 NPC_CHECKS = {
     4325676: ((6 * 8) + 4, False),  # Old Man Level Forest
@@ -65,22 +68,27 @@ class FFMQClient(SNIClient):
         return True
 
     async def game_watcher(self, ctx):
-
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
-        #container_flags = await snes_read(ctx, *CONTAINER_FLAGS)
-        received = await snes_read(ctx, *RECEIVED_DATA)
-        completed_game = await snes_read(ctx, *COMPLETED_GAME)
-        battlefield_data = await snes_read(ctx, *BATTLEFIELD_DATA)
-        game_flags = await snes_read(ctx, *GAME_FLAGS)
+
+        data = await snes_read(ctx, READ_DATA_START, READ_DATA_END - READ_DATA_START)
+
+        def get_range(data_range):
+            return data[data_range[0] - READ_DATA_START:data_range[0] + data_range[1] - READ_DATA_START]
+
+        received = get_range(RECEIVED_DATA)
+        completed_game = get_range(COMPLETED_GAME)
+        battlefield_data = get_range(BATTLEFIELD_DATA)
+        game_flags = get_range(GAME_FLAGS)
+
         if game_flags is None:
             return
         if not get_flag(game_flags, IN_GAME_FLAG):
             return
 
         if not ctx.finished_game:
-                if completed_game[0] & 0x80:
-                    await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                    ctx.finished_game = True
+            if completed_game[0] & 0x80:
+                await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                ctx.finished_game = True
 
         old_locations_checked = ctx.locations_checked.copy()
 
@@ -96,13 +104,6 @@ class FFMQClient(SNIClient):
             if battlefield_data[battlefield] == 0:
                 ctx.locations_checked.add(offset["Battlefield"] + battlefield + 1)
 
-
-        # for box in range(201):
-        #     byte = int(box/8) + 5
-        #     bit = int(0x80/(2 ** (box % 8)))
-        #     if game_flags[byte] & bit:
-        #         ctx.locations_checked.add(offset["Box"] + box)
-
         if old_locations_checked != ctx.locations_checked:
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": ctx.locations_checked}])
 
@@ -111,33 +112,8 @@ class FFMQClient(SNIClient):
             if received_index < len(ctx.items_received):
                 item = ctx.items_received[received_index]
                 received_index += 1
-                # logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                #     color(ctx.item_names[item.item], 'red', 'bold'),
-                #     color(ctx.player_names[item.player], 'yellow'),
-                #     ctx.location_names[item.location], received_index, len(ctx.items_received)))
                 code = (item.item - ITEM_CODE_START) + 1
                 if code > 256:
                     code -= 256
                 snes_buffered_write(ctx, RECEIVED_DATA[0], bytes([code]))
         await snes_flush_writes(ctx)
-
-    # async def server_auth(self, password_requested: bool = False) -> None:
-    #     if password_requested and not self.password:
-    #         await ctx.server_auth(password_requested)
-    #     if self.rom is None:
-    #         self.awaiting_rom = True
-    #         snes_logger.info(
-    #             "No ROM detected, awaiting snes connection to authenticate to the multiworld server (/snes)")
-    #         return
-    #     self.awaiting_rom = False
-    #     # TODO: This looks kind of hacky...
-    #     # Context.auth is meant to be the "name" parameter in send_connect,
-    #     # which has to be a str (bytes is not json serializable).
-    #     # But here, Context.auth is being used for something else
-    #     # (where it has to be bytes because it is compared with rom elsewhere).
-    #     # If we need to save something to compare with rom elsewhere,
-    #     # it should probably be in a different variable,
-    #     # and let auth be used for what it's meant for.
-    #     #self.auth = self.rom
-    #     #auth = base64.b64encode(self.rom).decode()
-    #     await self.send_connect(name="FFMQPlayer")
