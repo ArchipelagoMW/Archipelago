@@ -1,11 +1,10 @@
-import logging
-import typing
 import collections
 import itertools
+import logging
+import typing
 from collections import Counter, deque
 
-from BaseClasses import CollectionState, Location, LocationProgressType, MultiWorld, Item, ItemClassification
-
+from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld
 from worlds.AutoWorld import call_all
 from worlds.generic.Rules import add_item_rule
 
@@ -91,7 +90,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
                         # Unplaceable items can sometimes be swapped infinitely. Limit the
                         # number of times we will swap an individual item to prevent this
                         swap_count = swapped_items[placed_item.player,
-                                                   placed_item.name]
+                        placed_item.name]
                         if swap_count > 1:
                             continue
 
@@ -119,7 +118,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
 
                                 swap_count += 1
                                 swapped_items[placed_item.player,
-                                              placed_item.name] = swap_count
+                                placed_item.name] = swap_count
 
                                 reachable_items[placed_item.player].appendleft(
                                     placed_item)
@@ -199,7 +198,7 @@ def remaining_fill(world: MultiWorld,
                 # number of times we will swap an individual item to prevent this
 
                 if swapped_items[placed_item.player,
-                                 placed_item.name] > 1:
+                placed_item.name] > 1:
                     continue
 
                 location.item = None
@@ -210,7 +209,7 @@ def remaining_fill(world: MultiWorld,
                     spot_to_fill = placements.pop(i)
 
                     swapped_items[placed_item.player,
-                                  placed_item.name] += 1
+                    placed_item.name] += 1
 
                     itempool.append(placed_item)
 
@@ -252,7 +251,7 @@ def accessibility_corrections(world: MultiWorld, state: CollectionState, locatio
                              not location.can_reach(maximum_exploration_state)]
     for location in unreachable_locations:
         if (location.item is not None and location.item.advancement and location.address is not None and not
-                location.locked and location.item.player not in minimal_players):
+        location.locked and location.item.player not in minimal_players):
             pool.append(location.item)
             state.remove(location.item)
             location.item = None
@@ -550,7 +549,7 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
             return {loc for loc in locations if sphere_state.can_reach(loc)}
 
         def item_percentage(player: int, num: int) -> float:
-            return num / total_locations_count[player]
+            return num / total_locations_count[player] if total_locations_count[player] else 0
 
         while True:
             # Gather non-locked locations.
@@ -631,8 +630,8 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
                             testing = items_to_test.pop()
                             reducing_state = state.copy()
                             for location in itertools.chain((
-                                l for l in items_to_replace
-                                if l.item.player == player
+                                    l for l in items_to_replace
+                                    if l.item.player == player
                             ), items_to_test):
                                 reducing_state.collect(location.item, True, location)
 
@@ -824,7 +823,6 @@ def distribute_planned(world: MultiWorld) -> None:
                 locations.remove("non_early_locations")
                 for player in worlds:
                     locations += non_early_locations[player]
-
 
             block['locations'] = locations
 
