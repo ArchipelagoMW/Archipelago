@@ -2,13 +2,97 @@ import yaml
 from pathlib import Path
 from BaseClasses import Region, MultiWorld, Entrance, Location, LocationProgressType
 from worlds.generic.Rules import add_rule
-from .Items import item_groups
+from .Items import item_groups, yaml_item
 from copy import deepcopy
 import pkgutil
 
 # base_path = Path(__file__).parent
 # file_path = (base_path / "data/rooms.yaml").resolve()
 rooms = yaml.load(pkgutil.get_data(__name__, "data/rooms.yaml"), yaml.Loader)
+
+battlefields = [
+    {"name": "Battlefield - Level Forest",
+     "object_id": 0x01,
+     "type": "Battlefield",
+     "region": "Earth Region"},
+    {"name": "Battlefield - West Sand",
+     "object_id": 0x02,
+     "type": "Battlefield",
+     "region": "Earth Region"},
+    {"name": "Battlefield - West Sand",
+     "object_id": 0x03,
+     "type": "Battlefield",
+     "region": "Earth Region"},
+    {"name": "Battlefield - Sand Door",
+     "object_id": 0x04,
+     "type": "Battlefield",
+     "region": "Water Region"},
+    {"name": "Battlefield - Lake Corner",
+     "object_id": 0x05,
+     "type": "Battlefield",
+     "region": "Water Region"},
+    {"name": "Battlefield - Aquaria",
+     "object_id": 0x06,
+     "type": "Battlefield",
+     "region": "Water Region"},
+    {"name": "Battlefield - Wintry Cave South",
+     "object_id": 0x07,
+     "type": "Battlefield",
+     "region": "Water Region"},
+    {"name": "Battlefield - Wintry Cave West",
+     "object_id": 0x08,
+     "type": "Battlefield",
+     "region": "Water Region"},
+    {"name": "Battlefield - Waterfall",
+     "object_id": 0x09,
+     "type": "Battlefield",
+     "region": "Water Region"},
+    {"name": "Battlefield - Frozen Strip East",
+     "object_id": 0x0A,
+     "type": "Battlefield",
+     "region": "Frozen Strip"},
+    {"name": "Battlefield - Frozen Strip West",
+     "object_id": 0x0B,
+     "type": "Battlefield",
+     "region": "Frozen Strip"},
+    {"name": "Battlefield - Earthquake Shelf South",
+     "object_id": 0x0C,
+     "type": "Battlefield",
+     "region": "Fire Region"},
+    {"name": "Battlefield - Earthquake Shelf Center",
+     "object_id": 0x0D,
+     "type": "Battlefield",
+     "region": "Fire Region"},
+    {"name": "Battlefield - Earthquake Shelf North",
+     "object_id": 0x0E,
+     "type": "Battlefield",
+     "region": "Fire Region"},
+    {"name": "Battlefield - Boulder Path",
+     "object_id": 0x0F,
+     "type": "Battlefield",
+     "region": "Fire Region"},
+    {"name": "Battlefield - Earthquake Plains",
+     "object_id": 0x10,
+     "type": "Battlefield",
+     "region": "Fire Region"},
+    {"name": "Battlefield - Earthquake Hills",
+     "object_id": 0x11,
+     "type": "Battlefield",
+     "region": "Fire Region"},
+    {"name": "Battlefield - Volcano",
+     "object_id": 0x12,
+     "type": "Battlefield",
+     "region": "Volcano Battlefield"},
+    {"name": "Battlefield - Ocean View West",
+     "object_id": 0x13,
+     "type": "Battlefield",
+     "region": "Wind Region"},
+    {"name": "Battlefield - Ocean View East",
+     "object_id": 0x14,
+     "type": "Battlefield",
+     "region": "Wind Region"},
+
+]
 
 # file_path = (base_path / "data/shufflingdata.yaml").resolve()
 # with open(file_path) as file:
@@ -75,33 +159,30 @@ object_type_table = {}
 offset = {"Chest": 0x420000, "Box": 0x420000, "NPC": 0x420000 + 300, "Battlefield": 0x420000 + 350}
 for room in rooms:
     for object in room["game_objects"]:
-        if object["type"] in ("Chest", "NPC", "Battlefield", "Box") and "Hero Chest" not in object["name"]:
+        if object["type"] in ("Chest", "NPC", "Box") and "Hero Chest" not in object["name"]:
             #     location_table[object["name"]] = index
             object_id_table[object["name"]] = object["object_id"]
             object_type_table[object["name"]] = object["type"]
         #     index += 1
+for battlefield in battlefields:
+    #location_table[battlefield["name"]] = offset["Battlefield"] + battlefield["object_id"]
+    object_id_table[battlefield["name"]] = battlefield["object_id"]
+    object_type_table[battlefield["name"]] = "Battlefield"
 location_table = {loc_name: offset[object_type_table[loc_name]] + obj_id for loc_name, obj_id in
                   object_id_table.items()}
 
 
-def yaml_item(text):
-    if text == "CaptainCap":
-        return "Captain's Cap"
-    return "".join(
-        [(" " + c if (c.isupper() or c.isnumeric()) and not (text[i - 1].isnumeric() and c == "F") else c) for
-         i, c in enumerate(text)]).strip()
-
-
 ow_regions = {
-    "Earth Region": ([*range(445, 450)], ([2, 6], [25, 0], [31, 0], [36, 0], [37, 0]), [2]),
-    "Water Region": ([*range(450, 454), *range(455, 457)], ([4, 6], [13, 6], [8, 6], [49, 0], [53, 0], [56, 0]), [6]),
-    "Fire Region": ([*range(460, 466)], ([6, 6], [9, 6], [98, 0], [16, 6], [103, 0], [104, 0]), (13, 16)),
+    "Earth Region": ([*range(445, 450)], ([2, 6], [25, 0], [31, 0], [36, 0], [37, 0])),
+    "Water Region": ([*range(450, 454), *range(455, 457)], ([4, 6], [13, 6], [8, 6], [49, 0], [53, 0], [56, 0])),
+    "Fire Region": ([*range(460, 466)], ([6, 6], [9, 6], [98, 0], [16, 6], [103, 0], [104, 0])),
     "Wind Region": ([*range(466, 475)], ([3, 6], [140, 0], [142, 0], [18, 6], [173, 0], [174, 0], [10, 6], [184, 0]), ()),
-    "Frozen Strip": ([*range(458, 460)], ([5, 6], [15, 6]), [10]),
-    "Spencer's Place": ([457], ([7, 6]), ()),
-    "Inaccessible": ([454, 475, 477], ([19, 6], [17, 6], [14, 6]), ()),
-    "Mac's Ship": ([*range(478, 480)], ([37, 8]), ()),
-    "Doom Castle": ([476], ([1, 6]), ())
+    "Frozen Strip": ([*range(458, 460)], ([5, 6], [15, 6])),
+    "Spencer's Place": ([457], ([7, 6])),
+    "Inaccessible": ([454, 475, 477], ([19, 6], [17, 6], [14, 6])),
+    "Mac's Ship": ([*range(478, 480)], ([37, 8])),
+    "Doom Castle": ([476], ([1, 6])),
+    "Volcano Battlefield": ([], [])
 }
 
 weapons = ("Claw", "Bomb", "Sword", "Axe")
@@ -137,7 +218,10 @@ def create_regions(self):
     menu_region.locations.append(FFMQLocation(self.player, "Starting Armor", None, "Trigger",
                                               event=self.create_item("Steel Armor")))
     menu_region.locations[-1].parent_region = menu_region
-
+    if self.multiworld.sky_coin_mode[self.player] == "start_with":
+        menu_region.locations.append(FFMQLocation(self.player, "Starting Coin", None, "Trigger",
+                                                  event=self.create_item("Sky Coin")))
+        menu_region.locations[-1].parent_region = menu_region
     # if self.multiworld.map_shuffle[self.player]:
     #     self.rooms = rooms.deepcopy()
     #     local_connectors = connectors.copy()
@@ -150,13 +234,12 @@ def create_regions(self):
     #         while branches:
     #             map = self.random.randint(len(map_sets))
 
+
     for room in rooms:
         if room["id"] == 0:
             for region in ow_regions:
                 self.multiworld.regions.append(create_region(self.multiworld, self.player, region, 0,
-                    [FFMQLocation(self.player, object["name"], location_table[object["name"]], object["type"]) for object in
-                    room["game_objects"] if object["object_id"] in ow_regions[region][2]], [link for link in
-                    room["links"] if link["entrance"] in ow_regions[region][0]]))
+                    [], [link for link in room["links"] if link["entrance"] in ow_regions[region][0]]))
         else:
             self.multiworld.regions.append(create_region(self.multiworld, self.player, room["name"], room["id"],
                 [FFMQLocation(self.player, object["name"], location_table[object["name"]] if object["name"] in
@@ -164,6 +247,19 @@ def create_regions(self):
                 self.create_item(yaml_item(object["on_trigger"][0])) if object["type"] == "Trigger" else None) for
                 object in room["game_objects"] if "Hero Chest" not in object["name"] and (object["type"] != "Box" or
                 self.multiworld.brown_boxes[self.player] == "include")], room["links"]))
+
+    if self.multiworld.shuffle_battlefield_rewards[self.player]:
+        item_battlefields = self.multiworld.random.sample(list(range(1, 21)), 5)
+    else:
+        item_battlefields = [2, 6, 10, 13, 16]
+
+    for index in item_battlefields:
+        battlefield = battlefields[index - 1]
+        location = FFMQLocation(self.player, battlefield["name"], location_table[battlefield["name"]], "Battlefield")
+        region = self.multiworld.get_region(battlefield["region"], self.player)
+        location.parent_region = region
+        region.locations.append(location)
+
     dark_king_room = self.multiworld.get_region("Doom Castle Dark King Room", self.player)
     dark_king = FFMQLocation(self.player, "Dark King", None, "Trigger", [])
     dark_king.parent_region = dark_king_room
@@ -175,7 +271,7 @@ def create_regions(self):
         "Water Region": lambda state: state.has("Sand Coin", self.player) or state.has_all(
             ["River Coin", "Dualhead Hydra", "Summer Aquaria"], self.player),
         "Spencer's Place": lambda state: state.has_all(["Sun Coin", "Rainbow Bridge"], self.player),
-        "Frozen Strip": lambda state: state.has_all(["Sand Coin", "Wake Water", "Summer Aquaria"], self.player) \
+        "Frozen Strip": lambda state: state.has_all(["Sand Coin", "Wakewater", "Summer Aquaria"], self.player) \
             or state.has_all(["River Coin", "Dualhead Hydra", "Summer Aquaria"], self.player),
         "Fire Region": lambda state: state.has("River Coin", self.player) or state.has_all(
             ["Sand Coin", "Dualhead Hydra", "Summer Aquaria"], self.player),
@@ -184,6 +280,8 @@ def create_regions(self):
         "Inaccessible": lambda state: False,
         "Doom Castle": lambda state: state.has_all(
             ["Ship Dock Access", "Ship Steering Wheel", "Ship Loaned"], self.player),
+        "Volcano Battlefield": lambda state: state.has_all(["River Coin", "Dualhead Hydra"], self.player) or
+                                             state.has_all(["Sand Coin", "Summer Aquaria"], self.player)
     }
 
     for region in ow_regions:

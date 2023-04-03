@@ -15,7 +15,7 @@ class ItemData:
 item_table = {
     "Elixir": ItemData(0, ItemClassification.progression, ["Key Items"]),
     "Tree Wither": ItemData(1, ItemClassification.progression, ["Key Items"]),
-    "Wake Water": ItemData(2, ItemClassification.progression, ["Key Items"]),
+    "Wakewater": ItemData(2, ItemClassification.progression, ["Key Items"]),
     "Venus Key": ItemData(3, ItemClassification.progression, ["Key Items"]),
     "Multi Key": ItemData(4, ItemClassification.progression, ["Key Items"]),
     "Mask": ItemData(5, ItemClassification.progression, ["Key Items"]),
@@ -86,7 +86,7 @@ item_table = {
     "Progressive Accessory": ItemData(61 + 256, ItemClassification.useful, ["Accessories"]),
     "Charm": ItemData(61, ItemClassification.useful, ["Accessories"]),
     "Magic Ring": ItemData(62, ItemClassification.useful, ["Accessories"]),
-    "Cupid Lock": ItemData(63, ItemClassification.useful, ["Accessories"]),
+    "Cupid Locket": ItemData(63, ItemClassification.useful, ["Accessories"]),
     "Bomb Refill": ItemData(221, ItemClassification.filler, ["Refills"]),
     "Projectile Refill": ItemData(222, ItemClassification.filler, ["Refills"]),
     #"None": ItemData(255, ItemClassification.progression, []),
@@ -178,6 +178,23 @@ prog_map = {
     "Accessories": "Progressive Accessory",
 }
 
+yaml_to_ap = {
+    "WakeWater": "Wakewater",
+    "CaptainCap": "Captain's Cap"
+}
+
+ap_to_yaml = {
+    "Wakewater": "WakeWater"
+}
+
+
+def yaml_item(text):
+    if text in yaml_to_ap:
+        return yaml_to_ap[text]
+    return "".join(
+        [(" " + c if (c.isupper() or c.isnumeric()) and not (text[i - 1].isnumeric() and c == "F") else c) for
+         i, c in enumerate(text)]).strip()
+
 
 item_groups = {}
 for item, data in item_table.items():
@@ -189,9 +206,8 @@ def create_items(self) -> None:
     items = []
     #self.multiworld.push_precollected(self.create_item(self.multiworld.starting_weapon[self.player].current_key.title().replace("_", " ")))
     #self.multiworld.push_precollected(self.create_item("Steel Armor"))
-    if self.multiworld.sky_coin_mode[self.player] == "start_with":
-        self.multiworld.push_precollected(self.create_item("Sky Coin"))
-
+    # if self.multiworld.sky_coin_mode[self.player] == "start_with":
+    #     self.multiworld.push_precollected(self.create_item("Sky Coin"))
 
     def add_item(item_name):
         if item_name in ["Steel Armor", "Sky Fragment"] or "Progressive" in item_name:

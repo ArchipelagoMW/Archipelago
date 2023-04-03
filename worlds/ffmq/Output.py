@@ -3,6 +3,7 @@ import os
 import zipfile
 from copy import deepcopy
 from .Regions import object_id_table
+from .Items import ap_to_yaml
 from Main import __version__
 from worlds.Files import APContainer
 import pkgutil
@@ -19,15 +20,16 @@ def generate_output(self, output_directory):
                     item_name = self.item_id_to_name[location.item.code - 256]
                 else:
                     item_name = location.item.name
-                item_name = "".join(item_name.split(" "))
+                if item_name in ap_to_yaml:
+                    item_name = ap_to_yaml[item_name]
+                else:
+                    item_name = "".join(item_name.split("'"))
+                    item_name = "".join(item_name.split(" "))
             else:
                 if location.item.advancement or location.item.useful:
                     item_name = "APItem"
                 else:
                     item_name = "APItemFiller"
-            item_name = "".join(item_name.split("'"))
-            if item_name == "CaptainsCap":
-                item_name = "CaptainCap"
             item_placement.append({"object_id": object_id_table[location.name], "type": location.type, "content":
                 item_name, "player": self.multiworld.player_name[location.item.player], "item_name": location.item.name}
                                   )
@@ -62,12 +64,12 @@ def generate_output(self, output_directory):
                    "battles_quantity": cc(mw.battlefields_battles_quantities[p]) if
                                         mw.battlefields_battles_quantities[p].value < 5 else "RandomLow" if
                                         mw.battlefields_battles_quantities[p].value == 5 else "RandomHigh",
-                   "shuffle_battlefield_rewards": False, # tf(mw.shuffle_battlefield_rewards[p]),
+                   "shuffle_battlefield_rewards": tf(mw.shuffle_battlefield_rewards[p]),
                    "random_starting_weapon": True,
                    "progressive_gear": tf(mw.progressive_gear[p]),
                    "tweaked_dungeons": tf(mw.tweak_frustrating_dungeons[p]),
-                   "doom_castle_mode": cc(mw.doom_castle[p]),
-                   "doom_castle_shortcut": False,
+                   "doom_castle_mode": cc(mw.doom_castle_mode[p]),
+                   "doom_castle_shortcut": tf(mw.doom_castle_shortcut[p]),
                    "sky_coin_mode": cc(mw.sky_coin_mode[p]),
                    "sky_coin_fragments_qty": cc(mw.shattered_sky_coin_quantity[p]),
                    "enable_spoilers": False,
@@ -100,7 +102,6 @@ def generate_output(self, output_directory):
         zf.writestr("setup.yaml", yaml.dump(setup))
 
         APMQ.write_contents(zf)
-
 
 class APMQFile(APContainer):
     game = "Final Fantasy Mystic Quest"
