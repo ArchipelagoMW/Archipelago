@@ -1,6 +1,8 @@
 # items
 # listing individual groups first for easy lookup
-NOTES = [
+from typing import List
+
+NOTES: List[str] = [
     "Key of Hope",
     "Key of Chaos",
     "Key of Courage",
@@ -9,7 +11,7 @@ NOTES = [
     "Key of Symbiosis"
 ]
 
-PROG_ITEMS = [
+PROG_ITEMS: List[str] = [
     "Wingsuit",
     "Rope Dart",
     "Ninja Tabi",
@@ -23,19 +25,19 @@ PROG_ITEMS = [
     # "Astral Tea Leaves"
 ]
 
-PHOBEKINS = [
+PHOBEKINS: List[str] = [
     "Necro",
     "Pyro",
     "Claustro",
     "Acro"
 ]
 
-USEFUL_ITEMS = [
+USEFUL_ITEMS: List[str] = [
     "Windmill Shuriken"
 ]
 
 # item_name_to_id needs to be deterministic and match upstream
-ALL_ITEMS = [
+ALL_ITEMS: List[str] = [
     *NOTES,
     "Windmill Shuriken",
     "Wingsuit",
@@ -59,7 +61,7 @@ ALL_ITEMS = [
 # locations
 # the names of these don't actually matter, but using the upstream's names for now
 # order must be exactly the same as upstream
-ALWAYS_LOCATIONS = [
+ALWAYS_LOCATIONS: List[str] = [
     # notes
     "Key of Love",
     "Key of Courage",
@@ -90,7 +92,7 @@ ALWAYS_LOCATIONS = [
     "Acro"
 ]
 
-SEALS = [
+SEALS: List[str] = [
     "Ninja Village Seal - Tree House",
 
     "Autumn Hills Seal - Trip Saws",
@@ -150,4 +152,12 @@ SEALS = [
     "Elemental Skylands Seal - Air",
     "Elemental Skylands Seal - Water",
     "Elemental Skylands Seal - Fire"
+]
+
+BOSS_LOCATIONS: List[str] = [
+    "Leaf Golem",
+    "Ruxxtin",
+    "Emerald Golem",
+    "Queen of Quills",
+    "Barma'thazel",
 ]

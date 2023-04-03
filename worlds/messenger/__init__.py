@@ -1,8 +1,8 @@
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, Optional
 
 from BaseClasses import Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS, ALWAYS_LOCATIONS, SEALS, ALL_ITEMS
+from .Constants import *
 from .Options import messenger_options, NotesNeeded, Goal, PowerSeals, Logic
 from .Regions import REGIONS, REGION_CONNECTIONS, MEGA_SHARDS
 from .SubClasses import MessengerRegion, MessengerItem
@@ -50,7 +50,13 @@ class MessengerWorld(World):
                        for item_id, item in enumerate(ALL_ITEMS, base_offset)}
     mega_shard_locs = [shard for region in MEGA_SHARDS for shard in MEGA_SHARDS[region]]
     location_name_to_id = {location: location_id
-                           for location_id, location in enumerate([*ALWAYS_LOCATIONS, *SEALS, *mega_shard_locs], base_offset)}
+                           for location_id, location in
+                           enumerate([
+                               *ALWAYS_LOCATIONS,
+                               *SEALS,
+                               *mega_shard_locs,
+                               *BOSS_LOCATIONS,
+                           ], base_offset)}
 
     data_version = 1
 

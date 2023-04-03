@@ -44,6 +44,7 @@ class MessengerRules:
             # howling grotto
             "Howling Grotto Seal - Windy Saws and Balls": self.has_wingsuit,
             "Howling Grotto Seal - Crushing Pits": lambda state: self.has_wingsuit(state) and self.has_dart(state),
+            "Emerald Golem": self.has_wingsuit,
             # searing crags
             "Key of Strength": lambda state: state.has("Power Thistle", self.player),
             # glacial peak

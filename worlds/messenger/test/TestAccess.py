@@ -13,7 +13,7 @@ class AccessTest(MessengerTestBase):
                      "Underworld Seal - Fireball Wave", "Underworld Seal - Rising Fanta", "Sun Crest", "Moon Crest",
                      "Sunken Shrine Seal - Waterfall Paradise", "Sunken Shrine Seal - Tabi Gauntlet",
                      "Mega Shard of the Moon", "Mega Shard of the Sun", "Under Entrance Mega Shard",
-                     "Hot Tub Mega Shard", "Projectile Pit Mega Shard"]
+                     "Hot Tub Mega Shard", "Projectile Pit Mega Shard", "Barma'thazel"]
         items = [["Ninja Tabi"]]
         self.assertAccessDependency(locations, items)
 
@@ -43,7 +43,8 @@ class AccessTest(MessengerTestBase):
                      "Forlorn Temple Seal - Rocket Sunset", "Astral Seed", "Autumn Hills Mega Shard",
                      "Hidden Entrance Mega Shard", "Sunny Day Mega Shard", "Down Under Mega Shard",
                      "Catacombs Mega Shard", "Above Entrance Mega Shard", "Abandoned Mega Shard", "Time Loop Mega Shard",
-                     "Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2"]
+                     "Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2", "Leaf Golem", "Ruxxtin",
+                     "Emerald Golem"]
         items = [["Wingsuit"]]
         self.assertAccessDependency(locations, items)
 
@@ -74,7 +75,7 @@ class AccessTest(MessengerTestBase):
                      "Above Entrance Mega Shard", "Abandoned Mega Shard", "Time Loop Mega Shard",
                      "Searing Crags Mega Shard", "Glacial Peak Mega Shard", "Cloud Entrance Mega Shard",
                      "Time Warp Mega Shard", "Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2",
-                     "Quick Restock Mega Shard 1", "Quick Restock Mega Shard 2"]
+                     "Quick Restock Mega Shard 1", "Quick Restock Mega Shard 2", "Leaf Golem", "Ruxxtin", "Emerald Golem"]
         items = [["Wingsuit", "Rope Dart"]]
         self.assertAccessDependency(locations, items)
 
