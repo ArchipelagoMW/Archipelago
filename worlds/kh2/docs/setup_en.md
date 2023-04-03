@@ -32,7 +32,7 @@ This mod is based upon Num's Garden of Assemblege Mod and requires it to work. W
 Load this mod just like the GoA ROM you did during the KH2 Rando setup. `KH2FM-Mods-equations19/auto-save` Location doesn't matter, required in case of crashes.
 
 <h2 style="text-transform:none";>What the Mod Manager Should Look Like.</h2>
-![image](https://i.imgur.com/uaad5RM.png)
+![image](https://i.imgur.com/bTbJ8KO.png)
 
 <h2 style="text-transform:none";>Using the KH2 Client</h2>
 
