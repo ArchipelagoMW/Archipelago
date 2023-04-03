@@ -24,7 +24,7 @@ from .LADXR.locations.instrument import Instrument
 from .LADXR.locations.constants import CHEST_ITEMS
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id)
-from .Options import links_awakening_options
+from .Options import links_awakening_options, EntranceShuffle
 from .Rom import LADXDeltaPatch
 
 
@@ -97,10 +97,32 @@ class LinksAwakeningWorld(World):
         self.ladxr_logic = LAXDRLogic(configuration_options=self.laxdr_options, world_setup=self.world_setup)
         self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.laxdr_options, self.multiworld.random).toDict()
     
-    # Failing seeds -
-    # Generating for 1 player, 45461688514297641536 Seed 17354083837832261298 with plando: bosses
-    # Generating for 1 player, 60252350886745909164 Seed 97069388582882178805 with plando: bosses
     def randomize_entrances(self):
+        entrance_pools = {}
+        indoor_pools = {}
+        entrance_pool_mapping = {}
+        for option in self.player_options.values():
+            if isinstance(option, EntranceShuffle):
+                print(option)
+                if option.value == EntranceShuffle.option_simple:
+                    entrance_pool_mapping[option.entrance_type] = option.entrance_type
+                elif option.value == EntranceShuffle.option_mixed:
+                    entrance_pool_mapping[option.entrance_type] = "mixed"
+                else:
+                    continue
+                pool = entrance_pools.setdefault(entrance_pool_mapping[option.entrance_type], [])
+                indoor_pool = indoor_pools.setdefault(entrance_pool_mapping[option.entrance_type], [])
+                for entrance_name, entrance in ENTRANCE_INFO.items():
+                    if entrance.type == option.entrance_type:
+                        pool.append(entrance_name)
+                        # Connectors have special handling
+                        if entrance.type != "connector":
+                            indoor_pool.append(entrance_name)
+
+        for pool in itertools.chain(entrance_pools.values(), indoor_pools.values()):
+            # Sort first so that we get the same result every time
+            pool.sort()
+        
         from .LADXR.logic.overworld import World
 
         has_castle_button = False
@@ -136,84 +158,103 @@ class LinksAwakeningWorld(World):
                     walk_locations(callback, o, filter, walked)
 
 
-
-
         # First shuffle the start location, if needed
-        start = world.start
-
-        # Get the list of all unseen locations
-        def shuffleable(entrance_name, location):
-            return ENTRANCE_INFO[entrance_name].type == "connector"
-
-        unshuffled_connectors = copy.copy(connector_info)
-        random.shuffle(unshuffled_connectors)
-
-        unseen_entrances = [k for k,v in world.overworld_entrance.items() if shuffleable(k, v.location)]
-
-        location_to_entrances = {}
-        for k,v in world.overworld_entrance.items():
-            location_to_entrances.setdefault(v.location,[]).append(k)
-
-        unshuffled_entrances = copy.copy(unseen_entrances)
-        seen_locations = set()
-        def mark_location(l):
-            if l in location_to_entrances:
-                for entrance in location_to_entrances[l]:
-                    seen_locations.add(entrance)
-                    if entrance in unseen_entrances:
-                        unseen_entrances.remove(entrance)
-
-        # TODO: we can reuse our walked location cache
-        walk_locations(callback=mark_location, n=start)
-
-        while unseen_entrances:
-            # Find the places we haven't yet seen
-            # Pick one
-            unseen_entrance_to_connect = random.choice(unseen_entrances)
-
-            # Pick an unshuffled seen entrance
-            l = list(seen_locations.intersection(unshuffled_entrances))
-            l.sort()
-            seen_entrance_to_connect = random.choice(l)
-            
-            # Pick a connector
-            connector = unshuffled_connectors.pop()
-            if connector.castle_button:
-                has_castle_button = True
-            # Pick the connector direction
-            entrances = connector.entrances
-            if not connector.oneway:
-                entrances = list(entrances)
-                random.shuffle(entrances)
-            else:
-                assert len(connector.entrances) == 2
-            A = connector.entrances[0]
-            B = connector.entrances[1]
-            C = len(connector.entrances) > 2 and connector.entrances[2] or None
-
-            # Flag the two doors as connected
-            self.world_setup.entrance_mapping[seen_entrance_to_connect] = A            
-            self.world_setup.entrance_mapping[unseen_entrance_to_connect] = B
-            # Walk the new locations
-            walk_locations(callback=mark_location, n=world.overworld_entrance[unseen_entrance_to_connect].location)
-            assert unseen_entrance_to_connect not in unseen_entrances
-            unshuffled_entrances.remove(seen_entrance_to_connect)
-            unshuffled_entrances.remove(unseen_entrance_to_connect)
-            if C:
-                third_entrance_to_connect = random.choice(list(unshuffled_entrances))
-                self.world_setup.entrance_mapping[third_entrance_to_connect] = C
-                walk_locations(callback=mark_location, n=world.overworld_entrance[third_entrance_to_connect].location)
-                unshuffled_entrances.remove(third_entrance_to_connect)
-
-        # Shuffle the remainder
-        unshuffled_entrances = list(unshuffled_entrances)
-        random.shuffle(unshuffled_entrances)
-        random.shuffle(unshuffled_connectors)
-        while unshuffled_entrances:
-            connector = unshuffled_connectors.pop()
-            for entrance in connector.entrances:
-                self.world_setup.entrance_mapping[unshuffled_entrances.pop()] = entrance
         
+        if "start" in entrance_pool_mapping:
+            # if simple, swap with a random dummy entrance
+            
+            # if mixed, swap with any random entrance
+            pass
+        else:
+            start = world.start
+
+        # First shuffle connectors, as they will fail if shuffled randomly
+        if "connector" in entrance_pool_mapping:
+            # Get the list of unshuffled connectors
+            unshuffled_connectors = copy.copy(connector_info)
+            random.shuffle(unshuffled_connectors)
+
+            # Get the list of unshuffled candidates connector entrances 
+            unseen_entrances = copy.copy(entrance_pools[entrance_pool_mapping["connector"]])
+
+            location_to_entrances = {}
+            for k,v in world.overworld_entrance.items():
+                location_to_entrances.setdefault(v.location,[]).append(k)
+
+            unshuffled_entrances = entrance_pools[entrance_pool_mapping["connector"]]
+            seen_locations = set()
+            def mark_location(l):
+                if l in location_to_entrances:
+                    for entrance in location_to_entrances[l]:
+                        seen_locations.add(entrance)
+                        if entrance in unseen_entrances:
+                            unseen_entrances.remove(entrance)
+
+            # TODO: we can reuse our walked location cache
+            walk_locations(callback=mark_location, n=start)
+
+            while unseen_entrances:
+                # Find the places we haven't yet seen
+                # Pick one
+                unseen_entrance_to_connect = random.choice(unseen_entrances)
+
+                # Pick an unshuffled seen entrance
+                l = list(seen_locations.intersection(unshuffled_entrances))
+                l.sort()
+                seen_entrance_to_connect = random.choice(l)
+                
+                # Pick a connector
+                connector = unshuffled_connectors.pop()
+                if connector.castle_button:
+                    has_castle_button = True
+                # Pick the connector direction
+                entrances = connector.entrances
+                if not connector.oneway:
+                    entrances = list(entrances)
+                    random.shuffle(entrances)
+                else:
+                    assert len(connector.entrances) == 2
+                A = connector.entrances[0]
+                B = connector.entrances[1]
+                C = len(connector.entrances) > 2 and connector.entrances[2] or None
+
+                # Flag the two doors as connected
+                self.world_setup.entrance_mapping[seen_entrance_to_connect] = A            
+                self.world_setup.entrance_mapping[unseen_entrance_to_connect] = B
+                # Walk the new locations
+                walk_locations(callback=mark_location, n=world.overworld_entrance[unseen_entrance_to_connect].location)
+                assert unseen_entrance_to_connect not in unseen_entrances
+                unshuffled_entrances.remove(seen_entrance_to_connect)
+                unshuffled_entrances.remove(unseen_entrance_to_connect)
+                if C:
+                    third_entrance_to_connect = random.choice(list(unshuffled_entrances))
+                    self.world_setup.entrance_mapping[third_entrance_to_connect] = C
+                    walk_locations(callback=mark_location, n=world.overworld_entrance[third_entrance_to_connect].location)
+                    unshuffled_entrances.remove(third_entrance_to_connect)
+
+            # Shuffle the remainder
+            random.shuffle(unshuffled_entrances)
+            random.shuffle(unshuffled_connectors)
+            while unshuffled_connectors:
+                connector = unshuffled_connectors.pop()
+                for entrance in connector.entrances:
+                    self.world_setup.entrance_mapping[unshuffled_entrances.pop()] = entrance
+
+        # Now for each pool of entrances, shuffle
+        for pool_name, pool in entrance_pools.items():
+            random.shuffle(pool)
+            indoor_pool = indoor_pools[pool_name]
+            random.shuffle(indoor_pool)
+            for a, b in zip(pool, indoor_pool):
+                self.world_setup.entrance_mapping[a] = b
+        
+        seen_keys = set()
+        seen_values = set()
+        for k, v in self.world_setup.entrance_mapping.items():
+            assert k not in seen_keys
+            assert v not in seen_values, v
+            seen_keys.add(k)
+            seen_values.add(v)
     def create_regions(self) -> None:
         # Initialize
         self.convert_ap_options_to_ladxr_logic()

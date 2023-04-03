@@ -68,9 +68,10 @@ class StartShuffle(EntranceShuffle):
     """
     Shuffle Start Location
     [Vanilla] No changes
-    [Simple] Your start location will be mixed with the single pool, or swapped with a "single" entrance (if there is no single shuffle)
+    [Simple] Your start location will be mixed with the dummy pool, or swapped with a "dummy" entrance (if there is no dummy shuffle)
     [Mixed] Your start location will be shuffled among all other non-connector entrances, or swapped with a random non-connector (if there are no other shuffles enabled)
     """
+    entrance_type="start"
 
 class SingleEntranceShuffle(EntranceShuffle):
     """
@@ -79,6 +80,7 @@ class SingleEntranceShuffle(EntranceShuffle):
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among all other entrances
     """
+    entrance_type="single"
 
 class DummyEntranceShuffle(EntranceShuffle):
     """
@@ -87,22 +89,25 @@ class DummyEntranceShuffle(EntranceShuffle):
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among all other entrances
     """
+    entrance_type="dummy"
 
-class InsanityEntranceShuffle(EntranceShuffle):
+class AnnoyingEntranceShuffle(EntranceShuffle):
     """
-    Shuffle Insanity Entrances (entrances that will be really annoying if moved - mamu or raft house)
+    Shuffle Annoying Entrances (entrances that will be really annoying if moved - mamu or raft house)
     [Vanilla] No changes
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among all other entrances
     """
+    entrance_type="insanity"
 
-class InsanityEntranceShuffle(EntranceShuffle):
+class WaterEntranceShuffle(EntranceShuffle):
     """
-    Shuffle Insanity Entrances (entrances that will be really annoying if moved - mamu or raft house)
+    Shuffle Water Entrances (entrances that drop you into water)
     [Vanilla] No changes
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among all other entrances
     """
+    entrance_type="water"
 
 class ConnectorEntranceShuffle(EntranceShuffle):
     """
@@ -111,6 +116,7 @@ class ConnectorEntranceShuffle(EntranceShuffle):
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among all other entrances
     """
+    entrance_type="connector"
 
 class DungeonEntranceShuffle(EntranceShuffle):
     """
@@ -119,6 +125,8 @@ class DungeonEntranceShuffle(EntranceShuffle):
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among other entrances
     """
+    entrance_type="dungeon"
+
 
 class DungeonItemShuffle(Choice):
     option_original_dungeon = 0
@@ -414,8 +422,8 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'start_shuffle': StartShuffle,
     'single_entrance_shuffle': SingleEntranceShuffle,
     'dummy_entrance_shuffle': DummyEntranceShuffle,
-    'insanity_entrance_shuffle': InsanityEntranceShuffle,
-    'insanity_entrance_shuffle': InsanityEntranceShuffle,
+    'annoying_entrance_shuffle': AnnoyingEntranceShuffle,
+    'water_entrance_shuffle': WaterEntranceShuffle,
     'connector_entrance_shuffle': ConnectorEntranceShuffle,
     'dungeon_entrance_shuffle': DungeonEntranceShuffle,
     # 'bossshuffle': BossShuffle,
