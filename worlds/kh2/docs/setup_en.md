@@ -54,7 +54,7 @@ Most checks will be sent to you anywhere outside a load or cutscene.<br>
 
 <h2 style="text-transform:none";>Recommendation</h2>
 
-- This will be the recommended file to select when loading an autosave if/when your game crashes.
+- Recommended making a save at the start of the GoA before opening anything. This will be the recommended file to select when loading an autosave if/when your game crashes.
     - If you don't want to have a save in the GoA. Disconnect the client, load the auto save, and then reconnect the client after it loads the auto save.
 - Recommended to set fps limit to 60fps.
 - Recommended to run the game in windows/borderless windowed mode. Fullscreen is stable but the game can crash if you alt-tab out.
