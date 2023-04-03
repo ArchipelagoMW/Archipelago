@@ -228,6 +228,7 @@ class SC2Context(CommonContext):
     checks_per_level = 1
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
     last_bot: typing.Optional[ArchipelagoBot] = None
+    temp_items = queue.Queue()
 
     def __init__(self, *args, **kwargs):
         super(SC2Context, self).__init__(*args, **kwargs)
@@ -649,6 +650,8 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     want_close: bool = False
     can_read_game = False
 
+    last_temp_item_iteration: int = 0
+    temp_item_delay = 160
     last_received_update: int = 0
 
     def __init__(self, ctx: SC2Context, mission_id):
@@ -702,6 +705,13 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                 await self.chat_send("UpdateTech {} {} {} {} {} {}".format(
                     current_items[0], current_items[1], current_items[2], current_items[3], current_items[4],
                     current_items[5]))
+                # Storing temporary items
+                new_items = self.ctx.items_received[self.last_received_update - 1:len(self.ctx.items_received)]
+                for network_item in new_items:
+                    name: str = lookup_id_to_name[network_item.item]
+                    item_data: ItemData = item_table[name]
+                    if item_data.type == "Trap":
+                        self.ctx.temp_items.put(name)
                 self.last_received_update = len(self.ctx.items_received)
 
             if game_state & 1:
@@ -710,6 +720,12 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     self.game_running = True
 
                 if self.can_read_game:
+                    # Sending temporary items
+                    if not self.ctx.temp_items.empty() and iteration > self.last_temp_item_iteration + self.temp_item_delay:
+                        item_name = self.ctx.temp_items.get(timeout=1)
+                        if item_name == "Transmission Trap":
+                            await self.chat_send('t')
+                        self.last_temp_item_iteration = iteration
                     if game_state & (1 << 1) and not self.mission_completed:
                         if self.mission_id != self.ctx.final_mission:
                             print("Mission Completed")

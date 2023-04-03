@@ -257,8 +257,14 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[s
             pool.remove(invalid_upgrade)
     
     fill_pool_with_kerrigan_levels(multiworld, player, pool)
+    inventory_size = len([location for location in location_cache if location.item is None])
+    trap_count = int(inventory_size * get_option_value(multiworld, player, "trap_percentage") / 100)
+    inventory_size -= trap_count
+    filtered_pool = filter_items(multiworld, player, mission_req_table, location_cache,
+                                 pool, existing_items, locked_items, inventory_size)
+    for _ in range(trap_count):
+        filtered_pool.append(create_item_with_correct_settings(player, "Transmission Trap"))
 
-    filtered_pool = filter_items(multiworld, player, mission_req_table, location_cache, pool, existing_items, locked_items)
     return filtered_pool
 
 

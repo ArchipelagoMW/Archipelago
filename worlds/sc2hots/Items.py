@@ -231,6 +231,8 @@ item_table = {
     "+15 Starting Vespene": ItemData(801 + SC2HOTS_ITEM_ID_OFFSET, "Vespene", 15, quantity=0, classification=ItemClassification.filler),
     "+2 Starting Supply": ItemData(802 + SC2HOTS_ITEM_ID_OFFSET, "Supply", 2, quantity=0, classification=ItemClassification.filler),
 
+    "Transmission Trap": ItemData(803 + SC2HOTS_ITEM_ID_OFFSET, "Trap", 0, quantity=0, classification=ItemClassification.trap)
+
     # "Keystone Piece": ItemData(850 + SC2HOTS_ITEM_ID_OFFSET, "Goal", 0, quantity=0, classification=ItemClassification.progression_skip_balancing)
 }
 
@@ -315,5 +317,6 @@ type_flaggroups: typing.Dict[str, int] = {
     "Minerals": 6,
     "Vespene": 7,
     "Supply": 8,
-    "Goal": 9
+    "Goal": 9,
+    "Trap": 10
 }
