@@ -23,7 +23,7 @@ class MessengerRegion(Region):
         if self.name == "The Shop" and self.multiworld.goal[self.player] > Goal.option_open_music_box:
             self.locations.append(MessengerLocation("Shop Chest", self, name_to_id.get("Shop Chest", None)))
         # putting some dumb special case for searing crags and ToT so i can split them into 2 regions
-        if self.multiworld.shuffle_seals[self.player] and self.name not in {"Searing Crags", "Tower HQ"}:
+        if self.multiworld.shuffle_seals[self.player] and self.name not in {"Searing Crags", "Tower HQ", "Cloud Ruins"}:
             for seal_loc in SEALS:
                 if seal_loc.startswith(self.name.split(" ")[0]):
                     self.locations.append(MessengerLocation(seal_loc, self, name_to_id.get(seal_loc, None)))

@@ -27,7 +27,8 @@ class MessengerRules:
             "Catacombs": self.has_wingsuit,
             "Bamboo Creek": self.has_wingsuit,
             "Searing Crags Upper": self.has_vertical,
-            "Cloud Ruins": lambda state: self.has_wingsuit(state) and state.has("Ruxxtin's Amulet", self.player),
+            "Cloud Ruins": lambda state: self.has_vertical(state) and state.has("Ruxxtin's Amulet", self.player),
+            "Cloud Ruins Right": self.has_wingsuit,
             "Underworld": self.has_tabi,
             "Forlorn Temple": lambda state: state.has_all({"Wingsuit", *PHOBEKINS}, self.player),
             "Glacial Peak": self.has_vertical,
@@ -63,9 +64,13 @@ class MessengerRules:
             "Key of Love": lambda state: state.has_all({"Sun Crest", "Moon Crest"}, self.player),
             "Sunken Shrine Seal - Waterfall Paradise": self.has_tabi,
             "Sunken Shrine Seal - Tabi Gauntlet": self.has_tabi,
+            "Mega Shard of the Moon": self.has_tabi,
+            "Mega Shard of the Sun": self.has_tabi,
             # riviere turquoise
             "Fairy Bottle": self.has_vertical,
             "Riviere Turquoise Seal - Flower Power": self.has_vertical,
+            "Quick Restock Mega Shard 1": self.has_vertical,
+            "Quick Restock Mega Shard 2": self.has_vertical,
             # elemental skylands
             "Key of Symbiosis": self.has_dart,
             "Elemental Skylands Seal - Air": self.has_wingsuit,
@@ -155,6 +160,8 @@ class MessengerHardRules(MessengerRules):
         for loc, rule in self.extra_rules.items():
             if not self.world.multiworld.shuffle_seals[self.player] and "Seal" in loc:
                 continue
+            if not self.world.multiworld.shuffle_shards[self.player] and "Shard" in loc:
+                continue
             add_rule(self.world.multiworld.get_location(loc, self.player), rule, "or")
 
 
@@ -219,6 +226,6 @@ def set_self_locking_items(multiworld: MultiWorld, player: int) -> None:
     allow_self_locking_items(multiworld.get_location("Key of Courage", player), "Demon King Crown")
 
     # add these locations when seals aren't shuffled
-    if not multiworld.shuffle_seals[player]:
+    if not multiworld.shuffle_seals[player] and not multiworld.shuffle_shards[player]:
         allow_self_locking_items(multiworld.get_region("Cloud Ruins", player), "Ruxxtin's Amulet")
         allow_self_locking_items(multiworld.get_region("Forlorn Temple", player), *PHOBEKINS)

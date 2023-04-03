@@ -4,7 +4,7 @@ from BaseClasses import Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS, ALWAYS_LOCATIONS, SEALS, ALL_ITEMS
 from .Options import messenger_options, NotesNeeded, Goal, PowerSeals, Logic
-from .Regions import REGIONS, REGION_CONNECTIONS
+from .Regions import REGIONS, REGION_CONNECTIONS, MEGA_SHARDS
 from .SubClasses import MessengerRegion, MessengerItem
 from . import Rules
 
@@ -48,8 +48,9 @@ class MessengerWorld(World):
     base_offset = 0xADD_000
     item_name_to_id = {item: item_id
                        for item_id, item in enumerate(ALL_ITEMS, base_offset)}
+    mega_shard_locs = [shard for region in MEGA_SHARDS for shard in MEGA_SHARDS[region]]
     location_name_to_id = {location: location_id
-                           for location_id, location in enumerate([*ALWAYS_LOCATIONS, *SEALS], base_offset)}
+                           for location_id, location in enumerate([*ALWAYS_LOCATIONS, *SEALS, *mega_shard_locs], base_offset)}
 
     data_version = 1
 
