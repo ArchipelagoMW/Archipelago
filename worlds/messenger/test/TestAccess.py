@@ -13,7 +13,7 @@ class AccessTest(MessengerTestBase):
                      "Underworld Seal - Fireball Wave", "Underworld Seal - Rising Fanta", "Sun Crest", "Moon Crest",
                      "Sunken Shrine Seal - Waterfall Paradise", "Sunken Shrine Seal - Tabi Gauntlet",
                      "Mega Shard of the Moon", "Mega Shard of the Sun", "Under Entrance Mega Shard",
-                     "Hot Tub Mega Shard", "Projectile Pit Mega Shard", "Barma'thazel"]
+                     "Hot Tub Mega Shard", "Projectile Pit Mega Shard"]
         items = [["Ninja Tabi"]]
         self.assertAccessDependency(locations, items)
 
