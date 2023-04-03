@@ -63,9 +63,8 @@ jobs:
           # charset-normalizer was somehow incomplete in the github runner
           "${{ env.PYTHON }}" -m venv venv
           source venv/bin/activate
-          "${{ env.PYTHON }}" -m pip install --upgrade pip PyGObject setuptools charset-normalizer
-          pip install -r requirements.txt
-          python setup.py build --yes bdist_appimage --yes
+          "${{ env.PYTHON }}" -m pip install --upgrade pip PyGObject charset-normalizer
+          python setup.py build_exe --yes bdist_appimage --yes
           echo -e "setup.py build output:\n `ls build`"
           echo -e "setup.py dist output:\n `ls dist`"
           cd dist && export APPIMAGE_NAME="`ls *.AppImage`" && cd ..

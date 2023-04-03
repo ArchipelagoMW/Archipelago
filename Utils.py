@@ -39,7 +39,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.9"
+__version__ = "0.4.0"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -88,7 +88,10 @@ def is_frozen() -> bool:
 
 
 def local_path(*path: str) -> str:
-    """Returns path to a file in the local Archipelago installation or source."""
+    """
+    Returns path to a file in the local Archipelago installation or source.
+    This might be read-only and user_path should be used instead for ROMs, configuration, etc.
+    """
     if hasattr(local_path, 'cached_path'):
         pass
     elif is_frozen():
@@ -148,8 +151,8 @@ def cache_path(*path: str) -> str:
     if hasattr(cache_path, "cached_path"):
         pass
     else:
-        import appdirs
-        cache_path.cached_path = appdirs.user_cache_dir("Archipelago", False)
+        import platformdirs
+        cache_path.cached_path = platformdirs.user_cache_dir("Archipelago", False)
 
     return os.path.join(cache_path.cached_path, *path)
 
