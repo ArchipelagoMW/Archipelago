@@ -1,7 +1,7 @@
 import os, importlib
-from logic.logic import Logic
-from patches.common.patches import patches, additional_PLMs
-from utils.parameters import appDir
+from worlds.sm.variaRandomizer.logic.logic import Logic
+from worlds.sm.variaRandomizer.patches.common.patches import patches, additional_PLMs
+from worlds.sm.variaRandomizer.utils.parameters import appDir
 
 class PatchAccess(object):
     def __init__(self):
@@ -16,12 +16,12 @@ class PatchAccess(object):
 
         # load dict patches
         self.dictPatches = patches
-        logicPatches = importlib.import_module("patches.{}.patches".format(Logic.patches)).patches
+        logicPatches = importlib.import_module("worlds.sm.variaRandomizer.patches.{}.patches".format(Logic.patches)).patches
         self.dictPatches.update(logicPatches)
 
         # load additional PLMs
         self.additionalPLMs = additional_PLMs
-        logicPLMs = importlib.import_module("patches.{}.patches".format(Logic.patches)).additional_PLMs
+        logicPLMs = importlib.import_module("worlds.sm.variaRandomizer.patches.{}.patches".format(Logic.patches)).additional_PLMs
         self.additionalPLMs.update(logicPLMs)
 
     def getPatchPath(self, patch):

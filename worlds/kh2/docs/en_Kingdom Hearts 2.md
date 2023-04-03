@@ -37,7 +37,7 @@ It is added to your inventory. If you obtain magic, you will need to pause your 
 <h2 style="text-transform:none";>What Happens if I die before Room Saving?</h2>
 
 
-When you die in Kingdom Hearts 2, you are reverted to the last non-boss room you entered and your status is reverted to what it was at that time. However, in archipelago, any item that you have sent/received will not be taken away from the player, unlike vanilla Kingdom Hearts 2.
+When you die in Kingdom Hearts 2, you are reverted to the last non-boss room you entered and your status is reverted to what it was at that time. However, in archipelago, any item that you have sent/received will not be taken away from the player, any chest you have opened will remain open, and you will keep your level but lose the expereince. Unlike vanilla Kingdom Hearts 2.
 
 
 For example, if you are fighting Roxas and you receive Reflect Element and you die fighting Roxas, you will keep that reflect. You will still need to pause your game to have it show up in your inventory, then enter a new room for it to become properly usable.
@@ -93,6 +93,8 @@ With the help of Shananas, Num, and ZakTheRobot we have many QoL features such a
       - If you have a continuous/constant crash (in the same area/event every time) you will want to reverify your installed files. This can be done by doing the following: Open Epic Game Store --> Library --> Click Triple Dots --> Manage --> Verify
 - Why am I getting dummy items or letters?
     - You will need to get the `JaredWeakStrike/APCompanion` (you can find how to get this in the setup guide)
+- Why is my HP/MP continuously increasing without stopping?
+    - You do not have `JaredWeakStrike/APCompanion` setup correctly. Make Sure it is above the GOA in the mod manager.
 - Why am I not sending or receiving items?
     - Make sure you are connected to the KH2 client and the correct room (for more information reference the setup guide)
 - Why did I not load in to the correct visit

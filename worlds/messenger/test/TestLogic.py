@@ -79,6 +79,7 @@ class HardLogicTest(MessengerTestBase):
 
 class ChallengingLogicTest(MessengerTestBase):
     options = {
+        "shuffle_seals": "false",
         "logic_level": "challenging"
     }
 
