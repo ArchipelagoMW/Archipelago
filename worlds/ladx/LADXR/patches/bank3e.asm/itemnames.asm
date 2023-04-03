@@ -73,8 +73,6 @@ MessageAddPlayerName:
     jr  C, .continue
     ld  a, 100
 .continue:
-
-db "XXXXXSTART"
     ld  h, 0 ; bc = a, hl = a
     ld  l, a
     ld  b, 0
@@ -89,7 +87,7 @@ db "XXXXXSTART"
     
     call MessageCopyString
     ret
-db "XXXXXEND"
+
 ItemNamePointers:
     dw ItemNamePowerBracelet
     dw ItemNameShield
