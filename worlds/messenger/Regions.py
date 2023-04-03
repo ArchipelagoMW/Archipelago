@@ -17,7 +17,7 @@ REGIONS: Dict[str, List[str]] = {
     "Glacial Peak": [],
     "Cloud Ruins": [],
     "Cloud Ruins Right": ["Acro"],
-    "Underworld": ["Pyro", "Key of Chaos", "Barma'thazel"],
+    "Underworld": ["Pyro", "Key of Chaos"],
     "Dark Cave": [],
     "Riviere Turquoise": ["Fairy Bottle"],
     "Sunken Shrine": ["Ninja Tabi", "Sun Crest", "Moon Crest", "Key of Love"],

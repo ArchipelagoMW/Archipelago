@@ -159,5 +159,4 @@ BOSS_LOCATIONS: List[str] = [
     "Ruxxtin",
     "Emerald Golem",
     "Queen of Quills",
-    "Barma'thazel",
 ]
