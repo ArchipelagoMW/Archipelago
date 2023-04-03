@@ -549,7 +549,7 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
             return {loc for loc in locations if sphere_state.can_reach(loc)}
 
         def item_percentage(player: int, num: int) -> float:
-            return num / total_locations_count[player] if total_locations_count[player] else 0
+            return num / total_locations_count[player] if total_locations_count[player] else 1
 
         while True:
             # Gather non-locked locations.
