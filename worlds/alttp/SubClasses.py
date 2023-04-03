@@ -1,5 +1,5 @@
 """Module extending BaseClasses.py for aLttP"""
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Union
 from enum import IntEnum
 
 from BaseClasses import Location, Item, ItemClassification, Region, MultiWorld, Entrance
@@ -87,10 +87,9 @@ class LttPEntrance(Entrance):
     target: Optional[int] = None
 
     def connect(self, region: Region, addresses: Optional[Addresses] = None, target: Optional[int] = None) -> None:
-        self.connected_region = region
+        super().connect(region)
         self.target = target
         self.addresses = addresses
-        region.entrances.append(self)
 
 
 class LTTPRegion(Region):

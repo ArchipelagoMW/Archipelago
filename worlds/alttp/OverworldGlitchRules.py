@@ -296,15 +296,15 @@ def create_no_logic_connections(player, world, connections):
     for entrance, parent_region, target_region, *rule_override in connections:
         parent = world.get_region(parent_region, player)
         target = world.get_region(target_region, player)
-        connection = LttPEntrance(player, entrance, parent)
-        connection.connect(target)
+        LttPEntrance(player, entrance, parent).connect(target)
+
 
 def create_owg_connections(player, world, connections):
     for entrance, parent_region, target_region, *rule_override in connections:
         parent = world.get_region(parent_region, player)
         target = world.get_region(target_region, player)
-        connection = LttPEntrance(player, entrance, parent)
-        connection.connect(target)
+        LttPEntrance(player, entrance, parent).connect(target)
+
 
 def set_owg_connection_rules(player, world, connections, default_rule):
     for entrance, _, _, *rule_override in connections:
