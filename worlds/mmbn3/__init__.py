@@ -133,7 +133,7 @@ class MMBN3World(World):
         required_items = []
         for item in all_items:
             if item.progression != ItemClassification.filler:
-                freq = self.item_frequencies[item.itemName] if item.itemName in self.item_frequencies else 1
+                freq = self.item_frequencies.get(item.itemName, 1)
                 required_items += [item.itemName] * freq
 
         for itemName in required_items:
@@ -143,14 +143,13 @@ class MMBN3World(World):
         filler_items = []
         for item in all_items:
             if item.progression == ItemClassification.filler:
-                freq = self.item_frequencies[item.itemName] \
-                    if item.itemName in self.item_frequencies \
-                    else 1
+                freq = self.item_frequencies[item.itemName].get(item.itemName, 1)
                 filler_items += [item.itemName] * freq
 
         remaining = len(all_locations) - len(required_items)
         for i in range(remaining):
             item = self.create_item(self.multiworld.random.choice(filler_items))
+            filler_items.remove(item)
             self.multiworld.itempool.append(item)
 
     def set_rules(self) -> None:
