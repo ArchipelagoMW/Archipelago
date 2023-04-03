@@ -169,7 +169,7 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, 
     rom.write_byte(0x3D010, multiworld.death_link[player].value)
     rom.write_byte(0x3D012, multiworld.goal[player].value)
     rom.write_bytes(0x3D00A, struct.pack("H", heart_stars_required if multiworld.goal[player] > 0
-                                         else [0xFF, 0xFF]))
+                                         else 0xFFFF))
 
     for level in shuffled_levels:
         for i in range(len(shuffled_levels[level])):
