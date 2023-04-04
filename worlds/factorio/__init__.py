@@ -64,8 +64,8 @@ class Factorio(World):
     item_name_groups = {
         "Progressive": set(progressive_tech_table.keys()),
     }
-    data_version = 7
-    required_client_version = (0, 3, 6)
+    data_version = 8
+    required_client_version = (0, 4, 0)
 
     ordered_science_packs: typing.List[str] = MaxSciencePack.get_ordered_science_packs()
     tech_mix: int = 0
