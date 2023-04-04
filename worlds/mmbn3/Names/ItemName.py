@@ -1,6 +1,4 @@
-from enum import Enum
-
-class ItemName(str, Enum):
+class ItemName():
     ## Chips
     AirShoes_star = "AirShoes *"
     AirShot3_star = "AirShot3 *"
@@ -238,5 +236,3 @@ class ItemName(str, Enum):
     SubMem = "SubMem"
 
     Victory = "Victory"
-
-    __str__ = str.__str__

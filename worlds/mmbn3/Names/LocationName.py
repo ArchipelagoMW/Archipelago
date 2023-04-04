@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class LocationName(str, Enum):
+class LocationName():
     ## Blue Mystery Datas
     # ACDC Area
     ACDC_1_Southwest_BMD = "ACDC 1 Southwest BMD"
@@ -311,5 +311,3 @@ class LocationName(str, Enum):
     Chocolate_Shop_30 = "Chocolate Shop 30"
     Chocolate_Shop_31 = "Chocolate Shop 31"
     Chocolate_Shop_32 = "Chocolate Shop 32"
-
-    __str__ = str.__str__
