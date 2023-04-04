@@ -111,23 +111,42 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
     for item in multiworld.precollected_items[player]:
         excluded_items.add(item.name)
     locked_items: Set[str] = set(get_option_value(multiworld, player, 'locked_items'))
-    # pick a random mutation & strain for each unit and exclude the rest
+    # Starter items are also excluded items
+    starter_items: Set[str] = set(get_option_value(multiworld, player, 'start_inventory'))
+    guaranteed_items = locked_items.union(starter_items)
     mutation_count = get_option_value(multiworld, player, "include_mutations")
     strain_count = get_option_value(multiworld, player, "include_strains")
+
+    # Ensure no item is both guaranteed and excluded
+    invalid_items = excluded_items.intersection(locked_items)
+    invalid_count = len(invalid_items)
+    # Don't count starter items that can appear multiple times
+    invalid_count -= len([item for item in starter_items.intersection(locked_items) if item_table[item].quantity != 1])
+    if invalid_count > 0:
+        raise Exception(f"{invalid_count} item{'s are' if invalid_count > 1 else ' is'} both locked and excluded from generation.  Please adjust your excluded items and locked items.")
+
+    # Ensure no Kerrigan ability tier has two locked actives
+    # Should only be called when actives are relevant to the player
+    def test_kerrigan_actives(tier: int):
+        actives_amount = len(guaranteed_items.intersection(KERRIGAN_ACTIVES[tier]))
+        if actives_amount > 1:
+            raise Exception(f"Kerrigan Ability Tier {tier + 1} has {actives_amount} guaranteed active abilities.  The maximum allowed is 1.  Please adjust your locked items and start inventory.")
 
     def smart_exclude(item_choices: Set[str], choices_to_keep: int):
         expected_choices = len(item_choices)
         if expected_choices == 0:
             return
         item_choices = set(item_choices)
+        starter_choices = item_choices.intersection(starter_items)
         excluded_choices = item_choices.intersection(excluded_items)
         item_choices.difference_update(excluded_choices)
         item_choices.difference_update(locked_items)
         candidates = sorted(item_choices)
-        exclude_amount = min(expected_choices - choices_to_keep - len(excluded_choices), len(candidates))
+        exclude_amount = min(expected_choices - choices_to_keep - len(excluded_choices) + len(starter_choices), len(candidates))
         if exclude_amount > 0:
             excluded_items.update(multiworld.random.sample(candidates, exclude_amount))
 
+    # pick a random mutation & strain for each unit and exclude the rest
     for name in UPGRADABLE_ITEMS:
         mutations = {child_name for child_name, item in item_table.items()
                    if item.parent_item == name and item.type == "Mutation"}
@@ -154,6 +173,7 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
                 if kerriganless == 1:
                     smart_exclude(KERRIGAN_PASSIVES[tier], 0)
                 else:
+                    test_kerrigan_actives(tier)
                     smart_exclude(KERRIGAN_ACTIVES[tier].union(KERRIGAN_PASSIVES[tier]), 1)
             # ensure Kerrigan has an active T1 or T2 ability for no-build missions on Standard
             if get_option_value(multiworld, player, "required_tactics") == 0 and get_option_value(multiworld, player, "shuffle_no_build"):
@@ -166,6 +186,7 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
                     excluded_items.remove(active_ability)
         elif kerriganless == 0:  # if Kerrigan exists, pick a random active ability per tier and remove the other active abilities
             for tier in range(7):
+                test_kerrigan_actives(tier)
                 smart_exclude(KERRIGAN_ACTIVES[tier], 1)
 
     return excluded_items
