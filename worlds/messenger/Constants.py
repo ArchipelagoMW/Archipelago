@@ -6,7 +6,7 @@ NOTES = [
     "Key of Courage",
     "Key of Love",
     "Key of Strength",
-    "Key of Symbiosis"
+    "Key of Symbiosis",
 ]
 
 PROG_ITEMS = [
@@ -20,18 +20,18 @@ PROG_ITEMS = [
     "Sun Crest",
     "Moon Crest",
     # "Astral Seed",
-    # "Astral Tea Leaves"
+    # "Astral Tea Leaves",
 ]
 
 PHOBEKINS = [
     "Necro",
     "Pyro",
     "Claustro",
-    "Acro"
+    "Acro",
 ]
 
 USEFUL_ITEMS = [
-    "Windmill Shuriken"
+    "Windmill Shuriken",
 ]
 
 # item_name_to_id needs to be deterministic and match upstream
@@ -53,7 +53,7 @@ ALL_ITEMS = [
     "Moon Crest",
     *PHOBEKINS,
     "Power Seal",
-    "Time Shard"  # there's 45 separate instances of this in the client lookup, but hopefully we don't care?
+    "Time Shard",  # there's 45 separate instances of this in the client lookup, but hopefully we don't care?
 ]
 
 # locations
@@ -87,7 +87,7 @@ ALWAYS_LOCATIONS = [
     "Necro",
     "Pyro",
     "Claustro",
-    "Acro"
+    "Acro",
 ]
 
 SEALS = [
@@ -149,5 +149,5 @@ SEALS = [
 
     "Elemental Skylands Seal - Air",
     "Elemental Skylands Seal - Water",
-    "Elemental Skylands Seal - Fire"
+    "Elemental Skylands Seal - Fire",
 ]
