@@ -391,17 +391,13 @@ progressive_rows["progressive-energy-shield"] = ("energy-shield-equipment", "ene
 progressive_rows["progressive-wall"] = ("stone-wall", "gate")
 progressive_rows["progressive-follower"] = ("defender", "distractor", "destroyer")
 progressive_rows["progressive-inserter"] = ("fast-inserter", "stack-inserter")
-
-sorted_rows = sorted(progressive_rows)
-# to keep ID mappings the same.
-# If there's a breaking change at some point, then this should be moved in with the sorted ordering
 progressive_rows["progressive-turret"] = ("gun-turret", "laser-turret")
-sorted_rows.append("progressive-turret")
 progressive_rows["progressive-flamethrower"] = ("flamethrower",)  # leaving out flammables, as they do nothing
-sorted_rows.append("progressive-flamethrower")
 progressive_rows["progressive-personal-roboport-equipment"] = ("personal-roboport-equipment",
                                                                "personal-roboport-mk2-equipment")
-sorted_rows.append("progressive-personal-roboport-equipment")
+
+sorted_rows = sorted(progressive_rows)
+
 # integrate into
 source_target_mapping: Dict[str, str] = {
     "progressive-braking-force": "progressive-train-network",
