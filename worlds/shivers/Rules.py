@@ -37,7 +37,10 @@ def get_rules_lookup(player: int):
             "To Lobby From Slide Room": lambda state: (state.can_reach("Generator", "Region", player) and state.can_reach("Torture", "Region", player))
         },
         "locations": {
-            "Puzzle Solved Anansi Musicbox": lambda state: state.can_reach("Clock Tower", "Region", player)
+            "Puzzle Solved Anansi Musicbox": lambda state: state.can_reach("Clock Tower", "Region", player),
+
+            #Events
+            "Ash Captured": lambda state: (state.can_reach("Office", "Region", player) and state.has('Ash Pot Top', player) and state.has('Ash Pot Bottom', player))
 
 
         }

@@ -59,4 +59,7 @@ item_table = {
 
     #Abilities
     "Crawling": ItemData(SHIVERS_ITEM_ID_OFFSET + 50, "ability"),
+
+    #Event Items
+    "Ash Captured": ItemData(SHIVERS_ITEM_ID_OFFSET + 70, "eventItem")
 }

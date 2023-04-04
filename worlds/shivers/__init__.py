@@ -2,7 +2,7 @@ import typing
 from .Items import item_table, ShiversItem, get_full_item_list
 #from .Options import Shivers_options
 from .Rules import set_rules
-from BaseClasses import Item, Tutorial, Region, Entrance, Location
+from BaseClasses import Item, Tutorial, Region, Entrance, Location, ItemClassification
 from ..AutoWorld import World, WebWorld
 from . import Constants
 
@@ -32,8 +32,21 @@ class ShiversWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = Constants.location_name_to_id
     data_version = 0
-    
-    
+
+    def create_item(self, name: str) -> Item:
+        data = get_full_item_list()[name]
+        return ShiversItem(name, data.classification, data.code, self.player)
+
+    def create_event(self, region_name: str, event_name: str) -> None:
+        region = self.multiworld.get_region(region_name, self.player)
+        loc = ShiversLocation(self.player, event_name, None, region)
+        loc.place_locked_item(self.create_event_item(event_name))
+        region.locations.append(loc)
+
+    def create_event_item(self, name: str) -> None:
+        item = self.create_item(name)
+        item.classification = ItemClassification.progression
+        return item
 
     #option_definitions = Shivers_options
 
@@ -58,16 +71,11 @@ class ShiversWorld(World):
                 loc = ShiversLocation(self.player, loc_name,
                     self.location_name_to_id.get(loc_name, None), region)
                 region.locations.append(loc)
-        
+
+        # Add events
+        self.create_event("Office", "Ash Captured")
 
 
-    #def set_rules(self):
-    #    self.area_connections = {}
-    #    set_rules(self.multiworld, self.player, self.area_connections, self.area_cost_map)
-
-    def create_item(self, name: str) -> Item:
-        data = get_full_item_list()[name]
-        return ShiversItem(name, data.classification, data.code, self.player)
 
     def generate_basic(self):
         # Add pots
@@ -78,16 +86,18 @@ class ShiversWorld(World):
         
         # Add abilities
         abilities = [self.create_item(name) for name, data in item_table.items() if data.type == 'ability']
+
+        # Local Event Items
         
         self.multiworld.itempool += pots
         self.multiworld.itempool += keys
         self.multiworld.itempool += abilities
 
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Ash Pot Top", self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Ash Captured", self.player)
 
     set_rules = set_rules
 
-    def _place_events(self):
+    #def _place_events(self):
 
 
 class ShiversLocation(Location):
