@@ -708,7 +708,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     current_items[0], current_items[1], current_items[2], current_items[3], current_items[4],
                     current_items[5]))
                 # Storing temporary items
-                new_items = self.ctx.items_received[self.last_received_update - 1:len(self.ctx.items_received)]
+                new_items = self.ctx.items_received[self.last_received_update:]
                 for network_item in new_items:
                     name: str = lookup_id_to_name[network_item.item]
                     item_data: ItemData = item_table[name]
