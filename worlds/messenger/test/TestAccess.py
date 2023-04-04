@@ -40,11 +40,11 @@ class AccessTest(MessengerTestBase):
                      "Tower of Time Seal - Lantern Climb", "Tower of Time Seal - Arcane Orbs",
                      "Underworld Seal - Sharp and Windy Climb", "Underworld Seal - Fireball Wave",
                      "Elemental Skylands Seal - Air", "Forlorn Temple Seal - Rocket Maze",
-                     "Forlorn Temple Seal - Rocket Sunset", "Astral Seed", "Autumn Hills Mega Shard",
-                     "Hidden Entrance Mega Shard", "Sunny Day Mega Shard", "Down Under Mega Shard",
-                     "Catacombs Mega Shard", "Above Entrance Mega Shard", "Abandoned Mega Shard", "Time Loop Mega Shard",
-                     "Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2", "Leaf Golem", "Ruxxtin",
-                     "Emerald Golem"]
+                     "Forlorn Temple Seal - Rocket Sunset", "Astral Seed", "Astral Tea Leaves",
+                     "Autumn Hills Mega Shard", "Hidden Entrance Mega Shard", "Sunny Day Mega Shard",
+                     "Down Under Mega Shard", "Catacombs Mega Shard", "Above Entrance Mega Shard",
+                     "Abandoned Mega Shard", "Time Loop Mega Shard", "Money Farm Room Mega Shard 1",
+                     "Money Farm Room Mega Shard 2", "Leaf Golem", "Ruxxtin", "Emerald Golem"]
         items = [["Wingsuit"]]
         self.assertAccessDependency(locations, items)
 
@@ -132,7 +132,7 @@ class AccessTest(MessengerTestBase):
 class ItemsAccessTest(MessengerTestBase):
     options = {
         "shuffle_seals": "false",
-        "accessibility": "items"
+        "accessibility": "items",
     }
 
     def testSelfLockingItems(self) -> None:

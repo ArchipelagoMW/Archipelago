@@ -33,7 +33,7 @@ class MessengerRules:
             "Forlorn Temple": lambda state: state.has_all({"Wingsuit", *PHOBEKINS}, self.player),
             "Glacial Peak": self.has_vertical,
             "Elemental Skylands": lambda state: state.has("Fairy Bottle", self.player),
-            "Music Box": lambda state: state.has_all(set(NOTES), self.player) and self.has_vertical(state)
+            "Music Box": lambda state: state.has_all(set(NOTES), self.player) and self.has_vertical(state),
         }
 
         self.location_rules = {
@@ -46,6 +46,7 @@ class MessengerRules:
             "Howling Grotto Seal - Crushing Pits": lambda state: self.has_wingsuit(state) and self.has_dart(state),
             "Emerald Golem": self.has_wingsuit,
             # searing crags
+            "Astral Tea Leaves": lambda state: state.can_reach("Astral Seed", "Location", self.player),
             "Key of Strength": lambda state: state.has("Power Thistle", self.player),
             # glacial peak
             "Glacial Peak Seal - Ice Climbers": self.has_dart,
@@ -80,7 +81,7 @@ class MessengerRules:
             # corrupted future
             "Key of Courage": lambda state: state.has_all({"Demon King Crown", "Fairy Bottle"}, self.player),
             # the shop
-            "Shop Chest": self.has_enough_seals
+            "Shop Chest": self.has_enough_seals,
         }
 
     def has_wingsuit(self, state: CollectionState) -> bool:
@@ -173,7 +174,7 @@ class MessengerChallengeRules(MessengerHardRules):
         self.region_rules.update({
             "Forlorn Temple": lambda state: (self.has_vertical(state) and state.has_all(set(PHOBEKINS), self.player))
                                             or state.has_all({"Wingsuit", "Windmill Shuriken"}, self.player),
-            "Elemental Skylands": lambda state: self.has_wingsuit(state) or state.has("Fairy Bottle", self.player)
+            "Elemental Skylands": lambda state: self.has_wingsuit(state) or state.has("Fairy Bottle", self.player),
         })
 
         self.location_rules.update({
@@ -196,7 +197,7 @@ class MessengerOOBRules(MessengerRules):
 
         self.region_rules = {
             "Elemental Skylands": lambda state: state.has_any({"Wingsuit", "Rope Dart", "Fairy Bottle"}, self.player),
-            "Music Box": lambda state: state.has_all(set(NOTES), self.player)
+            "Music Box": lambda state: state.has_all(set(NOTES), self.player),
         }
 
         self.location_rules = {
@@ -211,7 +212,7 @@ class MessengerOOBRules(MessengerRules):
             "Underworld Seal - Fireball Wave": lambda state: state.has_any({"Wingsuit", "Windmill Shuriken"},
                                                                            self.player),
             "Tower of Time Seal - Time Waster Seal": self.has_dart,
-            "Shop Chest": self.has_enough_seals
+            "Shop Chest": self.has_enough_seals,
         }
 
     def set_messenger_rules(self) -> None:
