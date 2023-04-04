@@ -6,10 +6,9 @@ from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, 
     LocationProgressType
 from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
 from worlds.AutoWorld import WebWorld, World
-from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequencies, items_by_id, ItemType, \
-    player_item_frequencies
+from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequencies, items_by_id, ItemType
 from .Locations import Location, MMBN3Location, all_locations, location_table, location_data_table, \
-    always_excluded_locations, player_excluded_locations, jobs
+    always_excluded_locations, jobs
 from .Options import MMBN3Options
 from .Regions import regions, RegionName
 from .Names.ItemName import ItemName
@@ -59,7 +58,7 @@ class MMBN3World(World):
         called per player before any items or locations are created. You can set properties on your world here.
         Already has access to player options and RNG.
         """
-        self.item_frequencies = item_frequencies
+        self.item_frequencies = item_frequencies.copy()
         if self.multiworld.extra_ranks[self.player] > 0:
             self.item_frequencies[ItemName.Progressive_Undernet_Rank] = 8 + self.multiworld.extra_ranks[self.player]
 
@@ -67,6 +66,7 @@ class MMBN3World(World):
             self.excluded_locations = always_excluded_locations + [job.name for job in jobs]
         else:
             self.excluded_locations = always_excluded_locations
+
     def create_regions(self) -> None:
         """
         called to place player's regions into the MultiWorld's regions list. If it's hard to separate, this can be done
@@ -133,7 +133,7 @@ class MMBN3World(World):
         required_items = []
         for item in all_items:
             if item.progression != ItemClassification.filler:
-                freq = self.item_frequencies[item.itemName] if item.itemName in self.item_frequencies else 1
+                freq = self.item_frequencies.get(item.itemName, 1)
                 required_items += [item.itemName] * freq
 
         for itemName in required_items:
@@ -143,14 +143,13 @@ class MMBN3World(World):
         filler_items = []
         for item in all_items:
             if item.progression == ItemClassification.filler:
-                freq = player_item_frequencies[self.player][item.itemName] \
-                    if self.player in player_item_frequencies and item.itemName in player_item_frequencies[self.player] \
-                    else item_frequencies[item.itemName] if item.itemName in item_frequencies else 1
+                freq = self.item_frequencies[item.itemName].get(item.itemName, 1)
                 filler_items += [item.itemName] * freq
 
         remaining = len(all_locations) - len(required_items)
         for i in range(remaining):
             item = self.create_item(self.multiworld.random.choice(filler_items))
+            filler_items.remove(item)
             self.multiworld.itempool.append(item)
 
     def set_rules(self) -> None:

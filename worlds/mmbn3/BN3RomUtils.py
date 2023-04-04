@@ -23,6 +23,8 @@ charDict = {
     "BowneGlobal10": 0x7D, "BowneGlobal11": 0x7E, '\n': 0xE8, 'ω': 0x6C
 }
 
+undernet_item_indices = [27, 28, 29, 30, 31, 32, 58, 34, 34]
+
 
 def read_u16_le(data, offset) -> int:
     low_byte = data[offset]
@@ -53,10 +55,7 @@ def int16_to_byte_list_le(x) -> bytearray:
 
 
 def generate_text_bytes(message) -> bytearray:
-    byte_list = []
-    for c in message:
-        byte_list.append(charDict[c])
-    return bytearray(byte_list)
+    return bytearray(charDict[c] for c in message)
 
 
 def generate_chip_get(chip, code, amt) -> bytearray:
@@ -90,14 +89,14 @@ def generate_sub_chip_get(subchip, amt) -> bytearray:
 
 def generate_zenny_get(amt) -> bytearray:
     zenny_bytes = int32_to_byte_list_le(amt)
-    byte_list = [0xF6, 0x30, zenny_bytes[0], zenny_bytes[1], zenny_bytes[2], zenny_bytes[3], 0xFF, 0xFF, 0xFF]
-    byte_list.extend(generate_text_bytes("Got \n\"" + str(amt) + " Zennys\"!!"))
+    byte_list = [0xF6, 0x30, *zenny_bytes, 0xFF, 0xFF, 0xFF]
+    byte_list.extend(generate_text_bytes(f"Got \n\"{amt} Zennys\"!!"))
     return bytearray(byte_list)
 
 
 def generate_program_get(program, color, amt) -> bytearray:
-    # Programs are bit shifted twice to generate the "give" bit. So we multiply by 4 here
-    byte_list = [0xF6, 0x40, (program * 4), amt, color]
+    # Programs are bit shifted twice to generate the "give" bit
+    byte_list = [0xF6, 0x40, program << 2, amt, color]
     byte_list.extend(generate_text_bytes("Got a Navi\nCustomizer Program:\n\""))
     byte_list.extend([0xF9, 0x00, program, 0x05])
     return bytearray(byte_list)
@@ -110,21 +109,20 @@ def generate_bugfrag_get(amt) -> bytearray:
     return bytearray(byte_list)
 
 
+# This one is meant to be "silent". The text box has already been displayed.
+# So this one just gives the item using the text box syntax
 def generate_progressive_undernet(progression_index, next_script) -> bytearray:
-    # This one is meant to be "silent". The text box has already been displayed.
-    # So this one just gives bytes
-    item_indices = [27, 28, 29, 30, 31, 32, 58, 34, 34]
-
-    # CheckItem for the current index. If we have it, move on to the next script.
-    byte_list = [0xf6, 0x03, item_indices[progression_index], 0x01, next_script, next_script, 0xFF, 0xE9]
-
-    # Otherwise, give the item
     if progression_index >= 8:
+        # If we're at max rank, give bugfrags instead
         frag_bytes = int32_to_byte_list_le(20)
         byte_list = [0xF6, 0x50, frag_bytes[0], frag_bytes[1], frag_bytes[2], frag_bytes[3], 0xFF, 0xFF, 0xFF]
         byte_list.extend(generate_text_bytes("The extra data\ndecompiles into:\n\"20 BugFrags\"!!"))
     else:
-        byte_list.extend(generate_key_item_get(item_indices[progression_index], 1))
+        # F6 03 - Check for item. If you have it, load next_script, otherwise, continue
+        byte_list = [0xf6, 0x03, undernet_item_indices[progression_index], 0x01, next_script, next_script, 0xFF, 0xE9]
+
+        # Otherwise, give the item, with different code depending on if we're at max rank already or not
+        byte_list.extend(generate_key_item_get(undernet_item_indices[progression_index], 1))
     byte_list.extend([0xEB, 0xE7]) # End the message
     return bytearray(byte_list)
 
@@ -132,7 +130,7 @@ def generate_progressive_undernet(progression_index, next_script) -> bytearray:
 def generate_get_for_item(item) -> bytearray:
     if item.type == "undernet":
         return generate_text_bytes("Got the next\n\"Undernet Rank\"!!")
-    if item.type == "chip":
+    elif item.type == "chip":
         return generate_chip_get(item.itemID, item.subItemID, item.count)
     elif item.type == "key":
         return generate_key_item_get(item.itemID, item.count)
@@ -142,7 +140,7 @@ def generate_get_for_item(item) -> bytearray:
         return generate_zenny_get(item.count)
     elif item.type == "program":
         return generate_program_get(item.itemID, item.subItemID, item.count)
-    elif item.type == "bugfrag":
+    elif item.type == ItemType.BugFrag:
         return generate_bugfrag_get(item.count)
 
     return generate_text_bytes("Empty Message")

@@ -97,6 +97,9 @@ components: List[Component] = [
               file_identifier=SuffixIdentifier('.apzl')),
     #Kingdom Hearts 2
     Component('KH2 Client', "KH2Client"),
+
+    #MegaMan Battle Network 3
+    Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.abpn3'))
 ]
 
 

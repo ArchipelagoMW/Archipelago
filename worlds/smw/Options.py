@@ -88,7 +88,7 @@ class BowserCastleRooms(Choice):
 
 class BossShuffle(Choice):
     """
-    How the rooms of Bowser's Castle Front Door behave
+    How bosses are shuffled
     None: Bosses are not shuffled
     Simple: Four Reznors and the seven Koopalings are shuffled around
     Full: Each boss location gets a fully random boss

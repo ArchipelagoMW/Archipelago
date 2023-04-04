@@ -3,6 +3,7 @@ import typing
 import logging
 from Options import Choice, Option, Toggle, DefaultOnToggle, Range, FreeText
 from collections import defaultdict
+import Utils
 
 DefaultOffToggle = Toggle
 
@@ -180,17 +181,22 @@ class InstrumentCount(Range, LADXROption):
     range_end = 8
     default = 8
 
-class ItemPool(Choice):
-    """Effects which items are shuffled.
-[Casual] Places multiple copies of key items.
-[More keys] Adds additional small/nightmare keys so that dungeons are faster.
-[Path of Pain]. Adds negative heart containers to the item pool."""
-    casual = 0
-    more_keys = 1
-    normal = 2
-    painful = 3
-    default = normal
+class NagMessages(DefaultOffToggle, LADXROption):
+    """
+    Controls if nag messages are shown when rocks and crystals are touched. Useful for glitches, annoying for everyone else.
+    """
 
+    ladxr_name = "nagmessages"
+
+class MusicChangeCondition(Choice):
+    """
+    Controls how the music changes.
+    [Sword] When you pick up a sword, the music changes
+    [Always] You always have the post-sword music
+    """
+    option_sword = 0
+    option_always = 1
+    default = option_always
 #             Setting('hpmode', 'Gameplay', 'm', 'Health mode', options=[('default', '', 'Normal'), ('inverted', 'i', 'Inverted'), ('1', '1', 'Start with 1 heart'), ('low', 'l', 'Low max')], default='default',
 #                 description="""
 # [Normal} health works as you would expect.
@@ -313,28 +319,34 @@ class GfxMod(FreeText, LADXROption):
     default = 'Link'
 
     __spriteFiles: typing.DefaultDict[str, typing.List[str]] = defaultdict(list)
-    __spriteDir = os.path.join('data', 'sprites','ladx')
+    __spriteDir: str = None
 
     extensions = [".bin", ".bdiff", ".png", ".bmp"]
     def __init__(self, value: str):
         super().__init__(value)
-        if not GfxMod.__spriteFiles:
+        if not GfxMod.__spriteDir:
+            GfxMod.__spriteDir = Utils.local_path(os.path.join('data', 'sprites','ladx'))
             for file in os.listdir(GfxMod.__spriteDir):
                 name, extension = os.path.splitext(file)
                 if extension in self.extensions:
                     GfxMod.__spriteFiles[name].append(file)
                     
+    def verify(self, world, player_name: str, plando_options) -> None:
+        if self.value == "Link" or self.value in GfxMod.__spriteFiles:
+            return
+        raise Exception(f"LADX Sprite '{self.value}' not found. Possible sprites are: {['Link'] + list(GfxMod.__spriteFiles.keys())}")
+            
 
     def to_ladxr_option(self, all_options):
         if self.value == -1 or self.value == "Link":
             return None, None
-        elif self.value in GfxMod.__spriteFiles:
-            if len(GfxMod.__spriteFiles[self.value]) > 1:
-                logger.warning(f"{self.value} does not uniquely identify a file. Possible matches: {GfxMod.__spriteFiles[self.value]}. Using {GfxMod.__spriteFiles[self.value][0]}")
-                return self.ladxr_name, GfxMod.__spriteFiles[self.value][0]
-            return self.ladxr_name, GfxMod.__spriteFiles[self.value][0]
-        logger.error(f"Spritesheet {self.value} not found. Falling back to default sprite.")
-        return None, None
+
+        assert self.value in GfxMod.__spriteFiles
+
+        if len(GfxMod.__spriteFiles[self.value]) > 1:
+            logger.warning(f"{self.value} does not uniquely identify a file. Possible matches: {GfxMod.__spriteFiles[self.value]}. Using {GfxMod.__spriteFiles[self.value][0]}")
+
+        return self.ladxr_name, self.__spriteDir + "/" + GfxMod.__spriteFiles[self.value][0]
 
 class Palette(Choice):
     """
@@ -383,4 +395,6 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'shuffle_maps': ShuffleMaps,
     'shuffle_compasses': ShuffleCompasses,
     'shuffle_stone_beaks': ShuffleStoneBeaks,
+    'music_change_condition': MusicChangeCondition,
+    'nag_messages': NagMessages
 }

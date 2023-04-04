@@ -344,7 +344,6 @@ always_excluded_locations = [
 all_locations: typing.List[LocationData] = bmds + pmds + overworlds + jobs + number_traders + chocolate_shop
 location_table: typing.Dict[str, int] = {locData.name: locData.id for locData in all_locations}
 location_data_table: typing.Dict[str, LocationData] = {locData.name: locData for locData in all_locations}
-player_excluded_locations: typing.Dict[int, typing.List[str]] = {}
 
 
 """
