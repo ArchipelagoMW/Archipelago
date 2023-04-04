@@ -230,6 +230,7 @@ class SC2Context(CommonContext):
     last_bot: typing.Optional[ArchipelagoBot] = None
     temp_items = queue.Queue()
     transmissions_per_trap = 1
+    accept_traps = False
 
     def __init__(self, *args, **kwargs):
         super(SC2Context, self).__init__(*args, **kwargs)
@@ -278,9 +279,17 @@ class SC2Context(CommonContext):
         
         elif cmd in {"ReceivedItems"}:
             # Store traps to send once a game is running
-            for item in args["items"]:
-                if item["flags"] & 0b100:
-                    self.temp_items.put(item["item"])
+            if self.accept_traps:
+                for item in args["items"]:
+                    item_name = lookup_id_to_name[item.item]
+                    item_data = item_table[item_name]
+                    if item_data.type == "Trap":
+                        print("adding trap")
+                        self.temp_items.put(item_name)
+        elif cmd in {"PrintJSON"}:
+            # Hack to ignore traps sent when connecting
+            # Ignores all duplicate traps and all traps received while client was not connected
+            self.accept_traps = True
 
     def on_print_json(self, args: dict):
         # goes to this world
@@ -690,11 +699,6 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
             self.last_received_update = len(self.ctx.items_received)
 
         else:
-            if not self.ctx.announcements.empty():
-                message = self.ctx.announcements.get(timeout=1)
-                await self.chat_send("SendMessage " + message)
-                self.ctx.announcements.task_done()
-
             # Archipelago reads the health
             for unit in self.all_own_units():
                 if unit.health_max == 38281:
@@ -717,18 +721,22 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                 #     item_data: ItemData = item_table[name]
                 #     if item_data.type == "Trap":
                 #         self.ctx.temp_items.put(name)
-                # self.last_received_update = len(self.ctx.items_received)
+                self.last_received_update = len(self.ctx.items_received)
 
             if game_state & 1:
                 if not self.game_running:
                     print("Archipelago Connected")
                     self.game_running = True
 
+                if not self.ctx.announcements.empty():
+                    message = self.ctx.announcements.get(timeout=1)
+                    await self.chat_send("SendMessage " + message)
+                    self.ctx.announcements.task_done()
+
                 if self.can_read_game:
                     # Sending temporary items
                     if not self.ctx.temp_items.empty() and not self.mission_completed:
-                        item_id = self.ctx.temp_items.get(timeout=1)
-                        item_name: str = lookup_id_to_name[item_id]
+                        item_name = self.ctx.temp_items.get(timeout=1)
                         if item_name == "Transmission Trap":
                             await self.chat_send(f'Transmission {self.ctx.transmissions_per_trap}')
                     if game_state & (1 << 1) and not self.mission_completed:
