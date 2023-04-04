@@ -75,7 +75,8 @@ class AccessTest(MessengerTestBase):
                      "Above Entrance Mega Shard", "Abandoned Mega Shard", "Time Loop Mega Shard",
                      "Searing Crags Mega Shard", "Glacial Peak Mega Shard", "Cloud Entrance Mega Shard",
                      "Time Warp Mega Shard", "Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2",
-                     "Quick Restock Mega Shard 1", "Quick Restock Mega Shard 2", "Leaf Golem", "Ruxxtin", "Emerald Golem"]
+                     "Quick Restock Mega Shard 1", "Quick Restock Mega Shard 2", "Earth Mega Shard", "Water Mega Shard",
+                     "Leaf Golem", "Ruxxtin", "Emerald Golem"]
         items = [["Wingsuit", "Rope Dart"]]
         self.assertAccessDependency(locations, items)
 
@@ -91,7 +92,7 @@ class AccessTest(MessengerTestBase):
     def testBottle(self) -> None:
         """Elemental Skylands and Corrupted Future require the Fairy Bottle"""
         locations = ["Key of Symbiosis", "Elemental Skylands Seal - Air", "Elemental Skylands Seal - Fire",
-                     "Elemental Skylands Seal - Water", "Key of Courage"]
+                     "Elemental Skylands Seal - Water", "Key of Courage", "Earth Mega Shard", "Water Mega Shard"]
         items = [["Fairy Bottle"]]
         self.assertAccessDependency(locations, items)
 

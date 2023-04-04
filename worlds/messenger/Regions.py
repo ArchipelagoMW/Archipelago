@@ -42,7 +42,7 @@ MEGA_SHARDS: Dict[str, List[str]] = {
     "Forlorn Temple": ["Sunny Day Mega Shard", "Down Under Mega Shard"],
     "Sunken Shrine": ["Mega Shard of the Moon", "Beginner's Mega Shard", "Mega Shard of the Stars", "Mega Shard of the Sun"],
     "Riviere Turquoise": ["Waterfall Mega Shard", "Quick Restock Mega Shard 1", "Quick Restock Mega Shard 2"],
-    "Elemental Skylands": [],
+    "Elemental Skylands": ["Earth Mega Shard", "Water Mega Shard"],
 }
 
 
