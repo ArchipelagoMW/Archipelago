@@ -205,8 +205,8 @@ class TheMinesElevatorsProgression(Choice):
     With Vanilla, you will unlock a new elevator floor every 5 floor in the mine.
     With Progressive, you will randomly find Progressive Mine Elevator to go deeper. Location are sent for reaching
         every level multiple of 5.
-    With Progressive from previous floor, Locations are sent for taking the ladder or stair to every level multiple of 5,
-		taking the elevator does not count."""
+    With Progressive from previous floor, Locations are sent for taking the ladder or stairs to every 5
+        levels, taking the elevator does not count."""
     internal_name = "elevator_progression"
     display_name = "Elevator Progression"
     default = 2
@@ -490,7 +490,8 @@ stardew_valley_option_classes = [
     Gifting,
     GiftTax,
 ]
-stardew_valley_options: Dict[str, type(Option)] = {option.internal_name: option for option in stardew_valley_option_classes}
+stardew_valley_options: Dict[str, type(Option)] = {option.internal_name: option for option in
+                                                   stardew_valley_option_classes}
 default_options = {option.internal_name: option.default for option in stardew_valley_options.values()}
 stardew_valley_options["death_link"] = DeathLink
 
