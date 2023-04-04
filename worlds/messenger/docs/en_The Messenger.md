@@ -32,7 +32,9 @@ You can find items wherever items can be picked up in the original game. This in
 * Quest Item pickups
 * Music Box notes
 * Phobekins
+* Bosses
 * Power seals
+* Mega Time Shards
 
 ## What are the item name groups?
 
