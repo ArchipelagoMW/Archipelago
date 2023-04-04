@@ -71,7 +71,7 @@ class StartShuffle(EntranceShuffle):
     [Simple] Your start location will be mixed with the dummy pool, or swapped with a "dummy" entrance (if there is no dummy shuffle)
     [Mixed] Your start location will be shuffled among all other non-connector entrances, or swapped with a random non-connector (if there are no other shuffles enabled)
     """
-    entrance_type="start"
+    entrance_type=["start"]
 
 class SingleEntranceShuffle(EntranceShuffle):
     """
@@ -80,7 +80,7 @@ class SingleEntranceShuffle(EntranceShuffle):
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among all other entrances
     """
-    entrance_type="single"
+    entrance_type=["single", "trade"]
 
 class DummyEntranceShuffle(EntranceShuffle):
     """
@@ -89,7 +89,7 @@ class DummyEntranceShuffle(EntranceShuffle):
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among all other entrances
     """
-    entrance_type="dummy"
+    entrance_type=["dummy"]
 
 class AnnoyingEntranceShuffle(EntranceShuffle):
     """
@@ -98,7 +98,7 @@ class AnnoyingEntranceShuffle(EntranceShuffle):
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among all other entrances
     """
-    entrance_type="insanity"
+    entrance_type=["insanity"]
 
 class WaterEntranceShuffle(EntranceShuffle):
     """
@@ -107,7 +107,7 @@ class WaterEntranceShuffle(EntranceShuffle):
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among all other entrances
     """
-    entrance_type="water"
+    entrance_type=["water"]
 
 class ConnectorEntranceShuffle(EntranceShuffle):
     """
@@ -116,7 +116,7 @@ class ConnectorEntranceShuffle(EntranceShuffle):
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among all other entrances
     """
-    entrance_type="connector"
+    entrance_type=["connector"]
 
 class DungeonEntranceShuffle(EntranceShuffle):
     """
@@ -125,7 +125,7 @@ class DungeonEntranceShuffle(EntranceShuffle):
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among other entrances
     """
-    entrance_type="dungeon"
+    entrance_type=["dungeon"]
 
 
 class DungeonItemShuffle(Choice):

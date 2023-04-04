@@ -105,15 +105,15 @@ class LinksAwakeningWorld(World):
             if isinstance(option, EntranceShuffle):
                 print(option)
                 if option.value == EntranceShuffle.option_simple:
-                    entrance_pool_mapping[option.entrance_type] = option.entrance_type
+                    entrance_pool_mapping[option.entrance_type[0]] = option.entrance_type[0]
                 elif option.value == EntranceShuffle.option_mixed:
-                    entrance_pool_mapping[option.entrance_type] = "mixed"
+                    entrance_pool_mapping[option.entrance_type[0]] = "mixed"
                 else:
                     continue
-                pool = entrance_pools.setdefault(entrance_pool_mapping[option.entrance_type], [])
-                indoor_pool = indoor_pools.setdefault(entrance_pool_mapping[option.entrance_type], [])
+                pool = entrance_pools.setdefault(entrance_pool_mapping[option.entrance_type[0]], [])
+                indoor_pool = indoor_pools.setdefault(entrance_pool_mapping[option.entrance_type[0]], [])
                 for entrance_name, entrance in ENTRANCE_INFO.items():
-                    if entrance.type == option.entrance_type:
+                    if entrance.type in option.entrance_type:
                         pool.append(entrance_name)
                         # Connectors have special handling
                         if entrance.type != "connector":
@@ -247,7 +247,7 @@ class LinksAwakeningWorld(World):
             random.shuffle(indoor_pool)
             for a, b in zip(pool, indoor_pool):
                 self.world_setup.entrance_mapping[a] = b
-        
+                print(f"{a} -> {b}")
         seen_keys = set()
         seen_values = set()
         for k, v in self.world_setup.entrance_mapping.items():
@@ -255,6 +255,7 @@ class LinksAwakeningWorld(World):
             assert v not in seen_values, v
             seen_keys.add(k)
             seen_values.add(v)
+
     def create_regions(self) -> None:
         # Initialize
         self.convert_ap_options_to_ladxr_logic()
