@@ -22,7 +22,7 @@ REGIONS: Dict[str, List[str]] = {
     "Sunken Shrine": ["Ninja Tabi", "Sun Crest", "Moon Crest", "Key of Love"],
     "Elemental Skylands": ["Key of Symbiosis"],
     "Corrupted Future": ["Key of Courage"],
-    "Music Box": ["Rescue Phantom"]
+    "Music Box": ["Rescue Phantom"],
 }
 """seal locations have the region in their name and may not need to be created so skip them here"""
 
@@ -47,6 +47,6 @@ REGION_CONNECTIONS: Dict[str, Set[str]] = {
     "Dark Cave": {"Catacombs", "Riviere Turquoise"},
     "Riviere Turquoise": set(),
     "Sunken Shrine": {"Howling Grotto"},
-    "Elemental Skylands": set()
+    "Elemental Skylands": set(),
 }
 """Vanilla layout mapping with all Tower HQ portals open. from -> to"""
