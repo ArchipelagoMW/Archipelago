@@ -229,6 +229,7 @@ class SC2Context(CommonContext):
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
     last_bot: typing.Optional[ArchipelagoBot] = None
     temp_items = queue.Queue()
+    transmissions_per_trap = 1
 
     def __init__(self, *args, **kwargs):
         super(SC2Context, self).__init__(*args, **kwargs)
@@ -260,6 +261,7 @@ class SC2Context(CommonContext):
             self.levels_per_check = args["slot_data"].get("kerrigan_levels_per_check", 0)
             self.checks_per_level = args["slot_data"].get("kerrigan_checks_per_level_pack", 1)
             self.kerrigan_primal_status = args["slot_data"].get("kerrigan_primal_status", 0)
+            self.transmissions_per_trap = args["slot_data"].get("transmissions_per_trap", 1)
 
             self.build_location_to_mission_mapping()
 
@@ -724,7 +726,8 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     if not self.ctx.temp_items.empty() and iteration > self.last_temp_item_iteration + self.temp_item_delay:
                         item_name = self.ctx.temp_items.get(timeout=1)
                         if item_name == "Transmission Trap":
-                            await self.chat_send('t')
+                            for _ in range(self.ctx.transmissions_per_trap):
+                                await self.chat_send('t')
                         self.last_temp_item_iteration = iteration
                     if game_state & (1 << 1) and not self.mission_completed:
                         if self.mission_id != self.ctx.final_mission:

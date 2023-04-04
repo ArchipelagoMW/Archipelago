@@ -236,6 +236,14 @@ class TrapPercentage(Range):
     default = 0
 
 
+class TransmissionsPerTrap(Range):
+    """Number of transmissions played per Transmission Trap"""
+    display_name = "Transmissions per Trap"
+    range_start = 0
+    range_end = 10
+    default = 1
+
+
 # class UpgradeBonus(Choice):
 #     """Determines what lab upgrade to use, whether it is Ultra-Capacitors which boost attack speed with every weapon
 #     upgrade or Vanadium Plating which boosts life with every armor upgrade."""
@@ -307,6 +315,7 @@ sc2hots_options: Dict[str, Option] = {
     "start_primary_abilities": StartPrimaryAbilities,
     "kerrigan_primal_status": KerriganPrimalStatus,
     "trap_percentage": TrapPercentage,
+    "transmissions_per_trap": TransmissionsPerTrap,
     # "upgrade_bonus": UpgradeBonus,
     # "bunker_upgrade": BunkerUpgrade,
     # "all_in_map": AllInMap,
