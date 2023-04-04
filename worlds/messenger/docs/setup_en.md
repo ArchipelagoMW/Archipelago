@@ -10,10 +10,11 @@
 
 ## Installation
 
-1. Download and install Courier Mod Loader using the instructions on the release page
+1. Read the [Game Info Page](../../../../games/The%20Messenger/info/en) for how the game works, caveats and known issues
+2. Download and install Courier Mod Loader using the instructions on the release page
    * [Latest release is currently 0.7.1](https://github.com/Brokemia/Courier/releases)
-2. Download and install the randomizer mod
-   1. Download the latest TheMessengerRandomizerAP.zip from the
+3. Download and install the randomizer mod
+   1. Download the latest TheMessengerRandomizerAP.zip from
       [The Messenger Randomizer Mod AP releases page](https://github.com/alwaysintreble/TheMessengerRandomizerModAP/releases)
    2. Extract the zip file to `TheMessenger/Mods/` of your game's install location
       * You cannot have both the non-AP randomizer and the AP randomizer installed at the same time. The AP randomizer
@@ -35,10 +36,10 @@
 2. Navigate to `Options > Third Party Mod Options`
 3. Select `Reset Randomizer File Slots`
    * This will set up all of your save slots with new randomizer save files. You can have up to 3 randomizer files at a
-     time, but must do this step again to start new runs afterwards.
+     time, but must do this step again to start new runs afterward.
 4. Enter connection info using the relevant option buttons
-   * **The game is limited to alphanumerical characters and `-` so when entering the host name replace `.` with ` ` and
-     ensure that your player name when generating a settings file follows these constrictions**
+   * **The game is limited to alphanumerical characters and `-` so when entering the host name replace `.` with ` `.
+     Ensure that your player name when generating a settings file follows these constrictions**
    * This defaults to `archipelago.gg` and does not need to be manually changed if connecting to a game hosted on the
      website.
 5. Select the `Connect to Archipelago` button
