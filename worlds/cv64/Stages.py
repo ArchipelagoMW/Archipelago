@@ -29,17 +29,13 @@ class CV64Stage:
     stage_tier2_junk_counts: typing.Dict[str, int]
     stage_tier1_junk_count: int
 
-    locs_reachable_with_nothing: int
-    end_reachable_with_nothing: bool
-
     def __init__(self, start_region_name: str, startzone_map_offset: typing.Optional[int], startzone_spawn_offset:
                  typing.Optional[int], start_map_id: int, start_spawn_id: int, mid_region_name: str, mid_map_id: int,
                  mid_spawn_id: int, end_region_name: str, endzone_map_offset: typing.Optional[int],
                  endzone_spawn_offset: typing.Optional[int], altzone_map_offset: typing.Optional[int],
                  altzone_spawn_offset: typing.Optional[int], end_map_id: typing.Optional[int],
                  end_spawn_id: typing.Optional[int], boss_count: int, stage_number_offset_list: list,
-                 stage_key_counts: dict, stage_tier2_item_counts: dict, stage_tier1_junk_count: int,
-                 locs_reachable_with_nothing: int, end_reachable_with_nothing: bool):
+                 stage_key_counts: dict, stage_tier2_item_counts: dict, stage_tier1_junk_count: int):
         self.start_region_name = start_region_name
         self.startzone_map_offset = startzone_map_offset
         self.startzone_spawn_offset = startzone_spawn_offset
@@ -65,9 +61,6 @@ class CV64Stage:
         self.stage_tier2_junk_counts = stage_tier2_item_counts
         self.stage_tier1_junk_count = stage_tier1_junk_count
 
-        self.locs_reachable_with_nothing = locs_reachable_with_nothing
-        self.end_reachable_with_nothing = end_reachable_with_nothing
-
 
 stage_info = {
     "Forest of Silence":    CV64Stage(RName.forest_start, None, None, 0x00, 0x00,
@@ -79,8 +72,7 @@ stage_info = {
                                        IName.roast_beef: 3,
                                        IName.powerup: 1,
                                        IName.sun_card: 2,
-                                       IName.moon_card: 1}, 12,
-                                      23, True),
+                                       IName.moon_card: 1}, 12),
 
     "Castle Wall":          CV64Stage(RName.cw_start, None, None, 0x02, 0x00,
                                       RName.cw_start, 0x02, 0x07,
@@ -91,8 +83,7 @@ stage_info = {
                                        IName.roast_beef: 1,
                                        IName.powerup: 1,
                                        IName.sun_card: 1,
-                                       IName.moon_card: 2}, 2,
-                                      7, False),
+                                       IName.moon_card: 2}, 2),
 
     "Villa":                CV64Stage(RName.villa_start, None, None, 0x03, 0x00,
                                       RName.villa_storeroom, 0x05, 0x04,
@@ -107,8 +98,7 @@ stage_info = {
                                        IName.purifying: 9,
                                        IName.powerup: 1,
                                        IName.sun_card: 1,
-                                       IName.moon_card: 2}, 29,
-                                      32, False),
+                                       IName.moon_card: 2}, 29),
 
     "Tunnel":               CV64Stage(RName.tunnel_start, None, None, 0x07, 0x00,
                                       RName.tunnel_end, 0x07, 0x03,
@@ -120,8 +110,7 @@ stage_info = {
                                        IName.cure_ampoule: 2,
                                        IName.powerup: 1,
                                        IName.sun_card: 2,
-                                       IName.moon_card: 1}, 14,
-                                      25, True),
+                                       IName.moon_card: 1}, 14),
 
     "Underground Waterway": CV64Stage(RName.uw_main, None, None, 0x08, 0x00,
                                       RName.uw_main, 0x08, 0x03,
@@ -130,8 +119,7 @@ stage_info = {
                                       {},
                                       {IName.roast_chicken: 1,
                                        IName.cure_ampoule: 1,
-                                       IName.powerup: 1}, 3,
-                                      6, True),
+                                       IName.powerup: 1}, 3),
 
     "Castle Center":        CV64Stage(RName.cc_main, None, None, 0x19, 0x00,
                                       RName.cc_main, 0x0E, 0x03,
@@ -147,8 +135,7 @@ stage_info = {
                                        IName.cure_ampoule: 2,
                                        IName.powerup: 2,
                                        IName.sun_card: 2,
-                                       IName.moon_card: 1}, 25,
-                                      46, False),
+                                       IName.moon_card: 1}, 25),
 
     "Duel Tower":           CV64Stage(RName.dt_main, 0x109DA7, 0x109DA9, 0x13, 0x00,
                                       RName.dt_main, 0x13, 0x15,
@@ -157,8 +144,7 @@ stage_info = {
                                       {},
                                       {IName.roast_chicken: 1,
                                        IName.roast_beef: 2,
-                                       IName.powerup: 1}, 0,
-                                      4, True),
+                                       IName.powerup: 1}, 0),
 
     "Tower of Execution":   CV64Stage(RName.toe_main, 0x109D17, 0x109D19, 0x10, 0x00,
                                       RName.toe_main, 0x10, 0x02,
@@ -166,8 +152,7 @@ stage_info = {
                                       0, [0x104A7D, 0x104A85],
                                       {IName.execution_key: 1},
                                       {IName.roast_chicken: 1,
-                                       IName.roast_beef: 1}, 3,
-                                      6, True),
+                                       IName.roast_beef: 1}, 3),
 
     "Tower of Science":     CV64Stage(RName.tosci_start, 0x109D77, 0x109D79, 0x12, 0x00,
                                       RName.tosci_conveyors, 0x12, 0x03,
@@ -176,16 +161,14 @@ stage_info = {
                                       {IName.science_key_one: 1,
                                        IName.science_key_two: 1,
                                        IName.science_key_three: 1},
-                                      {IName.roast_beef: 1}, 5,
-                                      3, False),
+                                      {IName.roast_beef: 1}, 5),
 
     "Tower of Sorcery":     CV64Stage(RName.tosor_main, 0x109D47, 0x109D49, 0x11, 0x00,
                                       RName.tosor_main, 0x11, 0x01,
                                       RName.tosor_main, 0x109D2F, 0x109D31, None, None, 0x11, 0x13,
                                       0, [0x104A8D],
                                       {},
-                                      {IName.roast_beef: 1}, 6,
-                                      7, True),
+                                      {IName.roast_beef: 1}, 6),
 
     "Room of Clocks":       CV64Stage(RName.roc_main, None, None, 0x1B, 0x00,
                                       RName.roc_main, 0x1B, 0x02,
@@ -193,8 +176,7 @@ stage_info = {
                                       1, [0x104AC5],
                                       {},
                                       {IName.roast_beef: 1,
-                                       IName.powerup: 2}, 0,
-                                      3, True),
+                                       IName.powerup: 2}, 0),
 
     "Clock Tower":          CV64Stage(RName.ct_start, None, None, 0x17, 0x00,
                                       RName.ct_middle, 0x17, 0x02,
@@ -203,16 +185,14 @@ stage_info = {
                                       {IName.clocktower_key_one: 1,
                                        IName.clocktower_key_two: 1,
                                        IName.clocktower_key_three: 1},
-                                      {}, 3,
-                                      2, False),
+                                      {}, 3),
 
     "Castle Keep":          CV64Stage(RName.ck_main, None, None, 0x14, 0x02,
                                       RName.ck_main, 0x14, 0x03,
                                       RName.ck_drac_chamber, None, None, None, None, None, None,
                                       2, [0x104AAD],
                                       {},
-                                      {IName.healing_kit: 3}, 1,
-                                      4, False)
+                                      {IName.healing_kit: 3}, 1)
 }
 
 vanilla_stage_order = ["Forest of Silence", "Castle Wall", "Villa", "Tunnel", "Underground Waterway", "Castle Center",

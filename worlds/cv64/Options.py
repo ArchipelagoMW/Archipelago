@@ -35,8 +35,9 @@ class SubWeaponShuffle(Toggle):
 
 
 class ExtraKeys(Choice):
-    """Puts an additional copy of every key item in the pool to ensure fewer specific locations are required.
-    Chance gives each key item a 50% chance of having an additional copy instead of guaranteeing one for all of them."""
+    """Puts an additional copy of every key item in the pool for every key item that there is to ensure fewer specific
+    locations are required. Chance gives each key item a 50% chance of having a duplicate instead of guaranteeing one
+    for all of them."""
     display_name = "Extra Keys"
     option_off = 0
     option_on = 1
@@ -151,6 +152,15 @@ class IncreaseItemLimit(DefaultOnToggle):
     display_name = "Increase Item Limit"
 
 
+class NerfHealingItems(Toggle):
+    """Decreases the amount of health healed by Roast Chickens to 25%, Roast Beefs to 50%, and Healing Kits to 80%."""
+    display_name = "Nerf Healing Items"
+
+
+class LoadingZoneHeals(DefaultOnToggle):
+    """Whether end-of-level loading zones restore health and cure status aliments or not.
+    Recommended off for those looking for more of a survival horror experience!"""
+
 # class RevealInvisibleItems(DefaultOnToggle):
 #     """Makes all invisible freestanding items visible."""
 #     display_name = "Reveal Invisible Items"
@@ -207,6 +217,8 @@ cv64_options: Dict[str, Option] = {
     "vincent_fight_condition": VincentFightCondition,
     "bad_ending_condition": BadEndingCondition,
     "increase_item_limit": IncreaseItemLimit,
+    "nerf_healing_items": NerfHealingItems,
+    "loading_zone_heals": LoadingZoneHeals,
     # "reveal_invisible_items": RevealInvisibleItems,
     "disable_time_restrictions": DisableTimeRestrictions,
     "skip_waterway_platforms": SkipWaterwayPlatforms,

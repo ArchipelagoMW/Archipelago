@@ -110,8 +110,8 @@ rom_looping_music_fade_ins = {
     0x16: 0x17,
     0x18: 0x19,
     0x1A: 0x1B,
-    0x21: 0x23,
-    0x27: 0x75,
+    0x21: 0x75,
+    0x27: 0x23,
     0x2E: None,
     0x39: None,
     0x45: 0x63,
@@ -233,8 +233,10 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
         rom.write_bytes(0x6CEAA4, [0x24, 0x0D, 0x00, 0x01])  # ADDIU T5, R0, 0x0001
 
     # Were-bull arena flag hack
-    rom.write_bytes(0x6E38F0, [0x0C, 0x0F, 0xF1, 0x57])
+    rom.write_bytes(0x6E38F0, [0x0C, 0x0F, 0xF1, 0x57])  # JAL   0x803FC55C
     rom.write_bytes(0xBFC55C, Patches.werebull_flag_unsetter)
+    rom.write_bytes(0xA949C, [0x0C, 0x0F, 0xF3, 0x80])  # JAL   0x803FCE00
+    rom.write_bytes(0xBFCE00, Patches.werebull_flag_pickup_setter)
 
     # Enable being able to carry multiple Special jewels, Nitros, and Mandragoras simultaneously
     rom.write_bytes(0xBF1F4, [0x3C, 0x03, 0x80, 0x39])  # LUI V1, 0x8039
@@ -264,13 +266,19 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     # Rename "Wooden stake" and "Rose" to "Sent major" and "Sent" respectively
     rom.write_bytes(0xEFE34, cv64_text_converter("Sent major  ", False))
     rom.write_bytes(0xEFE4E, cv64_text_converter("Sent", False))
+    # Capitalize the "k" in "Archives key" to be consistent with...literally every other key name!
+    rom.write_byte(0xEFF21, 0x2D)
 
     # Change the Stage Select menu options
     rom.write_bytes(0xADF64, Patches.warp_menu_rewrite)
     rom.write_bytes(0x10E0C8, Patches.warp_pointer_table)
-    for warp in range(len(active_warp_list)):
-        rom.write_byte(warp_map_offsets[warp], stage_info[active_warp_list[warp]].mid_map_id)
-        rom.write_byte(warp_map_offsets[warp] + 4, stage_info[active_warp_list[warp]].mid_spawn_id)
+    for i in range(len(active_warp_list)):
+        if i == 0:
+            rom.write_byte(warp_map_offsets[i], stage_info[active_warp_list[i]].start_map_id)
+            rom.write_byte(warp_map_offsets[i] + 4, stage_info[active_warp_list[i]].start_spawn_id)
+        else:
+            rom.write_byte(warp_map_offsets[i], stage_info[active_warp_list[i]].mid_map_id)
+            rom.write_byte(warp_map_offsets[i] + 4, stage_info[active_warp_list[i]].mid_spawn_id)
 
     # Play the "teleportation" sound effect when teleporting
     rom.write_bytes(0xAE088, [0x08, 0x00, 0x4F, 0xAB,   # J 0x80013EAC
@@ -330,11 +338,26 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     rom.write_bytes(0x6E937C, [0x08, 0x0F, 0xF1, 0x2E])
     rom.write_bytes(0xBFC4B8, Patches.ck_door_music_player)
 
-    # Increase item capacity to 100
+    # Increase item capacity to 100 if "Increase Item Limit" is turned on
     if multiworld.increase_item_limit[player]:
         rom.write_byte(0xBF30B, 0x64)  # Most items
         rom.write_byte(0xBF3F7, 0x64)  # Sun/Moon cards
     rom.write_byte(0xBF353, 0x64)  # Keys (increase regardless)
+
+    # Change the item healing values if "Nerf Healing" is turned on
+    if multiworld.nerf_healing_items[player]:
+        rom.write_byte(0xB56371, 0x50)  # Healing kit   (100 -> 80)
+        rom.write_byte(0xB56374, 0x32)  # Roast beef    ( 80 -> 50)
+        rom.write_byte(0xB56377, 0x19)  # Roast chicken ( 50 -> 25)
+
+    # Disable loading zone healing if turned off
+    if not multiworld.loading_zone_heals[player]:
+        rom.write_byte(0xD99A5, 0x00)  # Skip all loading zone checks
+        rom.write_byte(0xA9DFFB, 0x40)  # Disable free heal from King Skeleton by reading the unused magic meter value
+
+    # Disable spinning on the Special1 and 2 pickup models so colorblind people can more easily identify them
+    rom.write_byte(0xEE4F5, 0x00)  # Special1
+    rom.write_byte(0xEE505, 0x00)  # Special2
 
     # Prevent the vanilla Magical Nitro transport's "can explode" flag from setting
     rom.write_bytes(0xB5D7AA, [0x00, 0x00, 0x00, 0x00])
@@ -344,6 +367,7 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     rom.write_bytes(0x106750, Patches.continue_cursor_start_checker)
     rom.write_bytes(0x1C444, [0x08, 0x0F, 0xF0, 0x90])  # J   0x803FC240
     rom.write_bytes(0xBFC240, Patches.savepoint_cursor_updater)
+    rom.write_bytes(0x1C2A0, [0x08, 0x0F, 0xF0, 0x94])  # J   0x803FC294
     rom.write_bytes(0x1C2D0, [0x08, 0x0F, 0xF0, 0x94])  # J   0x803FC250
     rom.write_bytes(0xBFC250, Patches.stage_start_cursor_updater)
     rom.write_byte(0xB585C8, 0xFF)
@@ -408,7 +432,6 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     rom.write_bytes(0xBFC000, Patches.remote_item_giver)
 
     # DeathLink counter decrementer code
-    rom.write_bytes(0x1C2A0, [0x08, 0x0F, 0xF0, 0x52])  # J 0x803FC148
     rom.write_bytes(0x1C340, [0x08, 0x0F, 0xF0, 0x52])  # J 0x803FC148
     rom.write_bytes(0xBFC148, Patches.deathlink_counter_decrementer)
 

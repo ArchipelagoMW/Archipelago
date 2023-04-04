@@ -136,9 +136,6 @@ class CV64World(World):
                          self.required_s2s, active_regions)
 
         # Set up the regions correctly
-        this_is_a_test = active_regions["Menu"].exits[0]
-        this_is_also_a_test = active_regions["Menu"].exits[1]
-
         for region in active_regions:
             self.multiworld.regions.append(active_regions[region])
 
@@ -298,7 +295,7 @@ class CV64World(World):
                                 f"for player {self.multiworld.get_player_name(self.player)}.")
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has(IName.victory, self.player)
-        self.multiworld.get_region(RName.ck_main, self.player).exits[0].access_rule = \
+        self.multiworld.get_entrance(RName.ck_drac_chamber, self.player).access_rule = \
             lambda state: state.has(IName.special_two, self.player, self.required_s2s)
 
     def pre_fill(self) -> None:
@@ -368,10 +365,11 @@ class CV64World(World):
 
             # Handle map lighting rando here.
             if self.multiworld.map_lighting[self.player].value == 1:
-                for entry in range(65):
+                for entry in range(67):
                     for sub_entry in range(19):
-                        if sub_entry not in [3, 7, 11, 15]:
-                            offsets_to_ids[0x1091BC + (entry * 27) + sub_entry] = \
+                        if sub_entry not in [3, 7, 11, 15] and entry != 4:
+                            # The fourth entry in the lighting table affects the lighting on some item pickups; skip it
+                            offsets_to_ids[0x1091A0 + (entry * 28) + sub_entry] = \
                                 random.randint(0, 255)
 
             world = self.multiworld

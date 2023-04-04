@@ -272,7 +272,7 @@ boss_table = {
     LName.cw_boss:               LocationData(None, 0x000000, RName.cw_start, "event"),
     LName.villa_boss_one:        LocationData(None, 0x000000, RName.villa_crypt, "event"),
     LName.villa_boss_two:        LocationData(None, 0x000000, RName.villa_crypt, "event"),
-    LName.uw_boss:               LocationData(None, 0x000000, RName.underground_waterway, "event"),
+    LName.uw_boss:               LocationData(None, 0x000000, RName.uw_main, "event"),
     LName.cc_boss_one:           LocationData(None, 0x000000, RName.cc_crystal, "event"),
     LName.cc_boss_two:           LocationData(None, 0x000000, RName.cc_crystal, "event"),
     LName.dt_boss_one:           LocationData(None, 0x000000, RName.dt_main, "event"),
