@@ -31,8 +31,8 @@ class Dungeon6:
             lower_right_owl = Location(dungeon=6).add(OwlStatue(0x1D7)).connect(lower_right_side, AND(POWER_BRACELET, STONE_BEAK6))
 
         center_1 = Location(dungeon=6).add(DroppedKey(0x1C3)).connect(miniboss, AND(COUNT(POWER_BRACELET, 2), FEATHER)) # tile room key drop
-        center_2_and_upper_right_side = Location(dungeon=6).add(DungeonChest(0x1B1)).connect(center_1, KEY6) # top right chest horseheads
-        boss_key = Location(dungeon=6).add(DungeonChest(0x1B6)).connect(center_2_and_upper_right_side, AND(KEY6, HOOKSHOT))
+        center_2_and_upper_right_side = Location(dungeon=6).add(DungeonChest(0x1B1)).connect(center_1, AND(KEY6, FOUND(KEY6, 2))) # top right chest horseheads
+        boss_key = Location(dungeon=6).add(DungeonChest(0x1B6)).connect(center_2_and_upper_right_side, AND(AND(KEY6, FOUND(KEY6, 3), HOOKSHOT)))
         if options.owlstatues == "both" or options.owlstatues == "dungeon":
             Location(dungeon=6).add(OwlStatue(0x1B6)).connect(boss_key, STONE_BEAK6)
 

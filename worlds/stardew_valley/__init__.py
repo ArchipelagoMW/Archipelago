@@ -42,7 +42,8 @@ class StardewWebWorld(WebWorld):
 
 class StardewValleyWorld(World):
     """
-    Stardew Valley farming simulator game where the objective is basically to spend the least possible time on your farm.
+    Stardew Valley is an open-ended country-life RPG. You can farm, fish, mine, fight, complete quests,
+    befriend villagers, and uncover dark secrets.
     """
     game = "Stardew Valley"
     option_definitions = stardew_valley_options

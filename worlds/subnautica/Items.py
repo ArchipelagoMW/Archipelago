@@ -40,8 +40,8 @@ item_table: Dict[int, ItemDict] = {
             'tech_type': 'CyclopsThermalReactorModule'},
     35007: {'classification': ItemClassification.filler,
             'count': 1,
-            'name': 'Stillsuit',
-            'tech_type': 'WaterFiltrationSuitFragment'},
+            'name': 'Water Filtration Suit',
+            'tech_type': 'WaterFiltrationSuit'},
     35008: {'classification': ItemClassification.progression,
             'count': 1,
             'name': 'Alien Containment',
@@ -359,6 +359,18 @@ item_table: Dict[int, ItemDict] = {
             'count': 0,
             'name': 'Partition Door',
             'tech_type': 'BasePartitionDoor'},
+    # new items that the mod implements
+
+    # Awards all furniture as a bundle
+    35100: {'classification': ItemClassification.filler,
+            'count': 0,
+            'name': 'Furniture',
+            'tech_type': 'Furniture'},
+    # Awards all farming blueprints as a bundle
+    35101: {'classification': ItemClassification.filler,
+            'count': 0,
+            'name': 'Farming',
+            'tech_type': 'Farming'},
 }
 
 advancement_item_names: Set[str] = set()
@@ -371,8 +383,15 @@ for item_id, item_data in item_table.items():
     else:
         non_advancement_item_names.add(item_name)
 
+group_items: Dict[int, Set[int]] = {
+    35100: {35025, 35047, 35048, 35056, 35057, 35058, 35059, 35060, 35061, 35062, 35063, 35064, 35065, 35067, 35068,
+            35069, 35070, 35073, 35074},
+    35101: {35049, 35050, 35051, 35071, 35072, 35074}
+}
+
 if False:  # turn to True to export for Subnautica mod
     from .Locations import location_table
+    from NetUtils import encode
     itemcount = sum(item_data["count"] for item_data in item_table.values())
     assert itemcount == len(location_table), f"{itemcount} != {len(location_table)}"
     payload = {item_id: item_data["tech_type"] for item_id, item_data in item_table.items()}
@@ -380,3 +399,5 @@ if False:  # turn to True to export for Subnautica mod
 
     with open("items.json", "w") as f:
         json.dump(payload, f)
+    with open("group_items.json", "w") as f:
+        f.write(encode(group_items))

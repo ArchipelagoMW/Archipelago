@@ -1,8 +1,8 @@
-from logic.helpers import Bosses
-from utils.parameters import Settings
-from rom.rom_patches import RomPatches
-from logic.smbool import SMBool
-from graph.location import locationsDict
+from worlds.sm.variaRandomizer.logic.helpers import Bosses
+from worlds.sm.variaRandomizer.utils.parameters import Settings
+from worlds.sm.variaRandomizer.rom.rom_patches import RomPatches
+from worlds.sm.variaRandomizer.logic.smbool import SMBool
+from worlds.sm.variaRandomizer.graph.location import locationsDict
 
 locationsDict["Energy Tank, Gauntlet"].AccessFrom = {
     'Landing Site': lambda sm: SMBool(True)
