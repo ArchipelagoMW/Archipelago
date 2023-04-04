@@ -653,7 +653,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     can_read_game = False
 
     last_temp_item_iteration: int = 0
-    temp_item_delay = 160
+    temp_item_delay = 60
     last_received_update: int = 0
 
     def __init__(self, ctx: SC2Context, mission_id):
@@ -723,7 +723,9 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
 
                 if self.can_read_game:
                     # Sending temporary items
-                    if not self.ctx.temp_items.empty() and iteration > self.last_temp_item_iteration + self.temp_item_delay:
+                    if not self.ctx.temp_items.empty()\
+                       and iteration > self.last_temp_item_iteration + self.temp_item_delay\
+                       and not self.mission_completed:
                         item_name = self.ctx.temp_items.get(timeout=1)
                         if item_name == "Transmission Trap":
                             for _ in range(self.ctx.transmissions_per_trap):
