@@ -27,12 +27,12 @@ ItemGetFlagFullHealth:
 ; Already got the full-health check
     ldr r2, =HasFullHealthItem
     mov r1, #2
-    strb r1, [r2, #1]
+    strb r1, [r2]
     b @@CheckKeyzer
 
 @@NoFullhealth:
     ldr r1, =HasFullHealthItem
-    strb r2, [r1, #1]
+    strb r2, [r1]
 
 @@CheckKeyzer:
     add r1, r4, r6

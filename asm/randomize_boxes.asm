@@ -60,7 +60,11 @@ SpawnRandomizedItemFromBox:
     str r2, [r4, @oam_animation_pointer]
 
 @@CheckLocation:
+    ldr r6, =Jewel1BoxContents
+    add r6, r6, r0
     bl GetItemAtLocation
+    strb r0, [r6]
+
     lsr r0, r0, #31-6
     cmp r0, #1  ; If it's your own junk item, always release
     beq @@HasNotChecked
@@ -133,14 +137,15 @@ hook_branch 0x802A378, 0x802A388, 0x802A3E6, LoadRandomItemAnimation ;  Full hea
 LoadRandomItemAnimation:
     push r4-r6, lr
     ldr r4, =CurrentEnemyData
-
     ldrb r0, [r4, @global_id]
     sub r0, 0x86
-    bl GetItemAtLocation
+    ldr r1, =Jewel1BoxContents
+    add r0, r1, r0
+    ldrb r0, [r0]
     mov r6, r0
 
 ; AP items
-    cmp r6, #0xFE
+    cmp r6, #0xF0
     beq @@APItem
 
 ; Clear bit 7
@@ -279,9 +284,9 @@ CollectRandomItem:
     strb r3, [r0]
 
 ; Get and decode
-    mov r0, r5
-    bl GetItemAtLocation
-    mov r5, r0
+    ldr r1, =Jewel1BoxContents
+    add r1, r5, r1
+    ldrb r5, [r1]
 
 ; Multiplayer items
     lsr r0, r5, #7
@@ -294,9 +299,14 @@ CollectRandomItem:
     bne @@JunkItem
 
 ; Jewel/CD
+    ldr r0, =LastCollectedItemID
+    strb r5, [r0]
+
     lsr r1, r5, #5
     cmp r1, #0
     bne @@CD
+    mov r0, #0  ; a1
+    bl SpawnCollectionIndicator
 
 ; Jewel piece or other world's item
 @@MultiplayerItem:
@@ -304,6 +314,8 @@ CollectRandomItem:
     b @@SetCheckLocation
 
 @@CD:
+    mov r0, #1  ; a1
+    bl SpawnCollectionIndicator
     ldr r0, =0x13C  ; a1
     b @@SetCheckLocation
 

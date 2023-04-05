@@ -39,6 +39,13 @@ ReceiveNextItem:
     add r2, r2, #1
     strh r2, [r1]
 
+; Set last collected item (if jewel or CD)
+    lsr r1, r0, #5
+    cmp r1, #2
+    bge @@Return
+    ldr r1, =LastCollectedItemID
+    strb r0, [r1]
+
 @@Return:
     mov pc, lr
 .pool

@@ -20,7 +20,7 @@ class ItemData(typing.NamedTuple):
 # CD:               | W | 0   1 |  passage  | level |
 #
 # Junk items:       | W | 1   0   0 |     type      |
-# AP item:          | 1 | 1   1   1   1   1   1   0 |
+# AP item:          | 1 | 1   1   1   0   0   0   0 |
 #
 # For jewel pieces:
 #  - passage = 0-5 for entry/emerald/ruby/topaz/sapphire/golden

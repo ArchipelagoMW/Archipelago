@@ -12,9 +12,11 @@ unusedrom equ 0x0878F97C
 .definelabel InPassageLevelID, 0x3000003
 .definelabel CurrentRoomId, 0x3000024
 .definelabel ucFlashLoop, 0x3000044
+.definelabel ucTimeUp, 0x3000047
 .definelabel EntityLeftOverStateList, 0x3000564
 .definelabel CurrentEnemyData, 0x3000A24
 .definelabel LevelStatusTable, 0x3000A68
+.definelabel Scbuf_ucStatus, 0x3000BE0
 .definelabel HasJewelPiece1, 0x3000C07
 .definelabel HasJewelPiece2, 0x3000C08
 .definelabel HasJewelPiece3, 0x3000C09
@@ -42,13 +44,23 @@ unusedrom equ 0x0878F97C
 ; Items can be received one at a time w/o issue
 .definelabel IncomingItemID, unusedram + 1  ; byte
 
-.definelabel DeathlinkEnabled, unusedram + 2  ; byte
+; The jewel piece or CD that you've most recently received or grabbed from a box
+.definelabel LastCollectedItemID, unusedram + 2  ; byte
+
+.definelabel DeathlinkEnabled, unusedram + 8  ; byte
 
 .definelabel QueuedJunk, unusedram + 16  ; bytes
     .definelabel QueuedFullHealthItem, QueuedJunk + 0
     .definelabel QueuedFormTraps, QueuedJunk + 1
     .definelabel QueuedHearts, QueuedJunk + 2
     .definelabel QueuedLightningTraps, QueuedJunk + 3
+
+.definelabel Jewel1BoxContents, unusedram + 24
+.definelabel Jewel2BoxContents, unusedram + 25
+.definelabel Jewel3BoxContents, unusedram + 26
+.definelabel Jewel4BoxContents, unusedram + 27
+.definelabel CDBoxContents, unusedram + 28
+.definelabel HealthBoxContents, unusedram + 29
 
 
 ; Functions
@@ -171,11 +183,13 @@ GetItemAtLocation:
 
 .endregion
 
-.include "worlds/wl4/asm/check_locations.asm"
-.include "worlds/wl4/asm/item_effects.asm"
-.include "worlds/wl4/asm/randomize_boxes.asm"
-.include "worlds/wl4/asm/save_full_health.asm"
-.include "worlds/wl4/asm/item_queue.asm"
-.include "worlds/wl4/asm/pre_game_loop.asm"
+.relativeinclude on
+.include "check_locations.asm"
+.include "item_effects.asm"
+.include "randomize_boxes.asm"
+.include "save_full_health.asm"
+.include "item_queue.asm"
+.include "pre_game_loop.asm"
+.include "item_indicator.asm"
 
 .close
