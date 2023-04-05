@@ -159,7 +159,8 @@ class And(StardewRule):
         if rules is not None:
             rules_list.update(rules)
 
-        assert rules_list, "Can't create a And conditions without rules"
+        if len(rules_list) < 1:
+            rules_list.add(True_())
 
         new_rules = set()
         for rule in rules_list:

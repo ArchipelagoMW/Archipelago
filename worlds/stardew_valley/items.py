@@ -55,6 +55,9 @@ class Group(enum.Enum):
     TRAVELING_MERCHANT_DAY = enum.auto()
     MUSEUM = enum.auto()
     FRIENDSANITY = enum.auto()
+    FESTIVAL = enum.auto()
+    RARECROW = enum.auto()
+    TRAP = enum.auto()
 
 
 @dataclass(frozen=True)
@@ -75,59 +78,6 @@ class ItemData:
     def has_any_group(self, *group: Group) -> bool:
         groups = set(group)
         return bool(groups.intersection(self.groups))
-
-
-@dataclass(frozen=True)
-class ResourcePackData:
-    name: str
-    default_amount: int = 1
-    scaling_factor: int = 1
-    classification: ItemClassification = ItemClassification.filler
-    groups: FrozenSet[Group] = frozenset()
-
-    def as_item_data(self, counter: itertools.count) -> [ItemData]:
-        return [ItemData(next(counter), self.create_item_name(quantity), self.classification,
-                         {Group.RESOURCE_PACK} | self.groups)
-                for quantity in self.scale_quantity.values()]
-
-    def create_item_name(self, quantity: int) -> str:
-        return f"Resource Pack: {quantity} {self.name}"
-
-    @cached_property
-    def scale_quantity(self) -> typing.OrderedDict[int, int]:
-        """Discrete scaling of the resource pack quantities.
-        100 is default, 200 is double, 50 is half (if the scaling_factor allows it).
-        """
-        levels = math.ceil(self.default_amount / self.scaling_factor) * 2
-        first_level = self.default_amount % self.scaling_factor
-        if first_level == 0:
-            first_level = self.scaling_factor
-        quantities = sorted(set(range(first_level, self.scaling_factor * levels, self.scaling_factor))
-                            | {self.default_amount * 2})
-
-        return OrderedDict({round(quantity / self.default_amount * 100): quantity
-                            for quantity in quantities
-                            if quantity <= self.default_amount * 2})
-
-    def calculate_quantity(self, multiplier: int) -> int:
-        scales = list(self.scale_quantity)
-        left_scale = bisect.bisect_left(scales, multiplier)
-        closest_scale = min([scales[left_scale], scales[left_scale - 1]],
-                            key=lambda x: abs(multiplier - x))
-        return self.scale_quantity[closest_scale]
-
-    def create_name_from_multiplier(self, multiplier: int) -> str:
-        return self.create_item_name(self.calculate_quantity(multiplier))
-
-
-class FriendshipPackData(ResourcePackData):
-    def create_item_name(self, quantity: int) -> str:
-        return f"Friendship Bonus ({quantity} <3)"
-
-    def as_item_data(self, counter: itertools.count) -> [ItemData]:
-        item_datas = super().as_item_data(counter)
-        return [ItemData(item.code_without_offset, item.name, item.classification, {Group.FRIENDSHIP_PACK})
-                for item in item_datas]
 
 
 class StardewItemFactory(Protocol):
@@ -152,25 +102,6 @@ def load_item_csv():
     return items
 
 
-def load_resource_pack_csv() -> List[ResourcePackData]:
-    try:
-        from importlib.resources import files
-    except ImportError:
-        from importlib_resources import files  # noqa
-
-    resource_packs = []
-    with files(data).joinpath("resource_packs.csv").open() as file:
-        resource_pack_reader = csv.DictReader(file)
-        for resource_pack in resource_pack_reader:
-            groups = frozenset(Group[group] for group in resource_pack["groups"].split(",") if group)
-            resource_packs.append(ResourcePackData(resource_pack["name"],
-                                                   int(resource_pack["default_amount"]),
-                                                   int(resource_pack["scaling_factor"]),
-                                                   ItemClassification[resource_pack["classification"]],
-                                                   groups))
-    return resource_packs
-
-
 events = [
     ItemData(None, "Victory", ItemClassification.progression),
     ItemData(None, "Month End", ItemClassification.progression),
@@ -193,9 +124,6 @@ def initialize_item_table():
     item_table.update({item.name: item for item in all_items})
 
 
-friendship_pack = FriendshipPackData("Friendship Bonus", default_amount=2, classification=ItemClassification.useful)
-all_resource_packs = load_resource_pack_csv()
-
 initialize_item_table()
 initialize_groups()
 
@@ -211,6 +139,10 @@ def create_items(item_factory: StardewItemFactory, locations_count: int, items_t
     assert len(items) <= locations_count, \
         "There should be at least as many locations as there are mandatory items"
     logger.debug(f"Created {len(items)} unique items")
+
+    unique_filler_items = create_unique_filler_items(item_factory, world_options, random, locations_count - len(items))
+    items += unique_filler_items
+    logger.debug(f"Created {len(unique_filler_items)} unique filler items")
 
     resource_pack_items = fill_with_resource_packs(item_factory, world_options, random, locations_count - len(items))
     items += resource_pack_items
@@ -237,14 +169,14 @@ def create_unique_items(item_factory: StardewItemFactory, world_options: Stardew
     create_museum_items(item_factory, world_options, items)
     create_arcade_machine_items(item_factory, world_options, items)
     items.append(item_factory(random.choice(items_by_group[Group.GALAXY_WEAPONS])))
-    items.append(
-        item_factory(friendship_pack.create_name_from_multiplier(world_options[options.ResourcePackMultiplier])))
+    items.append(item_factory("Friendship Bonus (2 <3)"))
     create_player_buffs(item_factory, world_options, items)
     items.extend(create_traveling_merchant_items(item_factory))
     items.append(item_factory("Return Scepter"))
     items.extend(create_seasons(item_factory, world_options))
     items.extend(create_seeds(item_factory, world_options))
     create_friendsanity_items(item_factory, world_options, items)
+    items.extend(create_festival_rewards(item_factory, world_options))
 
     return items
 
@@ -417,17 +349,44 @@ def create_seeds(item_factory: StardewItemFactory, world_options: StardewOptions
     return [item_factory(item) for item in items_by_group[Group.SEED_SHUFFLE]]
 
 
-def fill_with_resource_packs(item_factory: StardewItemFactory, world_options: options.StardewOptions, random: Random,
-                             required_resource_pack: int) -> List[Item]:
-    resource_pack_multiplier = world_options[options.ResourcePackMultiplier]
+def create_festival_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
+    if world_options[options.FestivalLocations] == options.FestivalLocations.option_disabled:
+        return []
 
-    if resource_pack_multiplier == 0:
-        return [item_factory(cola) for cola in ["Joja Cola"] * required_resource_pack]
+    return [
+        *[item_factory(item) for item in items_by_group[Group.FESTIVAL] if item.classification != ItemClassification.filler],
+        item_factory("Stardrop"),
+    ]
+
+
+def create_filler_festival_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
+    if world_options[options.FestivalLocations] == options.FestivalLocations.option_disabled:
+        return []
+
+    return [item_factory(item) for item in items_by_group[Group.FESTIVAL] if item.classification == ItemClassification.filler]
+
+
+def create_unique_filler_items(item_factory: StardewItemFactory, world_options: options.StardewOptions, random: Random,
+                             available_item_slots: int) -> List[Item]:
+    items = []
+
+    items.extend(create_filler_festival_rewards(item_factory, world_options))
+
+    if len(items) > available_item_slots:
+        items = random.sample(items, available_item_slots)
+    return items
+
+
+def fill_with_resource_packs(item_factory: StardewItemFactory, random: Random,
+                             required_resource_pack: int) -> List[Item]:
+    all_resource_packs = items_by_group[Group.RESOURCE_PACK]
+    all_resource_packs.extend(items_by_group[Group.TRASH])
+    all_resource_packs.extend(items_by_group[Group.TRAP])
 
     items = []
 
     for i in range(required_resource_pack):
         resource_pack = random.choice(all_resource_packs)
-        items.append(item_factory(resource_pack.create_name_from_multiplier(resource_pack_multiplier)))
+        items.append(item_factory(resource_pack))
 
     return items

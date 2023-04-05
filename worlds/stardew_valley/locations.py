@@ -51,6 +51,9 @@ class LocationTags(enum.Enum):
     MUSEUM_MILESTONES = enum.auto()
     MUSEUM_DONATIONS = enum.auto()
     FRIENDSANITY = enum.auto()
+    FESTIVAL = enum.auto()
+    SPECIAL_ORDER_BOARD = enum.auto()
+    SPECIAL_ORDER_QI = enum.auto()
 
 
 @dataclass(frozen=True)
@@ -178,6 +181,47 @@ def extend_friendsanity_locations(randomized_locations: List[LocationData], frie
             randomized_locations.append(location_table[f"Friendsanity: Pet {heart} <3"])
 
 
+def extend_festival_locations(randomized_locations: List[LocationData], festival_option: int):
+    if festival_option == options.FestivalLocations.option_disabled:
+        return
+
+    randomized_locations.append(location_table["Egg Hunt Victory"])
+    randomized_locations.append(location_table["Egg Festival: Strawberry Seeds"])
+    randomized_locations.append(location_table["Dance with someone"])
+    randomized_locations.append(location_table["Rarecrow #5 (Woman)"])
+    randomized_locations.append(location_table["Luau Soup"])
+    randomized_locations.append(location_table["Dance of the Moonlight Jellies"])
+    randomized_locations.append(location_table["Smashing Stone"])
+    randomized_locations.append(location_table["Grange Display"])
+    randomized_locations.append(location_table["Rarecrow #1 (Turnip Head)"])
+    randomized_locations.append(location_table["Fair Stardrop"])
+    randomized_locations.append(location_table["Spirit's Eve Maze"])
+    randomized_locations.append(location_table["Rarecrow #2 (Witch)"])
+    randomized_locations.append(location_table["Win Fishing Competition"])
+    randomized_locations.append(location_table["Rarecrow #4 (Snowman)"])
+    randomized_locations.append(location_table["Mermaid Pearl"])
+    randomized_locations.append(location_table["Rarecrow #7 (Tanuki)"])
+    randomized_locations.append(location_table["Rarecrow #8 (Tribal Mask)"])
+    randomized_locations.append(location_table["Secret Santa"])
+    randomized_locations.append(location_table["Lupini: Red Eagle"])
+    randomized_locations.append(location_table["Lupini: Portrait Of A Mermaid"])
+    randomized_locations.append(location_table["Lupini: Solar Kingdom"])
+    extend_hard_festival_locations(randomized_locations, festival_option)
+
+
+def extend_hard_festival_locations(randomized_locations, festival_option: int):
+    if festival_option != options.FestivalLocations.option_hard:
+        return
+    randomized_locations.append(location_table["Cone Hat"])
+    randomized_locations.append(location_table["Iridium Fireplace"])
+    randomized_locations.append(location_table["Lupini: Clouds"])
+    randomized_locations.append(location_table["Lupini: 1000 Years From Now"])
+    randomized_locations.append(location_table["Lupini: Three Trees"])
+    randomized_locations.append(location_table["Lupini: The Serpent"])
+    randomized_locations.append(location_table["Lupini: Tropical Fish #173"])
+    randomized_locations.append(location_table["Lupini: Land Of Clay"])
+
+
 def create_locations(location_collector: StardewLocationCollector,
                      world_options: options.StardewOptions,
                      random: Random):
@@ -210,6 +254,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_fishsanity_locations(randomized_locations, world_options[options.Fishsanity], random)
     extend_museumsanity_locations(randomized_locations, world_options[options.Museumsanity], random)
     extend_friendsanity_locations(randomized_locations, world_options[options.Friendsanity])
+    extend_festival_locations(randomized_locations, world_options[options.FestivalLocations])
 
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)
