@@ -19,7 +19,7 @@ battlefields = [
      "object_id": 0x02,
      "type": "Battlefield",
      "region": "Earth Region"},
-    {"name": "Battlefield - West Sand",
+    {"name": "Battlefield - East Sand",
      "object_id": 0x03,
      "type": "Battlefield",
      "region": "Earth Region"},
@@ -248,10 +248,10 @@ def create_regions(self):
                 object in room["game_objects"] if "Hero Chest" not in object["name"] and (object["type"] != "Box" or
                 self.multiworld.brown_boxes[self.player] == "include")], room["links"]))
 
-    if self.multiworld.shuffle_battlefield_rewards[self.player]:
-        item_battlefields = self.multiworld.random.sample(list(range(1, 21)), 5)
-    else:
-        item_battlefields = [2, 6, 10, 13, 16]
+    # if self.multiworld.shuffle_battlefield_rewards[self.player]:
+    #     item_battlefields = self.multiworld.random.sample(list(range(1, 21)), 5)
+    # else:
+    item_battlefields = [2, 6, 10, 13, 16]
 
     for index in item_battlefields:
         battlefield = battlefields[index - 1]
