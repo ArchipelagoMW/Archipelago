@@ -31,8 +31,6 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
             return stage_info[active_stage_exits[source_stage][2]].start_region_name
         return "Menu"
 
-    s1s_per_warp = multiworld.special1s_per_warp[player].value
-
     all_entrances = [
         # Forest of Silence
         EntranceData(RName.forest_start, RName.forest_mid),
@@ -131,7 +129,8 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
         else:
             menu_exit = Entrance(player, f"Warp {i}", active_regions["Menu"])
             warp_exit = Entrance(player, stage_info[active_warp_list[i]].mid_region_name, active_regions[f"Warp {i}"])
-            menu_exit.access_rule = lambda state: state.has(IName.special_one, player, s1s_per_warp * i)
+            menu_exit.access_rule = lambda state, warp_num=i: state.has(IName.special_one, player, multiworld.
+                                                                        special1s_per_warp[player].value * warp_num)
             active_regions["Menu"].exits.append(menu_exit)
             active_regions[f"Warp {i}"].exits.append(warp_exit)
             menu_exit.connect(active_regions[f"Warp {i}"])
