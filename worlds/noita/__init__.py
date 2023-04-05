@@ -56,9 +56,7 @@ class NoitaWorld(World):
         Events.create_all_events(self.multiworld, self.player)
     
     def create_item(self, name: str) -> Item:
-        Items.create_item(self.player, name)
-        item_data = item_table[name]
-        return NoitaItem(name, item_data.classification, item_data.code, self.player)
+        return Items.create_item(self.player, name)
         
     def create_items(self) -> None:
         Items.create_all_items(self.multiworld, self.player)
