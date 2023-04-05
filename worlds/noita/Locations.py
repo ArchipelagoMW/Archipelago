@@ -191,7 +191,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "The Tower Pedestal": LocationData(112780, "peds", Pedestals.main_world),
     },
     "Wizard's Den": {
-        "Mestarien mestari": LocationData(110700, "boss", Bosses.main_world),
+        "Mestarien mestari": LocationData(110690, "boss", Bosses.main_world),
         "Wizard's Den Orb": LocationData(110511, "orb", Orbs.main_world),
         "Wizards' Den Chest": LocationData(112220, "hc", HiddenChests.main_world),
         "Wizards' Den Pedestal": LocationData(112720, "peds", Pedestals.main_world),
