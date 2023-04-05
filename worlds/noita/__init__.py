@@ -14,6 +14,7 @@ class NoitaWeb(WebWorld):
         ["DaftBrit, Heinermann, ScipioWright"]
     )]
     theme = "partyTime"
+    bug_report_page = "https://github.com/DaftBrit/NoitaArchipelago/issues"
 
 
 # Keeping World slim so that it's easier to comprehend
