@@ -71,24 +71,6 @@ class StartingMoney(SpecialRange):
     }
 
 
-class ResourcePackMultiplier(SpecialRange):
-    """How many items will be in the resource packs. A lower setting mean fewer resources in each pack.
-    A higher setting means more resources in each pack. Easy (200) doubles the default quantity"""
-    internal_name = "resource_pack_multiplier"
-    default = 100
-    range_start = 0
-    range_end = 200
-    # step = 25
-    display_name = "Resource Pack Multiplier"
-
-    special_range_names = {
-        "resource packs disabled": 0,
-        "half packs": 50,
-        "normal packs": 100,
-        "double packs": 200,
-    }
-
-
 class BundleRandomization(Choice):
     """What items are needed for the community center bundles?
     Vanilla: Standard bundles from the vanilla game
@@ -242,9 +224,23 @@ class BuildingProgression(Choice):
     option_progressive_early_shipping_bin = 2
 
 
+class FestivalLocations(Choice):
+    """Locations for attending and participating in festivals
+    With Disabled, you do not need to attend festivals
+    With Easy, there are checks for participating in festivals
+    With Hard, the festival checks are only granted when the player performs well in the festival
+    """
+    internal_name = "festival_locations"
+    display_name = "Festival Locations"
+    default = 1
+    option_disabled = 0
+    option_easy = 1
+    option_hard = 2
+
+
 class ArcadeMachineLocations(Choice):
     """How are the Arcade Machines handled?
-    Vanilla: The arcade machines are not included in the Archipelago shuffling.
+    Disabled: The arcade machines are not included in the Archipelago shuffling.
     Victories: Each Arcade Machine will contain one check on victory
     Victories Easy: The arcade machines are both made considerably easier to be more accessible for the average
         player.
@@ -259,6 +255,20 @@ class ArcadeMachineLocations(Choice):
     option_victories = 1
     option_victories_easy = 2
     option_full_shuffling = 3
+
+
+class SpecialOrderLocations(Choice):
+    """How are the Special Orders handled?
+    Disabled: The special orders are not included in the Archipelago shuffling.
+    Board Only: The Special Orders on the board in town are location checks
+    Board and Qi: The Special Orders from Qi's walnut room are checks, as well as the board in town
+    """
+    internal_name = "special_order_locations"
+    display_name = "Special Order Locations"
+    default = 1
+    option_disabled = 0
+    option_board_only = 1
+    option_board_qi = 2
 
 
 class HelpWantedLocations(SpecialRange):
@@ -463,7 +473,6 @@ class GiftTax(SpecialRange):
 
 stardew_valley_option_classes = [
     StartingMoney,
-    ResourcePackMultiplier,
     BundleRandomization,
     BundlePrice,
     EntranceRandomization,
@@ -473,8 +482,10 @@ stardew_valley_option_classes = [
     ToolProgression,
     SkillProgression,
     BuildingProgression,
+    FestivalLocations,
     TheMinesElevatorsProgression,
     ArcadeMachineLocations,
+    SpecialOrderLocations,
     HelpWantedLocations,
     Fishsanity,
     Museumsanity,

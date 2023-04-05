@@ -6,7 +6,7 @@ from typing import Dict, Union, Optional, Iterable, Sized, Tuple, List
 from . import options
 from .data import all_fish, FishItem, all_purchasable_seeds, SeedItem, all_crops, CropItem
 from .data.bundle_data import BundleItem
-from .data.museum_data import all_museum_items, MuseumItem
+from .data.museum_data import all_museum_items, MuseumItem, all_artifact_items
 from .data.region_data import SVRegion
 from .data.villagers_data import all_villagers_by_name
 from .items import all_items, Group
@@ -108,6 +108,8 @@ class StardewLogic:
     museum_rules: Dict[str, StardewRule] = field(default_factory=dict)
     building_rules: Dict[str, StardewRule] = field(default_factory=dict)
     quest_rules: Dict[str, StardewRule] = field(default_factory=dict)
+    festival_rules: Dict[str, StardewRule] = field(default_factory=dict)
+    special_order_rules: Dict[str, StardewRule] = field(default_factory=dict)
 
     def __post_init__(self):
         self.fish_rules.update({fish.name: self.can_catch_fish(fish) for fish in all_fish})
@@ -207,11 +209,11 @@ class StardewLogic:
             "Dorado": self.can_fish(78) & self.has_season("Summer"),
             "Dried Starfish": self.can_fish() & self.can_reach_region(SVRegion.beach),
             "Driftwood": self.can_crab_pot(),
-            "Duck Egg": self.has("Duck"),
-            "Duck Feather": self.has("Duck"),
+            "Duck Egg": self.has_animal("Duck"),
+            "Duck Feather": self.has_animal("Duck"),
             "Duck": self.has_building("Big Coop"),
-            "Egg": self.has("Chicken"),
-            "Egg (Brown)": self.has("Chicken"),
+            "Egg": self.has_animal("Chicken"),
+            "Egg (Brown)": self.has_animal("Chicken"),
             "Eggplant Parmesan": self.can_cook() & self.has_relationship("Lewis", 7) & self.has("Eggplant") & self.has(
                 "Tomato"),
             "Escargot": self.can_cook() & self.has_relationship("Willy", 5) & self.has("Snail") & self.has("Garlic"),
@@ -273,10 +275,10 @@ class StardewLogic:
             "Junimo Kart Max Buff": self.has_junimo_kart_power_level(8),
             "Keg": self.has_skill_level("Farming", 8) & self.has("Iron Bar") & self.has("Copper Bar") & self.has(
                 "Oak Resin"),
-            "Large Egg": self.has("Chicken"),
-            "Large Egg (Brown)": self.has("Chicken"),
+            "Large Egg": self.has_animal("Chicken"),
+            "Large Egg (Brown)": self.has_animal("Chicken"),
             "Large Goat Milk": self.has("Goat"),
-            "Large Milk": self.has("Cow"),
+            "Large Milk": self.has_animal("Cow"),
             "Leek": self.has_season("Spring"),
             "Lightning Rod": self.has_skill_level("Foraging", 6),
             "Lobster": self.can_crab_pot(),
@@ -292,7 +294,7 @@ class StardewLogic:
             "Mayonnaise Machine": self.has_skill_level("Farming", 2) & self.has("Wood") & self.has("Stone") &
                                   self.has("Earth Crystal") & self.has("Copper Bar"),
             "Mead": self.has("Keg") & self.has("Honey"),
-            "Milk": self.has("Cow"),
+            "Milk": self.has_animal("Cow"),
             "Miner's Treat": self.can_cook() & self.has_skill_level("Mining", 3) & self.has("Cow Milk") & self.has(
                 "Cave Carrot"),
             "Morel": self.can_reach_region(SVRegion.secret_woods),
@@ -337,7 +339,7 @@ class StardewLogic:
                            self.has("Cow Milk") & self.has("Sugar"),
             "Purple Mushroom": self.can_mine_in_the_mines_floor_81_120() | self.can_mine_in_the_skull_cavern(),
             "Rabbit": self.has_building("Deluxe Coop"),
-            "Rabbit's Foot": self.has("Rabbit"),
+            "Rabbit's Foot": self.has_animal("Rabbit"),
             "Radioactive Bar": self.can_smelt("Radioactive Ore"),
             "Radioactive Ore": self.can_mine_perfectly_in_the_skull_cavern() & self.can_reach_region(SVRegion.ginger_island),
             "Rainbow Shell": self.has_season("Summer"),
@@ -400,7 +402,7 @@ class StardewLogic:
             "Tropical Curry": False_(),
             # self.can_cook() & self.can_reach_region(SVRegion.ginger_island) & self.has("Coconut") & self.has("Pineapple") & self.has("Hot Pepper"),
             "Truffle Oil": self.has("Truffle") & self.has("Oil Maker"),
-            "Truffle": self.has("Pig") & self.has_spring_summer_or_fall(),
+            "Truffle": self.has_animal("Pig") & self.has_spring_summer_or_fall(),
             "Vegetable Medley": self.can_cook() & self.has_relationship("Caroline", 7) & self.has("Tomato") & self.has(
                 "Beet"),
             "Vinegar": True_(),
@@ -415,7 +417,7 @@ class StardewLogic:
             "Wine": self.has("Keg"),
             "Winter Root": self.has_season("Winter"),
             "Wood": self.has_tool("Axe"),
-            "Wool": self.has("Rabbit") | self.has("Sheep"),
+            "Wool": self.has_animal("Rabbit") | self.has_animal("Sheep"),
             "Hay": self.has_building("Silo"),
         })
         self.item_rules.update(self.fish_rules)
@@ -493,6 +495,69 @@ class StardewLogic:
             "Granny's Gift": self.has("Leek"),
             "Exotic Spirits": self.has("Coconut"),
             "Catch a Lingcod": self.has("Lingcod"),
+        })
+
+        self.festival_rules.update({
+            "Egg Hunt Victory": self.has_season("Spring") & self.can_reach_region("Town") & self.can_win_egg_hunt(),
+            "Egg Festival: Strawberry Seeds": self.has_season("Spring") & self.can_reach_region("Town") & self.can_spend_money(1000),
+            "Dance with someone": self.has_season("Spring") & self.can_reach_region("Forest") & self.has_relationship("Bachelor", 4),
+            "Rarecrow #5 (Woman)": self.has_season("Spring") & self.can_reach_region("Forest") & self.can_spend_money(2500),
+            "Luau Soup": self.has_season("Summer") & self.can_reach_region("Beach") & self.can_succeed_luau_soup(),
+            "Dance of the Moonlight Jellies": self.has_season("Summer") & self.can_reach_region("Beach"),
+            "Smashing Stone": self.has_season("Fall") & self.can_reach_region("Town"),
+            "Grange Display": self.has_season("Fall") & self.can_reach_region("Town") & self.can_succeed_grange_display(),
+            "Rarecrow #1 (Turnip Head)": self.has_season("Fall") & self.can_reach_region("Town"),  # only cost star tokens
+            "Fair Stardrop": self.has_season("Fall") & self.can_reach_region("Town"),  # only cost star tokens
+            "Spirit's Eve Maze": self.has_season("Fall") & self.can_reach_region("Town"),
+            "Rarecrow #2 (Witch)": self.has_season("Fall") & self.can_reach_region("Town") & self.can_spend_money(5000),
+            "Win Fishing Competition": self.has_season("Winter") & self.can_reach_region("Forest") & self.can_win_fishing_competition(),
+            "Rarecrow #4 (Snowman)": self.has_season("Winter") & self.can_reach_region("Forest") & self.can_spend_money(5000),
+            "Mermaid Pearl": self.has_season("Winter") & self.can_reach_region("Beach"),
+            "Cone Hat": self.has_season("Winter") & self.can_reach_region("Beach") & self.can_spend_money(2500),
+            "Iridium Fireplace": self.has_season("Winter") & self.can_reach_region("Beach") & self.can_spend_money(15000),
+            "Rarecrow #7 (Tanuki)": self.has_season("Winter") & self.can_reach_region("Beach") & self.can_spend_money(5000) & self.can_find_museum_artifacts(20),
+            "Rarecrow #8 (Tribal Mask)": self.has_season("Winter") & self.can_reach_region("Beach") & self.can_spend_money(5000) & self.can_find_museum_items(40),
+            "Lupini: Red Eagle": self.has_season("Winter") & self.can_reach_region("Beach") & self.can_spend_money(1200),
+            "Lupini: Portrait Of A Mermaid": self.has_season("Winter") & self.can_reach_region("Beach") & self.can_spend_money(1200),
+            "Lupini: Solar Kingdom": self.has_season("Winter") & self.can_reach_region("Beach") & self.can_spend_money(1200),
+            "Lupini: Clouds": self.has_season("Winter") & self.can_reach_region("Beach") & self.has_year_two() & self.can_spend_money(1200),
+            "Lupini: 1000 Years From Now": self.has_season("Winter") & self.can_reach_region("Beach") & self.has_year_two() & self.can_spend_money(1200),
+            "Lupini: Three Trees": self.has_season("Winter") & self.can_reach_region("Beach") & self.has_year_two() & self.can_spend_money(1200),
+            "Lupini: The Serpent": self.has_season("Winter") & self.can_reach_region("Beach") & self.has_year_three() & self.can_spend_money(1200),
+            "Lupini: Tropical Fish #173": self.has_season("Winter") & self.can_reach_region("Beach") & self.has_year_three() & self.can_spend_money(1200),
+            "Lupini: Land Of Clay": self.has_season("Winter") & self.can_reach_region("Beach") & self.has_year_three() & self.can_spend_money(1200),
+            "Secret Santa": self.has_season("Winter") & self.can_reach_region("Town") & self.has_any_universal_love(),
+        })
+
+        self.special_order_rules.update({
+            "Island Ingredients": False_(),
+            "Cave Patrol": False_(),
+            "Aquatic Overpopulation": False_(),
+            "Biome Balance": False_(),
+            "Rock Rejuvenation": False_(),
+            "Gifts for George": False_(),
+            "Fragments of the past": False_(),
+            "Gus' Famous Omelet": False_(),
+            "Crop Order": False_(),
+            "Community Cleanup": False_(),
+            "The Strong Stuff": False_(),
+            "Pierre's Prime Produce": False_(),
+            "Robin's Project": False_(),
+            "Robin's Resource Rush": False_(),
+            "Juicy Bugs Wanted!": False_(),
+            "Tropical Fish": False_(),
+            "A Curious Substance": False_(),
+            "Prismatic Jelly": False_(),
+            "Qi's Crop": False_(),
+            "Let's Play A Game": False_(),
+            "Four Precious Stones": False_(),
+            "Qi's Hungry Challenge": False_(),
+            "Qi's Cuisine": False_(),
+            "Qi's Kindness": False_(),
+            "Extended Family": False_(),
+            "Danger In The Deep": False_(),
+            "Skull Cavern Invasion": False_(),
+            "Qi's Prismatic Grange": False_(),
         })
 
     def has(self, items: Union[str, (Iterable[str], Sized)], count: Optional[int] = None) -> StardewRule:
@@ -938,15 +1003,33 @@ class StardewLogic:
     def has_year_two(self) -> StardewRule:
         return self.has_lived_months(4)
 
+    def has_year_three(self) -> StardewRule:
+        return self.has_lived_months(8)
+
     def has_spring_summer_or_fall(self) -> StardewRule:
         return self.has_season("Spring") | self.has_season("Summer") | self.has_season("Fall")
 
     def can_find_museum_item(self, item: MuseumItem) -> StardewRule:
         region_rule = self.can_reach_all_regions(item.locations)
-        geodes_rule = self.has(item.geodes)
+        geodes_rule = And([self.can_open_geode(geode) for geode in item.geodes])
         # monster_rule = self.can_farm_monster(item.monsters)
         # extra_rule = True_()
         return region_rule & geodes_rule  # & monster_rule & extra_rule
+
+    def can_find_museum_artifacts(self, number: int) -> StardewRule:
+        rules = []
+        for donation in all_museum_items:
+            if donation in all_artifact_items:
+                rules.append(self.can_find_museum_item(donation))
+
+        return Count(number, rules)
+
+    def can_find_museum_items(self, number: int) -> StardewRule:
+        rules = []
+        for donation in all_museum_items:
+            rules.append(self.can_find_museum_item(donation))
+
+        return Count(number, rules)
 
     def can_complete_museum(self) -> StardewRule:
         rules = [self.can_mine_perfectly_in_the_skull_cavern()]
@@ -986,3 +1069,99 @@ class StardewLogic:
         if self.options[options.Museumsanity] == options.Museumsanity.option_none:
             return True_()
         return self.received("Rusty Key")
+
+    def can_win_egg_hunt(self) -> StardewRule:
+        number_of_buffs: int = self.options[options.NumberOfPlayerBuffs]
+        if self.options[options.FestivalLocations] == options.FestivalLocations.option_hard or number_of_buffs < 2:
+            return True_()
+        return self.received("Movement Speed Bonus", number_of_buffs // 2)
+
+    def can_succeed_luau_soup(self) -> StardewRule:
+        if self.options[options.FestivalLocations] != options.FestivalLocations.option_hard:
+            return True_()
+        eligible_fish = ["Blobfish", "Crimsonfish", "Ice Pip", "Lava Eel", "Legend", "Angler", "Catfish", "Glacierfish", "Mutant Carp", "Spook Fish", "Stingray", "Sturgeon", "Super Cucumber"]
+        fish_rule = [self.has(fish) for fish in eligible_fish]
+        eligible_kegables = ["Ancient Fruit", "Apple", "Banana", "Coconut", "Crystal Fruit", "Mango", "Melon", "Orange", "Peach", "Pineapple", "Pomegranate", "Rhubarb", "Starfruit", "Strawberry", "Cactus Fruit", "Cherry", "Cranberries", "Grape", "Spice Berry", "Wild Plum", "Hops", "Wheat"]
+        keg_rules = [self.can_keg(kegable) for kegable in eligible_kegables]
+        aged_rule = [self.can_age(rule, "Iridium") for rule in keg_rules]
+        # There are a few other valid items but I don't feel like coding them all
+        return Or(fish_rule) | Or(aged_rule)
+
+    def can_succeed_grange_display(self) -> StardewRule:
+        if self.options[options.FestivalLocations] != options.FestivalLocations.option_hard:
+            return True_()
+        animal_rule = self.has_animal("Any")
+        artisan_rule = self.can_keg("Any") | self.can_jelly("Any")
+        cooking_rule = True_()  # Salads at the bar are good enough
+        fish_rule = self.can_fish(50)
+        forage_rule = True_()  # Hazelnut always available since the grange display is in fall
+        mineral_rule = self.can_open_geode("Any")  # More than half the minerals are good enough
+        good_fruits = ["Apple", "Banana", "Coconut", "Crystal Fruit", "Mango", "Orange", "Peach", "Pomegranate",
+                       "Strawberry", "Melon", "Rhubarb", "Pineapple", "Ancient Fruit", "Starfruit",]
+        fruit_rule = Or([self.has(fruit) for fruit in good_fruits])
+        good_vegetables = ["Amaranth", "Artichoke", "Beet", "Cauliflower", "Fiddlehead Fern	", "Kale",
+                           "Radish", "Taro Root", "Yam", "Red Cabbage", "Pumpkin"]
+        vegetable_rule = Or([self.has(vegetable) for vegetable in good_vegetables])
+
+        return animal_rule & artisan_rule & cooking_rule & fish_rule & \
+               forage_rule & fruit_rule & mineral_rule & vegetable_rule
+
+    def can_win_fishing_competition(self) -> StardewRule:
+        return self.can_fish(60)
+
+    def has_any_universal_love(self) -> StardewRule:
+        return self.has("Golden Pumpkin") | self.has("Magic Rock Candy") | self.has("Pearl") | self.has("Prismatic Shard") | self.has("Rabbit's Foot")
+
+    def can_keg(self, item: str) -> StardewRule:
+        keg_rule = self.has("Keg")
+        if item == "Any":
+            return keg_rule
+        return keg_rule & self.has(item)
+
+    def can_jelly(self, item: str) -> StardewRule:
+        jelly_rule = self.has("Preserves Jar")
+        if item == "Any":
+            return jelly_rule
+        return jelly_rule & self.has(item)
+
+    def can_age(self, item: Union[str, StardewRule], quality: str) -> StardewRule:
+        months = 1
+        if quality == "Gold":
+            months = 2
+        elif quality == "Iridium":
+            months = 3
+        if item is str:
+            rule = self.has(item)
+        else:
+            rule: StardewRule = item
+        return self.has("Cask") & self.has_lived_months(months) & rule
+
+    def has_animal(self, animal: str) -> StardewRule:
+        if animal == "Any":
+            return self.has_any_animal()
+        elif animal == "Coop":
+            return self.has_any_coop_animal()
+        elif animal == "Barn":
+            return self.has_any_barn_animal()
+        return self.has(animal)
+
+    def has_any_animal(self) -> StardewRule:
+        return self.has_any_coop_animal() | self.has_any_barn_animal()
+
+    def has_any_coop_animal(self) -> StardewRule:
+        coop_animals = ["Chicken", "Rabbit", "Duck", "Dinosaur"]
+        coop_rule = Or([self.has_animal(coop_animal) for coop_animal in coop_animals])
+        return coop_rule
+
+    def has_any_barn_animal(self) -> StardewRule:
+        barn_animals = ["Cow", "Sheep", "Pig", "Ostrich"]
+        barn_rule = Or([self.has_animal(barn_animal) for barn_animal in barn_animals])
+        return barn_rule
+
+    def can_open_geode(self, geode: str) -> StardewRule:
+        blacksmith_access = self.can_reach_region("Clint's Blacksmith")
+        geodes = ["Geode", "Frozen Geode", "Magma Geode", "Omni Geode"]
+        if geode == "Any":
+            return blacksmith_access & Or([self.has(geode_type) for geode_type in geodes])
+        return blacksmith_access & self.has(geode)
+
