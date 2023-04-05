@@ -1,4 +1,4 @@
-from BaseClasses import Tutorial
+from BaseClasses import Tutorial, Item
 from worlds.AutoWorld import World, WebWorld
 from . import Options, Items, Locations, Regions, Rules, Events
 from .Options import noita_options
@@ -27,6 +27,7 @@ class NoitaWorld(World):
     game = "Noita"
     option_definitions = Options.noita_options
     topology_present = True
+    data_version = 0
 
     item_name_to_id = Items.item_name_to_id
     location_name_to_id = Locations.location_name_to_id
@@ -51,16 +52,16 @@ class NoitaWorld(World):
 
     def create_regions(self) -> None:
         Regions.create_all_regions_and_connections(self.multiworld, self.player)
-
+        Events.create_all_events(self.multiworld, self.player)
+    
+    def create_item(self, name: str) -> Item:
+        return Items.create_item(self.player, name)
+        
     def create_items(self) -> None:
         Items.create_all_items(self.multiworld, self.player)
 
     def set_rules(self) -> None:
-        Rules.create_all_rules(self.multiworld, self.player)
-
-    # Generate victory conditions and other shenanigans
-    def generate_basic(self) -> None:
-        Events.create_all_events(self.multiworld, self.player)
+        Rules.create_all_rules(self.multiworld, self.player)      
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(Items.filler_items)
