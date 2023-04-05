@@ -904,6 +904,7 @@ class StartHints(ItemSet):
 
 class LocationSet(OptionSet):
     verify_location_name = True
+    convert_name_groups = True
 
 
 class StartLocationHints(LocationSet):

@@ -179,6 +179,7 @@ class AllPokemonSeen(Toggle):
     """Start with all Pokemon "seen" in your Pokedex. This allows you to see where Pokemon can be encountered in the
     wild. Pokemon found by fishing or in the Cerulean Cave are not displayed."""
     default = 0
+    display_name = "All Pokemon Seen"
 
 
 class DexSanity(Toggle):
@@ -271,6 +272,7 @@ class Area1To1Mapping(Toggle):
     """When randomizing wild Pokemon, for each zone, all instances of a particular Pokemon will be replaced with the
     same Pokemon, resulting in fewer Pokemon in each area."""
     default = 1
+    display_name = "Area 1-to-1 Mapping"
 
 
 class RandomizeStarterPokemon(Choice):
