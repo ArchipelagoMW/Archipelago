@@ -525,16 +525,16 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
         checked_locations: typing.Set[Location] = set()
         unchecked_locations: typing.Set[Location] = set(world.get_locations())
 
-        reachable_locations_count: typing.Dict[int, int] = {
-            player: 0
-            for player in world.player_ids
-            if len(world.get_filled_locations(player)) != 0
-        }
         total_locations_count: typing.Counter[int] = Counter(
             location.player
             for location in world.get_locations()
             if not location.locked
         )
+        reachable_locations_count: typing.Dict[int, int] = {
+            player: 0
+            for player in world.player_ids
+            if total_locations_count[player] and len(world.get_filled_locations(player)) != 0
+        }
         balanceable_players = {
             player: balanceable_players[player]
             for player in balanceable_players
@@ -549,7 +549,11 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
             return {loc for loc in locations if sphere_state.can_reach(loc)}
 
         def item_percentage(player: int, num: int) -> float:
-            return num / total_locations_count[player] if total_locations_count[player] else 1
+            return num / total_locations_count[player]
+
+        # If there are no locations that aren't locked, there's no point in attempting to balance progression.
+        if len(total_locations_count) == 0:
+            return
 
         while True:
             # Gather non-locked locations.
