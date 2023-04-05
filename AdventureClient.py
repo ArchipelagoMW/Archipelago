@@ -436,7 +436,7 @@ async def patch_and_run_game(patch_file, ctx):
         logger.info(msg, extra={'compact_gui': True})
         ctx.gui_error('Error', msg)
 
-    with open(Utils.user_path("data", "adventure_basepatch.bsdiff4"), "rb") as file:
+    with open(Utils.local_path("data", "adventure_basepatch.bsdiff4"), "rb") as file:
         basepatch = bytes(file.read())
 
     base_patched_rom_data = bsdiff4.patch(base_rom, basepatch)
