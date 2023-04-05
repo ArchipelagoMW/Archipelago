@@ -70,7 +70,11 @@ class FFMQClient(SNIClient):
     async def game_watcher(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
+        check_1 = await snes_read(ctx, 0xF5103F, 1)
         data = await snes_read(ctx, READ_DATA_START, READ_DATA_END - READ_DATA_START)
+        check_2 = await snes_read(ctx, 0xF5103F, 1)
+        if check_1 == b'\x00' or check_2 == b'\x00':
+            return
 
         def get_range(data_range):
             return data[data_range[0] - READ_DATA_START:data_range[0] + data_range[1] - READ_DATA_START]
