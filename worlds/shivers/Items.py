@@ -61,5 +61,27 @@ item_table = {
     "Crawling": ItemData(SHIVERS_ITEM_ID_OFFSET + 50, "ability"),
 
     #Event Items
-    "Ash Captured": ItemData(SHIVERS_ITEM_ID_OFFSET + 70, "eventItem")
+
+    #Duplicate pot pieces for fill_Restrictive
+    "Water Pot Bottom DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 70, "potduplicate"),
+    "Wax Pot Bottom DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 71, "potduplicate"),
+    "Ash Pot Bottom DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 72, "potduplicate"),
+    "Oil Pot Bottom DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 73, "potduplicate"),
+    "Cloth Pot Bottom DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 74, "potduplicate"),
+    "Wood Pot Bottom DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 75, "potduplicate"),
+    "Crystal Pot Bottom DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 76, "potduplicate"),
+    "Lightning Pot Bottom DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 77, "potduplicate"),
+    "Sand Pot Bottom DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 78, "potduplicate"),
+    "Metal Pot Bottom DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 79, "potduplicate"),
+    "Water Pot Top DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 80, "potduplicate"),
+    "Wax Pot Top DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 81, "potduplicate"),
+    "Ash Pot Top DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 82, "potduplicate"),
+    "Oil Pot Top DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 83, "potduplicate"),
+    "Cloth Pot Top DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 84, "potduplicate"),
+    "Wood Pot Top DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 85, "potduplicate"),
+    "Crystal Pot Top DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 86, "potduplicate"),
+    "Lightning Pot Top DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 87, "potduplicate"),
+    "Sand Pot Top DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 88, "potduplicate"),
+    "Metal Top DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 89, "potduplicate"),
+
 }
