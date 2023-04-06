@@ -260,7 +260,8 @@ class Context:
 
     def _init_game_data(self):
         for game_name, game_package in self.gamespackage.items():
-            self.checksums[game_name] = game_package["checksum"]
+            if "checksum" in game_package:
+                self.checksums[game_name] = game_package["checksum"]
             for item_name, item_id in game_package["item_name_to_id"].items():
                 self.item_names[item_id] = item_name
             for location_name, location_id in game_package["location_name_to_id"].items():
@@ -268,7 +269,7 @@ class Context:
             self.all_item_and_group_names[game_name] = \
                 set(game_package["item_name_to_id"]) | set(self.item_name_groups[game_name])
             self.all_location_and_group_names[game_name] = \
-                set(game_package["location_name_to_id"]) | set(self.location_name_groups[game_name])
+                set(game_package["location_name_to_id"]) | set(self.location_name_groups.get(game_name, []))
 
     def item_names_for_game(self, game: str) -> typing.Optional[typing.Dict[str, int]]:
         return self.gamespackage[game]["item_name_to_id"] if game in self.gamespackage else None
@@ -356,9 +357,7 @@ class Context:
                                    [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}
                                     for text in texts]))
 
-
     # loading
-
     def load(self, multidatapath: str, use_embedded_server_options: bool = False):
         if multidatapath.lower().endswith(".zip"):
             import zipfile
@@ -446,9 +445,10 @@ class Context:
             logging.info(f"Loading embedded data package for game {game_name}")
             self.gamespackage[game_name] = data
             self.item_name_groups[game_name] = data["item_name_groups"]
-            self.location_name_groups[game_name] = data["location_name_groups"]
+            if "location_name_groups" in data:
+                self.location_name_groups[game_name] = data["location_name_groups"]
+                del data["location_name_groups"]
             del data["item_name_groups"]  # remove from data package, but keep in self.item_name_groups
-            del data["location_name_groups"]
         self._init_game_data()
         for game_name, data in self.item_name_groups.items():
             self.read_data[f"item_name_groups_{game_name}"] = lambda lgame=game_name: self.item_name_groups[lgame]
@@ -761,7 +761,7 @@ async def on_client_connected(ctx: Context, client: Client):
         'datapackage_versions': {game: game_data["version"] for game, game_data
                                  in ctx.gamespackage.items() if game in games},
         'datapackage_checksums': {game: game_data["checksum"] for game, game_data
-                                  in ctx.gamespackage.items() if game in games},
+                                  in ctx.gamespackage.items() if game in games and "checksum" in game_data},
         'seed_name': ctx.seed_name,
         'time': time.time(),
     }])
@@ -1327,27 +1327,41 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     "Sorry, !remaining requires you to have beaten the game on this server")
                 return False
 
-    def _cmd_missing(self) -> bool:
-        """List all missing location checks from the server's perspective"""
+    def _cmd_missing(self, filter_text="") -> bool:
+        """List all missing location checks from the server's perspective.
+        Can be given text, which will be used as filter."""
 
         locations = get_missing_checks(self.ctx, self.client.team, self.client.slot)
 
         if locations:
-            texts = [f'Missing: {self.ctx.location_names[location]}' for location in locations]
-            texts.append(f"Found {len(locations)} missing location checks")
+            names = [self.ctx.location_names[location] for location in locations]
+            if filter_text:
+                names = [name for name in names if filter_text in name]
+            texts = [f'Missing: {name}' for name in names]
+            if filter_text:
+                texts.append(f"Found {len(locations)} missing location checks, displaying {len(names)} of them.")
+            else:
+                texts.append(f"Found {len(locations)} missing location checks")
             self.output_multiple(texts)
         else:
             self.output("No missing location checks found.")
         return True
 
-    def _cmd_checked(self) -> bool:
-        """List all done location checks from the server's perspective"""
+    def _cmd_checked(self, filter_text="") -> bool:
+        """List all done location checks from the server's perspective.
+        Can be given text, which will be used as filter."""
 
         locations = get_checked_checks(self.ctx, self.client.team, self.client.slot)
 
         if locations:
-            texts = [f'Checked: {self.ctx.location_names[location]}' for location in locations]
-            texts.append(f"Found {len(locations)} done location checks")
+            names = [self.ctx.location_names[location] for location in locations]
+            if filter_text:
+                names = [name for name in names if filter_text in name]
+            texts = [f'Checked: {name}' for name in names]
+            if filter_text:
+                texts.append(f"Found {len(locations)} done location checks, displaying {len(names)} of them.")
+            else:
+                texts.append(f"Found {len(locations)} done location checks")
             self.output_multiple(texts)
         else:
             self.output("No done location checks found.")

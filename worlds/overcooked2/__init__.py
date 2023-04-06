@@ -249,8 +249,9 @@ class Overcooked2World(World):
             self.level_mapping = None
 
     def set_location_priority(self) -> None:
+        priority_locations = self.get_priority_locations()
         for level in Overcooked2Level():
-            if level.level_id in self.get_priority_locations():
+            if level.level_id in priority_locations:
                 location: Location = self.multiworld.get_location(level.location_name_item, self.player)
                 location.progress_type = LocationProgressType.PRIORITY
 

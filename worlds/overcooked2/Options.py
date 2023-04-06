@@ -28,7 +28,7 @@ class OC2Toggle(Toggle):
 
 
 class LocationBalancing(Choice):
-    """Location balancing affects the density of progression items found in your world relative to other wordlds. This setting changes nothing for solo games.
+    """Location balancing affects the density of progression items found in your world relative to other worlds. This setting changes nothing for solo games.
 
     - Disabled: Location density in your world can fluctuate greatly depending on the settings of other players. In extreme cases, your world may be entirely populated with filler items
 
@@ -48,7 +48,7 @@ class RampTricks(OC2Toggle):
     
 
 class DeathLink(Choice):
-    """DeathLink is an opt-in feature for Multiworlds where individual death events are propogated to all games with DeathLink enabled.
+    """DeathLink is an opt-in feature for Multiworlds where individual death events are propagated to all games with DeathLink enabled.
 
     - Disabled: Death will behave as it does in the original game.
 
@@ -88,7 +88,7 @@ class ShuffleLevelOrder(OC2OnToggle):
 
 
 class IncludeHordeLevels(OC2OnToggle):
-    """Includes "Horde Defence" levels in the pool of possible kitchens when Shuffle Level Order is enabled. Also adds
+    """Includes "Horde Defense" levels in the pool of possible kitchens when Shuffle Level Order is enabled. Also adds
     two horde-specific items into the item pool."""
     display_name = "Include Horde Levels"
 
@@ -119,7 +119,7 @@ class ShorterLevelDuration(OC2OnToggle):
 class ShortHordeLevels(OC2OnToggle):
     """Modifies horde levels to contain roughly 1/3rd fewer waves than in the original game.
 
-    The kitchen's health is sacled appropriately to preserve the same approximate difficulty."""
+    The kitchen's health is scaled appropriately to preserve the same approximate difficulty."""
     display_name = "Shorter Horde Levels"
 
 
