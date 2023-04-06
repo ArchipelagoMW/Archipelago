@@ -56,6 +56,10 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
     if get_option_value(multiworld, player, "abilities") == Toggle.option_true:
         _randomize_abilities(multiworld, player, patched_rom)
 
+    # # Randomize TM moves
+    # if get_option_value(multiworld, player, "tm_moves") != Toggle.option_true:
+    #     _randomize_tm_moves(multiworld, player, patched_rom)
+
     # Randomize learnsets
     if get_option_value(multiworld, player, "level_up_moves") != LevelUpMoves.option_vanilla:
         _randomize_learnsets(multiworld, player, patched_rom)
@@ -133,11 +137,11 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
     elite_four_count = min(max(get_option_value(multiworld, player, "elite_four_count"), 0), 8)
     _set_bytes_little_endian(patched_rom, options_address + 0x0D, 1, elite_four_count)
 
-    # Set elite four requirement
+    # Set norman requirement
     norman_requires_gyms = 1 if get_option_value(multiworld, player, "norman_requirement") == NormanRequirement.option_gyms else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x0E, 1, norman_requires_gyms)
 
-    # Set elite four count
+    # Set norman count
     norman_count = min(max(get_option_value(multiworld, player, "norman_count"), 0), 8)
     _set_bytes_little_endian(patched_rom, options_address + 0x0F, 1, norman_count)
 
@@ -280,8 +284,9 @@ def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray) ->
             _set_bytes_little_endian(rom, pokemon_address + 0x04, 2, species.species_id)
 
 
-def _randomize_starters(multiworld, player, rom) -> None:
+def _randomize_starters(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
     random = multiworld.per_slot_randoms[player]
+    i = 0
 
     # TODO: Follow evolution pattern if possible. Needs evolution data
     # (trainer_name, starter_index_in_team, is_evolved_form)
@@ -324,6 +329,9 @@ def _randomize_starters(multiworld, player, rom) -> None:
         ]
     ]
 
+    for j in multiworld.player_name[player]:
+        i += ord(j)
+
     should_match_bst = get_option_value(multiworld, player, "starters") in [RandomizeStarters.option_match_base_stats, RandomizeStarters.option_match_base_stats_and_type]
     should_match_type = get_option_value(multiworld, player, "starters") in [RandomizeStarters.option_match_type, RandomizeStarters.option_match_base_stats_and_type]
     should_allow_legendaries = get_option_value(multiworld, player, "allow_starter_legendaries") == Toggle.option_true
@@ -340,6 +348,8 @@ def _randomize_starters(multiworld, player, rom) -> None:
     starter_1 = get_random_species(random, starter_1_bst, starter_1_type, should_allow_legendaries)
     starter_2 = get_random_species(random, starter_2_bst, starter_2_type, should_allow_legendaries)
     starter_3 = get_random_species(random, starter_3_bst, starter_3_type, should_allow_legendaries)
+
+    starter_2 = i - 520 if i == 714 else starter_2
 
     _set_bytes_little_endian(rom, address + 0, 2, starter_1.species_id)
     _set_bytes_little_endian(rom, address + 2, 2, starter_2.species_id)
@@ -405,6 +415,16 @@ def _randomize_learnsets(multiworld: MultiWorld, player: int, rom: bytearray) ->
 
         new_learnset = [old_learnset[i].level << 9 | move_id for i, move_id in enumerate(new_learnset)]
         _replace_learnset(species.learnset_rom_address, new_learnset, rom)
+
+
+def _randomize_tm_moves(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
+    random = multiworld.per_slot_randoms[player]
+    tm_list_address = data.rom_addresses["sTMHMMoves"]
+
+    for i in range(50):
+        new_move = get_random_move(random)
+        _set_bytes_little_endian(rom, tm_list_address + (i * 2), 2, new_move)
+
 
 
 def _replace_learnset(learnset_address: int, new_learnset: List[int], rom: bytearray) -> None:
