@@ -1,4 +1,4 @@
-from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice
+from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice, Toggle
 
 
 class MessengerAccessibility(Accessibility):
@@ -27,6 +27,11 @@ class PowerSeals(DefaultOnToggle):
     display_name = "Shuffle Seals"
 
 
+class MegaShards(Toggle):
+    """Whether mega shards should be item locations."""
+    display_name = "Shuffle Mega Time Shards"
+
+
 class Goal(Choice):
     """Requirement to finish the game. Power Seal Hunt will force power seal locations to be shuffled."""
     display_name = "Goal"
@@ -51,8 +56,8 @@ class AmountSeals(Range):
     """Number of power seals that exist in the item pool when power seal hunt is the goal."""
     display_name = "Total Power Seals"
     range_start = 1
-    range_end = 45
-    default = range_end
+    range_end = 85
+    default = 45
 
 
 class RequiredSeals(Range):
@@ -67,6 +72,7 @@ messenger_options = {
     "accessibility": MessengerAccessibility,
     "logic_level": Logic,
     "shuffle_seals": PowerSeals,
+    "shuffle_shards": MegaShards,
     "goal": Goal,
     "music_box": MusicBox,
     "notes_needed": NotesNeeded,
