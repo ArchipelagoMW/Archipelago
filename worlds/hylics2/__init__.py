@@ -1,5 +1,4 @@
-import random
-from typing import Dict, Any
+from typing import Dict, List, Any
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.generic.Rules import set_rule
 from . import Exits, Items, Locations, Options, Rules
@@ -41,6 +40,8 @@ class Hylics2World(World):
 
     start_location = "Waynehouse"
 
+    pre_fill_items = []
+
 
     def set_rules(self):
         Rules.set_rules(self)
@@ -73,7 +74,7 @@ class Hylics2World(World):
             elif i == 3:
                 self.start_location = "Shield Facility"
 
-    def generate_basic(self):
+    def create_items(self):
         # create item pool
         pool = []
 
@@ -88,6 +89,22 @@ class Hylics2World(World):
             for i, data in Items.party_item_table.items():
                 pool.append(self.add_item(data["name"], data["classification"], i))
 
+        # handle gesture shuffle
+        if self.multiworld.gesture_shuffle[self.player] == 0: # add gestures to pool like normal
+            for i, data in Items.gesture_item_table.items():
+                pool.append(self.add_item(data["name"], data["classification"], i))
+
+        # add '10 Bones' items if medallion shuffle is enabled
+        if self.multiworld.medallion_shuffle[self.player]:
+            for i, data in Items.medallion_item_table.items():
+                for j in range(data["count"]):
+                    pool.append(self.add_item(data["name"], data["classification"], i))
+
+        # add to world's pool
+        self.multiworld.itempool += pool
+
+
+    def pre_fill(self):
         # handle gesture shuffle options
         if self.multiworld.gesture_shuffle[self.player] == 2: # vanilla locations
             gestures = Items.gesture_item_table
@@ -109,6 +126,22 @@ class Hylics2World(World):
                 .place_locked_item(self.add_item(gestures[200688]["name"], gestures[200688]["classification"], 200688))
             self.multiworld.get_location("Sage Airship: TV", self.player)\
                 .place_locked_item(self.add_item(gestures[200685]["name"], gestures[200685]["classification"], 200685))
+            self.pre_fill_items.append(\
+                self.add_item(gestures[200678]["name"], gestures[200678]["classification"], 200678))
+            self.pre_fill_items.append(\
+                self.add_item(gestures[200683]["name"], gestures[200683]["classification"], 200683))
+            self.pre_fill_items.append(\
+                self.add_item(gestures[200679]["name"], gestures[200679]["classification"], 200679))
+            self.pre_fill_items.append(\
+                self.add_item(gestures[200680]["name"], gestures[200680]["classification"], 200680))
+            self.pre_fill_items.append(\
+                self.add_item(gestures[200681]["name"], gestures[200681]["classification"], 200682))
+            self.pre_fill_items.append(\
+                self.add_item(gestures[200684]["name"], gestures[200684]["classification"], 200684))
+            self.pre_fill_items.append(\
+                self.add_item(gestures[200688]["name"], gestures[200688]["classification"], 200688))
+            self.pre_fill_items.append(\
+                self.add_item(gestures[200685]["name"], gestures[200685]["classification"], 200685))
 
         elif self.multiworld.gesture_shuffle[self.player] == 1: # TVs only
             gestures = list(Items.gesture_item_table.items())
@@ -124,6 +157,8 @@ class Hylics2World(World):
                 self.multiworld.get_location(tv[1]["name"], self.player)\
                     .place_locked_item(self.add_item(gestures[gest][1]["name"], gestures[gest][1]["classification"],
                     gestures[gest]))
+                self.pre_fill_items.append(\
+                    self.add_item(gestures[gest][1]["name"], gestures[gest][1]["classification"], gestures[gest]))
                 gestures.remove(gestures[gest])
                 tvs.remove(tv)
 
@@ -132,21 +167,14 @@ class Hylics2World(World):
                 tv = self.multiworld.random.choice(tvs)
                 self.multiworld.get_location(tv[1]["name"], self.player)\
                     .place_locked_item(self.add_item(gest[1]["name"], gest[1]["classification"], gest[1]))
+                self.pre_fill_items.append(\
+                    self.add_item(gest[1]["name"], gest[1]["classification"], gest[1]))
                 gestures.remove(gest)
                 tvs.remove(tv)
 
-        else: # add gestures to pool like normal
-            for i, data in Items.gesture_item_table.items():
-                pool.append(self.add_item(data["name"], data["classification"], i))
 
-        # add '10 Bones' items if medallion shuffle is enabled
-        if self.multiworld.medallion_shuffle[self.player]:
-            for i, data in Items.medallion_item_table.items():
-                for j in range(data["count"]):
-                    pool.append(self.add_item(data["name"], data["classification"], i))
-
-        # add to world's pool
-        self.multiworld.itempool += pool
+    def get_pre_fill_items(self) -> List["Item"]:
+        return self.pre_fill_items
 
 
     def fill_slot_data(self) -> Dict[str, Any]:
