@@ -24,7 +24,6 @@ def parse_multidata(compressed_multidata, files={}):
     decompressed_multidata = MultiServer.Context.decompress(compressed_multidata)
 
     slots: typing.Set[Slot] = set()
-    recompress = False
     if "datapackage" in decompressed_multidata:
         # strip datapackage from multidata, leaving only the checksums
         game_data_packages: typing.List[GameDataPackage] = []
