@@ -20,7 +20,8 @@ from .LADXR.locations.instrument import Instrument
 from .LADXR.locations.constants import CHEST_ITEMS
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id)
-from .Options import links_awakening_options
+from .Options import links_awakening_options, DungeonItemShuffle
+
 from .Rom import LADXDeltaPatch
 
 DEVELOPER_MODE = False
@@ -142,7 +143,7 @@ class LinksAwakeningWorld(World):
         dungeon_item_types = {
 
         }
-        from .Options import DungeonItemShuffle        
+
         self.prefill_original_dungeon = [ [], [], [], [], [], [], [], [], [] ]
         self.prefill_own_dungeons = []
         # For any and different world, set item rule instead
@@ -215,7 +216,6 @@ class LinksAwakeningWorld(World):
                     else:
                         self.multiworld.itempool.append(item)
 
-    def pre_fill(self):
         self.multi_key = self.generate_multi_key()
 
         dungeon_locations = []
@@ -264,11 +264,6 @@ class LinksAwakeningWorld(World):
                     #location.item_rule = lambda item, orig_rule=orig_rule: \
                     #    (not isinstance(item, DungeonItemData) or item.dungeon_index == location.dungeon) and orig_rule(item)
 
-            for location in r.locations:
-                # If tradequests are disabled, place trade items directly in their proper location
-                if not self.multiworld.tradequest[self.player] and isinstance(location, LinksAwakeningLocation) and isinstance(location.ladxr_item, TradeSequenceItem):
-                    item = next(i for i in self.trade_items if i.item_data.ladxr_id == location.ladxr_item.default_item)
-                    location.place_locked_item(item)
 
         for dungeon_index in range(0, 9):
             locs = dungeon_locations_by_dungeon[dungeon_index]
