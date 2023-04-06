@@ -1,11 +1,11 @@
 
 import math
 
-from logic.cache import Cache
-from logic.smbool import SMBool, smboolFalse
-from utils.parameters import Settings, easy, medium, diff2text
-from rom.rom_patches import RomPatches
-from utils.utils import normalizeRounding
+from worlds.sm.variaRandomizer.logic.cache import Cache
+from worlds.sm.variaRandomizer.logic.smbool import SMBool, smboolFalse
+from worlds.sm.variaRandomizer.utils.parameters import Settings, easy, medium, diff2text
+from worlds.sm.variaRandomizer.rom.rom_patches import RomPatches
+from worlds.sm.variaRandomizer.utils.utils import normalizeRounding
 
 
 class Helpers(object):

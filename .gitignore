@@ -26,6 +26,7 @@
 *multisave
 *.archipelago
 *.apsave
+*.BIN
 
 setups
 build
@@ -53,6 +54,7 @@ Output Logs/
 /setup.ini
 /installdelete.iss
 /data/user.kv
+/datapackage
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

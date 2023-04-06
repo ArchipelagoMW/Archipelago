@@ -1,19 +1,22 @@
 import base64
 import json
+import pickle
 import typing
 import uuid
 import zipfile
-from io import BytesIO
+import zlib
 
+from io import BytesIO
 from flask import request, flash, redirect, url_for, session, render_template, Markup
-from pony.orm import flush, select
+from pony.orm import commit, flush, select, rollback
+from pony.orm.core import TransactionIntegrityError
 
 import MultiServer
 from NetUtils import NetworkSlot, SlotType
 from Utils import VersionException, __version__
 from worlds.Files import AutoPatchRegister
 from . import app
-from .models import Seed, Room, Slot
+from .models import Seed, Room, Slot, GameDataPackage
 
 banned_zip_contents = (".sfc", ".z64", ".n64", ".sms", ".gb")
 
@@ -78,6 +81,27 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
     # Load multi data.
     if multidata:
         decompressed_multidata = MultiServer.Context.decompress(multidata)
+        recompress = False
+
+        if "datapackage" in decompressed_multidata:
+            # strip datapackage from multidata, leaving only the checksums
+            game_data_packages: typing.List[GameDataPackage] = []
+            for game, game_data in decompressed_multidata["datapackage"].items():
+                if game_data.get("checksum"):
+                    game_data_package = GameDataPackage(checksum=game_data["checksum"],
+                                                        data=pickle.dumps(game_data))
+                    decompressed_multidata["datapackage"][game] = {
+                        "version": game_data.get("version", 0),
+                        "checksum": game_data["checksum"]
+                    }
+                    recompress = True
+                    try:
+                        commit()  # commit game data package
+                        game_data_packages.append(game_data_package)
+                    except TransactionIntegrityError:
+                        del game_data_package
+                        rollback()
+
         if "slot_info" in decompressed_multidata:
             for slot, slot_info in decompressed_multidata["slot_info"].items():
                 # Ignore Player Groups (e.g. item links)
@@ -89,6 +113,9 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
                                game=slot_info.game))
 
             flush()  # commit slots
+
+        if recompress:
+            multidata = multidata[0:1] + zlib.compress(pickle.dumps(decompressed_multidata), 9)
 
         seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=owner, meta=json.dumps(meta),
                     id=sid if sid else uuid.uuid4())

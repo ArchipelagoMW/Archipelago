@@ -197,6 +197,7 @@ class PokemonRedBlueWorld(World):
                           + self.multiworld.paralyze_trap_weight[self.player].value
                           + self.multiworld.ice_trap_weight[self.player].value)
         for location in locations:
+            event = location.event
             if not location.inclusion(self.multiworld, self.player):
                 continue
             if location.original_item in self.multiworld.start_inventory[self.player].value and \
@@ -208,7 +209,7 @@ class PokemonRedBlueWorld(World):
             elif location.original_item == "Pokedex":
                 if self.multiworld.randomize_pokedex[self.player] == "vanilla":
                     self.multiworld.get_location(location.name, self.player).event = True
-                    location.event = True
+                    event = True
                 item = self.create_item("Pokedex")
             elif location.original_item.startswith("TM"):
                 if self.multiworld.randomize_tm_moves[self.player]:
@@ -220,7 +221,7 @@ class PokemonRedBlueWorld(World):
                 if (item.classification == ItemClassification.filler and self.multiworld.random.randint(1, 100)
                         <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0):
                     item = self.create_item(self.select_trap())
-            if location.event:
+            if event:
                 self.multiworld.get_location(location.name, self.player).place_locked_item(item)
             elif "Badge" not in item.name or self.multiworld.badgesanity[self.player].value:
                 item_pool.append(item)
@@ -345,8 +346,9 @@ class PokemonRedBlueWorld(World):
             for item in reversed(self.multiworld.itempool):
                 if item.player == self.player and loc.can_fill(self.multiworld.state, item, False):
                     self.multiworld.itempool.remove(item)
-                    state = sweep_from_pool(self.multiworld.state, self.multiworld.itempool + unplaced_items)
-                    if state.can_reach(loc, "Location", self.player):
+                    if item.advancement:
+                        state = sweep_from_pool(self.multiworld.state, self.multiworld.itempool + unplaced_items)
+                    if (not item.advancement) or state.can_reach(loc, "Location", self.player):
                         loc.place_locked_item(item)
                         break
                     else:
