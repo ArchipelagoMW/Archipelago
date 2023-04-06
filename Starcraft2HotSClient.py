@@ -14,7 +14,6 @@ import zipfile
 import io
 import random
 from pathlib import Path
-from math import ceil
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
@@ -628,9 +627,9 @@ def calculate_items(ctx: SC2Context) -> typing.List[int]:
         upgrade_flaggroup = type_flaggroups["Upgrade"]
         num_missions = ctx.generic_upgrade_research * len(ctx.mission_req_table)
         amounts = [
-            ceil(num_missions / 100),
-            ceil(2 * num_missions / 100),
-            ceil(3 * num_missions / 100)
+            num_missions // 100,
+            2 * num_missions // 100,
+            3 * num_missions // 100
         ]
         upgrade_count = 0
         completed = len([id for id in ctx.mission_id_to_location_ids if SC2HOTS_LOC_ID_OFFSET + victory_modulo * id in ctx.checked_locations])
