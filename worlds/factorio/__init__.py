@@ -6,6 +6,9 @@ import typing
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
+from worlds.LauncherComponents import Component, components
+from worlds.generic import Rules
+from .Locations import location_pools, location_table
 from .Mod import generate_mod
 from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal, TechCostDistribution
 from .Shapes import get_shapes
@@ -14,8 +17,6 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies, \
     fluids, stacking_items, valid_ingredients, progressive_rows
-from .Locations import location_pools, location_table
-from worlds.LauncherComponents import Component, components
 
 components.append(Component("Factorio Client", "FactorioClient"))
 
@@ -154,62 +155,14 @@ class Factorio(World):
 
     def create_items(self) -> None:
         player = self.player
+        self.custom_technologies = self.set_custom_technologies()
+        self.set_custom_recipes()
         traps = ("Evolution", "Attack", "Teleport", "Grenade", "Cluster Grenade", "Artillery", "Atomic Rocket")
         for trap_name in traps:
             self.multiworld.itempool.extend(self.create_item(f"{trap_name} Trap") for _ in
                                             range(getattr(self.multiworld,
                                                           f"{trap_name.lower().replace(' ', '_')}_traps")[player]))
 
-    def set_rules(self):
-        world = self.multiworld
-        player = self.player
-        self.custom_technologies = self.set_custom_technologies()
-        self.set_custom_recipes()
-        shapes = get_shapes(self)
-        if world.logic[player] != 'nologic':
-            from worlds.generic import Rules
-            for ingredient in self.multiworld.max_science_pack[self.player].get_allowed_packs():
-                location = world.get_location(f"Automate {ingredient}", player)
-
-                if self.multiworld.recipe_ingredients[self.player]:
-                    custom_recipe = self.custom_recipes[ingredient]
-
-                    location.access_rule = lambda state, ingredient=ingredient, custom_recipe=custom_recipe: \
-                        (ingredient not in technology_table or state.has(ingredient, player)) and \
-                        all(state.has(technology.name, player) for sub_ingredient in custom_recipe.ingredients
-                            for technology in required_technologies[sub_ingredient])
-                else:
-                    location.access_rule = lambda state, ingredient=ingredient: \
-                        all(state.has(technology.name, player) for technology in required_technologies[ingredient])
-
-            for location in self.locations:
-                Rules.set_rule(location, lambda state, ingredients=location.ingredients:
-                    all(state.has(f"Automated {ingredient}", player) for ingredient in ingredients))
-                prerequisites = shapes.get(location)
-                if prerequisites:
-                    Rules.add_rule(location, lambda state, locations=
-                        prerequisites: all(state.can_reach(loc) for loc in locations))
-
-            silo_recipe = None
-            if self.multiworld.silo[self.player] == Silo.option_spawn:
-                silo_recipe = self.custom_recipes["rocket-silo"] if "rocket-silo" in self.custom_recipes \
-                    else next(iter(all_product_sources.get("rocket-silo")))
-            part_recipe = self.custom_recipes["rocket-part"]
-            satellite_recipe = None
-            if self.multiworld.goal[self.player] == Goal.option_satellite:
-                satellite_recipe = self.custom_recipes["satellite"] if "satellite" in self.custom_recipes \
-                    else next(iter(all_product_sources.get("satellite")))
-            victory_tech_names = get_rocket_requirements(silo_recipe, part_recipe, satellite_recipe)
-            if self.multiworld.silo[self.player] != Silo.option_spawn:
-                victory_tech_names.add("rocket-silo")
-            world.get_location("Rocket Launch", player).access_rule = lambda state: all(state.has(technology, player)
-                                                                                        for technology in
-                                                                                        victory_tech_names)
-
-        world.completion_condition[player] = lambda state: state.has('Victory', player)
-
-    def generate_basic(self):
-        player = self.player
         want_progressives = collections.defaultdict(lambda: self.multiworld.progressive[player].
                                                     want_progressives(self.multiworld.random))
 
@@ -244,9 +197,56 @@ class Factorio(World):
                     loc.place_locked_item(tech_item)
                     loc.revealed = True
 
-        map_basic_settings = self.multiworld.world_gen[player].value["basic"]
+    def set_rules(self):
+        world = self.multiworld
+        player = self.player
+        shapes = get_shapes(self)
+
+        for ingredient in self.multiworld.max_science_pack[self.player].get_allowed_packs():
+            location = world.get_location(f"Automate {ingredient}", player)
+
+            if self.multiworld.recipe_ingredients[self.player]:
+                custom_recipe = self.custom_recipes[ingredient]
+
+                location.access_rule = lambda state, ingredient=ingredient, custom_recipe=custom_recipe: \
+                    (ingredient not in technology_table or state.has(ingredient, player)) and \
+                    all(state.has(technology.name, player) for sub_ingredient in custom_recipe.ingredients
+                        for technology in required_technologies[sub_ingredient])
+            else:
+                location.access_rule = lambda state, ingredient=ingredient: \
+                    all(state.has(technology.name, player) for technology in required_technologies[ingredient])
+
+        for location in self.locations:
+            Rules.set_rule(location, lambda state, ingredients=location.ingredients:
+                all(state.has(f"Automated {ingredient}", player) for ingredient in ingredients))
+            prerequisites = shapes.get(location)
+            if prerequisites:
+                Rules.add_rule(location, lambda state, locations=
+                    prerequisites: all(state.can_reach(loc) for loc in locations))
+
+        silo_recipe = None
+        if self.multiworld.silo[self.player] == Silo.option_spawn:
+            silo_recipe = self.custom_recipes["rocket-silo"] if "rocket-silo" in self.custom_recipes \
+                else next(iter(all_product_sources.get("rocket-silo")))
+        part_recipe = self.custom_recipes["rocket-part"]
+        satellite_recipe = None
+        if self.multiworld.goal[self.player] == Goal.option_satellite:
+            satellite_recipe = self.custom_recipes["satellite"] if "satellite" in self.custom_recipes \
+                else next(iter(all_product_sources.get("satellite")))
+        victory_tech_names = get_rocket_requirements(silo_recipe, part_recipe, satellite_recipe)
+        if self.multiworld.silo[self.player] != Silo.option_spawn:
+            victory_tech_names.add("rocket-silo")
+        world.get_location("Rocket Launch", player).access_rule = lambda state: all(state.has(technology, player)
+                                                                                    for technology in
+                                                                                    victory_tech_names)
+
+        world.completion_condition[player] = lambda state: state.has('Victory', player)
+
+    def generate_basic(self):
+        map_basic_settings = self.multiworld.world_gen[self.player].value["basic"]
         if map_basic_settings.get("seed", None) is None:  # allow seed 0
-            map_basic_settings["seed"] = self.multiworld.per_slot_randoms[player].randint(0, 2 ** 32 - 1)  # 32 bit uint
+            # 32 bit uint
+            map_basic_settings["seed"] = self.multiworld.per_slot_randoms[self.player].randint(0, 2 ** 32 - 1)
 
         start_location_hints: typing.Set[str] = self.multiworld.start_location_hints[self.player].value
 
