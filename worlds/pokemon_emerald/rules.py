@@ -5,6 +5,7 @@ from BaseClasses import CollectionState, MultiWorld
 
 from worlds.generic.Rules import add_rule, set_rule
 
+from .options import EliteFourRequirement, NormanRequirement, get_option_value
 from .util import location_name_to_label
 
 
@@ -328,14 +329,24 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     )
 
     # Mauville City
-    set_rule(
-        multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3", player),
-        lambda state: _defeated_n_gym_leaders(state, player, 4)
-    )
-    set_rule(
-        multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6", player),
-        lambda state: _defeated_n_gym_leaders(state, player, 4)
-    )
+    if get_option_value(multiworld, player, "norman_requirement") == NormanRequirement.option_badges:
+        set_rule(
+            multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3", player),
+            lambda state: _has_at_least_n_badges(state, player, get_option_value(multiworld, player, "norman_count"))
+        )
+        set_rule(
+            multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6", player),
+            lambda state: _has_at_least_n_badges(state, player, get_option_value(multiworld, player, "norman_count"))
+        )
+    else:
+        set_rule(
+            multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3", player),
+            lambda state: _defeated_n_gym_leaders(state, player, get_option_value(multiworld, player, "norman_count"))
+        )
+        set_rule(
+            multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6", player),
+            lambda state: _defeated_n_gym_leaders(state, player, get_option_value(multiworld, player, "norman_count"))
+        )
 
     # Route 111
     set_rule(
@@ -1018,10 +1029,16 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     )
 
     # Pokemon League
-    set_rule(
-        multiworld.get_entrance("REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/MAIN -> REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/BEHIND_BADGE_CHECKERS", player),
-        lambda state: _has_at_least_n_badges(state, player, 8)
-    )
+    if get_option_value(multiworld, player, "elite_four_requirement") == EliteFourRequirement.option_badges:
+        set_rule(
+            multiworld.get_entrance("REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/MAIN -> REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/BEHIND_BADGE_CHECKERS", player),
+            lambda state: _has_at_least_n_badges(state, player, get_option_value(multiworld, player, "elite_four_count"))
+        )
+    else:
+        set_rule(
+            multiworld.get_entrance("REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/MAIN -> REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/BEHIND_BADGE_CHECKERS", player),
+            lambda state: _defeated_n_gym_leaders(state, player, get_option_value(multiworld, player, "elite_four_count"))
+        )
 
     # Battle Frontier
     # set_rule(
