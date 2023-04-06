@@ -829,10 +829,6 @@ class Region:
     def hint_text(self) -> str:
         return self._hint_text if self._hint_text else self.name
 
-    @property
-    def entrance(self) -> Entrance:
-        return self.entrances[0]
-
     def __repr__(self):
         return self.__str__()
 

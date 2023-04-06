@@ -508,7 +508,7 @@ class ALTTPWorld(World):
 
         for region in world.regions:
             if region.player in er_hint_data and region.locations:
-                main_entrance = region.entrance
+                main_entrance = region.main_entrance
                 for location in region.locations:
                     if type(location.address) == int:  # skips events and crystals
                         if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
@@ -526,7 +526,7 @@ class ALTTPWorld(World):
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
         for location in self.multiworld.get_filled_locations(self.player):
-            main_entrance = location.parent_region.entrance
+            main_entrance = location.parent_region.main_entrance
             if location.parent_region.dungeon:
                 dungeon_name = {"Inverted Agahnims Tower": "Agahnims Tower", "Inverted Ganons Tower": "Ganons Tower"} \
                     .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)

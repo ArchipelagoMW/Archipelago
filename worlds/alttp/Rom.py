@@ -824,7 +824,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         rom.write_byte(0x155C9, local_random.choice([0x11, 0x16]))  # Randomize GT music too with map shuffle
 
     # patch entrance/exits/holes
-    for region in world.regions:
+    for region in world.get_regions(player):
         for exit in region.exits:
             if exit.target is not None and exit.player == player:
                 if isinstance(exit.addresses, tuple):

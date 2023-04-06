@@ -107,9 +107,9 @@ class LTTPRegion(Region):
         self.type = type_
 
     @property
-    def entrance(self):
+    def main_entrance(self):
         for entrance in self.entrances:
             if entrance.parent_region.type in (LTTPRegionType.DarkWorld, LTTPRegionType.LightWorld):
                 return entrance
         for entrance in self.entrances:
-            return entrance.parent_region.entrance
+            return entrance.parent_region.main_entrance
