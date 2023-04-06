@@ -14,6 +14,7 @@ import zipfile
 import io
 import random
 from pathlib import Path
+from math import ceil
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
@@ -32,7 +33,7 @@ from sc2.data import Race
 from sc2.main import run_game
 from sc2.player import Bot
 from worlds.sc2hots import SC2HotSWorld
-from worlds.sc2hots.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups
+from worlds.sc2hots.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups, upgrade_numbers
 from worlds.sc2hots.Locations import SC2HOTS_LOC_ID_OFFSET
 from worlds.sc2hots.MissionTables import lookup_id_to_mission, no_build_regions_list
 from worlds.sc2hots.Regions import MissionInfo
@@ -232,6 +233,8 @@ class SC2Context(CommonContext):
     player_color_primal = 4
     kerriganless = 0
     kerrigan_primal_status = 0
+    generic_upgrade_missions = 0
+    generic_upgrade_items = 0
     generic_upgrade_research = 0
     levels_per_check = 0
     checks_per_level = 1
@@ -264,6 +267,8 @@ class SC2Context(CommonContext):
             self.player_color_primal = args["slot_data"].get("player_color_primal", 4)
             if args["slot_data"].get("kerriganless", 0) > 0:
                 self.kerriganless = 1
+            self.generic_upgrade_missions = args["slot_data"].get("generic_upgrade_missions", 0)
+            self.generic_upgrade_items = args["slot_data"].get("generic_upgrade_items", 0)
             self.generic_upgrade_research = args["slot_data"].get("generic_upgrade_research", 0)
             self.levels_per_check = args["slot_data"].get("kerrigan_levels_per_check", 0)
             self.checks_per_level = args["slot_data"].get("kerrigan_checks_per_level_pack", 1)
@@ -604,7 +609,12 @@ def calculate_items(ctx: SC2Context) -> typing.List[int]:
 
         # exists multiple times
         elif item_data.type == "Upgrade":
-            accumulators[type_flaggroups[item_data.type]] += 1 << item_data.number
+            flaggroup = type_flaggroups[item_data.type]
+            if ctx.generic_upgrade_items == 0:
+                accumulators[flaggroup] += 1 << item_data.number
+            else:
+                for bundled_number in upgrade_numbers[item_data.number]:
+                    accumulators[flaggroup] += 1 << bundled_number
 
         # sum
         else:
@@ -612,6 +622,24 @@ def calculate_items(ctx: SC2Context) -> typing.List[int]:
 
     # Kerrigan levels per check
     accumulators[type_flaggroups["Level"]] += (len(ctx.checked_locations) // ctx.checks_per_level) * ctx.levels_per_check
+
+    # Upgrades from completed missions
+    if ctx.generic_upgrade_research > 0:
+        upgrade_flaggroup = type_flaggroups["Upgrade"]
+        num_missions = ctx.generic_upgrade_research * len(ctx.mission_req_table)
+        amounts = [
+            ceil(num_missions / 100),
+            ceil(2 * num_missions / 100),
+            ceil(3 * num_missions / 100)
+        ]
+        upgrade_count = 0
+        completed = len([id for id in ctx.mission_id_to_location_ids if SC2HOTS_LOC_ID_OFFSET + victory_modulo * id in ctx.checked_locations])
+        for amount in amounts:
+            if completed >= amount:
+                upgrade_count += 1
+        # Equivalent to "Progressive Upgrades" item
+        for bundled_number in upgrade_numbers[4]:
+            accumulators[upgrade_flaggroup] += upgrade_count << bundled_number
 
     return accumulators
 

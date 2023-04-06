@@ -61,6 +61,12 @@ item_table = {
     "Progressive Ground Carapace": ItemData(102 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 4, quantity=3),
     "Progressive Flyer Attack": ItemData(103 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 6, quantity=3),
     "Progressive Flyer Carapace": ItemData(104 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 8, quantity=3),
+    # Upgrade bundle 'number' values are used as indices to get affected 'number's
+    "Progressive Weapon Upgrades": ItemData(105 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 0, quantity=3),
+    "Progressive Armor Upgrades": ItemData(106 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 1, quantity=3),
+    "Progressive Ground Upgrades": ItemData(107 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 2, quantity=3),
+    "Progressive Flyer Upgrades": ItemData(108 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 3, quantity=3),
+    "Progressive Upgrades": ItemData(109 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 4, quantity=3),
     # "Progressive Infantry Weapon": ItemData(100 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 0, quantity=3),
     # "Progressive Infantry Armor": ItemData(102 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 2, quantity=3),
     # "Progressive Vehicle Weapon": ItemData(103 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 4, quantity=3),
@@ -297,6 +303,36 @@ zerg_defense_ratings = {
     "Hive Mind Emulator": 3,
     "Psi Disruptor": 3
 }
+
+# 'number' values of upgrades for upgrade bundle items
+upgrade_numbers = [
+    {0, 2, 6}, # Weapon
+    {4, 8}, # Armor
+    {0, 2, 4}, # Ground
+    {6, 8}, # Flyer
+    {0, 2, 4, 6, 8} # All
+]
+# Names of upgrades to be included for different options
+upgrade_included_names = [
+    { # Individual Items
+        "Progressive Melee Attack",
+        "Progressive Missile Attack",
+        "Progressive Ground Carapace",
+        "Progressive Flyer Attack",
+        "Progressive Flyer Carapace"
+    },
+    { # Bundle Weapon And Armor
+        "Progressive Weapon Upgrades",
+        "Progressive Armor Upgrades"
+    },
+    { # Bundle Ground And Flyer
+        "Progressive Ground Upgrades",
+        "Progressive Flyer Upgrades"
+    },
+    { # Bundle All
+        "Progressive Upgrades"
+    }
+]
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in get_full_item_list().items() if
                                             data.code}
