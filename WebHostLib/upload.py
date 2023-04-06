@@ -162,7 +162,7 @@ def uploads():
                     except Exception as e:
                         flash(f"Could not load multidata. File may be corrupted or incompatible. ({e})")
                     else:
-                        seed = Seed(multidata=multidata, slots=slots,owner=session["_id"])
+                        seed = Seed(multidata=multidata, slots=slots, owner=session["_id"])
                         flush()  # place into DB and generate ids
                         return redirect(url_for("view_seed", seed=seed.id))
             else:
