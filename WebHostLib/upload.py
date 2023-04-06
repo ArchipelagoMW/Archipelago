@@ -36,7 +36,6 @@ def parse_multidata(compressed_multidata, files={}):
                     "version": game_data.get("version", 0),
                     "checksum": game_data["checksum"]
                 }
-                recompress = True
                 try:
                     commit()  # commit game data package
                     game_data_packages.append(game_data_package)
