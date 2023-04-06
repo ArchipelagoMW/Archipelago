@@ -108,6 +108,57 @@ class DarkCavesRequireFlash(DefaultOnToggle):
     display_name = "Require Flash"
 
 
+class EnableFerry(Toggle):
+    """
+    The ferry between Slateport, Lilycove, and the Battle Frontier can be used if you have the S.S. Ticket
+    """
+    display_name = "Enable Ferry"
+
+
+class EliteFourRequirement(Choice):
+    """
+    Sets the requirements to challenge the elite four
+    Badges: Obtain some number of badges
+    Gyms: Defeat some number of gyms
+    """
+    display_name = "Elite Four Requirement"
+    default = 0
+    option_badges = 0
+    option_gyms = 1
+
+
+class EliteFourCount(Range):
+    """
+    Sets the number of badges/gyms required to challenge the elite four
+    """
+    display_name = "Elite Four Count"
+    range_start = 0
+    range_end = 8
+    default = 8
+
+
+class NormanRequirement(Choice):
+    """
+    Sets the requirements to challenge the Petalburg Gym
+    Badges: Obtain some number of badges
+    Gyms: Defeat some number of gyms
+    """
+    display_name = "Norman Requirement"
+    default = 0
+    option_badges = 0
+    option_gyms = 1
+
+
+class NormanCount(Range):
+    """
+    Sets the number of badges/gyms required to challenge the Petalburg Gym
+    """
+    display_name = "Norman Count"
+    range_start = 0
+    range_end = 7
+    default = 4
+
+
 class RandomizeWildPokemon(Choice):
     """
     Randomizes wild pokemon encounters (grass, caves, water, fishing)
@@ -228,7 +279,7 @@ class ExpModifier(Range):
     etc...
     """
     display_name = "Exp Modifier"
-    range_start = 50
+    range_start = 0
     range_end = 10000
     default = 100
 
@@ -282,13 +333,6 @@ class HmCompatibility(Choice):
     option_completely_random = 2
 
 
-class EnableFerry(Toggle):
-    """
-    The ferry between Slateport, Lilycove, and the Battle Frontier can be used if you have the S.S. Ticket
-    """
-    display_name = "Enable Ferry"
-
-
 class BetterShops(Toggle):
     """
     Pokemarts sell every item that can be obtained in a pokemart (except mail, which is still unique to the relevant city)
@@ -319,9 +363,17 @@ option_definitions: Dict[str, Option] = {
   "overworld_items": RandomizeOverworldItems,
   "hidden_items": RandomizeHiddenItems,
   "npc_gifts": RandomizeNpcGifts,
+
   "item_pool_type": ItemPoolType,
+
   "require_itemfinder": HiddenItemsRequireItemfinder,
   "require_flash": DarkCavesRequireFlash,
+  "enable_ferry": EnableFerry,
+  "elite_four_requirement": EliteFourRequirement,
+  "elite_four_count": EliteFourCount,
+  "norman_requirement": NormanRequirement,
+  "norman_count": NormanCount,
+
   "wild_pokemon": RandomizeWildPokemon,
   "allow_wild_legendaries": AllowWildLegendaries,
   "starters": RandomizeStarters,
@@ -330,14 +382,14 @@ option_definitions: Dict[str, Option] = {
   "allow_trainer_legendaries": AllowTrainerLegendaries,
   "abilities": RandomizeAbilities,
   "ability_blacklist": AbilityBlacklist,
+  "tm_compatibility": TmCompatibility,
+  "hm_compatibility": HmCompatibility,
   "min_catch_rate": MinCatchRate,
   "guaranteed_catch": GuaranteedCatch,
+
   "exp_modifier": ExpModifier,
   "blind_trainers": BlindTrainers,
   "level_up_moves": LevelUpMoves,
-  "tm_compatibility": TmCompatibility,
-  "hm_compatibility": HmCompatibility,
-  "enable_ferry": EnableFerry,
   "better_shops": BetterShops,
   "fly_without_badge": FlyWithoutBadge,
   "turbo_a": TurboA

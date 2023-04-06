@@ -14,7 +14,7 @@ import Utils
 from .data import SpeciesData, TrainerPokemonDataTypeEnum, data
 from .items import reverse_offset_item_value
 from .options import (RandomizeWildPokemon, RandomizeStarters, RandomizeTrainerParties, TmCompatibility,
-    HmCompatibility, LevelUpMoves, get_option_value)
+    HmCompatibility, LevelUpMoves, EliteFourRequirement, NormanRequirement, get_option_value)
 from .pokemon import (get_random_species, get_species_by_id, get_species_by_name,
     get_random_damaging_move, get_random_move)
 
@@ -77,49 +77,69 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
     # Options
     # struct ArchipelagoOptions
     # {
-    #     bool8 advanceTextWithHoldA;
-    #     bool8 isFerryEnabled;
-    #     bool8 areTrainersBlind;
-    #     bool8 canFlyWithoutBadge
-    #     u16 expMultiplierNumerator;
-    #     u16 expMultiplierDenominator;
-    #     u16 birchPokemon;
-    #     bool8 guaranteedCatch;
-    #     bool8 betterShopsEnabled;
-    # } __attribute__((packed));
+    #     /* 0x00 */ bool8 advanceTextWithHoldA;
+    #     /* 0x01 */ bool8 isFerryEnabled;
+    #     /* 0x02 */ bool8 areTrainersBlind;
+    #     /* 0x03 */ bool8 canFlyWithoutBadge;
+    #     /* 0x04 */ u16 expMultiplierNumerator;
+    #     /* 0x06 */ u16 expMultiplierDenominator;
+    #     /* 0x08 */ u16 birchPokemon;
+    #     /* 0x0A */ bool8 guaranteedCatch;
+    #     /* 0x0B */ bool8 betterShopsEnabled;
+    #     /* 0x0C */ bool8 eliteFourRequiresGyms;
+    #     /* 0x0D */ u8 eliteFourRequiredCount;
+    #     /* 0x0E */ bool8 normanRequiresGyms;
+    #     /* 0x0F */ u8 normanRequiredCount;
+    # };
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
     # Set hold A to advance text
     turbo_a = 1 if get_option_value(multiworld, player, "turbo_a") == Toggle.option_true else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0, 1, turbo_a)
+    _set_bytes_little_endian(patched_rom, options_address + 0x00, 1, turbo_a)
 
     # Set ferry enabled
     enable_ferry = 1 if get_option_value(multiworld, player, "enable_ferry") == Toggle.option_true else 0
-    _set_bytes_little_endian(patched_rom, options_address + 1, 1, enable_ferry)
+    _set_bytes_little_endian(patched_rom, options_address + 0x01, 1, enable_ferry)
 
     # Set blind trainers
     blind_trainers = 1 if get_option_value(multiworld, player, "blind_trainers") == Toggle.option_true else 0
-    _set_bytes_little_endian(patched_rom, options_address + 2, 1, blind_trainers)
+    _set_bytes_little_endian(patched_rom, options_address + 0x02, 1, blind_trainers)
 
     # Set fly without badge
     fly_without_badge = 1 if get_option_value(multiworld, player, "fly_without_badge") == Toggle.option_true else 0
-    _set_bytes_little_endian(patched_rom, options_address + 3, 1, fly_without_badge)
+    _set_bytes_little_endian(patched_rom, options_address + 0x03, 1, fly_without_badge)
 
     # Set exp modifier
-    numerator = min(get_option_value(multiworld, player, "exp_modifier"), 2**16 - 1)
-    _set_bytes_little_endian(patched_rom, options_address + 4, 2, numerator)
-    _set_bytes_little_endian(patched_rom, options_address + 6, 2, 100)
+    numerator = min(max(get_option_value(multiworld, player, "exp_modifier"), 0), 2**16 - 1)
+    _set_bytes_little_endian(patched_rom, options_address + 0x04, 2, numerator)
+    _set_bytes_little_endian(patched_rom, options_address + 0x06, 2, 100)
 
     # Set Birch pokemon
-    _set_bytes_little_endian(patched_rom, options_address + 8, 2, get_random_species(multiworld.per_slot_randoms[player]).species_id)
+    _set_bytes_little_endian(patched_rom, options_address + 0x08, 2, get_random_species(multiworld.per_slot_randoms[player]).species_id)
 
     # Set guaranteed catch
     guaranteed_catch = 1 if get_option_value(multiworld, player, "guaranteed_catch") == Toggle.option_true else 0
-    _set_bytes_little_endian(patched_rom, options_address + 10, 1, guaranteed_catch)
+    _set_bytes_little_endian(patched_rom, options_address + 0x0A, 1, guaranteed_catch)
 
     # Set better shops
     better_shops = 1 if get_option_value(multiworld, player, "better_shops") == Toggle.option_true else 0
-    _set_bytes_little_endian(patched_rom, options_address + 11, 1, better_shops)
+    _set_bytes_little_endian(patched_rom, options_address + 0x0B, 1, better_shops)
+
+    # Set elite four requirement
+    elite_four_requires_gyms = 1 if get_option_value(multiworld, player, "elite_four_requirement") == EliteFourRequirement.option_gyms else 0
+    _set_bytes_little_endian(patched_rom, options_address + 0x0C, 1, elite_four_requires_gyms)
+
+    # Set elite four count
+    elite_four_count = min(max(get_option_value(multiworld, player, "elite_four_count"), 0), 8)
+    _set_bytes_little_endian(patched_rom, options_address + 0x0D, 1, elite_four_count)
+
+    # Set elite four requirement
+    norman_requires_gyms = 1 if get_option_value(multiworld, player, "norman_requirement") == NormanRequirement.option_gyms else 0
+    _set_bytes_little_endian(patched_rom, options_address + 0x0E, 1, norman_requires_gyms)
+
+    # Set elite four count
+    norman_count = min(max(get_option_value(multiworld, player, "norman_count"), 0), 8)
+    _set_bytes_little_endian(patched_rom, options_address + 0x0F, 1, norman_count)
 
     # Write Output
     outfile_player_name = f"_P{player}"
