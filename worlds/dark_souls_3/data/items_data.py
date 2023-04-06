@@ -202,8 +202,8 @@ goods_table = {
     **{"Titanite Slab #"+str(i): 0x400003EB for i in range(1, 4)},
 
     # Healing
-    **{"Estus Shard #"+str(i): 0x4000085D for i in range(1, 16)},
-    **{"Undead Bone Shard #"+str(i): 0x4000085F for i in range(1, 6)},
+    **{"Estus Shard #"+str(i): 0x4000085D for i in range(1, 12)}, # There are only 11 Shards total in the pool
+    **{"Undead Bone Shard #"+str(i): 0x4000085F for i in range(1, 10)}, # increased by 4 to reflect shard change | Datapackage should only change estus/bone numbers
 
     # Souls
     **{"Soul of a Great Champion #"+str(i): 0x400001A4 for i in range(1, 3)},
