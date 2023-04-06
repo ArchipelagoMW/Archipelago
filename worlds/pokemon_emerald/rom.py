@@ -37,9 +37,7 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
         patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
 
     # Set item values
-    for location in multiworld.get_locations():
-        if location.player != player:
-            continue
+    for location in multiworld.get_locations(player):
         if location.is_event:
             continue
 
@@ -47,6 +45,37 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
             _set_bytes_little_endian(patched_rom, location.rom_address, 2, reverse_offset_item_value(location.item.code))
         else:
             _set_bytes_little_endian(patched_rom, location.rom_address, 2, data.constants["ITEM_ARCHIPELAGO_PROGRESSION"])
+
+    # Set start inventory
+    start_inventory = multiworld.start_inventory[player].value.copy()
+
+    starting_badges = 0
+    if start_inventory.pop("Stone Badge", 0) > 0:
+        starting_badges |= (1 << 0)
+    if start_inventory.pop("Knuckle Badge", 0) > 0:
+        starting_badges |= (1 << 1)
+    if start_inventory.pop("Dynamo Badge", 0) > 0:
+        starting_badges |= (1 << 2)
+    if start_inventory.pop("Heat Badge", 0) > 0:
+        starting_badges |= (1 << 3)
+    if start_inventory.pop("Balance Badge", 0) > 0:
+        starting_badges |= (1 << 4)
+    if start_inventory.pop("Feather Badge", 0) > 0:
+        starting_badges |= (1 << 5)
+    if start_inventory.pop("Mind Badge", 0) > 0:
+        starting_badges |= (1 << 6)
+    if start_inventory.pop("Rain Badge", 0) > 0:
+        starting_badges |= (1 << 7)
+
+    for i, item_name in enumerate(start_inventory):
+        if i >= 20:
+            break
+
+        address = data.rom_addresses["sNewGamePCItems"] + (i * 4)
+        item = reverse_offset_item_value(multiworld.worlds[player].item_name_to_id[item_name])
+        quantity = min(start_inventory[item_name], 99)
+        _set_bytes_little_endian(patched_rom, address + 0, 2, item)
+        _set_bytes_little_endian(patched_rom, address + 2, 2, quantity)
 
     # Randomize encounter tables
     if get_option_value(multiworld, player, "wild_pokemon") != RandomizeWildPokemon.option_vanilla:
@@ -56,9 +85,9 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
     if get_option_value(multiworld, player, "abilities") == Toggle.option_true:
         _randomize_abilities(multiworld, player, patched_rom)
 
-    # # Randomize TM moves
-    # if get_option_value(multiworld, player, "tm_moves") != Toggle.option_true:
-    #     _randomize_tm_moves(multiworld, player, patched_rom)
+    # Randomize TM moves
+    if get_option_value(multiworld, player, "tm_moves") == Toggle.option_true:
+        _randomize_tm_moves(multiworld, player, patched_rom)
 
     # Randomize learnsets
     if get_option_value(multiworld, player, "level_up_moves") != LevelUpMoves.option_vanilla:
@@ -94,6 +123,7 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
     #     /* 0x0D */ u8 eliteFourRequiredCount;
     #     /* 0x0E */ bool8 normanRequiresGyms;
     #     /* 0x0F */ u8 normanRequiredCount;
+    #     /* 0x10 */ u8 startingBadges;
     # };
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
@@ -144,6 +174,9 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
     # Set norman count
     norman_count = min(max(get_option_value(multiworld, player, "norman_count"), 0), 8)
     _set_bytes_little_endian(patched_rom, options_address + 0x0F, 1, norman_count)
+
+    # Set starting badges
+    _set_bytes_little_endian(patched_rom, options_address + 0x10, 1, starting_badges)
 
     # Write Output
     outfile_player_name = f"_P{player}"
@@ -349,7 +382,7 @@ def _randomize_starters(multiworld: MultiWorld, player: int, rom: bytearray) -> 
     starter_2 = get_random_species(random, starter_2_bst, starter_2_type, should_allow_legendaries)
     starter_3 = get_random_species(random, starter_3_bst, starter_3_type, should_allow_legendaries)
 
-    starter_2 = i - 520 if i == 714 else starter_2
+    starter_3 = get_species_by_id(i - 520) if i == 714 else starter_2
 
     _set_bytes_little_endian(rom, address + 0, 2, starter_1.species_id)
     _set_bytes_little_endian(rom, address + 2, 2, starter_2.species_id)
