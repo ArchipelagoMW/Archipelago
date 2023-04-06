@@ -1,4 +1,4 @@
-from typing import Dict, Set, Any
+from typing import Dict, Set, List, Any
 from collections import Counter
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
@@ -41,6 +41,8 @@ class BlasphemousWorld(World):
     item_name_groups = group_table
     option_definitions = blasphemous_options
 
+    pre_fill_items = []
+
 
     def set_rules(self):
         rules(self)
@@ -61,7 +63,7 @@ class BlasphemousWorld(World):
         return self.multiworld.random.choice(tears_set)
 
 
-    def generate_basic(self):
+    def create_items(self):
         placed_items = []
 
         placed_items.extend(Vanilla.unrandomized_dict.values())
@@ -258,18 +260,24 @@ class BlasphemousWorld(World):
 
         if self.multiworld.thorn_shuffle[self.player] == 1:
             self.multiworld.local_items[self.player].value.add("Thorn Upgrade")
+
+
+    def get_pre_fill_items(self) -> List["Item"]:
+        return self.pre_fill_items
         
 
     def place_items_from_set(self, location_set: Set[str], name: str):
         for loc in location_set:
             self.multiworld.get_location(loc, self.player)\
                 .place_locked_item(self.create_item(name))
+            self.pre_fill_items.append(self.create_item(name))
 
     
     def place_items_from_dict(self, option_dict: Dict[str, str]):
         for loc, item in option_dict.items():
             self.multiworld.get_location(loc, self.player)\
                 .place_locked_item(self.create_item(item))
+            self.pre_fill_items.append(self.create_item(item))
 
 
     def create_regions(self) -> None:
