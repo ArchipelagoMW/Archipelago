@@ -20,7 +20,7 @@ from .models import Seed, Room, Slot, GameDataPackage
 
 banned_zip_contents = (".sfc", ".z64", ".n64", ".sms", ".gb")
 
-def parse_multidata(compressed_multidata, files={}):
+def process_multidata(compressed_multidata, files={}):
     decompressed_multidata = MultiServer.Context.decompress(compressed_multidata)
 
     slots: typing.Set[Slot] = set()
@@ -116,7 +116,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
 
     # Load multi data.
     if multidata:
-        slots, multidata = parse_multidata(multidata, files)
+        slots, multidata = process_multidata(multidata, files)
 
         seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=owner, meta=json.dumps(meta),
                     id=sid if sid else uuid.uuid4())
@@ -157,7 +157,7 @@ def uploads():
                     # noinspection PyBroadException
                     try:
                         multidata = file.read()
-                        slots, multidata = parse_multidata(multidata)
+                        slots, multidata = process_multidata(multidata)
                     except Exception as e:
                         flash(f"Could not load multidata. File may be corrupted or incompatible. ({e})")
                     else:
