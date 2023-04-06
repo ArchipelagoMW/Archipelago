@@ -1,9 +1,9 @@
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 
 from BaseClasses import Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from .Constants import *
+from .Constants import NOTES, PHOBEKINS, ALL_ITEMS, ALWAYS_LOCATIONS, SEALS, BOSS_LOCATIONS
 from .Options import messenger_options, NotesNeeded, Goal, PowerSeals, Logic
 from .Regions import REGIONS, REGION_CONNECTIONS, MEGA_SHARDS
 from .SubClasses import MessengerRegion, MessengerItem
@@ -60,7 +60,7 @@ class MessengerWorld(World):
                            ], base_offset)}
 
     data_version = 2
-    required_client_version = (0, 4, 0)
+    required_client_version = (0, 3, 9)
 
     web = MessengerWeb()
 
