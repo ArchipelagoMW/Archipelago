@@ -84,15 +84,6 @@ class ItemShuffle(Choice):
     default = 0
 
 
-class DayOnePatchLag(Choice):
-    """If the day one patch is needed for lag reduction on coin pick up"""
-    internal_name = "day_one_patch_lag"
-    display_name = "Day One Patch Lag"
-    option_disabled = 0
-    option_enabled = 1
-    default = 1
-
-
 DLCQuest_options: Dict[str, type(Option)] = {
     option.internal_name: option
     for option in [
@@ -103,7 +94,6 @@ DLCQuest_options: Dict[str, type(Option)] = {
         EndingChoice,
         Campaign,
         ItemShuffle,
-        DayOnePatchLag,
     ]
 }
 default_options = {option.internal_name: option.default for option in DLCQuest_options.values()}
