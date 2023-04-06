@@ -78,6 +78,8 @@ class MessengerRules:
             "Elemental Skylands Seal - Air": self.has_wingsuit,
             "Elemental Skylands Seal - Water": self.has_dart,
             "Elemental Skylands Seal - Fire": self.has_dart,
+            "Earth Mega Shard": self.has_dart,
+            "Water Mega Shard": self.has_dart,
             # corrupted future
             "Key of Courage": lambda state: state.has_all({"Demon King Crown", "Fairy Bottle"}, self.player),
             # the shop
@@ -136,12 +138,17 @@ class MessengerHardRules(MessengerRules):
             "Forlorn Temple": lambda state: self.has_vertical(state) and state.has_all(set(PHOBEKINS), self.player),
             "Searing Crags Upper": self.true,
             "Glacial Peak": self.true,
+            "Elemental Skylands": lambda state: state.has("Fairy Bottle", self.player) or self.has_windmill(state),
         })
 
         self.location_rules.update({
             "Howling Grotto Seal - Windy Saws and Balls": self.true,
             "Glacial Peak Seal - Projectile Spike Pit": self.true,
             "Claustro": self.has_wingsuit,
+            "Elemental Skylands Seal - Water": self.true,
+            "Elemental Skylands Seal - Fire": self.true,
+            "Earth Mega Shard": self.true,
+            "Water Mega Shard": self.true,
         })
 
         self.extra_rules = {
@@ -174,7 +181,8 @@ class MessengerChallengeRules(MessengerHardRules):
         self.region_rules.update({
             "Forlorn Temple": lambda state: (self.has_vertical(state) and state.has_all(set(PHOBEKINS), self.player))
                                             or state.has_all({"Wingsuit", "Windmill Shuriken"}, self.player),
-            "Elemental Skylands": lambda state: self.has_wingsuit(state) or state.has("Fairy Bottle", self.player),
+            "Elemental Skylands": lambda state: self.has_wingsuit(state) or state.has("Fairy Bottle", self.player)
+                                                or self.has_windmill(state),
         })
 
         self.location_rules.update({
