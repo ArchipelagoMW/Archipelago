@@ -22,7 +22,8 @@ class AccessTest(MessengerTestBase):
         locations = ["Ninja Village Seal - Tree House", "Key of Hope", "Howling Grotto Seal - Crushing Pits",
                      "Glacial Peak Seal - Ice Climbers", "Tower of Time Seal - Time Waster Seal",
                      "Tower of Time Seal - Arcane Orbs", "Underworld Seal - Rising Fanta", "Key of Symbiosis",
-                     "Elemental Skylands Seal - Water", "Elemental Skylands Seal - Fire"]
+                     "Elemental Skylands Seal - Water", "Elemental Skylands Seal - Fire", "Earth Mega Shard",
+                     "Water Mega Shard"]
         items = [["Rope Dart"]]
         self.assertAccessDependency(locations, items)
 

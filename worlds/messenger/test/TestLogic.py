@@ -41,7 +41,7 @@ class HardLogicTest(MessengerTestBase):
             # riviere turquoise
             "Fairy Bottle", "Riviere Turquoise Seal - Flower Power",
             # elemental skylands
-            "Elemental Skylands Seal - Air", "Elemental Skylands Seal - Water", "Elemental Skylands Seal - Fire",
+            "Elemental Skylands Seal - Air",
             # phantom
             "Rescue Phantom",
         ]
