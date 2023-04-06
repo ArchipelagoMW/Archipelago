@@ -1331,11 +1331,11 @@
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM03": {
-    "label": "Sootopolis City Gym - TM03 from Juan",
+    "label": "Sootopolis Gym - TM03 from Juan",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM04": {
-    "label": "Mossdeep City Gym - TM04 from Tate and Liza",
+    "label": "Mossdeep Gym - TM04 from Tate and Liza",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM05": {
@@ -1343,7 +1343,7 @@
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM08": {
-    "label": "Dewford Town Gym - TM08 from Brawly",
+    "label": "Dewford Gym - TM08 from Brawly",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM09": {
@@ -1379,7 +1379,7 @@
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM34": {
-    "label": "Mauville City Gym - TM34 from Wattson",
+    "label": "Mauville Gym - TM34 from Wattson",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM36": {
@@ -1387,11 +1387,11 @@
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM39": {
-    "label": "Rustboro City Gym - TM39 from Roxanne",
+    "label": "Rustboro Gym - TM39 from Roxanne",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM40": {
-    "label": "Fortree City Gym - TM40 from Winona",
+    "label": "Fortree Gym - TM40 from Winona",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM41": {
@@ -1399,7 +1399,7 @@
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM42": {
-    "label": "Petalburg City Gym - TM42 from Norman",
+    "label": "Petalburg Gym - TM42 from Norman",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM44": {
@@ -1423,7 +1423,7 @@
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM50": {
-    "label": "Lavaridge Town Gym - TM50 from Flannery",
+    "label": "Lavaridge Gym - TM50 from Flannery",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_WHITE_HERB": {

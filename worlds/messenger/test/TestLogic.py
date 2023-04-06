@@ -4,7 +4,7 @@ from . import MessengerTestBase
 
 class HardLogicTest(MessengerTestBase):
     options = {
-        "logic_level": "hard"
+        "logic_level": "hard",
     }
 
     def testVertical(self) -> None:
@@ -14,7 +14,7 @@ class HardLogicTest(MessengerTestBase):
             "Tower of Time Seal - Time Waster Seal", "Tower of Time Seal - Lantern Climb",
             "Tower of Time Seal - Arcane Orbs",
             # ninja village
-            "Candle", "Astral Seed", "Ninja Village Seal - Tree House",
+            "Candle", "Astral Seed", "Ninja Village Seal - Tree House", "Astral Tea Leaves",
             # autumn hills
             "Climbing Claws", "Key of Hope",
             "Autumn Hills Seal - Trip Saws", "Autumn Hills Seal - Double Swing Saws",
@@ -54,7 +54,7 @@ class HardLogicTest(MessengerTestBase):
         windmill_locs = [
             "Key of Strength",
             "Key of Symbiosis",
-            "Underworld Seal - Fireball Wave"
+            "Underworld Seal - Fireball Wave",
         ]
         for loc in windmill_locs:
             with self.subTest("can't reach location with nothing", location=loc):
@@ -79,13 +79,14 @@ class HardLogicTest(MessengerTestBase):
 
 class ChallengingLogicTest(MessengerTestBase):
     options = {
-        "logic_level": "challenging"
+        "shuffle_seals": "false",
+        "logic_level": "challenging",
     }
 
 
 class NoLogicTest(MessengerTestBase):
     options = {
-        "logic_level": "oob"
+        "logic_level": "oob",
     }
 
     def testAccess(self) -> None:

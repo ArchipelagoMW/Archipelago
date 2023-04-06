@@ -58,7 +58,8 @@ _legendary_pokemon = frozenset([
     'Registeel',
     'Regirock',
     'Regice',
-    'Jirachi'
+    'Jirachi',
+    'Deoxys'
 ])
 
 

@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import logging
+import itertools
 from typing import List, Dict, Any
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
@@ -7,7 +10,7 @@ from . import Items
 from . import Locations
 from . import Creatures
 from . import Options
-from .Items import item_table
+from .Items import item_table, group_items
 from .Rules import set_rules
 
 logger = logging.getLogger("Subnautica")
@@ -84,37 +87,41 @@ class SubnauticaWorld(World):
 
     def create_items(self):
         # Generate item pool
-        pool = []
+        pool: List[SubnauticaItem] = []
         extras = self.multiworld.creature_scans[self.player].value
-        valuable = self.multiworld.item_pool[self.player] == Options.ItemPool.option_valuable
-        for item in item_table.values():
-            for i in range(item["count"]):
-                subnautica_item = self.create_item(item["name"])
-                if item["name"] == "Neptune Launch Platform":
-                    self.multiworld.get_location("Aurora - Captain Data Terminal", self.player).place_locked_item(
-                        subnautica_item)
-                elif valuable and ItemClassification.filler == item["classification"]:
-                    extras += 1
-                else:
-                    pool.append(subnautica_item)
 
-        for item_name in self.multiworld.random.choices(sorted(Items.advancement_item_names - {"Neptune Launch Platform"}),
-                                                        k=extras):
+        grouped = set(itertools.chain.from_iterable(group_items.values()))
+
+        for item_id, item in item_table.items():
+            if item_id in grouped:
+                extras += item["count"]
+            else:
+                for i in range(item["count"]):
+                    subnautica_item = self.create_item(item["name"])
+                    if item["name"] == "Neptune Launch Platform":
+                        self.multiworld.get_location("Aurora - Captain Data Terminal", self.player).place_locked_item(
+                            subnautica_item)
+                    else:
+                        pool.append(subnautica_item)
+
+        group_amount: int = 3
+        assert len(group_items) * group_amount <= extras
+        for name in ("Furniture", "Farming"):
+            for _ in range(group_amount):
+                pool.append(self.create_item(name))
+            extras -= group_amount
+
+        for item_name in self.multiworld.random.choices(
+                sorted(Items.advancement_item_names -  {"Neptune Launch Platform"}), k=extras):
             item = self.create_item(item_name)
-            item.classification = ItemClassification.filler  # as it's an extra, just fast-fill it somewhere
             pool.append(item)
 
         self.multiworld.itempool += pool
 
     def fill_slot_data(self) -> Dict[str, Any]:
         goal: Options.Goal = self.multiworld.goal[self.player]
-        item_pool: Options.ItemPool = self.multiworld.item_pool[self.player]
         swim_rule: Options.SwimRule = self.multiworld.swim_rule[self.player]
         vanilla_tech: List[str] = []
-        if item_pool == Options.ItemPool.option_valuable:
-            for item in Items.item_table.values():
-                if item["classification"] == ItemClassification.filler:
-                    vanilla_tech.append(item["tech_type"])
 
         slot_data: Dict[str, Any] = {
             "goal": goal.current_key,
@@ -126,7 +133,7 @@ class SubnauticaWorld(World):
 
         return slot_data
 
-    def create_item(self, name: str) -> Item:
+    def create_item(self, name: str) -> SubnauticaItem:
         item_id: int = self.item_name_to_id[name]
 
         return SubnauticaItem(name,

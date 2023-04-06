@@ -1,9 +1,9 @@
-from graph.graph import AccessPoint
-from utils.parameters import Settings
-from rom.rom_patches import RomPatches
-from logic.smbool import SMBool
-from logic.helpers import Bosses
-from logic.cache import Cache
+from worlds.sm.variaRandomizer.graph.graph import AccessPoint
+from worlds.sm.variaRandomizer.utils.parameters import Settings
+from worlds.sm.variaRandomizer.rom.rom_patches import RomPatches
+from worlds.sm.variaRandomizer.logic.smbool import SMBool
+from worlds.sm.variaRandomizer.logic.helpers import Bosses
+from worlds.sm.variaRandomizer.logic.cache import Cache
 
 # all access points and traverse functions
 accessPoints = [

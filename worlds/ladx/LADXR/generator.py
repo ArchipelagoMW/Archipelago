@@ -56,7 +56,7 @@ from . import hints
 from .locations.keyLocation import KeyLocation
 from .patches import bank34
 
-from ..Options import TrendyGame, Palette
+from ..Options import TrendyGame, Palette, MusicChangeCondition
 
 
 # Function to generate a final rom, this patches the rom with all required patches
@@ -181,7 +181,8 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     # patches.reduceRNG.slowdownThreeOfAKind(rom)
     patches.reduceRNG.fixHorseHeads(rom)
     patches.bomb.onlyDropBombsWhenHaveBombs(rom)
-    # patches.aesthetics.noSwordMusic(rom)
+    if ap_settings['music_change_condition'] == MusicChangeCondition.option_always:
+        patches.aesthetics.noSwordMusic(rom)
     patches.aesthetics.reduceMessageLengths(rom, rnd)
     patches.aesthetics.allowColorDungeonSpritesEverywhere(rom)
     if settings.music == 'random':
@@ -258,9 +259,9 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
         mw = None
         if spot.item_owner != spot.location_owner:
             mw = spot.item_owner
-            if mw > 255:
-                # Don't torture the game with higher slot numbers
-                mw = 255
+            if mw > 100:
+                # There are only 101 player name slots (99 + "The Server" + "another world"), so don't use more than that
+                mw = 100
         spot.patch(rom, spot.item, multiworld=mw)
     patches.enemies.changeBosses(rom, world_setup.boss_mapping)
     patches.enemies.changeMiniBosses(rom, world_setup.miniboss_mapping)

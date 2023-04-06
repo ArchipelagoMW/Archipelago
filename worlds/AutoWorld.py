@@ -36,6 +36,9 @@ class AutoWorldRegister(type):
                                    in dct.get("item_name_groups", {}).items()}
         dct["item_name_groups"]["Everything"] = dct["item_names"]
         dct["location_names"] = frozenset(dct["location_name_to_id"])
+        dct["location_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
+                                       in dct.get("location_name_groups", {}).items()}
+        dct["location_name_groups"]["Everywhere"] = dct["location_names"]
         dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
 
         # move away from get_required_client_version function
