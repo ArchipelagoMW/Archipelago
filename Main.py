@@ -11,7 +11,6 @@ from typing import Dict, List, Tuple, Optional, Set
 
 from BaseClasses import Item, MultiWorld, CollectionState, Region, LocationProgressType, Location
 import worlds
-from worlds.alttp.SubClasses import LTTPRegionType
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from worlds.alttp.Shops import FillDisabledShopSlots
 from Utils import output_path, get_options, __version__, version_tuple
@@ -282,21 +281,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 if type(location.address) is int:
                     if location.game != "A Link to the Past":  # TODO needs tracker work should probably completely remove `checks_in_area` from multidata
                         checks_in_area[location.player]["Light World"].append(location.address)
-                    else:
-                        main_entrance = location.parent_region.entrance
-                        if location.parent_region.dungeon:
-                            dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
-                                           'Inverted Ganons Tower': 'Ganons Tower'} \
-                                .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
-                            checks_in_area[location.player][dungeonname].append(location.address)
-                        elif location.parent_region.type == LTTPRegionType.LightWorld:
-                            checks_in_area[location.player]["Light World"].append(location.address)
-                        elif location.parent_region.type == LTTPRegionType.DarkWorld:
-                            checks_in_area[location.player]["Dark World"].append(location.address)
-                        elif main_entrance.parent_region.type == LTTPRegionType.LightWorld:
-                            checks_in_area[location.player]["Light World"].append(location.address)
-                        elif main_entrance.parent_region.type == LTTPRegionType.DarkWorld:
-                            checks_in_area[location.player]["Dark World"].append(location.address)
                     checks_in_area[location.player]["Total"] += 1
 
             FillDisabledShopSlots(world)

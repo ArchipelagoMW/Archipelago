@@ -525,6 +525,21 @@ class ALTTPWorld(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
+        for location in self.multiworld.get_filled_locations(self.player):
+            main_entrance = location.parent_region.entrance
+            if location.parent_region.dungeon:
+                dungeon_name = {"Inverted Agahnims Tower": "Agahnims Tower", "Inverted Ganons Tower": "Ganons Tower"} \
+                    .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
+                multidata["checks_in_area"][self.player][dungeon_name].append(location.address)
+            elif location.parent_region.type == LTTPRegionType.LightWorld:
+                multidata["checks_in_area"][self.player]["Light World"].append(location.address)
+            elif location.parent_region.type == LTTPRegionType.DarkWorld:
+                multidata["checks_in_area"][self.player]["Dark World"].append(location.address)
+            elif main_entrance.parent_region.type == LTTPRegionType.LightWorld:
+                multidata["checks_in_area"][self.player]["Light World"].append(location.address)
+            elif main_entrance.parent_region.type == LTTPRegionType.DarkWorld:
+                multidata["checks_in_area"][self.player]["Dark World"].append(location.address)
+
     def create_item(self, name: str) -> Item:
         return ALttPItem(name, self.player, **item_init_table[name])
 
