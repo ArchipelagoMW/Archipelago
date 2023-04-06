@@ -21,7 +21,7 @@ class ArchipIDLEWebWorld(WebWorld):
 
 class ArchipIDLEWorld(World):
     """
-    An idle game which sends a check every thirty seconds, up to one hundred checks.
+    An idle game which sends a check every thirty seconds, up to two hundred checks.
     """
     game = "ArchipIDLE"
     topology_present = False
@@ -41,7 +41,13 @@ class ArchipIDLEWorld(World):
         location_name_to_id[f"IDLE item number {i}"] = start_id
         start_id += 1
 
-    def generate_basic(self):
+    def set_rules(self):
+        set_rules(self.multiworld, self.player)
+
+    def create_item(self, name: str) -> Item:
+        return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
+
+    def create_items(self):
         item_table_copy = list(item_table)
         self.multiworld.random.shuffle(item_table_copy)
 
@@ -56,12 +62,6 @@ class ArchipIDLEWorld(World):
             item_pool.append(item)
 
         self.multiworld.itempool += item_pool
-
-    def set_rules(self):
-        set_rules(self.multiworld, self.player)
-
-    def create_item(self, name: str) -> Item:
-        return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
 
     def create_regions(self):
         self.multiworld.regions += [
