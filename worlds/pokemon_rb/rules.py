@@ -16,7 +16,7 @@ def set_rules(world, player):
         item_rules["Celadon Prize Corner - Item Prize 2"] = prize_rule
         item_rules["Celadon Prize Corner - Item Prize 3"] = prize_rule
 
-    if world.accessibility[player] != "locations":
+    if world.accessibility[player] != "full":
         world.get_location("Cerulean City - Bicycle Shop", player).always_allow = (lambda state, item:
                                                                                    item.name == "Bike Voucher"
                                                                                    and item.player == player)

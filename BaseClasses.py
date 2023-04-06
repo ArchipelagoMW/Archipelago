@@ -233,7 +233,7 @@ class MultiWorld():
 
     def set_options(self, args: Namespace) -> None:
         for option_key in Options.common_options:
-            setattr(self, option_key, getattr(args, option_key, {}))
+            setattr(self, option_key, getattr(args, option_key, ))
         for option_key in Options.per_game_common_options:
             setattr(self, option_key, getattr(args, option_key, {}))
 

@@ -1,10 +1,10 @@
-from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice
+from Options import DefaultOnToggle, DeathLink, Range, ItemsAccessibility, Choice
 
 
-class MessengerAccessibility(Accessibility):
-    default = Accessibility.option_locations
-    # defaulting to locations accessibility since items makes certain items self-locking
-    __doc__ = Accessibility.__doc__.replace(f"default {Accessibility.default}", f"default {default}")
+class MessengerAccessibility(ItemsAccessibility):
+    default = ItemsAccessibility.option_full
+    # defaulting to full accessibility since items makes certain items self-locking
+    __doc__ = ItemsAccessibility.__doc__.replace(f"default {ItemsAccessibility.default}", f"default {default}")
 
 
 class Logic(Choice):
