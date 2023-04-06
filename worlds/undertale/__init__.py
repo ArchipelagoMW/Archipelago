@@ -10,6 +10,9 @@ from worlds.generic.Rules import exclusion_rules
 from BaseClasses import Region, Entrance, Tutorial, Item
 from .Options import undertale_options
 from worlds.AutoWorld import World, WebWorld
+from worlds.LauncherComponents import Component, components
+
+components.append(Component("Undertale Client", "UndertaleClient"))
 
 
 def data_path(file_name: str):
