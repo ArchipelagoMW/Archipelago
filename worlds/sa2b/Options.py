@@ -100,6 +100,13 @@ class SlowTrapWeight(BaseTrapWeight):
     display_name = "Slow Trap Weight"
 
 
+class CutsceneTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which makes you watch an unskippable cutscene
+    """
+    display_name = "Cutscene Trap Weight"
+
+
 class PongTrapWeight(BaseTrapWeight):
     """
     Likelihood of receiving a trap which forces you to play a Pong minigame
@@ -634,6 +641,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     #"darkness_trap_weight": DarknessTrapWeight,
     "ice_trap_weight": IceTrapWeight,
     "slow_trap_weight": SlowTrapWeight,
+    "cutscene_trap_weight": CutsceneTrapWeight,
     "pong_trap_weight": PongTrapWeight,
     "minigame_trap_difficulty": MinigameTrapDifficulty,
     "ring_loss": RingLoss,
