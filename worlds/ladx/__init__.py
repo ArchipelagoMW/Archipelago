@@ -6,12 +6,11 @@ from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 
 from .Common import *
-from .Items import (DungeonItemData, DungeonItemType, LinksAwakeningItem,
+from .Items import (DungeonItemData, DungeonItemType, LinksAwakeningItem, TradeItemData,
                     ladxr_item_to_la_item_name, links_awakening_items,
                     links_awakening_items_by_name)
 from .LADXR import generator
 from .LADXR.itempool import ItemPool as LADXRItemPool
-from .LADXR.locations.tradeSequence import TradeSequenceItem
 from .LADXR.logic import Logic as LAXDRLogic
 from .LADXR.main import get_parser
 from .LADXR.settings import Settings as LADXRSettings
@@ -138,8 +137,6 @@ class LinksAwakeningWorld(World):
     def create_items(self) -> None:    
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
 
-        self.trade_items = []
-
         dungeon_item_types = {
 
         }
@@ -181,8 +178,9 @@ class LinksAwakeningWorld(World):
                 else:
                     item = self.create_item(item_name)
 
-                    if not self.multiworld.tradequest[self.player] and ladx_item_name.startswith("TRADING_"):
-                        self.trade_items.append(item)
+                    if not self.multiworld.tradequest[self.player] and isinstance(item.item_data, TradeItemData):
+                        location = self.multiworld.get_location(item.item_data.vanilla_location, self.player)
+                        location.place_locked_item(item)
                         continue
                     if isinstance(item.item_data, DungeonItemData):
                         if item.item_data.dungeon_item_type == DungeonItemType.INSTRUMENT:
@@ -257,13 +255,6 @@ class LinksAwakeningWorld(World):
                         dungeon_locations_by_dungeon[r.dungeon_index - 1].remove(location)
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
-
-                    # Tell the filler that if we're placing a dungeon item, restrict it to the dungeon the item associates with
-                    # This will need changed once keysanity is implemented
-                    #orig_rule = location.item_rule
-                    #location.item_rule = lambda item, orig_rule=orig_rule: \
-                    #    (not isinstance(item, DungeonItemData) or item.dungeon_index == location.dungeon) and orig_rule(item)
-
 
         for dungeon_index in range(0, 9):
             locs = dungeon_locations_by_dungeon[dungeon_index]
