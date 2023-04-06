@@ -34,7 +34,7 @@ from sc2.player import Bot
 from worlds.sc2hots import SC2HotSWorld
 from worlds.sc2hots.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups
 from worlds.sc2hots.Locations import SC2HOTS_LOC_ID_OFFSET
-from worlds.sc2hots.MissionTables import lookup_id_to_mission
+from worlds.sc2hots.MissionTables import lookup_id_to_mission, no_build_regions_list
 from worlds.sc2hots.Regions import MissionInfo
 
 import colorama
@@ -210,27 +210,32 @@ class SC2Context(CommonContext):
     command_processor = StarcraftClientProcessor
     game = "Starcraft 2 Heart of the Swarm"
     items_handling = 0b111
-    difficulty = -1
-    mission_order = 0
-    player_color = 6
-    player_color_primal = 4
     mission_req_table: typing.Dict[str, MissionInfo] = {}
     final_mission: int = 20
     announcements = queue.Queue()
     sc2_run_task: typing.Optional[asyncio.Task] = None
-    missions_unlocked: bool = False  # allow launching missions ignoring requirements
     current_tooltip = None
     last_loc_list = None
-    difficulty_override = -1
-    kerriganless = 0
-    kerrigan_primal_status = 0
-    levels_per_check = 0
-    checks_per_level = 1
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
     last_bot: typing.Optional[ArchipelagoBot] = None
     temp_items = queue.Queue()
-    transmissions_per_trap = 1
     accept_traps = False
+
+    # Client options
+    missions_unlocked: bool = False  # allow launching missions ignoring requirements
+    difficulty_override = -1
+
+    # Slot options
+    difficulty = -1
+    mission_order = 0
+    player_color = 6
+    player_color_primal = 4
+    kerriganless = 0
+    kerrigan_primal_status = 0
+    generic_upgrade_research = 0
+    levels_per_check = 0
+    checks_per_level = 1
+    transmissions_per_trap = 1
 
     def __init__(self, *args, **kwargs):
         super(SC2Context, self).__init__(*args, **kwargs)
@@ -259,6 +264,7 @@ class SC2Context(CommonContext):
             self.player_color_primal = args["slot_data"].get("player_color_primal", 4)
             if args["slot_data"].get("kerriganless", 0) > 0:
                 self.kerriganless = 1
+            self.generic_upgrade_research = args["slot_data"].get("generic_upgrade_research", 0)
             self.levels_per_check = args["slot_data"].get("kerrigan_levels_per_check", 0)
             self.checks_per_level = args["slot_data"].get("kerrigan_checks_per_level_pack", 1)
             self.kerrigan_primal_status = args["slot_data"].get("kerrigan_primal_status", 0)
@@ -609,11 +615,14 @@ def calculate_items(ctx: SC2Context) -> typing.List[int]:
 
     return accumulators
 
-def calculate_options(ctx: SC2Context, items: typing.List[int]) -> int:
+def calculate_options(ctx: SC2Context, items: typing.List[int], mission_id: int) -> int:
     options = 0
+
+    # Bit 0
     if ctx.kerriganless > 0:
         options |= 1 << 0
     
+    # Bits 1, 2
     if ctx.kerrigan_primal_status > 0:
         options |= 1 << 1
         primal = False
@@ -632,6 +641,14 @@ def calculate_options(ctx: SC2Context, items: typing.List[int]) -> int:
         if primal:
             options |= 1 << 2
     
+    # Bit 3
+    if ctx.generic_upgrade_research == 2:
+        options |= 1 << 3
+    elif ctx.generic_upgrade_research > 0:
+        mission_name = lookup_id_to_mission[mission_id]
+        if mission_name in no_build_regions_list == (ctx.generic_upgrade_research == 1):
+            options |= 1 << 3
+
     return options
 
 
@@ -686,7 +703,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
         if not self.setup_done:
             self.setup_done = True
             start_items = calculate_items(self.ctx)
-            options = calculate_options(self.ctx, start_items)
+            options = calculate_options(self.ctx, start_items, self.mission_id)
             if self.ctx.difficulty_override >= 0:
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
             else:

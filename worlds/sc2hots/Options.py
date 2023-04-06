@@ -107,6 +107,22 @@ class UnitsAlwaysHaveUpgrades(DefaultOnToggle):
     display_name = "Units Always Have Upgrades"
 
 
+class GenericUpgradeResearch(Choice):
+    """Determines how weapon and armor upgrades affect missions once found.  
+    
+    Vanilla:  Upgrades must be researched as normal.  
+    Auto In No-Build:  In No-Build missions, upgrades are automatically researched.  
+    In all other missions, upgrades must be researched as normal.  
+    Auto In Build:  In No-Build missions, upgrades are unavailable as normal.  
+    In all other missions, upgrades are automatically researched.  
+    Always Auto:  Upgrades are automatically researched in all missions."""
+    display_name = "Generic Upgrade Research"
+    option_vanilla = 0
+    option_auto_in_no_build = 1
+    option_auto_in_build = 2
+    option_always_auto = 3
+
+
 class IncludeMutations(Range):
     """Determines how many of the 3 mutations for the 7 units that have them can appear."""
     display_name = "Include Mutations"
@@ -304,6 +320,7 @@ sc2hots_options: Dict[str, Option] = {
     "early_unit": EarlyUnit,
     "required_tactics": RequiredTactics,
     "units_always_have_upgrades": UnitsAlwaysHaveUpgrades,
+    "generic_upgrade_research": GenericUpgradeResearch,
     "include_mutations": IncludeMutations,
     "include_strains": IncludeStrains,
     "kerriganless": Kerriganless,
