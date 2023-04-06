@@ -1,9 +1,10 @@
 
-import utils.log, copy, random, sys, logging
+import copy, random, sys, logging, os
 from enum import Enum, unique
-from utils.parameters import infinity
-from rando.ItemLocContainer import getLocListStr, getItemListStr, getItemLocStr, ItemLocation
-from logic.helpers import Bosses
+from worlds.sm.variaRandomizer.utils import log
+from worlds.sm.variaRandomizer.utils.parameters import infinity
+from worlds.sm.variaRandomizer.rando.ItemLocContainer import getLocListStr, getItemListStr, getItemLocStr, ItemLocation
+from worlds.sm.variaRandomizer.logic.helpers import Bosses
 
 # used to specify whether we want to come back from locations
 @unique
@@ -23,7 +24,7 @@ class RandoServices(object):
         self.settings = restrictions.settings
         self.areaGraph = graph
         self.cache = cache
-        self.log = utils.log.get('RandoServices')
+        self.log = log.get('RandoServices')
 
     # collect an item/loc with logic in a container from a given AP
     # return new AP

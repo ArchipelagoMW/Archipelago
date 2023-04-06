@@ -112,7 +112,11 @@ class WorldTestBase(unittest.TestCase):
             self.world_setup()
 
     def world_setup(self, seed: typing.Optional[int] = None) -> None:
-        if type(self) is WorldTestBase:
+        if type(self) is WorldTestBase or \
+                (hasattr(WorldTestBase, self._testMethodName)
+                 and not self.run_default_tests and
+                 getattr(self, self._testMethodName).__code__ is
+                 getattr(WorldTestBase, self._testMethodName, None).__code__):
             return  # setUp gets called for tests defined in the base class. We skip world_setup here.
         if not hasattr(self, "game"):
             raise NotImplementedError("didn't define game name")
@@ -195,11 +199,15 @@ class WorldTestBase(unittest.TestCase):
 
         self.collect_all_but(all_items)
         for location in self.multiworld.get_locations():
-            self.assertEqual(self.multiworld.state.can_reach(location), location.name not in locations)
+            loc_reachable = self.multiworld.state.can_reach(location)
+            self.assertEqual(loc_reachable, location.name not in locations,
+                             f"{location.name} is reachable without {all_items}" if loc_reachable
+                             else f"{location.name} is not reachable without {all_items}")
         for item_names in possible_items:
             items = self.collect_by_name(item_names)
             for location in locations:
-                self.assertTrue(self.can_reach_location(location))
+                self.assertTrue(self.can_reach_location(location),
+                                f"{location} not reachable with {item_names}")
             self.remove(items)
 
     def assertBeatable(self, beatable: bool):
@@ -208,16 +216,20 @@ class WorldTestBase(unittest.TestCase):
 
     # following tests are automatically run
     @property
-    def skip_default_tests(self) -> bool:
+    def run_default_tests(self) -> bool:
         """Not possible or identical to the base test that's always being run already"""
-        constructed = hasattr(self, "game") and hasattr(self, "multiworld")
-        return not constructed or (not self.options
-                                   and self.setUp is WorldTestBase.setUp
-                                   and self.world_setup is WorldTestBase.world_setup)
+        return (self.options
+                or self.setUp.__code__ is not WorldTestBase.setUp.__code__
+                or self.world_setup.__code__ is not WorldTestBase.world_setup.__code__)
+
+    @property
+    def constructed(self) -> bool:
+        """A multiworld has been constructed by this point"""
+        return hasattr(self, "game") and hasattr(self, "multiworld")
 
     def testAllStateCanReachEverything(self):
-        """Ensure all state can reach everything with the defined options"""
-        if self.skip_default_tests:
+        """Ensure all state can reach everything and complete the game with the defined options"""
+        if not (self.run_default_tests and self.constructed):
             return
         with self.subTest("Game", game=self.game):
             excluded = self.multiworld.exclude_locations[1].value
@@ -226,10 +238,13 @@ class WorldTestBase(unittest.TestCase):
                 if location.name not in excluded:
                     with self.subTest("Location should be reached", location=location):
                         self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
+            with self.subTest("Beatable"):
+                self.multiworld.state = state
+                self.assertBeatable(True)
 
     def testEmptyStateCanReachSomething(self):
         """Ensure empty state can reach at least one location with the defined options"""
-        if self.skip_default_tests:
+        if not (self.run_default_tests and self.constructed):
             return
         with self.subTest("Game", game=self.game):
             state = CollectionState(self.multiworld)
