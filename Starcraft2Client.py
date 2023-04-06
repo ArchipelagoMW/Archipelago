@@ -32,7 +32,7 @@ from sc2.data import Race
 from sc2.main import run_game
 from sc2.player import Bot
 from worlds.sc2wol import SC2WoLWorld
-from worlds.sc2wol.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups
+from worlds.sc2wol.Items import lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
 from worlds.sc2wol.MissionTables import lookup_id_to_mission
 from worlds.sc2wol.Regions import MissionInfo
@@ -536,7 +536,7 @@ def calculate_items(items: typing.List[NetworkItem]) -> typing.List[int]:
 
     for network_item in items:
         name: str = lookup_id_to_name[network_item.item]
-        item_data: ItemData = item_table[name]
+        item_data: ItemData = get_full_item_list()[name]
 
         # exists exactly once
         if item_data.quantity == 1:

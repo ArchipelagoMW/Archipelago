@@ -218,6 +218,18 @@ void libC6542F50_gf_APUnlockUnits (string lp_unitCode, string lp_version) {
         libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupDominionThor, 1);
     }
 
+    if ((ModI(lv_unitCode, PowI(2.0, (18 + 1))) >= PowI(2.0, 18.0))) {
+        libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupxxxReactor, 1);
+        TechTreeUnitAllow(1, "Reactor", true);
+        TechTreeUnitAllow(1, "Liberator", true);
+    }
+
+    if ((ModI(lv_unitCode, 1048576) >= 524288)) {
+        TechTreeUnitAllow(1, "StarportTechLab", true);
+        TechTreeUnitAllow(1, "Starport", true);
+        TechTreeUnitAllow(1, "ValkyrieSCBW", true);
+    }
+
 }
 
 void libC6542F50_gf_APUnlockUpgrades (string lp_upgradeCode, string lp_version) {
@@ -618,6 +630,14 @@ void libC6542F50_gf_APUnlockArmory2 (string lp_unitUpgradeCode, string lp_versio
 
     if ((ModI(lv_unitUpgradeCode, 67108864) >= 33554432)) {
         TechTreeUpgradeAddLevel(1, "MechanicalRebirth", 1);
+    }
+
+    if ((ModI(lv_unitUpgradeCode, 134217728) >= 67108864)) {
+        TechTreeUpgradeAddLevel(1, "LiberatorAGRangeUpgrade", 1);
+    }
+
+    if ((ModI(lv_unitUpgradeCode, 268435456) >= 134217728)) {
+        TechTreeUpgradeAddLevel(1, "LiberatorSiegeProtocol", 1);
     }
 
 }
@@ -1092,6 +1112,10 @@ bool libC6542F50_gt_APClearTech_Func (bool testConds, bool runActions) {
     TechTreeUnitAllow(1, "Phoenix", false);
     TechTreeUnitAllow(1, "VoidRay", false);
     TechTreeUnitAllow(1, "Carrier", false);
+    TechTreeUnitAllow(1, "Liberator", false);
+    TechTreeUnitAllow(1, "ValkyrieSCBW", false);
+    TechTreeUpgradeAllow(1, "LiberatorAGRangeUpgrade", false);
+    TechTreeUpgradeAllow(1, "LiberatorSiegeProtocol", false);
     return true;
 }
 

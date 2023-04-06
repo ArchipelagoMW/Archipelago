@@ -1,6 +1,6 @@
 from typing import Callable, Dict, List, Set
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
-from .Items import item_table
+from .Items import get_full_item_list
 from .MissionTables import no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list,\
     mission_orders, MissionInfo, alt_final_mission_locations, MissionPools
 from .Options import get_option_value
@@ -16,7 +16,7 @@ UPGRADABLE_ITEMS = [
 
 BARRACKS_UNITS = {"Marine", "Medic", "Firebat", "Marauder", "Reaper", "Ghost", "Spectre"}
 FACTORY_UNITS = {"Hellion", "Vulture", "Goliath", "Diamondback", "Siege Tank", "Thor", "Predator"}
-STARPORT_UNITS = {"Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "Hercules", "Science Vessel", "Raven"}
+STARPORT_UNITS = {"Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "Hercules", "Science Vessel", "Raven", "Liberator", "Valkyrie"}
 
 PROTOSS_REGIONS = {"A Sinister Turn", "Echoes of the Future", "In Utter Darkness"}
 
@@ -92,7 +92,7 @@ def get_item_upgrades(inventory: List[Item], parent_item: Item or str):
     item_name = parent_item.name if isinstance(parent_item, Item) else parent_item
     return [
         inv_item for inv_item in inventory
-        if item_table[inv_item.name].parent_item == item_name
+        if get_full_item_list()[inv_item.name].parent_item == item_name
     ]
 
 
@@ -230,7 +230,7 @@ class ValidInventory:
         self.min_units_per_structure = int(mission_count / 7)
         min_upgrades = 1 if mission_count < 10 else 2
         for item in item_pool:
-            item_info = item_table[item.name]
+            item_info = get_full_item_list()[item.name]
             if item_info.type == "Upgrade":
                 # Locking upgrades based on mission duration
                 if item.name not in item_quantities:

@@ -14,7 +14,7 @@ class SC2WoLLogic(LogicMixin):
 
     def _sc2wol_has_air_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has('Viking', player) \
-               or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has('Wraith', player)
+               or get_option_value(multiworld, player, 'required_tactics') > 0 and (self.has('Wraith', player) or self.has('Valkyrie', player))
 
     def _sc2wol_has_competent_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has('Goliath', player) \

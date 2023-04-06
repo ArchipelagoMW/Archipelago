@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CUnit id="Liberator">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="AIThreatGround" value="1"/>
+        <FlagArray index="AIThreatAir" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Air" value="1"/>
+        <Collide index="Flying" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="180"/>
+        <LifeMax value="180"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranShipPlating"/>
+        <Mover value="Fly"/>
+        <Speed value="3.375"/>
+        <Acceleration value="3.5"/>
+        <StationaryTurningRate value="1499.9414"/>
+        <TurningRate value="1499.9414"/>
+        <Sight value="10"/>
+        <Height value="3.75"/>
+        <VisionHeight value="4"/>
+        <Food value="-3"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="150"/>
+        <CostResource index="Vespene" value="150"/>
+        <RepairTime value="60"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="50"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="LiberatorMorphtoAG"/>
+        <AbilArray Link="LiberatorAGTarget"/>
+        <WeaponArray Link="LiberatorMissileLaunchers"/>
+        <WeaponArray Turret="Liberator"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="LiberatorAGMode" Type="AbilCmd" AbilCmd="LiberatorAGTarget,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="LiberatorAGRangeUpgrade" Type="Passive" Requirements="HaveLiberatorRange" Row="2" Column="2"/>
+        </CardLayouts>
+        <Radius value="0.75"/>
+        <SeparationRadius value="0.75"/>
+        <ScoreMake value="250"/>
+        <ScoreKill value="250"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="15"/>
+        <MinimapRadius value="0.75"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAIThink value="AIThinkLiberator"/>
+        <TechAliasArray value="Alias_Liberator"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="188"/>
+        <GlossaryStrongArray value="VikingFighter"/>
+        <GlossaryStrongArray value="Mutalisk"/>
+        <GlossaryStrongArray value="Phoenix"/>
+        <GlossaryWeakArray value="Battlecruiser"/>
+        <GlossaryWeakArray value="Corruptor"/>
+        <GlossaryWeakArray value="Carrier"/>
+        <GlossaryAlias value="Liberator"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+    </CUnit>
+    <CUnit id="LiberatorAG">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="AIThreatGround" value="1"/>
+        <FlagArray index="AIThreatAir" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Air" value="1"/>
+        <Collide index="Flying" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="180"/>
+        <LifeMax value="180"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranShipPlating"/>
+        <Mover value="Fly"/>
+        <Acceleration value="3.5"/>
+        <StationaryTurningRate value="1499.9414"/>
+        <TurningRate value="1499.9414"/>
+        <Sight value="13"/>
+        <Height value="3.75"/>
+        <VisionHeight value="4"/>
+        <Food value="-3"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="150"/>
+        <CostResource index="Vespene" value="150"/>
+        <RepairTime value="60"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="50"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="LiberatorMorphtoAA"/>
+        <AbilArray Link="LiberatorMorphtoAG"/>
+        <AbilArray Link="LiberatorAATarget"/>
+        <BehaviorArray Link="LiberatorInitialMovable"/>
+        <WeaponArray Link="LiberatorAGWeapon" Turret="LiberatorAG"/>
+        <CardLayouts>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="LiberatorAAMode" Type="AbilCmd" AbilCmd="LiberatorAATarget,Execute" Row="2" Column="1"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="LiberatorAGRangeUpgrade" Type="Passive" Requirements="HaveLiberatorRange" Row="2" Column="2"/>
+            <LayoutButtons Face="SiegeProtocol" Type="Passive" Requirements="HaveLiberatorSiegeProtocol" Row="2" Column="3"/>
+        </CardLayouts>
+        <Radius value="0.75"/>
+        <SeparationRadius value="0.75"/>
+        <ScoreMake value="250"/>
+        <ScoreKill value="250"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="15"/>
+        <MinimapRadius value="0.75"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAIThink value="AIThinkLiberatorAG"/>
+        <LeaderAlias value="Liberator"/>
+        <HotkeyAlias value="Liberator"/>
+        <SelectAlias value="Liberator"/>
+        <SubgroupAlias value="Liberator"/>
+        <TechAliasArray value="Alias_Liberator"/>
+    </CUnit>
+    <CUnit id="LiberatorAGMissile" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="LiberatorDamageMissile" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="LiberatorMissile"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="LiberatorMissile" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="SpiderMine2">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <FlagArray index="Uncommandable" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="25"/>
+        <LifeMax value="25"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
+        <Speed value="9"/>
+        <Acceleration value="1000"/>
+        <StationaryTurningRate value="2292.8906"/>
+        <Sight value="4"/>
+        <CostResource index="Minerals" value="25"/>
+        <RepairTime value="33.3332"/>
+        <AbilArray Link="VultureSpiderMineBurrow"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <BehaviorArray Link="VultureSpiderMineBurrowFirst"/>
+        <WeaponArray Link="VultureSpiderMines"/>
+        <Radius value="0.125"/>
+        <SeparationRadius value="0"/>
+        <SubgroupPriority value="15"/>
+        <MinimapRadius value="0.25"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAI value="SpiderMineVulture"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="160"/>
+        <HotkeyCategory value="Unit/Category/TerranStory"/>
+        <KillDisplay value="Never"/>
+        <RankDisplay value="Never"/>
+    </CUnit>
+    <CUnit id="Starport">
+        <CardLayouts index="0">
+            <LayoutButtons index="13" Face="TechReactor" Type="AbilCmd" AbilCmd="StarportAddOns,Build4" Row="2" Column="0"/>
+            <LayoutButtons index="14" Face="SelectBuilder" Type="SelectBuilder" AbilCmd="StarportTrain,Train5" Row="1" Column="3"/>
+            <LayoutButtons index="15" Face="Wraith" AbilCmd="StarportTrain,Train8" Row="1" Column="0"/>
+            <LayoutButtons index="16" Face="BuildHercules" AbilCmd="StarportTrain,Train6" Column="1"/>
+            <LayoutButtons index="17" Face="BuildScienceVessel" AbilCmd="StarportTrain,Train7" Column="2"/>
+            <LayoutButtons index="18" Face="TechReactorAI" AbilCmd="StarportAddOns,Build3" Row="2"/>
+            <LayoutButtons Face="ValkyrieSCBW" Type="AbilCmd" AbilCmd="TrainStarportAdditionalUnits,Train2" Row="2" Column="0"/>
+            <LayoutButtons Face="Liberator" Type="AbilCmd" AbilCmd="TrainStarportAdditionalUnits,Train1" Row="1" Column="3"/>
+        </CardLayouts>
+        <TechTreeProducedUnitArray value="Liberator"/>
+        <AbilArray index="3" Link="TrainStarportAdditionalUnits"/>
+        <AbilArray index="4" Link="StarportAddOns"/>
+        <AbilArray index="5" Link="Rally"/>
+        <AbilArray Link="StarportLiftOff"/>
+    </CUnit>
+    <CUnit id="ValkyrieSCBW">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Air" value="1"/>
+        <Collide index="Flying" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="200"/>
+        <LifeMax value="200"/>
+        <LifeArmor value="2"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranShipPlating"/>
+        <Mover value="Fly"/>
+        <Speed value="3.75"/>
+        <Acceleration value="2.625"/>
+        <Sight value="8"/>
+        <Height value="3.75"/>
+        <VisionHeight value="4"/>
+        <Food value="-3"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="250"/>
+        <CostResource index="Vespene" value="125"/>
+        <BuildTime value="46.5"/>
+        <RepairTime value="32"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="50"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <WeaponArray Link="ValkyrieSCBWWeapon"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+        </CardLayouts>
+        <Radius value="0.625"/>
+        <SeparationRadius value="0.625"/>
+        <ScoreMake value="400"/>
+        <ScoreKill value="800"/>
+        <SubgroupPriority value="1"/>
+        <MinimapRadius value="0.625"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <HotkeyCategory value="Unit/Category/TerranUnitsSCBW"/>
+    </CUnit>
+    <CUnit id="ValkyrieSCBWWeapon@Missile" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="ValkyrieSCBWWeapon@Mover"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnitHero id="Vulture2">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Classic"/>
+        <FlagArray index="Hero" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Land2" value="1"/>
+        <Collide index="Land16" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="300"/>
+        <LifeMax value="300"/>
+        <LifeArmor value="3"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
+        <Speed value="4.25"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="69.125"/>
+        <Sight value="9"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="75"/>
+        <RepairTime value="25"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="15"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="VultureSpiderMines2"/>
+        <AbilArray Link="MakeVultureSpiderMines2"/>
+        <AbilArray Link="VultureQueue32"/>
+        <BehaviorArray Link="ScavengingSystemsMechDeath"/>
+        <WeaponArray Link="RaynorFragmentationGrenade"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="SpiderMine3" Type="AbilCmd" AbilCmd="VultureSpiderMines2,0" Row="2" Column="0"/>
+            <LayoutButtons>
+                <Face value="CerberusMines3"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255,0"/>
+                <Requirements value="UseCerberusMines4"/>
+                <Row value="2"/>
+                <Column value="2"/>
+            </LayoutButtons>
+            <LayoutButtons Face="SpiderMineReplenish3" Type="AbilCmd" AbilCmd="MakeVultureSpiderMines2,0" Row="2" Column="1"/>
+            <LayoutButtons Face="Cancel2" Type="AbilCmd" AbilCmd="VultureQueue32,0" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="0.625"/>
+        <SeparationRadius value="0.625"/>
+        <CargoSize value="2"/>
+        <ScoreMake value="75"/>
+        <ScoreKill value="150"/>
+        <SubgroupPriority value="20"/>
+        <MinimapRadius value="0.625"/>
+        <EditorCategories value="ObjectType:Hero,ObjectFamily:Campaign"/>
+        <TacticalAIThink value="AIThinkVulture"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="90"/>
+        <GlossaryStrongArray value="Zergling"/>
+        <GlossaryStrongArray value="Zealot"/>
+        <GlossaryStrongArray value="Marine"/>
+        <GlossaryWeakArray value="Roach"/>
+        <GlossaryWeakArray value="Colossus"/>
+        <GlossaryWeakArray value="SiegeTank"/>
+        <HotkeyCategory value="Unit/Category/TerranStory"/>
+    </CUnitHero>
+    <CUnit id="VultureWeapon2" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="MissileDefault"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+</Catalog>

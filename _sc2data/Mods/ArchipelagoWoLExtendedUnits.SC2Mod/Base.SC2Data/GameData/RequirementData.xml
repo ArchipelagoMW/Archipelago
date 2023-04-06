@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CRequirement id="HaveLiberatorMorph">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Use" Link="CountUpgradeLiberatorMorphCompleteOnly4015118574TechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="HaveLiberatorRange">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="CountUpgradeLiberatorAGRangeUpgradeCompleteOnly2325880491"/>
+    </CRequirement>
+    <CRequirement id="HaveLiberatorSiegeProtocol">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="CountUpgradeLiberatorSiegeProtocolUpgradeCompleteOnly2325880495"/>
+    </CRequirement>
+    <CRequirement id="LearnLiberatorMorph">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="NotCountUpgradeLiberatorMorphQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="LearnLiberatorRange">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="CountUnitFusionCoreCompleteOnly"/>
+        <NodeArray index="Show" Link="NotCountUpgradeLiberatorAGRangeUpgradeQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="UseCerberusMines2">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="CountUpgradeCerberusMinesCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="UseCerberusMines3">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="CountUpgradeCerberusMinesCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="UseCerberusMines4">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="CountUpgradeCerberusMinesCompleteOnly"/>
+    </CRequirement>
+</Catalog>

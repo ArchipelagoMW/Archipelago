@@ -19,7 +19,7 @@ class StarcraftWoLItem(Item):
 
 
 def get_full_item_list():
-    return item_table
+    return extended_item_table
 
 
 SC2WOL_ITEM_ID_OFFSET = 1000
@@ -148,6 +148,20 @@ item_table = {
     # "Keystone Piece": ItemData(850 + SC2WOL_ITEM_ID_OFFSET, "Goal", 0, quantity=0, classification=ItemClassification.progression_skip_balancing)
 }
 
+extended_item_table = dict(**item_table, **{
+    "Liberator": ItemData(900 + SC2WOL_ITEM_ID_OFFSET, "Unit", 18, classification=ItemClassification.progression),
+    "Valkyrie": ItemData(901 + SC2WOL_ITEM_ID_OFFSET, "Unit", 19, classification=ItemClassification.progression),
+
+    "Advanced Ballistics (Liberator)": ItemData(950 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 26, parent_item="Liberator"),
+    "Siege Protocol (Liberator)": ItemData(951 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 27, classification=ItemClassification.progression, parent_item="Liberator")
+
+})
+
+def get_item_table(multiworld: MultiWorld, player: int):
+    if get_option_value(multiworld, player, "item_set") > 0:
+        return extended_item_table
+    else:
+        return item_table
 
 basic_units = {
     'Marine',
@@ -173,7 +187,7 @@ def get_basic_units(multiworld: MultiWorld, player: int) -> typing.Set[str]:
 
 
 item_name_groups = {}
-for item, data in item_table.items():
+for item, data in get_full_item_list().items():
     item_name_groups.setdefault(data.type, []).append(item)
 item_name_groups["Missions"] = ["Beat " + mission_name for mission_name in vanilla_mission_req_table]
 
@@ -191,7 +205,8 @@ defense_ratings = {
     # Bunker w/ Marine/Marauder: 3,
     "Perdition Turret": 2,
     "Missile Turret": 2,
-    "Vulture": 2
+    "Vulture": 2,
+    "Liberator": 2
 }
 zerg_defense_ratings = {
     "Perdition Turret": 2,

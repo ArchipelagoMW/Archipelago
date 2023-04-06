@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CRequirementCountUpgrade id="CountUpgradeLiberatorAGRangeUpgradeCompleteOnly2325880491">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="LiberatorAGRangeUpgrade" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeLiberatorSiegeProtocolUpgradeCompleteOnly2325880495">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="LiberatorSiegeProtocol" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeLiberatorAGRangeUpgradeQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="LiberatorAGRangeUpgrade" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeLiberatorMorphCompleteOnly1725926371TechTreeCheat">
+        <Count Link="LiberatorMorph" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeLiberatorMorphCompleteOnly4015118574TechTreeCheat">
+        <Count Link="LiberatorMorph" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeLiberatorMorphQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="LiberatorMorph" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="NotCountUpgradeLiberatorAGRangeUpgradeQueuedOrBetter">
+        <OperandArray index="0" value="CountUpgradeLiberatorAGRangeUpgradeQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="NotCountUpgradeLiberatorMorphQueuedOrBetter">
+        <OperandArray index="0" value="CountUpgradeLiberatorMorphQueuedOrBetter"/>
+    </CRequirementNot>
+</Catalog>

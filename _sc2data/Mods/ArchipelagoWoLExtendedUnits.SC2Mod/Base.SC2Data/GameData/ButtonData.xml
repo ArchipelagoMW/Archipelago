@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CButton id="Cancel2">
+        <Icon value="Assets\Textures\btn-command-cancel.dds"/>
+        <AlertIcon value="Assets\Textures\btn-command-cancel.dds"/>
+        <EditorCategories value="Race:Neutral"/>
+        <TintRacially value="1"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="CerberusMines2">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-cerberusmine.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="CerberusMines3">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-cerberusmine.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="Liberator">
+        <Icon value="Assets\Textures\btn-unit-terran-liberator.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-liberator.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="LiberatorAAMode">
+        <TooltipFlags index="ShowLevel" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-terran-liberator-aamode.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-liberator-aamode.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeySet value="LiberatorModes"/>
+    </CButton>
+    <CButton id="LiberatorAGMode">
+        <Icon value="Assets\Textures\btn-ability-terran-liberator-agmode.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-liberator-agmode.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeySet value="LiberatorModes"/>
+        <TooltipFlags index="ShowLevel" value="0"/>
+    </CButton>
+    <CButton id="LiberatorAGRangeUpgrade">
+        <Icon value="Assets\Textures\btn-upgrade-terran-advanceballistics.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-advanceballistics.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="SiegeProtocol">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-maelstromrounds.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+        <HotkeyAlias value=""/>
+    </CButton>
+    <CButton id="ResearchBallisticRange">
+        <Icon value="Assets\Textures\btn-upgrade-terran-advanceballistics.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-advanceballistics.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="ResearchLiberatorAGMode">
+        <Icon value="Assets\Textures\btn-upgrade-terran-liberator-agmode.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-liberator-agmode.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="SpiderMine2">
+        <Icon value="Assets\Textures\btn-ability-terran-spidermine.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-spidermine.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="SpiderMine3">
+        <Icon value="Assets\Textures\btn-ability-terran-spidermine.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-spidermine.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="SpiderMineReplenish2">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-replenishablemagazine.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-spidermine.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="SpiderMineReplenish3">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-replenishablemagazine.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-spidermine.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="ValkyrieSCBW">
+        <Icon value="Assets\Textures\btn-unit-terran-valkyrie@scbw.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-valkyrie@scbw.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value=""/>
+        <DefaultButtonLayout Column="2"/>
+    </CButton>
+</Catalog>

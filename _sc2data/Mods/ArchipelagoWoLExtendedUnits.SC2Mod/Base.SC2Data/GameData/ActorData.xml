@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CActorModel id="GenericAttackDamageModel2" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Model value="GenericAttackModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorModel id="GenericAttackDamageModel3" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Model value="GenericAttackModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorModel id="GenericAttackDamageModel4" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Model value="GenericAttackModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorSound id="GenericAttackDamageSound2" parent="SoundOneShot">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Sound value="GenericAttackSound"/>
+    </CActorSound>
+    <CActorSound id="GenericAttackDamageSound3" parent="SoundOneShot">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Sound value="GenericAttackSound"/>
+    </CActorSound>
+    <CActorSound id="GenericAttackDamageSound4" parent="SoundOneShot">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Sound value="GenericAttackSound"/>
+    </CActorSound>
+    <CActorModel id="GenericAttackImpactModel2" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Model value="GenericAttackModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorModel id="GenericAttackImpactModel3" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Model value="GenericAttackModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorModel id="GenericAttackImpactModel4" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Model value="GenericAttackModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorSound id="GenericAttackImpactSound2" parent="SoundOneShot">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Sound value="GenericAttackSound"/>
+    </CActorSound>
+    <CActorSound id="GenericAttackImpactSound3" parent="SoundOneShot">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Sound value="GenericAttackSound"/>
+    </CActorSound>
+    <CActorSound id="GenericAttackImpactSound4" parent="SoundOneShot">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Sound value="GenericAttackSound"/>
+    </CActorSound>
+    <CActorModel id="GenericAttackLaunchModel2" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Model value="GenericAttackModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorModel id="GenericAttackLaunchModel3" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Model value="GenericAttackModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorModel id="GenericAttackLaunchModel4" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Model value="GenericAttackModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorSound id="GenericAttackLaunchSound2" parent="SoundOneShot">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Sound value="GenericAttackSound"/>
+    </CActorSound>
+    <CActorSound id="GenericAttackLaunchSound3" parent="SoundOneShot">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Sound value="GenericAttackSound"/>
+    </CActorSound>
+    <CActorSound id="GenericAttackLaunchSound4" parent="SoundOneShot">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Sound value="GenericAttackSound"/>
+    </CActorSound>
+    <CActorUnit id="Liberator" parent="GenericUnitBase" unitName="Liberator">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <Macros value="PhysicsDeathsVoidAir"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Liberator_Land"/>
+        <On Terms="WeaponStart.LiberatorMissileLaunchers.AttackStart" Send="AnimBracketStart Attack Cover,Start Cover Cover,End"/>
+        <On Terms="WeaponStop.LiberatorMissileLaunchers.AttackStop" Send="TimerSet 2.000000 LiberatorAttack"/>
+        <On Terms="TimerExpired; TimerName LiberatorAttack; ValidateUnitType CasterNotAttacking" Send="AnimBracketStop Attack"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo Liberator" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom Liberator" Send="Destroy"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimClear Visor 0.000000"/>
+        <On Terms="ActorCreation" Send="AnimBlendTimeApply 0.000000"/>
+        <On Terms="ActorCreation" Send="AnimBaselineStop"/>
+        <On Terms="ActorCreation" Send="AnimBaselineStart"/>
+        <On Terms="ActorCreation" Send="AnimBlendTimeApply"/>
+        <On Terms="ActorCreation" Send="StatusSet Morphed 0"/>
+        <On Terms="Effect.LiberatorTargetMorphDelayPersistent.Start" Send="Create LiberatorAGBirthSearchIndicatorModel"/>
+        <On Terms="AbilMorph.*.Finish; FlyerHelper All; !ScopeContains FlyerHelperSplat" Send="Create FlyerHelperSplat"/>
+        <HostSiteOps Ops="SOpBankerLiberator"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <DeathArray index="Normal" ModelLink="LiberatorDeath" SoundLink="Liberator_Death"/>
+        <DeathCustoms>
+            <ActorModel value="LiberatorDeathRagdoll"/>
+            <ModelLink value="LiberatorDeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+            <BodySquibs Name="Basic" Model="ProtossTinyRobotSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PortraitModel value="LiberatorPortrait"/>
+        <AbilSoundArray AbilCmd="LiberatorAGTarget,Execute" Sound="TerranFlyer_DefenderModeVO"/>
+        <BarOffset value="50"/>
+        <BarWidth value="70"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\btn-ability-terran-liberator-aamode.dds"/>
+        </GroupIcon>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="TerranFlyer_Ready"/>
+        <SoundArray index="Help" value="TerranFlyer_Help"/>
+        <SoundArray index="What" value="TerranFlyer_What"/>
+        <SoundArray index="Yes" value="TerranFlyer_Yes"/>
+        <SoundArray index="Attack" value="TerranFlyer_Attack"/>
+        <SoundArray index="Pissed" value="TerranFlyer_Pissed"/>
+        <SoundArray index="Movement" value="Liberator_Move_Start"/>
+        <UnitIcon value="Assets\Textures\btn-ability-terran-liberator-aamode.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-terran-liberator-aamode.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSound id="LiberatorAASound" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo Liberator" Send="Create"/>
+        <On Terms="UnitDeath.Liberator" Send="Destroy"/>
+        <Sound value="Liberator_AA_Morph"/>
+    </CActorSound>
+    <CActorUnit id="LiberatorAG" parent="GenericUnitBase" unitName="LiberatorAG">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <Macros value="PhysicsDeathsVoidAir"/>
+        <On Terms="ActorCreation" Send="Create LiberatorAGTurret"/>
+        <On Terms="WeaponStart.LiberatorAGWeapon.AttackStart" Target="LiberatorAGTurret" Send="LookAtEngage"/>
+        <On Terms="WeaponStart.LiberatorAGWeapon.AttackStart" Send="TimerKill ResetOnNoTargets"/>
+        <On Terms="Abil.attack.ReadyStop" Target="LiberatorAGTurret" Send="RefClear ::HostTarget"/>
+        <On Terms="Abil.attack.ReadyStop" Send="TimerSet 2.000000 ResetOnNoTargets"/>
+        <On Terms="TimerExpired; TimerName ResetOnNoTargets" Target="LiberatorAGTurret" Send="LookAtStop"/>
+        <On Terms="WeaponStart.LiberatorAGWeapon.AttackStart" Send="AnimBracketStart AttackA Attack,A"/>
+        <On Terms="WeaponStop.LiberatorAGWeapon.AttackStop" Send="AnimBracketStop AttackA"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart Work {} Stand,Work Stand,Work,End Instant"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo LiberatorAG" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom LiberatorAG" Send="Destroy"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Stand PlayForever 0.000000"/>
+        <On Terms="AbilMorph.*.Finish; FlyerHelper All; !ScopeContains FlyerHelperSplat" Send="Create FlyerHelperSplat"/>
+        <HostSiteOps Ops="SOpBankerLiberator"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <DeathArray index="Normal" ModelLink="LiberatorMorph_Death" SoundLink="Liberator_Death"/>
+        <DeathCustoms>
+            <ActorModel value="LiberatorDeathRagdoll"/>
+            <ModelLink value="LiberatorDeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+            <BodySquibs Name="Basic" Model="ProtossTinyRobotSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PortraitModel value="LiberatorPortrait"/>
+        <AbilSoundArray/>
+        <BarOffset value="50"/>
+        <BarWidth value="70"/>
+        <GlossaryAnim value="Stand,Work"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\btn-ability-terran-liberator-agmode.dds"/>
+        </GroupIcon>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="TerranFlyer_Ready"/>
+        <SoundArray index="Help" value="TerranFlyer_Help"/>
+        <SoundArray index="What" value="TerranFlyer_What"/>
+        <SoundArray index="Yes" value="TerranFlyerAG_Yes"/>
+        <SoundArray index="Attack" value="TerranFlyerAG_Attack"/>
+        <SoundArray index="Pissed" value="TerranFlyer_Pissed"/>
+        <SoundArray index="Movement" value="Liberator_Move_Start"/>
+        <UnitIcon value="Assets\Textures\btn-ability-terran-liberator-agmode.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-terran-liberator-agmode.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="LiberatorAGAttack" parent="GenericAttack" effectImpact="LiberatorAGDamage" effectLaunch="LiberatorAGMissileLM">
+        <LaunchAssets Sound="Liberator_AG_Launch"/>
+        <ImpactMap index="None" Sound="Liberator_AG_Launch_Impact"/>
+        <ImpactPhysics Name="RailgunImpact" MatchKeys="Basic" Physics="RailgunAttackDeathForce"/>
+        <ActionFlags index="LaunchForceSite" value="1"/>
+    </CActorAction>
+    <CActorMissile id="LiberatorAGAttackMissile" parent="GenericAttackMissile" unitName="LiberatorAGMissile">
+        <Model value="Invisible"/>
+    </CActorMissile>
+    <CActorModel id="LiberatorAGBirthSearchIndicatorModel">
+        <Inherits index="TeamColor" value="1"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="AnimBracketState.*.AfterClosing; !AnimBracketExitReason ModelSwap; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="Effect.LiberatorTargetMorphDelayPersistent.Stop" Send="Destroy"/>
+        <HostForProps Subject="_Unit" Scope="Caster"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpShadowSyncGround"/>
+        <ScopeBearingsTracking value="ForceOff"/>
+        <Model value="LiberatorAGSearchIndicator"/>
+    </CActorModel>
+    <CActorUnit id="LiberatorAGMorphModel" parent="GenericUnitBaseMorphTransition" unitName="LiberatorAGMorphModel">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <Macros value="PhysicsDeathsVoidAir"/>
+        <On Terms="AbilMorph.*.Start; MorphTo LiberatorAG" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo LiberatorAG" Send="AnimPlay Start Work,Start"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom LiberatorAG" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom Liberator" Send="Destroy"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed LE Normal" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping 0.250000 0.250000 4.000000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed Eq Fast" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping 0.250000 0.250000 3.330000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed GE Faster" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping 0.250000 0.250000 2.850000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="PortraitAnimSetTimeFrom Visor MorphStart"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Liberator_Land"/>
+        <On Terms="AbilMorph.*.Start; FlyerHelper All; !ScopeContains FlyerHelperSplat" Send="Create FlyerHelperSplat"/>
+        <Model value="Liberator"/>
+        <DeathArray index="Normal" ModelLink="LiberatorMorph_Death" SoundLink=""/>
+        <DeathCustoms>
+            <ActorModel value="LiberatorDeathRagdoll"/>
+            <ModelLink value="LiberatorDeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+            <BodySquibs Name="Basic" Model="ProtossTinyRobotSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PortraitModel value="LiberatorPortrait"/>
+        <BarOffset value="50"/>
+        <BarWidth value="70"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\btn-ability-terran-liberator-agmode.dds"/>
+        </GroupIcon>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="TerranFlyer_Ready"/>
+        <SoundArray index="Help" value="TerranFlyer_Help"/>
+        <SoundArray index="What" value="TerranFlyer_What"/>
+        <SoundArray index="Yes" value="TerranFlyer_Yes"/>
+        <SoundArray index="Attack" value="TerranFlyer_Attack"/>
+        <SoundArray index="Pissed" value="TerranFlyer_Pissed"/>
+        <SoundArray index="Movement" value="Liberator_Move_Start"/>
+        <UnitIcon value="Assets\Textures\btn-ability-terran-liberator-agmode.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-terran-liberator-agmode.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="LiberatorAGSearchIndicatorModel">
+        <Inherits index="TeamColor" value="1"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="AnimBracketState.*.AfterClosing; !AnimBracketExitReason ModelSwap; AnimName BSD" Send="Destroy"/>
+        <On Terms="Effect.LiberatorTargetMorphPersistent.Start" Send="Create"/>
+        <On Terms="Effect.LiberatorTargetMorphPersistent.Start" Send="AnimBracketStart BSD {} Stand Death"/>
+        <On Terms="Effect.LiberatorTargetMorphPersistent.Stop" Send="Destroy"/>
+        <HostForProps Subject="_Unit" Scope="Caster"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpShadowSyncGround"/>
+        <ScopeBearingsTracking value="ForceOff"/>
+        <Model value="LiberatorAGSearchIndicator"/>
+    </CActorModel>
+    <CActorSound id="LiberatorAGSound" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo LiberatorAG" Send="Create"/>
+        <On Terms="UnitDeath.LiberatorAG" Send="Destroy"/>
+        <Sound value="Liberator_AG_Morph"/>
+    </CActorSound>
+    <CActorSplat id="LiberatorAGTargetCursorSplat" parent="CursorSplat" abil="LiberatorAGTarget"/>
+    <CActorRange id="LiberatorAGTargetRange" parent="RangeAbil" abil="LiberatorAGTarget">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorLookAt id="LiberatorAGTurret" parent="UnitTurret">
+        <Type value="LiberatorAG"/>
+    </CActorLookAt>
+    <CActorAction id="LiberatorAttack" parent="GenericAttack" effectImpact="LiberatorMissileDummy" effectLaunch="LiberatorMissileLM">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0"/>
+        <LaunchAssets Sound="Liberator_AA_Launch"/>
+        <ImpactSiteOps Ops="SOpAttachCenter SOpRandomPointInCircle1Dot5"/>
+        <ImpactMap index="None" Sound="Liberator_AA_Launch_Impact"/>
+        <ShieldFlashType value="Full"/>
+    </CActorAction>
+    <CActorBeamSimple id="LiberatorAttackBeam" parent="BeamSimpleAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.LiberatorAGMissileLM.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.LiberatorAGDamage.Start; At Target" Send="Create LiberatorImpactHoldingSite"/>
+        <On Terms="Effect.LiberatorAGDamage.Start" Send="RefSet ::HostImpact LiberatorImpactHoldingSite"/>
+        <Host Subject="_Selectable"/>
+        <HostLaunch Subject="_Selectable" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachWeapon"/>
+        <HostImpact Subject="_Missile" Actor="Find"/>
+    </CActorBeamSimple>
+    <CActorMissile id="LiberatorAttackMissile" parent="GenericAttackMissile" unitName="LiberatorMissile"/>
+    <CActorAction id="LiberatorDamageAttack" parent="GenericAttack" effectImpact="LiberatorMissileDamage" effectLaunch="LiberatorDamageMissileLM">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0"/>
+        <LaunchAssets Sound="Liberator_AA_Launch"/>
+        <ImpactSiteOps Ops="SOpAttachCenter SOpRandomPointInCircle1Dot5"/>
+        <ImpactMap index="None" Model="LiberatorAttackImpact" Sound="Liberator_AA_Launch_Impact"/>
+        <ShieldFlashType value="Full"/>
+    </CActorAction>
+    <CActorMissile id="LiberatorDamageAttackMissile" parent="GenericAttackMissile" unitName="LiberatorDamageMissile"/>
+    <CActorModel id="LiberatorDeathRagdoll" parent="UnitDeathRagdollFlier">
+        <On Terms="ActorCreation" Send="Create LiberatorDeathRagdollDetonationForce"/>
+    </CActorModel>
+    <CActorForceSphere id="LiberatorDeathRagdollDetonationForce">
+        <Host Subject="::Main"/>
+        <HostSiteOps Ops="SOpAttachInternalDetonation SOpForwardCasterCenter SOpRotVariancerForward60 SOpMoveByDot15ToDot5 SOpMoveDownByDot15ToDot25 SOpPointSouthWorld" HoldPosition="1"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="8.000000,7.500000"/>
+        <Radius value="1.000000,0.250000"/>
+    </CActorForceSphere>
+    <CActorSite id="LiberatorImpactHoldingSite"/>
+    <CActorUnit id="LiberatorMorphModel" parent="GenericUnitBaseMorphTransition" unitName="LiberatorMorphModel">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <Macros value="PhysicsDeathsVoidAir"/>
+        <On Terms="AbilMorph.*.Start; MorphTo Liberator" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo Liberator" Send="AnimPlay End Work,End"/>
+        <On Terms="AbilMorph.*.Start; MorphTo Liberator" Send="TimerSet 0.100000 StartDisengage"/>
+        <On Terms="TimerExpired; TimerName StartDisengage" Target="LiberatorAGTurret" Send="LookAtDisengage"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom Liberator" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom LiberatorAG" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom LiberatorAG" Target="LiberatorAGTurret" Send="Destroy"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed LE Normal" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End PlayForever,NonLooping 0.250000 0.250000 2.000000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed Eq Fast" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End PlayForever,NonLooping 0.250000 0.250000 1.660000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed GE Faster" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End PlayForever,NonLooping 0.250000 0.250000 1.420000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="PortraitAnimSetTimeFrom Visor MorphStart"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Liberator_Land"/>
+        <On Terms="AbilMorph.*.Start; FlyerHelper All; !ScopeContains FlyerHelperSplat" Send="Create FlyerHelperSplat"/>
+        <Model value="Liberator"/>
+        <DeathArray index="Normal" ModelLink="LiberatorDeath" SoundLink=""/>
+        <DeathCustoms>
+            <ActorModel value="LiberatorDeathRagdoll"/>
+            <ModelLink value="LiberatorDeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+            <BodySquibs Name="Basic" Model="ProtossTinyRobotSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PortraitModel value="LiberatorPortrait"/>
+        <BarOffset value="50"/>
+        <BarWidth value="70"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\btn-ability-terran-liberator-aamode.dds"/>
+        </GroupIcon>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="TerranFlyer_Ready"/>
+        <SoundArray index="Help" value="TerranFlyer_Help"/>
+        <SoundArray index="What" value="TerranFlyer_What"/>
+        <SoundArray index="Yes" value="TerranFlyer_Yes"/>
+        <SoundArray index="Attack" value="TerranFlyer_Attack"/>
+        <SoundArray index="Pissed" value="TerranFlyer_Pissed"/>
+        <SoundArray index="Movement" value="Liberator_Move_Start"/>
+        <UnitIcon value="Assets\Textures\btn-ability-terran-liberator-aamode.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-terran-liberator-aamode.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="LiberatorShieldHitter" parent="AoESplashShieldHitter" effectHit="LiberatorMissileDamage"/>
+    <CActorSound id="Liberator_Death_ActorSound" parent="SoundOneShot">
+        <EditorCategories value=""/>
+        <Sound value="Liberator_Death"/>
+        <Layers Sound="Spell_Firebreath_Launch">
+            <Chance value="100"/>
+            <Pitch value="-2.000000,-1.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="-3.000000,-3.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="Liberator_Land" parent="SoundOneShot"/>
+    <CActorSiteOpBankerUnit id="SOpBankerLiberator" parent="SOpBankerUnit">
+        <RollMax value="30.000000,10.000000"/>
+        <RollInActivationAngle value="5.000000"/>
+        <RollInArc value="105.000000,30.000000"/>
+        <RollOutDuration value="0.400000,0.100000"/>
+    </CActorSiteOpBankerUnit>
+    <CActorUnit id="ValkyrieSCBW" parent="GenericUnitBase" unitName="ValkyrieSCBW">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <HostSiteOps Ops="SOpBankerWraith"/>
+        <AnimBlendTime value="0.300000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <DeathArray index="Normal" ModelLink="ValkyrieSCBW@Death" SoundLink="ValkyrieSCBW@Explode"/>
+        <DeathCustoms>
+            <ModelLink value="DeathVoidShadowMedium"/>
+            <SoundLink value="ShadowUnit_DeathFX"/>
+            <VoiceLink value="ShadowUnit_DeathVox"/>
+            <Name value="Shadow"/>
+        </DeathCustoms>
+        <PortraitModel value="ValkyrieSCBW@Portrait"/>
+        <BarOffset value="55"/>
+        <BarWidth value="66"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-terran-valkyrie@scbw.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="Birth" value="Wraith_Birth"/>
+        <GroupSoundArray index="Ready" value="ValkyrieSCBW@Ready"/>
+        <GroupSoundArray index="Help" value="ValkyrieSCBW@Help"/>
+        <GroupSoundArray index="What" value="ValkyrieSCBW@What"/>
+        <GroupSoundArray index="Yes" value="ValkyrieSCBW@Yes"/>
+        <GroupSoundArray index="Attack" value="ValkyrieSCBW@Attack"/>
+        <GroupSoundArray index="Pissed" value="ValkyrieSCBW@Pissed"/>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-valkyrie@scbw.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="ValkyrieSCBW@Ready"/>
+        <SoundArray index="Help" value="ValkyrieSCBW@Help"/>
+        <SoundArray index="What" value="ValkyrieSCBW@What"/>
+        <SoundArray index="Yes" value="ValkyrieSCBW@Yes"/>
+        <SoundArray index="Attack" value="ValkyrieSCBW@Attack"/>
+        <SoundArray index="Pissed" value="ValkyrieSCBW@Pissed"/>
+        <SoundArray index="Movement" value="ValkyrieSCBW@Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-valkyrie@scbw.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-terran-valkyrie@scbw.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="ValkyrieSCBWWeapon@Action" parent="GenericAttack" effectImpact="ValkyrieSCBWWeapon@Damage" effectLaunch="ValkyrieSCBWWeapon@LM">
+        <LaunchAttachQuery Methods=""/>
+        <LaunchAssets Sound="ValkyrieSCBWWeapon@Launch"/>
+        <Missile value="ValkyrieSCBWWeapon@Missile"/>
+        <ImpactMap index="None" Model="ValkyrieSCBWWeapon@Impact" Sound="ValkyrieSCBWWeapon@Impact"/>
+    </CActorAction>
+    <CActorMissile id="ValkyrieSCBWWeapon@Missile" parent="GenericAttackMissile" unitName="ValkyrieSCBWWeapon@Missile"/>
+    <CActorUnit id="Vulture2" parent="GenericUnitStandard" unitName="JimRaynorVulture">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="UnloadDropAnim"/>
+        <Model value="Vulture2"/>
+        <BuildModel value="Vulture2"/>
+        <DeathArray index="Normal" ModelLink="VultureDeath2" SoundLink="Vulture_Explode"/>
+        <DeathCustoms index="0" ModelLink="ZergSmallUnitDeathLow2" Name="AntiGravGeneric"/>
+        <DeathCustoms index="1" ModelLink="ProtossSmallUnitDeathLow2" Name="AntiGravProtoss"/>
+        <DeathCustoms index="2" ModelLink="TerranSmallUnitDeathLow2" Name="AntiGravTerran"/>
+        <DeathCustoms index="3" ModelLink="ZergSmallUnitDeathLow2" Name="AntiGravZerg"/>
+        <DeathCustoms index="4" ModelLink="Invisible2" Name="Vortex"/>
+        <PlacementModel value="Vulture2"/>
+        <PortraitModel value="VulturePortrait2"/>
+        <AbilSoundArray AbilCmd="VultureSpiderMines2,0" Sound="Vulture_SpiderMinePlace"/>
+        <BarOffset value="80"/>
+        <BarWidth value="102"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Vulture.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-vulture.dds"/>
+        <HighlightTooltip value="Unit/Name/Vulture2"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="40"/>
+        <SoundArray index="Ready" value="Vulture_Ready"/>
+        <SoundArray index="Help" value="Vulture_Help"/>
+        <SoundArray index="What" value="Vulture_What"/>
+        <SoundArray index="Yes" value="Vulture_Yes"/>
+        <SoundArray index="Attack" value="Vulture_Attack"/>
+        <SoundArray index="Pissed" value="Vulture_Pissed"/>
+        <SoundArray index="Movement" value="Vulture_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-vulture.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Vulture.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="Vulture3" parent="GenericUnitStandard" unitName="JimRaynorVulture">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="UnloadDropAnim"/>
+        <Model value="Vulture3"/>
+        <BuildModel value="Vulture3"/>
+        <DeathArray index="Normal" ModelLink="VultureDeath3" SoundLink="Vulture_Explode2"/>
+        <DeathCustoms index="0" ModelLink="ZergSmallUnitDeathLow3" Name="AntiGravGeneric"/>
+        <DeathCustoms index="1" ModelLink="ProtossSmallUnitDeathLow3" Name="AntiGravProtoss"/>
+        <DeathCustoms index="2" ModelLink="TerranSmallUnitDeathLow3" Name="AntiGravTerran"/>
+        <DeathCustoms index="3" ModelLink="ZergSmallUnitDeathLow3" Name="AntiGravZerg"/>
+        <DeathCustoms index="4" ModelLink="Invisible3" Name="Vortex"/>
+        <PlacementModel value="Vulture3"/>
+        <PortraitModel value="VulturePortrait3"/>
+        <AbilSoundArray AbilCmd="VultureSpiderMines3,0" Sound="Vulture_SpiderMinePlace2"/>
+        <BarOffset value="80"/>
+        <BarWidth value="102"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Vulture.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-vulture.dds"/>
+        <HighlightTooltip value="Unit/Name/Vulture3"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="40"/>
+        <SoundArray index="Ready" value="Raynor_Ready2"/>
+        <SoundArray index="Help" value="Raynor_Help2"/>
+        <SoundArray index="What" value="Raynor_What2"/>
+        <SoundArray index="Yes" value="Raynor_Yes2"/>
+        <SoundArray index="Attack" value="Raynor_Attack2"/>
+        <SoundArray index="Pissed" value="Raynor_Pissed2"/>
+        <SoundArray index="Movement" value="Vulture_Movement2"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-vulture.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Vulture.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="Vulture4" parent="GenericUnitStandard" unitName="Vulture2">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="UnloadDropAnim"/>
+        <Model value="Vulture4"/>
+        <Scale value="1.100000"/>
+        <BuildModel value="RaynorCommando"/>
+        <DeathArray index="Normal" ModelLink="VultureDeath4" SoundLink="Vulture_Explode2"/>
+        <DeathCustoms index="0" ModelLink="ZergSmallUnitDeathLow4" Name="AntiGravGeneric"/>
+        <DeathCustoms index="1" ModelLink="ProtossSmallUnitDeathLow4" Name="AntiGravProtoss"/>
+        <DeathCustoms index="2" ModelLink="TerranSmallUnitDeathLow4" Name="AntiGravTerran"/>
+        <DeathCustoms index="3" ModelLink="ZergSmallUnitDeathLow4" Name="AntiGravZerg"/>
+        <DeathCustoms index="4" ModelLink="Invisible4" Name="Vortex"/>
+        <PlacementModel value="Vulture4"/>
+        <PortraitModel value="VulturePortrait4"/>
+        <AbilSoundArray AbilCmd="VultureSpiderMines2,0" Sound="Vulture_SpiderMinePlace2"/>
+        <BarOffset value="80"/>
+        <BarWidth value="102"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Vulture.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\ui-heroicon-raynor.dds"/>
+        <HighlightTooltip value="Unit/Name/Raynor"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="40"/>
+        <SoundArray index="Ready" value="Raynor_Ready2"/>
+        <SoundArray index="Help" value="Raynor_Help2"/>
+        <SoundArray index="What" value="Raynor_What2"/>
+        <SoundArray index="Yes" value="Raynor_Yes2"/>
+        <SoundArray index="Attack" value="Raynor_Attack2"/>
+        <SoundArray index="Pissed" value="Raynor_Pissed2"/>
+        <SoundArray index="Movement" value="Vulture_Movement2"/>
+        <UnitIcon value="Assets\Textures\ui-heroicon-raynor.dds"/>
+        <UnitKillRank Text="UnitKillRank/Raynor"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Vulture.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="VultureAttack2" parent="GenericAttack" effectImpact="VultureU2" effectLaunch="Vulture2">
+        <LaunchAssets Model="VultureAttackLaunch2" Sound="VultureAttackLaunch"/>
+        <LaunchModel value="GenericAttackLaunchModel2"/>
+        <LaunchSound value="GenericAttackLaunchSound2"/>
+        <ContainerModel value="GenericAttackLaunchModel2"/>
+        <ContainerSound value="GenericAttackLaunchSound2"/>
+        <Missile value="VultureAttackMissile2"/>
+        <ImpactMap index="None" Model="VultureAttackImpact2" Sound="VultureAttackImpact"/>
+        <ImpactModel value="GenericAttackImpactModel2"/>
+        <ImpactSound value="GenericAttackImpactSound2"/>
+        <DamageModel value="GenericAttackDamageModel2"/>
+        <DamageSound value="GenericAttackDamageSound2"/>
+    </CActorAction>
+    <CActorAction id="VultureAttack3" parent="GenericAttack" effectImpact="VultureU2" effectLaunch="Vulture2">
+        <LaunchAssets Model="VultureAttackLaunch3" Sound="VultureAttackLaunch2"/>
+        <LaunchModel value="GenericAttackLaunchModel3"/>
+        <LaunchSound value="GenericAttackLaunchSound3"/>
+        <ContainerModel value="GenericAttackLaunchModel3"/>
+        <ContainerSound value="GenericAttackLaunchSound3"/>
+        <Missile value="VultureAttackMissile3"/>
+        <ImpactMap index="None" Model="VultureAttackImpact3" Sound="VultureAttackImpact2"/>
+        <ImpactModel value="GenericAttackImpactModel3"/>
+        <ImpactSound value="GenericAttackImpactSound3"/>
+        <DamageModel value="GenericAttackDamageModel3"/>
+        <DamageSound value="GenericAttackDamageSound3"/>
+    </CActorAction>
+    <CActorAction id="VultureAttack4" parent="GenericAttack" effectImpact="VultureU2" effectLaunch="Vulture2">
+        <LaunchAssets Model="VultureAttackLaunch4" Sound="VultureAttackLaunch2"/>
+        <LaunchModel value="GenericAttackLaunchModel4"/>
+        <LaunchSound value="GenericAttackLaunchSound4"/>
+        <ContainerModel value="GenericAttackLaunchModel4"/>
+        <ContainerSound value="GenericAttackLaunchSound4"/>
+        <Missile value="VultureAttackMissile4"/>
+        <ImpactMap index="None" Model="VultureAttackImpact4" Sound="VultureAttackImpact2"/>
+        <ImpactModel value="GenericAttackImpactModel4"/>
+        <ImpactSound value="GenericAttackImpactSound4"/>
+        <DamageModel value="GenericAttackDamageModel4"/>
+        <DamageSound value="GenericAttackDamageSound4"/>
+    </CActorAction>
+    <CActorMissile id="VultureAttackMissile2" parent="GenericAttackMissile" unitName="VultureWeapon2"/>
+    <CActorMissile id="VultureAttackMissile3" parent="GenericAttackMissile" unitName="VultureWeapon2">
+        <Model value="VultureWeapon3"/>
+    </CActorMissile>
+    <CActorMissile id="VultureAttackMissile4" parent="GenericAttackMissile" unitName="VultureWeapon2">
+        <Model value="VultureWeapon4"/>
+    </CActorMissile>
+</Catalog>

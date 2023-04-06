@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CAbilEffectInstant id="LiberatorAATarget">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="LiberatorTargetAAMorphOrderSet"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="LiberatorAAMode"/>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="LiberatorAGTarget">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Effect index="0" value="LiberatorTargetMorphOrderInitialSet"/>
+        <Range value="9"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="LiberatorAGMode"/>
+    </CAbilEffectTarget>
+    <CAbilMorph id="LiberatorMorphtoAA">
+        <AbilSetId value="LiberatorAA"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="LiberatorAAMode">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="IgnoreFacing" value="1"/>
+        <CancelUnit value="Liberator"/>
+        <InfoArray Unit="Liberator">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="0.5"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Delay" value="0.5"/>
+                <DurationArray index="Duration" value="1.5417"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Duration" value="0.5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="0.5"/>
+                <DurationArray index="Duration" value="1.5417"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="LiberatorMorphtoAG">
+        <AbilSetId value="LiberatorAG"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="LiberatorAGMode"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="WaitUntilStopped" value="0"/>
+        <InfoArray Unit="LiberatorAG">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="0.5"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Delay" value="0.5"/>
+                <DurationArray index="Duration" value="3.5417"/>
+            </SectionArray>
+            <SectionArray index="Facing">
+                <DurationArray index="Duration" value="0.5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="0.5"/>
+                <DurationArray index="Duration" value="3.5417"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilSpecialize id="MakeVultureSpiderMines2">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Activity value="UI/SpiderMineBuilding"/>
+        <InfoArray index="Specialize1" Time="12" Effect="ReplenishMines">
+            <Resource index="Minerals" value="15"/>
+            <Display index="Minerals" value="1"/>
+            <Charge>
+                <CountMax value="3"/>
+                <CountUse value="1"/>
+                <HideCount value="1"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Button DefaultButtonFace="SpiderMineReplenish" Requirements="UseNanoConstructor"/>
+            <Flags index="AutoCast" value="1"/>
+        </InfoArray>
+        <Alert value="BuildComplete"/>
+        <Flags index="BestUnit" value="0"/>
+    </CAbilSpecialize>
+    <CAbilTrain id="TrainStarportAdditionalUnits" parent="StarportTrain">
+        <!-- Work around bug training unit in pairs when there are 9+ entries in single ability -->
+        <Name value="Abil/Name/TrainStarportAdditionalUnits"/>
+        <InfoArray index="Train1" Time="60">
+            <Charge Link="Abil/StarportTrain2"/>
+            <Cooldown Link="Abil/StarportTrain2"/>
+            <Button DefaultButtonFace="Liberator"/>
+            <Unit index="0" value="Liberator"/>
+        </InfoArray>
+        <InfoArray index="Train2" Time="42">
+            <Button DefaultButtonFace="ValkyrieSCBW"/>
+            <Unit index="0" value="ValkyrieSCBW"/>
+        </InfoArray>
+        <InfoArray index="Train3" Time="0">
+            <Button DefaultButtonFace="" Requirements=""/>
+            <Unit index="0" removed="1"/>
+        </InfoArray>
+        <InfoArray index="Train4" Time="0">
+            <Button DefaultButtonFace="" Requirements=""/>
+            <Unit index="0" removed="1"/>
+        </InfoArray>
+        <InfoArray index="Train5" Time="0">
+            <Button DefaultButtonFace=""/>
+            <Unit index="0" removed="1"/>
+        </InfoArray>
+        <InfoArray index="Train6" Time="0">
+            <Button DefaultButtonFace="" Requirements=""/>
+            <Unit index="0" removed="1"/>
+        </InfoArray>
+        <InfoArray index="Train7" Time="0">
+            <Button DefaultButtonFace="" Requirements=""/>
+            <Unit index="0" removed="1"/>
+        </InfoArray>
+        <InfoArray index="Train8" Time="0">
+            <Button DefaultButtonFace="" Requirements=""/>
+            <Unit index="0" removed="1"/>
+        </InfoArray>
+        <InfoArray index="Train9">
+            <Button State="Restricted"/>
+        </InfoArray>
+    </CAbilTrain>
+    <CAbilQueue id="VultureQueue32">
+        <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
+        <QueueSize value="3"/>
+        <Flags index="Passive" value="1"/>
+    </CAbilQueue>
+    <CAbilEffectTarget id="VultureSpiderMines2">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SpawnSpiderMineSet2"/>
+        <Cost>
+            <Charge>
+                <CountMax value="3"/>
+                <CountStart value="3"/>
+                <CountUse value="1"/>
+                <Location value="Unit"/>
+            </Charge>
+        </Cost>
+        <Placeholder value="SpiderMine"/>
+        <Range value="3"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SpiderMine"/>
+    </CAbilEffectTarget>
+    <CAbilAttack id="attack2">
+        <TargetMessage value="Abil/TargetMessage/attack2"/>
+        <MinAttackSpeedMultiplier value="0.25"/>
+        <MaxAttackSpeedMultiplier value="128"/>
+    </CAbilAttack>
+    <CAbilMove id="move2">
+        <FleeRange value="5"/>
+        <FleeTime value="5"/>
+        <FollowRangeSlop value="1"/>
+        <FollowAcquireRange value="6"/>
+        <MinPatrolDistance value="1"/>
+    </CAbilMove>
+    <CAbilStop id="stop2">
+        <CmdButtonArray index="HoldFire" DefaultButtonFace="HoldFireSpecial"/>
+    </CAbilStop>
+</Catalog>

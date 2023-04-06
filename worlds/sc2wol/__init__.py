@@ -3,7 +3,7 @@ import typing
 from typing import List, Set, Tuple, Dict
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
-from .Items import StarcraftWoLItem, item_table, filler_items, item_name_groups, get_full_item_list, \
+from .Items import StarcraftWoLItem, filler_items, item_name_groups, get_item_table, get_full_item_list, \
     get_basic_units
 from .Locations import get_locations
 from .Regions import create_regions
@@ -36,7 +36,7 @@ class SC2WoLWorld(World):
     web = Starcraft2WoLWebWorld()
     data_version = 3
 
-    item_name_to_id = {name: data.code for name, data in item_table.items()}
+    item_name_to_id = {name: data.code for name, data in get_full_item_list().items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
     option_definitions = sc2wol_options
 
@@ -175,7 +175,7 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[s
     # YAML items
     yaml_locked_items = get_option_value(multiworld, player, 'locked_items')
 
-    for name, data in item_table.items():
+    for name, data in get_item_table(multiworld, player).items():
         if name not in excluded_items:
             for _ in range(data.quantity):
                 item = create_item_with_correct_settings(player, name)
@@ -206,7 +206,7 @@ def fill_item_pool_with_dummy_items(self: SC2WoLWorld, multiworld: MultiWorld, p
 
 
 def create_item_with_correct_settings(player: int, name: str) -> Item:
-    data = item_table[name]
+    data = get_full_item_list()[name]
 
     item = Item(name, data.classification, data.code, player)
 

@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CUpgrade default="1" id="TerranVehicleArmorsVanadiumPlating">
+        <EffectArray Reference="Unit,Vulture2,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Vulture2,LifeArmor" Value="1"/>
+    </CUpgrade>
+    <CUpgrade default="1" id="TerranVehicleWeaponsUltraCapacitors">
+        <EffectArray Reference="Effect,VultureU2,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,RaynorFragmentationGrenade,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="LiberatorAGRangeUpgrade">
+        <Icon value="Assets\Textures\btn-upgrade-terran-advanceballistics.dds"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Abil,LiberatorAGTarget,Range[0]" Value="3"/>
+        <EffectArray Reference="Weapon,LiberatorAGWeapon,Range" Value="3"/>
+        <EffectArray Reference="Validator,LiberatorAGNotOutOfRange,Range" Value="3"/>
+        <EditorCategories value="Race:Terran,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="Liberator"/>
+        <AffectedUnitArray value="LiberatorAG"/>
+    </CUpgrade>
+    <CUpgrade id="LiberatorMorph">
+        <Icon value="Assets\Textures\btn-upgrade-terran-liberator-agmode.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="Liberator"/>
+    </CUpgrade>
+    <CUpgrade id="RegenerativeBioSteel">
+        <EffectArray Operation="Set" Reference="Unit,Vulture2,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,Vulture2,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,Liberator,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,Liberator,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,LiberatorAG,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,LiberatorAG,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,ValkyrieSCBW,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,ValkyrieSCBW,LifeRegenRate" Value="0.601500"/>
+    </CUpgrade>
+    <CUpgrade id="LiberatorSiegeProtocol">
+        <Icon value="Assets\Textures\btn-upgrade-raynor-maelstromrounds.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,LiberatorAGWeapon,TargetFilters" Value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="TerranShipArmorsLevel1">
+        <AffectedUnitArray value="Liberator"/>
+        <AffectedUnitArray value="LiberatorAG"/>
+        <AffectedUnitArray value="ValkyrieSCBW"/>
+        <EffectArray Operation="Set" Reference="Actor,Liberator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Reference="Unit,Liberator,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Liberator,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,LiberatorAG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Reference="Unit,LiberatorAG,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,LiberatorAG,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,ValkyrieSCBW,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Reference="Unit,ValkyrieSCBW,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,ValkyrieSCBW,LifeArmorLevel" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="TerranShipArmorsLevel2">
+        <AffectedUnitArray value="Liberator"/>
+        <AffectedUnitArray value="LiberatorAG"/>
+        <AffectedUnitArray value="ValkyrieSCBW"/>
+        <EffectArray Operation="Set" Reference="Actor,Liberator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Reference="Unit,Liberator,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Liberator,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,LiberatorAG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Reference="Unit,LiberatorAG,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,LiberatorAG,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,ValkyrieSCBW,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Reference="Unit,ValkyrieSCBW,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,ValkyrieSCBW,LifeArmorLevel" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="TerranShipArmorsLevel3">
+        <AffectedUnitArray value="Liberator"/>
+        <AffectedUnitArray value="LiberatorAG"/>
+        <AffectedUnitArray value="ValkyrieSCBW"/>
+        <EffectArray Operation="Set" Reference="Actor,Liberator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Reference="Unit,Liberator,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Liberator,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,LiberatorAG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Reference="Unit,LiberatorAG,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,LiberatorAG,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,ValkyrieSCBW,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Reference="Unit,ValkyrieSCBW,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,ValkyrieSCBW,LifeArmorLevel" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="TerranShipArmorsVanadiumPlatingLevel1">
+        <AffectedUnitArray value="Liberator"/>
+        <AffectedUnitArray value="LiberatorAG"/>
+        <AffectedUnitArray value="ValkyrieSCBW"/>
+        <EffectArray Operation="Set" Reference="Actor,Liberator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Reference="Unit,Liberator,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Liberator,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Liberator,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Liberator,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,LiberatorAG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Reference="Unit,LiberatorAG,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,LiberatorAG,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,LiberatorAG,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,LiberatorAG,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,ValkyrieSCBW,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Reference="Unit,ValkyrieSCBW,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,ValkyrieSCBW,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,ValkyrieSCBW,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,ValkyrieSCBW,LifeStart" Value="1.05"/>
+    </CUpgrade>
+    <CUpgrade id="TerranShipArmorsVanadiumPlatingLevel2">
+        <AffectedUnitArray value="Liberator"/>
+        <AffectedUnitArray value="LiberatorAG"/>
+        <AffectedUnitArray value="ValkyrieSCBW"/>
+        <EffectArray Operation="Set" Reference="Actor,Liberator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Reference="Unit,Liberator,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Liberator,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Liberator,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Liberator,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,LiberatorAG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Reference="Unit,LiberatorAG,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,LiberatorAG,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,LiberatorAG,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,LiberatorAG,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,ValkyrieSCBW,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Reference="Unit,ValkyrieSCBW,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,ValkyrieSCBW,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,ValkyrieSCBW,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,ValkyrieSCBW,LifeStart" Value="1.05"/>
+    </CUpgrade>
+    <CUpgrade id="TerranShipArmorsVanadiumPlatingLevel3">
+        <AffectedUnitArray value="Liberator"/>
+        <AffectedUnitArray value="LiberatorAG"/>
+        <AffectedUnitArray value="ValkyrieSCBW"/>
+        <EffectArray Operation="Set" Reference="Actor,Liberator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Reference="Unit,Liberator,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Liberator,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Liberator,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Liberator,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,LiberatorAG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Reference="Unit,LiberatorAG,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,LiberatorAG,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,LiberatorAG,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,LiberatorAG,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,ValkyrieSCBW,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Reference="Unit,ValkyrieSCBW,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,ValkyrieSCBW,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,ValkyrieSCBW,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,ValkyrieSCBW,LifeStart" Value="1.05"/>
+    </CUpgrade>
+    <CUpgrade id="TerranShipWeaponsLevel1">
+        <AffectedUnitArray value="Liberator"/>
+        <AffectedUnitArray value="LiberatorAG"/>
+        <AffectedUnitArray value="ValkyrieSCBW"/>
+        <EffectArray Reference="Weapon,LiberatorMissileLaunchers,Level" Value="1"/>
+        <EffectArray Reference="Effect,LiberatorMissileDamage,Amount" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,LiberatorAGWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,LiberatorAGDamage,Amount" Value="5"/>
+        <EffectArray Operation="Set" Reference="Weapon,LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,ValkyrieSCBWWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,ValkyrieSCBWWeapon@Damage,Amount" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="TerranShipWeaponsLevel2">
+        <AffectedUnitArray value="Liberator"/>
+        <AffectedUnitArray value="LiberatorAG"/>
+        <AffectedUnitArray value="ValkyrieSCBW"/>
+        <EffectArray Reference="Weapon,LiberatorMissileLaunchers,Level" Value="1"/>
+        <EffectArray Reference="Effect,LiberatorMissileDamage,Amount" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,LiberatorAGWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,LiberatorAGDamage,Amount" Value="5"/>
+        <EffectArray Operation="Set" Reference="Weapon,LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,ValkyrieSCBWWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,ValkyrieSCBWWeapon@Damage,Amount" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="TerranShipWeaponsLevel3">
+        <AffectedUnitArray value="Liberator"/>
+        <AffectedUnitArray value="LiberatorAG"/>
+        <AffectedUnitArray value="ValkyrieSCBW"/>
+        <EffectArray Reference="Weapon,LiberatorMissileLaunchers,Level" Value="1"/>
+        <EffectArray Reference="Effect,LiberatorMissileDamage,Amount" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,LiberatorAGWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,LiberatorAGDamage,Amount" Value="5"/>
+        <EffectArray Operation="Set" Reference="Weapon,LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,ValkyrieSCBWWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,ValkyrieSCBWWeapon@Damage,Amount" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="TerranShipWeaponsUltraCapacitorsLevel1">
+        <AffectedUnitArray value="Liberator"/>
+        <AffectedUnitArray value="LiberatorAG"/>
+        <AffectedUnitArray value="ValkyrieSCBW"/>
+        <EffectArray Reference="Weapon,LiberatorMissileLaunchers,Level" Value="1"/>
+        <EffectArray Reference="Effect,LiberatorMissileDamage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,LiberatorMissileLaunchers,RateMultiplier" Value="0.05"/>
+        <EffectArray Operation="Set" Reference="Weapon,LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,LiberatorAGWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,LiberatorAGDamage,Amount" Value="5"/>
+        <EffectArray Reference="Weapon,LiberatorAGWeapon,RateMultiplier" Value="0.05"/>
+        <EffectArray Operation="Set" Reference="Weapon,LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,ValkyrieSCBWWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,ValkyrieSCBWWeapon@Damage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,ValkyrieSCBWWeapon,RateMultiplier" Value="0.05"/>
+        <EffectArray Operation="Set" Reference="Weapon,ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="TerranShipWeaponsUltraCapacitorsLevel2">
+        <AffectedUnitArray value="Liberator"/>
+        <AffectedUnitArray value="LiberatorAG"/>
+        <AffectedUnitArray value="ValkyrieSCBW"/>
+        <EffectArray Reference="Weapon,LiberatorMissileLaunchers,Level" Value="1"/>
+        <EffectArray Reference="Effect,LiberatorMissileDamage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,LiberatorMissileLaunchers,RateMultiplier" Value="0.05"/>
+        <EffectArray Operation="Set" Reference="Weapon,LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,LiberatorAGWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,LiberatorAGDamage,Amount" Value="5"/>
+        <EffectArray Reference="Weapon,LiberatorAGWeapon,RateMultiplier" Value="0.05"/>
+        <EffectArray Operation="Set" Reference="Weapon,LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,ValkyrieSCBWWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,ValkyrieSCBWWeapon@Damage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,ValkyrieSCBWWeapon,RateMultiplier" Value="0.05"/>
+        <EffectArray Operation="Set" Reference="Weapon,ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="TerranShipWeaponsUltraCapacitorsLevel3">
+        <AffectedUnitArray value="Liberator"/>
+        <AffectedUnitArray value="LiberatorAG"/>
+        <AffectedUnitArray value="ValkyrieSCBW"/>
+        <EffectArray Reference="Weapon,LiberatorMissileLaunchers,Level" Value="1"/>
+        <EffectArray Reference="Effect,LiberatorMissileDamage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,LiberatorMissileLaunchers,RateMultiplier" Value="0.05"/>
+        <EffectArray Operation="Set" Reference="Weapon,LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,LiberatorAGWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,LiberatorAGDamage,Amount" Value="5"/>
+        <EffectArray Reference="Weapon,LiberatorAGWeapon,RateMultiplier" Value="0.05"/>
+        <EffectArray Operation="Set" Reference="Weapon,LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,ValkyrieSCBWWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,ValkyrieSCBWWeapon@Damage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,ValkyrieSCBWWeapon,RateMultiplier" Value="0.05"/>
+        <EffectArray Operation="Set" Reference="Weapon,ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="TerranVehicleArmorsLevel1">
+        <EffectArray Reference="Unit,Vulture2,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Vulture2,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="TerranVehicleArmorsLevel2">
+        <EffectArray Reference="Unit,Vulture2,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Vulture2,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="TerranVehicleArmorsLevel3">
+        <EffectArray Reference="Unit,Vulture2,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Vulture2,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="TerranVehicleArmorsVanadiumPlatingLevel1">
+        <EffectArray Reference="Unit,Vulture2,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Vulture2,LifeArmor" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="TerranVehicleArmorsVanadiumPlatingLevel2">
+        <EffectArray Reference="Unit,Vulture2,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Vulture2,LifeArmor" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="TerranVehicleArmorsVanadiumPlatingLevel3">
+        <EffectArray Reference="Unit,Vulture2,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Vulture2,LifeArmor" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <AffectedUnitArray value="Vulture2"/>
+    </CUpgrade>
+    <CUpgrade id="TerranVehicleWeaponsLevel1">
+        <EffectArray Reference="Effect,VultureU2,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="TerranVehicleWeaponsLevel2">
+        <EffectArray Reference="Effect,VultureU2,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="TerranVehicleWeaponsLevel3">
+        <EffectArray Reference="Effect,VultureU2,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="TerranVehicleWeaponsUltraCapacitorsLevel1">
+        <EffectArray Reference="Effect,VultureU2,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,RaynorFragmentationGrenade,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="TerranVehicleWeaponsUltraCapacitorsLevel2">
+        <EffectArray Reference="Effect,VultureU2,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,RaynorFragmentationGrenade,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="TerranVehicleWeaponsUltraCapacitorsLevel3">
+        <EffectArray Reference="Effect,VultureU2,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
+        <EffectArray Reference="Weapon,RaynorFragmentationGrenade,RateMultiplier" Value="0.05"/>
+    </CUpgrade>
+</Catalog>

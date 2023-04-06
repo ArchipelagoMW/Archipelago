@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CValidatorUnitCompareBehaviorCount id="HasLiberatorMorphBehavior">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="LiberatorTargetMorphBehavior"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="HasNoLiberatorYoink">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="YoinkTentacle"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorLocationCompareRange id="LiberatorAGNotOutOfRange">
+        <Compare value="LE"/>
+        <Range value="9"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorUnitCompareBehaviorCount id="LiberatorAGTargets">
+        <ResultFailed value="TargetIsOutOfRange"/>
+        <Compare value="GT"/>
+        <Behavior value="LiberatorTargetMorphAGAttackable"/>
+        <RequireCasterUnit Value="Caster"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="LiberatorMorphValidatorCombine">
+        <Type value="And"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="HasLiberatorMorphBehavior"/>
+        <CombineArray value="HasNoLiberatorYoink"/>
+        <CombineArray value="LiberatorNotRecallingMothership"/>
+        <CombineArray value="LiberatorNotRecallingMothershipCore"/>
+        <CombineArray value="LiberatorAGNotOutOfRange"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="LiberatorNotRecallingMothership">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="MothershipRecalling"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="LiberatorNotRecallingMothershipCore">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="MothershipCoreRecalling"/>
+    </CValidatorUnitCompareBehaviorCount>
+</Catalog>

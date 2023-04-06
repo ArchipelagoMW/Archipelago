@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CBehaviorBuff id="KillsToCaster2">
+        <InfoFlags index="Hidden" value="1"/>
+        <KillCredit Value="Caster"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="LiberatorInitialMovable">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="3.5"/>
+        <Modification MoveSpeedBonus="3.375"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="LiberatorTargetMorphAGAttackable">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="65535"/>
+        <MaxStackCountPerCaster value="1"/>
+        <Duration value="0.3125"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="LiberatorTargetMorphBehavior">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="HasNoLiberatorYoink"/>
+        <RemoveValidatorArray value="IsNotRecallingCombine"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="ScavengingSystemsMechDeath2">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="ScavengingSystemsResearched"/>
+        <Modification>
+            <DeathResponse Chance="1" Effect="ScavengingSystemsSearchArea"/>
+        </Modification>
+    </CBehaviorBuff>
+</Catalog>
