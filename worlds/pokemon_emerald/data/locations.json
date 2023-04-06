@@ -1429,5 +1429,13 @@
   "NPC_GIFT_RECEIVED_WHITE_HERB": {
     "label": "Route 104 - White Herb from Lady Near Flower Shop",
     "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_DEEP_SEA_SCALE": {
+    "label": "Slateport City - Deep Sea Scale from Capt. Stern",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_DEEP_SEA_TOOTH": {
+    "label": "Slateport City - Deep Sea Tooth from Capt. Stern",
+    "tags": ["NpcGift"]
   }
 }

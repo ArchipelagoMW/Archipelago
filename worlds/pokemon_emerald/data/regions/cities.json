@@ -711,7 +711,9 @@
   "REGION_SLATEPORT_CITY_STERNS_SHIPYARD_1F/MAIN": {
     "parent_map": "MAP_SLATEPORT_CITY_STERNS_SHIPYARD_1F",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_TALK_TO_DOCK"
+    ],
     "exits": [],
     "warps": [
       "MAP_SLATEPORT_CITY_STERNS_SHIPYARD_1F:0,1/MAP_SLATEPORT_CITY:2",
@@ -783,10 +785,11 @@
   },
   "REGION_SLATEPORT_CITY_HARBOR/MAIN": {
     "parent_map": "MAP_SLATEPORT_CITY_HARBOR",
-    "locations": [],
-    "events": [
-      "EVENT_TALK_TO_DOCK"
+    "locations": [
+      "NPC_GIFT_RECEIVED_DEEP_SEA_TOOTH",
+      "NPC_GIFT_RECEIVED_DEEP_SEA_SCALE"
     ],
+    "events": [],
     "exits": [
       "REGION_SS_TIDAL_CORRIDOR/MAIN"
     ],

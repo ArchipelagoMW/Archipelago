@@ -1199,6 +1199,16 @@ def set_npc_gift_rules(multiworld: MultiWorld, player: int):
         lambda state: state.has("EVENT_DELIVER_LETTER", player)
     )
 
+    # Slateport City
+    set_rule(
+        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_DEEP_SEA_TOOTH"), player),
+        lambda state: state.has("EVENT_RESCUE_CAPT_STERN", player) and state.has("Scanner", player)
+    )
+    set_rule(
+        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_DEEP_SEA_SCALE"), player),
+        lambda state: state.has("EVENT_RESCUE_CAPT_STERN", player) and state.has("Scanner", player)
+    )
+
     # Route 116
     set_rule(
         multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_REPEAT_BALL"), player),
