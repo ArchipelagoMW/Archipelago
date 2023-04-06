@@ -71,12 +71,13 @@ class Factorio(World):
     ordered_science_packs: typing.List[str] = MaxSciencePack.get_ordered_science_packs()
     tech_mix: int = 0
     skip_silo: bool = False
+    science_locations: typing.List[FactorioScienceLocation]
 
     def __init__(self, world, player: int):
         super(Factorio, self).__init__(world, player)
         self.advancement_technologies = set()
         self.custom_recipes = {}
-        self.locations = []
+        self.science_locations = []
 
     generate_output = generate_mod
 
@@ -116,18 +117,18 @@ class Factorio(World):
             raise Exception("Too many traps for too few locations. Either decrease the trap count, "
                             f"or increase the location count (higher max science pack). (Player {self.player})") from e
 
-        self.locations = [FactorioScienceLocation(player, loc_name, self.location_name_to_id[loc_name], nauvis)
-                          for loc_name in location_names]
+        self.science_locations = [FactorioScienceLocation(player, loc_name, self.location_name_to_id[loc_name], nauvis)
+                                  for loc_name in location_names]
         distribution: TechCostDistribution = self.multiworld.tech_cost_distribution[self.player]
         min_cost = self.multiworld.min_tech_cost[self.player]
         max_cost = self.multiworld.max_tech_cost[self.player]
         if distribution == distribution.option_even:
-            rand_values = (random.randint(min_cost, max_cost) for _ in self.locations)
+            rand_values = (random.randint(min_cost, max_cost) for _ in self.science_locations)
         else:
             mode = {distribution.option_low: min_cost,
                     distribution.option_middle: (min_cost+max_cost)//2,
                     distribution.option_high: max_cost}[distribution.value]
-            rand_values = (random.triangular(min_cost, max_cost, mode) for _ in self.locations)
+            rand_values = (random.triangular(min_cost, max_cost, mode) for _ in self.science_locations)
         rand_values = sorted(rand_values)
         if self.multiworld.ramping_tech_costs[self.player]:
             def sorter(loc: FactorioScienceLocation):
@@ -135,10 +136,10 @@ class Factorio(World):
         else:
             def sorter(loc: FactorioScienceLocation):
                 return loc.rel_cost
-        for i, location in enumerate(sorted(self.locations, key=sorter)):
+        for i, location in enumerate(sorted(self.science_locations, key=sorter)):
             location.count = rand_values[i]
         del rand_values
-        nauvis.locations.extend(self.locations)
+        nauvis.locations.extend(self.science_locations)
         location = FactorioLocation(player, "Rocket Launch", None, nauvis)
         nauvis.locations.append(location)
         event = FactorioItem("Victory", ItemClassification.progression, None, player)
@@ -166,14 +167,14 @@ class Factorio(World):
         want_progressives = collections.defaultdict(lambda: self.multiworld.progressive[player].
                                                     want_progressives(self.multiworld.random))
 
-        cost_sorted_locations = sorted(self.locations, key=lambda location: location.name)
+        cost_sorted_locations = sorted(self.science_locations, key=lambda location: location.name)
         special_index = {"automation": 0,
                          "logistics": 1,
                          "rocket-silo": -1}
         loc: FactorioScienceLocation
         if self.multiworld.tech_tree_information[player] == TechTreeInformation.option_full:
             # mark all locations as pre-hinted
-            for loc in self.locations:
+            for loc in self.science_locations:
                 loc.revealed = True
         if self.skip_silo:
             removed = useless_technologies | {"rocket-silo"}
@@ -216,7 +217,7 @@ class Factorio(World):
                 location.access_rule = lambda state, ingredient=ingredient: \
                     all(state.has(technology.name, player) for technology in required_technologies[ingredient])
 
-        for location in self.locations:
+        for location in self.science_locations:
             Rules.set_rule(location, lambda state, ingredients=location.ingredients:
                 all(state.has(f"Automated {ingredient}", player) for ingredient in ingredients))
             prerequisites = shapes.get(location)
@@ -250,7 +251,7 @@ class Factorio(World):
 
         start_location_hints: typing.Set[str] = self.multiworld.start_location_hints[self.player].value
 
-        for loc in self.locations:
+        for loc in self.science_locations:
             # show start_location_hints ingame
             if loc.name in start_location_hints:
                 loc.revealed = True

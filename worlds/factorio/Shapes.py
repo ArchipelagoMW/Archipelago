@@ -24,7 +24,7 @@ def get_shapes(factorio_world: "Factorio") -> Dict["FactorioScienceLocation", Se
     player = factorio_world.player
     prerequisites: Dict["FactorioScienceLocation", Set["FactorioScienceLocation"]] = {}
     layout = world.tech_tree_layout[player].value
-    locations: List["FactorioScienceLocation"] = sorted(factorio_world.locations, key=lambda loc: loc.name)
+    locations: List["FactorioScienceLocation"] = sorted(factorio_world.science_locations, key=lambda loc: loc.name)
     world.random.shuffle(locations)
 
     if layout == TechTreeLayout.option_single:
