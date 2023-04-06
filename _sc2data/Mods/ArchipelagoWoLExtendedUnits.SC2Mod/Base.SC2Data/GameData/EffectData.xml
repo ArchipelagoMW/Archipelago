@@ -141,8 +141,13 @@
     <CEffectEnumArea id="LiberatorTargetMorphSearchArea">
         <EditorCategories value="Race:Terran"/>
         <AINotifyFlags index="HurtEnemy" value="1"/>
-        <AINotifyFlags index="MinorDanger" value="1"/> <!-- Degraded from MajorDanger so AI won't avoid that much -->
-        <SearchFilters value="Ground,Visible;Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <!-- Degraded from MajorDanger so AI won't avoid that much -->
+        <AINotifyFlags index="MinorDanger" value="1"/>
+        <!--
+            Structure exclude is done at Weapon side as we need to allow structures on upgrade
+            and changing SearchFilters on effect didn't work
+        -->
+        <SearchFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <AreaArray Radius="5" Effect="LiberatorTargetMorphSearchAB"/>
     </CEffectEnumArea>
     <CEffectModifyUnit id="LiberatorTurretFace">

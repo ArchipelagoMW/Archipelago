@@ -207,6 +207,7 @@
         <Mob value="Multiplayer"/>
         <FlagArray index="UseLineOfSight" value="1"/>
         <FlagArray index="ArmySelect" value="1"/>
+        <FlagArray index="AIThreatAir" value="1"/>
         <PlaneArray index="Air" value="1"/>
         <Collide index="Flying" value="1"/>
         <Attributes index="Armored" value="1"/>
@@ -225,7 +226,6 @@
         <CostCategory value="Army"/>
         <CostResource index="Minerals" value="250"/>
         <CostResource index="Vespene" value="125"/>
-        <BuildTime value="46.5"/>
         <RepairTime value="32"/>
         <AttackTargetPriority value="20"/>
         <DamageDealtXP value="1"/>
