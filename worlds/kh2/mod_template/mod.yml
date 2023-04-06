@@ -1,17 +1,5 @@
 assets:
 - method: binarc
-  multi:
-  - name: msg/us/jm.bar
-  - name: msg/uk/jm.bar
-  name: msg/jp/jm.bar
-  source:
-  - method: kh2msg
-    name: jm
-    source:
-    - language: en
-      name: jm.yml
-    type: list
-- method: binarc
   name: 00battle.bin
   source:
   - method: listpatch
