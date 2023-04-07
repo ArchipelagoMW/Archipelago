@@ -13,7 +13,7 @@ import Utils
 import worlds.Files
 from . import Options
 from .Technologies import tech_table, recipes, free_sample_exclusions, progressive_technology_table, \
-    base_tech_table, tech_to_progressive_lookup, fluids
+    base_tech_table, tech_to_progressive_lookup, fluids, useless_technologies
 
 if TYPE_CHECKING:
     from . import Factorio
@@ -99,7 +99,7 @@ def generate_mod(world: "Factorio", output_directory: str):
                  for location in world.locations]
     mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.get_file_safe_player_name(player)}"
 
-    random = multiworld.slot_seeds[player]
+    random = multiworld.per_slot_randoms[player]
 
     def flop_random(low, high, base=None):
         """Guarantees 50% below base and 50% above base, uniform distribution in each direction."""
@@ -135,6 +135,8 @@ def generate_mod(world: "Factorio", output_directory: str):
         "liquids": fluids,
         "goal": multiworld.goal[player].value,
         "energy_link": multiworld.energy_link[player].value,
+        "useless_technologies": useless_technologies,
+        "chunk_shuffle": multiworld.chunk_shuffle[player].value if hasattr(multiworld, "chunk_shuffle") else 0,
     }
 
     for factorio_option in Options.factorio_options:

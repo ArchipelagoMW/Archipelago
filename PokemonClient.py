@@ -5,18 +5,19 @@ import os
 import bsdiff4
 import subprocess
 import zipfile
-import hashlib
 from asyncio import StreamReader, StreamWriter
 from typing import List
 
 
 import Utils
+from Utils import async_start
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
     get_base_parser
 
 from worlds.pokemon_rb.locations import location_data
+from worlds.pokemon_rb.rom import RedDeltaPatch, BlueDeltaPatch
 
-location_map = {"Rod": {}, "EventFlag": {}, "Missable": {}, "Hidden": {}, "list": {}}
+location_map = {"Rod": {}, "EventFlag": {}, "Missable": {}, "Hidden": {}, "list": {}, "DexSanityFlag": {}}
 location_bytes_bits = {}
 for location in location_data:
     if location.ram_address is not None:
@@ -39,6 +40,8 @@ CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
 
 DISPLAY_MSGS = True
 
+SCRIPT_VERSION = 3
+
 
 class GBCommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx: CommonContext):
@@ -53,7 +56,6 @@ class GBCommandProcessor(ClientCommandProcessor):
 class GBContext(CommonContext):
     command_processor = GBCommandProcessor
     game = 'Pokemon Red and Blue'
-    items_handling = 0b101
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
@@ -64,6 +66,12 @@ class GBContext(CommonContext):
         self.gb_status = CONNECTION_INITIAL_STATUS
         self.awaiting_rom = False
         self.display_msgs = True
+        self.deathlink_pending = False
+        self.set_deathlink = False
+        self.client_compatibility_mode = 0
+        self.items_handling = 0b001
+        self.sent_release = False
+        self.sent_collect = False
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -82,6 +90,8 @@ class GBContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
             self.locations_array = None
+            if 'death_link' in args['slot_data'] and args['slot_data']['death_link']:
+                self.set_deathlink = True
         elif cmd == "RoomInfo":
             self.seed_name = args['seed_name']
         elif cmd == 'Print':
@@ -91,6 +101,10 @@ class GBContext(CommonContext):
         elif cmd == "ReceivedItems":
             msg = f"Received {', '.join([self.item_names[item.item] for item in args['items']])}"
             self._set_message(msg, SYSTEM_MESSAGE_ID)
+
+    def on_deathlink(self, data: dict):
+        self.deathlink_pending = True
+        super().on_deathlink(data)
 
     def run_gui(self):
         from kvui import GameManager
@@ -107,28 +121,29 @@ class GBContext(CommonContext):
 
 def get_payload(ctx: GBContext):
     current_time = time.time()
-    return json.dumps(
+    ret = json.dumps(
         {
             "items": [item.item for item in ctx.items_received],
             "messages": {f'{key[0]}:{key[1]}': value for key, value in ctx.messages.items()
-                         if key[0] > current_time - 10}
+                         if key[0] > current_time - 10},
+            "deathlink": ctx.deathlink_pending,
+            "options": ((ctx.permissions['release'] in ('goal', 'enabled')) * 2) + (ctx.permissions['collect'] in ('goal', 'enabled'))
         }
     )
+    ctx.deathlink_pending = False
+    return ret
 
 
 async def parse_locations(data: List, ctx: GBContext):
     locations = []
     flags = {"EventFlag": data[:0x140], "Missable": data[0x140:0x140 + 0x20],
-             "Hidden": data[0x140 + 0x20: 0x140 + 0x20 + 0x0E], "Rod": data[0x140 + 0x20 + 0x0E:]}
+             "Hidden": data[0x140 + 0x20: 0x140 + 0x20 + 0x0E],
+             "Rod": data[0x140 + 0x20 + 0x0E:0x140 + 0x20 + 0x0E + 0x01]}
 
-    # Check for clear problems
-    if len(flags['Rod']) > 1:
-        return
-    if flags["EventFlag"][1] + flags["EventFlag"][8] + flags["EventFlag"][9] + flags["EventFlag"][12] \
-            + flags["EventFlag"][61] + flags["EventFlag"][62] + flags["EventFlag"][63] + flags["EventFlag"][64] \
-            + flags["EventFlag"][65] + flags["EventFlag"][66] + flags["EventFlag"][67] + flags["EventFlag"][68] \
-            + flags["EventFlag"][69] + flags["EventFlag"][70] != 0:
-        return
+    if len(data) > 0x140 + 0x20 + 0x0E + 0x01:
+        flags["DexSanityFlag"] = data[0x140 + 0x20 + 0x0E + 0x01:]
+    else:
+        flags["DexSanityFlag"] = [0] * 19
 
     for flag_type, loc_map in location_map.items():
         for flag, loc_id in loc_map.items():
@@ -168,8 +183,15 @@ async def gb_sync_task(ctx: GBContext):
                     # 2. An array representing the memory values of the locations area (if in game)
                     data = await asyncio.wait_for(reader.readline(), timeout=5)
                     data_decoded = json.loads(data.decode())
-                    #print(data_decoded)
-
+                    if 'scriptVersion' not in data_decoded or data_decoded['scriptVersion'] != SCRIPT_VERSION:
+                        msg = "You are connecting with an incompatible Lua script version. Ensure your connector Lua " \
+                            "and PokemonClient are from the same Archipelago installation."
+                        logger.info(msg, extra={'compact_gui': True})
+                        ctx.gui_error('Error', msg)
+                        error_status = CONNECTION_RESET_STATUS
+                    ctx.client_compatibility_mode = data_decoded['clientCompatibilityVersion']
+                    if ctx.client_compatibility_mode == 0:
+                        ctx.items_handling = 0b101  # old patches will not have local start inventory, must be requested
                     if ctx.seed_name and ctx.seed_name != ''.join([chr(i) for i in data_decoded['seedName'] if i != 0]):
                         msg = "The server is running a different multiworld than your client is. (invalid seed_name)"
                         logger.info(msg, extra={'compact_gui': True})
@@ -179,13 +201,30 @@ async def gb_sync_task(ctx: GBContext):
                     if not ctx.auth:
                         ctx.auth = ''.join([chr(i) for i in data_decoded['playerName'] if i != 0])
                         if ctx.auth == '':
-                            logger.info("Invalid ROM detected. No player name built into the ROM.")
+                            msg = "Invalid ROM detected. No player name built into the ROM."
+                            logger.info(msg, extra={'compact_gui': True})
+                            ctx.gui_error('Error', msg)
+                            error_status = CONNECTION_RESET_STATUS
                         if ctx.awaiting_rom:
                             await ctx.server_auth(False)
                     if 'locations' in data_decoded and ctx.game and ctx.gb_status == CONNECTION_CONNECTED_STATUS \
                             and not error_status and ctx.auth:
                         # Not just a keep alive ping, parse
-                        asyncio.create_task(parse_locations(data_decoded['locations'], ctx))
+                        async_start(parse_locations(data_decoded['locations'], ctx))
+                    if 'deathLink' in data_decoded and data_decoded['deathLink'] and 'DeathLink' in ctx.tags:
+                        await ctx.send_death(ctx.auth + " is out of usable Pokémon! " + ctx.auth + " blacked out!")
+                    if 'options' in data_decoded:
+                        msgs = []
+                        if data_decoded['options'] & 4 and not ctx.sent_release:
+                            ctx.sent_release = True
+                            msgs.append({"cmd": "Say", "text": "!release"})
+                        if data_decoded['options'] & 8 and not ctx.sent_collect:
+                            ctx.sent_collect = True
+                            msgs.append({"cmd": "Say", "text": "!collect"})
+                        if msgs:
+                            await ctx.send_msgs(msgs)
+                    if ctx.set_deathlink:
+                        await ctx.update_death_link(True)
                 except asyncio.TimeoutError:
                     logger.debug("Read Timed Out, Reconnecting")
                     error_status = CONNECTION_TIMING_OUT_STATUS
@@ -243,33 +282,26 @@ async def run_game(romfile):
 async def patch_and_run_game(game_version, patch_file, ctx):
     base_name = os.path.splitext(patch_file)[0]
     comp_path = base_name + '.gb'
-    with open(Utils.local_path(Utils.get_options()["pokemon_rb_options"][f"{game_version}_rom_file"]), "rb") as stream:
-        base_rom = bytes(stream.read())
+    if game_version == "blue":
+        delta_patch = BlueDeltaPatch
+    else:
+        delta_patch = RedDeltaPatch
+
     try:
-        with open(Utils.local_path('lib', 'worlds', 'pokemon_rb', f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:
-            base_patch = bytes(stream.read())
-    except FileNotFoundError:
-        with open(Utils.local_path('worlds', 'pokemon_rb', f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:
-            base_patch = bytes(stream.read())
-    base_patched_rom_data = bsdiff4.patch(base_rom, base_patch)
-    basemd5 = hashlib.md5()
-    basemd5.update(base_patched_rom_data)
+        base_rom = delta_patch.get_source_data()
+    except Exception as msg:
+        logger.info(msg, extra={'compact_gui': True})
+        ctx.gui_error('Error', msg)
 
     with zipfile.ZipFile(patch_file, 'r') as patch_archive:
         with patch_archive.open('delta.bsdiff4', 'r') as stream:
             patch = stream.read()
-    patched_rom_data = bsdiff4.patch(base_patched_rom_data, patch)
+    patched_rom_data = bsdiff4.patch(base_rom, patch)
 
-    written_hash = patched_rom_data[0xFFCB:0xFFDB]
-    if written_hash == basemd5.digest():
-        with open(comp_path, "wb") as patched_rom_file:
-            patched_rom_file.write(patched_rom_data)
+    with open(comp_path, "wb") as patched_rom_file:
+        patched_rom_file.write(patched_rom_data)
 
-        asyncio.create_task(run_game(comp_path))
-    else:
-        msg = "Patch supplied was not generated with the same base patch version as this client. Patching failed."
-        logger.warning(msg)
-        ctx.gui_error('Error', msg)
+    async_start(run_game(comp_path))
 
 
 if __name__ == '__main__':
@@ -295,10 +327,10 @@ if __name__ == '__main__':
             ext = args.patch_file.split(".")[len(args.patch_file.split(".")) - 1].lower()
             if ext == "apred":
                 logger.info("APRED file supplied, beginning patching process...")
-                asyncio.create_task(patch_and_run_game("red", args.patch_file, ctx))
+                async_start(patch_and_run_game("red", args.patch_file, ctx))
             elif ext == "apblue":
                 logger.info("APBLUE file supplied, beginning patching process...")
-                asyncio.create_task(patch_and_run_game("blue", args.patch_file, ctx))
+                async_start(patch_and_run_game("blue", args.patch_file, ctx))
             else:
                 logger.warning(f"Unknown patch file extension {ext}")
 

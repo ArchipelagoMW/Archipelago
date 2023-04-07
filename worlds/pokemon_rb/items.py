@@ -16,7 +16,7 @@ item_table = {
     "Bicycle": ItemData(6, ItemClassification.progression, ["Unique", "Key Items"]),
     # "Flippers": ItemData(7, ItemClassification.progression),
     #"Safari Ball": ItemData(8, ItemClassification.filler),
-    #"Pokedex": ItemData(9, ItemClassification.filler),
+    "Pokedex": ItemData(9, ItemClassification.progression, ["Unique", "Key Items"]),
     "Moon Stone": ItemData(10, ItemClassification.useful, ["Unique", "Evolution Stones"]),
     "Antidote": ItemData(11, ItemClassification.filler, ["Consumables"]),
     "Burn Heal": ItemData(12, ItemClassification.filler, ["Consumables"]),
@@ -65,7 +65,7 @@ item_table = {
     "Super Repel": ItemData(56, ItemClassification.filler, ["Consumables"]),
     "Max Repel": ItemData(57, ItemClassification.filler, ["Consumables"]),
     "Dire Hit": ItemData(58, ItemClassification.filler, ["Consumables", "Battle Items"]),
-    #"Coin": ItemData(59, ItemClassification.filler),
+    "10 Coins": ItemData(59, ItemClassification.filler, ["Coins"]),
     "Fresh Water": ItemData(60, ItemClassification.filler, ["Consumables", "Vending Machine Drinks"]),
     "Soda Pop": ItemData(61, ItemClassification.filler, ["Consumables", "Vending Machine Drinks"]),
     "Lemonade": ItemData(62, ItemClassification.filler, ["Consumables", "Vending Machine Drinks"]),
@@ -99,13 +99,19 @@ item_table = {
     "Mansion Key": ItemData(90, ItemClassification.progression, ["Unique", "Key Items"]),
     "Hideout Key": ItemData(91, ItemClassification.progression, ["Unique", "Key Items"]),
     "Safari Pass": ItemData(93, ItemClassification.progression, ["Unique", "Key Items"]),
+    "Poison Trap": ItemData(94, ItemClassification.trap, ["Traps"]),
+    "Paralyze Trap": ItemData(95, ItemClassification.trap, ["Traps"]),
+    "Ice Trap": ItemData(96, ItemClassification.trap, ["Traps"]),
+    "Fire Trap": ItemData(97, ItemClassification.trap, ["Traps"]),
+    "20 Coins": ItemData(98, ItemClassification.filler, ["Coins"]),
+    "100 Coins": ItemData(99, ItemClassification.filler, ["Coins"]),
     "HM01 Cut": ItemData(196, ItemClassification.progression, ["Unique", "HMs"]),
     "HM02 Fly": ItemData(197, ItemClassification.progression, ["Unique", "HMs"]),
     "HM03 Surf": ItemData(198, ItemClassification.progression, ["Unique", "HMs"]),
     "HM04 Strength": ItemData(199, ItemClassification.progression, ["Unique", "HMs"]),
     "HM05 Flash": ItemData(200, ItemClassification.progression, ["Unique", "HMs"]),
     "TM01 Mega Punch": ItemData(201, ItemClassification.useful, ["Unique", "TMs"]),
-    "TM02 Razor Wind": ItemData(202, ItemClassification.useful, ["Unique", "TMs"]),
+    "TM02 Razor Wind": ItemData(202, ItemClassification.filler, ["Unique", "TMs"]),
     "TM03 Swords Dance": ItemData(203, ItemClassification.useful, ["Unique", "TMs"]),
     "TM04 Whirlwind": ItemData(204, ItemClassification.filler, ["Unique", "TMs"]),
     "TM05 Mega Kick": ItemData(205, ItemClassification.useful, ["Unique", "TMs"]),
@@ -115,7 +121,7 @@ item_table = {
     "TM09 Take Down": ItemData(209, ItemClassification.useful, ["Unique", "TMs"]),
     "TM10 Double Edge": ItemData(210, ItemClassification.useful, ["Unique", "TMs"]),
     "TM11 Bubble Beam": ItemData(211, ItemClassification.useful, ["Unique", "TMs"]),
-    "TM12 Water Gun": ItemData(212, ItemClassification.useful, ["Unique", "TMs"]),
+    "TM12 Water Gun": ItemData(212, ItemClassification.filler, ["Unique", "TMs"]),
     "TM13 Ice Beam": ItemData(213, ItemClassification.useful, ["Unique", "TMs"]),
     "TM14 Blizzard": ItemData(214, ItemClassification.useful, ["Unique", "TMs"]),
     "TM15 Hyper Beam": ItemData(215, ItemClassification.useful, ["Unique", "TMs"]),
@@ -139,12 +145,12 @@ item_table = {
     "TM33 Reflect": ItemData(233, ItemClassification.useful, ["Unique", "TMs"]),
     "TM34 Bide": ItemData(234, ItemClassification.filler, ["Unique", "TMs"]),
     "TM35 Metronome": ItemData(235, ItemClassification.useful, ["Unique", "TMs"]),
-    "TM36 Self Destruct": ItemData(236, ItemClassification.useful, ["Unique", "TMs"]),
+    "TM36 Self-Destruct": ItemData(236, ItemClassification.useful, ["Unique", "TMs"]),
     "TM37 Egg Bomb": ItemData(237, ItemClassification.useful, ["Unique", "TMs"]),
     "TM38 Fire Blast": ItemData(238, ItemClassification.useful, ["Unique", "TMs"]),
     "TM39 Swift": ItemData(239, ItemClassification.useful, ["Unique", "TMs"]),
     "TM40 Skull Bash": ItemData(240, ItemClassification.filler, ["Unique", "TMs"]),
-    "TM41 Soft Boiled": ItemData(241, ItemClassification.useful, ["Unique", "TMs"]),
+    "TM41 Soft-Boiled": ItemData(241, ItemClassification.useful, ["Unique", "TMs"]),
     "TM42 Dream Eater": ItemData(242, ItemClassification.useful, ["Unique", "TMs"]),
     "TM43 Sky Attack": ItemData(243, ItemClassification.filler, ["Unique", "TMs"]),
     "TM44 Rest": ItemData(244, ItemClassification.useful, ["Unique", "TMs"]),
@@ -159,6 +165,10 @@ item_table = {
     "Silph Co Liberated": ItemData(None, ItemClassification.progression, []),
     "Become Champion": ItemData(None, ItemClassification.progression, [])
 }
+
+item_table.update({f"TM{str(i).zfill(2)}": ItemData(i + 456, ItemClassification.filler, ["Unique", "TMs"])
+                   for i in range(1, 51)})
+
 item_table.update(
     {pokemon: ItemData(None, ItemClassification.progression, []) for pokemon in pokemon_data.keys()}
 )

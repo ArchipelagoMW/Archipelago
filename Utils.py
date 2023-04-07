@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import asyncio
+import json
 import typing
 import builtins
 import os
@@ -11,7 +13,7 @@ import io
 import collections
 import importlib
 import logging
-from typing import BinaryIO
+from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
 
 from yaml import load, load_all, dump, SafeLoader
 
@@ -37,7 +39,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.6"
+__version__ = "0.4.0"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -86,7 +88,10 @@ def is_frozen() -> bool:
 
 
 def local_path(*path: str) -> str:
-    """Returns path to a file in the local Archipelago installation or source."""
+    """
+    Returns path to a file in the local Archipelago installation or source.
+    This might be read-only and user_path should be used instead for ROMs, configuration, etc.
+    """
     if hasattr(local_path, 'cached_path'):
         pass
     elif is_frozen():
@@ -98,7 +103,7 @@ def local_path(*path: str) -> str:
             local_path.cached_path = os.path.dirname(os.path.abspath(sys.argv[0]))
     else:
         import __main__
-        if hasattr(__main__, "__file__"):
+        if hasattr(__main__, "__file__") and os.path.isfile(__main__.__file__):
             # we are running in a normal Python environment
             local_path.cached_path = os.path.dirname(os.path.abspath(__main__.__file__))
         else:
@@ -139,6 +144,17 @@ def user_path(*path: str) -> str:
                 shutil.copy2(local_path(fn), user_path(fn))
 
     return os.path.join(user_path.cached_path, *path)
+
+
+def cache_path(*path: str) -> str:
+    """Returns path to a file in the user's Archipelago cache directory."""
+    if hasattr(cache_path, "cached_path"):
+        pass
+    else:
+        import platformdirs
+        cache_path.cached_path = platformdirs.user_cache_dir("Archipelago", False)
+
+    return os.path.join(cache_path.cached_path, *path)
 
 
 def output_path(*path: str) -> str:
@@ -194,11 +210,11 @@ def get_public_ipv4() -> str:
     ip = socket.gethostbyname(socket.gethostname())
     ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen("https://checkip.amazonaws.com/", context=ctx).read().decode("utf8").strip()
+        ip = urllib.request.urlopen("https://checkip.amazonaws.com/", context=ctx, timeout=10).read().decode("utf8").strip()
     except Exception as e:
         # noinspection PyBroadException
         try:
-            ip = urllib.request.urlopen("https://v4.ident.me", context=ctx).read().decode("utf8").strip()
+            ip = urllib.request.urlopen("https://v4.ident.me", context=ctx, timeout=10).read().decode("utf8").strip()
         except Exception:
             logging.exception(e)
             pass  # we could be offline, in a local game, so no point in erroring out
@@ -212,7 +228,7 @@ def get_public_ipv6() -> str:
     ip = socket.gethostbyname(socket.gethostname())
     ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen("https://v6.ident.me", context=ctx).read().decode("utf8").strip()
+        ip = urllib.request.urlopen("https://v6.ident.me", context=ctx, timeout=10).read().decode("utf8").strip()
     except Exception as e:
         logging.exception(e)
         pass  # we could be offline, in a local game, or ipv6 may not be available
@@ -235,7 +251,7 @@ def get_default_options() -> OptionsType:
             "bridge_chat_out": True,
         },
         "sni_options": {
-            "sni": "SNI",
+            "sni_path": "SNI",
             "snes_rom_start": True,
         },
         "sm_options": {
@@ -246,6 +262,9 @@ def get_default_options() -> OptionsType:
         },
         "lttp_options": {
             "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
+        },
+        "ladx_options": {
+            "rom_file": "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc",
         },
         "server_options": {
             "host": None,
@@ -259,7 +278,7 @@ def get_default_options() -> OptionsType:
             "disable_item_cheat": False,
             "location_check_points": 1,
             "hint_cost": 10,
-            "forfeit_mode": "goal",
+            "release_mode": "goal",
             "collect_mode": "disabled",
             "remaining_mode": "goal",
             "auto_shutdown": 0,
@@ -267,13 +286,12 @@ def get_default_options() -> OptionsType:
             "log_network": 0
         },
         "generator": {
-            "teams": 1,
             "enemizer_path": os.path.join("EnemizerCLI", "EnemizerCLI.Core"),
             "player_files_path": "Players",
             "players": 0,
             "weights_file_path": "weights.yaml",
             "meta_file_path": "meta.yaml",
-            "spoiler": 2,
+            "spoiler": 3,
             "glitch_triforce_room": 1,
             "race": 0,
             "plando_options": "bosses",
@@ -285,6 +303,7 @@ def get_default_options() -> OptionsType:
         },
         "oot_options": {
             "rom_file": "The Legend of Zelda - Ocarina of Time.z64",
+            "rom_start": True
         },
         "dkc3_options": {
             "rom_file": "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc",
@@ -302,9 +321,28 @@ def get_default_options() -> OptionsType:
             "red_rom_file": "Pokemon Red (UE) [S][!].gb",
             "blue_rom_file": "Pokemon Blue (UE) [S][!].gb",
             "rom_start": True
-        }
+        },
+        "ffr_options": {
+            "display_msgs": True,
+        },
+        "lufia2ac_options": {
+            "rom_file": "Lufia II - Rise of the Sinistrals (USA).sfc",
+        },
+        "tloz_options": {
+            "rom_file": "Legend of Zelda, The (U) (PRG0) [!].nes",
+            "rom_start": True,
+            "display_msgs": True,
+        },
+        "wargroove_options": {
+            "root_directory": "C:/Program Files (x86)/Steam/steamapps/common/Wargroove"
+        },
+        "adventure_options": {
+            "rom_file": "ADVNTURE.BIN",
+            "display_msgs": True,
+            "rom_start": True,
+            "rom_args": ""
+        },
     }
-
     return options
 
 
@@ -369,6 +407,45 @@ def persistent_load() -> typing.Dict[str, dict]:
         storage = {}
     persistent_load.storage = storage
     return storage
+
+
+def get_file_safe_name(name: str) -> str:
+    return "".join(c for c in name if c not in '<>:"/\\|?*')
+
+
+def load_data_package_for_checksum(game: str, checksum: typing.Optional[str]) -> Dict[str, Any]:
+    if checksum and game:
+        if checksum != get_file_safe_name(checksum):
+            raise ValueError(f"Bad symbols in checksum: {checksum}")
+        path = cache_path("datapackage", get_file_safe_name(game), f"{checksum}.json")
+        if os.path.exists(path):
+            try:
+                with open(path, "r", encoding="utf-8-sig") as f:
+                    return json.load(f)
+            except Exception as e:
+                logging.debug(f"Could not load data package: {e}")
+
+    # fall back to old cache
+    cache = persistent_load().get("datapackage", {}).get("games", {}).get(game, {})
+    if cache.get("checksum") == checksum:
+        return cache
+
+    # cache does not match
+    return {}
+
+
+def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> None:
+    checksum = data.get("checksum")
+    if checksum and game:
+        if checksum != get_file_safe_name(checksum):
+            raise ValueError(f"Bad symbols in checksum: {checksum}")
+        game_folder = cache_path("datapackage", get_file_safe_name(game))
+        os.makedirs(game_folder, exist_ok=True)
+        try:
+            with open(os.path.join(game_folder, f"{checksum}.json"), "w", encoding="utf-8-sig") as f:
+                json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
+        except Exception as e:
+            logging.debug(f"Could not store data package: {e}")
 
 
 def get_adjuster_settings(game_name: str) -> typing.Dict[str, typing.Any]:
@@ -451,6 +528,7 @@ loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': log
 def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
                  log_format: str = "[%(name)s at %(asctime)s]: %(message)s",
                  exception_logger: typing.Optional[str] = None):
+    import datetime
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
     log_folder = user_path("logs")
     os.makedirs(log_folder, exist_ok=True)
@@ -459,6 +537,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         root_logger.removeHandler(handler)
         handler.close()
     root_logger.setLevel(loglevel)
+    if "a" not in write_mode:
+        name += f"_{datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}"
     file_handler = logging.FileHandler(
         os.path.join(log_folder, f"{name}.txt"),
         write_mode,
@@ -486,7 +566,25 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
 
         sys.excepthook = handle_exception
 
-    logging.info(f"Archipelago ({__version__}) logging initialized.")
+    def _cleanup():
+        for file in os.scandir(log_folder):
+            if file.name.endswith(".txt"):
+                last_change = datetime.datetime.fromtimestamp(file.stat().st_mtime)
+                if datetime.datetime.now() - last_change > datetime.timedelta(days=7):
+                    try:
+                        os.unlink(file.path)
+                    except Exception as e:
+                        logging.exception(e)
+                    else:
+                        logging.debug(f"Deleted old logfile {file.path}")
+    import threading
+    threading.Thread(target=_cleanup, name="LogCleaner").start()
+    import platform
+    logging.info(
+        f"Archipelago ({__version__}) logging initialized"
+        f" on {platform.platform()}"
+        f" running Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+    )
 
 
 def stream_input(stream, queue):
@@ -635,7 +733,10 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
 
 def title_sorted(data: typing.Sequence, key=None, ignore: typing.Set = frozenset(("a", "the"))):
     """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
-    def sorter(element: str) -> str:
+    def sorter(element: Union[str, Dict[str, Any]]) -> str:
+        if (not isinstance(element, str)):
+            element = element["title"]
+
         parts = element.split(maxsplit=1)
         if parts[0].lower() in ignore:
             return parts[1].lower()
@@ -650,3 +751,24 @@ def read_snes_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
     if strip_header and len(buffer) % 0x400 == 0x200:
         return buffer[0x200:]
     return buffer
+
+
+_faf_tasks: "Set[asyncio.Task[None]]" = set()
+
+
+def async_start(co: Coroutine[typing.Any, typing.Any, bool], name: Optional[str] = None) -> None:
+    """
+    Use this to start a task when you don't keep a reference to it or immediately await it,
+    to prevent early garbage collection. "fire-and-forget"
+    """
+    # https://docs.python.org/3.10/library/asyncio-task.html#asyncio.create_task
+    # Python docs:
+    # ```
+    # Important: Save a reference to the result of [asyncio.create_task],
+    # to avoid a task disappearing mid-execution.
+    # ```
+    # This implementation follows the pattern given in that documentation.
+
+    task = asyncio.create_task(co, name=name)
+    _faf_tasks.add(task)
+    task.add_done_callback(_faf_tasks.discard)

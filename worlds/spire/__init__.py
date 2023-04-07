@@ -1,12 +1,12 @@
 import string
 
-from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification, RegionType
-from .Items import item_table, item_pool, event_item_pairs
+from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+from .Items import event_item_pairs, item_pool, item_table
 from .Locations import location_table
+from .Options import spire_options
 from .Regions import create_regions
 from .Rules import set_rules
-from ..AutoWorld import World, WebWorld
-from .Options import spire_options
+from ..AutoWorld import WebWorld, World
 
 
 class SpireWeb(WebWorld):
@@ -32,19 +32,10 @@ class SpireWorld(World):
     topology_present = False
     data_version = 1
     web = SpireWeb()
+    required_client_version = (0, 3, 7)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
-
-    forced_auto_forfeit = True
-
-    def _get_slot_data(self):
-        return {
-            'seed': "".join(self.multiworld.slot_seeds[self.player].choice(string.ascii_letters) for i in range(16)),
-            'character': self.multiworld.character[self.player],
-            'ascension': self.multiworld.ascension[self.player],
-            'heart_run': self.multiworld.heart_run[self.player]
-        }
 
     def generate_basic(self):
         # Fill out our pool with our items from item_pool, assuming 1 item if not present in item_pool
@@ -65,7 +56,6 @@ class SpireWorld(World):
         if self.multiworld.logic[self.player] != 'no logic':
             self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
-
     def set_rules(self):
         set_rules(self.multiworld, self.player)
 
@@ -76,10 +66,12 @@ class SpireWorld(World):
         create_regions(self.multiworld, self.player)
 
     def fill_slot_data(self) -> dict:
-        slot_data = self._get_slot_data()
+        slot_data = {
+            'seed': "".join(self.multiworld.per_slot_randoms[self.player].choice(string.ascii_letters) for i in range(16))
+        }
         for option_name in spire_options:
             option = getattr(self.multiworld, option_name)[self.player]
-            slot_data[option_name] = int(option.value)
+            slot_data[option_name] = option.value
         return slot_data
 
     def get_filler_item_name(self) -> str:
@@ -87,8 +79,7 @@ class SpireWorld(World):
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, RegionType.Generic, name, player)
-    ret.multiworld = world
+    ret = Region(name, player, world)
     if locations:
         for location in locations:
             loc_id = location_table.get(location, 0)

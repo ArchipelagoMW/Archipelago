@@ -192,6 +192,11 @@ class ZillionRedIDCardCount(Range):
     display_name = "Red ID Card count"
 
 
+class ZillionEarlyScope(Toggle):
+    """ make sure Scope is available early """
+    display_name = "early scope"
+
+
 class ZillionSkill(Range):
     """ the difficulty level of the game """
     range_start = 0
@@ -236,6 +241,7 @@ zillion_options: Dict[str, AssembleOptions] = {
     "floppy_disk_count": ZillionFloppyDiskCount,
     "scope_count": ZillionScopeCount,
     "red_id_card_count": ZillionRedIDCardCount,
+    "early_scope": ZillionEarlyScope,
     "skill": ZillionSkill,
     "starting_cards": ZillionStartingCards,
     "room_gen": ZillionRoomGen,
@@ -270,14 +276,14 @@ def validate(world: "MultiWorld", p: int) -> "Tuple[ZzOptions, Counter[str]]":
     skill = wo.skill[p].value
 
     jump_levels = cast(ZillionJumpLevels, wo.jump_levels[p])
-    jump_option = jump_levels.get_current_option_name().lower()
+    jump_option = jump_levels.current_key
     required_level = char_to_jump["Apple"][cast(ZzVBLR, jump_option)].index(3) + 1
     if skill == 0:
         # because of hp logic on final boss
         required_level = 8
 
     gun_levels = cast(ZillionGunLevels, wo.gun_levels[p])
-    gun_option = gun_levels.get_current_option_name().lower()
+    gun_option = gun_levels.current_key
     guns_required = char_to_gun["Champ"][cast(ZzVBLR, gun_option)].index(3)
 
     floppy_req = cast(ZillionFloppyReq, wo.floppy_req[p])
@@ -341,16 +347,24 @@ def validate(world: "MultiWorld", p: int) -> "Tuple[ZzOptions, Counter[str]]":
 
     # that should be all of the level requirements met
 
+    name_capitalization = {
+        "jj": "JJ",
+        "apple": "Apple",
+        "champ": "Champ",
+    }
+
     start_char = cast(ZillionStartChar, wo.start_char[p])
-    start_char_name = start_char.get_current_option_name()
-    if start_char_name == "Jj":
-        start_char_name = "JJ"
+    start_char_name = name_capitalization[start_char.current_key]
     assert start_char_name in chars
     start_char_name = cast(Chars, start_char_name)
 
     starting_cards = cast(ZillionStartingCards, wo.starting_cards[p])
 
     room_gen = cast(ZillionRoomGen, wo.room_gen[p])
+
+    early_scope = cast(ZillionEarlyScope, wo.early_scope[p])
+    if early_scope:
+        world.early_items[p]["Scope"] = 1
 
     zz_item_counts = convert_item_counts(item_counts)
     zz_op = ZzOptions(
@@ -365,7 +379,7 @@ def validate(world: "MultiWorld", p: int) -> "Tuple[ZzOptions, Counter[str]]":
         floppy_req.value,
         wo.continues[p].value,
         wo.randomize_alarms[p].value,
-        False,  # early scope can be done with AP early_items
+        False,  # early scope is done with AP early_items API
         True,  # balance defense
         starting_cards.value,
         bool(room_gen.value)

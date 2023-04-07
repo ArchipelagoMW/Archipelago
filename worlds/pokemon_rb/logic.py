@@ -45,19 +45,22 @@ class PokemonLogic(LogicMixin):
                     ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge", "Marsh Badge",
                      "Volcano Badge", "Earth Badge", "Bicycle", "Silph Scope", "Item Finder", "Super Rod", "Good Rod",
                      "Old Rod", "Lift Key", "Card Key", "Town Map", "Coin Case", "S.S. Ticket", "Secret Key",
-                     "Mansion Key", "Safari Pass", "Plant Key", "Hideout Key", "HM01 Cut", "HM02 Fly", "HM03 Surf",
-                     "HM04 Strength", "HM05 Flash"] if self.has(item, player)]) >= count
+                     "Poke Flute", "Mansion Key", "Safari Pass", "Plant Key", "Hideout Key", "HM01 Cut", "HM02 Fly",
+                     "HM03 Surf", "HM04 Strength", "HM05 Flash"] if self.has(item, player)]) >= count
 
     def pokemon_rb_can_pass_guards(self, player):
         if self.multiworld.tea[player].value:
             return self.has("Tea", player)
         else:
-            # this could just be "True", but you never know what weird options I might introduce later ;)
             return self.can_reach("Celadon City - Counter Man", "Location", player)
 
     def pokemon_rb_has_badges(self, count, player):
         return len([item for item in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Marsh Badge",
                                       "Soul Badge", "Volcano Badge", "Earth Badge"] if self.has(item, player)]) >= count
+
+    def pokemon_rb_oaks_aide(self, count, player):
+        return ((not self.multiworld.require_pokedex[player] or self.has("Pokedex", player))
+                and self.pokemon_rb_has_pokemon(count, player))
 
     def pokemon_rb_has_pokemon(self, count, player):
         obtained_pokemon = set()
@@ -71,3 +74,13 @@ class PokemonLogic(LogicMixin):
         return (self.can_reach('Mt Moon 1F - Southwest Item', 'Location', player) and
                 self.can_reach('Cinnabar Island - Lab Scientist', 'Location', player) and len(
             [item for item in ["Dome Fossil", "Helix Fossil", "Old Amber"] if self.has(item, player)]) >= count)
+
+    def pokemon_rb_cinnabar_gym(self, player):
+        # ensures higher level Pokémon are obtainable before Cinnabar Gym is in logic
+        return ((self.multiworld.old_man[player] != "vanilla") or (not self.multiworld.extra_key_items[player]) or
+                self.has("Mansion Key", player) or self.has("Oak's Parcel", player) or self.pokemon_rb_can_surf(player))
+
+    def pokemon_rb_dojo(self, player):
+        # ensures higher level Pokémon are obtainable before Fighting Dojo is in logic
+        return (self.pokemon_rb_can_pass_guards(player) or self.has("Oak's Parcel", player) or
+                self.pokemon_rb_can_surf(player))

@@ -1,6 +1,7 @@
-from typing import Dict
+from typing import Dict, FrozenSet, Union
 from BaseClasses import MultiWorld
 from Options import Choice, Option, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range
+from .MissionTables import vanilla_mission_req_table
 
 
 class GameDifficulty(Choice):
@@ -13,16 +14,16 @@ class GameDifficulty(Choice):
 
 
 class UpgradeBonus(Choice):
-    """Determines what lab upgrade to use, whether it is Ultra-Capacitors which boost attack speed with every weapon upgrade
-    or Vanadium Plating which boosts life with every armor upgrade."""
+    """Determines what lab upgrade to use, whether it is Ultra-Capacitors which boost attack speed with every weapon
+    upgrade or Vanadium Plating which boosts life with every armor upgrade."""
     display_name = "Upgrade Bonus"
     option_ultra_capacitors = 0
     option_vanadium_plating = 1
 
 
 class BunkerUpgrade(Choice):
-    """Determines what bunker lab upgrade to use, whether it is Shrike Turret which outfits bunkers with an automated turret or
-    Fortified Bunker which boosts the life of bunkers."""
+    """Determines what bunker lab upgrade to use, whether it is Shrike Turret which outfits bunkers with an automated
+    turret or Fortified Bunker which boosts the life of bunkers."""
     display_name = "Bunker Upgrade"
     option_shrike_turret = 0
     option_fortified_bunker = 1
@@ -56,14 +57,17 @@ class MissionOrder(Choice):
 
 class ShuffleProtoss(DefaultOnToggle):
     """Determines if the 3 protoss missions are included in the shuffle if Vanilla mission order is not enabled.
-    If turned off with Vanilla Shuffled, the 3 protoss missions will be in their normal position on the Prophecy chain if not shuffled.
-    If turned off with reduced mission settings, the 3 protoss missions will not appear and Protoss units are removed from the pool."""
+    If turned off with Vanilla Shuffled, the 3 protoss missions will be in their normal position on the Prophecy chain
+       if not shuffled.
+    If turned off with reduced mission settings, the 3 protoss missions will not appear and Protoss units are removed
+        from the pool."""
     display_name = "Shuffle Protoss Missions"
 
 
 class ShuffleNoBuild(DefaultOnToggle):
     """Determines if the 5 no-build missions are included in the shuffle if Vanilla mission order is not enabled.
-    If turned off with Vanilla Shuffled, one no-build mission will be placed as the first mission and the rest will be placed at the end of optional routes.
+    If turned off with Vanilla Shuffled, one no-build mission will be placed as the first mission and the rest will be
+        placed at the end of optional routes.
     If turned off with reduced mission settings, the 5 no-build missions will not appear."""
     display_name = "Shuffle No-Build Missions"
 
@@ -74,7 +78,9 @@ class EarlyUnit(DefaultOnToggle):
 
 
 class RequiredTactics(Choice):
-    """Determines the maximum tactical difficulty of the seed (separate from mission difficulty).  Higher settings increase randomness.
+    """Determines the maximum tactical difficulty of the seed (separate from mission difficulty).  Higher settings
+    increase randomness.
+
     Standard:  All missions can be completed with good micro and macro.
     Advanced:  Completing missions may require relying on starting units and micro-heavy units.
     No Logic:  Units and upgrades may be placed anywhere.  LIKELY TO RENDER THE RUN IMPOSSIBLE ON HARDER DIFFICULTIES!"""
@@ -105,6 +111,7 @@ class ExcludedMissions(OptionSet):
     Only applies on shortened mission orders.
     It may be impossible to build a valid campaign if too many missions are excluded."""
     display_name = "Excluded Missions"
+    valid_keys = {mission_name for mission_name in vanilla_mission_req_table.keys() if mission_name != 'All-In'}
 
 
 # noinspection PyTypeChecker
@@ -125,19 +132,10 @@ sc2wol_options: Dict[str, Option] = {
 }
 
 
-def get_option_value(world: MultiWorld, player: int, name: str) -> int:
-    option = getattr(world, name, None)
+def get_option_value(multiworld: MultiWorld, player: int, name: str) -> Union[int,  FrozenSet]:
+    if multiworld is None:
+        return sc2wol_options[name].default
 
-    if option is None:
-        return 0
+    player_option = getattr(multiworld, name)[player]
 
-    return int(option[player].value)
-
-
-def get_option_set_value(world: MultiWorld, player: int, name: str) -> set:
-    option = getattr(world, name, None)
-
-    if option is None:
-        return set()
-
-    return option[player].value
+    return player_option.value

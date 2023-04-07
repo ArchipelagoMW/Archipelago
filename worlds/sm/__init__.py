@@ -7,8 +7,6 @@ import threading
 import base64
 from typing import Any, Dict, Iterable, List, Set, TextIO, TypedDict
 
-from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils
-
 logger = logging.getLogger("Super Metroid")
 
 from .Regions import create_regions
@@ -18,19 +16,20 @@ from .Client import SMSNIClient
 from .Rom import get_base_rom_path, SM_ROM_MAX_PLAYERID, SM_ROM_PLAYERDATA_COUNT, SMDeltaPatch, get_sm_symbols
 import Utils
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, RegionType, CollectionState, Tutorial
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, Tutorial
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
 
-from logic.smboolmanager import SMBoolManager
-from graph.vanilla.graph_locations import locationsDict
-from graph.graph_utils import getAccessPoint
-from rando.ItemLocContainer import ItemLocation
-from rando.Items import ItemManager
-from utils.parameters import *
-from logic.logic import Logic
-from randomizer import VariaRandomizer
-from utils.doorsmanager import DoorsManager
-from rom.rom_patches import RomPatches
+from worlds.sm.variaRandomizer.logic.smboolmanager import SMBoolManager
+from worlds.sm.variaRandomizer.graph.vanilla.graph_locations import locationsDict
+from worlds.sm.variaRandomizer.graph.graph_utils import getAccessPoint
+from worlds.sm.variaRandomizer.rando.ItemLocContainer import ItemLocation
+from worlds.sm.variaRandomizer.rando.Items import ItemManager
+from worlds.sm.variaRandomizer.utils.parameters import *
+from worlds.sm.variaRandomizer.logic.logic import Logic
+from worlds.sm.variaRandomizer.randomizer import VariaRandomizer
+from worlds.sm.variaRandomizer.utils.doorsmanager import DoorsManager
+from worlds.sm.variaRandomizer.rom.rom_patches import RomPatches
+from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils
 
 
 class SMCollectionState(metaclass=AutoLogicRegister):
@@ -39,7 +38,7 @@ class SMCollectionState(metaclass=AutoLogicRegister):
         # for unit tests where MultiWorld is instantiated before worlds
         if hasattr(parent, "state"):
             self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff,
-                                    parent.state.smbm[player].onlyBossLeft) for player in
+                                    parent.state.smbm[player].onlyBossLeft, parent.state.smbm[player].lastAP) for player in
                                         parent.get_game_players("Super Metroid")}
             for player, group in parent.groups.items():
                 if (group["game"] == "Super Metroid"):
@@ -93,9 +92,6 @@ class SMWorld(World):
     location_name_to_id = {key: locations_start_id + value.Id for key, value in locationsDict.items() if value.Id != None}
     web = SMWeb()
 
-    remote_items: bool = False
-    remote_start_inventory: bool = False
-
     # changes to client DeathLink handling for 0.2.1
     # changes to client Remote Item handling for 0.2.6
     required_client_version = (0, 2, 6)
@@ -110,7 +106,7 @@ class SMWorld(World):
         super().__init__(world, player)
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld: MultiWorld):
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
@@ -119,7 +115,7 @@ class SMWorld(World):
         Logic.factory('vanilla')
 
         self.variaRando = VariaRandomizer(self.multiworld, get_base_rom_path(), self.player)
-        self.multiworld.state.smbm[self.player] = SMBoolManager(self.player, self.variaRando.maxDifficulty)
+        self.multiworld.state.smbm[self.player] = SMBoolManager(self.player, self.variaRando.maxDifficulty, lastAP = self.variaRando.args.startLocation)
 
         # keeps Nothing items local so no player will ever pickup Nothing
         # doing so reduces contribution of this world to the Multiworld the more Nothing there is though
@@ -127,7 +123,7 @@ class SMWorld(World):
         self.multiworld.local_items[self.player].value.add('No Energy')
 
         if (self.variaRando.args.morphPlacement == "early"):
-            self.multiworld.local_items[self.player].value.add('Morph')
+            self.multiworld.local_early_items[self.player]['Morph Ball'] = 1
 
         self.remote_items = self.multiworld.remote_items[self.player]
 
@@ -631,6 +627,11 @@ class SMWorld(World):
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         state.smbm[self.player].addItem(item.type)
+        if (item.location != None and item.location.player == self.player):
+            for entrance in self.multiworld.get_region(item.location.parent_region.name, self.player).entrances:
+                if (entrance.parent_region.can_reach(state)):
+                    state.smbm[self.player].lastAP = entrance.parent_region.name
+                    break
         return super(SMWorld, self).collect(state, item)
 
     def remove(self, state: CollectionState, item: Item) -> bool:
@@ -658,21 +659,6 @@ class SMWorld(World):
             return "Nothing"
 
     def pre_fill(self):
-        if (self.variaRando.args.morphPlacement == "early") and next((item for item in self.multiworld.itempool if item.player == self.player and item.name == "Morph Ball"), False):
-            viable = []
-            for location in self.multiworld.get_locations():
-                if location.player == self.player \
-                        and location.item is None \
-                        and location.can_reach(self.multiworld.state):
-                    viable.append(location)
-            self.multiworld.random.shuffle(viable)
-            key = self.multiworld.create_item("Morph Ball", self.player)
-            loc = viable.pop()
-            loc.place_locked_item(key)
-            self.multiworld.itempool[:] = [item for item in self.multiworld.itempool if
-                                           item.player != self.player or
-                                           item.name != "Morph Ball"]
-
         if len(self.NothingPool) > 0:
             nonChozoLoc = []
             chozoLoc = []
@@ -734,8 +720,7 @@ def create_locations(self, player: int):
 
 
 def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, RegionType.LightWorld, name, player)
-    ret.multiworld = world
+    ret = Region(name, player, world)
     if locations:
         for loc in locations:
             location = self.locations[loc]
@@ -754,18 +739,34 @@ class SMLocation(Location):
         super(SMLocation, self).__init__(player, name, address, parent)
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
-        return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or (self.can_reach(state) and self.can_comeback(state, item))))
+        return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or self.can_reach(state)))
 
-    def can_comeback(self, state: CollectionState, item: Item):
+    def can_reach(self, state: CollectionState) -> bool:
+        # self.access_rule computes faster on average, so placing it first for faster abort
+        assert self.parent_region, "Can't reach location without region"
+        return self.access_rule(state) and self.parent_region.can_reach(state) and self.can_comeback(state)
+    
+    def can_comeback(self, state: CollectionState):
+        # some specific early/late game checks
+        if self.name == 'Bomb' or self.name == 'Mother Brain':
+            return True
+
         randoExec = state.multiworld.worlds[self.player].variaRando.randoExec
+        n = 2 if GraphUtils.isStandardStart(randoExec.graphSettings.startAP) else 3
+        # is early game
+        if (len([loc for loc in state.locations_checked if loc.player == self.player]) <= n):
+            return True
+
         for key in locationsDict[self.name].AccessFrom.keys():
-            if (randoExec.areaGraph.canAccessList(  state.smbm[self.player], 
-                                                    key,
-                                                    [randoExec.graphSettings.startAP, 'Landing Site'] if not GraphUtils.isStandardStart(randoExec.graphSettings.startAP) else ['Landing Site'],
-                                                    state.smbm[self.player].maxDiff)):
+            smbm = state.smbm[self.player]
+            if (randoExec.areaGraph.canAccess(  smbm, 
+                                                smbm.lastAP,
+                                                key,
+                                                smbm.maxDiff,
+                                                None)):
                 return True
         return False
-
+ 
 
 class SMItem(Item):
     game = "Super Metroid"

@@ -29,6 +29,7 @@ class Room(db.Entity):
     show_spoiler = Required(int, default=0)  # 0 -> never, 1 -> after completion, -> 2 always
     timeout = Required(int, default=lambda: 2 * 60 * 60)  # seconds since last activity to shutdown
     tracker = Optional(UUID, index=True)
+    # Port special value -1 means the server errored out. Another attempt can be made with a page refresh
     last_port = Optional(int, default=lambda: 0)
 
 
@@ -55,3 +56,8 @@ class Generation(db.Entity):
     options = Required(buffer, lazy=True)
     meta = Required(LongStr, default=lambda: "{\"race\": false}")
     state = Required(int, default=0, index=True)
+
+
+class GameDataPackage(db.Entity):
+    checksum = PrimaryKey(str)
+    data = Required(bytes)

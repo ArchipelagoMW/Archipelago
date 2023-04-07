@@ -1,14 +1,13 @@
 from collections import deque, Counter
 from contextlib import redirect_stdout
 import functools
-from typing import Any, Dict, List, Set, Tuple, Optional, cast
+import threading
+from typing import Any, Dict, List, Literal, Set, Tuple, Optional, cast
 import os
 import logging
 
 from BaseClasses import ItemClassification, LocationProgressType, \
-    MultiWorld, Item, CollectionState, RegionType, \
-    Entrance, Tutorial
-from Options import AssembleOptions
+    MultiWorld, Item, CollectionState, Entrance, Tutorial
 from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
 from .options import ZillionStartChar, zillion_options, validate
@@ -48,25 +47,17 @@ class ZillionWorld(World):
     game = "Zillion"
     web = ZillionWebWorld()
 
-    option_definitions: Dict[str, AssembleOptions] = zillion_options
-    topology_present: bool = True  # indicate if world type has any meaningful layout/pathing
+    option_definitions = zillion_options
+    topology_present = True  # indicate if world type has any meaningful layout/pathing
 
     # map names to their IDs
-    item_name_to_id: Dict[str, int] = _item_name_to_id
-    location_name_to_id: Dict[str, int] = _loc_name_to_id
+    item_name_to_id = _item_name_to_id
+    location_name_to_id = _loc_name_to_id
 
     # increment this every time something in your world's names/id mappings changes.
     # While this is set to 0 in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
     # retrieved by clients on every connection.
-    data_version: int = 1
-
-    # NOTE: remote_items and remote_start_inventory are now available in the network protocol for the client to set.
-    # These values will be removed.
-    # if a world is set to remote_items, then it just needs to send location checks to the server and the server
-    # sends back the items
-    # if a world is set to remote_items = False, then the server never sends an item where receiver == finder,
-    # the client finds its own items in its own world.
-    remote_items: bool = False
+    data_version = 1
 
     logger: logging.Logger
 
@@ -101,19 +92,22 @@ class ZillionWorld(World):
     """
     my_locations: List[ZillionLocation] = []
     """ This is kind of a cache to avoid iterating through all the multiworld locations in logic. """
+    slot_data_ready: threading.Event
+    """ This event is set in `generate_output` when the data is ready for `fill_slot_data` """
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
         self.logger = logging.getLogger("Zillion")
         self.lsi = ZillionWorld.LogStreamInterface(self.logger)
         self.zz_system = System()
+        self.slot_data_ready = threading.Event()
 
     def _make_item_maps(self, start_char: Chars) -> None:
         _id_to_name, _id_to_zz_id, id_to_zz_item = make_id_to_others(start_char)
         self.id_to_zz_item = id_to_zz_item
 
     @classmethod
-    def stage_assert_generate(cls, world: MultiWorld) -> None:
+    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         """Checks that a game is capable of generating, usually checks for some base file like a ROM.
         Not run for unittests since they don't produce output"""
         rom_file = get_base_rom_path()
@@ -159,7 +153,7 @@ class ZillionWorld(World):
         all: Dict[str, ZillionRegion] = {}
         for here_zz_name, zz_r in self.zz_system.randomizer.regions.items():
             here_name = "Menu" if here_zz_name == "start" else zz_reg_name_to_reg_name(here_zz_name)
-            all[here_name] = ZillionRegion(zz_r, here_name, RegionType.Generic, here_name, p, w)
+            all[here_name] = ZillionRegion(zz_r, here_name, here_name, p, w)
             self.multiworld.regions.append(all[here_name])
 
         limited_skill = Req(gun=3, jump=3, skill=self.zz_system.randomizer.options.skill, hp=940, red=1, floppy=126)
@@ -255,13 +249,13 @@ class ZillionWorld(World):
             if group["game"] == "Zillion":
                 assert "item_pool" in group
                 item_pool = group["item_pool"]
-                to_stay = "JJ"
+                to_stay: Literal['Apple', 'Champ', 'JJ'] = "JJ"
                 if "JJ" in item_pool:
                     assert "players" in group
                     group_players = group["players"]
                     start_chars = cast(Dict[int, ZillionStartChar], getattr(multiworld, "start_char"))
                     players_start_chars = [
-                        (player, start_chars[player].get_current_option_name())
+                        (player, start_chars[player].current_option_name)
                         for player in group_players
                     ]
                     start_char_counts = Counter(sc for _, sc in players_start_chars)
@@ -338,6 +332,7 @@ class ZillionWorld(World):
         zz_patcher.write_locations(self.zz_system.randomizer.regions,
                                    zz_options.start_char,
                                    self.zz_system.randomizer.loc_name_2_pretty)
+        self.slot_data_ready.set()
         zz_patcher.all_fixes_and_options(zz_options)
         zz_patcher.set_external_item_interface(zz_options.start_char, zz_options.max_level)
         zz_patcher.set_multiworld_items(multi_items)
@@ -346,7 +341,7 @@ class ZillionWorld(World):
 
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use world.random here.
-        If you need any last-second randomization, use MultiWorld.slot_seeds[slot] instead."""
+        If you need any last-second randomization, use MultiWorld.per_slot_randoms[slot] instead."""
         self.finalize_item_locations()
 
         assert self.zz_system.patcher, "didn't get patcher from generate_early"
@@ -385,6 +380,7 @@ class ZillionWorld(World):
         assert self.zz_system.randomizer, "didn't get randomizer from generate_early"
 
         rescues: Dict[str, Any] = {}
+        self.slot_data_ready.wait()
         for i in (0, 1):
             if i in zz_patcher.rescue_locations:
                 ri = zz_patcher.rescue_locations[i]

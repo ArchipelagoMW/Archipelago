@@ -44,11 +44,11 @@
             "Dodongos Cavern Gossip Stone": "True"
         },
         "exits": {
-            "Dodongos Cavern Boss Area": "has_explosives"
+            "King Dodongo Boss Room": "has_explosives"
         }
     },
     {
-        "region_name": "Dodongos Cavern Boss Area",
+        "region_name": "King Dodongo Boss Room",
         "dungeon": "Dodongos Cavern",
         "locations": {
             "Dodongos Cavern MQ Under Grave Chest": "True",

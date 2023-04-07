@@ -3,19 +3,18 @@
 from Utils import output_path
 import argparse, os.path, json, sys, shutil, random, copy, requests
 
-from rando.RandoSettings import RandoSettings, GraphSettings
-from rando.RandoExec import RandoExec
-from graph.graph_utils import vanillaTransitions, vanillaBossesTransitions, GraphUtils, getAccessPoint
-from utils.parameters import Knows, Controller, easy, medium, hard, harder, hardcore, mania, infinity, text2diff, diff2text, appDir
-from rom.rom_patches import RomPatches
-from rom.rompatcher import RomPatcher
-from utils.utils import PresetLoader, loadRandoPreset, getDefaultMultiValues, getPresetDir
-from utils.version import displayedVersion
-from logic.smbool import SMBool
-from utils.doorsmanager import DoorsManager
-from logic.logic import Logic
+from worlds.sm.variaRandomizer.rando.RandoSettings import RandoSettings, GraphSettings
+from worlds.sm.variaRandomizer.rando.RandoExec import RandoExec
+from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils, getAccessPoint
+from worlds.sm.variaRandomizer.utils.parameters import Controller, easy, medium, hard, harder, hardcore, mania, infinity, text2diff, appDir
+from worlds.sm.variaRandomizer.rom.rom_patches import RomPatches
+from worlds.sm.variaRandomizer.rom.rompatcher import RomPatcher
+from worlds.sm.variaRandomizer.utils.utils import PresetLoader, loadRandoPreset, getDefaultMultiValues, getPresetDir
+from worlds.sm.variaRandomizer.utils.version import displayedVersion
+from worlds.sm.variaRandomizer.utils.doorsmanager import DoorsManager
+from worlds.sm.variaRandomizer.logic.logic import Logic
 
-import utils.log
+from worlds.sm.variaRandomizer.utils import log
 from worlds.sm.Options import StartLocation
 
 # we need to know the logic before doing anything else
@@ -304,8 +303,8 @@ class VariaRandomizer:
             print("plandoRando param requires output param")
             sys.exit(-1)
 
-        utils.log.init(args.debug)
-        logger = utils.log.get('Rando')
+        log.init(args.debug)
+        logger = log.get('Rando')
 
         Logic.factory(args.logic)
 
@@ -621,7 +620,7 @@ class VariaRandomizer:
         self.ctrlDict = { getattr(ctrl, button) : button for button in ctrlButton }
         args.moonWalk = ctrl.Moonwalk
 
-        plandoSettings = None
+        PlandoOptions = None
         if args.plandoRando is not None:
             forceArg('progressionSpeed', 'speedrun', "'Progression Speed' forced to speedrun")
             progSpeed = 'speedrun'
@@ -632,10 +631,10 @@ class VariaRandomizer:
             args.plandoRando = json.loads(args.plandoRando)
             RomPatches.ActivePatches[self.player] = args.plandoRando["patches"]
             DoorsManager.unserialize(args.plandoRando["doors"])
-            plandoSettings = {"locsItems": args.plandoRando['locsItems'], "forbiddenItems": args.plandoRando['forbiddenItems']}
+            PlandoOptions = {"locsItems": args.plandoRando['locsItems'], "forbiddenItems": args.plandoRando['forbiddenItems']}
         randoSettings = RandoSettings(self.maxDifficulty, progSpeed, progDiff, qty,
                                     restrictions, args.superFun, args.runtimeLimit_s,
-                                    plandoSettings, minDifficulty)
+                                    PlandoOptions, minDifficulty)
 
         # print some parameters for jm's stats
         if args.jm == True:

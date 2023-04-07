@@ -1,6 +1,7 @@
-from BaseClasses import Tutorial
-from ..AutoWorld import World, WebWorld
 from typing import Dict
+
+from BaseClasses import Tutorial
+from ..AutoWorld import WebWorld, World
 
 
 class Bk_SudokuWebWorld(WebWorld):
@@ -12,7 +13,7 @@ class Bk_SudokuWebWorld(WebWorld):
             description='A guide to playing BK Sudoku',
             language='English',
             file_name='setup_en.md',
-            link='guide/en',
+            link='setup/en',
             authors=['Jarno']
         )
     ]
@@ -24,10 +25,11 @@ class Bk_SudokuWorld(World):
     """
     game = "Sudoku"
     web = Bk_SudokuWebWorld()
+    data_version = 1
 
     item_name_to_id: Dict[str, int] = {}
     location_name_to_id: Dict[str, int] = {}
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld):
         raise Exception("BK Sudoku cannot be used for generating worlds, the client can instead connect to any other world")

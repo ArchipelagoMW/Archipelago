@@ -1,9 +1,9 @@
 import copy, logging
 from operator import attrgetter
-import utils.log
-from logic.smbool import SMBool, smboolFalse
-from utils.parameters import infinity
-from logic.helpers import Bosses
+from worlds.sm.variaRandomizer.utils import log
+from worlds.sm.variaRandomizer.logic.smbool import SMBool, smboolFalse
+from worlds.sm.variaRandomizer.utils.parameters import infinity
+from worlds.sm.variaRandomizer.logic.helpers import Bosses
 
 class Path(object):
     __slots__ = ( 'path', 'pdiff', 'distance' )
@@ -106,7 +106,7 @@ class AccessGraph(object):
                   'availAccessPoints' )
 
     def __init__(self, accessPointList, transitions, dotFile=None):
-        self.log = utils.log.get('Graph')
+        self.log = log.get('Graph')
         self.accessPoints = {}
         self.InterAreaTransitions = []
         self.EscapeAttributes = {
@@ -360,22 +360,6 @@ class AccessGraph(object):
         srcAccessPoint = self.accessPoints[srcAccessPointName]
         availAccessPoints = self.getAvailableAccessPoints(srcAccessPoint, smbm, maxDiff, item)
         can = destAccessPoint in availAccessPoints
-        # if not can:
-        #     self.log.debug("canAccess KO: avail = {}".format([ap.Name for ap in availAccessPoints.keys()]))
-        if item is not None:
-            smbm.removeItem(item)
-        #print("canAccess: {}".format(can))
-        return can
-
-        # test access from an access point to a list of others, given an optional item
-    def canAccessList(self, smbm, srcAccessPointName, destAccessPointNameList, maxDiff, item=None):
-        if item is not None:
-            smbm.addItem(item)
-        #print("canAccess: item: {}, src: {}, dest: {}".format(item, srcAccessPointName, destAccessPointName))
-        destAccessPointList = [self.accessPoints[destAccessPointName] for destAccessPointName in destAccessPointNameList]
-        srcAccessPoint = self.accessPoints[srcAccessPointName]
-        availAccessPoints = self.getAvailableAccessPoints(srcAccessPoint, smbm, maxDiff, item)
-        can = any(ap in availAccessPoints for ap in destAccessPointList)
         # if not can:
         #     self.log.debug("canAccess KO: avail = {}".format([ap.Name for ap in availAccessPoints.keys()]))
         if item is not None:

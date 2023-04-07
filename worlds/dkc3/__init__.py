@@ -12,7 +12,7 @@ from .Levels import level_list
 from .Rules import set_rules
 from .Names import ItemName, LocationName
 from .Client import DKC3SNIClient
-from ..AutoWorld import WebWorld, World
+from worlds.AutoWorld import WebWorld, World
 from .Rom import LocalRom, patch_rom, get_base_rom_path, DKC3DeltaPatch
 import Patch
 
@@ -55,7 +55,7 @@ class DKC3World(World):
         super().__init__(world, player)
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld: MultiWorld):
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
@@ -143,7 +143,7 @@ class DKC3World(World):
 
             self.active_level_list.append(LocationName.rocket_rush_region)
 
-            rompath = os.path.join(output_directory, f"{self.world.get_out_file_name_base(self.player)}.sfc")
+            rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rompath)
             self.rom_name = rom.name
 

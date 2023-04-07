@@ -1,15 +1,16 @@
-import sys, random, time, utils.log
+import sys, random, time
 
-from logic.logic import Logic
-from graph.graph_utils import GraphUtils, getAccessPoint
-from rando.Restrictions import Restrictions
-from rando.RandoServices import RandoServices
-from rando.GraphBuilder import GraphBuilder
-from rando.RandoSetup import RandoSetup
-from rando.Items import ItemManager
-from rando.ItemLocContainer import ItemLocation
-from utils.vcr import VCR
-from utils.doorsmanager import DoorsManager
+from worlds.sm.variaRandomizer.utils import log
+from worlds.sm.variaRandomizer.logic.logic import Logic
+from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils, getAccessPoint
+from worlds.sm.variaRandomizer.rando.Restrictions import Restrictions
+from worlds.sm.variaRandomizer.rando.RandoServices import RandoServices
+from worlds.sm.variaRandomizer.rando.GraphBuilder import GraphBuilder
+from worlds.sm.variaRandomizer.rando.RandoSetup import RandoSetup
+from worlds.sm.variaRandomizer.rando.Items import ItemManager
+from worlds.sm.variaRandomizer.rando.ItemLocContainer import ItemLocation
+from worlds.sm.variaRandomizer.utils.vcr import VCR
+from worlds.sm.variaRandomizer.utils.doorsmanager import DoorsManager
 
 # entry point for rando execution ("randomize" method)
 class RandoExec(object):
@@ -19,7 +20,7 @@ class RandoExec(object):
         self.vcr = vcr
         self.randoSettings = randoSettings
         self.graphSettings = graphSettings
-        self.log = utils.log.get('RandoExec')
+        self.log = log.get('RandoExec')
         self.player = player
 
     # processes settings to :

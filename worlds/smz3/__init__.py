@@ -5,7 +5,7 @@ import random
 import threading
 from typing import Dict, Set, TextIO
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, RegionType, CollectionState, \
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, \
     Tutorial
 from worlds.generic.Rules import set_rule
 from worlds.smz3.TotalSMZ3.Item import ItemType
@@ -16,6 +16,7 @@ from worlds.smz3.TotalSMZ3.Config import Config, GameMode, Goal, KeyShuffle, Mor
 from worlds.smz3.TotalSMZ3.Location import LocationType, locations_start_id, Location as TotalSMZ3Location
 from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWord, getWordArray
 from worlds.smz3.TotalSMZ3.WorldState import WorldState
+from worlds.smz3.TotalSMZ3.Region import IReward, IMedallionAccess
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
 from .Client import SMZ3SNIClient
 from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
@@ -74,9 +75,6 @@ class SMZ3World(World):
     location_name_to_id: Dict[str, int] = {key : locations_start_id + convertLocSMZ3IDToAPID(value.Id)
         for key, value in TotalSMZ3World(Config(), "", 0, "").locationLookup.items()}
     web = SMZ3Web()
-
-    remote_items: bool = False
-    remote_start_inventory: bool = False
 
     locationNamesGT: Set[str] = {loc.Name for loc in GanonsTower(None, None).Locations}
 
@@ -183,7 +181,7 @@ class SMZ3World(World):
         return itemType in progressionTypes
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld: MultiWorld):
         base_combined_rom = get_base_rom_bytes()
 
     def generate_early(self):
@@ -235,7 +233,8 @@ class SMZ3World(World):
         # SM G4 is logically required to access Ganon's Tower in SMZ3
         self.multiworld.completion_condition[self.player] = lambda state: \
             self.smz3World.GetRegion("Ganon's Tower").CanEnter(state.smz3state[self.player]) and \
-            self.smz3World.GetRegion("Ganon's Tower").TowerAscend(state.smz3state[self.player])
+            self.smz3World.GetRegion("Ganon's Tower").TowerAscend(state.smz3state[self.player]) and \
+            self.smz3World.GetRegion("Ganon's Tower").CanComplete(state.smz3state[self.player])
 
         for region in self.smz3World.Regions:
             entrance = self.multiworld.get_entrance('Menu' + "->" + region.Name, self.player)
@@ -245,12 +244,12 @@ class SMZ3World(World):
                 if self.multiworld.accessibility[self.player] != 'locations':
                     l.always_allow = lambda state, item, loc=loc: \
                         item.game == "SMZ3" and \
-                        loc.alwaysAllow(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World), state.smz3state[self.player])
+                        loc.alwaysAllow(item.item, state.smz3state[self.player])
                 old_rule = l.item_rule
                 l.item_rule = lambda item, loc=loc, region=region: (\
                     item.game != "SMZ3" or \
-                    loc.allow(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World), None) and \
-                        region.CanFill(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World))) and old_rule(item)
+                    loc.allow(item.item, None) and \
+                        region.CanFill(item.item)) and old_rule(item)
                 set_rule(l, lambda state, loc=loc: loc.Available(state.smz3state[self.player]))
 
     def create_regions(self):
@@ -483,9 +482,9 @@ class SMZ3World(World):
         return False
 
     def create_item(self, name: str) -> Item:
-        return SMZ3Item(name, 
+        return SMZ3Item(name,
                         ItemClassification.progression if SMZ3World.isProgression(TotalSMZ3Item.ItemType[name]) else ItemClassification.filler,
-                        TotalSMZ3Item.ItemType[name], self.item_name_to_id[name], 
+                        TotalSMZ3Item.ItemType[name], self.item_name_to_id[name],
                         self.player,
                         TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[name], self))
 
@@ -503,17 +502,6 @@ class SMZ3World(World):
 
             all_dungeonItems = self.smz3DungeonItems[:]
             fill_restrictive(self.multiworld, all_state, locations, all_dungeonItems, True, True)
-            # some small or big keys (those always_allow) can be unreachable in-game
-            # while logic still collects some of them (probably to simulate the player collecting pot keys in the logic), some others don't
-            # so we need to remove those exceptions as progression items
-            if self.multiworld.accessibility[self.player] != 'locations':
-                exception_item = [TotalSMZ3Item.ItemType.BigKeySW, TotalSMZ3Item.ItemType.BigKeySP, TotalSMZ3Item.ItemType.KeyTH]
-                for item in self.smz3DungeonItems:
-                    if item.item.Type in exception_item and item.location.always_allow(all_state, item) and not all_state.can_reach(item.location):
-                        item.classification = ItemClassification.filler
-                        item.item.Progression = False
-                        item.location.event = False
-                        self.unreachable.append(item.location)
         self.JunkFillGT(0.5)
 
     def get_pre_fill_items(self):
@@ -522,11 +510,40 @@ class SMZ3World(World):
         else:
             return []
 
+    def post_fill(self):
+        # some small or big keys (those always_allow) can be unreachable in-game
+        # while logic still collects some of them (probably to simulate the player collecting pot keys in the logic), some others don't
+        # so we need to remove those exceptions as progression items
+        if self.multiworld.accessibility[self.player] == 'items':
+            state = CollectionState(self.multiworld)
+            locs = [self.multiworld.get_location("Swamp Palace - Big Chest", self.player),
+                   self.multiworld.get_location("Skull Woods - Big Chest", self.player),
+                   self.multiworld.get_location("Tower of Hera - Big Key Chest", self.player)]
+            for loc in locs:
+                if (loc.item.player == self.player and loc.always_allow(state, loc.item)):
+                    loc.item.classification = ItemClassification.filler
+                    loc.item.item.Progression = False
+                    loc.item.location.event = False
+                    self.unreachable.append(loc)
+
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(self.junkItemsNames)
 
     def write_spoiler(self, spoiler_handle: TextIO):
-            self.multiworld.spoiler.unreachables.update(self.unreachable)
+        self.multiworld.spoiler.unreachables.update(self.unreachable)
+        player_name = f'{self.multiworld.get_player_name(self.player)}: ' if self.multiworld.players > 1 else ''
+        spoiler_handle.write('\n\nRewards:\n\n')
+        spoiler_handle.write('\n'.join([
+            f"{player_name}{region.Name}: {region.Reward.name}"
+            for region in self.smz3World.Regions
+            if isinstance(region, IReward)
+        ]))
+        spoiler_handle.write('\n\nMedallions:\n\n')
+        spoiler_handle.write('\n'.join([
+            f"{player_name}{region.Name}: {region.Medallion.name}"
+            for region in self.smz3World.Regions
+            if isinstance(region, IMedallionAccess)
+        ]))
 
     def JunkFillGT(self, factor):
         poolLength = len(self.multiworld.itempool)
@@ -620,8 +637,7 @@ class SMZ3World(World):
             self.smz3World.locationLookup[name].APLocation = newLoc
 
     def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):
-        ret = Region(name, RegionType.LightWorld, name, player)
-        ret.multiworld = world
+        ret = Region(name, player, world)
         if locations:
             for loc in locations:
                 location = self.locations[loc]

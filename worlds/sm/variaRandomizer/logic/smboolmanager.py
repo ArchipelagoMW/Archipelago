@@ -1,11 +1,11 @@
 # object to handle the smbools and optimize them
 
-from logic.cache import Cache
-from logic.smbool import SMBool, smboolFalse
-from logic.helpers import Bosses
-from logic.logic import Logic
-from utils.doorsmanager import DoorsManager
-from utils.parameters import Knows, isKnows
+from worlds.sm.variaRandomizer.logic.cache import Cache
+from worlds.sm.variaRandomizer.logic.smbool import SMBool, smboolFalse
+from worlds.sm.variaRandomizer.logic.helpers import Bosses
+from worlds.sm.variaRandomizer.logic.logic import Logic
+from worlds.sm.variaRandomizer.utils.doorsmanager import DoorsManager
+from worlds.sm.variaRandomizer.utils.parameters import Knows, isKnows
 import logging
 import sys
 
@@ -13,13 +13,15 @@ class SMBoolManager(object):
     items = ['ETank', 'Missile', 'Super', 'PowerBomb', 'Bomb', 'Charge', 'Ice', 'HiJump', 'SpeedBooster', 'Wave', 'Spazer', 'SpringBall', 'Varia', 'Plasma', 'Grapple', 'Morph', 'Reserve', 'Gravity', 'XRayScope', 'SpaceJump', 'ScrewAttack', 'Nothing', 'NoEnergy', 'MotherBrain', 'Hyper'] + Bosses.Golden4()
     countItems = ['Missile', 'Super', 'PowerBomb', 'ETank', 'Reserve']
 
-    def __init__(self, player=0, maxDiff=sys.maxsize, onlyBossLeft = False):
+    def __init__(self, player=0, maxDiff=sys.maxsize, onlyBossLeft = False, lastAP = 'Landing Site'):
         self._items = { }
         self._counts = { }
 
         self.player = player
         self.maxDiff = maxDiff
         self.onlyBossLeft = onlyBossLeft
+
+        self.lastAP = lastAP
 
         # cache related
         self.cacheKey = 0

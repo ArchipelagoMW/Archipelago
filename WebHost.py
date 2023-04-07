@@ -29,10 +29,15 @@ if not os.path.exists(configpath):  # fall back to config.yaml in home
 def get_app():
     register()
     app = raw_app
-    if os.path.exists(configpath):
+    if os.path.exists(configpath) and not app.config["TESTING"]:
         import yaml
         app.config.from_file(configpath, yaml.safe_load)
         logging.info(f"Updated config from {configpath}")
+    if not app.config["HOST_ADDRESS"]:
+        logging.info("Getting public IP, as HOST_ADDRESS is empty.")
+        app.config["HOST_ADDRESS"] = Utils.get_public_ipv4()
+        logging.info(f"HOST_ADDRESS was set to {app.config['HOST_ADDRESS']}")
+
     db.bind(**app.config["PONY"])
     db.generate_mapping(create_tables=True)
     return app
