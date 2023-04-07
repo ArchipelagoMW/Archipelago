@@ -63,8 +63,8 @@ ALL_ITEMS = [
     "Sun Crest",
     "Moon Crest",
     *PHOBEKINS,
-    *FILLER.keys(),
     "Power Seal",
+    *FILLER.keys(),
     *SHOP_ITEMS,
 ]
 
