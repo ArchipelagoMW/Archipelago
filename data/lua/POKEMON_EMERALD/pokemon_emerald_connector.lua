@@ -12,7 +12,7 @@ local GAME_STATE_UNSAFE = 0
 local GAME_STATE_SAFE = 1
 
 local bizhawk_version = client.getversion()
-local is27To28 = (bizhawk_version:sub(1,3)=="2.7") or (bizhawk_version:sub(1,3)=="2.8")
+local is27To28 = (bizhawk_version:sub(1,3) == "2.7") or (bizhawk_version:sub(1,3) == "2.8")
 
 local ap_socket = nil
 
@@ -81,10 +81,10 @@ function try_write_next_item ()
 
         next_item = received_items[last_received_item_index + 1]
         if (next_item ~= nil) then
-            memory.write_u16_le(archipelago_received_item_address + 0, next_item,                    "EWRAM")
+            memory.write_u16_le(archipelago_received_item_address + 0, next_item[0],                 "EWRAM")
             memory.write_u16_le(archipelago_received_item_address + 2, last_received_item_index + 1, "EWRAM")
             memory.write_u8(    archipelago_received_item_address + 4, 1,                            "EWRAM")
-            memory.write_u8(    archipelago_received_item_address + 5, 1,                            "EWRAM")
+            memory.write_u8(    archipelago_received_item_address + 5, next_item[1],                 "EWRAM")
         end
     end
 end
@@ -94,7 +94,7 @@ end
 function create_message ()
     local data = {}
 
-    data["script_version"] = 1
+    data["script_version"] = 2
 
     if (current_game_state == GAME_STATE_SAFE) then
         local save_block_address = memory.read_u32_le(save_block_ptr_address, "IWRAM") - ewram_start
