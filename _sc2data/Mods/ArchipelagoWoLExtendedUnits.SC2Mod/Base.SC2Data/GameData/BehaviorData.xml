@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
-    <CBehaviorBuff id="KillsToCaster2">
-        <InfoFlags index="Hidden" value="1"/>
-        <KillCredit Value="Caster"/>
-    </CBehaviorBuff>
     <CBehaviorBuff id="LiberatorInitialMovable">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -22,13 +18,5 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <RemoveValidatorArray value="HasNoLiberatorYoink"/>
         <RemoveValidatorArray value="IsNotRecallingCombine"/>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="ScavengingSystemsMechDeath2">
-        <InfoFlags index="Hidden" value="1"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Requirements value="ScavengingSystemsResearched"/>
-        <Modification>
-            <DeathResponse Chance="1" Effect="ScavengingSystemsSearchArea"/>
-        </Modification>
     </CBehaviorBuff>
 </Catalog>

@@ -145,45 +145,6 @@
         <Race value="Terr"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
     </CUnit>
-    <CUnit id="SpiderMine2">
-        <DeathRevealRadius value="3"/>
-        <Race value="Terr"/>
-        <FlagArray index="Uncommandable" value="1"/>
-        <FlagArray index="UseLineOfSight" value="1"/>
-        <FlagArray index="NoScore" value="1"/>
-        <PlaneArray index="Ground" value="1"/>
-        <Collide index="Burrow" value="1"/>
-        <Collide index="Ground" value="1"/>
-        <Collide index="Small" value="1"/>
-        <Attributes index="Light" value="1"/>
-        <Attributes index="Mechanical" value="1"/>
-        <LifeStart value="25"/>
-        <LifeMax value="25"/>
-        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
-        <Speed value="9"/>
-        <Acceleration value="1000"/>
-        <StationaryTurningRate value="2292.8906"/>
-        <Sight value="4"/>
-        <CostResource index="Minerals" value="25"/>
-        <RepairTime value="33.3332"/>
-        <AbilArray Link="VultureSpiderMineBurrow"/>
-        <AbilArray Link="stop"/>
-        <AbilArray Link="attack"/>
-        <AbilArray Link="move"/>
-        <BehaviorArray Link="VultureSpiderMineBurrowFirst"/>
-        <WeaponArray Link="VultureSpiderMines"/>
-        <Radius value="0.125"/>
-        <SeparationRadius value="0"/>
-        <SubgroupPriority value="15"/>
-        <MinimapRadius value="0.25"/>
-        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
-        <TacticalAI value="SpiderMineVulture"/>
-        <GlossaryCategory value="Unit/Category/TerranUnits"/>
-        <GlossaryPriority value="160"/>
-        <HotkeyCategory value="Unit/Category/TerranStory"/>
-        <KillDisplay value="Never"/>
-        <RankDisplay value="Never"/>
-    </CUnit>
     <CUnit id="Starport">
         <CardLayouts index="0">
             <LayoutButtons index="13" Face="TechReactor" Type="AbilCmd" AbilCmd="StarportAddOns,Build4" Row="2" Column="0"/>
@@ -206,8 +167,8 @@
         <Race value="Terr"/>
         <Mob value="Multiplayer"/>
         <FlagArray index="UseLineOfSight" value="1"/>
-        <FlagArray index="ArmySelect" value="1"/>
         <FlagArray index="AIThreatAir" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
         <PlaneArray index="Air" value="1"/>
         <Collide index="Flying" value="1"/>
         <Attributes index="Armored" value="1"/>
@@ -256,7 +217,7 @@
         <Mover value="ValkyrieSCBWWeapon@Mover"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
-    <CUnitHero id="Vulture2">
+    <CUnitHero id="JimRaynorVulture">
         <DeathRevealRadius value="3"/>
         <Race value="Terr"/>
         <Mob value="Classic"/>
@@ -286,9 +247,9 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
-        <AbilArray Link="VultureSpiderMines2"/>
-        <AbilArray Link="MakeVultureSpiderMines2"/>
-        <AbilArray Link="VultureQueue32"/>
+        <AbilArray Link="VultureSpiderMines"/>
+        <AbilArray Link="MakeVultureSpiderMines"/>
+        <AbilArray Link="VultureQueue3"/>
         <BehaviorArray Link="ScavengingSystemsMechDeath"/>
         <WeaponArray Link="RaynorFragmentationGrenade"/>
         <CardLayouts>
@@ -297,17 +258,10 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons Face="SpiderMine3" Type="AbilCmd" AbilCmd="VultureSpiderMines2,0" Row="2" Column="0"/>
-            <LayoutButtons>
-                <Face value="CerberusMines3"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,0"/>
-                <Requirements value="UseCerberusMines4"/>
-                <Row value="2"/>
-                <Column value="2"/>
-            </LayoutButtons>
-            <LayoutButtons Face="SpiderMineReplenish3" Type="AbilCmd" AbilCmd="MakeVultureSpiderMines2,0" Row="2" Column="1"/>
-            <LayoutButtons Face="Cancel2" Type="AbilCmd" AbilCmd="VultureQueue32,0" Row="2" Column="4"/>
+            <LayoutButtons Face="SpiderMine" Type="AbilCmd" AbilCmd="VultureSpiderMines,0" Row="2" Column="0"/>
+            <LayoutButtons Face="CerberusMines" Type="Passive" AbilCmd="255,0" Row="2" Column="2"/>
+            <LayoutButtons Face="SpiderMineReplenish" Type="AbilCmd" AbilCmd="MakeVultureSpiderMines,0" Row="2" Column="1"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="VultureQueue3,0" Row="2" Column="4"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
@@ -328,9 +282,4 @@
         <GlossaryWeakArray value="SiegeTank"/>
         <HotkeyCategory value="Unit/Category/TerranStory"/>
     </CUnitHero>
-    <CUnit id="VultureWeapon2" parent="MISSILE">
-        <Race value="Terr"/>
-        <Mover value="MissileDefault"/>
-        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
-    </CUnit>
 </Catalog>

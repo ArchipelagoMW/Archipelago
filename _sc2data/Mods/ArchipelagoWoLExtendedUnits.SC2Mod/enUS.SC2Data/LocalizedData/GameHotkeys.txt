@@ -1,9 +1,4 @@
-﻿Button/Hotkey/Cancel2=Escape
-Button/Hotkey/Liberator=T
+﻿Button/Hotkey/Liberator=T
 Button/Hotkey/LiberatorAAMode=D
 Button/Hotkey/LiberatorAGMode=E
-Button/Hotkey/SpiderMine2=E
-Button/Hotkey/SpiderMine3=E
-Button/Hotkey/SpiderMineReplenish2=R
-Button/Hotkey/SpiderMineReplenish3=R
 Button/Hotkey/ValkyrieSCBW=K

@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
-    <CEffectApplyBehavior id="KillsToCaster2">
-        <EditorCategories value="Race:Terran"/>
-        <Behavior value="KillsToCaster"/>
-    </CEffectApplyBehavior>
-    <CEffectApplyBehavior id="KillsToCaster3">
-        <EditorCategories value="Race:Terran"/>
-        <Behavior value="KillsToCaster"/>
-    </CEffectApplyBehavior>
     <CEffectDamage id="LiberatorAGDamage" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>
         <ImpactLocation Value="TargetUnit"/>
@@ -161,24 +153,6 @@
             <Flags index="ClearTargetOnAimComplete" value="1"/>
         </ModifyTurret>
     </CEffectModifyUnit>
-    <CEffectModifyUnit id="ReplenishNanoConstructor2">
-        <ImpactUnit Value="Source"/>
-        <Cost Abil="MakeVultureSpiderMines,Specialize1" ChargeCountUse="-1"/>
-    </CEffectModifyUnit>
-    <CEffectCreateUnit id="SpawnSpiderMine2">
-        <EditorCategories value="Race:Terran"/>
-        <WhichLocation Value="TargetPoint"/>
-        <CreateFlags index="ProvideFood" value="0"/>
-        <CreateFlags index="UseFood" value="0"/>
-        <SpawnEffect value="KillsToCaster3"/>
-        <SpawnUnit value="SpiderMine2"/>
-    </CEffectCreateUnit>
-    <CEffectSet id="SpawnSpiderMineSet2">
-        <EditorCategories value="Race:Terran"/>
-        <EffectArray value="SpawnSpiderMine2"/>
-        <EffectArray value="ReplenishNanoConstructor2"/>
-        <TargetLocationType value="UnitOrPoint"/>
-    </CEffectSet>
     <CEffectCreatePersistent id="ValkyrieSCBWWeapon@CP">
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetUnit"/>
@@ -206,12 +180,12 @@
         <EffectArray value="ValkyrieSCBWWeapon@LM"/>
         <EffectArray value="ValkyrieSCBWWeapon@LM"/>
     </CEffectSet>
-    <CEffectLaunchMissile id="Vulture2">
+    <CEffectLaunchMissile id="JimRaynorVultureWeaponLaunch">
         <EditorCategories value="Race:Terran"/>
-        <ImpactEffect value="VultureU2"/>
-        <AmmoUnit value="VultureWeapon2"/>
+        <ImpactEffect value="JimRaynorVultureWeaponDamage"/>
+        <AmmoUnit value="VultureWeapon"/>
     </CEffectLaunchMissile>
-    <CEffectDamage id="VultureU2" parent="DU_WEAP_MISSILE">
+    <CEffectDamage id="JimRaynorVultureWeaponDamage" parent="DU_WEAP_MISSILE">
         <EditorCategories value="Race:Terran"/>
         <Amount value="30"/>
     </CEffectDamage>

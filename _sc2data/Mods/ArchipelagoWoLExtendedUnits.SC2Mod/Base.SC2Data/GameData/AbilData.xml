@@ -60,26 +60,7 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
-    <CAbilSpecialize id="MakeVultureSpiderMines2">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Activity value="UI/SpiderMineBuilding"/>
-        <InfoArray index="Specialize1" Time="12" Effect="ReplenishMines">
-            <Resource index="Minerals" value="15"/>
-            <Display index="Minerals" value="1"/>
-            <Charge>
-                <CountMax value="3"/>
-                <CountUse value="1"/>
-                <HideCount value="1"/>
-                <Location value="Unit"/>
-            </Charge>
-            <Button DefaultButtonFace="SpiderMineReplenish" Requirements="UseNanoConstructor"/>
-            <Flags index="AutoCast" value="1"/>
-        </InfoArray>
-        <Alert value="BuildComplete"/>
-        <Flags index="BestUnit" value="0"/>
-    </CAbilSpecialize>
     <CAbilTrain id="TrainStarportAdditionalUnits" parent="StarportTrain">
-        <!-- Work around bug training unit in pairs when there are 9+ entries in single ability -->
         <Name value="Abil/Name/TrainStarportAdditionalUnits"/>
         <InfoArray index="Train1" Time="60">
             <Charge Link="Abil/StarportTrain2"/>
@@ -119,39 +100,4 @@
             <Button State="Restricted"/>
         </InfoArray>
     </CAbilTrain>
-    <CAbilQueue id="VultureQueue32">
-        <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
-        <QueueSize value="3"/>
-        <Flags index="Passive" value="1"/>
-    </CAbilQueue>
-    <CAbilEffectTarget id="VultureSpiderMines2">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="SpawnSpiderMineSet2"/>
-        <Cost>
-            <Charge>
-                <CountMax value="3"/>
-                <CountStart value="3"/>
-                <CountUse value="1"/>
-                <Location value="Unit"/>
-            </Charge>
-        </Cost>
-        <Placeholder value="SpiderMine"/>
-        <Range value="3"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SpiderMine"/>
-    </CAbilEffectTarget>
-    <CAbilAttack id="attack2">
-        <TargetMessage value="Abil/TargetMessage/attack2"/>
-        <MinAttackSpeedMultiplier value="0.25"/>
-        <MaxAttackSpeedMultiplier value="128"/>
-    </CAbilAttack>
-    <CAbilMove id="move2">
-        <FleeRange value="5"/>
-        <FleeTime value="5"/>
-        <FollowRangeSlop value="1"/>
-        <FollowAcquireRange value="6"/>
-        <MinPatrolDistance value="1"/>
-    </CAbilMove>
-    <CAbilStop id="stop2">
-        <CmdButtonArray index="HoldFire" DefaultButtonFace="HoldFireSpecial"/>
-    </CAbilStop>
 </Catalog>

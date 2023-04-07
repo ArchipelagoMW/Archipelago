@@ -1,22 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
-    <CButton id="Cancel2">
-        <Icon value="Assets\Textures\btn-command-cancel.dds"/>
-        <AlertIcon value="Assets\Textures\btn-command-cancel.dds"/>
-        <EditorCategories value="Race:Neutral"/>
-        <TintRacially value="1"/>
-        <Universal value="1"/>
-    </CButton>
-    <CButton id="CerberusMines2">
-        <Icon value="Assets\Textures\btn-techupgrade-terran-cerberusmine.dds"/>
-        <EditorCategories value="Race:Terran"/>
-        <TintRacially value="1"/>
-    </CButton>
-    <CButton id="CerberusMines3">
-        <Icon value="Assets\Textures\btn-techupgrade-terran-cerberusmine.dds"/>
-        <EditorCategories value="Race:Terran"/>
-        <TintRacially value="1"/>
-    </CButton>
     <CButton id="Liberator">
         <Icon value="Assets\Textures\btn-unit-terran-liberator.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-liberator.dds"/>
@@ -55,26 +38,6 @@
     <CButton id="ResearchLiberatorAGMode">
         <Icon value="Assets\Textures\btn-upgrade-terran-liberator-agmode.dds"/>
         <AlertIcon value="Assets\Textures\btn-upgrade-terran-liberator-agmode.dds"/>
-        <EditorCategories value="Race:Terran"/>
-    </CButton>
-    <CButton id="SpiderMine2">
-        <Icon value="Assets\Textures\btn-ability-terran-spidermine.dds"/>
-        <AlertIcon value="Assets\Textures\btn-ability-terran-spidermine.dds"/>
-        <EditorCategories value="Race:Terran"/>
-    </CButton>
-    <CButton id="SpiderMine3">
-        <Icon value="Assets\Textures\btn-ability-terran-spidermine.dds"/>
-        <AlertIcon value="Assets\Textures\btn-ability-terran-spidermine.dds"/>
-        <EditorCategories value="Race:Terran"/>
-    </CButton>
-    <CButton id="SpiderMineReplenish2">
-        <Icon value="Assets\Textures\btn-techupgrade-terran-replenishablemagazine.dds"/>
-        <AlertIcon value="Assets\Textures\btn-unit-terran-spidermine.dds"/>
-        <EditorCategories value="Race:Terran"/>
-    </CButton>
-    <CButton id="SpiderMineReplenish3">
-        <Icon value="Assets\Textures\btn-techupgrade-terran-replenishablemagazine.dds"/>
-        <AlertIcon value="Assets\Textures\btn-unit-terran-spidermine.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="ValkyrieSCBW">

@@ -29,37 +29,18 @@
         <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <Range value="7"/>
         <RangeSlop value="0"/>
-        <Period value="3.0"/>
+        <Period value="3"/>
         <Backswing value="0.25"/>
         <Effect value="ValkyrieSCBWWeapon@CP"/>
-    </CWeaponLegacy>
-    <CWeaponLegacy id="Vulture2">
-        <EditorCategories value="Race:Terran"/>
-        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
-        <DisplayEffect value="VultureU2"/>
-        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
-        <Range value="6"/>
-        <Period value="1.694"/>
-        <Backswing value="0"/>
-    </CWeaponLegacy>
-    <CWeaponLegacy id="Vulture3">
-        <EditorCategories value="Race:Terran"/>
-        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
-        <DisplayEffect value="VultureU2"/>
-        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
-        <Range value="6"/>
-        <Period value="1.694"/>
-        <Backswing value="0"/>
-        <Effect value="Vulture2"/>
     </CWeaponLegacy>
     <CWeaponLegacy id="RaynorFragmentationGrenade">
         <EditorCategories value="Race:Terran"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
-        <DisplayEffect value="VultureU2"/>
+        <DisplayEffect value="JimRaynorVultureWeaponDamage"/>
         <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <Range value="6"/>
         <Period value="1"/>
         <Backswing value="0"/>
-        <Effect value="Vulture2"/>
+        <Effect value="JimRaynorVultureWeaponLaunch"/>
     </CWeaponLegacy>
 </Catalog>

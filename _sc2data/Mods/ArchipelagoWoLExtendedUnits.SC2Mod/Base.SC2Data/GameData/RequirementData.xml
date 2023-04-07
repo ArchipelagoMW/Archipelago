@@ -21,16 +21,4 @@
         <NodeArray index="Use" Link="CountUnitFusionCoreCompleteOnly"/>
         <NodeArray index="Show" Link="NotCountUpgradeLiberatorAGRangeUpgradeQueuedOrBetter"/>
     </CRequirement>
-    <CRequirement id="UseCerberusMines2">
-        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Show" Link="CountUpgradeCerberusMinesCompleteOnly"/>
-    </CRequirement>
-    <CRequirement id="UseCerberusMines3">
-        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Show" Link="CountUpgradeCerberusMinesCompleteOnly"/>
-    </CRequirement>
-    <CRequirement id="UseCerberusMines4">
-        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Show" Link="CountUpgradeCerberusMinesCompleteOnly"/>
-    </CRequirement>
 </Catalog>

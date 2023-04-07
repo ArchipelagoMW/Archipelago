@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
-    <CUpgrade default="1" id="TerranVehicleArmorsVanadiumPlating">
-        <EffectArray Reference="Unit,Vulture2,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,Vulture2,LifeArmor" Value="1"/>
-    </CUpgrade>
-    <CUpgrade default="1" id="TerranVehicleWeaponsUltraCapacitors">
-        <EffectArray Reference="Effect,VultureU2,Amount" Value="2"/>
-        <EffectArray Reference="Weapon,RaynorFragmentationGrenade,RateMultiplier" Value="0.05"/>
-        <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
-    </CUpgrade>
     <CUpgrade id="LiberatorAGRangeUpgrade">
         <Icon value="Assets\Textures\btn-upgrade-terran-advanceballistics.dds"/>
         <ScoreAmount value="300"/>
@@ -30,8 +21,8 @@
         <AffectedUnitArray value="Liberator"/>
     </CUpgrade>
     <CUpgrade id="RegenerativeBioSteel">
-        <EffectArray Operation="Set" Reference="Unit,Vulture2,LifeRegenDelay" Value="3.000000"/>
-        <EffectArray Operation="Set" Reference="Unit,Vulture2,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,JimRaynorVulture,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,JimRaynorVulture,LifeRegenRate" Value="0.601500"/>
         <EffectArray Operation="Set" Reference="Unit,Liberator,LifeRegenDelay" Value="3.000000"/>
         <EffectArray Operation="Set" Reference="Unit,Liberator,LifeRegenRate" Value="0.601500"/>
         <EffectArray Operation="Set" Reference="Unit,LiberatorAG,LifeRegenDelay" Value="3.000000"/>
@@ -240,65 +231,65 @@
         <EffectArray Operation="Set" Reference="Weapon,ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleArmorsLevel1">
-        <EffectArray Reference="Unit,Vulture2,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,Vulture2,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleArmorsLevel2">
-        <EffectArray Reference="Unit,Vulture2,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,Vulture2,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleArmorsLevel3">
-        <EffectArray Reference="Unit,Vulture2,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,Vulture2,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleArmorsVanadiumPlatingLevel1">
-        <EffectArray Reference="Unit,Vulture2,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,Vulture2,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleArmorsVanadiumPlatingLevel2">
-        <EffectArray Reference="Unit,Vulture2,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,Vulture2,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleArmorsVanadiumPlatingLevel3">
-        <EffectArray Reference="Unit,Vulture2,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,Vulture2,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <AffectedUnitArray value="Vulture2"/>
+        <AffectedUnitArray value="JimRaynorVulture"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleWeaponsLevel1">
-        <EffectArray Reference="Effect,VultureU2,Amount" Value="2"/>
+        <EffectArray Reference="Effect,JimRaynorVultureWeaponDamage,Amount" Value="2"/>
         <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleWeaponsLevel2">
-        <EffectArray Reference="Effect,VultureU2,Amount" Value="2"/>
+        <EffectArray Reference="Effect,JimRaynorVultureWeaponDamage,Amount" Value="2"/>
         <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleWeaponsLevel3">
-        <EffectArray Reference="Effect,VultureU2,Amount" Value="2"/>
+        <EffectArray Reference="Effect,JimRaynorVultureWeaponDamage,Amount" Value="2"/>
         <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleWeaponsUltraCapacitorsLevel1">
-        <EffectArray Reference="Effect,VultureU2,Amount" Value="2"/>
+        <EffectArray Reference="Effect,JimRaynorVultureWeaponDamage,Amount" Value="2"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
         <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleWeaponsUltraCapacitorsLevel2">
-        <EffectArray Reference="Effect,VultureU2,Amount" Value="2"/>
+        <EffectArray Reference="Effect,JimRaynorVultureWeaponDamage,Amount" Value="2"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
         <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleWeaponsUltraCapacitorsLevel3">
-        <EffectArray Reference="Effect,VultureU2,Amount" Value="2"/>
+        <EffectArray Reference="Effect,JimRaynorVultureWeaponDamage,Amount" Value="2"/>
         <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,RateMultiplier" Value="0.05"/>

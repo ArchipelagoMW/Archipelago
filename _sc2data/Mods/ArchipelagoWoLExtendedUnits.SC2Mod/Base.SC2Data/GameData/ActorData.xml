@@ -1,95 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
-    <CActorModel id="GenericAttackDamageModel2" parent="ModelAnimationStyleOneShotNoOrphan">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Inherits index="Visibility" value="1"/>
-        <Model value="GenericAttackModel"/>
-        <ModelFlags index="AllowHitTest" value="0"/>
-    </CActorModel>
-    <CActorModel id="GenericAttackDamageModel3" parent="ModelAnimationStyleOneShotNoOrphan">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Inherits index="Visibility" value="1"/>
-        <Model value="GenericAttackModel"/>
-        <ModelFlags index="AllowHitTest" value="0"/>
-    </CActorModel>
-    <CActorModel id="GenericAttackDamageModel4" parent="ModelAnimationStyleOneShotNoOrphan">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Inherits index="Visibility" value="1"/>
-        <Model value="GenericAttackModel"/>
-        <ModelFlags index="AllowHitTest" value="0"/>
-    </CActorModel>
-    <CActorSound id="GenericAttackDamageSound2" parent="SoundOneShot">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Sound value="GenericAttackSound"/>
-    </CActorSound>
-    <CActorSound id="GenericAttackDamageSound3" parent="SoundOneShot">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Sound value="GenericAttackSound"/>
-    </CActorSound>
-    <CActorSound id="GenericAttackDamageSound4" parent="SoundOneShot">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Sound value="GenericAttackSound"/>
-    </CActorSound>
-    <CActorModel id="GenericAttackImpactModel2" parent="ModelAnimationStyleOneShotNoOrphan">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Inherits index="Visibility" value="1"/>
-        <Model value="GenericAttackModel"/>
-        <ModelFlags index="AllowHitTest" value="0"/>
-    </CActorModel>
-    <CActorModel id="GenericAttackImpactModel3" parent="ModelAnimationStyleOneShotNoOrphan">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Inherits index="Visibility" value="1"/>
-        <Model value="GenericAttackModel"/>
-        <ModelFlags index="AllowHitTest" value="0"/>
-    </CActorModel>
-    <CActorModel id="GenericAttackImpactModel4" parent="ModelAnimationStyleOneShotNoOrphan">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Inherits index="Visibility" value="1"/>
-        <Model value="GenericAttackModel"/>
-        <ModelFlags index="AllowHitTest" value="0"/>
-    </CActorModel>
-    <CActorSound id="GenericAttackImpactSound2" parent="SoundOneShot">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Sound value="GenericAttackSound"/>
-    </CActorSound>
-    <CActorSound id="GenericAttackImpactSound3" parent="SoundOneShot">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Sound value="GenericAttackSound"/>
-    </CActorSound>
-    <CActorSound id="GenericAttackImpactSound4" parent="SoundOneShot">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Sound value="GenericAttackSound"/>
-    </CActorSound>
-    <CActorModel id="GenericAttackLaunchModel2" parent="ModelAnimationStyleOneShotNoOrphan">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Inherits index="Visibility" value="1"/>
-        <Model value="GenericAttackModel"/>
-        <ModelFlags index="AllowHitTest" value="0"/>
-    </CActorModel>
-    <CActorModel id="GenericAttackLaunchModel3" parent="ModelAnimationStyleOneShotNoOrphan">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Inherits index="Visibility" value="1"/>
-        <Model value="GenericAttackModel"/>
-        <ModelFlags index="AllowHitTest" value="0"/>
-    </CActorModel>
-    <CActorModel id="GenericAttackLaunchModel4" parent="ModelAnimationStyleOneShotNoOrphan">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Inherits index="Visibility" value="1"/>
-        <Model value="GenericAttackModel"/>
-        <ModelFlags index="AllowHitTest" value="0"/>
-    </CActorModel>
-    <CActorSound id="GenericAttackLaunchSound2" parent="SoundOneShot">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Sound value="GenericAttackSound"/>
-    </CActorSound>
-    <CActorSound id="GenericAttackLaunchSound3" parent="SoundOneShot">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Sound value="GenericAttackSound"/>
-    </CActorSound>
-    <CActorSound id="GenericAttackLaunchSound4" parent="SoundOneShot">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Sound value="GenericAttackSound"/>
-    </CActorSound>
     <CActorUnit id="Liberator" parent="GenericUnitBase" unitName="Liberator">
         <Aliases value="_UnitLarge"/>
         <Macros value="PhysicsDeathsSwarmAir"/>
@@ -479,91 +389,16 @@
         <ImpactMap index="None" Model="ValkyrieSCBWWeapon@Impact" Sound="ValkyrieSCBWWeapon@Impact"/>
     </CActorAction>
     <CActorMissile id="ValkyrieSCBWWeapon@Missile" parent="GenericAttackMissile" unitName="ValkyrieSCBWWeapon@Missile"/>
-    <CActorUnit id="Vulture2" parent="GenericUnitStandard" unitName="JimRaynorVulture">
+    <CActorUnit id="JimRaynorVulture" parent="GenericUnitStandard" unitName="JimRaynorVulture">
         <Aliases value="_UnitMedium"/>
         <Macros value="UnloadDropAnim"/>
-        <Model value="Vulture2"/>
-        <BuildModel value="Vulture2"/>
-        <DeathArray index="Normal" ModelLink="VultureDeath2" SoundLink="Vulture_Explode"/>
-        <DeathCustoms index="0" ModelLink="ZergSmallUnitDeathLow2" Name="AntiGravGeneric"/>
-        <DeathCustoms index="1" ModelLink="ProtossSmallUnitDeathLow2" Name="AntiGravProtoss"/>
-        <DeathCustoms index="2" ModelLink="TerranSmallUnitDeathLow2" Name="AntiGravTerran"/>
-        <DeathCustoms index="3" ModelLink="ZergSmallUnitDeathLow2" Name="AntiGravZerg"/>
-        <DeathCustoms index="4" ModelLink="Invisible2" Name="Vortex"/>
-        <PlacementModel value="Vulture2"/>
-        <PortraitModel value="VulturePortrait2"/>
-        <AbilSoundArray AbilCmd="VultureSpiderMines2,0" Sound="Vulture_SpiderMinePlace"/>
-        <BarOffset value="80"/>
-        <BarWidth value="102"/>
-        <GroupIcon>
-            <Image value="Assets\Textures\Wireframe-Terran-Vulture.dds"/>
-        </GroupIcon>
-        <HeroIcon value="Assets\Textures\btn-unit-terran-vulture.dds"/>
-        <HighlightTooltip value="Unit/Name/Vulture2"/>
-        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
-        <NameOffset value="40"/>
-        <SoundArray index="Ready" value="Vulture_Ready"/>
-        <SoundArray index="Help" value="Vulture_Help"/>
-        <SoundArray index="What" value="Vulture_What"/>
-        <SoundArray index="Yes" value="Vulture_Yes"/>
-        <SoundArray index="Attack" value="Vulture_Attack"/>
-        <SoundArray index="Pissed" value="Vulture_Pissed"/>
-        <SoundArray index="Movement" value="Vulture_Movement"/>
-        <UnitIcon value="Assets\Textures\btn-unit-terran-vulture.dds"/>
-        <Wireframe>
-            <Image value="Assets\Textures\Wireframe-Terran-Vulture.dds"/>
-        </Wireframe>
-    </CActorUnit>
-    <CActorUnit id="Vulture3" parent="GenericUnitStandard" unitName="JimRaynorVulture">
-        <Aliases value="_UnitMedium"/>
-        <Macros value="UnloadDropAnim"/>
-        <Model value="Vulture3"/>
-        <BuildModel value="Vulture3"/>
-        <DeathArray index="Normal" ModelLink="VultureDeath3" SoundLink="Vulture_Explode2"/>
-        <DeathCustoms index="0" ModelLink="ZergSmallUnitDeathLow3" Name="AntiGravGeneric"/>
-        <DeathCustoms index="1" ModelLink="ProtossSmallUnitDeathLow3" Name="AntiGravProtoss"/>
-        <DeathCustoms index="2" ModelLink="TerranSmallUnitDeathLow3" Name="AntiGravTerran"/>
-        <DeathCustoms index="3" ModelLink="ZergSmallUnitDeathLow3" Name="AntiGravZerg"/>
-        <DeathCustoms index="4" ModelLink="Invisible3" Name="Vortex"/>
-        <PlacementModel value="Vulture3"/>
-        <PortraitModel value="VulturePortrait3"/>
-        <AbilSoundArray AbilCmd="VultureSpiderMines3,0" Sound="Vulture_SpiderMinePlace2"/>
-        <BarOffset value="80"/>
-        <BarWidth value="102"/>
-        <GroupIcon>
-            <Image value="Assets\Textures\Wireframe-Terran-Vulture.dds"/>
-        </GroupIcon>
-        <HeroIcon value="Assets\Textures\btn-unit-terran-vulture.dds"/>
-        <HighlightTooltip value="Unit/Name/Vulture3"/>
-        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
-        <NameOffset value="40"/>
-        <SoundArray index="Ready" value="Raynor_Ready2"/>
-        <SoundArray index="Help" value="Raynor_Help2"/>
-        <SoundArray index="What" value="Raynor_What2"/>
-        <SoundArray index="Yes" value="Raynor_Yes2"/>
-        <SoundArray index="Attack" value="Raynor_Attack2"/>
-        <SoundArray index="Pissed" value="Raynor_Pissed2"/>
-        <SoundArray index="Movement" value="Vulture_Movement2"/>
-        <UnitIcon value="Assets\Textures\btn-unit-terran-vulture.dds"/>
-        <Wireframe>
-            <Image value="Assets\Textures\Wireframe-Terran-Vulture.dds"/>
-        </Wireframe>
-    </CActorUnit>
-    <CActorUnit id="Vulture4" parent="GenericUnitStandard" unitName="Vulture2">
-        <Aliases value="_UnitMedium"/>
-        <Macros value="UnloadDropAnim"/>
-        <Model value="Vulture4"/>
+        <Model value="Vulture"/>
         <Scale value="1.100000"/>
         <BuildModel value="RaynorCommando"/>
-        <DeathArray index="Normal" ModelLink="VultureDeath4" SoundLink="Vulture_Explode2"/>
-        <DeathCustoms index="0" ModelLink="ZergSmallUnitDeathLow4" Name="AntiGravGeneric"/>
-        <DeathCustoms index="1" ModelLink="ProtossSmallUnitDeathLow4" Name="AntiGravProtoss"/>
-        <DeathCustoms index="2" ModelLink="TerranSmallUnitDeathLow4" Name="AntiGravTerran"/>
-        <DeathCustoms index="3" ModelLink="ZergSmallUnitDeathLow4" Name="AntiGravZerg"/>
-        <DeathCustoms index="4" ModelLink="Invisible4" Name="Vortex"/>
-        <PlacementModel value="Vulture4"/>
-        <PortraitModel value="VulturePortrait4"/>
-        <AbilSoundArray AbilCmd="VultureSpiderMines2,0" Sound="Vulture_SpiderMinePlace2"/>
+        <DeathArray index="Normal" ModelLink="VultureDeath" SoundLink="Vulture_Explode"/>
+        <PlacementModel value="Vulture"/>
+        <PortraitModel value="JimRaynorVulturePortrait"/>
+        <AbilSoundArray AbilCmd="VultureSpiderMines,0" Sound="Vulture_SpiderMinePlace"/>
         <BarOffset value="80"/>
         <BarWidth value="102"/>
         <GroupIcon>
@@ -573,63 +408,26 @@
         <HighlightTooltip value="Unit/Name/Raynor"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
         <NameOffset value="40"/>
-        <SoundArray index="Ready" value="Raynor_Ready2"/>
-        <SoundArray index="Help" value="Raynor_Help2"/>
-        <SoundArray index="What" value="Raynor_What2"/>
-        <SoundArray index="Yes" value="Raynor_Yes2"/>
-        <SoundArray index="Attack" value="Raynor_Attack2"/>
-        <SoundArray index="Pissed" value="Raynor_Pissed2"/>
-        <SoundArray index="Movement" value="Vulture_Movement2"/>
+        <SoundArray index="Ready" value="Raynor_Ready"/>
+        <SoundArray index="Help" value="Raynor_Help"/>
+        <SoundArray index="What" value="Raynor_What"/>
+        <SoundArray index="Yes" value="Raynor_Yes"/>
+        <SoundArray index="Attack" value="Raynor_Attack"/>
+        <SoundArray index="Pissed" value="Raynor_Pissed"/>
+        <SoundArray index="Movement" value="Vulture_Movement"/>
         <UnitIcon value="Assets\Textures\ui-heroicon-raynor.dds"/>
         <UnitKillRank Text="UnitKillRank/Raynor"/>
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Terran-Vulture.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorAction id="VultureAttack2" parent="GenericAttack" effectImpact="VultureU2" effectLaunch="Vulture2">
-        <LaunchAssets Model="VultureAttackLaunch2" Sound="VultureAttackLaunch"/>
-        <LaunchModel value="GenericAttackLaunchModel2"/>
-        <LaunchSound value="GenericAttackLaunchSound2"/>
-        <ContainerModel value="GenericAttackLaunchModel2"/>
-        <ContainerSound value="GenericAttackLaunchSound2"/>
-        <Missile value="VultureAttackMissile2"/>
-        <ImpactMap index="None" Model="VultureAttackImpact2" Sound="VultureAttackImpact"/>
-        <ImpactModel value="GenericAttackImpactModel2"/>
-        <ImpactSound value="GenericAttackImpactSound2"/>
-        <DamageModel value="GenericAttackDamageModel2"/>
-        <DamageSound value="GenericAttackDamageSound2"/>
+    <CActorAction id="JimRaynorVultureAttack" parent="GenericAttack" effectImpact="JimRaynorVultureWeaponDamage" effectLaunch="JimRaynorVultureWeaponLaunch">
+        <LaunchAssets Model="VultureAttackLaunch" Sound="VultureAttackLaunch"/>
+        <Beam value="VultureAttackBeam"/>
+        <Missile value="VultureAttackMissile"/>
+        <ImpactMap index="None" Model="VultureAttackImpact" Sound="VultureAttackImpact" ModelReaction="VultureAttackImpactReaction"/>
+        <ImpactMap index="Shield" Sound="VultureAttackImpactShield" ModelReaction="VultureAttackImpactReactionShield"/>
+        <DamageMap index="None" Model="VultureAttackDamage" Sound="VultureAttackDamage" ModelReaction="VultureAttackDamageReaction"/>
+        <DamageMap index="Shield" Sound="VultureAttackDamageShield" ModelReaction="VultureAttackDamageReactionShield"/>
     </CActorAction>
-    <CActorAction id="VultureAttack3" parent="GenericAttack" effectImpact="VultureU2" effectLaunch="Vulture2">
-        <LaunchAssets Model="VultureAttackLaunch3" Sound="VultureAttackLaunch2"/>
-        <LaunchModel value="GenericAttackLaunchModel3"/>
-        <LaunchSound value="GenericAttackLaunchSound3"/>
-        <ContainerModel value="GenericAttackLaunchModel3"/>
-        <ContainerSound value="GenericAttackLaunchSound3"/>
-        <Missile value="VultureAttackMissile3"/>
-        <ImpactMap index="None" Model="VultureAttackImpact3" Sound="VultureAttackImpact2"/>
-        <ImpactModel value="GenericAttackImpactModel3"/>
-        <ImpactSound value="GenericAttackImpactSound3"/>
-        <DamageModel value="GenericAttackDamageModel3"/>
-        <DamageSound value="GenericAttackDamageSound3"/>
-    </CActorAction>
-    <CActorAction id="VultureAttack4" parent="GenericAttack" effectImpact="VultureU2" effectLaunch="Vulture2">
-        <LaunchAssets Model="VultureAttackLaunch4" Sound="VultureAttackLaunch2"/>
-        <LaunchModel value="GenericAttackLaunchModel4"/>
-        <LaunchSound value="GenericAttackLaunchSound4"/>
-        <ContainerModel value="GenericAttackLaunchModel4"/>
-        <ContainerSound value="GenericAttackLaunchSound4"/>
-        <Missile value="VultureAttackMissile4"/>
-        <ImpactMap index="None" Model="VultureAttackImpact4" Sound="VultureAttackImpact2"/>
-        <ImpactModel value="GenericAttackImpactModel4"/>
-        <ImpactSound value="GenericAttackImpactSound4"/>
-        <DamageModel value="GenericAttackDamageModel4"/>
-        <DamageSound value="GenericAttackDamageSound4"/>
-    </CActorAction>
-    <CActorMissile id="VultureAttackMissile2" parent="GenericAttackMissile" unitName="VultureWeapon2"/>
-    <CActorMissile id="VultureAttackMissile3" parent="GenericAttackMissile" unitName="VultureWeapon2">
-        <Model value="VultureWeapon3"/>
-    </CActorMissile>
-    <CActorMissile id="VultureAttackMissile4" parent="GenericAttackMissile" unitName="VultureWeapon2">
-        <Model value="VultureWeapon4"/>
-    </CActorMissile>
 </Catalog>

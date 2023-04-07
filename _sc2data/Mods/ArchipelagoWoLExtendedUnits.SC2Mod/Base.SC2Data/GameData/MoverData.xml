@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
-    <CMoverAvoid id="Ground2">
-        <PlacementArray index="Prevent">
-            <Bits index="GroundNoSpawn" value="1"/>
-        </PlacementArray>
-    </CMoverAvoid>
     <CMoverMissile id="LiberatorAGMissile" parent="MissileDefault">
         <MotionPhases index="0">
             <Driver value="Guidance"/>
@@ -55,17 +50,6 @@
             <RevolverAccel value="45"/>
             <RevolverAccelRange value="337.5"/>
         </MotionOverlays>
-    </CMoverMissile>
-    <CMoverMissile id="MissileDefault2">
-        <MotionPhases>
-            <Driver value="Guidance"/>
-            <Acceleration value="3200"/>
-            <MaxSpeed value="18.75"/>
-            <ClearanceAcceleration value="75"/>
-            <Outro value="-1"/>
-            <YawPitchRoll value="719.2968"/>
-        </MotionPhases>
-        <MotionPhases YawPitchRoll="MAX"/>
     </CMoverMissile>
     <CMoverMissile id="ValkyrieSCBWWeapon@Mover">
         <MotionPhases>
