@@ -133,8 +133,9 @@ class KH2World(World):
             itempool += [self.create_item(item) for _ in range(data)]
 
         # Creating filler for unfilled locations
+        # -1 because of length
         itempool += [self.create_filler()
-                     for _ in range(self.totalLocations-len(itempool))]
+                     for _ in range(self.totalLocations-len(itempool)-1)]
         self.multiworld.itempool += itempool
 
     def generate_early(self) -> None:
@@ -188,7 +189,7 @@ class KH2World(World):
         random_stt_item = self.create_filler().name
         for location in {LocationName.JunkMedal, LocationName.JunkMedal}:
             self.plando_locations[location] = random_stt_item
-
+        self.totalLocations -= 2
         self.level_subtraction()
 
     def pre_fill(self):
