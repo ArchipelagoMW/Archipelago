@@ -3,7 +3,7 @@ from typing import Set, TYPE_CHECKING, Optional, Dict
 from BaseClasses import Region, Location, Item, ItemClassification, Entrance
 from .Constants import SEALS, NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
 from .Options import Goal
-from .Regions import REGIONS
+from .Regions import REGIONS, MEGA_SHARDS
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -23,10 +23,12 @@ class MessengerRegion(Region):
         if self.name == "The Shop" and self.multiworld.goal[self.player] > Goal.option_open_music_box:
             self.locations.append(MessengerLocation("Shop Chest", self, name_to_id.get("Shop Chest", None)))
         # putting some dumb special case for searing crags and ToT so i can split them into 2 regions
-        if self.multiworld.shuffle_seals[self.player] and self.name not in {"Searing Crags", "Tower HQ"}:
-            for seal_loc in SEALS:
-                if seal_loc.startswith(self.name.split(" ")[0]):
-                    self.locations.append(MessengerLocation(seal_loc, self, name_to_id.get(seal_loc, None)))
+        if self.multiworld.shuffle_seals[self.player] and self.name not in {"Searing Crags", "Tower HQ", "Cloud Ruins"}:
+            self.locations += [MessengerLocation(seal_loc, self, name_to_id.get(seal_loc, None))
+                               for seal_loc in SEALS if seal_loc.startswith(self.name.split(" ")[0])]
+        if self.multiworld.shuffle_shards[self.player] and self.name in MEGA_SHARDS:
+            self.locations += [MessengerLocation(shard, self, name_to_id.get(shard, None))
+                               for shard in MEGA_SHARDS[self.name]]
 
     def add_exits(self, exits: Set[str]) -> None:
         for exit in exits:
