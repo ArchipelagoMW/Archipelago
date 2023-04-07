@@ -177,18 +177,15 @@ class KH2World(World):
         self.goofy_fill()
         self.keyblade_fill()
 
-        self.filler_items.extend(item_groups["Filler"])
-
         if self.multiworld.FinalXemnas[self.player]:
             self.plando_locations[LocationName.FinalXemnas] = ItemName.Victory
         else:
-            randomItem = self.multiworld.per_slot_randoms[self.player].choice(self.filler_items)
-            self.plando_locations[LocationName.FinalXemnas] = randomItem
+            self.plando_locations[LocationName.FinalXemnas] = self.create_filler().name
         self.totalLocations -= 3
 
         # same item placed because you can only get one of these 2 locations
         # they are both under the same flag so the player gets both locations just one of the two items
-        random_stt_item = self.multiworld.per_slot_randoms[self.player].choice(self.filler_items)
+        random_stt_item = self.create_filler().name
         for location in {LocationName.JunkMedal, LocationName.JunkMedal}:
             self.plando_locations[location] = random_stt_item
 
