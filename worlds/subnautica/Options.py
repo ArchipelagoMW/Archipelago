@@ -1,6 +1,6 @@
 import typing
 
-from Options import Choice, Range, DeathLink, DefaultOnToggle
+from Options import Choice, Range, DeathLink, DefaultOnToggle, StartInventoryPool
 from .Creatures import all_creatures, Definitions
 
 
@@ -104,4 +104,5 @@ options = {
     "creature_scans": CreatureScans,
     "creature_scan_logic": AggressiveScanLogic,
     "death_link": SubnauticaDeathLink,
+    "start_inventory_from_pool": StartInventoryPool,
 }

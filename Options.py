@@ -1003,7 +1003,6 @@ per_game_common_options = {
     "local_items": LocalItems,
     "non_local_items": NonLocalItems,
     "start_inventory": StartInventory,
-    "start_inventory_from_pool": StartInventoryPool,
     "start_hints": StartHints,
     "start_location_hints": StartLocationHints,
     "exclude_locations": ExcludeLocations,
