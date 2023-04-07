@@ -133,9 +133,8 @@ class KH2World(World):
             itempool += [self.create_item(item) for _ in range(data)]
 
         # Creating filler for unfilled locations
-        # -1 because of length
         itempool += [self.create_filler()
-                     for _ in range(self.totalLocations-len(itempool)-1)]
+                     for _ in range(self.totalLocations-len(itempool))]
         self.multiworld.itempool += itempool
 
     def generate_early(self) -> None:
@@ -182,15 +181,15 @@ class KH2World(World):
             self.plando_locations[LocationName.FinalXemnas] = ItemName.Victory
         else:
             self.plando_locations[LocationName.FinalXemnas] = self.create_filler().name
-        self.totalLocations -= 3
 
         # same item placed because you can only get one of these 2 locations
         # they are both under the same flag so the player gets both locations just one of the two items
         random_stt_item = self.create_filler().name
         for location in {LocationName.JunkMedal, LocationName.JunkMedal}:
             self.plando_locations[location] = random_stt_item
-        self.totalLocations -= 2
         self.level_subtraction()
+        # subtraction from final xemnas and stt
+        self.totalLocations -= 3
 
     def pre_fill(self):
         for location, item in self.plando_locations.items():
