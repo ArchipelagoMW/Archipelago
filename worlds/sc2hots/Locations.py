@@ -131,10 +131,10 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2hots_has_competent_defense(multiworld, player) and
                                    state._sc2hots_has_good_antiair(multiworld, player)),
         LocationData("The Crucible", "The Crucible: Reach the Pool", SC2HOTS_LOC_ID_OFFSET + 1102),
-        LocationData("The Crucible", "The Crucible: Survive 10 Minutes", SC2HOTS_LOC_ID_OFFSET + 1103,
+        LocationData("The Crucible", "The Crucible: 15 Minutes Remaining", SC2HOTS_LOC_ID_OFFSET + 1103,
                      lambda state: state._sc2hots_has_competent_defense(multiworld, player) and
                                    state._sc2hots_has_good_antiair(multiworld, player)),
-        LocationData("The Crucible", "The Crucible: Survive 20 Minutes", SC2HOTS_LOC_ID_OFFSET + 1104,
+        LocationData("The Crucible", "The Crucible: 5 Minutes Remaining", SC2HOTS_LOC_ID_OFFSET + 1104,
                      lambda state: state._sc2hots_has_competent_defense(multiworld, player) and
                                    state._sc2hots_has_good_antiair(multiworld, player)),
         LocationData("Supreme", "Supreme: Victory", SC2HOTS_LOC_ID_OFFSET + 1200),
