@@ -68,11 +68,9 @@ class PlandoTest(MessengerTestBase):
         for loc, price in prices.items():
             with self.subTest("prices", loc=loc):
                 if loc == "Karuta Plates":
-                    self.assertEqual(self.options["shop_price_plan"]["Karuta Plates"],
-                                     self.multiworld.get_location(loc, self.player).cost())
+                    self.assertEqual(self.options["shop_price_plan"]["Karuta Plates"], price)
                 elif loc == "Serendipitous Bodies":
-                    self.assertTrue(self.multiworld.get_location(loc, self.player).cost()
-                                    in self.options["shop_price_plan"]["Serendipitous Bodies"])
+                    self.assertTrue(price in self.options["shop_price_plan"]["Serendipitous Bodies"])
 
                 self.assertEqual(price, self.multiworld.get_location(loc, self.player).cost())
                 self.assertTrue(loc in SHOP_ITEMS)

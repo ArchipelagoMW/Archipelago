@@ -195,7 +195,7 @@ class MessengerWorld(World):
         count = 0
         if "Time Shard " in name:
             count = int(name.split(" ")[-1].strip("()"))
-            self.total_shards += count
+            self.total_shards += count if count >= 100 else 0
         return MessengerItem(name, self.player, item_id, override_prog, count)
 
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:

@@ -57,7 +57,10 @@ class MessengerShopLocation(MessengerLocation):
 
     def can_afford(self, state: CollectionState) -> bool:
         world = state.multiworld.worlds[self.player]
-        return state.has("Shards", self.player, self.cost() * 2) or \
+        cost = self.cost() * 2
+        if cost >= 1000:
+            cost *= 2
+        return state.has("Shards", self.player, cost) or \
             state.has("Shards", self.player, world.total_shards)
 
 
