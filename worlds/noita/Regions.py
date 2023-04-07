@@ -15,7 +15,7 @@ def create_region(world: MultiWorld, player: int, region_name: str) -> Region:
         opt_orbs = world.orbs_as_checks[player].value
         opt_bosses = world.bosses_as_checks[player].value
         opt_paths = world.path_option[player].value
-        opt_hc = world.hidden_chests[player].value
+        opt_chests = world.hidden_chests[player].value
         opt_peds = world.pedestal_checks[player].value
         ltype = location_data.ltype
         flag = location_data.flag
@@ -23,15 +23,15 @@ def create_region(world: MultiWorld, player: int, region_name: str) -> Region:
         if flag == 0 or ltype == "orb" and flag <= opt_orbs or ltype == "boss" and flag <= opt_bosses:
             new_region.locations.append(location)
 
-        if ltype == "hc" and flag <= opt_paths:
-            for i in range(opt_hc):
+        if ltype == "chest" and flag <= opt_paths:
+            for i in range(opt_chests):
                 location_name_num = f"{location_name} {i+1}"
                 location_id = location_data.id + i
                 location = Locations.NoitaLocation(player, location_name_num, location_id, new_region)
                 location.progress_type = LocationProgressType.DEFAULT
                 new_region.locations.append(location)
 
-        if ltype == "peds" and flag <= opt_paths:
+        if ltype == "pedestal" and flag <= opt_paths:
             for i in range(opt_peds):
                 location_name_num = f"{location_name} {i+1}"
                 location_id = location_data.id + i

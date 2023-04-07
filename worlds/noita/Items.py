@@ -1,7 +1,7 @@
 import itertools
 from typing import Dict, NamedTuple, Optional, List, Set
 from BaseClasses import Item, ItemClassification, MultiWorld
-from .Options import BossesAsChecks, VictoryCondition
+from . import Options
 
 
 class ItemData(NamedTuple):
@@ -32,15 +32,15 @@ def create_all_items(world: MultiWorld, player: int) -> None:
     vic = world.victory_condition[player].value
     orb_count = 0
 
-    if vic == VictoryCondition.option_pure_ending:
+    if vic == Options.VictoryCondition.option_pure_ending:
         orb_count = 11
-    if vic == VictoryCondition.option_peaceful_ending:
+    if vic == Options.VictoryCondition.option_peaceful_ending:
         orb_count = 33
 
     for i in range(orb_count):
         itempool += ["Orb"]
 
-    if world.bosses_as_checks[player].value >= BossesAsChecks.option_all_bosses:
+    if world.bosses_as_checks[player].value >= Options.BossesAsChecks.option_all_bosses:
         itempool += ["Perk (Spatial Awareness)"]
 
     # Create any non-progression repeat items (referred to as junk regardless of whether it's useful)
@@ -132,7 +132,7 @@ def item_is_filler(item_name: str) -> bool:
 filler_items: List[str] = list(filter(item_is_filler, item_table.keys()))
 item_name_to_id: Dict[str, int] = {name: data.code for name, data in item_table.items()}
 
-item_name_groups: Dict[set, Set[str]] = {
+item_name_groups: Dict[str, Set[str]] = {
     group: set(item_names)
     for group, item_names in itertools.groupby(item_table, get_item_group)
 }
