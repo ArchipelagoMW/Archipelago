@@ -1,3 +1,5 @@
+from typing import Dict
+
 from . import MessengerTestBase
 from ..Shop import SHOP_ITEMS
 
@@ -11,14 +13,15 @@ class ShopCostTest(MessengerTestBase):
 
     def testShopRules(self) -> None:
         for loc in SHOP_ITEMS:
+            loc = f"The Shop - {loc}"
             with self.subTest("has cost", loc=loc):
                 self.assertFalse(self.can_reach_location(loc))
 
-        prices = self.multiworld.worlds[self.player].shop_prices
+        prices: Dict[str, int] = self.multiworld.worlds[self.player].shop_prices
         for loc, price in prices.items():
             with self.subTest("prices", loc=loc):
                 self.assertEqual(price, self.multiworld.get_location(loc, self.player).cost())
-                self.assertTrue(loc in SHOP_ITEMS)
+                self.assertTrue(loc.lstrip("The Shop - ") in SHOP_ITEMS)
         self.assertEqual(len(prices), len(SHOP_ITEMS))
 
     def testDBoost(self) -> None:
@@ -68,6 +71,7 @@ class PlandoTest(MessengerTestBase):
 
     def testCosts(self) -> None:
         for loc in SHOP_ITEMS:
+            loc = f"The Shop - {loc}"
             with self.subTest("has cost", loc=loc):
                 self.assertFalse(self.can_reach_location(loc))
 
@@ -79,6 +83,7 @@ class PlandoTest(MessengerTestBase):
                 elif loc == "Serendipitous Bodies":
                     self.assertTrue(price in self.options["shop_price_plan"]["Serendipitous Bodies"])
 
+                loc = f"The Shop - {loc}"
                 self.assertEqual(price, self.multiworld.get_location(loc, self.player).cost())
-                self.assertTrue(loc in SHOP_ITEMS)
+                self.assertTrue(loc.lstrip("The Shop - ") in SHOP_ITEMS)
         self.assertEqual(len(prices), len(SHOP_ITEMS))

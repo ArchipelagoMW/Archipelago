@@ -51,6 +51,7 @@ class MessengerWorld(World):
     item_name_to_id = {item: item_id
                        for item_id, item in enumerate(ALL_ITEMS, base_offset)}
     mega_shard_locs = [shard for region in MEGA_SHARDS for shard in MEGA_SHARDS[region]]
+    shop_locs = [f"The Shop - {shop_loc}" for shop_loc in SHOP_ITEMS]
     location_name_to_id = {location: location_id
                            for location_id, location in
                            enumerate([
@@ -58,7 +59,7 @@ class MessengerWorld(World):
                                *SEALS,
                                *mega_shard_locs,
                                *BOSS_LOCATIONS,
-                               *SHOP_ITEMS,
+                               *shop_locs,
                            ], base_offset)}
 
     data_version = 0

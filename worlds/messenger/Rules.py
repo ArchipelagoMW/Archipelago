@@ -32,7 +32,7 @@ class MessengerRules:
             "Underworld": self.has_tabi,
             "Forlorn Temple": lambda state: state.has_all({"Wingsuit", *PHOBEKINS}, self.player),
             "Glacial Peak": self.has_vertical,
-            "Elemental Skylands": lambda state: state.has("Fairy Bottle", self.player),
+            "Elemental Skylands": lambda state: state.has("Magic Firefly", self.player),
             "Music Box": lambda state: state.has_all(set(NOTES), self.player) and self.has_vertical(state),
         }
 
@@ -40,14 +40,14 @@ class MessengerRules:
             # ninja village
             "Ninja Village Seal - Tree House": self.has_dart,
             # autumn hills
-            "Key of Hope": self.has_dart,
+            "Autumn Hills - Key of Hope": self.has_dart,
             # howling grotto
             "Howling Grotto Seal - Windy Saws and Balls": self.has_wingsuit,
             "Howling Grotto Seal - Crushing Pits": lambda state: self.has_wingsuit(state) and self.has_dart(state),
-            "Emerald Golem": self.has_wingsuit,
+            "Howling Grotto - Emerald Golem": self.has_wingsuit,
             # searing crags
-            "Astral Tea Leaves": lambda state: state.can_reach("Astral Seed", "Location", self.player),
-            "Key of Strength": lambda state: state.has("Power Thistle", self.player),
+            "Searing Crags - Astral Tea Leaves": lambda state: state.can_reach("Ninja Village - Astral Seed", "Location", self.player),
+            "Searing Crags - Key of Strength": lambda state: state.has("Power Thistle", self.player),
             # glacial peak
             "Glacial Peak Seal - Ice Climbers": self.has_dart,
             # tower of time
@@ -59,22 +59,22 @@ class MessengerRules:
             "Underworld Seal - Fireball Wave": self.has_wingsuit,
             "Underworld Seal - Rising Fanta": self.has_dart,
             # sunken shrine
-            "Sun Crest": self.has_tabi,
-            "Moon Crest": self.has_tabi,
-            "Key of Love": lambda state: state.has_all({"Sun Crest", "Moon Crest"}, self.player),
+            "Sunken Shrine - Sun Crest": self.has_tabi,
+            "Sunken Shrine - Moon Crest": self.has_tabi,
+            "Sunken Shrine - Key of Love": lambda state: state.has_all({"Sun Crest", "Moon Crest"}, self.player),
             "Sunken Shrine Seal - Waterfall Paradise": self.has_tabi,
             "Sunken Shrine Seal - Tabi Gauntlet": self.has_tabi,
             "Mega Shard of the Moon": self.has_tabi,
             "Mega Shard of the Sun": self.has_tabi,
             # riviere turquoise
-            "Fairy Bottle": self.has_vertical,
+            "Riviere Turquoise - Magic Firefly": self.has_vertical,
             "Riviere Turquoise Seal - Bounces and Balls": self.can_dboost,
             "Riviere Turquoise Seal - Launch of Faith": self.can_dboost,
             "Riviere Turquoise Seal - Flower Power": self.has_vertical,
             "Quick Restock Mega Shard 1": self.has_vertical,
             "Quick Restock Mega Shard 2": self.has_vertical,
             # elemental skylands
-            "Key of Symbiosis": self.has_dart,
+            "Elemental Skylands - Key of Symbiosis": self.has_dart,
             "Elemental Skylands Seal - Air": self.has_wingsuit,
             "Elemental Skylands Seal - Water": lambda state: self.has_dart(state) and
                                                              state.has("Currents Master", self.player),
@@ -82,7 +82,8 @@ class MessengerRules:
             "Earth Mega Shard": self.has_dart,
             "Water Mega Shard": self.has_dart,
             # corrupted future
-            "Key of Courage": lambda state: state.has_all({"Demon King Crown", "Fairy Bottle"}, self.player),
+            "Corrupted Future - Key of Courage": lambda state: state.has_all({"Demon King Crown", "Magic Firefly"},
+                                                                             self.player),
             # the shop
             "Shop Chest": self.has_enough_seals,
         }
@@ -94,7 +95,7 @@ class MessengerRules:
         return state.has("Rope Dart", self.player)
 
     def has_tabi(self, state: CollectionState) -> bool:
-        return state.has("Ninja Tabi", self.player)
+        return state.has("Lightfoot Tabi", self.player)
 
     def has_vertical(self, state: CollectionState) -> bool:
         return self.destroys_projectiles(state) and (self.has_wingsuit(state) or self.has_dart(state))
@@ -156,7 +157,7 @@ class MessengerHardRules(MessengerRules):
         self.location_rules.update({
             "Howling Grotto Seal - Windy Saws and Balls": self.true,
             "Glacial Peak Seal - Projectile Spike Pit": self.true,
-            "Claustro": self.has_wingsuit,
+            "Bamboo Creek - Claustro": self.has_wingsuit,
             "Elemental Skylands Seal - Water": self.true,
             "Elemental Skylands Seal - Fire": self.true,
             "Earth Mega Shard": self.true,
@@ -164,8 +165,8 @@ class MessengerHardRules(MessengerRules):
         })
 
         self.extra_rules = {
-            "Key of Strength": lambda state: self.has_dart(state) or self.has_windmill(state),
-            "Key of Symbiosis": self.has_windmill,
+            "Searing Crags - Key of Strength": lambda state: self.has_dart(state) or self.has_windmill(state),
+            "Elemental Skylands - Key of Symbiosis": self.has_windmill,
             "Autumn Hills Seal - Spike Ball Darts": lambda state: (self.has_dart(state) and self.has_windmill(state))
                                                                   or self.has_wingsuit(state),
             "Glacial Peak Seal - Glacial Air Swag": self.has_windmill,
@@ -198,15 +199,15 @@ class MessengerChallengeRules(MessengerHardRules):
         })
 
         self.location_rules.update({
-            "Fairy Bottle": self.true,
+            "Riviere Turquoise - Magic Firefly": self.true,
             "Howling Grotto Seal - Crushing Pits": self.true,
             "Underworld Seal - Sharp and Windy Climb": self.true,
             "Riviere Turquoise Seal - Flower Power": self.true,
         })
 
         self.extra_rules.update({
-            "Key of Hope": self.has_vertical,
-            "Key of Symbiosis": lambda state: self.has_vertical(state) or self.has_windmill(state),
+            "Autumn Hills - Key of Hope": self.has_vertical,
+            "Elemental Skylands - Key of Symbiosis": lambda state: self.has_vertical(state) or self.has_windmill(state),
         })
 
 
@@ -221,12 +222,14 @@ class MessengerOOBRules(MessengerRules):
         }
 
         self.location_rules = {
-            "Claustro": self.has_wingsuit,
-            "Key of Strength": lambda state: self.has_vertical(state) or state.has("Power Thistle", self.player),
-            "Key of Love": lambda state: state.has_all({"Sun Crest", "Moon Crest"}, self.player),
-            "Pyro": self.has_tabi,
-            "Key of Chaos": self.has_tabi,
-            "Key of Courage": lambda state: state.has_all({"Demon King Crown", "Fairy Bottle"}, self.player),
+            "Bamboo Creek - Claustro": self.has_wingsuit,
+            "Searing Crags - Key of Strength": lambda state: self.has_vertical(state)
+                                                             or state.has("Power Thistle", self.player),
+            "Sunken Shrine - Key of Love": lambda state: state.has_all({"Sun Crest", "Moon Crest"}, self.player),
+            "Searing Crags - Pyro": self.has_tabi,
+            "Underworld - Key of Chaos": self.has_tabi,
+            "Corrupted Future - Key of Courage": lambda state: state.has_all({"Demon King Crown", "Fairy Bottle"},
+                                                                             self.player),
             "Autumn Hills Seal - Spike Ball Darts": self.has_dart,
             "Ninja Village Seal - Tree House": self.has_dart,
             "Underworld Seal - Fireball Wave": lambda state: state.has_any({"Wingsuit", "Windmill Shuriken"},
@@ -243,9 +246,9 @@ class MessengerOOBRules(MessengerRules):
 
 def set_self_locking_items(multiworld: MultiWorld, player: int) -> None:
     # do the ones for seal shuffle on and off first
-    allow_self_locking_items(multiworld.get_location("Key of Strength", player), "Power Thistle")
-    allow_self_locking_items(multiworld.get_location("Key of Love", player), "Sun Crest", "Moon Crest")
-    allow_self_locking_items(multiworld.get_location("Key of Courage", player), "Demon King Crown")
+    allow_self_locking_items(multiworld.get_location("Searing Crags - Key of Strength", player), "Power Thistle")
+    allow_self_locking_items(multiworld.get_location("Sunken Shrine - Key of Love", player), "Sun Crest", "Moon Crest")
+    allow_self_locking_items(multiworld.get_location("Corrupted Future - Key of Courage", player), "Demon King Crown")
 
     # add these locations when seals are shuffled
     if multiworld.shuffle_seals[player]:

@@ -14,11 +14,11 @@ NOTES = [
 PROG_ITEMS = [
     "Wingsuit",
     "Rope Dart",
-    "Ninja Tabi",
+    "Lightfoot Tabi",
     "Power Thistle",
     "Demon King Crown",
     "Ruxxtin's Amulet",
-    "Fairy Bottle",
+    "Magic Firefly",
     "Sun Crest",
     "Moon Crest",
     # "Astral Seed",
@@ -82,7 +82,7 @@ ALWAYS_LOCATIONS = [
     # upgrades
     "Howling Grotto - Wingsuit",
     "Searing Crags - Rope Dart",
-    "Sunken Shrine - Ninja Tabi",
+    "Sunken Shrine - Lightfoot Tabi",
     "Autumn Hills - Climbing Claws",
     # quest items
     "Ninja Village - Astral Seed",
