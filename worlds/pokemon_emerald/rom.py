@@ -125,6 +125,7 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
     #     /* 0x0F */ u8 normanRequiredCount;
     #     /* 0x10 */ u8 startingBadges;
     #     /* 0x11 */ u8 receivedItemMessageFilter; // 0 = Show All; 1 = Show Progression Only; 2 = Show None
+    #     /* 0x12 */ bool8 reusableTms;
     # };
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
@@ -182,6 +183,10 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
     # Set receive item messages type
     receive_item_messages_type = get_option_value(multiworld, player, "receive_item_messages")
     _set_bytes_little_endian(patched_rom, options_address + 0x11, 1, receive_item_messages_type)
+
+    # Set better shops
+    reusable_tms = 1 if get_option_value(multiworld, player, "reusable_tms") == Toggle.option_true else 0
+    _set_bytes_little_endian(patched_rom, options_address + 0x12, 1, reusable_tms)
 
     # Write Output
     outfile_player_name = f"_P{player}"

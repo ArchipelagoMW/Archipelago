@@ -271,6 +271,13 @@ class TmMoves(Toggle):
     display_name = "TM Moves"
 
 
+class ReusableTms(Toggle):
+    """
+    Sets TMs to not break after use (they remain sellable)
+    """
+    display_name = "Reusable TMs"
+
+
 class TmCompatibility(Choice):
     """
     Modifies the compatability of TMs with species
@@ -406,6 +413,7 @@ option_definitions: Dict[str, Option] = {
   "ability_blacklist": AbilityBlacklist,
   "level_up_moves": LevelUpMoves,
   "tm_moves": TmMoves,
+  "reusable_tms": ReusableTms,
   "tm_compatibility": TmCompatibility,
   "hm_compatibility": HmCompatibility,
 
