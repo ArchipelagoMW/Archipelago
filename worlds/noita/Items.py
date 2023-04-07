@@ -65,8 +65,6 @@ item_table: Dict[str, ItemData] = {
     "Extra Max HP":                         ItemData(110001, "Pickups", ItemClassification.useful),
     "Spell Refresher":                      ItemData(110002, "Pickups", ItemClassification.filler),
     "Potion":                               ItemData(110003, "Items", ItemClassification.filler),
-    "Gold (10)":                            ItemData(110004, "Gold", ItemClassification.filler),
-    "Gold (50)":                            ItemData(110005, "Gold", ItemClassification.filler),
     "Gold (200)":                           ItemData(110006, "Gold", ItemClassification.filler),
     "Gold (1000)":                          ItemData(110007, "Gold", ItemClassification.filler),
     "Wand (Tier 1)":                        ItemData(110008, "Wands", ItemClassification.useful),
