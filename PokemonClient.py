@@ -17,7 +17,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandP
 from worlds.pokemon_rb.locations import location_data
 from worlds.pokemon_rb.rom import RedDeltaPatch, BlueDeltaPatch
 
-location_map = {"Rod": {}, "EventFlag": {}, "Missable": {}, "Hidden": {}, "list": {}}
+location_map = {"Rod": {}, "EventFlag": {}, "Missable": {}, "Hidden": {}, "list": {}, "DexSanityFlag": {}}
 location_bytes_bits = {}
 for location in location_data:
     if location.ram_address is not None:
@@ -40,7 +40,7 @@ CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
 
 DISPLAY_MSGS = True
 
-SCRIPT_VERSION = 1
+SCRIPT_VERSION = 3
 
 
 class GBCommandProcessor(ClientCommandProcessor):
@@ -70,6 +70,8 @@ class GBContext(CommonContext):
         self.set_deathlink = False
         self.client_compatibility_mode = 0
         self.items_handling = 0b001
+        self.sent_release = False
+        self.sent_collect = False
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -124,7 +126,8 @@ def get_payload(ctx: GBContext):
             "items": [item.item for item in ctx.items_received],
             "messages": {f'{key[0]}:{key[1]}': value for key, value in ctx.messages.items()
                          if key[0] > current_time - 10},
-            "deathlink": ctx.deathlink_pending
+            "deathlink": ctx.deathlink_pending,
+            "options": ((ctx.permissions['release'] in ('goal', 'enabled')) * 2) + (ctx.permissions['collect'] in ('goal', 'enabled'))
         }
     )
     ctx.deathlink_pending = False
@@ -134,10 +137,13 @@ def get_payload(ctx: GBContext):
 async def parse_locations(data: List, ctx: GBContext):
     locations = []
     flags = {"EventFlag": data[:0x140], "Missable": data[0x140:0x140 + 0x20],
-             "Hidden": data[0x140 + 0x20: 0x140 + 0x20 + 0x0E], "Rod": data[0x140 + 0x20 + 0x0E:]}
+             "Hidden": data[0x140 + 0x20: 0x140 + 0x20 + 0x0E],
+             "Rod": data[0x140 + 0x20 + 0x0E:0x140 + 0x20 + 0x0E + 0x01]}
 
-    if len(flags['Rod']) > 1:
-        return
+    if len(data) > 0x140 + 0x20 + 0x0E + 0x01:
+        flags["DexSanityFlag"] = data[0x140 + 0x20 + 0x0E + 0x01:]
+    else:
+        flags["DexSanityFlag"] = [0] * 19
 
     for flag_type, loc_map in location_map.items():
         for flag, loc_id in loc_map.items():
@@ -207,6 +213,16 @@ async def gb_sync_task(ctx: GBContext):
                         async_start(parse_locations(data_decoded['locations'], ctx))
                     if 'deathLink' in data_decoded and data_decoded['deathLink'] and 'DeathLink' in ctx.tags:
                         await ctx.send_death(ctx.auth + " is out of usable Pokémon! " + ctx.auth + " blacked out!")
+                    if 'options' in data_decoded:
+                        msgs = []
+                        if data_decoded['options'] & 4 and not ctx.sent_release:
+                            ctx.sent_release = True
+                            msgs.append({"cmd": "Say", "text": "!release"})
+                        if data_decoded['options'] & 8 and not ctx.sent_collect:
+                            ctx.sent_collect = True
+                            msgs.append({"cmd": "Say", "text": "!collect"})
+                        if msgs:
+                            await ctx.send_msgs(msgs)
                     if ctx.set_deathlink:
                         await ctx.update_death_link(True)
                 except asyncio.TimeoutError:
