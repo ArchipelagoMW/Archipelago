@@ -179,7 +179,9 @@ ow_regions = {
     "Wind Region": ([*range(466, 475)], ([3, 6], [140, 0], [142, 0], [18, 6], [173, 0], [174, 0], [10, 6], [184, 0]), ()),
     "Frozen Strip": ([*range(458, 460)], ([5, 6], [15, 6])),
     "Spencer's Place": ([457], ([7, 6])),
-    "Inaccessible": ([454, 475, 477], ([19, 6], [17, 6], [14, 6])),
+    "Ship Dock Region": ([475, 477], ([17, 6])),
+    "Life Temple Region": ([454], [[14, 6]]),
+    "Light Temple Region": ([477], ([19, 6])),
     "Mac's Ship": ([*range(478, 480)], ([37, 8])),
     "Doom Castle": ([476], ([1, 6])),
     "Volcano Battlefield": ([], [])
@@ -277,7 +279,9 @@ def create_regions(self):
             ["Sand Coin", "Dualhead Hydra", "Summer Aquaria"], self.player),
         "Wind Region": lambda state: state.has("Sun Coin", self.player),
         "Mac's Ship": lambda state: state.has_all(["Ship Dock Access", "Ship Liberated"], self.player),
-        "Inaccessible": lambda state: False,
+        "Life Temple Region": lambda state: False,
+        "Light Temple Region": lambda state: False,
+        "Ship Dock Region": lambda state: False,
         "Doom Castle": lambda state: state.has_all(
             ["Ship Dock Access", "Ship Steering Wheel", "Ship Loaned"], self.player),
         "Volcano Battlefield": lambda state: state.has_all(["River Coin", "Dualhead Hydra"], self.player) or
@@ -399,7 +403,6 @@ def set_rules(self) -> None:
             lambda state: state.can_reach("Bone Dungeon B2 - Flamerus Rex Chest", "Location", self.player) and \
             state.has("Dualhead Hydra", self.player) and state.has("Ice Golem", self.player) and \
             state.can_reach("Pazuzu's Tower 7F - Pazuzu Chest", "Location", self.player)
-
 
 
 class FFMQLocation(Location):
