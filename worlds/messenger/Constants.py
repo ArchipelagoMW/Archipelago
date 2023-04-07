@@ -51,7 +51,7 @@ ALL_ITEMS = [
     "Windmill Shuriken",
     "Wingsuit",
     "Rope Dart",
-    "Ninja Tabi",
+    "Lightfoot Tabi",
     # "Astral Seed",
     # "Astral Tea Leaves",
     "Candle",
@@ -59,7 +59,7 @@ ALL_ITEMS = [
     "Power Thistle",
     "Demon King Crown",
     "Ruxxtin's Amulet",
-    "Fairy Bottle",
+    "Magic Firefly",
     "Sun Crest",
     "Moon Crest",
     *PHOBEKINS,
@@ -73,33 +73,33 @@ ALL_ITEMS = [
 # order must be exactly the same as upstream
 ALWAYS_LOCATIONS = [
     # notes
-    "Key of Love",
-    "Key of Courage",
-    "Key of Chaos",
-    "Key of Symbiosis",
-    "Key of Strength",
-    "Key of Hope",
+    "Sunken Shrine - Key of Love",
+    "Corrupted Future - Key of Courage",
+    "Underworld - Key of Chaos",
+    "Elemental Skylands - Key of Symbiosis",
+    "Searing Crags - Key of Strength",
+    "Autumn Hills - Key of Hope",
     # upgrades
-    "Wingsuit",
-    "Rope Dart",
-    "Ninja Tabi",
-    "Climbing Claws",
+    "Howling Grotto - Wingsuit",
+    "Searing Crags - Rope Dart",
+    "Sunken Shrine - Ninja Tabi",
+    "Autumn Hills - Climbing Claws",
     # quest items
-    "Astral Seed",
-    "Astral Tea Leaves",
-    "Candle",
-    "Seashell",
-    "Power Thistle",
-    "Demon King Crown",
-    "Ruxxtin's Amulet",
-    "Fairy Bottle",
-    "Sun Crest",
-    "Moon Crest",
+    "Ninja Village - Astral Seed",
+    "Searing Crags - Astral Tea Leaves",
+    "Ninja Village - Candle",
+    "Quillshroom Marsh - Seashell",
+    "Searing Crags - Power Thistle",
+    "Forlorn Temple - Demon King",
+    "Catacombs - Ruxxtin's Amulet",
+    "Riviere Turquoise - Butterfly Matriarch",
+    "Sunken Shrine - Sun Crest",
+    "Sunken Shrine - Moon Crest",
     # phobekins
-    "Necro",
-    "Pyro",
-    "Claustro",
-    "Acro",
+    "Catacombs - Necro",
+    "Searing Crags - Pyro",
+    "Bamboo Creek - Claustro",
+    "Cloud Ruins - Acro",
 ]
 
 SEALS = [
@@ -165,8 +165,8 @@ SEALS = [
 ]
 
 BOSS_LOCATIONS = [
-    "Leaf Golem",
-    "Ruxxtin",
-    "Emerald Golem",
-    "Queen of Quills",
+    "Autumn Hills - Leaf Golem",
+    "Catacombs - Ruxxtin",
+    "Howling Grotto - Emerald Golem",
+    "Quillshroom Marsh - Queen of Quills",
 ]
