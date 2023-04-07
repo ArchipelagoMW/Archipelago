@@ -3,9 +3,10 @@ from typing import Dict, Any, Optional, List
 
 from BaseClasses import Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from .Constants import NOTES, PHOBEKINS, ALL_ITEMS, ALWAYS_LOCATIONS, SEALS, BOSS_LOCATIONS
+from .Constants import NOTES, PHOBEKINS, ALL_ITEMS, ALWAYS_LOCATIONS, SEALS, BOSS_LOCATIONS, FILLER
 from .Options import messenger_options, NotesNeeded, Goal, PowerSeals, Logic
 from .Regions import REGIONS, REGION_CONNECTIONS, MEGA_SHARDS
+from .Shop import SHOP_ITEMS
 from .SubClasses import MessengerRegion, MessengerItem
 from . import Rules
 
@@ -57,9 +58,10 @@ class MessengerWorld(World):
                                *SEALS,
                                *mega_shard_locs,
                                *BOSS_LOCATIONS,
+                               *SHOP_ITEMS,
                            ], base_offset)}
 
-    data_version = 2
+    data_version = 0
     required_client_version = (0, 3, 9)
 
     web = MessengerWeb()
@@ -78,27 +80,35 @@ class MessengerWorld(World):
                 region.add_exits(REGION_CONNECTIONS[region.name])
 
     def create_items(self) -> None:
-        itempool: List[MessengerItem] = []
+        # create items that are always in the item pool
+        itempool = [
+            self.create_item(item)
+            for item in self.item_name_to_id
+            if item not in
+               {
+                   "Power Seal", *NOTES, *SHOP_ITEMS,
+                   *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
+               } and "Time Shard" not in item
+        ]
+
+        if self.multiworld.shop_shuffle[self.player]:
+            itempool += [self.create_item(item) for item in SHOP_ITEMS]
+
         if self.multiworld.goal[self.player] == Goal.option_open_music_box:
-            notes = self.multiworld.random.sample(NOTES, k=len(NOTES))
-            precollected_notes_amount = NotesNeeded.range_end - self.multiworld.notes_needed[self.player]
-            if precollected_notes_amount:
+            # make a list of all notes except those in the player's defined starting inventory, and adjust the
+            # amount we need to put in the itempool and precollect based on that
+            notes = [note for note in NOTES if note not in self.multiworld.precollected_items[self.player]]
+            self.multiworld.per_slot_randoms[self.player].shuffle(notes)
+            precollected_notes_amount = NotesNeeded.range_end - \
+                self.multiworld.notes_needed[self.player] - \
+                (len(NOTES) - len(notes))
+            if precollected_notes_amount > 0:
                 for note in notes[:precollected_notes_amount]:
                     self.multiworld.push_precollected(self.create_item(note))
-            itempool += [self.create_item(note) for note in notes[precollected_notes_amount:]]
+                notes -= notes[:precollected_notes_amount]
+            itempool += [self.create_item(note) for note in notes]
 
-        itempool += [self.create_item(item)
-                     for item in self.item_name_to_id
-                     if item not in
-                     {
-                         "Power Seal", "Time Shard", *NOTES,
-                         *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
-                         # this is a set and currently won't create items for anything that appears in here at all
-                         # if we get in a position where this can have duplicates of items that aren't Power Seals
-                         # or Time shards, this will need to be redone.
-                     }]
-
-        if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
+        elif self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
             total_seals = min(len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool),
                               self.multiworld.total_seals[self.player].value)
             if total_seals < self.total_seals:
@@ -111,8 +121,13 @@ class MessengerWorld(World):
                 seals[i].classification = ItemClassification.progression_skip_balancing
             itempool += seals
 
-        itempool += [self.create_filler()
-                     for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool))]
+        itempool += [self.create_item(filler_item)
+                     for filler_item in
+                     self.multiworld.random.choices(
+                         list(FILLER),
+                         weights=list(FILLER.values()),
+                         k=len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
+                     )]
 
         self.multiworld.itempool += itempool
 
@@ -152,5 +167,5 @@ class MessengerWorld(World):
     def create_item(self, name: str) -> MessengerItem:
         item_id: Optional[int] = self.item_name_to_id.get(name, None)
         override_prog = name in {"Windmill Shuriken"} and getattr(self, "multiworld") is not None \
-            and self.multiworld.logic_level[self.player] > Logic.option_normal
+                        and self.multiworld.logic_level[self.player] > Logic.option_normal
         return MessengerItem(name, self.player, item_id, override_prog)

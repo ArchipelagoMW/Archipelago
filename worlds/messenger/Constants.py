@@ -1,5 +1,6 @@
 # items
 # listing individual groups first for easy lookup
+from .Shop import SHOP_ITEMS
 
 NOTES = [
     "Key of Hope",
@@ -35,6 +36,16 @@ USEFUL_ITEMS = [
     "Windmill Shuriken",
 ]
 
+FILLER = {
+    "Time Shard": 1,
+    "Time Shard (5)": 5,
+    "Time Shard (10)": 10,
+    "Time Shard (50)": 20,
+    "Time Shard (100)": 20,
+    "Time Shard (300)": 10,
+    "Time Shard (500)": 5,
+}
+
 # item_name_to_id needs to be deterministic and match upstream
 ALL_ITEMS = [
     *NOTES,
@@ -53,8 +64,9 @@ ALL_ITEMS = [
     "Sun Crest",
     "Moon Crest",
     *PHOBEKINS,
+    *FILLER.keys(),
     "Power Seal",
-    "Time Shard",  # there's 45 separate instances of this in the client lookup, but hopefully we don't care?
+    *SHOP_ITEMS,
 ]
 
 # locations

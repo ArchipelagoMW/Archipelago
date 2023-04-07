@@ -1,4 +1,8 @@
-from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice, Toggle
+from typing import Dict
+
+from schema import Schema, Or, And, Optional
+
+from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice, Toggle, OptionDict
 
 
 class MessengerAccessibility(Accessibility):
@@ -68,6 +72,54 @@ class RequiredSeals(Range):
     default = range_end
 
 
+class ShopPrices(Range):
+    """Percentage modifier for shuffled item prices in shops"""
+    display_name = "Shop Prices Modifier"
+    range_end = 400
+
+
+def planned_price(location: str) -> Dict[Optional, Or]:
+    return {
+        Optional(location): Or(
+            And(int, lambda n: n >= 0),
+            {
+                Optional(And(int, lambda n: n >= 0)): And(int, lambda n: n >= 0)
+            }
+        )
+    }
+
+
+class PlannedShopPrices(OptionDict):
+    """Plan specific prices on shop slots. Supports weighting"""
+    display_name = "Shop Price Plando"
+    schema = Schema({
+        **planned_price("Karuta Plates"),
+        **planned_price("Serendipitous Bodies"),
+        **planned_price("Path of Resilience"),
+        **planned_price("Kusari Jacket"),
+        **planned_price("Energy Shuriken"),
+        **planned_price("Serendipitous Minds"),
+        **planned_price("Prepared Mind"),
+        **planned_price("Meditation"),
+        **planned_price("Rejuvenative Spirit"),
+        **planned_price("Centered Mind"),
+        **planned_price("Strike of the Ninja"),
+        **planned_price("Second Wind"),
+        **planned_price("Currents Master"),
+        **planned_price("Aerobatics Warrior"),
+        **planned_price("Demon's Bane"),
+        **planned_price("Devil's Due"),
+        **planned_price("Time Sense"),
+        **planned_price("Power Sense"),
+        **planned_price("Focused Power Sense"),
+    })
+
+
+class ShopShuffle(Toggle):
+    """Whether the shop items should be shuffled in the item pool."""
+    display_name = "Shop Shuffle"
+
+
 messenger_options = {
     "accessibility": MessengerAccessibility,
     "logic_level": Logic,
@@ -78,5 +130,8 @@ messenger_options = {
     "notes_needed": NotesNeeded,
     "total_seals": AmountSeals,
     "percent_seals_required": RequiredSeals,
+    "shop_shuffle": ShopShuffle,
+    "shop_price": ShopPrices,
+    "shop_price_plan": PlannedShopPrices,
     "death_link": DeathLink,
 }
