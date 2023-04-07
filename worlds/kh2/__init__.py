@@ -196,12 +196,6 @@ class KH2World(World):
         for location, item in self.plando_locations.items():
             self.multiworld.get_location(location, self.player).place_locked_item(
                     self.create_item(item))
-        self.multiworld.get_location(LocationName.ProofofNonexistence, self.player).place_locked_item(
-                self.create_item(ItemName.Glide))
-        self.multiworld.get_location(LocationName.GardenofAssemblageMap, self.player).place_locked_item(
-                self.create_item(ItemName.Glide))
-        self.multiworld.get_location(LocationName.GoALostIllusion, self.player).place_locked_item(
-                self.create_item(ItemName.Glide))
 
     def create_regions(self):
         location_table = setup_locations()
