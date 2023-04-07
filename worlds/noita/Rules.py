@@ -2,8 +2,7 @@ from BaseClasses import MultiWorld
 from typing import List, Set
 
 from ..generic import Rules as GenericRules
-from . import Locations
-from .Options import BossesAsChecks
+from . import Locations, Options
 
 
 holy_mountain_regions: List[str] = [
@@ -25,9 +24,9 @@ wand_tiers: List[str] = [
     "Wand (Tier 6)",    # Temple of the Art
 ]
 
-items_hidden_from_shops: Set[str] = {"Gold (10)", "Gold (50)", "Gold (200)", "Gold (1000)", "Potion", "Random Potion",
-                                     "Secret Potion", "Chaos Die", "Greed Die", "Kammi", "Refreshing Gourd", "Sädekivi",
-                                     "Broken Wand", "Powder Pouch"}
+items_hidden_from_shops: Set[str] = {"Gold (200)", "Gold (1000)", "Potion", "Random Potion", "Secret Potion",
+                                     "Chaos Die", "Greed Die", "Kammi", "Refreshing Gourd", "Sädekivi", "Broken Wand",
+                                     "Powder Pouch"}
 
 
 def forbid_items_at_location(world: MultiWorld, location_name: str, items: Set[str], player: int):
@@ -58,8 +57,5 @@ def create_all_rules(world: MultiWorld, player: int) -> None:
         forbid_items_at_location(world, location_name, wands_to_forbid, player)
 
     # Prevent the Map perk from being on Toveri
-    if world.bosses_as_checks[player].value >= BossesAsChecks.option_all_bosses:
-        for location_name in Locations.location_name_to_id.keys():
-            if "Toveri" not in location_name:
-                continue
-            forbid_items_at_location(world, location_name, {"Perk (Spatial Awareness)"}, player)
+    if world.bosses_as_checks[player].value >= Options.BossesAsChecks.option_all_bosses:
+        forbid_items_at_location(world, "Toveri", {"Perk (Spatial Awareness)"}, player)

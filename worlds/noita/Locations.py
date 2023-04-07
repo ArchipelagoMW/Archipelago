@@ -44,7 +44,7 @@ class Pedestals(IntEnum):
 
 # Mapping of items in each region
 # Only the first Hidden Chest and Pedestal are mapped here, the others are created in Regions
-# ltype key: "hc" = Hidden Chests, "peds" = Pedestals, "boss" = Boss, "orb" = Orb.
+# ltype key: "chest" = Hidden Chests, "pedestal" = Pedestals, "boss" = Boss, "orb" = Orb.
 location_region_mapping: Dict[str, Dict[str, LocationData]] = {
     "Holy Mountain 1 (To Coal Pits)": {
         "Holy Mountain 1 (To Coal Pits) Shop Item 1": LocationData(111000),
@@ -117,24 +117,24 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Sandcave Orb": LocationData(110505, "orb", Orbs.main_world),
     },
     "Overgrown Cavern": {
-        "Overgrown Cavern Chest": LocationData(112200, "hc", HiddenChests.main_world),
-        "Overgrown Cavern Pedestal": LocationData(112700, "peds", Pedestals.main_world),
+        "Overgrown Cavern Chest": LocationData(112200, "chest", HiddenChests.main_world),
+        "Overgrown Cavern Pedestal": LocationData(112700, "pedestal", Pedestals.main_world),
     },
     "Lake": {
         "Syväolento": LocationData(110650, "boss", Bosses.main_world),
     },
     "Frozen Vault": {
         "Frozen Vault Orb": LocationData(110503, "orb", Orbs.main_world),
-        "Frozen Vault Chest": LocationData(112260, "hc", HiddenChests.main_world),
-        "Frozen Vault Pedestal": LocationData(112760, "peds", Pedestals.main_world),
+        "Frozen Vault Chest": LocationData(112260, "chest", HiddenChests.main_world),
+        "Frozen Vault Pedestal": LocationData(112760, "pedestal", Pedestals.main_world),
     },
     "Mines": {
-        "Mines Chest": LocationData(112000, "hc", HiddenChests.main_path),
-        "Mines Pedestal": LocationData(112500, "peds", Pedestals.main_path),
+        "Mines Chest": LocationData(112000, "chest", HiddenChests.main_path),
+        "Mines Pedestal": LocationData(112500, "pedestal", Pedestals.main_path),
     },
     "Collapsed Mines": {
-        "Collapsed Mines Chest": LocationData(112020, "hc", HiddenChests.side_path),
-        "Collapsed Mines Pedestal": LocationData(112520, "peds", Pedestals.side_path),
+        "Collapsed Mines Chest": LocationData(112020, "chest", HiddenChests.side_path),
+        "Collapsed Mines Pedestal": LocationData(112520, "pedestal", Pedestals.side_path),
     },
     "Ancient Laboratory": {
         "Ylialkemisti": LocationData(110700, "boss", Bosses.side_path),
@@ -147,57 +147,57 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Lava Lake Orb": LocationData(110504, "orb", Orbs.side_path),
     },
     "Coal Pits": {
-        "Coal Pits Chest": LocationData(112040, "hc", HiddenChests.main_path),
-        "Coal Pits Pedestal": LocationData(112540, "peds", Pedestals.main_path),
+        "Coal Pits Chest": LocationData(112040, "chest", HiddenChests.main_path),
+        "Coal Pits Pedestal": LocationData(112540, "pedestal", Pedestals.main_path),
     },
     "Fungal Caverns": {
-        "Fungal Caverns Chest": LocationData(112060, "hc", HiddenChests.side_path),
-        "Fungal Caverns Pedestal": LocationData(112560, "peds", Pedestals.side_path),
+        "Fungal Caverns Chest": LocationData(112060, "chest", HiddenChests.side_path),
+        "Fungal Caverns Pedestal": LocationData(112560, "pedestal", Pedestals.side_path),
     },
     "Snowy Depths": {
-        "Snowy Depths Chest": LocationData(112080, "hc", HiddenChests.main_path),
-        "Snowy Depths Pedestal": LocationData(112580, "peds", Pedestals.main_path),
+        "Snowy Depths Chest": LocationData(112080, "chest", HiddenChests.main_path),
+        "Snowy Depths Pedestal": LocationData(112580, "pedestal", Pedestals.main_path),
     },
     "Magical Temple": {
         "Magical Temple Orb": LocationData(110506, "orb", Orbs.side_path),
     },
     "Hiisi Base": {
-        "Hiisi Base Chest": LocationData(112100, "hc", HiddenChests.main_path),
-        "Hiisi Base Pedestal": LocationData(112600, "peds", Pedestals.main_path),
+        "Hiisi Base Chest": LocationData(112100, "chest", HiddenChests.main_path),
+        "Hiisi Base Pedestal": LocationData(112600, "pedestal", Pedestals.main_path),
     },
     "Underground Jungle": {
         "Suomuhauki": LocationData(110620, "boss", Bosses.main_path),
-        "Underground Jungle Chest": LocationData(112120, "hc", HiddenChests.main_path),
-        "Underground Jungle Pedestal": LocationData(112620, "peds", Pedestals.main_path),
+        "Underground Jungle Chest": LocationData(112120, "chest", HiddenChests.main_path),
+        "Underground Jungle Pedestal": LocationData(112620, "pedestal", Pedestals.main_path),
     },
     "Lukki Lair": {
         "Lukki Lair Orb": LocationData(110507, "orb", Orbs.side_path),
-        "Lukki Lair Chest": LocationData(112140, "hc", HiddenChests.side_path),
-        "Lukki Lair Pedestal": LocationData(112640, "peds", Pedestals.side_path),
+        "Lukki Lair Chest": LocationData(112140, "chest", HiddenChests.side_path),
+        "Lukki Lair Pedestal": LocationData(112640, "pedestal", Pedestals.side_path),
     },
     "The Vault": {
-        "The Vault Chest": LocationData(112160, "hc", HiddenChests.main_path),
-        "The Vault Pedestal": LocationData(112660, "peds", Pedestals.main_path),
+        "The Vault Chest": LocationData(112160, "chest", HiddenChests.main_path),
+        "The Vault Pedestal": LocationData(112660, "pedestal", Pedestals.main_path),
     },
     "Temple of the Art": {
         "Gate Guardian": LocationData(110660, "boss", Bosses.main_path),
-        "Temple of the Art Chest": LocationData(112180, "hc", HiddenChests.main_path),
-        "Temple of the Art Pedestal": LocationData(112680, "peds", Pedestals.main_path),
+        "Temple of the Art Chest": LocationData(112180, "chest", HiddenChests.main_path),
+        "Temple of the Art Pedestal": LocationData(112680, "pedestal", Pedestals.main_path),
     },
     "The Tower": {
-        "The Tower Chest": LocationData(112280, "hc", HiddenChests.main_world),
-        "The Tower Pedestal": LocationData(112780, "peds", Pedestals.main_world),
+        "The Tower Chest": LocationData(112280, "chest", HiddenChests.main_world),
+        "The Tower Pedestal": LocationData(112780, "pedestal", Pedestals.main_world),
     },
     "Wizard's Den": {
         "Mestarien Mestari": LocationData(110690, "boss", Bosses.main_world),
         "Wizard's Den Orb": LocationData(110511, "orb", Orbs.main_world),
-        "Wizards' Den Chest": LocationData(112220, "hc", HiddenChests.main_world),
-        "Wizards' Den Pedestal": LocationData(112720, "peds", Pedestals.main_world),
+        "Wizards' Den Chest": LocationData(112220, "chest", HiddenChests.main_world),
+        "Wizards' Den Pedestal": LocationData(112720, "pedestal", Pedestals.main_world),
     },
     "Powerplant": {
         "Kolmisilmän silmä": LocationData(110710, "boss", Bosses.main_world),
-        "Power Plant Chest": LocationData(112240, "hc", HiddenChests.main_world),
-        "Power Plant Pedestal": LocationData(112740, "peds", Pedestals.main_world),
+        "Power Plant Chest": LocationData(112240, "chest", HiddenChests.main_world),
+        "Power Plant Pedestal": LocationData(112740, "pedestal", Pedestals.main_world),
     },
     "Snow Chasm": {
         "Unohdettu": LocationData(110670, "boss", Bosses.main_world),
@@ -222,7 +222,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
 location_name_to_id: Dict[str, int] = {}
 for location_group in location_region_mapping.values():
     for locname, locinfo in location_group.items():
-        if locinfo.ltype in ["hc", "peds"]:
+        if locinfo.ltype in ["chest", "pedestal"]:
             for i in range(20):
                 location_name_to_id.update({f"{locname} {i + 1}": locinfo.id + i})
         else:
