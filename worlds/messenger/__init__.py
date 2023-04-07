@@ -146,7 +146,7 @@ class MessengerWorld(World):
     def set_rules(self) -> None:
         if not self.multiworld.shop_shuffle[self.player]:
             for item in SHOP_ITEMS:
-                self.multiworld.state.collect(self.create_item(item))
+                self.multiworld.push_precollected(self.create_item(item))
         else:
             self.shop_prices = shuffle_shop_prices(self)
 
@@ -178,6 +178,14 @@ class MessengerWorld(World):
             },
             "logic": self.multiworld.logic_level[self.player].current_key,
         }
+
+    def modify_multidata(self, multidata: Dict[str, Any]) -> None:
+        if self.multiworld.shop_shuffle[self.player]:
+            return
+        for item in SHOP_ITEMS:
+            item_id = self.item_name_to_id.get(item, None)
+            if item_id in multidata["precollected_items"][self.player]:
+                multidata["precollected_items"][self.player].remove(item_id)
 
     def get_filler_item_name(self) -> str:
         return "Time Shard"

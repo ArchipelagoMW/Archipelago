@@ -70,13 +70,16 @@ class MessengerRules:
             "Mega Shard of the Sun": self.has_tabi,
             # riviere turquoise
             "Fairy Bottle": self.has_vertical,
+            "Riviere Turquoise Seal - Bounces and Balls": self.can_dboost,
+            "Riviere Turquoise Seal - Launch of Faith": self.can_dboost,
             "Riviere Turquoise Seal - Flower Power": self.has_vertical,
             "Quick Restock Mega Shard 1": self.has_vertical,
             "Quick Restock Mega Shard 2": self.has_vertical,
             # elemental skylands
             "Key of Symbiosis": self.has_dart,
             "Elemental Skylands Seal - Air": self.has_wingsuit,
-            "Elemental Skylands Seal - Water": self.has_dart,
+            "Elemental Skylands Seal - Water": lambda state: self.has_dart(state) and
+                                                             state.has("Currents Master", self.player),
             "Elemental Skylands Seal - Fire": self.has_dart,
             "Earth Mega Shard": self.has_dart,
             "Water Mega Shard": self.has_dart,
@@ -87,7 +90,7 @@ class MessengerRules:
         }
 
     def has_wingsuit(self, state: CollectionState) -> bool:
-        return state.has("Wingsuit", self.player)
+        return state.has_all({"Wingsuit", "Aerobatics Warrior"}, self.player)
 
     def has_dart(self, state: CollectionState) -> bool:
         return state.has("Rope Dart", self.player)
@@ -96,10 +99,17 @@ class MessengerRules:
         return state.has("Ninja Tabi", self.player)
 
     def has_vertical(self, state: CollectionState) -> bool:
-        return self.has_wingsuit(state) or self.has_dart(state)
+        return self.destroys_projectiles(state) and (self.has_wingsuit(state) or self.has_dart(state))
 
     def has_enough_seals(self, state: CollectionState) -> bool:
         return not self.world.required_seals or state.has("Power Seal", self.player, self.world.required_seals)
+
+    def destroys_projectiles(self, state: CollectionState) -> bool:
+        return state.has("Strike of the Ninja", self.player)
+
+    def can_dboost(self, state: CollectionState) -> bool:
+        return state.has_any({"Path of Resilience", "Meditation"}, self.player) and \
+            state.has("Second Wind", self.player)
 
     def true(self, state: CollectionState) -> bool:
         """I know this is stupid, but it's easier to read in the dicts."""
@@ -238,6 +248,10 @@ def set_self_locking_items(multiworld: MultiWorld, player: int) -> None:
     allow_self_locking_items(multiworld.get_location("Key of Strength", player), "Power Thistle")
     allow_self_locking_items(multiworld.get_location("Key of Love", player), "Sun Crest", "Moon Crest")
     allow_self_locking_items(multiworld.get_location("Key of Courage", player), "Demon King Crown")
+
+    # add these locations when seals are shuffled
+    if multiworld.shuffle_seals[player]:
+        allow_self_locking_items(multiworld.get_location("Elemental Skylands Seal - Water", player), "Currents Master")
 
     # add these locations when seals aren't shuffled
     if not multiworld.shuffle_seals[player] and not multiworld.shuffle_shards[player]:

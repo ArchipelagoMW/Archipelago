@@ -8,6 +8,24 @@ if TYPE_CHECKING:
 else:
     MessengerWorld = object
 
+PROG_SHOP_ITEMS = [
+    "Path of Resilience",
+    "Meditation",
+    "Strike of the Ninja",
+    "Second Wind",
+    "Currents Master",
+    "Aerobatics Warrior",
+]
+
+USEFUL_SHOP_ITEMS = [
+    "Karuta Plates",
+    "Serendipitous Bodies",
+    "Kusari Jacket",
+    "Energy Shuriken",
+    "Serendipitous Minds",
+    "Rejuvenate Spirit",
+    "Demon's Bane",
+]
 
 SHOP_ITEMS = {
     "Karuta Plates": "HP_UPGRADE_1",

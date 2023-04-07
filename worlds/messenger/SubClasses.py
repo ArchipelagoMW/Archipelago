@@ -4,7 +4,7 @@ from BaseClasses import Region, Location, Item, ItemClassification, Entrance, Co
 from .Constants import SEALS, NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
 from .Options import Goal
 from .Regions import REGIONS, MEGA_SHARDS
-from .Shop import SHOP_ITEMS
+from .Shop import SHOP_ITEMS, PROG_SHOP_ITEMS, USEFUL_SHOP_ITEMS
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -65,9 +65,9 @@ class MessengerItem(Item):
     game = "The Messenger"
 
     def __init__(self, name: str, player: int, item_id: Optional[int] = None, override_progression: bool = False) -> None:
-        if item_id is None or override_progression or name in {*NOTES, *PROG_ITEMS, *PHOBEKINS, *SHOP_ITEMS}:
+        if item_id is None or override_progression or name in {*NOTES, *PROG_ITEMS, *PHOBEKINS, *PROG_SHOP_ITEMS}:
             item_class = ItemClassification.progression
-        elif name in USEFUL_ITEMS:
+        elif name in {*USEFUL_ITEMS, *USEFUL_SHOP_ITEMS}:
             item_class = ItemClassification.useful
         else:
             item_class = ItemClassification.filler
