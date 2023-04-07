@@ -75,6 +75,8 @@ class MessengerWorld(World):
         if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
             self.multiworld.shuffle_seals[self.player].value = PowerSeals.option_true
             self.total_seals = self.multiworld.total_seals[self.player].value
+        self.multiworld.early_items[self.player]["Strike of the Ninja"] = 1
+        self.multiworld.early_items[self.player]["Second Wind"] = 1
 
     def create_regions(self) -> None:
         for region in [MessengerRegion(reg_name, self) for reg_name in REGIONS]:
@@ -145,8 +147,12 @@ class MessengerWorld(World):
 
     def set_rules(self) -> None:
         if not self.multiworld.shop_shuffle[self.player]:
+            self.shop_prices = {}
+            # the items are still logically relevant but i don't want to create the locations or send items to the player
             for item in SHOP_ITEMS:
-                self.multiworld.push_precollected(self.create_item(item))
+                shop_item = self.create_item(item)
+                shop_item.code = None
+                self.multiworld.push_precollected(shop_item)
         else:
             self.shop_prices = shuffle_shop_prices(self)
 
@@ -177,15 +183,8 @@ class MessengerWorld(World):
                 "Mega Shards": self.multiworld.shuffle_shards[self.player].value
             },
             "logic": self.multiworld.logic_level[self.player].current_key,
+            "shop": self.shop_prices,
         }
-
-    def modify_multidata(self, multidata: Dict[str, Any]) -> None:
-        if self.multiworld.shop_shuffle[self.player]:
-            return
-        for item in SHOP_ITEMS:
-            item_id = self.item_name_to_id.get(item, None)
-            if item_id in multidata["precollected_items"][self.player]:
-                multidata["precollected_items"][self.player].remove(item_id)
 
     def get_filler_item_name(self) -> str:
         return "Time Shard"
