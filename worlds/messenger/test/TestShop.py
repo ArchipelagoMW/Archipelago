@@ -50,6 +50,13 @@ class ShopCostTest(MessengerTestBase):
         self.assertAccessDependency(locations, items)
 
 
+class ShopMinLocTest(MessengerTestBase):
+    options = {
+        "shuffle_seals": "false",
+        "shop_shuffle": "true",
+    }
+
+
 class PlandoTest(MessengerTestBase):
     options = {
         "shop_shuffle": "true",
