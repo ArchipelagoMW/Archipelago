@@ -163,6 +163,10 @@
         <AbilArray Link="StarportLiftOff"/>
     </CUnit>
     <CUnit id="ValkyrieSCBW">
+        <!--
+            This unit and its assets are taken from SC2plusBW mod https://github.com/abrahamYG/SC2plusSCBW
+            Copyright (c) 2016 Abraham Yunes - MIT License
+        -->
         <DeathRevealRadius value="3"/>
         <Race value="Terr"/>
         <Mob value="Multiplayer"/>
