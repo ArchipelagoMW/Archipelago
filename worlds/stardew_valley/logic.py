@@ -826,6 +826,7 @@ class StardewLogic:
             rules.append(self.has_lived_months(4))
         if npc == "Dwarf":
             rules.append(self.received("Dwarvish Translation Guide"))
+            rules.append(self.has_tool("Pickaxe", "Iron"))
 
         return And(rules)
 
