@@ -134,7 +134,7 @@ class KH2World(World):
 
         # Creating filler for unfilled locations
         itempool += [self.create_filler()
-                     for _ in range(self.totalLocations-len(itempool))]
+                     for _ in range(self.totalLocations-len(itempool)-1)]
         self.multiworld.itempool += itempool
 
     def generate_early(self) -> None:
@@ -188,13 +188,19 @@ class KH2World(World):
         random_stt_item = self.create_filler().name
         for location in {LocationName.JunkMedal, LocationName.JunkMedal}:
             self.plando_locations[location] = random_stt_item
-
+        self.totalLocations -= 2
         self.level_subtraction()
 
     def pre_fill(self):
         for location, item in self.plando_locations.items():
             self.multiworld.get_location(location, self.player).place_locked_item(
                     self.create_item(item))
+        self.multiworld.get_location(LocationName.ProofofNonexistence, self.player).place_locked_item(
+                self.create_item(ItemName.Glide))
+        self.multiworld.get_location(LocationName.GardenofAssemblageMap, self.player).place_locked_item(
+                self.create_item(ItemName.Glide))
+        self.multiworld.get_location(LocationName.GoALostIllusion, self.player).place_locked_item(
+                self.create_item(ItemName.Glide))
 
     def create_regions(self):
         location_table = setup_locations()
@@ -363,4 +369,4 @@ class KH2World(World):
             self.totalLocations -= 76
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice([ItemName.PowerBoost,ItemName.MagicBoost,ItemName.DefenseBoost,ItemName.APBoost])
+        return self.multiworld.random.choice([ItemName.PowerBoost, ItemName.MagicBoost, ItemName.DefenseBoost, ItemName.APBoost])
