@@ -37,8 +37,7 @@ USEFUL_ITEMS = [
 ]
 
 FILLER = {
-    "Time Shard": 1,
-    "Time Shard (5)": 5,
+    "Time Shard": 5,
     "Time Shard (10)": 10,
     "Time Shard (50)": 20,
     "Time Shard (100)": 20,
