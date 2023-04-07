@@ -50,8 +50,6 @@ class MessengerRules:
             "Key of Strength": lambda state: state.has("Power Thistle", self.player),
             # glacial peak
             "Glacial Peak Seal - Ice Climbers": self.has_dart,
-            "Glacial Peak Seal - Projectile Spike Pit": self.has_vertical,
-            "Glacial Peak Seal - Glacial Air Swag": self.has_vertical,
             # tower of time
             "Tower of Time Seal - Time Waster Seal": self.has_dart,
             "Tower of Time Seal - Lantern Climb": self.has_wingsuit,

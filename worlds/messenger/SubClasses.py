@@ -64,12 +64,15 @@ class MessengerShopLocation(MessengerLocation):
 class MessengerItem(Item):
     game = "The Messenger"
 
-    def __init__(self, name: str, player: int, item_id: Optional[int] = None, override_progression: bool = False) -> None:
+    def __init__(self, name: str, player: int, item_id: Optional[int] = None, override_progression: bool = False,
+                 count: int = 0) -> None:
         if item_id is None or override_progression or name in {*NOTES, *PROG_ITEMS, *PHOBEKINS, *PROG_SHOP_ITEMS}:
             item_class = ItemClassification.progression
         elif name in {*USEFUL_ITEMS, *USEFUL_SHOP_ITEMS}:
             item_class = ItemClassification.useful
         else:
             item_class = ItemClassification.filler
+        if count >= 100:
+            item_class = ItemClassification.progression_skip_balancing
         super().__init__(name, item_class, item_id, player)
 
