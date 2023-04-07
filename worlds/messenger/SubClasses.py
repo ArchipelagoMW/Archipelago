@@ -1,12 +1,12 @@
 from typing import Set, TYPE_CHECKING, Optional, Dict
 
-from BaseClasses import Region, Location, Item, ItemClassification, Entrance
+from BaseClasses import Region, Location, Item, ItemClassification, Entrance, CollectionState
 from .Constants import SEALS, NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
 from .Options import Goal
 from .Regions import REGIONS, MEGA_SHARDS
 
 if TYPE_CHECKING:
-    from . import MessengerWorld
+    from . import MessengerWorld, SHOP_ITEMS
 else:
     MessengerWorld = object
 
@@ -22,6 +22,9 @@ class MessengerRegion(Region):
             self.locations.append(MessengerLocation(loc, self, name_to_id.get(loc, None)))
         if self.name == "The Shop" and self.multiworld.goal[self.player] > Goal.option_open_music_box:
             self.locations.append(MessengerLocation("Shop Chest", self, name_to_id.get("Shop Chest", None)))
+            if self.multiworld.shop_shuffle[self.player]:
+                self.locations += [MessengerShopLocation(shop_loc, self, name_to_id.get(shop_loc, None))
+                                   for shop_loc in SHOP_ITEMS]
         # putting some dumb special case for searing crags and ToT so i can split them into 2 regions
         if self.multiworld.shuffle_seals[self.player] and self.name not in {"Searing Crags", "Tower HQ", "Cloud Ruins"}:
             self.locations += [MessengerLocation(seal_loc, self, name_to_id.get(seal_loc, None))
@@ -44,6 +47,16 @@ class MessengerLocation(Location):
         super().__init__(parent.player, name, loc_id, parent)
         if loc_id is None:
             self.place_locked_item(MessengerItem(name, parent.player, None))
+
+
+class MessengerShopLocation(MessengerLocation):
+    def cost(self) -> int:
+        return self.parent_region.multiworld.worlds[self.player].shop_prices.get(self.name, 0)
+
+    def can_afford(self, state: CollectionState) -> bool:
+        world = state.multiworld.worlds[self.player]
+        return state.has("Shards", self.player) >= self.cost() * 2 or \
+            state.has("Shards", self.player) >= world.total_shards
 
 
 class MessengerItem(Item):

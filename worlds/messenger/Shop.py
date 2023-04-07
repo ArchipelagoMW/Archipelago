@@ -1,7 +1,7 @@
 from random import Random
 from typing import Dict, TYPE_CHECKING
 
-from BaseClasses import ItemClassification
+from BaseClasses import LocationProgressType
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -44,13 +44,12 @@ def shuffle_shop_prices(world: MessengerWorld) -> Dict[str, int]:
     if remaining_slots and shop_price_mod:
         random: Random = world.multiworld.per_slot_randoms[world.player]
         for shop_item in remaining_slots:
+            price = random.randint(20, 2000)
             shop_loc = world.multiworld.get_location(shop_item, world.player)
-            if shop_loc.item.classification == ItemClassification.progression:
-                price = random.randint(500, 2000)
-            elif shop_loc.item.classification == ItemClassification.useful:
-                price = random.randint(100, 500)
-            else:
-                price = random.randint(20, 100)
+            if price >= 800:
+                shop_loc.progress_type = LocationProgressType.PRIORITY
+            elif price <= 200:
+                shop_loc.progress_type = LocationProgressType.EXCLUDED
             shop_prices[shop_item] = min(int(price * shop_price_mod / 100), 5000)
 
     return shop_prices

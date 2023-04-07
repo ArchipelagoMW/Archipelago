@@ -1,12 +1,12 @@
 import logging
 from typing import Dict, Any, Optional, List
 
-from BaseClasses import Tutorial, ItemClassification
+from BaseClasses import Tutorial, ItemClassification, CollectionState, Item
 from worlds.AutoWorld import World, WebWorld
 from .Constants import NOTES, PHOBEKINS, ALL_ITEMS, ALWAYS_LOCATIONS, SEALS, BOSS_LOCATIONS, FILLER
 from .Options import messenger_options, NotesNeeded, Goal, PowerSeals, Logic
 from .Regions import REGIONS, REGION_CONNECTIONS, MEGA_SHARDS
-from .Shop import SHOP_ITEMS
+from .Shop import SHOP_ITEMS, shuffle_shop_prices
 from .SubClasses import MessengerRegion, MessengerItem
 from . import Rules
 
@@ -68,6 +68,8 @@ class MessengerWorld(World):
 
     total_seals: int = 0
     required_seals: int = 0
+    total_shards: int
+    shop_prices: Dict[str, int]
 
     def generate_early(self) -> None:
         if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
@@ -105,7 +107,7 @@ class MessengerWorld(World):
             if precollected_notes_amount > 0:
                 for note in notes[:precollected_notes_amount]:
                     self.multiworld.push_precollected(self.create_item(note))
-                notes -= notes[:precollected_notes_amount]
+                notes = notes[precollected_notes_amount:]
             itempool += [self.create_item(note) for note in notes]
 
         elif self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
@@ -121,7 +123,7 @@ class MessengerWorld(World):
                 seals[i].classification = ItemClassification.progression_skip_balancing
             itempool += seals
 
-        itempool += [self.create_item(filler_item)
+        shards = [self.create_item(filler_item)
                      for filler_item in
                      self.multiworld.random.choices(
                          list(FILLER),
@@ -129,9 +131,24 @@ class MessengerWorld(World):
                          k=len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
                      )]
 
+        self.total_shards = 0
+        for shard in shards:
+            if shard.name == "Time Shard":
+                self.total_shards += 1
+            else:
+                self.total_shards += int(shard.name.split(" ")[-1].strip("()"))
+
+        itempool += shards
+
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
+        if not self.multiworld.shop_shuffle[self.player]:
+            for item in SHOP_ITEMS:
+                self.multiworld.state.collect(self.create_item(item))
+        else:
+            self.shop_prices = shuffle_shop_prices(self)
+
         logic = self.multiworld.logic_level[self.player]
         if logic == Logic.option_normal:
             Rules.MessengerRules(self).set_messenger_rules()
@@ -166,6 +183,20 @@ class MessengerWorld(World):
 
     def create_item(self, name: str) -> MessengerItem:
         item_id: Optional[int] = self.item_name_to_id.get(name, None)
-        override_prog = name in {"Windmill Shuriken"} and getattr(self, "multiworld") is not None \
-                        and self.multiworld.logic_level[self.player] > Logic.option_normal
+        override_prog = getattr(self, "multiworld") is not None and (
+                (name in {"Windmill Shuriken"} and self.multiworld.logic_level[self.player] > Logic.option_normal) or
+                ("Time Shard" in name and self.multiworld.shop_shuffle[self.player])
+        )
         return MessengerItem(name, self.player, item_id, override_prog)
+
+    def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
+        if item.advancement and "Time Shard" in item.name:
+            if item.name == "Time Shard":
+                shard_count = 1
+            else:
+                shard_count = int(item.name.split(" ")[-1].strip("()"))
+            if remove:
+                shard_count = -shard_count
+            state.prog_items["Shards", self.player] += shard_count
+
+        return super().collect_item(state, item, remove)

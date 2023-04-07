@@ -115,6 +115,10 @@ class MessengerRules:
             for loc in region.locations:
                 if loc.name in self.location_rules:
                     loc.access_rule = self.location_rules[loc.name]
+            if region.name == "The Shop":
+                for loc in region.locations:
+                    if not loc.name == "Shop Chest":
+                        loc.access_rule = loc.can_afford
         if multiworld.goal[self.player] == Goal.option_power_seal_hunt:
             set_rule(multiworld.get_entrance("Tower HQ -> Music Box", self.player),
                      lambda state: state.has("Shop Chest", self.player))
