@@ -130,12 +130,11 @@ class KH2World(World):
 
         for item in item_dictionary_table:
             data = self.item_quantity_dict[item]
-            for _ in range(data):
-                itempool.append(self.create_item(item))
+            itempool += [self.create_item(item) for _ in range(data)]
+
         # Creating filler for unfilled locations
-        while len(itempool) < self.totalLocations:
-            item = self.multiworld.per_slot_randoms[self.player].choice(self.filler_items)
-            itempool += [self.create_item(item)]
+        itempool += [self.create_filler()
+                     for _ in range(self.totalLocations-len(itempool))]
         self.multiworld.itempool += itempool
 
     def generate_early(self) -> None:
@@ -195,7 +194,7 @@ class KH2World(World):
 
         self.level_subtraction()
 
-    def generate_basic(self):
+    def pre_fill(self):
         for location, item in self.plando_locations.items():
             self.multiworld.get_location(location, self.player).place_locked_item(
                     self.create_item(item))
@@ -365,3 +364,6 @@ class KH2World(World):
         else:
             # level 50/99 since they contain the same amount of levels
             self.totalLocations -= 76
+
+    def get_filler_item_name(self) -> str:
+        return self.multiworld.random.choice([ItemName.PowerBoost,ItemName.MagicBoost,ItemName.DefenseBoost,ItemName.APBoost])
