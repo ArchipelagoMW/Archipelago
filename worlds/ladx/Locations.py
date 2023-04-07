@@ -85,7 +85,7 @@ def has_free_weapon(state: "CollectionState", player: int) -> bool:
 
 # If the player has access to farm enough rupees to afford a game, we assume that they can keep beating the game
 def can_farm_rupees(state: "CollectionState", player: int) -> bool:
-    return has_free_weapon(state, player) and (state.has("Can Play Trendy Game", player=player) or state.has("RAFT", player=player))
+    return has_free_weapon(state, player) and (state.has("Can Play Trendy Game", player=player) or (state.has("RAFT", player=player) and state.has("Feather", player=player))
 
 
 class LinksAwakeningLogic(LogicMixin):
