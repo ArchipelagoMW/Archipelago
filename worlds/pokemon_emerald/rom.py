@@ -124,6 +124,7 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
     #     /* 0x0E */ bool8 normanRequiresGyms;
     #     /* 0x0F */ u8 normanRequiredCount;
     #     /* 0x10 */ u8 startingBadges;
+    #     /* 0x11 */ u8 receivedItemMessageFilter; // 0 = Show All; 1 = Show Progression Only; 2 = Show None
     # };
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
@@ -177,6 +178,10 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
 
     # Set starting badges
     _set_bytes_little_endian(patched_rom, options_address + 0x10, 1, starting_badges)
+
+    # Set receive item messages type
+    receive_item_messages_type = get_option_value(multiworld, player, "receive_item_messages")
+    _set_bytes_little_endian(patched_rom, options_address + 0x11, 1, receive_item_messages_type)
 
     # Write Output
     outfile_player_name = f"_P{player}"

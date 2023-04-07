@@ -361,6 +361,20 @@ class TurboA(Toggle):
     display_name = "Turbo A"
 
 
+class ReceiveItemMessages(Choice):
+    """
+    Determines whether you receive an in-game notification when receiving an item. Items can still only be received in the overworld.
+    All: Every item shows a message
+    Progression: Only progression items show a message
+    None: All items are added to your bag silently
+    """
+    display_name = "Receive Item Messages"
+    default = 0
+    option_all = 0
+    option_progression = 1
+    option_none = 2
+
+
 option_definitions: Dict[str, Option] = {
   "badges": RandomizeBadges,
   "hms": RandomizeHms,
@@ -401,7 +415,8 @@ option_definitions: Dict[str, Option] = {
   "blind_trainers": BlindTrainers,
   "better_shops": BetterShops,
   "fly_without_badge": FlyWithoutBadge,
-  "turbo_a": TurboA
+  "turbo_a": TurboA,
+  "receive_item_messages": ReceiveItemMessages
 }
 
 
