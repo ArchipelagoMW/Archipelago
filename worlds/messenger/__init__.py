@@ -124,8 +124,8 @@ class MessengerWorld(World):
             itempool += seals
 
         shards = [self.create_item(filler_item)
-                     for filler_item in
-                     self.multiworld.random.choices(
+                  for filler_item in
+                  self.multiworld.random.choices(
                          list(FILLER),
                          weights=list(FILLER.values()),
                          k=len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
@@ -137,6 +137,7 @@ class MessengerWorld(World):
                 self.total_shards += 1
             else:
                 self.total_shards += int(shard.name.split(" ")[-1].strip("()"))
+            shard.classification = ItemClassification.progression_skip_balancing
 
         itempool += shards
 
@@ -183,10 +184,9 @@ class MessengerWorld(World):
 
     def create_item(self, name: str) -> MessengerItem:
         item_id: Optional[int] = self.item_name_to_id.get(name, None)
-        override_prog = getattr(self, "multiworld") is not None and (
-                (name in {"Windmill Shuriken"} and self.multiworld.logic_level[self.player] > Logic.option_normal) or
-                ("Time Shard" in name and self.multiworld.shop_shuffle[self.player])
-        )
+        override_prog = getattr(self, "multiworld") is not None and \
+            name in {"Windmill Shuriken"} and \
+            self.multiworld.logic_level[self.player] > Logic.option_normal
         return MessengerItem(name, self.player, item_id, override_prog)
 
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:

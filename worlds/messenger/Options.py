@@ -75,7 +75,9 @@ class RequiredSeals(Range):
 class ShopPrices(Range):
     """Percentage modifier for shuffled item prices in shops"""
     display_name = "Shop Prices Modifier"
+    range_start = 25
     range_end = 400
+    default = 100
 
 
 def planned_price(location: str) -> Dict[Optional, Or]:

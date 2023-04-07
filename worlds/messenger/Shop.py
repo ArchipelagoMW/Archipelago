@@ -35,14 +35,17 @@ SHOP_ITEMS = {
 def shuffle_shop_prices(world: MessengerWorld) -> Dict[str, int]:
     shop_price_mod = world.multiworld.shop_price[world.player].value
     shop_price_planned = world.multiworld.shop_price_plan[world.player]
+    random: Random = world.multiworld.per_slot_randoms[world.player]
 
     shop_prices: Dict[str, int] = {}
     for item, price in shop_price_planned.value.items():
-        shop_prices[item] = price
+        if isinstance(price, int):
+            shop_prices[item] = price
+        else:
+            shop_prices[item] = random.choices(list(price.keys()), weights=list(price.values()))[0]
 
-    remaining_slots = [item for item in shop_price_mod.valid_keys if item not in shop_prices]
-    if remaining_slots and shop_price_mod:
-        random: Random = world.multiworld.per_slot_randoms[world.player]
+    remaining_slots = [item for item in SHOP_ITEMS if item not in shop_prices]
+    if remaining_slots:
         for shop_item in remaining_slots:
             price = random.randint(20, 2000)
             shop_loc = world.multiworld.get_location(shop_item, world.player)

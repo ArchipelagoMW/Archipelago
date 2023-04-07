@@ -4,9 +4,10 @@ from BaseClasses import Region, Location, Item, ItemClassification, Entrance, Co
 from .Constants import SEALS, NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
 from .Options import Goal
 from .Regions import REGIONS, MEGA_SHARDS
+from .Shop import SHOP_ITEMS
 
 if TYPE_CHECKING:
-    from . import MessengerWorld, SHOP_ITEMS
+    from . import MessengerWorld
 else:
     MessengerWorld = object
 
@@ -20,8 +21,9 @@ class MessengerRegion(Region):
     def add_locations(self, name_to_id: Dict[str, int]) -> None:
         for loc in REGIONS[self.name]:
             self.locations.append(MessengerLocation(loc, self, name_to_id.get(loc, None)))
-        if self.name == "The Shop" and self.multiworld.goal[self.player] > Goal.option_open_music_box:
-            self.locations.append(MessengerLocation("Shop Chest", self, name_to_id.get("Shop Chest", None)))
+        if self.name == "The Shop":
+            if self.multiworld.goal[self.player] > Goal.option_open_music_box:
+                self.locations.append(MessengerLocation("Shop Chest", self, name_to_id.get("Shop Chest", None)))
             if self.multiworld.shop_shuffle[self.player]:
                 self.locations += [MessengerShopLocation(shop_loc, self, name_to_id.get(shop_loc, None))
                                    for shop_loc in SHOP_ITEMS]
@@ -55,15 +57,15 @@ class MessengerShopLocation(MessengerLocation):
 
     def can_afford(self, state: CollectionState) -> bool:
         world = state.multiworld.worlds[self.player]
-        return state.has("Shards", self.player) >= self.cost() * 2 or \
-            state.has("Shards", self.player) >= world.total_shards
+        return state.has("Shards", self.player, self.cost() * 2) or \
+            state.has("Shards", self.player, world.total_shards)
 
 
 class MessengerItem(Item):
     game = "The Messenger"
 
     def __init__(self, name: str, player: int, item_id: Optional[int] = None, override_progression: bool = False) -> None:
-        if name in {*NOTES, *PROG_ITEMS, *PHOBEKINS} or item_id is None or override_progression:
+        if item_id is None or override_progression or name in {*NOTES, *PROG_ITEMS, *PHOBEKINS, *SHOP_ITEMS}:
             item_class = ItemClassification.progression
         elif name in USEFUL_ITEMS:
             item_class = ItemClassification.useful
