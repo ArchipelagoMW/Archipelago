@@ -32,6 +32,7 @@ class ShopData(NamedTuple):
     internal_name: str
     min_price: int
     max_price: int
+    default_price: int = 0
 
 
 SHOP_ITEMS: Dict[str, ShopData] = {

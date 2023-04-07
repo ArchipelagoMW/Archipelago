@@ -54,7 +54,9 @@ class MessengerLocation(Location):
 
 class MessengerShopLocation(MessengerLocation):
     def cost(self) -> int:
-        return self.parent_region.multiworld.worlds[self.player].shop_prices.get(self.name, 0)
+        name = self.name[11:]  # removes "The Shop - "
+        prices = self.parent_region.multiworld.worlds[self.player].shop_prices
+        return prices.get(name, SHOP_ITEMS[name].default_price)
 
     def can_afford(self, state: CollectionState) -> bool:
         world = state.multiworld.worlds[self.player]

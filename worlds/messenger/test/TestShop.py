@@ -20,8 +20,8 @@ class ShopCostTest(MessengerTestBase):
         prices: Dict[str, int] = self.multiworld.worlds[self.player].shop_prices
         for loc, price in prices.items():
             with self.subTest("prices", loc=loc):
-                self.assertEqual(price, self.multiworld.get_location(loc, self.player).cost())
-                self.assertTrue(loc.lstrip("The Shop - ") in SHOP_ITEMS)
+                self.assertEqual(price, self.multiworld.get_location(f"The Shop - {loc}", self.player).cost())
+                self.assertTrue(loc in SHOP_ITEMS)
         self.assertEqual(len(prices), len(SHOP_ITEMS))
 
     def testDBoost(self) -> None:
@@ -36,18 +36,17 @@ class ShopCostTest(MessengerTestBase):
 
     def testStrike(self) -> None:
         locations = [
-            "Power Thistle", "Key of Strength", "Astral Tea Leaves", "Searing Crags Seal - Triple Ball Spinner",
-            "Searing Crags Seal - Raining Rocks", "Searing Crags Seal - Rhythm Rocks", "Searing Crags Mega Shard",
-            "Acro", "Cloud Ruins Seal - Ghost Pit", "Cloud Ruins Seal - Toothbrush Alley", "Cloud Ruins Seal - Saw Pit",
+            "Searing Crags - Power Thistle", "Searing Crags - Key of Strength", "Searing Crags - Astral Tea Leaves",
+            "Searing Crags Seal - Triple Ball Spinner", "Searing Crags Seal - Raining Rocks",
+            "Searing Crags Seal - Rhythm Rocks", "Searing Crags Mega Shard", "Cloud Ruins - Acro",
+            "Cloud Ruins Seal - Ghost Pit", "Cloud Ruins Seal - Toothbrush Alley", "Cloud Ruins Seal - Saw Pit",
             "Cloud Ruins Seal - Money Farm Room", "Cloud Entrance Mega Shard", "Time Warp Mega Shard",
             "Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2",
             "Glacial Peak Seal - Ice Climbers", "Glacial Peak Seal - Projectile Spike Pit",
-            "Glacial Peak Seal - Glacial Air Swag", "Glacial Peak Mega Shard",
-            "Fairy Bottle", "Riviere Turquoise Seal - Flower Power", "Quick Restock Mega Shard 1",
-            "Quick Restock Mega Shard 2",
-            "Key of Symbiosis", "Elemental Skylands Seal - Air", "Elemental Skylands Seal - Water",
-            "Elemental Skylands Seal - Fire", "Earth Mega Shard", "Water Mega Shard",
-            "Rescue Phantom",
+            "Glacial Peak Seal - Glacial Air Swag", "Glacial Peak Mega Shard", "Riviere Turquoise - Butterfly Matriarch",
+            "Riviere Turquoise Seal - Flower Power", "Quick Restock Mega Shard 1", "Quick Restock Mega Shard 2",
+            "Elemental Skylands - Key of Symbiosis", "Elemental Skylands Seal - Air", "Elemental Skylands Seal - Water",
+            "Elemental Skylands Seal - Fire", "Earth Mega Shard", "Water Mega Shard", "Rescue Phantom",
         ]
         items = [["Strike of the Ninja"]]
         self.assertAccessDependency(locations, items)
@@ -85,5 +84,5 @@ class PlandoTest(MessengerTestBase):
 
                 loc = f"The Shop - {loc}"
                 self.assertEqual(price, self.multiworld.get_location(loc, self.player).cost())
-                self.assertTrue(loc.lstrip("The Shop - ") in SHOP_ITEMS)
+                self.assertTrue(loc[11:] in SHOP_ITEMS)
         self.assertEqual(len(prices), len(SHOP_ITEMS))

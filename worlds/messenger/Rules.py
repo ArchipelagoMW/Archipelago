@@ -67,7 +67,7 @@ class MessengerRules:
             "Mega Shard of the Moon": self.has_tabi,
             "Mega Shard of the Sun": self.has_tabi,
             # riviere turquoise
-            "Riviere Turquoise - Magic Firefly": self.has_vertical,
+            "Riviere Turquoise - Butterfly Matriarch": self.has_vertical,
             "Riviere Turquoise Seal - Bounces and Balls": self.can_dboost,
             "Riviere Turquoise Seal - Launch of Faith": self.can_dboost,
             "Riviere Turquoise Seal - Flower Power": self.has_vertical,
@@ -170,7 +170,7 @@ class MessengerHardRules(MessengerRules):
             "Autumn Hills Seal - Spike Ball Darts": lambda state: (self.has_dart(state) and self.has_windmill(state))
                                                                   or self.has_wingsuit(state),
             "Glacial Peak Seal - Glacial Air Swag": self.has_windmill,
-            "Underworld Seal - Fireball Wave": lambda state: state.has_all({"Ninja Tabi", "Windmill Shuriken"},
+            "Underworld Seal - Fireball Wave": lambda state: state.has_all({"Lightfoot Tabi", "Windmill Shuriken"},
                                                                            self.player),
         }
 
@@ -228,7 +228,7 @@ class MessengerOOBRules(MessengerRules):
             "Sunken Shrine - Key of Love": lambda state: state.has_all({"Sun Crest", "Moon Crest"}, self.player),
             "Searing Crags - Pyro": self.has_tabi,
             "Underworld - Key of Chaos": self.has_tabi,
-            "Corrupted Future - Key of Courage": lambda state: state.has_all({"Demon King Crown", "Fairy Bottle"},
+            "Corrupted Future - Key of Courage": lambda state: state.has_all({"Demon King Crown", "Magic Firefly"},
                                                                              self.player),
             "Autumn Hills Seal - Spike Ball Darts": self.has_dart,
             "Ninja Village Seal - Tree House": self.has_dart,
