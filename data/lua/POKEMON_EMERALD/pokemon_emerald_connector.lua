@@ -45,7 +45,7 @@ local cb2_address = 0x22C0 + 4                     -- gMain + offset
 local archipelago_received_item_address = 0x3A028  -- gArchipelagoReceivedItem
 
 -- ROM addresses
-local cb2_overworld_func_address = 0x8085E00 + 1   -- CB2_Overworld + 1
+local cb2_overworld_func_address = 0x8085E98 + 1   -- CB2_Overworld + 1
 
 -- Set us as safe if we're in the overworld and player has control
 function check_game_state ()
@@ -84,6 +84,7 @@ function try_write_next_item ()
             memory.write_u16_le(archipelago_received_item_address + 0, next_item,                    "EWRAM")
             memory.write_u16_le(archipelago_received_item_address + 2, last_received_item_index + 1, "EWRAM")
             memory.write_u8(    archipelago_received_item_address + 4, 1,                            "EWRAM")
+            memory.write_u8(    archipelago_received_item_address + 5, 1,                            "EWRAM")
         end
     end
 end
