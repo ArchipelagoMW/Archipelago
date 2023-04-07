@@ -50,7 +50,7 @@ class OrbsAsChecks(Choice):
 
 class BossesAsChecks(Choice):
     """Makes bosses count as location checks. The boss only needs to die, you do not need the kill credit.
-    The Main Path option includes Gate Guardian, Suomuhauki, and Kolmisilma.
+    The Main Path option includes Gate Guardian, Suomuhauki, and Kolmisilmä.
     The Side Path option includes the Main Path bosses, Sauvojen Tuntija, and Ylialkemisti.
     The All Bosses option includes all 12 bosses."""
     display_name = "Bosses as Location Checks"

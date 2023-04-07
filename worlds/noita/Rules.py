@@ -26,7 +26,7 @@ wand_tiers: List[str] = [
 ]
 
 items_hidden_from_shops: Set[str] = {"Gold (10)", "Gold (50)", "Gold (200)", "Gold (1000)", "Potion", "Random Potion",
-                                     "Secret Potion", "Chaos Die", "Greed Die", "Kammi", "Refreshing Gourd", "Sadekivi",
+                                     "Secret Potion", "Chaos Die", "Greed Die", "Kammi", "Refreshing Gourd", "Sädekivi",
                                      "Broken Wand", "Powder Pouch"}
 
 
