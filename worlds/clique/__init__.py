@@ -88,8 +88,7 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
     region = Region(name, player, world)
     if locations:
         for location_name in locations.keys():
-            location = CliqueLocation(player, location_name, locations[location_name], region)
-            region.locations.append(location)
+            region.locations.append(CliqueLocation(player, location_name, locations[location_name], region))
 
     if exits:
         for _exit in exits:
