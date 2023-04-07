@@ -42,8 +42,6 @@ class Pedestals(IntEnum):
     parallel_worlds = 4
 
 
-# todo: figure out how to add umlauts and stuff
-# 111000 - 111034
 # Mapping of items in each region
 # Only the first Hidden Chest and Pedestal are mapped here, the others are created in Regions
 # ltype key: "hc" = Hidden Chests, "peds" = Pedestals, "boss" = Boss, "orb" = Orb.
@@ -114,7 +112,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Floating Island Orb": LocationData(110501, "orb", Orbs.main_path),
     },
     "Pyramid": {
-        "Kolmisilman Koipi": LocationData(110630, "boss", Bosses.main_world),
+        "Kolmisilmän Koipi": LocationData(110630, "boss", Bosses.main_world),
         "Pyramid Orb": LocationData(110502, "orb", Orbs.main_world),
         "Sandcave Orb": LocationData(110505, "orb", Orbs.main_world),
     },
@@ -123,7 +121,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Overgrown Cavern Pedestal": LocationData(112700, "peds", Pedestals.main_world),
     },
     "Lake": {
-        "Syvaolento": LocationData(110650, "boss", Bosses.main_world),
+        "Syväolento": LocationData(110650, "boss", Bosses.main_world),
     },
     "Frozen Vault": {
         "Frozen Vault Orb": LocationData(110503, "orb", Orbs.main_world),
@@ -197,7 +195,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Wizards' Den Pedestal": LocationData(112720, "peds", Pedestals.main_world),
     },
     "Powerplant": {
-        "Kolmisilman silma": LocationData(110710, "boss", Bosses.main_world),
+        "Kolmisilmän silmä": LocationData(110710, "boss", Bosses.main_world),
         "Power Plant Chest": LocationData(112240, "hc", HiddenChests.main_world),
         "Power Plant Pedestal": LocationData(112740, "peds", Pedestals.main_world),
     },
@@ -209,7 +207,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Limatoukka": LocationData(110610, "boss", Bosses.main_world),
     },
     "The Laboratory": {
-        "Kolmisilma": LocationData(110600, "boss", Bosses.main_path),
+        "Kolmisilmä": LocationData(110600, "boss", Bosses.main_path),
     },
     "Friend Cave": {
         "Toveri": LocationData(110680, "boss", Bosses.main_world),

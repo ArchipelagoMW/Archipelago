@@ -27,7 +27,6 @@ class NoitaWorld(World):
     game = "Noita"
     option_definitions = Options.noita_options
     topology_present = True
-    data_version = 0
 
     item_name_to_id = Items.item_name_to_id
     location_name_to_id = Locations.location_name_to_id

@@ -90,7 +90,7 @@ item_table: Dict[str, ItemData] = {
     "Greed Die":                            ItemData(110026, "Items", ItemClassification.filler),
     "Kammi":                                ItemData(110027, "Items", ItemClassification.filler),
     "Refreshing Gourd":                     ItemData(110028, "Items", ItemClassification.filler),
-    "Sadekivi":                             ItemData(110029, "Items", ItemClassification.filler),
+    "Sädekivi":                             ItemData(110029, "Items", ItemClassification.filler),
     "Broken Wand":                          ItemData(110030, "Items", ItemClassification.filler),
     "Powder Pouch":                         ItemData(110031, "Items", ItemClassification.filler),
     "Perk (Spatial Awareness)":             ItemData(110032, "Perks", ItemClassification.progression)
@@ -116,7 +116,7 @@ filler_weights: Dict[str, int] = {
     "Greed Die":        4,
     "Kammi":            4,
     "Refreshing Gourd": 4,
-    "Sadekivi":         3,
+    "Sädekivi":         3,
     "Broken Wand":      10,
     "Powder Pouch":     10,
 }
