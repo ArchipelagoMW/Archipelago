@@ -1,5 +1,5 @@
-from worlds.sm.variaRandomizer.utils.utils import randGaussBounds, getRangeDict, chooseFromRange
-from worlds.sm.variaRandomizer.utils import log
+from ..utils.utils import randGaussBounds, getRangeDict, chooseFromRange
+from ..utils import log
 import logging, copy, random
 
 class Item:

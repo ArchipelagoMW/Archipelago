@@ -72,6 +72,8 @@ apworlds: set = {
     "Minecraft",
     "The Messenger",
     "Links Awakening DX",
+    "Super Metroid",
+    "SMZ3",
 }
 
 
