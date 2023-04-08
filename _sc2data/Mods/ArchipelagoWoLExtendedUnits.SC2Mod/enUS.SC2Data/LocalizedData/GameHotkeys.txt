@@ -2,3 +2,7 @@
 Button/Hotkey/LiberatorAAMode=D
 Button/Hotkey/LiberatorAGMode=E
 Button/Hotkey/ValkyrieSCBW=K
+Button/Hotkey/WidowMine=N
+Button/Hotkey/WidowMineAttack=C
+Button/Hotkey/WidowMineBurrow=E
+Button/Hotkey/WidowMineUnburrow=D

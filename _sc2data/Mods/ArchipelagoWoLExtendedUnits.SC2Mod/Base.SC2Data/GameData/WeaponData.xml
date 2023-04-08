@@ -43,4 +43,14 @@
         <Backswing value="0"/>
         <Effect value="JimRaynorVultureWeaponLaunch"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="WidowMineDummy">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Hidden" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="WidowMineExplodeDirect"/>
+        <TargetFilters value="Visible;Ally,Structure,Worker,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Arc value="360"/>
+        <Period value="1"/>
+        <Effect value="WidowMineAttack"/>
+    </CWeaponLegacy>
 </Catalog>

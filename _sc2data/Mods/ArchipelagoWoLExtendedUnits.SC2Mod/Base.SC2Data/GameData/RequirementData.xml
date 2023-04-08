@@ -12,6 +12,14 @@
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Use" Link="CountUpgradeLiberatorSiegeProtocolUpgradeCompleteOnly2325880495"/>
     </CRequirement>
+    <CRequirement id="HaveWidowMineDrillingClaws">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="CountUpgradeDrillClawsCompleteOnly1396043293"/>
+    </CRequirement>
+    <CRequirement id="HaveWidowMineImprovedConcealment">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="CountUpgradeImprovedConcealmentCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="LearnLiberatorMorph">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="NotCountUpgradeLiberatorMorphQueuedOrBetter"/>
@@ -20,5 +28,9 @@
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Use" Link="CountUnitFusionCoreCompleteOnly"/>
         <NodeArray index="Show" Link="NotCountUpgradeLiberatorAGRangeUpgradeQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="WidowMineArmed">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="CountBehaviorWidowMineArmedCompleteOnlyAtUnit"/>
     </CRequirement>
 </Catalog>

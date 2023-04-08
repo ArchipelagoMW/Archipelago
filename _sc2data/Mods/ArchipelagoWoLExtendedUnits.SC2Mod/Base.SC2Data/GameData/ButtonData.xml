@@ -47,4 +47,39 @@
         <HotkeyAlias value=""/>
         <DefaultButtonLayout Column="2"/>
     </CButton>
+    <CButton id="WidowMine">
+        <Icon value="Assets\Textures\btn-unit-terran-widowmine.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-widowmine.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="WidowMineAttack">
+        <TooltipFlags index="ShowHotkey" value="0"/>
+        <Icon value="Assets\Textures\btn-command-attack.dds"/>
+        <AlertIcon value="Assets\Textures\btn-command-attack.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value=""/>
+        <SimpleDisplayText value="SimpleDisplay/AttackBuilding"/>
+    </CButton>
+    <CButton id="WidowMineBioSplash">
+        <Icon value="Assets\Textures\btn-ability-terran-unstablepayload.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-unstablepayload.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="WidowMineBurrow">
+        <Icon value="Assets\Textures\BTN-Ability-Terran-ActivateMine.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Terran-ActivateMine.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeySet value="WidowMineModes"/>
+    </CButton>
+    <CButton id="WidowMineConcealment">
+        <Icon value="Assets\Textures\btn-ability-terran-widowminehidden.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-widowminehidden.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="WidowMineUnburrow">
+        <Icon value="Assets\Textures\BTN-Ability-Terran-DeactivateMine.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Terran-DeactivateMine.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeySet value="WidowMineModes"/>
+    </CButton>
 </Catalog>

@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CRequirementCountBehavior id="CountBehaviorWidowMineArmedCompleteOnlyAtUnit">
+        <Count Link="WidowMineArmed" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementCountUpgrade id="CountUpgradeDrillClawsCompleteOnly1396043293">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="DrillClaws" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeDrillClawsQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="DrillClaws" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeImprovedConcealmentCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="ImprovedConcealment" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeImprovedConcealmentQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="ImprovedConcealment" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="CountUpgradeLiberatorAGRangeUpgradeCompleteOnly2325880491">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="LiberatorAGRangeUpgrade" State="CompleteOnly"/>
@@ -23,6 +44,14 @@
         <Tooltip value=""/>
         <Count Link="LiberatorMorph" State="QueuedOrBetter"/>
     </CRequirementCountUpgrade>
+    <CRequirementNot id="NotCountUpgradeDrillClawsQueuedOrBetter">
+        <Tooltip value=""/>
+        <OperandArray index="0" value="CountUpgradeDrillClawsQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="NotCountUpgradeImprovedConcealmentQueuedOrBetter">
+        <Tooltip value=""/>
+        <OperandArray index="0" value="CountUpgradeImprovedConcealmentQueuedOrBetter"/>
+    </CRequirementNot>
     <CRequirementNot id="NotCountUpgradeLiberatorAGRangeUpgradeQueuedOrBetter">
         <OperandArray index="0" value="CountUpgradeLiberatorAGRangeUpgradeQueuedOrBetter"/>
     </CRequirementNot>

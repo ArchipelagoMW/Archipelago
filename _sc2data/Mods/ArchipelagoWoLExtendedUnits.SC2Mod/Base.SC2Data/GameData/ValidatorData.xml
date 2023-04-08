@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CValidatorCombine id="DontDamageOwnedWidowMines">
+        <CombineArray value="IsWidowMineOrWidowMineBurrowed"/>
+        <CombineArray value="OwnedBySelf"/>
+        <CombineArray value="IsWidowMineOrWidowMineBurrowed"/>
+        <CombineArray value="OwnedBySelf"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
     <CValidatorUnitCompareBehaviorCount id="HasLiberatorMorphBehavior">
         <WhichUnit Value="Caster"/>
         <Value value="1"/>
@@ -9,6 +16,24 @@
         <WhichUnit Value="Caster"/>
         <Behavior value="YoinkTentacle"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="HaveWidowMineImprovedConcealmentUpgrade">
+        <Find value="1"/>
+        <Value value="HaveWidowMineImprovedConcealment"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="NotHaveWidowMineImprovedConcealmentUpgrade">
+        <CombineArray value="HaveWidowMineImprovedConcealmentUpgrade" />
+        <Negate value="1" />
+    </CValidatorCombine>
+    <CValidatorUnitType id="IsWidowMine">
+        <Value value="WidowMine"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsWidowMineBurrowed">
+        <Value value="WidowMineBurrowed"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsWidowMineOrWidowMineBurrowed">
+        <CombineArray value="IsWidowMine"/>
+        <CombineArray value="IsWidowMineBurrowed"/>
+    </CValidatorCombine>
     <CValidatorLocationCompareRange id="LiberatorAGNotOutOfRange">
         <Compare value="LE"/>
         <Range value="9"/>
@@ -36,4 +61,17 @@
         <WhichUnit Value="Caster"/>
         <Behavior value="MothershipCoreRecalling"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="NotWidowMineTarget">
+        <ResultFailed value="Error,Error/NotWidowMineTarget"/>
+        <Behavior value="MineDroneCountdown"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareCooldown id="WidowMineAttackNotOnCooldown">
+        <CooldownLink value="Abil/WidowMineAttack"/>
+        <Ability value="WidowMineAttack"/>
+    </CValidatorUnitCompareCooldown>
+    <CValidatorUnitCompareCooldown id="WidowMineAttackOnCooldown">
+        <Compare value="NE"/>
+        <CooldownLink value="Abil/WidowMineAttack"/>
+        <Ability value="WidowMineAttack"/>
+    </CValidatorUnitCompareCooldown>
 </Catalog>

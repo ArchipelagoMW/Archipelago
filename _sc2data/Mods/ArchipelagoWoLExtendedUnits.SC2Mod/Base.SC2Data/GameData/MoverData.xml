@@ -86,4 +86,56 @@
             <RevolverAccelRange value="0"/>
         </MotionOverlays>
     </CMoverMissile>
+    <CMoverMissile id="WidowMineAirWeapon">
+        <PathMode value="Flying"/>
+        <MotionPhases>
+            <Driver value="Throw"/>
+            <Speed value="3"/>
+            <MaxSpeed value="3"/>
+            <Outro value="1.4,1.45"/>
+            <Timeout value="10"/>
+            <ThrowVector value="0,0,1"/>
+            <YawPitchRoll value="506.25"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="56"/>
+            <MaxSpeed value="28"/>
+            <Outro value="1.5,2.5"/>
+            <Timeout value="10"/>
+            <YawPitchRoll value="MAX"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <MaxSpeed value="28"/>
+            <Timeout value="10"/>
+            <YawPitchRoll value="5568.75"/>
+        </MotionPhases>
+    </CMoverMissile>
+    <CMoverMissile id="WidowMineWeapon">
+        <PathMode value="Flying"/>
+        <MotionPhases>
+            <Driver value="Throw"/>
+            <Speed value="3"/>
+            <MaxSpeed value="3"/>
+            <Outro value="1.4,1.45"/>
+            <Timeout value="10"/>
+            <ThrowVector value="0,0,1"/>
+            <YawPitchRoll value="506.25"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="56"/>
+            <MaxSpeed value="28"/>
+            <Outro value="1.5,2.5"/>
+            <Timeout value="10"/>
+            <YawPitchRoll value="MAX"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <MaxSpeed value="28"/>
+            <Timeout value="10"/>
+            <YawPitchRoll value="5568.75"/>
+        </MotionPhases>
+    </CMoverMissile>
 </Catalog>

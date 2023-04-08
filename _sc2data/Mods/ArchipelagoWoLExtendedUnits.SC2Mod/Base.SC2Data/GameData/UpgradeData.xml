@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CUpgrade id="DrillClaws">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\BTN-Upgrade-Terran-ResearchDrillingClaws.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Subtract" Reference="Abil,WidowMineBurrow,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="2.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,WidowMineBurrow,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="2.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="WidowMine"/>
+        <AffectedUnitArray value="WidowMineBurrowed"/>
+    </CUpgrade>
     <CUpgrade id="LiberatorAGRangeUpgrade">
         <Icon value="Assets\Textures\btn-upgrade-terran-advanceballistics.dds"/>
         <ScoreAmount value="300"/>
@@ -234,32 +247,74 @@
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Reference="Unit,WidowMine,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,WidowMine,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleArmorsLevel2">
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Reference="Unit,WidowMine,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,WidowMine,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleArmorsLevel3">
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Reference="Unit,WidowMine,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,WidowMine,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleArmorsVanadiumPlatingLevel1">
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Reference="Unit,WidowMine,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,WidowMine,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,WidowMine,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,WidowMine,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,WidowMineBurrowed,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,WidowMineBurrowed,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleArmorsVanadiumPlatingLevel2">
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Reference="Unit,WidowMine,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,WidowMine,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,WidowMine,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,WidowMine,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,WidowMineBurrowed,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,WidowMineBurrowed,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleArmorsVanadiumPlatingLevel3">
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,Vulture4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
         <AffectedUnitArray value="JimRaynorVulture"/>
+        <EffectArray Reference="Unit,WidowMine,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,WidowMine,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,WidowMine,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,WidowMine,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,WidowMineBurrowed,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,WidowMineBurrowed,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleWeaponsLevel1">
         <EffectArray Reference="Effect,JimRaynorVultureWeaponDamage,Amount" Value="2"/>
@@ -293,5 +348,8 @@
         <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,RateMultiplier" Value="0.05"/>
+    </CUpgrade>
+    <CUpgrade id="ImprovedConcealment">
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
 </Catalog>
