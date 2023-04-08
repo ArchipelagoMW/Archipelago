@@ -673,7 +673,7 @@ def calculate_options(ctx: SC2Context, items: typing.List[int], mission_id: int)
         options |= 1 << 3
     elif ctx.generic_upgrade_research > 0:
         mission_name = lookup_id_to_mission[mission_id]
-        if mission_name in no_build_regions_list == (ctx.generic_upgrade_research == 1):
+        if (mission_name in no_build_regions_list) == (ctx.generic_upgrade_research == 1):
             options |= 1 << 3
 
     return options
