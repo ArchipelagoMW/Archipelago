@@ -6,7 +6,7 @@ from worlds.AutoWorld import World, WebWorld
 from .Constants import NOTES, PHOBEKINS, ALL_ITEMS, ALWAYS_LOCATIONS, SEALS, BOSS_LOCATIONS, FILLER
 from .Options import messenger_options, NotesNeeded, Goal, PowerSeals, Logic
 from .Regions import REGIONS, REGION_CONNECTIONS, MEGA_SHARDS
-from .Shop import SHOP_ITEMS, shuffle_shop_prices
+from .Shop import SHOP_ITEMS, shuffle_shop_prices, FIGURINES
 from .SubClasses import MessengerRegion, MessengerItem
 from . import Rules
 
@@ -60,6 +60,8 @@ class MessengerWorld(World):
                                *mega_shard_locs,
                                *BOSS_LOCATIONS,
                                *shop_locs,
+                               *FIGURINES,
+                               "Money Wrench",
                            ], base_offset)}
 
     data_version = 0
@@ -71,6 +73,7 @@ class MessengerWorld(World):
     required_seals: int = 0
     total_shards: int
     shop_prices: Dict[str, int]
+    figurine_prices: Dict[str, int]
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
@@ -95,13 +98,13 @@ class MessengerWorld(World):
             for item in self.item_name_to_id
             if item not in
             {
-                "Power Seal", *NOTES, *SHOP_ITEMS,
+                "Power Seal", *NOTES, *SHOP_ITEMS, *FIGURINES, "Money Wrench",
                 *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
             } and "Time Shard" not in item
         ]
 
         if self.multiworld.shop_shuffle[self.player]:
-            itempool += [self.create_item(item) for item in SHOP_ITEMS]
+            itempool += [self.create_item(item) for item in [*SHOP_ITEMS, *FIGURINES, "Money Wrench"]]
 
         if self.multiworld.goal[self.player] == Goal.option_open_music_box:
             # make a list of all notes except those in the player's defined starting inventory, and adjust the
@@ -149,7 +152,7 @@ class MessengerWorld(World):
                 shop_item.code = None
                 self.multiworld.push_precollected(shop_item)
         else:
-            self.shop_prices = shuffle_shop_prices(self)
+            self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
 
         logic = self.multiworld.logic_level[self.player]
         if logic == Logic.option_normal:
@@ -170,6 +173,9 @@ class MessengerWorld(World):
         shop_prices = {}
         for item, price in self.shop_prices.items():
             shop_prices[SHOP_ITEMS[item].internal_name] = price
+        figure_prices = {}
+        for item, price in self.figurine_prices.items():
+            figure_prices[FIGURINES[item].internal_name] = price
 
         return {
             "deathlink": self.multiworld.death_link[self.player].value,
@@ -183,6 +189,7 @@ class MessengerWorld(World):
             },
             "logic": self.multiworld.logic_level[self.player].current_key,
             "shop": shop_prices,
+            "figures": figure_prices,
         }
 
     def get_filler_item_name(self) -> str:

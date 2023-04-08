@@ -1,7 +1,7 @@
 from typing import Dict
 
 from . import MessengerTestBase
-from ..Shop import SHOP_ITEMS
+from ..Shop import SHOP_ITEMS, FIGURINES
 
 
 class ShopCostTest(MessengerTestBase):
@@ -65,6 +65,8 @@ class PlandoTest(MessengerTestBase):
         "shop_price_plan": {
             "Karuta Plates": 50,
             "Serendipitous Bodies": {100: 1, 200: 1, 300: 1},
+            "Barmath'azel Figurine": 500,
+            "Demon Hive Figurine": {100: 1, 200: 2, 300: 1},
         },
     }
 
@@ -80,9 +82,21 @@ class PlandoTest(MessengerTestBase):
                 if loc == "Karuta Plates":
                     self.assertEqual(self.options["shop_price_plan"]["Karuta Plates"], price)
                 elif loc == "Serendipitous Bodies":
-                    self.assertTrue(price in self.options["shop_price_plan"]["Serendipitous Bodies"])
+                    self.assertIn(price, self.options["shop_price_plan"]["Serendipitous Bodies"])
 
                 loc = f"The Shop - {loc}"
                 self.assertEqual(price, self.multiworld.get_location(loc, self.player).cost())
                 self.assertTrue(loc.replace("The Shop - ", "") in SHOP_ITEMS)
         self.assertEqual(len(prices), len(SHOP_ITEMS))
+
+        figures = self.multiworld.worlds[self.player].figurine_prices
+        for loc, price in figures.items():
+            with self.subTest("figure prices", loc=loc):
+                if loc == "Barmath'azel Figurine":
+                    self.assertEqual(self.options["shop_price_plan"]["Barmath'azel Figurine"], price)
+                elif loc == "Demon Hive Figurine":
+                    self.assertIn(price, self.options["shop_price_plan"]["Demon Hive Figurine"])
+
+                self.assertEqual(price, self.multiworld.get_location(loc, self.player).cost())
+                self.assertTrue(loc in FIGURINES)
+        self.assertEqual(len(figures), len(FIGURINES))

@@ -4,7 +4,7 @@ from BaseClasses import Region, Location, Item, ItemClassification, Entrance, Co
 from .Constants import SEALS, NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
 from .Options import Goal
 from .Regions import REGIONS, MEGA_SHARDS
-from .Shop import SHOP_ITEMS, PROG_SHOP_ITEMS, USEFUL_SHOP_ITEMS
+from .Shop import SHOP_ITEMS, PROG_SHOP_ITEMS, USEFUL_SHOP_ITEMS, FIGURINES
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -23,11 +23,16 @@ class MessengerRegion(Region):
             self.locations.append(MessengerLocation(loc, self, name_to_id.get(loc, None)))
         if self.name == "The Shop":
             if self.multiworld.goal[self.player] > Goal.option_open_music_box:
-                self.locations.append(MessengerLocation("Shop Chest", self, name_to_id.get("Shop Chest", None)))
+                self.locations.append(MessengerLocation("Shop Chest", self, name_to_id.get("Shop Chest")))
             if self.multiworld.shop_shuffle[self.player]:
                 self.locations += [MessengerShopLocation(f"The Shop - {shop_loc}", self,
                                                          name_to_id.get(f"The Shop - {shop_loc}", None))
                                    for shop_loc in SHOP_ITEMS]
+                self.locations += [MessengerShopLocation(figurine, self, name_to_id.get(figurine, None))
+                                   for figurine in FIGURINES]
+        elif self.name == "Tower HQ":
+            if self.multiworld.shop_shuffle[self.player]:
+                self.locations.append(MessengerLocation("Money Wrench", self, name_to_id.get("Money Wrench")))
         # putting some dumb special case for searing crags and ToT so i can split them into 2 regions
         if self.multiworld.shuffle_seals[self.player] and self.name not in {"Searing Crags", "Tower HQ", "Cloud Ruins"}:
             self.locations += [MessengerLocation(seal_loc, self, name_to_id.get(seal_loc, None))
@@ -55,16 +60,18 @@ class MessengerLocation(Location):
 class MessengerShopLocation(MessengerLocation):
     def cost(self) -> int:
         name = self.name.replace("The Shop - ", "")  # TODO use `remove_prefix` when 3.8 finally gets dropped
-        prices = self.parent_region.multiworld.worlds[self.player].shop_prices
-        return prices.get(name, SHOP_ITEMS[name].default_price)
+        world = self.parent_region.multiworld.worlds[self.player]
+        return world.shop_prices.get(name, world.figurine_prices.get(name))
 
     def can_afford(self, state: CollectionState) -> bool:
         world = state.multiworld.worlds[self.player]
         cost = self.cost() * 2
         if cost >= 1000:
             cost *= 2
-        return state.has("Shards", self.player, cost) or \
-            state.has("Shards", self.player, world.total_shards)
+        can_afford = state.has("Shards", self.player, cost) or state.has("Shards", self.player, world.total_shards)
+        if "Figurine" in self.name:
+            return state.has("Money Wrench", self.player) and can_afford
+        return can_afford
 
 
 class MessengerItem(Item):

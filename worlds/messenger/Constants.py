@@ -1,6 +1,6 @@
 # items
 # listing individual groups first for easy lookup
-from .Shop import SHOP_ITEMS
+from .Shop import SHOP_ITEMS, FIGURINES
 
 NOTES = [
     "Key of Hope",
@@ -23,6 +23,7 @@ PROG_ITEMS = [
     "Moon Crest",
     # "Astral Seed",
     # "Astral Tea Leaves",
+    "Money Wrench",
 ]
 
 PHOBEKINS = [
@@ -66,6 +67,8 @@ ALL_ITEMS = [
     "Power Seal",
     *FILLER.keys(),
     *SHOP_ITEMS,
+    *FIGURINES,
+    "Money Wrench",
 ]
 
 # locations

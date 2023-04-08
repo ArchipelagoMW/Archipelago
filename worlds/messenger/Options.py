@@ -114,6 +114,19 @@ class PlannedShopPrices(OptionDict):
         **planned_price("Time Sense"),
         **planned_price("Power Sense"),
         **planned_price("Focused Power Sense"),
+        **planned_price("Green Kappa Figurine"),
+        **planned_price("Blue Kappa Figurine"),
+        **planned_price("Ountarde Figurine"),
+        **planned_price("Red Kappa Figurine"),
+        **planned_price("Demon King Figurine"),
+        **planned_price("Quillshroom Figurine"),
+        **planned_price("Jumping Quillshroom Figurine"),
+        **planned_price("Scurubu Figurine"),
+        **planned_price("Jumping Scurubu Figurine"),
+        **planned_price("Wallaxer Figurine"),
+        **planned_price("Barmath'azel Figurine"),
+        **planned_price("Queen of Quills Figurine"),
+        **planned_price("Demon Hive Figurine"),
     })
 
 

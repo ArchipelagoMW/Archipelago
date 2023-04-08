@@ -86,6 +86,8 @@ class MessengerRules:
                                                                              self.player),
             # the shop
             "Shop Chest": self.has_enough_seals,
+            # tower hq
+            "Money Wrench": self.can_shop,
         }
 
     def has_wingsuit(self, state: CollectionState) -> bool:
@@ -114,6 +116,16 @@ class MessengerRules:
         """I know this is stupid, but it's easier to read in the dicts."""
         return True
 
+    def can_shop(self, state: CollectionState) -> bool:
+        prices = self.world.shop_prices
+        most_expensive = 0
+        loc = "Demon's Bane"
+        for slot, price in prices.items():
+            if price > most_expensive:
+                most_expensive = price
+                loc = slot
+        return state.can_reach(f"The Shop - {loc}", "Location", self.player)
+
     def set_messenger_rules(self) -> None:
         multiworld = self.world.multiworld
 
@@ -125,9 +137,9 @@ class MessengerRules:
                 if loc.name in self.location_rules:
                     loc.access_rule = self.location_rules[loc.name]
             if region.name == "The Shop":
-                for loc in region.locations:
-                    if not loc.name == "Shop Chest":
-                        loc.access_rule = loc.can_afford
+                from worlds.messenger.SubClasses import MessengerShopLocation
+                for loc in [location for location in region.locations if isinstance(location, MessengerShopLocation)]:
+                    loc.access_rule = loc.can_afford
         if multiworld.goal[self.player] == Goal.option_power_seal_hunt:
             set_rule(multiworld.get_entrance("Tower HQ -> Music Box", self.player),
                      lambda state: state.has("Shop Chest", self.player))
