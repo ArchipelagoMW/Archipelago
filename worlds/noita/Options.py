@@ -4,9 +4,8 @@ from Options import Option, DeathLink, DefaultOnToggle, Range, Choice
 
 class PathOption(Choice):
     """Choose where you would like Hidden Chest and Pedestal checks to be placed.
-    Main Path includes the main 7 biomes you typically go through to get to the final boss.
-    Side Path includes areas off the main path, but not ones you need to go way out of your way for. 10 biomes total.
-    These biomes are the Collapsed Mines, Fungal Caverns, and Lukki Lair.
+    Main Path includes the main 7 biomes you typically go through to get to the final boss, and the Collapsed Mines.
+    Side Path includes the Lukki Lair and Fungal Caverns. 10 biomes total.
     Main World includes the full world (excluding parallel worlds). 15 biomes total."""
     display_name = "Path Option"
     option_main_path = 1

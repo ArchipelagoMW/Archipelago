@@ -133,8 +133,8 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Mines Pedestal": LocationData(112500, "pedestal", Pedestals.main_path),
     },
     "Collapsed Mines": {
-        "Collapsed Mines Chest": LocationData(112020, "chest", HiddenChests.side_path),
-        "Collapsed Mines Pedestal": LocationData(112520, "pedestal", Pedestals.side_path),
+        "Collapsed Mines Chest": LocationData(112020, "chest", HiddenChests.main_path),
+        "Collapsed Mines Pedestal": LocationData(112520, "pedestal", Pedestals.main_path),
     },
     "Ancient Laboratory": {
         "Ylialkemisti": LocationData(110700, "boss", Bosses.side_path),
