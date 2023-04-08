@@ -62,11 +62,11 @@ item_table = {
     "Progressive Flyer Attack": ItemData(103 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 6, quantity=3),
     "Progressive Flyer Carapace": ItemData(104 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 8, quantity=3),
     # Upgrade bundle 'number' values are used as indices to get affected 'number's
-    "Progressive Weapon Upgrades": ItemData(105 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 0, quantity=3),
-    "Progressive Armor Upgrades": ItemData(106 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 1, quantity=3),
-    "Progressive Ground Upgrades": ItemData(107 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 2, quantity=3),
-    "Progressive Flyer Upgrades": ItemData(108 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 3, quantity=3),
-    "Progressive Upgrades": ItemData(109 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 4, quantity=3),
+    "Progressive Weapon Upgrade": ItemData(105 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 0, quantity=3),
+    "Progressive Armor Upgrade": ItemData(106 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 1, quantity=3),
+    "Progressive Ground Upgrade": ItemData(107 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 2, quantity=3),
+    "Progressive Flyer Upgrade": ItemData(108 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 3, quantity=3),
+    "Progressive Upgrade": ItemData(109 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 4, quantity=3),
     # "Progressive Infantry Weapon": ItemData(100 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 0, quantity=3),
     # "Progressive Infantry Armor": ItemData(102 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 2, quantity=3),
     # "Progressive Vehicle Weapon": ItemData(103 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 4, quantity=3),
@@ -322,15 +322,15 @@ upgrade_included_names = [
         "Progressive Flyer Carapace"
     },
     { # Bundle Weapon And Armor
-        "Progressive Weapon Upgrades",
-        "Progressive Armor Upgrades"
+        "Progressive Weapon Upgrade",
+        "Progressive Armor Upgrade"
     },
     { # Bundle Ground And Flyer
-        "Progressive Ground Upgrades",
-        "Progressive Flyer Upgrades"
+        "Progressive Ground Upgrade",
+        "Progressive Flyer Upgrade"
     },
     { # Bundle All
-        "Progressive Upgrades"
+        "Progressive Upgrade"
     }
 ]
 
