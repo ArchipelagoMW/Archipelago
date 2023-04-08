@@ -6,7 +6,7 @@
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI
       ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
-       [BizHawk](http://tasvideos.org/BizHawk.html), or
+       [BizHawk](http://tasvideos.org/BizHawk.html) **2.8 or below**, or
        [RetroArch](https://retroarch.com?page=platforms) 1.10.1 or newer). Or,
     - An SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware. **note: 
 modded SNES minis are currently not supported by SNI**
@@ -89,16 +89,17 @@ the lua you are using in your file explorer and copy the `socket.dll` to the bas
 
 ##### BizHawk
 
-1. Ensure you have the BSNES core loaded. You may do this by clicking on the Tools menu in BizHawk and following these
+1. Ensure your BizHawk is 2.8 or older, not 2.9 or newer.
+    - You can check in Help -> About
+2. Ensure you have the BSNES core loaded. You may do this by clicking on the Tools menu in BizHawk and following these
    menu options:  
    `Config --> Cores --> SNES --> BSNES`  
    Once you have changed the loaded core, you must restart BizHawk.
-2. Load your ROM file if it hasn't already been loaded.
-3. Click on the Tools menu and click on **Lua Console**
-4. Click Script -> Open Script...
-5. Select the `Connector.lua` file you downloaded above
-    - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
-      emulator is 64-bit or 32-bit. Please note the most recent versions of BizHawk are 64-bit only.
+3. Load your ROM file if it hasn't already been loaded.
+4. Click on the Tools menu and click on **Lua Console**
+5. Click Script -> Open Script...
+6. Select the `Connector.lua` file you downloaded above
+    - Look in the Archipelago folder for `/SNI/lua/x64`
 
 
 ##### RetroArch 1.10.1 or newer
