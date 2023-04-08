@@ -25,7 +25,7 @@ from .variaRandomizer.graph.graph_utils import getAccessPoint
 from .variaRandomizer.rando.ItemLocContainer import ItemLocation
 from .variaRandomizer.rando.Items import ItemManager
 from .variaRandomizer.utils.parameters import *
-from .variaRandomizer.utils.utils import ReadFile
+from .variaRandomizer.utils.utils import openFile
 from .variaRandomizer.logic.logic import Logic
 from .variaRandomizer.randomizer import VariaRandomizer
 from .variaRandomizer.utils.doorsmanager import DoorsManager
@@ -377,7 +377,7 @@ class SMWorld(World):
         idx = 0
         offworldSprites: List[ByteEdit] = []
         for itemSprite in itemSprites:
-            with ReadFile("/".join((str(appDir), "worlds", "sm", "data", "custom_sprite", itemSprite["fileName"])), 'rb') as stream:
+            with openFile("/".join((str(appDir), "worlds", "sm", "data", "custom_sprite", itemSprite["fileName"])), 'rb') as stream:
                 buffer = bytearray(stream.read())
                 offworldSprites.append({"sym": symbols[itemSprite["paletteSymbolName"]],
                                         "offset": 0,

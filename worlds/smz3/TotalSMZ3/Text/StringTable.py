@@ -2,14 +2,14 @@
 from typing import Any, List
 import copy
 from ..Text.Dialog import Dialog
-from ..Text.Texts import ReadFile
+from ..Text.Texts import openFile
 from Utils import unsafe_parse_yaml
 
 class StringTable:
 
     @staticmethod
     def ParseEntries(resource: str):
-        with ReadFile(resource, 'rb') as f:
+        with openFile(resource, 'rb') as f:
             yaml = str(f.read(), "utf-8")
         content = unsafe_parse_yaml(yaml)
 

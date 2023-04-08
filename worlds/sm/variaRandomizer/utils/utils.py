@@ -9,20 +9,51 @@ from ..utils.parameters import Knows, Settings, Controller, isKnows, isSettings,
 from ..utils.parameters import easy, medium, hard, harder, hardcore, mania, text2diff
 from ..logic.smbool import SMBool
 
-def ReadFile(resource: str, mode: str = "r", encoding: None = None):
-    filename = sys.modules[ReadFile.__module__].__file__
+
+# support for AP world
+isAPWorld = ".apworld" in sys.modules[__name__].__file__
+
+def getZipFile():
+    filename = sys.modules[__name__].__file__
     apworldExt = ".apworld"
-    game = "/sm/"
-    if apworldExt in filename:
-        zipPath = pathlib.Path(filename[:filename.index(apworldExt) + len(apworldExt)])
-        with zipfile.ZipFile(zipPath) as zf:
-            zipFilePath = resource[resource.index(game)+1:]
+    zipPath = pathlib.Path(filename[:filename.index(apworldExt) + len(apworldExt)])    
+    return (zipfile.ZipFile(zipPath), zipPath.stem)
+
+def openFile(resource: str, mode: str = "r", encoding: None = None):
+    if isAPWorld:
+        (zipFile, stem) = getZipFile()
+        with zipFile as zf:
+            zipFilePath = resource[resource.index(stem + "/"):]
             if mode == 'rb':
                 return zf.open(zipFilePath, 'r')
             else:
                 return io.TextIOWrapper(zf.open(zipFilePath, mode), encoding)
     else:
         return open(resource, mode)
+    
+def listDir(resource: str):
+    if isAPWorld:
+        (zipFile, stem) = getZipFile()
+        with zipFile as zf:
+            zipFilePath = resource[resource.index(stem + "/"):]
+            path = zipfile.Path(zf, zipFilePath + "/")
+            files = [f.at[len(zipFilePath)+1:] for f in path.iterdir()]
+            return files
+    else:
+        return os.listdir(resource)    
+    
+def exists(resource: str):
+    if isAPWorld:
+        (zipFile, stem) = getZipFile()
+        with zipFile as zf:
+            if (stem in resource):
+                zipFilePath = resource[resource.index(stem + "/"):]
+                path = zipfile.Path(zf, zipFilePath)
+                return path.exists()
+            else:
+                return False
+    else:
+        return os.path.exists(resource)   
 
 def isStdPreset(preset):
     return preset in ['newbie', 'casual', 'regular', 'veteran', 'expert', 'master', 'samus', 'solution', 'Season_Races', 'SMRAT2021']
@@ -273,7 +304,7 @@ class PresetLoader(object):
 class PresetLoaderJson(PresetLoader):
     # when called from the test suite
     def __init__(self, jsonFileName):
-        with ReadFile(jsonFileName) as jsonFile:
+        with openFile(jsonFileName) as jsonFile:
             self.params = json.load(jsonFile)
         super(PresetLoaderJson, self).__init__()
 

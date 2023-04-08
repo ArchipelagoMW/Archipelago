@@ -17,7 +17,7 @@ from .TotalSMZ3.Location import LocationType, locations_start_id, Location as To
 from .TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWord, getWordArray
 from .TotalSMZ3.WorldState import WorldState
 from .TotalSMZ3.Region import IReward, IMedallionAccess
-from .TotalSMZ3.Text.Texts import ReadFile
+from .TotalSMZ3.Text.Texts import openFile
 from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
 from .Client import SMZ3SNIClient
 from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
@@ -273,7 +273,7 @@ class SMZ3World(World):
         idx = 0
         offworldSprites = {}
         for fileName in itemSprites:
-            with ReadFile(world_folder + "/data/custom_sprite/" + fileName, 'rb') as stream:
+            with openFile(world_folder + "/data/custom_sprite/" + fileName, 'rb') as stream:
                 buffer = bytearray(stream.read())
                 offworldSprites[0x04Eff2 + 10*((0x6B + 0x40) + idx)] = bytearray(getWordArray(itemSpritesAddress[idx])) + buffer[0:8]
                 offworldSprites[0x090000 + itemSpritesAddress[idx]] = buffer[8:264]

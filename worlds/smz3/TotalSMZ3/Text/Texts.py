@@ -12,7 +12,7 @@ import os
 
 text_folder = Path(__file__).parents[3]
 
-def ReadFile(resource: str, mode: str = "r", encoding: None = None):
+def openFile(resource: str, mode: str = "r", encoding: None = None):
     filename = sys.modules[__name__].__file__
     apworldExt = ".apworld"
     game = "smz3/"
@@ -30,13 +30,13 @@ def ReadFile(resource: str, mode: str = "r", encoding: None = None):
 class Texts:
     @staticmethod
     def ParseYamlScripts(resource: str):
-        with ReadFile(resource, 'rb') as f:
+        with openFile(resource, 'rb') as f:
             yaml = str(f.read(), "utf-8")
         return unsafe_parse_yaml(yaml)
 
     @staticmethod        
     def ParseTextScript(resource: str):
-        with ReadFile(resource, 'r') as file:
+        with openFile(resource, 'r') as file:
             return [text.rstrip('\n') for text in file.read().replace("\r", "").split("---\n") if text]
 
     scripts: Any = ParseYamlScripts.__func__("smz3/TotalSMZ3/Text/Scripts/General.yaml")
