@@ -1,4 +1,4 @@
-from typing import Dict, Set, Any
+from typing import Dict, Set, List, Any
 from collections import Counter
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
@@ -32,7 +32,7 @@ class BlasphemousWorld(World):
 
     game: str = "Blasphemous"
     web = BlasphemousWeb()
-    data_version: 1
+    data_version = 1
 
     item_name_to_id = {item["name"]: (base_id + index) for index, item in enumerate(item_table)}
     location_name_to_id = {loc["name"]: (base_id + index) for index, loc in enumerate(location_table)}
@@ -61,7 +61,7 @@ class BlasphemousWorld(World):
         return self.multiworld.random.choice(tears_set)
 
 
-    def generate_basic(self):
+    def create_items(self):
         placed_items = []
 
         placed_items.extend(Vanilla.unrandomized_dict.values())

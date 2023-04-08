@@ -20,6 +20,41 @@ from .models import Seed, Room, Slot, GameDataPackage
 
 banned_zip_contents = (".sfc", ".z64", ".n64", ".sms", ".gb")
 
+def process_multidata(compressed_multidata, files={}):
+    decompressed_multidata = MultiServer.Context.decompress(compressed_multidata)
+
+    slots: typing.Set[Slot] = set()
+    if "datapackage" in decompressed_multidata:
+        # strip datapackage from multidata, leaving only the checksums
+        game_data_packages: typing.List[GameDataPackage] = []
+        for game, game_data in decompressed_multidata["datapackage"].items():
+            if game_data.get("checksum"):
+                game_data_package = GameDataPackage(checksum=game_data["checksum"],
+                                                    data=pickle.dumps(game_data))
+                decompressed_multidata["datapackage"][game] = {
+                    "version": game_data.get("version", 0),
+                    "checksum": game_data["checksum"]
+                }
+                try:
+                    commit()  # commit game data package
+                    game_data_packages.append(game_data_package)
+                except TransactionIntegrityError:
+                    del game_data_package
+                    rollback()
+
+    if "slot_info" in decompressed_multidata:
+        for slot, slot_info in decompressed_multidata["slot_info"].items():
+            # Ignore Player Groups (e.g. item links)
+            if slot_info.type == SlotType.group:
+                continue
+            slots.add(Slot(data=files.get(slot, None),
+                            player_name=slot_info.name,
+                            player_id=slot,
+                            game=slot_info.game))
+        flush()  # commit slots
+
+    compressed_multidata = compressed_multidata[0:1] + zlib.compress(pickle.dumps(decompressed_multidata), 9)
+    return slots, compressed_multidata
 
 def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, sid=None):
     if not owner:
@@ -29,7 +64,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
         flash(Markup("Error: Your .zip file only contains .yaml files. "
                      'Did you mean to <a href="/generate">generate a game</a>?'))
         return
-    slots: typing.Set[Slot] = set()
+
     spoiler = ""
     files = {}
     multidata = None
@@ -80,42 +115,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
 
     # Load multi data.
     if multidata:
-        decompressed_multidata = MultiServer.Context.decompress(multidata)
-        recompress = False
-
-        if "datapackage" in decompressed_multidata:
-            # strip datapackage from multidata, leaving only the checksums
-            game_data_packages: typing.List[GameDataPackage] = []
-            for game, game_data in decompressed_multidata["datapackage"].items():
-                if game_data.get("checksum"):
-                    game_data_package = GameDataPackage(checksum=game_data["checksum"],
-                                                        data=pickle.dumps(game_data))
-                    decompressed_multidata["datapackage"][game] = {
-                        "version": game_data.get("version", 0),
-                        "checksum": game_data["checksum"]
-                    }
-                    recompress = True
-                    try:
-                        commit()  # commit game data package
-                        game_data_packages.append(game_data_package)
-                    except TransactionIntegrityError:
-                        del game_data_package
-                        rollback()
-
-        if "slot_info" in decompressed_multidata:
-            for slot, slot_info in decompressed_multidata["slot_info"].items():
-                # Ignore Player Groups (e.g. item links)
-                if slot_info.type == SlotType.group:
-                    continue
-                slots.add(Slot(data=files.get(slot, None),
-                               player_name=slot_info.name,
-                               player_id=slot,
-                               game=slot_info.game))
-
-            flush()  # commit slots
-
-        if recompress:
-            multidata = multidata[0:1] + zlib.compress(pickle.dumps(decompressed_multidata), 9)
+        slots, multidata = process_multidata(multidata, files)
 
         seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=owner, meta=json.dumps(meta),
                     id=sid if sid else uuid.uuid4())
@@ -156,11 +156,11 @@ def uploads():
                     # noinspection PyBroadException
                     try:
                         multidata = file.read()
-                        MultiServer.Context.decompress(multidata)
+                        slots, multidata = process_multidata(multidata)
                     except Exception as e:
                         flash(f"Could not load multidata. File may be corrupted or incompatible. ({e})")
                     else:
-                        seed = Seed(multidata=multidata, owner=session["_id"])
+                        seed = Seed(multidata=multidata, slots=slots, owner=session["_id"])
                         flush()  # place into DB and generate ids
                         return redirect(url_for("view_seed", seed=seed.id))
             else:

@@ -1,5 +1,7 @@
 import os
 import binascii
+import pkgutil
+
 from ..assembler import ASM
 from ..utils import formatText
 
@@ -13,7 +15,6 @@ ItemNameStringBufferStart = ItemNameLookupTable + \
 
 
 def addBank34(rom, item_list):
-    my_path = os.path.dirname(__file__)
     rom.patch(0x34, 0x0000, ItemNameLookupTable, ASM("""
         ; Get the pointer in the lookup table, doubled as it's two bytes
         ld  hl, $2080
@@ -74,7 +75,7 @@ def addBank34(rom, item_list):
     .notCavesA:
         add  hl, de
         ret
-    """ + open(os.path.join(my_path, "bank3e.asm/message.asm"), "rt").read(), 0x4000), fill_nop=True)
+    """ + pkgutil.get_data(__name__, os.path.join("bank3e.asm", "message.asm")).decode().replace("\r", ""), 0x4000), fill_nop=True)
 
     nextItemLookup = ItemNameStringBufferStart
     nameLookup = {

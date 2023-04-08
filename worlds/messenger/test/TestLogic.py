@@ -4,7 +4,7 @@ from . import MessengerTestBase
 
 class HardLogicTest(MessengerTestBase):
     options = {
-        "logic_level": "hard"
+        "logic_level": "hard",
     }
 
     def testVertical(self) -> None:
@@ -14,23 +14,23 @@ class HardLogicTest(MessengerTestBase):
             "Tower of Time Seal - Time Waster Seal", "Tower of Time Seal - Lantern Climb",
             "Tower of Time Seal - Arcane Orbs",
             # ninja village
-            "Candle", "Astral Seed", "Ninja Village Seal - Tree House",
+            "Candle", "Astral Seed", "Ninja Village Seal - Tree House", "Astral Tea Leaves",
             # autumn hills
-            "Climbing Claws", "Key of Hope",
+            "Climbing Claws", "Key of Hope", "Leaf Golem",
             "Autumn Hills Seal - Trip Saws", "Autumn Hills Seal - Double Swing Saws",
             "Autumn Hills Seal - Spike Ball Swing", "Autumn Hills Seal - Spike Ball Darts",
             # forlorn temple
             "Demon King Crown",
             "Forlorn Temple Seal - Rocket Maze", "Forlorn Temple Seal - Rocket Sunset",
             # catacombs
-            "Necro", "Ruxxtin's Amulet",
+            "Necro", "Ruxxtin's Amulet", "Ruxxtin",
             "Catacombs Seal - Triple Spike Crushers", "Catacombs Seal - Crusher Gauntlet", "Catacombs Seal - Dirty Pond",
             # bamboo creek
             "Claustro",
             "Bamboo Creek Seal - Spike Crushers and Doors", "Bamboo Creek Seal - Spike Ball Pits",
             "Bamboo Creek Seal - Spike Crushers and Doors v2",
             # howling grotto
-            "Howling Grotto Seal - Crushing Pits", "Howling Grotto Seal - Crushing Pits",
+            "Emerald Golem", "Howling Grotto Seal - Crushing Pits", "Howling Grotto Seal - Crushing Pits",
             # glacial peak
             "Glacial Peak Seal - Ice Climbers",
             # cloud ruins
@@ -41,7 +41,7 @@ class HardLogicTest(MessengerTestBase):
             # riviere turquoise
             "Fairy Bottle", "Riviere Turquoise Seal - Flower Power",
             # elemental skylands
-            "Elemental Skylands Seal - Air", "Elemental Skylands Seal - Water", "Elemental Skylands Seal - Fire",
+            "Elemental Skylands Seal - Air",
             # phantom
             "Rescue Phantom",
         ]
@@ -54,7 +54,7 @@ class HardLogicTest(MessengerTestBase):
         windmill_locs = [
             "Key of Strength",
             "Key of Symbiosis",
-            "Underworld Seal - Fireball Wave"
+            "Underworld Seal - Fireball Wave",
         ]
         for loc in windmill_locs:
             with self.subTest("can't reach location with nothing", location=loc):
@@ -80,13 +80,13 @@ class HardLogicTest(MessengerTestBase):
 class ChallengingLogicTest(MessengerTestBase):
     options = {
         "shuffle_seals": "false",
-        "logic_level": "challenging"
+        "logic_level": "challenging",
     }
 
 
 class NoLogicTest(MessengerTestBase):
     options = {
-        "logic_level": "oob"
+        "logic_level": "oob",
     }
 
     def testAccess(self) -> None:
