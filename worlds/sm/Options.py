@@ -1,6 +1,6 @@
 import typing
 from Options import Choice, Range, OptionDict, OptionList, Option, Toggle, DefaultOnToggle
-from worlds.sm.variaRandomizer.utils.objectives import _goals
+from .variaRandomizer.utils.objectives import _goals
 
 class StartItemsRemovesFromPool(Toggle):
     """Remove items in starting inventory from pool."""

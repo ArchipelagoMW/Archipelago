@@ -1,5 +1,5 @@
-from rom.addressTypes import ValueList, ValueSingle, ValueRange, Byte, Word, Long
-from rom.objectivesAddresses import objectivesAddr
+from .addressTypes import ValueList, ValueSingle, ValueRange, Byte, Word, Long
+from .objectivesAddresses import objectivesAddr
 
 # TODO::add patches
 

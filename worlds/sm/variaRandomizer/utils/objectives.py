@@ -1,15 +1,16 @@
 import copy
 import random
-from rom.addresses import Addresses
-from rom.rom import pc_to_snes
-from logic.helpers import Bosses
-from logic.smbool import SMBool
-from logic.logic import Logic
-from graph.location import locationsDict
-from utils.parameters import Knows
-import utils.log, logging
+from ..rom.addresses import Addresses
+from ..rom.rom import pc_to_snes
+from ..logic.helpers import Bosses
+from ..logic.smbool import SMBool
+from ..logic.logic import Logic
+from ..graph.location import locationsDict
+from ..utils.parameters import Knows
+from ..utils import log
+import logging
 
-LOG = utils.log.get('Objectives')
+LOG = log.get('Objectives')
 
 class Synonyms(object):
     killSynonyms = [
@@ -641,7 +642,7 @@ class Objectives(object):
 
     def checkLimitObjectives(self, beatableBosses):
         # check that there's enough bosses/minibosses for limit objectives
-        from logic.smboolmanager import SMBoolManager
+        from ..logic.smboolmanager import SMBoolManager
         smbm = SMBoolManager(self.player)
         smbm.addItems(beatableBosses)
         for goal in self.activeGoals:

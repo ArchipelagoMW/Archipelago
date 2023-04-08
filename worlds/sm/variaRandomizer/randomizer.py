@@ -13,8 +13,8 @@ from .utils.utils import PresetLoader, loadRandoPreset, getDefaultMultiValues, g
 from .utils.version import displayedVersion
 from .utils.doorsmanager import DoorsManager
 from .logic.logic import Logic
-from ..utils.objectives import Objectives
-from ..utils.utils import dumpErrorMsg
+from .utils.objectives import Objectives
+from .utils.utils import dumpErrorMsg
 
 from .utils import log
 from ..Options import StartLocation

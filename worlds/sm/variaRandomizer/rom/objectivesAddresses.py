@@ -1,4 +1,4 @@
-from rom.addressTypes import ValueList, ValueSingle, ValueRange
+from .addressTypes import ValueList, ValueSingle, ValueRange
 # generated from asar output
 # A1 start: A1FA80
 objectivesAddr = {

@@ -9,6 +9,7 @@ from ..graph.graph_utils import getAccessPoint, GraphUtils
 from ..rando.Filler import FrontFiller
 from ..rando.ItemLocContainer import ItemLocContainer, getLocListStr, ItemLocation, getItemListStr
 from ..rando.Restrictions import Restrictions
+from ..utils.objectives import Objectives
 from ..utils.parameters import infinity
 from ..rom.rom_patches import RomPatches
 
