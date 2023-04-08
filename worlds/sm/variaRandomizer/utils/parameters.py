@@ -61,7 +61,7 @@ def diff4solver(difficulty):
         return "mania"
 
 # allow multiple local repo
-appDir = Path(__file__).parents[4]
+appDir = str(Path(__file__).parents[4])
 
 def isKnows(knows):
     return knows[0:len('__')] != '__' and knows[0] == knows[0].upper()

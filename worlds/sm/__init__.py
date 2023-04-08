@@ -280,14 +280,14 @@ class SMWorld(World):
         # first apply the sm multiworld code patch named 'basepatch' (also has empty tables that we'll overwrite),
         #  + apply some patches from varia that we want to be always-on.
         # basepatch and variapatches are both generated from https://github.com/lordlou/SMBasepatch
-        romPatcher.applyIPSPatch("/".join((str(appDir),
-                                              "worlds", "sm", "data", "SMBasepatch_prebuilt", "multiworld-basepatch.ips")))
-        romPatcher.applyIPSPatch("/".join((str(appDir),
-                                              "worlds", "sm", "data", "SMBasepatch_prebuilt", "variapatches.ips")))
+        romPatcher.applyIPSPatch("/".join((os.path.dirname(self.__file__),
+                                              "data", "SMBasepatch_prebuilt", "multiworld-basepatch.ips")))
+        romPatcher.applyIPSPatch("/".join((os.path.dirname(self.__file__),
+                                              "data", "SMBasepatch_prebuilt", "variapatches.ips")))
 
     def APPostPatchRom(self, romPatcher):
-        symbols = get_sm_symbols("/".join((str(appDir),
-                                              "worlds", "sm", "data", "SMBasepatch_prebuilt", "sm-basepatch-symbols.json")))
+        symbols = get_sm_symbols("/".join((os.path.dirname(self.__file__),
+                                              "data", "SMBasepatch_prebuilt", "sm-basepatch-symbols.json")))
 
         # gather all player ids and names relevant to this rom, then write player name and player id data tables
         playerIdSet: Set[int] = {0}  # 0 is for "Archipelago" server
@@ -377,7 +377,7 @@ class SMWorld(World):
         idx = 0
         offworldSprites: List[ByteEdit] = []
         for itemSprite in itemSprites:
-            with openFile("/".join((str(appDir), "worlds", "sm", "data", "custom_sprite", itemSprite["fileName"])), 'rb') as stream:
+            with openFile("/".join((os.path.dirname(self.__file__), "data", "custom_sprite", itemSprite["fileName"])), 'rb') as stream:
                 buffer = bytearray(stream.read())
                 offworldSprites.append({"sym": symbols[itemSprite["paletteSymbolName"]],
                                         "offset": 0,
