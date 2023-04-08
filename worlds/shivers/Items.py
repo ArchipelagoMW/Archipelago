@@ -84,4 +84,7 @@ item_table = {
     "Sand Pot Top DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 88, "potduplicate"),
     "Metal Top DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 89, "potduplicate"),
 
+    #Filler
+    "Empty": ItemData(SHIVERS_ITEM_ID_OFFSET + 90, "filler"),
+
 }

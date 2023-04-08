@@ -1,4 +1,3 @@
-import typing
 from .Items import item_table, ShiversItem, get_full_item_list
 # from .Options import Shivers_options
 from .Rules import set_rules
@@ -7,7 +6,7 @@ from Fill import fill_restrictive
 from ..AutoWorld import World, WebWorld
 from . import Constants
 
-client_version = 1
+client_version = 0
 
 
 class ShiversWeb(WebWorld):
@@ -19,7 +18,6 @@ class ShiversWeb(WebWorld):
         "setup/en",
         ["Godl-Fire"]
     )]
-
 
 class ShiversWorld(World):
     """ 
@@ -50,9 +48,13 @@ class ShiversWorld(World):
         return item
 
     # option_definitions = Shivers_options
+
+    #Prefills event storage locations with duplicate pots
     def pre_fill(self) -> None:
+        global storage_placements
         storagelocs = []
         storageitems = []
+        
          
         for region_name, locations in Constants.location_info["locations_by_region"].items():
             region = self.multiworld.get_region(region_name, self.player)
@@ -60,13 +62,27 @@ class ShiversWorld(World):
                 if loc_name.startswith("Accessible: "):
                     loc = ShiversLocation(self.player, loc_name,
                                           self.location_name_to_id.get(loc_name, None), region)
-                    storagelocs.append(loc)
-        
+                    storagelocs.append(self.multiworld.get_location(loc_name, self.player))
+
         storageitems += [self.create_item(name) for name, data in item_table.items() if data.type == 'potduplicate']
+        storageitems += [self.create_item("Empty") for i in range(3)]
 
         state = self.multiworld.get_all_state(False)
+        self.multiworld.random.shuffle(storagelocs)
+        self.multiworld.random.shuffle(storageitems)
+        fill_restrictive(self.multiworld, state, storagelocs.copy(), storageitems, True)
 
-        fill_restrictive(self.multiworld, state, storagelocs, storageitems, True)
+        storage_placements = {location.name: location.item.name for location in storagelocs}
+
+    
+    def _get_slot_data(self):
+        return {
+            'storageplacements': storage_placements
+        }
+
+    def fill_slot_data(self) -> dict:
+        slot_data = self._get_slot_data()
+        return slot_data
 
     def create_regions(self):
         # Create regions
@@ -82,14 +98,12 @@ class ShiversWorld(World):
             r = self.multiworld.get_region(region_name, self.player)
             e.connect(r)
 
-        # Add locations
         for region_name, locations in Constants.location_info["locations_by_region"].items():
             region = self.multiworld.get_region(region_name, self.player)
             for loc_name in locations:
-                if not loc_name.startswith("Accessible: "):
-                    loc = ShiversLocation(self.player, loc_name,
-                                          self.location_name_to_id.get(loc_name, None), region)
-                    region.locations.append(loc)
+                loc = ShiversLocation(self.player, loc_name,
+                                      self.location_name_to_id.get(loc_name, None), region)
+                region.locations.append(loc)
 
     def generate_basic(self):
 
@@ -113,6 +127,29 @@ class ShiversWorld(World):
     # def _place_events(self):
 
     def generate_output(self, output_directory: str) -> None:
+        #print(self.multiworld.get_location("Accessible: Storage: Desk Drawer", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Workshop Drawers", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Library Cabinet", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Library Statue", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Slide", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Eagles Head", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Clock Tower", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Ocean", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Egypt", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Chinese Solitaire", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Tiki Hut", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Lyre", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Alchemy", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: UFO", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Skeleton", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Anansi", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Hanging", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Eagles Nest", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Tar River", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Theater", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Greenhouse", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Janitor Closet", self.player).item)
+        #print(self.multiworld.get_location("Accessible: Storage: Skull Bridge", self.player).item)
 
         return super().generate_output(output_directory)
 
