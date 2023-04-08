@@ -128,7 +128,7 @@ noita_connections: Dict[str, Set[str]] = {
     "Temple of the Art": {"Holy Mountain 6 (To Temple of the Art)", "Holy Mountain 7 (To The Laboratory)", "The Tower",
                           "Wizard's Den"},
     "Wizard's Den": {"Temple of the Art", "Powerplant"},
-    "Powerplant": {"Wizard's Den", "Deep Underground"},
+    "Powerplant": {"Wizard's Den", "Deep Underground", "Sandcave"},
     "The Tower": {"Forest"},
     "Deep Underground": {},
 
