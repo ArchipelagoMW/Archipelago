@@ -6,6 +6,7 @@ class PathOption(Choice):
     """Choose where you would like Hidden Chest and Pedestal checks to be placed.
     Main Path includes the main 7 biomes you typically go through to get to the final boss.
     Side Path includes areas off the main path, but not ones you need to go way out of your way for. 10 biomes total.
+    These biomes are the Collapsed Mines, Fungal Caverns, and Lukki Lair.
     Main World includes the full world (excluding parallel worlds). 15 biomes total."""
     display_name = "Path Option"
     option_main_path = 1
@@ -37,8 +38,8 @@ class Traps(DefaultOnToggle):
 
 class OrbsAsChecks(Choice):
     """Decides whether finding the orbs that naturally spawn in the world count as checks.
-    The Main Path option includes only the floating island and abyss orb room orbs.
-    The Side Path option includes the Main Path, magical temple, lukki lair, and lava lake orbs.
+    The Main Path option includes only the Floating Island and Abyss Orb Room orbs.
+    The Side Path option includes the Main Path, Magical Temple, Lukki Lair, and Lava Lake orbs.
     The Main World option includes all 11 orbs."""
     display_name = "Orbs as Location Checks"
     option_no_orbs = 0
