@@ -623,9 +623,9 @@ def calculate_items(ctx: SC2Context) -> typing.List[int]:
     accumulators[type_flaggroups["Level"]] += (len(ctx.checked_locations) // ctx.checks_per_level) * ctx.levels_per_check
 
     # Upgrades from completed missions
-    if ctx.generic_upgrade_research > 0:
+    if ctx.generic_upgrade_missions > 0:
         upgrade_flaggroup = type_flaggroups["Upgrade"]
-        num_missions = ctx.generic_upgrade_research * len(ctx.mission_req_table)
+        num_missions = ctx.generic_upgrade_missions * len(ctx.mission_req_table)
         amounts = [
             num_missions // 100,
             2 * num_missions // 100,

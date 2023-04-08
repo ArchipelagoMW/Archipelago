@@ -198,7 +198,9 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
     if get_option_value(multiworld, player, "early_unit"):
         local_basic_unit = sorted(item for item in get_basic_units(multiworld, player) if item not in non_local_items and item not in excluded_items)
         if not local_basic_unit:
-            raise Exception("At least one basic unit must be local")
+            local_basic_unit = sorted(item for item in get_basic_units(multiworld, player) if item not in excluded_items)
+            if not local_basic_unit:
+                raise Exception("Early Unit: At least one basic unit must be included")
 
         # The first world should also be the starting world
         first_mission = list(multiworld.worlds[player].mission_req_table)[0]
