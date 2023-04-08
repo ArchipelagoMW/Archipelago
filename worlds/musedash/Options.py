@@ -30,7 +30,7 @@ class AdditionalSongs(Range):
     """
     range_start = 15
     range_end = 500  # Note will probably not reach this high if any other settings are done.
-    default = 50
+    default = 40
     display_name = "Additional Song Count"
 
 
