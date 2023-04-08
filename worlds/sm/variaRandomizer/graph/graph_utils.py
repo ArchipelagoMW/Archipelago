@@ -1,10 +1,10 @@
 import copy
 import random
-from worlds.sm.variaRandomizer.logic.logic import Logic
-from worlds.sm.variaRandomizer.utils.parameters import Knows
-from worlds.sm.variaRandomizer.graph.location import locationsDict
-from worlds.sm.variaRandomizer.rom.rom import snes_to_pc
-from worlds.sm.variaRandomizer.utils import log
+from ..logic.logic import Logic
+from ..utils.parameters import Knows
+from ..graph.location import locationsDict
+from ..rom.rom import snes_to_pc
+from ..utils import log
 
 # order expected by ROM patches
 graphAreas = [
