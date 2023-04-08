@@ -200,9 +200,14 @@ initialize_item_table()
 initialize_groups()
 
 
-def create_items(item_factory: StardewItemFactory, locations_count: int, world_options: StardewOptions,
+def create_items(item_factory: StardewItemFactory, locations_count: int, items_to_exclude: list[Item], world_options: StardewOptions,
                  random: Random) -> List[Item]:
     items = create_unique_items(item_factory, world_options, random)
+
+    for item in items_to_exclude:
+        if item in items:
+            items.remove(item)
+
     assert len(items) <= locations_count, \
         "There should be at least as many locations as there are mandatory items"
     logger.debug(f"Created {len(items)} unique items")

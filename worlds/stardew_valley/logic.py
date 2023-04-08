@@ -153,7 +153,7 @@ class StardewLogic:
             "Broken Glasses": self.can_crab_pot(),
             "Bug Meat": self.can_mine_in_the_mines_floor_1_40(),
             "Cactus Fruit": self.can_reach_region("The Desert"),
-            "Cave Carrot": self.has_mine_elevator_to_floor(10),
+            "Cave Carrot": self.can_mine_to_floor(10),
             "Caviar": self.has("Preserves Jar") & self.has("Sturgeon Roe"),
             "Chanterelle": self.has_season("Fall") & self.can_reach_region("Secret Woods"),
             "Cheese Press": self.has_skill_level("Farming", 6) & self.has("Hardwood") & self.has("Copper Bar"),

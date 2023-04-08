@@ -102,13 +102,11 @@ class StardewValleyWorld(World):
         locations_count = len([location
                                for location in self.multiworld.get_locations(self.player)
                                if not location.event])
-        created_items = create_items(self.create_item, locations_count + len(items_to_exclude), self.options,
-                                     self.multiworld.random)
-        self.multiworld.itempool += created_items
 
-        for item in items_to_exclude:
-            if item in self.multiworld.itempool:
-                self.multiworld.itempool.remove(item)
+        created_items = create_items(self.create_item, locations_count, items_to_exclude, self.options,
+                                     self.multiworld.random)
+
+        self.multiworld.itempool += created_items
 
         self.setup_early_items()
         self.setup_month_events()
