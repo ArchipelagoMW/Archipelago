@@ -19,10 +19,21 @@ class MuseDashCollections:
     song_items: Dict[str, SongData] = {}
     song_locations: Dict[str, int] = {}
 
+    trap_items: Dict[str, int] = {}
+
+
     def __init__(self, start_item_id: int, items_per_location: int):
         self.MUSIC_SHEET_CODE = start_item_id
 
-        item_id_index = start_item_id + 1
+        self.trap_items["Bad Apple Trap"] = start_item_id + 1
+        self.trap_items["Pixelate Trap"] = start_item_id + 2
+        self.trap_items["Random Wave Trap"] = start_item_id + 3
+        self.trap_items["Shadow Edge Trap"] = start_item_id + 4
+        self.trap_items["Chromatic Aberration Trap"] = start_item_id + 5
+        self.trap_items["Background Freeze Trap"] = start_item_id + 6
+        self.trap_items["Gray Scale Trap"] = start_item_id + 7
+
+        item_id_index = start_item_id + 50
         location_id_index = start_item_id
 
         full_file = load_text_file("MuseDashData.txt")

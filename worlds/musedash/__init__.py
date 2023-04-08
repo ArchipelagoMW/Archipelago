@@ -46,6 +46,8 @@ class MuseDashWorld(World):
         name: data.code for name, data in muse_dash_collection.album_items.items() | muse_dash_collection.song_items.items()
     }
     item_name_to_id[music_sheet_name] = muse_dash_collection.MUSIC_SHEET_CODE
+    for item in muse_dash_collection.trap_items.items():
+        item_name_to_id[item[0]] = item[1]
 
     location_name_to_id = {
         name: id for name, id in muse_dash_collection.album_locations.items() | muse_dash_collection.song_locations.items()
@@ -97,7 +99,7 @@ class MuseDashWorld(World):
             self.included_songs.append(self.pop_random_item(available_song_keys))
 
         self.location_count = len(self.starting_songs) + len(self.included_songs)
-        location_multiplier = 1 + (self.multiworld.additional_item_percentage[self.player] / 100.0)
+        location_multiplier = 1 + (self.get_additional_item_percentage() / 100.0)
         self.location_count = floor(self.location_count * location_multiplier)
 
         minimum_location_count = len(self.included_songs) + self.get_music_sheet_count()
@@ -115,6 +117,10 @@ class MuseDashWorld(World):
         if (name == self.music_sheet_name):
             return MuseDashFixedItem(name, ItemClassification.progression_skip_balancing,
                                      self.muse_dash_collection.MUSIC_SHEET_CODE, self.player)
+
+        trap = self.muse_dash_collection.trap_items.get(name)
+        if (trap != None):
+            return MuseDashFixedItem(name, ItemClassification.trap, trap, self.player)
 
         song = self.muse_dash_collection.song_items.get(name)
         if (song != None):
@@ -136,6 +142,16 @@ class MuseDashWorld(World):
         # First add all goal song tokens
         for _ in range(0, item_count):
             self.multiworld.itempool.append(self.create_item(self.music_sheet_name))
+
+        # Then add all traps
+        trap_count = self.get_trap_count()
+        trap_list = list(self.muse_dash_collection.trap_items.items())
+        for _ in range(0, trap_count):
+            index = self.multiworld.random.randrange(0, len(trap_list))
+            choice = trap_list[index]
+            self.multiworld.itempool.append(self.create_item(choice[0]))
+
+        item_count += trap_count
 
         # Next fill all remaining slots with song items
         needed_item_count = self.location_count
@@ -212,9 +228,19 @@ class MuseDashWorld(World):
             else:
                 set_rule(location, lambda state, place=item_name: state.has(place, self.player))
 
+    def get_additional_item_percentage(self) -> int:
+        trap_count = self.multiworld.trap_count_percentage[self.player].value
+        song_count = self.multiworld.music_sheet_count_percentage[self.player].value
+        return max(trap_count + song_count, self.multiworld.additional_item_percentage[self.player].value)
+
+    def get_trap_count(self) -> int:
+        multiplier = self.multiworld.trap_count_percentage[self.player].value / 100.0
+        trap_count = (len(self.starting_songs) * 2) + len(self.included_songs)
+        return max(0, floor(trap_count * multiplier))
+
     def get_music_sheet_count(self) -> int:
         multiplier = self.multiworld.music_sheet_count_percentage[self.player].value / 100.0
-        song_count = len(self.starting_songs) + len(self.included_songs)
+        song_count = (len(self.starting_songs) * 2) + len(self.included_songs)
         return max(1, floor(song_count * multiplier))
 
     def get_music_sheet_win_count(self) -> int:

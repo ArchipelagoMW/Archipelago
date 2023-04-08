@@ -90,8 +90,8 @@ class MusicSheetCountPercentage(Range):
     """Music sheets are what you need to win Muse Dash. This controls how many sheets are in the item pool.
     This is based on the number of songs in the pool."""
     range_start = 5
-    range_end = 25
-    default = 15
+    range_end = 35
+    default = 20
     display_name = "Music Sheet Percentage"
 
 
@@ -110,6 +110,13 @@ class AdditionalItemPercentage(Range):
     default = 80
     range_end = 100
 
+class TrapCountPercentage(Range):
+    """The number of traps to add into the pool. Traps are visual effects which get played for an entire song."""
+    range_start = 0
+    range_end = 35
+    default = 15
+    display_name = "Music Sheet Percentage"
+
 
 musedash_options: Dict[str, type(Option)] = {
     "allow_just_as_planned_dlc_songs": AllowJustAsPlannedDLCSongs,
@@ -123,5 +130,6 @@ musedash_options: Dict[str, type(Option)] = {
     "grade_needed": GradeNeeded,
     "music_sheet_count_percentage": MusicSheetCountPercentage,
     "music_sheet_win_count_percentage": MusicSheetWinCountPercentage,
+    "trap_count_percentage": TrapCountPercentage,
     "death_link": DeathLink
 }
