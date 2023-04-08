@@ -21,7 +21,7 @@
 
 When you generate a game you will see a download link for a KH2 .zip seed on the room page. Download the seed then open OpenKH Mod Manager and click the green plus and `Select and install Mod Archive`.<br>
 Make sure the seed is on the top of the list (Highest Priority)<br>
-After Installing the seed click `Patching -> Build/Build and Run`. Every slot is a unique mod to install and will be needed be repatched for different slots/rooms.
+After Installing the seed click `Mod Loader -> Build/Build and Run`. Every slot is a unique mod to install and will be needed be repatched for different slots/rooms.
 
 <h3 style="text-transform:none";>Required: Archipelago Companion Mod</h3>
 
@@ -34,7 +34,7 @@ This mod is based upon Num's Garden of Assemblege Mod and requires it to work. W
 Load this mod just like the GoA ROM you did during the KH2 Rando setup. `KH2FM-Mods-equations19/auto-save` Location doesn't matter, required in case of crashes.
 
 <h2 style="text-transform:none";>What the Mod Manager Should Look Like.</h2>
-![image](https://i.imgur.com/bTbJ8KO.png)
+![image](https://i.imgur.com/QgRfjP1.png)
 
 <h2 style="text-transform:none";>Using the KH2 Client</h2>
 
@@ -45,13 +45,15 @@ If the client ever loses connection to the game, it will also disconnect from th
 Most checks will be sent to you anywhere outside a load or cutscene.<br>
 `If you obtain magic, you will need to pause your game to have it show up in your inventory, then enter a new room for it to become properly usable.`
 <br>
+<h2 style="text-transform:none";>KH2 Client should look like this: </h2>
+![image](https://i.imgur.com/qP6CmV8.png)
 <br>
-Enter `/connect [server-address]` into the input box at the bottom of the Archipelago Client and press "Enter"
+Enter `The room's port number` into the top box <b> where the x's are</b> and press "Connect". Follow the prompts there and you should be connected
 
 
 <h2 style="text-transform:none";>Common Pitfalls</h2>
 - Having an old GOA Lua Script in your `C:\Users\*YourName*\Documents\KINGDOM HEARTS HD 1.5+2.5 ReMIX\scripts\kh2` folder.
-  - Pressing F2 while in game should look like this. ![image](https://i.imgur.com/dK714jq.png)
+  - Pressing F2 while in game should look like this. ![image](https://i.imgur.com/ABSdtPC.png)
 <br>
 - Not having Lua Backend Configured Correctly.
   - To fix this look over the guide at [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/). Specifically the Lua Backend Configuration Step.
