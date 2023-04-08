@@ -1,6 +1,6 @@
-﻿from worlds.smz3.TotalSMZ3.Region import SMRegion
-from worlds.smz3.TotalSMZ3.Config import Config, SMLogic
-from worlds.smz3.TotalSMZ3.Location import Location, LocationType
+﻿from ....Region import SMRegion
+from ....Config import Config, SMLogic
+from ....Location import Location, LocationType
 
 class Central(SMRegion):
     Name = "Crateria Central"

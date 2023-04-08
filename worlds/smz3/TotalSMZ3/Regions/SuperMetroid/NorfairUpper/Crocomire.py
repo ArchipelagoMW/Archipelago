@@ -1,7 +1,7 @@
-﻿from worlds.smz3.TotalSMZ3.Region import SMRegion
-from worlds.smz3.TotalSMZ3.Config import Config, SMLogic
-from worlds.smz3.TotalSMZ3.Location import Location, LocationType
-from worlds.smz3.TotalSMZ3.Item import Progression
+﻿from ....Region import SMRegion
+from ....Config import Config, SMLogic
+from ....Location import Location, LocationType
+from ....Item import Progression
 
 class Crocomire(SMRegion):
     Name = "Norfair Upper Crocomire"

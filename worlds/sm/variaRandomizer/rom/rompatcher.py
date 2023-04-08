@@ -1,13 +1,13 @@
 import os, random, re
-from worlds.sm.variaRandomizer.rando.Items import ItemManager
-from worlds.sm.variaRandomizer.rom.ips import IPS_Patch
-from worlds.sm.variaRandomizer.utils.doorsmanager import DoorsManager
-from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils, getAccessPoint, locIdsByAreaAddresses
-from worlds.sm.variaRandomizer.logic.logic import Logic
-from worlds.sm.variaRandomizer.rom.rom import RealROM, snes_to_pc, pc_to_snes
-from worlds.sm.variaRandomizer.patches.patchaccess import PatchAccess
-from worlds.sm.variaRandomizer.utils.parameters import appDir
-from worlds.sm.variaRandomizer.utils import log
+from ..rando.Items import ItemManager
+from ..rom.ips import IPS_Patch
+from ..utils.doorsmanager import DoorsManager
+from ..graph.graph_utils import GraphUtils, getAccessPoint, locIdsByAreaAddresses
+from ..logic.logic import Logic
+from ..rom.rom import RealROM, snes_to_pc, pc_to_snes
+from ..patches.patchaccess import PatchAccess
+from ..utils.parameters import appDir
+from ..utils import log
 
 def getWord(w):
     return (w & 0x00FF, (w & 0xFF00) >> 8)

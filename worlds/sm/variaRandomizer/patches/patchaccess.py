@@ -1,17 +1,54 @@
 import os, importlib
-from worlds.sm.variaRandomizer.logic.logic import Logic
-from worlds.sm.variaRandomizer.patches.common.patches import patches, additional_PLMs
-from worlds.sm.variaRandomizer.utils.parameters import appDir
+import pathlib
+import sys
+import zipfile
+from ..logic.logic import Logic
+from ..patches.common.patches import patches, additional_PLMs
+from ..utils.parameters import appDir
+
+def ListDir(resource: str):
+    filename = sys.modules[PatchAccess.__module__].__file__
+    apworldExt = ".apworld"
+    game = "sm/"
+    if apworldExt in filename:
+        zipPath = pathlib.Path(filename[:filename.index(apworldExt) + len(apworldExt)])
+        with zipfile.ZipFile(zipPath) as zf:
+            zipFilePath = resource[resource.index(game):]
+            path = zipfile.Path(zf, zipFilePath + "/")
+            files = [f.at[len(zipFilePath)+1:] for f in path.iterdir()]
+            print(zipFilePath)
+            #files = list(set(f for f in zf.namelist() if f.startswith(zipFilePath) and f.count("/") == zipFilePath.count("/")))
+            print(files)
+            return files
+    else:
+        return os.listdir(resource)    
+    
+def Exists(resource: str):
+    filename = sys.modules[PatchAccess.__module__].__file__
+    apworldExt = ".apworld"
+    game = "sm/"
+    if apworldExt in filename:
+        zipPath = pathlib.Path(filename[:filename.index(apworldExt) + len(apworldExt)])
+        with zipfile.ZipFile(zipPath) as zf:
+            print(resource)
+            if (game in resource):
+                zipFilePath = resource[resource.index(game):]
+                path = zipfile.Path(zf, zipFilePath)
+                return path.exists()
+            else:
+                return False
+    else:
+        return os.path.exists(resource)   
 
 class PatchAccess(object):
     def __init__(self):
         # load all ips patches
         self.patchesPath = {}
-        commonDir = os.path.join(appDir, 'worlds/sm/variaRandomizer/patches/common/ips/')
-        for patch in os.listdir(commonDir):
+        commonDir = "/".join((str(appDir), 'worlds/sm/variaRandomizer/patches/common/ips'))
+        for patch in ListDir(commonDir):
             self.patchesPath[patch] = commonDir
-        logicDir = os.path.join(appDir, 'worlds/sm/variaRandomizer/patches/{}/ips/'.format(Logic.patches))
-        for patch in os.listdir(logicDir):
+        logicDir = "/".join((str(appDir), 'worlds/sm/variaRandomizer/patches/{}/ips'.format(Logic.patches)))
+        for patch in ListDir(logicDir):
             self.patchesPath[patch] = logicDir
 
         # load dict patches
@@ -27,10 +64,10 @@ class PatchAccess(object):
     def getPatchPath(self, patch):
         # is patch preloaded
         if patch in self.patchesPath:
-            return os.path.join(self.patchesPath[patch], patch)
+            return "/".join((self.patchesPath[patch], patch))
         else:
             # patchs from varia_repository used by the customizer for permalinks
-            if os.path.exists(patch):
+            if Exists(patch):
                 return patch
             else:
                 raise Exception("unknown patch: {}".format(patch))

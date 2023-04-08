@@ -1,8 +1,28 @@
+import io
 import os, json, re, random
+import pathlib
+import sys
+from typing import Any
+import zipfile
 
-from worlds.sm.variaRandomizer.utils.parameters import Knows, Settings, Controller, isKnows, isSettings, isButton
-from worlds.sm.variaRandomizer.utils.parameters import easy, medium, hard, harder, hardcore, mania, text2diff
-from worlds.sm.variaRandomizer.logic.smbool import SMBool
+from ..utils.parameters import Knows, Settings, Controller, isKnows, isSettings, isButton
+from ..utils.parameters import easy, medium, hard, harder, hardcore, mania, text2diff
+from ..logic.smbool import SMBool
+
+def ReadFile(resource: str, mode: str = "r", encoding: None = None):
+    filename = sys.modules[ReadFile.__module__].__file__
+    apworldExt = ".apworld"
+    game = "/sm/"
+    if apworldExt in filename:
+        zipPath = pathlib.Path(filename[:filename.index(apworldExt) + len(apworldExt)])
+        with zipfile.ZipFile(zipPath) as zf:
+            zipFilePath = resource[resource.index(game)+1:]
+            if mode == 'rb':
+                return zf.open(zipFilePath, 'r')
+            else:
+                return io.TextIOWrapper(zf.open(zipFilePath, mode), encoding)
+    else:
+        return open(resource, mode)
 
 def isStdPreset(preset):
     return preset in ['newbie', 'casual', 'regular', 'veteran', 'expert', 'master', 'samus', 'solution', 'Season_Races', 'SMRAT2021']
@@ -253,7 +273,7 @@ class PresetLoader(object):
 class PresetLoaderJson(PresetLoader):
     # when called from the test suite
     def __init__(self, jsonFileName):
-        with open(jsonFileName) as jsonFile:
+        with ReadFile(jsonFileName) as jsonFile:
             self.params = json.load(jsonFile)
         super(PresetLoaderJson, self).__init__()
 
@@ -264,7 +284,7 @@ class PresetLoaderDict(PresetLoader):
         super(PresetLoaderDict, self).__init__()
 
 def getDefaultMultiValues():
-    from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils
+    from ..graph.graph_utils import GraphUtils
     defaultMultiValues = {
         'startLocation': GraphUtils.getStartAccessPointNames(),
         'majorsSplit': ['Full', 'FullWithHUD', 'Major', 'Chozo', 'Scavenger'],

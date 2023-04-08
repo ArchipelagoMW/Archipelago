@@ -1,8 +1,8 @@
 ﻿from typing import List
-from worlds.smz3.TotalSMZ3.Region import Z3Region, RewardType, IReward, IMedallionAccess
-from worlds.smz3.TotalSMZ3.Config import Config
-from worlds.smz3.TotalSMZ3.Location import Location, LocationType
-from worlds.smz3.TotalSMZ3.Item import Progression, ItemType
+from ...Region import Z3Region, RewardType, IReward, IMedallionAccess
+from ...Config import Config
+from ...Location import Location, LocationType
+from ...Item import Progression, ItemType
 
 class MiseryMire(Z3Region, IReward, IMedallionAccess):
     Name = "Misery Mire"
@@ -35,7 +35,7 @@ class MiseryMire(Z3Region, IReward, IMedallionAccess):
 
     # // Need "CanKillManyEnemies" if implementing swordless
     def CanEnter(self, items: Progression):
-        from worlds.smz3.TotalSMZ3.WorldState import Medallion
+        from ...WorldState import Medallion
         return (items.Bombos if self.Medallion == Medallion.Bombos else (
                     items.Ether if self.Medallion == Medallion.Ether else items.Quake)) and items.Sword and \
             items.MoonPearl and (items.Boots or items.Hookshot) and \

@@ -1,7 +1,7 @@
-﻿from worlds.smz3.TotalSMZ3.Region import SMRegion, IReward, RewardType
-from worlds.smz3.TotalSMZ3.Config import Config, SMLogic
-from worlds.smz3.TotalSMZ3.Location import Location, LocationType
-from worlds.smz3.TotalSMZ3.Item import Progression
+﻿from ....Region import SMRegion, IReward, RewardType
+from ....Config import Config, SMLogic
+from ....Location import Location, LocationType
+from ....Item import Progression
 
 class Inner(SMRegion, IReward):
     Name = "Maridia Inner"

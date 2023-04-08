@@ -1,10 +1,10 @@
 import random
 import copy
-from worlds.sm.variaRandomizer.logic.smbool import SMBool
-from worlds.sm.variaRandomizer.rom.rom_patches import RomPatches
+from ..logic.smbool import SMBool
+from ..rom.rom_patches import RomPatches
 import logging
 
-from worlds.sm.variaRandomizer.utils import log
+from ..utils import log
 LOG = log.get('DoorsManager')
 
 colorsList = ['red', 'green', 'yellow', 'wave', 'spazer', 'plasma', 'ice']

@@ -1,8 +1,8 @@
 ﻿from typing import List
-from worlds.smz3.TotalSMZ3.Region import Z3Region, RewardType
-from worlds.smz3.TotalSMZ3.Config import Config, GameMode, KeyShuffle
-from worlds.smz3.TotalSMZ3.Location import Location, LocationType
-from worlds.smz3.TotalSMZ3.Item import Item, Progression, ItemType
+from ...Region import Z3Region, RewardType
+from ...Config import Config, GameMode, KeyShuffle
+from ...Location import Location, LocationType
+from ...Item import Item, Progression, ItemType
 
 class GanonsTower(Z3Region):
     Name = "Ganon's Tower"

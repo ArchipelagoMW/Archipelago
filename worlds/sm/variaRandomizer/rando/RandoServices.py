@@ -1,10 +1,10 @@
 
 import copy, random, sys, logging, os
 from enum import Enum, unique
-from worlds.sm.variaRandomizer.utils import log
-from worlds.sm.variaRandomizer.utils.parameters import infinity
-from worlds.sm.variaRandomizer.rando.ItemLocContainer import getLocListStr, getItemListStr, getItemLocStr, ItemLocation
-from worlds.sm.variaRandomizer.logic.helpers import Bosses
+from ..utils import log
+from ..utils.parameters import infinity
+from ..rando.ItemLocContainer import getLocListStr, getItemListStr, getItemLocStr, ItemLocation
+from ..logic.helpers import Bosses
 
 # used to specify whether we want to come back from locations
 @unique

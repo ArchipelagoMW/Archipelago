@@ -1,7 +1,7 @@
 import copy, random
-from worlds.sm.variaRandomizer.utils import log
-from worlds.sm.variaRandomizer.graph.graph_utils import getAccessPoint
-from worlds.sm.variaRandomizer.rando.ItemLocContainer import getLocListStr
+from ..utils import log
+from ..graph.graph_utils import getAccessPoint
+from ..rando.ItemLocContainer import getLocListStr
 
 # Holds settings related to item placement restrictions.
 # canPlaceAtLocation is the main entry point here

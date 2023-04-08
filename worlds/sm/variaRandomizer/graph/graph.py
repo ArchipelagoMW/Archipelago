@@ -1,9 +1,9 @@
 import copy, logging
 from operator import attrgetter
-from worlds.sm.variaRandomizer.utils import log
-from worlds.sm.variaRandomizer.logic.smbool import SMBool, smboolFalse
-from worlds.sm.variaRandomizer.utils.parameters import infinity
-from worlds.sm.variaRandomizer.logic.helpers import Bosses
+from ..utils import log
+from ..logic.smbool import SMBool, smboolFalse
+from ..utils.parameters import infinity
+from ..logic.helpers import Bosses
 
 class Path(object):
     __slots__ = ( 'path', 'pdiff', 'distance' )

@@ -4,30 +4,30 @@ from typing import Any, Callable, List, Sequence
 import random
 import typing
 from BaseClasses import Location
-from worlds.smz3.TotalSMZ3.Item import Item, ItemType
-from worlds.smz3.TotalSMZ3.Location import LocationType
-from worlds.smz3.TotalSMZ3.Region import IReward, RewardType, SMRegion, Z3Region
-from worlds.smz3.TotalSMZ3.Regions.Zelda.EasternPalace import EasternPalace
-from worlds.smz3.TotalSMZ3.Regions.Zelda.DesertPalace import DesertPalace
-from worlds.smz3.TotalSMZ3.Regions.Zelda.TowerOfHera import TowerOfHera
-from worlds.smz3.TotalSMZ3.Regions.Zelda.PalaceOfDarkness import PalaceOfDarkness
-from worlds.smz3.TotalSMZ3.Regions.Zelda.SwampPalace import SwampPalace
-from worlds.smz3.TotalSMZ3.Regions.Zelda.SkullWoods import SkullWoods
-from worlds.smz3.TotalSMZ3.Regions.Zelda.ThievesTown import ThievesTown
-from worlds.smz3.TotalSMZ3.Regions.Zelda.IcePalace import IcePalace
-from worlds.smz3.TotalSMZ3.Regions.Zelda.MiseryMire import MiseryMire
-from worlds.smz3.TotalSMZ3.Regions.Zelda.TurtleRock import TurtleRock
-from worlds.smz3.TotalSMZ3.Regions.Zelda.GanonsTower import GanonsTower
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.Brinstar.Kraid import Kraid
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.WreckedShip import WreckedShip
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.Maridia.Inner import Inner
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.NorfairLower.East import East
-from worlds.smz3.TotalSMZ3.Text.StringTable import StringTable
+from .Item import Item, ItemType
+from .Location import LocationType
+from .Region import IReward, RewardType, SMRegion, Z3Region
+from .Regions.Zelda.EasternPalace import EasternPalace
+from .Regions.Zelda.DesertPalace import DesertPalace
+from .Regions.Zelda.TowerOfHera import TowerOfHera
+from .Regions.Zelda.PalaceOfDarkness import PalaceOfDarkness
+from .Regions.Zelda.SwampPalace import SwampPalace
+from .Regions.Zelda.SkullWoods import SkullWoods
+from .Regions.Zelda.ThievesTown import ThievesTown
+from .Regions.Zelda.IcePalace import IcePalace
+from .Regions.Zelda.MiseryMire import MiseryMire
+from .Regions.Zelda.TurtleRock import TurtleRock
+from .Regions.Zelda.GanonsTower import GanonsTower
+from .Regions.SuperMetroid.Brinstar.Kraid import Kraid
+from .Regions.SuperMetroid.WreckedShip import WreckedShip
+from .Regions.SuperMetroid.Maridia.Inner import Inner
+from .Regions.SuperMetroid.NorfairLower.East import East
+from .Text.StringTable import StringTable
 
-from worlds.smz3.TotalSMZ3.World import World
-from worlds.smz3.TotalSMZ3.Config import Config, OpenTourian, Goal
-from worlds.smz3.TotalSMZ3.Text.Texts import Texts
-from worlds.smz3.TotalSMZ3.Text.Dialog import Dialog
+from .World import World
+from .Config import Config, OpenTourian, Goal
+from .Text.Texts import Texts
+from .Text.Dialog import Dialog
 
 class KeycardPlaque:
     Level1 = 0xe0
@@ -147,7 +147,7 @@ class Patch:
         return {patch[0]:patch[1] for patch in self.patches}
     
     def WriteMedallions(self):
-        from worlds.smz3.TotalSMZ3.WorldState import Medallion
+        from .WorldState import Medallion
         turtleRock = next(region for region in self.myWorld.Regions if isinstance(region, TurtleRock))
         miseryMire = next(region for region in self.myWorld.Regions if isinstance(region, MiseryMire))
 

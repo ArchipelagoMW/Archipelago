@@ -1,4 +1,4 @@
-from worlds.sm.variaRandomizer.logic.smbool import SMBool
+from ..logic.smbool import SMBool
 import os
 import sys
 from pathlib import Path
