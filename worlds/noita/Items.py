@@ -98,7 +98,7 @@ filler_weights: Dict[str, int] = {
     "Trap":             15,
     "Extra Max HP":     25,
     "Spell Refresher":  20,
-    "Potion":           45,
+    "Potion":           40,
     "Gold (200)":       15,
     "Gold (1000)":      6,
     "Wand (Tier 1)":    10,
@@ -108,8 +108,8 @@ filler_weights: Dict[str, int] = {
     "Wand (Tier 5)":    5,
     "Wand (Tier 6)":    4,
     "Perk (Extra Life)": 10,
-    "Random Potion":    7,
-    "Secret Potion":    7,
+    "Random Potion":    9,
+    "Secret Potion":    10,
     "Chaos Die":        4,
     "Greed Die":        4,
     "Kammi":            4,
@@ -127,6 +127,10 @@ def get_item_group(item_name: str) -> str:
 
 def item_is_filler(item_name: str) -> bool:
     return item_table[item_name].classification == ItemClassification.filler
+
+
+def item_is_perk(item_name: str) -> bool:
+    return item_table[item_name].group == "Perks"
 
 
 filler_items: List[str] = list(filter(item_is_filler, item_table.keys()))

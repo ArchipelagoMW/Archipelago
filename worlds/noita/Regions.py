@@ -74,6 +74,7 @@ def create_all_regions_and_connections(world: MultiWorld, player: int) -> None:
 # - Shaft is excluded to disconnect Mines from the Snowy Depths
 # - Lukki Lair is disconnected from The Vault
 # - Overgrown Cavern is disconnected from the Desert
+# - Snow Chasm is disconnected from the Snowy Wastelands
 noita_connections: Dict[str, Set[str]] = {
     "Menu": {"Forest"},
     "Forest": {"Mines", "Floating Island", "Desert", "Snowy Wasteland"},
@@ -127,7 +128,7 @@ noita_connections: Dict[str, Set[str]] = {
     "Temple of the Art": {"Holy Mountain 6 (To Temple of the Art)", "Holy Mountain 7 (To The Laboratory)", "The Tower",
                           "Wizard's Den"},
     "Wizard's Den": {"Temple of the Art", "Powerplant"},
-    "Powerplant": {"Wizard's Den", "Deep Underground"},
+    "Powerplant": {"Wizard's Den", "Deep Underground", "Sandcave"},
     "The Tower": {"Forest"},
     "Deep Underground": {},
 
