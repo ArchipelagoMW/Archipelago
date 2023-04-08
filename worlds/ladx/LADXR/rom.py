@@ -7,7 +7,7 @@ h2b = binascii.unhexlify
 
 class ROM:
     def __init__(self, filename):
-        data = open(Utils.local_path(filename), "rb").read()
+        data = open(Utils.user_path(filename), "rb").read()
         #assert len(data) == 1024 * 1024
         self.banks = []
         for n in range(0x40):

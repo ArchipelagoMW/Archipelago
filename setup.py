@@ -71,6 +71,7 @@ apworlds: set = {
     "Timespinner",
     "Minecraft",
     "The Messenger",
+    "Links Awakening DX",
 }
 
 
