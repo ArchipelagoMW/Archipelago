@@ -1,5 +1,5 @@
 from BaseClasses import MultiWorld
-from typing import List, Set
+from typing import List, NamedTuple, Set
 
 from ..generic import Rules as GenericRules
 from . import Locations, Options
@@ -14,6 +14,24 @@ holy_mountain_regions: List[str] = [
     "Holy Mountain 6 (To Temple of the Art)",
     "Holy Mountain 7 (To The Laboratory)",
 ]
+
+
+class EntranceLock(NamedTuple):
+    source: str
+    destination: str
+    event: str
+
+
+entrance_locks: List[EntranceLock] = {
+    EntranceLock("Mines", "Holy Mountain 1 (To Coal Pits)", "Portal to Holy Mountain 1"),
+    EntranceLock("Coal Pits", "Holy Mountain 2 (To Snowy Depths)", "Portal to Holy Mountain 2"),
+    EntranceLock("Snowy Depths", "Holy Mountain 3 (To Hiisi Base)", "Portal to Holy Mountain 3"),
+    EntranceLock("Hiisi Base", "Holy Mountain 4 (To Underground Jungle)", "Portal to Holy Mountain 4"),
+    EntranceLock("Underground Jungle", "Holy Mountain 5 (To The Vault)", "Portal to Holy Mountain 5"),
+    EntranceLock("The Vault", "Holy Mountain 6 (To Temple of the Art)", "Portal to Holy Mountain 6"),
+    EntranceLock("Temple of the Art", "Holy Mountain 7 (To The Laboratory)", "Portal to Holy Mountain 7"),
+}
+
 
 wand_tiers: List[str] = [
     "Wand (Tier 1)",    # Coal Pits
@@ -34,15 +52,16 @@ def forbid_items_at_location(world: MultiWorld, location_name: str, items: Set[s
     GenericRules.forbid_items_for_player(location, items, player)
 
 
-def create_all_rules(world: MultiWorld, player: int) -> None:
-
-    # Prevent gold and potions from appearing as purchasable items in shops
+# Prevent gold and potions from appearing as purchasable items in shops (because physics will destroy them)
+def ban_items_from_shops(world: MultiWorld, player: int) -> None:
     for location_name in Locations.location_name_to_id.keys():
         if "Shop Item" not in location_name:
             continue
         forbid_items_at_location(world, location_name, items_hidden_from_shops, player)
 
-    # Prevent high tier wands from appearing in early Holy Mountain shops
+
+# Prevent high tier wands from appearing in early Holy Mountain shops
+def ban_early_high_tier_wands(world: MultiWorld, player: int) -> None:
     for i, region_name in enumerate(holy_mountain_regions):
         wands_to_forbid = wand_tiers[i+1:]
 
@@ -56,6 +75,18 @@ def create_all_rules(world: MultiWorld, player: int) -> None:
     for location_name in locations_in_region:
         forbid_items_at_location(world, location_name, wands_to_forbid, player)
 
-    # Prevent the Map perk from being on Toveri
+
+def lock_holy_mountains_into_spheres(world: MultiWorld, player: int) -> None:
+    for lock in entrance_locks:
+        location = world.get_entrance(f"From {lock.source} To {lock.destination}", player)
+        GenericRules.set_rule(location, lambda state, evt=lock.event: state.has(evt, player))
+
+
+def create_all_rules(world: MultiWorld, player: int) -> None:
+    ban_items_from_shops(world, player)
+    ban_early_high_tier_wands(world, player)
+    lock_holy_mountains_into_spheres(world, player)
+
+    # Prevent the Map perk (used to find Toveri) from being on Toveri (boss)
     if world.bosses_as_checks[player].value >= Options.BossesAsChecks.option_all_bosses:
         forbid_items_at_location(world, "Toveri", {"Perk (Spatial Awareness)"}, player)

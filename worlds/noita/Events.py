@@ -1,3 +1,4 @@
+from typing import Dict
 from BaseClasses import Item, MultiWorld, Region, Location, ItemClassification
 from . import Items, Locations
 
@@ -20,11 +21,20 @@ def create_locked_location_event(world: MultiWorld, player: int, region_name: st
     return new_location
 
 
-def create_victory_events(world: MultiWorld, player: int) -> None:
-    # Generate Victory shenanigans
-    create_locked_location_event(world, player, "The Work", "Victory")
+def create_all_events(world: MultiWorld, player: int) -> None:
+    for region, event in event_locks.items():
+        create_locked_location_event(world, player, region, event)
+
     world.completion_condition[player] = lambda state: state.has("Victory", player)
 
 
-def create_all_events(world: MultiWorld, player: int) -> None:
-    create_victory_events(world, player)
+event_locks: Dict[str, str] = {
+    "The Work": "Victory",
+    "Mines": "Portal to Holy Mountain 1",
+    "Coal Pits": "Portal to Holy Mountain 2",
+    "Snowy Depths": "Portal to Holy Mountain 3",
+    "Hiisi Base": "Portal to Holy Mountain 4",
+    "Underground Jungle": "Portal to Holy Mountain 5",
+    "The Vault": "Portal to Holy Mountain 6",
+    "Temple of the Art": "Portal to Holy Mountain 7",
+}

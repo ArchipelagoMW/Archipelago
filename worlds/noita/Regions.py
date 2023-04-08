@@ -70,25 +70,28 @@ def create_all_regions_and_connections(world: MultiWorld, player: int) -> None:
 
 
 # Oh, what a tangled web we weave
+# Notes to create artificial spheres:
+# - Shaft is excluded to disconnect Mines from the Snowy Depths
+# - Lukki Lair is disconnected from The Vault
+# - Overgrown Cavern is disconnected from the Desert
 noita_connections: Dict[str, Set[str]] = {
     "Menu": {"Forest"},
     "Forest": {"Mines", "Floating Island", "Desert", "Snowy Wasteland"},
     "Snowy Wasteland": {"Frozen Vault", "Lake", "Forest"},
     "Frozen Vault": {"Snowy Wasteland"},
     "Lake": {"Snowy Wasteland", "Desert"},
-    "Desert": {"Lake", "Pyramid", "Overgrown Cavern"},
+    "Desert": {"Lake", "Pyramid"},
     "Floating Island": {"Forest"},
     "Pyramid": {"Desert"},
     "Overgrown Cavern": {"Sandcave"},
-    "Sandcave": {"Powerplant"},
+    "Sandcave": {"Powerplant", "Overgrown Cavern"},
 
     ###
     "Mines": {"Collapsed Mines", "Holy Mountain 1 (To Coal Pits)", "Lava Lake", "Forest"},
-    "Collapsed Mines": {"Mines", "Holy Mountain 1 (To Coal Pits)", "Dark Cave"},
-    "Lava Lake": {"Mines", "Shaft", "Abyss Orb Room", "Below Lava Lake"},
-    "Shaft": {"Lava Lake", "Snowy Depths", "Abyss Orb Room", "Below Lava Lake"},
-    "Abyss Orb Room": {"Lava Lake", "Shaft"},
-    "Below Lava Lake": {"Lava Lake", "Shaft"},
+    "Collapsed Mines": {"Mines", "Dark Cave"},
+    "Lava Lake": {"Mines", "Abyss Orb Room", "Below Lava Lake"},
+    "Abyss Orb Room": {"Lava Lake"},
+    "Below Lava Lake": {"Lava Lake"},
     "Dark Cave": {"Ancient Laboratory", "Collapsed Mines"},
     "Ancient Laboratory": {"Dark Cave"},
 
@@ -99,7 +102,7 @@ noita_connections: Dict[str, Set[str]] = {
 
     ###
     "Holy Mountain 2 (To Snowy Depths)": {"Snowy Depths"},
-    "Snowy Depths": {"Shaft", "Holy Mountain 2 (To Snowy Depths)", "Holy Mountain 3 (To Hiisi Base)", "Magical Temple"},
+    "Snowy Depths": {"Holy Mountain 2 (To Snowy Depths)", "Holy Mountain 3 (To Hiisi Base)", "Magical Temple"},
     "Magical Temple": {"Snowy Depths"},
 
     ###
@@ -112,12 +115,12 @@ noita_connections: Dict[str, Set[str]] = {
     "Underground Jungle": {"Holy Mountain 4 (To Underground Jungle)", "Dragoncave", "Holy Mountain 5 (To The Vault)",
                            "Lukki Lair"},
     "Dragoncave": {"Underground Jungle"},
-    "Lukki Lair": {"Underground Jungle", "The Vault", "Snow Chasm"},
+    "Lukki Lair": {"Underground Jungle", "Snow Chasm"},
     "Snow Chasm": {},
 
     ###
     "Holy Mountain 5 (To The Vault)": {"The Vault"},
-    "The Vault": {"Holy Mountain 5 (To The Vault)", "Holy Mountain 6 (To Temple of the Art)", "Lukki Lair"},
+    "The Vault": {"Holy Mountain 5 (To The Vault)", "Holy Mountain 6 (To Temple of the Art)"},
 
     ###
     "Holy Mountain 6 (To Temple of the Art)": {"Temple of the Art"},
