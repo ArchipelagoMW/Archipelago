@@ -54,7 +54,7 @@ class MessengerLocation(Location):
 
 class MessengerShopLocation(MessengerLocation):
     def cost(self) -> int:
-        name = self.name[11:]  # removes "The Shop - "
+        name = self.name.replace("The Shop - ", "")  # TODO use `remove_prefix` when 3.8 finally gets dropped
         prices = self.parent_region.multiworld.worlds[self.player].shop_prices
         return prices.get(name, SHOP_ITEMS[name].default_price)
 

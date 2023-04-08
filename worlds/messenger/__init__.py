@@ -94,10 +94,10 @@ class MessengerWorld(World):
             self.create_item(item)
             for item in self.item_name_to_id
             if item not in
-               {
-                   "Power Seal", *NOTES, *SHOP_ITEMS,
-                   *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
-               } and "Time Shard" not in item
+            {
+                "Power Seal", *NOTES, *SHOP_ITEMS,
+                *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
+            } and "Time Shard" not in item
         ]
 
         if self.multiworld.shop_shuffle[self.player]:

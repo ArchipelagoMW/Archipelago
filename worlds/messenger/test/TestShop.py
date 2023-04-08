@@ -84,5 +84,5 @@ class PlandoTest(MessengerTestBase):
 
                 loc = f"The Shop - {loc}"
                 self.assertEqual(price, self.multiworld.get_location(loc, self.player).cost())
-                self.assertTrue(loc[11:] in SHOP_ITEMS)
+                self.assertTrue(loc.replace("The Shop - ", "") in SHOP_ITEMS)
         self.assertEqual(len(prices), len(SHOP_ITEMS))
