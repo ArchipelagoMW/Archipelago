@@ -200,7 +200,7 @@ initialize_item_table()
 initialize_groups()
 
 
-def create_items(item_factory: StardewItemFactory, locations_count: int, items_to_exclude: list[Item], world_options: StardewOptions,
+def create_items(item_factory: StardewItemFactory, locations_count: int, items_to_exclude: List[Item], world_options: StardewOptions,
                  random: Random) -> List[Item]:
     items = create_unique_items(item_factory, world_options, random)
 
