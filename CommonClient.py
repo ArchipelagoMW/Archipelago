@@ -709,6 +709,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.slot = args["slot"]
         # int keys get lost in JSON transfer
         ctx.slot_info = {int(pid): data for pid, data in args["slot_info"].items()}
+        ctx.hint_points = args.get("hint_points", 0)
         ctx.consume_players_package(args["players"])
         msgs = []
         if ctx.locations_checked:
@@ -721,7 +722,6 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             await ctx.send_msgs(msgs)
         if ctx.finished_game:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-        ctx.hint_points = args.get("hint_points", 0)
 
         # Get the server side view of missing as of time of connecting.
         # This list is used to only send to the server what is reported as ACTUALLY Missing.
