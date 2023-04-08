@@ -544,7 +544,7 @@ class Context:
             "stored_data": self.stored_data,
             "game_options": {"hint_cost": self.hint_cost, "location_check_points": self.location_check_points,
                              "server_password": self.server_password, "password": self.password,
-                             "forfeit_mode": self.release_mode, "release_mode": self.release_mode,  # TODO remove forfeit_mode around 0.4
+                             "release_mode": self.release_mode,
                              "remaining_mode": self.remaining_mode, "collect_mode": self.collect_mode,
                              "item_cheat": self.item_cheat, "compatibility": self.compatibility}
 
@@ -769,7 +769,6 @@ async def on_client_connected(ctx: Context, client: Client):
 
 def get_permissions(ctx) -> typing.Dict[str, Permission]:
     return {
-        "forfeit": Permission.from_text(ctx.release_mode),  # TODO remove around 0.4
         "release": Permission.from_text(ctx.release_mode),
         "remaining": Permission.from_text(ctx.remaining_mode),
         "collect": Permission.from_text(ctx.collect_mode)
@@ -1742,6 +1741,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
             ctx.notify_hints(client.team, hints, only_new=create_as_hint == 2)
+            if locs and create_as_hint:
+                ctx.save()
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
 
         elif cmd == 'StatusUpdate':
@@ -1800,6 +1801,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 targets.add(client)
             if targets:
                 ctx.broadcast(targets, [args])
+            ctx.save()
 
         elif cmd == "SetNotify":
             if "keys" not in args or type(args["keys"]) != list:
@@ -1817,6 +1819,7 @@ def update_client_status(ctx: Context, client: Client, new_status: ClientStatus)
             ctx.on_goal_achieved(client)
 
         ctx.client_game_state[client.team, client.slot] = new_status
+        ctx.save()
 
 
 class ServerCommandProcessor(CommonCommandProcessor):
