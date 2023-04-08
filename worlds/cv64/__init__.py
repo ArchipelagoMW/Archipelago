@@ -71,7 +71,7 @@ class CV64World(World):
 
         # Prevent Clock Tower from being Stage 1 if more than 4 S1s are needed to warp out of it.
         if self.multiworld.special1s_per_warp[self.player].value > 4:
-            stage_1_blacklist += RName.clock_tower
+            stage_1_blacklist.append(RName.clock_tower)
 
         # Remove character stages from the stage list and exits dict if they're not enabled
         if self.multiworld.character_stages[self.player].value == 2:
@@ -81,6 +81,8 @@ class CV64World(World):
             del(self.active_stage_exits[RName.underground_waterway])
             del(self.active_stage_exits[RName.tower_of_science])
             del(self.active_stage_exits[RName.tower_of_sorcery])
+            self.active_stage_exits[RName.villa][2] = RName.tunnel
+            self.active_stage_exits[RName.castle_center][2] = RName.duel_tower
         elif self.multiworld.character_stages[self.player].value == 3:
             self.active_stage_list.remove(RName.tunnel)
             self.active_stage_list.remove(RName.duel_tower)
@@ -88,6 +90,8 @@ class CV64World(World):
             del(self.active_stage_exits[RName.tunnel])
             del(self.active_stage_exits[RName.duel_tower])
             del(self.active_stage_exits[RName.tower_of_execution])
+            self.active_stage_exits[RName.villa][1] = RName.underground_waterway
+            self.active_stage_exits[RName.castle_center][1] = RName.tower_of_science
 
         if self.multiworld.stage_shuffle[self.player]:
             shuffle_stages(self.multiworld, self.player, self.active_stage_list, self.active_stage_exits,
@@ -140,12 +144,14 @@ class CV64World(World):
             self.multiworld.regions.append(active_regions[region])
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
+        s1_with_under_15 = name == IName.special_one and self.multiworld.total_special1s[self.player] < 15
+
         if force_non_progression:
             classification = ItemClassification.filler
+        elif name in key_table or s1_with_under_15:
+            classification = ItemClassification.progression
         elif name in special_table:
             classification = ItemClassification.progression_skip_balancing
-        elif name in key_table:
-            classification = ItemClassification.progression
         else:
             classification = ItemClassification.filler
 
@@ -305,6 +311,10 @@ class CV64World(World):
         elif self.active_stage_list[0] == RName.clock_tower:
             if self.multiworld.special1s_per_warp[self.player].value > 2:
                 self.multiworld.local_early_items[self.player][IName.clocktower_key_one] = 1
+        elif self.active_stage_list[0] == RName.castle_wall:
+            if self.multiworld.special1s_per_warp[self.player].value > 5 and \
+                    self.multiworld.hard_logic[self.player].value == 0:
+                self.multiworld.local_early_items[self.player][IName.left_tower_key] = 1
 
     def generate_output(self, output_directory: str) -> None:
         try:

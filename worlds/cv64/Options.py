@@ -48,7 +48,7 @@ class ExtraKeys(Choice):
 class Special1sPerWarp(Range):
     """Sets how many Special1 jewels are needed per warp menu option unlock."""
     range_start = 1
-    range_end = 5
+    range_end = 10
     default = 1
     display_name = "Special1 Jewels Per Warp"
 
@@ -56,7 +56,7 @@ class Special1sPerWarp(Range):
 class TotalSpecial1s(Range):
     """Sets how many Speical1 jewels are in the pool in total. This cannot be less than Special1s Per Warp x 7."""
     range_start = 1
-    range_end = 40
+    range_end = 70
     default = 7
     display_name = "Total Special1 Jewels"
 
@@ -75,7 +75,7 @@ class Special2sRequired(Range):
     """Sets how many Special2 jewels are needed to enter Dracula's chamber. Only applies if Dracula's Chamber Condition
     is set to Special2s."""
     range_start = 1
-    range_end = 40
+    range_end = 70
     default = 10
     display_name = "Special2 Jewels Required"
 
@@ -84,7 +84,7 @@ class TotalSpecial2s(Range):
     """Sets how many Speical2 jewels are in the pool in total. This cannot be less than 'Special2s Required'. Only
     applies if Dracula's Chamber Condition is set to Special2s."""
     range_start = 1
-    range_end = 40
+    range_end = 70
     default = 10
     display_name = "Total Special2 Jewels"
 
@@ -184,7 +184,7 @@ class BackgroundMusic(Choice):
     loop and songs that don't."""
     display_name = "Background Music"
     option_normal = 0
-    option_off = 1
+    option_disabled = 1
     option_randomized = 2
     default = 0
 

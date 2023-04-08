@@ -111,8 +111,8 @@ rom_looping_music_fade_ins = {
     0x18: 0x19,
     0x1A: 0x1B,
     0x21: 0x75,
-    0x27: 0x23,
-    0x2E: None,
+    0x27: None,
+    0x2E: 0x23,
     0x39: None,
     0x45: 0x63,
     0x56: None,
@@ -362,12 +362,15 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     # Prevent the vanilla Magical Nitro transport's "can explode" flag from setting
     rom.write_bytes(0xB5D7AA, [0x00, 0x00, 0x00, 0x00])
 
+    # Ensure the vampire Nitro check will always pass, so they'll never not spawn and crash the Villa cutscenes
+    rom.write_byte(0xA6253D, 0x03)
+
     # Enable the Game Over's "Continue" menu starting the cursor on whichever checkpoint is most recent
     rom.write_bytes(0xB4DDC, [0x0C, 0x06, 0x0D, 0x58])  # JAL 0x80183560
     rom.write_bytes(0x106750, Patches.continue_cursor_start_checker)
     rom.write_bytes(0x1C444, [0x08, 0x0F, 0xF0, 0x90])  # J   0x803FC240
+    rom.write_bytes(0x1C2A0, [0x08, 0x0F, 0xF0, 0x90])  # J   0x803FC240
     rom.write_bytes(0xBFC240, Patches.savepoint_cursor_updater)
-    rom.write_bytes(0x1C2A0, [0x08, 0x0F, 0xF0, 0x94])  # J   0x803FC294
     rom.write_bytes(0x1C2D0, [0x08, 0x0F, 0xF0, 0x94])  # J   0x803FC250
     rom.write_bytes(0xBFC250, Patches.stage_start_cursor_updater)
     rom.write_byte(0xB585C8, 0xFF)
@@ -401,8 +404,8 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
             rom.write_byte(offset, active_stage_exits[stage][3])
 
     # Top elevator switch check
-    rom.write_bytes(0x6CF0A0, [0x0C, 0x0F, 0xF0, 0xAF])  # JAL 0x803FC2BC
-    rom.write_bytes(0xBFC2BC, Patches.elevator_flag_checker)
+    rom.write_bytes(0x6CF0A0, [0x0C, 0x0F, 0xF0, 0xB0])  # JAL 0x803FC2C0
+    rom.write_bytes(0xBFC2C0, Patches.elevator_flag_checker)
 
     # Waterway brick platforms skip
     if multiworld.skip_waterway_platforms[player]:
@@ -440,8 +443,8 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     rom.write_bytes(0xBFC11C, Patches.death_flag_unsetter)
 
     # Warp menu-opening code
-    rom.write_bytes(0xB9BA8, [0x08, 0x0F, 0xF0, 0x9B])  # J	0x803FC26C
-    rom.write_bytes(0xBFC26C, Patches.warp_menu_opener)
+    rom.write_bytes(0xB9BA8, [0x08, 0x0F, 0xF0, 0x99])  # J	0x803FC264
+    rom.write_bytes(0xBFC264, Patches.warp_menu_opener)
 
     # NPC item textbox hack
     rom.write_bytes(0xBF1DC, [0x08, 0x0F, 0xF0, 0x67])  # J 0x803FC19C
@@ -497,7 +500,7 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     # On-the-fly TLB script modifier
     rom.write_bytes(0xBFC338, Patches.double_component_checker)
     rom.write_bytes(0xBFC3D4, Patches.downstairs_seal_checker)
-    rom.write_bytes(0xBFC700, Patches.tlb_modifiers)
+    rom.write_bytes(0xBFC700, Patches.overlay_modifiers)
 
     # On-the-fly scene object data modifier hook
     rom.write_bytes(0xEAB04, [0x08, 0x0F, 0xF2, 0x40])  # J 0x803FC900
@@ -569,12 +572,16 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     # Change bitflag on item in upper coffin in Forest final switch gate tomb to one that's not used by something else
     rom.write_bytes(0x10C77C, [0x00, 0x00, 0x00, 0x02])
 
+    # Make the torch directly behind Dracula's chamber that normally doesn't set a flag set bitflag 0x08 in 0x80389BFA
+    rom.write_byte(0x10CE9E, 0x08)
+
     # Write the randomized (or disabled) music ID list and its associated code
     if multiworld.background_music[player] != 0:
-        rom.write_bytes(0x7BE64, [0x0C, 0x0F, 0xF3, 0x44])  # JAL 0x803FCD10
-        rom.write_bytes(0xBFCD10, Patches.music_modifier)
+        rom.write_bytes(0x14588, [0x08, 0x06, 0x0D, 0x60])  # J 0x80183580
+        rom.write_bytes(0x14590, [0x00, 0x00, 0x00, 0x00])  # NOP
+        rom.write_bytes(0x106770, Patches.music_modifier)
         rom.write_bytes(0xBFCD30, music_list)
-        rom.write_bytes(0x156DC, [0x0C, 0x0F, 0xF3, 0x6E])  # JAL 0x803FCDB8
+        rom.write_bytes(0x15780, [0x0C, 0x0F, 0xF3, 0x6E])  # JAL 0x803FCDB8
         rom.write_bytes(0xBFCDB8, Patches.music_comparer_modifier)
 
     # Write all the new item and loading zone bytes
@@ -640,7 +647,10 @@ def cv64_text_converter(cv64text: str, a_advance: bool) -> list:
             text_bytes.append(0xFF)
         else:
             text_bytes.append(0x00)
-            text_bytes.append(char_dict[i])
+            if i in char_dict:
+                text_bytes.append(char_dict[i])
+            else:
+                text_bytes.append(0x02)
     if a_advance:
         text_bytes.append(0xA3)
         text_bytes.append(0x00)
