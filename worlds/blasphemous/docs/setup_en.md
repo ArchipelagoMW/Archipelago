@@ -6,6 +6,7 @@
 - Blasphemous Modding API from: [GitHub](https://github.com/BrandenEK/Blasphemous-Modding-API)
 - Blasphemous Randomizer from: [GitHub](https://github.com/BrandenEK/Blasphemous-Randomizer)
 - Blasphemous Multiworld from: [GitHub](https://github.com/BrandenEK/Blasphemous-Multiworld)
+- (*Optional*) PopTracker Pack from: [GitHub](https://github.com/sassyvania/Blasphemous-Randomizer-Maptracker) 
 
 ## Instructions (Windows)
 
@@ -14,6 +15,8 @@
 2. After the Modding API has been installed, download the [Randomizer](https://github.com/BrandenEK/Blasphemous-Randomizer/releases) and [Multiworld](https://github.com/BrandenEK/Blasphemous-Multiworld/releases) archives, and extract the contents of both into the `Modding` folder.
 
 3. Start Blasphemous. To verfy that the mods are working, look for a version number for both the Randomizer and Multiworld on the title screen.
+
+4. (*Optional*) Add the Blasphemous pack to PopTracker. In game, open the console by pressing backslash `\` and type `randomizer autotracker on` to automatically connect the game to PopTracker.
 
 ## Connecting
 
