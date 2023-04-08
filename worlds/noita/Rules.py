@@ -60,20 +60,12 @@ def get_orb_count(state: CollectionState, player: int) -> int:
     return state.item_count("Orb", player)
 
 
-def get_heart_count(state: CollectionState, player: int) -> int:
-    return state.item_count("Extra Max HP", player)
-
-
 def has_perk_count(state: CollectionState, player: int, amount: int) -> bool:
     return get_perk_count(state, player) >= amount
 
 
 def has_orb_count(state: CollectionState, player: int, amount: int) -> bool:
     return get_orb_count(state, player) >= amount
-
-
-def has_heart_count(state: CollectionState, player: int, amount: int) -> bool:
-    return get_heart_count(state, player) >= amount
 
 
 def forbid_items_at_location(world: MultiWorld, location_name: str, items: Set[str], player: int):
