@@ -690,7 +690,8 @@ def kerrigan_primal(ctx: SC2Context, items: typing.List[int]) -> bool:
                 for mission_id in ctx.mission_id_to_location_ids])
             return completed >= (total_missions / 2)
         case 5: # Item
-            return item_table["Primal Form (Kerrigan)"].code in ctx.items_received
+            codes = [item.item for item in ctx.items_received]
+            return item_table["Primal Form (Kerrigan)"].code in codes
     return False
 
 
