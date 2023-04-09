@@ -61,6 +61,8 @@ class BossesAsChecks(Choice):
     default = 0
 
 
+# Note: the Sampo is an item that is picked up to trigger the boss fight at the normal ending location.
+# The sampo is required for every ending (having orbs and bringing the sampo to a different spot changes the ending).
 class VictoryCondition(Choice):
     """Greed is to get to the bottom, beat the boss, and win the game.
     Pure is to get the 11 orbs in the main world, grab the sampo, and bring it to the mountain altar.

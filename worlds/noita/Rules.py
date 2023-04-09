@@ -1,7 +1,7 @@
 from BaseClasses import MultiWorld, CollectionState
 from typing import List, NamedTuple, Set
 
-from ..generic import Rules as GenericRules
+from worlds.generic import Rules as GenericRules
 from . import Locations, Options, Items
 
 
@@ -112,13 +112,22 @@ def holy_mountain_unlock_conditions(world: MultiWorld, player: int) -> None:
 
         elif vic == Options.VictoryCondition.option_pure_ending:
             world.get_location(lock.event, player).access_rule = \
-                lambda state, items_needed=lock.items_needed: has_perk_count(state, player, items_needed) \
+                lambda state, items_needed=lock.items_needed: has_perk_count(state, player, items_needed//2) \
                 and has_orb_count(state, player, items_needed)
 
         elif vic == Options.VictoryCondition.option_peaceful_ending:
             world.get_location(lock.event, player).access_rule = \
-                lambda state, items_needed=lock.items_needed: has_perk_count(state, player, items_needed) \
+                lambda state, items_needed=lock.items_needed: has_perk_count(state, player, items_needed//2) \
                 and has_orb_count(state, player, items_needed * 3)
+
+
+def victory_unlock_conditions(world: MultiWorld, player: int) -> None:
+    vic = world.victory_condition[player].value
+    victory_location = world.get_location("Victory", player)
+    if vic == Options.VictoryCondition.option_pure_ending:
+        victory_location.access_rule = lambda state: has_orb_count(state, player, 11)
+    elif vic == Options.VictoryCondition.option_peaceful_ending:
+        victory_location.access_rule = lambda state: has_orb_count(state, player, 33)
 
 
 def create_all_rules(world: MultiWorld, player: int) -> None:

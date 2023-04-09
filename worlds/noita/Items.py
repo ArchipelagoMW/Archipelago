@@ -26,7 +26,7 @@ def create_all_items(world: MultiWorld, player: int) -> None:
     # Generate fixed item pool, these are items with a specific fixed quantity that must be added
     itempool: List = []
     for item_name, count in required_items.items():
-        itempool += [item_name] * count
+        itempool += [item_name for _ in range(count)]
 
     # Generate items based on victory condition settings (Orbs)
     vic = world.victory_condition[player].value
@@ -34,14 +34,13 @@ def create_all_items(world: MultiWorld, player: int) -> None:
 
     if vic == Options.VictoryCondition.option_pure_ending:
         orb_count = 11
-    if vic == Options.VictoryCondition.option_peaceful_ending:
+    elif vic == Options.VictoryCondition.option_peaceful_ending:
         orb_count = 33
 
-    for i in range(orb_count):
-        itempool += ["Orb"]
+    itempool += ["Orb" for _ in range(orb_count)]
 
     if world.bosses_as_checks[player].value >= Options.BossesAsChecks.option_all_bosses:
-        itempool += ["Perk (Spatial Awareness)"]
+        itempool.append("Perk (Spatial Awareness)")
 
     # Create any non-progression repeat items (referred to as junk regardless of whether it's useful)
     filler_pool = filler_weights.copy()
