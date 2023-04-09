@@ -135,6 +135,7 @@ def create_all_rules(world: MultiWorld, player: int) -> None:
     ban_early_high_tier_wands(world, player)
     lock_holy_mountains_into_spheres(world, player)
     holy_mountain_unlock_conditions(world, player)
+    victory_unlock_conditions(world, player)
 
     # Prevent the Map perk (used to find Toveri) from being on Toveri (boss)
     if world.bosses_as_checks[player].value >= Options.BossesAsChecks.option_all_bosses:
