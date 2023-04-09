@@ -408,8 +408,7 @@ class LinksAwakeningWorld(World):
       
         handle = open(out_path, "wb")
         rom.save(handle, name="LADXR")
-        from .LADXR.patches.aesthetics import exportTitleScreen
-        exportTitleScreen(rom, "test.png")
+
         handle.close()
         patch = LADXDeltaPatch(os.path.splitext(out_path)[0]+LADXDeltaPatch.patch_file_ending, player=self.player,
                                 player_name=self.multiworld.player_name[self.player], patched_path=out_path)
