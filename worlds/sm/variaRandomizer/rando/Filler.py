@@ -1,14 +1,14 @@
 
 import copy, time, random
-from worlds.sm.variaRandomizer.utils import log
-from worlds.sm.variaRandomizer.logic.cache import RequestCache
-from worlds.sm.variaRandomizer.rando.RandoServices import RandoServices
-from worlds.sm.variaRandomizer.rando.Choice import ItemThenLocChoice
-from worlds.sm.variaRandomizer.rando.RandoServices import ComebackCheckType
-from worlds.sm.variaRandomizer.rando.ItemLocContainer import ItemLocation, getItemLocationsStr
-from worlds.sm.variaRandomizer.utils.parameters import infinity
-from worlds.sm.variaRandomizer.logic.helpers import diffValue2txt
-from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils
+from ..utils import log
+from ..logic.cache import RequestCache
+from ..rando.RandoServices import RandoServices
+from ..rando.Choice import ItemThenLocChoice
+from ..rando.RandoServices import ComebackCheckType
+from ..rando.ItemLocContainer import ItemLocation, getItemLocationsStr
+from ..utils.parameters import infinity
+from ..logic.helpers import diffValue2txt
+from ..graph.graph_utils import GraphUtils
 
 # base class for fillers. a filler responsibility is to fill a given
 # ItemLocContainer while a certain condition is fulfilled (usually
