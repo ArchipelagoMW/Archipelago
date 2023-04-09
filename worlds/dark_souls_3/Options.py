@@ -83,9 +83,17 @@ class MaxLevelsIn10WeaponPoolOption(Range):
 
 
 class LateBasinOfVowsOption(Toggle):
-    """Force the Basin of Vows to be located as a reward of defeating Pontiff Sulyvahn. It permits to ease the
-    progression by preventing having to kill the Dancer of the Boreal Valley as the first boss"""
+    """This option makes it so the Basin of Vows is still randomized, but guarantees you that you wont have to venture into
+    Lothric Castle to find your Small Lothric Banner to get out of High Wall of Lothric. So you may find Basin of Vows early, 
+    but you wont have to fight Dancer to find your Small Lothric Banner."""
     display_name = "Late Basin of Vows"
+
+
+class LateDLCOption(Toggle):
+    """This option makes it so you are guaranteed to find your Small Doll without having to venture off into the DLC, 
+    effectively putting anything in the DLC in logic after finding both Contraption Key and Small Doll, 
+    and being able to get into Irithyll of the Boreal Valley"""
+    display_name = "Late DLC"
 
 
 class EnableProgressiveLocationsOption(Toggle):
@@ -109,6 +117,7 @@ dark_souls_options: typing.Dict[str, type(Option)] = {
     "min_levels_in_10": MinLevelsIn10WeaponPoolOption,
     "max_levels_in_10": MaxLevelsIn10WeaponPoolOption,
     "late_basin_of_vows": LateBasinOfVowsOption,
+    "late_dlc": LateDLCOption,
     "no_spell_requirements": NoSpellRequirementsOption,
     "no_equip_load": NoEquipLoadOption,
     "death_link": DeathLink,

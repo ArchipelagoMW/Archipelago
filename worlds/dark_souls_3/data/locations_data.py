@@ -96,7 +96,8 @@ undead_settlement_table = {
     "US: Cornyx's Wrap": 0x11946370,
     "US: Cornyx's Garb": 0x11945F88,
     "US: Cornyx's Skirt": 0x11946758,
-    "US: Pyromancy Flame": 0x00CC77C0 #given/dropped by Cornyx
+    "US: Pyromancy Flame": 0x00CC77C0, #given/dropped by Cornyx
+    "US: Fire Gem": 0x4000047E #dropped from fire demon
 }
 
 road_of_sacrifice_table = {

@@ -558,7 +558,8 @@ misc_items_table = {
     "Irina's Ashes": 0x40000843,
     "Karla's Ashes": 0x40000842,
     "Cornyx's Ashes": 0x40000841,
-    "Orbeck's Ashes": 0x40000840
+    "Orbeck's Ashes": 0x40000840,
+    "Fire Gem": 0x4000047E #dropped from fire demon
 }
 
 dlc_misc_table = {

@@ -193,8 +193,10 @@ class DarkSouls3World(World):
     def create_items(self):
         for name, address in self.item_name_to_id.items():
             # Specific items will be included in the item pool under certain conditions. See generate_basic
-            if name == "Basin of Vows":
-                continue
+            #if name == "Basin of Vows":
+                #continue
+            #if name == "Contraption Key":
+                #continue
             # Do not add progressive_items ( containing "#" ) to the itempool if the option is disabled
             if (not self.multiworld.enable_progressive_locations[self.player]) and "#" in name:
                 continue
@@ -237,6 +239,15 @@ class DarkSouls3World(World):
                      lambda state: state.has("Contraption Key", self.player))
             set_rule(self.multiworld.get_entrance("Goto Ringed City", self.player),
                      lambda state: state.has("Small Envoy Banner", self.player))
+        # Late Basin/DLC Rules Below
+        if self.multiworld.late_basin_of_vows[self.player]:
+            set_rule(self.multiworld.get_entrance("Goto Lothric Castle", self.player),
+                     lambda state: state.has("Basin of Vows", self.player) and 
+                                   state.has("Small Lothric Banner", self.player))
+        if self.multiworld.late_dlc[self.player]:
+            set_rule(self.multiworld.get_entrance("Goto Painted World of Ariandel", self.player),
+                     lambda state: state.has("Contraption Key", self.player) and 
+                                   state.has("Small Doll",self.player))
 
         # Define the access rules to some specific locations
         set_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),
@@ -267,11 +278,18 @@ class DarkSouls3World(World):
 
     def generate_basic(self):
         # Depending on the specified option, add the Basin of Vows to a specific location or to the item pool
-        item = self.create_item("Basin of Vows")
-        if self.multiworld.late_basin_of_vows[self.player]:
-            self.multiworld.get_location("IBV: Soul of Pontiff Sulyvahn", self.player).place_locked_item(item)
-        else:
-            self.multiworld.itempool += [item]
+        #item = self.create_item("Basin of Vows")
+        #if self.multiworld.late_basin_of_vows[self.player]:
+            #self.multiworld.get_location("IBV: Soul of Pontiff Sulyvahn", self.player).place_locked_item(item)
+        #else:
+            #self.multiworld.itempool += [item]
+
+        # Depending on the specified option, add the Contraption Key to a specific location or to the item pool
+        #item = self.create_item("Contraption Key")
+        #if self.multiworld.late_dlc[self.player]:
+            #self.multiworld.get_location("HWL: Soul of the Dancer", self.player).place_locked_item(item)
+        #else:
+            #self.multiworld.itempool += [item]
 
         # Fill item pool with additional items
         item_pool_len = self.item_name_to_id.__len__()
