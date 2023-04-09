@@ -90,7 +90,38 @@ def createGfxImage(rom, filename):
         255, 255, 255,
     ))
     for bank_nr in range(bank_count):
-        bank = rom.banks[0x2C + bank_nr]
+            bank = rom.banks[0x2C + bank_nr]
+            for tx in range(32):
+                for ty in range(16):
+                    for y in range(16):
+                        a = bank[tx * 32 + ty * 32 * 32 + y * 2]
+                        b = bank[tx * 32 + ty * 32 * 32 + y * 2 + 1]
+                        for x in range(8):
+                            c = 0
+                            if a & (0x80 >> x):
+                                c |= 1
+                            if b & (0x80 >> x):
+                                c |= 2
+                            img.putpixel((tx*8+x, bank_nr * 32 * 8 + ty*16+y), c)
+    img.save(filename)
+
+def exportTitleScreen(rom, filename):
+    import PIL.Image
+
+    
+    
+    BITS_PER_PIXEL = 2
+    bank_count = 1
+    img = PIL.Image.new("P", (32 * 8, 32 * 8 * bank_count))
+    img.putpalette((
+        128, 0, 128,
+        0, 0, 0,
+        128, 128, 128,
+        255, 255, 255,
+    ))
+
+    for bank_nr in range(bank_count):
+        bank = rom.banks[0x30 + bank_nr]
         for tx in range(32):
             for ty in range(16):
                 for y in range(16):
@@ -104,6 +135,7 @@ def createGfxImage(rom, filename):
                             c |= 2
                         img.putpixel((tx*8+x, bank_nr * 32 * 8 + ty*16+y), c)
     img.save(filename)
+
 
 def prepatch(rom, bank, offset, filename):
     bank_count = 8
@@ -434,3 +466,14 @@ noChange:
             rom.room_sprite_data_overworld[room_nr] = data
         else:
             rom.room_sprite_data_indoor[room_nr - 0x100] = data
+
+
+def bin_to_rgb(word):
+    red   = word & 0b11111
+    word >>= 5
+    green = word & 0b11111
+    word >>= 5
+    blue  = word & 0b11111
+    return (red, green, blue)
+def rgb_to_bin(r, g, b):
+    return (b << 10) | (g << 5) | r

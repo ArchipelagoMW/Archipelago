@@ -23,7 +23,7 @@ from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
 from .Options import links_awakening_options
 from .Rom import LADXDeltaPatch
 
-DEVELOPER_MODE = False
+DEVELOPER_MODE = True
 
 class LinksAwakeningWebWorld(WebWorld):
     tutorials = [Tutorial(
@@ -410,6 +410,8 @@ class LinksAwakeningWorld(World):
       
         handle = open(rompath, "wb")
         rom.save(handle, name="LADXR")
+        from .LADXR.patches.aesthetics import exportTitleScreen
+        exportTitleScreen(rom, "test.png")
         handle.close()
         patch = LADXDeltaPatch(os.path.splitext(rompath)[0]+LADXDeltaPatch.patch_file_ending, player=self.player,
                                 player_name=self.multiworld.player_name[self.player], patched_path=rompath)

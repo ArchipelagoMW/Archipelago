@@ -82,3 +82,62 @@ def setRomInfo(rom, seed, seed_name, settings, player_name, player_id):
             ba.tiles[0x9820 + n] = 0x08 | pal
         be.store(rom)
         ba.store(rom)
+
+def setTitleGraphics(rom):
+    
+    BASE = 0x9800
+    ROW_SIZE = 0x20
+    
+    from ..backgroundEditor import BackgroundEditor
+    be = BackgroundEditor(rom, 0x11, attributes=True)
+    for tile in be.tiles:
+        if be.tiles[tile] == 7:
+            be.tiles[tile] = 3
+        
+    be.tiles[BASE + 10 * ROW_SIZE + 8] = 7
+    be.tiles[BASE + 10 * ROW_SIZE + 10] = 2
+    be.tiles[BASE + 10 * ROW_SIZE + 11] = 5
+    be.tiles[BASE + 11 * ROW_SIZE + 10] = 6
+    be.tiles[BASE + 11 * ROW_SIZE + 11] = 6
+    be.tiles[BASE + 12 * ROW_SIZE + 11] = 6
+    be.tiles[BASE + 11 * ROW_SIZE + 9] = 1
+    be.tiles[BASE + 12 * ROW_SIZE + 9] = 1
+    be.tiles[BASE + 12 * ROW_SIZE + 10] = 1
+    be.tiles[BASE + 13 * ROW_SIZE + 9] = 1
+    be.tiles[BASE + 13 * ROW_SIZE + 10] = 1
+    
+    be.store(rom)
+    from .aesthetics import rgb_to_bin, bin_to_rgb
+    BASE = 0x3DEE
+    palettes = []
+    BANK = 0x21
+    for i in range(8):
+        palette = []
+        for c in range(4):
+            address = BASE + i * 8 + c * 2
+            packed = (rom.banks[BANK][address + 1] << 8) | rom.banks[BANK][address]
+            r,g,b = bin_to_rgb(packed)
+            palette.append([r, g, b])
+        palettes.append(palette)
+    import copy
+    for i in [1, 2, 5, 6, 7]:
+        palettes[i] = copy.copy(palettes[3])
+    
+    def to_5_bit(r, g, b):
+        return [r >> 3, g >> 3, b >> 3]
+        #return [r * 31 // 0xFF, g * 31 // 0xFF, b * 31 // 0xFF]
+    palettes[1][3] = to_5_bit(0xFF, 0x80, 145)
+    palettes[2][3] = to_5_bit(119, 198, 155)
+    palettes[5][3] = to_5_bit(119, 198, 155)
+    palettes[6][3] = to_5_bit(192, 139, 215)
+    palettes[7][3] = to_5_bit(229, 196, 139)
+    
+    for i in range(8):
+        for c in range(4):
+            address = BASE + i * 8 + c * 2
+
+            packed = rgb_to_bin(*palettes[i][c])
+            rom.banks[BANK][address] = packed & 0xFF
+            rom.banks[BANK][address + 1] = packed >> 8
+            #palettes.append()
+    #rom.banks[0x21][0x3DEE : 0x3DEE + 0x80] = [0xFF] * (0x80)

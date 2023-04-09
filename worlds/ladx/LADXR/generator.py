@@ -271,6 +271,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
 
     patches.core.warpHome(rom)  # Needs to be done after setting the start location.
     patches.titleScreen.setRomInfo(rom, auth, seed_name, settings, player_name, player_id)
+    patches.titleScreen.setTitleGraphics(rom)
     patches.endscreen.updateEndScreen(rom)
     patches.aesthetics.updateSpriteData(rom)
     if args.doubletrouble:
@@ -363,15 +364,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
                 if x > max:
                     return max
                 return x
-            def bin_to_rgb(word):
-                red   = word & 0b11111
-                word >>= 5
-                green = word & 0b11111
-                word >>= 5
-                blue  = word & 0b11111
-                return (red, green, blue)
-            def rgb_to_bin(r, g, b):
-                return (b << 10) | (g << 5) | r
+            from patches.aesthetics import rgb_to_bin, bin_to_rgb
 
             for address in range(start, end, 2):
                 packed = (rom.banks[bank][address + 1] << 8) | rom.banks[bank][address]
