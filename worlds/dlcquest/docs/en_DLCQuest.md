@@ -10,7 +10,7 @@ config file.
 DLCs are obtained as checks for the multiworld. There are also some other optional checks in DLC Quest
 
 
-## What is the goal of Stardew Valley?
+## What is the goal of DLC Quest?
 
 DLC Quest has two campaigns, and the player can choose which one they will play for their slot.
 They can also choose to do both campaigns.
