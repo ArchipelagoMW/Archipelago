@@ -76,4 +76,4 @@ for i in range(1, 826):
 
 for i in range(1, 890):
     item_coin_freemium = f"Live Freemium or Die: {i} Coin"
-    location_table.update({item_coin_freemium: offset + 825 + 58 + i})
+    location_table[item_coin_freemium] = offset + 825 + 58 + i
