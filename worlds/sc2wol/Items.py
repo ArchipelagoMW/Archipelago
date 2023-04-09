@@ -50,6 +50,13 @@ item_table = {
     "Progressive Vehicle Armor": ItemData(104 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 6, quantity=3),
     "Progressive Ship Weapon": ItemData(105 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 8, quantity=3),
     "Progressive Ship Armor": ItemData(106 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 10, quantity=3),
+    # Upgrade bundle 'number' values are used as indices to get affected 'number's
+    "Progressive Weapon Upgrade": ItemData(107 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 0, quantity=3),
+    "Progressive Armor Upgrade": ItemData(108 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 1, quantity=3),
+    "Progressive Infantry Upgrade": ItemData(109 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 2, quantity=3),
+    "Progressive Vehicle Upgrade": ItemData(110 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 3, quantity=3),
+    "Progressive Starship Upgrade": ItemData(111 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 4, quantity=3),
+    "Progressive Upgrade": ItemData(112 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 5, quantity=3),
 
     "Projectile Accelerator (Bunker)": ItemData(200 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 0, parent_item="Bunker"),
     "Neosteel Bunker (Bunker)": ItemData(201 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 1, parent_item="Bunker"),
@@ -175,6 +182,9 @@ def get_basic_units(multiworld: MultiWorld, player: int) -> typing.Set[str]:
 item_name_groups = {}
 for item, data in item_table.items():
     item_name_groups.setdefault(data.type, []).append(item)
+    if data.type in ("Armory 1", "Armory 2") and '(' in item:
+        short_name = item[:item.find(' (')]
+        item_name_groups[short_name] = [item]
 item_name_groups["Missions"] = ["Beat " + mission_name for mission_name in vanilla_mission_req_table]
 
 filler_items: typing.Tuple[str, ...] = (
@@ -199,6 +209,39 @@ zerg_defense_ratings = {
     "Hive Mind Emulator": 3,
     "Psi Disruptor": 3
 }
+
+# 'number' values of upgrades for upgrade bundle items
+upgrade_numbers = [
+    {0, 4, 8}, # Weapon
+    {2, 6, 10}, # Armor
+    {0, 2}, # Infantry
+    {4, 6}, # Vehicle
+    {8, 10}, # Starship
+    {0, 2, 4, 6, 8, 10} # All
+]
+# Names of upgrades to be included for different options
+upgrade_included_names = [
+    { # Individual Items
+        "Progressive Infantry Weapon",
+        "Progressive Infantry Armor",
+        "Progressive Vehicle Weapon",
+        "Progressive Vehicle Armor"
+        "Progressive Ship Weapon",
+        "Progressive Ship Armor"
+    },
+    { # Bundle Weapon And Armor
+        "Progressive Weapon Upgrade",
+        "Progressive Armor Upgrade"
+    },
+    { # Bundle Unit Class
+        "Progressive Infantry Upgrade",
+        "Progressive Vehicle Upgrade",
+        "Progressive Starship Upgrade"
+    },
+    { # Bundle All
+        "Progressive Upgrade"
+    }
+]
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in get_full_item_list().items() if
                                             data.code}
