@@ -267,13 +267,15 @@ class KerriganPrimalStatus(Choice):
     Always Human:  Kerrigan is always human.
     Level 35:  Kerrigan is human until reaching level 35, and zerg thereafter.
     Half Completion:  Kerrigan is human until half of the missions in the seed are completed, 
-    and zerg thereafter."""
+    and zerg thereafter.
+    Item:  Kerrigan's Primal Form is an item. She is human until it is found, and zerg thereafter."""
     display_name = "Kerrigan Primal Status"
     option_vanilla = 0
     option_always_zerg = 1
     option_always_human = 2
     option_level_35 = 3
     option_half_completion = 4
+    option_item = 5
 
 
 class TrapPercentage(Range):

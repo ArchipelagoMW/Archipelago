@@ -117,6 +117,10 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
     mutation_count = get_option_value(multiworld, player, "include_mutations")
     strain_count = get_option_value(multiworld, player, "include_strains")
 
+    # Exclude Primal Form item if option is not set
+    if get_option_value(multiworld, player, "kerrigan_primal_status") != 5:
+        excluded_items.add("Primal Form (Kerrigan)")
+
     # Ensure no item is both guaranteed and excluded
     invalid_items = excluded_items.intersection(locked_items)
     invalid_count = len(invalid_items)

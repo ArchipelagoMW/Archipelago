@@ -176,6 +176,8 @@ item_table = {
     "Apocalypse (Kerrigan Tier 7)": ItemData(418 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 18, classification=ItemClassification.progression),
     "Spawn Leviathan (Kerrigan Tier 7)": ItemData(419 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 19, classification=ItemClassification.progression),
     "Drop-Pods (Kerrigan Tier 7)": ItemData(420 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 20, classification=ItemClassification.progression),
+    # Handled separately from other abilities
+    "Primal Form (Kerrigan)": ItemData(421 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 0),
     # "Bunker": ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, "Building", 0, classification=ItemClassification.progression),
     # "Missile Turret": ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, "Building", 1, classification=ItemClassification.progression),
     # "Sensor Tower": ItemData(402 + SC2HOTS_ITEM_ID_OFFSET, "Building", 2),
