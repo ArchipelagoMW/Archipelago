@@ -1,8 +1,8 @@
 
 import copy
-from worlds.sm.variaRandomizer.utils import log
-from worlds.sm.variaRandomizer.logic.smbool import SMBool, smboolFalse
-from worlds.sm.variaRandomizer.logic.smboolmanager import SMBoolManager
+from ..utils import log
+from ..logic.smbool import SMBool, smboolFalse
+from ..logic.smboolmanager import SMBoolManager
 from collections import Counter
 
 class ItemLocation(object):

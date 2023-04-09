@@ -1,4 +1,4 @@
-from worlds.sm.variaRandomizer.logic.smbool import SMBool
+from ..logic.smbool import SMBool
 
 # layout patches added by randomizers
 class RomPatches:

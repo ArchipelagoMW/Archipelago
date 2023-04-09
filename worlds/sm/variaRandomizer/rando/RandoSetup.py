@@ -1,15 +1,15 @@
 import copy, random
 
-from worlds.sm.variaRandomizer.utils import log
-from worlds.sm.variaRandomizer.utils.utils import randGaussBounds
-from worlds.sm.variaRandomizer.logic.smbool import SMBool, smboolFalse
-from worlds.sm.variaRandomizer.logic.smboolmanager import SMBoolManager
-from worlds.sm.variaRandomizer.logic.helpers import Bosses
-from worlds.sm.variaRandomizer.graph.graph_utils import getAccessPoint, GraphUtils
-from worlds.sm.variaRandomizer.rando.Filler import FrontFiller
-from worlds.sm.variaRandomizer.rando.ItemLocContainer import ItemLocContainer, getLocListStr, ItemLocation, getItemListStr
-from worlds.sm.variaRandomizer.rando.Restrictions import Restrictions
-from worlds.sm.variaRandomizer.utils.parameters import infinity
+from ..utils import log
+from ..utils.utils import randGaussBounds
+from ..logic.smbool import SMBool, smboolFalse
+from ..logic.smboolmanager import SMBoolManager
+from ..logic.helpers import Bosses
+from ..graph.graph_utils import getAccessPoint, GraphUtils
+from ..rando.Filler import FrontFiller
+from ..rando.ItemLocContainer import ItemLocContainer, getLocListStr, ItemLocation, getItemListStr
+from ..rando.Restrictions import Restrictions
+from ..utils.parameters import infinity
 
 # checks init conditions for the randomizer: processes super fun settings, graph, start location, special restrictions
 # the entry point is createItemLocContainer

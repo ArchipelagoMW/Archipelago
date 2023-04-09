@@ -1,9 +1,9 @@
 
 import random, copy
-from worlds.sm.variaRandomizer.utils import log
-from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils, vanillaTransitions, vanillaBossesTransitions, escapeSource, escapeTargets
-from worlds.sm.variaRandomizer.logic.logic import Logic
-from worlds.sm.variaRandomizer.graph.graph import AccessGraphRando as AccessGraph
+from ..utils import log
+from ..graph.graph_utils import GraphUtils, vanillaTransitions, vanillaBossesTransitions, escapeSource, escapeTargets
+from ..logic.logic import Logic
+from ..graph.graph import AccessGraphRando as AccessGraph
 
 # creates graph and handles randomized escape
 class GraphBuilder(object):

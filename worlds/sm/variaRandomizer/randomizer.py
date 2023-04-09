@@ -3,19 +3,19 @@
 from Utils import output_path
 import argparse, os.path, json, sys, shutil, random, copy, requests
 
-from worlds.sm.variaRandomizer.rando.RandoSettings import RandoSettings, GraphSettings
-from worlds.sm.variaRandomizer.rando.RandoExec import RandoExec
-from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils, getAccessPoint
-from worlds.sm.variaRandomizer.utils.parameters import Controller, easy, medium, hard, harder, hardcore, mania, infinity, text2diff, appDir
-from worlds.sm.variaRandomizer.rom.rom_patches import RomPatches
-from worlds.sm.variaRandomizer.rom.rompatcher import RomPatcher
-from worlds.sm.variaRandomizer.utils.utils import PresetLoader, loadRandoPreset, getDefaultMultiValues, getPresetDir
-from worlds.sm.variaRandomizer.utils.version import displayedVersion
-from worlds.sm.variaRandomizer.utils.doorsmanager import DoorsManager
-from worlds.sm.variaRandomizer.logic.logic import Logic
+from .rando.RandoSettings import RandoSettings, GraphSettings
+from .rando.RandoExec import RandoExec
+from .graph.graph_utils import GraphUtils, getAccessPoint
+from .utils.parameters import Controller, easy, medium, hard, harder, hardcore, mania, infinity, text2diff, appDir
+from .rom.rom_patches import RomPatches
+from .rom.rompatcher import RomPatcher
+from .utils.utils import PresetLoader, loadRandoPreset, getDefaultMultiValues, getPresetDir
+from .utils.version import displayedVersion
+from .utils.doorsmanager import DoorsManager
+from .logic.logic import Logic
 
-from worlds.sm.variaRandomizer.utils import log
-from worlds.sm.Options import StartLocation
+from .utils import log
+from ..Options import StartLocation
 
 # we need to know the logic before doing anything else
 def getLogic():
@@ -327,8 +327,8 @@ class VariaRandomizer:
         preset = loadRandoPreset(world, self.player, args)
         # use the skill preset from the rando preset
         if preset is not None and preset != 'custom' and preset != 'varia_custom' and args.paramsFileName is None:
-            args.paramsFileName = os.path.join(appDir, getPresetDir(preset), preset+".json")
-
+            args.paramsFileName = "/".join((appDir, getPresetDir(preset), preset+".json"))
+        
         # if diff preset given, load it
         if args.paramsFileName is not None:
             PresetLoader.factory(args.paramsFileName).load(self.player)
@@ -353,7 +353,7 @@ class VariaRandomizer:
                     raise Exception("Got error {} {} {} from trying to fetch varia custom preset named {}".format(response.status_code, response.reason, response.text, preset_name))
             else:
                 preset = 'default'
-                PresetLoader.factory(os.path.join(appDir, getPresetDir('casual'), 'casual.json')).load(self.player)
+                PresetLoader.factory("/".join((appDir, getPresetDir('casual'), 'casual.json'))).load(self.player)
 
         
 
