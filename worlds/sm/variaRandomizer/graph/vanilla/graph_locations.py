@@ -1,8 +1,8 @@
-from logic.helpers import Bosses
-from utils.parameters import Settings
-from rom.rom_patches import RomPatches
-from logic.smbool import SMBool
-from graph.location import locationsDict
+from ...logic.helpers import Bosses
+from ...utils.parameters import Settings
+from ...rom.rom_patches import RomPatches
+from ...logic.smbool import SMBool
+from ...graph.location import locationsDict
 
 locationsDict["Energy Tank, Gauntlet"].AccessFrom = {
     'Landing Site': lambda sm: SMBool(True)

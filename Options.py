@@ -739,6 +739,11 @@ class VerifyKeys:
             for item_name in self.value:
                 new_value |= world.item_name_groups.get(item_name, {item_name})
             self.value = new_value
+        elif self.convert_name_groups and self.verify_location_name:
+            new_value = type(self.value)()
+            for loc_name in self.value:
+                new_value |= world.location_name_groups.get(loc_name, {loc_name})
+            self.value = new_value
         if self.verify_item_name:
             for item_name in self.value:
                 if item_name not in world.item_names:
@@ -899,6 +904,7 @@ class StartHints(ItemSet):
 
 class LocationSet(OptionSet):
     verify_location_name = True
+    convert_name_groups = True
 
 
 class StartLocationHints(LocationSet):

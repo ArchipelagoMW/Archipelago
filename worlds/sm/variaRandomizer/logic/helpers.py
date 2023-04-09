@@ -1,11 +1,11 @@
 
 import math
 
-from logic.cache import Cache
-from logic.smbool import SMBool, smboolFalse
-from utils.parameters import Settings, easy, medium, diff2text
-from rom.rom_patches import RomPatches
-from utils.utils import normalizeRounding
+from ..logic.cache import Cache
+from ..logic.smbool import SMBool, smboolFalse
+from ..utils.parameters import Settings, easy, medium, diff2text
+from ..rom.rom_patches import RomPatches
+from ..utils.utils import normalizeRounding
 
 
 class Helpers(object):

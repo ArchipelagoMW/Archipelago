@@ -468,7 +468,6 @@ painted_world_table = { # DLC
     "PW: Vilhelm's Armor": 0x113130E8,
     "PW: Vilhelm's Gauntlets": 0x113134D0,
     "PW: Vilhelm's Leggings": 0x113138B8,
-    "PW: Vilhelm's Leggings": 0x113138B8,
     "PW: Valorheart": 0x00F646E0, # GRAVETENDER FIGHT
     "PW: Champions Bones": 0x40000869, # GRAVETENDER FIGHT
     "PW: Onyx Blade": 0x00222E00, # VILHELM FIGHT

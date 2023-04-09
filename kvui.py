@@ -148,9 +148,11 @@ class ServerLabel(HovererableLabel):
                     for permission_name, permission_data in ctx.permissions.items():
                         text += f"\n    {permission_name}: {permission_data}"
                 if ctx.hint_cost is not None and ctx.total_locations:
+                    min_cost = int(ctx.server_version >= (0, 3, 9))
                     text += f"\nA new !hint <itemname> costs {ctx.hint_cost}% of checks made. " \
-                            f"For you this means every {max(0, int(ctx.hint_cost * 0.01 * ctx.total_locations))} " \
-                            "location checks."
+                            f"For you this means every " \
+                            f"{max(min_cost, int(ctx.hint_cost * 0.01 * ctx.total_locations))}" \
+                            f" location checks."
                 elif ctx.hint_cost == 0:
                     text += "\n!hint is free to use."
 
@@ -486,6 +488,10 @@ class GameManager(App):
         if hasattr(self, "energy_link_label"):
             self.energy_link_label.text = f"EL: {Utils.format_SI_prefix(self.ctx.current_energy_link_value)}J"
 
+    # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
+    def open_settings(self, *largs):
+        pass
+
 
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
@@ -606,7 +612,7 @@ class KivyJSONtoTextParser(JSONtoTextParser):
 ExceptionManager.add_handler(E())
 
 Builder.load_file(Utils.local_path("data", "client.kv"))
-user_file = Utils.local_path("data", "user.kv")
+user_file = Utils.user_path("data", "user.kv")
 if os.path.exists(user_file):
     logging.info("Loading user.kv into builder.")
     Builder.load_file(user_file)

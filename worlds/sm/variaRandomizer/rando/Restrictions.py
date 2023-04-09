@@ -1,13 +1,13 @@
-import copy, random, utils.log
-
-from graph.graph_utils import getAccessPoint
-from rando.ItemLocContainer import getLocListStr
+import copy, random
+from ..utils import log
+from ..graph.graph_utils import getAccessPoint
+from ..rando.ItemLocContainer import getLocListStr
 
 # Holds settings related to item placement restrictions.
 # canPlaceAtLocation is the main entry point here
 class Restrictions(object):
     def __init__(self, settings):
-        self.log = utils.log.get('Restrictions')
+        self.log = log.get('Restrictions')
         self.settings = settings
         # Item split : Major, Chozo, Full, Scavenger
         self.split = settings.restrictions['MajorMinor']

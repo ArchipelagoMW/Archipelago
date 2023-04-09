@@ -1,9 +1,9 @@
-from graph.graph import AccessPoint
-from utils.parameters import Settings
-from rom.rom_patches import RomPatches
-from logic.smbool import SMBool
-from logic.helpers import Bosses
-from logic.cache import Cache
+from ...graph.graph import AccessPoint
+from ...utils.parameters import Settings
+from ...rom.rom_patches import RomPatches
+from ...logic.smbool import SMBool
+from ...logic.helpers import Bosses
+from ...logic.cache import Cache
 
 # all access points and traverse functions
 accessPoints = [

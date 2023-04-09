@@ -1,4 +1,4 @@
-from utils.parameters import infinity
+from ..utils.parameters import infinity
 import copy
 
 class Location:

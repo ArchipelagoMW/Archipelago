@@ -7,7 +7,8 @@ import threading
 import base64
 from typing import Any, Dict, Iterable, List, Set, TextIO, TypedDict
 
-from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, Tutorial
+from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
 
 logger = logging.getLogger("Super Metroid")
 
@@ -18,19 +19,18 @@ from .Client import SMSNIClient
 from .Rom import get_base_rom_path, SM_ROM_MAX_PLAYERID, SM_ROM_PLAYERDATA_COUNT, SMDeltaPatch, get_sm_symbols
 import Utils
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, Tutorial
-from ..AutoWorld import World, AutoLogicRegister, WebWorld
-
-from logic.smboolmanager import SMBoolManager
-from graph.vanilla.graph_locations import locationsDict
-from graph.graph_utils import getAccessPoint
-from rando.ItemLocContainer import ItemLocation
-from rando.Items import ItemManager
-from utils.parameters import *
-from logic.logic import Logic
-from randomizer import VariaRandomizer
-from utils.doorsmanager import DoorsManager
-from rom.rom_patches import RomPatches
+from .variaRandomizer.logic.smboolmanager import SMBoolManager
+from .variaRandomizer.graph.vanilla.graph_locations import locationsDict
+from .variaRandomizer.graph.graph_utils import getAccessPoint
+from .variaRandomizer.rando.ItemLocContainer import ItemLocation
+from .variaRandomizer.rando.Items import ItemManager
+from .variaRandomizer.utils.parameters import *
+from .variaRandomizer.utils.utils import openFile
+from .variaRandomizer.logic.logic import Logic
+from .variaRandomizer.randomizer import VariaRandomizer
+from .variaRandomizer.utils.doorsmanager import DoorsManager
+from .variaRandomizer.rom.rom_patches import RomPatches
+from .variaRandomizer.graph.graph_utils import GraphUtils
 
 
 class SMCollectionState(metaclass=AutoLogicRegister):
@@ -280,14 +280,14 @@ class SMWorld(World):
         # first apply the sm multiworld code patch named 'basepatch' (also has empty tables that we'll overwrite),
         #  + apply some patches from varia that we want to be always-on.
         # basepatch and variapatches are both generated from https://github.com/lordlou/SMBasepatch
-        romPatcher.applyIPSPatch(os.path.join(os.path.dirname(__file__),
-                                              "data", "SMBasepatch_prebuilt", "multiworld-basepatch.ips"))
-        romPatcher.applyIPSPatch(os.path.join(os.path.dirname(__file__),
-                                              "data", "SMBasepatch_prebuilt", "variapatches.ips"))
+        romPatcher.applyIPSPatch("/".join((os.path.dirname(self.__file__),
+                                              "data", "SMBasepatch_prebuilt", "multiworld-basepatch.ips")))
+        romPatcher.applyIPSPatch("/".join((os.path.dirname(self.__file__),
+                                              "data", "SMBasepatch_prebuilt", "variapatches.ips")))
 
     def APPostPatchRom(self, romPatcher):
-        symbols = get_sm_symbols(os.path.join(os.path.dirname(__file__),
-                                              "data", "SMBasepatch_prebuilt", "sm-basepatch-symbols.json"))
+        symbols = get_sm_symbols("/".join((os.path.dirname(self.__file__),
+                                              "data", "SMBasepatch_prebuilt", "sm-basepatch-symbols.json")))
 
         # gather all player ids and names relevant to this rom, then write player name and player id data tables
         playerIdSet: Set[int] = {0}  # 0 is for "Archipelago" server
@@ -377,7 +377,7 @@ class SMWorld(World):
         idx = 0
         offworldSprites: List[ByteEdit] = []
         for itemSprite in itemSprites:
-            with open(os.path.join(os.path.dirname(__file__), "data", "custom_sprite", itemSprite["fileName"]), 'rb') as stream:
+            with openFile("/".join((os.path.dirname(self.__file__), "data", "custom_sprite", itemSprite["fileName"])), 'rb') as stream:
                 buffer = bytearray(stream.read())
                 offworldSprites.append({"sym": symbols[itemSprite["paletteSymbolName"]],
                                         "offset": 0,

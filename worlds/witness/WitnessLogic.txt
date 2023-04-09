@@ -14,7 +14,7 @@ Tutorial (Tutorial) - Outside Tutorial - 0x03629:
 158005 - 0x0A3B5 (Back Left) - True - True
 158006 - 0x0A3B2 (Back Right) - True - True
 158007 - 0x03629 (Gate Open) - 0x002C2 & 0x0A3B5 & 0x0A3B2 - True
-158008 - 0x03505 (Gate Close) - 0x2FAF6 - True
+158008 - 0x03505 (Gate Close) - 0x2FAF6 & 0x03629 - True
 158009 - 0x0C335 (Pillar) - True - Triangles
 158010 - 0x0C373 (Patio Floor) - 0x0C335 - Dots
 159512 - 0x33530 (Cloud EP) - True - True

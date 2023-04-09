@@ -1,11 +1,11 @@
 from math import ceil
 
-from logic.smbool import SMBool
-from logic.helpers import Helpers, Bosses
-from logic.cache import Cache
-from rom.rom_patches import RomPatches
-from graph.graph_utils import getAccessPoint
-from utils.parameters import Settings
+from ...logic.smbool import SMBool
+from ...logic.helpers import Helpers, Bosses
+from ...logic.cache import Cache
+from ...rom.rom_patches import RomPatches
+from ...graph.graph_utils import getAccessPoint
+from ...utils.parameters import Settings
 
 class HelpersGraph(Helpers):
     def __init__(self, smbm):

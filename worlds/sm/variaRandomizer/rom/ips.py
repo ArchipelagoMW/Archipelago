@@ -1,6 +1,6 @@
 import itertools
 
-from utils.utils import range_union
+from ..utils.utils import range_union, openFile
 
 # adapted from ips-util for python 3.2 (https://pypi.org/project/ips-util/)
 class IPS_Patch(object):
@@ -25,7 +25,7 @@ class IPS_Patch(object):
     @staticmethod
     def load(filename):
         loaded_patch = IPS_Patch()
-        with open(filename, 'rb') as file:
+        with openFile(filename, 'rb') as file:
             header = file.read(5)
             if header != b'PATCH':
                 raise Exception('Not a valid IPS patch file!')

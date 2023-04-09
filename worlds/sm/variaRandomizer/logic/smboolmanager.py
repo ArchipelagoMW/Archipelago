@@ -1,11 +1,11 @@
 # object to handle the smbools and optimize them
 
-from logic.cache import Cache
-from logic.smbool import SMBool, smboolFalse
-from logic.helpers import Bosses
-from logic.logic import Logic
-from utils.doorsmanager import DoorsManager
-from utils.parameters import Knows, isKnows
+from ..logic.cache import Cache
+from ..logic.smbool import SMBool, smboolFalse
+from ..logic.helpers import Bosses
+from ..logic.logic import Logic
+from ..utils.doorsmanager import DoorsManager
+from ..utils.parameters import Knows, isKnows
 import logging
 import sys
 

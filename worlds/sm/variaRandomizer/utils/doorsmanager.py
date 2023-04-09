@@ -1,10 +1,11 @@
 import random
 import copy
-from logic.smbool import SMBool
-from rom.rom_patches import RomPatches
-import utils.log, logging
+from ..logic.smbool import SMBool
+from ..rom.rom_patches import RomPatches
+import logging
 
-LOG = utils.log.get('DoorsManager')
+from ..utils import log
+LOG = log.get('DoorsManager')
 
 colorsList = ['red', 'green', 'yellow', 'wave', 'spazer', 'plasma', 'ice']
 # 1/15 chance to have the door set to grey

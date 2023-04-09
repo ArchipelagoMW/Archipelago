@@ -107,10 +107,14 @@ class Crystals(Range):
 
 
 class CrystalsTower(Crystals):
+    """Number of crystals needed to open Ganon's Tower"""
+    display_name = "Crystals for GT"
     default = 7
 
 
 class CrystalsGanon(Crystals):
+    """Number of crystals needed to damage Ganon"""
+    display_name = "Crystals for Ganon"
     default = 7
 
 
@@ -121,12 +125,15 @@ class TriforcePieces(Range):
 
 
 class ShopItemSlots(Range):
+    """Number of slots in all shops available to have items from the multiworld"""
+    display_name = "Available Shop Slots"
     range_start = 0
     range_end = 30
 
 
 class ShopPriceModifier(Range):
     """Percentage modifier for shuffled item prices in shops"""
+    display_name = "Shop Price Cost Percent"
     range_start = 0
     default = 100
     range_end = 400
@@ -144,7 +151,7 @@ class LTTPBosses(PlandoBosses):
     Full chooses 3 bosses at random to be placed twice instead of Lanmolas, Moldorm, and Helmasaur.
     Chaos allows any boss to appear any number of times.
     Singularity places a single boss in as many places as possible, and a second boss in any remaining locations.
-    Supports plando placement. Formatting here: https://archipelago.gg/tutorial/A%20Link%20to%20the%20Past/plando/en"""
+    Supports plando placement."""
     display_name = "Boss Shuffle"
     option_none = 0
     option_basic = 1
@@ -202,6 +209,7 @@ class Enemies(Choice):
 
 
 class Progressive(Choice):
+    """How item types that have multiple tiers (armor, bows, gloves, shields, and swords) should be rewarded"""
     display_name = "Progressive Items"
     option_off = 0
     option_grouped_random = 1
@@ -305,22 +313,27 @@ class Palette(Choice):
 
 
 class OWPalette(Palette):
+    """The type of palette shuffle to use for the overworld"""
     display_name = "Overworld Palette"
 
 
 class UWPalette(Palette):
+    """The type of palette shuffle to use for the underworld (caves, dungeons, etc.)"""
     display_name = "Underworld Palette"
 
 
 class HUDPalette(Palette):
+    """The type of palette shuffle to use for the HUD"""
     display_name = "Menu Palette"
 
 
 class SwordPalette(Palette):
+    """The type of palette shuffle to use for the sword"""
     display_name = "Sword Palette"
 
 
 class ShieldPalette(Palette):
+    """The type of palette shuffle to use for the shield"""
     display_name = "Shield Palette"
 
 
@@ -329,6 +342,7 @@ class ShieldPalette(Palette):
 
 
 class HeartBeep(Choice):
+    """How quickly the heart beep sound effect will play"""
     display_name = "Heart Beep Rate"
     option_normal = 0
     option_double = 1
@@ -338,6 +352,7 @@ class HeartBeep(Choice):
 
 
 class HeartColor(Choice):
+    """The color of hearts in the HUD"""
     display_name = "Heart Color"
     option_red = 0
     option_blue = 1
@@ -346,10 +361,12 @@ class HeartColor(Choice):
 
 
 class QuickSwap(DefaultOnToggle):
+    """Allows you to quickly swap items while playing with L/R"""
     display_name = "L/R Quickswapping"
 
 
 class MenuSpeed(Choice):
+    """How quickly the menu appears/disappears"""
     display_name = "Menu Speed"
     option_normal = 0
     option_instant = 1,
@@ -360,19 +377,27 @@ class MenuSpeed(Choice):
 
 
 class Music(DefaultOnToggle):
+    """Whether background music will play in game"""
     display_name = "Play music"
 
 
 class ReduceFlashing(DefaultOnToggle):
+    """Reduces flashing for certain scenes such as the Misery Mire and Ganon's Tower opening cutscenes"""
     display_name = "Reduce Screen Flashes"
 
 
 class TriforceHud(Choice):
+    """When and how the triforce hunt HUD should display"""
     display_name = "Display Method for Triforce Hunt"
     option_normal = 0
     option_hide_goal = 1
     option_hide_required = 2
     option_hide_both = 3
+
+
+class GlitchBoots(DefaultOnToggle):
+    """If this is enabled, the player will start with Pegasus Boots when playing with overworld glitches or harder logic."""
+    display_name = "Glitched Starting Boots"
 
 
 class BeemizerRange(Range):
@@ -437,7 +462,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "music": Music,
     "reduceflashing": ReduceFlashing,
     "triforcehud": TriforceHud,
-    "glitch_boots": DefaultOnToggle,
+    "glitch_boots": GlitchBoots,
     "beemizer_total_chance": BeemizerTotalChance,
     "beemizer_trap_chance": BeemizerTrapChance,
     "death_link": DeathLink,
