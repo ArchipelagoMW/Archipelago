@@ -269,7 +269,7 @@ class SC2Context(CommonContext):
             self.generic_upgrade_missions = args["slot_data"].get("generic_upgrade_missions", 0)
             self.generic_upgrade_items = args["slot_data"].get("generic_upgrade_items", 0)
             self.generic_upgrade_research = args["slot_data"].get("generic_upgrade_research", 0)
-            self.levels_per_check = args["slot_data"].get("kerrigan_levels_per_check", 0)
+            self.levels_per_check = args["slot_data"].get("kerrigan_check_level_pack_size", 0)
             self.checks_per_level = args["slot_data"].get("kerrigan_checks_per_level_pack", 1)
             self.kerrigan_primal_status = args["slot_data"].get("kerrigan_primal_status", 0)
             self.transmissions_per_trap = args["slot_data"].get("transmissions_per_trap", 1)

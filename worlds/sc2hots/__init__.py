@@ -320,7 +320,7 @@ def create_item_with_correct_settings(player: int, name: str) -> Item:
     return item
 
 def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_pool: List[Item]):
-    total_levels = get_option_value(multiworld, player, "kerrigan_total_levels")
+    total_levels = get_option_value(multiworld, player, "kerrigan_level_item_sum")
     if get_option_value(multiworld, player, "kerriganless") > 0 \
         or total_levels == 0:
         return
@@ -333,7 +333,7 @@ def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_poo
             item_pool.append(create_item_with_correct_settings(player, name))
 
     sizes = [70, 35, 14, 10, 7, 5, 2, 1]
-    option = get_option_value(multiworld, player, "kerrigan_level_distribution")
+    option = get_option_value(multiworld, player, "kerrigan_level_item_distribution")
     if option < 2:
         distribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         if option == 0: # vanilla

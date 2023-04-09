@@ -185,39 +185,41 @@ class Kerriganless(Choice):
     option_on_without_passives = 2
 
 
-class KerriganLevelsPerCheck(Range):
-    """Determines how many levels Kerrigan gains per checked location.  Kerrigan's maximum level is always 70."""
-    display_name = "Kerrigan Levels Per Check"
+class KerriganChecksPerLevelPack(Range):
+    """Determines how many locations need to be checked for a level pack to be received.  Missions have between 4 and 5 locations each.  
+    Kerrigan's maximum level is always 70."""
+    display_name = "Checks Per Kerrigan Level Pack"
+    range_start = 1
+    range_end = 10
+    default = 1
+
+
+class KerriganCheckLevelPackSize(Range):
+    """Determines how many levels Kerrigan gains when enough locations are checked.  Kerrigan's maximum level is always 70."""
+    display_name = "Check Level Pack Size"
     range_start = 0
     range_end = 5
     default = 0
 
 
-class KerriganChecksPerLevelPacks(Range):
-    """Determines how many locations need to be checked for the above level gain.  Kerrigan's maximum level is always 70."""
-    display_name = "Checks Per Kerrigan Level Packs"
-    range_start = 1
-    range_end = 5
-    default = 1
-
-
-class KerriganTotalLevels(Range):
-    """Determines the sum of the level items in the seed.  This does not change Kerrigan's maximum level of 70."""
-    display_name = "Total Kerrigan Levels"
+class KerriganLevelItemSum(Range):
+    """Determines the sum of the level items in the seed.  This does not affect levels gained from checks.  
+    Kerrigan's maximum level is always 70."""
+    display_name = "Kerrigan Level Item Sum"
     range_start = 0
     range_end = 140
     default = 70
 
 
-class KerriganLevelDistribution(Choice):
+class KerriganLevelItemDistribution(Choice):
     """Determines the amount and size of Kerrigan level items.  Kerrigan's maximum level is always 70.
 
     Vanilla:  Uses the distribution in the vanilla campaign.
     This entails 32 individual levels and 6 packs of varying sizes.
-    This distribution always adds up to 70, ignoring the above setting.
+    This distribution always adds up to 70, ignoring the Level Item Sum setting.
     Smooth:  Uses a custom, condensed distribution of items between sizes 4 and 10,
     intended to fit more levels into settings with little room for filler while keeping some variance in level gains.
-    This distribution always adds up to 70, ignoring the above setting.
+    This distribution always adds up to 70, ignoring the Level Item Sum setting.
     Size 70:  Uses items worth 70 levels each.
     Size 35:  Uses items worth 35 levels each.
     Size 14:  Uses items worth 14 levels each.
@@ -227,7 +229,7 @@ class KerriganLevelDistribution(Choice):
     Size 2:  Uses items worth 2 level eachs.
     Size 1:  Uses individual levels.  As there are not enough locations in the game for this distribution,
     this will result in a greatly reduced total level, and is likely to remove many other items."""
-    display_name = "Kerrigan Level Distribution"
+    display_name = "Kerrigan Level Item Distribution"
     option_vanilla = 0
     option_smooth = 1
     option_size_70 = 2
@@ -360,10 +362,10 @@ sc2hots_options: Dict[str, Option] = {
     "include_mutations": IncludeMutations,
     "include_strains": IncludeStrains,
     "kerriganless": Kerriganless,
-    "kerrigan_levels_per_check": KerriganLevelsPerCheck,
-    "kerrigan_checks_per_level_pack": KerriganChecksPerLevelPacks,
-    "kerrigan_total_levels": KerriganTotalLevels,
-    "kerrigan_level_distribution": KerriganLevelDistribution,
+    "kerrigan_checks_per_level_pack": KerriganChecksPerLevelPack,
+    "kerrigan_check_level_pack_size": KerriganCheckLevelPackSize,
+    "kerrigan_level_item_sum": KerriganLevelItemSum,
+    "kerrigan_level_item_distribution": KerriganLevelItemDistribution,
     "include_all_kerrigan_abilities": IncludeAllKerriganAbilities,
     "start_primary_abilities": StartPrimaryAbilities,
     "kerrigan_primal_status": KerriganPrimalStatus,
