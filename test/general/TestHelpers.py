@@ -1,7 +1,7 @@
 from random import seed
 from typing import Dict, Optional, Callable, Tuple, List
 
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import MultiWorld, CollectionState, Region
 import unittest
 
 
@@ -34,22 +34,16 @@ class TestHelpers(unittest.TestCase):
             }
         }
 
-        reg_exits: Dict[str, Dict[str, List[str, Callable[[CollectionState], bool]]]] = {
-            "TestRegion1": {
-                "TestRegion2": ["Region 1 -> Region 2"],
-            },
-            "TestRegion2": {
-                "TestRegion1": ["Region 2 -> Region 1", lambda state: state.has("testItem", self.player)]
-            }
+        reg_exits: Dict[str, Dict[str, Optional[str]]] = {
+            "TestRegion1": {"TestRegion2": "connection"},
+            "TestRegion2": {"TestRegion1": None},
         }
-
-        with self.subTest("Test Region Creation Helper"):
-            for region, hint in regions.items():
-                self.multiworld.regions.append(self.multiworld.create_region(region, self.player, hint))
-
-            created_region_names = [region.name for region in self.multiworld.get_regions()]
-            for region_name in regions:
-                self.assertTrue(region_name in created_region_names)
+        
+        exit_rules: Dict[str, Callable[[CollectionState], bool]] = {
+            "TestRegion1": lambda state: state.has("test_item", self.player)
+        }
+        
+        self.multiworld.regions += [Region(region, self.player, self.multiworld, regions[region]) for region in regions]
 
         with self.subTest("Test Location Creation Helper"):
             for region, loc_pair in locations.items():
@@ -61,12 +55,17 @@ class TestHelpers(unittest.TestCase):
                     self.assertTrue(loc_name in created_location_names)
 
         with self.subTest("Test Exit Creation Helper"):
-            for region, exit_region in reg_exits.items():
-                self.multiworld.get_region(region, self.player).add_exits(exit_region)
+            for region, exit_dict in reg_exits.items():
+                self.multiworld.get_region(region, self.player).add_exits(exit_dict, exit_rules)
 
             created_exit_names = [exit.name for region in self.multiworld.get_regions() for exit in region.exits]
-            for exit_pair in reg_exits.values():
-                for exit_list in exit_pair.values():
-                    self.assertTrue(exit_list[0] in created_exit_names)
-                    if len(exit_list) > 1:
-                        self.assertEqual(exit_list[1], self.multiworld.get_entrance(exit_list[0], self.player).access_rule)
+            for parent, exit_pair in reg_exits.items():
+                for exit_reg, exit_name in exit_pair.items():
+                    if exit_name:
+                        self.assertTrue(exit_name in created_exit_names)
+                    else:
+                        self.assertTrue(f"{parent} -> {exit_reg}" in created_exit_names)
+                    if exit_reg in exit_rules:
+                        entrance_name = exit_name if exit_name else f"{parent} -> {exit_reg}"
+                        self.assertEqual(exit_rules[exit_reg],
+                                         self.multiworld.get_entrance(entrance_name, self.player).access_rule)

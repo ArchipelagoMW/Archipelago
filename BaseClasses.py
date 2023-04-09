@@ -366,10 +366,6 @@ class MultiWorld():
     def get_regions(self, player=None):
         return self.regions if player is None else self._region_cache[player].values()
 
-    def create_region(self, name: str, player: int, hint: str = None) -> Region:
-        """Creates and returns a region with the given parameters"""
-        return Region(name, player, self, hint)
-
     def get_region(self, regionname: str, player: int) -> Region:
         try:
             return self._region_cache[player][regionname]
@@ -848,13 +844,18 @@ class Region:
         for location, address in locations.items():
             self.locations.append(location_type(self.player, location, address, self))
 
-    def add_exits(self, exits: Dict[str, List[str, Optional[Callable]]]) -> None:
-        """Connects current region to regions in exit dictionary. Passed region names must exist first.
-        :param exits: exits from the region. format is {"connecting_region": ["exit_name", rule]}"""
-        for exiting_region, pair in exits.items():
-            ret = Entrance(self.player, pair[0], self)
-            if len(pair) > 1:
-                ret.access_rule = pair[1]
+    def add_exits(self, exits: Dict[str, Optional[str]], rules: Optional[Dict[str, Optional[Callable[[CollectionState], bool]]]] = None) -> None:
+        """
+        Connects current region to regions in exit dictionary. Passed region names must exist first.
+
+        :param exits: exits from the region. format is {"connecting_region", "exit_name"}
+        :param rules: rules for the exits from this region. format is {"connecting_region", rule}
+        """
+        for exiting_region, name in exits.items():
+            ret = Entrance(self.player, name, self) if name \
+                else Entrance(self.player, f"{self.name} -> {exiting_region}", self)
+            if rules and exiting_region in rules:
+                ret.access_rule = rules[exiting_region]
             self.exits.append(ret)
             ret.connect(self.multiworld.get_region(exiting_region, self.player))
 
