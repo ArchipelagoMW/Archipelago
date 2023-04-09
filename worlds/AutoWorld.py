@@ -9,6 +9,7 @@ from typing import Any, Callable, ClassVar, Dict, FrozenSet, List, Optional, Set
 
 from BaseClasses import CollectionState
 from Options import AssembleOptions
+from Utils import DuplicateWorldDefinition
 
 if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial
@@ -55,7 +56,7 @@ class AutoWorldRegister(type):
         new_class = super().__new__(mcs, name, bases, dct)
         if "game" in dct:
             if dct["game"] in AutoWorldRegister.world_types:
-                raise RuntimeError(f"""Game {dct["game"]} already registered.""")
+                raise DuplicateWorldDefinition(f"""Game {dct["game"]} already registered.""")
             AutoWorldRegister.world_types[dct["game"]] = new_class
         new_class.__file__ = sys.modules[new_class.__module__].__file__
         if ".apworld" in new_class.__file__:

@@ -5,6 +5,8 @@ import typing
 import warnings
 import zipimport
 
+from Utils import DuplicateWorldDefinition
+
 folder = os.path.dirname(__file__)
 
 __all__ = {
@@ -77,6 +79,9 @@ for world_source in world_sources:
                     importer.exec_module(mod)
         else:
             importlib.import_module(f".{world_source.path}", "worlds")
+    except DuplicateWorldDefinition as e:
+        # we want to stop here, instead of loading a "random" world
+        raise e
     except Exception as e:
         # A single world failing can still mean enough is working for the user, log and carry on
         import traceback
