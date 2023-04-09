@@ -14,7 +14,7 @@ def make_pools() -> Dict[str, List[str]]:
     for i, pack in enumerate(MaxSciencePack.get_ordered_science_packs(), start=1):
         max_needed: int = 0xff
         prefix: str = f"AP-{i}-"
-        pools[pack] = [prefix + hex(int(x))[2:].upper().zfill(2) for x in range(1, max_needed + 1)]
+        pools[pack] = [prefix + hex(x)[2:].upper().zfill(2) for x in range(1, max_needed + 1)]
     return pools
 
 
