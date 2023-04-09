@@ -175,6 +175,9 @@ def get_basic_units(multiworld: MultiWorld, player: int) -> typing.Set[str]:
 item_name_groups = {}
 for item, data in item_table.items():
     item_name_groups.setdefault(data.type, []).append(item)
+    if data.type in ("Armory 1", "Armory 2") and '(' in item:
+        short_name = item[:item.find(' (')]
+        item_name_groups[short_name] = [item]
 item_name_groups["Missions"] = ["Beat " + mission_name for mission_name in vanilla_mission_req_table]
 
 filler_items: typing.Tuple[str, ...] = (
