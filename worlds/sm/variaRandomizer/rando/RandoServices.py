@@ -26,6 +26,13 @@ class RandoServices(object):
         self.cache = cache
         self.log = log.get('RandoServices')
 
+    @staticmethod
+    def printProgress(s):
+        sys.stdout.write(s)
+        # avoid flushing I/O on pythonanywhere, as they are very slow
+        if os.getenv("PYTHONANYWHERE_DOMAIN") is None:
+            sys.stdout.flush()
+
     # collect an item/loc with logic in a container from a given AP
     # return new AP
     def collect(self, ap, container, itemLoc, pickup=True):
@@ -36,8 +43,7 @@ class RandoServices(object):
             self.currentLocations(ap, container)
         container.collect(itemLoc, pickup=pickup)
         self.log.debug("COLLECT "+itemLoc.Item.Type+" at "+itemLoc.Location.Name)
-        sys.stdout.write('.')
-        sys.stdout.flush()
+        RandoServices.printProgress('.')
         return itemLoc.Location.accessPoint if pickup == True else ap
 
     # gives all the possible theoretical locations for a given item
