@@ -443,5 +443,6 @@ def bin_to_rgb(word):
     word >>= 5
     blue  = word & 0b11111
     return (red, green, blue)
+
 def rgb_to_bin(r, g, b):
     return (b << 10) | (g << 5) | r

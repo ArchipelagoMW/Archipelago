@@ -10,13 +10,10 @@ class ROM:
     def __init__(self, filename, patches=None):
         data = open(Utils.user_path(filename), "rb").read()
 
-        import pkgutil
-        #prepatch(rom, None, None, data=pkgutil.get_data(__name__, "title_screen.bdiff4"))
         if patches:
             for patch in patches:
                 data = bsdiff4.patch(data, patch)
 
-        #assert len(data) == 1024 * 1024
         self.banks = []
         for n in range(0x40):
             self.banks.append(bytearray(data[n*0x4000:(n+1)*0x4000]))
