@@ -208,7 +208,7 @@ class KH2World(World):
         patch_kh2(self, output_directory)
 
     def donald_fill(self):
-        for item in DonaldAbility_Table.keys():
+        for item in DonaldAbility_Table:
             data = self.item_quantity_dict[item]
             for _ in range(data):
                 self.donald_ability_pool.append(item)
@@ -278,8 +278,8 @@ class KH2World(World):
 
     def starting_invo_verify(self):
         for item, value in self.multiworld.start_inventory[self.player].value.items():
-            if item in ActionAbility_Table.keys() \
-                    or item in SupportAbility_Table.keys() or exclusionItem_table["StatUps"]:
+            if item in ActionAbility_Table \
+                    or item in SupportAbility_Table or exclusionItem_table["StatUps"]:
                 # cannot have more than the quantity for abilties
                 if value > item_dictionary_table[item].quantity:
                     logging.info(
@@ -310,7 +310,7 @@ class KH2World(World):
         #  Testing if the player has the right amount of Bounties for Completion.
         if len(self.RandomSuperBoss) < self.BountiesAmount:
             logging.info(
-                    f"{self.multiworld.get_file_safe_player_name(self.player)} has too many bounties than bosses."
+                    f"{self.multiworld.get_file_safe_player_name(self.player)} has more bounties than bosses."
                     f" Setting total bounties to {len(self.RandomSuperBoss)}")
             self.BountiesAmount = len(self.RandomSuperBoss)
             self.multiworld.BountyAmount[self.player].value = self.BountiesAmount

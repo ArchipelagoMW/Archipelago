@@ -16,22 +16,20 @@
     2. `Install mod from JaredWeakStrike/APCompanion`<br>
     3. `Install mod from KH2FM-Mods-equations19/auto-save`<br>
     4. `AP Randomizer Seed`
-
-<h3 style="text-transform:none";>Installing A Seed</h3>
-
-When you generate a game you will see a download link for a KH2 .zip seed on the room page. Download the seed then open OpenKH Mod Manager and click the green plus and `Select and install Mod Archive`.<br>
-Make sure the seed is on the top of the list (Highest Priority)<br>
-After Installing the seed click `Mod Loader -> Build/Build and Run`. Every slot is a unique mod to install and will be needed be repatched for different slots/rooms.
-
 <h3 style="text-transform:none";>Required: Archipelago Companion Mod</h3>
 
 Load this mod just like the <b>GoA ROM</b> you did during the KH2 Rando setup. `JaredWeakStrike/APCompanion`<br> 
 Have this mod second-highest priority below the .zip seed.<br>
 This mod is based upon Num's Garden of Assemblege Mod and requires it to work. Without Num this could not be possible. 
 
-
 <h3 style="text-transform:none";>Required: Auto Save Mod</h3>
 Load this mod just like the GoA ROM you did during the KH2 Rando setup. `KH2FM-Mods-equations19/auto-save` Location doesn't matter, required in case of crashes.
+
+<h3 style="text-transform:none";>Installing A Seed</h3>
+
+When you generate a game you will see a download link for a KH2 .zip seed on the room page. Download the seed then open OpenKH Mod Manager and click the green plus and `Select and install Mod Archive`.<br>
+Make sure the seed is on the top of the list (Highest Priority)<br>
+After Installing the seed click `Mod Loader -> Build/Build and Run`. Every slot is a unique mod to install and will be needed be repatched for different slots/rooms.
 
 <h2 style="text-transform:none";>What the Mod Manager Should Look Like.</h2>
 ![image](https://i.imgur.com/QgRfjP1.png)
