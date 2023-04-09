@@ -23,7 +23,7 @@ from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
 from .Options import links_awakening_options
 from .Rom import LADXDeltaPatch
 
-DEVELOPER_MODE = True
+DEVELOPER_MODE = False
 
 class LinksAwakeningWebWorld(WebWorld):
     tutorials = [Tutorial(
