@@ -90,19 +90,19 @@ def createGfxImage(rom, filename):
         255, 255, 255,
     ))
     for bank_nr in range(bank_count):
-            bank = rom.banks[0x2C + bank_nr]
-            for tx in range(32):
-                for ty in range(16):
-                    for y in range(16):
-                        a = bank[tx * 32 + ty * 32 * 32 + y * 2]
-                        b = bank[tx * 32 + ty * 32 * 32 + y * 2 + 1]
-                        for x in range(8):
-                            c = 0
-                            if a & (0x80 >> x):
-                                c |= 1
-                            if b & (0x80 >> x):
-                                c |= 2
-                            img.putpixel((tx*8+x, bank_nr * 32 * 8 + ty*16+y), c)
+        bank = rom.banks[0x2C + bank_nr]
+        for tx in range(32):
+            for ty in range(16):
+                for y in range(16):
+                    a = bank[tx * 32 + ty * 32 * 32 + y * 2]
+                    b = bank[tx * 32 + ty * 32 * 32 + y * 2 + 1]
+                    for x in range(8):
+                        c = 0
+                        if a & (0x80 >> x):
+                            c |= 1
+                        if b & (0x80 >> x):
+                            c |= 2
+                        img.putpixel((tx*8+x, bank_nr * 32 * 8 + ty*16+y), c)
     img.save(filename)
 
 def prepatch(rom, bank, offset, filename):
