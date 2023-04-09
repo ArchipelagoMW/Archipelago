@@ -39,11 +39,7 @@ class NoitaWorld(World):
 
     # Returned items will be sent over to the client
     def fill_slot_data(self):
-        slot_data = {}
-        for option_name in self.option_definitions:
-            slot_data[option_name] = self.get_option(option_name)
-
-        return slot_data
+        return {option_name: self.get_option(option_name) for option_name in self.option_definitions}
 
     def create_regions(self) -> None:
         Regions.create_all_regions_and_connections(self.multiworld, self.player)
