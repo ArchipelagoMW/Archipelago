@@ -41,7 +41,6 @@ function arrayEqual(a1, a2)
 end
 
 local bizhawk_version = client.getversion()
--- Bizhawk p
 local bizhawk_major, bizhawk_minor, bizhawk_patch = bizhawk_version:match("(%d+)%.(%d+)%.?(%d*)")
 bizhawk_major = tonumber(bizhawk_major)
 bizhawk_minor = tonumber(bizhawk_minor)
