@@ -6,20 +6,26 @@
 .autoregion
 
 .align 2
-; Gives the player the item in r0. If the item is junk, it will be stored to be
-; given to Wario next time a level loads.
+; Collect the item in r0. If the item is this player's junk, it will be stored
+; and given to Wario later.
 ;
 ; See Items.py
 GiveItem:
     push {r4-r5, lr}
 
-    ; 0xFF means no item, so immediately return
+; 0xFF means no item, so immediately return
     cmp r0, #0xFF
     beq @@Return
 
+; If another world's item, it'll be handled outside the game
+    ldr r2, =PlayerID
+    ldr r2, [r2]
+    cmp r1, r2
+    bne @@Return
+
     lsr r1, r0, #6
     cmp r1, #0
-    bne @@JunkOrMultiplayer
+    bne @@Junk
 
 ; Progression item
     ldr r4, =LevelStatusTable
@@ -81,13 +87,8 @@ GiveItem:
 
     b @@Return
 
-@@JunkOrMultiplayer:
-; If another world's item, it'll be handled outside the game
-    lsr r1, r1, #7
-    cmp r1, #1
-    beq @@Return
-
-; If your world's item, queue it by incrementing the appropriate variable
+@@Junk:
+; Queue your junk item by incrementing the appropriate variable
     lsl r1, r0, #31-3
     lsr r1, r1, #31-3
     ldr r2, =QueuedJunk
@@ -112,23 +113,35 @@ hook 0x808134C, 0x808135C, CheckLocations
 .autoregion
 .align 2
 
-; Get the item at level r4's position in LocationTable and give it
-; If it's your own junk item, don't do anything because you would've gotten it
-; in the level already.
-.macro check, LocationTable
+; If Wario has the item specified in HasLocation, check level r4's entry in
+; LocationTable. If that item is your own junk item, don't do anything because
+; you would've gotten it in the level already
+.macro check_has_item, HasLocation, LocationTable
+    ldr r0, =HasLocation
+    ldrb r0, [r0]
+    cmp r0, #0
+    beq @@DontGive
+
+; Get the item and player ID
     ldr r0, =LocationTable
-    add r0, r0, r4  ; get entry for this level
-    ldrb r0, [r0]  ; a1
+    add r1, r0, r4  ; get entry for this level
+    ldrb r0, [r1]  ; a1
+    ldr r1, =ItemDestinationTable + (LocationTable - ItemLocationTable)
+    add r1, r1, r4
+    ldrb r1, [r1]  ; a2
 
-    ; If the first two bits are 01, then this item is yours and junk
-    lsr r1, r0, #6
-    cmp r1, #1
-    beq @@Junk
-
-    ; TODO Do something if there's no item in that spot?
+; Skip your junk items
+    ldr r2, =PlayerID
+    ldrb r2, [r2]
+    cmp r1, r2
+    bne @@Give
+    lsr r2, r0, #6
+    cmp r2, #1
+    beq @@DontGive
+    
+@@Give:
     bl GiveItem
-
-@@Junk:
+@@DontGive:
 .endmacro
 
 CheckLocations:
@@ -142,16 +155,6 @@ CheckLocations:
     ldrb r1, [r1]
     lsl r0, r0, #2
     add r4, r0, r1
-
-; If Wario has the item specified in HasLocation, check level r4's entry in LocationTable
-.macro check_has_item, HasLocation, LocationTable
-    ldr r0, =HasLocation
-    ldrb r0, [r0]
-    cmp r0, #0
-    beq @@DoesNotHave
-    check LocationTable
-@@DoesNotHave:
-.endmacro
 
     check_has_item HasJewelPiece1, Jewel1LocationTable
     check_has_item HasJewelPiece2, Jewel2LocationTable

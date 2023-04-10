@@ -64,14 +64,23 @@ SpawnRandomizedItemFromBox:
     add r6, r6, r0
     bl GetItemAtLocation
     strb r0, [r6]
+    strb r1, [r6, 1]
 
+; If it's your own junk item, always release it
+    ldr r2, =PlayerID
+    ldrb r2, [r2]
+    cmp r1, r2
+    bne @@CheckCollectionStatus
+
+    ; Check bit 6 for collectible vs junk
     lsr r0, r0, #31-6
-    cmp r0, #1  ; If it's your own junk item, always release
-    beq @@HasNotChecked
+    cmp r0, #1
+    beq @@ReleaseItem
 
+@@CheckCollectionStatus:
     ldrb r1, [r5]
     cmp r1, #0
-    beq @@HasNotChecked
+    beq @@ReleaseItem
 
 ; Has checked: contains nothing
     ldr r1, =EntityLeftOverStateList
@@ -85,7 +94,7 @@ SpawnRandomizedItemFromBox:
     strb r1, [r0]
     b @@Return
 
-@@HasNotChecked:
+@@ReleaseItem:
     ldrb r6, [r4, @global_id]
 
 ; Spawn item
@@ -147,10 +156,6 @@ LoadRandomItemAnimation:
 ; AP items
     cmp r6, #0xF0
     beq @@APItem
-
-; Clear bit 7
-    lsl r6, r6, #31-6
-    lsr r6, r6, #31-6
 
 ; Junk items
     lsr r0, r6, #6
@@ -287,10 +292,12 @@ CollectRandomItem:
     ldr r1, =Jewel1BoxContents
     add r1, r5, r1
     ldrb r5, [r1]
+    ldrb r1, [r1, 1]
 
 ; Multiplayer items
-    lsr r0, r5, #7
-    cmp r0, #0
+    ldr r2, =PlayerID
+    ldrb r2, [r2]
+    cmp r1, r2
     bne @@MultiplayerItem
 
 ; Junk items

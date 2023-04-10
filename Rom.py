@@ -157,19 +157,20 @@ def fill_items(rom: LocalRom, world: MultiWorld, player: int):
         
         itemid = location.item.code if location.item is not None else ...
         locationid = location.address
+        playerid = location.item.player
         if itemid is None or locationid is None:
             continue
         locationid = locationid & 0xFF
 
         if location.native_item:
             itemid = itemid & 0xFF
-            if location.item.player != player:
-                itemid = itemid | 1 << 7
         else:
             itemid = 0xF0
             
-        offset = symbols["itemlocationtable"] + locationid
-        rom.write_byte(offset, itemid)
+        location_offset = symbols["itemlocationtable"] + locationid
+        destination_offset = symbols["itemdestinationtable"] + locationid
+        rom.write_byte(location_offset, itemid)
+        rom.write_byte(destination_offset, playerid)
 
 
 def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
@@ -177,11 +178,12 @@ def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     fill_items(rom, world, player)
     skip_cutscenes(rom)
 
-    # Write player name
+    # Write player name and number
     player_name = bytes(world.player_name[player], "utf-8")
     if len(player_name) > 16:
         player_name = player_name[:16]
     rom.write_bytes(symbols["playername"], player_name)
+    rom.write_byte(symbols["playerid"], player)
     
     # Set deathlink
     rom.write_byte(symbols["deathlinkflag"], world.death_link[player].value)

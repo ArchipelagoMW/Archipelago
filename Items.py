@@ -16,11 +16,11 @@ class ItemData(typing.NamedTuple):
 
 # Items are encoded as 8-bit numbers as follows:
 #                   | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
-# Jewel pieces:     | W | 0   0 |  passage  | qdrnt |
-# CD:               | W | 0   1 |  passage  | level |
+# Jewel pieces:     | 0   0   0 |  passage  | qdrnt |
+# CD:               | 0   0   1 |  passage  | level |
 #
-# Junk items:       | W | 1   0   0 |     type      |
-# AP item:          | 1 | 1   1   1   0   0   0   0 |
+# Junk items:       | 0   1   0   0 |     type      |
+# AP item:          | 1   1   1   1   0   0   0   0 |
 #
 # For jewel pieces:
 #  - passage = 0-5 for entry/emerald/ruby/topaz/sapphire/golden
@@ -35,10 +35,6 @@ class ItemData(typing.NamedTuple):
 #  - 1 = Wario form trap
 #  - 2 = Single heart recovery
 #  - 3 = Single heart damage
-#
-# Bit 7 determines whose world the item belongs in. If set, it's someone else's
-# item, either WL4 or local. If clear, it's your own WL4 item. AP items always
-# have this bit set.
 #
 # For Archipelago, the IDs are the encoded values appended to 0xEC, which is
 # Wario Land 4's checksum.

@@ -56,11 +56,11 @@ unusedrom equ 0x0878F97C
     .definelabel QueuedLightningTraps, QueuedJunk + 3
 
 .definelabel Jewel1BoxContents, unusedram + 24
-.definelabel Jewel2BoxContents, unusedram + 25
-.definelabel Jewel3BoxContents, unusedram + 26
-.definelabel Jewel4BoxContents, unusedram + 27
-.definelabel CDBoxContents, unusedram + 28
-.definelabel HealthBoxContents, unusedram + 29
+.definelabel Jewel2BoxContents, unusedram + 26
+.definelabel Jewel3BoxContents, unusedram + 28
+.definelabel Jewel4BoxContents, unusedram + 30
+.definelabel CDBoxContents, unusedram + 32
+.definelabel HealthBoxContents, unusedram + 34
 
 
 ; Functions
@@ -132,8 +132,8 @@ unusedrom equ 0x0878F97C
 .org unusedrom
 .region 0x0E000000-.
 
-; Player's name, up to 16 characters
-PlayerName: .fill 16, 0
+PlayerName: .fill 16, 0  ; Player's name, up to 16 characters
+PlayerID: .byte 0
 
 ; 24 available level IDs, not all of which are used.
 @levels equ 6 * 4
@@ -152,11 +152,21 @@ ItemLocationTable:
     CDLocationTable:     .fill @levels, invalid_item
     HealthLocationTable: .fill @levels, invalid_item
 
+; Maps locations to the 8-bit player ID of the item's owner.
+.align 4
+ItemDestinationTable:
+    Jewel1DestinationTable: .fill @levels, -1
+    Jewel2DestinationTable: .fill @levels, -1
+    Jewel3DestinationTable: .fill @levels, -1
+    Jewel4DestinationTable: .fill @levels, -1
+    CDDestinationTable:     .fill @levels, -1
+    HealthDestinationTable: .fill @levels, -1
+
 DeathLinkFlag: .byte 0
 
 .align 2
-; Retrieve the item ID at the location specified in r0 in this level.
-; Return the encoded ID in r0
+; Retrieve the item and player ID at the location specified in r0 in this level.
+; Return the encoded ID in r0 and the player ID in r1
 GetItemAtLocation:
     ; r1 = boxtype * 6
     lsl r1, r0, #1
@@ -169,15 +179,20 @@ GetItemAtLocation:
     add r1, r1, r0
     lsl r1, r1, #2
 
-    ; r0 = locationID = (boxtype * 6 + passageID) * 4 + levelID
+    ; r3 = locationID = (boxtype * 6 + passageID) * 4 + levelID
     ldr r0, =InPassageLevelID
     ldrb r0, [r0]
-    add r0, r1, r0
+    add r3, r1, r0
 
     ; r0 = item ID
     ldr r1, =ItemLocationTable
-    add r2, r1, r0
+    add r2, r1, r3
     ldrb r0, [r2]
+
+    ; r1 = player ID
+    ldr r1, =ItemDestinationTable
+    add r2, r1, r3
+    ldrb r1, [r2]
 
     mov pc, lr
 
