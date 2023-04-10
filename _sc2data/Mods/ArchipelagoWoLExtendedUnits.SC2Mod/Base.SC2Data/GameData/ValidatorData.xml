@@ -3,8 +3,6 @@
     <CValidatorCombine id="DontDamageOwnedWidowMines">
         <CombineArray value="IsWidowMineOrWidowMineBurrowed"/>
         <CombineArray value="OwnedBySelf"/>
-        <CombineArray value="IsWidowMineOrWidowMineBurrowed"/>
-        <CombineArray value="OwnedBySelf"/>
         <Negate value="1"/>
     </CValidatorCombine>
     <CValidatorUnitCompareBehaviorCount id="HasLiberatorMorphBehavior">
@@ -21,8 +19,8 @@
         <Value value="HaveWidowMineImprovedConcealment"/>
     </CValidatorPlayerRequirement>
     <CValidatorCombine id="NotHaveWidowMineImprovedConcealmentUpgrade">
-        <CombineArray value="HaveWidowMineImprovedConcealmentUpgrade" />
-        <Negate value="1" />
+        <CombineArray value="HaveWidowMineImprovedConcealmentUpgrade"/>
+        <Negate value="1"/>
     </CValidatorCombine>
     <CValidatorUnitType id="IsWidowMine">
         <Value value="WidowMine"/>
@@ -65,6 +63,9 @@
         <ResultFailed value="Error,Error/NotWidowMineTarget"/>
         <Behavior value="MineDroneCountdown"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitFilters id="OwnedBySelf">
+        <Filters value="-;Ally,Neutral,Enemy"/>
+    </CValidatorUnitFilters>
     <CValidatorUnitCompareCooldown id="WidowMineAttackNotOnCooldown">
         <CooldownLink value="Abil/WidowMineAttack"/>
         <Ability value="WidowMineAttack"/>

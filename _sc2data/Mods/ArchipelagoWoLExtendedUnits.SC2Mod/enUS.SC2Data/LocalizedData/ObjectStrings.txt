@@ -167,6 +167,7 @@ Validator/Name/LiberatorMorphValidatorCombine=Liberator Morph Validator Combine
 Validator/Name/LiberatorNotRecallingMothership=Liberator Not Recalling Mothership
 Validator/Name/LiberatorNotRecallingMothershipCore=Liberator Not Recalling Mothership Core
 Validator/Name/NotWidowMineTarget=Not Widow Mine Target
+Validator/Name/OwnedBySelf=OwnedBySelf
 Validator/Name/WidowMineAttackNotOnCooldown=Widow Mine Attack Not On Cooldown
 Weapon/EditorPrefix/LiberatorAGWeapon=Liberator -
 Weapon/EditorPrefix/LiberatorMissileLaunchers=Liberator -

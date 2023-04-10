@@ -7,6 +7,7 @@ Abil/Name/WidowMineAttack=Widow Mine Attack
 Abil/Name/WidowMineBurrow=Widow Mine Burrow
 Abil/Name/WidowMineUnburrow=Widow Mine Unburrow
 Behavior/Name/MineDroneCountdown=Widow Mine Detonating
+Button/Name/DrillClaws=Drilling Claws
 Button/Name/Liberator=Build Liberator
 Button/Name/LiberatorAAMode=Fighter Mode
 Button/Name/LiberatorAGMode=Defender Mode
@@ -21,6 +22,7 @@ Button/Name/WidowMineBioSplash=Sentinel Missiles
 Button/Name/WidowMineBurrow=Activate Mine
 Button/Name/WidowMineConcealment=Concealment
 Button/Name/WidowMineUnburrow=Deactivate Mine
+Button/Tooltip/DrillClaws=This unit burrows faster.
 Button/Tooltip/Liberator=Artillery fighter. Loaded with missiles that deal area damage to enemy air targets. Can switch into Defender Mode to provide siege support.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
 Button/Tooltip/LiberatorAAMode=Reverts to Fighter Mode. In this mode Liberators can move, but they can only attack air targets.
 Button/Tooltip/LiberatorAGMode=Deploys into Defender Mode. In this mode Liberators inflict single target damage to ground units. Liberators in this mode cannot move.

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CButton id="DrillClaws">
+        <Icon value="Assets\Textures\BTN-Upgrade-Terran-ResearchDrillingClaws.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Terran-ResearchDrillingClaws.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
     <CButton id="Liberator">
         <Icon value="Assets\Textures\btn-unit-terran-liberator.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-liberator.dds"/>

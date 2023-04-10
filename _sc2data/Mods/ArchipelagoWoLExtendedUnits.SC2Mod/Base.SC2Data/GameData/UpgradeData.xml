@@ -42,6 +42,10 @@
         <EffectArray Operation="Set" Reference="Unit,LiberatorAG,LifeRegenRate" Value="0.601500"/>
         <EffectArray Operation="Set" Reference="Unit,ValkyrieSCBW,LifeRegenDelay" Value="3.000000"/>
         <EffectArray Operation="Set" Reference="Unit,ValkyrieSCBW,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,WidowMine,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,WidowMine,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,WidowMineBurrowed,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,WidowMineBurrowed,LifeRegenRate" Value="0.601500"/>
     </CUpgrade>
     <CUpgrade id="LiberatorSiegeProtocol">
         <Icon value="Assets\Textures\btn-upgrade-raynor-maelstromrounds.dds"/>
