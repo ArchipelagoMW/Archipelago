@@ -8,7 +8,7 @@ class NamesTest(unittest.TestCase):
         collection = MuseDashCollections(0, 1)
         for name in collection.song_items.keys():
             for c in name:
-                if (0 <= ord(c) <= 127):
+                if (0x20 <= ord(c) <= 0x7e):
                     continue
 
                 bad_names.append(name)
