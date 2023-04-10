@@ -6,13 +6,19 @@ from . import setup_solo_multiworld
 
 class TestBase(unittest.TestCase):
     def testCreateDuplicateLocations(self):
-        """Tests that no two Locations share a name."""
+        """Tests that no two Locations share a name or ID."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             multiworld = setup_solo_multiworld(world_type)
-            locations = Counter(multiworld.get_locations())
+            locations = Counter(location.name for location in multiworld.get_locations())
             if locations:
                 self.assertLessEqual(locations.most_common(1)[0][1], 1,
-                                     f"{world_type.game} has duplicate of location {locations.most_common(1)}")
+                                     f"{world_type.game} has duplicate of location name {locations.most_common(1)}")
+
+            locations = Counter(location.address for location in multiworld.get_locations()
+                                if type(location.address) is int)
+            if locations:
+                self.assertLessEqual(locations.most_common(1)[0][1], 1,
+                                     f"{world_type.game} has duplicate of location ID {locations.most_common(1)}")
 
     def testLocationsInDatapackage(self):
         """Tests that created locations not filled before fill starts exist in the datapackage."""

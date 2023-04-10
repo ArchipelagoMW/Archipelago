@@ -1,10 +1,16 @@
 from __future__ import annotations
 
 import random
-from itertools import chain, combinations
-from typing import Any, cast, Dict, List, Optional, Set, Tuple
+from dataclasses import dataclass
+from itertools import accumulate, chain, combinations
+from typing import Any, cast, Dict, Iterator, List, Mapping, Optional, Set, Tuple, Type, TYPE_CHECKING, Union
 
-from Options import AssembleOptions, Choice, DeathLink, Option, Range, SpecialRange, TextChoice, Toggle
+from Options import AssembleOptions, Choice, DeathLink, ItemDict, Range, SpecialRange, TextChoice, Toggle
+from .Enemies import enemy_name_to_sprite
+
+if TYPE_CHECKING:
+    from BaseClasses import PlandoOptions
+    from worlds.AutoWorld import World
 
 
 class AssembleCustomizableChoices(AssembleOptions):
@@ -37,6 +43,22 @@ class RandomGroupsChoice(Choice, metaclass=AssembleCustomizableChoices):
         return super().from_text(text)
 
 
+class EnemyChoice(TextChoice):
+    _valid_sprites: Dict[str, int] = {enemy_name.lower(): sprite for enemy_name, sprite in enemy_name_to_sprite.items()}
+
+    def verify(self, world: Type[World], player_name: str, plando_options: PlandoOptions) -> None:
+        if isinstance(self.value, int):
+            return
+        if str(self.value).lower() in self._valid_sprites:
+            return
+        raise ValueError(f"Could not find option '{self.value}' for '{self.__class__.__name__}', known options are:\n"
+                         f"{', '.join(self.options)}, {', '.join(enemy_name_to_sprite)}.")
+
+    @property
+    def sprite(self) -> Optional[int]:
+        return self._valid_sprites.get(str(self.value).lower())
+
+
 class LevelMixin:
     xp_coefficients: List[int] = sorted([191, 65, 50, 32, 18, 14, 6, 3, 3, 2, 2, 2, 2] * 8, reverse=True)
 
@@ -61,8 +83,7 @@ class BlueChestChance(Range):
     """The chance of a chest being a blue chest.
 
     It is given in units of 1/256, i.e., a value of 25 corresponds to 25/256 ~ 9.77%.
-    If you increase the blue chest chance, then the chance of finding consumables is decreased in return.
-    The chance of finding red chest equipment or spells is unaffected.
+    If you increase the blue chest chance, then the red chest chance is decreased in return.
     Supported values: 5 – 75
     Default value: 25 (five times as much as in an unmodified game)
     """
@@ -71,6 +92,14 @@ class BlueChestChance(Range):
     range_start = 5
     range_end = 75
     default = 25
+
+    @property
+    def chest_type_thresholds(self) -> bytes:
+        ratio: float = (256 - self.value) / (256 - 5)
+        # unmodified chances are: consumable (mostly non-restorative) = 36/256, consumable (restorative) = 58/256,
+        # blue chest = 5/256, spell = 30/256, gear = 45/256 (and the remaining part, weapon = 82/256)
+        chest_type_chances: List[float] = [36 * ratio, 58 * ratio, float(self.value), 30 * ratio, 45 * ratio]
+        return bytes(round(threshold) for threshold in reversed(tuple(accumulate(chest_type_chances))))
 
 
 class BlueChestCount(Range):
@@ -152,7 +181,7 @@ class Boss(RandomGroupsChoice):
         "random-high": ["venge_ghost", "white_dragon_x3", "fire_dragon", "ghost_ship", "tank"],
         "random-sinistral": ["gades_c", "amon", "erim", "daos"],
     }
-    extra_options = frozenset(random_groups)
+    extra_options = set(random_groups)
 
     @property
     def flag(self) -> int:
@@ -242,6 +271,34 @@ class CrowdedFloorChance(Range):
     default = 16
 
 
+class CustomItemPool(ItemDict, Mapping[str, int]):
+    """Customize your multiworld item pool.
+
+    Using this option you can place any cave item in your multiworld item pool. (By default, the pool is filled with
+    blue chest items.) Here you can add any valid item from the Lufia II Ancient Cave section of the datapackage
+    (see https://archipelago.gg/datapackage). The value of this option has to be a mapping of item name to count,
+    e.g., to add two Deadly rods and one Dekar Blade: {Deadly rod: 2, Dekar blade: 1}
+    The maximum total amount of custom items you can place is limited by the chosen blue_chest_count; any remaining,
+    non-customized space in the pool will be occupied by random blue chest items.
+    """
+
+    display_name = "Custom item pool"
+    value: Dict[str, int]
+
+    @property
+    def count(self) -> int:
+        return sum(self.values())
+
+    def __getitem__(self, key: str) -> int:
+        return self.value.__getitem__(key)
+
+    def __iter__(self) -> Iterator[str]:
+        return self.value.__iter__()
+
+    def __len__(self) -> int:
+        return self.value.__len__()
+
+
 class DefaultCapsule(Choice):
     """Preselect the active capsule monster.
 
@@ -277,7 +334,8 @@ class DefaultParty(RandomGroupsChoice, TextChoice):
     """
 
     display_name = "Default party lineup"
-    default = "M"
+    default: Union[str, int] = "M"
+    value: Union[str, int]
 
     random_groups = {
         "random-2p": ["M" + "".join(p) for p in combinations("ADGLST", 1)],
@@ -288,7 +346,7 @@ class DefaultParty(RandomGroupsChoice, TextChoice):
     _valid_sorted_parties: List[List[str]] = [sorted(party) for party in ("M", *chain(*random_groups.values()))]
     _members_to_bytes: bytes = bytes.maketrans(b"MSGATDL", bytes(range(7)))
 
-    def verify(self, *args, **kwargs) -> None:
+    def verify(self, world: Type[World], player_name: str, plando_options: PlandoOptions) -> None:
         if str(self.value).lower() in self.random_groups:
             return
         if sorted(str(self.value).upper()) in self._valid_sorted_parties:
@@ -315,6 +373,97 @@ class DefaultParty(RandomGroupsChoice, TextChoice):
 
     def __len__(self) -> int:
         return len(str(self.value))
+
+
+class EnemyFloorNumbers(Choice):
+    """Change which enemy types are encountered at which floor numbers.
+
+    Supported values:
+    vanilla
+        Ninja, e.g., is allowed to appear on the 3 floors B44-B46
+    shuffle — The existing enemy types are redistributed among nearby floors. Shifts by up to 6 floors are possible.
+        Ninja, e.g., will be allowed to appear on exactly 3 consecutive floors somewhere from B38-B40 to B50-B52
+    randomize — For each floor, new enemy types are chosen randomly from the set usually possible on floors [-6, +6].
+        Ninja, e.g., is among the various possible selections for any enemy slot affecting the floors from B38 to B52
+    Default value: vanilla (same as in an unmodified game)
+    """
+
+    display_name = "Enemy floor numbers"
+    option_vanilla = 0
+    option_shuffle = 1
+    option_randomize = 2
+    default = option_vanilla
+
+
+class EnemyMovementPatterns(EnemyChoice):
+    """Change the movement patterns of enemies.
+
+    Supported values:
+    vanilla
+    shuffle_by_pattern — The existing movement patterns are redistributed among each other.
+        Sprites that usually share a movement pattern will still share movement patterns after shuffling
+    randomize_by_pattern — For each movement pattern, a new one is chosen randomly from the set of existing patterns.
+        Sprites that usually share a movement pattern will still share movement patterns after randomizing
+    shuffle_by_sprite — The existing movement patterns of sprites are redistributed among the enemy sprites.
+        Sprites that usually share a movement pattern can end up with different movement patterns after shuffling
+    randomize_by_sprite — For each sprite, a new movement is chosen randomly from the set of existing patterns.
+        Sprites that usually share a movement pattern can end up with different movement patterns after randomizing
+    singularity — All enemy sprites use the same, randomly selected movement pattern
+    Alternatively, you can directly specify an enemy name such as "Red Jelly" as the value of this option.
+        In that case, the movement pattern usually associated with this sprite will be used by all enemy sprites
+    Default value: vanilla (same as in an unmodified game)
+    """
+
+    display_name = "Enemy movement patterns"
+    option_vanilla = 0
+    option_shuffle_by_pattern = 1
+    option_randomize_by_pattern = 2
+    option_shuffle_by_sprite = 3
+    option_randomize_by_sprite = 4
+    option_singularity = 5
+    default = option_vanilla
+
+
+class EnemySprites(EnemyChoice):
+    """Change the appearance of enemies.
+
+    Supported values:
+    vanilla
+    shuffle — The existing sprites are redistributed among the enemy types.
+        This means that, after shuffling, exactly 1 enemy type will be dressing up as the "Red Jelly" sprite
+    randomize — For each enemy type, a new sprite is chosen randomly from the set of existing sprites.
+        This means that, after randomizing, any number of enemy types could end up using the "Red Jelly" sprite
+    singularity — All enemies use the same, randomly selected sprite
+    Alternatively, you can directly specify an enemy name such as "Red Jelly" as the value of this option.
+        In this case, the sprite usually associated with that enemy will be used by all enemies
+    Default value: vanilla (same as in an unmodified game)
+    """
+
+    display_name = "Enemy sprites"
+    option_vanilla = 0
+    option_shuffle = 1
+    option_randomize = 2
+    option_singularity = 3
+    default = option_vanilla
+
+
+class ExpModifier(Range):
+    """Percentage modifier for EXP gained from enemies.
+
+    Supported values: 100 – 500
+    Default value: 100 (same as in an unmodified game)
+    """
+
+    display_name = "EXP modifier"
+    range_start = 100
+    range_end = 500
+    default = 100
+
+    def __call__(self, exp: bytes) -> bytes:
+        try:
+            return (int.from_bytes(exp, "little") * self.value // 100).to_bytes(2, "little")
+        except OverflowError:
+            return b"\xFF\xFF"
 
 
 class FinalFloor(Range):
@@ -424,28 +573,18 @@ class IrisTreasuresRequired(Range):
     default = 9
 
 
-class MasterHp(SpecialRange):
+class MasterHp(Range):
     """The number of hit points of the Master
 
-    Supported values:
-    1 – 9980,
-    scale — scales the HP depending on the value of final_floor
+    (Only has an effect if boss is set to master.)
+    Supported values: 1 – 9980
     Default value: 9980 (same as in an unmodified game)
     """
 
     display_name = "Master HP"
-    range_start = 0
+    range_start = 1
     range_end = 9980
     default = 9980
-    special_range_cutoff = 1
-    special_range_names = {
-        "default": 9980,
-        "scale": 0,
-    }
-
-    @staticmethod
-    def scale(final_floor: int) -> int:
-        return final_floor * 100 + 80
 
 
 class PartyStartingLevel(LevelMixin, Range):
@@ -503,7 +642,8 @@ class ShufflePartyMembers(Toggle):
     Supported values:
     false — all 6 optional party members are present in the cafe and can be recruited right away
     true — only Maxim is available from the start; 6 new "items" are added to your pool and shuffled into the
-        multiworld; when one of these items is found, the corresponding party member is unlocked for you to use
+        multiworld; when one of these items is found, the corresponding party member is unlocked for you to use.
+        While cave diving, you can add newly unlocked ones to your party by using the character items from the inventory
     Default value: false (same as in an unmodified game)
     """
 
@@ -514,27 +654,32 @@ class ShufflePartyMembers(Toggle):
         return 0b00000000 if self.value else 0b11111100
 
 
-l2ac_option_definitions: Dict[str, type(Option)] = {
-    "blue_chest_chance": BlueChestChance,
-    "blue_chest_count": BlueChestCount,
-    "boss": Boss,
-    "capsule_cravings_jp_style": CapsuleCravingsJPStyle,
-    "capsule_starting_form": CapsuleStartingForm,
-    "capsule_starting_level": CapsuleStartingLevel,
-    "crowded_floor_chance": CrowdedFloorChance,
-    "death_link": DeathLink,
-    "default_capsule": DefaultCapsule,
-    "default_party": DefaultParty,
-    "final_floor": FinalFloor,
-    "gear_variety_after_b9": GearVarietyAfterB9,
-    "goal": Goal,
-    "healing_floor_chance": HealingFloorChance,
-    "initial_floor": InitialFloor,
-    "iris_floor_chance": IrisFloorChance,
-    "iris_treasures_required": IrisTreasuresRequired,
-    "master_hp": MasterHp,
-    "party_starting_level": PartyStartingLevel,
-    "run_speed": RunSpeed,
-    "shuffle_capsule_monsters": ShuffleCapsuleMonsters,
-    "shuffle_party_members": ShufflePartyMembers,
-}
+@dataclass
+class L2ACOptions:
+    blue_chest_chance: BlueChestChance
+    blue_chest_count: BlueChestCount
+    boss: Boss
+    capsule_cravings_jp_style: CapsuleCravingsJPStyle
+    capsule_starting_form: CapsuleStartingForm
+    capsule_starting_level: CapsuleStartingLevel
+    crowded_floor_chance: CrowdedFloorChance
+    custom_item_pool: CustomItemPool
+    death_link: DeathLink
+    default_capsule: DefaultCapsule
+    default_party: DefaultParty
+    enemy_floor_numbers: EnemyFloorNumbers
+    enemy_movement_patterns: EnemyMovementPatterns
+    enemy_sprites: EnemySprites
+    exp_modifier: ExpModifier
+    final_floor: FinalFloor
+    gear_variety_after_b9: GearVarietyAfterB9
+    goal: Goal
+    healing_floor_chance: HealingFloorChance
+    initial_floor: InitialFloor
+    iris_floor_chance: IrisFloorChance
+    iris_treasures_required: IrisTreasuresRequired
+    master_hp: MasterHp
+    party_starting_level: PartyStartingLevel
+    run_speed: RunSpeed
+    shuffle_capsule_monsters: ShuffleCapsuleMonsters
+    shuffle_party_members: ShufflePartyMembers

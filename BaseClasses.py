@@ -71,6 +71,11 @@ class MultiWorld():
     completion_condition: Dict[int, Callable[[CollectionState], bool]]
     indirect_connections: Dict[Region, Set[Entrance]]
     exclude_locations: Dict[int, Options.ExcludeLocations]
+    priority_locations: Dict[int, Options.PriorityLocations]
+    start_inventory: Dict[int, Options.StartInventory]
+    start_hints: Dict[int, Options.StartHints]
+    start_location_hints: Dict[int, Options.StartLocationHints]
+    item_links: Dict[int, Options.ItemLinks]
 
     game: Dict[int, str]
 
@@ -331,7 +336,7 @@ class MultiWorld():
         return self.player_name[player]
 
     def get_file_safe_player_name(self, player: int) -> str:
-        return ''.join(c for c in self.get_player_name(player) if c not in '<>:"/\\|?*')
+        return Utils.get_file_safe_name(self.get_player_name(player))
 
     def get_out_file_name_base(self, player: int) -> str:
         """ the base name (without file extension) for each player's output file for a seed """
@@ -961,7 +966,7 @@ class Location:
         self.parent_region = parent
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
-        return (self.always_allow(state, item)
+        return ((self.always_allow(state, item) and item.name not in state.multiworld.non_local_items[item.player])
                 or ((self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
                     and self.item_rule(item)
                     and (not check_access or self.can_reach(state))))
@@ -1203,7 +1208,7 @@ class Spoiler():
                 raise RuntimeError(f'Not all required items reachable. Unreachable locations: {required_locations}')
 
         # we can finally output our playthrough
-        self.playthrough = {"0": sorted([str(item) for item in
+        self.playthrough = {"0": sorted([self.multiworld.get_name_string_for_object(item) for item in
                                          chain.from_iterable(multiworld.precollected_items.values())
                                          if item.advancement])}
 

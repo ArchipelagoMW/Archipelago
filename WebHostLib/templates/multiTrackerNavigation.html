@@ -2,11 +2,8 @@
     <div id="tracker-navigation">
         {% for enabled_tracker in enabled_multiworld_trackers %}
             {% set tracker_url = url_for(enabled_tracker.endpoint, tracker=room.tracker) %}
-            {%- if enabled_tracker.current -%}
-                <a class="tracker-navigation-button selected" href="{{ tracker_url }}">{{ enabled_tracker.name }}</a>
-            {%- else -%}
-                <a class="tracker-navigation-button" href="{{ tracker_url }}">{{ enabled_tracker.name }}</a>
-            {%- endif -%}
+            <a class="tracker-navigation-button{% if enabled_tracker.current %} selected{% endif %}"
+               href="{{ tracker_url }}">{{ enabled_tracker.name }}</a>
         {% endfor %}
     </div>
 {%- endif -%}

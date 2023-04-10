@@ -11,10 +11,10 @@ from werkzeug.exceptions import abort
 from MultiServer import Context, get_saving_second
 from NetUtils import SlotType
 from Utils import restricted_loads
-from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
+from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name, network_data_package
 from worlds.alttp import Items
 from . import app, cache
-from .models import Room
+from .models import GameDataPackage, Room
 
 alttp_icons = {
     "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
@@ -229,14 +229,15 @@ def render_timedelta(delta: datetime.timedelta):
 
 @pass_context
 def get_location_name(context: runtime.Context, loc: int) -> str:
+    # once all rooms embed data package, the chain lookup can be dropped
     context_locations = context.get("custom_locations", {})
-    return collections.ChainMap(lookup_any_location_id_to_name, context_locations).get(loc, loc)
+    return collections.ChainMap(context_locations, lookup_any_location_id_to_name).get(loc, loc)
 
 
 @pass_context
 def get_item_name(context: runtime.Context, item: int) -> str:
     context_items = context.get("custom_items", {})
-    return collections.ChainMap(lookup_any_item_id_to_name, context_items).get(item, item)
+    return collections.ChainMap(context_items, lookup_any_item_id_to_name).get(item, item)
 
 
 app.jinja_env.filters["location_name"] = get_location_name
@@ -274,11 +275,21 @@ def get_static_room_data(room: Room):
                   if slot_info.type == SlotType.group}
 
         for game in games.values():
-            if game in multidata["datapackage"]:
-                custom_locations.update(
-                    {id: name for name, id in multidata["datapackage"][game]["location_name_to_id"].items()})
-                custom_items.update(
-                    {id: name for name, id in multidata["datapackage"][game]["item_name_to_id"].items()})
+            if game not in multidata["datapackage"]:
+                continue
+            game_data = multidata["datapackage"][game]
+            if "checksum" in game_data:
+                if network_data_package["games"].get(game, {}).get("checksum") == game_data["checksum"]:
+                    # non-custom. remove from multidata
+                    # network_data_package import could be skipped once all rooms embed data package
+                    del multidata["datapackage"][game]
+                    continue
+                else:
+                    game_data = restricted_loads(GameDataPackage.get(checksum=game_data["checksum"]).data)
+            custom_locations.update(
+                {id_: name for name, id_ in game_data["location_name_to_id"].items()})
+            custom_items.update(
+                {id_: name for name, id_ in game_data["item_name_to_id"].items()})
     elif "games" in multidata:
         games = multidata["games"]
     seed_checks_in_area = checks_in_area.copy()
@@ -666,7 +677,6 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
     }
     for item_name, item_id in multi_items.items():
         base_name = item_name.split()[-1].lower()
-        count = inventory[item_id]
         display_data[base_name+"_count"] = inventory[item_id]
 
     # Gather dungeon locations
@@ -1323,24 +1333,22 @@ def get_enabled_multiworld_trackers(room: Room, current: str):
             "current": current == "Generic"
          }
     ]
-
-    if any(slot.game == "A Link to the Past" for slot in room.seed.slots) or current == "A Link to the Past":
-        enabled.append({
-            "name": "A Link to the Past",
-            "endpoint": "get_LttP_multiworld_tracker",
-            "current": current == "A Link to the Past"}
-        )
-
+    for game_name, endpoint in multi_trackers.items():
+        if any(slot.game == game_name for slot in room.seed.slots) or current == game_name:
+            enabled.append({
+                "name": game_name,
+                "endpoint": endpoint.__name__,
+                "current": current == game_name}
+            )
     return enabled
 
 
-@app.route('/tracker/<suuid:tracker>')
-@cache.memoize(timeout=60)  # multisave is currently created at most every minute
-def get_multiworld_tracker(tracker: UUID):
+def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[str, typing.Any]]:
     room: Room = Room.get(tracker=tracker)
     if not room:
-        abort(404)
-    locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
+        return None
+
+    locations, names, use_door_tracker, checks_in_area, player_location_to_area, \
         precollected_items, games, slot_data, groups, saving_second, custom_locations, custom_items = \
         get_static_room_data(room)
 
@@ -1366,7 +1374,9 @@ def get_multiworld_tracker(tracker: UUID):
             continue
         player_locations = locations[player]
         checks_done[team][player]["Total"] = sum(1 for loc in locations_checked if loc in player_locations)
-        percent_total_checks_done[team][player] = int(checks_done[team][player]["Total"] / seed_checks_in_area[player]["Total"] * 100) if seed_checks_in_area[player]["Total"] else 100
+        percent_total_checks_done[team][player] = int(checks_done[team][player]["Total"] /
+                                                      checks_in_area[player]["Total"] * 100) \
+            if checks_in_area[player]["Total"] else 100
 
     activity_timers = {}
     now = datetime.datetime.utcnow()
@@ -1374,27 +1384,75 @@ def get_multiworld_tracker(tracker: UUID):
         activity_timers[team, player] = now - datetime.datetime.utcfromtimestamp(timestamp)
 
     player_names = {}
+    states: typing.Dict[typing.Tuple[int, int], int] = {}
     for team, names in enumerate(names):
         for player, name in enumerate(names, 1):
-            player_names[(team, player)] = name
+            player_names[team, player] = name
+            states[team, player] = multisave.get("client_game_state", {}).get((team, player), 0)
     long_player_names = player_names.copy()
     for (team, player), alias in multisave.get("name_aliases", {}).items():
-        player_names[(team, player)] = alias
-        long_player_names[(team, player)] = f"{alias} ({long_player_names[(team, player)]})"
+        player_names[team, player] = alias
+        long_player_names[(team, player)] = f"{alias} ({long_player_names[team, player]})"
 
     video = {}
     for (team, player), data in multisave.get("video", []):
-        video[(team, player)] = data
+        video[team, player] = data
 
-    enabled_multiworld_trackers = get_enabled_multiworld_trackers(room, "Generic")
+    return dict(player_names=player_names, room=room, checks_done=checks_done,
+                percent_total_checks_done=percent_total_checks_done, checks_in_area=checks_in_area,
+                activity_timers=activity_timers, video=video, hints=hints,
+                long_player_names=long_player_names,
+                multisave=multisave, precollected_items=precollected_items, groups=groups,
+                locations=locations, games=games, states=states)
 
-    return render_template("multiTracker.html", player_names=player_names, room=room, checks_done=checks_done,
-                           percent_total_checks_done=percent_total_checks_done, checks_in_area=seed_checks_in_area,
-                           activity_timers=activity_timers, video=video, hints=hints,
-                           long_player_names=long_player_names, enabled_multiworld_trackers=enabled_multiworld_trackers)
+
+def _get_inventory_data(data: typing.Dict[str, typing.Any]) -> typing.Dict[int, typing.Dict[int, int]]:
+    inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in team_data}
+                 for teamnumber, team_data in data["checks_done"].items()}
+
+    groups = data["groups"]
+
+    for (team, player), locations_checked in data["multisave"].get("location_checks", {}).items():
+        if player in data["groups"]:
+            continue
+        player_locations = data["locations"][player]
+        precollected = data["precollected_items"][player]
+        for item_id in precollected:
+            inventory[team][player][item_id] += 1
+        for location in locations_checked:
+            item_id, recipient, flags = player_locations[location]
+            recipients = groups.get(recipient, [recipient])
+            for recipient in recipients:
+                inventory[team][recipient][item_id] += 1
+    return inventory
 
 
-@app.route('/tracker/<suuid:tracker>/lttp')
+@app.route('/tracker/<suuid:tracker>')
+@cache.memoize(timeout=60)  # multisave is currently created at most every minute
+def get_multiworld_tracker(tracker: UUID):
+    data = _get_multiworld_tracker_data(tracker)
+    if not data:
+        abort(404)
+
+    data["enabled_multiworld_trackers"] = get_enabled_multiworld_trackers(data["room"], "Generic")
+
+    return render_template("multiTracker.html", **data)
+
+
+@app.route('/tracker/<suuid:tracker>/Factorio')
+@cache.memoize(timeout=60)  # multisave is currently created at most every minute
+def get_Factorio_multiworld_tracker(tracker: UUID):
+    data = _get_multiworld_tracker_data(tracker)
+    if not data:
+        abort(404)
+
+    data["inventory"] = _get_inventory_data(data)
+    data["enabled_multiworld_trackers"] = get_enabled_multiworld_trackers(data["room"], "Factorio")
+
+    return render_template("multiFactorioTracker.html", **data)
+
+
+@app.route('/tracker/<suuid:tracker>/A Link to the Past')
 @cache.memoize(timeout=60)  # multisave is currently created at most every minute
 def get_LttP_multiworld_tracker(tracker: UUID):
     room: Room = Room.get(tracker=tracker)
@@ -1517,4 +1575,9 @@ game_specific_trackers: typing.Dict[str, typing.Callable] = {
     "ChecksFinder": __renderChecksfinder,
     "Super Metroid": __renderSuperMetroidTracker,
     "Starcraft 2 Wings of Liberty": __renderSC2WoLTracker
+}
+
+multi_trackers: typing.Dict[str, typing.Callable] = {
+    "A Link to the Past": get_LttP_multiworld_tracker,
+    "Factorio": get_Factorio_multiworld_tracker,
 }

@@ -249,8 +249,9 @@ class Overcooked2World(World):
             self.level_mapping = None
 
     def set_location_priority(self) -> None:
+        priority_locations = self.get_priority_locations()
         for level in Overcooked2Level():
-            if level.level_id in self.get_priority_locations():
+            if level.level_id in priority_locations:
                 location: Location = self.multiworld.get_location(level.location_name_item, self.player)
                 location.progress_type = LocationProgressType.PRIORITY
 
@@ -322,7 +323,7 @@ class Overcooked2World(World):
 
             level_access_rule: Callable[[CollectionState], bool] = \
                 lambda state, level_name=level.level_name, previous_level_completed_event_name=previous_level_completed_event_name, required_star_count=required_star_count: \
-                has_requirements_for_level_access(state, level_name, previous_level_completed_event_name, required_star_count, self.player)
+                has_requirements_for_level_access(state, level_name, previous_level_completed_event_name, required_star_count, self.options["RampTricks"], self.player)
             self.connect_regions("Overworld", level.level_name, level_access_rule)
 
             # Level --> Overworld

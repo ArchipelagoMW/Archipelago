@@ -134,6 +134,20 @@ def create_regions(world, player: int, active_locations):
         LocationName.city_escape_hidden_3,
         LocationName.city_escape_hidden_4,
         LocationName.city_escape_hidden_5,
+        LocationName.city_escape_omo_1,
+        LocationName.city_escape_omo_2,
+        LocationName.city_escape_omo_3,
+        LocationName.city_escape_omo_4,
+        LocationName.city_escape_omo_5,
+        LocationName.city_escape_omo_6,
+        LocationName.city_escape_omo_7,
+        LocationName.city_escape_omo_8,
+        LocationName.city_escape_omo_9,
+        LocationName.city_escape_omo_10,
+        LocationName.city_escape_omo_11,
+        LocationName.city_escape_omo_12,
+        LocationName.city_escape_omo_13,
+        LocationName.city_escape_omo_14,
         LocationName.city_escape_beetle,
         LocationName.city_escape_upgrade,
     ]
@@ -150,6 +164,11 @@ def create_regions(world, player: int, active_locations):
         LocationName.metal_harbor_chao_2,
         LocationName.metal_harbor_chao_3,
         LocationName.metal_harbor_pipe_1,
+        LocationName.metal_harbor_omo_1,
+        LocationName.metal_harbor_omo_2,
+        LocationName.metal_harbor_omo_3,
+        LocationName.metal_harbor_omo_4,
+        LocationName.metal_harbor_omo_5,
         LocationName.metal_harbor_beetle,
         LocationName.metal_harbor_upgrade,
     ]
@@ -190,6 +209,10 @@ def create_regions(world, player: int, active_locations):
         LocationName.pyramid_cave_pipe_2,
         LocationName.pyramid_cave_pipe_3,
         LocationName.pyramid_cave_pipe_4,
+        LocationName.pyramid_cave_omo_1,
+        LocationName.pyramid_cave_omo_2,
+        LocationName.pyramid_cave_omo_3,
+        LocationName.pyramid_cave_omo_4,
         LocationName.pyramid_cave_beetle,
         LocationName.pyramid_cave_upgrade,
     ]
@@ -210,6 +233,19 @@ def create_regions(world, player: int, active_locations):
         LocationName.crazy_gadget_pipe_3,
         LocationName.crazy_gadget_pipe_4,
         LocationName.crazy_gadget_hidden_1,
+        LocationName.crazy_gadget_omo_1,
+        LocationName.crazy_gadget_omo_2,
+        LocationName.crazy_gadget_omo_3,
+        LocationName.crazy_gadget_omo_4,
+        LocationName.crazy_gadget_omo_5,
+        LocationName.crazy_gadget_omo_6,
+        LocationName.crazy_gadget_omo_7,
+        LocationName.crazy_gadget_omo_8,
+        LocationName.crazy_gadget_omo_9,
+        LocationName.crazy_gadget_omo_10,
+        LocationName.crazy_gadget_omo_11,
+        LocationName.crazy_gadget_omo_12,
+        LocationName.crazy_gadget_omo_13,
         LocationName.crazy_gadget_beetle,
         LocationName.crazy_gadget_upgrade,
     ]
@@ -227,6 +263,9 @@ def create_regions(world, player: int, active_locations):
         LocationName.final_rush_chao_3,
         LocationName.final_rush_pipe_1,
         LocationName.final_rush_pipe_2,
+        LocationName.final_rush_omo_1,
+        LocationName.final_rush_omo_2,
+        LocationName.final_rush_omo_3,
         LocationName.final_rush_beetle,
         LocationName.final_rush_upgrade,
     ]
@@ -248,6 +287,16 @@ def create_regions(world, player: int, active_locations):
         LocationName.prison_lane_hidden_1,
         LocationName.prison_lane_hidden_2,
         LocationName.prison_lane_hidden_3,
+        LocationName.prison_lane_omo_1,
+        LocationName.prison_lane_omo_2,
+        LocationName.prison_lane_omo_3,
+        LocationName.prison_lane_omo_4,
+        LocationName.prison_lane_omo_5,
+        LocationName.prison_lane_omo_6,
+        LocationName.prison_lane_omo_7,
+        LocationName.prison_lane_omo_8,
+        LocationName.prison_lane_omo_9,
+        LocationName.prison_lane_omo_10,
         LocationName.prison_lane_beetle,
         LocationName.prison_lane_upgrade,
     ]
@@ -270,6 +319,14 @@ def create_regions(world, player: int, active_locations):
         LocationName.mission_street_hidden_2,
         LocationName.mission_street_hidden_3,
         LocationName.mission_street_hidden_4,
+        LocationName.mission_street_omo_1,
+        LocationName.mission_street_omo_2,
+        LocationName.mission_street_omo_3,
+        LocationName.mission_street_omo_4,
+        LocationName.mission_street_omo_5,
+        LocationName.mission_street_omo_6,
+        LocationName.mission_street_omo_7,
+        LocationName.mission_street_omo_8,
         LocationName.mission_street_beetle,
         LocationName.mission_street_upgrade,
     ]
@@ -299,6 +356,10 @@ def create_regions(world, player: int, active_locations):
         LocationName.hidden_base_pipe_3,
         LocationName.hidden_base_pipe_4,
         LocationName.hidden_base_pipe_5,
+        LocationName.hidden_base_omo_1,
+        LocationName.hidden_base_omo_2,
+        LocationName.hidden_base_omo_3,
+        LocationName.hidden_base_omo_4,
         LocationName.hidden_base_beetle,
         LocationName.hidden_base_upgrade,
     ]
@@ -319,6 +380,18 @@ def create_regions(world, player: int, active_locations):
         LocationName.eternal_engine_pipe_3,
         LocationName.eternal_engine_pipe_4,
         LocationName.eternal_engine_pipe_5,
+        LocationName.eternal_engine_omo_1,
+        LocationName.eternal_engine_omo_2,
+        LocationName.eternal_engine_omo_3,
+        LocationName.eternal_engine_omo_4,
+        LocationName.eternal_engine_omo_5,
+        LocationName.eternal_engine_omo_6,
+        LocationName.eternal_engine_omo_7,
+        LocationName.eternal_engine_omo_8,
+        LocationName.eternal_engine_omo_9,
+        LocationName.eternal_engine_omo_10,
+        LocationName.eternal_engine_omo_11,
+        LocationName.eternal_engine_omo_12,
         LocationName.eternal_engine_beetle,
         LocationName.eternal_engine_upgrade,
     ]
@@ -337,6 +410,16 @@ def create_regions(world, player: int, active_locations):
         LocationName.wild_canyon_pipe_1,
         LocationName.wild_canyon_pipe_2,
         LocationName.wild_canyon_pipe_3,
+        LocationName.wild_canyon_omo_1,
+        LocationName.wild_canyon_omo_2,
+        LocationName.wild_canyon_omo_3,
+        LocationName.wild_canyon_omo_4,
+        LocationName.wild_canyon_omo_5,
+        LocationName.wild_canyon_omo_6,
+        LocationName.wild_canyon_omo_7,
+        LocationName.wild_canyon_omo_8,
+        LocationName.wild_canyon_omo_9,
+        LocationName.wild_canyon_omo_10,
         LocationName.wild_canyon_beetle,
         LocationName.wild_canyon_upgrade,
     ]
@@ -354,6 +437,17 @@ def create_regions(world, player: int, active_locations):
         LocationName.pumpkin_hill_chao_3,
         LocationName.pumpkin_hill_pipe_1,
         LocationName.pumpkin_hill_hidden_1,
+        LocationName.pumpkin_hill_omo_1,
+        LocationName.pumpkin_hill_omo_2,
+        LocationName.pumpkin_hill_omo_3,
+        LocationName.pumpkin_hill_omo_4,
+        LocationName.pumpkin_hill_omo_5,
+        LocationName.pumpkin_hill_omo_6,
+        LocationName.pumpkin_hill_omo_7,
+        LocationName.pumpkin_hill_omo_8,
+        LocationName.pumpkin_hill_omo_9,
+        LocationName.pumpkin_hill_omo_10,
+        LocationName.pumpkin_hill_omo_11,
         LocationName.pumpkin_hill_upgrade,
     ]
     pumpkin_hill_region = create_region(world, player, active_locations, LocationName.pumpkin_hill_region,
@@ -371,6 +465,13 @@ def create_regions(world, player: int, active_locations):
         LocationName.aquatic_mine_pipe_1,
         LocationName.aquatic_mine_pipe_2,
         LocationName.aquatic_mine_pipe_3,
+        LocationName.aquatic_mine_omo_1,
+        LocationName.aquatic_mine_omo_2,
+        LocationName.aquatic_mine_omo_3,
+        LocationName.aquatic_mine_omo_4,
+        LocationName.aquatic_mine_omo_5,
+        LocationName.aquatic_mine_omo_6,
+        LocationName.aquatic_mine_omo_7,
         LocationName.aquatic_mine_beetle,
         LocationName.aquatic_mine_upgrade,
     ]
@@ -391,6 +492,15 @@ def create_regions(world, player: int, active_locations):
         LocationName.death_chamber_pipe_3,
         LocationName.death_chamber_hidden_1,
         LocationName.death_chamber_hidden_2,
+        LocationName.death_chamber_omo_1,
+        LocationName.death_chamber_omo_2,
+        LocationName.death_chamber_omo_3,
+        LocationName.death_chamber_omo_4,
+        LocationName.death_chamber_omo_5,
+        LocationName.death_chamber_omo_6,
+        LocationName.death_chamber_omo_7,
+        LocationName.death_chamber_omo_8,
+        LocationName.death_chamber_omo_9,
         LocationName.death_chamber_beetle,
         LocationName.death_chamber_upgrade,
     ]
@@ -409,6 +519,9 @@ def create_regions(world, player: int, active_locations):
         LocationName.meteor_herd_pipe_1,
         LocationName.meteor_herd_pipe_2,
         LocationName.meteor_herd_pipe_3,
+        LocationName.meteor_herd_omo_1,
+        LocationName.meteor_herd_omo_2,
+        LocationName.meteor_herd_omo_3,
         LocationName.meteor_herd_beetle,
         LocationName.meteor_herd_upgrade,
     ]
@@ -430,6 +543,14 @@ def create_regions(world, player: int, active_locations):
         LocationName.radical_highway_hidden_1,
         LocationName.radical_highway_hidden_2,
         LocationName.radical_highway_hidden_3,
+        LocationName.radical_highway_omo_1,
+        LocationName.radical_highway_omo_2,
+        LocationName.radical_highway_omo_3,
+        LocationName.radical_highway_omo_4,
+        LocationName.radical_highway_omo_5,
+        LocationName.radical_highway_omo_6,
+        LocationName.radical_highway_omo_7,
+        LocationName.radical_highway_omo_8,
         LocationName.radical_highway_beetle,
         LocationName.radical_highway_upgrade,
     ]
@@ -452,6 +573,11 @@ def create_regions(world, player: int, active_locations):
         LocationName.white_jungle_hidden_1,
         LocationName.white_jungle_hidden_2,
         LocationName.white_jungle_hidden_3,
+        LocationName.white_jungle_omo_1,
+        LocationName.white_jungle_omo_2,
+        LocationName.white_jungle_omo_3,
+        LocationName.white_jungle_omo_4,
+        LocationName.white_jungle_omo_5,
         LocationName.white_jungle_beetle,
         LocationName.white_jungle_upgrade,
     ]
@@ -491,6 +617,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.final_chase_pipe_1,
         LocationName.final_chase_pipe_2,
         LocationName.final_chase_pipe_3,
+        LocationName.final_chase_omo_1,
         LocationName.final_chase_beetle,
         LocationName.final_chase_upgrade,
     ]
@@ -511,6 +638,12 @@ def create_regions(world, player: int, active_locations):
         LocationName.iron_gate_pipe_3,
         LocationName.iron_gate_pipe_4,
         LocationName.iron_gate_pipe_5,
+        LocationName.iron_gate_omo_1,
+        LocationName.iron_gate_omo_2,
+        LocationName.iron_gate_omo_3,
+        LocationName.iron_gate_omo_4,
+        LocationName.iron_gate_omo_5,
+        LocationName.iron_gate_omo_6,
         LocationName.iron_gate_beetle,
         LocationName.iron_gate_upgrade,
     ]
@@ -531,6 +664,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.sand_ocean_pipe_3,
         LocationName.sand_ocean_pipe_4,
         LocationName.sand_ocean_pipe_5,
+        LocationName.sand_ocean_omo_1,
+        LocationName.sand_ocean_omo_2,
         LocationName.sand_ocean_beetle,
         LocationName.sand_ocean_upgrade,
     ]
@@ -549,6 +684,14 @@ def create_regions(world, player: int, active_locations):
         LocationName.lost_colony_pipe_1,
         LocationName.lost_colony_pipe_2,
         LocationName.lost_colony_hidden_1,
+        LocationName.lost_colony_omo_1,
+        LocationName.lost_colony_omo_2,
+        LocationName.lost_colony_omo_3,
+        LocationName.lost_colony_omo_4,
+        LocationName.lost_colony_omo_5,
+        LocationName.lost_colony_omo_6,
+        LocationName.lost_colony_omo_7,
+        LocationName.lost_colony_omo_8,
         LocationName.lost_colony_beetle,
         LocationName.lost_colony_upgrade,
     ]
@@ -569,6 +712,9 @@ def create_regions(world, player: int, active_locations):
         LocationName.weapons_bed_pipe_3,
         LocationName.weapons_bed_pipe_4,
         LocationName.weapons_bed_pipe_5,
+        LocationName.weapons_bed_omo_1,
+        LocationName.weapons_bed_omo_2,
+        LocationName.weapons_bed_omo_3,
         LocationName.weapons_bed_upgrade,
     ]
     weapons_bed_region = create_region(world, player, active_locations, LocationName.weapons_bed_region,
@@ -588,6 +734,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.cosmic_wall_pipe_3,
         LocationName.cosmic_wall_pipe_4,
         LocationName.cosmic_wall_pipe_5,
+        LocationName.cosmic_wall_omo_1,
         LocationName.cosmic_wall_beetle,
         LocationName.cosmic_wall_upgrade,
     ]
@@ -605,6 +752,18 @@ def create_regions(world, player: int, active_locations):
         LocationName.dry_lagoon_chao_3,
         LocationName.dry_lagoon_pipe_1,
         LocationName.dry_lagoon_hidden_1,
+        LocationName.dry_lagoon_omo_1,
+        LocationName.dry_lagoon_omo_2,
+        LocationName.dry_lagoon_omo_3,
+        LocationName.dry_lagoon_omo_4,
+        LocationName.dry_lagoon_omo_5,
+        LocationName.dry_lagoon_omo_6,
+        LocationName.dry_lagoon_omo_7,
+        LocationName.dry_lagoon_omo_8,
+        LocationName.dry_lagoon_omo_9,
+        LocationName.dry_lagoon_omo_10,
+        LocationName.dry_lagoon_omo_11,
+        LocationName.dry_lagoon_omo_12,
         LocationName.dry_lagoon_beetle,
         LocationName.dry_lagoon_upgrade,
     ]
@@ -624,6 +783,13 @@ def create_regions(world, player: int, active_locations):
         LocationName.egg_quarters_pipe_2,
         LocationName.egg_quarters_hidden_1,
         LocationName.egg_quarters_hidden_2,
+        LocationName.egg_quarters_omo_1,
+        LocationName.egg_quarters_omo_2,
+        LocationName.egg_quarters_omo_3,
+        LocationName.egg_quarters_omo_4,
+        LocationName.egg_quarters_omo_5,
+        LocationName.egg_quarters_omo_6,
+        LocationName.egg_quarters_omo_7,
         LocationName.egg_quarters_beetle,
         LocationName.egg_quarters_upgrade,
     ]
@@ -641,6 +807,18 @@ def create_regions(world, player: int, active_locations):
         LocationName.security_hall_chao_3,
         LocationName.security_hall_pipe_1,
         LocationName.security_hall_hidden_1,
+        LocationName.security_hall_omo_1,
+        LocationName.security_hall_omo_2,
+        LocationName.security_hall_omo_3,
+        LocationName.security_hall_omo_4,
+        LocationName.security_hall_omo_5,
+        LocationName.security_hall_omo_6,
+        LocationName.security_hall_omo_7,
+        LocationName.security_hall_omo_8,
+        LocationName.security_hall_omo_9,
+        LocationName.security_hall_omo_10,
+        LocationName.security_hall_omo_11,
+        LocationName.security_hall_omo_12,
         LocationName.security_hall_beetle,
         LocationName.security_hall_upgrade,
     ]
@@ -670,6 +848,11 @@ def create_regions(world, player: int, active_locations):
         LocationName.mad_space_pipe_2,
         LocationName.mad_space_pipe_3,
         LocationName.mad_space_pipe_4,
+        LocationName.mad_space_omo_1,
+        LocationName.mad_space_omo_2,
+        LocationName.mad_space_omo_3,
+        LocationName.mad_space_omo_4,
+        LocationName.mad_space_omo_5,
         LocationName.mad_space_beetle,
         LocationName.mad_space_upgrade,
     ]
@@ -691,6 +874,15 @@ def create_regions(world, player: int, active_locations):
         LocationName.cannon_core_pipe_4,
         LocationName.cannon_core_pipe_5,
         LocationName.cannon_core_hidden_1,
+        LocationName.cannon_core_omo_1,
+        LocationName.cannon_core_omo_2,
+        LocationName.cannon_core_omo_3,
+        LocationName.cannon_core_omo_4,
+        LocationName.cannon_core_omo_5,
+        LocationName.cannon_core_omo_6,
+        LocationName.cannon_core_omo_7,
+        LocationName.cannon_core_omo_8,
+        LocationName.cannon_core_omo_9,
         LocationName.cannon_core_beetle,
     ]
     cannon_core_region = create_region(world, player, active_locations, LocationName.cannon_core_region,
@@ -782,6 +974,59 @@ def create_regions(world, player: int, active_locations):
     chao_garden_expert_region = create_region(world, player, active_locations, LocationName.chao_garden_expert_region,
                                               chao_garden_expert_region_locations)
 
+    kart_race_beginner_region_locations = []
+    if world.kart_race_checks[player] == 2:
+        kart_race_beginner_region_locations.extend([
+            LocationName.kart_race_beginner_sonic,
+            LocationName.kart_race_beginner_tails,
+            LocationName.kart_race_beginner_knuckles,
+            LocationName.kart_race_beginner_shadow,
+            LocationName.kart_race_beginner_eggman,
+            LocationName.kart_race_beginner_rouge,
+        ])
+    if world.kart_race_checks[player] == 1:
+        kart_race_beginner_region_locations.append(LocationName.kart_race_beginner)
+    kart_race_beginner_region = create_region(world, player, active_locations, LocationName.kart_race_beginner_region,
+                                              kart_race_beginner_region_locations)
+
+    kart_race_standard_region_locations = []
+    if world.kart_race_checks[player] == 2:
+        kart_race_standard_region_locations.extend([
+            LocationName.kart_race_standard_sonic,
+            LocationName.kart_race_standard_tails,
+            LocationName.kart_race_standard_knuckles,
+            LocationName.kart_race_standard_shadow,
+            LocationName.kart_race_standard_eggman,
+            LocationName.kart_race_standard_rouge,
+        ])
+    if world.kart_race_checks[player] == 1:
+        kart_race_standard_region_locations.append(LocationName.kart_race_standard)
+    kart_race_standard_region = create_region(world, player, active_locations, LocationName.kart_race_standard_region,
+                                              kart_race_standard_region_locations)
+
+    kart_race_expert_region_locations = []
+    if world.kart_race_checks[player] == 2:
+        kart_race_expert_region_locations.extend([
+            LocationName.kart_race_expert_sonic,
+            LocationName.kart_race_expert_tails,
+            LocationName.kart_race_expert_knuckles,
+            LocationName.kart_race_expert_shadow,
+            LocationName.kart_race_expert_eggman,
+            LocationName.kart_race_expert_rouge,
+        ])
+    if world.kart_race_checks[player] == 1:
+        kart_race_expert_region_locations.append(LocationName.kart_race_expert)
+    kart_race_expert_region = create_region(world, player, active_locations, LocationName.kart_race_expert_region,
+                                            kart_race_expert_region_locations)
+
+    if world.goal[player] == 3:
+        grand_prix_region_locations = [
+            LocationName.grand_prix,
+        ]
+        grand_prix_region = create_region(world, player, active_locations, LocationName.grand_prix_region,
+                                          grand_prix_region_locations)
+        world.regions += [grand_prix_region]
+
     if world.goal[player] == 0 or world.goal[player] == 2:
         biolizard_region_locations = [
             LocationName.finalhazard,
@@ -838,6 +1083,9 @@ def create_regions(world, player: int, active_locations):
         chao_garden_beginner_region,
         chao_garden_intermediate_region,
         chao_garden_expert_region,
+        kart_race_beginner_region,
+        kart_race_standard_region,
+        kart_race_expert_region,
     ]
 
 
@@ -867,6 +1115,8 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
                                state.has(ItemName.blue_emerald, player)))
         if world.goal[player] == 2:
             connect(world, player, names, LocationName.green_hill_region, LocationName.biolizard_region)
+    elif world.goal[player] == 3:
+        connect(world, player, names, LocationName.kart_race_expert_region, LocationName.grand_prix_region)
 
     for i in range(len(gates[0].gate_levels)):
         connect(world, player, names, LocationName.gate_0_region, shuffleable_regions[gates[0].gate_levels[i]])
@@ -941,26 +1191,50 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_expert_region)
+
+        connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_beginner_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_standard_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_expert_region)
     elif gates_len == 2:
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_expert_region)
+
+        connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_beginner_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_standard_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_expert_region)
     elif gates_len == 3:
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_expert_region)
+
+        connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_beginner_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_standard_region)
+        connect(world, player, names, LocationName.gate_2_region, LocationName.kart_race_expert_region)
     elif gates_len == 4:
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_3_region, LocationName.chao_garden_expert_region)
+
+        connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_beginner_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_standard_region)
+        connect(world, player, names, LocationName.gate_3_region, LocationName.kart_race_expert_region)
     elif gates_len == 5:
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_3_region, LocationName.chao_garden_expert_region)
+
+        connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_beginner_region)
+        connect(world, player, names, LocationName.gate_2_region, LocationName.kart_race_standard_region)
+        connect(world, player, names, LocationName.gate_3_region, LocationName.kart_race_expert_region)
     elif gates_len >= 6:
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_4_region, LocationName.chao_garden_expert_region)
+
+        connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_beginner_region)
+        connect(world, player, names, LocationName.gate_2_region, LocationName.kart_race_standard_region)
+        connect(world, player, names, LocationName.gate_4_region, LocationName.kart_race_expert_region)
 
 
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None):
