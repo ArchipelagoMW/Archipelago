@@ -726,13 +726,12 @@ class VerifyKeys:
     @classmethod
     def verify_keys(cls, data: typing.List[str]):
         if cls.valid_keys:
-            valid_keys = set(cls.valid_keys)
             data = set(data)
             dataset = set(word.casefold() for word in data) if cls.valid_keys_casefold else set(data)
-            extra = dataset - valid_keys
+            extra = dataset - cls.valid_keys
             if extra:
                 raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
-                                f"Allowed keys: {valid_keys}.")
+                                f"Allowed keys: {cls.valid_keys}.")
 
     def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
         if self.convert_name_groups and self.verify_item_name:
