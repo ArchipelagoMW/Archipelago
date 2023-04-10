@@ -10,28 +10,26 @@ def add_location(player: int, loc_name: str, id: int, region: Region) -> None:
     region.locations.append(location)
 
 
-def add_locations(player: int, region: Region) -> None:
+def add_locations(multiworld: MultiWorld, player: int, region: Region) -> None:
     locations = Locations.location_region_mapping.get(region.name, {})
     for location_name, location_data in locations.items():
         location_type = location_data.ltype
         flag = location_data.flag
 
-        opt_orbs = world.orbs_as_checks[player].value
-        opt_bosses = world.bosses_as_checks[player].value
-        opt_paths = world.path_option[player].value
-        opt_num_chests = world.hidden_chests[player].value
-        opt_num_pedestals = world.pedestal_checks[player].value
+        opt_orbs = multiworld.orbs_as_checks[player].value
+        opt_bosses = multiworld.bosses_as_checks[player].value
+        opt_paths = multiworld.path_option[player].value
+        opt_num_chests = multiworld.hidden_chests[player].value
+        opt_num_pedestals = multiworld.pedestal_checks[player].value
 
         is_orb_allowed = location_type == "orb" and flag <= opt_orbs
         is_boss_allowed = location_type == "boss" and flag <= opt_bosses
         if flag == Locations.LocationFlag.none or is_orb_allowed or is_boss_allowed:
-            add_location(player, location_name_num, location_id, region)
-
-        if location_type == "chest" and flag <= opt_paths:
+            add_location(player, location_name, location_data.id, region)
+        elif location_type == "chest" and flag <= opt_paths:
             for i in range(opt_num_chests):
                 add_location(player, f"{location_name} {i+1}", location_data.id + i, region)
-
-        if location_type == "pedestal" and flag <= opt_paths:
+        elif location_type == "pedestal" and flag <= opt_paths:
             for i in range(opt_num_pedestals):
                 add_location(player, f"{location_name} {i+1}", location_data.id + i, region)
 
@@ -39,7 +37,7 @@ def add_locations(player: int, region: Region) -> None:
 # Creates a new Region with the locations found in `location_region_mapping` and adds them to the world.
 def create_region(multiworld: MultiWorld, player: int, region_name: str) -> Region:
     new_region = Region(region_name, player, multiworld)
-    add_locations(player, new_region)
+    add_locations(multiworld, player, new_region)
     return new_region
 
 

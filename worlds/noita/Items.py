@@ -53,7 +53,7 @@ def create_random_items(multiworld: MultiWorld, player: int, random_count: int) 
 
 
 def create_all_items(multiworld: MultiWorld, player: int) -> None:
-    sum_locations = len(world.get_unfilled_locations(player))
+    sum_locations = len(multiworld.get_unfilled_locations(player))
 
     itempool = (
         create_fixed_item_pool()
