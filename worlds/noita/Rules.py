@@ -1,9 +1,9 @@
-from BaseClasses import MultiWorld, CollectionState
 from typing import List, NamedTuple, Set
 
+from BaseClasses import CollectionState, MultiWorld
+from . import Items, Locations
+from .Options import BossesAsChecks, VictoryCondition
 from worlds.generic import Rules as GenericRules
-from . import Locations, Items
-from .Options import VictoryCondition, BossesAsChecks
 
 
 class EntranceLock(NamedTuple):

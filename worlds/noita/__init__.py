@@ -1,6 +1,6 @@
-from BaseClasses import Tutorial, Item
-from worlds.AutoWorld import World, WebWorld
-from . import Options, Items, Locations, Regions, Rules, Events
+from BaseClasses import Item, Tutorial
+from worlds.AutoWorld import WebWorld, World
+from . import Events, Items, Locations, Options, Regions, Rules
 
 
 class NoitaWeb(WebWorld):

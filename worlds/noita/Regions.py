@@ -1,6 +1,7 @@
 # Regions are areas in your game that you travel to.
 from typing import Dict, Set
-from BaseClasses import Region, Entrance, MultiWorld
+
+from BaseClasses import Entrance, MultiWorld, Region
 from . import Locations
 
 

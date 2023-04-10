@@ -1,6 +1,7 @@
 # Locations are specific points that you would obtain an item at.
 from enum import IntEnum
 from typing import Dict, NamedTuple, Optional
+
 from BaseClasses import Location
 
 

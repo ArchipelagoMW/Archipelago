@@ -1,8 +1,9 @@
-import itertools
-from typing import Dict, NamedTuple, Optional, List, Set
-from BaseClasses import Item, ItemClassification, MultiWorld
-from .Options import VictoryCondition, BossesAsChecks
 from collections import Counter
+import itertools
+from typing import Dict, List, NamedTuple, Optional, Set
+
+from BaseClasses import Item, ItemClassification, MultiWorld
+from .Options import BossesAsChecks, VictoryCondition
 
 
 class ItemData(NamedTuple):

@@ -1,5 +1,5 @@
 from typing import Dict
-from Options import Option, DeathLink, DefaultOnToggle, Range, Choice
+from Options import Choice, DeathLink, DefaultOnToggle, Option, Range
 
 
 class PathOption(Choice):
