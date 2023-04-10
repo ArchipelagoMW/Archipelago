@@ -61,6 +61,12 @@ item_table = {
     "Progressive Ground Carapace": ItemData(102 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 4, quantity=3),
     "Progressive Flyer Attack": ItemData(103 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 6, quantity=3),
     "Progressive Flyer Carapace": ItemData(104 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 8, quantity=3),
+    # Upgrade bundle 'number' values are used as indices to get affected 'number's
+    "Progressive Weapon Upgrade": ItemData(105 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 0, quantity=3),
+    "Progressive Armor Upgrade": ItemData(106 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 1, quantity=3),
+    "Progressive Ground Upgrade": ItemData(107 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 2, quantity=3),
+    "Progressive Flyer Upgrade": ItemData(108 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 3, quantity=3),
+    "Progressive Upgrade": ItemData(109 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 4, quantity=3),
     # "Progressive Infantry Weapon": ItemData(100 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 0, quantity=3),
     # "Progressive Infantry Armor": ItemData(102 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 2, quantity=3),
     # "Progressive Vehicle Weapon": ItemData(103 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 4, quantity=3),
@@ -170,6 +176,8 @@ item_table = {
     "Apocalypse (Kerrigan Tier 7)": ItemData(418 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 18, classification=ItemClassification.progression),
     "Spawn Leviathan (Kerrigan Tier 7)": ItemData(419 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 19, classification=ItemClassification.progression),
     "Drop-Pods (Kerrigan Tier 7)": ItemData(420 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 20, classification=ItemClassification.progression),
+    # Handled separately from other abilities
+    "Primal Form (Kerrigan)": ItemData(421 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 0),
     # "Bunker": ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, "Building", 0, classification=ItemClassification.progression),
     # "Missile Turret": ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, "Building", 1, classification=ItemClassification.progression),
     # "Sensor Tower": ItemData(402 + SC2HOTS_ITEM_ID_OFFSET, "Building", 2),
@@ -231,6 +239,8 @@ item_table = {
     "+15 Starting Vespene": ItemData(801 + SC2HOTS_ITEM_ID_OFFSET, "Vespene", 15, quantity=0, classification=ItemClassification.filler),
     "+2 Starting Supply": ItemData(802 + SC2HOTS_ITEM_ID_OFFSET, "Supply", 2, quantity=0, classification=ItemClassification.filler),
 
+    "Transmission Trap": ItemData(803 + SC2HOTS_ITEM_ID_OFFSET, "Trap", 0, quantity=0, classification=ItemClassification.trap)
+
     # "Keystone Piece": ItemData(850 + SC2HOTS_ITEM_ID_OFFSET, "Goal", 0, quantity=0, classification=ItemClassification.progression_skip_balancing)
 }
 
@@ -271,6 +281,9 @@ def get_basic_units(multiworld: MultiWorld, player: int) -> typing.Set[str]:
 item_name_groups = {}
 for item, data in item_table.items():
     item_name_groups.setdefault(data.type, []).append(item)
+    if data.type in ("Mutation", "Strain", "Ability") and '(' in item:
+        short_name = item[:item.find(' (')]
+        item_name_groups[short_name] = [item]
 item_name_groups["Missions"] = ["Beat " + mission_name for mission_name in vanilla_mission_req_table]
 
 filler_items: typing.Tuple[str, ...] = (
@@ -296,6 +309,36 @@ zerg_defense_ratings = {
     "Psi Disruptor": 3
 }
 
+# 'number' values of upgrades for upgrade bundle items
+upgrade_numbers = [
+    {0, 2, 6}, # Weapon
+    {4, 8}, # Armor
+    {0, 2, 4}, # Ground
+    {6, 8}, # Flyer
+    {0, 2, 4, 6, 8} # All
+]
+# Names of upgrades to be included for different options
+upgrade_included_names = [
+    { # Individual Items
+        "Progressive Melee Attack",
+        "Progressive Missile Attack",
+        "Progressive Ground Carapace",
+        "Progressive Flyer Attack",
+        "Progressive Flyer Carapace"
+    },
+    { # Bundle Weapon And Armor
+        "Progressive Weapon Upgrade",
+        "Progressive Armor Upgrade"
+    },
+    { # Bundle Ground And Flyer
+        "Progressive Ground Upgrade",
+        "Progressive Flyer Upgrade"
+    },
+    { # Bundle All
+        "Progressive Upgrade"
+    }
+]
+
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in get_full_item_list().items() if
                                             data.code}
 # Map type to expected int
@@ -315,5 +358,6 @@ type_flaggroups: typing.Dict[str, int] = {
     "Minerals": 6,
     "Vespene": 7,
     "Supply": 8,
-    "Goal": 9
+    "Goal": 9,
+    "Trap": 10
 }

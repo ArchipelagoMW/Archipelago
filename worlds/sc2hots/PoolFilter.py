@@ -282,13 +282,11 @@ class ValidInventory:
 
 
 def filter_items(multiworld: MultiWorld, player: int, mission_req_table: Dict[str, MissionInfo], location_cache: List[Location],
-                 item_pool: List[Item], existing_items: List[Item], locked_items: List[Item]) -> List[Item]:
+                 item_pool: List[Item], existing_items: List[Item], locked_items: List[Item], inventory_size: int) -> List[Item]:
     """
     Returns a semi-randomly pruned set of items based on number of available locations.
     The returned inventory must be capable of logically accessing every location in the world.
     """
-    open_locations = [location for location in location_cache if location.item is None]
-    inventory_size = len(open_locations)
     # has_protoss = bool(PROTOSS_REGIONS.intersection(mission_req_table.keys()))
     mission_requirements = [location.access_rule for location in location_cache]
     valid_inventory = ValidInventory(multiworld, player, item_pool, existing_items, locked_items)

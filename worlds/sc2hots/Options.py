@@ -107,6 +107,54 @@ class UnitsAlwaysHaveUpgrades(DefaultOnToggle):
     display_name = "Units Always Have Upgrades"
 
 
+class GenericUpgradeMissions(Range):
+    """Determines the percentage of missions in the mission order that must be completed before
+    level 1 of all weapon and armor upgrades is unlocked.  Level 2 upgrades require double the amount of missions,
+    and level 3 requires triple the amount.  The required amounts are always rounded down.  
+    If set to 0, upgrades are instead added to the item pool and must be found to be used."""
+    display_name = "Generic Upgrade Missions"
+    range_start = 0
+    range_end = 100
+    default = 0
+
+
+class GenericUpgradeItems(Choice):
+    """Determines how weapon and armor upgrades are split into items.  All options produce 3 levels of each item.  
+    Does nothing if upgrades are unlocked by completed mission counts.
+    
+    Individual Items:  All weapon and armor upgrades are each an item,
+    resulting in 15 total upgrade items.
+    Bundle Weapon And Armor:  All types of weapon upgrades are one item,
+    and both types of armor upgrades are one item,
+    resulting in 6 total items.
+    Bundle Ground And Flyer:  All ground weapon and armor upgrades are one item,
+    and both flyer weapon and armor upgrades are one item,
+    resulting in 6 total items.
+    Bundle All:  All weapon and armor upgrades are one item,
+    resulting in 3 total items."""
+    display_name = "Generic Upgrade Items"
+    option_individual_items = 0
+    option_bundle_weapon_and_armor = 1
+    option_bundle_ground_and_flyer = 2
+    option_bundle_all = 3
+
+
+class GenericUpgradeResearch(Choice):
+    """Determines how weapon and armor upgrades affect missions once unlocked.  
+    
+    Vanilla:  Upgrades must be researched as normal.  
+    Auto In No-Build:  In No-Build missions, upgrades are automatically researched.  
+    In all other missions, upgrades must be researched as normal.  
+    Auto In Build:  In No-Build missions, upgrades are unavailable as normal.  
+    In all other missions, upgrades are automatically researched.  
+    Always Auto:  Upgrades are automatically researched in all missions."""
+    display_name = "Generic Upgrade Research"
+    option_vanilla = 0
+    option_auto_in_no_build = 1
+    option_auto_in_build = 2
+    option_always_auto = 3
+
+
 class IncludeMutations(Range):
     """Determines how many of the 3 mutations for the 7 units that have them can appear."""
     display_name = "Include Mutations"
@@ -137,39 +185,41 @@ class Kerriganless(Choice):
     option_on_without_passives = 2
 
 
-class KerriganLevelsPerCheck(Range):
-    """Determines how many levels Kerrigan gains per checked location.  Kerrigan's maximum level is always 70."""
-    display_name = "Kerrigan Levels Per Check"
+class KerriganChecksPerLevelPack(Range):
+    """Determines how many locations need to be checked for a level pack to be received.  Missions have between 4 and 5 locations each.  
+    Kerrigan's maximum level is always 70."""
+    display_name = "Checks Per Kerrigan Level Pack"
+    range_start = 1
+    range_end = 10
+    default = 1
+
+
+class KerriganCheckLevelPackSize(Range):
+    """Determines how many levels Kerrigan gains when enough locations are checked.  Kerrigan's maximum level is always 70."""
+    display_name = "Check Level Pack Size"
     range_start = 0
     range_end = 5
     default = 0
 
 
-class KerriganChecksPerLevelPacks(Range):
-    """Determines how many locations need to be checked for the above level gain.  Kerrigan's maximum level is always 70."""
-    display_name = "Checks Per Kerrigan Level Packs"
-    range_start = 1
-    range_end = 5
-    default = 1
-
-
-class KerriganTotalLevels(Range):
-    """Determines the sum of the level items in the seed.  This does not change Kerrigan's maximum level of 70."""
-    display_name = "Total Kerrigan Levels"
+class KerriganLevelItemSum(Range):
+    """Determines the sum of the level items in the seed.  This does not affect levels gained from checks.  
+    Kerrigan's maximum level is always 70."""
+    display_name = "Kerrigan Level Item Sum"
     range_start = 0
     range_end = 140
     default = 70
 
 
-class KerriganLevelDistribution(Choice):
+class KerriganLevelItemDistribution(Choice):
     """Determines the amount and size of Kerrigan level items.  Kerrigan's maximum level is always 70.
 
     Vanilla:  Uses the distribution in the vanilla campaign.
     This entails 32 individual levels and 6 packs of varying sizes.
-    This distribution always adds up to 70, ignoring the above setting.
+    This distribution always adds up to 70, ignoring the Level Item Sum setting.
     Smooth:  Uses a custom, condensed distribution of items between sizes 4 and 10,
     intended to fit more levels into settings with little room for filler while keeping some variance in level gains.
-    This distribution always adds up to 70, ignoring the above setting.
+    This distribution always adds up to 70, ignoring the Level Item Sum setting.
     Size 70:  Uses items worth 70 levels each.
     Size 35:  Uses items worth 35 levels each.
     Size 14:  Uses items worth 14 levels each.
@@ -179,7 +229,7 @@ class KerriganLevelDistribution(Choice):
     Size 2:  Uses items worth 2 level eachs.
     Size 1:  Uses individual levels.  As there are not enough locations in the game for this distribution,
     this will result in a greatly reduced total level, and is likely to remove many other items."""
-    display_name = "Kerrigan Level Distribution"
+    display_name = "Kerrigan Level Item Distribution"
     option_vanilla = 0
     option_smooth = 1
     option_size_70 = 2
@@ -219,13 +269,31 @@ class KerriganPrimalStatus(Choice):
     Always Human:  Kerrigan is always human.
     Level 35:  Kerrigan is human until reaching level 35, and zerg thereafter.
     Half Completion:  Kerrigan is human until half of the missions in the seed are completed, 
-    and zerg thereafter."""
+    and zerg thereafter.
+    Item:  Kerrigan's Primal Form is an item. She is human until it is found, and zerg thereafter."""
     display_name = "Kerrigan Primal Status"
     option_vanilla = 0
     option_always_zerg = 1
     option_always_human = 2
     option_level_35 = 3
     option_half_completion = 4
+    option_item = 5
+
+
+class TrapPercentage(Range):
+    """Percentage of the item pool to be replaced with Transmission Traps."""
+    display_name = "Trap Percentage"
+    range_start = 0
+    range_end = 75
+    default = 0
+
+
+class TransmissionsPerTrap(Range):
+    """Number of transmissions played per Transmission Trap"""
+    display_name = "Transmissions per Trap"
+    range_start = 0
+    range_end = 10
+    default = 1
 
 
 # class UpgradeBonus(Choice):
@@ -288,16 +356,21 @@ sc2hots_options: Dict[str, Option] = {
     "early_unit": EarlyUnit,
     "required_tactics": RequiredTactics,
     "units_always_have_upgrades": UnitsAlwaysHaveUpgrades,
+    "generic_upgrade_missions": GenericUpgradeMissions,
+    "generic_upgrade_items": GenericUpgradeItems,
+    "generic_upgrade_research": GenericUpgradeResearch,
     "include_mutations": IncludeMutations,
     "include_strains": IncludeStrains,
     "kerriganless": Kerriganless,
-    "kerrigan_levels_per_check": KerriganLevelsPerCheck,
-    "kerrigan_checks_per_level_pack": KerriganChecksPerLevelPacks,
-    "kerrigan_total_levels": KerriganTotalLevels,
-    "kerrigan_level_distribution": KerriganLevelDistribution,
+    "kerrigan_checks_per_level_pack": KerriganChecksPerLevelPack,
+    "kerrigan_check_level_pack_size": KerriganCheckLevelPackSize,
+    "kerrigan_level_item_sum": KerriganLevelItemSum,
+    "kerrigan_level_item_distribution": KerriganLevelItemDistribution,
     "include_all_kerrigan_abilities": IncludeAllKerriganAbilities,
     "start_primary_abilities": StartPrimaryAbilities,
     "kerrigan_primal_status": KerriganPrimalStatus,
+    "trap_percentage": TrapPercentage,
+    "transmissions_per_trap": TransmissionsPerTrap,
     # "upgrade_bonus": UpgradeBonus,
     # "bunker_upgrade": BunkerUpgrade,
     # "all_in_map": AllInMap,

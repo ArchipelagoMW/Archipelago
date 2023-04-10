@@ -4,7 +4,7 @@ from typing import List, Set, Tuple, Dict
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 from .Items import StarcraftWoLItem, filler_items, item_name_groups, get_item_table, get_full_item_list, \
-    get_basic_units
+    get_basic_units, ItemData, upgrade_included_names
 from .Locations import get_locations
 from .Regions import create_regions
 from .Options import sc2wol_options, get_option_value
@@ -175,8 +175,17 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[s
     # YAML items
     yaml_locked_items = get_option_value(multiworld, player, 'locked_items')
 
+    # Adjust generic upgrade availability based on options
+    include_upgrades = get_option_value(multiworld, player, 'generic_upgrade_missions') == 0
+    upgrade_items = get_option_value(multiworld, player, 'generic_upgrade_items')
+
+    def item_allowed(name: str, data: ItemData) -> bool:
+        return name not in excluded_items and \
+            (data.type != "Upgrade" or (include_upgrades and \
+            name in upgrade_included_names[upgrade_items]))
+
     for name, data in get_item_table(multiworld, player).items():
-        if name not in excluded_items:
+        if item_allowed(name, data):
             for _ in range(data.quantity):
                 item = create_item_with_correct_settings(player, name)
                 if name in yaml_locked_items:

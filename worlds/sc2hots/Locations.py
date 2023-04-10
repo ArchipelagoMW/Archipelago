@@ -36,6 +36,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2hots_has_basic_kerrigan(multiworld, player) or kerriganless),
         LocationData("Back in the Saddle", "Back in the Saddle: Kinetic Blast", SC2HOTS_LOC_ID_OFFSET + 202),
         LocationData("Back in the Saddle", "Back in the Saddle: Crushing Grip", SC2HOTS_LOC_ID_OFFSET + 203),
+        LocationData("Back in the Saddle", "Back in the Saddle: Reach the Sublevel", SC2HOTS_LOC_ID_OFFSET + 204),
         LocationData("Back in the Saddle", "Back in the Saddle: Defend the Tram", SC2HOTS_LOC_ID_OFFSET + 201,
                      lambda state: state._sc2hots_has_basic_kerrigan(multiworld, player) or kerriganless),
         LocationData("Rendezvous", "Rendezvous: Victory", SC2HOTS_LOC_ID_OFFSET + 300,
@@ -67,6 +68,8 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) or logic_level > 0),
         LocationData("Shoot the Messenger", "Shoot the Messenger: West Stasis Chamber", SC2HOTS_LOC_ID_OFFSET + 503,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Shoot the Messenger", "Shoot the Messenger: Destroy 4 Shuttles", SC2HOTS_LOC_ID_OFFSET + 504,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and state._sc2hots_has_minimal_antiair(multiworld, player)),
         LocationData("Enemy Within", "Enemy Within: Victory", SC2HOTS_LOC_ID_OFFSET + 600),
         LocationData("Enemy Within", "Enemy Within: First Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 602),
         LocationData("Enemy Within", "Enemy Within: Second Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 603),
@@ -89,6 +92,10 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                                    state._sc2hots_has_minimal_antiair(multiworld, player) and
                                    state._sc2hots_can_spread_creep(multiworld, player)),
         LocationData("Fire in the Sky", "Fire in the Sky: South Biomass", SC2HOTS_LOC_ID_OFFSET + 803,
+                     lambda state: state._sc2hots_has_basic_comp(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player) and
+                                   state._sc2hots_can_spread_creep(multiworld, player)),
+        LocationData("Fire in the Sky", "Fire in the Sky: Destroy 3 Gorgons", SC2HOTS_LOC_ID_OFFSET + 804,
                      lambda state: state._sc2hots_has_basic_comp(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player) and
                                    state._sc2hots_can_spread_creep(multiworld, player)),
@@ -120,10 +127,16 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("The Crucible", "The Crucible: Victory", SC2HOTS_LOC_ID_OFFSET + 1100,
                      lambda state: state._sc2hots_has_competent_defense(multiworld, player) and
                                    state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("The Crucible", "The Crucible: Reach the Pool", SC2HOTS_LOC_ID_OFFSET + 1102),
+        LocationData("The Crucible", "The Crucible: 15 Minutes Remaining", SC2HOTS_LOC_ID_OFFSET + 1103,
+                     lambda state: state._sc2hots_has_competent_defense(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("The Crucible", "The Crucible: 5 Minutes Remaining", SC2HOTS_LOC_ID_OFFSET + 1104,
+                     lambda state: state._sc2hots_has_competent_defense(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
         LocationData("The Crucible", "The Crucible: Tyrannozor", SC2HOTS_LOC_ID_OFFSET + 1101,
                      lambda state: state._sc2hots_has_competent_defense(multiworld, player) and
                                    state._sc2hots_has_good_antiair(multiworld, player)),
-        LocationData("The Crucible", "The Crucible: Reach the Pool", SC2HOTS_LOC_ID_OFFSET + 1102),
         LocationData("Supreme", "Supreme: Victory", SC2HOTS_LOC_ID_OFFSET + 1200),
         LocationData("Supreme", "Supreme: First Relic", SC2HOTS_LOC_ID_OFFSET + 1201),
         LocationData("Supreme", "Supreme: Second Relic", SC2HOTS_LOC_ID_OFFSET + 1202),
@@ -152,6 +165,9 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player)),
         LocationData("Hand of Darkness", "Hand of Darkness: South Brutalisk", SC2HOTS_LOC_ID_OFFSET + 1402,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Hand of Darkness", "Hand of Darkness: Kill 4 Hybrid", SC2HOTS_LOC_ID_OFFSET + 1403,
                      lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player)),
         LocationData("Phantoms of the Void", "Phantoms of the Void: Victory", SC2HOTS_LOC_ID_OFFSET + 1500,

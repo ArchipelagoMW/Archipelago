@@ -5,7 +5,7 @@ from math import floor, ceil
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 from .Items import StarcraftHotSItem, item_table, filler_items, item_name_groups, get_full_item_list, \
-    get_basic_units
+    get_basic_units, upgrade_included_names, ItemData
 from .Locations import get_locations
 from .Regions import create_regions
 from .Options import sc2hots_options, get_option_value
@@ -111,23 +111,46 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
     for item in multiworld.precollected_items[player]:
         excluded_items.add(item.name)
     locked_items: Set[str] = set(get_option_value(multiworld, player, 'locked_items'))
-    # pick a random mutation & strain for each unit and exclude the rest
+    # Starter items are also excluded items
+    starter_items: Set[str] = set(get_option_value(multiworld, player, 'start_inventory'))
+    guaranteed_items = locked_items.union(starter_items)
     mutation_count = get_option_value(multiworld, player, "include_mutations")
     strain_count = get_option_value(multiworld, player, "include_strains")
+
+    # Exclude Primal Form item if option is not set
+    if get_option_value(multiworld, player, "kerrigan_primal_status") != 5:
+        excluded_items.add("Primal Form (Kerrigan)")
+
+    # Ensure no item is both guaranteed and excluded
+    invalid_items = excluded_items.intersection(locked_items)
+    invalid_count = len(invalid_items)
+    # Don't count starter items that can appear multiple times
+    invalid_count -= len([item for item in starter_items.intersection(locked_items) if item_table[item].quantity != 1])
+    if invalid_count > 0:
+        raise Exception(f"{invalid_count} item{'s are' if invalid_count > 1 else ' is'} both locked and excluded from generation.  Please adjust your excluded items and locked items.")
+
+    # Ensure no Kerrigan ability tier has two locked actives
+    # Should only be called when actives are relevant to the player
+    def test_kerrigan_actives(tier: int):
+        actives_amount = len(guaranteed_items.intersection(KERRIGAN_ACTIVES[tier]))
+        if actives_amount > 1:
+            raise Exception(f"Kerrigan Ability Tier {tier + 1} has {actives_amount} guaranteed active abilities.  The maximum allowed is 1.  Please adjust your locked items and start inventory.")
 
     def smart_exclude(item_choices: Set[str], choices_to_keep: int):
         expected_choices = len(item_choices)
         if expected_choices == 0:
             return
         item_choices = set(item_choices)
+        starter_choices = item_choices.intersection(starter_items)
         excluded_choices = item_choices.intersection(excluded_items)
         item_choices.difference_update(excluded_choices)
         item_choices.difference_update(locked_items)
         candidates = sorted(item_choices)
-        exclude_amount = min(expected_choices - choices_to_keep - len(excluded_choices), len(candidates))
+        exclude_amount = min(expected_choices - choices_to_keep - len(excluded_choices) + len(starter_choices), len(candidates))
         if exclude_amount > 0:
             excluded_items.update(multiworld.random.sample(candidates, exclude_amount))
 
+    # pick a random mutation & strain for each unit and exclude the rest
     for name in UPGRADABLE_ITEMS:
         mutations = {child_name for child_name, item in item_table.items()
                    if item.parent_item == name and item.type == "Mutation"}
@@ -154,6 +177,7 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
                 if kerriganless == 1:
                     smart_exclude(KERRIGAN_PASSIVES[tier], 0)
                 else:
+                    test_kerrigan_actives(tier)
                     smart_exclude(KERRIGAN_ACTIVES[tier].union(KERRIGAN_PASSIVES[tier]), 1)
             # ensure Kerrigan has an active T1 or T2 ability for no-build missions on Standard
             if get_option_value(multiworld, player, "required_tactics") == 0 and get_option_value(multiworld, player, "shuffle_no_build"):
@@ -166,6 +190,7 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
                     excluded_items.remove(active_ability)
         elif kerriganless == 0:  # if Kerrigan exists, pick a random active ability per tier and remove the other active abilities
             for tier in range(7):
+                test_kerrigan_actives(tier)
                 smart_exclude(KERRIGAN_ACTIVES[tier], 1)
 
     return excluded_items
@@ -177,7 +202,9 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
     if get_option_value(multiworld, player, "early_unit"):
         local_basic_unit = sorted(item for item in get_basic_units(multiworld, player) if item not in non_local_items and item not in excluded_items)
         if not local_basic_unit:
-            raise Exception("At least one basic unit must be local")
+            local_basic_unit = sorted(item for item in get_basic_units(multiworld, player) if item not in excluded_items)
+            if not local_basic_unit:
+                raise Exception("Early Unit: At least one basic unit must be included")
 
         # The first world should also be the starting world
         first_mission = list(multiworld.worlds[player].mission_req_table)[0]
@@ -237,8 +264,18 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[s
     # YAML items
     yaml_locked_items = get_option_value(multiworld, player, 'locked_items')
 
+    # Adjust generic upgrade availability based on options
+    include_upgrades = get_option_value(multiworld, player, 'generic_upgrade_missions') == 0
+    upgrade_items = get_option_value(multiworld, player, 'generic_upgrade_items')
+
+    def item_allowed(name: str, data: ItemData) -> bool:
+        return name not in excluded_items and \
+            (data.type != "Upgrade" or (include_upgrades and \
+            name in upgrade_included_names[upgrade_items]))
+
     for name, data in item_table.items():
-        if name not in excluded_items:
+        # if name not in excluded_items:
+        if item_allowed(name, data):
             for _ in range(data.quantity):
                 item = create_item_with_correct_settings(player, name)
                 if name in yaml_locked_items:
@@ -257,8 +294,14 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[s
             pool.remove(invalid_upgrade)
     
     fill_pool_with_kerrigan_levels(multiworld, player, pool)
+    inventory_size = len([location for location in location_cache if location.item is None])
+    trap_count = int(inventory_size * get_option_value(multiworld, player, "trap_percentage") / 100)
+    inventory_size -= trap_count
+    filtered_pool = filter_items(multiworld, player, mission_req_table, location_cache,
+                                 pool, existing_items, locked_items, inventory_size)
+    for _ in range(trap_count):
+        filtered_pool.append(create_item_with_correct_settings(player, "Transmission Trap"))
 
-    filtered_pool = filter_items(multiworld, player, mission_req_table, location_cache, pool, existing_items, locked_items)
     return filtered_pool
 
 
@@ -277,7 +320,7 @@ def create_item_with_correct_settings(player: int, name: str) -> Item:
     return item
 
 def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_pool: List[Item]):
-    total_levels = get_option_value(multiworld, player, "kerrigan_total_levels")
+    total_levels = get_option_value(multiworld, player, "kerrigan_level_item_sum")
     if get_option_value(multiworld, player, "kerriganless") > 0 \
         or total_levels == 0:
         return
@@ -290,7 +333,7 @@ def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_poo
             item_pool.append(create_item_with_correct_settings(player, name))
 
     sizes = [70, 35, 14, 10, 7, 5, 2, 1]
-    option = get_option_value(multiworld, player, "kerrigan_level_distribution")
+    option = get_option_value(multiworld, player, "kerrigan_level_item_distribution")
     if option < 2:
         distribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         if option == 0: # vanilla

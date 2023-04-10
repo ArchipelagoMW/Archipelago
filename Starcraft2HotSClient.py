@@ -32,9 +32,9 @@ from sc2.data import Race
 from sc2.main import run_game
 from sc2.player import Bot
 from worlds.sc2hots import SC2HotSWorld
-from worlds.sc2hots.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups
+from worlds.sc2hots.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups, upgrade_numbers
 from worlds.sc2hots.Locations import SC2HOTS_LOC_ID_OFFSET
-from worlds.sc2hots.MissionTables import lookup_id_to_mission
+from worlds.sc2hots.MissionTables import lookup_id_to_mission, no_build_regions_list
 from worlds.sc2hots.Regions import MissionInfo
 
 import colorama
@@ -210,24 +210,34 @@ class SC2Context(CommonContext):
     command_processor = StarcraftClientProcessor
     game = "Starcraft 2 Heart of the Swarm"
     items_handling = 0b111
-    difficulty = -1
-    mission_order = 0
-    player_color = 6
-    player_color_primal = 4
     mission_req_table: typing.Dict[str, MissionInfo] = {}
     final_mission: int = 20
     announcements = queue.Queue()
     sc2_run_task: typing.Optional[asyncio.Task] = None
-    missions_unlocked: bool = False  # allow launching missions ignoring requirements
     current_tooltip = None
     last_loc_list = None
-    difficulty_override = -1
-    kerriganless = 0
-    kerrigan_primal_status = 0
-    levels_per_check = 0
-    checks_per_level = 1
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
     last_bot: typing.Optional[ArchipelagoBot] = None
+    temp_items = queue.Queue()
+    accept_traps = False
+
+    # Client options
+    missions_unlocked: bool = False  # allow launching missions ignoring requirements
+    difficulty_override = -1
+
+    # Slot options
+    difficulty = -1
+    mission_order = 0
+    player_color = 6
+    player_color_primal = 4
+    kerriganless = 0
+    kerrigan_primal_status = 0
+    generic_upgrade_missions = 0
+    generic_upgrade_items = 0
+    generic_upgrade_research = 0
+    levels_per_check = 0
+    checks_per_level = 1
+    transmissions_per_trap = 1
 
     def __init__(self, *args, **kwargs):
         super(SC2Context, self).__init__(*args, **kwargs)
@@ -256,9 +266,13 @@ class SC2Context(CommonContext):
             self.player_color_primal = args["slot_data"].get("player_color_primal", 4)
             if args["slot_data"].get("kerriganless", 0) > 0:
                 self.kerriganless = 1
-            self.levels_per_check = args["slot_data"].get("kerrigan_levels_per_check", 0)
+            self.generic_upgrade_missions = args["slot_data"].get("generic_upgrade_missions", 0)
+            self.generic_upgrade_items = args["slot_data"].get("generic_upgrade_items", 0)
+            self.generic_upgrade_research = args["slot_data"].get("generic_upgrade_research", 0)
+            self.levels_per_check = args["slot_data"].get("kerrigan_check_level_pack_size", 0)
             self.checks_per_level = args["slot_data"].get("kerrigan_checks_per_level_pack", 1)
             self.kerrigan_primal_status = args["slot_data"].get("kerrigan_primal_status", 0)
+            self.transmissions_per_trap = args["slot_data"].get("transmissions_per_trap", 1)
 
             self.build_location_to_mission_mapping()
 
@@ -272,7 +286,20 @@ class SC2Context(CommonContext):
             # elif maps_present:
             #     sc2_logger.warning("NOTICE: Your map files may be outdated (version number not found). "
             #                        "Run /download_data to update them.")
-
+        
+        elif cmd in {"ReceivedItems"}:
+            # Store traps to send once a game is running
+            if self.accept_traps:
+                for item in args["items"]:
+                    item_name = lookup_id_to_name[item.item]
+                    item_data = item_table[item_name]
+                    if item_data.type == "Trap":
+                        print("adding trap")
+                        self.temp_items.put(item_name)
+        elif cmd in {"PrintJSON"}:
+            # Hack to ignore traps sent when connecting
+            # Ignores all duplicate traps and all traps received while client was not connected
+            self.accept_traps = True
 
     def on_print_json(self, args: dict):
         # goes to this world
@@ -577,11 +604,19 @@ def calculate_items(ctx: SC2Context) -> typing.List[int]:
 
         # exists exactly once
         if item_data.quantity == 1:
+            # Skip option item
+            if name == "Primal Form (Kerrigan)":
+                continue
             accumulators[type_flaggroups[item_data.type]] |= 1 << item_data.number
 
         # exists multiple times
         elif item_data.type == "Upgrade":
-            accumulators[type_flaggroups[item_data.type]] += 1 << item_data.number
+            flaggroup = type_flaggroups[item_data.type]
+            if ctx.generic_upgrade_items == 0:
+                accumulators[flaggroup] += 1 << item_data.number
+            else:
+                for bundled_number in upgrade_numbers[item_data.number]:
+                    accumulators[flaggroup] += 1 << bundled_number
 
         # sum
         else:
@@ -590,32 +625,74 @@ def calculate_items(ctx: SC2Context) -> typing.List[int]:
     # Kerrigan levels per check
     accumulators[type_flaggroups["Level"]] += (len(ctx.checked_locations) // ctx.checks_per_level) * ctx.levels_per_check
 
+    # Upgrades from completed missions
+    if ctx.generic_upgrade_missions > 0:
+        upgrade_flaggroup = type_flaggroups["Upgrade"]
+        num_missions = ctx.generic_upgrade_missions * len(ctx.mission_req_table)
+        amounts = [
+            num_missions // 100,
+            2 * num_missions // 100,
+            3 * num_missions // 100
+        ]
+        upgrade_count = 0
+        completed = len([id for id in ctx.mission_id_to_location_ids if SC2HOTS_LOC_ID_OFFSET + victory_modulo * id in ctx.checked_locations])
+        for amount in amounts:
+            if completed >= amount:
+                upgrade_count += 1
+        # Equivalent to "Progressive Upgrade" item
+        for bundled_number in upgrade_numbers[4]:
+            accumulators[upgrade_flaggroup] += upgrade_count << bundled_number
+
     return accumulators
 
-def calculate_options(ctx: SC2Context, items: typing.List[int]) -> int:
+
+def kerrigan_level_adjusted(ctx: SC2Context, items: typing.List[int], checks: int, extra_checks: int) -> int:
+    value = items[type_flaggroups["Level"]]
+    value -= (checks // ctx.checks_per_level) * ctx.levels_per_check
+    value += ((checks + extra_checks) // ctx.checks_per_level) * ctx.levels_per_check
+    return value
+
+def calculate_options(ctx: SC2Context, items: typing.List[int], mission_id: int) -> int:
     options = 0
+
+    # Bit 0
     if ctx.kerriganless > 0:
         options |= 1 << 0
     
+    # Bits 1, 2
     if ctx.kerrigan_primal_status > 0:
         options |= 1 << 1
-        primal = False
-        match ctx.kerrigan_primal_status:
-            case 1: # Always Zerg
-                primal = True
-            case 2: # Always Human
-                primal = False
-            case 3: # Level 35
-                primal = items[type_flaggroups["Level"]] >= 35
-            case 4: # Half Completion
-                total_missions = len(ctx.mission_id_to_location_ids)
-                completed = len([(mission_id * victory_modulo + SC2HOTS_LOC_ID_OFFSET) in ctx.checked_locations
-                    for mission_id in ctx.mission_id_to_location_ids])
-                primal = completed >= (total_missions / 2)
-        if primal:
+        if kerrigan_primal(ctx, items):
             options |= 1 << 2
     
+    # Bit 3
+    if ctx.generic_upgrade_research == 3:
+        options |= 1 << 3
+    elif ctx.generic_upgrade_research > 0:
+        mission_name = lookup_id_to_mission[mission_id]
+        if (mission_name in no_build_regions_list) == (ctx.generic_upgrade_research == 1):
+            options |= 1 << 3
+
     return options
+
+
+def kerrigan_primal(ctx: SC2Context, items: typing.List[int]) -> bool:
+    match ctx.kerrigan_primal_status:
+        case 1: # Always Zerg
+            return True
+        case 2: # Always Human
+            return False
+        case 3: # Level 35
+            return items[type_flaggroups["Level"]] >= 35
+        case 4: # Half Completion
+            total_missions = len(ctx.mission_id_to_location_ids)
+            completed = len([(mission_id * victory_modulo + SC2HOTS_LOC_ID_OFFSET) in ctx.checked_locations
+                for mission_id in ctx.mission_id_to_location_ids])
+            return completed >= (total_missions / 2)
+        case 5: # Item
+            codes = [item.item for item in ctx.items_received]
+            return item_table["Primal Form (Kerrigan)"].code in codes
+    return False
 
 
 def calc_difficulty(difficulty):
@@ -650,6 +727,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     can_read_game = False
 
     last_received_update: int = 0
+    last_kerrigan_level: int = 0
 
     def __init__(self, ctx: SC2Context, mission_id):
         self.setup_done = False
@@ -669,7 +747,8 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
         if not self.setup_done:
             self.setup_done = True
             start_items = calculate_items(self.ctx)
-            options = calculate_options(self.ctx, start_items)
+            self.last_kerrigan_level = start_items[type_flaggroups["Level"]]
+            options = calculate_options(self.ctx, start_items, self.mission_id)
             if self.ctx.difficulty_override >= 0:
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
             else:
@@ -682,11 +761,6 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
             self.last_received_update = len(self.ctx.items_received)
 
         else:
-            if not self.ctx.announcements.empty():
-                message = self.ctx.announcements.get(timeout=1)
-                await self.chat_send("SendMessage " + message)
-                self.ctx.announcements.task_done()
-
             # Archipelago reads the health
             for unit in self.all_own_units():
                 if unit.health_max == 38281:
@@ -699,9 +773,18 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
 
             if self.last_received_update < len(self.ctx.items_received):
                 current_items = calculate_items(self.ctx)
-                await self.chat_send("UpdateTech {} {} {} {} {} {}".format(
+                self.last_kerrigan_level = current_items[type_flaggroups["Level"]]
+                primal = 1 if kerrigan_primal(self.ctx, current_items) else 0
+                await self.chat_send("UpdateTech {} {} {} {} {} {} {}".format(
                     current_items[0], current_items[1], current_items[2], current_items[3], current_items[4],
-                    current_items[5]))
+                    current_items[5], primal))
+                # Storing temporary items -- moved to SC2Context
+                # new_items = self.ctx.items_received[self.last_received_update:]
+                # for network_item in new_items:
+                #     name: str = lookup_id_to_name[network_item.item]
+                #     item_data: ItemData = item_table[name]
+                #     if item_data.type == "Trap":
+                #         self.ctx.temp_items.put(name)
                 self.last_received_update = len(self.ctx.items_received)
 
             if game_state & 1:
@@ -709,7 +792,17 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     print("Archipelago Connected")
                     self.game_running = True
 
+                if not self.ctx.announcements.empty():
+                    message = self.ctx.announcements.get(timeout=1)
+                    await self.chat_send("SendMessage " + message)
+                    self.ctx.announcements.task_done()
+
                 if self.can_read_game:
+                    # Sending temporary items
+                    if not self.ctx.temp_items.empty() and not self.mission_completed:
+                        item_name = self.ctx.temp_items.get(timeout=1)
+                        if item_name == "Transmission Trap":
+                            await self.chat_send(f'Transmission {self.ctx.transmissions_per_trap}')
                     if game_state & (1 << 1) and not self.mission_completed:
                         if self.mission_id != self.ctx.final_mission:
                             print("Mission Completed")
@@ -724,16 +817,22 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
 
                     for x, completed in enumerate(self.boni):
                         if not completed and game_state & (1 << (x + 2)):
+                            # Store check amount ahead of time to avoid server changing value mid calculation
+                            checks = len(self.ctx.checked_locations)
                             await self.ctx.send_msgs(
                                 [{"cmd": 'LocationChecks',
                                   "locations": [SC2HOTS_LOC_ID_OFFSET + victory_modulo * self.mission_id + x + 1]}])
                             self.boni[x] = True
                             # Kerrigan level needs manual updating if the check's receiver isn't the local player
-                            if self.last_received_update == len(self.ctx.items_received):
+                            if self.ctx.levels_per_check > 0 and self.last_received_update == len(self.ctx.items_received):
                                 current_items = calculate_items(self.ctx)
-                                await self.chat_send("UpdateTech {} {} {} {} {} {}".format(
-                                    current_items[0], current_items[1], current_items[2], current_items[3], current_items[4],
-                                    current_items[5]))
+                                new_level = kerrigan_level_adjusted(self.ctx, current_items, checks, 1)
+                                if self.last_kerrigan_level != new_level:
+                                    self.last_kerrigan_level = new_level
+                                    primal = 1 if kerrigan_primal(self.ctx, current_items) else 0
+                                    await self.chat_send("UpdateTech {} {} {} {} {} {} {}".format(
+                                        current_items[0], current_items[1], current_items[2], current_items[3], current_items[4],
+                                        new_level, primal))
 
                 else:
                     await self.chat_send("LostConnection - Lost connection to game.")

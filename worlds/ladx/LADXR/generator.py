@@ -259,9 +259,9 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
         mw = None
         if spot.item_owner != spot.location_owner:
             mw = spot.item_owner
-            if mw > 255:
-                # Don't torture the game with higher slot numbers
-                mw = 255
+            if mw > 100:
+                # There are only 101 player name slots (99 + "The Server" + "another world"), so don't use more than that
+                mw = 100
         spot.patch(rom, spot.item, multiworld=mw)
     patches.enemies.changeBosses(rom, world_setup.boss_mapping)
     patches.enemies.changeMiniBosses(rom, world_setup.miniboss_mapping)

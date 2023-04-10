@@ -119,6 +119,38 @@ class UnitsAlwaysHaveUpgrades(DefaultOnToggle):
     display_name = "Units Always Have Upgrades"
 
 
+class GenericUpgradeMissions(Range):
+    """Determines the percentage of missions in the mission order that must be completed before
+    level 1 of all weapon and armor upgrades is unlocked.  Level 2 upgrades require double the amount of missions,
+    and level 3 requires triple the amount.  The required amounts are always rounded down.
+    If set to 0, upgrades are instead added to the item pool and must be found to be used."""
+    display_name = "Generic Upgrade Missions"
+    range_start = 0
+    range_end = 100
+    default = 0
+
+
+class GenericUpgradeItems(Choice):
+    """Determines how weapon and armor upgrades are split into items.  All options produce 3 levels of each item.
+    Does nothing if upgrades are unlocked by completed mission counts.
+
+    Individual Items:  All weapon and armor upgrades are each an item,
+    resulting in 18 total upgrade items.
+    Bundle Weapon And Armor:  All types of weapon upgrades are one item,
+    and all types of armor upgrades are one item,
+    resulting in 6 total items.
+    Bundle Unit Class:  Weapon and armor upgrades are merged,
+    but Infantry, Vehicle, and Starship upgrades are bundled separately,
+    resulting in 9 total items.
+    Bundle All:  All weapon and armor upgrades are one item,
+    resulting in 3 total items."""
+    display_name = "Generic Upgrade Items"
+    option_individual_items = 0
+    option_bundle_weapon_and_armor = 1
+    option_bundle_unit_class = 2
+    option_bundle_all = 3
+
+
 class LockedItems(ItemSet):
     """Guarantees that these items will be unlockable"""
     display_name = "Locked Items"
@@ -159,6 +191,8 @@ sc2wol_options: Dict[str, Option] = {
     "early_unit": EarlyUnit,
     "required_tactics": RequiredTactics,
     "units_always_have_upgrades": UnitsAlwaysHaveUpgrades,
+    "generic_upgrade_missions": GenericUpgradeMissions,
+    "generic_upgrade_items": GenericUpgradeItems,
     "locked_items": LockedItems,
     "excluded_items": ExcludedItems,
     "excluded_missions": ExcludedMissions,

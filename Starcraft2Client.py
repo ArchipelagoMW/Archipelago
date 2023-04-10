@@ -32,7 +32,7 @@ from sc2.data import Race
 from sc2.main import run_game
 from sc2.player import Bot
 from worlds.sc2wol import SC2WoLWorld
-from worlds.sc2wol.Items import lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups
+from worlds.sc2wol.Items import lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups, upgrade_numbers
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
 from worlds.sc2wol.MissionTables import lookup_id_to_mission
 from worlds.sc2wol.Regions import MissionInfo
@@ -192,6 +192,8 @@ class SC2Context(CommonContext):
     announcements = queue.Queue()
     sc2_run_task: typing.Optional[asyncio.Task] = None
     missions_unlocked: bool = False  # allow launching missions ignoring requirements
+    generic_upgrade_missions = 0
+    generic_upgrade_items = 0
     current_tooltip = None
     last_loc_list = None
     difficulty_override = -1
@@ -223,6 +225,8 @@ class SC2Context(CommonContext):
             self.mission_order = args["slot_data"].get("mission_order", 0)
             self.final_mission = args["slot_data"].get("final_mission", 29)
             self.player_color = args["slot_data"].get("player_color", 2)
+            self.generic_upgrade_missions = args["slot_data"].get("generic_upgrade_missions", 0)
+            self.generic_upgrade_items = args["slot_data"].get("generic_upgrade_items", 0)
 
             self.build_location_to_mission_mapping()
 
@@ -530,7 +534,8 @@ wol_default_category_names = [
 ]
 
 
-def calculate_items(items: typing.List[NetworkItem]) -> typing.List[int]:
+def calculate_items(ctx: SC2Context) -> typing.List[int]:
+    items = ctx.items_received
     network_item: NetworkItem
     accumulators: typing.List[int] = [0 for _ in type_flaggroups]
 
@@ -544,11 +549,34 @@ def calculate_items(items: typing.List[NetworkItem]) -> typing.List[int]:
 
         # exists multiple times
         elif item_data.type == "Upgrade":
-            accumulators[type_flaggroups[item_data.type]] += 1 << item_data.number
+            flaggroup = type_flaggroups[item_data.type]
+            if ctx.generic_upgrade_items == 0:
+                accumulators[flaggroup] += 1 << item_data.number
+            else:
+                for bundled_number in upgrade_numbers[item_data.number]:
+                    accumulators[flaggroup] += 1 << bundled_number
 
         # sum
         else:
             accumulators[type_flaggroups[item_data.type]] += item_data.number
+
+    # Upgrades from completed missions
+    if ctx.generic_upgrade_missions > 0:
+        upgrade_flaggroup = type_flaggroups["Upgrade"]
+        num_missions = ctx.generic_upgrade_missions * len(ctx.mission_req_table)
+        amounts = [
+            num_missions // 100,
+            2 * num_missions // 100,
+            3 * num_missions // 100
+        ]
+        upgrade_count = 0
+        completed = len([id for id in ctx.mission_id_to_location_ids if SC2WOL_LOC_ID_OFFSET + victory_modulo * id in ctx.checked_locations])
+        for amount in amounts:
+            if completed >= amount:
+                upgrade_count += 1
+        # Equivalent to "Progressive Upgrade" item
+        for bundled_number in upgrade_numbers[5]:
+            accumulators[upgrade_flaggroup] += upgrade_count << bundled_number
 
     return accumulators
 
@@ -602,7 +630,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
         game_state = 0
         if not self.setup_done:
             self.setup_done = True
-            start_items = calculate_items(self.ctx.items_received)
+            start_items = calculate_items(self.ctx)
             if self.ctx.difficulty_override >= 0:
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
             else:
@@ -632,7 +660,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                                      "Starcraft 2 (This is likely a map issue)")
 
             if self.last_received_update < len(self.ctx.items_received):
-                current_items = calculate_items(self.ctx.items_received)
+                current_items = calculate_items(self.ctx)
                 await self.chat_send("UpdateTech {} {} {} {} {} {} {} {}".format(
                     current_items[0], current_items[1], current_items[2], current_items[3], current_items[4],
                     current_items[5], current_items[6], current_items[7]))
