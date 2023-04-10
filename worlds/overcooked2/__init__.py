@@ -4,7 +4,7 @@ from typing import Callable, Dict, Any, List, Optional
 from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, Tutorial, LocationProgressType
 from worlds.AutoWorld import World, WebWorld
 
-from .Overcooked2Levels import Overcooked2Level, Overcooked2GenericLevel, ITEMS_TO_EXCLUDE_IF_NO_DLC
+from .Overcooked2Levels import Overcooked2Dlc, Overcooked2Level, Overcooked2GenericLevel, ITEMS_TO_EXCLUDE_IF_NO_DLC
 from .Locations import Overcooked2Location, oc2_location_name_to_id, oc2_location_id_to_name
 from .Options import overcooked_options, OC2Options, OC2OnToggle, LocationBalancingMode, DeathLinkMode
 from .Items import item_table, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies
@@ -222,12 +222,15 @@ class Overcooked2World(World):
 
     # Helper Data
 
+    player_name: str
     level_unlock_counts: Dict[int, int]  # level_id, stars to purchase
     level_mapping: Dict[int, Overcooked2GenericLevel]  # level_id, level
+    enabled_dlc: List[Overcooked2Dlc]
 
     # Autoworld Hooks
 
     def generate_early(self):
+        self.player_name = self.multiworld.player_name[self.player]
         self.options = self.get_options()
 
         # 0.0 to 1.0 where 1.0 is World Record
@@ -247,9 +250,14 @@ class Overcooked2World(World):
                     self.multiworld.random,
                     self.options["PrepLevels"] != PrepLevelMode.excluded,
                     self.options["IncludeHordeLevels"],
+                    self.options["KevinLevels"],
+                    self.enabled_dlc,
+                    self.player_name,
                 )
         else:
             self.level_mapping = None
+            if Overcooked2Dlc.STORY not in self.enabled_dlc:
+                raise Exception(f"Invalid OC2 settings({self.player_name}) Need either Level Shuffle disabled or 'Story' DLC enabled")
 
     def set_location_priority(self) -> None:
         priority_locations = self.get_priority_locations()
@@ -428,7 +436,7 @@ class Overcooked2World(World):
     # Items get distributed to locations
 
     def fill_json_data(self) -> Dict[str, Any]:
-        mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.player_name[self.player]}"
+        mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.player_name}"
 
         # Serialize Level Order
         story_level_order = dict()
