@@ -832,7 +832,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                                     primal = 1 if kerrigan_primal(self.ctx, current_items) else 0
                                     await self.chat_send("UpdateTech {} {} {} {} {} {} {}".format(
                                         current_items[0], current_items[1], current_items[2], current_items[3], current_items[4],
-                                        current_items[5], primal))
+                                        new_level, primal))
 
                 else:
                     await self.chat_send("LostConnection - Lost connection to game.")
