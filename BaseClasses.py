@@ -836,6 +836,29 @@ class Region:
         for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
             return entrance.parent_region.get_connecting_entrance(is_main_entrance)
 
+    def add_locations(self, locations: Dict[str, Optional[int]], location_type: Optional[typing.Type[Location]] = None) -> None:
+        """Adds locations to the Region object, where location_type is your Location class and locations is a dict of
+        location names to address."""
+        if location_type is None:
+            location_type = Location
+        for location, address in locations.items():
+            self.locations.append(location_type(self.player, location, address, self))
+
+    def add_exits(self, exits: Dict[str, Optional[str]], rules: Dict[str, Callable[[CollectionState], bool]] = None) -> None:
+        """
+        Connects current region to regions in exit dictionary. Passed region names must exist first.
+
+        :param exits: exits from the region. format is {"connecting_region", "exit_name"}
+        :param rules: rules for the exits from this region. format is {"connecting_region", rule}
+        """
+        for exiting_region, name in exits.items():
+            ret = Entrance(self.player, name, self) if name \
+                else Entrance(self.player, f"{self.name} -> {exiting_region}", self)
+            if rules and exiting_region in rules:
+                ret.access_rule = rules[exiting_region]
+            self.exits.append(ret)
+            ret.connect(self.multiworld.get_region(exiting_region, self.player))
+
     def __repr__(self):
         return self.__str__()
 
