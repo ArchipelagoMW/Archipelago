@@ -180,7 +180,7 @@ def level_shuffle_factory(
     attempts = 0
 
     while len(result) == 0 or not meets_minimum_sphere_one_requirements(result):
-        if attempts >= 10:
+        if attempts >= 15:
             raise Exception("Failed to create valid Overcooked2 level shuffle permutation in a reasonable amount of attempts")
 
         result.clear()
@@ -215,12 +215,12 @@ def meets_minimum_sphere_one_requirements(
     levels: Dict[int, Overcooked2GenericLevel],
 ) -> bool:
 
-    # 1-1, 2-1, and 4-1 are garunteed to be accessible on
+    # 1-1, 2-1, and 4-1 are guaranteed to be accessible on
     # the overworld without requiring a ramp or additional stars
     sphere_one = [1, 7, 19]
 
-    # 1-2, 2-2, 3-1 and 5-1 are almost always the next thing unlocked
-    sphere_twoish = [2, 8, 13, 25]
+    # 1-2, 2-2, 3-1, 5-1 and 6-1 are almost always the next thing unlocked
+    sphere_twoish = [2, 8, 13, 25, 31]
 
     # Peek the logic for sphere one and see how many are possible
     # with no items
@@ -236,7 +236,7 @@ def meets_minimum_sphere_one_requirements(
 
     return sphere_one_count >= 2 and \
         sphere_twoish_count >= 2 and \
-        sphere_one_count + sphere_twoish_count >= 6
+        sphere_one_count + sphere_twoish_count >= 5
 
 
 def is_completable_no_items(level: Overcooked2GenericLevel) -> bool:
