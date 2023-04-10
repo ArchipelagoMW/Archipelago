@@ -387,7 +387,7 @@ Leave It Alone|Happy Otaku Pack Vol.4|True|2|5|8|
 Tsubasa no Oreta Tenshitachi no Requiem|Happy Otaku Pack Vol.4|False|4|7|9|
 Chronomia|Happy Otaku Pack Vol.4|False|5|7|10|
 Dandelion's Daydream|Happy Otaku Pack Vol.4|True|5|7|8|
-Lorikeet ~Flat design~|Happy Otaku Pack Vol.4|True|5|7|10|
+Lorikeet Flat design|Happy Otaku Pack Vol.4|True|5|7|10|
 GOODRAGE|Happy Otaku Pack Vol.4|False|6|9|11|
 Altale|Give Up TREATMENT Vol.3|False|3|5|7|
 Brain Power|Give Up TREATMENT Vol.3|False|4|7|10|
