@@ -57,9 +57,6 @@ class AssembleOptions(abc.ABCMeta):
             else:
                 assert verifiers, "class Option is supposed to implement def verify"
 
-        if "valid_keys" in attrs:
-            attrs["_valid_keys"] = frozenset(attrs["valid_keys"])
-
         # auto-validate schema on __init__
         if "schema" in attrs.keys():
 
@@ -718,9 +715,16 @@ class SpecialRange(Range):
                             f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
 
 
+class FreezeValidKeys(abc.ABCMeta):
+    def __new__(mcs, name, bases, attrs):
+        if "valid_keys" in attrs:
+            attrs["_valid_keys"] = frozenset(attrs["valid_keys"])
+        return super(FreezeValidKeys, mcs).__new__(mcs, name, bases, attrs)
+
+
 class VerifyKeys:
     valid_keys: typing.Iterable = []
-    _valid_keys: frozenset  # gets created by AssembleOptions from valid_keys
+    _valid_keys: frozenset
     valid_keys_casefold: bool = False
     convert_name_groups: bool = False
     verify_item_name: bool = False
@@ -796,10 +800,6 @@ class ItemDict(OptionDict):
 
 
 class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
-    # Supports duplicate entries and ordering.
-    # If only unique entries are needed and input order of elements does not matter, OptionSet should be used instead.
-    # Not a docstring so it doesn't get grabbed by the options system.
-
     default: typing.List[typing.Any] = []
     supports_weighting = False
 
