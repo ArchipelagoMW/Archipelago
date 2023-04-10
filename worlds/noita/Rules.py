@@ -2,18 +2,8 @@ from BaseClasses import MultiWorld, CollectionState
 from typing import List, NamedTuple, Set
 
 from worlds.generic import Rules as GenericRules
-from . import Locations, Options, Items
-
-
-holy_mountain_regions: List[str] = [
-    "Holy Mountain 1 (To Coal Pits)",
-    "Holy Mountain 2 (To Snowy Depths)",
-    "Holy Mountain 3 (To Hiisi Base)",
-    "Holy Mountain 4 (To Underground Jungle)",
-    "Holy Mountain 5 (To The Vault)",
-    "Holy Mountain 6 (To Temple of the Art)",
-    "Holy Mountain 7 (To The Laboratory)",
-]
+from . import Locations, Items
+from .Options import VictoryCondition, BossesAsChecks
 
 
 class EntranceLock(NamedTuple):
@@ -34,6 +24,17 @@ entrance_locks: List[EntranceLock] = [
 ]
 
 
+holy_mountain_regions: List[str] = [
+    "Holy Mountain 1 (To Coal Pits)",
+    "Holy Mountain 2 (To Snowy Depths)",
+    "Holy Mountain 3 (To Hiisi Base)",
+    "Holy Mountain 4 (To Underground Jungle)",
+    "Holy Mountain 5 (To The Vault)",
+    "Holy Mountain 6 (To Temple of the Art)",
+    "Holy Mountain 7 (To The Laboratory)",
+]
+
+
 wand_tiers: List[str] = [
     "Wand (Tier 1)",    # Coal Pits
     "Wand (Tier 2)",    # Snowy Depths
@@ -43,17 +44,22 @@ wand_tiers: List[str] = [
     "Wand (Tier 6)",    # Temple of the Art
 ]
 
+
 items_hidden_from_shops: Set[str] = {"Gold (200)", "Gold (1000)", "Potion", "Random Potion", "Secret Potion",
                                      "Chaos Die", "Greed Die", "Kammi", "Refreshing Gourd", "Sädekivi", "Broken Wand",
                                      "Powder Pouch"}
 
 
+perk_list: List[str] = list(filter(Items.item_is_perk, Items.item_table.keys()))
+
+
+# ----------------
+# Helper Functions
+# ----------------
+
+
 def get_perk_count(state: CollectionState, player: int) -> int:
-    perk_list: List[str] = list(filter(Items.item_is_perk, Items.item_table.keys()))
-    perk_count = 0
-    for perk in perk_list:
-        perk_count = perk_count + state.item_count(perk, player)
-    return perk_count
+    return sum(state.item_count(perk, player) for perk in perk_list)
 
 
 def get_orb_count(state: CollectionState, player: int) -> int:
@@ -73,12 +79,16 @@ def forbid_items_at_location(world: MultiWorld, location_name: str, items: Set[s
     GenericRules.forbid_items_for_player(location, items, player)
 
 
+# ----------------
+# Rule Functions
+# ----------------
+
+
 # Prevent gold and potions from appearing as purchasable items in shops (because physics will destroy them)
 def ban_items_from_shops(world: MultiWorld, player: int) -> None:
     for location_name in Locations.location_name_to_id.keys():
-        if "Shop Item" not in location_name:
-            continue
-        forbid_items_at_location(world, location_name, items_hidden_from_shops, player)
+        if "Shop Item" in location_name:
+            forbid_items_at_location(world, location_name, items_hidden_from_shops, player)
 
 
 # Prevent high tier wands from appearing in early Holy Mountain shops
@@ -104,30 +114,38 @@ def lock_holy_mountains_into_spheres(world: MultiWorld, player: int) -> None:
 
 
 def holy_mountain_unlock_conditions(world: MultiWorld, player: int) -> None:
-    vic = world.victory_condition[player].value
+    victory_condition = world.victory_condition[player].value
     for lock in entrance_locks:
-        if vic == Options.VictoryCondition.option_greed_ending:
-            world.get_location(lock.event, player).access_rule = \
-                lambda state, items_needed=lock.items_needed: has_perk_count(state, player, items_needed//2)
+        location = world.get_location(lock.event, player)
 
-        elif vic == Options.VictoryCondition.option_pure_ending:
-            world.get_location(lock.event, player).access_rule = \
-                lambda state, items_needed=lock.items_needed: has_perk_count(state, player, items_needed//2) \
-                and has_orb_count(state, player, items_needed)
-
-        elif vic == Options.VictoryCondition.option_peaceful_ending:
-            world.get_location(lock.event, player).access_rule = \
-                lambda state, items_needed=lock.items_needed: has_perk_count(state, player, items_needed//2) \
-                and has_orb_count(state, player, items_needed * 3)
+        if victory_condition == VictoryCondition.option_greed_ending:
+            location.access_rule = lambda state, items_needed=lock.items_needed: (
+                has_perk_count(state, player, items_needed//2)
+            )
+        elif victory_condition == VictoryCondition.option_pure_ending:
+            location.access_rule = lambda state, items_needed=lock.items_needed: (
+                has_perk_count(state, player, items_needed//2) and
+                has_orb_count(state, player, items_needed)
+            )
+        elif victory_condition == VictoryCondition.option_peaceful_ending:
+            location.access_rule = lambda state, items_needed=lock.items_needed: (
+                has_perk_count(state, player, items_needed//2) and
+                has_orb_count(state, player, items_needed * 3)
+            )
 
 
 def victory_unlock_conditions(world: MultiWorld, player: int) -> None:
-    vic = world.victory_condition[player].value
+    victory_condition = world.victory_condition[player].value
     victory_location = world.get_location("Victory", player)
-    if vic == Options.VictoryCondition.option_pure_ending:
+    if victory_condition == VictoryCondition.option_pure_ending:
         victory_location.access_rule = lambda state: has_orb_count(state, player, 11)
-    elif vic == Options.VictoryCondition.option_peaceful_ending:
+    elif victory_condition == VictoryCondition.option_peaceful_ending:
         victory_location.access_rule = lambda state: has_orb_count(state, player, 33)
+
+
+# ----------------
+# Main Function
+# ----------------
 
 
 def create_all_rules(world: MultiWorld, player: int) -> None:
@@ -138,5 +156,5 @@ def create_all_rules(world: MultiWorld, player: int) -> None:
     victory_unlock_conditions(world, player)
 
     # Prevent the Map perk (used to find Toveri) from being on Toveri (boss)
-    if world.bosses_as_checks[player].value >= Options.BossesAsChecks.option_all_bosses:
+    if world.bosses_as_checks[player].value >= BossesAsChecks.option_all_bosses:
         forbid_items_at_location(world, "Toveri", {"Perk (Spatial Awareness)"}, player)

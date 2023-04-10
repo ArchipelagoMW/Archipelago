@@ -1,7 +1,8 @@
 import itertools
 from typing import Dict, NamedTuple, Optional, List, Set
 from BaseClasses import Item, ItemClassification, MultiWorld
-from . import Options
+from .Options import VictoryCondition, BossesAsChecks
+from collections import Counter
 
 
 class ItemData(NamedTuple):
@@ -20,41 +21,48 @@ def create_item(player: int, name: str) -> Item:
     return NoitaItem(name, item_data.classification, item_data.code, player)
 
 
-def create_all_items(world: MultiWorld, player: int) -> None:
-    sum_locations = len(world.get_unfilled_locations(player))
+def create_fixed_item_pool() -> List[str]:
+    required_items: Dict[str, int] = {name: data.required_num for name, data in item_table.items()}
+    return list(Counter(required_items).elements())
 
-    # Generate fixed item pool, these are items with a specific fixed quantity that must be added
-    itempool: List = []
-    for item_name, count in required_items.items():
-        itempool += [item_name for _ in range(count)]
 
-    # Generate items based on victory condition settings (Orbs)
-    vic = world.victory_condition[player].value
+def create_orb_items(victory_condition: VictoryCondition) -> List[str]:
     orb_count = 0
-
-    if vic == Options.VictoryCondition.option_pure_ending:
+    if victory_condition == VictoryCondition.option_pure_ending:
         orb_count = 11
-    elif vic == Options.VictoryCondition.option_peaceful_ending:
+    elif victory_condition == VictoryCondition.option_peaceful_ending:
         orb_count = 33
+    return ["Orb" for _ in range(orb_count)]
 
-    itempool += ["Orb" for _ in range(orb_count)]
 
-    if world.bosses_as_checks[player].value >= Options.BossesAsChecks.option_all_bosses:
-        itempool.append("Perk (Spatial Awareness)")
+def create_spatial_awareness_item(bosses_as_checks: BossesAsChecks) -> List[str]:
+    return ["Perk (Spatial Awareness)"] if bosses_as_checks.value >= BossesAsChecks.option_all_bosses else []
 
-    # Create any non-progression repeat items (referred to as junk regardless of whether it's useful)
+
+def create_random_items(world: MultiWorld, player: int, random_count: int) -> List[str]:
     filler_pool = filler_weights.copy()
     if world.bad_effects[player].value == 0:
         del filler_pool["Trap"]
-    random_count = sum_locations - len(itempool)
 
-    itempool += world.random.choices(
+    return world.random.choices(
         population=list(filler_pool.keys()),
         weights=list(filler_pool.values()),
         k=random_count
     )
 
-    # Convert itempool into real items
+
+def create_all_items(world: MultiWorld, player: int) -> None:
+    sum_locations = len(world.get_unfilled_locations(player))
+
+    itempool = (
+        create_fixed_item_pool()
+        + create_orb_items(world.victory_condition[player])
+        + create_spatial_awareness_item(world.bosses_as_checks[player])
+    )
+
+    random_count = sum_locations - len(itempool)
+    itempool += create_random_items(world, player, random_count)
+
     world.itempool += [create_item(player, name) for name in itempool]
 
 
@@ -136,11 +144,5 @@ filler_items: List[str] = list(filter(item_is_filler, item_table.keys()))
 item_name_to_id: Dict[str, int] = {name: data.code for name, data in item_table.items()}
 
 item_name_groups: Dict[str, Set[str]] = {
-    group: set(item_names)
-    for group, item_names in itertools.groupby(item_table, get_item_group)
-}
-
-required_items: Dict[str, int] = {
-    name: data.required_num
-    for name, data in item_table.items() if data.required_num > 0
+    group: set(item_names) for group, item_names in itertools.groupby(item_table, get_item_group)
 }

@@ -14,36 +14,16 @@ class LocationData(NamedTuple):
     flag: int = 0
 
 
-class Orbs(IntEnum):
+class LocationFlag(IntEnum):
+    none = 0
     main_path = 1
     side_path = 2
     main_world = 3
     parallel_worlds = 4
 
 
-class Bosses(IntEnum):
-    main_path = 1
-    side_path = 2
-    main_world = 3
-    parallel_worlds = 4
-
-
-class HiddenChests(IntEnum):
-    main_path = 1
-    side_path = 2
-    main_world = 3
-    parallel_worlds = 4
-
-
-class Pedestals(IntEnum):
-    main_path = 1
-    side_path = 2
-    main_world = 3
-    parallel_worlds = 4
-
-
-# Mapping of items in each region
-# Only the first Hidden Chest and Pedestal are mapped here, the others are created in Regions
+# Mapping of items in each region.
+# Only the first Hidden Chest and Pedestal are mapped here, the others are created in Regions.
 # ltype key: "chest" = Hidden Chests, "pedestal" = Pedestals, "boss" = Boss, "orb" = Orb.
 location_region_mapping: Dict[str, Dict[str, LocationData]] = {
     "Holy Mountain 1 (To Coal Pits)": {
@@ -109,121 +89,123 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Secret Shop Item 4": LocationData(111045),
     },
     "Floating Island": {
-        "Floating Island Orb": LocationData(110501, "orb", Orbs.main_path),
+        "Floating Island Orb": LocationData(110501, "orb", LocationFlag.main_path),
     },
     "Pyramid": {
-        "Kolmisilmän Koipi": LocationData(110630, "boss", Bosses.main_world),
-        "Pyramid Orb": LocationData(110502, "orb", Orbs.main_world),
-        "Sandcave Orb": LocationData(110505, "orb", Orbs.main_world),
+        "Kolmisilmän Koipi": LocationData(110630, "boss", LocationFlag.main_world),
+        "Pyramid Orb": LocationData(110502, "orb", LocationFlag.main_world),
+        "Sandcave Orb": LocationData(110505, "orb", LocationFlag.main_world),
     },
     "Overgrown Cavern": {
-        "Overgrown Cavern Chest": LocationData(112200, "chest", HiddenChests.main_world),
-        "Overgrown Cavern Pedestal": LocationData(112700, "pedestal", Pedestals.main_world),
+        "Overgrown Cavern Chest": LocationData(112200, "chest", LocationFlag.main_world),
+        "Overgrown Cavern Pedestal": LocationData(112700, "pedestal", LocationFlag.main_world),
     },
     "Lake": {
-        "Syväolento": LocationData(110650, "boss", Bosses.main_world),
+        "Syväolento": LocationData(110650, "boss", LocationFlag.main_world),
     },
     "Frozen Vault": {
-        "Frozen Vault Orb": LocationData(110503, "orb", Orbs.main_world),
-        "Frozen Vault Chest": LocationData(112260, "chest", HiddenChests.main_world),
-        "Frozen Vault Pedestal": LocationData(112760, "pedestal", Pedestals.main_world),
+        "Frozen Vault Orb": LocationData(110503, "orb", LocationFlag.main_world),
+        "Frozen Vault Chest": LocationData(112260, "chest", LocationFlag.main_world),
+        "Frozen Vault Pedestal": LocationData(112760, "pedestal", LocationFlag.main_world),
     },
     "Mines": {
-        "Mines Chest": LocationData(112000, "chest", HiddenChests.main_path),
-        "Mines Pedestal": LocationData(112500, "pedestal", Pedestals.main_path),
+        "Mines Chest": LocationData(112000, "chest", LocationFlag.main_path),
+        "Mines Pedestal": LocationData(112500, "pedestal", LocationFlag.main_path),
     },
     "Collapsed Mines": {
-        "Collapsed Mines Chest": LocationData(112020, "chest", HiddenChests.main_path),
-        "Collapsed Mines Pedestal": LocationData(112520, "pedestal", Pedestals.main_path),
+        "Collapsed Mines Chest": LocationData(112020, "chest", LocationFlag.main_path),
+        "Collapsed Mines Pedestal": LocationData(112520, "pedestal", LocationFlag.main_path),
     },
     "Ancient Laboratory": {
-        "Ylialkemisti": LocationData(110700, "boss", Bosses.side_path),
+        "Ylialkemisti": LocationData(110700, "boss", LocationFlag.side_path),
     },
     "Abyss Orb Room": {
-        "Sauvojen Tuntija": LocationData(110640, "boss", Bosses.side_path),
-        "Abyss Orb": LocationData(110508, "orb", Orbs.main_path),
+        "Sauvojen Tuntija": LocationData(110640, "boss", LocationFlag.side_path),
+        "Abyss Orb": LocationData(110508, "orb", LocationFlag.main_path),
     },
     "Below Lava Lake": {
-        "Lava Lake Orb": LocationData(110504, "orb", Orbs.side_path),
+        "Lava Lake Orb": LocationData(110504, "orb", LocationFlag.side_path),
     },
     "Coal Pits": {
-        "Coal Pits Chest": LocationData(112040, "chest", HiddenChests.main_path),
-        "Coal Pits Pedestal": LocationData(112540, "pedestal", Pedestals.main_path),
+        "Coal Pits Chest": LocationData(112040, "chest", LocationFlag.main_path),
+        "Coal Pits Pedestal": LocationData(112540, "pedestal", LocationFlag.main_path),
     },
     "Fungal Caverns": {
-        "Fungal Caverns Chest": LocationData(112060, "chest", HiddenChests.side_path),
-        "Fungal Caverns Pedestal": LocationData(112560, "pedestal", Pedestals.side_path),
+        "Fungal Caverns Chest": LocationData(112060, "chest", LocationFlag.side_path),
+        "Fungal Caverns Pedestal": LocationData(112560, "pedestal", LocationFlag.side_path),
     },
     "Snowy Depths": {
-        "Snowy Depths Chest": LocationData(112080, "chest", HiddenChests.main_path),
-        "Snowy Depths Pedestal": LocationData(112580, "pedestal", Pedestals.main_path),
+        "Snowy Depths Chest": LocationData(112080, "chest", LocationFlag.main_path),
+        "Snowy Depths Pedestal": LocationData(112580, "pedestal", LocationFlag.main_path),
     },
     "Magical Temple": {
-        "Magical Temple Orb": LocationData(110506, "orb", Orbs.side_path),
+        "Magical Temple Orb": LocationData(110506, "orb", LocationFlag.side_path),
     },
     "Hiisi Base": {
-        "Hiisi Base Chest": LocationData(112100, "chest", HiddenChests.main_path),
-        "Hiisi Base Pedestal": LocationData(112600, "pedestal", Pedestals.main_path),
+        "Hiisi Base Chest": LocationData(112100, "chest", LocationFlag.main_path),
+        "Hiisi Base Pedestal": LocationData(112600, "pedestal", LocationFlag.main_path),
     },
     "Underground Jungle": {
-        "Suomuhauki": LocationData(110620, "boss", Bosses.main_path),
-        "Underground Jungle Chest": LocationData(112120, "chest", HiddenChests.main_path),
-        "Underground Jungle Pedestal": LocationData(112620, "pedestal", Pedestals.main_path),
+        "Suomuhauki": LocationData(110620, "boss", LocationFlag.main_path),
+        "Underground Jungle Chest": LocationData(112120, "chest", LocationFlag.main_path),
+        "Underground Jungle Pedestal": LocationData(112620, "pedestal", LocationFlag.main_path),
     },
     "Lukki Lair": {
-        "Lukki Lair Orb": LocationData(110507, "orb", Orbs.side_path),
-        "Lukki Lair Chest": LocationData(112140, "chest", HiddenChests.side_path),
-        "Lukki Lair Pedestal": LocationData(112640, "pedestal", Pedestals.side_path),
+        "Lukki Lair Orb": LocationData(110507, "orb", LocationFlag.side_path),
+        "Lukki Lair Chest": LocationData(112140, "chest", LocationFlag.side_path),
+        "Lukki Lair Pedestal": LocationData(112640, "pedestal", LocationFlag.side_path),
     },
     "The Vault": {
-        "The Vault Chest": LocationData(112160, "chest", HiddenChests.main_path),
-        "The Vault Pedestal": LocationData(112660, "pedestal", Pedestals.main_path),
+        "The Vault Chest": LocationData(112160, "chest", LocationFlag.main_path),
+        "The Vault Pedestal": LocationData(112660, "pedestal", LocationFlag.main_path),
     },
     "Temple of the Art": {
-        "Gate Guardian": LocationData(110660, "boss", Bosses.main_path),
-        "Temple of the Art Chest": LocationData(112180, "chest", HiddenChests.main_path),
-        "Temple of the Art Pedestal": LocationData(112680, "pedestal", Pedestals.main_path),
+        "Gate Guardian": LocationData(110660, "boss", LocationFlag.main_path),
+        "Temple of the Art Chest": LocationData(112180, "chest", LocationFlag.main_path),
+        "Temple of the Art Pedestal": LocationData(112680, "pedestal", LocationFlag.main_path),
     },
     "The Tower": {
-        "The Tower Chest": LocationData(112280, "chest", HiddenChests.main_world),
-        "The Tower Pedestal": LocationData(112780, "pedestal", Pedestals.main_world),
+        "The Tower Chest": LocationData(112280, "chest", LocationFlag.main_world),
+        "The Tower Pedestal": LocationData(112780, "pedestal", LocationFlag.main_world),
     },
     "Wizard's Den": {
-        "Mestarien Mestari": LocationData(110690, "boss", Bosses.main_world),
-        "Wizard's Den Orb": LocationData(110511, "orb", Orbs.main_world),
-        "Wizards' Den Chest": LocationData(112220, "chest", HiddenChests.main_world),
-        "Wizards' Den Pedestal": LocationData(112720, "pedestal", Pedestals.main_world),
+        "Mestarien Mestari": LocationData(110690, "boss", LocationFlag.main_world),
+        "Wizard's Den Orb": LocationData(110511, "orb", LocationFlag.main_world),
+        "Wizards' Den Chest": LocationData(112220, "chest", LocationFlag.main_world),
+        "Wizards' Den Pedestal": LocationData(112720, "pedestal", LocationFlag.main_world),
     },
     "Powerplant": {
-        "Kolmisilmän silmä": LocationData(110710, "boss", Bosses.main_world),
-        "Power Plant Chest": LocationData(112240, "chest", HiddenChests.main_world),
-        "Power Plant Pedestal": LocationData(112740, "pedestal", Pedestals.main_world),
+        "Kolmisilmän silmä": LocationData(110710, "boss", LocationFlag.main_world),
+        "Power Plant Chest": LocationData(112240, "chest", LocationFlag.main_world),
+        "Power Plant Pedestal": LocationData(112740, "pedestal", LocationFlag.main_world),
     },
     "Snow Chasm": {
-        "Unohdettu": LocationData(110670, "boss", Bosses.main_world),
-        "Snow Chasm Orb": LocationData(110510, "orb", Orbs.main_world),
+        "Unohdettu": LocationData(110670, "boss", LocationFlag.main_world),
+        "Snow Chasm Orb": LocationData(110510, "orb", LocationFlag.main_world),
     },
     "Deep Underground": {
-        "Limatoukka": LocationData(110610, "boss", Bosses.main_world),
+        "Limatoukka": LocationData(110610, "boss", LocationFlag.main_world),
     },
     "The Laboratory": {
-        "Kolmisilmä": LocationData(110600, "boss", Bosses.main_path),
+        "Kolmisilmä": LocationData(110600, "boss", LocationFlag.main_path),
     },
     "Friend Cave": {
-        "Toveri": LocationData(110680, "boss", Bosses.main_world),
+        "Toveri": LocationData(110680, "boss", LocationFlag.main_world),
     },
     "The Work (Hell)": {
-        "The Work (Hell) Orb": LocationData(110509, "orb", Orbs.main_world),
+        "The Work (Hell) Orb": LocationData(110509, "orb", LocationFlag.main_world),
     },
 }
 
 
 # Iterating the hidden chest and pedestal locations here to avoid clutter above
+def generate_location_entries(locname: str, locinfo: LocationData) -> Dict[str, int]:
+    if locinfo.ltype in ["chest", "pedestal"]:
+        return {f"{locname} {i + 1}": locinfo.id + i for i in range(20)}
+    return {locname: locinfo.id}
+
+
 location_name_to_id: Dict[str, int] = {}
 for location_group in location_region_mapping.values():
     for locname, locinfo in location_group.items():
-        if locinfo.ltype in ["chest", "pedestal"]:
-            for i in range(20):
-                location_name_to_id.update({f"{locname} {i + 1}": locinfo.id + i})
-        else:
-            location_name_to_id.update({locname: locinfo.id})
+        location_name_to_id.update(generate_location_entries(locname, locinfo))
