@@ -7,6 +7,7 @@ from . import options
 from .data import all_fish, FishItem, all_purchasable_seeds, SeedItem, all_crops, CropItem
 from .data.bundle_data import BundleItem
 from .data.museum_data import all_museum_items, MuseumItem
+from .data.region_data import SVRegion
 from .data.villagers_data import all_villagers_by_name
 from .items import all_items, Group
 from .options import StardewOptions
@@ -113,16 +114,16 @@ class StardewLogic:
         self.museum_rules.update({donation.name: self.can_find_museum_item(donation) for donation in all_museum_items})
 
         self.tree_fruit_rules.update({
-            "Apple": self.has_lived_months(1) & (self.has_season("Fall") | self.can_reach_region("Greenhouse")),
-            "Apricot": self.has_lived_months(1) & (self.has_season("Spring") | self.can_reach_region("Greenhouse")),
-            "Cherry": self.has_lived_months(1) & (self.has_season("Spring") | self.can_reach_region("Greenhouse")),
-            "Orange": self.has_lived_months(1) & (self.has_season("Summer") | self.can_reach_region("Greenhouse")),
-            "Peach": self.has_lived_months(1) & (self.has_season("Summer") | self.can_reach_region("Greenhouse")),
-            "Pomegranate": self.has_lived_months(1) & (self.has_season("Fall") | self.can_reach_region("Greenhouse")),
-            "Banana Sapling": self.can_reach_region("Ginger Island"),
-            "Mango Sapling": self.can_reach_region("Ginger Island"),
-            "Banana": self.has("Banana Sapling") & (self.has_season("Summer") | self.can_reach_region("Greenhouse")),
-            "Mango": self.has("Mango Sapling") & (self.has_season("Summer") | self.can_reach_region("Greenhouse")),
+            "Apple": self.has_lived_months(1) & (self.has_season("Fall") | self.can_reach_region(SVRegion.greenhouse)),
+            "Apricot": self.has_lived_months(1) & (self.has_season("Spring") | self.can_reach_region(SVRegion.greenhouse)),
+            "Cherry": self.has_lived_months(1) & (self.has_season("Spring") | self.can_reach_region(SVRegion.greenhouse)),
+            "Orange": self.has_lived_months(1) & (self.has_season("Summer") | self.can_reach_region(SVRegion.greenhouse)),
+            "Peach": self.has_lived_months(1) & (self.has_season("Summer") | self.can_reach_region(SVRegion.greenhouse)),
+            "Pomegranate": self.has_lived_months(1) & (self.has_season("Fall") | self.can_reach_region(SVRegion.greenhouse)),
+            "Banana Sapling": self.can_reach_region(SVRegion.ginger_island),
+            "Mango Sapling": self.can_reach_region(SVRegion.ginger_island),
+            "Banana": self.has("Banana Sapling") & (self.has_season("Summer") | self.can_reach_region(SVRegion.greenhouse)),
+            "Mango": self.has("Mango Sapling") & (self.has_season("Summer") | self.can_reach_region(SVRegion.greenhouse)),
         })
 
         self.seed_rules.update({seed.name: self.can_buy_seed(seed) for seed in all_purchasable_seeds})
@@ -136,7 +137,7 @@ class StardewLogic:
             "Algae Soup": self.can_cook() & self.has("Green Algae") & self.has_relationship("Clint", 3),
             "Any Egg": self.has("Chicken Egg") | self.has("Duck Egg"),
             "Artichoke Dip": self.can_cook() & self.has_season("Fall") & self.has("Artichoke") & self.has("Cow Milk"),
-            "Artifact Trove": self.has("Omni Geode") & self.can_reach_region("The Desert"),
+            "Artifact Trove": self.has("Omni Geode") & self.can_reach_region(SVRegion.desert),
             "Bait": self.has_skill_level("Fishing", 2),
             "Bat Wing": self.can_mine_in_the_mines_floor_41_80() | self.can_mine_in_the_skull_cavern(),
             "Battery Pack": self.has("Lightning Rod"),
@@ -152,13 +153,13 @@ class StardewLogic:
             "Broken CD": self.can_crab_pot(),
             "Broken Glasses": self.can_crab_pot(),
             "Bug Meat": self.can_mine_in_the_mines_floor_1_40(),
-            "Cactus Fruit": self.can_reach_region("The Desert"),
+            "Cactus Fruit": self.can_reach_region(SVRegion.desert),
             "Cave Carrot": self.can_mine_to_floor(10),
             "Caviar": self.has("Preserves Jar") & self.has("Sturgeon Roe"),
-            "Chanterelle": self.has_season("Fall") & self.can_reach_region("Secret Woods"),
+            "Chanterelle": self.has_season("Fall") & self.can_reach_region(SVRegion.secret_woods),
             "Cheese Press": self.has_skill_level("Farming", 6) & self.has("Hardwood") & self.has("Copper Bar"),
             "Cheese": (self.has("Cow Milk") & self.has("Cheese Press")) |
-                      (self.can_reach_region("The Desert") & self.has("Emerald")),
+                      (self.can_reach_region(SVRegion.desert) & self.has("Emerald")),
             "Cheese Cauliflower": self.has(["Cheese", "Cauliflower"]) & self.has_relationship("Pam", 3) &
                                   self.can_cook(),
             "Chicken": self.has_building("Coop"),
@@ -170,21 +171,21 @@ class StardewLogic:
             "Clay": True_(),
             "Glazed Yams": self.can_cook() & self.has_season("Fall") & self.has("Yam") & self.has("Sugar"),
             "Cloth": (self.has("Wool") & self.has("Loom")) |
-                     (self.can_reach_region("The Desert") & self.has("Aquamarine")),
+                     (self.can_reach_region(SVRegion.desert) & self.has("Aquamarine")),
             "Coal": True_(),
             "Cockle": True_(),
-            "Coconut": self.can_reach_region("The Desert"),
+            "Coconut": self.can_reach_region(SVRegion.desert),
             "Coffee": (self.has("Keg") & self.has("Coffee Bean")) | self.has("Coffee Maker") |
                       self.can_spend_money(300) | self.has("Hot Java Ring"),
             "Coffee Maker": False_(),
             "Common Mushroom": self.has_season("Fall") |
-                               (self.has_season("Spring") & self.can_reach_region("Secret Woods")),
+                               (self.has_season("Spring") & self.can_reach_region(SVRegion.secret_woods)),
             "Complete Breakfast": self.can_cook() & self.has_season("Spring") & self.has_lived_months(4) &
                                   self.has("Fried Egg") & self.has("Cow Milk") & self.has("Hashbrowns") | self.has(
                 "Pancakes"),
             "Copper Bar": self.can_smelt("Copper Ore"),
             "Copper Ore": self.can_mine_in_the_mines_floor_1_40() | self.can_mine_in_the_skull_cavern(),
-            "Coral": self.can_reach_region("Tide Pools") | self.has_season("Summer"),
+            "Coral": self.can_reach_region(SVRegion.tide_pools) | self.has_season("Summer"),
             "Cow": self.has_building("Barn"),
             "Cow Milk": self.has("Milk") | self.has("Large Milk"),
             "Crab": self.can_crab_pot(),
@@ -204,7 +205,7 @@ class StardewLogic:
             "Dish O' The Sea": self.can_cook() & self.has_skill_level("Fishing", 3) &
                                self.has(["Sardine", "Hashbrowns"]),
             "Dorado": self.can_fish(78) & self.has_season("Summer"),
-            "Dried Starfish": self.can_fish() & self.can_reach_region("Beach"),
+            "Dried Starfish": self.can_fish() & self.can_reach_region(SVRegion.beach),
             "Driftwood": self.can_crab_pot(),
             "Duck Egg": self.has("Duck"),
             "Duck Feather": self.has("Duck"),
@@ -217,7 +218,7 @@ class StardewLogic:
             "Farmer's Lunch": self.can_cook() & self.has_skill_level("Farming", 3) & self.has("Omelet") & self.has(
                 "Parsnip"),
             "Fiber": True_(),
-            "Fiddlehead Fern": self.can_reach_region("Secret Woods") & self.has_season("Summer"),
+            "Fiddlehead Fern": self.can_reach_region(SVRegion.secret_woods) & self.has_season("Summer"),
             "Fiddlehead Risotto": self.can_cook() & self.has_season("Fall") & self.has("Oil") &
                                   self.has("Fiddlehead Fern") & self.has("Garlic"),
             "Fishing Chest": self.can_fish_chests(),
@@ -234,8 +235,8 @@ class StardewLogic:
                            self.has("Melon") & self.has("Apricot"),
             "Furnace": self.has("Stone") & self.has("Copper Ore"),
             "Geode": self.can_mine_in_the_mines_floor_1_40(),
-            "Ginger": self.can_reach_region("Ginger Island"),
-            "Ginger Ale": self.can_cook() & self.can_reach_region("Ginger Island") & self.has("Ginger") & self.has(
+            "Ginger": self.can_reach_region(SVRegion.ginger_island),
+            "Ginger Ale": self.can_cook() & self.can_reach_region(SVRegion.ginger_island) & self.has("Ginger") & self.has(
                 "Sugar"),
             "Goat Cheese": self.has("Goat Milk") & self.has("Cheese Press"),
             "Goat Milk": self.has("Goat"),
@@ -249,11 +250,11 @@ class StardewLogic:
             "Hashbrowns": self.can_cook() & self.can_spend_money(50) & self.has("Potato"),
             "Hazelnut": self.has_season("Fall"),
             "Holly": self.has_season("Winter"),
-            "Honey": self.can_reach_region("The Desert") |
+            "Honey": self.can_reach_region(SVRegion.desert) |
                      (self.has("Bee House") &
                       (self.has_season("Spring") | self.has_season("Summer") | self.has_season("Fall"))),
-            "Hot Java Ring": self.can_reach_region("Ginger Island"),
-            "Ice Cream": (self.has_season("Summer") & self.can_reach_region("Town")) | self.can_reach_region(
+            "Hot Java Ring": self.can_reach_region(SVRegion.ginger_island),
+            "Ice Cream": (self.has_season("Summer") & self.can_reach_region(SVRegion.town)) | self.can_reach_region(
                 "The Desert"),
             # | (self.can_cook() & self.has_relationship("Jodi", 7) & self.has("Cow Milk") & self.has("Sugar")),
             "Iridium Bar": self.can_smelt("Iridium Ore"),
@@ -280,7 +281,7 @@ class StardewLogic:
             "Lightning Rod": self.has_skill_level("Foraging", 6),
             "Lobster": self.can_crab_pot(),
             "Loom": self.has_skill_level("Farming", 7) & self.has("Pine Tar"),
-            "Magic Rock Candy": self.can_reach_region("The Desert") & self.has("Prismatic Shard"),
+            "Magic Rock Candy": self.can_reach_region(SVRegion.desert) & self.has("Prismatic Shard"),
             "Magma Geode": self.can_mine_in_the_mines_floor_81_120() |
                            (self.has("Lava Eel") & self.has_building("Fish Pond")),
             "Maki Roll": self.can_cook() & self.can_fish(),
@@ -294,7 +295,7 @@ class StardewLogic:
             "Milk": self.has("Cow"),
             "Miner's Treat": self.can_cook() & self.has_skill_level("Mining", 3) & self.has("Cow Milk") & self.has(
                 "Cave Carrot"),
-            "Morel": self.can_reach_region("Secret Woods"),
+            "Morel": self.can_reach_region(SVRegion.secret_woods),
             "Mussel": True_(),
             "Nautilus Shell": self.has_season("Winter"),
             "Oak Resin": self.has("Tapper"),
@@ -302,13 +303,13 @@ class StardewLogic:
             "Oil Maker": self.has_skill_level("Farming", 8) & self.has("Hardwood") & self.has("Gold Bar"),
             "Omelet": self.can_cook() & self.can_spend_money(100) & self.has("Any Egg") & self.has("Cow Milk"),
             "Omni Geode": self.can_mine_in_the_mines_floor_41_80() |
-                          self.can_reach_region("The Desert") |
+                          self.can_reach_region(SVRegion.desert) |
                           self.can_do_panning() |
                           self.received("Rusty Key") |
                           (self.has("Octopus") & self.has_building("Fish Pond")) |
-                          self.can_reach_region("Ginger Island"),
+                          self.can_reach_region(SVRegion.ginger_island),
             "Ostrich": self.has_building("Barn") & self.has("Ostrich Egg"),
-            "Ostrich Egg": self.can_reach_region("Ginger Island"),
+            "Ostrich Egg": self.can_reach_region(SVRegion.ginger_island),
             "Oyster": True_(),
             "Pale Ale": self.has("Keg") & self.has("Hops"),
             "Pale Broth": self.can_cook() & self.has_relationship("Marnie", 3) & self.has("White Algae"),
@@ -322,7 +323,7 @@ class StardewLogic:
             "Periwinkle": self.can_crab_pot(),
             "Pickles": self.has("Preserves Jar"),
             "Pig": self.has_building("Deluxe Barn"),
-            "Piña Colada": False_(),  # self.can_reach_region("Ginger Island"),
+            "Piña Colada": False_(),  # self.can_reach_region(SVRegion.ginger_island),
             "Pine Tar": self.has("Tapper"),
             "Pink Cake": self.can_cook() & self.has_season("Summer") & self.has("Melon") & self.has(
                 "Wheat Flour") & self.has("Sugar") & self.has("Any Egg"),
@@ -338,12 +339,12 @@ class StardewLogic:
             "Rabbit": self.has_building("Deluxe Coop"),
             "Rabbit's Foot": self.has("Rabbit"),
             "Radioactive Bar": self.can_smelt("Radioactive Ore"),
-            "Radioactive Ore": self.can_mine_perfectly_in_the_skull_cavern() & self.can_reach_region("Ginger Island"),
+            "Radioactive Ore": self.can_mine_perfectly_in_the_skull_cavern() & self.can_reach_region(SVRegion.ginger_island),
             "Rainbow Shell": self.has_season("Summer"),
             "Rain Totem": self.has_skill_level("Foraging", 9),
             "Recycling Machine": self.has_skill_level("Fishing", 4) & self.has("Wood") &
                                  self.has("Stone") & self.has("Iron Bar"),
-            "Red Mushroom": self.can_reach_region("Secret Woods") & (
+            "Red Mushroom": self.can_reach_region(SVRegion.secret_woods) & (
                     self.has_season("Summer") | self.has_season("Fall")),
             "Refined Quartz": self.can_smelt("Quartz") | self.can_smelt("Fire Quartz") |
                               (self.has("Recycling Machine") & (self.has("Broken CD") | self.has("Broken Glasses"))),
@@ -362,8 +363,8 @@ class StardewLogic:
             "Salmon Dinner": self.can_cook() & self.has_relationship("Gus", 3) & self.has("Salmon") & self.has(
                 "Amaranth") & self.has("Kale"),
             "Sashimi": self.can_fish() & self.can_cook() & self.has_relationship("Linus", 3),
-            "Sea Urchin": self.can_reach_region("Tide Pools") | self.has_season("Summer"),
-            "Seaweed": self.can_fish() | self.can_reach_region("Tide Pools"),
+            "Sea Urchin": self.can_reach_region(SVRegion.tide_pools) | self.has_season("Summer"),
+            "Seaweed": self.can_fish() | self.can_reach_region(SVRegion.tide_pools),
             "Secret Note": self.received("Magnifying Glass"),
             "Sheep": self.has_building("Deluxe Barn"),
             "Shrimp": self.can_crab_pot(),
@@ -397,7 +398,7 @@ class StardewLogic:
             "Triple Shot Espresso": (self.has("Hot Java Ring") |
                                      (self.can_cook() & self.can_spend_money(5000) & self.has("Coffee"))),
             "Tropical Curry": False_(),
-            # self.can_cook() & self.can_reach_region("Ginger Island") & self.has("Coconut") & self.has("Pineapple") & self.has("Hot Pepper"),
+            # self.can_cook() & self.can_reach_region(SVRegion.ginger_island) & self.has("Coconut") & self.has("Pineapple") & self.has("Hot Pepper"),
             "Truffle Oil": self.has("Truffle") & self.has("Oil Maker"),
             "Truffle": self.has("Pig") & self.has_spring_summer_or_fall(),
             "Vegetable Medley": self.can_cook() & self.has_relationship("Caroline", 7) & self.has("Tomato") & self.has(
@@ -452,7 +453,7 @@ class StardewLogic:
             "Raising Animals": self.can_complete_quest("Getting Started") & self.has_building("Coop"),
             "Advancement": self.can_complete_quest("Getting Started") & self.has_skill_level("Farming", 1),
             "Archaeology": self.has_tool("Hoe") | self.can_mine_in_the_mines_floor_1_40() | self.can_fish(),
-            "Meet The Wizard": True_() & self.can_reach_region("Community Center"),
+            "Meet The Wizard": True_() & self.can_reach_region(SVRegion.community_center),
             "Forging Ahead": self.has("Copper Ore") & self.has("Furnace"),
             "Smelting": self.has("Copper Bar"),
             "Initiation": self.can_mine_in_the_mines_floor_1_40(),
@@ -464,18 +465,18 @@ class StardewLogic:
             "Pam Is Thirsty": self.has_season("Summer") & self.has("Pale Ale"),
             "A Dark Reagent": self.has_season("Winter") & self.has("Void Essence"),
             "Cow's Delight": self.has_season("Fall") & self.has("Amaranth"),
-            "The Skull Key": self.received("Skull Key") & self.can_reach_region("The Desert"),
+            "The Skull Key": self.received("Skull Key") & self.can_reach_region(SVRegion.desert),
             "Crop Research": self.has_season("Summer") & self.has("Melon"),
             "Knee Therapy": self.has_season("Summer") & self.has("Hot Pepper"),
             "Robin's Request": self.has_season("Winter") & self.has("Hardwood"),
             "Qi's Challenge": self.can_mine_in_the_skull_cavern(),
-            "The Mysterious Qi": self.has("Battery Pack") & self.can_reach_region("The Desert") & self.has(
+            "The Mysterious Qi": self.has("Battery Pack") & self.can_reach_region(SVRegion.desert) & self.has(
                 "Rainbow Shell") & self.has("Beet") & self.has("Solar Essence"),
             "Carving Pumpkins": self.has_season("Fall") & self.has("Pumpkin"),
             "A Winter Mystery": self.has_season("Winter"),
-            "Strange Note": self.received("Magnifying Glass") & self.can_reach_region("Secret Woods") & self.has(
+            "Strange Note": self.received("Magnifying Glass") & self.can_reach_region(SVRegion.secret_woods) & self.has(
                 "Maple Syrup"),
-            "Cryptic Note": self.received("Magnifying Glass") & self.can_reach_region("Skull Cavern Floor 100"),
+            "Cryptic Note": self.received("Magnifying Glass") & self.can_reach_region(SVRegion.perfect_skull_cavern),
             "Fresh Fruit": self.has("Apricot"),
             "Aquatic Research": self.has("Pufferfish"),
             "A Soldier's Star": self.has_relationship("Kent") & self.has("Starfruit"),
@@ -659,8 +660,8 @@ class StardewLogic:
     def can_grow_crop(self, crop: CropItem):
         season_rule = self.has_any_season(crop.farm_growth_seasons)
         seed_rule = self.has(crop.seed.name)
-        farm_rule = self.can_reach_region("Farm") & season_rule
-        region_rule = farm_rule | self.can_reach_region("Greenhouse")
+        farm_rule = self.can_reach_region(SVRegion.farm) & season_rule
+        region_rule = farm_rule | self.can_reach_region(SVRegion.greenhouse)
         return seed_rule & region_rule
 
     def can_catch_fish(self, fish: FishItem) -> StardewRule:
@@ -699,21 +700,21 @@ class StardewLogic:
 
     # Regions
     def can_mine_in_the_mines_floor_1_40(self) -> StardewRule:
-        return self.can_reach_region("The Mines - Floor 5")
+        return self.can_reach_region(SVRegion.mines_floor_5)
 
     def can_mine_in_the_mines_floor_41_80(self) -> StardewRule:
-        return self.can_reach_region("The Mines - Floor 45")
+        return self.can_reach_region(SVRegion.mines_floor_45)
 
     def can_mine_in_the_mines_floor_81_120(self) -> StardewRule:
-        return self.can_reach_region("The Mines - Floor 85")
+        return self.can_reach_region(SVRegion.mines_floor_85)
 
     def can_mine_in_the_skull_cavern(self) -> StardewRule:
         return (self.can_progress_in_the_mines_from_floor(120) &
-                self.can_reach_region("Skull Cavern"))
+                self.can_reach_region(SVRegion.skull_cavern))
 
     def can_mine_perfectly_in_the_skull_cavern(self) -> StardewRule:
         return (self.can_progress_in_the_mines_from_floor(160) &
-                self.can_reach_region("Skull Cavern"))
+                self.can_reach_region(SVRegion.skull_cavern))
 
     def get_weapon_rule_for_floor_tier(self, tier: int):
         if tier >= 4:
@@ -783,7 +784,7 @@ class StardewLogic:
         return self.received(traveling_merchant_days, tier)
 
     def can_get_married(self) -> StardewRule:
-        return self.can_reach_region("Tide Pools") & self.has_relationship("Bachelor", 10) & self.has_house(1)
+        return self.can_reach_region(SVRegion.tide_pools) & self.has_relationship("Bachelor", 10) & self.has_house(1)
 
     def can_have_two_children(self) -> StardewRule:
         return self.can_get_married() & self.has_house(2) & self.has_relationship("Bachelor", 12)
@@ -851,7 +852,7 @@ class StardewLogic:
         points = hearts * 200
         points_per_month = 12 * 14
         points_per_water_month = 18 * 14
-        return self.can_reach_region("Farm") & \
+        return self.can_reach_region(SVRegion.farm) & \
             ((self.has_tool("Watering Can") & self.has_lived_months(points // points_per_water_month)) |
              self.has_lived_months(points // points_per_month))
 
