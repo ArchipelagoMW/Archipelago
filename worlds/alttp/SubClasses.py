@@ -4,7 +4,6 @@ from enum import IntEnum
 
 from BaseClasses import Location, Item, ItemClassification, Region, MultiWorld
 
-
 class ALttPLocation(Location):
     game: str = "A Link to the Past"
     crystal: bool
@@ -80,6 +79,12 @@ class LTTPRegionType(IntEnum):
 
 class LTTPRegion(Region):
     type: LTTPRegionType
+
+    # will be set after making connections.
+    is_light_world: bool = False
+    is_dark_world: bool = False
+
+    shop: Optional = None
 
     def __init__(self, name: str, type_: LTTPRegionType, hint: str, player: int, multiworld: MultiWorld):
         super().__init__(name, player, multiworld, hint)

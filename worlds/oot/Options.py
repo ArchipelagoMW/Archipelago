@@ -1045,6 +1045,11 @@ class AdultTradeStart(OptionSet):
         "Claim Check",
     }
 
+    def __init__(self, value: typing.Iterable[str]):
+        if not value:
+            value = self.default
+        super().__init__(value)
+
 
 itempool_options: typing.Dict[str, type(Option)] = {
     "item_pool_value": ItemPoolValue, 

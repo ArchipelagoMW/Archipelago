@@ -93,6 +93,10 @@ sni_options:
 lttp_options:
   # File name of the v1.0 J rom
   rom_file: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
+ladx_options:
+  # File name of the Link's Awakening DX rom
+  rom_file: "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"
+
 lufia2ac_options:
   # File name of the US rom
   rom_file: "Lufia II - Rise of the Sinistrals (USA).sfc"
@@ -107,7 +111,7 @@ factorio_options:
   filter_item_sends: false
   # Whether to send chat messages from players on the Factorio server to Archipelago.
   bridge_chat_out: true
-minecraft_options: 
+minecraft_options:
   forge_directory: "Minecraft Forge server"
   max_heap_size: "2G"
   # release channel, currently "release", or "beta"
@@ -124,6 +128,15 @@ soe_options:
   # File name of the SoE US ROM
   rom_file: "Secret of Evermore (USA).sfc"
 ffr_options:
+  display_msgs: true
+tloz_options:
+  # File name of the Zelda 1
+  rom_file: "Legend of Zelda, The (U) (PRG0) [!].nes"
+  # Set this to false to never autostart a rom (such as after patching)
+  #             true  for operating system default program
+  # Alternatively, a path to a program to open the .nes file with
+  rom_start: true
+  # Display message inside of Bizhawk
   display_msgs: true
 dkc3_options:
   # File name of the DKC3 US rom
@@ -154,3 +167,25 @@ zillion_options:
   # RetroArch doesn't make it easy to launch a game from the command line.
   # You have to know the path to the emulator core library on the user's computer.
   rom_start: "retroarch"
+
+adventure_options:
+  # File name of the standard NTSC Adventure rom.
+  # The licensed "The 80 Classic Games" CD-ROM contains this.
+  # It may also have a .a26 extension
+  rom_file: "ADVNTURE.BIN"
+  # Set this to false to never autostart a rom (such as after patching)
+  # True for operating system default program for '.a26'
+  # Alternatively, a path to a program to open the .a26 file with (generally EmuHawk for multiworld)
+  rom_start: true
+  # Optional, additional args passed into rom_start before the .bin file
+  # For example, this can be used to autoload the connector script in BizHawk
+  # (see BizHawk --lua= option)
+  # Windows example:
+  # rom_args: "--lua=C:/ProgramData/Archipelago/data/lua/ADVENTURE/adventure_connector.lua"  
+  rom_args: " "
+  # Set this to true to display item received messages in Emuhawk
+  display_msgs: true
+
+
+
+
