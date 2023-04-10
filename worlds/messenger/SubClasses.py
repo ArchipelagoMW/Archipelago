@@ -1,4 +1,4 @@
-from typing import Set, TYPE_CHECKING, Optional, Dict
+from typing import Set, TYPE_CHECKING, Optional, Dict, Type
 
 from BaseClasses import Region, Location, Item, ItemClassification, Entrance
 from .Constants import SEALS, NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
@@ -14,34 +14,23 @@ else:
 class MessengerRegion(Region):
     def __init__(self, name: str, world: MessengerWorld) -> None:
         super().__init__(name, world.player, world.multiworld)
-        self.add_locations(self.multiworld.worlds[self.player].location_name_to_id)
-        world.multiworld.regions.append(self)
-
-    def add_locations(self, name_to_id: Dict[str, int]) -> None:
-        for loc in REGIONS[self.name]:
-            self.locations.append(MessengerLocation(loc, self, name_to_id.get(loc, None)))
+        locations = [loc for loc in REGIONS[self.name]]
         if self.name == "The Shop" and self.multiworld.goal[self.player] > Goal.option_open_music_box:
-            self.locations.append(MessengerLocation("Shop Chest", self, name_to_id.get("Shop Chest", None)))
-        # putting some dumb special case for searing crags and ToT so i can split them into 2 regions
+            locations += ["Shop Chest"]
         if self.multiworld.shuffle_seals[self.player] and self.name not in {"Searing Crags", "Tower HQ", "Cloud Ruins"}:
-            self.locations += [MessengerLocation(seal_loc, self, name_to_id.get(seal_loc, None))
-                               for seal_loc in SEALS if seal_loc.startswith(self.name.split(" ")[0])]
+            locations += [loc for loc in SEALS if loc.startswith(self.name.split(" ")[0])]
         if self.multiworld.shuffle_shards[self.player] and self.name in MEGA_SHARDS:
-            self.locations += [MessengerLocation(shard, self, name_to_id.get(shard, None))
-                               for shard in MEGA_SHARDS[self.name]]
-
-    def add_exits(self, exits: Set[str]) -> None:
-        for exit in exits:
-            ret = Entrance(self.player, f"{self.name} -> {exit}", self)
-            self.exits.append(ret)
-            ret.connect(self.multiworld.get_region(exit, self.player))
+            locations += [loc for loc in MEGA_SHARDS[self.name]]
+        loc_dict = {loc: world.location_name_to_id.get(loc, None) for loc in locations}
+        self.add_locations(loc_dict, MessengerLocation)
+        world.multiworld.regions.append(self)
 
 
 class MessengerLocation(Location):
     game = "The Messenger"
 
-    def __init__(self, name: str, parent: MessengerRegion, loc_id: Optional[int]) -> None:
-        super().__init__(parent.player, name, loc_id, parent)
+    def __init__(self, player: int, name: str, loc_id: Optional[int], parent: MessengerRegion) -> None:
+        super().__init__(player, name, loc_id, parent)
         if loc_id is None:
             self.place_locked_item(MessengerItem(name, parent.player, None))
 
