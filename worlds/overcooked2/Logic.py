@@ -1,6 +1,6 @@
 from BaseClasses import CollectionState
 from .Overcooked2Levels import Overcooked2GenericLevel, Overcooked2Dlc, Overcooked2Level, OverworldRegion, overworld_region_by_level
-from typing import Dict, List
+from typing import Dict, Set
 from random import Random
 
 def has_requirements_for_level_access(state: CollectionState, level_name: str, previous_level_completed_event_name: str,
@@ -133,7 +133,7 @@ def level_shuffle_factory(
     shuffle_prep_levels: bool,
     shuffle_horde_levels: bool,
     kevin_levels: bool,
-    enabled_dlc: List[Overcooked2Dlc],
+    enabled_dlc: Set[Overcooked2Dlc],
     player_name: str,
 ) -> Dict[int, Overcooked2GenericLevel]:  # return <story_level_id, level>
 

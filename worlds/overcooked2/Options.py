@@ -91,8 +91,7 @@ class DLCOptionSet(OptionSet):
     """Which DLCs should be included in when 'Shuffle Level Order' is enabled?'"""
     display_name = "Enabled DLC"
     default = {"Story", "Seasonal"}
-    valid_keys = {dlc.value for dlc in Overcooked2Dlc}
-
+    valid_keys = [dlc.value for dlc in Overcooked2Dlc]
 
 class IncludeHordeLevels(OC2OnToggle):
     """Includes "Horde Defense" levels in the pool of possible kitchens when Shuffle Level Order is enabled. Also adds

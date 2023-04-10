@@ -4,11 +4,11 @@ from typing import List
 
 class Overcooked2Dlc(Enum):
     STORY = "Story"
+    SEASONAL = "Seasonal"
     SURF_N_TURF = "Surf 'n' Turf"
     CAMPFIRE_COOK_OFF = "Campfire Cook Off"
     NIGHT_OF_THE_HANGRY_HORDE = "Night of the Hangry Horde"
     CARNIVAL_OF_CHAOS = "Carnival of Chaos"
-    SEASONAL = "Seasonal"
     # CHRISTMAS = "Christmas"
     # CHINESE_NEW_YEAR = "Chinese New Year"
     # WINTER_WONDERLAND = "Winter Wonderland"

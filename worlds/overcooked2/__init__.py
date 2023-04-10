@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Callable, Dict, Any, List, Optional, TextIO
+from typing import Any, List, Dict, Set, Callable, Optional, TextIO
 
 from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, Tutorial, LocationProgressType
 from worlds.AutoWorld import World, WebWorld
@@ -225,7 +225,7 @@ class Overcooked2World(World):
     player_name: str
     level_unlock_counts: Dict[int, int]  # level_id, stars to purchase
     level_mapping: Dict[int, Overcooked2GenericLevel]  # level_id, level
-    enabled_dlc: List[Overcooked2Dlc]
+    enabled_dlc: Set[Overcooked2Dlc]
 
     # Autoworld Hooks
 
@@ -237,7 +237,7 @@ class Overcooked2World(World):
         self.star_threshold_scale = self.options["StarThresholdScale"] / 100.0
 
         # Parse DLCOptionSet back into enums
-        self.enabled_dlc = [Overcooked2Dlc(x) for x in self.options["DLCOptionSet"]]
+        self.enabled_dlc = {Overcooked2Dlc(x) for x in self.options["DLCOptionSet"]}
 
         # Generate level unlock requirements such that the levels get harder to unlock
         # the further the game has progressed, and levels progress radially rather than linearly
