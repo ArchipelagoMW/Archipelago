@@ -67,26 +67,24 @@ class Overcooked2Test(unittest.TestCase):
 
     def testOvercooked2ShuffleFactory(self):
         previous_runs = set()
+
+        # Test uniqueness
         for seed in range(0, 5):
-            levels = level_shuffle_factory(Random(seed), True, False)
+            levels = level_shuffle_factory(Random(seed), True, False, True, {x for x in Overcooked2Dlc}, "test")
             self.assertEqual(len(levels), 44)
-            previous_level_id = None
-            for level_id in levels.keys():
-                if previous_level_id is not None:
-                    self.assertEqual(previous_level_id+1, level_id)
-                previous_level_id = level_id
 
-            self.assertNotIn(levels[15], previous_runs)
-            previous_runs.add(levels[15])
+            self.assertNotIn((levels[5], levels[15]), previous_runs)
+            previous_runs.add((levels[5], levels[15]))
 
-        levels = level_shuffle_factory(Random(123), False, True)
-        self.assertEqual(len(levels), 44)
+        # Test kevin = false
+        levels = level_shuffle_factory(Random(123), False, True, False, {x for x in Overcooked2Dlc}, "test")
+        self.assertEqual(len(levels), 36)
 
     def testLevelNameRepresentation(self):
         shortnames = [level.as_generic_level.shortname for level in Overcooked2Level()]
 
         for shortname in shortnames:
-            self.assertIn(shortname, level_logic.keys())
+            self.assertIn(shortname, level_logic)
 
         self.assertEqual(len(level_logic), len(level_id_to_shortname))
 
