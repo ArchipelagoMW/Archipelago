@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Callable, Dict, Any, List, Optional
+from typing import Callable, Dict, Any, List, Optional, TextIO
 
 from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, Tutorial, LocationProgressType
 from worlds.AutoWorld import World, WebWorld
@@ -588,6 +588,17 @@ class Overcooked2World(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return self.fill_json_data()
+
+    def write_spoiler(self, spoiler_handle: TextIO) -> None:
+        if not self.options["ShuffleLevelOrder"]:
+            return
+
+        world: Overcooked2World = self.multiworld.worlds[self.player]
+        spoiler_handle.write(f"\n\n{self.player_name}'s Level Order:\n\n")
+        for overworld_id in world.level_mapping:
+            overworld_name = Overcooked2GenericLevel(overworld_id).shortname.split("Story ")[1]
+            kitchen_name = world.level_mapping[overworld_id].shortname
+            spoiler_handle.write(f'{overworld_name} | {kitchen_name}\n')
 
 
 def level_unlock_requirement_factory(stars_to_win: int) -> Dict[int, int]:
