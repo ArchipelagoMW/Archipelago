@@ -1,4 +1,4 @@
-from typing import Dict, Set, Any
+from typing import Dict, Set, List, Any
 from collections import Counter
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
@@ -61,7 +61,7 @@ class BlasphemousWorld(World):
         return self.multiworld.random.choice(tears_set)
 
 
-    def generate_basic(self):
+    def create_items(self):
         placed_items = []
 
         placed_items.extend(Vanilla.unrandomized_dict.values())

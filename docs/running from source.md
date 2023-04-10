@@ -32,13 +32,11 @@ Recommended steps
  * Download and install a "Windows installer (64-bit)" from the [Python download page](https://www.python.org/downloads)
    * **Python 3.11 does not work currently**
 
- * Download and install full Visual Studio from
-   [Visual Studio Downloads](https://visualstudio.microsoft.com/downloads/)
-   or an older "Build Tools for Visual Studio" from
-   [Visual Studio Older Downloads](https://visualstudio.microsoft.com/vs/older-downloads/).
-
-   * Refer to [Windows Compilers on the python wiki](https://wiki.python.org/moin/WindowsCompilers) for details
-   * This step is optional. Pre-compiled modules are pinned on
+ * **Optional**: Download and install Visual Studio Build Tools from
+   [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
+   * Refer to [Windows Compilers on the python wiki](https://wiki.python.org/moin/WindowsCompilers) for details. 
+     Generally, selecting the box for "Desktop Development with C++" will provide what you need.
+   * Build tools are not required if all modules are installed pre-compiled. Pre-compiled modules are pinned on
      [Discord in #archipelago-dev](https://discord.com/channels/731205301247803413/731214280439103580/905154456377757808)
 
  * It is recommended to use [PyCharm IDE](https://www.jetbrains.com/pycharm/)

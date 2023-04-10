@@ -7,6 +7,9 @@ import threading
 import base64
 from typing import Any, Dict, Iterable, List, Set, TextIO, TypedDict
 
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, Tutorial
+from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
+
 logger = logging.getLogger("Super Metroid")
 
 from .Regions import create_regions
@@ -16,20 +19,18 @@ from .Client import SMSNIClient
 from .Rom import get_base_rom_path, SM_ROM_MAX_PLAYERID, SM_ROM_PLAYERDATA_COUNT, SMDeltaPatch, get_sm_symbols
 import Utils
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, Tutorial
-from ..AutoWorld import World, AutoLogicRegister, WebWorld
-
-from worlds.sm.variaRandomizer.logic.smboolmanager import SMBoolManager
-from worlds.sm.variaRandomizer.graph.vanilla.graph_locations import locationsDict
-from worlds.sm.variaRandomizer.graph.graph_utils import getAccessPoint
-from worlds.sm.variaRandomizer.rando.ItemLocContainer import ItemLocation
-from worlds.sm.variaRandomizer.rando.Items import ItemManager
-from worlds.sm.variaRandomizer.utils.parameters import *
-from worlds.sm.variaRandomizer.logic.logic import Logic
-from worlds.sm.variaRandomizer.randomizer import VariaRandomizer
-from worlds.sm.variaRandomizer.utils.doorsmanager import DoorsManager
-from worlds.sm.variaRandomizer.rom.rom_patches import RomPatches
-from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils
+from .variaRandomizer.logic.smboolmanager import SMBoolManager
+from .variaRandomizer.graph.vanilla.graph_locations import locationsDict
+from .variaRandomizer.graph.graph_utils import getAccessPoint
+from .variaRandomizer.rando.ItemLocContainer import ItemLocation
+from .variaRandomizer.rando.Items import ItemManager
+from .variaRandomizer.utils.parameters import *
+from .variaRandomizer.utils.utils import openFile
+from .variaRandomizer.logic.logic import Logic
+from .variaRandomizer.randomizer import VariaRandomizer
+from .variaRandomizer.utils.doorsmanager import DoorsManager
+from .variaRandomizer.rom.rom_patches import RomPatches
+from .variaRandomizer.graph.graph_utils import GraphUtils
 
 
 class SMCollectionState(metaclass=AutoLogicRegister):
@@ -85,7 +86,7 @@ class SMWorld(World):
 
     game: str = "Super Metroid"
     topology_present = True
-    data_version = 2
+    data_version = 3
     option_definitions = sm_options
 
     item_name_to_id = {value.Name: items_start_id + value.Id for key, value in ItemManager.Items.items() if value.Id != None}
@@ -139,8 +140,8 @@ class SMWorld(World):
                 if (item in itemPool):
                     itemPool.remove(item)
 
-        missingPool = 105 - len(itemPool) + 1
-        for i in range(1, missingPool):
+        missingPool = 109 - len(itemPool)
+        for i in range(missingPool):
             itemPool.append(ItemManager.Items['Nothing'])
         
         # Generate item pool
@@ -208,10 +209,11 @@ class SMWorld(World):
         """ little-endian convert a 16-bit number to an array of numbers <= 255 each """
         return [w & 0x00FF, (w & 0xFF00) >> 8]
 
-    # used for remote location Credits Spoiler of local items
+    # used for remote location Credits Spoiler of local items and Objectives' writeItemsMasks
     class DummyLocation:
         def __init__(self, name):
             self.Name = name
+            self.restricted = False
 
         def isBoss(self):
             return False
@@ -279,14 +281,14 @@ class SMWorld(World):
         # first apply the sm multiworld code patch named 'basepatch' (also has empty tables that we'll overwrite),
         #  + apply some patches from varia that we want to be always-on.
         # basepatch and variapatches are both generated from https://github.com/lordlou/SMBasepatch
-        romPatcher.applyIPSPatch(os.path.join(os.path.dirname(__file__),
-                                              "data", "SMBasepatch_prebuilt", "multiworld-basepatch.ips"))
-        romPatcher.applyIPSPatch(os.path.join(os.path.dirname(__file__),
-                                              "data", "SMBasepatch_prebuilt", "variapatches.ips"))
+        romPatcher.applyIPSPatch("/".join((os.path.dirname(self.__file__),
+                                              "data", "SMBasepatch_prebuilt", "multiworld-basepatch.ips")))
+        romPatcher.applyIPSPatch("/".join((os.path.dirname(self.__file__),
+                                              "data", "SMBasepatch_prebuilt", "variapatches.ips")))
 
     def APPostPatchRom(self, romPatcher):
-        symbols = get_sm_symbols(os.path.join(os.path.dirname(__file__),
-                                              "data", "SMBasepatch_prebuilt", "sm-basepatch-symbols.json"))
+        symbols = get_sm_symbols("/".join((os.path.dirname(self.__file__),
+                                              "data", "SMBasepatch_prebuilt", "sm-basepatch-symbols.json")))
 
         # gather all player ids and names relevant to this rom, then write player name and player id data tables
         playerIdSet: Set[int] = {0}  # 0 is for "Archipelago" server
@@ -336,7 +338,7 @@ class SMWorld(World):
         idx = 0
         vanillaItemTypesCount = 21
         for itemLoc in self.multiworld.get_locations():
-            if itemLoc.player == self.player and locationsDict[itemLoc.name].Id != None:
+            if itemLoc.player == self.player and "Boss" not in locationsDict[itemLoc.name].Class:
                 # item to place in this SM world: write full item data to tables
                 if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items:
                     itemId = ItemManager.Items[itemLoc.item.type].Id
@@ -376,7 +378,7 @@ class SMWorld(World):
         idx = 0
         offworldSprites: List[ByteEdit] = []
         for itemSprite in itemSprites:
-            with open(os.path.join(os.path.dirname(__file__), "data", "custom_sprite", itemSprite["fileName"]), 'rb') as stream:
+            with openFile("/".join((os.path.dirname(self.__file__), "data", "custom_sprite", itemSprite["fileName"])), 'rb') as stream:
                 buffer = bytearray(stream.read())
                 offworldSprites.append({"sym": symbols[itemSprite["paletteSymbolName"]],
                                         "offset": 0,
@@ -521,22 +523,38 @@ class SMWorld(World):
         # commit all the changes we've made here to the ROM
         romPatcher.commitIPS()
 
-        itemLocs = [
-            ItemLocation(ItemManager.Items[itemLoc.item.type
-                         if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
-                         'ArchipelagoItem'],
-                         locationsDict[itemLoc.name], True)
-            for itemLoc in self.multiworld.get_locations() if itemLoc.player == self.player
-        ]
-        romPatcher.writeItemsLocs(itemLocs)
-
         itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name] if itemLoc.name in locationsDict and itemLoc.player == self.player else self.DummyLocation(self.multiworld.get_player_name(itemLoc.player) + " " + itemLoc.name), True) for itemLoc in self.multiworld.get_locations() if itemLoc.item.player == self.player]
         progItemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name] if itemLoc.name in locationsDict and itemLoc.player == self.player else self.DummyLocation(self.multiworld.get_player_name(itemLoc.player) + " " + itemLoc.name), True) for itemLoc in self.multiworld.get_locations() if itemLoc.item.player == self.player and itemLoc.item.advancement == True]
-        # progItemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.multiworld.get_locations() if itemLoc.player == self.player and itemLoc.item.player == self.player and itemLoc.item.advancement == True]
-        
+
+
+        romPatcher.writeObjectives(itemLocs, romPatcher.settings["tourian"])
+        romPatcher.writeItemsLocs(self.itemLocs)
+
         # romPatcher.writeSplitLocs(self.variaRando.args.majorsSplit, itemLocs, progItemLocs)
+        romPatcher.writeItemsNumber()
+        if not romPatcher.settings["isPlando"]:
+            romPatcher.writeSeed(romPatcher.settings["seed"]) # lol if race mode
         romPatcher.writeSpoiler(itemLocs, progItemLocs)
         romPatcher.writeRandoSettings(self.variaRando.randoExec.randoSettings, itemLocs)
+        romPatcher.writeDoorConnections(romPatcher.settings["doors"])
+        romPatcher.writeVersion(romPatcher.settings["displayedVersion"])
+        if romPatcher.settings["ctrlDict"] is not None:
+            romPatcher.writeControls(romPatcher.settings["ctrlDict"])
+        if romPatcher.settings["moonWalk"] == True:
+            romPatcher.enableMoonWalk()
+
+        romPatcher.writeMagic()
+        romPatcher.writeMajorsSplit(romPatcher.settings["majorsSplit"])
+
+        #if self.settings["isPlando"] and self.race is None:
+        #    doorsPtrs = GraphUtils.getAps2DoorsPtrs()
+        #    self.writePlandoTransitions(self.settings["plando"]["graphTrans"], doorsPtrs,
+        #                                self.settings["plando"]["maxTransitions"])
+        #    self.writePlandoAddresses(self.settings["plando"]["visitedLocations"])
+        #if self.settings["isPlando"] and self.settings["plando"]["additionalETanks"] != 0:
+        #    self.writeAdditionalETanks(self.settings["plando"]["additionalETanks"])
+
+        romPatcher.end()
 
     def generate_output(self, output_directory: str):
         outfilebase = self.multiworld.get_out_file_name_base(self.player)
@@ -680,6 +698,41 @@ class SMWorld(World):
             for item, loc in zip(self.NothingPool, locations):
                 loc.place_locked_item(item)
                 loc.address = loc.item.code = None
+
+    def post_fill(self):
+        self.itemLocs = [
+            ItemLocation(ItemManager.Items[itemLoc.item.type
+                         if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
+                         'ArchipelagoItem'],
+                         locationsDict[itemLoc.name], itemLoc.item.player, True)
+            for itemLoc in self.multiworld.get_locations(self.player)
+        ]
+        self.progItemLocs = [
+            ItemLocation(ItemManager.Items[itemLoc.item.type
+                         if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
+                         'ArchipelagoItem'],
+                         locationsDict[itemLoc.name], itemLoc.item.player, True)
+            for itemLoc in self.multiworld.get_locations(self.player) if itemLoc.item.advancement
+        ]
+        for itemLoc in self.itemLocs:
+            if itemLoc.Item.Class == "Boss":
+                itemLoc.Item.Class = "Minor"
+        for itemLoc in self.progItemLocs:
+            if itemLoc.Item.Class == "Boss":
+                itemLoc.Item.Class = "Minor"
+
+        localItemLocs = [il for il in self.itemLocs if il.player == self.player]
+        localprogItemLocs = [il for il in self.progItemLocs if il.player == self.player]
+
+        escapeTrigger = (localItemLocs, localprogItemLocs, 'Full') if self.variaRando.randoExec.randoSettings.restrictions["EscapeTrigger"] else None
+        escapeOk = self.variaRando.randoExec.graphBuilder.escapeGraph(self.variaRando.container, self.variaRando.randoExec.areaGraph, self.variaRando.randoExec.randoSettings.maxDiff, escapeTrigger)
+        assert escapeOk, "Could not find a solution for escape"
+
+        self.variaRando.doors = GraphUtils.getDoorConnections(self.variaRando.randoExec.areaGraph,
+                                    self.variaRando.args.area, self.variaRando.args.bosses,
+                                    self.variaRando.args.escapeRando)
+        
+        self.variaRando.randoExec.postProcessItemLocs(self.itemLocs, self.variaRando.args.hideItems)
 
     @classmethod
     def stage_post_fill(cls, world):
