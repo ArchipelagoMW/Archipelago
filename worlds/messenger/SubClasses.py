@@ -1,6 +1,6 @@
-from typing import Set, TYPE_CHECKING, Optional, Dict, Type
+from typing import TYPE_CHECKING, Optional
 
-from BaseClasses import Region, Location, Item, ItemClassification, Entrance
+from BaseClasses import Region, Location, Item, ItemClassification
 from .Constants import SEALS, NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
 from .Options import Goal
 from .Regions import REGIONS, MEGA_SHARDS
