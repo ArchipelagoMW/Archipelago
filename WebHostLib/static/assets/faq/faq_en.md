@@ -20,7 +20,7 @@ comfortable exploiting certain glitches in the game.
 ## What is a multi-world?
 
 While a randomizer shuffles a game, a multi-world randomizer shuffles that game for multiple players. For example, in a
-two player multi-world, players A and B each get their own randomized version of a game, called seeds. In each player's
+two player multi-world, players A and B each get their own randomized version of a game, called a world. In each player's
 game, they may find items which belong to the other player. If player A finds an item which belongs to player B, the
 item will be sent to player B's world over the internet.
 
@@ -29,7 +29,7 @@ their game.
 
 ## What happens if a person has to leave early?
 
-If a player must leave early, they can use Archipelago's forfeit system. When a player forfeits their game, all the
+If a player must leave early, they can use Archipelago's release system. When a player releases their game, all the
 items in that game which belong to other players are sent out automatically, so other players can continue to play.
 
 ## What does multi-game mean?

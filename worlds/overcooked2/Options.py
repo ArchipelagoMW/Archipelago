@@ -1,13 +1,67 @@
+from enum import IntEnum
 from typing import TypedDict
-from Options import DefaultOnToggle, Range, Choice, OptionSet
-
+from Options import DefaultOnToggle, Toggle, Range, Choice, OptionSet
 from .Overcooked2Levels import Overcooked2Dlc
+
+class LocationBalancingMode(IntEnum):
+    disabled = 0
+    compromise = 1
+    full = 2
+
+
+class DeathLinkMode(IntEnum):
+    disabled = 0
+    death_only = 1
+    death_and_overcook = 2
 
 
 class OC2OnToggle(DefaultOnToggle):
     @property
     def result(self) -> bool:
         return bool(self.value)
+
+
+class OC2Toggle(Toggle):
+    @property
+    def result(self) -> bool:
+        return bool(self.value)
+
+
+class LocationBalancing(Choice):
+    """Location balancing affects the density of progression items found in your world relative to other worlds. This setting changes nothing for solo games.
+
+    - Disabled: Location density in your world can fluctuate greatly depending on the settings of other players. In extreme cases, your world may be entirely populated with filler items
+
+    - Compromise: Locations are balanced to a midpoint between "fair" and "natural"
+
+    - Full: Locations are balanced in an attempt to make the number of progression items sent out and received equal over the entire game"""
+    auto_display_name = True
+    display_name = "Location Balancing"
+    option_disabled = LocationBalancingMode.disabled.value
+    option_compromise = LocationBalancingMode.compromise.value
+    option_full = LocationBalancingMode.full.value
+    default = LocationBalancingMode.compromise.value
+
+class RampTricks(OC2Toggle):
+    """If enabled, generated games may require sequence breaks on the overworld map. This includes crossing small gaps and escaping out of bounds."""
+    display_name = "Overworld Tricks"
+    
+
+class DeathLink(Choice):
+    """DeathLink is an opt-in feature for Multiworlds where individual death events are propagated to all games with DeathLink enabled.
+
+    - Disabled: Death will behave as it does in the original game.
+
+    - Death Only: A DeathLink broadcast will be sent every time a chef falls into a stage hazard. All local chefs will be killed when any one perishes.
+
+    - Death and Overcook: Same as above, but an additional broadcast will be sent whenever the kitchen catches on fire from burnt food.
+    """
+    auto_display_name = True
+    display_name = "DeathLink"
+    option_disabled = DeathLinkMode.disabled.value
+    option_death_only = DeathLinkMode.death_only.value
+    option_death_and_overcook = DeathLinkMode.death_and_overcook.value
+    default = DeathLinkMode.disabled.value
 
 
 class AlwaysServeOldestOrder(OC2OnToggle):
@@ -22,7 +76,7 @@ class AlwaysPreserveCookingProgress(OC2OnToggle):
     display_name = "Preserve Cooking/Mixing Progress"
 
 
-class DisplayLeaderboardScores(OC2OnToggle):
+class DisplayLeaderboardScores(OC2Toggle):
     """Modifies the Overworld map to fetch and display the current world records for each level. Press number keys 1-4
     to view leaderboard scores for that number of players."""
     display_name = "Display Leaderboard Scores"
@@ -37,11 +91,11 @@ class DLCOptionSet(OptionSet):
     """Which DLCs should be included in when 'Shuffle Level Order' is enabled?'"""
     display_name = "DLCOptionSet"
     default = {"Story"}
-    valid_keys = {dlc.name for dlc in Overcooked2Dlc}
+    valid_keys = {dlc.value for dlc in Overcooked2Dlc}
 
 
 class IncludeHordeLevels(OC2OnToggle):
-    """Includes "Horde Defence" levels in the pool of possible kitchens when Shuffle Level Order is enabled. Also adds
+    """Includes "Horde Defense" levels in the pool of possible kitchens when Shuffle Level Order is enabled. Also adds
     two horde-specific items into the item pool."""
     display_name = "Include Horde Levels"
 
@@ -72,7 +126,7 @@ class ShorterLevelDuration(OC2OnToggle):
 class ShortHordeLevels(OC2OnToggle):
     """Modifies horde levels to contain roughly 1/3rd fewer waves than in the original game.
 
-    The kitchen's health is sacled appropriately to preserve the same approximate difficulty."""
+    The kitchen's health is scaled appropriately to preserve the same approximate difficulty."""
     display_name = "Shorter Horde Levels"
 
 
@@ -101,7 +155,7 @@ class StarsToWin(Range):
     display_name = "Stars to Win"
     range_start = 0
     range_end = 100
-    default = 66
+    default = 60
 
 
 class StarThresholdScale(Range):
@@ -110,10 +164,17 @@ class StarThresholdScale(Range):
     display_name = "Star Difficulty %"
     range_start = 1
     range_end = 100
-    default = 45
+    default = 35
 
 
 overcooked_options = {
+    # generator options
+    "location_balancing": LocationBalancing,
+    "ramp_tricks": RampTricks,
+
+    # deathlink
+    "deathlink": DeathLink,
+
     # randomization options
     "shuffle_level_order": ShuffleLevelOrder,
     "include_dlcs": DLCOptionSet,

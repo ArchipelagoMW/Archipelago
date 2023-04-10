@@ -65,7 +65,7 @@ item_table = {
     "Super Repel": ItemData(56, ItemClassification.filler, ["Consumables"]),
     "Max Repel": ItemData(57, ItemClassification.filler, ["Consumables"]),
     "Dire Hit": ItemData(58, ItemClassification.filler, ["Consumables", "Battle Items"]),
-    #"Coin": ItemData(59, ItemClassification.filler),
+    "10 Coins": ItemData(59, ItemClassification.filler, ["Coins"]),
     "Fresh Water": ItemData(60, ItemClassification.filler, ["Consumables", "Vending Machine Drinks"]),
     "Soda Pop": ItemData(61, ItemClassification.filler, ["Consumables", "Vending Machine Drinks"]),
     "Lemonade": ItemData(62, ItemClassification.filler, ["Consumables", "Vending Machine Drinks"]),
@@ -103,6 +103,8 @@ item_table = {
     "Paralyze Trap": ItemData(95, ItemClassification.trap, ["Traps"]),
     "Ice Trap": ItemData(96, ItemClassification.trap, ["Traps"]),
     "Fire Trap": ItemData(97, ItemClassification.trap, ["Traps"]),
+    "20 Coins": ItemData(98, ItemClassification.filler, ["Coins"]),
+    "100 Coins": ItemData(99, ItemClassification.filler, ["Coins"]),
     "HM01 Cut": ItemData(196, ItemClassification.progression, ["Unique", "HMs"]),
     "HM02 Fly": ItemData(197, ItemClassification.progression, ["Unique", "HMs"]),
     "HM03 Surf": ItemData(198, ItemClassification.progression, ["Unique", "HMs"]),
@@ -119,7 +121,7 @@ item_table = {
     "TM09 Take Down": ItemData(209, ItemClassification.useful, ["Unique", "TMs"]),
     "TM10 Double Edge": ItemData(210, ItemClassification.useful, ["Unique", "TMs"]),
     "TM11 Bubble Beam": ItemData(211, ItemClassification.useful, ["Unique", "TMs"]),
-    "TM12 Water Gun": ItemData(212, ItemClassification.useful, ["Unique", "TMs"]),
+    "TM12 Water Gun": ItemData(212, ItemClassification.filler, ["Unique", "TMs"]),
     "TM13 Ice Beam": ItemData(213, ItemClassification.useful, ["Unique", "TMs"]),
     "TM14 Blizzard": ItemData(214, ItemClassification.useful, ["Unique", "TMs"]),
     "TM15 Hyper Beam": ItemData(215, ItemClassification.useful, ["Unique", "TMs"]),
@@ -163,6 +165,10 @@ item_table = {
     "Silph Co Liberated": ItemData(None, ItemClassification.progression, []),
     "Become Champion": ItemData(None, ItemClassification.progression, [])
 }
+
+item_table.update({f"TM{str(i).zfill(2)}": ItemData(i + 456, ItemClassification.filler, ["Unique", "TMs"])
+                   for i in range(1, 51)})
+
 item_table.update(
     {pokemon: ItemData(None, ItemClassification.progression, []) for pokemon in pokemon_data.keys()}
 )

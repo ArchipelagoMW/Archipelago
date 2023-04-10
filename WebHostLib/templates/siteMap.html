@@ -29,17 +29,30 @@
             <li><a href="/glossary/en">Glossary</a></li>
         </ul>
 
+        <h2>Tutorials</h2>
+        <ul>
+            <li><a href="/tutorial/Archipelago/setup/en">Multiworld Setup Tutorial</a></li>
+            <li><a href="/tutorial/Archipelago/using_website/en">Website User Guide</a></li>
+            <li><a href="/tutorial/Archipelago/mac/en">Setup Guide for Mac</a></li>
+            <li><a href="/tutorial/Archipelago/commands/en">Server and Client Commands</a></li>
+            <li><a href="/tutorial/Archipelago/advanced_settings/en">Advanced YAML Guide</a></li>
+            <li><a href="/tutorial/Archipelago/triggers/en">Triggers Guide</a></li>
+            <li><a href="/tutorial/Archipelago/plando/en">Plando Guide</a></li>
+        </ul>
+
         <h2>Game Info Pages</h2>
         <ul>
             {% for game in games | title_sorted %}
-                <li><a href="{{ url_for('game_info', game=game, lang='en') }}">{{ game }}</a></li>
+                <li><a href="{{ url_for('game_info', game=game['title'], lang='en') }}">{{ game['title'] }}</a></li>
             {% endfor %}
         </ul>
 
         <h2>Game Settings Pages</h2>
         <ul>
             {% for game in games | title_sorted %}
-                <li><a href="{{ url_for('player_settings', game=game) }}">{{ game }}</a></li>
+                {% if game['has_settings'] %}
+                    <li><a href="{{ url_for('player_settings', game=game['title']) }}">{{ game['title'] }}</a></li>
+                {% endif %} 
             {% endfor %}
         </ul>
     </div>

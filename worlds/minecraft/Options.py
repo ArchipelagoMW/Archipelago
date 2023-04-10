@@ -6,7 +6,7 @@ class AdvancementGoal(Range):
     """Number of advancements required to spawn bosses."""
     display_name = "Advancement Goal"
     range_start = 0
-    range_end = 95
+    range_end = 114
     default = 40
 
 
@@ -14,7 +14,7 @@ class EggShardsRequired(Range):
     """Number of dragon egg shards to collect to spawn bosses."""
     display_name = "Egg Shards Required"
     range_start = 0
-    range_end = 40
+    range_end = 74
     default = 0
 
 
@@ -22,7 +22,7 @@ class EggShardsAvailable(Range):
     """Number of dragon egg shards available to collect."""
     display_name = "Egg Shards Available"
     range_start = 0
-    range_end = 40
+    range_end = 74
     default = 0
 
 
@@ -34,6 +34,14 @@ class BossGoal(Choice):
     option_wither = 2
     option_both = 3
     default = 1
+
+    @property
+    def dragon(self):
+        return self.value % 2 == 1
+
+    @property
+    def wither(self):
+        return self.value > 1
 
 
 class ShuffleStructures(DefaultOnToggle):
@@ -94,14 +102,16 @@ minecraft_options: typing.Dict[str, type(Option)] = {
     "egg_shards_required":                  EggShardsRequired,
     "egg_shards_available":                 EggShardsAvailable,
     "required_bosses":                      BossGoal,
+
     "shuffle_structures":                   ShuffleStructures,
     "structure_compasses":                  StructureCompasses,
-    "bee_traps":                            BeeTraps,
+
     "combat_difficulty":                    CombatDifficulty,
     "include_hard_advancements":            HardAdvancements,
     "include_unreasonable_advancements":    UnreasonableAdvancements,
     "include_postgame_advancements":        PostgameAdvancements,
+    "bee_traps":                            BeeTraps,
     "send_defeated_mobs":                   SendDefeatedMobs,
-    "starting_items":                       StartingItems,
     "death_link":                           DeathLink,
+    "starting_items":                       StartingItems,
 }

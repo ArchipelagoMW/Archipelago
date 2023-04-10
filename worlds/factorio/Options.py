@@ -1,5 +1,6 @@
 from __future__ import annotations
 import typing
+import datetime
 
 from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnToggle, Range, DeathLink, Toggle
 from schema import Schema, Optional, And, Or
@@ -61,12 +62,33 @@ class MaxTechCost(TechCost):
     default = 500
 
 
+class TechCostDistribution(Choice):
+    """Random distribution of costs of the Science Packs.
+    Even: any number between min and max is equally likely.
+    Low: low costs, near the minimum, are more likely.
+    Middle: medium costs, near the average, are more likely.
+    High: high costs, near the maximum, are more likely."""
+    display_name = "Tech Cost Distribution"
+    option_even = 0
+    option_low = 1
+    option_middle = 2
+    option_high = 3
+
+
 class TechCostMix(Range):
     """Percent chance that a preceding Science Pack is also required.
     Chance is rolled per preceding pack."""
     display_name = "Science Pack Cost Mix"
     range_end = 100
     default = 70
+
+
+class RampingTechCosts(Toggle):
+    """Forces the amount of Science Packs required to ramp up with the highest involved Pack. Average is preserved.
+    For example:
+    off: Automation (red)/Logistics (green) sciences can range from 1 to 1000 Science Packs,
+    on: Automation (red) ranges to ~500 packs and Logistics (green) from ~500 to 1000 Science Packs"""
+    display_name = "Ramping Tech Costs"
 
 
 class Silo(Choice):
@@ -176,6 +198,14 @@ class RecipeIngredients(Choice):
     option_science_pack = 1
 
 
+class RecipeIngredientsOffset(Range):
+    """When randomizing ingredients, remove or add this many "slots" of items.
+    For example, at -1 a randomized Automation Science Pack will only require 1 ingredient, instead of 2."""
+    display_name = "Randomized Recipe Ingredients Offset"
+    range_start = -1
+    range_end = 5
+
+
 class FactorioStartItems(ItemDict):
     """Mapping of Factorio internal item-name to amount granted on start."""
     display_name = "Starting Items"
@@ -202,9 +232,36 @@ class AttackTrapCount(TrapCount):
     display_name = "Attack Traps"
 
 
+class TeleportTrapCount(TrapCount):
+    """Trap items that when received trigger a random teleport."""
+    display_name = "Teleport Traps"
+
+
+class GrenadeTrapCount(TrapCount):
+    """Trap items that when received trigger a grenade explosion on each player."""
+    display_name = "Grenade Traps"
+
+
+class ClusterGrenadeTrapCount(TrapCount):
+    """Trap items that when received trigger a cluster grenade explosion on each player."""
+    display_name = "Cluster Grenade Traps"
+
+
+class ArtilleryTrapCount(TrapCount):
+    """Trap items that when received trigger an artillery shell on each player."""
+    display_name = "Artillery Traps"
+
+
+class AtomicRocketTrapCount(TrapCount):
+    """Trap items that when received trigger an atomic rocket explosion on each player.
+    Warning: there is no warning. The launch is instantaneous."""
+    display_name = "Atomic Rocket Traps"
+
+
 class EvolutionTrapCount(TrapCount):
     """Trap items that when received increase the enemy evolution."""
     display_name = "Evolution Traps"
+    range_end = 10
 
 
 class EvolutionTrapIncrease(Range):
@@ -371,7 +428,9 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "tech_tree_layout": TechTreeLayout,
     "min_tech_cost": MinTechCost,
     "max_tech_cost": MaxTechCost,
+    "tech_cost_distribution": TechCostDistribution,
     "tech_cost_mix": TechCostMix,
+    "ramping_tech_costs": RampingTechCosts,
     "silo": Silo,
     "satellite": Satellite,
     "free_samples": FreeSamples,
@@ -381,12 +440,31 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "free_sample_whitelist": FactorioFreeSampleWhitelist,
     "recipe_time": RecipeTime,
     "recipe_ingredients": RecipeIngredients,
+    "recipe_ingredients_offset": RecipeIngredientsOffset,
     "imported_blueprints": ImportedBlueprint,
     "world_gen": FactorioWorldGen,
     "progressive": Progressive,
-    "evolution_traps": EvolutionTrapCount,
+    "teleport_traps": TeleportTrapCount,
+    "grenade_traps": GrenadeTrapCount,
+    "cluster_grenade_traps": ClusterGrenadeTrapCount,
+    "artillery_traps": ArtilleryTrapCount,
+    "atomic_rocket_traps": AtomicRocketTrapCount,
     "attack_traps": AttackTrapCount,
+    "evolution_traps": EvolutionTrapCount,
     "evolution_trap_increase": EvolutionTrapIncrease,
     "death_link": DeathLink,
-    "energy_link": EnergyLink
+    "energy_link": EnergyLink,
 }
+
+# spoilers below. If you spoil it for yourself, please at least don't spoil it for anyone else.
+if datetime.datetime.today().month == 4:
+
+    class ChunkShuffle(Toggle):
+        """Entrance Randomizer."""
+        display_name = "Chunk Shuffle"
+
+
+    if datetime.datetime.today().day > 1:
+        ChunkShuffle.__doc__ += """
+        2023 April Fool's option. Shuffles chunk border transitions."""
+    factorio_options["chunk_shuffle"] = ChunkShuffle

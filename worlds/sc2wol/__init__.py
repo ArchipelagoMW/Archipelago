@@ -7,10 +7,10 @@ from .Items import StarcraftWoLItem, item_table, filler_items, item_name_groups,
     get_basic_units
 from .Locations import get_locations
 from .Regions import create_regions
-from .Options import sc2wol_options, get_option_value, get_option_set_value
+from .Options import sc2wol_options, get_option_value
 from .LogicMixin import SC2WoLLogic
 from .PoolFilter import filter_missions, filter_items, get_item_upgrades
-from .MissionTables import get_starting_mission_locations, MissionInfo
+from .MissionTables import starting_mission_locations, MissionInfo
 
 
 class Starcraft2WoLWebWorld(WebWorld):
@@ -137,7 +137,6 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
 
         # The first world should also be the starting world
         first_mission = list(multiworld.worlds[player].mission_req_table)[0]
-        starting_mission_locations = get_starting_mission_locations(multiworld, player)
         if first_mission in starting_mission_locations:
             first_location = starting_mission_locations[first_mission]
         elif first_mission == "In Utter Darkness":
@@ -174,7 +173,7 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[s
     locked_items = []
 
     # YAML items
-    yaml_locked_items = get_option_set_value(multiworld, player, 'locked_items')
+    yaml_locked_items = get_option_value(multiworld, player, 'locked_items')
 
     for name, data in item_table.items():
         if name not in excluded_items:

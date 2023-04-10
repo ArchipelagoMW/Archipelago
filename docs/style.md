@@ -18,6 +18,7 @@
 * Use type annotations where possible for function signatures and class members.
 * Use type annotations where appropriate for local variables (e.g. `var: List[int] = []`, or when the
   type is hard or impossible to deduce.) Clear annotations help developers look up and validate API calls.
+* Worlds that do not follow PEP8 should still have a consistent style across its files to make reading easier.
 
 
 ## Markdown

@@ -35,14 +35,6 @@ class EarlySeaglide(DefaultOnToggle):
     display_name = "Early Seaglide"
 
 
-class ItemPool(Choice):
-    """Valuable item pool leaves all filler items in their vanilla locations and
-    creates random duplicates of important items into freed spots."""
-    display_name = "Item Pool"
-    option_standard = 0
-    option_valuable = 1
-
-
 class Goal(Choice):
     """Goal to complete.
     Launch: Leave the planet.
@@ -108,7 +100,6 @@ class SubnauticaDeathLink(DeathLink):
 options = {
     "swim_rule": SwimRule,
     "early_seaglide": EarlySeaglide,
-    "item_pool": ItemPool,
     "goal": Goal,
     "creature_scans": CreatureScans,
     "creature_scan_logic": AggressiveScanLogic,

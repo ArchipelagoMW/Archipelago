@@ -1,0 +1,379 @@
+id,region,name,tags
+1,Crafts Room,Spring Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY"
+2,Crafts Room,Summer Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY"
+3,Crafts Room,Fall Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY"
+4,Crafts Room,Winter Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY"
+5,Crafts Room,Construction Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY"
+6,Crafts Room,Exotic Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY"
+7,Pantry,Spring Crops Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE"
+8,Pantry,Summer Crops Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE"
+9,Pantry,Fall Crops Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE"
+10,Pantry,Quality Crops Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE"
+11,Pantry,Animal Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE"
+12,Pantry,Artisan Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE"
+13,Fish Tank,River Fish Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY"
+14,Fish Tank,Lake Fish Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY"
+15,Fish Tank,Ocean Fish Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY"
+16,Fish Tank,Night Fishing Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY"
+17,Fish Tank,Crab Pot Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY"
+18,Fish Tank,Specialty Fish Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY"
+19,Boiler Room,Blacksmith's Bundle,"BOILER_ROOM_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY"
+20,Boiler Room,Geologist's Bundle,"BOILER_ROOM_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY"
+21,Boiler Room,Adventurer's Bundle,"BOILER_ROOM_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY"
+22,Bulletin Board,Chef's Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY"
+23,Bulletin Board,Dye Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY"
+24,Bulletin Board,Field Research Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY"
+25,Bulletin Board,Fodder Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY"
+26,Bulletin Board,Enchanter's Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY"
+27,Vault,"2,500g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,VAULT_BUNDLE"
+28,Vault,"5,000g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,VAULT_BUNDLE"
+29,Vault,"10,000g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,VAULT_BUNDLE"
+30,Vault,"25,000g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,VAULT_BUNDLE"
+31,Abandoned JojaMart,The Missing Bundle,BUNDLE
+32,Crafts Room,Complete Crafts Room,"COMMUNITY_CENTER_ROOM,MANDATORY"
+33,Pantry,Complete Pantry,"COMMUNITY_CENTER_ROOM,MANDATORY"
+34,Fish Tank,Complete Fish Tank,"COMMUNITY_CENTER_ROOM,MANDATORY"
+35,Boiler Room,Complete Boiler Room,"COMMUNITY_CENTER_ROOM,MANDATORY"
+36,Bulletin Board,Complete Bulletin Board,"COMMUNITY_CENTER_ROOM,MANDATORY"
+37,Vault,Complete Vault,"COMMUNITY_CENTER_ROOM,MANDATORY"
+101,Pierre's General Store,Large Pack,BACKPACK
+102,Pierre's General Store,Deluxe Pack,BACKPACK
+103,Clint's Blacksmith,Copper Hoe Upgrade,"HOE_UPGRADE,TOOL_UPGRADE"
+104,Clint's Blacksmith,Iron Hoe Upgrade,"HOE_UPGRADE,TOOL_UPGRADE"
+105,Clint's Blacksmith,Gold Hoe Upgrade,"HOE_UPGRADE,TOOL_UPGRADE"
+106,Clint's Blacksmith,Iridium Hoe Upgrade,"HOE_UPGRADE,TOOL_UPGRADE"
+107,Clint's Blacksmith,Copper Pickaxe Upgrade,"PICKAXE_UPGRADE,TOOL_UPGRADE"
+108,Clint's Blacksmith,Iron Pickaxe Upgrade,"PICKAXE_UPGRADE,TOOL_UPGRADE"
+109,Clint's Blacksmith,Gold Pickaxe Upgrade,"PICKAXE_UPGRADE,TOOL_UPGRADE"
+110,Clint's Blacksmith,Iridium Pickaxe Upgrade,"PICKAXE_UPGRADE,TOOL_UPGRADE"
+111,Clint's Blacksmith,Copper Axe Upgrade,"AXE_UPGRADE,TOOL_UPGRADE"
+112,Clint's Blacksmith,Iron Axe Upgrade,"AXE_UPGRADE,TOOL_UPGRADE"
+113,Clint's Blacksmith,Gold Axe Upgrade,"AXE_UPGRADE,TOOL_UPGRADE"
+114,Clint's Blacksmith,Iridium Axe Upgrade,"AXE_UPGRADE,TOOL_UPGRADE"
+115,Clint's Blacksmith,Copper Watering Can Upgrade,"TOOL_UPGRADE,WATERING_CAN_UPGRADE"
+116,Clint's Blacksmith,Iron Watering Can Upgrade,"TOOL_UPGRADE,WATERING_CAN_UPGRADE"
+117,Clint's Blacksmith,Gold Watering Can Upgrade,"TOOL_UPGRADE,WATERING_CAN_UPGRADE"
+118,Clint's Blacksmith,Iridium Watering Can Upgrade,"TOOL_UPGRADE,WATERING_CAN_UPGRADE"
+119,Clint's Blacksmith,Copper Trash Can Upgrade,"TOOL_UPGRADE,TRASH_CAN_UPGRADE"
+120,Clint's Blacksmith,Iron Trash Can Upgrade,"TOOL_UPGRADE,TRASH_CAN_UPGRADE"
+121,Clint's Blacksmith,Gold Trash Can Upgrade,"TOOL_UPGRADE,TRASH_CAN_UPGRADE"
+122,Clint's Blacksmith,Iridium Trash Can Upgrade,"TOOL_UPGRADE,TRASH_CAN_UPGRADE"
+123,Willy's Fish Shop,Purchase Training Rod,"FISHING_ROD_UPGRADE,TOOL_UPGRADE"
+124,Stardew Valley,Bamboo Pole Cutscene,"FISHING_ROD_UPGRADE,TOOL_UPGRADE"
+125,Willy's Fish Shop,Purchase Fiberglass Rod,"FISHING_ROD_UPGRADE,TOOL_UPGRADE"
+126,Willy's Fish Shop,Purchase Iridium Rod,"FISHING_ROD_UPGRADE,TOOL_UPGRADE"
+201,The Mines - Floor 10,The Mines Floor 10 Treasure,"MANDATORY,THE_MINES_TREASURE"
+202,The Mines - Floor 20,The Mines Floor 20 Treasure,"MANDATORY,THE_MINES_TREASURE"
+203,The Mines - Floor 40,The Mines Floor 40 Treasure,"MANDATORY,THE_MINES_TREASURE"
+204,The Mines - Floor 50,The Mines Floor 50 Treasure,"MANDATORY,THE_MINES_TREASURE"
+205,The Mines - Floor 60,The Mines Floor 60 Treasure,"MANDATORY,THE_MINES_TREASURE"
+206,The Mines - Floor 70,The Mines Floor 70 Treasure,"MANDATORY,THE_MINES_TREASURE"
+207,The Mines - Floor 80,The Mines Floor 80 Treasure,"MANDATORY,THE_MINES_TREASURE"
+208,The Mines - Floor 90,The Mines Floor 90 Treasure,"MANDATORY,THE_MINES_TREASURE"
+209,The Mines - Floor 100,The Mines Floor 100 Treasure,"MANDATORY,THE_MINES_TREASURE"
+210,The Mines - Floor 110,The Mines Floor 110 Treasure,"MANDATORY,THE_MINES_TREASURE"
+211,The Mines - Floor 120,The Mines Floor 120 Treasure,"MANDATORY,THE_MINES_TREASURE"
+212,Quarry Mine,Grim Reaper statue,MANDATORY
+213,The Mines,The Mines Entrance Cutscene,MANDATORY
+214,The Mines - Floor 5,Floor 5 Elevator,THE_MINES_ELEVATOR
+215,The Mines - Floor 10,Floor 10 Elevator,THE_MINES_ELEVATOR
+216,The Mines - Floor 15,Floor 15 Elevator,THE_MINES_ELEVATOR
+217,The Mines - Floor 20,Floor 20 Elevator,THE_MINES_ELEVATOR
+218,The Mines - Floor 25,Floor 25 Elevator,THE_MINES_ELEVATOR
+219,The Mines - Floor 30,Floor 30 Elevator,THE_MINES_ELEVATOR
+220,The Mines - Floor 35,Floor 35 Elevator,THE_MINES_ELEVATOR
+221,The Mines - Floor 40,Floor 40 Elevator,THE_MINES_ELEVATOR
+222,The Mines - Floor 45,Floor 45 Elevator,THE_MINES_ELEVATOR
+223,The Mines - Floor 50,Floor 50 Elevator,THE_MINES_ELEVATOR
+224,The Mines - Floor 55,Floor 55 Elevator,THE_MINES_ELEVATOR
+225,The Mines - Floor 60,Floor 60 Elevator,THE_MINES_ELEVATOR
+226,The Mines - Floor 65,Floor 65 Elevator,THE_MINES_ELEVATOR
+227,The Mines - Floor 70,Floor 70 Elevator,THE_MINES_ELEVATOR
+228,The Mines - Floor 75,Floor 75 Elevator,THE_MINES_ELEVATOR
+229,The Mines - Floor 80,Floor 80 Elevator,THE_MINES_ELEVATOR
+230,The Mines - Floor 85,Floor 85 Elevator,THE_MINES_ELEVATOR
+231,The Mines - Floor 90,Floor 90 Elevator,THE_MINES_ELEVATOR
+232,The Mines - Floor 95,Floor 95 Elevator,THE_MINES_ELEVATOR
+233,The Mines - Floor 100,Floor 100 Elevator,THE_MINES_ELEVATOR
+234,The Mines - Floor 105,Floor 105 Elevator,THE_MINES_ELEVATOR
+235,The Mines - Floor 110,Floor 110 Elevator,THE_MINES_ELEVATOR
+236,The Mines - Floor 115,Floor 115 Elevator,THE_MINES_ELEVATOR
+237,The Mines - Floor 120,Floor 120 Elevator,THE_MINES_ELEVATOR
+301,Stardew Valley,Level 1 Farming,"FARMING_LEVEL,SKILL_LEVEL"
+302,Stardew Valley,Level 2 Farming,"FARMING_LEVEL,SKILL_LEVEL"
+303,Stardew Valley,Level 3 Farming,"FARMING_LEVEL,SKILL_LEVEL"
+304,Stardew Valley,Level 4 Farming,"FARMING_LEVEL,SKILL_LEVEL"
+305,Stardew Valley,Level 5 Farming,"FARMING_LEVEL,SKILL_LEVEL"
+306,Stardew Valley,Level 6 Farming,"FARMING_LEVEL,SKILL_LEVEL"
+307,Stardew Valley,Level 7 Farming,"FARMING_LEVEL,SKILL_LEVEL"
+308,Stardew Valley,Level 8 Farming,"FARMING_LEVEL,SKILL_LEVEL"
+309,Stardew Valley,Level 9 Farming,"FARMING_LEVEL,SKILL_LEVEL"
+310,Stardew Valley,Level 10 Farming,"FARMING_LEVEL,SKILL_LEVEL"
+311,Stardew Valley,Level 1 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
+312,Stardew Valley,Level 2 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
+313,Stardew Valley,Level 3 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
+314,Stardew Valley,Level 4 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
+315,Stardew Valley,Level 5 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
+316,Stardew Valley,Level 6 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
+317,Stardew Valley,Level 7 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
+318,Stardew Valley,Level 8 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
+319,Stardew Valley,Level 9 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
+320,Stardew Valley,Level 10 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
+321,Stardew Valley,Level 1 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
+322,Stardew Valley,Level 2 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
+323,Stardew Valley,Level 3 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
+324,Stardew Valley,Level 4 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
+325,Stardew Valley,Level 5 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
+326,Stardew Valley,Level 6 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
+327,Stardew Valley,Level 7 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
+328,Stardew Valley,Level 8 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
+329,Stardew Valley,Level 9 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
+330,Stardew Valley,Level 10 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
+331,Stardew Valley,Level 1 Mining,"MINING_LEVEL,SKILL_LEVEL"
+332,Stardew Valley,Level 2 Mining,"MINING_LEVEL,SKILL_LEVEL"
+333,Stardew Valley,Level 3 Mining,"MINING_LEVEL,SKILL_LEVEL"
+334,Stardew Valley,Level 4 Mining,"MINING_LEVEL,SKILL_LEVEL"
+335,Stardew Valley,Level 5 Mining,"MINING_LEVEL,SKILL_LEVEL"
+336,Stardew Valley,Level 6 Mining,"MINING_LEVEL,SKILL_LEVEL"
+337,Stardew Valley,Level 7 Mining,"MINING_LEVEL,SKILL_LEVEL"
+338,Stardew Valley,Level 8 Mining,"MINING_LEVEL,SKILL_LEVEL"
+339,Stardew Valley,Level 9 Mining,"MINING_LEVEL,SKILL_LEVEL"
+340,Stardew Valley,Level 10 Mining,"MINING_LEVEL,SKILL_LEVEL"
+341,Stardew Valley,Level 1 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
+342,Stardew Valley,Level 2 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
+343,Stardew Valley,Level 3 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
+344,Stardew Valley,Level 4 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
+345,Stardew Valley,Level 5 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
+346,Stardew Valley,Level 6 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
+347,Stardew Valley,Level 7 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
+348,Stardew Valley,Level 8 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
+349,Stardew Valley,Level 9 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
+350,Stardew Valley,Level 10 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
+401,Carpenter Shop,Coop Blueprint,BUILDING_BLUEPRINT
+402,Carpenter Shop,Big Coop Blueprint,BUILDING_BLUEPRINT
+403,Carpenter Shop,Deluxe Coop Blueprint,BUILDING_BLUEPRINT
+404,Carpenter Shop,Barn Blueprint,BUILDING_BLUEPRINT
+405,Carpenter Shop,Big Barn Blueprint,BUILDING_BLUEPRINT
+406,Carpenter Shop,Deluxe Barn Blueprint,BUILDING_BLUEPRINT
+407,Carpenter Shop,Well Blueprint,BUILDING_BLUEPRINT
+408,Carpenter Shop,Silo Blueprint,BUILDING_BLUEPRINT
+409,Carpenter Shop,Mill Blueprint,BUILDING_BLUEPRINT
+410,Carpenter Shop,Shed Blueprint,BUILDING_BLUEPRINT
+411,Carpenter Shop,Big Shed Blueprint,BUILDING_BLUEPRINT
+412,Carpenter Shop,Fish Pond Blueprint,BUILDING_BLUEPRINT
+413,Carpenter Shop,Stable Blueprint,BUILDING_BLUEPRINT
+414,Carpenter Shop,Slime Hutch Blueprint,BUILDING_BLUEPRINT
+415,Carpenter Shop,Shipping Bin Blueprint,BUILDING_BLUEPRINT
+416,Carpenter Shop,Kitchen Blueprint,BUILDING_BLUEPRINT
+417,Carpenter Shop,Kids Room Blueprint,BUILDING_BLUEPRINT
+418,Carpenter Shop,Cellar Blueprint,BUILDING_BLUEPRINT
+501,Town,Introductions,"MANDATORY,QUEST"
+502,Town,How To Win Friends,"MANDATORY,QUEST"
+503,Farm,Getting Started,"MANDATORY,QUEST"
+504,Farm,Raising Animals,"MANDATORY,QUEST"
+505,Farm,Advancement,"MANDATORY,QUEST"
+506,Museum,Archaeology,"MANDATORY,QUEST"
+507,Wizard Tower,Meet The Wizard,"MANDATORY,QUEST"
+508,Farm,Forging Ahead,"MANDATORY,QUEST"
+509,Farm,Smelting,"MANDATORY,QUEST"
+510,The Mines - Floor 5,Initiation,"MANDATORY,QUEST"
+511,Forest,Robin's Lost Axe,"MANDATORY,QUEST"
+512,Sam's House,Jodi's Request,"MANDATORY,QUEST"
+513,Marnie's Ranch,"Mayor's ""Shorts""","MANDATORY,QUEST"
+514,Tunnel Entrance,Blackberry Basket,"MANDATORY,QUEST"
+515,Marnie's Ranch,Marnie's Request,"MANDATORY,QUEST"
+516,Town,Pam Is Thirsty,"MANDATORY,QUEST"
+517,Wizard Tower,A Dark Reagent,"MANDATORY,QUEST"
+518,Marnie's Ranch,Cow's Delight,"MANDATORY,QUEST"
+519,Skull Cavern Entrance,The Skull Key,"MANDATORY,QUEST"
+520,Town,Crop Research,"MANDATORY,QUEST"
+521,Town,Knee Therapy,"MANDATORY,QUEST"
+522,Town,Robin's Request,"MANDATORY,QUEST"
+523,Skull Cavern,Qi's Challenge,"MANDATORY,QUEST"
+524,The Desert,The Mysterious Qi,"MANDATORY,QUEST"
+525,Town,Carving Pumpkins,"MANDATORY,QUEST"
+526,Town,A Winter Mystery,"MANDATORY,QUEST"
+527,Secret Woods,Strange Note,"MANDATORY,QUEST"
+528,Skull Cavern,Cryptic Note,"MANDATORY,QUEST"
+529,Town,Fresh Fruit,"MANDATORY,QUEST"
+530,Town,Aquatic Research,"MANDATORY,QUEST"
+531,Town,A Soldier's Star,"MANDATORY,QUEST"
+532,Town,Mayor's Need,"MANDATORY,QUEST"
+533,Saloon,Wanted: Lobster,"MANDATORY,QUEST"
+534,Town,Pam Needs Juice,"MANDATORY,QUEST"
+535,Sam's House,Fish Casserole,"MANDATORY,QUEST"
+536,Beach,Catch A Squid,"MANDATORY,QUEST"
+537,Saloon,Fish Stew,"MANDATORY,QUEST"
+538,Town,Pierre's Notice,"MANDATORY,QUEST"
+539,Town,Clint's Attempt,"MANDATORY,QUEST"
+540,Town,A Favor For Clint,"MANDATORY,QUEST"
+541,Wizard Tower,Staff Of Power,"MANDATORY,QUEST"
+542,Town,Granny's Gift,"MANDATORY,QUEST"
+543,Saloon,Exotic Spirits,"MANDATORY,QUEST"
+544,Town,Catch a Lingcod,"MANDATORY,QUEST"
+601,JotPK World 1,JotPK: Boots 1,"ARCADE_MACHINE,JOTPK"
+602,JotPK World 1,JotPK: Boots 2,"ARCADE_MACHINE,JOTPK"
+603,JotPK World 1,JotPK: Gun 1,"ARCADE_MACHINE,JOTPK"
+604,JotPK World 2,JotPK: Gun 2,"ARCADE_MACHINE,JOTPK"
+605,JotPK World 2,JotPK: Gun 3,"ARCADE_MACHINE,JOTPK"
+606,JotPK World 3,JotPK: Super Gun,"ARCADE_MACHINE,JOTPK"
+607,JotPK World 1,JotPK: Ammo 1,"ARCADE_MACHINE,JOTPK"
+608,JotPK World 2,JotPK: Ammo 2,"ARCADE_MACHINE,JOTPK"
+609,JotPK World 3,JotPK: Ammo 3,"ARCADE_MACHINE,JOTPK"
+610,JotPK World 1,JotPK: Cowboy 1,"ARCADE_MACHINE,JOTPK"
+611,JotPK World 2,JotPK: Cowboy 2,"ARCADE_MACHINE,JOTPK"
+612,Junimo Kart 1,Junimo Kart: Crumble Cavern,"ARCADE_MACHINE,JUNIMO_KART"
+613,Junimo Kart 1,Junimo Kart: Slippery Slopes,"ARCADE_MACHINE,JUNIMO_KART"
+614,Junimo Kart 2,Junimo Kart: Secret Level,"ARCADE_MACHINE,JUNIMO_KART"
+615,Junimo Kart 2,Junimo Kart: The Gem Sea Giant,"ARCADE_MACHINE,JUNIMO_KART"
+616,Junimo Kart 2,Junimo Kart: Slomp's Stomp,"ARCADE_MACHINE,JUNIMO_KART"
+617,Junimo Kart 2,Junimo Kart: Ghastly Galleon,"ARCADE_MACHINE,JUNIMO_KART"
+618,Junimo Kart 3,Junimo Kart: Glowshroom Grotto,"ARCADE_MACHINE,JUNIMO_KART"
+619,Junimo Kart 3,Junimo Kart: Red Hot Rollercoaster,"ARCADE_MACHINE,JUNIMO_KART"
+620,JotPK World 3,Journey of the Prairie King Victory,"ARCADE_MACHINE_VICTORY,JUNIMO_KART"
+621,Junimo Kart 3,Junimo Kart: Sunset Speedway (Victory),"ARCADE_MACHINE_VICTORY,JUNIMO_KART"
+701,Secret Woods,Old Master Cannoli,MANDATORY
+702,Beach,Beach Bridge Repair,MANDATORY
+703,The Desert,Galaxy Sword Shrine,MANDATORY
+801,Town,Help Wanted: Gathering 1,HELP_WANTED
+802,Town,Help Wanted: Gathering 2,HELP_WANTED
+803,Town,Help Wanted: Gathering 3,HELP_WANTED
+804,Town,Help Wanted: Gathering 4,HELP_WANTED
+805,Town,Help Wanted: Gathering 5,HELP_WANTED
+806,Town,Help Wanted: Gathering 6,HELP_WANTED
+807,Town,Help Wanted: Gathering 7,HELP_WANTED
+808,Town,Help Wanted: Gathering 8,HELP_WANTED
+811,Town,Help Wanted: Slay Monsters 1,HELP_WANTED
+812,Town,Help Wanted: Slay Monsters 2,HELP_WANTED
+813,Town,Help Wanted: Slay Monsters 3,HELP_WANTED
+814,Town,Help Wanted: Slay Monsters 4,HELP_WANTED
+815,Town,Help Wanted: Slay Monsters 5,HELP_WANTED
+816,Town,Help Wanted: Slay Monsters 6,HELP_WANTED
+817,Town,Help Wanted: Slay Monsters 7,HELP_WANTED
+818,Town,Help Wanted: Slay Monsters 8,HELP_WANTED
+821,Town,Help Wanted: Fishing 1,HELP_WANTED
+822,Town,Help Wanted: Fishing 2,HELP_WANTED
+823,Town,Help Wanted: Fishing 3,HELP_WANTED
+824,Town,Help Wanted: Fishing 4,HELP_WANTED
+825,Town,Help Wanted: Fishing 5,HELP_WANTED
+826,Town,Help Wanted: Fishing 6,HELP_WANTED
+827,Town,Help Wanted: Fishing 7,HELP_WANTED
+828,Town,Help Wanted: Fishing 8,HELP_WANTED
+841,Town,Help Wanted: Item Delivery 1,HELP_WANTED
+842,Town,Help Wanted: Item Delivery 2,HELP_WANTED
+843,Town,Help Wanted: Item Delivery 3,HELP_WANTED
+844,Town,Help Wanted: Item Delivery 4,HELP_WANTED
+845,Town,Help Wanted: Item Delivery 5,HELP_WANTED
+846,Town,Help Wanted: Item Delivery 6,HELP_WANTED
+847,Town,Help Wanted: Item Delivery 7,HELP_WANTED
+848,Town,Help Wanted: Item Delivery 8,HELP_WANTED
+849,Town,Help Wanted: Item Delivery 9,HELP_WANTED
+850,Town,Help Wanted: Item Delivery 10,HELP_WANTED
+851,Town,Help Wanted: Item Delivery 11,HELP_WANTED
+852,Town,Help Wanted: Item Delivery 12,HELP_WANTED
+853,Town,Help Wanted: Item Delivery 13,HELP_WANTED
+854,Town,Help Wanted: Item Delivery 14,HELP_WANTED
+855,Town,Help Wanted: Item Delivery 15,HELP_WANTED
+856,Town,Help Wanted: Item Delivery 16,HELP_WANTED
+857,Town,Help Wanted: Item Delivery 17,HELP_WANTED
+858,Town,Help Wanted: Item Delivery 18,HELP_WANTED
+859,Town,Help Wanted: Item Delivery 19,HELP_WANTED
+860,Town,Help Wanted: Item Delivery 20,HELP_WANTED
+861,Town,Help Wanted: Item Delivery 21,HELP_WANTED
+862,Town,Help Wanted: Item Delivery 22,HELP_WANTED
+863,Town,Help Wanted: Item Delivery 23,HELP_WANTED
+864,Town,Help Wanted: Item Delivery 24,HELP_WANTED
+865,Town,Help Wanted: Item Delivery 25,HELP_WANTED
+866,Town,Help Wanted: Item Delivery 26,HELP_WANTED
+867,Town,Help Wanted: Item Delivery 27,HELP_WANTED
+868,Town,Help Wanted: Item Delivery 28,HELP_WANTED
+869,Town,Help Wanted: Item Delivery 29,HELP_WANTED
+870,Town,Help Wanted: Item Delivery 30,HELP_WANTED
+871,Town,Help Wanted: Item Delivery 31,HELP_WANTED
+872,Town,Help Wanted: Item Delivery 32,HELP_WANTED
+901,Forest,Traveling Merchant Sunday Item 1,"MANDATORY,TRAVELING_MERCHANT"
+902,Forest,Traveling Merchant Sunday Item 2,"MANDATORY,TRAVELING_MERCHANT"
+903,Forest,Traveling Merchant Sunday Item 3,"MANDATORY,TRAVELING_MERCHANT"
+911,Forest,Traveling Merchant Monday Item 1,"MANDATORY,TRAVELING_MERCHANT"
+912,Forest,Traveling Merchant Monday Item 2,"MANDATORY,TRAVELING_MERCHANT"
+913,Forest,Traveling Merchant Monday Item 3,"MANDATORY,TRAVELING_MERCHANT"
+921,Forest,Traveling Merchant Tuesday Item 1,"MANDATORY,TRAVELING_MERCHANT"
+922,Forest,Traveling Merchant Tuesday Item 2,"MANDATORY,TRAVELING_MERCHANT"
+923,Forest,Traveling Merchant Tuesday Item 3,"MANDATORY,TRAVELING_MERCHANT"
+931,Forest,Traveling Merchant Wednesday Item 1,"MANDATORY,TRAVELING_MERCHANT"
+932,Forest,Traveling Merchant Wednesday Item 2,"MANDATORY,TRAVELING_MERCHANT"
+933,Forest,Traveling Merchant Wednesday Item 3,"MANDATORY,TRAVELING_MERCHANT"
+941,Forest,Traveling Merchant Thursday Item 1,"MANDATORY,TRAVELING_MERCHANT"
+942,Forest,Traveling Merchant Thursday Item 2,"MANDATORY,TRAVELING_MERCHANT"
+943,Forest,Traveling Merchant Thursday Item 3,"MANDATORY,TRAVELING_MERCHANT"
+951,Forest,Traveling Merchant Friday Item 1,"MANDATORY,TRAVELING_MERCHANT"
+952,Forest,Traveling Merchant Friday Item 2,"MANDATORY,TRAVELING_MERCHANT"
+953,Forest,Traveling Merchant Friday Item 3,"MANDATORY,TRAVELING_MERCHANT"
+961,Forest,Traveling Merchant Saturday Item 1,"MANDATORY,TRAVELING_MERCHANT"
+962,Forest,Traveling Merchant Saturday Item 2,"MANDATORY,TRAVELING_MERCHANT"
+963,Forest,Traveling Merchant Saturday Item 3,"MANDATORY,TRAVELING_MERCHANT"
+1001,Mountain,Fishsanity: Carp,FISHSANITY
+1002,Beach,Fishsanity: Herring,FISHSANITY
+1003,Forest,Fishsanity: Smallmouth Bass,FISHSANITY
+1004,Beach,Fishsanity: Anchovy,FISHSANITY
+1005,Beach,Fishsanity: Sardine,FISHSANITY
+1006,Forest,Fishsanity: Sunfish,FISHSANITY
+1007,Forest,Fishsanity: Perch,FISHSANITY
+1008,Forest,Fishsanity: Chub,FISHSANITY
+1009,Forest,Fishsanity: Bream,FISHSANITY
+1010,Beach,Fishsanity: Red Snapper,FISHSANITY
+1011,Beach,Fishsanity: Sea Cucumber,FISHSANITY
+1012,Forest,Fishsanity: Rainbow Trout,FISHSANITY
+1013,Forest,Fishsanity: Walleye,FISHSANITY
+1014,Forest,Fishsanity: Shad,FISHSANITY
+1015,Mountain,Fishsanity: Bullhead,FISHSANITY
+1016,Mountain,Fishsanity: Largemouth Bass,FISHSANITY
+1017,Forest,Fishsanity: Salmon,FISHSANITY
+1018,The Mines - Floor 20,Fishsanity: Ghostfish,FISHSANITY
+1019,Beach,Fishsanity: Tilapia,FISHSANITY
+1020,Secret Woods,Fishsanity: Woodskip,FISHSANITY
+1021,Beach,Fishsanity: Flounder,FISHSANITY
+1022,Beach,Fishsanity: Halibut,FISHSANITY
+1023,Ginger Island,Fishsanity: Lionfish,FISHSANITY
+1024,Mutant Bug Lair,Fishsanity: Slimejack,FISHSANITY
+1025,Forest,Fishsanity: Midnight Carp,FISHSANITY
+1026,Beach,Fishsanity: Red Mullet,FISHSANITY
+1027,Forest,Fishsanity: Pike,FISHSANITY
+1028,Forest,Fishsanity: Tiger Trout,FISHSANITY
+1029,Ginger Island,Fishsanity: Blue Discus,FISHSANITY
+1030,Beach,Fishsanity: Albacore,FISHSANITY
+1031,The Desert,Fishsanity: Sandfish,FISHSANITY
+1032,The Mines - Floor 20,Fishsanity: Stonefish,FISHSANITY
+1033,Beach,Fishsanity: Tuna,FISHSANITY
+1034,Beach,Fishsanity: Eel,FISHSANITY
+1035,Forest,Fishsanity: Catfish,FISHSANITY
+1036,Beach,Fishsanity: Squid,FISHSANITY
+1037,Mountain,Fishsanity: Sturgeon,FISHSANITY
+1038,Forest,Fishsanity: Dorado,FISHSANITY
+1039,Beach,Fishsanity: Pufferfish,FISHSANITY
+1040,Witch's Swamp,Fishsanity: Void Salmon,FISHSANITY
+1041,Beach,Fishsanity: Super Cucumber,FISHSANITY
+1042,Ginger Island,Fishsanity: Stingray,FISHSANITY
+1043,The Mines - Floor 60,Fishsanity: Ice Pip,FISHSANITY
+1044,Forest,Fishsanity: Lingcod,FISHSANITY
+1045,The Desert,Fishsanity: Scorpion Carp,FISHSANITY
+1046,The Mines - Floor 100,Fishsanity: Lava Eel,FISHSANITY
+1047,Beach,Fishsanity: Octopus,FISHSANITY
+1048,Beach,Fishsanity: Midnight Squid,FISHSANITY
+1049,Beach,Fishsanity: Spook Fish,FISHSANITY
+1050,Beach,Fishsanity: Blobfish,FISHSANITY
+1051,Beach,Fishsanity: Crimsonfish,FISHSANITY
+1052,Town,Fishsanity: Angler,FISHSANITY
+1053,Mountain,Fishsanity: Legend,FISHSANITY
+1054,Forest,Fishsanity: Glacierfish,FISHSANITY
+1055,Sewers,Fishsanity: Mutant Carp,FISHSANITY
+1056,Town,Fishsanity: Crayfish,FISHSANITY
+1057,Town,Fishsanity: Snail,FISHSANITY
+1058,Town,Fishsanity: Periwinkle,FISHSANITY
+1059,Beach,Fishsanity: Lobster,FISHSANITY
+1060,Beach,Fishsanity: Clam,FISHSANITY
+1061,Beach,Fishsanity: Crab,FISHSANITY
+1062,Beach,Fishsanity: Cockle,FISHSANITY
+1063,Beach,Fishsanity: Mussel,FISHSANITY
+1064,Beach,Fishsanity: Shrimp,FISHSANITY
+1065,Beach,Fishsanity: Oyster,FISHSANITY

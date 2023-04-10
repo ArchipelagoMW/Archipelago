@@ -1,0 +1,312 @@
+id,name,classification,groups
+0,Joja Cola,filler,TRASH
+15,Rusty Key,progression,
+16,Dwarvish Translation Guide,progression,
+17,Bridge Repair,progression,COMMUNITY_REWARD
+18,Greenhouse,progression,COMMUNITY_REWARD
+19,Glittering Boulder Removed,progression,COMMUNITY_REWARD
+20,Minecarts Repair,useful,COMMUNITY_REWARD
+21,Bus Repair,progression,COMMUNITY_REWARD
+22,Movie Theater,useful,
+23,Stardrop,useful,
+24,Progressive Backpack,progression,
+25,Rusty Sword,progression,WEAPON
+26,Leather Boots,progression,"FOOTWEAR,MINES_FLOOR_10"
+27,Work Boots,useful,"FOOTWEAR,MINES_FLOOR_10"
+28,Wooden Blade,progression,"MINES_FLOOR_10,WEAPON"
+29,Iron Dirk,progression,"MINES_FLOOR_10,WEAPON"
+30,Wind Spire,progression,"MINES_FLOOR_10,WEAPON"
+31,Femur,progression,"MINES_FLOOR_10,WEAPON"
+32,Steel Smallsword,progression,"MINES_FLOOR_20,WEAPON"
+33,Wood Club,progression,"MINES_FLOOR_20,WEAPON"
+34,Elf Blade,progression,"MINES_FLOOR_20,WEAPON"
+35,Glow Ring,useful,"MINES_FLOOR_20,RING"
+36,Magnet Ring,useful,"MINES_FLOOR_20,RING"
+37,Slingshot,progression,WEAPON
+38,Tundra Boots,useful,"FOOTWEAR,MINES_FLOOR_50"
+39,Thermal Boots,useful,"FOOTWEAR,MINES_FLOOR_50"
+40,Combat Boots,useful,"FOOTWEAR,MINES_FLOOR_50"
+41,Silver Saber,progression,"MINES_FLOOR_50,WEAPON"
+42,Pirate's Sword,progression,"MINES_FLOOR_50,WEAPON"
+43,Crystal Dagger,progression,"MINES_FLOOR_60,WEAPON"
+44,Cutlass,progression,"MINES_FLOOR_60,WEAPON"
+45,Iron Edge,progression,"MINES_FLOOR_60,WEAPON"
+46,Burglar's Shank,progression,"MINES_FLOOR_60,WEAPON"
+47,Wood Mallet,progression,"MINES_FLOOR_60,WEAPON"
+48,Master Slingshot,progression,WEAPON
+49,Firewalker Boots,useful,"FOOTWEAR,MINES_FLOOR_80"
+50,Dark Boots,useful,"FOOTWEAR,MINES_FLOOR_80"
+51,Claymore,progression,"MINES_FLOOR_80,WEAPON"
+52,Templar's Blade,progression,"MINES_FLOOR_80,WEAPON"
+53,Kudgel,progression,"MINES_FLOOR_80,WEAPON"
+54,Shadow Dagger,progression,"MINES_FLOOR_80,WEAPON"
+55,Obsidian Edge,progression,"MINES_FLOOR_90,WEAPON"
+56,Tempered Broadsword,progression,"MINES_FLOOR_90,WEAPON"
+57,Wicked Kris,progression,"MINES_FLOOR_90,WEAPON"
+58,Bone Sword,progression,"MINES_FLOOR_90,WEAPON"
+59,Ossified Blade,progression,"MINES_FLOOR_90,WEAPON"
+60,Space Boots,useful,"FOOTWEAR,MINES_FLOOR_110"
+61,Crystal Shoes,useful,"FOOTWEAR,MINES_FLOOR_110"
+62,Steel Falchion,progression,"MINES_FLOOR_110,WEAPON"
+63,The Slammer,progression,"MINES_FLOOR_110,WEAPON"
+64,Skull Key,progression,
+65,Progressive Hoe,progression,PROGRESSIVE_TOOLS
+66,Progressive Pickaxe,progression,PROGRESSIVE_TOOLS
+67,Progressive Axe,progression,PROGRESSIVE_TOOLS
+68,Progressive Watering Can,progression,PROGRESSIVE_TOOLS
+69,Progressive Trash Can,progression,PROGRESSIVE_TOOLS
+70,Progressive Fishing Rod,progression,PROGRESSIVE_TOOLS
+71,Golden Scythe,useful,
+72,Progressive Mine Elevator,progression,
+73,Farming Level,progression,SKILL_LEVEL_UP
+74,Fishing Level,progression,SKILL_LEVEL_UP
+75,Foraging Level,progression,SKILL_LEVEL_UP
+76,Mining Level,progression,SKILL_LEVEL_UP
+77,Combat Level,progression,SKILL_LEVEL_UP
+78,Earth Obelisk,useful,
+79,Water Obelisk,useful,
+80,Desert Obelisk,progression,
+81,Island Obelisk,progression,
+82,Junimo Hut,useful,
+83,Gold Clock,useful,
+84,Progressive Coop,progression,
+85,Progressive Barn,progression,
+86,Well,useful,
+87,Silo,progression,
+88,Mill,progression,
+89,Progressive Shed,progression,
+90,Fish Pond,progression,
+91,Stable,useful,
+92,Slime Hutch,useful,
+93,Shipping Bin,progression,
+94,Beach Bridge,progression,
+95,Adventurer's Guild,progression,
+96,Club Card,progression,
+97,Magnifying Glass,progression,
+98,Bear's Knowledge,progression,
+99,Iridium Snake Milk,progression,
+100,JotPK: Progressive Boots,progression,ARCADE_MACHINE_BUFFS
+101,JotPK: Progressive Gun,progression,ARCADE_MACHINE_BUFFS
+102,JotPK: Progressive Ammo,progression,ARCADE_MACHINE_BUFFS
+103,JotPK: Extra Life,progression,ARCADE_MACHINE_BUFFS
+104,JotPK: Increased Drop Rate,progression,ARCADE_MACHINE_BUFFS
+105,Junimo Kart: Extra Life,progression,ARCADE_MACHINE_BUFFS
+106,Galaxy Sword,progression,"GALAXY_WEAPONS,WEAPON"
+107,Galaxy Dagger,progression,"GALAXY_WEAPONS,WEAPON"
+108,Galaxy Hammer,progression,"GALAXY_WEAPONS,WEAPON"
+109,Movement Speed Bonus,useful,
+110,Luck Bonus,useful,
+111,Lava Katana,progression,"MINES_FLOOR_110,WEAPON"
+112,Progressive House,progression,
+113,Traveling Merchant: Sunday,progression,
+114,Traveling Merchant: Monday,progression,
+115,Traveling Merchant: Tuesday,progression,
+116,Traveling Merchant: Wednesday,progression,
+117,Traveling Merchant: Thursday,progression,
+118,Traveling Merchant: Friday,progression,
+119,Traveling Merchant: Saturday,progression,
+120,Traveling Merchant Stock Size,progression,
+121,Traveling Merchant Discount,progression,
+122,Return Scepter,useful,
+5000,Resource Pack: 500 Money,useful,"BASE_RESOURCE,RESOURCE_PACK"
+5001,Resource Pack: 1000 Money,useful,"BASE_RESOURCE,RESOURCE_PACK"
+5002,Resource Pack: 1500 Money,useful,"BASE_RESOURCE,RESOURCE_PACK"
+5003,Resource Pack: 2000 Money,useful,"BASE_RESOURCE,RESOURCE_PACK"
+5004,Resource Pack: 25 Stone,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5005,Resource Pack: 50 Stone,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5006,Resource Pack: 75 Stone,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5007,Resource Pack: 100 Stone,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5008,Resource Pack: 25 Wood,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5009,Resource Pack: 50 Wood,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5010,Resource Pack: 75 Wood,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5011,Resource Pack: 100 Wood,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5012,Resource Pack: 5 Hardwood,useful,"BASE_RESOURCE,RESOURCE_PACK"
+5013,Resource Pack: 10 Hardwood,useful,"BASE_RESOURCE,RESOURCE_PACK"
+5014,Resource Pack: 15 Hardwood,useful,"BASE_RESOURCE,RESOURCE_PACK"
+5015,Resource Pack: 20 Hardwood,useful,"BASE_RESOURCE,RESOURCE_PACK"
+5016,Resource Pack: 15 Fiber,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5017,Resource Pack: 30 Fiber,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5018,Resource Pack: 45 Fiber,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5019,Resource Pack: 60 Fiber,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5020,Resource Pack: 5 Coal,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5021,Resource Pack: 10 Coal,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5022,Resource Pack: 15 Coal,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5023,Resource Pack: 20 Coal,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5024,Resource Pack: 5 Clay,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5025,Resource Pack: 10 Clay,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5026,Resource Pack: 15 Clay,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5027,Resource Pack: 20 Clay,filler,"BASE_RESOURCE,RESOURCE_PACK"
+5028,Resource Pack: 1 Warp Totem: Beach,filler,"RESOURCE_PACK,WARP_TOTEM"
+5029,Resource Pack: 3 Warp Totem: Beach,filler,"RESOURCE_PACK,WARP_TOTEM"
+5030,Resource Pack: 5 Warp Totem: Beach,filler,"RESOURCE_PACK,WARP_TOTEM"
+5031,Resource Pack: 7 Warp Totem: Beach,filler,"RESOURCE_PACK,WARP_TOTEM"
+5032,Resource Pack: 9 Warp Totem: Beach,filler,"RESOURCE_PACK,WARP_TOTEM"
+5033,Resource Pack: 10 Warp Totem: Beach,filler,"RESOURCE_PACK,WARP_TOTEM"
+5034,Resource Pack: 1 Warp Totem: Desert,filler,"RESOURCE_PACK,WARP_TOTEM"
+5035,Resource Pack: 3 Warp Totem: Desert,filler,"RESOURCE_PACK,WARP_TOTEM"
+5036,Resource Pack: 5 Warp Totem: Desert,filler,"RESOURCE_PACK,WARP_TOTEM"
+5037,Resource Pack: 7 Warp Totem: Desert,filler,"RESOURCE_PACK,WARP_TOTEM"
+5038,Resource Pack: 9 Warp Totem: Desert,filler,"RESOURCE_PACK,WARP_TOTEM"
+5039,Resource Pack: 10 Warp Totem: Desert,filler,"RESOURCE_PACK,WARP_TOTEM"
+5040,Resource Pack: 1 Warp Totem: Farm,filler,"RESOURCE_PACK,WARP_TOTEM"
+5041,Resource Pack: 3 Warp Totem: Farm,filler,"RESOURCE_PACK,WARP_TOTEM"
+5042,Resource Pack: 5 Warp Totem: Farm,filler,"RESOURCE_PACK,WARP_TOTEM"
+5043,Resource Pack: 7 Warp Totem: Farm,filler,"RESOURCE_PACK,WARP_TOTEM"
+5044,Resource Pack: 9 Warp Totem: Farm,filler,"RESOURCE_PACK,WARP_TOTEM"
+5045,Resource Pack: 10 Warp Totem: Farm,filler,"RESOURCE_PACK,WARP_TOTEM"
+5046,Resource Pack: 1 Warp Totem: Island,filler,"RESOURCE_PACK,WARP_TOTEM"
+5047,Resource Pack: 3 Warp Totem: Island,filler,"RESOURCE_PACK,WARP_TOTEM"
+5048,Resource Pack: 5 Warp Totem: Island,filler,"RESOURCE_PACK,WARP_TOTEM"
+5049,Resource Pack: 7 Warp Totem: Island,filler,"RESOURCE_PACK,WARP_TOTEM"
+5050,Resource Pack: 9 Warp Totem: Island,filler,"RESOURCE_PACK,WARP_TOTEM"
+5051,Resource Pack: 10 Warp Totem: Island,filler,"RESOURCE_PACK,WARP_TOTEM"
+5052,Resource Pack: 1 Warp Totem: Mountains,filler,"RESOURCE_PACK,WARP_TOTEM"
+5053,Resource Pack: 3 Warp Totem: Mountains,filler,"RESOURCE_PACK,WARP_TOTEM"
+5054,Resource Pack: 5 Warp Totem: Mountains,filler,"RESOURCE_PACK,WARP_TOTEM"
+5055,Resource Pack: 7 Warp Totem: Mountains,filler,"RESOURCE_PACK,WARP_TOTEM"
+5056,Resource Pack: 9 Warp Totem: Mountains,filler,"RESOURCE_PACK,WARP_TOTEM"
+5057,Resource Pack: 10 Warp Totem: Mountains,filler,"RESOURCE_PACK,WARP_TOTEM"
+5058,Resource Pack: 6 Geode,filler,"GEODE,RESOURCE_PACK"
+5059,Resource Pack: 12 Geode,filler,"GEODE,RESOURCE_PACK"
+5060,Resource Pack: 18 Geode,filler,"GEODE,RESOURCE_PACK"
+5061,Resource Pack: 24 Geode,filler,"GEODE,RESOURCE_PACK"
+5062,Resource Pack: 4 Frozen Geode,filler,"GEODE,RESOURCE_PACK"
+5063,Resource Pack: 8 Frozen Geode,filler,"GEODE,RESOURCE_PACK"
+5064,Resource Pack: 12 Frozen Geode,filler,"GEODE,RESOURCE_PACK"
+5065,Resource Pack: 16 Frozen Geode,filler,"GEODE,RESOURCE_PACK"
+5066,Resource Pack: 3 Magma Geode,filler,"GEODE,RESOURCE_PACK"
+5067,Resource Pack: 6 Magma Geode,filler,"GEODE,RESOURCE_PACK"
+5068,Resource Pack: 9 Magma Geode,filler,"GEODE,RESOURCE_PACK"
+5069,Resource Pack: 12 Magma Geode,filler,"GEODE,RESOURCE_PACK"
+5070,Resource Pack: 2 Omni Geode,useful,"GEODE,RESOURCE_PACK"
+5071,Resource Pack: 4 Omni Geode,useful,"GEODE,RESOURCE_PACK"
+5072,Resource Pack: 6 Omni Geode,useful,"GEODE,RESOURCE_PACK"
+5073,Resource Pack: 8 Omni Geode,useful,"GEODE,RESOURCE_PACK"
+5074,Resource Pack: 25 Copper Ore,filler,"ORE,RESOURCE_PACK"
+5075,Resource Pack: 50 Copper Ore,filler,"ORE,RESOURCE_PACK"
+5076,Resource Pack: 75 Copper Ore,filler,"ORE,RESOURCE_PACK"
+5077,Resource Pack: 100 Copper Ore,filler,"ORE,RESOURCE_PACK"
+5078,Resource Pack: 125 Copper Ore,filler,"ORE,RESOURCE_PACK"
+5079,Resource Pack: 150 Copper Ore,filler,"ORE,RESOURCE_PACK"
+5080,Resource Pack: 25 Iron Ore,filler,"ORE,RESOURCE_PACK"
+5081,Resource Pack: 50 Iron Ore,filler,"ORE,RESOURCE_PACK"
+5082,Resource Pack: 75 Iron Ore,filler,"ORE,RESOURCE_PACK"
+5083,Resource Pack: 100 Iron Ore,filler,"ORE,RESOURCE_PACK"
+5084,Resource Pack: 12 Gold Ore,useful,"ORE,RESOURCE_PACK"
+5085,Resource Pack: 25 Gold Ore,useful,"ORE,RESOURCE_PACK"
+5086,Resource Pack: 38 Gold Ore,useful,"ORE,RESOURCE_PACK"
+5087,Resource Pack: 50 Gold Ore,useful,"ORE,RESOURCE_PACK"
+5088,Resource Pack: 5 Iridium Ore,useful,"ORE,RESOURCE_PACK"
+5089,Resource Pack: 10 Iridium Ore,useful,"ORE,RESOURCE_PACK"
+5090,Resource Pack: 15 Iridium Ore,useful,"ORE,RESOURCE_PACK"
+5091,Resource Pack: 20 Iridium Ore,useful,"ORE,RESOURCE_PACK"
+5092,Resource Pack: 5 Quartz,filler,"ORE,RESOURCE_PACK"
+5093,Resource Pack: 10 Quartz,filler,"ORE,RESOURCE_PACK"
+5094,Resource Pack: 15 Quartz,filler,"ORE,RESOURCE_PACK"
+5095,Resource Pack: 20 Quartz,filler,"ORE,RESOURCE_PACK"
+5096,Resource Pack: 10 Basic Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5097,Resource Pack: 20 Basic Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5098,Resource Pack: 30 Basic Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5099,Resource Pack: 40 Basic Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5100,Resource Pack: 50 Basic Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5101,Resource Pack: 60 Basic Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5102,Resource Pack: 10 Basic Retaining Soil,filler,"FERTILIZER,RESOURCE_PACK"
+5103,Resource Pack: 20 Basic Retaining Soil,filler,"FERTILIZER,RESOURCE_PACK"
+5104,Resource Pack: 30 Basic Retaining Soil,filler,"FERTILIZER,RESOURCE_PACK"
+5105,Resource Pack: 40 Basic Retaining Soil,filler,"FERTILIZER,RESOURCE_PACK"
+5106,Resource Pack: 50 Basic Retaining Soil,filler,"FERTILIZER,RESOURCE_PACK"
+5107,Resource Pack: 60 Basic Retaining Soil,filler,"FERTILIZER,RESOURCE_PACK"
+5108,Resource Pack: 10 Speed-Gro,filler,"FERTILIZER,RESOURCE_PACK"
+5109,Resource Pack: 20 Speed-Gro,filler,"FERTILIZER,RESOURCE_PACK"
+5110,Resource Pack: 30 Speed-Gro,filler,"FERTILIZER,RESOURCE_PACK"
+5111,Resource Pack: 40 Speed-Gro,filler,"FERTILIZER,RESOURCE_PACK"
+5112,Resource Pack: 50 Speed-Gro,filler,"FERTILIZER,RESOURCE_PACK"
+5113,Resource Pack: 60 Speed-Gro,filler,"FERTILIZER,RESOURCE_PACK"
+5114,Resource Pack: 4 Quality Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5115,Resource Pack: 12 Quality Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5116,Resource Pack: 20 Quality Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5117,Resource Pack: 28 Quality Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5118,Resource Pack: 36 Quality Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5119,Resource Pack: 40 Quality Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5120,Resource Pack: 4 Quality Retaining Soil,filler,"FERTILIZER,RESOURCE_PACK"
+5121,Resource Pack: 12 Quality Retaining Soil,filler,"FERTILIZER,RESOURCE_PACK"
+5122,Resource Pack: 20 Quality Retaining Soil,filler,"FERTILIZER,RESOURCE_PACK"
+5123,Resource Pack: 28 Quality Retaining Soil,filler,"FERTILIZER,RESOURCE_PACK"
+5124,Resource Pack: 36 Quality Retaining Soil,filler,"FERTILIZER,RESOURCE_PACK"
+5125,Resource Pack: 40 Quality Retaining Soil,filler,"FERTILIZER,RESOURCE_PACK"
+5126,Resource Pack: 4 Deluxe Speed-Gro,filler,"FERTILIZER,RESOURCE_PACK"
+5127,Resource Pack: 12 Deluxe Speed-Gro,filler,"FERTILIZER,RESOURCE_PACK"
+5128,Resource Pack: 20 Deluxe Speed-Gro,filler,"FERTILIZER,RESOURCE_PACK"
+5129,Resource Pack: 28 Deluxe Speed-Gro,filler,"FERTILIZER,RESOURCE_PACK"
+5130,Resource Pack: 36 Deluxe Speed-Gro,filler,"FERTILIZER,RESOURCE_PACK"
+5131,Resource Pack: 40 Deluxe Speed-Gro,filler,"FERTILIZER,RESOURCE_PACK"
+5132,Resource Pack: 2 Deluxe Fertilizer,useful,"FERTILIZER,RESOURCE_PACK"
+5133,Resource Pack: 6 Deluxe Fertilizer,useful,"FERTILIZER,RESOURCE_PACK"
+5134,Resource Pack: 10 Deluxe Fertilizer,useful,"FERTILIZER,RESOURCE_PACK"
+5135,Resource Pack: 14 Deluxe Fertilizer,useful,"FERTILIZER,RESOURCE_PACK"
+5136,Resource Pack: 18 Deluxe Fertilizer,useful,"FERTILIZER,RESOURCE_PACK"
+5137,Resource Pack: 20 Deluxe Fertilizer,useful,"FERTILIZER,RESOURCE_PACK"
+5138,Resource Pack: 2 Deluxe Retaining Soil,useful,"FERTILIZER,RESOURCE_PACK"
+5139,Resource Pack: 6 Deluxe Retaining Soil,useful,"FERTILIZER,RESOURCE_PACK"
+5140,Resource Pack: 10 Deluxe Retaining Soil,useful,"FERTILIZER,RESOURCE_PACK"
+5141,Resource Pack: 14 Deluxe Retaining Soil,useful,"FERTILIZER,RESOURCE_PACK"
+5142,Resource Pack: 18 Deluxe Retaining Soil,useful,"FERTILIZER,RESOURCE_PACK"
+5143,Resource Pack: 20 Deluxe Retaining Soil,useful,"FERTILIZER,RESOURCE_PACK"
+5144,Resource Pack: 2 Hyper Speed-Gro,useful,"FERTILIZER,RESOURCE_PACK"
+5145,Resource Pack: 6 Hyper Speed-Gro,useful,"FERTILIZER,RESOURCE_PACK"
+5146,Resource Pack: 10 Hyper Speed-Gro,useful,"FERTILIZER,RESOURCE_PACK"
+5147,Resource Pack: 14 Hyper Speed-Gro,useful,"FERTILIZER,RESOURCE_PACK"
+5148,Resource Pack: 18 Hyper Speed-Gro,useful,"FERTILIZER,RESOURCE_PACK"
+5149,Resource Pack: 20 Hyper Speed-Gro,useful,"FERTILIZER,RESOURCE_PACK"
+5150,Resource Pack: 2 Tree Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5151,Resource Pack: 6 Tree Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5152,Resource Pack: 10 Tree Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5153,Resource Pack: 14 Tree Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5154,Resource Pack: 18 Tree Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5155,Resource Pack: 20 Tree Fertilizer,filler,"FERTILIZER,RESOURCE_PACK"
+5156,Resource Pack: 10 Spring Seeds,filler,"RESOURCE_PACK,SEED"
+5157,Resource Pack: 20 Spring Seeds,filler,"RESOURCE_PACK,SEED"
+5158,Resource Pack: 30 Spring Seeds,filler,"RESOURCE_PACK,SEED"
+5159,Resource Pack: 40 Spring Seeds,filler,"RESOURCE_PACK,SEED"
+5160,Resource Pack: 50 Spring Seeds,filler,"RESOURCE_PACK,SEED"
+5161,Resource Pack: 60 Spring Seeds,filler,"RESOURCE_PACK,SEED"
+5162,Resource Pack: 10 Summer Seeds,filler,"RESOURCE_PACK,SEED"
+5163,Resource Pack: 20 Summer Seeds,filler,"RESOURCE_PACK,SEED"
+5164,Resource Pack: 30 Summer Seeds,filler,"RESOURCE_PACK,SEED"
+5165,Resource Pack: 40 Summer Seeds,filler,"RESOURCE_PACK,SEED"
+5166,Resource Pack: 50 Summer Seeds,filler,"RESOURCE_PACK,SEED"
+5167,Resource Pack: 60 Summer Seeds,filler,"RESOURCE_PACK,SEED"
+5168,Resource Pack: 10 Fall Seeds,filler,"RESOURCE_PACK,SEED"
+5169,Resource Pack: 20 Fall Seeds,filler,"RESOURCE_PACK,SEED"
+5170,Resource Pack: 30 Fall Seeds,filler,"RESOURCE_PACK,SEED"
+5171,Resource Pack: 40 Fall Seeds,filler,"RESOURCE_PACK,SEED"
+5172,Resource Pack: 50 Fall Seeds,filler,"RESOURCE_PACK,SEED"
+5173,Resource Pack: 60 Fall Seeds,filler,"RESOURCE_PACK,SEED"
+5174,Resource Pack: 10 Winter Seeds,filler,"RESOURCE_PACK,SEED"
+5175,Resource Pack: 20 Winter Seeds,filler,"RESOURCE_PACK,SEED"
+5176,Resource Pack: 30 Winter Seeds,filler,"RESOURCE_PACK,SEED"
+5177,Resource Pack: 40 Winter Seeds,filler,"RESOURCE_PACK,SEED"
+5178,Resource Pack: 50 Winter Seeds,filler,"RESOURCE_PACK,SEED"
+5179,Resource Pack: 60 Winter Seeds,filler,"RESOURCE_PACK,SEED"
+5180,Resource Pack: 1 Mahogany Seed,filler,"RESOURCE_PACK,SEED"
+5181,Resource Pack: 3 Mahogany Seed,filler,"RESOURCE_PACK,SEED"
+5182,Resource Pack: 5 Mahogany Seed,filler,"RESOURCE_PACK,SEED"
+5183,Resource Pack: 7 Mahogany Seed,filler,"RESOURCE_PACK,SEED"
+5184,Resource Pack: 9 Mahogany Seed,filler,"RESOURCE_PACK,SEED"
+5185,Resource Pack: 10 Mahogany Seed,filler,"RESOURCE_PACK,SEED"
+5186,Resource Pack: 10 Bait,filler,"FISHING_RESOURCE,RESOURCE_PACK"
+5187,Resource Pack: 20 Bait,filler,"FISHING_RESOURCE,RESOURCE_PACK"
+5188,Resource Pack: 30 Bait,filler,"FISHING_RESOURCE,RESOURCE_PACK"
+5189,Resource Pack: 40 Bait,filler,"FISHING_RESOURCE,RESOURCE_PACK"
+5190,Resource Pack: 50 Bait,filler,"FISHING_RESOURCE,RESOURCE_PACK"
+5191,Resource Pack: 60 Bait,filler,"FISHING_RESOURCE,RESOURCE_PACK"
+5192,Resource Pack: 1 Crab Pot,filler,"FISHING_RESOURCE,RESOURCE_PACK"
+5193,Resource Pack: 2 Crab Pot,filler,"FISHING_RESOURCE,RESOURCE_PACK"
+5194,Resource Pack: 3 Crab Pot,filler,"FISHING_RESOURCE,RESOURCE_PACK"
+5195,Resource Pack: 4 Crab Pot,filler,"FISHING_RESOURCE,RESOURCE_PACK"
+5196,Resource Pack: 5 Crab Pot,filler,"FISHING_RESOURCE,RESOURCE_PACK"
+5197,Resource Pack: 6 Crab Pot,filler,"FISHING_RESOURCE,RESOURCE_PACK"
+5198,Friendship Bonus (1 <3),useful,FRIENDSHIP_PACK
+5199,Friendship Bonus (2 <3),useful,FRIENDSHIP_PACK
+5200,Friendship Bonus (3 <3),useful,FRIENDSHIP_PACK
+5201,Friendship Bonus (4 <3),useful,FRIENDSHIP_PACK

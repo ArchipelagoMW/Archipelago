@@ -460,7 +460,7 @@ def get_hint_area(spot):
         
             if parent_region.dungeon:
                 return parent_region.dungeon.hint_text
-            elif parent_region.hint_text and (spot.parent_region.name == 'Root' or parent_region.name != 'Root'):
+            elif parent_region.hint and (spot.parent_region.name == 'Root' or parent_region.name != 'Root'):
                 return parent_region.hint_text
 
             spot_queue.extend(list(filter(lambda ent: ent not in already_checked, parent_region.entrances)))

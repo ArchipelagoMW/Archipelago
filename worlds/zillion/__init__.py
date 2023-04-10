@@ -2,14 +2,12 @@ from collections import deque, Counter
 from contextlib import redirect_stdout
 import functools
 import threading
-from typing import Any, Dict, List, Set, Tuple, Optional, cast
+from typing import Any, Dict, List, Literal, Set, Tuple, Optional, cast
 import os
 import logging
 
 from BaseClasses import ItemClassification, LocationProgressType, \
-    MultiWorld, Item, CollectionState, RegionType, \
-    Entrance, Tutorial
-from Options import AssembleOptions
+    MultiWorld, Item, CollectionState, Entrance, Tutorial
 from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
 from .options import ZillionStartChar, zillion_options, validate
@@ -49,17 +47,17 @@ class ZillionWorld(World):
     game = "Zillion"
     web = ZillionWebWorld()
 
-    option_definitions: Dict[str, AssembleOptions] = zillion_options
-    topology_present: bool = True  # indicate if world type has any meaningful layout/pathing
+    option_definitions = zillion_options
+    topology_present = True  # indicate if world type has any meaningful layout/pathing
 
     # map names to their IDs
-    item_name_to_id: Dict[str, int] = _item_name_to_id
-    location_name_to_id: Dict[str, int] = _loc_name_to_id
+    item_name_to_id = _item_name_to_id
+    location_name_to_id = _loc_name_to_id
 
     # increment this every time something in your world's names/id mappings changes.
     # While this is set to 0 in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
     # retrieved by clients on every connection.
-    data_version: int = 1
+    data_version = 1
 
     logger: logging.Logger
 
@@ -109,7 +107,7 @@ class ZillionWorld(World):
         self.id_to_zz_item = id_to_zz_item
 
     @classmethod
-    def stage_assert_generate(cls, world: MultiWorld) -> None:
+    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         """Checks that a game is capable of generating, usually checks for some base file like a ROM.
         Not run for unittests since they don't produce output"""
         rom_file = get_base_rom_path()
@@ -155,7 +153,7 @@ class ZillionWorld(World):
         all: Dict[str, ZillionRegion] = {}
         for here_zz_name, zz_r in self.zz_system.randomizer.regions.items():
             here_name = "Menu" if here_zz_name == "start" else zz_reg_name_to_reg_name(here_zz_name)
-            all[here_name] = ZillionRegion(zz_r, here_name, RegionType.Generic, here_name, p, w)
+            all[here_name] = ZillionRegion(zz_r, here_name, here_name, p, w)
             self.multiworld.regions.append(all[here_name])
 
         limited_skill = Req(gun=3, jump=3, skill=self.zz_system.randomizer.options.skill, hp=940, red=1, floppy=126)
@@ -251,13 +249,13 @@ class ZillionWorld(World):
             if group["game"] == "Zillion":
                 assert "item_pool" in group
                 item_pool = group["item_pool"]
-                to_stay = "JJ"
+                to_stay: Literal['Apple', 'Champ', 'JJ'] = "JJ"
                 if "JJ" in item_pool:
                     assert "players" in group
                     group_players = group["players"]
                     start_chars = cast(Dict[int, ZillionStartChar], getattr(multiworld, "start_char"))
                     players_start_chars = [
-                        (player, start_chars[player].get_current_option_name())
+                        (player, start_chars[player].current_option_name)
                         for player in group_players
                     ]
                     start_char_counts = Counter(sc for _, sc in players_start_chars)
@@ -343,7 +341,7 @@ class ZillionWorld(World):
 
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use world.random here.
-        If you need any last-second randomization, use MultiWorld.slot_seeds[slot] instead."""
+        If you need any last-second randomization, use MultiWorld.per_slot_randoms[slot] instead."""
         self.finalize_item_locations()
 
         assert self.zz_system.patcher, "didn't get patcher from generate_early"

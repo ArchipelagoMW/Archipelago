@@ -3,9 +3,10 @@ import os
 import random
 import threading
 import typing
+from collections import OrderedDict
 
 import Utils
-from BaseClasses import Item, CollectionState, Tutorial
+from BaseClasses import Item, CollectionState, Tutorial, MultiWorld
 from .Dungeons import create_dungeons
 from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect, \
     indirect_connections, indirect_connections_inverted, indirect_connections_not_inverted
@@ -19,9 +20,10 @@ from .Client import ALTTPSNIClient
 from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
 from .Rules import set_rules
-from .Shops import create_shops, ShopSlotFill
-from .SubClasses import ALttPItem
+from .Shops import create_shops, Shop, ShopSlotFill, ShopType, price_rate_display, price_type_display_name
+from .SubClasses import ALttPItem, LTTPRegionType
 from worlds.AutoWorld import World, WebWorld, LogicMixin
+from .StateHelpers import can_buy_unlimited
 
 lttp_logger = logging.getLogger("A Link to the Past")
 
@@ -115,6 +117,75 @@ class ALTTPWorld(World):
     option_definitions = alttp_options
     topology_present = True
     item_name_groups = item_name_groups
+    location_name_groups = {
+        "Blind's Hideout": {"Blind's Hideout - Top", "Blind's Hideout - Left", "Blind's Hideout - Right",
+                           "Blind's Hideout - Far Left", "Blind's Hideout - Far Right"},
+        "Kakariko Well": {"Kakariko Well - Top", "Kakariko Well - Left", "Kakariko Well - Middle",
+                          "Kakariko Well - Right", "Kakariko Well - Bottom"},
+        "Mini Moldorm Cave": {"Mini Moldorm Cave - Far Left", "Mini Moldorm Cave - Left", "Mini Moldorm Cave - Right",
+                              "Mini Moldorm Cave - Far Right", "Mini Moldorm Cave - Generous Guy"},
+        "Paradox Cave": {"Paradox Cave Lower - Far Left", "Paradox Cave Lower - Left", "Paradox Cave Lower - Right",
+                         "Paradox Cave Lower - Far Right", "Paradox Cave Lower - Middle", "Paradox Cave Upper - Left",
+                         "Paradox Cave Upper - Right"},
+        "Hype Cave": {"Hype Cave - Top", "Hype Cave - Middle Right", "Hype Cave - Middle Left",
+                      "Hype Cave - Bottom", "Hype Cave - Generous Guy"},
+        "Hookshot Cave": {"Hookshot Cave - Top Right", "Hookshot Cave - Top Left", "Hookshot Cave - Bottom Right",
+                          "Hookshot Cave - Bottom Left"},
+        "Hyrule Castle": {"Hyrule Castle - Boomerang Chest", "Hyrule Castle - Map Chest",
+                          "Hyrule Castle - Zelda's Chest", "Sewers - Dark Cross", "Sewers - Secret Room - Left",
+                          "Sewers - Secret Room - Middle", "Sewers - Secret Room - Right"},
+        "Eastern Palace": {"Eastern Palace - Compass Chest", "Eastern Palace - Big Chest",
+                           "Eastern Palace - Cannonball Chest", "Eastern Palace - Big Key Chest",
+                           "Eastern Palace - Map Chest", "Eastern Palace - Boss"},
+        "Desert Palace": {"Desert Palace - Big Chest", "Desert Palace - Torch", "Desert Palace - Map Chest",
+                          "Desert Palace - Compass Chest", "Desert Palace Big Key Chest", "Desert Palace - Boss"},
+        "Tower of Hera": {"Tower of Hera - Basement Cage", "Tower of Hera - Map Chest", "Tower of Hera - Big Key Chest",
+                          "Tower of Hera - Compass Chest", "Tower of Hera - Big Chest", "Tower of Hera - Boss"},
+        "Palace of Darkness": {"Palace of Darkness - Shooter Room", "Palace of Darkness - The Arena - Bridge",
+                               "Palace of Darkness - Stalfos Basement", "Palace of Darkness - Big Key Chest",
+                               "Palace of Darkness - The Arena - Ledge", "Palace of Darkness - Map Chest",
+                               "Palace of Darkness - Compass Chest", "Palace of Darkness - Dark Basement - Left",
+                               "Palace of Darkness - Dark Basement - Right", "Palace of Darkness - Dark Maze - Top",
+                               "Palace of Darkness - Dark Maze - Bottom", "Palace of Darkness - Big Chest",
+                               "Palace of Darkness - Harmless Hellway", "Palace of Darkness - Boss"},
+        "Swamp Palace": {"Swamp Palace - Entrance", "Swamp Palace - Swamp Palace - Map Chest",
+                         "Swamp Palace - Big Chest", "Swamp Palace - Compass Chest", "Swamp Palace - Big Key Chest",
+                         "Swamp Palace - West Chest", "Swamp Palace - Flooded Room - Left",
+                         "Swamp Palace - Flooded Room - Right", "Swamp Palace - Waterfall Room", "Swamp Palace - Boss"},
+        "Thieves' Town": {"Thieves' Town - Big Key Chest", "Thieves' Town - Map Chest", "Thieves' Town - Compass Chest",
+                          "Thieves' Town - Ambush Chest", "Thieves' Town - Attic", "Thieves' Town - Big Chest",
+                          "Thieves' Town - Blind's Cell", "Thieves' Town - Boss"},
+        "Skull Woods": {"Skull Woods - Map Chest", "Skull Woods - Pinball Room", "Skull Woods - Compass Chest",
+                        "Skull Woods - Pot Prison", "Skull Woods - Big Chest", "Skull Woods - Big Key Chest",
+                        "Skull Woods - Bridge Room", "Skull Woods - Boss"},
+        "Ice Palace": {"Ice Palace - Compass Chest", "Ice Palace - Freezor Chest", "Ice Palace - Big Chest",
+                       "Ice Palace - Freezor Chest", "Ice Palace - Big Chest", "Ice Palace - Iced T Room",
+                       "Ice Palace - Spike Room", "Ice Palace - Big Key Chest", "Ice Palace - Map Chest",
+                       "Ice Palace - Boss"},
+        "Misery Mire": {"Misery Mire - Big Chest", "Misery Mire - Map Chest", "Misery Mire - Main Lobby",
+                        "Misery Mire - Bridge Chest", "Misery Mire - Spike Chest", "Misery Mire - Compass Chest",
+                        "Misery Mire - Big Key Chest", "Misery Mire - Boss"},
+        "Turtle Rock": {"Turtle Rock - Compass Chest", "Turtle Rock - Roller Room - Left",
+                        "Turtle Rock - Roller Room - Right", "Turtle Room - Chain Chomps", "Turtle Rock - Big Key Chest",
+                        "Turtle Rock - Big Chest", "Turtle Rock - Crystaroller Room",
+                        "Turtle Rock - Eye Bridge - Bottom Left", "Turtle Rock - Eye Bridge - Bottom Right",
+                        "Turtle Rock - Eye Bridge - Top Left", "Turtle Rock - Eye Bridge - Top Right", "Turtle Rock - Boss"},
+        "Ganons Tower": {"Ganons Tower - Bob's Torch", "Ganon's Tower - Hope Room - Left",
+                         "Ganons Tower - Hope Room - Right", "Ganons Tower - Tile Room",
+                         "Ganons Tower - Compass Room - Top Left", "Ganons Tower - Compass Room - Top Right",
+                         "Ganons Tower - Compass Room - Bottom Left", "Ganons Tower - Compass Room - Bottom Left",
+                         "Ganons Tower - DMs Room - Top Left", "Ganons Tower - DMs Room - Top Right",
+                         "Ganons Tower - DMs Room - Bottom Left", "Ganons Tower - DMs Room - Bottom Right",
+                         "Ganons Tower - Map Chest", "Ganons Tower - Firesnake Room",
+                         "Ganons Tower - Randomizer Room - Top Left", "Ganons Tower - Randomizer Room - Top Right",
+                         "Ganons Tower - Randomizer Room - Bottom Left", "Ganons Tower - Randomizer Room - Bottom Right",
+                         "Ganons Tower - Bob's Chest", "Ganons Tower - Big Chest", "Ganons Tower - Big Key Room - Left",
+                         "Ganons Tower - Big Key Room - Right", "Ganons Tower - Big Key Chest",
+                         "Ganons Tower - Mini Helmasaur Room - Left", "Ganons Tower - Mini Helmasaur Room - Right",
+                         "Ganons Tower - Pre-Moldorm Room", "Ganons Tower - Validation Chest"},
+        "Ganons Tower Climb": {"Ganons Tower - Mini Helmasaur Room - Left", "Ganons Tower - Mini Helmasaur Room - Right",
+                               "Ganons Tower - Pre-Moldorm Room", "Ganons Tower - Validation Chest"},
+    }
     hint_blacklist = {"Triforce"}
 
     item_name_to_id = {name: data.item_code for name, data in item_table.items() if type(data.item_code) == int}
@@ -151,16 +222,18 @@ class ALTTPWorld(World):
         super(ALTTPWorld, self).__init__(*args, **kwargs)
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld: MultiWorld):
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
-        if world.is_race:
+        if multiworld.is_race:
             import xxtea
+        for player in multiworld.get_game_players(cls.game):
+            if multiworld.worlds[player].use_enemizer:
+                check_enemizer(multiworld.worlds[player].enemizer_path)
+                break
 
     def generate_early(self):
-        if self.use_enemizer():
-            check_enemizer(self.enemizer_path)
 
         player = self.player
         world = self.multiworld
@@ -369,19 +442,20 @@ class ALTTPWorld(World):
     def stage_post_fill(cls, world):
         ShopSlotFill(world)
 
-    def use_enemizer(self):
+    @property
+    def use_enemizer(self) -> bool:
         world = self.multiworld
         player = self.player
-        return (world.boss_shuffle[player] or world.enemy_shuffle[player]
-                or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
-                or world.pot_shuffle[player] or world.bush_shuffle[player]
-                or world.killable_thieves[player])
+        return bool(world.boss_shuffle[player] or world.enemy_shuffle[player]
+                    or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
+                    or world.pot_shuffle[player] or world.bush_shuffle[player]
+                    or world.killable_thieves[player])
 
     def generate_output(self, output_directory: str):
         world = self.multiworld
         player = self.player
         try:
-            use_enemizer = self.use_enemizer()
+            use_enemizer = self.use_enemizer
 
             rom = LocalRom(get_base_rom_path())
 
@@ -517,6 +591,122 @@ class ALTTPWorld(World):
                     else:
                         logging.warning(f"Could not trash fill Ganon's Tower for player {player}.")
 
+    def write_spoiler_header(self, spoiler_handle: typing.TextIO) -> None:
+        def bool_to_text(variable: typing.Union[bool, str]) -> str:
+            if type(variable) == str:
+                return variable
+            return "Yes" if variable else "No"
+
+        spoiler_handle.write('Logic:                           %s\n' % self.multiworld.logic[self.player])
+        spoiler_handle.write('Dark Room Logic:                 %s\n' % self.multiworld.dark_room_logic[self.player])
+        spoiler_handle.write('Mode:                            %s\n' % self.multiworld.mode[self.player])
+        spoiler_handle.write('Goal:                            %s\n' % self.multiworld.goal[self.player])
+        if "triforce" in self.multiworld.goal[self.player]:  # triforce hunt
+            spoiler_handle.write("Pieces available for Triforce:   %s\n" %
+                          self.multiworld.triforce_pieces_available[self.player])
+            spoiler_handle.write("Pieces required for Triforce:    %s\n" %
+                          self.multiworld.triforce_pieces_required[self.player])
+        spoiler_handle.write('Difficulty:                      %s\n' % self.multiworld.difficulty[self.player])
+        spoiler_handle.write('Item Functionality:              %s\n' % self.multiworld.item_functionality[self.player])
+        spoiler_handle.write('Entrance Shuffle:                %s\n' % self.multiworld.shuffle[self.player])
+        if self.multiworld.shuffle[self.player] != "vanilla":
+            spoiler_handle.write('Entrance Shuffle Seed            %s\n' % self.er_seed)
+        spoiler_handle.write('Shop inventory shuffle:          %s\n' %
+                             bool_to_text("i" in self.multiworld.shop_shuffle[self.player]))
+        spoiler_handle.write('Shop price shuffle:              %s\n' %
+                             bool_to_text("p" in self.multiworld.shop_shuffle[self.player]))
+        spoiler_handle.write('Shop upgrade shuffle:            %s\n' %
+                             bool_to_text("u" in self.multiworld.shop_shuffle[self.player]))
+        spoiler_handle.write('New Shop inventory:              %s\n' %
+                             bool_to_text("g" in self.multiworld.shop_shuffle[self.player] or
+                                          "f" in self.multiworld.shop_shuffle[self.player]))
+        spoiler_handle.write('Custom Potion Shop:              %s\n' %
+                             bool_to_text("w" in self.multiworld.shop_shuffle[self.player]))
+        spoiler_handle.write('Enemy health:                    %s\n' % self.multiworld.enemy_health[self.player])
+        spoiler_handle.write('Enemy damage:                    %s\n' % self.multiworld.enemy_damage[self.player])
+        spoiler_handle.write('Prize shuffle                    %s\n' % self.multiworld.shuffle_prizes[self.player])
+
+    def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
+        spoiler_handle.write("\n\nMedallions:\n")
+        spoiler_handle.write(f"\nMisery Mire ({self.multiworld.get_player_name(self.player)}):"
+                             f" {self.multiworld.required_medallions[self.player][0]}")
+        spoiler_handle.write(
+            f"\nTurtle Rock ({self.multiworld.get_player_name(self.player)}):"
+            f" {self.multiworld.required_medallions[self.player][1]}")
+
+        if self.multiworld.boss_shuffle[self.player] != "none":
+            def create_boss_map() -> typing.Dict:
+                boss_map = {
+                    "Eastern Palace": self.multiworld.get_dungeon("Eastern Palace", self.player).boss.name,
+                    "Desert Palace": self.multiworld.get_dungeon("Desert Palace", self.player).boss.name,
+                    "Tower Of Hera": self.multiworld.get_dungeon("Tower of Hera", self.player).boss.name,
+                    "Hyrule Castle": "Agahnim",
+                    "Palace Of Darkness": self.multiworld.get_dungeon("Palace of Darkness",
+                                                                              self.player).boss.name,
+                    "Swamp Palace": self.multiworld.get_dungeon("Swamp Palace", self.player).boss.name,
+                    "Skull Woods": self.multiworld.get_dungeon("Skull Woods", self.player).boss.name,
+                    "Thieves Town": self.multiworld.get_dungeon("Thieves Town", self.player).boss.name,
+                    "Ice Palace": self.multiworld.get_dungeon("Ice Palace", self.player).boss.name,
+                    "Misery Mire": self.multiworld.get_dungeon("Misery Mire", self.player).boss.name,
+                    "Turtle Rock": self.multiworld.get_dungeon("Turtle Rock", self.player).boss.name,
+                    "Ganons Tower": "Agahnim 2",
+                    "Ganon": "Ganon"
+                }
+                if self.multiworld.mode[self.player] != 'inverted':
+                    boss_map.update({
+                        "Ganons Tower Basement":
+                            self.multiworld.get_dungeon("Ganons Tower", self.player).bosses["bottom"].name,
+                        "Ganons Tower Middle": self.multiworld.get_dungeon("Ganons Tower", self.player).bosses[
+                            "middle"].name,
+                        "Ganons Tower Top": self.multiworld.get_dungeon("Ganons Tower", self.player).bosses[
+                            "top"].name
+                    })
+                else:
+                    boss_map.update({
+                        "Ganons Tower Basement": self.multiworld.get_dungeon("Inverted Ganons Tower", self.player).bosses["bottom"].name,
+                        "Ganons Tower Middle": self.multiworld.get_dungeon("Inverted Ganons Tower", self.player).bosses["middle"].name,
+                        "Ganons Tower Top": self.multiworld.get_dungeon("Inverted Ganons Tower", self.player).bosses["top"].name
+                    })
+                return boss_map
+
+            bossmap = create_boss_map()
+            spoiler_handle.write(
+                f'\n\nBosses{(f" ({self.multiworld.get_player_name(self.player)})" if self.multiworld.players > 1 else "")}:\n')
+            spoiler_handle.write('    ' + '\n    '.join([f'{x}: {y}' for x, y in bossmap.items()]))
+
+        def build_shop_info(shop: Shop) -> typing.Dict[str, str]:
+            shop_data = {
+                "location": str(shop.region),
+                "type": "Take Any" if shop.type == ShopType.TakeAny else "Shop"
+            }
+
+            for index, item in enumerate(shop.inventory):
+                if item is None:
+                    continue
+                price = item["price"] // price_rate_display.get(item["price_type"], 1)
+                shop_data["item_{}".format(index)] = f"{item['item']} - {price} {price_type_display_name[item['price_type']]}"
+                if item["player"]:
+                    shop_data["item_{}".format(index)] =\
+                        shop_data["item_{}".format(index)].replace("—", "(Player {}) — ".format(item["player"]))
+
+                if item["max"] == 0:
+                    continue
+                shop_data["item_{}".format(index)] += " x {}".format(item["max"])
+                if item["replacement"] is None:
+                    continue
+                shop_data["item_{}".format(index)] +=\
+                    f", {item['replacement']} - {item['replacement_price']}" \
+                    f" {price_type_display_name[item['replacement_price_type']]}"
+
+            return shop_data
+
+        if shop_info := [build_shop_info(shop) for shop in self.multiworld.shops if shop.custom]:
+            spoiler_handle.write('\n\nShops:\n\n')
+        for shop_data in shop_info:
+            spoiler_handle.write("{} [{}]\n    {}\n".format(shop_data['location'], shop_data['type'], "\n    ".join(
+                item for item in [shop_data.get('item_0', None), shop_data.get('item_1', None), shop_data.get('item_2', None)] if
+                item)))
+
     def get_filler_item_name(self) -> str:
         if self.multiworld.goal[self.player] == "icerodhunt":
             item = "Nothing"
@@ -549,5 +739,5 @@ class ALttPLogic(LogicMixin):
         if self.multiworld.logic[player] == 'nologic':
             return True
         if self.multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
-            return self.can_buy_unlimited('Small Key (Universal)', player)
+            return can_buy_unlimited(self, 'Small Key (Universal)', player)
         return self.prog_items[item, player] >= count

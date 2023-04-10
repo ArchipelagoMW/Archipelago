@@ -4,7 +4,7 @@ from typing import Optional, Union, List, Tuple, Callable, Dict
 from BaseClasses import Boss
 from Fill import FillError
 from .Options import LTTPBosses as Bosses
-
+from .StateHelpers import can_shoot_arrows, can_extend_magic, can_get_good_bee, has_sword, has_beam_sword, has_melee_weapon, has_fire_source
 
 def BossFactory(boss: str, player: int) -> Optional[Boss]:
     if boss in boss_table:
@@ -16,33 +16,33 @@ def BossFactory(boss: str, player: int) -> Optional[Boss]:
 def ArmosKnightsDefeatRule(state, player: int) -> bool:
     # Magic amounts are probably a bit overkill
     return (
-            state.has_melee_weapon(player) or
-            state.can_shoot_arrows(player) or
-            (state.has('Cane of Somaria', player) and state.can_extend_magic(player, 10)) or
-            (state.has('Cane of Byrna', player) and state.can_extend_magic(player, 16)) or
-            (state.has('Ice Rod', player) and state.can_extend_magic(player, 32)) or
-            (state.has('Fire Rod', player) and state.can_extend_magic(player, 32)) or
+            has_melee_weapon(state, player) or
+            can_shoot_arrows(state, player) or
+            (state.has('Cane of Somaria', player) and can_extend_magic(state, player, 10)) or
+            (state.has('Cane of Byrna', player) and can_extend_magic(state, player, 16)) or
+            (state.has('Ice Rod', player) and can_extend_magic(state, player, 32)) or
+            (state.has('Fire Rod', player) and can_extend_magic(state, player, 32)) or
             state.has('Blue Boomerang', player) or
             state.has('Red Boomerang', player))
 
 
 def LanmolasDefeatRule(state, player: int) -> bool:
     return (
-            state.has_melee_weapon(player) or
+            has_melee_weapon(state, player) or
             state.has('Fire Rod', player) or
             state.has('Ice Rod', player) or
             state.has('Cane of Somaria', player) or
             state.has('Cane of Byrna', player) or
-            state.can_shoot_arrows(player))
+            can_shoot_arrows(state, player))
 
 
 def MoldormDefeatRule(state, player: int) -> bool:
-    return state.has_melee_weapon(player)
+    return has_melee_weapon(state, player)
 
 
 def HelmasaurKingDefeatRule(state, player: int) -> bool:
     # TODO: technically possible with the hammer
-    return state.has_sword(player) or state.can_shoot_arrows(player)
+    return has_sword(state, player) or can_shoot_arrows(state, player)
 
 
 def ArrghusDefeatRule(state, player: int) -> bool:
@@ -51,28 +51,28 @@ def ArrghusDefeatRule(state, player: int) -> bool:
     # TODO: ideally we would have a check for bow and silvers, which combined with the
     # hookshot is enough. This is not coded yet because the silvers that only work in pyramid feature
     # makes this complicated
-    if state.has_melee_weapon(player):
+    if has_melee_weapon(state, player):
         return True
 
-    return ((state.has('Fire Rod', player) and (state.can_shoot_arrows(player) or state.can_extend_magic(player,
+    return ((state.has('Fire Rod', player) and (can_shoot_arrows(state, player) or can_extend_magic(state, player,
                                                                                                          12))) or  # assuming mostly gitting two puff with one shot
-            (state.has('Ice Rod', player) and (state.can_shoot_arrows(player) or state.can_extend_magic(player, 16))))
+            (state.has('Ice Rod', player) and (can_shoot_arrows(state, player) or can_extend_magic(state, player, 16))))
 
 
 def MothulaDefeatRule(state, player: int) -> bool:
     return (
-            state.has_melee_weapon(player) or
-            (state.has('Fire Rod', player) and state.can_extend_magic(player, 10)) or
+            has_melee_weapon(state, player) or
+            (state.has('Fire Rod', player) and can_extend_magic(state, player, 10)) or
             # TODO: Not sure how much (if any) extend magic is needed for these two, since they only apply
             # to non-vanilla locations, so are harder to test, so sticking with what VT has for now:
-            (state.has('Cane of Somaria', player) and state.can_extend_magic(player, 16)) or
-            (state.has('Cane of Byrna', player) and state.can_extend_magic(player, 16)) or
-            state.can_get_good_bee(player)
+            (state.has('Cane of Somaria', player) and can_extend_magic(state, player, 16)) or
+            (state.has('Cane of Byrna', player) and can_extend_magic(state, player, 16)) or
+            can_get_good_bee(state, player)
     )
 
 
 def BlindDefeatRule(state, player: int) -> bool:
-    return state.has_melee_weapon(player) or state.has('Cane of Somaria', player) or state.has('Cane of Byrna', player)
+    return has_melee_weapon(state, player) or state.has('Cane of Somaria', player) or state.has('Cane of Byrna', player)
 
 
 def KholdstareDefeatRule(state, player: int) -> bool:
@@ -81,56 +81,56 @@ def KholdstareDefeatRule(state, player: int) -> bool:
                     state.has('Fire Rod', player) or
                     (
                             state.has('Bombos', player) and
-                            (state.has_sword(player) or state.multiworld.swordless[player])
+                            (has_sword(state, player) or state.multiworld.swordless[player])
                     )
             ) and
             (
-                    state.has_melee_weapon(player) or
-                    (state.has('Fire Rod', player) and state.can_extend_magic(player, 20)) or
+                    has_melee_weapon(state, player) or
+                    (state.has('Fire Rod', player) and can_extend_magic(state, player, 20)) or
                     (
                             state.has('Fire Rod', player) and
                             state.has('Bombos', player) and
                             state.multiworld.swordless[player] and
-                            state.can_extend_magic(player, 16)
+                            can_extend_magic(state, player, 16)
                     )
             )
     )
 
 
 def VitreousDefeatRule(state, player: int) -> bool:
-    return state.can_shoot_arrows(player) or state.has_melee_weapon(player)
+    return can_shoot_arrows(state, player) or has_melee_weapon(state, player)
 
 
 def TrinexxDefeatRule(state, player: int) -> bool:
     if not (state.has('Fire Rod', player) and state.has('Ice Rod', player)):
         return False
     return state.has('Hammer', player) or state.has('Tempered Sword', player) or state.has('Golden Sword', player) or \
-           (state.has('Master Sword', player) and state.can_extend_magic(player, 16)) or \
-           (state.has_sword(player) and state.can_extend_magic(player, 32))
+           (state.has('Master Sword', player) and can_extend_magic(state, player, 16)) or \
+           (has_sword(state, player) and can_extend_magic(state, player, 32))
 
 
 def AgahnimDefeatRule(state, player: int) -> bool:
-    return state.has_sword(player) or state.has('Hammer', player) or state.has('Bug Catching Net', player)
+    return has_sword(state, player) or state.has('Hammer', player) or state.has('Bug Catching Net', player)
 
 
 def GanonDefeatRule(state, player: int) -> bool:
     if state.multiworld.swordless[player]:
         return state.has('Hammer', player) and \
-               state.has_fire_source(player) and \
+               has_fire_source(state, player) and \
                state.has('Silver Bow', player) and \
-               state.can_shoot_arrows(player)
+               can_shoot_arrows(state, player)
 
-    can_hurt = state.has_beam_sword(player)
-    common = can_hurt and state.has_fire_source(player)
+    can_hurt = has_beam_sword(state, player)
+    common = can_hurt and has_fire_source(state, player)
     # silverless ganon may be needed in anything higher than no glitches
     if state.multiworld.logic[player] != 'noglitches':
         # need to light torch a sufficient amount of times
         return common and (state.has('Tempered Sword', player) or state.has('Golden Sword', player) or (
-                state.has('Silver Bow', player) and state.can_shoot_arrows(player)) or
-                           state.has('Lamp', player) or state.can_extend_magic(player, 12))
+                state.has('Silver Bow', player) and can_shoot_arrows(state, player)) or
+                           state.has('Lamp', player) or can_extend_magic(state, player, 12))
 
     else:
-        return common and state.has('Silver Bow', player) and state.can_shoot_arrows(player)
+        return common and state.has('Silver Bow', player) and can_shoot_arrows(state, player)
 
 
 boss_table: Dict[str, Tuple[str, Optional[Callable]]] = {
