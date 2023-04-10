@@ -1,7 +1,7 @@
 .gba
 
-input equ "Wario Land 4 (UE) [!].gba"
-output equ "worlds/wl4/data/basepatch.gba"
+input equ "../../Wario Land 4 (UE) [!].gba"
+output equ "data/basepatch.gba"
 
 unusedram equ 0x03006280
 unusedrom equ 0x0878F97C
@@ -183,13 +183,12 @@ GetItemAtLocation:
 
 .endregion
 
-.relativeinclude on
-.include "check_locations.asm"
-.include "item_effects.asm"
-.include "randomize_boxes.asm"
-.include "save_full_health.asm"
-.include "item_queue.asm"
-.include "pre_game_loop.asm"
-.include "item_indicator.asm"
+.include "asm/check_locations.asm"
+.include "asm/junk_effects.asm"
+.include "asm/randomize_boxes.asm"
+.include "asm/save_full_health.asm"
+.include "asm/item_queue.asm"
+.include "asm/pre_game_loop.asm"
+.include "asm/collection_indicator.asm"
 
 .close
