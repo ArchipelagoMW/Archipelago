@@ -57,9 +57,6 @@ class AssembleOptions(abc.ABCMeta):
             else:
                 assert verifiers, "class Option is supposed to implement def verify"
 
-        if "valid_keys" in attrs:
-            attrs["_valid_keys"] = frozenset(attrs["valid_keys"])
-
         # auto-validate schema on __init__
         if "schema" in attrs.keys():
 
@@ -718,7 +715,14 @@ class SpecialRange(Range):
                             f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
 
 
-class VerifyKeys:
+class FreezeValidKeys(AssembleOptions):
+    def __new__(mcs, name, bases, attrs):
+        if "valid_keys" in attrs:
+            attrs["_valid_keys"] = frozenset(attrs["valid_keys"])
+        return super(FreezeValidKeys, mcs).__new__(mcs, name, bases, attrs)
+
+
+class VerifyKeys(metaclass=FreezeValidKeys):
     valid_keys: typing.Iterable = []
     _valid_keys: frozenset  # gets created by AssembleOptions from valid_keys
     valid_keys_casefold: bool = False
