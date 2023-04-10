@@ -373,9 +373,14 @@ class Overcooked2World(World):
                 # skip horde-specific items if no horde levels
                 continue
 
-            if not self.options["KevinLevels"] and item_name.startswith("Kevin"):
-                # skip kevin items if no kevin levels
-                continue
+            if not self.options["KevinLevels"]:
+                if item_name.startswith("Kevin"):
+                    # skip kevin items if no kevin levels
+                    continue
+
+                if item_name == "Dark Green Ramp":
+                    # skip dark green ramp if there's no Kevin-1 to reveal it
+                    continue
 
             if is_item_progression(item_name, self.level_mapping, self.options["KevinLevels"]):
                 # progression.append(item_name)
