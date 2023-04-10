@@ -46,13 +46,14 @@ class MuseDashCollections:
                 self.album_items[sections[1]] = AlbumData(item_id_index)
                 item_id_index += 1
 
-            # Data is 'Song|Album|StreamerMode|EasyDiff|HardDiff|MasterDiff|SecretDiff'
+            # Data is in the format 'Song|Album|StreamerMode|EasyDiff|HardDiff|MasterDiff|SecretDiff'
             song_name = sections[0]
             song_is_free = sections[1] in self.FREE_ALBUMS
             steamer_mode = sections[2] == "True"
 
             if (song_name in self.DIFF_OVERRIDES):
                 # Note: These difficulties may not actually be representative of these songs.
+                # The game does not provide these difficulties so they have to be filled in.
                 diff_of_easy = 4
                 diff_of_hard = 7
                 diff_of_master = 10
@@ -67,13 +68,13 @@ class MuseDashCollections:
 
         for name in self.album_items.keys():
             for i in range(0, items_per_location):
-                new_name = "%s-%i" % (name, i)
+                new_name = f"{name}-{i}"
                 self.album_locations[new_name] = location_id_index
                 location_id_index += 1
 
         for name in self.song_items.keys():
             for i in range(0, items_per_location):
-                new_name = "%s-%i" % (name, i)
+                new_name = f"{name}-{i}"
                 self.song_locations[new_name] = location_id_index
                 location_id_index += 1
 

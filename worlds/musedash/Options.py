@@ -3,13 +3,12 @@ from Options import Toggle, Option, Range, Choice, DeathLink
 
 
 class AllowJustAsPlannedDLCSongs(Toggle):
-    """Whether or not Just as Planned DLC songs, and all the DLCs along with it, will be included in the randomiser.
-    Note: The newest DLC songs will most likely not be included in any randomisation."""
+    """Whether or not Just as Planned DLC songs, and all the DLCs along with it, will be included in the randomiser."""
     display_name = "Allow Just As Planned DLC Songs"
 
 
 class StreamerModeEnabled(Toggle):
-    """Whether or not the randomisation will take into account Streamer Mode.
+    """Whether or not the randomisation will take into account for Streamer Mode.
     If enabled, only songs available in Streamer Mode will be randomised."""
     display_name = "Streamer Mode Only Songs"
 
@@ -53,15 +52,21 @@ class DifficultyMode(Choice):
     default = 0
 
 
+# Todo: Investigate options to make this non randomisable
 class DifficultyModeOverrideMin(Range):
-    """Ensures that 1 song has at least 1 song this value or higher."""
+    """Ensures that 1 difficulty has at least 1 this value or higher per song.
+    Only available under Difficulty Mode: Custom."""
+    display_name = "Song Difficulty Custom Minimum"
     range_start = 1
     range_end = 11
     default = 4
 
 
+# Todo: Investigate options to make this non randomisable
 class DifficultyModeOverrideMax(Range):
-    """Ensures that 1 song has at least 1 song this value or lower."""
+    """Ensures that 1 difficulty has at least 1 this value or lower per song.
+    Only available under Difficulty Mode: Custom."""
+    display_name = "Song Difficulty Custom Maximum"
     range_start = 1
     range_end = 11
     default = 8
@@ -85,10 +90,16 @@ class GradeNeeded(Choice):
     option_SilverS = 5
     default = 0
 
+class AdditionalItemPercentage(Range):
+    """What percentage of songs will have 2 items instead of 1. Starting Songs will always have 2 locations."""
+    display_name = "Additional Item %"
+    range_start = 50
+    default = 80
+    range_end = 100
+
 
 class MusicSheetCountPercentage(Range):
-    """Music sheets are what you need to win Muse Dash. This controls how many sheets are in the item pool.
-    This is based on the number of songs in the pool."""
+    """Music sheets are what you need to win Muse Dash. This controls how many sheets are in the item pool based on the song count."""
     range_start = 5
     range_end = 35
     default = 20
@@ -103,15 +114,8 @@ class MusicSheetWinCountPercentage(Range):
     display_name = "Music Sheets Needed to Win"
 
 
-class AdditionalItemPercentage(Range):
-    """What percentage of songs will have 2 items instead of 1. Starting Songs will always have 2 locations."""
-    display_name = "Additional Item %"
-    range_start = 50
-    default = 80
-    range_end = 100
-
 class TrapCountPercentage(Range):
-    """The number of traps to add into the pool. Traps are visual effects which get played for an entire song."""
+    """This controls how many traps to add into the pool. Traps are visual effects which get played for an entire song."""
     range_start = 0
     range_end = 35
     default = 15
