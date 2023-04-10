@@ -715,8 +715,16 @@ class SpecialRange(Range):
                             f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
 
 
+class FreezeValidKeys(abc.ABCMeta):
+    def __new__(mcs, name, bases, attrs):
+        if "valid_keys" in attrs:
+            attrs["_valid_keys"] = frozenset(attrs["valid_keys"])
+        return super(FreezeValidKeys, mcs).__new__(mcs, name, bases, attrs)
+
+
 class VerifyKeys:
-    valid_keys = frozenset()
+    valid_keys: typing.Iterable = []
+    _valid_keys: frozenset
     valid_keys_casefold: bool = False
     convert_name_groups: bool = False
     verify_item_name: bool = False
@@ -728,7 +736,7 @@ class VerifyKeys:
         if cls.valid_keys:
             data = set(data)
             dataset = set(word.casefold() for word in data) if cls.valid_keys_casefold else set(data)
-            extra = dataset - cls.valid_keys
+            extra = dataset - cls._valid_keys
             if extra:
                 raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
                                 f"Allowed keys: {cls.valid_keys}.")
