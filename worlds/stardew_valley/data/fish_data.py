@@ -3,7 +3,7 @@ from typing import List, Tuple, Union
 
 from . import season_data as season
 from .game_item import GameItem
-from .region_data import Region
+from .region_data import SVRegion
 
 
 @dataclass(frozen=True)
@@ -18,24 +18,24 @@ class FishItem(GameItem):
                f" Difficulty: {self.difficulty}) "
 
 
-fresh_water = (Region.farm, Region.forest, Region.town, Region.mountain)
-ocean = (Region.beach,)
-town_river = (Region.town,)
-mountain_lake = (Region.mountain,)
-forest_pond = (Region.forest,)
-forest_river = (Region.forest,)
-secret_woods = (Region.secret_woods,)
-mines_floor_20 = (Region.mines_floor_20,)
-mines_floor_60 = (Region.mines_floor_60,)
-mines_floor_100 = (Region.mines_floor_100,)
-sewers = (Region.sewers,)
-desert = (Region.desert,)
-mutant_bug_lair = (Region.mutant_bug_lair,)
-witch_swamp = (Region.witch_swamp,)
-night_market = (Region.beach,)
-ginger_island_ocean = (Region.ginger_island,)
-ginger_island_river = (Region.ginger_island,)
-pirate_cove = (Region.pirate_cove,)
+fresh_water = (SVRegion.farm, SVRegion.forest, SVRegion.town, SVRegion.mountain)
+ocean = (SVRegion.beach,)
+town_river = (SVRegion.town,)
+mountain_lake = (SVRegion.mountain,)
+forest_pond = (SVRegion.forest,)
+forest_river = (SVRegion.forest,)
+secret_woods = (SVRegion.secret_woods,)
+mines_floor_20 = (SVRegion.mines_floor_20,)
+mines_floor_60 = (SVRegion.mines_floor_60,)
+mines_floor_100 = (SVRegion.mines_floor_100,)
+sewers = (SVRegion.sewers,)
+desert = (SVRegion.desert,)
+mutant_bug_lair = (SVRegion.mutant_bug_lair,)
+witch_swamp = (SVRegion.witch_swamp,)
+night_market = (SVRegion.beach,)
+ginger_island_ocean = (SVRegion.ginger_island,)
+ginger_island_river = (SVRegion.ginger_island,)
+pirate_cove = (SVRegion.pirate_cove,)
 
 all_fish: List[FishItem] = []
 
