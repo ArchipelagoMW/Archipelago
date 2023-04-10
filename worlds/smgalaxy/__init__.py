@@ -5,10 +5,8 @@ from .locations import location_table, SMGLocation
 from .Options import EnablePurpleCoinStars, galaxy_options
 from .Rules import set_rules
 from .regions import create_regions
-from BaseClasses import Item, Tutorial, ItemClassification, Region, Location, RegionType, Entrance, MultiWorld  
+from BaseClasses import Item, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
-
-client_version = 1
 
 
 class SMGWeb(WebWorld):
@@ -32,13 +30,15 @@ class SuperMarioGalaxy(World):
 
     game: str = "Super Mario Galaxy"
     topology_present = False
-    item_name_to_id = item_table
-    location_name_to_id = location_table
     
     web = SMGWeb()
 
+    item_name_to_id = item_table
+    location_name_to_id = location_table
+
     data_version = 0
-    required_client_version = (0, 3, 8)
+    required_client_version = (0, 4, 0)
+    
     option_definitions = galaxy_options
     hint_blacklist = {"B: Bowser's Galaxy Reactor", "Peach"}
 
@@ -59,10 +59,8 @@ class SuperMarioGalaxy(World):
         item = SMGItem(name, classification, item_id, self.player)
         
         return item
-   
     
-    def generate_basic(self): 
-
+    def create_items(self):
         # creates the green stars in each players itempool
         self.multiworld.itempool += [self.create_item("Green Star") for i in range(0,3)]
         
@@ -84,7 +82,6 @@ class SuperMarioGalaxy(World):
 
         else:
              self.multiworld.itempool += [self.create_item("Power Star") for i in range(0,92)]
-        
          
         # creates the grand stars in each players itempool
              grandstar1 = self.create_item("Grand Star Terrace")   
@@ -127,3 +124,4 @@ class SuperMarioGalaxy(World):
              self.multiworld.get_location("GL: Purple Coins in the Woods", self.player).place_locked_item(self.create_item("Nothing")) 
              self.multiworld.get_location("DDune: Purple Coin in the Desert", self.player).place_locked_item(self.create_item("Nothing"))
              self.multiworld.get_location("HH: The Honeyhive's Purple Coins", self.player).place_locked_item(self.create_item("Nothing")) 
+    

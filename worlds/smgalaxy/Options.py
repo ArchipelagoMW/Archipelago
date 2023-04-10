@@ -1,4 +1,4 @@
-from typing import TypedDict
+import typing
 from Options import Choice, Range
  
 # this defines the enable_purple_coin_stars setting 
@@ -12,7 +12,7 @@ class EnablePurpleCoinStars(Choice):
 # this allows players to pick their own star count to finish the game. 
 class StarstoFinish(Range):
     "This will set the number of stars required to reach the center of the universe."
-    display_name = "Stars_to_finish"
+    display_name = "Stars to finish"
     range_start = 25
     range_end = 99
     default = 60

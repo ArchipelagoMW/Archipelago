@@ -1,7 +1,7 @@
 import imp
 import typing
 from .Options import EnablePurpleCoinStars, galaxy_options
-from BaseClasses import Region, Location, RegionType, Entrance, MultiWorld
+from BaseClasses import Region, Location, Entrance, MultiWorld
 from .locations import SMGLocation, location_table, locGE_table, locHH_table, \
                    locSJ_table, locBR_table, locBB_table, \
                    locGG_table, locFF_table, locDDune_table, locG_table, \
@@ -12,7 +12,7 @@ from .locations import SMGLocation, location_table, locGE_table, locHH_table, \
 
 def create_regions(world: MultiWorld, player: int, self: int):
     #defines the special stages 
-    regspecialstages = Region("Menu", RegionType.Generic, "Ship", player, world)
+    regspecialstages = Region("Menu", player, world, "Ship")
     create_default_locs(regspecialstages, locspecialstages_table, player)
     if self.multiworld.enable_purple_coin_stars[self.player] == EnablePurpleCoinStars.option_main_game_only:
        regspecialstages.locations.append(SMGLocation(player, "GG: Gateway's Purple coins", location_table["GG: Gateway's Purple coins"], regspecialstages))
@@ -149,7 +149,7 @@ def connect_regions(world: MultiWorld, player: int, source: str, target: str, ru
     connection.connect(targetRegion)
 
 def create_region(name: str, player: int, world: MultiWorld) -> Region:
-    return Region(name, RegionType.Generic, name, player, world)
+    return Region(name, player, world, name, )
 
 def create_default_locs(reg: Region, locs, player):
     reg_names = [name for name, id in locs.items()]
