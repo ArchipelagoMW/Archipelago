@@ -151,10 +151,12 @@ item_table = {
 extended_item_table = dict(**item_table, **{
     "Liberator": ItemData(900 + SC2WOL_ITEM_ID_OFFSET, "Unit", 18, classification=ItemClassification.progression),
     "Valkyrie": ItemData(901 + SC2WOL_ITEM_ID_OFFSET, "Unit", 19, classification=ItemClassification.progression),
+    "Widow Mine": ItemData(902 + SC2WOL_ITEM_ID_OFFSET, "Unit", 20, classification=ItemClassification.progression),
 
     "Advanced Ballistics (Liberator)": ItemData(950 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 26, parent_item="Liberator"),
-    "Siege Protocol (Liberator)": ItemData(951 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 27, classification=ItemClassification.progression, parent_item="Liberator")
-
+    "Siege Protocol (Liberator)": ItemData(951 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 27, classification=ItemClassification.progression, parent_item="Liberator"),
+    "Drilling Claws (Widow Mine)": ItemData(952 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 28, classification=ItemClassification.filler, parent_item="Widow Mine"),
+    "Concealment (Widow Mine)": ItemData(953 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 29, classification=ItemClassification.progression, parent_item="Widow Mine")
 })
 
 def get_item_table(multiworld: MultiWorld, player: int):
@@ -206,7 +208,9 @@ defense_ratings = {
     "Perdition Turret": 2,
     "Missile Turret": 2,
     "Vulture": 2,
-    "Liberator": 2
+    "Liberator": 2,
+    "Widow Mine": 2
+    # "Concealment (Widow Mine)": 2
 }
 zerg_defense_ratings = {
     "Perdition Turret": 2,

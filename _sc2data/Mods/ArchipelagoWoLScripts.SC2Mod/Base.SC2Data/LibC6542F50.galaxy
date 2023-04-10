@@ -230,6 +230,12 @@ void libC6542F50_gf_APUnlockUnits (string lp_unitCode, string lp_version) {
         TechTreeUnitAllow(1, "ValkyrieSCBW", true);
     }
 
+    if ((ModI(lv_unitCode, 2097152) >= 1048576)) {
+        TechTreeUnitAllow(1, "Reactor", true);
+        TechTreeUnitAllow(1, "Factory", true);
+        TechTreeUnitAllow(1, "WidowMine", true);
+    }
+
 }
 
 void libC6542F50_gf_APUnlockUpgrades (string lp_upgradeCode, string lp_version) {
@@ -638,6 +644,14 @@ void libC6542F50_gf_APUnlockArmory2 (string lp_unitUpgradeCode, string lp_versio
 
     if ((ModI(lv_unitUpgradeCode, 268435456) >= 134217728)) {
         TechTreeUpgradeAddLevel(1, "LiberatorSiegeProtocol", 1);
+    }
+
+    if ((ModI(lv_unitUpgradeCode, 536870912) >= 268435456)) {
+        TechTreeUpgradeAddLevel(1, "DrillClaws", 1);
+    }
+
+    if ((ModI(lv_unitUpgradeCode, (1073741824)) >= 536870912)) {
+        TechTreeUpgradeAddLevel(1, "ImprovedConcealment", 1);
     }
 
 }
@@ -1116,6 +1130,9 @@ bool libC6542F50_gt_APClearTech_Func (bool testConds, bool runActions) {
     TechTreeUnitAllow(1, "ValkyrieSCBW", false);
     TechTreeUpgradeAllow(1, "LiberatorAGRangeUpgrade", false);
     TechTreeUpgradeAllow(1, "LiberatorSiegeProtocol", false);
+    TechTreeUnitAllow(1, "WidowMine", false);
+    TechTreeUpgradeAllow(1, "DrillClaws", false);
+    TechTreeUpgradeAllow(1, "ImprovedConcealment", false);
     return true;
 }
 

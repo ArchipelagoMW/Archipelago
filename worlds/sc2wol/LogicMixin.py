@@ -22,15 +22,17 @@ class SC2WoLLogic(LogicMixin):
                 or self._sc2wol_has_air_anti_air(multiworld, player)
 
     def _sc2wol_has_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
-        return self.has_any({'Missile Turret', 'Thor', 'War Pigs', 'Spartan Company', "Hel's Angel", 'Battlecruiser', 'Marine', 'Wraith'}, player) \
+        return self.has_any({'Missile Turret', 'Thor', 'War Pigs', 'Spartan Company', "Hel's Angel", 'Battlecruiser', 'Marine', 'Wraith', 'Valkyrie'}, player) \
                 or self._sc2wol_has_competent_anti_air(multiworld, player) \
-                or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has_any({'Ghost', 'Spectre'}, player)
+                or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has_any({'Ghost', 'Spectre', 'Widow Mine'}, player)
 
     def _sc2wol_defense_rating(self, multiworld: MultiWorld, player: int, zerg_enemy: bool, air_enemy: bool = True) -> bool:
         defense_score = sum((defense_ratings[item] for item in defense_ratings if self.has(item, player)))
         if self.has_any({'Marine', 'Marauder'}, player) and self.has('Bunker', player):
             defense_score += 3
-        if self.has_all({'Siege Tank', 'Maelstrom Rounds'}, player):
+        if self.has_all({'Siege Tank', 'Maelstrom Rounds (Siege Tank)'}, player):
+            defense_score += 2
+        if self.has_all({'Widow Mine', 'Concealment (Widow Mine)'}, player):
             defense_score += 2
         if zerg_enemy:
             defense_score += sum((zerg_defense_ratings[item] for item in zerg_defense_ratings if self.has(item, player)))
