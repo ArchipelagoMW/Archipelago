@@ -715,14 +715,14 @@ class SpecialRange(Range):
                             f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
 
 
-class FreezeValidKeys(abc.ABCMeta):
+class FreezeValidKeys(AssembleOptions):
     def __new__(mcs, name, bases, attrs):
         if "valid_keys" in attrs:
             attrs["_valid_keys"] = frozenset(attrs["valid_keys"])
         return super(FreezeValidKeys, mcs).__new__(mcs, name, bases, attrs)
 
 
-class VerifyKeys:
+class VerifyKeys(metaclass=FreezeValidKeys):
     valid_keys: typing.Iterable = []
     _valid_keys: frozenset
     valid_keys_casefold: bool = False
