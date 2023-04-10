@@ -1,5 +1,5 @@
-from collections import Counter
 import itertools
+from collections import Counter
 from typing import Dict, List, NamedTuple, Optional, Set
 
 from BaseClasses import Item, ItemClassification, MultiWorld
@@ -67,7 +67,7 @@ def create_all_items(multiworld: MultiWorld, player: int) -> None:
     multiworld.itempool += [create_item(player, name) for name in itempool]
 
 
-# 110000 - 110021
+# 110000 - 110032
 item_table: Dict[str, ItemData] = {
     "Trap":                                 ItemData(110000, "Traps", ItemClassification.trap),
     "Extra Max HP":                         ItemData(110001, "Pickups", ItemClassification.useful),

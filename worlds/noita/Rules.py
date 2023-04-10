@@ -58,20 +58,12 @@ perk_list: List[str] = list(filter(Items.item_is_perk, Items.item_table.keys()))
 # ----------------
 
 
-def get_perk_count(state: CollectionState, player: int) -> int:
-    return sum(state.item_count(perk, player) for perk in perk_list)
-
-
-def get_orb_count(state: CollectionState, player: int) -> int:
-    return state.item_count("Orb", player)
-
-
 def has_perk_count(state: CollectionState, player: int, amount: int) -> bool:
-    return get_perk_count(state, player) >= amount
+    return sum(state.item_count(perk, player) for perk in perk_list) >= amount
 
 
 def has_orb_count(state: CollectionState, player: int, amount: int) -> bool:
-    return get_orb_count(state, player) >= amount
+    return state.item_count("Orb", player) >= amount
 
 
 def forbid_items_at_location(multiworld: MultiWorld, location_name: str, items: Set[str], player: int):
@@ -137,6 +129,7 @@ def holy_mountain_unlock_conditions(multiworld: MultiWorld, player: int) -> None
 def victory_unlock_conditions(multiworld: MultiWorld, player: int) -> None:
     victory_condition = multiworld.victory_condition[player].value
     victory_location = multiworld.get_location("Victory", player)
+
     if victory_condition == VictoryCondition.option_pure_ending:
         victory_location.access_rule = lambda state: has_orb_count(state, player, 11)
     elif victory_condition == VictoryCondition.option_peaceful_ending:

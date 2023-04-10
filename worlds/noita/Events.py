@@ -29,6 +29,7 @@ def create_all_events(multiworld: MultiWorld, player: int) -> None:
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
 
 
+# Maps region names to event names
 event_locks: Dict[str, str] = {
     "The Work": "Victory",
     "Mines": "Portal to Holy Mountain 1",
