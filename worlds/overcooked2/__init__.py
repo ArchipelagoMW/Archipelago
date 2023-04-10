@@ -4,10 +4,10 @@ from typing import Any, List, Dict, Set, Callable, Optional, TextIO
 from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, Tutorial, LocationProgressType
 from worlds.AutoWorld import World, WebWorld
 
-from .Overcooked2Levels import Overcooked2Dlc, Overcooked2Level, Overcooked2GenericLevel, ITEMS_TO_EXCLUDE_IF_NO_DLC
+from .Overcooked2Levels import Overcooked2Dlc, Overcooked2Level, Overcooked2GenericLevel
 from .Locations import Overcooked2Location, oc2_location_name_to_id, oc2_location_id_to_name
 from .Options import overcooked_options, OC2Options, OC2OnToggle, LocationBalancingMode, DeathLinkMode
-from .Items import item_table, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies
+from .Items import item_table, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies, dlc_exclusives
 from .Logic import has_requirements_for_level_star, has_requirements_for_level_access, level_shuffle_factory, is_item_progression, is_useful
 
 
@@ -259,6 +259,8 @@ class Overcooked2World(World):
             if Overcooked2Dlc.STORY not in self.enabled_dlc:
                 raise Exception(f"Invalid OC2 settings({self.player_name}) Need either Level Shuffle disabled or 'Story' DLC enabled")
 
+            self.enabled_dlc = {Overcooked2Dlc.STORY}
+
     def set_location_priority(self) -> None:
         priority_locations = self.get_priority_locations()
         for level in Overcooked2Level():
@@ -362,9 +364,10 @@ class Overcooked2World(World):
                 # not used
                 continue
 
-            if not self.options["ShuffleLevelOrder"] and item_name in ITEMS_TO_EXCLUDE_IF_NO_DLC:
-                # skip DLC items if no DLC
-                continue
+            if item_name in dlc_exclusives:
+                if not any(x in dlc_exclusives[item_name] for x in self.enabled_dlc):
+                    # Item is always useless with these settings
+                    continue
 
             if not self.options["IncludeHordeLevels"] and item_name in ["Calmer Unbread", "Coin Purse"]:
                 # skip horde-specific items if no horde levels

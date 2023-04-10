@@ -5,7 +5,7 @@ from worlds.AutoWorld import AutoWorldRegister
 from test.general import setup_solo_multiworld
 
 from worlds.overcooked2.Items import *
-from worlds.overcooked2.Overcooked2Levels import Overcooked2Dlc, Overcooked2Level, OverworldRegion, overworld_region_by_level, level_id_to_shortname, ITEMS_TO_EXCLUDE_IF_NO_DLC
+from worlds.overcooked2.Overcooked2Levels import Overcooked2Dlc, Overcooked2Level, OverworldRegion, overworld_region_by_level, level_id_to_shortname
 from worlds.overcooked2.Logic import level_logic, overworld_region_logic, level_shuffle_factory
 from worlds.overcooked2.Locations import oc2_location_name_to_id
 
@@ -140,13 +140,9 @@ class Overcooked2Test(unittest.TestCase):
 
         self.assertLessEqual(number_of_items, len(oc2_location_name_to_id), "Too many items (before fillers placed)")
 
-    def testExclusiveItems(self):
-        for dlc in Overcooked2Dlc:
-            for item in dlc.exclusive_items():
-                self.assertIn(item, item_table.keys())
-
-        for item in ITEMS_TO_EXCLUDE_IF_NO_DLC:
-            self.assertIn(item, item_table.keys())
+    def testDlcExclusives(self):
+        for item in dlc_exclusives:
+            self.assertIn(item, item_table)
 
     def testLevelCounts(self):
         for dlc in Overcooked2Dlc:

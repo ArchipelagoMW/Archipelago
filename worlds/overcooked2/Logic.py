@@ -204,7 +204,7 @@ def level_shuffle_factory(
                 break
 
         # Level 6-6 is exempt from shuffling
-        result[36] = Overcooked2GenericLevel(level_id)
+        result[36] = Overcooked2GenericLevel(36)
 
         attempts += 1
 
