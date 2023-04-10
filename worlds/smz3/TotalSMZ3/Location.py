@@ -90,9 +90,9 @@ class Location:
     def AvailableWithinWorld(locations, items):
         result = []
         worldList = []
-        [worldList.append(l.SVRegion.World) for l in locations if l.SVRegion.World not in worldList]
+        [worldList.append(l.Region.World) for l in locations if l.Region.World not in worldList]
         for world in worldList:
-            result += Location.AvailableGlobal([l for l in locations if l.SVRegion.World == world], [i for i in items if i.World == world])
+            result += Location.AvailableGlobal([l for l in locations if l.Region.World == world], [i for i in items if i.World == world])
         return result  
 
     @staticmethod
@@ -104,9 +104,9 @@ class Location:
     def CanFillWithinWorld(locations, item, items):
         itemWorldProgression = Progression([i for i in items if i.World == item.World].append(item))
         worldList = []
-        [worldList.append(l.SVRegion.World) for l in locations if l.SVRegion.World not in worldList]
+        [worldList.append(l.Region.World) for l in locations if l.Region.World not in worldList]
         worldProgression = {world.Id : Progression([i for i in items if i.World == world]) for world in worldList}
-        return [l for l in locations if l.CanFill(item, worldProgression[l.SVRegion.World.Id] and next(ll for ll in item.World.Locations if ll.Id == l.Id).Available(itemWorldProgression))]
+        return [l for l in locations if l.CanFill(item, worldProgression[l.Region.World.Id] and next(ll for ll in item.World.Locations if ll.Id == l.Id).Available(itemWorldProgression))]
 
 # Start of AP integration
 locations_start_id = 85000
