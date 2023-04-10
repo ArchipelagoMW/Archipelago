@@ -844,7 +844,7 @@ class Region:
         for location, address in locations.items():
             self.locations.append(location_type(self.player, location, address, self))
 
-    def add_exits(self, exits: Dict[str, Optional[str]], rules: Optional[Dict[str, Optional[Callable[[CollectionState], bool]]]] = None) -> None:
+    def add_exits(self, exits: Dict[str, Optional[str]], rules: Dict[str, Callable[[CollectionState], bool]] = None) -> None:
         """
         Connects current region to regions in exit dictionary. Passed region names must exist first.
 
