@@ -1,6 +1,6 @@
 from enum import IntEnum
 from typing import TypedDict
-from Options import DefaultOnToggle, Toggle, Range, Choice, OptionList
+from Options import DefaultOnToggle, Toggle, Range, Choice, OptionSet
 from .Overcooked2Levels import Overcooked2Dlc
 
 class LocationBalancingMode(IntEnum):
@@ -87,10 +87,10 @@ class ShuffleLevelOrder(OC2OnToggle):
     display_name = "Shuffle Level Order"
 
 
-class DLCOptionList(OptionList):
+class DLCOptionSet(OptionSet):
     """Which DLCs should be included in when 'Shuffle Level Order' is enabled?'"""
-    display_name = "DLCOptionList"
-    default = ["Story", "Seasonal"]
+    display_name = "Enabled DLC"
+    default = {"Story", "Seasonal"}
     valid_keys = {dlc.value for dlc in Overcooked2Dlc}
 
 
@@ -177,7 +177,7 @@ overcooked_options = {
 
     # randomization options
     "shuffle_level_order": ShuffleLevelOrder,
-    "include_dlcs": DLCOptionList,
+    "include_dlcs": DLCOptionSet,
     "include_horde_levels": IncludeHordeLevels,
     "prep_levels": PrepLevels,
     "kevin_levels": KevinLevels,

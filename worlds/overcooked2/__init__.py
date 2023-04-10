@@ -236,8 +236,8 @@ class Overcooked2World(World):
         # 0.0 to 1.0 where 1.0 is World Record
         self.star_threshold_scale = self.options["StarThresholdScale"] / 100.0
 
-        # Parse DLCOptionList back into enums
-        self.enabled_dlc = [Overcooked2Dlc(x) for x in self.options["DLCOptionList"]]
+        # Parse DLCOptionSet back into enums
+        self.enabled_dlc = [Overcooked2Dlc(x) for x in self.options["DLCOptionSet"]]
 
         # Generate level unlock requirements such that the levels get harder to unlock
         # the further the game has progressed, and levels progress radially rather than linearly
