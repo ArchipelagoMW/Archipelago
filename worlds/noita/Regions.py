@@ -87,7 +87,7 @@ noita_connections: Dict[str, Set[str]] = {
     "Sandcave": {"Powerplant", "Overgrown Cavern"},
 
     ###
-    "Mines": {"Collapsed Mines", "Holy Mountain 1 (To Coal Pits)", "Lava Lake", "Forest"},
+    "Mines": {"Collapsed Mines", "Coal Pits Holy Mountain", "Lava Lake", "Forest"},
     "Collapsed Mines": {"Mines", "Dark Cave"},
     "Lava Lake": {"Mines", "Abyss Orb Room", "Below Lava Lake"},
     "Abyss Orb Room": {"Lava Lake"},
@@ -96,35 +96,35 @@ noita_connections: Dict[str, Set[str]] = {
     "Ancient Laboratory": {"Dark Cave"},
 
     ###
-    "Holy Mountain 1 (To Coal Pits)": {"Coal Pits"},
-    "Coal Pits": {"Holy Mountain 1 (To Coal Pits)", "Fungal Caverns", "Holy Mountain 2 (To Snowy Depths)"},
+    "Coal Pits Holy Mountain": {"Coal Pits"},
+    "Coal Pits": {"Coal Pits Holy Mountain", "Fungal Caverns", "Snowy Depths Holy Mountain"},
     "Fungal Caverns": {"Coal Pits"},
 
     ###
-    "Holy Mountain 2 (To Snowy Depths)": {"Snowy Depths"},
-    "Snowy Depths": {"Holy Mountain 2 (To Snowy Depths)", "Holy Mountain 3 (To Hiisi Base)", "Magical Temple"},
+    "Snowy Depths Holy Mountain": {"Snowy Depths"},
+    "Snowy Depths": {"Snowy Depths Holy Mountain", "Hiisi Base Holy Mountain", "Magical Temple"},
     "Magical Temple": {"Snowy Depths"},
 
     ###
-    "Holy Mountain 3 (To Hiisi Base)": {"Hiisi Base"},
-    "Hiisi Base": {"Holy Mountain 3 (To Hiisi Base)", "Secret Shop", "Holy Mountain 4 (To Underground Jungle)"},
+    "Hiisi Base Holy Mountain": {"Hiisi Base"},
+    "Hiisi Base": {"Hiisi Base Holy Mountain", "Secret Shop", "Underground Jungle Holy Mountain"},
     "Secret Shop": {"Hiisi Base"},
 
     ###
-    "Holy Mountain 4 (To Underground Jungle)": {"Underground Jungle"},
-    "Underground Jungle": {"Holy Mountain 4 (To Underground Jungle)", "Dragoncave", "Holy Mountain 5 (To The Vault)",
+    "Underground Jungle Holy Mountain": {"Underground Jungle"},
+    "Underground Jungle": {"Underground Jungle Holy Mountain", "Dragoncave", "Vault Holy Mountain",
                            "Lukki Lair"},
     "Dragoncave": {"Underground Jungle"},
     "Lukki Lair": {"Underground Jungle", "Snow Chasm"},
     "Snow Chasm": {},
 
     ###
-    "Holy Mountain 5 (To The Vault)": {"The Vault"},
-    "The Vault": {"Holy Mountain 5 (To The Vault)", "Holy Mountain 6 (To Temple of the Art)"},
+    "Vault Holy Mountain": {"The Vault"},
+    "The Vault": {"Vault Holy Mountain", "Temple of the Art Holy Mountain"},
 
     ###
-    "Holy Mountain 6 (To Temple of the Art)": {"Temple of the Art"},
-    "Temple of the Art": {"Holy Mountain 6 (To Temple of the Art)", "Holy Mountain 7 (To The Laboratory)", "The Tower",
+    "Temple of the Art Holy Mountain": {"Temple of the Art"},
+    "Temple of the Art": {"Temple of the Art Holy Mountain", "Laboratory Holy Mountain", "The Tower",
                           "Wizard's Den"},
     "Wizard's Den": {"Temple of the Art", "Powerplant"},
     "Powerplant": {"Wizard's Den", "Deep Underground", "Sandcave"},
@@ -132,8 +132,8 @@ noita_connections: Dict[str, Set[str]] = {
     "Deep Underground": {},
 
     ###
-    "Holy Mountain 7 (To The Laboratory)": {"The Laboratory"},
-    "The Laboratory": {"Holy Mountain 7 (To The Laboratory)", "The Work", "Friend Cave", "The Work (Hell)"},
+    "Laboratory Holy Mountain": {"The Laboratory"},
+    "The Laboratory": {"Laboratory Holy Mountain", "The Work", "Friend Cave", "The Work (Hell)"},
     "Friend Cave": {},
     "The Work": {},
     "The Work (Hell)": {},

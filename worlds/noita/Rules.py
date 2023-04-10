@@ -14,24 +14,24 @@ class EntranceLock(NamedTuple):
 
 
 entrance_locks: List[EntranceLock] = [
-    EntranceLock("Mines", "Holy Mountain 1 (To Coal Pits)", "Portal to Holy Mountain 1", 1),
-    EntranceLock("Coal Pits", "Holy Mountain 2 (To Snowy Depths)", "Portal to Holy Mountain 2", 2),
-    EntranceLock("Snowy Depths", "Holy Mountain 3 (To Hiisi Base)", "Portal to Holy Mountain 3", 3),
-    EntranceLock("Hiisi Base", "Holy Mountain 4 (To Underground Jungle)", "Portal to Holy Mountain 4", 4),
-    EntranceLock("Underground Jungle", "Holy Mountain 5 (To The Vault)", "Portal to Holy Mountain 5", 5),
-    EntranceLock("The Vault", "Holy Mountain 6 (To Temple of the Art)", "Portal to Holy Mountain 6", 6),
-    EntranceLock("Temple of the Art", "Holy Mountain 7 (To The Laboratory)", "Portal to Holy Mountain 7", 7),
+    EntranceLock("Mines", "Coal Pits Holy Mountain", "Portal to Holy Mountain 1", 1),
+    EntranceLock("Coal Pits", "Snowy Depths Holy Mountain", "Portal to Holy Mountain 2", 2),
+    EntranceLock("Snowy Depths", "Hiisi Base Holy Mountain", "Portal to Holy Mountain 3", 3),
+    EntranceLock("Hiisi Base", "Underground Jungle Holy Mountain", "Portal to Holy Mountain 4", 4),
+    EntranceLock("Underground Jungle", "Vault Holy Mountain", "Portal to Holy Mountain 5", 5),
+    EntranceLock("The Vault", "Temple of the Art Holy Mountain", "Portal to Holy Mountain 6", 6),
+    EntranceLock("Temple of the Art", "Laboratory Holy Mountain", "Portal to Holy Mountain 7", 7),
 ]
 
 
 holy_mountain_regions: List[str] = [
-    "Holy Mountain 1 (To Coal Pits)",
-    "Holy Mountain 2 (To Snowy Depths)",
-    "Holy Mountain 3 (To Hiisi Base)",
-    "Holy Mountain 4 (To Underground Jungle)",
-    "Holy Mountain 5 (To The Vault)",
-    "Holy Mountain 6 (To Temple of the Art)",
-    "Holy Mountain 7 (To The Laboratory)",
+    "Coal Pits Holy Mountain",
+    "Snowy Depths Holy Mountain",
+    "Hiisi Base Holy Mountain",
+    "Underground Jungle Holy Mountain",
+    "Vault Holy Mountain",
+    "Temple of the Art Holy Mountain",
+    "Laboratory Holy Mountain",
 ]
 
 
