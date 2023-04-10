@@ -1,6 +1,45 @@
 import typing
 from Options import Toggle, Option, Range, Choice, DeathLink
 
+class RandomizeWeaponLocations(Toggle):
+    """Adds Weapon Locations to the pool."""
+    display_name ="Randomize Weapon Locations"
+
+
+class RandomizeShieldLocations(Toggle):
+    """Adds Shield Locations to the pool."""
+    display_name ="Randomize Shield Locations"
+
+
+class RandomizeArmorLocations(Toggle):
+    """Adds Armor Locations to the pool."""
+    display_name ="Randomize Armor Locations"
+
+
+class RandomizeRingLocations(Toggle):
+    """Adds Ring Locations to the pool."""
+    display_name ="Randomize Ring Locations"
+
+
+class RandomizeSpellLocations(Toggle):
+    """Adds Spell Locations to the pool."""
+    display_name ="Randomize Spell Locations"
+
+
+class RandomizeMiscLocations(Toggle):
+    """Adds Miscellaneous Locations (Ashes, Tomes, Scrolls, etc.) to the pool."""
+    display_name ="Randomize Miscellaneous Locations"
+
+
+class RandomizeHealthLocations(Toggle):
+    """Adds Health Upgrade Locations to the pool."""
+    display_name ="Randomize Health Upgrade Locations"
+
+
+class RandomizeNPCLocations(Toggle):
+    """Adds NPC Locations to the pool."""
+    display_name ="Randomize NPC Locations"
+
 
 class AutoEquipOption(Toggle):
     """Automatically equips any received armor or left/right weapons."""
@@ -107,6 +146,14 @@ class EnableDLCOption(Toggle):
 
 
 dark_souls_options: typing.Dict[str, type(Option)] = {
+    "enable_weapon_locations": RandomizeWeaponLocations,
+    "enable_shield_locations": RandomizeShieldLocations,
+    "enable_armor_locations": RandomizeArmorLocations,
+    "enable_ring_locations": RandomizeRingLocations,
+    "enable_spell_locations": RandomizeSpellLocations,
+    "enable_misc_locations": RandomizeMiscLocations,
+    "enable_health_upgrade_locations": RandomizeHealthLocations,
+    "enable_npc_locations": RandomizeNPCLocations,
     "auto_equip": AutoEquipOption,
     "lock_equip": LockEquipOption,
     "no_weapon_requirements": NoWeaponRequirementsOption,

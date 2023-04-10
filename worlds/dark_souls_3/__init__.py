@@ -12,7 +12,8 @@ from .data.locations_data import location_dictionary, fire_link_shrine_table, \
     farron_keep_table, catacombs_of_carthus_table, smouldering_lake_table, irithyll_of_the_boreal_valley_table, \
     irithyll_dungeon_table, profaned_capital_table, anor_londo_table, lothric_castle_table, grand_archives_table, \
     untended_graves_table, archdragon_peak_table, firelink_shrine_bell_tower_table, progressive_locations, \
-    progressive_locations_2, progressive_locations_3, painted_world_table, dreg_heap_table, ringed_city_table, dlc_progressive_locations
+    progressive_locations_2, progressive_locations_3, painted_world_table, dreg_heap_table, ringed_city_table, dlc_progressive_locations, \
+    health_upgrade_locations
 from ..AutoWorld import World, WebWorld
 from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification
 from ..generic.Rules import set_rule, add_item_rule
@@ -69,7 +70,8 @@ class DarkSouls3World(World):
 
         if name in key_items_list:
             item_classification = ItemClassification.progression
-        elif name in weapons_upgrade_5_table or name in weapons_upgrade_10_table:
+        elif name in weapons_upgrade_5_table or name in weapons_upgrade_10_table or \
+            name in dlc_weapons_upgrade_5_table or name in dlc_weapons_upgrade_10_table:
             item_classification = ItemClassification.useful
         else:
             item_classification = ItemClassification.filler
@@ -87,6 +89,11 @@ class DarkSouls3World(World):
         else:
             menu_region = self.create_region("Menu", None)
 
+        if self.multiworld.enable_health_upgrade_locations[self.player].value:
+            health_region = self.create_region("Health", {**health_upgrade_locations})
+        else:
+            health_region = self.create_region("Health", None)
+        
         # Create all Vanilla regions of Dark Souls III
         firelink_shrine_region = self.create_region("Firelink Shrine", fire_link_shrine_table)
         firelink_shrine_bell_tower_region = self.create_region("Firelink Shrine Bell Tower",
@@ -116,6 +123,8 @@ class DarkSouls3World(World):
             ringed_city_region = self.create_region("Ringed City", ringed_city_table)
 
         # Create the entrance to connect those regions
+        health_region.exits.append(Entrance(self.player, "Healthy Start", health_region))
+        self.multiworld.get_entrance("Healthy Start", self.player).connect(firelink_shrine_region)
         menu_region.exits.append(Entrance(self.player, "New Game", menu_region))
         self.multiworld.get_entrance("New Game", self.player).connect(firelink_shrine_region)
         firelink_shrine_region.exits.append(Entrance(self.player, "Goto High Wall of Lothric",
@@ -200,13 +209,55 @@ class DarkSouls3World(World):
             # Do not add progressive_items ( containing "#" ) to the itempool if the option is disabled
             if (not self.multiworld.enable_progressive_locations[self.player]) and "#" in name:
                 continue
+            # Do not add health_upgrade_items ( containing "!" ) to the itempool if the option is disabled
+            if (not self.multiworld.enable_health_upgrade_locations[self.player]) and "!" in name:
+                continue
             # Do not add DLC items if the option is disabled
             if (not self.multiworld.enable_dlc[self.player]) and DarkSouls3Item.is_dlc_item(name):
                 continue
             # Do not add DLC Progressives if both options are disabled
             if ((not self.multiworld.enable_progressive_locations[self.player]) or (not self.multiworld.enable_dlc[self.player])) and DarkSouls3Item.is_dlc_progressive(name):
                 continue
-            self.multiworld.itempool += [self.create_item(name)]
+            # Do not add Weapons if the option is disabled
+            if (not self.multiworld.enable_weapon_locations[self.player]) and DarkSouls3Item.is_weapon_item(name):
+                continue
+            # Do not add DLC Weapons if both options are disabled
+            if ((not self.multiworld.enable_weapon_locations[self.player]) or (not self.multiworld.enable_dlc)) and DarkSouls3Item.is_dlc_weapon_item(name):
+                continue
+            # Do not add Shields if the option is disabled
+            if (not self.multiworld.enable_shield_locations[self.player]) and DarkSouls3Item.is_shield_item(name):
+                continue
+            # Do not add DLC Shield if both options are disabled
+            if ((not self.multiworld.enable_shield_locations[self.player]) or (not self.multiworld.enable_dlc)) and DarkSouls3Item.is_dlc_shield_item(name):
+                continue
+            # Do not add Armor if the option is disabled
+            if (not self.multiworld.enable_armor_locations[self.player]) and DarkSouls3Item.is_armor_item(name):
+                continue
+            # Do not add DLC Armor if both options are disabled
+            if ((not self.multiworld.enable_armor_locations[self.player]) or (not self.multiworld.enable_dlc)) and DarkSouls3Item.is_dlc_armor_item(name):
+                continue
+            # Do not add Rings if the option is disabled
+            if (not self.multiworld.enable_ring_locations[self.player]) and DarkSouls3Item.is_ring_item(name):
+                continue
+            # Do not add DLC Rings if both options are disabled
+            if ((not self.multiworld.enable_ring_locations[self.player]) or (not self.multiworld.enable_dlc)) and DarkSouls3Item.is_dlc_ring_item(name):
+                continue
+            # Do not add Spells if the option is disabled
+            if (not self.multiworld.enable_spell_locations[self.player]) and DarkSouls3Item.is_spell_item(name):
+                continue
+            # Do not add DLC Spells if both options are disabled
+            if ((not self.multiworld.enable_spell_locations[self.player]) or (not self.multiworld.enable_dlc)) and DarkSouls3Item.is_dlc_spell_item(name):
+                continue
+            # Do not add Miscellaneous if the option is disabled
+            if (not self.multiworld.enable_misc_locations[self.player]) and DarkSouls3Item.is_misc_item(name):
+                continue
+            # Do not add DLC Miscellaneous if both options are disabled
+            if ((not self.multiworld.enable_misc_locations[self.player]) or (not self.multiworld.enable_dlc)) and DarkSouls3Item.is_dlc_misc_item(name):
+                continue
+            # Do not add NPC's if the option is disabled
+            if (not self.multiworld.enable_npc_locations[self.player]) and DarkSouls3Item.is_npc_item(name):
+                continue
+            self.multiworld.itempool += [self.create_item(name)]     
 
     def generate_early(self):
         pass
