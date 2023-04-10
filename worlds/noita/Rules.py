@@ -74,8 +74,8 @@ def has_orb_count(state: CollectionState, player: int, amount: int) -> bool:
     return get_orb_count(state, player) >= amount
 
 
-def forbid_items_at_location(world: MultiWorld, location_name: str, items: Set[str], player: int):
-    location = world.get_location(location_name, player)
+def forbid_items_at_location(multiworld: MultiWorld, location_name: str, items: Set[str], player: int):
+    location = multiworld.get_location(location_name, player)
     GenericRules.forbid_items_for_player(location, items, player)
 
 
@@ -85,38 +85,38 @@ def forbid_items_at_location(world: MultiWorld, location_name: str, items: Set[s
 
 
 # Prevent gold and potions from appearing as purchasable items in shops (because physics will destroy them)
-def ban_items_from_shops(world: MultiWorld, player: int) -> None:
+def ban_items_from_shops(multiworld: MultiWorld, player: int) -> None:
     for location_name in Locations.location_name_to_id.keys():
         if "Shop Item" in location_name:
-            forbid_items_at_location(world, location_name, items_hidden_from_shops, player)
+            forbid_items_at_location(multiworld, location_name, items_hidden_from_shops, player)
 
 
 # Prevent high tier wands from appearing in early Holy Mountain shops
-def ban_early_high_tier_wands(world: MultiWorld, player: int) -> None:
+def ban_early_high_tier_wands(multiworld: MultiWorld, player: int) -> None:
     for i, region_name in enumerate(holy_mountain_regions):
         wands_to_forbid = wand_tiers[i+1:]
 
         locations_in_region = Locations.location_region_mapping[region_name].keys()
         for location_name in locations_in_region:
-            forbid_items_at_location(world, location_name, wands_to_forbid, player)
+            forbid_items_at_location(multiworld, location_name, wands_to_forbid, player)
 
     # Prevent high tier wands from appearing in the Secret shop
     wands_to_forbid = wand_tiers[3:]
     locations_in_region = Locations.location_region_mapping["Secret Shop"].keys()
     for location_name in locations_in_region:
-        forbid_items_at_location(world, location_name, wands_to_forbid, player)
+        forbid_items_at_location(multiworld, location_name, wands_to_forbid, player)
 
 
-def lock_holy_mountains_into_spheres(world: MultiWorld, player: int) -> None:
+def lock_holy_mountains_into_spheres(multiworld: MultiWorld, player: int) -> None:
     for lock in entrance_locks:
-        location = world.get_entrance(f"From {lock.source} To {lock.destination}", player)
+        location = multiworld.get_entrance(f"From {lock.source} To {lock.destination}", player)
         GenericRules.set_rule(location, lambda state, evt=lock.event: state.has(evt, player))
 
 
-def holy_mountain_unlock_conditions(world: MultiWorld, player: int) -> None:
-    victory_condition = world.victory_condition[player].value
+def holy_mountain_unlock_conditions(multiworld: MultiWorld, player: int) -> None:
+    victory_condition = multiworld.victory_condition[player].value
     for lock in entrance_locks:
-        location = world.get_location(lock.event, player)
+        location = multiworld.get_location(lock.event, player)
 
         if victory_condition == VictoryCondition.option_greed_ending:
             location.access_rule = lambda state, items_needed=lock.items_needed: (
@@ -134,9 +134,9 @@ def holy_mountain_unlock_conditions(world: MultiWorld, player: int) -> None:
             )
 
 
-def victory_unlock_conditions(world: MultiWorld, player: int) -> None:
-    victory_condition = world.victory_condition[player].value
-    victory_location = world.get_location("Victory", player)
+def victory_unlock_conditions(multiworld: MultiWorld, player: int) -> None:
+    victory_condition = multiworld.victory_condition[player].value
+    victory_location = multiworld.get_location("Victory", player)
     if victory_condition == VictoryCondition.option_pure_ending:
         victory_location.access_rule = lambda state: has_orb_count(state, player, 11)
     elif victory_condition == VictoryCondition.option_peaceful_ending:
@@ -148,13 +148,13 @@ def victory_unlock_conditions(world: MultiWorld, player: int) -> None:
 # ----------------
 
 
-def create_all_rules(world: MultiWorld, player: int) -> None:
-    ban_items_from_shops(world, player)
-    ban_early_high_tier_wands(world, player)
-    lock_holy_mountains_into_spheres(world, player)
-    holy_mountain_unlock_conditions(world, player)
-    victory_unlock_conditions(world, player)
+def create_all_rules(multiworld: MultiWorld, player: int) -> None:
+    ban_items_from_shops(multiworld, player)
+    ban_early_high_tier_wands(multiworld, player)
+    lock_holy_mountains_into_spheres(multiworld, player)
+    holy_mountain_unlock_conditions(multiworld, player)
+    victory_unlock_conditions(multiworld, player)
 
     # Prevent the Map perk (used to find Toveri) from being on Toveri (boss)
-    if world.bosses_as_checks[player].value >= BossesAsChecks.option_all_bosses:
-        forbid_items_at_location(world, "Toveri", {"Perk (Spatial Awareness)"}, player)
+    if multiworld.bosses_as_checks[player].value >= BossesAsChecks.option_all_bosses:
+        forbid_items_at_location(multiworld, "Toveri", {"Perk (Spatial Awareness)"}, player)

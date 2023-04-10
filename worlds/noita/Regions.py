@@ -37,14 +37,14 @@ def add_locations(player: int, region: Region) -> None:
 
 
 # Creates a new Region with the locations found in `location_region_mapping` and adds them to the world.
-def create_region(world: MultiWorld, player: int, region_name: str) -> Region:
-    new_region = Region(region_name, player, world)
+def create_region(multiworld: MultiWorld, player: int, region_name: str) -> Region:
+    new_region = Region(region_name, player, multiworld)
     add_locations(player, new_region)
     return new_region
 
 
-def create_regions(world: MultiWorld, player: int) -> Dict[str, Region]:
-    return {name: create_region(world, player, name) for name in noita_regions}
+def create_regions(multiworld: MultiWorld, player: int) -> Dict[str, Region]:
+    return {name: create_region(multiworld, player, name) for name in noita_regions}
 
 
 # An "Entrance" is really just a connection between two regions
@@ -62,11 +62,11 @@ def create_connections(player: int, regions: Dict[str, Region]) -> None:
 
 
 # Creates all regions and connections. Called from NoitaWorld.
-def create_all_regions_and_connections(world: MultiWorld, player: int) -> None:
-    created_regions = create_regions(world, player)
+def create_all_regions_and_connections(multiworld: MultiWorld, player: int) -> None:
+    created_regions = create_regions(multiworld, player)
     create_connections(player, created_regions)
 
-    world.regions += created_regions.values()
+    multiworld.regions += created_regions.values()
 
 
 # Oh, what a tangled web we weave
