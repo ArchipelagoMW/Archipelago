@@ -54,7 +54,7 @@ class StardewValleyWorld(World):
     location_name_to_id = {name: data.code for name, data in location_table.items()}
 
     data_version = 2
-    required_client_version = (0, 3, 9)
+    required_client_version = (0, 4, 0)
 
     options: StardewOptions
     logic: StardewLogic
