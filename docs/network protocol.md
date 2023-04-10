@@ -149,14 +149,14 @@ Sent to clients to acknowledge a received [LocationScouts](#LocationScouts) pack
 ### RoomUpdate
 Sent when there is a need to update information about the present game session.
 #### Arguments
-RoomUpdate can contain arguments from [RoomInfo](#RoomInfo) and, once authenticated, arguments from
-[Connected](#Connected), and additionally:
+RoomUpdate may contain the same arguments from [RoomInfo](#RoomInfo) and, once authenticated, arguments from
+[Connected](#Connected) with the following exceptions:
 
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| players | list\[[NetworkPlayer](#NetworkPlayer)\] | Send in the event of an alias rename. Always sends all players, whether connected or not. |
-| checked_locations | list\[int\] | May be a partial update, containing new locations that were checked, especially from a coop partner in the same slot. |
-| missing_locations | list\[int\] | Should never be sent as an update, if needed is the inverse of checked_locations. |
+| Name              | Type                                    | Notes                                                                                                                 |
+|-------------------|-----------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| players           | list\[[NetworkPlayer](#NetworkPlayer)\] | Sent in the event of an alias rename. Always sends all players, whether connected or not.                             |
+| checked_locations | list\[int\]                             | May be a partial update, containing new locations that were checked, especially from a coop partner in the same slot. |
+| missing_locations | -                                       | Never sent in this packet. If needed, it is the inverse of `checked_locations`.                                       |
 
 All arguments for this packet are optional, only changes are sent.
 
