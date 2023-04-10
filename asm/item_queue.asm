@@ -63,14 +63,14 @@ ReceiveItemsInPyramid:
 
 ; Game mode 2 (level)
 ReceiveItemsInLevel:
-    bl ReceiveNextItem
-    bl GiveItem
-
-; If Wario isn't in a playable state, don't bother with the junk items yet
+; If Wario isn't in a playable state, don't bother yet
     ldr r0, =usWarStopFlg
     ldrh r0, [r0]
     cmp r0, #0
     bne @@Return
+
+    bl ReceiveNextItem
+    bl GiveItem
 
 ; Check full health items
     ldr r3, =QueuedFullHealthItem
