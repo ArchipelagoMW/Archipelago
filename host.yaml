@@ -186,6 +186,9 @@ adventure_options:
   # Set this to true to display item received messages in Emuhawk
   display_msgs: true
 
+ygo06_options:
+  # File name of Yu-Gi-Oh! World Championship 2006
+  rom_file: "Yu-Gi-Oh06.gba"
 
 
 
