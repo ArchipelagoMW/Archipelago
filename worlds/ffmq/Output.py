@@ -3,7 +3,6 @@ import os
 import zipfile
 from copy import deepcopy
 from .Regions import object_id_table
-from .Items import ap_to_yaml
 from Main import __version__
 from worlds.Files import APContainer
 import pkgutil
@@ -11,28 +10,33 @@ import pkgutil
 settings_template = yaml.load(pkgutil.get_data(__name__, "data/settings.yaml"), yaml.Loader)
 
 
+
+
+
 def generate_output(self, output_directory):
+
+    def output_item_name(item):
+        if item.player == self.player:
+            if item.code > 0x420000 + 256:
+                item_name = self.item_id_to_name[item.code - 256]
+            else:
+                item_name = item.name
+            item_name = "".join(item_name.split("'"))
+            item_name = "".join(item_name.split(" "))
+        else:
+            if item.advancement or item.useful or (item.trap and
+                                                   self.multiworld.per_slot_randoms[self.player].randint(0, 1)):
+                item_name = "APItem"
+            else:
+                item_name = "APItemFiller"
+        return item_name
+
     item_placement = []
     for location in self.multiworld.get_locations(self.player):
         if location.type != "Trigger":
-            if location.item.player == self.player:
-                if location.item.code > 0x420000 + 256:
-                    item_name = self.item_id_to_name[location.item.code - 256]
-                else:
-                    item_name = location.item.name
-                if item_name in ap_to_yaml:
-                    item_name = ap_to_yaml[item_name]
-                else:
-                    item_name = "".join(item_name.split("'"))
-                    item_name = "".join(item_name.split(" "))
-            else:
-                if location.item.advancement or location.item.useful:
-                    item_name = "APItem"
-                else:
-                    item_name = "APItemFiller"
             item_placement.append({"object_id": object_id_table[location.name], "type": location.type, "content":
-                item_name, "player": self.multiworld.player_name[location.item.player], "item_name": location.item.name}
-                                  )
+                output_item_name(location.item), "player": self.multiworld.player_name[location.item.player],
+                                   "item_name": location.item.name})
 
     def cc(option):
         return option.current_key.title().replace("_", "")
@@ -64,7 +68,7 @@ def generate_output(self, output_directory):
                    "battles_quantity": cc(mw.battlefields_battles_quantities[p]) if
                                         mw.battlefields_battles_quantities[p].value < 5 else "RandomLow" if
                                         mw.battlefields_battles_quantities[p].value == 5 else "RandomHigh",
-                   "shuffle_battlefield_rewards": False, #tf(mw.shuffle_battlefield_rewards[p]),
+                   "shuffle_battlefield_rewards": tf(mw.shuffle_battlefield_rewards[p]),
                    "random_starting_weapon": True,
                    "progressive_gear": tf(mw.progressive_gear[p]),
                    "tweaked_dungeons": tf(mw.tweak_frustrating_dungeons[p]),
@@ -89,7 +93,9 @@ def generate_output(self, output_directory):
     setup = {"version": "1.4", "name": mw.player_name[p], "romname": rom_name, "seed":
         hex(mw.per_slot_randoms[p].randint(0, int("FFFFFFFF", 16))).split("0x")[1].upper()}
 
-    starting_items = [self.multiworld.starting_weapon[self.player].current_key.title().replace("_", ""), "SteelArmor"]
+    starting_items = [output_item_name(item) for item in self.multiworld.precollected_items[self.player]]
+    if self.multiworld.sky_coin_mode[self.player] == "shattered_sky_coin":
+        starting_items.append("SkyCoin")
 
     file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.apmq")
 

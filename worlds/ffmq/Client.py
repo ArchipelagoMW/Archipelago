@@ -40,11 +40,6 @@ NPC_CHECKS = {
 
 }
 
-
-# def get_bit(data, bit):
-#     byte = int(bit / 8)
-#     return (data[byte] & (1 << (bit - (byte * 8)))) > 0
-
 def get_flag(data, flag):
     byte = int(flag / 8)
     bit = int(0x80 / (2 ** (flag % 8)))
@@ -64,15 +59,15 @@ class FFMQClient(SNIClient):
 
         ctx.rom = rom_name
         ctx.game = self.game
-        ctx.items_handling = 0b101
+        ctx.items_handling = 0b001
         return True
 
     async def game_watcher(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
-        check_1 = await snes_read(ctx, 0xF5103F, 1)
+        check_1 = await snes_read(ctx, 0xF53749, 1)
         data = await snes_read(ctx, READ_DATA_START, READ_DATA_END - READ_DATA_START)
-        check_2 = await snes_read(ctx, 0xF5103F, 1)
+        check_2 = await snes_read(ctx, 0xF53749, 1)
         if check_1 == b'\x00' or check_2 == b'\x00':
             return
 
@@ -106,7 +101,7 @@ class FFMQClient(SNIClient):
 
         for battlefield in range(20):
             if battlefield_data[battlefield] == 0:
-                ctx.locations_checked.add(offset["Battlefield"] + battlefield + 1)
+                ctx.locations_checked.add(offset["BattlefieldItem"] + battlefield + 1)
 
         if old_locations_checked != ctx.locations_checked:
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": ctx.locations_checked}])

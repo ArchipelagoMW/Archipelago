@@ -1,25 +1,85 @@
 - name: Overworld
   id: 0
   game_objects:
-  - name: "Foresta Battlefield"
+  - name: "Foresta South Battlefield"
+    object_id: 0x01
+    type: "BattlefieldXp"
+    access: []
+  - name: "Foresta West Battlefield"
     object_id: 0x02
-    type: "Battlefield"
+    type: "BattlefieldItem"
     access: []
-  - name: "Aquaria Battlefield"
+  - name: "Foresta East Battlefield"
+    object_id: 0x03
+    type: "BattlefieldGp"
+    access: []
+  - name: "South of Libra Temple Battlefield"
+    object_id: 0x04
+    type: "BattlefieldXp"
+    access: []
+  - name: "East of Libra Temple Battlefield"
+    object_id: 0x05
+    type: "BattlefieldGp"
+    access: []
+  - name: "South of Aquaria Battlefield"
     object_id: 0x06
-    type: "Battlefield"
+    type: "BattlefieldItem"
     access: []
-  - name: "Libra Battlefield"
+  - name: "South of Wintry Cave Battlefield"
+    object_id: 0x07
+    type: "BattlefieldXp"
+    access: []
+  - name: "West of Wintry Cave Battlefield"
+    object_id: 0x08
+    type: "BattlefieldGp"
+    access: []
+  - name: "Ice Pyramid Battlefield"
+    object_id: 0x09
+    type: "BattlefieldXp"
+    access: []
+  - name: "North of Libra Temple Battlefield"
     object_id: 0x0A
-    type: "Battlefield"
+    type: "BattlefieldItem"
     access: []
-  - name: "Fireburg Battlefield"
+  - name: "Aquaria Frozen Field Battlefield"
+    object_id: 0x0B
+    type: "BattlefieldXp"
+    access: []
+  - name: "Path to Fireburg Southern Battlefield"
+    object_id: 0x0C
+    type: "BattlefieldGp"
+    access: []
+  - name: "Path to Fireburg Central Battlefield"
     object_id: 0x0D
-    type: "Battlefield"
+    type: "BattlefieldItem"
+    access: []
+  - name: "Path to Fireburg Northern Battlefield"
+    object_id: 0x0E
+    type: "BattlefieldXp"
+    access: []
+  - name: "Sealed Temple Battlefield"
+    object_id: 0x0F
+    type: "BattlefieldGp"
     access: []
   - name: "Mine Battlefield"
     object_id: 0x10
-    type: "Battlefield"
+    type: "BattlefieldItem"
+    access: []
+  - name: "Boulder Battlefield"
+    object_id: 0x11
+    type: "BattlefieldXp"
+    access: []
+  - name: "Volcano Battlefield"
+    object_id: 0x12
+    type: "BattlefieldXp"
+    access: []
+  - name: "Kaidge Temple Battlefield"
+    object_id: 0x13
+    type: "BattlefieldXp"
+    access: []
+  - name: "South of Windia Battlefield"
+    object_id: 0x14
+    type: "BattlefieldXp"
     access: []
   links:
   - target_room: 15  # Level Forest

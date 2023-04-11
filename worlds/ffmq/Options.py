@@ -252,7 +252,7 @@ option_definitions = {
     "map_shuffle": MapShuffle,
     "crest_shuffle": CrestShuffle,
     "leveling_curve": LevelingCurve,
-    #"shuffle_battlefield_rewards": ShuffleBattlefieldRewards,
+    "shuffle_battlefield_rewards": ShuffleBattlefieldRewards,
     "battlefields_battles_quantities": BattlefieldsBattlesQuantities,
 
 

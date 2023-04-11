@@ -178,19 +178,9 @@ prog_map = {
     "Accessories": "Progressive Accessory",
 }
 
-yaml_to_ap = {
-    "WakeWater": "Wakewater",
-    "CaptainCap": "Captain's Cap"
-}
-
-ap_to_yaml = {
-    "Wakewater": "WakeWater"
-}
-
-
 def yaml_item(text):
-    if text in yaml_to_ap:
-        return yaml_to_ap[text]
+    if text == "CaptainCap":
+        return "Captain's Cap"
     return "".join(
         [(" " + c if (c.isupper() or c.isnumeric()) and not (text[i - 1].isnumeric() and c == "F") else c) for
          i, c in enumerate(text)]).strip()
@@ -202,12 +192,13 @@ for item, data in item_table.items():
         item_groups[group] = item_groups.get(group, []) + [item]
 
 
+
 def create_items(self) -> None:
     items = []
-    #self.multiworld.push_precollected(self.create_item(self.multiworld.starting_weapon[self.player].current_key.title().replace("_", " ")))
-    #self.multiworld.push_precollected(self.create_item("Steel Armor"))
-    # if self.multiworld.sky_coin_mode[self.player] == "start_with":
-    #     self.multiworld.push_precollected(self.create_item("Sky Coin"))
+    self.multiworld.push_precollected(self.create_item(self.multiworld.starting_weapon[self.player].current_key.title().replace("_", " ")))
+    self.multiworld.push_precollected(self.create_item("Steel Armor"))
+    if self.multiworld.sky_coin_mode[self.player] == "start_with":
+        self.multiworld.push_precollected(self.create_item("Sky Coin"))
 
     def add_item(item_name):
         if item_name in ["Steel Armor", "Sky Fragment"] or "Progressive" in item_name:
