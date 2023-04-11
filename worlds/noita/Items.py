@@ -40,6 +40,10 @@ def create_spatial_awareness_item(bosses_as_checks: BossesAsChecks) -> List[str]
     return ["Spatial Awareness Perk"] if bosses_as_checks.value >= BossesAsChecks.option_all_bosses else []
 
 
+def create_kantele(victory_condition: VictoryCondition) -> List[str]:
+    return ["Kantele"] if victory_condition.value >= VictoryCondition.option_pure_ending else []
+
+
 def create_random_items(multiworld: MultiWorld, player: int, random_count: int) -> List[str]:
     filler_pool = filler_weights.copy()
     if multiworld.bad_effects[player].value == 0:
@@ -81,7 +85,7 @@ item_table: Dict[str, ItemData] = {
     "Wand (Tier 4)":                        ItemData(110009, "Wands", ItemClassification.useful),
     "Wand (Tier 5)":                        ItemData(110010, "Wands", ItemClassification.useful),
     "Wand (Tier 6)":                        ItemData(110011, "Wands", ItemClassification.useful),
-    "Ocarina":                              ItemData(110012, "Wands", ItemClassification.useful, 1),
+    "Kantele":                              ItemData(110012, "Wands", ItemClassification.useful),
     "Fire Immunity Perk":                   ItemData(110013, "Perks", ItemClassification.progression, 1),
     "Toxic Immunity Perk":                  ItemData(110014, "Perks", ItemClassification.progression, 1),
     "Explosion Immunity Perk":              ItemData(110015, "Perks", ItemClassification.progression, 1),
