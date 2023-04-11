@@ -33,8 +33,6 @@ local frames_with_no_item = 0
 local ItemTableStart = 0xfe9d
 local PlayerSlotAddress = 0xfff9
 
-local itemMessages = {}
-
 local nullObjectId = 0xB4
 local ItemsReceived = nil
 local sha256hash = nil

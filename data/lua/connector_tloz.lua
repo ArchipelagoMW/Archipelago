@@ -9,7 +9,6 @@ local STATE_TENTATIVELY_CONNECTED = "Tentatively Connected"
 local STATE_INITIAL_CONNECTION_MADE = "Initial Connection Made"
 local STATE_UNINITIALIZED = "Uninitialized"
 
-local itemMessages = {}
 local consumableStacks = nil
 local prevstate = ""
 local curstate =  STATE_UNINITIALIZED

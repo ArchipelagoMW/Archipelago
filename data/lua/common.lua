@@ -83,6 +83,8 @@ function clearScreen()
   end
 end
 
+itemMessages = {}
+
 function drawMessages()
   if table.empty(itemMessages) then
       clearScreen()

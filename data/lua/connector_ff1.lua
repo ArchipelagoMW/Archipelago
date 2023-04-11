@@ -103,7 +103,6 @@ local noOverworldItemsLookup = {
     [500] = 0x12,
 }
 
-local itemMessages = {}
 local consumableStacks = nil
 local prevstate = ""
 local curstate =  STATE_UNINITIALIZED
