@@ -1,10 +1,15 @@
-from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice, Toggle
+from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice, Toggle, StartInventory
 
 
 class MessengerAccessibility(Accessibility):
     default = Accessibility.option_locations
     # defaulting to locations accessibility since items makes certain items self-locking
     __doc__ = Accessibility.__doc__.replace(f"default {Accessibility.default}", f"default {default}")
+
+
+class MessengerInventory(StartInventory):
+    __doc__ = f"{StartInventory.__doc__} These items will be removed from the generated item pool."
+    display_name = "Start Inventory from Pool"
 
 
 class Logic(Choice):
@@ -70,6 +75,7 @@ class RequiredSeals(Range):
 
 messenger_options = {
     "accessibility": MessengerAccessibility,
+    "start_inventory": MessengerInventory,
     "logic_level": Logic,
     "shuffle_seals": PowerSeals,
     "shuffle_shards": MegaShards,
