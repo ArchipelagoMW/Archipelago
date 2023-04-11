@@ -385,12 +385,13 @@ class ReceiveItemMessages(Choice):
     Determines whether you receive an in-game notification when receiving an item. Items can still only be received in the overworld.
     All: Every item shows a message
     Progression: Only progression items show a message
-    None: All items are added to your bag silently
+    None: All items are added to your bag silently (badges will still show)
     """
     display_name = "Receive Item Messages"
     default = 0
     option_all = 0
     option_progression = 1
+    option_none = 2
 
 
 option_definitions: Dict[str, Option] = {
