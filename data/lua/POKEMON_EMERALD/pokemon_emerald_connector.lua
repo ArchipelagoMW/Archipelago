@@ -94,7 +94,7 @@ end
 function create_message ()
     local data = {}
 
-    data["script_version"] = 2
+    data["script_version"] = 1
 
     if (current_game_state == GAME_STATE_SAFE) then
         local save_block_address = memory.read_u32_le(save_block_ptr_address, "IWRAM") - ewram_start

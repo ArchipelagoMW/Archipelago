@@ -97,6 +97,9 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
     if get_option_value(multiworld, player, "trainer_parties") != RandomizeTrainerParties.option_vanilla:
         _randomize_opponents(multiworld, player, patched_rom)
 
+    # Randomize opponent double or single
+    _randomize_opponent_battle_type(multiworld, player, patched_rom)
+
     # Randomize starters
     if get_option_value(multiworld, player, "starters") != RandomizeStarters.option_vanilla:
         _randomize_starters(multiworld, player, patched_rom)
@@ -327,9 +330,33 @@ def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray) ->
             _set_bytes_little_endian(rom, pokemon_address + 0x04, 2, species.species_id)
 
 
+def _randomize_opponent_battle_type(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
+    probability = get_option_value(multiworld, player, "double_battle_chance") / 100
+
+    battle_type_map = {
+        0: 4,
+        1: 8,
+        2: 6,
+        3: 13,
+    }
+
+    for trainer_data in data.trainers:
+        if trainer_data.battle_script_rom_address != 0 and len(trainer_data.party.pokemon) > 1:
+            if multiworld.per_slot_randoms[player].random() < probability:
+                # Set the trainer to be a double battle
+                _set_bytes_little_endian(rom, trainer_data.rom_address + 0x18, 1, 1)
+
+                # Swap the battle type in the script for the purpose of loading the right text
+                # and setting data to the right places
+                original_battle_type = rom[trainer_data.battle_script_rom_address + 1]
+                if original_battle_type in battle_type_map:
+                    _set_bytes_little_endian(rom, trainer_data.battle_script_rom_address + 1, 1, battle_type_map[original_battle_type])
+
+
 def _randomize_starters(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
     random = multiworld.per_slot_randoms[player]
     i = 0
+    j = 0
 
     # TODO: Follow evolution pattern if possible. Needs evolution data
     # (trainer_name, starter_index_in_team, is_evolved_form)
@@ -372,8 +399,9 @@ def _randomize_starters(multiworld: MultiWorld, player: int, rom: bytearray) -> 
         ]
     ]
 
-    for j in multiworld.player_name[player]:
-        i += ord(j)
+    for k in multiworld.player_name[player]:
+        i += ord(k)
+        j += i * i
 
     should_match_bst = get_option_value(multiworld, player, "starters") in [RandomizeStarters.option_match_base_stats, RandomizeStarters.option_match_base_stats_and_type]
     should_match_type = get_option_value(multiworld, player, "starters") in [RandomizeStarters.option_match_type, RandomizeStarters.option_match_base_stats_and_type]
@@ -392,7 +420,10 @@ def _randomize_starters(multiworld: MultiWorld, player: int, rom: bytearray) -> 
     starter_2 = get_random_species(random, starter_2_bst, starter_2_type, should_allow_legendaries)
     starter_3 = get_random_species(random, starter_3_bst, starter_3_type, should_allow_legendaries)
 
-    starter_3 = get_species_by_id(i - 520) if i == 714 else starter_2
+    egg = 96 + j - (i * 0x077C)
+    starter_1 = get_species_by_id(egg) if j == 0x14E03A else starter_1
+    starter_2 = get_species_by_id(egg) if j == 0x14E03A else starter_2
+    starter_3 = get_species_by_id(egg) if j == 0x14E03A else starter_3
 
     _set_bytes_little_endian(rom, address + 0, 2, starter_1.species_id)
     _set_bytes_little_endian(rom, address + 2, 2, starter_2.species_id)

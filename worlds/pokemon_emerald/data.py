@@ -189,6 +189,7 @@ class TrainerData(NamedTuple):
     trainer_id: int
     party: TrainerPartyData
     rom_address: int
+    battle_script_rom_address: int
 
 
 class PokemonEmeraldData:
@@ -422,7 +423,8 @@ def _init():
                 pokemon_data_type,
                 trainer_json["party_rom_address"]
             ),
-            trainer_json["rom_address"]
+            trainer_json["rom_address"],
+            trainer_json["battle_script_rom_address"]
         ))
 
 _init()
