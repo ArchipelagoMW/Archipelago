@@ -73,7 +73,6 @@ class MultiWorld():
     exclude_locations: Dict[int, Options.ExcludeLocations]
     priority_locations: Dict[int, Options.PriorityLocations]
     start_inventory: Dict[int, Options.StartInventory]
-    start_inventory_from_pool: Dict[int, Options.StartInventoryPool]
     start_hints: Dict[int, Options.StartHints]
     start_location_hints: Dict[int, Options.StartLocationHints]
     item_links: Dict[int, Options.ItemLinks]
@@ -122,6 +121,7 @@ class MultiWorld():
         self.early_items = {player: {} for player in self.player_ids}
         self.local_early_items = {player: {} for player in self.player_ids}
         self.indirect_connections = {}
+        self.start_inventory_from_pool: Dict[int, Options.StartInventoryPool] = {}
         self.fix_trock_doors = self.AttributeProxy(
             lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
         self.fix_skullwoods_exit = self.AttributeProxy(
