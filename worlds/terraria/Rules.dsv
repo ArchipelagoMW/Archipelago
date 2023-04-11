@@ -306,7 +306,7 @@ Pickaxe Axe;                        Pickaxe(200);                               
 Drax Attax;                         Achievement;                                Pickaxe Axe;
 True Night's Edge;                  ;                                           Hardmode Anvil & Night's Edge & Soul of Fright & Soul of Might & Soul of Sight;
 Chlorophyte Ore;                    ;                                           Wall of Flesh & @pickaxe(200);
-Photosyntesis;                      Achievement;                                Chlorophyte Ore;
+Photosynthesis;                     Achievement;                                Chlorophyte Ore;
 Chlorophyte Bar;                    ;                                           Hardmode Forge & Chlorophyte Ore;
 True Excalibur;                     ;                                           Hardmode Anvil & Excalibur & Chlorophyte Bar;
 Chlorophyte Pickaxe;                Pickaxe(200);                               Hardmode Anvil & Chlorophyte Bar;
