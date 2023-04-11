@@ -56,3 +56,8 @@ class Generation(db.Entity):
     options = Required(buffer, lazy=True)
     meta = Required(LongStr, default=lambda: "{\"race\": false}")
     state = Required(int, default=0, index=True)
+
+
+class GameDataPackage(db.Entity):
+    checksum = PrimaryKey(str)
+    data = Required(bytes)

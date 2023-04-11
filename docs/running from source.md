@@ -7,10 +7,11 @@ use that version. These steps are for developers or platforms without compiled r
 ## General
 
 What you'll need:
- * Python 3.8.7 or newer
-   * pip (Depending on platform may come included)
- * A C compiler
-   * possibly optional, read OS-specific sections
+ * [Python 3.8.7 or newer](https://www.python.org/downloads/), not the Windows Store version
+   * **Python 3.11 does not work currently**
+ * pip: included in downloads from python.org, separate in many Linux distributions
+ * Matching C compiler
+   * possibly optional, read operating system specific sections
 
 Then run any of the starting point scripts, like Generate.py, and the included ModuleUpdater should prompt to install or update the
 required modules and after pressing enter proceed to install everything automatically.
@@ -29,17 +30,19 @@ After this, you should be able to run the programs.
 
 Recommended steps
  * Download and install a "Windows installer (64-bit)" from the [Python download page](https://www.python.org/downloads)
- * Download and install full Visual Studio from
-   [Visual Studio Downloads](https://visualstudio.microsoft.com/downloads/)
-   or an older "Build Tools for Visual Studio" from
-   [Visual Studio Older Downloads](https://visualstudio.microsoft.com/vs/older-downloads/).
+   * **Python 3.11 does not work currently**
 
-   * Refer to [Windows Compilers on the python wiki](https://wiki.python.org/moin/WindowsCompilers) for details
-   * This step is optional. Pre-compiled modules are pinned on
+ * **Optional**: Download and install Visual Studio Build Tools from
+   [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
+   * Refer to [Windows Compilers on the python wiki](https://wiki.python.org/moin/WindowsCompilers) for details. 
+     Generally, selecting the box for "Desktop Development with C++" will provide what you need.
+   * Build tools are not required if all modules are installed pre-compiled. Pre-compiled modules are pinned on
      [Discord in #archipelago-dev](https://discord.com/channels/731205301247803413/731214280439103580/905154456377757808)
 
  * It is recommended to use [PyCharm IDE](https://www.jetbrains.com/pycharm/)
  * Run Generate.py which will prompt installation of missing modules, press enter to confirm
+   * In PyCharm: right-click Generate.py and select `Run 'Generate'`
+   * Without PyCharm: open a command prompt in the source folder and type `py Generate.py`
 
 
 ## macOS
@@ -59,7 +62,7 @@ setting in host.yaml at your Enemizer executable.
 
 ## Optional: SNI
 
-SNI is required to use SNIClient. If not integrated into the project, it has to be started manually.
+[SNI](https://github.com/alttpo/sni/blob/main/README.md) is required to use SNIClient. If not integrated into the project, it has to be started manually.
 
 You can get the latest SNI release at [SNI Github releases](https://github.com/alttpo/sni/releases).
 It should be dropped as "SNI" into the root folder of the project. Alternatively, you can point the sni setting in

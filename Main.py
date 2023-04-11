@@ -115,6 +115,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         for item_name, count in world.start_inventory[player].value.items():
             for _ in range(count):
                 world.push_precollected(world.create_item(item_name, player))
+        for item_name, count in world.start_inventory_from_pool[player].value.items():
+            for _ in range(count):
+                world.push_precollected(world.create_item(item_name, player))
 
     logger.info('Creating World.')
     AutoWorld.call_all(world, "create_regions")
@@ -148,6 +151,32 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             world.get_location(location_name, player).progress_type = LocationProgressType.PRIORITY
 
     AutoWorld.call_all(world, "generate_basic")
+
+    # remove starting inventory from pool items.
+    # Because some worlds don't actually create items during create_items this has to be as late as possible.
+    if any(world.start_inventory_from_pool[player].value for player in world.player_ids):
+        new_items: List[Item] = []
+        depletion_pool: Dict[int, Dict[str, int]] = {
+            player: world.start_inventory_from_pool[player].value.copy() for player in world.player_ids}
+        for player, items in depletion_pool.items():
+            player_world: AutoWorld.World = world.worlds[player]
+            for count in items.values():
+                new_items.append(player_world.create_filler())
+        target: int = sum(sum(items.values()) for items in depletion_pool.values())
+        for item in world.itempool:
+            if depletion_pool[item.player].get(item.name, 0):
+                target -= 1
+                depletion_pool[item.player][item.name] -= 1
+                # quick abort if we have found all items
+                if not target:
+                    break
+            else:
+                new_items.append(item)
+        for player, remaining_items in depletion_pool.items():
+            if remaining_items:
+                raise Exception(f"{world.get_player_name(player)}"
+                                f" is trying to remove items from their pool that don't exist: {remaining_items}")
+        world.itempool[:] = new_items
 
     # temporary home for item links, should be moved out of Main
     for group_id, group in world.groups.items():
@@ -355,13 +384,11 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                                   for player in world.groups.get(location.item.player, {}).get("players", [])]):
                             precollect_hint(location)
 
-                # custom datapackage
-                datapackage = {}
-                for game_world in world.worlds.values():
-                    if game_world.data_version == 0 and game_world.game not in datapackage:
-                        datapackage[game_world.game] = worlds.network_data_package["games"][game_world.game]
-                        datapackage[game_world.game]["item_name_groups"] = game_world.item_name_groups
-                        datapackage[game_world.game]["location_name_groups"] = game_world.location_name_groups
+                # embedded data package
+                data_package = {
+                    game_world.game: worlds.network_data_package["games"][game_world.game]
+                    for game_world in world.worlds.values()
+                }
 
                 multidata = {
                     "slot_data": slot_data,
@@ -378,7 +405,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "tags": ["AP"],
                     "minimum_versions": minimum_versions,
                     "seed_name": world.seed_name,
-                    "datapackage": datapackage,
+                    "datapackage": data_package,
                 }
                 AutoWorld.call_all(world, "modify_multidata", multidata)
 

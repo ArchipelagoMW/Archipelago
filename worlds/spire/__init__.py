@@ -67,7 +67,7 @@ class SpireWorld(World):
 
     def fill_slot_data(self) -> dict:
         slot_data = {
-            'seed': "".join(self.multiworld.slot_seeds[self.player].choice(string.ascii_letters) for i in range(16))
+            'seed': "".join(self.multiworld.per_slot_randoms[self.player].choice(string.ascii_letters) for i in range(16))
         }
         for option_name in spire_options:
             option = getattr(self.multiworld, option_name)[self.player]

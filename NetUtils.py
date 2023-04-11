@@ -35,7 +35,7 @@ class SlotType(enum.IntFlag):
 
     @property
     def always_goal(self) -> bool:
-        """Mark this slot has having reached its goal instantly."""
+        """Mark this slot as having reached its goal instantly."""
         return self.value != 0b01
 
 

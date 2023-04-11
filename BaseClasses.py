@@ -113,7 +113,6 @@ class MultiWorld():
         self.dark_world_light_cone = False
         self.rupoor_cost = 10
         self.aga_randomness = True
-        self.lock_aga_door_in_escape = False
         self.save_and_quit_from_boss = True
         self.custom = False
         self.customitemarray = []
@@ -122,6 +121,7 @@ class MultiWorld():
         self.early_items = {player: {} for player in self.player_ids}
         self.local_early_items = {player: {} for player in self.player_ids}
         self.indirect_connections = {}
+        self.start_inventory_from_pool = {player: Options.StartInventoryPool({}) for player in range(1, players + 1)}
         self.fix_trock_doors = self.AttributeProxy(
             lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
         self.fix_skullwoods_exit = self.AttributeProxy(
@@ -336,7 +336,7 @@ class MultiWorld():
         return self.player_name[player]
 
     def get_file_safe_player_name(self, player: int) -> str:
-        return ''.join(c for c in self.get_player_name(player) if c not in '<>:"/\\|?*')
+        return Utils.get_file_safe_name(self.get_player_name(player))
 
     def get_out_file_name_base(self, player: int) -> str:
         """ the base name (without file extension) for each player's output file for a seed """
@@ -836,6 +836,29 @@ class Region:
         for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
             return entrance.parent_region.get_connecting_entrance(is_main_entrance)
 
+    def add_locations(self, locations: Dict[str, Optional[int]], location_type: Optional[typing.Type[Location]] = None) -> None:
+        """Adds locations to the Region object, where location_type is your Location class and locations is a dict of
+        location names to address."""
+        if location_type is None:
+            location_type = Location
+        for location, address in locations.items():
+            self.locations.append(location_type(self.player, location, address, self))
+
+    def add_exits(self, exits: Dict[str, Optional[str]], rules: Dict[str, Callable[[CollectionState], bool]] = None) -> None:
+        """
+        Connects current region to regions in exit dictionary. Passed region names must exist first.
+
+        :param exits: exits from the region. format is {"connecting_region", "exit_name"}
+        :param rules: rules for the exits from this region. format is {"connecting_region", rule}
+        """
+        for exiting_region, name in exits.items():
+            ret = Entrance(self.player, name, self) if name \
+                else Entrance(self.player, f"{self.name} -> {exiting_region}", self)
+            if rules and exiting_region in rules:
+                ret.access_rule = rules[exiting_region]
+            self.exits.append(ret)
+            ret.connect(self.multiworld.get_region(exiting_region, self.player))
+
     def __repr__(self):
         return self.__str__()
 
@@ -1208,7 +1231,7 @@ class Spoiler():
                 raise RuntimeError(f'Not all required items reachable. Unreachable locations: {required_locations}')
 
         # we can finally output our playthrough
-        self.playthrough = {"0": sorted([str(item) for item in
+        self.playthrough = {"0": sorted([self.multiworld.get_name_string_for_object(item) for item in
                                          chain.from_iterable(multiworld.precollected_items.values())
                                          if item.advancement])}
 

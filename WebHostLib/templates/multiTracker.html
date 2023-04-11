@@ -36,6 +36,7 @@
                                 {% endblock %}
                                 <th class="center-column">Checks</th>
                                 <th class="center-column">&percnt;</th>
+                                <th class="center-column">Status</th>
                                 <th class="center-column hours">Last<br>Activity</th>
                             </tr>
                         </thead>
@@ -51,8 +52,10 @@
                                     {% endblock %}
                                     <td class="center-column">{{ checks["Total"] }}/{{ checks_in_area[player]["Total"] }}</td>
                                     <td class="center-column">{{ percent_total_checks_done[team][player] }}</td>
-                                    {%- if activity_timers[(team, player)] -%}
-                                        <td class="center-column">{{ activity_timers[(team, player)].total_seconds() }}</td>
+                                    <td>{{ {0: "Disconnected", 5: "Connected", 10: "Ready", 20: "Playing",
+                                            30: "Goal Completed"}.get(states[team, player], "Unknown State") }}</td>
+                                    {%- if activity_timers[team, player] -%}
+                                        <td class="center-column">{{ activity_timers[team, player].total_seconds() }}</td>
                                     {%- else -%}
                                         <td class="center-column">None</td>
                                     {%- endif -%}

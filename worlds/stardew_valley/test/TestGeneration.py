@@ -1,6 +1,7 @@
 from BaseClasses import ItemClassification
 from . import SVTestBase
 from .. import locations, items, location_table, options
+from ..data.villagers_data import all_villagers_by_name
 from ..items import items_by_group, Group
 from ..locations import LocationTags
 
@@ -113,15 +114,157 @@ class TestLocationGeneration(SVTestBase):
 
 class TestLocationAndItemCount(SVTestBase):
     options = {
+        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized,
+        options.SeedShuffle.internal_name: options.SeedShuffle.option_shuffled,
         options.BackpackProgression.internal_name: options.BackpackProgression.option_vanilla,
         options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
-        options.TheMinesElevatorsProgression.internal_name: options.TheMinesElevatorsProgression.option_vanilla,
         options.SkillProgression.internal_name: options.SkillProgression.option_vanilla,
         options.BuildingProgression.internal_name: options.BuildingProgression.option_vanilla,
+        options.TheMinesElevatorsProgression.internal_name: options.TheMinesElevatorsProgression.option_vanilla,
         options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_disabled,
         options.HelpWantedLocations.internal_name: 0,
+        options.Fishsanity.internal_name: options.Fishsanity.option_none,
+        options.Museumsanity.internal_name: options.Museumsanity.option_none,
+        options.Friendsanity.internal_name: options.Museumsanity.option_none,
         options.NumberOfPlayerBuffs.internal_name: 12,
     }
 
     def test_minimal_location_maximal_items_still_valid(self):
         assert len(self.multiworld.get_locations()) >= len(self.multiworld.get_items())
+
+
+class TestFriendsanityNone(SVTestBase):
+    options = {
+        options.Friendsanity.internal_name: options.Friendsanity.option_none,
+    }
+
+    def test_no_friendsanity_items(self):
+        for item in self.multiworld.get_items():
+            assert not item.name.endswith(": 1 <3")
+
+    def test_no_friendsanity_locations(self):
+        for location in self.multiworld.get_locations():
+            assert not location.name.startswith("Friendsanity")
+
+
+class TestFriendsanityBachelors(SVTestBase):
+    options = {
+        options.Friendsanity.internal_name: options.Friendsanity.option_bachelors,
+    }
+    bachelors = {"Harvey", "Elliott", "Sam", "Alex", "Shane", "Sebastian", "Emily", "Haley", "Leah", "Abigail", "Penny",
+                 "Maru"}
+
+    def test_friendsanity_only_bachelor_items(self):
+        suffix = ": 1 <3"
+        for item in self.multiworld.get_items():
+            if item.name.endswith(suffix):
+                villager_name = item.name[:item.name.index(suffix)]
+                assert villager_name in self.bachelors
+
+    def test_friendsanity_only_bachelor_locations(self):
+        prefix = "Friendsanity: "
+        suffix = " <3"
+        for location in self.multiworld.get_locations():
+            if location.name.startswith(prefix):
+                name_no_prefix = location.name[len(prefix):]
+                name_trimmed = name_no_prefix[:name_no_prefix.index(suffix)]
+                parts = name_trimmed.split(" ")
+                name = parts[0]
+                hearts = parts[1]
+                assert name in self.bachelors
+                assert int(hearts) <= 8
+
+
+class TestFriendsanityStartingNpcs(SVTestBase):
+    options = {
+        options.Friendsanity.internal_name: options.Friendsanity.option_starting_npcs,
+    }
+    excluded_npcs = {"Leo", "Krobus", "Dwarf", "Sandy", "Kent"}
+
+    def test_friendsanity_only_starting_npcs_items(self):
+        suffix = ": 1 <3"
+        for item in self.multiworld.get_items():
+            if item.name.endswith(suffix):
+                villager_name = item.name[:item.name.index(suffix)]
+                assert villager_name not in self.excluded_npcs
+
+    def test_friendsanity_only_starting_npcs_locations(self):
+        prefix = "Friendsanity: "
+        suffix = " <3"
+        for location in self.multiworld.get_locations():
+            if location.name.startswith(prefix):
+                name_no_prefix = location.name[len(prefix):]
+                name_trimmed = name_no_prefix[:name_no_prefix.index(suffix)]
+                parts = name_trimmed.split(" ")
+                name = parts[0]
+                hearts = parts[1]
+                assert name not in self.excluded_npcs
+                assert name in all_villagers_by_name or name == "Pet"
+                if name == "Pet":
+                    assert int(hearts) <= 5
+                elif all_villagers_by_name[name].bachelor:
+                    assert int(hearts) <= 8
+                else:
+                    assert int(hearts) <= 10
+
+
+class TestFriendsanityAllNpcs(SVTestBase):
+    options = {
+        options.Friendsanity.internal_name: options.Friendsanity.option_all,
+    }
+
+    def test_friendsanity_all_items(self):
+        suffix = ": 1 <3"
+        for item in self.multiworld.get_items():
+            if item.name.endswith(suffix):
+                villager_name = item.name[:item.name.index(suffix)]
+                assert villager_name in all_villagers_by_name or villager_name == "Pet"
+
+    def test_friendsanity_all_locations(self):
+        prefix = "Friendsanity: "
+        suffix = " <3"
+        for location in self.multiworld.get_locations():
+            if location.name.startswith(prefix):
+                name_no_prefix = location.name[len(prefix):]
+                name_trimmed = name_no_prefix[:name_no_prefix.index(suffix)]
+                parts = name_trimmed.split(" ")
+                name = parts[0]
+                hearts = parts[1]
+                assert name in all_villagers_by_name or name == "Pet"
+                if name == "Pet":
+                    assert int(hearts) <= 5
+                elif all_villagers_by_name[name].bachelor:
+                    assert int(hearts) <= 8
+                else:
+                    assert int(hearts) <= 10
+
+
+class TestFriendsanityAllNpcsWithMarriage(SVTestBase):
+    options = {
+        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
+    }
+
+    def test_friendsanity_all_with_marriage_items(self):
+        suffix = ": 1 <3"
+        for item in self.multiworld.get_items():
+            if item.name.endswith(suffix):
+                villager_name = item.name[:item.name.index(suffix)]
+                assert villager_name in all_villagers_by_name or villager_name == "Pet"
+
+    def test_friendsanity_all_with_marriage_locations(self):
+        prefix = "Friendsanity: "
+        suffix = " <3"
+        for location in self.multiworld.get_locations():
+            if location.name.startswith(prefix):
+                name_no_prefix = location.name[len(prefix):]
+                name_trimmed = name_no_prefix[:name_no_prefix.index(suffix)]
+                parts = name_trimmed.split(" ")
+                name = parts[0]
+                hearts = parts[1]
+                assert name in all_villagers_by_name or name == "Pet"
+                if name == "Pet":
+                    assert int(hearts) <= 5
+                elif all_villagers_by_name[name].bachelor:
+                    assert int(hearts) <= 14
+                else:
+                    assert int(hearts) <= 10

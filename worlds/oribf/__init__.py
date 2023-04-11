@@ -13,6 +13,7 @@ class OriBlindForest(World):
     game: str = "Ori and the Blind Forest"
 
     topology_present = True
+    data_version = 1
 
     item_name_to_id = item_table
     location_name_to_id = lookup_name_to_id
