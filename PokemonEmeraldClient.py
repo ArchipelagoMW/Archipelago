@@ -69,7 +69,7 @@ class GBAContext(CommonContext):
 
 def create_payload(ctx: GBAContext):
     payload = json.dumps({
-        "items": [[item.item - config["ap_offset"], item & 1] for item in ctx.items_received]
+        "items": [[item.item - config["ap_offset"], item.flags & 1] for item in ctx.items_received]
     })
 
     return payload

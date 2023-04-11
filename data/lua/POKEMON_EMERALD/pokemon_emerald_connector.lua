@@ -81,10 +81,10 @@ function try_write_next_item ()
 
         next_item = received_items[last_received_item_index + 1]
         if (next_item ~= nil) then
-            memory.write_u16_le(archipelago_received_item_address + 0, next_item[0],                 "EWRAM")
+            memory.write_u16_le(archipelago_received_item_address + 0, next_item[1],                 "EWRAM")
             memory.write_u16_le(archipelago_received_item_address + 2, last_received_item_index + 1, "EWRAM")
             memory.write_u8(    archipelago_received_item_address + 4, 1,                            "EWRAM")
-            memory.write_u8(    archipelago_received_item_address + 5, next_item[1],                 "EWRAM")
+            memory.write_u8(    archipelago_received_item_address + 5, next_item[2],                 "EWRAM")
         end
     end
 end
