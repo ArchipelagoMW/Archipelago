@@ -42,9 +42,11 @@
         id: Panel_hidden_hidden
     doors:
       Main Door:
-        - HI
+        panels:
+          - HI
       Back Right Door:
-        - HIDDEN
+        panels:
+          - HIDDEN
       Rhyme Room Entrance:
         skip_location: True
         panels:
@@ -76,7 +78,8 @@
           - room: Hub Room
             panel: RAT
       Seeker Entrance:
-        - OPEN
+        panels:
+          - OPEN
       Rhyme Room Entrance:
         skip_location: True
         panels:
@@ -113,7 +116,8 @@
         id: "Panel_hi_high"
     doors:
       Exit Door:
-        - HI
+        panels:
+          - HI
   Hub Room:
     entrances:
       Second Room:
@@ -169,25 +173,36 @@
         required_door:
           room: Outside The Undeterred
           door: Fours
+      LOST:
+        id: "????"
+        colors: black
     doors:
-      # Not doing anything with LOST for now because it doesn't unlock access to anywhere
       Crossroads Entrance:
-        - ORDER
+        panels:
+          - ORDER
       Tenacious Entrance:
-        - SLAUGHTER
+        panels:
+          - SLAUGHTER
       Near Door:
-        - NEAR
+        panels:
+          - NEAR
       Far Door:
-        - FAR
+        panels:
+          - FAR
       Shortcut to Hedge Maze:
-        - TRACE
+        panels:
+          - TRACE
       Near RAT Door:
         skip_location: True
         panels:
           - room: Hidden Room
             panel: DEAD END
       Traveled Entrance:
-        - OPEN
+        panels:
+          - OPEN
+      Lost Door:
+        panels:
+          - LOST
   Dead End Area:
     entrances:
       Hidden Room:
@@ -223,9 +238,11 @@
         colors: yellow
     doors:
       Shortcut to The Seeker:
-        - THIS
+        panels:
+          - THIS
       Sun Painting:
-        - HOT CRUST
+        panels:
+          - HOT CRUST
   Crossroads:
     entrances:
       Hub Room: True # The sunwarp means that we never need the ORDER door
@@ -266,13 +283,24 @@
       BEND HI:
         id: "????"
         colors: yellow
+      THE EYES:
+        id: "????"
+        colors: yellow
+        check: True
+      IRK HORN:
+        id: "????"
+        colors: yellow
+        check: True
     doors:
       Tenacious Entrance:
-        - DECAY
+        panels:
+          - DECAY
       Discerning Entrance:
-        - NOPE
+        panels:
+          - NOPE
       Tower Entrance:
-        - WE ROT
+        panels:
+          - WE ROT
       Tower Back Entrance:
         location_name: Crossroads - TURN/RUNT
         panels:
@@ -280,11 +308,28 @@
           - room: Orange Tower Fourth Floor
             panel: RUNT
       Words/Sword Door:
-        - WORDS
-        - SWORD
+        panels:
+          - WORDS
+          - SWORD
       Eye Wall:
-        - BEND HI
+        panels:
+          - BEND HI
       Shortcut to Roof:
+        id: "????"
+        skip_location: True
+        panels:
+          - room: Orange Tower First Floor
+            panel: DADS + ALE
+          - room: Outside The Undeterred
+            panel: ART + ART
+          - room: Orange Tower Third Floor
+            panel: DEER + WREN
+          - room: Orange Tower Fourth Floor
+            panel: LEARNS + UNSEW
+          - room: Orange Tower Fifth Floor
+            panel: DRAWL + RUNS
+          - room: Owl Hallway
+            panel: READS + RUST
   Lost/Lost Area:
     entrances:
       Outside The Agreeable:
@@ -326,8 +371,9 @@
           door: Nines
     doors:
       Exit:
-        - AMEN
-        - NAME
+        panels:
+          - AMEN
+          - NAME
   The Tenacious:
     entrances:
       Hub Room:
@@ -353,6 +399,12 @@
       SOLOS (Black):
         id: "Panel_solos_solos"
         colors: black
+      LEVEL (White):
+        id: "????"
+      RACECAR (White):
+        id: "????"
+      SOLOS (White):
+        id: "????"
       Achievement:
         id: "Panel_tenacious_tenacious"
         check: True
@@ -363,6 +415,12 @@
           - LEVEL (Black)
           - RACECAR (Black)
           - SOLOS (Black)
+      White Palindromes:
+        skip_item: True
+        panels:
+          - LEVEL (White)
+          - RACECAR (White)
+          - SOLOS (White)
   Warts/Straw Area:
     entrances:
       Hub Room:
@@ -382,9 +440,11 @@
         colors: black
     doors:
       Warts Door:
-        - WARTS
+        panels:
+          - WARTS
       Straw Door:
-        - STRAW
+        panels:
+          - STRAW
   Leaf/Feel Area:
     entrances:
       Warts/Straw Area:
@@ -404,9 +464,11 @@
         colors: black
     doors:
       Leaf Door:
-        - LEAF
+        panels:
+          - LEAF
       Feel Door:
-        - FEEL
+        panels:
+          - FEEL
   Outside The Agreeable:
     # Let's ignore the blue warp thing for now because the lookout is a dead
     # end. Later on it could be filler checks.
@@ -455,15 +517,22 @@
         required_door:
           room: Number Hunt
           door: Fives
+      OUT:
+        id: "????"
+        check: True
     doors:
       Tenacious Entrance:
-        - MASSACRED
+        panels:
+          - MASSACRED
       Black Door:
-        - BLACK
+        panels:
+          - BLACK
       Agreeable Entrance:
-        - CLOSE
+        panels:
+          - CLOSE
       Painting Shortcut:
-        - RIGHT
+        panels:
+          - RIGHT
       Purple Barrier:
         skip_location: True
         panels:
@@ -482,7 +551,8 @@
         colors: red
     doors:
       Tenacious Entrance:
-        - DREAD
+        panels:
+          - DREAD
   The Agreeable:
     entrances:
       Outside The Agreeable:
@@ -501,7 +571,8 @@
         colors: black
     doors:
       Shortcut to Hedge Maze:
-        - BYE
+        panels:
+          - BYE
   Hedge Maze:
     entrances:
       Hub Room:
@@ -519,14 +590,35 @@
       DOWN:
         id: Panel_down_up
         colors: black
+      HIDE (1):
+        id: "????"
+        colors: black
+      HIDE (2):
+        id: "????"
+        colors: black
+      HIDE (3):
+        id: "????"
+        colors: black
+      HIDE (4):
+        id: "????"
+        colors: black
     doors:
       Perceptive Entrance:
-        - DOWN
+        panels:
+          - DOWN
       Observant Entrance:
         skip_location: True
         panels:
           - room: The Perceptive
             panel: GAZE
+      Hide and Seek:
+        skip_item: True
+        location_name: Hedge Maze - Hide and Seek
+        panels:
+          - HIDE (1)
+          - HIDE (2)
+          - HIDE (3)
+          - HIDE (4)
   The Perceptive:
     entrances:
       Starting Room:
@@ -599,6 +691,77 @@
             panel: I
           - room: Elements Area
             panel: A
+  Orange Tower:
+    # This is a special, meta-ish room.
+    entrances:
+      Menu: True
+    doors:
+      Second Floor:
+        id: "????"
+        skip_location: True
+        panels:
+          - room: Orange Tower First Floor
+            panel: DADS + ALE
+      Third Floor:
+        id: "????"
+        skip_location: True
+        panels:
+          - room: Orange Tower First Floor
+            panel: DADS + ALE
+          - room: Outside The Undeterred
+            panel: ART + ART
+      Fourth Floor:
+        id: "????"
+        skip_location: True
+        panels:
+          - room: Orange Tower First Floor
+            panel: DADS + ALE
+          - room: Outside The Undeterred
+            panel: ART + ART
+          - room: Orange Tower Third Floor
+            panel: DEER + WREN
+      Fifth Floor:
+        id: "????"
+        skip_location: True
+        panels:
+          - room: Orange Tower First Floor
+            panel: DADS + ALE
+          - room: Outside The Undeterred
+            panel: ART + ART
+          - room: Orange Tower Third Floor
+            panel: DEER + WREN
+          - room: Orange Tower Fourth Floor
+            panel: LEARNS + UNSEW
+      Sixth Floor:
+        id: "????"
+        skip_location: True
+        panels:
+          - room: Orange Tower First Floor
+            panel: DADS + ALE
+          - room: Outside The Undeterred
+            panel: ART + ART
+          - room: Orange Tower Third Floor
+            panel: DEER + WREN
+          - room: Orange Tower Fourth Floor
+            panel: LEARNS + UNSEW
+          - room: Orange Tower Fifth Floor
+            panel: DRAWL + RUNS
+      Seventh Floor:
+        id: "????"
+        skip_location: True
+        panels:
+          - room: Orange Tower First Floor
+            panel: DADS + ALE
+          - room: Outside The Undeterred
+            panel: ART + ART
+          - room: Orange Tower Third Floor
+            panel: DEER + WREN
+          - room: Orange Tower Fourth Floor
+            panel: LEARNS + UNSEW
+          - room: Orange Tower Fifth Floor
+            panel: DRAWL + RUNS
+          - room: Owl Hallway
+            panel: READS + RUST
   Orange Tower First Floor:
     entrances:
       Hub Room:
@@ -623,11 +786,13 @@
         colors: black
     doors:
       Shortcut to Hub Room:
-        - SECRET
+        panels:
+          - SECRET
       Salt/Pepper Door:
-        - SALT
-        - room: Directional Gallery
-          panel: PEPPER
+        panels:
+          - SALT
+          - room: Directional Gallery
+            panel: PEPPER
   Orange Tower Second Floor:
     entrances:
       Orange Tower First Floor:
@@ -720,7 +885,8 @@
           - door: Hot Crusts Door
     doors:
       Hot Crusts Door:
-        - HOT CRUSTS
+        panels:
+          - HOT CRUSTS
   Orange Tower Fifth Floor:
     entrances:
       Orange Tower Fourth Floor:
@@ -761,8 +927,9 @@
           door: Nines
     doors:
       Welcome Back:
-        - SIZE (Small)
-        - SIZE (Big)
+        panels:
+          - SIZE (Small)
+          - SIZE (Big)
   Orange Tower Sixth Floor:
     entrances:
       Orange Tower Fifth Floor:
@@ -777,7 +944,9 @@
     panels:
       # TODO
       THE END:
+        event: True
       THE MASTER:
+        event: True
   Roof:
     entrances:
       Orange Tower Seventh Floor: True
@@ -823,10 +992,11 @@
           door: Backside Door
     doors:
       Painting Shortcut:
-        - FIRST
-        - SECOND
-        - THIRD
-        - FOURTH
+        panels:
+          - FIRST
+          - SECOND
+          - THIRD
+          - FOURTH
       Backside Door:
         skip_location: True
         panels:
@@ -847,7 +1017,8 @@
         id: Panel_begin_start
     doors:
       Progress Door:
-        - BEGIN
+        panels:
+          - BEGIN
   The Colorful (Black):
     entrances:
       The Colorful (White):
@@ -859,7 +1030,8 @@
         colors: black
     doors:
       Progress Door:
-        - FOUND
+        panels:
+          - FOUND
   The Colorful (Red):
     entrances:
       The Colorful (Black):
@@ -871,7 +1043,8 @@
         colors: red
     doors:
       Progress Door:
-        - LOAF
+        panels:
+          - LOAF
   The Colorful (Yellow):
     entrances:
       The Colorful (Red):
@@ -883,7 +1056,8 @@
         colors: yellow
     doors:
       Progress Door:
-        - CREAM
+        panels:
+          - CREAM
   The Colorful (Blue):
     entrances:
       The Colorful (Yellow):
@@ -895,7 +1069,8 @@
         colors: blue
     doors:
       Progress Door:
-        - SUN
+        panels:
+          - SUN
   The Colorful (Purple):
     entrances:
       The Colorful (Blue):
@@ -907,7 +1082,8 @@
         colors: purple
     doors:
       Progress Door:
-        - SPOON
+        panels:
+          - SPOON
   The Colorful (Orange):
     entrances:
       The Colorful (Purple):
@@ -919,7 +1095,8 @@
         colors: orange
     doors:
       Progress Door:
-        - LETTERS
+        panels:
+          - LETTERS
   The Colorful (Green):
     entrances:
       The Colorful (Orange):
@@ -931,7 +1108,8 @@
         colors: green
     doors:
       Progress Door:
-        - WALLS
+        panels:
+          - WALLS
   The Colorful (Brown):
     entrances:
       The Colorful (Green):
@@ -943,7 +1121,8 @@
         colors: brown
     doors:
       Progress Door:
-        - IRON
+        panels:
+          - IRON
   The Colorful (Gray):
     entrances:
       The Colorful (Brown):
@@ -955,7 +1134,8 @@
         colors: gray
     doors:
       Progress Door:
-        - OBSTACLE
+        panels:
+          - OBSTACLE
   The Colorful:
     # We are going to pretend that the Roof access isn't a thing, because we
     # want to hide this panel until all of the doors have been opened. We might
@@ -998,7 +1178,8 @@
         check: True
     doors:
       Shortcut to Starting Room:
-        - WELCOME BACK
+        panels:
+          - WELCOME BACK
   Owl Hallway:
     entrances:
       Hidden Room: True
@@ -1015,7 +1196,8 @@
         check: True
     doors:
       Shortcut to Hedge Maze:
-        - STRAYS
+        panels:
+          - STRAYS
   Outside The Initiated:
     entrances:
       Hub Room:
@@ -1068,7 +1250,8 @@
         check: True
     doors:
       Shortcut to Hub Room:
-        - UNCOVER
+        panels:
+          - UNCOVER
       Blue Barrier:
         skip_location: True
         panels:
@@ -1080,7 +1263,8 @@
           - room: Champion's Rest
             panel: ORANGE
       Initiated Entrance:
-        - OXEN
+        panels:
+          - OXEN
       # These would be more appropriate in Champion's Rest, but as currently
       # implemented, locations need to include at least one panel from the
       # containing region.
@@ -1137,7 +1321,8 @@
           door: Fours
     doors:
       Color Hallways Entrance:
-        - HELLO
+        panels:
+          - HELLO
   Color Hallways:
     entrances:
       The Traveled:
@@ -1191,13 +1376,15 @@
           door: Nines
     doors:
       Bold Entrance:
-        - UNOPEN
+        panels:
+          - UNOPEN
       Steady Entrance:
-        - BEGIN
+        panels:
+          - BEGIN
   The Bold:
     entrances:
       Outside The Bold:
-        room: The Bold
+        room: Outside The Bold
         door: Bold Entrance
     panels:
       Achievement:
@@ -1273,9 +1460,11 @@
           door: Fours
     doors:
       Undeterred Entrance:
-        - PEN
+        panels:
+          - PEN
       Twos:
-        - ONE
+        panels:
+          - ONE
       Threes:
         location_name: Twos
         panels:
@@ -1304,7 +1493,8 @@
           - room: The Traveled
             panel: FOUR
       Challenge Entrance:
-        - ZERO
+        panels:
+          - ZERO
   The Undeterred:
     entrances:
       Outside The Undeterred:
@@ -1490,8 +1680,9 @@
           door: Yellow Barrier
     doors:
       Shortcut to The Undeterred:
-        - TURN
-        - LEARN
+        panels:
+          - TURN
+          - LEARN
       Yellow Barrier:
         skip_location: True
         panels:
@@ -1541,7 +1732,8 @@
         check: True
     doors:
       Shortcut to The Steady:
-        - EXIT
+        panels:
+          - EXIT
   The Bearer:
     entrances:
       # Let's treat the shortcut to the tower third floor as one-way for now,
@@ -1581,11 +1773,14 @@
           door: Backside Door
     doors:
       Shortcut to The Bold:
-        - MIDDLE
+        panels:
+          - MIDDLE
       Shortcut to Tower:
-        - SHORTCUT
+        panels:
+          - SHORTCUT
       Backside Door:
-        - FARTHER
+        panels:
+          - FARTHER
   The Steady:
     # For now, let's just let the doors in here be vanilla.
     entrances:
@@ -1638,7 +1833,8 @@
           - door: Exit
     doors:
       Exit:
-        - TRUSTED
+        panels:
+          - TRUSTED
   The Artistic (Smiley):
     entrances:
       Dead End Area: True
@@ -1932,7 +2128,8 @@
         id: "Panel_shrink_shrink"
     doors:
       Wondrous Entrance:
-        - SHRINK
+        panels:
+          - SHRINK
   The Wondrous:
     entrances:
       Outside The Wondrous:
@@ -1957,7 +2154,8 @@
           - room: Outside The Wondrous
             panel: SHRINK
       Exit:
-        - Achievement
+        panels:
+          - Achievement
   Wheelbarrow Hallway:
     entrances:
       Outside The Agreeable: True
@@ -1969,7 +2167,8 @@
         colors: blue
     doors:
       Exit:
-        - WHEELBARROW
+        panels:
+          - WHEELBARROW
   Elements Area:
     entrances:
       Roof: True
@@ -2005,8 +2204,9 @@
         colors: orange
     doors:
       Tower Entrance:
-        - WANDERLUST
-        - "1234567890"
+        panels:
+          - WANDERLUST
+          - "1234567890"
   Art Gallery:
     # For now, let's just let the doors in here be vanilla.
     # This also means that we won't allow reverse progression.
@@ -2033,7 +2233,8 @@
           - orange
     doors:
       Exit Door:
-        - ONE ROAD MANY TURNS
+        panels:
+          - ONE ROAD MANY TURNS
   Rhyme Room (Smiley):
     entrances:
       Orange Tower Third Floor:
@@ -2041,7 +2242,7 @@
         door: Rhyme Room Entrance
       Rhyme Room (Circle):
         room: Rhyme Room (Circle)
-        door: Door to Circle
+        door: Door to Smiley
       Rhyme Room (Cross): True # one-way
     panels:
       LOANS:
@@ -2067,10 +2268,11 @@
         id: Panel_mystery_syn
     doors:
       Door to Target:
-        - SCHEME
-        - FANTASY
-        - HISTORY
-        - SECRET
+        panels:
+          - SCHEME
+          - FANTASY
+          - HISTORY
+          - SECRET
   Rhyme Room (Cross):
     entrances:
       Rhyme Room (Target): # one-way
@@ -2109,10 +2311,11 @@
         id: Panel_fall_syn
     doors:
       Exit:
-        - PLUMP
-        - BOUNCE
-        - SCRAWL
-        - PLUNGE
+        panels:
+          - PLUMP
+          - BOUNCE
+          - SCRAWL
+          - PLUNGE
   Rhyme Room (Circle):
     entrances:
       Rhyme Room (Looped Square):
@@ -2153,7 +2356,7 @@
           - room: Rhyme Room (Smiley)
             panel: SKELETON
           - room: Rhyme Room (Smiley)
-            panel: REPENTENCE
+            panel: REPENTANCE
           - room: Rhyme Room (Smiley)
             panel: WORD
   Rhyme Room (Looped Square):
@@ -2260,10 +2463,11 @@
         id: Panel_creative_syn
     doors:
       Door to Cross:
-        - PISTOL
-        - QUARTZ
-        - INNOVATIVE (Top)
-        - INNOVATIVE (Bottom)
+        panels:
+          - PISTOL
+          - QUARTZ
+          - INNOVATIVE (Top)
+          - INNOVATIVE (Bottom)
   Room Room:
     # This is a bit of a weird room. You can't really get to it from the roof.
     # And even if you were to go through the shortcut on the fifth floor into
@@ -2284,9 +2488,10 @@
         colors: blue
     doors:
       Shortcut to Fifth Floor:
-        - BROOMED
-        - LAYS
-        - BASE
+        panels:
+          - BROOMED
+          - LAYS
+          - BASE
   Outside The Wise:
     entrances:
       Orange Tower Sixth Floor: True
@@ -2300,8 +2505,9 @@
         colors: brown
     doors:
       Wise Entrance:
-        - KITTEN
-        - CAT
+        panels:
+          - KITTEN
+          - CAT
   The Wise:
     entrances:
       Outside The Wise:
@@ -2336,7 +2542,8 @@
         id: Panel_open
     doors:
       Lab Entrance:
-        - OPEN
+        panels:
+          - OPEN
   The Lab:
     entrances:
       Outside The Lab:
@@ -2377,4 +2584,5 @@
           - orange
     doors:
       Welcome Door:
-        - WELCOME
+        panels:
+          - WELCOME
