@@ -166,6 +166,7 @@ class CommonContext:
     server_address: typing.Optional[str]
     password: typing.Optional[str]
     hint_cost: typing.Optional[int]
+    hint_points: typing.Optional[int]
     player_names: typing.Dict[int, str]
 
     finished_game: bool
@@ -711,6 +712,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.slot = args["slot"]
         # int keys get lost in JSON transfer
         ctx.slot_info = {int(pid): data for pid, data in args["slot_info"].items()}
+        ctx.hint_points = args.get("hint_points", 0)
         ctx.consume_players_package(args["players"])
         msgs = []
         if ctx.locations_checked:
