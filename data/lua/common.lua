@@ -1,19 +1,9 @@
 local lua_major, lua_minor = _VERSION:match("Lua (%d+)%.(%d+)")
-
+lua_major = tonumber(lua_major)
+lua_minor = tonumber(lua_minor)
 -- lua compat shims
 if lua_major > 5 or (lua_major == 5 and lua_minor >= 3) then
-  function bit.rshift(a, b)
-    return a >> b
-  end
-  function bit.lshift(a, b)
-    return a << b
-  end
-  function bit.bor(a, b)
-    return a | b
-  end
-  function bit.band(a, b)
-    return a & b
-  end
+  require("lua_5_3_compat")
 end
 
 function table.empty (self)
