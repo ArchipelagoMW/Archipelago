@@ -165,11 +165,6 @@ class MessengerWorld(World):
             Rules.MessengerOOBRules(self).set_messenger_rules()
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        locations: Dict[int, List[str]] = {}
-        for loc in self.multiworld.get_filled_locations(self.player):
-            if loc.item.code:
-                locations[loc.address] = [loc.item.name, self.multiworld.player_name[loc.item.player]]
-
         shop_prices = {}
         for item, price in self.shop_prices.items():
             shop_prices[SHOP_ITEMS[item].internal_name] = price
@@ -182,11 +177,7 @@ class MessengerWorld(World):
             "goal": self.multiworld.goal[self.player].current_key,
             "music_box": self.multiworld.music_box[self.player].value,
             "required_seals": self.required_seals,
-            "locations": locations,
-            "settings": {
-                "Difficulty": "Basic" if not self.multiworld.shuffle_seals[self.player] else "Advanced",
-                "Mega Shards": self.multiworld.shuffle_shards[self.player].value
-            },
+            "mega_shards": self.multiworld.shuffle_shards[self.player].value,
             "logic": self.multiworld.logic_level[self.player].current_key,
             "shop": shop_prices,
             "figures": figure_prices,
