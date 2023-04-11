@@ -844,29 +844,20 @@ class Region:
         for location, address in locations.items():
             self.locations.append(location_type(self.player, location, address, self))
 
-    def add_exits(self, exits: Union[Iterable[str], Dict[str, Optional[str]]],
-                  rules: Dict[str, Callable[[CollectionState], bool]] = None) -> None:
+    def add_exits(self, exits: Dict[str, Optional[str]], rules: Dict[str, Callable[[CollectionState], bool]] = None) -> None:
         """
         Connects current region to regions in exit dictionary. Passed region names must exist first.
 
         :param exits: exits from the region. format is {"connecting_region", "exit_name"}
         :param rules: rules for the exits from this region. format is {"connecting_region", rule}
         """
-        if isinstance(exits, Dict):
-            for exiting_region, name in exits.items():
-                ret = Entrance(self.player, name, self) if name \
-                    else Entrance(self.player, f"{self.name} -> {exiting_region}", self)
-                if rules and exiting_region in rules:
-                    ret.access_rule = rules[exiting_region]
-                self.exits.append(ret)
-                ret.connect(self.multiworld.get_region(exiting_region, self.player))
-        else:
-            for region in exits:
-                ret = Entrance(self.player, f"{self.name} -> {region}", self)
-                if rules and region in rules:
-                    ret.access_rule = rules[region]
-                self.exits.append(ret)
-                ret.connect(self.multiworld.get_region(region, self.player))
+        for exiting_region, name in exits.items():
+            ret = Entrance(self.player, name, self) if name \
+                else Entrance(self.player, f"{self.name} -> {exiting_region}", self)
+            if rules and exiting_region in rules:
+                ret.access_rule = rules[exiting_region]
+            self.exits.append(ret)
+            ret.connect(self.multiworld.get_region(exiting_region, self.player))
 
     def __repr__(self):
         return self.__str__()
