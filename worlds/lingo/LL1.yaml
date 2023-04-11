@@ -46,12 +46,14 @@
       Back Right Door:
         - HIDDEN
       Rhyme Room Entrance:
-        - room: The Tenacious
-          panel: LEVEL (Black)
-        - room: The Tenacious
-          panel: RACECAR (Black)
-        - room: The Tenacious
-          panel: SOLOS (Black)
+        skip_location: True
+        panels:
+          - room: The Tenacious
+            panel: LEVEL (Black)
+          - room: The Tenacious
+            panel: RACECAR (Black)
+          - room: The Tenacious
+            panel: SOLOS (Black)
   Hidden Room:
     entrances:
       Starting Room:
@@ -64,23 +66,28 @@
     panels:
       DEAD END:
         id: Panel_deadend_deadened
+        check: True
       OPEN:
         id: Panel_entrance_entrance
     doors:
       Dead End Door:
-        - room: Hub Room
-          panel: RAT
+        skip_location: true
+        panels:
+          - room: Hub Room
+            panel: RAT
       Seeker Entrance:
         - OPEN
       Rhyme Room Entrance:
-        - room: The Tenacious
-          panel: LEVEL (Black)
-        - room: The Tenacious
-          panel: RACECAR (Black)
-        - room: The Tenacious
-          panel: SOLOS (Black)
-        - room: Hub Room
-          panel: RAT
+        skip_location: True
+        panels:
+          - room: The Tenacious
+            panel: LEVEL (Black)
+          - room: The Tenacious
+            panel: RACECAR (Black)
+          - room: The Tenacious
+            panel: SOLOS (Black)
+          - room: Hub Room
+            panel: RAT
   The Seeker:
     entrances:
       Hidden Room:
@@ -133,8 +140,8 @@
       The Traveled:
         door: Traveled Entrance
       Roof: True # through the sunwarp
-      Outside The Undeterred:
-        room: Number Hunt
+      Outside The Undeterred: # this could be its own door
+        room: Outside The Undeterred
         door: Fours
     panels:
       ORDER:
@@ -154,12 +161,13 @@
       RAT:
         id: Panel_rat_tar
         colors: black
+        check: True
       OPEN:
         id: Panel_open_open"
       FOUR:
         id: "????"
         required_door:
-          room: Number Hunt
+          room: Outside The Undeterred
           door: Fours
     doors:
       # Not doing anything with LOST for now because it doesn't unlock access to anywhere
@@ -174,8 +182,10 @@
       Shortcut to Hedge Maze:
         - TRACE
       Near RAT Door:
-        - room: Hidden Room
-          panel: DEAD END
+        skip_location: True
+        panels:
+          - room: Hidden Room
+            panel: DEAD END
       Traveled Entrance:
         - OPEN
   Dead End Area:
@@ -190,7 +200,7 @@
       FOUR:
         id: Panel_four_four_2
         required_door:
-          room: Number Hunt
+          room: Outside The Undeterred
           door: Fours
       EIGHT:
         id: Panel_eight_eight_8
@@ -264,9 +274,11 @@
       Tower Entrance:
         - WE ROT
       Tower Back Entrance:
-        - TURN
-        - room: Orange Tower Fourth Floor
-          panel: RUNT
+        location_name: Crossroads - TURN/RUNT
+        panels:
+          - TURN
+          - room: Orange Tower Fourth Floor
+            panel: RUNT
       Words/Sword Door:
         - WORDS
         - SWORD
@@ -289,8 +301,10 @@
         colors: yellow
     doors:
       Exit:
-        - LOST (1)
-        - LOST (2)
+        location_name: Crossroads - LOST Pair
+        panels:
+          - LOST (1)
+          - LOST (2)
   Amen/Name Area:
     entrances:
       Crossroads:
@@ -344,9 +358,11 @@
         check: True
     doors:
       Shortcut to Hub Room:
-        - LEVEL (Black)
-        - RACECAR (Black)
-        - SOLOS (Black)
+        location_name: The Tenacious - Palindromes
+        panels:
+          - LEVEL (Black)
+          - RACECAR (Black)
+          - SOLOS (Black)
   Warts/Straw Area:
     entrances:
       Hub Room:
@@ -449,8 +465,10 @@
       Painting Shortcut:
         - RIGHT
       Purple Barrier:
-        - room: Champion's Rest
-          panel: PURPLE
+        skip_location: True
+        panels:
+          - room: Champion's Rest
+            panel: PURPLE
   Dread Hallway:
     entrances:
       Outside The Agreeable:
@@ -505,8 +523,10 @@
       Perceptive Entrance:
         - DOWN
       Observant Entrance:
-        - room: The Perceptive
-          panel: GAZE
+        skip_location: True
+        panels:
+          - room: The Perceptive
+            panel: GAZE
   The Perceptive:
     entrances:
       Starting Room:
@@ -522,6 +542,7 @@
         check: True
       GAZE:
         id: Panel_look_look
+        check: True
   The Fearless:
     entrances:
       The Perceptive: True
@@ -552,8 +573,10 @@
           door: Backside Door
     doors:
       Backside Door:
-        - FOUR (Left)
-        - FOUR (Middle)
+        location_name: The Observant - BACK and SIDE
+        panels:
+          - FOUR (Left)
+          - FOUR (Middle)
   The Incomparable:
     entrances:
       The Observant: True
@@ -569,11 +592,13 @@
         colors: blue
     doors:
       Eight Painting:
-        - I (Seven)
-        - room: Courtyard
-          panel: I
-        - room: Elements Area
-          panel: A
+        location_name: Giant Sevens
+        panels:
+          - I (Seven)
+          - room: Courtyard
+            panel: I
+          - room: Elements Area
+            panel: A
   Orange Tower First Floor:
     entrances:
       Hub Room:
@@ -641,15 +666,26 @@
         check: True
     doors:
       Red Barrier:
-        - room: Champion's Rest
-          panel: RED
+        skip_location: True
+        panels:
+          - room: Champion's Rest
+            panel: RED
       Rhyme Room Entrance:
-        - room: The Tenacious
-          panel: LEVEL (Black)
-        - room: The Tenacious
-          panel: RACECAR (Black)
-        - room: The Tenacious
-          panel: SOLOS (Black)
+        skip_location: True
+        panels:
+          - room: The Tenacious
+            panel: LEVEL (Black)
+          - room: The Tenacious
+            panel: RACECAR (Black)
+          - room: The Tenacious
+            panel: SOLOS (Black)
+      Orange Barrier: # see note in Outside The Initiated
+        location_name: Color Hunt - RED and YELLOW
+        item_name: Champion's Rest - Orange Barrier
+        panels:
+          - RED
+          - room: Directional Gallery
+            panel: YELLOW
   Orange Tower Fourth Floor:
     entrances:
       Orange Tower Third Floor:
@@ -792,13 +828,17 @@
         - THIRD
         - FOURTH
       Backside Door:
-        - FIRST
-        - SECOND
-        - THIRD
-        - FOURTH
+        skip_location: True
+        panels:
+          - FIRST
+          - SECOND
+          - THIRD
+          - FOURTH
       Green Barrier:
-        - room: Champion's Rest
-          panel: GREEN
+        skip_location: True
+        panels:
+          - room: Champion's Rest
+            panel: GREEN
   The Colorful (White):
     entrances:
       Courtyard: True
@@ -1030,13 +1070,43 @@
       Shortcut to Hub Room:
         - UNCOVER
       Blue Barrier:
-        - room: Champion's Rest
-          panel: BLUE
+        skip_location: True
+        panels:
+          - room: Champion's Rest
+            panel: BLUE
       Orange Barrier:
-        - room: Champion's Rest
-          panel: ORANGE
+        skip_location: True
+        panels:
+          - room: Champion's Rest
+            panel: ORANGE
       Initiated Entrance:
         - OXEN
+      # These would be more appropriate in Champion's Rest, but as currently
+      # implemented, locations need to include at least one panel from the
+      # containing region.
+      Green Barrier:
+        location_name: Color Hunt - BLUE and YELLOW
+        item_name: Champion's Rest - Green Barrier
+        panels:
+          - BLUE
+          - room: Directional Gallery
+            panel: YELLOW
+      Purple Barrier:
+        location_name: Color Hunt - RED and BLUE
+        item_name: Champion's Rest - Purple Barrier
+        panels:
+          - BLUE
+          - room: Orange Tower Third Floor
+            panel: RED
+      Entrance:
+        location_name: Color Hunt - GREEN, ORANGE and PURPLE
+        item_name: Champion's Rest - Entrance
+        panels:
+          - ORANGE
+          - room: Courtyard
+            panel: GREEN
+          - room: Outside The Agreeable
+            panel: PURPLE
   The Initiated:
     entrances:
       Outside The Initiated:
@@ -1063,7 +1133,7 @@
       FOUR:
         id: "????"
         required_door:
-          room: Number Hunt
+          room: Outside The Undeterred
           door: Fours
     doors:
       Color Hallways Entrance:
@@ -1165,6 +1235,7 @@
       ZERO:
         id: Panel_zero_zero
         required_door:
+          room: Number Hunt
           door: Zero Door
       ONE:
         id: Panel_one_one
@@ -1191,7 +1262,6 @@
       FOUR:
         id: Panel_four_four
         required_door:
-          room: Number Hunt
           door: Fours
     doors:
       Undeterred Entrance:
@@ -1199,31 +1269,34 @@
       Twos:
         - ONE
       Threes:
-        - TWO (1)
-        - TWO (2)
+        location_name: Twos
+        panels:
+          - TWO (1)
+          - TWO (2)
       Number Hunt:
-        - THREE (1)
-        - THREE (2)
-        - THREE (3)
-      Zero Door:
-        - room: Number Hunt
-          panel: NINE
-        - room: Directional Gallery
-          panel: NINE
-        - room: Amen/Name Area
-          panel: NINE
-        - room: Courtyard
-          panel: NINE
-        - room: Outside The Initiated
-          panel: NINE
-        - room: Outside The Bold
-          panel: NINE
-        - room: Rhyme Room (Cross)
-          panel: NINE
-        - room: Orange Tower Fifth Floor
-          panel: NINE
-        - room: Elements Area
-          panel: NINE
+        location_name: Threes
+        panels:
+          - THREE (1)
+          - THREE (2)
+          - THREE (3)
+      Fours:
+        skip_location: True
+        panels:
+          - THREE (1)
+          - THREE (2)
+          - THREE (3)
+      Fives:
+        location_name: Fours
+        panels:
+          - FOUR
+          - room: Hub Room
+            panel: FOUR
+          - room: Dead End Area
+            panel: FOUR
+          - room: The Traveled
+            panel: FOUR
+      Challenge Entrance:
+        - ZERO
   The Undeterred:
     entrances:
       Outside The Undeterred:
@@ -1243,11 +1316,13 @@
         room: Outside The Undeterred
         door: Number Hunt
       Challenge Room:
+        room: Outside The Undeterred
         door: Challenge Entrance
     panels:
       FIVE:
         id: Panel_five_five
         required_door:
+          room: Outside The Undeterred
           door: Fives
       SIX:
         id: Panel_six_six
@@ -1266,77 +1341,86 @@
         required_door:
           door: Nines
     doors:
-      Fours:
-        - room: Outside The Undeterred
-          panel: THREE (1)
-        - room: Outside The Undeterred
-          panel: THREE (2)
-        - room: Outside The Undeterred
-          panel: THREE (3)
-      Fives:
-        - room: Outside The Undeterred
-          panel: FOUR
-        - room: Hub Room
-          panel: FOUR
-        - room: Dead End Area
-          panel: FOUR
-        - room: The Traveled
-          panel: FOUR
       Sixes:
-        - FIVE
-        - room: Outside The Agreeable
-          panel: FIVE (1)
-        - room: Outside The Agreeable
-          panel: FIVE (2)
-        - room: Directional Gallery
-          panel: FIVE (1)
-        - room: Directional Gallery
-          panel: FIVE (2)
+        location_name: Fives
+        panels:
+          - FIVE
+          - room: Outside The Agreeable
+            panel: FIVE (1)
+          - room: Outside The Agreeable
+            panel: FIVE (2)
+          - room: Directional Gallery
+            panel: FIVE (1)
+          - room: Directional Gallery
+            panel: FIVE (2)
       Sevens:
-        - SIX
-        - room: Outside The Bold
-          panel: SIX
-        - room: Directional Gallery
-          panel: SIX (1)
-        - room: Directional Gallery
-          panel: SIX (2)
-        - room: The Bearer
-          panel: SIX (1)
-        - room: The Bearer
-          panel: SIX (2)
+        location_name: Sixes
+        panels:
+          - SIX
+          - room: Outside The Bold
+            panel: SIX
+          - room: Directional Gallery
+            panel: SIX (1)
+          - room: Directional Gallery
+            panel: SIX (2)
+          - room: The Bearer
+            panel: SIX (1)
+          - room: The Bearer
+            panel: SIX (2)
       Eights:
-        - SEVEN
-        - room: Directional Gallery
-          panel: SEVEN
-        - room: Knight/Night Room
-          panel: SEVEN (1)
-        - room: Knight/Night Room
-          panel: SEVEN (2)
-        - room: Knight/Night Room
-          panel: SEVEN (3)
-        - room: Outside The Initiated
-          panel: SEVEN (1)
-        - room: Outside The Initiated
-          panel: SEVEN (2)
+        location_name: Sevens
+        panels:
+          - SEVEN
+          - room: Directional Gallery
+            panel: SEVEN
+          - room: Knight/Night Room
+            panel: SEVEN (1)
+          - room: Knight/Night Room
+            panel: SEVEN (2)
+          - room: Knight/Night Room
+            panel: SEVEN (3)
+          - room: Outside The Initiated
+            panel: SEVEN (1)
+          - room: Outside The Initiated
+            panel: SEVEN (2)
       Nines:
-        - EIGHT
-        - room: Directional Gallery
-          panel: EIGHT
-        - room: The Eyes They See
-          panel: EIGHT
-        - room: Dead End Area
-          panel: EIGHT
-        - room: Crossroads
-          panel: EIGHT
-        - room: Orange Tower Fourth Floor
-          panel: EIGHT
-        - room: Art Gallery
-          panel: EIGHT
-        - room: Outside The Initiated
-          panel: EIGHT
-      Challenge Entrance:
-        - room: Outside The Undeterred
-          panel: ZERO
+        location_name: Eights
+        panels:
+          - EIGHT
+          - room: Directional Gallery
+            panel: EIGHT
+          - room: The Eyes They See
+            panel: EIGHT
+          - room: Dead End Area
+            panel: EIGHT
+          - room: Crossroads
+            panel: EIGHT
+          - room: Orange Tower Fourth Floor
+            panel: EIGHT
+          - room: Art Gallery
+            panel: EIGHT
+          - room: Outside The Initiated
+            panel: EIGHT
+      Zero Door:
+        location_name: Nines
+        panels:
+          - NINE
+          - room: Directional Gallery
+            panel: NINE
+          - room: Amen/Name Area
+            panel: NINE
+          - room: Courtyard
+            panel: NINE
+          - room: Outside The Initiated
+            panel: NINE
+          - room: Outside The Bold
+            panel: NINE
+          - room: Rhyme Room (Cross)
+            panel: NINE
+          - room: Orange Tower Fifth Floor
+            panel: NINE
+          - room: Elements Area
+            panel: NINE
   Directional Gallery:
     entrances:
       Outside The Agreeable: True # sunwarp
@@ -1401,8 +1485,10 @@
         - TURN
         - LEARN
       Yellow Barrier:
-        - room: Champion's Rest
-          panel: YELLOW
+        skip_location: True
+        panels:
+          - room: Champion's Rest
+            panel: YELLOW
   Champion's Rest:
     entrances:
       Outside The Bold:
@@ -1414,52 +1500,40 @@
         id: Panel_red_red
       RED:
         id: Panel_red_near
+        check: True
       BLUE:
         id: Panel_blue_near
+        check: True
       YELLOW:
         id: Panel_yellow_near
+        check: True
       GREEN:
         id: Panel_green_near
+        check: True
         required_door:
+          room: Outside The Initiated
           door: Green Barrier
       PURPLE:
         id: Panel_purple_near
+        check: True
         required_door:
+          room: Outside The Initiated
           door: Purple Barrier
       ORANGE:
         id: Panel_orange_near
+        check: True
         required_door:
+          room: Orange Tower Third Floor
           door: Orange Barrier
       YOU:
         id: Panel_you
         required_door:
+          room: Outside The Initiated
           door: Entrance
         check: True
     doors:
       Shortcut to The Steady:
         - EXIT
-      Green Barrier:
-        - room: Outside The Initiated
-          panel: BLUE
-        - room: Directional Gallery
-          panel: YELLOW
-      Purple Barrier:
-        - room: Outside The Initiated
-          panel: BLUE
-        - room: Orange Tower Third Floor
-          panel: RED
-      Orange Barrier:
-        - room: Orange Tower Third Floor
-          panel: RED
-        - room: Directional Gallery
-          panel: YELLOW
-      Entrance:
-        - room: Courtyard
-          panel: GREEN
-        - room: Outside The Initiated
-          panel: ORANGE
-        - room: Outside The Agreeable
-          panel: PURPLE
   The Bearer:
     entrances:
       # Let's treat the shortcut to the tower third floor as one-way for now,
@@ -1612,28 +1686,30 @@
         colors: yellow
     doors:
       Door to Panda:
-        - FINE
-        - BLADE
-        - RED
-        - BEARD
-        - ICE
-        - ROOT
-        - room: The Artistic (Panda)
-          panel: EYE (Top)
-        - room: The Artistic (Panda)
-          panel: EYE (Bottom)
-        - room: The Artistic (Panda)
-          panel: LADYLIKE
-        - room: The Artistic (Panda)
-          panel: WATER
-        - room: The Artistic (Panda)
-          panel: OURS
-        - room: The Artistic (Panda)
-          panel: DAYS
-        - room: The Artistic (Panda)
-          panel: NIGHTTIME
-        - room: The Artistic (Panda)
-          panel: NIGHT
+        location_name: The Artistic - Smiley and Panda
+        panels:
+          - FINE
+          - BLADE
+          - RED
+          - BEARD
+          - ICE
+          - ROOT
+          - room: The Artistic (Panda)
+            panel: EYE (Top)
+          - room: The Artistic (Panda)
+            panel: EYE (Bottom)
+          - room: The Artistic (Panda)
+            panel: LADYLIKE
+          - room: The Artistic (Panda)
+            panel: WATER
+          - room: The Artistic (Panda)
+            panel: OURS
+          - room: The Artistic (Panda)
+            panel: DAYS
+          - room: The Artistic (Panda)
+            panel: NIGHTTIME
+          - room: The Artistic (Panda)
+            panel: NIGHT
   The Artistic (Panda):
     entrances:
       Orange Tower Sixth Floor: True
@@ -1670,30 +1746,32 @@
         colors: blue
     doors:
       Door to Apple:
-        - EYE (Top)
-        - EYE (Bottom)
-        - LADYLIKE
-        - WATER
-        - OURS
-        - DAYS
-        - NIGHTTIME
-        - NIGHT
-        - room: The Artistic (Apple)
-          panel: POSH
-        - room: The Artistic (Apple)
-          panel: MALL
-        - room: The Artistic (Apple)
-          panel: DEICIDE
-        - room: The Artistic (Apple)
-          panel: WAVER
-        - room: The Artistic (Apple)
-          panel: REPAID
-        - room: The Artistic (Apple)
-          panel: BABY
-        - room: The Artistic (Apple)
-          panel: LOBE
-        - room: The Artistic (Apple)
-          panel: BOWELS
+        location_name: The Artistic - Panda and Apple
+        panels:
+          - EYE (Top)
+          - EYE (Bottom)
+          - LADYLIKE
+          - WATER
+          - OURS
+          - DAYS
+          - NIGHTTIME
+          - NIGHT
+          - room: The Artistic (Apple)
+            panel: POSH
+          - room: The Artistic (Apple)
+            panel: MALL
+          - room: The Artistic (Apple)
+            panel: DEICIDE
+          - room: The Artistic (Apple)
+            panel: WAVER
+          - room: The Artistic (Apple)
+            panel: REPAID
+          - room: The Artistic (Apple)
+            panel: BABY
+          - room: The Artistic (Apple)
+            panel: LOBE
+          - room: The Artistic (Apple)
+            panel: BOWELS
   The Artistic (Apple):
     entrances:
       Orange Tower Sixth Floor: True
@@ -1730,30 +1808,32 @@
         colors: red
     doors:
       Door to Lattice:
-        - POSH
-        - MALL
-        - DEICIDE
-        - WAVER
-        - REPAID
-        - BABY
-        - LOBE
-        - BOWELS
-        - room: The Artistic (Lattice)
-          panel: SPRIG
-        - room: The Artistic (Lattice)
-          panel: RELEASES
-        - room: The Artistic (Lattice)
-          panel: MUCH
-        - room: The Artistic (Lattice)
-          panel: FISH
-        - room: The Artistic (Lattice)
-          panel: MASK
-        - room: The Artistic (Lattice)
-          panel: HILL
-        - room: The Artistic (Lattice)
-          panel: TINE
-        - room: The Artistic (Lattice)
-          panel: THING
+        location_name: The Artistic - Apple and Lattice
+        panels:
+          - POSH
+          - MALL
+          - DEICIDE
+          - WAVER
+          - REPAID
+          - BABY
+          - LOBE
+          - BOWELS
+          - room: The Artistic (Lattice)
+            panel: SPRIG
+          - room: The Artistic (Lattice)
+            panel: RELEASES
+          - room: The Artistic (Lattice)
+            panel: MUCH
+          - room: The Artistic (Lattice)
+            panel: FISH
+          - room: The Artistic (Lattice)
+            panel: MASK
+          - room: The Artistic (Lattice)
+            panel: HILL
+          - room: The Artistic (Lattice)
+            panel: TINE
+          - room: The Artistic (Lattice)
+            panel: THING
   The Artistic (Lattice):
     entrances:
       Directional Gallery: True
@@ -1789,26 +1869,28 @@
         colors: yellow
     doors:
       Door to Smiley:
-        - SPRIG
-        - RELEASES
-        - MUCH
-        - FISH
-        - MASK
-        - HILL
-        - TINE
-        - THING
-        - room: The Artistic (Smiley)
-          panel: FINE
-        - room: The Artistic (Smiley)
-          panel: BLADE
-        - room: The Artistic (Smiley)
-          panel: RED
-        - room: The Artistic (Smiley)
-          panel: BEARD
-        - room: The Artistic (Smiley)
-          panel: ICE
-        - room: The Artistic (Smiley)
-          panel: ROOT
+        location_name: The Artistic - Lattice and Smiley
+        panels:
+          - SPRIG
+          - RELEASES
+          - MUCH
+          - FISH
+          - MASK
+          - HILL
+          - TINE
+          - THING
+          - room: The Artistic (Smiley)
+            panel: FINE
+          - room: The Artistic (Smiley)
+            panel: BLADE
+          - room: The Artistic (Smiley)
+            panel: RED
+          - room: The Artistic (Smiley)
+            panel: BEARD
+          - room: The Artistic (Smiley)
+            panel: ICE
+          - room: The Artistic (Smiley)
+            panel: ROOT
   The Discerning:
     entrances:
       Crossroads:
@@ -1862,8 +1944,10 @@
           - red
     doors:
       Painting Shortcut:
-        - room: Outside The Wondrous
-          panel: SHRINK
+        skip_location: True
+        panels:
+          - room: Outside The Wondrous
+            panel: SHRINK
       Exit:
         - Achievement
   Wheelbarrow Hallway:
@@ -2050,18 +2134,20 @@
         id: Panel_silent_syn
     doors:
       Door to Smiley:
-        - BIRD
-        - LETTER
-        - VIOLENT
-        - MUTE
-        - room: Rhyme Room (Smiley)
-          panel: LOANS
-        - room: Rhyme Room (Smiley)
-          panel: SKELETON
-        - room: Rhyme Room (Smiley)
-          panel: REPENTENCE
-        - room: Rhyme Room (Smiley)
-          panel: WORD
+        location_name: Rhyme Room - Circle/Smiley Wall
+        panels:
+          - BIRD
+          - LETTER
+          - VIOLENT
+          - MUTE
+          - room: Rhyme Room (Smiley)
+            panel: LOANS
+          - room: Rhyme Room (Smiley)
+            panel: SKELETON
+          - room: Rhyme Room (Smiley)
+            panel: REPENTENCE
+          - room: Rhyme Room (Smiley)
+            panel: WORD
   Rhyme Room (Looped Square):
     entrances:
       Starting Room:
@@ -2096,44 +2182,50 @@
         id: Panel_double_syn
     doors:
       Door to Circle:
-        - WALKED
-        - OBSTRUCTED
-        - SKIES
-        - SWELL
-        - room: Rhyme Room (Circle)
-          panel: BIRD
-        - room: Rhyme Room (Circle)
-          panel: LETTER
-        - room: Rhyme Room (Circle)
-          panel: FORBIDDEN
-        - room: Rhyme Room (Circle)
-          panel: CONCEALED
+        location_name: Rhyme Room - Circle/Looped Square Wall
+        panels:
+          - WALKED
+          - OBSTRUCTED
+          - SKIES
+          - SWELL
+          - room: Rhyme Room (Circle)
+            panel: BIRD
+          - room: Rhyme Room (Circle)
+            panel: LETTER
+          - room: Rhyme Room (Circle)
+            panel: FORBIDDEN
+          - room: Rhyme Room (Circle)
+            panel: CONCEALED
       Door to Cross:
-        - SKIES
-        - SWELL
-        - PENNED
-        - CLIMB
-        - room: Rhyme Room (Cross)
-          panel: FERN
-        - room: Rhyme Room (Cross)
-          panel: STAY
-        - room: Rhyme Room (Cross)
-          panel: FRIEND
-        - room: Rhyme Room (Cross)
-          panel: RISE
+        location_name: Rhyme Room - Cross/Looped Square Wall
+        panels:
+          - SKIES
+          - SWELL
+          - PENNED
+          - CLIMB
+          - room: Rhyme Room (Cross)
+            panel: FERN
+          - room: Rhyme Room (Cross)
+            panel: STAY
+          - room: Rhyme Room (Cross)
+            panel: FRIEND
+          - room: Rhyme Room (Cross)
+            panel: RISE
       Door to Target:
-        - PENNED
-        - CLIMB
-        - TROUBLE
-        - DUPLICATE
-        - room: Rhyme Room (Target)
-          panel: WILD
-        - room: Rhyme Room (Target)
-          panel: KID
-        - room: Rhyme Room (Target)
-          panel: PISTOL
-        - room: Rhyme Room (Target)
-          panel: QUARTZ
+        location_name: Rhyme Room - Target/Looped Square Wall
+        panels:
+          - PENNED
+          - CLIMB
+          - TROUBLE
+          - DUPLICATE
+          - room: Rhyme Room (Target)
+            panel: WILD
+          - room: Rhyme Room (Target)
+            panel: KID
+          - room: Rhyme Room (Target)
+            panel: PISTOL
+          - room: Rhyme Room (Target)
+            panel: QUARTZ
   Rhyme Room (Target):
     entrances:
       Rhyme Room (Smiley): # one-way
@@ -2258,7 +2350,7 @@
       Welcome Back Area:
         door: Welcome Door
       Number Hunt:
-        room: Number Hunt
+        room: Outside The Undeterred
         door: Challenge Entrance
     panels:
       WELCOME:
