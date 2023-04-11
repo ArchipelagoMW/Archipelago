@@ -12,6 +12,7 @@ from typing import Dict, List, Optional, Set, Tuple
 import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
 from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
+from Options import StartInventoryPool
 from Utils import __version__, get_options, output_path, version_tuple
 from worlds import AutoWorld
 from worlds.alttp.Regions import is_main_entrance
@@ -116,10 +117,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for _ in range(count):
                 world.push_precollected(world.create_item(item_name, player))
 
-        if player in world.start_inventory_from_pool:
-            for item_name, count in world.start_inventory_from_pool[player].value.items():
-                for _ in range(count):
-                    world.push_precollected(world.create_item(item_name, player))
+        for item_name, count in world.start_inventory_from_pool.setdefault(player, StartInventoryPool({})).value.items():
+            for _ in range(count):
+                world.push_precollected(world.create_item(item_name, player))
 
     logger.info('Creating World.')
     AutoWorld.call_all(world, "create_regions")
@@ -156,8 +156,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     # remove starting inventory from pool items.
     # Because some worlds don't actually create items during create_items this has to be as late as possible.
-    if player in world.start_inventory_from_pool and any(
-            world.start_inventory_from_pool[player].value for player in world.player_ids):
+    if any(world.start_inventory_from_pool[player].value for player in world.player_ids):
         new_items: List[Item] = []
         depletion_pool: Dict[int, Dict[str, int]] = {
             player: world.start_inventory_from_pool[player].value.copy() for player in world.player_ids}

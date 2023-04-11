@@ -7,9 +7,9 @@ import random
 import secrets
 import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
-from collections import OrderedDict, Counter, deque, ChainMap
+from collections import ChainMap, Counter, OrderedDict, deque
 from enum import IntEnum, IntFlag
-from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable, NamedTuple
+from typing import Any, Callable, Dict, Iterable, List, NamedTuple, Optional, Set, Tuple, TypedDict, Union
 
 import NetUtils
 import Options
@@ -73,6 +73,7 @@ class MultiWorld():
     exclude_locations: Dict[int, Options.ExcludeLocations]
     priority_locations: Dict[int, Options.PriorityLocations]
     start_inventory: Dict[int, Options.StartInventory]
+    start_inventory_from_pool: Dict[int, Options.StartInventoryPool]
     start_hints: Dict[int, Options.StartHints]
     start_location_hints: Dict[int, Options.StartLocationHints]
     item_links: Dict[int, Options.ItemLinks]
@@ -121,7 +122,6 @@ class MultiWorld():
         self.early_items = {player: {} for player in self.player_ids}
         self.local_early_items = {player: {} for player in self.player_ids}
         self.indirect_connections = {}
-        self.start_inventory_from_pool = {player: Options.StartInventoryPool({}) for player in range(1, players + 1)}
         self.fix_trock_doors = self.AttributeProxy(
             lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
         self.fix_skullwoods_exit = self.AttributeProxy(
