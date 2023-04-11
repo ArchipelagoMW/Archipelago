@@ -131,6 +131,7 @@ def create():
                     "type": "items-list",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                     "description": get_html_doc(option),
+                    "defaultValue": list(option.default)
                 }
 
             elif issubclass(option, Options.LocationSet):
@@ -138,6 +139,7 @@ def create():
                     "type": "locations-list",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                     "description": get_html_doc(option),
+                    "defaultValue": list(option.default)
                 }
 
             elif issubclass(option, Options.VerifyKeys):
@@ -147,6 +149,7 @@ def create():
                         "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                         "description": get_html_doc(option),
                         "options": list(option.valid_keys),
+                        "defaultValue": list(option.default) if hasattr(option, "default") else []
                     }
 
             else:

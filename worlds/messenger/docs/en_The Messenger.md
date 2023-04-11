@@ -32,7 +32,9 @@ You can find items wherever items can be picked up in the original game. This in
 * Quest Item pickups
 * Music Box notes
 * Phobekins
+* Bosses
 * Power seals
+* Mega Time Shards
 
 ## What are the item name groups?
 
@@ -56,20 +58,20 @@ for it. The groups you can use for The Messenger are:
         is recommended to quit to title and reload the save
 * After reaching ninja village a teleport option is added to the menu to reach it quickly
 * Toggle Windmill Shuriken button is added to option menu once the item is received
+* The mod option menu will also have a hint item button, as well as a release and collect button that are all placed when
+  the player fulfills the necessary conditions.
 
 ## Currently known issues
 * Necro cutscene will sometimes not play correctly, but will still reward the item
 * Ruxxtin Coffin cutscene will sometimes not play correctly, but will still reward the item
-* If you receive the Fairy Bottle while in Quillshroom Marsh, The Decurse Queen cutscene will not play. You can exit
+* If you receive the Fairy Bottle while in Quillshroom Marsh, The De-curse Queen cutscene will not play. You can exit
   to Searing Crags and re-enter to get it to play correctly.
-* If you defeat Barma'thazël, the cutscene afterward will not play correctly since that is what normally transitions
-  you to 2nd quest. The game will not kill you if you fall here, so you can teleport to HQ at any point after defeating him.
 * Sometimes upon teleporting back to HQ, Ninja will run left and enter a different portal than the one entered by the
-  player.
+  player. This may also cause a softlock.
 * Text entry menus don't accept controller input
-* Opening the shop chest in power seal hunt mode from the tower of time HQ will soft lock the game.
+* Opening the shop chest in power seal hunt mode from the tower of time HQ will softlock the game.
 
 ## What do I do if I have a problem?
 
 If you believe something happened that isn't intended, please get the `log.txt`from the folder of your game installation
-and send a bug report either on github or the [Archipelago Discord Server](http://archipelago.gg/discord)
+and send a bug report either on GitHub or the [Archipelago Discord Server](http://archipelago.gg/discord)
