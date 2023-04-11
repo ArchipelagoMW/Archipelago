@@ -1,7 +1,7 @@
 local lua_major, lua_minor = _VERSION:match("Lua (%d+)%.(%d+)")
 
 -- lua compat shims
-if lua_major > 5 or lua_major == 5 and lua_minor >= 3 then
+if lua_major > 5 or (lua_major == 5 and lua_minor >= 3) then
   function bit.rshift(a, b)
     return a >> b
   end
