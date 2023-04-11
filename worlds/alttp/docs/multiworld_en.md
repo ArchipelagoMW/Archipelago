@@ -89,7 +89,9 @@ the lua you are using in your file explorer and copy the `socket.dll` to the bas
 
 ##### BizHawk
 
-1. Ensure your BizHawk is 2.8 or older, not 2.9 or newer.
+1. Ensure your BizHawk is supported.
+    - Windows: BizHawk is 2.8 or older, not 2.9 or newer
+    - Linux: Bizhawk is 2.9.1 or newer, not 2.9 or older
     - You can check in Help -> About
 2. Ensure you have the BSNES core loaded. You may do this by clicking on the Tools menu in BizHawk and following these
    menu options:  
