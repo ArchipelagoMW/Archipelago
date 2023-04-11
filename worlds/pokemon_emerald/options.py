@@ -391,7 +391,6 @@ class ReceiveItemMessages(Choice):
     default = 0
     option_all = 0
     option_progression = 1
-    option_none = 2
 
 
 option_definitions: Dict[str, Option] = {
