@@ -45,7 +45,7 @@ local cb2_address = 0x22C0 + 4                     -- gMain + offset
 local archipelago_received_item_address = 0x3A028  -- gArchipelagoReceivedItem
 
 -- ROM addresses
-local cb2_overworld_func_address = 0x8085E98 + 1   -- CB2_Overworld + 1
+local cb2_overworld_func_address = 0x8085FB0 + 1   -- CB2_Overworld + 1
 
 -- Set us as safe if we're in the overworld and player has control
 function check_game_state ()
@@ -94,7 +94,7 @@ end
 function create_message ()
     local data = {}
 
-    data["script_version"] = 2
+    data["script_version"] = 1
 
     if (current_game_state == GAME_STATE_SAFE) then
         local save_block_address = memory.read_u32_le(save_block_ptr_address, "IWRAM") - ewram_start

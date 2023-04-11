@@ -347,6 +347,18 @@ class BlindTrainers(Toggle):
     display_name = "Blind Trainers"
 
 
+class DoubleBattleChance(Range):
+    """
+    The percent chance that a trainer with more than 1 pokemon will be converted into a double battle.
+
+    If these trainers would normally approach you, they will only do so if you have 2 unfainted pokemon. They can be battled by talking to them no matter what.
+    """
+    display_name = "Double Battle Chance"
+    range_start = 0
+    range_end = 100
+    default = 0
+
+
 class BetterShops(Toggle):
     """
     Pokemarts sell every item that can be obtained in a pokemart (except mail, which is still unique to the relevant city)
@@ -421,6 +433,7 @@ option_definitions: Dict[str, Option] = {
   "guaranteed_catch": GuaranteedCatch,
   "exp_modifier": ExpModifier,
   "blind_trainers": BlindTrainers,
+  "double_battle_chance": DoubleBattleChance,
   "better_shops": BetterShops,
   "fly_without_badge": FlyWithoutBadge,
   "turbo_a": TurboA,
