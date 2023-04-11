@@ -1147,6 +1147,14 @@
       Outside The Undeterred: True
       Crossroads: True
       Hedge Maze: True
+      Outside The Initiated: True # backside
+      Directional Gallery: True # backside
+      Courtyard:
+        room: Courtyard
+        door: Backside Door
+      The Bearer:
+        room: The Bearer
+        door: Backside Door
   Outside The Bold:
     entrances:
       Color Hallways: True
