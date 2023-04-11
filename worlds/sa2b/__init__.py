@@ -61,6 +61,7 @@ class SA2BWorld(World):
     location_table: typing.Dict[str, int]
 
     music_map: typing.Dict[int, int]
+    voice_map: typing.Dict[int, int]
     mission_map: typing.Dict[int, int]
     mission_count_map: typing.Dict[int, int]
     emblems_for_cannons_core: int
@@ -74,6 +75,7 @@ class SA2BWorld(World):
             "ModVersion": 201,
             "Goal": self.multiworld.goal[self.player].value,
             "MusicMap": self.music_map,
+            "VoiceMap": self.voice_map,
             "MissionMap": self.mission_map,
             "MissionCountMap": self.mission_count_map,
             "MusicShuffle": self.multiworld.music_shuffle[self.player].value,
@@ -164,10 +166,13 @@ class SA2BWorld(World):
             self.multiworld.ice_trap_weight[self.player].value = 0
             self.multiworld.slow_trap_weight[self.player].value = 0
 
-            valid_trap_weights = self.multiworld.exposition_trap_weight[self.player].value + self.multiworld.pong_trap_weight[self.player].value
+            valid_trap_weights = self.multiworld.exposition_trap_weight[self.player].value + \
+                                 self.multiworld.cutscene_trap_weight[self.player].value + \
+                                 self.multiworld.pong_trap_weight[self.player].value
 
             if valid_trap_weights == 0:
                 self.multiworld.exposition_trap_weight[self.player].value = 4
+                self.multiworld.cutscene_trap_weight[self.player].value = 4
                 self.multiworld.pong_trap_weight[self.player].value = 4
 
             if self.multiworld.kart_race_checks[self.player].value == 0:
@@ -276,6 +281,7 @@ class SA2BWorld(World):
         #trap_weights += ([ItemName.darkness_trap] * self.multiworld.darkness_trap_weight[self.player].value)
         trap_weights += ([ItemName.ice_trap] * self.multiworld.ice_trap_weight[self.player].value)
         trap_weights += ([ItemName.slow_trap] * self.multiworld.slow_trap_weight[self.player].value)
+        trap_weights += ([ItemName.cutscene_trap] * self.multiworld.cutscene_trap_weight[self.player].value)
         trap_weights += ([ItemName.pong_trap] * self.multiworld.pong_trap_weight[self.player].value)
 
         junk_count += extra_junk_count
@@ -351,6 +357,35 @@ class SA2BWorld(World):
                         musiclist_s[i] += 100
 
             self.music_map = dict(zip(musiclist_o, musiclist_s))
+
+        # Voice Shuffle
+        if self.multiworld.voice_shuffle[self.player] == "shuffled":
+            voicelist_o = list(range(0, 2623))
+            voicelist_s = voicelist_o.copy()
+            self.multiworld.random.shuffle(voicelist_s)
+
+            self.voice_map = dict(zip(voicelist_o, voicelist_s))
+        elif self.multiworld.voice_shuffle[self.player] == "rude":
+            voicelist_o = list(range(0, 2623))
+            voicelist_s = voicelist_o.copy()
+            self.multiworld.random.shuffle(voicelist_s)
+
+            for i in range(len(voicelist_s)):
+                if self.multiworld.random.randint(1,100) > 70:
+                    voicelist_s[i] = 17
+
+            self.voice_map = dict(zip(voicelist_o, voicelist_s))
+        elif self.multiworld.voice_shuffle[self.player] == "singularity":
+            voicelist_o = list(range(0, 2623))
+            voicelist_s = [self.multiworld.random.choice(voicelist_o)] * len(voicelist_o)
+
+            self.voice_map = dict(zip(voicelist_o, voicelist_s))
+        else:
+            voicelist_o = list(range(0, 2623))
+            voicelist_s = voicelist_o.copy()
+
+            self.voice_map = dict(zip(voicelist_o, voicelist_s))
+
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]

@@ -100,6 +100,13 @@ class SlowTrapWeight(BaseTrapWeight):
     display_name = "Slow Trap Weight"
 
 
+class CutsceneTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which makes you watch an unskippable cutscene
+    """
+    display_name = "Cutscene Trap Weight"
+
+
 class PongTrapWeight(BaseTrapWeight):
     """
     Likelihood of receiving a trap which forces you to play a Pong minigame
@@ -560,7 +567,7 @@ class SADXMusic(Choice):
 class MusicShuffle(Choice):
     """
     What type of Music Shuffle is used
-    Off: No music is shuffled.
+    None: No music is shuffled.
     Levels: Level music is shuffled.
     Full: Level, Menu, and Additional music is shuffled.
     Singularity: Level, Menu, and Additional music is all replaced with a single random song.
@@ -569,6 +576,22 @@ class MusicShuffle(Choice):
     option_none = 0
     option_levels = 1
     option_full = 2
+    option_singularity = 3
+    default = 0
+
+
+class VoiceShuffle(Choice):
+    """
+    What type of Voice Shuffle is used
+    None: No voices are shuffled.
+    Shuffled: Voices are shuffled.
+    Rude: Voices are shuffled, but some are replaced with rude words.
+    Singularity: All voices are replaced with a single random voice.
+    """
+    display_name = "Voice Shuffle Type"
+    option_none = 0
+    option_shuffled = 1
+    option_rude = 2
     option_singularity = 3
     default = 0
 
@@ -634,11 +657,13 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     #"darkness_trap_weight": DarknessTrapWeight,
     "ice_trap_weight": IceTrapWeight,
     "slow_trap_weight": SlowTrapWeight,
+    "cutscene_trap_weight": CutsceneTrapWeight,
     "pong_trap_weight": PongTrapWeight,
     "minigame_trap_difficulty": MinigameTrapDifficulty,
     "ring_loss": RingLoss,
     "sadx_music": SADXMusic,
     "music_shuffle": MusicShuffle,
+    "voice_shuffle": VoiceShuffle,
     "narrator": Narrator,
     "logic_difficulty": LogicDifficulty,
     "speed_mission_count": SpeedMissionCount,
