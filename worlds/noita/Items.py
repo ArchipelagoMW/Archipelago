@@ -116,7 +116,7 @@ filler_weights: Dict[str, int] = {
     "Wand (Tier 4)":     6,
     "Wand (Tier 5)":     5,
     "Wand (Tier 6)":     4,
-    "Perk (Extra Life)": 10,
+    "Extra Life Perk":   10,
     "Random Potion":     9,
     "Secret Potion":     10,
     "Chaos Die":         4,
