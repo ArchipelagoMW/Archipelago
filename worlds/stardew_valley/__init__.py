@@ -1,15 +1,16 @@
 from typing import Dict, Any, Iterable, Optional, Union
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, CollectionState
 from worlds.AutoWorld import World, WebWorld
 from . import rules, logic, options
 from .bundles import get_all_bundles, Bundle
-from .items import item_table, create_items, ItemData, Group
+from .items import item_table, create_items, ItemData, Group, items_by_group
 from .locations import location_table, create_locations, LocationData
-from .logic import StardewLogic, StardewRule, _True, _And
+from .logic import StardewLogic, StardewRule, True_
 from .options import stardew_valley_options, StardewOptions, fetch_options
 from .regions import create_regions
 from .rules import set_rules
+from ..generic.Rules import set_rule
 
 client_version = 0
 
@@ -52,8 +53,8 @@ class StardewValleyWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
 
-    data_version = 1
-    required_client_version = (0, 3, 9)
+    data_version = 2
+    required_client_version = (0, 4, 0)
 
     options: StardewOptions
     logic: StardewLogic
@@ -88,38 +89,66 @@ class StardewValleyWorld(World):
         create_locations(add_location, self.options, self.multiworld.random)
 
     def create_items(self):
-        locations_count = len([location
-                               for location in self.multiworld.get_locations(self.player)
-                               if not location.event])
+        self.precollect_starting_season()
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]
                             if not item_table[excluded_items.name].has_any_group(Group.RESOURCE_PACK,
                                                                                  Group.FRIENDSHIP_PACK)]
-        created_items = create_items(self.create_item, locations_count + len(items_to_exclude), self.options,
+
+        if self.options[options.SeasonRandomization] == options.SeasonRandomization.option_disabled:
+            items_to_exclude = [item for item in items_to_exclude
+                                if item_table[item.name] not in items_by_group[Group.SEASON]]
+
+        locations_count = len([location
+                               for location in self.multiworld.get_locations(self.player)
+                               if not location.event])
+
+        created_items = create_items(self.create_item, locations_count, items_to_exclude, self.options,
                                      self.multiworld.random)
+
         self.multiworld.itempool += created_items
 
-        for item in items_to_exclude:
-            self.multiworld.itempool.remove(item)
-
-        self.setup_season_events()
+        self.setup_early_items()
+        self.setup_month_events()
         self.setup_victory()
 
-    def set_rules(self):
-        set_rules(self.multiworld, self.player, self.options, self.logic, self.modified_bundles)
+    def precollect_starting_season(self) -> Optional[StardewItem]:
+        if self.options[options.SeasonRandomization] == options.SeasonRandomization.option_progressive:
+            return
 
-    def create_item(self, item: Union[str, ItemData]) -> StardewItem:
-        if isinstance(item, str):
-            item = item_table[item]
+        season_pool = items_by_group[Group.SEASON]
 
-        return StardewItem(item.name, item.classification, item.code, self.player)
+        if self.options[options.SeasonRandomization] == options.SeasonRandomization.option_disabled:
+            for season in season_pool:
+                self.multiworld.push_precollected(self.create_item(season))
+            return
 
-    def setup_season_events(self):
-        self.multiworld.push_precollected(self.create_item("Spring"))
-        self.create_event_location(location_table["Summer"], self.logic.received("Spring"), "Summer")
-        self.create_event_location(location_table["Fall"], self.logic.received("Summer"), "Fall")
-        self.create_event_location(location_table["Winter"], self.logic.received("Fall"), "Winter")
-        self.create_event_location(location_table["Year Two"], self.logic.received("Winter"), "Year Two")
+        if [item for item in self.multiworld.precollected_items[self.player]
+            if item.name in {season.name for season in items_by_group[Group.SEASON]}]:
+            return
+
+        if self.options[options.SeasonRandomization] == options.SeasonRandomization.option_randomized_not_winter:
+            season_pool = [season for season in season_pool if season.name != "Winter"]
+
+        starting_season = self.create_item(self.multiworld.random.choice(season_pool))
+        self.multiworld.push_precollected(starting_season)
+
+    def setup_early_items(self):
+        if (self.options[options.BuildingProgression] ==
+                options.BuildingProgression.option_progressive_early_shipping_bin):
+            self.multiworld.early_items[self.player]["Shipping Bin"] = 1
+
+        if self.options[options.BackpackProgression] == options.BackpackProgression.option_early_progressive:
+            self.multiworld.early_items[self.player]["Progressive Backpack"] = 1
+
+    def setup_month_events(self):
+        for i in range(0, 8):
+            month_end = LocationData(None, "Stardew Valley", f"Month End {i + 1}")
+            if i == 0:
+                self.create_event_location(month_end, True_(), "Month End")
+                continue
+
+            self.create_event_location(month_end, self.logic.received("Month End", i).simplify(), "Month End")
 
     def setup_victory(self):
         if self.options[options.Goal] == options.Goal.option_community_center:
@@ -142,15 +171,69 @@ class StardewValleyWorld(World):
             self.create_event_location(location_table["Catch Every Fish"],
                                        self.logic.can_catch_every_fish().simplify(),
                                        "Victory")
+        elif self.options[options.Goal] == options.Goal.option_complete_collection:
+            self.create_event_location(location_table["Complete the Museum Collection"],
+                                       self.logic.can_complete_museum().simplify(),
+                                       "Victory")
+        elif self.options[options.Goal] == options.Goal.option_full_house:
+            self.create_event_location(location_table["Full House"],
+                                       self.logic.can_have_two_children().simplify(),
+                                       "Victory")
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
-    def create_event_location(self, location_data: LocationData, rule: StardewRule, item: str):
+    def create_item(self, item: Union[str, ItemData]) -> StardewItem:
+        if isinstance(item, str):
+            item = item_table[item]
+
+        return StardewItem(item.name, item.classification, item.code, self.player)
+
+    def create_event_location(self, location_data: LocationData, rule: StardewRule, item: Optional[str] = None):
+        if item is None:
+            item = location_data.name
+
         region = self.multiworld.get_region(location_data.region, self.player)
         location = StardewLocation(self.player, location_data.name, None, region)
         location.access_rule = rule
         region.locations.append(location)
         location.place_locked_item(self.create_item(item))
+
+    def set_rules(self):
+        set_rules(self.multiworld, self.player, self.options, self.logic, self.modified_bundles)
+        self.force_first_month_once_all_early_items_are_found()
+
+    def force_first_month_once_all_early_items_are_found(self):
+        """
+        The Fill algorithm sweeps all event when calculating the early location. This causes an issue where
+        location only locked behind event are considered early, which they are not really...
+
+        This patches the issue, by adding a dependency to the first month end on all early items, so all the locations
+        that depends on it will not be considered early. This requires at least one early item to be progression, or
+        it just won't work...
+        """
+
+        early_items = []
+        for player, item_count in self.multiworld.early_items.items():
+            for item, count in item_count.items():
+                if self.multiworld.worlds[player].create_item(item).advancement:
+                    early_items.append((player, item, count))
+
+        for item, count in self.multiworld.local_early_items[self.player].items():
+            if self.create_item(item).advancement:
+                early_items.append((self.player, item, count))
+
+        def first_month_require_all_early_items(state: CollectionState) -> bool:
+            for player, item, count in early_items:
+                if not state.has(item, player, count):
+                    return False
+
+            return True
+
+        first_month_end = self.multiworld.get_location("Month End 1", self.player)
+        set_rule(first_month_end, first_month_require_all_early_items)
+
+    def generate_basic(self):
+        pass
 
     def get_filler_item_name(self) -> str:
         return "Joja Cola"
@@ -162,28 +245,16 @@ class StardewValleyWorld(World):
             key, value = self.modified_bundles[bundle_key].to_pair()
             modified_bundles[key] = value
 
-        return {
-            "starting_money": self.options[options.StartingMoney],
-            "entrance_randomization": self.options[options.EntranceRandomization],
-            "backpack_progression": self.options[options.BackpackProgression],
-            "tool_progression": self.options[options.ToolProgression],
-            "elevator_progression": self.options[options.TheMinesElevatorsProgression],
-            "skill_progression": self.options[options.SkillProgression],
-            "building_progression": self.options[options.BuildingProgression],
-            "arcade_machine_progression": self.options[options.ArcadeMachineLocations],
-            "help_wanted_locations": self.options[options.HelpWantedLocations],
-            "fishsanity": self.options[options.Fishsanity],
-            "death_link": self.options["death_link"],
-            "goal": self.options[options.Goal],
+        excluded_options = [options.ResourcePackMultiplier, options.BundleRandomization, options.BundlePrice,
+                            options.NumberOfPlayerBuffs]
+        slot_data = dict(self.options.options)
+        for option in excluded_options:
+            slot_data.pop(option.internal_name)
+        slot_data.update({
             "seed": self.multiworld.per_slot_randoms[self.player].randrange(1000000000),  # Seed should be max 9 digits
-            "multiple_day_sleep_enabled": self.options[options.MultipleDaySleepEnabled],
-            "multiple_day_sleep_cost": self.options[options.MultipleDaySleepCost],
-            "experience_multiplier": self.options[options.ExperienceMultiplier],
-            "debris_multiplier": self.options[options.DebrisMultiplier],
-            "quick_start": self.options[options.QuickStart],
-            "gifting": self.options[options.Gifting],
-            "gift_tax": self.options[options.GiftTax],
-            "modified_bundles": modified_bundles,
             "randomized_entrances": self.randomized_entrances,
-            "client_version": "2.2.2",
-        }
+            "modified_bundles": modified_bundles,
+            "client_version": "3.0.0",
+        })
+
+        return slot_data

@@ -128,7 +128,8 @@ Sent to clients when the connection handshake is successfully completed.
 | missing_locations | list\[int\]                              | Contains ids of remaining locations that need to be checked. Useful for trackers, among other things.                                               |
 | checked_locations | list\[int\]                              | Contains ids of all locations that have been checked. Useful for trackers, among other things. Location ids are in the range of ± 2<sup>53</sup>-1. |
 | slot_data         | dict\[str, any\]                         | Contains a json object for slot related data, differs per game. Empty if not required. Not present if slot_data in [Connect](#Connect) is false.    |
-| slot_info         | dict\[int, [NetworkSlot](#NetworkSlot)\] | maps each slot to a [NetworkSlot](#NetworkSlot) information                                                                                         |
+| slot_info         | dict\[int, [NetworkSlot](#NetworkSlot)\] | maps each slot to a [NetworkSlot](#NetworkSlot) information.                                                                                        |
+| hint_points       | int                                      | Number of hint points that the current player has.                                                                                                  |
 
 ### ReceivedItems
 Sent to clients when they receive an item.
@@ -146,17 +147,16 @@ Sent to clients to acknowledge a received [LocationScouts](#LocationScouts) pack
 | locations | list\[[NetworkItem](#NetworkItem)\] | Contains list of item(s) in the location(s) scouted. |
 
 ### RoomUpdate
-Sent when there is a need to update information about the present game session. Generally useful for async games.
-Once authenticated (received Connected), this may also contain data from Connected.
+Sent when there is a need to update information about the present game session.
 #### Arguments
-The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring:
+RoomUpdate may contain the same arguments from [RoomInfo](#RoomInfo) and, once authenticated, arguments from
+[Connected](#Connected) with the following exceptions:
 
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| hint_points | int | New argument. The client's current hint points. |
-| players | list\[[NetworkPlayer](#NetworkPlayer)\] | Send in the event of an alias rename. Always sends all players, whether connected or not. |
-| checked_locations | list\[int\] | May be a partial update, containing new locations that were checked, especially from a coop partner in the same slot. |
-| missing_locations | list\[int\] | Should never be sent as an update, if needed is the inverse of checked_locations. |
+| Name              | Type                                    | Notes                                                                                                                 |
+|-------------------|-----------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| players           | list\[[NetworkPlayer](#NetworkPlayer)\] | Sent in the event of an alias rename. Always sends all players, whether connected or not.                             |
+| checked_locations | list\[int\]                             | May be a partial update, containing new locations that were checked, especially from a coop partner in the same slot. |
+| missing_locations | -                                       | Never sent in this packet. If needed, it is the inverse of `checked_locations`.                                       |
 
 All arguments for this packet are optional, only changes are sent.
 

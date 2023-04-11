@@ -1,14 +1,9 @@
 from dataclasses import dataclass
 
 from . import fish_data
+from .common_data import quality_dict
 from .game_item import GameItem
-
-quality_dict = {
-    0: "",
-    1: "Silver",
-    2: "Gold",
-    3: "Iridium"
-}
+from .museum_data import Mineral
 
 
 @dataclass(frozen=True)
@@ -218,16 +213,16 @@ iridium_bar = BundleItem.item_bundle("Iridium Bar", 337, 1, 0)
 refined_quartz = BundleItem.item_bundle("Refined Quartz", 338, 2, 0)
 coal = BundleItem.item_bundle("Coal", 382, 5, 0)
 
-quartz = BundleItem.item_bundle("Quartz", 80, 1, 0)
-fire_quartz = BundleItem.item_bundle("Fire Quartz", 82, 1, 0)
-frozen_tear = BundleItem.item_bundle("Frozen Tear", 84, 1, 0)
-earth_crystal = BundleItem.item_bundle("Earth Crystal", 86, 1, 0)
-emerald = BundleItem.item_bundle("Emerald", 60, 1, 0)
-aquamarine = BundleItem.item_bundle("Aquamarine", 62, 1, 0)
-ruby = BundleItem.item_bundle("Ruby", 64, 1, 0)
-amethyst = BundleItem.item_bundle("Amethyst", 66, 1, 0)
-topaz = BundleItem.item_bundle("Topaz", 68, 1, 0)
-jade = BundleItem.item_bundle("Jade", 70, 1, 0)
+quartz = BundleItem(Mineral.quartz, 1, 0)
+fire_quartz = BundleItem(Mineral.fire_quartz, 1, 0)
+frozen_tear = BundleItem(Mineral.frozen_tear, 1, 0)
+earth_crystal = BundleItem(Mineral.earth_crystal, 1, 0)
+emerald = BundleItem(Mineral.emerald, 1, 0)
+aquamarine = BundleItem(Mineral.aquamarine, 1, 0)
+ruby = BundleItem(Mineral.ruby, 1, 0)
+amethyst = BundleItem(Mineral.amethyst, 1, 0)
+topaz = BundleItem(Mineral.topaz, 1, 0)
+jade = BundleItem(Mineral.jade, 1, 0)
 
 slime = BundleItem.item_bundle("Slime", 766, 99, 0)
 bug_meat = BundleItem.item_bundle("Bug Meat", 684, 10, 0)
@@ -325,13 +320,12 @@ elvish_jewelry = BundleItem.item_bundle("Elvish Jewelry", 104, 1, 0)
 ancient_drum = BundleItem.item_bundle("Ancient Drum", 123, 1, 0)
 dried_starfish = BundleItem.item_bundle("Dried Starfish", 116, 1, 0)
 
-# TODO Dye Bundle
-dye_red_items = [cranberries, dwarf_scroll_1, hot_pepper, radish, rhubarb, spaghetti, strawberry, tomato, tulip]
+dye_red_items = [cranberries, hot_pepper, radish, rhubarb, spaghetti, strawberry, tomato, tulip]
 dye_orange_items = [poppy, pumpkin, apricot, orange, spice_berry, winter_root]
-dye_yellow_items = [dried_starfish, dwarf_scroll_4, elvish_jewelry, corn, parsnip, summer_spangle, sunflower]
-dye_green_items = [dwarf_scroll_2, fiddlehead_fern, kale, artichoke, bok_choy, green_bean]
-dye_blue_items = [blueberry, dwarf_scroll_3, blue_jazz, blackberry, crystal_fruit]
-dye_purple_items = [ancient_drum, beet, crocus, eggplant, red_cabbage, sweet_pea]
+dye_yellow_items = [corn, parsnip, summer_spangle, sunflower]
+dye_green_items = [fiddlehead_fern, kale, artichoke, bok_choy, green_bean]
+dye_blue_items = [blueberry, blue_jazz, blackberry, crystal_fruit]
+dye_purple_items = [beet, crocus, eggplant, red_cabbage, sweet_pea]
 dye_items = [dye_red_items, dye_orange_items, dye_yellow_items, dye_green_items, dye_blue_items, dye_purple_items]
 field_research_items = [purple_mushroom, nautilus_shell, chub, geode, frozen_geode, magma_geode, omni_geode,
                         rainbow_shell, amethyst, bream, carp]

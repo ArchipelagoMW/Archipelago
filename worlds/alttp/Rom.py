@@ -189,7 +189,7 @@ def check_enemizer(enemizercli):
         # some time may have passed since the lock was acquired, as such a quick re-check doesn't hurt
         if getattr(check_enemizer, "done", None):
             return
-        wanted_version = (7, 0, 1)
+        wanted_version = (7, 1, 0)
         # version info is saved on the lib, for some reason
         library_info = os.path.join(os.path.dirname(enemizercli), "EnemizerCLI.Core.deps.json")
         with open(library_info) as f:
@@ -1247,8 +1247,8 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     # assorted fixes
     rom.write_byte(0x1800A2, 0x01 if world.fix_fake_world[
         player] else 0x00)  # Toggle whether to be in real/fake dark world when dying in a DW dungeon before killing aga1
-    rom.write_byte(0x180169,
-                   0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
+    # Lock or unlock aga tower door during escape sequence.
+    rom.write_byte(0x180169, 0x00)
     if world.mode[player] == 'inverted':
         rom.write_byte(0x180169, 0x02)  # lock aga/ganon tower door with crystals in inverted
     rom.write_byte(0x180171,
@@ -1775,8 +1775,57 @@ def hud_format_text(text):
         output += b'\x7f\x00'
     return output[:32]
 
+def apply_oof_sfx(rom, oof: str):
+    with open(oof, 'rb') as stream:
+        oof_bytes = bytearray(stream.read())
 
-def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, sprite: str, palettes_options,
+    oof_len_bytes = len(oof_bytes).to_bytes(2, byteorder='little')
+
+    # Credit to kan for this method, and Nyx for initial C# implementation
+    # this is ported from, with both of their permission for use by AP
+    # Original C# implementation:
+    # https://github.com/Nyx-Edelstein/The-Unachievable-Ideal-of-Chibi-Elf-Grunting-Noises-When-They-Get-Punched-A-Z3-Rom-Patcher
+
+    # Jump execution from the SPC load routine to new code
+    rom.write_bytes(0x8CF, [0x5C, 0x00, 0x80, 0x25])
+
+    # Change the pointer for instrument 9 in SPC memory to point to the new data we'll be inserting:
+    rom.write_bytes(0x1A006C, [0x88, 0x31, 0x00, 0x00])
+
+    # Insert a sigil so we can branch on it later
+    # We will recover the value it overwrites after we're done with insertion
+    rom.write_bytes(0x1AD38C, [0xBE, 0xBE])
+
+    # Change the "oof" sound effect to use instrument 9:
+    rom.write_byte(0x1A9C4E, 0x09)
+
+    # Correct the pitch shift value:
+    rom.write_byte(0x1A9C51, 0xB6)
+
+    # Modify parameters of instrument 9
+    # (I don't actually understand this part, they're just magic values to me)
+    rom.write_bytes(0x1A9CAE, [0x7F, 0x7F, 0x00, 0x10, 0x1A, 0x00, 0x00, 0x7F, 0x01])
+
+    # Hook from SPC load routine:
+    #  * Check for the read of the sigil
+    #  * Once we find it, change the SPC load routine's data pointer to read from the location containing the new sample
+    #  * Note: XXXX in the string below is a placeholder for the number of bytes in the .brr sample (little endian)
+    #  * Another sigil "$EBEB" is inserted at the end of the data
+    #  * When the second sigil is read, we know we're done inserting our data so we can change the data pointer back
+    #  * Effect: The new data gets loaded into SPC memory without having to relocate the SPC load routine
+    # Slight variation from VT-compatible algorithm: We need to change the data pointer to $00 00 35 and load 538E into Y to pick back up where we left off
+    rom.write_bytes(0x128000, [0xB7, 0x00, 0xC8, 0xC8, 0xC9, 0xBE, 0xBE, 0xF0, 0x09, 0xC9, 0xEB, 0xEB, 0xF0, 0x1B, 0x5C, 0xD3, 0x88, 0x00, 0xA2, oof_len_bytes[0], oof_len_bytes[1], 0xA9, 0x80, 0x25, 0x85, 0x01, 0xA9, 0x3A, 0x80, 0x85, 0x00, 0xA0, 0x00, 0x00, 0xA9, 0x88, 0x31, 0x5C, 0xD8, 0x88, 0x00, 0xA9, 0x80, 0x35, 0x64, 0x00, 0x85, 0x01, 0xA2, 0x00, 0x00, 0xA0, 0x8E, 0x53, 0x5C, 0xD4, 0x88, 0x00])
+
+    # The new sample data
+    # (We need to insert the second sigil at the end)
+    rom.write_bytes(0x12803A, oof_bytes)
+    rom.write_bytes(0x12803A + len(oof_bytes), [0xEB, 0xEB])
+	
+	#Enemizer patch: prevent Enemizer from overwriting $3188 in SPC memory with an unused sound effect ("WHAT")
+    rom.write_bytes(0x13000D, [0x00, 0x00, 0x00, 0x08])
+	
+
+def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, sprite: str, oof: str, palettes_options,
                        world=None, player=1, allow_random_on_event=False, reduceflashing=False,
                        triforcehud: str = None, deathlink: bool = False, allowcollect: bool = False):
     local_random = random if not world else world.per_slot_randoms[player]
@@ -1918,6 +1967,10 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
 
     apply_random_sprite_on_event(rom, sprite, local_random, allow_random_on_event,
                                  world.sprite_pool[player] if world else [])
+
+    if oof is not None:
+        apply_oof_sfx(rom, oof)
+
     if isinstance(rom, LocalRom):
         rom.write_crc()
 
