@@ -1,3 +1,21 @@
+local lua_major, lua_minor = _VERSION:match("Lua (%d+)%.(%d+)")
+
+-- lua compat shims
+if lua_major > 5 or lua_major == 5 and lua_minor >= 3 then
+  function bit.rshift(a, b)
+    return a >> b
+  end
+  function bit.lshift(a, b)
+    return a << b
+  end
+  function bit.bor(a, b)
+    return a | b
+  end
+  function bit.band(a, b)
+    return a & b
+  end
+end
+
 function table.empty (self)
     for _, _ in pairs(self) do
         return false
@@ -60,11 +78,11 @@ wU8 = memory.write_u8
 u16 = memory.read_u16_le
 
 function getMaxMessageLength()
+  local denominator = 12
   if is23Or24Or25 then
-      return client.screenwidth()/11
-  elseif isGreaterOrEqualTo26 then
-      return client.screenwidth()//12
+    denominator = 11
   end
+  return math.floor(client.screenwidth()/denominator)
 end
 
 function drawText(x, y, message, color)
