@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from typing import Dict, NamedTuple, List, Optional
 
-from BaseClasses import Region, RegionType, Location
+from BaseClasses import Region, Location, MultiWorld
 
 EventId: Optional[int] = None
 CHAOS_TERMINATED_EVENT = 'Terminated Chaos'
@@ -43,8 +43,8 @@ class FF1Locations:
 
     @staticmethod
     def create_menu_region(player: int, locations: Dict[str, int],
-                           rules: Dict[str, List[List[str]]]) -> Region:
-        menu_region = Region("Menu", RegionType.Generic, "Menu", player)
+                           rules: Dict[str, List[List[str]]], world: MultiWorld) -> Region:
+        menu_region = Region("Menu", player, world)
         for name, address in locations.items():
             location = Location(player, name, address, menu_region)
             ## TODO REMOVE WHEN LOGIC FOR TOFR IS CORRECT

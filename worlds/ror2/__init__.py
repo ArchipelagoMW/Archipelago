@@ -5,7 +5,7 @@ from .Locations import RiskOfRainLocation, get_classic_item_pickups, item_pickup
 from .Rules import set_rules
 from .RoR2Environments import *
 
-from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, MultiWorld, Tutorial
+from BaseClasses import Region, Entrance, Item, ItemClassification, MultiWorld, Tutorial
 from .Options import ror2_options, ItemWeights
 from worlds.AutoWorld import World, WebWorld
 from .Regions import create_regions
@@ -216,8 +216,7 @@ class RiskOfRainWorld(World):
         # This should shave down comparions.
 
         elif name in environment_ALL_table.keys():
-            if name in {"Void Fields", "Hidden Realm: Bazaar Between Time", "Hidden Realm: Bulwark's Ambry",
-                        "Hidden Realm: Gilded Coast,"}:
+            if name in {"Hidden Realm: Bulwark's Ambry", "Hidden Realm: Gilded Coast,"}:
                 classification = ItemClassification.useful
             else:
                 classification = ItemClassification.progression
@@ -256,7 +255,7 @@ def create_events(world: MultiWorld, player: int) -> None:
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations: Dict[str, int] = {}) -> Region:
-    ret = Region(name, RegionType.Generic, name, player, world)
+    ret = Region(name, player, world)
     for location_name, location_id in locations.items():
         ret.locations.append(RiskOfRainLocation(player, location_name, location_id, ret))
     return ret

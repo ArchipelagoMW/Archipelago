@@ -20,7 +20,7 @@ import concurrent.futures
 import bsdiff4
 from typing import Optional, List
 
-from BaseClasses import CollectionState, Region, Location
+from BaseClasses import CollectionState, Region, Location, MultiWorld
 from worlds.alttp.Shops import ShopType, ShopPriceType
 from worlds.alttp.Dungeons import dungeon_music_addresses
 from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address
@@ -765,7 +765,7 @@ def get_nonnative_item_sprite(item: str) -> int:
     # https://discord.com/channels/731205301247803413/827141303330406408/852102450822905886
 
 
-def patch_rom(world, rom, player, enemized):
+def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     local_random = world.per_slot_randoms[player]
 
     # patch items
@@ -1247,8 +1247,8 @@ def patch_rom(world, rom, player, enemized):
     # assorted fixes
     rom.write_byte(0x1800A2, 0x01 if world.fix_fake_world[
         player] else 0x00)  # Toggle whether to be in real/fake dark world when dying in a DW dungeon before killing aga1
-    rom.write_byte(0x180169,
-                   0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
+    # Lock or unlock aga tower door during escape sequence.
+    rom.write_byte(0x180169, 0x00)
     if world.mode[player] == 'inverted':
         rom.write_byte(0x180169, 0x02)  # lock aga/ganon tower door with crystals in inverted
     rom.write_byte(0x180171,

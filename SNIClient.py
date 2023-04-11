@@ -115,8 +115,8 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
 
 class SNIContext(CommonContext):
     command_processor: typing.Type[SNIClientCommandProcessor] = SNIClientCommandProcessor
-    game = None  # set in validate_rom
-    items_handling = None  # set in game_watcher
+    game: typing.Optional[str] = None  # set in validate_rom
+    items_handling: typing.Optional[int] = None  # set in game_watcher
     snes_connect_task: "typing.Optional[asyncio.Task[None]]" = None
     snes_autoreconnect_task: typing.Optional["asyncio.Task[None]"] = None
 

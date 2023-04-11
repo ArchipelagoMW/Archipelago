@@ -96,7 +96,7 @@ def generate_mod(world: "Factorio", output_directory: str):
             settings_template = template_env.get_template("settings.lua")
     # get data for templates
     locations = [(location, location.item)
-                 for location in world.locations]
+                 for location in world.science_locations]
     mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.get_file_safe_player_name(player)}"
 
     random = multiworld.per_slot_randoms[player]
@@ -136,6 +136,7 @@ def generate_mod(world: "Factorio", output_directory: str):
         "goal": multiworld.goal[player].value,
         "energy_link": multiworld.energy_link[player].value,
         "useless_technologies": useless_technologies,
+        "chunk_shuffle": multiworld.chunk_shuffle[player].value if hasattr(multiworld, "chunk_shuffle") else 0,
     }
 
     for factorio_option in Options.factorio_options:

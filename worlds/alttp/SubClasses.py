@@ -1,8 +1,8 @@
 """Module extending BaseClasses.py for aLttP"""
 from typing import Optional
+from enum import IntEnum
 
-from BaseClasses import Location, Item, ItemClassification
-
+from BaseClasses import Location, Item, ItemClassification, Region, MultiWorld
 
 class ALttPLocation(Location):
     game: str = "A Link to the Past"
@@ -63,3 +63,37 @@ class ALttPItem(Item):
     @property
     def locked_dungeon_item(self):
         return self.location.locked and self.dungeon_item
+
+
+class LTTPRegionType(IntEnum):
+    LightWorld = 1
+    DarkWorld = 2
+    Cave = 3  # also houses
+    Dungeon = 4
+
+    @property
+    def is_indoors(self) -> bool:
+        """Shorthand for checking if Cave or Dungeon"""
+        return self in (LTTPRegionType.Cave, LTTPRegionType.Dungeon)
+
+
+class LTTPRegion(Region):
+    type: LTTPRegionType
+
+    # will be set after making connections.
+    is_light_world: bool = False
+    is_dark_world: bool = False
+
+    shop: Optional = None
+
+    def __init__(self, name: str, type_: LTTPRegionType, hint: str, player: int, multiworld: MultiWorld):
+        super().__init__(name, player, multiworld, hint)
+        self.type = type_
+
+    @property
+    def get_entrance(self):
+        for entrance in self.entrances:
+            if entrance.parent_region.type in (LTTPRegionType.DarkWorld, LTTPRegionType.LightWorld):
+                return entrance
+        for entrance in self.entrances:
+            return entrance.parent_region.get_entrance
