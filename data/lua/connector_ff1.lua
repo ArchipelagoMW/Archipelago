@@ -234,7 +234,14 @@ function getEmptyArmorSlots()
     end
     return ret
 end
-
+local function slice (tbl, s, e)
+    local pos, new = 1, {}
+    for i = s + 1, e do
+        new[pos] = tbl[i]
+        pos = pos + 1
+    end
+    return new
+end
 function processBlock(block)
     local msgBlock = block['messages']
     if msgBlock ~= nil then

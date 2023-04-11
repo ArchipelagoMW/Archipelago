@@ -23,41 +23,6 @@ function table.empty (self)
     return true
 end
 
-function slice (tbl, s, e)
-    local pos, new = 1, {}
-    for i = s + 1, e do
-        new[pos] = tbl[i]
-        pos = pos + 1
-    end
-    return new
-end
-
-function difference(a, b)
-  local aa = {}
-  for k,v in pairs(a) do aa[v]=true end
-  for k,v in pairs(b) do aa[v]=nil end
-  local ret = {}
-  local n = 0
-  for k,v in pairs(a) do
-      if aa[v] then n=n+1 ret[n]=v end
-  end
-  return ret
-end
-
-function arrayEqual(a1, a2)
-    if #a1 ~= #a2 then
-      return false
-    end
-  
-    for i, v in ipairs(a1) do
-      if v ~= a2[i] then
-        return false
-      end
-    end
-  
-    return true
-end
-
 local bizhawk_version = client.getversion()
 local bizhawk_major, bizhawk_minor, bizhawk_patch = bizhawk_version:match("(%d+)%.(%d+)%.?(%d*)")
 bizhawk_major = tonumber(bizhawk_major)
