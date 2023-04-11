@@ -150,4 +150,4 @@ def create_all_rules(multiworld: MultiWorld, player: int) -> None:
 
     # Prevent the Map perk (used to find Toveri) from being on Toveri (boss)
     if multiworld.bosses_as_checks[player].value >= BossesAsChecks.option_all_bosses:
-        forbid_items_at_location(multiworld, "Toveri", {"Perk (Spatial Awareness)"}, player)
+        forbid_items_at_location(multiworld, "Toveri", {"Spatial Awareness Perk"}, player)
