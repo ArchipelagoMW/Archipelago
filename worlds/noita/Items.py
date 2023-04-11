@@ -37,7 +37,7 @@ def create_orb_items(victory_condition: VictoryCondition) -> List[str]:
 
 
 def create_spatial_awareness_item(bosses_as_checks: BossesAsChecks) -> List[str]:
-    return ["Perk (Spatial Awareness)"] if bosses_as_checks.value >= BossesAsChecks.option_all_bosses else []
+    return ["Spatial Awareness Perk"] if bosses_as_checks.value >= BossesAsChecks.option_all_bosses else []
 
 
 def create_random_items(multiworld: MultiWorld, player: int, random_count: int) -> List[str]:
