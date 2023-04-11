@@ -497,7 +497,7 @@ def read_data() -> tuple[
             for char, id, token in tokens(line):
                 if pos == RWD_NAME:
                     if id == IDENT:
-                        reward = token
+                        reward = f"Reward: {token}"
                         pos = RWD_NAME_SEMI
                     elif id == HASH:
                         pos = RWD_LABEL
@@ -545,11 +545,9 @@ def read_data() -> tuple[
                     raise Exception(f"reward `{reward}` on line `{line + 1}` is not labeled")
                 labels[label].append(reward)
 
-                item_name = f"Reward: {reward}"
-
-                if item_name in item_name_to_id:
-                    raise Exception(f"item `{item_name}` on line `{line + 1}` shadows a previous item")
-                item_name_to_id[item_name] = next_id
+                if reward in item_name_to_id:
+                    raise Exception(f"item `{reward}` on line `{line + 1}` shadows a previous item")
+                item_name_to_id[reward] = next_id
                 next_id += 1
 
     item_name_to_id["Reward: Coins"] = next_id

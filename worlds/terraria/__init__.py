@@ -117,7 +117,7 @@ class TerrariaWorld(World):
                 else:
                     continue
             else:
-                name = f"Reward: {item}"
+                name = item
 
             if item in progression:
                 classification = ItemClassification.progression
