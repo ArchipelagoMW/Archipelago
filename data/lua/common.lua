@@ -63,7 +63,7 @@ function getMaxMessageLength()
   if is23Or24Or25 then
       return client.screenwidth()/11
   elseif isGreaterOrEqualTo26 then
-      return client.screenwidth()/12
+      return client.screenwidth()//12
   end
 end
 
