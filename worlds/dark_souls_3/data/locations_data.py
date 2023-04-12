@@ -97,7 +97,8 @@ undead_settlement_table = {
     "US: Cornyx's Garb": 0x11945F88, #!
     "US: Cornyx's Skirt": 0x11946758, #!
     "US: Pyromancy Flame": 0x00CC77C0, #!
-    "US: Fire Gem": 0x4000047E #!
+    "US: Fire Gem": 0x4000047E, #!
+    "US: Tower Key (Irina Drop)": 0x400007DD, #! DROPPED FROM IRINA
 }
 
 road_of_sacrifice_table = {
@@ -322,7 +323,11 @@ irithyll_dungeon_table = {
     "ID: Jailer's Key Ring": 0x400007D8, #!
     "ID: Dusk Crown Ring": 0x20004F4C, #!
     "ID: Dark Clutch Ring": 0x20005028, #!
-    "ID: Karla's Ashes": 0x40000842 #!
+    "ID: Karla's Ashes": 0x40000842, #!
+    "ID: Karla's Pointed Hat": 0x15E69EC0, #! NEW
+    "ID: Karla's Coat": 0x15E6A2A8, #! NEW 
+    "ID: Karla's Gloves": 0x15E6A690, #! NEW
+    "ID: Karla's Trousers": 0x15E6AA78 #! NEW
 }
 
 profaned_capital_table = {
@@ -747,8 +752,7 @@ weapon_location_list = { # SOME LOCATIONS ARENT NORMALLY WEAPONS, BUT TO INCLUDE
     "LC: Greatlance",
     "LC: Sniper Crossbow",
     "CKG: Claw",
-    "IBV: Drang Twinspears",
-    "US: Pyromancy Flame"
+    "IBV: Drang Twinspears"
 }
 
 dlc_weapon_location_list = {
@@ -909,10 +913,7 @@ armor_location_list = {
     "GA: Outrider Knight Helm",
     "GA: Outrider Knight Armor",
     "GA: Outrider Knight Gauntlets",
-    "GA: Outrider Knight Leggings",
-    "US: Cornyx's Wrap",
-    "US: Cornyx's Garb",
-    "US: Cornyx's Skirt",
+    "GA: Outrider Knight Leggings"
 }
 
 dlc_armor_location_list = {
@@ -1002,6 +1003,7 @@ dlc_ring_location_list = {
     "RC: Havel's Ring",
     "PW: Chillbite Ring"
 }
+
 spell_location_list = {
     "CD: Seek Guidance",
     "FK: Lightning Spear",
@@ -1072,8 +1074,17 @@ dlc_misc_location_list = {
 
 npc_location_list = {
     "US: Irina's Ashes",
+    "US: Tower Key (Irina Drop)",
     "ID: Karla's Ashes",
+    "ID: Karla's Pointed Hat",
+    "ID: Karla's Coat",
+    "ID: Karla's Gloves",
+    "ID: Karla's Trousers",
     "US: Cornyx's Ashes",
+    "US: Pyromancy Flame",
+    "US: Cornyx's Wrap",
+    "US: Cornyx's Garb",
+    "US: Cornyx's Skirt",
     "RS: Orbeck's Ashes"
 }
 

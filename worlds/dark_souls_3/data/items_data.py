@@ -358,7 +358,11 @@ armor_table = {
 
     "Cornyx's Wrap": 0x11946370, #!
     "Cornyx's Garb": 0x11945F88, #!
-    "Cornyx's Skirt": 0x11946758 #!
+    "Cornyx's Skirt": 0x11946758, #!
+    "Karla's Pointed Hat": 0x15E69EC0, #! NEW 
+    "Karla's Coat": 0x15E6A2A8, #! NEW
+    "Karla's Gloves": 0x15E6A690, #! NEW
+    "Karla's Trousers": 0x15E6AA78 #! NEW
 }
 
 dlc_armor_table = { 
@@ -560,7 +564,8 @@ misc_items_table = {
     "Karla's Ashes": 0x40000842, #!
     "Cornyx's Ashes": 0x40000841, #!
     "Orbeck's Ashes": 0x40000840, #!
-    "Fire Gem": 0x4000047E #!
+    "Fire Gem": 0x4000047E, #!
+    "Tower Key (Irina Drop)": 0x400007DD, #! DROPPED FROM IRINA
 }
 
 dlc_misc_table = {
@@ -587,7 +592,8 @@ key_items_list = {
     "Old Cell Key",
     "Jailer's Key Ring",
     "Contraption Key",
-    "Small Envoy Banner"
+    "Small Envoy Banner",
+    "Tower Key (Irina Drop)"
 }
 
 items_for_key_location_list = {
@@ -672,8 +678,17 @@ items_for_dlc_misc_location_list = {
 
 items_for_npc_location_list = {
     "Irina's Ashes",
+    "Tower Key (Irina Drop)",
     "Karla's Ashes",
+    "Karla's Pointed Hat",
+    "Karla's Coat",
+    "Karla's Gloves",
+    "Karla's Trousers",
     "Cornyx's Ashes",
+    "Pyromancy Flame",
+    "Cornyx's Wrap",
+    "Cornyx's Garb",
+    "Cornyx's Skirt",
     "Orbeck's Ashes"
 }
 

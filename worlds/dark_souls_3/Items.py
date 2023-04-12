@@ -44,7 +44,8 @@ class DarkSouls3Item(Item):
 
     dlc_misc_item = ("Captains Ashes")
 
-    npc_item = ("Irina's Ashes", "Karla's Ashes", "Cornyx's Ashes", "Orbeck's Ashes")
+    npc_item = ("Irina's Ashes", "Tower Key (Irina Drop)", "Karla's Ashes", "Karla's Pointed Hat", "Karla's Coat", "Karla's Gloves", "Karla's Trousers",
+                "Cornyx's Ashes", "Pyromancy Flame", "Cornyx's Wrap", "Cornyx's Garb", "Cornyx's Skirt", "Orbeck's Ashes")
 
     @staticmethod
     def get_name_to_id() -> dict:

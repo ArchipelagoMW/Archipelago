@@ -16,7 +16,7 @@ from .data.locations_data import location_dictionary, fire_link_shrine_table, \
     health_upgrade_locations
 from ..AutoWorld import World, WebWorld
 from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification
-from ..generic.Rules import set_rule, add_item_rule
+from ..generic.Rules import set_rule, add_item_rule, exclusion_rules
 
 
 class DarkSouls3Web(WebWorld):
@@ -195,6 +195,8 @@ class DarkSouls3World(World):
                 location = DarkSouls3Location(self.player, name, self.location_name_to_id[name], new_region)
                 if region_name == "Menu":
                     add_item_rule(location, lambda item: not item.advancement)
+                if region_name == "Health":
+                    add_item_rule(location, lambda item: not item.advancement)
                 new_region.locations.append(location)
         self.multiworld.regions.append(new_region)
         return new_region
@@ -266,7 +268,8 @@ class DarkSouls3World(World):
 
         # Define the access rules to the entrances
         set_rule(self.multiworld.get_entrance("Goto Bell Tower", self.player),
-                 lambda state: state.has("Tower Key", self.player))
+                 lambda state: state.has("Tower Key", self.player) or
+                               state.has("Tower Key (Irina Drop)", self.player))
         set_rule(self.multiworld.get_entrance("Goto Undead Settlement", self.player),
                  lambda state: state.has("Small Lothric Banner", self.player))
         set_rule(self.multiworld.get_entrance("Goto Lothric Castle", self.player),
