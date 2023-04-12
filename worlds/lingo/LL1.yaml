@@ -27,11 +27,25 @@
   #
   # doors is an array of doors associated with this room. When door
   # randomization is enabled, each of these is an item. The key is a name that
-  # will be displayed as part of the item's name. The value is an array of panel
-  # names from the "panels" list. These are the panels that canonically open
-  # this door. If there is only one panel for the door, then that panel is a
-  # check. If there is more then one panel, then that entire set of panels must
-  # be solved for a check.
+  # will be displayed as part of the item's name. Doors can have the following
+  # fields:
+  # - id:             A string or list of internal door IDs from the LINGO map.
+  #                   In door shuffle mode, collecting the item generated for
+  #                   this door will open the doors listed here.
+  # - panels:         These are the panels that canonically open this door. If
+  #                   there is only one panel for the door, then that panel is a
+  #                   check. If there is more than one panel, then that entire
+  #                   set of panels must be solved for a check. Panels can
+  #                   either be a string (representing a panel in this room) or
+  #                   a dict containing "room" and "panel".
+  # - item_name:      Overrides the name of the item generated for this door.
+  #                   If not specified, the item name will be generated from
+  #                   the room name and the door name.
+  # - location_name:  Overrides the name of the location generated for this
+  #                   door. If not specified, the location name will be
+  #                   generated using the names of the panels.
+  # - skip_location:  If true, no location is generated for this door.
+  # - skip_item:      If true, no item is generated for this door.
   Starting Room:
     entrances:
       Menu: True
