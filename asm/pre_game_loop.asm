@@ -10,6 +10,11 @@ PreGamePrep:
     ldr r4, =DeathlinkEnabled
     strb r0, [r4]
 
+; Reset incoming item sender
+    ldr r4, =IncomingItemSender
+    mov r0, #0xFF
+    strb r0, [r4]
+
 ; Replaced code
     ldr r0, =KeyPressContinuous
     strh r7, [r0]

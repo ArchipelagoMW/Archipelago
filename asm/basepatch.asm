@@ -43,9 +43,10 @@ unusedrom equ 0x0878F97C
 
 ; Items can be received one at a time w/o issue
 .definelabel IncomingItemID, unusedram + 1  ; byte
+.definelabel IncomingItemSender, unusedram + 2  ; byte
 
 ; The jewel piece or CD that you've most recently received or grabbed from a box
-.definelabel LastCollectedItemID, unusedram + 2  ; byte
+.definelabel LastCollectedItemID, unusedram + 3  ; byte
 
 .definelabel DeathlinkEnabled, unusedram + 8  ; byte
 
