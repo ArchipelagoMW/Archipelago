@@ -1447,7 +1447,7 @@ def create_regions(world, player: int, active_locations):
                                           grand_prix_region_locations)
         world.regions += [grand_prix_region]
 
-    if world.goal[player] == 0 or world.goal[player] == 2:
+    if world.goal[player] in [0, 2, 4, 5]:
         biolizard_region_locations = [
             LocationName.finalhazard,
         ]
@@ -1455,7 +1455,7 @@ def create_regions(world, player: int, active_locations):
                                          biolizard_region_locations)
         world.regions += [biolizard_region]
 
-    if world.goal[player] == 1 or world.goal[player] == 2:
+    if world.goal[player] in [1, 2]:
         green_hill_region_locations = [
             LocationName.green_hill,
             LocationName.green_hill_chao_1,
@@ -1464,6 +1464,15 @@ def create_regions(world, player: int, active_locations):
         green_hill_region = create_region(world, player, active_locations, LocationName.green_hill_region,
                                           green_hill_region_locations)
         world.regions += [green_hill_region]
+
+    if world.goal[player] in [4, 5]:
+        for i in range(16):
+            boss_region_locations = [
+                "Boss Rush - " + str(i + 1),
+            ]
+            boss_region = create_region(world, player, active_locations, "Boss Rush " + str(i + 1),
+                                        boss_region_locations)
+            world.regions += [boss_region]
 
 
     # Set up the regions correctly.
@@ -1510,7 +1519,7 @@ def create_regions(world, player: int, active_locations):
     ]
 
 
-def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_emblems, gate_bosses, first_cannons_core_mission: str, final_cannons_core_mission: str):
+def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_emblems, gate_bosses, boss_rush_bosses, first_cannons_core_mission: str, final_cannons_core_mission: str):
     names: typing.Dict[str, int] = {}
 
     connect(world, player, names, 'Menu', LocationName.gate_0_region)
@@ -1525,7 +1534,7 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
 
         connect(world, player, names, LocationName.cannon_core_region, LocationName.biolizard_region,
                 lambda state: (state.can_reach(required_mission_name, "Location", player)))
-    elif world.goal[player] == 1 or world.goal[player] == 2:
+    elif world.goal[player] in [1, 2]:
         connect(world, player, names, 'Menu', LocationName.green_hill_region,
                 lambda state: (state.has(ItemName.white_emerald, player) and
                                state.has(ItemName.red_emerald, player) and
@@ -1538,6 +1547,26 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
             connect(world, player, names, LocationName.green_hill_region, LocationName.biolizard_region)
     elif world.goal[player] == 3:
         connect(world, player, names, LocationName.kart_race_expert_region, LocationName.grand_prix_region)
+    elif world.goal[player] in [4, 5]:
+        if world.goal[player] == 4:
+            connect(world, player, names, LocationName.gate_0_region, LocationName.boss_rush_1_region)
+        elif world.goal[player] == 5:
+            required_mission_name = first_cannons_core_mission
+
+            if world.required_cannons_core_missions[player].value == 1:
+                required_mission_name = final_cannons_core_mission
+
+            connect(world, player, names, LocationName.cannon_core_region, LocationName.boss_rush_1_region,
+                    lambda state: (state.can_reach(required_mission_name, "Location", player)))
+
+        for i in range(15):
+            if boss_rush_bosses[i] == all_gate_bosses_table[king_boom_boo]:
+                connect(world, player, names, "Boss Rush " + str(i + 1), "Boss Rush " + str(i + 2),
+                        lambda state: (state.has(ItemName.knuckles_shovel_claws, player)))
+            else:
+                connect(world, player, names, "Boss Rush " + str(i + 1), "Boss Rush " + str(i + 2))
+
+        connect(world, player, names, LocationName.boss_rush_16_region, LocationName.biolizard_region)
 
     for i in range(len(gates[0].gate_levels)):
         connect(world, player, names, LocationName.gate_0_region, shuffleable_regions[gates[0].gate_levels[i]])
