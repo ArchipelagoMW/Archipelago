@@ -98,13 +98,14 @@ item_table: Dict[str, ItemData] = {
     "Orb":                                  ItemData(110022, "Orbs", ItemClassification.progression_skip_balancing),
     "Random Potion":                        ItemData(110023, "Items", ItemClassification.filler),
     "Secret Potion":                        ItemData(110024, "Items", ItemClassification.filler),
-    "Chaos Die":                            ItemData(110025, "Items", ItemClassification.filler),
-    "Greed Die":                            ItemData(110026, "Items", ItemClassification.filler),
-    "Kammi":                                ItemData(110027, "Items", ItemClassification.filler),
-    "Refreshing Gourd":                     ItemData(110028, "Items", ItemClassification.filler),
-    "Sädekivi":                             ItemData(110029, "Items", ItemClassification.filler),
-    "Broken Wand":                          ItemData(110030, "Items", ItemClassification.filler),
-    "Powder Pouch":                         ItemData(110031, "Items", ItemClassification.filler),
+    "Powder Pouch":                         ItemData(110025, "Items", ItemClassification.filler),
+    "Chaos Die":                            ItemData(110026, "Items", ItemClassification.filler),
+    "Greed Die":                            ItemData(110027, "Items", ItemClassification.filler),
+    "Kammi":                                ItemData(110028, "Items", ItemClassification.filler),
+    "Refreshing Gourd":                     ItemData(110029, "Items", ItemClassification.filler),
+    "Sädekivi":                             ItemData(110030, "Items", ItemClassification.filler),
+    "Broken Wand":                          ItemData(110031, "Items", ItemClassification.filler),
+
 }
 
 filler_weights: Dict[str, int] = {
@@ -123,13 +124,13 @@ filler_weights: Dict[str, int] = {
     "Extra Life Perk":   10,
     "Random Potion":     9,
     "Secret Potion":     10,
+    "Powder Pouch":      10,
     "Chaos Die":         4,
     "Greed Die":         4,
     "Kammi":             4,
     "Refreshing Gourd":  4,
     "Sädekivi":          3,
     "Broken Wand":       10,
-    "Powder Pouch":      10,
 }
 
 
