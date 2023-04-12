@@ -2,7 +2,7 @@ from typing import List, Set, Dict, Tuple, Optional, Callable
 from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import LocationData
 from .Options import get_option_value
-from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, alt_final_mission_locations, MissionPools
+from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, MissionPools
 from .PoolFilter import filter_missions
 
 
@@ -324,17 +324,14 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
         # final_mission_id = vanilla_mission_req_table[final_mission].id
 
         # Changing the completion condition for alternate final missions into an event
-        if final_mission != 'The Reckoning':
-            final_location = alt_final_mission_locations[final_mission]
-            # Final location should be near the end of the cache
-            for i in range(len(location_cache) - 1, -1, -1):
-                if location_cache[i].name == final_location:
-                    location_cache[i].locked = True
-                    location_cache[i].event = True
-                    location_cache[i].address = None
-                    break
-        else:
-            final_location = 'The Reckoning: Victory'
+        final_location = final_mission + ': Victory'
+        # Final location should be near the end of the cache
+        for i in range(len(location_cache) - 1, -1, -1):
+            if location_cache[i].name == final_location:
+                location_cache[i].locked = True
+                location_cache[i].event = True
+                location_cache[i].address = None
+                break
 
         return mission_req_table, final_mission_id, final_location
 

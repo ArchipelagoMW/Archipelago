@@ -14,7 +14,10 @@ no_build_regions_list = ["Back in the Saddle", "Enemy Within", "Supreme", "With 
 starter_regions_list = ["Lab Rat", "Back in the Saddle", "Enemy Within", "With Friends Like These"]
 easy_regions_list = ["Rendezvous", "Harvest of Screams", "Shoot the Messenger", "Domination"]
 medium_regions_list = ["Fire in the Sky", "Old Soldiers", "Waking the Ancient", "The Crucible", "Supreme", "Infested", "Conviction"]
-hard_regions_list = ["Hand of Darkness", "Phantoms of the Void", "Planetfall", "Death From Above"]
+hard_regions_list = ["Hand of Darkness", "Phantoms of the Void", "Planetfall", "Death From Above", "The Reckoning"]
+# Order must correspond to Final Mission option order
+final_missions_list = ["The Reckoning", "The Crucible", "Hand of Darkness", "Phantoms of the Void", "Planetfall", "Death From Above"]
+
 
 class MissionPools(IntEnum):
     STARTER = 0
@@ -298,10 +301,3 @@ starting_mission_locations = {
 #     "Gates of Hell": "Gates of Hell: Victory",
 #     "Shatter the Sky": "Shatter the Sky: Victory"
 # }
-alt_final_mission_locations = {
-    "Hand of Darkness": "Hand of Darkness: Victory",
-    "Phantoms of the Void": "Phantoms of the Void: Victory",
-    "The Crucible": "The Crucible: Victory",
-    "Planetfall": "Planetfall: Victory",
-    "Death From Above": "Death From Above: Victory"
-}

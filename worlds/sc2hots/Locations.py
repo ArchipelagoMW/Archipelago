@@ -217,7 +217,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Death From Above", "Death From Above: Third Power Link", SC2HOTS_LOC_ID_OFFSET + 1903,
                      lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
                                    state._sc2hots_has_good_antiair(multiworld, player)),
-        LocationData("The Reckoning", "The Reckoning: Victory", None,
+        LocationData("The Reckoning", "The Reckoning: Victory", SC2HOTS_LOC_ID_OFFSET + 2000,
                      lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
                                    state._sc2hots_has_good_antiair(multiworld, player)),
         LocationData("The Reckoning", "The Reckoning: South Lane", SC2HOTS_LOC_ID_OFFSET + 2001,

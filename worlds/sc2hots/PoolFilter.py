@@ -2,7 +2,7 @@ from typing import Callable, Dict, List, Set
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
 from .Items import item_table
 from .MissionTables import no_build_regions_list, starter_regions_list, easy_regions_list, medium_regions_list, hard_regions_list,\
-    mission_orders, MissionInfo, alt_final_mission_locations, MissionPools
+    mission_orders, MissionInfo, final_missions_list, MissionPools
 from .Options import get_option_value
 from .LogicMixin import SC2HotSLogic
 
@@ -33,9 +33,9 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
     shuffle_no_build = get_option_value(multiworld, player, "shuffle_no_build")
     kerriganless = get_option_value(multiworld, player, "kerriganless") > 0
     logic_level = get_option_value(multiworld, player, "required_tactics")
+    final_mission = final_missions_list[get_option_value(multiworld, player, "final_mission")]
     # shuffle_protoss = get_option_value(multiworld, player, "shuffle_protoss")
     excluded_missions = get_option_value(multiworld, player, "excluded_missions")
-    mission_count = len(mission_orders[mission_order_type]) - 1
     mission_pools = {
         MissionPools.STARTER: starter_regions_list[:],
         MissionPools.EASY: easy_regions_list[:],
@@ -57,17 +57,9 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
     # Omitting Protoss missions if not shuffling protoss
     # if not shuffle_protoss:
     #     excluded_missions = excluded_missions.union(PROTOSS_REGIONS)
-    # Replacing The Reckoning on low mission counts
-    if mission_count < 13 and mission_order_type != 2 or 'The Reckoning' in excluded_missions:
-        final_mission_candidates = list(alt_final_mission_locations.keys())
-        if not kerriganless:
-            final_mission_candidates.append('Supreme')
-        if logic_level > 0:
-            final_mission_candidates.append('The Reckoning')
-        final_mission = multiworld.random.choice([mission for mission in final_mission_candidates if mission not in excluded_missions])
-        excluded_missions.add(final_mission)
-    else:
-        final_mission = 'The Reckoning'
+    if final_mission in excluded_missions:
+        final_mission = multiworld.random.choice([mission for mission in final_missions_list if mission not in excluded_missions])
+    excluded_missions.add(final_mission)
     # Excluding missions
     for difficulty, mission_pool in mission_pools.items():
         mission_pools[difficulty] = [mission for mission in mission_pool if mission not in excluded_missions]

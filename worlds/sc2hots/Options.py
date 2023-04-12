@@ -1,6 +1,6 @@
 from typing import Dict, FrozenSet, Union
 from BaseClasses import MultiWorld
-from Options import Choice, Option, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range
+from Options import Choice, Option, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range, TextChoice
 from .MissionTables import vanilla_mission_req_table
 
 
@@ -328,6 +328,18 @@ class TransmissionsPerTrap(Range):
 #     display_name = "Shuffle Protoss Missions"
 
 
+class FinalMission(Choice):
+    """Determines the final mission of the campaign when randomizing mission order."""
+    display_name = "Final Mission"
+    option_the_reckoning = 0
+    option_the_crucible = 1
+    option_hand_of_darkness = 2
+    option_phantoms_of_the_void = 3
+    option_planetfall = 4
+    option_death_from_above = 5
+    default = 'random'
+
+
 class LockedItems(ItemSet):
     """Guarantees that these items will be unlockable"""
     display_name = "Locked Items"
@@ -375,6 +387,7 @@ sc2hots_options: Dict[str, Option] = {
     # "bunker_upgrade": BunkerUpgrade,
     # "all_in_map": AllInMap,
     # "shuffle_protoss": ShuffleProtoss,
+    "final_mission": FinalMission,
     "locked_items": LockedItems,
     "excluded_items": ExcludedItems,
     "excluded_missions": ExcludedMissions
