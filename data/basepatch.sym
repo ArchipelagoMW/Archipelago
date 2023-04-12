@@ -49,6 +49,7 @@
 08001DA4 m4asongnumstart
 0801009C wariohitmain
 0801B8EC .dbl:0004
+0801B8F0 .thumb
 0801E328 enemychildset
 0801EA3C changewarioreact_fire
 0801EA64 changewarioreact_fat
@@ -111,6 +112,7 @@
 08081354 .pool
 08088620 wariovoiceset
 08089B80 minirandomcreate
+08091DA8 .dbl:0004
 08094ED0 modsi3
 082DECA0 wariochng_react
 083B4BC8 takara_anm_00

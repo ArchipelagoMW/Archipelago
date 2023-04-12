@@ -100,31 +100,6 @@ def _get_symbols(symbol_file: Path) -> typing.Dict[str, int]:
 symbols = _get_symbols(Path(__file__).parent / "data/basepatch.sym")
 
 
-def patch_save_data(rom: LocalRom):
-    # Use the second byte of each level state word to store the boxes that have
-    # been opened and looted, keeping the actual world status in the least
-    # significant byte
-
-    # ItemGetFlgSet_LoadSavestateInfo2RAM()
-    rom.write_halfword(0x75E4E, 0x7849)  # ldrb r1, [r1, #1]  ; Jewel piece 1
-    rom.write_halfword(0x75E78, 0x7849)  # ldrb r1, [r1, #1]  ; Jewel piece 2
-    rom.write_halfword(0x75EA0, 0x7849)  # ldrb r1, [r1, #1]  ; Jewel piece 3
-    rom.write_halfword(0x75EC8, 0x7849)  # ldrb r1, [r1, #1]  ; Jewel piece 4
-    rom.write_halfword(0x75EF0, 0x7849)  # ldrb r1, [r1, #1]  ; CD
-
-    # SeisanSave()
-    rom.write_halfword(0x811D0, 0x7848)  # ldrb r0, [r1, #1]  ; Jewel piece 1
-    rom.write_halfword(0x811D6, 0x7048)  # strb r0, [r1, #1]  ; Jewel piece 1
-    rom.write_halfword(0x811F4, 0x7848)  # ldrb r0, [r1, #1]  ; Jewel piece 2
-    rom.write_halfword(0x811FA, 0x7048)  # strb r0, [r1, #1]  ; Jewel piece 2
-    rom.write_halfword(0x81216, 0x7848)  # ldrb r0, [r1, #1]  ; Jewel piece 3
-    rom.write_halfword(0x8121C, 0x7048)  # strb r0, [r1, #1]  ; Jewel piece 3
-    rom.write_halfword(0x81238, 0x7848)  # ldrb r0, [r1, #1]  ; Jewel piece 4
-    rom.write_halfword(0x8123E, 0x7048)  # strb r0, [r1, #1]  ; Jewel piece 4
-    rom.write_halfword(0x8125A, 0x7848)  # ldrb r0, [r1, #1]  ; CD
-    rom.write_halfword(0x81260, 0x7048)  # strb r0, [r1, #1]  ; CD
-
-
 # Unused; written only for my future reference
 def shuffle_keyzer(rom: LocalRom, world: MultiWorld, player: int):
     # Use setting world.keyzer[player]
@@ -133,23 +108,6 @@ def shuffle_keyzer(rom: LocalRom, world: MultiWorld, player: int):
     rom.write_halfword(0x81282, 0x7048)  # strb r0, [r1, #1]  ; SeisanSave()
 
     # TODO skip cutscene so Wario doesn't walk through locked doors
-
-
-def skip_cutscenes(rom: LocalRom):
-    # Intro cutscene
-    rom.write_halfword(0x00312, 0x2001)  # movs r0, #1  ; MainGameLoop(): Prevent cutscene start
-    rom.write_halfword(0x91944, 0x46C0)  # nop  ; GameReady(): Stop title music
-    rom.write_word(0x91DA8, 0x08091DD8)  # ReadySet_SelectKey(): Don't play car engine sound
-
-    # Autosave tutorial
-    rom.write_halfword(0x80C5C, 0x2001)  # movs r0, #1  ; GameSelectSeisan()
-
-    # Jewel cutscene and jewel door opening
-    rom.write_halfword(0x80FA8, 0x4C60)  # nop  ; DoraGetItemHantei()
-
-    # Post-boss cutscenes
-    rom.write_halfword(0x79FDC, 0x2001)  # movs r0, #1  ; MainGameLoop(): Pyramid appears
-    rom.write_halfword(0x7A030, 0x2000)  # movs r0, #0  ; MainGameLoop(): Pyramid opens
 
 
 def fill_items(rom: LocalRom, world: MultiWorld, player: int):
@@ -174,9 +132,7 @@ def fill_items(rom: LocalRom, world: MultiWorld, player: int):
 
 
 def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
-    patch_save_data(rom)
     fill_items(rom, world, player)
-    skip_cutscenes(rom)
 
     # Write player name and number
     player_name = bytes(world.player_name[player], "utf-8")
