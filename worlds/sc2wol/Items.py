@@ -159,6 +159,10 @@ extended_item_table = dict(**item_table, **{
     "Liberator": ItemData(900 + SC2WOL_ITEM_ID_OFFSET, "Unit", 18, classification=ItemClassification.progression),
     "Valkyrie": ItemData(901 + SC2WOL_ITEM_ID_OFFSET, "Unit", 19, classification=ItemClassification.progression),
     "Widow Mine": ItemData(902 + SC2WOL_ITEM_ID_OFFSET, "Unit", 20, classification=ItemClassification.progression),
+    "Cyclone": ItemData(903 + SC2WOL_ITEM_ID_OFFSET, "Unit", 21, classification=ItemClassification.progression),
+
+    "Mag-Field Accelerators (Cyclone)": ItemData(940 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 18, parent_item="Cyclone"),
+    "Mag-Field Launchers (Cyclone)": ItemData(941 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 19, parent_item="Cyclone"),
 
     "Advanced Ballistics (Liberator)": ItemData(950 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 26, parent_item="Liberator"),
     "Siege Protocol (Liberator)": ItemData(951 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 27, classification=ItemClassification.progression, parent_item="Liberator"),

@@ -236,6 +236,12 @@ void libC6542F50_gf_APUnlockUnits (string lp_unitCode, string lp_version) {
         TechTreeUnitAllow(1, "WidowMine", true);
     }
 
+    if ((ModI(lv_unitCode, 4194304) >= 2097152)) {
+        TechTreeUnitAllow(1, "FactoryTechLab", true);
+        TechTreeUnitAllow(1, "Factory", true);
+        TechTreeUnitAllow(1, "Cyclone", true);
+    }
+
 }
 
 void libC6542F50_gf_APUnlockUpgrades (string lp_upgradeCode, string lp_version) {
@@ -517,6 +523,14 @@ void libC6542F50_gf_APUnlockArmory1 (string lp_unitUpgradeCode, string lp_versio
     if ((ModI(lv_unitUpgradeCode, PowI(2.0, (17 + 1))) >= PowI(2.0, 17.0))) {
         TechTreeUpgradeAddLevel(1, "ClusterBomb", 1);
         TechTreeAbilityAllow(1, AbilityCommand("D8Charge", 0), true);
+    }
+
+    if ((ModI(lv_unitUpgradeCode, PowI(2.0, (18 + 1))) >= PowI(2.0, 18.0))) {
+        TechTreeUpgradeAddLevel(1, "CycloneLockOnDamageUpgrade", 1);
+    }
+
+    if ((ModI(lv_unitUpgradeCode, 1048576) >= 524288)) {
+        TechTreeUpgradeAddLevel(1, "MagFieldLaunchers", 1);
     }
 
 }
@@ -1133,6 +1147,9 @@ bool libC6542F50_gt_APClearTech_Func (bool testConds, bool runActions) {
     TechTreeUnitAllow(1, "WidowMine", false);
     TechTreeUpgradeAllow(1, "DrillClaws", false);
     TechTreeUpgradeAllow(1, "ImprovedConcealment", false);
+    TechTreeUnitAllow(1, "Cyclone", false);
+    TechTreeUpgradeAllow(1, "CycloneLockOnDamageUpgrade", false);
+    TechTreeUpgradeAllow(1, "MagFieldLaunchers", false);
     return true;
 }
 

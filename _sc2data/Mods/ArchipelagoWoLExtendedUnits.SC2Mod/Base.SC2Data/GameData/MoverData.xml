@@ -1,5 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CMoverMissile id="CycloneMissileLeft">
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="5"/>
+            <Speed value="20"/>
+            <MaxSpeed value="35"/>
+            <Outro value="-1"/>
+            <YawPitchRoll value="719.2968"/>
+            <Overlays Scale="0.2,0.2"/>
+        </MotionPhases>
+        <MotionPhases YawPitchRoll="MAX">
+            <Overlays Scale="0"/>
+        </MotionPhases>
+        <MotionOverlays>
+            <Type value="Revolver"/>
+            <RevolverSpeed value="179.2968"/>
+            <RevolverSpeedRange value="179.2968"/>
+            <RevolverMaxSpeed value="719.2968"/>
+            <RevolverMaxSpeedRange value="0"/>
+            <RevolverAccel value="337.5"/>
+            <RevolverAccelRange value="337.5"/>
+        </MotionOverlays>
+    </CMoverMissile>
+    <CMoverMissile id="CycloneMissileRight">
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="5"/>
+            <Speed value="20"/>
+            <MaxSpeed value="35"/>
+            <Outro value="-1"/>
+            <YawPitchRoll value="719.2968"/>
+            <Overlays Scale="0.2,0.2"/>
+        </MotionPhases>
+        <MotionPhases YawPitchRoll="MAX">
+            <Overlays Scale="0"/>
+        </MotionPhases>
+        <MotionOverlays>
+            <Type value="Revolver"/>
+            <RevolverSpeed value="179.2968"/>
+            <RevolverSpeedRange value="179.2968"/>
+            <RevolverMaxSpeed value="719.2968"/>
+            <RevolverMaxSpeedRange value="0"/>
+            <RevolverAccel value="337.5"/>
+            <RevolverAccelRange value="337.5"/>
+        </MotionOverlays>
+    </CMoverMissile>
     <CMoverMissile id="LiberatorAGMissile" parent="MissileDefault">
         <MotionPhases index="0">
             <Driver value="Guidance"/>

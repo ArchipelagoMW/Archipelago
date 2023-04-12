@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CValidatorUnitCompareBehaviorCount id="CasterLockingOn">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="LockOnDisableAttack"/>
+    </CValidatorUnitCompareBehaviorCount>
     <CValidatorCombine id="DontDamageOwnedWidowMines">
         <CombineArray value="IsWidowMineOrWidowMineBurrowed"/>
         <CombineArray value="OwnedBySelf"/>
@@ -14,10 +19,130 @@
         <WhichUnit Value="Caster"/>
         <Behavior value="YoinkTentacle"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="HaveCycloneLockOnDamageUpgrade">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="HaveCycloneLockOnDamageUpgrade"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="HaveCycloneLockOnRangeUpgrade">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="CycloneLockOnRangeUpgrade"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="HaveMagFieldLaunchers">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="HaveMagFieldLaunchers"/>
+    </CValidatorPlayerRequirement>
     <CValidatorPlayerRequirement id="HaveWidowMineImprovedConcealmentUpgrade">
         <Find value="1"/>
         <Value value="HaveWidowMineImprovedConcealment"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="IsBunker">
+        <Value value="Bunker"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsDefensiveStructure">
+        <CombineArray value="NotStructure"/>
+        <CombineArray value="IsPhotonCannon"/>
+        <CombineArray value="IsBunker"/>
+        <CombineArray value="IsMissileTurret"/>
+        <CombineArray value="IsSpineCrawler"/>
+        <CombineArray value="IsSporeCrawler"/>
+        <CombineArray value="IsPlanetaryFortress"/>
+        <CombineArray value="IsAutoTurret"/>
+        <CombineArray value="NotStructure"/>
+        <CombineArray value="IsPhotonCannon"/>
+        <CombineArray value="IsBunker"/>
+        <CombineArray value="IsMissileTurret"/>
+        <CombineArray value="IsSpineCrawler"/>
+        <CombineArray value="IsSporeCrawler"/>
+        <CombineArray value="IsPlanetaryFortress"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="IsNotInterceptor">
+        <Value value="Interceptor"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsSpineCrawler">
+        <CombineArray value="IsSpineCrawlerRooted"/>
+        <CombineArray value="IsSpineCrawlerUprooted"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="IsSpineCrawlerRooted">
+        <Value value="SpineCrawler"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsSpineCrawlerUprooted">
+        <Value value="SpineCrawlerUprooted"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsSporeCrawler">
+        <CombineArray value="IsSporeCrawlerRooted"/>
+        <CombineArray value="IsSporeCrawlerUprooted"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="IsSporeCrawlerRooted">
+        <Value value="SporeCrawler"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsSporeCrawlerUprooted">
+        <Value value="SporeCrawlerUprooted"/>
+    </CValidatorUnitType>
+    <CValidatorUnitFilters id="LockOnAirTargetNotDead">
+        <WhichUnit Effect="LockOnAirFireSet"/>
+        <Filters value="Air;Dead"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="LockOnCasterFilters">
+        <WhichUnit Value="Caster"/>
+        <Filters value="-;Stasis,Dead,Hidden,Stunned"/>
+    </CValidatorUnitFilters>
+    <CValidatorLocationCompareRange id="LockOnCasterNearTarget">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="LT"/>
+        <Range value="12"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorLocationCompareRange id="LockOnCasterNearTargetUpgraded">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="LT"/>
+        <Range value="15"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorCombine id="LockOnGroundAirPeriodicValidators">
+        <Type value="And"/>
+        <CombineArray value="LockOnCasterNearTargetUpgraded"/>
+        <CombineArray value="LockOnTargetFilters"/>
+        <CombineArray value="LockOnCasterFilters"/>
+        <CombineArray value="CasterLockingOn"/>
+        <!-- <CombineArray value="CasterDoesNotHaveScramblerMissileBehavior"/> --><!-- Not Applicable to WoL environment -->
+    </CValidatorCombine>
+    <CValidatorCombine id="LockOnPeriodicValidators">
+        <Type value="And"/>
+        <CombineArray value="LockOnCasterNearTarget"/>
+        <CombineArray value="LockOnTargetFilters"/>
+        <CombineArray value="LockOnCasterFilters"/>
+        <CombineArray value="CasterLockingOn"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="LockOnPeriodicValidatorsUpgraded">
+        <Type value="And"/>
+        <CombineArray value="LockOnCasterNearTargetUpgraded"/>
+        <CombineArray value="LockOnTargetFilters"/>
+        <CombineArray value="LockOnCasterFilters"/>
+        <CombineArray value="CasterLockingOn"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="LockOnTargetFilters">
+        <Filters value="Visible;Player,Ally,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="LockOnTargetNotDead">
+        <WhichUnit Effect="LockOnFireSet"/>
+        <Filters value="-;Dead"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="LockOnTargetNotDeadNew">
+        <WhichUnit Effect="LockOnInitialSetNew"/>
+        <Filters value="-;Dead"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="LockOnTargetNotDeadSet">
+        <CombineArray value="LockOnTargetNotDead"/>
+        <CombineArray value="LockOnAirTargetNotDead"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="LockingOn">
+        <ResultFailed value="Error,NotLockingOn"/>
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="LockOnDisableAttack"/>
+    </CValidatorUnitCompareBehaviorCount>
     <CValidatorCombine id="NotHaveWidowMineImprovedConcealmentUpgrade">
         <CombineArray value="HaveWidowMineImprovedConcealmentUpgrade"/>
         <Negate value="1"/>
@@ -59,6 +184,11 @@
         <WhichUnit Value="Caster"/>
         <Behavior value="MothershipCoreRecalling"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="NotLockingOn">
+        <ResultFailed value="Error,NotLockingOn"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="LockOnDisableAttack"/>
+    </CValidatorUnitCompareBehaviorCount>
     <CValidatorUnitCompareBehaviorCount id="NotWidowMineTarget">
         <ResultFailed value="Error,Error/NotWidowMineTarget"/>
         <Behavior value="MineDroneCountdown"/>
@@ -66,6 +196,9 @@
     <CValidatorUnitFilters id="OwnedBySelf">
         <Filters value="-;Ally,Neutral,Enemy"/>
     </CValidatorUnitFilters>
+    <CValidatorUnitCompareBehaviorCount id="TargetNotLockOn">
+        <Behavior value="LockOn"/>
+    </CValidatorUnitCompareBehaviorCount>
     <CValidatorUnitCompareCooldown id="WidowMineAttackNotOnCooldown">
         <CooldownLink value="Abil/WidowMineAttack"/>
         <Ability value="WidowMineAttack"/>

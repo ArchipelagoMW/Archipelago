@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CTurret id="Cyclone" parent="FreeRotate">
+        <Idle value="Reset"/>
+        <YawIdleRate value="360"/>
+        <Fidget>
+            <ChanceArray index="Turn" value="0"/>
+        </Fidget>
+    </CTurret>
+    <CTurret id="CycloneWeaponTurret" parent="FreeRotate">
+        <Idle value="FollowMovement"/>
+        <YawIdleRate value="360"/>
+    </CTurret>
     <CTurret id="Liberator" parent="FreeRotate">
         <Idle value="ResetIfMoving"/>
         <Fidget>

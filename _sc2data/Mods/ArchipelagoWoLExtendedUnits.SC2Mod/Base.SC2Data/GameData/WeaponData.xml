@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CWeaponLegacy id="CycloneFakeWeapon">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Hidden" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="CycloneWeaponDamage"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <MinScanRange value="6"/>
+        <Period value="1"/>
+        <Effect value="CycloneFakeWeaponDummyDamage"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="CycloneLockOnDummy">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Hidden" value="1"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <MinScanRange value="7.5"/>
+        <Range value="7"/>
+        <Arc value="360"/>
+        <Period value="1"/>
+        <Effect value="CycloneFakeWeaponDummyDamage"/>
+    </CWeaponLegacy>
     <CWeaponLegacy id="LiberatorAGWeapon">
         <EditorCategories value="Race:Terran"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
@@ -20,6 +40,15 @@
         <Period value="1.8"/>
         <Effect value="LiberatorMissileBurstPersistent"/>
         <AllowedMovement value="Slowing"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="TyphoonMissilePod">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="CycloneAttackWeaponDamage"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <MinScanRange value="5.5"/>
+        <Period value="1"/>
+        <Effect value="CycloneAttackWeaponLaunchMissileSwitch"/>
     </CWeaponLegacy>
     <CWeaponLegacy id="ValkyrieSCBWWeapon">
         <EditorCategories value="Race:Terran"/>

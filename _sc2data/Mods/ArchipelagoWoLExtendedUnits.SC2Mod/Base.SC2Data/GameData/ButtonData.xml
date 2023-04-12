@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CButton id="BuildCyclone">
+        <Icon value="Assets\Textures\btn-unit-terran-cyclone.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-cyclone.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="CycloneLockOnAir">
+        <Icon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="CycloneLockOnDamageUpgrade">
+        <Icon value="Assets\Textures\btn-upgrade-terran-magfieldaccelerator.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-magfieldaccelerator.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="CycloneMissiles">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-hellstormbatteries.dds"/>
+        <AlertIcon value="Assets\Textures\btn-techupgrade-terran-hellstormbatteries.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="CycloneRapidFireLaunchers">
+        <Icon value="Assets\Textures\btn-upgrade-raynor-ripwavemissiles.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-raynor-ripwavemissiles.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="CycloneResearchLockOnAir">
+        <Icon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="CycloneResearchLockOnDamageUpgrade">
+        <Icon value="Assets\Textures\btn-upgrade-terran-magfieldaccelerator.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-magfieldaccelerator.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
     <CButton id="DrillClaws">
         <Icon value="Assets\Textures\BTN-Upgrade-Terran-ResearchDrillingClaws.dds"/>
         <AlertIcon value="Assets\Textures\BTN-Upgrade-Terran-ResearchDrillingClaws.dds"/>
@@ -27,6 +62,44 @@
     <CButton id="LiberatorAGRangeUpgrade">
         <Icon value="Assets\Textures\btn-upgrade-terran-advanceballistics.dds"/>
         <AlertIcon value="Assets\Textures\btn-upgrade-terran-advanceballistics.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="LockOn">
+        <Icon value="Assets\Textures\btn-ability-terran-lockon.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-lockon.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="LockOnAir">
+        <Icon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="LockOnCancel">
+        <Icon value="Assets\Textures\btn-command-cancel.dds"/>
+        <AlertIcon value="Assets\Textures\btn-command-cancel.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+        <HotkeyAlias value="Cancel"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="MagFieldLaunchers">
+        <Icon value="Assets\Textures\btn-upgrade-terran-cyclonerangeupgrade.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-cyclonerangeupgrade.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="ResearchArmorPiercingRockets">
+        <Icon value="Assets\Textures\btn-ability-terran-ignorearmor.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-ignorearmor.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="ResearchCycloneRapidFireLaunchers">
+        <Icon value="Assets\Textures\btn-upgrade-raynor-ripwavemissiles.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-raynor-ripwavemissiles.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="ResearchMagFieldLaunchers">
+        <Icon value="Assets\Textures\btn-upgrade-terran-cyclonerangeupgrade.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-cyclonerangeupgrade.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="SiegeProtocol">

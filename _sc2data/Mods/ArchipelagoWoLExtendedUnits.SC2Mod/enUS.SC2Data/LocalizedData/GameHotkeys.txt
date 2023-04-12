@@ -1,6 +1,14 @@
-﻿Button/Hotkey/Liberator=T
+﻿Button/Hotkey/BuildCyclone=B
+Button/Hotkey/CycloneResearchLockOnDamageUpgrade=R
+Button/Hotkey/Liberator=T
 Button/Hotkey/LiberatorAAMode=D
 Button/Hotkey/LiberatorAGMode=E
+Button/Hotkey/LockOn=C
+Button/Hotkey/LockOnAir=T
+Button/Hotkey/LockOnCancel=Escape
+Button/Hotkey/ResearchArmorPiercingRockets=A
+Button/Hotkey/ResearchCycloneRapidFireLaunchers=A
+Button/Hotkey/ResearchMagFieldLaunchers=R
 Button/Hotkey/ValkyrieSCBW=K
 Button/Hotkey/WidowMine=N
 Button/Hotkey/WidowMineAttack=C

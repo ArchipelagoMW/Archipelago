@@ -5,6 +5,10 @@
             <Button DefaultButtonFace="WidowMine" State="Restricted"/>
             <Unit value="WidowMine"/>
         </InfoArray>
+        <InfoArray index="Train12" Time="45">
+            <Button DefaultButtonFace="BuildCyclone" Requirements="HaveAttachedTechLab"/>
+            <Unit value="Cyclone"/>
+        </InfoArray>
     </CAbilTrain>
     <CAbilEffectInstant id="LiberatorAATarget">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -66,6 +70,69 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
+    <CAbilEffectTarget id="LockOn">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <PrepEffect value="LockOnInitialAB"/>
+        <Effect index="0" value="LockOnInitialSetNew"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="6"/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <TargetSorts>
+            <SortArray value="TSThreatensCyclone"/>
+            <SortArray value="AirTarget"/>
+        </TargetSorts>
+        <Range value="7"/>
+        <Arc value="360"/>
+        <AutoCastFilters value="Visible;Player,Ally,Neutral"/>
+        <AutoCastRange value="7.5"/>
+        <AutoCastValidatorArray value="noMarkers"/>
+        <AutoCastValidatorArray value="TargetNotLockOn"/>
+        <AutoCastValidatorArray value="IsNotInterceptor"/>
+        <AutoCastValidatorArray value="TargetNotChangeling"/>
+        <AutoCastValidatorArray value="IsNotNeuralParasited"/>
+        <AutoCastValidatorArray value="TargetNotChangeling"/>
+        <AutoCastValidatorArray value="IsDefensiveStructure"/>
+        <!-- <AutoCastValidatorArray value="IsNotBroodlingFate"/> --><!-- Not Applicable to WoL environment -->
+        <AutoCastValidatorArray value="NotLarva"/>
+        <AutoCastValidatorArray value="CasterIsNotHidden"/>
+        <AutoCastValidatorArray value="NotLarvaEgg"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="LockOn" Requirements="NoLockedOn"/>
+        <FollowRange value="7"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="LockOnAir">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <PrepEffect value="LockOnInitialAB"/>
+        <Effect index="0" value="LockOnAirInitialSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Cost>
+            <Cooldown Link="LockOnShared" Location="Unit" TimeUse="6"/>
+        </Cost>
+        <TargetFilters value="Air,Visible;Self,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="7"/>
+        <Arc value="360"/>
+        <AutoCastFilters value="Visible;Player,Ally,Neutral"/>
+        <AutoCastRange value="7"/>
+        <AutoCastValidatorArray value="noMarkers"/>
+        <AutoCastValidatorArray value="TargetNotLockOn"/>
+        <AutoCastValidatorArray value="IsNotInterceptor"/>
+        <AutoCastValidatorArray value="TargetNotChangeling"/>
+        <AutoCastValidatorArray value="IsNotNeuralParasited"/>
+        <AutoCastValidatorArray value="IsFlying"/>
+        <!-- <AutoCastValidatorArray value="IsNotBroodlingFate"/> --><!-- Not Applicable to WoL environment -->
+        <CmdButtonArray index="Execute" DefaultButtonFace="LockOnAir" Requirements="NoLockedOn"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="LockOnCancel">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="LockOnDisableAttackRB"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="LockOnCancel" Requirements="LockedOn"/>
+    </CAbilEffectInstant>
     <CAbilTrain id="TrainStarportAdditionalUnits" parent="StarportTrain">
         <Name value="Abil/Name/TrainStarportAdditionalUnits"/>
         <InfoArray index="Train1" Time="60">

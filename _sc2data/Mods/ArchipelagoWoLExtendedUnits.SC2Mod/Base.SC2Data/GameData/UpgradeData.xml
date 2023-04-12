@@ -1,5 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CUpgrade id="ArmorPiercingRockets">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-ability-terran-ignorearmor.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Effect,CycloneAirWeaponDamageAlternative,AttributeBonus[Armored]" Value="2"/>
+        <EffectArray Operation="Set" Reference="Button,LockOn,Tooltip" Value="Button/Tooltip/LockOnArmorPiercingUpgrade"/>
+        <EffectArray Operation="Set" Reference="Button,LockOn,AlertTooltip" Value="Button/Tooltip/LockOnArmorPiercingUpgrade"/>
+        <EffectArray Reference="Effect,CycloneAirWeaponDamage,AttributeBonus[Armored]" Value="2"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="Cyclone"/>
+    </CUpgrade>
+    <CUpgrade id="CycloneAirUpgrade">
+        <Icon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Weapon,TyphoonMissilePod,TargetFilters" Value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <EffectArray Operation="Set" Reference="Abil,LockOn,IgnoreFilters" Value="-;-"/>
+        <EffectArray Operation="Set" Reference="Unit,Cyclone,Description" Value="Button/Tooltip/CycloneUpgrade"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="Cyclone"/>
+    </CUpgrade>
+    <CUpgrade id="CycloneLockOnDamageUpgrade">
+        <Icon value="Assets\Textures\btn-upgrade-terran-magfieldaccelerator.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Effect,CycloneAirWeaponDamage,Amount" Value="10"/>
+        <EffectArray Reference="Effect,CycloneWeaponDamage,Amount" Value="10"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="Cyclone"/>
+    </CUpgrade>
+    <CUpgrade id="CycloneLockOnRangeUpgrade">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-durablematerials.dds"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Abil,LockOn,Range[0]" Value="3"/>
+        <EffectArray Reference="Abil,LockOn,AutoCastRange" Value="3"/>
+        <EffectArray Reference="Actor,CycloneLockOnRange,Range" Value="3.000000"/>
+        <EffectArray Reference="Actor,CycloneLockOnTrackingRange,Range" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Effect,LockOnCP,PeriodicValidator" Value="LockOnPeriodicValidatorsUpgraded"/>
+        <AffectedUnitArray value="Cyclone"/>
+    </CUpgrade>
+    <CUpgrade id="CycloneRapidFireLaunchers">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-raynor-ripwavemissiles.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Effect,LockOnAirCP,PeriodicPeriodArray[4]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,LockOnAirCP,PeriodicPeriodArray[5]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,LockOnAirCP,PeriodicPeriodArray[6]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,LockOnAirCP,PeriodicPeriodArray[7]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,LockOnAirCP,PeriodicPeriodArray[8]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,LockOnAirCP,PeriodicPeriodArray[9]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,LockOnAirCP,PeriodicPeriodArray[10]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,LockOnAirCP,PeriodicPeriodArray[11]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,LockOnAirCP,PeriodicEffectArray[4]" Value="CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Effect,LockOnAirCP,PeriodicEffectArray[5]" Value="CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Effect,LockOnAirCP,PeriodicEffectArray[6]" Value="CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Effect,LockOnAirCP,PeriodicEffectArray[7]" Value="CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Effect,LockOnAirCP,PeriodicEffectArray[8]" Value="CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Effect,LockOnAirCP,PeriodicEffectArray[9]" Value="CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Effect,LockOnAirCP,PeriodicEffectArray[10]" Value="CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Effect,LockOnAirCP,PeriodicEffectArray[11]" Value="CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Button,LockOn,AlertTooltip" Value="Button/Tooltip/LockOnRapidFireLaunchers"/>
+        <EffectArray Operation="Set" Reference="Button,LockOn,Tooltip" Value="Button/Tooltip/LockOnRapidFireLaunchers"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="Cyclone"/>
+    </CUpgrade>
     <CUpgrade id="DrillClaws">
         <Flags index="TechTreeCheat" value="1"/>
         <Icon value="Assets\Textures\BTN-Upgrade-Terran-ResearchDrillingClaws.dds"/>
@@ -33,6 +111,16 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="Liberator"/>
     </CUpgrade>
+    <CUpgrade id="MagFieldLaunchers">
+        <Icon value="Assets\Textures\btn-upgrade-terran-cyclonerangeupgrade.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Weapon,TyphoonMissilePod,Range" Value="2"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="Cyclone"/>
+    </CUpgrade>
     <CUpgrade id="RegenerativeBioSteel">
         <EffectArray Operation="Set" Reference="Unit,JimRaynorVulture,LifeRegenDelay" Value="3.000000"/>
         <EffectArray Operation="Set" Reference="Unit,JimRaynorVulture,LifeRegenRate" Value="0.601500"/>
@@ -46,6 +134,8 @@
         <EffectArray Operation="Set" Reference="Unit,WidowMine,LifeRegenRate" Value="0.601500"/>
         <EffectArray Operation="Set" Reference="Unit,WidowMineBurrowed,LifeRegenDelay" Value="3.000000"/>
         <EffectArray Operation="Set" Reference="Unit,WidowMineBurrowed,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,Cyclone,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,Cyclone,LifeRegenRate" Value="0.601500"/>
     </CUpgrade>
     <CUpgrade id="LiberatorSiegeProtocol">
         <Icon value="Assets\Textures\btn-upgrade-raynor-maelstromrounds.dds"/>
@@ -251,46 +341,56 @@
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,JimRaynorVulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <AffectedUnitArray value="JimRaynorVulture"/>
         <EffectArray Reference="Unit,WidowMine,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,WidowMine,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmorLevel" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <AffectedUnitArray value="WidowMine" />
-        <AffectedUnitArray value="WidowMineBurrowed" />
+        <EffectArray Reference="Unit,Cyclone,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Cyclone,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,Cyclone,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <AffectedUnitArray value="JimRaynorVulture"/>
+        <AffectedUnitArray value="WidowMine"/>
+        <AffectedUnitArray value="WidowMineBurrowed"/>
+        <AffectedUnitArray value="Cyclone"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleArmorsLevel2">
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,JimRaynorVulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <AffectedUnitArray value="JimRaynorVulture"/>
         <EffectArray Reference="Unit,WidowMine,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,WidowMine,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmorLevel" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <AffectedUnitArray value="WidowMine" />
-        <AffectedUnitArray value="WidowMineBurrowed" />
+        <EffectArray Reference="Unit,Cyclone,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Cyclone,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,Cyclone,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <AffectedUnitArray value="JimRaynorVulture"/>
+        <AffectedUnitArray value="WidowMine"/>
+        <AffectedUnitArray value="WidowMineBurrowed"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleArmorsLevel3">
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,JimRaynorVulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <AffectedUnitArray value="JimRaynorVulture"/>
         <EffectArray Reference="Unit,WidowMine,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,WidowMine,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,WidowMineBurrowed,LifeArmorLevel" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <AffectedUnitArray value="WidowMine" />
-        <AffectedUnitArray value="WidowMineBurrowed" />
+        <EffectArray Reference="Unit,Cyclone,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Cyclone,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,Cyclone,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <AffectedUnitArray value="JimRaynorVulture"/>
+        <AffectedUnitArray value="WidowMine"/>
+        <AffectedUnitArray value="WidowMineBurrowed"/>
+        <AffectedUnitArray value="Cyclone"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleArmorsVanadiumPlatingLevel1">
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,JimRaynorVulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <AffectedUnitArray value="JimRaynorVulture"/>
         <EffectArray Reference="Unit,WidowMine,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,WidowMine,LifeArmorLevel" Value="1"/>
         <EffectArray Operation="Multiply" Reference="Unit,WidowMine,LifeMax" Value="1.05"/>
@@ -300,14 +400,20 @@
         <EffectArray Operation="Multiply" Reference="Unit,WidowMineBurrowed,LifeMax" Value="1.05"/>
         <EffectArray Operation="Multiply" Reference="Unit,WidowMineBurrowed,LifeStart" Value="1.05"/>
         <EffectArray Operation="Set" Reference="Actor,WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <AffectedUnitArray value="WidowMine" />
-        <AffectedUnitArray value="WidowMineBurrowed" />
+        <EffectArray Reference="Unit,Cyclone,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Cyclone,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Cyclone,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Cyclone,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,Cyclone,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <AffectedUnitArray value="JimRaynorVulture"/>
+        <AffectedUnitArray value="WidowMine"/>
+        <AffectedUnitArray value="WidowMineBurrowed"/>
+        <AffectedUnitArray value="Cyclone"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleArmorsVanadiumPlatingLevel2">
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,JimRaynorVulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <AffectedUnitArray value="JimRaynorVulture"/>
         <EffectArray Reference="Unit,WidowMine,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,WidowMine,LifeArmorLevel" Value="1"/>
         <EffectArray Operation="Multiply" Reference="Unit,WidowMine,LifeMax" Value="1.05"/>
@@ -317,14 +423,20 @@
         <EffectArray Operation="Multiply" Reference="Unit,WidowMineBurrowed,LifeMax" Value="1.05"/>
         <EffectArray Operation="Multiply" Reference="Unit,WidowMineBurrowed,LifeStart" Value="1.05"/>
         <EffectArray Operation="Set" Reference="Actor,WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <AffectedUnitArray value="WidowMine" />
-        <AffectedUnitArray value="WidowMineBurrowed" />
+        <EffectArray Reference="Unit,Cyclone,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Cyclone,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Cyclone,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Cyclone,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,Cyclone,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <AffectedUnitArray value="JimRaynorVulture"/>
+        <AffectedUnitArray value="WidowMine"/>
+        <AffectedUnitArray value="WidowMineBurrowed"/>
+        <AffectedUnitArray value="Cyclone"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleArmorsVanadiumPlatingLevel3">
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,JimRaynorVulture,LifeArmor" Value="1"/>
         <EffectArray Operation="Set" Reference="Actor,JimRaynorVulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <AffectedUnitArray value="JimRaynorVulture"/>
         <EffectArray Reference="Unit,WidowMine,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,WidowMine,LifeArmorLevel" Value="1"/>
         <EffectArray Operation="Multiply" Reference="Unit,WidowMine,LifeMax" Value="1.05"/>
@@ -334,41 +446,69 @@
         <EffectArray Operation="Multiply" Reference="Unit,WidowMineBurrowed,LifeMax" Value="1.05"/>
         <EffectArray Operation="Multiply" Reference="Unit,WidowMineBurrowed,LifeStart" Value="1.05"/>
         <EffectArray Operation="Set" Reference="Actor,WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <AffectedUnitArray value="WidowMine" />
-        <AffectedUnitArray value="WidowMineBurrowed" />
+        <EffectArray Reference="Unit,Cyclone,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Cyclone,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Cyclone,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Cyclone,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,Cyclone,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <AffectedUnitArray value="JimRaynorVulture"/>
+        <AffectedUnitArray value="WidowMine"/>
+        <AffectedUnitArray value="WidowMineBurrowed"/>
+        <AffectedUnitArray value="Cyclone"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleWeaponsLevel1">
         <EffectArray Reference="Effect,JimRaynorVultureWeaponDamage,Amount" Value="2"/>
         <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
+        <EffectArray Reference="Effect,CycloneAttackWeaponDamage,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,TyphoonMissilePod,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,TyphoonMissilePod,Level" Value="1"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleWeaponsLevel2">
         <EffectArray Reference="Effect,JimRaynorVultureWeaponDamage,Amount" Value="2"/>
         <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
+        <EffectArray Reference="Effect,CycloneAttackWeaponDamage,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,TyphoonMissilePod,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,TyphoonMissilePod,Level" Value="1"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleWeaponsLevel3">
         <EffectArray Reference="Effect,JimRaynorVultureWeaponDamage,Amount" Value="2"/>
         <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
+        <EffectArray Reference="Effect,CycloneAttackWeaponDamage,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,TyphoonMissilePod,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,TyphoonMissilePod,Level" Value="1"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleWeaponsUltraCapacitorsLevel1">
         <EffectArray Reference="Effect,JimRaynorVultureWeaponDamage,Amount" Value="2"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
         <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Reference="Effect,CycloneAttackWeaponDamage,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,TyphoonMissilePod,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,TyphoonMissilePod,Level" Value="1"/>
+        <EffectArray Reference="Weapon,TyphoonMissilePod,RateMultiplier" Value="0.05"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleWeaponsUltraCapacitorsLevel2">
         <EffectArray Reference="Effect,JimRaynorVultureWeaponDamage,Amount" Value="2"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
         <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Reference="Effect,CycloneAttackWeaponDamage,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,TyphoonMissilePod,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,TyphoonMissilePod,Level" Value="1"/>
+        <EffectArray Reference="Weapon,TyphoonMissilePod,RateMultiplier" Value="0.05"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleWeaponsUltraCapacitorsLevel3">
         <EffectArray Reference="Effect,JimRaynorVultureWeaponDamage,Amount" Value="2"/>
         <EffectArray Operation="Set" Reference="Weapon,RaynorFragmentationGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,Level" Value="1"/>
         <EffectArray Reference="Weapon,RaynorFragmentationGrenade,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Effect,CycloneAttackWeaponDamage,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,TyphoonMissilePod,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,TyphoonMissilePod,Level" Value="1"/>
+        <EffectArray Reference="Weapon,TyphoonMissilePod,RateMultiplier" Value="0.05"/>
     </CUpgrade>
     <CUpgrade id="ImprovedConcealment">
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CModel id="CycloneMissile2" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\Cyclone_Missile\Cyclone_Missile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Lighting value="CycloneMissile"/>
+    </CModel>
     <CModel id="ValkyrieSCBW" parent="Unit">
         <Model value="Assets\Units\Terran\ValkyrieSCBW\ValkyrieSCBW.m3"/>
         <AttachProps Id="Ref_Weapon">

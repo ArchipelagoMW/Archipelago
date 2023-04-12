@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CTargetSortField id="AirTarget">
+        <Field value="PlaneArray[Air]"/>
+        <Value value="1"/>
+    </CTargetSortField>
+    <CTargetSortValidator id="TSThreatensCyclone">
+        <Validator value="ThreatensCyclone"/>
+    </CTargetSortValidator>
+</Catalog>

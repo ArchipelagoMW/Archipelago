@@ -1,8 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CRequirementCountBehavior id="CountBehaviorLockOnDisableAttackCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="LockOnDisableAttack" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementCountBehavior id="CountBehaviorMercenaryCycloneMissilesCompleteOnlyAtUnit714158575">
+        <Count Link="MercenaryCycloneMissiles" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
     <CRequirementCountBehavior id="CountBehaviorWidowMineArmedCompleteOnlyAtUnit">
         <Count Link="WidowMineArmed" State="CompleteOnlyAtUnit"/>
     </CRequirementCountBehavior>
+    <CRequirementCountUpgrade id="CountUpgradeCycloneAirUpgradeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="CycloneAirUpgrade" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeCycloneAirUpgradeCompleteOnly3809174891">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="CycloneAirUpgrade" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeCycloneAirUpgradeQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="CycloneAirUpgrade" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeCycloneLockOnDamageUpgradeCompleteOnly114637382">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="CycloneLockOnDamageUpgrade" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeCycloneLockOnDamageUpgradeCompleteOnly3649956308">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="CycloneLockOnDamageUpgrade" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeCycloneLockOnDamageUpgradeQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="CycloneLockOnDamageUpgrade" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeCycloneLockOnRangeUpgradeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="CycloneLockOnRangeUpgrade" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeCycloneLockOnRangeUpgradeQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="CycloneLockOnRangeUpgrade" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeCycloneRapidFireLaunchersCompleteOnly403155563">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="CycloneRapidFireLaunchers" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeCycloneRapidFireLaunchersCompleteOnlyTechTreeCheat">
+        <Count Link="CycloneRapidFireLaunchers" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeCycloneRapidFireLaunchersQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="CycloneRapidFireLaunchers" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="CountUpgradeDrillClawsCompleteOnly1396043293">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="DrillClaws" State="CompleteOnly"/>
@@ -44,6 +98,34 @@
         <Tooltip value=""/>
         <Count Link="LiberatorMorph" State="QueuedOrBetter"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeMagFieldLaunchersCompleteOnly4115927287">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="MagFieldLaunchers" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeMagFieldLaunchersQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="MagFieldLaunchers" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="Not361380870CountBehaviorLockOnDisableAttackCompleteOnlyAtUnit">
+        <OperandArray index="0" value="CountBehaviorLockOnDisableAttackCompleteOnlyAtUnit"/>
+    </CRequirementNot>
+    <CRequirementNot id="Not714158575CountBehaviorMercenaryCycloneMissilesCompleteOnlyAtUnit714158575">
+        <OperandArray index="0" value="CountBehaviorMercenaryCycloneMissilesCompleteOnlyAtUnit714158575"/>
+    </CRequirementNot>
+    <CRequirementNot id="NotCountUpgradeCycloneAirUpgradeQueuedOrBetter">
+        <Tooltip value=""/>
+        <OperandArray index="0" value="CountUpgradeCycloneAirUpgradeQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="NotCountUpgradeCycloneLockOnDamageUpgradeQueuedOrBetter">
+        <OperandArray index="0" value="CountUpgradeCycloneLockOnDamageUpgradeQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="NotCountUpgradeCycloneLockOnRangeUpgradeQueuedOrBetter">
+        <Tooltip value=""/>
+        <OperandArray index="0" value="CountUpgradeCycloneLockOnRangeUpgradeQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="NotCountUpgradeCycloneRapidFireLaunchersQueuedOrBetter">
+        <OperandArray index="0" value="CountUpgradeCycloneRapidFireLaunchersQueuedOrBetter"/>
+    </CRequirementNot>
     <CRequirementNot id="NotCountUpgradeDrillClawsQueuedOrBetter">
         <Tooltip value=""/>
         <OperandArray index="0" value="CountUpgradeDrillClawsQueuedOrBetter"/>
@@ -57,5 +139,8 @@
     </CRequirementNot>
     <CRequirementNot id="NotCountUpgradeLiberatorMorphQueuedOrBetter">
         <OperandArray index="0" value="CountUpgradeLiberatorMorphQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="NotCountUpgradeMagFieldLaunchersQueuedOrBetter">
+        <OperandArray index="0" value="CountUpgradeMagFieldLaunchersQueuedOrBetter"/>
     </CRequirementNot>
 </Catalog>
