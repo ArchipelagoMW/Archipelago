@@ -68,14 +68,17 @@ class ClientCommandProcessor(CommandProcessor):
             self.output(f"{self.ctx.item_names[item.item]} from {self.ctx.player_names[item.player]}")
         return True
 
-    def _cmd_missing(self) -> bool:
-        """List all missing location checks, from your local game state"""
+    def _cmd_missing(self, filter_text = "") -> bool:
+        """List all missing location checks, from your local game state.
+        Can be given text, which will be used as filter."""
         if not self.ctx.game:
             self.output("No game set, cannot determine missing checks.")
             return False
         count = 0
         checked_count = 0
         for location, location_id in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id.items():
+            if filter_text and filter_text not in location:
+                continue
             if location_id < 0:
                 continue
             if location_id not in self.ctx.locations_checked:
@@ -163,6 +166,7 @@ class CommonContext:
     server_address: typing.Optional[str]
     password: typing.Optional[str]
     hint_cost: typing.Optional[int]
+    hint_points: typing.Optional[int]
     player_names: typing.Dict[int, str]
 
     finished_game: bool
@@ -708,6 +712,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.slot = args["slot"]
         # int keys get lost in JSON transfer
         ctx.slot_info = {int(pid): data for pid, data in args["slot_info"].items()}
+        ctx.hint_points = args.get("hint_points", 0)
         ctx.consume_players_package(args["players"])
         msgs = []
         if ctx.locations_checked:

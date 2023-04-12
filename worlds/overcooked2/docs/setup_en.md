@@ -51,8 +51,11 @@ To completely remove *OC2-Modding*, navigate to your game's installation folder 
 
 1. Visit the [Player Settings](../../../../games/Overcooked!%202/player-settings) page and configure the game-specific settings to taste
 
+*By default, these settings will only use levels from the base game and the "Seasonal" free DLC updates. If you own any of the paid DLC, you may select individual DLC packs to include/exclude on the [Weighted Settings](../../../../weighted-settings) page*
+
 2. Export your yaml file and use it to generate a new randomized game
-- (For instructions on how to generate an Archipelago game, refer to the [Archipelago Web Guide](../../../../tutorial/Archipelago/using_website/en))
+
+*For instructions on how to generate an Archipelago game, refer to the [Archipelago Web Guide](../../../../tutorial/Archipelago/using_website/en)*
 
 ## Joining a MultiWorld Game
 

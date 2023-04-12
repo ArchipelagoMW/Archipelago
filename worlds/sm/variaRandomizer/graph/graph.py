@@ -1,9 +1,9 @@
 import copy, logging
 from operator import attrgetter
-from worlds.sm.variaRandomizer.utils import log
-from worlds.sm.variaRandomizer.logic.smbool import SMBool, smboolFalse
-from worlds.sm.variaRandomizer.utils.parameters import infinity
-from worlds.sm.variaRandomizer.logic.helpers import Bosses
+from ..utils import log
+from ..logic.smbool import SMBool, smboolFalse
+from ..utils.parameters import infinity
+from ..logic.helpers import Bosses
 
 class Path(object):
     __slots__ = ( 'path', 'pdiff', 'distance' )
@@ -140,7 +140,7 @@ class AccessGraph(object):
 
     def addAccessPoint(self, ap):
         ap.distance = 0
-        self.accessPoints[ap.Name] = ap
+        self.accessPoints[ap.Name] = copy.deepcopy(ap)
 
     def toDot(self, dotFile):
         colors = ['red', 'blue', 'green', 'yellow', 'skyblue', 'violet', 'orange',
@@ -174,6 +174,15 @@ class AccessGraph(object):
         self.InterAreaTransitions.append((src, dst))
         if both is True:
             self.addTransition(dstName, srcName, False)
+
+    # remove transitions whose source or dest matches apName
+    def removeTransitions(self, apName):
+        toRemove = [t for t in self.InterAreaTransitions if t[0].Name == apName or t[1].Name == apName]
+        for t in toRemove:
+            src, dst = t
+            self.InterAreaTransitions.remove(t)
+            src.disconnect()
+            dst.disconnect()
 
     # availNodes: all already available nodes
     # nodesToCheck: nodes we have to check transitions for
