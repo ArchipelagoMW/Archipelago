@@ -58,8 +58,13 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
     # if not shuffle_protoss:
     #     excluded_missions = excluded_missions.union(PROTOSS_REGIONS)
     # Replacing The Reckoning on low mission counts
-    if mission_count < 13:
-        final_mission = multiworld.random.choice([mission for mission in alt_final_mission_locations.keys() if mission not in excluded_missions])
+    if mission_count < 13 and mission_order_type != 2 or 'The Reckoning' in excluded_missions:
+        final_mission_candidates = list(alt_final_mission_locations.keys())
+        if not kerriganless:
+            final_mission_candidates.append('Supreme')
+        if logic_level > 0:
+            final_mission_candidates.append('The Reckoning')
+        final_mission = multiworld.random.choice([mission for mission in final_mission_candidates if mission not in excluded_missions])
         excluded_missions.add(final_mission)
     else:
         final_mission = 'The Reckoning'

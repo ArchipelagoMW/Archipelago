@@ -299,7 +299,9 @@ starting_mission_locations = {
 #     "Shatter the Sky": "Shatter the Sky: Victory"
 # }
 alt_final_mission_locations = {
+    "Hand of Darkness": "Hand of Darkness: Victory",
     "Phantoms of the Void": "Phantoms of the Void: Victory",
     "The Crucible": "The Crucible: Victory",
+    "Planetfall": "Planetfall: Victory",
     "Death From Above": "Death From Above: Victory"
 }

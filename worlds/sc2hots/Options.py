@@ -343,7 +343,7 @@ class ExcludedMissions(OptionSet):
     Only applies on shortened mission orders.
     It may be impossible to build a valid campaign if too many missions are excluded."""
     display_name = "Excluded Missions"
-    valid_keys = {mission_name for mission_name in vanilla_mission_req_table.keys() if mission_name != 'The Reckoning'}
+    valid_keys = {mission_name for mission_name in vanilla_mission_req_table.keys()}
 
 
 # noinspection PyTypeChecker
