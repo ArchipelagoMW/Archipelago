@@ -4,6 +4,80 @@
 
 .autoregion
 
+
+CollectJunkItems:
+    push {lr}
+
+; Check full health items
+    ldr r3, =QueuedFullHealthItem
+    ldrb r2, [r3]
+    mov r1, #0
+    cmp r2, r1
+    beq @@EndCheckFullHealth
+    strb r1, [r3]
+    mov r0, #8
+    bl GiveWarioHearts
+@@EndCheckFullHealth:
+
+; Check hearts
+; Only every 32 frames so as to not spam them too hard
+    ldr r3, =GlobalTimer
+    ldr r3, [r3]
+    lsl r2, r3, #32-5
+    lsr r2, r2, #32-5
+    cmp r2, #0
+    bne @@EndCheckHearts
+
+    ldr r3, =QueuedHearts
+    ldrb r2, [r3]
+    cmp r2, #0
+    beq @@EndCheckHearts
+    sub r2, r2, #1
+    strb r2, [r3]
+    mov r0, #1
+    bl GiveWarioHearts
+@@EndCheckHearts:
+
+; Wario needs to not be invincible to be transformed or damaged
+    ldr r3, =Wario_ucMiss
+    ldrb r3, [r3]
+    cmp r3, #0
+    bne @@EndCheckTraps
+
+; Wario also needs to be in normal form
+    ldr r3, =Wario_ucReact
+    ldrb r3, [r3]
+    cmp r3, #1
+    bgt @@EndCheckTraps
+
+; For transformations, he needs to also not be swimming
+; TODO Maybe also on solid ground for balance reasons
+    beq @@EndTransformTraps
+
+    ldr r3, =QueuedFormTraps
+    ldrb r2, [r3]
+    cmp r2, #0
+    beq @@EndTransformTraps
+    sub r2, r2, #1
+    strb r2, [r3]
+    bl GiveTransformTrap
+@@EndTransformTraps:
+
+; Check lightning traps
+    ldr r3, =QueuedLightningTraps
+    ldrb r2, [r3]
+    cmp r2, #0
+    beq @@EndLightningTraps
+    sub r2, r2, #1
+    strb r2, [r3]
+    bl GiveLightningTrap
+@@EndLightningTraps:
+
+@@EndCheckTraps:
+    pop {pc}
+.pool
+
+
 ; Refil Wario's health, by the amount in r0
 GiveWarioHearts:
     push lr

@@ -1,11 +1,68 @@
 .gba
 
-; Implement checking items.
-
-
 .autoregion
 
+; 24 available level IDs, not all of which are used.
+@levels equ 6 * 4
+
+invalid_item equ 0xFF
+
+; Maps locations to the 8-bit IDs of the items they contain.
+; After Archipelago patches the ROM, the "invalid" value should only be in
+; locations that don't exist
+.align 4
+ItemLocationTable:
+    Jewel1LocationTable: .fill @levels, invalid_item
+    Jewel2LocationTable: .fill @levels, invalid_item
+    Jewel3LocationTable: .fill @levels, invalid_item
+    Jewel4LocationTable: .fill @levels, invalid_item
+    CDLocationTable:     .fill @levels, invalid_item
+    HealthLocationTable: .fill @levels, invalid_item
+
+; Maps locations to the 8-bit player ID of the item's owner.
+.align 4
+ItemDestinationTable:
+    Jewel1DestinationTable: .fill @levels, -1
+    Jewel2DestinationTable: .fill @levels, -1
+    Jewel3DestinationTable: .fill @levels, -1
+    Jewel4DestinationTable: .fill @levels, -1
+    CDDestinationTable:     .fill @levels, -1
+    HealthDestinationTable: .fill @levels, -1
+
+
 .align 2
+; Retrieve the item and player ID at the location specified in r0 in this level.
+; Return the encoded ID in r0 and the player ID in r1
+GetItemAtLocation:
+    ; r1 = boxtype * 6
+    lsl r1, r0, #1
+    add r1, r1, r0
+    lsl r1, r1, #1
+    
+    ; r1 = (boxtype * 6 + passageID) * 4
+    ldr r0, =PassageID
+    ldrb r0, [r0]
+    add r1, r1, r0
+    lsl r1, r1, #2
+
+    ; r3 = locationID = (boxtype * 6 + passageID) * 4 + levelID
+    ldr r0, =InPassageLevelID
+    ldrb r0, [r0]
+    add r3, r1, r0
+
+    ; r0 = item ID
+    ldr r1, =ItemLocationTable
+    add r2, r1, r3
+    ldrb r0, [r2]
+
+    ; r1 = player ID
+    ldr r1, =ItemDestinationTable
+    add r2, r1, r3
+    ldrb r1, [r2]
+
+    mov pc, lr
+.pool
+
 ; Collect the item in r0. If the item is this player's junk, it will be stored
 ; and given to Wario later.
 ;
@@ -19,7 +76,7 @@ GiveItem:
 
 ; If another world's item, it'll be handled outside the game
     ldr r2, =PlayerID
-    ldr r2, [r2]
+    ldrb r2, [r2]
     cmp r1, r2
     bne @@Return
 
@@ -102,81 +159,4 @@ GiveItem:
 
 .pool
 
-.endautoregion
-
-
-; Give the player their progression items from what they collected in the level.
-
-; Hook into SeisanSave() where the high score is recorded
-hook 0x808134C, 0x808135C, CheckLocations
-
-.autoregion
-.align 2
-
-; If Wario has the item specified in HasLocation, check level r4's entry in
-; LocationTable. If that item is your own junk item, don't do anything because
-; you would've gotten it in the level already
-.macro check_has_item, HasLocation, LocationTable
-    ldr r0, =HasLocation
-    ldrb r0, [r0]
-    cmp r0, #0
-    beq @@DontGive
-
-; Get the item and player ID
-    ldr r0, =LocationTable
-    add r1, r0, r4  ; get entry for this level
-    ldrb r0, [r1]  ; a1
-    ldr r1, =ItemDestinationTable + (LocationTable - ItemLocationTable)
-    add r1, r1, r4
-    ldrb r1, [r1]  ; a2
-
-; Skip your junk items
-    ldr r2, =PlayerID
-    ldrb r2, [r2]
-    cmp r1, r2
-    bne @@Give
-    lsr r2, r0, #6
-    cmp r2, #1
-    beq @@DontGive
-    
-@@Give:
-    bl GiveItem
-@@DontGive:
-.endmacro
-
-CheckLocations:
-    push lr
-    push r2, r4
-
-; Calculate level ID as [PassageID] * 4 + [InPassageLevelID] and store in r4
-    ldr r0, =PassageID
-    ldr r1, =InPassageLevelID
-    ldrb r0, [r0]
-    ldrb r1, [r1]
-    lsl r0, r0, #2
-    add r4, r0, r1
-
-    check_has_item HasJewelPiece1, Jewel1LocationTable
-    check_has_item HasJewelPiece2, Jewel2LocationTable
-    check_has_item HasJewelPiece3, Jewel3LocationTable
-    check_has_item HasJewelPiece4, Jewel4LocationTable
-    check_has_item HasCD, CDLocationTable
-    check_has_item HasFullHealthItem, HealthLocationTable
-
-; Return
-    pop r2, r4
-
-; Replaced code
-    ldrb r0, [r6]
-    lsl r0, r0, #2
-    ldrb r1, [r5] 
-    lsl r1, r1, #4
-    add r0, r0, r1
-    add r0, r9
-    ldr r0, [r0]
-    cmp r0, r2
-
-    pop pc
-
-.pool
 .endautoregion
