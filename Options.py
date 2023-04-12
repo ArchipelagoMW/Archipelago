@@ -715,8 +715,16 @@ class SpecialRange(Range):
                             f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
 
 
-class VerifyKeys:
-    valid_keys = frozenset()
+class FreezeValidKeys(AssembleOptions):
+    def __new__(mcs, name, bases, attrs):
+        if "valid_keys" in attrs:
+            attrs["_valid_keys"] = frozenset(attrs["valid_keys"])
+        return super(FreezeValidKeys, mcs).__new__(mcs, name, bases, attrs)
+
+
+class VerifyKeys(metaclass=FreezeValidKeys):
+    valid_keys: typing.Iterable = []
+    _valid_keys: frozenset  # gets created by AssembleOptions from valid_keys
     valid_keys_casefold: bool = False
     convert_name_groups: bool = False
     verify_item_name: bool = False
@@ -728,10 +736,10 @@ class VerifyKeys:
         if cls.valid_keys:
             data = set(data)
             dataset = set(word.casefold() for word in data) if cls.valid_keys_casefold else set(data)
-            extra = dataset - cls.valid_keys
+            extra = dataset - cls._valid_keys
             if extra:
                 raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
-                                f"Allowed keys: {cls.valid_keys}.")
+                                f"Allowed keys: {cls._valid_keys}.")
 
     def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
         if self.convert_name_groups and self.verify_item_name:
@@ -792,6 +800,10 @@ class ItemDict(OptionDict):
 
 
 class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
+    # Supports duplicate entries and ordering.
+    # If only unique entries are needed and input order of elements does not matter, OptionSet should be used instead.
+    # Not a docstring so it doesn't get grabbed by the options system.
+
     default: typing.List[typing.Any] = []
     supports_weighting = False
 
@@ -895,6 +907,13 @@ class StartInventory(ItemDict):
     """Start with these items."""
     verify_item_name = True
     display_name = "Start Inventory"
+
+
+class StartInventoryPool(StartInventory):
+    """Start with these items and don't place them in the world.
+    The game decides what the replacement items will be."""
+    verify_item_name = True
+    display_name = "Start Inventory from Pool"
 
 
 class StartHints(ItemSet):

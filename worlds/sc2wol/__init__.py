@@ -34,7 +34,7 @@ class SC2WoLWorld(World):
 
     game = "Starcraft 2 Wings of Liberty"
     web = Starcraft2WoLWebWorld()
-    data_version = 3
+    data_version = 4
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}

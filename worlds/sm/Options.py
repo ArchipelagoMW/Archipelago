@@ -1,5 +1,6 @@
 import typing
 from Options import Choice, Range, OptionDict, OptionList, Option, Toggle, DefaultOnToggle
+from .variaRandomizer.utils.objectives import _goals
 
 class StartItemsRemovesFromPool(Toggle):
     """Remove items in starting inventory from pool."""
@@ -125,7 +126,7 @@ class AreaRandomization(Choice):
     display_name = "Area Randomization"
     option_off = 0
     option_light = 1
-    option_on = 2
+    option_full = 2
     default = 0
 
 class AreaLayout(Toggle):
@@ -183,9 +184,13 @@ class GravityBehaviour(Choice):
     option_Progressive = 2
     default = 1
 
-class ElevatorsDoorsSpeed(DefaultOnToggle):
-    """Accelerate doors and elevators transitions."""
-    display_name = "Elevators doors speed"
+class ElevatorsSpeed(DefaultOnToggle):
+    """Accelerate elevators transitions."""
+    display_name = "Elevators speed"
+
+class DoorsSpeed(DefaultOnToggle):
+    """Accelerate doors transitions."""
+    display_name = "Doors speed"
 
 class SpinJumpRestart(Toggle):
     """Allows Samus to start spinning in mid air after jumping or falling."""
@@ -239,6 +244,94 @@ class VariaCustomPreset(OptionList):
     display_name = "Varia Custom Preset"  
     default = {}
 
+
+class EscapeRando(Toggle):
+    """
+    When leaving Tourian, get teleported to the exit of a random Map station (between Brinstar/Maridia/Norfair/Wrecked Ship).
+    You then have to find your way to the ship in the remaining time. Allotted time depends on area layout, but not on skill settings and is pretty generous.
+    
+    During the escape sequence:
+    - All doors are opened
+    - Maridia tube is opened
+    - The Hyper Beam can destroy Bomb , Power Bomb  and Super Missile  blocks and open blue/green gates from both sides
+    - All mini bosses are defeated
+    - All minor enemies are removed to allow you to move faster and remove lag
+
+    During regular game only Crateria Map station door can be opened and activating the station will act as if all map stations were activated at once.
+
+    Animals Challenges:
+    You can use the extra available time to:
+    - find the animals that are hidden behind a (now blue) map station door
+    - go to the vanilla animals door to cycle through the 4 available escapes, and complete as many escapes as you can
+
+    Pick your challenge, or try to do both, but watch your timer!
+    """
+    display_name = "Randomize the escape sequence"
+
+class RemoveEscapeEnemies(Toggle):
+    """Remove enemies during escape sequence, disable it to blast through enemies with your Hyper Beam and cause lag."""
+    display_name = "Remove enemies during escape"   
+
+class Tourian(Choice):
+    """
+    Choose endgame Tourian behaviour:
+    Vanilla: regular vanilla Tourian
+    Fast: speed up Tourian to skip Metroids, Zebetites, and all cutscenes (including Mother Brain 3 fight). Golden Four statues are replaced by an invincible Gadora until all objectives are completed.
+    Disabled: skip Tourian entirely, ie. escape sequence is triggered as soon as all objectives are completed.
+    """
+    display_name = "Endgame behavior with Tourian"
+    option_Vanilla = 0
+    option_Fast = 1
+    option_Disabled = 2
+    default = 0  
+
+class Objective(OptionList):
+    """
+    Choose which objectives are required to sink the Golden Four statue and to open access to Tourian.
+    You can choose from 0 to 5 objectives.
+    Note: If you leave the list empty no objective is required to access Tourian, ie. it's open.
+    Note: See the Tourian parameter to enable fast Tourian or trigger the escape when all objectives are completed.
+    Note: Current percentage of collected items is displayed in the inventory pause menu.
+    Note: Collect 100% items is excluded by default when randomizing the objectives list as it requires you to complete all the objectives.
+    Note: In AP, Items% and areas objectives are counted toward location checks, not items collected or received, except for "collect all upgrades"
+
+    Format as a comma-separated list of objective names: ["kill three G4", "collect 75% items"].
+    A full list of supported objectives can be found at:
+    https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/sm/utils/objectives.py
+    """
+    display_name = "Objectives"
+    default = ["kill all G4"]
+    valid_keys = frozenset({name: goal for (name, goal) in _goals.items()})
+    #valid_keys_casefold = True
+
+class HideItems(Toggle):
+    """
+    Hides half of the visible items.
+    Items always visible:
+    - Energy Tank, Gauntlet
+    - Energy Tank, Terminator
+    - Morphing Ball
+    - Missile (Crateria moat)
+    - Missile (green Brinstar below super missile)
+    - Missile (above Crocomire)
+    - Power Bomb (lower Norfair above fire flea room)
+    - Missile (Gravity Suit)
+    - Missile (green Maridia shinespark)
+    """
+    display_name = "Hide half the items"
+
+class RelaxedRoundRobinCF(Toggle):
+    """
+    Changes Crystal Flashes behavior and requirements as follows:
+
+    You can perform a Crystal Flash with any amount of ammo, but you need at least one Power Bomb to begin the process.
+    After consuming 1 ammo, Samus gains 50 energy, and it will try a different ammo type next,  
+    cycling through Missiles, Supers, and Power Bombs as available. The cycling is to keep the consumption even between ammo types.
+    If one of your ammo types is at 0, it will be skipped.
+    The Crystal Flash ends when Samus is out of ammo or a total of 30 ammo has been consumed.
+    """
+    display_name = "Relaxed round robin Crystal Flash"
+
 sm_options: typing.Dict[str, type(Option)] = {
     "start_inventory_removes_from_pool": StartItemsRemovesFromPool,
     "preset": Preset,
@@ -254,7 +347,7 @@ sm_options: typing.Dict[str, type(Option)] = {
     #"progression_difficulty": "normal",
     "morph_placement": MorphPlacement,
     #"suits_restriction": SuitsRestriction,
-    #"hide_items": "off",
+    "hide_items": HideItems,
     "strict_minors": StrictMinors,
     "missile_qty": MissileQty,
     "super_qty": SuperQty,
@@ -269,8 +362,8 @@ sm_options: typing.Dict[str, type(Option)] = {
     #"minimizer": "off",
     #"minimizer_qty": "45",
     #"minimizer_tourian": "off",
-    #"escape_rando": "off",
-    #"remove_escape_enemies": "off",
+    "escape_rando": EscapeRando,
+    "remove_escape_enemies": RemoveEscapeEnemies,
     "fun_combat": FunCombat,
     "fun_movement": FunMovement,
     "fun_suits": FunSuits,
@@ -279,7 +372,8 @@ sm_options: typing.Dict[str, type(Option)] = {
     "nerfed_charge": NerfedCharge,
     "gravity_behaviour": GravityBehaviour,
     #"item_sounds": "on",
-    "elevators_doors_speed": ElevatorsDoorsSpeed,
+    "elevators_speed": ElevatorsSpeed,
+    "fast_doors": DoorsSpeed,
     "spin_jump_restart": SpinJumpRestart,
     "rando_speed": SpeedKeep,
     "infinite_space_jump": InfiniteSpaceJump,
@@ -290,4 +384,7 @@ sm_options: typing.Dict[str, type(Option)] = {
     "random_music": RandomMusic,
     "custom_preset": CustomPreset,
     "varia_custom_preset": VariaCustomPreset,
+    "tourian": Tourian,
+    "objective": Objective,
+    "relaxed_round_robin_cf": RelaxedRoundRobinCF,
     }
