@@ -1,4 +1,4 @@
-import itertools
+import itertools, math
 
 from ..utils.utils import range_union, openFile
 
@@ -9,9 +9,14 @@ class IPS_Patch(object):
         self.truncate_length = None
         self.max_size = 0
         if patchDict is not None:
+            recMaxSize = 0xffff
             for addr, data in patchDict.items():
-                byteData = bytearray(data)
-                self.add_record(addr, byteData)
+                nrecs = int(math.ceil(float(len(data))/recMaxSize))
+                for i in range(nrecs):
+                    start = i*recMaxSize
+                    end = min((i+1)*recMaxSize, len(data))
+                    byteData = bytearray(data[start:end])
+                    self.add_record(addr+start, byteData)
 
     def toDict(self):
         ret = {}

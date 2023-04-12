@@ -288,7 +288,8 @@ item_name_groups["Missions"] = ["Beat " + mission_name for mission_name in vanil
 
 filler_items: typing.Tuple[str, ...] = (
     '+15 Starting Minerals',
-    '+15 Starting Vespene'
+    '+15 Starting Vespene',
+    '+2 Starting Supply'
 )
 
 # Defense rating table

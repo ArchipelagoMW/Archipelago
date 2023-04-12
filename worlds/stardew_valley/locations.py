@@ -5,7 +5,9 @@ from random import Random
 from typing import Optional, Dict, Protocol, List, FrozenSet
 
 from . import options, data
-from .fish_data import legendary_fish, special_fish, all_fish_items
+from .data.fish_data import legendary_fish, special_fish, all_fish
+from .data.museum_data import all_museum_items
+from .data.villagers_data import all_villagers
 
 LOCATION_CODE_OFFSET = 717000
 
@@ -46,6 +48,9 @@ class LocationTags(enum.Enum):
     HELP_WANTED = enum.auto()
     TRAVELING_MERCHANT = enum.auto()
     FISHSANITY = enum.auto()
+    MUSEUM_MILESTONES = enum.auto()
+    MUSEUM_DONATIONS = enum.auto()
+    FRIENDSANITY = enum.auto()
 
 
 @dataclass(frozen=True)
@@ -88,10 +93,8 @@ events_locations = [
     LocationData(None, "The Mines - Floor 120", "Reach the Bottom of The Mines"),
     LocationData(None, "Skull Cavern", "Complete Quest Cryptic Note"),
     LocationData(None, "Stardew Valley", "Catch Every Fish"),
-    LocationData(None, "Stardew Valley", "Summer"),
-    LocationData(None, "Stardew Valley", "Fall"),
-    LocationData(None, "Stardew Valley", "Winter"),
-    LocationData(None, "Stardew Valley", "Year Two"),
+    LocationData(None, "Stardew Valley", "Complete the Museum Collection"),
+    LocationData(None, "Stardew Valley", "Full House"),
 ]
 
 all_locations = load_location_csv() + events_locations
@@ -133,11 +136,46 @@ def extend_fishsanity_locations(randomized_locations: List[LocationData], fishsa
         randomized_locations.extend(location_table[f"{prefix}{legendary.name}"] for legendary in legendary_fish)
     elif fishsanity == options.Fishsanity.option_special:
         randomized_locations.extend(location_table[f"{prefix}{special.name}"] for special in special_fish)
-    elif fishsanity == options.Fishsanity.option_random_selection:
+    elif fishsanity == options.Fishsanity.option_randomized:
         randomized_locations.extend(location_table[f"{prefix}{fish.name}"]
-                                    for fish in all_fish_items if random.random() < 0.4)
+                                    for fish in all_fish if random.random() < 0.4)
     elif fishsanity == options.Fishsanity.option_all:
-        randomized_locations.extend(location_table[f"{prefix}{fish.name}"] for fish in all_fish_items)
+        randomized_locations.extend(location_table[f"{prefix}{fish.name}"] for fish in all_fish)
+
+
+def extend_museumsanity_locations(randomized_locations: List[LocationData], museumsanity: int, random: Random):
+    prefix = "Museumsanity: "
+    if museumsanity == options.Museumsanity.option_none:
+        return
+    elif museumsanity == options.Museumsanity.option_milestones:
+        randomized_locations.extend(locations_by_tag[LocationTags.MUSEUM_MILESTONES])
+    elif museumsanity == options.Museumsanity.option_randomized:
+        randomized_locations.extend(location_table[f"{prefix}{museum_item.name}"]
+                                    for museum_item in all_museum_items if random.random() < 0.4)
+    elif museumsanity == options.Museumsanity.option_all:
+        randomized_locations.extend(location_table[f"{prefix}{museum_item.name}"] for museum_item in all_museum_items)
+
+
+def extend_friendsanity_locations(randomized_locations: List[LocationData], friendsanity: int):
+    if friendsanity == options.Friendsanity.option_none:
+        return
+    exclude_non_bachelors = friendsanity == options.Friendsanity.option_bachelors
+    exclude_locked_villagers = friendsanity == options.Friendsanity.option_starting_npcs or \
+                               friendsanity == options.Friendsanity.option_bachelors
+    exclude_post_marriage_hearts = friendsanity != options.Friendsanity.option_all_with_marriage
+    for villager in all_villagers:
+        if not villager.available and exclude_locked_villagers:
+            continue
+        if not villager.bachelor and exclude_non_bachelors:
+            continue
+        for heart in range(1, 15):
+            if villager.bachelor and exclude_post_marriage_hearts and heart > 8:
+                continue
+            if villager.bachelor or heart < 11:
+                randomized_locations.append(location_table[f"Friendsanity: {villager.name} {heart} <3"])
+    if not exclude_non_bachelors:
+        for heart in range(1, 6):
+            randomized_locations.append(location_table[f"Friendsanity: Pet {heart} <3"])
 
 
 def create_locations(location_collector: StardewLocationCollector,
@@ -170,6 +208,8 @@ def create_locations(location_collector: StardewLocationCollector,
 
     extend_help_wanted_quests(randomized_locations, world_options[options.HelpWantedLocations])
     extend_fishsanity_locations(randomized_locations, world_options[options.Fishsanity], random)
+    extend_museumsanity_locations(randomized_locations, world_options[options.Museumsanity], random)
+    extend_friendsanity_locations(randomized_locations, world_options[options.Friendsanity])
 
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)
