@@ -105,7 +105,10 @@ class StaticLingoLogic:
                                     ))
 
                         if "colors" in panel_data:
-                            colors = panel_data["colors"]
+                            if isinstance(panel_data["colors"], List):
+                                colors = panel_data["colors"]
+                            else:
+                                colors = [panel_data["colors"]]
                         else:
                             colors = []
 
