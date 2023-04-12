@@ -149,17 +149,27 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         can_surf
     )
     set_rule(
-        multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3", player),
-        lambda state: _defeated_n_gym_leaders(state, player, 4)
-    )
-    set_rule(
-        multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6", player),
-        lambda state: _defeated_n_gym_leaders(state, player, 4)
-    )
-    set_rule(
         multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_HM03"), player),
         lambda state: state.has("EVENT_DEFEAT_NORMAN", player)
     )
+    if get_option_value(multiworld, player, "norman_requirement") == NormanRequirement.option_badges:
+        set_rule(
+            multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3", player),
+            lambda state: _has_at_least_n_badges(state, player, get_option_value(multiworld, player, "norman_count"))
+        )
+        set_rule(
+            multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6", player),
+            lambda state: _has_at_least_n_badges(state, player, get_option_value(multiworld, player, "norman_count"))
+        )
+    else:
+        set_rule(
+            multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3", player),
+            lambda state: _defeated_n_gym_leaders(state, player, get_option_value(multiworld, player, "norman_count"))
+        )
+        set_rule(
+            multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6", player),
+            lambda state: _defeated_n_gym_leaders(state, player, get_option_value(multiworld, player, "norman_count"))
+        )
 
     # Route 104
     set_rule(
@@ -1164,24 +1174,6 @@ def set_npc_gift_rules(multiworld: MultiWorld, player: int):
     )
 
     # Petalburg City
-    if get_option_value(multiworld, player, "norman_requirement") == NormanRequirement.option_badges:
-        set_rule(
-            multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3", player),
-            lambda state: _has_at_least_n_badges(state, player, get_option_value(multiworld, player, "norman_count"))
-        )
-        set_rule(
-            multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6", player),
-            lambda state: _has_at_least_n_badges(state, player, get_option_value(multiworld, player, "norman_count"))
-        )
-    else:
-        set_rule(
-            multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3", player),
-            lambda state: _defeated_n_gym_leaders(state, player, get_option_value(multiworld, player, "norman_count"))
-        )
-        set_rule(
-            multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6", player),
-            lambda state: _defeated_n_gym_leaders(state, player, get_option_value(multiworld, player, "norman_count"))
-        )
     set_rule(
         multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_TM36"), player),
         lambda state: state.has("EVENT_DEFEAT_NORMAN", player)
