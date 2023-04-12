@@ -4,7 +4,7 @@ from .Options import get_option_value
 from .static_logic import StaticLingoLogic, RoomAndDoor
 from ..AutoWorld import LogicMixin
 from ..generic.Rules import set_rule
-from .locations import LocationData
+from .locations import StaticLingoLocations, LocationData
 
 
 class LingoLogic(LogicMixin):
@@ -83,3 +83,12 @@ class LingoLogic(LogicMixin):
                 if not self.has(color.capitalize(), player):
                     return False
         return True
+
+
+def make_location_lambda(location: LocationData, world: MultiWorld, player: int):
+    return lambda state: state.lingo_can_use_location(location, world, player)
+
+
+def set_rules(world: MultiWorld, player: int):
+    for location_name, location in StaticLingoLocations.ALL_LOCATION_TABLE.items():
+        set_rule(world.get_location(location_name, player), make_location_lambda(location, world, player))

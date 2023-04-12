@@ -85,7 +85,10 @@ class StaticLingoLogic:
                         full_name = f"{room_name} - {panel_name}"
 
                         if "required_room" in panel_data:
-                            required_rooms = panel_data["required_room"]
+                            if isinstance(panel_data["required_room"], List):
+                                required_rooms = panel_data["required_room"]
+                            else:
+                                required_rooms = [panel_data["required_room"]]
                         else:
                             required_rooms = []
 

@@ -10,7 +10,7 @@ from .items import LingoItem, StaticLingoItems
 from .locations import LingoLocation, StaticLingoLocations
 from .Options import lingo_options, get_option_value
 from ..generic.Rules import set_rule
-from .rules import LingoLogic
+from .rules import LingoLogic, set_rules
 
 
 class LingoWebWorld(WebWorld):
@@ -113,11 +113,9 @@ class LingoWorld(World):
         
         new_item = LingoItem(name, classification, item.code, player=self.player)
         return new_item
-    
+
     def set_rules(self):
-        for location_name, location in StaticLingoLocations.ALL_LOCATION_TABLE.items():
-            set_rule(self.multiworld.get_location(location_name, self.player),
-                     lambda state: state.lingo_can_use_location(location, self.multiworld, self.player))
+        set_rules(self.multiworld, self.player)
         
         self.multiworld.completion_condition[self.player] = \
             lambda state: state.has("Victory", self.player)
