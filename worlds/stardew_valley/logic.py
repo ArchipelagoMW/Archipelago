@@ -103,7 +103,7 @@ class StardewLogic:
     item_rules: Dict[str, StardewRule] = field(default_factory=dict)
     tree_fruit_rules: Dict[str, StardewRule] = field(default_factory=dict)
     seed_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    crops_rules: Dict[str, StardewRule] = field(default_factory=dict)
+    crop_rules: Dict[str, StardewRule] = field(default_factory=dict)
     fish_rules: Dict[str, StardewRule] = field(default_factory=dict)
     museum_rules: Dict[str, StardewRule] = field(default_factory=dict)
     building_rules: Dict[str, StardewRule] = field(default_factory=dict)
@@ -127,8 +127,8 @@ class StardewLogic:
         })
 
         self.seed_rules.update({seed.name: self.can_buy_seed(seed) for seed in all_purchasable_seeds})
-        self.crops_rules.update({crop.name: self.can_grow_crop(crop) for crop in all_crops})
-        self.crops_rules.update({
+        self.crop_rules.update({crop.name: self.can_grow_crop(crop) for crop in all_crops})
+        self.crop_rules.update({
             "Coffee Bean": (self.has_season("Spring") | self.has_season("Summer")) & self.has_traveling_merchant(),
         })
 
@@ -422,7 +422,7 @@ class StardewLogic:
         self.item_rules.update(self.museum_rules)
         self.item_rules.update(self.tree_fruit_rules)
         self.item_rules.update(self.seed_rules)
-        self.item_rules.update(self.crops_rules)
+        self.item_rules.update(self.crop_rules)
 
         self.building_rules.update({
             "Barn": self.can_spend_money(6000) & self.has(["Wood", "Stone"]),

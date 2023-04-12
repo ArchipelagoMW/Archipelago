@@ -1,2 +1,1 @@
 importlib_resources; python_version <= '3.8'
-pytest>=7.2.2
