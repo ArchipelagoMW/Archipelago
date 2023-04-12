@@ -5,7 +5,7 @@ import typing
 
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
-from .static_logic import StaticLingoLogic
+from .static_logic import StaticLingoLogic, Room, RoomEntrance
 from .items import LingoItem, StaticLingoItems
 from .locations import LingoLocation, StaticLingoLocations
 from .Options import lingo_options, get_option_value
@@ -39,7 +39,7 @@ class LingoWorld(World):
         if data.code is not None
     }
 
-    def create_region(self, room):
+    def create_region(self, room: Room):
         new_region = Region(room.name, self.player, self.multiworld)
 
         for location_name, location in StaticLingoLocations.ALL_LOCATION_TABLE.items():
@@ -51,10 +51,10 @@ class LingoWorld(World):
             new_region
         ]
 
-    def connect(self, target, entrance):
+    def connect(self, target: Room, entrance: RoomEntrance):
         target_region = self.multiworld.get_region(target.name, self.player)
         source_region = self.multiworld.get_region(entrance.room, self.player)
-        connection = Entrance(self.player, entrance.room + " to " + target.name, source_region)
+        connection = Entrance(self.player, f"{entrance.room} to {target.name}", source_region)
         connection.access_rule = lambda state: state.lingo_can_use_entrance(
             target.name, entrance.doors, self.multiworld, self.player)
 
@@ -81,28 +81,19 @@ class LingoWorld(World):
             if item.should_include(self.multiworld, self.player):
                 new_item = self.create_item(name)
                 pool.append(new_item)
-
-        if get_option_value(self.multiworld, self.player, "shuffle_doors") == 4350:
-            for room_name, room_doors in StaticLingoLogic.DOORS_BY_ROOM.items():
-                for door_name, door_obj in room_doors.items():
-                    door_item = LingoItem(room_name + " - " + door_name + " Opened", ItemClassification.progression,
-                                          None, player=self.player)
-                    location_obj = self.multiworld.get_location(room_name + " - " + door_name + " (Door)", self.player)
-                    location_obj.place_locked_item(door_item)
-                    placed_events += 1
         
         if get_option_value(self.multiworld, self.player, "orange_tower_access") == 2:
-            for i in range (0, 6):
+            for i in range(0, 6):
                 new_item = self.create_item("Progressive Orange Tower")
                 pool.append(new_item)
         
         victory_item = LingoItem("Victory", ItemClassification.progression, None, player=self.player)
         victory_condition = get_option_value(self.multiworld, self.player, "victory_condition")
-        if victory_condition == 0: # THE END
+        if victory_condition == 0:  # THE END
             location_obj = self.multiworld.get_location("Orange Tower Seventh Floor - THE END", self.player)
             location_obj.place_locked_item(victory_item)
             placed_events += 1
-        elif victory_condition == 1: # THE MASTER
+        elif victory_condition == 1:  # THE MASTER
             location_obj = self.multiworld.get_location("Orange Tower Seventh Floor - THE MASTER", self.player)
             location_obj.place_locked_item(victory_item)
             placed_events += 1

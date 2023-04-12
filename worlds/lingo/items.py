@@ -14,7 +14,7 @@ class ItemData(NamedTuple):
     event: bool = False
     orange_tower: bool = False
 
-    def should_include(self, world, player):
+    def should_include(self, world: MultiWorld, player: int) -> bool:
         if self.mode == "colors":
             return get_option_value(world, player, "shuffle_colors") > 0
         elif self.mode == "doors":
@@ -43,7 +43,7 @@ class StaticLingoItems:
     """
     ALL_ITEM_TABLE: Dict[str, ItemData] = {}
 
-    def __init__(self, base_id):
+    def __init__(self, base_id: int):
         item_tab = dict()
 
         for color in ["Black", "Red", "Blue", "Yellow", "Green", "Orange", "Gray", "Brown", "Purple"]:

@@ -82,7 +82,7 @@ class StaticLingoLogic:
                     self.PANELS_BY_ROOM[room_name] = dict()
 
                     for panel_name, panel_data in room_data["panels"].items():
-                        full_name = room_name + " - " + panel_name
+                        full_name = f"{room_name} - {panel_name}"
 
                         if "required_room" in panel_data:
                             required_rooms = panel_data["required_room"]
@@ -133,7 +133,7 @@ class StaticLingoLogic:
                         if "item_name" in door_data:
                             item_name = door_data["item_name"]
                         else:
-                            item_name = room_name + " - " + door_name
+                            item_name = f"{room_name} - {door_name}"
 
                         if "skip_location" in door_data:
                             skip_location = door_data["skip_location"]

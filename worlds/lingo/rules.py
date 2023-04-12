@@ -1,6 +1,7 @@
+from typing import Optional, List
 from BaseClasses import MultiWorld
 from .Options import get_option_value
-from .static_logic import StaticLingoLogic
+from .static_logic import StaticLingoLogic, RoomAndDoor
 from ..AutoWorld import LogicMixin
 from ..generic.Rules import set_rule
 from .locations import LocationData
@@ -11,7 +12,7 @@ class LingoLogic(LogicMixin):
     Logic macros that get reused
     """
 
-    def lingo_can_use_entrance(self, room, doors, world, player):
+    def lingo_can_use_entrance(self, room: str, doors: Optional[List[RoomAndDoor]], world, player):
         if doors is None:
             return True
         else:
@@ -27,7 +28,7 @@ class LingoLogic(LogicMixin):
                 return False
         return True
 
-    def _lingo_can_open_door(self, start_room, room, door, world, player):
+    def _lingo_can_open_door(self, start_room: str, room: str, door: str, world, player):
         """
         Determines whether a door can be opened
         """
@@ -62,9 +63,8 @@ class LingoLogic(LogicMixin):
                                                    world, player):
                     return False
             return True
-            #return self.has(room + " - " + door + " Opened", player)
 
-    def _lingo_can_solve_panel(self, start_room, room, panel, world, player):
+    def _lingo_can_solve_panel(self, start_room: str, room: str, panel: str, world, player):
         """
         Determines whether a panel can be solved
         """
