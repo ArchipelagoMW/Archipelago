@@ -1,6 +1,6 @@
 from typing import Dict, FrozenSet, Union
 from BaseClasses import MultiWorld
-from Options import Choice, Option, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range, TextChoice
+from Options import Choice, Option, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range
 from .MissionTables import vanilla_mission_req_table
 
 
