@@ -81,6 +81,44 @@ boss_butch = "Boss Butch"
 mg5_p = "Minigame 5 - Perfect"
 jumping_clear = "Jumping - Target Score Reached"
 
+# 1-Ups
+grass_land_1_u1 = "Grass Land 1 - 1-Up (Parasol)"
+grass_land_2_u1 = "Grass Land 2 - 1-Up (Needle)"
+grass_land_3_u1 = "Grass Land 3 - 1-Up (Climb)"
+grass_land_4_u1 = "Grass Land 4 - 1-Up (Gordo)"
+grass_land_6_u1 = "Grass Land 6 - 1-Up (Tower)"
+grass_land_6_u2 = "Grass Land 6 - 1-Up (Falling)"
+ribbon_field_2_u1 = "Ribbon Field 2 - 1-Up (Currents)"
+ribbon_field_3_u1 = "Ribbon Field 3 - 1-Up (Cutter/Spark)"
+ribbon_field_4_u1 = "Ribbon Field 4 - 1-Up (Stone)"
+ribbon_field_5_u1 = "Ribbon Field 5 - 1-Up (Currents)"
+sand_canyon_1_u1 = "Sand Canyon 1 - 1-Up (Polof)"
+sand_canyon_2_u1 = "Sand Canyon 2 - 1-Up (Enclave)"
+sand_canyon_4_u1 = "Sand Canyon 4 - 1-Up (Clean)"
+sand_canyon_5_u1 = "Sand Canyon 5 - 1-Up (Falling Block)"
+sand_canyon_5_u2 = "Sand Canyon 5 - 1-Up (Ice 1)"
+sand_canyon_5_u3 = "Sand Canyon 5 - 1-Up (Ice 2)"
+sand_canyon_5_u4 = "Sand Canyon 5 - 1-Up (Ice 3)"
+
+
+# Maxim Tomatoes
+grass_land_1_m1 = "Grass Land 1 - Maxim Tomato (Spark)"
+grass_land_3_m1 = "Grass Land 3 - Maxim Tomato (Climb)"
+grass_land_4_m1 = "Grass Land 4 - Maxim Tomato (Zebon Right)"
+grass_land_4_m2 = "Grass Land 4 - Maxim Tomato (Gordo)"
+grass_land_4_m3 = "Grass Land 4 - Maxim Tomato (Cliff)"
+ribbon_field_2_m1 = "Ribbon Field 2 - Maxim Tomato (Currents)"
+ribbon_field_3_m1 = "Ribbon Field 3 - Maxim Tomato (Cove)"
+ribbon_field_4_m1 = "Ribbon Field 4 - Maxim Tomato (Dark)"
+ribbon_field_4_m2 = "Ribbon Field 4 - Maxim Tomato (Stone)"
+ribbon_field_5_m1 = "Ribbon Field 5 - Maxim Tomato (Exit)"
+ribbon_field_5_m2 = "Ribbon Field 5 - Maxim Tomato (Currents)"
+sand_canyon_2_m1 = "Sand Canyon 2 - Maxim Tomato (Underwater)"
+sand_canyon_4_m1 = "Sand Canyon 4 - Maxim Tomato (Pacto)"
+sand_canyon_4_m2 = "Sand Canyon 4 - Maxim Tomato (Needle)"
+sand_canyon_5_m1 = "Sand Canyon 5 - Maxim Tomato (Pit)"
+
+
 # Level Names
 level_names = {
     "Grass Land": 1,
