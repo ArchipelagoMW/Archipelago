@@ -510,12 +510,12 @@
       FIVE (1):
         id: Panel_five_five_5
         required_door:
-          room: Number Hunt
+          room: Outside The Undeterred
           door: Fives
       FIVE (2):
         id: Panel_five_five_4
         required_door:
-          room: Number Hunt
+          room: Outside The Undeterred
           door: Fives
       OUT:
         id: "????"
@@ -1640,12 +1640,12 @@
       FIVE (1):
         id: "????"
         required_door:
-          room: Number Hunt
+          room: Outside The Undeterred
           door: Fives
       FIVE (2):
         id: "????"
         required_door:
-          room: Number Hunt
+          room: Outside The Undeterred
           door: Fives
       SIX (1):
         id: "????"
