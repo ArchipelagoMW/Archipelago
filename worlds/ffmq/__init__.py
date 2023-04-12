@@ -1,6 +1,6 @@
 from worlds.AutoWorld import World, WebWorld
 from Fill import remaining_fill
-from .Regions import rooms, create_regions, location_table, set_rules
+from .Regions import create_regions, location_table, set_rules, rooms
 from .Items import item_table, item_groups, create_items, FFMQItem, fillers
 from .Output import generate_output
 from .Options import option_definitions
@@ -8,6 +8,8 @@ from .Client import FFMQClient
 from BaseClasses import LocationProgressType
 import base64
 import threading
+from copy import deepcopy
+
 
 class FFMQWorld(World):
     """ffmq description here"""
@@ -29,6 +31,7 @@ class FFMQWorld(World):
     def __init__(self, world, player: int):
         self.rom_name_available_event = threading.Event()
         self.rom_name = None
+        self.rooms = deepcopy(rooms)
         super().__init__(world, player)
 
     def generate_early(self):

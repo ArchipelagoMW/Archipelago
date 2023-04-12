@@ -181,6 +181,8 @@ prog_map = {
 def yaml_item(text):
     if text == "CaptainCap":
         return "Captain's Cap"
+    elif text == "WakeWater":
+        return "Wakewater"
     return "".join(
         [(" " + c if (c.isupper() or c.isnumeric()) and not (text[i - 1].isnumeric() and c == "F") else c) for
          i, c in enumerate(text)]).strip()

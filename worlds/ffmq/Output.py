@@ -79,7 +79,7 @@ def generate_output(self, output_directory):
                    "enable_spoilers": False,
                    "progressive_formations": cc(mw.progressive_formations[p]),
                    "map_shuffling": "None",
-                   "crest_shuffle": False, #tf(mw.crest_shuffle[p]),
+                   "crest_shuffle": tf(mw.crest_shuffle[p]),
                }
     for option, data in option_writes.items():
         options["Final Fantasy Mystic Quest"][option][data] = 1
@@ -106,6 +106,7 @@ def generate_output(self, output_directory):
         zf.writestr("flagset.yaml", yaml.dump(options))
         zf.writestr("startingitems.yaml", yaml.dump(starting_items))
         zf.writestr("setup.yaml", yaml.dump(setup))
+        zf.writestr("rooms.yaml", yaml.dump(self.rooms))
 
         APMQ.write_contents(zf)
 

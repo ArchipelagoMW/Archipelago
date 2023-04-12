@@ -1,14 +1,16 @@
-import yaml
-from pathlib import Path
+
 from BaseClasses import Region, MultiWorld, Entrance, Location, LocationProgressType
 from worlds.generic.Rules import add_rule
 from .Items import item_groups, yaml_item
-from copy import deepcopy
 import pkgutil
+import yaml
+
+rooms = yaml.load(pkgutil.get_data(__name__, "data/rooms.yaml"), yaml.Loader)
+
+entrance_pairs = yaml.load(pkgutil.get_data(__name__, "data/entrancespairs.yaml"), yaml.Loader)
 
 # base_path = Path(__file__).parent
 # file_path = (base_path / "data/rooms.yaml").resolve()
-rooms = yaml.load(pkgutil.get_data(__name__, "data/rooms.yaml"), yaml.Loader)
 
 # battlefields = [
 #     {"name": "Battlefield - Level Forest",
@@ -215,7 +217,122 @@ def create_region(world: MultiWorld, player: int, name: str, room_id=None, locat
     return ret
 
 
+def get_entrance_to(entrance_to):
+    for room in rooms:
+        if room["id"] == entrance_to["target_room"]:
+            for link in room["links"]:
+                # if "entrance" in link and link["entrance"] == entrance_to["entrance"]:
+                #     return link
+                if link["target_room"] == entrance_to["room"]:
+                    return link
+    else:
+        raise Exception(f"Did not find entrance {entrance_to}")
+    # for room in rooms:
+    #     for link in room["links"]:
+    #         if link["entrance"] == entrance_from:
+    #             return link
+    # else:
+    #     raise Exception(f"Did not find entrance {entrance_to}")
+
+
+crest_dead_ends = (51, 52, 53, 108, 158, 396, 397)
+dupe_rooms = ((336, 171), (175, 96))
+
+
 def create_regions(self):
+    #
+    def pair(entrance_a, entrance_b, access_rule, barred=False):
+        entrance_a_to = get_entrance_to(entrance_a)
+        entrance_b_to = get_entrance_to(entrance_b)
+        entrance_a["teleporter"] = entrance_b_to["teleporter"]
+        entrance_b["teleporter"] = entrance_a_to["teleporter"]
+        entrance_a["target_room"] = entrance_b_to["target_room"]
+        entrance_b["target_room"] = entrance_a_to["target_room"]
+        entrance_a["access"][0] = access_rule
+        entrance_b["access"][0] = access_rule
+        if barred:
+            entrance_a["access"].append("Barred")
+            entrance_b["access"].append("Barred")
+        if "room" in entrance_a:
+            del entrance_a["room"]
+        if "room" in entrance_b:
+            del entrance_b["room"]
+
+    if self.multiworld.crest_shuffle[self.player]:
+        crest_tiles = (["MobiusCrest"] * 4) + (["LibraCrest"] * 2) + (["GeminiCrest"] * 3)
+        self.multiworld.random.shuffle(crest_tiles)
+        crest_dead_end_entrances = []
+        crest_open_entrances = []
+        for room in self.rooms:
+            for link in room["links"]:
+                if ("GeminiCrest" in link["access"] or "LibraCrest" in link["access"] or "MobiusCrest" in
+                        link["access"]) and "Spencer" not in room["name"]:
+                    link["room"] = room["id"]
+                    if link["entrance"] in crest_dead_ends:
+                        crest_dead_end_entrances.append(link)
+                    else:
+                        crest_open_entrances.append(link)
+        dupe_room_crests = [self.multiworld.random.choice(crest_tiles), self.multiworld.random.choice(crest_tiles)]
+        self.multiworld.random.shuffle(crest_open_entrances)
+        # there are two different sets of "dupe rooms" - rooms which use the same tile map. These must have the same
+        # crest tiles set up for both instances. We have chosen two sets of crest tiles to be used for the dupe room
+        # sets. If these are not the same crest, then we need to ensure we aren't going to try to connect a room from
+        # one set to another.
+        while dupe_room_crests[0] != dupe_room_crests[1]:
+            for i in (-1, -3):
+                if crest_open_entrances[i]["entrance"] in dupe_rooms[0] and crest_open_entrances[i-1]["entrance"] in dupe_rooms[1]:
+                    self.multiworld.random.shuffle(crest_open_entrances)
+                    continue
+                if crest_open_entrances[i]["entrance"] in dupe_rooms[1] and crest_open_entrances[i-1]["entrance"] in dupe_rooms[0]:
+                    self.multiworld.random.shuffle(crest_open_entrances)
+                    continue
+                break
+            else:
+                continue
+            break
+
+        crest_tiles.remove(dupe_room_crests[0])
+        print(f"removing {dupe_room_crests[0]}")
+        crest_tiles.remove(dupe_room_crests[1])
+        print(f"removing {dupe_room_crests[1]}")
+        # we need to remove a second copy of the chosen dupe room crests unless two dupe rooms from the same set are
+        # going to be connected.
+        for x, dupe_room in enumerate(dupe_rooms):
+            for i in (-1, -3):
+                if crest_open_entrances[i]["entrance"] in dupe_room and crest_open_entrances[i-1]["entrance"] in dupe_room:
+                    break
+            else:
+                print(f"removing {dupe_room_crests[x]}")
+                crest_tiles.remove(dupe_room_crests[x])
+        # crest_open_entrances.sort(key=lambda i: i["entrance"] not in dupe_rooms[0]
+        #                               and i["entrance"] not in dupe_rooms[1])
+        for entrance_a in crest_dead_end_entrances:
+            entrance_b = crest_open_entrances.pop(0)
+            for i, dupe_room in enumerate(dupe_rooms):
+                if entrance_b["entrance"] in dupe_room:
+                    print(f"Dupe {i}")
+                    crest_tile = dupe_room_crests[i]
+                    break
+            else:
+                crest_tile = crest_tiles.pop()
+            print(crest_tile)
+            pair(entrance_a, entrance_b, crest_tile)
+        print(" ")
+        for _ in range(2):
+            entrance_a = crest_open_entrances.pop(0)
+            entrance_b = crest_open_entrances.pop(0)
+            for i, dupe_room in enumerate(dupe_rooms):
+                if entrance_a["entrance"] in dupe_room or entrance_b["entrance"] in dupe_room:
+                    crest_tile = dupe_room_crests[i]
+                    print(f"Dupe {i}")
+                    break
+            else:
+                crest_tile = crest_tiles.pop()
+            print(crest_tile)
+            pair(entrance_a, entrance_b, crest_tile, barred=self.multiworld.logic[self.player] != "expert")
+    # 8 mobius
+    # 4 Libra
+    # 6 gemini
     menu_region = create_region(self.multiworld, self.player, "Menu")
     self.multiworld.regions.append(menu_region)
     # menu_region.locations.append(FFMQLocation(self.player, "Starting Weapon", None, "Trigger",
@@ -241,7 +358,7 @@ def create_regions(self):
     #             map = self.random.randint(len(map_sets))
 
 
-    for room in rooms:
+    for room in self.rooms:
         if room["id"] == 0:
             for region in ow_regions:
                 self.multiworld.regions.append(create_region(self.multiworld, self.player, region, 0,
@@ -259,7 +376,7 @@ def create_regions(self):
     else:
         item_battlefields = [2, 6, 10, 13, 16]
 
-    for battlefield in rooms[0]["game_objects"]:
+    for battlefield in self.rooms[0]["game_objects"]:
         if battlefield["object_id"] in item_battlefields:
             for region_name in ow_regions:
                 if battlefield["object_id"] in ow_regions[region_name][2]:
