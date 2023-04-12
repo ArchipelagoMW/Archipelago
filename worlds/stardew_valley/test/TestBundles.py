@@ -1,6 +1,6 @@
 import unittest
 
-from ..bundle_data import all_bundle_items
+from ..data.bundle_data import all_bundle_items
 
 
 class TestBundles(unittest.TestCase):
