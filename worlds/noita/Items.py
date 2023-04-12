@@ -63,6 +63,7 @@ def create_all_items(multiworld: MultiWorld, player: int) -> None:
         create_fixed_item_pool()
         + create_orb_items(multiworld.victory_condition[player])
         + create_spatial_awareness_item(multiworld.bosses_as_checks[player])
+        + create_kantele(multiworld.victory_condition[player])
     )
 
     random_count = sum_locations - len(itempool)
