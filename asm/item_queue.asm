@@ -14,6 +14,32 @@
 .align 2
 
 
+ItemReceivedFeedbackSound:
+    push {lr}
+
+    lsl r0, r4, #31-6
+    lsr r0, r0, #32-2
+    cmp r0, #1
+    bgt @@Return
+    beq @@CDSound    
+
+@@MultiplayerItem:
+    ldr r0, =0x13B  ; a1
+    b @@PlaySound
+
+@@CDSound:
+    ldr r0, =0x13C  ; a1
+
+@@PlaySound:
+    call_using r1, m4aSongNumStart
+    mov r0, #1
+    call_using r1, WarioVoiceSet
+
+@@Return:
+    pop {pc}
+.pool
+
+
 ; Get the next incoming item and return it in r0, and return this game's player
 ; ID in r1.
 ; If nothing was received, return 0xFF
@@ -51,9 +77,13 @@ ReceiveNextItem:
 
 ; Game mode 1 (pyramid)
 ReceiveItemsInPyramid:
+    push {r4}
     bl ReceiveNextItem
+    mov r4, r0
     bl GiveItem
-
+    mov r0, r4
+    bl ItemReceivedFeedbackSound
+    pop {r4}
     ldr r0, =0x8079AE0
     mov pc, r0
 .pool
@@ -61,6 +91,8 @@ ReceiveItemsInPyramid:
 
 ; Game mode 2 (level)
 ReceiveItemsInLevel:
+    push {r4}
+
 ; If Wario isn't in a playable state, don't bother yet
     ldr r0, =usWarStopFlg
     ldrh r0, [r0]
@@ -68,7 +100,10 @@ ReceiveItemsInLevel:
     bne @@Return
 
     bl ReceiveNextItem
+    mov r4, r0
     bl GiveItem
+    mov r0, r4
+    bl ItemReceivedFeedbackSound
 
 ; Check full health items
     ldr r3, =QueuedFullHealthItem
@@ -138,6 +173,7 @@ ReceiveItemsInLevel:
 @@EndCheckTraps:
 
 @@Return:
+    pop {r4}
     ldr r0, =0x801B950
     mov pc, r0
 .pool

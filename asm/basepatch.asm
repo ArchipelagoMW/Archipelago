@@ -79,6 +79,7 @@ unusedrom equ 0x0878F97C
 .definelabel EntityAI_INITIAL_takara_kakera, 0x802932C
 .definelabel TOptObjSet, 0x80766E8
 .definelabel WarioCoinSet, 0x80768B8
+.definelabel WarioVoiceSet, 0x8088620
 .definelabel MiniRandomCreate, 0x8089B80
 .definelabel modsi3, 0x8094ED0
 .definelabel WarioChng_React, 0x82DECA0
