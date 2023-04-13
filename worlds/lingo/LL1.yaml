@@ -1702,7 +1702,7 @@
       Door to Directional Gallery:
         id: Count Up Room Area Doors/Door_five_unlocked
         panels:
-          FIVE
+          - FIVE
       Sixes:
         id:
           - Count Up Room Area Doors/Door_six_hider
@@ -1725,7 +1725,7 @@
       Sevens:
         id:
           - Count Up Room Area Doors/Door_seven_hider
-          - Count Up Room Area Doors/Door_seven_hider_unlocked
+          - Count Up Room Area Doors/Door_seven_unlocked
           - Count Up Room Area Doors/Door_seven_hider_2
           - Count Up Room Area Doors/Door_seven_hider_3
           - Count Up Room Area Doors/Door_seven_hider_4
@@ -1748,7 +1748,7 @@
       Eights:
         id:
           - Count Up Room Area Doors/Door_eight_hider
-          - Count Up Room Area Doors/Door_eight_hider_unlocked
+          - Count Up Room Area Doors/Door_eight_unlocked
           - Count Up Room Area Doors/Door_eight_hider_2
           - Count Up Room Area Doors/Door_eight_hider_3
           - Count Up Room Area Doors/Door_eight_hider_4
@@ -1884,7 +1884,7 @@
         id: Backside Room/Panel_paranoid_paranoid
         check: True
       YELLOW:
-        id: Panel_yellow_afar
+        id: Color Arrow Room/Panel_yellow_afar
         required_door:
           door: Yellow Barrier
     doors:
@@ -1971,7 +1971,7 @@
           room: Number Hunt
           door: Sixes
       SIX (2):
-        id: Backside Room/Panel_six_six_five
+        id: Backside Room/Panel_six_six_5
         colors:
           - red
           - yellow
@@ -2535,7 +2535,7 @@
         door: Door to Cross
     panels:
       NINE:
-        id: Panel_nine_nine_9
+        id: Backside Room/Panel_nine_nine_9
         required_door:
           room: Number Hunt
           door: Nines
