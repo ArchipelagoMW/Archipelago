@@ -2346,7 +2346,7 @@ def patch_rom(world, rom):
 
     # Write numeric seed truncated to 32 bits for rng seeding
     # Overwritten with new seed every time a new rng value is generated
-    rng_seed = world.multiworld.slot_seeds[world.player].getrandbits(32)
+    rng_seed = world.multiworld.per_slot_randoms[world.player].getrandbits(32)
     rom.write_int32(rom.sym('RNG_SEED_INT'), rng_seed)
     # Static initial seed value for one-time random actions like the Hylian Shield discount
     rom.write_int32(rom.sym('RANDOMIZER_RNG_SEED'), rng_seed)

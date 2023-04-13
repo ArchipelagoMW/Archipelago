@@ -10,11 +10,11 @@ The randomizer shuffles emblems and upgrade items into the AP item pool. The sto
 
 ## What is the goal of Sonic Adventure 2: Battle when randomized?
 
-If the Biolizard goal is selected, the objective is to unlock and complete the required number of Cannon's Core Missions, then complete the Biolizard boss fight. If the Emerald Hunt goal is selected, the objective is to find the seven Chaos Emeralds then complete Green Hill Zone and optionally default Final Hazard.
+If the Biolizard goal is selected, the objective is to unlock and complete the required number of Cannon's Core Missions, then complete the Biolizard boss fight. If the Emerald Hunt goal is selected, the objective is to find the seven Chaos Emeralds then complete Green Hill Zone and optionally default Final Hazard. If the Grand Prix goal is selected, the objective is to complete all levels in the kart race mode.
 
 ## What items and locations get shuffled?
 
-All 30 story stages leading up to Cannon's Core will be shuffled and can be optionally placed behind emblem requirement gates. Mission order can be shuffled for each stage. Chao keys, animal pipes, hidden whistle spots, and gold beetles can be added as additional locations to check in each stage. Chao Garden emblems can optionally be added to the randomizer. All emblems from the selected mission range and all 28 character upgrade items get shuffled. At most 180 emblems will be added to the item pool, after which remaining items added will be random collectables (rings, shields, etc). Traps can also be optionally included.
+All 30 story stages leading up to Cannon's Core will be shuffled and can be optionally placed behind emblem requirement gates. Mission order can be shuffled for each stage. Chao keys, animal pipes, hidden whistle spots, omochao, and gold beetles can be added as additional locations to check in each stage. Chao Garden emblems can optionally be added to the randomizer. All emblems from the selected mission range and all 28 character upgrade items get shuffled. At most 250 emblems will be added to the item pool, after which remaining items added will be random collectables (rings, shields, etc). Traps can also be optionally included.
 
 ## Which items can be in another player's world?
 

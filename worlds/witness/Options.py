@@ -58,9 +58,41 @@ class ShuffleVaultBoxes(Toggle):
     display_name = "Shuffle Vault Boxes"
 
 
+class ShuffleEnvironmentalPuzzles(Choice):
+    """
+    Add Environmental/Obelisk Puzzles into the location pool.
+    In "individual", every Environmental Puzzle sends an item.
+    In "obelisk_sides", completing every puzzle on one side of an Obelisk sends an item.
+    Note: In Obelisk Sides, any EPs excluded through another setting will be counted as pre-completed on their Obelisk.
+    """
+    display_name = "Shuffle Environmental Puzzles"
+    option_off = 0
+    option_individual = 1
+    option_obelisk_sides = 2
+
+
+class ShuffleDog(Toggle):
+    """Add petting the Town dog into the location pool."""
+
+    display_name = "Pet the Dog"
+
+
+class EnvironmentalPuzzlesDifficulty(Choice):
+    """
+    When "Shuffle Environmental Puzzles" is on, this setting governs which EPs are eligible for the location pool.
+    On "eclipse", every EP in the game is eligible, including the 1-hour-long "Theater Eclipse EP".
+    On "tedious", Theater Eclipse EP is excluded from the location pool.
+    On "normal", several other difficult or long EPs are excluded as well.
+    """
+    display_name = "Environmental Puzzles Difficulty"
+    option_normal = 0
+    option_tedious = 1
+    option_eclipse = 2
+
+
 class ShufflePostgame(Toggle):
     """Adds locations into the pool that are guaranteed to become accessible after or at the same time as your goal.
-    Use this if you don't play with forfeit on victory. IMPORTANT NOTE: The possibility of your second
+    Use this if you don't play with release on victory. IMPORTANT NOTE: The possibility of your second
     "Progressive Dots" showing up in the Caves is ignored, they will still be considered "postgame" in base settings."""
     display_name = "Shuffle Postgame"
 
@@ -81,6 +113,7 @@ class PuzzleRandomization(Choice):
     display_name = "Puzzle Randomization"
     option_sigma_normal = 0
     option_sigma_expert = 1
+    option_none = 2
 
 
 class MountainLasers(Range):
@@ -125,6 +158,12 @@ class HintAmount(Range):
     default = 10
 
 
+class DeathLink(Toggle):
+    """If on: Whenever you fail a puzzle (with some exceptions), everyone who is also on Death Link dies.
+    The effect of a "death" in The Witness is a Power Surge."""
+    display_name = "Death Link"
+
+
 the_witness_options: Dict[str, type] = {
     "puzzle_randomization": PuzzleRandomization,
     "shuffle_symbols": ShuffleSymbols,
@@ -133,6 +172,8 @@ the_witness_options: Dict[str, type] = {
     "disable_non_randomized_puzzles": DisableNonRandomizedPuzzles,
     "shuffle_discarded_panels": ShuffleDiscardedPanels,
     "shuffle_vault_boxes": ShuffleVaultBoxes,
+    "shuffle_EPs": ShuffleEnvironmentalPuzzles,
+    "EP_difficulty": EnvironmentalPuzzlesDifficulty,
     "shuffle_postgame": ShufflePostgame,
     "victory_condition": VictoryCondition,
     "mountain_lasers": MountainLasers,
@@ -141,6 +182,7 @@ the_witness_options: Dict[str, type] = {
     "trap_percentage": TrapPercentage,
     "puzzle_skip_amount": PuzzleSkipAmount,
     "hint_amount": HintAmount,
+    "death_link": DeathLink,
 }
 
 

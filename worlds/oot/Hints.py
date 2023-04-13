@@ -460,7 +460,7 @@ def get_hint_area(spot):
         
             if parent_region.dungeon:
                 return parent_region.dungeon.hint_text
-            elif parent_region.hint_text and (spot.parent_region.name == 'Root' or parent_region.name != 'Root'):
+            elif parent_region.hint and (spot.parent_region.name == 'Root' or parent_region.name != 'Root'):
                 return parent_region.hint_text
 
             spot_queue.extend(list(filter(lambda ent: ent not in already_checked, parent_region.entrances)))
@@ -1136,14 +1136,14 @@ def buildMiscItemHints(world, messages):
             if world.multiworld.state.has(data['default_item'], world.player) > 0:
                 text = data['default_item_text'].format(area='#your pocket#')
             elif item_locations:
-                location = item_locations[0]
+                location = world.hint_rng.choice(item_locations)
                 player_text = ''
                 if location.player != world.player:
                     player_text = world.multiworld.get_player_name(location.player) + "'s "
                 if location.game == 'Ocarina of Time':
                     area = HintArea.at(location, use_alt_hint=data['use_alt_hint']).text(world.clearer_hints, world=None)
                 else:
-                    area = location.name    
+                    area = location.name
                 text = data['default_item_text'].format(area=(player_text + area))
             elif 'default_item_fallback' in data:
                 text = data['default_item_fallback']

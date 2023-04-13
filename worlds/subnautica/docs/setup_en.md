@@ -12,6 +12,8 @@
 
 2. Start Subnautica. You should see a connect form with three text boxes in the top left of your main menu.
 
+**If using Linux,** add ``WINEDLLOVERRIDES="winhttp=n,b" %command%`` to your Subnautica launch arguments on Steam. If you bought Subnautica elsewhere, you can either add it as a non-steam game and use those launch arguments or use winecfg to set the dll override.
+
 ## Connecting
 
 Use the connect form in Subnautica's main menu to enter your connection information to connect to an Archipelago multiworld.
@@ -33,18 +35,19 @@ Warning: Currently it is not checked whether a loaded savegame belongs to the mu
 ## Console Commands
 
 The mod adds the following console commands:
- - `say` sends the text following it to Archipelago as a chat message. ! is not an allowed character, use / instead.
- - `silent` toggles Archipelago chat messages appearing.
+ - `say` sends the text following it to Archipelago as a chat message.
+   - `!` is not an allowed character, use `/` in its place. For example, to use the [`!hint` command](/tutorial/Archipelago/commands/en#remote-commands), type `say /hint`.
+ - `silent` toggles Archipelago messages appearing.
+ - `tracker` rotates through the possible settings for the in-game tracker that displays the closest uncollected location.
  - `deathlink` toggles death link.
 
-To enable the console in Subnautica, press `F3` and `F8`, then uncheck "Disable Console" in the top left. Press `F3` and `F8` again to close the menus.
-To enter a console command, press `Enter`.
+To enable the console in Subnautica, press `Shift+Enter`.
 
 ## Known Issues
 
 - Do not attempt playing vanilla saves while the mod is installed, as the mod will override the scan information of the savegame.
 - When exiting to the main menu the mod's state is not properly reset. Loading a savegame from here will break various things.
-  If you want to reload a save it is recommended you restart the game entirely.
+  If you want to reload a save it is recommended you relaunch the game entirely.
 - Attempting to load a savegame containing no longer valid connection information without entering valid information on the main menu will hang on the loading screen.
 
 ## Troubleshooting

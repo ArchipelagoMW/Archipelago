@@ -476,7 +476,7 @@ class LocalRom(object):
 
 
 def patch_rom(world, rom, player, active_level_list):
-    local_random = world.slot_seeds[player]
+    local_random = world.per_slot_randoms[player]
 
     # Boomer Costs
     bonus_coin_cost = world.krematoa_bonus_coin_cost[player]
@@ -740,5 +740,5 @@ def get_base_rom_path(file_name: str = "") -> str:
     if not file_name:
         file_name = options["dkc3_options"]["rom_file"]
     if not os.path.exists(file_name):
-        file_name = Utils.local_path(file_name)
+        file_name = Utils.user_path(file_name)
     return file_name

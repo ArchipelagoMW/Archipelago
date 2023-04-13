@@ -1,17 +1,18 @@
 def create_regions(self, world, player: int):
     from . import create_region
     from BaseClasses import Entrance
-    from logic.logic import Logic
-    from graph.vanilla.graph_locations import locationsDict
+    from .variaRandomizer.logic.logic import Logic
+    from .variaRandomizer.graph.vanilla.graph_locations import locationsDict
 
     regions = []
     for accessPoint in Logic.accessPoints:
-        regions.append(create_region(   self, 
-                                        world, 
-                                        player, 
-                                        accessPoint.Name, 
-                                        None,
-                                        [accessPoint.Name + "->" + key for key in accessPoint.intraTransitions.keys()]))
+        if not accessPoint.Escape:
+            regions.append(create_region(self, 
+                                         world, 
+                                         player, 
+                                         accessPoint.Name, 
+                                         None,
+                                         [accessPoint.Name + "->" + key for key in accessPoint.intraTransitions.keys()]))
 
     world.regions += regions
 

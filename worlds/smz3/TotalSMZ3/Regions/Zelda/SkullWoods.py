@@ -1,8 +1,8 @@
 ﻿from typing import List
-from worlds.smz3.TotalSMZ3.Region import Z3Region, RewardType, IReward
-from worlds.smz3.TotalSMZ3.Config import Config
-from worlds.smz3.TotalSMZ3.Location import Location, LocationType
-from worlds.smz3.TotalSMZ3.Item import Progression, ItemType
+from ...Region import Z3Region, RewardType, IReward
+from ...Config import Config
+from ...Location import Location, LocationType
+from ...Item import Progression, ItemType
 
 class SkullWoods(Z3Region, IReward):
     Name = "Skull Woods"
