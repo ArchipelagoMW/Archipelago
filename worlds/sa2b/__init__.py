@@ -210,7 +210,7 @@ class SA2BWorld(World):
         if self.multiworld.goal[self.player].value != 3:
             # Fill item pool with all required items
             for item in {**upgrades_table}:
-                itempool += self._create_items(item)
+                itempool += [self.create_item(item, False, self.multiworld.goal[self.player].value)]
 
             if self.multiworld.goal[self.player].value in [1, 2]:
                 # Some flavor of Chaos Emerald Hunt
@@ -391,14 +391,14 @@ class SA2BWorld(World):
             self.voice_map = dict(zip(voicelist_o, voicelist_s))
 
 
-    def create_item(self, name: str, force_non_progression=False) -> Item:
+    def create_item(self, name: str, force_non_progression=False, goal=0) -> Item:
         data = item_table[name]
 
         if force_non_progression:
             classification = ItemClassification.filler
         elif name == ItemName.emblem or \
              name in emeralds_table.keys() or \
-             (name == ItemName.knuckles_shovel_claws and self.multiworld.goal[self.player].value in [4, 5]):
+             (name == ItemName.knuckles_shovel_claws and goal in [4, 5]):
             classification = ItemClassification.progression_skip_balancing
         elif data.progression:
             classification = ItemClassification.progression
