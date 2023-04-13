@@ -5,6 +5,10 @@
 - [Dark Souls III](https://store.steampowered.com/app/374320/DARK_SOULS_III/)
 - [Dark Souls III AP Client](https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases)
 
+## Optional Software
+
+- [Dark Souls III Maptracker Pack](https://github.com/Br00ty/DS3_AP_Maptracker/releases/latest), for use with [Poptracker](https://github.com/black-sliver/PopTracker/releases)
+
 ## General Concept
 
 The Dark Souls III AP Client is a dinput8.dll triggered when launching Dark Souls III. This .dll file will launch a command 

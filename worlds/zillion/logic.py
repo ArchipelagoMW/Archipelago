@@ -42,6 +42,7 @@ def item_counts(cs: CollectionState, p: int) -> Tuple[Tuple[str, int], ...]:
 
 
 LogicCacheType = Dict[int, Tuple[_Counter[Tuple[str, int]], FrozenSet[Location]]]
+""" { hash: (cs.prog_items, accessible_locations) } """
 
 
 def cs_to_zz_locs(cs: CollectionState, p: int, zz_r: Randomizer, id_to_zz_item: Dict[int, Item]) -> FrozenSet[Location]:

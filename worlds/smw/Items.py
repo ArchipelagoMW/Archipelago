@@ -49,6 +49,7 @@ trap_table = {
     ItemName.ice_trap:        ItemData(0xBC0013, False, True),
     ItemName.stun_trap:       ItemData(0xBC0014, False, True),
     ItemName.literature_trap: ItemData(0xBC0015, False, True),
+    ItemName.timer_trap:      ItemData(0xBC0016, False, True),
 }
 
 event_table = {

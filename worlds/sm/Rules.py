@@ -1,10 +1,7 @@
-from ..generic.Rules import set_rule, add_rule
+from worlds.generic.Rules import set_rule, add_rule
 
-from graph.vanilla.graph_locations import locationsDict
-from graph.graph_utils import vanillaTransitions, getAccessPoint
-from logic.logic import Logic
-from rom.rom_patches import RomPatches
-from utils.doorsmanager import DoorsManager
+from .variaRandomizer.graph.vanilla.graph_locations import locationsDict
+from .variaRandomizer.logic.logic import Logic
 
 def evalSMBool(smbool, maxDiff):
     return smbool.bool == True and smbool.difficulty <= maxDiff
@@ -36,5 +33,6 @@ def set_rules(world, player):
             add_postAvailable_rule(location, player, value.PostAvailable)
             
     for accessPoint in Logic.accessPoints:
-        for key, value1 in accessPoint.intraTransitions.items():
-            set_entrance_rule(world.get_entrance(accessPoint.Name + "->" + key, player), player, value1)
+        if not accessPoint.Escape:
+            for key, value1 in accessPoint.intraTransitions.items():
+                set_entrance_rule(world.get_entrance(accessPoint.Name + "->" + key, player), player, value1)

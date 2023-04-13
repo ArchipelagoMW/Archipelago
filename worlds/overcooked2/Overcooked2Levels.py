@@ -1,14 +1,14 @@
-from enum import Enum
+from enum import Enum, IntEnum
 from typing import List
 
 
 class Overcooked2Dlc(Enum):
     STORY = "Story"
+    SEASONAL = "Seasonal"
     SURF_N_TURF = "Surf 'n' Turf"
     CAMPFIRE_COOK_OFF = "Campfire Cook Off"
     NIGHT_OF_THE_HANGRY_HORDE = "Night of the Hangry Horde"
     CARNIVAL_OF_CHAOS = "Carnival of Chaos"
-    SEASONAL = "Seasonal"
     # CHRISTMAS = "Christmas"
     # CHINESE_NEW_YEAR = "Chinese New Year"
     # WINTER_WONDERLAND = "Winter Wonderland"
@@ -32,16 +32,16 @@ class Overcooked2Dlc(Enum):
         assert False
 
     # inclusive
+    @property
     def start_level_id(self) -> int:
-        if self == Overcooked2Dlc.STORY:
-            return 1
         return 0
 
     # exclusive
+    @property
     def end_level_id(self) -> int:
         id = None
         if self == Overcooked2Dlc.STORY:
-            id = 6*6 + 8  # world_count*level_count + kevin count
+            id = 1 + 6*6 + 8 # tutorial + world_count*level_count + kevin count
         if self == Overcooked2Dlc.SURF_N_TURF:
             id = 3*4 + 1
         if self == Overcooked2Dlc.CAMPFIRE_COOK_OFF:
@@ -51,9 +51,9 @@ class Overcooked2Dlc(Enum):
         if self == Overcooked2Dlc.CARNIVAL_OF_CHAOS:
             id = 3*4 + 3
         if self == Overcooked2Dlc.SEASONAL:
-            id = 31
+            id = 31 + 1
 
-        return self.start_level_id() + id
+        return self.start_level_id + id
 
     # Tutorial + Horde Levels + Endgame
     def excluded_levels(self) -> List[int]:
@@ -87,33 +87,8 @@ class Overcooked2Dlc(Enum):
 
         return []
 
-    def exclusive_items(self) -> List[str]:
-        """Returns list of items exclusive to this DLC"""
-        if self == Overcooked2Dlc.SURF_N_TURF:
-            return ["Bellows"]
-        if self == Overcooked2Dlc.CAMPFIRE_COOK_OFF:
-            return ["Wood"]
-        if self == Overcooked2Dlc.NIGHT_OF_THE_HANGRY_HORDE:
-            return ["Coal Bucket"]
-        if self == Overcooked2Dlc.CARNIVAL_OF_CHAOS:
-            return ["Faster Condiment/Drink Switch"]
-        if self == Overcooked2Dlc.SEASONAL:
-            return ["Wok Wheels"]
 
-        return []
-
-ITEMS_TO_EXCLUDE_IF_NO_DLC = [
-    "Wood",
-    "Coal Bucket",
-    "Bellows",
-    "Coin Purse",
-    "Wok Wheels",
-    "Lightweight Backpack",
-    "Faster Condiment/Drink Switch",
-    "Calmer Unbread",
-]
-
-class Overcooked2GameWorld(Enum):
+class Overcooked2GameWorld(IntEnum):
     ONE = 1
     TWO = 2
     THREE = 3
@@ -127,7 +102,7 @@ class Overcooked2GameWorld(Enum):
         if self == Overcooked2GameWorld.KEVIN:
             return "Kevin"
 
-        return str(int(self.value))
+        return str(self.value)
 
     @property
     def sublevel_count(self) -> int:
@@ -141,7 +116,7 @@ class Overcooked2GameWorld(Enum):
         if self == Overcooked2GameWorld.ONE:
             return 1
 
-        prev = Overcooked2GameWorld(self.value - 1)
+        prev = Overcooked2GameWorld(self - 1)
         return prev.base_id + prev.sublevel_count
 
     @property
@@ -195,7 +170,7 @@ class Overcooked2Level:
         if self.sublevel > self.world.sublevel_count:
             if self.world == Overcooked2GameWorld.KEVIN:
                 raise StopIteration
-            self.world = Overcooked2GameWorld(self.world.value + 1)
+            self.world = Overcooked2GameWorld(self.world + 1)
             self.sublevel = 1
 
         return self
@@ -371,4 +346,63 @@ level_id_to_shortname = {
     (Overcooked2Dlc.SEASONAL                  , 29 ): "Moon 1-3"      ,
     (Overcooked2Dlc.SEASONAL                  , 30 ): "Moon 1-4"      ,
     (Overcooked2Dlc.SEASONAL                  , 31 ): "Moon 1-5"      ,
+}
+
+class OverworldRegion(IntEnum):
+    main = 0
+    yellow_island = 1
+    sky_shelf = 2
+    stonehenge_mountain = 3
+    tip_of_the_map = 4
+    pink_island = 5
+    mars_shelf = 6
+    dark_green_mountain = 7
+    kevin_eight_island = 8
+    out_of_bounds = 9
+
+overworld_region_by_level = {
+    "1-1": OverworldRegion.main,
+    "1-2": OverworldRegion.main,
+    "1-3": OverworldRegion.main,
+    "1-4": OverworldRegion.main,
+    "1-5": OverworldRegion.yellow_island,
+    "1-6": OverworldRegion.yellow_island,
+    "2-1": OverworldRegion.main,
+    "2-2": OverworldRegion.sky_shelf,
+    "2-3": OverworldRegion.sky_shelf,
+    "2-4": OverworldRegion.main,
+    "2-5": OverworldRegion.main,
+    "2-6": OverworldRegion.main,
+    "3-1": OverworldRegion.stonehenge_mountain,
+    "3-2": OverworldRegion.stonehenge_mountain,
+    "3-3": OverworldRegion.stonehenge_mountain,
+    "3-4": OverworldRegion.stonehenge_mountain,
+    "3-5": OverworldRegion.stonehenge_mountain,
+    "3-6": OverworldRegion.main,
+    "4-1": OverworldRegion.main,
+    "4-2": OverworldRegion.main,
+    "4-3": OverworldRegion.main,
+    "4-4": OverworldRegion.main,
+    "4-5": OverworldRegion.main,
+    "4-6": OverworldRegion.main,
+    "5-1": OverworldRegion.main,
+    "5-2": OverworldRegion.sky_shelf,
+    "5-3": OverworldRegion.main,
+    "5-4": OverworldRegion.tip_of_the_map,
+    "5-5": OverworldRegion.tip_of_the_map,
+    "5-6": OverworldRegion.tip_of_the_map,
+    "6-1": OverworldRegion.pink_island,
+    "6-2": OverworldRegion.tip_of_the_map,
+    "6-3": OverworldRegion.tip_of_the_map,
+    "6-4": OverworldRegion.sky_shelf,
+    "6-5": OverworldRegion.mars_shelf,
+    "6-6": OverworldRegion.mars_shelf,
+    "Kevin-1": OverworldRegion.dark_green_mountain,
+    "Kevin-2": OverworldRegion.main,
+    "Kevin-3": OverworldRegion.main,
+    "Kevin-4": OverworldRegion.main,
+    "Kevin-5": OverworldRegion.main,
+    "Kevin-6": OverworldRegion.main,
+    "Kevin-7": OverworldRegion.tip_of_the_map,
+    "Kevin-8": OverworldRegion.kevin_eight_island,
 }

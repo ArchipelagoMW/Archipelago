@@ -36,3 +36,14 @@ Example: "Shipwreck Vault contains Triangles".
 
 There are limitations to what can currently be randomized in The Witness.
 There is an option to turn these non-randomized panels off, called "disable_non_randomized" in your yaml file. This will also slightly change the activation requirement of certain panels, detailed [here](https://github.com/sigma144/witness-randomizer/wiki/Activation-Triggers).
+
+## A note on starting inventory and excluded locations
+
+In this randomizer, items added to start_inventory will be removed from the item pool (as many copies as specified).
+
+It is also possible to add items to the starting inventory that are not part of the mode you are playing.
+In this case, the generator will make its best attempt to adjust logic accordingly.
+One of the use cases of this could be to pre-open a specific door or pre-activate a single laser.
+
+In "shuffle_EPs: obelisk_sides", any Environmental Puzzles in exclude_locations will be pre-completed and not considered for their Obelisk Side.
+If every Environmental Puzzle on an Obelisk Side is pre-completed, that side disappears from the location pool entirely.

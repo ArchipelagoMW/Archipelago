@@ -69,7 +69,7 @@ multiworld. The output of this process is placed in the `output` folder.
 #### Changing local host settings for generation
 
 Sometimes there are various settings that you may want to change before rolling a seed such as enabling race mode,
-auto-forfeit, plando support, or setting a password.
+auto-release, plando support, or setting a password.
 
 All of these settings plus other options are able to be changed by modifying the `host.yaml` file in the Archipelago
 installation folder. The settings chosen here are baked into the `.archipelago` file that gets output with the other
