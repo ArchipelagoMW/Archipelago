@@ -2199,7 +2199,7 @@ def set_boss_gate_rules(world: MultiWorld, player: int, gate_bosses: typing.Dict
                      lambda state: state.has(ItemName.knuckles_shovel_claws, player))
 
 
-def set_rules(world: MultiWorld, player: int, gate_bosses: typing.Dict[int, int], mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int]):
+def set_rules(world: MultiWorld, player: int, gate_bosses: typing.Dict[int, int], boss_rush_map: typing.Dict[int, int], mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int]):
     # Mission Progression Rules (Mission 1 begets Mission 2, etc.)
     set_mission_progress_rules(world, player, mission_map, mission_count_map)
 
@@ -2209,6 +2209,12 @@ def set_rules(world: MultiWorld, player: int, gate_bosses: typing.Dict[int, int]
             set_mission_upgrade_rules_standard(world, player)
         elif world.logic_difficulty[player].value == 1:
             set_mission_upgrade_rules_hard(world, player)
+
+    if world.goal[player] in [4, 5]:
+        for i in range(16):
+            if boss_rush_map[i] == 10:
+                add_rule(world.get_location("Boss Rush - " + str(i + 1), player),
+                         lambda state: (state.has(ItemName.knuckles_shovel_claws, player)))
 
     # Upgrade Requirements for each boss gate
     set_boss_gate_rules(world, player, gate_bosses)

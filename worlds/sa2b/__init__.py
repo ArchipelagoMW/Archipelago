@@ -10,7 +10,7 @@ from .Regions import create_regions, shuffleable_regions, connect_regions, Level
 from .Rules import set_rules
 from .Names import ItemName, LocationName
 from worlds.AutoWorld import WebWorld, World
-from .GateBosses import get_gate_bosses, get_boss_name
+from .GateBosses import get_gate_bosses, get_boss_rush_bosses, get_boss_name
 from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions
 import Patch
 
@@ -68,6 +68,7 @@ class SA2BWorld(World):
     region_emblem_map: typing.Dict[int, int]
     gate_costs: typing.Dict[int, int]
     gate_bosses: typing.Dict[int, int]
+    boss_rush_map: typing.Dict[int, int]
     web = SA2BWeb()
 
     def _get_slot_data(self):
@@ -100,6 +101,7 @@ class SA2BWorld(World):
             "RegionEmblemMap": self.region_emblem_map,
             "GateCosts": self.gate_costs,
             "GateBosses": self.gate_bosses,
+            "BossRushMap": self.boss_rush_map,
         }
 
     def _create_items(self, name: str):
@@ -179,8 +181,10 @@ class SA2BWorld(World):
                 self.multiworld.kart_race_checks[self.player].value = 2
 
             self.gate_bosses = {}
+            self.boss_rush_map = {}
         else:
-            self.gate_bosses = get_gate_bosses(self.multiworld, self.player)
+            self.gate_bosses   = get_gate_bosses(self.multiworld, self.player)
+            self.boss_rush_map = get_boss_rush_bosses(self.multiworld, self.player)
 
     def create_regions(self):
         self.mission_map       = get_mission_table(self.multiworld, self.player)
@@ -190,7 +194,7 @@ class SA2BWorld(World):
         create_regions(self.multiworld, self.player, self.location_table)
 
         # Not Generate Basic
-        if self.multiworld.goal[self.player].value == 0 or self.multiworld.goal[self.player].value == 2:
+        if self.multiworld.goal[self.player].value in [0, 2, 4, 5]:
             self.multiworld.get_location(LocationName.finalhazard, self.player).place_locked_item(self.create_item(ItemName.maria))
         elif self.multiworld.goal[self.player].value == 1:
             self.multiworld.get_location(LocationName.green_hill, self.player).place_locked_item(self.create_item(ItemName.maria))
@@ -206,9 +210,9 @@ class SA2BWorld(World):
         if self.multiworld.goal[self.player].value != 3:
             # Fill item pool with all required items
             for item in {**upgrades_table}:
-                itempool += self._create_items(item)
+                itempool += [self.create_item(item, False, self.multiworld.goal[self.player].value)]
 
-            if self.multiworld.goal[self.player].value == 1 or self.multiworld.goal[self.player].value == 2:
+            if self.multiworld.goal[self.player].value in [1, 2]:
                 # Some flavor of Chaos Emerald Hunt
                 for item in {**emeralds_table}:
                     itempool += self._create_items(item)
@@ -261,7 +265,7 @@ class SA2BWorld(World):
 
         first_cannons_core_mission, final_cannons_core_mission = get_first_and_last_cannons_core_missions(self.mission_map, self.mission_count_map)
 
-        connect_regions(self.multiworld, self.player, gates, self.emblems_for_cannons_core, self.gate_bosses, first_cannons_core_mission, final_cannons_core_mission)
+        connect_regions(self.multiworld, self.player, gates, self.emblems_for_cannons_core, self.gate_bosses, self.boss_rush_map, first_cannons_core_mission, final_cannons_core_mission)
 
         max_required_emblems = max(max(emblem_requirement_list), self.emblems_for_cannons_core)
         itempool += [self.create_item(ItemName.emblem) for _ in range(max_required_emblems)]
@@ -387,12 +391,14 @@ class SA2BWorld(World):
             self.voice_map = dict(zip(voicelist_o, voicelist_s))
 
 
-    def create_item(self, name: str, force_non_progression=False) -> Item:
+    def create_item(self, name: str, force_non_progression=False, goal=0) -> Item:
         data = item_table[name]
 
         if force_non_progression:
             classification = ItemClassification.filler
-        elif name == ItemName.emblem:
+        elif name == ItemName.emblem or \
+             name in emeralds_table.keys() or \
+             (name == ItemName.knuckles_shovel_claws and goal in [4, 5]):
             classification = ItemClassification.progression_skip_balancing
         elif data.progression:
             classification = ItemClassification.progression
@@ -409,18 +415,28 @@ class SA2BWorld(World):
         self.multiworld.random.choice(junk_table.keys())
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self.gate_bosses, self.mission_map, self.mission_count_map)
+        set_rules(self.multiworld, self.player, self.gate_bosses, self.boss_rush_map, self.mission_map, self.mission_count_map)
 
     def write_spoiler(self, spoiler_handle: typing.TextIO):
-        if self.multiworld.number_of_level_gates[self.player].value > 0:
+        if self.multiworld.number_of_level_gates[self.player].value > 0 or self.multiworld.goal[self.player].value in [4, 5]:
             spoiler_handle.write("\n")
             header_text = "Sonic Adventure 2 Bosses for {}:\n"
             header_text = header_text.format(self.multiworld.player_name[self.player])
             spoiler_handle.write(header_text)
-            for x in range(len(self.gate_bosses.values())):
-                text = "Gate {0} Boss: {1}\n"
-                text = text.format((x + 1), get_boss_name(self.gate_bosses[x + 1]))
-                spoiler_handle.writelines(text)
+
+            if self.multiworld.number_of_level_gates[self.player].value > 0:
+                for x in range(len(self.gate_bosses.values())):
+                    text = "Gate {0} Boss: {1}\n"
+                    text = text.format((x + 1), get_boss_name(self.gate_bosses[x + 1]))
+                    spoiler_handle.writelines(text)
+                spoiler_handle.write("\n")
+
+            if self.multiworld.goal[self.player].value in [4, 5]:
+                for x in range(len(self.boss_rush_map.values())):
+                    text = "Boss Rush Boss {0}: {1}\n"
+                    text = text.format((x + 1), get_boss_name(self.boss_rush_map[x]))
+                    spoiler_handle.writelines(text)
+                spoiler_handle.write("\n")
 
     def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
         gate_names = [

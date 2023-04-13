@@ -1222,6 +1222,25 @@ boss_gate_location_table = {
     LocationName.gate_5_boss: 0xFF0104,
 }
 
+boss_rush_location_table = {
+    LocationName.boss_rush_1:  0xFF0105,
+    LocationName.boss_rush_2:  0xFF0106,
+    LocationName.boss_rush_3:  0xFF0107,
+    LocationName.boss_rush_4:  0xFF0108,
+    LocationName.boss_rush_5:  0xFF0109,
+    LocationName.boss_rush_6:  0xFF010A,
+    LocationName.boss_rush_7:  0xFF010B,
+    LocationName.boss_rush_8:  0xFF010C,
+    LocationName.boss_rush_9:  0xFF010D,
+    LocationName.boss_rush_10: 0xFF010E,
+    LocationName.boss_rush_11: 0xFF010F,
+    LocationName.boss_rush_12: 0xFF0110,
+    LocationName.boss_rush_13: 0xFF0111,
+    LocationName.boss_rush_14: 0xFF0112,
+    LocationName.boss_rush_15: 0xFF0113,
+    LocationName.boss_rush_16: 0xFF0114,
+}
+
 chao_garden_beginner_location_table = {
     LocationName.chao_race_crab_pool_1: 0xFF0200,
     LocationName.chao_race_crab_pool_2: 0xFF0201,
@@ -1360,6 +1379,7 @@ all_locations = {
     **mission_location_table,
     **upgrade_location_table,
     **boss_gate_location_table,
+    **boss_rush_location_table,
     **chao_key_location_table,
     **pipe_location_table,
     **hidden_whistle_location_table,
@@ -1472,10 +1492,10 @@ def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int
         elif world.kart_race_checks[player] == 1:
             location_table.update({**kart_race_mini_location_table})
 
-        if world.goal[player].value == 0 or world.goal[player].value == 2:
+        if world.goal[player].value in [0, 2, 4, 5]:
             location_table.update({**final_boss_location_table})
 
-        if world.goal[player].value == 1 or world.goal[player].value == 2:
+        if world.goal[player].value in [1, 2]:
             location_table.update({**green_hill_location_table})
 
             if world.keysanity[player]:
@@ -1483,6 +1503,9 @@ def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int
 
             if world.animalsanity[player]:
                 location_table.update({**green_hill_animal_location_table})
+
+        if world.goal[player].value in [4, 5]:
+            location_table.update({**boss_rush_location_table})
 
         if world.chao_garden_difficulty[player].value >= 1:
             chao_location_table.update({**chao_garden_beginner_location_table})

@@ -10,13 +10,26 @@ class Goal(Choice):
     Chaos Emerald Hunt: Find the Seven Chaos Emeralds and reach Green Hill Zone
     Finalhazard Chaos Emerald Hunt: Find the Seven Chaos Emeralds and reach Green Hill Zone, then defeat Finalhazard
     Grand Prix: Win every race in Kart Race Mode (all standard levels are disabled)
+    Boss Rush: Beat all of the bosses in the Boss Rush, ending with Finalhazard
+    Cannon's Core Boss Rush: Beat Cannon's Core, then beat all of the bosses in the Boss Rush, ending with Finalhazard
     """
     display_name = "Goal"
     option_biolizard = 0
     option_chaos_emerald_hunt = 1
     option_finalhazard_chaos_emerald_hunt = 2
     option_grand_prix = 3
+    option_boss_rush = 4
+    option_cannons_core_boss_rush = 5
     default = 0
+
+    @classmethod
+    def get_option_name(cls, value) -> str:
+        if cls.auto_display_name and value == 5:
+            return "Cannon's Core Boss Rush"
+        elif cls.auto_display_name:
+            return cls.name_lookup[value].replace("_", " ").title()
+        else:
+            return cls.name_lookup[value]
 
 
 class MissionShuffle(Toggle):
@@ -24,6 +37,22 @@ class MissionShuffle(Toggle):
     Determines whether missions order will be shuffled per level
     """
     display_name = "Mission Shuffle"
+
+
+class BossRushShuffle(Choice):
+    """
+    Determines how bosses in Boss Rush Mode are shuffled
+    Vanilla: Bosses appear in the Vanilla ordering
+    Shuffled: The same bosses appear, but in a random order
+    Chaos: Each boss is randomly chosen separately (one will always be King Boom Boo)
+    Singularity: One boss is chosen and placed in every slot (one will always be replaced with King Boom Boo)
+    """
+    display_name = "Boss Rush Shuffle"
+    option_vanilla = 0
+    option_shuffled = 1
+    option_chaos = 2
+    option_singularity = 3
+    default = 0
 
 
 class BaseTrapWeight(Choice):
@@ -630,6 +659,7 @@ class LogicDifficulty(Choice):
 sa2b_options: typing.Dict[str, type(Option)] = {
     "goal": Goal,
     "mission_shuffle": MissionShuffle,
+    "boss_rush_shuffle": BossRushShuffle,
     "keysanity": Keysanity,
     "whistlesanity": Whistlesanity,
     "beetlesanity": Beetlesanity,
