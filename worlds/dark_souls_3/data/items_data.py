@@ -194,6 +194,7 @@ goods_table = {
     "Soul of Boreal Valley Vordt": 0x400002CF,
     "Soul of a Stray Demon": 0x400002E7,
     "Soul of a Demon": 0x400002E3,
+    "Soul of the Dancer": 0x400002CA, #New
 
     # Upgrade materials
     **{"Titanite Shard #"+str(i): 0x400003E8 for i in range(1, 11)},
@@ -642,7 +643,6 @@ items_for_dlc_key_location_list = {
 }
 
 items_for_misc_location_list = {
-    "Mortician's Ashes",
     "Braille Divine Tome of Carim",
     "Great Swamp Pyromancy Tome",
     "Farron Coal",
@@ -669,7 +669,8 @@ items_for_misc_location_list = {
     "Dragon Chaser's Ashes",
     "Twinkling Dragon Torso Stone",
     "Braille Divine Tome of Lothric",
-    "Fire Gem"
+    "Fire Gem",
+    "Grave Key"
 }
 
 items_for_dlc_misc_location_list = {

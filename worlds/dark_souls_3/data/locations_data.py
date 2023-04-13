@@ -27,7 +27,7 @@ high_wall_of_lothric = {
     "HWL: Deep Battle Axe": 0x0006AFA54, #!
     "HWL: Club": 0x007A1200, #!
     "HWL: Claymore": 0x005BDBA0, #!
-    "HWL: Binoculars": 0x40000173,
+    "HWL: Binoculars": 0x40000173, #!
     "HWL: Longbow": 0x00D689E0, #!
     "HWL: Mail Breaker": 0x002DEDD0, #!
     "HWL: Broadsword": 0x001ED2A0, #!
@@ -372,13 +372,13 @@ lothric_castle_table = {
     "LC: Caitha's Chime": 0x00CA06C0, #!
     "LC: Braille Divine Tome of Lothric": 0x40000848, #!
     "LC: Knight's Ring": 0x20004FEC, #!
-    "LC: Irithyll Rapier": 0x002E8A10,
+    "LC: Irithyll Rapier": 0x002E8A10, #!
     "LC: Sunlight Straight Sword": 0x00203230, #!
-    "LC: Soul of Dragonslayer Armour": 0x400002D1, #!
+    "LC: Soul of Dragonslayer Armour": 0x400002D1 #!
 
     # The Black Hand Gotthard corpse appears when you have defeated Yhorm and Aldrich and triggered the cutscene
-    "LC: Grand Archives Key": 0x400007DE, #!       # On Black Hand Gotthard corpse
-    "LC: Gotthard Twinswords": 0x00F53570 #!       # On Black Hand Gotthard corpse
+    #"LC: Grand Archives Key": 0x400007DE, #!       # On Black Hand Gotthard corpse
+    #"LC: Gotthard Twinswords": 0x00F53570 #!       # On Black Hand Gotthard corpse
 }
 
 consumed_king_garden_table = {
@@ -421,7 +421,7 @@ untended_graves_table = {
     "UG: Hornet Ring": 0x20004F9C, #!
     "UG: Chaos Blade": 0x004C9960, #!
     "UG: Blacksmith Hammer": 0x007E57C0, #!
-    "UG: Eyes of a Fire Keeper": 0x4000085A,
+    "UG: Eyes of a Fire Keeper": 0x4000085A, #!
     "UG: Coiled Sword Fragment": 0x4000015F, #!
     "UG: Soul of Champion Gundyr": 0x400002C8, #!
 }
@@ -609,44 +609,50 @@ dlc_progressive_locations = { #71
 
 health_upgrade_locations = {
     # Healing
-    **{"Estus Shard -"+str(i): 0x4000085D for i in range(1, 12)}, # Updated to reflect changes in items_data.py
-    **{"Undead Bone Shard -"+str(i): 0x4000085F for i in range(1, 10)}, # Updated to reflect changes in items_data.py
+    **{"Estus Shard !"+str(i): 0x4000085D for i in range(1, 12)}, # Updated to reflect changes in items_data.py
+    **{"Undead Bone Shard !"+str(i): 0x4000085F for i in range(1, 10)}, # Updated to reflect changes in items_data.py
+}
+
+gotthard_table = {
+    "LC: Grand Archives Key": 0x400007DE, #! On Black Hand Gotthard corpse
+    "LC: Gotthard Twinswords": 0x00F53570 #! On Black Hand Gotthard corpse
 }
 
 key_location_list = { #Bosses are to be considered a key location
-    "HWL: Small Lothric Banner",
-    "HWL: Basin of Vows",
-    "CD: Small Doll",
-    "PC: Storm Ruler",
-    "LC: Grand Archives Key",
-    "FK: Cinders of a Lord - Abyss Watcher",
-    "PC: Cinders of a Lord - Yhorm the Giant",
-    "AL: Cinders of a Lord - Aldrich",
-    "GA: Cinders of a Lord - Lothric Prince",
-    "US: Mortician's Ashes",
-    "HWL: Cell Key",
-    "HWL: Way of Blue Covenant",
-    "ID: Jailbreaker's Key",
-    "ID: Prisoner Chief's Ashes",
-    "ID: Old Cell Key",
-    "ID: Jailer's Key Ring",
-    "HWL: Soul of Boreal Valley Vordt",
-    "US: Soul of the Rotted Greatwood",
-    "RS: Soul of a Crystal Sage",
-    "CD: Soul of the Deacons of the Deep",
-    "FK: Soul of the Blood of the Wolf",
-    "FK: Soul of a Stray Demon",
-    "CC: Soul of High Lord Wolnir",
-    "CC: Soul of a Demon",
-    "SL: Soul of the Old Demon King",
-    "IBV: Soul of Pontiff Sulyvahn",
-    "PC: Soul of Yhorm the Giant",
-    "AL: Soul of Aldrich",
-    "LC: Soul of Dragonslayer Armour",
-    "CKG: Soul of Consumed Oceiros",
-    "GA: Soul of the Twin Princes",
-    "UG: Soul of Champion Gundyr",
-    "AP: Soul of the Nameless King"
+    "HWL: Small Lothric Banner", #!
+    "HWL: Basin of Vows", #!
+    "CD: Small Doll", #!
+    "PC: Storm Ruler", #!
+    "LC: Grand Archives Key", #!
+    "FK: Cinders of a Lord - Abyss Watcher", #!
+    "PC: Cinders of a Lord - Yhorm the Giant", #!
+    "AL: Cinders of a Lord - Aldrich", #!
+    "GA: Cinders of a Lord - Lothric Prince", #!
+    "US: Mortician's Ashes", #!
+    "HWL: Cell Key", #!
+    "HWL: Way of Blue Covenant", #!
+    "ID: Jailbreaker's Key", #!
+    "ID: Prisoner Chief's Ashes", #!
+    "ID: Old Cell Key", #!
+    "ID: Jailer's Key Ring", #!
+    "HWL: Soul of Boreal Valley Vordt", #!
+    "HWL: Soul of the Dancer", #!
+    "US: Soul of the Rotted Greatwood", #!
+    "RS: Soul of a Crystal Sage", #!
+    "CD: Soul of the Deacons of the Deep", #!
+    "FK: Soul of the Blood of the Wolf", #!
+    "FK: Soul of a Stray Demon", #!
+    "CC: Soul of High Lord Wolnir", #!
+    "CC: Soul of a Demon", #!
+    "SL: Soul of the Old Demon King", #!
+    "IBV: Soul of Pontiff Sulyvahn", #!
+    "PC: Soul of Yhorm the Giant", #!
+    "AL: Soul of Aldrich", #!
+    "LC: Soul of Dragonslayer Armour", #!
+    "CKG: Soul of Consumed Oceiros", #!
+    "GA: Soul of the Twin Princes", #!
+    "UG: Soul of Champion Gundyr", #!
+    "AP: Soul of the Nameless King" #!
 }
 
 dlc_key_location_list = {
@@ -701,6 +707,7 @@ weapon_location_list = { # SOME LOCATIONS ARENT NORMALLY WEAPONS, BUT TO INCLUDE
     "IBV: Roster of Knights",
     "IBV: Aldrich Faithful Covenant",
     "LC: Gotthard Twinswords",
+    "LC: Irithyll Rapier",
     "AP: Dragon Tooth",
     "GA: Sage's Crystal Staff",
     "AP: Havel's Greatshield",
@@ -878,7 +885,7 @@ armor_location_list = {
     "FK: Ragged Mask",
     "FK: Crown of Dusk",
     "FK: Pharis's Hat",
-    "CC: Old Sage's Blindfold"
+    "CC: Old Sage's Blindfold",
     "IBV: Painting Guardian Hood",
     "IBV: Painting Guardian Gown",
     "IBV: Painting Guardian Gloves",
@@ -1038,7 +1045,6 @@ dlc_spell_location_list = {
 }
 
 misc_location_list = {
-    "US: Mortician's Ashes",
     "RS: Braille Divine Tome of Carim",
     "RS: Great Swamp Pyromancy Tome",
     "RS: Farron Coal",
@@ -1065,7 +1071,9 @@ misc_location_list = {
     "AP: Dragon Chaser's Ashes",
     "AP: Twinkling Dragon Torso Stone",
     "LC: Braille Divine Tome of Lothric",
-    "US: Fire Gem"
+    "US: Fire Gem",
+    "HWL: Binoculars",
+    "UG: Eyes of a Fire Keeper"
 }
 
 dlc_misc_location_list = {
@@ -1092,10 +1100,10 @@ location_tables = [fire_link_shrine_table, firelink_shrine_bell_tower_table, hig
                              cathedral_of_the_deep_table, farron_keep_table, catacombs_of_carthus_table, smouldering_lake_table, irithyll_of_the_boreal_valley_table,
                              irithyll_dungeon_table, profaned_capital_table, anor_londo_table, lothric_castle_table, consumed_king_garden_table,
                              grand_archives_table, untended_graves_table, archdragon_peak_table, progressive_locations, progressive_locations_2, progressive_locations_3, 
-                             painted_world_table, dreg_heap_table, ringed_city_table, dlc_progressive_locations, health_upgrade_locations]
+                             painted_world_table, dreg_heap_table, ringed_city_table, dlc_progressive_locations, health_upgrade_locations, gotthard_table]
 
 location_dictionary = {**fire_link_shrine_table, **firelink_shrine_bell_tower_table, **high_wall_of_lothric, **undead_settlement_table, **road_of_sacrifice_table,
                        **cathedral_of_the_deep_table, **farron_keep_table, **catacombs_of_carthus_table, **smouldering_lake_table, **irithyll_of_the_boreal_valley_table,
                        **irithyll_dungeon_table, **profaned_capital_table, **anor_londo_table, **lothric_castle_table, **consumed_king_garden_table,
                        **grand_archives_table, **untended_graves_table, **archdragon_peak_table, **progressive_locations, **progressive_locations_2, **progressive_locations_3, 
-                       **painted_world_table, **dreg_heap_table, **ringed_city_table, **dlc_progressive_locations, **health_upgrade_locations}
+                       **painted_world_table, **dreg_heap_table, **ringed_city_table, **dlc_progressive_locations, **health_upgrade_locations, **gotthard_table}

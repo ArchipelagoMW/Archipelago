@@ -35,12 +35,34 @@ class DarkSouls3Item(Item):
 
     dlc_spell_item = {**dlc_spells_table}
 
-    misc_item = ("Mortician's Ashes", "Braille Divine Tome of Carim", "Great Swamp Pyromancy Tome", "Farron Coal", "Paladin's Ashes",
-                 "Deep Braille Divine Tome", "Golden Scroll", "Sage's Coal", "Sage's Scroll", "Dreamchaser's Ashes", "Carthus Pyromancy Tome",
-                 "Grave Warden's Ashes", "Grave Warden Pyromancy Tome", "Quelana Pyromancy Tome", "Izalith Pyromancy Tome", "Greirat's Ashes",
-                 "Excrement-covered Ashes", "Easterner's Ashes", "Dragon Torso Stone", "Profaned Coal", "Xanthous Ashes", "Logan's Scroll",
-                 "Giant's Coal", "Coiled Sword Fragment", "Dragon Chaser's Ashes", "Twinkling Dragon Torso Stone", "Braille Divine Tome of Lothric",
-                 "Fire Gem")
+    misc_item = ("Braille Divine Tome of Carim",
+                 "Great Swamp Pyromancy Tome",
+                 "Farron Coal",
+                 "Paladin's Ashes",
+                 "Deep Braille Divine Tome",
+                 "Golden Scroll",
+                 "Sage's Coal",
+                 "Sage's Scroll",
+                 "Dreamchaser's Ashes",
+                 "Carthus Pyromancy Tome",
+                 "Grave Warden's Ashes",
+                 "Grave Warden Pyromancy Tome",
+                 "Quelana Pyromancy Tome",
+                 "Izalith Pyromancy Tome",
+                 "Greirat's Ashes",
+                 "Excrement-covered Ashes",
+                 "Easterner's Ashes",
+                 "Dragon Torso Stone",
+                 "Profaned Coal",
+                 "Xanthous Ashes",
+                 "Logan's Scroll",
+                 "Giant's Coal",
+                 "Coiled Sword Fragment",
+                 "Dragon Chaser's Ashes",
+                 "Twinkling Dragon Torso Stone",
+                 "Braille Divine Tome of Lothric",
+                 "Fire Gem", 
+                 "Grave Key")
 
     dlc_misc_item = ("Captains Ashes")
 

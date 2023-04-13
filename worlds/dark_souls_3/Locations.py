@@ -50,6 +50,7 @@ class DarkSouls3Location(Location):
         "IBV: Roster of Knights",
         "IBV: Aldrich Faithful Covenant",
         "LC: Gotthard Twinswords",
+        "LC: Irithyll Rapier",
         "AP: Dragon Tooth",
         "GA: Sage's Crystal Staff",
         "AP: Havel's Greatshield",
@@ -226,7 +227,7 @@ class DarkSouls3Location(Location):
         "FK: Ragged Mask",
         "FK: Crown of Dusk",
         "FK: Pharis's Hat",
-        "CC: Old Sage's Blindfold"
+        "CC: Old Sage's Blindfold",
         "IBV: Painting Guardian Hood",
         "IBV: Painting Guardian Gown",
         "IBV: Painting Guardian Gloves",
@@ -386,7 +387,6 @@ class DarkSouls3Location(Location):
     )
 
     misc_location = (
-        "US: Mortician's Ashes",
         "RS: Braille Divine Tome of Carim",
         "RS: Great Swamp Pyromancy Tome",
         "RS: Farron Coal",
@@ -413,7 +413,9 @@ class DarkSouls3Location(Location):
         "AP: Dragon Chaser's Ashes",
         "AP: Twinkling Dragon Torso Stone",
         "LC: Braille Divine Tome of Lothric",
-        "US: Fire Gem"
+        "US: Fire Gem",
+        "HWL: Binoculars",
+        "UG: Eyes of a Fire Keeper"
     )
 
     dlc_misc_location = ("PW: Captains Ashes")

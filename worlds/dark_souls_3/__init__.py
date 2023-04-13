@@ -13,7 +13,7 @@ from .data.locations_data import location_dictionary, fire_link_shrine_table, \
     irithyll_dungeon_table, profaned_capital_table, anor_londo_table, lothric_castle_table, grand_archives_table, \
     untended_graves_table, archdragon_peak_table, firelink_shrine_bell_tower_table, progressive_locations, \
     progressive_locations_2, progressive_locations_3, painted_world_table, dreg_heap_table, ringed_city_table, dlc_progressive_locations, \
-    health_upgrade_locations
+    health_upgrade_locations, gotthard_table
 from ..AutoWorld import World, WebWorld
 from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification
 from ..generic.Rules import set_rule, add_item_rule, exclusion_rules
@@ -112,6 +112,7 @@ class DarkSouls3World(World):
         profaned_capital_region = self.create_region("Profaned Capital", profaned_capital_table)
         anor_londo_region = self.create_region("Anor Londo", anor_londo_table)
         lothric_castle_region = self.create_region("Lothric Castle", lothric_castle_table)
+        gotthard_region = self.create_region("Gotthard Corpse", gotthard_table)
         grand_archives_region = self.create_region("Grand Archives", grand_archives_table)
         untended_graves_region = self.create_region("Untended Graves", untended_graves_table)
         archdragon_peak_region = self.create_region("Archdragon Peak", archdragon_peak_table)
@@ -171,8 +172,10 @@ class DarkSouls3World(World):
         self.multiworld.get_entrance("Goto Profaned capital", self.player).connect(profaned_capital_region)
         lothric_castle_region.exits.append(Entrance(self.player, "Goto Consumed King Garden", lothric_castle_region))
         lothric_castle_region.exits.append(Entrance(self.player, "Goto Grand Archives", lothric_castle_region))
+        lothric_castle_region.exits.append(Entrance(self.player, "Goto Gotthard Corpse", lothric_castle_region))
         self.multiworld.get_entrance("Goto Consumed King Garden", self.player).connect(consumed_king_garden_region)
         self.multiworld.get_entrance("Goto Grand Archives", self.player).connect(grand_archives_region)
+        self.multiworld.get_entrance("Goto Gotthard Corpse", self.player).connect(gotthard_region)
         consumed_king_garden_region.exits.append(Entrance(self.player, "Goto Untended Graves",
                                                           consumed_king_garden_region))
         self.multiworld.get_entrance("Goto Untended Graves", self.player).connect(untended_graves_region)
@@ -187,17 +190,47 @@ class DarkSouls3World(World):
             dreg_heap_region.exits.append(Entrance(self.player, "Goto Ringed City", dreg_heap_region))
             self.multiworld.get_entrance("Goto Ringed City", self.player).connect(ringed_city_region)
 
+    def check_is_excluded(self, name):
+        if (not self.multiworld.enable_weapon_locations[self.player]) and DarkSouls3Location.is_weapon_location(name):
+            return True
+        if ((not self.multiworld.enable_weapon_locations[self.player]) or (not self.multiworld.enable_dlc[self.player])) and DarkSouls3Location.is_dlc_weapon_location(name):
+            return True
+        if (not self.multiworld.enable_shield_locations[self.player]) and DarkSouls3Location.is_shield_location(name):
+            return True
+        if ((not self.multiworld.enable_shield_locations[self.player]) or (not self.multiworld.enable_dlc[self.player])) and DarkSouls3Location.is_dlc_shield_location(name):
+            return True
+        if (not self.multiworld.enable_armor_locations[self.player]) and DarkSouls3Location.is_armor_location(name):
+            return True
+        if ((not self.multiworld.enable_armor_locations[self.player]) or (not self.multiworld.enable_dlc[self.player])) and DarkSouls3Location.is_dlc_armor_location(name):
+            return True
+        if (not self.multiworld.enable_ring_locations[self.player]) and DarkSouls3Location.is_ring_location(name):
+            return True
+        if ((not self.multiworld.enable_ring_locations[self.player]) or (not self.multiworld.enable_dlc[self.player])) and DarkSouls3Location.is_dlc_ring_location(name):
+            return True
+        if (not self.multiworld.enable_spell_locations[self.player]) and DarkSouls3Location.is_spell_location(name):
+            return True
+        if ((not self.multiworld.enable_spell_locations[self.player]) or (not self.multiworld.enable_dlc[self.player])) and DarkSouls3Location.is_dlc_spell_location(name):
+            return True
+        if (not self.multiworld.enable_misc_locations[self.player]) and DarkSouls3Location.is_misc_location(name):
+            return True
+        if ((not self.multiworld.enable_misc_locations[self.player]) or (not self.multiworld.enable_dlc[self.player])) and DarkSouls3Location.is_dlc_misc_location(name):
+            return True
+        if (not self.multiworld.enable_npc_locations[self.player]) and DarkSouls3Location.is_npc_location(name):
+            return True
+        return False
+        
     # For each region, add the associated locations retrieved from the corresponding location_table
     def create_region(self, region_name, location_table) -> Region:
         new_region = Region(region_name, self.player, self.multiworld)
         if location_table:
             for name, address in location_table.items():
-                location = DarkSouls3Location(self.player, name, self.location_name_to_id[name], new_region)
-                if region_name == "Menu":
-                    add_item_rule(location, lambda item: not item.advancement)
-                if region_name == "Health":
-                    add_item_rule(location, lambda item: not item.advancement)
-                new_region.locations.append(location)
+                if not self.check_is_excluded(name):
+                    location = DarkSouls3Location(self.player, name, self.location_name_to_id[name], new_region)
+                    if region_name == "Menu":
+                        add_item_rule(location, lambda item: not item.advancement)
+                    if region_name == "Health":
+                        add_item_rule(location, lambda item: not item.advancement)
+                    new_region.locations.append(location)
         self.multiworld.regions.append(new_region)
         return new_region
 
@@ -298,31 +331,33 @@ class DarkSouls3World(World):
             set_rule(self.multiworld.get_entrance("Goto Lothric Castle", self.player),
                      lambda state: state.has("Basin of Vows", self.player) and 
                                    state.has("Small Lothric Banner", self.player))
-        if self.multiworld.late_dlc[self.player]:
+        if self.multiworld.late_dlc[self.player] and self.multiworld.enable_dlc[self.player]:
             set_rule(self.multiworld.get_entrance("Goto Painted World of Ariandel", self.player),
                      lambda state: state.has("Contraption Key", self.player) and 
                                    state.has("Small Doll",self.player))
+        # Gotthard Corpse Rule
+        set_rule(self.multiworld.get_entrance("Goto Gotthard Corpse", self.player),
+                 lambda state: (state.can_reach("AL: Cinders of a Lord - Aldrich", "Location", self.player) and
+                                state.can_reach("PC: Cinders of a Lord - Yhorm the Giant", "Location", self.player)))
 
         # Define the access rules to some specific locations
         set_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),
                  lambda state: state.has("Basin of Vows", self.player))
-        set_rule(self.multiworld.get_location("HWL: Greirat's Ashes", self.player),
-                 lambda state: state.has("Cell Key", self.player))
-        set_rule(self.multiworld.get_location("HWL: Blue Tearstone Ring", self.player),
-                 lambda state: state.has("Cell Key", self.player))
-        set_rule(self.multiworld.get_location("ID: Bellowing Dragoncrest Ring", self.player),
-                 lambda state: state.has("Jailbreaker's Key", self.player))
+        if self.multiworld.enable_misc_locations[self.player]:
+            set_rule(self.multiworld.get_location("HWL: Greirat's Ashes", self.player),
+                     lambda state: state.has("Cell Key", self.player))
+        if self.multiworld.enable_ring_locations[self.player]:
+            set_rule(self.multiworld.get_location("HWL: Blue Tearstone Ring", self.player),
+                     lambda state: state.has("Cell Key", self.player))
+            set_rule(self.multiworld.get_location("ID: Bellowing Dragoncrest Ring", self.player),
+                     lambda state: state.has("Jailbreaker's Key", self.player))
+            set_rule(self.multiworld.get_location("ID: Covetous Gold Serpent Ring", self.player),
+                     lambda state: state.has("Old Cell Key", self.player))
         set_rule(self.multiworld.get_location("ID: Prisoner Chief's Ashes", self.player),
                  lambda state: state.has("Jailer's Key Ring", self.player))
-        set_rule(self.multiworld.get_location("ID: Covetous Gold Serpent Ring", self.player),
-                 lambda state: state.has("Old Cell Key", self.player))
-        set_rule(self.multiworld.get_location("ID: Karla's Ashes", self.player),
-                 lambda state: state.has("Jailer's Key Ring", self.player))
-        black_hand_gotthard_corpse_rule = lambda state: \
-            (state.can_reach("AL: Cinders of a Lord - Aldrich", "Location", self.player) and
-             state.can_reach("PC: Cinders of a Lord - Yhorm the Giant", "Location", self.player))
-        set_rule(self.multiworld.get_location("LC: Grand Archives Key", self.player), black_hand_gotthard_corpse_rule)
-        set_rule(self.multiworld.get_location("LC: Gotthard Twinswords", self.player), black_hand_gotthard_corpse_rule)
+        if self.multiworld.enable_npc_locations[self.player]:
+            set_rule(self.multiworld.get_location("ID: Karla's Ashes", self.player),
+                     lambda state: state.has("Jailer's Key Ring", self.player))
 
         self.multiworld.completion_condition[self.player] = lambda state: \
             state.has("Cinders of a Lord - Abyss Watcher", self.player) and \
@@ -331,23 +366,14 @@ class DarkSouls3World(World):
             state.has("Cinders of a Lord - Lothric Prince", self.player)
 
     def generate_basic(self):
-        # Depending on the specified option, add the Basin of Vows to a specific location or to the item pool
-        #item = self.create_item("Basin of Vows")
-        #if self.multiworld.late_basin_of_vows[self.player]:
-            #self.multiworld.get_location("IBV: Soul of Pontiff Sulyvahn", self.player).place_locked_item(item)
-        #else:
-            #self.multiworld.itempool += [item]
-
-        # Depending on the specified option, add the Contraption Key to a specific location or to the item pool
-        #item = self.create_item("Contraption Key")
-        #if self.multiworld.late_dlc[self.player]:
-            #self.multiworld.get_location("HWL: Soul of the Dancer", self.player).place_locked_item(item)
-        #else:
-            #self.multiworld.itempool += [item]
-
+        pass
         # Fill item pool with additional items
-        item_pool_len = self.item_name_to_id.__len__()
-        total_required_locations = self.location_name_to_id.__len__()
+        item_pool_len = len([item for item in self.multiworld.itempool if item.player == self.player])
+        #print("item_pool_len = " + str(item_pool_len))
+        print(len(self.multiworld.itempool))
+        total_required_locations = len(self.multiworld.get_locations(self.player))
+        #print("location_pool_len = " + str(total_required_locations))
+        print(len(self.multiworld.get_locations()))
         for i in range(item_pool_len, total_required_locations):
             self.multiworld.itempool += [self.create_item("Soul of an Intrepid Hero")]
 
