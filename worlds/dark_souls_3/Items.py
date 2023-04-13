@@ -61,8 +61,8 @@ class DarkSouls3Item(Item):
                  "Dragon Chaser's Ashes",
                  "Twinkling Dragon Torso Stone",
                  "Braille Divine Tome of Lothric",
-                 "Fire Gem", 
-                 "Grave Key")
+                 "Fire Gem"
+                 )
 
     dlc_misc_item = ("Captains Ashes")
 

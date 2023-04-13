@@ -2,7 +2,7 @@ import sys
 
 from BaseClasses import Location
 from worlds.dark_souls_3.data.locations_data import location_tables, painted_world_table, dreg_heap_table, \
-    ringed_city_table, key_location_list, dlc_key_location_list, weapon_location_list
+    ringed_city_table, key_location_list, dlc_key_location_list
 
 
 class DarkSouls3Location(Location):
@@ -414,8 +414,7 @@ class DarkSouls3Location(Location):
         "AP: Twinkling Dragon Torso Stone",
         "LC: Braille Divine Tome of Lothric",
         "US: Fire Gem",
-        "HWL: Binoculars",
-        "UG: Eyes of a Fire Keeper"
+        "HWL: Binoculars"
     )
 
     dlc_misc_location = ("PW: Captains Ashes")
