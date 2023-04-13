@@ -3,7 +3,7 @@
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
-from BaseClasses import MultiWorld, Region, Entrance, RegionType
+from BaseClasses import MultiWorld, Region, Entrance
 from .Locations import BumpStikLocation, level1_locs, level2_locs, level3_locs, level4_locs, level5_locs, location_table
 
 
@@ -34,8 +34,7 @@ def create_regions(world: MultiWorld, player: int):
 
     for x, region_name in enumerate(region_map):
         region_list = region_map[region_name]
-        region = Region(region_name, RegionType.Generic,
-                        region_name, player, world)
+        region = Region(region_name, player, world)
         for location_name in region_list:
             region.locations += [BumpStikLocation(
                 player, location_name, location_table[location_name], region)]
