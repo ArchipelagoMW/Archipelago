@@ -31,6 +31,8 @@ class Door(NamedTuple):
     panels: Optional[List[RoomAndPanel]]
     skip_location: bool
     skip_item: bool
+    door_ids: List[str]
+    painting_ids: List[str]
 
 
 class Panel(NamedTuple):
@@ -39,6 +41,7 @@ class Panel(NamedTuple):
     colors: List[str]
     check: bool
     event: bool
+    internal_ids: List[str]
 
 
 class StaticLingoLogic:
@@ -125,7 +128,15 @@ class StaticLingoLogic:
                         else:
                             event = False
 
-                        panel_obj = Panel(required_rooms, required_doors, colors, check, event)
+                        if "id" in panel_data:
+                            if isinstance(panel_data["id"], List):
+                                internal_ids = panel_data["id"]
+                            else:
+                                internal_ids = [panel_data["id"]]
+                        else:
+                            internal_ids = []
+
+                        panel_obj = Panel(required_rooms, required_doors, colors, check, event, internal_ids)
                         self.PANELS[full_name] = panel_obj
                         self.PANELS_BY_ROOM[room_name][panel_name] = panel_obj
 
@@ -175,7 +186,24 @@ class StaticLingoLogic:
                         else:
                             location_name = None
 
-                        door_obj = Door(door_name, item_name, location_name, panels, skip_location, skip_item)
+                        if "id" in door_data:
+                            if isinstance(door_data["id"], List):
+                                door_ids = door_data["id"]
+                            else:
+                                door_ids = [door_data["id"]]
+                        else:
+                            door_ids = []
+
+                        if "painting_id" in door_data:
+                            if isinstance(door_data["painting_id"], List):
+                                painting_ids = door_data["painting_id"]
+                            else:
+                                painting_ids = [door_data["painting_id"]]
+                        else:
+                            painting_ids = []
+
+                        door_obj = Door(door_name, item_name, location_name, panels, skip_location, skip_item, door_ids,
+                                        painting_ids)
 
                         self.DOORS[door_obj.item_name] = door_obj
                         self.DOORS_BY_ROOM[room_name][door_name] = door_obj

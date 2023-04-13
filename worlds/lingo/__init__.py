@@ -39,6 +39,22 @@ class LingoWorld(World):
         if data.code is not None
     }
 
+    def _get_slot_data(self):
+        return {
+            'door_ids_by_item_id': {
+                data.code: data.door_ids for name, data in self.static_items.ALL_ITEM_TABLE.items()
+                if data.code is not None and len(data.door_ids) > 0
+            },
+            'painting_ids_by_item_id': {
+                data.code: data.painting_ids for name, data in self.static_items.ALL_ITEM_TABLE.items()
+                if data.code is not None and len(data.painting_ids) > 0
+            },
+            'panel_ids_by_location_id': {
+                data.code: data.panel_ids() for name, data in self.static_locat.ALL_LOCATION_TABLE.items()
+                if data.code is not None
+            },
+        }
+
     def create_region(self, room: Room):
         new_region = Region(room.name, self.player, self.multiworld)
 
@@ -119,3 +135,6 @@ class LingoWorld(World):
         
         self.multiworld.completion_condition[self.player] = \
             lambda state: state.has("Victory", self.player)
+
+    def fill_slot_data(self):
+        return self._get_slot_data()
