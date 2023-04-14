@@ -883,8 +883,7 @@
   "REGION_ROUTE118/WEST": {
     "parent_map": "MAP_ROUTE118",
     "locations": [
-      "HIDDEN_ITEM_ROUTE_118_HEART_SCALE",
-      "NPC_GIFT_RECEIVED_GOOD_ROD"
+      "HIDDEN_ITEM_ROUTE_118_HEART_SCALE"
     ],
     "events": [],
     "exits": [
@@ -907,7 +906,8 @@
     "parent_map": "MAP_ROUTE118",
     "locations": [
       "ITEM_ROUTE_118_HYPER_POTION",
-      "HIDDEN_ITEM_ROUTE_118_IRON"
+      "HIDDEN_ITEM_ROUTE_118_IRON",
+      "NPC_GIFT_RECEIVED_GOOD_ROD"
     ],
     "events": [],
     "exits": [
