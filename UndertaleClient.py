@@ -514,8 +514,6 @@ if __name__ == "__main__":
     parser.add_argument("url", nargs="?", help="Archipelago connection url")
 
     args = parser.parse_args()
-    if not os.path.exists(os.getcwd() + r"/Undertale"):
-        os.mkdir(os.getcwd() + r"/Undertale")
 
     if args.url:
         url = urllib.parse.urlparse(args.url)
