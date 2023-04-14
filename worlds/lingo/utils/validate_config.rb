@@ -37,9 +37,20 @@ mentioned_rooms = Set[]
 mentioned_doors = Set[]
 mentioned_panels = Set[]
 
+directives = Set["entrances", "panels", "doors"]
+
 config = YAML.load_file(configpath)
 config.each do |room_name, room|
   configured_rooms.add(room_name)
+
+  used_directives = Set[]
+  room.each_key do |key|
+    used_directives.add(key)
+  end
+  diff_directives = used_directives - directives
+  unless diff_directives.empty? then
+    puts("#{room_name} has the following invalid top-level directives: #{diff_directives.to_s}")
+  end
 
   (room["entrances"] || {}).each do |source_room, entrance|
     mentioned_rooms.add(source_room)

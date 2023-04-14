@@ -110,7 +110,7 @@
           - OPEN
       Rhyme Room Entrance:
         id:
-          - Appendix Room Area Doors/Door_rat_tar_2
+          - Appendix Room Area Doors/Door_rat_tar_3
           - Double Room Area Doors/Door_room_entry_stairs
         skip_location: True
         panels:
@@ -556,7 +556,7 @@
       Starting Room:
         door: Painting Shortcut
       Wheelbarrow Hallway: True
-      Roof: True # through the door to the sectioned-off part of the hedge maze
+      Hedge Maze: True # through the door to the sectioned-off part of the hedge maze
     panels:
       MASSACRED:
         id: Palindrome Room/Panel_massacred_sacred
@@ -587,6 +587,9 @@
       OUT:
         id: Hallway Room/Panel_out_out
         check: True
+      HIDE:
+        id: Maze Room/Panel_hide_seek_4
+        colors: black
     doors:
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_massacred_sacred
@@ -605,9 +608,7 @@
         panels:
           - RIGHT
       Purple Barrier:
-        id:
-          - Color Arrow Room Doors/Door_purple_2
-          - Color Arrow Room Doors/Door_purple_3
+        id: Color Arrow Room Doors/Door_purple_3
         skip_location: True
         panels:
           - room: Champion's Rest
@@ -662,6 +663,7 @@
       Owl Hallway:
         room: Owl Hallway
         door: Shortcut to Hedge Maze
+      Roof: True
     panels:
       DOWN:
         id: Maze Room/Panel_down_up
@@ -674,9 +676,6 @@
         colors: black
       HIDE (3):
         id: Maze Room/Panel_hide_seek_3
-        colors: black
-      HIDE (4):
-        id: Maze Room/Panel_hide_seek_4
         colors: black
     doors:
       Perceptive Entrance:
@@ -699,7 +698,8 @@
           - HIDE (1)
           - HIDE (2)
           - HIDE (3)
-          - HIDE (4)
+          - room: Outside The Agreeable
+            panel: HIDE
   The Perceptive:
     entrances:
       Starting Room:
@@ -734,23 +734,31 @@
         id: Countdown Panels/Panel_observant_observant
         colors: green
         check: True
-      FOUR (Left):
+        required_door:
+          door: Stairs
+      BACK:
         id: Look Room/Panel_four_back
         colors: green
-      FOUR (Middle):
+      SIDE:
         id: Look Room/Panel_four_side
         colors: green
       BACKSIDE:
         id: Backside Room/Panel_backside_2
         required_door:
           door: Backside Door
+      STAIRS:
+        id: Look Room/Panel_six_stairs
+        colors: green
     doors:
       Backside Door:
         id: Maze Area Doors/Door_backside
-        location_name: The Observant - BACK and SIDE
         panels:
-          - FOUR (Left)
-          - FOUR (Middle)
+          - BACK
+          - SIDE
+      Stairs:
+        id: Maze Area Doors/Door_stairs
+        panels:
+          - STAIRS
   The Incomparable:
     entrances:
       The Observant: True
@@ -916,10 +924,7 @@
         check: True
     doors:
       Red Barrier:
-        id:
-          - Color Arrow Room Doors/Door_red_4
-          - Color Arrow Room Doors/Door_red_5
-          - Color Arrow Room Doors/Door_red_6
+        id: Color Arrow Room Doors/Door_red_6
         skip_location: True
         panels:
           - room: Champion's Rest
@@ -1045,9 +1050,9 @@
       # TODO
       THE END: # EndPanel/Panel_end_end
         event: True
-      THE MASTER:
-        id: Countdown Panels/Panel_master_master
-        event: True
+      #THE MASTER:
+      #  id: Countdown Panels/Panel_master_master
+      #  event: True
   Roof:
     entrances:
       Orange Tower Seventh Floor: True
@@ -1108,10 +1113,7 @@
           - THIRD
           - FOURTH
       Green Barrier:
-        id:
-          - Color Arrow Room Doors/Door_green_3
-          - Color Arrow Room Doors/Door_green_4
-          - Color Arrow Room Doors/Door_green_5
+        id: Color Arrow Room Doors/Door_green_5
         skip_location: True
         panels:
           - room: Champion's Rest
@@ -1373,17 +1375,13 @@
         panels:
           - UNCOVER
       Blue Barrier:
-        id:
-          - Color Arrow Room Doors/Door_blue_3
-          - Color Arrow Room Doors/Door_blue_4
+        id: Color Arrow Room Doors/Door_blue_3
         skip_location: True
         panels:
           - room: Champion's Rest
             panel: BLUE
       Orange Barrier:
-        id:
-          - Color Arrow Room Doors/Door_orange_2
-          - Color Arrow Room Doors/Door_orange_3
+        id: Color Arrow Room Doors/Door_orange_3
         skip_location: True
         panels:
           - room: Champion's Rest
@@ -1448,6 +1446,7 @@
       Achievement:
         id: Countdown Panels/Panel_traveled_traveled
         required_room: Hub Room
+        check: True
       HELLO:
         id: Synonym Room/Panel_hello_hi
       FOUR:
@@ -1658,7 +1657,7 @@
       Outside The Undeterred:
         room: Outside The Undeterred
         door: Undeterred Entrance
-    panel:
+    panels:
       Achievement:
         id: Countdown Panels/Panel_deterred_undeterred
         colors: blue
@@ -1701,6 +1700,7 @@
     doors:
       Door to Directional Gallery:
         id: Count Up Room Area Doors/Door_five_unlocked
+        skip_location: True
         panels:
           - FIVE
       Sixes:
@@ -1887,6 +1887,10 @@
         id: Color Arrow Room/Panel_yellow_afar
         required_door:
           door: Yellow Barrier
+      WADED + WEE:
+        id: Tower Room/Panel_waded_wee_warts_7
+        colors: orange
+        check: True
     doors:
       Shortcut to The Undeterred:
         id: Count Up Room Area Doors/Door_return_double
@@ -1894,9 +1898,7 @@
           - TURN
           - LEARN
       Yellow Barrier:
-        id:
-          - Color Arrow Room Doors/Door_yellow_3
-          - Color Arrow Room Doors/Door_yellow_4
+        id: Color Arrow Room Doors/Door_yellow_4
         skip_location: True
         panels:
           - room: Champion's Rest
@@ -1958,6 +1960,12 @@
         room: Art Gallery
         door: Exit Door
     panels:
+      Achievement:
+        id: Countdown Panels/Panel_bearer_bearer
+        check: True
+        colors:
+          - red
+          - yellow
       MIDDLE:
         id: Shuffle Room/Panel_middle_middle_2
       SHORTCUT:
@@ -2393,7 +2401,9 @@
           - red
     doors:
       Painting Shortcut:
-        painting_id: symmetry_painting_a_starter
+        painting_id:
+          - symmetry_painting_a_starter
+          - arrows_painting2
         skip_location: True
         panels:
           - room: Outside The Wondrous
@@ -2436,6 +2446,9 @@
         required_door:
           room: Number Hunt
           door: Nines
+      UNDISTRACTED:
+        id: Open Areas/Panel_undistracted
+        check: True
   Wanderlust Tutorial:
     entrances:
       Orange Tower First Floor:
@@ -2462,8 +2475,6 @@
     # This also means that we won't allow reverse progression.
     entrances:
       Orange Tower Third Floor: True
-      Orange Tower Fifth Floor:
-        door: Exit Door
     panels:
       EIGHT:
         id: Backside Room/Panel_eight_eight_6
@@ -2519,7 +2530,9 @@
         id: Double Room/Panel_mystery_syn
     doors:
       Door to Target:
-        id: Double Room Area Doors/Door_room_3a
+        id:
+          - Double Room Area Doors/Door_room_3a
+          - Double Room Area Doors/Door_room_3bc
         panels:
           - SCHEME
           - FANTASY
@@ -2771,7 +2784,9 @@
         colors: brown
       CAT:
         id: Clock Room/Panel_cat_kitten
-        colors: brown
+        colors:
+          - brown
+          - black
     doors:
       Wise Entrance:
         id: Clock Room Area Doors/Door_time_start
@@ -2786,7 +2801,9 @@
     panels:
       Achievement:
         id: Countdown Panels/Panel_intelligent_wise
-        colors: brown
+        colors:
+          - brown
+          - black
         check: True
   The Red:
     entrances:
