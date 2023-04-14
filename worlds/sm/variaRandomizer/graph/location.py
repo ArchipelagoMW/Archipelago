@@ -1,4 +1,4 @@
-from worlds.sm.variaRandomizer.utils.parameters import infinity
+from ..utils.parameters import infinity
 import copy
 
 class Location:
@@ -64,6 +64,8 @@ class Location:
             smbm.removeItem(self.itemName)
 
             self.difficulty = self.difficulty & postAvailable
+            if self.locDifficulty is not None:
+                self.locDifficulty = self.locDifficulty & postAvailable
 
     def evalComeBack(self, smbm, areaGraph, ap):
         if self.difficulty.bool == True:
@@ -102,7 +104,7 @@ class Location:
 
 def define_location(
         Area, GraphArea, SolveArea, Name, Class, CanHidden, Address, Id,
-        Visibility, Room, VanillaItemType=None, AccessFrom=None, Available=None, PostAvailable=None, HUD=None):
+        Visibility, Room, VanillaItemType=None, BossItemType=None, AccessFrom=None, Available=None, PostAvailable=None, HUD=None):
     name = Name.replace(' ', '').replace(',', '') + 'Location'
     subclass = type(name, (Location,), {
         'Area': Area,
@@ -116,6 +118,7 @@ def define_location(
         'Visibility': Visibility,
         'Room': Room,
         'VanillaItemType': VanillaItemType,
+        'BossItemType': BossItemType,
         'HUD': HUD,
         'AccessFrom': AccessFrom,
         'Available': Available,
@@ -322,6 +325,7 @@ define_location(
     Id=None,
     Visibility="Hidden",
     Room='Kraid Room',
+    BossItemType="Kraid"
 ),
     "Varia Suit":
 define_location(
@@ -445,12 +449,15 @@ define_location(
     GraphArea="LowerNorfair",
     SolveArea="Ridley Boss",
     Name="Ridley",
-    Class=["Boss"],
+    Class=["Boss", "Scavenger"],
     CanHidden=False,
     Address=0xB055B056,
-    Id=None,
+    Id=0xaa,
     Visibility="Hidden",
     Room="Ridley's Room",
+    VanillaItemType="Ridley",
+    BossItemType="Ridley",
+    HUD=16
 ),
     "Energy Tank, Ridley":
 define_location(
@@ -531,6 +538,7 @@ define_location(
     Id=None,
     Visibility="Hidden",
     Room="Phantoon's Room",
+    BossItemType="Phantoon"
 ),
     "Right Super, Wrecked Ship":
 define_location(
@@ -641,6 +649,7 @@ define_location(
     Id=None,
     Visibility="Hidden",
     Room="Draygon's Room",
+    BossItemType="Draygon"
 ),
     "Space Jump":
 define_location(
@@ -669,6 +678,63 @@ define_location(
     Visibility="Hidden",
     CanHidden=False,
     Room='Mother Brain Room',
+    BossItemType="MotherBrain"
+),
+    "Spore Spawn":
+define_location(
+    Area="Brinstar",
+    GraphArea="GreenPinkBrinstar",
+    SolveArea="Pink Brinstar",
+    Name="Spore Spawn",
+    Class=["Boss"],
+    CanHidden=False,
+    Address=0xB055B055,
+    Id=None,
+    Visibility="Hidden",
+    Room='Spore Spawn Room',
+    BossItemType="SporeSpawn"
+),
+    "Botwoon":
+define_location(
+    Area="Maridia",
+    GraphArea="EastMaridia",
+    SolveArea="Maridia Pink Top",
+    Name="Botwoon",
+    Class=["Boss"],
+    CanHidden=False,
+    Address=0xB055B055,
+    Id=None,
+    Visibility="Hidden",
+    Room="Botwoon's Room",
+    BossItemType="Botwoon"
+),
+    "Crocomire":
+define_location(
+    Area="Norfair",
+    GraphArea="Crocomire",
+    SolveArea="Crocomire",
+    Name="Crocomire",
+    Class=["Boss"],
+    CanHidden=False,
+    Address=0xB055B055,
+    Id=None,
+    Visibility="Hidden",
+    Room="Crocomire's Room",
+    BossItemType="Crocomire"
+),
+    "Golden Torizo":
+define_location(
+    Area="LowerNorfair",
+    GraphArea="LowerNorfair",
+    SolveArea="Lower Norfair Screw Attack",
+    Name="Golden Torizo",
+    Class=["Boss"],
+    CanHidden=False,
+    Address=0xB055B055,
+    Id=None,
+    Visibility="Hidden",
+    Room="Golden Torizo's Room",
+    BossItemType="GoldenTorizo"
 ),
 ###### MINORS
     "Power Bomb (Crateria surface)":

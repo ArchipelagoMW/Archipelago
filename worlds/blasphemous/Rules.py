@@ -114,51 +114,66 @@ class BlasphemousLogic(LogicMixin):
         return self.has("Taranto to my Sister", player)
 
     def _blasphemous_tirana(self, player):
-        return self.has("Tirana of the Celestial Bastion", player)
+        return self.has("Tirana of the Celestial Bastion", player) and \
+            self.has("Fervour Upgrade", player, 2)
 
     def _blasphemous_aubade(self, player):
-        return self.has("Aubade of the Nameless Guardian", player)
+        return self.has("Aubade of the Nameless Guardian", player) and \
+            self.has("Fervour Upgrade", player, 2)
 
     def _blasphemous_cherub_6(self, player):
         return self.has_any({"Debla of the Lights", "Taranto to my Sister", "Verdiales of the Forsaken Hamlet", \
-            "Tirana of the Celestial Bastion", "Cloistered Ruby"}, player)
+            "Cloistered Ruby"}, player) or \
+                (self.has("Tirana of the Celestial Bastion", player) and \
+                    self.has("Fervour Upgrade", player, 2))
 
     def _blasphemous_cherub_13(self, player):
         return self.has_any({"Ranged Skill", "Debla of the Lights", "Taranto to my Sister", \
-            "Cante Jondo of the Three Sisters", "Aubade of the Nameless Guardian", "Tirana of the Celestial Bastion", \
-                "Cloistered Ruby"}, player)
+            "Cante Jondo of the Three Sisters", "Cloistered Ruby"}, player) or \
+                    (self.has_any({"Aubade of the Nameless Guardian", "Tirana of the Celestial Bastion"}, player) and \
+                        self.has("Fervour Upgrade", player, 2))
     
     def _blasphemous_cherub_20(self, player):
         return self.has_any({"Debla of the Lights", "Lorqiana", "Zarabanda of the Safe Haven", "Taranto to my Sister", \
-            "Cante Jondo of the Three Sisters", "Aubade of the Nameless Guardian", "Tirana of the Celestial Bastion", \
-                "Cloistered Ruby"}, player)
+            "Cante Jondo of the Three Sisters", "Cloistered Ruby"}, player) or \
+                    (self.has_any({"Aubade of the Nameless Guardian", "Tirana of the Celestial Bastion"}, player) and \
+                        self.has("Fervour Upgrade", player, 2))
 
     def _blasphemous_cherub_21(self, player):
         return self.has_any({"Debla of the Lights", "Taranto to my Sister", "Cante Jondo of the Three Sisters", \
-            "Verdiales of the Forsaken Hamlet", "Tirana of the Celestial Bastion", "Cloistered Ruby"}, player)
+            "Verdiales of the Forsaken Hamlet", "Cloistered Ruby"}, player) or \
+                (self.has("Tirana of the Celestial Bastion", player) and \
+                    self.has("Fervour Upgrade", player, 2))
     
     def _blasphemous_cherub_22_23_31_32(self, player):
         return self.has_any({"Debla of the Lights", "Taranto to my Sister", "Cloistered Ruby"}, player)
 
     def _blasphemous_cherub_24_33(self, player):
         return self.has_any({"Debla of the Lights", "Taranto to my Sister", "Cante Jondo of the Three Sisters", \
-            "Tirana of the Celestial Bastion", "Cloistered Ruby"}, player)
+            "Cloistered Ruby"}, player) or \
+                (self.has("Tirana of the Celestial Bastion", player) and \
+                    self.has("Fervour Upgrade", player, 2))
 
     def _blasphemous_cherub_25(self, player):
         return self.has_any({"Debla of the Lights", "Lorquiana", "Taranto to my Sister", \
-            "Cante Jondo of the Three Sisters", "Verdiales of the Forsaken Hamlet", "Aubade of the Nameless Guardian", \
-                "Cantina of the Blue Rose", "Cloistered Ruby"}, player)
+            "Cante Jondo of the Three Sisters", "Verdiales of the Forsaken Hamlet", "Cantina of the Blue Rose", \
+                "Cloistered Ruby"}, player) or \
+                    (self.has("Aubade of the Nameless Guardian", player) and \
+                        self.has("Fervour Upgrade", player, 2))
 
     def _blasphemous_cherub_27(self, player):
         return self.has_any({"Ranged Skill", "Debla of the Lights", "Lorquiana", "Taranto to my Sister", \
-            "Cante Jondo of the Three Sisters", "Aubade of the Nameless Guardian", "Cantina of the Blue Rose", \
-                "Cloistered Ruby"}, player)
+            "Cante Jondo of the Three Sisters", "Cantina of the Blue Rose", "Cloistered Ruby"}, player) or \
+                    (self.has("Aubade of the Nameless Guardian", player) and \
+                        self.has("Fervour Upgrade", player, 2))
 
     def _blasphemous_cherub_38(self, player):
         return self.has_any({"Ranged Skill", "Lorquiana", "Cante Jondo of the Three Sisters", \
-            "Aubade of the Nameless Guardian", "Cantina of the Blue Rose", "Cloistered Ruby"}, player) or \
+            "Cantina of the Blue Rose", "Cloistered Ruby"}, player) or \
                 (self.has("The Young Mason's Wheel", player) and \
-                    self.has("Brilliant Heart of Dawn", player))
+                    self.has("Brilliant Heart of Dawn", player)) or \
+                        (self.has("Aubade of the Nameless Guardian", player) and \
+                            self.has("Fervour Upgrade", player, 2))
 
     def _blasphemous_wheel(self, player):
         return self.has("The Young Mason's Wheel", player)
