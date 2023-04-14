@@ -138,7 +138,7 @@ class MessengerHardRules(MessengerRules):
             "Searing Crags Upper": self.true,
             "Glacial Peak": self.true,
             "Elemental Skylands": lambda state: state.has("Fairy Bottle", self.player) or self.has_windmill(state) or
-                                                self.has_dart(state),
+                                                self.has_vertical(state),
         })
 
         self.location_rules.update({
@@ -182,7 +182,7 @@ class MessengerChallengeRules(MessengerHardRules):
         self.region_rules.update({
             "Forlorn Temple": lambda state: (self.has_vertical(state) and state.has_all(set(PHOBEKINS), self.player))
                                             or state.has_all({"Wingsuit", "Windmill Shuriken"}, self.player),
-            "Elemental Skylands": lambda state: self.has_wingsuit(state) or state.has("Fairy Bottle", self.player)
+            "Elemental Skylands": lambda state: self.has_vertical(state) or state.has("Fairy Bottle", self.player)
                                                 or self.has_windmill(state),
         })
 
@@ -195,7 +195,7 @@ class MessengerChallengeRules(MessengerHardRules):
 
         self.extra_rules.update({
             "Key of Hope": self.has_vertical,
-            "Key of Symbiosis": lambda state: self.has_vertical(state) or self.has_windmill(state),
+            "Key of Symbiosis": lambda state: self.has_wingsuit(state),
         })
 
 
