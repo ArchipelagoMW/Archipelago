@@ -136,4 +136,4 @@ loadLoop2:
     addr = 0x1000
     data = pkgutil.get_data(__name__, "nyan.bin")    
     rom.banks[0x3F][addr : addr + len(data)] = data
-    
+
