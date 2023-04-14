@@ -1483,7 +1483,6 @@ exclusion_table = {
         LocationName.OasisMap,
         LocationName.OasisTornPages,
         LocationName.OasisAPBoost,
-        LocationName.StationofSerenityPotion,
         LocationName.StationofCallingPotion,
         LocationName.CentralStationPotion1,
         LocationName.STTCentralStationHiPotion,

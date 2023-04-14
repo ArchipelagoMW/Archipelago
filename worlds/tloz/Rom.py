@@ -74,5 +74,5 @@ def get_base_rom_path(file_name: str = "") -> str:
     if not file_name:
         file_name = options["tloz_options"]["rom_file"]
     if not os.path.exists(file_name):
-        file_name = Utils.local_path(file_name)
+        file_name = Utils.user_path(file_name)
     return file_name

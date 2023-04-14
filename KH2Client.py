@@ -119,7 +119,12 @@ class KH2Context(CommonContext):
                                 "LimitLevel":  0,
                                 "MasterLevel": 0,
                                 "FinalLevel":  0,
-                            }
+                            },
+                            "SoldEquipment":      [],
+                            "SoldBoosts":         {"Power Boost":   0,
+                                                   "Magic Boost":   0,
+                                                   "Defense Boost": 0,
+                                                   "AP Boost":      0}
                             }
         self.slotDataProgressionNames = {}
         self.kh2seedname = None
@@ -137,23 +142,23 @@ class KH2Context(CommonContext):
         self.finalxemnas = False
         self.worldid = {
             #  1:   {},  # world of darkness (story cutscenes)
-            2:   TT_Checks,
+            2:  TT_Checks,
             #  3:   {},  # destiny island doesn't have checks to ima put tt checks here
-            4:   HB_Checks,
-            5:   BC_Checks,
-            6:   Oc_Checks,
-            7:   AG_Checks,
-            8:   LoD_Checks,
-            9:   HundredAcreChecks,
-            10:  PL_Checks,
-            11:  DC_Checks,  # atlantica isn't a supported world. if you go in atlantica it will check dc
-            12:  DC_Checks,
-            13:  TR_Checks,
-            14:  HT_Checks,
-            15:  HB_Checks,  # world map, but you only go to the world map while on the way to goa so checking hb
-            16:  PR_Checks,
-            17:  SP_Checks,
-            18:  TWTNW_Checks,
+            4:  HB_Checks,
+            5:  BC_Checks,
+            6:  Oc_Checks,
+            7:  AG_Checks,
+            8:  LoD_Checks,
+            9:  HundredAcreChecks,
+            10: PL_Checks,
+            11: DC_Checks,  # atlantica isn't a supported world. if you go in atlantica it will check dc
+            12: DC_Checks,
+            13: TR_Checks,
+            14: HT_Checks,
+            15: HB_Checks,  # world map, but you only go to the world map while on the way to goa so checking hb
+            16: PR_Checks,
+            17: SP_Checks,
+            18: TWTNW_Checks,
             #  255: {},  # starting screen
         }
         # 0x2A09C00+0x40 is the sve anchor. +1 is the last saved room
@@ -412,7 +417,7 @@ class KH2Context(CommonContext):
             logger.info(e)
 
     async def verifyLevel(self):
-        for leveltype, anchor in {"SoraLevel": 0x24FF,
+        for leveltype, anchor in {"SoraLevel":   0x24FF,
                                   "ValorLevel":  0x32F6,
                                   "WisdomLevel": 0x332E,
                                   "LimitLevel":  0x3366,
@@ -536,6 +541,34 @@ class KH2Context(CommonContext):
         self.ui = KH2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
+    async def IsInShop(self, sellable, master_boost):
+        # journal = 0x741230 shop = 0x741320
+        # if journal=-1 and shop = 5 then in shop
+        # if journam !=-1 and shop = 10 then journal
+        journal = self.kh2.read_short(self.kh2.base_address + 0x741230)
+        shop = self.kh2.read_short(self.kh2.base_address + 0x741320)
+        if (journal == -1 and shop == 5) or (journal != -1 and shop == 10):
+            # print("your in the shop")
+            sellable_dict = {}
+            for itemName in sellable:
+                itemdata = self.item_name_to_data[itemName]
+                amount = int.from_bytes(
+                        self.kh2.read_bytes(self.kh2.base_address + self.Save + itemdata.memaddr, 1), "big")
+                sellable_dict[itemName] = amount
+            while (journal == -1 and shop == 5) or (journal != -1 and shop == 10):
+                journal = self.kh2.read_short(self.kh2.base_address + 0x741230)
+                shop = self.kh2.read_short(self.kh2.base_address + 0x741320)
+                await asyncio.sleep(0.5)
+            for item, amount in sellable_dict.items():
+                itemdata = self.item_name_to_data[item]
+                afterShop = int.from_bytes(
+                        self.kh2.read_bytes(self.kh2.base_address + self.Save + itemdata.memaddr, 1), "big")
+                if afterShop < amount:
+                    if item in master_boost:
+                        self.kh2seedsave["SoldBoosts"][item] += (amount - afterShop)
+                    else:
+                        self.kh2seedsave["SoldEquipment"].append(item)
+
     async def verifyItems(self):
         try:
             local_amount = set(self.kh2seedsave["AmountInvo"]["LocalItems"]["Amount"].keys())
@@ -578,6 +611,8 @@ class KH2Context(CommonContext):
             server_boost = set(self.kh2seedsave["AmountInvo"]["ServerItems"]["Boost"].keys())
             master_boost = local_boost | server_boost
 
+            master_sell = master_equipment | master_staff | master_shield | master_boost
+            await asyncio.create_task(self.IsInShop(master_sell, master_boost))
             for itemName in master_amount:
                 itemData = self.item_name_to_data[itemName]
                 amountOfItems = 0
@@ -603,7 +638,8 @@ class KH2Context(CommonContext):
                 itemData = self.item_name_to_data[itemName]
                 # if the inventory slot for that keyblade is less than the amount they should have
                 if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
-                                  "big") <= 0:
+                                  "big") != 1 and int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x1CFF, 1),
+                                                                 "big") != 13:
                     # Checking form anchors for the keyblade
                     if self.kh2.read_short(self.kh2.base_address + self.Save + 0x24F0) == itemData.kh2id \
                             or self.kh2.read_short(self.kh2.base_address + self.Save + 0x32F4) == itemData.kh2id \
@@ -618,7 +654,8 @@ class KH2Context(CommonContext):
                 itemData = self.item_name_to_data[itemName]
                 if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
                                   "big") != 1 \
-                        and self.kh2.read_short(self.kh2.base_address + self.Save + 0x2604) != itemData.kh2id:
+                        and self.kh2.read_short(self.kh2.base_address + self.Save + 0x2604) != itemData.kh2id \
+                        and itemName not in self.kh2seedsave["SoldEquipment"]:
                     self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
                                          (1).to_bytes(1, 'big'), 1)
 
@@ -626,7 +663,8 @@ class KH2Context(CommonContext):
                 itemData = self.item_name_to_data[itemName]
                 if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
                                   "big") != 1 \
-                        and self.kh2.read_short(self.kh2.base_address + self.Save + 0x2718) != itemData.kh2id:
+                        and self.kh2.read_short(self.kh2.base_address + self.Save + 0x2718) != itemData.kh2id \
+                        and itemName not in self.kh2seedsave["SoldEquipment"]:
                     self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
                                          (1).to_bytes(1, 'big'), 1)
 
@@ -679,16 +717,18 @@ class KH2Context(CommonContext):
                     Equipment_Anchor_List = self.Equipment_Anchor_Dict["Accessories"]
                 else:
                     Equipment_Anchor_List = self.Equipment_Anchor_Dict["Armor"]
-                if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
-                                  "big") != 1:
                     # Checking form anchors for the equipment
-                    for slot in Equipment_Anchor_List:
-                        if self.kh2.read_short(self.kh2.base_address + self.Save + slot) == itemData.kh2id:
-                            isThere = True
+                for slot in Equipment_Anchor_List:
+                    if self.kh2.read_short(self.kh2.base_address + self.Save + slot) == itemData.kh2id:
+                        isThere = True
+                        if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
+                                          "big") != 0:
                             self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
                                                  (0).to_bytes(1, 'big'), 1)
-                            break
-                    if not isThere:
+                        break
+                if not isThere and itemName not in self.kh2seedsave["SoldEquipment"]:
+                    if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
+                                      "big") != 1:
                         self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
                                              (1).to_bytes(1, 'big'), 1)
 
@@ -736,7 +776,8 @@ class KH2Context(CommonContext):
                 # Ap Boots start at +50 for some reason
                 if itemName == "AP Boost":
                     amountOfUsedBoosts -= 50
-                if (amountOfBoostsInInvo + amountOfUsedBoosts) <= amountOfItems and amountOfBoostsInInvo < 255:
+                totalBoosts = (amountOfBoostsInInvo + amountOfUsedBoosts)
+                if totalBoosts <= amountOfItems - self.kh2seedsave["SoldBoosts"][itemName] and amountOfBoostsInInvo < 255:
                     self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
                                          (amountOfBoostsInInvo + 1).to_bytes(1, 'big'), 1)
 
@@ -821,9 +862,9 @@ async def kh2_watcher(ctx: KH2Context):
                     currentWorld = int.from_bytes(ctx.kh2.read_bytes(ctx.kh2.base_address + 0x0714DB8, 1), "big")
                     if location not in ctx.kh2seedsave["worldIdChecks"][str(currentWorld)]:
                         ctx.kh2seedsave["worldIdChecks"][str(currentWorld)].append(location)
-                    if location in ctx.kh2LocalItems:
-                        item = ctx.kh2slotdata["LocalItems"][str(location)]
-                        await asyncio.create_task(ctx.give_item(item, "LocalItems"))
+                        if location in ctx.kh2LocalItems:
+                            item = ctx.kh2slotdata["LocalItems"][str(location)]
+                            await asyncio.create_task(ctx.give_item(item, "LocalItems"))
                 await ctx.send_msgs(message)
             elif not ctx.kh2connected and ctx.serverconneced:
                 logger.info("Game is not open. Disconnecting from Server.")

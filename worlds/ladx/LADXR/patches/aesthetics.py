@@ -434,3 +434,15 @@ noChange:
             rom.room_sprite_data_overworld[room_nr] = data
         else:
             rom.room_sprite_data_indoor[room_nr - 0x100] = data
+
+
+def bin_to_rgb(word):
+    red   = word & 0b11111
+    word >>= 5
+    green = word & 0b11111
+    word >>= 5
+    blue  = word & 0b11111
+    return (red, green, blue)
+
+def rgb_to_bin(r, g, b):
+    return (b << 10) | (g << 5) | r
