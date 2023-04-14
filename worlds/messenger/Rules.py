@@ -32,7 +32,7 @@ class MessengerRules:
             "Underworld": self.has_tabi,
             "Forlorn Temple": lambda state: state.has_all({"Wingsuit", *PHOBEKINS}, self.player),
             "Glacial Peak": self.has_vertical,
-            "Elemental Skylands": lambda state: state.has("Fairy Bottle", self.player),
+            "Elemental Skylands": lambda state: state.has("Fairy Bottle", self.player) and self.has_wingsuit(state),
             "Music Box": lambda state: state.has_all(set(NOTES), self.player) and self.has_vertical(state),
         }
 
@@ -75,7 +75,6 @@ class MessengerRules:
             "Quick Restock Mega Shard 2": self.has_vertical,
             # elemental skylands
             "Key of Symbiosis": self.has_dart,
-            "Elemental Skylands Seal - Air": self.has_wingsuit,
             "Elemental Skylands Seal - Water": self.has_dart,
             "Elemental Skylands Seal - Fire": self.has_dart,
             "Earth Mega Shard": self.has_dart,
@@ -138,13 +137,15 @@ class MessengerHardRules(MessengerRules):
             "Forlorn Temple": lambda state: self.has_vertical(state) and state.has_all(set(PHOBEKINS), self.player),
             "Searing Crags Upper": self.true,
             "Glacial Peak": self.true,
-            "Elemental Skylands": lambda state: state.has("Fairy Bottle", self.player) or self.has_windmill(state),
+            "Elemental Skylands": lambda state: state.has("Fairy Bottle", self.player) or self.has_windmill(state) or
+                                                self.has_dart(state),
         })
 
         self.location_rules.update({
             "Howling Grotto Seal - Windy Saws and Balls": self.true,
             "Glacial Peak Seal - Projectile Spike Pit": self.true,
             "Claustro": self.has_wingsuit,
+            "Elemental Skylands Seal - Air": self.has_wingsuit,
             "Elemental Skylands Seal - Water": self.true,
             "Elemental Skylands Seal - Fire": self.true,
             "Earth Mega Shard": self.true,
@@ -155,7 +156,7 @@ class MessengerHardRules(MessengerRules):
             "Key of Strength": lambda state: self.has_dart(state) or self.has_windmill(state),
             "Key of Symbiosis": self.has_windmill,
             "Autumn Hills Seal - Spike Ball Darts": lambda state: (self.has_dart(state) and self.has_windmill(state))
-                                                                  or self.has_wingsuit(state),
+                                                                   or self.has_wingsuit(state),
             "Glacial Peak Seal - Glacial Air Swag": self.has_windmill,
             "Underworld Seal - Fireball Wave": lambda state: state.has_all({"Ninja Tabi", "Windmill Shuriken"},
                                                                            self.player),

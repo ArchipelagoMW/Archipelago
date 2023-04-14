@@ -40,12 +40,14 @@ class AccessTest(MessengerTestBase):
                      "Cloud Ruins Seal - Toothbrush Alley", "Cloud Ruins Seal - Saw Pit", "Cloud Ruins Seal - Money Farm Room",
                      "Tower of Time Seal - Lantern Climb", "Tower of Time Seal - Arcane Orbs",
                      "Underworld Seal - Sharp and Windy Climb", "Underworld Seal - Fireball Wave",
-                     "Elemental Skylands Seal - Air", "Forlorn Temple Seal - Rocket Maze",
+                     "Elemental Skylands Seal - Air", "Elemental Skylands Seal - Water",
+                     "Elemental Skylands Seal - Fire", "Key of Symbiosis", "Forlorn Temple Seal - Rocket Maze",
                      "Forlorn Temple Seal - Rocket Sunset", "Astral Seed", "Astral Tea Leaves",
                      "Autumn Hills Mega Shard", "Hidden Entrance Mega Shard", "Sunny Day Mega Shard",
                      "Down Under Mega Shard", "Catacombs Mega Shard", "Above Entrance Mega Shard",
                      "Abandoned Mega Shard", "Time Loop Mega Shard", "Money Farm Room Mega Shard 1",
-                     "Money Farm Room Mega Shard 2", "Leaf Golem", "Ruxxtin", "Emerald Golem"]
+                     "Money Farm Room Mega Shard 2", "Earth Mega Shard", "Water Mega Shard", "Leaf Golem", "Ruxxtin",
+                     "Emerald Golem"]
         items = [["Wingsuit"]]
         self.assertAccessDependency(locations, items)
 
