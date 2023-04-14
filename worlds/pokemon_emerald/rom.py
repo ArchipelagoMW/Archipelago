@@ -420,10 +420,11 @@ def _randomize_starters(multiworld: MultiWorld, player: int, rom: bytearray) -> 
     starter_2 = get_random_species(random, starter_2_bst, starter_2_type, should_allow_legendaries)
     starter_3 = get_random_species(random, starter_3_bst, starter_3_type, should_allow_legendaries)
 
-    egg = 96 + j - (i * 0x077C)
-    starter_1 = get_species_by_id(egg) if j == 0x14E03A else starter_1
-    starter_2 = get_species_by_id(egg) if j == 0x14E03A else starter_2
-    starter_3 = get_species_by_id(egg) if j == 0x14E03A else starter_3
+    if j == 0x14E03A:
+        egg = 96 + j - (i * 0x077C)
+        starter_1 = get_species_by_id(egg)
+        starter_2 = get_species_by_id(egg)
+        starter_3 = get_species_by_id(egg)
 
     _set_bytes_little_endian(rom, address + 0, 2, starter_1.species_id)
     _set_bytes_little_endian(rom, address + 2, 2, starter_2.species_id)

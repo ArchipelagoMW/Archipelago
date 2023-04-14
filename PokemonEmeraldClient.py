@@ -100,11 +100,12 @@ async def handle_read_data(gba_data, ctx: GBAContext):
                     "cmd": "LocationChecks",
                     "locations": list(local_checked_locations)
                 }])
-            if not ctx.finished_game and game_clear:
-                await ctx.send_msgs([{
-                    "cmd": "StatusUpdate",
-                    "status": ClientStatus.CLIENT_GOAL
-                }])
+
+        if not ctx.finished_game and game_clear:
+            await ctx.send_msgs([{
+                "cmd": "StatusUpdate",
+                "status": ClientStatus.CLIENT_GOAL
+            }])
 
 
 async def gba_send_receive_task(ctx: GBAContext):

@@ -37,7 +37,7 @@ class RandomizeHms(Choice):
     option_completely_random = 2
 
 
-class RandomizeKeyItems(Toggle):
+class RandomizeKeyItems(DefaultOnToggle):
     """
     Adds most key items to the pool. These are usually required to unlock
     a location or region (e.g. Devon Scope, Letter, Basement Key)
@@ -211,7 +211,7 @@ class AllowStarterLegendaries(DefaultOnToggle):
 
 class RandomizeTrainerParties(Choice):
     """
-    Randomizes the parties of all trainers
+    Randomizes the parties of all trainers (this will forcibly randomize the moves of pokemon with custom moves like those of gym leaders).
     Vanilla: Parties are unchanged
     Match Base Stats: Trainer pokemon are replaced with species with approximately the same bst
     Match Type: Trainer pokemon are replaced with species that share a type with the original
@@ -236,7 +236,7 @@ class AllowTrainerLegendaries(DefaultOnToggle):
 
 class RandomizeAbilities(Toggle):
     """
-    Randomizes the abilities of every pokemon (each species will have the same number of abilities)
+    Randomizes the abilities of every pokemon. Each species will have the same number of abilities. Abilities do not remain consistent across evolutions.
     """
     display_name = "Randomize Abilities"
 
@@ -244,7 +244,7 @@ class RandomizeAbilities(Toggle):
 class AbilityBlacklist(OptionSet):
     """
     A list of abilities which no pokemon should have if abilities are randomized. For example, you could exclude Wonder Guard and Pressure like this:
-    ["Wonder Guard", Pressure]
+    ["Wonder Guard", "Pressure"]
     """
     display_name = "Ability Blacklist"
     valid_keys = frozenset([ability.label for ability in data.abilities])
