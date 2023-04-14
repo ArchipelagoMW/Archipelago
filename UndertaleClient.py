@@ -292,7 +292,6 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                 ctx.completed_routes["genocide"] = args["value"]
             elif str(ctx.slot)+" RoutesDone neutral" == args["key"]:
                 ctx.completed_routes["neutral"] = args["value"]
-        print(args["key"])
     elif cmd == "ReceivedItems":
         start_index = args["index"]
 
@@ -513,24 +512,8 @@ if __name__ == "__main__":
     parser = get_base_parser(description="Undertale Client, for text interfacing.")
     parser.add_argument("--name", default=None, help="Slot Name to connect as.")
     parser.add_argument("url", nargs="?", help="Archipelago connection url")
-    parser.add_argument("--install", "-i", dest="install", nargs="?", default="",
-                        help="Patch the vanilla game for randomization. Does not launch the client afterwards.")
 
     args = parser.parse_args()
-    if args.install != "":
-        logging.info("Patching Undertale")
-        if os.path.exists(os.getcwd() + r"/Undertale"):
-            path = os.getcwd() + r"/Undertale"
-            for root, dirs, files in os.walk(path):
-                for file in files:
-                    os.remove(root+"/"+file)
-            os.removedirs(os.getcwd() + r"/Undertale")
-        if not os.path.exists(os.getcwd() + r"/Undertale"):
-            os.mkdir(os.getcwd() + r"/Undertale")
-        logging.info(args.install)
-        shutil.copy(args.install+"/data.win", os.getcwd() + r"/Undertale/data.win")
-        bsdiff4.file_patch_inplace(os.getcwd() + r"/Undertale/data.win", undertale.data_path("patch.bsdiff"))
-        sys.exit(0)
     if not os.path.exists(os.getcwd() + r"/Undertale"):
         os.mkdir(os.getcwd() + r"/Undertale")
 
