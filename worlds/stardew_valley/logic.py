@@ -795,6 +795,10 @@ class StardewLogic:
         if self.options[options.Friendsanity] == options.Friendsanity.option_none:
             return self.can_earn_relationship(npc, hearts)
         if npc not in all_villagers_by_name:
+            if npc == "Pet":
+                if self.options[options.Friendsanity] == options.Friendsanity.option_bachelors:
+                    return self.can_befriend_pet(hearts)
+                return self.received(f"Pet: 1 <3", hearts)
             if npc == "Any" or npc == "Bachelor":
                 possible_friends = []
                 for name in all_villagers_by_name:
@@ -806,6 +810,11 @@ class StardewLogic:
                 for name in all_villagers_by_name:
                     mandatory_friends.append(self.has_relationship(name, hearts))
                 return And(mandatory_friends)
+            if npc.isnumeric():
+                possible_friends = []
+                for name in all_villagers_by_name:
+                    possible_friends.append(self.has_relationship(name, hearts))
+                return Count(int(npc), possible_friends)
             return self.can_earn_relationship(npc, hearts)
 
         villager = all_villagers_by_name[npc]
@@ -888,9 +897,9 @@ class StardewLogic:
                                # Catching every fish not expected
                                # Shipping every item not expected
                                self.can_get_married() & self.has_house(2),
-                               self.has_lived_months(3),  # 5 Friends (TODO)
-                               self.has_lived_months(4),  # 10 friends (TODO)
-                               self.can_befriend_pet(5),  # Max Pet
+                               self.has_relationship("5", 8),  # 5 Friends
+                               self.has_relationship("10", 8),  # 10 friends
+                               self.has_relationship("Pet", 5),  # Max Pet
                                self.can_complete_community_center(),  # Community Center Completion
                                self.can_complete_community_center(),  # CC Ceremony first point
                                self.can_complete_community_center(),  # CC Ceremony second point
@@ -940,7 +949,11 @@ class StardewLogic:
         return region_rule & geodes_rule  # & monster_rule & extra_rule
 
     def can_complete_museum(self) -> StardewRule:
-        rules = [self.can_mine_perfectly_in_the_skull_cavern(), self.received("Traveling Merchant Metal Detector", 4)]
+        rules = [self.can_mine_perfectly_in_the_skull_cavern()]
+
+        if self.options[options.Museumsanity] != options.Museumsanity.option_none:
+            rules.append(self.received("Traveling Merchant Metal Detector", 4))
+
         for donation in all_museum_items:
             rules.append(self.can_find_museum_item(donation))
         return And(rules)
