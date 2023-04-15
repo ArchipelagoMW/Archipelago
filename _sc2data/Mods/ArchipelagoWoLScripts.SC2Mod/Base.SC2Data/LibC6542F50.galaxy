@@ -221,6 +221,7 @@ void libC6542F50_gf_APUnlockUnits (string lp_unitCode, string lp_version) {
     if ((ModI(lv_unitCode, PowI(2.0, (18 + 1))) >= PowI(2.0, 18.0))) {
         libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupxxxReactor, 1);
         TechTreeUnitAllow(1, "Reactor", true);
+        TechTreeUnitAllow(1, "StarportReactor", true);
         TechTreeUnitAllow(1, "Liberator", true);
     }
 
@@ -231,7 +232,9 @@ void libC6542F50_gf_APUnlockUnits (string lp_unitCode, string lp_version) {
     }
 
     if ((ModI(lv_unitCode, 2097152) >= 1048576)) {
+        libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupxxxReactor, 1);
         TechTreeUnitAllow(1, "Reactor", true);
+        TechTreeUnitAllow(1, "FactoryReactor", true);
         TechTreeUnitAllow(1, "Factory", true);
         TechTreeUnitAllow(1, "WidowMine", true);
     }
