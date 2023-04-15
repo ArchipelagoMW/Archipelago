@@ -14,17 +14,18 @@ class SC2WoLLogic(LogicMixin):
 
     def _sc2wol_has_air_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has('Viking', player) \
-               or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has_any('Wraith', 'Valkyrie', 'Cyclone', player)
+               or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has_any({'Wraith', 'Valkyrie'}, player)
 
     def _sc2wol_has_competent_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has('Goliath', player) \
                 or self.has('Marine', player) and self.has_any({'Medic', 'Medivac'}, player) \
-                or self._sc2wol_has_air_anti_air(multiworld, player)
+                or self._sc2wol_has_air_anti_air(multiworld, player) \
+                or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has('Cyclone', player)
 
     def _sc2wol_has_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has_any({'Missile Turret', 'Thor', 'War Pigs', 'Spartan Company', "Hel's Angel", 'Battlecruiser', 'Marine', 'Wraith', 'Valkyrie', 'Cyclone'}, player) \
                 or self._sc2wol_has_competent_anti_air(multiworld, player) \
-                or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has_any({'Ghost', 'Spectre', 'Widow Mine'}, player)
+                or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has_any({'Ghost', 'Spectre', 'Widow Mine', 'Liberator'}, player)
 
     def _sc2wol_defense_rating(self, multiworld: MultiWorld, player: int, zerg_enemy: bool, air_enemy: bool = True) -> bool:
         defense_score = sum((defense_ratings[item] for item in defense_ratings if self.has(item, player)))
