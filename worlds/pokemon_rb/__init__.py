@@ -197,6 +197,7 @@ class PokemonRedBlueWorld(World):
                           + self.multiworld.paralyze_trap_weight[self.player].value
                           + self.multiworld.ice_trap_weight[self.player].value)
         for location in locations:
+            event = location.event
             if not location.inclusion(self.multiworld, self.player):
                 continue
             if location.original_item in self.multiworld.start_inventory[self.player].value and \
@@ -208,7 +209,7 @@ class PokemonRedBlueWorld(World):
             elif location.original_item == "Pokedex":
                 if self.multiworld.randomize_pokedex[self.player] == "vanilla":
                     self.multiworld.get_location(location.name, self.player).event = True
-                    location.event = True
+                    event = True
                 item = self.create_item("Pokedex")
             elif location.original_item.startswith("TM"):
                 if self.multiworld.randomize_tm_moves[self.player]:
@@ -220,7 +221,7 @@ class PokemonRedBlueWorld(World):
                 if (item.classification == ItemClassification.filler and self.multiworld.random.randint(1, 100)
                         <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0):
                     item = self.create_item(self.select_trap())
-            if location.event:
+            if event:
                 self.multiworld.get_location(location.name, self.player).place_locked_item(item)
             elif "Badge" not in item.name or self.multiworld.badgesanity[self.player].value:
                 item_pool.append(item)
