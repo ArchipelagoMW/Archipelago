@@ -299,10 +299,15 @@ async def patch_and_run_game(apz5_file):
     if not os.path.exists(rom_file_name):
         rom_file_name = Utils.user_path(rom_file_name)
     rom = Rom(rom_file_name)
-    apply_patch_file(rom, apz5_file,
-        sub_file=(os.path.basename(base_name) + '.zpf'
-            if zipfile.is_zipfile(apz5_file)
-            else None))
+
+    sub_file = None
+    if zipfile.is_zipfile(apz5_file):
+        for name in zipfile.ZipFile(apz5_file).namelist():
+            if name.endswith('.zpf'):
+                sub_file = name
+                break
+
+    apply_patch_file(rom, apz5_file, sub_file=sub_file)
     rom.write_to_file(decomp_path)
     os.chdir(data_path("Compress"))
     compress_rom_file(decomp_path, comp_path)
