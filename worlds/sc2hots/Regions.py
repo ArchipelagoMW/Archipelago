@@ -141,6 +141,9 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
         #         lambda state: state.has('Beat Gates of Hell', player) and (
         #                 state.has('Beat Shatter the Sky', player) or state.has('Beat Belly of the Beast', player)))
 
+        # Final location should be near the end of the cache
+        set_final_location(location_cache, 'The Reckoning: Victory')
+
         return vanilla_mission_req_table, 20, 'The Reckoning: Victory'
 
     else:
@@ -325,13 +328,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
 
         # Changing the completion condition for alternate final missions into an event
         final_location = final_mission + ': Victory'
-        # Final location should be near the end of the cache
-        for i in range(len(location_cache) - 1, -1, -1):
-            if location_cache[i].name == final_location:
-                location_cache[i].locked = True
-                location_cache[i].event = True
-                location_cache[i].address = None
-                break
+        set_final_location(location_cache, final_location)
 
         return mission_req_table, final_mission_id, final_location
 
@@ -389,3 +386,13 @@ def get_locations_per_region(locations: Tuple[LocationData, ...]) -> Dict[str, L
         per_region.setdefault(location.region, []).append(location)
 
     return per_region
+
+
+def set_final_location(location_cache: List[Location], final_location: str):
+    # Final location should be near the end of the cache
+    for i in range(len(location_cache) - 1, -1, -1):
+        if location_cache[i].name == final_location:
+            location_cache[i].locked = True
+            location_cache[i].event = True
+            location_cache[i].address = None
+            return
