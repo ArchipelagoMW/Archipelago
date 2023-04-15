@@ -25,7 +25,7 @@ class SC2WoLLogic(LogicMixin):
     def _sc2wol_has_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has_any({'Missile Turret', 'Thor', 'War Pigs', 'Spartan Company', "Hel's Angel", 'Battlecruiser', 'Marine', 'Wraith', 'Valkyrie', 'Cyclone'}, player) \
                 or self._sc2wol_has_competent_anti_air(multiworld, player) \
-                or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has_any({'Ghost', 'Spectre', 'Widow Mine'}, player)
+                or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has_any({'Ghost', 'Spectre', 'Widow Mine', 'Liberator'}, player)
 
     def _sc2wol_defense_rating(self, multiworld: MultiWorld, player: int, zerg_enemy: bool, air_enemy: bool = True) -> bool:
         defense_score = sum((defense_ratings[item] for item in defense_ratings if self.has(item, player)))
