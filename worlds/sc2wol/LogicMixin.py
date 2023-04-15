@@ -51,8 +51,15 @@ class SC2WoLLogic(LogicMixin):
                self.has('Siege Tank', player) and self._sc2wol_has_competent_anti_air(multiworld, player)
 
     def _sc2wol_has_train_killers(self, multiworld: MultiWorld, player: int) -> bool:
-        return (self.has_any({'Siege Tank', 'Diamondback', 'Marauder'}, player) or get_option_value(multiworld, player, 'required_tactics') > 0
-                and self.has_all({'Reaper', "G-4 Clusterbomb"}, player) or self.has_all({'Spectre', 'Psionic Lash'}, player))
+        return (
+                self.has_any({'Siege Tank', 'Diamondback', 'Marauder'}, player)
+                or get_option_value(multiworld, player, 'required_tactics') > 0
+                and (
+                        self.has_all({'Reaper', "G-4 Clusterbomb"}, player)
+                        or self.has_all({'Spectre', 'Psionic Lash'}, player)
+                        or self.has('Vulture', player)
+                )
+        )
 
     def _sc2wol_able_to_rescue(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has_any({'Medivac', 'Hercules', 'Raven', 'Viking'}, player) or get_option_value(multiworld, player, 'required_tactics') > 0
