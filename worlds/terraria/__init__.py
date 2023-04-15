@@ -1,7 +1,7 @@
 # Look at `Rules.dsv` first to get an idea for how this works
 
 from worlds.AutoWorld import WebWorld, World
-from BaseClasses import Region, ItemClassification, Tutorial
+from BaseClasses import Region, ItemClassification, Tutorial, CollectionState
 from .Checks import TerrariaItem, TerrariaLocation, goals, rules, rule_indices, labels, rewards, item_name_to_id, location_name_to_id, COND_ITEM, COND_LOC, COND_FN, COND_GROUP, npcs, pickaxes, hammers, mech_bosses, progression
 from .Options import options
 
@@ -108,6 +108,14 @@ class TerrariaWorld(World):
 
         self.multiworld.regions.append(menu)
 
+    def create_item(self, item: str) -> TerrariaItem:
+        if item in progression:
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
+
+        return TerrariaItem(item, classification, item_name_to_id[item], self.player)
+
     def create_items(self) -> None:
         for item in self.ter_items:
             if (rule_index := rule_indices.get(item)) is not None:
@@ -119,12 +127,7 @@ class TerrariaWorld(World):
             else:
                 name = item
 
-            if item in progression:
-                classification = ItemClassification.progression
-            else:
-                classification = ItemClassification.useful
-
-            self.multiworld.itempool.append(TerrariaItem(name, classification, item_name_to_id[name], self.player))
+            self.multiworld.itempool.append(self.create_item(name))
 
     def check_condition(self, state, sign: bool, ty: int, condition: str | tuple[bool | None, list], arg: str | int | None) -> bool:
         if ty == COND_ITEM:
@@ -180,6 +183,7 @@ class TerrariaWorld(World):
                         boss_count += 1
                         if boss_count >= arg:
                             return sign
+
                 return not sign
             else:
                 raise Exception(f"Unknown function {condition}")
@@ -201,7 +205,7 @@ class TerrariaWorld(World):
 
     def set_rules(self) -> None:
         for location in self.ter_locations:
-            def check(state, location=location):
+            def check(state: CollectionState, location=location):
                 _, _, operator, conditions = rules[rule_indices[location]]
                 return self.check_conditions(state, operator, conditions)
 

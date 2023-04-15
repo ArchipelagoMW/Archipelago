@@ -251,51 +251,52 @@ Pirate;                             Npc;                                        
 // Queen Slime
 Queen Slime;                        Location | Item;                            Hallow;
 
-// Aquatic Scourge;
-Aquatic Scourge;                    Calamity | Location | Item;
-Cragmaw Mire;                       Calamity | Location | Item;                 #Acid Rain Tier 2;
-Acid Rain Tier 2;                   Calamity | Location | Item;                 #Acid Rain Tier 1 & Aquatic Scourge;
-
-// The Twins
-The Twins;                          Location | Item | Mech Boss;                (@calamity | Hardmode Anvil) & Soul of Light;
-Soul of Sight;                      ;                                           The Twins;
-Steampunker;                        Npc;                                        @mech_boss(1);
-Hammush;                            ;                                           Truffle & @mech_boss(1);
+// Aquatic Scourge
 Mythril Ore;                        ;                                           ((~@calamity & Altar) | (@calamity & @mech_boss(1))) & @pickaxe(110);
 Mythril Bar;                        ;                                           Mythril Ore;
 Hardmode Anvil;                     ;                                           Mythril Bar;
 Mythril Pickaxe;                    Pickaxe(150);                               Hardmode Anvil & Mythril Bar;
+Adamantite Ore;                     ;                                           ((~@calamity & Altar) | (@calamity & @mech_boss(2))) & @pickaxe(150);
+Hardmode Forge;                     ;                                           Hardmode Anvil & Adamantite Ore & Hellforge;
+Adamantite Bar;                     ;                                           Hardmode Forge & Adamantite Ore;
+Adamantite Pickaxe;                 Pickaxe(180);                               Hardmode Anvil & Adamantite Bar;
+Aquatic Scourge;                    Calamity | Location | Item;
+The Twins;                          Location | Item | Mech Boss;                (@calamity | Hardmode Anvil) & Soul of Light;
+Brimstone Elemental;                Calamity | Location | Item;                 Soul of Night & Essence of Havoc & Unholy Core;
+The Destroyer;                      Location | Item | Mech Boss;                (@calamity | Hardmode Anvil) & Soul of Night;
+Cryogen;                            Calamity | Location | Item;                 Soul of Night & Soul of Light & Essence of Eleum;
+Skeletron Prime;                    Location | Item | Mech Boss;                (@calamity | Hardmode Anvil) & Soul of Night & Soul of Light & Bone;
+# mechanical_bosses
+Cragmaw Mire;                       Calamity | Location | Item;                 #Acid Rain Tier 2;
+Acid Rain Tier 2;                   Calamity | Location | Item;                 #Acid Rain Tier 1 & Aquatic Scourge;
+
+// The Twins
+Soul of Sight;                      ;                                           The Twins;
+Steampunker;                        Npc;                                        @mech_boss(1);
+Hammush;                            ;                                           Truffle & @mech_boss(1);
 Rainbow Rod;                        ;                                           Hardmode Anvil & Crystal Shard & Unicorn Horn & Pixie Dust & Soul of Light & Soul of Sight;
 Prismancer;                         Achievement;                                Rainbow Rod;
 Long Ranged Sensor Array;           Calamity;                                   Hardmode Anvil & Mysterious Circuitry & Dubious Plating & Mythril Bar & Wire & Decryption Computer & Codebreaker Base;
-Hydraulic Volt Crusher;             Calamity;                                   Hardmode Anvil & Hardmode Anvil & Mysterious Circuitry & Dubious Plating & Mythril Bar & Soul of Sight;
+Hydraulic Volt Crusher;             Calamity;                                   Hardmode Anvil & Mysterious Circuitry & Dubious Plating & Mythril Bar & Soul of Sight;
 Life Fruit;                         ;                                           (@mech_boss(1) & Wall of Flesh) | (@calamity & (Living Shard | Wall of Flesh));
 Get a Life;                         Achievement;                                Life Fruit;
 Topped Off;                         Achievement;                                Life Fruit;
 Old One's Army Tier 2;              Location | Item;                            #Old One's Army Tier 1 & (@mech_boss(1) | #Old One's Army Tier 3); // TODO Check
 
 // Brimstone Elemental
-Brimstone Elemental;                Calamity | Location | Item;                 Soul of Night & Essence of Havoc & Unholy Core;
 Infernal Suevite;                   Calamity;                                   @pickaxe(150) | Brimstone Elemental;
 Unholy Core;                        Calamity;                                   Infernal Suevite & Hellstone;
 
 // The Destroyer
-The Destroyer;                      Location | Item | Mech Boss;                (@calamity | Hardmode Anvil) & Soul of Night;
 Soul of Might;                      ;                                           #The Destroyer;
-Adamantite Ore;                     ;                                           ((~@calamity & Altar) | (@calamity & @mech_boss(2))) & @pickaxe(150);
-Hardmode Forge;                     ;                                           Hardmode Anvil & Adamantite Ore & Hellforge;
-Adamantite Bar;                     ;                                           Hardmode Forge & Adamantite Ore;
-Adamantite Pickaxe;                 Pickaxe(180);                               Hardmode Anvil & Adamantite Bar;
 
 // Cryogen
-Cryogen;                            Calamity | Location | Item;                 Soul of Night & Soul of Light & Essence of Eleum;
 Cryonic Ore;                        Calamity;                                   Cryogen & (@pickaxe(180) | @mech_boss(2));
 Cryonic Bar;                        Calamity;                                   (Hardmode Forge & Cryonic Ore) | Fleshy Geode | Necromantic Geode;
 Abyssal Warhammer;                  Calamity | Hammer(88);                      Hardmode Anvil & Cryonic Bar;
 Shardlight Pickaxe;                 Calamity | Pickaxe(180);                    Hardmode Anvil & Cryonic Bar;
 
 // Skeletron Prime
-Skeletron Prime;                    Location | Item | Mech Boss;                (@calamity | Hardmode Anvil) & Soul of Night & Soul of Light & Bone;
 Soul of Fright;                     ;                                           #Skeletron Prime;
 Inferna Cutter;                     Calamity;                                   Hardmode Anvil & Axe of Purity & Soul of Fright & Essence of Havoc;
 Buckets of Bolts;                   Achievement;                                #The Twins & #The Destroyer & #Skeletron Prime;
@@ -311,14 +312,15 @@ Chlorophyte Bar;                    ;                                           
 True Excalibur;                     ;                                           Hardmode Anvil & Excalibur & Chlorophyte Bar;
 Chlorophyte Pickaxe;                Pickaxe(200);                               Hardmode Anvil & Chlorophyte Bar;
 Chlorophyte Warhammer;              Hammer(90);                                 Hardmode Anvil & Chlorophyte Bar;
-# mechanical_bosses
 
 // Calamitas Clone
 Calamitas Clone;                    Calamity | Location | Item | Goal;          Hardmode Anvil & Hellstone Bar & Essence of Havoc;
+Plantera;                           Location | Item | Goal;                     Wall of Flesh & (@mech_boss(3) | (@calamity & Hardmode Anvil & Trapper Bulb));
+# calamitas_clone
+# plantera
 Ashes of Calamity;                  Calamity;                                   #Calamitas Clone;
 
 // Plantera
-Plantera;                           Location | Item | Goal;                     Wall of Flesh & (@mech_boss(3) | (@calamity & Hardmode Anvil & Trapper Bulb));
 The Axe;                            Hammer(100);                                #Plantera;
 Seedler;                            ;                                           #Plantera;
 Living Shard;                       Calamity;                                   #Plantera;
@@ -352,8 +354,6 @@ Perennial Ore;                      Calamity;                                   
 Perennial Bar;                      Calamity;                                   Hardmode Forge & Perennial Ore;
 Beastial Pickaxe;                   Calamity | Pickaxe(200);                    Hardmode Anvil & Perennial Bar;
 Armored Digger;                     Calamity | Location | Item;                 Plantera; // TODO Check
-# calamitas_clone
-# plantera
 
 // Solar Eclipse
 Temple Raider;                      Achievement;                                #Plantera;
@@ -426,6 +426,9 @@ Empress of Light;                   Location | Item | Goal;                     
 
 // Lunatic Cultist
 Lunatic Cultist;                    Location | Item;                            (@calamity | (Dungeon & Golem)) & Wall of Flesh;
+Astrum Deus;                        Calamity | Location | Item;                 Titan Heart;
+# lunatic_cultist
+# astrum_deus
 Ancient Manipulator;                ;                                           #Lunatic Cultist;
 
 // Lunar Events
@@ -436,13 +439,10 @@ Meld Blob;                          Calamity;                                   
 Meld Construct;                     Calamity;                                   Ancient Manipulator & Meld Blob & Stardust;
 
 // Astrum Deus
-Astrum Deus;                        Calamity | Location | Item;                 Titan Heart;
 Astral Ore;                         Calamity;                                   Wall of Flesh & Astrum Deus;
 Astral Bar;                         Calamity;                                   Ancient Manipulator & Stardust & Astral Ore;
 Astral Hamaxe;                      Calamity | Hammer(100);                     Ancient Manipulator & Astral Bar;
 Astral Pickaxe;                     Calamity | Pickaxe(220);                    Ancient Manipulator & Astral Bar;
-# lunatic_cultist
-# astrum_deus
 
 // Moon Lord
 Moon Lord;                          Location | Item | Goal;                     #Lunar Events;
@@ -523,15 +523,15 @@ Zenith;                             Location | Item(Has Zenith) | Goal;         
 // Exo Mechs
 Auric Quantum Cooling Cell;         Calamity;                                   Cosmic Anvil & Auric Bar & Mysterious Circuitry & Dubious Plating & Endothermic Energy & Core of Eleum & Voltage Regulation System;
 Exo Mechs;                          Calamity | Location | Item | Final Boss;    Codebreaker Base & Decryption Computer & Auric Quantum Cooling Cell;
+Supreme Witch, Calamitas;           Calamity | Location | Item | Final Boss;    Cosmic Anvil & Brimstone Slag & Auric Bar & Core of Calamity & Ashes of Calamity;
+# calamity_final_bosses
 Exo Prism;                          Calamity;                                   #Exo Mechs;
 Draedon's Forge;                    Calamity;                                   Cosmic Anvil & Hardmode Forge & Tinkerer's Workshop & Ancient Manipulator & Auric Bar & Exo Prism & Ascendant Spirit Essence;
 
 // Supreme Witch, Calamitas
-Supreme Witch, Calamitas;           Calamity | Location | Item | Final Boss;    Cosmic Anvil & Brimstone Slag & Auric Bar & Core of Calamity & Ashes of Calamity;
 Ashes of Annihilation;              Calamity;                                   #Supreme Witch, Calamitas;
 Shadowspec Bar;                     Calamity;                                   Draedon's Forge & Auric Bar & Exo Prism & Ashes of Annihilation;
 Crystyl Crusher;                    Calamity | Pickaxe(1000);                   Draedon's Forge & Luminite Pickaxe & Blossom Pickaxe & Shadowspec Bar;
-# calamity_final_bosses
 
 // Adult Eidolon Wyrm;
 Adult Eidolon Wyrm;                 Calamity | Location | Item | Goal;          Rod of Discord | Normality Relocator;
