@@ -143,7 +143,7 @@ Crabulon;                           Calamity | Location | Item;
 // Evil Boss
 Evil Boss;                          Location | Item;
 Evil Boss Part;                     ;                                           #Evil Boss;
-Evil Pickaxe;                       ;                                           Evil Boss Part;
+Evil Pickaxe;                       Pickaxe(65);                                Evil Boss Part;
 Tavernkeep;                         Npc;                                        Evil Boss;
 Old One's Army Tier 1;              Location | Item;                            Tavernkeep;
 Meteorite;                          ;                                           Evil Boss;

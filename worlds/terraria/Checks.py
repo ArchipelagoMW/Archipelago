@@ -143,20 +143,20 @@ def validate_conditions(rule: str, rule_indices: dict, conditions: list[tuple[bo
             _, conditions = condition
             validate_conditions(rule, rule_indices, conditions)
 
-def mark_progression(conditions: list[tuple[bool, int, str | tuple[bool | None, list], str | int | None]], progression: set[str], rules: list, rule_indices: dict):
+def mark_progression(conditions: list[tuple[bool, int, str | tuple[bool | None, list], str | int | None]], progression: set[str], rules: list, rule_indices: dict, loc_to_item: dict):
     for _, type, condition, _ in conditions:
         if type == COND_ITEM:
             prog = condition in progression
-            progression.add(condition)
+            progression.add(loc_to_item[condition])
             _, flags, _, conditions = rules[rule_indices[condition]]
             if not prog and "Achievement" not in flags and "Location" not in flags and "Item" not in flags:
-                mark_progression(conditions, progression, rules, rule_indices)
+                mark_progression(conditions, progression, rules, rule_indices, loc_to_item)
         elif type == COND_LOC:
             _, _, _, conditions = rules[rule_indices[condition]]
-            mark_progression(conditions, progression, rules, rule_indices)
+            mark_progression(conditions, progression, rules, rule_indices, loc_to_item)
         elif type == COND_GROUP:
             _, conditions = condition
-            mark_progression(conditions, progression, rules, rule_indices)
+            mark_progression(conditions, progression, rules, rule_indices, loc_to_item)
 
 def read_data() -> tuple[
     # Goal to rule index that ends that goal's range and the locations required
@@ -211,6 +211,7 @@ def read_data() -> tuple[
     goal_indices = {}
     rules = []
     rule_indices = {}
+    loc_to_item = {}
 
     npcs = []
     pickaxes = {}
@@ -437,6 +438,9 @@ def read_data() -> tuple[
                         raise Exception(f"item `{item_name}` on line `{line + 1}` shadows a previous item")
                     item_name_to_id[item_name] = next_id
                     next_id += 1
+                    loc_to_item[name] = item_name
+                else:
+                    loc_to_item[name] = name
 
                 if "Npc" in flags:
                     npcs.append(name)
@@ -478,10 +482,10 @@ def read_data() -> tuple[
     for name, flags, _, conditions in rules:
         prog = False
         if "Npc" in flags or "Goal" in flags or "Pickaxe" in flags or "Hammer" in flags or "Mech Boss" in flags:
-            progression.add(name)
+            progression.add(loc_to_item[name])
             prog = True
         if prog or "Location" in flags or "Achievement" in flags:
-            mark_progression(conditions, progression, rules, rule_indices)
+            mark_progression(conditions, progression, rules, rule_indices, loc_to_item)
 
     # Will be randomized via `slot_randoms` / `self.multiworld.random`
     label = None
