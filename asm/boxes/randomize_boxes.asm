@@ -71,9 +71,7 @@ SpawnRandomizedItemFromBox:
     ldrb r2, [r2]
     cmp r1, r2
     bne @@CheckCollectionStatus
-
-    ; Check bit 6 for collectible vs junk
-    lsr r0, r0, #31-6
+    lsr r0, r0, #6
     cmp r0, #1
     beq @@ReleaseItem
 
@@ -293,12 +291,15 @@ CollectRandomItem:
 ; Jewel piece or other world's item
 @@MultiplayerItem:
     ldr r0, =0x13B  ; a1
-    b @@SetCheckLocation
+    b @@PlayCollectionSound
 
 @@CD:
     mov r0, #1  ; a1
     bl SpawnCollectionIndicator
     ldr r0, =0x13C  ; a1
+
+@@PlayCollectionSound:
+    call_using r1, m4aSongNumStart
     b @@SetCheckLocation
 
 @@JunkItem:
@@ -310,9 +311,6 @@ CollectRandomItem:
     bl GiveWarioHearts
 
 @@SetCheckLocation:
-    call_using r1, m4aSongNumStart
-
-; Set "has X" variable
     mov r0, #1
     strb r0, [r6]
     b @@Return

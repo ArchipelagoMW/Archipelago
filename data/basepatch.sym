@@ -313,9 +313,10 @@
 08790272 @@getitem
 087902B0 @@multiplayeritem
 087902B4 @@cd
-087902BE @@junkitem
-087902C8 @@setchecklocation
-087902D0 @@call_using_return_0000000c
+087902BC @@playcollectionsound
+087902C4 @@call_using_return_0000000c
+087902C6 @@junkitem
+087902D0 @@setchecklocation
 087902D6 @@return
 087902D8 .dbl:0034
 087902D8 .pool
