@@ -157,41 +157,29 @@ html{
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-#weighted-settings .hints-div{
+#weighted-settings .hints-div, #weighted-settings .locations-div{
     margin-top: 2rem;
 }
 
-#weighted-settings .hints-div h3{
+#weighted-settings .hints-div h3, #weighted-settings .locations-div h3{
     margin-bottom: 0.5rem;
 }
 
-#weighted-settings .hints-div .hints-container{
+#weighted-settings .hints-container, #weighted-settings .locations-container{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+#weighted-settings .hints-wrapper, #weighted-settings .locations-wrapper{
+    width: calc(50% - 0.5rem);
     font-weight: bold;
 }
 
-#weighted-settings .hints-div .hints-wrapper{
-    width: 32.5%;
-}
-
-#weighted-settings .hints-div .hints-wrapper .hint-div{
-    display: flex;
-    flex-direction: row;
-    cursor: pointer;
-    user-select: none;
-    -moz-user-select: none;
-}
-
-#weighted-settings .hints-div .hints-wrapper .hint-div:hover{
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-#weighted-settings .hints-div .hints-wrapper .hint-div label{
-    flex-grow: 1;
-    padding: 0.125rem 0.5rem;
-    cursor: pointer;
+#weighted-settings .hints-wrapper .simple-list, #weighted-settings .locations-wrapper .simple-list{
+    margin-top: 0.25rem;
+    height: 300px;
+    font-weight: normal;
 }
 
 #weighted-settings #weighted-settings-button-row{
@@ -278,6 +266,30 @@ html{
 #weighted-settings .game-options, #weighted-settings .rom-options{
     display: flex;
     flex-direction: column;
+}
+
+#weighted-settings .simple-list{
+    display: flex;
+    flex-direction: column;
+
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ffffff;
+    border-radius: 4px;
+}
+
+#weighted-settings .simple-list .list-row label{
+    display: block;
+    width: calc(100% - 0.5rem);
+    padding: 0.0625rem 0.25rem;
+}
+
+#weighted-settings .simple-list .list-row label:hover{
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+#weighted-settings .simple-list .list-row label input[type=checkbox]{
+    margin-right: 0.5rem;
 }
 
 #weighted-settings .invisible{

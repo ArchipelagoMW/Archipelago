@@ -1,7 +1,11 @@
-from .TestMinecraft import TestMinecraft
+from . import MCTestBase
 
 
-class TestEntrances(TestMinecraft): 
+class TestEntrances(MCTestBase): 
+    options = {
+        "shuffle_structures": False,
+        "structure_compasses": False
+    }
 
     def testPortals(self): 
         self.run_entrance_tests([

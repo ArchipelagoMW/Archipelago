@@ -1,11 +1,17 @@
 
 from BaseClasses import Location
 from .rom_addresses import rom_addresses
+from .poke_data import pokemon_data
+
 loc_id_start = 172000000
 
 
 def trainersanity(multiworld, player):
     return multiworld.trainersanity[player]
+
+
+def dexsanity(multiworld, player):
+    return multiworld.dexsanity[player]
 
 
 def hidden_items(multiworld, player):
@@ -20,13 +26,12 @@ def extra_key_items(multiworld, player):
     return multiworld.extra_key_items[player]
 
 
-def pokedex(multiworld, player):
-    return multiworld.randomize_pokedex[player].value > 0
-
-
 def always_on(multiworld, player):
     return True
 
+
+def prizesanity(multiworld, player):
+    return multiworld.prizesanity[player]
 
 
 class LocationData:
@@ -69,6 +74,13 @@ class Rod:
     def __init__(self, flag):
         self.byte = 0
         self.bit = flag
+        self.flag = flag
+
+
+class DexSanityFlag:
+    def __init__(self, flag):
+        self.byte = int(flag / 8)
+        self.bit = flag % 8
         self.flag = flag
 
 
@@ -119,7 +131,7 @@ location_data = [
     LocationData("Celadon City", "Gambling Addict", "Coin Case", rom_addresses["Event_Gambling_Addict"],
                  EventFlag(480)),
     LocationData("Celadon Gym", "Erika 2", "TM21 Mega Drain", rom_addresses["Event_Celadon_Gym"], EventFlag(424)),
-    LocationData("Silph Co 11F", "Silph Co President", "Master Ball", rom_addresses["Event_Silph_Co_President"],
+    LocationData("Silph Co 11F", "Silph Co President (Card Key)", "Master Ball", rom_addresses["Event_Silph_Co_President"],
                  EventFlag(1933)),
     LocationData("Silph Co 2F", "Woman", "TM36 Self-Destruct", rom_addresses["Event_Scared_Woman"],
                  EventFlag(1791)),
@@ -374,7 +386,7 @@ location_data = [
     LocationData("Seafoam Islands B4F", "Hidden Item Corner Island", "Ultra Ball", rom_addresses['Hidden_Item_Seafoam_Islands_B4F'], Hidden(26), inclusion=hidden_items),
     LocationData("Pokemon Mansion 1F", "Hidden Item Block Near Entrance Carpet", "Moon Stone", rom_addresses['Hidden_Item_Pokemon_Mansion_1F'], Hidden(27), inclusion=hidden_items),
     LocationData("Pokemon Mansion 3F", "Hidden Item Behind Burglar", "Max Revive", rom_addresses['Hidden_Item_Pokemon_Mansion_3F'], Hidden(28), inclusion=hidden_items),
-    LocationData("Route 23", "Hidden Item Rocks Before Final Guard", "Full Restore", rom_addresses['Hidden_Item_Route_23_1'], Hidden(29), inclusion=hidden_items),
+    LocationData("Route 23", "Hidden Item Rocks Before Victory Road", "Full Restore", rom_addresses['Hidden_Item_Route_23_1'], Hidden(29), inclusion=hidden_items),
     LocationData("Route 23", "Hidden Item East Bush After Water", "Ultra Ball", rom_addresses['Hidden_Item_Route_23_2'], Hidden(30), inclusion=hidden_items),
     LocationData("Route 23", "Hidden Item On Island", "Max Ether", rom_addresses['Hidden_Item_Route_23_3'], Hidden(31), inclusion=hidden_items),
     LocationData("Victory Road 2F", "Hidden Item Rock Before Moltres", "Ultra Ball", rom_addresses['Hidden_Item_Victory_Road_2F_1'], Hidden(32), inclusion=hidden_items),
@@ -400,7 +412,8 @@ location_data = [
     LocationData("Cerulean City", "Hidden Item Gym Badge Guy's Backyard", "Rare Candy", rom_addresses['Hidden_Item_Cerulean_City'], Hidden(52), inclusion=hidden_items),
     LocationData("Route 4", "Hidden Item Plateau East Of Mt Moon", "Great Ball", rom_addresses['Hidden_Item_Route_4'], Hidden(53), inclusion=hidden_items),
 
-    LocationData("Pallet Town", "Oak's Parcel Reward", "Pokedex", rom_addresses["Event_Pokedex"], EventFlag(0x38), inclusion=pokedex),
+
+    LocationData("Pallet Town", "Oak's Parcel Reward", "Pokedex", rom_addresses["Event_Pokedex"], EventFlag(0x38)),
 
     LocationData("Pokemon Mansion 1F", "Scientist", None, rom_addresses["Trainersanity_EVENT_BEAT_MANSION_1_TRAINER_0_ITEM"], EventFlag(376), inclusion=trainersanity),
     LocationData("Pokemon Mansion 2F", "Burglar", None, rom_addresses["Trainersanity_EVENT_BEAT_MANSION_2_TRAINER_0_ITEM"], EventFlag(43), inclusion=trainersanity),
@@ -712,6 +725,37 @@ location_data = [
     LocationData("Indigo Plateau", "Bruno", None, rom_addresses["Trainersanity_EVENT_BEAT_BRUNOS_ROOM_TRAINER_0_ITEM"], EventFlag(20), inclusion=trainersanity),
     LocationData("Indigo Plateau", "Agatha", None, rom_addresses["Trainersanity_EVENT_BEAT_AGATHAS_ROOM_TRAINER_0_ITEM"], EventFlag(19), inclusion=trainersanity),
     LocationData("Indigo Plateau", "Lance", None, rom_addresses["Trainersanity_EVENT_BEAT_LANCES_ROOM_TRAINER_0_ITEM"], EventFlag(18), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Burglar 1", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_A_ITEM"], EventFlag(374), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Super Nerd 1", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_B_ITEM"], EventFlag(373), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Super Nerd 2", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_2_ITEM"], EventFlag(372), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Burglar 2", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_3_ITEM"], EventFlag(371), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Super Nerd 3", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_4_ITEM"], EventFlag(370), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Super Nerd 4", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_5_ITEM"], EventFlag(369), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Super Nerd 5", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_6_ITEM"], EventFlag(368), inclusion=trainersanity),
+
+    LocationData("Celadon Prize Corner", "Item Prize 1", "TM23 Dragon Rage", rom_addresses["Prize_Item_A"], EventFlag(0x69a), inclusion=prizesanity),
+    LocationData("Celadon Prize Corner", "Item Prize 2", "TM15 Hyper Beam", rom_addresses["Prize_Item_B"], EventFlag(0x69B), inclusion=prizesanity),
+    LocationData("Celadon Prize Corner", "Item Prize 3", "TM50 Substitute", rom_addresses["Prize_Item_C"], EventFlag(0x69C), inclusion=prizesanity),
+
+    LocationData("Celadon Game Corner", "West Gambler's Gift (Coin Case)", "10 Coins", rom_addresses["Event_Game_Corner_Gift_A"], EventFlag(0x1ba)),
+    LocationData("Celadon Game Corner", "Center Gambler's Gift (Coin Case)", "20 Coins", rom_addresses["Event_Game_Corner_Gift_C"], EventFlag(0x1bc)),
+    LocationData("Celadon Game Corner", "East Gambler's Gift (Coin Case)", "20 Coins", rom_addresses["Event_Game_Corner_Gift_B"], EventFlag(0x1bb)),
+
+    LocationData("Celadon Game Corner", "Hidden Item Northwest By Counter (Coin Case)", "10 Coins", rom_addresses["Hidden_Item_Game_Corner_1"], Hidden(54), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item Southwest Corner (Coin Case)", "10 Coins", rom_addresses["Hidden_Item_Game_Corner_2"], Hidden(55), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item Near Rumor Man (Coin Case)", "20 Coins", rom_addresses["Hidden_Item_Game_Corner_3"], Hidden(56), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item Near Speculating Woman (Coin Case)", "10 Coins", rom_addresses["Hidden_Item_Game_Corner_4"], Hidden(57), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item Near West Gifting Gambler (Coin Case)", "10 Coins", rom_addresses["Hidden_Item_Game_Corner_5"], Hidden(58), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item Near Wonderful Time Woman (Coin Case)", "20 Coins", rom_addresses["Hidden_Item_Game_Corner_6"], Hidden(59), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item Near Failing Gym Information Guy (Coin Case)", "10 Coins", rom_addresses["Hidden_Item_Game_Corner_7"], Hidden(60), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item Near East Gifting Gambler (Coin Case)", "10 Coins", rom_addresses["Hidden_Item_Game_Corner_8"], Hidden(61), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item Near Hooked Guy (Coin Case)", "10 Coins", rom_addresses["Hidden_Item_Game_Corner_9"], Hidden(62), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item at End of Horizontal Machine Row (Coin Case)", "20 Coins", rom_addresses["Hidden_Item_Game_Corner_10"], Hidden(63), inclusion=hidden_items),
+    LocationData("Celadon Game Corner", "Hidden Item in Front of Horizontal Machine Row (Coin Case)", "100 Coins", rom_addresses["Hidden_Item_Game_Corner_11"], Hidden(64), inclusion=hidden_items),
+
+    *[LocationData("Pokedex", mon, ball, rom_addresses["Dexsanity_Items"] + i, DexSanityFlag(i), type="Item",
+                   inclusion=dexsanity) for (mon, i, ball) in zip(pokemon_data.keys(), range(0, 152),
+                                                                  ["Poke Ball", "Great Ball", "Ultra Ball"]* 51)],
 
     LocationData("Indigo Plateau", "Become Champion", "Become Champion", event=True),
     LocationData("Pokemon Tower 7F", "Fuji Saved", "Fuji Saved", event=True),
@@ -1965,6 +2009,25 @@ location_data = [
     LocationData("Cinnabar Island", "Dome Fossil Pokemon", "Kabuto", rom_addresses["Gift_Kabuto"], None,
                  event=True, type="Static Pokemon"),
 
+    LocationData("Route 2 East", "Marcel Trade", "Mr Mime", rom_addresses["Trade_Marcel"] + 1, None, event=True,
+                 type="Static Pokemon"),
+    LocationData("Underground Tunnel North-South", "Spot Trade", "Nidoran F", rom_addresses["Trade_Spot"] + 1, None,
+                 event=True, type="Static Pokemon"),
+    LocationData("Route 11", "Terry Trade", "Nidorina", rom_addresses["Trade_Terry"] + 1, None, event=True,
+                 type="Static Pokemon"),
+    LocationData("Route 18", "Marc Trade", "Lickitung", rom_addresses["Trade_Marc"] + 1, None, event=True,
+                 type="Static Pokemon"),
+    LocationData("Cinnabar Island", "Sailor Trade", "Seel", rom_addresses["Trade_Sailor"] + 1, None, event=True,
+                 type="Static Pokemon"),
+    LocationData("Cinnabar Island", "Crinkles Trade", "Tangela", rom_addresses["Trade_Crinkles"] + 1, None,
+                 event=True, type="Static Pokemon"),
+    LocationData("Cinnabar Island", "Doris Trade", "Electrode", rom_addresses["Trade_Doris"] + 1, None,
+                 event=True, type="Static Pokemon"),
+    LocationData("Vermilion City", "Dux Trade", "Farfetchd", rom_addresses["Trade_Dux"] + 1, None, event=True,
+                 type="Static Pokemon"),
+    LocationData("Cerulean City", "Lola Trade", "Jynx", rom_addresses["Trade_Lola"] + 1, None, event=True,
+                 type="Static Pokemon"),
+
     # not counted for logic currently. Could perhaps make static encounters resettable in the future?
     LocationData("Power Plant", "Fake Pokeball Battle 1", "Voltorb", rom_addresses["Static_Encounter_Voltorb_A"],
                  None, event=True, type="Missable Pokemon"),
@@ -2043,20 +2106,24 @@ location_data = [
 
 ]
 
-for i, location in enumerate(location_data):
+
+
+i = 0
+for location in location_data:
     if location.event or location.rom_address is None:
         location.address = None
     else:
         location.address = loc_id_start + i
-
+        i += 1
 
 
 class PokemonRBLocation(Location):
     game = "Pokemon Red and Blue"
 
-    def __init__(self, player, name, address, rom_address):
+    def __init__(self, player, name, address, rom_address, type):
         super(PokemonRBLocation, self).__init__(
             player, name,
             address
         )
         self.rom_address = rom_address
+        self.type = type

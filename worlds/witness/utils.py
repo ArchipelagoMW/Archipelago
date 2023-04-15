@@ -3,6 +3,42 @@ from Utils import cache_argsless
 from itertools import accumulate
 from typing import *
 from fractions import Fraction
+from collections import Counter
+
+
+def make_warning_string(any_j: bool, any_u: bool, any_d: bool, all_j: bool, all_u: bool, all_d: bool) -> str:
+    warning_string = ""
+
+    if any_j:
+        if all_j:
+            warning_string += "all "
+        else:
+            warning_string += "some "
+
+        warning_string += "junk"
+
+    if any_u or any_d:
+        if warning_string:
+            warning_string += " and "
+
+        if all_u:
+            warning_string += "all "
+        else:
+            warning_string += "some "
+
+        warning_string += "usefuls"
+
+    if any_d:
+        warning_string += ", including "
+
+        if all_d:
+            warning_string += "all "
+        else:
+            warning_string += "some "
+
+        warning_string += "non-essential door items"
+
+    return warning_string
 
 
 def best_junk_to_add_based_on_weights(weights: Dict[Any, Fraction], created_junk: Dict[Any, int]):

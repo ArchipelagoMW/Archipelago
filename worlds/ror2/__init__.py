@@ -216,8 +216,7 @@ class RiskOfRainWorld(World):
         # This should shave down comparions.
 
         elif name in environment_ALL_table.keys():
-            if name in {"Void Fields", "Hidden Realm: Bazaar Between Time", "Hidden Realm: Bulwark's Ambry",
-                        "Hidden Realm: Gilded Coast,"}:
+            if name in {"Hidden Realm: Bulwark's Ambry", "Hidden Realm: Gilded Coast,"}:
                 classification = ItemClassification.useful
             else:
                 classification = ItemClassification.progression

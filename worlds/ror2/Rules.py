@@ -140,9 +140,7 @@ def set_rules(multiworld: MultiWorld, player: int) -> None:
                             has_location_access_rule(multiworld, environment_name, player, newt, "Newt Altar")
                     if i > 0:
                         has_entrance_access_rule(multiworld, f"Stage_{i}", environment_name, player)
-        has_entrance_access_rule(multiworld, f"Sky Meadow", "Hidden Realm: Bulwark's Ambry", player)
         has_entrance_access_rule(multiworld, f"Hidden Realm: A Moment, Fractured", "Hidden Realm: A Moment, Whole", player)
-        has_entrance_access_rule(multiworld, f"Stage_1", "Hidden Realm: Gilded Coast", player)
         has_entrance_access_rule(multiworld, f"Stage_1", "Hidden Realm: Bazaar Between Time", player)
         has_entrance_access_rule(multiworld, f"Hidden Realm: Bazaar Between Time", "Void Fields", player)
         has_entrance_access_rule(multiworld, f"Stage_5", "Commencement", player)
