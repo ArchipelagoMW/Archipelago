@@ -2272,8 +2272,7 @@ async def main(args: argparse.Namespace):
 
     ssl_context = load_server_cert(args.cert, args.cert_key) if args.cert else None
 
-    ctx.server = websockets.serve(functools.partial(server, ctx=ctx), host=ctx.host, port=ctx.port, ping_timeout=None,
-                                  ping_interval=None, ssl=ssl_context)
+    ctx.server = websockets.serve(functools.partial(server, ctx=ctx), host=ctx.host, port=ctx.port, ssl=ssl_context)
     ip = args.host if args.host else Utils.get_public_ipv4()
     logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port,
                                                  'No password' if not ctx.password else 'Password: %s' % ctx.password))

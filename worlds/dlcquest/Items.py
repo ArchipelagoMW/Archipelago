@@ -1,7 +1,7 @@
 import csv
 import enum
 import math
-from typing import Protocol, Union, Dict, List
+from typing import Protocol, Union, Dict, List, Set
 from BaseClasses import Item, ItemClassification
 from . import Options, data
 from dataclasses import dataclass, field
@@ -29,7 +29,7 @@ class ItemData:
     code_without_offset: offset
     name: str
     classification: ItemClassification
-    groups: set[Group] = field(default_factory=frozenset)
+    groups: Set[Group] = field(default_factory=frozenset)
 
     def __post_init__(self):
         if not isinstance(self.groups, frozenset):

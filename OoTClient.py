@@ -17,9 +17,9 @@ from worlds.oot.N64Patch import apply_patch_file
 from worlds.oot.Utils import data_path
 
 
-CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart oot_connector.lua"
-CONNECTION_REFUSED_STATUS = "Connection refused. Please start your emulator and make sure oot_connector.lua is running"
-CONNECTION_RESET_STATUS = "Connection was reset. Please restart your emulator, then restart oot_connector.lua"
+CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart connector_oot.lua"
+CONNECTION_REFUSED_STATUS = "Connection refused. Please start your emulator and make sure connector_oot.lua is running"
+CONNECTION_RESET_STATUS = "Connection was reset. Please restart your emulator, then restart connector_oot.lua"
 CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
 CONNECTION_CONNECTED_STATUS = "Connected"
 CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
