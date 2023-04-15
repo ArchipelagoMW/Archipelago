@@ -15,7 +15,7 @@ from .Items import OOTItem
 from .HintList import getHint, getHintGroup, Hint, hintExclusions, \
     misc_item_hint_table, misc_location_hint_table
 from .Messages import COLOR_MAP, update_message_by_id
-from .TextBox import line_wrap, character_table
+from .TextBox import line_wrap, character_table, rom_safe_text
 from .Utils import data_path, read_json
 
 
@@ -145,10 +145,6 @@ def isRestrictedDungeonItem(dungeon, item):
     if item.type == 'GanonBossKey' and dungeon.multiworld.shuffle_ganon_bosskey == 'dungeon':
         return item in dungeon.boss_key
     return False
-
-
-def rom_safe_text(text):
-    return ''.join(map(lambda c: c if c in character_table else '?', text))
 
 
 # Attach a player name to the item or location text.
@@ -1148,7 +1144,7 @@ def buildMiscItemHints(world, messages):
                     area = HintArea.at(location, use_alt_hint=data['use_alt_hint']).text(world.clearer_hints, world=None)
                 else:
                     area = location.name
-                text = data['default_item_text'].format(area=(player_text + area))
+                text = data['default_item_text'].format(area=rom_safe_text(player_text + area))
             elif 'default_item_fallback' in data:
                 text = data['default_item_fallback']
             else:
@@ -1171,7 +1167,7 @@ def buildMiscLocationHints(world, messages):
             item_text = getHint(getItemGenericName(item), world.clearer_hints).text
             if item.player != world.player:
                 item_text += f' for {world.multiworld.get_player_name(item.player)}'
-            text = data['location_text'].format(item=item_text)
+            text = data['location_text'].format(item=rom_safe_text(item_text))
 
         update_message_by_id(messages, data['id'], str(GossipText(text, ['Green'], prefix='')), 0x23)
 
