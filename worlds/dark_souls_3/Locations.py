@@ -421,7 +421,6 @@ class DarkSouls3Location(Location):
 
     npc_location = (
         "US: Irina's Ashes",
-        "US: Tower Key (Irina Drop)",
         "ID: Karla's Ashes",
         "ID: Karla's Pointed Hat",
         "ID: Karla's Coat",

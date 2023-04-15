@@ -97,8 +97,7 @@ undead_settlement_table = {
     "US: Cornyx's Garb": 0x11945F88,
     "US: Cornyx's Skirt": 0x11946758,
     "US: Pyromancy Flame": 0x00CC77C0,
-    "US: Fire Gem": 0x4000047E,
-    "US: Tower Key (Irina Drop)": 0x400007DD, #DROPPED FROM IRINA
+    "US: Fire Gem": 0x4000047E
 }
 
 road_of_sacrifice_table = {

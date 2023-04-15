@@ -37,7 +37,7 @@ class RandomizeHealthLocations(Toggle):
 
 
 class RandomizeNPCLocations(Toggle):
-    """Adds Friendly NPC Locations to the pool. (Irina, Cornyx, Karla, Orbeck) (+13 checks/items)"""
+    """Adds Friendly NPC Locations to the pool. (Irina, Cornyx, Karla, Orbeck) (+12 checks/items)"""
     display_name ="Randomize NPC Locations"
 
 

@@ -565,8 +565,7 @@ misc_items_table = {
     "Karla's Ashes": 0x40000842, #!
     "Cornyx's Ashes": 0x40000841, #!
     "Orbeck's Ashes": 0x40000840, #!
-    "Fire Gem": 0x4000047E, #!
-    "Tower Key (Irina Drop)": 0x400007DD, #! DROPPED FROM IRINA
+    "Fire Gem": 0x4000047E #!
 }
 
 dlc_misc_table = {
@@ -593,8 +592,7 @@ key_items_list = {
     "Old Cell Key",
     "Jailer's Key Ring",
     "Contraption Key",
-    "Small Envoy Banner",
-    "Tower Key (Irina Drop)"
+    "Small Envoy Banner"
 }
 
 items_for_key_location_list = {
@@ -679,7 +677,6 @@ items_for_dlc_misc_location_list = {
 
 items_for_npc_location_list = {
     "Irina's Ashes",
-    "Tower Key (Irina Drop)",
     "Karla's Ashes",
     "Karla's Pointed Hat",
     "Karla's Coat",
