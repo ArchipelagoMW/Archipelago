@@ -225,7 +225,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2wol_has_mm_upgrade(multiworld, player)),
         LocationData("Piercing the Shroud", "Piercing the Shroud: Second Escape Relic", SC2WOL_LOC_ID_OFFSET + 2104,
                      lambda state: state._sc2wol_has_mm_upgrade(multiworld, player)),
-        LocationData("Piercing the Shroud", "Piercing the Shroud: Brutalisk ", SC2WOL_LOC_ID_OFFSET + 2105,
+        LocationData("Piercing the Shroud", "Piercing the Shroud: Brutalisk", SC2WOL_LOC_ID_OFFSET + 2105,
                      lambda state: state._sc2wol_has_mm_upgrade(multiworld, player)),
         LocationData("Whispers of Doom", "Whispers of Doom: Victory", SC2WOL_LOC_ID_OFFSET + 2200),
         LocationData("Whispers of Doom", "Whispers of Doom: First Hatchery", SC2WOL_LOC_ID_OFFSET + 2201),
