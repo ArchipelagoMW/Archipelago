@@ -1800,7 +1800,8 @@
           - room: Outside The Initiated
             panel: EIGHT
       Zero Door:
-        id: Count Up Room Area Doors/Door_zero_hider
+        # The black wall isn't a door, so we can't ever hide it.
+        id: Count Up Room Area Doors/Door_zero_hider_2
         location_name: Nines
         panels:
           - NINE
