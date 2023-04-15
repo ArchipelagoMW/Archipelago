@@ -4,6 +4,7 @@ from BaseClasses import CollectionState
 
 from worlds.AutoWorld import World
 
+
 def get_rules_lookup(player: int):
     rules_lookup: typing.Dict[str, typing.List[Callable[[CollectionState], bool]]] = {
         "entrances": {
@@ -29,22 +30,42 @@ def get_rules_lookup(player: int):
             "To Underground Lake": lambda state: state.has("Key for Underground Lake Room", player),
             "To Maintenance Tunnels From Theater Back Hallways": lambda state: state.has("Crawling", player),
             "To Blue Maze": lambda state: state.has("Crawling", player),
-            "To Lobby From Tar River": lambda state: (state.has("Crawling", player) and state.has("Oil Pot Bottom", player) and state.has("Oil Pot Top", player)),
+            "To Lobby From Tar River": lambda state: (state.has("Crawling", player) and state.has("Oil Pot Bottom", player) and 
+                                                      state.has("Oil Pot Top", player)),
             "To Anansi": lambda state: state.can_reach("Gods Room", "Region", player),
             "To Burial": lambda state: state.can_reach("Egypt", "Region", player),
-            "To Slide Room": lambda state: (state.can_reach("Prehistoric", "Region", player) and state.can_reach("Tar River", "Region", player) and state.can_reach("Egypt", "Region", player) and 
-                                            state.can_reach("Burial", "Region", player) and state.can_reach("Gods Room", "Region", player) and state.can_reach("Werewolf", "Region", player)),
-            "To Lobby From Slide Room": lambda state: (state.can_reach("Generator", "Region", player) and state.can_reach("Torture", "Region", player))
+            "To Slide Room": lambda state: (
+                        state.can_reach("Prehistoric", "Region", player) and state.can_reach("Tar River", "Region",player) and 
+                        state.can_reach("Egypt", "Region", player) and state.can_reach("Burial", "Region", player) and 
+                        state.can_reach("Gods Room", "Region", player) and state.can_reach("Werewolf", "Region", player)),
+            "To Lobby From Slide Room": lambda state: (
+                        state.can_reach("Generator", "Region", player) and state.can_reach("Torture", "Region", player))
         },
         "locations": {
             "Puzzle Solved Anansi Musicbox": lambda state: state.can_reach("Clock Tower", "Region", player),
-
-            #Events
-            #"Ash Captured": lambda state: ((state.can_reach("Office", "Region", player) or (state.can_reach("Burial", "Region", player))) 
-            #                               and state.has('Ash Pot Top', player) and state.has('Ash Pot Bottom', player))
-
-
-        }
+            "Accessible: Storage: Janitor Closet": lambda state: state.has("Cloth Pot Bottom", player) and state.has("Cloth Pot Top", player) and
+                        state.has("Cloth Pot Bottom DUPE", player) and state.has("Cloth Pot Top DUPE", player),
+            "Accessible: Storage: Tar River": lambda state: state.has("Oil Pot Bottom", player) and state.has("Oil Pot Top", player) and
+                        state.has("Oil Pot Bottom DUPE", player) and state.has("Oil Pot Top DUPE", player),
+            "Accessible: Storage: Slide": lambda state: state.has("Water Pot Bottom DUPE", player) and
+                        state.has("Wax Pot Bottom DUPE", player) and
+                        state.has("Ash Pot Bottom DUPE", player) and
+                        state.has("Oil Pot Bottom DUPE", player) and
+                        state.has("Cloth Pot Bottom DUPE", player) and
+                        state.has("Wood Pot Bottom DUPE", player) and
+                        state.has("Crystal Pot Bottom DUPE", player) and
+                        state.has("Sand Pot Bottom DUPE", player) and
+                        state.has("Metal Pot Bottom DUPE", player) and
+                        state.has("Water Pot Top DUPE", player) and
+                        state.has("Wax Pot Top DUPE", player) and
+                        state.has("Ash Pot Top DUPE", player) and
+                        state.has("Oil Pot Top DUPE", player) and
+                        state.has("Cloth Pot Top DUPE", player) and
+                        state.has("Wood Pot Top DUPE", player) and
+                        state.has("Crystal Pot Top DUPE", player) and
+                        state.has("Sand Pot Top DUPE", player) and
+                        state.has("Metal Top DUPE", player)
+            }
     }
     return rules_lookup
 

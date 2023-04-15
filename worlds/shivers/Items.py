@@ -35,7 +35,7 @@ item_table = {
     "Crystal Pot Top": ItemData(SHIVERS_ITEM_ID_OFFSET + 16, "pot"),
     "Lightning Pot Top": ItemData(SHIVERS_ITEM_ID_OFFSET + 17, "pot"),
     "Sand Pot Top": ItemData(SHIVERS_ITEM_ID_OFFSET + 18, "pot"),
-    "Metal Top": ItemData(SHIVERS_ITEM_ID_OFFSET + 19, "pot"),
+    "Metal Pot Top": ItemData(SHIVERS_ITEM_ID_OFFSET + 19, "pot"),
 
     #Keys
     "Key for Office Elevator": ItemData(SHIVERS_ITEM_ID_OFFSET + 20, "key"),

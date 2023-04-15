@@ -113,14 +113,14 @@ class ShiversWorld(World):
         # Add keys
         keys = [self.create_item(name) for name, data in item_table.items() if data.type == 'key']
 
-        # Add abilities
-        abilities = [self.create_item(name) for name, data in item_table.items() if data.type == 'ability']
-
         self.multiworld.itempool += pots
         self.multiworld.itempool += keys
-        self.multiworld.itempool += abilities
 
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Ash Pot Top", self.player)
+        #Place crawling locally in the library to prevent softlock
+        self.multiworld.random.choice(self.multiworld.get_region("Library", self.player).locations).place_locked_item(self.create_item("Crawling"))
+        
+
+        #self.multiworld.completion_condition[self.player] = lambda state: state.has("Ash Pot Top", self.player)
 
     set_rules = set_rules
 

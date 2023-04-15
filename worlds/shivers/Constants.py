@@ -6,11 +6,7 @@ def load_data_file(*args) -> dict:
     fname = os.path.join("data", *args)
     return json.loads(pkgutil.get_data(__name__, fname).decode())
 
-# For historical reasons, these values are different.
-# They remain different to ensure datapackage consistency.
-# Do not separate other games' location and item IDs like this.
-#item_id_offset: int 	= 45000
-location_id_offset: int = 42000
+location_id_offset: int = 20000
 
 #item_info = load_data_file("items.json")
 #item_name_to_id = {name: item_id_offset + index \
