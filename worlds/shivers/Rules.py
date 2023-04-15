@@ -43,6 +43,12 @@ def get_rules_lookup(player: int):
         },
         "locations": {
             "Puzzle Solved Anansi Musicbox": lambda state: state.can_reach("Clock Tower", "Region", player),
+            "Puzzle Solved Geoffrey Door": lambda state: state.can_reach("Three Floor Elevator", "Region", player),
+            "Puzzle Solved Clock Chains": lambda state: state.can_reach("Bedroom", "Region", player),
+            "Puzzle Solved Tiki Drums": lambda state: state.can_reach("Clock Tower", "Region", player),
+            "Puzzle Solved Red Door": lambda state: state.can_reach("Maintenance Tunnels", "Region", player),
+            "Puzzle Solved UFO Symbols": lambda state: state.can_reach("Library", "Region", player),
+            "Puzzle Solved Maze Door": lambda state: state.can_reach("Projector Room", "Region", player),
             "Accessible: Storage: Janitor Closet": lambda state: state.has("Cloth Pot Bottom", player) and state.has("Cloth Pot Top", player) and
                         state.has("Cloth Pot Bottom DUPE", player) and state.has("Cloth Pot Top DUPE", player),
             "Accessible: Storage: Tar River": lambda state: state.has("Oil Pot Bottom", player) and state.has("Oil Pot Top", player) and
