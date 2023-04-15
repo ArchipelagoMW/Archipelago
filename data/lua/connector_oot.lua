@@ -1,8 +1,9 @@
 local socket = require("socket")
 local json = require('json')
 local math = require('math')
+require('common.lua')
 
-local last_modified_date = '2022-11-27' -- Should be the last modified date
+local last_modified_date = '2022-4-9' -- Should be the last modified date
 local script_version = 3
 
 --------------------------------------------------
@@ -1861,8 +1862,7 @@ function receive()
 end
 
 function main()
-    if (is23Or24Or25 or is26To27) == false then
-        print("Must use a version of bizhawk 2.3.1 or higher")
+    if not checkBizhawkVersion() then
         return
     end
     server, error = socket.bind('localhost', 28921)
@@ -1886,7 +1886,7 @@ function main()
                     ootSocket = client
                     ootSocket:settimeout(0)
                 else
-                    print('Connection failed, ensure OoTClient is running and rerun oot_connector.lua')
+                    print('Connection failed, ensure OoTClient is running and rerun connector_oot.lua')
                     return
                 end
             end
