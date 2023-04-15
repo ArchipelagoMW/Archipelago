@@ -135,13 +135,6 @@ SpawnCollectionIndicator:
 .endautoregion
 
 
-.definelabel REG_DMA3SAD, 0x40000D4
-.definelabel @EmptyJewel1Tile, 0x8401708
-.definelabel @EmptyJewel2Tile, 0x8401B08
-.definelabel @EmptyJewel3Tile, 0x8401AE8
-.definelabel @EmptyJewel4Tile, 0x84016E8
-.definelabel @EmptyCDTile, 0x8400FA8
-
 .macro set_tile, TileId, RomId
     ldr r0, =RomId
     str r0, [r1]
@@ -152,8 +145,13 @@ SpawnCollectionIndicator:
     ldr r0, [r1, #8]
 .endmacro
 
+; Override jump table
 .org 0x8078E68
-.word ReadJewelPieces
+.word ReadJewelPieces  ; case 0
+.word UpdateJewelIcon  ; case 1
+.word UpdateJewelIcon  ; case 2
+.word UpdateJewelIcon  ; case 3
+.word UpdateJewelIcon  ; case 4
 
 .autoregion
 ReadJewelPieces:
@@ -161,10 +159,10 @@ ReadJewelPieces:
 
 ; Clear indicator status
     ldr r1, =REG_DMA3SAD
-    set_tile 0x6011C20, @EmptyJewel1Tile
-    set_tile 0x6012020, @EmptyJewel2Tile
-    set_tile 0x6012000, @EmptyJewel3Tile
-    set_tile 0x6011C00, @EmptyJewel4Tile
+    set_tile 0x6011C20, EmptyJewel1Tile
+    set_tile 0x6012020, EmptyJewel2Tile
+    set_tile 0x6012000, EmptyJewel3Tile
+    set_tile 0x6011C00, EmptyJewel4Tile
 
 ; Load collected jewel piece
     ldr r0, =LastCollectedItemID
@@ -240,6 +238,60 @@ ReadJewelPieces:
     ldr r0, =0x8079064
     mov pc, r0
 .pool
+
+
+UpdateJewelIcon:
+    push {r4}
+    mov r4, r2
+    ldrb r0, [r4, #4]
+    cmp r0, #0x3B
+    bhi @@UpdatePosition
+    cmp r0, #0x14
+    bne @@DspSub
+    call_using r0, TKakeraComp_SE_Set
+
+; Change tile
+    ldr r3, =JewelGraphicTable
+    ldrb r0, [r4, #3]
+    sub r0, #1
+    lsl r0, #4
+    add r3, r3, r0  ; r3 = entry for this jewel piece
+    ldr r0, =LastCollectedItemStatus
+    ldrb r0, [r0]
+    lsl r0, #2
+    add r2, r3, r0  ; r2 = selected graphic
+
+    ldr r1, =REG_DMA3SAD
+    ldr r0, [r2]  ; Source (selected graphic)
+    str r0, [r1]  
+    ldr r0, [r3, #4]  ; Destination (tilemap position)
+    str r0, [r1, #4]
+    ldr r0, =0x80000010
+    str r0, [r1, #8]
+    ldr r0, [r1, #8]
+
+@@DspSub:
+    call_using r0, TKakeraIconDsp_sub
+
+@@Return:
+    pop {r4}
+    ldr r0, =0x8079064
+    mov pc, r0
+
+@@UpdatePosition:
+    pop {r4}
+    ldr r3, =0x8078F86
+    mov pc, r3
+
+.pool
+
+.align 4
+JewelGraphicTable:
+    .word EmptyJewel1Tile, 0x6011C20, CarryingJewel1Tile, HasJewel1Tile
+    .word EmptyJewel2Tile, 0x6012020, CarryingJewel2Tile, HasJewel2Tile
+    .word EmptyJewel3Tile, 0x6012000, CarryingJewel3Tile, HasJewel3Tile
+    .word EmptyJewel4Tile, 0x6011C00, CarryingJewel4Tile, HasJewel4Tile
+
 .endautoregion
 
 
@@ -250,7 +302,7 @@ ReadCD:
 
 ; clear indicator
     ldr r1, =REG_DMA3SAD
-    set_tile 0x60114C0, @EmptyCDTile
+    set_tile 0x60114C0, EmptyCDTile
     
 ; Load collected CD
     ldr r0, =LastCollectedItemID

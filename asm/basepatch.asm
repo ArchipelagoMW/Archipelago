@@ -28,5 +28,6 @@ DeathLinkFlag: .byte 0
 .include "asm/boxes/save_full_health.asm"
 .include "asm/routines.asm"
 .include "asm/patches.asm"
+.include "asm/graphics.asm"
 
 .close

@@ -60,6 +60,9 @@ ReceiveNextItem:
     bge @@Return
     ldr r1, =LastCollectedItemID
     strb r0, [r1]
+    ldr r1, =LastCollectedItemStatus
+    mov r2, #3
+    strb r2, [r1]
 
 @@Return:
     ldr r1, =PlayerID

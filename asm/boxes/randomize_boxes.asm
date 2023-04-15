@@ -136,12 +136,6 @@ hook_branch 0x802A1F4, 0x802A204, 0x802A26E, LoadRandomItemAnimation ;  NW jewel
 hook_branch 0x802A2B8, 0x802A2C8, 0x802A32E, LoadRandomItemAnimation ;  CD
 hook_branch 0x802A378, 0x802A388, 0x802A3E6, LoadRandomItemAnimation ;  Full health
 
-.definelabel @ObjectPalette4, 0x5000280
-.macro change_palette_entry, imm
-    ldrh r2, [r0, imm * 2]
-    strh r2, [r1, imm * 2]
-.endmacro
-
 .autoregion
 LoadRandomItemAnimation:
     push r4-r6, lr
@@ -177,20 +171,7 @@ LoadRandomItemAnimation:
     mov r0, #6
 @@LoadPalette:
 
-; Load palette
-    ldr r1, =@@JewelPaletteTable
-    lsl r2, r0, #2
-    add r0, r2, r0
-    lsl r0, r0, #1
-    add r0, r1, r0
-
-; Change the last five entries in object palette 4
-    ldr r1, =@ObjectPalette4 + 0x296 - 0x280
-    change_palette_entry #0
-    change_palette_entry #1
-    change_palette_entry #2
-    change_palette_entry #3
-    change_palette_entry #4
+    bl SetTreasurePalette
 
 ; Jewel/CD branch
     lsr r1, r6, #5
@@ -234,15 +215,6 @@ LoadRandomItemAnimation:
     .word takara_Anm_00  ; CD
     .word takara_Anm_01  ; Full health item
 
-.align 2
-@@JewelPaletteTable:
-    .halfword 0x7B3E, 0x723C, 0x6576, 0x58B0, 0x4C07  ; Entry passage
-    .halfword 0x5793, 0x578D, 0x4B20, 0x2E40, 0x1160  ; Emerald passage
-    .halfword 0x6B5F, 0x529F, 0x253F, 0x14B4, 0x14AE  ; Ruby passage
-    .halfword 0x6BDF, 0x23DF, 0x139B, 0x1274, 0x0DAE  ; Topaz passage
-    .halfword 0x7F5A, 0x7E94, 0x7D29, 0x50A5, 0x38A5  ; Sapphire passage
-    .halfword 0x579F, 0x3B1F, 0x1A7F, 0x05DE, 0x00FB  ; Golden pyramid
-    .halfword 0x7FFF, 0x72F5, 0x560E, 0x4169, 0x0000  ; Archipelago item
 .endautoregion
 
 
@@ -308,6 +280,9 @@ CollectRandomItem:
 ; Jewel/CD
     ldr r0, =LastCollectedItemID
     strb r5, [r0]
+    ldr r0, =LastCollectedItemStatus
+    mov r1, #2
+    strb r1, [r0]
 
     lsr r1, r5, #5
     cmp r1, #0

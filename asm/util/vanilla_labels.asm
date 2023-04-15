@@ -1,6 +1,6 @@
 .gba
 
-; Variables
+; WRAM Variables
 .definelabel PassageID, 0x3000002
 .definelabel InPassageLevelID, 0x3000003
 .definelabel CurrentRoomId, 0x3000024
@@ -26,6 +26,9 @@
 .definelabel WarioHeart, 0x3001910
 .definelabel usWarStopFlg, 0x30019F6
 
+; I/O Registers
+.definelabel REG_DMA3SAD, 0x40000D4
+
 ; Functions
 .definelabel MainGameLoop, 0x80001CC
 .definelabel m4aSongNumStart, 0x8001DA4
@@ -41,6 +44,8 @@
 .definelabel EntityAI_INITIAL_takara_kakera, 0x802932C
 .definelabel TOptObjSet, 0x80766E8
 .definelabel WarioCoinSet, 0x80768B8
+.definelabel TKakeraComp_SE_Set, 0x8078D60
+.definelabel TKakeraIconDsp_Sub, 0x8078D98
 .definelabel WarioVoiceSet, 0x8088620
 .definelabel MiniRandomCreate, 0x8089B80
 .definelabel modsi3, 0x8094ED0
@@ -55,3 +60,16 @@
 .definelabel takara_Anm_05, 0x83B4C30
 .definelabel zako_takara_box_Anm_02, 0x83B4F34
 .definelabel zako_takara_box_Anm_11, 0x83B5004
+.definelabel EmptyJewel4Tile, 0x84016E8
+.definelabel EmptyJewel1Tile, 0x8401708
+.definelabel EmptyJewel3Tile, 0x8401AE8
+.definelabel EmptyJewel2Tile, 0x8401B08
+.definelabel CarryingJewel1Tile, 0x8404548
+.definelabel CarryingJewel2Tile, 0x8404568
+.definelabel CarryingJewel3Tile, 0x8404588
+.definelabel CarryingJewel4Tile, 0x84045A8
+.definelabel HasJewel1Tile, 0x84045C8
+.definelabel HasJewel2Tile, 0x84045E8
+.definelabel HasJewel3Tile, 0x8404608
+.definelabel HasJewel4Tile, 0x8404628
+.definelabel EmptyCDTile, 0x8400FA8

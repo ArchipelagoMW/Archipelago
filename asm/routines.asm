@@ -40,11 +40,21 @@ PreGamePrep:
 ; Receive multiworld items (level select)
 PyramidScreen:
     push {r4}
+
     bl ReceiveNextItem
     mov r4, r0
     bl GiveItem
     mov r0, r4
+
+; If we get treasure, tell the player
+    lsl r0, r4, #31-6
+    lsr r0, r4, #31-6
+    cmp r0, #0
+    bne @@Return
+    mov r0, r4
     bl ItemReceivedFeedbackSound
+
+@@Return:
     pop {r4}
     ldr r0, =0x8079AE0
     mov pc, r0
@@ -70,9 +80,22 @@ LevelScreen:
     bl ReceiveNextItem
     mov r4, r0
     bl GiveItem
+
+; If we get treasure, tell the player
+    lsl r0, r4, #31-6
+    lsr r0, r0, #31
+    cmp r0, #0
+    bne @@CollectJunk
+
     mov r0, r4
     bl ItemReceivedFeedbackSound
+    lsl r0, r4, #31-4
+    lsr r0, r0, #31-2
+    bl SetTreasurePalette
+    lsr r0, r4, #5
+    bl SpawnCollectionIndicator
 
+@@CollectJunk:
     bl CollectJunkItems
 
 @@Return:

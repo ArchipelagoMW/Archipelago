@@ -14,6 +14,8 @@
 
 ; The jewel piece or CD that you've most recently received or grabbed from a box
 .definelabel LastCollectedItemID, UnusedRamStart + 3  ; byte
+; Same values as "Has X" variables
+.definelabel LastCollectedItemStatus, UnusedRamStart + 4  ; byte
 
 .definelabel DeathlinkEnabled, UnusedRamStart + 8  ; byte
 
