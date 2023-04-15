@@ -148,7 +148,7 @@ class MagpieBridge:
     checks = None
     item_tracker = None
     ws = None
-
+    features = []
     async def handler(self, websocket):
         self.ws = websocket
         while True:
@@ -156,9 +156,12 @@ class MagpieBridge:
             if message["type"] == "handshake":
                 logger.info(
                     f"Connected, supported features: {message['features']}")
-                if "items" in message["features"]:
+                self.features = message["features"]
+
+            if message["type"] in ("handshake", "sendFull"):
+                if "items" in self.features:
                     await self.send_all_inventory()
-                if "checks" in message["features"]:
+                if "checks" in self.features:
                     await self.send_all_checks()
     # Translate renamed IDs back to LADXR IDs
     @staticmethod

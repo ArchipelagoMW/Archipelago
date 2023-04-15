@@ -1,5 +1,8 @@
 import binascii
+import bsdiff4
 import os
+import pkgutil
+import tempfile
 
 from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial
 from Fill import fill_restrictive
@@ -406,10 +409,18 @@ class LinksAwakeningWorld(World):
             player_names=all_names,
             player_id = self.player)
       
-        handle = open(out_path, "wb")
-        rom.save(handle, name="LADXR")
+        with open(out_path, "wb") as handle:
+            rom.save(handle, name="LADXR")
 
-        handle.close()
+        # Write title screen after everything else is done - full gfxmods may stomp over the egg tiles
+        if self.player_options["ap_title_screen"]:
+            with tempfile.NamedTemporaryFile(delete=False) as title_patch:
+                title_patch.write(pkgutil.get_data(__name__, "LADXR/patches/title_screen.bdiff4"))
+        
+            bsdiff4.file_patch_inplace(out_path, title_patch.name)
+            os.unlink(title_patch.name)
+
+
         patch = LADXDeltaPatch(os.path.splitext(out_path)[0]+LADXDeltaPatch.patch_file_ending, player=self.player,
                                 player_name=self.multiworld.player_name[self.player], patched_path=out_path)
         patch.write()
