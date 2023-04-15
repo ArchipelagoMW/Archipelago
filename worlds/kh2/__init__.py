@@ -314,8 +314,7 @@ class KH2World(World):
             luckyemblemamount = max(self.luckyemblemamount, self.luckyemblemrequired)
             self.multiworld.LuckyEmblemsAmount[self.player].value = luckyemblemamount
 
-        self.item_quantity_dict[ItemName.LuckyEmblem] = item_dictionary_table[
-                                                            ItemName.LuckyEmblem].quantity + self.luckyemblemamount
+        self.item_quantity_dict[ItemName.LuckyEmblem] = self.multiworld.LuckyEmblemsAmount[self.player].value
         # give this proof to unlock the final door once the player has the amount of lucky emblem required
         self.item_quantity_dict[ItemName.ProofofNonexistence] = 0
 
