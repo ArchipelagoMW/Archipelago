@@ -273,7 +273,7 @@ class KH2World(World):
         #  Kingdom Key cannot have No Experience so plandoed here instead of checking 26 times if its kingdom key
         random_ability = self.multiworld.per_slot_randoms[self.player].choice(self.valid_abilities)
         while random_ability == ItemName.NoExperience:
-            random_ability = self.multiworld.per_slot_randoms[self.player].choice(self.validAbilitys)
+            random_ability = self.multiworld.per_slot_randoms[self.player].choice(self.valid_abilities)
         self.plando_locations[LocationName.KingdomKeySlot] = random_ability
         self.item_quantity_dict[random_ability] -= 1
         self.sora_keyblade_ability_pool[random_ability] -= 1
