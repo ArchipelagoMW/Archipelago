@@ -1883,6 +1883,9 @@
       PARANOID:
         id: Backside Room/Panel_paranoid_paranoid
         check: True
+        required_door:
+          room: Number Hunt
+          door: Sixes
       YELLOW:
         id: Color Arrow Room/Panel_yellow_afar
         required_door:
