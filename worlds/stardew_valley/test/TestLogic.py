@@ -45,6 +45,13 @@ class TestLogic(unittest.TestCase):
                 assert MISSING_ITEM not in repr(rule)
                 assert rule == False_() or rule(multi_world.state), f"Could not resolve quest rule for {quest} {rule}"
 
+    def test_given_special_order_rule_then_can_be_resolved(self):
+        for special_order in logic.special_order_rules.keys():
+            with self.subTest(msg=special_order):
+                rule = logic.special_order_rules[special_order]
+                assert MISSING_ITEM not in repr(rule)
+                assert rule == False_() or rule(multi_world.state), f"Could not resolve special order rule for {special_order} {rule}"
+
     def test_given_tree_fruit_rule_then_can_be_resolved(self):
         for tree_fruit in logic.tree_fruit_rules.keys():
             with self.subTest(msg=tree_fruit):

@@ -144,7 +144,7 @@ def create_items(item_factory: StardewItemFactory, locations_count: int, items_t
     items += unique_filler_items
     logger.debug(f"Created {len(unique_filler_items)} unique filler items")
 
-    resource_pack_items = fill_with_resource_packs(item_factory, world_options, random, locations_count - len(items))
+    resource_pack_items = fill_with_resource_packs(item_factory, random, locations_count - len(items))
     items += resource_pack_items
     logger.debug(f"Created {len(resource_pack_items)} resource packs")
 
