@@ -381,7 +381,7 @@ def fill_with_resource_packs(item_factory: StardewItemFactory, random: Random,
                              required_resource_pack: int) -> List[Item]:
     all_resource_packs = items_by_group[Group.RESOURCE_PACK]
     all_resource_packs.extend(items_by_group[Group.TRASH])
-    all_resource_packs.extend(items_by_group[Group.TRAP])
+    # all_resource_packs.extend(items_by_group[Group.TRAP])
 
     items = []
 
