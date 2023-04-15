@@ -45,10 +45,17 @@ class DolphinClientCommandProcessor(ClientCommandProcessor):
         self.output(f"Setting slow mode to {self.ctx.slow_mode}")
 
 class DolphinContext(CommonContext):
-    command_processor: typing.Type[SNIClientCommandProcessor] = SNIClientCommandProcessor
+    command_processor: typing.Type[DolphinClientCommandProcessor] = DolphinClientCommandProcessor
     game: typing.Optional[str] = None  # set in validate_rom
     items_handling: typing.Optional[int] = None  # set in game_watcher
     snes_reconnect_address: typing.Optional[str]
     slow_mode: bool
 
     awaiting_rom: bool
+    rom: typing.Optional[bytes]
+
+    def event_invalid_slot(self) -> typing.NoReturn:
+        if self.dol_socket is not None and not self.dol_socket.closed:
+            async_start(self.dol_socket.close())
+        raise Exception("Invalid ROM detected, "
+                        "please verify that you have loaded the correct rom and reconnect your conector (/dol)")
