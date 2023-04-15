@@ -38,11 +38,17 @@ class VictoryCondition(Choice):
     option_the_master = 1
 
 
+class DeathLink(Toggle):
+    """If on: Whenever another player on death link dies, you will be returned to the starting room."""
+    display_name = "Death Link"
+
+
 lingo_options: Dict[str, type] = {
     "shuffle_doors": ShuffleDoors,
     "orange_tower_access": OrangeTowerAccess,
     "shuffle_colors": ShuffleColors,
-    "victory_condition": VictoryCondition
+    "victory_condition": VictoryCondition,
+    "death_link": DeathLink
 }
 
 

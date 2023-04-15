@@ -137,4 +137,9 @@ class LingoWorld(World):
             lambda state: state.has("Victory", self.player)
 
     def fill_slot_data(self):
-        return self._get_slot_data()
+        slot_data = self._get_slot_data()
+
+        for option_name in lingo_options:
+            slot_data[option_name] = get_option_value(self.multiworld, self.player, option_name)
+
+        return slot_data
