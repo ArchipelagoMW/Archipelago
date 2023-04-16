@@ -54,10 +54,15 @@ class CoinSanityRange(SpecialRange):
     range_start = 1
     range_end = 100
     default = 20
+    special_range_names = {
+        "low": 5,
+        "normal": 20,
+        "high": 50,
+    }
 
 
 class EndingChoice(Choice):
-    """This is for the ending type of the basic game"""
+    """Which ending is considered completion for the basic campaign"""
     internal_name = "ending_choice"
     display_name = "Ending Choice"
     option_any = 0
@@ -66,7 +71,7 @@ class EndingChoice(Choice):
 
 
 class Campaign(Choice):
-    """Whitch game you wana play to end"""
+    """Which campaign you want to play"""
     internal_name = "campaign"
     display_name = "Campaign"
     option_basic = 0
