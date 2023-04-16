@@ -2053,10 +2053,14 @@
         colors:
           - red
           - yellow
+          - blue
       MIDDLE:
         id: Shuffle Room/Panel_middle_middle_2
       SHORTCUT:
         id: Cross Room/Panel_shortcut_shortcut
+        colors:
+          - red
+          - yellow
       SIX (1):
         id: Backside Room/Panel_six_six_6
         colors:
