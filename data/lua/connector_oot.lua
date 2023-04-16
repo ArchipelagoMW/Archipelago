@@ -1,3 +1,4 @@
+local socket = require("socket")
 local json = require('json')
 local math = require('math')
 require('common')
