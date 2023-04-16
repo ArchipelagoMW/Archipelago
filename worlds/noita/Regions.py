@@ -71,19 +71,22 @@ def create_all_regions_and_connections(multiworld: MultiWorld, player: int) -> N
 # Notes to create artificial spheres:
 # - Shaft is excluded to disconnect Mines from the Snowy Depths
 # - Lukki Lair is disconnected from The Vault
-# - Overgrown Cavern is disconnected from the Desert
-# - Snow Chasm is disconnected from the Snowy Wastelands
+# - Overgrown Cavern is connected to the Underground Jungle instead of the Desert due to similar difficulty
+# - Powerplant is disconnected from the Sandcave due to difficulty and sphere creation
+# - Snow Chasm is disconnected from the Snowy Wasteland
+# - Pyramid is connected to the Hiisi Base instead of the Desert due to similar difficulty
+# - Frozen Vault is connected to the Vault instead of the Snowy Wasteland due to similar difficulty
 noita_connections: Dict[str, Set[str]] = {
     "Menu": {"Forest"},
     "Forest": {"Mines", "Floating Island", "Desert", "Snowy Wasteland"},
-    "Snowy Wasteland": {"Frozen Vault", "Lake", "Forest"},
-    "Frozen Vault": {"Snowy Wasteland"},
+    "Snowy Wasteland": {"Lake", "Forest"},
+    "Frozen Vault": {"The Vault"},
     "Lake": {"Snowy Wasteland", "Desert"},
-    "Desert": {"Lake", "Pyramid"},
+    "Desert": {"Lake", "Forest"},
     "Floating Island": {"Forest"},
-    "Pyramid": {"Desert"},
+    "Pyramid": {"Hiisi Base"},
     "Overgrown Cavern": {"Sandcave"},
-    "Sandcave": {"Powerplant", "Overgrown Cavern"},
+    "Sandcave": {"Overgrown Cavern"},
 
     ###
     "Mines": {"Collapsed Mines", "Coal Pits Holy Mountain", "Lava Lake", "Forest"},
@@ -106,7 +109,7 @@ noita_connections: Dict[str, Set[str]] = {
 
     ###
     "Hiisi Base Holy Mountain": {"Hiisi Base"},
-    "Hiisi Base": {"Hiisi Base Holy Mountain", "Secret Shop", "Underground Jungle Holy Mountain"},
+    "Hiisi Base": {"Hiisi Base Holy Mountain", "Secret Shop", "Pyramid", "Underground Jungle Holy Mountain"},
     "Secret Shop": {"Hiisi Base"},
 
     ###
@@ -114,19 +117,19 @@ noita_connections: Dict[str, Set[str]] = {
     "Underground Jungle": {"Underground Jungle Holy Mountain", "Dragoncave", "Vault Holy Mountain",
                            "Lukki Lair"},
     "Dragoncave": {"Underground Jungle"},
-    "Lukki Lair": {"Underground Jungle", "Snow Chasm"},
+    "Lukki Lair": {"Underground Jungle", "Snow Chasm", "Frozen Vault"},
     "Snow Chasm": {},
 
     ###
     "Vault Holy Mountain": {"The Vault"},
-    "The Vault": {"Vault Holy Mountain", "Temple of the Art Holy Mountain"},
+    "The Vault": {"Vault Holy Mountain", "Frozen Vault", "Temple of the Art Holy Mountain"},
 
     ###
     "Temple of the Art Holy Mountain": {"Temple of the Art"},
     "Temple of the Art": {"Temple of the Art Holy Mountain", "Laboratory Holy Mountain", "The Tower",
                           "Wizard's Den"},
     "Wizard's Den": {"Temple of the Art", "Powerplant"},
-    "Powerplant": {"Wizard's Den", "Deep Underground", "Sandcave"},
+    "Powerplant": {"Wizard's Den", "Deep Underground"},
     "The Tower": {"Forest"},
     "Deep Underground": {},
 
