@@ -769,6 +769,9 @@
         check: True
         required_door:
           door: Eight Painting
+        required_room:
+          - Elements Area
+          - Courtyard
       I (Seven):
         id: Strand Room/Panel_i_strings
         colors: blue
