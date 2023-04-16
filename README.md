@@ -43,6 +43,7 @@ Currently, the following games are supported:
 * The Legend of Zelda: Link's Awakening DX
 * Clique
 * Adventure
+* DLC Quest
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled

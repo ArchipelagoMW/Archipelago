@@ -1,23 +1,24 @@
 import collections
+import concurrent.futures
 import logging
 import os
-import time
-import zlib
-import concurrent.futures
 import pickle
 import tempfile
+import time
 import zipfile
-from typing import Dict, List, Tuple, Optional, Set
+import zlib
+from typing import Dict, List, Optional, Set, Tuple
 
-from BaseClasses import Item, MultiWorld, CollectionState, Region, LocationProgressType, Location
 import worlds
-from worlds.alttp.SubClasses import LTTPRegionType
-from worlds.alttp.Regions import is_main_entrance
-from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
-from worlds.alttp.Shops import FillDisabledShopSlots
-from Utils import output_path, get_options, __version__, version_tuple
-from worlds.generic.Rules import locality_rules, exclusion_rules
+from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
+from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
+from Options import StartInventoryPool
+from Utils import __version__, get_options, output_path, version_tuple
 from worlds import AutoWorld
+from worlds.alttp.Regions import is_main_entrance
+from worlds.alttp.Shops import FillDisabledShopSlots
+from worlds.alttp.SubClasses import LTTPRegionType
+from worlds.generic.Rules import exclusion_rules, locality_rules
 
 ordered_areas = (
     'Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
@@ -116,6 +117,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for _ in range(count):
                 world.push_precollected(world.create_item(item_name, player))
 
+        for item_name, count in world.start_inventory_from_pool.setdefault(player, StartInventoryPool({})).value.items():
+            for _ in range(count):
+                world.push_precollected(world.create_item(item_name, player))
+
     logger.info('Creating World.')
     AutoWorld.call_all(world, "create_regions")
 
@@ -148,6 +153,32 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             world.get_location(location_name, player).progress_type = LocationProgressType.PRIORITY
 
     AutoWorld.call_all(world, "generate_basic")
+
+    # remove starting inventory from pool items.
+    # Because some worlds don't actually create items during create_items this has to be as late as possible.
+    if any(world.start_inventory_from_pool[player].value for player in world.player_ids):
+        new_items: List[Item] = []
+        depletion_pool: Dict[int, Dict[str, int]] = {
+            player: world.start_inventory_from_pool[player].value.copy() for player in world.player_ids}
+        for player, items in depletion_pool.items():
+            player_world: AutoWorld.World = world.worlds[player]
+            for count in items.values():
+                new_items.append(player_world.create_filler())
+        target: int = sum(sum(items.values()) for items in depletion_pool.values())
+        for item in world.itempool:
+            if depletion_pool[item.player].get(item.name, 0):
+                target -= 1
+                depletion_pool[item.player][item.name] -= 1
+                # quick abort if we have found all items
+                if not target:
+                    break
+            else:
+                new_items.append(item)
+        for player, remaining_items in depletion_pool.items():
+            if remaining_items:
+                raise Exception(f"{world.get_player_name(player)}"
+                                f" is trying to remove items from their pool that don't exist: {remaining_items}")
+        world.itempool[:] = new_items
 
     # temporary home for item links, should be moved out of Main
     for group_id, group in world.groups.items():

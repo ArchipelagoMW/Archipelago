@@ -14,10 +14,12 @@ import itertools
 import shlex
 import subprocess
 import sys
+import webbrowser
 from os.path import isfile
 from shutil import which
 from typing import Sequence, Union, Optional
 
+import Utils
 from worlds.LauncherComponents import Component, components, Type, SuffixIdentifier
 
 if __name__ == "__main__":
@@ -38,7 +40,6 @@ def open_host_yaml():
         exe = which("open")
         subprocess.Popen([exe, file])
     else:
-        import webbrowser
         webbrowser.open(file)
 
 
@@ -58,23 +59,36 @@ def open_patch():
             launch([*get_exe(component), file], component.cli)
 
 
+def generate_yamls():
+    from Options import generate_yaml_templates
+
+    target = Utils.user_path("Players", "Templates")
+    generate_yaml_templates(target, False)
+    open_folder(target)
+
+
 def browse_files():
-    file = user_path()
+    open_folder(user_path())
+
+
+def open_folder(folder_path):
     if is_linux:
         exe = which('xdg-open') or which('gnome-open') or which('kde-open')
-        subprocess.Popen([exe, file])
+        subprocess.Popen([exe, folder_path])
     elif is_macos:
         exe = which("open")
-        subprocess.Popen([exe, file])
+        subprocess.Popen([exe, folder_path])
     else:
-        import webbrowser
-        webbrowser.open(file)
+        webbrowser.open(folder_path)
 
 
 components.extend([
     # Functions
     Component('Open host.yaml', func=open_host_yaml),
     Component('Open Patch', func=open_patch),
+    Component('Generate Template Settings', func=generate_yamls),
+    Component('Discord Server', func=lambda: webbrowser.open("https://discord.gg/8Z65BR2")),
+    Component('18+ Discord Server', func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
     Component('Browse Files', func=browse_files),
 ])
 

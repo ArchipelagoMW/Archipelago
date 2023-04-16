@@ -5,7 +5,7 @@
 - Stardew Valley on PC (Recommended: [Steam version](https://store.steampowered.com/app/413150/Stardew_Valley/))
 - SMAPI ([Mod loader for Stardew Valley](https://smapi.io/))
 - [StardewArchipelago Mod Release 2.x.x](https://github.com/agilbert1412/StardewArchipelago/releases)
-    - It is important to use a mod release of version 2.x.x to play seeds that have been generated here. Later releases can only be used with later releases of the world generator, that are not hosted on archipelago.gg yet.
+    - It is important to use a mod release of version 3.x.x to play seeds that have been generated here. Later releases can only be used with later releases of the world generator, that are not hosted on archipelago.gg yet.
 
 ## Optional Software
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
@@ -23,7 +23,7 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a YAML file?
 
-You can customize your settings by visiting the [Stardew Valley Player Settings Page](../player-settings)
+You can customize your settings by visiting the [Stardew Valley Player Settings Page](/games/Stardew%20Valley/player-settings)
 
 ## Joining a MultiWorld Game
 
@@ -56,7 +56,14 @@ The password is optional.
 
 Your game will connect automatically to Archipelago, and reconnect automatically when loading the save, later.
 
-You will never need to enter this information again for this character.
+You will never need to enter this information again for this character, unless your room changes its ip or port.
+If the room's ip or port **does** change, you can follow these instructions to modify the connection information of your save file
+- Launch modded Stardew Valley
+- While **on the main menu** of the game, enter the follow command **in the SMAPI console**:
+- `connect_override ip:port slot password`
+- Example: `connect_override archipelago.gg:38281 StardewPlayer`
+- Load your save game. The new connection information will be used, instead of the saved one
+- Play a full day, sleep, and save the game. This connection information will overwrite the previous one and become permanent.
 
 ### Interacting with the MultiWorld from in-game
 

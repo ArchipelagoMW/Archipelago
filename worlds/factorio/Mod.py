@@ -96,7 +96,7 @@ def generate_mod(world: "Factorio", output_directory: str):
             settings_template = template_env.get_template("settings.lua")
     # get data for templates
     locations = [(location, location.item)
-                 for location in world.locations]
+                 for location in world.science_locations]
     mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.get_file_safe_player_name(player)}"
 
     random = multiworld.per_slot_randoms[player]
