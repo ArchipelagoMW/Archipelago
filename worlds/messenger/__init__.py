@@ -71,10 +71,8 @@ class MessengerWorld(World):
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         for player in multiworld.get_game_players(cls.game):
             player_name = multiworld.player_name[player] = multiworld.get_player_name(player).replace("_", " ")
-            if not player_name.isalnum():
-                for char in player_name:
-                    if not (char.isalnum() or char in {' ', '-'}):
-                        raise NameError(f"Player name {player_name} is not alpha-numeric.")
+            if not all(c.isalnum() or c in "- " for c in player_name):
+                raise ValueError(f"Player name {player_name} is not alpha-numeric.")
 
     def generate_early(self) -> None:
         if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
