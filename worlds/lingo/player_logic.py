@@ -83,6 +83,7 @@ class LingoPlayerLogic:
             if item.should_include(world, player):
                 self.REAL_ITEMS.append(name)
 
-        if get_option_value(world, player, "orange_tower_access") == 2:
+        if get_option_value(world, player, "shuffle_doors") > 0 and get_option_value(world, player,
+                                                                                     "orange_tower_access") == 2:
             for i in range(0, 6):
                 self.REAL_ITEMS.append("Progressive Orange Tower")
