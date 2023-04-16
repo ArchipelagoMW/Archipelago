@@ -27,8 +27,8 @@ class MuseDashWebWorld(WebWorld):
 
 
 class MuseDashWorld(World):
-    """Muse Dash is a rhythm game, where you hit objects to the beat of one of 400+ songs.
-    Play through a selection of randomly chosen songs, collecting music sheets until you have enough to play and beat the final song!"""
+    """Muse Dash is a rhythm game where you hit objects to the beat of one of 400+ songs.
+    Play through a selection of randomly chosen songs, collecting music sheets until you have enough to play and complete the goal song!"""
 
     # FUTURE OPTIONS
     # - Album Rando.
