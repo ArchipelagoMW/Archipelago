@@ -745,7 +745,7 @@ class CollectionState():
         return all(self.prog_items[item, player] for item in items)
 
     def has_any(self, items: Set[str], player: int) -> bool:
-        """Returns True if one item name of items is in state at least once."""
+        """Returns True if at least one item name of items is in state at least once."""
         return any(self.prog_items[item, player] for item in items)
 
     def count(self, item: str, player: int) -> int:
