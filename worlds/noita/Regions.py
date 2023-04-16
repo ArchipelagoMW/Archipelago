@@ -75,6 +75,7 @@ def create_all_regions_and_connections(multiworld: MultiWorld, player: int) -> N
 # - Powerplant is disconnected from the Sandcave due to difficulty and sphere creation
 # - Snow Chasm is disconnected from the Snowy Wasteland
 # - Pyramid is connected to the Hiisi Base instead of the Desert due to similar difficulty
+# - Frozen Vault is connected to the Vault instead of the Snowy Wasteland due to similar difficulty
 noita_connections: Dict[str, Set[str]] = {
     "Menu": {"Forest"},
     "Forest": {"Mines", "Floating Island", "Desert", "Snowy Wasteland"},
