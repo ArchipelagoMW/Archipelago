@@ -176,7 +176,7 @@
       The Traveled:
         door: Traveled Entrance
       Roof: True # through the sunwarp
-      Outside The Undeterred: # this could be its own door
+      Outside The Undeterred: # this could be its own door (NOTE: used in hardcoded pilgrimage)
         room: Outside The Undeterred
         door: Fours
     panels:
@@ -264,7 +264,7 @@
           door: Eights
   Pilgrim Room:
     entrances:
-      # How do we describe the pilgrimage? It might need to be a hardcoded special case.
+      Outside The Agreeable: True # The pilgrimage is hardcoded in rules.py
       The Seeker:
         door: Shortcut to The Seeker
       Starting Room:
@@ -1016,10 +1016,10 @@
     panels:
       SIZE (Small):
         id: Entry Room/Panel_size_small
-        colors: grey
+        colors: gray
       SIZE (Big):
         id: Entry Room/Panel_size_big
-        colors: grey
+        colors: gray
       DRAWL + RUNS:
         id: Tower Room/Panel_drawl_runs_enter_5
         colors: orange
@@ -1047,12 +1047,60 @@
         room: Orange Tower
         door: Seventh Floor
     panels:
-      # TODO
-      THE END: # EndPanel/Panel_end_end
+      THE END:
+        id: EndPanel/Panel_end_end
+        check: True
+      THE MASTER:
+        id: Countdown Panels/Panel_master_master
+        check: True
+        required_door:
+          door: Mastery Achievements
+    doors:
+      Mastery Achievements:
         event: True
-      #THE MASTER:
-      #  id: Countdown Panels/Panel_master_master
-      #  event: True
+        panels:
+          - room: The Seeker
+            panel: Achievement
+          - room: The Tenacious
+            panel: Achievement
+          - room: The Agreeable
+            panel: Achievement
+          - room: The Perceptive
+            panel: Achievement
+          - room: The Fearless
+            panel: Achievement
+          - room: The Observant
+            panel: Achievement
+          - room: The Incomparable
+            panel: Achievement
+          - room: The Colorful
+            panel: Achievement
+          - room: The Initiated
+            panel: Achievement
+          - room: The Traveled
+            panel: Achievement
+          - room: Outside The Initiated
+            panel: The Optimistic
+          - room: The Bold
+            panel: Achievement
+          - room: The Undeterred
+            panel: Achievement
+          - room: The Bearer
+            panel: Achievement
+          - room: The Steady
+            panel: Achievement
+          - room: The Artistic (Smiley)
+            panel: Achievement
+          - room: The Discerning
+            panel: Achievement
+          - room: The Wondrous
+            panel: Achievement
+          - room: The Wise
+            panel: Achievement
+          - room: The Red
+            panel: Achievement
+          - room: The Ecstatic
+            panel: Achievement
   Roof:
     entrances:
       Orange Tower Seventh Floor: True
@@ -1366,9 +1414,10 @@
         id: Rhyme Room/Panel_locked_knocked
         colors: purple
       The Optimistic:
-        # How will we describe the access rules for this?
         id: Countdown Panels/Panel_optimistic_optimistic
-        # check: True
+        check: True
+        required_door:
+          door: Backsides
     doors:
       Shortcut to Hub Room:
         id: Appendix Room Area Doors/Door_recover_discover
@@ -1425,6 +1474,17 @@
             panel: GREEN
           - room: Outside The Agreeable
             panel: PURPLE
+      Backsides:
+        event: True
+        panels:
+          - room: The Observant
+            panel: BACKSIDE
+          - room: Courtyard
+            panel: BACKSIDE
+          - room: Directional Gallery
+            panel: BACKSIDE
+          - room: The Bearer
+            panel: BACKSIDE
   The Initiated:
     entrances:
       Outside The Initiated:

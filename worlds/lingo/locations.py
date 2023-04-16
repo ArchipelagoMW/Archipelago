@@ -54,7 +54,7 @@ class StaticLingoLocations:
 
         for room_name, doors in StaticLingoLogic.DOORS_BY_ROOM.items():
             for door_name, door in doors.items():
-                if door.skip_location or door.panels is None:
+                if door.skip_location or door.event or door.panels is None:
                     continue
                 
                 locat_name = door.location_name

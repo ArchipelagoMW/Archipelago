@@ -150,8 +150,8 @@ config.each do |room_name, room|
       end
     end
 
-    if not door.include?("id") and not door.include?("painting_id") and not door["skip_item"] then
-      puts "#{room_name} - #{door_name} :::: Should be marked skip_item if there are no doors or paintings"
+    if not door.include?("id") and not door.include?("painting_id") and not door["skip_item"] and not door["event"] then
+      puts "#{room_name} - #{door_name} :::: Should be marked skip_item or event if there are no doors or paintings"
     end
 
     if door.include?("panels")

@@ -62,7 +62,7 @@ class StaticLingoItems:
 
         for room_name, doors in StaticLingoLogic.DOORS_BY_ROOM.items():
             for door_name, door in doors.items():
-                if door.skip_item is False:
+                if door.skip_item is False and door.event is False:
                     self.create_item(door.item_name, False, True,
                                      "orange tower" if room_name == "Orange Tower" else "doors", door.door_ids,
                                      door.painting_ids)

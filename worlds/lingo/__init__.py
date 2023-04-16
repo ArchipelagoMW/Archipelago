@@ -11,6 +11,7 @@ from .locations import LingoLocation, StaticLingoLocations
 from .Options import lingo_options, get_option_value
 from ..generic.Rules import set_rule
 from .rules import LingoLogic, set_rules
+from .player_logic import LingoPlayerLogic
 
 
 class LingoWebWorld(WebWorld):
@@ -55,12 +56,15 @@ class LingoWorld(World):
             },
         }
 
+    def generate_early(self):
+        self.player_logic = LingoPlayerLogic(self.multiworld, self.player)
+
     def create_region(self, room: Room):
         new_region = Region(room.name, self.player, self.multiworld)
 
-        for location_name, location in StaticLingoLocations.ALL_LOCATION_TABLE.items():
-            if location.room == room.name:
-                new_loc = LingoLocation(self.player, location_name, location.code, new_region)
+        if room.name in self.player_logic.LOCATIONS_BY_ROOM.keys():
+            for location in self.player_logic.LOCATIONS_BY_ROOM[room.name]:
+                new_loc = LingoLocation(self.player, location.name, location.code, new_region)
                 new_region.locations.append(new_loc)
 
         self.multiworld.regions += [
@@ -72,7 +76,7 @@ class LingoWorld(World):
         source_region = self.multiworld.get_region(entrance.room, self.player)
         connection = Entrance(self.player, f"{entrance.room} to {target.name}", source_region)
         connection.access_rule = lambda state: state.lingo_can_use_entrance(
-            target.name, entrance.doors, self.multiworld, self.player)
+            target.name, entrance.doors, self.multiworld, self.player, self.player_logic)
 
         source_region.exits.append(connection)
         connection.connect(target_region)
@@ -91,30 +95,17 @@ class LingoWorld(World):
     
     def create_items(self):
         pool = []
-        placed_events = 0
 
-        for name, item in self.static_items.ALL_ITEM_TABLE.items():
-            if item.should_include(self.multiworld, self.player):
-                new_item = self.create_item(name)
-                pool.append(new_item)
-        
-        if get_option_value(self.multiworld, self.player, "orange_tower_access") == 2:
-            for i in range(0, 6):
-                new_item = self.create_item("Progressive Orange Tower")
-                pool.append(new_item)
-        
-        victory_item = LingoItem("Victory", ItemClassification.progression, None, player=self.player)
-        victory_condition = get_option_value(self.multiworld, self.player, "victory_condition")
-        if victory_condition == 0:  # THE END
-            location_obj = self.multiworld.get_location("Orange Tower Seventh Floor - THE END", self.player)
-            location_obj.place_locked_item(victory_item)
-            placed_events += 1
-        elif victory_condition == 1:  # THE MASTER
-            location_obj = self.multiworld.get_location("Orange Tower Seventh Floor - THE MASTER", self.player)
-            location_obj.place_locked_item(victory_item)
-            placed_events += 1
+        for name in self.player_logic.REAL_ITEMS:
+            new_item = self.create_item(name)
+            pool.append(new_item)
 
-        while (len(pool) + placed_events) < len(StaticLingoLocations.ALL_LOCATION_TABLE):
+        for location, item in self.player_logic.EVENT_LOC_TO_ITEM.items():
+            event_item = LingoItem(item, ItemClassification.progression, None, player=self.player)
+            location_obj = self.multiworld.get_location(location, self.player)
+            location_obj.place_locked_item(event_item)
+
+        while len(pool) < len(self.player_logic.REAL_LOCATIONS):
             pool.append(self.create_item("Nothing"))
         
         self.multiworld.itempool += pool
@@ -131,7 +122,7 @@ class LingoWorld(World):
         return new_item
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player)
+        set_rules(self.multiworld, self.player, self.player_logic)
         
         self.multiworld.completion_condition[self.player] = \
             lambda state: state.has("Victory", self.player)
