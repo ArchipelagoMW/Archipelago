@@ -10,7 +10,7 @@ Go through the standard installation process for [Noita](https://noitagame.com/)
 
 Download the Archipelago mod zip from the GitHub page:
 
-[Archipelago Mod Download](https://github.com/DaftBrit/NoitaArchipelago/archive/refs/heads/master.zip)
+[Archipelago Mod Download](https://github.com/DaftBrit/NoitaArchipelago/releases/latest)
 
 Firstly, go to your Noita installation directory.
 
