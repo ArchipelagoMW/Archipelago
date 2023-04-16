@@ -255,7 +255,7 @@ class WitnessWorld(World):
 
             self.multiworld.per_slot_randoms[self.player].shuffle(audio_logs)
 
-            duplicates = len(audio_logs) // hint_amount
+            duplicates = min(3, len(audio_logs) // hint_amount)
 
             for _ in range(0, hint_amount):
                 hint = generated_hints.pop(0)
