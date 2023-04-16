@@ -2822,13 +2822,22 @@
     panels:
       BROOMED:
         id: Panel Room/Panel_broomed_bedroom
-        colors: yellow
+        colors:
+          - yellow
+          - gray
       LAYS:
         id: Panel Room/Panel_lays_maze
-        colors: purple
+        colors:
+          - yellow
+          - purple
+          - gray
       BASE:
         id: Panel Room/Panel_base_basement
-        colors: blue
+        colors:
+          - yellow
+          - purple
+          - blue
+          - gray
     doors:
       Shortcut to Fifth Floor:
         id:
