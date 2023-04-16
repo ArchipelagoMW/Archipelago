@@ -14,11 +14,10 @@ WRAM_SIZE = 0x20000
 SRAM_1_START = 0xE00000
 
 # KDL3
-KDL3_DEBUG = ROM_START + 0x387E
-KDL3_ROMNAME = ROM_START + 0x7FC0
-KDL3_DEATH_LINK_ADDR = ROM_START + 0x3D010
-KDL3_GOAL_ADDR = ROM_START + 0x3D012
-KDL3_LEVEL_ADDR = ROM_START + 0x3D020
+KDL3_ROMNAME = SRAM_1_START + 0x8100
+KDL3_DEATH_LINK_ADDR = SRAM_1_START + 0x9010
+KDL3_GOAL_ADDR = SRAM_1_START + 0x9012
+KDL3_LEVEL_ADDR = SRAM_1_START + 0x9020
 
 KDL3_GAME_STATE = SRAM_1_START + 0x36D0
 KDL3_GAME_SAVE = SRAM_1_START + 0x3617
@@ -113,9 +112,7 @@ class KDL3SNIClient(SNIClient):
         halken = await snes_read(ctx, WRAM_START, 6)
         if halken != b"halken":
             return
-        is_debug = await snes_read(ctx, KDL3_DEBUG, 1)
-        if is_debug[0]:
-            return  # just in case someone tries to get smart
+        # can't check debug anymore, without going and copying the value. might be important later.
         current_save = await snes_read(ctx, KDL3_GAME_SAVE, 1)
         goal = await snes_read(ctx, KDL3_GOAL_ADDR, 1)
         boss_butch_status = await snes_read(ctx, KDL3_BOSS_BUTCH_STATUS + (current_save[0] * 2), 1)
