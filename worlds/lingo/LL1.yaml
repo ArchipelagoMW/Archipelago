@@ -465,6 +465,8 @@
       Achievement:
         id: Countdown Panels/Panel_tenacious_tenacious
         check: True
+        required_door:
+          door: Required Panels
     doors:
       Shortcut to Hub Room:
         id:
@@ -482,6 +484,23 @@
           - LEVEL (White)
           - RACECAR (White)
           - SOLOS (White)
+      Required Panels:
+        event: True
+        panels:
+          - LEVEL (Black)
+          - RACECAR (Black)
+          - SOLOS (Black)
+          - LEVEL (White)
+          - RACECAR (White)
+          - SOLOS (White)
+          - room: Hub Room
+            panel: SLAUGHTER
+          - room: Crossroads
+            panel: DECAY
+          - room: Outside The Agreeable
+            panel: MASSACRED
+          - room: Dread Hallway
+            panel: DREAD
   Warts/Straw Area:
     entrances:
       Hub Room:
