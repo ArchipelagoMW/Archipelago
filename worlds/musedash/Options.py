@@ -8,7 +8,7 @@ class AllowJustAsPlannedDLCSongs(Toggle):
 
 
 class StreamerModeEnabled(Toggle):
-    """Muse Dash provides an option labelled "Streamer Mode" which removes songs that might trigger copyright issues while streaming.
+    """Muse Dash provides an option labeled "Streamer Mode" which removes songs that might trigger copyright issues while streaming.
     If enabled, only songs available under Streamer Mode will be randomized."""
     display_name = "Streamer Mode Only Songs"
 
@@ -102,7 +102,8 @@ class AdditionalItemPercentage(Range):
 
 
 class MusicSheetCountPercentage(Range):
-    """Music Sheets are what you need to win Muse Dash. This controls how many are in the item pool. (Based on song count)"""
+    """Collecting enough Music Sheets will unlock the goal song needed for completion.
+    This option controls how many are in the item pool, based on the total number of songs."""
     range_start = 5
     range_end = 35
     default = 20
@@ -118,7 +119,7 @@ class MusicSheetWinCountPercentage(Range):
 
 
 class TrapCountPercentage(Range):
-    """This controls how many traps to add into the pool. (Based on song count)
+    """This controls how many traps to add into the pool, based the total number of songs.
      - Traps consist of a visual effect that will get played for the length of a song, or until you die."""
     range_start = 0
     range_end = 35

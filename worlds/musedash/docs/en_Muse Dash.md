@@ -23,5 +23,5 @@ However the **Just as Planned DLC** is recommended as the number of possible son
 - Several song select filters have been added to make finding songs to play easy.
 - Selecting Random while playing a seed will give you a random song you haven't finished yet.
 - Master difficulties are always unlocked while playing a seed.
-- Hints are shown when selecting a song in song select.
+- Hints are shown when viewing a song in song select.
 - You can hint for songs and music sheets from song select.
