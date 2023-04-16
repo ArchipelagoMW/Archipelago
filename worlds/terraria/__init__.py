@@ -99,6 +99,7 @@ class TerrariaWorld(World):
 
         self.ter_goals = ter_goals
         self.goal_items = goal_items
+        self.goal_locations = goal_locations
 
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
@@ -225,3 +226,8 @@ class TerrariaWorld(World):
             self.multiworld.get_location(location, self.player).place_locked_item(TerrariaItem(item, ItemClassification.progression, item_name_to_id[item], self.player))
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has_all(self.goal_items, self.player)
+
+    def fill_slot_data(self) -> dict[str, object]:
+        return {
+            "goal": list(self.goal_locations),
+        }
