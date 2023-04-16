@@ -19,9 +19,9 @@
 
 ## Overview
 
-*OC2-Modding* is a general purpose modding framework which doubles as an Archipelago MultiWorld Client. It works by using Harmony to inject custom code into the game at runtime, so none of the orignal game files need to be modified in any way.
+*OC2-Modding* is a general purpose modding framework which doubles as an Archipelago MultiWorld Client. It works by using Harmony to inject custom code into the game at runtime, so none of the original game files need to be modified in any way.
 
-When connecting to an Archipelago session using the in-game login screen, a modfile containing all relevant game modifications is automatically downloaded and applied.
+When connecting to an Archipelago session using the in-game login screen, a mod file containing all relevant game modifications is automatically downloaded and applied.
 
 From this point, the game will communicate with the Archipelago service directly to manage sending/receiving items. Notifications of important events will appear through an in-game console at the top of the screen.
 
@@ -51,8 +51,11 @@ To completely remove *OC2-Modding*, navigate to your game's installation folder 
 
 1. Visit the [Player Settings](../../../../games/Overcooked!%202/player-settings) page and configure the game-specific settings to taste
 
+*By default, these settings will only use levels from the base game and the "Seasonal" free DLC updates. If you own any of the paid DLC, you may select individual DLC packs to include/exclude on the [Weighted Settings](../../../../weighted-settings) page*
+
 2. Export your yaml file and use it to generate a new randomized game
-- (For instructions on how to generate an Archipelago game, refer to the [Archipelago Web Guide](../../../../tutorial/Archipelago/using_website/en))
+
+*For instructions on how to generate an Archipelago game, refer to the [Archipelago Web Guide](../../../../tutorial/Archipelago/using_website/en)*
 
 ## Joining a MultiWorld Game
 

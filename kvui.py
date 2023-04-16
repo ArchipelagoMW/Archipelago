@@ -151,11 +151,11 @@ class ServerLabel(HovererableLabel):
                     min_cost = int(ctx.server_version >= (0, 3, 9))
                     text += f"\nA new !hint <itemname> costs {ctx.hint_cost}% of checks made. " \
                             f"For you this means every " \
-                            f"{max(min_cost, int(ctx.hint_cost * 0.01 * ctx.total_locations))}" \
-                            f" location checks."
+                            f"{max(min_cost, int(ctx.hint_cost * 0.01 * ctx.total_locations))} " \
+                            "location checks." \
+                            f"\nYou currently have {ctx.hint_points} points."
                 elif ctx.hint_cost == 0:
                     text += "\n!hint is free to use."
-
             else:
                 text += f"\nYou are not authenticated yet."
 

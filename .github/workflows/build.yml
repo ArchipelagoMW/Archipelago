@@ -52,8 +52,8 @@ jobs:
           path: dist/${{ env.ZIP_NAME }}
           retention-days: 7  # keep for 7 days, should be enough
 
-  build-ubuntu1804:
-    runs-on: ubuntu-18.04
+  build-ubuntu2004:
+    runs-on: ubuntu-20.04
     steps:
       # - copy code below to release.yml -
       - uses: actions/checkout@v3

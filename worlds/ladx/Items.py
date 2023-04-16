@@ -202,7 +202,7 @@ links_awakening_items = [
     ItemData(ItemName.RUPEES_200, "RUPEES_200", ItemClassification.progression_skip_balancing),
     ItemData(ItemName.RUPEES_500, "RUPEES_500", ItemClassification.progression_skip_balancing),
     ItemData(ItemName.SEASHELL, "SEASHELL", ItemClassification.progression_skip_balancing),
-    ItemData(ItemName.MESSAGE, "MESSAGE", ItemClassification.progression),
+    ItemData(ItemName.MESSAGE, "MESSAGE", ItemClassification.filler),
     ItemData(ItemName.GEL, "GEL", ItemClassification.trap),
     ItemData(ItemName.BOOMERANG, "BOOMERANG", ItemClassification.progression),
     ItemData(ItemName.HEART_PIECE, "HEART_PIECE", ItemClassification.filler),
