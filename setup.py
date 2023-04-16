@@ -71,6 +71,9 @@ apworlds: set = {
     "Timespinner",
     "Minecraft",
     "The Messenger",
+    "Links Awakening DX",
+    "Super Metroid",
+    "SMZ3",
 }
 
 
@@ -306,16 +309,12 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
                         dirs_exist_ok=True)
 
         os.makedirs(self.buildfolder / "Players" / "Templates", exist_ok=True)
-        from WebHostLib.options import create
-        create()
+        from Options import generate_yaml_templates
         from worlds.AutoWorld import AutoWorldRegister
         assert not apworlds - set(AutoWorldRegister.world_types), "Unknown world designated for .apworld"
         folders_to_remove: typing.List[str] = []
+        generate_yaml_templates(self.buildfolder / "Players" / "Templates", False)
         for worldname, worldtype in AutoWorldRegister.world_types.items():
-            if not worldtype.hidden:
-                file_name = worldname+".yaml"
-                shutil.copyfile(os.path.join("WebHostLib", "static", "generated", "configs", file_name),
-                                self.buildfolder / "Players" / "Templates" / file_name)
             if worldname in apworlds:
                 file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
                 world_directory = self.libfolder / "worlds" / file_name

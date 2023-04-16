@@ -1,5 +1,8 @@
 import binascii
+import bsdiff4
 import os
+import pkgutil
+import tempfile
 
 from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial
 from Fill import fill_restrictive
@@ -381,16 +384,14 @@ class LinksAwakeningWorld(World):
                     # Kind of kludge, make it possible for the location to differentiate between local and remote items
                     loc.ladxr_item.location_owner = self.player
 
-        rom_path = "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"
+        rom_name = "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"
         out_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.player_name[self.player]}.gbc"
-        out_file = os.path.join(output_directory, out_name)
-
-        rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gbc")
+        out_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gbc")
 
 
 
         parser = get_parser()
-        args = parser.parse_args([rom_path, "-o", out_name, "--dump"])
+        args = parser.parse_args([rom_name, "-o", out_name, "--dump"])
 
         name_for_rom = self.multiworld.player_name[self.player]
 
@@ -408,14 +409,23 @@ class LinksAwakeningWorld(World):
             player_names=all_names,
             player_id = self.player)
       
-        handle = open(rompath, "wb")
-        rom.save(handle, name="LADXR")
-        handle.close()
-        patch = LADXDeltaPatch(os.path.splitext(rompath)[0]+LADXDeltaPatch.patch_file_ending, player=self.player,
-                                player_name=self.multiworld.player_name[self.player], patched_path=rompath)
+        with open(out_path, "wb") as handle:
+            rom.save(handle, name="LADXR")
+
+        # Write title screen after everything else is done - full gfxmods may stomp over the egg tiles
+        if self.player_options["ap_title_screen"]:
+            with tempfile.NamedTemporaryFile(delete=False) as title_patch:
+                title_patch.write(pkgutil.get_data(__name__, "LADXR/patches/title_screen.bdiff4"))
+        
+            bsdiff4.file_patch_inplace(out_path, title_patch.name)
+            os.unlink(title_patch.name)
+
+
+        patch = LADXDeltaPatch(os.path.splitext(out_path)[0]+LADXDeltaPatch.patch_file_ending, player=self.player,
+                                player_name=self.multiworld.player_name[self.player], patched_path=out_path)
         patch.write()
         if not DEVELOPER_MODE:
-            os.unlink(rompath)
+            os.unlink(out_path)
 
     def generate_multi_key(self):
         return bytearray(self.multiworld.random.getrandbits(8) for _ in range(10)) + self.player.to_bytes(2, 'big')

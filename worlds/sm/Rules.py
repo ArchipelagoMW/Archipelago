@@ -1,7 +1,7 @@
-from ..generic.Rules import set_rule, add_rule
+from worlds.generic.Rules import set_rule, add_rule
 
-from worlds.sm.variaRandomizer.graph.vanilla.graph_locations import locationsDict
-from worlds.sm.variaRandomizer.logic.logic import Logic
+from .variaRandomizer.graph.vanilla.graph_locations import locationsDict
+from .variaRandomizer.logic.logic import Logic
 
 def evalSMBool(smbool, maxDiff):
     return smbool.bool == True and smbool.difficulty <= maxDiff
