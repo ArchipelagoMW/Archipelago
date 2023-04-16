@@ -26,6 +26,16 @@ class BundleItem:
     def as_quality(self, quality: int):
         return BundleItem.item_bundle(self.item.name, self.item.item_id, self.amount, quality)
 
+    def as_gold_quality(self):
+        return self.as_quality(2)
+
+    def as_quality_crop(self):
+        amount = 5
+        difficult_crops = ["Sweet Gem Berry", "Ancient Fruit"]
+        if self.item.name in difficult_crops:
+            amount = 1
+        return self.as_gold_quality().as_amount(amount)
+
     def __repr__(self):
         return f"{self.amount} {quality_dict[self.quality]} {self.item.name}"
 
@@ -281,7 +291,7 @@ summer_crops_items = [blueberry, corn, hops, hot_pepper, melon, poppy,
 fall_crops_items = [corn, sunflower, wheat, amaranth, bok_choy, cranberries,
                     eggplant, fairy_rose, grape, pumpkin, yam, sweet_gem_berry]
 all_crops_items = sorted({*spring_crop_items, *summer_crops_items, *fall_crops_items})
-quality_crops_items = [item.as_quality(2).as_amount(5) for item in all_crops_items]
+quality_crops_items = [item.as_quality_crop() for item in all_crops_items]
 # TODO void_egg, dinosaur_egg, ostrich_egg, golden_egg
 animal_product_items = [egg, large_egg, brown_egg, large_brown_egg, wool, milk, large_milk,
                         goat_milk, large_goat_milk, truffle, duck_feather, duck_egg, rabbit_foot]
