@@ -70,7 +70,7 @@ def get_rules_lookup(player: int):
                         state.has("Wood Pot Top DUPE", player) and
                         state.has("Crystal Pot Top DUPE", player) and
                         state.has("Sand Pot Top DUPE", player) and
-                        state.has("Metal Top DUPE", player)
+                        state.has("Metal Pot Top DUPE", player)
             }
     }
     return rules_lookup
