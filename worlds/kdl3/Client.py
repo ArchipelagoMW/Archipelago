@@ -23,10 +23,12 @@ KDL3_GAME_STATE = SRAM_1_START + 0x36D0
 KDL3_GAME_SAVE = SRAM_1_START + 0x3617
 KDL3_LIFE_COUNT = SRAM_1_START + 0x39CF
 KDL3_KIRBY_HP = SRAM_1_START + 0x39D1
+KDL3_BOSS_HP = SRAM_1_START + 0x39D5
 KDL3_LIFE_VISUAL = SRAM_1_START + 0x39E3
 KDL3_HEART_STARS = SRAM_1_START + 0x53A7
 KDL3_WORLD_UNLOCK = SRAM_1_START + 0x53CB
 KDL3_LEVEL_UNLOCK = SRAM_1_START + 0x53CD
+KDL3_CURRENT_LEVEL = SRAM_1_START + 0x53D3
 KDL3_BOSS_STATUS = SRAM_1_START + 0x53D5
 KDL3_INVINCIBILITY_TIMER = SRAM_1_START + 0x54B1
 KDL3_MG5_STATUS = SRAM_1_START + 0x5EE4
@@ -50,10 +52,17 @@ class KDL3SNIClient(SNIClient):
     async def deathlink_kill_player(self, ctx) -> None:
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
         game_state = await snes_read(ctx, KDL3_GAME_STATE, 1)
-        if game_state == 0xFF:
+        if game_state[0] == 0xFF:
             return  # despite how funny it is, don't try to kill Kirby in a menu
+
+        current_stage = await snes_read(ctx, KDL3_CURRENT_LEVEL, 1)
+        if current_stage[0] == 0x7:  # boss stage
+            boss_hp = await snes_read(ctx, KDL3_BOSS_HP, 1)
+            if boss_hp[0] == 0:
+                return  # sending a deathlink after defeating a boss has softlock potential
+
         current_hp = await snes_read(ctx, KDL3_KIRBY_HP, 1)
-        if current_hp == 0:
+        if current_hp[0] == 0:
             return  # don't kill Kirby while he's already dead
         snes_buffered_write(ctx, KDL3_KIRBY_HP, bytes([0x00]))
 
@@ -127,8 +136,8 @@ class KDL3SNIClient(SNIClient):
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
         current_bgm = await snes_read(ctx, KDL3_CURRENT_BGM, 1)
-        if current_bgm[0] in (0x00, 0x21, 0x22, 0x23, 0x25):
-            return  # title screen, opening, save select
+        if current_bgm[0] in (0x00, 0x21, 0x22, 0x23, 0x25, 0x2A, 0x2B):
+            return  # null, title screen, opening, save select, true and false endings
         game_state = await snes_read(ctx, KDL3_GAME_STATE, 1)
         current_hp = await snes_read(ctx, KDL3_KIRBY_HP, 1)
         if "DeathLink" in ctx.tags and game_state[0] == 0x00 and ctx.last_death_link + 1 < time.time():

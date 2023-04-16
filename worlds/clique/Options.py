@@ -4,7 +4,7 @@ from Options import Option, Toggle
 
 
 class HardMode(Toggle):
-    """Only for masochists: requires 2 presses!"""
+    """Only for the most masochistically inclined... Requires button activation!"""
     display_name = "Hard Mode"
 
 

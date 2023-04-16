@@ -1,13 +1,19 @@
+import bsdiff4
 import binascii
+import Utils
 
 b2h = binascii.hexlify
 h2b = binascii.unhexlify
 
 
 class ROM:
-    def __init__(self, filename):
-        data = open(filename, "rb").read()
-        #assert len(data) == 1024 * 1024
+    def __init__(self, filename, patches=None):
+        data = open(Utils.user_path(filename), "rb").read()
+
+        if patches:
+            for patch in patches:
+                data = bsdiff4.patch(data, patch)
+
         self.banks = []
         for n in range(0x40):
             self.banks.append(bytearray(data[n*0x4000:(n+1)*0x4000]))
