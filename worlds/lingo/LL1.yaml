@@ -264,7 +264,7 @@
           door: Eights
   Pilgrim Room:
     entrances:
-      Outside The Agreeable: True # The pilgrimage is hardcoded in rules.py
+      # The pilgrimage is hardcoded in rules.py
       The Seeker:
         door: Shortcut to The Seeker
       Starting Room:

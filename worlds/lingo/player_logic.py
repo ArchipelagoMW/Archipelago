@@ -17,15 +17,15 @@ class LingoPlayerLogic:
     Defines logic after a player's options have been applied
     """
 
-    ITEM_BY_DOOR: Dict[str, Dict[str, str]] = {}
+    ITEM_BY_DOOR: Dict[str, Dict[str, str]]
 
-    LOCATIONS_BY_ROOM: Dict[str, List[PlayerLocation]] = {}
-    REAL_LOCATIONS: List[str] = []
+    LOCATIONS_BY_ROOM: Dict[str, List[PlayerLocation]]
+    REAL_LOCATIONS: List[str]
 
-    EVENT_LOC_TO_ITEM: Dict[str, str] = {}
-    REAL_ITEMS: List[str] = []
+    EVENT_LOC_TO_ITEM: Dict[str, str]
+    REAL_ITEMS: List[str]
 
-    VICTORY_CONDITION = ""
+    VICTORY_CONDITION: str
 
     def add_location(self, room: str, loc: PlayerLocation):
         self.LOCATIONS_BY_ROOM.setdefault(room, []).append(loc)
@@ -34,6 +34,13 @@ class LingoPlayerLogic:
         self.ITEM_BY_DOOR.setdefault(room, {})[door] = item
 
     def __init__(self, world: MultiWorld, player: int):
+        self.ITEM_BY_DOOR = {}
+        self.LOCATIONS_BY_ROOM = {}
+        self.REAL_LOCATIONS = []
+        self.EVENT_LOC_TO_ITEM = {}
+        self.REAL_ITEMS = []
+        self.VICTORY_CONDITION = ""
+
         if get_option_value(world, player, "shuffle_doors") == 0:  # no door shuffle
             for room_name, room_data in StaticLingoLogic.DOORS_BY_ROOM.items():
                 for door_name, door_data in room_data.items():

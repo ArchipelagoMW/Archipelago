@@ -81,6 +81,16 @@ class LingoWorld(World):
         source_region.exits.append(connection)
         connection.connect(target_region)
 
+    def handle_pilgrim_room(self):
+        target_region = self.multiworld.get_region("Pilgrim Room", self.player)
+        source_region = self.multiworld.get_region("Outside The Agreeable", self.player)
+        connection = Entrance(self.player, f"Pilgrimage", source_region)
+        connection.access_rule = lambda state: state.lingo_can_use_pilgrimage(
+            self.player, self.player_logic)
+
+        source_region.exits.append(connection)
+        connection.connect(target_region)
+
     def create_regions(self):
         self.multiworld.regions += [
             Region("Menu", self.player, self.multiworld)
@@ -92,6 +102,9 @@ class LingoWorld(World):
         for room in StaticLingoLogic.ALL_ROOMS:
             for entrance in room.entrances:
                 self.connect(room, entrance)
+
+        self.handle_pilgrim_room()
+
     
     def create_items(self):
         pool = []

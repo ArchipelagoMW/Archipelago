@@ -18,26 +18,26 @@ class LingoLogic(LogicMixin):
             return True
         else:
             for door in doors:
-                if self._lingo_can_open_door(room, room if door.room is None else door.room, door.door, world, player,
-                                             player_logic):
-                    return True
-            if room == "Pilgrim Room":
-                fake_pilgrimage = [
-                    ["Starting Room", "Main Door"], ["Second Room", "Exit Door"],
-                    ["Crossroads", "Tower Entrance"], ["Orange Tower Fourth Floor", "Hot Crusts Door"],
-                    ["Outside The Initiated", "Shortcut to Hub Room"],
-                    ["Orange Tower First Floor", "Shortcut to Hub Room"],
-                    ["Outside The Undeterred", "Fours"], ["Hub Room", "Crossroads Entrance"],
-                    ["The Tenacious", "Shortcut to Hub Room"], ["Outside The Agreeable", "Tenacious Entrance"]
-                ]
-                viable_option = True
-                for entrance in fake_pilgrimage:
-                    if not self.has(player_logic.ITEM_BY_DOOR[entrance[0]][entrance[1]], player):
-                        viable_option = False
-                        break
-                if viable_option:
+                if self._lingo_can_open_door(room, room if door.room is None else door.room, door.door, world,
+                                             player, player_logic):
                     return True
             return False
+
+    def lingo_can_use_pilgrimage(self, player: int, player_logic: LingoPlayerLogic):
+        fake_pilgrimage = [
+            ["Starting Room", "Main Door"], ["Second Room", "Exit Door"],
+            ["Crossroads", "Tower Entrance"], ["Orange Tower Fourth Floor", "Hot Crusts Door"],
+            ["Outside The Initiated", "Shortcut to Hub Room"],
+            ["Orange Tower First Floor", "Shortcut to Hub Room"],
+            ["Outside The Undeterred", "Fours"], ["Hub Room", "Crossroads Entrance"],
+            ["The Tenacious", "Shortcut to Hub Room"], ["Outside The Agreeable", "Tenacious Entrance"]
+        ]
+        viable_option = True
+        for entrance in fake_pilgrimage:
+            if not self.has(player_logic.ITEM_BY_DOOR[entrance[0]][entrance[1]], player):
+                viable_option = False
+                break
+        return viable_option
 
     def lingo_can_use_location(self, location: PlayerLocation, room_name: str, world: MultiWorld, player: int,
                                player_logic: LingoPlayerLogic):
