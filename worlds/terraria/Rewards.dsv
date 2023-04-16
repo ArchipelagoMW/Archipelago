@@ -1,4 +1,5 @@
 # ordered
+
 Hermes Boots;
 Magic Mirror;
 Demon Conch;
@@ -12,49 +13,108 @@ Fledgling Wings;
 Rod of Discord;
 
 # random
-Anklet of the Wind;
+
+// Movement
 Aglet;
+Anklet of the Wind;
 Ice Skates;
 Lava Charm;
-Obsidian Rose;
-Nature's Gift;
-Feral Claws;
-Magma Stone;
-Shark Tooth Necklace;
-Cobalt Shield;
-Abyssal Amulet;             Calamity;
-Band of Regeneration;
-Philosopher's Stone;
-Cross Necklace;
-Magic Quiver;
-Rifle Scope;
-Celestial Magnet;
-Flying Carpet;
-Lifeform Analyzer;
-Sprit Glyph;                Calamity;
-Moon Charm;
-Neptune's Shell;
+
+Flipper;
+Frog Leg;
 Shoe Spikes;
 Tabi;
-Frog Leg;                   Calamity;
 Black Belt;
-Flipper;                    Calamity;
-Diving Helmet;              Calamity;
-Jellyfish Necklace;         Calamity;
-Depths Charm;               Calamity;
-Anechoic Plating;           Calamity;
-Iron Boots;                 Calamity;
-Flesh Knuckles;
-Putrid Scent;
+
+Flying Carpet;
+
+Moon Charm;
+Neptune's Shell;
+
+// Informational (Cell Phone)
+Compass;
+Depth Meter;
+Radar;
+Tally Counter;
+Lifeform Analyzer;
+DPS Meter;
+Stopwatch;
+Metal Detector;
+Fisherman's Pocket Guide;
+Weather Radio;
+Sextant;
+
+
+// Health and Mana
+Band of Regeneration;
+
+Celestial Magnet;
+Nature's Gift;
+Philosopher's Stone;
+
+// Combat
+Cobalt Shield;
+
+Armor Polish;
+Vitamins;
+Bezoar;
+Adhesive Bandage;
+Megaphone;
+Nazar;
+Fast Clock;
+Trifold Map;
+Blindfold;
+Pocket Mirror;
+
 Paladin's Shield;
 Frozen Turtle Shell;
+
+Flesh Knuckles;
+Putrid Scent;
+
+Feral Claws;
+
+Cross Necklace;
 Star Cloak;
-Fungal Symbiote;            Calamity;
-Gladiator's Locket;         Calamity;
-Wulfrum Acrobatics Pack;    Calamity;
+
+Obsidian Rose;
+Magma Stone;
+
+Shark Tooth Necklace;
+
+Magic Quiver;
+Rifle Scope;
+
+// Construction (Hand of Creation)
+Brick Layer;
+Extendo Grip;
+Paint Sprayer;
+Portable Cement Mixer;
+Treasure Magnet;
+Step Stool;
+
+// Money (Greedy Ring)
 Discount Card;
+Gold Ring;
+Lucky Coin;
+
+// Fishing (Lavaproof Tackle Bag)
+High Test Fishing Line;
+Angler Earring;
+Tackle Box;
+Lavaproof Fishing Hook;
+
+
+// Yoyo Stuff
 Red Counterweight;
 Yoyo Glove;
+
+// Vanilla Forced to Calamity
+Diving Helmet;              Calamity;
+Jellyfish Necklace;         Calamity;
+
+
+// Calamity Accessories
 Corrupt Flask;              Calamity;
 Crimson Flask;              Calamity;
 Craw Carapace;              Calamity;
@@ -82,35 +142,11 @@ Marnite Repulsion Shield;   Calamity;
 Frost Barrier;              Calamity;
 Ancient Fossil;             Calamity;
 Spelunker's Amulet;         Calamity;
-Depth Meter;
-Compass;
-Radar;
-DPS Meter;
-Metal Detector;
-Sextant;
-Stopwatch;
-Tally Counter;
-Fisherman's Pocket Guide;
-High Test Fishing Line;
-Angler Earring;
-Tackle Box;
-Lavaproof Fishing Hook;
-Weather Radio;
-Blindfold;
-Pocket Mirror;
-Vitamins;
-Armor Polish;
-Adhesive Bandage;
-Bezoar;
-Nazar;
-Megaphone;
-Trifold Map;
-Fast Clock;
-Brick Layer;
-Extendo Grip;
-Paint Sprayer;
-Portable Cement Mixer;
-Treasure Magnet;
-Step Stool;
-Gold Ring;
-Lucky Coin;
+Fungal Symbiote;            Calamity;
+Gladiator's Locket;         Calamity;
+Wulfrum Acrobatics Pack;    Calamity;
+Depths Charm;               Calamity;
+Anechoic Plating;           Calamity;
+Iron Boots;                 Calamity;
+Sprit Glyph;                Calamity;
+Abyssal Amulet;             Calamity;
