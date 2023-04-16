@@ -48,9 +48,6 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
         mission_pools[MissionPools.FINAL] = ['The Reckoning']
         # mission_pools[MissionPools.FINAL] = ['All-In']
         return mission_pools
-    elif mission_order_type == 1:
-        # Vanilla Shuffled ignores the player-provided excluded missions
-        excluded_missions = set()
     # Omitting No-Build missions if not shuffling no-build
     if not shuffle_no_build:
         excluded_missions = excluded_missions.union(no_build_regions_list)
