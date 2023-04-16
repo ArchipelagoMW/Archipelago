@@ -1,0 +1,82 @@
+{
+    "massan": {
+        "mapId": 600,
+        "posX": 31,
+        "posY": 25,
+        "orientation": 136,
+        "nodeId": "massan",
+        "startingLife": 4
+    },
+
+    "gumi": {
+        "mapId": 606,
+        "posX": 16,
+        "posY": 15,
+        "orientation": 136,
+        "nodeId": "gumi",
+        "startingLife": 4
+    },
+
+    "ryuma": {
+        "mapId": 616,
+        "posX": 17,
+        "posY": 20,
+        "orientation": 72,
+        "nodeId": "ryuma",
+        "startingLife": 4
+    },
+
+    "waterfall": {
+        "mapId": 532,
+        "posX": 40,
+        "posY": 23,
+        "orientation": 136,
+        "nodeId": "greenmaze_post_whistle",
+        "startingLife": 10
+    },
+
+    "kado": {
+        "mapId": 442,
+        "posX": 22,
+        "posY": 18,
+        "orientation": 200,
+        "nodeId": "route_gumi_ryuma",
+        "startingLife": 4
+    },
+
+    "mercator": {
+        "mapId": 691,
+        "posX": 16,
+        "posY": 15,
+        "orientation": 136,
+        "nodeId": "mercator",
+        "startingLife": 10
+    },
+
+    "greenmaze": {
+        "mapId": 563,
+        "posX": 29,
+        "posY": 33,
+        "orientation": 8,
+        "nodeId": "greenmaze_pre_whistle",
+        "startingLife": 10
+    },
+
+    "verla": {
+        "mapId": 722,
+        "posX": 22,
+        "posY": 22,
+        "orientation": 136,
+        "nodeId": "verla",
+        "startingLife": 16
+    },
+    
+    "destel": {
+        "mapId": 735,
+        "posX": 17,
+        "posY": 18,
+        "orientation": 136,
+        "nodeId": "destel",
+        "startingLife": 20
+    }
+}

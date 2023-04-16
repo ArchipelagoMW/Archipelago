@@ -1,0 +1,72 @@
+[
+    [
+        {
+            "name": "Massan tree",
+            "treeMapId": 512,
+            "exteriorMapId": 424,
+            "nodeId": "route_massan_gumi"
+        },
+        {
+            "name": "Tibor tree",
+            "treeMapId": 534,
+            "exteriorMapId": 451,
+            "nodeId": "route_gumi_ryuma"
+        }
+    ],
+    [
+        {
+            "name": "Mercator front gate tree",
+            "treeMapId": 539,
+            "exteriorMapId": 454,
+            "nodeId": "route_gumi_ryuma"
+        },
+        {
+            "name": "Verla shore tree",
+            "treeMapId": 537,
+            "exteriorMapId": 474,
+            "nodeId": "verla_shore"
+        }
+    ],
+    [
+        {
+            "name": "Destel sector tree",
+            "treeMapId": 536,
+            "exteriorMapId": 488,
+            "nodeId": "route_after_destel"
+        },
+        {
+            "name": "Lake Shrine sector tree",
+            "treeMapId": 513,
+            "exteriorMapId": 501,
+            "nodeId": "route_lake_shrine"
+        }
+    ],
+    [
+        {
+            "name": "Mir Tower sector tree",
+            "treeMapId": 538,
+            "exteriorMapId": 458,
+            "nodeId": "mir_tower_sector"
+        },
+        {
+            "name": "Mountainous area tree",
+            "treeMapId": 535,
+            "exteriorMapId": 484,
+            "nodeId": "mountainous_area"
+        }
+    ],
+    [
+        {
+            "name": "Greenmaze entrance tree",
+            "treeMapId": 510,
+            "exteriorMapId": 561,
+            "nodeId": "greenmaze_pre_whistle"
+        },
+        {
+            "name": "Greenmaze end tree",
+            "treeMapId": 511,
+            "exteriorMapId": 564,
+            "nodeId": "greenmaze_post_whistle"
+        }
+    ]
+]
