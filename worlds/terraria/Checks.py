@@ -1,5 +1,6 @@
 from BaseClasses import Item, Location
 import string
+import pkgutil
 
 class TerrariaItem(Item):
     game = "Terraria"
@@ -223,247 +224,246 @@ def read_data() -> tuple[
 
     progression = set()
 
-    with open("worlds/terraria/Rules.dsv") as file:
-        for line, rule in enumerate(file):
-            goal = None
-            name = None
-            flags = {}
+    for line, rule in enumerate(pkgutil.get_data(__name__, "Rules.dsv").decode().splitlines()):
+        goal = None
+        name = None
+        flags = {}
 
-            sign = True
-            operator = None
-            outer = []
-            conditions = []
+        sign = True
+        operator = None
+        outer = []
+        conditions = []
 
-            pos = NAME
-            for char, id, token in tokens(rule):
-                if pos == NAME:
-                    if id == IDENT:
-                        name = token
-                        pos = NAME_SEMI
-                    elif id == HASH:
-                        pos = GOAL
-                    else:
-                        unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
-                elif pos == NAME_SEMI:
-                    if id == SEMI:
-                        pos = FLAG_OR_SEMI
-                    else:
-                        unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
-                elif pos == FLAG_OR_SEMI:
-                    if id == IDENT:
-                        flag = token
-                        pos = POST_FLAG
-                    elif id == SEMI:
-                        pos = COND_OR_SEMI
-                    else:
-                        unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
-                elif pos == POST_FLAG:
-                    if id == SEMI:
-                        if flag is not None:
-                            if flag in flags:
-                                raise Exception(f"set flag `{flag}` at {line + 1}:{char + 1} that was already set")
-                            flags[flag] = None
-                            flag = None
-                        pos = COND_OR_SEMI
-                    elif id == OR:
-                        pos = FLAG
-                    elif id == LPAREN:
-                        pos = FLAG_ARG
-                    else:
-                        unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
-                elif pos == FLAG:
-                    if id == IDENT:
-                        if flag is not None:
-                            if flag in flags:
-                                raise Exception(f"set flag `{flag}` at {line + 1}:{char + 1} that was already set")
-                            flags[flag] = None
-                            flag = None
-                        flag = token
-                        pos = POST_FLAG
-                    else:
-                        unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
-                elif pos == FLAG_ARG:
-                    if id == IDENT or id == NUM:
+        pos = NAME
+        for char, id, token in tokens(rule):
+            if pos == NAME:
+                if id == IDENT:
+                    name = token
+                    pos = NAME_SEMI
+                elif id == HASH:
+                    pos = GOAL
+                else:
+                    unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
+            elif pos == NAME_SEMI:
+                if id == SEMI:
+                    pos = FLAG_OR_SEMI
+                else:
+                    unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
+            elif pos == FLAG_OR_SEMI:
+                if id == IDENT:
+                    flag = token
+                    pos = POST_FLAG
+                elif id == SEMI:
+                    pos = COND_OR_SEMI
+                else:
+                    unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
+            elif pos == POST_FLAG:
+                if id == SEMI:
+                    if flag is not None:
                         if flag in flags:
                             raise Exception(f"set flag `{flag}` at {line + 1}:{char + 1} that was already set")
-                        flags[flag] = token
+                        flags[flag] = None
                         flag = None
-                        pos = FLAG_ARG_END
-                    else:
-                        unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
-                elif pos == FLAG_ARG_END:
-                    if id == RPAREN:
-                        pos = POST_FLAG
-                    else:
-                        unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
-                elif pos == COND_OR_SEMI:
-                    if id == IDENT:
-                        conditions.append((sign, COND_ITEM, token, None))
-                        sign = True
-                        pos = POST_COND
-                    elif id == HASH:
-                        pos = LOC
-                    elif id == AT:
-                        pos = FN
-                    elif id == NOT:
-                        sign = not sign
-                        pos = COND
-                    elif id == LPAREN:
-                        outer.append((sign, None, conditions))
-                        conditions = []
-                        sign = True
-                        pos = COND
-                    else:
-                        unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
-                elif pos == POST_COND:
-                    if id == SEMI:
-                        if outer:
-                            raise Exception(f"found `;` at {line + 1}:{char + 1} after unclosed `(`")
-                        pos = END
-                    elif id == AND:
-                        if operator is True:
-                            raise Exception(f"found `&` at {line + 1}:{char + 1} in group containing `|`")
-                        operator = False
-                        pos = COND
-                    elif id == OR:
-                        if operator is False:
-                            raise Exception(f"found `|` at {line + 1}:{char + 1} in group containing `&`")
-                        operator = True
-                        pos = COND
-                    elif id == RPAREN:
-                        if not outer:
-                            raise Exception(f"found `)` at {line + 1}:{char + 1} without matching `(`")
-                        condition = operator, conditions
-                        sign, operator, conditions = outer.pop()
-                        conditions.append((sign, COND_GROUP, condition, None))
-                        sign = True
-                        pos = POST_COND
-                    else:
-                        unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
-                elif pos == COND:
-                    if id == IDENT:
-                        conditions.append((sign, COND_ITEM, token, None))
-                        sign = True
-                        pos = POST_COND
-                    elif id == HASH:
-                        pos = LOC
-                    elif id == AT:
-                        pos = FN
-                    elif id == NOT:
-                        sign = not sign
-                    elif id == LPAREN:
-                        outer.append((sign, operator, conditions))
-                        conditions = []
-                        sign = True
-                        operator = None
-                    else:
-                        unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
-                elif pos == LOC:
-                    if id == IDENT:
-                        conditions.append((sign, COND_LOC, token, None))
-                        sign = True
-                        pos = POST_COND
-                    else:
-                        unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
-                elif pos == FN:
-                    if id == IDENT:
-                        function = token
-                        pos = POST_FN
-                    else:
-                        unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
-                elif pos == POST_FN:
-                    if id == LPAREN:
-                        pos = FN_ARG
-                    elif id == SEMI:
-                        conditions.append((sign, COND_FN, function, None))
-                        pos = END
-                    elif id == AND:
-                        conditions.append((sign, COND_FN, function, None))
-                        sign = True
-                        if operator is True:
-                            raise Exception(f"found `&` at {line + 1}:{char + 1} in group containing `|`")
-                        operator = False
-                        pos = COND
-                    elif id == OR:
-                        conditions.append((sign, COND_FN, function, None))
-                        sign = True
-                        if operator is False:
-                            raise Exception(f"found `|` at {line + 1}:{char + 1} in group containing `&`")
-                        operator = True
-                        pos = COND
-                    elif id == RPAREN:
-                        conditions.append((sign, COND_FN, function, None))
-                        if not outer:
-                            raise Exception(f"found `)` at {line + 1}:{char + 1} without matching `(`")
-                        condition = operator, conditions
-                        sign, operator, conditions = outer.pop()
-                        conditions.append((sign, COND_GROUP, condition, None))
-                        sign = True
-                        pos = POST_COND
-                    else:
-                        unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
-                elif pos == FN_ARG:
-                    if id == IDENT or id == NUM:
-                        conditions.append((sign, COND_FN, function, token))
-                        sign = True
-                        pos = FN_ARG_END
-                    else:
-                        unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
-                elif pos == FN_ARG_END:
-                    if id == RPAREN:
-                        pos = POST_COND
-                    else:
-                        unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
-                elif pos == END:
-                    unexpected(line, char, id, token, pos)
-                elif pos == GOAL:
-                    if id == IDENT:
-                        goal = token
-                        pos = END
-                    else:
-                        unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
-
-            if pos != NAME and pos != FLAG_OR_SEMI and pos != COND_OR_SEMI and pos != END:
-                unexpected(line, char + 1, END_OF_LINE, None, pos, POS_FMT, "Rules.dsv")
-
-            if name:
-                if name in rule_indices:
-                    raise Exception(f"rule `{name}` on line `{line + 1}` shadows a previous rule")
-                rule_indices[name] = len(rules)
-                rules.append((name, flags, operator, conditions))
-
-                if "Item" in flags:
-                    item_name = flags["Item"] or f"Post-{name}"
-                    if item_name in item_name_to_id:
-                        raise Exception(f"item `{item_name}` on line `{line + 1}` shadows a previous item")
-                    item_name_to_id[item_name] = next_id
-                    next_id += 1
-                    loc_to_item[name] = item_name
+                    pos = COND_OR_SEMI
+                elif id == OR:
+                    pos = FLAG
+                elif id == LPAREN:
+                    pos = FLAG_ARG
                 else:
-                    loc_to_item[name] = name
+                    unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
+            elif pos == FLAG:
+                if id == IDENT:
+                    if flag is not None:
+                        if flag in flags:
+                            raise Exception(f"set flag `{flag}` at {line + 1}:{char + 1} that was already set")
+                        flags[flag] = None
+                        flag = None
+                    flag = token
+                    pos = POST_FLAG
+                else:
+                    unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
+            elif pos == FLAG_ARG:
+                if id == IDENT or id == NUM:
+                    if flag in flags:
+                        raise Exception(f"set flag `{flag}` at {line + 1}:{char + 1} that was already set")
+                    flags[flag] = token
+                    flag = None
+                    pos = FLAG_ARG_END
+                else:
+                    unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
+            elif pos == FLAG_ARG_END:
+                if id == RPAREN:
+                    pos = POST_FLAG
+                else:
+                    unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
+            elif pos == COND_OR_SEMI:
+                if id == IDENT:
+                    conditions.append((sign, COND_ITEM, token, None))
+                    sign = True
+                    pos = POST_COND
+                elif id == HASH:
+                    pos = LOC
+                elif id == AT:
+                    pos = FN
+                elif id == NOT:
+                    sign = not sign
+                    pos = COND
+                elif id == LPAREN:
+                    outer.append((sign, None, conditions))
+                    conditions = []
+                    sign = True
+                    pos = COND
+                else:
+                    unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
+            elif pos == POST_COND:
+                if id == SEMI:
+                    if outer:
+                        raise Exception(f"found `;` at {line + 1}:{char + 1} after unclosed `(`")
+                    pos = END
+                elif id == AND:
+                    if operator is True:
+                        raise Exception(f"found `&` at {line + 1}:{char + 1} in group containing `|`")
+                    operator = False
+                    pos = COND
+                elif id == OR:
+                    if operator is False:
+                        raise Exception(f"found `|` at {line + 1}:{char + 1} in group containing `&`")
+                    operator = True
+                    pos = COND
+                elif id == RPAREN:
+                    if not outer:
+                        raise Exception(f"found `)` at {line + 1}:{char + 1} without matching `(`")
+                    condition = operator, conditions
+                    sign, operator, conditions = outer.pop()
+                    conditions.append((sign, COND_GROUP, condition, None))
+                    sign = True
+                    pos = POST_COND
+                else:
+                    unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
+            elif pos == COND:
+                if id == IDENT:
+                    conditions.append((sign, COND_ITEM, token, None))
+                    sign = True
+                    pos = POST_COND
+                elif id == HASH:
+                    pos = LOC
+                elif id == AT:
+                    pos = FN
+                elif id == NOT:
+                    sign = not sign
+                elif id == LPAREN:
+                    outer.append((sign, operator, conditions))
+                    conditions = []
+                    sign = True
+                    operator = None
+                else:
+                    unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
+            elif pos == LOC:
+                if id == IDENT:
+                    conditions.append((sign, COND_LOC, token, None))
+                    sign = True
+                    pos = POST_COND
+                else:
+                    unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
+            elif pos == FN:
+                if id == IDENT:
+                    function = token
+                    pos = POST_FN
+                else:
+                    unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
+            elif pos == POST_FN:
+                if id == LPAREN:
+                    pos = FN_ARG
+                elif id == SEMI:
+                    conditions.append((sign, COND_FN, function, None))
+                    pos = END
+                elif id == AND:
+                    conditions.append((sign, COND_FN, function, None))
+                    sign = True
+                    if operator is True:
+                        raise Exception(f"found `&` at {line + 1}:{char + 1} in group containing `|`")
+                    operator = False
+                    pos = COND
+                elif id == OR:
+                    conditions.append((sign, COND_FN, function, None))
+                    sign = True
+                    if operator is False:
+                        raise Exception(f"found `|` at {line + 1}:{char + 1} in group containing `&`")
+                    operator = True
+                    pos = COND
+                elif id == RPAREN:
+                    conditions.append((sign, COND_FN, function, None))
+                    if not outer:
+                        raise Exception(f"found `)` at {line + 1}:{char + 1} without matching `(`")
+                    condition = operator, conditions
+                    sign, operator, conditions = outer.pop()
+                    conditions.append((sign, COND_GROUP, condition, None))
+                    sign = True
+                    pos = POST_COND
+                else:
+                    unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
+            elif pos == FN_ARG:
+                if id == IDENT or id == NUM:
+                    conditions.append((sign, COND_FN, function, token))
+                    sign = True
+                    pos = FN_ARG_END
+                else:
+                    unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
+            elif pos == FN_ARG_END:
+                if id == RPAREN:
+                    pos = POST_COND
+                else:
+                    unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
+            elif pos == END:
+                unexpected(line, char, id, token, pos)
+            elif pos == GOAL:
+                if id == IDENT:
+                    goal = token
+                    pos = END
+                else:
+                    unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
 
-                if "Npc" in flags:
-                    npcs.append(name)
+        if pos != NAME and pos != FLAG_OR_SEMI and pos != COND_OR_SEMI and pos != END:
+            unexpected(line, char + 1, END_OF_LINE, None, pos, POS_FMT, "Rules.dsv")
 
-                if (power := flags.get("Pickaxe")) is not None:
-                    pickaxes[name] = power
+        if name:
+            if name in rule_indices:
+                raise Exception(f"rule `{name}` on line `{line + 1}` shadows a previous rule")
+            rule_indices[name] = len(rules)
+            rules.append((name, flags, operator, conditions))
 
-                if (power := flags.get("Hammer")) is not None:
-                    hammers[name] = power
+            if "Item" in flags:
+                item_name = flags["Item"] or f"Post-{name}"
+                if item_name in item_name_to_id:
+                    raise Exception(f"item `{item_name}` on line `{line + 1}` shadows a previous item")
+                item_name_to_id[item_name] = next_id
+                next_id += 1
+                loc_to_item[name] = item_name
+            else:
+                loc_to_item[name] = name
 
-                if "Mech Boss" in flags:
-                    mech_bosses.append(flags["Item"] or f"Post-{name}")
-                    mech_boss_loc.append(name)
+            if "Npc" in flags:
+                npcs.append(name)
 
-                if "Final Boss" in flags:
-                    final_bosses.append(flags["Item"] or f"Post-{name}")
-                    final_boss_loc.append(name)
+            if (power := flags.get("Pickaxe")) is not None:
+                pickaxes[name] = power
 
-            if goal:
-                if goal in goal_indices:
-                    raise Exception(f"goal `{goal}` on line `{line + 1}` shadows a previous goal")
-                goal_indices[goal] = len(goals)
-                goals.append((len(rules), set()))
+            if (power := flags.get("Hammer")) is not None:
+                hammers[name] = power
+
+            if "Mech Boss" in flags:
+                mech_bosses.append(flags["Item"] or f"Post-{name}")
+                mech_boss_loc.append(name)
+
+            if "Final Boss" in flags:
+                final_bosses.append(flags["Item"] or f"Post-{name}")
+                final_boss_loc.append(name)
+
+        if goal:
+            if goal in goal_indices:
+                raise Exception(f"goal `{goal}` on line `{line + 1}` shadows a previous goal")
+            goal_indices[goal] = len(goals)
+            goals.append((len(rules), set()))
 
     for name, flags, _, _ in rules:
         if "Goal" in flags:
@@ -492,67 +492,66 @@ def read_data() -> tuple[
     labels = {}
     rewards = {}
 
-    with open("worlds/terraria/Rewards.dsv") as file:
-        for line in file:
-            reward = None
-            flags = set()
+    for line in pkgutil.get_data(__name__, "Rewards.dsv").decode().splitlines():
+        reward = None
+        flags = set()
 
-            pos = RWD_NAME
-            for char, id, token in tokens(line):
-                if pos == RWD_NAME:
-                    if id == IDENT:
-                        reward = f"Reward: {token}"
-                        pos = RWD_NAME_SEMI
-                    elif id == HASH:
-                        pos = RWD_LABEL
-                    else:
-                        unexpected(line, char, id, token, pos, RWD_POS_FMT, "Rewards.dsv")
-                elif pos == RWD_NAME_SEMI:
-                    if id == SEMI:
-                        pos = RWD_FLAG
-                    else:
-                        unexpected(line, char, id, token, pos, RWD_POS_FMT, "Rewards.dsv")
-                elif pos == RWD_FLAG:
-                    if id == IDENT:
-                        if token in flags:
-                            raise Exception(f"set flag `{token}` at {line + 1}:{char + 1} that was already set")
-                        flags.add(token)
-                        pos = RWD_FLAG_SEMI
-                    else:
-                        unexpected(line, char, id, token, pos, RWD_POS_FMT, "Rewards.dsv")
-                elif pos == RWD_FLAG_SEMI:
-                    if id == SEMI:
-                        pos = RWD_END
-                    else:
-                        unexpected(line, char, id, token, pos, RWD_POS_FMT, "Rewards.dsv")
-                elif pos == RWD_END:
+        pos = RWD_NAME
+        for char, id, token in tokens(line):
+            if pos == RWD_NAME:
+                if id == IDENT:
+                    reward = f"Reward: {token}"
+                    pos = RWD_NAME_SEMI
+                elif id == HASH:
+                    pos = RWD_LABEL
+                else:
                     unexpected(line, char, id, token, pos, RWD_POS_FMT, "Rewards.dsv")
-                elif pos == RWD_LABEL:
-                    if id == IDENT:
-                        label = token
-                        if label in labels:
-                            raise Exception(f"started label `{label}` at {line + 1}:{char + 1} that was already used")
-                        labels[label] = []
-                        pos = RWD_END
-                    else:
-                        unexpected(line, char, id, token, pos, RWD_POS_FMT, "Rewards.dsv")
+            elif pos == RWD_NAME_SEMI:
+                if id == SEMI:
+                    pos = RWD_FLAG
+                else:
+                    unexpected(line, char, id, token, pos, RWD_POS_FMT, "Rewards.dsv")
+            elif pos == RWD_FLAG:
+                if id == IDENT:
+                    if token in flags:
+                        raise Exception(f"set flag `{token}` at {line + 1}:{char + 1} that was already set")
+                    flags.add(token)
+                    pos = RWD_FLAG_SEMI
+                else:
+                    unexpected(line, char, id, token, pos, RWD_POS_FMT, "Rewards.dsv")
+            elif pos == RWD_FLAG_SEMI:
+                if id == SEMI:
+                    pos = RWD_END
+                else:
+                    unexpected(line, char, id, token, pos, RWD_POS_FMT, "Rewards.dsv")
+            elif pos == RWD_END:
+                unexpected(line, char, id, token, pos, RWD_POS_FMT, "Rewards.dsv")
+            elif pos == RWD_LABEL:
+                if id == IDENT:
+                    label = token
+                    if label in labels:
+                        raise Exception(f"started label `{label}` at {line + 1}:{char + 1} that was already used")
+                    labels[label] = []
+                    pos = RWD_END
+                else:
+                    unexpected(line, char, id, token, pos, RWD_POS_FMT, "Rewards.dsv")
 
-            if pos != RWD_NAME and pos != RWD_FLAG and pos != RWD_END:
-                unexpected(line, char + 1, END_OF_LINE, None, pos)
+        if pos != RWD_NAME and pos != RWD_FLAG and pos != RWD_END:
+            unexpected(line, char + 1, END_OF_LINE, None, pos)
 
-            if reward:
-                if reward in rewards:
-                    raise Exception(f"reward `{reward}` on line `{line + 1}` shadows a previous reward")
-                rewards[reward] = flags
+        if reward:
+            if reward in rewards:
+                raise Exception(f"reward `{reward}` on line `{line + 1}` shadows a previous reward")
+            rewards[reward] = flags
 
-                if not label:
-                    raise Exception(f"reward `{reward}` on line `{line + 1}` is not labeled")
-                labels[label].append(reward)
+            if not label:
+                raise Exception(f"reward `{reward}` on line `{line + 1}` is not labeled")
+            labels[label].append(reward)
 
-                if reward in item_name_to_id:
-                    raise Exception(f"item `{reward}` on line `{line + 1}` shadows a previous item")
-                item_name_to_id[reward] = next_id
-                next_id += 1
+            if reward in item_name_to_id:
+                raise Exception(f"item `{reward}` on line `{line + 1}` shadows a previous item")
+            item_name_to_id[reward] = next_id
+            next_id += 1
 
     item_name_to_id["Reward: Coins"] = next_id
     item_name_to_id["Victory"] = next_id + 1
