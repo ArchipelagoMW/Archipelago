@@ -2551,13 +2551,10 @@
       ONE ROAD MANY TURNS:
         id: Painting Room/Panel_order_onepathmanyturns
         colors:
-          - red
           - yellow
-          - purple
           - blue
           - gray
           - brown
-          - black
           - orange
     doors:
       Exit Door:
