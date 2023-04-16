@@ -1542,8 +1542,8 @@
         # we wanted.
         room: Number Hunt
         door: Sixes
-      Starting Room: # This could be its own item.
-        door: Bold Entrance
+      Starting Room:
+        door: Painting Shortcut
       Room Room: True # trapdoor
     panels:
       UNOPEN:
@@ -1564,6 +1564,11 @@
     doors:
       Bold Entrance:
         id: Red Blue Purple Room Area Doors/Door_unopened_open
+        panels:
+          - UNOPEN
+      Painting Shortcut:
+        painting_id: pencil_painting6
+        skip_location: True
         panels:
           - UNOPEN
       Steady Entrance:
@@ -1597,8 +1602,8 @@
       Directional Gallery:
         room: Directional Gallery
         door: Shortcut to The Undeterred
-      Starting Room: # This could be its own item.
-        door: Undeterred Entrance
+      Starting Room:
+        door: Painting Shortcut
     panels:
       ART + ART:
         id: Tower Room/Panel_art_art_eat_2
@@ -1650,6 +1655,13 @@
     doors:
       Undeterred Entrance:
         id: Red Blue Purple Room Area Doors/Door_pen_open
+        panels:
+          - PEN
+      Painting Shortcut:
+        painting_id:
+          - blueman_painting_3
+          - arrows_painting3
+        skip_location: True
         panels:
           - PEN
       Twos:
@@ -1762,6 +1774,7 @@
           - Count Up Room Area Doors/Door_six_hider_4
           - Count Up Room Area Doors/Door_six_hider_5
           - Count Up Room Area Doors/Door_six_hider_6
+        painting_id: pencil_painting3 # See note in Outside The Bold
         location_name: Fives
         panels:
           - FIVE
