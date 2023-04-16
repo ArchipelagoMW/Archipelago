@@ -162,8 +162,7 @@
       The Tenacious:
         door: Tenacious Entrance
       Warts/Straw Area:
-        - door: Near Door
-        - door: Far Door
+        door: Symmetry Door
       Hedge Maze:
         door: Shortcut to Hedge Maze
       Orange Tower First Floor:
@@ -217,13 +216,12 @@
         id: Palindrome Room Area Doors/Door_slaughter_laughter
         panels:
           - SLAUGHTER
-      Near Door:
-        id: Symmetry Room Area Doors/Door_near_far
+      Symmetry Door:
+        id:
+          - Symmetry Room Area Doors/Door_near_far
+          - Symmetry Room Area Doors/Door_far_near
         panels:
           - NEAR
-      Far Door:
-        id: Symmetry Room Area Doors/Door_far_near
-        panels:
           - FAR
       Shortcut to Hedge Maze:
         id: Maze Area Doors/Door_trace_trace
@@ -487,13 +485,10 @@
   Warts/Straw Area:
     entrances:
       Hub Room:
-        - room: Hub Room
-          door: Near Door
-        - room: Hub Room
-          door: Far Door
+        room: Hub Room
+        door: Symmetry Door
       Leaf/Feel Area:
-        - door: Warts Door
-        - door: Straw Door
+        door: Door
     panels:
       WARTS:
         id: Symmetry Room/Panel_warts_straw
@@ -502,24 +497,20 @@
         id: Symmetry Room/Panel_straw_warts
         colors: black
     doors:
-      Warts Door:
-        id: Symmetry Room Area Doors/Door_warts_straw
+      Door:
+        id:
+          - Symmetry Room Area Doors/Door_warts_straw
+          - Symmetry Room Area Doors/Door_straw_warts
         panels:
           - WARTS
-      Straw Door:
-        id: Symmetry Room Area Doors/Door_straw_warts
-        panels:
           - STRAW
   Leaf/Feel Area:
     entrances:
       Warts/Straw Area:
-        - room: Warts/Straw Area
-          door: Warts Door
-        - room: Warts/Straw Area
-          door: Straw Door
+        room: Warts/Straw Area
+        door: Door
       Outside The Agreeable:
-        - door: Leaf Door
-        - door: Feel Door
+        door: Door
     panels:
       LEAF:
         id: Symmetry Room/Panel_leaf_feel
@@ -528,13 +519,12 @@
         id: Symmetry Room/Panel_feel_leaf
         colors: black
     doors:
-      Leaf Door:
-        id: Symmetry Room Area Doors/Door_leaf_feel
+      Door:
+        id:
+          - Symmetry Room Area Doors/Door_leaf_feel
+          - Symmetry Room Area Doors/Door_feel_leaf
         panels:
           - LEAF
-      Feel Door:
-        id: Symmetry Room Area Doors/Door_feel_leaf
-        panels:
           - FEEL
   Outside The Agreeable:
     # Let's ignore the blue warp thing for now because the lookout is a dead
@@ -549,10 +539,8 @@
       Dread Hallway:
         door: Black Door
       Leaf/Feel Area:
-        - room: Leaf/Feel Area
-          door: Leaf Door
-        - room: Leaf/Feel Area
-          door: Feel Door
+        room: Leaf/Feel Area
+        door: Door
       Starting Room:
         door: Painting Shortcut
       Wheelbarrow Hallway: True
