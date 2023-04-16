@@ -53,12 +53,20 @@ special_table = {
     IName.special_two: 0xC64005
 }
 
+sub_weapon_table = {
+    IName.holy_water: 0xC6400D,
+    IName.cross:      0xC6400E,
+    IName.axe:        0xC6400F,
+    IName.knife:      0xC64010
+}
+
 # Complete item table.
 item_table = {
     **tier1_junk_table,
     **tier2_junk_table,
     **key_table,
     **special_table,
+    **sub_weapon_table
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {code: item_name for item_name, code in item_table.items() if code}

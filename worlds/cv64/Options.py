@@ -29,9 +29,15 @@ class WarpShuffle(Choice):
     default = 0
 
 
-class SubWeaponShuffle(Toggle):
-    """Shuffles all sub-weapons in the game within their own pool."""
+class SubWeaponShuffle(Choice):
+    """Shuffles all sub-weapons in the game within their own pool or in the main item pool (keeping them local or
+    allowing them to be anywhere)."""
     display_name = "Sub-weapon Shuffle"
+    option_off = 0
+    option_own_pool = 1
+    option_own_world = 2
+    option_any_world = 3
+    default = 0
 
 
 class ExtraKeys(Choice):
@@ -109,6 +115,13 @@ class HardLogic(Toggle):
     """Properly considers sequence break tricks in logic (i.e. Left Tower skip). Can be combined with Carrie Logic to
     include Carrie-only skips. See the FAQ for a full list of tricks and glitches that may be logically required."""
     display_name = "Hard Logic"
+
+
+class MultiHitBreakableItems(Toggle):
+    """Adds the items that drop from the environmental objects that break in three hits to the pool. There are 17 of
+    these throughout the game containing up to 74 checks in total. The game will be modified to remember exactly which
+    of their items you've picked up instead of simply whether they were broken or not."""
+    display_name = "Multi-hit Breakable Items"
 
 
 class LizardGeneratorItems(Toggle):
@@ -212,6 +225,7 @@ cv64_options: Dict[str, Option] = {
     "bosses_required": BossesRequired,
     "carrie_logic": CarrieLogic,
     "hard_logic": HardLogic,
+    "multi_hit_breakable_items": MultiHitBreakableItems,
     "lizard_generator_items": LizardGeneratorItems,
     "renon_fight_condition": RenonFightCondition,
     "vincent_fight_condition": VincentFightCondition,

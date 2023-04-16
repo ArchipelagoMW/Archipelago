@@ -6,14 +6,15 @@ import threading
 import copy
 
 from BaseClasses import Item, Region, Entrance, Location, MultiWorld, Tutorial, ItemClassification
-from .Items import CV64Item, item_table, tier1_junk_table, tier2_junk_table, key_table, special_table
+from .Items import CV64Item, item_table, tier1_junk_table, tier2_junk_table, key_table, special_table, sub_weapon_table
 from .Locations import CV64Location, all_locations, create_locations, boss_table
 from .Entrances import create_entrances
 from .Options import cv64_options
 from .Stages import CV64Stage, stage_info, shuffle_stages, vanilla_stage_order, vanilla_stage_exits
 from .Names import IName, LName, RName
 from ..AutoWorld import WebWorld, World
-from .Rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch, rom_sub_weapon_offsets, rom_looping_music_fade_ins
+from .Rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch, rom_sub_weapon_offsets, \
+    rom_looping_music_fade_ins
 # import math
 
 
@@ -70,7 +71,8 @@ class CV64World(World):
         stage_1_blacklist = []
 
         # Prevent Clock Tower from being Stage 1 if more than 4 S1s are needed to warp out of it.
-        if self.multiworld.special1s_per_warp[self.player].value > 4:
+        if self.multiworld.special1s_per_warp[self.player].value > 4 and \
+                self.multiworld.multi_hit_breakable_items[self.player].value == 0:
             stage_1_blacklist.append(RName.clock_tower)
 
         # Remove character stages from the stage list and exits dict if they're not enabled
@@ -179,19 +181,26 @@ class CV64World(World):
                     item_counts["tier1_junk_counts"][item_to_add] = 0
                 item_counts["tier1_junk_counts"][item_to_add] += 1
 
+        def add_items(amounts_dict, counts_to_add_on_to):
+            for item_name in amounts_dict:
+                if item_name not in item_counts[counts_to_add_on_to]:
+                    item_counts[counts_to_add_on_to][item_name] = 0
+                item_counts[counts_to_add_on_to][item_name] += amounts_dict[item_name]
+
         # Add up all the item counts per stage
         for stage in self.active_stage_list:
-            for item in stage_info[stage].stage_key_counts:
-                if item not in item_counts["key_counts"]:
-                    item_counts["key_counts"][item] = 0
-                item_counts["key_counts"][item] += stage_info[stage].stage_key_counts[item]
-
-            for item in stage_info[stage].stage_tier2_junk_counts:
-                if item not in item_counts["tier2_junk_counts"]:
-                    item_counts["tier2_junk_counts"][item] = 0
-                item_counts["tier2_junk_counts"][item] += stage_info[stage].stage_tier2_junk_counts[item]
-
+            add_items(stage_info[stage].stage_key_counts, "key_counts")
+            add_items(stage_info[stage].stage_tier2_junk_counts, "tier2_junk_counts")
             add_tier1_junk(stage_info[stage].stage_tier1_junk_count)
+
+            # If multi-hit breakables are on, add those items too
+            if self.multiworld.multi_hit_breakable_items[self.player]:
+                add_items(stage_info[stage].multihit_tier2_junk_counts, "tier2_junk_counts")
+                add_tier1_junk(stage_info[stage].multihit_tier1_junk_count)
+
+            # If sub-weapons are shuffled in the main pool, add those in too
+            if self.multiworld.sub_weapon_shuffle[self.player].value > 1:
+                add_items(stage_info[stage].sub_weapon_counts, "tier2_junk_counts")
 
         # Put in the Carrie-only items if applicable
         if self.multiworld.carrie_logic[self.player] and RName.underground_waterway in self.active_stage_list:
@@ -309,11 +318,15 @@ class CV64World(World):
             if self.multiworld.special1s_per_warp[self.player].value > 3:
                 self.multiworld.local_early_items[self.player][IName.science_key_two] = 1
         elif self.active_stage_list[0] == RName.clock_tower:
-            if self.multiworld.special1s_per_warp[self.player].value > 2:
+            if (self.multiworld.special1s_per_warp[self.player].value > 2 and
+                    self.multiworld.multi_hit_breakable_items[self.player].value == 0) or \
+                    (self.multiworld.special1s_per_warp[self.player].value > 8 and
+                     self.multiworld.multi_hit_breakable_items[self.player].value == 1):
                 self.multiworld.local_early_items[self.player][IName.clocktower_key_one] = 1
         elif self.active_stage_list[0] == RName.castle_wall:
             if self.multiworld.special1s_per_warp[self.player].value > 5 and \
-                    self.multiworld.hard_logic[self.player].value == 0:
+                    self.multiworld.hard_logic[self.player].value == 0 and \
+                    self.multiworld.multi_hit_breakable_items[self.player].value == 0:
                 self.multiworld.local_early_items[self.player][IName.left_tower_key] = 1
 
     def generate_output(self, output_directory: str) -> None:
@@ -324,7 +337,7 @@ class CV64World(World):
             # Handle sub-weapon shuffle here.
             sub_weapon_dict = rom_sub_weapon_offsets.copy()
 
-            if self.multiworld.sub_weapon_shuffle[self.player]:
+            if self.multiworld.sub_weapon_shuffle[self.player].value == 1:
                 sub_bytes = list(sub_weapon_dict.values())
                 random.shuffle(sub_bytes)
                 sub_weapon_dict = dict(zip(sub_weapon_dict, sub_bytes))
@@ -406,7 +419,7 @@ class CV64World(World):
                             offsets_to_ids[loc.cv64_rom_offset] = 0x12
 
             # Figure out the sub-weapon bytes
-            if self.multiworld.sub_weapon_shuffle[self.player]:
+            if self.multiworld.sub_weapon_shuffle[self.player].value == 1:
                 for offset, sub_id in sub_weapon_dict.items():
                     offsets_to_ids[offset] = sub_id
 

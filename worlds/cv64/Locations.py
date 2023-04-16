@@ -265,6 +265,138 @@ cc_lizard_generator_table = {
     LName.ccff_lizard_coffin_fr:  LocationData(0xC640DB, 0x8C44F5, RName.cc_main)
 }
 
+multi_breakable_table = {
+    # Forest of Silence multi-hits
+    LName.forest_dirge_rock1:  LocationData(0xC640DC, 0x10C791, RName.forest_start),
+    LName.forest_dirge_rock2:  LocationData(0xC640DD, 0x10C793, RName.forest_start),
+    LName.forest_dirge_rock3:  LocationData(0xC640DE, 0x10C795, RName.forest_start),
+    LName.forest_dirge_rock4:  LocationData(0xC640DF, 0x10C797, RName.forest_start),
+    LName.forest_dirge_rock5:  LocationData(0xC640E0, 0x10C799, RName.forest_start),
+    LName.forest_bridge_rock1: LocationData(0xC640E1, 0x10C79D, RName.forest_mid),
+    LName.forest_bridge_rock2: LocationData(0xC640E2, 0x10C79F, RName.forest_mid),
+    LName.forest_bridge_rock3: LocationData(0xC640E3, 0x10C7A1, RName.forest_mid),
+    LName.forest_bridge_rock4: LocationData(0xC640E4, 0x10C7A3, RName.forest_mid),
+    # Castle Wall multi-hits
+    LName.cw_save_slab1: LocationData(0xC640E5, 0x10C84D, RName.cw_start),
+    LName.cw_save_slab2: LocationData(0xC640E6, 0x10C84F, RName.cw_start),
+    LName.cw_save_slab3: LocationData(0xC640E7, 0x10C851, RName.cw_start),
+    LName.cw_save_slab4: LocationData(0xC640E8, 0x10C853, RName.cw_start),
+    LName.cw_save_slab5: LocationData(0xC640E9, 0x10C855, RName.cw_start),
+    LName.cw_drac_slab1: LocationData(0xC640EA, 0x10C859, RName.cw_ltower),
+    LName.cw_drac_slab2: LocationData(0xC640EB, 0x10C85B, RName.cw_ltower),
+    LName.cw_drac_slab3: LocationData(0xC640EC, 0x10C85D, RName.cw_ltower),
+    LName.cw_drac_slab4: LocationData(0xC640ED, 0x10C85F, RName.cw_ltower),
+    LName.cw_drac_slab5: LocationData(0xC640EE, 0x10C861, RName.cw_ltower),
+    # Villa multi-hit
+    LName.villafo_chandelier1: LocationData(0xC640EF, 0x10C8F5, RName.villa_main),
+    LName.villafo_chandelier2: LocationData(0xC640F0, 0x10C8F7, RName.villa_main),
+    LName.villafo_chandelier3: LocationData(0xC640F1, 0x10C8F9, RName.villa_main),
+    LName.villafo_chandelier4: LocationData(0xC640F2, 0x10C8FB, RName.villa_main),
+    LName.villafo_chandelier5: LocationData(0xC640F3, 0x10C8FD, RName.villa_main),
+    # Tunnel multi-hits
+    LName.tunnel_arrows_rock1:      LocationData(0xC640F4, 0x10CABD, RName.tunnel_start),
+    LName.tunnel_arrows_rock2:      LocationData(0xC640F5, 0x10CABF, RName.tunnel_start),
+    LName.tunnel_arrows_rock3:      LocationData(0xC640F6, 0x10CAC1, RName.tunnel_start),
+    LName.tunnel_arrows_rock4:      LocationData(0xC640F7, 0x10CAC3, RName.tunnel_start),
+    LName.tunnel_arrows_rock5:      LocationData(0xC640F8, 0x10CAC5, RName.tunnel_start),
+    LName.tunnel_bucket_quag_rock1: LocationData(0xC640F9, 0x10CAC9, RName.tunnel_start),
+    LName.tunnel_bucket_quag_rock2: LocationData(0xC640FA, 0x10CACB, RName.tunnel_start),
+    LName.tunnel_bucket_quag_rock3: LocationData(0xC640FB, 0x10CACD, RName.tunnel_start),
+    # Underground Waterway multi-hits
+    LName.uw_first_ledge1:   LocationData(0xC640FC, 0x10CB39, RName.uw_main),
+    LName.uw_first_ledge2:   LocationData(0xC640FD, 0x10CB3B, RName.uw_main),
+    LName.uw_first_ledge3:   LocationData(0xC640FE, 0x10CB3D, RName.uw_main),
+    LName.uw_first_ledge4:   LocationData(0xC640FF, 0x10CB3F, RName.uw_main),
+    LName.uw_first_ledge5:   LocationData(0xC64100, 0x10CB41, RName.uw_main),
+    LName.uw_first_ledge6:   LocationData(0xC64101, 0x10CB43, RName.uw_main),
+    LName.uw_in_skel_ledge1: LocationData(0xC64102, 0x10CB45, RName.uw_main),
+    LName.uw_in_skel_ledge2: LocationData(0xC64103, 0x10CB47, RName.uw_main),
+    LName.uw_in_skel_ledge3: LocationData(0xC64104, 0x10CB49, RName.uw_main),
+    # Castle Center multi-hits
+    LName.ccb_behemoth_crate1: LocationData(0xC64105, 0x10CBDD, RName.cc_main),
+    LName.ccb_behemoth_crate2: LocationData(0xC64106, 0x10CBDF, RName.cc_main),
+    LName.ccb_behemoth_crate3: LocationData(0xC64107, 0x10CBE1, RName.cc_main),
+    LName.ccb_behemoth_crate4: LocationData(0xC64108, 0x10CBE3, RName.cc_main),
+    LName.ccb_behemoth_crate5: LocationData(0xC64109, 0x10CBE5, RName.cc_main),
+    LName.ccelv_stand1:        LocationData(0xC6410A, 0x10CC1D, RName.cc_main),
+    LName.ccelv_stand2:        LocationData(0xC6410B, 0x10CC1F, RName.cc_main),
+    LName.ccelv_stand3:        LocationData(0xC6410C, 0x10CC21, RName.cc_main),
+    LName.ccff_lizard_slab1:   LocationData(0xC6410D, 0x10CC61, RName.cc_main),
+    LName.ccff_lizard_slab2:   LocationData(0xC6410E, 0x10CC63, RName.cc_main),
+    LName.ccff_lizard_slab3:   LocationData(0xC6410F, 0x10CC65, RName.cc_main),
+    LName.ccff_lizard_slab4:   LocationData(0xC64110, 0x10CC67, RName.cc_main),
+    # Tower of Science multi-hit
+    LName.tosci_ibridge_b1: LocationData(0xC64111, 0x10CE59, RName.tosci_conveyors),
+    LName.tosci_ibridge_b2: LocationData(0xC64112, 0x10CE5B, RName.tosci_conveyors),
+    LName.tosci_ibridge_b3: LocationData(0xC64113, 0x10CE5D, RName.tosci_conveyors),
+    LName.tosci_ibridge_b4: LocationData(0xC64114, 0x10CE5F, RName.tosci_conveyors),
+    LName.tosci_ibridge_b5: LocationData(0xC64115, 0x10CE61, RName.tosci_conveyors),
+    LName.tosci_ibridge_b6: LocationData(0xC64116, 0x10CE63, RName.tosci_conveyors),
+    # Clock Tower multi-hits
+    LName.ct_gearclimb_battery_slab1: LocationData(0xC64117, 0x10CEF9, RName.ct_start),
+    LName.ct_gearclimb_battery_slab2: LocationData(0xC64118, 0x10CEFB, RName.ct_start),
+    LName.ct_gearclimb_battery_slab3: LocationData(0xC64119, 0x10CEFD, RName.ct_start),
+    LName.ct_gearclimb_door_slab1:    LocationData(0xC6411A, 0x10CF01, RName.ct_start),
+    LName.ct_gearclimb_door_slab2:    LocationData(0xC6411B, 0x10CF03, RName.ct_start),
+    LName.ct_gearclimb_door_slab3:    LocationData(0xC6411C, 0x10CF05, RName.ct_start),
+    LName.ct_finalroom_door_slab1:    LocationData(0xC6411D, 0x10CF09, RName.ct_end),
+    LName.ct_finalroom_door_slab2:    LocationData(0xC6411E, 0x10CF0B, RName.ct_end),
+    LName.ct_finalroom_renon_slab1:   LocationData(0xC6411F, 0x10CF0D, RName.ct_end),
+    LName.ct_finalroom_renon_slab2:   LocationData(0xC64120, 0x10CF0F, RName.ct_end),
+    LName.ct_finalroom_renon_slab3:   LocationData(0xC64121, 0x10CF11, RName.ct_end),
+    LName.ct_finalroom_renon_slab4:   LocationData(0xC64122, 0x10CF13, RName.ct_end),
+    LName.ct_finalroom_renon_slab5:   LocationData(0xC64123, 0x10CF15, RName.ct_end),
+    LName.ct_finalroom_renon_slab6:   LocationData(0xC64124, 0x10CF17, RName.ct_end),
+}
+
+sub_weapon_table = {
+    # Forest of Silence sub-weapons
+    LName.forest_pillars_left:    LocationData(0xC64125, 0x10C6EB, RName.forest_start),
+    LName.forest_dirge_ped:       LocationData(0xC64126, 0x10C6FB, RName.forest_start),
+    LName.forest_dbridge_gate_l:  LocationData(0xC64127, 0x10C6F3, RName.forest_mid),
+    LName.forest_werewolf_island: LocationData(0xC64128, 0x10C703, RName.forest_mid),
+    # Castle Wall sub-weapons
+    LName.cw_pillar:       LocationData(0xC64129, 0x7F9A0F, RName.cw_start),
+    LName.cw_shelf_torch:  LocationData(0xC6412A, 0x10C82F, RName.cw_start),
+    LName.cw_ground_left:  LocationData(0xC6412B, 0x10C827, RName.cw_exit),
+    LName.cw_ground_right: LocationData(0xC6412C, 0x10C81F, RName.cw_exit),
+    # Villa sub-weapons
+    LName.villala_hallway_l:          LocationData(0xC6412D, 0xBFC983, RName.villa_main),
+    LName.villala_hallway_r:          LocationData(0xC6412E, 0x83A5F1, RName.villa_main),
+    LName.villala_slivingroom_mirror: LocationData(0xC6412F, 0x83A5D9, RName.villa_main),
+    LName.villala_archives_entrance:  LocationData(0xC64130, 0x83A5E5, RName.villa_archives),
+    LName.villam_frankieturf_r:       LocationData(0xC64131, 0x10C98F, RName.villa_maze),
+    LName.villam_fplatform:           LocationData(0xC64132, 0x10C987, RName.villa_maze),
+    LName.villam_rplatform:           LocationData(0xC64133, 0x10C997, RName.villa_maze),
+    LName.villac_coffin_l:            LocationData(0xC64134, 0x10CF73, RName.villa_crypt),
+    # Tunnel sub-weapons
+    LName.tunnel_stone_alcove_r:        LocationData(0xC64135, 0x10CA57, RName.tunnel_start),
+    LName.tunnel_lbucket_mdoor_l:       LocationData(0xC64136, 0x10CA67, RName.tunnel_start),
+    LName.tunnel_gondola_rc_sdoor_l:    LocationData(0xC64137, 0x10CA5F, RName.tunnel_start),
+    LName.tunnel_corpse_bucket_mdoor_l: LocationData(0xC64138, 0x10CA6F, RName.tunnel_end),
+    LName.tunnel_shovel_mdoor_r:        LocationData(0xC64139, 0x10CA77, RName.tunnel_end),
+    LName.tunnel_shovel_sdoor_r:        LocationData(0xC6413A, 0x10CA7F, RName.tunnel_end),
+    # Castle Center sub-weapons
+    LName.ccb_skel_hallway_ba:     LocationData(0xC6413B, 0x10CBC7, RName.cc_main),
+    LName.ccelv_switch:            LocationData(0xC6413C, 0x10CC0F, RName.cc_main),
+    LName.ccff_lizard_near_knight: LocationData(0xC6413D, 0x10CC5B, RName.cc_main),
+    # Duel Tower sub-weapon
+    LName.dt_stones_end: LocationData(0xC6413E, 0x10CE83, RName.dt_main),
+    # Tower of Execution sub-weapon
+    LName.toe_keygate_r: LocationData(0xC6413F, 0x10CD3F, RName.toe_ledge),
+    # Tower of Science sub-weapon
+    LName.tosci_key3_m:  LocationData(0xC64140, 0x10CE2B, RName.tosci_key3),
+    # Room of Clocks sub-weapons
+    LName.roc_elev_l: LocationData(0xC64141, 0x10CF8B, RName.roc_main),
+    LName.roc_elev_r: LocationData(0xC64142, 0x10CF93, RName.roc_main),
+    # Clock Tower sub-weapons
+    LName.ct_bp_chasm_rl:  LocationData(0xC64143, 0x99BC5A, RName.ct_middle),
+    LName.ct_finalroom_fl: LocationData(0xC64144, 0x10CED3, RName.ct_end),
+    LName.ct_finalroom_fr: LocationData(0xC64145, 0x10CECB, RName.ct_end),
+    LName.ct_finalroom_rl: LocationData(0xC64146, 0x10CEE3, RName.ct_end),
+    LName.ct_finalroom_rr: LocationData(0xC64147, 0x10CEDB, RName.ct_end),
+}
+
 boss_table = {
     LName.forest_boss_one:       LocationData(None, 0x000000, RName.forest_start, "event"),
     LName.forest_boss_two:       LocationData(None, 0x000000, RName.forest_start, "event"),
@@ -296,6 +428,8 @@ all_locations = {
     **main_location_table,
     **carrie_only_location_table,
     **cc_lizard_generator_table,
+    **multi_breakable_table,
+    **sub_weapon_table
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {id: name for name, _ in all_locations.items()}
@@ -320,6 +454,12 @@ def create_locations(world, player: int, active_regions):
 
     if world.lizard_generator_items[player].value:
         location_table.update({**cc_lizard_generator_table})
+
+    if world.multi_hit_breakable_items[player].value:
+        location_table.update({**multi_breakable_table})
+
+    if world.sub_weapon_shuffle[player].value > 1:
+        location_table.update({**sub_weapon_table})
 
     for loc, data in location_table.items():
         if data.region in active_regions:
