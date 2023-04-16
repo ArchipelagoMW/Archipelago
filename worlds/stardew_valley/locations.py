@@ -209,6 +209,15 @@ def extend_festival_locations(randomized_locations: List[LocationData], festival
     extend_hard_festival_locations(randomized_locations, festival_option)
 
 
+def extend_special_order_locations(randomized_locations: List[LocationData], special_order_option: int):
+    if special_order_option == options.SpecialOrderLocations.option_disabled:
+        return
+
+    randomized_locations.extend(locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD])
+    if special_order_option == options.SpecialOrderLocations.option_board_qi:
+        randomized_locations.extend(locations_by_tag[LocationTags.SPECIAL_ORDER_QI])
+
+
 def extend_hard_festival_locations(randomized_locations, festival_option: int):
     if festival_option != options.FestivalLocations.option_hard:
         return
@@ -255,6 +264,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_museumsanity_locations(randomized_locations, world_options[options.Museumsanity], random)
     extend_friendsanity_locations(randomized_locations, world_options[options.Friendsanity])
     extend_festival_locations(randomized_locations, world_options[options.FestivalLocations])
+    extend_special_order_locations(randomized_locations, world_options[options.SpecialOrderLocations])
 
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)

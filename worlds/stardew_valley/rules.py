@@ -5,9 +5,11 @@ from BaseClasses import MultiWorld
 from worlds.generic import Rules as MultiWorldRules
 from . import options, locations
 from .bundles import Bundle
+from .data.entrance_data import dig_to_mines_floor, SVEntrance
 from .data.museum_data import all_museum_items, all_mineral_items, all_artifact_items, \
     dwarf_scrolls, skeleton_front, \
     skeleton_middle, skeleton_back, all_museum_items_by_name
+from .data.region_data import SVRegion
 from .locations import LocationTags
 from .logic import StardewLogic, And, month_end_per_skill_level, tool_prices, week_days
 from .options import StardewOptions
@@ -18,33 +20,33 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
     all_location_names = list(location.name for location in multi_world.get_locations(player))
 
     for floor in range(5, 120 + 5, 5):
-        MultiWorldRules.set_rule(multi_world.get_entrance(f"Dig to The Mines - Floor {floor}", player),
+        MultiWorldRules.set_rule(multi_world.get_entrance(dig_to_mines_floor(floor), player),
                                  logic.can_mine_to_floor(floor).simplify())
 
-    MultiWorldRules.set_rule(multi_world.get_entrance("Enter Tide Pools", player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_tide_pools, player),
                              logic.received("Beach Bridge").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance("Enter Quarry", player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_quarry, player),
                              logic.received("Bridge Repair").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance("Enter Secret Woods", player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_secret_woods, player),
                              logic.has_tool("Axe", "Iron").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance("Forest to Sewers", player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.forest_to_sewers, player),
                              logic.has_rusty_key().simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance("Town to Sewers", player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.town_to_sewers, player),
                              logic.has_rusty_key().simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance("Take Bus to Desert", player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.take_bus_to_desert, player),
                              logic.received("Bus Repair").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance("Enter Skull Cavern", player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_skull_cavern, player),
                              logic.received("Skull Key").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance("Mine to Skull Cavern Floor 100", player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.mine_to_skull_cavern_floor_100, player),
                              logic.can_mine_perfectly_in_the_skull_cavern().simplify())
 
-    MultiWorldRules.set_rule(multi_world.get_entrance("Use Desert Obelisk", player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.use_desert_obelisk, player),
                              logic.received("Desert Obelisk").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance("Use Island Obelisk", player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.use_island_obelisk, player),
                              logic.received("Island Obelisk").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance("Talk to Traveling Merchant", player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.talk_to_traveling_merchant, player),
                              logic.has_traveling_merchant())
-    MultiWorldRules.set_rule(multi_world.get_entrance("Enter Greenhouse", player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_greenhouse, player),
                              logic.received("Greenhouse"))
 
     # Those checks do not exist if ToolProgression is vanilla
@@ -117,31 +119,9 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
             MultiWorldRules.set_rule(multi_world.get_location(building.name, player),
                                      logic.building_rules[building.name.replace(" Blueprint", "")].simplify())
 
-    # Story Quests
-    for quest in locations.locations_by_tag[LocationTags.QUEST]:
-        MultiWorldRules.set_rule(multi_world.get_location(quest.name, player),
-                                 logic.quest_rules[quest.name].simplify())
-
-    # Help Wanted Quests
-    desired_number_help_wanted: int = world_options[options.HelpWantedLocations] // 7
-    for i in range(0, desired_number_help_wanted):
-        prefix = "Help Wanted:"
-        delivery = "Item Delivery"
-        rule = logic.received("Month End", i)
-        fishing_rule = rule & logic.can_fish()
-        slay_rule = rule & logic.has_any_weapon()
-        item_delivery_index = (i * 4) + 1
-        for j in range(item_delivery_index, item_delivery_index + 4):
-            location_name = f"{prefix} {delivery} {j}"
-            MultiWorldRules.set_rule(multi_world.get_location(location_name, player), rule.simplify())
-
-        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Gathering {i+1}", player),
-                                 rule.simplify())
-        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Fishing {i+1}", player),
-                                 fishing_rule.simplify())
-        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Slay Monsters {i+1}", player),
-                                 slay_rule.simplify())
-
+    set_story_quests_rules(logic, multi_world, player)
+    set_special_order_rules(logic, multi_world, player)
+    set_help_wanted_quests_rules(logic, multi_world, player, world_options)
     set_fishsanity_rules(all_location_names, logic, multi_world, player)
     set_museumsanity_rules(all_location_names, logic, multi_world, player, world_options)
     set_friendsanity_rules(all_location_names, logic, multi_world, player)
@@ -154,6 +134,45 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
 
     set_traveling_merchant_rules(logic, multi_world, player)
     set_arcade_machine_rules(logic, multi_world, player, world_options)
+
+
+def set_story_quests_rules(logic, multi_world, player):
+    for quest in locations.locations_by_tag[LocationTags.QUEST]:
+        MultiWorldRules.set_rule(multi_world.get_location(quest.name, player),
+                                 logic.quest_rules[quest.name].simplify())
+
+
+def set_special_order_rules(logic, multi_world, player):
+    board_rule = logic.received("Special Order Board")
+    for board_order in locations.locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD]:
+        order_rule = board_rule & logic.special_order_rules[board_order.name]
+        MultiWorldRules.set_rule(multi_world.get_location(board_order.name, player), order_rule.simplify())
+
+    qi_rule = logic.can_reach_region(SVRegion.qi_walnut_room)
+    for qi_order in locations.locations_by_tag[LocationTags.SPECIAL_ORDER_QI]:
+        order_rule = qi_rule & logic.special_order_rules[qi_order.name]
+        MultiWorldRules.set_rule(multi_world.get_location(qi_order.name, player), order_rule.simplify())
+
+
+def set_help_wanted_quests_rules(logic, multi_world, player, world_options):
+    desired_number_help_wanted: int = world_options[options.HelpWantedLocations] // 7
+    for i in range(0, desired_number_help_wanted):
+        prefix = "Help Wanted:"
+        delivery = "Item Delivery"
+        rule = logic.received("Month End", i)
+        fishing_rule = rule & logic.can_fish()
+        slay_rule = rule & logic.has_any_weapon()
+        item_delivery_index = (i * 4) + 1
+        for j in range(item_delivery_index, item_delivery_index + 4):
+            location_name = f"{prefix} {delivery} {j}"
+            MultiWorldRules.set_rule(multi_world.get_location(location_name, player), rule.simplify())
+
+        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Gathering {i + 1}", player),
+                                 rule.simplify())
+        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Fishing {i + 1}", player),
+                                 fishing_rule.simplify())
+        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Slay Monsters {i + 1}", player),
+                                 slay_rule.simplify())
 
 
 def set_fishsanity_rules(all_location_names: List[str], logic: StardewLogic, multi_world: MultiWorld, player: int):
@@ -246,19 +265,19 @@ def set_traveling_merchant_rules(logic: StardewLogic, multi_world: MultiWorld, p
 
 def set_arcade_machine_rules(logic: StardewLogic, multi_world: MultiWorld, player: int, world_options):
     if world_options[options.ArcadeMachineLocations] == options.ArcadeMachineLocations.option_full_shuffling:
-        MultiWorldRules.add_rule(multi_world.get_entrance("Play Junimo Kart", player),
+        MultiWorldRules.add_rule(multi_world.get_entrance(SVEntrance.play_junimo_kart, player),
                                  (logic.received("Skull Key") & logic.has("Junimo Kart Small Buff")).simplify())
-        MultiWorldRules.add_rule(multi_world.get_entrance("Reach Junimo Kart 2", player),
+        MultiWorldRules.add_rule(multi_world.get_entrance(SVEntrance.reach_junimo_kart_2, player),
                                  logic.has("Junimo Kart Medium Buff").simplify())
-        MultiWorldRules.add_rule(multi_world.get_entrance("Reach Junimo Kart 3", player),
+        MultiWorldRules.add_rule(multi_world.get_entrance(SVEntrance.reach_junimo_kart_3, player),
                                  logic.has("Junimo Kart Big Buff").simplify())
         MultiWorldRules.add_rule(multi_world.get_location("Junimo Kart: Sunset Speedway (Victory)", player),
                                  logic.has("Junimo Kart Max Buff").simplify())
-        MultiWorldRules.add_rule(multi_world.get_entrance("Play Journey of the Prairie King", player),
+        MultiWorldRules.add_rule(multi_world.get_entrance(SVEntrance.play_journey_of_the_prairie_king, player),
                                  logic.has("JotPK Small Buff").simplify())
-        MultiWorldRules.add_rule(multi_world.get_entrance("Reach JotPK World 2", player),
+        MultiWorldRules.add_rule(multi_world.get_entrance(SVEntrance.reach_jotpk_world_2, player),
                                  logic.has("JotPK Medium Buff").simplify())
-        MultiWorldRules.add_rule(multi_world.get_entrance("Reach JotPK World 3", player),
+        MultiWorldRules.add_rule(multi_world.get_entrance(SVEntrance.reach_jotpk_world_3, player),
                                  logic.has("JotPK Big Buff").simplify())
         MultiWorldRules.add_rule(multi_world.get_location("Journey of the Prairie King Victory", player),
                                  logic.has("JotPK Max Buff").simplify())

@@ -29,6 +29,7 @@ class SVRegion:
     ginger_island = "Ginger Island"
     pirate_cove = ginger_island
     dig_site = ginger_island
+    qi_walnut_room = ginger_island
     perfect_skull_cavern = "Skull Cavern Floor 100"
     hospital = "Hospital"
     carpenter = "Carpenter Shop"
