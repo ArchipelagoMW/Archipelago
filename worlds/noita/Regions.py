@@ -85,7 +85,7 @@ noita_connections: Dict[str, Set[str]] = {
     "Desert": {"Lake", "Forest"},
     "Floating Island": {"Forest"},
     "Pyramid": {"Hiisi Base"},
-    "Overgrown Cavern": {"Sandcave"},
+    "Overgrown Cavern": {"Sandcave", "Undeground Jungle"},
     "Sandcave": {"Overgrown Cavern"},
 
     ###
@@ -114,7 +114,7 @@ noita_connections: Dict[str, Set[str]] = {
 
     ###
     "Underground Jungle Holy Mountain": {"Underground Jungle"},
-    "Underground Jungle": {"Underground Jungle Holy Mountain", "Dragoncave", "Vault Holy Mountain",
+    "Underground Jungle": {"Underground Jungle Holy Mountain", "Dragoncave", "Overgrown Cavern", "Vault Holy Mountain",
                            "Lukki Lair"},
     "Dragoncave": {"Underground Jungle"},
     "Lukki Lair": {"Underground Jungle", "Snow Chasm", "Frozen Vault"},
