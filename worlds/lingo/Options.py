@@ -55,6 +55,7 @@ lingo_options: Dict[str, type] = {
     "shuffle_doors": ShuffleDoors,
     "orange_tower_access": OrangeTowerAccess,
     "shuffle_colors": ShuffleColors,
+    "shuffle_panels": ShufflePanels,
     "victory_condition": VictoryCondition,
     "death_link": DeathLink
 }
