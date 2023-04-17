@@ -91,9 +91,12 @@ class SMBoolManager(object):
         return itemsDict
 
     def withItem(self, item, func):
-        self.addItem(item)
+        addAndRemoveItem = self.isCountItem(item) or not self.haveItem(item)
+        if addAndRemoveItem:
+            self.addItem(item)
         ret = func(self)
-        self.removeItem(item)
+        if addAndRemoveItem:
+            self.removeItem(item)
         return ret
 
     def resetItems(self):
