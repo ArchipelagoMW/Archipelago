@@ -1,6 +1,9 @@
 import os
 import logging
 import typing
+import platform
+
+operating_system = platform.system()
 
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
@@ -339,22 +342,28 @@ class GameManager(App):
         return 1
 
     def build(self) -> Layout:
+        if operating_system == "Darwin":
+            input_field_width = 160
+            input_field_height = 50
+        else:
+            input_field_width = 100
+            input_field_height = 30
         self.container = ContainerLayout()
 
         self.grid = MainLayout()
         self.grid.cols = 1
-        self.connect_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=30)
+        self.connect_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=input_field_height)
         # top part
         server_label = ServerLabel()
         self.connect_layout.add_widget(server_label)
         self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg:", size_hint_y=None,
-                                                      height=30, multiline=False, write_tab=False)
+                                                      height=input_field_height, multiline=False, write_tab=False)
         def connect_bar_validate(sender):
             if not self.ctx.server:
                 self.connect_button_action(sender)
         self.server_connect_bar.bind(on_text_validate=connect_bar_validate)
         self.connect_layout.add_widget(self.server_connect_bar)
-        self.server_connect_button = Button(text="Connect", size=(100, 30), size_hint_y=None, size_hint_x=None)
+        self.server_connect_button = Button(text="Connect", size=(input_field_width, input_field_height), size_hint_y=None, size_hint_x=None)
         self.server_connect_button.bind(on_press=self.connect_button_action)
         self.connect_layout.add_widget(self.server_connect_button)
         self.grid.add_widget(self.connect_layout)
@@ -387,11 +396,11 @@ class GameManager(App):
             self.tabs.tab_height = 0
 
         # bottom part
-        bottom_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=30)
-        info_button = Button(height=30, text="Command:", size_hint_x=None)
+        bottom_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=input_field_height)
+        info_button = Button(size=(input_field_width, input_field_height), text="Command:", size_hint_x=None)
         info_button.bind(on_release=self.command_button_action)
         bottom_layout.add_widget(info_button)
-        self.textinput = TextInput(size_hint_y=None, height=30, multiline=False, write_tab=False)
+        self.textinput = TextInput(size_hint_y=None, height=input_field_height, multiline=False, write_tab=False)
         self.textinput.bind(on_text_validate=self.on_message)
         self.textinput.text_validate_unfocus = False
         bottom_layout.add_widget(self.textinput)
