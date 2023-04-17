@@ -105,7 +105,6 @@ class SMWorld(World):
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         self.locations = {}
-        self.is_prog_balancing = False
         super().__init__(world, player)
 
     @classmethod
@@ -145,10 +144,6 @@ class SMWorld(World):
         missingPool = 109 - len(itemPool)
         for i in range(missingPool):
             itemPool.append(ItemManager.Items['Nothing'])
-
-        doorOpenerItems = ['Missile', 'Super', 'PowerBomb', 'Spazer', 'Ice', 'Wave' ,'Plasma']
-        hasAreaOrDoorRando = self.multiworld.area_randomization[self.player].value != 0 or \
-                             self.multiworld.doors_colors_rando[self.player].value != 0
         
         # Generate item pool
         pool = []
@@ -176,10 +171,6 @@ class SMWorld(World):
                 isAdvancement = False
 
             classification = ItemClassification.progression if isAdvancement else ItemClassification.filler
-            if hasAreaOrDoorRando and self.multiworld.progression_balancing[self.player].value != 0:
-                if isAdvancement and item.Type in doorOpenerItems:
-                    classification = ItemClassification.progression_skip_balancing
-
             itemClass = ItemManager.Items[item.Type].Class
             smitem = SMItem(item.Name, 
                             classification, 
@@ -747,7 +738,6 @@ class SMWorld(World):
                                     self.variaRando.args.escapeRando)
         
         self.variaRando.randoExec.postProcessItemLocs(self.itemLocs, self.variaRando.args.hideItems)
-        self.is_prog_balancing = True
 
     @classmethod
     def stage_post_fill(cls, world):
@@ -814,8 +804,7 @@ class SMLocation(Location):
         assert self.parent_region, "Can't reach location without region"
         return self.access_rule(state) and \
                 self.parent_region.can_reach(state) and \
-                (state.multiworld.worlds[self.player].is_prog_balancing or \
-                self.can_comeback(state, self.item))
+                self.can_comeback(state, self.item)
     
     def can_comeback(self, state: CollectionState, item):
         randoExec = state.multiworld.worlds[self.player].variaRando.randoExec
