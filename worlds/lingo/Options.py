@@ -31,6 +31,14 @@ class ShuffleColors(Toggle):
     display_name = "Shuffle Colors"
 
 
+class ShufflePanels(Choice):
+    """If on, the puzzles on each panel are randomized.
+    On "rearrange", the puzzles are the same as the ones in the base game, but are placed in different areas."""
+    display_name = "Shuffle Panels"
+    option_none = 0
+    option_rearrange = 1
+
+
 class VictoryCondition(Choice):
     """Change the victory condition."""
     display_name = "Victory Condition"
