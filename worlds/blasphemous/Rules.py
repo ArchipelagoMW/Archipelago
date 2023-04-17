@@ -299,7 +299,9 @@ class BlasphemousLogic(LogicMixin):
         return self.has_group("masks", player, 3)
 
     def _blasphemous_laudes_gate(self, player): 
-        return self.has_all({"Petrified Bell", "Blood Perpetuated in Sand", "Three Gnarled Tongues", "Key of the Secular", "Key of the Scribe", "Verses Spun from Gold"}, player)
+        return self.has_all({"Petrified Bell", "Blood Perpetuated in Sand", "Three Gnarled Tongues", \
+            "Key of the Secular", "Key of the Scribe"}, player) and \
+                self.has("Verses Spun from Gold", player, 4)
 
     # Ten Piedad, Tres Angustias, Our Lady of the Charred Visage
     def _blasphemous_wound_boss_easy(self, player):
