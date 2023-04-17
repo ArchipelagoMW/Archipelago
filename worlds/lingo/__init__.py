@@ -54,6 +54,7 @@ class LingoWorld(World):
                 data.code: data.panel_ids() for name, data in self.static_locat.ALL_LOCATION_TABLE.items()
                 if data.code is not None
             },
+            'seed': self.multiworld.per_slot_randoms[self.player].randint(0, 1000000),
         }
 
     def generate_early(self):
