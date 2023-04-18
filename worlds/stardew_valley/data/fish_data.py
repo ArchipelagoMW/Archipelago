@@ -33,8 +33,8 @@ desert = (SVRegion.desert,)
 mutant_bug_lair = (SVRegion.mutant_bug_lair,)
 witch_swamp = (SVRegion.witch_swamp,)
 night_market = (SVRegion.beach,)
-ginger_island_ocean = (SVRegion.ginger_island,)
-ginger_island_river = (SVRegion.ginger_island,)
+ginger_island_ocean = (SVRegion.island_south, SVRegion.island_west)
+ginger_island_river = (SVRegion.island_west,)
 pirate_cove = (SVRegion.pirate_cove,)
 
 all_fish: List[FishItem] = []

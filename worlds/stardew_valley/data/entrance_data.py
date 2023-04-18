@@ -53,6 +53,8 @@ class SVEntrance:
     town_to_museum = "Town to Museum"
     town_to_jojamart = "Town to JojaMart"
     beach_to_willy_fish_shop = "Beach to Willy's Fish Shop"
+    fish_shop_to_backroom = "Fish Shop to Back Room"
+    boat_to_ginger_island = "Take the Boat to Ginger Island"
     enter_elliott_house = "Enter Elliott's House"
     enter_tide_pools = "Enter Tide Pools"
     enter_bathhouse_entrance = "Enter Bathhouse Entrance"
@@ -103,3 +105,18 @@ class SVEntrance:
     dig_to_mines_floor_115 = dig_to_mines_floor(115)
     dig_to_mines_floor_120 = dig_to_mines_floor(120)
     perfection_cutscene_area = "Enter Perfection Cutscene Area"
+    island_south_to_west = "Island South to West",
+    island_south_to_north = "Island South to North",
+    island_south_to_east = "Island South to East",
+    island_south_to_southeast = "Island South to Southeast",
+    island_west_to_gourmand_cave = "Island West to Gourmand Cave",
+    island_west_to_crystals_cave = "Island West to Crystal Cave",
+    island_west_to_shipwreck = "Island West to Shipwreck",
+    island_west_to_qi_walnut_room = "Island West to Qi Walnut Room",
+    island_east_to_leo_hut = "Island East to Leo Hut",
+    island_southeast_to_pirate_cove = "Island Southeast to Pirate Cove",
+    island_north_to_field_office = "Island North to Field Office",
+    island_north_to_dig_site = "Island North to Dig Site",
+    island_north_to_volcano = "Island North to Volcano",
+    climb_to_volcano_5 = "Climb to Volcano Floor 5",
+    climb_to_volcano_10 = "Climb to Volcano Floor 10",

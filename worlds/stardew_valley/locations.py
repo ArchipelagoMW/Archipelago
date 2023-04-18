@@ -54,6 +54,7 @@ class LocationTags(enum.Enum):
     FESTIVAL = enum.auto()
     SPECIAL_ORDER_BOARD = enum.auto()
     SPECIAL_ORDER_QI = enum.auto()
+    GINGER_ISLAND = enum.auto()
 
 
 @dataclass(frozen=True)
@@ -131,19 +132,23 @@ def extend_help_wanted_quests(randomized_locations: List[LocationData], desired_
             randomized_locations.append(location_table[f"Help Wanted: Gathering {batch + 1}"])
 
 
-def extend_fishsanity_locations(randomized_locations: List[LocationData], fishsanity: int, random: Random):
+def extend_fishsanity_locations(randomized_locations: List[LocationData], world_options, random: Random):
     prefix = "Fishsanity: "
-    if fishsanity == options.Fishsanity.option_none:
+    include_ginger_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false
+    if world_options[options.Fishsanity] == options.Fishsanity.option_none:
         return
-    elif fishsanity == options.Fishsanity.option_legendaries:
+    elif world_options[options.Fishsanity] == options.Fishsanity.option_legendaries:
         randomized_locations.extend(location_table[f"{prefix}{legendary.name}"] for legendary in legendary_fish)
-    elif fishsanity == options.Fishsanity.option_special:
+    elif world_options[options.Fishsanity] == options.Fishsanity.option_special:
         randomized_locations.extend(location_table[f"{prefix}{special.name}"] for special in special_fish)
-    elif fishsanity == options.Fishsanity.option_randomized:
-        randomized_locations.extend(location_table[f"{prefix}{fish.name}"]
-                                    for fish in all_fish if random.random() < 0.4)
-    elif fishsanity == options.Fishsanity.option_all:
-        randomized_locations.extend(location_table[f"{prefix}{fish.name}"] for fish in all_fish)
+    elif world_options[options.Fishsanity] == options.Fishsanity.option_randomized:
+        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in all_fish if random.random() < 0.4]
+        randomized_locations.extend(location for location in fish_locations
+                                    if include_ginger_island or LocationTags.GINGER_ISLAND not in location.tags)
+    elif world_options[options.Fishsanity] == options.Fishsanity.option_all:
+        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in all_fish]
+        randomized_locations.extend(location for location in fish_locations
+                                    if include_ginger_island or LocationTags.GINGER_ISLAND not in location.tags)
 
 
 def extend_museumsanity_locations(randomized_locations: List[LocationData], museumsanity: int, random: Random):
@@ -159,17 +164,21 @@ def extend_museumsanity_locations(randomized_locations: List[LocationData], muse
         randomized_locations.extend(location_table[f"{prefix}{museum_item.name}"] for museum_item in all_museum_items)
 
 
-def extend_friendsanity_locations(randomized_locations: List[LocationData], friendsanity: int):
-    if friendsanity == options.Friendsanity.option_none:
+def extend_friendsanity_locations(randomized_locations: List[LocationData], world_options):
+    if world_options[options.Friendsanity] == options.Friendsanity.option_none:
         return
-    exclude_non_bachelors = friendsanity == options.Friendsanity.option_bachelors
-    exclude_locked_villagers = friendsanity == options.Friendsanity.option_starting_npcs or \
-                               friendsanity == options.Friendsanity.option_bachelors
-    exclude_post_marriage_hearts = friendsanity != options.Friendsanity.option_all_with_marriage
+
+    exclude_leo = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
+    exclude_non_bachelors = world_options[options.Friendsanity] == options.Friendsanity.option_bachelors
+    exclude_locked_villagers = world_options[options.Friendsanity] == options.Friendsanity.option_starting_npcs or \
+                               world_options[options.Friendsanity] == options.Friendsanity.option_bachelors
+    exclude_post_marriage_hearts = world_options[options.Friendsanity] != options.Friendsanity.option_all_with_marriage
     for villager in all_villagers:
         if not villager.available and exclude_locked_villagers:
             continue
         if not villager.bachelor and exclude_non_bachelors:
+            continue
+        if villager.name == "Leo" and exclude_leo:
             continue
         for heart in range(1, 15):
             if villager.bachelor and exclude_post_marriage_hearts and heart > 8:
@@ -209,12 +218,13 @@ def extend_festival_locations(randomized_locations: List[LocationData], festival
     extend_hard_festival_locations(randomized_locations, festival_option)
 
 
-def extend_special_order_locations(randomized_locations: List[LocationData], special_order_option: int):
-    if special_order_option == options.SpecialOrderLocations.option_disabled:
+def extend_special_order_locations(randomized_locations: List[LocationData], world_options):
+    if world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_disabled:
         return
 
     randomized_locations.extend(locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD])
-    if special_order_option == options.SpecialOrderLocations.option_board_qi:
+    if (world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_board_qi and
+        world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false):
         randomized_locations.extend(locations_by_tag[LocationTags.SPECIAL_ORDER_QI])
 
 
@@ -260,11 +270,11 @@ def create_locations(location_collector: StardewLocationCollector,
         randomized_locations.extend(locations_by_tag[LocationTags.ARCADE_MACHINE])
 
     extend_help_wanted_quests(randomized_locations, world_options[options.HelpWantedLocations])
-    extend_fishsanity_locations(randomized_locations, world_options[options.Fishsanity], random)
+    extend_fishsanity_locations(randomized_locations, world_options, random)
     extend_museumsanity_locations(randomized_locations, world_options[options.Museumsanity], random)
-    extend_friendsanity_locations(randomized_locations, world_options[options.Friendsanity])
+    extend_friendsanity_locations(randomized_locations, world_options)
     extend_festival_locations(randomized_locations, world_options[options.FestivalLocations])
-    extend_special_order_locations(randomized_locations, world_options[options.SpecialOrderLocations])
+    extend_special_order_locations(randomized_locations, world_options)
 
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)

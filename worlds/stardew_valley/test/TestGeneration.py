@@ -242,6 +242,40 @@ class TestFriendsanityAllNpcs(SVTestBase):
                     self.assertLessEqual(int(hearts), 10)
 
 
+class TestFriendsanityAllNpcsExcludingGingerIsland(SVTestBase):
+    options = {
+        options.Friendsanity.internal_name: options.Friendsanity.option_all,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true
+    }
+
+    def test_friendsanity_all_items(self):
+        suffix = ": 1 <3"
+        for item in self.multiworld.get_items():
+            if item.name.endswith(suffix):
+                villager_name = item.name[:item.name.index(suffix)]
+                self.assertNotEqual(villager_name, "Leo")
+                self.assertTrue(villager_name in all_villagers_by_name or villager_name == "Pet")
+
+    def test_friendsanity_all_locations(self):
+        prefix = "Friendsanity: "
+        suffix = " <3"
+        for location in self.multiworld.get_locations():
+            if location.name.startswith(prefix):
+                name_no_prefix = location.name[len(prefix):]
+                name_trimmed = name_no_prefix[:name_no_prefix.index(suffix)]
+                parts = name_trimmed.split(" ")
+                name = parts[0]
+                hearts = parts[1]
+                self.assertNotEqual(name, "Leo")
+                self.assertTrue(name in all_villagers_by_name or name == "Pet")
+                if name == "Pet":
+                    self.assertLessEqual(int(hearts), 5)
+                elif all_villagers_by_name[name].bachelor:
+                    self.assertLessEqual(int(hearts), 8)
+                else:
+                    self.assertLessEqual(int(hearts), 10)
+
+
 class TestFriendsanityAllNpcsWithMarriage(SVTestBase):
     options = {
         options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,

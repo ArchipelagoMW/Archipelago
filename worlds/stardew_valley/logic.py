@@ -101,6 +101,7 @@ class StardewLogic:
     options: StardewOptions
 
     item_rules: Dict[str, StardewRule] = field(default_factory=dict)
+    sapling_rules: Dict[str, StardewRule] = field(default_factory=dict)
     tree_fruit_rules: Dict[str, StardewRule] = field(default_factory=dict)
     seed_rules: Dict[str, StardewRule] = field(default_factory=dict)
     crop_rules: Dict[str, StardewRule] = field(default_factory=dict)
@@ -115,18 +116,36 @@ class StardewLogic:
         self.fish_rules.update({fish.name: self.can_catch_fish(fish) for fish in all_fish})
         self.museum_rules.update({donation.name: self.can_find_museum_item(donation) for donation in all_museum_items})
 
-        self.tree_fruit_rules.update({
-            "Apple": self.has_lived_months(1) & (self.has_season("Fall") | self.can_reach_region(SVRegion.greenhouse)),
-            "Apricot": self.has_lived_months(1) & (self.has_season("Spring") | self.can_reach_region(SVRegion.greenhouse)),
-            "Cherry": self.has_lived_months(1) & (self.has_season("Spring") | self.can_reach_region(SVRegion.greenhouse)),
-            "Orange": self.has_lived_months(1) & (self.has_season("Summer") | self.can_reach_region(SVRegion.greenhouse)),
-            "Peach": self.has_lived_months(1) & (self.has_season("Summer") | self.can_reach_region(SVRegion.greenhouse)),
-            "Pomegranate": self.has_lived_months(1) & (self.has_season("Fall") | self.can_reach_region(SVRegion.greenhouse)),
-            "Banana Sapling": self.can_reach_region(SVRegion.ginger_island),
-            "Mango Sapling": self.can_reach_region(SVRegion.ginger_island),
-            "Banana": self.has("Banana Sapling") & (self.has_season("Summer") | self.can_reach_region(SVRegion.greenhouse)),
-            "Mango": self.has("Mango Sapling") & (self.has_season("Summer") | self.can_reach_region(SVRegion.greenhouse)),
+        self.sapling_rules.update({
+            "Apple Sapling": self.can_buy_sapling("Apple"),
+            "Apricot Sapling": self.can_buy_sapling("Apricot"),
+            "Cherry Sapling": self.can_buy_sapling("Cherry"),
+            "Orange Sapling": self.can_buy_sapling("Orange"),
+            "Peach Sapling": self.can_buy_sapling("Peach"),
+            "Pomegranate Sapling": self.can_buy_sapling("Pomegranate"),
+            "Banana Sapling": self.can_buy_sapling("Banana"),
+            "Mango Sapling": self.can_buy_sapling("Mango"),
         })
+
+        for sapling in self.sapling_rules:
+            existing_rules = self.sapling_rules[sapling]
+            self.sapling_rules[sapling] = self.received(sapling) | existing_rules
+
+        self.tree_fruit_rules.update({
+            "Apple": self.can_plant_and_grow_item("Fall"),
+            "Apricot": self.can_plant_and_grow_item("Spring"),
+            "Cherry": self.can_plant_and_grow_item("Spring"),
+            "Orange": self.can_plant_and_grow_item("Summer"),
+            "Peach": self.can_plant_and_grow_item("Summer"),
+            "Pomegranate": self.can_plant_and_grow_item("Fall"),
+            "Banana": self.can_plant_and_grow_item("Summer"),
+            "Mango": self.can_plant_and_grow_item("Summer"),
+        })
+
+        for tree_fruit in self.tree_fruit_rules:
+            existing_rules = self.tree_fruit_rules[tree_fruit]
+            sapling = f"{tree_fruit} Sapling"
+            self.tree_fruit_rules[tree_fruit] = self.has(sapling) & self.has_lived_months(1) & existing_rules
 
         self.seed_rules.update({seed.name: self.can_buy_seed(seed) for seed in all_purchasable_seeds})
         self.crop_rules.update({crop.name: self.can_grow_crop(crop) for crop in all_crops})
@@ -422,6 +441,7 @@ class StardewLogic:
         })
         self.item_rules.update(self.fish_rules)
         self.item_rules.update(self.museum_rules)
+        self.item_rules.update(self.sapling_rules)
         self.item_rules.update(self.tree_fruit_rules)
         self.item_rules.update(self.seed_rules)
         self.item_rules.update(self.crop_rules)
@@ -713,8 +733,8 @@ class StardewLogic:
         skill_rule = self.has_skill_level("Fishing", 4)
         return self.has_max_fishing_rod() & skill_rule
 
-    def can_buy_seed(self, seed: SeedItem):
-        if self.options[options.SeedShuffle] == options.SeedShuffle.option_disabled or seed.name == "Rare Seed":
+    def can_buy_seed(self, seed: SeedItem) -> StardewRule:
+        if self.options[options.SeedShuffle] == options.SeedShuffle.option_disabled:
             item_rule = True_()
         else:
             item_rule = self.received(seed.name)
@@ -722,12 +742,36 @@ class StardewLogic:
         region_rule = self.can_reach_any_region(seed.regions)
         return season_rule & region_rule & item_rule
 
-    def can_grow_crop(self, crop: CropItem):
+    def can_buy_sapling(self, fruit: str) -> StardewRule:
+        sapling_prices = {"Apple": 4000, "Apricot": 2000, "Cherry": 3400, "Orange": 4000, "Peach": 6000,
+                          "Pomegranate": 6000, "Banana": 0, "Mango": 0}
+        item_rule = self.received(f"{fruit} Sapling")
+        if self.options[options.SeedShuffle] == options.SeedShuffle.option_disabled:
+            item_rule = item_rule | self.can_spend_money(sapling_prices[fruit])
+        if fruit == "Banana":
+            access_rule = self.has_island_trader() & self.has("Dragon Tooth")
+        elif fruit == "Mango":
+            access_rule = self.has_island_trader() & self.has("Mussel Node")
+        else:
+            access_rule = self.can_reach_region(SVRegion.pierre_store)
+        return item_rule & access_rule
+
+    def can_grow_crop(self, crop: CropItem) -> StardewRule:
         season_rule = self.has_any_season(crop.farm_growth_seasons)
         seed_rule = self.has(crop.seed.name)
         farm_rule = self.can_reach_region(SVRegion.farm) & season_rule
         region_rule = farm_rule | self.can_reach_region(SVRegion.greenhouse)
         return seed_rule & region_rule
+
+    def can_plant_and_grow_item(self, seasons: Union[str, Iterable[str]]) -> StardewRule:
+        if isinstance(seasons, str):
+            seasons = [seasons]
+        season_rule = self.has_any_season(seasons) | self.can_reach_region(SVRegion.greenhouse) | self.has_island_farm()
+        farm_rule = self.can_reach_region(SVRegion.farm) | self.can_reach_region(SVRegion.greenhouse) | self.has_island_farm()
+        return season_rule & farm_rule
+
+    def has_island_farm(self) -> StardewRule:
+        return self.can_reach_region(SVRegion.island_south)
 
     def can_catch_fish(self, fish: FishItem) -> StardewRule:
         region_rule = self.can_reach_any_region(fish.locations)
@@ -1164,4 +1208,10 @@ class StardewLogic:
         if geode == "Any":
             return blacksmith_access & Or([self.has(geode_type) for geode_type in geodes])
         return blacksmith_access & self.has(geode)
+
+    def has_island_trader(self) -> StardewRule:
+        if self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
+            return False_()
+        region_rule = self.can_reach_region(SVRegion.island_north)
+        return region_rule & self.received("Island Trader")
 

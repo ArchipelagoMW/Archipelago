@@ -32,7 +32,7 @@ mines = (SVRegion.mines,)
 desert = (SVRegion.desert,)
 oasis = (SVRegion.desert,)
 sewers = (SVRegion.sewers,)
-island = (SVRegion.ginger_island,)
+island = (SVRegion.island_east,)
 
 golden_pumpkin = ("Golden Pumpkin",)
 # magic_rock_candy = ("Magic Rock Candy",)

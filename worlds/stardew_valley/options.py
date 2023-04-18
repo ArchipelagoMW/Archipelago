@@ -353,6 +353,15 @@ class NumberOfPlayerBuffs(Range):
     # step = 1
 
 
+class ExcludeGingerIsland(Toggle):
+    """Exclude Ginger Island?
+    This option will override every other option in the yaml and forcefully exclude everything related to Ginger Island
+    from the slot."""
+    internal_name = "exclude_ginger_island"
+    display_name = "Exclude Ginger Island"
+    default = 0
+
+
 class MultipleDaySleepEnabled(Toggle):
     """Enable the ability to sleep automatically for multiple days straight?"""
     internal_name = "multiple_day_sleep_enabled"
@@ -489,6 +498,7 @@ stardew_valley_option_classes = [
     Museumsanity,
     Friendsanity,
     NumberOfPlayerBuffs,
+    ExcludeGingerIsland,
     MultipleDaySleepEnabled,
     MultipleDaySleepCost,
     ExperienceMultiplier,

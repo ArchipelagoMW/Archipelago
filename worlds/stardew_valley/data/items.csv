@@ -66,7 +66,7 @@ id,name,classification,groups
 78,Earth Obelisk,useful,
 79,Water Obelisk,useful,
 80,Desert Obelisk,progression,
-81,Island Obelisk,progression,
+81,Island Obelisk,progression,GINGER_ISLAND
 82,Junimo Hut,useful,
 83,Gold Clock,useful,
 84,Progressive Coop,progression,
@@ -148,7 +148,7 @@ id,name,classification,groups
 160,Wheat Seeds,progression,SEED_SHUFFLE
 161,Yam Seeds,progression,SEED_SHUFFLE
 162,Cactus Seeds,progression,SEED_SHUFFLE
-163,Magic Rock Candy,useful,MUSEUM
+163,Magic Rock Candy,useful,"MUSEUM,RESOURCE_PACK,RESOURCE_PACK_USEFUL"
 164,Ancient Seeds Recipe,progression,MUSEUM
 165,Ancient Seeds,useful,MUSEUM
 166,Traveling Merchant Metal Detector,progression,MUSEUM
@@ -175,7 +175,7 @@ id,name,classification,groups
 187,Jodi: 1 <3,progression,FRIENDSANITY
 188,Kent: 1 <3,progression,FRIENDSANITY
 189,Krobus: 1 <3,progression,FRIENDSANITY
-190,Leo: 1 <3,progression,FRIENDSANITY
+190,Leo: 1 <3,progression,"FRIENDSANITY,GINGER_ISLAND"
 191,Lewis: 1 <3,progression,FRIENDSANITY
 192,Linus: 1 <3,progression,FRIENDSANITY
 193,Marnie: 1 <3,progression,FRIENDSANITY
@@ -213,6 +213,38 @@ id,name,classification,groups
 225,Lupini: The Serpent,filler,FESTIVAL
 226,Lupini: Tropical Fish #173,filler,FESTIVAL
 227,Lupini: Land Of Clay,filler,FESTIVAL
+228,Special Order Board,progression,SPECIAL_ORDER_BOARD
+229,Solar Panel Recipe,progression,SPECIAL_ORDER_BOARD
+230,Geode Crusher Recipe,progression,SPECIAL_ORDER_BOARD
+231,Farm Computer Recipe,progression,SPECIAL_ORDER_BOARD
+232,Sewing Machine,progression,SPECIAL_ORDER_BOARD
+233,Coffee Maker,progression,SPECIAL_ORDER_BOARD
+234,Bone Mill Recipe,progression,SPECIAL_ORDER_BOARD
+235,Mini Fridge,progression,SPECIAL_ORDER_BOARD
+236,Mini-Shipping Bin,progression,SPECIAL_ORDER_BOARD
+237,Fiber Seeds Recipe,progression,SPECIAL_ORDER_BOARD
+238,Fishing Information Broadcasting Service,progression,SPECIAL_ORDER_BOARD
+239,Stone Chest Recipe,progression,SPECIAL_ORDER_BOARD
+240,Quality Bobber Recipe,progression,SPECIAL_ORDER_BOARD
+241,Deluxe Fish Tank,progression,SPECIAL_ORDER_BOARD
+242,Mini-Obelisk Recipe,progression,SPECIAL_ORDER_BOARD
+243,Monster Musk Recipe,progression,SPECIAL_ORDER_BOARD
+244,10 Qi Gems,useful,"SPECIAL_ORDER_QI,GINGER_ISLAND"
+245,20 Qi Gems,useful,"SPECIAL_ORDER_QI,GINGER_ISLAND"
+246,25 Qi Gems,useful,"SPECIAL_ORDER_QI,GINGER_ISLAND"
+247,35 Qi Gems,useful,"SPECIAL_ORDER_QI,GINGER_ISLAND"
+248,40 Qi Gems,useful,"SPECIAL_ORDER_QI,GINGER_ISLAND"
+249,50 Qi Gems,useful,"SPECIAL_ORDER_QI,GINGER_ISLAND"
+250,100 Qi Gems,useful,"SPECIAL_ORDER_QI,GINGER_ISLAND"
+251,Rare Seed,progression,SEED_SHUFFLE
+252,Apple Sapling,progression,"SEED_SHUFFLE,RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+253,Apricot Sapling,progression,"SEED_SHUFFLE,RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+254,Cherry Sapling,progression,"SEED_SHUFFLE,RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+255,Orange Sapling,progression,"SEED_SHUFFLE,RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+256,Pomegranate Sapling,progression,"SEED_SHUFFLE,RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+257,Peach Sapling,progression,"SEED_SHUFFLE,RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+258,Banana Sapling,progression,"SEED_SHUFFLE,GINGER_ISLAND,RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+259,Mango Sapling,progression,"SEED_SHUFFLE,GINGER_ISLAND,RESOURCE_PACK,RESOURCE_PACK_USEFUL"
 5000,Resource Pack: 500 Money,useful,"BASE_RESOURCE,RESOURCE_PACK"
 5001,Resource Pack: 1000 Money,useful,"BASE_RESOURCE,RESOURCE_PACK"
 5002,Resource Pack: 1500 Money,useful,"BASE_RESOURCE,RESOURCE_PACK"
@@ -411,13 +443,26 @@ id,name,classification,groups
 5195,Resource Pack: 4 Crab Pot,filler,"FISHING_RESOURCE,RESOURCE_PACK"
 5196,Resource Pack: 5 Crab Pot,filler,"FISHING_RESOURCE,RESOURCE_PACK"
 5197,Resource Pack: 6 Crab Pot,filler,"FISHING_RESOURCE,RESOURCE_PACK"
-5198,Friendship Bonus (1 <3),useful,FRIENDSHIP_PACK
-5199,Friendship Bonus (2 <3),useful,FRIENDSHIP_PACK
-5200,Friendship Bonus (3 <3),useful,FRIENDSHIP_PACK
-5201,Friendship Bonus (4 <3),useful,FRIENDSHIP_PACK
-5202,Resource Pack: 10 Qi Gems,useful,RESOURCE_PACK
-5203,Resource Pack: 20 Qi Gems,useful,RESOURCE_PACK
-5204,Resource Pack: 30 Qi Gems,useful,RESOURCE_PACK
-5205,Resource Pack: 40 Qi Gems,useful,RESOURCE_PACK
-5206,Resource Pack: 50 Qi Gems,useful,RESOURCE_PACK
-5207,Resource Pack: 60 Qi Gems,useful,RESOURCE_PACK
+5198,Friendship Bonus (1 <3),useful,"FRIENDSHIP_PACK,DEPRECATED"
+5199,Friendship Bonus (2 <3),useful,"FRIENDSHIP_PACK"
+5200,Friendship Bonus (3 <3),useful,"FRIENDSHIP_PACK,DEPRECATED"
+5201,Friendship Bonus (4 <3),useful,"FRIENDSHIP_PACK,DEPRECATED"
+,30 Qi Gems,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL,GINGER_ISLAND"
+,Solar Panel,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+,Geode Crusher,filler,"RESOURCE_PACK,MAXIMUM_ONE"
+,Farm Computer,filler,"RESOURCE_PACK,MAXIMUM_ONE"
+,Bone Mill,filler,"RESOURCE_PACK,MAXIMUM_ONE"
+,Fiber Seeds,filler,"RESOURCE_PACK"
+,Chest,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+,Stone Chest,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+,Quality Bobber,filler,"RESOURCE_PACK"
+,Mini-Obelisk,filler,"RESOURCE_PACK,EXACTLY_TWO"
+,Monster Musk,filler,"RESOURCE_PACK"
+,Sprinkler,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+,Quality Sprinkler,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+,Iridium Sprinkler,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+,Scarecrow,filler,"RESOURCE_PACK"
+,Deluxe Scarecrow,filler,"RESOURCE_PACK_USEFUL"
+,Furnace,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+,Charcoal Kiln,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+,Lightning Rod,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"

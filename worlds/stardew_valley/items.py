@@ -58,6 +58,13 @@ class Group(enum.Enum):
     FESTIVAL = enum.auto()
     RARECROW = enum.auto()
     TRAP = enum.auto()
+    MAXIMUM_ONE = enum.auto()
+    EXACTLY_TWO = enum.auto
+    DEPRECATED = enum.auto()
+    RESOURCE_PACK_USEFUL = enum.auto()
+    SPECIAL_ORDER_BOARD = enum.auto()
+    SPECIAL_ORDER_QI = enum.auto()
+    GINGER_ISLAND = enum.auto()
 
 
 @dataclass(frozen=True)
@@ -128,7 +135,8 @@ initialize_item_table()
 initialize_groups()
 
 
-def create_items(item_factory: StardewItemFactory, locations_count: int, items_to_exclude: List[Item], world_options: StardewOptions,
+def create_items(item_factory: StardewItemFactory, locations_count: int, items_to_exclude: List[Item],
+                 world_options: StardewOptions,
                  random: Random) -> List[Item]:
     items = create_unique_items(item_factory, world_options, random)
 
@@ -144,7 +152,7 @@ def create_items(item_factory: StardewItemFactory, locations_count: int, items_t
     items += unique_filler_items
     logger.debug(f"Created {len(unique_filler_items)} unique filler items")
 
-    resource_pack_items = fill_with_resource_packs(item_factory, random, locations_count - len(items))
+    resource_pack_items = fill_with_resource_packs(item_factory, world_options, random, items, locations_count)
     items += resource_pack_items
     logger.debug(f"Created {len(resource_pack_items)} resource packs")
 
@@ -285,10 +293,13 @@ def create_friendsanity_items(item_factory: StardewItemFactory, world_options: S
     exclude_locked_villagers = world_options[options.Friendsanity] == options.Friendsanity.option_starting_npcs or \
                                world_options[options.Friendsanity] == options.Friendsanity.option_bachelors
     exclude_post_marriage_hearts = world_options[options.Friendsanity] != options.Friendsanity.option_all_with_marriage
+    exclude_ginger_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
     for villager in all_villagers:
         if not villager.available and exclude_locked_villagers:
             continue
         if not villager.bachelor and exclude_non_bachelors:
+            continue
+        if villager.name == "Leo" and exclude_ginger_island:
             continue
         for heart in range(1, 15):
             if villager.bachelor and exclude_post_marriage_hearts and heart > 8:
@@ -346,7 +357,9 @@ def create_seeds(item_factory: StardewItemFactory, world_options: StardewOptions
     if world_options[options.SeedShuffle] == options.SeedShuffle.option_disabled:
         return []
 
-    return [item_factory(item) for item in items_by_group[Group.SEED_SHUFFLE]]
+    include_ginger_island = world_options[options.ExcludeGingerIsland] != options.ExcludeGingerIsland.option_true
+    return [item_factory(item) for item in items_by_group[Group.SEED_SHUFFLE]
+            if include_ginger_island or Group.GINGER_ISLAND not in item.groups]
 
 
 def create_festival_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
@@ -354,7 +367,8 @@ def create_festival_rewards(item_factory: StardewItemFactory, world_options: Sta
         return []
 
     return [
-        *[item_factory(item) for item in items_by_group[Group.FESTIVAL] if item.classification != ItemClassification.filler],
+        *[item_factory(item) for item in items_by_group[Group.FESTIVAL] if
+          item.classification != ItemClassification.filler],
         item_factory("Stardrop"),
     ]
 
@@ -363,11 +377,30 @@ def create_filler_festival_rewards(item_factory: StardewItemFactory, world_optio
     if world_options[options.FestivalLocations] == options.FestivalLocations.option_disabled:
         return []
 
-    return [item_factory(item) for item in items_by_group[Group.FESTIVAL] if item.classification == ItemClassification.filler]
+    return [item_factory(item) for item in items_by_group[Group.FESTIVAL] if
+            item.classification == ItemClassification.filler]
+
+
+def create_special_order_board_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
+    if world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_disabled:
+        return []
+
+    return [item_factory(item) for item in items_by_group[Group.SPECIAL_ORDER_BOARD]]
+
+
+def create_special_order_qi_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
+    if (world_options[options.SpecialOrderLocations] != options.SpecialOrderLocations.option_board_qi or
+        world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true):
+        return []
+
+    return [item_factory("100 Qi Gems"), item_factory("10 Qi Gems"), item_factory("40 Qi Gems"),
+            item_factory("25 Qi Gems"), item_factory("25 Qi Gems"), item_factory("40 Qi Gems"),
+            item_factory("20 Qi Gems"), item_factory("50 Qi Gems"), item_factory("40 Qi Gems"),
+            item_factory("35 Qi Gems")]
 
 
 def create_unique_filler_items(item_factory: StardewItemFactory, world_options: options.StardewOptions, random: Random,
-                             available_item_slots: int) -> List[Item]:
+                               available_item_slots: int) -> List[Item]:
     items = []
 
     items.extend(create_filler_festival_rewards(item_factory, world_options))
@@ -377,16 +410,46 @@ def create_unique_filler_items(item_factory: StardewItemFactory, world_options: 
     return items
 
 
-def fill_with_resource_packs(item_factory: StardewItemFactory, random: Random,
-                             required_resource_pack: int) -> List[Item]:
+def fill_with_resource_packs(item_factory: StardewItemFactory, world_options: options.StardewOptions, random: Random, items_already_added: List[Item],
+                             number_locations: int) -> List[Item]:
     all_resource_packs = items_by_group[Group.RESOURCE_PACK]
+    items_already_added_names = [item.name for item in items_already_added]
+    useful_resource_packs = [pack for pack in items_by_group[Group.RESOURCE_PACK_USEFUL]
+                             if pack.name not in items_already_added_names]
     all_resource_packs.extend(items_by_group[Group.TRASH])
     # all_resource_packs.extend(items_by_group[Group.TRAP])
 
-    items = []
+    all_resource_packs = [pack for pack in all_resource_packs if Group.DEPRECATED not in pack.groups]
+    if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
+        all_resource_packs = [pack for pack in all_resource_packs if Group.GINGER_ISLAND not in pack.groups]
+        useful_resource_packs = [pack for pack in useful_resource_packs if Group.GINGER_ISLAND not in pack.groups]
 
-    for i in range(required_resource_pack):
+    items = []
+    number_useful_packs = len(useful_resource_packs)
+    required_resource_pack = number_locations - len(items_already_added)
+    if required_resource_pack < number_useful_packs:
+        chosen_useful_packs = [item_factory(resource_pack) for resource_pack in
+                               random.sample(useful_resource_packs, required_resource_pack)]
+        items.extend(chosen_useful_packs)
+        return items
+
+    chosen_useful_packs = [item_factory(resource_pack) for resource_pack in useful_resource_packs]
+    items.extend(chosen_useful_packs)
+    required_resource_pack -= number_useful_packs
+
+    for i in range(required_resource_pack - 1):
         resource_pack = random.choice(all_resource_packs)
+        exactly_2 = Group.EXACTLY_TWO in resource_pack.groups
         items.append(item_factory(resource_pack))
+        if exactly_2:
+            items.append(item_factory(resource_pack))
+            i += 1
+        if exactly_2 or Group.MAXIMUM_ONE in resource_pack.groups:
+            all_resource_packs.remove(resource_pack)
+
+    # The last pack is added from the packs that don't need to exist twice
+    all_solo_packs = [pack for pack in all_resource_packs if Group.EXACTLY_TWO not in pack.groups]
+    last_resource_pack = random.choice(all_solo_packs)
+    items.append(item_factory(last_resource_pack))
 
     return items
