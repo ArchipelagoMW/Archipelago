@@ -18,13 +18,16 @@ class ItemData(NamedTuple):
     def should_include(self, world: MultiWorld, player: int) -> bool:
         if self.mode == "colors":
             return get_option_value(world, player, "shuffle_colors") > 0
-        elif self.mode == "doors" or self.mode == "orange tower":
-            if get_option_value(world, player, "shuffle_doors") > 0:
-                if self.mode == "orange tower" and get_option_value(world, player, "orange_tower_access") == 2:
-                    return False
-                return True
-            else:
-                return False
+        elif self.mode == "doors":
+            return get_option_value(world, player, "shuffle_doors") > 0
+        elif self.mode == "orange tower":
+            # doors is on and tower isn't progressive
+            return get_option_value(world, player, "shuffle_doors") > 0 and get_option_value(world, player,
+                                                                                             "orange_tower_access") != 2
+        elif self.mode == "complex door":
+            return get_option_value(world, player, "shuffle_doors") == 2  # complex doors
+        elif self.mode == "door group":
+            return get_option_value(world, player, "shuffle_doors") == 1  # simple doors
         elif self.mode == "special":
             return False
         else:
@@ -60,12 +63,22 @@ class StaticLingoItems:
         for color in ["Black", "Red", "Blue", "Yellow", "Green", "Orange", "Gray", "Brown", "Purple"]:
             self.create_item(color, False, True, "colors")
 
+        door_groups: Dict[str, List[str]] = {}
         for room_name, doors in StaticLingoLogic.DOORS_BY_ROOM.items():
             for door_name, door in doors.items():
                 if door.skip_item is False and door.event is False:
-                    self.create_item(door.item_name, False, True,
-                                     "orange tower" if room_name == "Orange Tower" else "doors", door.door_ids,
-                                     door.painting_ids)
+                    if room_name == "Orange Tower":
+                        door_mode = "orange tower"
+                    elif door.group is None:
+                        door_mode = "doors"
+                    else:
+                        door_mode = "complex door"
+                        door_groups.setdefault(door.group, []).extend(door.door_ids)
+
+                    self.create_item(door.item_name, False, True, door_mode, door.door_ids, door.painting_ids)
+
+        for group, group_door_ids in door_groups.items():
+            self.create_item(group, False, True, "door group", group_door_ids, [])
 
         self.create_item("Progressive Orange Tower", False, True, "special")
         self.create_item("Nothing", False, False)

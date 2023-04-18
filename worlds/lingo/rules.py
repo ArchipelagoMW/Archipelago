@@ -27,9 +27,8 @@ class LingoLogic(LogicMixin):
         fake_pilgrimage = [
             ["Starting Room", "Main Door"], ["Second Room", "Exit Door"],
             ["Crossroads", "Tower Entrance"], ["Orange Tower Fourth Floor", "Hot Crusts Door"],
-            ["Outside The Initiated", "Shortcut to Hub Room"],
-            ["Orange Tower First Floor", "Shortcut to Hub Room"],
-            ["Outside The Undeterred", "Fours"], ["Hub Room", "Crossroads Entrance"],
+            ["Outside The Initiated", "Shortcut to Hub Room"], ["Orange Tower First Floor", "Shortcut to Hub Room"],
+            ["Directional Gallery", "Shortcut to The Undeterred"], ["Orange Tower First Floor", "Salt/Pepper Door"],
             ["The Tenacious", "Shortcut to Hub Room"], ["Outside The Agreeable", "Tenacious Entrance"]
         ]
         viable_option = True

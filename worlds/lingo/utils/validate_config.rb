@@ -37,6 +37,8 @@ mentioned_rooms = Set[]
 mentioned_doors = Set[]
 mentioned_panels = Set[]
 
+door_groups = {}
+
 directives = Set["entrances", "panels", "doors", "paintings"]
 
 config = YAML.load_file(configpath)
@@ -169,6 +171,11 @@ config.each do |room_name, room|
     elsif not door["skip_location"]
       puts "#{room_name} - #{door_name} :::: Should be marked skip_location if there are no panels"
     end
+
+    if door.include?("group")
+      door_groups[door["group"]] ||= 0
+      door_groups[door["group"]] += 1
+    end
   end
 
   (room["paintings"] || []).each do |painting|
@@ -217,4 +224,10 @@ end
 errored_doors = mentioned_doors - configured_doors
 unless errored_doors.empty? then
   puts "The folloring doors are mentioned but do not exist: " + errored_doors.to_s
+end
+
+door_groups.each do |group,num|
+  if num == 1 then
+    puts "Door group \"#{group}\" only has one door in it"
+  end
 end

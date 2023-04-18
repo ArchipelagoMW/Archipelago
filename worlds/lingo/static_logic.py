@@ -35,6 +35,7 @@ class Door(NamedTuple):
     door_ids: List[str]
     painting_ids: List[str]
     event: bool
+    group: Optional[str]
 
 
 class Panel(NamedTuple):
@@ -199,6 +200,11 @@ class StaticLingoLogic:
                         else:
                             event = False
 
+                        if "group" in door_data:
+                            group = door_data["group"]
+                        else:
+                            group = None
+
                         if "panels" in door_data:
                             panels = list()
                             for panel in door_data["panels"]:
@@ -243,7 +249,7 @@ class StaticLingoLogic:
                             painting_ids = []
 
                         door_obj = Door(door_name, item_name, location_name, panels, skip_location, skip_item, door_ids,
-                                        painting_ids, event)
+                                        painting_ids, event, group)
 
                         self.DOORS[door_obj.item_name] = door_obj
                         self.DOORS_BY_ROOM[room_name][door_name] = door_obj

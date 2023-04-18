@@ -83,7 +83,7 @@ class LingoWorld(World):
         connection.connect(target_region)
 
     def handle_pilgrim_room(self):
-        target_region = self.multiworld.get_region("Pilgrim Room", self.player)
+        target_region = self.multiworld.get_region("Pilgrim Antechamber", self.player)
         source_region = self.multiworld.get_region("Outside The Agreeable", self.player)
         connection = Entrance(self.player, f"Pilgrimage", source_region)
         connection.access_rule = lambda state: state.lingo_can_use_pilgrimage(

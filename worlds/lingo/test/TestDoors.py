@@ -8,11 +8,13 @@ class TestRequiredRoomLogic(LingoTestBase):
 
     def test_pilgrim_first(self) -> None:
         assert not self.multiworld.state.can_reach("The Seeker", "Region", self.player)
+        assert not self.multiworld.state.can_reach("Pilgrim Antechamber", "Region", self.player)
         assert not self.multiworld.state.can_reach("Pilgrim Room", "Region", self.player)
         assert not self.multiworld.state.can_reach("The Seeker - Achievement", "Location", self.player)
 
         self.collect_by_name("Pilgrim Room - Sun Painting")
         assert not self.multiworld.state.can_reach("The Seeker", "Region", self.player)
+        assert self.multiworld.state.can_reach("Pilgrim Antechamber", "Region", self.player)
         assert self.multiworld.state.can_reach("Pilgrim Room", "Region", self.player)
         assert not self.multiworld.state.can_reach("The Seeker - Achievement", "Location", self.player)
 

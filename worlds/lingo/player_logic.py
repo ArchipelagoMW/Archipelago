@@ -52,8 +52,14 @@ class LingoPlayerLogic:
                     self.EVENT_LOC_TO_ITEM[itemloc_name] = itemloc_name
                     self.set_door_item(room_name, door_name, itemloc_name)
         elif get_option_value(world, player, "shuffle_doors") == 1:  # simple doors
-            # TODO
-            pass
+            for room_name, room_data in StaticLingoLogic.DOORS_BY_ROOM.items():
+                for door_name, door_data in room_data.items():
+                    # This line is duplicated from StaticLingoItems
+                    if door_data.skip_item is False and door_data.event is False:
+                        if door_data.group is None:
+                            self.set_door_item(room_name, door_name, door_data.item_name)
+                        else:
+                            self.set_door_item(room_name, door_name, door_data.group)
         elif get_option_value(world, player, "shuffle_doors") == 2:  # complex doors
             for room_name, room_data in StaticLingoLogic.DOORS_BY_ROOM.items():
                 for door_name, door_data in room_data.items():

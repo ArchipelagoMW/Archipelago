@@ -46,6 +46,8 @@
   #                   generated using the names of the panels.
   # - skip_location:  If true, no location is generated for this door.
   # - skip_item:      If true, no item is generated for this door.
+  # - group:          When simple doors is used, all doors with the same group
+  #                   will be covered by a single item.
   #
   # paintings is an array of paintings in the room. This is used for painting
   # shuffling.
@@ -78,6 +80,7 @@
     doors:
       Main Door:
         id: Entry Room Area Doors/Door_hi_hi
+        group: Entry Doors
         panels:
           - HI
       Back Right Door:
@@ -90,6 +93,7 @@
           - Palindrome Room Area Doors/Door_racecar_racecar_2
           - Palindrome Room Area Doors/Door_solos_solos_2
         skip_location: True
+        group: Rhyme Room Doors
         panels:
           - room: The Tenacious
             panel: LEVEL (Black)
@@ -162,6 +166,7 @@
       Dead End Door:
         id: Appendix Room Area Doors/Door_rat_tar_2
         skip_location: true
+        group: Dead End Area Access
         panels:
           - room: Hub Room
             panel: RAT
@@ -180,6 +185,7 @@
           - Appendix Room Area Doors/Door_rat_tar_3
           - Double Room Area Doors/Door_room_entry_stairs
         skip_location: True
+        group: Rhyme Room Doors
         panels:
           - room: The Tenacious
             panel: LEVEL (Black)
@@ -218,6 +224,7 @@
     doors:
       Exit Door:
         id: Entry Room Area Doors/Door_hi_high
+        group: Entry Doors
         panels:
           - HI
   Hub Room:
@@ -286,27 +293,32 @@
           - ORDER
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_slaughter_laughter
+        group: Entrances to The Tenacious
         panels:
           - SLAUGHTER
       Symmetry Door:
         id:
           - Symmetry Room Area Doors/Door_near_far
           - Symmetry Room Area Doors/Door_far_near
+        group: Symmetry Doors
         panels:
           - NEAR
           - FAR
       Shortcut to Hedge Maze:
         id: Maze Area Doors/Door_trace_trace
+        group: Hedge Maze Doors
         panels:
           - TRACE
       Near RAT Door:
         id: Appendix Room Area Doors/Door_deadend_deadened
         skip_location: True
+        group: Dead End Area Access
         panels:
           - room: Hidden Room
             panel: DEAD END
       Traveled Entrance:
         id: Appendix Room Area Doors/Door_open_open
+        group: Entrance to The Traveled
         panels:
           - OPEN
       Lost Door:
@@ -338,30 +350,46 @@
     paintings:
       - id: smile_painting_6
         orientation: north
-  Pilgrim Room:
+  Pilgrim Antechamber:
     # Let's not shuffle the paintings yet.
     entrances:
       # The pilgrimage is hardcoded in rules.py
-      The Seeker:
-        door: Shortcut to The Seeker
       Starting Room:
         door: Sun Painting
+    panels:
+      HOT CRUST:
+        id: Lingo Room/Panel_shortcut
+        colors: yellow
+      PILGRIMAGE:
+        id: Lingo Room/Panel_pilgrim
+        colors: blue
+    doors:
+      Sun Painting:
+        item_name: Pilgrim Room - Sun Painting
+        location_name: Pilgrim Room - HOT CRUST
+        painting_id: pilgrim_painting2
+        panels:
+          - HOT CRUST
+      Exit:
+        event: True
+        panels:
+          - PILGRIMAGE
+  Pilgrim Room:
+    entrances:
+      The Seeker:
+        door: Shortcut to The Seeker
+      Pilgrim Antechamber:
+        room: Pilgrim Antechamber
+        door: Exit
     panels:
       THIS:
         id: Lingo Room/Panel_lingo_9
         colors: gray
-      HOT CRUST:
-        id: Lingo Room/Panel_shortcut
-        colors: yellow
     doors:
       Shortcut to The Seeker:
         id: Master Room Doors/Door_pilgrim_shortcut
         panels:
           - THIS
-      Sun Painting:
-        painting_id: pilgrim_painting2
-        panels:
-          - HOT CRUST
   Crossroads:
     entrances:
       Hub Room: True # The sunwarp means that we never need the ORDER door
@@ -409,6 +437,7 @@
     doors:
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_decay_day
+        group: Entrances to The Tenacious
         panels:
           - DECAY
       Discerning Entrance:
@@ -421,11 +450,13 @@
           - Shuffle Room Area Doors/Door_tower2
           - Shuffle Room Area Doors/Door_tower3
           - Shuffle Room Area Doors/Door_tower4
+        group: Crossroads - Tower Entrances
         panels:
           - WE ROT
       Tower Back Entrance:
         id: Shuffle Room Area Doors/Door_runt
         location_name: Crossroads - TURN/RUNT
+        group: Crossroads - Tower Entrances
         panels:
           - TURN
           - room: Orange Tower Fourth Floor
@@ -439,6 +470,7 @@
           - SWORD
       Eye Wall:
         id: Shuffle Room Area Doors/Door_behind
+        group: Access to The Wondrous
         panels:
           - BEND HI
       Hollow Hallway:
@@ -562,6 +594,7 @@
           - Palindrome Room Area Doors/Door_racecar_racecar_1
           - Palindrome Room Area Doors/Door_solos_solos_1
         location_name: The Tenacious - Palindromes
+        group: Entrances to The Tenacious
         panels:
           - LEVEL (Black)
           - RACECAR (Black)
@@ -608,6 +641,7 @@
         id:
           - Symmetry Room Area Doors/Door_warts_straw
           - Symmetry Room Area Doors/Door_straw_warts
+        group: Symmetry Doors
         panels:
           - WARTS
           - STRAW
@@ -630,6 +664,7 @@
         id:
           - Symmetry Room Area Doors/Door_leaf_feel
           - Symmetry Room Area Doors/Door_feel_leaf
+        group: Symmetry Doors
         panels:
           - LEAF
           - FEEL
@@ -689,10 +724,12 @@
     doors:
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_massacred_sacred
+        group: Entrances to The Tenacious
         panels:
           - MASSACRED
       Black Door:
         id: Symmetry Room Area Doors/Door_black_white
+        group: Entrances to The Tenacious
         panels:
           - BLACK
       Agreeable Entrance:
@@ -706,6 +743,7 @@
           - RIGHT
       Purple Barrier:
         id: Color Arrow Room Doors/Door_purple_3
+        group: Color Hunt Barriers
         skip_location: True
         panels:
           - room: Champion's Rest
@@ -729,6 +767,7 @@
     doors:
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_dread_dead
+        group: Entrances to The Tenacious
         panels:
           - DREAD
   The Agreeable:
@@ -750,6 +789,7 @@
     doors:
       Shortcut to Hedge Maze:
         id: Symmetry Room Area Doors/Door_bye_hi
+        group: Hedge Maze Doors
         panels:
           - BYE
   Hedge Maze:
@@ -782,6 +822,7 @@
     doors:
       Perceptive Entrance:
         id: Maze Area Doors/Door_maze_maze
+        group: Hedge Maze Doors
         panels:
           - DOWN
       Painting Shortcut:
@@ -796,6 +837,7 @@
           - Maze Area Doors/Door_look_room_2
           - Maze Area Doors/Door_look_room_3
         skip_location: True
+        group: Observant Doors
         panels:
           - room: The Perceptive
             panel: GAZE
@@ -864,11 +906,13 @@
     doors:
       Backside Door:
         id: Maze Area Doors/Door_backside
+        group: Backside Doors
         panels:
           - BACK
           - SIDE
       Stairs:
         id: Maze Area Doors/Door_stairs
+        group: Observant Doors
         panels:
           - STAIRS
   The Incomparable:
@@ -891,6 +935,7 @@
       Eight Painting:
         id: Red Blue Purple Room Area Doors/Door_a_strands
         location_name: Giant Sevens
+        group: Observant Doors
         panels:
           - I (Seven)
           - room: Courtyard
@@ -1007,10 +1052,12 @@
     doors:
       Shortcut to Hub Room:
         id: Shuffle Room Area Doors/Door_secret_secret
+        group: Orange Tower First Floor - Shortcuts
         panels:
           - SECRET
       Salt/Pepper Door:
         id: Count Up Room Area Doors/Door_salt_pepper
+        group: Orange Tower First Floor - Shortcuts
         panels:
           - SALT
           - room: Directional Gallery
@@ -1053,6 +1100,7 @@
     doors:
       Red Barrier:
         id: Color Arrow Room Doors/Door_red_6
+        group: Color Hunt Barriers
         skip_location: True
         panels:
           - room: Champion's Rest
@@ -1060,6 +1108,7 @@
       Rhyme Room Entrance:
         id: Double Room Area Doors/Door_room_entry_stairs2
         skip_location: True
+        group: Rhyme Room Doors
         panels:
           - room: The Tenacious
             panel: LEVEL (Black)
@@ -1073,6 +1122,7 @@
           - Color Arrow Room Doors/Door_orange_hider_2
           - Color Arrow Room Doors/Door_orange_hider_3
         location_name: Color Hunt - RED and YELLOW
+        group: Champion's Rest - Color Barriers
         item_name: Champion's Rest - Orange Barrier
         panels:
           - RED
@@ -1176,6 +1226,7 @@
     doors:
       Welcome Back:
         id: Entry Room Area Doors/Door_sizes
+        group: Welcome Back Doors
         panels:
           - SIZE (Small)
           - SIZE (Big)
@@ -1331,6 +1382,7 @@
           - FOURTH
       Backside Door:
         id: Count Up Room Area Doors/Door_yellow_backside
+        group: Backside Doors
         skip_location: True
         panels:
           - FIRST
@@ -1339,6 +1391,7 @@
           - FOURTH
       Green Barrier:
         id: Color Arrow Room Doors/Door_green_5
+        group: Color Hunt Barriers
         skip_location: True
         panels:
           - room: Champion's Rest
@@ -1372,6 +1425,8 @@
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_white
+        item_name: The Colorful - White Door
+        group: Colorful Doors
         panels:
           - BEGIN
   The Colorful (Black):
@@ -1386,6 +1441,8 @@
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_black
+        item_name: The Colorful - Black Door
+        group: Colorful Doors
         panels:
           - FOUND
   The Colorful (Red):
@@ -1400,6 +1457,8 @@
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_red
+        item_name: The Colorful - Red Door
+        group: Colorful Doors
         panels:
           - LOAF
   The Colorful (Yellow):
@@ -1414,6 +1473,8 @@
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_yellow
+        item_name: The Colorful - Yellow Door
+        group: Colorful Doors
         panels:
           - CREAM
   The Colorful (Blue):
@@ -1428,6 +1489,8 @@
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_blue
+        item_name: The Colorful - Blue Door
+        group: Colorful Doors
         panels:
           - SUN
   The Colorful (Purple):
@@ -1442,6 +1505,8 @@
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_purple
+        item_name: The Colorful - Purple Door
+        group: Colorful Doors
         panels:
           - SPOON
   The Colorful (Orange):
@@ -1456,6 +1521,8 @@
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_orange
+        item_name: The Colorful - Orange Door
+        group: Colorful Doors
         panels:
           - LETTERS
   The Colorful (Green):
@@ -1470,6 +1537,8 @@
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_green
+        item_name: The Colorful - Green Door
+        group: Colorful Doors
         panels:
           - WALLS
   The Colorful (Brown):
@@ -1484,6 +1553,8 @@
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_brown
+        item_name: The Colorful - Brown Door
+        group: Colorful Doors
         panels:
           - IRON
   The Colorful (Gray):
@@ -1497,7 +1568,11 @@
         colors: gray
     doors:
       Progress Door:
-        id: Doorway Room Doors/Door_gray
+        id:
+          - Doorway Room Doors/Door_gray
+          - Doorway Room Doors/Door_gray2 # See comment below
+        item_name: The Colorful - Gray Door
+        group: Colorful Doors
         panels:
           - OBSTACLE
   The Colorful:
@@ -1546,6 +1621,7 @@
     doors:
       Shortcut to Starting Room:
         id: Entry Room Area Doors/Door_return_return
+        group: Welcome Back Doors
         panels:
           - WELCOME BACK
   Owl Hallway:
@@ -1567,6 +1643,7 @@
     doors:
       Shortcut to Hedge Maze:
         id: Maze Area Doors/Door_strays_maze
+        group: Hedge Maze Doors
         panels:
           - STRAYS
     paintings:
@@ -1637,12 +1714,14 @@
           - UNCOVER
       Blue Barrier:
         id: Color Arrow Room Doors/Door_blue_3
+        group: Color Hunt Barriers
         skip_location: True
         panels:
           - room: Champion's Rest
             panel: BLUE
       Orange Barrier:
         id: Color Arrow Room Doors/Door_orange_3
+        group: Color Hunt Barriers
         skip_location: True
         panels:
           - room: Champion's Rest
@@ -1658,6 +1737,7 @@
         id: Color Arrow Room Doors/Door_green_hider_1
         location_name: Color Hunt - BLUE and YELLOW
         item_name: Champion's Rest - Green Barrier
+        group: Champion's Rest - Color Barriers
         panels:
           - BLUE
           - room: Directional Gallery
@@ -1669,6 +1749,7 @@
           - Color Arrow Room Doors/Door_purple_hider_3
         location_name: Color Hunt - RED and BLUE
         item_name: Champion's Rest - Purple Barrier
+        group: Champion's Rest - Color Barriers
         panels:
           - BLUE
           - room: Orange Tower Third Floor
@@ -1734,6 +1815,7 @@
     doors:
       Color Hallways Entrance:
         id: Appendix Room Area Doors/Door_hello_hi
+        group: Entrance to The Traveled
         panels:
           - HELLO
   Color Hallways:
@@ -2008,6 +2090,7 @@
     doors:
       Door to Directional Gallery:
         id: Count Up Room Area Doors/Door_five_unlocked
+        group: Directional Gallery Doors
         skip_location: True
         panels:
           - FIVE
@@ -2213,11 +2296,13 @@
     doors:
       Shortcut to The Undeterred:
         id: Count Up Room Area Doors/Door_return_double
+        group: Directional Gallery Doors
         panels:
           - TURN
           - LEARN
       Yellow Barrier:
         id: Color Arrow Room Doors/Door_yellow_4
+        group: Color Hunt Barriers
         skip_location: True
         panels:
           - room: Champion's Rest
@@ -2358,6 +2443,7 @@
           - SHORTCUT
       Backside Door:
         id: Red Blue Purple Room Area Doors/Door_locked_knocked2 # yeah...
+        group: Backside Doors
         panels:
           - FARTHER
   The Steady:
@@ -2503,6 +2589,7 @@
           - Ceiling Room Doors/Door_blue
           - Ceiling Room Doors/Door_blue2
         location_name: The Artistic - Smiley and Panda
+        group: Artistic Doors
         panels:
           - FINE
           - BLADE
@@ -2572,6 +2659,7 @@
           - Ceiling Room Doors/Door_red
           - Ceiling Room Doors/Door_red2
         location_name: The Artistic - Panda and Apple
+        group: Artistic Doors
         panels:
           - EYE (Top)
           - EYE (Bottom)
@@ -2644,6 +2732,7 @@
           - Ceiling Room Doors/Door_black
           - Ceiling Room Doors/Door_black2
         location_name: The Artistic - Apple and Lattice
+        group: Artistic Doors
         panels:
           - POSH
           - MALL
@@ -2714,6 +2803,7 @@
           - Ceiling Room Doors/Door_yellow
           - Ceiling Room Doors/Door_yellow2
         location_name: The Artistic - Lattice and Smiley
+        group: Artistic Doors
         panels:
           - SPRIG
           - RELEASES
@@ -2770,6 +2860,7 @@
     doors:
       Exit:
         id: Count Up Room Area Doors/Door_near_near
+        group: Access to The Wondrous
         panels:
           - NEAR
     paintings:
@@ -2798,6 +2889,7 @@
     doors:
       Wondrous Entrance:
         id: Red Blue Purple Room Area Doors/Door_wonderland
+        group: Access to The Wondrous
         panels:
           - SHRINK
   The Wondrous (Doorknob):
@@ -3062,6 +3154,7 @@
         id:
           - Double Room Area Doors/Door_room_3a
           - Double Room Area Doors/Door_room_3bc
+        group: Rhyme Room Doors
         panels:
           - SCHEME
           - FANTASY
@@ -3106,6 +3199,7 @@
     doors:
       Exit:
         id: Double Room Area Doors/Door_room_exit
+        group: Rhyme Room Doors
         panels:
           - PLUMP
           - BOUNCE
@@ -3144,6 +3238,7 @@
           - Double Room Area Doors/Door_room_2b
           - Double Room Area Doors/Door_room_3b
         location_name: Rhyme Room - Circle/Smiley Wall
+        group: Rhyme Room Doors
         panels:
           - BIRD
           - LETTER
@@ -3198,6 +3293,7 @@
           - Double Room Area Doors/Door_room_2a
           - Double Room Area Doors/Door_room_1c
         location_name: Rhyme Room - Circle/Looped Square Wall
+        group: Rhyme Room Doors
         panels:
           - WALKED
           - OBSTRUCTED
@@ -3216,6 +3312,7 @@
           - Double Room Area Doors/Door_room_1a
           - Double Room Area Doors/Door_room_5a
         location_name: Rhyme Room - Cross/Looped Square Wall
+        group: Rhyme Room Doors
         panels:
           - SKIES
           - SWELL
@@ -3234,6 +3331,7 @@
           - Double Room Area Doors/Door_room_1b
           - Double Room Area Doors/Door_room_4b
         location_name: Rhyme Room - Target/Looped Square Wall
+        group: Rhyme Room Doors
         panels:
           - PENNED
           - CLIMB
@@ -3274,6 +3372,7 @@
     doors:
       Door to Cross:
         id: Double Room Area Doors/Door_room_4a
+        group: Rhyme Room Doors
         panels:
           - PISTOL
           - QUARTZ
