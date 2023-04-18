@@ -58,7 +58,7 @@ class LingoWorld(World):
         }
 
     def generate_early(self):
-        self.player_logic = LingoPlayerLogic(self.multiworld, self.player)
+        self.player_logic = LingoPlayerLogic(self.multiworld, self.player, self.static_logic)
 
     def create_region(self, room: Room):
         new_region = Region(room.name, self.player, self.multiworld)
@@ -77,7 +77,7 @@ class LingoWorld(World):
         source_region = self.multiworld.get_region(entrance.room, self.player)
         connection = Entrance(self.player, f"{entrance.room} to {target.name}", source_region)
         connection.access_rule = lambda state: state.lingo_can_use_entrance(
-            target.name, entrance.doors, self.multiworld, self.player, self.player_logic)
+            target.name, entrance.door, self.multiworld, self.player, self.player_logic)
 
         source_region.exits.append(connection)
         connection.connect(target_region)
@@ -92,6 +92,20 @@ class LingoWorld(World):
         source_region.exits.append(connection)
         connection.connect(target_region)
 
+    def connect_painting(self, warp_enter: str, warp_exit: str):
+        source_painting = StaticLingoLogic.PAINTINGS[warp_enter]
+        target_painting = StaticLingoLogic.PAINTINGS[warp_exit]
+
+        target_region = self.multiworld.get_region(target_painting.room, self.player)
+        source_region = self.multiworld.get_region(source_painting.room, self.player)
+        connection = Entrance(self.player, f"{source_painting.room} to {target_painting.room} (Painting)",
+                              source_region)
+        connection.access_rule = lambda state: state.lingo_can_use_entrance(
+            target_painting.room, source_painting.required_door, self.multiworld, self.player, self.player_logic)
+
+        source_region.exits.append(connection)
+        connection.connect(target_region)
+
     def create_regions(self):
         self.multiworld.regions += [
             Region("Menu", self.player, self.multiworld)
@@ -99,14 +113,21 @@ class LingoWorld(World):
 
         for room in StaticLingoLogic.ALL_ROOMS:
             self.create_region(room)
-        
+
         for room in StaticLingoLogic.ALL_ROOMS:
             for entrance in room.entrances:
+                if entrance.painting and get_option_value(self.multiworld, self.player, "shuffle_paintings"):
+                    # Don't use the vanilla painting connections if we are shuffling paintings.
+                    continue
+
                 self.connect(room, entrance)
 
         self.handle_pilgrim_room()
 
-    
+        if get_option_value(self.multiworld, self.player, "shuffle_paintings"):
+            for warp_enter, warp_exit in self.player_logic.PAINTING_MAPPING.items():
+                self.connect_painting(warp_enter, warp_exit)
+
     def create_items(self):
         pool = []
 
@@ -121,9 +142,9 @@ class LingoWorld(World):
 
         while len(pool) < len(self.player_logic.REAL_LOCATIONS):
             pool.append(self.create_item("Nothing"))
-        
+
         self.multiworld.itempool += pool
-    
+
     def create_item(self, name: str) -> Item:
         item = StaticLingoItems.ALL_ITEM_TABLE[name]
 
@@ -131,13 +152,13 @@ class LingoWorld(World):
             classification = ItemClassification.progression
         else:
             classification = ItemClassification.filler
-        
+
         new_item = LingoItem(name, classification, item.code, player=self.player)
         return new_item
 
     def set_rules(self):
         set_rules(self.multiworld, self.player, self.player_logic)
-        
+
         self.multiworld.completion_condition[self.player] = \
             lambda state: state.has("Victory", self.player)
 
@@ -146,5 +167,12 @@ class LingoWorld(World):
 
         for option_name in lingo_options:
             slot_data[option_name] = get_option_value(self.multiworld, self.player, option_name)
+
+        if get_option_value(self.multiworld, self.player, "shuffle_paintings"):
+            slot_data["painting_entrance_to_exit"] = self.player_logic.PAINTING_MAPPING
+            slot_data["paintings"] = {
+                painting.id: {"orientation": painting.orientation, "move": painting.move}
+                for painting in self.static_logic.PAINTINGS.values()
+            }
 
         return slot_data

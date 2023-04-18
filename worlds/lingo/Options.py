@@ -39,6 +39,10 @@ class ShufflePanels(Choice):
     option_rearrange = 1
 
 
+class ShufflePaintings(Toggle):
+    """If on, the destination, location, and appearance of the painting warps in the game will be randomized."""
+    display_name = "Shuffle Paintings"
+
 class VictoryCondition(Choice):
     """Change the victory condition."""
     display_name = "Victory Condition"
@@ -56,6 +60,7 @@ lingo_options: Dict[str, type] = {
     "orange_tower_access": OrangeTowerAccess,
     "shuffle_colors": ShuffleColors,
     "shuffle_panels": ShufflePanels,
+    "shuffle_paintings": ShufflePaintings,
     "victory_condition": VictoryCondition,
     "death_link": DeathLink
 }

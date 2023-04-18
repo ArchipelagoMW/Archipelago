@@ -27,19 +27,22 @@ class LingoPlayerLogic:
 
     VICTORY_CONDITION: str
 
+    PAINTING_MAPPING: Dict[str, str]
+
     def add_location(self, room: str, loc: PlayerLocation):
         self.LOCATIONS_BY_ROOM.setdefault(room, []).append(loc)
 
     def set_door_item(self, room: str, door: str, item: str):
         self.ITEM_BY_DOOR.setdefault(room, {})[door] = item
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, world: MultiWorld, player: int, static_logic: StaticLingoLogic):
         self.ITEM_BY_DOOR = {}
         self.LOCATIONS_BY_ROOM = {}
         self.REAL_LOCATIONS = []
         self.EVENT_LOC_TO_ITEM = {}
         self.REAL_ITEMS = []
         self.VICTORY_CONDITION = ""
+        self.PAINTING_MAPPING = {}
 
         if get_option_value(world, player, "shuffle_doors") == 0:  # no door shuffle
             for room_name, room_data in StaticLingoLogic.DOORS_BY_ROOM.items():
@@ -87,3 +90,28 @@ class LingoPlayerLogic:
                                                                                      "orange_tower_access") == 2:
             for i in range(0, 6):
                 self.REAL_ITEMS.append("Progressive Orange Tower")
+
+        if get_option_value(world, player, "shuffle_paintings"):
+            chosen_exits = []
+            if get_option_value(world, player, "shuffle_doors") == 0:
+                chosen_exits = [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
+                                if painting.required_when_no_doors]
+            chosen_exits += [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
+                             if painting.exit_only and painting.required]
+            exitable = [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
+                        if not painting.enter_only and not painting.disable and not painting.required]
+            chosen_exits += world.per_slot_randoms[player].sample(exitable,
+                                                                  static_logic.PAINTING_EXITS - len(chosen_exits))
+
+            enterable = [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
+                         if not painting.exit_only and not painting.disable and painting_id not in chosen_exits]
+            chosen_entrances = world.per_slot_randoms[player].sample(enterable, static_logic.PAINTING_ENTRANCES)
+
+            for warp_exit in chosen_exits:
+                warp_enter = world.per_slot_randoms[player].choice(chosen_entrances)
+                chosen_entrances.remove(warp_enter)
+                self.PAINTING_MAPPING[warp_enter] = warp_exit
+
+            for warp_enter in chosen_entrances:
+                warp_exit = world.per_slot_randoms[player].choice(chosen_exits)
+                self.PAINTING_MAPPING[warp_enter] = warp_exit

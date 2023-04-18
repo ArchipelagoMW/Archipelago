@@ -13,14 +13,14 @@ class LingoLogic(LogicMixin):
     Logic macros that get reused
     """
 
-    def lingo_can_use_entrance(self, room: str, doors: Optional[List[RoomAndDoor]], world, player, player_logic):
-        if doors is None:
+    def lingo_can_use_entrance(self, room: str, door: RoomAndDoor, world: MultiWorld, player: int,
+                               player_logic: LingoPlayerLogic):
+        if door is None:
             return True
         else:
-            for door in doors:
-                if self._lingo_can_open_door(room, room if door.room is None else door.room, door.door, world,
-                                             player, player_logic):
-                    return True
+            if self._lingo_can_open_door(room, room if door.room is None else door.room, door.door, world,
+                                         player, player_logic):
+                return True
             return False
 
     def lingo_can_use_pilgrimage(self, player: int, player_logic: LingoPlayerLogic):

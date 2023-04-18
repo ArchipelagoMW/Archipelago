@@ -16,7 +16,8 @@ class RoomAndPanel(NamedTuple):
 
 class RoomEntrance(NamedTuple):
     room: str  # source room
-    doors: Optional[List[RoomAndDoor]]
+    door: Optional[RoomAndDoor]
+    painting: bool
 
 
 class Room(NamedTuple):
@@ -45,14 +46,32 @@ class Panel(NamedTuple):
     internal_ids: List[str]
 
 
+class Painting(NamedTuple):
+    id: str
+    room: str
+    enter_only: bool
+    exit_only: bool
+    orientation: str
+    required: bool
+    required_when_no_doors: bool
+    required_door: Optional[RoomAndDoor]
+    disable: bool
+    move: bool
+
+
 class StaticLingoLogic:
     ROOMS: Dict[str, Room] = {}
     PANELS: Dict[str, Panel] = {}
     DOORS: Dict[str, Door] = {}
+    PAINTINGS: Dict[str, Painting] = {}
 
     ALL_ROOMS: List[Room] = []
     DOORS_BY_ROOM: Dict[str, Dict[str, Door]] = {}
     PANELS_BY_ROOM: Dict[str, Dict[str, Panel]] = {}
+    PAINTINGS_BY_ROOM: Dict[str, List[Painting]] = {}
+
+    PAINTING_ENTRANCES: int = 0
+    PAINTING_EXITS: int = 0
 
     def __init__(self):
         path = os.path.join(os.path.dirname(__file__), "LL1.yaml")
@@ -63,24 +82,39 @@ class StaticLingoLogic:
                 room_obj = Room(room_name, [])
 
                 if "entrances" in room_data:
+                    is_painting_exit = False
+
                     for source_room, doors in room_data["entrances"].items():
                         if doors is True:
-                            doors_list = None
+                            room_obj.entrances.append(RoomEntrance(source_room, None, False))
                         elif isinstance(doors, Dict):
-                            doors_list = list()
-                            doors_list.append(RoomAndDoor(
-                                doors["room"] if "room" in doors else None,
-                                doors["door"]
-                            ))
+                            if "painting" in doors and "door" not in doors:
+                                is_painting_exit = True
+                                self.PAINTING_ENTRANCES += 1
+
+                                room_obj.entrances.append(RoomEntrance(source_room, None, True))
+                            else:
+                                if "painting" in doors and doors["painting"]:
+                                    is_painting_exit = True
+                                    self.PAINTING_ENTRANCES += 1
+
+                                room_obj.entrances.append(RoomEntrance(source_room, RoomAndDoor(
+                                    doors["room"] if "room" in doors else None,
+                                    doors["door"]
+                                ), doors["painting"] if "painting" in doors else False))
                         else:
-                            doors_list = list()
                             for door in doors:
-                                doors_list.append(RoomAndDoor(
+                                if "painting" in door and door["painting"]:
+                                    is_painting_exit = True
+                                    self.PAINTING_ENTRANCES += 1
+
+                                room_obj.entrances.append(RoomEntrance(source_room, RoomAndDoor(
                                     door["room"] if "room" in door else None,
                                     door["door"]
-                                ))
+                                ), door["painting"] if "painting" in door else False))
 
-                        room_obj.entrances.append(RoomEntrance(source_room, doors_list))
+                    if is_painting_exit:
+                        self.PAINTING_EXITS += 1
 
                 if "panels" in room_data:
                     self.PANELS_BY_ROOM[room_name] = dict()
@@ -213,6 +247,60 @@ class StaticLingoLogic:
 
                         self.DOORS[door_obj.item_name] = door_obj
                         self.DOORS_BY_ROOM[room_name][door_name] = door_obj
+
+                if "paintings" in room_data:
+                    self.PAINTINGS_BY_ROOM[room_name] = []
+
+                    for painting_data in room_data["paintings"]:
+                        painting_id = painting_data["id"]
+
+                        if "orientation" in painting_data:
+                            orientation = painting_data["orientation"]
+                        else:
+                            orientation = ""
+
+                        if "disable" in painting_data:
+                            disable_painting = painting_data["disable"]
+                        else:
+                            disable_painting = False
+
+                        if "required" in painting_data:
+                            required_painting = painting_data["required"]
+                        else:
+                            required_painting = False
+
+                        if "move" in painting_data:
+                            move_painting = painting_data["move"]
+                        else:
+                            move_painting = False
+
+                        if "required_when_no_doors" in painting_data:
+                            rwnd = painting_data["required_when_no_doors"]
+                        else:
+                            rwnd = False
+
+                        if "exit_only" in painting_data:
+                            exit_only = painting_data["exit_only"]
+                        else:
+                            exit_only = False
+
+                        if "enter_only" in painting_data:
+                            enter_only = painting_data["enter_only"]
+                        else:
+                            enter_only = False
+
+                        required_door = None
+                        if "required_door" in painting_data:
+                            door = painting_data["required_door"]
+                            required_door = RoomAndDoor(
+                                door["room"] if "room" in door else room_name,
+                                door["door"]
+                            )
+
+                        painting_obj = Painting(painting_id, room_name, enter_only, exit_only, orientation,
+                                                required_painting, rwnd, required_door, disable_painting, move_painting)
+                        self.PAINTINGS[painting_id] = painting_obj
+                        self.PAINTINGS_BY_ROOM[room_name].append(painting_obj)
 
                 self.ROOMS[room_name] = room_obj
                 self.ALL_ROOMS.append(room_obj)

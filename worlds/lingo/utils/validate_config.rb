@@ -37,7 +37,7 @@ mentioned_rooms = Set[]
 mentioned_doors = Set[]
 mentioned_panels = Set[]
 
-directives = Set["entrances", "panels", "doors"]
+directives = Set["entrances", "panels", "doors", "paintings"]
 
 config = YAML.load_file(configpath)
 config.each do |room_name, room|
@@ -57,7 +57,9 @@ config.each do |room_name, room|
 
     entrances = []
     if entrance.kind_of? Hash
-      entrances = [entrance]
+      if entrance.keys() != ["painting"] then
+        entrances = [entrance]
+      end
     elsif entrance.kind_of? Array
       entrances = entrance
     end
@@ -166,6 +168,38 @@ config.each do |room_name, room|
       end
     elsif not door["skip_location"]
       puts "#{room_name} - #{door_name} :::: Should be marked skip_location if there are no panels"
+    end
+  end
+
+  (room["paintings"] || []).each do |painting|
+    if painting.include?("id") and painting["id"].kind_of? String then
+      unless paintings.include? painting["id"] then
+        puts "#{room_name} :::: Invalid Painting ID #{painting["id"]}"
+      end
+    else
+      puts "#{room_name} :::: Painting is missing an ID"
+    end
+
+    if painting["disable"] then
+      # We're good.
+      next
+    end
+
+    if painting.include?("orientation") then
+      unless ["north", "south", "east", "west"].include? painting["orientation"] then
+        puts "#{room_name} - #{painting["id"] || "painting"} :::: Invalid orientation #{painting["orientation"]}"
+      end
+    else
+      puts "#{room_name} :::: Painting is missing an orientation"
+    end
+
+    if painting.include?("required_door")
+      other_room = painting["required_door"].include?("room") ? painting["required_door"]["room"] : room_name
+      mentioned_doors.add("#{other_room} - #{painting["required_door"]["door"]}")
+
+      unless painting["enter_only"] then
+        puts "#{room_name} - #{painting["id"] || "painting"} :::: Should be marked enter_only if there is a required_door"
+      end
     end
   end
 end

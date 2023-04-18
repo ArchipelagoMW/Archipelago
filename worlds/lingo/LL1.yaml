@@ -1,6 +1,6 @@
 ---
   # This file is an associative array where the keys are region names. Rooms
-  # have three properties: entrances, panels, and doors.
+  # have four properties: entrances, panels, doors, and paintings.
   #
   # entrances is an array of regions from which this room can be accessed. The
   # key of each entry is the room that can access this one. The value is a list
@@ -46,6 +46,27 @@
   #                   generated using the names of the panels.
   # - skip_location:  If true, no location is generated for this door.
   # - skip_item:      If true, no item is generated for this door.
+  #
+  # paintings is an array of paintings in the room. This is used for painting
+  # shuffling.
+  # - id:             The internal painting ID from the LINGO map.
+  # - enter_only:     If true, painting shuffling will not place a warp exit on
+  #                   this painting.
+  # - exit_only:      If true, painting shuffling will not place a warp entrance
+  #                   on this painting.
+  # - orientation:    One of north/south/east/west. This is the direction that
+  #                   the player is facing when they are interacting with it,
+  #                   not the orientation of the painting itself. "North" is
+  #                   the direction the player faces at a new game, with the
+  #                   positive X axis to the right.
+  # - required_door:  This door must be open for the painting to be usable as an
+  #                   entrance. If required_door is set, enter_only must be
+  #                   True.
+  # - required:       Marks a painting as being the only entrance for a room,
+  #                   and thus it is required to be an exit when randomized.
+  #                   Use "required_when_no_doors" instead if it would be
+  #                   possible to enter the room without the painting in door
+  #                   shuffle mode.
   Starting Room:
     entrances:
       Menu: True
@@ -76,6 +97,52 @@
             panel: RACECAR (Black)
           - room: The Tenacious
             panel: SOLOS (Black)
+    paintings:
+      - id: arrows_painting
+        exit_only: True
+        orientation: south
+      - id: garden_painting_tower2
+        enter_only: True
+        orientation: north
+        move: True
+        required_door:
+          room: Hedge Maze
+          door: Painting Shortcut
+      - id: flower_painting_8
+        enter_only: True
+        orientation: north
+        move: True
+        required_door:
+          room: Courtyard
+          door: Painting Shortcut
+      - id: symmetry_painting_a_starter
+        enter_only: True
+        orientation: west
+        move: True
+        required_door:
+          room: The Wondrous (Doorknob)
+          door: Painting Shortcut
+      - id: pencil_painting6
+        enter_only: True
+        orientation: east
+        move: True
+        required_door:
+          room: Outside The Bold
+          door: Painting Shortcut
+      - id: blueman_painting_3
+        enter_only: True
+        orientation: east
+        move: True
+        required_door:
+          room: Outside The Undeterred
+          door: Painting Shortcut
+      - id: eyes_yellow_painting2
+        enter_only: True
+        orientation: west
+        move: True
+        required_door:
+          room: Outside The Agreeable
+          door: Painting Shortcut
   Hidden Room:
     entrances:
       Starting Room:
@@ -122,6 +189,9 @@
             panel: SOLOS (Black)
           - room: Hub Room
             panel: RAT
+    paintings:
+      - id: owl_painting
+        orientation: north
   The Seeker:
     entrances:
       Hidden Room:
@@ -168,16 +238,18 @@
       Orange Tower First Floor:
         room: Orange Tower First Floor
         door: Shortcut to Hub Room
-      Owl Hallway: True
+      Owl Hallway:
+        painting: True
       Outside The Initiated:
         room: Outside The Initiated
         door: Shortcut to Hub Room
       The Traveled:
         door: Traveled Entrance
       Roof: True # through the sunwarp
-      Outside The Undeterred: # this could be its own door (NOTE: used in hardcoded pilgrimage)
+      Outside The Undeterred: # (NOTE: used in hardcoded pilgrimage)
         room: Outside The Undeterred
-        door: Fours
+        door: Green Painting
+        painting: True
     panels:
       ORDER:
         id: Shuffle Room/Panel_order_chaos
@@ -241,6 +313,9 @@
         id: Shuffle Room Area Doors/Door_lost_found
         panels:
           - LOST
+    paintings:
+      - id: maze_painting
+        orientation: west
   Dead End Area:
     entrances:
       Hidden Room:
@@ -260,7 +335,11 @@
         required_door:
           room: Number Hunt
           door: Eights
+    paintings:
+      - id: smile_painting_6
+        orientation: north
   Pilgrim Room:
+    # Let's not shuffle the paintings yet.
     entrances:
       # The pilgrimage is hardcoded in rules.py
       The Seeker:
@@ -383,6 +462,15 @@
             panel: DRAWL + RUNS
           - room: Owl Hallway
             panel: READS + RUST
+    paintings:
+      - id: eye_painting
+        enter_only: True
+        orientation: east
+        move: True
+        required_door:
+          door: Eye Wall
+      - id: smile_painting_4
+        orientation: south
   Lost/Lost Area:
     entrances:
       Outside The Agreeable:
@@ -562,6 +650,7 @@
         door: Door
       Starting Room:
         door: Painting Shortcut
+        painting: True
       Wheelbarrow Hallway: True
       Hedge Maze: True # through the door to the sectioned-off part of the hedge maze
     panels:
@@ -611,6 +700,7 @@
         panels:
           - CLOSE
       Painting Shortcut:
+        item_name: Starting Room - Street Painting
         painting_id: eyes_yellow_painting2
         panels:
           - RIGHT
@@ -620,6 +710,11 @@
         panels:
           - room: Champion's Rest
             panel: PURPLE
+    paintings:
+      - id: panda_painting
+        orientation: south
+      - id: eyes_yellow_painting
+        orientation: east
   Dread Hallway:
     entrances:
       Outside The Agreeable:
@@ -689,6 +784,12 @@
         id: Maze Area Doors/Door_maze_maze
         panels:
           - DOWN
+      Painting Shortcut:
+        painting_id: garden_painting_tower2
+        item_name: Starting Room - Hedge Maze Painting
+        skip_location: True
+        panels:
+          - DOWN
       Observant Entrance:
         id:
           - Maze Area Doors/Door_look_room_1
@@ -711,8 +812,9 @@
     entrances:
       Starting Room:
         room: Hedge Maze
-        door: Perceptive Entrance
-      Hedge Maze: # This is technically implied by the above one.
+        door: Painting Shortcut
+        painting: True
+      Hedge Maze:
         room: Hedge Maze
         door: Perceptive Entrance
     panels:
@@ -723,6 +825,9 @@
       GAZE:
         id: Maze Room/Panel_look_look
         check: True
+    paintings:
+      - id: garden_painting_tower
+        orientation: north
   The Fearless:
     entrances:
       The Perceptive: True
@@ -769,16 +874,16 @@
   The Incomparable:
     entrances:
       The Observant: True
+      Eight Room: True
     panels:
       Achievement:
         id: Countdown Panels/Panel_incomparable_incomparable
         colors: blue
         check: True
-        required_door:
-          door: Eight Painting
         required_room:
           - Elements Area
           - Courtyard
+          - Eight Room
       I (Seven):
         id: Strand Room/Panel_i_strings
         colors: blue
@@ -792,6 +897,20 @@
             panel: I
           - room: Elements Area
             panel: A
+    paintings:
+      - id: eight_painting2
+        orientation: north
+  Eight Room:
+    entrances:
+      The Incomparable:
+        room: The Incomparable
+        door: Eight Painting
+        painting: True
+    paintings:
+      - id: eight_painting
+        orientation: south
+        exit_only: True
+        required: True
   Orange Tower:
     # This is a special, meta-ish room.
     entrances:
@@ -914,10 +1033,9 @@
         room: Orange Tower
         door: Third Floor
       Orange Tower Fourth Floor:
-        - room: Orange Tower Fourth Floor
-          door: Hot Crusts Door
-        - room: Orange Tower
-          door: Fourth Floor
+        room: Orange Tower
+        door: Fourth Floor
+      Hot Crusts Area: True # sunwarp
       The Bearer: # This is complicated because of The Bearer's topology
         room: The Bearer
         door: Shortcut to Tower
@@ -960,6 +1078,11 @@
           - RED
           - room: Directional Gallery
             panel: YELLOW
+    paintings:
+      - id: arrows_painting_6
+        orientation: east
+      - id: flower_painting_5
+        orientation: south
   Orange Tower Fourth Floor:
     entrances:
       Orange Tower Third Floor:
@@ -968,6 +1091,8 @@
       Orange Tower Fifth Floor:
         room: Orange Tower
         door: Fifth Floor
+      Hot Crusts Area:
+        door: Hot Crusts Door
       Crossroads:
         - room: Crossroads
           door: Tower Entrance
@@ -986,12 +1111,6 @@
       HOT CRUSTS:
         id: Shuffle Room/Panel_shortcuts
         colors: yellow
-      EIGHT:
-        id: Backside Room/Panel_eight_eight_3
-        required_door:
-          - room: Number Hunt
-            door: Eights
-          - door: Hot Crusts Door
       IRK HORN:
         id: Shuffle Room/Panel_corner
         colors: yellow
@@ -1001,6 +1120,21 @@
         id: Shuffle Room Area Doors/Door_hotcrust_shortcuts
         panels:
           - HOT CRUSTS
+  Hot Crusts Area:
+    entrances:
+      Orange Tower Fourth Floor:
+        room: Orange Tower Fourth Floor
+        door: Hot Crusts Door
+      Roof: True # through the sunwarp
+    panels:
+      EIGHT:
+        id: Backside Room/Panel_eight_eight_3
+        required_door:
+          room: Number Hunt
+          door: Eights
+    paintings:
+      - id: smile_painting_8
+        orientation: north
   Orange Tower Fifth Floor:
     entrances:
       Orange Tower Fourth Floor:
@@ -1045,12 +1179,37 @@
         panels:
           - SIZE (Small)
           - SIZE (Big)
+    paintings:
+      - id: hi_solved_painting3
+        orientation: south
   Orange Tower Sixth Floor:
     entrances:
       Orange Tower Fifth Floor:
         room: Orange Tower
         door: Sixth Floor
-      The Lab: True
+      The Lab:
+        painting: True
+    paintings:
+      - id: arrows_painting_10
+        orientation: east
+      - id: owl_painting_3
+        orientation: north
+      - id: clock_painting
+        orientation: west
+      - id: scenery_painting_5d_2
+        orientation: south
+      - id: symmetry_painting_b_7
+        orientation: north
+      - id: panda_painting_2
+        orientation: south
+      - id: pencil_painting
+        orientation: north
+      - id: colors_painting2
+        orientation: south
+      - id: cherry_painting2
+        orientation: east
+      - id: hi_solved_painting
+        orientation: west
   Orange Tower Seventh Floor:
     entrances:
       Orange Tower Sixth Floor:
@@ -1111,21 +1270,40 @@
             panel: Achievement
           - room: The Ecstatic
             panel: Achievement
+      Mastery:
+        id: Master Room Doors/Door_tower_down
+        skip_location: True
+        panels:
+          - THE MASTER
+    paintings:
+      - id: map_painting2
+        orientation: north
+        enter_only: True # otherwise you might just skip the whole game!
   Roof:
     entrances:
       Orange Tower Seventh Floor: True
       Crossroads:
         room: Crossroads
         door: Shortcut to Roof
+  Orange Tower Basement:
+    entrances:
+      Orange Tower Sixth Floor:
+        room: Orange Tower Seventh Floor
+        door: Mastery
+    paintings:
+      - id: arrows_painting_11
+        orientation: east
   Courtyard:
     entrances:
       Roof: True
       Orange Tower Fourth Floor: True
-      The Wondrous:
-        room: The Wondrous
-        door: Exit
+      Arrow Garden:
+        painting: True
       Starting Room:
         door: Painting Shortcut
+        painting: True
+      Yellow Backside Area:
+        door: Backside Door
     panels:
       I:
         id: Strand Room/Panel_i_staring
@@ -1142,21 +1320,10 @@
         id: Color Arrow Room/Panel_green_afar
         required_door:
           door: Green Barrier
-      # For now, we will consider the Roof entry to the backside area to be out
-      # of logic.
-      NINE:
-        id: Backside Room/Panel_nine_nine_8
-        required_door:
-          - room: Number Hunt
-            door: Nines
-          - door: Backside Door
-      BACKSIDE:
-        id: Backside Room/Panel_backside_3
-        required_door:
-          door: Backside Door
     doors:
       Painting Shortcut:
         painting_id: flower_painting_8
+        item_name: Starting Room - Flower Painting
         panels:
           - FIRST
           - SECOND
@@ -1176,6 +1343,26 @@
         panels:
           - room: Champion's Rest
             panel: GREEN
+    paintings:
+      - id: flower_painting_7
+        orientation: north
+  Yellow Backside Area:
+    entrances:
+      Courtyard:
+        room: Courtyard
+        door: Backside Door
+      Roof: True
+    panels:
+      BACKSIDE:
+        id: Backside Room/Panel_backside_3
+      NINE:
+        id: Backside Room/Panel_nine_nine_8
+        required_door:
+          room: Number Hunt
+          door: Nines
+    paintings:
+      - id: blueman_painting
+        orientation: east
   The Colorful (White):
     entrances:
       Courtyard: True
@@ -1327,6 +1514,9 @@
       Achievement:
         id: Countdown Panels/Panel_colorful_colorful
         check: True
+    paintings:
+      - id: arrows_painting_12
+        orientation: north
   Welcome Back Area:
     entrances:
       Starting Room:
@@ -1360,10 +1550,12 @@
           - WELCOME BACK
   Owl Hallway:
     entrances:
-      Hidden Room: True
+      Hidden Room:
+        painting: True
       Hedge Maze:
         door: Shortcut to Hedge Maze
-      Orange Tower Sixth Floor: True # painting
+      Orange Tower Sixth Floor:
+        painting: True
     panels:
       STRAYS:
         id: Maze Room/Panel_strays_maze
@@ -1377,6 +1569,16 @@
         id: Maze Area Doors/Door_strays_maze
         panels:
           - STRAYS
+    paintings:
+      - id: arrows_painting_8
+        orientation: south
+      - id: maze_painting_2
+        orientation: north
+      - id: owl_painting_2
+        orientation: south
+        required_when_no_doors: True
+      - id: clock_painting_4
+        orientation: north
   Outside The Initiated:
     entrances:
       Hub Room:
@@ -1489,12 +1691,17 @@
         panels:
           - room: The Observant
             panel: BACKSIDE
-          - room: Courtyard
+          - room: Yellow Backside Area
             panel: BACKSIDE
           - room: Directional Gallery
             panel: BACKSIDE
           - room: The Bearer
             panel: BACKSIDE
+    paintings:
+      - id: clock_painting_5
+        orientation: east
+      - id: smile_painting_1
+        orientation: north
   The Initiated:
     entrances:
       Outside The Initiated:
@@ -1540,9 +1747,7 @@
       Hedge Maze: True
       Outside The Initiated: True # backside
       Directional Gallery: True # backside
-      Courtyard:
-        room: Courtyard
-        door: Backside Door
+      Yellow Backside Area: True
       The Bearer:
         room: The Bearer
         door: Backside Door
@@ -1561,8 +1766,10 @@
         # we wanted.
         room: Number Hunt
         door: Sixes
+        painting: True
       Starting Room:
         door: Painting Shortcut
+        painting: True
       Room Room: True # trapdoor
     panels:
       UNOPEN:
@@ -1588,12 +1795,16 @@
       Painting Shortcut:
         painting_id: pencil_painting6
         skip_location: True
+        item_name: Starting Room - Pencil Painting
         panels:
           - UNOPEN
       Steady Entrance:
         id: Rock Room Doors/Door_2
         panels:
           - BEGIN
+    paintings:
+      - id: pencil_painting2
+        orientation: west
   The Bold:
     entrances:
       Outside The Bold:
@@ -1613,9 +1824,8 @@
       The Artistic (Panda): True
       The Artistic (Apple): True
       The Artistic (Lattice): True
-      Courtyard:
-        room: Courtyard
-        door: Backside Door
+      Yellow Backside Area:
+        painting: True
       Number Hunt:
         door: Number Hunt
       Directional Gallery:
@@ -1623,6 +1833,7 @@
         door: Shortcut to The Undeterred
       Starting Room:
         door: Painting Shortcut
+        painting: True
     panels:
       ART + ART:
         id: Tower Room/Panel_art_art_eat_2
@@ -1681,8 +1892,14 @@
           - blueman_painting_3
           - arrows_painting3
         skip_location: True
+        item_name: Starting Room - Blue Painting
         panels:
           - PEN
+      Green Painting:
+        painting_id: maze_painting_3
+        skip_location: True
+        panels:
+          - FOUR
       Twos:
         id:
           - Count Up Room Area Doors/Door_two_hider
@@ -1734,6 +1951,15 @@
         id: Count Up Room Area Doors/Door_zero_unlocked
         panels:
           - ZERO
+    paintings:
+      - id: maze_painting_3
+        enter_only: True
+        orientation: north
+        move: True
+        required_door:
+          door: Green Painting
+      - id: blueman_painting_2
+        orientation: east
   The Undeterred:
     entrances:
       Outside The Undeterred:
@@ -1876,7 +2102,7 @@
             panel: EIGHT
           - room: Crossroads
             panel: EIGHT
-          - room: Orange Tower Fourth Floor
+          - room: Hot Crusts Area
             panel: EIGHT
           - room: Art Gallery
             panel: EIGHT
@@ -1892,7 +2118,7 @@
             panel: NINE
           - room: Amen/Name Area
             panel: NINE
-          - room: Courtyard
+          - room: Yellow Backside Area
             panel: NINE
           - room: Outside The Initiated
             panel: NINE
@@ -1904,6 +2130,12 @@
             panel: NINE
           - room: Elements Area
             panel: NINE
+    paintings:
+      - id: smile_painting_5
+        enter_only: True
+        orientation: east
+        required_door:
+          door: Eights
   Directional Gallery:
     entrances:
       Outside The Agreeable: True # sunwarp
@@ -1990,6 +2222,22 @@
         panels:
           - room: Champion's Rest
             panel: YELLOW
+    paintings:
+      - id: smile_painting_7
+        orientation: south
+      - id: flower_painting_4
+        orientation: south
+      - id: pencil_painting3
+        enter_only: True
+        orientation: east
+        move: True
+        required_door:
+          room: Number Hunt
+          door: Sixes
+      - id: boxes_painting
+        orientation: south
+      - id: cherry_painting
+        orientation: east
   Champion's Rest:
     entrances:
       Outside The Bold:
@@ -2037,6 +2285,21 @@
         id: Rock Room Doors/Door_hint
         panels:
           - EXIT
+    paintings:
+      - id: arrows_painting_7
+        orientation: east
+      - id: fruitbowl_painting3
+        orientation: west
+        enter_only: True
+        required_door:
+          room: Outside The Initiated
+          door: Entrance
+      - id: colors_painting
+        orientation: south
+        enter_only: True
+        required_door:
+          room: Outside The Initiated
+          door: Entrance
   The Bearer:
     entrances:
       # Let's treat the shortcut to the tower third floor as one-way for now,
@@ -2113,19 +2376,29 @@
           - red
           - blue
         check: True
+    paintings:
+      - id: pencil_painting4
+        disable: True
+      - id: pencil_painting5
+        disable: True
   Knight/Night Room:
     # For now, let's just let the doors in here be vanilla.
-    # This also means that we won't allow reverse progression.
+    # We will allow reverse progression because it works if the exit is open.
     entrances:
       Hidden Room:
         room: Hidden Room
         door: Knight/Night Entrance
+      Orange Tower Third Floor:
+        door: Exit
+      Outside The Initiated:
+        door: Exit
     panels:
       TRUSTED:
         id: Appendix Room/Panel_trusted_readjusted
         colors:
           # We'll pretend this is also red and blue because solving the other
-          # panels is required for getting here.
+          # panels is required for getting here. Not technically true if reverse
+          # progression but it's okay to have little a out-of-logic as a treat.
           - purple
           - red
           - blue
@@ -2167,18 +2440,24 @@
           - TRUSTED
   The Artistic (Smiley):
     entrances:
-      Dead End Area: True
-      Crossroads: True
-      Orange Tower Fourth Floor:
-        room: Orange Tower Fourth Floor
-        door: Hot Crusts Door
-      Outside The Initiated: True
-      Directional Gallery: True
+      Dead End Area:
+        painting: True
+      Crossroads:
+        painting: True
+      Hot Crusts Area:
+        painting: True
+      Outside The Initiated:
+        painting: True
+      Directional Gallery:
+        painting: True
       Number Hunt:
         room: Number Hunt
         door: Eights
-      Art Gallery: True
-      The Eyes They See: True # implied by Directional Gallery
+        painting: True
+      Art Gallery:
+        painting: True
+      The Eyes They See:
+        painting: True
       The Artistic (Panda):
         door: Door to Panda
       The Artistic (Lattice):
@@ -2247,10 +2526,16 @@
             panel: NIGHTTIME
           - room: The Artistic (Panda)
             panel: NIGHT
+    paintings:
+      - id: smile_painting_9
+        orientation: north
+        exit_only: True
   The Artistic (Panda):
     entrances:
-      Orange Tower Sixth Floor: True
-      Outside The Agreeable: True
+      Orange Tower Sixth Floor:
+        painting: True
+      Outside The Agreeable:
+        painting: True
       The Artistic (Smiley):
         room: The Artistic (Smiley)
         door: Door to Panda
@@ -2312,10 +2597,17 @@
             panel: LOBE
           - room: The Artistic (Apple)
             panel: BOWELS
+    paintings:
+      - id: panda_painting_3
+        exit_only: True
+        orientation: south
+        required_when_no_doors: True
   The Artistic (Apple):
     entrances:
-      Orange Tower Sixth Floor: True
-      Directional Gallery: True
+      Orange Tower Sixth Floor:
+        painting: True
+      Directional Gallery:
+        painting: True
       The Artistic (Panda):
         room: The Artistic (Panda)
         door: Door to Apple
@@ -2377,9 +2669,15 @@
             panel: TINE
           - room: The Artistic (Lattice)
             panel: THING
+    paintings:
+      - id: cherry_painting3
+        orientation: north
+        exit_only: True
+        required_when_no_doors: True
   The Artistic (Lattice):
     entrances:
-      Directional Gallery: True
+      Directional Gallery:
+        painting: True
       The Artistic (Apple):
         room: The Artistic (Apple)
         door: Door to Lattice
@@ -2437,6 +2735,11 @@
             panel: ICE
           - room: The Artistic (Smiley)
             panel: ROOT
+    paintings:
+      - id: boxes_painting2
+        orientation: south
+        exit_only: True
+        required_when_no_doors: True
   The Discerning:
     entrances:
       Crossroads:
@@ -2448,23 +2751,47 @@
         colors: yellow
         check: True
   The Eyes They See:
-    # The door in here is vanilla right now. Is that what we want?
     entrances:
       Crossroads:
         room: Crossroads
         door: Eye Wall
+        painting: True
+      Wondrous Lobby:
+        door: Exit
       Directional Gallery: True
     panels:
+      NEAR:
+        id: Shuffle Room/Panel_near_near
       EIGHT:
         id: Backside Room/Panel_eight_eight_4
         required_door:
           room: Number Hunt
           door: Eights
+    doors:
+      Exit:
+        id: Count Up Room Area Doors/Door_near_near
+        panels:
+          - NEAR
+    paintings:
+      - id: eye_painting_2
+        orientation: west
+      - id: smile_painting_2
+        orientation: north
+  Wondrous Lobby:
+    entrances:
+      Directional Gallery: True
+      The Eyes They See:
+        room: The Eyes They See
+        door: Exit
+    paintings:
+      - id: arrows_painting_5
+        orientation: east
   Outside The Wondrous:
     entrances:
-      The Eyes They See: True
-      The Wondrous:
+      Wondrous Lobby: True
+      The Wondrous (Doorknob):
         door: Wondrous Entrance
+      The Wondrous (Window): True
     panels:
       SHRINK:
         id: Wonderland Room/Panel_shrink_shrink
@@ -2473,36 +2800,138 @@
         id: Red Blue Purple Room Area Doors/Door_wonderland
         panels:
           - SHRINK
-  The Wondrous:
+  The Wondrous (Doorknob):
     entrances:
       Outside The Wondrous:
         room: Outside The Wondrous
         door: Wondrous Entrance
       Starting Room:
         door: Painting Shortcut
-      Roof: # If we want to do something with MASTERY and SHARP we'll have to refactor this.
-        door: Exit
+        painting: True
+      The Wondrous (Chandelier):
+        painting: True
+      The Wondrous (Table): True # There is a way that doesn't use the painting
     panels:
-      Achievement:
-        id: Countdown Panels/Panel_wondrous_wondrous
-        colors:
-          - blue
-          - yellow
-          - brown
-          - red
+      BROOK NOD:
+        id: Wonderland Room/Panel_brooknod_doorknob
+        colors: yellow
     doors:
       Painting Shortcut:
         painting_id:
           - symmetry_painting_a_starter
           - arrows_painting2
         skip_location: True
+        item_name: Starting Room - Symmetry Painting
         panels:
           - room: Outside The Wondrous
             panel: SHRINK
+    paintings:
+      - id: symmetry_painting_a_1
+        orientation: east
+        exit_only: True
+      - id: symmetry_painting_b_1
+        orientation: south
+  The Wondrous (Bookcase):
+    entrances:
+      The Wondrous (Doorknob): True
+    panels:
+      CASE:
+        id: Wonderland Room/Panel_case_bookcase
+        colors: blue
+    paintings:
+      - id: symmetry_painting_a_3
+        orientation: west
+        exit_only: True
+  The Wondrous (Chandelier):
+    entrances:
+      The Wondrous (Bookcase): True
+    panels:
+      CANDLE HEIR:
+        id: Wonderland Room/Panel_candleheir_chandelier
+        colors: yellow
+    paintings:
+      - id: symmetry_painting_a_5
+        orientation: east
+  The Wondrous (Window):
+    entrances:
+      The Wondrous (Bookcase): True
+    panels:
+      GLASS:
+        id: Wonderland Room/Panel_glass_window
+        colors: brown
+    paintings:
+      - id: symmetry_painting_b_4
+        orientation: north
+        exit_only: True
+  The Wondrous (Table):
+    entrances:
+      The Wondrous (Doorknob):
+        painting: True
+    panels:
+      WOOD:
+        id: Wonderland Room/Panel_wood_table
+        colors: brown
+    paintings:
+      - id: symmetry_painting_a_2
+        orientation: west
+      - id: symmetry_painting_b_2
+        orientation: south
+        exit_only: True
+        required: True
+  The Wondrous:
+    entrances:
+      The Wondrous (Table): True
+      Arrow Garden:
+        door: Exit
+    panels:
+      FIREPLACE:
+        id: Wonderland Room/Panel_fireplace_fire
+        colors: red
+      Achievement:
+        id: Countdown Panels/Panel_wondrous_wondrous
+        required_door:
+          door: Required Panels
+    doors:
+      Required Panels:
+        event: True
+        panels:
+          - FIREPLACE
+          - room: The Wondrous (Doorknob)
+            panel: BROOK NOD
+          - room: The Wondrous (Bookcase)
+            panel: CASE
+          - room: The Wondrous (Chandelier)
+            panel: CANDLE HEIR
+          - room: The Wondrous (Window)
+            panel: GLASS
+          - room: The Wondrous (Table)
+            panel: WOOD
       Exit:
         id: Red Blue Purple Room Area Doors/Door_wonderland_exit
+        painting_id: arrows_painting_9
         panels:
           - Achievement
+    paintings:
+      - id: arrows_painting_9
+        enter_only: True
+        orientation: south
+        move: True
+        required_door:
+          door: Exit
+      - id: symmetry_painting_a_6
+        orientation: west
+        exit_only: True
+      - id: symmetry_painting_b_6
+        orientation: north
+  Arrow Garden:
+    entrances:
+      The Wondrous:
+        room: The Wondrous
+        door: Exit
+      Roof: True
+    paintings:
+      - id: flower_painting_6
+        orientation: south
   Wheelbarrow Hallway:
     entrances:
       Outside The Agreeable: True
@@ -2564,6 +2993,7 @@
   Art Gallery:
     # For now, let's just let the doors in here be vanilla.
     # This also means that we won't allow reverse progression.
+    # Most of the scenery paintings will be vanilla too.
     entrances:
       Orange Tower Third Floor: True
     panels:
@@ -2585,6 +3015,17 @@
         id: Tower Room Area Doors/Door_painting_exit
         panels:
           - ONE ROAD MANY TURNS
+    paintings:
+      - id: smile_painting_3
+        orientation: west
+      - id: flower_painting_2
+        orientation: east
+      - id: scenery_painting_0a
+        orientation: north
+      - id: map_painting
+        orientation: east
+      - id: fruitbowl_painting4
+        orientation: south
   Rhyme Room (Smiley):
     entrances:
       Orange Tower Third Floor:
@@ -2716,6 +3157,9 @@
             panel: REPENTANCE
           - room: Rhyme Room (Smiley)
             panel: WORD
+    paintings:
+      - id: arrows_painting_3
+        orientation: north
   Rhyme Room (Looped Square):
     entrances:
       Starting Room:
@@ -2835,12 +3279,18 @@
           - QUARTZ
           - INNOVATIVE (Top)
           - INNOVATIVE (Bottom)
+    paintings:
+      - id: arrows_painting_4
+        orientation: north
   Room Room:
     # This is a bit of a weird room. You can't really get to it from the roof.
     # And even if you were to go through the shortcut on the fifth floor into
     # the basement and up the stairs, you'd be blocked by the backsides of the
     # ROOM panels, which isn't ideal. So we will, at least for now, say that
     # this room is vanilla.
+    #
+    # For pretty much the same reason, I don't want to shuffle the paintings in
+    # here.
     entrances:
       Orange Tower Fourth Floor: True
     panels:
@@ -2873,8 +3323,10 @@
           - BASE
   Outside The Wise:
     entrances:
-      Orange Tower Sixth Floor: True
-      Outside The Initiated: True
+      Orange Tower Sixth Floor:
+        painting: True
+      Outside The Initiated:
+        painting: True
     panels:
       KITTEN:
         id: Clock Room/Panel_kitten_cat
@@ -2890,6 +3342,13 @@
         panels:
           - KITTEN
           - CAT
+    paintings:
+      - id: arrows_painting_2
+        orientation: east
+      - id: clock_painting_2
+        orientation: east
+        exit_only: True
+        required: True
   The Wise:
     entrances:
       Outside The Wise:
@@ -2902,6 +3361,9 @@
           - brown
           - black
         check: True
+    paintings:
+      - id: clock_painting_3
+        orientation: east
   The Red:
     entrances:
       Roof: True
@@ -2945,6 +3407,9 @@
           - black
           - purple
         check: True
+    paintings:
+      - id: hi_solved_painting4
+        orientation: south
   Challenge Room:
     entrances:
       Welcome Back Area:
