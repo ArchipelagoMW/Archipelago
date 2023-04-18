@@ -1355,6 +1355,7 @@
         painting: True
       Yellow Backside Area:
         door: Backside Door
+      The Colorful (White): True
     panels:
       I:
         id: Strand Room/Panel_i_staring
@@ -1419,6 +1420,8 @@
   The Colorful (White):
     entrances:
       Courtyard: True
+      The Colorful (Black):
+        door: Progress Door
     panels:
       BEGIN:
         id: Doorways Room/Panel_begin_start
@@ -1433,6 +1436,8 @@
     entrances:
       The Colorful (White):
         room: The Colorful (White)
+        door: Progress Door
+      The Colorful (Red):
         door: Progress Door
     panels:
       FOUND:
@@ -1450,6 +1455,8 @@
       The Colorful (Black):
         room: The Colorful (Black)
         door: Progress Door
+      The Colorful (Yellow):
+        door: Progress Door
     panels:
       LOAF:
         id: Doorways Room/Panel_loaf_crust
@@ -1465,6 +1472,8 @@
     entrances:
       The Colorful (Red):
         room: The Colorful (Red)
+        door: Progress Door
+      The Colorful (Blue):
         door: Progress Door
     panels:
       CREAM:
@@ -1482,6 +1491,8 @@
       The Colorful (Yellow):
         room: The Colorful (Yellow)
         door: Progress Door
+      The Colorful (Purple):
+        door: Progress Door
     panels:
       SUN:
         id: Doorways Room/Panel_sun_sky
@@ -1497,6 +1508,8 @@
     entrances:
       The Colorful (Blue):
         room: The Colorful (Blue)
+        door: Progress Door
+      The Colorful (Orange):
         door: Progress Door
     panels:
       SPOON:
@@ -1514,6 +1527,8 @@
       The Colorful (Purple):
         room: The Colorful (Purple)
         door: Progress Door
+      The Colorful (Green):
+        door: Progress Door
     panels:
       LETTERS:
         id: Doorways Room/Panel_walnuts_orange
@@ -1529,6 +1544,8 @@
     entrances:
       The Colorful (Orange):
         room: The Colorful (Orange)
+        door: Progress Door
+      The Colorful (Brown):
         door: Progress Door
     panels:
       WALLS:
@@ -1546,6 +1563,8 @@
       The Colorful (Green):
         room: The Colorful (Green)
         door: Progress Door
+      The Colorful (Gray):
+        door: Progress Door
     panels:
       IRON:
         id: Doorways Room/Panel_iron_rust
@@ -1562,6 +1581,8 @@
       The Colorful (Brown):
         room: The Colorful (Brown)
         door: Progress Door
+      The Colorful:
+        door: Progress Door
     panels:
       OBSTACLE:
         id: Doorways Room/Panel_obstacle_door
@@ -1576,19 +1597,42 @@
         panels:
           - OBSTACLE
   The Colorful:
-    # We are going to pretend that the Roof access isn't a thing, because we
-    # want to hide this panel until all of the doors have been opened. We might
-    # need to hardcode some kind of special case for this, because we don't want
-    # the achievement door to be shuffled into the pool, we specifically want it
-    # to be a consequence of having all of the other doors open.
+    # The set of required_doors in the achievement panel should prevent
+    # generation from asking you to solve The Colorful before opening all of the
+    # doors. Access from the roof is included so that the painting here could be
+    # an entrance. The client will have to be hardcoded to not open the door to
+    # the achievement until all of the doors are open, whether by solving the
+    # panels or through receiving items.
     entrances:
       The Colorful (Gray):
         room: The Colorful (Gray)
         door: Progress Door
+      Roof: True
     panels:
       Achievement:
         id: Countdown Panels/Panel_colorful_colorful
         check: True
+        required_door:
+          - room: The Colorful (White)
+            door: Progress Door
+          - room: The Colorful (Black)
+            door: Progress Door
+          - room: The Colorful (Red)
+            door: Progress Door
+          - room: The Colorful (Yellow)
+            door: Progress Door
+          - room: The Colorful (Blue)
+            door: Progress Door
+          - room: The Colorful (Purple)
+            door: Progress Door
+          - room: The Colorful (Orange)
+            door: Progress Door
+          - room: The Colorful (Green)
+            door: Progress Door
+          - room: The Colorful (Brown)
+            door: Progress Door
+          - room: The Colorful (Gray)
+            door: Progress Door
     paintings:
       - id: arrows_painting_12
         orientation: north
