@@ -64,9 +64,6 @@ from ..Options import TrendyGame, Palette, MusicChangeCondition
 def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, multiworld=None, player_name=None, player_names=[], player_id = 0):
     rom_patches = []
 
-    if ap_settings["ap_title_screen"]:
-        rom_patches.append(pkgutil.get_data(__name__, "patches/title_screen.bdiff4"))
-
     rom = ROMWithTables(args.input_filename, rom_patches)
     rom.player_names = player_names
     pymods = []
@@ -416,9 +413,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     assert(len(auth) == 12)
     rom.patch(0x00, SEED_LOCATION, None, binascii.hexlify(auth))
 
-
     for pymod in pymods:
         pymod.postPatch(rom)
-
 
     return rom
