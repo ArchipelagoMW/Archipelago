@@ -3469,7 +3469,9 @@
     panels:
       Achievement:
         id: Countdown Panels/Panel_grandfathered_red
-        colors: red
+        colors:
+          - red
+          - black
         check: True
   The Ecstatic:
     entrances:
