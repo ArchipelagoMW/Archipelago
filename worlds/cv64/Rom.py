@@ -60,50 +60,6 @@ rom_sub_weapon_offsets = {
     0x10CEE3: 0x0D,
 }
 
-rom_invis_item_bytes = {
-    "White jewel": 0x7E,
-    "Red jewel(S)": 0x38,
-    "Red jewel(L)": 0x39,
-    "Special1": 0x7F,
-    "Special2": 0x80,
-    "Roast chicken": 0x3A,
-    "Roast beef": 0x3B,
-    "Healing kit": 0x3C,
-    "Purifying": 0x3D,
-    "Cure ampoule": 0x3E,
-    "pot-pourri": 0x81,
-    "PowerUp": 0x82,
-    "Holy water": 0x83,
-    "Cross": 0x84,
-    "Axe": 0x85,
-    "Knife": 0x86,
-    "Wooden stake": 0x87,
-    "Rose": 0x88,
-    "The contract": 0x89,
-    "engagement ring": 0x8A,
-    "Magical Nitro": 0x8B,
-    "Mandragora": 0x8C,
-    "Sun card": 0x3F,
-    "Moon card": 0x40,
-    "Incandescent gaze": 0x8D,
-    "500 GOLD": 0x41,
-    "300 GOLD": 0x42,
-    "100 GOLD": 0x43,
-    "Archives key": 0x8E,
-    "Left Tower Key": 0x8F,
-    "Storeroom Key": 0x90,
-    "Garden Key": 0x91,
-    "Copper Key": 0x92,
-    "Chamber Key": 0x93,
-    "Execution Key": 0x94,
-    "Science Key1": 0x95,
-    "Science Key2": 0x96,
-    "Science Key3": 0x97,
-    "Clocktower Key1": 0x98,
-    "Clocktower Key2": 0x99,
-    "Clocktower Key3": 0x9A,
-}
-
 rom_looping_music_fade_ins = {
     0x10: None,
     0x11: None,
@@ -587,6 +543,20 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
         rom.write_bytes(0xBFCD30, music_list)
         rom.write_bytes(0x15780, [0x0C, 0x0F, 0xF3, 0x6E])  # JAL 0x803FCDB8
         rom.write_bytes(0xBFCDB8, Patches.music_comparer_modifier)
+
+    # Enable storing item flags anywhere and changing the item model/visibility on any item instance.
+    rom.write_bytes(0xA857C, [0x08, 0x0F, 0xF3, 0x8F,   # J	    0x803FCE3C
+                              0x94, 0xD9, 0x00, 0x38])  # LHU   T9, 0x0038 (A2)
+    rom.write_bytes(0xBFCE3C, Patches.item_customizer)
+    rom.write_bytes(0xA86A0, [0x0C, 0x0F, 0xF3, 0xAF,   # JAL   0x803FCEBC
+                              0x95, 0xC4, 0x00, 0x02])  # LHU   A0, 0x0002 (T6)
+    rom.write_bytes(0xBFCEBC, Patches.item_appearance_switcher)
+    rom.write_bytes(0xA8728, [0x0C, 0x0F, 0xF3, 0xB8,   # JAL   0x803FCEE4
+                              0x01, 0x39, 0x60, 0x21])  # ADDU  T4, T1, T9
+    rom.write_bytes(0xBFCEE4, Patches.item_model_visibility_switcher)
+    rom.write_bytes(0xA8A04, [0x0C, 0x0F, 0xF3, 0xC2,   # JAL   0x803FCF08
+                              0x01, 0x8B, 0x60, 0x21])  # ADDU  T4, T4, T3
+    rom.write_bytes(0xBFCF08, Patches.item_shine_visibility_switcher)
 
     # Write all the new item and loading zone bytes
     for offset, item_id in offsets_to_ids.items():

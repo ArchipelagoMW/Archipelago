@@ -174,10 +174,16 @@ class LoadingZoneHeals(DefaultOnToggle):
     """Whether end-of-level loading zones restore health and cure status aliments or not.
     Recommended off for those looking for more of a survival horror experience!"""
 
-# class RevealInvisibleItems(DefaultOnToggle):
-#     """Makes all invisible freestanding items visible."""
-#     display_name = "Reveal Invisible Items"
-# TODO: Extend the item properties table to add invisible variations of every item that lacks one.
+
+class InvisibleItems(Choice):
+    """Controls which items are visible and which are invisible until picked up. 'Chance' gives each item a 50/50 chance
+    of being visible or invisible."""
+    display_name = "Invisible Items"
+    option_reveal_all = 0
+    option_vanilla = 1
+    option_hide_all = 2
+    option_chance = 3
+    default = 1
 
 
 class DisableTimeRestrictions(Toggle):
@@ -233,7 +239,7 @@ cv64_options: Dict[str, Option] = {
     "increase_item_limit": IncreaseItemLimit,
     "nerf_healing_items": NerfHealingItems,
     "loading_zone_heals": LoadingZoneHeals,
-    # "reveal_invisible_items": RevealInvisibleItems,
+    "invisible_items": InvisibleItems,
     "disable_time_restrictions": DisableTimeRestrictions,
     "skip_waterway_platforms": SkipWaterwayPlatforms,
     "background_music": BackgroundMusic,
