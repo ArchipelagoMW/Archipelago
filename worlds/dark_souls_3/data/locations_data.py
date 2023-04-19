@@ -42,7 +42,8 @@ high_wall_of_lothric = {
     "HWL: Soul of the Dancer": 0x400002CA,
     "HWL: Way of Blue Covenant": 0x2000274C,
     "HWL: Greirat's Ashes": 0x4000083F,
-    "HWL: Blue Tearstone Ring": 0x20004ED4
+    "HWL: Blue Tearstone Ring": 0x20004ED4,
+    "HWL: Broken Straight Sword": 0x001EF9B0 #NEW
 }
 
 undead_settlement_table = {

@@ -47,6 +47,7 @@ class DarkSouls3Location(Location):
         "AP: Dragon Tooth", # ITEM ADDED
         "GA: Sage's Crystal Staff",
         "FS: Broken Straight Sword",
+        "HWL: Broken Straight Sword",
         "HWL: Deep Battle Axe",
         "HWL: Club",
         "HWL: Claymore",
@@ -402,7 +403,6 @@ class DarkSouls3Location(Location):
         "CC: Grave Warden Pyromancy Tome",
         "SL: Quelana Pyromancy Tome",
         "SL: Izalith Pyromancy Tome",
-        "HWL: Greirat's Ashes",
         "IBV: Excrement-covered Ashes",
         "IBV: Easterner's Ashes",
         "ID: Dragon Torso Stone",
@@ -421,6 +421,7 @@ class DarkSouls3Location(Location):
     dlc_misc_location = ("PW: Captains Ashes")
 
     npc_location = (
+        "HWL: Greirat's Ashes",
         "US: Irina's Ashes",
         "ID: Karla's Ashes",
         "ID: Karla's Pointed Hat",

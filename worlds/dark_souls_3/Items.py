@@ -228,7 +228,6 @@ class DarkSouls3Item(Item):
                  "Grave Warden Pyromancy Tome",
                  "Quelana Pyromancy Tome",
                  "Izalith Pyromancy Tome",
-                 "Greirat's Ashes",
                  "Excrement-covered Ashes",
                  "Easterner's Ashes",
                  "Dragon Torso Stone",
@@ -245,7 +244,8 @@ class DarkSouls3Item(Item):
 
     dlc_misc_item = ("Captains Ashes")
 
-    npc_item = ("Irina's Ashes",
+    npc_item = ("Greirat's Ashes",
+                "Irina's Ashes",
                 "Karla's Ashes",
                 "Karla's Pointed Hat",
                 "Karla's Coat",
