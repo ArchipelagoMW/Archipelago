@@ -221,12 +221,16 @@
     panels:
       HI:
         id: Entry Room/Panel_hi_high
+      LOW:
+        id: Entry Room/Panel_low_low
     doors:
       Exit Door:
         id: Entry Room Area Doors/Door_hi_high
+        location_name: Second Room - Good Luck
         group: Entry Doors
         panels:
           - HI
+          - LOW
   Hub Room:
     entrances:
       Second Room:
