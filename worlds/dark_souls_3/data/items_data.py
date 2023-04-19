@@ -42,23 +42,24 @@ weapons_upgrade_5_table = {
     "Cleric's Candlestick": 0x0020F580, ###
     "Dragonslayer Greataxe": 0x006C7D70, ###
     "Moonlight Greatsword": 0x00606F80, ###
-    "Gundyr's Halberd": 0x009A1D20, ###
-    "Lothric's Holy Sword": 0x005FD340, ###
-    "Lorian's Greatsword": 0x005F8520, ###
-    "Twin Princes' Greatsword": 0x005FAC30, ###
-    "Storm Curved Sword": 0x003E4180, ###
-    "Dragonslayer Swordspear": 0x008BC540, ###
+    "Gundyr's Halberd": 0x009A1D20, #!
+    "Lothric's Holy Sword": 0x005FD340, #!
+    "Lorian's Greatsword": 0x005F8520, #!
+    "Twin Princes' Greatsword": 0x005FAC30, #!
+    "Storm Curved Sword": 0x003E4180, #!
+    "Dragonslayer Swordspear": 0x008BC540, #!
     "Sage's Crystal Staff": 0x00C8CE40, #!
-    "Irithyll Rapier": 0x002E8A10 ###
+    "Irithyll Rapier": 0x002E8A10, #!
+    "Dragon Tooth": 0x007E09A0 #! NEW
 }
 
 dlc_weapons_upgrade_5_table = {
-    "Friede's Great Scythe": 0x009B55A0, ###
-    "Rose of Ariandel": 0x00B82C70, ###
-    "Demon's Scar": 0x003F04D0, ###
-    "Frayed Blade": 0x004D35A0, ###
-    "Gael's Greatsword": 0x00227C20, ###
-    "Repeating Crossbow": 0x00D885B0, ###
+    "Friede's Great Scythe": 0x009B55A0, #!
+    "Rose of Ariandel": 0x00B82C70, #!
+    "Demon's Scar": 0x003F04D0, #!
+    "Frayed Blade": 0x004D35A0, #!
+    "Gael's Greatsword": 0x00227C20, #!
+    "Repeating Crossbow": 0x00D885B0, #!
     "Onyx Blade": 0x00222E00, #!
     "Earth Seeker": 0x006D8EE0, #!
     "Quakestone Hammer": 0x007ECCF0, #!
@@ -66,7 +67,7 @@ dlc_weapons_upgrade_5_table = {
     "Valorheart": 0x00F646E0, #!
     "Aquamarine Dagger": 0x00116520, #!
     "Ringed Knight Straight Sword": 0x00225510, #!
-    "Ledo's Great Hammer": 0x007EF400, ###
+    "Ledo's Great Hammer": 0x007EF400, #!
     "Ringed Knight Spear": 0x008CFDC0, #!
     "Crucifix of the Mad King": 0x008D4BE0, #!
     "Sacred Chime of Filianore": 0x00CCECF0, #!
@@ -75,18 +76,18 @@ dlc_weapons_upgrade_5_table = {
     "Ringed Knight Paired Greatswords": 0x00F69500 #!
 }
 
-weapons_upgrade_10_table = {
-    "Broken Straight Sword": 0x001EF9B0, #!
+weapons_upgrade_10_table = { #Removed some items to balance item/location tables to accomodate boss weapons properly
+    #"Broken Straight Sword": 0x001EF9B0, #! ?
     "Deep Battle Axe": 0x0006AFA54, #!
     "Club": 0x007A1200, #!
-    "Claymore": 0x005BDBA0, #!
-    "Longbow": 0x00D689E0, #!
-    "Mail Breaker": 0x002DEDD0, #!
-    "Broadsword": 0x001ED2A0, #!
+    #"Claymore": 0x005BDBA0, #! ?
+    #"Longbow": 0x00D689E0, #! ?
+    #"Mail Breaker": 0x002DEDD0, #! ?
+    #"Broadsword": 0x001ED2A0, #! ?
     "Astora's Straight Sword": 0x002191C0, #!
-    "Rapier": 0x002E14E0, #!
+    #"Rapier": 0x002E14E0, #! ?
     "Lucerne": 0x0098BD90, #!
-    "Whip": 0x00B71B00, #!
+    #"Whip": 0x00B71B00, #! ?
     "Reinforced Club": 0x007A8730, #!
     "Caestus": 0x00A7FFD0, #!
     "Partizan": 0x0089C970, #!
@@ -115,17 +116,18 @@ weapons_upgrade_10_table = {
     "Blacksmith Hammer": 0x007E57C0, #!
     "Witchtree Branch": 0x00C94370, #!
     "Painting Guardian's Curved Sword": 0x003E6890, #!
-    "Pickaxe": 0x007DE290, #!
+    #"Pickaxe": 0x007DE290, #! ?
     "Court Sorcerer's Staff": 0x00C91C60, #!
     "Avelyn": 0x00D6FF10, #!
     "Onikiri and Ubadachi": 0x00F58390, #!
     "Ricard's Rapier": 0x002E3BF0, #!
     "Drakeblood Greatsword": 0x00609690, #!
     "Greatlance": 0x008A8CC0, #!
-    "Sniper Crossbow": 0x00D83790, #!
+    #"Sniper Crossbow": 0x00D83790, #! ?
     "Claw": 0x00A7D8C0, #!
     "Drang Twinspears": 0x00F5AAA0, #!
-    "Pyromancy Flame": 0x00CC77C0 #!
+    "Pyromancy Flame": 0x00CC77C0, #!
+    "Gotthard Twinswords": 0x00F53570 #On Black Hand Gotthard corpse
 }
 
 dlc_weapons_upgrade_10_table = {
@@ -138,8 +140,8 @@ dlc_weapons_upgrade_10_table = {
     "Follower Torch": 0x015F1AD0, #!
     "Murky Hand Scythe": 0x00118C30, #!
     "Herald Curved Greatsword": 0x006159E0, #!
-    "Lothric War Banner": 0x008D24D0, ###
-    "Splitleaf Greatsword": 0x009B2E90, ###
+    "Lothric War Banner": 0x008D24D0, #!
+    "Splitleaf Greatsword": 0x009B2E90, #!
     "Murky Longstaff": 0x00CCC5E0, #!
 }
 
@@ -166,7 +168,9 @@ shields_table = {
     "Golden Wing Crest Shield": 0x0143CAA0, #!
     "Ancient Dragon Greatshield": 0x013599D0, #!
     "Spirit Tree Crest Shield": 0x014466E0, #!
-    "Blessed Red and White Shield": 0x01343FB9 #!
+    "Blessed Red and White Shield": 0x01343FB9, #!
+    "Havel's Greatshield": 0x013376F0 #! NEW
+
 }
 
 dlc_shields_table = {
@@ -261,7 +265,7 @@ dlc_goods_2_table = { #71
     **{"Ember $"+str(i): 0x400001F4 for i in range(1, 11)}
 }
 
-armor_table = {
+armor_table = { # Added Nameless Knight set to balance item/locations tables
     "Fire Keeper Robe": 0x140D9CE8, #!
     "Fire Keeper Gloves": 0x140DA0D0, #!
     "Fire Keeper Skirt": 0x140DA4B8, #!
@@ -363,7 +367,11 @@ armor_table = {
     "Karla's Pointed Hat": 0x15E69EC0, #! NEW 
     "Karla's Coat": 0x15E6A2A8, #! NEW
     "Karla's Gloves": 0x15E6A690, #! NEW
-    "Karla's Trousers": 0x15E6AA78 #! NEW
+    "Karla's Trousers": 0x15E6AA78, #! NEW
+    "Nameless Knight Helm": 0x143B5FC0, #! NEW
+    "Nameless Knight Armor": 0x143B63A8, #! NEW
+    "Nameless Knight Gauntlets": 0x143B6790, #! NEW
+    "Nameless Knight Leggings": 0x143B6B78 #! NEW
 }
 
 dlc_armor_table = { 
@@ -425,7 +433,7 @@ dlc_armor_table = {
     "Antiquated Plain Garb": 0x11B2E408 #!
 }
 
-rings_table = {
+rings_table = { #Added 3 rings to balance item/location tables
     "Estus Ring": 0x200050DC, #!
     "Covetous Silver Serpent Ring": 0x20004FB0, #!
     "Fire Clutch Ring": 0x2000501E, #!
@@ -473,7 +481,10 @@ rings_table = {
     "Dragonscale Ring": 0x2000515E, #!
     "Knight Slayer's Ring": 0x20005000, #!
     "Magic Stoneplate Ring": 0x20004E66, #!
-    "Blue Tearstone Ring": 0x20004ED4 #!
+    "Blue Tearstone Ring": 0x20004ED4, #!
+    "Bloodbite Ring": 0x20004E84, #! NEW
+    "Hawk Ring": 0x20004F92, #! NEW
+    "Great Swamp Ring": 0x20004F10 #! NEW
 }
 
 dlc_ring_table = {
@@ -525,7 +536,7 @@ misc_items_table = {
     "Mortician's Ashes": 0x4000083B, #!
     "Braille Divine Tome of Carim": 0x40000847, #!  # Shop
     "Great Swamp Pyromancy Tome": 0x4000084F, #!  # Shop
-    "Farron Coal ": 0x40000837, #!  # Shop
+    "Farron Coal": 0x40000837, #!  # Shop
     "Paladin's Ashes": 0x4000083D, #!  # Shop
     "Deep Braille Divine Tome": 0x40000860, #!  # Shop
     "Small Doll": 0x400007D5, #!
@@ -565,7 +576,8 @@ misc_items_table = {
     "Karla's Ashes": 0x40000842, #!
     "Cornyx's Ashes": 0x40000841, #!
     "Orbeck's Ashes": 0x40000840, #!
-    "Fire Gem": 0x4000047E #!
+    "Fire Gem": 0x4000047E, #!
+    "Pale Tongue": 0x40000175
 }
 
 dlc_misc_table = {
@@ -612,6 +624,7 @@ items_for_key_location_list = {
     "Prisoner Chief's Ashes",
     "Old Cell Key",
     "Jailer's Key Ring",
+    "Grave Key",
     "Soul of Boreal Valley Vordt",
     "Soul of the Rotted Greatwood",
     "Soul of a Crystal Sage",
@@ -628,7 +641,8 @@ items_for_key_location_list = {
     "Soul of Consumed Oceiros",
     "Soul of the Twin Princes",
     "Soul of Champion Gundyr",
-    "Soul of the Nameless King"
+    "Soul of the Nameless King",
+    "Pale Tongue"
 }
 
 items_for_dlc_key_location_list = {
@@ -667,8 +681,7 @@ items_for_misc_location_list = {
     "Dragon Chaser's Ashes",
     "Twinkling Dragon Torso Stone",
     "Braille Divine Tome of Lothric",
-    "Fire Gem",
-    "Grave Key"
+    "Fire Gem"
 }
 
 items_for_dlc_misc_location_list = {

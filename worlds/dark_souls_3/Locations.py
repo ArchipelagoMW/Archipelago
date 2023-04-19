@@ -28,32 +28,24 @@ class DarkSouls3Location(Location):
         "LC: Caitha's Chime",
         "LC: Sunlight Straight Sword",
         "FS: Uchigatana",
-        "FS: Master's Attire",
-        "FS: Master's Gloves",
-        "US: Bloodbite Ring",
-        "US: Mirrah Vest",
-        "US: Mirrah Gloves",
-        "US: Mirrah Trousers",
-        "US: Loretta's Bone",
-        "US: Hand Axe",
-        "US: Great Scythe",
-        "US: Hawk Ring",
-        "US: Warrior of Sunlight Covenant",
-        "RS: Great Swamp Ring",
-        "CD: Rosaria's Fingers Covenant",
-        "FK: Nameless Knight Helm",
-        "FK: Nameless Knight Armor",
-        "FK: Nameless Knight Gauntlets",
-        "FK: Nameless Knight Leggings",
-        "FK: Wolf's Blood Swordgrass",
-        "FK: Watchdogs of Farron Covenant",
-        "IBV: Roster of Knights",
-        "IBV: Aldrich Faithful Covenant",
-        "LC: Gotthard Twinswords",
+        "FS: Master's Attire", # ARMOR KEEP
+        "FS: Master's Gloves", # ARMOR KEEP
+        "US: Mirrah Vest", # ARMOR KEEP
+        "US: Mirrah Gloves", # ARMOR KEEP
+        "US: Mirrah Trousers", # ARMOR KEEP
+        "US: Loretta's Bone", # RANDOM ITEM KEEP
+        "US: Hand Axe", 
+        "US: Great Scythe", 
+        "US: Warrior of Sunlight Covenant", # COV ITEM KEEP
+        "CD: Rosaria's Fingers Covenant", # COV ITEM KEEP
+        "FK: Wolf's Blood Swordgrass", # COV FARM ITEM KEEP
+        "FK: Watchdogs of Farron Covenant", # COV ITEM KEEP
+        "IBV: Roster of Knights", # COV ITEM KEEP
+        "IBV: Aldrich Faithful Covenant", # ONLINE ITEM KEEP
+        "LC: Gotthard Twinswords", # ITEM ADDED
         "LC: Irithyll Rapier",
-        "AP: Dragon Tooth",
+        "AP: Dragon Tooth", # ITEM ADDED
         "GA: Sage's Crystal Staff",
-        "AP: Havel's Greatshield",
         "FS: Broken Straight Sword",
         "HWL: Deep Battle Axe",
         "HWL: Club",
@@ -162,7 +154,9 @@ class DarkSouls3Location(Location):
         "GA: Golden Wing Crest Shield",
         "AP: Ancient Dragon Greatshield",
         "LC: Spirit Tree Crest Shield",
-        "US: Blessed Red and White Shield"
+        "US: Blessed Red and White Shield",
+        "AP: Havel's Greatshield", # SHIELD / MOVE TO SHIELDS
+
     )
 
     dlc_shield_location = (
@@ -262,7 +256,11 @@ class DarkSouls3Location(Location):
         "GA: Outrider Knight Helm",
         "GA: Outrider Knight Armor",
         "GA: Outrider Knight Gauntlets",
-        "GA: Outrider Knight Leggings"
+        "GA: Outrider Knight Leggings",
+        "FK: Nameless Knight Helm", # NEW
+        "FK: Nameless Knight Armor", # NEW
+        "FK: Nameless Knight Gauntlets", # NEW
+        "FK: Nameless Knight Leggings" # NEW
     )
 
     dlc_armor_location = (
@@ -345,7 +343,10 @@ class DarkSouls3Location(Location):
         "CKG: Dragonscale Ring",
         "SL: Knight Slayer's Ring",
         "CKG: Magic Stoneplate Ring",
-        "HWL: Blue Tearstone Ring"
+        "HWL: Blue Tearstone Ring",
+        "US: Bloodbite Ring", # RING
+        "US: Hawk Ring", # RING
+        "RS: Great Swamp Ring" # RING
     )
 
     dlc_ring_location = (

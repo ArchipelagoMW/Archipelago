@@ -634,6 +634,7 @@ key_location_list = { #Bosses are to be considered a key location
     "ID: Prisoner Chief's Ashes",
     "ID: Old Cell Key",
     "ID: Jailer's Key Ring",
+    "UG: Eyes of a Fire Keeper",
     "HWL: Soul of Boreal Valley Vordt",
     "HWL: Soul of the Dancer",
     "US: Soul of the Rotted Greatwood",
