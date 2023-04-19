@@ -1,6 +1,6 @@
 from typing import Dict, Union
 from BaseClasses import MultiWorld
-from Options import Toggle, Option, Choice
+from Options import Toggle, Option, Choice, DefaultOnToggle
 
 
 class ShuffleDoors(Choice):
@@ -13,16 +13,12 @@ class ShuffleDoors(Choice):
     option_complex = 2
 
 
-class OrangeTowerAccess(Choice):
-    """When "Shuffle Doors" is on, this settings governs the manner in which the Orange Tower floors open up.
-    On "individual", there is an item for each floor of the tower, and each floor's item is the only one needed to access that floor.
-    On "vanilla", there is an item for each floor of the tower, but a floor only becomes accessible if you have the items for each lower floor as well.
-    On "progressive", there are not individual items for each floor, and instead six progressive items, which open up the tower from the bottom floor upward.
+class ProgressiveOrangeTower(DefaultOnToggle):
+    """When "Shuffle Doors" is on, this setting governs the manner in which the Orange Tower floors open up.
+    If off, there is an item for each floor of the tower, and each floor's item is the only one needed to access that floor.
+    If on, there are six progressive items, which open up the tower from the bottom floor upward.
     """
-    display_name = "Orange Tower Access"
-    option_individual = 0
-    option_vanilla = 1
-    option_progressive = 2
+    display_name = "Progressive Orange Tower"
 
 
 class ShuffleColors(Toggle):
@@ -43,6 +39,7 @@ class ShufflePaintings(Toggle):
     """If on, the destination, location, and appearance of the painting warps in the game will be randomized."""
     display_name = "Shuffle Paintings"
 
+
 class VictoryCondition(Choice):
     """Change the victory condition."""
     display_name = "Victory Condition"
@@ -57,7 +54,7 @@ class DeathLink(Toggle):
 
 lingo_options: Dict[str, type] = {
     "shuffle_doors": ShuffleDoors,
-    "orange_tower_access": OrangeTowerAccess,
+    "progressive_orange_tower": ProgressiveOrangeTower,
     "shuffle_colors": ShuffleColors,
     "shuffle_panels": ShufflePanels,
     "shuffle_paintings": ShufflePaintings,

@@ -4,7 +4,7 @@ from . import LingoTestBase
 class TestProgressiveOrangeTower(LingoTestBase):
     options = {
         "shuffle_doors": "complex",
-        "orange_tower_access": "progressive"
+        "progressive_orange_tower": "true"
     }
 
     def test_from_welcome_back(self) -> None:

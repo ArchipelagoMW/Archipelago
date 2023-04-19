@@ -51,9 +51,9 @@ class LingoLogic(LogicMixin):
         """
         Determines whether a door can be opened
         """
-        if get_option_value(world, player, "shuffle_doors") > 0 and room == "Orange Tower":
+        if get_option_value(world, player, "shuffle_doors") > 0 and room == "Orange Tower" \
+                and get_option_value(world, player, "progressive_orange_tower"):
             door_object = StaticLingoLogic.DOORS_BY_ROOM[room][door]
-            orange_opt = get_option_value(world, player, "orange_tower_access")
             ordered_floors = [
                 "Orange Tower - Second Floor",
                 "Orange Tower - Third Floor",
@@ -62,17 +62,7 @@ class LingoLogic(LogicMixin):
                 "Orange Tower - Sixth Floor",
                 "Orange Tower - Seventh Floor"
             ]
-            if orange_opt == 0:  # individual
-                return self.has(door_object.item_name, player)
-            elif orange_opt == 1:  # vanilla
-                for floor in ordered_floors:
-                    if not self.has(floor, player):
-                        return False
-                    if floor == door_object.item_name:
-                        break
-                return True
-            elif orange_opt == 2:  # progressive
-                return self.has("Progressive Orange Tower", player, ordered_floors.index(door_object.item_name) + 1)
+            return self.has("Progressive Orange Tower", player, ordered_floors.index(door_object.item_name) + 1)
         else:
             return self.has(player_logic.ITEM_BY_DOOR[room][door], player)
 

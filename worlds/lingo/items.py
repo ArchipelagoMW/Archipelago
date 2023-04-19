@@ -21,9 +21,9 @@ class ItemData(NamedTuple):
         elif self.mode == "doors":
             return get_option_value(world, player, "shuffle_doors") > 0
         elif self.mode == "orange tower":
-            # doors is on and tower isn't progressive
-            return get_option_value(world, player, "shuffle_doors") > 0 and get_option_value(world, player,
-                                                                                             "orange_tower_access") != 2
+            # door shuffle is on and tower isn't progressive
+            return get_option_value(world, player, "shuffle_doors") > 0\
+                and not get_option_value(world, player, "progressive_orange_tower")
         elif self.mode == "complex door":
             return get_option_value(world, player, "shuffle_doors") == 2  # complex doors
         elif self.mode == "door group":
