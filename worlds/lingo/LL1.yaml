@@ -923,6 +923,8 @@
     entrances:
       The Observant: True
       Eight Room: True
+      Eight Alcove:
+        door: Eight Painting
     panels:
       Achievement:
         id: Countdown Panels/Panel_incomparable_incomparable
@@ -946,14 +948,17 @@
             panel: I
           - room: Elements Area
             panel: A
+  Eight Alcove:
+    entrances:
+      The Incomparable:
+        room: The Incomparable
+        door: Eight Painting
     paintings:
       - id: eight_painting2
         orientation: north
   Eight Room:
     entrances:
-      The Incomparable:
-        room: The Incomparable
-        door: Eight Painting
+      Eight Alcove:
         painting: True
     paintings:
       - id: eight_painting
@@ -1650,9 +1655,7 @@
       Outside The Initiated: True
       Outside The Agreeable: True
       Wanderlust Tutorial: True
-      The Incomparable:
-        room: The Incomparable
-        door: Eight Painting
+      Eight Alcove: True
       Orange Tower Fifth Floor:
         room: Orange Tower Fifth Floor
         door: Welcome Back
