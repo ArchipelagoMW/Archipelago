@@ -13,6 +13,7 @@ import queue
 import zipfile
 import io
 import random
+from collections import deque
 from pathlib import Path
 
 # CommonClient import first to trigger ModuleUpdater
@@ -220,6 +221,7 @@ class SC2Context(CommonContext):
     last_bot: typing.Optional[ArchipelagoBot] = None
     temp_items = queue.Queue()
     accept_traps = False
+    traps_processed: typing.Dict[str, int] = {}
 
     # Client options
     missions_unlocked: bool = False  # allow launching missions ignoring requirements
@@ -248,6 +250,7 @@ class SC2Context(CommonContext):
             await super(SC2Context, self).server_auth(password_requested)
         await self.get_username()
         await self.send_connect()
+        await self.send_msgs([{"cmd": 'Get', "keys": ["traps_processed"]}])
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
@@ -289,17 +292,23 @@ class SC2Context(CommonContext):
         
         elif cmd in {"ReceivedItems"}:
             # Store traps to send once a game is running
-            if self.accept_traps:
-                for item in args["items"]:
-                    item_name = lookup_id_to_name[item.item]
-                    item_data = item_table[item_name]
-                    if item_data.type == "Trap":
-                        print("adding trap")
-                        self.temp_items.put(item_name)
-        elif cmd in {"PrintJSON"}:
-            # Hack to ignore traps sent when connecting
-            # Ignores all duplicate traps and all traps received while client was not connected
-            self.accept_traps = True
+            for item in args["items"]:
+                item_name = lookup_id_to_name[item.item]
+                item_data = item_table[item_name]
+                if item_data.type == "Trap":
+                    self.temp_items.put(item_name)
+        elif cmd in {"Retrieved"}:
+            # Currently only called once, after server auth
+            # Remove duplicate traps from temp item queue 
+            self.traps_processed = args["keys"].get("traps_processed", {})
+            if not self.traps_processed:
+                self.traps_processed = {}
+            traps_sent = {}
+            for item in self.temp_items.queue:
+                traps_sent[item] = traps_sent.get(item, 0) + 1
+            for item in traps_sent:
+                traps_sent[item] -= self.traps_processed.get(item, 0)
+            self.temp_items.queue = deque([item for item in traps_sent for _ in range(traps_sent[item])])
 
     def on_print_json(self, args: dict):
         # goes to this world
@@ -803,6 +812,11 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                         item_name = self.ctx.temp_items.get(timeout=1)
                         if item_name == "Transmission Trap":
                             await self.chat_send(f'Transmission {self.ctx.transmissions_per_trap}')
+                            self.ctx.traps_processed[item_name] = self.ctx.traps_processed.get(item_name, 0) + 1
+                            await self.ctx.send_msgs(
+                                [{"cmd": 'Set',
+                                  "key": "traps_processed", "default": {}, "want_reply": False,
+                                  "operations": [{"operation": "update", "value": self.ctx.traps_processed}]}])
                     if game_state & (1 << 1) and not self.mission_completed:
                         if self.mission_id != self.ctx.final_mission:
                             print("Mission Completed")
