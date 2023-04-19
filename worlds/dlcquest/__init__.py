@@ -49,6 +49,7 @@ class DLCqworld(World):
         return DLCQuestItem(event, True, None, self.player)
 
     def create_items(self):
+        self.precollect_coinsanity()
         locations_count = len([location
                                for location in self.multiworld.get_locations(self.player)
                                if not location.event])
@@ -64,6 +65,12 @@ class DLCqworld(World):
         for item in items_to_exclude:
             if item in self.multiworld.itempool:
                 self.multiworld.itempool.remove(item)
+
+    def precollect_coinsanity(self):
+        if self.options[Options.Campaign] == Options.Campaign.option_basic:
+            if self.options[Options.CoinSanity] == Options.CoinSanity.option_coin and self.options[Options.CoinSanityRange] >= 5:
+                self.multiworld.push_precollected(self.create_item("Movement Pack"))
+
 
     def create_item(self, item: Union[str, ItemData]) -> DLCQuestItem:
         if isinstance(item, str):
