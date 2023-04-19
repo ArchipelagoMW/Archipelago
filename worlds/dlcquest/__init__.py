@@ -6,6 +6,7 @@ from .Locations import location_table, DLCQuestLocation
 from .Options import DLCQuest_options, DLCQuestOptions, fetch_options
 from .Rules import set_rules
 from .Regions import create_regions
+from . import Options
 
 client_version = 0
 
