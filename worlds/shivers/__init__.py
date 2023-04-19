@@ -54,6 +54,7 @@ class ShiversWorld(World):
         global storage_placements
         storagelocs = []
         storageitems = []
+        self.storage_placements = []
         
          
         for region_name, locations in Constants.location_info["locations_by_region"].items():
@@ -71,13 +72,13 @@ class ShiversWorld(World):
         self.multiworld.random.shuffle(storagelocs)
         self.multiworld.random.shuffle(storageitems)
         fill_restrictive(self.multiworld, state, storagelocs.copy(), storageitems, True)
-
-        storage_placements = {location.name: location.item.name for location in storagelocs}
+        
+        self.storage_placements = {location.name: location.item.name for location in storagelocs}
 
     
     def _get_slot_data(self):
         return {
-            'storageplacements': storage_placements
+            'storageplacements': self.storage_placements
         }
 
     def fill_slot_data(self) -> dict:
