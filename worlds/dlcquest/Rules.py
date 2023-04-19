@@ -19,8 +19,6 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
                 name_coin = f"{i} coins"
                 if state.has(name_coin, player):
                     coin_possessed += i
-            print_value = f"{coin_possessed} possessed and {coins} coins and result {coin_possessed >= coins}"
-            print(print_value)
 
             return coin_possessed >= coins
 
