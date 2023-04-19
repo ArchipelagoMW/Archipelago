@@ -65,6 +65,7 @@ class Group(enum.Enum):
     SPECIAL_ORDER_BOARD = enum.auto()
     SPECIAL_ORDER_QI = enum.auto()
     GINGER_ISLAND = enum.auto()
+    WALNUT_PURCHASE = enum.auto()
 
 
 @dataclass(frozen=True)
@@ -138,15 +139,17 @@ initialize_groups()
 def create_items(item_factory: StardewItemFactory, locations_count: int, items_to_exclude: List[Item],
                  world_options: StardewOptions,
                  random: Random) -> List[Item]:
-    items = create_unique_items(item_factory, world_options, random)
+    items = []
+    unique_items = create_unique_items(item_factory, world_options, random)
 
     for item in items_to_exclude:
-        if item in items:
-            items.remove(item)
+        if item in unique_items:
+            unique_items.remove(item)
 
-    assert len(items) <= locations_count, \
+    assert len(unique_items) <= locations_count, \
         "There should be at least as many locations as there are mandatory items"
-    logger.debug(f"Created {len(items)} unique items")
+    items += unique_items
+    logger.debug(f"Created {len(unique_items)} unique items")
 
     unique_filler_items = create_unique_filler_items(item_factory, world_options, random, locations_count - len(items))
     items += unique_filler_items
@@ -169,7 +172,7 @@ def create_unique_items(item_factory: StardewItemFactory, world_options: Stardew
     create_mine_elevators(item_factory, world_options, items)
     create_tools(item_factory, world_options, items)
     create_skills(item_factory, world_options, items)
-    create_wizard_buildings(item_factory, items)
+    create_wizard_buildings(item_factory, world_options, items)
     create_carpenter_buildings(item_factory, world_options, items)
     items.append(item_factory("Beach Bridge"))
     create_special_quest_rewards(item_factory, items)
@@ -185,6 +188,9 @@ def create_unique_items(item_factory: StardewItemFactory, world_options: Stardew
     items.extend(create_seeds(item_factory, world_options))
     create_friendsanity_items(item_factory, world_options, items)
     items.extend(create_festival_rewards(item_factory, world_options))
+    items.extend(create_special_order_board_rewards(item_factory, world_options))
+    items.extend(create_special_order_qi_rewards(item_factory, world_options))
+    items.extend(create_walnut_purchase_rewards(item_factory, world_options))
 
     return items
 
@@ -228,13 +234,14 @@ def create_skills(item_factory: StardewItemFactory, world_options: StardewOption
         items.extend([item_factory(item) for item in items_by_group[Group.SKILL_LEVEL_UP] * 10])
 
 
-def create_wizard_buildings(item_factory: StardewItemFactory, items: List[Item]):
+def create_wizard_buildings(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
     items.append(item_factory("Earth Obelisk"))
     items.append(item_factory("Water Obelisk"))
     items.append(item_factory("Desert Obelisk"))
-    items.append(item_factory("Island Obelisk"))
     items.append(item_factory("Junimo Hut"))
     items.append(item_factory("Gold Clock"))
+    if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false:
+        items.append(item_factory("Island Obelisk"))
 
 
 def create_carpenter_buildings(item_factory: StardewItemFactory, world_options: StardewOptions,
@@ -373,12 +380,14 @@ def create_festival_rewards(item_factory: StardewItemFactory, world_options: Sta
     ]
 
 
-def create_filler_festival_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
-    if world_options[options.FestivalLocations] == options.FestivalLocations.option_disabled:
+def create_walnut_purchase_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
+    if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
         return []
 
-    return [item_factory(item) for item in items_by_group[Group.FESTIVAL] if
-            item.classification == ItemClassification.filler]
+    return [
+        item_factory("Willy Boat Repair"),
+        *[item_factory(item) for item in items_by_group[Group.WALNUT_PURCHASE]]
+    ]
 
 
 def create_special_order_board_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
@@ -390,13 +399,21 @@ def create_special_order_board_rewards(item_factory: StardewItemFactory, world_o
 
 def create_special_order_qi_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
     if (world_options[options.SpecialOrderLocations] != options.SpecialOrderLocations.option_board_qi or
-        world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true):
+            world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true):
         return []
 
     return [item_factory("100 Qi Gems"), item_factory("10 Qi Gems"), item_factory("40 Qi Gems"),
             item_factory("25 Qi Gems"), item_factory("25 Qi Gems"), item_factory("40 Qi Gems"),
             item_factory("20 Qi Gems"), item_factory("50 Qi Gems"), item_factory("40 Qi Gems"),
             item_factory("35 Qi Gems")]
+
+
+def create_filler_festival_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
+    if world_options[options.FestivalLocations] == options.FestivalLocations.option_disabled:
+        return []
+
+    return [item_factory(item) for item in items_by_group[Group.FESTIVAL] if
+            item.classification == ItemClassification.filler]
 
 
 def create_unique_filler_items(item_factory: StardewItemFactory, world_options: options.StardewOptions, random: Random,
@@ -410,9 +427,11 @@ def create_unique_filler_items(item_factory: StardewItemFactory, world_options: 
     return items
 
 
-def fill_with_resource_packs(item_factory: StardewItemFactory, world_options: options.StardewOptions, random: Random, items_already_added: List[Item],
+def fill_with_resource_packs(item_factory: StardewItemFactory, world_options: options.StardewOptions, random: Random,
+                             items_already_added: List[Item],
                              number_locations: int) -> List[Item]:
-    all_resource_packs = items_by_group[Group.RESOURCE_PACK]
+    all_resource_packs = []
+    all_resource_packs.extend(items_by_group[Group.RESOURCE_PACK])
     items_already_added_names = [item.name for item in items_already_added]
     useful_resource_packs = [pack for pack in items_by_group[Group.RESOURCE_PACK_USEFUL]
                              if pack.name not in items_already_added_names]
@@ -437,19 +456,18 @@ def fill_with_resource_packs(item_factory: StardewItemFactory, world_options: op
     items.extend(chosen_useful_packs)
     required_resource_pack -= number_useful_packs
 
-    for i in range(required_resource_pack - 1):
+    while required_resource_pack > 0:
         resource_pack = random.choice(all_resource_packs)
         exactly_2 = Group.EXACTLY_TWO in resource_pack.groups
+        while exactly_2 and required_resource_pack == 1:
+            resource_pack = random.choice(all_resource_packs)
+            exactly_2 = Group.EXACTLY_TWO in resource_pack.groups
         items.append(item_factory(resource_pack))
+        required_resource_pack -= 1
         if exactly_2:
             items.append(item_factory(resource_pack))
-            i += 1
+            required_resource_pack -= 1
         if exactly_2 or Group.MAXIMUM_ONE in resource_pack.groups:
             all_resource_packs.remove(resource_pack)
-
-    # The last pack is added from the packs that don't need to exist twice
-    all_solo_packs = [pack for pack in all_resource_packs if Group.EXACTLY_TWO not in pack.groups]
-    last_resource_pack = random.choice(all_solo_packs)
-    items.append(item_factory(last_resource_pack))
 
     return items

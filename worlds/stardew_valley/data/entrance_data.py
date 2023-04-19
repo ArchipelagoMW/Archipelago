@@ -13,6 +13,7 @@ class SVEntrance:
     enter_greenhouse = "Enter Greenhouse"
     use_desert_obelisk = "Use Desert Obelisk"
     use_island_obelisk = "Use Island Obelisk"
+    use_farm_obelisk = "Use Farm Obelisk"
     backwoods_to_mountain = "Backwoods to Mountain"
     bus_stop_to_town = "Bus Stop to Town"
     take_bus_to_desert = "Take Bus to Desert"
@@ -76,6 +77,8 @@ class SVEntrance:
     enter_witch_swamp = "Enter Witch's Swamp"
     enter_quarry_mine_entrance = "Enter Quarry Mine Entrance"
     enter_quarry_mine = "Enter Quarry Mine"
+    enter_oasis = "Enter Oasis"
+    enter_casino = "Casino"
     enter_skull_cavern_entrance = "Enter Skull Cavern Entrance"
     enter_skull_cavern = "Enter Skull Cavern"
     mine_to_skull_cavern_floor_25 = "Mine to Skull Cavern Floor 25"
@@ -109,6 +112,7 @@ class SVEntrance:
     island_south_to_north = "Island South to North",
     island_south_to_east = "Island South to East",
     island_south_to_southeast = "Island South to Southeast",
+    island_west_to_islandfarmhouse = "Island West to Island Farmhouse",
     island_west_to_gourmand_cave = "Island West to Gourmand Cave",
     island_west_to_crystals_cave = "Island West to Crystal Cave",
     island_west_to_shipwreck = "Island West to Shipwreck",
@@ -118,5 +122,6 @@ class SVEntrance:
     island_north_to_field_office = "Island North to Field Office",
     island_north_to_dig_site = "Island North to Dig Site",
     island_north_to_volcano = "Island North to Volcano",
+    talk_to_island_trader = "Talk to Island Trader"
     climb_to_volcano_5 = "Climb to Volcano Floor 5",
     climb_to_volcano_10 = "Climb to Volcano Floor 10",

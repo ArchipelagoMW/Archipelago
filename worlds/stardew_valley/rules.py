@@ -11,7 +11,7 @@ from .data.museum_data import all_museum_items, all_mineral_items, all_artifact_
     skeleton_middle, skeleton_back, all_museum_items_by_name
 from .data.region_data import SVRegion
 from .locations import LocationTags
-from .logic import StardewLogic, And, month_end_per_skill_level, tool_prices, week_days
+from .logic import StardewLogic, And, tool_prices, week_days
 from .options import StardewOptions
 
 
@@ -44,10 +44,34 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
                              logic.received("Desert Obelisk").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.use_island_obelisk, player),
                              logic.received("Island Obelisk").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.use_farm_obelisk, player),
+                             logic.received("Farm Obelisk").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.talk_to_traveling_merchant, player),
                              logic.has_traveling_merchant())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_greenhouse, player),
                              logic.received("Greenhouse"))
+
+    # Ginger Island Entrances
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.boat_to_ginger_island, player),
+                             logic.received("Willy Boat Repair").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_west, player),
+                             logic.received("Island West Turtle").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_north, player),
+                             logic.received("Island North Turtle").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_west_to_islandfarmhouse, player),
+                             logic.received("Island Farmhouse").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_north_to_dig_site, player),
+                             logic.received("Dig Site Bridge").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.talk_to_island_trader, player),
+                             logic.received("Island Trader").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_southeast, player),
+                             logic.received("Island Resort").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_west_to_qi_walnut_room, player),
+                             logic.received("Qi Walnut Room").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.climb_to_volcano_5, player),
+                             logic.can_mine_perfectly().simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.climb_to_volcano_10, player),
+                             logic.can_mine_perfectly().simplify())
 
     # Those checks do not exist if ToolProgression is vanilla
     if world_options[options.ToolProgression] != options.ToolProgression.option_vanilla:
@@ -72,20 +96,15 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
     if world_options[options.SkillProgression] != options.SkillProgression.option_vanilla:
         for i in range(1, 11):
             MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Farming", player),
-                                     (logic.received("Month End", month_end_per_skill_level["Farming", i])).simplify())
+                                     logic.can_earn_skill_level("Farming", i).simplify())
             MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Fishing", player),
-                                     (logic.can_get_fishing_xp() &
-                                      logic.received("Month End", month_end_per_skill_level["Fishing", i])).simplify())
-            MultiWorldRules.add_rule(multi_world.get_location(f"Level {i} Foraging", player),
-                                     logic.received("Month End", month_end_per_skill_level["Foraging", i]).simplify())
-            if i >= 6:
-                MultiWorldRules.add_rule(multi_world.get_location(f"Level {i} Foraging", player),
-                                         logic.has_tool("Axe", "Iron").simplify())
+                                     logic.can_earn_skill_level("Fishing", i).simplify())
+            MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Foraging", player),
+                                     logic.can_earn_skill_level("Foraging", i).simplify())
             MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Mining", player),
-                                     logic.received("Month End", month_end_per_skill_level["Mining", i]).simplify())
+                                     logic.can_earn_skill_level("Mining", i).simplify())
             MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Combat", player),
-                                     (logic.received("Month End", month_end_per_skill_level["Combat", i]) &
-                                      logic.has_any_weapon()).simplify())
+                                     logic.can_earn_skill_level("Combat", i).simplify())
 
     # Bundles
     for bundle in current_bundles.values():
@@ -119,8 +138,8 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
             MultiWorldRules.set_rule(multi_world.get_location(building.name, player),
                                      logic.building_rules[building.name.replace(" Blueprint", "")].simplify())
 
-    set_story_quests_rules(logic, multi_world, player)
-    set_special_order_rules(logic, multi_world, player)
+    set_story_quests_rules(all_location_names, logic, multi_world, player)
+    set_special_order_rules(all_location_names, logic, multi_world, player, world_options)
     set_help_wanted_quests_rules(logic, multi_world, player, world_options)
     set_fishsanity_rules(all_location_names, logic, multi_world, player)
     set_museumsanity_rules(all_location_names, logic, multi_world, player, world_options)
@@ -136,22 +155,31 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
     set_arcade_machine_rules(logic, multi_world, player, world_options)
 
 
-def set_story_quests_rules(logic, multi_world, player):
+def set_story_quests_rules(all_location_names: List[str], logic, multi_world, player):
     for quest in locations.locations_by_tag[LocationTags.QUEST]:
-        MultiWorldRules.set_rule(multi_world.get_location(quest.name, player),
-                                 logic.quest_rules[quest.name].simplify())
+        if quest.name in all_location_names:
+            MultiWorldRules.set_rule(multi_world.get_location(quest.name, player),
+                                     logic.quest_rules[quest.name].simplify())
 
 
-def set_special_order_rules(logic, multi_world, player):
-    board_rule = logic.received("Special Order Board")
+def set_special_order_rules(all_location_names: List[str], logic, multi_world, player, world_options: StardewOptions):
+    if world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_disabled:
+        return
+    board_rule = logic.received("Special Order Board") & logic.has_lived_months(4)
     for board_order in locations.locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD]:
-        order_rule = board_rule & logic.special_order_rules[board_order.name]
-        MultiWorldRules.set_rule(multi_world.get_location(board_order.name, player), order_rule.simplify())
+        if board_order.name in all_location_names:
+            order_rule = board_rule & logic.special_order_rules[board_order.name]
+            MultiWorldRules.set_rule(multi_world.get_location(board_order.name, player), order_rule.simplify())
 
-    qi_rule = logic.can_reach_region(SVRegion.qi_walnut_room)
+    if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
+        return
+    if world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_board_only:
+        return
+    qi_rule = logic.can_reach_region(SVRegion.qi_walnut_room) & logic.has_lived_months(8)
     for qi_order in locations.locations_by_tag[LocationTags.SPECIAL_ORDER_QI]:
-        order_rule = qi_rule & logic.special_order_rules[qi_order.name]
-        MultiWorldRules.set_rule(multi_world.get_location(qi_order.name, player), order_rule.simplify())
+        if qi_order.name in all_location_names:
+            order_rule = qi_rule & logic.special_order_rules[qi_order.name]
+            MultiWorldRules.set_rule(multi_world.get_location(qi_order.name, player), order_rule.simplify())
 
 
 def set_help_wanted_quests_rules(logic, multi_world, player, world_options):

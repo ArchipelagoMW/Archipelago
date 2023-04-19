@@ -55,6 +55,7 @@ class LocationTags(enum.Enum):
     SPECIAL_ORDER_BOARD = enum.auto()
     SPECIAL_ORDER_QI = enum.auto()
     GINGER_ISLAND = enum.auto()
+    WALNUT_PURCHASE = enum.auto
 
 
 @dataclass(frozen=True)
@@ -218,16 +219,6 @@ def extend_festival_locations(randomized_locations: List[LocationData], festival
     extend_hard_festival_locations(randomized_locations, festival_option)
 
 
-def extend_special_order_locations(randomized_locations: List[LocationData], world_options):
-    if world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_disabled:
-        return
-
-    randomized_locations.extend(locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD])
-    if (world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_board_qi and
-        world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false):
-        randomized_locations.extend(locations_by_tag[LocationTags.SPECIAL_ORDER_QI])
-
-
 def extend_hard_festival_locations(randomized_locations, festival_option: int):
     if festival_option != options.FestivalLocations.option_hard:
         return
@@ -241,12 +232,34 @@ def extend_hard_festival_locations(randomized_locations, festival_option: int):
     randomized_locations.append(location_table["Lupini: Land Of Clay"])
 
 
+def extend_special_order_locations(randomized_locations: List[LocationData], world_options):
+    if world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_disabled:
+        return
+
+    include_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false
+    board_locations = [location for location in locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD]
+                       if include_island or LocationTags.GINGER_ISLAND not in location.tags]
+    randomized_locations.extend(board_locations)
+    if (world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_board_qi and include_island):
+        randomized_locations.extend(locations_by_tag[LocationTags.SPECIAL_ORDER_QI])
+
+
+def extend_walnut_purchase_locations(randomized_locations: List[LocationData], world_options):
+    if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
+        return
+
+    randomized_locations.extend(locations_by_tag[LocationTags.WALNUT_PURCHASE])
+
+
 def create_locations(location_collector: StardewLocationCollector,
                      world_options: options.StardewOptions,
                      random: Random):
     randomized_locations = []
 
-    randomized_locations.extend(locations_by_tag[LocationTags.MANDATORY])
+    include_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false
+    mandatory_locations = [location for location in locations_by_tag[LocationTags.MANDATORY]
+                           if include_island or LocationTags.GINGER_ISLAND not in location.tags]
+    randomized_locations.extend(mandatory_locations)
 
     if not world_options[options.BackpackProgression] == options.BackpackProgression.option_vanilla:
         randomized_locations.extend(locations_by_tag[LocationTags.BACKPACK])
@@ -275,6 +288,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_friendsanity_locations(randomized_locations, world_options)
     extend_festival_locations(randomized_locations, world_options[options.FestivalLocations])
     extend_special_order_locations(randomized_locations, world_options)
+    extend_walnut_purchase_locations(randomized_locations, world_options)
 
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)

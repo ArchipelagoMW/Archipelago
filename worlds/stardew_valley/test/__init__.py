@@ -21,7 +21,9 @@ class SVTestBase(WorldTestBase):
     @property
     def run_default_tests(self) -> bool:
         # world_setup is overridden, so it'd always run default tests when importing SVTestBase
-        return type(self) is not SVTestBase and super().run_default_tests
+        is_not_stardew_test = type(self) is not SVTestBase
+        should_run_default_tests = is_not_stardew_test and super().run_default_tests
+        return should_run_default_tests
 
 
 pre_generated_worlds = {}

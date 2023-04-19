@@ -30,7 +30,7 @@ elliott_house = (SVRegion.elliott_house,)
 ranch = (SVRegion.ranch,)
 mines = (SVRegion.mines,)
 desert = (SVRegion.desert,)
-oasis = (SVRegion.desert,)
+oasis = (SVRegion.oasis,)
 sewers = (SVRegion.sewers,)
 island = (SVRegion.island_east,)
 

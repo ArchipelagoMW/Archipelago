@@ -6,7 +6,7 @@ from . import rules, logic, options
 from .bundles import get_all_bundles, Bundle
 from .items import item_table, create_items, ItemData, Group, items_by_group
 from .locations import location_table, create_locations, LocationData
-from .logic import StardewLogic, StardewRule, True_
+from .logic import StardewLogic, StardewRule, True_, MAX_MONTHS
 from .options import stardew_valley_options, StardewOptions, fetch_options
 from .regions import create_regions
 from .rules import set_rules
@@ -142,7 +142,7 @@ class StardewValleyWorld(World):
             self.multiworld.early_items[self.player]["Progressive Backpack"] = 1
 
     def setup_month_events(self):
-        for i in range(0, 8):
+        for i in range(0, MAX_MONTHS):
             month_end = LocationData(None, "Stardew Valley", f"Month End {i + 1}")
             if i == 0:
                 self.create_event_location(month_end, True_(), "Month End")

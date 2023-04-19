@@ -211,7 +211,7 @@ id,region,name,tags
 542,Town,Granny's Gift,"MANDATORY,QUEST"
 543,Saloon,Exotic Spirits,"MANDATORY,QUEST"
 544,Town,Catch a Lingcod,"MANDATORY,QUEST"
-545,Ginger Island,The Pirate's Wife,"MANDATORY,QUEST,GINGER_ISLAND"
+545,Island West,The Pirate's Wife,"GINGER_ISLAND,MANDATORY,QUEST"
 601,JotPK World 1,JotPK: Boots 1,"ARCADE_MACHINE,JOTPK"
 602,JotPK World 1,JotPK: Boots 2,"ARCADE_MACHINE,JOTPK"
 603,JotPK World 1,JotPK: Gun 1,"ARCADE_MACHINE,JOTPK"
@@ -335,13 +335,13 @@ id,region,name,tags
 1020,Secret Woods,Fishsanity: Woodskip,FISHSANITY
 1021,Beach,Fishsanity: Flounder,FISHSANITY
 1022,Beach,Fishsanity: Halibut,FISHSANITY
-1023,Ginger Island,Fishsanity: Lionfish,"FISHSANITY,GINGER_ISLAND"
+1023,Island West,Fishsanity: Lionfish,"FISHSANITY,GINGER_ISLAND"
 1024,Mutant Bug Lair,Fishsanity: Slimejack,FISHSANITY
 1025,Forest,Fishsanity: Midnight Carp,FISHSANITY
 1026,Beach,Fishsanity: Red Mullet,FISHSANITY
 1027,Forest,Fishsanity: Pike,FISHSANITY
 1028,Forest,Fishsanity: Tiger Trout,FISHSANITY
-1029,Ginger Island,Fishsanity: Blue Discus,"FISHSANITY,GINGER_ISLAND"
+1029,Island West,Fishsanity: Blue Discus,"FISHSANITY,GINGER_ISLAND"
 1030,Beach,Fishsanity: Albacore,FISHSANITY
 1031,The Desert,Fishsanity: Sandfish,FISHSANITY
 1032,The Mines - Floor 20,Fishsanity: Stonefish,FISHSANITY
@@ -354,7 +354,7 @@ id,region,name,tags
 1039,Beach,Fishsanity: Pufferfish,FISHSANITY
 1040,Witch's Swamp,Fishsanity: Void Salmon,FISHSANITY
 1041,Beach,Fishsanity: Super Cucumber,FISHSANITY
-1042,Ginger Island,Fishsanity: Stingray,"FISHSANITY,GINGER_ISLAND"
+1042,Pirate Cove,Fishsanity: Stingray,"FISHSANITY,GINGER_ISLAND"
 1043,The Mines - Floor 60,Fishsanity: Ice Pip,FISHSANITY
 1044,Forest,Fishsanity: Lingcod,FISHSANITY
 1045,The Desert,Fishsanity: Scorpion Carp,FISHSANITY
@@ -440,12 +440,12 @@ id,region,name,tags
 1231,The Desert,Museumsanity: Strange Doll,MUSEUM_DONATIONS
 1232,Forest,Museumsanity: Prehistoric Scapula,MUSEUM_DONATIONS
 1233,Forest,Museumsanity: Prehistoric Tibia,MUSEUM_DONATIONS
-1234,Ginger Island,Museumsanity: Prehistoric Skull,MUSEUM_DONATIONS
-1235,Ginger Island,Museumsanity: Skeletal Hand,MUSEUM_DONATIONS
-1236,Ginger Island,Museumsanity: Prehistoric Rib,MUSEUM_DONATIONS
-1237,Ginger Island,Museumsanity: Prehistoric Vertebra,MUSEUM_DONATIONS
-1238,Ginger Island,Museumsanity: Skeletal Tail,MUSEUM_DONATIONS
-1239,Ginger Island,Museumsanity: Nautilus Fossil,MUSEUM_DONATIONS
+1234,Dig Site,Museumsanity: Prehistoric Skull,MUSEUM_DONATIONS
+1235,Dig Site,Museumsanity: Skeletal Hand,MUSEUM_DONATIONS
+1236,Dig Site,Museumsanity: Prehistoric Rib,MUSEUM_DONATIONS
+1237,Dig Site,Museumsanity: Prehistoric Vertebra,MUSEUM_DONATIONS
+1238,Dig Site,Museumsanity: Skeletal Tail,MUSEUM_DONATIONS
+1239,Dig Site,Museumsanity: Nautilus Fossil,MUSEUM_DONATIONS
 1240,Forest,Museumsanity: Amphibian Fossil,MUSEUM_DONATIONS
 1241,Forest,Museumsanity: Palm Fossil,MUSEUM_DONATIONS
 1242,Forest,Museumsanity: Trilobite,MUSEUM_DONATIONS
@@ -780,16 +780,16 @@ id,region,name,tags
 1586,Sewers,Friendsanity: Krobus 8 <3,FRIENDSANITY
 1587,Sewers,Friendsanity: Krobus 9 <3,FRIENDSANITY
 1588,Sewers,Friendsanity: Krobus 10 <3,FRIENDSANITY
-1590,Ginger Island,Friendsanity: Leo 1 <3,"FRIENDSANITY,GINGER_ISLAND"
-1591,Ginger Island,Friendsanity: Leo 2 <3,"FRIENDSANITY,GINGER_ISLAND"
-1592,Ginger Island,Friendsanity: Leo 3 <3,"FRIENDSANITY,GINGER_ISLAND"
-1593,Ginger Island,Friendsanity: Leo 4 <3,"FRIENDSANITY,GINGER_ISLAND"
-1594,Ginger Island,Friendsanity: Leo 5 <3,"FRIENDSANITY,GINGER_ISLAND"
-1595,Ginger Island,Friendsanity: Leo 6 <3,"FRIENDSANITY,GINGER_ISLAND"
-1596,Ginger Island,Friendsanity: Leo 7 <3,"FRIENDSANITY,GINGER_ISLAND"
-1597,Ginger Island,Friendsanity: Leo 8 <3,"FRIENDSANITY,GINGER_ISLAND"
-1598,Ginger Island,Friendsanity: Leo 9 <3,"FRIENDSANITY,GINGER_ISLAND"
-1599,Ginger Island,Friendsanity: Leo 10 <3,"FRIENDSANITY,GINGER_ISLAND"
+1590,Leo's Hut,Friendsanity: Leo 1 <3,"FRIENDSANITY,GINGER_ISLAND"
+1591,Leo's Hut,Friendsanity: Leo 2 <3,"FRIENDSANITY,GINGER_ISLAND"
+1592,Leo's Hut,Friendsanity: Leo 3 <3,"FRIENDSANITY,GINGER_ISLAND"
+1593,Leo's Hut,Friendsanity: Leo 4 <3,"FRIENDSANITY,GINGER_ISLAND"
+1594,Leo's Hut,Friendsanity: Leo 5 <3,"FRIENDSANITY,GINGER_ISLAND"
+1595,Leo's Hut,Friendsanity: Leo 6 <3,"FRIENDSANITY,GINGER_ISLAND"
+1596,Leo's Hut,Friendsanity: Leo 7 <3,"FRIENDSANITY,GINGER_ISLAND"
+1597,Leo's Hut,Friendsanity: Leo 8 <3,"FRIENDSANITY,GINGER_ISLAND"
+1598,Leo's Hut,Friendsanity: Leo 9 <3,"FRIENDSANITY,GINGER_ISLAND"
+1599,Leo's Hut,Friendsanity: Leo 10 <3,"FRIENDSANITY,GINGER_ISLAND"
 1601,Town,Friendsanity: Lewis 1 <3,FRIENDSANITY
 1602,Town,Friendsanity: Lewis 2 <3,FRIENDSANITY
 1603,Town,Friendsanity: Lewis 3 <3,FRIENDSANITY
@@ -938,31 +938,42 @@ id,region,name,tags
 2027,Beach,Lupini: Tropical Fish #173,FESTIVAL
 2028,Beach,Lupini: Land Of Clay,FESTIVAL
 2029,Town,Secret Santa,FESTIVAL
-2100,Town,Island Ingredients,SPECIAL_ORDER_BOARD
-2101,Town,Cave Patrol,SPECIAL_ORDER_BOARD
-2102,Town,Aquatic Overpopulation,SPECIAL_ORDER_BOARD
-2103,Town,Biome Balance,SPECIAL_ORDER_BOARD
-2104,Town,Rock Rejuvenation,SPECIAL_ORDER_BOARD
-2105,Town,Gifts for George,SPECIAL_ORDER_BOARD
-2106,Town,Fragments of the past,SPECIAL_ORDER_BOARD
-2107,Town,Gus' Famous Omelet,SPECIAL_ORDER_BOARD
-2108,Town,Crop Order,SPECIAL_ORDER_BOARD
-2109,Town,Community Cleanup,SPECIAL_ORDER_BOARD
-2110,Town,The Strong Stuff,SPECIAL_ORDER_BOARD
-2111,Town,Pierre's Prime Produce,SPECIAL_ORDER_BOARD
-2112,Town,Robin's Project,SPECIAL_ORDER_BOARD
-2113,Town,Robin's Resource Rush,SPECIAL_ORDER_BOARD
-2114,Town,Juicy Bugs Wanted!,SPECIAL_ORDER_BOARD
-2115,Town,Tropical Fish,"SPECIAL_ORDER_BOARD,GINGER_ISLAND"
-2116,Town,A Curious Substance,SPECIAL_ORDER_BOARD
-2117,Town,Prismatic Jelly,SPECIAL_ORDER_BOARD
-2150,Ginger Island,Qi's Crop,"SPECIAL_ORDER_QI,GINGER_ISLAND"
-2151,Ginger Island,Let's Play A Game,"SPECIAL_ORDER_QI,GINGER_ISLAND"
-2152,Ginger Island,Four Precious Stones,"SPECIAL_ORDER_QI,GINGER_ISLAND"
-2153,Ginger Island,Qi's Hungry Challenge,"SPECIAL_ORDER_QI,GINGER_ISLAND"
-2154,Ginger Island,Qi's Cuisine,"SPECIAL_ORDER_QI,GINGER_ISLAND"
-2155,Ginger Island,Qi's Kindness,"SPECIAL_ORDER_QI,GINGER_ISLAND"
-2156,Ginger Island,Extended Family,"SPECIAL_ORDER_QI,GINGER_ISLAND"
-2157,Ginger Island,Danger In The Deep,"SPECIAL_ORDER_QI,GINGER_ISLAND"
-2158,Ginger Island,Skull Cavern Invasion,"SPECIAL_ORDER_QI,GINGER_ISLAND"
-2159,Ginger Island,Qi's Prismatic Grange,"SPECIAL_ORDER_QI,GINGER_ISLAND"
+2101,Town,Island Ingredients,"GINGER_ISLAND,SPECIAL_ORDER_BOARD"
+2102,Town,Cave Patrol,SPECIAL_ORDER_BOARD
+2103,Town,Aquatic Overpopulation,SPECIAL_ORDER_BOARD
+2104,Town,Biome Balance,SPECIAL_ORDER_BOARD
+2105,Town,Rock Rejuvenation,SPECIAL_ORDER_BOARD
+2106,Town,Gifts for George,SPECIAL_ORDER_BOARD
+2107,Town,Fragments of the past,"GINGER_ISLAND,SPECIAL_ORDER_BOARD"
+2108,Town,Gus' Famous Omelet,SPECIAL_ORDER_BOARD
+2109,Town,Crop Order,SPECIAL_ORDER_BOARD
+2110,Town,Community Cleanup,SPECIAL_ORDER_BOARD
+2111,Town,The Strong Stuff,SPECIAL_ORDER_BOARD
+2112,Town,Pierre's Prime Produce,SPECIAL_ORDER_BOARD
+2113,Town,Robin's Project,SPECIAL_ORDER_BOARD
+2114,Town,Robin's Resource Rush,SPECIAL_ORDER_BOARD
+2115,Town,Juicy Bugs Wanted!,SPECIAL_ORDER_BOARD
+2116,Town,Tropical Fish,"GINGER_ISLAND,SPECIAL_ORDER_BOARD"
+2117,Town,A Curious Substance,SPECIAL_ORDER_BOARD
+2118,Town,Prismatic Jelly,SPECIAL_ORDER_BOARD
+2151,Qi's Walnut Room,Qi's Crop,"GINGER_ISLAND,SPECIAL_ORDER_QI"
+2152,Qi's Walnut Room,Let's Play A Game,"GINGER_ISLAND,SPECIAL_ORDER_QI"
+2153,Qi's Walnut Room,Four Precious Stones,"GINGER_ISLAND,SPECIAL_ORDER_QI"
+2154,Qi's Walnut Room,Qi's Hungry Challenge,"GINGER_ISLAND,SPECIAL_ORDER_QI"
+2155,Qi's Walnut Room,Qi's Cuisine,"GINGER_ISLAND,SPECIAL_ORDER_QI"
+2156,Qi's Walnut Room,Qi's Kindness,"GINGER_ISLAND,SPECIAL_ORDER_QI"
+2157,Qi's Walnut Room,Extended Family,"GINGER_ISLAND,SPECIAL_ORDER_QI"
+2158,Qi's Walnut Room,Danger In The Deep,"GINGER_ISLAND,SPECIAL_ORDER_QI"
+2159,Qi's Walnut Room,Skull Cavern Invasion,"GINGER_ISLAND,SPECIAL_ORDER_QI"
+2160,Qi's Walnut Room,Qi's Prismatic Grange,"GINGER_ISLAND,SPECIAL_ORDER_QI"
+2201,Leo's Hut,Island North Turtle,"GINGER_ISLAND,WALNUT_PURCHASE"
+2202,Island South,Island West Turtle,"GINGER_ISLAND,WALNUT_PURCHASE"
+2203,Island West,Island Farmhouse,"GINGER_ISLAND,WALNUT_PURCHASE"
+2204,Island Farmhouse,Island Farmhouse Mailbox,"GINGER_ISLAND,WALNUT_PURCHASE"
+2205,Island Farmhouse,Farm Obelisk,"GINGER_ISLAND,WALNUT_PURCHASE"
+2206,Island North,Dig Site Bridge,"GINGER_ISLAND,WALNUT_PURCHASE"
+2207,Island North,Island Trader,"GINGER_ISLAND,WALNUT_PURCHASE"
+2208,Volcano,Volcano Bridge,"GINGER_ISLAND,WALNUT_PURCHASE"
+2209,Volcano - Floor 5,Volcano Exit Shortcut,"GINGER_ISLAND,WALNUT_PURCHASE"
+2210,Island South,Island Resort,"GINGER_ISLAND,WALNUT_PURCHASE"
+2211,Island West,Parrot Express,"GINGER_ISLAND,WALNUT_PURCHASE"
