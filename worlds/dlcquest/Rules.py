@@ -15,12 +15,13 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
     def has_enough_coin(player: int, coin: int):
         def has_coin(state, player: int, coins: int):
             coin_possessed = 0
-            for i in [4, 7, 9, 10, 46, 50, 60, 76, 89, 100, 169, 203]:
+            for i in [4, 7, 9, 10, 46, 50, 60, 76, 89, 100, 171, 203]:
                 name_coin = f"{i} coins"
                 if state.has(name_coin, player):
                     coin_possessed += i
 
             return coin_possessed >= coins
+
 
         return lambda state: has_coin(state, player, coin)
 
@@ -104,9 +105,8 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
             number_of_bundle = math.floor(825 / World_Options[Options.CoinSanityRange])
             for i in range(number_of_bundle):
 
-                item_coin = "DLC Quest: number Coin"
-                item_coin_loc = re.sub("number", str(World_Options[Options.CoinSanityRange] * (i + 1)), item_coin)
-                set_rule(world.get_location(item_coin_loc, player),
+                item_coin = f"DLC Quest: {World_Options[Options.CoinSanityRange] * (i + 1)} Coin"
+                set_rule(world.get_location(item_coin, player),
                          has_enough_coin(player, World_Options[Options.CoinSanityRange] * (i + 1)))
                 if 825 % World_Options[Options.CoinSanityRange] != 0:
                     set_rule(world.get_location("DLC Quest: 825 Coin", player),
@@ -195,7 +195,6 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
             set_rule(world.get_location("Finish the Fight Pack", player),
                      has_enough_coin(player, 5))
 
-
         if World_Options[Options.EndingChoice] == Options.EndingChoice.option_any:
             set_rule(world.get_location("Winning Basic", player),
                      lambda state: state.has("Finish the Fight Pack", player))
@@ -210,8 +209,6 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
                  lambda state: state.has("Wall Jump Pack", player))
         set_rule(world.get_entrance("Harmless Plants", player),
                  lambda state: state.has("Harmless Plants Pack", player))
-        set_rule(world.get_entrance("Pickaxe Hard Cave", player),
-                 lambda state: state.has("Pickaxe", player))
         set_rule(world.get_entrance("Name Change Entrance", player),
                  lambda state: state.has("Name Change Pack", player))
         set_rule(world.get_entrance("Cut Content Entrance", player),
@@ -226,12 +223,17 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
                  lambda state: state.has("Death of Comedy Pack", player))
         set_rule(world.get_location("Story is Important", player),
                  lambda state: state.has("DLC NPC Pack", player))
+        set_rule(world.get_entrance("Pickaxe Hard Cave", player),
+                 lambda state: state.has("Pickaxe", player))
 
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_disabled:
             set_rule(world.get_entrance("Vines", player),
                      lambda state: state.has("Incredibly Important Pack", player))
             set_rule(world.get_entrance("Behind Rocks", player),
                      lambda state: state.can_reach("Cut Content", 'region', player))
+            set_rule(world.get_entrance("Pickaxe Hard Cave", player),
+                     lambda state: state.can_reach("Cut Content", 'region', player) and state.has("Name Change Pack",
+                                                                                                  player))
 
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             set_rule(world.get_entrance("Vines", player),
@@ -356,8 +358,6 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
                      has_enough_coin_freemium(player, 10))
             set_rule(world.get_location("Remove Ads Pack", player),
                      has_enough_coin_freemium(player, 25))
-
-
 
     if World_Options[Options.Campaign] == Options.Campaign.option_basic:
         world.completion_condition[player] = lambda state: state.has("Victory Basic", player)
