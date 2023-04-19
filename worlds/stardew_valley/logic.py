@@ -599,7 +599,7 @@ class StardewLogic:
     def can_reach_all_regions_except_one(self, spots: Iterable[str]) -> StardewRule:
         num_required = len(list(spots)) - 1
         if num_required <= 0:
-            num_required = len(spots)
+            num_required = len(list(spots))
         return Count(num_required, [self.can_reach_region(spot) for spot in spots])
 
     def can_reach_location(self, spot: str) -> StardewRule:
