@@ -228,7 +228,7 @@ def extend_hard_festival_locations(randomized_locations, festival_option: int):
     randomized_locations.append(location_table["Lupini: 1000 Years From Now"])
     randomized_locations.append(location_table["Lupini: Three Trees"])
     randomized_locations.append(location_table["Lupini: The Serpent"])
-    randomized_locations.append(location_table["Lupini: Tropical Fish #173"])
+    randomized_locations.append(location_table["Lupini: 'Tropical Fish #173'"])
     randomized_locations.append(location_table["Lupini: Land Of Clay"])
 
 
@@ -248,6 +248,7 @@ def extend_walnut_purchase_locations(randomized_locations: List[LocationData], w
     if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
         return
 
+    randomized_locations.append(location_table["Boat Repaired"])
     randomized_locations.extend(locations_by_tag[LocationTags.WALNUT_PURCHASE])
 
 

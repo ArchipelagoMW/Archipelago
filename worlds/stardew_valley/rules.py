@@ -51,27 +51,7 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_greenhouse, player),
                              logic.received("Greenhouse"))
 
-    # Ginger Island Entrances
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.boat_to_ginger_island, player),
-                             logic.received("Willy Boat Repair").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_west, player),
-                             logic.received("Island West Turtle").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_north, player),
-                             logic.received("Island North Turtle").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_west_to_islandfarmhouse, player),
-                             logic.received("Island Farmhouse").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_north_to_dig_site, player),
-                             logic.received("Dig Site Bridge").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.talk_to_island_trader, player),
-                             logic.received("Island Trader").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_southeast, player),
-                             logic.received("Island Resort").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_west_to_qi_walnut_room, player),
-                             logic.received("Qi Walnut Room").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.climb_to_volcano_5, player),
-                             logic.can_mine_perfectly().simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.climb_to_volcano_10, player),
-                             logic.can_mine_perfectly().simplify())
+    set_ginger_island_rules(logic, multi_world, player, world_options)
 
     # Those checks do not exist if ToolProgression is vanilla
     if world_options[options.ToolProgression] != options.ToolProgression.option_vanilla:
@@ -153,6 +133,36 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
 
     set_traveling_merchant_rules(logic, multi_world, player)
     set_arcade_machine_rules(logic, multi_world, player, world_options)
+
+
+def set_ginger_island_rules(logic, multi_world, player, world_options: StardewOptions):
+    if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
+        return
+
+    boat_rules = logic.has("Hardwood") & logic.has("Iridium Bar") & logic.has("Battery Pack")
+    MultiWorldRules.add_rule(multi_world.get_location("Boat Repaired", player),
+                             boat_rules.simplify())
+
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.boat_to_ginger_island, player),
+                             logic.received("Willy Boat Repair").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_west, player),
+                             logic.received("Island West Turtle").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_north, player),
+                             logic.received("Island North Turtle").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_west_to_islandfarmhouse, player),
+                             logic.received("Island Farmhouse").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_north_to_dig_site, player),
+                             logic.received("Dig Site Bridge").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.talk_to_island_trader, player),
+                             logic.received("Island Trader").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_southeast, player),
+                             logic.received("Island Resort").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_west_to_qi_walnut_room, player),
+                             logic.received("Qi Walnut Room").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.climb_to_volcano_5, player),
+                             logic.can_mine_perfectly().simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.climb_to_volcano_10, player),
+                             logic.can_mine_perfectly().simplify())
 
 
 def set_story_quests_rules(all_location_names: List[str], logic, multi_world, player):

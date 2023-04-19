@@ -935,7 +935,7 @@ id,region,name,tags
 2024,Beach,Lupini: 1000 Years From Now,FESTIVAL
 2025,Beach,Lupini: Three Trees,FESTIVAL
 2026,Beach,Lupini: The Serpent,FESTIVAL
-2027,Beach,Lupini: Tropical Fish #173,FESTIVAL
+2027,Beach,Lupini: 'Tropical Fish #173',FESTIVAL
 2028,Beach,Lupini: Land Of Clay,FESTIVAL
 2029,Town,Secret Santa,FESTIVAL
 2101,Town,Island Ingredients,"GINGER_ISLAND,SPECIAL_ORDER_BOARD"
@@ -966,6 +966,7 @@ id,region,name,tags
 2158,Qi's Walnut Room,Danger In The Deep,"GINGER_ISLAND,SPECIAL_ORDER_QI"
 2159,Qi's Walnut Room,Skull Cavern Invasion,"GINGER_ISLAND,SPECIAL_ORDER_QI"
 2160,Qi's Walnut Room,Qi's Prismatic Grange,"GINGER_ISLAND,SPECIAL_ORDER_QI"
+2201,Fish Shop Backroom,Boat Repaired,"GINGER_ISLAND"
 2201,Leo's Hut,Island North Turtle,"GINGER_ISLAND,WALNUT_PURCHASE"
 2202,Island South,Island West Turtle,"GINGER_ISLAND,WALNUT_PURCHASE"
 2203,Island West,Island Farmhouse,"GINGER_ISLAND,WALNUT_PURCHASE"
