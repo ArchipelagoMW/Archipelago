@@ -58,7 +58,7 @@ Once the Archipelago server has been hosted:
    extension `*.nes`
 2. Click on the Tools menu and click on **Lua Console**
 3. Click the folder button to open a new Lua script. (CTL-O or **Script** -> **Open Script**)
-4. Navigate to the location you installed Archipelago to. Open data/lua/FF1/ff1_connector.lua
+4. Navigate to the location you installed Archipelago to. Open data/lua/connector_ff1.lua
     1. If it gives a `NLua.Exceptions.LuaScriptException: .\socket.lua:13: module 'socket.core' not found:` exception
        close your emulator entirely, restart it and re-run these steps
     2. If it says `Must use a version of bizhawk 2.3.1 or higher`, double-check your Bizhawk version by clicking **
