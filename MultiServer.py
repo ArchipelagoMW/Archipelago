@@ -260,7 +260,8 @@ class Context:
 
     def _init_game_data(self):
         for game_name, game_package in self.gamespackage.items():
-            self.checksums[game_name] = game_package["checksum"]
+            if "checksum" in game_package:
+                self.checksums[game_name] = game_package["checksum"]
             for item_name, item_id in game_package["item_name_to_id"].items():
                 self.item_names[item_id] = item_name
             for location_name, location_id in game_package["location_name_to_id"].items():
@@ -268,7 +269,7 @@ class Context:
             self.all_item_and_group_names[game_name] = \
                 set(game_package["item_name_to_id"]) | set(self.item_name_groups[game_name])
             self.all_location_and_group_names[game_name] = \
-                set(game_package["location_name_to_id"]) | set(self.location_name_groups[game_name])
+                set(game_package["location_name_to_id"]) | set(self.location_name_groups.get(game_name, []))
 
     def item_names_for_game(self, game: str) -> typing.Optional[typing.Dict[str, int]]:
         return self.gamespackage[game]["item_name_to_id"] if game in self.gamespackage else None
@@ -356,9 +357,7 @@ class Context:
                                    [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}
                                     for text in texts]))
 
-
     # loading
-
     def load(self, multidatapath: str, use_embedded_server_options: bool = False):
         if multidatapath.lower().endswith(".zip"):
             import zipfile
@@ -446,9 +445,10 @@ class Context:
             logging.info(f"Loading embedded data package for game {game_name}")
             self.gamespackage[game_name] = data
             self.item_name_groups[game_name] = data["item_name_groups"]
-            self.location_name_groups[game_name] = data["location_name_groups"]
+            if "location_name_groups" in data:
+                self.location_name_groups[game_name] = data["location_name_groups"]
+                del data["location_name_groups"]
             del data["item_name_groups"]  # remove from data package, but keep in self.item_name_groups
-            del data["location_name_groups"]
         self._init_game_data()
         for game_name, data in self.item_name_groups.items():
             self.read_data[f"item_name_groups_{game_name}"] = lambda lgame=game_name: self.item_name_groups[lgame]
@@ -544,7 +544,7 @@ class Context:
             "stored_data": self.stored_data,
             "game_options": {"hint_cost": self.hint_cost, "location_check_points": self.location_check_points,
                              "server_password": self.server_password, "password": self.password,
-                             "forfeit_mode": self.release_mode, "release_mode": self.release_mode,  # TODO remove forfeit_mode around 0.4
+                             "release_mode": self.release_mode,
                              "remaining_mode": self.remaining_mode, "collect_mode": self.collect_mode,
                              "item_cheat": self.item_cheat, "compatibility": self.compatibility}
 
@@ -700,6 +700,10 @@ class Context:
         targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
         if targets:
             self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.hints[team, slot]}])
+        self.broadcast(self.clients[team][slot], [{
+            "cmd": "RoomUpdate",
+            "hint_points": get_slot_points(self, team, slot)
+        }])
 
 
 def update_aliases(ctx: Context, team: int):
@@ -761,7 +765,7 @@ async def on_client_connected(ctx: Context, client: Client):
         'datapackage_versions': {game: game_data["version"] for game, game_data
                                  in ctx.gamespackage.items() if game in games},
         'datapackage_checksums': {game: game_data["checksum"] for game, game_data
-                                  in ctx.gamespackage.items() if game in games},
+                                  in ctx.gamespackage.items() if game in games and "checksum" in game_data},
         'seed_name': ctx.seed_name,
         'time': time.time(),
     }])
@@ -769,7 +773,6 @@ async def on_client_connected(ctx: Context, client: Client):
 
 def get_permissions(ctx) -> typing.Dict[str, Permission]:
     return {
-        "forfeit": Permission.from_text(ctx.release_mode),  # TODO remove around 0.4
         "release": Permission.from_text(ctx.release_mode),
         "remaining": Permission.from_text(ctx.remaining_mode),
         "collect": Permission.from_text(ctx.collect_mode)
@@ -1327,27 +1330,41 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     "Sorry, !remaining requires you to have beaten the game on this server")
                 return False
 
-    def _cmd_missing(self) -> bool:
-        """List all missing location checks from the server's perspective"""
+    def _cmd_missing(self, filter_text="") -> bool:
+        """List all missing location checks from the server's perspective.
+        Can be given text, which will be used as filter."""
 
         locations = get_missing_checks(self.ctx, self.client.team, self.client.slot)
 
         if locations:
-            texts = [f'Missing: {self.ctx.location_names[location]}' for location in locations]
-            texts.append(f"Found {len(locations)} missing location checks")
+            names = [self.ctx.location_names[location] for location in locations]
+            if filter_text:
+                names = [name for name in names if filter_text in name]
+            texts = [f'Missing: {name}' for name in names]
+            if filter_text:
+                texts.append(f"Found {len(locations)} missing location checks, displaying {len(names)} of them.")
+            else:
+                texts.append(f"Found {len(locations)} missing location checks")
             self.output_multiple(texts)
         else:
             self.output("No missing location checks found.")
         return True
 
-    def _cmd_checked(self) -> bool:
-        """List all done location checks from the server's perspective"""
+    def _cmd_checked(self, filter_text="") -> bool:
+        """List all done location checks from the server's perspective.
+        Can be given text, which will be used as filter."""
 
         locations = get_checked_checks(self.ctx, self.client.team, self.client.slot)
 
         if locations:
-            texts = [f'Checked: {self.ctx.location_names[location]}' for location in locations]
-            texts.append(f"Found {len(locations)} done location checks")
+            names = [self.ctx.location_names[location] for location in locations]
+            if filter_text:
+                names = [name for name in names if filter_text in name]
+            texts = [f'Checked: {name}' for name in names]
+            if filter_text:
+                texts.append(f"Found {len(locations)} done location checks, displaying {len(names)} of them.")
+            else:
+                texts.append(f"Found {len(locations)} done location checks")
             self.output_multiple(texts)
         else:
             self.output("No done location checks found.")
@@ -1626,7 +1643,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 "players": ctx.get_players_package(),
                 "missing_locations": get_missing_checks(ctx, team, slot),
                 "checked_locations": get_checked_checks(ctx, team, slot),
-                "slot_info": ctx.slot_info
+                "slot_info": ctx.slot_info,
+                "hint_points": get_slot_points(ctx, team, slot),
             }
             reply = [connected_packet]
             start_inventory = get_start_inventory(ctx, slot, client.remote_start_inventory)
@@ -1728,6 +1746,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
             ctx.notify_hints(client.team, hints, only_new=create_as_hint == 2)
+            if locs and create_as_hint:
+                ctx.save()
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
 
         elif cmd == 'StatusUpdate':
@@ -1786,6 +1806,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 targets.add(client)
             if targets:
                 ctx.broadcast(targets, [args])
+            ctx.save()
 
         elif cmd == "SetNotify":
             if "keys" not in args or type(args["keys"]) != list:
@@ -1803,6 +1824,7 @@ def update_client_status(ctx: Context, client: Client, new_status: ClientStatus)
             ctx.on_goal_achieved(client)
 
         ctx.client_game_state[client.team, client.slot] = new_status
+        ctx.save()
 
 
 class ServerCommandProcessor(CommonCommandProcessor):
@@ -2250,8 +2272,7 @@ async def main(args: argparse.Namespace):
 
     ssl_context = load_server_cert(args.cert, args.cert_key) if args.cert else None
 
-    ctx.server = websockets.serve(functools.partial(server, ctx=ctx), host=ctx.host, port=ctx.port, ping_timeout=None,
-                                  ping_interval=None, ssl=ssl_context)
+    ctx.server = websockets.serve(functools.partial(server, ctx=ctx), host=ctx.host, port=ctx.port, ssl=ssl_context)
     ip = args.host if args.host else Utils.get_public_ipv4()
     logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port,
                                                  'No password' if not ctx.password else 'Password: %s' % ctx.password))

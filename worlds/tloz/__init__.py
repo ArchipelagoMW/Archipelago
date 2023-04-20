@@ -36,7 +36,7 @@ class TLoZWeb(WebWorld):
 class TLoZWorld(World):
     """
     The Legend of Zelda needs almost no introduction. Gather the eight fragments of the
-    Triforce of Courage, enter Death Mountain, defeat Ganon, and rescue Princess Zelda.
+    Triforce of Wisdom, enter Death Mountain, defeat Ganon, and rescue Princess Zelda.
     This randomizer shuffles all the items in the game around, leading to a new adventure
     every time.
     """
@@ -76,6 +76,12 @@ class TLoZWorld(World):
         self.rom_name_available_event = threading.Event()
         self.levels = None
         self.filler_items = None
+
+    @classmethod
+    def stage_assert_generate(cls, multiworld: MultiWorld):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
 
     def create_item(self, name: str):
         return TLoZItem(name, item_table[name].classification, self.item_name_to_id[name], self.player)

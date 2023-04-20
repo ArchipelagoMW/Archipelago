@@ -8,16 +8,17 @@ from typing import Dict, Set, TextIO
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, \
     Tutorial
 from worlds.generic.Rules import set_rule
-from worlds.smz3.TotalSMZ3.Item import ItemType
-import worlds.smz3.TotalSMZ3.Item as TotalSMZ3Item
-from worlds.smz3.TotalSMZ3.World import World as TotalSMZ3World
-from worlds.smz3.TotalSMZ3.Regions.Zelda.GanonsTower import GanonsTower
-from worlds.smz3.TotalSMZ3.Config import Config, GameMode, Goal, KeyShuffle, MorphLocation, SMLogic, SwordLocation, Z3Logic, OpenTower, GanonVulnerable, OpenTourian
-from worlds.smz3.TotalSMZ3.Location import LocationType, locations_start_id, Location as TotalSMZ3Location
-from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWord, getWordArray
-from worlds.smz3.TotalSMZ3.WorldState import WorldState
-from worlds.smz3.TotalSMZ3.Region import IReward, IMedallionAccess
-from ..AutoWorld import World, AutoLogicRegister, WebWorld
+from .TotalSMZ3.Item import ItemType
+from .TotalSMZ3 import Item as TotalSMZ3Item
+from .TotalSMZ3.World import World as TotalSMZ3World
+from .TotalSMZ3.Regions.Zelda.GanonsTower import GanonsTower
+from .TotalSMZ3.Config import Config, GameMode, Goal, KeyShuffle, MorphLocation, SMLogic, SwordLocation, Z3Logic, OpenTower, GanonVulnerable, OpenTourian
+from .TotalSMZ3.Location import LocationType, locations_start_id, Location as TotalSMZ3Location
+from .TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWord, getWordArray
+from .TotalSMZ3.WorldState import WorldState
+from .TotalSMZ3.Region import IReward, IMedallionAccess
+from .TotalSMZ3.Text.Texts import openFile
+from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
 from .Client import SMZ3SNIClient
 from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
 from .ips import IPS_Patch
@@ -272,7 +273,7 @@ class SMZ3World(World):
         idx = 0
         offworldSprites = {}
         for fileName in itemSprites:
-            with open(world_folder + "/data/custom_sprite/" + fileName, 'rb') as stream:
+            with openFile(world_folder + "/data/custom_sprite/" + fileName, 'rb') as stream:
                 buffer = bytearray(stream.read())
                 offworldSprites[0x04Eff2 + 10*((0x6B + 0x40) + idx)] = bytearray(getWordArray(itemSpritesAddress[idx])) + buffer[0:8]
                 offworldSprites[0x090000 + itemSpritesAddress[idx]] = buffer[8:264]

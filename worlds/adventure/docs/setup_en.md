@@ -27,6 +27,10 @@ Once Bizhawk has been installed, open Bizhawk and change the following settings:
 BizHawk is running in the background.
 
 - It is recommended that you provide a path to BizHawk in your host.yaml for Adventure so the client can start it automatically
+- At the same time, you can set an option to automatically load the connector_adventure.lua script when launching BizHawk
+from AdventureClient.
+Default Windows install example:
+```rom_args: "--lua=C:/ProgramData/Archipelago/data/lua/connector_adventure.lua"```
 
 ## Configuring your YAML file
 
@@ -62,7 +66,8 @@ path as recommended).
 Once both the client and the emulator are started, you must connect them. Within the emulator click on the "Tools"
 menu and select "Lua Console". Click the folder button or press Ctrl+O to open a Lua script.
 
-Navigate to your Archipelago install folder and open `data/lua/ADVENTURE/adventure_connector.lua`.
+Navigate to your Archipelago install folder and open `data/lua/connector_adventure.lua`, if it is not
+configured to do this automatically.
 
 To connect the client to the multiserver simply put `<address>:<port>` on the textfield on top and press enter (if the
 server uses password, type in the bottom textfield `/connect <address>:<port> [password]`)
