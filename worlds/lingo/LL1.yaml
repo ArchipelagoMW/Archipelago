@@ -105,6 +105,12 @@
       - id: arrows_painting
         exit_only: True
         orientation: south
+      - id: arrows_painting2
+        disable: True
+        move: True
+      - id: arrows_painting3
+        disable: True
+        move: True
       - id: garden_painting_tower2
         enter_only: True
         orientation: north
@@ -2518,8 +2524,10 @@
     paintings:
       - id: pencil_painting4
         disable: True
+        orientation: south
       - id: pencil_painting5
         disable: True
+        orientation: south
   Knight/Night Room:
     # For now, let's just let the doors in here be vanilla.
     # We will allow reverse progression because it works if the exit is open.

@@ -59,6 +59,7 @@ class LingoWorld(World):
 
     def generate_early(self):
         self.player_logic = LingoPlayerLogic(self.multiworld, self.player, self.static_logic)
+        self.topology_present = get_option_value(self.multiworld, self.player, "shuffle_paintings")
 
     def create_region(self, room: Room):
         new_region = Region(room.name, self.player, self.multiworld)

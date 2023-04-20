@@ -121,3 +121,14 @@ class LingoPlayerLogic:
             for warp_enter in chosen_entrances:
                 warp_exit = world.per_slot_randoms[player].choice(chosen_exits)
                 self.PAINTING_MAPPING[warp_enter] = warp_exit
+
+            # Hard-code the relation with the two pencil paintings in The Steady. If the pencil painting outside The
+            # Bold is an entrance, then these should also be the same entrance (so we don't have to worry about logic
+            # trying to figure out if the player has access to those paintings, since the one outside The Bold is right
+            # there). Otherwise, make these paintings warps to the main one.
+            if "pencil_painting2" in chosen_entrances:
+                self.PAINTING_MAPPING["pencil_painting4"] = self.PAINTING_MAPPING["pencil_painting2"]
+                self.PAINTING_MAPPING["pencil_painting5"] = self.PAINTING_MAPPING["pencil_painting2"]
+            else:
+                self.PAINTING_MAPPING["pencil_painting4"] = "pencil_painting2"
+                self.PAINTING_MAPPING["pencil_painting5"] = "pencil_painting2"
