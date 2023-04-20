@@ -25,17 +25,17 @@ class NoitaWorld(World):
 
     game = "Noita"
     option_definitions = Options.noita_options
-    topology_present = True
 
     item_name_to_id = Items.item_name_to_id
     location_name_to_id = Locations.location_name_to_id
 
     item_name_groups = Items.item_name_groups
+    data_version = 1
 
     web = NoitaWeb()
 
     def get_option(self, name):
-        return getattr(self.multiworld, name)[self.player].value
+        return {name: getattr(self.multiworld, name)[self.player].value for name in self.option_definitions}
 
     # Returned items will be sent over to the client
     def fill_slot_data(self):
