@@ -1202,7 +1202,7 @@
       Orange Tower Sixth Floor:
         room: Orange Tower
         door: Sixth Floor
-      Room Room:
+      Cellar:
         room: Room Room
         door: Shortcut to Fifth Floor
       Welcome Back Area:
@@ -1241,6 +1241,8 @@
           - SIZE (Big)
     paintings:
       - id: hi_solved_painting3
+        orientation: south
+      - id: hi_solved_painting2
         orientation: south
   Orange Tower Sixth Floor:
     entrances:
@@ -3444,6 +3446,9 @@
     entrances:
       Orange Tower Fourth Floor: True
     panels:
+      WALL (1):
+        id: Panel Room/Panel_room_wall_1
+        colors: gray
       BROOMED:
         id: Panel Room/Panel_broomed_bedroom
         colors:
@@ -3463,6 +3468,10 @@
           - blue
           - gray
     doors:
+      Excavation:
+        event: True
+        panels:
+          - WALL (1)
       Shortcut to Fifth Floor:
         id:
           - Tower Room Area Doors/Door_panel_basement
@@ -3471,6 +3480,14 @@
           - BROOMED
           - LAYS
           - BASE
+  Cellar:
+    entrances:
+      Room Room:
+        room: Room Room
+        door: Excavation
+      Orange Tower Fifth Floor:
+        room: Room Room
+        door: Shortcut to Fifth Floor
   Outside The Wise:
     entrances:
       Orange Tower Sixth Floor:
