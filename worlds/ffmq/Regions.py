@@ -280,18 +280,14 @@ def create_regions(self):
         # crest tiles set up for both instances. We have chosen two sets of crest tiles to be used for the dupe room
         # sets. If these are not the same crest, then we need to ensure we aren't going to try to connect a room from
         # one set to another.
-        while dupe_room_crests[0] != dupe_room_crests[1]:
-            for i in (-1, -3):
-                if crest_open_entrances[i]["entrance"] in dupe_rooms[0] and crest_open_entrances[i-1]["entrance"] in dupe_rooms[1]:
-                    self.multiworld.random.shuffle(crest_open_entrances)
-                    continue
-                if crest_open_entrances[i]["entrance"] in dupe_rooms[1] and crest_open_entrances[i-1]["entrance"] in dupe_rooms[0]:
-                    self.multiworld.random.shuffle(crest_open_entrances)
-                    continue
-                break
-            else:
-                continue
-            break
+        if dupe_room_crests[0] != dupe_room_crests[1]:
+            while ((crest_open_entrances[-1]["entrance"] in dupe_rooms[0] and crest_open_entrances[-2]["entrance"]
+                    in dupe_rooms[1]) or (crest_open_entrances[-1]["entrance"] in dupe_rooms[1] and
+                    crest_open_entrances[-2]["entrance"] in dupe_rooms[0]) or (crest_open_entrances[-3]["entrance"]
+                    in dupe_rooms[0] and crest_open_entrances[-4]["entrance"] in dupe_rooms[1]) or
+                    (crest_open_entrances[-3]["entrance"] in dupe_rooms[1] and crest_open_entrances[-4]["entrance"]
+                    in dupe_rooms[0])):
+                self.multiworld.random.shuffle(crest_open_entrances)
 
         crest_tiles.remove(dupe_room_crests[0])
         crest_tiles.remove(dupe_room_crests[1])
@@ -324,6 +320,8 @@ def create_regions(self):
             else:
                 crest_tile = crest_tiles.pop()
             pair(entrance_a, entrance_b, crest_tile, barred=self.multiworld.logic[self.player] != "expert")
+    if crest_tiles:
+        breakpoint()
     # 8 mobius
     # 4 Libra
     # 6 gemini
