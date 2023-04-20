@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Optional
+from typing import Dict, NamedTuple, Optional, List
 from BaseClasses import Location
 from .static_logic import StaticLingoLogic, RoomAndPanel, Room
 
@@ -9,7 +9,7 @@ class LocationData(NamedTuple):
     """
     code: Optional[int]
     room: str
-    panels: list[RoomAndPanel]
+    panels: List[RoomAndPanel]
 
     def panel_ids(self):
         ids = set()
@@ -36,7 +36,7 @@ class StaticLingoLocations:
 
     ALL_LOCATION_TABLE: Dict[str, LocationData] = {}
 
-    def create_location(self, name: str, event: bool, room: str, panels: list[RoomAndPanel]):
+    def create_location(self, name: str, event: bool, room: str, panels: List[RoomAndPanel]):
         new_id = None if event is True else self.base_id + len(self.ALL_LOCATION_TABLE)
         new_locat = LocationData(new_id, room, panels)
         self.ALL_LOCATION_TABLE[name] = new_locat

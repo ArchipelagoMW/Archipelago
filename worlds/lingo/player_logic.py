@@ -9,7 +9,7 @@ from .items import ItemData, StaticLingoItems
 class PlayerLocation(NamedTuple):
     name: str
     code: Optional[int] = None
-    panels: list[RoomAndPanel] = []
+    panels: List[RoomAndPanel] = []
 
 
 class LingoPlayerLogic:
