@@ -273,6 +273,8 @@ def create_regions(self):
                     else:
                         crest_open_entrances.append(link)
         dupe_room_crests = [self.multiworld.random.choice(crest_tiles), self.multiworld.random.choice(crest_tiles)]
+        while dupe_room_crests == ["GeminiCrest", "GeminiCrest"] or dupe_room_crests == ["LibraCrest", "LibraCrest"]:
+            dupe_room_crests = [self.multiworld.random.choice(crest_tiles), self.multiworld.random.choice(crest_tiles)]
         self.multiworld.random.shuffle(crest_open_entrances)
         # there are two different sets of "dupe rooms" - rooms which use the same tile map. These must have the same
         # crest tiles set up for both instances. We have chosen two sets of crest tiles to be used for the dupe room
@@ -292,9 +294,7 @@ def create_regions(self):
             break
 
         crest_tiles.remove(dupe_room_crests[0])
-        print(f"removing {dupe_room_crests[0]}")
         crest_tiles.remove(dupe_room_crests[1])
-        print(f"removing {dupe_room_crests[1]}")
         # we need to remove a second copy of the chosen dupe room crests unless two dupe rooms from the same set are
         # going to be connected.
         for x, dupe_room in enumerate(dupe_rooms):
@@ -302,7 +302,6 @@ def create_regions(self):
                 if crest_open_entrances[i]["entrance"] in dupe_room and crest_open_entrances[i-1]["entrance"] in dupe_room:
                     break
             else:
-                print(f"removing {dupe_room_crests[x]}")
                 crest_tiles.remove(dupe_room_crests[x])
         # crest_open_entrances.sort(key=lambda i: i["entrance"] not in dupe_rooms[0]
         #                               and i["entrance"] not in dupe_rooms[1])
@@ -310,25 +309,20 @@ def create_regions(self):
             entrance_b = crest_open_entrances.pop(0)
             for i, dupe_room in enumerate(dupe_rooms):
                 if entrance_b["entrance"] in dupe_room:
-                    print(f"Dupe {i}")
                     crest_tile = dupe_room_crests[i]
                     break
             else:
                 crest_tile = crest_tiles.pop()
-            print(crest_tile)
             pair(entrance_a, entrance_b, crest_tile)
-        print(" ")
         for _ in range(2):
             entrance_a = crest_open_entrances.pop(0)
             entrance_b = crest_open_entrances.pop(0)
             for i, dupe_room in enumerate(dupe_rooms):
                 if entrance_a["entrance"] in dupe_room or entrance_b["entrance"] in dupe_room:
                     crest_tile = dupe_room_crests[i]
-                    print(f"Dupe {i}")
                     break
             else:
                 crest_tile = crest_tiles.pop()
-            print(crest_tile)
             pair(entrance_a, entrance_b, crest_tile, barred=self.multiworld.logic[self.player] != "expert")
     # 8 mobius
     # 4 Libra

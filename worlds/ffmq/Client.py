@@ -75,6 +75,7 @@ class FFMQClient(SNIClient):
             return data[data_range[0] - READ_DATA_START:data_range[0] + data_range[1] - READ_DATA_START]
 
         received = get_range(RECEIVED_DATA)
+        received_sram = await snes_read(ctx, 0xE01FF0, 1)
         completed_game = get_range(COMPLETED_GAME)
         battlefield_data = get_range(BATTLEFIELD_DATA)
         game_flags = get_range(GAME_FLAGS)
@@ -114,5 +115,5 @@ class FFMQClient(SNIClient):
                 code = (item.item - ITEM_CODE_START) + 1
                 if code > 256:
                     code -= 256
-                snes_buffered_write(ctx, RECEIVED_DATA[0], bytes([code]))
+                snes_buffered_write(ctx, RECEIVED_DATA[0], bytes([code])) # 0xE01FF0
         await snes_flush_writes(ctx)
