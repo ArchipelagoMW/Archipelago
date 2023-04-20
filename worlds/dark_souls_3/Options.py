@@ -2,22 +2,22 @@ import typing
 from Options import Toggle, Option, Range, Choice, DeathLink
 
 class RandomizeWeaponLocations(Toggle):
-    """Adds Weapon Locations to the pool. (+94 checks/items)"""
+    """Adds Weapon Locations to the pool. (+86 checks/items)"""
     display_name ="Randomize Weapon Locations"
 
 
 class RandomizeShieldLocations(Toggle):
-    """Adds Shield Locations to the pool. (+23 checks/items)"""
+    """Adds Shield Locations to the pool. (+24 checks/items)"""
     display_name ="Randomize Shield Locations"
 
 
 class RandomizeArmorLocations(Toggle):
-    """Adds Armor Locations to the pool. (+89 checks/items)"""
+    """Adds Armor Locations to the pool. (+93 checks/items)"""
     display_name ="Randomize Armor Locations"
 
 
 class RandomizeRingLocations(Toggle):
-    """Adds Ring Locations to the pool. (+46 checks/items)"""
+    """Adds Ring Locations to the pool. (+49 checks/items)"""
     display_name ="Randomize Ring Locations"
 
 
@@ -27,7 +27,7 @@ class RandomizeSpellLocations(Toggle):
 
 
 class RandomizeMiscLocations(Toggle):
-    """Adds Miscellaneous Locations (Ashes, Tomes, Scrolls, etc.) to the pool. (+28 checks/items)"""
+    """Adds Miscellaneous Locations (Ashes, Tomes, Scrolls, etc.) to the pool. (+27 checks/items)"""
     display_name ="Randomize Miscellaneous Locations"
 
 
@@ -37,7 +37,7 @@ class RandomizeHealthLocations(Toggle):
 
 
 class RandomizeNPCLocations(Toggle):
-    """Adds Friendly NPC Locations to the pool. (Irina, Cornyx, Karla, Orbeck) (+12 checks/items)"""
+    """Adds Friendly NPC Locations to the pool. (Irina, Cornyx, Karla, Orbeck) (+13 checks/items)"""
     display_name ="Randomize NPC Locations"
 
 

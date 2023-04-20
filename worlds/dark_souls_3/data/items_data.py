@@ -77,7 +77,7 @@ dlc_weapons_upgrade_5_table = {
 }
 
 weapons_upgrade_10_table = { #Removed some items to balance item/location tables to accomodate boss weapons properly
-    "Broken Straight Sword": 0x001EF9B0, #!
+    #"Broken Straight Sword": 0x001EF9B0, #!
     "Deep Battle Axe": 0x0006AFA54, #!
     "Club": 0x007A1200, #!
     #"Claymore": 0x005BDBA0, #! ?

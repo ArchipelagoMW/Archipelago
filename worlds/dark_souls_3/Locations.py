@@ -47,7 +47,6 @@ class DarkSouls3Location(Location):
         "AP: Dragon Tooth", # ITEM ADDED
         "GA: Sage's Crystal Staff",
         "FS: Broken Straight Sword",
-        "HWL: Broken Straight Sword",
         "HWL: Deep Battle Axe",
         "HWL: Club",
         "HWL: Claymore",

@@ -342,9 +342,8 @@ class DarkSouls3World(World):
         # Define the access rules to some specific locations
         set_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),
                  lambda state: state.has("Basin of Vows", self.player))
-        if self.multiworld.enable_misc_locations[self.player]:
-            set_rule(self.multiworld.get_location("HWL: Greirat's Ashes", self.player),
-                     lambda state: state.has("Cell Key", self.player))
+        set_rule(self.multiworld.get_location("ID: Prisoner Chief's Ashes", self.player),
+                 lambda state: state.has("Jailer's Key Ring", self.player))
         if self.multiworld.enable_ring_locations[self.player]:
             set_rule(self.multiworld.get_location("HWL: Blue Tearstone Ring", self.player),
                      lambda state: state.has("Cell Key", self.player))
@@ -352,11 +351,11 @@ class DarkSouls3World(World):
                      lambda state: state.has("Jailbreaker's Key", self.player))
             set_rule(self.multiworld.get_location("ID: Covetous Gold Serpent Ring", self.player),
                      lambda state: state.has("Old Cell Key", self.player))
-        set_rule(self.multiworld.get_location("ID: Prisoner Chief's Ashes", self.player),
-                 lambda state: state.has("Jailer's Key Ring", self.player))
         if self.multiworld.enable_npc_locations[self.player]:
             set_rule(self.multiworld.get_location("ID: Karla's Ashes", self.player),
                      lambda state: state.has("Jailer's Key Ring", self.player))
+            set_rule(self.multiworld.get_location("HWL: Greirat's Ashes", self.player),
+                     lambda state: state.has("Cell Key", self.player))
 
         self.multiworld.completion_condition[self.player] = lambda state: \
             state.has("Cinders of a Lord - Abyss Watcher", self.player) and \
@@ -365,7 +364,6 @@ class DarkSouls3World(World):
             state.has("Cinders of a Lord - Lothric Prince", self.player)
 
     def generate_basic(self):
-        pass
         # Fill item pool with additional items
         item_pool_len = len([item for item in self.multiworld.itempool if item.player == self.player])
         #print("item_pool_len = " + str(item_pool_len))
