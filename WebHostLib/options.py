@@ -17,29 +17,8 @@ handled_in_js = {"start_inventory", "local_items", "non_local_items", "start_hin
 def create():
     target_folder = local_path("WebHostLib", "static", "generated")
     yaml_folder = os.path.join(target_folder, "configs")
-    os.makedirs(yaml_folder, exist_ok=True)
 
-    for file in os.listdir(yaml_folder):
-        full_path: str = os.path.join(yaml_folder, file)
-        if os.path.isfile(full_path):
-            os.unlink(full_path)
-
-    def dictify_range(option: typing.Union[Options.Range, Options.SpecialRange]):
-        data = {option.default: 50}
-        for sub_option in ["random", "random-low", "random-high"]:
-            if sub_option != option.default:
-                data[sub_option] = 0
-
-        notes = {}
-        for name, number in getattr(option, "special_range_names", {}).items():
-            notes[name] = f"equivalent to {number}"
-            if number in data:
-                data[name] = data[number]
-                del data[number]
-            else:
-                data[name] = 0
-
-        return data, notes
+    Options.generate_yaml_templates(yaml_folder)
 
     def get_html_doc(option_type: type(Options.Option)) -> str:
         if not option_type.__doc__:
@@ -61,18 +40,6 @@ def create():
             **Options.per_game_common_options,
             **world.option_definitions
         }
-        with open(local_path("WebHostLib", "templates", "options.yaml")) as f:
-            file_data = f.read()
-        res = Template(file_data).render(
-            options=all_options,
-            __version__=__version__, game=game_name, yaml_dump=yaml.dump,
-            dictify_range=dictify_range,
-        )
-
-        del file_data
-
-        with open(os.path.join(target_folder, "configs", game_name + ".yaml"), "w", encoding="utf-8") as f:
-            f.write(res)
 
         # Generate JSON files for player-settings pages
         player_settings = {
@@ -131,6 +98,7 @@ def create():
                     "type": "items-list",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                     "description": get_html_doc(option),
+                    "defaultValue": list(option.default)
                 }
 
             elif issubclass(option, Options.LocationSet):
@@ -138,6 +106,7 @@ def create():
                     "type": "locations-list",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                     "description": get_html_doc(option),
+                    "defaultValue": list(option.default)
                 }
 
             elif issubclass(option, Options.VerifyKeys):
@@ -147,6 +116,7 @@ def create():
                         "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                         "description": get_html_doc(option),
                         "options": list(option.valid_keys),
+                        "defaultValue": list(option.default) if hasattr(option, "default") else []
                     }
 
             else:

@@ -79,6 +79,12 @@ class DungeonShuffle(DefaultOffToggle, LADXROption):
     """
     ladxr_name = "dungeonshuffle"
 
+class APTitleScreen(DefaultOnToggle):
+    """
+    Enables AP specific title screen and disables the intro cutscene
+    """
+    
+
 class BossShuffle(Choice):
     none = 0
     shuffle = 1
@@ -396,5 +402,6 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'shuffle_compasses': ShuffleCompasses,
     'shuffle_stone_beaks': ShuffleStoneBeaks,
     'music_change_condition': MusicChangeCondition,
-    'nag_messages': NagMessages
+    'nag_messages': NagMessages,
+    'ap_title_screen': APTitleScreen,
 }

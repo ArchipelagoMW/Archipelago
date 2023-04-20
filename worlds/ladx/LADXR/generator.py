@@ -2,6 +2,7 @@ import binascii
 import importlib.util
 import importlib.machinery
 import os
+import pkgutil
 
 from .romTables import ROMWithTables
 from . import assembler
@@ -61,7 +62,9 @@ from ..Options import TrendyGame, Palette, MusicChangeCondition
 
 # Function to generate a final rom, this patches the rom with all required patches
 def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, multiworld=None, player_name=None, player_names=[], player_id = 0):
-    rom = ROMWithTables(args.input_filename)
+    rom_patches = []
+
+    rom = ROMWithTables(args.input_filename, rom_patches)
     rom.player_names = player_names
     pymods = []
     if args.pymod:
@@ -259,9 +262,9 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
         mw = None
         if spot.item_owner != spot.location_owner:
             mw = spot.item_owner
-            if mw > 255:
-                # Don't torture the game with higher slot numbers
-                mw = 255
+            if mw > 100:
+                # There are only 101 player name slots (99 + "The Server" + "another world"), so don't use more than that
+                mw = 100
         spot.patch(rom, spot.item, multiworld=mw)
     patches.enemies.changeBosses(rom, world_setup.boss_mapping)
     patches.enemies.changeMiniBosses(rom, world_setup.miniboss_mapping)
@@ -271,6 +274,8 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
 
     patches.core.warpHome(rom)  # Needs to be done after setting the start location.
     patches.titleScreen.setRomInfo(rom, auth, seed_name, settings, player_name, player_id)
+    if ap_settings["ap_title_screen"]:
+        patches.titleScreen.setTitleGraphics(rom)
     patches.endscreen.updateEndScreen(rom)
     patches.aesthetics.updateSpriteData(rom)
     if args.doubletrouble:
@@ -363,15 +368,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
                 if x > max:
                     return max
                 return x
-            def bin_to_rgb(word):
-                red   = word & 0b11111
-                word >>= 5
-                green = word & 0b11111
-                word >>= 5
-                blue  = word & 0b11111
-                return (red, green, blue)
-            def rgb_to_bin(r, g, b):
-                return (b << 10) | (g << 5) | r
+            from patches.aesthetics import rgb_to_bin, bin_to_rgb
 
             for address in range(start, end, 2):
                 packed = (rom.banks[bank][address + 1] << 8) | rom.banks[bank][address]
@@ -416,9 +413,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     assert(len(auth) == 12)
     rom.patch(0x00, SEED_LOCATION, None, binascii.hexlify(auth))
 
-
     for pymod in pymods:
         pymod.postPatch(rom)
-
 
     return rom
