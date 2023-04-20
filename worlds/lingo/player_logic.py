@@ -98,37 +98,60 @@ class LingoPlayerLogic:
                 self.REAL_ITEMS.append("Progressive Orange Tower")
 
         if get_option_value(world, player, "shuffle_paintings"):
-            chosen_exits = []
+            # Shuffle paintings until we get something workable.
+            while not self.randomize_paintings(world, player, static_logic):
+                pass
+
+    def randomize_paintings(self, world: MultiWorld, player: int, static_logic: StaticLingoLogic) -> bool:
+        self.PAINTING_MAPPING.clear()
+
+        chosen_exits = []
+        if get_option_value(world, player, "shuffle_doors") == 0:
+            chosen_exits = [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
+                            if painting.required_when_no_doors]
+        chosen_exits += [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
+                         if painting.exit_only and painting.required]
+        exitable = [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
+                    if not painting.enter_only and not painting.disable and not painting.required]
+        chosen_exits += world.per_slot_randoms[player].sample(exitable,
+                                                              static_logic.PAINTING_EXITS - len(chosen_exits))
+
+        enterable = [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
+                     if not painting.exit_only and not painting.disable and painting_id not in chosen_exits]
+        chosen_entrances = world.per_slot_randoms[player].sample(enterable, static_logic.PAINTING_ENTRANCES)
+
+        for warp_exit in chosen_exits:
+            warp_enter = world.per_slot_randoms[player].choice(chosen_entrances)
+
+            # Check whether this is a warp from a required painting room to another (or the same) required painting
+            # room. This could cause a cycle that would make certain regions inaccessible.
+            warp_exit_room = static_logic.PAINTINGS[warp_exit].room
+            warp_enter_room = static_logic.PAINTINGS[warp_enter].room
+
+            required_painting_rooms = static_logic.REQUIRED_PAINTING_ROOMS
             if get_option_value(world, player, "shuffle_doors") == 0:
-                chosen_exits = [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
-                                if painting.required_when_no_doors]
-            chosen_exits += [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
-                             if painting.exit_only and painting.required]
-            exitable = [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
-                        if not painting.enter_only and not painting.disable and not painting.required]
-            chosen_exits += world.per_slot_randoms[player].sample(exitable,
-                                                                  static_logic.PAINTING_EXITS - len(chosen_exits))
+                required_painting_rooms += static_logic.REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS
 
-            enterable = [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
-                         if not painting.exit_only and not painting.disable and painting_id not in chosen_exits]
-            chosen_entrances = world.per_slot_randoms[player].sample(enterable, static_logic.PAINTING_ENTRANCES)
+            if warp_exit_room in required_painting_rooms and warp_enter_room in required_painting_rooms:
+                # This shuffling is non-workable. Start over.
+                return False
 
-            for warp_exit in chosen_exits:
-                warp_enter = world.per_slot_randoms[player].choice(chosen_entrances)
-                chosen_entrances.remove(warp_enter)
-                self.PAINTING_MAPPING[warp_enter] = warp_exit
+            chosen_entrances.remove(warp_enter)
+            self.PAINTING_MAPPING[warp_enter] = warp_exit
 
-            for warp_enter in chosen_entrances:
-                warp_exit = world.per_slot_randoms[player].choice(chosen_exits)
-                self.PAINTING_MAPPING[warp_enter] = warp_exit
+        for warp_enter in chosen_entrances:
+            warp_exit = world.per_slot_randoms[player].choice(chosen_exits)
+            self.PAINTING_MAPPING[warp_enter] = warp_exit
 
-            # Hard-code the relation with the two pencil paintings in The Steady. If the pencil painting outside The
-            # Bold is an entrance, then these should also be the same entrance (so we don't have to worry about logic
-            # trying to figure out if the player has access to those paintings, since the one outside The Bold is right
-            # there). Otherwise, make these paintings warps to the main one.
-            if "pencil_painting2" in chosen_entrances:
-                self.PAINTING_MAPPING["pencil_painting4"] = self.PAINTING_MAPPING["pencil_painting2"]
-                self.PAINTING_MAPPING["pencil_painting5"] = self.PAINTING_MAPPING["pencil_painting2"]
-            else:
-                self.PAINTING_MAPPING["pencil_painting4"] = "pencil_painting2"
-                self.PAINTING_MAPPING["pencil_painting5"] = "pencil_painting2"
+        # Hard-code the relation with the two pencil paintings in The Steady. If the pencil painting outside The
+        # Bold is an entrance, then these should also be the same entrance (so we don't have to worry about logic
+        # trying to figure out if the player has access to those paintings, since the one outside The Bold is right
+        # there). Otherwise, make these paintings warps to the main one.
+        if "pencil_painting2" in chosen_entrances:
+            self.PAINTING_MAPPING["pencil_painting4"] = self.PAINTING_MAPPING["pencil_painting2"]
+            self.PAINTING_MAPPING["pencil_painting5"] = self.PAINTING_MAPPING["pencil_painting2"]
+        else:
+            self.PAINTING_MAPPING["pencil_painting4"] = "pencil_painting2"
+            self.PAINTING_MAPPING["pencil_painting5"] = "pencil_painting2"
+
+        return True

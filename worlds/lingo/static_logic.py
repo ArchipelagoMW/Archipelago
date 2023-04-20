@@ -73,6 +73,8 @@ class StaticLingoLogic:
 
     PAINTING_ENTRANCES: int = 0
     PAINTING_EXITS: int = 0
+    REQUIRED_PAINTING_ROOMS: List[str] = []
+    REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS: List[str] = []
 
     def __init__(self):
         path = os.path.join(os.path.dirname(__file__), "LL1.yaml")
@@ -272,6 +274,8 @@ class StaticLingoLogic:
 
                         if "required" in painting_data:
                             required_painting = painting_data["required"]
+                            if required_painting:
+                                self.REQUIRED_PAINTING_ROOMS.append(room_name)
                         else:
                             required_painting = False
 
@@ -282,6 +286,8 @@ class StaticLingoLogic:
 
                         if "required_when_no_doors" in painting_data:
                             rwnd = painting_data["required_when_no_doors"]
+                            if rwnd:
+                                self.REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS.append(room_name)
                         else:
                             rwnd = False
 
