@@ -91,7 +91,7 @@ class TerrariaWorld(World):
             item_count += 1
 
         while item_count < location_count:
-            items.append("Coins")
+            items.append("Reward: Coins")
             item_count += 1
 
         self.ter_items = items
