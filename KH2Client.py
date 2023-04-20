@@ -131,7 +131,6 @@ class KH2Context(CommonContext):
 
         self.boost_set = set(CheckDupingItems["Boosts"])
         self.stat_increase_set = set(CheckDupingItems["Stat Increases"])
-
         self.AbilityQuantityDict = {item: self.item_name_to_data[item].quantity for item in self.all_abilities}
         #  Growth:[level 1,level 4,slot]
         self.growth_values_dict = {"High Jump":    [0x05E, 0x061, 0x25DA],
@@ -201,8 +200,8 @@ class KH2Context(CommonContext):
                 self.kh2seedsave = {"itemIndex":        -1,
                                     # back of soras invo is 0x25E2. Growth should be moved there
                                     #  Character: [back of invo, front of invo]
-                                    "SoraInvo":         [0x25D6, 0x2546],
-                                    "DonaldInvo":       [0x26F6, 0x2658],
+                                    "SoraInvo":         [0x25D8, 0x2546],
+                                    "DonaldInvo":       [0x26F4, 0x2658],
                                     "GoofyInvo":        [0x280A, 0x276C],
                                     "AmountInvo":       {
                                         "ServerItems": {
@@ -249,14 +248,15 @@ class KH2Context(CommonContext):
                 with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}{self.auth}.json"),
                           'wt') as f:
                     pass
+                self.locations_checked = set()
             elif os.path.exists(self.game_communication_path + f"\kh2save{self.kh2seedname}{self.auth}.json"):
                 with open(self.game_communication_path + f"\kh2save{self.kh2seedname}{self.auth}.json", 'r') as f:
                     self.kh2seedsave = json.load(f)
                     self.locations_checked = set(self.kh2seedsave["LocationsChecked"])
+            self.serverconneced = True
 
         if cmd in {"Connected"}:
             self.kh2slotdata = args['slot_data']
-            self.serverconneced = True
             self.kh2LocalItems = {int(location): item for location, item in self.kh2slotdata["LocalItems"].items()}
             try:
                 self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
@@ -713,10 +713,11 @@ class KH2Context(CommonContext):
                 if itemName in server_stat:
                     amountOfItems += self.kh2seedsave["AmountInvo"]["ServerItems"]["StatIncrease"][itemName]
 
+                # 0x130293 is Crit_1's location id for touching the computer
                 if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
                                   "big") != amountOfItems \
                         and int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Slot1 + 0x1B2, 1),
-                                           "big") >= 5 and int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x0714DB8, 1), "big") not in {1, 255}:
+                                           "big") >= 5 and 0x130293 in self.locations_checked:
                     self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
                                          amountOfItems.to_bytes(1, 'big'), 1)
 
