@@ -68,6 +68,7 @@ Like a Boss;                        Achievement;
 Hermes Boots;
 Jeepers Creepers;                   Achievement;
 Stylist;                            Npc;
+Funkytown;                          Achievement;
 Deceiver of Fools;                  Achievement | Grindy;
 Dead Men Tell No Tales;             Achievement | Grindy;
 Bulldozer;                          Achievement | Grindy;
@@ -243,6 +244,8 @@ Essence of Havoc;                   Calamity;                                   
 Don't Dread on Me;                  Achievement;                                Wall of Flesh;
 Earth Elemental;                    Calamity | Location | Item;                 Wall of Flesh;
 Cloud Elemental;                    Calamity | Location | Item;                 Wall of Flesh;
+Truffle;                            Npc;                                        Wall of Flesh;
+It Can Talk?!;                      Achievement;                                Truffle;
 
 // Pirate Invasion
 Pirate Invasion;                    Location | Item;                            Wall of Flesh;
@@ -325,9 +328,6 @@ The Axe;                            Hammer(100);                                
 Seedler;                            ;                                           #Plantera;
 Living Shard;                       Calamity;                                   #Plantera;
 Cyborg;                             Npc;                                        Plantera;
-Funkytown;                          Achievement;
-Truffle;                            Npc;                                        Wall of Flesh;
-It Can Talk?!;                      Achievement;                                Truffle;
 Autohammer;                         ;                                           Truffle & Plantera;
 Shroomite Bar;                      ;                                           Autohammer & Chlorophyte Bar;
 Shroomite Digging Claw;             Pickaxe(200);                               Hardmode Anvil & Shroomite Bar;
