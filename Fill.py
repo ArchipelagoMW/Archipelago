@@ -1,11 +1,10 @@
-import logging
-import typing
 import collections
 import itertools
+import logging
+import typing
 from collections import Counter, deque
 
-from BaseClasses import CollectionState, Location, LocationProgressType, MultiWorld, Item, ItemClassification
-
+from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld
 from worlds.AutoWorld import call_all
 from worlds.generic.Rules import add_item_rule
 
@@ -526,16 +525,16 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
         checked_locations: typing.Set[Location] = set()
         unchecked_locations: typing.Set[Location] = set(world.get_locations())
 
-        reachable_locations_count: typing.Dict[int, int] = {
-            player: 0
-            for player in world.player_ids
-            if len(world.get_filled_locations(player)) != 0
-        }
         total_locations_count: typing.Counter[int] = Counter(
             location.player
             for location in world.get_locations()
             if not location.locked
         )
+        reachable_locations_count: typing.Dict[int, int] = {
+            player: 0
+            for player in world.player_ids
+            if total_locations_count[player] and len(world.get_filled_locations(player)) != 0
+        }
         balanceable_players = {
             player: balanceable_players[player]
             for player in balanceable_players
@@ -551,6 +550,10 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
 
         def item_percentage(player: int, num: int) -> float:
             return num / total_locations_count[player]
+
+        # If there are no locations that aren't locked, there's no point in attempting to balance progression.
+        if len(total_locations_count) == 0:
+            return
 
         while True:
             # Gather non-locked locations.
@@ -824,7 +827,6 @@ def distribute_planned(world: MultiWorld) -> None:
                 locations.remove("non_early_locations")
                 for player in worlds:
                     locations += non_early_locations[player]
-
 
             block['locations'] = locations
 

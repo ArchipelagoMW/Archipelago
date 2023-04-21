@@ -21,11 +21,11 @@ class ArchipIDLEWebWorld(WebWorld):
 
 class ArchipIDLEWorld(World):
     """
-    An idle game which sends a check every thirty seconds, up to one hundred checks.
+    An idle game which sends a check every thirty seconds, up to two hundred checks.
     """
     game = "ArchipIDLE"
     topology_present = False
-    data_version = 4
+    data_version = 5
     hidden = (datetime.now().month != 4)  # ArchipIDLE is only visible during April
     web = ArchipIDLEWebWorld()
 
@@ -37,31 +37,31 @@ class ArchipIDLEWorld(World):
 
     location_name_to_id = {}
     start_id = 9000
-    for i in range(1, 101):
-        location_name_to_id[f"IDLE for at least {int(i / 2)} minutes {30 if (i % 2) else 0} seconds"] = start_id
+    for i in range(1, 201):
+        location_name_to_id[f"IDLE item number {i}"] = start_id
         start_id += 1
-
-    def generate_basic(self):
-        item_table_copy = list(item_table)
-        self.multiworld.random.shuffle(item_table_copy)
-
-        item_pool = []
-        for i in range(100):
-            item = ArchipIDLEItem(
-                item_table_copy[i],
-                ItemClassification.progression if i < 20 else ItemClassification.filler,
-                self.item_name_to_id[item_table_copy[i]],
-                self.player
-            )
-            item_pool.append(item)
-
-        self.multiworld.itempool += item_pool
 
     def set_rules(self):
         set_rules(self.multiworld, self.player)
 
     def create_item(self, name: str) -> Item:
         return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
+
+    def create_items(self):
+        item_table_copy = list(item_table)
+        self.multiworld.random.shuffle(item_table_copy)
+
+        item_pool = []
+        for i in range(200):
+            item = ArchipIDLEItem(
+                item_table_copy[i],
+                ItemClassification.progression if i < 40 else ItemClassification.filler,
+                self.item_name_to_id[item_table_copy[i]],
+                self.player
+            )
+            item_pool.append(item)
+
+        self.multiworld.itempool += item_pool
 
     def create_regions(self):
         self.multiworld.regions += [

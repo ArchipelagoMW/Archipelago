@@ -25,11 +25,11 @@ from worlds.adventure.Offsets import static_item_element_size, connector_port_of
 SYSTEM_MESSAGE_ID = 0
 
 CONNECTION_TIMING_OUT_STATUS = \
-    "Connection timing out. Please restart your emulator, then restart adventure_connector.lua"
+    "Connection timing out. Please restart your emulator, then restart connector_adventure.lua"
 CONNECTION_REFUSED_STATUS = \
-    "Connection Refused. Please start your emulator and make sure adventure_connector.lua is running"
+    "Connection Refused. Please start your emulator and make sure connector_adventure.lua is running"
 CONNECTION_RESET_STATUS = \
-    "Connection was reset. Please restart your emulator, then restart adventure_connector.lua"
+    "Connection was reset. Please restart your emulator, then restart connector_adventure.lua"
 CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
 CONNECTION_CONNECTED_STATUS = "Connected"
 CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
@@ -436,7 +436,7 @@ async def patch_and_run_game(patch_file, ctx):
         logger.info(msg, extra={'compact_gui': True})
         ctx.gui_error('Error', msg)
 
-    with open(Utils.user_path("data", "adventure_basepatch.bsdiff4"), "rb") as file:
+    with open(Utils.local_path("data", "adventure_basepatch.bsdiff4"), "rb") as file:
         basepatch = bytes(file.read())
 
     base_patched_rom_data = bsdiff4.patch(base_rom, basepatch)
