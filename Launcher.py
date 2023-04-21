@@ -20,7 +20,7 @@ from shutil import which
 from typing import Sequence, Union, Optional
 
 import Utils
-from worlds.LauncherComponents import Component, components, Type, SuffixIdentifier
+from worlds.LauncherComponents import Component, components, Type, SuffixIdentifier, icon_paths
 
 if __name__ == "__main__":
     import ModuleUpdate
@@ -84,12 +84,12 @@ def open_folder(folder_path):
 
 components.extend([
     # Functions
-    Component('Open host.yaml', func=open_host_yaml),
-    Component('Open Patch', func=open_patch),
-    Component('Generate Template Settings', func=generate_yamls),
-    Component('Discord Server', func=lambda: webbrowser.open("https://discord.gg/8Z65BR2")),
-    Component('18+ Discord Server', func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
-    Component('Browse Files', func=browse_files),
+    Component("Open host.yaml", func=open_host_yaml),
+    Component("Open Patch", func=open_patch),
+    Component("Generate Template Settings", func=generate_yamls),
+    Component("Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2")),
+    Component("18+ Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
+    Component("Browse Files", func=browse_files),
 ])
 
 
@@ -146,6 +146,8 @@ def launch(exe, in_terminal=False):
 
 def run_gui():
     from kvui import App, ContainerLayout, GridLayout, Button, Label
+    from kivy.uix.image import Image
+    from kivy.uix.relativelayout import RelativeLayout
 
     class Launcher(App):
         base_title: str = "Archipelago Launcher"
@@ -167,24 +169,43 @@ def run_gui():
             self.container = ContainerLayout()
             self.grid = GridLayout(cols=2)
             self.container.add_widget(self.grid)
-
+            self.grid.add_widget(Label(text="General"))
+            self.grid.add_widget(Label(text="Clients"))
             button_layout = self.grid  # make buttons fill the window
+
+            def build_button(component: Component):
+                """
+                Builds a button widget for a given component.
+
+                Args:
+                    component (Component): The component associated with the button.
+
+                Returns:
+                    None. The button is added to the parent grid layout.
+
+                """
+                button = Button(text=component.display_name)
+                button.component = component
+                button.bind(on_release=self.component_action)
+                if component.icon != "icon":
+                    image = Image(source=icon_paths[component.icon], size=(38, 38), size_hint=(None, 1), pos=(5, 0))
+                    box_layout = RelativeLayout()
+                    box_layout.add_widget(button)
+                    box_layout.add_widget(image)
+                    button_layout.add_widget(box_layout)
+                else:
+                    button_layout.add_widget(button)
+
             for (tool, client) in itertools.zip_longest(itertools.chain(
                     self._tools.items(), self._funcs.items(), self._adjusters.items()), self._clients.items()):
                 # column 1
                 if tool:
-                    button = Button(text=tool[0])
-                    button.component = tool[1]
-                    button.bind(on_release=self.component_action)
-                    button_layout.add_widget(button)
+                    build_button(tool[1])
                 else:
                     button_layout.add_widget(Label())
                 # column 2
                 if client:
-                    button = Button(text=client[0])
-                    button.component = client[1]
-                    button.bind(on_press=self.component_action)
-                    button_layout.add_widget(button)
+                    build_button(client[1])
                 else:
                     button_layout.add_widget(Label())
 
