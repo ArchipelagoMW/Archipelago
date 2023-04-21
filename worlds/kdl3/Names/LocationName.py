@@ -99,7 +99,13 @@ sand_canyon_5_u1 = "Sand Canyon 5 - 1-Up (Falling Block)"  # None
 sand_canyon_5_u2 = "Sand Canyon 5 - 1-Up (Ice 1)"  # Ice
 sand_canyon_5_u3 = "Sand Canyon 5 - 1-Up (Ice 2)"  # Ice
 sand_canyon_5_u4 = "Sand Canyon 5 - 1-Up (Ice 3)"  # Ice
-
+cloudy_park_1_u1 = "Cloudy Park 1 - 1-Up (1)"
+cloudy_park_4_u1 = "Cloudy Park 4 - 1-Up (1)"
+cloudy_park_6_u1 = "Cloudy Park 6 - 1-Up (1)"
+iceberg_5_u1 = "Iceberg 5 - 1-Up (1)"
+iceberg_5_u2 = "Iceberg 5 - 1-Up (2)"
+iceberg_5_u3 = "Iceberg 5 - 1-Up (3)"
+iceberg_6_u1 = "Iceberg 6 - 1-Up (1)"
 
 # Maxim Tomatoes
 grass_land_1_m1 = "Grass Land 1 - Maxim Tomato (Spark)"
@@ -117,7 +123,11 @@ sand_canyon_2_m1 = "Sand Canyon 2 - Maxim Tomato (Underwater)"
 sand_canyon_4_m1 = "Sand Canyon 4 - Maxim Tomato (Pacto)"
 sand_canyon_4_m2 = "Sand Canyon 4 - Maxim Tomato (Needle)"
 sand_canyon_5_m1 = "Sand Canyon 5 - Maxim Tomato (Pit)"
-
+cloudy_park_1_m1 = "Cloudy Park 1 - Maxim Tomato (1)"
+cloudy_park_4_m1 = "Cloudy Park 4 - Maxim Tomato (1)"
+cloudy_park_5_m1 = "Cloudy Park 5 - Maxim Tomato (1)"
+iceberg_3_m1 = "Iceberg 3 - Maxim Tomato (1)"
+iceberg_6_m1 = "Iceberg 6 - Maxim Tomato (1)"
 
 # Level Names
 level_names = {
