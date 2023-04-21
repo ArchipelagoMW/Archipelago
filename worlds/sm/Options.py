@@ -127,6 +127,7 @@ class AreaRandomization(Choice):
     option_off = 0
     option_light = 1
     option_full = 2
+    alias_true = 2
     default = 0
 
 class AreaLayout(Toggle):
