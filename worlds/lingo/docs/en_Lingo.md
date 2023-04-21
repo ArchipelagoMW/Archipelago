@@ -31,7 +31,7 @@ to use.
 Most panels / panel sets that open a door are now location checks, even if door shuffle is not enabled. Various other
 puzzles are also location checks, including the achievement panels for each area.
 
-# What about wall snipes?
+## What about wall snipes?
 
 "Wall sniping" refers to the fact that you are able to solve puzzles on the other side of opaque walls. This feature is
 not affected by randomization, but you are almost never required to perform a wall snipe. The exceptions to this are:
@@ -54,7 +54,7 @@ not affected by randomization, but you are almost never required to perform a wa
   present is not in logic.
 
 Any other snipe is considered out of logic. This includes sniping The Bearer's MIDDLE while standing outside The Bold,
-and sniping The Colorful without opening all of the color doors.
+sniping The Colorful without opening all of the color doors, and sniping WELCOME from next to WELCOME BACK.
 
 Because these puzzles are invisible to the player, they are not affected by panel shuffling. Additionally, they are all
 white puzzles, so they are not affected by color shuffling.
