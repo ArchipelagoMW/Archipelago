@@ -154,4 +154,11 @@ class LingoPlayerLogic:
             self.PAINTING_MAPPING["pencil_painting4"] = "pencil_painting2"
             self.PAINTING_MAPPING["pencil_painting5"] = "pencil_painting2"
 
+        # The Eye Wall painting is unique in that it is both double-sided and also enter only (because it moves).
+        # There is only one eligible double-sided exit painting, which is the vanilla exit for this warp. If the
+        # exit painting is an entrance in the shuffle, we will disable the Eye Wall painting. Otherwise, Eye Wall
+        # is forced to point to the vanilla exit.
+        if "eye_painting_2" not in self.PAINTING_MAPPING.keys():
+            self.PAINTING_MAPPING["eye_painting"] = "eye_painting_2"
+
         return True

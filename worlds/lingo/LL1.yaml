@@ -506,7 +506,7 @@
             panel: READS + RUST
     paintings:
       - id: eye_painting
-        enter_only: True
+        disable: True
         orientation: east
         move: True
         required_door:
