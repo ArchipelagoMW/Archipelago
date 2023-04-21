@@ -35,11 +35,11 @@ KDL3_MG5_STATUS = SRAM_1_START + 0x5EE4
 KDL3_BOSS_BUTCH_STATUS = SRAM_1_START + 0x5EEA
 KDL3_JUMPING_STATUS = SRAM_1_START + 0x5EF0
 KDL3_CURRENT_BGM = SRAM_1_START + 0x733E
-KDL3_ABILITY_ARRAY = SRAM_1_START + 0x7F50
 KDL3_SOUND_FX = SRAM_1_START + 0x7F62
-KDL3_RECV_COUNT = SRAM_1_START + 0x7F70
-KDL3_HEART_STAR_COUNT = SRAM_1_START + 0x7F80
 KDL3_ANIMAL_FRIENDS = SRAM_1_START + 0x8000
+KDL3_ABILITY_ARRAY = SRAM_1_START + 0x8020
+KDL3_RECV_COUNT = SRAM_1_START + 0x8050
+KDL3_HEART_STAR_COUNT = SRAM_1_START + 0x8070
 
 
 class KDL3SNIClient(SNIClient):
@@ -59,7 +59,7 @@ class KDL3SNIClient(SNIClient):
         if current_stage[0] == 0x7:  # boss stage
             boss_hp = await snes_read(ctx, KDL3_BOSS_HP, 1)
             if boss_hp[0] == 0:
-                return  # sending a deathlink after defeating a boss has softlock potential
+                return  # receiving a deathlink after defeating a boss has softlock potential
 
         current_hp = await snes_read(ctx, KDL3_KIRBY_HP, 1)
         if current_hp[0] == 0:
