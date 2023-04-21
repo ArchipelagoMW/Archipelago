@@ -215,6 +215,10 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         can_rock_smash
     )
     set_rule(
+        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_HM04"), player),
+        can_rock_smash
+    )
+    set_rule(
         multiworld.get_location("EVENT_RECOVER_DEVON_GOODS", player),
         lambda state: state.has("EVENT_DEFEAT_ROXANNE", player)
     )
