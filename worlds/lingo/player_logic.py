@@ -147,7 +147,7 @@ class LingoPlayerLogic:
         # Bold is an entrance, then these should also be the same entrance (so we don't have to worry about logic
         # trying to figure out if the player has access to those paintings, since the one outside The Bold is right
         # there). Otherwise, make these paintings warps to the main one.
-        if "pencil_painting2" in chosen_entrances:
+        if "pencil_painting2" in self.PAINTING_MAPPING.keys():
             self.PAINTING_MAPPING["pencil_painting4"] = self.PAINTING_MAPPING["pencil_painting2"]
             self.PAINTING_MAPPING["pencil_painting5"] = self.PAINTING_MAPPING["pencil_painting2"]
         else:
