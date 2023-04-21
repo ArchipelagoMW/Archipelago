@@ -52,11 +52,12 @@ def get_yaml_data(file) -> Union[Dict[str, str], str, Markup]:
 
                 if any(file.filename.endswith(".archipelago") for file in infolist):
                     return Markup("Error: Your .zip file contains an .archipelago file. "
-                                 'Did you mean to <a href="/uploads">host a game</a>?')
+                                  'Did you mean to <a href="/uploads">host a game</a>?')
 
                 for file in infolist:
                     if file.filename.endswith(banned_zip_contents):
-                        return "Uploaded data contained a rom file, which is likely to contain copyrighted material. Your file was deleted."
+                        return "Uploaded data contained a rom file, which is likely to contain copyrighted material. " \
+                               "Your file was deleted."
                     elif file.filename.endswith((".yaml", ".json", ".yml", ".txt")):
                         options[file.filename] = zfile.open(file, "r").read()
         else:

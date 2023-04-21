@@ -8,6 +8,7 @@ import base64
 from typing import Any, Dict, Iterable, List, Set, TextIO, TypedDict
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, Tutorial
+from Fill import fill_restrictive
 from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
 
 logger = logging.getLogger("Super Metroid")
@@ -22,8 +23,9 @@ import Utils
 from .variaRandomizer.logic.smboolmanager import SMBoolManager
 from .variaRandomizer.graph.vanilla.graph_locations import locationsDict
 from .variaRandomizer.graph.graph_utils import getAccessPoint
-from .variaRandomizer.rando.ItemLocContainer import ItemLocation
+from .variaRandomizer.rando.ItemLocContainer import ItemLocation, ItemLocContainer
 from .variaRandomizer.rando.Items import ItemManager
+from .variaRandomizer.rando.RandoServices import ComebackCheckType
 from .variaRandomizer.utils.parameters import *
 from .variaRandomizer.utils.utils import openFile
 from .variaRandomizer.logic.logic import Logic
@@ -148,6 +150,7 @@ class SMWorld(World):
         pool = []
         self.locked_items = {}
         self.NothingPool = []
+        self.prefilled_locked_items = []
         weaponCount = [0, 0, 0]
         for item in itemPool:
             isAdvancement = True
@@ -170,8 +173,20 @@ class SMWorld(World):
                 isAdvancement = False
 
             itemClass = ItemManager.Items[item.Type].Class
-            smitem = SMItem(item.Name, ItemClassification.progression if isAdvancement else ItemClassification.filler,
-                            item.Type, None if itemClass == 'Boss' else self.item_name_to_id[item.Name], player=self.player)
+            smitem = SMItem(item.Name, 
+                            ItemClassification.progression if isAdvancement else ItemClassification.filler, 
+                            item.Type,
+                            None if itemClass == 'Boss' else self.item_name_to_id[item.Name], 
+                            player=self.player)
+            
+            beamItems = ['Spazer', 'Ice', 'Wave' ,'Plasma']
+            self.ammoItems = ['Missile', 'Super', 'PowerBomb']
+            if self.multiworld.doors_colors_rando[self.player].value != 0:
+                if item.Type in beamItems:
+                    self.multiworld.local_items[self.player].value.add(item.Name)
+                elif item.Type in self.ammoItems and isAdvancement:
+                    self.prefilled_locked_items.append(smitem)
+            
             if itemClass == 'Boss':
                 self.locked_items[item.Name] = smitem
             elif item.Category == 'Nothing':
@@ -200,10 +215,21 @@ class SMWorld(World):
     def set_rules(self):
         set_rules(self.multiworld, self.player)
 
-
     def create_regions(self):
         create_locations(self, self.player)
         create_regions(self, self.multiworld, self.player)
+
+    def pre_fill(self):
+        from Fill import fill_restrictive
+        if len(self.prefilled_locked_items) > 0:
+            locations = [loc for loc in self.locations.values() if loc.item is None]
+            self.multiworld.random.shuffle(locations)
+            all_state = self.multiworld.get_all_state(False)
+            for item in self.ammoItems:
+                while (all_state.has(item.name, self.player, 1)):
+                    all_state.remove(item)
+
+            fill_restrictive(self.multiworld, all_state, locations, self.prefilled_locked_items, True, True)
 
     def getWordArray(self, w: int) -> List[int]:
         """ little-endian convert a 16-bit number to an array of numbers <= 255 each """
@@ -645,10 +671,10 @@ class SMWorld(World):
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         state.smbm[self.player].addItem(item.type)
-        if (item.location != None and item.location.player == self.player):
-            for entrance in self.multiworld.get_region(item.location.parent_region.name, self.player).entrances:
+        if item.location != None:
+            for entrance in self.multiworld.get_region(item.location.parent_region.name, item.location.player).entrances:
                 if (entrance.parent_region.can_reach(state)):
-                    state.smbm[self.player].lastAP = entrance.parent_region.name
+                    state.smbm[item.location.player].lastAP = entrance.parent_region.name
                     break
         return super(SMWorld, self).collect(state, item)
 
@@ -797,29 +823,25 @@ class SMLocation(Location):
     def can_reach(self, state: CollectionState) -> bool:
         # self.access_rule computes faster on average, so placing it first for faster abort
         assert self.parent_region, "Can't reach location without region"
-        return self.access_rule(state) and self.parent_region.can_reach(state) and self.can_comeback(state)
+        return self.access_rule(state) and \
+                self.parent_region.can_reach(state) and \
+                self.can_comeback(state, self.item)
     
-    def can_comeback(self, state: CollectionState):
-        # some specific early/late game checks
-        if self.name == 'Bomb' or self.name == 'Mother Brain':
-            return True
-
+    def can_comeback(self, state: CollectionState, item):
         randoExec = state.multiworld.worlds[self.player].variaRando.randoExec
+        randoService = randoExec.setup.services
+
+        comebackCheck = ComebackCheckType.JustComeback        
         n = 2 if GraphUtils.isStandardStart(randoExec.graphSettings.startAP) else 3
         # is early game
-        if (len([loc for loc in state.locations_checked if loc.player == self.player]) <= n):
-            return True
-
-        for key in locationsDict[self.name].AccessFrom.keys():
-            smbm = state.smbm[self.player]
-            if (randoExec.areaGraph.canAccess(  smbm, 
-                                                smbm.lastAP,
-                                                key,
-                                                smbm.maxDiff,
-                                                None)):
-                return True
-        return False
- 
+        if (len([loc for loc in state.locations_checked if loc.player == self.player]) <= n or randoExec.graphSettings.startAP == state.smbm[self.player].lastAP):
+            comebackCheck = ComebackCheckType.NoCheck
+        container = ItemLocContainer(state.smbm[self.player], [], [])
+        return randoService.fullComebackCheck(  container, 
+                                                state.smbm[self.player].lastAP, 
+                                                ItemManager.Items[item.type] if item is not None and item.player == self.player else None,
+                                                locationsDict[self.name], 
+                                                comebackCheck) 
 
 class SMItem(Item):
     game = "Super Metroid"

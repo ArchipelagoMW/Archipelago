@@ -740,7 +740,7 @@ class Objectives(object):
                 if c not in char2tile:
                     continue
                 romFile.writeWord(0x3800 + char2tile[c])
-
+        Synonyms.alreadyUsed = []
         # write goal completed positions y in sprites OAM
         baseY = 0x40
         addr = Addresses.getOne('objectivesSpritesOAM')
