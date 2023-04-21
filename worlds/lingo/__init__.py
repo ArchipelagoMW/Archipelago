@@ -16,6 +16,14 @@ from .player_logic import LingoPlayerLogic
 
 class LingoWebWorld(WebWorld):
     theme = "grass"
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing Lingo with Archipelago.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["hatkirby"]
+    )]
 
 
 class LingoWorld(World):
