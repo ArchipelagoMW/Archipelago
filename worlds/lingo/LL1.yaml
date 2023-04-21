@@ -696,7 +696,9 @@
       Starting Room:
         door: Painting Shortcut
         painting: True
-      Wheelbarrow Hallway: True
+      Wheelbarrow Hallway (2): True
+      Wheelbarrow Hallway (3): True
+      Wheelbarrow Hallway (4): True
       Hedge Maze: True # through the door to the sectioned-off part of the hedge maze
     panels:
       MASSACRED:
@@ -731,6 +733,18 @@
       HIDE:
         id: Maze Room/Panel_hide_seek_4
         colors: black
+      WALL:
+        id: Hallway Room/Panel_castle_1
+        colors: blue
+      KEEP:
+        id: Hallway Room/Panel_castle_2
+        colors: blue
+      BAILEY:
+        id: Hallway Room/Panel_castle_3
+        colors: blue
+      TOWER:
+        id: Hallway Room/Panel_castle_4
+        colors: blue
     doors:
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_massacred_sacred
@@ -758,6 +772,16 @@
         panels:
           - room: Champion's Rest
             panel: PURPLE
+      Wheelbarrow Door:
+        id: Red Blue Purple Room Area Doors/Door_room_2
+        skip_location: True
+        item_name: Wheelbarrow Hallway - First Door
+        group: Wheelbarrow Hallway Doors
+        panels:
+          - WALL
+          - KEEP
+          - BAILEY
+          - TOWER
     paintings:
       - id: panda_painting
         orientation: south
@@ -2611,7 +2635,7 @@
         room: The Artistic (Lattice)
         door: Door to Smiley
       Elements Area:
-        room: Wheelbarrow Hallway
+        room: Wheelbarrow Hallway (4)
         door: Exit
     panels:
       Achievement:
@@ -3085,13 +3109,74 @@
     paintings:
       - id: flower_painting_6
         orientation: south
-  Wheelbarrow Hallway:
+  Wheelbarrow Hallway (2):
     entrances:
-      Outside The Agreeable: True
-      Elements Area:
-        door: Exit
+      Outside The Agreeable:
+        room: Outside The Agreeable
+        door: Wheelbarrow Door
+      Elements Area: True
     panels:
-      WHEELBARROW:
+      WISE:
+        id: Hallway Room/Panel_counterclockwise_1
+        colors: blue
+      CLOCK:
+        id: Hallway Room/Panel_counterclockwise_2
+        colors: blue
+      ER:
+        id: Hallway Room/Panel_counterclockwise_3
+        colors: blue
+      COUNT:
+        id: Hallway Room/Panel_counterclockwise_4
+        colors: blue
+    doors:
+      Exit:
+        id: Red Blue Purple Room Area Doors/Door_room_3
+        skip_location: True
+        item_name: Wheelbarrow Hallway - Second Door
+        group: Wheelbarrow Hallway Doors
+        panels:
+          - WISE
+          - CLOCK
+          - ER
+          - COUNT
+  Wheelbarrow Hallway (3):
+    entrances:
+      Wheelbarrow Hallway (2):
+        room: Wheelbarrow Hallway (2)
+        door: Exit
+      # No entrance from Elements Area. The winding hallway does not connect.
+    panels:
+      TRANCE:
+        id: Hallway Room/Panel_transformation_1
+        colors: blue
+      FORM:
+        id: Hallway Room/Panel_transformation_2
+        colors: blue
+      A:
+        id: Hallway Room/Panel_transformation_3
+        colors: blue
+      SHUN:
+        id: Hallway Room/Panel_transformation_4
+        colors: blue
+    doors:
+      Exit:
+        id: Red Blue Purple Room Area Doors/Door_room_4
+        skip_location: True
+        item_name: Wheelbarrow Hallway - Third Door
+        group: Wheelbarrow Hallway Doors
+        panels:
+          - TRANCE
+          - FORM
+          - A
+          - SHUN
+  Wheelbarrow Hallway (4):
+    entrances:
+      Wheelbarrow Hallway (2):
+        room: Wheelbarrow Hallway (2)
+        door: Exit
+      Elements Area: True
+    panels:
+      WHEEL:
         id: Hallway Room/Panel_room_5
         colors: blue
     doors:
@@ -3099,16 +3184,48 @@
         id:
           - Red Blue Purple Room Area Doors/Door_room_5
           - Red Blue Purple Room Area Doors/Door_room_6 # this is the connection to The Artistic
+        skip_location: True
+        item_name: Wheelbarrow Hallway - Fourth Door
+        group: Wheelbarrow Hallway Doors
         panels:
-          - WHEELBARROW
+          - WHEEL
+      All Puzzles:
+        skip_item: True
+        location_name: Wheelbarrow Hallway
+        panels:
+          - room: Outside The Agreeable
+            panel: WALL
+          - room: Outside The Agreeable
+            panel: KEEP
+          - room: Outside The Agreeable
+            panel: BAILEY
+          - room: Outside The Agreeable
+            panel: TOWER
+          - room: Wheelbarrow Hallway (2)
+            panel: WISE
+          - room: Wheelbarrow Hallway (2)
+            panel: CLOCK
+          - room: Wheelbarrow Hallway (2)
+            panel: ER
+          - room: Wheelbarrow Hallway (2)
+            panel: COUNT
+          - room: Wheelbarrow Hallway (3)
+            panel: TRANCE
+          - room: Wheelbarrow Hallway (3)
+            panel: FORM
+          - room: Wheelbarrow Hallway (3)
+            panel: A
+          - room: Wheelbarrow Hallway (3)
+            panel: SHUN
+          - WHEEL
   Elements Area:
     entrances:
       Roof: True
-      Wheelbarrow Hallway:
-        room: Wheelbarrow Hallway
+      Wheelbarrow Hallway (4):
+        room: Wheelbarrow Hallway (4)
         door: Exit
       The Artistic (Smiley):
-        room: Wheelbarrow Hallway
+        room: Wheelbarrow Hallway (4)
         door: Exit
     panels:
       A:
