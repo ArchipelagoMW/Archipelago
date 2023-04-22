@@ -42,7 +42,7 @@ class WorldSource(typing.NamedTuple):
     relative: bool = True  # relative to regular world import folder
 
     def __repr__(self):
-        return f"{self.__class__.__name__}({self.path}, is_zip={self.is_zip})"
+        return f"{self.__class__.__name__}({self.path}, is_zip={self.is_zip}, relative={self.relative})"
 
     @property
     def resolved_path(self) -> str:
@@ -55,10 +55,10 @@ class WorldSource(typing.NamedTuple):
             if self.is_zip:
                 importer = zipimport.zipimporter(self.resolved_path)
                 if hasattr(importer, "find_spec"):  # new in Python 3.10
-                    spec = importer.find_spec(self.path.split(".", 1)[0])
+                    spec = importer.find_spec(os.path.basename(self.path).rsplit(".", 1)[0])
                     mod = importlib.util.module_from_spec(spec)
                 else:  # TODO: remove with 3.8 support
-                    mod = importer.load_module(self.path.split(".", 1)[0])
+                    mod = importer.load_module(os.path.basename(self.path).rsplit(".", 1)[0])
 
                 mod.__package__ = f"worlds.{mod.__package__}"
                 mod.__name__ = f"worlds.{mod.__name__}"
