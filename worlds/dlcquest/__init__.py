@@ -6,6 +6,7 @@ from .Locations import location_table, DLCQuestLocation
 from .Options import DLCQuest_options, DLCQuestOptions, fetch_options
 from .Rules import set_rules
 from .Regions import create_regions
+from . import Options
 
 client_version = 0
 
@@ -49,6 +50,7 @@ class DLCqworld(World):
         return DLCQuestItem(event, True, None, self.player)
 
     def create_items(self):
+        self.precollect_coinsanity()
         locations_count = len([location
                                for location in self.multiworld.get_locations(self.player)
                                if not location.event])
@@ -59,10 +61,17 @@ class DLCqworld(World):
         created_items = create_items(self, self.options, locations_count + len(items_to_exclude), self.multiworld.random)
 
         self.multiworld.itempool += created_items
+        self.multiworld.early_items[self.player]["Movement Pack"] = 1
 
         for item in items_to_exclude:
             if item in self.multiworld.itempool:
                 self.multiworld.itempool.remove(item)
+
+    def precollect_coinsanity(self):
+        if self.options[Options.Campaign] == Options.Campaign.option_basic:
+            if self.options[Options.CoinSanity] == Options.CoinSanity.option_coin and self.options[Options.CoinSanityRange] >= 5:
+                self.multiworld.push_precollected(self.create_item("Movement Pack"))
+
 
     def create_item(self, item: Union[str, ItemData]) -> DLCQuestItem:
         if isinstance(item, str):
