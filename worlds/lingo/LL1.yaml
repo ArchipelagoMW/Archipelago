@@ -24,6 +24,8 @@
   # - colors:        A list of colors that are required to be unlocked in order
   #                  to solve this panel
   # - check:         A location check will be created for this individual panel.
+  # - exclude_reduce: Panel checks are assumed to be INCLUDED when reduce checks
+  #                   is on. This option excludes the check anyway.
   #
   # doors is an array of doors associated with this room. When door
   # randomization is enabled, each of these is an item. The key is a name that
@@ -48,6 +50,8 @@
   # - skip_item:      If true, no item is generated for this door.
   # - group:          When simple doors is used, all doors with the same group
   #                   will be covered by a single item.
+  # - include_reduce: Door checks are assumed to be EXCLUDED when reduce checks
+  #                   is on. This option includes the check anyway.
   #
   # paintings is an array of paintings in the room. This is used for painting
   # shuffling.
@@ -81,10 +85,12 @@
       Main Door:
         id: Entry Room Area Doors/Door_hi_hi
         group: Entry Doors
+        include_reduce: True
         panels:
           - HI
       Back Right Door:
         id: Entry Room Area Doors/Door_hidden_hidden
+        include_reduce: True
         panels:
           - HIDDEN
       Rhyme Room Entrance:
@@ -166,6 +172,7 @@
       DEAD END:
         id: Appendix Room/Panel_deadend_deadened
         check: True
+        exclude_reduce: True
       OPEN:
         id: Heteronym Room/Panel_entrance_entrance
     doors:
@@ -234,6 +241,7 @@
       Exit Door:
         id: Entry Room Area Doors/Door_hi_high
         location_name: Second Room - Good Luck
+        include_reduce: True
         group: Entry Doors
         panels:
           - HI
@@ -287,6 +295,7 @@
         id: Appendix Room/Panel_rat_tar
         colors: black
         check: True
+        exclude_reduce: True
       OPEN:
         id: Synonym Room/Panel_open_open
       FOUR:
@@ -400,6 +409,7 @@
     doors:
       Shortcut to The Seeker:
         id: Master Room Doors/Door_pilgrim_shortcut
+        include_reduce: True
         panels:
           - THIS
   Crossroads:
@@ -444,6 +454,7 @@
         id: Shuffle Room/Panel_eyes_see_shuffle
         colors: yellow
         check: True
+        exclude_reduce: True
         required_door:
           door: Hollow Hallway
     doors:
@@ -736,6 +747,7 @@
       OUT:
         id: Hallway Room/Panel_out_out
         check: True
+        exclude_reduce: True
       HIDE:
         id: Maze Room/Panel_hide_seek_4
         colors: black
@@ -887,6 +899,7 @@
       Hide and Seek:
         skip_item: True
         location_name: Hedge Maze - Hide and Seek
+        include_reduce: True
         panels:
           - HIDE (1)
           - HIDE (2)
@@ -910,6 +923,7 @@
       GAZE:
         id: Maze Room/Panel_look_look
         check: True
+        exclude_reduce: True
     paintings:
       - id: garden_painting_tower
         orientation: north
@@ -1213,6 +1227,7 @@
         id: Shuffle Room/Panel_corner
         colors: yellow
         check: True
+        exclude_reduce: True
     doors:
       Hot Crusts Door:
         id: Shuffle Room Area Doors/Door_hotcrust_shortcuts
@@ -1710,10 +1725,12 @@
         id: Shuffle Room/Panel_clockwise_counterclockwise
         colors: black
         check: True
+        exclude_reduce: True
     doors:
       Shortcut to Starting Room:
         id: Entry Room Area Doors/Door_return_return
         group: Welcome Back Doors
+        include_reduce: True
         panels:
           - WELCOME BACK
   Owl Hallway:
@@ -2082,6 +2099,7 @@
         id:
           - Count Up Room Area Doors/Door_two_hider
           - Count Up Room Area Doors/Door_two_hider_2
+        include_reduce: True
         panels:
           - ONE
       Threes:
@@ -2090,12 +2108,14 @@
           - Count Up Room Area Doors/Door_three_hider_2
           - Count Up Room Area Doors/Door_three_hider_3
         location_name: Twos
+        include_reduce: True
         panels:
           - TWO (1)
           - TWO (2)
       Number Hunt:
         id: Count Up Room Area Doors/Door_three_unlocked
         location_name: Threes
+        include_reduce: True
         panels:
           - THREE (1)
           - THREE (2)
@@ -2117,6 +2137,7 @@
           - Count Up Room Area Doors/Door_five_hider_4
           - Count Up Room Area Doors/Door_five_hider_5
         location_name: Fours
+        include_reduce: True
         panels:
           - FOUR
           - room: Hub Room
@@ -2200,6 +2221,7 @@
           - Count Up Room Area Doors/Door_six_hider_6
         painting_id: pencil_painting3 # See note in Outside The Bold
         location_name: Fives
+        include_reduce: True
         panels:
           - FIVE
           - room: Outside The Agreeable
@@ -2221,6 +2243,7 @@
           - Count Up Room Area Doors/Door_seven_hider_6
           - Count Up Room Area Doors/Door_seven_hider_7
         location_name: Sixes
+        include_reduce: True
         panels:
           - SIX
           - room: Outside The Bold
@@ -2245,6 +2268,7 @@
           - Count Up Room Area Doors/Door_eight_hider_7
           - Count Up Room Area Doors/Door_eight_hider_8
         location_name: Sevens
+        include_reduce: True
         panels:
           - SEVEN
           - room: Directional Gallery
@@ -2271,6 +2295,7 @@
           - Count Up Room Area Doors/Door_nine_hider_8
           - Count Up Room Area Doors/Door_nine_hider_9
         location_name: Eights
+        include_reduce: True
         panels:
           - EIGHT
           - room: Directional Gallery
@@ -2291,6 +2316,7 @@
         # The black wall isn't a door, so we can't ever hide it.
         id: Count Up Room Area Doors/Door_zero_hider_2
         location_name: Nines
+        include_reduce: True
         panels:
           - NINE
           - room: Directional Gallery
@@ -2378,6 +2404,7 @@
       PARANOID:
         id: Backside Room/Panel_paranoid_paranoid
         check: True
+        exclude_reduce: True
         required_door:
           room: Number Hunt
           door: Sixes
@@ -2620,6 +2647,7 @@
           - Appendix Room Area Doors/Door_trusted_readjusted11
           - Appendix Room Area Doors/Door_trusted_readjusted12
           - Appendix Room Area Doors/Door_trusted_readjusted13
+        include_reduce: True
         panels:
           - TRUSTED
   The Artistic (Smiley):
@@ -3099,6 +3127,7 @@
       Exit:
         id: Red Blue Purple Room Area Doors/Door_wonderland_exit
         painting_id: arrows_painting_9
+        include_reduce: True
         panels:
           - Achievement
     paintings:
@@ -3205,6 +3234,7 @@
       All Puzzles:
         skip_item: True
         location_name: Wheelbarrow Hallway
+        include_reduce: True
         panels:
           - room: Outside The Agreeable
             panel: WALL
@@ -3252,6 +3282,7 @@
       UNDISTRACTED:
         id: Open Areas/Panel_undistracted
         check: True
+        exclude_reduce: True
   Wanderlust Tutorial:
     entrances:
       Orange Tower First Floor:
@@ -3296,6 +3327,7 @@
     doors:
       Exit Door:
         id: Tower Room Area Doors/Door_painting_exit
+        include_reduce: True
         panels:
           - ONE ROAD MANY TURNS
     paintings:

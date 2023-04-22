@@ -84,6 +84,10 @@ class LingoPlayerLogic:
 
         for location_name, location_data in StaticLingoLocations.ALL_LOCATION_TABLE.items():
             if location_name != self.VICTORY_CONDITION:
+                if get_option_value(world, player, "reduce_checks")\
+                        and get_option_value(world, player, "shuffle_doors") == 0 and not location_data.include_reduce:
+                    continue
+
                 self.add_location(location_data.room, PlayerLocation(location_name, location_data.code,
                                                                      location_data.panels))
                 self.REAL_LOCATIONS.append(location_name)

@@ -21,6 +21,13 @@ class ProgressiveOrangeTower(DefaultOnToggle):
     display_name = "Progressive Orange Tower"
 
 
+class ReduceChecks(DefaultOnToggle):
+    """When "Shuffle Doors" is off, there are far more location checks than there are items.
+    Enabling reduce checks will remove many of the locations that are associated with opening doors.
+    This option is ignored if "Shuffle Doors" is on."""
+    display_name = "Reduce Checks"
+
+
 class ShuffleColors(Toggle):
     """If on, an item is added to the pool for every puzzle color (besides White).
     You will need to unlock the requisite colors in order to be able to solve puzzles of that color."""
@@ -55,6 +62,7 @@ class DeathLink(Toggle):
 lingo_options: Dict[str, type] = {
     "shuffle_doors": ShuffleDoors,
     "progressive_orange_tower": ProgressiveOrangeTower,
+    "reduce_checks": ReduceChecks,
     "shuffle_colors": ShuffleColors,
     "shuffle_panels": ShufflePanels,
     "shuffle_paintings": ShufflePaintings,

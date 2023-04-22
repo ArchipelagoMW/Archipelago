@@ -37,6 +37,7 @@ class Door(NamedTuple):
     painting_ids: List[str]
     event: bool
     group: Optional[str]
+    include_reduce: bool
 
 
 class Panel(NamedTuple):
@@ -46,6 +47,7 @@ class Panel(NamedTuple):
     check: bool
     event: bool
     internal_ids: List[str]
+    exclude_reduce: bool
 
 
 class Painting(NamedTuple):
@@ -171,6 +173,11 @@ class StaticLingoLogic:
                         else:
                             event = False
 
+                        if "exclude_reduce" in panel_data:
+                            exclude_reduce = panel_data["exclude_reduce"]
+                        else:
+                            exclude_reduce = False
+
                         if "id" in panel_data:
                             if isinstance(panel_data["id"], List):
                                 internal_ids = panel_data["id"]
@@ -179,7 +186,8 @@ class StaticLingoLogic:
                         else:
                             internal_ids = []
 
-                        panel_obj = Panel(required_rooms, required_doors, colors, check, event, internal_ids)
+                        panel_obj = Panel(required_rooms, required_doors, colors, check, event, internal_ids,
+                                          exclude_reduce)
                         self.PANELS[full_name] = panel_obj
                         self.PANELS_BY_ROOM[room_name][panel_name] = panel_obj
 
@@ -206,6 +214,11 @@ class StaticLingoLogic:
                             event = door_data["event"]
                         else:
                             event = False
+
+                        if "include_reduce" in door_data:
+                            include_reduce = door_data["include_reduce"]
+                        else:
+                            include_reduce = False
 
                         if "group" in door_data:
                             group = door_data["group"]
@@ -256,7 +269,7 @@ class StaticLingoLogic:
                             painting_ids = []
 
                         door_obj = Door(door_name, item_name, location_name, panels, skip_location, skip_item, door_ids,
-                                        painting_ids, event, group)
+                                        painting_ids, event, group, include_reduce)
 
                         self.DOORS[door_obj.item_name] = door_obj
                         self.DOORS_BY_ROOM[room_name][door_name] = door_obj
