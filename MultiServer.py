@@ -700,6 +700,10 @@ class Context:
         targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
         if targets:
             self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.hints[team, slot]}])
+        self.broadcast(self.clients[team][slot], [{
+            "cmd": "RoomUpdate",
+            "hint_points": get_slot_points(self, team, slot)
+        }])
 
 
 def update_aliases(ctx: Context, team: int):
@@ -1639,7 +1643,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 "players": ctx.get_players_package(),
                 "missing_locations": get_missing_checks(ctx, team, slot),
                 "checked_locations": get_checked_checks(ctx, team, slot),
-                "slot_info": ctx.slot_info
+                "slot_info": ctx.slot_info,
+                "hint_points": get_slot_points(ctx, team, slot),
             }
             reply = [connected_packet]
             start_inventory = get_start_inventory(ctx, slot, client.remote_start_inventory)
@@ -2267,8 +2272,7 @@ async def main(args: argparse.Namespace):
 
     ssl_context = load_server_cert(args.cert, args.cert_key) if args.cert else None
 
-    ctx.server = websockets.serve(functools.partial(server, ctx=ctx), host=ctx.host, port=ctx.port, ping_timeout=None,
-                                  ping_interval=None, ssl=ssl_context)
+    ctx.server = websockets.serve(functools.partial(server, ctx=ctx), host=ctx.host, port=ctx.port, ssl=ssl_context)
     ip = args.host if args.host else Utils.get_public_ipv4()
     logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port,
                                                  'No password' if not ctx.password else 'Password: %s' % ctx.password))

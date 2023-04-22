@@ -299,7 +299,7 @@ class BlasphemousLogic(LogicMixin):
         return self.has_group("masks", player, 3)
 
     def _blasphemous_laudes_gate(self, player): 
-        return self.has_all({"Petrified Bell", "Blood Perpetuated in Sand", "Three Gnarled Tongues", "Key of the Secular", "Key of the Scribe", "Verses Spun from Gold"}, player)
+        return self.has("Verses Spun from Gold", player, 4)
 
     # Ten Piedad, Tres Angustias, Our Lady of the Charred Visage
     def _blasphemous_wound_boss_easy(self, player):
@@ -479,8 +479,7 @@ def rules(blasphemousworld):
         lambda state: state._blasphemous_bridge_access(player))
     set_rule(world.get_location("BotTC: Inside giant statue", player),
         lambda state: state._blasphemous_bridge_access(player) and \
-            state._blasphemous_laudes_gate(player) and \
-                state._blasphemous_1_mask(player))
+            state._blasphemous_laudes_gate(player))
     
     # Brotherhood of the Silent Sorrow
     set_rule(world.get_location("BotSS: Starting room Child of Moonlight", player),
@@ -627,8 +626,7 @@ def rules(blasphemousworld):
     # Hall of the Dawning
     set_rule(world.get_location("HotD: Laudes, the First of the Amanecidas", player),
         lambda state: state._blasphemous_bridge_access(player) and \
-                state._blasphemous_1_mask(player) and \
-                    state._blasphemous_laudes_gate(player))
+            state._blasphemous_laudes_gate(player))
 
     # Jondo
     set_rule(world.get_location("Jondo: Upper east chest", player),
@@ -943,8 +941,7 @@ def rules(blasphemousworld):
             lambda state: state._blasphemous_ex_bridge_access(player))
         set_rule(world.get_location("BotTC: Inside giant statue", player),
             lambda state: state._blasphemous_ex_bridge_access(player) and \
-                state._blasphemous_laudes_gate(player) and \
-                    state._blasphemous_1_mask(player))
+                state._blasphemous_laudes_gate(player))
         set_rule(world.get_location("BotSS: Esdras' final gift", player),
             lambda state: state._blasphemous_blood_relic(player) and \
                 state._blasphemous_scapular(player) and \
@@ -993,8 +990,7 @@ def rules(blasphemousworld):
                                                             state._blasphemous_ranged(player)))))
         set_rule(world.get_location("HotD: Laudes, the First of the Amanecidas", player),
             lambda state: state._blasphemous_ex_bridge_access(player) and \
-                    state._blasphemous_1_mask(player) and \
-                        state._blasphemous_laudes_gate(player))
+                state._blasphemous_laudes_gate(player))
         set_rule(world.get_location("LotNW: Elevator Child of Moonlight", player),
             lambda state: state._blasphemous_blood_relic(player) and \
                 (state._blasphemous_cherub_22_23_31_32(player) and \
