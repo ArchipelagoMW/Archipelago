@@ -679,7 +679,7 @@ class SMWorld(World):
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         state.smbm[self.player].addItem(item.type)
-        if item.location != None:
+        if item.location != None and item.location.game == self.game:
             for entrance in self.multiworld.get_region(item.location.parent_region.name, item.location.player).entrances:
                 if (entrance.parent_region.can_reach(state)):
                     state.smbm[item.location.player].lastAP = entrance.parent_region.name
