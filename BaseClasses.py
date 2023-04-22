@@ -7,9 +7,9 @@ import random
 import secrets
 import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
-from collections import OrderedDict, Counter, deque, ChainMap
+from collections import ChainMap, Counter, OrderedDict, deque
 from enum import IntEnum, IntFlag
-from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable, NamedTuple
+from typing import Any, Callable, Dict, Iterable, List, NamedTuple, Optional, Set, Tuple, TypedDict, Union
 
 import NetUtils
 import Options
@@ -121,7 +121,7 @@ class MultiWorld():
         self.early_items = {player: {} for player in self.player_ids}
         self.local_early_items = {player: {} for player in self.player_ids}
         self.indirect_connections = {}
-        self.start_inventory_from_pool = {player: Options.StartInventoryPool({}) for player in range(1, players + 1)}
+        self.start_inventory_from_pool: Dict[int, Options.StartInventoryPool] = {}
         self.fix_trock_doors = self.AttributeProxy(
             lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
         self.fix_skullwoods_exit = self.AttributeProxy(
@@ -445,7 +445,6 @@ class MultiWorld():
         self.state.collect(item, True)
 
     def push_item(self, location: Location, item: Item, collect: bool = True):
-        assert location.can_fill(self.state, item, False), f"Cannot place {item} into {location}."
         location.item = item
         item.location = location
         if collect:
@@ -742,9 +741,11 @@ class CollectionState():
         return self.prog_items[item, player] >= count
 
     def has_all(self, items: Set[str], player: int) -> bool:
+        """Returns True if each item name of items is in state at least once."""
         return all(self.prog_items[item, player] for item in items)
 
     def has_any(self, items: Set[str], player: int) -> bool:
+        """Returns True if at least one item name of items is in state at least once."""
         return any(self.prog_items[item, player] for item in items)
 
     def count(self, item: str, player: int) -> int:

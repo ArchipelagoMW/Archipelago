@@ -1,17 +1,19 @@
 import binascii
+import bsdiff4
 import os
+import pkgutil
+import tempfile
 
 from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 
 from .Common import *
-from .Items import (DungeonItemData, DungeonItemType, LinksAwakeningItem,
+from .Items import (DungeonItemData, DungeonItemType, LinksAwakeningItem, TradeItemData,
                     ladxr_item_to_la_item_name, links_awakening_items,
                     links_awakening_items_by_name)
 from .LADXR import generator
 from .LADXR.itempool import ItemPool as LADXRItemPool
-from .LADXR.locations.tradeSequence import TradeSequenceItem
 from .LADXR.logic import Logic as LAXDRLogic
 from .LADXR.main import get_parser
 from .LADXR.settings import Settings as LADXRSettings
@@ -20,7 +22,8 @@ from .LADXR.locations.instrument import Instrument
 from .LADXR.locations.constants import CHEST_ITEMS
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id)
-from .Options import links_awakening_options
+from .Options import links_awakening_options, DungeonItemShuffle
+
 from .Rom import LADXDeltaPatch
 
 DEVELOPER_MODE = False
@@ -137,12 +140,10 @@ class LinksAwakeningWorld(World):
     def create_items(self) -> None:    
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
 
-        self.trade_items = []
-
         dungeon_item_types = {
 
         }
-        from .Options import DungeonItemShuffle        
+
         self.prefill_original_dungeon = [ [], [], [], [], [], [], [], [], [] ]
         self.prefill_own_dungeons = []
         # For any and different world, set item rule instead
@@ -180,8 +181,9 @@ class LinksAwakeningWorld(World):
                 else:
                     item = self.create_item(item_name)
 
-                    if not self.multiworld.tradequest[self.player] and ladx_item_name.startswith("TRADING_"):
-                        self.trade_items.append(item)
+                    if not self.multiworld.tradequest[self.player] and isinstance(item.item_data, TradeItemData):
+                        location = self.multiworld.get_location(item.item_data.vanilla_location, self.player)
+                        location.place_locked_item(item)
                         continue
                     if isinstance(item.item_data, DungeonItemData):
                         if item.item_data.dungeon_item_type == DungeonItemType.INSTRUMENT:
@@ -215,7 +217,6 @@ class LinksAwakeningWorld(World):
                     else:
                         self.multiworld.itempool.append(item)
 
-    def pre_fill(self):
         self.multi_key = self.generate_multi_key()
 
         dungeon_locations = []
@@ -257,18 +258,6 @@ class LinksAwakeningWorld(World):
                         dungeon_locations_by_dungeon[r.dungeon_index - 1].remove(location)
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
-
-                    # Tell the filler that if we're placing a dungeon item, restrict it to the dungeon the item associates with
-                    # This will need changed once keysanity is implemented
-                    #orig_rule = location.item_rule
-                    #location.item_rule = lambda item, orig_rule=orig_rule: \
-                    #    (not isinstance(item, DungeonItemData) or item.dungeon_index == location.dungeon) and orig_rule(item)
-
-            for location in r.locations:
-                # If tradequests are disabled, place trade items directly in their proper location
-                if not self.multiworld.tradequest[self.player] and isinstance(location, LinksAwakeningLocation) and isinstance(location.ladxr_item, TradeSequenceItem):
-                    item = next(i for i in self.trade_items if i.item_data.ladxr_id == location.ladxr_item.default_item)
-                    location.place_locked_item(item)
 
         for dungeon_index in range(0, 9):
             locs = dungeon_locations_by_dungeon[dungeon_index]
@@ -381,16 +370,14 @@ class LinksAwakeningWorld(World):
                     # Kind of kludge, make it possible for the location to differentiate between local and remote items
                     loc.ladxr_item.location_owner = self.player
 
-        rom_path = "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"
+        rom_name = "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"
         out_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.player_name[self.player]}.gbc"
-        out_file = os.path.join(output_directory, out_name)
-
-        rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gbc")
+        out_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gbc")
 
 
 
         parser = get_parser()
-        args = parser.parse_args([rom_path, "-o", out_name, "--dump"])
+        args = parser.parse_args([rom_name, "-o", out_name, "--dump"])
 
         name_for_rom = self.multiworld.player_name[self.player]
 
@@ -408,14 +395,23 @@ class LinksAwakeningWorld(World):
             player_names=all_names,
             player_id = self.player)
       
-        handle = open(rompath, "wb")
-        rom.save(handle, name="LADXR")
-        handle.close()
-        patch = LADXDeltaPatch(os.path.splitext(rompath)[0]+LADXDeltaPatch.patch_file_ending, player=self.player,
-                                player_name=self.multiworld.player_name[self.player], patched_path=rompath)
+        with open(out_path, "wb") as handle:
+            rom.save(handle, name="LADXR")
+
+        # Write title screen after everything else is done - full gfxmods may stomp over the egg tiles
+        if self.player_options["ap_title_screen"]:
+            with tempfile.NamedTemporaryFile(delete=False) as title_patch:
+                title_patch.write(pkgutil.get_data(__name__, "LADXR/patches/title_screen.bdiff4"))
+        
+            bsdiff4.file_patch_inplace(out_path, title_patch.name)
+            os.unlink(title_patch.name)
+
+
+        patch = LADXDeltaPatch(os.path.splitext(out_path)[0]+LADXDeltaPatch.patch_file_ending, player=self.player,
+                                player_name=self.multiworld.player_name[self.player], patched_path=out_path)
         patch.write()
         if not DEVELOPER_MODE:
-            os.unlink(rompath)
+            os.unlink(out_path)
 
     def generate_multi_key(self):
         return bytearray(self.multiworld.random.getrandbits(8) for _ in range(10)) + self.player.to_bytes(2, 'big')
