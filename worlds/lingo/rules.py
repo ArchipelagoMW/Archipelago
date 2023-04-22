@@ -2,8 +2,8 @@ from typing import Optional, List
 from BaseClasses import MultiWorld
 from .Options import get_option_value
 from .static_logic import StaticLingoLogic, RoomAndDoor
-from ..AutoWorld import LogicMixin
-from ..generic.Rules import set_rule
+from worlds.AutoWorld import LogicMixin
+from worlds.generic.Rules import set_rule
 from .locations import StaticLingoLocations, LocationData
 from .player_logic import LingoPlayerLogic, PlayerLocation
 

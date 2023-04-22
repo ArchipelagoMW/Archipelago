@@ -4,7 +4,7 @@ Archipelago init file for Lingo
 import typing
 
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, ItemClassification
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 from .static_logic import StaticLingoLogic, Room, RoomEntrance
 from .items import LingoItem, StaticLingoItems
 from .locations import LingoLocation, StaticLingoLocations

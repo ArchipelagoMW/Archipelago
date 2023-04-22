@@ -2,6 +2,7 @@ import os
 import yaml
 
 from typing import Dict, NamedTuple, Optional, List
+from worlds import lingo
 
 
 class RoomAndDoor(NamedTuple):
@@ -77,8 +78,12 @@ class StaticLingoLogic:
     REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS: List[str] = []
 
     def __init__(self):
-        path = os.path.join(os.path.dirname(__file__), "LL1.yaml")
-        with open(path, 'r') as file:
+        try:
+            from importlib.resources import files
+        except ImportError:
+            from importlib_resources import files
+
+        with files(lingo).joinpath("LL1.yaml").open() as file:
             config = yaml.load(file, Loader=yaml.Loader)
 
             for room_name, room_data in config.items():
