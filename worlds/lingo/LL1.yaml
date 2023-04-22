@@ -3341,12 +3341,33 @@
       SECRET:
         id: Double Room/Panel_mystery_syn
     doors:
+      # This is complicated. I want the location in here to just be the four
+      # panels against the wall toward Target. But in vanilla, you also need to
+      # solve the panels in Circle that are against the Smiley wall. Logic needs
+      # to know this so that it can handle no door shuffle properly. So we split
+      # the item and location up.
       Door to Target:
         id:
           - Double Room Area Doors/Door_room_3a
           - Double Room Area Doors/Door_room_3bc
-        location_name: Rhyme Room (Smiley) - Puzzles Toward Target
+        skip_location: True
         group: Rhyme Room Doors
+        panels:
+          - SCHEME
+          - FANTASY
+          - HISTORY
+          - SECRET
+          - room: Rhyme Room (Circle)
+            panel: BIRD
+          - room: Rhyme Room (Circle)
+            panel: LETTER
+          - room: Rhyme Room (Circle)
+            panel: VIOLENT
+          - room: Rhyme Room (Circle)
+            panel: MUTE
+      Door to Target (Location):
+        location_name: Rhyme Room (Smiley) - Puzzles Toward Target
+        skip_item: True
         panels:
           - SCHEME
           - FANTASY
