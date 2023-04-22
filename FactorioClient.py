@@ -117,6 +117,13 @@ class FactorioContext(CommonContext):
         super(FactorioContext, self).on_print_json(args)
 
     @property
+    def energylink_key(self) -> str:
+        if self.team:
+            return f"EnergyLink{self.team}"
+        else:
+            return "EnergyLink"
+
+    @property
     def savegame_name(self) -> str:
         return f"AP_{self.seed_name}_{self.auth}_Save.zip"
 
@@ -146,10 +153,10 @@ class FactorioContext(CommonContext):
                                                 item_name in args["checked_locations"]})
             if cmd == "Connected" and self.energy_link_increment:
                 async_start(self.send_msgs([{
-                    "cmd": "SetNotify", "keys": ["EnergyLink"]
+                    "cmd": "SetNotify", "keys": [self.energylink_key]
                 }]))
         elif cmd == "SetReply":
-            if args["key"] == "EnergyLink":
+            if args["key"].startswith("EnergyLink"):
                 if self.energy_link_increment and args.get("last_deplete", -1) == self.last_deplete:
                     # it's our deplete request
                     gained = int(args["original_value"] - args["value"])
@@ -261,7 +268,7 @@ async def game_watcher(ctx: FactorioContext):
                                 # attempt to refill
                                 ctx.last_deplete = time.time()
                                 async_start(ctx.send_msgs([{
-                                    "cmd": "Set", "key": "EnergyLink", "operations":
+                                    "cmd": "Set", "key": ctx.energylink_key, "operations":
                                         [{"operation": "add", "value": -ctx.energy_link_increment * in_world_bridges},
                                          {"operation": "max", "value": 0}],
                                     "last_deplete": ctx.last_deplete
@@ -271,7 +278,7 @@ async def game_watcher(ctx: FactorioContext):
                                 ctx.energy_link_increment*in_world_bridges:
                                 value = ctx.energy_link_increment * in_world_bridges
                                 async_start(ctx.send_msgs([{
-                                    "cmd": "Set", "key": "EnergyLink", "operations":
+                                    "cmd": "Set", "key": ctx.energylink_key, "operations":
                                         [{"operation": "add", "value": value}]
                                 }]))
                                 ctx.rcon_client.send_command(
