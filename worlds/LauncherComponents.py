@@ -1,3 +1,4 @@
+import os.path
 from enum import Enum, auto
 from typing import Optional, Callable, List, Iterable
 
@@ -58,6 +59,25 @@ class SuffixIdentifier:
         return False
 
 
+def install_apworld(path: str):
+    import shutil
+    import worlds
+    basename = os.path.basename(path)
+    target = os.path.join(worlds.folder, basename)
+
+    if basename in os.listdir(worlds.folder):
+        # overwrite existing apworld
+        os.unlink(target)
+        shutil.copy(path, target)
+
+    else:
+        # we can at least import for now to minimally test it.
+        source = worlds.WorldSource(path, is_zip=True, relative=False)
+        success = source.load()
+        if success:
+            shutil.copy(path, target)
+
+
 components: List[Component] = [
     # Launcher
     Component('', 'Launcher'),
@@ -66,6 +86,7 @@ components: List[Component] = [
               file_identifier=SuffixIdentifier('.archipelago', '.zip')),
     Component('Generate', 'Generate', cli=True),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient'),
+    Component("APWorld Installer", file_identifier=SuffixIdentifier('.apworld'), func=install_apworld),
     # SNI
     Component('SNI Client', 'SNIClient',
               file_identifier=SuffixIdentifier('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3', '.apdkc3',
