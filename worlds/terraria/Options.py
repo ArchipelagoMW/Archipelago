@@ -1,4 +1,4 @@
-from Options import Choice, Option
+from Options import Choice, Option, Toggle
 import typing
 
 
@@ -49,8 +49,16 @@ class FillExtraChecksWith(Choice):
     default = 1
 
 
+class Deathlink(Toggle):
+    """When you die, everyone dies. Of course, the reverse is true too."""
+
+    display_name = "DeathLink"
+    default = False
+
+
 options: typing.Dict[str, type(Option)] = {  # type: ignore
     "goal": Goal,
     "achievements": Achievements,
     "fill_extra_checks_with": FillExtraChecksWith,
+    "deathlink": Deathlink,
 }

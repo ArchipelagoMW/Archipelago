@@ -307,4 +307,5 @@ class TerrariaWorld(World):
     def fill_slot_data(self) -> dict[str, object]:
         return {
             "goal": list(self.goal_locations),
+            "deathlink": bool(self.multiworld.deathlink[self.player]),
         }
