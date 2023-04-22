@@ -196,7 +196,7 @@ class PokemonRedBlueWorld(World):
                           + self.multiworld.fire_trap_weight[self.player].value
                           + self.multiworld.paralyze_trap_weight[self.player].value
                           + self.multiworld.ice_trap_weight[self.player].value)
-        stones = ["Moon Stone", "Fire Stone", "Water Stone", "Thunder Stone"]
+        stones = ["Moon Stone", "Fire Stone", "Water Stone", "Thunder Stone", "Leaf Stone"]
         for location in locations:
             event = location.event
             if not location.inclusion(self.multiworld, self.player):
@@ -237,8 +237,8 @@ class PokemonRedBlueWorld(World):
             for item in item_pool:
                 if item.name in self.item_name_groups["Consumables"]:
                     item_pool.remove(item)
-                    item_pool.append(self.create_item(stones.pop(), self.player))
-                break
+                    item_pool.append(self.create_item(stones.pop()))
+                    break
 
         self.multiworld.itempool += item_pool
 
