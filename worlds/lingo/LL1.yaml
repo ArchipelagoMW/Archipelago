@@ -184,6 +184,7 @@
             panel: RAT
       Seeker Entrance:
         id: Entry Room Area Doors/Door_entrance_entrance
+        item_name: The Seeker - Entrance
         panels:
           - OPEN
       Rhyme Room Entrance:
@@ -328,6 +329,7 @@
             panel: DEAD END
       Traveled Entrance:
         id: Appendix Room Area Doors/Door_open_open
+        item_name: The Traveled - Entrance
         group: Entrance to The Traveled
         panels:
           - OPEN
@@ -452,6 +454,7 @@
           - DECAY
       Discerning Entrance:
         id: Shuffle Room Area Doors/Door_nope_open
+        item_name: The Discerning - Entrance
         panels:
           - NOPE
       Tower Entrance:
@@ -610,6 +613,7 @@
           - RACECAR (Black)
           - SOLOS (Black)
       White Palindromes:
+        location_name: The Tenacious - White Palindromes
         skip_item: True
         panels:
           - LEVEL (White)
@@ -758,6 +762,7 @@
           - BLACK
       Agreeable Entrance:
         id: Symmetry Room Area Doors/Door_close_open
+        item_name: The Agreeable - Entrance
         panels:
           - CLOSE
       Painting Shortcut:
@@ -856,6 +861,7 @@
     doors:
       Perceptive Entrance:
         id: Maze Area Doors/Door_maze_maze
+        item_name: The Perceptive - Entrance
         group: Hedge Maze Doors
         panels:
           - DOWN
@@ -871,6 +877,7 @@
           - Maze Area Doors/Door_look_room_2
           - Maze Area Doors/Door_look_room_3
         skip_location: True
+        item_name: The Observant - Entrance
         group: Observant Doors
         panels:
           - room: The Perceptive
@@ -1279,7 +1286,7 @@
       Orange Tower Fifth Floor:
         room: Orange Tower
         door: Sixth Floor
-      The Lab:
+      The Scientific:
         painting: True
     paintings:
       - id: arrows_painting_10
@@ -1811,6 +1818,7 @@
             panel: ORANGE
       Initiated Entrance:
         id: Red Blue Purple Room Area Doors/Door_locked_knocked
+        item_name: The Initiated - Entrance
         panels:
           - OXEN
       # These would be more appropriate in Champion's Rest, but as currently
@@ -1955,6 +1963,7 @@
     doors:
       Bold Entrance:
         id: Red Blue Purple Room Area Doors/Door_unopened_open
+        item_name: The Bold - Entrance
         panels:
           - UNOPEN
       Painting Shortcut:
@@ -1965,6 +1974,7 @@
           - UNOPEN
       Steady Entrance:
         id: Rock Room Doors/Door_2
+        item_name: The Steady - Entrance
         panels:
           - BEGIN
     paintings:
@@ -2050,6 +2060,7 @@
     doors:
       Undeterred Entrance:
         id: Red Blue Purple Room Area Doors/Door_pen_open
+        item_name: The Undeterred - Entrance
         panels:
           - PEN
       Painting Shortcut:
@@ -2974,6 +2985,7 @@
     doors:
       Wondrous Entrance:
         id: Red Blue Purple Room Area Doors/Door_wonderland
+        item_name: The Wondrous - Entrance
         group: Access to The Wondrous
         panels:
           - SHRINK
@@ -3332,6 +3344,7 @@
         id:
           - Double Room Area Doors/Door_room_3a
           - Double Room Area Doors/Door_room_3bc
+        location_name: Rhyme Room (Smiley) - Puzzles Toward Target
         group: Rhyme Room Doors
         panels:
           - SCHEME
@@ -3377,6 +3390,7 @@
     doors:
       Exit:
         id: Double Room Area Doors/Door_room_exit
+        location_name: Rhyme Room (Cross) - Exit Puzzles
         group: Rhyme Room Doors
         panels:
           - PLUMP
@@ -3550,6 +3564,7 @@
     doors:
       Door to Cross:
         id: Double Room Area Doors/Door_room_4a
+        location_name: Rhyme Room (Target) - Puzzles Toward Cross
         group: Rhyme Room Doors
         panels:
           - PISTOL
@@ -3631,6 +3646,7 @@
     doors:
       Wise Entrance:
         id: Clock Room Area Doors/Door_time_start
+        item_name: The Wise - Entrance
         panels:
           - KITTEN
           - CAT
@@ -3674,22 +3690,23 @@
         id: Countdown Panels/Panel_ecstatic_ecstatic
         colors: yellow
         check: True
-  Outside The Lab:
+  Outside The Scientific:
     entrances:
       Roof: True
     panels:
       OPEN:
         id: Chemistry Room/Panel_open
     doors:
-      Lab Entrance:
+      Scientific Entrance:
         id: Red Blue Purple Room Area Doors/Door_chemistry_lab
+        item_name: The Scientific - Entrance
         panels:
           - OPEN
-  The Lab:
+  The Scientific:
     entrances:
-      Outside The Lab:
-        room: Outside The Lab
-        door: Lab Entrance
+      Outside The Scientific:
+        room: Outside The Scientific
+        door: Scientific Entrance
     panels:
       Achievement:
         id: Countdown Panels/Panel_scientific_scientific
