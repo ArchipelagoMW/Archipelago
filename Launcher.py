@@ -11,6 +11,7 @@ Scroll down to components= to add components to the launcher as well as setup.py
 
 import argparse
 import itertools
+import logging
 import shlex
 import subprocess
 import sys
@@ -221,6 +222,15 @@ def run_gui():
     Launcher().run()
 
 
+def run_component(component: Component, *args):
+    if component.func:
+        component.func(*args)
+    elif component.script_name:
+        subprocess.run([*get_exe(component.script_name), *args])
+    else:
+        logging.warning(f"Component {component} does not appear to be executable.")
+
+
 def main(args: Optional[Union[argparse.Namespace, dict]] = None):
     if isinstance(args, argparse.Namespace):
         args = {k: v for k, v in args._get_kwargs()}
@@ -228,16 +238,16 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
         args = {}
 
     if "Patch|Game|Component" in args:
-        file, component, _ = identify(args["Patch|Game|Component"])
+        file, _, component = identify(args["Patch|Game|Component"])
         if file:
             args['file'] = file
         if component:
             args['component'] = component
 
     if 'file' in args:
-        subprocess.run([*get_exe(args['component']), args['file'], *args['args']])
+        run_component(args["component"], args["file"], *args["args"])
     elif 'component' in args:
-        subprocess.run([*get_exe(args['component']), *args['args']])
+        run_component(args["component"], *args["args"])
     else:
         run_gui()
 
