@@ -17,7 +17,7 @@ class RandomizeArmorLocations(Toggle):
 
 
 class RandomizeRingLocations(Toggle):
-    """Adds Ring Locations to the pool. (+49 checks/items)"""
+    """Adds Ring Locations to the pool. (+48 checks/items)"""
     display_name ="Randomize Ring Locations"
 
 
@@ -37,7 +37,7 @@ class RandomizeHealthLocations(Toggle):
 
 
 class RandomizeNPCLocations(Toggle):
-    """Adds Friendly NPC Locations to the pool. (Irina, Cornyx, Karla, Orbeck) (+13 checks/items)"""
+    """Adds Friendly NPC Locations to the pool. (Irina, Cornyx, Karla, Orbeck) (+14 checks/items)"""
     display_name ="Randomize NPC Locations"
 
 
@@ -142,7 +142,7 @@ class EnableProgressiveLocationsOption(Toggle):
 
 class EnableDLCOption(Toggle):
     """To use this option, you must own both the ASHES OF ARIANDEL and the RINGED CITY DLC"""
-    display_name = "Add the DLC Items and Locations to the pool (+81 checks/items)"
+    display_name = "Add the DLC Items and Locations to the pool (+92 checks/items)"
 
 
 dark_souls_options: typing.Dict[str, type(Option)] = {
