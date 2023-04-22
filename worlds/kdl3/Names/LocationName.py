@@ -88,10 +88,10 @@ grass_land_3_u1 = "Grass Land 3 - 1-Up (Climb)"  # None
 grass_land_4_u1 = "Grass Land 4 - 1-Up (Gordo)"  # None
 grass_land_6_u1 = "Grass Land 6 - 1-Up (Tower)"  # None
 grass_land_6_u2 = "Grass Land 6 - 1-Up (Falling)"  # None
-ribbon_field_2_u1 = "Ribbon Field 2 - 1-Up (Currents)"  # Kine
-ribbon_field_3_u1 = "Ribbon Field 3 - 1-Up (Cutter/Spark)"  # Cutter or Spark
-ribbon_field_4_u1 = "Ribbon Field 4 - 1-Up (Stone)"  # Stone
-ribbon_field_5_u1 = "Ribbon Field 5 - 1-Up (Currents)"  # Kine, Burning, Stone
+ripple_field_2_u1 = "Ripple Field 2 - 1-Up (Currents)"  # Kine
+ripple_field_3_u1 = "Ripple Field 3 - 1-Up (Cutter/Spark)"  # Cutter or Spark
+ripple_field_4_u1 = "Ripple Field 4 - 1-Up (Stone)"  # Stone
+ripple_field_5_u1 = "Ripple Field 5 - 1-Up (Currents)"  # Kine, Burning, Stone
 sand_canyon_1_u1 = "Sand Canyon 1 - 1-Up (Polof)"  # None
 sand_canyon_2_u1 = "Sand Canyon 2 - 1-Up (Enclave)"  # None
 sand_canyon_4_u1 = "Sand Canyon 4 - 1-Up (Clean)"  # Clean
@@ -99,35 +99,35 @@ sand_canyon_5_u1 = "Sand Canyon 5 - 1-Up (Falling Block)"  # None
 sand_canyon_5_u2 = "Sand Canyon 5 - 1-Up (Ice 1)"  # Ice
 sand_canyon_5_u3 = "Sand Canyon 5 - 1-Up (Ice 2)"  # Ice
 sand_canyon_5_u4 = "Sand Canyon 5 - 1-Up (Ice 3)"  # Ice
-cloudy_park_1_u1 = "Cloudy Park 1 - 1-Up (1)"
-cloudy_park_4_u1 = "Cloudy Park 4 - 1-Up (1)"
-cloudy_park_6_u1 = "Cloudy Park 6 - 1-Up (1)"
-iceberg_5_u1 = "Iceberg 5 - 1-Up (1)"
-iceberg_5_u2 = "Iceberg 5 - 1-Up (2)"
-iceberg_5_u3 = "Iceberg 5 - 1-Up (3)"
-iceberg_6_u1 = "Iceberg 6 - 1-Up (1)"
+cloudy_park_1_u1 = "Cloudy Park 1 - 1-Up (Shotzo)"  # None
+cloudy_park_4_u1 = "Cloudy Park 4 - 1-Up (Windy)"  # Coo
+cloudy_park_6_u1 = "Cloudy Park 6 - 1-Up (Cutter)"  # Cutter
+iceberg_5_u1 = "Iceberg 5 - 1-Up (Boulder)"  # None
+iceberg_5_u2 = "Iceberg 5 - 1-Up (Floor)"  # None
+iceberg_5_u3 = "Iceberg 5 - 1-Up (Peloo)"  # None, just let yourself get eaten by the Peloo
+iceberg_6_u1 = "Iceberg 6 - 1-Up (Middle)"  # None
 
 # Maxim Tomatoes
-grass_land_1_m1 = "Grass Land 1 - Maxim Tomato (Spark)"
-grass_land_3_m1 = "Grass Land 3 - Maxim Tomato (Climb)"
-grass_land_4_m1 = "Grass Land 4 - Maxim Tomato (Zebon Right)"
-grass_land_4_m2 = "Grass Land 4 - Maxim Tomato (Gordo)"
-grass_land_4_m3 = "Grass Land 4 - Maxim Tomato (Cliff)"
-ribbon_field_2_m1 = "Ribbon Field 2 - Maxim Tomato (Currents)"
-ribbon_field_3_m1 = "Ribbon Field 3 - Maxim Tomato (Cove)"
-ribbon_field_4_m1 = "Ribbon Field 4 - Maxim Tomato (Dark)"
-ribbon_field_4_m2 = "Ribbon Field 4 - Maxim Tomato (Stone)"
-ribbon_field_5_m1 = "Ribbon Field 5 - Maxim Tomato (Exit)"
-ribbon_field_5_m2 = "Ribbon Field 5 - Maxim Tomato (Currents)"
-sand_canyon_2_m1 = "Sand Canyon 2 - Maxim Tomato (Underwater)"
-sand_canyon_4_m1 = "Sand Canyon 4 - Maxim Tomato (Pacto)"
-sand_canyon_4_m2 = "Sand Canyon 4 - Maxim Tomato (Needle)"
-sand_canyon_5_m1 = "Sand Canyon 5 - Maxim Tomato (Pit)"
-cloudy_park_1_m1 = "Cloudy Park 1 - Maxim Tomato (1)"
-cloudy_park_4_m1 = "Cloudy Park 4 - Maxim Tomato (1)"
-cloudy_park_5_m1 = "Cloudy Park 5 - Maxim Tomato (1)"
-iceberg_3_m1 = "Iceberg 3 - Maxim Tomato (1)"
-iceberg_6_m1 = "Iceberg 6 - Maxim Tomato (1)"
+grass_land_1_m1 = "Grass Land 1 - Maxim Tomato (Spark)"  # Spark
+grass_land_3_m1 = "Grass Land 3 - Maxim Tomato (Climb)"  # None
+grass_land_4_m1 = "Grass Land 4 - Maxim Tomato (Zebon Right)"  # None
+grass_land_4_m2 = "Grass Land 4 - Maxim Tomato (Gordo)"  # None
+grass_land_4_m3 = "Grass Land 4 - Maxim Tomato (Cliff)"  # None
+ripple_field_2_m1 = "Ripple Field 2 - Maxim Tomato (Currents)"  # Kine
+ripple_field_3_m1 = "Ripple Field 3 - Maxim Tomato (Cove)"  # None
+ripple_field_4_m1 = "Ripple Field 4 - Maxim Tomato (Dark)"  # None (maybe Spark?)
+ripple_field_4_m2 = "Ripple Field 4 - Maxim Tomato (Stone)"  # Stone
+ripple_field_5_m1 = "Ripple Field 5 - Maxim Tomato (Exit)"  # Kine
+ripple_field_5_m2 = "Ripple Field 5 - Maxim Tomato (Currents)"  # Kine, Burning, Stone
+sand_canyon_2_m1 = "Sand Canyon 2 - Maxim Tomato (Underwater)"  # None
+sand_canyon_4_m1 = "Sand Canyon 4 - Maxim Tomato (Pacto)"  # None
+sand_canyon_4_m2 = "Sand Canyon 4 - Maxim Tomato (Needle)"  # Needle
+sand_canyon_5_m1 = "Sand Canyon 5 - Maxim Tomato (Pit)"  # None
+cloudy_park_1_m1 = "Cloudy Park 1 - Maxim Tomato (Mariel)"  # None
+cloudy_park_4_m1 = "Cloudy Park 4 - Maxim Tomato (Windy)"  # Coo
+cloudy_park_5_m1 = "Cloudy Park 5 - Maxim Tomato (Pillars)"  # None
+iceberg_3_m1 = "Iceberg 3 - Maxim Tomato (Ceiling)"  # None
+iceberg_6_m1 = "Iceberg 6 - Maxim Tomato (Left)"  # None
 
 # Level Names
 level_names = {
@@ -147,6 +147,7 @@ boss_names = {
         "King Dedede": 0x770204
     }
 
+# Goal Mapping
 goals = {
     0: hyper_zone,
     1: boss_butch,

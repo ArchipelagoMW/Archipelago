@@ -2,7 +2,7 @@ from BaseClasses import Tutorial, ItemClassification, MultiWorld
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule
 from .Items import item_table, item_names, copy_ability_table, animal_friend_table, filler_item_weights, KDL3Item
-from .Locations import location_table, KDL3Location, stage_locations, heart_star_locations
+from .Locations import location_table, KDL3Location, level_consumables, consumable_locations
 from .Regions import create_levels
 from .Options import kdl3_options
 from .Names import LocationName
@@ -20,14 +20,14 @@ class KDL3WebWorld(WebWorld):
     theme = "partyTime"
     tutorials = [
 
-        #Tutorial(
+        # Tutorial(
         #    "Multiworld Setup Guide",
         #    "A guide to setting up the Kirby's Dream Land 3 randomizer connected to an Archipelago Multiworld.",
         #    "English",
         #    "setup_en.md",
         #    "setup/en",
         #    ["Silvris"]
-        #)
+        # )
     ]
 
 
@@ -77,9 +77,11 @@ class KDL3World(World):
         itempool.extend([self.create_item(name) for name in copy_ability_table])
         itempool.extend([self.create_item(name) for name in animal_friend_table])
         required_percentage = self.multiworld.heart_stars_required[self.player].value / 100.0
-        remaining_items = len(location_table) - len(itempool)
+        remaining_items = (len(location_table) if self.multiworld.consumables[self.player]
+                           else len(location_table) - len(consumable_locations)) - len(itempool)
         total_heart_stars = self.multiworld.total_heart_stars[self.player].value
-        required_heart_stars = max(math.floor(total_heart_stars * required_percentage), 1)  # ensure at least 1 heart star required
+        required_heart_stars = max(math.floor(total_heart_stars * required_percentage),
+                                   1)  # ensure at least 1 heart star required
         filler_items = total_heart_stars - required_heart_stars
         filler_amount = math.floor(filler_items * (self.multiworld.filler_percentage[self.player].value / 100.0))
         nonrequired_heart_stars = filler_items - filler_amount
@@ -105,25 +107,41 @@ class KDL3World(World):
             for stage in range(len(self.player_levels[self.player][level])):
                 if stage != 6:
                     set_rule(
-                        self.multiworld.get_location(stage_locations[self.player_levels[self.player][level][stage]],
+                        self.multiworld.get_location(location_table[self.player_levels[self.player][level][stage]],
                                                      self.player),
                         lambda state, level=level, stage=stage: True if level == 1 and stage == 0
-                        else state.can_reach(stage_locations[self.player_levels[self.player][level - 1][5]], "Location",
+                        else state.can_reach(location_table[self.player_levels[self.player][level - 1][5]], "Location",
                                              self.player)
                         if stage == 0
                         else state.can_reach(
-                            stage_locations[self.player_levels[self.player][level][stage - 1]], "Location",
+                            location_table[self.player_levels[self.player][level][stage - 1]], "Location",
                             self.player))
                     set_rule(
                         self.multiworld.get_location(
-                            heart_star_locations[self.player_levels[self.player][level][stage] + 0x100], self.player),
+                            location_table[self.player_levels[self.player][level][stage] + 0x100], self.player),
                         lambda state, level=level, stage=stage: True if level == 1 and stage == 0
-                        else state.can_reach(stage_locations[self.player_levels[self.player][level - 1][5]], "Location",
+                        else state.can_reach(location_table[self.player_levels[self.player][level - 1][5]], "Location",
                                              self.player)
                         if stage == 0
                         else state.can_reach(
-                            stage_locations[self.player_levels[self.player][level][stage - 1]], "Location",
+                            location_table[self.player_levels[self.player][level][stage - 1]], "Location",
                             self.player))
+                    if self.multiworld.consumables[self.player]:
+                        stage_idx = self.player_levels[self.player][level][stage] & 0xFF
+                        if stage_idx in level_consumables:
+                            for consumable in level_consumables[stage_idx]:
+                                set_rule(
+                                    self.multiworld.get_location(
+                                        location_table[0x770300 + consumable],
+                                        self.player),
+                                    lambda state, level=level, stage=stage: True if level == 1 and stage == 0
+                                    else state.can_reach(location_table[self.player_levels[self.player][level - 1][5]],
+                                                         "Location",
+                                                         self.player)
+                                    if stage == 0
+                                    else state.can_reach(
+                                        location_table[self.player_levels[self.player][level][stage - 1]], "Location",
+                                        self.player))
 
         # Level 1
         add_rule(self.multiworld.get_location(LocationName.grass_land_muchi, self.player),
@@ -133,7 +151,7 @@ class KDL3World(World):
         add_rule(self.multiworld.get_location(LocationName.grass_land_mine, self.player),
                  lambda state: state.has("Kine", self.player))
         add_rule(self.multiworld.get_entrance("To Level 2", self.player),
-                 lambda state: state.can_reach(stage_locations[self.player_levels[self.player][1][5]], "Location",
+                 lambda state: state.can_reach(location_table[self.player_levels[self.player][1][5]], "Location",
                                                self.player))
         # Level 2
         add_rule(self.multiworld.get_location(LocationName.ripple_field_5, self.player),
@@ -148,7 +166,7 @@ class KDL3World(World):
                  lambda state: state.has("Pitch", self.player) and state.has("Kine", self.player)
                                and state.has("Burning", self.player) and state.has("Stone", self.player))
         add_rule(self.multiworld.get_entrance("To Level 3", self.player),
-                 lambda state: state.can_reach(stage_locations[self.player_levels[self.player][2][5]], "Location",
+                 lambda state: state.can_reach(location_table[self.player_levels[self.player][2][5]], "Location",
                                                self.player))
 
         # Level 3
@@ -166,7 +184,7 @@ class KDL3World(World):
                                and (state.has("Ice", self.player) or state.has("Needle", self.player))
                  )
         add_rule(self.multiworld.get_entrance("To Level 4", self.player),
-                 lambda state: state.can_reach(stage_locations[self.player_levels[self.player][3][5]], "Location",
+                 lambda state: state.can_reach(location_table[self.player_levels[self.player][3][5]], "Location",
                                                self.player))
 
         # Level 4
@@ -179,7 +197,7 @@ class KDL3World(World):
         add_rule(self.multiworld.get_location(LocationName.cloudy_park_pick, self.player),
                  lambda state: state.has("Rick", self.player))
         add_rule(self.multiworld.get_entrance("To Level 5", self.player),
-                 lambda state: state.can_reach(stage_locations[self.player_levels[self.player][4][5]], "Location",
+                 lambda state: state.can_reach(location_table[self.player_levels[self.player][4][5]], "Location",
                                                self.player))
 
         # Level 5
@@ -190,7 +208,8 @@ class KDL3World(World):
         add_rule(self.multiworld.get_location(LocationName.iceberg_samus, self.player),
                  lambda state: state.has("Ice", self.player))
         add_rule(self.multiworld.get_location(LocationName.iceberg_name, self.player),
-                 lambda state: state.has("Coo", self.player) and state.has("Burning", self.player))
+                 lambda state: state.has("Coo", self.player) and state.has("Burning", self.player)
+                               and state.has("ChuChu", self.player))
         add_rule(self.multiworld.get_location(LocationName.iceberg_shiro, self.player),
                  lambda state: state.has("Nago", self.player) and
                                (state.can_reach(LocationName.grass_land_1, "Location", self.player)
@@ -210,36 +229,89 @@ class KDL3World(World):
         add_rule(self.multiworld.get_location(LocationName.iceberg_angel, self.player),
                  lambda state: state.count_group("Copy Ability", self.player))  # easier than writing out 8 ands
 
+        # Consumables
+        if self.multiworld.consumables[self.player]:
+            add_rule(self.multiworld.get_location(LocationName.grass_land_1_u1, self.player),
+                     lambda state: state.has("Parasol", self.player))
+            add_rule(self.multiworld.get_location(LocationName.grass_land_1_m1, self.player),
+                     lambda state: state.has("Spark", self.player))
+            add_rule(self.multiworld.get_location(LocationName.grass_land_2_u1, self.player),
+                     lambda state: state.has("Needle", self.player))
+            add_rule(self.multiworld.get_location(LocationName.ripple_field_2_u1, self.player),
+                     lambda state: state.has("Kine", self.player))
+            add_rule(self.multiworld.get_location(LocationName.ripple_field_2_m1, self.player),
+                     lambda state: state.has("Kine", self.player))
+            add_rule(self.multiworld.get_location(LocationName.ripple_field_3_u1, self.player),
+                     lambda state: state.has("Cutter", self.player) or state.has("Spark", self.player))
+            add_rule(self.multiworld.get_location(LocationName.ripple_field_4_u1, self.player),
+                     lambda state: state.has("Stone", self.player))
+            add_rule(self.multiworld.get_location(LocationName.ripple_field_4_m2, self.player),
+                     lambda state: state.has("Stone", self.player))
+            add_rule(self.multiworld.get_location(LocationName.ripple_field_5_m1, self.player),
+                     lambda state: state.has("Kine", self.player))
+            add_rule(self.multiworld.get_location(LocationName.ripple_field_5_u1, self.player),
+                     lambda state: state.has("Kine", self.player)
+                                   and state.has("Burning", self.player) and state.has("Stone", self.player))
+            add_rule(self.multiworld.get_location(LocationName.ripple_field_5_m2, self.player),
+                     lambda state: state.has("Kine", self.player)
+                                   and state.has("Burning", self.player) and state.has("Stone", self.player))
+            add_rule(self.multiworld.get_location(LocationName.sand_canyon_4_u1, self.player),
+                     lambda state: state.has("Clean", self.player))
+            add_rule(self.multiworld.get_location(LocationName.sand_canyon_4_m2, self.player),
+                     lambda state: state.has("Needle", self.player))
+            add_rule(self.multiworld.get_location(LocationName.sand_canyon_5_u2, self.player),
+                     lambda state: state.has("Ice", self.player) and state.has("Rick", self.player))
+            add_rule(self.multiworld.get_location(LocationName.sand_canyon_5_u3, self.player),
+                     lambda state: state.has("Ice", self.player) and state.has("Rick", self.player))
+            add_rule(self.multiworld.get_location(LocationName.sand_canyon_5_u4, self.player),
+                     lambda state: state.has("Ice", self.player) and state.has("Rick", self.player))
+            add_rule(self.multiworld.get_location(LocationName.cloudy_park_4_u1, self.player),
+                     lambda state: state.has("Coo", self.player))
+            add_rule(self.multiworld.get_location(LocationName.cloudy_park_4_m1, self.player),
+                     lambda state: state.has("Coo", self.player))
+            add_rule(self.multiworld.get_location(LocationName.cloudy_park_6_u1, self.player),
+                     lambda state: state.has("Cutter", self.player))
+
         set_rule(self.multiworld.get_location("Level 1 Boss", self.player),
                  lambda state: state.has("Heart Star", self.player, self.boss_requirements[self.player][0])
-                               and state.can_reach(stage_locations[self.player_levels[self.player][1][5]], "Location", self.player))
+                               and state.can_reach(location_table[self.player_levels[self.player][1][5]], "Location",
+                                                   self.player))
         set_rule(self.multiworld.get_location(LocationName.grass_land_whispy, self.player),
                  lambda state: state.has("Heart Star", self.player, self.boss_requirements[self.player][0])
-                               and state.can_reach(stage_locations[self.player_levels[self.player][1][5]], "Location", self.player))
+                               and state.can_reach(location_table[self.player_levels[self.player][1][5]], "Location",
+                                                   self.player))
         set_rule(self.multiworld.get_location("Level 2 Boss", self.player),
                  lambda state: state.has("Heart Star", self.player, self.boss_requirements[self.player][1])
-                               and state.can_reach(stage_locations[self.player_levels[self.player][2][5]], "Location", self.player))
+                               and state.can_reach(location_table[self.player_levels[self.player][2][5]], "Location",
+                                                   self.player))
         set_rule(self.multiworld.get_location(LocationName.ripple_field_acro, self.player),
                  lambda state: state.has("Heart Star", self.player, self.boss_requirements[self.player][1])
-                               and state.can_reach(stage_locations[self.player_levels[self.player][2][5]], "Location", self.player))
+                               and state.can_reach(location_table[self.player_levels[self.player][2][5]], "Location",
+                                                   self.player))
         set_rule(self.multiworld.get_location("Level 3 Boss", self.player),
                  lambda state: state.has("Heart Star", self.player, self.boss_requirements[self.player][2])
-                               and state.can_reach(stage_locations[self.player_levels[self.player][3][5]], "Location", self.player))
+                               and state.can_reach(location_table[self.player_levels[self.player][3][5]], "Location",
+                                                   self.player))
         set_rule(self.multiworld.get_location(LocationName.sand_canyon_poncon, self.player),
                  lambda state: state.has("Heart Star", self.player, self.boss_requirements[self.player][2])
-                               and state.can_reach(stage_locations[self.player_levels[self.player][3][5]], "Location", self.player))
+                               and state.can_reach(location_table[self.player_levels[self.player][3][5]], "Location",
+                                                   self.player))
         set_rule(self.multiworld.get_location("Level 4 Boss", self.player),
                  lambda state: state.has("Heart Star", self.player, self.boss_requirements[self.player][3])
-                               and state.can_reach(stage_locations[self.player_levels[self.player][4][5]], "Location", self.player))
+                               and state.can_reach(location_table[self.player_levels[self.player][4][5]], "Location",
+                                                   self.player))
         set_rule(self.multiworld.get_location(LocationName.cloudy_park_ado, self.player),
                  lambda state: state.has("Heart Star", self.player, self.boss_requirements[self.player][3])
-                               and state.can_reach(stage_locations[self.player_levels[self.player][4][5]], "Location", self.player))
+                               and state.can_reach(location_table[self.player_levels[self.player][4][5]], "Location",
+                                                   self.player))
         set_rule(self.multiworld.get_location("Level 5 Boss", self.player),
                  lambda state: state.has("Heart Star", self.player, self.boss_requirements[self.player][4])
-                               and state.can_reach(stage_locations[self.player_levels[self.player][5][5]], "Location", self.player))
+                               and state.can_reach(location_table[self.player_levels[self.player][5][5]], "Location",
+                                                   self.player))
         set_rule(self.multiworld.get_location(LocationName.iceberg_dedede, self.player),
                  lambda state: state.has("Heart Star", self.player, self.boss_requirements[self.player][4])
-                               and state.can_reach(stage_locations[self.player_levels[self.player][5][5]], "Location", self.player))
+                               and state.can_reach(location_table[self.player_levels[self.player][5][5]], "Location",
+                                                   self.player))
 
         set_rule(self.multiworld.get_entrance("To Level 6", self.player),
                  lambda state: state.has("Heart Star", self.player, self.required_heart_stars[self.player]))
@@ -313,5 +385,5 @@ class KDL3World(World):
                     if stage & 0x200 == 0:
                         level_hint_data[stage + 0x100] = regions[level] + f" {i + 1}"
             for i in range(5):
-                level_hint_data[0x770200 + i] = regions[i+1] + " Boss"
+                level_hint_data[0x770200 + i] = regions[i + 1] + " Boss"
             hint_data[self.player] = level_hint_data

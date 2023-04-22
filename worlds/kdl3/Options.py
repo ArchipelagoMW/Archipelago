@@ -115,6 +115,13 @@ class FillerPercentage(Range):
     default = 50
 
 
+class ConsumableChecks(Toggle):
+    """
+    When enabled, adds all 1-Ups and Maxim Tomatoes as possible locations.
+    """
+    display_name = "Consumable-sanity"
+
+
 class KirbyFlavorPreset(Choice):
     """
     The color of Kirby, from a list of presets.
@@ -178,6 +185,7 @@ kdl3_options: typing.Dict[str, type(Option)] = {
     "stage_shuffle": LevelShuffle,
     "boss_shuffle": BossShuffle,
     "boss_requirement_random": BossRequirementRandom,
+    "consumables": ConsumableChecks,
     "kirby_flavor_preset": KirbyFlavorPreset,
     "kirby_flavor": KirbyFlavor,
     "gooey_flavor_preset": GooeyFlavorPreset,

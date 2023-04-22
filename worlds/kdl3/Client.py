@@ -40,6 +40,54 @@ KDL3_ANIMAL_FRIENDS = SRAM_1_START + 0x8000
 KDL3_ABILITY_ARRAY = SRAM_1_START + 0x8020
 KDL3_RECV_COUNT = SRAM_1_START + 0x8050
 KDL3_HEART_STAR_COUNT = SRAM_1_START + 0x8070
+KDL3_CONSUMABLES = SRAM_1_START + 0xA000
+
+consumable_addrs = {
+    0: 14,
+    1: 15,
+    2: 84,
+    3: 138,
+    4: 139,
+    5: 204,
+    6: 214,
+    7: 215,
+    8: 224,
+    9: 330,
+    10: 353,
+    11: 458,
+    12: 459,
+    13: 522,
+    14: 525,
+    15: 605,
+    16: 606,
+    17: 630,
+    18: 671,
+    19: 672,
+    20: 693,
+    21: 791,
+    22: 851,
+    23: 883,
+    24: 971,
+    25: 985,
+    26: 986,
+    27: 1024,
+    28: 1035,
+    29: 1036,
+    30: 1038,
+    31: 1039,
+    32: 1170,
+    33: 1171,
+    34: 1377,
+    35: 1378,
+    36: 1413,
+    37: 1494,
+    38: 1666,
+    39: 1808,
+    40: 1809,
+    41: 1816,
+    42: 1856,
+    43: 1857,
+}
 
 
 class KDL3SNIClient(SNIClient):
@@ -130,8 +178,8 @@ class KDL3SNIClient(SNIClient):
         if boss_butch_status[0] == 0xFF:
             return  # save file is not created, ignore
         if (goal[0] == 0x00 and boss_butch_status[0] == 0x01) \
-                or (goal[0] == 0x01 and boss_butch_status[0] == 0x03)\
-                or (goal[0] == 0x02 and mg5_status[0] == 0x03)\
+                or (goal[0] == 0x01 and boss_butch_status[0] == 0x03) \
+                or (goal[0] == 0x02 and mg5_status[0] == 0x03) \
                 or (goal[0] == 0x03 and jumping_status[0] == 0x03):
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
@@ -198,13 +246,21 @@ class KDL3SNIClient(SNIClient):
             start_ind = i * 7
             for j in range(1, 7):
                 level_ind = start_ind + j - 1
-                loc_id = 0x770100 + (6*i) + j
+                loc_id = 0x770100 + (6 * i) + j
                 if heart_stars[level_ind] and loc_id not in ctx.checked_locations:
                     new_checks.append(loc_id)
                 elif not heart_stars[level_ind] and loc_id in ctx.checked_locations:
                     # only handle collected heart stars
                     snes_buffered_write(ctx, KDL3_HEART_STARS + level_ind, bytes([0x01]))
         await snes_flush_writes(ctx)
+        # consumable status
+        consumables = await snes_read(ctx, KDL3_CONSUMABLES, 1920)
+        for consumable in consumable_addrs:
+            # TODO see if this can be sped up in any way
+            if consumables[consumable_addrs[consumable]] == 0x01:
+                loc_id = 0x770300 + consumable
+                if loc_id not in ctx.checked_locations:
+                    new_checks.append(loc_id)
         # boss status
         boss_flag_bytes = await snes_read(ctx, KDL3_BOSS_STATUS, 2)
         boss_flag = unpack("H", boss_flag_bytes)[0]

@@ -1,7 +1,7 @@
 import typing
 from BaseClasses import Entrance, Region
 from worlds.AutoWorld import World
-from .Locations import KDL3Location, location_table
+from .Locations import KDL3Location, location_table, level_consumables
 from .Names import LocationName
 from .Options import BossShuffle
 if typing.TYPE_CHECKING:
@@ -150,6 +150,15 @@ def create_levels(world: World) -> None:
                 heart_star = stage + 0x100
                 levels[level].locations.append(KDL3Location(world.player, location_table[heart_star],
                                                             heart_star, levels[level]))
+                if world.multiworld.consumables[world.player]:
+                    stage_idx = stage & 0xFF
+                    if stage_idx in level_consumables:
+                        for consumable in level_consumables[stage_idx]:
+                            loc_id = 0x770300 + consumable
+                            levels[level].locations.append(KDL3Location(world.player,
+                                                                        location_table[loc_id],
+                                                                        loc_id, levels[level]
+                                                                        ))
     level1.locations.append(KDL3Location(world.player, LocationName.grass_land_whispy, 0x770200, level1))
     level2.locations.append(KDL3Location(world.player, LocationName.ripple_field_acro, 0x770201, level2))
     level3.locations.append(KDL3Location(world.player, LocationName.sand_canyon_poncon, 0x770202, level3))
