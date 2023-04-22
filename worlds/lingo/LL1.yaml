@@ -557,7 +557,7 @@
       Crossroads:
         room: Lost/Lost Area
         door: Exit
-      Roof:
+      Suits Area:
         door: Exit
     panels:
       AMEN:
@@ -577,6 +577,15 @@
         panels:
           - AMEN
           - NAME
+  Suits Area:
+    entrances:
+      Amen/Name Area:
+        room: Amen/Name Area
+        door: Exit
+      Roof: True
+    paintings:
+      - id: west_afar
+        orientation: south
   The Tenacious:
     entrances:
       Hub Room:
@@ -1298,6 +1307,8 @@
         orientation: south
       - id: hi_solved_painting2
         orientation: south
+      - id: east_afar
+        orientation: north
   Orange Tower Sixth Floor:
     entrances:
       Orange Tower Fifth Floor:
@@ -1999,6 +2010,8 @@
     paintings:
       - id: pencil_painting2
         orientation: west
+      - id: north_missing2
+        orientation: north
   The Bold:
     entrances:
       Outside The Bold:
@@ -2488,6 +2501,7 @@
           room: Outside The Initiated
           door: Entrance
         check: True
+        colors: gray
     doors:
       Shortcut to The Steady:
         id: Rock Room Doors/Door_hint
@@ -3060,6 +3074,8 @@
       - id: symmetry_painting_a_3
         orientation: west
         exit_only: True
+      - id: symmetry_painting_b_3
+        disable: True
   The Wondrous (Chandelier):
     entrances:
       The Wondrous (Bookcase): True
@@ -3070,6 +3086,8 @@
     paintings:
       - id: symmetry_painting_a_5
         orientation: east
+      - id: symmetry_painting_a_5
+        disable: True
   The Wondrous (Window):
     entrances:
       The Wondrous (Bookcase): True
@@ -3081,6 +3099,8 @@
       - id: symmetry_painting_b_4
         orientation: north
         exit_only: True
+      - id: symmetry_painting_a_4
+        disable: True
   The Wondrous (Table):
     entrances:
       The Wondrous (Doorknob):
@@ -3283,6 +3303,9 @@
         id: Open Areas/Panel_undistracted
         check: True
         exclude_reduce: True
+    paintings:
+      - id: south_afar
+        orientation: south
   Wanderlust Tutorial:
     entrances:
       Orange Tower First Floor:
@@ -3747,6 +3770,8 @@
   Outside The Scientific:
     entrances:
       Roof: True
+      The Scientific:
+        door: Scientific Entrance
     panels:
       OPEN:
         id: Chemistry Room/Panel_open
