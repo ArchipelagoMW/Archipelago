@@ -1,6 +1,6 @@
 from BaseClasses import ItemClassification, Item
 
-fillers = {"Cure Potion": 61, "Heal Potion": 52, "Refresher": 2, "Seed": 17, "Bomb Refill": 19,
+fillers = {"Cure Potion": 61, "Heal Potion": 52, "Refresher": 17, "Seed": 2, "Bomb Refill": 19,
            "Projectile Refill": 50}
 
 class ItemData:
