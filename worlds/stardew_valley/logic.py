@@ -103,7 +103,7 @@ class StardewLogic:
     item_rules: Dict[str, StardewRule] = field(default_factory=dict)
     tree_fruit_rules: Dict[str, StardewRule] = field(default_factory=dict)
     seed_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    crops_rules: Dict[str, StardewRule] = field(default_factory=dict)
+    crop_rules: Dict[str, StardewRule] = field(default_factory=dict)
     fish_rules: Dict[str, StardewRule] = field(default_factory=dict)
     museum_rules: Dict[str, StardewRule] = field(default_factory=dict)
     building_rules: Dict[str, StardewRule] = field(default_factory=dict)
@@ -127,8 +127,8 @@ class StardewLogic:
         })
 
         self.seed_rules.update({seed.name: self.can_buy_seed(seed) for seed in all_purchasable_seeds})
-        self.crops_rules.update({crop.name: self.can_grow_crop(crop) for crop in all_crops})
-        self.crops_rules.update({
+        self.crop_rules.update({crop.name: self.can_grow_crop(crop) for crop in all_crops})
+        self.crop_rules.update({
             "Coffee Bean": (self.has_season("Spring") | self.has_season("Summer")) & self.has_traveling_merchant(),
         })
 
@@ -422,7 +422,7 @@ class StardewLogic:
         self.item_rules.update(self.museum_rules)
         self.item_rules.update(self.tree_fruit_rules)
         self.item_rules.update(self.seed_rules)
-        self.item_rules.update(self.crops_rules)
+        self.item_rules.update(self.crop_rules)
 
         self.building_rules.update({
             "Barn": self.can_spend_money(6000) & self.has(["Wood", "Stone"]),
@@ -795,6 +795,10 @@ class StardewLogic:
         if self.options[options.Friendsanity] == options.Friendsanity.option_none:
             return self.can_earn_relationship(npc, hearts)
         if npc not in all_villagers_by_name:
+            if npc == "Pet":
+                if self.options[options.Friendsanity] == options.Friendsanity.option_bachelors:
+                    return self.can_befriend_pet(hearts)
+                return self.received(f"Pet: 1 <3", hearts)
             if npc == "Any" or npc == "Bachelor":
                 possible_friends = []
                 for name in all_villagers_by_name:
@@ -806,6 +810,11 @@ class StardewLogic:
                 for name in all_villagers_by_name:
                     mandatory_friends.append(self.has_relationship(name, hearts))
                 return And(mandatory_friends)
+            if npc.isnumeric():
+                possible_friends = []
+                for name in all_villagers_by_name:
+                    possible_friends.append(self.has_relationship(name, hearts))
+                return Count(int(npc), possible_friends)
             return self.can_earn_relationship(npc, hearts)
 
         villager = all_villagers_by_name[npc]
@@ -888,9 +897,9 @@ class StardewLogic:
                                # Catching every fish not expected
                                # Shipping every item not expected
                                self.can_get_married() & self.has_house(2),
-                               self.has_lived_months(3),  # 5 Friends (TODO)
-                               self.has_lived_months(4),  # 10 friends (TODO)
-                               self.can_befriend_pet(5),  # Max Pet
+                               self.has_relationship("5", 8),  # 5 Friends
+                               self.has_relationship("10", 8),  # 10 friends
+                               self.has_relationship("Pet", 5),  # Max Pet
                                self.can_complete_community_center(),  # Community Center Completion
                                self.can_complete_community_center(),  # CC Ceremony first point
                                self.can_complete_community_center(),  # CC Ceremony second point
@@ -940,7 +949,11 @@ class StardewLogic:
         return region_rule & geodes_rule  # & monster_rule & extra_rule
 
     def can_complete_museum(self) -> StardewRule:
-        rules = [self.can_mine_perfectly_in_the_skull_cavern(), self.received("Traveling Merchant Metal Detector", 4)]
+        rules = [self.can_mine_perfectly_in_the_skull_cavern()]
+
+        if self.options[options.Museumsanity] != options.Museumsanity.option_none:
+            rules.append(self.received("Traveling Merchant Metal Detector", 4))
+
         for donation in all_museum_items:
             rules.append(self.can_find_museum_item(donation))
         return And(rules)

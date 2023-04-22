@@ -332,7 +332,7 @@ async def track_locations(ctx, roomid, roomdata) -> bool:
         location = ctx.location_names[location_id]
         snes_logger.info(
             f'New Check: {location} ' +
-            f'({len(ctx.checked_locations + 1 if ctx.checked_locations else ctx.locations_checked)}/' +
+            f'({len(ctx.checked_locations) + 1 if ctx.checked_locations else len(ctx.locations_checked)}/' +
             f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
 
     try:
