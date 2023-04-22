@@ -478,17 +478,19 @@
         id:
           - Shuffle Room Area Doors/Door_words_shuffle_3
           - Shuffle Room Area Doors/Door_words_shuffle_4
+        group: Crossroads Doors
         panels:
           - WORDS
           - SWORD
       Eye Wall:
         id: Shuffle Room Area Doors/Door_behind
-        group: Access to The Wondrous
+        group: Crossroads Doors
         panels:
           - BEND HI
       Hollow Hallway:
         id: Shuffle Room Area Doors/Door_crossroads6
         skip_location: True
+        group: Crossroads Doors
         panels:
           - BEND HI
       Shortcut to Roof:
@@ -2956,7 +2958,7 @@
     doors:
       Exit:
         id: Count Up Room Area Doors/Door_near_near
-        group: Access to The Wondrous
+        group: Crossroads Doors
         panels:
           - NEAR
     paintings:
@@ -2986,7 +2988,6 @@
       Wondrous Entrance:
         id: Red Blue Purple Room Area Doors/Door_wonderland
         item_name: The Wondrous - Entrance
-        group: Access to The Wondrous
         panels:
           - SHRINK
   The Wondrous (Doorknob):
