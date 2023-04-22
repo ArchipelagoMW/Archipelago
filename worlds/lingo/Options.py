@@ -1,6 +1,6 @@
 from typing import Dict, Union
 from BaseClasses import MultiWorld
-from Options import Toggle, Option, Choice, DefaultOnToggle
+from Options import Toggle, Option, Choice, DefaultOnToggle, Range
 
 
 class ShuffleDoors(Choice):
@@ -54,6 +54,14 @@ class VictoryCondition(Choice):
     option_the_master = 1
 
 
+class TrapPercentage(Range):
+    """Replaces junk items with traps, at the specified rate."""
+    display_name = "Trap Percentage"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
 class DeathLink(Toggle):
     """If on: Whenever another player on death link dies, you will be returned to the starting room."""
     display_name = "Death Link"
@@ -67,6 +75,7 @@ lingo_options: Dict[str, type] = {
     "shuffle_panels": ShufflePanels,
     "shuffle_paintings": ShufflePaintings,
     "victory_condition": VictoryCondition,
+    "trap_percentage": TrapPercentage,
     "death_link": DeathLink
 }
 

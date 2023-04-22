@@ -10,6 +10,7 @@ class ItemData(NamedTuple):
     """
     code: Optional[int]
     progression: bool
+    trap: bool
     mode: Optional[str]
     event: bool
     door_ids: List[str]
@@ -50,10 +51,10 @@ class StaticLingoItems:
 
     ALL_ITEM_TABLE: Dict[str, ItemData] = {}
 
-    def create_item(self, name: str, event: bool, progression: bool, mode: Optional[str] = None,
+    def create_item(self, name: str, event: bool, progression: bool, trap: bool, mode: Optional[str] = None,
                     door_ids: Optional[List[str]] = None, painting_ids: Optional[List[str]] = None):
         new_id = None if event is True else self.base_id + len(self.ALL_ITEM_TABLE)
-        new_item = ItemData(new_id, progression, mode, event, [] if door_ids is None else door_ids,
+        new_item = ItemData(new_id, progression, trap, mode, event, [] if door_ids is None else door_ids,
                             [] if painting_ids is None else painting_ids)
         self.ALL_ITEM_TABLE[name] = new_item
 
@@ -61,7 +62,7 @@ class StaticLingoItems:
         self.base_id = base_id
 
         for color in ["Black", "Red", "Blue", "Yellow", "Green", "Orange", "Gray", "Brown", "Purple"]:
-            self.create_item(color, False, True, "colors")
+            self.create_item(color, False, True, False, "colors")
 
         door_groups: Dict[str, List[str]] = {}
         for room_name, doors in StaticLingoLogic.DOORS_BY_ROOM.items():
@@ -75,10 +76,12 @@ class StaticLingoItems:
                         door_mode = "complex door"
                         door_groups.setdefault(door.group, []).extend(door.door_ids)
 
-                    self.create_item(door.item_name, False, True, door_mode, door.door_ids, door.painting_ids)
+                    self.create_item(door.item_name, False, True, False, door_mode, door.door_ids, door.painting_ids)
 
         for group, group_door_ids in door_groups.items():
-            self.create_item(group, False, True, "door group", group_door_ids, [])
+            self.create_item(group, False, True, False, "door group", group_door_ids, [])
 
-        self.create_item("Progressive Orange Tower", False, True, "special")
-        self.create_item("Nothing", False, False)
+        self.create_item("Progressive Orange Tower", False, True, False, "special")
+        self.create_item("Nothing", False, False, False)
+        self.create_item("Slowness Trap", False, False, True)
+        self.create_item("Iceland Trap", False, False, True)

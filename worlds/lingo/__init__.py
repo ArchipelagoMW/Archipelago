@@ -12,6 +12,7 @@ from .Options import lingo_options, get_option_value
 from ..generic.Rules import set_rule
 from .rules import LingoLogic, set_rules
 from .player_logic import LingoPlayerLogic
+from math import floor
 
 
 class LingoWebWorld(WebWorld):
@@ -149,8 +150,24 @@ class LingoWorld(World):
             location_obj = self.multiworld.get_location(location, self.player)
             location_obj.place_locked_item(event_item)
 
-        while len(pool) < len(self.player_logic.REAL_LOCATIONS):
-            pool.append(self.create_item("Nothing"))
+        item_difference = len(self.player_logic.REAL_LOCATIONS) - len(pool)
+        if item_difference > 0:
+            trap_percentage = get_option_value(self.multiworld, self.player, "trap_percentage")
+            traps = floor(item_difference * trap_percentage / 100.0)
+            non_traps = item_difference - traps
+
+            for i in range(0, non_traps):
+                pool.append(self.create_item("Nothing"))
+
+            if traps > 0:
+                slowness = floor(traps * 0.8)
+                iceland = traps - slowness
+
+                for i in range(0, slowness):
+                    pool.append(self.create_item("Slowness Trap"))
+
+                for i in range(0, iceland):
+                    pool.append(self.create_item("Iceland Trap"))
 
         self.multiworld.itempool += pool
 
@@ -159,6 +176,8 @@ class LingoWorld(World):
 
         if item.progression:
             classification = ItemClassification.progression
+        elif item.trap:
+            classification = ItemClassification.trap
         else:
             classification = ItemClassification.filler
 
