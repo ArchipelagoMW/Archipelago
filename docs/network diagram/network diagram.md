@@ -75,6 +75,18 @@ flowchart LR
     end
     SNI <-- Various, depending on SNES device --> DK3
 
+    %% Super Mario World
+    subgraph Super Mario World
+        SMW[SNES]
+    end
+    SNI <-- Various, depending on SNES device --> SMW
+
+    %% Lufia II Ancient Cave
+    subgraph Lufia II Ancient Cave
+        L2AC[SNES]
+    end
+    SNI <-- Various, depending on SNES device --> L2AC
+
     %% Native Clients or Games
     %% Games or clients which compile to native or which the client is integrated in the game.
     subgraph "Native"

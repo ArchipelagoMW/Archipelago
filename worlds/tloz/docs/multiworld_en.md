@@ -7,6 +7,11 @@
 - The BizHawk emulator. Versions 2.3.1 and higher are supported. Version 2.7 is recommended
     - [BizHawk Official Website](http://tasvideos.org/BizHawk.html)
 
+## Optional Software
+
+- [Map Tracker](https://github.com/Br00ty/tloz_brooty/releases/latest)
+    - Used alongside [Poptracker](https://github.com/black-sliver/PopTracker) to keep track of what items/checks you've gotten. Uses auto-tracking by connecting to the Archipelago server. 
+
 ## Installation Procedures
 
 1. Download and install the latest version of Archipelago.
@@ -29,7 +34,7 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 ### Where do I get a config file?
 
 The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: [The Legend of Zelda Player Settings Page](/games/The%20Legen%20of%20Zelda/player-settings)
+them. Player settings page: [The Legend of Zelda Player Settings Page](/games/The%20Legend%20of%20Zelda/player-settings)
 
 ### Verifying your config file
 
@@ -39,7 +44,7 @@ validator page: [YAML Validation page](/mysterycheck)
 ## Generating a Single-Player Game
 
 1. Navigate to the Player Settings page, configure your options, and click the "Generate Game" button.
-    - Player Settings page: [The Legend of Zelda Player Settings Page](/games/The%20Legen%20of%20Zelda/player-settings)
+    - Player Settings page: [The Legend of Zelda Player Settings Page](/games/The%20Legend%20of%20Zelda/player-settings)
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.
 4. You will be presented with a server page, from which you can download your patch file.
@@ -75,7 +80,7 @@ Once the Archipelago server has been hosted:
    extension `*.nes`.
 2. Click on the Tools menu and click on **Lua Console**.
 3. Click the folder button to open a new Lua script. (CTL-O or **Script** -> **Open Script**)
-4. Navigate to the location you installed Archipelago to. Open `data/lua/TLOZ/tloz_connector.lua`.
+4. Navigate to the location you installed Archipelago to. Open `data/lua/connector_tloz.lua`.
     1. If it gives a `NLua.Exceptions.LuaScriptException: .\socket.lua:13: module 'socket.core' not found:` exception
        close your emulator entirely, restart it and re-run these steps.
     2. If it says `Must use a version of bizhawk 2.3.1 or higher`, double-check your Bizhawk version by clicking **

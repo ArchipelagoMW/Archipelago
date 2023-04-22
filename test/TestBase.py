@@ -199,11 +199,15 @@ class WorldTestBase(unittest.TestCase):
 
         self.collect_all_but(all_items)
         for location in self.multiworld.get_locations():
-            self.assertEqual(self.multiworld.state.can_reach(location), location.name not in locations)
+            loc_reachable = self.multiworld.state.can_reach(location)
+            self.assertEqual(loc_reachable, location.name not in locations,
+                             f"{location.name} is reachable without {all_items}" if loc_reachable
+                             else f"{location.name} is not reachable without {all_items}")
         for item_names in possible_items:
             items = self.collect_by_name(item_names)
             for location in locations:
-                self.assertTrue(self.can_reach_location(location))
+                self.assertTrue(self.can_reach_location(location),
+                                f"{location} not reachable with {item_names}")
             self.remove(items)
 
     def assertBeatable(self, beatable: bool):

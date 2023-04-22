@@ -7,6 +7,8 @@ from worlds.alttp.Items import ItemFactory
 from worlds.alttp.Regions import lookup_boss_drops
 from worlds.alttp.Options import smallkey_shuffle
 
+if typing.TYPE_CHECKING:
+    from .SubClasses import ALttPLocation
 
 def create_dungeons(world, player):
     def make_dungeon(name, default_boss, dungeon_regions, big_key, small_keys, dungeon_items):
@@ -138,9 +140,10 @@ def fill_dungeons_restrictive(world):
         if in_dungeon_items:
             restricted_players = {player for player, restricted in world.restrict_dungeon_item_on_boss.items() if
                                   restricted}
-            locations = [location for location in get_unfilled_dungeon_locations(world)
-                         # filter boss
-                         if not (location.player in restricted_players and location.name in lookup_boss_drops)]
+            locations: typing.List["ALttPLocation"] = [
+                location for location in get_unfilled_dungeon_locations(world)
+                # filter boss
+                if not (location.player in restricted_players and location.name in lookup_boss_drops)]
             if dungeon_specific:
                 for location in locations:
                     dungeon = location.parent_region.dungeon
@@ -159,7 +162,7 @@ def fill_dungeons_restrictive(world):
                                  (5 if (item.player, item.name) in dungeon_specific else 0))
             for item in in_dungeon_items:
                 all_state_base.remove(item)
-            fill_restrictive(world, all_state_base, locations, in_dungeon_items, True, True)
+            fill_restrictive(world, all_state_base, locations, in_dungeon_items, True, True, allow_excluded=True)
 
 
 dungeon_music_addresses = {'Eastern Palace - Prize': [0x1559A],

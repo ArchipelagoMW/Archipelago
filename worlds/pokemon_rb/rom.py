@@ -274,14 +274,14 @@ def process_wild_pokemon(self):
         for mon in mons_to_add:
             stat_base = get_base_stat_total(mon)
             candidate_locations = get_encounter_slots(self)
-            candidate_locations = [self.multiworld.get_location(location.name, self.player) for location in candidate_locations]
             if self.multiworld.randomize_wild_pokemon[self.player].current_key in ["match_base_stats", "match_types_and_base_stats"]:
-                candidate_locations.sort(key=lambda slot: abs(get_base_stat_total(slot.item.name) - stat_base))
+                candidate_locations.sort(key=lambda slot: abs(get_base_stat_total(slot.original_item) - stat_base))
             if self.multiworld.randomize_wild_pokemon[self.player].current_key in ["match_types", "match_types_and_base_stats"]:
                 candidate_locations.sort(key=lambda slot: not any([poke_data.pokemon_data[slot.original_item]["type1"] in
                      [self.local_poke_data[mon]["type1"], self.local_poke_data[mon]["type2"]],
                      poke_data.pokemon_data[slot.original_item]["type2"] in
                      [self.local_poke_data[mon]["type1"], self.local_poke_data[mon]["type2"]]]))
+            candidate_locations = [self.multiworld.get_location(location.name, self.player) for location in candidate_locations]
             for location in candidate_locations:
                 zone = " - ".join(location.name.split(" - ")[:-1])
                 if self.multiworld.catch_em_all[self.player] == "all_pokemon" and self.multiworld.area_1_to_1_mapping[self.player]:
@@ -577,10 +577,7 @@ def write_quizzes(self, data, random):
             for location in self.multiworld.get_filled_locations():
                 if location.item.name == "Secret Key" and location.item.player == self.player:
                     break
-            if location.player == self.player:
-                player_name = "yourself"
-            else:
-                player_name = self.multiworld.player_names[location.player]
+            player_name = self.multiworld.player_name[location.player]
             if not a:
                 if len(self.multiworld.player_name) > 1:
                     old_name = player_name
@@ -588,7 +585,10 @@ def write_quizzes(self, data, random):
                         player_name = random.choice(list(self.multiworld.player_name.values()))
                 else:
                     return encode_text("You're playing<LINE>in a multiworld<CONT>with other<CONT>players?<DONE>")
-            return encode_text(f"The Secret Key was<LINE>found by<CONT>{player_name[:17]}?<DONE>")
+            if player_name == self.multiworld.player_name[self.player]:
+                player_name = "yourself"
+            player_name = encode_text(player_name, force=True, safety=True)
+            return encode_text(f"The Secret Key was<LINE>found by<CONT>") + player_name + encode_text("<DONE>")
         elif q == 2:
             if a:
                 return encode_text(f"#mon is<LINE>pronounced<CONT>Po-kay-mon?<DONE>")
@@ -750,6 +750,7 @@ def generate_output(self, output_directory: str):
     if self.multiworld.require_pokedex[self.player]:
         data[rom_addresses["Require_Pokedex_A"]] = 1
         data[rom_addresses["Require_Pokedex_B"]] = 1
+        data[rom_addresses["Require_Pokedex_C"]] = 1
     if self.multiworld.dexsanity[self.player]:
         data[rom_addresses["Option_Dexsanity_A"]] = 1
         data[rom_addresses["Option_Dexsanity_B"]] = 1
@@ -961,7 +962,7 @@ def get_base_rom_path(game_version: str) -> str:
     options = Utils.get_options()
     file_name = options["pokemon_rb_options"][f"{game_version}_rom_file"]
     if not os.path.exists(file_name):
-        file_name = Utils.local_path(file_name)
+        file_name = Utils.user_path(file_name)
     return file_name
 
 
