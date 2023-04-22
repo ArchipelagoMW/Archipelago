@@ -66,6 +66,7 @@ class FFMQClient(SNIClient):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
         check_1 = await snes_read(ctx, 0xF53749, 1)
+        received_sram = await snes_read(ctx, 0xE01FF0, 1)
         data = await snes_read(ctx, READ_DATA_START, READ_DATA_END - READ_DATA_START)
         check_2 = await snes_read(ctx, 0xF53749, 1)
         if check_1 == b'\x00' or check_2 == b'\x00':
@@ -75,7 +76,6 @@ class FFMQClient(SNIClient):
             return data[data_range[0] - READ_DATA_START:data_range[0] + data_range[1] - READ_DATA_START]
 
         received = get_range(RECEIVED_DATA)
-        received_sram = await snes_read(ctx, 0xE01FF0, 1)
         completed_game = get_range(COMPLETED_GAME)
         battlefield_data = get_range(BATTLEFIELD_DATA)
         game_flags = get_range(GAME_FLAGS)
@@ -107,7 +107,7 @@ class FFMQClient(SNIClient):
         if old_locations_checked != ctx.locations_checked:
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": ctx.locations_checked}])
 
-        if received[0] == 0:
+        if received_sram[0] == 0:
             received_index = (received[2] * 256) + received[1]
             if received_index < len(ctx.items_received):
                 item = ctx.items_received[received_index]
@@ -115,5 +115,5 @@ class FFMQClient(SNIClient):
                 code = (item.item - ITEM_CODE_START) + 1
                 if code > 256:
                     code -= 256
-                snes_buffered_write(ctx, RECEIVED_DATA[0], bytes([code])) # 0xE01FF0
+                snes_buffered_write(ctx, 0xE01FF0, bytes([code]))
         await snes_flush_writes(ctx)
