@@ -207,8 +207,8 @@ goods_table = {
     **{"Titanite Slab #"+str(i): 0x400003EB for i in range(1, 4)},
 
     # Healing
-    **{"Estus Shard !"+str(i): 0x4000085D for i in range(1, 12)}, # There are only 11 Shards total in the pool
-    **{"Undead Bone Shard !"+str(i): 0x4000085F for i in range(1, 10)}, # increased by 4 to reflect shard change | Datapackage should only change estus/bone numbers
+    **{"Estus Shard "+str(i): 0x4000085D for i in range(1, 12)}, # There are only 11 Shards total in the pool
+    **{"Undead Bone Shard "+str(i): 0x4000085F for i in range(1, 11)}, # increased by 4 to reflect shard change | Datapackage should only change estus/bone numbers
 
     # Souls
     **{"Soul of a Great Champion #"+str(i): 0x400001A4 for i in range(1, 3)},
@@ -488,7 +488,7 @@ rings_table = { #Added 3 rings to balance item/location tables
 }
 
 dlc_ring_table = {
-    "Havel's Ring": 0x20004E34, #!
+    "Havel's Ring +3": 0x20004E37, #!
     "Chillbite Ring": 0x20005208 #!
 }
 

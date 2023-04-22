@@ -350,7 +350,7 @@ class DarkSouls3Location(Location):
     )
 
     dlc_ring_location = (
-        "RC: Havel's Ring",
+        "RC: Havel's Ring +3",
         "PW: Chillbite Ring"
     )
 

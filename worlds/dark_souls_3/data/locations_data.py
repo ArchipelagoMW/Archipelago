@@ -512,7 +512,7 @@ ringed_city_table = { # DLC
     "RC: Black Witch Wrappings": 0x14EAE170,
     "RC: Black Witch Trousers": 0x14EAE558,
     "RC: White Preacher Head": 0x14153A20,
-    "RC: Havel's Ring": 0x20004E34,
+    "RC: Havel's Ring +3": 0x20004E37,
     "RC: Ringed Knight Spear": 0x008CFDC0,
     "RC: Dragonhead Shield": 0x0135E7F0,
     "RC: Ringed Knight Straight Sword": 0x00225510,
@@ -608,8 +608,8 @@ dlc_progressive_locations = { #71
 
 health_upgrade_locations = {
     # Healing
-    **{"Estus Shard !"+str(i): 0x4000085D for i in range(1, 12)}, # Updated to reflect changes in items_data.py
-    **{"Undead Bone Shard !"+str(i): 0x4000085F for i in range(1, 10)}, # Updated to reflect changes in items_data.py
+    **{"Estus Shard "+str(i): 0x4000085D for i in range(1, 12)}, # Updated to reflect changes in items_data.py
+    **{"Undead Bone Shard "+str(i): 0x4000085F for i in range(1, 11)}, # Updated to reflect changes in items_data.py
 }
 
 gotthard_table = {

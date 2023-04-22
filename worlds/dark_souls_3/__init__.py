@@ -244,8 +244,10 @@ class DarkSouls3World(World):
             # Do not add progressive_items ( containing "#" ) to the itempool if the option is disabled
             if (not self.multiworld.enable_progressive_locations[self.player]) and "#" in name:
                 continue
-            # Do not add health_upgrade_items ( containing "!" ) to the itempool if the option is disabled
-            if (not self.multiworld.enable_health_upgrade_locations[self.player]) and "!" in name:
+            # Do not add health_upgrade_items to the itempool if the option is disabled
+            if (not self.multiworld.enable_health_upgrade_locations[self.player]) and "Estus Shard " in name:
+                continue
+            if (not self.multiworld.enable_health_upgrade_locations[self.player]) and "Undead Bone Shard " in name:
                 continue
             # Do not add DLC items if the option is disabled
             if (not self.multiworld.enable_dlc[self.player]) and DarkSouls3Item.is_dlc_item(name):

@@ -136,7 +136,7 @@ class LateDLCOption(Toggle):
 
 
 class EnableProgressiveLocationsOption(Toggle):
-    """Randomize upgrade materials such as the titanite shards, the estus shards and the consumables"""
+    """Randomize upgrade materials such as the titanite shards, titanite scales, and the consumables"""
     display_name = "Randomize materials, weapon upgrade shards, and consumables (+176 checks/items)"
 
 
