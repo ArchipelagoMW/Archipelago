@@ -498,7 +498,9 @@ dreg_heap_table = { # DLC
     "DH: Herald Curved Greatsword": 0x006159E0,
     "DH: Flame Fan": 0x40258190,
     "DH: Soul of the Demon Prince": 0x400002EA,
-    "DH: Small Envoy Banner": 0x4000086C
+    "DH: Small Envoy Banner": 0x4000086C,
+    "DH: Ring of Favor +3": 0x20004E41, #NEW
+    "DH: Covetous Silver Serpent Ring +3": 0x20004FB3, #NEW
 }
 
 ringed_city_table = { # DLC
@@ -539,6 +541,11 @@ ringed_city_table = { # DLC
     "RC: Soul of Darkeater Midir": 0x400002EB,
     "RC: Soul of Slave Knight Gael": 0x400002E9,
     "RC: Blood of the Dark Souls": 0x4000086E,
+    "RC: Chloranthy Ring +3": 0x20004E2D, #NEW
+    "RC: Ring of Steel Protection +3": 0x20004E4B, #NEW
+    "RC: Covetous Gold Serpent Ring +3": 0x20004FA9, #NEW
+    "RC: Ring of the Evil Eye +3": 0x20005071, #NEW
+    "RC: Wolf Ring +3": 0x20004EE1 # ALVA FIGHT | NEW
 }
 
 progressive_locations = {
@@ -549,8 +556,8 @@ progressive_locations = {
     **{"Titanite Slab #"+str(i): 0x400003EB for i in range(1, 4)},
 
     # Healing
-    #**{"Estus Shard #"+str(i): 0x4000085D for i in range(1, 12)}, # MOVED FOR NEW SETTING // SRY DATAPACKAGE :(
-    #**{"Undead Bone Shard #"+str(i): 0x4000085F for i in range(1, 10)}, # MOVED FOR NEW SETTING // SRY DATAPACKAGE :(
+    #**{"Estus Shard #"+str(i): 0x4000085D for i in range(1, 12)}, # MOVED FOR NEW SETTING :(
+    #**{"Undead Bone Shard #"+str(i): 0x4000085F for i in range(1, 10)}, # MOVED FOR NEW SETTING :(
 
     # Items
     **{"Firebomb #"+str(i): 0x40000124 for i in range(1, 5)},
@@ -608,8 +615,8 @@ dlc_progressive_locations = { #71
 
 health_upgrade_locations = {
     # Healing
-    **{"Estus Shard "+str(i): 0x4000085D for i in range(1, 12)}, # Updated to reflect changes in items_data.py
-    **{"Undead Bone Shard "+str(i): 0x4000085F for i in range(1, 11)}, # Updated to reflect changes in items_data.py
+    **{"Estus Shard "+str(i): 0x4000085D for i in range(1, 12)},
+    **{"Undead Bone Shard "+str(i): 0x4000085F for i in range(1, 11)},
 }
 
 gotthard_table = {

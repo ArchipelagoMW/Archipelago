@@ -50,7 +50,7 @@ weapons_upgrade_5_table = {
     "Dragonslayer Swordspear": 0x008BC540, #!
     "Sage's Crystal Staff": 0x00C8CE40, #!
     "Irithyll Rapier": 0x002E8A10, #!
-    "Dragon Tooth": 0x007E09A0 #! NEW
+    "Dragon Tooth": 0x007E09A0, #! NEW
 }
 
 dlc_weapons_upgrade_5_table = {
@@ -207,8 +207,8 @@ goods_table = {
     **{"Titanite Slab #"+str(i): 0x400003EB for i in range(1, 4)},
 
     # Healing
-    **{"Estus Shard "+str(i): 0x4000085D for i in range(1, 12)}, # There are only 11 Shards total in the pool
-    **{"Undead Bone Shard "+str(i): 0x4000085F for i in range(1, 11)}, # increased by 4 to reflect shard change | Datapackage should only change estus/bone numbers
+    **{"Estus Shard "+str(i): 0x4000085D for i in range(1, 12)},
+    **{"Undead Bone Shard "+str(i): 0x4000085F for i in range(1, 11)},
 
     # Souls
     **{"Soul of a Great Champion #"+str(i): 0x400001A4 for i in range(1, 3)},
@@ -489,7 +489,14 @@ rings_table = { #Added 3 rings to balance item/location tables
 
 dlc_ring_table = {
     "Havel's Ring +3": 0x20004E37, #!
-    "Chillbite Ring": 0x20005208 #!
+    "Chillbite Ring": 0x20005208, #!
+    "Chloranthy Ring +3": 0x20004E2D, #NEW
+    "Ring of Favor +3": 0x20004E41, #NEW
+    "Ring of Steel Protection +3": 0x20004E4B, #NEW
+    "Covetous Gold Serpent Ring +3": 0x20004FA9, #NEW
+    "Covetous Silver Serpent Ring +3": 0x20004FB3, #NEW
+    "Ring of the Evil Eye +3": 0x20005071, #NEW
+    "Wolf Ring +3": 0x20004EE1 # ALVA FIGHT | NEW
 }
 
 spells_table = {

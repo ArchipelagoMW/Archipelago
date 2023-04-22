@@ -343,7 +343,6 @@ class DarkSouls3Location(Location):
         "CKG: Dragonscale Ring",
         "SL: Knight Slayer's Ring",
         "CKG: Magic Stoneplate Ring",
-        "HWL: Blue Tearstone Ring",
         "US: Bloodbite Ring", # RING
         "US: Hawk Ring", # RING
         "RS: Great Swamp Ring" # RING
@@ -351,7 +350,14 @@ class DarkSouls3Location(Location):
 
     dlc_ring_location = (
         "RC: Havel's Ring +3",
-        "PW: Chillbite Ring"
+        "PW: Chillbite Ring",
+        "DH: Ring of Favor +3", #NEW
+        "DH: Covetous Silver Serpent Ring +3", #NEW
+        "RC: Chloranthy Ring +3", #NEW
+        "RC: Ring of Steel Protection +3", #NEW
+        "RC: Covetous Gold Serpent Ring +3", #NEW
+        "RC: Ring of the Evil Eye +3", #NEW
+        "RC: Wolf Ring +3" # ALVA FIGHT | NEW
     )
 
     spell_location = (
@@ -421,6 +427,7 @@ class DarkSouls3Location(Location):
 
     npc_location = (
         "HWL: Greirat's Ashes",
+        "HWL: Blue Tearstone Ring",
         "US: Irina's Ashes",
         "ID: Karla's Ashes",
         "ID: Karla's Pointed Hat",

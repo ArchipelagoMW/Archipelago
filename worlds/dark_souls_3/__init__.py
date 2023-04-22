@@ -347,8 +347,6 @@ class DarkSouls3World(World):
         set_rule(self.multiworld.get_location("ID: Prisoner Chief's Ashes", self.player),
                  lambda state: state.has("Jailer's Key Ring", self.player))
         if self.multiworld.enable_ring_locations[self.player]:
-            set_rule(self.multiworld.get_location("HWL: Blue Tearstone Ring", self.player),
-                     lambda state: state.has("Cell Key", self.player))
             set_rule(self.multiworld.get_location("ID: Bellowing Dragoncrest Ring", self.player),
                      lambda state: state.has("Jailbreaker's Key", self.player))
             set_rule(self.multiworld.get_location("ID: Covetous Gold Serpent Ring", self.player),
@@ -357,6 +355,8 @@ class DarkSouls3World(World):
             set_rule(self.multiworld.get_location("ID: Karla's Ashes", self.player),
                      lambda state: state.has("Jailer's Key Ring", self.player))
             set_rule(self.multiworld.get_location("HWL: Greirat's Ashes", self.player),
+                     lambda state: state.has("Cell Key", self.player))
+            set_rule(self.multiworld.get_location("HWL: Blue Tearstone Ring", self.player),
                      lambda state: state.has("Cell Key", self.player))
 
         self.multiworld.completion_condition[self.player] = lambda state: \

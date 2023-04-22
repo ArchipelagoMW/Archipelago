@@ -206,7 +206,55 @@ class DarkSouls3Item(Item):
 
     dlc_armor_item = {**dlc_armor_table}
 
-    ring_item = {**rings_table}
+    ring_item = ("Estus Ring",  # !
+                 "Covetous Silver Serpent Ring",  # !
+                 "Fire Clutch Ring",  # !
+                 "Flame Stoneplate Ring",  # !
+                 "Flynn's Ring",  # !
+                 "Chloranthy Ring",  # !
+                 "Morne's Ring",  # !
+                 "Sage Ring",  # !
+                 "Aldrich's Sapphire",  # !
+                 "Lloyd's Sword Ring",  # !
+                 "Poisonbite Ring",  # !
+                 "Deep Ring",  # !
+                 "Lingering Dragoncrest Ring",  # !
+                 "Carthus Milkring",  # !
+                 "Witch's Ring",  # !
+                 "Carthus Bloodring",  # !
+                 "Speckled Stoneplate Ring",  # !
+                 "Magic Clutch Ring",  # !
+                 "Ring of the Sun's First Born",  # !
+                 "Pontiff's Right Eye",  # !
+                 "Leo Ring",  # !
+                 "Dark Stoneplate Ring",  # !
+                 "Reversal Ring",  # !
+                 "Ring of Favor",  # !
+                 "Bellowing Dragoncrest Ring",  # !
+                 "Covetous Gold Serpent Ring",  # !
+                 "Dusk Crown Ring",  # !
+                 "Dark Clutch Ring",  # !
+                 "Cursebite Ring",  # !
+                 "Sun Princess Ring",  # !
+                 "Aldrich's Ruby",  # !
+                 "Scholar Ring",  # !
+                 "Fleshbite Ring",  # !
+                 "Hunter's Ring",  # !
+                 "Ashen Estus Ring",  # !
+                 "Hornet Ring",  # !
+                 "Lightning Clutch Ring",  # !
+                 "Ring of Steel Protection",  # !
+                 "Calamity Ring",  # !
+                 "Thunder Stoneplate Ring",  # !
+                 "Knight's Ring",  # !
+                 "Red Tearstone Ring",  # !
+                 "Dragonscale Ring",  # !
+                 "Knight Slayer's Ring",  # !
+                 "Magic Stoneplate Ring",  # !
+                 "Bloodbite Ring",  # ! NEW
+                 "Hawk Ring",  # ! NEW
+                 "Great Swamp Ring"  # ! NEW
+                 )
 
     dlc_ring_item = {**dlc_ring_table}
 
@@ -245,6 +293,7 @@ class DarkSouls3Item(Item):
     dlc_misc_item = ("Captains Ashes")
 
     npc_item = ("Greirat's Ashes",
+                "Blue Tearstone Ring",
                 "Irina's Ashes",
                 "Karla's Ashes",
                 "Karla's Pointed Hat",
