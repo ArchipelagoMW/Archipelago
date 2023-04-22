@@ -1,23 +1,24 @@
 import collections
+import concurrent.futures
 import logging
 import os
-import time
-import zlib
-import concurrent.futures
 import pickle
 import tempfile
+import time
 import zipfile
-from typing import Dict, List, Tuple, Optional, Set
+import zlib
+from typing import Dict, List, Optional, Set, Tuple
 
-from BaseClasses import Item, MultiWorld, CollectionState, Region, LocationProgressType, Location
 import worlds
-from worlds.alttp.SubClasses import LTTPRegionType
-from worlds.alttp.Regions import is_main_entrance
-from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
-from worlds.alttp.Shops import FillDisabledShopSlots
-from Utils import output_path, get_options, __version__, version_tuple
-from worlds.generic.Rules import locality_rules, exclusion_rules
+from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
+from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
+from Options import StartInventoryPool
+from Utils import __version__, get_options, output_path, version_tuple
 from worlds import AutoWorld
+from worlds.alttp.Regions import is_main_entrance
+from worlds.alttp.Shops import FillDisabledShopSlots
+from worlds.alttp.SubClasses import LTTPRegionType
+from worlds.generic.Rules import exclusion_rules, locality_rules
 
 ordered_areas = (
     'Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
@@ -115,7 +116,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         for item_name, count in world.start_inventory[player].value.items():
             for _ in range(count):
                 world.push_precollected(world.create_item(item_name, player))
-        for item_name, count in world.start_inventory_from_pool[player].value.items():
+
+        for item_name, count in world.start_inventory_from_pool.setdefault(player, StartInventoryPool({})).value.items():
             for _ in range(count):
                 world.push_precollected(world.create_item(item_name, player))
 
