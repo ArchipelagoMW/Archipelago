@@ -114,51 +114,66 @@ class BlasphemousLogic(LogicMixin):
         return self.has("Taranto to my Sister", player)
 
     def _blasphemous_tirana(self, player):
-        return self.has("Tirana of the Celestial Bastion", player)
+        return self.has("Tirana of the Celestial Bastion", player) and \
+            self.has("Fervour Upgrade", player, 2)
 
     def _blasphemous_aubade(self, player):
-        return self.has("Aubade of the Nameless Guardian", player)
+        return self.has("Aubade of the Nameless Guardian", player) and \
+            self.has("Fervour Upgrade", player, 2)
 
     def _blasphemous_cherub_6(self, player):
         return self.has_any({"Debla of the Lights", "Taranto to my Sister", "Verdiales of the Forsaken Hamlet", \
-            "Tirana of the Celestial Bastion", "Cloistered Ruby"}, player)
+            "Cloistered Ruby"}, player) or \
+                (self.has("Tirana of the Celestial Bastion", player) and \
+                    self.has("Fervour Upgrade", player, 2))
 
     def _blasphemous_cherub_13(self, player):
         return self.has_any({"Ranged Skill", "Debla of the Lights", "Taranto to my Sister", \
-            "Cante Jondo of the Three Sisters", "Aubade of the Nameless Guardian", "Tirana of the Celestial Bastion", \
-                "Cloistered Ruby"}, player)
+            "Cante Jondo of the Three Sisters", "Cloistered Ruby"}, player) or \
+                    (self.has_any({"Aubade of the Nameless Guardian", "Tirana of the Celestial Bastion"}, player) and \
+                        self.has("Fervour Upgrade", player, 2))
     
     def _blasphemous_cherub_20(self, player):
         return self.has_any({"Debla of the Lights", "Lorqiana", "Zarabanda of the Safe Haven", "Taranto to my Sister", \
-            "Cante Jondo of the Three Sisters", "Aubade of the Nameless Guardian", "Tirana of the Celestial Bastion", \
-                "Cloistered Ruby"}, player)
+            "Cante Jondo of the Three Sisters", "Cloistered Ruby"}, player) or \
+                    (self.has_any({"Aubade of the Nameless Guardian", "Tirana of the Celestial Bastion"}, player) and \
+                        self.has("Fervour Upgrade", player, 2))
 
     def _blasphemous_cherub_21(self, player):
         return self.has_any({"Debla of the Lights", "Taranto to my Sister", "Cante Jondo of the Three Sisters", \
-            "Verdiales of the Forsaken Hamlet", "Tirana of the Celestial Bastion", "Cloistered Ruby"}, player)
+            "Verdiales of the Forsaken Hamlet", "Cloistered Ruby"}, player) or \
+                (self.has("Tirana of the Celestial Bastion", player) and \
+                    self.has("Fervour Upgrade", player, 2))
     
     def _blasphemous_cherub_22_23_31_32(self, player):
         return self.has_any({"Debla of the Lights", "Taranto to my Sister", "Cloistered Ruby"}, player)
 
     def _blasphemous_cherub_24_33(self, player):
         return self.has_any({"Debla of the Lights", "Taranto to my Sister", "Cante Jondo of the Three Sisters", \
-            "Tirana of the Celestial Bastion", "Cloistered Ruby"}, player)
+            "Cloistered Ruby"}, player) or \
+                (self.has("Tirana of the Celestial Bastion", player) and \
+                    self.has("Fervour Upgrade", player, 2))
 
     def _blasphemous_cherub_25(self, player):
         return self.has_any({"Debla of the Lights", "Lorquiana", "Taranto to my Sister", \
-            "Cante Jondo of the Three Sisters", "Verdiales of the Forsaken Hamlet", "Aubade of the Nameless Guardian", \
-                "Cantina of the Blue Rose", "Cloistered Ruby"}, player)
+            "Cante Jondo of the Three Sisters", "Verdiales of the Forsaken Hamlet", "Cantina of the Blue Rose", \
+                "Cloistered Ruby"}, player) or \
+                    (self.has("Aubade of the Nameless Guardian", player) and \
+                        self.has("Fervour Upgrade", player, 2))
 
     def _blasphemous_cherub_27(self, player):
         return self.has_any({"Ranged Skill", "Debla of the Lights", "Lorquiana", "Taranto to my Sister", \
-            "Cante Jondo of the Three Sisters", "Aubade of the Nameless Guardian", "Cantina of the Blue Rose", \
-                "Cloistered Ruby"}, player)
+            "Cante Jondo of the Three Sisters", "Cantina of the Blue Rose", "Cloistered Ruby"}, player) or \
+                    (self.has("Aubade of the Nameless Guardian", player) and \
+                        self.has("Fervour Upgrade", player, 2))
 
     def _blasphemous_cherub_38(self, player):
         return self.has_any({"Ranged Skill", "Lorquiana", "Cante Jondo of the Three Sisters", \
-            "Aubade of the Nameless Guardian", "Cantina of the Blue Rose", "Cloistered Ruby"}, player) or \
+            "Cantina of the Blue Rose", "Cloistered Ruby"}, player) or \
                 (self.has("The Young Mason's Wheel", player) and \
-                    self.has("Brilliant Heart of Dawn", player))
+                    self.has("Brilliant Heart of Dawn", player)) or \
+                        (self.has("Aubade of the Nameless Guardian", player) and \
+                            self.has("Fervour Upgrade", player, 2))
 
     def _blasphemous_wheel(self, player):
         return self.has("The Young Mason's Wheel", player)
@@ -284,7 +299,7 @@ class BlasphemousLogic(LogicMixin):
         return self.has_group("masks", player, 3)
 
     def _blasphemous_laudes_gate(self, player): 
-        return self.has_all({"Petrified Bell", "Blood Perpetuated in Sand", "Three Gnarled Tongues", "Key of the Secular", "Key of the Scribe", "Verses Spun from Gold"}, player)
+        return self.has("Verses Spun from Gold", player, 4)
 
     # Ten Piedad, Tres Angustias, Our Lady of the Charred Visage
     def _blasphemous_wound_boss_easy(self, player):
@@ -464,8 +479,7 @@ def rules(blasphemousworld):
         lambda state: state._blasphemous_bridge_access(player))
     set_rule(world.get_location("BotTC: Inside giant statue", player),
         lambda state: state._blasphemous_bridge_access(player) and \
-            state._blasphemous_laudes_gate(player) and \
-                state._blasphemous_1_mask(player))
+            state._blasphemous_laudes_gate(player))
     
     # Brotherhood of the Silent Sorrow
     set_rule(world.get_location("BotSS: Starting room Child of Moonlight", player),
@@ -612,8 +626,7 @@ def rules(blasphemousworld):
     # Hall of the Dawning
     set_rule(world.get_location("HotD: Laudes, the First of the Amanecidas", player),
         lambda state: state._blasphemous_bridge_access(player) and \
-                state._blasphemous_1_mask(player) and \
-                    state._blasphemous_laudes_gate(player))
+            state._blasphemous_laudes_gate(player))
 
     # Jondo
     set_rule(world.get_location("Jondo: Upper east chest", player),
@@ -928,8 +941,7 @@ def rules(blasphemousworld):
             lambda state: state._blasphemous_ex_bridge_access(player))
         set_rule(world.get_location("BotTC: Inside giant statue", player),
             lambda state: state._blasphemous_ex_bridge_access(player) and \
-                state._blasphemous_laudes_gate(player) and \
-                    state._blasphemous_1_mask(player))
+                state._blasphemous_laudes_gate(player))
         set_rule(world.get_location("BotSS: Esdras' final gift", player),
             lambda state: state._blasphemous_blood_relic(player) and \
                 state._blasphemous_scapular(player) and \
@@ -978,8 +990,7 @@ def rules(blasphemousworld):
                                                             state._blasphemous_ranged(player)))))
         set_rule(world.get_location("HotD: Laudes, the First of the Amanecidas", player),
             lambda state: state._blasphemous_ex_bridge_access(player) and \
-                    state._blasphemous_1_mask(player) and \
-                        state._blasphemous_laudes_gate(player))
+                state._blasphemous_laudes_gate(player))
         set_rule(world.get_location("LotNW: Elevator Child of Moonlight", player),
             lambda state: state._blasphemous_blood_relic(player) and \
                 (state._blasphemous_cherub_22_23_31_32(player) and \

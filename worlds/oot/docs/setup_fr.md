@@ -414,7 +414,7 @@ Double-cliquez sur votre fichier `.apz5` pour démarrer votre client et démarre
 Une fois le client et l'émulateur démarrés, vous devez les connecter. Dans l'émulateur, cliquez sur "Outils"
 menu et sélectionnez "Console Lua". Cliquez sur le bouton du dossier ou appuyez sur Ctrl+O pour ouvrir un script Lua.
 
-Accédez à votre dossier d'installation Archipelago et ouvrez `data/lua/OOT/oot_connector.lua`.
+Accédez à votre dossier d'installation Archipelago et ouvrez `data/lua/connector_oot.lua`.
 
 Pour connecter le client au multiserveur, mettez simplement `<adresse>:<port>` dans le champ de texte en haut et appuyez sur Entrée (si le
 le serveur utilise un mot de passe, saisissez dans le champ de texte inférieur `/connect <adresse>:<port> [mot de passe]`)

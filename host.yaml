@@ -180,6 +180,8 @@ adventure_options:
   # Optional, additional args passed into rom_start before the .bin file
   # For example, this can be used to autoload the connector script in BizHawk
   # (see BizHawk --lua= option)
+  # Windows example:
+  # rom_args: "--lua=C:/ProgramData/Archipelago/data/lua/connector_adventure.lua"
   rom_args: " "
   # Set this to true to display item received messages in Emuhawk
   display_msgs: true

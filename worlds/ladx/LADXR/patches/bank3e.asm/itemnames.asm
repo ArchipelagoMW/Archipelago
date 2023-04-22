@@ -67,7 +67,12 @@ MessageAddFromPlayerOld:
 
 ; hahaha none of this follows calling conventions
 MessageAddPlayerName:
-    ; call MessagePad    
+    ; call MessagePad
+
+    cp  101
+    jr  C, .continue
+    ld  a, 100
+.continue:
     ld  h, 0 ; bc = a, hl = a
     ld  l, a
     ld  b, 0
@@ -79,6 +84,7 @@ MessageAddPlayerName:
     add hl, bc ; 17
     ld  bc, MultiNamePointers
     add hl, bc ; hl = MultiNamePointers + wLinkGiveItemFrom * 17
+    
     call MessageCopyString
     ret
 

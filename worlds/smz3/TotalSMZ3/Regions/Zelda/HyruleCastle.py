@@ -1,8 +1,8 @@
 ﻿from typing import List
-from worlds.smz3.TotalSMZ3.Region import Z3Region
-from worlds.smz3.TotalSMZ3.Config import Config
-from worlds.smz3.TotalSMZ3.Location import Location, LocationType
-from worlds.smz3.TotalSMZ3.Item import ItemType
+from ...Region import Z3Region
+from ...Config import Config
+from ...Location import Location, LocationType
+from ...Item import ItemType
 
 class HyruleCastle(Z3Region):
     Name = "Hyrule Castle"
