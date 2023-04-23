@@ -170,7 +170,7 @@ Lightning Boots;                    ;                                           
 Frostspark Boots;                   ;                                           Tinkerer's Workshop & Lightning Boots & Ice Skates;
 Lava Waders;                        ;                                           Tinkerer's Workshop & Obsidian Skull & Lava Charm & Obsidian Rose & Water Walking Boots;
 Terraspark Boots;                   ;                                           Tinkerer's Workshop & Frostspark Boots & Lava Waders;
-Boots of the Hero;                  Achievement;                                Terraspark Boots;
+Boots of the Hero;                  Achievement | Grindy;                       Terraspark Boots;
 
 // Queen Bee
 Where's My Honey?;                  Achievement;
