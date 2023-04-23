@@ -1,7 +1,7 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice, PlandoBosses
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool, PlandoBosses
 
 
 class Logic(Choice):
@@ -466,5 +466,6 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "beemizer_total_chance": BeemizerTotalChance,
     "beemizer_trap_chance": BeemizerTrapChance,
     "death_link": DeathLink,
-    "allow_collect": AllowCollect
+    "allow_collect": AllowCollect,
+    "start_inventory_from_pool": StartInventoryPool,
 }

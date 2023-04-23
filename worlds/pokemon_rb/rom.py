@@ -747,6 +747,7 @@ def generate_output(self, output_directory: str):
     if self.multiworld.require_pokedex[self.player]:
         data[rom_addresses["Require_Pokedex_A"]] = 1
         data[rom_addresses["Require_Pokedex_B"]] = 1
+        data[rom_addresses["Require_Pokedex_C"]] = 1
     if self.multiworld.dexsanity[self.player]:
         data[rom_addresses["Option_Dexsanity_A"]] = 1
         data[rom_addresses["Option_Dexsanity_B"]] = 1
