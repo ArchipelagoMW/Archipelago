@@ -36,16 +36,16 @@ main_location_table = {
     LName.forest_weretiger_sw:    LocationData(0xC64008, 0x10C6CB, RName.forest_start),
     LName.forest_weretiger_gate:  LocationData(0xC64009, 0x10C683, RName.forest_start),
     LName.forest_dirge_plaque:    LocationData(0xC6400A, 0x7C7F9D, RName.forest_start, "inv"),
-    LName.forest_dirge_tomb:      LocationData(0xC6400B, 0x10C743, RName.forest_start),
+    LName.forest_dirge_tomb_u:    LocationData(0xC6400B, 0x10C743, RName.forest_start),
     LName.forest_corpse_save:     LocationData(0xC6400C, 0x10C6A3, RName.forest_start),
     LName.forest_dbridge_wall:    LocationData(0xC6400D, 0x10C69B, RName.forest_start),
     LName.forest_dbridge_sw:      LocationData(0xC6400E, 0x10C6D3, RName.forest_start),
     LName.forest_dbridge_gate_r:  LocationData(0xC6400F, 0x10C6AB, RName.forest_mid),
-    LName.forest_dbridge_tomb:    LocationData(0xC64010, 0x10C76B, RName.forest_mid),
-    LName.forest_bface_tomb_l:    LocationData(0xC64011, 0x10C75B, RName.forest_mid),
+    LName.forest_dbridge_tomb_uf: LocationData(0xC64010, 0x10C76B, RName.forest_mid),
+    LName.forest_bface_tomb_lf:   LocationData(0xC64011, 0x10C75B, RName.forest_mid),
     LName.forest_bface_tomb_u:    LocationData(0xC64012, 0x10C77B, RName.forest_mid),
     LName.forest_ibridge:         LocationData(0xC64013, 0x10C713, RName.forest_mid),
-    LName.forest_werewolf_tomb:   LocationData(0xC64014, 0x10C733, RName.forest_mid),
+    LName.forest_werewolf_tomb_r: LocationData(0xC64014, 0x10C733, RName.forest_mid),
     LName.forest_werewolf_plaque: LocationData(0xC64015, 0xBFC937, RName.forest_mid, "inv"),
     LName.forest_werewolf_tree:   LocationData(0xC64016, 0x10C6B3, RName.forest_mid),
     LName.forest_final_sw:        LocationData(0xC64017, 0x10C72B, RName.forest_mid),
@@ -234,9 +234,9 @@ main_location_table = {
     LName.tosor_side_isle:       LocationData(0xC640C5, 0x10CDCB, RName.tosor_main),
     LName.tosor_ibridge:         LocationData(0xC640C6, 0x10CDE3, RName.tosor_main),
     # Room Of Clocks locations
-    LName.roc_ent_l: LocationData(0xC640C7, 0x10CF7B, RName.roc_main),
-    LName.roc_gs_r:  LocationData(0xC640C8, 0x10CFB3, RName.roc_main),
-    LName.roc_ent_r: LocationData(0xC640C9, 0x10CFBB, RName.roc_main),
+    LName.roc_ent_l:   LocationData(0xC640C7, 0x10CF7B, RName.roc_main),
+    LName.roc_cont_r:  LocationData(0xC640C8, 0x10CFB3, RName.roc_main),
+    LName.roc_ent_r:   LocationData(0xC640C9, 0x10CFBB, RName.roc_main),
     # Clock Tower locations
     LName.ct_gearclimb_side:     LocationData(0xC640CA, 0x10CEB3, RName.ct_start),
     LName.ct_gearclimb_mid:      LocationData(0xC640CB, 0x10CEC3, RName.ct_start),
@@ -397,6 +397,20 @@ sub_weapon_table = {
     LName.ct_finalroom_rr: LocationData(0xC64147, 0x10CEDB, RName.ct_end),
 }
 
+empty_breakables_table = {
+    LName.forest_dirge_tomb_l:     LocationData(0xC64148, 0x10C74B, RName.forest_start),
+    LName.forest_dbridge_tomb_l:   LocationData(0xC64149, 0x10C763, RName.forest_mid),
+    LName.forest_dbridge_tomb_ur:  LocationData(0xC6414A, 0x10C773, RName.forest_mid),
+    LName.forest_bface_tomb_lr:    LocationData(0xC6414B, 0x10C753, RName.forest_mid),
+    LName.forest_werewolf_tomb_lf: LocationData(0xC6414C, 0x10C783, RName.forest_mid),
+    LName.forest_werewolf_tomb_lr: LocationData(0xC6414D, 0x10C73B, RName.forest_mid),
+
+    LName.villafo_mid_r: LocationData(0xC6414E, 0x10C753, RName.villa_main),
+
+    LName.roc_cont_l: LocationData(0xC6414F, 0x10CFA3, RName.roc_main),
+    LName.roc_exit:   LocationData(0xC64150, 0x10CF9B, RName.roc_main),
+}
+
 boss_table = {
     LName.forest_boss_one:       LocationData(None, 0x000000, RName.forest_start, "event"),
     LName.forest_boss_two:       LocationData(None, 0x000000, RName.forest_start, "event"),
@@ -429,7 +443,8 @@ all_locations = {
     **carrie_only_location_table,
     **cc_lizard_generator_table,
     **multi_breakable_table,
-    **sub_weapon_table
+    **sub_weapon_table,
+    **empty_breakables_table
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {id: name for name, _ in all_locations.items()}
