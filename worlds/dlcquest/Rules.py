@@ -22,7 +22,6 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
 
             return coin_possessed >= coins
 
-
         return lambda state: has_coin(state, player, coin)
 
     def has_enough_coin_freemium(player: int, coin: int):
@@ -216,9 +215,9 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
         set_rule(world.get_entrance("Blizzard", player),
                  lambda state: state.has("Season Pass", player))
         set_rule(world.get_entrance("Boss Door", player),
-                 lambda state: state.has("Big Sword Pack", player) and state.has("Really Big Sword Pack",
-                                                                                 player) and state.has(
-                     "Unfathomable Sword Pack", player))
+                 lambda state: state.has("Big Sword Pack", player) and
+                               state.has("Really Big Sword Pack", player) and
+                               state.has("Unfathomable Sword Pack", player))
         set_rule(world.get_location("I Get That Reference!", player),
                  lambda state: state.has("Death of Comedy Pack", player))
         set_rule(world.get_location("Story is Important", player),
@@ -232,8 +231,8 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
             set_rule(world.get_entrance("Behind Rocks", player),
                      lambda state: state.can_reach("Cut Content", 'region', player))
             set_rule(world.get_entrance("Pickaxe Hard Cave", player),
-                     lambda state: state.can_reach("Cut Content", 'region', player) and state.has("Name Change Pack",
-                                                                                                  player))
+                     lambda state: state.can_reach("Cut Content", 'region', player) and
+                                   state.has("Name Change Pack", player))
 
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
             set_rule(world.get_entrance("Vines", player),
@@ -246,8 +245,8 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
             set_rule(world.get_location("Pickaxe", player),
                      lambda state: state.has("Humble Indie Bindle", player))
             set_rule(world.get_location("Humble Indie Bindle", player),
-                     lambda state: state.has("Box of Various Supplies", player) and state.can_reach("Cut Content",
-                                                                                                    'region', player))
+                     lambda state: state.has("Box of Various Supplies", player) and
+                                   state.can_reach("Cut Content", 'region', player))
             set_rule(world.get_location("Box of Various Supplies", player),
                      lambda state: state.can_reach("Cut Content", 'region', player))
 
@@ -264,7 +263,7 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
                     set_rule(world.get_location("Live Freemium or Die: 889 Coin", player),
                              has_enough_coin_freemium(player, 889))
 
-            set_rule(world.get_entrance("Boss Door", player),
+            add_rule(world.get_entrance("Boss Door", player),
                      lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
                                              math.ceil(889 / World_Options[Options.CoinSanityRange])))
 
@@ -321,7 +320,7 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
                                              math.ceil(25 / World_Options[Options.CoinSanityRange])))
 
         if World_Options[Options.CoinSanity] == Options.CoinSanity.option_none:
-            set_rule(world.get_entrance("Boss Door", player),
+            add_rule(world.get_entrance("Boss Door", player),
                      has_enough_coin_freemium(player, 889))
 
             set_rule(world.get_location("Particles Pack", player),
