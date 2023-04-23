@@ -1,5 +1,5 @@
 from typing import Dict
-from Options import Toggle, Option, Range, Choice, DeathLink
+from Options import Toggle, Option, Range, Choice, DeathLink, ItemSet
 
 
 class AllowJustAsPlannedDLCSongs(Toggle):
@@ -127,6 +127,19 @@ class TrapCountPercentage(Range):
     display_name = "Trap Percentage"
 
 
+class IncludeSongs(ItemSet):
+    """Any song listed here will be included as part of the seed.
+    - If you want these songs immediately, use start_inventory."""
+    verify_item_name = True
+    display_name = "Include Songs"
+
+
+class ExcludeSongs(ItemSet):
+    """Any song listed here will be excluded from being a part of the seed."""
+    verify_item_name = True
+    display_name = "Exclude Songs"
+
+
 musedash_options: Dict[str, type(Option)] = {
     "allow_just_as_planned_dlc_songs": AllowJustAsPlannedDLCSongs,
     "streamer_mode_enabled": StreamerModeEnabled,
@@ -140,5 +153,7 @@ musedash_options: Dict[str, type(Option)] = {
     "music_sheet_count_percentage": MusicSheetCountPercentage,
     "music_sheet_win_count_percentage": MusicSheetWinCountPercentage,
     "trap_count_percentage": TrapCountPercentage,
-    "death_link": DeathLink
+    "death_link": DeathLink,
+    "include_songs": IncludeSongs,
+    "exclude_songs": ExcludeSongs
 }

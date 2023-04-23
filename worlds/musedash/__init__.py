@@ -72,10 +72,37 @@ class MuseDashWorld(World):
         diff_threshold = self.get_difficulty_range()
 
         available_song_keys = self.muse_dash_collection.get_songs_with_settings(dlc_songs, streamer_mode, diff_threshold[0], diff_threshold[1])
+
+        self.starting_songs = list()
+        self.included_songs = list()
+
+        self.handle_plando(available_song_keys)
         self.create_song_pool(available_song_keys)
 
         for song in self.starting_songs:
             self.multiworld.push_precollected(self.create_item(song))
+
+    # Todo: Update this to list[str] when python 3.8 stops being used
+    def handle_plando(self, available_song_keys: list):
+        for item_name in self.multiworld.start_inventory[self.player].value.keys():
+            if not (item_name in self.muse_dash_collection.song_items):
+                continue
+
+            self.starting_songs.append(item_name)
+            available_song_keys.remove(item_name)
+
+        for item_name in self.multiworld.include_songs[self.player].value:
+            if not (item_name in self.muse_dash_collection.song_items):
+                continue
+
+            self.included_songs.append(item_name)
+            available_song_keys.remove(item_name)
+
+        for item_name in self.multiworld.exclude_songs[self.player].value:
+            if not (item_name in self.muse_dash_collection.song_items):
+                continue
+
+            available_song_keys.remove(item_name)
 
     # Todo: Update this to list[str] when python 3.8 stops being used
     def create_song_pool(self, available_song_keys: list):
@@ -87,11 +114,9 @@ class MuseDashWorld(World):
 
         self.victory_song_name = self.pop_random_item(available_song_keys)
 
-        self.starting_songs = list()
         for _ in range(0, startingSongCount):
             self.starting_songs.append(self.pop_random_item(available_song_keys))
 
-        self.included_songs = list()
         for _ in range(0, self.multiworld.additional_song_count[self.player]):
             if (len(available_song_keys) <= 0):
                 break
