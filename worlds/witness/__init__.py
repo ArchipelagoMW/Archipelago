@@ -143,14 +143,19 @@ class WitnessWorld(World):
 
         for v in self.multiworld.plando_items[self.player]:
             if v.get("from_pool", True):
-                plandoed_items.update({self.items_by_name[i] for i in v.get("items", dict()).keys()
-                                       if i in self.items_by_name})
-                if "item" in v and v["item"] in self.items_by_name:
-                    plandoed_items.add(self.items_by_name[v["item"]])
+                for item_key in {"item", "items"}:
+                    if item_key in v:
+                        if type(v[item_key]) is str:
+                            plandoed_items.add(v[item_key])
+                        elif type(v[item_key]) is dict:
+                            plandoed_items.update(item for item, weight in v[item_key].items() if weight)
+                        else:
+                            # Other type of iterable
+                            plandoed_items.update(v[item_key])
 
         for symbol in self.items.GOOD_ITEMS:
             item = self.items_by_name[symbol]
-            if item in pool and item not in plandoed_items:
+            if item in pool and symbol not in plandoed_items:
                 # for now, any item that is mentioned in any plando option, even if it's a list of items, is ineligible.
                 # Hopefully, in the future, plando gets resolved before create_items.
                 # I could also partially resolve lists myself, but this could introduce errors if not done carefully.
