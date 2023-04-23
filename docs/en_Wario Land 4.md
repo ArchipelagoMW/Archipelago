@@ -20,10 +20,11 @@ Any shuffled item can be in other players' worlds.
 
 ## What does another world's item look like in Wario Land 4?
 
-Other games' items will look like silver CDs.
+Other games' items will look like Archipelago logos.
 
 ## When the player receives an item, what happens?
 
-Currently, it isn't obvious when the player receives an item. Jewel pieces and CDs are granted as
-soon as they're received. If Wario is in a level, junk items will be granted immediately; otherwise,
-they will be queued and granted the next time he enters one.
+If you receive a jewel piece or CD in a level, the game will show you what you got using a similar
+display to when you take one from a chest. On the pyramid screen, a sound effect and Wario voice
+clip will play. If the item is junk, Wario will receive it the next time he enters a level, or
+immediately if he's already in one.

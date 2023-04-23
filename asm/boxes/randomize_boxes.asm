@@ -157,17 +157,9 @@ LoadRandomItemAnimation:
 ; Jewel piece or CD
 
 ; Change the palette
-; Get passage
+    ; Get passage
     lsl r0, r6, #31-4
     lsr r0, r0, #31-2
-
-; Use CD graphic for AP items until I get a custom sprite made
-; This looks super disorganized, but I want to remove this later without leaving
-; artifacts like unnecessary jumps or labels
-    b @@LoadPalette
-@@APItem:
-    mov r0, #6
-@@LoadPalette:
 
     bl SetTreasurePalette
 
@@ -191,6 +183,12 @@ LoadRandomItemAnimation:
 
 @@FullHealthItem:
     mov r6, #0x05
+    b @@SetAnimation
+
+@@APItem:
+    mov r0, #6
+    bl SetTreasurePalette
+    mov r6, #0x06
 
 @@SetAnimation:
     ldr r0, =@@ItemAnimationTable
@@ -212,6 +210,7 @@ LoadRandomItemAnimation:
     .word takara_Anm_02  ; NW jewel piece
     .word takara_Anm_00  ; CD
     .word takara_Anm_01  ; Full health item
+    .word APLogoAnm      ; Archipelago item
 
 .endautoregion
 
