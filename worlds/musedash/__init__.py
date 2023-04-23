@@ -95,6 +95,9 @@ class MuseDashWorld(World):
             if not (item_name in self.muse_dash_collection.song_items):
                 continue
 
+            if item_name in self.starting_songs:
+                continue
+
             self.included_songs.append(item_name)
             available_song_keys.remove(item_name)
 
