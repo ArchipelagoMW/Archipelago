@@ -3,6 +3,175 @@ from BaseClasses import MultiWorld, Region, Entrance, LocationProgressType
 from .locations import location_data, PokemonRBLocation
 
 
+connecting_interior_warps = [
+    ['Route 2-South', 'Viridian Forest', {'Warp_Route_2_to_Viridian_Forest_South': bytearray(b'\x022')},
+     {'Warp_Viridian_Forest_to_Route_2_South_A': bytearray(b'\x05\r'),
+      'Warp_Viridian_Forest_to_Route_2_South_B': bytearray(b'\x05\r')}],
+    ['Route 2-North', 'Viridian Forest', {'Warp_Route_2_to_Viridian_Forest_North': bytearray(b'\x01/')},
+     {'Warp_Viridian_Forest_to_Route_2_North_A': bytearray(b'\x01\r'),
+      'Warp_Viridian_Forest_to_Route_2_North_B': bytearray(b'\x01\r')}],
+    ['Cerulean City', 'Trashed House', {'Warp_Trashed_House_to_Cerulean_City_South': bytearray(b'\x07\x03')},
+     {'Warp_Cerulean_City_to_Trashed_House_South': bytearray(b'\x00>')}],
+    ['Cerulean City-Outskirts', 'Trashed House', {'Warp_Cerulean_City_to_Trashed_House_North': bytearray(b'\x02>')},
+     {'Warp_Trashed_House_to_Cerulean_City_North_A': bytearray(b'\x00\x03'),
+      'Warp_Trashed_House_to_Cerulean_City_North_B': bytearray(b'\x00\x03')}],
+    ['Route 11', "Diglett's Cave", {'Warp_Route_11_to_Digletts_Cave': bytearray(b'\x00U')},
+     {'Warp_Digletts_Cave_to_Route_11_A': bytearray(b'\x04\x16'),
+      'Warp_Digletts_Cave_to_Route_11_B': bytearray(b'\x04\x16')}],
+    ['Route 2-Southeast', "Diglett's Cave", {'Warp_Route_2_to_Digletts_Cave': bytearray(b'\x00.')},
+     {'Warp_Digletts_Cave_to_Route_2_A': bytearray(b'\x00\r'),
+      'Warp_Digletts_Cave_to_Route_2_B': bytearray(b'\x00\r')}], ['Route 5', 'Saffron North Gate-North', {
+        'Warp_Route_5_to_Saffron_North_Gate_North_A': bytearray(b'\x03F'),
+        'Warp_Route_5_to_Saffron_North_Gate_North_B': bytearray(b'\x02F')}, {
+                                                                      'Warp_Saffron_North_Gate_to_Route_5_A': bytearray(
+                                                                          b'\x02\x10'),
+                                                                      'Warp_Saffron_North_Gate_to_Route_5_B': bytearray(
+                                                                          b'\x02\x10')}],
+    ['Saffron City', 'Saffron North Gate-South', {'Warp_Saffron_to_Saffron_North_Gate_South': bytearray(b'\x00F')},
+     {'Warp_Saffron_North_Gate_to_Saffron_A': bytearray(b'\x01\x10'),
+      'Warp_Saffron_North_Gate_to_Saffron_B': bytearray(b'\x00\x10')}],
+    ['Route 6', 'Saffron South Gate-South', {'Warp_Route_6_to_Saffron_South_Gate_South': bytearray(b'\x00I')},
+     {'Warp_Saffron_Gate_South_to_Route_6_A': bytearray(b'\x01\x11'),
+      'Warp_Saffron_Gate_South_to_Route_6_B': bytearray(b'\x01\x11')}], ['Saffron City', 'Saffron South Gate-North', {
+        'Warp_Saffron_to_Saffron_South_Gate_North_A': bytearray(b'\x02I'),
+        'Warp_Saffron_to_Saffron_South_Gate_North_B': bytearray(b'\x02I')}, {
+                                                                             'Warp_Saffron_Gate_South_to_Saffron_A': bytearray(
+                                                                                 b'\x02\x11'),
+                                                                             'Warp_Saffron_Gate_South_to_Saffron_B': bytearray(
+                                                                                 b'\x02\x11')}],
+    ['Route 7', 'Saffron West Gate-West', {'Warp_Route_7_to_Saffron_Gate_West_A': bytearray(b'\x00L'),
+                                      'Warp_Route_7_to_Saffron_Gate_West_B': bytearray(b'\x01L')},
+     {'Warp_Saffron_Gate_West_to_Route_7_A': bytearray(b'\x03\x12'),
+      'Warp_Saffron_Gate_West_to_Route_7_B': bytearray(b'\x03\x12')}], ['Saffron City', 'Saffron West Gate-East', {
+        'Warp_Saffron_to_Saffron_Gate_West_A': bytearray(b'\x02L'),
+        'Warp_Saffron_to_Saffron_Gate_West_B': bytearray(b'\x03L')}, {'Warp_Saffron_Gate_West_to_Saffron_A': bytearray(
+        b'\x00\x12'), 'Warp_Saffron_Gate_West_to_Saffron_B': bytearray(b'\x01\x12')}], ['Route 8', 'Saffron East Gate-East',
+                                                                                        {
+                                                                                            'Warp_Route_8_to_Saffron_Gate_East_A': bytearray(
+                                                                                                b'\x02O'),
+                                                                                            'Warp_Route_8_to_Saffron_Gate_East_B': bytearray(
+                                                                                                b'\x03O')}, {
+                                                                                            'Warp_Saffron_Gate_East_to_Route_8_A': bytearray(
+                                                                                                b'\x02\x13'),
+                                                                                            'Warp_Saffron_Gate_East_to_Route_8_B': bytearray(
+                                                                                                b'\x03\x13')}],
+    ['Saffron City', 'Saffron East Gate-West', {'Warp_Saffron_to_Saffron_Gate_East_A': bytearray(b'\x00O'),
+                                           'Warp_Saffron_to_Saffron_Gate_East_B': bytearray(b'\x01O')},
+     {'Warp_Saffron_Gate_East_to_Saffron_A': bytearray(b'\x00\x13'),
+      'Warp_Saffron_Gate_East_to_Saffron_B': bytearray(b'\x01\x13')}],
+    ['Route 8', 'Underground Path West East', {'Warp_Route_8_to_Underground_Path_East': bytearray(b'\x00P')},
+     {'Warp_Underground_Path_East_to_Route_8_A': bytearray(b'\x04\x13'),
+      'Warp_Underground_Path_East_to_Route_8_BA': bytearray(b'\x04\x13')}],
+    ['Route 7', 'Underground Path West East', {'Warp_Route_7_to_Underground_Path_West': bytearray(b'\x00M')},
+     {'Warp_Underground_Path_West_to_Route_7_A': bytearray(b'\x04\x12'),
+      'Warp_Underground_Path_West_to_Route_7_B': bytearray(b'\x04\x12')}],
+    ['Route 22', 'Badge Gate South', {'Warp_Route_22_to_Badge_Gate': bytearray(b'\x00\xc1')},
+     {'Warp_Badge_Gate_to_Route_22_A': bytearray(b'\x00!'), 'Warp_Badge_Gate_to_Route_22_B': bytearray(b'\x00!')}],
+    ['Route 23', 'Badge Gate North',
+     {'Warp_Route_23_to_Badge_Gate_A': bytearray(b'\x02\xc1'), 'Warp_Route_23_to_Badge_Gate_B': bytearray(b'\x03\xc1')},
+     {'Warp_Badge_Gate_to_Route_23_A': bytearray(b'\x00"'), 'Warp_Badge_Gate_to_Route_23_B': bytearray(b'\x01"')}],
+    ['Route 20-West', 'Seafoam Islands 1F', {'Warp_Route_20_West_to_Seafoam_Islands': bytearray(b'\x00\xc0')},
+     {'Warp_Seafoam_Islands_to_Route_20_West_A': bytearray(b'\x00\x1f'),
+      'Warp_Seafoam_Islands_to_Route_20_West_B': bytearray(b'\x00\x1f')}],
+    ['Route 20-East', 'Seafoam Islands Exit', {'Warp_Route_20_East_to_Seafoam_Islands': bytearray(b'\x02\xc0')},
+     {'Warp_Seafoam_Islands_to_Route_20_East_A': bytearray(b'\x01\x1f'),
+      'Warp_Seafoam_Islands_to_Route_20_East_B': bytearray(b'\x01\x1f')}], ['Route 11', 'Route 11 Gate', {
+        'Warp_Route_11_to_Gate_West_A': bytearray(b'\x00T'), 'Warp_Route_11_to_Gate_West_B': bytearray(b'\x01T')}, {
+                                                                                'Warp_Route_11_Gate_to_Route_11_West_A': bytearray(
+                                                                                    b'\x00\x16'),
+                                                                                'Warp_Route_11_Gate_to_Route_11_West_B': bytearray(
+                                                                                    b'\x01\x16')}],
+    ['Route 11-East', 'Route 11 Gate',
+     {'Warp_Route_11_to_Gate_East_A': bytearray(b'\x02T'), 'Warp_Route_11_to_Gate_East_B': bytearray(b'\x03T')},
+     {'Warp_Route_11_Gate_to_Route_11_East_A': bytearray(b'\x02\x16'),
+      'Warp_Route_11_Gate_to_Route_11_East_B': bytearray(b'\x03\x16')}], ['Lavender Town', 'Route 12 Gate', {
+        'Warp_Lavender_to_Route_12_Gate_A': bytearray(b'\x00W'),
+        'Warp_Lavender_to_Route_12_Gate_B': bytearray(b'\x01W')}, {'Warp_Route_12_Gate_to_Lavender_A': bytearray(
+        b'\x00\x17'), 'Warp_Route_12_Gate_to_Lavender_B': bytearray(b'\x01\x17')}],
+    ['Route 12-North', 'Route 12 Gate', {'Warp_Route_12_to_Route_12_Gate': bytearray(b'\x02W')},
+     {'Warp_Route_12_Gate_to_Route_12_A': bytearray(b'\x02\x17'),
+      'Warp_Route_12_Gate_to_Route_12_B': bytearray(b'\x02\x17')}], ['Route 15', 'Route 15 Gate', {
+        'Warp_Route_15_to_Route_15_Gate_A': bytearray(b'\x02\xb8'),
+        'Warp_Route_15_to_Route_15_Gate_B': bytearray(b'\x03\xb8')}, {'Warp_Route_15_Gate_to_Route_15_A': bytearray(
+        b'\x02\x1a'), 'Warp_Route_15_Gate_to_Route_15_B': bytearray(b'\x03\x1a')}], ['Fuchsia City', 'Route 15 Gate', {
+        'Warp_Fuchsia_to_Route_15_Gate_A': bytearray(b'\x00\xb8'),
+        'Warp_Fuchsia_to_Route_15_Gate_B': bytearray(b'\x01\xb8')}, {'Warp_Route_15_Gate_to_Fuchsia_A': bytearray(
+        b'\x00\x1a'), 'Warp_Route_15_Gate_to_Fuchsia_B': bytearray(b'\x01\x1a')}],
+    ['Route 16-Center', 'Route 16 Gate', {'Warp_Route_16_East_to_Route_16_Gate': bytearray(b'\x02\xba')},
+     {'Warp_Route_16_Gate_to_Route_16_East_A': bytearray(b'\x02\x1b'),
+      'Warp_Route_16_Gate_to_Route_16_East_B': bytearray(b'\x02\x1b')}], ['Route 16-West', 'Route 16 Gate', {
+        'Warp_Route_16_West_to_Route_16_Gate_A': bytearray(b'\x00\xba'),
+        'Warp_Route_16_West_to_Route_16_Gate_B': bytearray(b'\x01\xba')}, {
+                                                                              'Warp_Route_16_Gate_to_Route_16_West_A': bytearray(
+                                                                                  b'\x00\x1b'),
+                                                                              'Warp_Route_16_Gate_to_Route_16_West_B': bytearray(
+                                                                                  b'\x01\x1b')}],
+    ['Route 16-North', 'Fly House Gate', {'Warp_Route_16_East_to_Fly_House_Gate_A': bytearray(b'\x06\xba'),
+                                          'Warp_Route_16_East_to_Fly_House_Gate_B': bytearray(b'\x07\xba')},
+     {'Warp_Fly_House_Gate_to_Route_16_East_A': bytearray(b'\x06\x1b'),
+      'Warp_Fly_House_Gate_to_Route_16_East_B': bytearray(b'\x07\x1b')}], ['Route 16 House', 'Fly House Gate', {
+        'Warp_Route_16_Fly_House_to_Fly_House_Gate_A': bytearray(b'\x04\xba'),
+        'Warp_Route_16_Fly_House_to_Fly_House_Gate_B': bytearray(b'\x05\xba')}, {
+                                                                               'Warp_Fly_House_Gate_to_Route_16_Fly_House_A': bytearray(
+                                                                                   b'\x04\x1b'),
+                                                                               'Warp_Fly_House_Gate_to_Route_16_Fly_House_B': bytearray(
+                                                                                   b'\x05\x1b')}],
+    ['Route 18-West', 'Route 18 Gate', {'Warp_Route_18_West_to_Route_18_Gate_A': bytearray(b'\x00\xbe'),
+                                        'Warp_Route_18_West_to_Route_18_Gate_B': bytearray(b'\x01\xbe')},
+     {'Warp_Route_18_Gate_to_Route_18_West_A': bytearray(b'\x00\x1d'),
+      'Warp_Route_18_Gate_to_Route_18_West_B': bytearray(b'\x01\x1d')}], ['Route 18-East', 'Route 18 Gate', {
+        'Warp_Route_18_East_to_Route_18_Gate_A': bytearray(b'\x02\xbe'),
+        'Warp_Route_18_East_to_Route_18_Gate_B': bytearray(b'\x03\xbe')}, {
+                                                                              'Warp_Route_18_Gate_to_Route_18_East_A': bytearray(
+                                                                                  b'\x02\x1d'),
+                                                                              'Warp_Route_18_Gate_to_Route_18_East_B': bytearray(
+                                                                                  b'\x03\x1d')}],
+    ['Route 4-West', 'Mt Moon 1F', {'Warp_Route_4_West_to_Mt_Moon': bytearray(b'\x00;')},
+     {'Warp_Mt_Moon_to_Route_4_West_A': bytearray(b'\x01\x0f'),
+      'Warp_Mt_Moon_to_Route_4_West_B': bytearray(b'\x01\x0f')}],
+    ['Route 4-East', 'Mt Moon B1F-Exit', {'Warp_Route_4_East_to_Mt_Moon': bytearray(b'\x07<')},
+     {'Warp_Mt_Moon_to_Route_4_East': bytearray(b'\x02\x0f')}],
+    ['Route 23', 'Victory Road 1F', {'Warp_Route_23_South_to_Victory_Road': bytearray(b'\x00l')},
+     {'Warp_Victory_Road_to_Route_23_South_A': bytearray(b'\x02"'),
+      'Warp_Victory_Road_to_Route_23_South_B': bytearray(b'\x02"')}],
+    ['Route 23-North', 'Victory Road 2F', {'Warp_Route_23_North_to_Victory_Road': bytearray(b'\x01\xc2')},
+     {'Warp_Victory_Road_to_Route_23_North_A': bytearray(b'\x03"'),
+      'Warp_Victory_Road_to_Route_23_North_B': bytearray(b'\x03"')}],
+    ['Route 2-Southeast', 'Route 2 Gate', {'Warp_Route_2_to_Gate_South': bytearray(b'\x021')},
+     {'Warp_Route_2_Gate_to_Route_2_South_A': bytearray(b'\x04\r'),
+      'Warp_Route_2_Gate_to_Route_2_South_B': bytearray(b'\x04\r')}],
+    ['Route 2-Northeast', 'Route 2 Gate', {'Warp_Route_2_to_Gate_North': bytearray(b'\x011')},
+     {'Warp_Route_2_Gate_to_Route_2_North_A': bytearray(b'\x03\r'),
+      'Warp_Route_2_Gate_to_Route_2_North_B': bytearray(b'\x03\r')}],
+    ['Route 5', 'Underground Path North South', {'Warp_Route_5_to_Underground_Path_North': bytearray(b'\x00G')},
+     {'Warp_Underground_Path_North_to_Route_5_A': bytearray(b'\x03\x10'),
+      'Warp_Underground_Path_North_to_Route_5_B': bytearray(b'\x03\x10')}],
+    ['Route 6', 'Underground Path North South', {'Warp_Route_6_to_Underground_Path_South': bytearray(b'\x00J')},
+     {'Warp_Underground_Path_North_to_Route_6_A': bytearray(b'\x03\x11'),
+      'Warp_Underground_Path_North_to_Route_6_B': bytearray(b'\x03\x11')}],
+    ['Route 10-North', 'Rock Tunnel 1F', {'Warp_Route_10_North_to_Rock_Tunnel': bytearray(b'\x00R')},
+     {'Warp_Rock_Tunnel_to_Route_10_South_A': bytearray(b'\x02\x15'),
+      'Warp_Rock_Tunnel_to_Route_10_South_B': bytearray(b'\x02\x15')}],
+    ['Route 10-South', 'Rock Tunnel 1F', {'Warp_Route_10_South_to_Rock_Tunnel': bytearray(b'\x02R')},
+     {'Warp_Rock_Tunnel_to_Route_10_North_A': bytearray(b'\x01\x15'),
+      'Warp_Rock_Tunnel_to_Route_10_North_B': bytearray(b'\x01\x15')}],
+    ['Cerulean City', 'Badge House', {'Warp_Cerulean_City_to_Badge_House_South': bytearray(b'\x01\xe6')},
+     {'Warp_Badge_House_to_Cerulean_City_South_A': bytearray(b'\t\x03'),
+      'Warp_Badge_House_to_Cerulean_City_South_B': bytearray(b'\x08\x03')}],
+    ['Cerulean City-Badge House Backyard', 'Badge House',
+     {'Warp_Cerulean_City_to_Badge_House_North': bytearray(b'\x00\xe6')},
+     {'Warp_Badge_House_to_Cerulean_City_North': bytearray(b'\x08\x03')}],
+    ['Fuchsia City', 'Good Rod House', {'Warp_Fuchsia_City_to_Good_Rod_House_South': bytearray(b'\x01\xa4')},
+     {'Warp_Good_Rod_House_to_Fuchsia_City_South_A': bytearray(b'\x08\x07'),
+      'Warp_Good_Rod_House_to_Fuchsia_City_South_B': bytearray(b'\x07\x07')}],
+    ['Fuchsia City-Good Rod House Backyard', 'Good Rod House',
+     {'Warp_Fuchsia_City_to_Good_Rod_House_North': bytearray(b'\x00\xa4')},
+     {'Warp_Good_Rod_House_to_Fuchsia_City_North': bytearray(b'\x07\x07')}]]
+
+# fixed = []
+# for c in connecting_interior_exits:
+#     fixed.append([c[0], c[]])
+
 def create_region(world: MultiWorld, player: int, name: str, locations_per_region=None, exits=None):
     ret = Region(name, player, world)
     for location in locations_per_region.get(name, []):
@@ -23,41 +192,50 @@ def create_regions(multiworld: MultiWorld, player: int):
         locations_per_region.setdefault(location.region, [])
         if location.inclusion(multiworld, player):
             locations_per_region[location.region].append(PokemonRBLocation(player, location.name, location.address,
-                                                                           location.rom_address, location.type))
+                                                                           location.rom_address, location.type,
+                                                                           location.level))
     regions = [
-        create_region(multiworld, player, "Menu", locations_per_region),
         create_region(multiworld, player, "Anywhere", locations_per_region),
-        create_region(multiworld, player, "Fossil", locations_per_region),
-        create_region(multiworld, player, "Pokedex", locations_per_region),
-        create_region(multiworld, player, "Pallet Town", locations_per_region),
-        create_region(multiworld, player, "Route 1", locations_per_region),
-        create_region(multiworld, player, "Viridian City", locations_per_region),
-        create_region(multiworld, player, "Viridian City North", locations_per_region),
-        create_region(multiworld, player, "Viridian Gym", locations_per_region),
-        create_region(multiworld, player, "Route 2", locations_per_region),
-        create_region(multiworld, player, "Route 2 East", locations_per_region),
+        create_region(multiworld, player, "Badge Gate North", locations_per_region),
+        create_region(multiworld, player, "Badge Gate South", locations_per_region),
+        create_region(multiworld, player, "Badge House", locations_per_region),
+        create_region(multiworld, player, "Celadon City", locations_per_region),
+        create_region(multiworld, player, "Celadon Game Corner", locations_per_region),
+        create_region(multiworld, player, "Celadon Gym", locations_per_region),
+        create_region(multiworld, player, "Celadon Prize Corner", locations_per_region),
+        create_region(multiworld, player, "Cerulean Cave 1F", locations_per_region),
+        create_region(multiworld, player, "Cerulean Cave 2F", locations_per_region),
+        create_region(multiworld, player, "Cerulean Cave B1F", locations_per_region),
+        create_region(multiworld, player, "Cerulean City", locations_per_region),
+        create_region(multiworld, player, "Cerulean City-Badge House Backyard", locations_per_region),
+        create_region(multiworld, player, "Cerulean City-Outskirts", locations_per_region),
+        create_region(multiworld, player, "Cerulean Gym", locations_per_region),
+        create_region(multiworld, player, "Cinnabar Gym", locations_per_region),
+        create_region(multiworld, player, "Cinnabar Island", locations_per_region),
+        create_region(multiworld, player, "Copycat's House", locations_per_region),
         create_region(multiworld, player, "Diglett's Cave", locations_per_region),
-        create_region(multiworld, player, "Route 22", locations_per_region),
-        create_region(multiworld, player, "Route 23", locations_per_region),
-        create_region(multiworld, player, "Viridian Forest", locations_per_region),
-        create_region(multiworld, player, "Pewter City", locations_per_region),
-        create_region(multiworld, player, "Pewter Gym", locations_per_region),
-        create_region(multiworld, player, "Route 3", locations_per_region),
+        create_region(multiworld, player, "Fighting Dojo", locations_per_region),
+        create_region(multiworld, player, "Fly House Gate", locations_per_region),
+        create_region(multiworld, player, "Fossil", locations_per_region),
+        create_region(multiworld, player, "Fuchsia City", locations_per_region),
+        create_region(multiworld, player, "Fuchsia City-Good Rod House Backyard", locations_per_region),
+        create_region(multiworld, player, "Fuchsia Gym", locations_per_region),
+        create_region(multiworld, player, "Good Rod House", locations_per_region),
+        create_region(multiworld, player, "Indigo Plateau", locations_per_region),
+        create_region(multiworld, player, "Lavender Town", locations_per_region),
+        create_region(multiworld, player, "Menu", locations_per_region),
         create_region(multiworld, player, "Mt Moon 1F", locations_per_region),
+        create_region(multiworld, player, "Mt Moon B1F-Exit", locations_per_region),
         create_region(multiworld, player, "Mt Moon B1F", locations_per_region),
         create_region(multiworld, player, "Mt Moon B2F", locations_per_region),
-        create_region(multiworld, player, "Route 4", locations_per_region),
-        create_region(multiworld, player, "Cerulean City", locations_per_region),
-        create_region(multiworld, player, "Cerulean Gym", locations_per_region),
-        create_region(multiworld, player, "Route 24", locations_per_region),
-        create_region(multiworld, player, "Route 25", locations_per_region),
-        create_region(multiworld, player, "Route 9", locations_per_region),
-        create_region(multiworld, player, "Route 10 North", locations_per_region),
-        create_region(multiworld, player, "Rock Tunnel 1F", locations_per_region),
-        create_region(multiworld, player, "Rock Tunnel B1F", locations_per_region),
-        create_region(multiworld, player, "Power Plant", locations_per_region),
-        create_region(multiworld, player, "Route 10 South", locations_per_region),
-        create_region(multiworld, player, "Lavender Town", locations_per_region),
+        create_region(multiworld, player, "Pallet Town", locations_per_region),
+        create_region(multiworld, player, "Pewter City", locations_per_region),
+        create_region(multiworld, player, "Pewter Gym", locations_per_region),
+        create_region(multiworld, player, "Pokedex", locations_per_region),
+        create_region(multiworld, player, "Pokemon Mansion 1F", locations_per_region),
+        create_region(multiworld, player, "Pokemon Mansion 2F", locations_per_region),
+        create_region(multiworld, player, "Pokemon Mansion 3F", locations_per_region),
+        create_region(multiworld, player, "Pokemon Mansion B1F", locations_per_region),
         create_region(multiworld, player, "Pokemon Tower 1F", locations_per_region),
         create_region(multiworld, player, "Pokemon Tower 2F", locations_per_region),
         create_region(multiworld, player, "Pokemon Tower 3F", locations_per_region),
@@ -65,61 +243,93 @@ def create_regions(multiworld: MultiWorld, player: int):
         create_region(multiworld, player, "Pokemon Tower 5F", locations_per_region),
         create_region(multiworld, player, "Pokemon Tower 6F", locations_per_region),
         create_region(multiworld, player, "Pokemon Tower 7F", locations_per_region),
+        create_region(multiworld, player, "Power Plant", locations_per_region),
+        create_region(multiworld, player, "Rock Tunnel 1F", locations_per_region),
+        create_region(multiworld, player, "Rock Tunnel B1F", locations_per_region),
+        create_region(multiworld, player, "Rocket Hideout B1F", locations_per_region),
+        create_region(multiworld, player, "Rocket Hideout B2F", locations_per_region),
+        create_region(multiworld, player, "Rocket Hideout B3F", locations_per_region),
+        create_region(multiworld, player, "Rocket Hideout B4F", locations_per_region),
+        create_region(multiworld, player, "Route 1", locations_per_region),
+        create_region(multiworld, player, "Route 10-North", locations_per_region),
+        create_region(multiworld, player, "Route 10-South", locations_per_region),
+        create_region(multiworld, player, "Route 11", locations_per_region),
+        create_region(multiworld, player, "Route 11-East", locations_per_region),
+        create_region(multiworld, player, "Route 11 Gate", locations_per_region),
+        create_region(multiworld, player, "Route 12 Gate", locations_per_region),
+        create_region(multiworld, player, "Route 12-Grass", locations_per_region),
+        create_region(multiworld, player, "Route 12-North", locations_per_region),
+        create_region(multiworld, player, "Route 12-South", locations_per_region),
+        create_region(multiworld, player, "Route 12-West", locations_per_region),
+        create_region(multiworld, player, "Route 13", locations_per_region),
+        create_region(multiworld, player, "Route 13-East", locations_per_region),
+        create_region(multiworld, player, "Route 14", locations_per_region),
+        create_region(multiworld, player, "Route 14-Grass", locations_per_region),
+        create_region(multiworld, player, "Route 15", locations_per_region),
+        create_region(multiworld, player, "Route 15 Gate", locations_per_region),
+        create_region(multiworld, player, "Route 16-Center", locations_per_region),
+        create_region(multiworld, player, "Route 16-East", locations_per_region),
+        create_region(multiworld, player, "Route 16 Gate", locations_per_region),
+        create_region(multiworld, player, "Route 16 House", locations_per_region),
+        create_region(multiworld, player, "Route 16-North", locations_per_region),
+        create_region(multiworld, player, "Route 16-West", locations_per_region),
+        create_region(multiworld, player, "Route 17", locations_per_region),
+        create_region(multiworld, player, "Route 18-East", locations_per_region),
+        create_region(multiworld, player, "Route 18 Gate", locations_per_region),
+        create_region(multiworld, player, "Route 18-West", locations_per_region),
+        create_region(multiworld, player, "Route 19", locations_per_region),
+        create_region(multiworld, player, "Route 2 Gate", locations_per_region),
+        create_region(multiworld, player, "Route 2-Grass", locations_per_region),
+        create_region(multiworld, player, "Route 2-North", locations_per_region),
+        create_region(multiworld, player, "Route 2-Northeast", locations_per_region),
+        create_region(multiworld, player, "Route 2-South", locations_per_region),
+        create_region(multiworld, player, "Route 2-Southeast", locations_per_region),
+        create_region(multiworld, player, "Route 20-East", locations_per_region),
+        create_region(multiworld, player, "Route 20-West", locations_per_region),
+        create_region(multiworld, player, "Route 21", locations_per_region),
+        create_region(multiworld, player, "Route 22", locations_per_region),
+        create_region(multiworld, player, "Route 23", locations_per_region),
+        create_region(multiworld, player, "Route 23-North", locations_per_region),
+        create_region(multiworld, player, "Route 23-South", locations_per_region),
+        create_region(multiworld, player, "Route 24", locations_per_region),
+        create_region(multiworld, player, "Route 25", locations_per_region),
+        create_region(multiworld, player, "Route 3", locations_per_region),
+        create_region(multiworld, player, "Route 4-East", locations_per_region),
+        create_region(multiworld, player, "Route 4-Lass", locations_per_region),
+        create_region(multiworld, player, "Route 4-West", locations_per_region),
         create_region(multiworld, player, "Route 5", locations_per_region),
-        create_region(multiworld, player, "Saffron City", locations_per_region),
-        create_region(multiworld, player, "Fighting Dojo", locations_per_region),
-        create_region(multiworld, player, "Saffron Gym", locations_per_region),
-        create_region(multiworld, player, "Copycat's House", locations_per_region),
-        create_region(multiworld, player, "Underground Tunnel North-South", locations_per_region),
         create_region(multiworld, player, "Route 6", locations_per_region),
-        create_region(multiworld, player, "Vermilion City", locations_per_region),
-        create_region(multiworld, player, "Vermilion Gym", locations_per_region),
+        create_region(multiworld, player, "Route 7", locations_per_region),
+        create_region(multiworld, player, "Route 8", locations_per_region),
+        create_region(multiworld, player, "Route 8-Grass", locations_per_region),
+        create_region(multiworld, player, "Route 9", locations_per_region),
         create_region(multiworld, player, "S.S. Anne 1F", locations_per_region),
-        create_region(multiworld, player, "S.S. Anne B1F", locations_per_region),
         create_region(multiworld, player, "S.S. Anne 2F", locations_per_region),
         create_region(multiworld, player, "S.S. Anne 3F", locations_per_region),
-        create_region(multiworld, player, "Route 11", locations_per_region),
-        create_region(multiworld, player, "Route 11 East", locations_per_region),
-        create_region(multiworld, player, "Route 12 North", locations_per_region),
-        create_region(multiworld, player, "Route 12 South", locations_per_region),
-        create_region(multiworld, player, "Route 12 Grass", locations_per_region),
-        create_region(multiworld, player, "Route 12 West", locations_per_region),
-        create_region(multiworld, player, "Route 7", locations_per_region),
-        create_region(multiworld, player, "Underground Tunnel West-East", locations_per_region),
-        create_region(multiworld, player, "Route 8", locations_per_region),
-        create_region(multiworld, player, "Route 8 Grass", locations_per_region),
-        create_region(multiworld, player, "Celadon City", locations_per_region),
-        create_region(multiworld, player, "Celadon Game Corner", locations_per_region),
-        create_region(multiworld, player, "Celadon Prize Corner", locations_per_region),
-        create_region(multiworld, player, "Celadon Gym", locations_per_region),
-        create_region(multiworld, player, "Route 16", locations_per_region),
-        create_region(multiworld, player, "Route 16 West", locations_per_region),
-        create_region(multiworld, player, "Route 16 North", locations_per_region),
-        create_region(multiworld, player, "Route 17", locations_per_region),
-        create_region(multiworld, player, "Route 18", locations_per_region),
-        create_region(multiworld, player, "Fuchsia City", locations_per_region),
-        create_region(multiworld, player, "Fuchsia Gym", locations_per_region),
-        create_region(multiworld, player, "Safari Zone Gate", locations_per_region),
+        create_region(multiworld, player, "S.S. Anne B1F", locations_per_region),
         create_region(multiworld, player, "Safari Zone Center", locations_per_region),
         create_region(multiworld, player, "Safari Zone East", locations_per_region),
+        create_region(multiworld, player, "Safari Zone Gate", locations_per_region),
         create_region(multiworld, player, "Safari Zone North", locations_per_region),
         create_region(multiworld, player, "Safari Zone West", locations_per_region),
-        create_region(multiworld, player, "Route 15", locations_per_region),
-        create_region(multiworld, player, "Route 14", locations_per_region),
-        create_region(multiworld, player, "Route 14 Grass", locations_per_region),
-        create_region(multiworld, player, "Route 13", locations_per_region),
-        create_region(multiworld, player, "Route 13 East", locations_per_region),
-        create_region(multiworld, player, "Route 19", locations_per_region),
-        create_region(multiworld, player, "Route 20 East", locations_per_region),
-        create_region(multiworld, player, "Route 20 West", locations_per_region),
+        create_region(multiworld, player, "Saffron City", locations_per_region),
+        create_region(multiworld, player, "Saffron East Gate-West", locations_per_region),
+        create_region(multiworld, player, "Saffron East Gate-East", locations_per_region),
+        create_region(multiworld, player, "Saffron Gym", locations_per_region),
+        create_region(multiworld, player, "Saffron North Gate-South", locations_per_region),
+        create_region(multiworld, player, "Saffron North Gate-North", locations_per_region),
+        create_region(multiworld, player, "Saffron South Gate-North", locations_per_region),
+        create_region(multiworld, player, "Saffron South Gate-South", locations_per_region),
+        create_region(multiworld, player, "Saffron West Gate-East", locations_per_region),
+        create_region(multiworld, player, "Saffron West Gate-West", locations_per_region),
         create_region(multiworld, player, "Seafoam Islands 1F", locations_per_region),
         create_region(multiworld, player, "Seafoam Islands B1F", locations_per_region),
         create_region(multiworld, player, "Seafoam Islands B2F", locations_per_region),
         create_region(multiworld, player, "Seafoam Islands B3F", locations_per_region),
         create_region(multiworld, player, "Seafoam Islands B4F", locations_per_region),
-        create_region(multiworld, player, "Cinnabar Island", locations_per_region),
-        create_region(multiworld, player, "Cinnabar Gym", locations_per_region),
-        create_region(multiworld, player, "Route 21", locations_per_region),
+        create_region(multiworld, player, "Seafoam Islands Exit", locations_per_region),
+        create_region(multiworld, player, "Silph Co 10F", locations_per_region),
+        create_region(multiworld, player, "Silph Co 11F", locations_per_region),
         create_region(multiworld, player, "Silph Co 1F", locations_per_region),
         create_region(multiworld, player, "Silph Co 2F", locations_per_region),
         create_region(multiworld, player, "Silph Co 3F", locations_per_region),
@@ -129,25 +339,32 @@ def create_regions(multiworld: MultiWorld, player: int):
         create_region(multiworld, player, "Silph Co 7F", locations_per_region),
         create_region(multiworld, player, "Silph Co 8F", locations_per_region),
         create_region(multiworld, player, "Silph Co 9F", locations_per_region),
-        create_region(multiworld, player, "Silph Co 10F", locations_per_region),
-        create_region(multiworld, player, "Silph Co 11F", locations_per_region),
-        create_region(multiworld, player, "Rocket Hideout B1F", locations_per_region),
-        create_region(multiworld, player, "Rocket Hideout B2F", locations_per_region),
-        create_region(multiworld, player, "Rocket Hideout B3F", locations_per_region),
-        create_region(multiworld, player, "Rocket Hideout B4F", locations_per_region),
-        create_region(multiworld, player, "Pokemon Mansion 1F", locations_per_region),
-        create_region(multiworld, player, "Pokemon Mansion 2F", locations_per_region),
-        create_region(multiworld, player, "Pokemon Mansion 3F", locations_per_region),
-        create_region(multiworld, player, "Pokemon Mansion B1F", locations_per_region),
+        create_region(multiworld, player, "Trashed House", locations_per_region),
+        create_region(multiworld, player, "Underground Path North South", locations_per_region),
+        create_region(multiworld, player, "Underground Path West East", locations_per_region),
+        create_region(multiworld, player, "Vermilion City", locations_per_region),
+        create_region(multiworld, player, "Vermilion Gym", locations_per_region),
         create_region(multiworld, player, "Victory Road 1F", locations_per_region),
         create_region(multiworld, player, "Victory Road 2F", locations_per_region),
         create_region(multiworld, player, "Victory Road 3F", locations_per_region),
-        create_region(multiworld, player, "Indigo Plateau", locations_per_region),
-        create_region(multiworld, player, "Cerulean Cave 1F", locations_per_region),
-        create_region(multiworld, player, "Cerulean Cave 2F", locations_per_region),
-        create_region(multiworld, player, "Cerulean Cave B1F", locations_per_region),
-        ]
+        create_region(multiworld, player, "Viridian City", locations_per_region),
+        create_region(multiworld, player, "Viridian City-North", locations_per_region),
+        create_region(multiworld, player, "Viridian Forest", locations_per_region),
+        create_region(multiworld, player, "Viridian Gym", locations_per_region),
+
+
+    ]
+    if __debug__:
+        for region in locations_per_region:
+            assert not locations_per_region[region], f"locations not assigned to region {region}"
     multiworld.regions += regions
+    for c in connecting_interior_warps:
+        for cx in c[:2]:
+            for region in regions:
+                if region.name == cx:
+                    break
+            else:
+                print(cx)
     connect(multiworld, player, "Menu", "Anywhere", one_way=True)
     connect(multiworld, player, "Menu", "Pallet Town", one_way=True)
     connect(multiworld, player, "Menu", "Pokedex", one_way=True)
@@ -156,32 +373,42 @@ def create_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "Pallet Town", "Route 1")
     connect(multiworld, player, "Route 1", "Viridian City")
     connect(multiworld, player, "Viridian City", "Route 22")
-    connect(multiworld, player, "Route 22", "Route 23",
-            lambda state: state.pokemon_rb_has_badges(state.multiworld.victory_road_condition[player].value, player) and
-                          state.pokemon_rb_can_surf(player))
-    connect(multiworld, player, "Viridian City North", "Viridian Gym", lambda state:
+    connect(multiworld, player, "Route 2-South", "Route 2-Grass", one_way=True)
+    connect(multiworld, player, "Route 2-North", "Route 2-Grass", one_way=True)
+    connect(multiworld, player, "Badge Gate South", "Badge Gate North",
+            lambda state: state.pokemon_rb_has_badges(state.multiworld.victory_road_condition[player].value, player))
+    connect(multiworld, player, "Route 23-South", "Route 23",
+            lambda state: state.pokemon_rb_can_surf(player))
+    connect(multiworld, player, "Viridian City-North", "Viridian Gym", lambda state:
                      state.pokemon_rb_has_badges(state.multiworld.viridian_gym_condition[player].value, player), one_way=True)
-    connect(multiworld, player, "Route 2", "Route 2 East", lambda state: state.pokemon_rb_can_cut(player))
-    connect(multiworld, player, "Route 2 East", "Diglett's Cave", lambda state: state.pokemon_rb_can_cut(player))
-    connect(multiworld, player, "Route 2", "Viridian City North")
-    connect(multiworld, player, "Route 2", "Viridian Forest")
-    connect(multiworld, player, "Route 2", "Pewter City")
+    connect(multiworld, player, "Route 2-South", "Route 2-Southeast", lambda state: state.pokemon_rb_can_cut(player))
+    # connect(multiworld, player, "Route 2 Northeast", "Diglett's Cave")
+    # connect(multiworld, player, "Route 2 Southeast", "Route 2 Gate")
+    # connect(multiworld, player, "Route 2 Northeast", "Route 2 Gate")
+    connect(multiworld, player, "Route 2-North", "Route 2-Northeast", lambda state: state.pokemon_rb_can_cut(player))
+    connect(multiworld, player, "Route 2-South", "Viridian City-North")
+    # connect(multiworld, player, "Route 2 South", "Viridian Forest")
+    # connect(multiworld, player, "Route 2 North", "Viridian Forest")
+    connect(multiworld, player, "Route 2-North", "Pewter City")
     connect(multiworld, player, "Pewter City", "Pewter Gym", one_way=True)
     connect(multiworld, player, "Pewter City", "Route 3")
-    connect(multiworld, player, "Route 4", "Route 3", one_way=True)
-    connect(multiworld, player, "Mt Moon 1F", "Mt Moon B1F", one_way=True)
-    connect(multiworld, player, "Mt Moon B1F", "Mt Moon B2F", one_way=True)
-    connect(multiworld, player, "Mt Moon B1F", "Route 4", one_way=True)
-    connect(multiworld, player, "Route 4", "Cerulean City")
+    connect(multiworld, player, "Route 4-West", "Route 3")
+    connect(multiworld, player, "Route 24", "Route 4-Lass", lambda state: state.pokemon_rb_can_surf(player), one_way=True)
+    connect(multiworld, player, "Mt Moon 1F", "Mt Moon B1F")
+    connect(multiworld, player, "Mt Moon B1F", "Mt Moon B2F")
+    connect(multiworld, player, "Mt Moon B2F", "Mt Moon B1F-Exit", one_way=True)
+    # connect(multiworld, player, "Mt Moon B1F", "Route 4", one_way=True)
+    connect(multiworld, player, "Route 4-East", "Cerulean City")
     connect(multiworld, player, "Cerulean City", "Cerulean Gym", one_way=True)
     connect(multiworld, player, "Cerulean City", "Route 24", one_way=True)
+    connect(multiworld, player, "Cerulean City-Outskirts", "Route 9", lambda state: state.pokemon_rb_can_cut(player))
+    connect(multiworld, player, "Cerulean City-Outskirts", "Route 5")
     connect(multiworld, player, "Route 24", "Route 25", one_way=True)
-    connect(multiworld, player, "Cerulean City", "Route 9", lambda state: state.pokemon_rb_can_cut(player))
-    connect(multiworld, player, "Route 9", "Route 10 North")
-    connect(multiworld, player, "Route 10 North", "Rock Tunnel 1F", lambda state: state.pokemon_rb_can_flash(player))
-    connect(multiworld, player, "Route 10 North", "Power Plant", lambda state: state.pokemon_rb_can_surf(player) and
+    connect(multiworld, player, "Route 9", "Route 10-North")
+    # connect(multiworld, player, "Route 10 North", "Rock Tunnel 1F", lambda state: state.pokemon_rb_can_flash(player))
+    connect(multiworld, player, "Route 10-North", "Power Plant", lambda state: state.pokemon_rb_can_surf(player) and
                                                                                (state.has("Plant Key", player) or not state.multiworld.extra_key_items[player].value), one_way=True)
-    connect(multiworld, player, "Rock Tunnel 1F", "Route 10 South", lambda state: state.pokemon_rb_can_flash(player))
+    # connect(multiworld, player, "Rock Tunnel 1F", "Route 10 South", lambda state: state.pokemon_rb_can_flash(player))
     connect(multiworld, player, "Rock Tunnel 1F", "Rock Tunnel B1F")
     connect(multiworld, player, "Lavender Town", "Pokemon Tower 1F", one_way=True)
     connect(multiworld, player, "Lavender Town", "Pokemon Tower 1F", one_way=True)
@@ -191,14 +418,17 @@ def create_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "Pokemon Tower 4F", "Pokemon Tower 5F", one_way=True)
     connect(multiworld, player, "Pokemon Tower 5F", "Pokemon Tower 6F", one_way=True)
     connect(multiworld, player, "Pokemon Tower 6F", "Pokemon Tower 7F", lambda state: state.has("Silph Scope", player))
-    connect(multiworld, player, "Cerulean City", "Route 5")
-    connect(multiworld, player, "Route 5", "Saffron City", lambda state: state.pokemon_rb_can_pass_guards(player))
+    #connect(multiworld, player, "Route 5", "Saffron City", lambda state: state.pokemon_rb_can_pass_guards(player))
     connect(multiworld, player, "Saffron City", "Fighting Dojo", lambda state: state.pokemon_rb_dojo(player), one_way=True)
-    connect(multiworld, player, "Route 5", "Underground Tunnel North-South")
-    connect(multiworld, player, "Route 6", "Underground Tunnel North-South")
-    connect(multiworld, player, "Route 6", "Saffron City", lambda state: state.pokemon_rb_can_pass_guards(player))
-    connect(multiworld, player, "Route 7", "Saffron City", lambda state: state.pokemon_rb_can_pass_guards(player))
-    connect(multiworld, player, "Route 8", "Saffron City", lambda state: state.pokemon_rb_can_pass_guards(player))
+    # connect(multiworld, player, "Route 5", "Underground Path North-South")
+    # connect(multiworld, player, "Route 6", "Underground Path North-South")
+    #connect(multiworld, player, "Route 6", "Saffron City", lambda state: state.pokemon_rb_can_pass_guards(player))
+    #connect(multiworld, player, "Route 7", "Saffron City", lambda state: state.pokemon_rb_can_pass_guards(player))
+    #connect(multiworld, player, "Route 8", "Saffron City", lambda state: state.pokemon_rb_can_pass_guards(player))
+    connect(multiworld, player, "Saffron East Gate-West", "Saffron East Gate-East", lambda state: state.pokemon_rb_can_pass_guards(player))
+    connect(multiworld, player, "Saffron West Gate-West", "Saffron West Gate-East", lambda state: state.pokemon_rb_can_pass_guards(player))
+    connect(multiworld, player, "Saffron North Gate-North", "Saffron North Gate-South", lambda state: state.pokemon_rb_can_pass_guards(player))
+    connect(multiworld, player, "Saffron South Gate-North", "Saffron South Gate-South", lambda state: state.pokemon_rb_can_pass_guards(player))
     connect(multiworld, player, "Saffron City", "Copycat's House", lambda state: state.has("Silph Co Liberated", player), one_way=True)
     connect(multiworld, player, "Saffron City", "Saffron Gym", lambda state: state.has("Silph Co Liberated", player), one_way=True)
     connect(multiworld, player, "Route 6", "Vermilion City")
@@ -208,56 +438,57 @@ def create_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "S.S. Anne 2F", "S.S. Anne 3F", one_way=True)
     connect(multiworld, player, "S.S. Anne 1F", "S.S. Anne B1F", one_way=True)
     connect(multiworld, player, "Vermilion City", "Route 11")
-    connect(multiworld, player, "Vermilion City", "Diglett's Cave")
-    connect(multiworld, player, "Route 12 West", "Route 11 East", lambda state: state.pokemon_rb_can_strength(player) or not state.multiworld.extra_strength_boulders[player].value)
-    connect(multiworld, player, "Route 12 North", "Route 12 South", lambda state: state.has("Poke Flute", player) or state.pokemon_rb_can_surf(player))
-    connect(multiworld, player, "Route 12 West", "Route 12 North", lambda state: state.has("Poke Flute", player))
-    connect(multiworld, player, "Route 12 West", "Route 12 South", lambda state: state.has("Poke Flute", player))
-    connect(multiworld, player, "Route 12 South", "Route 12 Grass", lambda state: state.pokemon_rb_can_cut(player))
-    connect(multiworld, player, "Route 12 North", "Lavender Town")
+    # connect(multiworld, player, "Route 11", "Diglett's Cave")
+    # connect(multiworld, player, "Route 12 West", "Route 11 East", lambda state: state.pokemon_rb_can_strength(player) or not state.multiworld.extra_strength_boulders[player].value)
+    connect(multiworld, player, "Route 12-North", "Route 12-South", lambda state: state.has("Poke Flute", player) or state.pokemon_rb_can_surf(player))
+    connect(multiworld, player, "Route 12-West", "Route 12-North", lambda state: state.has("Poke Flute", player))
+    connect(multiworld, player, "Route 12-West", "Route 12-South", lambda state: state.has("Poke Flute", player))
+    connect(multiworld, player, "Route 12-South", "Route 12-Grass", lambda state: state.pokemon_rb_can_cut(player))
+    # connect(multiworld, player, "Route 12 North", "Lavender Town")
     connect(multiworld, player, "Route 7", "Lavender Town")
-    connect(multiworld, player, "Route 10 South", "Lavender Town")
-    connect(multiworld, player, "Route 7", "Underground Tunnel West-East")
-    connect(multiworld, player, "Route 8", "Underground Tunnel West-East")
+    connect(multiworld, player, "Route 10-South", "Lavender Town")
+    # connect(multiworld, player, "Route 7", "Underground Path West-East")
+    # connect(multiworld, player, "Route 8", "Underground Path West-East")
     connect(multiworld, player, "Route 8", "Celadon City")
-    connect(multiworld, player, "Route 8", "Route 8 Grass", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
+    connect(multiworld, player, "Route 8", "Route 8-Grass", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
     connect(multiworld, player, "Route 7", "Celadon City")
     connect(multiworld, player, "Celadon City", "Celadon Gym", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
     connect(multiworld, player, "Celadon City", "Celadon Game Corner")
     connect(multiworld, player, "Celadon City", "Celadon Prize Corner")
-    connect(multiworld, player, "Celadon City", "Route 16")
-    connect(multiworld, player, "Route 16", "Route 16 North", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
-    connect(multiworld, player, "Route 16", "Route 16 West", lambda state: state.has("Poke Flute", player) and state.has("Bicycle", player))
-    connect(multiworld, player, "Route 17", "Route 16 West")
-    connect(multiworld, player, "Route 17", "Route 18", lambda state: state.has("Bicycle", player))
+    connect(multiworld, player, "Celadon City", "Route 16-East")
+    connect(multiworld, player, "Route 16-East", "Route 16-North", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
+    connect(multiworld, player, "Route 16-East", "Route 16-Center", lambda state: state.has("Poke Flute", player))
+    connect(multiworld, player, "Route 17", "Route 16-West")
+    connect(multiworld, player, "Route 17", "Route 18-West")
     connect(multiworld, player, "Fuchsia City", "Fuchsia Gym", one_way=True)
-    connect(multiworld, player, "Fuchsia City", "Route 18")
+    # connect(multiworld, player, "Fuchsia City", "Route 18")
     connect(multiworld, player, "Fuchsia City", "Safari Zone Gate", one_way=True)
     connect(multiworld, player, "Safari Zone Gate", "Safari Zone Center", lambda state: state.has("Safari Pass", player) or not state.multiworld.extra_key_items[player].value, one_way=True)
     connect(multiworld, player, "Safari Zone Center", "Safari Zone East", one_way=True)
     connect(multiworld, player, "Safari Zone Center", "Safari Zone West", one_way=True)
     connect(multiworld, player, "Safari Zone Center", "Safari Zone North", one_way=True)
-    connect(multiworld, player, "Fuchsia City", "Route 15")
+    # connect(multiworld, player, "Fuchsia City", "Route 15")
     connect(multiworld, player, "Route 15", "Route 14")
-    connect(multiworld, player, "Route 14", "Route 14 Grass", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
+    connect(multiworld, player, "Route 14", "Route 14-Grass", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
     connect(multiworld, player, "Route 14", "Route 13")
-    connect(multiworld, player, "Route 13", "Route 13 East", lambda state: state.pokemon_rb_can_strength(player) or state.pokemon_rb_can_surf(player) or not state.multiworld.extra_strength_boulders[player].value)
-    connect(multiworld, player, "Route 12 South", "Route 13 East")
+    connect(multiworld, player, "Route 13", "Route 13-East", lambda state: state.pokemon_rb_can_strength(player) or state.pokemon_rb_can_surf(player) or not state.multiworld.extra_strength_boulders[player].value)
+    connect(multiworld, player, "Route 12-South", "Route 13-East")
     connect(multiworld, player, "Fuchsia City", "Route 19", lambda state: state.pokemon_rb_can_surf(player))
-    connect(multiworld, player, "Route 20 East", "Route 19")
-    connect(multiworld, player, "Route 20 West", "Cinnabar Island", lambda state: state.pokemon_rb_can_surf(player))
-    connect(multiworld, player, "Route 20 West", "Seafoam Islands 1F")
-    connect(multiworld, player, "Route 20 East", "Seafoam Islands 1F", one_way=True)
-    connect(multiworld, player, "Seafoam Islands 1F", "Route 20 East", lambda state: state.pokemon_rb_can_strength(player), one_way=True)
-    connect(multiworld, player, "Viridian City", "Viridian City North", lambda state: state.has("Oak's Parcel", player) or state.multiworld.old_man[player].value == 2 or state.pokemon_rb_can_cut(player))
+    connect(multiworld, player, "Route 20-East", "Route 19")
+    connect(multiworld, player, "Route 20-West", "Cinnabar Island", lambda state: state.pokemon_rb_can_surf(player))
+    # connect(multiworld, player, "Route 20 West", "Seafoam Islands 1F")
+    # connect(multiworld, player, "Route 20 East", "Seafoam Islands 1F", one_way=True)
+    # connect(multiworld, player, "Seafoam Islands 1F", "Route 20-East", lambda state: state.pokemon_rb_can_strength(player), one_way=True)
+    connect(multiworld, player, "Viridian City", "Viridian City-North", lambda state: state.has("Oak's Parcel", player) or state.multiworld.old_man[player].value == 2 or state.pokemon_rb_can_cut(player))
     connect(multiworld, player, "Route 3", "Mt Moon 1F", one_way=True)
-    connect(multiworld, player, "Route 11", "Route 11 East", lambda state: state.pokemon_rb_can_strength(player))
+    connect(multiworld, player, "Route 11", "Route 11-East", lambda state: state.pokemon_rb_can_strength(player) or not state.multiworld.extra_strength_boulders[player])
     connect(multiworld, player, "Cinnabar Island", "Cinnabar Gym", lambda state: state.has("Secret Key", player) and state.pokemon_rb_cinnabar_gym(player), one_way=True)
     connect(multiworld, player, "Cinnabar Island", "Pokemon Mansion 1F", lambda state: state.has("Mansion Key", player) or not state.multiworld.extra_key_items[player].value, one_way=True)
     connect(multiworld, player, "Seafoam Islands 1F", "Seafoam Islands B1F", one_way=True)
     connect(multiworld, player, "Seafoam Islands B1F", "Seafoam Islands B2F", one_way=True)
     connect(multiworld, player, "Seafoam Islands B2F", "Seafoam Islands B3F", one_way=True)
     connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B4F", one_way=True)
+    connect(multiworld, player, "Seafoam Islands B4F", "Seafoam Islands Exit", lambda state: state.pokemon_rb_can_strength(player), one_way=True)
     connect(multiworld, player, "Route 21", "Cinnabar Island", lambda state: state.pokemon_rb_can_surf(player))
     connect(multiworld, player, "Pallet Town", "Route 21", lambda state: state.pokemon_rb_can_surf(player))
     connect(multiworld, player, "Saffron City", "Silph Co 1F", lambda state: state.has("Fuji Saved", player), one_way=True)
@@ -278,10 +509,10 @@ def create_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "Pokemon Mansion 1F", "Pokemon Mansion 2F", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 2F", "Pokemon Mansion 3F", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 1F", "Pokemon Mansion B1F", one_way=True)
-    connect(multiworld, player, "Route 23", "Victory Road 1F", lambda state: state.pokemon_rb_can_strength(player), one_way=True)
+    # connect(multiworld, player, "Route 23", "Victory Road 1F", lambda state: state.pokemon_rb_can_strength(player), one_way=True)
     connect(multiworld, player, "Victory Road 1F", "Victory Road 2F", one_way=True)
     connect(multiworld, player, "Victory Road 2F", "Victory Road 3F", one_way=True)
-    connect(multiworld, player, "Victory Road 2F", "Indigo Plateau", lambda state: state.pokemon_rb_has_badges(state.multiworld.elite_four_condition[player], player), one_way=True)
+    connect(multiworld, player, "Route 23-North", "Indigo Plateau", lambda state: state.pokemon_rb_has_badges(state.multiworld.elite_four_condition[player], player), one_way=True)
     connect(multiworld, player, "Cerulean City", "Cerulean Cave 1F", lambda state:
             state.pokemon_rb_cerulean_cave(state.multiworld.cerulean_cave_condition[player].value + (state.multiworld.extra_key_items[player].value * 4), player) and
             state.pokemon_rb_can_surf(player), one_way=True)
@@ -290,6 +521,9 @@ def create_regions(multiworld: MultiWorld, player: int):
     if multiworld.worlds[player].fly_map != "Pallet Town":
         connect(multiworld, player, "Menu", multiworld.worlds[player].fly_map, lambda state: state.pokemon_rb_can_fly(player), one_way=True,
                 name="Fly to " + multiworld.worlds[player].fly_map)
+
+    for connection in connecting_interior_warps:
+        connect(multiworld, player, connection[0], connection[1])
 
 
 def connect(world: MultiWorld, player: int, source: str, target: str, rule: callable = lambda state: True, one_way=False, name=None):

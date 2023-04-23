@@ -128,7 +128,7 @@ def set_rules(world, player):
         **{f"Pokemon Tower {floor}F - Wild Pokemon - {slot}": lambda state: state.has("Silph Scope", player) for floor in range(3, 8) for slot in range(1, 11)},
 
         "Route 2 - Marcel Trade": lambda state: state.can_reach("Route 24 - Wild Pokemon - 6", "Location", player),
-        "Underground Tunnel West-East - Spot Trade": lambda state: state.can_reach("Route 24 - Wild Pokemon - 6", "Location", player),
+        "Underground Tunnel West East - Spot Trade": lambda state: state.can_reach("Route 24 - Wild Pokemon - 6", "Location", player),
         "Route 11 - Terry Trade": lambda state: state.can_reach("Safari Zone Center - Wild Pokemon - 5", "Location", player),
         "Route 18 - Marc Trade": lambda state: state.can_reach("Route 23 - Super Rod Pokemon - 1", "Location", player),
         "Cinnabar Island - Sailor Trade": lambda state: state.can_reach("Pokemon Mansion 1F - Wild Pokemon - 3", "Location", player),
@@ -141,7 +141,6 @@ def set_rules(world, player):
         "Pallet Town - Oak's Parcel Reward": lambda state: state.has("Oak's Parcel", player),
 
         # trainers
-        "Route 4 - Cooltrainer F": lambda state: state.pokemon_rb_can_surf(player),
         "Route 15 - Jr. Trainer F 1": lambda state: state.pokemon_rb_can_cut(player),
         "Silph Co 11F - Rocket 2 (Card Key)": lambda state: state.has("Card Key", player),
         "Silph Co 9F - Rocket 2 (Card Key)": lambda state: state.has("Card Key", player),
@@ -194,7 +193,8 @@ def set_rules(world, player):
             player),
         "Route 23 - Hidden Item East Bush After Water": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
-        "Route 23 - Hidden Item On Island": lambda state: state.pokemon_rb_can_get_hidden_items(player),
+        "Route 23 - Hidden Item On Island": lambda state: state.pokemon_rb_can_get_hidden_items(
+            player) and state.pokemon_rb_can_surf(player),
         "Victory Road 2F - Hidden Item Rock Before Moltres": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
         "Victory Road 2F - Hidden Item Rock In Final Room": lambda state: state.pokemon_rb_can_get_hidden_items(player),
@@ -206,12 +206,12 @@ def set_rules(world, player):
         "Route 17 - Hidden Item East Center": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Route 17 - Hidden Item West Center": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Route 17 - Hidden Item Before Final Bridge": lambda state: state.pokemon_rb_can_get_hidden_items(player),
-        "Underground Tunnel North-South - Hidden Item Near Northern Stairs": lambda
+        "Underground Tunnel North South - Hidden Item Near Northern Stairs": lambda
             state: state.pokemon_rb_can_get_hidden_items(player),
-        "Underground Tunnel North-South - Hidden Item Near Southern Stairs": lambda
+        "Underground Tunnel North South - Hidden Item Near Southern Stairs": lambda
             state: state.pokemon_rb_can_get_hidden_items(player),
-        "Underground Tunnel West-East - Hidden Item West": lambda state: state.pokemon_rb_can_get_hidden_items(player),
-        "Underground Tunnel West-East - Hidden Item East": lambda state: state.pokemon_rb_can_get_hidden_items(player),
+        "Underground Tunnel West East - Hidden Item West": lambda state: state.pokemon_rb_can_get_hidden_items(player),
+        "Underground Tunnel West East - Hidden Item East": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Celadon City - Hidden Item Dead End Near Cuttable Tree": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
         "Route 25 - Hidden Item Northeast Of Grass": lambda state: state.pokemon_rb_can_get_hidden_items(player),

@@ -113,6 +113,7 @@ def set_mon_palettes(self, random, data):
 
 
 def process_trainer_data(self, data, random):
+    return
     mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
                  or self.multiworld.trainer_legendaries[self.player].value]
     address = rom_addresses["Trainer_Data"]
@@ -670,6 +671,81 @@ def generate_output(self, output_directory: str):
     basemd5 = hashlib.md5()
     basemd5.update(data)
 
+
+            # data[location.rom_address - 1] = location.level
+
+    from .map_shuffle import warp_data, map_ids
+    # for region in warp_data:
+    #     for entrance in warp_data[region]:
+    #         if isinstance(entrance["id"], int):
+    #             entrance["id"] = (entrance["id"],)
+    #         for warp_id in entrance["id"]:
+    #             address = rom_addresses[entrance["address"]]
+    #             if "Elevator" in entrance["address"]:
+    #                 address += (2 * warp_id)
+    #             else:
+    #                 address += (4 * warp_id)
+    #             if data[address] != entrance["to"]["id"]:
+    #                 print(entrance)
+    #                 print(warp_id)
+    #                 print(f"Warp ID mismatch: {data[address]} to {entrance['to']['id']}")
+    #             if data[address + 1] != 255 and data[address + 1] != map_ids[entrance["to"]["map"]]:
+    #                 print(entrance)
+    #                 print(warp_id)
+    #                 print(f"Map ID mismatch: {data[address + 1]} to {map_ids[entrance['to']['map']]}")
+    #             if "Elevator" in entrance["to"]["map"]:
+    #                 data[address] = 0
+    #             else:
+    #                 data[address] = entrance["to"]["id"]
+    #             data[address + 1] = map_ids[entrance["to"]["map"]]
+
+    entrances = []
+    interior_ent = 0
+    exterior_ent = 0
+    for region in warp_data:
+        if (not (region.startswith("Route") or region.endswith("City") or region.endswith("Town") or region.endswith("Island") or "City-" in region)) or "Gate" in region or "Center" in region or "House" in region:
+            interior_ent += len(warp_data[region])
+            continue
+        exterior_ent += len(warp_data[region])
+        for entrance in warp_data[region]:
+            entrance["region"] = region
+        entrances += warp_data[region]
+    print(exterior_ent)
+    print(interior_ent)
+    random.shuffle(entrances)
+    for i in range(0, len(entrances), 1):
+        # if i+1 > len(entrances) - 1:
+        #     break
+        if i+1 == len(entrances):
+            pair = [entrances[i], entrances[0]]
+        else:
+            pair = [entrances[i], entrances[i+1]]
+        for entrance in pair:
+            if isinstance(entrance["id"], int):
+                entrance["id"] = (entrance["id"],)
+            if isinstance(entrance["to"]["id"], int):
+                entrance["to"]["id"] = (entrance["to"]["id"],)
+        # pairs = [pair, [pair[1], pair[0]]]
+        # for pair in pairs:
+        for i, id in enumerate(pair[0]["id"]):
+            if "Elevator" in pair[1]["address"]:
+                id2 = 0
+            else:
+                i_2 = i
+                while i_2 > len(pair[1]["id"]) - 1:
+                    i_2 -= len(pair[1]["id"])
+                id2 = pair[1]["id"][i_2]
+            address = rom_addresses[pair[0]["address"]]
+            if "Elevator" in pair[0]["address"]:
+                address += (2 * id)
+            else:
+                address += (4 * id)
+            data[address] = id2
+            data[address + 1] = map_ids[pair[1]["region"].split("-")[0]]
+
+
+    self.finished_level_scaling.wait()
+
     for location in self.multiworld.get_locations():
         if location.player != self.player or location.rom_address is None:
             continue
@@ -688,6 +764,8 @@ def generate_output(self, output_directory: str):
                         if item_id > 255:
                             item_id -= 256
                         data[address] = item_id
+                    if location.level:
+                        data[address - 1] = location.level
 
         else:
             data[location.rom_address] = 0x2C  # AP Item
@@ -883,6 +961,20 @@ def generate_output(self, output_directory: str):
 
     TM_IDs = bytearray([poke_data.moves[move]["id"] for move in self.local_tms])
     write_bytes(data, TM_IDs, rom_addresses["TM_Moves"])
+
+
+    # REMOVE WHEN DONE WITH ENTRANCE SHUFFLE
+    existing_warps = []
+    from .regions import connecting_interior_warps
+    for c in connecting_interior_warps:
+        for i in range(2, 4):
+            for w in c[i]:
+                existing_warps.append(w)
+    for a in rom_addresses:
+        if a.startswith("Warp_"):
+            if a not in existing_warps:
+                print(f"{a}: {data[rom_addresses[a] + 2:rom_addresses[a] + 4]}")
+
 
     if self.multiworld.randomize_rock_tunnel[self.player]:
         seed = randomize_rock_tunnel(data, random)

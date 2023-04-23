@@ -1,6 +1,6 @@
 from typing import TextIO
 import os
-import logging
+import threading
 from copy import deepcopy
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
@@ -17,6 +17,7 @@ from .text import encode_text
 from .rom import generate_output, get_base_rom_bytes, get_base_rom_path, process_pokemon_data, process_wild_pokemon,\
     process_static_pokemon, process_move_data
 from .rules import set_rules
+from .level_scaling import level_scaling
 
 import worlds.pokemon_rb.poke_data as poke_data
 
@@ -43,7 +44,7 @@ class PokemonRedBlueWorld(World):
     data_version = 7
     required_client_version = (0, 3, 9)
 
-    topology_present = False
+    topology_present = True
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = {location.name: location.address for location in location_data if location.type == "Item"
@@ -67,6 +68,7 @@ class PokemonRedBlueWorld(World):
         self.type_chart = None
         self.traps = None
         self.trade_mons = {}
+        self.finished_level_scaling = threading.Event()
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
@@ -227,7 +229,11 @@ class PokemonRedBlueWorld(World):
                         <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0):
                     item = self.create_item(self.select_trap())
             if event:
-                self.multiworld.get_location(location.name, self.player).place_locked_item(item)
+                loc = self.multiworld.get_location(location.name, self.player)
+                loc.place_locked_item(item)
+                if location.type == "Trainer Party":
+                    loc.item.classification = ItemClassification.filler
+                    loc.party_data = deepcopy(location.party_data)
             elif "Badge" not in item.name or self.multiworld.badgesanity[self.player].value:
                 item_pool.append(item)
 
@@ -391,6 +397,10 @@ class PokemonRedBlueWorld(World):
 
     def create_item(self, name: str) -> Item:
         return PokemonRBItem(name, self.player)
+
+    @classmethod
+    def stage_generate_output(cls, multiworld, output_directory):
+        level_scaling(multiworld)
 
     def generate_output(self, output_directory: str):
         generate_output(self, output_directory)
