@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, Any, Optional, List
 
-from BaseClasses import Tutorial, ItemClassification, CollectionState, Item
+from BaseClasses import Tutorial, ItemClassification, CollectionState, Item, MultiWorld
 from worlds.AutoWorld import World, WebWorld
 from .Constants import NOTES, PHOBEKINS, ALL_ITEMS, ALWAYS_LOCATIONS, SEALS, BOSS_LOCATIONS, FILLER
 from .Options import messenger_options, NotesNeeded, Goal, PowerSeals, Logic
@@ -78,6 +78,13 @@ class MessengerWorld(World):
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
         self.total_shards = 0
+    
+    @classmethod
+    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
+        for player in multiworld.get_game_players(cls.game):
+            player_name = multiworld.player_name[player] = multiworld.get_player_name(player).replace("_", " ")
+            if not all(c.isalnum() or c in "- " for c in player_name):
+                raise ValueError(f"Player name {player_name} is not alpha-numeric.")
 
     def generate_early(self) -> None:
         if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:

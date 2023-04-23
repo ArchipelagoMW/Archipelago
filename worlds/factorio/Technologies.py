@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import string
+import pkgutil
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, Set, FrozenSet, Tuple, Union, List, Any
@@ -11,7 +12,7 @@ from typing import Dict, Set, FrozenSet, Tuple, Union, List, Any
 import Utils
 from . import Options
 
-factorio_id = factorio_base_id = 2 ** 17
+factorio_tech_id = factorio_base_id = 2 ** 17
 # Factorio technologies are imported from a .json document in /data
 source_folder = os.path.join(os.path.dirname(__file__), "data")
 
@@ -19,7 +20,6 @@ pool = ThreadPoolExecutor(1)
 
 
 def load_json_data(data_name: str) -> Union[List[str], Dict[str, Any]]:
-    import pkgutil
     return json.loads(pkgutil.get_data(__name__, "data/" + data_name + ".json").decode())
 
 
@@ -33,7 +33,9 @@ items_future = pool.submit(load_json_data, "items")
 tech_table: Dict[str, int] = {}
 technology_table: Dict[str, Technology] = {}
 
-always = lambda state: True
+
+def always(state):
+    return True
 
 
 class FactorioElement:
@@ -49,7 +51,6 @@ class FactorioElement:
 class Technology(FactorioElement):  # maybe make subclass of Location?
     has_modifier: bool
     factorio_id: int
-    name: str
     ingredients: Set[str]
     progressive: Tuple[str]
     unlocks: Union[Set[str], bool]  # bool case is for progressive technologies
@@ -192,9 +193,9 @@ recipe_sources: Dict[str, Set[str]] = {}  # recipe_name -> technology source
 # recipes and technologies can share names in Factorio
 for technology_name, data in sorted(techs_future.result().items()):
     current_ingredients = set(data["ingredients"])
-    technology = Technology(technology_name, current_ingredients, factorio_id,
+    technology = Technology(technology_name, current_ingredients, factorio_tech_id,
                             has_modifier=data["has_modifier"], unlocks=set(data["unlocks"]))
-    factorio_id += 1
+    factorio_tech_id += 1
     tech_table[technology_name] = technology.factorio_id
     technology_table[technology_name] = technology
     for recipe_name in technology.unlocks:
@@ -391,17 +392,13 @@ progressive_rows["progressive-energy-shield"] = ("energy-shield-equipment", "ene
 progressive_rows["progressive-wall"] = ("stone-wall", "gate")
 progressive_rows["progressive-follower"] = ("defender", "distractor", "destroyer")
 progressive_rows["progressive-inserter"] = ("fast-inserter", "stack-inserter")
-
-sorted_rows = sorted(progressive_rows)
-# to keep ID mappings the same.
-# If there's a breaking change at some point, then this should be moved in with the sorted ordering
 progressive_rows["progressive-turret"] = ("gun-turret", "laser-turret")
-sorted_rows.append("progressive-turret")
 progressive_rows["progressive-flamethrower"] = ("flamethrower",)  # leaving out flammables, as they do nothing
-sorted_rows.append("progressive-flamethrower")
 progressive_rows["progressive-personal-roboport-equipment"] = ("personal-roboport-equipment",
                                                                "personal-roboport-mk2-equipment")
-sorted_rows.append("progressive-personal-roboport-equipment")
+
+sorted_rows = sorted(progressive_rows)
+
 # integrate into
 source_target_mapping: Dict[str, str] = {
     "progressive-braking-force": "progressive-train-network",
@@ -421,8 +418,8 @@ progressive_technology_table: Dict[str, Technology] = {}
 for root in sorted_rows:
     progressive = progressive_rows[root]
     assert all(tech in tech_table for tech in progressive), "declared a progressive technology without base technology"
-    factorio_id += 1
-    progressive_technology = Technology(root, technology_table[progressive[0]].ingredients, factorio_id,
+    factorio_tech_id += 1
+    progressive_technology = Technology(root, technology_table[progressive[0]].ingredients, factorio_tech_id,
                                         progressive,
                                         has_modifier=any(technology_table[tech].has_modifier for tech in progressive),
                                         unlocks=any(technology_table[tech].unlocks for tech in progressive))
@@ -504,3 +501,4 @@ valid_ingredients: Set[str] = stacking_items | fluids
 # cleanup async helpers
 pool.shutdown()
 del pool
+del factorio_tech_id
