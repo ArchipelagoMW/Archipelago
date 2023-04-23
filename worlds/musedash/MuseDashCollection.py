@@ -113,4 +113,4 @@ class MuseDashCollections:
         if difficulty == "〇":
             return 10
 
-        return intdifficulty
+        return int(difficulty)
