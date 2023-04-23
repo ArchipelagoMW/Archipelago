@@ -150,7 +150,6 @@ class SMWorld(World):
         pool = []
         self.locked_items = {}
         self.NothingPool = []
-        self.prefilled_locked_items = []
         weaponCount = [0, 0, 0]
         for item in itemPool:
             isAdvancement = True
@@ -336,9 +335,6 @@ class SMWorld(World):
         else:
             return "Nothing"
         
-    def get_pre_fill_items(self):
-        return self.prefilled_locked_items
-
     def pre_fill(self):
         if len(self.NothingPool) > 0:
             nonChozoLoc = []
@@ -361,17 +357,6 @@ class SMWorld(World):
             for item, loc in zip(self.NothingPool, locations):
                 loc.place_locked_item(item)
                 loc.address = loc.item.code = None
-
-        from Fill import fill_restrictive
-        if len(self.prefilled_locked_items) > 0:
-            locations = [loc for loc in self.locations.values() if loc.item is None]
-            self.multiworld.random.shuffle(locations)
-            all_state = self.multiworld.get_all_state(False)
-            for item in set(self.prefilled_locked_items):
-                while (all_state.smbm[self.player].haveItem(item.type)):
-                    all_state.remove(item)
-
-            fill_restrictive(self.multiworld, all_state, locations, self.prefilled_locked_items, True, True)
 
     def post_fill(self):
         self.itemLocs = [
