@@ -264,7 +264,7 @@ Quarry Stoneworks Upper Floor (Quarry Stoneworks) - Quarry Stoneworks Middle Flo
 158141 - 0x014E9 (Upper Row 8) - 0x03686 - Squares & Colored Squares & Eraser & Stars & Stars + Same Colored Symbol
 158142 - 0x03677 (Stair Control) - True - Squares & Colored Squares & Eraser
 Door - 0x0368A (Stairs) - 0x03677
-158143 - 0x3C125 (Control Room Left) - 0x0367C - Squares & Black/White Squares & Dots & Full Dots & Eraser
+158143 - 0x3C125 (Control Room Left) - 0x014E9 - Squares & Black/White Squares & Dots & Full Dots & Eraser
 158144 - 0x0367C (Control Room Right) - 0x014E9 - Squares & Colored Squares & Triangles & Eraser & Stars & Stars + Same Colored Symbol
 159411 - 0x0069D (Ramp EP) - 0x03676 & 0x275FF - True
 159413 - 0x00614 (Lift EP) - 0x275FF & 0x03675 - True
