@@ -785,7 +785,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         if "DeathLink" in tags and ctx.last_death_link != args["data"]["time"]:
             ctx.on_deathlink(args["data"])
     elif cmd == "SetReply":
-        if args["key"] == "EnergyLink":
+        if args["key"].startswith("EnergyLink"):
             ctx.current_energy_link_value = args["value"]
             if ctx.ui:
                 ctx.ui.set_new_energy_link_value()
