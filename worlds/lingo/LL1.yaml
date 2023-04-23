@@ -1430,20 +1430,13 @@
         door: Painting Shortcut
         painting: True
       Yellow Backside Area:
+        room: First Second Third Fourth
         door: Backside Door
       The Colorful (White): True
     panels:
       I:
         id: Strand Room/Panel_i_staring
         colors: blue
-      FIRST:
-        id: Backside Room/Panel_first_first
-      SECOND:
-        id: Backside Room/Panel_second_second
-      THIRD:
-        id: Backside Room/Panel_third_third
-      FOURTH:
-        id: Backside Room/Panel_fourth_fourth
       GREEN:
         id: Color Arrow Room/Panel_green_afar
         required_door:
@@ -1452,20 +1445,16 @@
       Painting Shortcut:
         painting_id: flower_painting_8
         item_name: Starting Room - Flower Painting
-        panels:
-          - FIRST
-          - SECOND
-          - THIRD
-          - FOURTH
-      Backside Door:
-        id: Count Up Room Area Doors/Door_yellow_backside
-        group: Backside Doors
         skip_location: True
         panels:
-          - FIRST
-          - SECOND
-          - THIRD
-          - FOURTH
+          - room: First Second Third Fourth
+            panel: FIRST
+          - room: First Second Third Fourth
+            panel: SECOND
+          - room: First Second Third Fourth
+            panel: THIRD
+          - room: First Second Third Fourth
+            panel: FOURTH
       Green Barrier:
         id: Color Arrow Room Doors/Door_green_5
         group: Color Hunt Barriers
@@ -1479,7 +1468,7 @@
   Yellow Backside Area:
     entrances:
       Courtyard:
-        room: Courtyard
+        room: First Second Third Fourth
         door: Backside Door
       Roof: True
     panels:
@@ -1493,6 +1482,35 @@
     paintings:
       - id: blueman_painting
         orientation: east
+  First Second Third Fourth:
+    # We are separating this door + its panels into its own room because they
+    # are accessible from two distinct regions (Courtyard and Yellow Backside
+    # Area). We need to do this because painting shuffle makes it possible to
+    # have access to Yellow Backside Area without having access to Courtyard,
+    # and we want it to still be in logic to solve these panels.
+    entrances:
+      Courtyard: True
+      Yellow Backside Area: True
+    panels:
+      FIRST:
+        id: Backside Room/Panel_first_first
+      SECOND:
+        id: Backside Room/Panel_second_second
+      THIRD:
+        id: Backside Room/Panel_third_third
+      FOURTH:
+        id: Backside Room/Panel_fourth_fourth
+    doors:
+      Backside Door:
+        id: Count Up Room Area Doors/Door_yellow_backside
+        group: Backside Doors
+        location_name: Courtyard - FIRST, SECOND, THIRD, FOURTH
+        item_name: Courtyard - Backside Door
+        panels:
+          - FIRST
+          - SECOND
+          - THIRD
+          - FOURTH
   The Colorful (White):
     entrances:
       Courtyard: True

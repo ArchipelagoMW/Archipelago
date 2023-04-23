@@ -41,8 +41,8 @@ not affected by randomization, but you are almost never required to perform a wa
   logic.
     * As an aside, this snipe is different from the others in that it is possible to see the face of the panel by going
       through the nearby door (if it is open), entering the area from the roof, or entering the area through a painting
-      using painting shuffle. Solving the panel in either of those ways is not in logic (particularly in the painting
-      shuffle case, where you may not have access to the Courtyard itself).
+      using painting shuffle. Solving the panel in either of those ways does not require a wall snipe and is still in
+      logic.
 * In the maze outside The Lab, there is a hidden OPEN puzzle within a wall that ordinarily opens the entrance to lab.
   Its existence can be inferred from the nearby black puzzles with the solutions "OPEN" and "BEHIND". Solving this
   puzzle while standing in the OPEN BEHIND room is in logic.
