@@ -102,5 +102,6 @@ components: List[Component] = [
 
 icon_paths = {
     'icon': local_path('data', 'icon.ico' if is_windows else 'icon.png'),
-    'mcicon': local_path('data', 'mcicon.ico')
+    'mcicon': local_path('data', 'mcicon.ico'),
+    'discord': local_path('data', 'discord-mark-blue.png'),
 }

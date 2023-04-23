@@ -30,7 +30,7 @@ class SC2WoLLogic(LogicMixin):
         defense_score = sum((defense_ratings[item] for item in defense_ratings if self.has(item, player)))
         if self.has_any({'Marine', 'Marauder'}, player) and self.has('Bunker', player):
             defense_score += 3
-        if self.has_all({'Siege Tank', 'Maelstrom Rounds'}, player):
+        if self.has_all({'Siege Tank', 'Maelstrom Rounds (Siege Tank)'}, player):
             defense_score += 2
         if zerg_enemy:
             defense_score += sum((zerg_defense_ratings[item] for item in zerg_defense_ratings if self.has(item, player)))
@@ -51,8 +51,15 @@ class SC2WoLLogic(LogicMixin):
                self.has('Siege Tank', player) and self._sc2wol_has_competent_anti_air(multiworld, player)
 
     def _sc2wol_has_train_killers(self, multiworld: MultiWorld, player: int) -> bool:
-        return (self.has_any({'Siege Tank', 'Diamondback', 'Marauder'}, player) or get_option_value(multiworld, player, 'required_tactics') > 0
-                and self.has_all({'Reaper', "G-4 Clusterbomb"}, player) or self.has_all({'Spectre', 'Psionic Lash'}, player))
+        return (
+                self.has_any({'Siege Tank', 'Diamondback', 'Marauder'}, player)
+                or get_option_value(multiworld, player, 'required_tactics') > 0
+                and (
+                        self.has_all({'Reaper', "G-4 Clusterbomb"}, player)
+                        or self.has_all({'Spectre', 'Psionic Lash'}, player)
+                        or self.has('Vulture', player)
+                )
+        )
 
     def _sc2wol_able_to_rescue(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has_any({'Medivac', 'Hercules', 'Raven', 'Viking'}, player) or get_option_value(multiworld, player, 'required_tactics') > 0

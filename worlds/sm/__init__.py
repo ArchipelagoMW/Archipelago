@@ -8,6 +8,7 @@ import base64
 from typing import Any, Dict, Iterable, List, Set, TextIO, TypedDict
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, Tutorial
+from Fill import fill_restrictive
 from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
 
 logger = logging.getLogger("Super Metroid")
@@ -149,6 +150,7 @@ class SMWorld(World):
         pool = []
         self.locked_items = {}
         self.NothingPool = []
+        self.prefilled_locked_items = []
         weaponCount = [0, 0, 0]
         for item in itemPool:
             isAdvancement = True
@@ -170,13 +172,21 @@ class SMWorld(World):
             elif item.Category == 'Nothing':
                 isAdvancement = False
 
-            classification = ItemClassification.progression if isAdvancement else ItemClassification.filler
             itemClass = ItemManager.Items[item.Type].Class
             smitem = SMItem(item.Name, 
-                            classification, 
+                            ItemClassification.progression if isAdvancement else ItemClassification.filler, 
                             item.Type,
                             None if itemClass == 'Boss' else self.item_name_to_id[item.Name], 
                             player=self.player)
+            
+            beamItems = ['Spazer', 'Ice', 'Wave' ,'Plasma']
+            self.ammoItems = ['Missile', 'Super', 'PowerBomb']
+            if self.multiworld.doors_colors_rando[self.player].value != 0:
+                if item.Type in beamItems:
+                    self.multiworld.local_items[self.player].value.add(item.Name)
+                elif item.Type in self.ammoItems and isAdvancement:
+                    self.prefilled_locked_items.append(smitem)
+            
             if itemClass == 'Boss':
                 self.locked_items[item.Name] = smitem
             elif item.Category == 'Nothing':
@@ -205,10 +215,21 @@ class SMWorld(World):
     def set_rules(self):
         set_rules(self.multiworld, self.player)
 
-
     def create_regions(self):
         create_locations(self, self.player)
         create_regions(self, self.multiworld, self.player)
+
+    def pre_fill(self):
+        from Fill import fill_restrictive
+        if len(self.prefilled_locked_items) > 0:
+            locations = [loc for loc in self.locations.values() if loc.item is None]
+            self.multiworld.random.shuffle(locations)
+            all_state = self.multiworld.get_all_state(False)
+            for item in self.ammoItems:
+                while (all_state.has(item.name, self.player, 1)):
+                    all_state.remove(item)
+
+            fill_restrictive(self.multiworld, all_state, locations, self.prefilled_locked_items, True, True)
 
     def getWordArray(self, w: int) -> List[int]:
         """ little-endian convert a 16-bit number to an array of numbers <= 255 each """
@@ -650,7 +671,7 @@ class SMWorld(World):
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         state.smbm[self.player].addItem(item.type)
-        if item.location != None:
+        if item.location != None and item.location.game == self.game:
             for entrance in self.multiworld.get_region(item.location.parent_region.name, item.location.player).entrances:
                 if (entrance.parent_region.can_reach(state)):
                     state.smbm[item.location.player].lastAP = entrance.parent_region.name
@@ -813,7 +834,7 @@ class SMLocation(Location):
         comebackCheck = ComebackCheckType.JustComeback        
         n = 2 if GraphUtils.isStandardStart(randoExec.graphSettings.startAP) else 3
         # is early game
-        if (len([loc for loc in state.locations_checked if loc.player == self.player]) <= n):
+        if (len([loc for loc in state.locations_checked if loc.player == self.player]) <= n or randoExec.graphSettings.startAP == state.smbm[self.player].lastAP):
             comebackCheck = ComebackCheckType.NoCheck
         container = ItemLocContainer(state.smbm[self.player], [], [])
         return randoService.fullComebackCheck(  container, 
