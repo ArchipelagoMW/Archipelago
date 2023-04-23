@@ -42,7 +42,6 @@ class MessengerWorld(World):
         "Crest": {"Sun Crest", "Moon Crest"},
         "Phobe": set(PHOBEKINS),
         "Phobekin": set(PHOBEKINS),
-        "Shuriken": {"Windmill Shuriken"},
     }
 
     option_definitions = messenger_options
@@ -151,8 +150,9 @@ class MessengerWorld(World):
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
+        self.shop_prices = {}
+        self.figurine_prices = {}
         if not self.multiworld.shop_shuffle[self.player]:
-            self.shop_prices = {}
             # the items are still logically relevant but i don't want to create the locations or send items to the player
             for item in SHOP_ITEMS:
                 shop_item = self.create_item(item)

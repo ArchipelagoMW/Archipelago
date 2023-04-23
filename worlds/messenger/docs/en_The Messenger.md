@@ -35,6 +35,7 @@ You can find items wherever items can be picked up in the original game. This in
 * Bosses
 * Power seals
 * Mega Time Shards
+* Shop Upgrades, Money Wrench, and Figurine Purchases
 
 ## What are the item name groups?
 
@@ -46,7 +47,6 @@ for it. The groups you can use for The Messenger are:
 * Crest - The Sun and Moon Crests
 * Phobekin - Any of the Phobekins
 * Phobe - An alternative name for the Phobekins
-* Shuriken - The windmill shuriken
 
 ## Other changes
 
@@ -59,10 +59,9 @@ for it. The groups you can use for The Messenger are:
 * After reaching ninja village a teleport option is added to the menu to reach it quickly
 * Toggle Windmill Shuriken button is added to option menu once the item is received
 * The mod option menu will also have a hint item button, as well as a release and collect button that are all placed when
-  the player fulfills the necessary conditions.
+the player fulfills the necessary conditions.
 
 ## Currently known issues
-* Necro cutscene will sometimes not play correctly, but will still reward the item
 * Ruxxtin Coffin cutscene will sometimes not play correctly, but will still reward the item
 * If you receive the Fairy Bottle while in Quillshroom Marsh, The De-curse Queen cutscene will not play. You can exit
   to Searing Crags and re-enter to get it to play correctly.
