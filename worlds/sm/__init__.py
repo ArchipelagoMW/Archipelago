@@ -180,16 +180,9 @@ class SMWorld(World):
                             player=self.player)
             
             beamItems = ['Spazer', 'Ice', 'Wave' ,'Plasma']
-            #ammoItems = ['Missile', 'Super', 'PowerBomb']
             if self.multiworld.doors_colors_rando[self.player].value != 0:
                 if item.Type in beamItems:
                     self.multiworld.local_items[self.player].value.add(item.Name)
-                #elif item.Type in ammoItems and isAdvancement:
-                    #def forbid_items_for_player(location: "BaseClasses.Location", items: typing.Set[str], player: int):
-                    #old_rule = location.item_rule
-                    #location.item_rule = lambda i: (i.player != player or i.name not in items) and old_rule(i)
-                    # self.prefilled_locked_items.append(smitem)
-                    # continue
             
             if itemClass == 'Boss':
                 self.locked_items[item.Name] = smitem
