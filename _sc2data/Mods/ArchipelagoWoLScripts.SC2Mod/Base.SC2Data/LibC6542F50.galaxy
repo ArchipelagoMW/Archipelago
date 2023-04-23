@@ -208,8 +208,8 @@ void libC6542F50_gf_APUnlockUnits (string lp_unitCode, string lp_version) {
     }
 
     if ((ModI(lv_unitCode, PowI(2.0, (16 + 1))) >= PowI(2.0, 16.0))) {
-        TechTreeUnitAllow(1, "BarracksTechLab", true);
         libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupDominionSpectre, 1);
+        TechTreeUnitAllow(1, "BarracksTechLab", true);
     }
 
     if ((ModI(lv_unitCode, PowI(2.0, (17 + 1))) >= PowI(2.0, 17.0))) {
