@@ -61,6 +61,7 @@ item_table = {
     "Crawling": ItemData(SHIVERS_ITEM_ID_OFFSET + 50, "ability"),
 
     #Event Items
+    "Victory": ItemData(SHIVERS_ITEM_ID_OFFSET + 60, "victory"),
 
     #Duplicate pot pieces for fill_Restrictive
     "Water Pot Bottom DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 70, "potduplicate"),
@@ -86,5 +87,6 @@ item_table = {
 
     #Filler
     "Empty": ItemData(SHIVERS_ITEM_ID_OFFSET + 90, "filler"),
+    "Filler Item": ItemData(SHIVERS_ITEM_ID_OFFSET + 91, "filler")
 
 }

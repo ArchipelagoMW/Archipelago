@@ -99,6 +99,7 @@ class ShiversWorld(World):
             r = self.multiworld.get_region(region_name, self.player)
             e.connect(r)
 
+        # Add locations
         for region_name, locations in Constants.location_info["locations_by_region"].items():
             region = self.multiworld.get_region(region_name, self.player)
             for loc_name in locations:
@@ -114,14 +115,16 @@ class ShiversWorld(World):
         # Add keys
         keys = [self.create_item(name) for name, data in item_table.items() if data.type == 'key']
 
+        #Add Filler
+        filler = []
+        filler += [self.create_item("Filler Item") for i in range(9)]
+
         self.multiworld.itempool += pots
         self.multiworld.itempool += keys
+        self.multiworld.itempool += filler
 
         #Place crawling locally in the library to prevent softlock
         self.multiworld.random.choice(self.multiworld.get_region("Library", self.player).locations).place_locked_item(self.create_item("Crawling"))
-        
-
-        #self.multiworld.completion_condition[self.player] = lambda state: state.has("Ash Pot Top", self.player)
 
     set_rules = set_rules
 

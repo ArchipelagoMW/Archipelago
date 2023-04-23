@@ -38,12 +38,30 @@
     "Flashback Memory Obtained Museum Blueprints",
     "Flashback Memory Obtained Beth's Address Book",
     "Flashback Memory Obtained Merick's Notebook",
-    "Flashback Memory Obtained Professor Windlenot's Diary"
+    "Flashback Memory Obtained Professor Windlenot's Diary",
+    "Ixupi Captured Water",
+    "Ixupi Captured Wax",
+    "Ixupi Captured Ash",
+    "Ixupi Captured Oil",
+    "Ixupi Captured Cloth",
+    "Ixupi Captured Wood",
+    "Ixupi Captured Crystal",
+    "Ixupi Captured Sand",
+    "Ixupi Captured Metal"
   ],
   "locations_by_region": {
     "Outside": [
       "Puzzle Solved Gears",
-      "Puzzle Solved Stone Henge"
+      "Puzzle Solved Stone Henge",
+      "Ixupi Captured Water",
+      "Ixupi Captured Wax",
+      "Ixupi Captured Ash",
+      "Ixupi Captured Oil",
+      "Ixupi Captured Cloth",
+      "Ixupi Captured Wood",
+      "Ixupi Captured Crystal",
+      "Ixupi Captured Sand",
+      "Ixupi Captured Metal"
     ],
     "Underground Lake": [
       "Flashback Memory Obtained Windlenot's Ghost",
@@ -171,15 +189,6 @@
   "future locations": [
     "Puzzle Solved Skull Dial",
     "Puzzle Solved Final Riddle",
-    "Ixupi Captured Water",
-    "Ixupi Captured Wax",
-    "Ixupi Captured Ash",
-    "Ixupi Captured Oil",
-    "Ixupi Captured Cloth",
-    "Ixupi Captured Wood ",
-    "Ixupi Captured Crystal",
-    "Ixupi Captured Lightning",
-    "Ixupi Captured Sand",
-    "Ixupi Captured Metal"
+    "Ixupi Captured Lightning"
   ]
 }   
