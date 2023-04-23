@@ -1,7 +1,7 @@
 import math
 import re
 from .Locations import DLCQuestLocation
-from ..generic.Rules import add_rule, set_rule
+from ..generic.Rules import add_rule, set_rule, item_in_locations
 from .Items import DLCQuestItem
 from BaseClasses import ItemClassification
 from . import Options
@@ -214,16 +214,26 @@ def set_rules(world, player, World_Options: Options.DLCQuestOptions):
                  lambda state: state.has("Cut Content Pack", player))
         set_rule(world.get_entrance("Blizzard", player),
                  lambda state: state.has("Season Pass", player))
-        set_rule(world.get_entrance("Boss Door", player),
-                 lambda state: state.has("Big Sword Pack", player) and
-                               state.has("Really Big Sword Pack", player) and
-                               state.has("Unfathomable Sword Pack", player))
         set_rule(world.get_location("I Get That Reference!", player),
                  lambda state: state.has("Death of Comedy Pack", player))
         set_rule(world.get_location("Story is Important", player),
                  lambda state: state.has("DLC NPC Pack", player))
         set_rule(world.get_entrance("Pickaxe Hard Cave", player),
                  lambda state: state.has("Pickaxe", player))
+        big_sword_location = world.get_location("Big Sword Pack", player)
+        big_sword_self = lambda state: item_in_locations(state, "Big Sword Pack", player, big_sword_location)
+        really_big_sword_location = [world.get_location("Big Sword Pack", player),
+                                    world.get_location("Really Big Sword Pack", player)]
+        really_big_sword_self = lambda state: item_in_locations(state, "Really Big Sword Pack", player, really_big_sword_location)
+        unfathomable_sword_location = [world.get_location("Big Sword Pack", player),
+                                       world.get_location("Really Big Sword Pack", player),
+                                       world.get_location("Unfathomable Sword Pack", player)]
+        unfathomable_sword_self = lambda state: item_in_locations(state, "Unfathomable Sword Pack", player, unfathomable_sword_location)
+        has_3_swords = lambda state: ((state.has("Big Sword Pack", player) or big_sword_self) and
+                                      (state.has("Really Big Sword Pack", player) or really_big_sword_self) and
+                                      (state.has("Unfathomable Sword Pack", player) or unfathomable_sword_self))
+        set_rule(world.get_entrance("Boss Door", player), has_3_swords)
+
 
         if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_disabled:
             set_rule(world.get_entrance("Vines", player),
