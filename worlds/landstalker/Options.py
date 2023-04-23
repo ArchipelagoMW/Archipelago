@@ -23,9 +23,8 @@ class ProgressiveArmors(DefaultOnToggle):
 
 class RemoveGumiBoulder(Toggle):
     """
-    Removes the boulder between Gumi and Ryuma which is usually a one-way path. This makes accessing the bears region
-    (Massan, Gumi, Swamp Shrine...) easily accessible when starting in distant spawn regions (Ryuma and after), whereas
-    you should go through Greenmaze to reach it otherwise.
+    Removes the boulder between Gumi and Ryuma which is usually a one-way path.
+    This makes the vanilla early game (Massan, Gumi...) more easily accessible when starting outside of it.
     """
     display_name = "Remove boulder after Gumi"
 
@@ -64,15 +63,25 @@ class WhistleUsageBehindTrees(DefaultOnToggle):
     display_name = "Allow using Einstein Whistle behind trees"
 
 
-class SpawnRegion(OptionSet):
+class SpawnRegion(Choice):
     """
     List of spawn locations that can be picked by the randomizer. It is advised to keep Massan as your spawn location
     for your first few seeds since picking a late-game location can make the seed significantly harder, both for
     logic and combat.
     """
     display_name = "Starting Region"
-    default = {"Massan"}
-    valid_keys = {"Massan", "Gumi", "Kado", "Waterfall", "Ryuma", "Mercator", "Verla", "Greenmaze", "Destel"}
+
+    option_massan = "massan"
+    option_gumi = "gumi"
+    option_kado = "kado"
+    option_waterfall = "waterfall"
+    option_ryuma = "ryuma"
+    option_mercator = "mercator"
+    option_verla = "verla"
+    option_greenmaze = "greenmaze"
+    option_destel = "destel"
+
+    default = "massan"
 
 
 class TeleportTreeRequirements(Choice):
@@ -84,10 +93,12 @@ class TeleportTreeRequirements(Choice):
     Vanilla behavior is "Clear Tibor And Visit Trees"
     """
     display_name = "Teleportation trees requirements"
+
     option_none = 0
     option_clear_tibor = 1
     option_visit_trees = 2
     option_clear_tibor_and_visit_trees = 3
+
     default = 3
 
 
@@ -124,7 +135,6 @@ ls_options: Dict[str, type(Option)] = {
     "death_link": DeathLink,
 }
 
-#    "startingLife": 0,
 #    "startingGold": 0,
 
 #    "startingItems": {
@@ -134,8 +144,7 @@ ls_options: Dict[str, type(Option)] = {
 #    "consumableRecordBook": false,
 #    "consumableSpellBook": false,
 
-#    "ekeekeAutoRevive": true,
-#    "fastMenuTransitions": true
+#    "ekeekeAutoRevive": true
 
 #    "hintsDistribution": {
 #        "regionRequirement": 6,

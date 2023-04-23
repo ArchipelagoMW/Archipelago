@@ -109,16 +109,6 @@ def remove_requirements_for(multiworld: MultiWorld, entrance_name: str, player: 
 def add_location_rules(multiworld: MultiWorld, player: int):
     for location in multiworld.get_locations(player):
         if location.type_string == "ground":
-            location.item_rule = lambda item: item.player == player and not (item.name.endswith('Golds')
-                                                                             or item.name.endswith('Gold'))\
-                                              and not item.name == 'Life Stock'  # TODO: Remove
+            location.item_rule = lambda item: not (item.player == player and ' Gold' in item.name)
         elif location.type_string == "shop":
-            location.item_rule = make_shop_item_rule_lambda(player)
-
-
-def make_shop_item_rule_lambda(player):
-    """
-    Lambdas are created in a for loop so values need to be captured
-    """
-    return lambda item: item.player == player and not (item.name.endswith('Golds')
-                                                       or item.name.endswith('Gold'))
+            location.item_rule = lambda item: item.player == player and ' Gold' not in item.name

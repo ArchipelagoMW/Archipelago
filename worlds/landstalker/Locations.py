@@ -35,7 +35,6 @@ def create_locations(player: int, regions_table: Dict[str, Region], name_to_id_t
 
 def build_location_name_to_id_table():
     location_name_to_id_table = {}
-    current_ground_id = 0
     current_reward_id = 0
 
     script_folder = Path(__file__)
@@ -45,8 +44,7 @@ def build_location_name_to_id_table():
             if data["type"] == "chest":
                 location_id = BASE_LOCATION_ID + int(data["chestId"])
             elif data["type"] == "ground" or data["type"] == "shop":
-                location_id = BASE_LOCATION_ID + 256 + current_ground_id
-                current_ground_id += 1
+                location_id = BASE_LOCATION_ID + 256 + int(data["groundItemId"])
             else:  # if data["type"] == "reward":
                 location_id = BASE_LOCATION_ID + 340 + current_reward_id
                 current_reward_id += 1
