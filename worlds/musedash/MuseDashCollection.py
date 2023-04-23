@@ -42,7 +42,7 @@ class MuseDashCollections:
             line = line.strip()
             sections = line.split("|")
 
-            if (sections[1] not in self.album_items):
+            if sections[1] not in self.album_items:
                 self.album_items[sections[1]] = AlbumData(item_id_index)
                 item_id_index += 1
 
@@ -51,7 +51,7 @@ class MuseDashCollections:
             song_is_free = sections[1] in self.FREE_ALBUMS
             steamer_mode = sections[2] == "True"
 
-            if (song_name in self.DIFF_OVERRIDES):
+            if song_name in self.DIFF_OVERRIDES:
                 # Note: These difficulties may not actually be representative of these songs.
                 # The game does not provide these difficulties so they have to be filled in.
                 diff_of_easy = 4
@@ -84,21 +84,21 @@ class MuseDashCollections:
         filtered_list = list()
 
         for songKey, songData in self.song_items.items():
-            if (not dlc_songs and not songData.song_is_free):
+            if not dlc_songs and not songData.song_is_free:
                 continue
 
-            if (streamer_mode_active and not songData.streamer_mode):
+            if streamer_mode_active and not songData.streamer_mode:
                 continue
 
-            if (songData.easy is not None and diff_lower <= songData.easy <= diff_higher):
+            if songData.easy is not None and diff_lower <= songData.easy <= diff_higher:
                 filtered_list.append(songKey)
                 continue
 
-            if (songData.hard is not None and diff_lower <= songData.hard <= diff_higher):
+            if songData.hard is not None and diff_lower <= songData.hard <= diff_higher:
                 filtered_list.append(songKey)
                 continue
 
-            if (songData.master is not None and diff_lower <= songData.master <= diff_higher):
+            if songData.master is not None and diff_lower <= songData.master <= diff_higher:
                 filtered_list.append(songKey)
                 continue
 
@@ -106,11 +106,11 @@ class MuseDashCollections:
 
     def parse_song_difficulty(self, difficulty: str) -> Optional[int]:
         """Attempts to parse the song difficulty."""
-        if (len(difficulty) <= 0 or difficulty == "?" or difficulty == "¿"):
+        if len(difficulty) <= 0 or difficulty == "?" or difficulty == "¿":
             return None
 
         # Curse the 2023 april fools update. Used on 3rd Avenue.
-        if (difficulty == "〇"):
+        if difficulty == "〇":
             return 10
 
-        return int(difficulty)
+        return intdifficulty

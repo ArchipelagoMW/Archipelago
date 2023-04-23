@@ -147,11 +147,11 @@ class MuseDashWorld(World):
                                      self.muse_dash_collection.MUSIC_SHEET_CODE, self.player)
 
         trap = self.muse_dash_collection.trap_items.get(name)
-        if (trap != None):
+        if trap != None:
             return MuseDashFixedItem(name, ItemClassification.trap, trap, self.player)
 
         song = self.muse_dash_collection.song_items.get(name)
-        if (song != None):
+        if song != None:
             return MuseDashSongItem(name, self.player, song)
 
         return MuseDashFixedItem(name, ItemClassification.filler, None, self.player)
@@ -276,20 +276,20 @@ class MuseDashWorld(World):
         difficulty_mode = self.multiworld.song_difficulty_mode[self.player]
 
         difficulty_bounds = [1, 12]
-        if (difficulty_mode == 1):
+        if difficulty_mode == 1:
             difficulty_bounds[1] = 3
-        elif (difficulty_mode == 2):
+        elif difficulty_mode == 2:
             difficulty_bounds[0] = 4
             difficulty_bounds[1] = 5
-        elif (difficulty_mode == 3):
+        elif difficulty_mode == 3:
             difficulty_bounds[0] = 6
             difficulty_bounds[1] = 7
-        elif (difficulty_mode == 4):
+        elif difficulty_mode == 4:
             difficulty_bounds[0] = 8
             difficulty_bounds[1] = 9
-        elif (difficulty_mode == 5):
+        elif difficulty_mode == 5:
             difficulty_bounds[0] = 10
-        elif (difficulty_mode == 6):
+        elif difficulty_mode == 6:
             minimum_difficulty = self.multiworld.song_difficulty_min[self.player].value
             maximum_difficulty = self.multiworld.song_difficulty_max[self.player].value
 
