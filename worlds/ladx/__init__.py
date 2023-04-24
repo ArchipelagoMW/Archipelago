@@ -268,31 +268,47 @@ class LinksAwakeningWorld(World):
     def pre_fill(self) -> None:
         allowed_locations_by_item = {}
 
+
         # Set up filter rules
+
+        # The list of items we will pass to fill_restrictive, contains at first the items that go to all dungeons
         all_dungeon_items_to_fill = list(self.prefill_own_dungeons)
+        # set containing the list of all possible dungeon locations for the player
         all_dungeon_locs = set()
+        
+        # Do dungeon specific things
         for dungeon_index in range(0, 9):
-            # First set up allow-list for dungeon specific items
+            # set up allow-list for dungeon specific items
             locs = set(self.dungeon_locations_by_dungeon[dungeon_index])
             for item in self.prefill_original_dungeon[dungeon_index]:
                 allowed_locations_by_item[item] = locs
+
+            # put the items for this dungeon in the list to fill
             all_dungeon_items_to_fill.extend(self.prefill_original_dungeon[dungeon_index])
+
             # ...and gather the list of all dungeon locations
             all_dungeon_locs |= locs
             # ...also set the rules for the dungeon
             for location in locs:
                 orig_rule = location.item_rule
+                # If an item is about to be placed on a dungeon location, it can go there iff 
+                # 1. it fits the general rules for that location (probably 'return True' for most places)
+                # 2. Either
+                #    2a. it's not a restricted dungeon item
+                #    2b. it's a restricted dungeon item and this location is specified as allowed
                 location.item_rule = lambda item, location=location, orig_rule=orig_rule: \
                     (item not in allowed_locations_by_item or location in allowed_locations_by_item[item]) and orig_rule(item)
 
         # Now set up the allow-list for any-dungeon items
         for item in self.prefill_own_dungeons:
+            # They of course get to go in any spot
             allowed_locations_by_item[item] = all_dungeon_locs
 
         # Get the list of locations and shuffle
         all_dungeon_locs_to_fill = list(all_dungeon_locs)
         self.multiworld.random.shuffle(all_dungeon_locs_to_fill)
-        # Get the list of items and sort
+
+        # Get the list of items and sort by priority
         def priority(item):
             # 0 - Nightmare dungeon-specific
             # 1 - Key dungeon-specific
@@ -312,11 +328,14 @@ class LinksAwakeningWorld(World):
 
         # Set up state
         all_state = self.multiworld.get_all_state(use_cache=False)
+        # Remove dungeon items we are about to put in from the state so that we don't double count
         for item in all_dungeon_items_to_fill:
             all_state.remove(item)
             
         # ...and flag items as pre-filled
         self.pre_fill_items.extend(all_dungeon_items_to_fill)
+
+        # Finally, fill!
         fill_restrictive(self.multiworld, all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
 
     name_cache = {}
