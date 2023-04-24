@@ -42,6 +42,7 @@ class LandstalkerWorld(World):
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
         self.regions_table: Dict[str, Region] = {}
+        self.dark_dungeon_id = "None"
         self.dark_region_ids = []
 
     def get_setting(self, name: str):
@@ -51,6 +52,7 @@ class LandstalkerWorld(World):
         # Put options, locations' contents and some additional data inside slot data
         slot_data = {option_name: self.get_setting(option_name).value for option_name in ls_options}
         slot_data["seed"] = self.multiworld.per_slot_randoms[self.player].randint(0, 4294967295)
+        slot_data["dark_region"] = self.dark_dungeon_id
         slot_data["locations"] = {}
         for location in self.multiworld.get_locations(self.player):
             slot_data['locations'][location.name] = {
@@ -62,7 +64,8 @@ class LandstalkerWorld(World):
     def generate_early(self):
         # Randomly pick a set of dark regions where Lantern is needed
         darkenable_regions = get_darkenable_regions()
-        self.dark_region_ids = self.multiworld.random.choices(darkenable_regions)[0]
+        self.dark_dungeon_id = self.multiworld.random.choices(list(darkenable_regions.keys()))[0]
+        self.dark_region_ids = darkenable_regions[self.dark_dungeon_id]
 
     def create_item(self, name: str) -> LandstalkerItem:
         data = item_table[name]

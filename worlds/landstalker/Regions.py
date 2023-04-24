@@ -95,11 +95,11 @@ def get_starting_region(multiworld: MultiWorld, player: int, regions_table: Dict
 
 
 def get_darkenable_regions():
-    darkenable_region_ids = []
+    darkenable_region_ids = {}
     script_folder = Path(__file__)
     with open((script_folder.parent / "data/world_region.json").resolve(), "r") as file:
         regions_data = json.load(file)
         for data in regions_data:
             if "darkMapIds" in data:
-                darkenable_region_ids.append(data["nodeIds"])
+                darkenable_region_ids[data["name"]] = data["nodeIds"]
     return darkenable_region_ids
