@@ -305,7 +305,7 @@ class SMWSNIClient(SNIClient):
         dragon_coins_active = await snes_read(ctx, SMW_DRAGON_COINS_ACTIVE_ADDR, 0x1)
         from worlds.smw.Rom import item_rom_data, ability_rom_data, trap_rom_data
         from worlds.smw.Levels import location_id_to_level_id, level_info_dict
-        from worlds import AutoWorldRegister
+        from worlds.AutoWorld import AutoWorldRegister
         for loc_name, level_data in location_id_to_level_id.items():
             loc_id = AutoWorldRegister.world_types[ctx.game].location_name_to_id[loc_name]
             if loc_id not in ctx.locations_checked:

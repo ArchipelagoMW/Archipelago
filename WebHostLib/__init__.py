@@ -10,6 +10,7 @@ from pony.flask import Pony
 from werkzeug.routing import BaseConverter
 
 from Utils import title_sorted
+from worlds import WorldLoader
 
 UPLOAD_FOLDER = os.path.relpath('uploads')
 LOGS_FOLDER = os.path.relpath('logs')
@@ -76,8 +77,10 @@ def register():
     """Import submodules, triggering their registering on flask routing.
     Note: initializes worlds subsystem."""
     # has automatic patch integration
-    import worlds.AutoWorld
+    WorldLoader.load_worlds()
+
     import worlds.Files
+
     app.jinja_env.filters['supports_apdeltapatch'] = lambda game_name: \
         game_name in worlds.Files.AutoPatchRegister.patch_types
 

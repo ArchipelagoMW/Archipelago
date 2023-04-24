@@ -23,6 +23,7 @@ import weakref
 import zlib
 
 import ModuleUpdate
+from worlds import WorldLoader
 
 ModuleUpdate.update()
 
@@ -249,13 +250,16 @@ class Context:
     # Data package retrieval
     def _load_game_data(self):
         import worlds
+
+        WorldLoader.load_worlds()
+
         self.gamespackage = worlds.network_data_package["games"]
 
         self.item_name_groups = {world_name: world.item_name_groups for world_name, world in
-                                 worlds.AutoWorldRegister.world_types.items()}
+                                 worlds.AutoWorld.AutoWorldRegister.world_types.items()}
         self.location_name_groups = {world_name: world.location_name_groups for world_name, world in
-                                     worlds.AutoWorldRegister.world_types.items()}
-        for world_name, world in worlds.AutoWorldRegister.world_types.items():
+                                     worlds.AutoWorld.AutoWorldRegister.world_types.items()}
+        for world_name, world in worlds.AutoWorld.AutoWorldRegister.world_types.items():
             self.non_hintable_names[world_name] = world.hint_blacklist
 
     def _init_game_data(self):

@@ -9,7 +9,7 @@ import subprocess
 import time
 import typing
 from asyncio import StreamReader, StreamWriter
-from typing import List
+from typing import List, Tuple
 
 import Utils
 from Utils import async_start
@@ -64,7 +64,7 @@ class ZeldaContext(CommonContext):
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
         self.bonus_items = []
-        self.nes_streams: (StreamReader, StreamWriter) = None
+        self.nes_streams: Tuple[StreamReader, StreamWriter] = None
         self.nes_sync_task = None
         self.messages = {}
         self.locations_array = None
