@@ -66,7 +66,7 @@ chemin recommandé).
 Une fois le client et l'émulateur démarrés, vous devez les connecter. Dans l'émulateur, cliquez sur "Outils"
 menu et sélectionnez "Console Lua". Cliquez sur le bouton du dossier ou appuyez sur Ctrl+O pour ouvrir un script Lua.
 
-Accédez à votre dossier d'installation Archipelago et ouvrez `data/lua/ADVENTURE/adventure_connector.lua`, si ce n'est pas le cas
+Accédez à votre dossier d'installation Archipelago et ouvrez `data/lua/connector_adventure.lua`, si ce n'est pas le cas
 configuré pour le faire automatiquement.
 
 Pour connecter le client au multiserveur, mettez simplement `<adresse>:<port>` dans le champ de texte en haut et appuyez sur Entrée (si le
