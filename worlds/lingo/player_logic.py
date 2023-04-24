@@ -165,4 +165,12 @@ class LingoPlayerLogic:
         if "eye_painting_2" not in self.PAINTING_MAPPING.keys():
             self.PAINTING_MAPPING["eye_painting"] = "eye_painting_2"
 
+        # Just for sanity's sake, ensure that all required painting rooms are accessed.
+        for painting_id, painting in static_logic.PAINTINGS.items():
+            if painting_id not in self.PAINTING_MAPPING.values()\
+                    and (painting.required
+                         or (painting.required_when_no_doors
+                             and get_option_value(world, player, "shuffle_doors") == 0)):
+                return False
+
         return True
