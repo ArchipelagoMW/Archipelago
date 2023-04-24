@@ -95,11 +95,21 @@ def add_specific_path_requirements(multiworld: MultiWorld, player: int):
 
 def make_path_requirement_lambda(player, required_items, required_regions):
     """
-    Lambdas are created in a for loop so values need to be captured
+    Lambdas are created in a for loop, so values need to be captured
     """
     return lambda state: \
         state._landstalker_has_items(player, required_items) \
         and state._landstalker_has_visited_regions(player, required_regions)
+
+
+def make_shop_location_requirement_lambda(player, location):
+    """
+    Lambdas are created in a for loop, so values need to be captured
+    """
+    other_locations_in_shop = [loc for loc in location.parent_region.locations if loc != location]
+    return lambda item: item.player == player \
+                        and ' Gold' not in item.name \
+                        and item.name not in [loc.item.name for loc in other_locations_in_shop if loc.item is not None]
 
 
 def remove_requirements_for(multiworld: MultiWorld, entrance_name: str, player: int):
@@ -112,4 +122,4 @@ def add_location_rules(multiworld: MultiWorld, player: int):
         if location.type_string == "ground":
             location.item_rule = lambda item: not (item.player == player and ' Gold' in item.name)
         elif location.type_string == "shop":
-            location.item_rule = lambda item: item.player == player and ' Gold' not in item.name
+            location.item_rule = make_shop_location_requirement_lambda(player, location)
