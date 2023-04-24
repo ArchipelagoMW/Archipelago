@@ -4,9 +4,7 @@ from test.general import setup_solo_multiworld
 from . import KH2TestBase
 from .. import KH2World, all_locations, item_dictionary_table, CheckDupingItems, AllWeaponSlot, KH2Item
 from ..Names import ItemName
-from ... import AutoWorldRegister
-from ...AutoWorld import call_all
-
+from ...AutoWorld import AutoWorldRegister, call_all
 
 class TestLocalItems(KH2TestBase):
 
