@@ -16,7 +16,7 @@ to obtain a config file for StarCraft 2.
    - Linux users should also follow the instructions found at the bottom of this page 
      (["Running in Linux"](#running-in-linux)).
 2. Run ArchipelagoStarcraft2Client.exe.
-   - macOS users should instead follow the instructions found at (["Running in macOS"](#running-in-macos)) for this step only.
+   - macOS users should instead follow the instructions found at ["Running in macOS"](#running-in-macos) for this step only.
 3. Type the command `/download_data`. This will automatically install the Maps and Data files from the third link above.
 
 ## Where do I get a config file (aka "YAML") for this game?
@@ -35,7 +35,7 @@ Check out [Creating a YAML](https://archipelago.gg/tutorial/Archipelago/setup/en
 ## How do I join a MultiWorld game?
 
 1. Run ArchipelagoStarcraft2Client.exe.
-   - macOS users should instead follow the instructions found at (["Running in macOS"](#running-in-macos)) for this step only.
+   - macOS users should instead follow the instructions found at ["Running in macOS"](#running-in-macos) for this step only.
 2. Type `/connect [server ip]`.
 3. Type your slot name and the server's password when prompted.
 4. Once connected, switch to the 'StarCraft 2 Launcher' tab in the client. There, you can see every mission. By default,
