@@ -96,6 +96,7 @@ class LinksAwakeningWorld(World):
 
 
     def create_regions(self) -> None:
+        self.pre_fill_items = []
         # Initialize
         self.convert_ap_options_to_ladxr_logic()
         regions = create_regions_from_ladxr(self.player, self.multiworld, self.ladxr_logic)
@@ -121,6 +122,7 @@ class LinksAwakeningWorld(World):
             for loc in region.locations:
                 if loc.event:
                     loc.place_locked_item(self.create_event(loc.ladxr_item.event))
+                    self.pre_fill_items.append(loc.item)
         
         # Connect Windfish -> Victory
         windfish = self.multiworld.get_region("Windfish", self.player)
@@ -138,8 +140,6 @@ class LinksAwakeningWorld(World):
         return Item(event, ItemClassification.progression, None, self.player)
 
     def create_items(self) -> None:
-        self.pre_fill_items = []
-
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
 
         dungeon_item_types = {
@@ -224,14 +224,13 @@ class LinksAwakeningWorld(World):
 
         self.multi_key = self.generate_multi_key()
 
-        
-        
         # Add special case for trendy shop access
         trendy_region = self.multiworld.get_region("Trendy Shop", self.player)
         event_location = Location(self.player, "Can Play Trendy Game", parent=trendy_region)
         trendy_region.locations.insert(0, event_location)
         event_location.place_locked_item(self.create_event("Can Play Trendy Game"))
-        
+        self.pre_fill_items.append(event_location.item)
+
         # For now, special case first item
         FORCE_START_ITEM = True
         if FORCE_START_ITEM:
@@ -267,7 +266,6 @@ class LinksAwakeningWorld(World):
         return self.pre_fill_items
 
     def pre_fill(self) -> None:
-        debug = False
         allowed_locations_by_item = {}
 
         def priority(item):
@@ -286,16 +284,8 @@ class LinksAwakeningWorld(World):
                 i += 3
             return i
 
-        def location_rule(item, location, orig_rule):
-            if not orig_rule(item):
-                return False
-            if item in allowed_locations_by_item:
-                return location in allowed_locations_by_item[item]
-            else:
-                return True
-
         # Set up filter rules
-        all_dungeon_items_to_fill = list()
+        all_dungeon_items_to_fill = list(self.prefill_own_dungeons)
         all_dungeon_locs = set()
         for dungeon_index in range(0, 9):
             # First set up allow-list for dungeon specific items
@@ -309,7 +299,7 @@ class LinksAwakeningWorld(World):
             for location in locs:
                 orig_rule = location.item_rule
                 location.item_rule = lambda item, location=location, orig_rule=orig_rule: \
-                    location_rule(item=item, location=location, orig_rule=orig_rule)
+                    (item not in allowed_locations_by_item or location in allowed_locations_by_item[item]) and orig_rule(item)
 
         # Now set up the allow-list for any-dungeon items
         for item in self.prefill_own_dungeons:
@@ -328,14 +318,9 @@ class LinksAwakeningWorld(World):
             
         # ...and flag items as pre-filled
         self.pre_fill_items.extend(all_dungeon_items_to_fill)
-        #print(all_dungeon_items_to_fill)
-        fill_restrictive(self.multiworld, all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=True)
-        print(all_dungeon_items_to_fill)
-        print(all_dungeon_locs_to_fill)
-        debug = True
         fill_restrictive(self.multiworld, all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
-    name_cache = {}
 
+    name_cache = {}
     # Tries to associate an icon from another game with an icon we have
     def guess_icon_for_other_world(self, other):
         if not self.name_cache:
