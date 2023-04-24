@@ -268,22 +268,6 @@ class LinksAwakeningWorld(World):
     def pre_fill(self) -> None:
         allowed_locations_by_item = {}
 
-        def priority(item):
-            # 0 - Nightmare dungeon-specific
-            # 1 - Key dungeon-specific
-            # 2 - Other dungeon-specific
-            # 3 - Nightmare any local dungeon
-            # 4 - Key any local dungeon
-            # 5 - Other any local dungeon
-            i = 2
-            if "Nightmare" in item.name:
-                i = 0
-            elif "Key" in item.name:
-                i = 1
-            if allowed_locations_by_item[item] is locs:
-                i += 3
-            return i
-
         # Set up filter rules
         all_dungeon_items_to_fill = list(self.prefill_own_dungeons)
         all_dungeon_locs = set()
@@ -309,6 +293,21 @@ class LinksAwakeningWorld(World):
         all_dungeon_locs_to_fill = list(all_dungeon_locs)
         self.multiworld.random.shuffle(all_dungeon_locs_to_fill)
         # Get the list of items and sort
+        def priority(item):
+            # 0 - Nightmare dungeon-specific
+            # 1 - Key dungeon-specific
+            # 2 - Other dungeon-specific
+            # 3 - Nightmare any local dungeon
+            # 4 - Key any local dungeon
+            # 5 - Other any local dungeon
+            i = 2
+            if "Nightmare" in item.name:
+                i = 0
+            elif "Key" in item.name:
+                i = 1
+            if allowed_locations_by_item[item] is all_dungeon_locs:
+                i += 3
+            return i
         all_dungeon_items_to_fill.sort(key=priority)
 
         # Set up state
