@@ -598,7 +598,7 @@ function main()
                 if ( localItemLocations ~= nil and localItemLocations[tostring(carry_item)] ~= nil ) then
                     pending_local_items_collected[localItemLocations[tostring(carry_item)]] =
                         localItemLocations[tostring(carry_item)]
-                    table.remove(localItemLocations, tostring(carry_item))
+                    localItemLocations[tostring(carry_item)] = nil
                     skip_inventory_items[carry_item] = carry_item
                 end
             end
