@@ -219,9 +219,7 @@ class LinksAwakeningWorld(World):
 
         self.multi_key = self.generate_multi_key()
 
-        dungeon_locations = []
-        dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]
-        all_state = self.multiworld.get_all_state(use_cache=False)
+        
         
         # Add special case for trendy shop access
         trendy_region = self.multiworld.get_region("Trendy Shop", self.player)
@@ -241,7 +239,11 @@ class LinksAwakeningWorld(World):
                 index = self.multiworld.random.choice(possible_start_items)
                 start_item = self.multiworld.itempool.pop(index)
                 start_loc.place_locked_item(start_item)
-        
+
+    def pre_fill(self) -> None:
+        all_state = self.multiworld.get_all_state(use_cache=False)
+        dungeon_locations = []
+        dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]     
         for r in self.multiworld.get_regions():
             if r.player != self.player:
                 continue
