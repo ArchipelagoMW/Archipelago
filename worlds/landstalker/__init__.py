@@ -44,6 +44,7 @@ class LandstalkerWorld(World):
         self.regions_table: Dict[str, Region] = {}
         self.dark_dungeon_id = "None"
         self.dark_region_ids = []
+        self.teleport_tree_pairs = []
 
     def get_setting(self, name: str):
         return getattr(self.multiworld, name)[self.player]
@@ -53,12 +54,18 @@ class LandstalkerWorld(World):
         slot_data = {option_name: self.get_setting(option_name).value for option_name in ls_options}
         slot_data["seed"] = self.multiworld.per_slot_randoms[self.player].randint(0, 4294967295)
         slot_data["dark_region"] = self.dark_dungeon_id
+
         slot_data["locations"] = {}
         for location in self.multiworld.get_locations(self.player):
             slot_data['locations'][location.name] = {
                 "item": location.item.name,
                 "player": self.multiworld.get_player_name(location.item.player)
             }
+
+        slot_data["teleport_tree_pairs"] = []
+        for pair in self.teleport_tree_pairs:
+            slot_data["teleport_tree_pairs"].append([pair[0]['name'], pair[1]['name']])
+
         return slot_data
 
     def generate_early(self):
@@ -85,13 +92,40 @@ class LandstalkerWorld(World):
         # Fill the rest of the item pool with empty items
         unfilled_location_count = len(self.multiworld.get_unfilled_locations(self.player))
         while len(item_pool) < unfilled_location_count:
-            item_pool.append(self.create_item("No Item"))
+            item_pool.append(self.create_item("EkeEke"))
 
         self.multiworld.itempool += item_pool
 
     def create_regions(self):
         self.regions_table = Regions.create_regions(self.multiworld, self.player)
         Locations.create_locations(self.player, self.regions_table, self.location_name_to_id)
+        self.create_teleportation_trees()
+
+    def create_teleportation_trees(self):
+        self.teleport_tree_pairs = load_teleport_trees()
+
+        # Shuffle teleport tree pairs if the matching setting is on
+        if self.multiworld.shuffle_trees[self.player].value == 1:
+            all_trees = []
+            for pair in self.teleport_tree_pairs:
+                all_trees += [pair[0], pair[1]]
+            self.multiworld.random.shuffle(all_trees)
+            self.teleport_tree_pairs = []
+            while len(all_trees) > 0:
+                self.teleport_tree_pairs.append([all_trees[0], all_trees[1]])
+                all_trees = all_trees[2:]
+
+        # If a specific setting is set, teleport trees are potentially active without visiting both sides.
+        # This means we need to add those as explorable paths for the generation algorithm.
+        teleport_trees_mode = self.multiworld.teleport_tree_requirements[self.player].value
+        created_entrances = []
+        if teleport_trees_mode < 2:
+            for pair in self.teleport_tree_pairs:
+                entrances = create_entrance(pair[0]['region'], pair[1]['region'], True, self.player, self.regions_table)
+                created_entrances += entrances
+        if teleport_trees_mode == 1:  # Teleport trees are open but require access to Tibor in order to work
+            for entrance in created_entrances:
+                entrance.access_rule = make_path_requirement_lambda(self.player, [], [self.regions_table['tibor']])
 
     def set_rules(self):
         Rules.create_rules(self.multiworld, self.player, self.regions_table, self.dark_region_ids)

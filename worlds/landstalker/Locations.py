@@ -57,6 +57,6 @@ def build_location_name_to_id_table():
             location_name_to_id_table[data["name"]] = location_id
 
     # Win condition location ID
-    location_name_to_id_table["Gola"] = BASE_LOCATION_ID + 340 + current_reward_id
+    location_name_to_id_table["Gola"] = BASE_REWARD_LOCATION_ID + current_reward_id
 
     return location_name_to_id_table

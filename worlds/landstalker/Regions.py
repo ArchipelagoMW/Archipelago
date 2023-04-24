@@ -47,23 +47,29 @@ def create_regions(multiworld: MultiWorld, player: int):
     menu_region.exits.append(game_entrance)
     game_entrance.connect(starting_region)
 
-    # If Gumi boulder is removed, add a path from "route_gumi_ryuma" to "gumi"
-    if multiworld.remove_gumi_boulder[player].value is True:
-        create_entrance("route_gumi_ryuma", "gumi", False, player, regions_table)
-
-    # If enemy jumping is in logic, Mountainous Area can be reached from route to Lake Shrine by doing a "ghost jump"
-    # at crossroads map
-    if multiworld.handle_enemy_jumping_in_logic[player].value is True:
-        create_entrance("route_lake_shrine", "route_lake_shrine_cliff", False, player, regions_table)
-
-    # If using Einstein Whistle behind trees is allowed, add a new logic path there to reflect that change
-    if multiworld.allow_whistle_usage_behind_trees[player].value is True:
-        create_entrance("greenmaze_post_whistle", "greenmaze_pre_whistle", False, player, regions_table)
+    add_specific_paths(multiworld, player, regions_table)
 
     return regions_table
 
 
+def add_specific_paths(multiworld: MultiWorld, player: int, regions_table: Dict[str, LandstalkerRegion]):
+    # If Gumi boulder is removed, add a path from "route_gumi_ryuma" to "gumi"
+    if multiworld.remove_gumi_boulder[player].value == 1:
+        create_entrance("route_gumi_ryuma", "gumi", False, player, regions_table)
+
+    # If enemy jumping is in logic, Mountainous Area can be reached from route to Lake Shrine by doing a "ghost jump"
+    # at crossroads map
+    if multiworld.handle_enemy_jumping_in_logic[player].value == 1:
+        create_entrance("route_lake_shrine", "route_lake_shrine_cliff", False, player, regions_table)
+
+    # If using Einstein Whistle behind trees is allowed, add a new logic path there to reflect that change
+    if multiworld.allow_whistle_usage_behind_trees[player].value == 1:
+        create_entrance("greenmaze_post_whistle", "greenmaze_pre_whistle", False, player, regions_table)
+
+
 def create_entrance(from_id: str, to_id: str, two_way: bool, player: int, regions_table: Dict[str, LandstalkerRegion]):
+    created_entrances = []
+
     name = from_id + " -> " + to_id
     from_region = regions_table[from_id]
     to_region = regions_table[to_id]
@@ -71,6 +77,7 @@ def create_entrance(from_id: str, to_id: str, two_way: bool, player: int, region
     entrance = Entrance(player, name, from_region)
     from_region.exits.append(entrance)
     entrance.connect(to_region)
+    created_entrances.append(entrance)
 
     # If two-way, also create a reverse path
     if two_way:
@@ -78,6 +85,10 @@ def create_entrance(from_id: str, to_id: str, two_way: bool, player: int, region
         entrance = Entrance(player, reverse_name, to_region)
         to_region.exits.append(entrance)
         entrance.connect(from_region)
+        created_entrances.append(entrance)
+
+    return created_entrances
+
 
 def get_starting_region(multiworld: MultiWorld, player: int, regions_table: Dict[str, LandstalkerRegion]):
     spawn_id = multiworld.spawn_region[player].value
@@ -103,3 +114,21 @@ def get_darkenable_regions():
             if "darkMapIds" in data:
                 darkenable_region_ids[data["name"]] = data["nodeIds"]
     return darkenable_region_ids
+
+
+def load_teleport_trees():
+    script_folder = Path(__file__)
+    with open((script_folder.parent / "data/world_teleport_tree.json").resolve(), "r") as file:
+        tp_tree_data = json.load(file)
+        pairs = []
+        for pair in tp_tree_data:
+            first_tree = {
+                'name': pair[0]["name"],
+                'region': pair[0]["nodeId"]
+            }
+            second_tree = {
+                'name': pair[1]["name"],
+                'region': pair[1]["nodeId"]
+            }
+            pairs.append([first_tree, second_tree])
+        return pairs

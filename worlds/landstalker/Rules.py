@@ -31,7 +31,8 @@ def create_rules(multiworld: MultiWorld, player: int, regions_table: Dict[str, R
     multiworld.completion_condition[player] = lambda state: state.has("King Nole's Treasure", player)
 
 
-def add_path_requirements(multiworld: MultiWorld, player: int, regions_table: Dict[str, Region], dark_region_ids: List[str]):
+def add_path_requirements(multiworld: MultiWorld, player: int, regions_table: Dict[str, Region],
+                          dark_region_ids: List[str]):
     can_damage_boost = multiworld.handle_damage_boosting_in_logic[player].value
 
     script_folder = Path(__file__)
@@ -78,16 +79,16 @@ def add_specific_path_requirements(multiworld: MultiWorld, player: int):
     path_to_kazalt.access_rule = make_path_requirement_lambda(player, required_jewels, [])
 
     # If enemy jumping is enabled, Mir Tower sector first tree can be bypassed to reach the elevated ledge
-    if multiworld.handle_enemy_jumping_in_logic[player].value is True:
+    if multiworld.handle_enemy_jumping_in_logic[player].value == 1:
         remove_requirements_for(multiworld, "mir_tower_sector -> mir_tower_sector_tree_ledge", player)
 
     # Both trees in Mir Tower sector can be abused using tree cutting glitch
-    if multiworld.handle_tree_cutting_glitch_in_logic[player].value is True:
+    if multiworld.handle_tree_cutting_glitch_in_logic[player].value == 1:
         remove_requirements_for(multiworld, "mir_tower_sector -> mir_tower_sector_tree_ledge", player)
         remove_requirements_for(multiworld, "mir_tower_sector -> mir_tower_sector_tree_coast", player)
 
     # If Whistle can be used from behind the trees, it adds a new path that requires the whistle as well
-    if multiworld.allow_whistle_usage_behind_trees[player].value is True:
+    if multiworld.allow_whistle_usage_behind_trees[player].value == 1:
         entrance = multiworld.get_entrance("greenmaze_post_whistle -> greenmaze_pre_whistle", player)
         entrance.access_rule = make_path_requirement_lambda(player, ["Einstein Whistle"], [])
 
