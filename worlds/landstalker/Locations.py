@@ -5,6 +5,10 @@ from BaseClasses import Location, Region, MultiWorld, ItemClassification
 from worlds.landstalker import LandstalkerItem
 
 BASE_LOCATION_ID = 4000
+BASE_GROUND_LOCATION_ID = BASE_LOCATION_ID + 256
+BASE_SHOP_LOCATION_ID = BASE_GROUND_LOCATION_ID + 30
+BASE_REWARD_LOCATION_ID = BASE_SHOP_LOCATION_ID + 50
+
 
 class LandstalkerLocation(Location):
     game: str = "Landstalker"
@@ -43,10 +47,12 @@ def build_location_name_to_id_table():
         for data in item_source_data:
             if data["type"] == "chest":
                 location_id = BASE_LOCATION_ID + int(data["chestId"])
-            elif data["type"] == "ground" or data["type"] == "shop":
-                location_id = BASE_LOCATION_ID + 256 + int(data["groundItemId"])
+            elif data["type"] == "ground":
+                location_id = BASE_GROUND_LOCATION_ID + int(data["groundItemId"])
+            elif data["type"] == "shop":
+                location_id = BASE_SHOP_LOCATION_ID + int(data["shopItemId"])
             else:  # if data["type"] == "reward":
-                location_id = BASE_LOCATION_ID + 340 + current_reward_id
+                location_id = BASE_REWARD_LOCATION_ID + current_reward_id
                 current_reward_id += 1
             location_name_to_id_table[data["name"]] = location_id
 
@@ -54,4 +60,3 @@ def build_location_name_to_id_table():
     location_name_to_id_table["Gola"] = BASE_LOCATION_ID + 340 + current_reward_id
 
     return location_name_to_id_table
-

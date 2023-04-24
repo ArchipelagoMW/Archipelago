@@ -1572,147 +1572,147 @@
         "type": "shop",
         "nodeId": "massan",
         "entity": { "mapId": 596, "entityId": 1 },
-        "groundItemId": 30
+        "shopItemId": 1
     },
     {
         "name": "Massan: Shop item #2",
         "type": "shop",
         "nodeId": "massan",
         "entity": { "mapId": 596, "entityId": 2 },
-        "groundItemId": 31
+        "shopItemId": 2
     },
     {
         "name": "Massan: Shop item #3",
         "type": "shop",
         "nodeId": "massan",
         "entity": { "mapId": 596, "entityId": 3 },
-        "groundItemId": 32
+        "shopItemId": 3
     },
     {
         "name": "Gumi: Inn item #1",
         "type": "shop",
         "nodeId": "gumi",
         "entity": { "mapId": 608, "entityId": 4 },
-        "groundItemId": 33
+        "shopItemId": 4
     },
     {
         "name": "Gumi: Inn item #2",
         "type": "shop",
         "nodeId": "gumi",
         "entity": { "mapId": 608, "entityId": 2 },
-        "groundItemId": 34
+        "shopItemId": 5
     },
     {
         "name": "Ryuma: Shop item #1",
         "type": "shop",
         "nodeId": "ryuma_after_thieves_hideout",
         "entity": { "mapId": 615, "entityId": 2 },
-        "groundItemId": 35
+        "shopItemId": 6
     },
     {
         "name": "Ryuma: Shop item #2",
         "type": "shop",
         "nodeId": "ryuma_after_thieves_hideout",
         "entity": { "mapId": 615, "entityId": 3 },
-        "groundItemId": 36
+        "shopItemId": 7
     },
     {
         "name": "Ryuma: Shop item #3",
         "type": "shop",
         "nodeId": "ryuma_after_thieves_hideout",
         "entity": { "mapId": 615, "entityId": 4 },
-        "groundItemId": 37
+        "shopItemId": 8
     },
     {
         "name": "Ryuma: Shop item #4",
         "type": "shop",
         "nodeId": "ryuma_after_thieves_hideout",
         "entity": { "mapId": 615, "entityId": 5 },
-        "groundItemId": 38
+        "shopItemId": 9
     },
     {
         "name": "Ryuma: Shop item #5",
         "type": "shop",
         "nodeId": "ryuma_after_thieves_hideout",
         "entity": { "mapId": 615, "entityId": 6 },
-        "groundItemId": 39
+        "shopItemId": 10
     },
     {
         "name": "Ryuma: Inn item",
         "type": "shop",
         "nodeId": "ryuma",
         "entity": { "mapId": 624, "entityId": 3 },
-        "groundItemId": 40
+        "shopItemId": 11
     },
     {
         "name": "Mercator: Shop item #1",
         "type": "shop",
         "nodeId": "mercator",
         "entity": { "mapId": 679, "entityId": 1 },
-        "groundItemId": 41
+        "shopItemId": 12
     },
     {
         "name": "Mercator: Shop item #2",
         "type": "shop",
         "nodeId": "mercator",
         "entity": { "mapId": 679, "entityId": 2 },
-        "groundItemId": 42
+        "shopItemId": 13
     },
     {
         "name": "Mercator: Shop item #3",
         "type": "shop",
         "nodeId": "mercator",
         "entity": { "mapId": 679, "entityId": 3 },
-        "groundItemId": 43
+        "shopItemId": 14
     },
     {
         "name": "Mercator: Shop item #4",
         "type": "shop",
         "nodeId": "mercator",
         "entity": { "mapId": 679, "entityId": 4 },
-        "groundItemId": 44
+        "shopItemId": 15
     },
     {
         "name": "Mercator: Shop item #5",
         "type": "shop",
         "nodeId": "mercator",
         "entity": { "mapId": 679, "entityId": 5 },
-        "groundItemId": 45
+        "shopItemId": 16
     },
     {
         "name": "Mercator: Shop item #6",
         "type": "shop",
         "nodeId": "mercator",
         "entity": { "mapId": 679, "entityId": 6 },
-        "groundItemId": 46
+        "shopItemId": 17
     },
     {
         "name": "Mercator: Special shop item #1",
         "type": "shop",
         "nodeId": "mercator_special_shop",
         "entity": { "mapId": 696, "entityId": 1 },
-        "groundItemId": 47
+        "shopItemId": 18
     },
     {
         "name": "Mercator: Special shop item #2",
         "type": "shop",
         "nodeId": "mercator_special_shop",
         "entity": { "mapId": 696, "entityId": 2 },
-        "groundItemId": 48
+        "shopItemId": 19
     },
     {
         "name": "Mercator: Special shop item #3",
         "type": "shop",
         "nodeId": "mercator_special_shop",
         "entity": { "mapId": 696, "entityId": 3 },
-        "groundItemId": 49
+        "shopItemId": 20
     },
     {
         "name": "Mercator: Special shop item #4",
         "type": "shop",
         "nodeId": "mercator_special_shop",
         "entity": { "mapId": 696, "entityId": 4 },
-        "groundItemId": 50
+        "shopItemId": 21
     },
     {
         "name": "Mercator: Docks shop item #1",
@@ -1722,7 +1722,7 @@
             { "mapId": 644, "entityId": 3 },
             { "mapId": 643, "entityId": 9 }
         ],
-        "groundItemId": 51
+        "shopItemId": 22
     },
     {
         "name": "Mercator: Docks shop item #2",
@@ -1732,7 +1732,7 @@
             { "mapId": 644, "entityId": 4 },
             { "mapId": 643, "entityId": 10 }
         ],
-        "groundItemId": 52
+        "shopItemId": 23
     },
     {
         "name": "Mercator: Docks shop item #3",
@@ -1742,7 +1742,7 @@
             { "mapId": 644, "entityId": 5 },
             { "mapId": 643, "entityId": 11 }
         ],
-        "groundItemId": 53
+        "shopItemId": 24
     },
     {
         "name": "Verla: Shop item #1",
@@ -1752,7 +1752,7 @@
             { "mapId": 719, "entityId": 0 },
             { "mapId": 720, "entityId": 1 }
         ],
-        "groundItemId": 54
+        "shopItemId": 25
     },
     {
         "name": "Verla: Shop item #2",
@@ -1762,7 +1762,7 @@
             { "mapId": 719, "entityId": 1 },
             { "mapId": 720, "entityId": 2 }
         ],
-        "groundItemId": 55
+        "shopItemId": 26
     },
     {
         "name": "Verla: Shop item #3",
@@ -1772,7 +1772,7 @@
             { "mapId": 719, "entityId": 2 },
             { "mapId": 720, "entityId": 3 }
         ],
-        "groundItemId": 56
+        "shopItemId": 27
     },
     {
         "name": "Verla: Shop item #4",
@@ -1782,172 +1782,175 @@
             { "mapId": 719, "entityId": 4 },
             { "mapId": 720, "entityId": 4 }
         ],
-        "groundItemId": 57
+        "shopItemId": 28
     },
     {
         "name": "Verla: Shop item #5 (extra item after saving town)",
         "type": "shop",
         "nodeId": "verla_after_mines",
         "entity": { "mapId": 720, "entityId": 5 },
-        "groundItemId": 58
+        "shopItemId": 29
     },
     {
         "name": "Route from Verla to Destel: Kelketo shop item #1",
         "type": "shop",
         "nodeId": "route_verla_destel",
         "entity": { "mapId": 517, "entityId": 1 },
-        "groundItemId": 59
+        "shopItemId": 30
     },
     {
         "name": "Route from Verla to Destel: Kelketo shop item #2",
         "type": "shop",
         "nodeId": "route_verla_destel",
         "entity": { "mapId": 517, "entityId": 2 },
-        "groundItemId": 60
+        "shopItemId": 31
     },
     {
         "name": "Route from Verla to Destel: Kelketo shop item #3",
         "type": "shop",
         "nodeId": "route_verla_destel",
         "entity": { "mapId": 517, "entityId": 3 },
-        "groundItemId": 61
+        "shopItemId": 32
     },
     {
         "name": "Route from Verla to Destel: Kelketo shop item #4",
         "type": "shop",
         "nodeId": "route_verla_destel",
         "entity": { "mapId": 517, "entityId": 4 },
-        "groundItemId": 62
+        "shopItemId": 33
     },
     {
         "name": "Route from Verla to Destel: Kelketo shop item #5",
         "type": "shop",
         "nodeId": "route_verla_destel",
         "entity": { "mapId": 517, "entityId": 5 },
-        "groundItemId": 63
+        "shopItemId": 34
     },
     {
         "name": "Destel: Inn item",
         "type": "shop",
         "nodeId": "destel",
         "entity": { "mapId": 729, "entityId": 2 },
-        "groundItemId": 64
+        "shopItemId": 35
     },
     {
         "name": "Destel: Shop item #1",
         "type": "shop",
         "nodeId": "destel",
         "entity": { "mapId": 733, "entityId": 1 },
-        "groundItemId": 65
+        "shopItemId": 36
     },
     {
         "name": "Destel: Shop item #2",
         "type": "shop",
         "nodeId": "destel",
         "entity": { "mapId": 733, "entityId": 2 },
-        "groundItemId": 66
+        "shopItemId": 37
     },
     {
         "name": "Destel: Shop item #3",
         "type": "shop",
         "nodeId": "destel",
         "entity": { "mapId": 733, "entityId": 3 },
-        "groundItemId": 67
+        "shopItemId": 38
     },
     {
         "name": "Destel: Shop item #4",
         "type": "shop",
         "nodeId": "destel",
         "entity": { "mapId": 733, "entityId": 4 },
-        "groundItemId": 68
+        "shopItemId": 39
     },
     {
         "name": "Destel: Shop item #5",
         "type": "shop",
         "nodeId": "destel",
         "entity": { "mapId": 733, "entityId": 5 },
-        "groundItemId": 69
+        "shopItemId": 40
     },
     {
         "name": "Route to Lake Shrine: Greedly's shop item #1",
         "type": "shop",
         "nodeId": "route_lake_shrine",
         "entity": { "mapId": 526, "entityId": 0 },
-        "groundItemId": 70
+        "shopItemId": 41
     },
     {
         "name": "Route to Lake Shrine: Greedly's shop item #2",
         "type": "shop",
         "nodeId": "route_lake_shrine",
         "entity": { "mapId": 526, "entityId": 2 },
-        "groundItemId": 71
+        "shopItemId": 42
     },
     {
         "name": "Route to Lake Shrine: Greedly's shop item #3",
         "type": "shop",
         "nodeId": "route_lake_shrine",
         "entity": { "mapId": 526, "entityId": 3 },
-        "groundItemId": 72
+        "shopItemId": 43
     },
     {
         "name": "Route to Lake Shrine: Greedly's shop item #4",
         "type": "shop",
         "nodeId": "route_lake_shrine",
         "entity": { "mapId": 526, "entityId": 4 },
-        "groundItemId": 73
+        "shopItemId": 44
     },
     {
         "name": "Kazalt: Shop item #1",
         "type": "shop",
         "nodeId": "kazalt",
         "entity": { "mapId": 747, "entityId": 0 },
-        "groundItemId": 74
+        "shopItemId": 45
     },
     {
         "name": "Kazalt: Shop item #2",
         "type": "shop",
         "nodeId": "kazalt",
         "entity": { "mapId": 747, "entityId": 2 },
-        "groundItemId": 75
+        "shopItemId": 46
     },
     {
         "name": "Kazalt: Shop item #3",
         "type": "shop",
         "nodeId": "kazalt",
         "entity": { "mapId": 747, "entityId": 3 },
-        "groundItemId": 76
+        "shopItemId": 47
     },
     {
         "name": "Kazalt: Shop item #4",
         "type": "shop",
         "nodeId": "kazalt",
         "entity": { "mapId": 747, "entityId": 4 },
-        "groundItemId": 77
+        "shopItemId": 48
     },
     {
         "name": "Kazalt: Shop item #5",
         "type": "shop",
         "nodeId": "kazalt",
         "entity": { "mapId": 747, "entityId": 5 },
-        "groundItemId": 78
+        "shopItemId": 49
     },
     {
         "name": "Massan: Elder reward after freeing Fara in Swamp Shrine",
         "type": "reward",
         "nodeId": "massan_after_swamp_shrine",
-        "address": 162337
+        "address": 162337,
+        "flag": { "byte": "0x1004", "bit": 2 }
     },
     {
         "name": "Lake Shrine: Mir reward after beating Duke",
         "type": "reward",
         "nodeId": "lake_shrine",
-        "address": 166463
+        "address": 166463,
+        "flag": { "byte": "0x1003", "bit": 0 }
     },
     {
         "name": "Greenmaze: Cutter reward for saving Einstein",
         "type": "reward",
         "nodeId": "greenmaze_pre_whistle",
-        "address": 166021
+        "address": 166021,
+        "flag": { "byte": "0x1024", "bit": 4 }
     },
     {
         "name": "Mountainous Area: Zak reward after fighting",
@@ -1956,42 +1959,49 @@
         "hints": [
             "kept by a threatening guardian"
         ],
-        "address": 166515
+        "address": 166515,
+        "flag": { "byte": "0x1027", "bit": 0 }
     },
     {
         "name": "Route between Gumi and Ryuma: Swordsman Kado reward",
         "type": "reward",
         "nodeId": "route_gumi_ryuma",
-        "address": 166219
+        "address": 166219,
+        "flag": { "byte": "0x101B", "bit": 7 }
     },
     {
         "name": "Greenmaze: dwarf hidden in the trees",
         "type": "reward",
         "nodeId": "greenmaze_pre_whistle",
-        "address": 166111
+        "address": 166111,
+        "flag": { "byte": "0x1022", "bit": 7 }
     },
     {
         "name": "Mercator: Arthur reward (in castle throne room)",
         "type": "reward",
         "nodeId": "mercator",
-        "address": 164191
+        "address": 164191,
+        "flag": { "byte": "0x101B", "bit": 6 }
     },
     {
         "name": "Mercator: Fahl's dojo challenge reward",
         "type": "reward",
         "nodeId": "mercator",
-        "address": 165029
+        "address": 165029,
+        "flag": { "byte": "0x101C", "bit": 4 }
     },
     {
         "name": "Ryuma: Mayor's first reward",
         "type": "reward",
         "nodeId": "ryuma_after_thieves_hideout",
-        "address": 164731
+        "address": 164731,
+        "flag": { "byte": "0x1004", "bit": 3 }
     },
     {
         "name": "Ryuma: Mayor's second reward",
         "type": "reward",
         "nodeId": "ryuma_after_thieves_hideout",
-        "address": 164735
+        "address": 164735,
+        "flag": { "byte": "0x1004", "bit": 3 }
     }
 ]
