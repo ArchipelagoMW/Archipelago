@@ -76,7 +76,6 @@ def main(args=None, callback=ERmain):
     if not args:
         args, options = mystery_argparse()
 
-    args.additional_apworld_path = "T:\ApWorlds"
     if args.additional_apworld_path:
         WorldLoader.add_apworlds_source_folder(args.additional_apworld_path)
 
