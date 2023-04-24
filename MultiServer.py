@@ -1869,7 +1869,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
-        async_start(self.ctx.server.ws_server._close())
+        self.ctx.server.ws_server.close()
         if self.ctx.shutdown_task:
             self.ctx.shutdown_task.cancel()
         self.ctx.exit_event.set()
@@ -2210,7 +2210,7 @@ async def auto_shutdown(ctx, to_cancel=None):
     await asyncio.sleep(ctx.auto_shutdown)
     while not ctx.exit_event.is_set():
         if not ctx.client_activity_timers.values():
-            async_start(ctx.server.ws_server._close())
+            ctx.server.ws_server.close()
             ctx.exit_event.set()
             if to_cancel:
                 for task in to_cancel:
@@ -2221,7 +2221,7 @@ async def auto_shutdown(ctx, to_cancel=None):
             delta = datetime.datetime.now(datetime.timezone.utc) - newest_activity
             seconds = ctx.auto_shutdown - delta.total_seconds()
             if seconds < 0:
-                async_start(ctx.server.ws_server._close())
+                ctx.server.ws_server.close()
                 ctx.exit_event.set()
                 if to_cancel:
                     for task in to_cancel:
