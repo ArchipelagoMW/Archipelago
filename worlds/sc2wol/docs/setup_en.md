@@ -49,7 +49,7 @@ specific description of what's going wrong and attach your log file to your mess
 
 ## Running in macOS
 
-To run StarCraft 2 through Archipelago in macOS, you will need to run the client via source as seen here: [macOS Guide](https://archipelago.gg/tutorial/Archipelago/mac/en). Note: when running the client, you will need to run the command `sudo python3 Starcraft2Client.py`. This is done to make sure that `/download_data` works correctly.
+To run StarCraft 2 through Archipelago in macOS, you will need to run the client via source as seen here: [macOS Guide](https://archipelago.gg/tutorial/Archipelago/mac/en). Note: when running the client, you will need to run the command `python3 Starcraft2Client.py`. This is done to make sure that `/download_data` works correctly.
 
 ## Running in Linux
 
