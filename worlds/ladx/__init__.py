@@ -267,6 +267,7 @@ class LinksAwakeningWorld(World):
         return self.pre_fill_items
 
     def pre_fill(self) -> None:
+        debug = False
         allowed_locations_by_item = {}
 
         def priority(item):
@@ -286,14 +287,12 @@ class LinksAwakeningWorld(World):
             return i
 
         def location_rule(item, location, orig_rule):
-
-                
+            if not orig_rule(item):
+                return False
             if item in allowed_locations_by_item:
-                if item.name == "Dungeon Map (Eagle's Tower)":
-                    if "Eagle" in location.name:
-                        assert location in allowed_locations_by_item[item]
                 return location in allowed_locations_by_item[item]
-            return orig_rule(item)
+            else:
+                return True
 
         # Set up filter rules
         all_dungeon_items_to_fill = list()
@@ -329,7 +328,11 @@ class LinksAwakeningWorld(World):
             
         # ...and flag items as pre-filled
         self.pre_fill_items.extend(all_dungeon_items_to_fill)
+        #print(all_dungeon_items_to_fill)
+        fill_restrictive(self.multiworld, all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=True)
         print(all_dungeon_items_to_fill)
+        print(all_dungeon_locs_to_fill)
+        debug = True
         fill_restrictive(self.multiworld, all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
     name_cache = {}
 
