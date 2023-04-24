@@ -8,8 +8,7 @@ from collections import OrderedDict
 import Utils
 from BaseClasses import Item, CollectionState, Tutorial, MultiWorld
 from .Dungeons import create_dungeons
-from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect, \
-    indirect_connections, indirect_connections_inverted, indirect_connections_not_inverted
+from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
@@ -309,23 +308,12 @@ class ALTTPWorld(World):
         if world.mode[player] != 'inverted':
             link_entrances(world, player)
             mark_light_world_regions(world, player)
-            for region_name, entrance_name in indirect_connections_not_inverted.items():
-                world.register_indirect_condition(world.get_region(region_name, player),
-                                                  world.get_entrance(entrance_name, player))
         else:
             link_inverted_entrances(world, player)
             mark_dark_world_regions(world, player)
-            for region_name, entrance_name in indirect_connections_inverted.items():
-                world.register_indirect_condition(world.get_region(region_name, player),
-                                                  world.get_entrance(entrance_name, player))
 
         world.random = old_random
         plando_connect(world, player)
-
-        for region_name, entrance_name in indirect_connections.items():
-            world.register_indirect_condition(world.get_region(region_name, player),
-                                              world.get_entrance(entrance_name, player))
-
 
     def collect_item(self, state: CollectionState, item: Item, remove=False):
         item_name = item.name

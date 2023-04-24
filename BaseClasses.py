@@ -69,7 +69,6 @@ class MultiWorld():
     non_local_items: Dict[int, Options.NonLocalItems]
     progression_balancing: Dict[int, Options.ProgressionBalancing]
     completion_condition: Dict[int, Callable[[CollectionState], bool]]
-    indirect_connections: Dict[Region, Set[Entrance]]
     exclude_locations: Dict[int, Options.ExcludeLocations]
     priority_locations: Dict[int, Options.PriorityLocations]
     start_inventory: Dict[int, Options.StartInventory]
@@ -120,7 +119,6 @@ class MultiWorld():
         self.spoiler = Spoiler(self)
         self.early_items = {player: {} for player in self.player_ids}
         self.local_early_items = {player: {} for player in self.player_ids}
-        self.indirect_connections = {}
         self.start_inventory_from_pool: Dict[int, Options.StartInventoryPool] = {}
         self.fix_trock_doors = self.AttributeProxy(
             lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
@@ -460,11 +458,6 @@ class MultiWorld():
     def clear_entrance_cache(self):
         self._cached_entrances = None
 
-    def register_indirect_condition(self, region: Region, entrance: Entrance):
-        """Report that access to this Region can result in unlocking this Entrance,
-        state.can_reach(Region) in the Entrance's traversal condition, as opposed to pure transition logic."""
-        self.indirect_connections.setdefault(region, set()).add(entrance)
-
     def get_locations(self, player: Optional[int] = None) -> List[Location]:
         if self._cached_locations is None:
             self._cached_locations = [location for region in self.regions for location in region.locations]
@@ -661,36 +654,37 @@ class CollectionState():
                 self.collect(item, True)
 
     def update_reachable_regions(self, player: int):
+        new_connection: bool = True
         self.stale[player] = False
-        rrp = self.reachable_regions[player]
-        bc = self.blocked_connections[player]
+        reachable_regions = self.reachable_regions[player]
+        blocked_connections = self.blocked_connections[player]
         queue = deque(self.blocked_connections[player])
-        start = self.multiworld.get_region('Menu', player)
+        start = self.multiworld.get_region("Menu", player)
 
         # init on first call - this can't be done on construction since the regions don't exist yet
-        if start not in rrp:
-            rrp.add(start)
-            bc.update(start.exits)
+        if start not in reachable_regions:
+            reachable_regions.add(start)
+            blocked_connections.update(start.exits)
             queue.extend(start.exits)
 
         # run BFS on all connections, and keep track of those blocked by missing items
-        while queue:
-            connection = queue.popleft()
-            new_region = connection.connected_region
-            if new_region in rrp:
-                bc.remove(connection)
-            elif connection.can_reach(self):
-                assert new_region, f"tried to search through an Entrance \"{connection}\" with no Region"
-                rrp.add(new_region)
-                bc.remove(connection)
-                bc.update(new_region.exits)
-                queue.extend(new_region.exits)
-                self.path[new_region] = (new_region.name, self.path.get(connection, None))
-
-                # Retry connections if the new region can unblock them
-                for new_entrance in self.multiworld.indirect_connections.get(new_region, set()):
-                    if new_entrance in bc and new_entrance not in queue:
-                        queue.append(new_entrance)
+        while new_connection:
+            new_connection = False
+            while queue:
+                connection = queue.popleft()
+                new_region = connection.connected_region
+                if new_region in reachable_regions:
+                    blocked_connections.remove(connection)
+                elif connection.can_reach(self):
+                    assert new_region, f"tried to search through an Entrance \"{connection}\" with no Region"
+                    reachable_regions.add(new_region)
+                    blocked_connections.remove(connection)
+                    blocked_connections.update(new_region.exits)
+                    queue.extend(new_region.exits)
+                    self.path[new_region] = (new_region.name, self.path.get(connection, None))
+                    new_connection = True
+            # sweep for indirect connections, mostly Entrance.can_reach(unrelated_Region)
+            queue.extend(blocked_connections)
 
     def copy(self) -> CollectionState:
         ret = CollectionState(self.multiworld)
