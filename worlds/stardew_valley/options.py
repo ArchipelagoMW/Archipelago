@@ -292,6 +292,7 @@ class Fishsanity(Choice):
     option_legendaries = 1
     option_special = 2
     option_randomized = 3
+    alias_random_selection = option_randomized
     option_all = 4
 
 
