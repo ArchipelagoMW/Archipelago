@@ -11,10 +11,12 @@ from werkzeug.exceptions import abort
 from MultiServer import Context, get_saving_second
 from NetUtils import SlotType
 from Utils import restricted_loads
-from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name, network_data_package
+from worlds import WorldLoader, lookup_any_item_id_to_name, lookup_any_location_id_to_name, network_data_package
 from worlds.alttp import Items
 from . import app, cache
 from .models import GameDataPackage, Room
+
+WorldLoader.load_worlds()
 
 alttp_icons = {
     "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",

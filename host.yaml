@@ -83,6 +83,9 @@ generator:
   # List of options that can be plando'd. Can be combined, for example "bosses, items"
   # Available options: bosses, items, texts, connections
   plando_options: "bosses"
+  # Additional folder to scan for .apworld files in addition to the "worlds" folder
+  # can be left empty if no additional folders should be scanned
+  additional_apworld_path: null
 sni_options:
   # Set this to your SNI folder location if you want the MultiClient to attempt an auto start, does nothing if not found
   sni_path: "SNI"

@@ -11,6 +11,7 @@ from collections import Counter, ChainMap
 from typing import Dict, Tuple, Callable, Any, Union
 
 import ModuleUpdate
+from worlds import WorldLoader
 
 ModuleUpdate.update()
 
@@ -56,6 +57,8 @@ def mystery_argparse():
                         help='Output rolled mystery results to yaml up to specified number (made for async multiworld)')
     parser.add_argument('--plando', default=defaults["plando_options"],
                         help='List of options that can be set manually. Can be combined, for example "bosses, items"')
+    parser.add_argument('--additional_apworld_path', default=defaults["additional_apworld_path"],
+                        help='Input directory for discovery of additional .apworld files.')
     args = parser.parse_args()
     if not os.path.isabs(args.weights_file_path):
         args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
@@ -72,6 +75,10 @@ def get_seed_name(random_source) -> str:
 def main(args=None, callback=ERmain):
     if not args:
         args, options = mystery_argparse()
+
+    args.additional_apworld_path = "T:\ApWorlds"
+    if args.additional_apworld_path:
+        WorldLoader.add_apworlds_source_folder(args.additional_apworld_path)
 
     seed = get_seed(args.seed)
     random.seed(seed)

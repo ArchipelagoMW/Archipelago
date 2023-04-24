@@ -6,6 +6,7 @@ import pathlib
 import sys
 from typing import Any, Callable, ClassVar, Dict, FrozenSet, List, Optional, Set, TYPE_CHECKING, TextIO, Tuple, Type, \
     Union
+from . import WorldLoader
 
 from BaseClasses import CollectionState
 from Options import AssembleOptions
@@ -14,11 +15,20 @@ if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial
     from . import GamesPackage
 
-
 class AutoWorldRegister(type):
-    world_types: Dict[str, Type[World]] = {}
+    # these worlds are intertwined with the core and therefor get loaded early on
+    core_intertwined_worlds: ClassVar[Tuple[str]]= ("A Link to the Past", "Archipelago")
+    world_types_cache: ClassVar[Dict[str, Type[World]]] = {}
+
     __file__: str
     zip_path: Optional[str]
+
+    @classmethod
+    @property
+    def world_types(cls) -> Dict[str, Type[World]]:
+        if len(cls.world_types_cache) <= len(cls.core_intertwined_worlds):
+            WorldLoader.load_worlds()
+        return cls.world_types_cache
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
@@ -54,9 +64,9 @@ class AutoWorldRegister(type):
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
         if "game" in dct:
-            if dct["game"] in AutoWorldRegister.world_types:
+            if dct["game"] in mcs.world_types_cache and dct["game"] not in mcs.core_intertwined_worlds:
                 raise RuntimeError(f"""Game {dct["game"]} already registered.""")
-            AutoWorldRegister.world_types[dct["game"]] = new_class
+            mcs.world_types_cache[dct["game"]] = new_class
         new_class.__file__ = sys.modules[new_class.__module__].__file__
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]

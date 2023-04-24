@@ -1,30 +1,27 @@
 import importlib
 import os
 import sys
-import typing
+from typing import Dict, List, Set, TypedDict, NamedTuple, TYPE_CHECKING
 import warnings
 import zipimport
-
-folder = os.path.dirname(__file__)
 
 __all__ = {
     "lookup_any_item_id_to_name",
     "lookup_any_location_id_to_name",
     "network_data_package",
-    "AutoWorldRegister",
-    "world_sources",
-    "folder",
+    "AutoWorldRegister"
 }
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from .AutoWorld import World
 
+folder = os.path.dirname(__file__)
 
-class GamesData(typing.TypedDict):
-    item_name_groups: typing.Dict[str, typing.List[str]]
-    item_name_to_id: typing.Dict[str, int]
-    location_name_groups: typing.Dict[str, typing.List[str]]
-    location_name_to_id: typing.Dict[str, int]
+class GamesData(TypedDict):
+    item_name_groups: Dict[str, List[str]]
+    item_name_to_id: Dict[str, int]
+    location_name_groups: Dict[str, List[str]]
+    location_name_to_id: Dict[str, int]
     version: int
 
 
@@ -32,11 +29,11 @@ class GamesPackage(GamesData, total=False):
     checksum: str
 
 
-class DataPackage(typing.TypedDict):
-    games: typing.Dict[str, GamesPackage]
+class DataPackage(TypedDict):
+    games: Dict[str, GamesPackage]
 
 
-class WorldSource(typing.NamedTuple):
+class WorldSource(NamedTuple):
     path: str  # typically relative path from this module
     is_zip: bool = False
     relative: bool = True  # relative to regular world import folder
@@ -84,42 +81,69 @@ class WorldSource(typing.NamedTuple):
             logging.exception(file_like.read())
             return False
 
-
-# find potential world containers, currently folders and zip-importable .apworld's
-world_sources: typing.List[WorldSource] = []
-file: os.DirEntry  # for me (Berserker) at least, PyCharm doesn't seem to infer the type correctly
-for file in os.scandir(folder):
-    # prevent loading of __pycache__ and allow _* for non-world folders, disable files/folders starting with "."
-    if not file.name.startswith(("_", ".")):
-        if file.is_dir():
-            world_sources.append(WorldSource(file.name))
-        elif file.is_file() and file.name.endswith(".apworld"):
-            world_sources.append(WorldSource(file.name, is_zip=True))
-
-# import all submodules to trigger AutoWorldRegister
-world_sources.sort()
-for world_source in world_sources:
-    world_source.load()
-
 lookup_any_item_id_to_name = {}
 lookup_any_location_id_to_name = {}
-games: typing.Dict[str, GamesPackage] = {}
-
-from .AutoWorld import AutoWorldRegister
-
-# Build the data package for each game.
-for world_name, world in AutoWorldRegister.world_types.items():
-    games[world_name] = world.get_data_package_data()
-    lookup_any_item_id_to_name.update(world.item_id_to_name)
-    lookup_any_location_id_to_name.update(world.location_id_to_name)
-
 network_data_package: DataPackage = {
-    "games": games,
+    "games": {},
 }
 
-# Set entire datapackage to version 0 if any of them are set to 0
-if any(not world.data_version for world in AutoWorldRegister.world_types.values()):
-    import logging
+class WorldLoader:
+    is_loaded: bool = False
+    additional_apworlds_folders: List[str] = []
 
-    logging.warning(f"Datapackage is in custom mode. Custom Worlds: "
-                    f"{[world for world in AutoWorldRegister.world_types.values() if not world.data_version]}")
+    @staticmethod
+    def add_apworlds_source_folder(path: str) -> None:
+        WorldLoader.additional_apworlds_folders.append(path)
+
+    @staticmethod
+    def load_worlds():
+        # allow method to called any number of times but only load once
+        if WorldLoader.is_loaded:
+            return
+        else:
+            WorldLoader.is_loaded = True
+
+        # import all submodules to trigger AutoWorldRegister
+        for world_source in WorldLoader._get_world_sources():
+            world_source.load()
+
+        WorldLoader._update_shared_variables()
+
+    @staticmethod
+    def _get_world_sources() -> List[WorldSource]:
+        # find potential world containers, currently folders and zip-importable .apworld's
+        world_sources: List[WorldSource] = []
+        file: os.DirEntry  # for me (Berserker) at least, PyCharm doesn't seem to infer the type correctly
+        for file in os.scandir(folder):
+            # prevent loading of __pycache__ and allow _* for non-world folders, disable files/folders starting with "."
+            if not file.name.startswith(("_", ".")):
+                if file.is_dir():
+                    world_sources.append(WorldSource(file.name))
+                elif file.is_file() and file.name.endswith(".apworld"):
+                    world_sources.append(WorldSource(file.name, is_zip=True))
+        if WorldLoader.additional_apworlds_folders:
+            for path in WorldLoader.additional_apworlds_folders:
+                for file in os.scandir(path):
+                    if file.is_file() and file.name.endswith(".apworld"):
+                        world_sources.append(WorldSource(file.path, is_zip=True, relative=False))
+    
+        world_sources.sort()
+        return world_sources
+
+    @staticmethod
+    def _update_shared_variables():
+        from .AutoWorld import AutoWorldRegister
+
+        # Build the data package for each game.
+        custom_worlds: Set[str] = set()
+        for world_name, world in AutoWorldRegister.world_types.items():
+            network_data_package["games"][world_name] = world.get_data_package_data()
+            lookup_any_item_id_to_name.update(world.item_id_to_name)
+            lookup_any_location_id_to_name.update(world.location_id_to_name)
+
+            if not world.data_version:
+              custom_worlds.add(world_name)
+
+        if custom_worlds:
+            import logging
+            logging.warning(f"Datapackage is in custom mode. Custom Worlds: {custom_worlds}")

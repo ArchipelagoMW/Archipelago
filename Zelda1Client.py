@@ -13,9 +13,11 @@ from typing import List
 
 import Utils
 from Utils import async_start
-from worlds import lookup_any_location_id_to_name
+from worlds import WorldLoader, lookup_any_location_id_to_name
 from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, ClientCommandProcessor, logger, \
     get_base_parser
+
+WorldLoader.load_worlds()
 
 from worlds.tloz.Items import item_game_ids
 from worlds.tloz.Locations import location_ids
