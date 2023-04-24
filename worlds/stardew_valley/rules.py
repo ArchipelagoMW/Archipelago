@@ -139,12 +139,18 @@ def set_ginger_island_rules(logic, multi_world, player, world_options: StardewOp
     if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
         return
 
-    boat_rules = logic.has("Hardwood") & logic.has("Iridium Bar") & logic.has("Battery Pack")
-    MultiWorldRules.add_rule(multi_world.get_location("Boat Repaired", player),
-                             boat_rules.simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Repair Boat Hull", player),
+                             logic.has("Hardwood").simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Repair Boat Anchor", player),
+                             logic.has("Iridium Bar").simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Repair Ticket Machine", player),
+                             logic.has("Battery Pack").simplify())
 
+    boat_repaired = logic.received("Boat Repair").simplify()
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.fish_shop_to_boat_tunnel, player),
+                             boat_repaired)
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.boat_to_ginger_island, player),
-                             logic.received("Willy Boat Repair").simplify())
+                             boat_repaired)
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_west, player),
                              logic.received("Island West Turtle").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_north, player),

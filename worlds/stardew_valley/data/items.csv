@@ -245,7 +245,7 @@ id,name,classification,groups
 257,Peach Sapling,progression,"RESOURCE_PACK,RESOURCE_PACK_USEFUL,SEED_SHUFFLE"
 258,Banana Sapling,progression,"GINGER_ISLAND,RESOURCE_PACK,RESOURCE_PACK_USEFUL,SEED_SHUFFLE"
 259,Mango Sapling,progression,"GINGER_ISLAND,RESOURCE_PACK,RESOURCE_PACK_USEFUL,SEED_SHUFFLE"
-260,Willy Boat Repair,progression,"GINGER_ISLAND"
+260,Boat Repair,progression,"GINGER_ISLAND"
 261,Island North Turtle,progression,"GINGER_ISLAND,WALNUT_PURCHASE"
 262,Island West Turtle,progression,"GINGER_ISLAND,WALNUT_PURCHASE"
 263,Island Farmhouse,progression,"GINGER_ISLAND,WALNUT_PURCHASE"
