@@ -137,7 +137,9 @@ class LinksAwakeningWorld(World):
     def create_event(self, event: str):
         return Item(event, ItemClassification.progression, None, self.player)
 
-    def create_items(self) -> None:    
+    def create_items(self) -> None:
+        self.pre_fill_items = []
+
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
 
         dungeon_item_types = {
@@ -184,7 +186,9 @@ class LinksAwakeningWorld(World):
                     if not self.multiworld.tradequest[self.player] and isinstance(item.item_data, TradeItemData):
                         location = self.multiworld.get_location(item.item_data.vanilla_location, self.player)
                         location.place_locked_item(item)
+                        self.pre_fill_items.append(item)
                         continue
+
                     if isinstance(item.item_data, DungeonItemData):
                         if item.item_data.dungeon_item_type == DungeonItemType.INSTRUMENT:
                             # Find instrument, lock
@@ -201,6 +205,7 @@ class LinksAwakeningWorld(World):
                                     if not isinstance(loc.ladxr_item, Instrument):
                                         continue
                                     loc.place_locked_item(item)
+                                    self.pre_fill_items.append(item)
                                     found = True
                                     break
                                 if found:
@@ -239,43 +244,93 @@ class LinksAwakeningWorld(World):
                 index = self.multiworld.random.choice(possible_start_items)
                 start_item = self.multiworld.itempool.pop(index)
                 start_loc.place_locked_item(start_item)
+                self.pre_fill_items.append(start_item)
 
-    def pre_fill(self) -> None:
-        all_state = self.multiworld.get_all_state(use_cache=False)
-        dungeon_locations = []
-        dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]     
+        
+        self.dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]     
         for r in self.multiworld.get_regions():
             if r.player != self.player:
                 continue
 
             # Set aside dungeon locations
             if r.dungeon_index:
-                dungeon_locations += r.locations
-                dungeon_locations_by_dungeon[r.dungeon_index - 1] += r.locations
+                self.dungeon_locations_by_dungeon[r.dungeon_index - 1] += r.locations
                 for location in r.locations:
-                    if location.name == "Pit Button Chest (Tail Cave)":
-                        # Don't place dungeon items on pit button chest, to reduce chance of the filler blowing up
-                        # TODO: no need for this if small key shuffle
-                        dungeon_locations.remove(location)
-                        dungeon_locations_by_dungeon[r.dungeon_index - 1].remove(location)
+                    # Don't place dungeon items on pit button chest, to reduce chance of the filler blowing up
+                    # TODO: no need for this if small key shuffle
+                    if location.name == "Pit Button Chest (Tail Cave)" or location.item:
+                        self.dungeon_locations_by_dungeon[r.dungeon_index - 1].remove(location)
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
 
+    def get_pre_fill_items(self):
+        return self.pre_fill_items
+
+    def pre_fill(self) -> None:
+        allowed_locations_by_item = {}
+
+        def priority(item):
+            # 0 - Nightmare dungeon-specific
+            # 1 - Key dungeon-specific
+            # 2 - Other dungeon-specific
+            # 3 - Nightmare any local dungeon
+            # 4 - Key any local dungeon
+            # 5 - Other any local dungeon
+            i = 2
+            if "Nightmare" in item.name:
+                i = 0
+            elif "Key" in item.name:
+                i = 1
+            if allowed_locations_by_item[item] is locs:
+                i += 3
+            return i
+
+        def location_rule(item, location, orig_rule):
+
+                
+            if item in allowed_locations_by_item:
+                if item.name == "Dungeon Map (Eagle's Tower)":
+                    if "Eagle" in location.name:
+                        assert location in allowed_locations_by_item[item]
+                return location in allowed_locations_by_item[item]
+            return orig_rule(item)
+
+        # Set up filter rules
+        all_dungeon_items_to_fill = list()
+        all_dungeon_locs = set()
         for dungeon_index in range(0, 9):
-            locs = dungeon_locations_by_dungeon[dungeon_index]
-            locs = [loc for loc in locs if not loc.item]
-            self.multiworld.random.shuffle(locs)
-            self.multiworld.random.shuffle(self.prefill_original_dungeon[dungeon_index])
-            fill_restrictive(self.multiworld, all_state, locs, self.prefill_original_dungeon[dungeon_index], lock=True)
-            assert not self.prefill_original_dungeon[dungeon_index]
+            # First set up allow-list for dungeon specific items
+            locs = set(self.dungeon_locations_by_dungeon[dungeon_index])
+            for item in self.prefill_original_dungeon[dungeon_index]:
+                allowed_locations_by_item[item] = locs
+            all_dungeon_items_to_fill.extend(self.prefill_original_dungeon[dungeon_index])
+            # ...and gather the list of all dungeon locations
+            all_dungeon_locs |= locs
+            # ...also set the rules for the dungeon
+            for location in locs:
+                orig_rule = location.item_rule
+                location.item_rule = lambda item, location=location, orig_rule=orig_rule: \
+                    location_rule(item=item, location=location, orig_rule=orig_rule)
 
-        # Fill dungeon items first, to not torture the fill algo
-        dungeon_locations = [loc for loc in dungeon_locations if not loc.item]
-        # dungeon_items = sorted(self.prefill_own_dungeons, key=lambda item: item.item_data.dungeon_item_type)
-        self.multiworld.random.shuffle(self.prefill_own_dungeons)
-        self.multiworld.random.shuffle(dungeon_locations)
-        fill_restrictive(self.multiworld, all_state, dungeon_locations, self.prefill_own_dungeons, lock=True)
+        # Now set up the allow-list for any-dungeon items
+        for item in self.prefill_own_dungeons:
+            allowed_locations_by_item[item] = all_dungeon_locs
 
+        # Get the list of locations and shuffle
+        all_dungeon_locs_to_fill = list(all_dungeon_locs)
+        self.multiworld.random.shuffle(all_dungeon_locs_to_fill)
+        # Get the list of items and sort
+        all_dungeon_items_to_fill.sort(key=priority)
+
+        # Set up state
+        all_state = self.multiworld.get_all_state(use_cache=False)
+        for item in all_dungeon_items_to_fill:
+            all_state.remove(item)
+            
+        # ...and flag items as pre-filled
+        self.pre_fill_items.extend(all_dungeon_items_to_fill)
+        print(all_dungeon_items_to_fill)
+        fill_restrictive(self.multiworld, all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
     name_cache = {}
 
     # Tries to associate an icon from another game with an icon we have
