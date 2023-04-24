@@ -27,10 +27,10 @@ Une fois Bizhawk installé, ouvrez Bizhawk et modifiez les paramètres suivants�
 BizHawk s'exécute en arrière-plan.
 
 - Il est recommandé de fournir un chemin vers BizHawk dans votre host.yaml pour Adventure afin que le client puisse le démarrer automatiquement
-- En même temps, vous pouvez définir une option pour charger automatiquement le script adventure_connector.lua lors du lancement de BizHawk
+- En même temps, vous pouvez définir une option pour charger automatiquement le script connector_adventure.lua lors du lancement de BizHawk
 d'AdventureClient.
 Exemple d'installation Windows par défaut :
-```rom_args : "--lua=C:/ProgramData/Archipelago/data/lua/ADVENTURE/adventure_connector.lua"```
+```rom_args: "--lua=C:/ProgramData/Archipelago/data/lua/connector_adventure.lua"```
 
 ## Configuration de votre fichier YAML
 
