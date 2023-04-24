@@ -54,7 +54,7 @@ class SVEntrance:
     town_to_museum = "Town to Museum"
     town_to_jojamart = "Town to JojaMart"
     beach_to_willy_fish_shop = "Beach to Willy's Fish Shop"
-    fish_shop_to_backroom = "Fish Shop to Back Room"
+    fish_shop_to_boat_tunnel = "Fish Shop to Boat Tunnel"
     boat_to_ginger_island = "Take the Boat to Ginger Island"
     enter_elliott_house = "Enter Elliott's House"
     enter_tide_pools = "Enter Tide Pools"

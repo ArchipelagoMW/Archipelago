@@ -80,7 +80,7 @@ class SVRegion:
     sam_house = "Sam's House"
     jojamart = "JojaMart"
     fish_shop = "Willy's Fish Shop"
-    fish_shop_backroom = "Fish Shop Backroom"
+    boat_tunnel = "Boat Tunnel"
     tide_pools = "Tide Pools"
     bathhouse_entrance = "Bathhouse Entrance"
     locker_room = "Locker Room"
