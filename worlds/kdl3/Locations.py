@@ -103,7 +103,7 @@ consumable_locations = {
     0x77030E: LocationName.ripple_field_3_u1,
     0x77030F: LocationName.ripple_field_4_m2,
     0x770310: LocationName.ripple_field_4_u1,
-    0x770311: LocationName.ripple_field_4_m2,
+    0x770311: LocationName.ripple_field_4_m1,
     0x770312: LocationName.ripple_field_5_u1,
     0x770313: LocationName.ripple_field_5_m2,
     0x770314: LocationName.ripple_field_5_m1,

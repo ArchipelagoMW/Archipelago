@@ -384,6 +384,9 @@ class KDL3World(World):
                     level_hint_data[stage] = regions[level] + f" {i + 1}"
                     if stage & 0x200 == 0:
                         level_hint_data[stage + 0x100] = regions[level] + f" {i + 1}"
+                    if self.multiworld.consumables[self.player] and stage & 0xFF in level_consumables:
+                        for consumable in level_consumables[stage & 0xFF]:
+                            level_hint_data[consumable + 0x770300] = regions[level] + f" {i + 1}"
             for i in range(5):
                 level_hint_data[0x770200 + i] = regions[i + 1] + " Boss"
             hint_data[self.player] = level_hint_data
