@@ -61,6 +61,7 @@ SpawnRandomizedItemFromBox:
 
 @@CheckLocation:
     ldr r6, =Jewel1BoxContents
+    lsl r1, r0, #1
     add r6, r6, r0
     bl GetItemAtLocation
     strb r0, [r6]
@@ -141,6 +142,7 @@ LoadRandomItemAnimation:
     ldrb r0, [r4, @global_id]
     sub r0, 0x86
     ldr r1, =Jewel1BoxContents
+    lsl r0, r0, #1
     add r0, r1, r0
     ldrb r0, [r0]
     mov r6, r0
@@ -259,7 +261,8 @@ CollectRandomItem:
 
 ; Get and decode
     ldr r1, =Jewel1BoxContents
-    add r1, r5, r1
+    lsl r0, r5, #1
+    add r1, r0, r1
     ldrb r5, [r1]
     ldrb r1, [r1, 1]
 
