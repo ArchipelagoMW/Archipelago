@@ -42,10 +42,10 @@ class ShiversWorld(World):
         loc.place_locked_item(self.create_event_item(event_name))
         region.locations.append(loc)
 
-    def create_event_item(self, name: str) -> None:
-        item = self.create_item(name)
-        item.classification = ItemClassification.progression
-        return item
+    #def create_event_item(self, name: str) -> None:
+    #    item = self.create_item(name)
+    #    item.classification = ItemClassification.progression
+    #    return item
 
     # option_definitions = Shivers_options
 
@@ -61,18 +61,18 @@ class ShiversWorld(World):
             region = self.multiworld.get_region(region_name, self.player)
             for loc_name in locations:
                 if loc_name.startswith("Accessible: "):
-                    loc = ShiversLocation(self.player, loc_name,
-                                          self.location_name_to_id.get(loc_name, None), region)
                     storagelocs.append(self.multiworld.get_location(loc_name, self.player))
 
         storageitems += [self.create_item(name) for name, data in item_table.items() if data.type == 'potduplicate']
-        storageitems += [self.create_item("Empty") for i in range(3)]
+        
 
         state = self.multiworld.get_all_state(False)
+        storageitems += [self.create_item("Empty") for i in range(3)]
         self.multiworld.random.shuffle(storagelocs)
         self.multiworld.random.shuffle(storageitems)
-        fill_restrictive(self.multiworld, state, storagelocs.copy(), storageitems, True)
         
+        fill_restrictive(self.multiworld, state, storagelocs.copy(), storageitems, True)
+
         self.storage_placements = {location.name: location.item.name for location in storagelocs}
 
     
@@ -131,29 +131,29 @@ class ShiversWorld(World):
     # def _place_events(self):
 
     def generate_output(self, output_directory: str) -> None:
-        #print(self.multiworld.get_location("Accessible: Storage: Desk Drawer", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Workshop Drawers", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Library Cabinet", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Library Statue", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Slide", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Eagles Head", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Clock Tower", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Ocean", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Egypt", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Chinese Solitaire", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Tiki Hut", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Lyre", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Alchemy", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: UFO", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Skeleton", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Anansi", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Hanging", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Eagles Nest", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Tar River", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Theater", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Greenhouse", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Janitor Closet", self.player).item)
-        #print(self.multiworld.get_location("Accessible: Storage: Skull Bridge", self.player).item)
+        #print("Accessible: Storage: Desk Drawer -", self.multiworld.get_location("Accessible: Storage: Desk Drawer", self.player).item)
+        #print("Accessible: Storage: Workshop Drawers -", self.multiworld.get_location("Accessible: Storage: Workshop Drawers", self.player).item)
+        #print("Accessible: Storage: Library Cabinet -", self.multiworld.get_location("Accessible: Storage: Library Cabinet", self.player).item)
+        #print("Accessible: Storage: Library Statue -", self.multiworld.get_location("Accessible: Storage: Library Statue", self.player).item)
+        #print("Accessible: Storage: Slide -", self.multiworld.get_location("Accessible: Storage: Slide", self.player).item)
+        #print("Accessible: Storage: Eagles Head -", self.multiworld.get_location("Accessible: Storage: Eagles Head", self.player).item)
+        #print("Accessible: Storage: Clock Tower -", self.multiworld.get_location("Accessible: Storage: Clock Tower", self.player).item)
+        #print("Accessible: Storage: Ocean -", self.multiworld.get_location("Accessible: Storage: Ocean", self.player).item)
+        #print("Accessible: Storage: Egypt -", self.multiworld.get_location("Accessible: Storage: Egypt", self.player).item)
+        #print("Accessible: Storage: Chinese Solitaire -", self.multiworld.get_location("Accessible: Storage: Chinese Solitaire", self.player).item)
+        #print("Accessible: Storage: Tiki Hut -", self.multiworld.get_location("Accessible: Storage: Tiki Hut", self.player).item)
+        #print("Accessible: Storage: Lyre -", self.multiworld.get_location("Accessible: Storage: Lyre", self.player).item)
+        #print("Accessible: Storage: Alchemy -", self.multiworld.get_location("Accessible: Storage: Alchemy", self.player).item)
+        #print("Accessible: Storage: UFO -", self.multiworld.get_location("Accessible: Storage: UFO", self.player).item)
+        #print("Accessible: Storage: Skeleton -", self.multiworld.get_location("Accessible: Storage: Skeleton", self.player).item)
+        #print("Accessible: Storage: Anansi -", self.multiworld.get_location("Accessible: Storage: Anansi", self.player).item)
+        #print("Accessible: Storage: Hanging -", self.multiworld.get_location("Accessible: Storage: Hanging", self.player).item)
+        #print("Accessible: Storage: Eagles Nest -", self.multiworld.get_location("Accessible: Storage: Eagles Nest", self.player).item)
+        #print("Accessible: Storage: Tar River -", self.multiworld.get_location("Accessible: Storage: Tar River", self.player).item)
+        #print("Accessible: Storage: Theater -", self.multiworld.get_location("Accessible: Storage: Theater", self.player).item)
+        #print("Accessible: Storage: Greenhouse -", self.multiworld.get_location("Accessible: Storage: Greenhouse", self.player).item)
+        #print("Accessible: Storage: Janitor Closet -", self.multiworld.get_location("Accessible: Storage: Janitor Closet", self.player).item)
+        print("Accessible: Storage: Skull Bridge -", self.multiworld.get_location("Accessible: Storage: Skull Bridge", self.player).item)
 
         return super().generate_output(output_directory)
 

@@ -3,6 +3,7 @@ from collections.abc import Callable
 from BaseClasses import CollectionState
 
 from worlds.AutoWorld import World
+from worlds.generic.Rules import forbid_item
 
 
 def get_rules_lookup(player: int):
@@ -49,28 +50,8 @@ def get_rules_lookup(player: int):
             "Puzzle Solved Red Door": lambda state: state.can_reach("Maintenance Tunnels", "Region", player),
             "Puzzle Solved UFO Symbols": lambda state: state.can_reach("Library", "Region", player),
             "Puzzle Solved Maze Door": lambda state: state.can_reach("Projector Room", "Region", player),
-            "Accessible: Storage: Janitor Closet": lambda state: state.has("Cloth Pot Bottom", player) and state.has("Cloth Pot Top", player) and
-                        state.has("Cloth Pot Bottom DUPE", player) and state.has("Cloth Pot Top DUPE", player),
-            "Accessible: Storage: Tar River": lambda state: state.has("Oil Pot Bottom", player) and state.has("Oil Pot Top", player) and
-                        state.has("Oil Pot Bottom DUPE", player) and state.has("Oil Pot Top DUPE", player),
-            "Accessible: Storage: Slide": lambda state: state.has("Water Pot Bottom DUPE", player) and
-                        state.has("Wax Pot Bottom DUPE", player) and
-                        state.has("Ash Pot Bottom DUPE", player) and
-                        state.has("Oil Pot Bottom DUPE", player) and
-                        state.has("Cloth Pot Bottom DUPE", player) and
-                        state.has("Wood Pot Bottom DUPE", player) and
-                        state.has("Crystal Pot Bottom DUPE", player) and
-                        state.has("Sand Pot Bottom DUPE", player) and
-                        state.has("Metal Pot Bottom DUPE", player) and
-                        state.has("Water Pot Top DUPE", player) and
-                        state.has("Wax Pot Top DUPE", player) and
-                        state.has("Ash Pot Top DUPE", player) and
-                        state.has("Oil Pot Top DUPE", player) and
-                        state.has("Cloth Pot Top DUPE", player) and
-                        state.has("Wood Pot Top DUPE", player) and
-                        state.has("Crystal Pot Top DUPE", player) and
-                        state.has("Sand Pot Top DUPE", player) and
-                        state.has("Metal Pot Top DUPE", player),
+            "Accessible: Storage: Janitor Closet": lambda state: state.has("Cloth Pot Bottom DUPE", player) and state.has("Cloth Pot Top DUPE", player),
+            "Accessible: Storage: Tar River": lambda state: state.has("Oil Pot Bottom DUPE", player) and state.has("Oil Pot Top DUPE", player),
             "Ixupi Captured Water": lambda state: (state.can_reach("Lobby", "Region", player)) and 
                                                    state.has("Water Pot Bottom", player) and state.has("Water Pot Top", player) and
                                                    state.has("Water Pot Bottom DUPE", player) and state.has("Water Pot Top DUPE", player),
@@ -119,3 +100,31 @@ def set_rules(Shivers: World) -> None:
     # Set location rules
     for location_name, rule in rules_lookup["locations"].items():
         multiworld.get_location(location_name, player).access_rule = rule
+
+    #forbid cloth in janitor closet and oil in tar river
+    forbid_item(multiworld.get_location("Accessible: Storage: Janitor Closet", player), "Cloth Pot Bottom DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Janitor Closet", player), "Cloth Pot Top DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Tar River", player), "Oil Pot Bottom DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Tar River", player), "Oil Pot Top DUPE", player)
+
+    #forbid all but lightning in slide
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Water Pot Bottom DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Wax Pot Bottom DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Ash Pot Bottom DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Oil Pot Bottom DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Cloth Pot Bottom DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Wood Pot Bottom DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Crystal Pot Bottom DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Sand Pot Bottom DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Metal Pot Bottom DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Water Pot Top DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Wax Pot Top DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Ash Pot Top DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Oil Pot Top DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Cloth Pot Top DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Wood Pot Top DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Crystal Pot Top DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Sand Pot Top DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Metal Pot Top DUPE", player)
+
+    
