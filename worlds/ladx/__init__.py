@@ -1,5 +1,6 @@
 import binascii
 import bsdiff4
+import itertools
 import os
 import pkgutil
 import tempfile
@@ -96,7 +97,6 @@ class LinksAwakeningWorld(World):
 
 
     def create_regions(self) -> None:
-        self.pre_fill_items = []
         # Initialize
         self.convert_ap_options_to_ladxr_logic()
         regions = create_regions_from_ladxr(self.player, self.multiworld, self.ladxr_logic)
@@ -122,7 +122,6 @@ class LinksAwakeningWorld(World):
             for loc in region.locations:
                 if loc.event:
                     loc.place_locked_item(self.create_event(loc.ladxr_item.event))
-                    self.pre_fill_items.append(loc.item)
         
         # Connect Windfish -> Victory
         windfish = self.multiworld.get_region("Windfish", self.player)
@@ -148,6 +147,7 @@ class LinksAwakeningWorld(World):
 
         self.prefill_original_dungeon = [ [], [], [], [], [], [], [], [], [] ]
         self.prefill_own_dungeons = []
+        self.pre_fill_items = []
         # For any and different world, set item rule instead
         
         for option in ["maps", "compasses", "small_keys", "nightmare_keys", "stone_beaks"]:
@@ -186,7 +186,6 @@ class LinksAwakeningWorld(World):
                     if not self.multiworld.tradequest[self.player] and isinstance(item.item_data, TradeItemData):
                         location = self.multiworld.get_location(item.item_data.vanilla_location, self.player)
                         location.place_locked_item(item)
-                        self.pre_fill_items.append(item)
                         continue
 
                     if isinstance(item.item_data, DungeonItemData):
@@ -205,7 +204,6 @@ class LinksAwakeningWorld(World):
                                     if not isinstance(loc.ladxr_item, Instrument):
                                         continue
                                     loc.place_locked_item(item)
-                                    self.pre_fill_items.append(item)
                                     found = True
                                     break
                                 if found:
@@ -215,8 +213,10 @@ class LinksAwakeningWorld(World):
                             shuffle_type = dungeon_item_types[item_type]
                             if shuffle_type == DungeonItemShuffle.option_original_dungeon:
                                 self.prefill_original_dungeon[item.item_data.dungeon_index - 1].append(item)
+                                self.pre_fill_items.append(item)
                             elif shuffle_type == DungeonItemShuffle.option_own_dungeons:
                                 self.prefill_own_dungeons.append(item)
+                                self.pre_fill_items.append(item)
                             else:
                                 self.multiworld.itempool.append(item)
                     else:
@@ -229,7 +229,6 @@ class LinksAwakeningWorld(World):
         event_location = Location(self.player, "Can Play Trendy Game", parent=trendy_region)
         trendy_region.locations.insert(0, event_location)
         event_location.place_locked_item(self.create_event("Can Play Trendy Game"))
-        self.pre_fill_items.append(event_location.item)
 
         # For now, special case first item
         FORCE_START_ITEM = True
@@ -243,7 +242,6 @@ class LinksAwakeningWorld(World):
                 index = self.multiworld.random.choice(possible_start_items)
                 start_item = self.multiworld.itempool.pop(index)
                 start_loc.place_locked_item(start_item)
-                self.pre_fill_items.append(start_item)
 
         
         self.dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]     
