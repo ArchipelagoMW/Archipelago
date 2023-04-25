@@ -39,7 +39,6 @@ def create_locations(player: int, regions_table: Dict[str, Region], name_to_id_t
 
 def build_location_name_to_id_table():
     location_name_to_id_table = {}
-    current_reward_id = 0
 
     script_folder = Path(__file__)
     with open((script_folder.parent / "data/item_source.json").resolve(), "r") as file:
@@ -52,11 +51,10 @@ def build_location_name_to_id_table():
             elif data["type"] == "shop":
                 location_id = BASE_SHOP_LOCATION_ID + int(data["shopItemId"])
             else:  # if data["type"] == "reward":
-                location_id = BASE_REWARD_LOCATION_ID + current_reward_id
-                current_reward_id += 1
+                location_id = BASE_REWARD_LOCATION_ID + int(data["rewardId"])
             location_name_to_id_table[data["name"]] = location_id
 
     # Win condition location ID
-    location_name_to_id_table["Gola"] = BASE_REWARD_LOCATION_ID + current_reward_id
+    location_name_to_id_table["Gola"] = BASE_REWARD_LOCATION_ID + 10
 
     return location_name_to_id_table

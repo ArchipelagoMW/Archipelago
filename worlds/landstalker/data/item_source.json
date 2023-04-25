@@ -1936,21 +1936,24 @@
         "type": "reward",
         "nodeId": "massan_after_swamp_shrine",
         "address": 162337,
-        "flag": { "byte": "0x1004", "bit": 2 }
+        "flag": { "byte": "0x1004", "bit": 2 },
+        "rewardId": 0
     },
     {
         "name": "Lake Shrine: Mir reward after beating Duke",
         "type": "reward",
         "nodeId": "lake_shrine",
         "address": 166463,
-        "flag": { "byte": "0x1003", "bit": 0 }
+        "flag": { "byte": "0x1003", "bit": 0 },
+        "rewardId": 1
     },
     {
         "name": "Greenmaze: Cutter reward for saving Einstein",
         "type": "reward",
         "nodeId": "greenmaze_pre_whistle",
         "address": 166021,
-        "flag": { "byte": "0x1024", "bit": 4 }
+        "flag": { "byte": "0x1024", "bit": 4 },
+        "rewardId": 2
     },
     {
         "name": "Mountainous Area: Zak reward after fighting",
@@ -1960,48 +1963,55 @@
             "kept by a threatening guardian"
         ],
         "address": 166515,
-        "flag": { "byte": "0x1027", "bit": 0 }
+        "flag": { "byte": "0x1027", "bit": 0 },
+        "rewardId": 3
     },
     {
         "name": "Route between Gumi and Ryuma: Swordsman Kado reward",
         "type": "reward",
         "nodeId": "route_gumi_ryuma",
         "address": 166219,
-        "flag": { "byte": "0x101B", "bit": 7 }
+        "flag": { "byte": "0x101B", "bit": 7 },
+        "rewardId": 4
     },
     {
         "name": "Greenmaze: dwarf hidden in the trees",
         "type": "reward",
         "nodeId": "greenmaze_pre_whistle",
         "address": 166111,
-        "flag": { "byte": "0x1022", "bit": 7 }
+        "flag": { "byte": "0x1022", "bit": 7 },
+        "rewardId": 5
     },
     {
         "name": "Mercator: Arthur reward (in castle throne room)",
         "type": "reward",
         "nodeId": "mercator",
         "address": 164191,
-        "flag": { "byte": "0x101B", "bit": 6 }
+        "flag": { "byte": "0x101B", "bit": 6 },
+        "rewardId": 6
     },
     {
         "name": "Mercator: Fahl's dojo challenge reward",
         "type": "reward",
         "nodeId": "mercator",
         "address": 165029,
-        "flag": { "byte": "0x101C", "bit": 4 }
+        "flag": { "byte": "0x101C", "bit": 4 },
+        "rewardId": 7
     },
     {
         "name": "Ryuma: Mayor's first reward",
         "type": "reward",
         "nodeId": "ryuma_after_thieves_hideout",
         "address": 164731,
-        "flag": { "byte": "0x1004", "bit": 3 }
+        "flag": { "byte": "0x1004", "bit": 3 },
+        "rewardId": 8
     },
     {
         "name": "Ryuma: Mayor's second reward",
         "type": "reward",
         "nodeId": "ryuma_after_thieves_hideout",
         "address": 164735,
-        "flag": { "byte": "0x1004", "bit": 3 }
+        "flag": { "byte": "0x1004", "bit": 3 },
+        "rewardId": 9
     }
 ]
