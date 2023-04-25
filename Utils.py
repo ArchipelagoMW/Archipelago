@@ -38,6 +38,9 @@ class Version(typing.NamedTuple):
     minor: int
     build: int
 
+    def as_simple_string(self) -> str:
+        return ".".join(str(item) for item in self)
+
 
 __version__ = "0.4.1"
 version_tuple = tuplize_version(__version__)
