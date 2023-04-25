@@ -247,8 +247,9 @@ def extend_special_order_locations(randomized_locations: List[LocationData], wor
 def extend_walnut_purchase_locations(randomized_locations: List[LocationData], world_options):
     if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
         return
-
-    randomized_locations.append(location_table["Boat Repaired"])
+    randomized_locations.append(location_table["Repair Ticket Machine"])
+    randomized_locations.append(location_table["Repair Boat Hull"])
+    randomized_locations.append(location_table["Repair Boat Anchor"])
     randomized_locations.extend(locations_by_tag[LocationTags.WALNUT_PURCHASE])
 
 
