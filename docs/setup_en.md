@@ -74,7 +74,7 @@ Once both the client and the emulator are started, you must connect them. Within
 on the "Tools" menu and select "Lua Console". Click the folder button or press Ctrl+O to open a Lua
 script.
 
-Navigate to your Archipelago install folder and open `data/lua/wl4/wl4_connector.lua`.
+Navigate to your Archipelago install folder and open `data/lua/connector_wl4.lua`.
 
 To connect the client to the multiserver simply put `<address>:<port>` on the text field on top and
 press enter (if the server uses a password, type in the bottom text field

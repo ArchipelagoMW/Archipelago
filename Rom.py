@@ -182,4 +182,4 @@ def get_base_rom_path(file_name: str = "") -> Path:
     if file_path.exists():
         return file_path
     else:
-        return Path(Utils.local_path(file_name))
+        return Path(Utils.user_path(file_name))
