@@ -217,18 +217,18 @@ id,name,classification,groups
 229,Solar Panel Recipe,progression,SPECIAL_ORDER_BOARD
 230,Geode Crusher Recipe,progression,SPECIAL_ORDER_BOARD
 231,Farm Computer Recipe,progression,SPECIAL_ORDER_BOARD
-232,Sewing Machine,progression,SPECIAL_ORDER_BOARD
-233,Coffee Maker,progression,SPECIAL_ORDER_BOARD
 234,Bone Mill Recipe,progression,SPECIAL_ORDER_BOARD
-235,Mini Fridge,progression,SPECIAL_ORDER_BOARD
-236,Mini-Shipping Bin,progression,SPECIAL_ORDER_BOARD
 237,Fiber Seeds Recipe,progression,SPECIAL_ORDER_BOARD
-238,Fishing Information Broadcasting Service,progression,SPECIAL_ORDER_BOARD
 239,Stone Chest Recipe,progression,SPECIAL_ORDER_BOARD
 240,Quality Bobber Recipe,progression,SPECIAL_ORDER_BOARD
-241,Deluxe Fish Tank,progression,SPECIAL_ORDER_BOARD
 242,Mini-Obelisk Recipe,progression,SPECIAL_ORDER_BOARD
 243,Monster Musk Recipe,progression,SPECIAL_ORDER_BOARD
+238,Fishing Information Broadcasting Service,progression,SPECIAL_ORDER_BOARD
+232,Sewing Machine,progression,"SPECIAL_ORDER_BOARD,RESOURCE_PACK_USEFUL"
+233,Coffee Maker,progression,"SPECIAL_ORDER_BOARD,RESOURCE_PACK_USEFUL"
+235,Mini Fridge,progression,"SPECIAL_ORDER_BOARD,RESOURCE_PACK_USEFUL"
+236,Mini-Shipping Bin,progression,"SPECIAL_ORDER_BOARD,RESOURCE_PACK_USEFUL"
+241,Deluxe Fish Tank,progression,"SPECIAL_ORDER_BOARD,RESOURCE_PACK_USEFUL"
 244,10 Qi Gems,useful,"GINGER_ISLAND,SPECIAL_ORDER_QI"
 245,20 Qi Gems,useful,"GINGER_ISLAND,SPECIAL_ORDER_QI"
 246,25 Qi Gems,useful,"GINGER_ISLAND,SPECIAL_ORDER_QI"
@@ -236,7 +236,7 @@ id,name,classification,groups
 248,40 Qi Gems,useful,"GINGER_ISLAND,SPECIAL_ORDER_QI"
 249,50 Qi Gems,useful,"GINGER_ISLAND,SPECIAL_ORDER_QI"
 250,100 Qi Gems,useful,"GINGER_ISLAND,SPECIAL_ORDER_QI"
-251,Rare Seed,progression,SEED_SHUFFLE
+251,Rare Seed,progression,"RESOURCE_PACK,RESOURCE_PACK_USEFUL,SEED_SHUFFLE"
 252,Apple Sapling,progression,"RESOURCE_PACK,RESOURCE_PACK_USEFUL,SEED_SHUFFLE"
 253,Apricot Sapling,progression,"RESOURCE_PACK,RESOURCE_PACK_USEFUL,SEED_SHUFFLE"
 254,Cherry Sapling,progression,"RESOURCE_PACK,RESOURCE_PACK_USEFUL,SEED_SHUFFLE"

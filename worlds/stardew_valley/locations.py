@@ -240,7 +240,7 @@ def extend_special_order_locations(randomized_locations: List[LocationData], wor
     board_locations = [location for location in locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD]
                        if include_island or LocationTags.GINGER_ISLAND not in location.tags]
     randomized_locations.extend(board_locations)
-    if (world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_board_qi and include_island):
+    if world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_board_qi and include_island:
         randomized_locations.extend(locations_by_tag[LocationTags.SPECIAL_ORDER_QI])
 
 
