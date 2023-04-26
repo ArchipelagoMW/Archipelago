@@ -31,6 +31,7 @@ local untestedBizhawkMessage = "Warning: this version of bizhawk is newer than w
 u8 = memory.read_u8
 wU8 = memory.write_u8
 u16 = memory.read_u16_le
+uRange = memory.readbyterange
 
 function getMaxMessageLength()
   local denominator = 12
