@@ -62,10 +62,10 @@ SpawnRandomizedItemFromBox:
 @@CheckLocation:
     ldr r6, =Jewel1BoxContents
     lsl r1, r0, #1
-    add r6, r6, r0
+    add r6, r6, r1
     bl GetItemAtLocation
     strb r0, [r6]
-    strb r1, [r6, 1]
+    strb r1, [r6, #1]
 
 ; If it's your own junk item, always release it
     ldr r2, =PlayerID
