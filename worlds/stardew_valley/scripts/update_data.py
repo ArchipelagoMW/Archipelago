@@ -53,10 +53,19 @@ if __name__ == "__main__":
                                        for item in loaded_items
                                        if Group.RESOURCE_PACK not in item.groups
                                        and item.code_without_offset is not None) + 1)
+
+    resource_pack_counter = itertools.count(max(item.code_without_offset
+                                       for item in loaded_items
+                                       if Group.RESOURCE_PACK in item.groups
+                                       and item.code_without_offset is not None) + 1)
     items_to_write = []
     for item in loaded_items:
         if item.code_without_offset is None:
-            items_to_write.append(ItemData(next(item_counter), item.name, item.classification, item.groups))
+            if Group.RESOURCE_PACK in item.groups:
+                new_code = next(resource_pack_counter)
+            else:
+                new_code = next(item_counter)
+            items_to_write.append(ItemData(new_code, item.name, item.classification, item.groups))
             continue
 
         items_to_write.append(item)

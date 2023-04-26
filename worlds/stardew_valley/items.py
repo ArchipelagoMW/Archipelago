@@ -401,11 +401,10 @@ def create_special_order_qi_rewards(item_factory: StardewItemFactory, world_opti
     if (world_options[options.SpecialOrderLocations] != options.SpecialOrderLocations.option_board_qi or
             world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true):
         return []
-
-    return [item_factory("100 Qi Gems"), item_factory("10 Qi Gems"), item_factory("40 Qi Gems"),
-            item_factory("25 Qi Gems"), item_factory("25 Qi Gems"), item_factory("40 Qi Gems"),
-            item_factory("20 Qi Gems"), item_factory("50 Qi Gems"), item_factory("40 Qi Gems"),
-            item_factory("35 Qi Gems")]
+    qi_gem_rewards = ["100 Qi Gems", "10 Qi Gems", "40 Qi Gems", "25 Qi Gems", "25 Qi Gems",
+                      "40 Qi Gems", "20 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems"]
+    qi_gem_items = [item_factory(f"Resource Pack: {reward}") for reward in qi_gem_rewards]
+    return qi_gem_items
 
 
 def create_filler_festival_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
@@ -438,10 +437,8 @@ def fill_with_resource_packs(item_factory: StardewItemFactory, world_options: op
     all_resource_packs.extend(items_by_group[Group.TRASH])
     # all_resource_packs.extend(items_by_group[Group.TRAP])
 
-    all_resource_packs = [pack for pack in all_resource_packs if Group.DEPRECATED not in pack.groups]
-    if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
-        all_resource_packs = [pack for pack in all_resource_packs if Group.GINGER_ISLAND not in pack.groups]
-        useful_resource_packs = [pack for pack in useful_resource_packs if Group.GINGER_ISLAND not in pack.groups]
+    all_resource_packs = remove_excluded_packs(all_resource_packs, world_options)
+    useful_resource_packs = remove_excluded_packs(useful_resource_packs, world_options)
 
     items = []
     number_useful_packs = len(useful_resource_packs)
@@ -471,3 +468,10 @@ def fill_with_resource_packs(item_factory: StardewItemFactory, world_options: op
             all_resource_packs.remove(resource_pack)
 
     return items
+
+
+def remove_excluded_packs(packs, world_options):
+    included_packs = [pack for pack in packs if Group.DEPRECATED not in pack.groups]
+    if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
+        included_packs = [pack for pack in packs if Group.GINGER_ISLAND not in pack.groups]
+    return included_packs

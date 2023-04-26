@@ -7,23 +7,98 @@ from ..locations import LocationTags
 
 
 class TestBaseItemGeneration(SVTestBase):
+    options = {
+        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
+        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
+    }
 
     def test_all_progression_items_are_added_to_the_pool(self):
-        for classification in [ItemClassification.progression, ItemClassification.useful]:
-            with self.subTest(classification=classification):
-
-                all_classified_items = {self.world.create_item(item)
-                                        for item in items.items_by_group[items.Group.COMMUNITY_REWARD]
-                                        if item.classification is classification}
-
-                for item in all_classified_items:
-                    self.assertIn(item, self.multiworld.itempool)
+        all_created_items = [item.name for item in self.multiworld.itempool]
+        # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
+        items_to_ignore = [event.name for event in items.events]
+        items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
+        items_to_ignore.extend(season.name for season in items.items_by_group[Group.WEAPON])
+        items_to_ignore.extend(season.name for season in items.items_by_group[Group.FOOTWEAR])
+        progression_items = [item for item in items.all_items if item.classification is ItemClassification.progression
+                             and item.name not in items_to_ignore]
+        for progression_item in progression_items:
+            with self.subTest(f"{progression_item.name}"):
+                self.assertIn(progression_item.name, all_created_items)
 
     def test_creates_as_many_item_as_non_event_locations(self):
         non_event_locations = [location for location in self.multiworld.get_locations(self.player) if
                                not location.event]
 
         self.assertEqual(len(non_event_locations), len(self.multiworld.itempool))
+
+    def test_does_not_create_deprecated_items(self):
+        all_created_items = [item.name for item in self.multiworld.itempool]
+        for deprecated_item in items.items_by_group[items.Group.DEPRECATED]:
+            with self.subTest(f"{deprecated_item.name}"):
+                self.assertNotIn(deprecated_item.name, all_created_items)
+
+    def test_does_not_create_more_than_one_maximum_one_items(self):
+        all_created_items = [item.name for item in self.multiworld.itempool]
+        for maximum_one_item in items.items_by_group[items.Group.MAXIMUM_ONE]:
+            with self.subTest(f"{maximum_one_item.name}"):
+                self.assertLessEqual(all_created_items.count(maximum_one_item.name), 1)
+
+    def test_does_not_create_exactly_two_items(self):
+        all_created_items = [item.name for item in self.multiworld.itempool]
+        for exactly_two_item in items.items_by_group[items.Group.EXACTLY_TWO]:
+            with self.subTest(f"{exactly_two_item.name}"):
+                count = all_created_items.count(exactly_two_item.name)
+                self.assertTrue(count == 0 or count == 2)
+
+
+class TestNoGingerIslandItemGeneration(SVTestBase):
+    options = {
+        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
+        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true
+    }
+
+    def test_all_progression_items_except_island_are_added_to_the_pool(self):
+        all_created_items = [item.name for item in self.multiworld.itempool]
+        # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
+        items_to_ignore = [event.name for event in items.events]
+        items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
+        items_to_ignore.extend(season.name for season in items.items_by_group[Group.WEAPON])
+        items_to_ignore.extend(season.name for season in items.items_by_group[Group.FOOTWEAR])
+        progression_items = [item for item in items.all_items if item.classification is ItemClassification.progression
+                             and item.name not in items_to_ignore]
+        for progression_item in progression_items:
+            with self.subTest(f"{progression_item.name}"):
+                if Group.GINGER_ISLAND in progression_item.groups:
+                    self.assertNotIn(progression_item.name, all_created_items)
+                else:
+                    self.assertIn(progression_item.name, all_created_items)
+
+    def test_creates_as_many_item_as_non_event_locations(self):
+        non_event_locations = [location for location in self.multiworld.get_locations(self.player) if
+                               not location.event]
+
+        self.assertEqual(len(non_event_locations), len(self.multiworld.itempool))
+
+    def test_does_not_create_deprecated_items(self):
+        all_created_items = [item.name for item in self.multiworld.itempool]
+        for deprecated_item in items.items_by_group[items.Group.DEPRECATED]:
+            with self.subTest(f"Deprecated item: {deprecated_item.name}"):
+                self.assertNotIn(deprecated_item.name, all_created_items)
+
+    def test_does_not_create_more_than_one_maximum_one_items(self):
+        all_created_items = [item.name for item in self.multiworld.itempool]
+        for maximum_one_item in items.items_by_group[items.Group.MAXIMUM_ONE]:
+            with self.subTest(f"{maximum_one_item.name}"):
+                self.assertLessEqual(all_created_items.count(maximum_one_item.name), 1)
+
+    def test_does_not_create_exactly_two_items(self):
+        all_created_items = [item.name for item in self.multiworld.itempool]
+        for exactly_two_item in items.items_by_group[items.Group.EXACTLY_TWO]:
+            with self.subTest(f"{exactly_two_item.name}"):
+                count = all_created_items.count(exactly_two_item.name)
+                self.assertTrue(count == 0 or count == 2)
+
 
 
 class TestGivenProgressiveBackpack(SVTestBase):

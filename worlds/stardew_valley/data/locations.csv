@@ -966,9 +966,9 @@ id,region,name,tags
 2158,Qi's Walnut Room,Danger In The Deep,"GINGER_ISLAND,SPECIAL_ORDER_QI"
 2159,Qi's Walnut Room,Skull Cavern Invasion,"GINGER_ISLAND,SPECIAL_ORDER_QI"
 2160,Qi's Walnut Room,Qi's Prismatic Grange,"GINGER_ISLAND,SPECIAL_ORDER_QI"
-2201,Boat Tunnel,Repair Ticket Machine,"GINGER_ISLAND"
-2202,Boat Tunnel,Repair Boat Hull,"GINGER_ISLAND"
-2203,Boat Tunnel,Repair Boat Anchor,"GINGER_ISLAND"
+2201,Boat Tunnel,Repair Ticket Machine,GINGER_ISLAND
+2202,Boat Tunnel,Repair Boat Hull,GINGER_ISLAND
+2203,Boat Tunnel,Repair Boat Anchor,GINGER_ISLAND
 2204,Leo's Hut,Leo's Parrot,"GINGER_ISLAND,WALNUT_PURCHASE"
 2205,Island South,Island West Turtle,"GINGER_ISLAND,WALNUT_PURCHASE"
 2206,Island West,Island Farmhouse,"GINGER_ISLAND,WALNUT_PURCHASE"
