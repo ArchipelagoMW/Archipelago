@@ -55,7 +55,7 @@ def open_patch():
     except Exception as e:
         messagebox('Error', str(e), error=True)
     else:
-        file, _, component = identify(filename)
+        file, component = identify(filename)
         if file and component:
             launch([*get_exe(component), file], component.cli)
 
@@ -96,11 +96,13 @@ components.extend([
 
 def identify(path: Union[None, str]):
     if path is None:
-        return None, None, None
+        return None, None
     for component in components:
         if component.handles_file(path):
-            return path, component.script_name, component
-    return (None, None, None) if '/' in path or '\\' in path else (None, path, None)
+            return path,  component
+        elif path == component.display_name or path == component.script_name:
+            return None, component
+    return None, None
 
 
 def get_exe(component: Union[str, Component]) -> Optional[Sequence[str]]:
@@ -238,7 +240,7 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
         args = {}
 
     if "Patch|Game|Component" in args:
-        file, _, component = identify(args["Patch|Game|Component"])
+        file, component = identify(args["Patch|Game|Component"])
         if file:
             args['file'] = file
         if component:
