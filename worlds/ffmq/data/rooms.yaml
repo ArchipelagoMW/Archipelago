@@ -1654,7 +1654,7 @@
 - name: GrenadeMan's House
   id: 78
   game_objects:
-  - name: "Fireburg - Stolen Goods"
+  - name: "Fireburg - Locked House Man"
     object_id: 12
     type: "NPC"
     access: []
@@ -1682,7 +1682,7 @@
 - name: Fireburg Vendor House
   id: 80
   game_objects:
-  - name: "Fireburg Vendor Girl"
+  - name: "Fireburg - Vendor"
     object_id: 11
     type: "NPC"
     access: []

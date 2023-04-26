@@ -320,8 +320,6 @@ def create_regions(self):
             else:
                 crest_tile = crest_tiles.pop()
             pair(entrance_a, entrance_b, crest_tile, barred=self.multiworld.logic[self.player] != "expert")
-    if crest_tiles:
-        breakpoint()
     # 8 mobius
     # 4 Libra
     # 6 gemini

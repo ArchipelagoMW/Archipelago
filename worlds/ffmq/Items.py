@@ -194,7 +194,6 @@ for item, data in item_table.items():
         item_groups[group] = item_groups.get(group, []) + [item]
 
 
-
 def create_items(self) -> None:
     items = []
     self.multiworld.push_precollected(self.create_item(self.multiworld.starting_weapon[self.player].current_key.title().replace("_", " ")))
@@ -257,8 +256,21 @@ def create_items(self) -> None:
             filler_items = filler_items[39:]
         items += filler_items
 
-    self.multiworld.itempool += items
 
+    if len(self.multiworld.player_ids) > 1:
+        early_choices = ["Sand Coin", "River Coin"]
+        # if self.multiworld.starting_weapon[self.player] != "bomb":
+        #     if self.multiworld.progressive_gear[self.player]:
+        #         early_choices.append("Progressive Bomb")
+        #     else:
+        #         early_choices.append(self.multiworld.choice(["Bomb", "Jumbo Bomb", "Mega Grenade"]))
+        early_item = self.multiworld.random.choice(early_choices)
+        self.multiworld.early_items[self.player][early_item] = 1
+        # if "Coin" not in early_item:
+        #     self.multiworld.worlds[self.player].post_early_coin = self.create_item(self.multiworld.random.choice(
+        #         ["Sand Coin", "River Coin"]))
+        #     items.remove(self.multiworld.worlds[self.player].post_early_coin)
+    self.multiworld.itempool += items
 
 class FFMQItem(Item):
     game = "Final Fantasy Mystic Quest"

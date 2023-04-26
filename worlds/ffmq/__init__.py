@@ -1,5 +1,5 @@
 from worlds.AutoWorld import World, WebWorld
-from Fill import remaining_fill
+from Fill import fill_restrictive
 from .Regions import create_regions, location_table, set_rules, rooms
 from .Items import item_table, item_groups, create_items, FFMQItem, fillers
 from .Output import generate_output
@@ -32,6 +32,7 @@ class FFMQWorld(World):
         self.rom_name_available_event = threading.Event()
         self.rom_name = None
         self.rooms = deepcopy(rooms)
+        #self.post_early_coin = None
         super().__init__(world, player)
 
     def generate_early(self):
@@ -50,6 +51,20 @@ class FFMQWorld(World):
                 (self.multiworld.bosses_scaling_upper[self.player].value,
                  self.multiworld.bosses_scaling_lower[self.player].value)
 
+
+    # @classmethod
+    # def stage_fill_hook(cls, multiworld, progitempool, usefulitempool, filleritempool, fill_locations):
+    #     coins = []
+    #     for world in multiworld.get_game_worlds("Final Fantasy Mystic Quest"):
+    #         if world.post_early_coin is not None:
+    #             coins.append(world.post_early_coin)
+    #     if coins:
+    #         print(coins)
+    #         base_state = multiworld.state.copy()
+    #         base_state.sweep_for_events()
+    #         fill_restrictive(multiworld, base_state, fill_locations, coins)
+    #     else:
+    #         breakpoint()
     # @classmethod
     # def stage_generate_early(cls, multiworld):
     #     multiworld.ffmq_useful_locations = []
