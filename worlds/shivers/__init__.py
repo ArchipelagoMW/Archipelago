@@ -3,7 +3,7 @@ from .Items import item_table, ShiversItem, get_full_item_list
 from .Rules import set_rules
 from BaseClasses import Item, Tutorial, Region, Entrance, Location, ItemClassification
 from Fill import fill_restrictive
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import WebWorld, World
 from . import Constants
 
 client_version = 0
@@ -49,41 +49,7 @@ class ShiversWorld(World):
 
     # option_definitions = Shivers_options
 
-    #Prefills event storage locations with duplicate pots
-    def pre_fill(self) -> None:
-        global storage_placements
-        storagelocs = []
-        storageitems = []
-        self.storage_placements = []
-        
-         
-        for region_name, locations in Constants.location_info["locations_by_region"].items():
-            region = self.multiworld.get_region(region_name, self.player)
-            for loc_name in locations:
-                if loc_name.startswith("Accessible: "):
-                    storagelocs.append(self.multiworld.get_location(loc_name, self.player))
-
-        storageitems += [self.create_item(name) for name, data in item_table.items() if data.type == 'potduplicate']
-        
-
-        state = self.multiworld.get_all_state(False)
-        storageitems += [self.create_item("Empty") for i in range(3)]
-        self.multiworld.random.shuffle(storagelocs)
-        self.multiworld.random.shuffle(storageitems)
-        
-        fill_restrictive(self.multiworld, state, storagelocs.copy(), storageitems, True)
-
-        self.storage_placements = {location.name: location.item.name for location in storagelocs}
-
     
-    def _get_slot_data(self):
-        return {
-            'storageplacements': self.storage_placements
-        }
-
-    def fill_slot_data(self) -> dict:
-        slot_data = self._get_slot_data()
-        return slot_data
 
     def create_regions(self):
         # Create regions
@@ -107,8 +73,7 @@ class ShiversWorld(World):
                                       self.location_name_to_id.get(loc_name, None), region)
                 region.locations.append(loc)
 
-    def generate_basic(self):
-
+    def create_items(self) -> Item:
         # Add pots
         pots = [self.create_item(name) for name, data in item_table.items() if data.type == 'pot']
 
@@ -124,11 +89,41 @@ class ShiversWorld(World):
         self.multiworld.itempool += filler
 
         #Place crawling locally in the library to prevent softlock
-        self.multiworld.random.choice(self.multiworld.get_region("Library", self.player).locations).place_locked_item(self.create_item("Crawling"))
+        librarylocation = self.multiworld.random.choice(self.multiworld.get_region("Library", self.player).locations)
+        while librarylocation.name.startswith("Accessible: "):
+            librarylocation = self.multiworld.random.choice(self.multiworld.get_region("Library", self.player).locations)
+        librarylocation.place_locked_item(self.create_item("Crawling"))
+
+
+    #Prefills event storage locations with duplicate pots
+    def pre_fill(self) -> None:
+        global storage_placements
+        storagelocs = []
+        storageitems = []
+        self.storage_placements = []
+        
+         
+        for region_name, locations in Constants.location_info["locations_by_region"].items():
+            region = self.multiworld.get_region(region_name, self.player)
+            for loc_name in locations:
+                if loc_name.startswith("Accessible: "):
+                    storagelocs.append(self.multiworld.get_location(loc_name, self.player))
+
+        storageitems += [self.create_item(name) for name, data in item_table.items() if data.type == 'potduplicate']
+        storageitems += [self.create_item("Empty") for i in range(3)]
+
+        state = self.multiworld.get_all_state(False)
+
+        self.multiworld.random.shuffle(storagelocs)
+        self.multiworld.random.shuffle(storageitems)
+        
+        fill_restrictive(self.multiworld, state, storagelocs.copy(), storageitems, True)
+
+        self.storage_placements = {location.name: location.item.name for location in storagelocs}
+
 
     set_rules = set_rules
-
-    # def _place_events(self):
+        
 
     def generate_output(self, output_directory: str) -> None:
         #print("Accessible: Storage: Desk Drawer -", self.multiworld.get_location("Accessible: Storage: Desk Drawer", self.player).item)
@@ -153,9 +148,18 @@ class ShiversWorld(World):
         #print("Accessible: Storage: Theater -", self.multiworld.get_location("Accessible: Storage: Theater", self.player).item)
         #print("Accessible: Storage: Greenhouse -", self.multiworld.get_location("Accessible: Storage: Greenhouse", self.player).item)
         #print("Accessible: Storage: Janitor Closet -", self.multiworld.get_location("Accessible: Storage: Janitor Closet", self.player).item)
-        print("Accessible: Storage: Skull Bridge -", self.multiworld.get_location("Accessible: Storage: Skull Bridge", self.player).item)
+        #print("Accessible: Storage: Skull Bridge -", self.multiworld.get_location("Accessible: Storage: Skull Bridge", self.player).item)
 
         return super().generate_output(output_directory)
+
+    def _get_slot_data(self):
+        return {
+            'storageplacements': self.storage_placements
+        }
+
+    def fill_slot_data(self) -> dict:
+        slot_data = self._get_slot_data()
+        return slot_data
 
 
 class ShiversLocation(Location):

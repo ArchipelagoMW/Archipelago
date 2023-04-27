@@ -9,7 +9,7 @@ from worlds.generic.Rules import forbid_item
 def get_rules_lookup(player: int):
     rules_lookup: typing.Dict[str, typing.List[Callable[[CollectionState], bool]]] = {
         "entrances": {
-            "To Office Elevator": lambda state: state.has('Key for Office Elevator', player),
+            "To Office Elevator": lambda state: state.has("Key for Office Elevator", player),
             "To Bedroom Elevator": lambda state: state.has("Key for Bedroom Elevator", player) and state.has("Crawling", player),
             "To Three Floor Elevator From Maintenance Tunnels": lambda state: state.has("Key for Three Floor Elevator", player),
             "To Three Floor Elevator From Blue Maze Bottom": lambda state: state.has("Key for Three Floor Elevator", player),
