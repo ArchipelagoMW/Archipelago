@@ -329,10 +329,7 @@ class LinksAwakeningWorld(World):
         # Remove dungeon items we are about to put in from the state so that we don't double count
         for item in all_dungeon_items_to_fill:
             all_state.remove(item)
-            
-        # ...and flag items as pre-filled
-        self.pre_fill_items.extend(all_dungeon_items_to_fill)
-
+        
         # Finally, fill!
         fill_restrictive(self.multiworld, all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
 
