@@ -1,6 +1,5 @@
 import Utils
 
-from Utils import read_snes_rom
 from worlds.Files import APDeltaPatch
 
 import hashlib
@@ -29,7 +28,7 @@ rom_sub_weapon_offsets = {
     0x83A5D9: 0x0E,  # Villa
     0x83A5E5: 0x0D,
     0x83A5F1: 0x0F,
-    0xBFC983: 0x10,
+    0xBFC903: 0x10,
     0x10C987: 0x10,
     0x10C98F: 0x0D,
     0x10C997: 0x0F,
@@ -165,7 +164,7 @@ class LocalRom(object):
         self.orig_buffer = None
 
         with open(file, 'rb') as stream:
-            self.buffer = read_snes_rom(stream)
+            self.buffer = bytearray(stream.read())
         # if patch:
         #    self.patch_rom()
         #    self.orig_buffer = self.buffer.copy()
@@ -186,8 +185,24 @@ class LocalRom(object):
     def write_byte(self, address: int, value: int):
         self.buffer[address] = value
 
-    def write_bytes(self, startaddress: int, values):
+    def write_bytes(self, startaddress: int, values: list):
         self.buffer[startaddress:startaddress + len(values)] = values
+
+    def write_int16(self, address, value: int):
+        value = value & 0xFFFF
+        self.write_bytes(address, [(value >> 8) & 0xFF, value & 0xFF])
+
+    def write_int16s(self, startaddress, values: list):
+        for i, value in enumerate(values):
+            self.write_int16(startaddress + (i * 2), value)
+
+    def write_int32(self, address, value: int):
+        value = value & 0xFFFFFFFF
+        self.write_bytes(address, [(value >> 24) & 0xFF, (value >> 16) & 0xFF, (value >> 8) & 0xFF, value & 0xFF])
+
+    def write_int32s(self, startaddress, values: list):
+        for i, value in enumerate(values):
+            self.write_int32(startaddress + (i * 4), value)
 
     def write_to_file(self, file):
         with open(file, 'wb') as outfile:
@@ -209,14 +224,14 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     w7 = str(multiworld.special1s_per_warp[player] * 7).zfill(2)
 
     # NOP out the CRC BNEs
-    rom.write_bytes(0x66C, [0x00, 0x00, 0x00, 0x00])
-    rom.write_bytes(0x678, [0x00, 0x00, 0x00, 0x00])
+    rom.write_int32(0x66C, 0x00000000)
+    rom.write_int32(0x678, 0x00000000)
 
     # Always offer Hard Mode on file creation
-    rom.write_bytes(0xC8810, [0x24, 0x0A, 0x01, 0x00])  # ADDIU	T2, R0, 0x0100
+    rom.write_int32(0xC8810, 0x240A0100)  # ADDIU	T2, R0, 0x0100
 
     # Disable Easy Mode cutoff point at Castle Center elevator
-    rom.write_bytes(0xD9E18, [0x24, 0x0D, 0x00, 0x00])
+    rom.write_int32(0xD9E18, 0x240D0000)  # ADDIU	T5, R0, 0x0000
 
     # Disable the Forest, Castle Wall, and Villa intro cutscenes and make it possible to change the starting level
     rom.write_byte(0xB73308, 0x00)
@@ -229,54 +244,54 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     rom.write_byte(0xEEA51, 0x01)
 
     # Make the CW drawbridge always closed (since rando doesn't play the CW intro cutscene that closes it)
-    rom.write_bytes(0x6C00EC, [0x24, 0x0A, 0x00, 0x01])  # ADDIU T2, R0, 0x0001
-    rom.write_bytes(0x6C0ADC, [0x24, 0x0A, 0x00, 0x01])  # ADDIU T2, R0, 0x0001
+    rom.write_int32(0x6C00EC, 0x240A0001)  # ADDIU T2, R0, 0x0001
+    rom.write_int32(0x6C0ADC, 0x240A0001)  # ADDIU T2, R0, 0x0001
 
     # Villa coffin time-of-day hack
     rom.write_byte(0xD9D83, 0x74)
-    rom.write_bytes(0xD9D84, [0x08, 0x0F, 0xF1, 0x4D])  # J 0x803FC534
-    rom.write_bytes(0xBFC534, Patches.coffin_time_checker)
+    rom.write_int32(0xD9D84, 0x080FF14D)  # J 0x803FC534
+    rom.write_int32s(0xBFC534, Patches.coffin_time_checker)
 
     # Fix both Castle Center elevator bridges for both characters unless enabling only one character's stages. At which
     # point one bridge will be always broken and one always repaired instead.
     if multiworld.character_stages[player].value == 2:
-        rom.write_bytes(0x6CEAA0, [0x24, 0x0B, 0x00, 0x00])  # ADDIU T3, R0, 0x0000
+        rom.write_int32(0x6CEAA0, 0x240B0000)  # ADDIU T3, R0, 0x0000
     elif multiworld.character_stages[player].value == 3:
-        rom.write_bytes(0x6CEAA0, [0x24, 0x0B, 0x00, 0x01])  # ADDIU T3, R0, 0x0001
+        rom.write_int32(0x6CEAA0, 0x240B0001)  # ADDIU T3, R0, 0x0001
     else:
-        rom.write_bytes(0x6CEAA0, [0x24, 0x0B, 0x00, 0x01])  # ADDIU T3, R0, 0x0001
-        rom.write_bytes(0x6CEAA4, [0x24, 0x0D, 0x00, 0x01])  # ADDIU T5, R0, 0x0001
+        rom.write_int32(0x6CEAA0, 0x240B0001)  # ADDIU T3, R0, 0x0001
+        rom.write_int32(0x6CEAA4, 0x240D0001)  # ADDIU T5, R0, 0x0001
 
     # Were-bull arena flag hack
-    rom.write_bytes(0x6E38F0, [0x0C, 0x0F, 0xF1, 0x57])  # JAL   0x803FC55C
-    rom.write_bytes(0xBFC55C, Patches.werebull_flag_unsetter)
-    rom.write_bytes(0xA949C, [0x0C, 0x0F, 0xF3, 0x80])  # JAL   0x803FCE00
-    rom.write_bytes(0xBFCE00, Patches.werebull_flag_pickup_setter)
+    rom.write_int32(0x6E38F0, 0x0C0FF157)  # JAL   0x803FC55C
+    rom.write_int32s(0xBFC55C, Patches.werebull_flag_unsetter)
+    rom.write_int32(0xA949C,  0x0C0FF380)  # JAL   0x803FCE00
+    rom.write_int32s(0xBFCE00, Patches.werebull_flag_pickup_setter)
 
     # Enable being able to carry multiple Special jewels, Nitros, and Mandragoras simultaneously
-    rom.write_bytes(0xBF1F4, [0x3C, 0x03, 0x80, 0x39])  # LUI V1, 0x8039
+    rom.write_int32(0xBF1F4, 0x3C038039)  # LUI V1, 0x8039
     # Special1
-    rom.write_bytes(0xBF210, [0x80, 0x65, 0x9C, 0x4B])  # LB A1, 0x9C4B (V1)
-    rom.write_bytes(0xBF214, [0x24, 0xA5, 0x00, 0x01])  # ADDIU A1, A1, 0x0001
-    rom.write_bytes(0xBF21C, [0xA0, 0x65, 0x9C, 0x4B])  # SB A1, 0x9C4B (V1)
+    rom.write_int32(0xBF210, 0x80659C4B)  # LB A1, 0x9C4B (V1)
+    rom.write_int32(0xBF214, 0x24A50001)  # ADDIU A1, A1, 0x0001
+    rom.write_int32(0xBF21C, 0xA0659C4B)  # SB A1, 0x9C4B (V1)
     # Special2
-    rom.write_bytes(0xBF230, [0x80, 0x65, 0x9C, 0x4C])  # LB A1, 0x9C4C (V1)
-    rom.write_bytes(0xBF234, [0x24, 0xA5, 0x00, 0x01])  # ADDIU A1, A1, 0x0001
-    rom.write_bytes(0xbf23C, [0xA0, 0x65, 0x9C, 0x4C])  # SB A1, 0x9C4C (V1)
+    rom.write_int32(0xBF230, 0x80659C4C)  # LB A1, 0x9C4C (V1)
+    rom.write_int32(0xBF234, 0x24A50001)  # ADDIU A1, A1, 0x0001
+    rom.write_int32(0xbf23C, 0xA0659C4C)  # SB A1, 0x9C4C (V1)
     # Magical Nitro
-    rom.write_bytes(0xBF360, [0x10, 0x00, 0x00, 0x04])  # B 0x8013C184
-    rom.write_bytes(0xBF378, [0x25, 0xE5, 0x00, 0x01])  # ADDIU A1, T7, 0x0001
-    rom.write_bytes(0xBF37C, [0x10, 0x00, 0x00, 0x03])  # B 0x8013C19C
+    rom.write_int32(0xBF360, 0x10000004)  # B 0x8013C184
+    rom.write_int32(0xBF378, 0x25E50001)  # ADDIU A1, T7, 0x0001
+    rom.write_int32(0xBF37C, 0x10000003)  # B 0x8013C19C
     # Mandragora
-    rom.write_bytes(0xBF3A8, [0x10, 0x00, 0x00, 0x04])  # B 0x8013C1CC
-    rom.write_bytes(0xBF3C0, [0x25, 0x05, 0x00, 0x01])  # ADDIU A1, T0, 0x0001
-    rom.write_bytes(0xBF3C4, [0x10, 0x00, 0x00, 0x03])  # B 0x8013C1E4
+    rom.write_int32(0xBF3A8, 0x10000004)  # B 0x8013C1CC
+    rom.write_int32(0xBF3C0, 0x25050001)  # ADDIU A1, T0, 0x0001
+    rom.write_int32(0xBF3C4, 0x10000003)  # B 0x8013C1E4
 
     # Give PowerUps their Legacy of Darkness behavior when attempting to pick up more than two
-    rom.write_bytes(0xA9730, [0x24, 0x09, 0x00, 0x00])  # ADDIU	T1, R0, 0x0000
-    rom.write_bytes(0xBF2FC, [0x08, 0x0F, 0xF1, 0x6D])  # J	0x803FC5B4
-    rom.write_bytes(0xBF300, [0x00, 0x00, 0x00, 0x00])  # NOP
-    rom.write_bytes(0xBFC5B4, Patches.give_powerup_stopper)
+    rom.write_int32(0xA9730, 0x24090000)  # ADDIU	T1, R0, 0x0000
+    rom.write_int32(0xBF2FC, 0x080FF16D)  # J	0x803FC5B4
+    rom.write_int32(0xBF300, 0x00000000)  # NOP
+    rom.write_int32s(0xBFC5B4, Patches.give_powerup_stopper)
 
     # Rename "Wooden stake" and "Rose" to "Sent major" and "Sent" respectively
     rom.write_bytes(0xEFE34, cv64_text_converter("Sent major  ", False))
@@ -285,8 +300,8 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     rom.write_byte(0xEFF21, 0x2D)
 
     # Change the Stage Select menu options
-    rom.write_bytes(0xADF64, Patches.warp_menu_rewrite)
-    rom.write_bytes(0x10E0C8, Patches.warp_pointer_table)
+    rom.write_int32s(0xADF64, Patches.warp_menu_rewrite)
+    rom.write_int32s(0x10E0C8, Patches.warp_pointer_table)
     for i in range(len(active_warp_list)):
         if i == 0:
             rom.write_byte(warp_map_offsets[i], stage_info[active_warp_list[i]].start_map_id)
@@ -296,8 +311,8 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
             rom.write_byte(warp_map_offsets[i] + 4, stage_info[active_warp_list[i]].mid_spawn_id)
 
     # Play the "teleportation" sound effect when teleporting
-    rom.write_bytes(0xAE088, [0x08, 0x00, 0x4F, 0xAB,   # J 0x80013EAC
-                              0x24, 0x04, 0x01, 0x9E])  # ADDIU A0, R0, 0x019E
+    rom.write_int32s(0xAE088, [0x08004FAB,   # J 0x80013EAC
+                               0x2404019E])  # ADDIU A0, R0, 0x019E
 
     # Change the Stage Select menu's text to reflect its new purpose
     rom.write_bytes(0xEFAD0, cv64_text_converter(f"Where to...?\t{active_warp_list[0]}\t"
@@ -310,19 +325,19 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
                                                  f"`{w7} {active_warp_list[7]}", False))
 
     # Lizard-man save proofing
-    rom.write_bytes(0xA99AC, [0x08, 0x0F, 0xF0, 0xB8])  # J 0x803FC2E0
-    rom.write_bytes(0xBFC2E0, Patches.boss_save_stopper)
+    rom.write_int32(0xA99AC, 0x080FF0B8)  # J 0x803FC2E0
+    rom.write_int32s(0xBFC2E0, Patches.boss_save_stopper)
 
     # Disable or guarantee vampire Vincent's fight
     if multiworld.vincent_fight_condition[player] == "never":
-        rom.write_bytes(0xAACC0, [0x24, 0x01, 0x00, 0x01])  # ADDIU AT, R0, 0x0001
+        rom.write_int32(0xAACC0, 0x24010001)  # ADDIU AT, R0, 0x0001
     elif multiworld.vincent_fight_condition[player] == "always":
-        rom.write_bytes(0xAACE0, [0x24, 0x18, 0x00, 0x10])  # ADDIU	T8, R0, 0x0010
+        rom.write_int32(0xAACE0, 0x24180010)  # ADDIU T8, R0, 0x0010
     else:
-        rom.write_bytes(0xAACE0, [0x24, 0x18, 0x00, 0x00])  # ADDIU	T8, R0, 0x0000
+        rom.write_int32(0xAACE0, 0x24180000)  # ADDIU T8, R0, 0x0000
 
     # Disable or guarantee Renon's fight
-    rom.write_bytes(0xAACB4, [0x08, 0x0F, 0xF1, 0xA4])  # J 0x803FC690
+    rom.write_int32(0xAACB4, 0x080FF1A4)  # J 0x803FC690
     if multiworld.renon_fight_condition[player] == "never":
         rom.write_byte(0xB804F0, 0x00)
         rom.write_byte(0xB80632, 0x00)
@@ -330,7 +345,7 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
         rom.write_byte(0xB80988, 0xB8)
         rom.write_byte(0xB816BD, 0xB8)
         rom.write_byte(0xB817CF, 0x00)
-        rom.write_bytes(0xBFC690, Patches.renon_cutscene_checker_jr)
+        rom.write_int32s(0xBFC690, Patches.renon_cutscene_checker_jr)
     elif multiworld.renon_fight_condition[player] == "always":
         rom.write_byte(0xB804F0, 0x0C)
         rom.write_byte(0xB80632, 0x0C)
@@ -338,20 +353,19 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
         rom.write_byte(0xB80988, 0xC4)
         rom.write_byte(0xB816BD, 0xC4)
         rom.write_byte(0xB817CF, 0x0C)
-        # rom.write_bytes(0xB816C9, 0x00, 0x00)
-        rom.write_bytes(0xBFC690, Patches.renon_cutscene_checker_jr)
+        rom.write_int32s(0xBFC690, Patches.renon_cutscene_checker_jr)
     else:
-        rom.write_bytes(0xBFC690, Patches.renon_cutscene_checker)
+        rom.write_int32s(0xBFC690, Patches.renon_cutscene_checker)
 
     # Disable or guarantee the Bad Ending
     if multiworld.bad_ending_condition[player] == "never":
-        rom.write_bytes(0xAEE5C6, [0x3C, 0x0A, 0x00, 0x00])  # LUI  T2, 0x0000
+        rom.write_int32(0xAEE5C6, 0x3C0A0000)  # LUI  T2, 0x0000
     elif multiworld.bad_ending_condition[player] == "always":
-        rom.write_bytes(0xAEE5C6, [0x3C, 0x0A, 0x00, 0x40])  # LUI  T2, 0x0040
+        rom.write_int32(0xAEE5C6, 0x3C0A0040)  # LUI  T2, 0x0040
 
     # Play Castle Keep's song if teleporting in front of Dracula's door outside the escape sequence
-    rom.write_bytes(0x6E937C, [0x08, 0x0F, 0xF1, 0x2E])
-    rom.write_bytes(0xBFC4B8, Patches.ck_door_music_player)
+    rom.write_int32(0x6E937C, 0x080FF12E)  # J 0x803FC4B8
+    rom.write_int32s(0xBFC4B8, Patches.ck_door_music_player)
 
     # Increase item capacity to 100 if "Increase Item Limit" is turned on
     if multiworld.increase_item_limit[player]:
@@ -375,29 +389,29 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     rom.write_byte(0xEE505, 0x00)  # Special2
 
     # Prevent the vanilla Magical Nitro transport's "can explode" flag from setting
-    rom.write_bytes(0xB5D7AA, [0x00, 0x00, 0x00, 0x00])
+    rom.write_int32(0xB5D7AA, 0x00000000)  # NOP
 
     # Ensure the vampire Nitro check will always pass, so they'll never not spawn and crash the Villa cutscenes
     rom.write_byte(0xA6253D, 0x03)
 
     # Enable the Game Over's "Continue" menu starting the cursor on whichever checkpoint is most recent
-    rom.write_bytes(0xB4DDC, [0x0C, 0x06, 0x0D, 0x58])  # JAL 0x80183560
-    rom.write_bytes(0x106750, Patches.continue_cursor_start_checker)
-    rom.write_bytes(0x1C444, [0x08, 0x0F, 0xF0, 0x90])  # J   0x803FC240
-    rom.write_bytes(0x1C2A0, [0x08, 0x0F, 0xF0, 0x90])  # J   0x803FC240
-    rom.write_bytes(0xBFC240, Patches.savepoint_cursor_updater)
-    rom.write_bytes(0x1C2D0, [0x08, 0x0F, 0xF0, 0x94])  # J   0x803FC250
-    rom.write_bytes(0xBFC250, Patches.stage_start_cursor_updater)
+    rom.write_int32(0xB4DDC, 0x0C060D58)  # JAL 0x80183560
+    rom.write_int32s(0x106750, Patches.continue_cursor_start_checker)
+    rom.write_int32(0x1C444, 0x080FF090)  # J   0x803FC240
+    rom.write_int32(0x1C2A0, 0x080FF090)  # J   0x803FC240
+    rom.write_int32s(0xBFC240, Patches.savepoint_cursor_updater)
+    rom.write_int32(0x1C2D0, 0x080FF094)  # J   0x803FC250
+    rom.write_int32s(0xBFC250, Patches.stage_start_cursor_updater)
     rom.write_byte(0xB585C8, 0xFF)
 
     # Add data for White Jewel #22 (the new Duel Tower savepoint) at the end of the White Jewel ID data list
-    rom.write_bytes(0x104AC8, [0x00, 0x00, 0x00, 0x06,
-                               0x00, 0x13, 0x00, 0x15])
+    rom.write_int16s(0x104AC8, [0x0000, 0x0006,
+                                0x0013, 0x0015])
 
     # Spawn coordinates list extension
-    rom.write_bytes(0xD5BF4, [0x08, 0x0F, 0xF1, 0x03])  # J	0x803FC40C
-    rom.write_bytes(0xBFC40C, Patches.spawn_coordinates_extension)
-    rom.write_bytes(0x108A5E, Patches.waterway_end_coordinates)
+    rom.write_int32(0xD5BF4, 0x080FF103)  # J	0x803FC40C
+    rom.write_int32s(0xBFC40C, Patches.spawn_coordinates_extension)
+    rom.write_int32s(0x108A5E, Patches.waterway_end_coordinates)
 
     # Change the File Select stage numbers to match the new stage order. Also fix a vanilla issue wherein saving in a
     # character-exclusive stage as the other character would incorrectly display the name of that character's equivalent
@@ -405,7 +419,7 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     rom.write_byte(0xC9FE3, 0xD4)
     rom.write_byte(0xCA055, 0x08)
     rom.write_byte(0xCA066, 0x40)
-    rom.write_bytes(0xCA068, [0x86, 0x0C, 0x17, 0xD0])  # LH T4, 0x17D0 (S0)
+    rom.write_int32(0xCA068, 0x860C17D0)  # LH T4, 0x17D0 (S0)
     rom.write_byte(0xCA06D, 0x08)
     rom.write_byte(0x104A31, 0x01)
     rom.write_byte(0x104A39, 0x01)
@@ -419,85 +433,85 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
             rom.write_byte(offset, active_stage_exits[stage][3])
 
     # Top elevator switch check
-    rom.write_bytes(0x6CF0A0, [0x0C, 0x0F, 0xF0, 0xB0])  # JAL 0x803FC2C0
-    rom.write_bytes(0xBFC2C0, Patches.elevator_flag_checker)
+    rom.write_int32(0x6CF0A0, 0x0C0FF0B0)  # JAL 0x803FC2C0
+    rom.write_int32s(0xBFC2C0, Patches.elevator_flag_checker)
 
     # Waterway brick platforms skip
     if multiworld.skip_waterway_platforms[player]:
-        rom.write_bytes(0x6C7E2C, [0x00, 0x00, 0x00, 0x00])  # NOP
+        rom.write_int32(0x6C7E2C, 0x00000000)  # NOP
 
     # Disable time restrictions
     if multiworld.disable_time_restrictions[player]:
         # Fountain
-        rom.write_bytes(0x6C2340, [0x00, 0x00, 0x00, 0x00])  # NOP
-        rom.write_bytes(0x6C257C, [0x10, 0x00, 0x00, 0x23])  # B [forward 0x23]
+        rom.write_int32(0x6C2340, 0x00000000)  # NOP
+        rom.write_int32(0x6C257C, 0x10000023)  # B [forward 0x23]
         # Rosa
         rom.write_byte(0xEEAAB, 0x00)
         rom.write_byte(0xEEAAD, 0x18)
         # Moon doors
-        rom.write_bytes(0xDC3E0, [0x00, 0x00, 0x00, 0x00])  # NOP
-        rom.write_bytes(0xDC3E8, [0x00, 0x00, 0x00, 0x00])  # NOP
+        rom.write_int32(0xDC3E0, 0x00000000)  # NOP
+        rom.write_int32(0xDC3E8, 0x00000000)  # NOP
         # Sun doors
-        rom.write_bytes(0xDC410, [0x00, 0x00, 0x00, 0x00])  # NOP
-        rom.write_bytes(0xDC418, [0x00, 0x00, 0x00, 0x00])  # NOP
+        rom.write_int32(0xDC410, 0x00000000)  # NOP
+        rom.write_int32(0xDC418, 0x00000000)  # NOP
 
     # Custom data-loading code
-    rom.write_bytes(0x6B5028, [0x08, 0x06, 0x0D, 0x70])  # J 0x801835D0
-    rom.write_bytes(0x1067B0, Patches.custom_code_loader)
+    rom.write_int32(0x6B5028, 0x08060D70)  # J 0x801835D0
+    rom.write_int32s(0x1067B0, Patches.custom_code_loader)
 
     # Custom remote item rewarding and DeathLink receiving code
-    rom.write_bytes(0x19B98, [0x08, 0x0F, 0xF0, 0x00])  # J 0x803FC000
-    rom.write_bytes(0xBFC000, Patches.remote_item_giver)
+    rom.write_int32(0x19B98, 0x080FF000)  # J 0x803FC000
+    rom.write_int32s(0xBFC000, Patches.remote_item_giver)
 
     # DeathLink counter decrementer code
-    rom.write_bytes(0x1C340, [0x08, 0x0F, 0xF0, 0x52])  # J 0x803FC148
-    rom.write_bytes(0xBFC148, Patches.deathlink_counter_decrementer)
+    rom.write_int32(0x1C340, 0x080FF052)  # J 0x803FC148
+    rom.write_int32s(0xBFC148, Patches.deathlink_counter_decrementer)
 
     # Death flag un-setter on "Beginning of stage" state overwrite code
-    rom.write_bytes(0x1C2B0, [0x08, 0x0F, 0xF0, 0x47])  # J 0x803FC11C
-    rom.write_bytes(0xBFC11C, Patches.death_flag_unsetter)
+    rom.write_int32(0x1C2B0, 0x080FF047)  # J 0x803FC11C
+    rom.write_int32s(0xBFC11C, Patches.death_flag_unsetter)
 
     # Warp menu-opening code
-    rom.write_bytes(0xB9BA8, [0x08, 0x0F, 0xF0, 0x99])  # J	0x803FC264
-    rom.write_bytes(0xBFC264, Patches.warp_menu_opener)
+    rom.write_int32(0xB9BA8, 0x080FF099)  # J	0x803FC264
+    rom.write_int32s(0xBFC264, Patches.warp_menu_opener)
 
     # NPC item textbox hack
-    rom.write_bytes(0xBF1DC, [0x08, 0x0F, 0xF0, 0x67])  # J 0x803FC19C
-    rom.write_bytes(0xBF1E0, [0x27, 0xBD, 0xFF, 0xE0])  # ADDIU SP, SP, -0x20
-    rom.write_bytes(0xBFC19C, Patches.npc_item_hack)
+    rom.write_int32(0xBF1DC, 0x080FF067)  # J 0x803FC19C
+    rom.write_int32(0xBF1E0, 0x27BDFFE0)  # ADDIU SP, SP, -0x20
+    rom.write_int32s(0xBFC19C, Patches.npc_item_hack)
 
     # Sub-weapon check function hook
-    rom.write_bytes(0xBF32C, [0x00, 0x00, 0x00, 0x00])  # NOP
-    rom.write_bytes(0xBF330, [0x08, 0x0F, 0xF0, 0x5D])  # J	0x803FC174
-    rom.write_bytes(0xBFC174, Patches.give_subweapon_stopper)
+    rom.write_int32(0xBF32C, 0x00000000)  # NOP
+    rom.write_int32(0xBF330, 0x080FF05D)  # J	0x803FC174
+    rom.write_int32s(0xBFC174, Patches.give_subweapon_stopper)
 
     # Warp menu Special1 restriction
-    rom.write_bytes(0xADD68, [0x0C, 0x04, 0xAB, 0x12])  # JAL 0x8012AC48
-    rom.write_bytes(0xADE28, Patches.stage_select_overwrite)
+    rom.write_int32(0xADD68, 0x0C04AB12)  # JAL 0x8012AC48
+    rom.write_int32s(0xADE28, Patches.stage_select_overwrite)
     rom.write_byte(0xADE47, multiworld.special1s_per_warp[player])
 
     # Dracula's door text pointer hijack
-    rom.write_bytes(0xD69F0, [0x08, 0x0F, 0xF1, 0x41])  # J 0x803FC504
-    rom.write_bytes(0xBFC504, Patches.dracula_door_text_redirector)
+    rom.write_int32(0xD69F0, 0x080FF141)  # J 0x803FC504
+    rom.write_int32s(0xBFC504, Patches.dracula_door_text_redirector)
 
     # Dracula's chamber condition
-    rom.write_bytes(0xE2FDC, [0x08, 0x04, 0xAB, 0x25])  # J 0x8012AC78
-    rom.write_bytes(0xADE84, Patches.special_goal_checker)
+    rom.write_int32(0xE2FDC, 0x0804AB25)  # J 0x8012AC78
+    rom.write_int32s(0xADE84, Patches.special_goal_checker)
     rom.write_bytes(0xBFCC3C, [0xA0, 0x00, 0xFF, 0xFF, 0xA0, 0x01, 0xFF, 0xFF, 0xA0, 0x02, 0xFF, 0xFF, 0xA0, 0x03, 0xFF,
                                0xFF, 0xA0, 0x04, 0xFF, 0xFF, 0xA0, 0x05, 0xFF, 0xFF, 0xA0, 0x06, 0xFF, 0xFF, 0xA0, 0x07,
                                0xFF, 0xFF, 0xA0, 0x08, 0xFF, 0xFF, 0xA0, 0x09])
     if multiworld.draculas_condition[player] == 1:
-        rom.write_bytes(0x6C8A54, [0x0C, 0x0F, 0xF0, 0x89])  # JAL 0x803FC224
-        rom.write_bytes(0xBFC224, Patches.crystal_special2_giver)
+        rom.write_int32(0x6C8A54, 0x0C0FF089)  # JAL 0x803FC224
+        rom.write_int32s(0xBFC224, Patches.crystal_special2_giver)
         rom.write_byte(0xADE8F, 0x01)
         rom.write_bytes(0xBFCC62, cv64_text_converter(f"It won't budge!\n"
                                                       f"You'll need the power\n"
                                                       f"of the basement crystal\n"
                                                       f"to undo the seal.", True))
     elif multiworld.draculas_condition[player] == 2:
-        rom.write_bytes(0xBBD50, [0x08, 0x0F, 0xF1, 0x8C])  # J	0x803FC630
-        rom.write_bytes(0xBFC630, Patches.boss_special2_giver)
-        rom.write_bytes(0xBFC55C, Patches.werebull_flag_unsetter_special2_electric_boogaloo)
+        rom.write_int32(0xBBD50, 0x080FF18C)  # J	0x803FC630
+        rom.write_int32s(0xBFC630, Patches.boss_special2_giver)
+        rom.write_int32s(0xBFC55C, Patches.werebull_flag_unsetter_special2_electric_boogaloo)
         rom.write_byte(0xADE8F, multiworld.bosses_required[player].value)
         rom.write_bytes(0xBFCC62, cv64_text_converter(f"It won't budge!\n"
                                                       f"You'll need to defeat\n"
@@ -513,54 +527,56 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
         rom.write_byte(0xADE8F, 0x00)
 
     # On-the-fly TLB script modifier
-    rom.write_bytes(0xBFC338, Patches.double_component_checker)
-    rom.write_bytes(0xBFC3D4, Patches.downstairs_seal_checker)
-    rom.write_bytes(0xBFC700, Patches.overlay_modifiers)
+    rom.write_int32s(0xBFC338, Patches.double_component_checker)
+    rom.write_int32s(0xBFC3D4, Patches.downstairs_seal_checker)
+    rom.write_int32s(0xBFC700, Patches.overlay_modifiers)
 
-    # On-the-fly scene object data modifier hook
-    rom.write_bytes(0xEAB04, [0x08, 0x0F, 0xF2, 0x40])  # J 0x803FC900
-    rom.write_bytes(0xBFC8F8, Patches.scene_data_modifiers)
+    # On-the-fly map object data modifier hook
+    rom.write_int32(0xEAB04, 0x080FF220)  # J 0x803FC880
+    rom.write_int32s(0xBFC878, Patches.map_data_modifiers)
 
     # Fix locked doors to check the key counters instead of their vanilla key locations' bitflags
     # Pickup flag check modifications:
-    rom.write_bytes(0x10B2D8, [0x00, 0x00, 0x00, 0x02])  # Left Tower Door
-    rom.write_bytes(0x10B2F0, [0x00, 0x00, 0x00, 0x03])  # Storeroom Door
-    rom.write_bytes(0x10B2FC, [0x00, 0x00, 0x00, 0x01])  # Archives Door
-    rom.write_bytes(0x10B314, [0x00, 0x00, 0x00, 0x04])  # Maze Gate
-    rom.write_bytes(0x10B350, [0x00, 0x00, 0x00, 0x05])  # Copper Door
-    rom.write_bytes(0x10B3A4, [0x00, 0x00, 0x00, 0x06])  # Torture Chamber Door
-    rom.write_bytes(0x10B3B0, [0x00, 0x00, 0x00, 0x07])  # ToE Gate
-    rom.write_bytes(0x10B3BC, [0x00, 0x00, 0x00, 0x08])  # Science Door1
-    rom.write_bytes(0x10B3C8, [0x00, 0x00, 0x00, 0x09])  # Science Door2
-    rom.write_bytes(0x10B3D4, [0x00, 0x00, 0x00, 0x0A])  # Science Door3
-    rom.write_bytes(0x6F0094, [0x00, 0x00, 0x00, 0x0B])  # CT Door 1
-    rom.write_bytes(0x6F00A4, [0x00, 0x00, 0x00, 0x0C])  # CT Door 2
-    rom.write_bytes(0x6F00B4, [0x00, 0x00, 0x00, 0x0D])  # CT Door 3
+    rom.write_int32(0x10B2D8, 0x00000002)  # Left Tower Door
+    rom.write_int32(0x10B2F0, 0x00000003)  # Storeroom Door
+    rom.write_int32(0x10B2FC, 0x00000001)  # Archives Door
+    rom.write_int32(0x10B314, 0x00000004)  # Maze Gate
+    rom.write_int32(0x10B350, 0x00000005)  # Copper Door
+    rom.write_int32(0x10B3A4, 0x00000006)  # Torture Chamber Door
+    rom.write_int32(0x10B3B0, 0x00000007)  # ToE Gate
+    rom.write_int32(0x10B3BC, 0x00000008)  # Science Door1
+    rom.write_int32(0x10B3C8, 0x00000009)  # Science Door2
+    rom.write_int32(0x10B3D4, 0x0000000A)  # Science Door3
+    rom.write_int32(0x6F0094, 0x0000000B)  # CT Door 1
+    rom.write_int32(0x6F00A4, 0x0000000C)  # CT Door 2
+    rom.write_int32(0x6F00B4, 0x0000000D)  # CT Door 3
     # Item counter decrement check modifications:
-    rom.write_bytes(0xEDA84, [0x00, 0x00, 0x00, 0x01])   # Archives Door
-    rom.write_bytes(0xEDA8C, [0x00, 0x00, 0x00, 0x02])   # Left Tower Door
-    rom.write_bytes(0xEDA94, [0x00, 0x00, 0x00, 0x03])   # Storeroom Door
-    rom.write_bytes(0xEDA9C, [0x00, 0x00, 0x00, 0x04])   # Maze Gate
-    rom.write_bytes(0xEDAA4, [0x00, 0x00, 0x00, 0x05])   # Copper Door
-    rom.write_bytes(0xEDAAC, [0x00, 0x00, 0x00, 0x06])   # Torture Chamber Door
-    rom.write_bytes(0xEDAB4, [0x00, 0x00, 0x00, 0x07])   # ToE Gate
-    rom.write_bytes(0xEDABC, [0x00, 0x00, 0x00, 0x08])   # Science Door1
-    rom.write_bytes(0xEDAC4, [0x00, 0x00, 0x00, 0x09])   # Science Door2
-    rom.write_bytes(0xEDACC, [0x00, 0x00, 0x00, 0x0A])   # Science Door3
-    rom.write_bytes(0xEDAD4, [0x00, 0x00, 0x00, 0x0B])   # CT Door 1
-    rom.write_bytes(0xEDADC, [0x00, 0x00, 0x00, 0x0C])   # CT Door 2
-    rom.write_bytes(0xEDAE4, [0x00, 0x00, 0x00, 0x0D])   # CT Door 3
+    rom.write_int32(0xEDA84, 0x00000001)   # Archives Door
+    rom.write_int32(0xEDA8C, 0x00000002)   # Left Tower Door
+    rom.write_int32(0xEDA94, 0x00000003)   # Storeroom Door
+    rom.write_int32(0xEDA9C, 0x00000004)   # Maze Gate
+    rom.write_int32(0xEDAA4, 0x00000005)   # Copper Door
+    rom.write_int32(0xEDAAC, 0x00000006)   # Torture Chamber Door
+    rom.write_int32(0xEDAB4, 0x00000007)   # ToE Gate
+    rom.write_int32(0xEDABC, 0x00000008)   # Science Door1
+    rom.write_int32(0xEDAC4, 0x00000009)   # Science Door2
+    rom.write_int32(0xEDACC, 0x0000000A)   # Science Door3
+    rom.write_int32(0xEDAD4, 0x0000000B)   # CT Door 1
+    rom.write_int32(0xEDADC, 0x0000000C)   # CT Door 2
+    rom.write_int32(0xEDAE4, 0x0000000D)   # CT Door 3
 
-    rom.write_bytes(0x10AB2C, [0x80, 0x15, 0xFB, 0xD4])  # Maze Gates' check code pointer adjustments
-    rom.write_bytes(0x10AB40, [0x80, 0x15, 0xFB, 0xD4])
-    rom.write_bytes(0x10AB50, [0x0D, 0x0C, 0x00, 0x00, 0x80, 0x15, 0xFB, 0xD4])
-    rom.write_bytes(0x10AB64, [0x0D, 0x0C, 0x00, 0x00, 0x80, 0x15, 0xFB, 0xD4])
-    rom.write_bytes(0xE2E14, Patches.normal_door_hook)
-    rom.write_bytes(0xBFC5D0, Patches.normal_door_code)
-    rom.write_bytes(0x6EF298, Patches.ct_door_hook)
-    rom.write_bytes(0xBFC608, Patches.ct_door_code)
+    rom.write_int32(0x10AB2C, 0x8015FBD4)  # Maze Gates' check code pointer adjustments
+    rom.write_int32(0x10AB40, 0x8015FBD4)
+    rom.write_int32s(0x10AB50, [0x0D0C0000,
+                                0x8015FBD4])
+    rom.write_int32s(0x10AB64, [0x0D0C0000,
+                                0x8015FBD4])
+    rom.write_int32s(0xE2E14, Patches.normal_door_hook)
+    rom.write_int32s(0xBFC5D0, Patches.normal_door_code)
+    rom.write_int32s(0x6EF298, Patches.ct_door_hook)
+    rom.write_int32s(0xBFC608, Patches.ct_door_code)
     # Fix key counter not decrementing if 2 or above
-    rom.write_bytes(0xAA0E0, [0x24, 0x02, 0x00, 0x00])  # ADDIU	V0, R0, 0x0000
+    rom.write_int32(0xAA0E0, 0x24020000)  # ADDIU	V0, R0, 0x0000
 
     # Make the Easy-only candle drops in Room of Clocks appear on any difficulty
     rom.write_byte(0x9B518F, 0x01)
@@ -581,42 +597,39 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     rom.write_byte(0x90FE54, 0x97)  # CC staircase knight (x)
     rom.write_byte(0x90FE58, 0xFB)  # CC staircase knight (z)
 
-    # Item property table extension (for the remaining invisible items)
-    # rom.write_bytes(0xBFCD20, Patches.item_property_list_extension)
-
     # Change bitflag on item in upper coffin in Forest final switch gate tomb to one that's not used by something else
-    rom.write_bytes(0x10C77C, [0x00, 0x00, 0x00, 0x02])
+    rom.write_int32(0x10C77C, 0x00000002)
 
     # Make the torch directly behind Dracula's chamber that normally doesn't set a flag set bitflag 0x08 in 0x80389BFA
     rom.write_byte(0x10CE9F, 0x01)
 
     # Change the settings on the two candles in RoC that normally have nothing to settings that do have something if
     # including empty breakable locations
-    rom.write_byte(0xBFCB6B, 0x04)
-    rom.write_byte(0xBFCB6F, 0x05)
+    rom.write_byte(0xBFCB27, 0x04)
+    rom.write_byte(0xBFCB2B, 0x05)
 
     # Write the randomized (or disabled) music ID list and its associated code
     if multiworld.background_music[player] != 0:
-        rom.write_bytes(0x14588, [0x08, 0x06, 0x0D, 0x60])  # J 0x80183580
-        rom.write_bytes(0x14590, [0x00, 0x00, 0x00, 0x00])  # NOP
-        rom.write_bytes(0x106770, Patches.music_modifier)
+        rom.write_int32(0x14588, 0x08060D60)  # J 0x80183580
+        rom.write_int32(0x14590, 0x00000000)  # NOP
+        rom.write_int32s(0x106770, Patches.music_modifier)
         rom.write_bytes(0xBFCD30, music_list)
-        rom.write_bytes(0x15780, [0x0C, 0x0F, 0xF3, 0x6E])  # JAL 0x803FCDB8
-        rom.write_bytes(0xBFCDB8, Patches.music_comparer_modifier)
+        rom.write_int32(0x15780, 0x0C0FF36E)  # JAL 0x803FCDB8
+        rom.write_int32s(0xBFCDB8, Patches.music_comparer_modifier)
 
     # Enable storing item flags anywhere and changing the item model/visibility on any item instance.
-    rom.write_bytes(0xA857C, [0x08, 0x0F, 0xF3, 0x8F,   # J	    0x803FCE3C
-                              0x94, 0xD9, 0x00, 0x38])  # LHU   T9, 0x0038 (A2)
-    rom.write_bytes(0xBFCE3C, Patches.item_customizer)
-    rom.write_bytes(0xA86A0, [0x0C, 0x0F, 0xF3, 0xAF,   # JAL   0x803FCEBC
-                              0x95, 0xC4, 0x00, 0x02])  # LHU   A0, 0x0002 (T6)
-    rom.write_bytes(0xBFCEBC, Patches.item_appearance_switcher)
-    rom.write_bytes(0xA8728, [0x0C, 0x0F, 0xF3, 0xB8,   # JAL   0x803FCEE4
-                              0x01, 0x39, 0x60, 0x21])  # ADDU  T4, T1, T9
-    rom.write_bytes(0xBFCEE4, Patches.item_model_visibility_switcher)
-    rom.write_bytes(0xA8A04, [0x0C, 0x0F, 0xF3, 0xC2,   # JAL   0x803FCF08
-                              0x01, 0x8B, 0x60, 0x21])  # ADDU  T4, T4, T3
-    rom.write_bytes(0xBFCF08, Patches.item_shine_visibility_switcher)
+    rom.write_int32s(0xA857C, [0x080FF38F,   # J	    0x803FCE3C
+                               0x94D90038])  # LHU   T9, 0x0038 (A2)
+    rom.write_int32s(0xBFCE3C, Patches.item_customizer)
+    rom.write_int32s(0xA86A0, [0x0C0FF3AF,   # JAL   0x803FCEBC
+                               0x95C40002])  # LHU   A0, 0x0002 (T6)
+    rom.write_int32s(0xBFCEBC, Patches.item_appearance_switcher)
+    rom.write_int32s(0xA8728, [0x0C0FF3B8,   # JAL   0x803FCEE4
+                               0x01396021])  # ADDU  T4, T1, T9
+    rom.write_int32s(0xBFCEE4, Patches.item_model_visibility_switcher)
+    rom.write_int32s(0xA8A04, [0x0C0FF3C2,   # JAL   0x803FCF08
+                               0x018B6021])  # ADDU  T4, T4, T3
+    rom.write_int32s(0xBFCF08, Patches.item_shine_visibility_switcher)
 
     # Write all the new item and loading zone bytes
     for offset, item_id in offsets_to_ids.items():
@@ -639,7 +652,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
         file_name = get_base_rom_path(file_name)
-        base_rom_bytes = bytes(read_snes_rom(open(file_name, "rb")))
+        base_rom_bytes = bytes(open(file_name, "rb").read())
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
