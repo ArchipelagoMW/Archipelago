@@ -1254,3 +1254,28 @@ class StardewLogic:
         if self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
             return False_()
         return self.can_reach_region(SVRegion.island_trader)
+
+    def has_walnut(self, number: int) -> StardewRule:
+        if self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
+            return False_()
+        if number <= 0:
+            return True_()
+        # https://stardewcommunitywiki.com/Golden_Walnut#Walnut_Locations
+        reach_south = self.can_reach_region(SVRegion.island_south)
+        reach_north = self.can_reach_region(SVRegion.island_north)
+        reach_west = self.can_reach_region(SVRegion.island_west)
+        reach_hut = self.can_reach_region(SVRegion.leo_hut)
+        reach_volcano_regions = [self.can_reach_region(SVRegion.volcano), self.can_reach_region(SVRegion.volcano_floor_5),
+                           self.can_reach_region(SVRegion.volcano_floor_10)]
+        reach_volcano = Or(reach_volcano_regions)
+        reach_walnut_regions = [reach_south, reach_north, reach_west, reach_volcano]
+        reach_entire_island = [reach_south, reach_north, reach_west, reach_hut, *reach_volcano_regions]
+        if number <= 5:
+            return Or(reach_south, reach_north, reach_west, reach_volcano)
+        if number <= 10:
+            return Count(2, reach_walnut_regions)
+        if number <= 15:
+            return Count(3, reach_walnut_regions)
+        if number <= 20:
+            return And(reach_walnut_regions)
+        return And(reach_entire_island)

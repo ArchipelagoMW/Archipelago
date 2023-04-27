@@ -135,22 +135,30 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
     set_arcade_machine_rules(logic, multi_world, player, world_options)
 
 
-def set_ginger_island_rules(logic, multi_world, player, world_options: StardewOptions):
+def set_ginger_island_rules(logic: StardewLogic, multi_world, player, world_options: StardewOptions):
     if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
         return
 
+    set_boat_repair_rules(logic, multi_world, player)
+    set_island_entrances_rules(logic, multi_world, player)
+    set_island_parrot_rules(logic, multi_world, player)
+
+
+def set_boat_repair_rules(logic: StardewLogic, multi_world, player):
     MultiWorldRules.add_rule(multi_world.get_location("Repair Boat Hull", player),
                              logic.has("Hardwood").simplify())
     MultiWorldRules.add_rule(multi_world.get_location("Repair Boat Anchor", player),
                              logic.has("Iridium Bar").simplify())
     MultiWorldRules.add_rule(multi_world.get_location("Repair Ticket Machine", player),
                              logic.has("Battery Pack").simplify())
-
     boat_repaired = logic.received("Boat Repair").simplify()
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.fish_shop_to_boat_tunnel, player),
                              boat_repaired)
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.boat_to_ginger_island, player),
                              boat_repaired)
+
+
+def set_island_entrances_rules(logic: StardewLogic, multi_world, player):
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_west, player),
                              logic.received("Island West Turtle").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_north, player),
@@ -165,10 +173,12 @@ def set_ginger_island_rules(logic, multi_world, player, world_options: StardewOp
                              logic.received("Island Resort").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_west_to_qi_walnut_room, player),
                              logic.received("Qi Walnut Room").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_north_to_volcano, player),
+                             (logic.has_tool("Watering Can") | logic.received("Volcano Bridge")).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.climb_to_volcano_5, player),
                              logic.can_mine_perfectly().simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.climb_to_volcano_10, player),
-                             logic.can_mine_perfectly().simplify())
+                             (logic.can_mine_perfectly() & logic.received("Volcano Exit Shortcut")).simplify())
     parrots = [SVEntrance.parrot_express_docks_to_volcano, SVEntrance.parrot_express_jungle_to_volcano,
                SVEntrance.parrot_express_dig_site_to_volcano, SVEntrance.parrot_express_docks_to_dig_site,
                SVEntrance.parrot_express_jungle_to_dig_site, SVEntrance.parrot_express_volcano_to_dig_site,
@@ -179,14 +189,39 @@ def set_ginger_island_rules(logic, multi_world, player, world_options: StardewOp
         MultiWorldRules.set_rule(multi_world.get_entrance(parrot, player), logic.received("Parrot Express").simplify())
 
 
-def set_story_quests_rules(all_location_names: List[str], logic, multi_world, player):
+def set_island_parrot_rules(logic: StardewLogic, multi_world, player):
+    MultiWorldRules.add_rule(multi_world.get_location("Leo's Parrot", player),
+                             logic.has_walnut(1).simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Island West Turtle", player),
+                             logic.has_walnut(10).simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Island Farmhouse", player),
+                             logic.has_walnut(20).simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Island Mailbox", player),
+                             logic.has_walnut(5).simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Farm Obelisk", player),
+                             logic.has_walnut(20).simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Dig Site Bridge", player),
+                             logic.has_walnut(10).simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Island Trader", player),
+                             logic.has_walnut(10).simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Volcano Bridge", player),
+                             logic.has_walnut(5).simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Volcano Exit Shortcut", player),
+                             logic.has_walnut(5).simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Island Resort", player),
+                             logic.has_walnut(20).simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Parrot Express", player),
+                             logic.has_walnut(10).simplify())
+
+
+def set_story_quests_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player):
     for quest in locations.locations_by_tag[LocationTags.QUEST]:
         if quest.name in all_location_names:
             MultiWorldRules.set_rule(multi_world.get_location(quest.name, player),
                                      logic.quest_rules[quest.name].simplify())
 
 
-def set_special_order_rules(all_location_names: List[str], logic, multi_world, player, world_options: StardewOptions):
+def set_special_order_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player, world_options: StardewOptions):
     if world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_disabled:
         return
     board_rule = logic.received("Special Order Board") & logic.has_lived_months(4)
@@ -206,7 +241,7 @@ def set_special_order_rules(all_location_names: List[str], logic, multi_world, p
             MultiWorldRules.set_rule(multi_world.get_location(qi_order.name, player), order_rule.simplify())
 
 
-def set_help_wanted_quests_rules(logic, multi_world, player, world_options):
+def set_help_wanted_quests_rules(logic: StardewLogic, multi_world, player, world_options):
     desired_number_help_wanted: int = world_options[options.HelpWantedLocations] // 7
     for i in range(0, desired_number_help_wanted):
         prefix = "Help Wanted:"
@@ -246,7 +281,7 @@ def set_museumsanity_rules(all_location_names: List[str], logic: StardewLogic, m
         set_museum_individual_donations_rules(all_location_names, logic, multi_world, museum_prefix, player)
 
 
-def set_museum_individual_donations_rules(all_location_names, logic, multi_world, museum_prefix, player):
+def set_museum_individual_donations_rules(all_location_names, logic: StardewLogic, multi_world, museum_prefix, player):
     all_donations = sorted(locations.locations_by_tag[LocationTags.MUSEUM_DONATIONS],
                            key=lambda x: all_museum_items_by_name[x.name[len(museum_prefix):]].difficulty, reverse=True)
     counter = 0
@@ -290,7 +325,7 @@ def set_museum_milestone_rule(logic: StardewLogic, multi_world: MultiWorld, muse
     MultiWorldRules.set_rule(multi_world.get_location(museum_milestone.name, player), rule.simplify())
 
 
-def get_museum_item_count_rule(logic, suffix, milestone_name, accepted_items):
+def get_museum_item_count_rule(logic: StardewLogic, suffix, milestone_name, accepted_items):
     metal_detector = "Traveling Merchant Metal Detector"
     num = int(milestone_name[:milestone_name.index(suffix)])
     required_detectors = (num - 1) * 5 // len(accepted_items)
