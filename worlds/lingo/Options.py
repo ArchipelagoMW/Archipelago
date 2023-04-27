@@ -21,7 +21,7 @@ class ProgressiveOrangeTower(DefaultOnToggle):
     display_name = "Progressive Orange Tower"
 
 
-class ReduceChecks(DefaultOnToggle):
+class ReduceChecks(Toggle):
     """When "Shuffle Doors" is off, there are far more location checks than there are items.
     Enabling reduce checks will remove many of the locations that are associated with opening doors.
     This option is ignored if "Shuffle Doors" is on."""
