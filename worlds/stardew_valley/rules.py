@@ -169,6 +169,14 @@ def set_ginger_island_rules(logic, multi_world, player, world_options: StardewOp
                              logic.can_mine_perfectly().simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.climb_to_volcano_10, player),
                              logic.can_mine_perfectly().simplify())
+    parrots = [SVEntrance.parrot_express_docks_to_volcano, SVEntrance.parrot_express_jungle_to_volcano,
+               SVEntrance.parrot_express_dig_site_to_volcano, SVEntrance.parrot_express_docks_to_dig_site,
+               SVEntrance.parrot_express_jungle_to_dig_site, SVEntrance.parrot_express_volcano_to_dig_site,
+               SVEntrance.parrot_express_docks_to_jungle, SVEntrance.parrot_express_dig_site_to_jungle,
+               SVEntrance.parrot_express_volcano_to_jungle, SVEntrance.parrot_express_jungle_to_docks,
+               SVEntrance.parrot_express_dig_site_to_docks, SVEntrance.parrot_express_volcano_to_docks]
+    for parrot in parrots:
+        MultiWorldRules.set_rule(multi_world.get_entrance(parrot, player), logic.received("Parrot Express").simplify())
 
 
 def set_story_quests_rules(all_location_names: List[str], logic, multi_world, player):
