@@ -130,11 +130,6 @@ class PlannedShopPrices(OptionDict):
     })
 
 
-class ShopShuffle(Toggle):
-    """Whether the shop items should be shuffled in the item pool."""
-    display_name = "Shop Shuffle"
-
-
 messenger_options = {
     "accessibility": MessengerAccessibility,
     "logic_level": Logic,
@@ -145,7 +140,6 @@ messenger_options = {
     "notes_needed": NotesNeeded,
     "total_seals": AmountSeals,
     "percent_seals_required": RequiredSeals,
-    "shop_shuffle": ShopShuffle,
     "shop_price": ShopPrices,
     "shop_price_plan": PlannedShopPrices,
     "death_link": DeathLink,

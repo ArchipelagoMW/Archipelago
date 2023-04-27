@@ -89,8 +89,6 @@ class MessengerWorld(World):
         if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
             self.multiworld.shuffle_seals[self.player].value = PowerSeals.option_true
             self.total_seals = self.multiworld.total_seals[self.player].value
-        self.multiworld.early_items[self.player]["Strike of the Ninja"] = 1
-        self.multiworld.early_items[self.player]["Second Wind"] = 1
 
     def create_regions(self) -> None:
         for region in [MessengerRegion(reg_name, self) for reg_name in REGIONS]:
@@ -104,13 +102,10 @@ class MessengerWorld(World):
             for item in self.item_name_to_id
             if item not in
             {
-                "Power Seal", *NOTES, *SHOP_ITEMS, *FIGURINES, "Money Wrench",
+                "Power Seal", *NOTES,
                 *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
             } and "Time Shard" not in item
         ]
-
-        if self.multiworld.shop_shuffle[self.player]:
-            itempool += [self.create_item(item) for item in [*SHOP_ITEMS, *FIGURINES, "Money Wrench"]]
 
         if self.multiworld.goal[self.player] == Goal.option_open_music_box:
             # make a list of all notes except those in the player's defined starting inventory, and adjust the
@@ -150,16 +145,7 @@ class MessengerWorld(World):
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
-        self.shop_prices = {}
-        self.figurine_prices = {}
-        if not self.multiworld.shop_shuffle[self.player]:
-            # the items are still logically relevant but i don't want to create the locations or send items to the player
-            for item in SHOP_ITEMS:
-                shop_item = self.create_item(item)
-                shop_item.code = None
-                self.multiworld.push_precollected(shop_item)
-        else:
-            self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
+        self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
 
         logic = self.multiworld.logic_level[self.player]
         if logic == Logic.option_normal:

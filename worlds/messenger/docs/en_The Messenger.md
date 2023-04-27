@@ -33,9 +33,9 @@ You can find items wherever items can be picked up in the original game. This in
 * Music Box notes
 * Phobekins
 * Bosses
+* Shop Upgrades, Money Wrench, and Figurine Purchases
 * Power seals
 * Mega Time Shards
-* Shop Upgrades, Money Wrench, and Figurine Purchases
 
 ## What are the item name groups?
 
@@ -61,7 +61,7 @@ for it. The groups you can use for The Messenger are:
 * The mod option menu will also have a hint item button, as well as a release and collect button that are all placed when
 the player fulfills the necessary conditions.
 
-## Currently known issues
+## Known issues
 * Ruxxtin Coffin cutscene will sometimes not play correctly, but will still reward the item
 * If you receive the Fairy Bottle while in Quillshroom Marsh, The De-curse Queen cutscene will not play. You can exit
   to Searing Crags and re-enter to get it to play correctly.
