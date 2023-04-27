@@ -227,7 +227,7 @@ class SMWorld(World):
                 add_postAvailable_rule(location, self.player, value.PostAvailable)
 
             if self.multiworld.doors_colors_rando[self.player].value != 0:
-                add_item_rule(location, lambda item:    item.type not in ammoItems or 
+                add_item_rule(location, lambda item:    item.game != self.game or item.type not in ammoItems or 
                                                         (item.type in ammoItems and \
                                                         (not item.advancement or (item.advancement and item.player == self.player))))
                 
