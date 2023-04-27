@@ -1,14 +1,16 @@
 import typing
 
 from BaseClasses import Dungeon
-from worlds.alttp.Bosses import BossFactory
 from Fill import fill_restrictive
-from worlds.alttp.Items import ItemFactory
-from worlds.alttp.Regions import lookup_boss_drops
-from worlds.alttp.Options import smallkey_shuffle
+
+from .Bosses import BossFactory
+from .Items import ItemFactory
+from .Regions import lookup_boss_drops
+from .Options import smallkey_shuffle
 
 if typing.TYPE_CHECKING:
     from .SubClasses import ALttPLocation
+
 
 def create_dungeons(world, player):
     def make_dungeon(name, default_boss, dungeon_regions, big_key, small_keys, dungeon_items):
