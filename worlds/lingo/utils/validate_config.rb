@@ -39,7 +39,7 @@ mentioned_panels = Set[]
 
 door_groups = {}
 
-directives = Set["entrances", "panels", "doors", "paintings"]
+directives = Set["entrances", "panels", "doors", "paintings", "progression"]
 
 config = YAML.load_file(configpath)
 config.each do |room_name, room|
@@ -206,6 +206,16 @@ config.each do |room_name, room|
 
       unless painting["enter_only"] then
         puts "#{room_name} - #{painting["id"] || "painting"} :::: Should be marked enter_only if there is a required_door"
+      end
+    end
+  end
+
+  (room["progression"] || {}).each do |progression_name, door_list|
+    door_list.each do |door|
+      if door.kind_of? Hash then
+        mentioned_doors.add("#{door["room"]} - #{door["door"]}")
+      else
+        mentioned_doors.add("#{room_name} - #{door}")
       end
     end
   end

@@ -64,7 +64,12 @@ class LingoLogic(LogicMixin):
             ]
             return self.has("Progressive Orange Tower", player, ordered_floors.index(door_object.item_name) + 1)
         else:
-            return self.has(player_logic.ITEM_BY_DOOR[room][door], player)
+            item_name = player_logic.ITEM_BY_DOOR[room][door]
+            if item_name in StaticLingoLogic.PROGRESSIVE_ITEMS:
+                progression = StaticLingoLogic.PROGRESSION_BY_ROOM[room][door]
+                return self.has(item_name, player, progression.index)
+            else:
+                return self.has(item_name, player)
 
     def _lingo_can_solve_panel(self, start_room: str, room: str, panel: str, world, player,
                                player_logic: LingoPlayerLogic):

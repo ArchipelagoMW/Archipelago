@@ -67,16 +67,22 @@ class StaticLingoItems:
         door_groups: Dict[str, List[str]] = {}
         for room_name, doors in StaticLingoLogic.DOORS_BY_ROOM.items():
             for door_name, door in doors.items():
-                if door.skip_item is False and door.event is False:
-                    if room_name == "Orange Tower":
-                        door_mode = "orange tower"
-                    elif door.group is None:
-                        door_mode = "doors"
-                    else:
-                        door_mode = "complex door"
-                        door_groups.setdefault(door.group, []).extend(door.door_ids)
+                if door.skip_item is True or door.event is True:
+                    continue
 
-                    self.create_item(door.item_name, False, True, False, door_mode, door.door_ids, door.painting_ids)
+                if room_name == "Orange Tower":
+                    door_mode = "orange tower"
+                elif door.group is None:
+                    door_mode = "doors"
+                else:
+                    door_mode = "complex door"
+                    door_groups.setdefault(door.group, []).extend(door.door_ids)
+
+                if room_name in StaticLingoLogic.PROGRESSION_BY_ROOM\
+                        and door_name in StaticLingoLogic.PROGRESSION_BY_ROOM[room_name]:
+                    door_mode = "special"
+
+                self.create_item(door.item_name, False, True, False, door_mode, door.door_ids, door.painting_ids)
 
         for group, group_door_ids in door_groups.items():
             self.create_item(group, False, True, False, "door group", group_door_ids, [])
@@ -85,3 +91,6 @@ class StaticLingoItems:
         self.create_item("Nothing", False, False, False)
         self.create_item("Slowness Trap", False, False, True)
         self.create_item("Iceland Trap", False, False, True)
+
+        for item_name in StaticLingoLogic.PROGRESSIVE_ITEMS:
+            self.create_item(item_name, False, True, False, "special")

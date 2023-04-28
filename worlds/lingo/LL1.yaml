@@ -722,9 +722,9 @@
       Starting Room:
         door: Painting Shortcut
         painting: True
-      Wheelbarrow Hallway (2): True
-      Wheelbarrow Hallway (3): True
-      Wheelbarrow Hallway (4): True
+      Hallway Room (2): True
+      Hallway Room (3): True
+      Hallway Room (4): True
       Hedge Maze: True # through the door to the sectioned-off part of the hedge maze
     panels:
       MASSACRED:
@@ -800,11 +800,9 @@
         panels:
           - room: Champion's Rest
             panel: PURPLE
-      Wheelbarrow Door:
+      Hallway Door:
         id: Red Blue Purple Room Area Doors/Door_room_2
-        skip_location: True
-        item_name: Wheelbarrow Hallway - First Door
-        group: Wheelbarrow Hallway Doors
+        group: Hallway Room Doors
         panels:
           - WALL
           - KEEP
@@ -815,6 +813,15 @@
         orientation: south
       - id: eyes_yellow_painting
         orientation: east
+    progression:
+      Progressive Hallway Room:
+        - Hallway Door
+        - room: Hallway Room (2)
+          door: Exit
+        - room: Hallway Room (3)
+          door: Exit
+        - room: Hallway Room (4)
+          door: Exit
   Dread Hallway:
     entrances:
       Outside The Agreeable:
@@ -1272,13 +1279,13 @@
         door: Welcome Back
       Art Gallery:
         room: Art Gallery
-        door: Exit Door
+        door: Exit
       The Bearer:
         room: Art Gallery
-        door: Exit Door
+        door: Exit
       Outside The Initiated:
         room: Art Gallery
-        door: Exit Door
+        door: Exit
     panels:
       SIZE (Small):
         id: Entry Room/Panel_size_small
@@ -1804,7 +1811,7 @@
       Orange Tower Third Floor: True # sunwarp
       Orange Tower Fifth Floor:
         room: Art Gallery
-        door: Exit Door
+        door: Exit
     panels:
       SEVEN (1):
         id: Backside Room/Panel_seven_seven_5
@@ -2548,7 +2555,7 @@
         door: Shortcut to The Bold
       Orange Tower Fifth Floor:
         room: Art Gallery
-        door: Exit Door
+        door: Exit
     panels:
       Achievement:
         id: Countdown Panels/Panel_bearer_bearer
@@ -2708,7 +2715,7 @@
         room: The Artistic (Lattice)
         door: Door to Smiley
       Elements Area:
-        room: Wheelbarrow Hallway (4)
+        room: Hallway Room (4)
         door: Exit
     panels:
       Achievement:
@@ -3189,11 +3196,11 @@
     paintings:
       - id: flower_painting_6
         orientation: south
-  Wheelbarrow Hallway (2):
+  Hallway Room (2):
     entrances:
       Outside The Agreeable:
         room: Outside The Agreeable
-        door: Wheelbarrow Door
+        door: Hallway Door
       Elements Area: True
     panels:
       WISE:
@@ -3211,18 +3218,16 @@
     doors:
       Exit:
         id: Red Blue Purple Room Area Doors/Door_room_3
-        skip_location: True
-        item_name: Wheelbarrow Hallway - Second Door
-        group: Wheelbarrow Hallway Doors
+        group: Hallway Room Doors
         panels:
           - WISE
           - CLOCK
           - ER
           - COUNT
-  Wheelbarrow Hallway (3):
+  Hallway Room (3):
     entrances:
-      Wheelbarrow Hallway (2):
-        room: Wheelbarrow Hallway (2)
+      Hallway Room (2):
+        room: Hallway Room (2)
         door: Exit
       # No entrance from Elements Area. The winding hallway does not connect.
     panels:
@@ -3241,18 +3246,16 @@
     doors:
       Exit:
         id: Red Blue Purple Room Area Doors/Door_room_4
-        skip_location: True
-        item_name: Wheelbarrow Hallway - Third Door
-        group: Wheelbarrow Hallway Doors
+        group: Hallway Room Doors
         panels:
           - TRANCE
           - FORM
           - A
           - SHUN
-  Wheelbarrow Hallway (4):
+  Hallway Room (4):
     entrances:
-      Wheelbarrow Hallway (2):
-        room: Wheelbarrow Hallway (2)
+      Hallway Room (3):
+        room: Hallway Room (3)
         door: Exit
       Elements Area: True
     panels:
@@ -3264,49 +3267,18 @@
         id:
           - Red Blue Purple Room Area Doors/Door_room_5
           - Red Blue Purple Room Area Doors/Door_room_6 # this is the connection to The Artistic
-        skip_location: True
-        item_name: Wheelbarrow Hallway - Fourth Door
-        group: Wheelbarrow Hallway Doors
+        group: Hallway Room Doors
         panels:
           - WHEEL
-      All Puzzles:
-        skip_item: True
-        location_name: Wheelbarrow Hallway
         include_reduce: True
-        panels:
-          - room: Outside The Agreeable
-            panel: WALL
-          - room: Outside The Agreeable
-            panel: KEEP
-          - room: Outside The Agreeable
-            panel: BAILEY
-          - room: Outside The Agreeable
-            panel: TOWER
-          - room: Wheelbarrow Hallway (2)
-            panel: WISE
-          - room: Wheelbarrow Hallway (2)
-            panel: CLOCK
-          - room: Wheelbarrow Hallway (2)
-            panel: ER
-          - room: Wheelbarrow Hallway (2)
-            panel: COUNT
-          - room: Wheelbarrow Hallway (3)
-            panel: TRANCE
-          - room: Wheelbarrow Hallway (3)
-            panel: FORM
-          - room: Wheelbarrow Hallway (3)
-            panel: A
-          - room: Wheelbarrow Hallway (3)
-            panel: SHUN
-          - WHEEL
   Elements Area:
     entrances:
       Roof: True
-      Wheelbarrow Hallway (4):
-        room: Wheelbarrow Hallway (4)
+      Hallway Room (4):
+        room: Hallway Room (4)
         door: Exit
       The Artistic (Smiley):
-        room: Wheelbarrow Hallway (4)
+        room: Hallway Room (4)
         door: Exit
     panels:
       A:
@@ -3346,17 +3318,31 @@
           - WANDERLUST
           - "1234567890"
   Art Gallery:
-    # For now, let's just let the doors in here be vanilla.
-    # This also means that we won't allow reverse progression.
-    # Most of the scenery paintings will be vanilla too.
     entrances:
       Orange Tower Third Floor: True
+      Art Gallery (Second Floor): True
+      Art Gallery (Third Floor): True
+      Art Gallery (Fourth Floor): True
+      Orange Tower Fifth Floor:
+        door: Exit
     panels:
       EIGHT:
         id: Backside Room/Panel_eight_eight_6
         required_door:
           room: Number Hunt
           door: Eights
+      EON:
+        id: Painting Room/Panel_eon_one
+        colors: yellow
+      TRUSTWORTHY:
+        id: Painting Room/Panel_to_two
+        colors: red
+      FREE:
+        id: Painting Room/Panel_free_three
+        colors: purple
+      OUR:
+        id: Painting Room/Panel_our_four
+        colors: blue
       ONE ROAD MANY TURNS:
         id: Painting Room/Panel_order_onepathmanyturns
         colors:
@@ -3365,8 +3351,50 @@
           - gray
           - brown
           - orange
+        required_door:
+          door: Fifth Floor
     doors:
-      Exit Door:
+      Second Floor:
+        painting_id:
+          - scenery_painting_2b
+          - scenery_painting_2c
+        skip_location: True
+        panels:
+          - EON
+      First Floor Puzzles:
+        skip_item: True
+        location_name: Art Gallery - First Floor Puzzles
+        panels:
+          - EON
+          - TRUSTWORTHY
+          - FREE
+          - OUR
+      Third Floor:
+        painting_id:
+          - scenery_painting_3b
+          - scenery_painting_3c
+        skip_location: True
+        panels:
+          - room: Art Gallery (Second Floor)
+            panel: PATH
+      Fourth Floor:
+        painting_id:
+          - scenery_painting_4b
+          - scenery_painting_4c
+        skip_location: True
+        panels:
+          - room: Art Gallery (Third Floor)
+            panel: ANY
+      Fifth Floor:
+        id: Tower Room Area Doors/Door_painting_backroom
+        painting_id:
+          - scenery_painting_5b
+          - scenery_painting_5c
+        skip_location: True
+        panels:
+          - room: Art Gallery (Fourth Floor)
+            panel: SEND - USE
+      Exit:
         id: Tower Room Area Doors/Door_painting_exit
         include_reduce: True
         panels:
@@ -3382,6 +3410,102 @@
         orientation: east
       - id: fruitbowl_painting4
         orientation: south
+    progression:
+      Progressive Art Gallery:
+        - Second Floor
+        - Third Floor
+        - Fourth Floor
+        - Fifth Floor
+        - Exit
+  Art Gallery (Second Floor):
+    entrances:
+      Art Gallery:
+        room: Art Gallery
+        door: Second Floor
+    panels:
+      HOUSE:
+        id: Painting Room/Panel_house_neighborhood
+        colors: blue
+      PATH:
+        id: Painting Room/Panel_path_road
+        colors: brown
+      PARK:
+        id: Painting Room/Panel_park_drive
+        colors: black
+      CARRIAGE:
+        id: Painting Room/Panel_carriage_horse
+        colors: red
+    doors:
+      Puzzles:
+        skip_item: True
+        location_name: Art Gallery - Second Floor Puzzles
+        panels:
+          - HOUSE
+          - PATH
+          - PARK
+          - CARRIAGE
+  Art Gallery (Third Floor):
+    entrances:
+      Art Gallery:
+        room: Art Gallery
+        door: Third Floor
+    panels:
+      AN:
+        id: Painting Room/Panel_an_many
+        colors: blue
+      MAY:
+        id: Painting Room/Panel_may_many
+        colors: blue
+      ANY:
+        id: Painting Room/Panel_any_many
+        colors: blue
+      MAN:
+        id: Painting Room/Panel_man_many
+        colors: blue
+    doors:
+      Puzzles:
+        skip_item: True
+        location_name: Art Gallery - Third Floor Puzzles
+        panels:
+          - AN
+          - MAY
+          - ANY
+          - MAN
+  Art Gallery (Fourth Floor):
+    entrances:
+      Art Gallery:
+        room: Art Gallery
+        door: Fourth Floor
+    panels:
+      URNS:
+        id: Painting Room/Panel_urns_turns
+        colors: blue
+      LEARNS:
+        id: Painting Room/Panel_learns_turns
+        colors: purple
+      RUNTS:
+        id: Painting Room/Panel_runts_turns
+        colors: yellow
+      SEND - USE:
+        id: Painting Room/Panel_send_use_turns
+        colors: orange
+      TRUST:
+        id: Painting Room/Panel_trust_06890
+        colors: orange
+      "062459":
+        id: Painting Room/Panel_06890_trust
+        colors: orange
+    doors:
+      Puzzles:
+        skip_item: True
+        location_name: Art Gallery - Fourth Floor Puzzles
+        panels:
+          - URNS
+          - LEARNS
+          - RUNTS
+          - SEND - USE
+          - TRUST
+          - "062459"
   Rhyme Room (Smiley):
     entrances:
       Orange Tower Third Floor:

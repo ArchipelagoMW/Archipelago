@@ -63,6 +63,11 @@ class Painting(NamedTuple):
     move: bool
 
 
+class Progression(NamedTuple):
+    item_name: str
+    index: int
+
+
 class StaticLingoLogic:
     ROOMS: Dict[str, Room] = {}
     PANELS: Dict[str, Panel] = {}
@@ -73,6 +78,9 @@ class StaticLingoLogic:
     DOORS_BY_ROOM: Dict[str, Dict[str, Door]] = {}
     PANELS_BY_ROOM: Dict[str, Dict[str, Panel]] = {}
     PAINTINGS_BY_ROOM: Dict[str, List[Painting]] = {}
+
+    PROGRESSIVE_ITEMS: List[str] = []
+    PROGRESSION_BY_ROOM: Dict[str, Dict[str, Progression]] = {}
 
     PAINTING_ENTRANCES: int = 0
     PAINTING_EXITS: int = 0
@@ -331,6 +339,23 @@ class StaticLingoLogic:
                                                 required_painting, rwnd, required_door, disable_painting, move_painting)
                         self.PAINTINGS[painting_id] = painting_obj
                         self.PAINTINGS_BY_ROOM[room_name].append(painting_obj)
+
+                if "progression" in room_data:
+                    for progression_name, progression_doors in room_data["progression"].items():
+                        self.PROGRESSIVE_ITEMS.append(progression_name)
+
+                        progression_index = 1
+                        for door in progression_doors:
+                            if isinstance(door, Dict):
+                                door_room = door["room"]
+                                door_door = door["door"]
+                            else:
+                                door_room = room_name
+                                door_door = door
+
+                            room_progressions = self.PROGRESSION_BY_ROOM.setdefault(door_room, {})
+                            room_progressions[door_door] = Progression(progression_name, progression_index)
+                            progression_index += 1
 
                 self.ROOMS[room_name] = room_obj
                 self.ALL_ROOMS.append(room_obj)

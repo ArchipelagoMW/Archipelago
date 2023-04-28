@@ -56,16 +56,28 @@ class LingoPlayerLogic:
                 for door_name, door_data in room_data.items():
                     # This line is duplicated from StaticLingoItems
                     if door_data.skip_item is False and door_data.event is False:
-                        if door_data.group is None:
-                            self.set_door_item(room_name, door_name, door_data.item_name)
-                        else:
+                        if door_data.group is not None:
                             self.set_door_item(room_name, door_name, door_data.group)
+                        elif room_name in static_logic.PROGRESSION_BY_ROOM\
+                                and door_name in static_logic.PROGRESSION_BY_ROOM[room_name]:
+                            progressive_item_name = static_logic.PROGRESSION_BY_ROOM[room_name][door_name].item_name
+                            self.set_door_item(room_name, door_name, progressive_item_name)
+                            self.REAL_ITEMS.append(progressive_item_name)
+                        else:
+                            self.set_door_item(room_name, door_name, door_data.item_name)
+
         elif get_option_value(world, player, "shuffle_doors") == 2:  # complex doors
             for room_name, room_data in StaticLingoLogic.DOORS_BY_ROOM.items():
                 for door_name, door_data in room_data.items():
                     # This line is duplicated from StaticLingoItems
                     if door_data.skip_item is False and door_data.event is False:
-                        self.set_door_item(room_name, door_name, door_data.item_name)
+                        if room_name in static_logic.PROGRESSION_BY_ROOM \
+                                and door_name in static_logic.PROGRESSION_BY_ROOM[room_name]:
+                            progressive_item_name = static_logic.PROGRESSION_BY_ROOM[room_name][door_name].item_name
+                            self.set_door_item(room_name, door_name, progressive_item_name)
+                            self.REAL_ITEMS.append(progressive_item_name)
+                        else:
+                            self.set_door_item(room_name, door_name, door_data.item_name)
 
         for room_name, room_data in StaticLingoLogic.DOORS_BY_ROOM.items():
             for door_name, door_data in room_data.items():
