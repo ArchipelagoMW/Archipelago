@@ -335,6 +335,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
             def write_multidata():
                 import NetUtils
+                from worlds import WorldLoader
+
+                WorldLoader.load_worlds()
+
                 slot_data = {}
                 client_versions = {}
                 games = {}
