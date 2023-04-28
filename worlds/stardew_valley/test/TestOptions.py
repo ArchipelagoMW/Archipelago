@@ -35,36 +35,57 @@ def check_no_ginger_island(tester: SVTestBase, multiworld: MultiWorld):
         tester.assertNotIn(location.name, ginger_island_locations)
 
 
+def get_option_choices(option) -> dict[str, int]:
+    if issubclass(option, SpecialRange):
+        return option.special_range_names
+    elif option.options:
+        return option.options
+    return {}
+
+
 class TestGenerateDynamicOptions(SVTestBase):
     def test_given_special_range_when_generate_then_basic_checks(self):
         for option in stardew_valley_option_classes:
             if not issubclass(option, SpecialRange):
                 continue
-            with self.subTest(msg=option.internal_name):
-                for value in option.special_range_names:
-                    multiworld = setup_solo_multiworld({option.internal_name: option.special_range_names[value]})
+            for value in option.special_range_names:
+                with self.subTest(f"{option.internal_name}: {value}"):
+                    choices = {option.internal_name: option.special_range_names[value]}
+                    multiworld = setup_solo_multiworld(choices)
                     basic_checks(self, multiworld)
 
     def test_given_choice_when_generate_then_basic_checks(self):
         for option in stardew_valley_option_classes:
             if not option.options:
                 continue
-            with self.subTest(msg=option.internal_name):
-                for value in option.options:
-                    multiworld = setup_solo_multiworld({option.internal_name: option.options[value]})
+            for value in option.options:
+                with self.subTest(f"{option.internal_name}: {value}"):
+                    choices = {option.internal_name: option.options[value]}
+                    multiworld = setup_solo_multiworld(choices)
                     basic_checks(self, multiworld)
 
-    def test_given_option_combination_when_generate_then_basic_checks(self):
-        option_combinations = [{options.Goal.internal_name: options.Goal.option_master_angler,
-                                options.ToolProgression.internal_name: options.ToolProgression.option_vanilla}]
-        ids = ["Master Angler + Vanilla tools"]
-
-        for i in range(0, len(option_combinations)):
-            option_combination = option_combinations[i]
-            id = ids[i]
-            with self.subTest(msg=f"{id}"):
-                multi_world = setup_solo_multiworld(option_combination)
-                basic_checks(self, multi_world)
+    def test_given_option_pair_when_generate_then_basic_checks(self):
+        if self.skip_long_tests:
+            return
+        options_to_exclude = ["starting_money", "multiple_day_sleep_enabled", "multiple_day_sleep_cost",
+                              "experience_multiplier", "friendship_multiplier", "debris_multiplier",
+                              "quick_start", "gifting", "gift_tax"]
+        options_to_include = [option_to_include for option_to_include in stardew_valley_option_classes
+                              if option_to_include.internal_name not in options_to_exclude]
+        num_options = len(options_to_include)
+        for option1_index in range(0, num_options):
+            for option2_index in range(option1_index + 1, num_options):
+                option1 = options_to_include[option1_index]
+                option2 = options_to_include[option2_index]
+                option1_choices = get_option_choices(option1)
+                option2_choices = get_option_choices(option2)
+                for key1 in option1_choices:
+                    for key2 in option2_choices:
+                        with self.subTest(f"{option1.internal_name}: {key1}, {option2.internal_name}: {key2}"):
+                            choices = {option1.internal_name: option1_choices[key1],
+                                       option2.internal_name: option2_choices[key2]}
+                            multiworld = setup_solo_multiworld(choices)
+                            basic_checks(self, multiworld)
 
 
 class TestGoal(SVTestBase):
@@ -171,20 +192,34 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestBase):
             if not issubclass(option,
                               SpecialRange) or option.internal_name == options.ExcludeGingerIsland.internal_name:
                 continue
-            with self.subTest(msg=option.internal_name):
-                for value in option.special_range_names:
+            for value in option.special_range_names:
+                with self.subTest(f"{option.internal_name}: {value}"):
                     multiworld = setup_solo_multiworld(
                         {options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
                          option.internal_name: option.special_range_names[value]})
                     check_no_ginger_island(self, multiworld)
 
     def test_given_choice_when_generate_exclude_ginger_island(self):
+        island_option = options.ExcludeGingerIsland
         for option in stardew_valley_option_classes:
-            if not option.options or option.internal_name == options.ExcludeGingerIsland.internal_name:
+            if not option.options or option.internal_name == island_option.internal_name:
                 continue
-            with self.subTest(msg=option.internal_name):
-                for value in option.options:
+            for value in option.options:
+                with self.subTest(f"{option.internal_name}: {value}"):
                     multiworld = setup_solo_multiworld(
-                        {options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+                        {island_option.internal_name: island_option.option_true,
                          option.internal_name: option.options[value]})
+                    if multiworld.worlds[self.player].options[island_option.internal_name] != island_option.option_true:
+                        return
+                    basic_checks(self, multiworld)
                     check_no_ginger_island(self, multiworld)
+
+    def test_given_walnut_hunter_goal_then_override_exclude_ginger_island(self):
+        island_option = options.ExcludeGingerIsland
+        for value in island_option.options:
+            with self.subTest(f"{island_option.internal_name}: {value}"):
+                multiworld = setup_solo_multiworld(
+                    {options.Goal.internal_name: options.Goal.option_greatest_walnut_hunter,
+                        island_option.internal_name: island_option.options[value]})
+                basic_checks(self, multiworld)
+                self.assertEqual(multiworld.worlds[self.player].options[island_option.internal_name], island_option.option_false)

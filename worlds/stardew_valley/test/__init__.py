@@ -1,3 +1,4 @@
+import os
 from argparse import Namespace
 from typing import Dict, FrozenSet, Tuple, Any, ClassVar
 
@@ -12,9 +13,13 @@ class SVTestBase(WorldTestBase):
     game = "Stardew Valley"
     world: StardewValleyWorld
     player: ClassVar[int] = 1
+    skip_long_tests: bool = True
 
     def world_setup(self, *args, **kwargs):
         super().world_setup(*args, **kwargs)
+        long_tests_key = "long"
+        if long_tests_key in os.environ:
+            self.skip_long_tests = not bool(os.environ[long_tests_key])
         if self.constructed:
             self.world = self.multiworld.worlds[self.player]  # noqa
 

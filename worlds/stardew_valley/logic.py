@@ -186,6 +186,7 @@ class StardewLogic:
             "Fishing Chest": self.can_fish_chests(),
             "Fish Taco": self.can_cook() & self.has_relationship("Linus", 7) & self.has("Tuna") & self.has("Tortilla") &
                          self.has("Red Cabbage") & self.has("Mayonnaise"),
+            "Flute Block": self.has_relationship("Robin", 6),
             "Fried Calamari": self.can_cook() & self.has_relationship("Jodi", 3) & self.has("Squid") &
                               self.has("Wheat Flour") & self.has("Oil"),
             "Fried Eel": self.can_cook() & self.has_relationship("George", 3) & self.has("Eel") & self.has("Oil"),
@@ -333,6 +334,7 @@ class StardewLogic:
             "Sheep": self.has_building("Deluxe Barn"),
             "Shrimp": self.can_crab_pot(),
             "Slime": self.can_mine_in_the_mines_floor_1_40(),
+            "Slingshot": self.received("Slingshot") | self.received("Master Slingshot"),
             "Snail": self.can_crab_pot(),
             "Snow Yam": self.has_season("Winter"),
             "Soggy Newspaper": self.can_crab_pot(),
@@ -1265,11 +1267,19 @@ class StardewLogic:
         reach_north = self.can_reach_region(SVRegion.island_north)
         reach_west = self.can_reach_region(SVRegion.island_west)
         reach_hut = self.can_reach_region(SVRegion.leo_hut)
+        reach_southeast = self.can_reach_region(SVRegion.island_south_east)
+        reach_pirate_cove = self.can_reach_region(SVRegion.pirate_cove)
+        reach_outside_areas = And(reach_south, reach_north, reach_west, reach_hut)
         reach_volcano_regions = [self.can_reach_region(SVRegion.volcano), self.can_reach_region(SVRegion.volcano_floor_5),
                            self.can_reach_region(SVRegion.volcano_floor_10)]
         reach_volcano = Or(reach_volcano_regions)
+        reach_all_volcano = And(reach_volcano_regions)
         reach_walnut_regions = [reach_south, reach_north, reach_west, reach_volcano]
-        reach_entire_island = [reach_south, reach_north, reach_west, reach_hut, *reach_volcano_regions]
+        reach_caves = And(self.can_reach_region(SVRegion.qi_walnut_room), self.can_reach_region(SVRegion.dig_site),
+                          self.can_reach_region(SVRegion.gourmand_frog_cave), self.can_reach_region(SVRegion.colored_crystals_cave),
+                          self.can_reach_region(SVRegion.shipwreck), self.has("Slingshot"))
+        reach_entire_island = And(reach_outside_areas, reach_all_volcano,
+                                  reach_caves, reach_southeast, reach_pirate_cove)
         if number <= 5:
             return Or(reach_south, reach_north, reach_west, reach_volcano)
         if number <= 10:
@@ -1278,4 +1288,8 @@ class StardewLogic:
             return Count(3, reach_walnut_regions)
         if number <= 20:
             return And(reach_walnut_regions)
-        return And(reach_entire_island)
+        if number <= 50:
+            return reach_entire_island
+        gems = ["Amethyst", "Aquamarine", "Emerald", "Ruby", "Topaz"]
+        return reach_entire_island & self.has("Banana") & self.has(gems) & self.can_mine_perfectly() & \
+               self.can_fish_perfectly() & self.has("Flute Block")

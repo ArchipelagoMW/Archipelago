@@ -19,6 +19,11 @@ class StardewOptions:
 
         return self.options.get(item, None)
 
+    def __setitem__(self, key: Union[str, StardewOption], value: Union[bool, int]):
+        if isinstance(key, StardewOption):
+            key = key.internal_name
+        self.options[key] = value
+
 
 class Goal(Choice):
     """What's your goal with this play-through?
@@ -29,6 +34,7 @@ class Goal(Choice):
     Master Angler: The world will be completed once you have caught every fish in the game. Pairs well with Fishsanity.
     Complete Collection: The world will be completed once you have completed the museum by donating every possible item. Pairs well with Museumsanity.
     Full House: The world will be completed once you get married and have two kids. Pairs well with Friendsanity.
+    Greatest Walnut Hunter: The world will be completed once you find all 130 Golden Walnuts
     """
     internal_name = "goal"
     display_name = "Goal"
@@ -40,6 +46,18 @@ class Goal(Choice):
     option_master_angler = 4
     option_complete_collection = 5
     option_full_house = 6
+    option_greatest_walnut_hunter = 7
+    # option_junimo_kart =
+    # option_prairie_king =
+    # option_fector_challenge =
+    # option_craft_master =
+    # option_mystery_of_the_stardrops =
+    # option_protector_of_the_valley =
+    # option_full_shipment =
+    # option_legend =
+    # option_beloved_farmer =
+    # option_master_of_the_five_ways =
+    # option_perfection =
 
     @classmethod
     def get_option_name(cls, value) -> str:

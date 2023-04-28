@@ -1,3 +1,4 @@
+import logging
 from typing import Dict, Any, Iterable, Optional, Union
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, CollectionState
@@ -65,11 +66,21 @@ class StardewValleyWorld(World):
 
     def generate_early(self):
         self.options = fetch_options(self.multiworld, self.player)
+        self.force_change_options_if_incompatible()
+
         self.logic = StardewLogic(self.player, self.options)
         self.modified_bundles = get_all_bundles(self.multiworld.random,
                                                 self.logic,
                                                 self.options[options.BundleRandomization],
                                                 self.options[options.BundlePrice])
+
+    def force_change_options_if_incompatible(self):
+        goal_is_walnut_hunter = self.options[options.Goal] == options.Goal.option_greatest_walnut_hunter
+        exclude_ginger_island = self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
+        if goal_is_walnut_hunter and exclude_ginger_island:
+            self.options[options.ExcludeGingerIsland] = options.ExcludeGingerIsland.option_false
+            logging.warning(
+                f"Goal 'Greatest Walnut Hunter' requires Ginger Island. Exclude Ginger Island setting forced to 'False'")
 
     def create_regions(self):
         def create_region(name: str, exits: Iterable[str]) -> Region:
@@ -178,6 +189,10 @@ class StardewValleyWorld(World):
         elif self.options[options.Goal] == options.Goal.option_full_house:
             self.create_event_location(location_table["Full House"],
                                        self.logic.can_have_two_children().simplify(),
+                                       "Victory")
+        elif self.options[options.Goal] == options.Goal.option_greatest_walnut_hunter:
+            self.create_event_location(location_table["Greatest Walnut Hunter"],
+                                       self.logic.has_walnut(130).simplify(),
                                        "Victory")
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
