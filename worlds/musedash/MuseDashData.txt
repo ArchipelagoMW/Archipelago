@@ -74,6 +74,13 @@ snooze|Just as Planned  Plus|False|5|7|10|
 Kuishinbo Hacker feat.Kuishinbo Akachan|Just as Planned  Plus|True|5|7|9|
 Inu no outa|Just as Planned  Plus|True|3|5|7|
 Prism Fountain|Just as Planned  Plus|True|7|9|11|
+Gospel|Just as Planned  Plus|False|4|6|10|
+East Ai Li Lovely|Happy Otaku Pack Vol.17|False|2|4|7|
+Mori Umi no Fune|Happy Otaku Pack Vol.17|True|5|7|9|
+Ooi|Happy Otaku Pack Vol.17|True|5|7|10|
+Numatta!!|Happy Otaku Pack Vol.17|True|5|7|9|
+SATELLITE|Happy Otaku Pack Vol.17|False|5|7|9|
+Fantasia Sonata Colorful feat. V!C|Happy Otaku Pack Vol.17|True|6|8|11|
 MuseDash ka nanika hi|Ola Dash|True|?|?|¿|
 Aleph-0|Ola Dash|True|7|9|11|
 Buttoba Supernova|Ola Dash|False|5|7|10|11
