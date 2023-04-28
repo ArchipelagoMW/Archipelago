@@ -52,6 +52,10 @@
   #                   will be covered by a single item.
   # - include_reduce: Door checks are assumed to be EXCLUDED when reduce checks
   #                   is on. This option includes the check anyway.
+  # - junk_item:      If on, the item for this door will be considered a junk
+  #                   item instead of a progression item. Only use this for
+  #                   doors that could never gate progression regardless of
+  #                   options and state.
   #
   # paintings is an array of paintings in the room. This is used for painting
   # shuffling.
@@ -344,6 +348,7 @@
           - OPEN
       Lost Door:
         id: Shuffle Room Area Doors/Door_lost_found
+        junk_item: True
         panels:
           - LOST
     paintings:
@@ -495,6 +500,7 @@
           - SWORD
       Eye Wall:
         id: Shuffle Room Area Doors/Door_behind
+        junk_item: True
         group: Crossroads Doors
         panels:
           - BEND HI
@@ -2458,6 +2464,7 @@
       Shortcut to The Undeterred:
         id: Count Up Room Area Doors/Door_return_double
         group: Directional Gallery Doors
+        junk_item: True
         panels:
           - TURN
           - LEARN

@@ -82,7 +82,8 @@ class StaticLingoItems:
                         and door_name in StaticLingoLogic.PROGRESSION_BY_ROOM[room_name]:
                     door_mode = "special"
 
-                self.create_item(door.item_name, False, True, False, door_mode, door.door_ids, door.painting_ids)
+                self.create_item(door.item_name, False, not door.junk_item, False, door_mode, door.door_ids,
+                                 door.painting_ids)
 
         for group, group_door_ids in door_groups.items():
             self.create_item(group, False, True, False, "door group", group_door_ids, [])
