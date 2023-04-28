@@ -245,7 +245,7 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
             args['file'] = file
         if component:
             args['component'] = component
-        if not file or component:
+        if not component:
             logging.warning(f"Could not identify Component responsible for {identify(args['Patch|Game|Component'])}")
 
     if 'file' in args:
