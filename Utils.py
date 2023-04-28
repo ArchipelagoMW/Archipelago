@@ -295,6 +295,7 @@ def get_default_options() -> OptionsType:
             "glitch_triforce_room": 1,
             "race": 0,
             "plando_options": "bosses",
+            "additional_apworld_path": None
         },
         "minecraft_options": {
             "forge_directory": "Minecraft Forge server",
