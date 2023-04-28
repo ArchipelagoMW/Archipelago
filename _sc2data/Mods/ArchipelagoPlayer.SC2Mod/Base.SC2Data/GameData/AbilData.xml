@@ -43,4 +43,11 @@
         <AcquireAttackers value="1"/>
         <FollowRange value="1.5"/>
     </CAbilEffectTarget>
+    <CAbilRedirectInstant id="AP_StimpackRedirect">
+        <AbilSetId value="Stimpack"/>
+        <Abil value="AP_Stimpack"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="StimRedirect" Requirements="UseStimpack"> <!-- TODO: verify this -->
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilRedirectInstant>
 </Catalog>

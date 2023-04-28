@@ -1,5 +1,6 @@
 ﻿Abil/Name/AP_Stimpack=Stimpack
 Abil/Name/AP_heal=Heal
+Abil/Name/StimpackRedirect2=Stimpack Redirect
 Behavior/Name/AP_Stimpack=Stimpack
 Behavior/Tooltip/AP_Stimpack=This unit moves and attacks more quickly while under the effects of Stimpack.
 Button/Name/AP_MedicHeal=Heal
