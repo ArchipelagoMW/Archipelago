@@ -40,4 +40,25 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="Marine"/>
     </CUpgrade>
+    <CUpgrade id="AP_BearclawNozzles">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Alert value="ResearchComplete"/>
+        <EffectArray Reference="Effect,AP_FirebatE,AreaArray[0].Radius" Value="0.400000"/>
+        <EffectArray Reference="Effect,AP_DevilDogSearchArea,AreaArray[0].Radius" Value="0.400000"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_Firebat,PeriodicOffsetArray[0]" Value="0,-0.9"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_Firebat,PeriodicOffsetArray[1]" Value="0,-1.4"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_Firebat,PeriodicOffsetArray[2]" Value="0,-1.9"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_Firebat,PeriodicOffsetArray[3]" Value="0,-2.4"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_DevilDogCreatePersistent,PeriodicOffsetArray[0]" Value="0,-0.9"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_DevilDogCreatePersistent,PeriodicOffsetArray[1]" Value="0,-1.4"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_DevilDogCreatePersistent,PeriodicOffsetArray[2]" Value="0,-1.9"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_DevilDogCreatePersistent,PeriodicOffsetArray[3]" Value="0,-2.4"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_FirebatJuggernautPlating">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Unit,AP_Firebat,LifeArmor" Value="2"/>
+        <EffectArray Reference="Unit,AP_DevilDog,LifeArmor" Value="2"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

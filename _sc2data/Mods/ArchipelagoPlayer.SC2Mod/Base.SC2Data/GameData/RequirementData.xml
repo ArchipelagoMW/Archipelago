@@ -15,4 +15,12 @@
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeMarineStimpackCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_UseIncineratorNozzles">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeBearclawNozzlesCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseJuggernautPlatingFirebat">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeFirebatJuggernautPlatingCompleteOnly"/>
+    </CRequirement>
 </Catalog>

@@ -75,4 +75,113 @@
         <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Yes05.ogg" FacialAnim="Medic_Yes05"/>
         <Volume value="-1.000000,-1.000000"/>
     </CSound>
+    <CSound id="AP_FirebatAttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Firebat\Firebat_AttackLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Firebat\Firebat_AttackLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Firebat\Firebat_AttackLaunch2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Firebat\Firebat_AttackLaunch3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Firebat\Firebat_AttackLaunch4.wav"/>
+        <DupeDestroyCount value="8"/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="1.640000,3.160000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_FirebatBunkerAttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Firebat\Firebat_AttackLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Firebat\Firebat_AttackLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Firebat\Firebat_AttackLaunch2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Firebat\Firebat_AttackLaunch3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Firebat\Firebat_AttackLaunch4.wav"/>
+        <DupeDestroyCount value="8"/>
+        <Pitch value="1.640000,3.160000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Firebat_Attack" parent="TerranAck">
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Attack00.ogg" FacialAnim="Firebat_Attack00"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Attack01.ogg" FacialAnim="Firebat_Attack01"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Attack02.ogg" FacialAnim="Firebat_Attack02"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Attack03.ogg" FacialAnim="Firebat_Attack03"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Attack04.ogg" FacialAnim="Firebat_Attack04"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Attack05.ogg" FacialAnim="Firebat_Attack05"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Attack06.ogg" FacialAnim="Firebat_Attack06"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Firebat_AttackImpact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Hellion\Hellion_AttackImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Hellion\Hellion_AttackImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Hellion\Hellion_AttackImpact2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Hellion\Hellion_AttackImpact3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Hellion\Hellion_AttackImpact4.wav"/>
+        <DupeDestroyCount value="8"/>
+        <DupeMaximumMethod value="Replace"/>
+        <Pitch value="1.640000,3.160000"/>
+        <Volume value="-3.100000,-1.940000"/>
+    </CSound>
+    <CSound id="AP_Firebat_Explode" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall0.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall1.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall2.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall3.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall4.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall5.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall6.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall7.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall8.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall9.wav" Pitch="-3.000000,3.000000"/>
+        <Flags index="Ignorable" value="0"/>
+        <Flags index="Purgable" value="1"/>
+        <Category value="Combat"/>
+        <DupeDestroyCount value="5"/>
+        <DupeMaximumMethod value="Replace"/>
+    </CSound>
+    <CSound id="AP_Firebat_Help" parent="TerranAck">
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Help00.ogg" FacialAnim="Firebat_Help00"/>
+        <Category value="Alert"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Firebat_Pissed" parent="Pissed">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Pissed00.ogg" FacialAnim="Firebat_Pissed00"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Pissed01.ogg" FacialAnim="Firebat_Pissed01"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Pissed02.ogg" FacialAnim="Firebat_Pissed02"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Pissed03.ogg" FacialAnim="Firebat_Pissed03"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Pissed04.ogg" FacialAnim="Firebat_Pissed04"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Pissed05.ogg" FacialAnim="Firebat_Pissed05"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Pissed06.ogg" FacialAnim="Firebat_Pissed06"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Pissed07.ogg" FacialAnim="Firebat_Pissed07"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Pissed08.ogg" FacialAnim="Firebat_Pissed08"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Pissed09.ogg" FacialAnim="Firebat_Pissed09"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Pissed10.ogg" FacialAnim="Firebat_Pissed10"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Pissed11.ogg" FacialAnim="Firebat_Pissed11"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Pissed12.ogg" FacialAnim="Firebat_Pissed12"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Firebat_Ready" parent="Ready">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Ready00.ogg" FacialAnim="Firebat_Ready00"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Firebat_What" parent="TerranAck">
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_What00.ogg" FacialAnim="Firebat_What00"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_What01.ogg" FacialAnim="Firebat_What01"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_What02.ogg" FacialAnim="Firebat_What02"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_What03.ogg" FacialAnim="Firebat_What03"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_What04.ogg" FacialAnim="Firebat_What04"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_What05.ogg" FacialAnim="Firebat_What05"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Firebat_Yes" parent="TerranAck">
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Yes00.ogg" FacialAnim="Firebat_Yes00"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Yes01.ogg" FacialAnim="Firebat_Yes01"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Yes02.ogg" FacialAnim="Firebat_Yes02"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Yes03.ogg" FacialAnim="Firebat_Yes03"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Yes04.ogg" FacialAnim="Firebat_Yes04"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Yes05.ogg" FacialAnim="Firebat_Yes05"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Firebat\Firebat_Yes06.ogg" FacialAnim="Firebat_Yes06"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
 </Catalog>

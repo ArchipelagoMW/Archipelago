@@ -19,4 +19,12 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_MarineStimpack" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeBearclawNozzlesCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_BearclawNozzles" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeFirebatJuggernautPlatingCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_FirebatJuggernautPlating" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

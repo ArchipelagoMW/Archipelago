@@ -18,4 +18,51 @@
         <DrainVitalCostFactor value="0.33"/>
         <RechargeVitalRate value="9"/>
     </CEffectCreateHealer>
+    <CEffectCreatePersistent id="AP_Firebat">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="SourcePoint"/>
+        <OffsetVectorStartLocation Value="SourcePoint"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="4"/>
+        <PeriodicEffectArray value="AP_FirebatE"/>
+        <PeriodicOffsetArray value="0,-0.5,0"/>
+        <PeriodicOffsetArray value="0,-1,0"/>
+        <PeriodicOffsetArray value="0,-1.5,0"/>
+        <PeriodicOffsetArray value="0,-2,0"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="AP_FirebatE" parent="EA_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Ground;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="0.6" Effect="AP_FlameThrowerDamageSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_FirebatSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_Firebat"/>
+        <EffectArray value="AP_FirebatUFull"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_FirebatUFull" parent="DU_WEAP_SPLASH">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Light" value="4"/>
+        <Amount value="8"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_FlameThrowerApplyDoTBehavior">
+        <ValidatorArray index="0" value="ViralPlasmaPurchased"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_ViralPlasma"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_FlameThrowerDamageSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_FirebatUFull"/>
+        <EffectArray value="AP_FlameThrowerApplyDoTBehavior"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_FlameThrowerViralPlasmaDoTDamage">
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="2"/>
+    </CEffectDamage>
 </Catalog>

@@ -35,6 +35,40 @@
         <Model value="Assets\Portraits\Terran\MedicPortrait\MedicPortrait.m3"/>
         <FacialController value="LocalizedData\Facial\MedicPortrait.fxa"/>
         <Image value="Assets\Textures\MedicPortrait_Static.dds"/>
-        <Lighting value="AP_MedicPortrait"/>
+    </CModel>
+    <CModel id="AP_Firebat" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\Firebat\Firebat.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid04"/>
+        <TechPurchaseCamera value="TechPurchaseInfantry"/>
+        <UnitGlossaryCamera value="Star2CameraMid04"/>
+    </CModel>
+    <CModel id="AP_FirebatAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\FirebatFireSprite\FirebatFireSprite.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="1.000000,1.500000,1.000000"/>
+        <ScaleMin value="1.000000,1.500000,1.000000"/>
+    </CModel>
+    <CModel id="AP_FirebatBunkerAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\FirebatFireSprite\FirebatFireSprite.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="1.000000,3.000000,1.000000"/>
+        <ScaleMin value="1.000000,3.000000,1.000000"/>
+    </CModel>
+    <CModel id="AP_FirebatDeath" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Units\Terran\FirebatDeath\FirebatDeath.m3"/>
+        <LowQualityModel value="TerranSmallUnitDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_FirebatPortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\FirebatPortrait\FirebatPortrait.m3"/>
+        <FacialController value="LocalizedData\Facial\FirebatPortrait.fxa"/>
+        <Flags index="Download" value="1"/>
+        <Image value="Assets\Textures\FirebatPortrait_Static.dds"/>
+        <Lighting value="AP_FirebatPortrait"/>
+    </CModel>
+    <CModel id="AP_ImpactModelFlames" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\FireImpact\FireImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
     </CModel>
 </Catalog>

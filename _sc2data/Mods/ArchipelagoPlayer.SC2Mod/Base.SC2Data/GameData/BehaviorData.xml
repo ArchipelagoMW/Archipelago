@@ -7,4 +7,13 @@
         <Duration value="15"/>
         <Modification MoveSpeedMultiplier="1.5" AttackSpeedMultiplier="1.5"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ViralPlasma">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="99"/>
+        <MaxStackCountPerCaster value="1"/>
+        <Duration value="4"/>
+        <Period value="1"/>
+        <PeriodicEffect value="AP_FlameThrowerViralPlasmaDoTDamage"/>
+    </CBehaviorBuff>
 </Catalog>

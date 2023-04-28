@@ -2,20 +2,37 @@
 Abil/Name/AP_heal=Heal
 Abil/Name/StimpackRedirect2=Stimpack Redirect
 Behavior/Name/AP_Stimpack=Stimpack
+Behavior/Name/AP_ViralPlasma=Viral Plasma
 Behavior/Tooltip/AP_Stimpack=This unit moves and attacks more quickly while under the effects of Stimpack.
+Button/Name/AP_IncineratorNozzles=Incinerator Gauntlets
+Button/Name/AP_JuggernautPlating=Juggernaut Plating
 Button/Name/AP_MedicHeal=Heal
 Button/Name/AP_StabilizerMedPacks=Stabilizer Medpacks
+Button/Tooltip/AP_Firebat=Specialized anti-infantry attacker.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_IncineratorNozzles=Increases the Firebat's damage radius by 40%.
+Button/Tooltip/AP_JuggernautPlating=Increases the Firebat's armor by 2.
 Button/Tooltip/AP_Marine=General-purpose infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_Medic=Support trooper. Heals nearby biological units.
 Button/Tooltip/AP_MedicHeal=Heals a friendly biological target.<n/><n/><c val="f078ff">Heals <d ref="Effect,heal,RechargeVitalRate"/> life per <d ref="Effect,heal,RechargeVitalRate * Effect,heal,DrainVitalCostFactor"/> energy.</c>
 Button/Tooltip/AP_StabilizerMedPacks=Increases Medic heal speed. Reduces the amount of energy required for each heal.
+Effect/Name/AP_Firebat=Flame Thrower (Persistent)
+Effect/Name/AP_FirebatE=Flame Thrower (Enum Area)
+Effect/Name/AP_FirebatSet=Flame Thrower (Set)
+Effect/Name/AP_FirebatUFull=Flame Thrower (Damage)
+Effect/Name/AP_FlameThrowerApplyDoTBehavior=Flame Thrower (Apply DoT Behavior)
+Effect/Name/AP_FlameThrowerDamageSet=Flame Thrower (Damage Set)
+Effect/Name/AP_FlameThrowerViralPlasmaDoTDamage=Flame Thrower (Viral Plasma DoT Damage)
 Effect/Name/AP_GaussRifle=Guass Rifle
 Effect/Name/AP_Stimpack=Stim Pack (Apply Buff)
 Effect/Name/AP_heal=Heal
+Unit/Name/AP_Firebat=Firebat
 Unit/Name/AP_Marine=Marine
 Unit/Name/AP_Medic=Medic
 Upgrade/Name/AP_CombatShield=Combat Shield
 Upgrade/Name/AP_ShieldWall=Combat Shield
 Upgrade/Name/AP_Stimpack=Stimpack
+Upgrade/Name/AP_BearclawNozzles=Incinerator Gauntlets
+Upgrade/Name/AP_FirebatJuggernautPlating=Juggernaut Plating
 Upgrade/Name/MarineStimpack2=Stimpack
+Weapon/Name/AP_Firebat=Perdition Flamethrower
 Weapon/Name/AP_GaussRifle=C-14 Gauss Rifle
