@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CButton id="AP_MedicHeal">
+        <Icon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_StabilizerMedPacks">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-stabilizermedpacks.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+</Catalog>

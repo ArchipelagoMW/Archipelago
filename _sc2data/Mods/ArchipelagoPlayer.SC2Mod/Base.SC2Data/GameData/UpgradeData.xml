@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CUpgrade id="AP_ShieldWall" parent="Research">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Icon value="Assets\Textures\btn-techupgrade-terran-combatshield-color.dds"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Marine,LifeMax" Value="10"/>
+        <EffectArray Reference="Unit,AP_Marine,LifeStart" Value="10"/>
+        <EffectArray Operation="Set" Reference="Actor,Marine,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-marine-shield.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Marine,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-terran-marine-shield.dds"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Marine"/>
+    </CUpgrade>
+    <CUpgrade id="AP_Stimpack" parent="Research">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-terran-stimpack-color.dds"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_Marine"/>
+    </CUpgrade>
+    <CUpgrade id="AP_CombatShield">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Unit,AP_Marine,LifeMax" Value="10"/>
+        <EffectArray Reference="Unit,AP_Marine,LifeStart" Value="10"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Marine,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-terran-marine-shield.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Marine,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-marine-shield.dds"/>
+        <EffectArray Reference="Unit,AP_WarPig,LifeMax" Value="10"/>
+        <EffectArray Reference="Unit,AP_WarPig,LifeStart" Value="10"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Marine"/>
+        <AffectedUnitArray value="AP_WarPig"/>
+    </CUpgrade>
+    <CUpgrade id="AP_MarineStimpack">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="Marine"/>
+    </CUpgrade>
+</Catalog>

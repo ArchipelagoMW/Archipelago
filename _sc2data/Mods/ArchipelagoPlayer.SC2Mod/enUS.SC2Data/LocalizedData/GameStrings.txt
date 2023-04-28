@@ -1,0 +1,20 @@
+﻿Abil/Name/AP_Stimpack=Stimpack
+Abil/Name/AP_heal=Heal
+Behavior/Name/AP_Stimpack=Stimpack
+Behavior/Tooltip/AP_Stimpack=This unit moves and attacks more quickly while under the effects of Stimpack.
+Button/Name/AP_MedicHeal=Heal
+Button/Name/AP_StabilizerMedPacks=Stabilizer Medpacks
+Button/Tooltip/AP_Marine=General-purpose infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/AP_Medic=Support trooper. Heals nearby biological units.
+Button/Tooltip/AP_MedicHeal=Heals a friendly biological target.<n/><n/><c val="f078ff">Heals <d ref="Effect,heal,RechargeVitalRate"/> life per <d ref="Effect,heal,RechargeVitalRate * Effect,heal,DrainVitalCostFactor"/> energy.</c>
+Button/Tooltip/AP_StabilizerMedPacks=Increases Medic heal speed. Reduces the amount of energy required for each heal.
+Effect/Name/AP_GaussRifle=Guass Rifle
+Effect/Name/AP_Stimpack=Stim Pack (Apply Buff)
+Effect/Name/AP_heal=Heal
+Unit/Name/AP_Marine=Marine
+Unit/Name/AP_Medic=Medic
+Upgrade/Name/AP_CombatShield=Combat Shield
+Upgrade/Name/AP_ShieldWall=Combat Shield
+Upgrade/Name/AP_Stimpack=Stimpack
+Upgrade/Name/MarineStimpack2=Stimpack
+Weapon/Name/AP_GaussRifle=C-14 Gauss Rifle

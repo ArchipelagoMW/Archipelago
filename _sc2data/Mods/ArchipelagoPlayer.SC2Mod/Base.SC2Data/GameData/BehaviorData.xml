@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CBehaviorBuff id="AP_Stimpack">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-stimpack.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="15"/>
+        <Modification MoveSpeedMultiplier="1.5" AttackSpeedMultiplier="1.5"/>
+    </CBehaviorBuff>
+</Catalog>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CAbilEffectInstant id="AP_Stimpack">
+        <AbilSetId value="Stimpack"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Life" value="10"/>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackSM">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="AP_heal">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="ReExecutable" value="1"/>
+        <Flags index="Smart" value="1"/>
+        <Flags index="PassengerAcquirePassengers" value="1"/>
+        <TargetFilters value="Ground,Biological,Visible;Self,Enemy,Air,Structure,Missile,UnderConstruction,Dead,Hidden,Invulnerable"/>
+        <TargetSorts RequestCount="1">
+            <SortArray value="TSAlliancePassive"/>
+            <SortArray value="TSDistance"/>
+            <SortArray value="TSLifeFraction"/>
+        </TargetSorts>
+        <Range value="2"/>
+        <SmartValidatorArray value="healSmartTargetFilters"/>
+        <SmartValidatorArray value="NotWarpingIn"/>
+        <AutoCastAcquireLevel value="Defensive"/>
+        <AutoCastFilters value="Visible;Neutral,Enemy"/>
+        <AutoCastRange value="6"/>
+        <AutoCastValidatorArray value="healCasterMinEnergy"/>
+        <AutoCastValidatorArray value="NotWarpingIn"/>
+        <Marker Link="Abil/MedivacHeal"/>
+        <UseMarkerArray index="Approach" value="0"/>
+        <UseMarkerArray index="Prep" value="0"/>
+        <DefaultError value="RequiresHealTarget"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_MedicHeal"/>
+        <AcquireAttackers value="1"/>
+        <FollowRange value="1.5"/>
+    </CAbilEffectTarget>
+</Catalog>

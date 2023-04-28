@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CSound id="AP_Medic_Attack" parent="TerranAck">
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack00.ogg" FacialAnim="Medic_Attack00"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack01.ogg" FacialAnim="Medic_Attack01"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack02.ogg" FacialAnim="Medic_Attack02"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack03.ogg" FacialAnim="Medic_Attack03"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack04.ogg" FacialAnim="Medic_Attack04"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack05.ogg" FacialAnim="Medic_Attack05"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack06.ogg" FacialAnim="Medic_Attack06"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Medic_Death" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Death00.wav"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Death01.wav"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Death02.wav"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Death03.wav"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Death04.wav"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Death05.wav"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Medic_Explode" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall0.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall1.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall2.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall3.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall4.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall5.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall6.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_Medic_Help" parent="TerranAck">
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Help00.ogg" FacialAnim="Medic_Help00"/>
+        <Category value="Alert"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Medic_Pissed" parent="Pissed">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\AP_Medic_Pissed200.ogg" FacialAnim="AP_Medic_Pissed200"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\AP_Medic_Pissed201.ogg" FacialAnim="AP_Medic_Pissed201"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\AP_Medic_Pissed202.ogg" FacialAnim="AP_Medic_Pissed202"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\AP_Medic_Pissed203.ogg" FacialAnim="AP_Medic_Pissed203"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\AP_Medic_Pissed204.ogg" FacialAnim="AP_Medic_Pissed204"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\AP_Medic_Pissed205.ogg" FacialAnim="AP_Medic_Pissed205"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\AP_Medic_Pissed206.ogg" FacialAnim="AP_Medic_Pissed206"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\AP_Medic_Pissed207.ogg" FacialAnim="AP_Medic_Pissed207"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\AP_Medic_Pissed208.ogg" FacialAnim="AP_Medic_Pissed208"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\AP_Medic_Pissed209.ogg" FacialAnim="AP_Medic_Pissed209"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\AP_Medic_Pissed210.ogg" FacialAnim="AP_Medic_Pissed210"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\AP_Medic_Pissed211.ogg" FacialAnim="AP_Medic_Pissed211"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\AP_Medic_Pissed212.ogg" FacialAnim="AP_Medic_Pissed212"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Medic_Ready" parent="Ready">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Ready00.ogg" FacialAnim="Medic_Ready00"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Medic_What" parent="TerranAck">
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_What00.ogg" FacialAnim="Medic_What00"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_What01.ogg" FacialAnim="Medic_What01"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_What02.ogg" FacialAnim="Medic_What02"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_What03.ogg" FacialAnim="Medic_What03"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_What04.ogg" FacialAnim="Medic_What04"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_What05.ogg" FacialAnim="Medic_What05"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Medic_Yes" parent="TerranAck">
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Yes00.ogg" FacialAnim="Medic_Yes00"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Yes01.ogg" FacialAnim="Medic_Yes01"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Yes02.ogg" FacialAnim="Medic_Yes02"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Yes03.ogg" FacialAnim="Medic_Yes03"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Yes04.ogg" FacialAnim="Medic_Yes04"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Yes05.ogg" FacialAnim="Medic_Yes05"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+</Catalog>

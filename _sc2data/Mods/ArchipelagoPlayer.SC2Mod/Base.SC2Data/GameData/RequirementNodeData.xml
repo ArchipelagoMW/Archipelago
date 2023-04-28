@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CRequirementAllowUnit id="AP_AllowUnitMarine">
+        <Link value="AP_Marine"/>
+    </CRequirementAllowUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCombatShieldCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_CombatShield" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementOr id="AP_OrCountUpgradeCombatShieldCompleteOnlyCountUpgradeShieldWallCompleteOnly">
+        <OperandArray value="AP_CountUpgradeCombatShieldCompleteOnly"/>
+        <OperandArray value="AP_CountUpgradeShieldWallCompleteOnly"/>
+    </CRequirementOr>
+    <CRequirementCountUpgrade id="AP_CountUpgradeShieldWallCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_ShieldWall" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeMarineStimpackCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_MarineStimpack" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+</Catalog>

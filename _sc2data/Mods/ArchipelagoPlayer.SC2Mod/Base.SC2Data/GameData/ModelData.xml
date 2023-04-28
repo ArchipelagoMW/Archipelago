@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CModel id="AP_Medic" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\Medic\Medic.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid03"/>
+        <Radius value="0.375000"/>
+        <SelectionRadius value="0.375000"/>
+        <ShadowRadius value="0.375000"/>
+        <SquibTypeDefault value="Flesh"/>
+        <TechPurchaseCamera value="TechPurchaseInfantry"/>
+        <UnitGlossaryCamera value="Star2CameraMid03"/>
+    </CModel>
+    <CModel id="AP_MedicDeath" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Units\Terran\MedicDeath\MedicDeath.m3"/>
+        <LowQualityModel value="TerranBloodDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_MedicHealBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\MedivacBeam\MedivacBeam.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.500000,0.500000,0.500000"/>
+        <ScaleMin value="0.500000,0.500000,0.500000"/>
+    </CModel>
+    <CModel id="AP_MedicHealModel" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\MedicHeal\MedicHeal.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_MedicKillSquadDeath" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Units\Terran\MedicKillSquadDeath\MedicKillSquadDeath.m3"/>
+        <LowQualityModel value="TerranBloodDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_MedicPortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\MedicPortrait\MedicPortrait.m3"/>
+        <FacialController value="LocalizedData\Facial\MedicPortrait.fxa"/>
+        <Image value="Assets\Textures\MedicPortrait_Static.dds"/>
+        <Lighting value="AP_MedicPortrait"/>
+    </CModel>
+</Catalog>

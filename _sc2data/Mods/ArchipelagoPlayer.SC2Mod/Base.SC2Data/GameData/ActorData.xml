@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CActorUnit id="AP_Medic" parent="GenericUnitStandard" unitName="AP_Medic">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="Abil.heal.SourceChannelStart" Send="$Spell PlayForever"/>
+        <On Terms="Abil.heal.SourceChannelStop" Send="AnimClear Spell"/>
+        <On Terms="Behavior.KillSquad.On" Send="ModelSwap MedicKillSquad"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsKillSquad" Send="DeathCustomize Variation2"/>
+        <DeathArray index="Normal" ModelLink="AP_MedicDeath" SoundLink="AP_Medic_Explode"/>
+        <DeathArray index="Blast" ModelLink="AP_MedicDeath"/>
+        <DeathCustoms ModelLink="AP_MedicKillSquadDeath" SoundLink="AP_Medic_Death" Name="Variation2"/>
+        <PortraitModel value="AP_MedicPortrait"/>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <BarOffset value="20"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-medic.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Terran-Medic.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="AP_Medic_Ready"/>
+        <SoundArray index="Help" value="AP_Medic_Help"/>
+        <SoundArray index="What" value="AP_Medic_What"/>
+        <SoundArray index="Yes" value="AP_Medic_Yes"/>
+        <SoundArray index="Attack" value="AP_Medic_Attack"/>
+        <SoundArray index="Pissed" value="AP_Medic_Pissed"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Terran-Medic.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-medic.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorBeamSimple id="AP_MedicHealBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_heal.TargetStart" Send="Create"/>
+        <On Terms="Effect.AP_heal.TargetStop" Send="Destroy"/>
+        <HostForProps Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachWeapon"/>
+        <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorModel id="AP_MedicHealModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="ActorCreation" Send="$Birth PlayForever"/>
+        <On Terms="Effect.AP_heal.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.AP_heal.TargetStop; At Target" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+    </CActorModel>
+    <CActorSound id="AP_Medic_Death" parent="SoundOneShot">
+        <On Terms="UnitDeath.AP_Medic; PassChance 25.000000" Send="Create"/>
+    </CActorSound>
+</Catalog>

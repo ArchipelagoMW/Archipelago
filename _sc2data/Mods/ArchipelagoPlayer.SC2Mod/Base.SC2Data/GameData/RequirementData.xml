@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CRequirement id="AP_UseCombatShield">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="CountUpgradeCombatShieldCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseStabilizerMedpacks">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="CountUpgradeStabilizerMedPacksCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_CombatShieldResearched">
+        <NodeArray index="Use" Link="AP_CountUpgradeCombatShieldCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseStimpackSM">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMarineStimpackCompleteOnly"/>
+    </CRequirement>
+</Catalog>
