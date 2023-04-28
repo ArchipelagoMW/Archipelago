@@ -79,6 +79,8 @@ def main(args=None, callback=ERmain):
     if args.additional_apworld_path:
         WorldLoader.add_apworlds_source_folder(args.additional_apworld_path)
 
+    WorldLoader.load_worlds()
+
     seed = get_seed(args.seed)
     random.seed(seed)
     seed_name = get_seed_name(random)
