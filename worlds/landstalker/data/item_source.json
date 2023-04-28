@@ -24,7 +24,7 @@
         "chestId": 3
     },
     {
-        "name": "Swamp Shrine (0F): ekeeke chest in room connected to second entrance (without Idol Stone)",
+        "name": "Swamp Shrine (0F): chest in room visible from second entrance",
         "type": "chest",
         "nodeId": "swamp_shrine",
         "chestId": 4
@@ -54,7 +54,7 @@
         "chestId": 8
     },
     {
-        "name": "Mercator Dungeon (-1F): chest on elevated pathway",
+        "name": "Mercator Dungeon (-1F): chest on elevated path near entrance",
         "type": "chest",
         "nodeId": "mercator_dungeon",
         "hints": [
@@ -192,7 +192,7 @@
         "chestId": 31
     },
     {
-        "name": "Waterfall Shrine: chest under entrance hallway (open after reaching Prospero)",
+        "name": "Waterfall Shrine: chest under entrance hallway",
         "type": "chest",
         "nodeId": "waterfall_shrine",
         "chestId": 33
@@ -222,13 +222,13 @@
         "chestId": 38
     },
     {
-        "name": "Thieves Hideout (back): right chest in room under teal knight room",
+        "name": "Thieves Hideout (back): right chest after teal knight mini-boss",
         "type": "chest",
         "nodeId": "thieves_hideout_post_key",
         "chestId": 41
     },
     {
-        "name": "Thieves Hideout (back): left chest in room under teal knight room",
+        "name": "Thieves Hideout (back): left chest after teal knight mini-boss",
         "type": "chest",
         "nodeId": "thieves_hideout_post_key",
         "chestId": 42
@@ -246,13 +246,13 @@
         "chestId": 44
     },
     {
-        "name": "Thieves Hideout (back): right chest in upper hallway after quick climb trial",
+        "name": "Thieves Hideout (back): second chest in hallway after quick climb trial",
         "type": "chest",
         "nodeId": "thieves_hideout_post_key",
         "chestId": 45
     },
     {
-        "name": "Thieves Hideout (back): left chest in upper hallway after quick climb trial",
+        "name": "Thieves Hideout (back): first chest in hallway after quick climb trial",
         "type": "chest",
         "nodeId": "thieves_hideout_post_key",
         "chestId": 46
@@ -276,19 +276,19 @@
         "chestId": 49
     },
     {
-        "name": "Thieves Hideout: chest near entrance with rolling boulder",
+        "name": "Thieves Hideout: rolling boulder chest near entrance",
         "type": "chest",
         "nodeId": "thieves_hideout_pre_key",
         "chestId": 50
     },
     {
-        "name": "Thieves Hideout: left chest in double chest room after spiral climbing",
+        "name": "Thieves Hideout: left chest in room on the way to goddess statue",
         "type": "chest",
         "nodeId": "thieves_hideout_pre_key",
         "chestId": 52
     },
     {
-        "name": "Thieves Hideout: right chest in double chest room after spiral climbing",
+        "name": "Thieves Hideout: right chest in room on the way to goddess statue",
         "type": "chest",
         "nodeId": "thieves_hideout_pre_key",
         "chestId": 53
@@ -369,19 +369,19 @@
         "chestId": 70
     },
     {
-        "name": "Verla Mines: left chest in triple chests room near Slasher",
+        "name": "Verla Mines: left chest in 3-chests room near Slasher",
         "type": "chest",
         "nodeId": "verla_mines",
         "chestId": 71
     },
     {
-        "name": "Verla Mines: middle chest in triple chests room near Slasher",
+        "name": "Verla Mines: middle chest in 3-chests room near Slasher",
         "type": "chest",
         "nodeId": "verla_mines",
         "chestId": 72
     },
     {
-        "name": "Verla Mines: right chest in triple chests room near Slasher",
+        "name": "Verla Mines: right chest in 3-chests room near Slasher",
         "type": "chest",
         "nodeId": "verla_mines",
         "chestId": 73
@@ -498,13 +498,13 @@
         "chestId": 91
     },
     {
-        "name": "Lake Shrine (-1F): chest in blinking platform room near green golem spinner",
+        "name": "Lake Shrine (-1F): chest in crate room near green golem spinner",
         "type": "chest",
         "nodeId": "lake_shrine",
         "chestId": 92
     },
     {
-        "name": "Lake Shrine (-1F): chest in hallway after golem hopping room",
+        "name": "Lake Shrine (-1F): chest in hallway with hole leading downstairs",
         "type": "chest",
         "nodeId": "lake_shrine",
         "chestId": 93
@@ -528,13 +528,13 @@
         "chestId": 96
     },
     {
-        "name": "Lake Shrine (-2F): front chest in throne room",
+        "name": "Lake Shrine (-2F): lower chest in throne room",
         "type": "chest",
         "nodeId": "lake_shrine",
         "chestId": 97
     },
     {
-        "name": "Lake Shrine (-2F): back chest in throne room",
+        "name": "Lake Shrine (-2F): upper chest in throne room",
         "type": "chest",
         "nodeId": "lake_shrine",
         "chestId": 98
@@ -633,19 +633,19 @@
         "chestId": 112
     },
     {
-        "name": "King Nole's Labyrinth (-1F): right chest in triple chest dark room (left side)",
+        "name": "King Nole's Labyrinth (-1F): right chest in 3-chest dark room (left side)",
         "type": "chest",
         "nodeId": "king_nole_labyrinth_post_door",
         "chestId": 113
     },
     {
-        "name": "King Nole's Labyrinth (-1F): chest in triple chest dark room (right side)",
+        "name": "King Nole's Labyrinth (-1F): chest in 3-chest dark room (right side)",
         "type": "chest",
         "nodeId": "king_nole_labyrinth_pre_door",
         "chestId": 114
     },
     {
-        "name": "King Nole's Labyrinth (-1F): left chest in triple chest dark room (left side)",
+        "name": "King Nole's Labyrinth (-1F): left chest in 3-chest dark room (left side)",
         "type": "chest",
         "nodeId": "king_nole_labyrinth_post_door",
         "chestId": 115
@@ -727,13 +727,13 @@
         "chestId": 126
     },
     {
-        "name": "King Nole's Labyrinth (-3F): left chest in double chest room before Spinner",
+        "name": "King Nole's Labyrinth (-3F): left chest in room before Spinner",
         "type": "chest",
         "nodeId": "king_nole_labyrinth_raft",
         "chestId": 127
     },
     {
-        "name": "King Nole's Labyrinth (-3F): right chest in double chest room before Spinner",
+        "name": "King Nole's Labyrinth (-3F): right chest in room before Spinner",
         "type": "chest",
         "nodeId": "king_nole_labyrinth_raft",
         "chestId": 128
@@ -757,7 +757,7 @@
         "chestId": 130
     },
     {
-        "name": "King Nole's Labyrinth (-3F): chest before Miro",
+        "name": "King Nole's Labyrinth (-3F): chest in room before Miro",
         "type": "chest",
         "nodeId": "king_nole_labyrinth_path_to_palace",
         "hints": [
@@ -880,7 +880,7 @@
         "chestId": 148
     },
     {
-        "name": "Mountainous Area: chest on right side of the map right before the bridge",
+        "name": "Mountainous Area: chest on right side of map before the bridge",
         "type": "chest",
         "nodeId": "mountainous_area",
         "chestId": 149
@@ -895,7 +895,7 @@
         "chestId": 150
     },
     {
-        "name": "Mountainous Area: hidden chest in back path",
+        "name": "Mountainous Area: hidden chest in uppermost path",
         "type": "chest",
         "nodeId": "mountainous_area",
         "hints": [
@@ -976,7 +976,7 @@
         "chestId": 162
     },
     {
-        "name": "Mountainous Area: chest in map in front of the statue under the bridge",
+        "name": "Mountainous Area: chest in map in front of bridge statue",
         "type": "chest",
         "nodeId": "mountainous_area",
         "chestId": 163
@@ -1021,7 +1021,7 @@
         "chestId": 168
     },
     {
-        "name": "Greenmaze: chest on cliff appearing after pressing a button in swamp section",
+        "name": "Greenmaze: chest on cliff near the swamp",
         "type": "chest",
         "nodeId": "greenmaze_pre_whistle",
         "chestId": 169
@@ -1172,7 +1172,7 @@
         "chestId": 194
     },
     {
-        "name": "Destel: chest in shop requiring to wait for the shopkeeper to move",
+        "name": "Destel: chest in inn next to innkeeper",
         "type": "chest",
         "nodeId": "destel",
         "chestId": 196
