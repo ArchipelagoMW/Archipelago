@@ -9,8 +9,8 @@
         <ScoreResult value="BuildOrder"/>
         <EffectArray Reference="Unit,AP_Marine,LifeMax" Value="10"/>
         <EffectArray Reference="Unit,AP_Marine,LifeStart" Value="10"/>
-        <EffectArray Operation="Set" Reference="Actor,Marine,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-marine-shield.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Marine,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-terran-marine-shield.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Marine,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-marine-shield.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Marine,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-terran-marine-shield.dds"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_Marine"/>
     </CUpgrade>
@@ -59,6 +59,13 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Reference="Unit,AP_Firebat,LifeArmor" Value="2"/>
         <EffectArray Reference="Unit,AP_DevilDog,LifeArmor" Value="2"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_StabilizerMedPacks">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Alert value="ResearchComplete"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_heal,DrainVitalCostFactor" Value="0.25"/>
+        <EffectArray Reference="Effect,AP_heal,RechargeVitalRate" Value="1.000000"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
 </Catalog>

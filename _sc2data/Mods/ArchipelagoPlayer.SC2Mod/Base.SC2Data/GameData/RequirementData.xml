@@ -2,11 +2,11 @@
 <Catalog>
     <CRequirement id="AP_UseCombatShield">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Show" Link="CountUpgradeCombatShieldCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCombatShieldCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_UseStabilizerMedpacks">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Show" Link="CountUpgradeStabilizerMedPacksCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeStabilizerMedPacksCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_CombatShieldResearched">
         <NodeArray index="Use" Link="AP_CountUpgradeCombatShieldCompleteOnly"/>

@@ -59,12 +59,6 @@
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-unit-terran-firebat.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
-        <SoundArray index="Ready" value="AP_Firebat_Ready"/>
-        <SoundArray index="Help" value="AP_Firebat_Help"/>
-        <SoundArray index="What" value="AP_Firebat_What"/>
-        <SoundArray index="Yes" value="AP_Firebat_Yes"/>
-        <SoundArray index="Attack" value="AP_Firebat_Attack"/>
-        <SoundArray index="Pissed" value="AP_Firebat_Pissed"/>
         <UnitIcon value="Assets\Textures\btn-unit-terran-firebat.dds"/>
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Terran-firebat.dds"/>
@@ -73,17 +67,9 @@
     <CActorAction id="AP_FirebatAttack" parent="GenericAttackBase" effectAttack="Firebat">
         <On Terms="Effect.AP_FirebatSet.Start; At Caster" Send="Create"/>
         <On Terms="Effect.FirebatUFull.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
-        <LaunchAssets Model="AP_FirebatAttackLaunch" Sound="AP_FirebatAttackLaunch"/>
         <LaunchModel value="AP_FirebatAttackModel"/>
-        <LaunchSound value="GenericAttackLaunchSound"/>
         <ContainerAssets Model="AP_FirebatBunkerAttackLaunch" Sound="AP_FirebatBunkerAttackLaunch"/>
-        <ContainerModel value="GenericAttackLaunchModel"/>
-        <ContainerSound value="GenericAttackLaunchSound"/>
         <ImpactMap index="None" Sound="AP_Firebat_AttackImpact"/>
-        <ImpactModel value="GenericAttackImpactModel"/>
-        <ImpactSound value="GenericAttackImpactSound"/>
-        <DamageModel value="GenericAttackDamageModel"/>
-        <DamageSound value="GenericAttackDamageSound"/>
     </CActorAction>
     <CActorModel id="AP_FirebatAttackModel" parent="ModelAnimationStyleOneShotNoOrphan">
         <Flags index="SuppressCreationErrors" value="1"/>
@@ -117,4 +103,109 @@
         <HostSiteOps Ops="SOpAttachRandomDamage"/>
         <Model value="AP_ImpactModelFlames"/>
     </CActorModel>
+    <CActorUnit id="AP_Marine" parent="GenericUnitBase" unitName="AP_Marine">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <On Terms="ActorCreation; ValidatePlayer NoMarineShield" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
+        <On Terms="Upgrade.AP_ShieldWall.Add" Send="AnimClear Cover"/>
+        <On Terms="Upgrade.AP_ShieldWall.Remove" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
+        <On Terms="UnitDeath.AP_Marine; AnimPlaying Cover" Target="_DeathModel" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="ModelEvent; ModelEventName SquibStart" Send="Create MarineCheerSquib"/>
+        <On Terms="ModelEvent; ModelEventName SquibStop" Target="AP_MarineCheerSquib" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName SquibStop" Target="MarineCheerSquibSound" Send="Destroy"/>
+        <On Terms="AnimDone; AnimName Cheer" Target="AP_MarineCheerSquib" Send="Destroy"/>
+        <On Terms="AnimDone; AnimName Cheer" Target="MarineCheerSquibSound" Send="Destroy"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Marine_Land"/>
+        <On Terms="Upgrade.AP_CombatShield.Add" Send="AnimClear Cover"/>
+        <On Terms="Upgrade.AP_CombatShield.Remove" Send="AnimPlay Cover Cover PlayForever"/>
+        <On Terms="Upgrade.AP_CombatShield.Add" Send="AnimClear Cover"/>
+        <On Terms="Upgrade.AP_CombatShield.Remove" Send="AnimPlay Cover Cover PlayForever"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <DeathArray index="Normal" ModelLink="MarineDeath" SoundLink="Marine_DeathFXBloodSpray"/>
+        <DeathArray index="Blast" ModelLink="MarineDeathBlast"/>
+        <DeathArray index="Disintegrate" ModelLink="MarineDeathAcid" SoundLink="Uni_DeathFXAcid"/>
+        <DeathArray index="Eat" AnimProps="Stand" ModelLink="MarineDeathEat" SoundLink="Marine_DeathFXEat"/>
+        <DeathArray index="Eviscerate" ModelLink="MarineDeathEviscerate" SoundLink="Marine_DeathFXEviscerate"/>
+        <DeathArray index="Fire" ModelLink="MarineDeathFire" SoundLink="Marine_DeathFXFire"/>
+        <DeathArray index="Silentkill" SoundLink="Uni_DeathFXSilentKill"/>
+        <DeathArray index="Squish" SoundLink="Marine_DeathFXBloodSpray"/>
+        <DeathCustoms ModelLink="TerranSmallBiologicalUnitDeathLow" Name="AntiGravTerran"/>
+        <DeathCustoms ModelLink="MarineDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="None"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ActorModel="SpineCrawlerHurlDeathRagdollBloodPrevent" ModelLink="MarineDeathRagdoll" Name="RagdollSpineCrawlerHurl">
+            <BodySquibs Name="None"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathActorModel value="UnitDeathModelWithDeathMotionGround"/>
+        <PortraitModel value="MarinePortrait"/>
+        <StandAnimTurnTime value="4"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="0.600000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleSmall"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <AbilSoundArray AbilCmd="AP_Stimpack,Execute" Sound="Marine_StimPackVO"/>
+        <BarOffset value="40"/>
+        <BarWidth value="36"/>
+        <GlossaryAnim value="Spell"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Marine.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-marine.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_Marine"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-marine.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Marine.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_MarineAttack" parent="GenericAttack" effectAttack="AP_GaussRifle">
+        <LaunchAssets Model="MarineAttackLaunch" Sound="Marine_AttackLaunch"/>
+        <ContainerAssets Model="MarineBunkerAttackLaunch" Sound="Marine_BunkerAttackLaunch"/>
+        <ImpactMap index="None" Model="MarineAttackImpact" Sound="Marine_AttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+        <DamageMap index="None" Sound=""/>
+        <AcquisitionYawHalfArc value="10.000000"/>
+        <AcquisitionPitchHalfArc value="15.000000"/>
+        <AccuracyHalfArc value="5.000000"/>
+    </CActorAction>
+    <CActorModel id="AP_MarineCheerSquib" parent="ModelAdditionNoAnims">
+        <On Terms="ActorCreation" Send="$Stand"/>
+        <On Terms="AnimDone; AnimName Stand" Send="$Stand"/>
+        <On Terms="AnimPlay; AnimName Stand" Send="Create MarineCheerSquibSound"/>
+        <HostSiteOps Ops="SOpAttachWeapon"/>
+        <Model value="MarineAttackLaunch"/>
+    </CActorModel>
+    <CActorSound id="AP_Marine_Land" parent="SoundOneShot">
+        <Sound value="Marine_Land"/>
+    </CActorSound>
 </Catalog>

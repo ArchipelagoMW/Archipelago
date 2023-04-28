@@ -27,4 +27,8 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_FirebatJuggernautPlating" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeStabilizerMedPacksCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_StabilizerMedPacks" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>
