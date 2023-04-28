@@ -15,7 +15,7 @@ class LandstalkerItemData(NamedTuple):
 
 
 item_table: Dict[str, LandstalkerItemData] = {
-    "EkeEke":               LandstalkerItemData(0, ItemClassification.useful, 58),
+    "EkeEke":               LandstalkerItemData(0, ItemClassification.useful, 50),
     "Magic Sword":          LandstalkerItemData(1, ItemClassification.useful, 1),
     "Sword of Ice":         LandstalkerItemData(2, ItemClassification.useful, 1),
     "Thunder Sword":        LandstalkerItemData(3, ItemClassification.useful, 1),
@@ -83,7 +83,9 @@ item_table: Dict[str, LandstalkerItemData] = {
     "20 Golds":             LandstalkerItemData(65, ItemClassification.useful, 15),
     "50 Golds":             LandstalkerItemData(66, ItemClassification.useful, 7),
     "100 Golds":            LandstalkerItemData(67, ItemClassification.useful, 5),
-    "200 Golds":            LandstalkerItemData(68, ItemClassification.useful, 2)
+    "200 Golds":            LandstalkerItemData(68, ItemClassification.useful, 2),
+
+    "Progressive Armor":    LandstalkerItemData(69, ItemClassification.useful, 0)
 }
 
 

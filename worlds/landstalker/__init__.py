@@ -75,6 +75,8 @@ class LandstalkerWorld(World):
         self.dark_region_ids = darkenable_regions[self.dark_dungeon_id]
 
     def create_item(self, name: str) -> LandstalkerItem:
+        if self.get_setting('progressive_armors').value == 1 and 'Breast' in name:
+            name = 'Progressive Armor'
         data = item_table[name]
         return LandstalkerItem(name, data.classification, BASE_ITEM_ID + data.id, self.player)
 
@@ -84,12 +86,12 @@ class LandstalkerWorld(World):
             item_pool += [self.create_item(name) for _ in range(0, data.quantity)]
 
         # Add jewels to the item pool depending on the number of jewels set in generation settings
-        jewel_count = self.multiworld.jewel_count[self.player].value
+        jewel_count = self.get_setting('jewel_count').value
         required_jewels = ["Red Jewel", "Purple Jewel", "Green Jewel", "Blue Jewel", "Yellow Jewel"]
         del required_jewels[jewel_count:]
         item_pool += [self.create_item(name) for name in required_jewels]
 
-        # Fill the rest of the item pool with empty items
+        # Fill the rest of the item pool with EkeEke
         unfilled_location_count = len(self.multiworld.get_unfilled_locations(self.player))
         while len(item_pool) < unfilled_location_count:
             item_pool.append(self.create_item("EkeEke"))
