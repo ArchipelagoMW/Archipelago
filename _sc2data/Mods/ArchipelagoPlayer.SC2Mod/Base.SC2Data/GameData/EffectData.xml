@@ -65,4 +65,39 @@
         <EditorCategories value="Race:Terran"/>
         <Amount value="2"/>
     </CEffectDamage>
+    <CEffectEnumArea id="AP_MarauderSlowAOE">
+        <ValidatorArray value="AP_PunisherGrenadesResearched"/>
+        <EditorCategories value="Race:Terran"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Massive,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1" Effect="AP_PunisherGrenadesSlow"/>
+    </CEffectEnumArea>
+    <CEffectLaunchMissile id="AP_PunisherGrenadesLM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_PunisherGrenadesSet"/>
+        <AmmoUnit value="AP_PunisherGrenadesLMWeapon"/>
+        <Movers Link="AP_PunisherGrenadesWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_PunisherGrenadesSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_PunisherGrenadesSlow"/>
+        <EffectArray value="AP_PunisherGrenadesU"/>
+        <EffectArray value="AP_MarauderSlowAOE"/>
+        <EffectArray value="AP_MarauderSlowAOE"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_PunisherGrenadesSlow">
+        <ValidatorArray index="0" value="AP_PunisherGrenadesResearched"/>
+        <ValidatorArray value="AP_PunisherGrenadesSlowTargetFilters"/>
+        <ValidatorArray value="NotStructure"/>
+        <ValidatorArray value="NotFrenzied"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_Slow"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_PunisherGrenadesU" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Armored" value="10"/>
+        <Kind value="Ranged"/>
+        <Amount value="10"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
 </Catalog>

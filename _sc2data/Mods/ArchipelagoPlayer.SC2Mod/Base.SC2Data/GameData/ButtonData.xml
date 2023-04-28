@@ -20,4 +20,14 @@
         <EditorCategories value="Race:Terran"/>
         <TintRacially value="1"/>
     </CButton>
+    <CButton id="AP_AblativeScales">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-kineticfoam.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_JackhammerConcussionGrenade">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-jackhammerconcussion.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
 </Catalog>

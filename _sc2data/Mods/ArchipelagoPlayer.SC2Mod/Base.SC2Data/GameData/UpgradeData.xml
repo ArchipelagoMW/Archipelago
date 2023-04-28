@@ -68,4 +68,35 @@
         <EffectArray Reference="Effect,AP_heal,RechargeVitalRate" Value="1.000000"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_JuggernautPlating">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Unit,AP_Marauder,LifeArmor" Value="2.000000"/>
+        <EffectArray Reference="Unit,AP_HammerSecurity,LifeArmor" Value="2.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_MarauderLifeBoost">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Unit,AP_Marauder,LifeMax" Value="25"/>
+        <EffectArray Reference="Unit,AP_Marauder,LifeStart" Value="25"/>
+        <EffectArray Reference="Unit,AP_HammerSecurity,LifeMax" Value="25"/>
+        <EffectArray Reference="Unit,AP_HammerSecurity,LifeStart" Value="25"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Marauder"/>
+    </CUpgrade>
+    <CUpgrade id="AP_PunisherGrenades">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-terran-punishergrenade-color.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="100"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Marauder"/>
+    </CUpgrade>
+    <CUpgrade id="AP_JackhammerConcussionGrenades">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terran"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

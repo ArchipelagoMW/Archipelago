@@ -581,7 +581,12 @@ def calculate_items(ctx: SC2Context) -> typing.List[int]:
     return accumulators
 
 
-def calc_difficulty(difficulty):
+def calc_difficulty(difficulty):async def starcraft_launch(ctx: SC2Context, mission_id: int):
+    sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id]}. If game does not launch check log file for errors.")
+
+    with DllDirectory(None):
+        run_game(sc2.maps.get(maps_table[mission_id - 1]), [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id),
+                                                                name="Archipelago", fullscreen=True)], realtime=True)
     if difficulty == 0:
         return 'C'
     elif difficulty == 1:

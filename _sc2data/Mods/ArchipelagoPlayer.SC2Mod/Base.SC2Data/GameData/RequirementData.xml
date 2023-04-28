@@ -23,4 +23,15 @@
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeFirebatJuggernautPlatingCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_UseAblativeScales">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMarauderLifeBoostCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseJackhammerConcussiveGrenade">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeJackhammerConcussionGrenadesCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_JackhammerConcussionGrenadesResearched">
+        <NodeArray index="Use" Link="AP_CountUpgradeJackhammerConcussionGrenadesCompleteOnly"/>
+    </CRequirement>
 </Catalog>

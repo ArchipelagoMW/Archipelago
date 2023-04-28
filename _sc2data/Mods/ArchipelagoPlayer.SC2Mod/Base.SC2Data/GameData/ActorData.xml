@@ -181,7 +181,6 @@
             <Image value="Assets\Textures\Wireframe-Terran-Marine.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-unit-terran-marine.dds"/>
-        <HighlightTooltip value="Unit/Name/AP_Marine"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
         <UnitIcon value="Assets\Textures\btn-unit-terran-marine.dds"/>
         <Wireframe>
@@ -208,4 +207,63 @@
     <CActorSound id="AP_Marine_Land" parent="SoundOneShot">
         <Sound value="Marine_Land"/>
     </CActorSound>
+    <CActorUnit id="AP_Marauder" parent="GenericUnitBase" unitName="AP_Marauder">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="ActorCreation" Send="StatusSet WeaponNext 0"/>
+        <On Terms="Effect.AP_PunisherGrenadesLM.Start; At Caster" Send="StatusIncrement WeaponNext"/>
+        <On Terms="Effect.AP_PunisherGrenadesLM.Start; At Caster; IsStatus WeaponNext 2" Send="StatusSet WeaponNext 0"/>
+        <On Terms="Effect.AP_PunisherGrenadesLM.Start; At Caster; IsStatus WeaponNext 0" Send="AnimClear AttackRight"/>
+        <On Terms="Effect.AP_PunisherGrenadesLM.Start; At Caster; IsStatus WeaponNext 0" Send="AnimPlay AttackLeft Attack,Left"/>
+        <On Terms="Effect.AP_PunisherGrenadesLM.Start; At Caster; IsStatus WeaponNext 1" Send="AnimClear AttackLeft"/>
+        <On Terms="Effect.AP_PunisherGrenadesLM.Start; At Caster; IsStatus WeaponNext 1" Send="AnimPlay AttackRight Attack,Right"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="AnimClear AttackLeft"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="AnimClear AttackRight"/>
+        <On Terms="ModelEvent; ModelEventName AnimClear" Send="AnimClear AttackLeft"/>
+        <On Terms="ModelEvent; ModelEventName AnimClear" Send="AnimClear AttackRight"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <Model value="Marauder"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="Marauder"/>
+        <DeathArray index="Normal" ModelLink="MarauderDeath" SoundLink="Marauder_Explode"/>
+        <DeathArray index="Eviscerate" ModelLink="MarauderDeathEviscerate" SoundLink="Uni_DeathFXEviscerate"/>
+        <DeathArray index="Silentkill" SoundLink="Uni_DeathFXSilentKill"/>
+        <PlacementModel value="Marauder"/>
+        <PortraitModel value="MarauderPortrait"/>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <BarOffset value="60"/>
+        <BarWidth value="50"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Marauder.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-marauder.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="Marauder_Ready"/>
+        <SoundArray index="Help" value="Marauder_Help"/>
+        <SoundArray index="What" value="Marauder_What"/>
+        <SoundArray index="Yes" value="Marauder_Yes"/>
+        <SoundArray index="Attack" value="Marauder_Attack"/>
+        <SoundArray index="Pissed" value="Marauder_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-marauder.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Marauder.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_MarauderAttack" parent="MarauderAttackBase" effectImpact="AP_PunisherGrenadesU" effectLaunch="AP_PunisherGrenadesLM">
+        <On Terms="Effect.AP_PunisherGrenadesLM.Start; At Caster; !ValidateEffect AP_PunisherGrenadesResearched" Send="Create"/>
+        <LaunchAttachQuery Methods="AMPatternMarauder"/>
+        <LaunchAssets Model="MarauderAttackLaunch"/>
+        <Missile value="AP_MarauderAttackMissile"/>
+    </CActorAction>
+    <CActorMissile id="AP_MarauderAttackMissile" parent="GenericAttackMissile" unitName="AP_PunisherGrenadesLMWeapon">
+        <Model value="AP_PunisherGrenadesLMWeapon"/>
+    </CActorMissile>
+    <CActorAction id="AP_MarauderUpgradedAttack" parent="MarauderAttackBase" effectImpact="AP_PunisherGrenadesU" effectLaunch="AP_PunisherGrenadesLM">
+        <On Terms="Effect.AP_PunisherGrenadesLM.Start; At Caster; ValidateEffect AP_PunisherGrenadesResearched" Send="Create"/>
+        <LaunchAttachQuery Methods="AMPatternMarauder"/>
+        <LaunchAssets Model="MarauderAttackLaunch"/>
+        <Missile value="AP_MarauderAttackMissile"/>
+        <ImpactMap index="None" Model="MarauderUpgradedAttackImpact"/>
+    </CActorAction>
 </Catalog>

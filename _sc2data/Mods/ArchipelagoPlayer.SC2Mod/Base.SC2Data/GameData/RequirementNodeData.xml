@@ -31,4 +31,12 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_StabilizerMedPacks" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeJackhammerConcussionGrenadesCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_JackhammerConcussionGrenades" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeMarauderLifeBoostCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_MarauderLifeBoost" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

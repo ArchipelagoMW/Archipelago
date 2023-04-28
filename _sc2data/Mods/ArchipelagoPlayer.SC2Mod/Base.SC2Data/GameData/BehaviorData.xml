@@ -16,4 +16,11 @@
         <Period value="1"/>
         <PeriodicEffect value="AP_FlameThrowerViralPlasmaDoTDamage"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_Slow">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-slow.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="1.5"/>
+        <Modification MoveSpeedMultiplier="0.5"/>
+    </CBehaviorBuff>
 </Catalog>
