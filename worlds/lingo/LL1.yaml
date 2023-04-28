@@ -2718,8 +2718,8 @@
         painting: True
       The Artistic (Panda):
         door: Door to Panda
-      The Artistic (Lattice):
-        room: The Artistic (Lattice)
+      The Artistic (Apple):
+        room: The Artistic (Apple)
         door: Door to Smiley
       Elements Area:
         room: Hallway Room (4)
@@ -2798,8 +2798,8 @@
       The Artistic (Smiley):
         room: The Artistic (Smiley)
         door: Door to Panda
-      The Artistic (Apple):
-        door: Door to Apple
+      The Artistic (Lattice):
+        door: Door to Lattice
     panels:
       EYE (Top):
         id: Ceiling Room/Panel_blue_top_1
@@ -2826,11 +2826,11 @@
         id: Ceiling Room/Panel_blue_mid_4
         colors: blue
     doors:
-      Door to Apple:
+      Door to Lattice:
         id:
           - Ceiling Room Doors/Door_red
           - Ceiling Room Doors/Door_red2
-        location_name: The Artistic - Panda and Apple
+        location_name: The Artistic - Panda and Lattice
         group: Artistic Doors
         panels:
           - EYE (Top)
@@ -2841,38 +2841,36 @@
           - DAYS
           - NIGHTTIME
           - NIGHT
-          - room: The Artistic (Apple)
+          - room: The Artistic (Lattice)
             panel: POSH
-          - room: The Artistic (Apple)
+          - room: The Artistic (Lattice)
             panel: MALL
-          - room: The Artistic (Apple)
+          - room: The Artistic (Lattice)
             panel: DEICIDE
-          - room: The Artistic (Apple)
+          - room: The Artistic (Lattice)
             panel: WAVER
-          - room: The Artistic (Apple)
+          - room: The Artistic (Lattice)
             panel: REPAID
-          - room: The Artistic (Apple)
+          - room: The Artistic (Lattice)
             panel: BABY
-          - room: The Artistic (Apple)
+          - room: The Artistic (Lattice)
             panel: LOBE
-          - room: The Artistic (Apple)
+          - room: The Artistic (Lattice)
             panel: BOWELS
     paintings:
       - id: panda_painting_3
         exit_only: True
         orientation: south
         required_when_no_doors: True
-  The Artistic (Apple):
+  The Artistic (Lattice):
     entrances:
-      Orange Tower Sixth Floor:
-        painting: True
       Directional Gallery:
         painting: True
       The Artistic (Panda):
         room: The Artistic (Panda)
-        door: Door to Apple
-      The Artistic (Lattice):
         door: Door to Lattice
+      The Artistic (Apple):
+        door: Door to Apple
     panels:
       POSH:
         id: Ceiling Room/Panel_black_top_12
@@ -2899,11 +2897,11 @@
         id: Ceiling Room/Panel_red_mid_15
         colors: red
     doors:
-      Door to Lattice:
+      Door to Apple:
         id:
           - Ceiling Room Doors/Door_black
           - Ceiling Room Doors/Door_black2
-        location_name: The Artistic - Apple and Lattice
+        location_name: The Artistic - Lattice and Apple
         group: Artistic Doors
         panels:
           - POSH
@@ -2914,34 +2912,36 @@
           - BABY
           - LOBE
           - BOWELS
-          - room: The Artistic (Lattice)
+          - room: The Artistic (Apple)
             panel: SPRIG
-          - room: The Artistic (Lattice)
+          - room: The Artistic (Apple)
             panel: RELEASES
-          - room: The Artistic (Lattice)
+          - room: The Artistic (Apple)
             panel: MUCH
-          - room: The Artistic (Lattice)
+          - room: The Artistic (Apple)
             panel: FISH
-          - room: The Artistic (Lattice)
+          - room: The Artistic (Apple)
             panel: MASK
-          - room: The Artistic (Lattice)
+          - room: The Artistic (Apple)
             panel: HILL
-          - room: The Artistic (Lattice)
+          - room: The Artistic (Apple)
             panel: TINE
-          - room: The Artistic (Lattice)
+          - room: The Artistic (Apple)
             panel: THING
     paintings:
       - id: cherry_painting3
         orientation: north
         exit_only: True
         required_when_no_doors: True
-  The Artistic (Lattice):
+  The Artistic (Apple):
     entrances:
+      Orange Tower Sixth Floor:
+        painting: True
       Directional Gallery:
         painting: True
-      The Artistic (Apple):
-        room: The Artistic (Apple)
-        door: Door to Lattice
+      The Artistic (Lattice):
+        room: The Artistic (Lattice)
+        door: Door to Apple
       The Artistic (Smiley):
         door: Door to Smiley
     panels:
@@ -2974,7 +2974,7 @@
         id:
           - Ceiling Room Doors/Door_yellow
           - Ceiling Room Doors/Door_yellow2
-        location_name: The Artistic - Lattice and Smiley
+        location_name: The Artistic - Apple and Smiley
         group: Artistic Doors
         panels:
           - SPRIG
