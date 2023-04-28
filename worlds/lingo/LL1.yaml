@@ -3075,10 +3075,6 @@
       The Wondrous (Chandelier):
         painting: True
       The Wondrous (Table): True # There is a way that doesn't use the painting
-    panels:
-      BROOK NOD:
-        id: Wonderland Room/Panel_brooknod_doorknob
-        colors: yellow
     doors:
       Painting Shortcut:
         painting_id:
@@ -3141,6 +3137,12 @@
       WOOD:
         id: Wonderland Room/Panel_wood_table
         colors: brown
+      BROOK NOD:
+        # This panel, while physically being in the first room, is facing upward
+        # and is only really solvable while standing on the windowsill, which is
+        # a location you can only get to from Table.
+        id: Wonderland Room/Panel_brooknod_doorknob
+        colors: yellow
     paintings:
       - id: symmetry_painting_a_2
         orientation: west
@@ -3166,7 +3168,7 @@
         event: True
         panels:
           - FIREPLACE
-          - room: The Wondrous (Doorknob)
+          - room: The Wondrous (Table)
             panel: BROOK NOD
           - room: The Wondrous (Bookcase)
             panel: CASE
