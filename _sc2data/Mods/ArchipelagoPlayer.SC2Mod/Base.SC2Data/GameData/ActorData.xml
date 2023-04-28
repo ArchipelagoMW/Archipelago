@@ -3,8 +3,8 @@
     <CActorUnit id="AP_Medic" parent="GenericUnitStandard" unitName="AP_Medic">
         <Aliases value="_UnitSmall"/>
         <Macros value="UnloadDropAnim"/>
-        <On Terms="Abil.heal.SourceChannelStart" Send="$Spell PlayForever"/>
-        <On Terms="Abil.heal.SourceChannelStop" Send="AnimClear Spell"/>
+        <On Terms="Abil.AP_heal.SourceChannelStart" Send="$Spell PlayForever"/>
+        <On Terms="Abil.AP_heal.SourceChannelStop" Send="AnimClear Spell"/>
         <On Terms="Behavior.KillSquad.On" Send="ModelSwap MedicKillSquad"/>
         <On Terms="UnitDeathCustomize; ValidateUnit IsKillSquad" Send="DeathCustomize Variation2"/>
         <DeathArray index="Normal" ModelLink="AP_MedicDeath" SoundLink="AP_Medic_Explode"/>
