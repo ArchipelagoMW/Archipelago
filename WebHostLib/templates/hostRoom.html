@@ -32,13 +32,18 @@
         {% endif %}
         {{ macros.list_patches_room(room) }}
         {% if room.owner == session["_id"] %}
-            <form method=post>
-                <div class="form-group">
-                    <label for="cmd"></label>
-                    <input class="form-control" type="text" id="cmd" name="cmd"
-                           placeholder="Server Command. /help to list them, list gets appended to log.">
-                </div>
-            </form>
+            <div style="display: flex; align-items: center;">
+                <form method=post style="flex-grow: 1; margin-right: 1em;">
+                    <div class="form-group">
+                        <label for="cmd"></label>
+                        <input class="form-control" type="text" id="cmd" name="cmd"
+                               placeholder="Server Command. /help to list them, list gets appended to log.">
+                    </div>
+                </form>
+                <a href="{{ url_for("display_log", room=room.id) }}">
+                    Open Log File...
+                </a>
+            </div>
         <div id="logger"></div>
         <script type="application/ecmascript">
             let xmlhttp = new XMLHttpRequest();
