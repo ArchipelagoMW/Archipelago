@@ -1,16 +1,18 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, Union, Optional, Iterable, Sized, List
+from typing import Dict, Union, Optional, Iterable, Sized, List, Set
 
 from . import options
 from .data import all_fish, FishItem, all_purchasable_seeds, SeedItem, all_crops, CropItem
 from .data.bundle_data import BundleItem
+from .data.fish_data import island_fish
 from .data.museum_data import all_museum_items, MuseumItem, all_artifact_items
 from .data.region_data import SVRegion
 from .data.villagers_data import all_villagers_by_name
 from .items import all_items, Group
 from .options import StardewOptions
+from .regions import stardew_valley_regions
 from .stardew_rule import False_, Reach, Or, True_, Received, Count, And, Has, TotalReceived, StardewRule
 
 MAX_MONTHS = 12
@@ -791,6 +793,9 @@ class StardewLogic:
     def can_catch_every_fish(self) -> StardewRule:
         rules = [self.has_skill_level("Fishing", 10), self.has_max_fishing_rod()]
         for fish in all_fish:
+            if self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true and\
+                    fish in island_fish:
+                continue
             rules.append(self.can_catch_fish(fish))
         return And(rules)
 
@@ -1293,3 +1298,9 @@ class StardewLogic:
         gems = ["Amethyst", "Aquamarine", "Emerald", "Ruby", "Topaz"]
         return reach_entire_island & self.has("Banana") & self.has(gems) & self.can_mine_perfectly() & \
                self.can_fish_perfectly() & self.has("Flute Block")
+
+    def has_everything(self, all_progression_items: Set[str]) -> StardewRule:
+        all_regions = [region.name for region in stardew_valley_regions]
+        rules = self.received(all_progression_items, len(all_progression_items)) &\
+                self.can_reach_all_regions(all_regions)
+        return rules

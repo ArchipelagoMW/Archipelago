@@ -210,16 +210,18 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestBase):
                         {island_option.internal_name: island_option.option_true,
                          option.internal_name: option.options[value]})
                     if multiworld.worlds[self.player].options[island_option.internal_name] != island_option.option_true:
-                        return
+                        continue
                     basic_checks(self, multiworld)
                     check_no_ginger_island(self, multiworld)
 
-    def test_given_walnut_hunter_goal_then_override_exclude_ginger_island(self):
+    def test_given_island_related_goal_then_override_exclude_ginger_island(self):
+        island_goals = [value for value in options.Goal.options if value in ["greatest_walnut_hunter", "perfection"]]
         island_option = options.ExcludeGingerIsland
-        for value in island_option.options:
-            with self.subTest(f"{island_option.internal_name}: {value}"):
-                multiworld = setup_solo_multiworld(
-                    {options.Goal.internal_name: options.Goal.option_greatest_walnut_hunter,
-                        island_option.internal_name: island_option.options[value]})
-                basic_checks(self, multiworld)
-                self.assertEqual(multiworld.worlds[self.player].options[island_option.internal_name], island_option.option_false)
+        for goal in island_goals:
+            for value in island_option.options:
+                with self.subTest(f"Goal: {goal}, {island_option.internal_name}: {value}"):
+                    multiworld = setup_solo_multiworld(
+                        {options.Goal.internal_name: options.Goal.options[goal],
+                            island_option.internal_name: island_option.options[value]})
+                    self.assertEqual(multiworld.worlds[self.player].options[island_option.internal_name], island_option.option_false)
+                    basic_checks(self, multiworld)

@@ -101,6 +101,7 @@ events_locations = [
     LocationData(None, "Stardew Valley", "Complete the Museum Collection"),
     LocationData(None, "Stardew Valley", "Full House"),
     LocationData(None, "Stardew Valley", "Greatest Walnut Hunter"),
+    LocationData(None, "Stardew Valley", "Perfection"),
 ]
 
 all_locations = load_location_csv() + events_locations

@@ -136,11 +136,11 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
 
 
 def set_ginger_island_rules(logic: StardewLogic, multi_world, player, world_options: StardewOptions):
+    set_island_entrances_rules(logic, multi_world, player)
     if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
         return
 
     set_boat_repair_rules(logic, multi_world, player)
-    set_island_entrances_rules(logic, multi_world, player)
     set_island_parrot_rules(logic, multi_world, player)
 
 
@@ -151,14 +151,14 @@ def set_boat_repair_rules(logic: StardewLogic, multi_world, player):
                              logic.has("Iridium Bar").simplify())
     MultiWorldRules.add_rule(multi_world.get_location("Repair Ticket Machine", player),
                              logic.has("Battery Pack").simplify())
+
+
+def set_island_entrances_rules(logic: StardewLogic, multi_world, player):
     boat_repaired = logic.received("Boat Repair").simplify()
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.fish_shop_to_boat_tunnel, player),
                              boat_repaired)
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.boat_to_ginger_island, player),
                              boat_repaired)
-
-
-def set_island_entrances_rules(logic: StardewLogic, multi_world, player):
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_west, player),
                              logic.received("Island West Turtle").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_north, player),

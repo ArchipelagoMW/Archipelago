@@ -1,7 +1,7 @@
 import logging
-from typing import Dict, Any, Iterable, Optional, Union
+from typing import Dict, Any, Iterable, Optional, Union, Set
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, CollectionState
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, CollectionState, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from . import rules, logic, options
 from .bundles import get_all_bundles, Bundle
@@ -63,6 +63,7 @@ class StardewValleyWorld(World):
     web = StardewWebWorld()
     modified_bundles: Dict[str, Bundle]
     randomized_entrances: Dict[str, str]
+    all_progression_items: Set[str]
 
     def generate_early(self):
         self.options = fetch_options(self.multiworld, self.player)
@@ -76,11 +77,13 @@ class StardewValleyWorld(World):
 
     def force_change_options_if_incompatible(self):
         goal_is_walnut_hunter = self.options[options.Goal] == options.Goal.option_greatest_walnut_hunter
+        goal_is_perfection = self.options[options.Goal] == options.Goal.option_perfection
+        goal_is_island_related = goal_is_walnut_hunter or goal_is_perfection
         exclude_ginger_island = self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
-        if goal_is_walnut_hunter and exclude_ginger_island:
+        if goal_is_island_related and exclude_ginger_island:
             self.options[options.ExcludeGingerIsland] = options.ExcludeGingerIsland.option_false
-            logging.warning(
-                f"Goal 'Greatest Walnut Hunter' requires Ginger Island. Exclude Ginger Island setting forced to 'False'")
+            goal = options.Goal.name_lookup[self.options[options.Goal]]
+            logging.warning(f"Goal '{goal}' requires Ginger Island. Exclude Ginger Island setting forced to 'False'")
 
     def create_regions(self):
         def create_region(name: str, exits: Iterable[str]) -> Region:
@@ -100,6 +103,7 @@ class StardewValleyWorld(World):
         create_locations(add_location, self.options, self.multiworld.random)
 
     def create_items(self):
+        self.all_progression_items = set()
         self.precollect_starting_season()
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]
@@ -194,6 +198,10 @@ class StardewValleyWorld(World):
             self.create_event_location(location_table["Greatest Walnut Hunter"],
                                        self.logic.has_walnut(130).simplify(),
                                        "Victory")
+        elif self.options[options.Goal] == options.Goal.option_perfection:
+            self.create_event_location(location_table["Perfection"],
+                                       self.logic.has_everything(self.all_progression_items).simplify(),
+                                       "Victory")
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
@@ -201,6 +209,8 @@ class StardewValleyWorld(World):
         if isinstance(item, str):
             item = item_table[item]
 
+        if item.classification == ItemClassification.progression:
+            self.all_progression_items.add(item.name)
         return StardewItem(item.name, item.classification, item.code, self.player)
 
     def create_event_location(self, location_data: LocationData, rule: StardewRule, item: Optional[str] = None):

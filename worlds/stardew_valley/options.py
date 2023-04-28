@@ -57,7 +57,7 @@ class Goal(Choice):
     # option_legend =
     # option_beloved_farmer =
     # option_master_of_the_five_ways =
-    # option_perfection =
+    option_perfection = 25
 
     @classmethod
     def get_option_name(cls, value) -> str:
