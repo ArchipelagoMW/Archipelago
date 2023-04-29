@@ -86,4 +86,101 @@
         <CastOutroTime value="0.35"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_D8Charge" State="Restricted" Requirements="AP_UseG4ClusterBombs"/>
     </CAbilEffectTarget>
+    <CAbilSpecialize id="AP_MakeVultureSpiderMines">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Activity value="UI/AP_SpiderMineBuilding"/>
+        <InfoArray index="Specialize1" Time="12" Effect="AP_ReplenishMines">
+            <Resource index="Minerals" value="15"/>
+            <Display index="Minerals" value="1"/>
+            <Charge>
+                <CountMax value="3"/>
+                <CountUse value="1"/>
+                <HideCount value="1"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Button DefaultButtonFace="AP_SpiderMineReplenish" Requirements="AP_UseNanoConstructor"/>
+            <Flags index="AutoCast" value="1"/>
+        </InfoArray>
+        <Alert value="BuildComplete"/>
+        <Flags index="BestUnit" value="0"/>
+    </CAbilSpecialize>
+    <CAbilEffectTarget id="AP_SpiderMineUnburrowRangeDummy">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Range value="2"/>
+    </CAbilEffectTarget>
+    <CAbilQueue id="AP_VultureQueue3">
+        <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
+        <QueueSize value="3"/>
+        <Flags index="Passive" value="1"/>
+    </CAbilQueue>
+    <CAbilMorph id="AP_VultureSpiderMineUnburrow">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <ActorKey value="BurrowUp"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <Cost>
+            <Charge Link="Abil/AP_SpiderMineUnburrow"/>
+            <Cooldown Link="Abil/AP_SpiderMineUnburrow"/>
+        </Cost>
+        <InfoArray Unit="AP_SpiderMine">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="0.6"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Duration" value="0.6"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Duration" value="0.6"/>
+                <EffectArray index="Start" value="AP_SpiderMineInvulnerable"/>
+            </SectionArray>
+        </InfoArray>
+        <AutoCastFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Worker,Missile,Stasis,Dead,Hidden,Invulnerable,Benign"/>
+        <AutoCastRange value="2"/>
+        <AutoCastCountMin value="1"/>
+    </CAbilMorph>
+    <CAbilEffectTarget id="AP_VultureSpiderMines">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_SpawnSpiderMineSet"/>
+        <Cost>
+            <Charge>
+                <CountMax value="3"/>
+                <CountStart value="3"/>
+                <CountUse value="1"/>
+                <Location value="Unit"/>
+            </Charge>
+        </Cost>
+        <Placeholder value="SpiderMine"/>
+        <Range value="3"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SpiderMine"/>
+    </CAbilEffectTarget>
+    <CAbilMorph id="AP_VultureSpiderMineBurrow">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <ActorKey value="BurrowDown"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <Cost>
+            <Charge Link="Abil/AP_SpiderMineBurrow"/>
+            <Cooldown Link="Abil/AP_SpiderMineBurrow"/>
+        </Cost>
+        <InfoArray Unit="AP_SpiderMineBurrowed">
+            <SectionArray index="Actor">
+                <DurationArray index="Delay" value="3.5332"/>
+                <DurationArray index="Duration" value="1.067"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Delay" value="3.5332"/>
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="4.5332"/>
+                <EffectArray index="Start" value="AP_SpiderMineVulnerable"/>
+            </SectionArray>
+        </InfoArray>
+        <AutoCastFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Worker,Missile,Stasis,Dead,Hidden,Invulnerable,Benign"/>
+        <AutoCastRange value="2"/>
+    </CAbilMorph>
 </Catalog>

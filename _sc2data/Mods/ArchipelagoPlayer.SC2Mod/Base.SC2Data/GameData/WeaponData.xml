@@ -68,4 +68,23 @@
         <Effect value="AP_InfernalFlameThrowerCP"/>
         <LegacyOptions index="LockTurretWhileFiring" value="1"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_Vulture">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="AP_VultureU"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Period value="1.694"/>
+        <Backswing value="0"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_VultureSpiderMines">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-spidermine.dds"/>
+        <DisplayEffect value="AP_VultureSpiderMinesDamage"/>
+        <TargetFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.1"/>
+        <Period value="0.833"/>
+        <Effect value="AP_VultureSpiderMinesSet"/>
+    </CWeaponLegacy>
 </Catalog>

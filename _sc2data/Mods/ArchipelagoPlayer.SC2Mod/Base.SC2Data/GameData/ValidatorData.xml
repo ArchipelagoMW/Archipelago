@@ -47,6 +47,29 @@
     </CValidatorPlayerRequirement>
     <CValidatorPlayerRequirement id="AP_HasTwinLinkedFlameThrowers">
         <Find value="1"/>
-        <Value value="UseTwinLinkedFlameThrowers"/>
+        <Value value="AP_UseTwinLinkedFlameThrowers"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_IsVulture">
+        <Value value="AP_Vulture"/>
+    </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_HasCerberusMines">
+        <Find value="1"/>
+        <Value value="AP_UseCerberusMines"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_NotSpiderMine">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="AP_SpiderMine"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotSpiderMineBurrowed">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="AP_SpiderMineBurrowed"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareChargeUsed id="AP_SpiderMineUsed">
+        <ResultFailed value="Error,VultureMineMax"/>
+        <Compare value="GT"/>
+        <ChargeLink value="Abil/AP_VultureSpiderMines"/>
+        <Location value="Unit"/>
+    </CValidatorUnitCompareChargeUsed>
 </Catalog>

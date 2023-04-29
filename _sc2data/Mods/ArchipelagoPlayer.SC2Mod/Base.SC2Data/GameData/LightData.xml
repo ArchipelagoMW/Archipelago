@@ -34,4 +34,20 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
     </CLight>
+    <CLight id="AP_VulturePortrait" parent="default">
+        <ToDInfoArray index="0" AmbientColor="0.141176,0.000000,0.082353">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.950000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.294118,0.466667,0.749020"/>
+                <ColorMultiplier value="2.690000"/>
+                <SpecColorMultiplier value="3.020000"/>
+                <Direction value="-0.022873,0.274687,-0.961262"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.992157,0.819608,0.666667" ColorMultiplier="1.679000" Direction="0.830610,0.136762,-0.539800"/>
+            <DirectionalLight index="Back" Color="0.215686,0.380392,0.941176" ColorMultiplier="0.450000" Direction="-0.738852,0.475064,-0.477925"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
+    </CLight>
+
 </Catalog>

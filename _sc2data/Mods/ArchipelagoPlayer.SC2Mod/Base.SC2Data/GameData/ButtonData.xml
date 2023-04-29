@@ -58,4 +58,29 @@
         <EditorCategories value="Race:Terran"/>
         <TintRacially value="1"/>
     </CButton>
+    <CButton id="AP_CerberusMines">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-cerberusmine.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_ResearchSpiderMinesSC1">
+        <Icon value="Assets\Textures\btn-unit-terran-spidermine.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-unit-terran-spidermine.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_SpiderMine">
+        <Icon value="AP\Assets\Textures\btn-ability-terran-spidermine.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-ability-terran-spidermine.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_SpiderMineReplenish">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-replenishablemagazine.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-unit-terran-spidermine.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Vulture">
+        <Icon value="Assets\Textures\btn-unit-terran-vulture.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-vulture.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

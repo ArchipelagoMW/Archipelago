@@ -511,7 +511,6 @@
         <On Terms="Effect.AP_InfernalFlameThrower.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
         <On Terms="Effect.AP_InfernalFlameThrowerCP.Start; At Caster; !ValidatePlayer AP_HasHellionInfernalPreIgniter" Send="Create"/>
         <LaunchAssets Model="" Sound="Hellion_AttackLaunch"/>
-        <Beam value="AP_HellionAttackBeam"/>
         <BeamScope value="Caster"/>
         <Missile value="HellionAttackBaseMissile"/>
         <ImpactAttachQuery Methods="AMFilterTargetVolumes AMPreferGround AMArcTestWeapon AMVolumesWeightedPick"/>
@@ -587,4 +586,104 @@
         <HostSiteOps Ops="SOpAttachRandomDamage"/>
         <Model value="HellionUpgradedAttackDamageReactionStructure"/>
     </CActorModel>
+    <CActorModel id="AP_ScavengingSystemsHealModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_ScavengingSystemsHeal.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="SetScale 2.000000"/>
+        <Model value="AP_NanoRepairBeamImpact"/>
+    </CActorModel>
+    <CActorSound id="AP_ScavengingSystemsHealSound" parent="SoundOneShot">
+        <On Terms="Effect.ScavengingSystemsHeal.Start; At Target" Send="Create"/>
+    </CActorSound>
+    <CActorUnit id="AP_SpiderMineVulture" parent="GenericUnitStandard" unitName="AP_SpiderMine">
+        <Aliases value="_UnitSmall"/>
+        <On Terms="UnitBirth.AP_SpiderMineBurrowed" Send="Create"/>
+        <On Terms="UnitBirth.AP_SpiderMineBurrowed" Send="AnimPlay Burrow Burrow PlayForever,NonLooping"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SpiderMineBurrowed" Send="AnimPlay Burrow Burrow PlayForever,NonLooping"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SpiderMineBurrowed" Send="AnimClear Unburrow"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SpiderMine" Send="AnimClear Burrow"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SpiderMine" Send="AnimPlay Unburrow Unburrow"/>
+        <On Terms="AbilMorph.AP_VultureSpiderMineBurrow.Start" Send="Create AP_VultureSpiderMineBurrowSound"/>
+        <On Terms="Abil.attack.ReadyStart" Send="Create AP_VultureSpiderMineSeekSound"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HasCerberusMines" Send="ModelSwap AP_CerberusMine"/>
+        <DeathArray index="Normal" ModelLink="AP_SpiderMineExplosion" SoundLink="Terran_ExplosionSmall"/>
+        <PlacementModel value="AP_SpiderMinePlacement"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="10"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-SpiderMine.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="Birth" value="SpiderMineBirth"/>
+        <GroupSoundArray index="Ready" value="SpiderMineReady"/>
+        <GroupSoundArray index="Help" value="SpiderMineHelp"/>
+        <GroupSoundArray index="What" value="SpiderMineWhat"/>
+        <GroupSoundArray index="Yes" value="SpiderMineYes"/>
+        <GroupSoundArray index="Attack" value="SpiderMineYes"/>
+        <GroupSoundArray index="Pissed" value="SpiderMinePissed"/>
+        <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-SpiderMine.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="10"/>
+        <SoundArray index="Birth" value="SpiderMineBirth"/>
+        <SoundArray index="Ready" value="SpiderMineReady"/>
+        <SoundArray index="Help" value="SpiderMineHelp"/>
+        <SoundArray index="What" value="SpiderMineWhat"/>
+        <SoundArray index="Yes" value="SpiderMineYes"/>
+        <SoundArray index="Attack" value="SpiderMineYes"/>
+        <SoundArray index="Pissed" value="SpiderMinePissed"/>
+        <SoundArray index="Movement" value="SpiderMineMovement"/>
+        <SoundArray index="Turning" value="SpiderMineTurning"/>
+        <SoundArray index="Board" value="SpiderMineBoard"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-SpiderMine.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-SpiderMine.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="AP_Vulture" parent="GenericUnitStandard" unitName="AP_Vulture">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="UnloadDropAnim"/>
+        <DeathArray index="Normal" ModelLink="AP_VultureDeath" SoundLink="AP_Vulture_Explode"/>
+        <PortraitModel value="AP_VulturePortrait"/>
+        <AbilSoundArray AbilCmd="AP_VultureSpiderMines,0" Sound="AP_Vulture_SpiderMinePlace"/>
+        <BarOffset value="80"/>
+        <BarWidth value="102"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Vulture.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-vulture.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="40"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-vulture.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Vulture.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_VultureAttack" parent="GenericAttack" effectImpact="AP_VultureU" effectLaunch="AP_Vulture"/>
+    <CActorMissile id="AP_VultureAttackMissile" parent="GenericAttackMissile" unitName="AP_VultureWeapon"/>
+    <CActorAction id="AP_VultureSpiderMineAttack" parent="GenericAttack" effectAttack="AP_VultureSpiderMinesDamage">
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorSound id="AP_VultureSpiderMineBirthSound" parent="SoundOneShot">
+        <On Terms="AbilMorph.AP_VultureSpiderMineUnburrow.Start" Send="Create"/>
+        <Sound value="AP_Vulture_SpiderMinePlace"/>
+    </CActorSound>
+    <CActorSound id="AP_VultureSpiderMineBurrowSound" parent="SoundOneShot">
+        <Sound value="AP_Vulture_SpiderMineBurrow"/>
+    </CActorSound>
+    <CActorSound id="AP_VultureSpiderMineBury" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SpiderMine" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_SpiderMineBurrowed" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Sound value="AP_SpiderMineBurrow"/>
+    </CActorSound>
+    <CActorSound id="AP_VultureSpiderMineSeekSound" parent="SoundOneShot">
+        <Sound value="Vulture_SpiderMineSeek"/>
+    </CActorSound>
+    <CActorRange id="AP_VultureSpiderMineUnburrowRange">
+        <On Terms="SelectionLocalUpdate.AP_SpiderMineBurrowed.Start" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_SpiderMineBurrowed.Stop" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SpiderMineBurrowed" Send="Destroy"/>
+        <Abil Link="AP_SpiderMineUnburrowRangeDummy"/>
+    </CActorRange>
+    <CActorRange id="AP_VultureSpiderMinesRange" parent="RangeAbil" abil="AP_VultureSpiderMines"/>
 </Catalog>

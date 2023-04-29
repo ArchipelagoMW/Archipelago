@@ -66,4 +66,22 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_TwinLinkedFlameThrowers" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotUpgradeVultureSpeedQueuedOrBetter">
+        <OperandArray index="0" value="AP_UpgradeVultureSpeedQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_UpgradeVultureSpeedQueuedOrBetter">
+        <Count Link="AP_VultureSpeed" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeScavengingSystemsCompleteOnly">
+        <Count Link="AP_ScavengingSystems" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCerberusMinesCompleteOnly">
+        <Count Link="AP_CerberusMines" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNanoConstructorCompleteOnly">
+        <Count Link="AP_NanoConstructor" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
 </Catalog>

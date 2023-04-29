@@ -75,4 +75,18 @@
             <DeathResponse Chance="1" Effect="AP_ScavengingSystemsSearchArea"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SpiderMineInvulnerable">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VultureSpiderMineBurrowFirst">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="5"/>
+        <InitialEffect value="AP_VultureSpiderMineBurrowOrder"/>
+    </CBehaviorBuff>
 </Catalog>

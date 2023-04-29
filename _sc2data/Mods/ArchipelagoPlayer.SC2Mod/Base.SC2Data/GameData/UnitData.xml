@@ -561,4 +561,157 @@
         <GlossaryWeakArray value="Marauder"/>
         <HotkeyCategory value="Unit/Category/TerranUnits"/>
     </CUnit>
+    <CUnit id="AP_SpiderMine">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <FlagArray index="Uncommandable" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="25"/>
+        <LifeMax value="25"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
+        <Speed value="9"/>
+        <Acceleration value="1000"/>
+        <StationaryTurningRate value="2292.8906"/>
+        <Sight value="4"/>
+        <CostResource index="Minerals" value="25"/>
+        <RepairTime value="33.3332"/>
+        <AbilArray Link="AP_VultureSpiderMineBurrow"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <BehaviorArray Link="AP_VultureSpiderMineBurrowFirst"/>
+        <WeaponArray Link="AP_VultureSpiderMines"/>
+        <Radius value="0.125"/>
+        <SeparationRadius value="0"/>
+        <SubgroupPriority value="15"/>
+        <MinimapRadius value="0.25"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAI value="SpiderMineVulture"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="160"/>
+        <HotkeyCategory value="Unit/Category/TerranStory"/>
+        <KillDisplay value="Never"/>
+        <RankDisplay value="Never"/>
+    </CUnit>
+    <CUnit id="AP_SpiderMineBurrowed">
+        <Name value="Unit/Name/AP_SpiderMine"/>
+        <Description value="Button/Tooltip/SpiderMineVulture"/>
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <FlagArray index="Uncommandable" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="Cloaked" value="1"/>
+        <FlagArray index="Buried" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="25"/>
+        <LifeMax value="25"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
+        <Acceleration value="1000"/>
+        <StationaryTurningRate value="2292.8906"/>
+        <Sight value="4"/>
+        <CostResource index="Minerals" value="25"/>
+        <RepairTime value="33.3332"/>
+        <AbilArray Link="AP_VultureSpiderMineUnburrow"/>
+        <BehaviorArray Link="AP_VultureSpiderMineBurrowFirst"/>
+        <Radius value="0.125"/>
+        <SeparationRadius value="0"/>
+        <SubgroupPriority value="15"/>
+        <MinimapRadius value="0.25"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAI value="SpiderMineVultureBurrowed"/>
+        <LeaderAlias value="SpiderMine"/>
+        <SelectAlias value="SpiderMine"/>
+        <EquipmentArray Weapon="AP_VultureSpiderMines"/>
+    </CUnit>
+    <CUnit id="AP_Vulture">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Classic"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="75"/>
+        <LifeMax value="75"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
+        <Speed value="4.25"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="69.125"/>
+        <Sight value="9"/>
+        <Food value="-2"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="75"/>
+        <RepairTime value="25"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="15"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_VultureSpiderMines"/>
+        <AbilArray Link="AP_MakeVultureSpiderMines"/>
+        <AbilArray Link="AP_VultureQueue3"/>
+        <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
+        <WeaponArray Link="AP_Vulture"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AP_SpiderMine" Type="AbilCmd" AbilCmd="AP_VultureSpiderMines,0" Row="2" Column="0"/>
+            <LayoutButtons>
+                <Face value="AP_CerberusMines"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255,0"/>
+                <Requirements value="AP_UseCerberusMines"/>
+                <Row value="2"/>
+                <Column value="2"/>
+            </LayoutButtons>
+            <LayoutButtons Face="AP_SpiderMineReplenish" Type="AbilCmd" AbilCmd="AP_MakeVultureSpiderMines,0" Row="2" Column="1"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_VultureQueue3,0" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="0.625"/>
+        <SeparationRadius value="0.625"/>
+        <CargoSize value="2"/>
+        <ScoreMake value="75"/>
+        <ScoreKill value="150"/>
+        <SubgroupPriority value="12"/>
+        <MinimapRadius value="0.625"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAIThink value="AIThinkVulture"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="90"/>
+        <GlossaryStrongArray value="Zergling"/>
+        <GlossaryStrongArray value="Zealot"/>
+        <GlossaryStrongArray value="Marine"/>
+        <GlossaryWeakArray value="Roach"/>
+        <GlossaryWeakArray value="Colossus"/>
+        <GlossaryWeakArray value="SiegeTank"/>
+        <HotkeyCategory value="Unit/Category/TerranStory"/>
+    </CUnit>
+    <CUnit id="AP_VultureWeapon" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="MissileDefault"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
 </Catalog>

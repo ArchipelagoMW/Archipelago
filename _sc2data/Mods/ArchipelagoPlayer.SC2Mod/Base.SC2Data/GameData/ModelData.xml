@@ -102,7 +102,7 @@
     </CModel>
     <CModel id="AP_D8ClusterBomb" parent="Unit" Race="Terran">
         <Model value="Assets\Units\Terran\MagneticMine\MagneticMine.m3"/>
-        <LowQualityModel value="D8ClusterBombLow"/>
+        <LowQualityModel value="AP_D8ClusterBombLow"/>
         <ScaleMax value="0.600000,0.600000,0.600000"/>
         <ScaleMin value="0.600000,0.600000,0.600000"/>
         <SelectionLayer value="3"/>
@@ -127,5 +127,83 @@
         <Occlusion value="Show"/>
         <ScaleMax value="0.600000,0.600000,0.600000"/>
         <ScaleMin value="0.600000,0.600000,0.600000"/>
+    </CModel>
+    <CModel id="AP_NanoRepairBeamImpact" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\NanoRepairBeamImpact\NanoRepairBeamImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SpiderMine" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\SpiderMine\SpiderMine.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow02"/>
+        <Radius value="0.250000"/>
+        <SelectionLayer value="3"/>
+        <SelectionRadius value="0.250000"/>
+        <ShadowRadius value="0.250000"/>
+        <TechPurchaseCamera value="Star2CameraLow02"/>
+        <UnitGlossaryCamera value="Star2CameraLow02"/>
+    </CModel>
+    <CModel id="AP_SpiderMineExplosion" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\TerranSmallUnitDeath\TerranSmallUnitDeath.m3"/>
+        <LowQualityModel value="AP_SpiderMineExplosionLow"/>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.250000,0.250000,0.250000"/>
+        <ScaleMin value="0.250000,0.250000,0.250000"/>
+        <SelectionRadius value="2.000000"/>
+        <ShadowRadius value="2.000000"/>
+    </CModel>
+    <CModel id="AP_SpiderMinePlacement" parent="Placement" Race="Terran">
+        <Model value="Assets\Effects\Terran\SpiderMinePlacement\SpiderMinePlacement.m3"/>
+        <LowQualityModel value="AP_SpiderMine"/>
+        <SelectionRadius value="0.250000"/>
+        <ShadowRadius value="0.250000"/>
+    </CModel>
+    <CModel id="AP_Vulture" parent="Unit">
+        <Model value="Assets\Units\Terran\Vulture\Vulture.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid07"/>
+        <Radius value="0.650000"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionRadius value="0.722000"/>
+        <ShadowRadius value="0.722000"/>
+        <TechPurchaseCamera value="TechPurchaseVehicle"/>
+        <Tipability value="1.000000"/>
+        <TipabilityLength value="0.800000"/>
+        <TipabilityWidth value="0.400000"/>
+        <UnitGlossaryCamera value="Star2CameraMid07"/>
+    </CModel>
+    <CModel id="AP_VultureAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\VikingFighterMissileImpact\VikingFighterMissileImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_VultureAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\GhostFireSprite\GhostFireSprite.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_VultureDeath" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Units\Terran\VultureDeath\VultureDeath.m3"/>
+        <LowQualityModel value="TerranMediumUnitDeathLow"/>
+    </CModel>
+    <CModel id="AP_VulturePortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\VulturePortrait\VulturePortrait.m3"/>
+        <FacialController value="LocalizedData\Facial\VulturePortrait.fxa"/>
+        <Image value="Assets\Textures\VulturePortrait_Static.dds"/>
+        <Lighting value="AP_VulturePortrait"/>
+    </CModel>
+    <CModel id="AP_VultureSpiderMineAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\TerranSmallUnitDeath\TerranSmallUnitDeath.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Lighting value="AP_SpiderMineAttackImpact"/>
+    </CModel>
+    <CModel id="AP_SpiderMineAttackImpact" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\TerranSmallUnitDeath\TerranSmallUnitDeath.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_VultureWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\GoliathMissile\GoliathMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
     </CModel>
 </Catalog>
