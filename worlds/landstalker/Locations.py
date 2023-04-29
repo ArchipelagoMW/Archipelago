@@ -13,6 +13,7 @@ BASE_REWARD_LOCATION_ID = BASE_SHOP_LOCATION_ID + 50
 class LandstalkerLocation(Location):
     game: str = "Landstalker"
     type_string: str
+    price: int = 0
 
     def __init__(self, player: int, name: str, location_id: Optional[int], region: Region, type_string: str):
         super().__init__(player, name, location_id, region)

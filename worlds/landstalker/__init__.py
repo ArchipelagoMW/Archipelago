@@ -61,6 +61,8 @@ class LandstalkerWorld(World):
                 "item": location.item.name,
                 "player": self.multiworld.get_player_name(location.item.player)
             }
+            if location.price > 0:
+                slot_data['locations'][location.name]['price'] = location.price
 
         slot_data["teleport_tree_pairs"] = []
         for pair in self.teleport_tree_pairs:
@@ -78,7 +80,29 @@ class LandstalkerWorld(World):
         if self.get_setting('progressive_armors').value == 1 and 'Breast' in name:
             name = 'Progressive Armor'
         data = item_table[name]
-        return LandstalkerItem(name, data.classification, BASE_ITEM_ID + data.id, self.player)
+        item = LandstalkerItem(name, data.classification, BASE_ITEM_ID + data.id, self.player)
+        item.price_in_shops = data.price_in_shops
+        return item
+
+    def generate_output(self, output_directory: str) -> None:
+        earlygame_price_factor = 0.5
+        endgame_price_factor = 2.0
+        factor_diff = endgame_price_factor - earlygame_price_factor
+
+        spheres = list(self.multiworld.get_spheres())
+        sphere_id = 0
+        sphere_count = len(spheres)
+        for sphere in spheres:
+            for location in sphere:
+                if location.player == self.player and location.type_string == 'shop':
+                    current_playthrough_progression = sphere_id / sphere_count
+                    progression_price_factor = earlygame_price_factor + (current_playthrough_progression * factor_diff)
+
+                    price = location.item.price_in_shops if location.item.player == self.player else 100
+                    price *= progression_price_factor
+                    price -= price % 10
+                    location.price = int(price)
+            sphere_id += 1
 
     def create_items(self):
         item_pool: List[LandstalkerItem] = []
