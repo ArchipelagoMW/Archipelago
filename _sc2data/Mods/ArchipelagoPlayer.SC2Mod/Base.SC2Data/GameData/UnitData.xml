@@ -320,7 +320,7 @@
     </CUnit>
     <CUnit id="AP_PunisherGrenadesLMWeapon" parent="MISSILE">
         <Race value="Terr"/>
-        <Mover value="AP_PunisherGrenadesWeapon"/>
+        <Mover value="PunisherGrenadesWeapon"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
     </CUnit>
 </Catalog>

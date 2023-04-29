@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CValidatorPlayerRequirement id="AP_PunisherGrenadesResearched">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_JackhammerConcussionGrenadesResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_BearclawNozzlesPurchased">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_BearclawNozzlesResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_FirebatUpgraded">
+        <CombineArray value="AP_JuggernautPlatingPurchased"/>
+        <CombineArray value="AP_BearclawNozzlesPurchased"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_JuggernautPlatingPurchased">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_JuggernautPlatingResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsKillSquad">
+        <WhichUnit Value="Source"/>
+        <Value value="1"/>
+        <Behavior value="AP_KillSquad"/>
+    </CValidatorUnitCompareBehaviorCount>
+</Catalog>

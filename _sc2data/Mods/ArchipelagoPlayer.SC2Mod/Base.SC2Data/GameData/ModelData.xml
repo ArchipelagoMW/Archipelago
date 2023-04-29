@@ -65,10 +65,21 @@
         <FacialController value="LocalizedData\Facial\FirebatPortrait.fxa"/>
         <Flags index="Download" value="1"/>
         <Image value="Assets\Textures\FirebatPortrait_Static.dds"/>
-        <Lighting value="AP_FirebatPortrait"/>
     </CModel>
     <CModel id="AP_ImpactModelFlames" parent="ImpactFX">
         <Model value="Assets\Effects\Terran\FireImpact\FireImpact.m3"/>
         <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_MedicKillSquad" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\MedicKillSquad\MedicKillSquad.m3"/>
+        <Lighting value="Medic"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid03"/>
+        <Radius value="0.375000"/>
+        <SelectionRadius value="0.375000"/>
+        <ShadowRadius value="0.375000"/>
+        <SquibTypeDefault value="Flesh"/>
+        <TechPurchaseCamera value="TechPurchaseInfantry"/>
+        <UnitGlossaryCamera value="Star2CameraMid03"/>
     </CModel>
 </Catalog>

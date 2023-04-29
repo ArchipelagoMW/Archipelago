@@ -34,4 +34,10 @@
     <CRequirement id="AP_JackhammerConcussionGrenadesResearched">
         <NodeArray index="Use" Link="AP_CountUpgradeJackhammerConcussionGrenadesCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_BearclawNozzlesResearched">
+        <NodeArray index="Use" Link="AP_CountUpgradeBearclawNozzlesCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_JuggernautPlatingResearched">
+        <NodeArray index="Use" Link="AP_CountUpgradeFirebatJuggernautPlatingCompleteOnly"/>
+    </CRequirement>
 </Catalog>

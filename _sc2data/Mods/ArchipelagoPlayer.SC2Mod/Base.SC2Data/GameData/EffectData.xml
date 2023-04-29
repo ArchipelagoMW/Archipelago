@@ -76,7 +76,7 @@
         <EditorCategories value="Race:Terran"/>
         <ImpactEffect value="AP_PunisherGrenadesSet"/>
         <AmmoUnit value="AP_PunisherGrenadesLMWeapon"/>
-        <Movers Link="AP_PunisherGrenadesWeapon"/>
+        <Movers Link="PunisherGrenadesWeapon"/>
     </CEffectLaunchMissile>
     <CEffectSet id="AP_PunisherGrenadesSet">
         <EditorCategories value="Race:Terran"/>

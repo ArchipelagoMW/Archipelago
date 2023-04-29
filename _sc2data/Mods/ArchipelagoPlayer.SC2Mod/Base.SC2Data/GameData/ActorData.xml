@@ -5,8 +5,8 @@
         <Macros value="UnloadDropAnim"/>
         <On Terms="Abil.AP_heal.SourceChannelStart" Send="$Spell PlayForever"/>
         <On Terms="Abil.AP_heal.SourceChannelStop" Send="AnimClear Spell"/>
-        <On Terms="Behavior.KillSquad.On" Send="ModelSwap MedicKillSquad"/>
-        <On Terms="UnitDeathCustomize; ValidateUnit IsKillSquad" Send="DeathCustomize Variation2"/>
+        <On Terms="Behavior.AP_KillSquad.On" Send="ModelSwap AP_MedicKillSquad"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_IsKillSquad" Send="DeathCustomize Variation2"/>
         <DeathArray index="Normal" ModelLink="AP_MedicDeath" SoundLink="AP_Medic_Explode"/>
         <DeathArray index="Blast" ModelLink="AP_MedicDeath"/>
         <DeathCustoms ModelLink="AP_MedicKillSquadDeath" SoundLink="AP_Medic_Death" Name="Variation2"/>
@@ -15,13 +15,13 @@
         <BarOffset value="20"/>
         <BarWidth value="36"/>
         <GroupIcon>
-            <Image value="Assets\Textures\Wireframe-Terran-medic.dds"/>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-medic.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\BTN-Unit-Terran-Medic.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
         <UnitIcon value="Assets\Textures\BTN-Unit-Terran-Medic.dds"/>
         <Wireframe>
-            <Image value="Assets\Textures\Wireframe-Terran-medic.dds"/>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-medic.dds"/>
         </Wireframe>
     </CActorUnit>
     <CActorBeamSimple id="AP_MedicHealBeam" parent="BeamSimpleAnimationStyleContinuous">
@@ -55,13 +55,13 @@
         <BarOffset value="77"/>
         <BarWidth value="45"/>
         <GroupIcon>
-            <Image value="Assets\Textures\Wireframe-Terran-firebat.dds"/>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-firebat.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-unit-terran-firebat.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
         <UnitIcon value="Assets\Textures\btn-unit-terran-firebat.dds"/>
         <Wireframe>
-            <Image value="Assets\Textures\Wireframe-Terran-firebat.dds"/>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-firebat.dds"/>
         </Wireframe>
     </CActorUnit>
     <CActorAction id="AP_FirebatAttack" parent="GenericAttackBase" effectAttack="Firebat">
@@ -73,7 +73,7 @@
     </CActorAction>
     <CActorModel id="AP_FirebatAttackModel" parent="ModelAnimationStyleOneShotNoOrphan">
         <Flags index="SuppressCreationErrors" value="1"/>
-        <On Terms="ActorCreation; ValidateUnit BearclawNozzlesPurchased" Send="SetScale 2.250000,1.800000,1.000000"/>
+        <On Terms="ActorCreation; ValidateUnit AP_BearclawNozzlesPurchased" Send="SetScale 2.250000,1.800000,1.000000"/>
     </CActorModel>
     <CActorFoliageFXSpawner id="AP_FirebatFoliageFXSpawner" parent="FoliageFXSpawnerFire">
         <On Terms="Effect.AP_FirebatE.Start" Send="Create"/>
@@ -128,6 +128,7 @@
         <On Terms="Upgrade.AP_CombatShield.Remove" Send="AnimPlay Cover Cover PlayForever"/>
         <On Terms="Upgrade.AP_CombatShield.Add" Send="AnimClear Cover"/>
         <On Terms="Upgrade.AP_CombatShield.Remove" Send="AnimPlay Cover Cover PlayForever"/>
+        <Model value="Marine"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <DeathArray index="Normal" ModelLink="MarineDeath" SoundLink="Marine_DeathFXBloodSpray"/>
         <DeathArray index="Blast" ModelLink="MarineDeathBlast"/>
@@ -163,6 +164,12 @@
         <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
         <DeathActorModel value="UnitDeathModelWithDeathMotionGround"/>
         <PortraitModel value="MarinePortrait"/>
+        <SoundArray index="Ready" value="Marine_Ready"/>
+        <SoundArray index="Help" value="Marine_Help"/>
+        <SoundArray index="What" value="Marine_What"/>
+        <SoundArray index="Yes" value="Marine_Yes"/>
+        <SoundArray index="Attack" value="Marine_Attack"/>
+        <SoundArray index="Pissed" value="Marine_Pissed"/>
         <StandAnimTurnTime value="4"/>
         <TerrainSquibs>
             <MovementDistance value="0.150000,0.150000"/>
@@ -257,7 +264,7 @@
         <Missile value="AP_MarauderAttackMissile"/>
     </CActorAction>
     <CActorMissile id="AP_MarauderAttackMissile" parent="GenericAttackMissile" unitName="AP_PunisherGrenadesLMWeapon">
-        <Model value="AP_PunisherGrenadesLMWeapon"/>
+        <Model value="PunisherGrenadesLMWeapon"/>
     </CActorMissile>
     <CActorAction id="AP_MarauderUpgradedAttack" parent="MarauderAttackBase" effectImpact="AP_PunisherGrenadesU" effectLaunch="AP_PunisherGrenadesLM">
         <On Terms="Effect.AP_PunisherGrenadesLM.Start; At Caster; ValidateEffect AP_PunisherGrenadesResearched" Send="Create"/>
@@ -266,4 +273,40 @@
         <Missile value="AP_MarauderAttackMissile"/>
         <ImpactMap index="None" Model="MarauderUpgradedAttackImpact"/>
     </CActorAction>
+    <CActorSound id="AP_Firebat_Stand" parent="SoundOneShot">
+        <HostSiteOps Ops="SMArmoryFirebatSoundOffset"/>
+        <Sound value="AP_Firebat_Stand"/>
+    </CActorSound>
+    <CActorSound id="AP_Firebat_Stand_01" parent="SoundOneShot">
+        <HostSiteOps Ops="SMArmoryFirebatSoundOffset"/>
+        <Sound value="AP_Firebat_Stand_01"/>
+    </CActorSound>
+    <CActorSound id="AP_Firebat_Stand_Work" parent="SoundOneShot">
+        <HostSiteOps Ops="SMArmoryFirebatSoundOffset"/>
+        <Sound value="AP_Firebat_Stand_Work"/>
+    </CActorSound>
+    <CActorSound id="AP_Firebat_Stand_Work_01" parent="SoundOneShot">
+        <HostSiteOps Ops="SMArmoryFirebatSoundOffset"/>
+        <Sound value="AP_Firebat_Stand_Work_01"/>
+    </CActorSound>
+    <CActorSound id="AP_Firebat_Stand_Work_02" parent="SoundOneShot">
+        <HostSiteOps Ops="SMArmoryFirebatSoundOffset"/>
+        <Sound value="AP_Firebat_Stand_Work_02"/>
+    </CActorSound>
+    <CActorSound id="AP_MedicHealSound" parent="SoundContinuous">
+        <On Terms="Abil.AP_heal.TargetChannelStart" Send="Create"/>
+        <On Terms="Abil.AP_heal.TargetChannelStop" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create AP_MedicHealSoundStart"/>
+        <On Terms="ActorDestruction" Send="Create AP_MedicHealSoundStop"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Sound value="AP_Medic_Heal"/>
+    </CActorSound>
+    <CActorSound id="AP_MedicHealSoundStart" parent="SoundOneShot">
+        <Sound value="AP_Medic_HealStart"/>
+    </CActorSound>
+    <CActorSound id="AP_MedicHealSoundStop" parent="SoundOneShot">
+        <Sound value="AP_Medic_HealEnd"/>
+    </CActorSound>
 </Catalog>
