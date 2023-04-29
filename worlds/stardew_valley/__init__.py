@@ -269,8 +269,7 @@ class StardewValleyWorld(World):
             key, value = self.modified_bundles[bundle_key].to_pair()
             modified_bundles[key] = value
 
-        excluded_options = [options.ResourcePackMultiplier, options.BundleRandomization, options.BundlePrice,
-                            options.NumberOfPlayerBuffs]
+        excluded_options = [options.BundleRandomization, options.BundlePrice, options.NumberOfPlayerBuffs]
         slot_data = dict(self.options.options)
         for option in excluded_options:
             slot_data.pop(option.internal_name)
