@@ -2,7 +2,6 @@ import os
 import yaml
 
 from typing import Dict, NamedTuple, Optional, List
-from worlds import lingo
 
 
 class RoomAndDoor(NamedTuple):
@@ -94,7 +93,7 @@ class StaticLingoLogic:
         except ImportError:
             from importlib_resources import files
 
-        with files(lingo).joinpath("LL1.yaml").open() as file:
+        with files("worlds.lingo").joinpath("LL1.yaml").open() as file:
             config = yaml.load(file, Loader=yaml.Loader)
 
             for room_name, room_data in config.items():
