@@ -45,7 +45,7 @@
     </CRequirement>
     <CRequirement id="AP_HaveD8ClusterBomb">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Use" Link="CountUpgradeClusterBombCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeClusterBombCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_UseStimpackSMReaper">
         <EditorCategories value="Race:Terran,TechType:Ability"/>
