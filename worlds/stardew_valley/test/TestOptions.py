@@ -35,7 +35,7 @@ def check_no_ginger_island(tester: SVTestBase, multiworld: MultiWorld):
         tester.assertNotIn(location.name, ginger_island_locations)
 
 
-def get_option_choices(option) -> dict[str, int]:
+def get_option_choices(option) -> Dict[str, int]:
     if issubclass(option, SpecialRange):
         return option.special_range_names
     elif option.options:
