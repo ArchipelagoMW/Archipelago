@@ -79,4 +79,12 @@
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeNanoConstructorCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_UseAresClassWeaponsSystem">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeAresClassWeaponsSystemCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseMultilockTargetingSystems">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMultilockTargetingSystemsCompleteOnly"/>
+    </CRequirement>
 </Catalog>

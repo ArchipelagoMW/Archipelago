@@ -49,5 +49,19 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
     </CLight>
-
+    <CLight id="AP_GoliathPortrait" parent="default">
+        <ToDInfoArray index="0" AmbientColor="0.113725,0.062745,0.000000">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.950000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.419608,0.647059,0.988235"/>
+                <ColorMultiplier value="1.970000"/>
+                <SpecColorMultiplier value="1.698000"/>
+                <Direction value="-0.020512,-0.061553,-0.997893"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.992157,0.819608,0.666667" ColorMultiplier="0.339000" Direction="-0.566410,0.515755,0.642788"/>
+            <DirectionalLight index="Back" Color="0.086275,0.121569,0.552941" ColorMultiplier="0.871000" Direction="0.672465,0.588492,-0.448851"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
+    </CLight>
 </Catalog>

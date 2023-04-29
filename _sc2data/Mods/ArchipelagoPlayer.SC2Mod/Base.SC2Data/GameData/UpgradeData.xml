@@ -188,4 +188,29 @@
         <EffectArray Reference="Abil,VultureSpiderMines,Cost[0].Charge.CountStart" Value="2.000000"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_AresClassWeaponsSystem">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Race value="Terr"/>
+        <EffectArray Reference="Weapon,AP_GoliathA,Range" Value="3"/>
+        <EffectArray Reference="Weapon,AP_GoliathAUpgraded,Range" Value="3"/>
+        <EffectArray Reference="Weapon,AP_GoliathG,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_GoliathGUpgraded,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_SpartanCompanyA,Range" Value="3"/>
+        <EffectArray Reference="Weapon,AP_SpartanCompanyAUpgraded,Range" Value="3"/>
+        <EffectArray Reference="Weapon,AP_SpartanCompanyG,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_SpartanCompanyGUpgraded,Range" Value="1"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_MultilockTargetingSystems">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyAUpgraded,Options[Hidden]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyGUpgraded,Options[Hidden]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathAUpgraded,Options[Hidden]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Options[Hidden]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyA,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyG,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Options[Hidden]" Value="1"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

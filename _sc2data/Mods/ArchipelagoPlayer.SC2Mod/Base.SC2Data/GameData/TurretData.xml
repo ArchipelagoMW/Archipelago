@@ -6,4 +6,9 @@
         <YawRate value="999.8437"/>
         <Fidget DelayMax="30" DelayMin="10"/>
     </CTurret>
+    <CTurret id="AP_Goliath">
+        <YawArc value="135"/>
+        <YawRate value="360"/>
+        <YawIdleRate value="360"/>
+    </CTurret>
 </Catalog>

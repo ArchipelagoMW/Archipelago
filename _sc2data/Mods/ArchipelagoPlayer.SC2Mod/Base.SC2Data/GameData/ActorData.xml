@@ -686,4 +686,61 @@
         <Abil Link="AP_SpiderMineUnburrowRangeDummy"/>
     </CActorRange>
     <CActorRange id="AP_VultureSpiderMinesRange" parent="RangeAbil" abil="AP_VultureSpiderMines"/>
+    <CActorUnit id="AP_Goliath" parent="GenericUnitBase" unitName="AP_Goliath">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="WeaponStart.AP_GoliathG.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_GoliathG.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_GoliathA.AttackStart" Send="AnimBracketStart Spell Spell"/>
+        <On Terms="WeaponStop.AP_GoliathA.AttackStop" Send="AnimBracketStop Spell"/>
+        <On Terms="WeaponStart.AP_GoliathAUpgraded.AttackStart" Send="AnimBracketStart Spell Spell"/>
+        <On Terms="WeaponStop.AP_GoliathAUpgraded.AttackStop" Send="AnimBracketStop Spell"/>
+        <On Terms="ActorCreation" Send="TextureSelectBySlot main {RequireAll diffuse}"/>
+        <On Terms="ActorCreation" Send="TextureSelectByMatch main.specular main"/>
+        <DeathArray index="Normal" ModelLink="AP_GoliathDeath" SoundLink="AP_Goliath_Explode"/>
+        <DeathActorModel value="AP_GoliathDeath"/>
+        <PortraitModel value="AP_GoliathPortrait"/>
+        <StandAnimTurnTime value="4"/>
+        <WalkAnimMoveSpeed value="3.6093"/>
+        <BarOffset value="75"/>
+        <BarWidth value="66"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-goliath.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="Birth" value="AP_Goliath_Birth"/>
+        <GroupSoundArray index="Ready" value="AP_Goliath_Ready"/>
+        <GroupSoundArray index="Help" value="AP_Goliath_Help"/>
+        <GroupSoundArray index="What" value="AP_Goliath_What"/>
+        <GroupSoundArray index="Yes" value="AP_Goliath_Yes"/>
+        <GroupSoundArray index="Attack" value="AP_Goliath_Attack"/>
+        <GroupSoundArray index="Pissed" value="AP_Goliath_Pissed"/>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-goliath.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="AP_Goliath_Ready"/>
+        <SoundArray index="Help" value="AP_Goliath_Help"/>
+        <SoundArray index="What" value="AP_Goliath_What"/>
+        <SoundArray index="Yes" value="AP_Goliath_Yes"/>
+        <SoundArray index="Attack" value="AP_Goliath_Attack"/>
+        <SoundArray index="Pissed" value="AP_Goliath_Pissed"/>
+        <SoundArray index="Movement" value="AP_Goliath_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-goliath.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-goliath.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_GoliathAirAttack" parent="GenericAttack" effectImpact="AP_GoliathAU" effectLaunch="AP_GoliathALM">
+        <LaunchAttachQuery Methods="AP_AMPatternGoliath"/>
+        <LaunchAssets Model="AP_GoliathAirAttackLaunch" Sound="VikingFighter_AttackLaunch"/>
+        <Missile value="AP_GoliathAirAttackMissile"/>
+        <ImpactMap index="None" Model="AP_GoliathAirAttackImpact" Sound="VikingFighter_AttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_GoliathAirAttackMissile" parent="GenericAttackMissile" unitName="AP_GoliathAWeapon"/>
+    <CActorAction id="AP_GoliathGroundAttack" parent="GenericAttack" effectAttack="AP_GoliathG">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0"/>
+        <LaunchAssets Model="AP_GoliathGroundAttackLaunch" Sound="AP_GoliathGroundAttackLaunch"/>
+        <ImpactMap index="None" Model="AP_GoliathGroundAttackImpact" Sound="AP_Goliath_GroundAttackImpact"/>
+    </CActorAction>
+    <CActorTurret id="AP_GoliathTurret">
+        <On Terms="TurretEnable.AP_Goliath" Send="Create"/>
+    </CActorTurret>
 </Catalog>

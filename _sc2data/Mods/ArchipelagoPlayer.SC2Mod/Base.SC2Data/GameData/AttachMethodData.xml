@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CAttachMethodPattern id="AP_AMPatternGoliath">
+        <Keyword value="SetB"/>
+        <Base value="::RollingIndex"/>
+        <Multiplier value="2"/>
+        <Driver value="AP_GoliathALM"/>
+    </CAttachMethodPattern>
+</Catalog>

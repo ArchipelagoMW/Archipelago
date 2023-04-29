@@ -206,4 +206,115 @@
         <Model value="Assets\Effects\Terran\GoliathMissile\GoliathMissile.m3"/>
         <EditorCategories value="Race:Terran"/>
     </CModel>
+    <CModel id="AP_Goliath" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\Goliath\Goliath.m3"/>
+        <AttachProps Id="Ref_TurretZ">
+            <Keys index="Turret" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 01">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 02">
+            <Keys index="SetB" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 03">
+            <Keys index="SetB" value="2"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 04">
+            <Keys index="SetB" value="4"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 05">
+            <Keys index="SetB" value="1"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 06">
+            <Keys index="SetB" value="3"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 07">
+            <Keys index="SetB" value="5"/>
+        </AttachProps>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraHigh09"/>
+        <Radius value="0.650000"/>
+        <ScaleMax value="0.650000,0.650000,0.650000"/>
+        <ScaleMin value="0.650000,0.650000,0.650000"/>
+        <SelectionRadius value="0.999700"/>
+        <ShadowRadius value="0.999700"/>
+        <TechPurchaseCamera value="TechPurchaseGoliath"/>
+        <TextureDeclares Prefix="Goliath_">
+            <Adaptions TriggerOnSubstring="_Diffuse" Slot="main"/>
+            <Adaptions TriggerOnSubstring="_Specular" Slot="main"/>
+        </TextureDeclares>
+        <UnitGlossaryCamera value="Star2CameraHigh09"/>
+        <Variations Probability="1">
+            <TextureExpressionsForEditor Slot="main" Expression="RequireAll diffuse"/>
+        </Variations>
+    </CModel>
+    <CModel id="AP_GoliathAWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\GoliathAirMissile\GoliathAirMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_GoliathAirAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\GoliathAirMissileImpact\GoliathAirMissileImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_GoliathAirAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\VikingFighterMissileLaunch\VikingFighterMissileLaunch.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_GoliathDeath" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Units\Terran\GoliathDeath\GoliathDeath.m3"/>
+        <LowQualityModel value="TerranMediumUnitDeathLow"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="GoliathDeathFXA"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="AP_Goliath_DeathFXA"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="GoliathDeathFXA"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="AP_Goliath_DeathFXA"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="GoliathDeathFXB"/>
+            <Type value="Sound"/>
+            <Time value="2.000000"/>
+            <Payload value="AP_Goliath_DeathFXB"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="GoliathDeathFXB"/>
+            <Type value="Sound"/>
+            <Time value="0.870000"/>
+            <Payload value="AP_Goliath_DeathFXB"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.999700"/>
+        <ShadowRadius value="0.999700"/>
+        <TextureDeclares Prefix="Goliath_">
+            <Adaptions TriggerOnSubstring="_Diffuse" Slot="main"/>
+            <Adaptions TriggerOnSubstring="_Specular" Slot="main"/>
+        </TextureDeclares>
+    </CModel>
+    <CModel id="AP_GoliathGroundAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\VikingAssaultWeaponImpact\VikingAssaultWeaponImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_GoliathGroundAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\VikingAssaultWeaponLaunch\VikingAssaultWeaponLaunch.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_GoliathPortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\GoliathPortrait\GoliathPortrait.m3"/>
+        <FacialController value="LocalizedData\Facial\GoliathPortrait.fxa"/>
+        <Image value="Assets\Textures\GoliathPortrait_Static.dds"/>
+        <Lighting value="GoliathPortrait"/>
+    </CModel>
 </Catalog>

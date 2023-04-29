@@ -473,4 +473,129 @@
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Vulture\Vulture_Yes05.ogg" FacialAnim="Vulture_Yes05"/>
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Vulture\Vulture_Yes06.ogg" FacialAnim="Vulture_Yes06"/>
     </CSound>
+    <CSound id="AP_GoliathGroundAttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Goliath\Goliath_GroundAttackLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Goliath\Goliath_GroundAttackLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Goliath\Goliath_GroundAttackLaunch2.wav"/>
+        <DupeDestroyCount value="8"/>
+        <Pitch value="-0.010000,0.200000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Goliath_Attack" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Attack00.ogg" FacialAnim="Goliath_Attack00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Attack01.ogg" FacialAnim="Goliath_Attack01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Attack02.ogg" FacialAnim="Goliath_Attack02"/>
+    </CSound>
+    <CSound id="AP_Goliath_Attack_NP" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_NeuralParasiteAttack00.ogg" FacialAnim="Goliath_NeuralParasiteAttack00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_NeuralParasiteAttack01.ogg" FacialAnim="Goliath_NeuralParasiteAttack01"/>
+    </CSound>
+    <CSound id="AP_Goliath_DeathFXA" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Goliath\Goliath_DeathFXA0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Goliath\Goliath_DeathFXA1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Goliath\Goliath_DeathFXA2.wav"/>
+        <DupeMuteCount value="3"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Goliath_DeathFXB" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Goliath\Goliath_DeathFXB0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Goliath\Goliath_DeathFXB1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Goliath\Goliath_DeathFXB2.wav"/>
+        <DupeMuteCount value="3"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Goliath_Death_NP" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_NeuralParasiteDeath00.wav" FacialAnim="Goliath_NeuralParasiteDeath00"/>
+    </CSound>
+    <CSound id="AP_Goliath_Evac" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Evac00.ogg" FacialAnim="Goliath_Evac00"/>
+    </CSound>
+    <CSound id="AP_Goliath_Explode" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium4.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium5.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium6.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium7.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium8.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium9.wav"/>
+        <DupeDestroyCount value="5"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="5"/>
+        <Pitch value="-2.000000,3.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Goliath_GroundAttackImpact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_MultipleBulletAttackImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_MultipleBulletAttackImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_MultipleBulletAttackImpact2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_MultipleBulletAttackImpact3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_MultipleBulletAttackImpact4.wav"/>
+        <Pitch value="-1.500000,1.500000"/>
+        <Volume value="-12.000000,-12.000000"/>
+    </CSound>
+    <CSound id="AP_Goliath_Help" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Help00.ogg" FacialAnim="Goliath_Help00"/>
+        <Category value="Alert"/>
+    </CSound>
+    <CSound id="AP_Goliath_Movement" parent="Movement">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Thor\Thor_Movement0.wav"/>
+        <Pitch value="6.000000,6.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_Goliath_Pissed" parent="Pissed">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray>
+            <File value="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Pissed00.ogg"/>
+            <FacialAnim value="Goliath_Pissed00"/>
+            <PortraitModel value="AP_GoliathPortrait"/>
+            <Speaker value="ConversationState/Characters/CharGoliath"/>
+        </AssetArray>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Pissed01.ogg" FacialAnim="Goliath_Pissed01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Pissed02.ogg" FacialAnim="Goliath_Pissed02"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Pissed03.ogg" FacialAnim="Goliath_Pissed03"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Pissed04.ogg" FacialAnim="Goliath_Pissed04"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Pissed05.ogg" FacialAnim="Goliath_Pissed05"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Pissed06.ogg" FacialAnim="Goliath_Pissed06"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Pissed07.ogg" FacialAnim="Goliath_Pissed07"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Pissed08.ogg" FacialAnim="Goliath_Pissed08"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Pissed09.ogg" Volume="-6.000000,-6.000000"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Pissed10.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Pissed11.ogg"/>
+    </CSound>
+    <CSound id="AP_Goliath_Ready" parent="Ready">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Ready00.ogg" FacialAnim="Goliath_Ready00"/>
+    </CSound>
+    <CSound id="AP_Goliath_Ready_NP" parent="Ready">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_NeuralParasiteReady00.ogg" FacialAnim="Goliath_NeuralParasiteReady00"/>
+    </CSound>
+    <CSound id="AP_Goliath_What" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_What00.ogg" FacialAnim="Goliath_What00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_What01.ogg" FacialAnim="Goliath_What01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_What02.ogg" FacialAnim="Goliath_What02"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_What03.ogg" FacialAnim="Goliath_What03"/>
+    </CSound>
+    <CSound id="AP_Goliath_What_NP" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_NeuralParasiteWhat01.ogg" FacialAnim="Goliath_NeuralParasiteWhat01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_NeuralParasiteWhat02.ogg" FacialAnim="Goliath_NeuralParasiteWhat02"/>
+    </CSound>
+    <CSound id="AP_Goliath_Yes" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Yes00.ogg" FacialAnim="Goliath_Yes00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Yes01.ogg" FacialAnim="Goliath_Yes01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Yes02.ogg" FacialAnim="Goliath_Yes02"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Yes03.ogg" FacialAnim="Goliath_Yes03"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Yes04.ogg" FacialAnim="Goliath_Yes04"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Yes05.ogg" FacialAnim="Goliath_Yes05"/>
+    </CSound>
 </Catalog>

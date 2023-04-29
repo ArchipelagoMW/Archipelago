@@ -84,4 +84,16 @@
         <Count Link="AP_NanoConstructor" State="CompleteOnly"/>
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeAresClassWeaponsSystemCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_AresClassWeaponsSystem" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeAresClassWeaponsSystemQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_AresClassWeaponsSystem" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeMultilockTargetingSystemsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_MultilockTargetingSystems" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

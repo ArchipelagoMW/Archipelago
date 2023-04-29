@@ -89,4 +89,19 @@
         <Duration value="5"/>
         <InitialEffect value="AP_VultureSpiderMineBurrowOrder"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MultilockTargetingSystems">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Requirements value="AP_UseMultilockTargetingSystems"/>
+        <Modification>
+            <WeaponEnableArray value="AP_GoliathAUpgraded"/>
+            <WeaponEnableArray value="AP_GoliathGUpgraded"/>
+            <WeaponEnableArray value="AP_SpartanCompanyAUpgraded"/>
+            <WeaponEnableArray value="AP_SpartanCompanyGUpgraded"/>
+            <WeaponDisableArray value="AP_GoliathA"/>
+            <WeaponDisableArray value="AP_GoliathG"/>
+            <WeaponDisableArray value="AP_SpartanCompanyA"/>
+            <WeaponDisableArray value="AP_SpartanCompanyG"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

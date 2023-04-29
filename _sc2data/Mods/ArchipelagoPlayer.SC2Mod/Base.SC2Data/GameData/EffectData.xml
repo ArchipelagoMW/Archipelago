@@ -318,7 +318,6 @@
     <CEffectLaunchMissile id="AP_Vulture">
         <EditorCategories value="Race:Terran"/>
         <ImpactEffect value="AP_VultureU"/>
-        <AmmoUnit value="AP_VultureWeapon"/>
     </CEffectLaunchMissile>
     <CEffectIssueOrder id="AP_VultureSpiderMineBurrowOrder">
         <EditorCategories value="Race:Terran"/>
@@ -360,4 +359,30 @@
         <Cost Abil="AP_VultureSpiderMines,Execute" ChargeCountUse="-1"/>
         <ValidatorArray value="AP_SpiderMineUsed"/>
     </CEffectModifyUnit>
+    <CEffectCreatePersistent id="AP_GoliathA">
+        <ValidatorArray value="CasterIsNotHidden"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_GoliathALM"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.21"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="AP_GoliathALM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_GoliathAU"/>
+        <AmmoUnit value="AP_GoliathAWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_GoliathAU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Armored" value="8"/>
+        <Amount value="8"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_GoliathG" parent="DU_WEAP">
+        <ValidatorArray value="CasterIsNotHidden"/>
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <Amount value="18"/>
+    </CEffectDamage>
 </Catalog>

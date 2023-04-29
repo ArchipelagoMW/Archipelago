@@ -83,4 +83,14 @@
         <AlertIcon value="Assets\Textures\btn-unit-terran-vulture.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_AresClassWeaponsSystem">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-charonboosters.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_MultiLockTargetingSystem">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-multilocktargetingsystem.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
 </Catalog>
