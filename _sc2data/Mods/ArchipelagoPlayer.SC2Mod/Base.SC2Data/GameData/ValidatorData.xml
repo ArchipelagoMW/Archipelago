@@ -28,4 +28,8 @@
         <Find value="1"/>
         <Value value="AP_HaveD8ClusterBomb"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_D8ChargeUnitLink">
+        <Value value="AP_D8Charge"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
 </Catalog>

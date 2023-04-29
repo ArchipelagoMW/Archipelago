@@ -12,6 +12,22 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_StimpackMarauder">
+        <AbilSetId value="Stimpack"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Life" value="20"/>
+            <Charge Link="Abil/AP_Stimpack"/>
+            <Cooldown Link="Abil/AP_Stimpack"/>
+        </Cost>
+        <Marker Link="Abil/AP_Stimpack"/>
+        <AINotifyEffect value="Stimpack"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" Requirements="AP_UseStimpack">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <InfoTooltipPriority value="1"/>
+    </CAbilEffectInstant>
     <CAbilEffectTarget id="AP_heal">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="AllowMovement" value="1"/>
@@ -51,11 +67,19 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilRedirectInstant>
+    <CAbilRedirectInstant id="AP_StimpackMarauderRedirect">
+        <AbilSetId value="Stimpack"/>
+        <Abil value="AP_StimpackMarauder"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="StimRedirect" Requirements="UseStimpack">
+            <!-- TODO: verify this -->
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilRedirectInstant>
     <CAbilEffectTarget id="AP_D8Charge">
         <Alignment value="Negative"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Cost>
-            <Cooldown Link="AP_D8ChargeD8Charge" TimeUse="60"/>
+            <Cooldown Link="AP_D8Charge" TimeUse="60"/>
         </Cost>
         <TargetFilters value="Ground,Visible;-"/>
         <Range value="5"/>

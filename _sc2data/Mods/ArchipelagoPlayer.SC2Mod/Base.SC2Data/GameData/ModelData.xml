@@ -82,4 +82,50 @@
         <TechPurchaseCamera value="TechPurchaseInfantry"/>
         <UnitGlossaryCamera value="Star2CameraMid03"/>
     </CModel>
+    <CModel id="AP_D8Charge" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\MagneticMine\MagneticMine.m3"/>
+        <LowQualityModel value="D8ChargeLow"/>
+        <SelectionLayer value="3"/>
+    </CModel>
+    <CModel id="AP_D8ChargeAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\TerranSmallBlast\TerranSmallBlast.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_D8ChargeReleaseImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\ReaperJumpLandDown\ReaperJumpLandDown.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_D8ChargeWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\MagneticMineMissile\MagneticMineMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_D8ClusterBomb" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\MagneticMine\MagneticMine.m3"/>
+        <LowQualityModel value="D8ClusterBombLow"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <SelectionLayer value="3"/>
+    </CModel>
+    <CModel id="AP_D8ClusterBombAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\TerranSmallBlast\TerranSmallBlast.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_D8ClusterBombLow" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\MagneticMine\MagneticMine_Low.m3"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <SelectionLayer value="3"/>
+    </CModel>
+    <CModel id="AP_D8ClusterBombReleaseImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\ReaperJumpLandDown\ReaperJumpLandDown.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_D8ClusterBombWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\MagneticMineMissile\MagneticMineMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+    </CModel>
 </Catalog>

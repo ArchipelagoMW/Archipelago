@@ -342,7 +342,7 @@
         <StationaryTurningRate value="2292.8906"/>
         <Sight value="4"/>
         <AttackTargetPriority value="20"/>
-        <BehaviorArray Link="D8ChargeFate"/>
+        <BehaviorArray Link="AP_D8ChargeFate"/>
         <Radius value="0.375"/>
         <SeparationRadius value="0"/>
         <SubgroupPriority value="15"/>
@@ -352,7 +352,7 @@
         <LeaderAlias value=""/>
     </CUnit>
     <CUnit id="AP_D8ChargeWeapon" parent="MISSILE">
-        <ReviveType value="G4ChargeWeapon"/>
+        <ReviveType value="AP_G4ChargeWeapon"/>
         <Race value="Terr"/>
         <Mover value="AP_D8Charge"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
@@ -443,5 +443,44 @@
             <ChanceArray index="Idle" value="33"/>
             <ChanceArray index="Turn" value="33"/>
         </Fidget>
+    </CUnit>
+    <CUnit id="AP_D8ClusterBomb">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <FlagArray index="Uncommandable" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="KillCredit" value="0"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow3" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="45"/>
+        <LifeMax value="45"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <Acceleration value="1000"/>
+        <StationaryTurningRate value="2292.8906"/>
+        <Sight value="4"/>
+        <AttackTargetPriority value="20"/>
+        <BehaviorArray Link="AP_D8ClusterBombFate"/>
+        <Radius value="0.375"/>
+        <SeparationRadius value="0"/>
+        <SubgroupPriority value="15"/>
+        <MinimapRadius value="0"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAI value="D8ChargeClusterBomb"/>
+        <TacticalAIThink value="AIThinkD8Charge"/>
+        <LeaderAlias value=""/>
+    </CUnit>
+    <CUnit id="AP_D8ClusterBombWeapon" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="AP_G4ChargeWeapon" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <Mover value="AP_D8ChargeWeapon"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+        <TacticalAI value="D8ChargeWeapon"/>
     </CUnit>
 </Catalog>

@@ -359,7 +359,6 @@
     </CActorAction>
     <CActorAction id="AP_ReaperD8Attack" parent="GenericAttack" effectImpact="AP_D8ChargeDamage" effectLaunch="AP_D8ChargeLaunchMissile">
         <On Terms="Effect.AP_D8Charge.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.AP_D8Charge.Start; At Caster" Send="Create"/>
         <LaunchAttachQuery Methods="AMFilterWeaponRight"/>
         <LaunchAssets Sound="Reaper_D8ChargeAttackLaunch"/>
         <ImpactMap index="None" Model="ReaperD8AttackImpact" Sound="Reaper_D8ChargeExplode"/>
@@ -393,4 +392,91 @@
         <Sound value="Reaper_JumpLaunch"/>
     </CActorSound>
     <CActorRange id="AP_G4ChargeRange" parent="RangeAbil" abil="AP_D8Charge"/>
+    <CActorUnit id="AP_D8Charge" parent="GenericUnitSelectableNoAutoSoundLinks" unitName="AP_D8Charge">
+        <On Terms="UnitBirth.*.Normal" Send="$Birth"/>
+        <On Terms="ActorCreation" Send="AnimBaselineStop"/>
+        <On Terms="AnimDone; AnimName Birth" Send="$Stand 0 -1.000000 -1.000000 3.000000 AsDuration"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <DeathArray index="Normal" AnimProps="Death" ModelLink="AP_D8Charge" SoundLink="Reaper_D8ChargeExplode"/>
+        <DeathArray index="Eat" AnimProps="Death,Eat"/>
+        <DeathArray index="Eviscerate" AnimProps="Death,Eviscerate"/>
+        <DeathArray index="Fire" AnimProps="Death,Fire"/>
+        <DeathArray index="Silentkill" AnimProps="Death,Silentkill"/>
+        <DeathArray index="Squish" AnimProps="Death,Squish"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="10"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-D8Charge.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-ability-terran-d8charge.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <UnitIcon value="Assets\Textures\btn-ability-terran-d8charge.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-D8Charge.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorEventMacro id="AP_D8ChargeAnim">
+        <On Terms="Abil.AP_D8Charge.SourceCastStart" Send="$Spell"/>
+    </CActorEventMacro>
+    <CActorSound id="AP_Marine_Stimpack" parent="SoundOneShot">
+        <Sound value="Marine_Stimpack"/>
+        <On Terms="Abil.AP_Stimpack.SourceCastStart" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_Marauder_Stimpack" parent="SoundOneShot">
+        <Sound value="Marauder_Stimpack"/>
+        <On Terms="Abil.AP_StimpackMarauder.SourceCastStart" Send="Create"/>
+    </CActorSound>
+    <CActorModel id="AP_StimpackStartImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Abil.AP_Stimpack.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_StimpackMarauder.SourceCastStart" Send="Create"/>
+        <Model value="StimpackStartImpact"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Inherits index="CloakEffect" value="1"/>
+    </CActorModel>
+    <CActorModel id="AP_StimpackEndImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Behavior.AP_Stimpack.Off; ValidateUnit NotDead" Send="Create"/>
+        <On Terms="Behavior.AP_StimpackMarauder.Off; ValidateUnit NotDead" Send="Create"/>
+        <Model value="StimpackEndImpact"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Inherits index="CloakEffect" value="1"/>
+    </CActorModel>
+    <CActorUnit id="AP_D8ClusterBomb" parent="GenericUnitSelectableNoAutoSoundLinks" unitName="AP_D8ClusterBomb">
+        <On Terms="UnitBirth.*.Normal" Send="$Birth"/>
+        <On Terms="ActorCreation" Send="AnimBaselineStop"/>
+        <On Terms="AnimDone; AnimName Birth" Send="$Stand 0 -1.000000 -1.000000 3.000000 AsDuration"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <DeathArray index="Normal" AnimProps="Death" ModelLink="AP_D8Charge" SoundLink="Reaper_D8ChargeExplode"/>
+        <DeathArray index="Eat" AnimProps="Death,Eat"/>
+        <DeathArray index="Eviscerate" AnimProps="Death,Eviscerate"/>
+        <DeathArray index="Fire" AnimProps="Death,Fire"/>
+        <DeathArray index="Silentkill" AnimProps="Death,Silentkill"/>
+        <DeathArray index="Squish" AnimProps="Death,Squish"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="10"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-D8Charge.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-ability-terran-d8charge.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_D8ClusterBomb"/>
+        <UnitIcon value="Assets\Textures\btn-ability-terran-d8charge.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-D8Charge.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorEventMacro id="AP_D8ClusterBombAnim">
+        <On Terms="Abil.AP_D8Charge.SourceCastStart" Send="$Spell"/>
+    </CActorEventMacro>
+    <CActorAction id="AP_D8ClusterBombAttack" parent="GenericAttack" effectLaunch="AP_D8ClusterBombExplodeDamage">
+        <LaunchAssets Model="AP_D8ClusterBombAttackLaunch" Sound="Reaper_D8ChargeExplode"/>
+    </CActorAction>
+    <CActorAction id="AP_D8ClusterBombRelease" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="AP_D8ClusterBombLM">
+        <LaunchAssets Sound="Reaper_D8ChargeAttackLaunch"/>
+        <Missile value="AP_D8ClusterBombReleaseMissile"/>
+        <ImpactMap index="None" Model="AP_D8ClusterBombReleaseImpact" Sound="Reaper_D8ChargeAttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_D8ClusterBombReleaseMissile" parent="GenericAttackMissile" unitName="AP_D8ClusterBombWeapon"/>
 </Catalog>

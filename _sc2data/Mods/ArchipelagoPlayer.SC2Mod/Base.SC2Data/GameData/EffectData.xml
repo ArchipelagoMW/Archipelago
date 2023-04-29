@@ -121,8 +121,8 @@
         <LaunchLocation Value="CasterUnit"/>
         <FinishEffect value="RemovePrecursor"/>
         <AmmoUnit value="AP_D8ChargeWeapon"/>
-        <Movers Link="D8ChargeWeaponCloseRange" IfRangeLTE="1"/>
-        <Movers Link="D8ChargeWeapon" IfRangeLTE="500"/>
+        <Movers Link="AP_D8ChargeWeaponCloseRange" IfRangeLTE="1"/>
+        <Movers Link="AP_D8ChargeWeapon" IfRangeLTE="500"/>
     </CEffectLaunchMissile>
     <CEffectSet id="AP_D8ChargeLaunch">
         <EditorCategories value="Race:Terran"/>
@@ -173,4 +173,67 @@
         <SearchFilters value="Ground;Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectDamage>
+    <CEffectCreatePersistent id="AP_D8ClusterBombCreatePersistant">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="SourcePoint"/>
+        <OffsetVectorStartLocation Value="SourcePoint"/>
+        <PeriodCount value="7"/>
+        <PeriodicEffectArray value="AP_D8ClusterBombCreateUnit"/>
+        <PeriodicEffectArray value="AP_D8ClusterBombCreateUnit"/>
+        <PeriodicEffectArray value="AP_D8ClusterBombCreateUnit"/>
+        <PeriodicEffectArray value="AP_D8ClusterBombCreateUnit"/>
+        <PeriodicEffectArray value="AP_D8ClusterBombCreateUnit"/>
+        <PeriodicEffectArray value="AP_D8ClusterBombCreateUnit"/>
+        <PeriodicEffectArray value="AP_D8ClusterBombCreateUnit"/>
+        <PeriodicOffsetArray value="-0.4,-0.75,0"/>
+        <PeriodicOffsetArray value="0,0.9,0"/>
+        <PeriodicOffsetArray value="0.4,-0.75,0"/>
+        <PeriodicOffsetArray value="-0.6,0.5,0"/>
+        <PeriodicOffsetArray value="0.8,-0.2,0"/>
+        <PeriodicOffsetArray value="-0.8,-0.2,0"/>
+        <PeriodicOffsetArray value="0.6,0.5,0"/>
+        <PeriodicPeriodArray value="1.125"/>
+        <PeriodicPeriodArray value="0.125"/>
+        <PeriodicPeriodArray value="0.125"/>
+        <PeriodicPeriodArray value="0.125"/>
+        <PeriodicPeriodArray value="0.125"/>
+        <PeriodicPeriodArray value="0.125"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectCreateUnit id="AP_D8ClusterBombCreateUnit">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnitOrPoint"/>
+        <SpawnEffect value="AP_D8ClusterBombLaunch"/>
+        <SpawnUnit value="AP_D8ClusterBomb"/>
+        <SpawnRange value="1.5"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_D8ClusterBombExplode">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_D8ClusterBombExplodeDamage"/>
+        <EffectArray value="Suicide"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_D8ClusterBombExplodeDamage" parent="DU_WEAP_SPLASH">
+        <ValidatorArray value="NotHallucination"/>
+        <EditorCategories value="Race:Terran"/>
+        <AINotifyFlags index="HurtFriend" value="1"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <ImpactUnitValidator value="AP_D8ChargeUnitLink"/>
+        <Kind value="Spell"/>
+        <Amount value="6"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="1" Fraction="1" Validator="AP_D8ChargeUnitLink"/>
+        <ExcludeArray Value="Outer"/>
+        <SearchFilters value="Ground;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_D8ClusterBombLM">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <FinishEffect value="RemovePrecursor"/>
+        <AmmoUnit value="AP_D8ClusterBombWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_D8ClusterBombLaunch">
+        <EffectArray value="AP_D8ClusterBombLM"/>
+        <EffectArray value="MakePrecursor"/>
+    </CEffectSet>
 </Catalog>

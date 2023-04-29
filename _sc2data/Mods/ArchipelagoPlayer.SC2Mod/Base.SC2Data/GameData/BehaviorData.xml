@@ -57,4 +57,14 @@
         </Modification>
         <AINotifyEffect value="AP_D8ChargeExplodeDamage"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_D8ClusterBombFate">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="2.5"/>
+        <ExpireEffect value="AP_D8ClusterBombExplode"/>
+        <Modification>
+            <StateFlags index="SuppressCloak" value="1"/>
+        </Modification>
+        <AINotifyEffect value="AP_D8ChargeExplodeDamage"/>
+    </CBehaviorBuff>
 </Catalog>
