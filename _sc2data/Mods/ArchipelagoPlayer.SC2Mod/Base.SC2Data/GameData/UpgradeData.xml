@@ -65,7 +65,7 @@
         <Flags index="UpgradeCheat" value="0"/>
         <Alert value="ResearchComplete"/>
         <EffectArray Operation="Set" Reference="Effect,AP_heal,DrainVitalCostFactor" Value="0.25"/>
-        <EffectArray Reference="Effect,AP_heal,RechargeVitalRate" Value="1.000000"/>
+        <EffectArray Reference="Effect,AP_heal,RechargeVitalRate" Value="1"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_JuggernautPlating">
