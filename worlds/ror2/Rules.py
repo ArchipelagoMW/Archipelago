@@ -68,11 +68,10 @@ def set_rules(multiworld: MultiWorld, player: int) -> None:
         # classic mode
         if divisions:
             for i in range(1, divisions + 1):  # since divisions is the floor of total_locations / 25
-                if i * event_location_step == total_locations:
-                    break
-                event_loc = multiworld.get_location(f"Pickup{i * event_location_step}", player)
-                set_rule(event_loc,
-                        lambda state, i=i: state.can_reach(f"ItemPickup{i * event_location_step - 1}", "Location", player))
+                if i * event_location_step != total_locations:
+                    event_loc = multiworld.get_location(f"Pickup{i * event_location_step}", player)
+                    set_rule(event_loc,
+                            lambda state, i=i: state.can_reach(f"ItemPickup{i * event_location_step - 1}", "Location", player))
                 for n in range(i * event_location_step, (i + 1) * event_location_step + 1):  # we want to create a rule for each of the 25 locations per division
                     if n > total_locations:
                         break
