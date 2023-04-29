@@ -64,6 +64,11 @@ class LandstalkerWorld(World):
             if location.price > 0:
                 slot_data['locations'][location.name]['price'] = location.price
 
+        slot_data["hints"] = {
+            "Lithograph": self.generate_lithograph_hint(),
+            "Oracle Stone": self.generate_oracle_stone_hint()
+        }
+
         slot_data["teleport_tree_pairs"] = []
         for pair in self.teleport_tree_pairs:
             slot_data["teleport_tree_pairs"].append([pair[0]['name'], pair[1]['name']])
@@ -155,6 +160,25 @@ class LandstalkerWorld(World):
 
     def set_rules(self):
         Rules.create_rules(self.multiworld, self.player, self.regions_table, self.dark_region_ids)
+
+    def generate_lithograph_hint(self):
+        jewels = {}
+        for item in self.multiworld.itempool:
+            if item.player != self.player:
+                continue
+            if " Jewel" in item.name:
+                jewels[item.name] = self.multiworld.get_player_name(item.location.player)
+
+        hint_text = ""
+        for [jewel_name, player_name] in jewels.items():
+            if hint_text != "":
+                hint_text += "\n"
+            hint_text += f"{jewel_name} is in {player_name}'s world."
+
+        return hint_text
+
+    def generate_oracle_stone_hint(self):
+        return f"It shows {self.dark_dungeon_id}\nenshrouded in darkness."
 
 #   def get_filler_item_name(self) -> str:
 #       fillers = get_weighted_filler_item_names()
