@@ -461,7 +461,6 @@
             <Image value="Assets\Textures\Wireframe-Terran-D8Charge.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-ability-terran-d8charge.dds"/>
-        <HighlightTooltip value="Unit/Name/AP_D8ClusterBomb"/>
         <UnitIcon value="Assets\Textures\btn-ability-terran-d8charge.dds"/>
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Terran-D8Charge.dds"/>
@@ -471,12 +470,121 @@
         <On Terms="Abil.AP_D8Charge.SourceCastStart" Send="$Spell"/>
     </CActorEventMacro>
     <CActorAction id="AP_D8ClusterBombAttack" parent="GenericAttack" effectLaunch="AP_D8ClusterBombExplodeDamage">
-        <LaunchAssets Model="AP_D8ClusterBombAttackLaunch" Sound="Reaper_D8ChargeExplode"/>
+        <LaunchAssets Sound="Reaper_D8ChargeExplode"/>
     </CActorAction>
     <CActorAction id="AP_D8ClusterBombRelease" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="AP_D8ClusterBombLM">
         <LaunchAssets Sound="Reaper_D8ChargeAttackLaunch"/>
-        <Missile value="AP_D8ClusterBombReleaseMissile"/>
-        <ImpactMap index="None" Model="AP_D8ClusterBombReleaseImpact" Sound="Reaper_D8ChargeAttackImpact"/>
+        <ImpactMap index="None" Sound="Reaper_D8ChargeAttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_D8ClusterBombReleaseMissile" parent="GenericAttackMissile" unitName="AP_D8ClusterBombWeapon"/>
+    <CActorUnit id="AP_Hellion" parent="GenericUnitBase" unitName="AP_Hellion">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="TimerSet 0.250000 KillBeam"/>
+        <On Terms="Abil.attack.ReadyStop" Send="TimerSet 0.250000 KillBeam"/>
+        <On Terms="TimerExpired; TimerName KillBeam" Target="AP_HellionAttackBeam" Send="Destroy"/>
+        <Model value="Hellion"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="Hellion"/>
+        <DeathArray index="Normal" ModelLink="HellionDeath" SoundLink="Hellion_Explode"/>
+        <PlacementModel value="Hellion"/>
+        <PortraitModel value="HellionPortrait"/>
+        <BarOffset value="50"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Hellion.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-hellion.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="Hellion_Ready"/>
+        <SoundArray index="Help" value="Hellion_Help"/>
+        <SoundArray index="What" value="Hellion_What"/>
+        <SoundArray index="Yes" value="Hellion_Yes"/>
+        <SoundArray index="Attack" value="Hellion_Attack"/>
+        <SoundArray index="Pissed" value="Hellion_Pissed"/>
+        <SoundArray index="Movement" value="Hellion_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-hellion.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Hellion.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_HellionAttack" parent="GenericAttackBase">
+        <On Terms="Effect.AP_InfernalFlameThrower.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="Effect.AP_InfernalFlameThrowerCP.Start; At Caster; !ValidatePlayer AP_HasHellionInfernalPreIgniter" Send="Create"/>
+        <LaunchAssets Model="" Sound="Hellion_AttackLaunch"/>
+        <Beam value="AP_HellionAttackBeam"/>
+        <BeamScope value="Caster"/>
+        <Missile value="HellionAttackBaseMissile"/>
+        <ImpactAttachQuery Methods="AMFilterTargetVolumes AMPreferGround AMArcTestWeapon AMVolumesWeightedPick"/>
+        <ImpactMap index="None" Model="HellionAttackDamageReaction" Sound="Hellion_AttackImpact" ModelReaction="HellionAttackBaseImpactReaction"/>
+        <ImpactMap index="Flesh" Model="IGNORE" ModelReaction="IGNORE"/>
+        <ImpactMap index="Metal" Model="IGNORE" ModelReaction="IGNORE"/>
+        <ImpactMap index="Shield" Model="IGNORE" Sound="HellionAttackBaseImpactShield" ModelReaction="IGNORE"/>
+        <DamageSite value="HellionAttackDamageSite"/>
+        <DamageMap index="None" Model="HellionAttackBaseDamage" Sound="HellionAttackBaseDamage" ModelReaction="HellionAttackBaseDamageReaction"/>
+        <DamageMap index="Flesh" Model="IGNORE" ModelReaction="IGNORE"/>
+        <DamageMap index="Metal" Model="IGNORE" ModelReaction="IGNORE"/>
+        <DamageMap index="Shield" Model="IGNORE" Sound="HellionAttackBaseDamageShield" ModelReaction="IGNORE"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_HellionAttackBeam" parent="GenericAttackBeam">
+        <On Terms="ActorCreation; ValidateUnit AP_HasHighCapacityBarrels" Send="ModelSwap HellionUpgradeAttackBeam"/>
+        <On Terms="Effect.InfernalFlameThrowerE.Start; EffectExecuteIndex 24" Send="RefSet ::HostImpact AP_HellionAttackBeamImpactSite"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HasHellionInfernalPreIgniter" Send="ModelSwap HellionUpgradeAttackBeam"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HasTwinLinkedFlameThrowers" Send="SetScale 1.800000,1.000000,1.000000"/>
+        <Model value="HellionAttackBeam"/>
+    </CActorBeamSimple>
+    <CActorSite id="AP_HellionAttackBeamImpactSite">
+        <On Terms="Effect.AP_InfernalFlameThrowerE.Start; EffectExecuteIndex 24; At Caster" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpShadow SOpHeightLaunch"/>
+    </CActorSite>
+    <CActorModel id="AP_HellionAttackDamageReaction" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_InfernalFlameThrower.Start; At Target; !ValidateEffect AP_HasHighCapacityBarrels; ValidateUnitType NotStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachHead SOpForwardCasterCenter"/>
+        <Model value="HellionAttackDamageReaction"/>
+    </CActorModel>
+    <CActorModel id="AP_HellionAttackDamageReactionStructure" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_InfernalFlameThrower.Start; At Target; !ValidateEffect AP_HasHighCapacityBarrels; ValidateUnitType IsStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachRandomDamage"/>
+        <Model value="SiegeTankSiegedAttackDamage"/>
+    </CActorModel>
+    <CActorRegionCircle id="AP_HellionTreeKiller">
+        <On Terms="Effect.AP_InfernalFlameThrowerE.Start; At Effect" Send="Create"/>
+        <On Terms="ActorCreation" Send="QueryRegion ::Self TreeBurnQuery AgainstCenter"/>
+        <On Terms="Effect.AP_InfernalFlameThrowerE.Start; At Effect" Send="Destroy"/>
+        <Radius value="0.500000"/>
+    </CActorRegionCircle>
+    <CActorAction id="AP_HellionUpgradedAttack" parent="GenericAttackBase">
+        <On Terms="Effect.AP_InfernalFlameThrower.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="Effect.AP_InfernalFlameThrowerCP.Start; At Caster; ValidatePlayer AP_HasHellionInfernalPreIgniter" Send="Create"/>
+        <LaunchAssets Model="" Sound="Hellion_AttackLaunch"/>
+        <Beam value="AP_HellionAttackBeam"/>
+        <BeamScope value="Caster"/>
+        <Missile value="HellionAttackBaseMissile"/>
+        <ImpactAttachQuery Methods="AMFilterTargetVolumes AMPreferGround AMArcTestWeapon AMVolumesWeightedPick"/>
+        <ImpactMap index="None" Model="HellionUpgradedAttackDamageReaction" Sound="Hellion_AttackImpact" ModelReaction="HellionAttackBaseImpactReaction"/>
+        <ImpactMap index="Flesh" Model="IGNORE" ModelReaction="IGNORE"/>
+        <ImpactMap index="Metal" Model="IGNORE" ModelReaction="IGNORE"/>
+        <ImpactMap index="Shield" Model="IGNORE" Sound="HellionAttackBaseImpactShield" ModelReaction="IGNORE"/>
+        <DamageSite value="HellionAttackDamageSite"/>
+        <DamageMap index="None" Model="HellionAttackBaseDamage" Sound="HellionAttackBaseDamage" ModelReaction="HellionAttackBaseDamageReaction"/>
+        <DamageMap index="Flesh" Model="IGNORE" ModelReaction="IGNORE"/>
+        <DamageMap index="Metal" Model="IGNORE" ModelReaction="IGNORE"/>
+        <DamageMap index="Shield" Model="IGNORE" Sound="HellionAttackBaseDamageShield" ModelReaction="IGNORE"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorModel id="AP_HellionUpgradedAttackDamageReaction" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_InfernalFlameThrower.Start; At Target; ValidateEffect AP_HasHighCapacityBarrels; ValidateUnitType NotStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachHead SOpForwardCasterCenter"/>
+        <Model value="HellionUpgradedAttackDamageReaction"/>
+    </CActorModel>
+    <CActorModel id="AP_HellionUpgradedAttackDamageReactionStructure" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_InfernalFlameThrower.Start; At Target; ValidateEffect AP_HasHighCapacityBarrels; ValidateUnitType IsStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachRandomDamage"/>
+        <Model value="HellionUpgradedAttackDamageReactionStructure"/>
+    </CActorModel>
 </Catalog>

@@ -32,4 +32,21 @@
         <Value value="AP_D8Charge"/>
         <Find value="0"/>
     </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_HasHellionInfernalPreIgniter">
+        <Find value="1"/>
+        <Value value="AP_UseHellionInfernalPreIgniter"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_NapalmFuelTanksPurchased">
+        <Find value="1"/>
+        <Value value="AP_NapalmFuelTanksResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HasHighCapacityBarrels">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_UseHighCapacityBarrels"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HasTwinLinkedFlameThrowers">
+        <Find value="1"/>
+        <Value value="UseTwinLinkedFlameThrowers"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

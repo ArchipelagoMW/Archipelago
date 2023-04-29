@@ -67,4 +67,12 @@
         </Modification>
         <AINotifyEffect value="AP_D8ChargeExplodeDamage"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ScavengingSystemsMechDeath">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="AP_ScavengingSystemsResearched"/>
+        <Modification>
+            <DeathResponse Chance="1" Effect="AP_ScavengingSystemsSearchArea"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

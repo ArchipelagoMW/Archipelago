@@ -47,4 +47,15 @@
         <EditorCategories value="Race:Terran"/>
         <TintRacially value="1"/>
     </CButton>
+    <CButton id="AP_InfernalPreIgniter">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-infernalpreigniter.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_TwinLinkedFlameThrowers">
+        <Icon value="Assets\Textures\btn-upgrade-terran-twin-linkedflamethrower.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-twin-linkedflamethrower.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
 </Catalog>

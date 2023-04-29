@@ -55,4 +55,17 @@
         <Backswing value="0.75"/>
         <Effect value="AP_P38ScytheGuassPistolBurst"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_InfernalFlameThrower">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <Period value="2.5"/>
+        <DamagePoint value="0.25"/>
+        <Backswing value="0.75"/>
+        <Effect value="AP_InfernalFlameThrowerCP"/>
+        <LegacyOptions index="LockTurretWhileFiring" value="1"/>
+    </CWeaponLegacy>
 </Catalog>

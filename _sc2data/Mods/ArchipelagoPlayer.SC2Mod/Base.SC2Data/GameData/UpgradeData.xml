@@ -131,4 +131,31 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_HighCapacityBarrels">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infernalpreigniter.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Effect,AP_InfernalFlameThrower,AttributeBonus[Light]" Value="10.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:SpellResearch"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TurboChargedEngines">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Alert value="ResearchComplete_Terr"/>
+        <Race value="Terr"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Hellion,Speed" Value="1.398400"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TwinLinkedFlameThrowers">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_InfernalFlameThrowerE,AreaArray[0].Radius" Value="0.5"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HellionCampaignInfernalPreIgniter">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Effect,AP_InfernalFlameThrower,AttributeBonus[Light]" Value="10"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

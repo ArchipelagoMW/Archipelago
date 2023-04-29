@@ -236,4 +236,58 @@
         <EffectArray value="AP_D8ClusterBombLM"/>
         <EffectArray value="MakePrecursor"/>
     </CEffectSet>
+    <CEffectDamage id="AP_InfernalFlameThrower" parent="DU_WEAP">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Light" value="8"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="10"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_InfernalFlameThrowerCP">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="SourcePoint"/>
+        <InitialEffect value="AP_InfernalFlameThrower"/>
+        <PeriodCount value="24"/>
+        <PeriodicEffectArray value="AP_InfernalFlameThrowerE"/>
+        <PeriodicOffsetArray value="0,-0.25,0"/>
+        <PeriodicOffsetArray value="0,-0.5,0"/>
+        <PeriodicOffsetArray value="0,-0.75,0"/>
+        <PeriodicOffsetArray value="0,-1,0"/>
+        <PeriodicOffsetArray value="0,-1.25,0"/>
+        <PeriodicOffsetArray value="0,-1.5,0"/>
+        <PeriodicOffsetArray value="0,-1.75,0"/>
+        <PeriodicOffsetArray value="0,-2,0"/>
+        <PeriodicOffsetArray value="0,-2.25,0"/>
+        <PeriodicOffsetArray value="0,-2.5,0"/>
+        <PeriodicOffsetArray value="0,-2.75,0"/>
+        <PeriodicOffsetArray value="0,-3,0"/>
+        <PeriodicOffsetArray value="0,-3.25,0"/>
+        <PeriodicOffsetArray value="0,-3.5,0"/>
+        <PeriodicOffsetArray value="0,-3.75,0"/>
+        <PeriodicOffsetArray value="0,-4,0"/>
+        <PeriodicOffsetArray value="0,-4.25,0"/>
+        <PeriodicOffsetArray value="0,-4.5,0"/>
+        <PeriodicOffsetArray value="0,-4.75,0"/>
+        <PeriodicOffsetArray value="0,-5,0"/>
+        <PeriodicOffsetArray value="0,-5.25,0"/>
+        <PeriodicOffsetArray value="0,-5.5,0"/>
+        <PeriodicOffsetArray value="0,-5.75,0"/>
+        <PeriodicOffsetArray value="0,-6,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="AP_InfernalFlameThrowerE">
+        <EditorCategories value="Race:Terran"/>
+        <ExcludeArray Value="Target"/>
+        <IncludeArray Effect="AP_InfernalFlameThrowerCP" Value="Target"/>
+        <SearchFilters value="Ground;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="0.15" Effect="AP_InfernalFlameThrower"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_InfernalFlameThrowerSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_InfernalFlameThrower"/>
+        <EffectArray value="AP_InfernalFlameThrowerCP"/>
+    </CEffectSet>
 </Catalog>

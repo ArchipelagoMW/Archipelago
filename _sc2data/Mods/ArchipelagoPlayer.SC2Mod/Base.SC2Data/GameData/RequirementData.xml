@@ -55,4 +55,16 @@
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Show" Link="AP_CountUpgradeClusterBombCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_UseHellionInfernalPreIgniter">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHellionCampaignInfernalPreIgniterCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseTwinLinkedFlameThrowers">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeTwinLinkedFlameThrowersCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseHighCapacityBarrels">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeHighCapacityBarrelsCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
 </Catalog>

@@ -51,4 +51,19 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_ClusterBomb" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHighCapacityBarrelsCompleteOnlyTechTreeCheat">
+        <Count Link="AP_HighCapacityBarrels" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHighCapacityBarrelsQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HighCapacityBarrels" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHellionCampaignInfernalPreIgniterCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HellionCampaignInfernalPreIgniter" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTwinLinkedFlameThrowersCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TwinLinkedFlameThrowers" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>
