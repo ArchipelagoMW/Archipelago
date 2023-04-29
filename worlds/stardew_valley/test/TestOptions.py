@@ -1,5 +1,6 @@
 import itertools
 import unittest
+from typing import Dict
 
 from BaseClasses import ItemClassification, MultiWorld
 from Options import SpecialRange
