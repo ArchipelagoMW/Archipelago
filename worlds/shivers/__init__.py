@@ -94,6 +94,9 @@ class ShiversWorld(World):
             librarylocation = self.multiworld.random.choice(self.multiworld.get_region("Library", self.player).locations)
         librarylocation.place_locked_item(self.create_item("Crawling"))
 
+        #Set Key for Underground Lake Room to early item
+        self.multiworld.early_items[self.player]["Key for Underground Lake Room"] = 1
+
 
     #Prefills event storage locations with duplicate pots
     def pre_fill(self) -> None:
