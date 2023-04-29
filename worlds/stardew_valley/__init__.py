@@ -63,7 +63,7 @@ class StardewValleyWorld(World):
     web = StardewWebWorld()
     modified_bundles: Dict[str, Bundle]
     randomized_entrances: Dict[str, str]
-    all_progression_items: Set[str]
+    all_progression_items: Set[str] = set()
 
     def generate_early(self):
         self.options = fetch_options(self.multiworld, self.player)
@@ -103,7 +103,6 @@ class StardewValleyWorld(World):
         create_locations(add_location, self.options, self.multiworld.random)
 
     def create_items(self):
-        self.all_progression_items = set()
         self.precollect_starting_season()
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]
