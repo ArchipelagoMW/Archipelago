@@ -75,7 +75,6 @@
     <CEffectLaunchMissile id="AP_PunisherGrenadesLM">
         <EditorCategories value="Race:Terran"/>
         <ImpactEffect value="AP_PunisherGrenadesSet"/>
-        <AmmoUnit value="AP_PunisherGrenadesLMWeapon"/>
         <Movers Link="PunisherGrenadesWeapon"/>
     </CEffectLaunchMissile>
     <CEffectSet id="AP_PunisherGrenadesSet">
@@ -99,5 +98,79 @@
         <Kind value="Ranged"/>
         <Amount value="10"/>
         <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectCreateUnit id="AP_D8Charge">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnitOrPoint"/>
+        <SpawnEffect value="AP_D8ChargeLaunch"/>
+        <SpawnUnit value="AP_D8Charge"/>
+        <SpawnRange value="1.5"/>
+    </CEffectCreateUnit>
+    <CEffectDamage id="AP_D8ChargeDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="30"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_D8ChargeLM">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <FinishEffect value="RemovePrecursor"/>
+        <AmmoUnit value="AP_D8ChargeWeapon"/>
+        <Movers Link="D8ChargeWeaponCloseRange" IfRangeLTE="1"/>
+        <Movers Link="D8ChargeWeapon" IfRangeLTE="500"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_D8ChargeLaunch">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_D8ChargeLM"/>
+        <EffectArray value="MakePrecursor"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_D8ChargeLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_D8ChargeDamage"/>
+        <AmmoUnit value="AP_D8ChargeWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_P38ScytheGuassPistol" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Light" value="5"/>
+        <Kind value="Ranged"/>
+        <Amount value="4"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_P38ScytheGuassPistolBurst">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_P38ScytheGuassPistol"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.122"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_D8ChargeExplode">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_D8ChargeExplodeDamage"/>
+        <EffectArray value="Suicide"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_D8ChargeExplodeDamage" parent="DU_WEAP_SPLASH">
+        <ValidatorArray value="NotHallucination"/>
+        <EditorCategories value="Race:Terran"/>
+        <AINotifyFlags index="HurtFriend" value="1"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <ImpactUnitValidator value="D8ChargeUnitLink"/>
+        <AttributeBonus index="Structure" value="100"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Spell"/>
+        <Amount value="30"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="1.125" Fraction="1" Validator="D8ChargeUnitLink"/>
+        <AreaArray Radius="1.666" Fraction="0.5" Validator="D8ChargeUnitLink"/>
+        <AreaArray Radius="2.5" Fraction="0.25" Validator="D8ChargeUnitLink"/>
+        <ExcludeArray Value="Outer"/>
+        <SearchFilters value="Ground;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectDamage>
 </Catalog>

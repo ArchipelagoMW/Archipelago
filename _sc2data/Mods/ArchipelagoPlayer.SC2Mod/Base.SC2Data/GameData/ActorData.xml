@@ -275,23 +275,18 @@
     </CActorAction>
     <CActorSound id="AP_Firebat_Stand" parent="SoundOneShot">
         <HostSiteOps Ops="SMArmoryFirebatSoundOffset"/>
-        <Sound value="AP_Firebat_Stand"/>
     </CActorSound>
     <CActorSound id="AP_Firebat_Stand_01" parent="SoundOneShot">
         <HostSiteOps Ops="SMArmoryFirebatSoundOffset"/>
-        <Sound value="AP_Firebat_Stand_01"/>
     </CActorSound>
     <CActorSound id="AP_Firebat_Stand_Work" parent="SoundOneShot">
         <HostSiteOps Ops="SMArmoryFirebatSoundOffset"/>
-        <Sound value="AP_Firebat_Stand_Work"/>
     </CActorSound>
     <CActorSound id="AP_Firebat_Stand_Work_01" parent="SoundOneShot">
         <HostSiteOps Ops="SMArmoryFirebatSoundOffset"/>
-        <Sound value="AP_Firebat_Stand_Work_01"/>
     </CActorSound>
     <CActorSound id="AP_Firebat_Stand_Work_02" parent="SoundOneShot">
         <HostSiteOps Ops="SMArmoryFirebatSoundOffset"/>
-        <Sound value="AP_Firebat_Stand_Work_02"/>
     </CActorSound>
     <CActorSound id="AP_MedicHealSound" parent="SoundContinuous">
         <On Terms="Abil.AP_heal.TargetChannelStart" Send="Create"/>
@@ -309,4 +304,93 @@
     <CActorSound id="AP_MedicHealSoundStop" parent="SoundOneShot">
         <Sound value="AP_Medic_HealEnd"/>
     </CActorSound>
+    <CActorMissile id="AP_Reaper" parent="GenericUnitBase" unitName="AP_Reaper">
+        <Aliases value="_MissileHybrids"/>
+        <Macros value="D8ChargeAnim"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="D8ChargeAnim"/>
+        <Macros value="D8ChargeAnim"/>
+        <On Terms="Behavior.AP_ReaperJump.Launch" Send="AnimBracketStart Jump Jump,Start Jump Jump,End"/>
+        <On Terms="Behavior.AP_ReaperJump.Launch" Send="AnimBlendTimeApply 0.100000"/>
+        <On Terms="Behavior.AP_ReaperJump.LandDown" Send="AnimBracketStop Jump"/>
+        <On Terms="Behavior.AP_ReaperJump.LandDown" Send="AnimBlendTimeApply"/>
+        <On Terms="Behavior.AP_ReaperJump.LandUp" Send="AnimBracketStop Jump"/>
+        <On Terms="Behavior.AP_ReaperJump.LandUp" Send="AnimBlendTimeApply"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.AP_P38ScytheGuassPistol.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_P38ScytheGuassPistol.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_D8Charge.AttackStart" Send="AnimBracketStart Attack Spell"/>
+        <On Terms="WeaponStop.AP_D8Charge.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="UnitBirth.ReaperPlacement" Send="Create"/>
+        <Model value="Reaper"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="Reaper"/>
+        <DeathArray index="Normal" ModelLink="ReaperDeath" SoundLink="Reaper_Explode"/>
+        <PlacementModel value="Reaper"/>
+        <PortraitModel value="ReaperPortrait"/>
+        <WalkAnimMoveSpeed value="2"/>
+        <AbilSoundArray AbilCmd="AP_D8Charge,Execute" Sound="Reaper_D8ChargeVO"/>
+        <AbilSoundArray AbilCmd="AP_D8Charge,Execute" Sound="Reaper_D8ChargeVO"/>
+        <BarOffset value="40"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Reaper.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-reaper.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="Reaper_Ready"/>
+        <SoundArray index="Help" value="Reaper_Help"/>
+        <SoundArray index="What" value="Reaper_What"/>
+        <SoundArray index="Yes" value="Reaper_Yes"/>
+        <SoundArray index="Attack" value="Reaper_Attack"/>
+        <SoundArray index="Pissed" value="Reaper_Pissed"/>
+        <SoundArray index="Movement" value="Reaper_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-reaper.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Reaper.dds"/>
+        </Wireframe>
+    </CActorMissile>
+    <CActorAction id="AP_ReaperAttack" parent="GenericAttack" effectAttack="AP_P38ScytheGuassPistol">
+        <LaunchAttachQuery Methods="AMPatternReaper"/>
+        <LaunchAssets Model="ReaperAttackLaunch" Sound="Reaper_AttackLaunch"/>
+        <ContainerAssets Model="ReaperBunkerAttackLaunch" Sound="Reaper_BunkerAttackLaunch"/>
+        <ImpactMap index="None" Model="ReaperAttackImpact" Sound="Reaper_AttackImpact"/>
+    </CActorAction>
+    <CActorAction id="AP_ReaperD8Attack" parent="GenericAttack" effectImpact="AP_D8ChargeDamage" effectLaunch="AP_D8ChargeLaunchMissile">
+        <On Terms="Effect.AP_D8Charge.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_D8Charge.Start; At Caster" Send="Create"/>
+        <LaunchAttachQuery Methods="AMFilterWeaponRight"/>
+        <LaunchAssets Sound="Reaper_D8ChargeAttackLaunch"/>
+        <ImpactMap index="None" Model="ReaperD8AttackImpact" Sound="Reaper_D8ChargeExplode"/>
+    </CActorAction>
+    <CActorMissile id="AP_ReaperD8AttackMissile" parent="GenericAttackMissile" unitName="AP_D8ChargeWeapon">
+        <Model value="D8ChargeWeapon"/>
+    </CActorMissile>
+    <CActorModel id="AP_ReaperJumpLandDownModel" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.AP_ReaperJump.LandDown" Send="Create"/>
+        <On Terms="Behavior.AP_ReaperJump.LandUp" Send="Create"/>
+        <On Terms="Behavior.AP_ReaperJump.LandDown" Send="TimerSet 0.300000 TriggerSound"/>
+        <On Terms="TimerExpired; TimerName TriggerSound" Send="Create ReaperJumpLandSound"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpShadow"/>
+        <Model value="ReaperJumpLandDownModel"/>
+    </CActorModel>
+    <CActorSound id="AP_ReaperJumpLandSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_ReaperJump.LandUp" Send="Create"/>
+        <Sound value="Reaper_JumpLand"/>
+    </CActorSound>
+    <CActorModel id="AP_ReaperJumpLaunchModel" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.AP_ReaperJump.Launch" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpShadow" HoldPosition="1" HoldRotation="1"/>
+        <Model value="ReaperJumpLaunchModel"/>
+    </CActorModel>
+    <CActorSound id="AP_ReaperJumpLaunchSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_ReaperJump.Launch" Send="Create"/>
+        <Sound value="Reaper_JumpLaunch"/>
+    </CActorSound>
+    <CActorRange id="AP_G4ChargeRange" parent="RangeAbil" abil="AP_D8Charge"/>
 </Catalog>

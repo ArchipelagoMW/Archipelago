@@ -24,4 +24,8 @@
         <Value value="1"/>
         <Behavior value="AP_KillSquad"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_D8ClusterBombsResearched">
+        <Find value="1"/>
+        <Value value="AP_HaveD8ClusterBomb"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

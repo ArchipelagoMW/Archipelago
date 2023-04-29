@@ -1,1 +1,3 @@
-﻿Button/Hotkey/AP_MedicHeal=E
+﻿Button/Hotkey/AP_D8Charge=G
+Button/Hotkey/AP_MedicHeal=E
+Button/Hotkey/AP_D8Charge=G

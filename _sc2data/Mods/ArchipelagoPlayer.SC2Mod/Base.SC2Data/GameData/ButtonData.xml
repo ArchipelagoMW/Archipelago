@@ -30,4 +30,15 @@
         <EditorCategories value="Race:Terran"/>
         <TintRacially value="1"/>
     </CButton>
+    <CButton id="AP_D8Charge">
+        <Icon value="Assets\Textures\BTN-Ability-Terran-D8Charge.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Terran-D8Charge.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_U238Rounds">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-u238rounds.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
 </Catalog>

@@ -40,4 +40,19 @@
     <CRequirement id="AP_JuggernautPlatingResearched">
         <NodeArray index="Use" Link="AP_CountUpgradeFirebatJuggernautPlatingCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_UseReaperU238Rounds">
+        <NodeArray index="Show" Link="AP_CountUpgradeReaperU238RoundsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveD8ClusterBomb">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="CountUpgradeClusterBombCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseStimpackSMReaper">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeReaperStimpackCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseG4ClusterBombs">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeClusterBombCompleteOnly"/>
+    </CRequirement>
 </Catalog>

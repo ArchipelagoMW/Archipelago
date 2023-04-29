@@ -99,4 +99,36 @@
         <Race value="Terran"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_ClusterBomb">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Reaper"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ReaperD8Charge">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_D8Charge,Options[Hidden]" Value="1"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Reaper"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ReaperSpeed">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-reapernitropacks.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="100"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Reaper,Speed" Value="0.886700"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Reaper"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ReaperU238Rounds">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Weapon,AP_P38ScytheGuassPistol,Range" Value="1.000000"/>
+        <EffectArray Reference="Effect,AP_P38ScytheGuassPistol,AttributeBonus[Light]" Value="3.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ReaperStimpack">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

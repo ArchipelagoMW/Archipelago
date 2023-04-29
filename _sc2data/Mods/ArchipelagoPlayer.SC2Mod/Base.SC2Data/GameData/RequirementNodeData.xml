@@ -39,4 +39,16 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_MarauderLifeBoost" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeReaperU238RoundsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_ReaperU238Rounds" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeReaperStimpackCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_ReaperStimpack" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeClusterBombCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_ClusterBomb" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

@@ -33,4 +33,26 @@
         <Backswing value="0"/>
         <Effect value="AP_PunisherGrenadesLM"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_D8Charge">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel0.dds"/>
+        <DisplayEffect value="AP_D8ChargeDamage"/>
+        <TargetFilters value="Ground,Structure,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Period value="1.8"/>
+        <Effect value="AP_D8ChargeLaunchMissile"/>
+        <RandomDelayMin value="0.1"/>
+        <RandomDelayMax value="0.5"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_P38ScytheGuassPistol">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel0.dds"/>
+        <DisplayAttackCount value="2"/>
+        <TargetFilters value="Ground,Visible;Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <MinScanRange value="5.5"/>
+        <Range value="4.5"/>
+        <Period value="1.1"/>
+        <DamagePoint value="0"/>
+        <Backswing value="0.75"/>
+        <Effect value="AP_P38ScytheGuassPistolBurst"/>
+    </CWeaponLegacy>
 </Catalog>

@@ -46,8 +46,20 @@
     <CAbilRedirectInstant id="AP_StimpackRedirect">
         <AbilSetId value="Stimpack"/>
         <Abil value="AP_Stimpack"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="StimRedirect" Requirements="UseStimpack"> <!-- TODO: verify this -->
+        <CmdButtonArray index="Execute" DefaultButtonFace="StimRedirect" Requirements="UseStimpack">
+            <!-- TODO: verify this -->
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilRedirectInstant>
+    <CAbilEffectTarget id="AP_D8Charge">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Cost>
+            <Cooldown Link="AP_D8ChargeD8Charge" TimeUse="60"/>
+        </Cost>
+        <TargetFilters value="Ground,Visible;-"/>
+        <Range value="5"/>
+        <CastOutroTime value="0.35"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_D8Charge" State="Restricted" Requirements="AP_UseG4ClusterBombs"/>
+    </CAbilEffectTarget>
 </Catalog>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CTargetFindEnumArea id="AP_D8ChargeAllUnits">
+        <CasterValidator value="D8ChargeAllUnitValidator"/> <!-- Liberty.SC2Mod -->
+        <TargetValidator value="D8ChargeTargetValidator"/> <!-- Liberty.SC2Mod -->
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Hallucination,Invulnerable"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+        <AreaArray/>
+        <Abil value="AP_D8Charge"/>
+    </CTargetFindEnumArea>
+    <CTargetFindEnumArea id="AP_D8ChargeBuildingOnly">
+        <CasterValidator value="CasterLifeLT60Percent"/>
+        <TargetValidator value="D8ChargeTargetValidator"/> <!-- Liberty.SC2Mod -->
+        <SearchFilters value="Ground,Structure;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Hallucination,Invulnerable"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+        <AreaArray/>
+        <Abil value="AP_D8Charge"/>
+    </CTargetFindEnumArea>
+</Catalog>
