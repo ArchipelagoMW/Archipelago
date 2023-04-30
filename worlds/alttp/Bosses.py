@@ -6,6 +6,7 @@ from Fill import FillError
 from .Options import LTTPBosses as Bosses
 from .StateHelpers import can_shoot_arrows, can_extend_magic, can_get_good_bee, has_sword, has_beam_sword, has_melee_weapon, has_fire_source
 
+
 def BossFactory(boss: str, player: int) -> Optional[Boss]:
     if boss in boss_table:
         enemizer_name, defeat_rule = boss_table[boss]

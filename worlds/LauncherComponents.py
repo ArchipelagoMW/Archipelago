@@ -95,7 +95,7 @@ components: List[Component] = [
     # Zillion
     Component('Zillion Client', 'ZillionClient',
               file_identifier=SuffixIdentifier('.apzl')),
-    #Kingdom Hearts 2
+    # Kingdom Hearts 2
     Component('KH2 Client', "KH2Client"),
 ]
 
