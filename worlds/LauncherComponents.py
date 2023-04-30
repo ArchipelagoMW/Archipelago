@@ -102,6 +102,6 @@ components: List[Component] = [
 
 icon_paths = {
     'icon': local_path('data', 'icon.png'),
-    'mcicon': local_path('data', 'mcicon.png'),  # loading .ico on frozen windows seems to fail, investigate later
+    'mcicon': local_path('data', 'mcicon.png'),
     'discord': local_path('data', 'discord-mark-blue.png'),
 }
