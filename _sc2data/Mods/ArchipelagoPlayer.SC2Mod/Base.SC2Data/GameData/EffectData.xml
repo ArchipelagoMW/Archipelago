@@ -385,4 +385,31 @@
         <Kind value="Ranged"/>
         <Amount value="18"/>
     </CEffectDamage>
+    <CEffectApplyBehavior id="AP_BurstCapacitorsApplyAttackingBehavior">
+        <ValidatorArray index="0" value="AP_BurstCapacitorsPurchased"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_BurstCapacitorsAttacking"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_BurstCapacitorsApplyChargeBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_BurstCapacitorsCharging"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_BurstCapacitorsApplyDamageBuff">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_BurstCapacitorsDamageBuff"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_Diamondback">
+        <ValidatorArray value="CasterIsNotHidden"/>
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_DiamondbackBeam"/>
+        <EffectArray value="AP_BurstCapacitorsApplyAttackingBehavior"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_DiamondbackBeam" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Armored" value="20"/>
+        <Kind value="Ranged"/>
+        <Amount value="20"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
 </Catalog>

@@ -96,4 +96,16 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_MultilockTargetingSystems" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeBurstCapacitorsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_BurstCapacitors" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeShapedHullCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_ShapedHull" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTriLithiumPowerCellsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TriLithiumPowerCells" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

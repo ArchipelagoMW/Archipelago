@@ -136,4 +136,15 @@
         <Period value="1.5"/>
         <Effect value="AP_GoliathG"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_Diamondback">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="AP_DiamondbackBeam"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Period value="2"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
 </Catalog>

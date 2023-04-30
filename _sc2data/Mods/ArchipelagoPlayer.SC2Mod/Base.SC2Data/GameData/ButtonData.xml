@@ -93,4 +93,20 @@
         <EditorCategories value="Race:Terran"/>
         <TintRacially value="1"/>
     </CButton>
+    <CButton id="AP_FireOnTheMove">
+        <Icon value="AP\Assets\Textures\btn-ability-terran-fireonthemove.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-ability-terran-fireonthemove.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_ShapedHull">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-shapedhull.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_TriLithiumPowerCells">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-trilithiumpowercell.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
 </Catalog>

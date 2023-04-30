@@ -64,4 +64,22 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
     </CLight>
+    <CLight id="AP_DiamondbackPortrait" parent="default">
+        <ToDInfoArray index="0" AmbientColor="0.243137,0.203922,0.172549">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.950000"/>
+            <Param index="CreepSpecularExp" value="40.000000"/>
+            <Param index="CreepHDRSpecMultiplier" value="5.900000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.984314,0.937255,0.776471"/>
+                <ColorMultiplier value="1.799000"/>
+                <SpecularColor value="0.984314,0.937255,0.776471"/>
+                <SpecColorMultiplier value="1.349000"/>
+                <Direction value="-0.670153,0.566323,-0.479764"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="1.000000,0.501961,0.250980" ColorMultiplier="0.230000" Direction="0.423427,0.358331,0.832051"/>
+            <DirectionalLight index="Back" Color="0.000000,0.247059,0.501961" ColorMultiplier="1.349000" Direction="-0.867578,-0.085831,-0.489839"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
+    </CLight>
 </Catalog>

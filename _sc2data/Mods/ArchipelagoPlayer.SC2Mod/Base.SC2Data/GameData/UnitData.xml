@@ -805,4 +805,82 @@
         <Mover value="AP_GoliathMissile"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
+    <CUnit id="AP_Diamondback">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Campaign"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="200"/>
+        <LifeMax value="200"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
+        <Speed value="2.9531"/>
+        <Acceleration value="1000"/>
+        <Deceleration value="12"/>
+        <LateralAcceleration value="115.1875"/>
+        <StationaryTurningRate value="1499.9414"/>
+        <TurningRate value="1499.9414"/>
+        <Sight value="10"/>
+        <Food value="-4"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="150"/>
+        <CostResource index="Vespene" value="150"/>
+        <RepairTime value="50"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="30"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
+        <WeaponArray Link="AP_Diamondback" Turret="AP_Diamondback"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AP_FireOnTheMove" Type="Passive" Row="2" Column="0"/>
+            <LayoutButtons>
+                <Face value="AP_TriLithiumPowerCells"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255"/>
+                <Requirements value="AP_UseTriLithiumPowerCells"/>
+                <Row value="2"/>
+                <Column value="1"/>
+            </LayoutButtons>
+            <LayoutButtons>
+                <Face value="AP_ShapedHull"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255"/>
+                <Requirements value="AP_UseShapedHull"/>
+                <Row value="2"/>
+                <Column value="2"/>
+            </LayoutButtons>
+        </CardLayouts>
+        <Radius value="0.6875"/>
+        <SeparationRadius value="0.65"/>
+        <InnerRadius value="0.5"/>
+        <CargoSize value="4"/>
+        <ScoreMake value="375"/>
+        <ScoreKill value="750"/>
+        <SubgroupPriority value="16"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="120"/>
+        <GlossaryStrongArray value="Ultralisk"/>
+        <GlossaryStrongArray value="Colossus"/>
+        <GlossaryStrongArray value="SiegeTank"/>
+        <GlossaryWeakArray value="Zergling"/>
+        <GlossaryWeakArray value="Zealot"/>
+        <GlossaryWeakArray value="Marauder"/>
+        <HotkeyCategory value="Unit/Category/TerranStory"/>
+    </CUnit>
 </Catalog>

@@ -87,4 +87,15 @@
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeMultilockTargetingSystemsCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_BurstCapacitorsResearched">
+        <NodeArray index="Use" Link="AP_CountUpgradeBurstCapacitorsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseShapedHull">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeShapedHullCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseTriLithiumPowerCells">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeTriLithiumPowerCellsCompleteOnly"/>
+    </CRequirement>
 </Catalog>

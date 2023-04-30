@@ -72,4 +72,16 @@
         <ChargeLink value="Abil/AP_VultureSpiderMines"/>
         <Location value="Unit"/>
     </CValidatorUnitCompareChargeUsed>
+    <CValidatorPlayerRequirement id="AP_BurstCapacitorsPurchased">
+        <Find value="1"/>
+        <Value value="AP_BurstCapacitorsResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_DiamondbackCharged">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_BurstCapacitorsDamageBuff"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_DiamondbackNotAttacking">
+        <Behavior value="AP_BurstCapacitorsAttacking"/>
+    </CValidatorUnitCompareBehaviorCount>
 </Catalog>

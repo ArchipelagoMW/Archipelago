@@ -191,7 +191,6 @@
         <Model value="Assets\Portraits\Terran\VulturePortrait\VulturePortrait.m3"/>
         <FacialController value="LocalizedData\Facial\VulturePortrait.fxa"/>
         <Image value="Assets\Textures\VulturePortrait_Static.dds"/>
-        <Lighting value="AP_VulturePortrait"/>
     </CModel>
     <CModel id="AP_VultureSpiderMineAttackImpact" parent="ImpactFX">
         <Model value="Assets\Effects\Terran\TerranSmallUnitDeath\TerranSmallUnitDeath.m3"/>
@@ -316,5 +315,60 @@
         <FacialController value="LocalizedData\Facial\GoliathPortrait.fxa"/>
         <Image value="Assets\Textures\GoliathPortrait_Static.dds"/>
         <Lighting value="GoliathPortrait"/>
+    </CModel>
+    <CModel id="AP_Diamondback" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\Diamondback\Diamondback.m3"/>
+        <Events>
+            <Anim value="Stand,Morph,End"/>
+            <Name value="DiamondbackCapture"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Diamondback_Capture"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid07"/>
+        <Radius value="0.650000"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+        <SelectionRadius value="0.866400"/>
+        <ShadowRadius value="0.866400"/>
+        <TechPurchaseCamera value="TechPurchaseDiamondback"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="1.000000"/>
+        <TipabilityWidth value="0.800000"/>
+        <UnitGlossaryCamera value="Star2CameraMid07"/>
+    </CModel>
+    <CModel id="AP_DiamondbackAttackBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\DiamondbackBeam\DiamondbackBeam.m3"/>
+        <LowQualityModel value="AP_DiamondbackAttackBeamLow"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_DiamondbackAttackBeamCharged" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\DiamondbackWeaponChargedBeam\DiamondbackWeaponChargedBeam.m3"/>
+        <LowQualityModel value="AP_DiamondbackAttackBeamChargedLow"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_DiamondbackAttackBeamChargedLow" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\DiamondbackWeaponChargedBeam\DiamondbackWeaponChargedBeam_Low.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_DiamondbackAttackBeamLow" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\DiamondbackBeam\DiamondbackBeam_Low.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_DiamondbackCharged" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\DiamondbackWeaponChargedLaunch\DiamondbackWeaponChargedLaunch.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_DiamondbackDeath" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Units\Terran\DiamondbackDeath\DiamondbackDeath.m3"/>
+        <LowQualityModel value="TerranMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_DiamondbackPortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\DiamondbackPortrait\DiamondbackPortrait.m3"/>
+        <FacialController value="LocalizedData\Facial\DiamondbackPortrait.fxa"/>
+        <Image value="Assets\Textures\DiamondbackPortrait_Static.dds"/>
+        <Lighting value="AP_DiamondbackPortrait"/>
     </CModel>
 </Catalog>

@@ -716,13 +716,6 @@
         <GroupSoundArray index="Pissed" value="AP_Goliath_Pissed"/>
         <HeroIcon value="Assets\Textures\btn-unit-terran-goliath.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
-        <SoundArray index="Ready" value="AP_Goliath_Ready"/>
-        <SoundArray index="Help" value="AP_Goliath_Help"/>
-        <SoundArray index="What" value="AP_Goliath_What"/>
-        <SoundArray index="Yes" value="AP_Goliath_Yes"/>
-        <SoundArray index="Attack" value="AP_Goliath_Attack"/>
-        <SoundArray index="Pissed" value="AP_Goliath_Pissed"/>
-        <SoundArray index="Movement" value="AP_Goliath_Movement"/>
         <UnitIcon value="Assets\Textures\btn-unit-terran-goliath.dds"/>
         <Wireframe>
             <Image value="AP\Assets\Textures\Wireframe-Terran-goliath.dds"/>
@@ -730,17 +723,71 @@
     </CActorUnit>
     <CActorAction id="AP_GoliathAirAttack" parent="GenericAttack" effectImpact="AP_GoliathAU" effectLaunch="AP_GoliathALM">
         <LaunchAttachQuery Methods="AP_AMPatternGoliath"/>
-        <LaunchAssets Model="AP_GoliathAirAttackLaunch" Sound="VikingFighter_AttackLaunch"/>
-        <Missile value="AP_GoliathAirAttackMissile"/>
-        <ImpactMap index="None" Model="AP_GoliathAirAttackImpact" Sound="VikingFighter_AttackImpact"/>
+        <LaunchAssets Sound="VikingFighter_AttackLaunch"/>
+        <ImpactMap index="None" Sound="VikingFighter_AttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_GoliathAirAttackMissile" parent="GenericAttackMissile" unitName="AP_GoliathAWeapon"/>
     <CActorAction id="AP_GoliathGroundAttack" parent="GenericAttack" effectAttack="AP_GoliathG">
         <LaunchAttachQuery Methods="AMFilterWeaponSetA0"/>
-        <LaunchAssets Model="AP_GoliathGroundAttackLaunch" Sound="AP_GoliathGroundAttackLaunch"/>
-        <ImpactMap index="None" Model="AP_GoliathGroundAttackImpact" Sound="AP_Goliath_GroundAttackImpact"/>
+        <ImpactMap index="None" Sound="AP_Goliath_GroundAttackImpact"/>
     </CActorAction>
     <CActorTurret id="AP_GoliathTurret">
         <On Terms="TurretEnable.AP_Goliath" Send="Create"/>
+    </CActorTurret>
+    <CActorUnit id="AP_Diamondback" parent="GenericUnitStandard" unitName="AP_Diamondback">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="Abil.attack.ReadyStop" Target="AP_DiamondbackAttackBeam" Send="SetOpacity 0.000000 0.250000"/>
+        <DeathArray index="Normal" ModelLink="AP_DiamondbackDeath" SoundLink="AP_Diamondback_Explode"/>
+        <PortraitModel value="AP_DiamondbackPortrait"/>
+        <BarOffset value="80"/>
+        <BarWidth value="102"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Diamondback.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="Birth" value="AP_Diamondback_Birth"/>
+        <GroupSoundArray index="Ready" value="AP_Diamondback_Ready"/>
+        <GroupSoundArray index="Help" value="AP_Diamondback_Help"/>
+        <GroupSoundArray index="What" value="AP_Diamondback_What"/>
+        <GroupSoundArray index="Yes" value="AP_Diamondback_Yes"/>
+        <GroupSoundArray index="Attack" value="AP_Diamondback_Attack"/>
+        <GroupSoundArray index="Pissed" value="AP_Diamondback_Pissed"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="40"/>
+        <SoundArray index="Ready" value="AP_Diamondback_Ready"/>
+        <SoundArray index="Help" value="AP_Diamondback_Help"/>
+        <SoundArray index="What" value="AP_Diamondback_What"/>
+        <SoundArray index="Yes" value="AP_Diamondback_Yes"/>
+        <SoundArray index="Attack" value="AP_Diamondback_Attack"/>
+        <SoundArray index="Pissed" value="AP_Diamondback_Pissed"/>
+        <SoundArray index="Movement" value="AP_Diamondback_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-diamondback.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Diamondback.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_DiamondbackAttack" parent="GenericAttack" effectAttack="AP_DiamondbackBeam">
+        <LaunchAttachQuery Methods="AMFilterWeapon"/>
+        <LaunchAssets Sound="AP_Diamondback_AttackImpact"/>
+        <Beam value="AP_DiamondbackAttackBeam"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_DiamondbackAttackBeam" parent="GenericAttackBeam">
+        <On Terms="ActorCreation; ValidateEffect AP_DiamondbackCharged" Send="ModelSwap AP_DiamondbackAttackBeamCharged"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+    </CActorBeamSimple>
+    <CActorModel id="AP_DiamondbackCharged2" parent="ModelAddition">
+        <On Terms="Behavior.AP_BurstCapacitorsDamageBuff.On" Send="Create"/>
+        <On Terms="Behavior.AP_BurstCapacitorsDamageBuff.Off" Send="Destroy"/>
+        <HostSiteOps Ops="SOpAttachWeapon02"/>
+        <Model value="AP_DiamondbackCharged"/>
+    </CActorModel>
+    <CActorModel id="AP_DiamondbackCharged" parent="ModelAddition">
+        <On Terms="Behavior.AP_BurstCapacitorsDamageBuff.On" Send="Create"/>
+        <On Terms="Behavior.AP_BurstCapacitorsDamageBuff.Off" Send="Destroy"/>
+        <HostSiteOps Ops="SOpAttachWeapon01"/>
+        <Model value="AP_DiamondbackCharged"/>
+    </CActorModel>
+    <CActorTurret id="AP_DiamondbackTurret">
+        <On Terms="TurretEnable.AP_Diamondback" Send="Create"/>
     </CActorTurret>
 </Catalog>

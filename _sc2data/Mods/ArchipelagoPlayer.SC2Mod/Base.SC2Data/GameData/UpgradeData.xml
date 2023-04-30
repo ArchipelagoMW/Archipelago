@@ -213,4 +213,33 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Options[Hidden]" Value="1"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_BurstCapacitors">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_Hyperfluxor">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Weapon,AP_Diamondback,RateMultiplier" Value="0.25"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ShapedHull">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Alert value="UpgradeComplete_Terr"/>
+        <Race value="Terr"/>
+        <EffectArray Reference="Unit,AP_Diamondback,LifeStart" Value="50"/>
+        <EffectArray Reference="Unit,AP_Diamondback,LifeMax" Value="50"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TriLithiumPowerCells">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Weapon,AP_Diamondback,Range" Value="1"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TungstenSpikes">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Alert value="UpgradeComplete_Terr"/>
+        <Race value="Terr"/>
+        <EffectArray Reference="Weapon,AP_Diamondback,Range" Value="2.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

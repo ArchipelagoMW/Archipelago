@@ -104,4 +104,29 @@
             <WeaponDisableArray value="AP_SpartanCompanyG"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_BurstCapacitorsAttacking">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_BurstCapacitorsPurchased"/>
+        <Duration value="2"/>
+        <FinalEffect value="AP_BurstCapacitorsApplyChargeBehavior"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_BurstCapacitorsCharging">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <RemoveValidatorArray value="AP_DiamondbackNotAttacking"/>
+        <Duration value="5"/>
+        <FinalEffect value="AP_BurstCapacitorsApplyDamageBuff"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_BurstCapacitorsDamageBuff">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_DiamondbackNotAttacking"/>
+        <Modification>
+            <DamageDealtScaled index="Spell" value="10"/>
+            <DamageDealtScaled index="Melee" value="10"/>
+            <DamageDealtScaled index="Ranged" value="10"/>
+            <DamageDealtScaled index="Splash" value="10"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>
