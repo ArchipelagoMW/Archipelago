@@ -6,6 +6,7 @@
     - v0.0.59 or newer (included in Archipelago 0.2.1 setup)
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI with ROM access. Any one of the following will work:
+        - snes9x-nwa from: [snes9x-nwa](https://github.com/Skarsnik/snes9x-emunwa/releases),
         - snes9x-rr from: [snes9x-rr Releases Page](https://github.com/gocha/snes9x-rr/releases)
         - BizHawk from: [BizHawk Website](http://tasvideos.org/BizHawk.html)
         - bsnes-plus-nwa from: [bsnes-plus GitHub](https://github.com/black-sliver/bsnes-plus)
@@ -62,6 +63,11 @@ page: [Evermizer apbpatch Page](https://evermizer.com/apbpatch)
 
 Start SNI either from the Archipelago install folder or the stand-alone version. If this is its first time launching,
 you may be prompted to allow it to communicate through the Windows Firewall.
+
+#### snes9x-nwa
+
+1. Click on the Network Menu and check **Enable Emu Network Control**
+2. Load your ROM file if it hasn't already been loaded.
 
 ##### snes9x-rr
 

@@ -7,6 +7,7 @@
 
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI such as:
+        - snes9x-nwa from: [snes9x-nwa](https://github.com/Skarsnik/snes9x-emunwa/releases),
         - snes9x-rr from: [snes9x rr](https://github.com/gocha/snes9x-rr/releases),
         - BizHawk from: [BizHawk Website](http://tasvideos.org/BizHawk.html)
         - RetroArch 1.10.3 or newer from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
@@ -79,6 +80,11 @@ client, and will also create your ROM in the same place as your patch file.
 
 When the client launched automatically, SNI should have also automatically launched in the background. If this is its
 first time launching, you may be prompted to allow it to communicate through the Windows Firewall.
+
+#### snes9x-nwa
+
+1. Click on the Network Menu and check **Enable Emu Network Control**
+2. Load your ROM file if it hasn't already been loaded.
 
 ##### snes9x-rr
 

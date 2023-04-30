@@ -5,7 +5,7 @@
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for `SNI Client - A Link to the Past Patch Setup`
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI
-      ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
+      ([snes9x-nwa](https://github.com/Skarsnik/snes9x-emunwa/releases), [snes9x rr](https://github.com/gocha/snes9x-rr/releases),
        [BizHawk](http://tasvideos.org/BizHawk.html), or
        [RetroArch](https://retroarch.com?page=platforms) 1.10.1 or newer). Or,
     - An SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware. **note: 
@@ -74,6 +74,11 @@ client, and will also create your ROM in the same place as your patch file.
 
 When the client launched automatically, SNI should have also automatically launched in the background. If this is its
 first time launching, you may be prompted to allow it to communicate through the Windows Firewall.
+
+#### snes9x-nwa
+
+1. Click on the Network Menu and check **Enable Emu Network Control**
+2. Load your ROM file if it hasn't already been loaded.
 
 ##### snes9x-rr
 
