@@ -45,7 +45,7 @@ une expérience personnalisée à leur goût, et différents joueurs dans le mê
 Vous pouvez générer un yaml ou télécharger un modèle en visitant la [page des paramètres d'aventure](/games/Adventure/player-settings)
 
 ### Quels sont les paramètres recommandés pour s'initier à la rando ?
-Régler la difficulté_switch_a et réduire la vitesse des dragons rend les dragons plus faciles à éviter. Ajouter Calice à
+Régler la difficulty_switch_a et réduire la vitesse des dragons rend les dragons plus faciles à éviter. Ajouter Calice à
 local_items garantit que vous visiterez au moins un des châteaux intéressants, car il ne peut être placé que dans un château ou
 la salle des crédits.
 
