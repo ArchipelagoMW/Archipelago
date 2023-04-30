@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import enum
 import json
 import typing
 import builtins
@@ -481,9 +482,18 @@ class RestrictedUnpickler(pickle.Unpickler):
         self.net_utils_module = importlib.import_module("NetUtils")
         self.generic_properties_module = importlib.import_module("worlds.generic")
 
+    @staticmethod
+    def restricted_getter(get_obj, key, default=None):
+        if type(get_obj) == enum.EnumMeta and key == "player":
+            return getattr(get_obj, "player")
+        raise PermissionError("Not allowed unpickled getattr operation.")
+
     def find_class(self, module, name):
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
+        # Py 3.11 pickles a getattr into SlotType, so we load a specialized getattr with some measure of security
+        if module == "builtins" and name == "getattr":
+            return self.restricted_getter
         # used by MultiServer -> savegame/multidata
         if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint", "SlotType", "NetworkSlot"}:
             return getattr(self.net_utils_module, name)
