@@ -108,4 +108,27 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_TriLithiumPowerCells" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNotPossibleSiegeModeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NotPossibleSiegeMode" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeMaelstromRoundsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_MaelstromRounds" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSiegeTankShapedBlastCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SiegeTankShapedBlast" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeSiegeTankShapedBlastCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeSiegeTankShapedBlastCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSiegeTechCompleteOnlyTechTreeCheat">
+        <Tooltip value="RequirementNode/Tooltip/CountUpgradeSiegeTechCompleteOnly1316718431"/>
+        <Count Link="AP_SiegeTech" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNotPossibleSiegeModeCompleteOnly">
+        <Count Link="AP_NotPossibleSiegeMode" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
 </Catalog>

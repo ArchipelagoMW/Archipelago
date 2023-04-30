@@ -184,8 +184,8 @@
     </CUpgrade>
     <CUpgrade id="AP_ExtraMines">
         <Flags index="UpgradeCheat" value="0"/>
-        <EffectArray Reference="Abil,VultureSpiderMines,Cost[0].Charge.CountMax" Value="2.000000"/>
-        <EffectArray Reference="Abil,VultureSpiderMines,Cost[0].Charge.CountStart" Value="2.000000"/>
+        <EffectArray Reference="Abil,AP_VultureSpiderMines,Cost[0].Charge.CountMax" Value="2.000000"/>
+        <EffectArray Reference="Abil,AP_VultureSpiderMines,Cost[0].Charge.CountStart" Value="2.000000"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_AresClassWeaponsSystem">
@@ -241,5 +241,31 @@
         <Race value="Terr"/>
         <EffectArray Reference="Weapon,AP_Diamondback,Range" Value="2.000000"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_MaelstromRounds">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Effect,AP_CrucioShockCannonDummy,Amount" Value="40.000000"/>
+        <EffectArray Reference="Effect,AP_ArcliteShockCannonDummy,Amount" Value="40.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_SiegeTankSieged"/>
+        <AffectedUnitArray value="AP_SiegeBreakerSieged"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NotPossibleSiegeMode">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SiegeTankShapedBlast">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SiegeTech">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\btn-unit-terran-siegetanksiegemode.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_SiegeTank"/>
     </CUpgrade>
 </Catalog>

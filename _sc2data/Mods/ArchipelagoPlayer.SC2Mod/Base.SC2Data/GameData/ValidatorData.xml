@@ -84,4 +84,30 @@
     <CValidatorUnitCompareBehaviorCount id="AP_DiamondbackNotAttacking">
         <Behavior value="AP_BurstCapacitorsAttacking"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HasShapedBlast">
+        <Find value="1"/>
+        <Value value="AP_UseShapedBlast"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_IsAPSiegeTank">
+        <Value value="AP_SiegeTank"/>
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaSiegeTank">
+        <Value value="SiegeTank"/>
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsSiegeTank" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaSiegeTank"/>
+        <CombineArray value="AP_IsAPSiegeTank"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="NotSiegeTank" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="IsSiegeTank"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_NoShapedBlast">
+        <Find value="1"/>
+        <Value value="AP_NoShapedBlast"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

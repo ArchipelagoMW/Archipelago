@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CEffectDamage id="AP_90mmCannons" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Armored" value="10"/>
+        <Kind value="Ranged"/>
+        <Amount value="15"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
     <CEffectDamage id="AP_GaussRifle" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>
         <Kind value="Ranged"/>
@@ -410,6 +417,103 @@
         <AttributeBonus index="Armored" value="20"/>
         <Kind value="Ranged"/>
         <Amount value="20"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_CrucioShockCannonBlast" parent="DU_WEAP">
+        <ValidatorArray value="TargetRadiusSmall"/>
+        <ValidatorArray value="AP_NoShapedBlast"/>
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="60"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="0.4687" Fraction="1"/>
+        <AreaArray Radius="0.7812" Fraction="0.5"/>
+        <AreaArray Radius="1.25" Fraction="0.25"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Self,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="OffsetByUnitRadius" value="0"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_CrucioShockCannonBlastSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_CrucioShockCannonBlast"/>
+        <EffectArray value="AP_CrucioShockCannonFriendlyDamage"/>
+        <EffectArray value="AP_CrucioShockCannonEnemyDamage"/>
+        <EffectArray value="AP_CrucioShockCannonFriendlyTargetDamage"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_CrucioShockCannonDirected" parent="DU_WEAP">
+        <ValidatorArray value="TargetRadiusLarge"/>
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="60"/>
+        <Death value="Blast"/>
+        <SearchFilters value="Ground;Self,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_CrucioShockCannonDummy" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Splash"/>
+        <KindSplash value="Splash"/>
+        <Amount value="60"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_CrucioShockCannonEnemyDamage" parent="DU_WEAP">
+        <ValidatorArray value="TargetRadiusSmall"/>
+        <ValidatorArray value="AP_HasShapedBlast"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnitValidator value="EnemyTarget"/>
+        <Kind value="Splash"/>
+        <KindSplash value="Splash"/>
+        <Amount value="60"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="0.4687" Fraction="1"/>
+        <AreaArray Radius="0.7812" Fraction="0.5"/>
+        <AreaArray Radius="1.25" Fraction="0.25"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="OffsetByUnitRadius" value="0"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_CrucioShockCannonFriendlyDamage" parent="DU_WEAP">
+        <ValidatorArray value="TargetRadiusSmall"/>
+        <ValidatorArray value="AP_HasShapedBlast"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnitValidator value="FriendlyOrNeutralTarget"/>
+        <Kind value="Splash"/>
+        <KindSplash value="Splash"/>
+        <Amount value="15"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="0.4687" Fraction="1"/>
+        <AreaArray Radius="0.7812" Fraction="0.5"/>
+        <AreaArray Radius="1.25" Fraction="0.25"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Self,Enemy,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="OffsetByUnitRadius" value="0"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_CrucioShockCannonFriendlyTargetDamage" parent="DU_WEAP">
+        <ValidatorArray value="TargetRadiusSmall"/>
+        <ValidatorArray value="AP_HasShapedBlast"/>
+        <ValidatorArray value="FriendlyOrNeutralTarget"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnitValidator value="FriendlyOrNeutralTarget"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Splash"/>
+        <KindSplash value="Splash"/>
+        <Amount value="45"/>
+        <Death value="Blast"/>
+        <SearchFilters value="Ground;Self,Enemy,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_CrucioShockCannonSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_CrucioShockCannonBlastSet"/>
+        <EffectArray value="AP_CrucioShockCannonDirected"/>
+        <EffectArray value="AP_MaelstromRounds"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_MaelstromRounds" parent="DU_WEAP">
+        <ValidatorArray value="AP_HasMaelstromRounds"/>
+        <EditorCategories value="Race:Terran"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Ranged"/>
+        <Amount value="40"/>
         <Death value="Blast"/>
     </CEffectDamage>
 </Catalog>

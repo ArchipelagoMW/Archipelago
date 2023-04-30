@@ -109,4 +109,14 @@
         <EditorCategories value="Race:Terran"/>
         <TintRacially value="1"/>
     </CButton>
+    <CButton id="AP_MaelstromRounds">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-maelstromrounds.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_ShapedBlast">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-shapedblast.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
 </Catalog>

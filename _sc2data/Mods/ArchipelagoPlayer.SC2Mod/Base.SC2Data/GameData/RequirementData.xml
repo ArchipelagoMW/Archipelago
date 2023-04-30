@@ -98,4 +98,30 @@
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeTriLithiumPowerCellsCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_UseMaelstromRounds">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMaelstromRoundsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseShapedBlast">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSiegeTankShapedBlastCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_NoShapedBlast">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_NotCountUpgradeSiegeTankShapedBlastCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseMaelstromRoundsReq">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeNotPossibleSiegeModeCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMaelstromRoundsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseSiegeMode">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeSiegeTechCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_UseShapedBlastReq">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeNotPossibleSiegeModeCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSiegeTankShapedBlastCompleteOnly"/>
+    </CRequirement>
 </Catalog>
