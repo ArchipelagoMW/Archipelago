@@ -52,6 +52,7 @@ def get_rules_lookup(player: int):
             "Puzzle Solved Maze Door": lambda state: state.can_reach("Projector Room", "Region", player),
             "Accessible: Storage: Janitor Closet": lambda state: state.has("Cloth Pot Bottom DUPE", player) and state.has("Cloth Pot Top DUPE", player),
             "Accessible: Storage: Tar River": lambda state: state.has("Oil Pot Bottom DUPE", player) and state.has("Oil Pot Top DUPE", player),
+            "Accessible: Storage: Theater": lambda state: state.can_reach("Projector Room", "Region", player),
             "Ixupi Captured Water": lambda state: (state.can_reach("Lobby", "Region", player)) and 
                                                    state.has("Water Pot Bottom", player) and state.has("Water Pot Top", player) and
                                                    state.has("Water Pot Bottom DUPE", player) and state.has("Water Pot Top DUPE", player),

@@ -97,6 +97,9 @@ class ShiversWorld(World):
         #Set Key for Underground Lake Room to early item
         self.multiworld.early_items[self.player]["Key for Underground Lake Room"] = 1
 
+        # Set Key for Office Elevator to Sphere 2
+        self.multiworld.early_items[self.player]["Key for Office Elevator"] = 2
+
 
     #Prefills event storage locations with duplicate pots
     def pre_fill(self) -> None:
