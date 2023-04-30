@@ -190,28 +190,33 @@ def set_island_entrances_rules(logic: StardewLogic, multi_world, player):
 
 
 def set_island_parrot_rules(logic: StardewLogic, multi_world, player):
+    has_walnut = logic.has_walnut(1).simplify()
+    has_5_walnut = logic.has_walnut(5).simplify()
+    has_10_walnut = logic.has_walnut(10).simplify()
+    has_20_walnut = logic.has_walnut(10).simplify()
     MultiWorldRules.add_rule(multi_world.get_location("Leo's Parrot", player),
-                             logic.has_walnut(1).simplify())
+                             has_walnut)
     MultiWorldRules.add_rule(multi_world.get_location("Island West Turtle", player),
-                             logic.has_walnut(10).simplify())
+                             has_10_walnut & logic.received("Island North Turtle"))
     MultiWorldRules.add_rule(multi_world.get_location("Island Farmhouse", player),
-                             logic.has_walnut(20).simplify())
+                             has_20_walnut)
     MultiWorldRules.add_rule(multi_world.get_location("Island Mailbox", player),
-                             logic.has_walnut(5).simplify())
+                             has_5_walnut & logic.received("Island Farmhouse"))
     MultiWorldRules.add_rule(multi_world.get_location("Farm Obelisk", player),
-                             logic.has_walnut(20).simplify())
+                             has_20_walnut & logic.received("Island Mailbox"))
     MultiWorldRules.add_rule(multi_world.get_location("Dig Site Bridge", player),
-                             logic.has_walnut(10).simplify())
+                             has_10_walnut & logic.received("Island West Turtle"))
     MultiWorldRules.add_rule(multi_world.get_location("Island Trader", player),
-                             logic.has_walnut(10).simplify())
+                             has_10_walnut & logic.received("Island Farmhouse"))
     MultiWorldRules.add_rule(multi_world.get_location("Volcano Bridge", player),
-                             logic.has_walnut(5).simplify())
+                             has_5_walnut & logic.received("Island West Turtle") &
+                             logic.can_reach_region(SVRegion.volcano_floor_10))
     MultiWorldRules.add_rule(multi_world.get_location("Volcano Exit Shortcut", player),
-                             logic.has_walnut(5).simplify())
+                             has_5_walnut & logic.received("Island West Turtle"))
     MultiWorldRules.add_rule(multi_world.get_location("Island Resort", player),
-                             logic.has_walnut(20).simplify())
+                             has_20_walnut & logic.received("Island Farmhouse"))
     MultiWorldRules.add_rule(multi_world.get_location("Parrot Express", player),
-                             logic.has_walnut(10).simplify())
+                             has_10_walnut)
 
 
 def set_story_quests_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player):

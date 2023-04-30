@@ -10,6 +10,7 @@ class TestBaseItemGeneration(SVTestBase):
     options = {
         options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
         options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
     }
 
     def test_all_progression_items_are_added_to_the_pool(self):

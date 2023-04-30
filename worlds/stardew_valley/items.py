@@ -66,6 +66,7 @@ class Group(enum.Enum):
     SPECIAL_ORDER_QI = enum.auto()
     GINGER_ISLAND = enum.auto()
     WALNUT_PURCHASE = enum.auto()
+    TV_CHANNEL = enum.auto()
 
 
 @dataclass(frozen=True)
@@ -175,6 +176,7 @@ def create_unique_items(item_factory: StardewItemFactory, world_options: Stardew
     create_wizard_buildings(item_factory, world_options, items)
     create_carpenter_buildings(item_factory, world_options, items)
     items.append(item_factory("Beach Bridge"))
+    items.extend(create_tv_channels(item_factory))
     create_special_quest_rewards(item_factory, items)
     create_stardrops(item_factory, items)
     create_museum_items(item_factory, world_options, items)
@@ -403,8 +405,12 @@ def create_special_order_qi_rewards(item_factory: StardewItemFactory, world_opti
         return []
     qi_gem_rewards = ["100 Qi Gems", "10 Qi Gems", "40 Qi Gems", "25 Qi Gems", "25 Qi Gems",
                       "40 Qi Gems", "20 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems"]
-    qi_gem_items = [item_factory(f"Resource Pack: {reward}") for reward in qi_gem_rewards]
+    qi_gem_items = [item_factory(reward) for reward in qi_gem_rewards]
     return qi_gem_items
+
+
+def create_tv_channels(item_factory: StardewItemFactory) -> List[Item]:
+    return [item_factory(item) for item in items_by_group[Group.TV_CHANNEL]]
 
 
 def create_filler_festival_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
