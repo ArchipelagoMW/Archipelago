@@ -677,7 +677,7 @@
         <Sound value="AP_SpiderMineBurrow"/>
     </CActorSound>
     <CActorSound id="AP_VultureSpiderMineSeekSound" parent="SoundOneShot">
-        <Sound value="Vulture_SpiderMineSeek"/>
+        <Sound value="AP_Vulture_SpiderMineSeek"/>
     </CActorSound>
     <CActorRange id="AP_VultureSpiderMineUnburrowRange">
         <On Terms="SelectionLocalUpdate.AP_SpiderMineBurrowed.Start" Send="Create"/>
