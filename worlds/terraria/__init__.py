@@ -51,7 +51,7 @@ class TerrariaWorld(World):
     # data_version is used to signal that items, locations or their names
     # changed. Set this to 0 during development so other games' clients do not
     # cache any texts, then increase by 1 for each release that makes changes.
-    data_version = 0
+    data_version = 1
 
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
@@ -177,6 +177,23 @@ class TerrariaWorld(World):
 
             self.multiworld.itempool.append(self.create_item(name))
 
+        self.locked_items = {}
+
+        for location in self.ter_locations:
+            _, flags, _, _ = rules[rule_indices[location]]
+            if not "Location" in flags and not "Achievement" in flags:
+                if location in progression:
+                    classification = ItemClassification.progression
+                else:
+                    classification = ItemClassification.useful
+
+                self.locked_items[location] = TerrariaItem(
+                    location, classification, None, self.player
+                )
+
+        for item, location in self.ter_goals.items():
+            self.locked_items[location] = self.create_item(item)
+
     def check_condition(
         self,
         state,
@@ -278,31 +295,13 @@ class TerrariaWorld(World):
 
             self.multiworld.get_location(location, self.player).access_rule = check
 
-    def generate_basic(self) -> None:
-        for location in self.ter_locations:
-            _, flags, _, _ = rules[rule_indices[location]]
-            if not "Location" in flags and not "Achievement" in flags:
-                if location in progression:
-                    classification = ItemClassification.progression
-                else:
-                    classification = ItemClassification.useful
-                self.multiworld.get_location(location, self.player).place_locked_item(
-                    TerrariaItem(location, classification, None, self.player)
-                )
-
-        for item, location in self.ter_goals.items():
-            self.multiworld.get_location(location, self.player).place_locked_item(
-                TerrariaItem(
-                    item,
-                    ItemClassification.progression,
-                    item_name_to_id[item],
-                    self.player,
-                )
-            )
-
         self.multiworld.completion_condition[self.player] = lambda state: state.has_all(
             self.goal_items, self.player
         )
+
+    def generate_basic(self) -> None:
+        for location, item in self.locked_items.items():
+            self.multiworld.get_location(location, self.player).place_locked_item(item)
 
     def fill_slot_data(self) -> dict[str, object]:
         return {
