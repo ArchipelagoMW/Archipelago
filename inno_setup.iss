@@ -107,7 +107,8 @@ Source: "{code:GetBlueROMPath}"; DestDir: "{app}"; DestName: "Pokemon Blue (UE) 
 Source: "{code:GetLADXROMPath}"; DestDir: "{app}"; DestName: "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"; Flags: external; Components: client/ladx or generator/ladx
 Source: "{code:GetTLoZROMPath}"; DestDir: "{app}"; DestName: "Legend of Zelda, The (U) (PRG0) [!].nes"; Flags: external; Components: client/tloz or generator/tloz
 Source: "{code:GetAdvnROMPath}"; DestDir: "{app}"; DestName: "ADVNTURE.BIN"; Flags: external; Components: client/advn
-Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, data\lua, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#source_path}\data\lua*"; DestDir: "{app}\data\lua"; Flags: ignoreversion recursesubdirs createallsubdirs readonly
 Source: "{#source_path}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/sni
 Source: "{#source_path}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator/lttp
 
