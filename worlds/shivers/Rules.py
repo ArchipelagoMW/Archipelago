@@ -128,4 +128,7 @@ def set_rules(Shivers: World) -> None:
     forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Sand Pot Top DUPE", player)
     forbid_item(multiworld.get_location("Accessible: Storage: Slide", player), "Metal Pot Top DUPE", player)
 
+    #Filler Item Forbids
+    forbid_item(multiworld.get_location("Puzzle Solved Lyre", player), "Easier Lyre", player)
+
     

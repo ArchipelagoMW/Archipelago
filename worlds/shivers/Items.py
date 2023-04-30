@@ -87,6 +87,7 @@ item_table = {
 
     #Filler
     "Empty": ItemData(SHIVERS_ITEM_ID_OFFSET + 90, "filler"),
-    "Filler Item": ItemData(SHIVERS_ITEM_ID_OFFSET + 91, "filler", ItemClassification.filler)
+    "Easier Lyre": ItemData(SHIVERS_ITEM_ID_OFFSET + 91, "filler", ItemClassification.filler),
+    "Filler Item": ItemData(SHIVERS_ITEM_ID_OFFSET + 92, "filler2", ItemClassification.filler)
 
 }
