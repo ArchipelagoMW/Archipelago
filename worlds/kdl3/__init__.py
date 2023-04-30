@@ -227,7 +227,8 @@ class KDL3World(World):
                                 or state.can_reach(LocationName.iceberg_3, "Location", self.player)
                                 or state.can_reach(LocationName.iceberg_6, "Location", self.player)))
         add_rule(self.multiworld.get_location(LocationName.iceberg_angel, self.player),
-                 lambda state: state.count_group("Copy Ability", self.player))  # easier than writing out 8 ands
+                 lambda state: state.has_all(self.item_name_groups["Copy Ability"], self.player))
+        # easier than writing out 8 ands
 
         # Consumables
         if self.multiworld.consumables[self.player]:
@@ -315,7 +316,7 @@ class KDL3World(World):
 
         set_rule(self.multiworld.get_entrance("To Level 6", self.player),
                  lambda state: state.has("Heart Star", self.player, self.required_heart_stars[self.player]))
-        if self.multiworld.goal[self.player] == 0:
+        if self.multiworld.goal_speed[self.player] == 0:
             add_rule(self.multiworld.get_entrance("To Level 6", self.player),
                      lambda state: state.has("Level 1 Boss Purified", self.player)
                                    and state.has("Level 2 Boss Purified", self.player)

@@ -5,7 +5,7 @@ from .Names import LocationName
 
 class Goal(Choice):
     """
-    Zero: collect the Heart Stars, purify the five bosses, and defeat Zero in the Hyper Zone.
+    Zero: collect the Heart Stars, and defeat Zero in the Hyper Zone.
     Boss Butch: collect the Heart Stars, and then complete the boss rematches in the Boss Butch mode.
     MG5: collect the Heart Stars, and then complete a perfect run through the minigame gauntlet within the MG5
     Jumping: collect the Heart Stars, and then reach a designated score within the Jumping sub-game
@@ -16,6 +16,16 @@ class Goal(Choice):
     option_mg5 = 2
     option_jumping = 3
     default = 0
+
+
+class GoalSpeed(Choice):
+    """
+    Normal: the goal is unlocked after purifying the five bosses
+    Fast: the goal is unlocked after acquiring the target number of Heart Stars
+    """
+    display_name = "Goal Speed"
+    option_normal = 0
+    option_fast = 1
 
 
 class TotalHeartStars(Range):
@@ -178,6 +188,7 @@ kdl3_options: typing.Dict[str, type(Option)] = {
     "death_link": DeathLink,
     "game_language": GameLanguage,
     "goal": Goal,
+    "goal_speed": GoalSpeed,
     "total_heart_stars": TotalHeartStars,
     "heart_stars_required": HeartStarsRequired,
     "filler_percentage": FillerPercentage,
