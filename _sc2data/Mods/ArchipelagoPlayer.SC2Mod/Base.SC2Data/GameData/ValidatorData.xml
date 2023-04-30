@@ -62,6 +62,11 @@
         <CombineArray value="AP_IsVanillaHellion"/>
         <CombineArray value="AP_IsAPHellion"/>
     </CValidatorCombine>
+    <CValidatorCombine id="NotHellion" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="IsHellion"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
     <CValidatorUnitType id="AP_IsVulture">
         <Value value="AP_Vulture"/>
     </CValidatorUnitType>
