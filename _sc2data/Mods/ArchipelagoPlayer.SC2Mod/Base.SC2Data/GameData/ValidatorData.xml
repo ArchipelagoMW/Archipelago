@@ -49,6 +49,19 @@
         <Find value="1"/>
         <Value value="AP_UseTwinLinkedFlameThrowers"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_IsVanillaHellion">
+        <Value value="Hellion"/>
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPHellion">
+        <Value value="AP_Hellion"/>
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsHellion" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaHellion"/>
+        <CombineArray value="AP_IsAPHellion"/>
+    </CValidatorCombine>
     <CValidatorUnitType id="AP_IsVulture">
         <Value value="AP_Vulture"/>
     </CValidatorUnitType>

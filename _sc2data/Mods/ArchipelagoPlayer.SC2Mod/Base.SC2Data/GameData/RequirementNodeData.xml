@@ -127,8 +127,4 @@
         <Tooltip value="RequirementNode/Tooltip/CountUpgradeSiegeTechCompleteOnly1316718431"/>
         <Count Link="AP_SiegeTech" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
-    <CRequirementCountUpgrade id="AP_CountUpgradeNotPossibleSiegeModeCompleteOnly">
-        <Count Link="AP_NotPossibleSiegeMode" State="CompleteOnly"/>
-        <Flags index="TechTreeCheat" value="0"/>
-    </CRequirementCountUpgrade>
 </Catalog>
