@@ -106,7 +106,7 @@ kommunizieren darf.
 
 ##### BizHawk
 
-1. Stelle sicher, dass der BSNES-Core in Bizhawk geladen wird. Dazu musst du auf das Tools-Menü in Bizhawk klicken und
+1. Stelle sicher, dass der BSNES-Core in BizHawk geladen wird. Dazu musst du auf das Tools-Menü in BizHawk klicken und
    folgende Optionen wählen:
    `Config --> Cores --> SNES --> BSNES`
 2. Lade die entsprechende ROM-Datei, wenn sie nicht schon automatisch geladen wurde.

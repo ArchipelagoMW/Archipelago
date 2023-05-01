@@ -2,26 +2,26 @@
 
 ## Important
 
-As we are using Bizhawk, this guide is only applicable to Windows and Linux systems.
+As we are using BizHawk, this guide is only applicable to Windows and Linux systems.
 
 ## Required Software
 
-- Bizhawk: [Bizhawk Releases from TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
+- BizHawk: [BizHawk Releases from TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
   - Version 2.3.1 and later are supported. Version 2.7 is recommended for stability.
-  - Detailed installation instructions for Bizhawk can be found at the above link.
+  - Detailed installation instructions for BizHawk can be found at the above link.
   - Windows users must run the prereq installer first, which can also be found at the above link.
 - The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
   (select `Adventure Client` during installation).
 - An Adventure NTSC ROM file. The Archipelago community cannot provide these.
 
-## Configuring Bizhawk
+## Configuring BizHawk
 
-Once Bizhawk has been installed, open Bizhawk and change the following settings:
+Once BizHawk has been installed, open BizHawk and change the following settings:
 
 - (≤ 2.8) Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
-  "Lua+LuaInterface". Then restart Bizhawk. This is required for the Lua script to function correctly.
+  "Lua+LuaInterface". Then restart BizHawk. This is required for the Lua script to function correctly.
   **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs** 
-  **of newer versions of Bizhawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
+  **of newer versions of BizHawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
   **"NLua+KopiLua" until this step is done.**
 - Under Config > Customize, check the "Run in background" box. This will prevent disconnecting from the client while
 BizHawk is running in the background.

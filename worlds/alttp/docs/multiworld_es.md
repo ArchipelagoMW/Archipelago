@@ -126,7 +126,7 @@ ejecutas, puedes ser que el firewall de Windows te pregunte si le permites la co
 
 1. Asegurate que se ha cargado el nucleo BSNES. Debes hacer esto en el menu Tools y siguiento estas opciones:
    `Config --> Cores --> SNES --> BSNES`  
-   Una vez cambiado el nucleo cargado, Bizhawk ha de ser reiniciado.
+   Una vez cambiado el nucleo cargado, BizHawk ha de ser reiniciado.
 2. Carga tu fichero de ROM, si no lo has hecho ya.
 3. Haz click en el menu Tools y en la opción **Lua Console**
 4. Haz click en el botón para abrir un nuevo script Lua.

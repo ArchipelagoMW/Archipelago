@@ -2,13 +2,13 @@
 
 ## Important
 
-As we are using Bizhawk, this guide is only applicable to Windows and Linux systems.
+As we are using BizHawk, this guide is only applicable to Windows and Linux systems.
 
 ## Required Software
 
-- Bizhawk: [Bizhawk Releases from TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
+- BizHawk: [BizHawk Releases from TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
   - Version 2.3.1 and later are supported. Version 2.7 is recommended for stability.
-  - Detailed installation instructions for Bizhawk can be found at the above link.
+  - Detailed installation instructions for BizHawk can be found at the above link.
   - Windows users must run the prereq installer first, which can also be found at the above link.
 - The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
   (select `Pokemon Client` during installation).
@@ -19,23 +19,23 @@ As we are using Bizhawk, this guide is only applicable to Windows and Linux syst
 - [Pokémon Red and Blue Archipelago Map Tracker](https://github.com/j-imbo/pkmnrb_jim/releases/latest), for use with [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 
 
-## Configuring Bizhawk
+## Configuring BizHawk
 
-Once Bizhawk has been installed, open Bizhawk and change the following settings:
+Once BizHawk has been installed, open BizHawk and change the following settings:
 
 - (≤ 2.8) Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
-  "Lua+LuaInterface". Then restart Bizhawk. This is required for the Lua script to function correctly.
+  "Lua+LuaInterface". Then restart BizHawk. This is required for the Lua script to function correctly.
   **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs** 
-  **of newer versions of Bizhawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
+  **of newer versions of BizHawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
   **"NLua+KopiLua" until this step is done.**
 - Under Config > Customize > Advanced, make sure the box for AutoSaveRAM is checked, and click the 5s button.
   This reduces the possibility of losing save data in emulator crashes.
 - Under Config > Customize, check the "Run in background" box. This will prevent disconnecting from the client while
 BizHawk is running in the background.
 
-It is strongly recommended to associate GB rom extensions (\*.gb) to the Bizhawk we've just installed.
+It is strongly recommended to associate GB rom extensions (\*.gb) to the BizHawk we've just installed.
 To do so, we simply have to search any Gameboy rom we happened to own, right click and select "Open with...", unfold
-the list that appears and select the bottom option "Look for another application", then browse to the Bizhawk folder
+the list that appears and select the bottom option "Look for another application", then browse to the BizHawk folder
 and select EmuHawk.exe.
 
 ## Configuring your YAML file

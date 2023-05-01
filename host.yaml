@@ -136,7 +136,7 @@ tloz_options:
   #             true  for operating system default program
   # Alternatively, a path to a program to open the .nes file with
   rom_start: true
-  # Display message inside of Bizhawk
+  # Display message inside of BizHawk
   display_msgs: true
 dkc3_options:
   # File name of the DKC3 US rom
