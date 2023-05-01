@@ -127,4 +127,30 @@
         <Tooltip value="RequirementNode/Tooltip/CountUpgradeSiegeTechCompleteOnly1316718431"/>
         <Count Link="AP_SiegeTech" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeAdvancedHealingAICompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_AdvancedHealingAI" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeMedivacCaduceusReactorQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_MedivacCaduceusReactor" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeMedivacRapidDeploymentCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_MedivacRapidDeployment" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeMedivacCaduceusReactorQueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeMedivacCaduceusReactorQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeAdvancedHealingAICompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeAdvancedHealingAICompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeAuxiliaryMedBotsCompleteOnly">
+        <Count Link="AP_AuxiliaryMedBots" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeExpandedHullCompleteOnly">
+        <Count Link="AP_ExpandedHull" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
 </Catalog>

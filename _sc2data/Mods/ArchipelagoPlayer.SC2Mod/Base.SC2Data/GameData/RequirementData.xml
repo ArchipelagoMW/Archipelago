@@ -124,4 +124,27 @@
         <NodeArray index="Use" Link="AP_CountUpgradeNotPossibleSiegeModeCompleteOnly"/>
         <NodeArray index="Show" Link="AP_CountUpgradeSiegeTankShapedBlastCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_AdvancedHealingAINotPurchased">
+        <NodeArray index="Show" Link="AP_NotCountUpgradeAdvancedHealingAICompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_AdvancedHealingAIPurchased">
+        <NodeArray index="Show" Link="AP_CountUpgradeAdvancedHealingAICompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_AuxiliaryMedBotsResearched">
+        <NodeArray index="Use" Link="AP_CountUpgradeAuxiliaryMedBotsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_ExpandedHullResearched">
+        <NodeArray index="Use" Link="AP_CountUpgradeExpandedHullCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnCaduceusReactor">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeMedivacCaduceusReactorQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnMedivacEnergyUpgrade">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeMedivacCaduceusReactorQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="AP_RapidDeploymentResearched">
+        <NodeArray index="Show" Link="AP_CountUpgradeMedivacRapidDeploymentCompleteOnly"/>
+    </CRequirement>
 </Catalog>

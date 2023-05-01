@@ -57,11 +57,72 @@
         <Value value="AP_Hellion"/>
         <Type value="SelectAlias"/>
     </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_AtLeastOneHealBeamBusy">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="AP_MedivacHealBeamBusy"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_AuxilaryMedBotsPurchased">
+        <Find value="1"/>
+        <Value value="AP_AuxiliaryMedBotsResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_ExpandedHullPurchased">
+        <Find value="1"/>
+        <Value value="AP_ExpandedHullResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_HealBeamAvailable">
+        <WhichUnit Value="Caster"/>
+        <Compare value="LT"/>
+        <Value value="2"/>
+        <Behavior value="AP_MedivacHealBeamBusy"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_HealPeriodicCombine">
+        <Type value="And"/>
+        <CombineArray value="CasterHasEnergy"/>
+        <CombineArray value="AP_MedivacIsHealing"/>
+        <CombineArray value="LifeGTZero"/>
+        <CombineArray value="AP_NotMaxHP"/>
+        <CombineArray value="AP_HealTargetInRange"/>
+        <CombineArray value="NotHidden"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_HealScanPeriodicCombine">
+        <Type value="And"/>
+        <CombineArray value="CasterHasEnergy"/>
+        <CombineArray value="AP_AtLeastOneHealBeamBusy"/>
+    </CValidatorCombine>
+    <CValidatorLocationCompareRange id="AP_HealTargetInRange">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="LE"/>
+        <Range value="4"/>
+    </CValidatorLocationCompareRange>
     <CValidatorCombine id="IsHellion" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaHellion"/>
         <CombineArray value="AP_IsAPHellion"/>
     </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPMedivac">
+        <Value value="AP_Medivac"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaMedivac">
+        <Value value="Medivac"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsMedivac" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaMedivac"/>
+        <CombineArray value="AP_IsVanillaHellion"/>
+    </CValidatorCombine>
+    <CValidatorUnitOrderQueue id="AP_MedivacIsHealing">
+        <AbilLink value="AP_MedivacDoubleBeamHeal"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorCombine id="AP_MedivacUpgrade">
+        <CombineArray value="AP_RapidDeploymentPurchased"/>
+        <CombineArray value="AP_ExpandedHullPurchased"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareMarkerCount id="AP_NoMedivacMarkers">
+        <ResultFailed value="AlreadyTargeted"/>
+        <WhichUnit Effect="AP_MedivacHeal"/>
+    </CValidatorUnitCompareMarkerCount>
     <CValidatorCombine id="NotHellion" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="IsHellion"/>
@@ -128,4 +189,21 @@
         <Find value="1"/>
         <Value value="AP_NoShapedBlast"/>
     </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_RapidDeploymentPurchased">
+        <Find value="1"/>
+        <Value value="AP_RapidDeploymentResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotBeingHealed">
+        <Behavior value="AP_MedivacTargetBeingHealed"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitOrderQueue id="AP_NotStopping">
+        <AbilLink value="stop"/>
+        <Find value="0"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitCompareVital id="AP_NotMaxHP">
+        <ResultFailed value="TooMuchLife"/>
+        <Compare value="LT"/>
+        <Value value="1"/>
+        <Type value="Fraction"/>
+    </CValidatorUnitCompareVital>
 </Catalog>

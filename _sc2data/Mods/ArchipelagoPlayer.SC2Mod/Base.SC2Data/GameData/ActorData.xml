@@ -978,4 +978,165 @@
         <On Terms="AbilMorph.*.Start; MorphFrom AP_SiegeTankSieged" Send="Destroy"/>
         <On Terms="AbilMorph.*.Start; MorphFrom AP_SiegeBreakerSieged" Send="Destroy"/>
     </CActorTurret>
+    <CActorUnit id="AP_Medivac" parent="GenericUnitStandard" unitName="AP_Medivac">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="MedivacTransportAnim"/>
+        <On Terms="Abil.AP_MedivacHeal.SourceChannelStart" Send="$Spell PlayForever"/>
+        <On Terms="Abil.AP_MedivacHeal.SourceChannelStop" Send="AnimClear Spell"/>
+        <On Terms="AbilTransport.AP_MedivacTransport.TransportLoad; AbilTransport Thor" Send="Create ThorTransit"/>
+        <On Terms="Signal.*.ThorTransit" Send="RefSetFromMsg ::actor.Thor ::Sender"/>
+        <On Terms="Signal.*.ThorTransit" Send="RefSetFromMsg ::actor.AP_Thor ::Sender"/>
+        <On Terms="AbilTransport.AP_MedivacTransport.PassengerKilled; AbilTransport Thor" Target="::actor.Thor" Send="Signal Dead"/>
+        <On Terms="UnitDeath" Target="::actor.Thor" Send="Signal Dead"/>
+        <On Terms="ActorCreation; ValidateUnit AP_MedivacUpgrade" Send="ModelSwap MedivacUpgrade"/>
+        <On Terms="Abil.AP_MedivacDoubleBeamHeal.SourceChannelStart" Send="$Spell PlayForever"/>
+        <On Terms="Abil.AP_MedivacDoubleBeamHeal.SourceChannelStop" Send="AnimClear Spell"/>
+        <HostSiteOps Ops="SOpBankerMedivac"/>
+        <Model value="Medivac"/>
+        <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
+        <BuildModel value="Medivac"/>
+        <DeathArray index="Normal" ModelLink="MedivacDeath" SoundLink="Medivac_Explode"/>
+        <PlacementModel value="Medivac"/>
+        <PortraitModel value="MedivacPortrait"/>
+        <AbilSoundArray AbilCmd="AP_MedivacHeal,0" Sound="Medivac_HealVO"/>
+        <AbilSoundArray AbilCmd="AP_MedivacTransport,0" Sound="Medivac_LoadVO"/>
+        <AbilSoundArray AbilCmd="AP_MedivacTransport,2" Sound="Medivac_UnloadVO"/>
+        <BarOffset value="50"/>
+        <BarWidth value="80"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Medivac.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-medivac.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <NameOffset value="50"/>
+        <SoundArray index="Ready" value="Medivac_Ready"/>
+        <SoundArray index="Help" value="Medivac_Help"/>
+        <SoundArray index="What" value="Medivac_What"/>
+        <SoundArray index="Yes" value="Medivac_Yes"/>
+        <SoundArray index="Attack" value="Medivac_Attack"/>
+        <SoundArray index="Pissed" value="Medivac_Pissed"/>
+        <SoundArray index="Movement" value="Medivac_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-medivac.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Medivac.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorBeamSimple id="AP_MedivacDoubleHealBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <On Terms="ActorCreation" Target="::scope.AP_MedivacHealLaunch" Send="StatusIncrement Beams"/>
+        <On Terms="Effect.AP_MedivacHealTargetPersistent.Stop" Send="Destroy"/>
+        <On Terms="ActorDestruction" Target="::scope.AP_MedivacHealLaunch" Send="StatusDecrement Beams"/>
+        <Model value="MedivacHealBeam"/>
+        <HostLaunch Subject="::scope.AP_MedivacHealLaunch"/>
+        <HostImpact Subject="::Creator"/>
+    </CActorBeamSimple>
+    <CActorSite id="AP_MedivacDoubleHealBeamImpactSite" parent="SiteCenter">
+        <On Terms="Effect.AP_MedivacHealTargetPersistent.Start; At Target" Send="Create"/>
+        <On Terms="Effect.AP_MedivacHealTargetPersistent.Stop" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="RefSetFromRequest ::scope.AP_MedivacHealLaunch AP_MedivacDoubleHealBeamLaunchSite Caster Find"/>
+        <On Terms="ActorCreation" Send="Create AP_MedivacDoubleHealBeam"/>
+    </CActorSite>
+    <CActorModel id="AP_MedivacDoubleHealModel">
+        <On Terms="ActorCreation" Send="$Birth PlayForever"/>
+        <On Terms="Effect.AP_MedivacHealTargetPersistent.Start; At Target" Send="Create"/>
+        <On Terms="Effect.AP_MedivacHealTargetPersistent.Stop" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="MedicHealModel"/>
+    </CActorModel>
+    <CActorSound id="AP_MedivacDoubleHealSound" parent="SoundContinuous">
+        <On Terms="Effect.AP_MedivacHealTargetPersistent.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create AP_MedivacHealSoundStart"/>
+        <On Terms="ActorDestruction" Send="Create AP_MedivacHealSoundStop"/>
+        <On Terms="Effect.AP_MedivacHealTargetPersistent.Stop" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Sound value="Medivac_HealLoop"/>
+    </CActorSound>
+    <CActorBeamSimple id="AP_MedivacHealBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <On Terms="Effect.AP_MedivacHeal.TargetStop" Send="Destroy"/>
+        <Model value="MedivacHealBeam"/>
+        <HostLaunch Subject="::global.AP_MedivacHealLaunch"/>
+        <HostImpact Subject="::global.AP_MedivacHealImpact"/>
+    </CActorBeamSimple>
+    <CActorSite id="AP_MedivacHealBeamImpactSite" parent="SiteCenter">
+        <On Terms="ActorCreation" Send="RefSet ::global.AP_MedivacHealImpact ::Self"/>
+        <On Terms="Effect.AP_MedivacHeal.TargetStop" Send="Destroy"/>
+    </CActorSite>
+    <CActorSite id="AP_MedivacHealBeamLaunchSite" parent="SiteCenter">
+        <On Terms="ActorCreation" Send="RefSet ::global.AP_MedivacHealLaunch ::Self"/>
+        <On Terms="Signal.*.HealModel" Send="RefSetFromMsg ::actor.HealModel ::Sender"/>
+        <On Terms="Signal.*.HealSound" Send="RefSetFromMsg ::actor.HealSound ::Sender"/>
+        <On Terms="Effect.AP_MedivacHeal.TargetStop" Target="::actor.HealModel" Send="Destroy"/>
+        <On Terms="Effect.AP_MedivacHeal.TargetStop" Target="::actor.HealSound" Send="Destroy"/>
+        <On Terms="Effect.AP_MedivacHeal.TargetStop" Send="Destroy"/>
+    </CActorSite>
+    <CActorBeamSimple id="AP_MedivacHealBeamRev1" parent="BeamSimpleAnimationStyleContinuous">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_MedivacHeal.TargetStart" Send="Create"/>
+        <On Terms="Effect.AP_MedivacHeal.TargetStop" Send="Destroy"/>
+        <HostForProps Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <Model value="MedivacHealBeam"/>
+        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachCenter"/>
+        <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorModel id="AP_MedivacHealModelRev1" parent="ModelAnimationStyleContinuous">
+        <On Terms="ActorCreation" Send="$Birth PlayForever"/>
+        <On Terms="Effect.AP_MedivacHeal.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.AP_MedivacHeal.TargetStop; At Target" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="MedicHealModel"/>
+    </CActorModel>
+    <CActorSound id="AP_MedivacHealSoundRev1" parent="SoundContinuous">
+        <On Terms="Effect.AP_MedivacHeal.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.AP_MedivacHeal.TargetStop; At Target" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create AP_MedivacHealSoundStart"/>
+        <On Terms="ActorDestruction" Send="Create AP_MedivacHealSoundStop"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Sound value="Medivac_HealLoop"/>
+    </CActorSound>
+    <CActorSound id="AP_MedivacHealSoundStart" parent="SoundOneShot">
+        <Sound value="Medivac_HealStart"/>
+    </CActorSound>
+    <CActorSound id="AP_MedivacHealSoundStop" parent="SoundOneShot">
+        <Sound value="Medivac_HealEnd"/>
+    </CActorSound>
+    <CActorEventMacro id="AP_MedivacTransportAnim">
+        <On Terms="Abil.AP_MedivacTransport.TransportUnloadStart" Send="AnimBracketStart Unload Work,Start Work Work,End"/>
+        <On Terms="Abil.AP_MedivacTransport.TransportUnloadStop" Send="AnimBracketStop Unload"/>
+    </CActorEventMacro>
+    <CActorSound id="AP_MedivacTransportLoadSound" parent="SoundOneShot">
+        <On Terms="AbilTransport.AP_MedivacTransport.TransportLoad" Send="Create"/>
+        <On Terms="AbilTransport.AP_BunkerTransport.TransportLoad" Send="Create"/>
+        <On Terms="AbilTransport.AP_CommandCenterTransport.TransportLoad" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Sound value="Medivac_Load"/>
+    </CActorSound>
+    <CActorSound id="AP_MedivacTransportUnloadSound" parent="SoundOneShot">
+        <On Terms="AbilTransport.AP_MedivacTransport.TransportUnload" Send="Create"/>
+        <On Terms="AbilTransport.AP_BunkerTransport.TransportUnload" Send="Create"/>
+        <On Terms="AbilTransport.AP_CommandCenterTransport.TransportUnload" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Sound value="Medivac_Unload"/>
+    </CActorSound>
+    <CActorSite id="AP_MedivacDoubleHealBeamLaunchSite" parent="SiteCenter">
+        <On Terms="Abil.AP_MedivacDoubleBeamHeal.SourceChannelStart" Send="Create"/>
+        <On Terms="StatusOff.*.Beams" Send="Destroy"/>
+    </CActorSite>
+    <CActorModel id="AP_MedivacHealModel">
+        <On Terms="ActorCreation" Send="$Birth PlayForever"/>
+        <On Terms="ActorCreation" Target="::global.AP_MedivacHealLaunch" Send="Signal HealModel"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="MedicHealModel"/>
+    </CActorModel>
 </Catalog>

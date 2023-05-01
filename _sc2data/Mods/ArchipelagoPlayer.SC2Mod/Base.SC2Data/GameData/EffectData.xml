@@ -516,4 +516,149 @@
         <Amount value="40"/>
         <Death value="Blast"/>
     </CEffectDamage>
+    <CEffectRemoveBehavior id="AP_HealRemoveTargetBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="AP_MedivacTargetBeingHealed"/>
+    </CEffectRemoveBehavior>
+    <CEffectCreatePersistent id="AP_HealScanPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="CasterUnit"/>
+        <Flags index="Channeled" value="1"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <FinalEffect value="AP_MedivacHealIssueStopOrder"/>
+        <PeriodicValidator value="AP_HealScanPeriodicCombine"/>
+        <PeriodicEffectArray value="AP_MedivacHealSearch"/>
+        <PeriodicPeriodArray value="0.0625"/>
+    </CEffectCreatePersistent>
+    <CEffectCreateHealer id="AP_MedivacHeal">
+        <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="HiddenCompareAB"/>
+        <ValidatorArray value="HiddenCompareBA"/>
+        <ValidatorArray value="NotSpineCrawlerUprooted"/>
+        <ValidatorArray value="NotSporeCrawlerUprooted"/>
+        <ValidatorArray value="NotVortexd"/>
+        <ValidatorArray value="NotUncommandable"/>
+        <ValidatorArray value="SourceNotHidden"/>
+        <EditorCategories value="Race:Terran"/>
+        <DrainVital value="Energy"/>
+        <DrainVitalCostFactor value="0.33"/>
+        <RechargeVitalRate value="9"/>
+    </CEffectCreateHealer>
+    <CEffectSet id="AP_MedivacHealApplyBehaviorSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_MedivacHealApplyCasterBehavior"/>
+        <EffectArray value="AP_MedivacHealApplyTargetBehavior"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_MedivacHealApplyCasterBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_MedivacHealBeamBusy"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_MedivacHealApplyTargetBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_MedivacTargetBeingHealed"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_MedivacHealInitialSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_MedivacHealTargetPersistent"/>
+        <EffectArray value="AP_HealScanPersistent"/>
+    </CEffectSet>
+    <CEffectSwitch id="AP_MedivacHealInitialSwitch">
+        <ValidatorArray value="AP_NotMaxHP"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="AP_TargetNotBeingHealed"/>
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="AP_HealBeamAvailable" Effect="AP_MedivacHealInitialSet"/>
+        <CaseDefault value="AP_MedivacHealIssueOrderSet"/>
+    </CEffectSwitch>
+    <CEffectIssueOrder id="AP_MedivacHealIssueHealOrder">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="AP_MedivacDoubleBeamHeal"/>
+        <Player Value="Caster"/>
+        <Target Value="TargetUnit"/>
+    </CEffectIssueOrder>
+    <CEffectCreatePersistent id="AP_MedivacHealIssueHealOrderDelay">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <InitialDelay value="0.125"/>
+        <InitialEffect value="AP_MedivacHealIssueHealOrder"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_MedivacHealIssueOrderSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_MedivacHealIssueStopOrder"/>
+        <EffectArray value="AP_MedivacHealIssueHealOrderDelay"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="AP_MedivacHealIssueStopOrder">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="stop"/>
+        <Player Value="Caster"/>
+    </CEffectIssueOrder>
+    <CEffectModifyUnit id="AP_MedivacHealModifyCasterEnergy">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchUnit Value="Caster"/>
+        <ImpactUnit Value="Caster"/>
+        <VitalArray index="Energy">
+            <Change value="-0.33"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectSet id="AP_MedivacHealModifySet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_MedivacHealModifyCasterEnergy"/>
+        <EffectArray value="AP_MedivacHealModifyTargetLife"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="AP_MedivacHealModifyTargetLife">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchUnit Value="Caster"/>
+        <VitalArray index="Life">
+            <Change value="1"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectSet id="AP_MedivacHealRemoveBehaviorSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_MedivacHealRemoveCasterBehavior"/>
+        <EffectArray value="AP_HealRemoveTargetBehavior"/>
+    </CEffectSet>
+    <CEffectRemoveBehavior id="AP_MedivacHealRemoveCasterBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_MedivacHealBeamBusy"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectEnumArea id="AP_MedivacHealSearch">
+        <ValidatorArray value="AP_HealBeamAvailable"/>
+        <ValidatorArray value="healCasterMinEnergy"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <SearchFilters value="Biological;Neutral,Enemy,Structure,Stasis,Dead,Hidden"/>
+        <TargetSorts>
+            <SortArray value="TSAlliancePassive"/>
+            <SortArray value="TSLife"/>
+            <SortArray value="TSDistance"/>
+        </TargetSorts>
+        <AreaArray MaxCount="1" Radius="4.5" Effect="AP_MedivacHealTargetPersistent"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="AP_MedivacHealTargetPersistent">
+        <ValidatorArray value="AP_TargetNotBeingHealed"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="AP_NotMaxHP"/>
+        <ValidatorArray value="HealBeamAvailable"/>
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="Abil/MedivacHeal">
+            <MatchFlags index="Link" value="1"/>
+        </Marker>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <InitialEffect value="AP_MedivacHealApplyBehaviorSet"/>
+        <FinalEffect value="AP_MedivacHealRemoveBehaviorSet"/>
+        <PeriodicValidator value="AP_HealPeriodicCombine"/>
+        <PeriodicEffectArray value="AP_MedivacHealModifySet"/>
+        <PeriodicPeriodArray value="0.111"/>
+    </CEffectCreatePersistent>
 </Catalog>

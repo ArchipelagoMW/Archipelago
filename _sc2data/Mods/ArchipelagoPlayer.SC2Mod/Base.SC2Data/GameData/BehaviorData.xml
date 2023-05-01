@@ -129,4 +129,13 @@
             <DamageDealtScaled index="Splash" value="10"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MedivacHealBeamBusy">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="3"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MedivacTargetBeingHealed">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+    </CBehaviorBuff>
 </Catalog>

@@ -268,4 +268,71 @@
         <EditorCategories value="Race:Terran,UpgradeType:SpellResearch"/>
         <AffectedUnitArray value="AP_SiegeTank"/>
     </CUpgrade>
+    <CUpgrade id="AP_AdvancedHealingAI">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_AuxiliaryMedBots">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_EnergyStorage">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Medic,EnergyRegenRate" Value="1.250000"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Ghost,EnergyRegenRate" Value="1.250000"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Spectre,EnergyRegenRate" Value="1.250000"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Thor,EnergyRegenRate" Value="1.250000"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Medivac,EnergyRegenRate" Value="1.250000"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Raven,EnergyRegenRate" Value="1.250000"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Banshee,EnergyRegenRate" Value="1.250000"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Wraith,EnergyRegenRate" Value="1.250000"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Battlecruiser,EnergyRegenRate" Value="1.250000"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_ScienceVessel,EnergyRegenRate" Value="1.250000"/>
+        <EffectArray Reference="Unit,AP_Medivac,EnergyStart" Value="25"/>
+        <EffectArray Reference="Unit,AP_Raven,EnergyStart" Value="25"/>
+        <EffectArray Reference="Unit,AP_Ghost,EnergyStart" Value="25"/>
+        <EffectArray Reference="Unit,AP_Battlecruiser,EnergyStart" Value="25"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Medic"/>
+        <AffectedUnitArray value="AP_Ghost"/>
+        <AffectedUnitArray value="AP_Spectre"/>
+        <AffectedUnitArray value="AP_Thor"/>
+        <AffectedUnitArray value="AP_Medivac"/>
+        <AffectedUnitArray value="AP_Raven"/>
+        <AffectedUnitArray value="AP_Banshee"/>
+        <AffectedUnitArray value="AP_Wraith"/>
+        <AffectedUnitArray value="AP_Battlecruiser"/>
+        <AffectedUnitArray value="AP_BattlecruiserDefensiveMatrix"/>
+        <AffectedUnitArray value="AP_BattlecruiserHurricane"/>
+        <AffectedUnitArray value="AP_BattlecruiserYamato"/>
+        <AffectedUnitArray value="AP_ScienceVessel"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ExpandedHull">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Alert value="ResearchComplete"/>
+        <EffectArray Reference="Abil,AP_MedivacTransport,MaxCargoCount" Value="2"/>
+        <EffectArray Reference="Abil,AP_MedivacTransport,TotalCargoSpace" Value="2"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,UnitIcon" Value="Assets\Textures\BTN-Unit-Terran-MedivacUpgrade.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_MedivacCaduceusReactor">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-caduceusreactor.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Medivac,EnergyStart" Value="25"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_MedivacRapidDeployment">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Multiply" Reference="Abil,AP_MedivacTransport,UnloadPeriod" Value="0.100000"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,UnitIcon" Value="Assets\Textures\BTN-Unit-Terran-MedivacUpgrade.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

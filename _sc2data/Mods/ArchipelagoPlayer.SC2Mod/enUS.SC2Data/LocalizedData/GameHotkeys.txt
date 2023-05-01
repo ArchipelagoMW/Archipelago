@@ -4,3 +4,4 @@ Button/Hotkey/AP_ResearchSpiderMinesSC1=M
 Button/Hotkey/AP_SpiderMine=E
 Button/Hotkey/AP_SpiderMineReplenish=R
 Button/Hotkey/AP_Vulture=V
+Button/Hotkey/AP_Heal=E
