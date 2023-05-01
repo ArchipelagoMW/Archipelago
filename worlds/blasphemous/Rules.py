@@ -495,8 +495,6 @@ def rules(blasphemousworld):
             state._blasphemous_fall_relic(player))
     set_rule(world.get_location("BotSS: Chamber of the Eldest Brother", player),
         lambda state: state._blasphemous_elder_key(player))
-    set_rule(world.get_location("BotSS: Blue candle", player),
-        lambda state: state._blasphemous_blue_wax(player))
     set_rule(world.get_location("BotSS: Outside church", player),
         lambda state: state._blasphemous_blood_relic(player))
     set_rule(world.get_location("BotSS: Esdras' final gift", player),
@@ -519,8 +517,6 @@ def rules(blasphemousworld):
                 state._blasphemous_bronze_key(player) and \
                     state._blasphemous_silver_key(player) and \
                         state._blasphemous_high_key(player))
-    set_rule(world.get_location("CoOLotCV: Red candle", player),
-        lambda state: state._blasphemous_red_wax(player))
     set_rule(world.get_location("CoOLotCV: Fountain of burning oil", player),
         lambda state: state._blasphemous_thimble(player))
     set_rule(world.get_location("CoOLotCV: Mask room", player),
@@ -656,15 +652,10 @@ def rules(blasphemousworld):
     set_rule(world.get_location("LotNW: Elevator Child of Moonlight", player),
         lambda state: state._blasphemous_blood_relic(player) and \
             state._blasphemous_root_relic(player))
-    set_rule(world.get_location("LotNW: Red candle", player),
-        lambda state: state._blasphemous_red_wax(player))
     set_rule(world.get_location("LotNW: Twisted wood hidden wall", player),
         lambda state: state._blasphemous_wood_key(player))
 
     # Mercy Dreams
-    set_rule(world.get_location("MD: Blue candle", player),
-        lambda state: state._blasphemous_bridge_access(player) and \
-            state._blasphemous_blue_wax(player))
     set_rule(world.get_location("MD: Cave Child of Moonlight", player),
         lambda state: state._blasphemous_bridge_access(player) and \
             state._blasphemous_cherub_24_33(player))
@@ -826,6 +817,14 @@ def rules(blasphemousworld):
         lambda state: state._blasphemous_full_thimble(player))
 
     # Various
+    set_rule(world.get_location("Second red candle", player),
+        lambda state: state._blasphemous_red_wax(player))
+    set_rule(world.get_location("Third red candle", player),
+        lambda state: state._blasphemous_red_wax(player))
+    set_rule(world.get_location("Second blue candle", player),
+        lambda state: state._blasphemous_blue_wax(player))
+    set_rule(world.get_location("Third blue candle", player),
+        lambda state: state._blasphemous_blue_wax(player))
     set_rule(world.get_location("Confessor Dungeon 1 extra", player),
         lambda state: state._blasphemous_bead(player))
     set_rule(world.get_location("Confessor Dungeon 1 main", player),
@@ -1036,6 +1035,9 @@ def rules(blasphemousworld):
                 state._blasphemous_dawn_heart(player) or \
                     (state._blasphemous_wheel(player) and \
                         state._blasphemous_ranged(player)))
+        set_rule(world.get_location("Third blue candle", player),
+            lambda state: state._blasphemous_blue_wax(player) and \
+                state._blasphemous_ex_bridge_access(player))
         set_rule(world.get_location("Confessor Dungeon 5 extra", player),
             lambda state: state._blasphemous_bead(player) and \
                 state._blasphemous_ex_bridge_access(player))
@@ -1208,7 +1210,7 @@ def rules(blasphemousworld):
             lambda state: state._blasphemous_mask_boss_easy(player))
         add_rule(world.get_location("LotNW: Red candle", player),
             lambda state: state._blasphemous_mask_boss_easy(player))
-        add_rule(world.get_location("MD: Blue candle", player),
+        add_rule(world.get_location("Third blue candle", player),
             lambda state: state._blasphemous_wound_boss_easy(player))
         add_rule(world.get_location("MD: Cave Child of Moonlight", player),
             lambda state: state._blasphemous_wound_boss_easy(player))
@@ -1309,7 +1311,7 @@ def rules(blasphemousworld):
             lambda state: state._blasphemous_mask_boss_normal(player))
         add_rule(world.get_location("LotNW: Red candle", player),
             lambda state: state._blasphemous_mask_boss_normal(player))
-        add_rule(world.get_location("MD: Blue candle", player),
+        add_rule(world.get_location("Third blue candle", player),
             lambda state: state._blasphemous_wound_boss_normal(player))
         add_rule(world.get_location("MD: Cave Child of Moonlight", player),
             lambda state: state._blasphemous_wound_boss_normal(player))
@@ -1410,7 +1412,7 @@ def rules(blasphemousworld):
             lambda state: state._blasphemous_mask_boss_hard(player))
         add_rule(world.get_location("LotNW: Red candle", player),
             lambda state: state._blasphemous_mask_boss_hard(player))
-        add_rule(world.get_location("MD: Blue candle", player),
+        add_rule(world.get_location("Third blue candle", player),
             lambda state: state._blasphemous_wound_boss_hard(player))
         add_rule(world.get_location("MD: Cave Child of Moonlight", player),
             lambda state: state._blasphemous_wound_boss_hard(player))

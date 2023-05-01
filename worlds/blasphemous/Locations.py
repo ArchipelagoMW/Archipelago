@@ -9,7 +9,7 @@ class LocationDict(TypedDict):
 
 
 location_table: List[LocationDict] = [
-    # Albero (35)
+    # Albero
     {'name': "Albero: Tirso's house, top floor",
         'region': "albero",
         'game_id': "RB01",
@@ -151,13 +151,13 @@ location_table: List[LocationDict] = [
         'game_id': "Undertaker[5000]",
         'room': "D01BZ06S01"},
     
-    # All the Tears of the Sea (1)
+    # All the Tears of the Sea
     {'name': "AtTotS: Miriam's gift",
         'region': "attots",
         'game_id': "PR201",
         'room': "D04Z04S01"},
 
-    # Archcathedral Rooftops (11)
+    # Archcathedral Rooftops
     {'name': "AR: First soldier fight",
         'region': "ar",
         'game_id': "QI02",
@@ -203,7 +203,7 @@ location_table: List[LocationDict] = [
         'game_id': "BS16",
         'room': "D06Z01S25"},
 
-    # Bridge of the Three Cavalries (3)
+    # Bridge of the Three Cavalries
     {'name': "BotTC: Esdras, of the Anointed Legion",
         'region': "bottc",
         'game_id': "BS12",
@@ -217,7 +217,7 @@ location_table: List[LocationDict] = [
         'game_id': "HE101",
         'room': "D08Z01S02"},
 
-    # Brotherhood of the Silent Sorrow (11)
+    # Brotherhood of the Silent Sorrow
     {'name': "BotSS: Beginning gift",
         'region': "botss",
         'game_id': "QI106",
@@ -242,10 +242,6 @@ location_table: List[LocationDict] = [
         'region': "botss",
         'game_id': "CO25",
         'room': "D17BZ02S01"},
-    {'name': "BotSS: Blue candle",
-        'region': "botss",
-        'game_id': "RB25",
-        'room': "D17Z01S04"},
     {'name': "BotSS: Outside church",
         'region': "botss",
         'game_id': "PR203",
@@ -263,7 +259,7 @@ location_table: List[LocationDict] = [
         'game_id': "BS13",
         'room': "D17Z01S11"},
     
-    # Convent of Our Lady of the Charred Visage (13)
+    # Convent of Our Lady of the Charred Visage
     {'name': "CoOLotCV: Snowy window ledge",
         'region': "coolotcv",
         'game_id': "CO05",
@@ -288,11 +284,7 @@ location_table: List[LocationDict] = [
         'region': "coolotcv",
         'game_id': "Sword[D02Z03S13]",
         'room': "D02Z03S13"},
-    {'name': "CoOLotCV: Red candle",
-        'region': "coolotcv",
-        'game_id': "RB18",
-        'room': "D02Z03S06"},
-    {'name': "CoOLotCV: Blue candle",
+    {'name': "CoOLotCV: First blue candle",
         'region': "coolotcv",
         'game_id': "RB24",
         'room': "D02Z03S17"},
@@ -317,13 +309,13 @@ location_table: List[LocationDict] = [
         'game_id': "QI61",
         'room': "D02Z03S19"},
 
-    # Deambulatory of His Holiness (3)
+    # Deambulatory of His Holiness
     {'name': "DoHH: Viridiana's gift",
         'region': "dohh",
         'game_id': "PR08",
         'room': "D07Z01S01"},
 
-    # Desecrated Cistern (20)
+    # Desecrated Cistern
     {'name': "DC: Lady of the Six Sorrows, from MD",
         'region': "dc",
         'game_id': "Lady[D01Z05S22]",
@@ -405,7 +397,7 @@ location_table: List[LocationDict] = [
         'game_id': "CO44",
         'room': "D01Z05S25"},
 
-    # Echoes of Salt (2)
+    # Echoes of Salt
     {'name': "EoS: Lantern jump near MotED",
         'region': "eos",
         'game_id': "RB108",
@@ -415,7 +407,7 @@ location_table: List[LocationDict] = [
         'game_id': "RB202",
         'room': "D20Z01S09"},
     
-    # Graveyard of the Peaks (21)
+    # Graveyard of the Peaks
     {'name': "GotP: Shop cave Child of Moonlight",
         'region': "gotp",
         'game_id': "RESCUED_CHERUB_31",
@@ -501,7 +493,7 @@ location_table: List[LocationDict] = [
         'game_id': "Amanecida[D02Z02S14]",
         'room': "D02Z02S14"},
     
-    # Grievance Ascends (12)
+    # Grievance Ascends
     {'name': "GA: Lower west ledge",
         'region': "ga",
         'game_id': "QI44",
@@ -551,7 +543,7 @@ location_table: List[LocationDict] = [
         'game_id': "QI39",
         'room': "D03Z03S16"},
     
-    # Hall of the Dawning (2)
+    # Hall of the Dawning
     {'name': "HotD: Mirror room",
         'region': "hotd",
         'game_id': "QI105",
@@ -561,7 +553,7 @@ location_table: List[LocationDict] = [
         'game_id': "LaudesBossTrigger[30000]",
         'room': "D08Z03S03"},
     
-    # Jondo (13)
+    # Jondo
     {'name': "Jondo: Upper east ledge",
         'region': "jondo",
         'game_id': "CO08",
@@ -615,13 +607,13 @@ location_table: List[LocationDict] = [
         'game_id': "RESCUED_CHERUB_17",
         'room': "D03Z02S10"},
     
-    # Knot of the Three Words (1)
+    # Knot of the Three Words
     {'name': "KotTW: Gift from the Traitor",
         'region': "kottw",
         'game_id': "HE201",
         'room': "D04Z03S02"},
     
-    # Library of the Negated Words (18)
+    # Library of the Negated Words
     {'name': "LotNW: Platform room Child of Moonlight",
         'region': "lotnw",
         'game_id': "RESCUED_CHERUB_01",
@@ -682,10 +674,6 @@ location_table: List[LocationDict] = [
         'region': "lotnw",
         'game_id': "Sword[D05Z01S13]",
         'room': "D05Z01S13"},
-    {'name': "LotNW: Red candle",
-        'region': "lotnw",
-        'game_id': "RB19",
-        'room': "D05Z01S02"},
     {'name': "LotNW: Silence for Diosdado",
         'region': "lotnw",
         'game_id': "RB203",
@@ -695,7 +683,7 @@ location_table: List[LocationDict] = [
         'game_id': "RB301",
         'room': "D05BZ01S01"},
 
-    # Mercy Dreams (15)
+    # Mercy Dreams
     {'name': "MD: First area hidden wall",
         'region': "md",
         'game_id': "CO30",
@@ -712,7 +700,7 @@ location_table: List[LocationDict] = [
         'region': "md",
         'game_id': "RESCUED_CHERUB_09",
         'room': "D01Z04S06"},
-    {'name': "MD: Red candle",
+    {'name': "MD: First red candle",
         'region': "md",
         'game_id': "RB17",
         'room': "D01Z04S08"},
@@ -744,10 +732,7 @@ location_table: List[LocationDict] = [
         'region': "md",
         'game_id': "QI38",
         'room': "D01Z04S19"},
-    {'name': "MD: Blue candle",
-        'region': "md",
-        'game_id': "RB26",
-        'room': "D01Z04S16"},
+    
     {'name': "MD: Cave Child of Moonlight",
         'region': "md",
         'game_id': "RESCUED_CHERUB_33",
@@ -757,7 +742,7 @@ location_table: List[LocationDict] = [
         'game_id': "CO21",
         'room': "D01Z04S13"},
 
-    # Mother of Mothers (14)
+    # Mother of Mothers
     {'name': "MoM: Oil of the Pilgrims",
         'region': "mom",
         'game_id': "Oil[D04Z02S14]",
@@ -815,7 +800,7 @@ location_table: List[LocationDict] = [
         'game_id': "QI60",
         'room': "D04Z02S15"},
 
-    # Mountains of the Endless Dusk (8)
+    # Mountains of the Endless Dusk
     {'name': "MotED: Under entrance to DC",
         'region': "moted",
         'game_id': "CO13",
@@ -849,7 +834,7 @@ location_table: List[LocationDict] = [
         'game_id': "Amanecida[D03Z01S03]",
         'room': "D03Z01S03"},
 
-    # Mourning and Havoc (4)
+    # Mourning and Havoc
     {'name': "MaH: West chest",
         'region': "mah",
         'game_id': "PR202",
@@ -867,7 +852,7 @@ location_table: List[LocationDict] = [
         'game_id': "BossTrigger[5000]",
         'room': "D20Z02S08"},
     
-    # Patio of the Silent Steps (9)
+    # Patio of the Silent Steps
     {'name': "PotSS: First area Child of Moonlight",
         'region': "potss",
         'game_id': "RESCUED_CHERUB_35",
@@ -905,19 +890,19 @@ location_table: List[LocationDict] = [
         'game_id': "Amanecida[D04Z01S04]",
         'room': "D04Z01S04"},
 
-    # Petrous (1)
+    # Petrous
     {'name': "Petrous: Temple entrance",
         'region': "petrous",
         'game_id': "QI101",
         'room': "D01Z06S01"},
 
-    # The Resting Place of the Sister (1)
+    # The Resting Place of the Sister
     {'name': "TRPotS: Perpetva's shrine",
         'region': "trpots",
         'game_id': "QI203",
         'room': "D20Z03S01"},
     
-    # The Sleeping Canvases (10)
+    # The Sleeping Canvases
     {'name': "TSC: Painting ladder ledge",
         'region': "tsc",
         'game_id': "QI64",
@@ -959,7 +944,7 @@ location_table: List[LocationDict] = [
         'game_id': "PR05",
         'room': "D05Z02S10"},
 
-    # The Holy Line (6)
+    # The Holy Line
     {'name': "THL: Deogracias' gift",
         'region': "thl",
         'game_id': "QI31",
@@ -985,7 +970,7 @@ location_table: List[LocationDict] = [
         'game_id': "QI55",
         'room': "D01Z01S03"},
 
-    # Wall of the Holy Prohibitions (19)
+    # Wall of the Holy Prohibitions
     {'name': "WotHP: Upper east room, lift puzzle",
         'region': "wothp",
         'game_id': "RB11",
@@ -1063,7 +1048,7 @@ location_table: List[LocationDict] = [
         'game_id': "Amanecida[D09Z01S01]",
         'room': "D09Z01S01"},
 
-    # Wasteland of the Buried Churches (8)
+    # Wasteland of the Buried Churches
     {'name': "WotBC: Lower log path",
         'region': "wotbc",
         'game_id': "RB04",
@@ -1097,7 +1082,7 @@ location_table: List[LocationDict] = [
         'game_id': "RB20",
         'room': "D01Z03S06"},
     
-    # Where Olive Trees Wither (11)
+    # Where Olive Trees Wither
     {'name': "WOTW: Below Prie Dieu",
         'region': "wotw",
         'game_id': "CO11",
@@ -1143,7 +1128,23 @@ location_table: List[LocationDict] = [
         'game_id': "RB10",
         'room': "D02Z01S01"},
 
-    # Various (20)
+    # Various
+    {'name': "Second red candle",
+        'region': "dungeon",
+        'game_id': "RB18",
+        'room': "dungeon"},
+    {'name': "Third red candle",
+        'region': "dungeon",
+        'game_id': "RB19",
+        'room': "dungeon"},
+    {'name': "Second blue candle",
+        'region': "dungeon",
+        'game_id': "RB25",
+        'room': "dungeon"},
+    {'name': "Third blue candle",
+        'region': "dungeon",
+        'game_id': "RB26",
+        'room': "dungeon"},
     {'name': "Confessor Dungeon 1 extra",
         'region': "dungeon",
         'game_id': "Arena_NailManager[1000]",
