@@ -855,4 +855,9 @@
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Yes04.ogg" FacialAnim="Wraith_Yes04"/>
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Yes05.ogg" FacialAnim="Wraith_Yes05"/>
     </CSound>
+    <CSound id="AP_BansheeCarpetBombImpact" parent="Combat">
+        <AssetArray File="Assets\Sounds\Terran\Banshee\Banshee_AttackImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Banshee\Banshee_AttackImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Banshee\Banshee_AttackImpact2.wav"/>
+    </CSound>
 </Catalog>

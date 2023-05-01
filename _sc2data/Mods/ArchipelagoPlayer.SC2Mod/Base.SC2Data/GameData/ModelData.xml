@@ -415,6 +415,9 @@
         <Model value="Assets\Portraits\Terran\WraithPortrait\WraithPortrait.m3"/>
         <FacialController value="LocalizedData\Facial\WraithPortrait.fxa"/>
         <Image value="Assets\Textures\WraithPortrait_Static.dds"/>
-        <Lighting value="AP_WraithPortrait"/>
+    </CModel>
+    <CModel id="AP_BansheeCarpetBombImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\BansheeMissileImpact\BansheeMissileImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
     </CModel>
 </Catalog>

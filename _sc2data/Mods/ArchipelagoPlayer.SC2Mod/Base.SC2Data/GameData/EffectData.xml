@@ -731,4 +731,57 @@
         <Kind value="Ranged"/>
         <Amount value="14"/>
     </CEffectDamage>
+    <CEffectCreatePersistent id="AP_BacklashRockets">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <ExpireDelay value="0.8"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_BacklashRocketsLM"/>
+        <PeriodicPeriodArray value="0.15"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="AP_BacklashRocketsLM">
+        <ValidatorArray index="0" value="RangeCheckLE15"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_ScreecherMissilesSet"/>
+        <AmmoUnit value="AP_BacklashRocketsLMWeapon"/>
+        <Movers Link="AP_BacklashRocketsLMWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_BacklashRocketsU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <Visibility value="Visible"/>
+        <Amount value="12"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_ScreecherMissilesCarpetBombDamage">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Terran"/>
+        <ArmorReduction value="1"/>
+        <Kind value="Splash"/>
+        <KindSplash value="Splash"/>
+        <Amount value="12"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_ScreecherMissilesCarpetBombSearchArea">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Air,Missile,Stasis,Dead,Hidden,Invulnerable,Benign,Passive"/>
+        <AreaArray Radius="0.5" Effect="AP_ScreecherMissilesCarpetBombDamage"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="AP_ScreecherMissilesCreateCarpetBombPersistent">
+        <ValidatorArray value="AP_ClusterWarheadsPurchased"/>
+        <EditorCategories value="Race:Terran"/>
+        <OffsetVectorStartLocation Value="TargetPoint"/>
+        <OffsetVectorEndLocation Value="CasterPoint"/>
+        <PeriodCount value="4"/>
+        <PeriodicEffectArray value="AP_ScreecherMissilesCarpetBombSearchArea"/>
+        <PeriodicOffsetArray value="0,0.5,0"/>
+        <PeriodicOffsetArray value="0,1,0"/>
+        <PeriodicOffsetArray value="0,1.5,0"/>
+        <PeriodicOffsetArray value="0,2,0"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_ScreecherMissilesSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_BacklashRocketsU"/>
+        <EffectArray value="AP_ScreecherMissilesCreateCarpetBombPersistent"/>
+    </CEffectSet>
 </Catalog>

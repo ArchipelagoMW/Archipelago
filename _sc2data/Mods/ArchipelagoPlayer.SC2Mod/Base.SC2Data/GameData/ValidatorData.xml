@@ -100,6 +100,21 @@
         <Find value="1"/>
         <Value value="AP_HALORocketsResearched"/>
     </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_ClusterWarheadsPurchased">
+        <Find value="1"/>
+        <Value value="AP_ClusterWarheadsResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_IsVanillaBanshee">
+        <Value value="Banshee"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPBanshee">
+        <Value value="AP_Banshee"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsBanshee" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaBanshee"/>
+        <CombineArray value="AP_IsAPBanshee"/>
+    </CValidatorCombine>
     <CValidatorCombine id="IsHellion" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaHellion"/>
@@ -241,4 +256,9 @@
     <CValidatorUnitFilters id="AP_IsCloaked">
         <Filters value="Cloaked;-"/>
     </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_TacticalBansheeCloakOff" parent="TacticalCloakSharedOff" unitLink="AP_Banshee"/>
+    <CValidatorCombine id="AP_TacticalBansheeCloakOn" parent="TacticalCloakSharedOn" unitLink="AP_Banshee"/>
+    <CValidatorLocationEnumArea id="AP_TacticalBansheeCloakThreatSearch" parent="TacticalCloakThreatSearch" unitLink="AP_Banshee"/>
+    <CValidatorLocationEnumArea id="AP_TacticalBansheeCloakThreatSearchEmpty" parent="TacticalCloakThreatSearchEmpty" unitLink="AP_Banshee"/>
+    <CValidatorUnitCompareAttackPriority id="AP_UnitThreatensAP_Banshee" parent="UnitThreatens" unitLink="AP_Banshee"/>
 </Catalog>

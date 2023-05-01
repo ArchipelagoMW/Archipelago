@@ -171,4 +171,42 @@
             <VitalRegenArray index="Energy" value="-1.5"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_BansheeCloak">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-cloak.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="CanSpendEnergy"/>
+        <RemoveValidatorArray value="hasEnergy"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+            <VitalRegenArray index="Energy" value="-1.4765"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_BansheeCloakCrossSpectrumDampeners">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-cloak.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="CanSpendEnergy"/>
+        <RemoveValidatorArray value="hasEnergy"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+            <VitalRegenArray index="Energy" value="-1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DistortionBlasters">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="AP_DistortionBlastersResearched"/>
+        <DisableValidatorArray value="AP_IsCloaked"/>
+        <Modification>
+            <DamageDealtFraction index="Ranged" value="0.25"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DistortionThrusters">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="AP_DistortionThrustersResearched"/>
+        <DisableValidatorArray value="AP_IsCloaked"/>
+        <Modification MoveSpeedMultiplier="1.25" AccelerationMultiplier="1.25"/>
+    </CBehaviorBuff>
 </Catalog>

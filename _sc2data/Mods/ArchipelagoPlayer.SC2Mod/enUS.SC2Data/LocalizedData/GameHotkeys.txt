@@ -7,3 +7,4 @@ Button/Hotkey/AP_SpiderMineReplenish=R
 Button/Hotkey/AP_Vulture=V
 Button/Hotkey/AP_WraithCloakOff=D
 Button/Hotkey/AP_WraithCloakOn=C
+Button/Hotkey/AP_CloakOnBanshee=C

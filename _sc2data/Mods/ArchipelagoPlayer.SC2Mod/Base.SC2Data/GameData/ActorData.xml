@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CActorAction default="1" id="AP_VikingFighterAttackBase" parent="GenericAttackNoCreateBase">
+        <Missile value="AP_VikingFighterAttackMissile"/>
+        <LaunchAssets Sound="VikingFighter_AttackLaunch"/>
+        <LaunchAttachQuery Methods="AMFilterVikingFighter AMPatternVikingFighter"/>
+        <ImpactMap index="None" Sound="VikingFighter_AttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+    </CActorAction>
     <CActorUnit id="AP_Medic" parent="GenericUnitStandard" unitName="AP_Medic">
         <Aliases value="_UnitSmall"/>
         <Macros value="UnloadDropAnim"/>
@@ -1285,18 +1292,10 @@
             <Image value="Assets\Textures\Wireframe-Terran-Viking-Fighter.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorAction default="1" id="AP_VikingFighterAttackBase" parent="GenericAttackNoCreateBase">
-        <Missile value="AP_VikingFighterAttackMissile"/>
-        <LaunchAssets Sound="VikingFighter_AttackLaunch"/>
-        <LaunchAttachQuery Methods="AMFilterVikingFighter AMPatternVikingFighter"/>
-        <ImpactMap index="None" Sound="VikingFighter_AttackImpact"/>
-        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
-    </CActorAction>
     <CActorAction id="AP_VikingFighterAttack" parent="AP_VikingFighterAttackBase" effectImpact="AP_LanzerTorpedoesDamage" effectLaunch="LanzerTorpedoesLM">
         <On index="3" Terms="Effect.AP_LanzerTorpedoesLM.Start; At Caster; !ValidateEffect AP_HALORocketsResearched" Send="ActionDamage"/>
         <On Terms="Effect.AP_LanzerTorpedoesLM.Start; At Caster; !ValidateEffect AP_HALORocketsResearched" Send="Create"/>
         <LaunchAssets Model="VikingFighterAttackLaunch"/>
-        <Missile value="AP_VikingFighterAttackMissile"/>
         <ImpactMap index="None" Model="VikingFighterAttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_VikingFighterAttackMissile">
@@ -1315,7 +1314,6 @@
     </CActorMissile>
     <CActorAction id="AP_VikingFighterUpgradedAttack" parent="AP_VikingFighterAttackBase" effectImpact="AP_LanzerTorpedoesDamage" effectLaunch="LanzerTorpedoesLM">
         <On Terms="Effect.AP_LanzerTorpedoesLM.Start; At Caster; ValidateEffect AP_HALORocketsResearched" Send="Create"/>
-        <Missile value="AP_VikingFighterAttackMissile"/>
         <ImpactMap index="None" Model="VikingFighterRipWaveAttackImpact" Sound="Viking_RipwaveMissileImpact"/>
     </CActorAction>
     <CActorUnit id="AP_AssaultMorphModel" parent="GenericUnitBaseMorphTransition" unitName="AP_AssaultMorphModel">
@@ -1385,5 +1383,85 @@
     <CActorSound id="AP_AssaultMode" parent="SoundOneShot">
         <Sound value="Viking_MorphToAssault"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_VikingAssault" Send="Create"/>
+    </CActorSound>
+    <CActorUnit id="AP_Banshee" parent="GenericUnitStandard" unitName="AP_Banshee">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="UnitPortrait.*.Configure; ValidateUnit Cloaked" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End Instant"/>
+        <On Terms="UnitPortrait.*.Configure; ValidateUnit NotCloaked" Target="::PortraitGameSelf" Send="AnimBracketStop Visor Instant"/>
+        <On Terms="Behavior.AP_BansheeCloak.On" Send="StatusIncrement Cloaked"/>
+        <On Terms="Behavior.AP_CloakFieldEffect.On" Send="StatusIncrement Cloaked"/>
+        <On Terms="Behavior.CloakFieldEffect.On" Send="StatusIncrement Cloaked"/>
+        <On Terms="Behavior.AP_BansheeCloak.Off" Send="StatusDecrement Cloaked"/>
+        <On Terms="Behavior.AP_CloakFieldEffect.Off" Send="StatusDecrement Cloaked"/>
+        <On Terms="Behavior.CloakFieldEffect.Off" Send="StatusDecrement Cloaked"/>
+        <On Terms="Behavior.AP_BansheeCloak.On; IsStatus Cloaked 1" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
+        <On Terms="Behavior.AP_BansheeCloak.Off; IsStatus Cloaked 0" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
+        <On Terms="Behavior.AP_CloakFieldEffect.On; IsStatus Cloaked 1" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
+        <On Terms="Behavior.AP_CloakFieldEffect.Off; IsStatus Cloaked 0" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
+        <On Terms="Behavior.CloakFieldEffect.On; IsStatus Cloaked 1" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
+        <On Terms="Behavior.CloakFieldEffect.Off; IsStatus Cloaked 0" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
+        <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.On" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
+        <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.Off" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
+        <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.On" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
+        <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.Off" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
+        <HostSiteOps Ops="SOpBankerBanshee"/>
+        <Model value="Banshee"/>
+        <Baselines index="Walk" BlendIn="0.750000" BlendOut="1.000000"/>
+        <BuildModel value="Banshee"/>
+        <DeathArray index="Normal" ModelLink="BansheeDeath" SoundLink="Banshee_Explode"/>
+        <PlacementModel value="Banshee"/>
+        <PortraitModel value="BansheePortrait"/>
+        <AbilSoundArray AbilCmd="AP_BansheeCloak,0" Sound="Banshee_CloakOnVO"/>
+        <BarOffset value="60"/>
+        <BarWidth value="90"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Banshee.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-banshee.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <NameOffset value="60"/>
+        <SoundArray index="Ready" value="Banshee_Ready"/>
+        <SoundArray index="Help" value="Banshee_Help"/>
+        <SoundArray index="What" value="Banshee_What"/>
+        <SoundArray index="Yes" value="Banshee_Yes"/>
+        <SoundArray index="Attack" value="Banshee_Attack"/>
+        <SoundArray index="Pissed" value="Banshee_Pissed"/>
+        <SoundArray index="Movement" value="Banshee_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-banshee.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Banshee.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_BansheeAttack" parent="GenericAttack" effectImpact="AP_BacklashRocketsU" effectLaunch="AP_BacklashRocketsLM">
+        <LaunchAttachQuery Methods="AMPatternBanshee"/>
+        <LaunchAssets Sound="Banshee_AttackLaunch2"/>
+        <Missile value="AP_BansheeAttackMissile"/>
+        <ImpactMap index="None" Model="BansheeAttackImpact" Sound="Banshee_AttackImpact2"/>
+        <AcquisitionYawHalfArc value="15.000000"/>
+        <AcquisitionPitchHalfArc value="30.000000"/>
+        <ShieldRippleScaleFactor value="1.100000"/>
+    </CActorAction>
+    <CActorMissile id="AP_BansheeAttackMissile" parent="GenericAttackMissile" unitName="AP_BacklashRocketsLMWeapon">
+        <Model value="BacklashRocketsLMWeapon"/>
+    </CActorMissile>
+    <CActorModel id="AP_BansheeCarpetBombModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_ScreecherMissilesCarpetBombSearchArea.Start" Send="Create"/>
+        <Model value="AP_BansheeCarpetBombImpact"/>
+    </CActorModel>
+    <CActorSound id="AP_BansheeCarpetBombSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_ScreecherMissilesCarpetBombSearchArea.Start" Send="Create"/>
+        <Sound value="AP_BansheeCarpetBombImpact"/>
+    </CActorSound>
+    <CActorSound id="AP_Banshee_CloakOff" parent="SoundOneShot">
+        <Terms value="ValidateUnit NotCloakedAndNotDead"/>
+        <On Terms="Behavior.AP_BansheeCloak.Off" Send="Create"/>
+        <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.Off" Send="Create"/>
+        <Sound value="Banshee_CloakOff"/>
+    </CActorSound>
+    <CActorSound id="AP_Banshee_CloakOn" parent="SoundOneShot">
+        <Terms value="ValidateUnit NotCloaked"/>
+        <On Terms="Behavior.AP_BansheeCloak.On" Send="Create"/>
+        <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.On" Send="Create"/>
+        <Sound value="Banshee_CloakOn"/>
     </CActorSound>
 </Catalog>

@@ -193,4 +193,31 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_HALORockets" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeBansheeCloakCompleteOnly">
+        <Tooltip value="RequirementNode/Tooltip/CountUpgradeBansheeCloakCompleteOnly758801471"/>
+        <Count Link="AP_BansheeCloak" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeBansheeCloakQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_BansheeCloak" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeBansheeCloakedDamageCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_BansheeCloakedDamage" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeClusterWarheadsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_ClusterWarheads" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCrossSpectrumDampenersCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_CrossSpectrumDampeners" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeDistortionThrustersCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_DistortionThrusters" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeBansheeCloakQueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeBansheeCloakQueuedOrBetter"/>
+    </CRequirementNot>
 </Catalog>

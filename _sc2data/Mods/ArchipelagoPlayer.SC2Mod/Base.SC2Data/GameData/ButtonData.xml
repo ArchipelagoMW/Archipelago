@@ -164,4 +164,21 @@
         <EditorCategories value="Race:Terran"/>
         <TintRacially value="1"/>
     </CButton>
+    <CButton id="AP_CrossSpectrumDampeners">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-crossspectrumdampeners.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_ShockwaveMissilePattern">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-clusterwarheads.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_CloakOnBanshee">
+        <Icon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeySet value="Cloak"/>
+        <Universal value="1"/>
+    </CButton>
 </Catalog>

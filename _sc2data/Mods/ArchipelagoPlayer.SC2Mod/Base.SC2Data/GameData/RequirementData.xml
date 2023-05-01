@@ -174,4 +174,22 @@
         <EditorCategories value="Race:Terran"/>
         <NodeArray index="Show" Link="AP_CountUpgradeAresClassWeaponsSystemVikingCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_ClusterWarheadsResearched">
+        <NodeArray index="Show" Link="AP_CountUpgradeClusterWarheadsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_CrossSpectrumDampenersResearched">
+        <NodeArray index="Show" Link="AP_CountUpgradeCrossSpectrumDampenersCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_DistortionBlastersResearched">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeBansheeCloakedDamageCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_DistortionThrustersResearched">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeDistortionThrustersCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseCloakingField">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeBansheeCloakCompleteOnly"/>
+    </CRequirement>
 </Catalog>

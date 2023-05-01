@@ -374,4 +374,20 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
+    <CAbilBehavior id="AP_BansheeCloak">
+        <AbilSetId value="Clok"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="AP_CloakOnBanshee" Requirements="AP_UseCloakingField">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="CloakOff">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+        </Cost>
+        <BehaviorArray value="AP_BansheeCloak"/>
+    </CAbilBehavior>
 </Catalog>

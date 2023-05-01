@@ -391,4 +391,37 @@
         <EditorCategories value="Race:Terran,UpgradeType:AttackBonus"/>
         <AffectedUnitArray value="AP_VikingFighter"/>
     </CUpgrade>
+    <CUpgrade id="AP_BansheeCloak">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="400"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_Banshee"/>
+    </CUpgrade>
+    <CUpgrade id="AP_BansheeCloakedDamage">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ClusterWarheads">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_CrossSpectrumDampeners">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BansheeCloak,BehaviorArray[0]" Value="AP_BansheeCloakCrossSpectrumDampeners"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_DuskWingBansheeCloakingField,BehaviorArray[0]" Value="AP_BansheeCloakCrossSpectrumDampeners"/>
+        <EffectArray Operation="Set" Reference="Button,AP_CloakOnBanshee,Tooltip" Value="Button/Tooltip/AP_CloakOnBansheeUpgrade"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_DistortionBlasters">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_DistortionThrusters">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>
