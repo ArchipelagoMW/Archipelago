@@ -17,7 +17,6 @@ class LandstalkerWeb(WebWorld):
         "landstalker/en",
         ["Dinopony"]
     )]
-    bug_report_page = "https://github.com/Dinopony/randstalker/issues/"
 
 
 class LandstalkerWorld(World):
@@ -30,7 +29,7 @@ class LandstalkerWorld(World):
     game = "Landstalker - The Treasures of King Nole"
     option_definitions = ls_options
     topology_present = True
-    data_version = 0
+    data_version = 1
     required_client_version = (0, 3, 8)
     web = LandstalkerWeb()
 
@@ -87,35 +86,21 @@ class LandstalkerWorld(World):
         item.price_in_shops = data.price_in_shops
         return item
 
-    def generate_output(self, output_directory: str) -> None:
-        # Calculate prices for items in shops once all items have their final position
-        unknown_items_price = 250
-        earlygame_price_factor = 0.5
-        endgame_price_factor = 2.0
-        factor_diff = endgame_price_factor - earlygame_price_factor
-
-        global_price_factor = self.get_setting("shop_prices_factor").value / 100.0
-
-        spheres = list(self.multiworld.get_spheres())
-        sphere_id = 0
-        sphere_count = len(spheres)
-        for sphere in spheres:
-            for location in sphere:
-                if location.player == self.player and location.type_string == 'shop':
-                    current_playthrough_progression = sphere_id / sphere_count
-                    progression_price_factor = earlygame_price_factor + (current_playthrough_progression * factor_diff)
-
-                    price = location.item.price_in_shops if location.item.game == 'Landstalker' else unknown_items_price
-                    price *= progression_price_factor
-                    price *= global_price_factor
-                    price -= price % 10
-                    location.price = int(price)
-            sphere_id += 1
+    def create_regions(self):
+        self.regions_table = Regions.create_regions(self.multiworld, self.player)
+        Locations.create_locations(self.player, self.regions_table, self.location_name_to_id)
+        self.create_teleportation_trees()
 
     def create_items(self):
         item_pool: List[LandstalkerItem] = []
         for name, data in item_table.items():
             item_pool += [self.create_item(name) for _ in range(0, data.quantity)]
+
+        # Add a variable amount of Life Stock to the pool, depending on the amount of starting Life Stock
+        # (i.e. on the starting location)
+        starting_lifestocks = self.get_starting_health() - 4
+        lifestock_count = 80 - starting_lifestocks
+        item_pool += [self.create_item("Life Stock") for _ in range(0, lifestock_count)]
 
         # Add jewels to the item pool depending on the number of jewels set in generation settings
         jewel_count = self.get_setting('jewel_count').value
@@ -129,11 +114,6 @@ class LandstalkerWorld(World):
             item_pool.append(self.create_item("EkeEke"))
 
         self.multiworld.itempool += item_pool
-
-    def create_regions(self):
-        self.regions_table = Regions.create_regions(self.multiworld, self.player)
-        Locations.create_locations(self.player, self.regions_table, self.location_name_to_id)
-        self.create_teleportation_trees()
 
     def create_teleportation_trees(self):
         self.teleport_tree_pairs = load_teleport_trees()
@@ -182,6 +162,42 @@ class LandstalkerWorld(World):
 
     def generate_oracle_stone_hint(self):
         return f"It shows {self.dark_dungeon_id}\nenshrouded in darkness."
+
+    def get_starting_health(self):
+        spawn_id = self.get_setting('spawn_region').value
+        if spawn_id == "destel":
+            return 20
+        elif spawn_id == "verla":
+            return 16
+        elif spawn_id in ["waterfall", "mercator", "greenmaze"]:
+            return 10
+        else:
+            return 4
+
+    def generate_output(self, output_directory: str) -> None:
+        # Calculate prices for items in shops once all items have their final position
+        unknown_items_price = 250
+        earlygame_price_factor = 0.5
+        endgame_price_factor = 2.0
+        factor_diff = endgame_price_factor - earlygame_price_factor
+
+        global_price_factor = self.get_setting("shop_prices_factor").value / 100.0
+
+        spheres = list(self.multiworld.get_spheres())
+        sphere_id = 0
+        sphere_count = len(spheres)
+        for sphere in spheres:
+            for location in sphere:
+                if location.player == self.player and location.type_string == 'shop':
+                    current_playthrough_progression = sphere_id / sphere_count
+                    progression_price_factor = earlygame_price_factor + (current_playthrough_progression * factor_diff)
+
+                    price = location.item.price_in_shops if location.item.game == 'Landstalker' else unknown_items_price
+                    price *= progression_price_factor
+                    price *= global_price_factor
+                    price -= price % 10
+                    location.price = int(price)
+            sphere_id += 1
 
 #   def get_filler_item_name(self) -> str:
 #       fillers = get_weighted_filler_item_names()

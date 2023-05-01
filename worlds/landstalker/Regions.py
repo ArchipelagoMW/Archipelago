@@ -91,18 +91,15 @@ def create_entrance(from_id: str, to_id: str, two_way: bool, player: int, region
 
 
 def get_starting_region(multiworld: MultiWorld, player: int, regions_table: Dict[str, LandstalkerRegion]):
+    # Most spawn locations have the same name as the region they are bound to, but a few vary.
     spawn_id = multiworld.spawn_region[player].value
-    region_id = "massan"
-
-    script_folder = Path(__file__)
-    with open((script_folder.parent / "data/spawn_location.json").resolve(), "r") as file:
-        spawns_data = json.load(file)
-        for current_id, data in spawns_data.items():
-            if current_id == spawn_id:
-                region_id = data["nodeId"]
-                break
-
-    return regions_table[region_id]
+    if spawn_id == "waterfall":
+        return regions_table["greenmaze_post_whistle"]
+    elif spawn_id == "kado":
+        return regions_table["route_gumi_ryuma"]
+    elif spawn_id == "greenmaze":
+        return regions_table["greenmaze_pre_whistle"]
+    return regions_table[spawn_id]
 
 
 def get_darkenable_regions():
