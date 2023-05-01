@@ -103,6 +103,7 @@
         "hintName": "in the town of Mercator",
         "nodeIds": [
             "mercator",
+            "mercator_repaired_docks",
             "mercator_casino",
             "mercator_special_shop"
         ]

@@ -1717,7 +1717,7 @@
     {
         "name": "Mercator: Docks shop item #1",
         "type": "shop",
-        "nodeId": "mercator",
+        "nodeId": "mercator_repaired_docks",
         "entities": [
             { "mapId": 644, "entityId": 3 },
             { "mapId": 643, "entityId": 9 }
@@ -1727,7 +1727,7 @@
     {
         "name": "Mercator: Docks shop item #2",
         "type": "shop",
-        "nodeId": "mercator",
+        "nodeId": "mercator_repaired_docks",
         "entities": [
             { "mapId": 644, "entityId": 4 },
             { "mapId": 643, "entityId": 10 }
@@ -1737,7 +1737,7 @@
     {
         "name": "Mercator: Docks shop item #3",
         "type": "shop",
-        "nodeId": "mercator",
+        "nodeId": "mercator_repaired_docks",
         "entities": [
             { "mapId": 644, "entityId": 5 },
             { "mapId": 643, "entityId": 11 }

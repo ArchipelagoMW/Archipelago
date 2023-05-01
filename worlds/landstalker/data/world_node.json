@@ -131,6 +131,13 @@
             "in the town of Mercator"
         ]
     },
+    "mercator_repaired_docks": {
+        "name": "Mercator (docks with repaired lighthouse)",
+        "hints": [
+            "in a town",
+            "in the town of Mercator"
+        ]
+    },
     "mercator_casino": {
         "name": "Mercator casino"
     },
@@ -145,7 +152,11 @@
         ]
     },
     "mercator_special_shop": {
-        "name": "Mercator special shop"
+        "name": "Mercator special shop",
+        "hints": [
+            "in a town",
+            "in the town of Mercator"
+        ]
     },
     "mir_tower_sector": {
         "name": "Mir Tower sector",

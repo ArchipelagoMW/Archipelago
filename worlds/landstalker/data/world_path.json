@@ -209,10 +209,14 @@
     },
     {
         "fromId": "mercator",
-        "toId": "verla_shore",
+        "toId": "mercator_repaired_docks",
         "requiredNodes": [
             "ryuma_lighthouse_repaired"
         ]
+    },
+    {
+        "fromId": "mercator_repaired_docks",
+        "toId": "verla_shore"
     },
     {
         "fromId": "verla_shore",

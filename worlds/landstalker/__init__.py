@@ -7,13 +7,11 @@ from .Regions import *
 from .Locations import *
 from .Rules import *
 
-# TODO: Docs
 class LandstalkerWeb(WebWorld):
     theme = "grass"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up the Landstalker Randomizer software on your computer. This guide covers single-player, "
-        "multiworld, and related software.",
+        "A guide to setting up the Landstalker Randomizer software on your computer.",
         "English",
         "landstalker_en.md",
         "landstalker/en",
@@ -29,7 +27,7 @@ class LandstalkerWorld(World):
     Roam freely on the island, get stronger to beat dungeons and gather the required key items in order to reach the
     hidden palace and claim the treasure.
     """
-    game = "Landstalker"
+    game = "Landstalker - The Treasures of King Nole"
     option_definitions = ls_options
     topology_present = True
     data_version = 0
@@ -90,6 +88,8 @@ class LandstalkerWorld(World):
         return item
 
     def generate_output(self, output_directory: str) -> None:
+        # Calculate prices for items in shops once all items have their final position
+        unknown_items_price = 250
         earlygame_price_factor = 0.5
         endgame_price_factor = 2.0
         factor_diff = endgame_price_factor - earlygame_price_factor
@@ -103,7 +103,7 @@ class LandstalkerWorld(World):
                     current_playthrough_progression = sphere_id / sphere_count
                     progression_price_factor = earlygame_price_factor + (current_playthrough_progression * factor_diff)
 
-                    price = location.item.price_in_shops if location.item.player == self.player else 100
+                    price = location.item.price_in_shops if location.item.game == 'Landstalker' else unknown_items_price
                     price *= progression_price_factor
                     price -= price % 10
                     location.price = int(price)
