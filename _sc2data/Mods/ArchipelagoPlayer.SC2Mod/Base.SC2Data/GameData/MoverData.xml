@@ -145,4 +145,72 @@
             <RevolverAccelRange value="337.5"/>
         </MotionOverlays>
     </CMoverMissile>
+    <CMoverMissile id="AP_ATALaserBatteryLMWeapon">
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="150"/>
+            <MaxSpeed value="18.75"/>
+            <ClearanceAcceleration value="75"/>
+            <Outro value="-1"/>
+            <YawPitchRoll value="719.2968"/>
+        </MotionPhases>
+        <MotionPhases YawPitchRoll="MAX"/>
+    </CMoverMissile>
+    <CMoverMissile id="AP_ATSLaserBatteryLMWeapon">
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="150"/>
+            <MaxSpeed value="18.75"/>
+            <ClearanceAcceleration value="75"/>
+            <Outro value="-1"/>
+            <YawPitchRoll value="719.2968"/>
+        </MotionPhases>
+        <MotionPhases YawPitchRoll="MAX"/>
+    </CMoverMissile>
+    <CMoverMissile id="AP_HurricaneMissile">
+        <MotionPhases>
+            <Driver value="Throw"/>
+            <Acceleration value="10"/>
+            <Speed value="1"/>
+            <MaxSpeed value="8"/>
+            <Outro value="2.5,3.5"/>
+            <ThrowRotationType value="ThrowForward"/>
+            <ThrowVector value="0,-1,0"/>
+            <ThrowBandYaw value="74.9926,-74.9926,64.995,-64.995"/>
+            <ThrowBandPitch value="45,-45,4.9987,-4.9987"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="3"/>
+            <AccelerationRange value="7"/>
+            <MaxSpeed value="16"/>
+            <ActorTracking value="Actual"/>
+            <Outro value="-2.5,-1.5"/>
+            <YawPitchRoll value="359.2968"/>
+            <Overlays Scale="1,1"/>
+        </MotionPhases>
+        <MotionPhases YawPitchRoll="MAX">
+            <Overlays Scale="0.15,0.15"/>
+        </MotionPhases>
+        <MotionOverlays>
+            <Type value="Revolver"/>
+            <RevolverSpeed value="119.5312"/>
+            <RevolverSpeedRange value="119.5312"/>
+            <RevolverMaxSpeed value="719.2968"/>
+            <RevolverMaxSpeedRange value="719.2968"/>
+            <RevolverAccel value="45"/>
+            <RevolverAccelRange value="337.5"/>
+        </MotionOverlays>
+    </CMoverMissile>
+    <CMoverMissile id="AP_YamatoWeapon">
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="3200"/>
+            <MaxSpeed value="20"/>
+            <ClearanceAcceleration value="75"/>
+            <Outro value="-1"/>
+            <YawPitchRoll value="719.2968"/>
+        </MotionPhases>
+        <MotionPhases YawPitchRoll="MAX"/>
+    </CMoverMissile>
 </Catalog>

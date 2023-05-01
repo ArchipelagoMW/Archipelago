@@ -24,4 +24,8 @@
         <YawStart value="-180"/>
         <YawRate value="360"/>
     </CTurret>
+    <CTurret id="AP_Battlecruiser">
+        <YawArc value="90"/>
+        <YawRate value="1999.8632"/>
+    </CTurret>
 </Catalog>

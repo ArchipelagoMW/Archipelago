@@ -743,7 +743,6 @@
         <ValidatorArray index="0" value="RangeCheckLE15"/>
         <EditorCategories value="Race:Terran"/>
         <ImpactEffect value="AP_ScreecherMissilesSet"/>
-        <AmmoUnit value="AP_BacklashRocketsLMWeapon"/>
         <Movers Link="AP_BacklashRocketsLMWeapon"/>
     </CEffectLaunchMissile>
     <CEffectDamage id="AP_BacklashRocketsU" parent="DU_WEAP_MISSILE">
@@ -784,4 +783,160 @@
         <EffectArray value="AP_BacklashRocketsU"/>
         <EffectArray value="AP_ScreecherMissilesCreateCarpetBombPersistent"/>
     </CEffectSet>
+    <CEffectLaunchMissile id="AP_ATALaserBatteryLM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_ATALaserBatteryU"/>
+        <AmmoUnit value="AP_ATALaserBatteryLMWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_ATALaserBatteryU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <Visibility value="Visible"/>
+        <Amount value="6"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_ATSLaserBatteryLM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_ATSLaserBatteryU"/>
+        <AmmoUnit value="AP_ATSLaserBatteryLMWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_ATSLaserBatteryU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <Visibility value="Visible"/>
+        <Amount value="10"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_DefensiveMatrixApplyBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_DefensiveMatrix"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_DefensiveMatrixApplyDummyBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_DefensiveMatrixDummy"/>
+    </CEffectApplyBehavior>
+    <CEffectModifyUnit id="AP_DefensiveMatrixModifyUnit">
+        <EditorCategories value="Race:Terran"/>
+        <VitalArray index="Shields">
+            <ChangeFraction value="1"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectRemoveBehavior id="AP_DefensiveMatrixRemoveDummyBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="AP_DefensiveMatrixDummy"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="AP_DefensiveMatrixSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_DefensiveMatrixApplyDummyBehavior"/>
+        <EffectArray value="AP_DefensiveMatrixModifyUnit"/>
+        <EffectArray value="AP_DefensiveMatrixApplyBehavior"/>
+        <EffectArray value="AP_DefensiveMatrixRemoveDummyBehavior"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_HurricaneMissile">
+        <EditorCategories value="Race:Terran"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <InitialEffect value="AP_HurricaneMissileDamageDelayPersistent"/>
+        <PeriodCount value="10"/>
+        <PeriodicEffectArray value="AP_HurricaneMissileBurstPersistent"/>
+        <PeriodicOffsetArray value="-0.8,-0.8,0"/>
+        <PeriodicOffsetArray value="-0.8,0.8,0"/>
+        <PeriodicOffsetArray value="0.8,0.8,0"/>
+        <PeriodicOffsetArray value="0.8,-0.8,0"/>
+        <PeriodicPeriodArray value="0.1"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_HurricaneMissileBurstPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="Channeled" value="1"/>
+        <Flags index="RandomOffset" value="1"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_HurricaneMissileLeftLM"/>
+        <PeriodicEffectArray value="AP_HurricaneMissileRightLM"/>
+        <PeriodicOffsetArray value="0,0,0"/>
+        <PeriodicOffsetArray value="-0.3,0.3,0"/>
+        <PeriodicOffsetArray value="0,0.3,0"/>
+        <PeriodicOffsetArray value="0.3,0.3,0"/>
+        <PeriodicOffsetArray value="-0.3,0,0"/>
+        <PeriodicOffsetArray value="0,0,0"/>
+        <PeriodicOffsetArray value="0.3,0,0"/>
+        <PeriodicOffsetArray value="-0.3,-0.3,0"/>
+        <PeriodicOffsetArray value="0,-0.3,0"/>
+        <PeriodicOffsetArray value="0.3,-0.3,0"/>
+        <PeriodicOffsetArray value="-0.6,0.6,0"/>
+        <PeriodicOffsetArray value="0,0.6,0"/>
+        <PeriodicOffsetArray value="0.6,0.6,0"/>
+        <PeriodicOffsetArray value="-0.6,0,0"/>
+        <PeriodicOffsetArray value="0,0,0"/>
+        <PeriodicOffsetArray value="0.6,0,0"/>
+        <PeriodicOffsetArray value="-0.6,-0.6,0"/>
+        <PeriodicOffsetArray value="0,-0.6,0"/>
+        <PeriodicOffsetArray value="0.6,-0.6,0"/>
+        <PeriodicPeriodArray value="0.05"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_HurricaneMissileDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <LaunchLocation Value="SourceUnitOrPoint"/>
+        <AttributeBonus index="Light" value="5"/>
+        <Visibility value="Visible"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="4"/>
+        <Death value="Fire"/>
+        <AreaArray Radius="1.6" Fraction="1"/>
+        <SearchFilters value="Air;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_HurricaneMissileDamageDelayPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="Channeled" value="1"/>
+        <ExpireDelay value="1.5"/>
+        <FinalEffect value="AP_HurricaneMissileDamagePersistent"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_HurricaneMissileDamagePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="10"/>
+        <PeriodicEffectArray value="AP_HurricaneMissileDamage"/>
+        <PeriodicPeriodArray value="0.1"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="AP_HurricaneMissileLeftDummy">
+        <EditorCategories value="Race:Terran"/>
+        <AreaArray/>
+    </CEffectEnumArea>
+    <CEffectLaunchMissile id="AP_HurricaneMissileLeftLM">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="AP_HurricaneMissileLeftDummy"/>
+        <AmmoUnit value="AP_HurricaneMissileLeft"/>
+    </CEffectLaunchMissile>
+    <CEffectEnumArea id="AP_HurricaneMissileRightDummy">
+        <EditorCategories value="Race:Terran"/>
+        <AreaArray/>
+    </CEffectEnumArea>
+    <CEffectLaunchMissile id="AP_HurricaneMissileRightLM">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="AP_HurricaneMissileRightDummy"/>
+        <AmmoUnit value="AP_HurricaneMissileRight"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_Yamato">
+        <ValidatorArray index="0" value="YamatoTargetFilters"/>
+        <ValidatorArray value="IsNotWarpBubble"/>
+        <ValidatorArray value="YamatoTargetFilters"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_YamatoU"/>
+        <AmmoUnit value="AP_YamatoWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_YamatoU">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Visibility value="Visible"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="300"/>
+        <Death value="Blast"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
 </Catalog>

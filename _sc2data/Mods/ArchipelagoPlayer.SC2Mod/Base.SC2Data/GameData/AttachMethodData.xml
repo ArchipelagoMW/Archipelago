@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CAttachMethodFilter id="AP_AMFilterBattlecruiserHurricaneLeft">
+        <Keys Keyword="Weapon" Index="20"/>
+        <Keys Keyword="Weapon" Index="21"/>
+        <Keys Keyword="Weapon" Index="25"/>
+        <Logic value="OR"/>
+    </CAttachMethodFilter>
+    <CAttachMethodFilter id="AP_AMFilterBattlecruiserHurricaneRight">
+        <Keys Keyword="Weapon" Index="22"/>
+        <Keys Keyword="Weapon" Index="23"/>
+        <Keys Keyword="Weapon" Index="24"/>
+        <Logic value="OR"/>
+    </CAttachMethodFilter>
     <CAttachMethodPattern id="AP_AMPatternGoliath">
         <Keyword value="SetB"/>
         <Base value="::RollingIndex"/>

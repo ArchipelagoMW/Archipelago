@@ -390,4 +390,62 @@
         </Cost>
         <BehaviorArray value="AP_BansheeCloak"/>
     </CAbilBehavior>
+    <CAbilEffectInstant id="AP_DefensiveMatrix">
+        <AbilSetId value="dmatrix"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_DefensiveMatrixSet"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_DefensiveMatrix" State="Restricted" Requirements="AP_UseDefensiveMatrix">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="AP_MissilePods">
+        <Alignment value="Negative"/>
+        <AbilSetId value="missilepods"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_HurricaneMissile"/>
+        <Cost>
+            <Vital index="Energy" value="125"/>
+            <Cooldown TimeUse="0.8332"/>
+        </Cost>
+        <Range value="7"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <CursorEffect value="AP_HurricaneMissileDamage"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="MissilePods" State="Restricted" Requirements="AP_UseHurricaneMissiles">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_Yamato">
+        <AbilSetId value="yamato"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="125"/>
+            <Cooldown Link="AP_YamatoYamato" TimeUse="0.8332"/>
+        </Cost>
+        <Range value="10"/>
+        <RangeSlop value="10"/>
+        <PrepTime value="3"/>
+        <ShowProgressArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <ProgressButtonArray index="Prep" value="YamatoGun"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_YamatoGun" Requirements="AP_UseYamato">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilQueue id="AP_que1">
+        <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
+        <QueueSize value="1"/>
+    </CAbilQueue>
 </Catalog>

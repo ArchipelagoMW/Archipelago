@@ -220,4 +220,37 @@
     <CRequirementNot id="AP_NotCountUpgradeBansheeCloakQueuedOrBetter">
         <OperandArray index="0" value="AP_CountUpgradeBansheeCloakQueuedOrBetter"/>
     </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeBattlecruiserBehemothReactorQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_BattlecruiserBehemothReactor" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeBattlecruiserEnableSpecializationsCompleteOnly">
+        <Tooltip value="RequirementNode/Tooltip/CountUpgradeBattlecruiserEnableSpecializationsCompleteOnly3622066930"/>
+        <Count Link="AP_BattlecruiserEnableSpecializations" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeBattlecruiserEnableSpecializationsCompleteOnlyTechTreeCheat">
+        <Count Link="AP_BattlecruiserEnableSpecializations" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeBattlecruiserEnableSpecializationsQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_BattlecruiserEnableSpecializations" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeDefensiveMatrixCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_DefensiveMatrix" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHurricaneMissilesCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HurricaneMissiles" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeYamatoCannonCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_YamatoCannon" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeBattlecruiserBehemothReactorQueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeBattlecruiserBehemothReactorQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeBattlecruiserEnableSpecializationsQueuedOrBetter">
+        <OperandArray index="0" value="CountUpgradeBattlecruiserEnableSpecializationsQueuedOrBetter"/>
+    </CRequirementNot>
 </Catalog>

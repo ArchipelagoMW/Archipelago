@@ -192,4 +192,32 @@
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Use" Link="AP_CountUpgradeBansheeCloakCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_LearnBattlecruiserEnergyUpgrade">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeBattlecruiserBehemothReactorQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnBattlecruiserSpecializations">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeBattlecruiserEnableSpecializationsQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="AP_UseBattlecruiserSpecializations">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeBattlecruiserEnableSpecializationsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveWeaponRefit">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeBattlecruiserEnableSpecializationsCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_UseYamato">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeYamatoCannonCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseDefensiveMatrix">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeDefensiveMatrixCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseHurricaneMissiles">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHurricaneMissilesCompleteOnly"/>
+    </CRequirement>
 </Catalog>

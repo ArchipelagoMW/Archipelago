@@ -424,4 +424,38 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_BattlecruiserBehemothReactor">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="11"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-behemothreactor.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Battlecruiser,EnergyStart" Value="25"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_BattlecruiserEnableSpecializations">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="1"/>
+        <Icon value="Assets\Textures\btn-ability-terran-yamatogun-color.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Battlecruiser"/>
+    </CUpgrade>
+    <CUpgrade id="AP_DefensiveMatrix">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HurricaneMissiles">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_YamatoCannon">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

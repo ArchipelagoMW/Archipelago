@@ -181,4 +181,19 @@
         <HotkeySet value="Cloak"/>
         <Universal value="1"/>
     </CButton>
+    <CButton id="AP_DefensiveMatrix">
+        <Icon value="Assets\Textures\btn-ability-terran-defensivematrix.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-defensivematrix.dds"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_MissilePods">
+        <Icon value="Assets\Textures\btn-ability-terran-hurricane.dds"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_YamatoGun">
+        <Icon value="Assets\Textures\btn-ability-terran-yamatogun-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-yamatogun-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <Universal value="1"/>
+    </CButton>
 </Catalog>

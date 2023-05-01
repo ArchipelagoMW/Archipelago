@@ -420,4 +420,21 @@
         <Model value="Assets\Effects\Terran\BansheeMissileImpact\BansheeMissileImpact.m3"/>
         <EditorCategories value="Race:Terran"/>
     </CModel>
+    <CModel id="AP_DefensiveMatrix" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\DefensiveMatrixShield\DefensiveMatrixShield.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_DefensiveMatrixModel" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\BattlecruiserDefensiveMatrix\BattlecruiserDefensiveMatrix.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Radius value="2.000000"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+        <SelectionRadius value="0.555400"/>
+        <ShadowRadius value="0.555400"/>
+    </CModel>
+    <CModel id="AP_HurricaneMissile" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\MissilePodMissile\MissilePodMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
 </Catalog>

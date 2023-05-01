@@ -115,6 +115,22 @@
         <CombineArray value="AP_IsVanillaBanshee"/>
         <CombineArray value="AP_IsAPBanshee"/>
     </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_BattlecruiserUpgraded">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveWeaponRefit"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_IsVanillaBattlecruiser">
+        <Value value="Battlecruiser"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPBattlecruiser">
+        <Value value="AP_Battlecruiser"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsBattlecruiser" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaBattlecruiser"/>
+        <CombineArray value="AP_IsAPBattlecruiser"/>
+    </CValidatorCombine>
     <CValidatorCombine id="IsHellion" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaHellion"/>
@@ -261,4 +277,7 @@
     <CValidatorLocationEnumArea id="AP_TacticalBansheeCloakThreatSearch" parent="TacticalCloakThreatSearch" unitLink="AP_Banshee"/>
     <CValidatorLocationEnumArea id="AP_TacticalBansheeCloakThreatSearchEmpty" parent="TacticalCloakThreatSearchEmpty" unitLink="AP_Banshee"/>
     <CValidatorUnitCompareAttackPriority id="AP_UnitThreatensAP_Banshee" parent="UnitThreatens" unitLink="AP_Banshee"/>
+    <CValidatorUnitFilters id="AP_YamatoTargetFilters">
+        <Filters value="-;Self,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorUnitFilters>
 </Catalog>

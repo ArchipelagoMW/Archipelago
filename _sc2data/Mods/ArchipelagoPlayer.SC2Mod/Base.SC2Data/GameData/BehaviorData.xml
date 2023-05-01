@@ -209,4 +209,58 @@
         <DisableValidatorArray value="AP_IsCloaked"/>
         <Modification MoveSpeedMultiplier="1.25" AccelerationMultiplier="1.25"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DefensiveMatrix">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-defensivematrix.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <RemoveValidatorArray value="hasShields"/>
+        <Duration value="20"/>
+        <Modification>
+            <VitalMaxArray index="Shields" value="200"/>
+        </Modification>
+        <DamageResponse ModifyMinimumDamage="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DefensiveMatrixDummy">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification>
+            <VitalMaxArray index="Shields" value="200"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SpecDefensiveMatrix">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <Duration value="15"/>
+        <ExpireEffect value="AP_SpecDefensiveMatrixIssueOrder"/> <!-- Looks like unused -->
+        <Modification>
+            <AbilLinkDisableArray value="AP_BattlecruiserSpecialize"/>
+        </Modification>
+        <DamageResponse ModifyMinimumDamage="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SpecHurricane">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <Duration value="15"/>
+        <ExpireEffect value="AP_SpecHurricaneIssueOrder"/> <!-- Looks like unused -->
+        <Modification>
+            <AbilLinkDisableArray value="AP_BattlecruiserSpecialize"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SpecYamato">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <Duration value="15"/>
+        <ExpireEffect value="AP_SpecYamatoIssueOrder"/> <!-- Looks like unused -->
+        <Modification>
+            <AbilLinkDisableArray value="AP_BattlecruiserSpecialize"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

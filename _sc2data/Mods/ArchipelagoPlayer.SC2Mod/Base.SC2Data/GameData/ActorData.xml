@@ -1435,7 +1435,6 @@
     <CActorAction id="AP_BansheeAttack" parent="GenericAttack" effectImpact="AP_BacklashRocketsU" effectLaunch="AP_BacklashRocketsLM">
         <LaunchAttachQuery Methods="AMPatternBanshee"/>
         <LaunchAssets Sound="Banshee_AttackLaunch2"/>
-        <Missile value="AP_BansheeAttackMissile"/>
         <ImpactMap index="None" Model="BansheeAttackImpact" Sound="Banshee_AttackImpact2"/>
         <AcquisitionYawHalfArc value="15.000000"/>
         <AcquisitionPitchHalfArc value="30.000000"/>
@@ -1464,4 +1463,149 @@
         <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.On" Send="Create"/>
         <Sound value="Banshee_CloakOn"/>
     </CActorSound>
+    <CActorUnit id="AP_Battlecruiser" parent="GenericUnitStandard" unitName="AP_Battlecruiser">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="ActorCreation; ValidateUnit AP_BattlecruiserUpgraded" Send="AnimBlendTimeApply 0.000000"/>
+        <On Terms="ActorCreation; ValidateUnit AP_BattlecruiserUpgraded" Send="AnimGroupApply A"/>
+        <On Terms="ActorCreation; ValidateUnit AP_BattlecruiserUpgraded" Send="AnimBlendTimeApply"/>
+        <On Terms="Upgrade.AP_BattlecruiserEnableSpecializations.Add; ValidateUnit NotDeadOrConstruction" Send="AnimBlendTimeApply 5.000000"/>
+        <On Terms="Upgrade.AP_BattlecruiserEnableSpecializations.Add; ValidateUnit NotDeadOrConstruction" Send="AnimPlay GLBirth,A"/>
+        <On Terms="Upgrade.AP_BattlecruiserEnableSpecializations.Add; ValidateUnit NotDeadOrConstruction" Send="AnimGroupApply A"/>
+        <On Terms="Upgrade.AP_BattlecruiserEnableSpecializations.Add; ValidateUnit NotDeadOrConstruction" Send="AnimBlendTimeApply"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_BattlecruiserUpgraded" Send="DeathCustomize Upgrade"/>
+        <On Terms="Abil.AP_Yamato.SourcePrepStart" Send="$Spell 0 -1.000000 -1.000000 3.500000 AsDuration"/>
+        <On Terms="Abil.AP_Yamato.SourcePrepStop" Send="AnimClear Spell"/>
+        <On Terms="ActorCreation" Send="AnimBlendTimeApply 0.000000"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply A"/>
+        <On Terms="ActorCreation" Send="AnimBlendTimeApply"/>
+        <HostSiteOps Ops="SOpBankerBattlecruiser"/>
+        <Model value="Battlecruiser"/>
+        <BuildModel value="Battlecruiser"/>
+        <DeathArray index="Normal" ModelLink="BattlecruiserDeathA" SoundLink=""/>
+        <DeathCustoms ModelLink="BattlecruiserDeathA" Name="Upgrade"/>
+        <PlacementModel value="Battlecruiser"/>
+        <PortraitModel value="BattlecruiserPortrait"/>
+        <BarOffset value="75"/>
+        <BarWidth value="130"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Battlecruiser.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-battlecruiser.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Ready" value="Battlecruiser_Ready"/>
+        <SoundArray index="Help" value="Battlecruiser_Help2"/>
+        <SoundArray index="What" value="Battlecruiser_What"/>
+        <SoundArray index="Yes" value="Battlecruiser_Yes"/>
+        <SoundArray index="Attack" value="Battlecruiser_Attack"/>
+        <SoundArray index="Pissed" value="Battlecruiser_Pissed"/>
+        <SoundArray index="Movement" value="Battlecruiser_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-battlecruiser.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Battlecruiser.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_BattlecruiserAirAttack" parent="GenericAttack" effectImpact="AP_ATALaserBatteryU" effectLaunch="AP_ATALaserBatteryLM">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMRandomUniform"/>
+        <LaunchAssets Sound="Battlecruiser_AirAttackLaunch"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeStandard SOpForwardLaunchGuide"/>
+        <ImpactMap index="None" Model="BattlecruiserAirAttackImpact" Sound="Battlecruiser_AirAttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_BattlecruiserAirAttackMissile" parent="GenericAttackMissile" unitName="AP_ATALaserBatteryLMWeapon">
+        <Model value="ATALaserBatteryLMWeapon"/>
+    </CActorMissile>
+    <CActorAction id="AP_BattlecruiserGroundAttack" parent="GenericAttack" effectImpact="AP_ATSLaserBatteryU" effectLaunch="AP_ATSLaserBatteryLM">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA1 AMRandomUniform"/>
+        <LaunchAssets Sound="Battlecruiser_GroundAttackLaunch"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeStandard SOpForwardLaunchGuide"/>
+        <ImpactMap index="None" Model="BattlecruiserGroundAttackImpact" Sound="Battlecruiser_GroundAttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_BattlecruiserGroundAttackMissile" parent="GenericAttackMissile" unitName="AP_ATSLaserBatteryLMWeapon">
+        <Model value="ATSLaserBatteryLMWeapon"/>
+    </CActorMissile>
+    <CActorAction id="AP_BattlecruiserHurricaneLeftAttack" parent="GenericAttack" effectImpact="AP_HurricaneMissileLeftDummy" effectLaunch="AP_HurricaneMissileLeftLM">
+        <LaunchAttachQuery Methods="AP_AMFilterBattlecruiserHurricaneLeft AMRandomUniform"/>
+        <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow AP_BattlecruiserHurricaneSiteOpOffset"/>
+        <ImpactMap index="None" Model="BattlecruiserHurricaneAttackImpact" Sound="Battlecruiser_MissilePodsImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_BattlecruiserHurricaneLeftAttackMissile" parent="GenericAttackMissile" unitName="AP_HurricaneMissileLeft">
+        <Model value="AP_HurricaneMissile"/>
+    </CActorMissile>
+    <CActorAction id="AP_BattlecruiserHurricaneRightAttack" parent="GenericAttack" effectImpact="AP_HurricaneMissileRightDummy" effectLaunch="AP_HurricaneMissileRightLM">
+        <LaunchAttachQuery Methods="AP_AMFilterBattlecruiserHurricaneRight AMRandomUniform"/>
+        <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow AP_BattlecruiserHurricaneSiteOpOffset"/>
+        <ImpactMap index="None" Model="BattlecruiserHurricaneAttackImpact" Sound="Battlecruiser_MissilePodsImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_BattlecruiserHurricaneRightAttackMissile" parent="GenericAttackMissile" unitName="AP_HurricaneMissileRight">
+        <Model value="AP_HurricaneMissile"/>
+    </CActorMissile>
+    <CActorAction id="AP_BattlecruiserHurricaneShieldHitter" parent="AoESplashShieldHitter" effectHit="AP_HurricaneMissileDamage"/>
+    <CActorSiteOpLocalOffset id="AP_BattlecruiserHurricaneSiteOpOffset">
+        <LocalOffset value="0.000000,0.000000,3.750000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSound id="AP_BattlecruiserMissilePodsLaunch" parent="SoundOneShot">
+        <On Terms="Abil.MissilePods.SourcePrepStart" Send="Create"/>
+        <Sound value="Battlecruiser_MissilePodsLaunch"/>
+    </CActorSound>
+    <CActorAction id="AP_BattlecruiserYamatoAttack" parent="GenericAttack" effectImpact="AP_YamatoU" effectLaunch="AP_Yamato">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA2"/>
+        <LaunchAssets Sound="Battlecruiser_YamatoAttackLaunch"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpForwardLaunchGuide SOp2DRotation"/>
+        <ImpactAttachQuery Methods="Origin"/>
+        <ImpactMap index="None" Model="BattlecruiserYamatoAttackImpact" Sound="Battlecruiser_YamatoAttackImpact"/>
+        <ImpactMap index="Miss" Model="None"/>
+        <ImpactModel value="AP_BattlecruiserYamatoAttackImpactModel"/>
+        <ShieldFlashType value="Full"/>
+    </CActorAction>
+    <CActorModel id="AP_BattlecruiserYamatoAttackImpactModel" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <HostSiteOps Ops="SOpAttachOrigin SOpForwardLaunchGuide SOp2DRotation" HoldPosition="1" HoldRotation="1"/>
+        <Model value="GenericAttackModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorMissile id="AP_BattlecruiserYamatoAttackMissile" parent="GenericAttackMissile" unitName="AP_YamatoWeapon">
+        <Model value="YamatoWeapon"/>
+    </CActorMissile>
+    <CActorSound id="AP_DefensiveMatrixBirth" parent="SoundOneShot">
+        <On Terms="Behavior.AP_DefensiveMatrix.On" Send="Create"/>
+        <On Terms="Behavior.AP_DefensiveMatrix.Off" Send="Destroy"/>
+        <Sound value="Battlecruiser_DefensiveMatrixBirth"/>
+    </CActorSound>
+    <CActorSound id="AP_DefensiveMatrixDeath" parent="SoundOneShot">
+        <On Terms="Behavior.AP_DefensiveMatrix.Off" Send="Create"/>
+        <Sound value="Battlecruiser_DefensiveMatrixDeath"/>
+    </CActorSound>
+    <CActorModel id="AP_DefensiveMatrixModel" parent="ModelAddition">
+        <On Terms="Behavior.AP_DefensiveMatrix.On" Send="Create"/>
+        <On Terms="Behavior.AP_DefensiveMatrix.Off" Send="AnimBracketStop BSD"/>
+        <AutoScaleFactor value="2.100000"/>
+    </CActorModel>
+    <CActorModel id="AP_DefensiveMatrix" parent="ModelAnimationStyleContinuous">
+        <On Terms="UnitBirth.AP_DefensiveMatrixGrid" Send="Create"/> <!-- Looks like unused -->
+        <On Terms="UnitDeath" Send="Destroy"/>
+        <Model value="AP_DefensiveMatrix"/>
+        <Scale value="0.600000"/>
+    </CActorModel>
+    <CActorSound id="AP_DefensiveMatrixImpact" parent="SoundOneShot">
+        <On Terms="Effect.AP_DefensiveMatrix.Start" Send="Create"/>
+        <Sound value="Raven_DefensiveMatrixDeath"/>
+    </CActorSound>
+    <CActorModel id="AP_BattlecruiserYamatoAttackChargeModel" parent="ModelAddition">
+        <On Terms="Abil.AP_Yamato.SourcePrepStart" Send="Create"/>
+        <On Terms="Abil.AP_Yamato.SourcePrepStop" Send="Destroy"/>
+        <HostSiteOps Ops="SOpAttachCustomA"/>
+        <Model value="BattlecruiserYamatoAttackChargeModel"/>
+    </CActorModel>
+    <CActorSound id="AP_BattlecruiserYamatoAttackChargeSound" parent="SoundContinuous">
+        <Host Subject="AP_BattlecruiserYamatoAttackChargeModel"/>
+        <Sound value="Battlecruiser_YamatoAttackChargeUp"/>
+        <On Terms="Abil.AP_Yamato.SourcePrepStart" Send="Create"/>
+        <On Terms="Abil.AP_Yamato.SourcePrepStop" Send="Destroy"/>
+    </CActorSound>
+    <CActorSplat id="AP_MissilePodsCursorSplat" parent="TerranCursorSplat" abil="AP_MissilePods"/>
+    <CActorRange id="AP_MissilePodsRange" parent="RangeAbil" abil="AP_MissilePods"/>
+    <CActorSiteOpLocalOffset id="AP_BattlecruiserHurricaneSiteOpOffset">
+        <LocalOffset value="0.000000,0.000000,3.750000"/>
+    </CActorSiteOpLocalOffset>
 </Catalog>
