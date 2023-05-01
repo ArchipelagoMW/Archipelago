@@ -184,4 +184,24 @@
         <Effect value="AP_WraithGLaunchMissile"/>
         <AllowedMovement value="Slowing"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_LanzerTorpedoes">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
+        <DisplayEffect value="AP_LanzerTorpedoesDamage"/>
+        <DisplayAttackCount value="2"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="9"/>
+        <Period value="2"/>
+        <AllowedMovement value="Slowing"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_TwinGatlingCannon">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
+        <DisplayEffect value="AP_TwinGatlingCannons"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Arc value="5.625"/>
+        <Period value="1"/>
+        <Effect value="AP_TwinGatlingCannons"/>
+    </CWeaponLegacy>
 </Catalog>

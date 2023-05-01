@@ -154,4 +154,14 @@
         <AlertIcon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_AresClassWeaponsSystemviking">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-jotunboosters.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_RipwaveMissiles">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-ripwavemissiles.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
 </Catalog>

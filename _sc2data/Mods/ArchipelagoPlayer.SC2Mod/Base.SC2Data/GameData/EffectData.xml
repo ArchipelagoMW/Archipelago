@@ -698,4 +698,37 @@
         <Kind value="Ranged"/>
         <Amount value="8"/>
     </CEffectDamage>
+    <CEffectCreatePersistent id="AP_LanzerTorpedoes">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_LanzerTorpedoesLM"/>
+        <PeriodicEffectArray value="AP_LanzerTorpedoesLM"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.21"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_LanzerTorpedoesDamage" parent="DU_WEAP_SPLASH">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Armored" value="4"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="10"/>
+        <AreaArray Radius="0.3" Fraction="1" Validator="AP_HALORocketsResearched"/>
+        <AreaArray Radius="0.6" Fraction="0.5" Validator="AP_HALORocketsResearched"/>
+        <AreaArray Radius="1.2" Fraction="0.25" Validator="AP_HALORocketsResearched"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Air;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_LanzerTorpedoesLM">
+        <ValidatorArray index="0" value="RangeCheckLE15"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_LanzerTorpedoesDamage"/>
+        <AmmoUnit value="AP_VikingFighterWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_TwinGatlingCannons" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <Amount value="14"/>
+    </CEffectDamage>
 </Catalog>

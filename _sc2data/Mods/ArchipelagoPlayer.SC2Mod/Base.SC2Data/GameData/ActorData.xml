@@ -1164,13 +1164,6 @@
         <GroupSoundArray index="Pissed" value="AP_Wraith_Pissed"/>
         <HeroIcon value="Assets\Textures\btn-unit-terran-wraith.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
-        <SoundArray index="Ready" value="AP_Wraith_Ready"/>
-        <SoundArray index="Help" value="AP_Wraith_Help"/>
-        <SoundArray index="What" value="AP_Wraith_What"/>
-        <SoundArray index="Yes" value="AP_Wraith_Yes"/>
-        <SoundArray index="Attack" value="AP_Wraith_Attack"/>
-        <SoundArray index="Pissed" value="AP_Wraith_Pissed"/>
-        <SoundArray index="Movement" value="AP_Wraith_Movement"/>
         <UnitIcon value="Assets\Textures\btn-unit-terran-wraith.dds"/>
         <Wireframe>
             <Image value="AP\Assets\Textures\Wireframe-Terran-wraith.dds"/>
@@ -1184,14 +1177,12 @@
     <CActorAction id="AP_WraithAirAttackLeft" parent="GenericAttack" effectImpact="AP_WraithAU" effectLaunch="AP_WraithALeftLaunchMissile">
         <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
         <LaunchAssets Sound="AP_WraithAWeaponBirth"/>
-        <Missile value="AP_WraithAirAttackLeftMissile"/>
         <ImpactMap index="None" Model="AP_WraithAirAttackImpact" Sound="AP_WraithAWeaponImpact"/>
     </CActorAction>
     <CActorMissile id="AP_WraithAirAttackLeftMissile" parent="GenericAttackMissile" unitName="AP_WraithAirWeaponLeft"/>
     <CActorAction id="AP_WraithAirAttackRight" parent="GenericAttack" effectImpact="AP_WraithAU" effectLaunch="AP_WraithARightLaunchMissile">
         <LaunchAttachQuery Methods="AMFilterWeaponRight"/>
         <LaunchAssets Sound="AP_WraithAWeaponBirth"/>
-        <Missile value="AP_WraithAirAttackRightMissile"/>
         <ImpactMap index="None" Model="AP_WraithAirAttackImpact" Sound="AP_WraithAWeaponImpact"/>
     </CActorAction>
     <CActorMissile id="AP_WraithAirAttackRightMissile" parent="GenericAttackMissile" unitName="AP_WraithAirWeaponRight"/>
@@ -1202,9 +1193,7 @@
     </CActorModel>
     <CActorAction id="AP_WraithGroundAttack" parent="GenericAttack" effectImpact="AP_WraithGU" effectLaunch="AP_WraithGLaunchMissile">
         <LaunchAttachQuery Methods="AMFilterWeaponBottom"/>
-        <LaunchAssets Sound="AP_WraithGroundAttackLaunch"/>
-        <Missile value="AP_WraithGroundAttackMissile"/>
-        <ImpactMap index="None" Model="AP_WraithGroundAttackImpact" Sound="AP_Wraith_GroundAttackImpact"/>
+        <ImpactMap index="None" Sound="AP_Wraith_GroundAttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_WraithGroundAttackMissile" parent="GenericAttackMissile" unitName="AP_WraithGroundWeapon"/>
     <CActorSound id="AP_CloakOff">
@@ -1214,5 +1203,187 @@
     <CActorSound id="AP_CloakOn">
         <On Terms="Behavior.AP_WraithCloak.On" Send="Create"/>
         <Sound value="AP_Wraith_CloakOn"/>
+    </CActorSound>
+    <CActorUnit id="AP_VikingAssault" parent="GenericUnitBase" unitName="AP_VikingAssault">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_VikingAssault" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_VikingAssault" Target="FlyerHelperSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_VikingAssault" Send="Destroy"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimClear Visor 0.000000"/>
+        <Model value="VikingAssault"/>
+        <BuildModel value="VikingAssault"/>
+        <DeathArray index="Normal" ModelLink="VikingAssaultDeath" SoundLink="Viking_Explode"/>
+        <DeathArray index="Blast" AnimProps="Death,Blast" ModelLink="VikingAssaultDeath"/>
+        <PlacementModel value="VikingAssault"/>
+        <PortraitModel value="VikingFighterPortrait"/>
+        <WalkAnimMoveSpeed value="2.5468"/>
+        <AbilSoundArray AbilCmd="AP_FighterMode,0" Sound="Viking_FighterModeVO"/>
+        <BarOffset value="70"/>
+        <BarWidth value="70"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Viking-Assault.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-vikingassault.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="Viking_Ready"/>
+        <SoundArray index="Help" value="Viking_Help"/>
+        <SoundArray index="What" value="Viking_What"/>
+        <SoundArray index="Yes" value="Viking_Yes"/>
+        <SoundArray index="Attack" value="Viking_Attack"/>
+        <SoundArray index="Pissed" value="Viking_Pissed"/>
+        <UnitFlags index="StandAnimBirthVariation" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-vikingassault.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Viking-Assault.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_VikingAssaultAttack" parent="GenericAttack" effectAttack="AP_TwinGatlingCannons">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0"/>
+        <LaunchAssets Model="VikingAssaultAttackLaunch" Sound="VikingAssault_AttackLaunch"/>
+        <ImpactMap index="None" Model="VikingAssaultAttackImpact" Sound="Viking_AssaultAttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+    </CActorAction>
+    <CActorUnit id="AP_VikingFighter" parent="GenericUnitMorph" unitName="AP_VikingFighter">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="AssaultModeAnim"/>
+        <Macros value="UnloadDropAnim"/>
+        <AcceptedTransfers index="Status" value="0"/>
+        <On Terms="ActorDestruction; HasStatus FlyerHelper" Send="StatusDecrement FlyerHelper"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Stand PlayForever 0.000000"/>
+        <HostSiteOps Ops="SOpBankerViking"/>
+        <Model value="VikingFighter"/>
+        <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
+        <BuildModel value="VikingFighter"/>
+        <DeathArray index="Normal" ModelLink="VikingFighterDeath" SoundLink="Viking_Explode"/>
+        <PlacementModel value="VikingFighter"/>
+        <PortraitModel value="VikingFighterPortrait"/>
+        <AbilSoundArray AbilCmd="AP_AssaultMode,0" Sound="Viking_AssaultModeVO"/>
+        <BarOffset value="50"/>
+        <BarWidth value="70"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Viking-Fighter.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <NameOffset value="50"/>
+        <SoundArray index="Ready" value="Viking_Ready"/>
+        <SoundArray index="Help" value="Viking_Help"/>
+        <SoundArray index="What" value="Viking_What"/>
+        <SoundArray index="Yes" value="Viking_Yes"/>
+        <SoundArray index="Attack" value="Viking_Attack"/>
+        <SoundArray index="Pissed" value="Viking_Pissed"/>
+        <SoundArray index="Movement" value="Viking_FighterMovement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Viking-Fighter.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction default="1" id="AP_VikingFighterAttackBase" parent="GenericAttackNoCreateBase">
+        <Missile value="AP_VikingFighterAttackMissile"/>
+        <LaunchAssets Sound="VikingFighter_AttackLaunch"/>
+        <LaunchAttachQuery Methods="AMFilterVikingFighter AMPatternVikingFighter"/>
+        <ImpactMap index="None" Sound="VikingFighter_AttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+    </CActorAction>
+    <CActorAction id="AP_VikingFighterAttack" parent="AP_VikingFighterAttackBase" effectImpact="AP_LanzerTorpedoesDamage" effectLaunch="LanzerTorpedoesLM">
+        <On index="3" Terms="Effect.AP_LanzerTorpedoesLM.Start; At Caster; !ValidateEffect AP_HALORocketsResearched" Send="ActionDamage"/>
+        <On Terms="Effect.AP_LanzerTorpedoesLM.Start; At Caster; !ValidateEffect AP_HALORocketsResearched" Send="Create"/>
+        <LaunchAssets Model="VikingFighterAttackLaunch"/>
+        <Missile value="AP_VikingFighterAttackMissile"/>
+        <ImpactMap index="None" Model="VikingFighterAttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_VikingFighterAttackMissile">
+        <Aliases value="_Unit"/>
+        <Aliases value="_Missile"/>
+        <On Terms="UnitBirth.AP_VikingFighterWeapon" Send="Create"/>
+        <On Terms="UnitBirth" Send="$Birth PlayForever,NonLooping"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimClear Birth"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimPlay Turbo Turbo PlayForever"/>
+        <On Terms="MotionPhaseStart; MotionPhase 3" Send="AnimClear Turbo"/>
+        <On Terms="MotionPhaseStart; MotionPhase 3" Send="$Stand PlayForever"/>
+        <On Terms="UnitDeath" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Model value="VikingFighterWeapon"/>
+        <PreHost value="_ActorAction"/>
+    </CActorMissile>
+    <CActorAction id="AP_VikingFighterUpgradedAttack" parent="AP_VikingFighterAttackBase" effectImpact="AP_LanzerTorpedoesDamage" effectLaunch="LanzerTorpedoesLM">
+        <On Terms="Effect.AP_LanzerTorpedoesLM.Start; At Caster; ValidateEffect AP_HALORocketsResearched" Send="Create"/>
+        <Missile value="AP_VikingFighterAttackMissile"/>
+        <ImpactMap index="None" Model="VikingFighterRipWaveAttackImpact" Sound="Viking_RipwaveMissileImpact"/>
+    </CActorAction>
+    <CActorUnit id="AP_AssaultMorphModel" parent="GenericUnitBaseMorphTransition" unitName="AP_AssaultMorphModel">
+        <Model value="VikingMorph"/>
+        <DeathArray index="Normal" ModelLink="VikingFighterDeath" SoundLink="Viking_Explode"/>
+        <PortraitModel value="VikingFighterPortrait"/>
+        <BarWidth value="70"/>
+        <BarOffset value="70"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-vikingassault.dds"/>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-vikingassault.dds"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Viking-Assault.dds"/>
+        </GroupIcon>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Viking-Assault.dds"/>
+        </Wireframe>
+        <SoundArray index="Ready" value="Viking_Ready"/>
+        <SoundArray index="Help" value="Viking_Help"/>
+        <SoundArray index="What" value="Viking_What"/>
+        <SoundArray index="Yes" value="Viking_Yes"/>
+        <SoundArray index="Attack" value="Viking_Attack"/>
+        <SoundArray index="Pissed" value="Viking_Pissed"/>
+        <AbilSoundArray AbilCmd="AP_FighterMode,Execute" Sound="Viking_FighterModeVO"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_VikingAssault" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_VikingAssault" Send="AnimPlay Start Morph,Start PlayForever"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_VikingAssault" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_VikingFighter" Send="Destroy"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="PortraitAnimSetTimeFrom Visor MorphStart"/>
+        <Aliases value="_UnitLarge"/>
+    </CActorUnit>
+    <CActorUnit id="AP_FighterMorphModel" parent="GenericUnitBaseMorphTransition" unitName="AP_FighterMorphModel">
+        <Model value="VikingMorph"/>
+        <DeathArray index="Normal" ModelLink="VikingFighterDeath" SoundLink="Viking_Explode"/>
+        <PortraitModel value="VikingFighterPortrait"/>
+        <BarWidth value="70"/>
+        <BarOffset value="50"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Viking-Fighter.dds"/>
+        </GroupIcon>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Viking-Fighter.dds"/>
+        </Wireframe>
+        <SoundArray index="Ready" value="Viking_Ready"/>
+        <SoundArray index="Help" value="Viking_Help"/>
+        <SoundArray index="What" value="Viking_What"/>
+        <SoundArray index="Yes" value="Viking_Yes"/>
+        <SoundArray index="Attack" value="Viking_Attack"/>
+        <SoundArray index="Pissed" value="Viking_Pissed"/>
+        <AbilSoundArray AbilCmd="AP_AssaultMode,Execute" Sound="Viking_AssaultModeVO"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_VikingFighter" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_VikingFighter" Send="AnimPlay End Morph,End PlayForever,NonLooping"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_VikingFighter" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_VikingAssault" Send="Destroy"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="PortraitAnimSetTimeFrom Visor MorphStart"/>
+        <Aliases value="_UnitLarge"/>
+    </CActorUnit>
+    <CActorSound id="AP_FighterMode" parent="SoundOneShot">
+        <Sound value="Viking_MorphToFighter"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_VikingFighter" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_AssaultMode" parent="SoundOneShot">
+        <Sound value="Viking_MorphToAssault"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_VikingAssault" Send="Create"/>
     </CActorSound>
 </Catalog>

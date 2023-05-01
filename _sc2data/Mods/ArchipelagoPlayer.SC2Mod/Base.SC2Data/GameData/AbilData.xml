@@ -330,4 +330,48 @@
         </Cost>
         <BehaviorArray value="AP_WraithCloak"/>
     </CAbilBehavior>
+    <CAbilMorph id="AP_AssaultMode">
+        <AbilSetId value="AssaultMode"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AssaultMode">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnorePlacement" value="0"/>
+        <InfoArray Unit="AP_VikingAssault" CollideRange="3.75" RandomDelayMax="0.5">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="2.34"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Delay" value="0.533"/>
+                <DurationArray index="Duration" value="1.2"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Duration" value="2.34"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="AP_FighterMode">
+        <AbilSetId value="FighterMode"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="FighterMode" Requirements="AP_UseFighterMode">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="IgnoreFacing" value="1"/>
+        <InfoArray Unit="AP_VikingFighter" RandomDelayMax="0.5">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="2.333"/>
+            </SectionArray>
+            <SectionArray index="Collide">
+                <DurationArray index="Delay" value="1.5"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Delay" value="0.6"/>
+                <DurationArray index="Duration" value="0.85"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Duration" value="2.333"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
 </Catalog>

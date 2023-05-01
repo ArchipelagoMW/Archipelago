@@ -96,6 +96,10 @@
         <Compare value="LE"/>
         <Range value="4"/>
     </CValidatorLocationCompareRange>
+    <CValidatorPlayerRequirement id="AP_HALORocketsResearched">
+        <Find value="1"/>
+        <Value value="AP_HALORocketsResearched"/>
+    </CValidatorPlayerRequirement>
     <CValidatorCombine id="IsHellion" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaHellion"/>
@@ -123,6 +127,29 @@
         <ResultFailed value="AlreadyTargeted"/>
         <WhichUnit Effect="AP_MedivacHeal"/>
     </CValidatorUnitCompareMarkerCount>
+    <!-- Vanilla IsViking works based on SelectAlias, not need to override -->
+    <CValidatorUnitType id="AP_IsVanillaVikingAssault">
+        <Value value="VikingAssault"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPVikingAssault">
+        <Value value="AP_VikingAssault"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsVikingAssault" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaVikingAssault"/>
+        <CombineArray value="AP_IsAPVikingAssault"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaVikingFighter">
+        <Value value="VikingFighter"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPVikingFighter">
+        <Value value="AP_VikingFighter"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsVikingFighter" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaVikingFighter"/>
+        <CombineArray value="AP_IsAPVikingAssault"/>
+    </CValidatorCombine>
     <CValidatorCombine id="NotHellion" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="IsHellion"/>
@@ -206,4 +233,9 @@
         <Value value="1"/>
         <Type value="Fraction"/>
     </CValidatorUnitCompareVital>
+    <CValidatorLocationCompareRange id="AP_VikingTargetInRange">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="LT"/>
+        <Range value="12"/>
+    </CValidatorLocationCompareRange>
 </Catalog>

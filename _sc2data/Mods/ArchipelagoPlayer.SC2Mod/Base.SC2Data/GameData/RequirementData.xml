@@ -162,4 +162,16 @@
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Use" Link="AP_CountUpgradeWraithCloakCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HALORocketsResearched">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHALORocketsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnVikingMissileUpgrade">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeVikingJotunBoostersQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="AP_PhobusClassWeaponSystemsResearched">
+        <EditorCategories value="Race:Terran"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeAresClassWeaponsSystemVikingCompleteOnly"/>
+    </CRequirement>
 </Catalog>

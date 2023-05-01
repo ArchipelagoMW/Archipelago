@@ -350,4 +350,45 @@
         <Race value="Terr"/>
         <EditorCategories value="Race:Terran,UpgradeType:SpellResearch"/>
     </CUpgrade>
+    <CUpgrade id="AP_AresClassWeaponsSystemViking">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Weapon,AP_LanzerTorpedoes,Range" Value="2"/>
+        <EffectArray Reference="Weapon,AP_TwinGatlingCannon,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_WreckingCrewAssault,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_WreckingCrewFighter,Range" Value="2"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_CampaignJotunBoosters">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Alert value="UpgradeComplete_Terr"/>
+        <Race value="Terr"/>
+        <EffectArray Reference="Weapon,AP_LanzerTorpedoes,Range" Value="2"/>
+        <EffectArray Reference="Weapon,AP_WreckingCrewFighter,Range" Value="2"/>
+        <EffectArray Reference="Weapon,AP_WreckingCrewAssault,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_TwinGatlingCannon,Range" Value="1"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HALORockets">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_RewardDanceViking">
+        <Icon value="Assets\Textures\btn-unit-terran-ghost.dds"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_VikingFighter,TauntDuration[Dance]" Value="5"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_VikingAssault,TauntDuration[Dance]" Value="5"/>
+        <AffectedUnitArray value="VikingFighter"/>
+        <AffectedUnitArray value="AP_VikingAssault"/>
+        <LeaderAlias value=""/>
+    </CUpgrade>
+    <CUpgrade id="AP_VikingJotunBoosters">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-jotunboosters.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Weapon,AP_LanzerTorpedoes,Range" Value="2.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:AttackBonus"/>
+        <AffectedUnitArray value="AP_VikingFighter"/>
+    </CUpgrade>
 </Catalog>

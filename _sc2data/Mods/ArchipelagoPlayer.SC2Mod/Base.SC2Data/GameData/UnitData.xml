@@ -1222,4 +1222,159 @@
         <Mover value="MissileDefault"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
+    <CUnit id="AP_VikingAssault">
+        <Name value="Unit/Name/VikingFighter"/>
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="AIThreatGround" value="1"/>
+        <FlagArray index="AIThreatAir" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="125"/>
+        <LifeMax value="125"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranShipPlating"/>
+        <Speed value="2.25"/>
+        <Acceleration value="1000"/>
+        <StationaryTurningRate value="999.8437"/>
+        <Sight value="10"/>
+        <Food value="-2"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="150"/>
+        <CostResource index="Vespene" value="75"/>
+        <RepairTime value="41.6667"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="30"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_FighterMode"/>
+        <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
+        <WeaponArray Link="AP_TwinGatlingCannon"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="FighterMode" Type="AbilCmd" AbilCmd="AP_FighterMode,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_AresClassWeaponsSystemviking" Type="Passive" Requirements="AP_PhobusClassWeaponSystemsResearched" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_RipwaveMissiles" Type="Passive" Requirements="AP_HALORocketsResearched" Row="2" Column="2"/>
+        </CardLayouts>
+        <Radius value="0.75"/>
+        <SeparationRadius value="0.75"/>
+        <InnerRadius value="0.375"/>
+        <CargoSize value="2"/>
+        <ScoreKill value="225"/>
+        <SubgroupPriority value="12"/>
+        <MinimapRadius value="0.75"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAIThink value="AIThinkVikingAssault"/>
+        <LeaderAlias value="VikingFighter"/>
+        <HotkeyAlias value="VikingFighter"/>
+        <SelectAlias value="VikingAssault"/>
+        <SubgroupAlias value="VikingAssault"/>
+        <TechAliasArray value="Alias_Viking"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="155"/>
+        <GlossaryStrongArray value="Reaper"/>
+        <GlossaryWeakArray value="Hydralisk"/>
+        <GlossaryWeakArray value="Marine"/>
+        <GlossaryWeakArray value="Stalker"/>
+        <GlossaryAlias value="VikingFighter"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+        <Fidget>
+            <ChanceArray index="Anim" value="15"/>
+            <ChanceArray index="Idle" value="55"/>
+            <ChanceArray index="Turn" value="30"/>
+        </Fidget>
+    </CUnit>
+    <CUnit id="AP_VikingFighter">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="AIThreatGround" value="1"/>
+        <FlagArray index="AIThreatAir" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Air" value="1"/>
+        <Collide index="Flying" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="125"/>
+        <LifeMax value="125"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranShipPlating"/>
+        <Mover value="Fly"/>
+        <Speed value="2.75"/>
+        <Acceleration value="2.625"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="10"/>
+        <Height value="3.75"/>
+        <VisionHeight value="4"/>
+        <Food value="-2"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="150"/>
+        <CostResource index="Vespene" value="75"/>
+        <RepairTime value="41.6667"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="30"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_AssaultMode"/>
+        <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
+        <WeaponArray Link="AP_LanzerTorpedoes"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="AssaultMode" Type="AbilCmd" AbilCmd="AP_AssaultMode,0" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_AresClassWeaponsSystemviking" Type="Passive" Requirements="AP_PhobusClassWeaponSystemsResearched" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_RipwaveMissiles" Type="Passive" Requirements="AP_HALORocketsResearched" Row="2" Column="2"/>
+        </CardLayouts>
+        <Radius value="0.75"/>
+        <SeparationRadius value="0.75"/>
+        <ScoreMake value="225"/>
+        <ScoreKill value="225"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="12"/>
+        <MinimapRadius value="0.75"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAIThink value="AIThinkVikingFighter"/>
+        <LeaderAlias value="VikingFighter"/>
+        <HotkeyAlias value="VikingFighter"/>
+        <SelectAlias value="VikingAssault"/>
+        <SubgroupAlias value="VikingAssault"/>
+        <TechAliasArray value="Alias_Viking"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="150"/>
+        <GlossaryStrongArray value="BroodLord"/>
+        <GlossaryStrongArray value="VoidRay"/>
+        <GlossaryStrongArray value="Battlecruiser"/>
+        <GlossaryWeakArray value="SporeCrawler"/>
+        <GlossaryWeakArray value="PhotonCannon"/>
+        <GlossaryWeakArray value="MissileTurret"/>
+        <GlossaryWeakArray value="Marine"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+    </CUnit>
+    <CUnit id="AP_VikingFighterWeapon" parent="MISSILE_HALFLIFE">
+        <Race value="Terr"/>
+        <Mover value="AP_VikingFighterMissile"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
 </Catalog>

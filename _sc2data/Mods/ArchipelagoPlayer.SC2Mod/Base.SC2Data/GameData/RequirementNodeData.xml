@@ -172,4 +172,25 @@
         <Count Link="AP_DynamicPowerRouting" State="CompleteOnly"/>
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeAresClassWeaponsSystemVikingCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_AresClassWeaponsSystemViking" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeVikingJotunBoostersQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_VikingJotunBoosters" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeVikingJotunBoostersQueuedOrBetter">
+        <OperandArray index="0" value="CountUpgradeVikingJotunBoostersQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotUpgradeVikingAATargetingCompleteOnly">
+        <OperandArray index="0" value="AP_UpgradeVikingAATargetingCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_UpgradeVikingAATargetingCompleteOnly">
+        <Count Link="AP_VikingAATargeting" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHALORocketsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HALORockets" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>
