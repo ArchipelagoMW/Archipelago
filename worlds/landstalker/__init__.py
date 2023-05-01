@@ -94,6 +94,8 @@ class LandstalkerWorld(World):
         endgame_price_factor = 2.0
         factor_diff = endgame_price_factor - earlygame_price_factor
 
+        global_price_factor = self.get_setting("shop_prices_factor").value / 100.0
+
         spheres = list(self.multiworld.get_spheres())
         sphere_id = 0
         sphere_count = len(spheres)
@@ -105,6 +107,7 @@ class LandstalkerWorld(World):
 
                     price = location.item.price_in_shops if location.item.game == 'Landstalker' else unknown_items_price
                     price *= progression_price_factor
+                    price *= global_price_factor
                     price -= price % 10
                     location.price = int(price)
             sphere_id += 1

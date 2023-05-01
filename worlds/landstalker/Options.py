@@ -1,13 +1,13 @@
 from typing import Dict
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet
+from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle
 
 
 class JewelCount(Range):
     """
     Determines the number of jewels to find in order to be able to reach Kazalt
     """
-    display_name = "Jewel Count"
+    display_name = "Jewel count"
     range_start = 0
     range_end = 5
     default = 2
@@ -18,7 +18,23 @@ class ProgressiveArmors(DefaultOnToggle):
     When obtaining an armor, you get the next armor tier instead of getting the specific armor tier that was
     placed here by randomization. Enabling this provides a smoother progression.
     """
-    display_name = "Progressive Armors"
+    display_name = "Progressive armors"
+
+
+class UseRecordBook(DefaultOnToggle):
+    """
+    Gives a Record Book item in starting inventory, allowing to save the game anywhere.
+    This makes the game significantly less frustrating and enables interesting save-scumming strategies in some places.
+    """
+    display_name = "Use Record Book"
+
+
+class UseSpellBook(DefaultOnToggle):
+    """
+    Gives a Spell Book item in starting inventory, allowing to warp back to the starting location at any time.
+    This prevents any kind of softlock and makes the world easier to explore.
+    """
+    display_name = "Use Spell Book"
 
 
 class RemoveGumiBoulder(Toggle):
@@ -31,9 +47,9 @@ class RemoveGumiBoulder(Toggle):
 
 class EnemyJumpingInLogic(Toggle):
     """
-    Adds jumping on enemies' heads as a logical rule, enabling access to Mountainous Area from Lake Shrine sector and
-    to the cliff chest behind a magic tree in Mir Tower sector. These tricks not being easy, you should leave this
-    disabled until practiced.
+    Adds jumping on enemies' heads as a logical rule.
+    This gives access to Mountainous Area from Lake Shrine sector and to the cliff chest behind a magic tree near Mir Tower.
+    These tricks not being easy, you should leave this disabled until practiced.
     """
     display_name = "Enemy jumping in logic"
 
@@ -56,9 +72,9 @@ class DamageBoostingInLogic(Toggle):
 
 class WhistleUsageBehindTrees(DefaultOnToggle):
     """
-    In Greenmaze, Einstein Whistle can only be used to call the lumberjack from the intended side by default.
-    Enabling this allows using Einstein Whistle from behind the trees, which can only be useful in seeds
-    starting in the "waterfall" spawn region or where teleportation trees are made open from the start.
+    In Greenmaze, Einstein Whistle can only be used to call Cutter from the intended side by default.
+    Enabling this allows using Einstein Whistle from both sides of the magic trees.
+    This is only useful in seeds starting in the "waterfall" spawn region or where teleportation trees are made open from the start.
     """
     display_name = "Allow using Einstein Whistle behind trees"
 
@@ -69,7 +85,7 @@ class SpawnRegion(Choice):
     for your first few seeds since picking a late-game location can make the seed significantly harder, both for
     logic and combat.
     """
-    display_name = "Starting Region"
+    display_name = "Starting region"
 
     option_massan = "massan"
     option_gumi = "gumi"
@@ -109,11 +125,55 @@ class ShuffleTrees(Toggle):
     display_name = "Shuffle teleportation trees"
 
 
-# TODO: Also integrate cosmetic options
+class ReviveUsingEkeeke(DefaultOnToggle):
+    """
+    In the vanilla game, when you die, you are automatically revived by Friday using an EkeEke.
+    This setting allows disabling this feature, making the game extremely harder.
+    USE WITH CAUTION!
+    """
+    display_name = "Revive using EkeEke"
+
+
+class ShopPricesFactor(Range):
+    """
+    Applies a percentage factor on all prices in shops. Having higher prices can lead to a bit of gold farming, which
+    can make seeds longer but also sometimes more frustrating.
+    """
+    display_name = "Shop prices factor (%)"
+    range_start = 50
+    range_end = 200
+    default = 100
+
+
+class CombatDifficulty(Choice):
+    """
+    Determines the overall combat difficulty in the game by modifying both monsters HP & damage.
+    - Peaceful: 50% HP & damage
+    - Easy: 75% HP & damage
+    - Normal: 100% HP & damage
+    - Hard: 140% HP & damage
+    - Insane: 200% HP & damage
+    """
+    display_name = "Combat difficulty"
+
+    option_peaceful = 0
+    option_easy = 1
+    option_normal = 2
+    option_hard = 3
+    option_insane = 4
+
+    default = 2
+
+
 ls_options: Dict[str, type(Option)] = {
     "spawn_region": SpawnRegion,
     "jewel_count": JewelCount,
     "progressive_armors": ProgressiveArmors,
+    "use_record_book": UseRecordBook,
+    "use_spell_book": UseSpellBook,
+
+    "shop_prices_factor": ShopPricesFactor,
+    "combat_difficulty": CombatDifficulty,
 
     "teleport_tree_requirements": TeleportTreeRequirements,
     "shuffle_trees": ShuffleTrees,
@@ -124,32 +184,6 @@ ls_options: Dict[str, type(Option)] = {
     "handle_enemy_jumping_in_logic": EnemyJumpingInLogic,
     "handle_tree_cutting_glitch_in_logic": TreeCuttingGlitchInLogic,
 
-    # "healthGainedPerLifestock": 1,
-
-    # "enemiesDamageFactor": 100,
-    # "enemiesHealthFactor": 100,
-    # "enemiesArmorFactor": 100,
-    # "enemiesGoldsFactor": 100,
-    # "enemiesDropChanceFactor": 100,
-
+    "revive_using_ekeeke": ReviveUsingEkeeke,
     "death_link": DeathLink,
 }
-
-#    "startingGold": 0,
-
-#    "startingItems": {
-#        "Record Book": 1,
-#        "Spell Book": 1
-#    },
-#    "consumableRecordBook": false,
-#    "consumableSpellBook": false,
-
-#    "ekeekeAutoRevive": true
-
-#    "hintsDistribution": {
-#        "regionRequirement": 6,
-#        "itemRequirement": 5,
-#        "itemLocation": 8,
-#        "darkRegion": 1,
-#        "joke": 3
-#    }
