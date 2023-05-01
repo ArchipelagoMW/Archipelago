@@ -987,7 +987,7 @@
     </CActorTurret>
     <CActorUnit id="AP_Medivac" parent="GenericUnitStandard" unitName="AP_Medivac">
         <Aliases value="_UnitLarge"/>
-        <Macros value="MedivacTransportAnim"/>
+        <Macros value="AP_MedivacTransportAnim"/>
         <On Terms="Abil.AP_MedivacHeal.SourceChannelStart" Send="$Spell PlayForever"/>
         <On Terms="Abil.AP_MedivacHeal.SourceChannelStop" Send="AnimClear Spell"/>
         <On Terms="AbilTransport.AP_MedivacTransport.TransportLoad; AbilTransport Thor" Send="Create ThorTransit"/>
@@ -1608,4 +1608,13 @@
     <CActorSiteOpLocalOffset id="AP_BattlecruiserHurricaneSiteOpOffset">
         <LocalOffset value="0.000000,0.000000,3.750000"/>
     </CActorSiteOpLocalOffset>
+    <CActorEventMacro id="UnloadDropAnim">
+        <!-- Override -->
+        <!-- Add AP_Medivac to common transport load/unload animations -->
+        <On Terms="AbilTransport.AP_MedivacTransport.CargoLoad" Send="AnimBracketStart Unload IGNORE Unload Unload,End"/>
+        <On Terms="AbilTransport.AP_MedivacTransport.CargoLoadSuppressed" Send="AnimBracketStart Unload IGNORE Unload Unload,End"/>
+        <On Terms="AbilTransport.AP_MedivacTransport.CargoUnload" Send="AnimBracketStop Unload"/>
+        <On Terms="AbilTransport.AP_MedivacTransport.TransportLoad" Send="AnimBracketStart Unload IGNORE Unload Unload,End"/>
+        <On Terms="AbilTransport.AP_MedivacTransport.TransportUnload" Send="AnimBracketStop Unload"/>
+    </CActorEventMacro>
 </Catalog>
