@@ -47,7 +47,12 @@
     "Ixupi Captured Wood",
     "Ixupi Captured Crystal",
     "Ixupi Captured Sand",
-    "Ixupi Captured Metal"
+    "Ixupi Captured Metal",
+    "Final Riddle: Fortune Teller",
+    "Final Riddle: Planets Aligned",
+    "Final Riddle: Norse God Stone Message",
+    "Final Riddle: Beth's Body Page 17",
+    "Final Riddle: Guillotine Dropped"
   ],
   "locations_by_region": {
     "Outside": [
@@ -96,6 +101,9 @@
       "Accessible: Storage: Slide",
       "Accessible: Storage: Eagles Head"
     ],
+    "Generator": [
+      "Final Riddle: Beth's Body Page 17"
+    ],
     "Theater Back Hallways": [
       "Puzzle Solved Geoffrey Door"
     ],
@@ -135,13 +143,15 @@
     "Gods Room": [
       "Puzzle Solved Lyre",
       "Puzzle Solved Red Door",
-      "Accessible: Storage: Lyre"
+      "Accessible: Storage: Lyre",
+      "Final Riddle: Norse God Stone Message"
     ],
     "Blue Maze": [
       "Puzzle Solved Fortune Teller Door"
     ],
     "Fortune Teller": [
-      "Flashback Memory Obtained Merrick's Ghost"
+      "Flashback Memory Obtained Merrick's Ghost",
+      "Final Riddle: Fortune Teller"
     ],
     "Inventions": [
       "Puzzle Solved Alchemy",
@@ -149,7 +159,8 @@
     ],
     "UFO": [
       "Puzzle Solved UFO Symbols",
-      "Accessible: Storage: UFO"
+      "Accessible: Storage: UFO",
+      "Final Riddle: Planets Aligned"
     ],
     "Anansi": [
       "Puzzle Solved Anansi Musicbox",
@@ -159,7 +170,8 @@
     ],
     "Torture": [
       "Puzzle Solved Gallows",
-      "Accessible: Storage: Hanging"
+      "Accessible: Storage: Hanging",
+      "Final Riddle: Guillotine Dropped"
     ],
     "Puzzle Room Mastermind": [
       "Puzzle Solved Mastermind"
@@ -188,7 +200,6 @@
   },
   "future locations": [
     "Puzzle Solved Skull Dial",
-    "Puzzle Solved Final Riddle",
     "Ixupi Captured Lightning"
   ]
 }   

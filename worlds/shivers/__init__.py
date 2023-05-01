@@ -83,6 +83,7 @@ class ShiversWorld(World):
         #Add Filler
         filler = []
         filler += [self.create_item("Easier Lyre") for i in range(9)]
+        filler += [self.create_item("Filler Item") for i in range(5)]
 
         self.multiworld.itempool += pots
         self.multiworld.itempool += keys
@@ -109,8 +110,7 @@ class ShiversWorld(World):
         self.storage_placements = []
         
          
-        for region_name, locations in Constants.location_info["locations_by_region"].items():
-            region = self.multiworld.get_region(region_name, self.player)
+        for locations in Constants.location_info["locations_by_region"].values():
             for loc_name in locations:
                 if loc_name.startswith("Accessible: "):
                     storagelocs.append(self.multiworld.get_location(loc_name, self.player))

@@ -5,6 +5,76 @@ from BaseClasses import CollectionState
 from worlds.AutoWorld import World
 from worlds.generic.Rules import forbid_item
 
+def water_capturable(state: CollectionState, player: int) -> bool:
+    return (state.can_reach("Lobby", "Region", player)) \
+        and state.has("Water Pot Bottom", player) \
+        and state.has("Water Pot Top", player) \
+        and state.has("Water Pot Bottom DUPE", player) \
+        and state.has("Water Pot Top DUPE", player)
+
+def wax_capturable(state: CollectionState, player: int) -> bool:
+    return (state.can_reach("Library", "Region", player) or state.can_reach("Anansi", "Region", player)) \
+        and state.has("Wax Pot Bottom", player) \
+        and state.has("Wax Pot Top", player) \
+        and state.has("Wax Pot Bottom DUPE", player) \
+        and state.has("Wax Pot Top DUPE", player)
+
+def ash_capturable(state: CollectionState, player: int) -> bool:
+    return (state.can_reach("Office", "Region", player) or state.can_reach("Burial", "Region", player)) \
+        and state.has("Ash Pot Bottom", player) \
+        and state.has("Ash Pot Top", player) \
+        and state.has("Ash Pot Bottom DUPE", player) \
+        and state.has("Ash Pot Top DUPE", player)
+
+def oil_capturable(state: CollectionState, player: int) -> bool:
+    return (state.can_reach("Prehistoric", "Region", player) or state.can_reach("Tar River", "Region", player)) \
+        and state.has("Oil Pot Bottom", player) \
+        and state.has("Oil Pot Top", player) \
+        and state.has("Oil Pot Bottom DUPE", player) \
+        and state.has("Oil Pot Top DUPE", player)
+
+def cloth_capturable(state: CollectionState, player: int) -> bool:
+    return (state.can_reach("Egypt", "Region", player) or state.can_reach("Burial", "Region", player) or state.can_reach("Janitor Closet", "Region", player)) \
+        and state.has("Cloth Pot Bottom", player) \
+        and state.has("Cloth Pot Top", player) \
+        and state.has("Cloth Pot Bottom DUPE", player) \
+        and state.has("Cloth Pot Top DUPE", player)
+
+def wood_capturable(state: CollectionState, player: int) -> bool:
+    return (state.can_reach("Workshop", "Region", player) or state.can_reach("Blue Maze", "Region", player) or state.can_reach("Gods Room", "Region", player) or state.can_reach("Anansi", "Region", player)) \
+        and state.has("Wood Pot Bottom", player) \
+        and state.has("Wood Pot Top", player) \
+        and state.has("Wood Pot Bottom DUPE", player) \
+        and state.has("Wood Pot Top DUPE", player)
+
+def crystal_capturable(state: CollectionState, player: int) -> bool:
+    return (state.can_reach("Lobby", "Region", player) or state.can_reach("Ocean", "Region", player)) \
+        and state.has("Crystal Pot Bottom", player) \
+        and state.has("Crystal Pot Top", player) \
+        and state.has("Crystal Pot Bottom DUPE", player) \
+        and state.has("Crystal Pot Top DUPE", player)
+
+def sand_capturable(state: CollectionState, player: int) -> bool:
+    return (state.can_reach("Plants", "Region", player) or state.can_reach("Ocean", "Region", player)) \
+        and state.has("Sand Pot Bottom", player) \
+        and state.has("Sand Pot Top", player) \
+        and state.has("Sand Pot Bottom DUPE", player) \
+        and state.has("Sand Pot Top DUPE", player)
+
+def metal_capturable(state: CollectionState, player: int) -> bool:
+    return (state.can_reach("Projector Room", "Region", player) or state.can_reach("Prehistoric", "Region", player) or state.can_reach("Bedroom", "Region", player)) \
+        and state.has("Metal Pot Bottom", player) \
+        and state.has("Metal Pot Top", player) \
+        and state.has("Metal Pot Bottom DUPE", player) \
+        and state.has("Metal Pot Top DUPE", player)
+def beths_body_available(state: CollectionState, player: int) -> bool:
+    return water_capturable(state, player) and wax_capturable(state, player) \
+        and ash_capturable(state, player) and oil_capturable(state, player) \
+        and cloth_capturable(state, player) and wood_capturable(state, player) \
+        and crystal_capturable(state, player) and sand_capturable(state, player) \
+        and metal_capturable(state, player)
+
+ 
 
 def get_rules_lookup(player: int):
     rules_lookup: typing.Dict[str, typing.List[Callable[[CollectionState], bool]]] = {
@@ -53,36 +123,19 @@ def get_rules_lookup(player: int):
             "Accessible: Storage: Janitor Closet": lambda state: state.has("Cloth Pot Bottom DUPE", player) and state.has("Cloth Pot Top DUPE", player),
             "Accessible: Storage: Tar River": lambda state: state.has("Oil Pot Bottom DUPE", player) and state.has("Oil Pot Top DUPE", player),
             "Accessible: Storage: Theater": lambda state: state.can_reach("Projector Room", "Region", player),
-            "Ixupi Captured Water": lambda state: (state.can_reach("Lobby", "Region", player)) and 
-                                                   state.has("Water Pot Bottom", player) and state.has("Water Pot Top", player) and
-                                                   state.has("Water Pot Bottom DUPE", player) and state.has("Water Pot Top DUPE", player),
-            "Ixupi Captured Wax": lambda state: ((state.can_reach("Library", "Region", player) or state.can_reach("Anansi", "Region", player)) and 
-                                                   state.has("Wax Pot Bottom", player) and state.has("Wax Pot Top", player) and
-                                                   state.has("Wax Pot Bottom DUPE", player) and state.has("Wax Pot Top DUPE", player)),
-            "Ixupi Captured Ash": lambda state: ((state.can_reach("Office", "Region", player) or state.can_reach("Burial", "Region", player)) and 
-                                                   state.has("Ash Pot Bottom", player) and state.has("Ash Pot Top", player) and
-                                                   state.has("Ash Pot Bottom DUPE", player) and state.has("Ash Pot Top DUPE", player)),
-            "Ixupi Captured Oil": lambda state: ((state.can_reach("Prehistoric", "Region", player) or state.can_reach("Tar River", "Region", player)) and 
-                                                   state.has("Oil Pot Bottom", player) and state.has("Oil Pot Top", player) and
-                                                   state.has("Oil Pot Bottom DUPE", player) and state.has("Oil Pot Top DUPE", player)),
-            "Ixupi Captured Cloth": lambda state: ((state.can_reach("Egypt", "Region", player) or state.can_reach("Burial", "Region", player) 
-                                                     or state.can_reach("Janitor Closet", "Region", player)) and 
-                                                   state.has("Cloth Pot Bottom", player) and state.has("Cloth Pot Top", player) and
-                                                   state.has("Cloth Pot Bottom DUPE", player) and state.has("Cloth Pot Top DUPE", player)),
-            "Ixupi Captured Wood": lambda state: ((state.can_reach("Workshop", "Region", player) or state.can_reach("Blue Maze", "Region", player)
-                                                    or state.can_reach("Gods Room", "Region", player) or state.can_reach("Anansi", "Region", player)) and 
-                                                   state.has("Wood Pot Bottom", player) and state.has("Wood Pot Top", player) and
-                                                   state.has("Wood Pot Bottom DUPE", player) and state.has("Wood Pot Top DUPE", player)),
-            "Ixupi Captured Crystal": lambda state: ((state.can_reach("Lobby", "Region", player) or state.can_reach("Ocean", "Region", player)) and 
-                                                   state.has("Crystal Pot Bottom", player) and state.has("Crystal Pot Top", player) and
-                                                   state.has("Crystal Pot Bottom DUPE", player) and state.has("Crystal Pot Top DUPE", player)),
-            "Ixupi Captured Sand": lambda state: ((state.can_reach("Plants", "Region", player) or state.can_reach("Ocean", "Region", player)) and 
-                                                   state.has("Sand Pot Bottom", player) and state.has("Sand Pot Top", player) and
-                                                   state.has("Sand Pot Bottom DUPE", player) and state.has("Sand Pot Top DUPE", player)),
-            "Ixupi Captured Metal": lambda state: ((state.can_reach("Projector Room", "Region", player) or state.can_reach("Prehistoric", "Region", player)
-                                                     or state.can_reach("Bedroom", "Region", player)) and 
-                                                   state.has("Metal Pot Bottom", player) and state.has("Metal Pot Top", player) and
-                                                   state.has("Metal Pot Bottom DUPE", player) and state.has("Metal Pot Top DUPE", player))
+            "Ixupi Captured Water": lambda state: water_capturable(state, player),
+            "Ixupi Captured Wax": lambda state: wax_capturable(state, player),
+            "Ixupi Captured Ash": lambda state: ash_capturable(state, player),
+            "Ixupi Captured Oil": lambda state: oil_capturable(state, player),
+            "Ixupi Captured Cloth": lambda state: cloth_capturable(state, player),
+            "Ixupi Captured Wood": lambda state: wood_capturable(state, player),
+            "Ixupi Captured Crystal": lambda state: crystal_capturable(state, player),
+            "Ixupi Captured Sand": lambda state: sand_capturable(state, player),
+            "Ixupi Captured Metal": lambda state: metal_capturable(state, player),
+            "Final Riddle: Planets Aligned": lambda state: state.can_reach("Fortune Teller", "Region", player),
+            "Final Riddle: Norse God Stone Message": lambda state: (state.can_reach("Fortune Teller", "Region", player) and state.can_reach("UFO", "Region", player)),
+            "Final Riddle: Beth's Body Page 17": lambda state: beths_body_available(state, player),
+            "Final Riddle: Guillotine Dropped": lambda state: beths_body_available(state, player) and state.can_reach("Generator", "Region", player),
             }
     }
     return rules_lookup
@@ -130,5 +183,7 @@ def set_rules(Shivers: World) -> None:
 
     #Filler Item Forbids
     forbid_item(multiworld.get_location("Puzzle Solved Lyre", player), "Easier Lyre", player)
+    forbid_item(multiworld.get_location("Final Riddle: Beth's Body Page 17", player), "Easier Lyre", player)
+    forbid_item(multiworld.get_location("Final Riddle: Guillotine Dropped", player), "Easier Lyre", player)
 
     
