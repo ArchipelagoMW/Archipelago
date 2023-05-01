@@ -18,6 +18,9 @@ class LandstalkerLogic(LogicMixin):
                 return False
         return True
 
+    def _landstalker_has_health(self, player, health):
+        return self.has("Life Stock", player, health)
+
 
 def create_rules(multiworld: MultiWorld, player: int, regions_table: Dict[str, Region], dark_region_ids: List[str]):
     # Item & exploration requirements to take paths
@@ -125,3 +128,7 @@ def add_location_rules(multiworld: MultiWorld, player: int):
             location.item_rule = lambda item: not (item.player == player and ' Gold' in item.name)
         elif location.type_string == "shop":
             location.item_rule = make_shop_location_requirement_lambda(player, location)
+
+    # Add a special rule for Fahl
+    fahl_location = multiworld.get_location("Mercator: Fahl's dojo challenge reward", player)
+    fahl_location.access_rule = lambda state: state._landstalker_has_health(player, 30)

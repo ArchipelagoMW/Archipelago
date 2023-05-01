@@ -37,6 +37,14 @@ class UseSpellBook(DefaultOnToggle):
     display_name = "Use Spell Book"
 
 
+class EnsureEkeEkeInShops(DefaultOnToggle):
+    """
+    Ensures an EkeEke will always be for sale in one shop per region in the game.
+    Disabling this can lead to frustrating situations where you cannot refill your health items and might get locked.
+    """
+    display_name = "Ensure EkeEke in shops"
+
+
 class RemoveGumiBoulder(Toggle):
     """
     Removes the boulder between Gumi and Ryuma which is usually a one-way path.
@@ -178,6 +186,7 @@ ls_options: Dict[str, type(Option)] = {
     "teleport_tree_requirements": TeleportTreeRequirements,
     "shuffle_trees": ShuffleTrees,
 
+    "ensure_ekeeke_in_shops": EnsureEkeEkeInShops,
     "remove_gumi_boulder": RemoveGumiBoulder,
     "allow_whistle_usage_behind_trees": WhistleUsageBehindTrees,
     "handle_damage_boosting_in_logic": DamageBoostingInLogic,

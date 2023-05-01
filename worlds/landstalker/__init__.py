@@ -78,6 +78,11 @@ class LandstalkerWorld(World):
         self.dark_dungeon_id = self.multiworld.random.choices(list(darkenable_regions.keys()))[0]
         self.dark_region_ids = darkenable_regions[self.dark_dungeon_id]
 
+    def create_regions(self):
+        self.regions_table = Regions.create_regions(self.multiworld, self.player)
+        Locations.create_locations(self.player, self.regions_table, self.location_name_to_id)
+        self.create_teleportation_trees()
+
     def create_item(self, name: str) -> LandstalkerItem:
         if self.get_setting('progressive_armors').value == 1 and 'Breast' in name:
             name = 'Progressive Armor'
@@ -86,15 +91,25 @@ class LandstalkerWorld(World):
         item.price_in_shops = data.price_in_shops
         return item
 
-    def create_regions(self):
-        self.regions_table = Regions.create_regions(self.multiworld, self.player)
-        Locations.create_locations(self.player, self.regions_table, self.location_name_to_id)
-        self.create_teleportation_trees()
-
     def create_items(self):
         item_pool: List[LandstalkerItem] = []
         for name, data in item_table.items():
             item_pool += [self.create_item(name) for _ in range(0, data.quantity)]
+
+        # If the appropriate setting is on, place one EkeEke in one shop in every town in the game
+        if self.get_setting("ensure_ekeeke_in_shops").value == 1:
+            SHOPS_TO_FILL = [
+                "Massan: Shop item #1",
+                "Gumi: Inn item #1",
+                "Ryuma: Inn item",
+                "Mercator: Shop item #1",
+                "Verla: Shop item #1",
+                "Destel: Inn item",
+                "Route to Lake Shrine: Greedly's shop item #1",
+                "Kazalt: Shop item #1"
+            ]
+            for location_name in SHOPS_TO_FILL:
+                self.multiworld.get_location(location_name, self.player).place_locked_item(self.create_item("EkeEke"))
 
         # Add a variable amount of Life Stock to the pool, depending on the amount of starting Life Stock
         # (i.e. on the starting location)
