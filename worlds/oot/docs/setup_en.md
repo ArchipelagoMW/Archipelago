@@ -16,12 +16,12 @@ As we are using BizHawk, this guide is only applicable to Windows and Linux syst
 
 ## Configuring BizHawk
 
-Once BizHawk has been installed, open BizHawk and change the following settings:
+Once BizHawk has been installed, open EmuHawk and change the following settings:
 
 - (≤ 2.8) Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
-  "Lua+LuaInterface". Then restart BizHawk. This is required for the Lua script to function correctly.
+  "Lua+LuaInterface". Then restart EmuHawk. This is required for the Lua script to function correctly.
   **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs** 
-  **of newer versions of BizHawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
+  **of newer versions of EmuHawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
   **"NLua+KopiLua" until this step is done.**
 - Under Config > Customize > Advanced, make sure the box for AutoSaveRAM is checked, and click the 5s button.
   This reduces the possibility of losing save data in emulator crashes.
@@ -34,7 +34,7 @@ Once BizHawk has been installed, open BizHawk and change the following settings:
 - Under N64 enable "Use Expansion Slot". This is required for savestates to work.
   (The N64 menu only appears after loading a ROM.)
 
-It is strongly recommended to associate N64 rom extensions (\*.n64, \*.z64) to the BizHawk we've just installed.
+It is strongly recommended to associate N64 rom extensions (\*.n64, \*.z64) to the EmuHawk we've just installed.
 To do so, we simply have to search any N64 rom we happened to own, right click and select "Open with...", unfold
 the list that appears and select the bottom option "Look for another application", then browse to the BizHawk folder
 and select EmuHawk.exe.

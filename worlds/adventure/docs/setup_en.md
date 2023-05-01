@@ -16,18 +16,18 @@ As we are using BizHawk, this guide is only applicable to Windows and Linux syst
 
 ## Configuring BizHawk
 
-Once BizHawk has been installed, open BizHawk and change the following settings:
+Once BizHawk has been installed, open EmuHawk and change the following settings:
 
 - (≤ 2.8) Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
-  "Lua+LuaInterface". Then restart BizHawk. This is required for the Lua script to function correctly.
+  "Lua+LuaInterface". Then restart EmuHawk. This is required for the Lua script to function correctly.
   **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs** 
-  **of newer versions of BizHawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
+  **of newer versions of EmuHawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
   **"NLua+KopiLua" until this step is done.**
 - Under Config > Customize, check the "Run in background" box. This will prevent disconnecting from the client while
-BizHawk is running in the background.
+EmuHawk is running in the background.
 
-- It is recommended that you provide a path to BizHawk in your host.yaml for Adventure so the client can start it automatically
-- At the same time, you can set an option to automatically load the connector_adventure.lua script when launching BizHawk
+- It is recommended that you provide a path to EmuHawk in your host.yaml for Adventure so the client can start it automatically
+- At the same time, you can set an option to automatically load the connector_adventure.lua script when launching EmuHawk
 from AdventureClient.
 Default Windows install example:
 ```rom_args: "--lua=C:/ProgramData/Archipelago/data/lua/connector_adventure.lua"```

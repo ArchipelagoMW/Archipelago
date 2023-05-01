@@ -16,7 +16,7 @@
 
 1. Download and install the latest version of Archipelago.
     - On Windows, download Setup.Archipelago.<HighestVersion\>.exe and run it.
-2. Assign BizHawk version 2.3.1 or higher as your default program for launching `.nes` files.
+2. Assign EmuHawk version 2.3.1 or higher as your default program for launching `.nes` files.
     - Extract your BizHawk folder to your Desktop, or somewhere you will remember. Below are optional additional steps
        for loading ROMs more conveniently.
         1. Right-click on a ROM file and select **Open with...**
@@ -76,7 +76,7 @@ Once the Archipelago server has been hosted:
 
 ### Running Your Game and Connecting to the Client Program
 
-1. Open BizHawk 2.3.1 or higher and load your ROM OR click your ROM file if it is already associated with the
+1. Open EmuHawk 2.3.1 or higher and load your ROM OR click your ROM file if it is already associated with the
    extension `*.nes`.
 2. Navigate to where you installed Archipelago, then to `data/lua`, and drag+drop the `connector_ff1.lua` script onto
    the main EmuHawk window.
