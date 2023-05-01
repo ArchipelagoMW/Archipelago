@@ -1,10 +1,10 @@
-from typing import Dict, Set, List, Any
+from typing import Dict, Set, Any
 from collections import Counter
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
-from .Items import base_id, item_table, group_table, tears_set, reliquary_set, skill_set
-from .Locations import location_table, shop_set
-from .Exits import region_exit_table, exit_lookup_table
+from .Items import base_id, item_table, group_table, tears_set, reliquary_set
+from .Locations import location_table
+from .Regions import area_table, region_exit_table, exit_lookup_table
 from .Rules import rules
 from worlds.generic.Rules import set_rule
 from .Options import blasphemous_options
@@ -277,68 +277,33 @@ class BlasphemousWorld(World):
         player = self.player
         world = self.multiworld
 
-        region_table: Dict[str, Region] = {
-            "menu"    : Region("Menu", player, world),
-            "albero"  : Region("Albero", player, world),
-            "attots"  : Region("All the Tears of the Sea", player, world),
-            "ar"      : Region("Archcathedral Rooftops", player, world),
-            "bottc"   : Region("Bridge of the Three Cavalries", player, world),
-            "botss"   : Region("Brotherhood of the Silent Sorrow", player, world),
-            "coolotcv": Region("Convent of Our Lady of the Charred Visage", player, world),
-            "dohh"    : Region("Deambulatory of His Holiness", player, world),
-            "dc"      : Region("Desecrated Cistern", player, world),
-            "eos"     : Region("Echoes of Salt", player, world),
-            "ft"      : Region("Ferrous Tree", player, world),
-            "gotp"    : Region("Graveyard of the Peaks", player, world),
-            "ga"      : Region("Grievance Ascends", player, world),
-            "hotd"    : Region("Hall of the Dawning", player, world),
-            "jondo"   : Region("Jondo", player, world),
-            "kottw"   : Region("Knot of the Three Words", player, world),
-            "lotnw"   : Region("Library of the Negated Words", player, world),
-            "md"      : Region("Mercy Dreams", player, world),
-            "mom"     : Region("Mother of Mothers", player, world),
-            "moted"   : Region("Mountains of the Endless Dusk", player, world),
-            "mah"     : Region("Mourning and Havoc", player, world),
-            "potss"   : Region("Patio of the Silent Steps", player, world),
-            "petrous" : Region("Petrous", player, world),
-            "thl"     : Region("The Holy Line", player, world),
-            "trpots"  : Region("The Resting Place of the Sister", player, world),
-            "tsc"     : Region("The Sleeping Canvases", player, world),
-            "wothp"   : Region("Wall of the Holy Prohibitions", player, world),
-            "wotbc"   : Region("Wasteland of the Buried Churches", player, world),
-            "wotw"    : Region("Where Olive Trees Wither", player, world),
-            "dungeon" : Region("Dungeons", player, world)
-        }
-
-        for rname, reg in region_table.items():
+        for short, long in area_table.items():
+            reg = Region(long, player, world)
             world.regions.append(reg)
 
-            for ename, exits in region_exit_table.items():
-                if ename == rname:
-                    for i in exits:
-                        ent = Entrance(player, i, reg)
-                        reg.exits.append(ent)
-
-                        for e, r in exit_lookup_table.items():
-                            if i == e:
-                                ent.connect(region_table[r])
+        for rname, exits in region_exit_table.items():
+            for i in exits:
+                parent = world.get_region(area_table[rname], player)
+                ent = Entrance(player, i, parent)
+                ent.connect(world.get_region(area_table[exit_lookup_table[i]], player))
+                parent.exits.append(ent)
 
         for loc in location_table:
             id = base_id + location_table.index(loc)
-            region_table[loc["region"]].locations\
-                .append(BlasphemousLocation(self.player, loc["name"], id, region_table[loc["region"]]))
+            world.get_region(area_table[loc["region"]], player).locations\
+                .append(BlasphemousLocation(self.player, loc["name"], id, world.get_region(area_table[loc["region"]], player)))
         
-        victory = Location(self.player, "His Holiness Escribar", None, self.multiworld.get_region("Deambulatory of His Holiness", self.player))
+        victory = Location(player, "His Holiness Escribar", None, world.get_region("Deambulatory of His Holiness", player))
         victory.place_locked_item(self.create_event("Victory"))
-        self.multiworld.get_region("Deambulatory of His Holiness", self.player).locations.append(victory)
+        world.get_region("Deambulatory of His Holiness", player).locations.append(victory)
 
-        if self.multiworld.ending[self.player].value == 1:
+        if world.ending[self.player].value == 1:
             set_rule(victory, lambda state: state.has("Thorn Upgrade", player, 8))
-        elif self.multiworld.ending[self.player].value == 2:
+        elif world.ending[self.player].value == 2:
             set_rule(victory, lambda state: state.has("Thorn Upgrade", player, 8) and \
                 state.has("Holy Wound of Abnegation", player))
 
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+        world.completion_condition[self.player] = lambda state: state.has("Victory", player)
 
     
     def fill_slot_data(self) -> Dict[str, Any]:
@@ -355,9 +320,6 @@ class BlasphemousWorld(World):
                     "name": loc.item.name,
                     "player_name": self.multiworld.player_name[loc.item.player]
                 }
-
-                if loc.name in shop_set:
-                    data["type"] = loc.item.classification.name
 
                 locations.append(data)
 
