@@ -1207,4 +1207,12 @@
         <ImpactMap index="None" Model="AP_WraithGroundAttackImpact" Sound="AP_Wraith_GroundAttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_WraithGroundAttackMissile" parent="GenericAttackMissile" unitName="AP_WraithGroundWeapon"/>
+    <CActorSound id="AP_CloakOff">
+        <On Terms="Behavior.AP_WraithCloak.Off" Send="Create"/>
+        <Sound value="AP_Wraith_CloakOff"/>
+    </CActorSound>
+    <CActorSound id="AP_CloakOn">
+        <On Terms="Behavior.AP_WraithCloak.On" Send="Create"/>
+        <Sound value="AP_Wraith_CloakOn"/>
+    </CActorSound>
 </Catalog>
