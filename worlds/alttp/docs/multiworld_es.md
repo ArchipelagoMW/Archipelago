@@ -13,7 +13,7 @@
 - Hardware o software capaz de cargar y ejecutar archivos de ROM de SNES
     - Un emulador capaz de ejecutar scripts Lua
       ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
-       [BizHawk](http://tasvideos.org/BizHawk.html), o
+       [BizHawk](https://tasvideos.org/BizHawk), o
        [RetroArch](https://retroarch.com?page=platforms) 1.10.1 o más nuevo). O,
     - Un flashcart SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), o otro hardware compatible
 - Tu archivo ROM japones v1.0, probablemente se llame `Zelda no Densetsu - Kamigami no Triforce (Japan).sfc`

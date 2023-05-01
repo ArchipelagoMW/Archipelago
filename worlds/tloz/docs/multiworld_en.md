@@ -5,7 +5,7 @@
 - The Zelda1Client
     - Bundled with Archipelago: [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
 - The BizHawk emulator. Versions 2.3.1 and higher are supported. Version 2.7 is recommended
-    - [BizHawk Official Website](http://tasvideos.org/BizHawk.html)
+    - [BizHawk at TASVideos](https://tasvideos.org/BizHawk)
 
 ## Optional Software
 

@@ -7,7 +7,7 @@
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI with ROM access. Any one of the following will work:
         - snes9x-rr from: [snes9x-rr Releases Page](https://github.com/gocha/snes9x-rr/releases)
-        - BizHawk from: [BizHawk Website](http://tasvideos.org/BizHawk.html)
+        - BizHawk from: [TASVideos](https://tasvideos.org/BizHawk)
         - bsnes-plus-nwa from: [bsnes-plus GitHub](https://github.com/black-sliver/bsnes-plus)
         - RetroArch from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
     - Or SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
