@@ -3,6 +3,20 @@ from typing import Dict
 from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle
 
 
+class LandstalkerGoal(Choice):
+    """
+    The goal to accomplish in order to complete the seed.
+    - Beat Gola: the same as vanilla, beat the final boss to complete the game
+    - Reach Kazalt: find the jewels and take the teleporter to Kazalt to win the game
+    """
+    display_name = "Goal"
+
+    option_beat_gola = 0
+    option_reach_kazalt = 1
+
+    default = 0
+
+
 class JewelCount(Range):
     """
     Determines the number of jewels to find in order to be able to reach Kazalt
@@ -174,6 +188,7 @@ class CombatDifficulty(Choice):
 
 
 ls_options: Dict[str, type(Option)] = {
+    "goal": LandstalkerGoal,
     "spawn_region": SpawnRegion,
     "jewel_count": JewelCount,
     "progressive_armors": ProgressiveArmors,

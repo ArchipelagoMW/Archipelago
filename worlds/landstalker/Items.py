@@ -82,7 +82,7 @@ item_table: Dict[str, LandstalkerItemData] = {
     "Life Stock":           LandstalkerItemData(62, ItemClassification.useful,      250,    0),  # Variable amount
     "No Item":              LandstalkerItemData(63, ItemClassification.filler,      0,      0),
     "1 Gold":               LandstalkerItemData(64, ItemClassification.filler,      0,      1),
-    "20 Golds":             LandstalkerItemData(65, ItemClassification.useful,      0,      15),
+    "20 Golds":             LandstalkerItemData(65, ItemClassification.filler,      0,      15),
     "50 Golds":             LandstalkerItemData(66, ItemClassification.useful,      0,      7),
     "100 Golds":            LandstalkerItemData(67, ItemClassification.useful,      0,      5),
     "200 Golds":            LandstalkerItemData(68, ItemClassification.useful,      0,      2),

@@ -1,5 +1,5 @@
 from typing import List
-from BaseClasses import Tutorial
+from BaseClasses import Tutorial, LocationProgressType
 from worlds.AutoWorld import WebWorld, World
 from .Options import ls_options
 from .Items import *
@@ -130,6 +130,10 @@ class LandstalkerWorld(World):
 
         self.multiworld.itempool += item_pool
 
+        # Add a pre-placed fake win condition item
+        win_condition_item = LandstalkerItem("King Nole's Treasure", ItemClassification.progression, None, self.player)
+        self.multiworld.get_location("End", self.player).place_locked_item(win_condition_item)
+
     def create_teleportation_trees(self):
         self.teleport_tree_pairs = load_teleport_trees()
 
@@ -158,6 +162,30 @@ class LandstalkerWorld(World):
 
     def set_rules(self):
         Rules.create_rules(self.multiworld, self.player, self.regions_table, self.dark_region_ids)
+
+        # In "Reach Kazalt" goal, player doesn't have access to Kazalt, King Nole's Labyrinth & King Nole's Palace.
+        # As a consequence, all locations inside those regions must be excluded and the teleporter from
+        # King Nole's Cave to Kazalt must go to the end region instead.
+        if self.get_setting("goal").value == 1:
+            kazalt_tp = self.multiworld.get_entrance("king_nole_cave -> kazalt", self.player)
+            kazalt_tp.connected_region = self.regions_table["end"]
+
+            EXCLUDED_REGIONS = [
+                "kazalt",
+                "king_nole_labyrinth_pre_door",
+                "king_nole_labyrinth_post_door",
+                "king_nole_labyrinth_exterior",
+                "king_nole_labyrinth_fall_from_exterior",
+                "king_nole_labyrinth_raft_entrance",
+                "king_nole_labyrinth_raft",
+                "king_nole_labyrinth_sacred_tree",
+                "king_nole_labyrinth_path_to_palace",
+                "king_nole_palace"
+            ]
+
+            for location in self.multiworld.get_locations(self.player):
+                if location.parent_region.name in EXCLUDED_REGIONS:
+                    location.progress_type = LocationProgressType.EXCLUDED
 
     def generate_lithograph_hint(self):
         jewels = {}

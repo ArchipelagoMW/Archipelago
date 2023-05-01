@@ -31,10 +31,8 @@ def create_locations(player: int, regions_table: Dict[str, Region], name_to_id_t
             new_location = LandstalkerLocation(player, data["name"], name_to_id_table[data["name"]], region, data["type"])
             region.locations.append(new_location)
 
-    # Create a specific end location containing a fake win-condition item
-    end_location = LandstalkerLocation(player, "Gola", None, regions_table['end'], "reward")
-    win_condition_item = LandstalkerItem("King Nole's Treasure", ItemClassification.progression, None, player)
-    end_location.place_locked_item(win_condition_item)
+    # Create a specific end location that will contain a fake win-condition item
+    end_location = LandstalkerLocation(player, "End", None, regions_table['end'], "reward")
     regions_table['end'].locations.append(end_location)
 
 
