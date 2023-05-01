@@ -79,14 +79,14 @@ you may be prompted to allow it to communicate through the Windows Firewall.
 
 ##### BizHawk
 
-1. Ensure you have the BSNES core loaded. You may do this by clicking on the Tools menu in BizHawk and following these
-   menu options:  
-   `Config --> Cores --> SNES --> BSNES`  
-   Once you have changed the loaded core, you must restart BizHawk.
+1. Ensure you have the BSNES core loaded. This is done with the main menubar, under:
+    - (≤ 2.8) `Config` 〉 `Cores` 〉 `SNES` 〉 `BSNES`
+    - (≥ 2.9) `Config` 〉 `Preferred Cores` 〉 `SNES` 〉 `BSNESv115+`
 2. Load your ROM file if it hasn't already been loaded.
-3. Click on the Tools menu and click on **Lua Console**
-4. Click the Open Folder icon that says `Open Script` via the tooltip on mouse hover, or click the Script Menu then `Open Script...`, or press `Ctrl-O`.
-5. Select any `Connector.lua` file from your SNI installation
+   If you changed your core preference after loading the ROM, don't forget to reload it (default hotkey: Ctrl+R).
+3. Drag+drop the `Connector.lua` file from your SNI installation onto the main EmuHawk window.
+    - You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to `Connector.lua`
+      with the file picker.
 
 ##### bsnes-plus-nwa
 

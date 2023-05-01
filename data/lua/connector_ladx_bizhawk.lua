@@ -16,7 +16,7 @@
 -- commands are supported right now.
 --
 -- USAGE:
---  Load this script in BizHawk ("Tools" -> "Lua Console" -> "Script" -> "Open Script")
+--  Load this script in BizHawk ("Tools" -> "Lua Console" -> "Script" -> "Open Script", or drag+drop)
 --
 -- All inconsistencies (like missing newlines for some commands) of the RetroArch
 -- UDP API (network_cmd_enable) are reproduced as-is in order for clients written to work with

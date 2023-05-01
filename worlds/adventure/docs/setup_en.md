@@ -18,7 +18,7 @@ As we are using Bizhawk, this guide is only applicable to Windows and Linux syst
 
 Once Bizhawk has been installed, open Bizhawk and change the following settings:
 
-- Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
+- (≤ 2.8) Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
   "Lua+LuaInterface". Then restart Bizhawk. This is required for the Lua script to function correctly.
   **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs** 
   **of newer versions of Bizhawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
@@ -63,11 +63,10 @@ path as recommended).
 
 ### Connect to the Multiserver
 
-Once both the client and the emulator are started, you must connect them. Within the emulator click on the "Tools"
-menu and select "Lua Console". Click the folder button or press Ctrl+O to open a Lua script.
-
-Navigate to your Archipelago install folder and open `data/lua/connector_adventure.lua`, if it is not
-configured to do this automatically.
+Once both the client and the emulator are started, you must connect them, assuming you didn't set it up to be automatic.
+Navigate to your Archipelago install folder, then to `data/lua`, and drag+drop the `connector_adventure.lua` script onto
+the main EmuHawk window. (You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate
+to `connector_adventure.lua` with the file picker.)
 
 To connect the client to the multiserver simply put `<address>:<port>` on the textfield on top and press enter (if the
 server uses password, type in the bottom textfield `/connect <address>:<port> [password]`)

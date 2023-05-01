@@ -78,12 +78,13 @@ Once the Archipelago server has been hosted:
 
 1. Open Bizhawk 2.3.1 or higher and load your ROM OR click your ROM file if it is already associated with the
    extension `*.nes`.
-2. Click on the Tools menu and click on **Lua Console**.
-3. Click the folder button to open a new Lua script. (CTL-O or **Script** -> **Open Script**)
-4. Navigate to the location you installed Archipelago to. Open `data/lua/connector_tloz.lua`.
-    1. If it gives a `NLua.Exceptions.LuaScriptException: .\socket.lua:13: module 'socket.core' not found:` exception
+2. Navigate to where you installed Archipelago, then to `data/lua`, and drag+drop the `connector_ff1.lua` script onto
+   the main EmuHawk window.
+    1. You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to
+       `connector_ff1.lua` with the file picker.
+    2. If it gives a `NLua.Exceptions.LuaScriptException: .\socket.lua:13: module 'socket.core' not found:` exception
        close your emulator entirely, restart it and re-run these steps.
-    2. If it says `Must use a version of bizhawk 2.3.1 or higher`, double-check your Bizhawk version by clicking **
+    3. If it says `Must use a version of bizhawk 2.3.1 or higher`, double-check your Bizhawk version by clicking **
        Help** -> **About**.
 
 ## Play the game
