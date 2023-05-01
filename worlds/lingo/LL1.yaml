@@ -187,7 +187,7 @@
         panels:
           - room: Hub Room
             panel: RAT
-      Knight/Night Entrance:
+      Knight Night Entrance:
         id: Appendix Room Area Doors/Door_rat_tar_4
         skip_location: true
         panels:
@@ -261,7 +261,7 @@
         door: Crossroads Entrance
       The Tenacious:
         door: Tenacious Entrance
-      Warts/Straw Area:
+      Warts Straw Area:
         door: Symmetry Door
       Hedge Maze:
         door: Shortcut to Hedge Maze
@@ -424,8 +424,8 @@
       The Tenacious:
         door: Tenacious Entrance
       Orange Tower Fourth Floor: True # through IRK HORN
-      Amen/Name Area:
-        room: Lost/Lost Area
+      Amen Name Area:
+        room: Lost Area
         door: Exit
       Roof: True # through the sunwarp
     panels:
@@ -490,7 +490,7 @@
           - TURN
           - room: Orange Tower Fourth Floor
             panel: RUNT
-      Words/Sword Door:
+      Words Sword Door:
         id:
           - Shuffle Room Area Doors/Door_words_shuffle_3
           - Shuffle Room Area Doors/Door_words_shuffle_4
@@ -535,13 +535,13 @@
           door: Eye Wall
       - id: smile_painting_4
         orientation: south
-  Lost/Lost Area:
+  Lost Area:
     entrances:
       Outside The Agreeable:
         door: Exit
       Crossroads:
         room: Crossroads
-        door: Words/Sword Door
+        door: Words Sword Door
     panels:
       LOST (1):
         id: Shuffle Room/Panel_lost_lots
@@ -558,10 +558,10 @@
         panels:
           - LOST (1)
           - LOST (2)
-  Amen/Name Area:
+  Amen Name Area:
     entrances:
       Crossroads:
-        room: Lost/Lost Area
+        room: Lost Area
         door: Exit
       Suits Area:
         door: Exit
@@ -585,8 +585,8 @@
           - NAME
   Suits Area:
     entrances:
-      Amen/Name Area:
-        room: Amen/Name Area
+      Amen Name Area:
+        room: Amen Name Area
         door: Exit
       Roof: True
     paintings:
@@ -664,12 +664,12 @@
             panel: MASSACRED
           - room: Dread Hallway
             panel: DREAD
-  Warts/Straw Area:
+  Warts Straw Area:
     entrances:
       Hub Room:
         room: Hub Room
         door: Symmetry Door
-      Leaf/Feel Area:
+      Leaf Feel Area:
         door: Door
     panels:
       WARTS:
@@ -687,10 +687,10 @@
         panels:
           - WARTS
           - STRAW
-  Leaf/Feel Area:
+  Leaf Feel Area:
     entrances:
-      Warts/Straw Area:
-        room: Warts/Straw Area
+      Warts Straw Area:
+        room: Warts Straw Area
         door: Door
       Outside The Agreeable:
         door: Door
@@ -714,7 +714,7 @@
     # Let's ignore the blue warp thing for now because the lookout is a dead
     # end. Later on it could be filler checks.
     entrances:
-      # We don't have to list Lost/Lost Area because of Crossroads.
+      # We don't have to list Lost Area because of Crossroads.
       Crossroads: True
       The Tenacious:
         door: Tenacious Entrance
@@ -722,8 +722,8 @@
         door: Agreeable Entrance
       Dread Hallway:
         door: Black Door
-      Leaf/Feel Area:
-        room: Leaf/Feel Area
+      Leaf Feel Area:
+        room: Leaf Feel Area
         door: Door
       Starting Room:
         door: Painting Shortcut
@@ -809,6 +809,7 @@
       Hallway Door:
         id: Red Blue Purple Room Area Doors/Door_room_2
         group: Hallway Room Doors
+        location_name: Hallway Room - First Room
         panels:
           - WALL
           - KEEP
@@ -1122,7 +1123,7 @@
         room: Orange Tower
         door: Second Floor
       Directional Gallery:
-        door: Salt/Pepper Door
+        door: Salt Pepper Door
     panels:
       SECRET:
         id: Shuffle Room/Panel_secret_secret
@@ -1139,7 +1140,7 @@
         group: Orange Tower First Floor - Shortcuts
         panels:
           - SECRET
-      Salt/Pepper Door:
+      Salt Pepper Door:
         id: Count Up Room Area Doors/Door_salt_pepper
         group: Orange Tower First Floor - Shortcuts
         panels:
@@ -1157,8 +1158,8 @@
       Outside The Undeterred: True
   Orange Tower Third Floor:
     entrances:
-      Knight/Night Room:
-        room: Knight/Night Room
+      Knight Night Room:
+        room: Knight Night Room
         door: Exit
       Orange Tower Second Floor:
         room: Orange Tower
@@ -1537,6 +1538,7 @@
         id: Doorway Room Doors/Door_white
         item_name: The Colorful - White Door
         group: Colorful Doors
+        location_name: The Colorful - White
         panels:
           - BEGIN
   The Colorful (Black):
@@ -1554,6 +1556,7 @@
       Progress Door:
         id: Doorway Room Doors/Door_black
         item_name: The Colorful - Black Door
+        location_name: The Colorful - Black
         group: Colorful Doors
         panels:
           - FOUND
@@ -1572,6 +1575,7 @@
       Progress Door:
         id: Doorway Room Doors/Door_red
         item_name: The Colorful - Red Door
+        location_name: The Colorful - Red
         group: Colorful Doors
         panels:
           - LOAF
@@ -1590,6 +1594,7 @@
       Progress Door:
         id: Doorway Room Doors/Door_yellow
         item_name: The Colorful - Yellow Door
+        location_name: The Colorful - Yellow
         group: Colorful Doors
         panels:
           - CREAM
@@ -1608,6 +1613,7 @@
       Progress Door:
         id: Doorway Room Doors/Door_blue
         item_name: The Colorful - Blue Door
+        location_name: The Colorful - Blue
         group: Colorful Doors
         panels:
           - SUN
@@ -1626,6 +1632,7 @@
       Progress Door:
         id: Doorway Room Doors/Door_purple
         item_name: The Colorful - Purple Door
+        location_name: The Colorful - Purple
         group: Colorful Doors
         panels:
           - SPOON
@@ -1644,6 +1651,7 @@
       Progress Door:
         id: Doorway Room Doors/Door_orange
         item_name: The Colorful - Orange Door
+        location_name: The Colorful - Orange
         group: Colorful Doors
         panels:
           - LETTERS
@@ -1662,6 +1670,7 @@
       Progress Door:
         id: Doorway Room Doors/Door_green
         item_name: The Colorful - Green Door
+        location_name: The Colorful - Green
         group: Colorful Doors
         panels:
           - WALLS
@@ -1680,6 +1689,7 @@
       Progress Door:
         id: Doorway Room Doors/Door_brown
         item_name: The Colorful - Brown Door
+        location_name: The Colorful - Brown
         group: Colorful Doors
         panels:
           - IRON
@@ -1700,6 +1710,7 @@
           - Doorway Room Doors/Door_gray
           - Doorway Room Doors/Door_gray2 # See comment below
         item_name: The Colorful - Gray Door
+        location_name: The Colorful - Gray
         group: Colorful Doors
         panels:
           - OBSTACLE
@@ -1811,8 +1822,8 @@
     entrances:
       Hub Room:
         door: Shortcut to Hub Room
-      Knight/Night Room:
-        room: Knight/Night Room
+      Knight Night Room:
+        room: Knight Night Room
         door: Exit
       Orange Tower Third Floor: True # sunwarp
       Orange Tower Fifth Floor:
@@ -2317,11 +2328,11 @@
           - SEVEN
           - room: Directional Gallery
             panel: SEVEN
-          - room: Knight/Night Room
+          - room: Knight Night Room
             panel: SEVEN (1)
-          - room: Knight/Night Room
+          - room: Knight Night Room
             panel: SEVEN (2)
-          - room: Knight/Night Room
+          - room: Knight Night Room
             panel: SEVEN (3)
           - room: Outside The Initiated
             panel: SEVEN (1)
@@ -2365,7 +2376,7 @@
           - NINE
           - room: Directional Gallery
             panel: NINE
-          - room: Amen/Name Area
+          - room: Amen Name Area
             panel: NINE
           - room: Yellow Backside Area
             panel: NINE
@@ -2390,7 +2401,7 @@
       Outside The Agreeable: True # sunwarp
       Orange Tower First Floor:
         room: Orange Tower First Floor
-        door: Salt/Pepper Door
+        door: Salt Pepper Door
       Outside The Undeterred:
         door: Shortcut to The Undeterred
       Number Hunt:
@@ -2638,13 +2649,13 @@
       - id: pencil_painting5
         disable: True
         orientation: south
-  Knight/Night Room:
+  Knight Night Room:
     # For now, let's just let the doors in here be vanilla.
     # We will allow reverse progression because it works if the exit is open.
     entrances:
       Hidden Room:
         room: Hidden Room
-        door: Knight/Night Entrance
+        door: Knight Night Entrance
       Orange Tower Third Floor:
         door: Exit
       Outside The Initiated:
@@ -3227,6 +3238,7 @@
     doors:
       Exit:
         id: Red Blue Purple Room Area Doors/Door_room_3
+        location_name: Hallway Room - Second Room
         group: Hallway Room Doors
         panels:
           - WISE
@@ -3255,6 +3267,7 @@
     doors:
       Exit:
         id: Red Blue Purple Room Area Doors/Door_room_4
+        location_name: Hallway Room - Third Room
         group: Hallway Room Doors
         panels:
           - TRANCE
@@ -3277,6 +3290,7 @@
           - Red Blue Purple Room Area Doors/Door_room_5
           - Red Blue Purple Room Area Doors/Door_room_6 # this is the connection to The Artistic
         group: Hallway Room Doors
+        location_name: Hallway Room - Fourth Room
         panels:
           - WHEEL
         include_reduce: True

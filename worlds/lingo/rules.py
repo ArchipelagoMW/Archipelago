@@ -28,7 +28,7 @@ class LingoLogic(LogicMixin):
             ["Starting Room", "Main Door"], ["Second Room", "Exit Door"],
             ["Crossroads", "Tower Entrance"], ["Orange Tower Fourth Floor", "Hot Crusts Door"],
             ["Outside The Initiated", "Shortcut to Hub Room"], ["Orange Tower First Floor", "Shortcut to Hub Room"],
-            ["Directional Gallery", "Shortcut to The Undeterred"], ["Orange Tower First Floor", "Salt/Pepper Door"],
+            ["Directional Gallery", "Shortcut to The Undeterred"], ["Orange Tower First Floor", "Salt Pepper Door"],
             ["The Tenacious", "Shortcut to Hub Room"], ["Outside The Agreeable", "Tenacious Entrance"]
         ]
         viable_option = True

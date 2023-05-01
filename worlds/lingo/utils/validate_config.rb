@@ -241,3 +241,24 @@ door_groups.each do |group,num|
     puts "Door group \"#{group}\" only has one door in it"
   end
 end
+
+slashed_rooms = configured_rooms.select do |room|
+  room.include? "/"
+end
+unless slashed_rooms.empty? then
+  puts "The following rooms have slashes in their names: " + slashed_rooms.to_s
+end
+
+slashed_panels = configured_panels.select do |panel|
+  panel.include? "/"
+end
+unless slashed_panels.empty? then
+  puts "The following panels have slashes in their names: " + slashed_panels.to_s
+end
+
+slashed_doors = configured_doors.select do |door|
+  door.include? "/"
+end
+unless slashed_doors.empty? then
+  puts "The following doors have slashes in their names: " + slashed_doors.to_s
+end
