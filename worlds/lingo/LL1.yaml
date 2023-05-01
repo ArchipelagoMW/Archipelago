@@ -389,6 +389,11 @@
       PILGRIMAGE:
         id: Lingo Room/Panel_pilgrim
         colors: blue
+      MASTERY:
+        id: Master Room/Panel_mastery_mastery14
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
     doors:
       Sun Painting:
         item_name: Pilgrim Room - Sun Painting
@@ -895,6 +900,16 @@
       HIDE (3):
         id: Maze Room/Panel_hide_seek_3
         colors: black
+      MASTERY (1):
+        id: Master Room/Panel_mastery_mastery5
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
+      MASTERY (2):
+        id: Master Room/Panel_mastery_mastery9
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
     doors:
       Perceptive Entrance:
         id: Maze Area Doors/Door_maze_maze
@@ -1365,6 +1380,12 @@
         check: True
         required_door:
           door: Mastery Achievements
+      MASTERY:
+        # This is the MASTERY on the other side of THE FEARLESS. It can only be
+        # accessed by jumping from the top of the tower.
+        id: Master Room/Panel_mastery_mastery8
+        required_door:
+          door: Mastery
     doors:
       Mastery Achievements:
         event: True
@@ -1412,10 +1433,57 @@
           - room: The Ecstatic
             panel: Achievement
       Mastery:
-        id: Master Room Doors/Door_tower_down
+        id:
+          - Master Room Doors/Door_tower_down
+          - Master Room Doors/Door_master_master
+          - Master Room Doors/Door_master_master_2
+          - Master Room Doors/Door_master_master_3
+          - Master Room Doors/Door_master_master_4
+          - Master Room Doors/Door_master_master_5
+          - Master Room Doors/Door_master_master_6
+          - Master Room Doors/Door_master_master_10
+          - Master Room Doors/Door_master_master_11
+          - Master Room Doors/Door_master_master_12
+          - Master Room Doors/Door_master_master_13
+          - Master Room Doors/Door_master_master_14
+          - Master Room Doors/Door_master_master_15
+          - Master Room Doors/Door_master_down
+          - Master Room Doors/Door_master_down2
         skip_location: True
         panels:
           - THE MASTER
+      Mastery Panels:
+        skip_item: True
+        panels:
+          - room: Room Room
+            panel: MASTERY
+          - room: The Steady
+            panel: MASTERY
+          - room: Orange Tower Basement
+            panel: MASTERY
+          - room: Arrow Garden
+            panel: MASTERY
+          - room: Hedge Maze
+            panel: MASTERY (1)
+          - room: Roof
+            panel: MASTERY (1)
+          - room: Roof
+            panel: MASTERY (2)
+          - MASTERY
+          - room: Hedge Maze
+            panel: MASTERY (2)
+          - room: Roof
+            panel: MASTERY (3)
+          - room: Roof
+            panel: MASTERY (4)
+          - room: Roof
+            panel: MASTERY (5)
+          - room: Elements Area
+            panel: MASTERY
+          - room: Pilgrim Antechamber
+            panel: MASTERY
+          - room: Roof
+            panel: MASTERY (6)
     paintings:
       - id: map_painting2
         orientation: north
@@ -1426,11 +1494,48 @@
       Crossroads:
         room: Crossroads
         door: Shortcut to Roof
+    panels:
+      MASTERY (1):
+        id: Master Room/Panel_mastery_mastery6
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
+      MASTERY (2):
+        id: Master Room/Panel_mastery_mastery7
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
+      MASTERY (3):
+        id: Master Room/Panel_mastery_mastery10
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
+      MASTERY (4):
+        id: Master Room/Panel_mastery_mastery11
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
+      MASTERY (5):
+        id: Master Room/Panel_mastery_mastery12
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
+      MASTERY (6):
+        id: Master Room/Panel_mastery_mastery15
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
   Orange Tower Basement:
     entrances:
       Orange Tower Sixth Floor:
         room: Orange Tower Seventh Floor
         door: Mastery
+    panels:
+      MASTERY:
+        id: Master Room/Panel_mastery_mastery3
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
     paintings:
       - id: arrows_painting_11
         orientation: east
@@ -2642,6 +2747,17 @@
           - red
           - blue
         check: True
+      MASTERY:
+        id: Master Room/Panel_mastery_mastery2
+        colors:
+          - black
+          - yellow
+          - purple
+          - red
+          - blue
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
     paintings:
       - id: pencil_painting4
         disable: True
@@ -3213,6 +3329,12 @@
         room: The Wondrous
         door: Exit
       Roof: True
+    panels:
+      MASTERY:
+        id: Master Room/Panel_mastery_mastery4
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
     paintings:
       - id: flower_painting_6
         orientation: south
@@ -3316,6 +3438,11 @@
         id: Open Areas/Panel_undistracted
         check: True
         exclude_reduce: True
+      MASTERY:
+        id: Master Room/Panel_mastery_mastery13
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
     paintings:
       - id: south_afar
         orientation: south
@@ -3849,6 +3976,12 @@
           - purple
           - blue
           - gray
+      MASTERY:
+        id: Master Room/Panel_mastery_mastery
+        colors: gray
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
     doors:
       Excavation:
         event: True
