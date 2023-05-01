@@ -238,4 +238,7 @@
         <Compare value="LT"/>
         <Range value="12"/>
     </CValidatorLocationCompareRange>
+    <CValidatorUnitFilters id="AP_IsCloaked">
+        <Filters value="Cloaked;-"/>
+    </CValidatorUnitFilters>
 </Catalog>

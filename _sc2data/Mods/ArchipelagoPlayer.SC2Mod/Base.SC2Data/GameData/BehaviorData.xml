@@ -144,7 +144,7 @@
         <InfoIcon value="Assets\Textures\btn-ability-terran-cloak.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Requirements value="AP_CloakDistortionFieldResearched"/>
-        <DisableValidatorArray value="IsCloaked"/>
+        <DisableValidatorArray value="AP_IsCloaked"/>
         <DamageResponse ModifyFraction="0" ModifyMinimumDamage="1">
             <Chance value="0.2"/>
         </DamageResponse>
@@ -153,7 +153,7 @@
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Requirements value="AP_DynamicPowerRoutingResearched"/>
-        <DisableValidatorArray value="IsCloaked"/>
+        <DisableValidatorArray value="AP_IsCloaked"/>
         <DisableValidatorArray value="NotMoving"/>
         <DisableValidatorArray value="NotAttacking"/>
         <Modification>
