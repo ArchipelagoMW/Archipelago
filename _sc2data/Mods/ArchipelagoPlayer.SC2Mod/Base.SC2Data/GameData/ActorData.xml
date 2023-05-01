@@ -1139,4 +1139,72 @@
         <HostSiteOps Ops="SOpAttachOverhead"/>
         <Model value="MedicHealModel"/>
     </CActorModel>
+    <CActorUnit id="AP_Wraith" parent="GenericUnitBase" unitName="AP_Wraith">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.AP_WraithA.AttackStart" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.AP_WraithG.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <HostSiteOps Ops="AP_SOpBankerWraith"/>
+        <AnimBlendTime value="0.300000"/>
+        <DeathArray index="Normal" ModelLink="AP_WraithDeath" SoundLink="AP_Wraith_Explode"/>
+        <PortraitModel value="AP_WraithPortrait"/>
+        <BarOffset value="55"/>
+        <BarWidth value="66"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-wraith.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="Birth" value="Wraith_Birth"/>
+        <GroupSoundArray index="Ready" value="AP_Wraith_Ready"/>
+        <GroupSoundArray index="Help" value="AP_Wraith_Help"/>
+        <GroupSoundArray index="What" value="AP_Wraith_What"/>
+        <GroupSoundArray index="Yes" value="AP_Wraith_Yes"/>
+        <GroupSoundArray index="Attack" value="AP_Wraith_Attack"/>
+        <GroupSoundArray index="Pissed" value="AP_Wraith_Pissed"/>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-wraith.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="AP_Wraith_Ready"/>
+        <SoundArray index="Help" value="AP_Wraith_Help"/>
+        <SoundArray index="What" value="AP_Wraith_What"/>
+        <SoundArray index="Yes" value="AP_Wraith_Yes"/>
+        <SoundArray index="Attack" value="AP_Wraith_Attack"/>
+        <SoundArray index="Pissed" value="AP_Wraith_Pissed"/>
+        <SoundArray index="Movement" value="AP_Wraith_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-wraith.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-wraith.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSiteOpBanker id="AP_SOpBankerWraith" parent="SOpBanker">
+        <RollAngleMax value="75.000000"/>
+        <RollInRate value="23.450001"/>
+        <RollOutRate value="18.799999"/>
+    </CActorSiteOpBanker>
+    <CActorAction id="AP_WraithAirAttackLeft" parent="GenericAttack" effectImpact="AP_WraithAU" effectLaunch="AP_WraithALeftLaunchMissile">
+        <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
+        <LaunchAssets Sound="AP_WraithAWeaponBirth"/>
+        <Missile value="AP_WraithAirAttackLeftMissile"/>
+        <ImpactMap index="None" Model="AP_WraithAirAttackImpact" Sound="AP_WraithAWeaponImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_WraithAirAttackLeftMissile" parent="GenericAttackMissile" unitName="AP_WraithAirWeaponLeft"/>
+    <CActorAction id="AP_WraithAirAttackRight" parent="GenericAttack" effectImpact="AP_WraithAU" effectLaunch="AP_WraithARightLaunchMissile">
+        <LaunchAttachQuery Methods="AMFilterWeaponRight"/>
+        <LaunchAssets Sound="AP_WraithAWeaponBirth"/>
+        <Missile value="AP_WraithAirAttackRightMissile"/>
+        <ImpactMap index="None" Model="AP_WraithAirAttackImpact" Sound="AP_WraithAWeaponImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_WraithAirAttackRightMissile" parent="GenericAttackMissile" unitName="AP_WraithAirWeaponRight"/>
+    <CActorModel id="AP_WraithEvade" parent="ModelAnimationStyleOneShot">
+        <On Terms="Behavior.AP_CloakDistortionField.DamageHandled" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+    </CActorModel>
+    <CActorAction id="AP_WraithGroundAttack" parent="GenericAttack" effectImpact="AP_WraithGU" effectLaunch="AP_WraithGLaunchMissile">
+        <LaunchAttachQuery Methods="AMFilterWeaponBottom"/>
+        <LaunchAssets Sound="AP_WraithGroundAttackLaunch"/>
+        <Missile value="AP_WraithGroundAttackMissile"/>
+        <ImpactMap index="None" Model="AP_WraithGroundAttackImpact" Sound="AP_Wraith_GroundAttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_WraithGroundAttackMissile" parent="GenericAttackMissile" unitName="AP_WraithGroundWeapon"/>
 </Catalog>

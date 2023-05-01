@@ -147,4 +147,19 @@
     <CRequirement id="AP_RapidDeploymentResearched">
         <NodeArray index="Show" Link="AP_CountUpgradeMedivacRapidDeploymentCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_CloakDistortionFieldResearched">
+        <NodeArray index="Show" Link="AP_CountUpgradeCloakDistortionFieldCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_DynamicPowerRoutingResearched">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeDynamicPowerRoutingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnWraithCloak">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeWraithCloakQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="AP_UseWraithCloak">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeWraithCloakCompleteOnly"/>
+    </CRequirement>
 </Catalog>

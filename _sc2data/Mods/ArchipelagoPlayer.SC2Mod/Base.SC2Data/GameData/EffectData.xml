@@ -661,4 +661,41 @@
         <PeriodicEffectArray value="AP_MedivacHealModifySet"/>
         <PeriodicPeriodArray value="0.111"/>
     </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="AP_WraithALeftLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_WraithAU"/>
+        <AmmoUnit value="AP_WraithAirWeaponLeft"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="AP_WraithAPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnitOrPoint"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_WraithALeftLaunchMissile"/>
+        <PeriodicEffectArray value="AP_WraithARightLaunchMissile"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="AP_WraithARightLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_WraithAU"/>
+        <AmmoUnit value="AP_WraithAirWeaponRight"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_WraithAU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Armored" value="5"/>
+        <Visibility value="Visible"/>
+        <Amount value="5"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_WraithGLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_WraithGU"/>
+        <AmmoUnit value="AP_WraithGroundWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_WraithGU" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="8"/>
+    </CEffectDamage>
 </Catalog>

@@ -138,4 +138,37 @@
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CloakDistortionField">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-cloak.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="AP_CloakDistortionFieldResearched"/>
+        <DisableValidatorArray value="IsCloaked"/>
+        <DamageResponse ModifyFraction="0" ModifyMinimumDamage="1">
+            <Chance value="0.2"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DynamicPowerRouting">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="AP_DynamicPowerRoutingResearched"/>
+        <DisableValidatorArray value="IsCloaked"/>
+        <DisableValidatorArray value="NotMoving"/>
+        <DisableValidatorArray value="NotAttacking"/>
+        <Modification>
+            <VitalRegenArray index="Energy" value="1.4765"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_WraithCloak">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-cloak.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="CanSpendEnergy"/>
+        <RemoveValidatorArray value="hasEnergy"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+            <VitalRegenArray index="Energy" value="-1.5"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

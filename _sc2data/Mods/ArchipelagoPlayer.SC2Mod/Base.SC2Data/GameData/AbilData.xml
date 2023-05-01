@@ -252,7 +252,8 @@
         <AutoCastFilters value="Visible;Neutral,Enemy,Missile,Stasis,Dead,Invulnerable"/>
         <AutoCastRange value="6"/>
         <AutoCastValidatorArray value="healCasterMinEnergy"/>
-        <AutoCastValidatorArray value="NotWarpingIn"/> <!-- Vanilla says NotStopping but this might be a bug -->
+        <AutoCastValidatorArray value="NotWarpingIn"/>
+        <!-- Vanilla says NotStopping but this might be a bug -->
         <Marker Link="Abil/MedivacHeal"/>
         <UseMarkerArray index="Approach" value="0"/>
         <UseMarkerArray index="Prep" value="0"/>
@@ -313,4 +314,20 @@
         <TotalCargoSpace value="8"/>
         <UnloadPeriod value="1"/>
     </CAbilTransport>
+    <CAbilBehavior id="AP_WraithCloak">
+        <AbilSetId value="Clok"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="AP_CloakOn" Requirements="AP_UseWraithCloak">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="AP_CloakOff">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+        </Cost>
+        <BehaviorArray value="AP_WraithCloak"/>
+    </CAbilBehavior>
 </Catalog>

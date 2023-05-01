@@ -369,6 +369,52 @@
         <Model value="Assets\Portraits\Terran\DiamondbackPortrait\DiamondbackPortrait.m3"/>
         <FacialController value="LocalizedData\Facial\DiamondbackPortrait.fxa"/>
         <Image value="Assets\Textures\DiamondbackPortrait_Static.dds"/>
-        <Lighting value="AP_DiamondbackPortrait"/>
+    </CModel>
+    <CModel id="AP_Wraith" parent="Unit">
+        <Model value="Assets\Units\Terran\Wraith\Wraith.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow04"/>
+        <Radius value="0.625000"/>
+        <SelectionRadius value="0.625000"/>
+        <ShadowRadius value="0.625000"/>
+        <TechPurchaseCamera value="TechPurchaseStarship"/>
+        <Tipability value="0.750000"/>
+        <UnitGlossaryCamera value="Star2CameraLow04"/>
+    </CModel>
+    <CModel id="AP_WraithAirAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\WraithMissileImpact\WraithMissileImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_WraithAirWeaponLeft" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\WraithMissile\WraithMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_WraithAirWeaponRight" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\WraithMissile\WraithMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_WraithDeath" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Units\Terran\WraithDeath\WraithDeath.m3"/>
+        <LowQualityModel value="TerranMediumUnitDeathLow"/>
+        <Radius value="0.625000"/>
+    </CModel>
+    <CModel id="AP_WraithEvade" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\DisplacementFieldImpact\DisplacementFieldImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_WraithGroundAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\WraithLaserMissileImpact\WraithLaserMissileImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_WraithGroundWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\WraithLaserMissile\WraithLaserMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_WraithPortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\WraithPortrait\WraithPortrait.m3"/>
+        <FacialController value="LocalizedData\Facial\WraithPortrait.fxa"/>
+        <Image value="Assets\Textures\WraithPortrait_Static.dds"/>
+        <Lighting value="AP_WraithPortrait"/>
     </CModel>
 </Catalog>

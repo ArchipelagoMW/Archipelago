@@ -713,4 +713,146 @@
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Diamondback\Diamondback_Yes05.ogg" FacialAnim="Diamondback_Yes05"/>
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Diamondback\Diamondback_Yes06.ogg" FacialAnim="Diamondback_Yes06"/>
     </CSound>
+    <CSound id="AP_WraithAWeaponBirth" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Banshee\Banshee_AttackLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Banshee\Banshee_AttackLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Banshee\Banshee_AttackLaunch2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Banshee\Banshee_AttackLaunch3.wav"/>
+        <DupeDestroyCount value="10"/>
+        <OverlapTimeDelta value="100"/>
+        <Pitch value="-3.860000,1.640000"/>
+        <Volume value="-5.200000,-3.100000"/>
+    </CSound>
+    <CSound id="AP_WraithAWeaponImpact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall0.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall1.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall2.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall3.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall4.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall5.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall6.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall7.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall8.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall9.wav" Pitch="-3.000000,3.000000"/>
+        <DupeDestroyCount value="5"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="5"/>
+        <Volume value="-5.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_WraithGroundAttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Battlecruiser\Battlecruiser_AttackLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Battlecruiser\Battlecruiser_AttackLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Battlecruiser\Battlecruiser_AttackLaunch2.wav"/>
+    </CSound>
+    <CSound id="AP_Wraith_Attack" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Attack00.ogg" FacialAnim="Wraith_Attack00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Attack01.ogg" FacialAnim="Wraith_Attack01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Attack02.ogg" FacialAnim="Wraith_Attack02"/>
+    </CSound>
+    <CSound id="AP_Wraith_Attack_NP" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_NeuralParasiteAttack00.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_NeuralParasiteAttack01.ogg"/>
+    </CSound>
+    <CSound id="AP_Wraith_CloakOff" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_CloakOff.wav"/>
+    </CSound>
+    <CSound id="AP_Wraith_CloakOn" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_CloakOn.wav"/>
+    </CSound>
+    <CSound id="AP_Wraith_CloakVO" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Cloak00.ogg" FacialAnim="Wraith_Cloak00"/>
+    </CSound>
+    <CSound id="AP_Wraith_Death" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Death00.wav"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Death01.wav"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Death02.wav"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Death03.wav"/>
+    </CSound>
+    <CSound id="AP_Wraith_Death_NP" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_NeuralParasiteDeath00.wav"/>
+    </CSound>
+    <CSound id="AP_Wraith_EnergyLowVO" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_EnergyLow00.ogg" FacialAnim="Wraith_EnergyLow00"/>
+    </CSound>
+    <CSound id="AP_Wraith_Explode" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium4.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium5.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium6.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium7.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium8.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium9.wav"/>
+        <DupeDestroyCount value="5"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="5"/>
+        <Pitch value="-2.000000,3.000000"/>
+        <Volume value="-5.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Wraith_GroundAttackImpact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Wraith\Wraith_GroundAttackImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Wraith\Wraith_GroundAttackImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Wraith\AP_Wraith_GroundAttackImpact.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Wraith\Wraith_GroundAttackImpact3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Wraith\Wraith_GroundAttackImpact4.wav"/>
+        <Pitch value="-3.000000,3.000000"/>
+        <Volume value="-7.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_Wraith_Help" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Help00.ogg" FacialAnim="Wraith_Help00"/>
+        <Category value="Alert"/>
+    </CSound>
+    <CSound id="AP_Wraith_Movement" parent="Movement">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Wraith\Wraith_Movement00.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Wraith\Wraith_Movement01.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Wraith\Wraith_Movement02.wav"/>
+    </CSound>
+    <CSound id="AP_Wraith_Pissed" parent="Pissed">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Pissed00.ogg" FacialAnim="Wraith_Pissed00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Pissed01.ogg" FacialAnim="Wraith_Pissed01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Pissed02.ogg" FacialAnim="Wraith_Pissed02"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Pissed03.ogg" FacialAnim="Wraith_Pissed03"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Pissed04.ogg" FacialAnim="Wraith_Pissed04"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Pissed05.ogg" FacialAnim="Wraith_Pissed05"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Pissed06.ogg" FacialAnim="Wraith_Pissed06"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Pissed07.ogg" FacialAnim="Wraith_Pissed07"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Pissed08.ogg" FacialAnim="Wraith_Pissed08"/>
+    </CSound>
+    <CSound id="AP_Wraith_Ready" parent="Ready">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Ready00.ogg" FacialAnim="Wraith_Ready00"/>
+    </CSound>
+    <CSound id="AP_Wraith_Ready_NP" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_NeuralParasiteReady00.ogg"/>
+    </CSound>
+    <CSound id="AP_Wraith_What" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_What00.ogg" FacialAnim="Wraith_What00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_What01.ogg" FacialAnim="Wraith_What01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_What02.ogg" FacialAnim="Wraith_What02"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_What03.ogg" FacialAnim="Wraith_What03"/>
+    </CSound>
+    <CSound id="AP_Wraith_What_NP" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_NeuralParasiteWhat00.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_NeuralParasiteWhat01.ogg"/>
+    </CSound>
+    <CSound id="AP_Wraith_Yes" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Yes00.ogg" FacialAnim="Wraith_Yes00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Yes01.ogg" FacialAnim="Wraith_Yes01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Yes02.ogg" FacialAnim="Wraith_Yes02"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Yes03.ogg" FacialAnim="Wraith_Yes03"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Yes04.ogg" FacialAnim="Wraith_Yes04"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Wraith\Wraith_Yes05.ogg" FacialAnim="Wraith_Yes05"/>
+    </CSound>
 </Catalog>

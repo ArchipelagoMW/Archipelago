@@ -1,7 +1,9 @@
 ﻿Button/Hotkey/AP_D8Charge=G
+Button/Hotkey/AP_Heal=E
 Button/Hotkey/AP_MedicHeal=E
 Button/Hotkey/AP_ResearchSpiderMinesSC1=M
 Button/Hotkey/AP_SpiderMine=E
 Button/Hotkey/AP_SpiderMineReplenish=R
 Button/Hotkey/AP_Vulture=V
-Button/Hotkey/AP_Heal=E
+Button/Hotkey/AP_WraithCloakOff=D
+Button/Hotkey/AP_WraithCloakOn=C

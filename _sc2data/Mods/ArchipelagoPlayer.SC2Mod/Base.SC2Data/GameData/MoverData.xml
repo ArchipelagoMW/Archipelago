@@ -72,4 +72,14 @@
             <YawPitchRoll value="5568.75"/>
         </MotionPhases>
     </CMoverMissile>
+    <CMoverMissile id="AP_WraithGroundLaser">
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="3200"/>
+            <MaxSpeed value="36"/>
+            <Outro value="-1"/>
+            <YawPitchRoll value="719.2968"/>
+        </MotionPhases>
+        <MotionPhases YawPitchRoll="MAX"/>
+    </CMoverMissile>
 </Catalog>

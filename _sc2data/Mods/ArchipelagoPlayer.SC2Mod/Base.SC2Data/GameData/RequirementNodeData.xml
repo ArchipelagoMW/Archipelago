@@ -153,4 +153,23 @@
         <Count Link="AP_ExpandedHull" State="CompleteOnly"/>
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeWraithCloakCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_WraithCloak" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeWraithCloakQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_WraithCloak" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeWraithCloakQueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeWraithCloakQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCloakDistortionFieldCompleteOnly">
+        <Count Link="AP_CloakDistortionField" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeDynamicPowerRoutingCompleteOnly">
+        <Count Link="AP_DynamicPowerRouting" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
 </Catalog>
