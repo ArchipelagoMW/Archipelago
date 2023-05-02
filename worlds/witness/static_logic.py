@@ -57,7 +57,7 @@ class StaticWitnessLogicObj:
                         "panels": parse_lambda(required_panel_lambda)
                     }
 
-                    current_region["panels"].add(check_hex)
+                    current_region["panels"].append(check_hex)
                     continue
 
                 required_item_lambda = line_split.pop(0)
@@ -117,7 +117,7 @@ class StaticWitnessLogicObj:
                 self.CHECKS_BY_NAME[self.CHECKS_BY_HEX[check_hex]["checkName"]] = self.CHECKS_BY_HEX[check_hex]
                 self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX[check_hex] = requirement
 
-                current_region["panels"].add(check_hex)
+                current_region["panels"].append(check_hex)
 
     def __init__(self, file_path="WitnessLogic.txt"):
         # All regions with a list of panels in them and the connections to other regions, before logic adjustments
