@@ -1605,9 +1605,6 @@
     </CActorSound>
     <CActorSplat id="AP_MissilePodsCursorSplat" parent="TerranCursorSplat" abil="AP_MissilePods"/>
     <CActorRange id="AP_MissilePodsRange" parent="RangeAbil" abil="AP_MissilePods"/>
-    <CActorSiteOpLocalOffset id="AP_BattlecruiserHurricaneSiteOpOffset">
-        <LocalOffset value="0.000000,0.000000,3.750000"/>
-    </CActorSiteOpLocalOffset>
     <CActorEventMacro id="UnloadDropAnim">
         <!-- Override -->
         <!-- Add AP_Medivac to common transport load/unload animations -->
