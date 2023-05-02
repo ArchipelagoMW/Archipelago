@@ -477,5 +477,5 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, world_o
 def remove_excluded_packs(packs, world_options):
     included_packs = [pack for pack in packs if Group.DEPRECATED not in pack.groups]
     if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
-        included_packs = [pack for pack in packs if Group.GINGER_ISLAND not in pack.groups]
+        included_packs = [pack for pack in included_packs if Group.GINGER_ISLAND not in pack.groups]
     return included_packs
