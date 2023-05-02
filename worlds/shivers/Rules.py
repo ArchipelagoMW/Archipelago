@@ -6,7 +6,8 @@ from worlds.AutoWorld import World
 from worlds.generic.Rules import forbid_item
 
 def water_capturable(state: CollectionState, player: int) -> bool:
-    return (state.can_reach("Lobby", "Region", player)) \
+    return (state.can_reach("Lobby", "Region", player) or
+            (state.can_reach("Janitor Closet", "Region", player) and cloth_capturable(state, player))) \
         and state.has("Water Pot Bottom", player) \
         and state.has("Water Pot Top", player) \
         and state.has("Water Pot Bottom DUPE", player) \
@@ -183,7 +184,5 @@ def set_rules(Shivers: World) -> None:
 
     #Filler Item Forbids
     forbid_item(multiworld.get_location("Puzzle Solved Lyre", player), "Easier Lyre", player)
-    forbid_item(multiworld.get_location("Final Riddle: Beth's Body Page 17", player), "Easier Lyre", player)
-    forbid_item(multiworld.get_location("Final Riddle: Guillotine Dropped", player), "Easier Lyre", player)
 
     
