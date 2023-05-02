@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CUpgrade id="AP_330mmBarrageCannons">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Race value="Terr"/>
+        <EffectArray Operation="Set" Reference="Button,AP_Thor,Tooltip" Value="Button/Tooltip/ThorUpgraded"/>
+        <EffectArray Operation="Set" Reference="Button,AP_Thor,AlertTooltip" Value="Button/Tooltip/ThorUpgraded"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Thor,Description" Value="Button/Tooltip/ThorUpgraded"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ThorWreckage,Description" Value="Button/Tooltip/ThorWreckageUpgraded"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
     <CUpgrade id="AP_ShieldWall" parent="Research">
         <Flags index="UpgradeCheat" value="0"/>
         <InfoTooltipPriority value="2"/>
@@ -547,5 +556,15 @@
         <!-- Actually is Psionic Lash upgrade -->
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_MechanicalRebirth">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Race value="Terr"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ThorSkin">
+        <Icon value="Assets\Textures\btn-unit-terran-thor.dds"/>
+        <AffectedUnitArray value="AP_Thor"/>
+        <LeaderAlias value=""/>
     </CUpgrade>
 </Catalog>

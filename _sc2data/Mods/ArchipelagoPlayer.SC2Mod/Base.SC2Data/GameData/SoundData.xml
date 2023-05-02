@@ -1112,4 +1112,56 @@
         <EditorCategories value="Race:Terran"/>
         <AssetArray File="Assets\Sounds\Terran\Tosh\Tosh_ConsumptionImpact0.wav"/>
     </CSound>
+    <CSound id="AP_330mmBarrageCannonsMorph" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Thor\Thor_250mmCannonMorph0.wav"/>
+    </CSound>
+    <CSound id="AP_330mmBarrageCannonsSound" parent="Spell">
+        <AssetArray File="Assets\Sounds\Terran\Thor\Thor_AttackImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Thor\Thor_AttackImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Thor\Thor_AttackImpact2.wav"/>
+        <EditorCategories value="Race:Terran"/>
+    </CSound>
+    <CSound id="AP_330mmBarrageCannonsUnMorph" parent="Spell">
+        <AssetArray File="Assets\Sounds\Terran\Thor\Thor_250mmCannonUnMorph0.wav"/>
+        <EditorCategories value="Race:Terran"/>
+    </CSound>
+    <CSound id="AP_Thor_ImmortalityProtocolBirth" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Thor\Thor_ImmortalityProtocolBirth0.wav"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Thor_ImmortalityProtocolDeath" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Construction\Terran_ConstructionEnd.wav"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Thor_ImmortalityProtocolWeld" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Uni\Doodads\Doodad_SparkBurstShort0.wav"/>
+        <AssetArray File="Assets\Sounds\Uni\Doodads\Doodad_SparkBurstShort1.wav"/>
+        <AssetArray File="Assets\Sounds\Uni\Doodads\Doodad_SparkBurstShort2.wav"/>
+        <AssetArray File="Assets\Sounds\Uni\Doodads\Doodad_SparkBurstShort3.wav"/>
+        <AssetArray File="Assets\Sounds\Uni\Doodads\Doodad_SparkBurstShort4.wav"/>
+        <Flags index="Purgable" value="0"/>
+        <Category value="Doodad"/>
+        <DupeDestroyCount value="32"/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="0.000000,2.000000"/>
+        <Volume value="-12.000000,-12.000000"/>
+    </CSound>
+    <CSound id="AP_ThorWreckageSparks" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Uni\Doodads\Doodad_SparkBurstShort0.wav"/>
+        <AssetArray File="Assets\Sounds\Uni\Doodads\Doodad_SparkBurstShort1.wav"/>
+        <AssetArray File="Assets\Sounds\Uni\Doodads\Doodad_SparkBurstShort2.wav"/>
+        <AssetArray File="Assets\Sounds\Uni\Doodads\Doodad_SparkBurstShort3.wav"/>
+        <AssetArray File="Assets\Sounds\Uni\Doodads\Doodad_SparkBurstShort4.wav"/>
+        <Flags index="Purgable" value="0"/>
+        <Category value="Doodad"/>
+        <DupeDestroyCount value="32"/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="0.000000,2.000000"/>
+        <Volume value="-12.000000,-12.000000"/>
+    </CSound>
 </Catalog>

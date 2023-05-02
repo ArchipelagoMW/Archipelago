@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="AP_250mmStrikeCannons">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-bombardmentstrike.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="NotFrenzied"/>
+        <BuffFlags index="Channeling" value="1"/>
+        <MaxStackCount value="20"/>
+        <Duration value="10"/>
+        <Period value="0.25"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_330mmBarrageCannons">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-bombardmentstrike.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="Channeling" value="1"/>
+        <MaxStackCount value="20"/>
+        <Duration value="10"/>
+        <Period value="0.25"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="AP_Stimpack">
         <Alignment value="Positive"/>
         <InfoIcon value="Assets\Textures\btn-ability-terran-stimpack.dds"/>
@@ -357,7 +386,8 @@
         <DisplayDuration index="Self" value="1"/>
         <DisplayDuration index="Ally" value="1"/>
         <Duration value="60"/>
-        <ExpireEffect value="AP_KillKillerPhantasm"/> <!-- Appears to be unused in Vanilla -->
+        <ExpireEffect value="AP_KillKillerPhantasm"/>
+        <!-- Appears to be unused in Vanilla -->
         <Modification>
             <StateFlags index="Summoned" value="1"/>
         </Modification>
@@ -422,8 +452,9 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Duration value="1"/>
         <Modification>
-            <DeathResponse Chance="1" Effect="AP_SpectreMindSplatterExplosionDamage"/> <!-- Appears to be unused in Vanilla -->
+            <DeathResponse Chance="1" Effect="AP_SpectreMindSplatterExplosionDamage"/>
         </Modification>
+        <!-- Appears to be unused in Vanilla -->
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_SpectreNuclearReactorQueue">
         <InfoFlags index="Hidden" value="1"/>
@@ -443,6 +474,32 @@
             <ModifyFlags index="Detected" value="1"/>
             <ModifyFlags index="SuppressMoving" value="1"/>
             <ModifyFlags index="SuppressTurning" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ThorDontDie">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\BTN-techupgrade-terran-combatshield-color.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="AP_UseMechanicalRebirth"/>
+        <DamageResponse Fatal="1" Handled="AP_ThorWreckage" ModifyFraction="0">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ThorEnergyUse">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_DontHave250mmCannons"/>
+        <Modification>
+            <VitalMaxArray index="Energy" value="-200"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ThorEnergyUseCellular">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_DontHave250mmCannonsHaveCellularReactors"/>
+        <Modification>
+            <VitalMaxArray index="Energy" value="-100"/>
         </Modification>
     </CBehaviorBuff>
 </Catalog>

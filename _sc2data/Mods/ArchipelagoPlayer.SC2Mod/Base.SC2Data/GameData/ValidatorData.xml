@@ -133,6 +133,10 @@
         <Find value="1"/>
         <Value value="AP_HaveGhostJunker"/>
     </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveRewardThorSkin">
+        <Find value="1"/>
+        <Value value="AP_HaveRewardThorSkin"/>
+    </CValidatorPlayerRequirement>
     <CValidatorCombine id="IsBanshee" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaBanshee"/>
@@ -181,6 +185,17 @@
         <ResultFailed value="AlreadyTargeted"/>
         <WhichUnit Effect="AP_MedivacHeal"/>
     </CValidatorUnitCompareMarkerCount>
+    <CValidatorUnitType id="AP_IsAPThor">
+        <Value value="AP_Thor"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaThor">
+        <Value value="Thor"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsThor" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaThor"/>
+        <CombineArray value="AP_IsAPThor"/>
+    </CValidatorCombine>
     <!-- Vanilla IsViking works based on SelectAlias, not need to override -->
     <CValidatorUnitType id="AP_IsVanillaVikingAssault">
         <Value value="VikingAssault"/>
@@ -327,4 +342,9 @@
         <Find value="1"/>
         <Value value="AP_SpectrePermanentCloak"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_NotThorWreckage">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="AP_ThorWreckage"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
 </Catalog>

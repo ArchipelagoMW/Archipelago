@@ -7,6 +7,45 @@
         <ImpactMap index="None" Sound="VikingFighter_AttackImpact"/>
         <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
     </CActorAction>
+    <CActorModel id="AP_250mmStrikeCannonsImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_250mmStrikeCannonsDamage.Start; At Target" Send="Create"/>
+        <HostSiteOps Ops="SOpShadow ThorBarrageVariance"/>
+        <Model value="250mmStrikeCannonsImpact"/>
+    </CActorModel>
+    <CActorSound id="AP_250mmStrikeCannonsSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_250mmStrikeCannonsDamage.Start; At Target" Send="Create"/>
+        <Sound value="250mmStrikeCannonsSound"/>
+    </CActorSound>
+    <CActorSound id="AP_250mmStrikeCannonsMorph" parent="SoundOneShot">
+        <On Terms="Abil.AP_250mmStrikeCannons.SourceCastStart" Send="Create"/>
+        <Sound value="250mmStrikeCannonsMorph"/>
+    </CActorSound>
+    <CActorSound id="AP_250mmStrikeCannonsUnMorph" parent="SoundOneShot">
+        <On Terms="Abil.AP_250mmStrikeCannons.SourceFinishStart" Send="Create"/>
+        <Sound value="250mmStrikeCannonsUnMorph"/>
+    </CActorSound>
+    <CActorRange id="AP_250mmStrikeCannonsRange" parent="RangeAbil" abil="AP_250mmStrikeCannons"/>
+    <CActorModel id="AP_330mmBarrageCannonsImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_330mmBarrageCannonsSearch.Impact" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPoint AP_330mmBarrageCannonsVariance"/>
+        <Model value="AP_330mmBarrageCannonsImpact"/>
+    </CActorModel>
+    <CActorSiteOpRandomPointInCircle id="AP_330mmBarrageCannonsVariance">
+        <Radius value="2.000000"/>
+        <Variance value="11.000000"/>
+    </CActorSiteOpRandomPointInCircle>
+    <CActorSound id="AP_330mmBarrageCannonsSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_330mmBarrageCannonsSearch.Impact" Send="Create"/>
+        <Sound value="AP_330mmBarrageCannonsSound"/>
+    </CActorSound>
+    <CActorRange id="AP_330mmBarrageCannonsRange" parent="RangeAbil" abil="AP_330mmBarrageCannons"/>
+    <CActorSound id="AP_330mmBarrageCannonsMorph" parent="SoundOneShot">
+        <On Terms="Abil.AP_330mmBarrageCannons.SourceCastStart" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_330mmBarrageCannonsUnMorph" parent="SoundOneShot">
+        <On Terms="Abil.AP_330mmBarrageCannons.SourceFinishStart" Send="Create"/>
+    </CActorSound>
+    <CActorSplat id="AP_330mmBarrageCannonsCursorSplat" parent="TerranCursorSplat" abil="AP_330mmBarrageCannons"/>
     <CActorUnit id="AP_Medic" parent="GenericUnitStandard" unitName="AP_Medic">
         <Aliases value="_UnitSmall"/>
         <Macros value="UnloadDropAnim"/>
@@ -991,10 +1030,13 @@
         <On Terms="Abil.AP_MedivacHeal.SourceChannelStart" Send="$Spell PlayForever"/>
         <On Terms="Abil.AP_MedivacHeal.SourceChannelStop" Send="AnimClear Spell"/>
         <On Terms="AbilTransport.AP_MedivacTransport.TransportLoad; AbilTransport Thor" Send="Create ThorTransit"/>
+        <On Terms="AbilTransport.AP_MedivacTransport.TransportLoad; AbilTransport AP_Thor" Send="Create AP_ThorTransit"/>
         <On Terms="Signal.*.ThorTransit" Send="RefSetFromMsg ::actor.Thor ::Sender"/>
         <On Terms="Signal.*.ThorTransit" Send="RefSetFromMsg ::actor.AP_Thor ::Sender"/>
         <On Terms="AbilTransport.AP_MedivacTransport.PassengerKilled; AbilTransport Thor" Target="::actor.Thor" Send="Signal Dead"/>
+        <On Terms="AbilTransport.AP_MedivacTransport.PassengerKilled; AbilTransport AP_Thor" Target="::actor.AP_Thor" Send="Signal Dead"/>
         <On Terms="UnitDeath" Target="::actor.Thor" Send="Signal Dead"/>
+        <On Terms="UnitDeath" Target="::actor.AP_Thor" Send="Signal Dead"/>
         <On Terms="ActorCreation; ValidateUnit AP_MedivacUpgrade" Send="ModelSwap MedivacUpgrade"/>
         <On Terms="Abil.AP_MedivacDoubleBeamHeal.SourceChannelStart" Send="$Spell PlayForever"/>
         <On Terms="Abil.AP_MedivacDoubleBeamHeal.SourceChannelStop" Send="AnimClear Spell"/>
@@ -1942,12 +1984,6 @@
         <HeroIcon value="Assets\Textures\btn-unit-terran-spectre.dds"/>
         <HighlightTooltip value="Unit/Name/Spectre"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
-        <SoundArray index="Ready" value="AP_Spectre_Ready"/>
-        <SoundArray index="Help" value="AP_Spectre_Help"/>
-        <SoundArray index="What" value="AP_Spectre_What"/>
-        <SoundArray index="Yes" value="AP_Spectre_Yes"/>
-        <SoundArray index="Attack" value="AP_Spectre_Attack"/>
-        <SoundArray index="Pissed" value="AP_Spectre_Pissed"/>
         <UnitIcon value="Assets\Textures\btn-unit-terran-spectre.dds"/>
         <Wireframe>
             <Image value="AP\Assets\Textures\Wireframe-Terran-Spectre.dds"/>
@@ -1977,7 +2013,6 @@
     <CActorRange id="AP_SpectreConsumptionRange" parent="RangeAbil" abil="AP_SpectreConsumption"/>
     <CActorAction id="AP_SpectreLockdown" parent="GenericAttack" effectImpact="AP_SpectreLockdownB" effectLaunch="AP_SpectreLockdown">
         <LaunchAssets Sound="AP_Spectre_EMPLaunch"/>
-        <Missile value="AP_SpectreLockdownMissile"/>
         <ImpactMap index="None" Sound="AP_Spectre_EMPImpact"/>
     </CActorAction>
     <CActorModel id="AP_SpectreLockdownEffect" parent="ModelAddition">
@@ -2112,7 +2147,6 @@
     <CActorAction id="AP_UltrasonicPulseAttack" parent="GenericAttack" effectImpact="AP_UltrasonicPulseSearch" effectLaunch="AP_UltrasonicPulseLaunchMissile">
         <On Terms="Effect.AP_UltrasonicPulseStun.Start; At Caster" Send="ActionDamage"/>
         <LaunchAssets Sound="AP_Spectre_UltrasonicPulseLaunch"/>
-        <Missile value="AP_UltrasonicPulseAttackMissile"/>
         <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow AP_UltrasonicPulseOffset"/>
         <ImpactMap index="None" Sound="AP_UltraSonicPulseImpactSound"/>
     </CActorAction>
@@ -2120,13 +2154,221 @@
     <CActorModel id="AP_UltrasonicPulseAttackImpactEffect" parent="ModelAnimationStyleOneShot">
         <Inherits index="Visibility" value="1"/>
         <On Terms="Effect.AP_UltrasonicPulseSearchArea.Start" Send="Create"/>
-        <Model value="AP_UltrasonicPulseAttackImpactEffect"/>
     </CActorModel>
-    <CActorMissile id="AP_UltrasonicPulseAttackMissile" parent="GenericAttackMissile" unitName="AP_UltrasonicPulseWeapon">
-        <Model value="AP_UltrasonicPulseWeapon"/>
-    </CActorMissile>
+    <CActorMissile id="AP_UltrasonicPulseAttackMissile" parent="GenericAttackMissile" unitName="AP_UltrasonicPulseWeapon"/>
     <CActorSplat id="AP_UltrasonicPulseCursorSplat" parent="TerranCursorSplat" abil="AP_UltrasonicPulse"/>
     <CActorRange id="AP_UltrasonicPulseRange" parent="RangeAbil" abil="AP_UltrasonicPulse"/>
+    <CActorUnit id="AP_Thor" parent="GenericUnitBase" unitName="AP_Thor">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Thor" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Thor" Send="Destroy"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="ActorCreation" Send="AnimPlay CoverStand Cover,Stand PlayForever 0.000000"/>
+        <On Terms="WeaponStart.AP_JavelinMissileLaunchers.AttackStart" Send="TimerKill CoverDelay"/>
+        <On Terms="WeaponStart.AP_JavelinMissileLaunchers.AttackStart" Send="AnimClear CoverStand"/>
+        <On Terms="WeaponStart.AP_JavelinMissileLaunchers.AttackStart" Send="AnimPlay Cover Cover PlayForever"/>
+        <On Terms="WeaponStop.AP_JavelinMissileLaunchers.AttackStop" Send="TimerSet 2.500000 CoverDelay"/>
+        <On Terms="TimerExpired; TimerName CoverDelay" Send="AnimClear Cover"/>
+        <On Terms="TimerExpired; TimerName CoverDelay" Send="AnimPlay CoverStand Cover,Stand PlayForever"/>
+        <On Terms="WeaponStart.AP_ThorsHammer.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.AP_ThorsHammer.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.AP_ThorsHammer.AttackStart; WeaponTargetDistance LE 1.000000" Send="AnimBracketStart Attack Spell,B"/>
+        <On Terms="WeaponStart.AP_ThorsHammer.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="Abil.AP_250mmStrikeCannons.SourceCastStart" Send="AnimPlay Morph Morph NonLooping"/>
+        <On Terms="Abil.AP_250mmStrikeCannons.SourceCastStop" Send="AnimClear Morph"/>
+        <On Terms="Abil.AP_250mmStrikeCannons.SourceCastStop" Target="AP_250mmStrikeCannonsMorph" Send="SoundSetMuted 1 0"/>
+        <On Terms="Abil.AP_250mmStrikeCannons.SourceChannelStart" Send="$Spell PlayForever"/>
+        <On Terms="Abil.AP_250mmStrikeCannons.SourceChannelStop" Send="AnimClear Spell"/>
+        <On Terms="Abil.AP_250mmStrikeCannons.SourceFinishStart" Send="AnimPlay MorphEnd Morph,End NonLooping"/>
+        <On Terms="Abil.AP_250mmStrikeCannons.SourceFinishStop" Send="AnimClear MorphEnd"/>
+        <On Terms="AbilTransport.AP_MedivacTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
+        <On Terms="AbilTransport.MedivacTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying Unload" Send="AnimClear Unload"/>
+        <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying Unload" Send="AnimClear Unload"/>
+        <On Terms="ModelEvent; ModelEventName SquibStartLeft" Send="Create ThorLeftCheerSquib"/>
+        <On Terms="ModelEvent; ModelEventName SquibStartRight" Send="Create ThorRightCheerSquib"/>
+        <On Terms="AbilTransport.SpecOpsDropshipTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
+        <On Terms="Abil.AP_330mmBarrageCannons.SourceCastStart" Send="AnimPlay Morph Morph NonLooping"/>
+        <On Terms="Abil.AP_330mmBarrageCannons.SourceCastStop" Send="AnimClear Morph"/>
+        <On Terms="Abil.AP_330mmBarrageCannons.SourceCastStop" Target="AP_330mmBarrageCannonsMorph" Send="SoundSetMuted 1 0"/>
+        <On Terms="Abil.AP_330mmBarrageCannons.SourceChannelStart" Send="$Spell PlayForever"/>
+        <On Terms="Abil.AP_330mmBarrageCannons.SourceChannelStop" Send="AnimClear Spell"/>
+        <On Terms="Abil.AP_330mmBarrageCannons.SourceFinishStart" Send="AnimPlay MorphEnd Morph,End NonLooping"/>
+        <On Terms="Abil.AP_330mmBarrageCannons.SourceFinishStop" Send="AnimClear MorphEnd"/>
+        <On Terms="AbilTransport.SpecOpsDropshipTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
+        <!-- There's no AP_SpecOpsDropship -->
+        <On Terms="AbilTransport.HerculesTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
+        <On Terms="AbilTransport.AP_HerculesTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
+        <Model value="Thor"/>
+        <EventDataFootprint index="0" Actor="" Model=""/>
+        <BuildModel value="Thor"/>
+        <DeathArray index="Normal" ModelLink="ThorDeath" SoundLink=""/>
+        <DeathCustoms ModelLink="ThorDeathLow" Name="AntiGravTerran"/>
+        <PlacementModel value="Thor"/>
+        <PortraitModel value="ThorPortrait"/>
+        <StandAnimTurnTime value="5"/>
+        <StandAnimTurnTimeScaleMin value="0.850000"/>
+        <WalkAnimMoveSpeed value="1.8671"/>
+        <BarOffset value="120"/>
+        <BarWidth value="140"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Thor.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-thor.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="80"/>
+        <SoundArray index="Ready" value="Thor_Ready"/>
+        <SoundArray index="Help" value="Thor_Help"/>
+        <SoundArray index="What" value="Thor_What"/>
+        <SoundArray index="Yes" value="Thor_Yes"/>
+        <SoundArray index="Attack" value="Thor_Attack"/>
+        <SoundArray index="Pissed" value="Thor_Pissed"/>
+        <SoundArray index="Movement" value="Thor_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-thor.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Thor.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="Thor">
+        <!-- Override -->
+        <!-- Just make it aware about AP_Medivac -->
+        <On Terms="AbilTransport.AP_MedivacTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
+    </CActorUnit>
+    <CActorAction id="AP_ThorAAAttack" parent="GenericAttack" effectImpact="AP_JavelinMissileLaunchersDamage" effectLaunch="AP_JavelinMissileLaunchersLM">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA1 AMPatternThorAA"/>
+        <LaunchAssets Model="ThorAAAttackLaunch" Sound="Thor_AntiAirAttackLaunch"/>
+        <Missile value="AP_ThorAAAttackMissile"/>
+        <ImpactMap index="None" Model="ThorAAAttackImpact" Sound="Thor_AntiAirAttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_ThorAAAttackMissile" parent="GenericAttackMissile" unitName="AP_ThorAAWeapon">
+        <Model value="ThorAAWeapon"/>
+    </CActorMissile>
+    <CActorAction id="AP_ThorAttack" parent="GenericAttack" effectAttack="AP_ThorsHammerDamage">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMPatternThor"/>
+        <LaunchAssets Model="ThorHandGunAttackLaunch" Sound="Thor_HandGunAttackLaunch"/>
+        <ImpactMap index="None" Model="ThorHandGunAttackImpact" Sound="Thor_HandGunAttackImpact"/>
+    </CActorAction>
+    <CActorModel id="AP_ThorFootprint" parent="ModelAnimationStyleOneShot">
+        <HostSiteOps Ops="SOpShadow" HoldPosition="1" HoldRotation="1"/>
+        <Model value="ThorFootprint"/>
+    </CActorModel>
+    <CActorModel id="AP_ThorLeftCheerSquib" parent="ModelAdditionNoAnims">
+        <On Terms="ActorCreation" Send="$Birth"/>
+        <On Terms="ActorCreation" Send="Create AP_ThorLeftCheerSquibSound"/>
+        <On Terms="AnimDone; AnimName Birth" Send="Destroy"/>
+        <HostSiteOps Ops="SOpAttachWeapon05"/>
+        <Model value="ThorHandGunAttackLaunch"/>
+    </CActorModel>
+    <CActorSound id="AP_ThorLeftCheerSquibSound" parent="SoundOneShot">
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeapon05"/>
+        <Sound value="Thor_HandGunAttackLaunch"/>
+    </CActorSound>
+    <CActorUnit id="AP_ThorRebornMorphModel" parent="GenericUnitBase" unitName="ThorRebornMorphModel">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_Thor; MorphFrom AP_ThorWreckage" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimPlay MorphStart Morph,Start"/>
+        <On Terms="AnimDone; AnimName MorphStart" Send="AnimPlay Morph Morph 0 -1.000000 -1.000000 8.233000 AsDuration"/>
+        <On Terms="AnimDone; AnimName Morph" Send="AnimPlay MorphEnd Morph,End"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Thor" Send="Destroy"/>
+        <On Terms="ActorCreation; PlayerHasReward ThorCE" Send="ModelSwap ThorCEWreckage"/>
+        <Model value="AP_ThorWreckage"/>
+        <Baselines index="Stand" AnimProps=""/>
+        <DeathArray index="Normal" ModelLink="AP_ThorWreckageDeath" SoundLink="Thor_Explode"/>
+        <PortraitModel value="ThorPortrait"/>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-thor.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_ThorRebornMorphModel"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-thor.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-ThorWreckage.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_ThorRightCheerSquib" parent="ModelAdditionNoAnims">
+        <On Terms="ActorCreation" Send="$Birth"/>
+        <On Terms="ActorCreation" Send="Create AP_ThorRightCheerSquibSound"/>
+        <On Terms="AnimDone; AnimName Birth" Send="Destroy"/>
+        <HostSiteOps Ops="SOpAttachWeapon07"/>
+        <Model value="ThorHandGunAttackLaunch"/>
+    </CActorModel>
+    <CActorSound id="AP_ThorRightCheerSquibSound" parent="SoundOneShot">
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeapon07"/>
+        <Sound value="Thor_HandGunAttackLaunch"/>
+    </CActorSound>
+    <CActorModel id="AP_ThorTransit">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <On Terms="ActorCreation" Target="::Creator" Send="Signal ThorTransit"/>
+        <On Terms="ActorCreation" Send="AnimPlay Start Stand,Work,Start"/>
+        <On Terms="AnimDone; AnimName Start" Send="AnimPlay Work Stand,Work PlayForever"/>
+        <On Terms="AbilTransport.MedivacTransport.TransportUnload" Send="Destroy"/>
+        <On Terms="AbilTransport.AP_MedivacTransport.TransportUnload; AbilTransport AP_Thor" Send="Destroy"/> <!-- Yes, we can unload something else then Thor, should work as two Thors can't fit in -->
+        <On Terms="Signal.*.Dead" Send="Create ThorTransitDeath"/>
+        <On Terms="Signal.*.Dead" Send="Destroy"/>
+        <On Terms="ActorCreation; PlayerHasReward ThorCE" Send="ModelSwap ThorCETransit"/>
+        <On Terms="AbilTransport.SpecOpsDropshipTransport.TransportUnload; AbilTransport Thor" Send="Destroy"/>
+        <On Terms="AbilTransport.SpecOpsDropshipTransport.CargoUnload; AbilTransport Thor" Send="Destroy"/>
+        <On Terms="AbilTransport.SpecOpsDropshipTransport.TransportUnload; AbilTransport AP_Thor" Send="Destroy"/>
+        <On Terms="AbilTransport.SpecOpsDropshipTransport.CargoUnload; AbilTransport AP_Thor" Send="Destroy"/>
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpAttachCenter ThorCargoSOpOffset"/>
+        <Model value="ThorTransit"/>
+    </CActorModel>
+    <CActorModel id="ThorTransit">
+        <!-- Override -->
+        <!-- Just make it compatible with AP_Medivac -->
+        <On Terms="AbilTransport.AP_MedivacTransport.TransportUnload; AbilTransport Thor" Send="Destroy"/> <!-- Yes, we can unload something else then Thor, should work as two Thors can't fit in -->
+    </CActorModel>
+    <CActorModel id="AP_ThorTransitDeath">
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <HostSiteOps Ops="SOpBasicCreatorStationary"/>
+        <Model value="TerranLargeUnitDeath"/>
+    </CActorModel>
+    <CActorUnit id="AP_ThorWreckage" parent="GenericUnitMorph" unitName="AP_ThorWreckage">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_ThorWreckage" Send="$Birth 0 1.000000 1.000000"/>
+        <On Terms="AnimDone; AnimName Birth" Send="$Stand PlayForever,NonLooping"/>
+        <On Terms="UnitBirth.AP_ThorWreckage.Suppressed" Send="$Stand PlayForever,NonLooping"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_ThorWreckage; PlayerHasReward ThorCE" Send="ModelSwap ThorCEWreckage"/>
+        <Baselines index="Stand" AnimProps=""/>
+        <DeathArray index="Normal" ModelLink="ThorWreckageDeath" SoundLink="Thor_Explode"/>
+        <PortraitModel value="ThorPortrait"/>
+        <StandAnimTurnTime value="5"/>
+        <WalkAnimMoveSpeed value="1.75"/>
+        <BarOffset value="170"/>
+        <BarWidth value="160"/>
+        <GroupSoundArray index="What" value="ThorGroupWhat"/>
+        <GroupSoundArray index="Yes" value="ThorGroupYes"/>
+        <GroupSoundArray index="Attack" value="ThorGroupAttack"/>
+        <GroupSoundArray index="Board" value="ThorGroupBoard"/>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-thor.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_ThorWreckage"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <SoundArray index="Birth" value="ThorBirth"/>
+        <SoundArray index="Ready" value="Thor_Ready"/>
+        <SoundArray index="Help" value="Thor_Help"/>
+        <SoundArray index="What" value="Thor_What"/>
+        <SoundArray index="Yes" value="Thor_Yes"/>
+        <SoundArray index="Attack" value="Thor_Attack"/>
+        <SoundArray index="Pissed" value="Thor_Pissed"/>
+        <SoundArray index="Movement" value="Thor_Movement"/>
+        <SoundArray index="Turning" value="ThorTurning"/>
+        <SoundArray index="Board" value="ThorBoard"/>
+        <SoundArray index="Click" value="ThorClick"/>
+        <SoundArray index="ClickError" value="ThorClickError"/>
+        <SoundArray index="Highlight" value="ThorHighlight"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-thor.dds"/>
+        <Model value="AP_ThorWreckage"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-ThorWreckage.dds"/>
+        </Wireframe>
+    </CActorUnit>
     <CActorEventMacro id="UnloadDropAnim">
         <!-- Override -->
         <!-- Add AP_Medivac to common transport load/unload animations -->

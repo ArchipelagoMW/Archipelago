@@ -294,4 +294,25 @@
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Show" Link="AP_CountUpgradeUltrasonicPulseCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveRewardThorSkin">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeRewardThorSkinCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseImmortailityProtocol">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMechanicalRebirthCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseMechanicalRebirth">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeMechanicalRebirthCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_Hide250mmStrikeCannons">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgrade330mmBarrageCannonsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_Use330mmBarrageCannons">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgrade330mmBarrageCannonsCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgrade330mmBarrageCannonsCompleteOnly"/>
+    </CRequirement>
 </Catalog>

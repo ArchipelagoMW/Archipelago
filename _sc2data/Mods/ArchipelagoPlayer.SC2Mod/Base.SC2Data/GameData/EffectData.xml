@@ -1,5 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CEffectApplyBehavior id="AP_250mmStrikeCannonsApplyBehavior">
+        <ValidatorArray index="0" value="NotHeroic"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_250mmStrikeCannons"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_250mmStrikeCannonsCreatePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="Channeled" value="1"/>
+        <InitialEffect value="AP_250mmStrikeCannonsSet"/>
+        <PeriodCount value="25"/>
+        <PeriodicValidator value="250mmCannonValidators"/>
+        <PeriodicEffectArray value="AP_250mmStrikeCannonsDamage"/>
+        <PeriodicPeriodArray value="0.24"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_250mmStrikeCannonsDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="20"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_250mmStrikeCannonsDummy">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_250mmStrikeCannonsSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_250mmStrikeCannonsApplyBehavior"/>
+        <EffectArray value="AP_250mmStrikeCannonsDummy"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_330mmBarrageCannonsApplyBehavior">
+        <ValidatorArray index="0" value="AP_330mmCannonValidators"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_330mmBarrageCannons"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_330mmBarrageCannonsDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Splash"/>
+        <KindSplash value="Splash"/>
+        <Amount value="20"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="0.5" Fraction="1"/>
+        <AreaArray Radius="1" Fraction="0.5"/>
+        <AreaArray Radius="2" Fraction="0.25"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_330mmBarrageCannonsPersistent">
+        <ValidatorArray value="CliffLevelGE1"/>
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="25"/>
+        <PeriodicEffectArray value="AP_330mmBarrageCannonsSet"/>
+        <PeriodicPeriodArray value="0.24"/>
+        <RevealRadius value="4"/>
+        <RevealFlags index="Unfog" value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="AP_330mmBarrageCannonsSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="0.5" Effect="AP_330mmBarrageCannonsApplyBehavior"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_330mmBarrageCannonsSet">
+        <ValidatorArray value="AP_330mmBarrageCannonsSetTargetFilters"/>
+        <EditorCategories value=""/>
+        <EffectArray value="AP_330mmBarrageCannonsDamage"/>
+        <EffectArray value="AP_330mmBarrageCannonsSearch"/>
+    </CEffectSet>
     <CEffectDamage id="AP_90mmCannons" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>
         <AttributeBonus index="Armored" value="10"/>
@@ -1115,7 +1193,6 @@
     <CEffectApplyBehavior id="AP_SpectreHoldFireB">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Caster"/>
-        <Behavior value="AP_SpectreHoldFireB"/>
     </CEffectApplyBehavior>
     <CEffectSet id="AP_SpectreHoldFireSet">
         <EditorCategories value="Race:Terran"/>
@@ -1173,7 +1250,8 @@
         <Behavior value="AP_UltrasonicPulseStun"/>
     </CEffectApplyBehavior>
     <CEffectLaunchMissile id="AP_UltrasonicPulseLaunchMissile">
-        <ValidatorArray index="0" value="AP_UltrasonicPulseTargetFilters"/> <!-- Looks like unused in Vanilla -->
+        <ValidatorArray index="0" value="AP_UltrasonicPulseTargetFilters"/>
+        <!-- Looks like unused in Vanilla -->
         <EditorCategories value="Race:Terran"/>
         <ImpactLocation Value="TargetPoint"/>
         <ImpactEffect value="AP_UltrasonicPulseSearchArea"/>
@@ -1186,4 +1264,77 @@
         <AreaArray Radius="1.5" Effect="AP_UltrasonicPulseApplyBehavior"/>
         <SearchFlags index="CallForHelp" value="1"/>
     </CEffectEnumArea>
+    <CEffectDamage id="AP_JavelinMissileLaunchersDamage" parent="DU_WEAP_SPLASH">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Light" value="4"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="8"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="0.5" Fraction="1"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Air;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="OffsetByUnitRadius" value="0"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_JavelinMissileLaunchersLM">
+        <ValidatorArray index="0" value="RangeCheckLE15"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_JavelinMissileLaunchersDamage"/>
+        <AmmoUnit value="AP_ThorAAWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="AP_JavelinMissileLaunchersPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="4"/>
+        <PeriodicEffectArray value="AP_JavelinMissileLaunchersLM"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.125"/>
+        <PeriodicPeriodArray value="0.25"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectIssueOrder id="AP_ThorCancel250">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="AP_250mmStrikeCannons"/>
+        <AbilCmdIndex value="1"/>
+        <CmdFlags index="Preempt" value="1"/>
+    </CEffectIssueOrder>
+    <CEffectIssueOrder id="AP_ThorCancel330">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="AP_330mmBarrageCannons"/>
+        <AbilCmdIndex value="1"/>
+        <CmdFlags index="Preempt" value="1"/>
+    </CEffectIssueOrder>
+    <CEffectSet id="AP_ThorWreckage">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_ThorCancel250"/>
+        <EffectArray value="AP_ThorCancel330"/>
+        <EffectArray value="AP_ThorWreckageAbil"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="AP_ThorWreckageAbil">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="AP_ThorWreckage"/>
+        <CmdFlags index="Preempt" value="1"/>
+    </CEffectIssueOrder>
+    <CEffectCreatePersistent id="AP_ThorsHammer">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnitOrPoint"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_ThorsHammerDamage"/>
+        <PeriodicEffectArray value="AP_ThorsHammerDamage"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.375"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_ThorsHammerDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <Amount value="45"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
 </Catalog>

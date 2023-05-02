@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CButton id="AP_250mmStrikeCannons">
+        <Icon value="Assets\Textures\btn-ability-terran-bombardmentstrike-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-bombardmentstrike-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_330mmBarrageCannons">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-330mmbarragecannon.dds"/>
+        <Hotkey value="Button/Hotkey/250mmStrikeCannons"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+        <HotkeyAlias value="250mmStrikeCannons"/>
+    </CButton>
     <CButton id="AP_MedicHeal">
         <Icon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>
         <AlertIcon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>
@@ -334,5 +346,15 @@
         <Icon value="AP\Assets\Textures\btn-ability-terran-ultrasonicpulse.dds"/>
         <EditorCategories value="Race:Terran"/>
         <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_ImmortalityProtocol">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-immortalityprotocol.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_Thor">
+        <Icon value="Assets\Textures\btn-unit-terran-thor.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-thor.dds"/>
+        <EditorCategories value="Race:Terran"/>
     </CButton>
 </Catalog>

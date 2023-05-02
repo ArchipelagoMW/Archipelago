@@ -508,7 +508,6 @@
         <Model value="Assets\Portraits\Terran\SpectrePortrait\SpectrePortrait.m3"/>
         <Flags index="Download" value="1"/>
         <Image value="Assets\Textures\SpectrePortrait_Static.dds"/>
-        <Lighting value="AP_SpectrePortrait"/>
     </CModel>
     <CModel id="AP_ConsumptionImpactModel" parent="ImpactFX">
         <Model value="Assets\Effects\Protoss\EnergyTransferImpact\EnergyTransferImpact.m3"/>
@@ -548,5 +547,188 @@
     <CModel id="AP_ObliterateCasterChannel" parent="PersistentSpellFX">
         <Model value="Assets\Effects\Terran\PsionicLashCasterLaunch\PsionicLashCasterLaunch.m3"/>
         <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_ThorWreckage" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\ThorWrecked\ThorWrecked.m3"/>
+        <AttachProps Id="Ref_Weapon 01">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 02">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 03">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 04">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 05">
+            <Keys index="CustomA" value="1"/>
+            <Keys index="SetA" value="1"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 06">
+            <Keys index="SetA" value="4"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 07">
+            <Keys index="CustomA" value="1"/>
+            <Keys index="SetA" value="1"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 08">
+            <Keys index="SetB" value="4"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 15">
+            <Keys index="SetA" value="3"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 16">
+            <Keys index="SetA" value="3"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 17">
+            <Keys index="SetA" value="3"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 18">
+            <Keys index="SetA" value="3"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Center">
+            <Keys index="Turret" value="0"/>
+        </AttachProps>
+        <Events>
+            <Anim value="Stand,Morph,Start"/>
+            <Name value="ThorImmortalityProtocolBirth"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="AP_Thor_ImmortalityProtocolBirth"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,Morph,End"/>
+            <Name value="ThorImmortalityProtocolDeath"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="AP_Thor_ImmortalityProtocolDeath"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,Morph,00"/>
+            <Name value="Thor_ImmortalityProtocolWeld"/>
+            <Type value="Sound"/>
+            <Time value="0.600000"/>
+            <Payload value="AP_Thor_ImmortalityProtocolWeld"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,Morph,00"/>
+            <Name value="Thor_ImmortalityProtocolWeld"/>
+            <Type value="Sound"/>
+            <Time value="1.933000"/>
+            <Payload value="AP_Thor_ImmortalityProtocolWeld"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,Morph,00"/>
+            <Name value="Thor_ImmortalityProtocolWeld"/>
+            <Type value="Sound"/>
+            <Time value="3.100000"/>
+            <Payload value="AP_Thor_ImmortalityProtocolWeld"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,Morph,00"/>
+            <Name value="Thor_ImmortalityProtocolWeld"/>
+            <Type value="Sound"/>
+            <Time value="4.433000"/>
+            <Payload value="AP_Thor_ImmortalityProtocolWeld"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,Morph,00"/>
+            <Name value="Thor_ImmortalityProtocolWeld"/>
+            <Type value="Sound"/>
+            <Time value="5.733000"/>
+            <Payload value="AP_Thor_ImmortalityProtocolWeld"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,Morph,00"/>
+            <Name value="Thor_ImmortalityProtocolWeld"/>
+            <Type value="Sound"/>
+            <Time value="6.933000"/>
+            <Payload value="AP_Thor_ImmortalityProtocolWeld"/>
+        </Events>
+        <Events>
+            <Anim value="Birth,00"/>
+            <Name value="ThorWreckageSparks"/>
+            <Type value="Sound"/>
+            <Time value="0.210000"/>
+            <Payload value="AP_ThorWreckageSparks"/>
+        </Events>
+        <Events>
+            <Anim value="Birth,00"/>
+            <Name value="ThorWreckageSparks"/>
+            <Type value="Sound"/>
+            <Time value="0.370000"/>
+            <Payload value="AP_ThorWreckageSparks"/>
+        </Events>
+        <Events>
+            <Anim value="Birth,00"/>
+            <Name value="ThorWreckageSparks"/>
+            <Type value="Sound"/>
+            <Time value="1.430000"/>
+            <Payload value="AP_ThorWreckageSparks"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <Radius value="0.800000"/>
+        <ScaleMax value="0.650000,0.650000,0.650000"/>
+        <ScaleMin value="0.650000,0.650000,0.650000"/>
+        <SelectionRadius value="1.845700"/>
+        <ShadowRadius value="1.230700"/>
+    </CModel>
+    <CModel id="AP_ThorWreckageDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Terran\ThorWrecked\ThorWrecked.m3"/>
+        <LowQualityModel value="AP_ThorWreckageDeathLow"/>
+        <EditorCategories value="Race:Terran"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranPreExplosionSmall"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranPreExplosionSmall"/>
+            <Type value="Sound"/>
+            <Time value="0.200000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranExplosionMedium"/>
+            <Type value="Sound"/>
+            <Time value="0.800000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranExplosionLarge"/>
+            <Type value="Sound"/>
+            <Time value="1.533000"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <Radius value="1.400000"/>
+    </CModel>
+    <CModel id="AP_ThorWreckageDeathLow" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Effects\Terran\TerranLargeUnitDeath\TerranLargeUnitDeath_Low.m3"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranExplosionLarge"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+        </Events>
+        <Flags index="TeenSafe" value="1"/>
+        <Lighting value="TerranLargeUnitDeathLow"/>
+        <SelectionRadius value="0.263000"/>
+        <ShadowRadius value="0.263000"/>
+    </CModel>
+    <CModel id="AP_330mmBarrageCannonsImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\ThorShoulderMissileImpact\ThorShoulderMissileImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_330mmBarrageCannonsStun" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\DisruptionWeb\DisruptionWeb.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.250000,0.250000,0.250000"/>
+        <ScaleMin value="0.250000,0.250000,0.250000"/>
+        <SelectionRadius value="2.000000"/>
+        <ShadowRadius value="2.000000"/>
     </CModel>
 </Catalog>

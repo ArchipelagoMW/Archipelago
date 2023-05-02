@@ -356,7 +356,28 @@
         <OperandArray value="AP_AllowUnitSpectre"/>
     </CRequirementOr>
     <CRequirementCountUpgrade id="AP_CountUpgradeUltrasonicPulseCompleteOnly">
-        <Count Link="AP_UltrasonicPulse" State="CompleteOnly"/> <!-- Actually is for Psionic Lash -->
+        <Count Link="AP_UltrasonicPulse" State="CompleteOnly"/>
+        <!-- Actually is for Psionic Lash -->
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeMechanicalRebirthCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_MechanicalRebirth" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeRewardThorSkinCompleteOnly">
+        <Count Link="AP_ThorSkin" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_UpgradeMechanicalRebirthQueuedOrBetter">
+        <Count Link="AP_MechanicalRebirth" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_UpgradeThorShoulderGunQueuedOrBetter">
+        <Count Link="AP_ThorShoulderGun" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgrade330mmBarrageCannonsCompleteOnly">
+        <Count Link="AP_330mmBarrageCannons" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgrade330mmBarrageCannonsCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgrade330mmBarrageCannonsCompleteOnly"/>
+    </CRequirementNot>
 </Catalog>

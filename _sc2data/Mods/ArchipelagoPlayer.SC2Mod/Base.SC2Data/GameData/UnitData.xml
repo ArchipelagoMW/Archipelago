@@ -1862,4 +1862,164 @@
         <Race value="Terr"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
     </CUnit>
+    <CUnit id="AP_Thor">
+        <DeathRevealRadius value="3"/>
+        <Facing value="135"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TurnBeforeMove" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Massive" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
+        <EnergyStart value="50"/>
+        <EnergyMax value="200"/>
+        <EnergyRegenRate value="0.5625"/>
+        <Speed value="1.875"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <TurningRate value="360"/>
+        <Sight value="11"/>
+        <Food value="-6"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="300"/>
+        <CostResource index="Vespene" value="200"/>
+        <RepairTime value="60"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="160"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_250mmStrikeCannons"/>
+        <AbilArray Link="AP_ThorWreckage"/>
+        <AbilArray Link="AP_330mmBarrageCannons"/>
+        <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
+        <BehaviorArray Link="AP_ThorDontDie"/>
+        <WeaponArray Link="AP_JavelinMissileLaunchers"/>
+        <WeaponArray Link="AP_ThorsHammer"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AP_250mmStrikeCannons" Type="AbilCmd" AbilCmd="AP_250mmStrikeCannons,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_330mmBarrageCannons" Type="AbilCmd" AbilCmd="AP_330mmBarrageCannons,0" Row="2" Column="0"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_250mmStrikeCannons,1" Row="2" Column="4"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_330mmBarrageCannons,1" Row="2" Column="4"/>
+            <LayoutButtons>
+                <Face value="AP_ImmortalityProtocol"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255"/>
+                <Requirements value="AP_UseImmortailityProtocol"/>
+                <Row value="1"/>
+                <Column value="0"/>
+            </LayoutButtons>
+        </CardLayouts>
+        <Radius value="1.375"/>
+        <SeparationRadius value="1"/>
+        <InnerRadius value="0.8125"/>
+        <CargoSize value="8"/>
+        <ScoreMake value="500"/>
+        <ScoreKill value="500"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="10"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAIThink value="AIThinkThor"/>
+        <SelectAlias value="Thor"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="140"/>
+        <GlossaryStrongArray value="Mutalisk"/>
+        <GlossaryStrongArray value="Stalker"/>
+        <GlossaryStrongArray value="Marine"/>
+        <GlossaryWeakArray value="Zergling"/>
+        <GlossaryWeakArray value="Immortal"/>
+        <GlossaryWeakArray value="Marauder"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+        <Fidget>
+            <ChanceArray index="Anim" value="10"/>
+            <ChanceArray index="Idle" value="90"/>
+        </Fidget>
+        <TauntDuration index="Cheer" value="5"/>
+        <TauntDuration index="Dance" value="5"/>
+    </CUnit>
+    <CUnit id="AP_ThorAAWeapon" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="ThorAA"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="AP_ThorWreckage">
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="Thor"/>
+        <Facing value="135"/>
+        <Race value="Terr"/>
+        <FlagArray index="Movable" value="0"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Massive" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
+        <Speed value="1.875"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <TurningRate value="360"/>
+        <Sight value="11"/>
+        <Food value="-6"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="300"/>
+        <RepairTime value="60"/>
+        <AttackTargetPriority value="18"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="160"/>
+        <AbilArray Link="AP_ThorReborn"/>
+        <WeaponArray Link="AP_JavelinMissileLaunchers"/>
+        <WeaponArray Link="AP_ThorsHammer"/>
+        <CardLayouts>
+            <LayoutButtons Face="AP_ImmortalityProtocol" Type="AbilCmd" AbilCmd="AP_ThorReborn,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_250mmStrikeCannons,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1.375"/>
+        <SeparationRadius value="1"/>
+        <InnerRadius value="0.8125"/>
+        <CargoSize value="8"/>
+        <ScoreMake value="500"/>
+        <ScoreKill value="500"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAIThink value="AIThinkThor"/>
+        <HotkeyAlias value="Thor"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+        <Fidget>
+            <ChanceArray index="Anim" value="10"/>
+            <ChanceArray index="Idle" value="90"/>
+        </Fidget>
+        <TauntDuration index="Cheer" value="5"/>
+        <TauntDuration index="Dance" value="5"/>
+        <ReviveInfoBase>
+            <Charge Link="Thor/Revive"/>
+            <Cooldown Link="Thor/Revive"/>
+        </ReviveInfoBase>
+    </CUnit>
 </Catalog>

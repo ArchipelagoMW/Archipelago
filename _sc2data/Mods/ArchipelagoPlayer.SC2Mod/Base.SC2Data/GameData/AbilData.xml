@@ -1,5 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CAbilEffectTarget id="AP_250mmStrikeCannons">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Effect index="0" value="AP_250mmStrikeCannonsCreatePersistent"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+        </Cost>
+        <TargetFilters value="Ground,Visible;Self,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="7"/>
+        <RangeSlop value="4"/>
+        <CastIntroTime value="2"/>
+        <FinishTime value="2"/>
+        <CancelableArray index="Prep" value="1"/>
+        <CancelableArray index="Cast" value="1"/>
+        <CancelableArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_250mmStrikeCannons" Requirements="AP_Hide250mmStrikeCannons"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_330mmBarrageCannons">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Effect index="0" value="AP_330mmBarrageCannonsPersistent"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+        </Cost>
+        <TargetFilters value="Ground,Visible;Self,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="7"/>
+        <CastIntroTime value="2"/>
+        <FinishTime value="2"/>
+        <CancelableArray index="Prep" value="1"/>
+        <CancelableArray index="Cast" value="1"/>
+        <CancelableArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CursorEffect value="AP_330mmBarrageCannonsDamage"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_330mmBarrageCannons" Requirements="AP_Use330mmBarrageCannons"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
     <CAbilEffectInstant id="AP_Stimpack">
         <AbilSetId value="Stimpack"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -608,4 +652,48 @@
         <AINotifyEffect value="AP_UltrasonicPulseLaunchMissile"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_UltrasonicPulse"/>
     </CAbilEffectTarget>
+    <CAbilMorph id="AP_ThorReborn">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Thor"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <RefundFraction>
+            <Resource index="Minerals" value="0"/>
+            <Resource index="Vespene" value="0"/>
+            <Resource index="Terrazine" value="0"/>
+            <Resource index="Custom" value="0"/>
+        </RefundFraction>
+        <InfoArray Score="1" Unit="AP_Thor">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="12"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="12"/>
+            </SectionArray>
+            <SectionArray index="Collide">
+                <DurationArray index="Delay" value="12"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="12"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="RebornComplete"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_ThorWreckage">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Thor"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="AP_ThorWreckage">
+            <SectionArray index="Stats">
+                <EffectArray index="Finish" value="PostMorphHeal"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
 </Catalog>
