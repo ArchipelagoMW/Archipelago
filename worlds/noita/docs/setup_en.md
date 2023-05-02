@@ -53,5 +53,5 @@ To use it, download the pack as well as [PopTracker](https://github.com/black-sl
 Place the unzipped pack in the `packs` folder. Then, open Poptracker and open the pack.
 Click on the "AP" symbol at the top, then enter the desired address, slot name, and password.
 
-And that's all you need for it. It will provide you with a quick reference to see what checks you've done and
+That's all you need for it. It will provide you with a quick reference to see which checks you've done and
 which checks you still have left.
