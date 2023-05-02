@@ -17,7 +17,7 @@ default_levels = {
 
 first_stage_blacklist = {
     0x77000B,  # 2-5 needs Kine
-    0x770012,  # 3-5 needs Cutter
+    0x770011,  # 3-5 needs Cutter
     0x77001C,  # 5-4 needs Burning
 }
 
