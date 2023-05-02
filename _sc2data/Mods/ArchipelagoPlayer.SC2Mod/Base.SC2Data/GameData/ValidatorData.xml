@@ -316,4 +316,15 @@
     <CValidatorLocationEnumArea id="AP_TacticalGhostCloakThreatSearchEmpty" parent="TacticalCloakThreatSearchEmpty" unitLink="AP_Ghost"/>
     <CValidatorCombine id="AP_TacticalGhostSharedOn" parent="TacticalCloakSharedOn" unitLink="AP_Ghost"/>
     <CValidatorUnitCompareAttackPriority id="AP_UnitThreatensGhost" parent="UnitThreatens" unitLink="AP_Ghost"/>
+    <CValidatorCombine id="AP_SpectreLockdown">
+        <ResultFailed value="CantLockdown"/>
+        <Type value="And"/>
+        <CombineArray value="LockdownTargetFilters"/>
+        <CombineArray value="NotMothership"/>
+        <CombineArray value="NotTrain"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_SpectrePermanentCloakNotPurchased">
+        <Find value="1"/>
+        <Value value="AP_SpectrePermanentCloak"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

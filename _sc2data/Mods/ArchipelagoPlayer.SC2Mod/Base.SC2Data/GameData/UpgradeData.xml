@@ -525,4 +525,27 @@
         <AffectedUnitArray value="AP_Ghost"/>
         <LeaderAlias value=""/>
     </CUpgrade>
+    <CUpgrade id="AP_ImpalerRounds">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Effect,AP_SpecterU,AttributeBonus[1]" Value="5.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_PermanentCloakSpectre">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_RogueGhostCloak,Cost[0].Vital[Energy]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_RogueGhostCloak,BehaviorArray[0]" Value="AP_SpectreCloakingFree"/>
+        <EffectArray Operation="Set" Reference="Button,AP_CloakOnSpectre,Tooltip" Value="Button/Tooltip/AP_CloakOnSpectreFree"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SpectreTooltipUpgrade">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Button,AP_GhostAcademy,Tooltip" Value="Button/Tooltip/AP_GhostAcademySpectre"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_GhostAcademy,Description" Value="Button/Tooltip/AP_GhostAcademySpectre"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_UltrasonicPulse">
+        <!-- Actually is Psionic Lash upgrade -->
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

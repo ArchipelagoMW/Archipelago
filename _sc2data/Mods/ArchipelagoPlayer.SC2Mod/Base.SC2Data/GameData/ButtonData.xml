@@ -264,4 +264,75 @@
         <HotkeySet value="HoldFire"/>
         <HidesForSimpleText value="0"/>
     </CButton>
+    <CButton id="AP_CloakOnSpectre">
+        <Icon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="CloakOnBanshee"/>
+        <HotkeySet value="Cloak"/>
+    </CButton>
+    <CButton id="AP_NyxClassCloakingModule">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-nyxcloakingclassmodule.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_Obliterate">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-psioniclash.dds"/>
+        <AlertIcon value="Assets\Textures\btn-techupgrade-terran-psioniclash.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_PermanentlyCloakedSpectre">
+        <Icon value="Assets\Textures\BTN-Ability-Terran-Cloak-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_SpecterPsiRound">
+        <Icon value="Assets\Textures\btn-ability-terran-snipe-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-snipe-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Spectre">
+        <Icon value="Assets\Textures\btn-unit-terran-spectre.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-spectre.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_SpectreConsumption">
+        <Icon value="Assets\Textures\btn-ability-zerg-plague.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_SpectreHoldFire">
+        <Icon value="Assets\Textures\BTN-Ability-Terran-HoldFire.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Terran-HoldFire.dds"/>
+        <TintRacially value="1"/>
+        <HotkeySet value="HoldFire"/>
+        <HidesForSimpleText value="0"/>
+    </CButton>
+    <CButton id="AP_SpectreMindSplatter">
+        <Icon value="Assets\Textures\btn-ability-zerg-explode-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_SpectreNukeCalldown">
+        <Icon value="Assets\Textures\btn-ability-terran-nuclearstrike-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-nuclearstrike-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HidesForSimpleText value="0"/>
+    </CButton>
+    <CButton id="AP_SpectreShadowClones">
+        <Icon value="Assets\Textures\btn-ability-zerg-disguise.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_SpectreWeaponsFree">
+        <Icon value="Assets\Textures\btn-ability-terran-weaponsfree.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-weaponsfree.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+        <HotkeySet value="HoldFire"/>
+        <HidesForSimpleText value="0"/>
+    </CButton>
+    <CButton id="AP_UltrasonicPulse">
+        <Icon value="AP\Assets\Textures\btn-ability-terran-ultrasonicpulse.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
 </Catalog>

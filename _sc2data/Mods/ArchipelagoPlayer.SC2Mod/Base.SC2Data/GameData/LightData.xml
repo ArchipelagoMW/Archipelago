@@ -97,4 +97,17 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
     </CLight>
+    <CLight id="AP_SpectrePortrait" parent="default">
+        <ToDInfoArray index="0" AmbientColor="0.094118,0.007843,0.101961">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.950000"/>
+            <Param index="HDREmisMultiplier" value="2.000000"/>
+            <Param index="CreepSpecularExp" value="40.000000"/>
+            <Param index="CreepHDRSpecMultiplier" value="5.900000"/>
+            <DirectionalLight index="Key" ColorMultiplier="0.733000" SpecColorMultiplier="0.891000" Direction="0.164375,0.708598,-0.686199"/>
+            <DirectionalLight index="Fill" Color="0.933333,0.850980,0.725490" ColorMultiplier="0.230000" Direction="-0.245834,0.968683,-0.034900"/>
+            <DirectionalLight index="Back" Color="0.047059,0.603922,0.933333" ColorMultiplier="1.799000" Direction="-0.414609,-0.901011,0.127584"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
+    </CLight>
 </Catalog>

@@ -317,4 +317,46 @@
         <Count Link="AP_OcularImplants" State="CompleteOnly"/>
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUpgrade>
+    <CRequirementAllowUnit id="AP_AllowUnitSpectre">
+        <Link value="AP_Spectre"/>
+    </CRequirementAllowUnit>
+    <CRequirementAnd id="AP_AndOr96167438CountUnitFactoryCompleteOnly96167438TechTreeCheatCountUnitFactoryFlyingCompleteOnly1718561093TechTreeCheatNot83801426CountUnitSpectreNukeQueuedOrBetterAtUnit">
+        <OperandArray value="AP_Or96167438CountUnitFactoryCompleteOnly96167438TechTreeCheatCountUnitFactoryFlyingCompleteOnly1718561093TechTreeCheat"/>
+        <OperandArray value="AP_Not83801426CountUnitSpectreNukeQueuedOrBetterAtUnit"/>
+    </CRequirementAnd>
+    <CRequirementCountBehavior id="AP_CountBehaviorSpectreHoldFireBCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SpectreHoldFireB" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementCountUnit id="AP_CountUnitSpectreNukeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value="RequirementNode/Tooltip/CountUnitSpectreNukeCompleteOnly2567665972"/>
+        <Count Link="AP_SpectreNuke" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitSpectreNukeQueuedOrBetterAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SpectreNuke" State="QueuedOrBetterAtUnit"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradePermanentCloakSpectreCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_PermanentCloakSpectre" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_Not83801426CountUnitSpectreNukeQueuedOrBetterAtUnit">
+        <Tooltip value="RequirementNode/Tooltip/Not3687802547CountUnitSpectreNukeQueuedOrBetterAtUnit"/>
+        <OperandArray index="0" value="AP_CountUnitSpectreNukeQueuedOrBetterAtUnit"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountBehaviorSpectreHoldFireBCompleteOnlyAtUnit">
+        <OperandArray index="0" value="AP_CountBehaviorSpectreHoldFireBCompleteOnlyAtUnit"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradePermanentCloakSpectreCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradePermanentCloakSpectreCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementOr id="AP_OrAllowUnitGhostAllowUnitSpectre">
+        <OperandArray value="AP_AllowUnitGhost"/>
+        <OperandArray value="AP_AllowUnitSpectre"/>
+    </CRequirementOr>
+    <CRequirementCountUpgrade id="AP_CountUpgradeUltrasonicPulseCompleteOnly">
+        <Count Link="AP_UltrasonicPulse" State="CompleteOnly"/> <!-- Actually is for Psionic Lash -->
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
 </Catalog>

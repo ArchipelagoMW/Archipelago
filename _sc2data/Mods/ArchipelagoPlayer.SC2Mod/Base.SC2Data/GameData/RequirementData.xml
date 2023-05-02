@@ -257,4 +257,41 @@
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeOcularImplantsCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_PermanentCloakSpectreResearched">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradePermanentCloakSpectreCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_PermanentCloakSpectreResearchedHide">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradePermanentCloakSpectreCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_SpectreHaveNuke">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitSpectreNukeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_SpectreHoldingFire">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountBehaviorSpectreHoldFireBCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_SpectreNotHoldingFire">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_NotCountBehaviorSpectreHoldFireBCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_SpectrePermanentCloak">
+        <NodeArray index="Use" Link="AP_CountUpgradePermanentCloakSpectreCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_SpectreTrainNuke">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_AndOr96167438CountUnitFactoryCompleteOnly96167438TechTreeCheatCountUnitFactoryFlyingCompleteOnly1718561093TechTreeCheatNot83801426CountUnitSpectreNukeQueuedOrBetterAtUnit"/>
+        <NodeArray index="Show" Link="AP_AllowUnitSpectre"/>
+    </CRequirement>
+    <CRequirement id="AP_UseSpectreNyxSuit">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradePermanentCloakSpectreCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseUltrasonicPulse">
+        <!-- Actually is for Psionic Lash -->
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeUltrasonicPulseCompleteOnly"/>
+    </CRequirement>
 </Catalog>

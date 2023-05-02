@@ -252,4 +252,29 @@
         <DamagePoint value="0.083"/>
         <Backswing value="1.167"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_Specter">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel0.dds"/>
+        <DisplayEffect value="AP_SpecterU"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Period value="2"/>
+        <DamagePoint value="0.083"/>
+        <Backswing value="1.167"/>
+        <Effect value="AP_SpecterU"/>
+        <RandomDelayMin value="-0.063"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_SpectreShadowClone">
+        <EditorCategories value="Race:Terran"/>
+        <Tip value="Weapon/Tip/Specter"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel0.dds"/>
+        <DisplayEffect value="ToshShadowCloneU"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <MinScanRange value="6"/>
+        <Period value="1.5"/>
+        <DamagePoint value="0.083"/>
+        <Backswing value="1.167"/>
+        <Effect value="ToshShadowCloneU"/>
+        <RandomDelayMin value="-0.063"/>
+    </CWeaponLegacy>
 </Catalog>

@@ -1603,6 +1603,7 @@
         <On Terms="Abil.AP_Yamato.SourcePrepStart" Send="Create"/>
         <On Terms="Abil.AP_Yamato.SourcePrepStop" Send="Destroy"/>
     </CActorSound>
+    <CActorRange id="AP_YamatoRange" parent="RangeAbil" abil="AP_Yamato"/>
     <CActorSplat id="AP_MissilePodsCursorSplat" parent="TerranCursorSplat" abil="AP_MissilePods"/>
     <CActorRange id="AP_MissilePodsRange" parent="RangeAbil" abil="AP_MissilePods"/>
     <CActorUnit id="AP_Ghost" parent="GenericUnitBase" unitName="AP_Ghost">
@@ -1750,7 +1751,6 @@
     <CActorAction id="AP_GhostEMPAttack" parent="GenericAttack" effectImpact="AP_EMPSearch" effectLaunch="AP_EMPLaunchMissile">
         <On Terms="Effect.EMPDamage.Start; At Caster" Send="ActionDamage"/>
         <LaunchAssets Sound="Ghost_EMPAttackLaunch"/>
-        <Missile value="AP_GhostEMPAttackMissile"/>
         <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow GhostEMPOffset"/>
         <ImpactMap index="None" Sound="Ghost_EMPAttackImpact"/>
     </CActorAction>
@@ -1830,13 +1830,12 @@
     <CActorAction id="AP_GhostSnipeAttack" parent="GenericAttack" effectAttack="AP_SnipeDamage">
         <LaunchSiteOps Ops="SOpAttachHarnessStationary"/>
         <LaunchAssets Model="GhostSnipeAttackLaunch" Sound="Ghost_SnipeLaunch"/>
-        <Beam value="AP_GhostSnipeAttackBeam"/>
         <ImpactMap index="None" Model="GhostSnipeAttackImpact" Sound="Ghost_SnipeImpact"/>
     </CActorAction>
     <CActorBeamSimple id="AP_GhostSnipeAttackBeam" parent="GenericAttackBeam">
         <Model value="GhostSnipeAttackBeam"/>
     </CActorBeamSimple>
-    <CActorRange id="AP_GhostSnipeRange" parent="RangeAbil" abil="Snipe"/>
+    <CActorRange id="AP_GhostSnipeRange" parent="RangeAbil" abil="AP_Snipe"/>
     <CActorSound id="AP_Ghost_CloakOff" parent="SoundOneShot">
         <Terms value="ValidateUnit NotCloakedAndNotDead"/>
         <On Terms="Behavior.AP_GhostCloak.Off" Send="Create"/>
@@ -1870,6 +1869,264 @@
     <CActorSound id="AP_Ghost_WeaponsFree_Sound" parent="SoundOneShot">
         <Sound value="Ghost_WeaponsFree"/>
     </CActorSound>
+    <CActorModel id="AP_MindBlastStun" parent="ModelAnimationStyleContinuous">
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="Behavior.AP_MindBlastStun.On" Send="Create"/>
+        <On Terms="Behavior.AP_UltrasonicPulseStun.On" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart $BSD"/>
+        <On Terms="Behavior.AP_MindBlastStun.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.AP_UltrasonicPulseStun.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+    </CActorModel>
+    <CActorModel id="AP_ObliterateExplosion" parent="ModelAnimationStyleOneShotNoOrphan">
+        <On Terms="Effect.AP_Obliterate.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <AutoScaleFactor value="0.500000"/>
+    </CActorModel>
+    <CActorSound id="AP_Obliterate_Impact" parent="SoundOneShot">
+        <On Terms="Effect.AP_Obliterate.Start" Send="Create"/>
+    </CActorSound>
+    <CActorRange id="AP_SpecterObliterateRange" parent="RangeAbil" abil="AP_Obliterate"/>
+    <CActorModel id="AP_ObliterateCasterChannel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Abil.AP_Obliterate.SourcePrepStart" Send="Create"/>
+        <On Terms="Abil.AP_Obliterate.SourcePrepStop" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+    </CActorModel>
+    <CActorSound id="AP_Obliterate_Charge" parent="SoundOneShot">
+        <On Terms="Abil.AP_Obliterate.SourcePrepStart" Send="Create"/>
+        <On Terms="Abil.AP_Obliterate.SourceCastStop" Send="Destroy"/>
+    </CActorSound>
+    <CActorSound id="AP_Obliterate_Launch" parent="SoundOneShot">
+        <On Terms="Abil.AP_Obliterate.SourceCastStart" Send="Create"/>
+    </CActorSound>
+    <CActorRange id="AP_SpecterPsiRoundRange" parent="RangeAbil" abil="AP_SpecterPsiRound"/>
+    <CActorAction id="AP_SpecterSnipeAttack" parent="GenericAttack" effectAttack="AP_SpecterPsiRoundDamage"/>
+    <CActorUnit id="AP_SpecterUnit" parent="GenericUnitStandard" unitName="AP_Spectre">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="Abil.AP_SpectreNuke.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
+        <On Terms="Abil.AP_SpectreNuke.SourceCastStop" Send="AnimClear SpellA"/>
+        <On Terms="Abil.AP_SpectreNuke.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
+        <On Terms="Abil.AP_SpectreNuke.SourceChannelStop" Send="AnimClear SpellB"/>
+        <On Terms="Abil.AP_SpectreNuke.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
+        <On Terms="Abil.AP_SpectreNuke.SourceFinishStop" Send="AnimClear SpellC"/>
+        <On Terms="Abil.AP_Obliterate.SourcePrepStart" Send="AnimPlay Charge Spell"/>
+        <On Terms="Abil.AP_Obliterate.SourcePrepStart" Send="AnimSetTimeScale Charge 0.150000"/>
+        <On Terms="Abil.AP_Obliterate.SourcePrepStop" Send="AnimClear Charge"/>
+        <On Terms="Abil.AP_UltrasonicPulse.SourceCastStart" Send="AnimPlay Attack Attack 0 0.000000"/>
+        <On Terms="Abil.AP_UltrasonicPulse.SourceCastStart" Send="AnimSetTimeScale Attack 2.500000"/>
+        <On Terms="Behavior.AP_SpectreHoldFireB.On" Send="AnimGroupApply Cover"/>
+        <On Terms="Behavior.AP_SpectreHoldFireB.On" Send="AnimPlay MorphStart Cover,Start"/>
+        <On Terms="Behavior.AP_SpectreHoldFireB.On" Send="AnimClear MorphEnd"/>
+        <On Terms="Behavior.AP_SpectreHoldFireB.Off" Send="AnimPlay MorphEnd Cover,End"/>
+        <On Terms="Behavior.AP_SpectreHoldFireB.Off" Send="AnimClear MorphStart"/>
+        <On Terms="Behavior.AP_SpectreHoldFireB.Off" Send="AnimGroupRemove Cover"/>
+        <On Terms="UnitPortrait.*.Configure; ValidateUnit AP_IsCloaked" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End Instant"/>
+        <On Terms="UnitPortrait.*.Configure; ValidateUnit NotCloaked" Target="::PortraitGameSelf" Send="AnimBracketStop Visor Instant"/>
+        <On Terms="Behavior.AP_SpectreCloaking.On" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
+        <On Terms="Behavior.AP_SpectreCloaking.Off" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
+        <On Terms="Behavior.AP_SpectreCloakingFree.On" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
+        <On Terms="Behavior.AP_SpectreCloakingFree.Off" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
+        <AnimBlendTime value="-0.800000"/>
+        <DeathArray index="Normal" ModelLink="AP_SpecterDeath" SoundLink="AP_Spectre_Explode"/>
+        <PortraitModel value="AP_SpectrePortrait"/>
+        <WalkAnimMoveSpeed value="3"/>
+        <BarOffset value="50"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Spectre.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-spectre.dds"/>
+        <HighlightTooltip value="Unit/Name/Spectre"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="AP_Spectre_Ready"/>
+        <SoundArray index="Help" value="AP_Spectre_Help"/>
+        <SoundArray index="What" value="AP_Spectre_What"/>
+        <SoundArray index="Yes" value="AP_Spectre_Yes"/>
+        <SoundArray index="Attack" value="AP_Spectre_Attack"/>
+        <SoundArray index="Pissed" value="AP_Spectre_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-spectre.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Spectre.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_SpecterUnitAttack" parent="GenericAttack" effectAttack="AP_SpecterU">
+        <LaunchAssets Model="AP_SpecterAttackLaunch" Sound="AP_Spectre_AttackLaunch"/>
+        <ContainerAssets Model="AP_SpecterAttackLaunch" Sound="AP_Spectre_AttackLaunch"/>
+        <ImpactMap index="None" Model="AP_SpecterAttackImpact" Sound="AP_Spectre_AttackImpact"/>
+    </CActorAction>
+    <CActorModel id="AP_SpectreConsumptionImpactModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="ActorCreation" Send="SetTintColor 255,0,0"/>
+        <On Terms="Effect.AP_SpectreConsumptionDamage.Start" Send="Create"/>
+        <Model value="AP_ConsumptionImpactModel"/>
+    </CActorModel>
+    <CActorSound id="AP_SpectreConsumptionImpactSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_SpectreConsumptionDamage.Start" Send="Create"/>
+        <Sound value="AP_Tosh_ConsumptionImpact"/>
+    </CActorSound>
+    <CActorModel id="AP_SpectreConsumptionLaunchModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="ActorCreation" Send="SetTintColor 255,0,150"/>
+        <On Terms="Effect.AP_SpectreConsumptionDamage.Start; At Caster" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="AP_ConsumptionLaunchModel"/>
+    </CActorModel>
+    <CActorRange id="AP_SpectreConsumptionRange" parent="RangeAbil" abil="AP_SpectreConsumption"/>
+    <CActorAction id="AP_SpectreLockdown" parent="GenericAttack" effectImpact="AP_SpectreLockdownB" effectLaunch="AP_SpectreLockdown">
+        <LaunchAssets Sound="AP_Spectre_EMPLaunch"/>
+        <Missile value="AP_SpectreLockdownMissile"/>
+        <ImpactMap index="None" Sound="AP_Spectre_EMPImpact"/>
+    </CActorAction>
+    <CActorModel id="AP_SpectreLockdownEffect" parent="ModelAddition">
+        <On Terms="Behavior.AP_SpectreLockdownB.On" Send="Create"/>
+        <On Terms="Behavior.AP_SpectreLockdownB.Off" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="AP_VoodooLockdownEffect"/>
+        <AutoScaleFactor value="0.700000"/>
+    </CActorModel>
+    <CActorMissile id="AP_SpectreLockdownMissile" parent="GenericAttackMissile" unitName="AP_SpectreLockdownWeapon"/>
+    <CActorModel id="AP_SpectreMindSplatterBuffModel" parent="ModelAddition">
+        <On Terms="ActorCreation" Send="SetTintColor 255,0,50"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="SetTintColor 255,175,250"/>
+        <On Terms="Behavior.AP_SpectreMindSplatter.On" Send="Create"/>
+        <On Terms="Behavior.AP_SpectreMindSplatter.Off" Send="Destroy"/>
+        <Host Subject="_Unit" Actor="Create"/>
+        <HostSiteOps Ops="SOpAttachHead"/>
+        <Model value="AP_MindSplatterBuff"/>
+    </CActorModel>
+    <CActorModel id="AP_SpectreMindSplatterCastModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="ActorCreation" Send="SetTintColor 255,0,50"/>
+        <On Terms="Abil.AP_SpectreMindSplatter.SourceCastStart" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachWeapon"/>
+        <Model value="AP_MindSplatterBuff"/>
+    </CActorModel>
+    <CActorModel id="AP_SpectreMindSplatterExplosion" parent="ModelAnimationStyleOneShot">
+        <On Terms="Behavior.AP_SpectreMindSplatter.Off" Send="Create"/>
+    </CActorModel>
+    <CActorRange id="AP_SpectreMindSplatterRange" parent="RangeAbil" abil="AP_SpectreMindSplatter"/>
+    <CActorUnit id="AP_SpectreNuke" parent="GenericUnitStandard" unitName="SpectreNuke">
+        <Model value="Invisible"/>
+        <HighlightTooltip value="Unit/Name/AP_SpectreNuke"/>
+        <SoundArray index="Ready" value="Alert_TerranNukeReady"/>
+    </CActorUnit>
+    <CActorModel id="AP_SpectreNukeCollateralFire">
+        <On Terms="Effect.AP_SpectreNukeDamage.Start; At Target" Send="Create"/>
+    </CActorModel>
+    <CActorSplat id="AP_SpectreNukeCursorSplat" parent="TerranCursorSplat" abil="SpectreNuke">
+        <Model value="AP_SpectreNukeCursorSplat"/>
+    </CActorSplat>
+    <CActorSquib id="AP_SpectreNukeDrop">
+        <On Terms="Effect.AP_SpectreNukeDetonate.Start" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPointStationary"/>
+        <Map index="None" Sound="AP_Spectre_NukeDrop"/>
+    </CActorSquib>
+    <CActorSquib id="AP_SpectreNukeExplode">
+        <On Terms="Effect.AP_SpectreNukeDamage.Start; At Effect" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPointStationary"/>
+        <Map index="None" Sound="AP_Spectre_NukeExplode"/>
+    </CActorSquib>
+    <CActorFoliageFXSpawner id="AP_SpectreNukeFoliageFXSpawner" parent="FoliageFXSpawnerFire">
+        <On Terms="Effect.AP_SpectreNukeDamage.Start" Send="Create"/>
+        <Radius value="5.000000"/>
+    </CActorFoliageFXSpawner>
+    <CActorModel id="AP_SpectreNukeIndicator" parent="ModelAnimationStyleOneShot">
+        <Filter index="Enemy" value="1"/>
+        <On Terms="Effect.AP_SpectreNukeP.Start" Send="Create"/>
+        <On Terms="Effect.AP_SpectreNukeP.Stop" Send="Destroy"/>
+    </CActorModel>
+    <CActorSquib id="AP_SpectreNukeLaunch">
+        <On Terms="Effect.AP_SpectreNukeP.Start" Send="Create"/>
+        <HostSiteOps Ops="SOpSourcePointSationary"/>
+        <Map index="None" Sound="AP_Spectre_NukeLaunch"/>
+    </CActorSquib>
+    <CActorRange id="AP_SpectreNukeRange" parent="RangeAbil" abil="AP_SpectreNuke"/>
+    <CActorSound id="AP_SpectreNukeSeek" parent="SoundContinuous">
+        <On Terms="Effect.AP_SpectreNukeP.Initial" Send="Create"/>
+        <On Terms="Effect.AP_SpectreNukeP.Stop; At Effect" Send="Destroy"/>
+        <Sound value="AP_Spectre_NukeSeek"/>
+    </CActorSound>
+    <CActorAction id="AP_SpectreNukeShieldHitter" parent="AoESplashShieldHitter" effectHit="AP_SpectreNukeDamage"/>
+    <CActorModel id="AP_SpectreNukeTarget" parent="ModelAnimationStyleOneShot">
+        <Filter index="Self" value="1"/>
+        <Filter index="Ally" value="1"/>
+        <On Terms="Effect.AP_SpectreNukeP.Start" Send="Create"/>
+        <On Terms="Effect.AP_SpectreNukeP.Stop" Send="AnimBracketStop BSD"/>
+    </CActorModel>
+    <CActorUnit id="AP_SpectreShadowClone" parent="GenericUnitStandard" unitName="SpectreShadowClone">
+        <On Terms="ActorCreation" Send="SetTintColor 0,50,255"/>
+        <On Terms="ActorCreation" Send="Create HallucinationBirth"/>
+        <On Terms="ActorCreation" Send="Create ToshShadowCloneBirth"/>
+        <Model value="SpecterUnit"/>
+        <DeathArray index="Normal" ModelLink="HallucinationDeath" SoundLink="Tosh_ShadowClonesDeath"/>
+        <PortraitModel value="SpectrePortrait"/>
+        <BarOffset value="40"/>
+        <BarWidth value="40"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-spectre.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Terran-spectre.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_SpectreShadowClone"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="AP_Spectre_Ready"/>
+        <SoundArray index="Help" value="AP_Spectre_Help"/>
+        <SoundArray index="What" value="AP_Spectre_What"/>
+        <SoundArray index="Yes" value="AP_Spectre_Yes"/>
+        <SoundArray index="Attack" value="AP_Spectre_Attack"/>
+        <SoundArray index="Pissed" value="AP_Spectre_Pissed"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Terran-spectre.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-spectre.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorRange id="AP_SpectreShadowClonesRange" parent="RangeAbil" abil="SpectreShadowClones"/>
+    <CActorSound id="AP_Spectre_CloakOff" parent="SoundOneShot">
+        <Terms value="ValidateUnit NotCloakedAndNotDead"/>
+        <On Terms="Behavior.AP_SpectreCloaking.Off" Send="Create"/>
+        <On Terms="Behavior.AP_SpectreCloakingFree.Off" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_Spectre_CloakOn" parent="SoundOneShot">
+        <Terms value="ValidateUnit NotCloaked"/>
+        <On Terms="Behavior.AP_SpectreCloaking.On" Send="Create"/>
+        <On Terms="Behavior.AP_SpectreCloakingFree.On" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_Spectre_Death" parent="SoundOneShot">
+        <On Terms="UnitDeath.AP_Spectre; PassChance 100.000000" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_Spectre_KillerPhantasmImpact" parent="SoundOneShot">
+        <On Terms="Behavior.AP_KillerPhantasm.Off" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_Spectre_KillerPhantasmLaunch" parent="SoundOneShot">
+        <On Terms="Behavior.AP_KillerPhantasm.On" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_UltraSonicPulseImpactSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_UltrasonicPulseSearchArea.Start" Send="Create"/>
+        <Sound value="AP_Spectre_UltrasonicPulseImpact"/>
+    </CActorSound>
+    <CActorSound id="AP_UltraSonicPulseLaunchSound">
+        <On Terms="Abil.AP_UltrasonicPulseEnhanced.SourceCastStart" Send="Create"/>
+    </CActorSound>
+    <CActorAction id="AP_UltrasonicPulseAttack" parent="GenericAttack" effectImpact="AP_UltrasonicPulseSearch" effectLaunch="AP_UltrasonicPulseLaunchMissile">
+        <On Terms="Effect.AP_UltrasonicPulseStun.Start; At Caster" Send="ActionDamage"/>
+        <LaunchAssets Sound="AP_Spectre_UltrasonicPulseLaunch"/>
+        <Missile value="AP_UltrasonicPulseAttackMissile"/>
+        <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow AP_UltrasonicPulseOffset"/>
+        <ImpactMap index="None" Sound="AP_UltraSonicPulseImpactSound"/>
+    </CActorAction>
+    <CActorSiteOpLocalOffset id="AP_UltrasonicPulseOffset"/>
+    <CActorModel id="AP_UltrasonicPulseAttackImpactEffect" parent="ModelAnimationStyleOneShot">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_UltrasonicPulseSearchArea.Start" Send="Create"/>
+        <Model value="AP_UltrasonicPulseAttackImpactEffect"/>
+    </CActorModel>
+    <CActorMissile id="AP_UltrasonicPulseAttackMissile" parent="GenericAttackMissile" unitName="AP_UltrasonicPulseWeapon">
+        <Model value="AP_UltrasonicPulseWeapon"/>
+    </CActorMissile>
+    <CActorSplat id="AP_UltrasonicPulseCursorSplat" parent="TerranCursorSplat" abil="AP_UltrasonicPulse"/>
+    <CActorRange id="AP_UltrasonicPulseRange" parent="RangeAbil" abil="AP_UltrasonicPulse"/>
     <CActorEventMacro id="UnloadDropAnim">
         <!-- Override -->
         <!-- Add AP_Medivac to common transport load/unload animations -->

@@ -526,4 +526,86 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
+    <CAbilEffectTarget id="AP_Obliterate">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Cost>
+            <Vital index="Energy" value="150"/>
+            <Charge Link=""/>
+            <Cooldown Link=""/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Missile,Stasis,Dead,Invulnerable"/>
+        <Range value="8"/>
+        <RangeSlop value="8"/>
+        <PrepTime value="3"/>
+        <ShowProgressArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <AINotifyEffect value=""/>
+        <ProgressButtonArray index="Prep" value="AP_Obliterate"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_Obliterate" State="Restricted" Requirements="AP_UseUltrasonicPulse">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilBehavior id="AP_RogueGhostCloak">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="AP_CloakOnSpectre">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="CloakOff">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+        </Cost>
+        <BehaviorArray value="AP_SpectreCloaking"/>
+    </CAbilBehavior>
+    <CAbilEffectInstant id="AP_SpectreHoldFire">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_SpectreHoldFireSet"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SpectreHoldFire" Requirements="AP_SpectreNotHoldingFire">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_SpectreWeaponsFree">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_Spectre_WeaponsFree" Requirements="AP_SpectreHoldingFire">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="AP_SpectreNuke">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Range value="12"/>
+        <FinishTime value="2.5"/>
+        <CancelableArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <ValidatedArray index="Channel" value="0"/>
+        <AlertArray index="Cast" value="CalldownLaunch"/>
+        <CursorEffect value="AP_SpectreNukeDamage"/>
+        <CalldownEffect value="AP_SpectreNuke"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SpectreNukeCalldown" Requirements="AP_HaveNuke"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_UltrasonicPulse">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_UltrasonicPulseLaunchMissile"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Charge Link="Abil/PsiStorm"/>
+            <Cooldown Link="Abil/PsiStorm" TimeUse="2.5"/>
+        </Cost>
+        <Range value="9"/>
+        <PrepTime value="0.01"/>
+        <FinishTime value="2.5"/>
+        <CursorEffect value="AP_UltrasonicPulseSearchArea"/>
+        <AINotifyEffect value="AP_UltrasonicPulseLaunchMissile"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_UltrasonicPulse"/>
+    </CAbilEffectTarget>
 </Catalog>

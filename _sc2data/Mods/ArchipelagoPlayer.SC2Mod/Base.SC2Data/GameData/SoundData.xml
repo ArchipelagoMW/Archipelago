@@ -860,4 +860,256 @@
         <AssetArray File="Assets\Sounds\Terran\Banshee\Banshee_AttackImpact1.wav"/>
         <AssetArray File="Assets\Sounds\Terran\Banshee\Banshee_AttackImpact2.wav"/>
     </CSound>
+    <CSound id="AP_Obliterate_Charge" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Zerg\Hybrid\HybridMaar_PlasmaBlastBuildUp0.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Hybrid\HybridMaar_PlasmaBlastBuildUp1.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Hybrid\HybridMaar_PlasmaBlastBuildUp2.wav"/>
+        <DupeDestroyCount value="3"/>
+        <Pitch value="-2.000000,-2.000000"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Obliterate_Launch" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Zerg\Hybrid\HybridMaar_PlasmaBlastLaunch0.wav" Offset="5000,5000"/>
+        <AssetArray File="Assets\Sounds\Zerg\Hybrid\HybridMaar_PlasmaBlastLaunch1.wav" Offset="5000,5000"/>
+        <AssetArray File="Assets\Sounds\Zerg\Hybrid\HybridMaar_PlasmaBlastLaunch2.wav" Offset="5000,5000"/>
+        <DupeDestroyCount value="3"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="100"/>
+        <Pitch value="2.000000,2.000000"/>
+    </CSound>
+    <CSound id="AP_Obliterate_Impact" parent="HighTemplar_PsionicStormImpact">
+        <Pitch value="-6.000000,-6.000000"/>
+        <Volume value="-4.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_Attack" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Attack00.ogg" FacialAnim="Spectre_Attack00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Attack01.ogg" FacialAnim="Spectre_Attack01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Attack02.ogg" FacialAnim="Spectre_Attack02"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Attack03.ogg" FacialAnim="Spectre_Attack03"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Attack04.ogg" FacialAnim="Spectre_Attack04"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Attack05.ogg" FacialAnim="Spectre_Attack05"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Attack06.ogg" FacialAnim="Spectre_Attack06"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_AttackImpact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_SingleBulletAttackImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_SingleBulletAttackImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_SingleBulletAttackImpact2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_SingleBulletAttackImpact3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_SingleBulletAttackImpact4.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_SingleBulletAttackImpact5.wav"/>
+        <Pitch value="-1.500000,1.500000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_AttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_AttackLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_AttackLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_AttackLaunch2.wav"/>
+        <DupeMaximumMethod value="Replace"/>
+        <Pitch value="-0.890000,0.840000"/>
+        <Volume value="-12.000000,-10.500000"/>
+    </CSound>
+    <CSound id="AP_Spectre_Attack_NP" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_NeuralParasiteAttack00.ogg" FacialAnim="Spectre_NeuralParasiteAttack00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_NeuralParasiteAttack01.ogg" FacialAnim="Spectre_NeuralParasiteAttack01"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_CloakOff" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Abilities\Terran_CloakOff.wav"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_CloakOn" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Abilities\Terran_CloakOn.wav"/>
+        <DupeDestroyCount value="3"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_CloakVO" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Cloak00.ogg" FacialAnim="Spectre_Cloak00"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_Death" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Death00.wav"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Death01.wav"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Death02.wav"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Death03.wav"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Death04.wav"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Death05.wav"/>
+        <Flags index="Stream" value="0"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_Death_NP" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_NeuralParasiteDeath00.wav" FacialAnim="Spectre_NeuralParasiteDeath00"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_EMPImpact" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_EMPAttackImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_EMPAttackImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_EMPAttackImpact2.wav"/>
+        <Volume value="-5.490000,-5.490000"/>
+    </CSound>
+    <CSound id="AP_Spectre_EMPLaunch" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_EMPAttackLaunch.wav"/>
+        <DupeMaximumMethod value="Replace"/>
+        <Volume value="-6.860000,-6.860000"/>
+    </CSound>
+    <CSound id="AP_Spectre_EMPVO" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_EMP00.ogg" FacialAnim="Spectre_EMP00"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_EnergyLowVO" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_EnergyLow00.ogg" FacialAnim="Spectre_EnergyLow00"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_EnterBunkerVO" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_EntBunk00.ogg"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_Evac" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Evac00.ogg" FacialAnim="Spectre_Evac00"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_ExitBunkerVO" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_ExitBunk00.ogg"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_Explode" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall0.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall1.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall2.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall3.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall4.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall5.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall6.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <Flags index="Ignorable" value="0"/>
+        <Flags index="Purgable" value="1"/>
+        <Category value="Combat"/>
+    </CSound>
+    <CSound id="AP_Spectre_Help" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Help00.ogg" FacialAnim="Spectre_Help00"/>
+        <Category value="Alert"/>
+        <Mode value="2D"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_KillerPhantasmDeath" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Protoss\Sentry\Sentry_HallucinationDeathSmall.wav"/>
+    </CSound>
+    <CSound id="AP_Spectre_KillerPhantasmLaunch" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Protoss\Sentry\Sentry_HallucinationLaunchSmall.wav"/>
+    </CSound>
+    <CSound id="AP_Spectre_NuclearStrikeVO" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_NuclearStrike00.ogg" FacialAnim="Spectre_NuclearStrike00"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_NukeDrop" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_NuclearStrikeDrop0.wav"/>
+        <DupeMaximumMethod value="Replace"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="1000"/>
+        <Pitch value="-6.180000,-6.180000"/>
+        <Volume value="-3.100000,-3.100000"/>
+    </CSound>
+    <CSound id="AP_Spectre_NukeExplode" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_NuclearStrikeImpact0.wav"/>
+        <DupeMaximumMethod value="Replace"/>
+        <Spread value="180.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_NukeLaunch" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_NuclearStrikeLaunch0.wav"/>
+        <DupeDestroyCount value="4"/>
+        <DupeMaximumMethod value="Replace"/>
+        <VolumeRolloffPoints Distance="250.000000"/>
+        <VolumeRolloffPoints Distance="10000.000000" Volume="-96.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_NukeSeek" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_NuclearStrikeSeek0.wav"/>
+        <DupeDestroyCount value="4"/>
+        <DupeMaximumMethod value="Replace"/>
+        <LoopCount value="-1"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="4201" Volume="-12.270000"/>
+        <OffsetFadeIn Time="6457" Volume="-6.330000"/>
+        <OffsetFadeIn Time="7740" Volume="-1.880000"/>
+        <OffsetFadeIn Time="8000"/>
+        <SustainFade index="1" Time="2000"/>
+    </CSound>
+    <CSound id="AP_Spectre_Pissed" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Pissed00.ogg" FacialAnim="Spectre_Pissed00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Pissed01.ogg" FacialAnim="Spectre_Pissed01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Pissed02.ogg" FacialAnim="Spectre_Pissed02"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Pissed03.ogg" FacialAnim="Spectre_Pissed03"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Pissed04.ogg" FacialAnim="Spectre_Pissed04"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Pissed05.ogg" FacialAnim="Spectre_Pissed05"/>
+        <Select value="Sequential"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_Ready" parent="Ready">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Ready00.ogg" FacialAnim="Spectre_Ready00"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_Ready_NP" parent="Ready">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_NeuralParasiteReady00.ogg" FacialAnim="Spectre_NeuralParasiteReady00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_NeuralParasiteReady01.ogg" FacialAnim="Spectre_NeuralParasiteReady01"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_UltrasonicPulseImpact" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Spectre\Spectre_UltraSonicPulseImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Spectre\Spectre_UltraSonicPulseImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Spectre\Spectre_UltraSonicPulseImpact2.wav"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_UltrasonicPulseLaunch" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Spectre\Spectre_UltraSonicPulseLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Spectre\Spectre_UltraSonicPulseLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Spectre\Spectre_UltraSonicPulseLaunch2.wav"/>
+        <DupeMaximumMethod value="Replace"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-9.000000,-9.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_What" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_What00.ogg" FacialAnim="Spectre_What00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_What01.ogg" FacialAnim="Spectre_What01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_What02.ogg" FacialAnim="Spectre_What02"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_What03.ogg" FacialAnim="Spectre_What03"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_What04.ogg" FacialAnim="Spectre_What04"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_What05.ogg" FacialAnim="Spectre_What05"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_What_NP" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_NeuralParasiteWhat00.ogg" PortraitModel="SpectrePortrait" Speaker="ConversationState/Characters/CharSpectre"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_NeuralParasiteWhat01.ogg"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spectre_Yes" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Yes00.ogg" FacialAnim="Spectre_Yes00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Yes01.ogg" FacialAnim="Spectre_Yes01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Yes02.ogg" FacialAnim="Spectre_Yes02"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Yes03.ogg" FacialAnim="Spectre_Yes03"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Yes04.ogg" FacialAnim="Spectre_Yes04"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Spectre\Spectre_Yes05.ogg" FacialAnim="Spectre_Yes05"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Tosh_ConsumptionImpact" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Tosh\Tosh_ConsumptionImpact0.wav"/>
+    </CSound>
 </Catalog>

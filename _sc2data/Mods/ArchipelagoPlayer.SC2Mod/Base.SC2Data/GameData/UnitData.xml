@@ -1773,4 +1773,93 @@
             <Cooldown Link="Ghost/Revive"/>
         </ReviveInfoBase>
     </CUnit>
+    <CUnit id="AP_Spectre">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Campaign"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <Attributes index="Psionic" value="1"/>
+        <LifeStart value="80"/>
+        <LifeMax value="80"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranInfantryArmor"/>
+        <EnergyStart value="50"/>
+        <EnergyMax value="200"/>
+        <EnergyRegenRate value="0.5625"/>
+        <Speed value="2.75"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="11"/>
+        <Food value="-2"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="150"/>
+        <CostResource index="Vespene" value="150"/>
+        <RepairTime value="41.667"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="30"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="AP_RogueGhostCloak"/>
+        <AbilArray Link="AP_SpectreNuke"/>
+        <AbilArray Link="AP_UltrasonicPulse"/>
+        <AbilArray Link="AP_Obliterate"/>
+        <AbilArray Link="AP_SpectreHoldFire"/>
+        <AbilArray Link="AP_SpectreWeaponsFree"/>
+        <AbilArray Link="AP_TacNukeStrike"/>
+        <WeaponArray Link="AP_Specter"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AP_CloakOnSpectre" Type="AbilCmd" AbilCmd="AP_RogueGhostCloak,0" Row="2" Column="2"/>
+            <LayoutButtons Face="CloakOff" Type="AbilCmd" AbilCmd="AP_RogueGhostCloak,1" Row="2" Column="2"/>
+            <LayoutButtons Face="AttackGhost" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_SpectreNuke,1" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_SpectreHoldFire" Type="AbilCmd" AbilCmd="AP_SpectreHoldFire,0" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_SpectreWeaponsFree" Type="AbilCmd" AbilCmd="AP_SpectreWeaponsFree,Execute" Row="1" Column="3"/>
+            <LayoutButtons>
+                <Face value="AP_NyxClassCloakingModule"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255,255"/>
+                <Requirements value="AP_UseSpectreNyxSuit"/>
+                <Row value="1"/>
+                <Column value="1"/>
+            </LayoutButtons>
+            <LayoutButtons Face="AP_UltrasonicPulse" Type="AbilCmd" AbilCmd="AP_UltrasonicPulse,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_SpectreNukeCalldown" Type="AbilCmd" AbilCmd="AP_TacNukeStrike,Execute" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_Obliterate" Type="AbilCmd" AbilCmd="AP_Obliterate,0" Row="2" Column="1"/>
+        </CardLayouts>
+        <Radius value="0.375"/>
+        <SeparationRadius value="0.375"/>
+        <CargoSize value="2"/>
+        <ScoreMake value="500"/>
+        <ScoreKill value="1000"/>
+        <SubgroupPriority value="25"/>
+        <MinimapRadius value="0.375"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAI value="SpecterUnit"/>
+        <TacticalAIThink value="AIThinkGhost"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="70"/>
+        <HotkeyCategory value="Unit/Category/TerranStory"/>
+        <Fidget>
+            <ChanceArray index="Anim" value="33"/>
+            <ChanceArray index="Idle" value="33"/>
+            <ChanceArray index="Turn" value="33"/>
+        </Fidget>
+    </CUnit>
+    <CUnit id="AP_UltrasonicPulseWeapon" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
 </Catalog>

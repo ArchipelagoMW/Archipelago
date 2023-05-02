@@ -213,4 +213,15 @@
         </MotionPhases>
         <MotionPhases YawPitchRoll="MAX"/>
     </CMoverMissile>
+    <CMoverMissile id="AP_UltrasonicPulseWeapon">
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="3200"/>
+            <MaxSpeed value="30"/>
+            <ClearanceAcceleration value="75"/>
+            <Outro value="-1"/>
+            <YawPitchRoll value="719.2968"/>
+        </MotionPhases>
+        <MotionPhases YawPitchRoll="MAX"/>
+    </CMoverMissile>
 </Catalog>

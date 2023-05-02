@@ -437,4 +437,116 @@
         <Model value="Assets\Effects\Terran\MissilePodMissile\MissilePodMissile.m3"/>
         <EditorCategories value="Race:Terran"/>
     </CModel>
+    <CModel id="AP_MindBlastStun" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Zerg\UnitStunImpact\UnitStunImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_ObliterateExplosion" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\PsionicLashImpact\PsionicLashImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SpecterAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\GhostWeaponImpact\GhostWeaponImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SpecterAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\GhostWeaponLaunch\GhostWeaponLaunch.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SpecterDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Terran\SpectreDeath\SpectreDeath.m3"/>
+        <LowQualityModel value="TerranBloodDeathLow"/>
+        <EditorCategories value="Race:Terran"/>
+        <Lighting value=""/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_Spectre" parent="Unit">
+        <Model value="Assets\Units\Terran\Spectre\Spectre.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="AutoUnload" value="1"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid04"/>
+        <Radius value="0.375000"/>
+        <SelectionRadius value="0.375000"/>
+        <ShadowRadius value="0.375000"/>
+        <SquibTypeDefault value="Flesh"/>
+        <TechPurchaseCamera value="TechPurchaseInfantry"/>
+        <UnitGlossaryCamera value="Star2CameraMid04"/>
+    </CModel>
+    <CModel id="AP_SpectreNukeCollateralFire" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\FirebatHitSprite\FirebatHitSprite.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SpectreNukeCursorSplat" parent="UI">
+        <Model value="Assets\UI\Cursors\NukeCursor1\NukeCursor1.m3"/>
+        <ScaleMax value="0.200000,0.200000,0.200000"/>
+        <ScaleMin value="0.200000,0.200000,0.200000"/>
+        <SelectionRadius value="2.500000"/>
+        <ShadowRadius value="2.500000"/>
+    </CModel>
+    <CModel id="AP_SpectreNukeDrop" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\NukeFalling\NukeFalling.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SpectreNukeExplode" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\Nuke\Nuke.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SpectreNukeIndicator" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\GhostLaseTargetTactical\GhostLaseTargetTactical.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SpectreNukeLaunch" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\NukeRising\NukeRising.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SpectreNukeTarget" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\GhostLaseTarget\GhostLaseTarget.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SpectrePortrait" parent="Portrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\SpectrePortrait\SpectrePortrait.m3"/>
+        <Flags index="Download" value="1"/>
+        <Image value="Assets\Textures\SpectrePortrait_Static.dds"/>
+        <Lighting value="AP_SpectrePortrait"/>
+    </CModel>
+    <CModel id="AP_ConsumptionImpactModel" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\EnergyTransferImpact\EnergyTransferImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Lighting value="ConsumptionModel"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionRadius value="0.625000"/>
+        <ShadowRadius value="0.625000"/>
+    </CModel>
+    <CModel id="AP_ConsumptionLaunchModel" parent="LaunchFX">
+        <Model value="Assets\Effects\Protoss\EnergyTransferLaunch\EnergyTransferLaunch.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.500000,0.500000,0.500000"/>
+        <ScaleMin value="0.500000,0.500000,0.500000"/>
+        <SelectionRadius value="1.000000"/>
+        <ShadowRadius value="1.000000"/>
+    </CModel>
+    <CModel id="AP_VoodooLockdownEffect" parent="PersistentSpellFX">
+        <EditorCategories value="Race:Terran"/>
+        <Model value="Assets\Effects\Terran\LockDown\LockDown.m3"/>
+    </CModel>
+    <CModel id="AP_MindSplatterBuff" parent="BuffFX">
+        <Model value="Assets\Effects\Terran\DiamondbackZapBuff\DiamondbackZapBuff.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_UltrasonicPulseAttackImpactEffect" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\UltraSonicMissileImpact\UltraSonicMissileImpact.m3"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_UltrasonicPulseWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\UltraSonicMissile\UltraSonicMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_ObliterateCasterChannel" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\PsionicLashCasterLaunch\PsionicLashCasterLaunch.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
 </Catalog>
