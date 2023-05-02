@@ -110,6 +110,29 @@
     <CValidatorUnitType id="AP_IsAPBanshee">
         <Value value="AP_Banshee"/>
     </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_GhostHoldingFire">
+        <Compare value="GT"/>
+        <Behavior value="AP_GhostHoldFire"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_GhostNotHoldingFire">
+        <Behavior value="AP_GhostHoldFire"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_GhostPermanentCloakNotPurchased">
+        <Find value="1"/>
+        <Value value="AP_GhostPermanentCloak"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveGhostAlternate">
+        <Find value="1"/>
+        <Value value="AP_HaveGhostAlternate"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_HaveGhostAlternateorGhostJunker">
+        <CombineArray value="AP_HaveGhostAlternate"/>
+        <CombineArray value="AP_HaveGhostJunker"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveGhostJunker">
+        <Find value="1"/>
+        <Value value="AP_HaveGhostJunker"/>
+    </CValidatorPlayerRequirement>
     <CValidatorCombine id="IsBanshee" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaBanshee"/>
@@ -181,6 +204,9 @@
         <CombineArray value="AP_IsVanillaVikingFighter"/>
         <CombineArray value="AP_IsAPVikingAssault"/>
     </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_LockdownTargetFilters">
+        <Filters value="Mechanical,Visible;Self,Structure,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorUnitFilters>
     <CValidatorCombine id="NotHellion" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="IsHellion"/>
@@ -280,4 +306,14 @@
     <CValidatorUnitFilters id="AP_YamatoTargetFilters">
         <Filters value="-;Self,Stasis,Dead,Hidden,Invulnerable"/>
     </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_TacticalGhostCloakOff" parent="TacticalCloakSharedOff" unitLink="AP_Ghost"/>
+    <CValidatorCombine id="AP_TacticalGhostCloakOn">
+        <Type value="And"/>
+        <CombineArray value="AP_TacticalGhostSharedOn"/>
+        <CombineArray value="TacticalCloakNotDetected"/>
+    </CValidatorCombine>
+    <CValidatorLocationEnumArea id="AP_TacticalGhostCloakThreatSearch" parent="TacticalCloakThreatSearch" unitLink="AP_Ghost"/>
+    <CValidatorLocationEnumArea id="AP_TacticalGhostCloakThreatSearchEmpty" parent="TacticalCloakThreatSearchEmpty" unitLink="AP_Ghost"/>
+    <CValidatorCombine id="AP_TacticalGhostSharedOn" parent="TacticalCloakSharedOn" unitLink="AP_Ghost"/>
+    <CValidatorUnitCompareAttackPriority id="AP_UnitThreatensGhost" parent="UnitThreatens" unitLink="AP_Ghost"/>
 </Catalog>

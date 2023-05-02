@@ -243,4 +243,13 @@
         <AllowedMovement value="Slowing"/>
         <RandomDelayMax value="0.1875"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_C10CanisterRifle">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel0.dds"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Period value="1.5"/>
+        <DamagePoint value="0.083"/>
+        <Backswing value="1.167"/>
+    </CWeaponLegacy>
 </Catalog>

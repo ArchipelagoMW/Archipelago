@@ -786,7 +786,6 @@
     <CEffectLaunchMissile id="AP_ATALaserBatteryLM">
         <EditorCategories value="Race:Terran"/>
         <ImpactEffect value="AP_ATALaserBatteryU"/>
-        <AmmoUnit value="AP_ATALaserBatteryLMWeapon"/>
     </CEffectLaunchMissile>
     <CEffectDamage id="AP_ATALaserBatteryU" parent="DU_WEAP_MISSILE">
         <EditorCategories value="Race:Terran"/>
@@ -796,7 +795,6 @@
     <CEffectLaunchMissile id="AP_ATSLaserBatteryLM">
         <EditorCategories value="Race:Terran"/>
         <ImpactEffect value="AP_ATSLaserBatteryU"/>
-        <AmmoUnit value="AP_ATSLaserBatteryLMWeapon"/>
     </CEffectLaunchMissile>
     <CEffectDamage id="AP_ATSLaserBatteryU" parent="DU_WEAP_MISSILE">
         <EditorCategories value="Race:Terran"/>
@@ -927,7 +925,6 @@
         <ValidatorArray value="YamatoTargetFilters"/>
         <EditorCategories value="Race:Terran"/>
         <ImpactEffect value="AP_YamatoU"/>
-        <AmmoUnit value="AP_YamatoWeapon"/>
     </CEffectLaunchMissile>
     <CEffectDamage id="AP_YamatoU">
         <EditorCategories value="Race:Terran"/>
@@ -938,5 +935,162 @@
         <Amount value="300"/>
         <Death value="Blast"/>
         <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_C10CanisterRifle" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Light" value="10"/>
+        <Kind value="Ranged"/>
+        <Amount value="10"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_EMPApplyDecloakBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_EMPDecloak"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_EMPDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_EMPLaunchMissile">
+        <ValidatorArray index="0" value="AP_EMPTargetFilters"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="AP_EMPSearch"/>
+        <AmmoUnit value="AP_EMP2Weapon"/>
+    </CEffectLaunchMissile>
+    <CEffectModifyUnit id="AP_EMPModifyUnit">
+        <ValidatorArray value="empUTargetFilters"/>
+        <EditorCategories value="Race:Terran"/>
+        <VitalArray index="Shields">
+            <Change value="-100"/>
+        </VitalArray>
+        <VitalArray index="Energy">
+            <ChangeFraction value="-1"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectEnumArea id="AP_EMPSearch">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="TargetPoint"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="-;Hidden,Invulnerable"/>
+        <AreaArray Radius="2" Effect="AP_EMPSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_EMPSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_EMPDamage"/>
+        <EffectArray value="AP_EMPModifyUnit"/>
+        <EffectArray value="AP_EMPApplyDecloakBehavior"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_GhostHoldFire">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_GhostHoldFireB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_GhostWeaponsFree">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="AP_GhostHoldFireB"/>
+    </CEffectRemoveBehavior>
+    <CEffectUseCalldown id="AP_Nuke">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CalldownCount value="1"/>
+        <CalldownEffect value="AP_NukePersistent"/>
+    </CEffectUseCalldown>
+    <CEffectDamage id="AP_NukeDamage">
+        <EditorCategories value="Race:Terran"/>
+        <AINotifyFlags index="HurtFriend" value="1"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <AINotifyFlags index="MajorDanger" value="1"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Structure" value="200"/>
+        <Amount value="300"/>
+        <Death value="Fire"/>
+        <AreaArray Radius="4" Fraction="1"/>
+        <AreaArray Radius="6" Fraction="0.5"/>
+        <AreaArray Radius="8" Fraction="0.25"/>
+        <SearchFilters value="-;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_NukeDetonate">
+        <EditorCategories value="Race:Terran"/>
+        <InitialDelay value="1.25"/>
+        <InitialEffect value="AP_NukeDamage"/>
+        <ExpireDelay value="8.25"/>
+        <RevealRadius value="8"/>
+        <RevealFlags index="Unfog" value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_NukePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <Alert value="CalldownLaunchObserver"/>
+        <Flags index="Channeled" value="1"/>
+        <InitialDelay value="8.75"/>
+        <ExpireEffect value="AP_NukeDetonate"/>
+        <FinalEffect value="AP_NukeSuicide"/>
+        <PeriodCount value="50"/>
+        <PeriodicPeriodArray value="0.2"/>
+        <AINotifyEffect value="NukeDamage"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_NukeSuicide">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <Flags index="Kill" value="1"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_SnipeDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Spell"/>
+        <Amount value="45"/>
+        <Death value="Silentkill"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_HeroNukePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <InitialDelay value="1.75"/>
+        <ExpireDelay value="3"/>
+        <ExpireEffect value="AP_HeroNukeDetonate"/>
+        <FinalEffect value="AP_HeroNukeSuicide"/>
+        <Flags index="Channeled" value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectUseCalldown id="AP_HeroNukeCalldown">
+        <EditorCategories value="Race:Terran"/>
+        <CalldownCount value="1"/>
+        <CalldownEffect value="AP_HeroNukePersistent"/>
+        <ValidatorArray value=""/>
+        <WhichLocation Value="TargetPoint"/>
+    </CEffectUseCalldown>
+    <CEffectCreatePersistent id="AP_HeroNukeDetonate">
+        <EditorCategories value="Race:Terran"/>
+        <InitialDelay value="1.25"/>
+        <InitialEffect value="AP_HeroNukeDamage"/>
+        <ExpireDelay value="8.25"/>
+        <RevealRadius value="8"/>
+        <RevealFlags index="Unfog" value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_HeroNukeSuicide">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <Flags index="Kill" value="1"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_HeroNukeDamage">
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="750"/>
+        <SearchFilters value="-;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="4" Fraction="1"/>
+        <AreaArray Radius="6" Fraction="0.5"/>
+        <AreaArray Radius="8" Fraction="0.25"/>
+        <AINotifyFlags index="HurtFriend" value="1"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <AttributeBonus index="Structure" value="200"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
     </CEffectDamage>
 </Catalog>

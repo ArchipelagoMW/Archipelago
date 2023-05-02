@@ -253,4 +253,68 @@
     <CRequirementNot id="AP_NotCountUpgradeBattlecruiserEnableSpecializationsQueuedOrBetter">
         <OperandArray index="0" value="CountUpgradeBattlecruiserEnableSpecializationsQueuedOrBetter"/>
     </CRequirementNot>
+    <CRequirementAllowUnit id="AP_AllowUnitGhost">
+        <Link value="AP_Ghost"/>
+    </CRequirementAllowUnit>
+    <CRequirementAnd id="AP_AndCountUnitAlias_TechLabCompleteOnlyAtUnit2589852481TechTreeCheatCountUnitGhostAcademyCompleteOnlyTechTreeCheat">
+        <OperandArray value="AP_CountUnitAlias_TechLabCompleteOnlyAtUnit2589852481TechTreeCheat"/>
+        <OperandArray value="AP_CountUnitGhostAcademyCompleteOnlyTechTreeCheat"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndCountUnitBarracksTechLabCompleteOnlyAtUnit2589852481TechTreeCheatCountUnitGhostAcademyCompleteOnlyTechTreeCheat">
+        <OperandArray value="AP_CountUnitBarracksTechLabCompleteOnlyAtUnit2589852481TechTreeCheat"/>
+        <OperandArray value="AP_CountUnitGhostAcademyCompleteOnlyTechTreeCheat"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndOr96167438CountUnitFactoryCompleteOnly96167438TechTreeCheatCountUnitFactoryFlyingCompleteOnly1718561093TechTreeCheatNot866976074CountUnitNukeQueuedOrBetterAtUnit">
+        <OperandArray value="AP_Or96167438CountUnitFactoryCompleteOnly96167438TechTreeCheatCountUnitFactoryFlyingCompleteOnly1718561093TechTreeCheat"/>
+        <OperandArray value="AP_Not866976074CountUnitNukeQueuedOrBetterAtUnit"/>
+    </CRequirementAnd>
+    <CRequirementCountBehavior id="AP_CountBehaviorGhostHoldFireBCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_GhostHoldFireB" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementCountUnit id="AP_CountUnitGhostAcademyCompleteOnlyTechTreeCheat">
+        <Count Link="AP_GhostAcademy" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitNukeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value="RequirementNode/Tooltip/CountUnitNukeCompleteOnly2567665972"/>
+        <Count Link="AP_Nuke" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeGhostAlternateCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_GhostAlternate" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeGhostMoebiusReactorQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_GhostMoebiusReactor" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeGhostSkinJunkerCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_GhostSkinJunker" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradePermanentCloakGhostCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_PermanentCloakGhost" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradePersonalCloakingCompleteOnlyTechTreeCheat">
+        <Tooltip value="RequirementNode/Tooltip/CountUpgradePersonalCloakingCompleteOnly769360710"/>
+        <Count Link="AP_PersonalCloaking" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_Not866976074CountUnitNukeQueuedOrBetterAtUnit">
+        <Tooltip value="RequirementNode/Tooltip/Not2961182459CountUnitNukeQueuedOrBetterAtUnit"/>
+        <OperandArray index="0" value="AP_CountUnitNukeQueuedOrBetterAtUnit"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountBehaviorGhostHoldFireBCompleteOnlyAtUnit">
+        <OperandArray index="0" value="AP_CountBehaviorGhostHoldFireBCompleteOnlyAtUnit"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeGhostMoebiusReactorQueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeGhostMoebiusReactorQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradePermanentCloakGhostCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradePermanentCloakGhostCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeOcularImplantsCompleteOnly">
+        <Count Link="AP_OcularImplants" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
 </Catalog>

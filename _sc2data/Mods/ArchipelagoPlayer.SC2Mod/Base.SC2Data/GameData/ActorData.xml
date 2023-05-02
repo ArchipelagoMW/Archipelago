@@ -1582,9 +1582,9 @@
         <AutoScaleFactor value="2.100000"/>
     </CActorModel>
     <CActorModel id="AP_DefensiveMatrix" parent="ModelAnimationStyleContinuous">
-        <On Terms="UnitBirth.AP_DefensiveMatrixGrid" Send="Create"/> <!-- Looks like unused -->
+        <On Terms="UnitBirth.AP_DefensiveMatrixGrid" Send="Create"/>
+        <!-- Looks like unused -->
         <On Terms="UnitDeath" Send="Destroy"/>
-        <Model value="AP_DefensiveMatrix"/>
         <Scale value="0.600000"/>
     </CActorModel>
     <CActorSound id="AP_DefensiveMatrixImpact" parent="SoundOneShot">
@@ -1605,6 +1605,271 @@
     </CActorSound>
     <CActorSplat id="AP_MissilePodsCursorSplat" parent="TerranCursorSplat" abil="AP_MissilePods"/>
     <CActorRange id="AP_MissilePodsRange" parent="RangeAbil" abil="AP_MissilePods"/>
+    <CActorUnit id="AP_Ghost" parent="GenericUnitBase" unitName="AP_Ghost">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceCastStop" Send="AnimClear SpellA"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceChannelStop" Send="AnimClear SpellB"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceFinishStop" Send="AnimClear SpellC"/>
+        <On Terms="Abil.AP_Snipe.SourceCastStart" Send="AnimBaselineStop"/>
+        <On Terms="Abil.AP_Snipe.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
+        <On Terms="Abil.AP_Snipe.SourceCastStop" Send="AnimClear SpellA"/>
+        <On Terms="Abil.AP_Snipe.SourceCastStop" Send="AnimBaselineStart"/>
+        <On Terms="Abil.AP_Snipe.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
+        <On Terms="Abil.AP_Snipe.SourceChannelStop" Send="AnimClear SpellB"/>
+        <On Terms="Abil.AP_Snipe.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
+        <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying SpellC" Send="AnimClear SpellC"/>
+        <On Terms="Abil.AP_EMP.SourceCastStart" Send="AnimPlay SpellC Spell,C 0 0.000000 0.300000"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="Behavior.AP_GhostHoldFireB.On" Send="AnimGroupApply Cover"/>
+        <On Terms="Behavior.AP_GhostHoldFireB.On" Send="AnimPlay MorphStart Cover,Start"/>
+        <On Terms="Behavior.AP_GhostHoldFireB.On" Send="AnimClear MorphEnd"/>
+        <On Terms="Behavior.AP_GhostHoldFireB.On" Send="Create AP_Ghost_HoldFire_Sound"/>
+        <On Terms="Behavior.AP_GhostHoldFireB.Off" Send="AnimPlay MorphEnd Cover,End"/>
+        <On Terms="Behavior.AP_GhostHoldFireB.Off" Send="AnimClear MorphStart"/>
+        <On Terms="Behavior.AP_GhostHoldFireB.Off" Send="AnimGroupRemove Cover"/>
+        <On Terms="Behavior.AP_GhostHoldFireB.Off" Send="Create AP_Ghost_WeaponsFree_Sound"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_GhostAlternate" Send="Destroy"/>
+        <Model value="Ghost"/>
+        <AnimBlendTime value="-0.800000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="Ghost"/>
+        <DeathArray index="Normal" ModelLink="GhostDeath" SoundLink="Ghost_Explode"/>
+        <DeathArray index="Blast" ModelLink="GhostDeathBlast"/>
+        <DeathArray index="Disintegrate" ModelLink="GhostDeathAcid" SoundLink="Uni_DeathFXAcid"/>
+        <DeathArray index="Eviscerate" ModelLink="GhostDeathEviscerate" SoundLink="Uni_DeathFXEviscerate"/>
+        <DeathArray index="Fire" ModelLink="GhostDeathFire" SoundLink="Uni_DeathFXFire"/>
+        <DeathCustoms ModelLink="TerranSmallBiologicalUnitDeathLow" Name="AntiGravTerran"/>
+        <PlacementModel value="Ghost"/>
+        <PortraitModel value="GhostPortrait"/>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <AbilSoundArray AbilCmd="AP_GhostCloak,0" Sound="Ghost_CloakOnVO"/>
+        <AbilSoundArray AbilCmd="AP_EMP,0" Sound="Ghost_EmpVO"/>
+        <AbilSoundArray AbilCmd="AP_TacNukeStrike,0" Sound="Ghost_NuclearStrikeVO"/>
+        <BarOffset value="50"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Ghost.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-ghost.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <SelectAbilCmd value="EMP,Execute"/>
+        <SoundArray index="Ready" value="Ghost_Ready"/>
+        <SoundArray index="Help" value="Ghost_Help"/>
+        <SoundArray index="What" value="Ghost_What"/>
+        <SoundArray index="Yes" value="Ghost_Yes"/>
+        <SoundArray index="Attack" value="Ghost_Attack"/>
+        <SoundArray index="Pissed" value="Ghost_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-ghost.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Ghost.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="AP_GhostAlternate" parent="GenericUnitBase" unitName="GhostAlternate">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_GhostAlternate" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_GhostNova" Send="Destroy"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceCastStop" Send="AnimClear SpellA"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceChannelStop" Send="AnimClear SpellB"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceFinishStop" Send="AnimClear SpellC"/>
+        <On Terms="Abil.AP_Snipe.SourceCastStart" Send="AnimBaselineStop"/>
+        <On Terms="Abil.AP_Snipe.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
+        <On Terms="Abil.AP_Snipe.SourceCastStop" Send="AnimClear SpellA"/>
+        <On Terms="Abil.AP_Snipe.SourceCastStop" Send="AnimBaselineStart"/>
+        <On Terms="Abil.AP_Snipe.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
+        <On Terms="Abil.AP_Snipe.SourceChannelStop" Send="AnimClear SpellB"/>
+        <On Terms="Abil.AP_Snipe.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
+        <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying SpellC" Send="AnimClear SpellC"/>
+        <On Terms="Abil.AP_EMP.SourceCastStart" Send="AnimPlay SpellC Spell,C 0 0.000000 0.300000"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="Behavior.AP_GhostHoldFireB.On" Send="AnimGroupApply Cover"/>
+        <On Terms="Behavior.AP_GhostHoldFireB.On" Send="AnimPlay MorphStart Cover,Start"/>
+        <On Terms="Behavior.AP_GhostHoldFireB.On" Send="AnimClear MorphEnd"/>
+        <On Terms="Behavior.AP_GhostHoldFireB.On" Send="Create AP_Ghost_HoldFire_Sound"/>
+        <On Terms="Behavior.AP_GhostHoldFireB.Off" Send="AnimPlay MorphEnd Cover,End"/>
+        <On Terms="Behavior.AP_GhostHoldFireB.Off" Send="AnimClear MorphStart"/>
+        <On Terms="Behavior.AP_GhostHoldFireB.Off" Send="AnimGroupRemove Cover"/>
+        <On Terms="Behavior.AP_GhostHoldFireB.Off" Send="Create Ghost_WeaponsFree_Sound"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <AnimBlendTime value="-0.800000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <DeathArray index="Normal" ModelLink="GhostAlternateDeath" SoundLink="Ghost_Explode"/>
+        <DeathArray index="Blast" ModelLink="GhostAlternateDeathBlast"/>
+        <DeathArray index="Disintegrate" AnimProps="Death" ModelLink="GhostAlternateDeathAcid" SoundLink="Uni_DeathFXAcid"/>
+        <DeathArray index="Eviscerate" ModelLink="GhostAlternateDeathEviscerate" SoundLink="Uni_DeathFXEviscerate"/>
+        <DeathArray index="Fire" AnimProps="Death" ModelLink="GhostAlternateDeathFire" SoundLink="Uni_DeathFXFire"/>
+        <DeathCustoms ModelLink="TerranSmallBiologicalUnitDeathLow" Name="AntiGravTerran"/>
+        <PortraitModel value="GhostAlternatePortrait"/>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <AbilSoundArray AbilCmd="AP_GhostCloak,On" Sound="GhostAlternate_CloakOnVO"/>
+        <AbilSoundArray AbilCmd="AP_EMP,Execute" Sound="GhostAlternate_EmpVO"/>
+        <AbilSoundArray AbilCmd="AP_TacNukeStrike,Execute" Sound="GhostAlternate_NuclearStrikeVO"/>
+        <BarOffset value="50"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-terran-ghost.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-ghost.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_GhostAlternate"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <SelectAbilCmd value="EMP,Execute"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-ghost.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-terran-ghost.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSound id="AP_GhostAlternate_Death" parent="SoundOneShot">
+        <On Terms="UnitDeath.GhostAlternate; PassChance 100.000000" Send="Create"/>
+        <Sound value="GhostAlternate_Death"/>
+    </CActorSound>
+    <CActorAction id="AP_GhostAttack" parent="GenericAttack" effectAttack="AP_C10CanisterRifle">
+        <LaunchAssets Model="GhostAttackLaunch" Sound="Ghost_AttackLaunch"/>
+        <ContainerAssets Model="GhostBunkerAttackLaunch" Sound="Ghost_BunkerAttackLaunch"/>
+        <ImpactMap index="None" Model="GhostAttackImpact" Sound="Ghost_AttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+        <AcquisitionYawHalfArc value="10.000000"/>
+        <AcquisitionPitchHalfArc value="15.000000"/>
+        <AccuracyHalfArc value="5.000000"/>
+    </CActorAction>
+    <CActorAction id="AP_GhostEMPAttack" parent="GenericAttack" effectImpact="AP_EMPSearch" effectLaunch="AP_EMPLaunchMissile">
+        <On Terms="Effect.EMPDamage.Start; At Caster" Send="ActionDamage"/>
+        <LaunchAssets Sound="Ghost_EMPAttackLaunch"/>
+        <Missile value="AP_GhostEMPAttackMissile"/>
+        <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow GhostEMPOffset"/>
+        <ImpactMap index="None" Sound="Ghost_EMPAttackImpact"/>
+    </CActorAction>
+    <CActorModel id="AP_GhostEMPAttackImpactEffect" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_EMPSearch.Start" Send="Create"/>
+        <On Terms="Effect.AP_EMPSearch.Stop" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="GhostEMPAttackImpactEffect"/>
+    </CActorModel>
+    <CActorMissile id="AP_GhostEMPAttackMissile" parent="GenericAttackMissile" unitName="AP_EMP2Weapon">
+        <Model value="EMP2Weapon"/>
+    </CActorMissile>
+    <CActorModel id="AP_GhostNukeCollateralFire">
+        <On Terms="Effect.AP_NukeDamage.Start; At Target" Send="Create"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="GhostNukeCollateralFire"/>
+    </CActorModel>
+    <CActorModel id="AP_GhostNukeDrop">
+        <On Terms="Effect.AP_NukeDetonate.Start" Send="Create"/>
+        <On Terms="Effect.AP_NukeDetonate.Start" Send="$Birth"/>
+        <On Terms="Effect.NukeDamage.Start" Send="Destroy"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Model value="GhostNukeDrop"/>
+    </CActorModel>
+    <CActorSound id="AP_GhostNukeDropSound" parent="SoundContinuous">
+        <On Terms="Effect.AP_NukeDetonate.Start" Send="Create"/>
+        <On Terms="Effect.NukeDamage.Start" Send="Destroy"/>
+        <Sound value="Ghost_NukeDrop"/>
+    </CActorSound>
+    <CActorSquib id="AP_GhostNukeExplode">
+        <On Terms="Effect.AP_NukeDamage.Start; At Effect" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Map index="None" Model="GhostNukeExplode" Sound="Ghost_NukeExplode"/>
+    </CActorSquib>
+    <CActorFoliageFXSpawner id="AP_GhostNukeFoliageFXSpawner" parent="FoliageFXSpawnerFire">
+        <On Terms="Effect.AP_NukeDamage.Start" Send="Create"/>
+        <Radius value="5.000000"/>
+    </CActorFoliageFXSpawner>
+    <CActorModel id="AP_GhostNukeIndicator" parent="ModelAnimationStyleOneShot">
+        <Flags index="SuppressSaveLoad" value="0"/>
+        <Filter index="Enemy" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="Effect.AP_NukePersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_NukePersistent.Stop" Send="Destroy"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="GhostNukeIndicator"/>
+    </CActorModel>
+    <CActorSquib id="AP_GhostNukeLaunch">
+        <On Terms="Effect.AP_NukePersistent.Start" Send="Create"/>
+        <HostSiteOps Ops="SOpSourcePointSationary"/>
+        <Map index="None" Model="GhostNukeLaunch" Sound="Ghost_NukeLaunch"/>
+    </CActorSquib>
+    <CActorSound id="AP_GhostNukeSeek" parent="SoundContinuous">
+        <On Terms="Effect.AP_NukePersistent.Initial" Send="Create"/>
+        <On Terms="Effect.AP_NukePersistent.Stop; At Effect" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="SoundSetPitch Inverse 10.000000@0.000000,0.000000@8750.000000"/>
+        <Sound value="Ghost_NukeSeek"/>
+    </CActorSound>
+    <CActorAction id="AP_GhostNukeShieldHitter" parent="AoESplashShieldHitter" effectHit="AP_NukeDamage"/>
+    <CActorModel id="AP_GhostNukeTarget" parent="ModelAnimationStyleOneShot">
+        <Flags index="SuppressSaveLoad" value="0"/>
+        <Filter index="Self" value="1"/>
+        <Filter index="Ally" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="Effect.AP_NukePersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_NukePersistent.Stop" Send="AnimBracketStop BSD"/>
+        <Host Subject="GhostNukeTargetBillboard" Actor="Create"/>
+        <Model value="GhostNukeTarget"/>
+    </CActorModel>
+    <CActorSiteBillboard id="AP_GhostNukeTargetBillboard">
+        <Host Subject="GhostNukeTargetBillboardBase" Actor="Create"/>
+    </CActorSiteBillboard>
+    <CActorSite id="AP_GhostNukeTargetBillboardBase2">
+        <HostSiteOps Ops="SOpTargetPointStationary"/>
+    </CActorSite>
+    <CActorAction id="AP_GhostSnipeAttack" parent="GenericAttack" effectAttack="AP_SnipeDamage">
+        <LaunchSiteOps Ops="SOpAttachHarnessStationary"/>
+        <LaunchAssets Model="GhostSnipeAttackLaunch" Sound="Ghost_SnipeLaunch"/>
+        <Beam value="AP_GhostSnipeAttackBeam"/>
+        <ImpactMap index="None" Model="GhostSnipeAttackImpact" Sound="Ghost_SnipeImpact"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_GhostSnipeAttackBeam" parent="GenericAttackBeam">
+        <Model value="GhostSnipeAttackBeam"/>
+    </CActorBeamSimple>
+    <CActorRange id="AP_GhostSnipeRange" parent="RangeAbil" abil="Snipe"/>
+    <CActorSound id="AP_Ghost_CloakOff" parent="SoundOneShot">
+        <Terms value="ValidateUnit NotCloakedAndNotDead"/>
+        <On Terms="Behavior.AP_GhostCloak.Off" Send="Create"/>
+        <On Terms="Behavior.AP_PersonalCloakingFree.Off" Send="Create"/>
+        <Sound value="Ghost_CloakOff"/>
+    </CActorSound>
+    <CActorSound id="AP_Ghost_CloakOn" parent="SoundOneShot">
+        <Terms value="ValidateUnit NotCloaked"/>
+        <On Terms="Behavior.AP_GhostCloak.On" Send="Create"/>
+        <On Terms="Behavior.AP_PersonalCloakingFree.On" Send="Create"/>
+        <Sound value="Ghost_CloakOn"/>
+    </CActorSound>
+    <CActorSound id="AP_Ghost_Death" parent="SoundOneShot">
+        <On Terms="UnitDeath.AP_Ghost; PassChance 100.000000" Send="Create"/>
+        <Sound value="Ghost_Death"/>
+    </CActorSound>
+    <CActorRegionCircle id="AP_NukeTreeKiller">
+        <On Terms="Effect.AP_NukeDamage.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.AP_HeroNukeDamage.Start; At Effect" Send="Create"/>
+        <On Terms="ActorCreation" Send="QueryRegion ::Self TreeBurnQuery AgainstCenter"/>
+        <On Terms="ActorCreation" Send="QueryRegion ::Self NukedQuery AgainstCenter"/>
+        <On Terms="Effect.AP_NukeDamage.Start; At Effect" Send="Destroy"/>
+        <On Terms="Effect.AP_HeroNukeDamage.Start; At Effect" Send="Destroy"/>
+        <Radius value="8.000000"/>
+    </CActorRegionCircle>
+    <CActorSplat id="AP_EMPCursorSplat" parent="TerranCursorSplat" abil="AP_EMP"/>
+    <CActorRange id="AP_EMPRange" parent="RangeAbil" abil="AP_EMP"/>
+    <CActorSound id="AP_Ghost_HoldFire_Sound" parent="SoundOneShot">
+        <Sound value="Ghost_HoldFire"/>
+    </CActorSound>
+    <CActorSound id="AP_Ghost_WeaponsFree_Sound" parent="SoundOneShot">
+        <Sound value="Ghost_WeaponsFree"/>
+    </CActorSound>
     <CActorEventMacro id="UnloadDropAnim">
         <!-- Override -->
         <!-- Add AP_Medivac to common transport load/unload animations -->

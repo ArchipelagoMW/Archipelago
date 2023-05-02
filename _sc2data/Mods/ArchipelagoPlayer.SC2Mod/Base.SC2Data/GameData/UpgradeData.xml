@@ -458,4 +458,71 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_FullBoreCanisterAmmo">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Race value="Terr"/>
+        <EffectArray Reference="Weapon,AP_C10CanisterRifle,Range" Value="2.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_GhostAlternate">
+        <Flags index="UpgradeCheat" value="0"/>
+        <AffectedUnitArray value="AP_Ghost"/>
+        <LeaderAlias value=""/>
+    </CUpgrade>
+    <CUpgrade id="AP_GhostMoebiusReactor">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-moebiusreactor.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Ghost,EnergyStart" Value="25"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_GhostSkinJunker">
+        <Flags index="UpgradeCheat" value="0"/>
+        <AffectedUnitArray value="AP_Ghost"/>
+        <LeaderAlias value=""/>
+    </CUpgrade>
+    <CUpgrade id="AP_GhostSkinNova">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Button,Ghost,Icon" Value="Assets\Textures\btn-unit-terran-blackops-femaleghost.dds"/>
+        <EffectArray Operation="Set" Reference="Button,Ghost,AlertIcon" Value="Assets\Textures\btn-unit-terran-blackops-femaleghost.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Ghost,UnitIcon" Value="Assets\Textures\btn-unit-terran-blackops-femaleghost.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Ghost,UnitIcon" Value="Assets\Textures\btn-unit-terran-blackops-femaleghost.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Ghost,Wireframe.Image[0]" Value="Assets\Textures\wireframe-ghostfemale.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Ghost,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-ghostfemale.dds"/>
+        <AffectedUnitArray value="AP_Ghost"/>
+        <LeaderAlias value=""/>
+    </CUpgrade>
+    <CUpgrade id="AP_OcularImplants">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Unit,AP_Ghost,SightBonus[Dusk]" Value="3"/>
+        <EffectArray Reference="Unit,AP_Ghost,SightBonus[Dawn]" Value="3"/>
+        <EffectArray Reference="Weapon,AP_C10CanisterRifle,Range" Value="2"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_PermanentCloakGhost">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_GhostCloak,Cost[0].Vital[Energy]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_GhostCloak,BehaviorArray[0]" Value="AP_PersonalCloakingFree"/>
+        <EffectArray Operation="Set" Reference="Button,AP_CloakOnGhost,Tooltip" Value="Button/Tooltip/AP_CloakOnGhostFree"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_PersonalCloaking">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_Ghost"/>
+    </CUpgrade>
+    <CUpgrade id="AP_RewardDanceGhost">
+        <Icon value="Assets\Textures\btn-unit-terran-ghost.dds"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Ghost,TauntDuration[Dance]" Value="5"/>
+        <AffectedUnitArray value="AP_Ghost"/>
+        <LeaderAlias value=""/>
+    </CUpgrade>
 </Catalog>

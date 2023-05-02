@@ -220,4 +220,41 @@
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHurricaneMissilesCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_GhostHoldingFire">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountBehaviorGhostHoldFireBCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_GhostNotHoldingFire">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_NotCountBehaviorGhostHoldFireBCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_GhostPermanentCloak">
+        <NodeArray index="Use" Link="AP_CountUpgradePermanentCloakGhostCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveGhostAlternate">
+        <NodeArray index="Show" Link="AP_CountUpgradeGhostAlternateCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveGhostJunker">
+        <NodeArray index="Show" Link="AP_CountUpgradeGhostSkinJunkerCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnGhostEnergyUpgrade">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeGhostMoebiusReactorQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="AP_PermanentCloakGhostResearched">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradePermanentCloakGhostCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_PermanentCloakGhostResearchedHide">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradePermanentCloakGhostCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseGhostCriusSuit">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradePermanentCloakGhostCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseGhostOcularImplants">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeOcularImplantsCompleteOnly"/>
+    </CRequirement>
 </Catalog>
