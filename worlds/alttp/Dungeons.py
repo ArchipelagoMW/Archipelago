@@ -1,28 +1,80 @@
-import typing
+from __future__ import annotations
 
-from BaseClasses import Dungeon
+import typing
+from typing import List, Optional
+
+from BaseClasses import Region, MultiWorld
 from Fill import fill_restrictive
 
-from .Bosses import BossFactory
+from .Bosses import BossFactory, Boss
 from .Items import ItemFactory
 from .Regions import lookup_boss_drops
 from .Options import smallkey_shuffle
 
 if typing.TYPE_CHECKING:
-    from .SubClasses import ALttPLocation
+    from .SubClasses import ALttPLocation, ALttPItem
 
 
-def create_dungeons(world, player):
+class Dungeon:
+    def __init__(self, name: str, regions: List[Region], big_key: ALttPItem, small_keys: List[ALttPItem],
+                 dungeon_items: List[ALttPItem], player: int):
+        self.name = name
+        self.regions = regions
+        self.big_key = big_key
+        self.small_keys = small_keys
+        self.dungeon_items = dungeon_items
+        self.bosses = dict()
+        self.player = player
+        self.multiworld = None
+
+    @property
+    def boss(self) -> Optional[Boss]:
+        return self.bosses.get(None, None)
+
+    @boss.setter
+    def boss(self, value: Optional[Boss]):
+        self.bosses[None] = value
+
+    @property
+    def keys(self) -> List[ALttPItem]:
+        return self.small_keys + ([self.big_key] if self.big_key else [])
+
+    @property
+    def all_items(self) -> List[ALttPItem]:
+        return self.dungeon_items + self.keys
+
+    def is_dungeon_item(self, item: ALttPItem) -> bool:
+        return item.player == self.player and item.name in (dungeon_item.name for dungeon_item in self.all_items)
+
+    def __eq__(self, other: Dungeon) -> bool:
+        if not other:
+            return False
+        return self.name == other.name and self.player == other.player
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return self.multiworld.get_name_string_for_object(self) if self.multiworld \
+            else f'{self.name} (Player {self.player})'
+
+
+def create_dungeons(multiworld: MultiWorld, player):
+    world = multiworld.worlds[player]
     def make_dungeon(name, default_boss, dungeon_regions, big_key, small_keys, dungeon_items):
         dungeon = Dungeon(name, dungeon_regions, big_key,
-                          [] if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal else small_keys,
+                          [] if multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal else small_keys,
                           dungeon_items, player)
         for item in dungeon.all_items:
             item.dungeon = dungeon
         dungeon.boss = BossFactory(default_boss, player) if default_boss else None
-        for region in dungeon.regions:
-            world.get_region(region, player).dungeon = dungeon
-            dungeon.multiworld = world
+        regions = []
+        for region_name in dungeon.regions:
+            region = multiworld.get_region(region_name, player)
+            region.dungeon = dungeon
+            regions.append(region)
+            dungeon.multiworld = multiworld
+        dungeon.regions = regions
         return dungeon
 
     ES = make_dungeon('Hyrule Castle', None, ['Hyrule Castle', 'Sewers', 'Sewer Drop', 'Sewers (Dark)', 'Sanctuary'],
@@ -83,7 +135,7 @@ def create_dungeons(world, player):
                       ItemFactory(['Small Key (Turtle Rock)'] * 4, player),
                       ItemFactory(['Map (Turtle Rock)', 'Compass (Turtle Rock)'], player))
 
-    if world.mode[player] != 'inverted':
+    if multiworld.mode[player] != 'inverted':
         AT = make_dungeon('Agahnims Tower', 'Agahnim', ['Agahnims Tower', 'Agahnim 1'], None,
                           ItemFactory(['Small Key (Agahnims Tower)'] * 2, player), [])
         GT = make_dungeon('Ganons Tower', 'Agahnim2',
@@ -111,26 +163,34 @@ def create_dungeons(world, player):
     GT.bosses['top'] = BossFactory('Moldorm', player)
 
     for dungeon in [ES, EP, DP, ToH, AT, PoD, TT, SW, SP, IP, MM, TR, GT]:
-        world.dungeons[dungeon.name, dungeon.player] = dungeon
+        world.dungeons[dungeon.name] = dungeon
 
 
-def get_dungeon_item_pool(world) -> typing.List:
-    return [item for dungeon in world.dungeons.values() for item in dungeon.all_items]
+def get_dungeon_item_pool(multiworld: MultiWorld) -> typing.List[ALttPItem]:
+    return [item
+            for world in multiworld.get_game_worlds("A Link to the Past")
+            for item in get_dungeon_item_pool_player(world)]
 
 
-def get_dungeon_item_pool_player(world, player) -> typing.List:
-    return [item for dungeon in world.dungeons.values() if dungeon.player == player for item in dungeon.all_items]
+def get_dungeon_item_pool_player(world) -> typing.List[ALttPItem]:
+    return [item
+            for dungeon in world.dungeons.values()
+            for item in dungeon.all_items]
 
 
-def get_unfilled_dungeon_locations(multiworld) -> typing.List:
-    return [location for location in multiworld.get_locations() if not location.item and location.parent_region.dungeon]
+def get_unfilled_dungeon_locations(multiworld: MultiWorld) -> typing.List[ALttPLocation]:
+    return [location
+            for world in multiworld.get_game_worlds("A Link to the Past")
+            for dungeon in world.dungeons.values()
+            for region in dungeon.regions
+            for location in region.locations if not location.item]
 
 
-def fill_dungeons_restrictive(world):
+def fill_dungeons_restrictive(multiworld: MultiWorld):
     """Places dungeon-native items into their dungeons, places nothing if everything is shuffled outside."""
     localized: set = set()
     dungeon_specific: set = set()
-    for subworld in world.get_game_worlds("A Link to the Past"):
+    for subworld in multiworld.get_game_worlds("A Link to the Past"):
         player = subworld.player
         localized |= {(player, item_name) for item_name in
                       subworld.dungeon_local_item_names}
@@ -138,12 +198,12 @@ def fill_dungeons_restrictive(world):
                              subworld.dungeon_specific_item_names}
 
     if localized:
-        in_dungeon_items = [item for item in get_dungeon_item_pool(world) if (item.player, item.name) in localized]
+        in_dungeon_items = [item for item in get_dungeon_item_pool(multiworld) if (item.player, item.name) in localized]
         if in_dungeon_items:
-            restricted_players = {player for player, restricted in world.restrict_dungeon_item_on_boss.items() if
+            restricted_players = {player for player, restricted in multiworld.restrict_dungeon_item_on_boss.items() if
                                   restricted}
             locations: typing.List["ALttPLocation"] = [
-                location for location in get_unfilled_dungeon_locations(world)
+                location for location in get_unfilled_dungeon_locations(multiworld)
                 # filter boss
                 if not (location.player in restricted_players and location.name in lookup_boss_drops)]
             if dungeon_specific:
@@ -153,8 +213,8 @@ def fill_dungeons_restrictive(world):
                     location.item_rule = lambda item, dungeon=dungeon, orig_rule=orig_rule: \
                         (not (item.player, item.name) in dungeon_specific or item.dungeon is dungeon) and orig_rule(item)
 
-            world.random.shuffle(locations)
-            all_state_base = world.get_all_state(use_cache=True)
+            multiworld.random.shuffle(locations)
+            all_state_base = multiworld.get_all_state(use_cache=True)
             # Dungeon-locked items have to be placed first, to not run out of spaces for dungeon-locked items
             # subsort in the order Big Key, Small Key, Other before placing dungeon items
 
@@ -164,7 +224,7 @@ def fill_dungeons_restrictive(world):
                                  (5 if (item.player, item.name) in dungeon_specific else 0))
             for item in in_dungeon_items:
                 all_state_base.remove(item)
-            fill_restrictive(world, all_state_base, locations, in_dungeon_items, True, True, allow_excluded=True)
+            fill_restrictive(multiworld, all_state_base, locations, in_dungeon_items, True, True, allow_excluded=True)
 
 
 dungeon_music_addresses = {'Eastern Palace - Prize': [0x1559A],
@@ -178,3 +238,4 @@ dungeon_music_addresses = {'Eastern Palace - Prize': [0x1559A],
                            'Ice Palace - Prize': [0x155BF],
                            'Misery Mire - Prize': [0x155B9],
                            'Turtle Rock - Prize': [0x155C7, 0x155A7, 0x155AA, 0x155AB]}
+
