@@ -1,16 +1,10 @@
-import bisect
 import csv
 import enum
-import itertools
 import logging
-import math
-import typing
-from collections import OrderedDict
 from dataclasses import dataclass, field
-from functools import cached_property
 from pathlib import Path
 from random import Random
-from typing import Dict, List, Protocol, Union, Set, Optional, FrozenSet
+from typing import Dict, List, Protocol, Union, Set, Optional
 
 from BaseClasses import Item, ItemClassification
 from . import options, data
@@ -156,7 +150,7 @@ def create_items(item_factory: StardewItemFactory, locations_count: int, items_t
     items += unique_filler_items
     logger.debug(f"Created {len(unique_filler_items)} unique filler items")
 
-    resource_pack_items = fill_with_resource_packs(item_factory, world_options, random, items, locations_count)
+    resource_pack_items = fill_with_resource_packs_and_traps(item_factory, world_options, random, items, locations_count)
     items += resource_pack_items
     logger.debug(f"Created {len(resource_pack_items)} resource packs")
 
@@ -432,38 +426,42 @@ def create_unique_filler_items(item_factory: StardewItemFactory, world_options: 
     return items
 
 
-def fill_with_resource_packs(item_factory: StardewItemFactory, world_options: options.StardewOptions, random: Random,
-                             items_already_added: List[Item],
-                             number_locations: int) -> List[Item]:
-    all_resource_packs = []
-    all_resource_packs.extend(items_by_group[Group.RESOURCE_PACK])
+def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, world_options: options.StardewOptions, random: Random,
+                                       items_already_added: List[Item],
+                                       number_locations: int) -> List[Item]:
+    all_filler_packs = [pack for pack in items_by_group[Group.RESOURCE_PACK]]
+    all_filler_packs.extend(items_by_group[Group.TRASH])
+    all_filler_packs.extend(items_by_group[Group.TRAP])
     items_already_added_names = [item.name for item in items_already_added]
     useful_resource_packs = [pack for pack in items_by_group[Group.RESOURCE_PACK_USEFUL]
                              if pack.name not in items_already_added_names]
-    all_resource_packs.extend(items_by_group[Group.TRASH])
-    # all_resource_packs.extend(items_by_group[Group.TRAP])
+    trap_items = [pack for pack in items_by_group[Group.TRAP]
+                  if pack.name not in items_already_added_names]
 
-    all_resource_packs = remove_excluded_packs(all_resource_packs, world_options)
-    useful_resource_packs = remove_excluded_packs(useful_resource_packs, world_options)
+    priority_filler_items = []
+    priority_filler_items.extend(useful_resource_packs)
+    priority_filler_items.extend(trap_items)
+
+    all_filler_packs = remove_excluded_packs(all_filler_packs, world_options)
+    priority_filler_items = remove_excluded_packs(priority_filler_items, world_options)
+
+    number_priority_items = len(priority_filler_items)
+    required_resource_pack = number_locations - len(items_already_added)
+    if required_resource_pack < number_priority_items:
+        chosen_priority_items = [item_factory(resource_pack) for resource_pack in
+                               random.sample(priority_filler_items, required_resource_pack)]
+        return chosen_priority_items
 
     items = []
-    number_useful_packs = len(useful_resource_packs)
-    required_resource_pack = number_locations - len(items_already_added)
-    if required_resource_pack < number_useful_packs:
-        chosen_useful_packs = [item_factory(resource_pack) for resource_pack in
-                               random.sample(useful_resource_packs, required_resource_pack)]
-        items.extend(chosen_useful_packs)
-        return items
-
-    chosen_useful_packs = [item_factory(resource_pack) for resource_pack in useful_resource_packs]
-    items.extend(chosen_useful_packs)
-    required_resource_pack -= number_useful_packs
+    chosen_priority_items = [item_factory(resource_pack) for resource_pack in priority_filler_items]
+    items.extend(chosen_priority_items)
+    required_resource_pack -= number_priority_items
 
     while required_resource_pack > 0:
-        resource_pack = random.choice(all_resource_packs)
+        resource_pack = random.choice(all_filler_packs)
         exactly_2 = Group.EXACTLY_TWO in resource_pack.groups
         while exactly_2 and required_resource_pack == 1:
-            resource_pack = random.choice(all_resource_packs)
+            resource_pack = random.choice(all_filler_packs)
             exactly_2 = Group.EXACTLY_TWO in resource_pack.groups
         items.append(item_factory(resource_pack))
         required_resource_pack -= 1
@@ -471,7 +469,7 @@ def fill_with_resource_packs(item_factory: StardewItemFactory, world_options: op
             items.append(item_factory(resource_pack))
             required_resource_pack -= 1
         if exactly_2 or Group.MAXIMUM_ONE in resource_pack.groups:
-            all_resource_packs.remove(resource_pack)
+            all_filler_packs.remove(resource_pack)
 
     return items
 

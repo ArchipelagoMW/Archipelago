@@ -266,6 +266,23 @@ id,name,classification,groups
 279,The Queen of Sauce,useful,"TV_CHANNEL"
 280,Fishing Information Broadcasting Service,useful,"TV_CHANNEL"
 281,Sinister Signal,useful,"TV_CHANNEL"
+4001,Burnt,trap,TRAP
+4002,Darkness,trap,TRAP
+4003,Frozen,trap,TRAP
+4004,Jinxed,trap,TRAP
+4005,Nauseated,trap,TRAP
+4006,Slimed,trap,TRAP
+4007,Weakness,trap,TRAP
+4008,Taxes,trap,TRAP
+4009,Random Teleport,trap,TRAP
+4010,Crows,trap,TRAP
+4011,Monsters,trap,TRAP
+4012,Entrance Reshuffle,trap,"TRAP,DEPRECATED"
+4013,Debris,trap,TRAP
+4014,Shuffle,trap,TRAP
+4015,Winter for the rest of today (tomorrow?),trap,"TRAP,DEPRECATED"
+4016,Pariah,trap,TRAP
+4017,Drought,trap,TRAP
 5000,Resource Pack: 500 Money,useful,"BASE_RESOURCE,RESOURCE_PACK"
 5001,Resource Pack: 1000 Money,useful,"BASE_RESOURCE,RESOURCE_PACK"
 5002,Resource Pack: 1500 Money,useful,"BASE_RESOURCE,RESOURCE_PACK"
