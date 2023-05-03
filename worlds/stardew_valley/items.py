@@ -429,9 +429,11 @@ def create_unique_filler_items(item_factory: StardewItemFactory, world_options: 
 def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, world_options: options.StardewOptions, random: Random,
                                        items_already_added: List[Item],
                                        number_locations: int) -> List[Item]:
+    include_traps = world_options[options.TrapItems] != options.TrapItems.option_no_traps
     all_filler_packs = [pack for pack in items_by_group[Group.RESOURCE_PACK]]
     all_filler_packs.extend(items_by_group[Group.TRASH])
-    all_filler_packs.extend(items_by_group[Group.TRAP])
+    if include_traps:
+        all_filler_packs.extend(items_by_group[Group.TRAP])
     items_already_added_names = [item.name for item in items_already_added]
     useful_resource_packs = [pack for pack in items_by_group[Group.RESOURCE_PACK_USEFUL]
                              if pack.name not in items_already_added_names]
@@ -440,7 +442,8 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, world_o
 
     priority_filler_items = []
     priority_filler_items.extend(useful_resource_packs)
-    priority_filler_items.extend(trap_items)
+    if include_traps:
+        priority_filler_items.extend(trap_items)
 
     all_filler_packs = remove_excluded_packs(all_filler_packs, world_options)
     priority_filler_items = remove_excluded_packs(priority_filler_items, world_options)

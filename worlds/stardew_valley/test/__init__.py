@@ -5,7 +5,7 @@ from typing import Dict, FrozenSet, Tuple, Any, ClassVar
 from BaseClasses import MultiWorld
 from test.TestBase import WorldTestBase
 from test.general import gen_steps
-from .. import StardewValleyWorld
+from .. import StardewValleyWorld, options
 from ...AutoWorld import call_all
 
 
@@ -30,6 +30,30 @@ class SVTestBase(WorldTestBase):
         should_run_default_tests = is_not_stardew_test and super().run_default_tests
         return should_run_default_tests
 
+    def allsanity_options(self):
+        allsanity = {
+            options.Goal.internal_name: options.Goal.option_perfection,
+            options.BundleRandomization.internal_name: options.BundleRandomization.option_shuffled,
+            options.BundlePrice.internal_name: options.BundlePrice.option_expensive,
+            options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized,
+            options.SeedShuffle.internal_name: options.SeedShuffle.option_shuffled,
+            options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive,
+            options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
+            options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
+            options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
+            options.FestivalLocations.internal_name: options.FestivalLocations.option_hard,
+            options.TheMinesElevatorsProgression.internal_name: options.TheMinesElevatorsProgression.option_progressive,
+            options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_full_shuffling,
+            options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
+            options.HelpWantedLocations.internal_name: 56,
+            options.Fishsanity.internal_name: options.Fishsanity.option_all,
+            options.Museumsanity.internal_name: options.Museumsanity.option_all,
+            options.Friendsanity.internal_name: options.Friendsanity.option_all,
+            options.NumberOfPlayerBuffs.internal_name: 12,
+            options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
+            options.TrapItems.internal_name: options.TrapItems.option_nightmare,
+        }
+        return allsanity
 
 pre_generated_worlds = {}
 

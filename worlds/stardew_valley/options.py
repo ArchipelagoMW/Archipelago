@@ -380,6 +380,21 @@ class ExcludeGingerIsland(Toggle):
     default = 0
 
 
+class TrapItems(Choice):
+    """When rolling filler items, including resource packs, the game can also roll trap items.
+    This setting is for choosing if traps will be in the item pool, and if so, how punishing they will be.
+    """
+    internal_name = "trap_items"
+    display_name = "Trap Items"
+    default = 0
+    option_no_traps = 0
+    option_easy = 1
+    option_medium = 2
+    option_hard = 3
+    option_hell = 4
+    option_nightmare = 5
+
+
 class MultipleDaySleepEnabled(Toggle):
     """Enable the ability to sleep automatically for multiple days straight?"""
     internal_name = "multiple_day_sleep_enabled"
@@ -517,6 +532,7 @@ stardew_valley_option_classes = [
     Friendsanity,
     NumberOfPlayerBuffs,
     ExcludeGingerIsland,
+    TrapItems,
     MultipleDaySleepEnabled,
     MultipleDaySleepCost,
     ExperienceMultiplier,

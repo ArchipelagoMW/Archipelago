@@ -204,7 +204,7 @@ class TestLocationAndItemCount(SVTestBase):
         options.HelpWantedLocations.internal_name: 0,
         options.Fishsanity.internal_name: options.Fishsanity.option_none,
         options.Museumsanity.internal_name: options.Museumsanity.option_none,
-        options.Friendsanity.internal_name: options.Museumsanity.option_none,
+        options.Friendsanity.internal_name: options.Friendsanity.option_none,
         options.NumberOfPlayerBuffs.internal_name: 12,
     }
 
