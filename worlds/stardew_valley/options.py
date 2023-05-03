@@ -386,7 +386,7 @@ class TrapItems(Choice):
     """
     internal_name = "trap_items"
     display_name = "Trap Items"
-    default = 0
+    default = 2
     option_no_traps = 0
     option_easy = 1
     option_medium = 2
