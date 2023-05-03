@@ -72,7 +72,7 @@ class CV64World(World):
 
         # Prevent Clock Tower from being Stage 1 if more than 4 S1s are needed to warp out of it.
         if self.multiworld.special1s_per_warp[self.player].value > 4 and \
-                self.multiworld.multi_hit_breakable_items[self.player].value == 0:
+                self.multiworld.multi_hit_breakables[self.player].value == 0:
             stage_1_blacklist.append(RName.clock_tower)
 
         # Remove character stages from the stage list and exits dict if they're not enabled
@@ -194,7 +194,7 @@ class CV64World(World):
             add_tier1_junk(stage_info[stage].stage_tier1_junk_count)
 
             # If multi-hit breakables are on, add those items too
-            if self.multiworld.multi_hit_breakable_items[self.player]:
+            if self.multiworld.multi_hit_breakables[self.player]:
                 add_items(stage_info[stage].multihit_tier2_junk_counts, "tier2_junk_counts")
                 add_tier1_junk(stage_info[stage].multihit_tier1_junk_count)
 
@@ -206,6 +206,15 @@ class CV64World(World):
         if self.multiworld.carrie_logic[self.player] and RName.underground_waterway in self.active_stage_list:
             item_counts["tier2_junk_counts"][IName.roast_beef] += 1
             item_counts["tier2_junk_counts"][IName.moon_card] += 1
+
+        # Put in empty breakable items if applicable
+        if self.multiworld.empty_breakables[self.player]:
+            if RName.forest_of_silence in self.active_stage_list:
+                add_tier1_junk(6)
+            if RName.villa in self.active_stage_list:
+                add_tier1_junk(1)
+            if RName.room_of_clocks in self.active_stage_list:
+                add_tier1_junk(2)
 
         # Put in the lizard-man generator items if applicable
         if self.multiworld.lizard_generator_items[self.player] and RName.castle_center in self.active_stage_list:
@@ -319,14 +328,14 @@ class CV64World(World):
                 self.multiworld.local_early_items[self.player][IName.science_key_two] = 1
         elif self.active_stage_list[0] == RName.clock_tower:
             if (self.multiworld.special1s_per_warp[self.player].value > 2 and
-                    self.multiworld.multi_hit_breakable_items[self.player].value == 0) or \
+                    self.multiworld.multi_hit_breakables[self.player].value == 0) or \
                     (self.multiworld.special1s_per_warp[self.player].value > 8 and
-                     self.multiworld.multi_hit_breakable_items[self.player].value == 1):
+                     self.multiworld.multi_hit_breakables[self.player].value == 1):
                 self.multiworld.local_early_items[self.player][IName.clocktower_key_one] = 1
         elif self.active_stage_list[0] == RName.castle_wall:
             if self.multiworld.special1s_per_warp[self.player].value > 5 and \
                     self.multiworld.hard_logic[self.player].value == 0 and \
-                    self.multiworld.multi_hit_breakable_items[self.player].value == 0:
+                    self.multiworld.multi_hit_breakables[self.player].value == 0:
                 self.multiworld.local_early_items[self.player][IName.left_tower_key] = 1
 
     def generate_output(self, output_directory: str) -> None:

@@ -105,7 +105,7 @@ class BossesRequired(Range):
 
 
 class CarrieLogic(Toggle):
-    """Adds the two checks inside Underground Waterway's crawlspace to the pool. If you are not yet certain that you
+    """Adds the 2 checks inside Underground Waterway's crawlspace to the pool. If you are not yet certain that you
     (and everyone else if racing the same seed) will be playing as Carrie, don't enable this. Can be combined with
     Glitch Logic to include Carrie-only tricks."""
     display_name = "Carrie Logic"
@@ -117,16 +117,23 @@ class HardLogic(Toggle):
     display_name = "Hard Logic"
 
 
-class MultiHitBreakableItems(Toggle):
-    """Adds the items that drop from the environmental objects that break in three hits to the pool. There are 17 of
-    these throughout the game containing up to 74 checks in total. The game will be modified to remember exactly which
-    of their items you've picked up instead of simply whether they were broken or not."""
-    display_name = "Multi-hit Breakable Items"
+class MultiHitBreakables(Toggle):
+    """Adds the items that drop from the objects that break in three hits to the pool. There are 17 of these throughout
+    the game adding up to 74 checks in total. The game will be modified to remember exactly which of their items you've
+    picked up instead of simply whether they were broken or not."""
+    display_name = "Multi-hit Breakables"
+
+
+class EmptyBreakables(Toggle):
+    """Adds 9 check locations in the form of breakables that normally have nothing (i.e. many Forest coffins, the candle
+    in the Villa foyer that drops nothing, etc.) and some additional Red Jewels and/or moneybags into the item pool to
+    compensate."""
+    display_name = "Empty Breakables"
 
 
 class LizardGeneratorItems(Toggle):
-    """Adds the items inside Castle Center 2F's Lizard-man generators to the pool. Picking up all of these can
-    be a very time-consuming and luck-based process, so they are excluded by default."""
+    """Adds the 6 items inside Castle Center 2F's Lizard-man generators to the pool. Picking up all of these can be a
+    very time-consuming and luck-based process, so they are excluded by default."""
     display_name = "Lizard-man Generator Items"
 
 
@@ -231,7 +238,8 @@ cv64_options: Dict[str, Option] = {
     "bosses_required": BossesRequired,
     "carrie_logic": CarrieLogic,
     "hard_logic": HardLogic,
-    "multi_hit_breakable_items": MultiHitBreakableItems,
+    "multi_hit_breakables": MultiHitBreakables,
+    "empty_breakables": EmptyBreakables,
     "lizard_generator_items": LizardGeneratorItems,
     "renon_fight_condition": RenonFightCondition,
     "vincent_fight_condition": VincentFightCondition,

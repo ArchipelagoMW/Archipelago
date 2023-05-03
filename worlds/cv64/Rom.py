@@ -60,10 +60,10 @@ rom_sub_weapon_offsets = {
 }
 
 rom_sub_weapon_flags = {
-    0x10C6EC: [0x02, 0x00, 0xFF, 0x04],  # Forest of Silence
-    0x10C6FC: [0x04, 0x00, 0xFF, 0x04],
-    0x10C6F4: [0x08, 0x00, 0xFF, 0x04],
-    0x10C704: [0x40, 0x00, 0xFF, 0x04],
+    0x10C6EC: 0x0200FF04,  # Forest of Silence
+    0x10C6FC: 0x0400FF04,
+    0x10C6F4: 0x0800FF04,
+    0x10C704: 0x4000FF04,
 
     # Holy pillar
     0x10C831: 0x08,  # Castle Wall
@@ -71,6 +71,11 @@ rom_sub_weapon_flags = {
     0x10C821: 0x20,
 
     # Villa
+    0xBFC926: 0xFF04,
+    0xBFC93A: 0x80,
+    0xBFC93F: 0x01,
+    0xBFC943: 0x40,
+    0xBFC947: 0x80,
     0x10C989: 0x10,
     0x10C991: 0x20,
     0x10C999: 0x40,
@@ -78,10 +83,10 @@ rom_sub_weapon_flags = {
 
     0x10CA59: 0x40,  # Tunnel
     0x10CA6B: 0x80,
-    0x10CA60: [0x10, 0x00, 0xFF, 0x05],
-    0x10CA70: [0x20, 0x00, 0xFF, 0x05],
-    0x10CA78: [0x40, 0x00, 0xFF, 0x05],
-    0x10CA80: [0x80, 0x00, 0xFF, 0x05],
+    0x10CA60: 0x1000FF05,
+    0x10CA70: 0x2000FF05,
+    0x10CA78: 0x4000FF05,
+    0x10CA80: 0x8000FF05,
 
     0x10CBCA: 0x02,  # Castle Center
     0x10CC10: 0x80,
@@ -91,8 +96,8 @@ rom_sub_weapon_flags = {
     0x10CD43: 0x02,  # Tower of Execution
     0x10CE2E: 0x20,  # Tower of Science
 
-    0x10CF8B: 0x40,  # Room of Clocks
-    0x10CF96: 0x80,
+    0x10CF8E: 0x04,  # Room of Clocks
+    0x10CF96: 0x08,
 
     0x10CECE: 0x08,  # Clock Tower
     0x10CED6: 0x10,
@@ -101,17 +106,19 @@ rom_sub_weapon_flags = {
 }
 
 rom_empty_breakables_flags = {
-    0x10C74C: [0x00, 0x40, 0xFF, 0x05],  # Forest of Silence
-    0x10C764: [0x00, 0x80, 0xFF, 0x0D],
-    0x10C774: [0x08, 0x00, 0xFF, 0x0E],
-    0x10C754: [0x00, 0x80, 0xFF, 0x05],
-    0x10C784: [0x01, 0x00, 0xFF, 0x0E],
-    0x10C73C: [0x02, 0x00, 0xFF, 0x0E],
+    0x10C74D: 0x40FF05,  # Forest of Silence
+    0x10C765: 0x80FF0D,
+    0x10C774: 0x0800FF0E,
+    0x10C755: 0x80FF05,
+    0x10C784: 0x0100FF0E,
+    0x10C73C: 0x0200FF0E,
 
-    0x10C8D0: [0x04, 0x00, 0xFF, 0x0E],  # Villa foyer
+    0x10C8D0: 0x0400FF0E,  # Villa foyer
 
-    0x10CF9F: 0x08,  # Room of Clocks
+    0x10CF9F: 0x08,  # Room of Clocks flags
     0x10CFA7: 0x01,
+    0xBFCB27: 0x04,  # Room of Clocks candle property IDs
+    0xBFCB2B: 0x05,
 }
 
 rom_looping_music_fade_ins = {
@@ -195,6 +202,14 @@ class LocalRom(object):
     def write_int16s(self, startaddress, values: list):
         for i, value in enumerate(values):
             self.write_int16(startaddress + (i * 2), value)
+
+    def write_int24(self, address, value: int):
+        value = value & 0xFFFFFF
+        self.write_bytes(address, [(value >> 16) & 0xFF, (value >> 8) & 0xFF, value & 0xFF])
+
+    def write_int24s(self, startaddress, values: list):
+        for i, value in enumerate(values):
+            self.write_int24(startaddress + (i * 3), value)
 
     def write_int32(self, address, value: int):
         value = value & 0xFFFFFFFF
@@ -603,11 +618,6 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     # Make the torch directly behind Dracula's chamber that normally doesn't set a flag set bitflag 0x08 in 0x80389BFA
     rom.write_byte(0x10CE9F, 0x01)
 
-    # Change the settings on the two candles in RoC that normally have nothing to settings that do have something if
-    # including empty breakable locations
-    rom.write_byte(0xBFCB27, 0x04)
-    rom.write_byte(0xBFCB2B, 0x05)
-
     # Write the randomized (or disabled) music ID list and its associated code
     if multiworld.background_music[player] != 0:
         rom.write_int32(0x14588, 0x08060D60)  # J 0x80183580
@@ -631,9 +641,23 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
                                0x018B6021])  # ADDU  T4, T4, T3
     rom.write_int32s(0xBFCF08, Patches.item_shine_visibility_switcher)
 
+    # If playing with universal sub-weapons or included empty breakables, write these values to have them store flags
+    # and, in the case of the RoC candles, change them to two unused candle settings.
+    if multiworld.empty_breakables[player]:
+        offsets_to_ids.update({**rom_empty_breakables_flags})
+    if multiworld.sub_weapon_shuffle[player].value > 1:
+        offsets_to_ids.update({**rom_sub_weapon_flags})
+
     # Write all the new item and loading zone bytes
     for offset, item_id in offsets_to_ids.items():
-        rom.write_byte(offset, item_id)
+        if item_id <= 0xFF:
+            rom.write_byte(offset, item_id)
+        elif item_id <= 0xFFFF:
+            rom.write_int16(offset, item_id)
+        elif item_id <= 0xFFFFFF:
+            rom.write_int24(offset, item_id)
+        else:
+            rom.write_int32(offset, item_id)
 
 
 class CV64DeltaPatch(APDeltaPatch):

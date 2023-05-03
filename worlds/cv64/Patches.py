@@ -310,32 +310,14 @@ overlay_modifiers = [
     0x00000000,  # NOP
     0x03200008,  # JR    T9
     0xAF2A01D4,  # SW    T2, 0x01D4 (T9)
-    # Make it so exactly one item can be taken from the Nitro shelf, regardless of the inventory and cracked walls
-    0x240B0080,  # ADDIU T3, R0, 0x0080
-    0x240C0017,  # ADDIU T4, R0, 0x0017
+    # Make it so nothing can be taken from the Nitro or Mandragora shelves through the textboxes
     0x24090022,  # ADDIU T1, R0, 0x0022
-    0x15090009,  # BNE   T0, T1, [forward 0x09]
-    0x3C0D8078,  # LUI   T5, 0x8078
-    0x25AD6138,  # ADDIU T5, T5, 0x6138
-    0xAF2A0180,  # SW    T2, 0x0180 (T9)
-    0xAF2A0194,  # SW    T2, 0x0194 (T9)
-    0xAF2D01B0,  # SW    T5, 0x01B0 (T9)
-    0xA32B01B7,  # SB    T3, 0x01B7 (T9)
-    0xA32C01BB,  # SB    T4, 0x01BB (T9)
-    0x03200008,  # JR    T9
-    0xAF2001CC,  # SW    R0, 0x01CC (T9)
-    # Make it so exactly one item can be taken from the Mandragora shelf, regardless of the inventory and cracked walls
+    0x11090002,  # BEQ   T0, T1, [forward 0x02]
     0x24090021,  # ADDIU T1, R0, 0x0021
-    0x15090009,  # BNE   T0, T1, [forward 0x09]
-    0x3C0D1000,  # LUI   T5, 0x1000
-    0x25AD000F,  # ADDIU T5, T5, 0x000F
-    0xAF2A0180,  # SW    T2, 0x0180 (T9)
-    0xAF2A0194,  # SW    T2, 0x0194 (T9)
-    0xA32B01D4,  # SB    T3, 0x01D4 (T9)
-    0xA32B01E3,  # SB    T3, 0x01E3 (T9)
-    0xA32C01E7,  # SB    T4, 0x01E7 (T9)
-    0xAF2D01F8,  # SW    T5, 0x01F8 (T9)
+    0x15090003,  # BNE   T0, T1, [forward 0x03]
+    0x254AFFFF,  # ADDIU T2, T2, 0xFFFF
     0x03200008,  # JR    T9
+    0xAF2A0194,  # SW    T2, 0x0194 (T9)
     # Fix to allow placing both bomb components at a cracked wall at once while having multiple copies of each, and
     # prevent placing them at the downstairs crack altogether until the seal is removed
     0x24090024,  # ADDIU T1, R0, 0x0024
@@ -488,7 +470,7 @@ map_data_modifiers = [
     0x15090019,  # BNE   T0, T1, [forward 0x19]
     0x340A0001,  # ORI   T2, R0, 0x0001         <- Storeroom R
     0x340B0010,  # ORI   T3, R0, 0x0001         <- Hallway knife
-    0x340C0001,  # ORI   T4, R0, 0x0001         <- Painting
+    0x340C0001,  # ORI   T4, R0, 0x0001         <- Living Room painting
     0x340D0001,  # ORI   T5, R0, 0x0001         <- Dining Room vase
     0x340E0001,  # ORI   T6, R0, 0x0001         <- Archives table
     0xA44A0078,  # SH    T2, 0x0078 (V0)
@@ -496,15 +478,15 @@ map_data_modifiers = [
     0xA44C0108,  # SH    T4, 0x0108 (V0)
     0xA44D0128,  # SH    T5, 0x0128 (V0)
     0xA44E0138,  # SH    T6, 0x0138 (V0)
-    0x340AFF04,  # ORI   T2, R0, 0xFF04
+    0x340A0000,  # ORI   T2, R0, 0x0000         <- Sub-weapons lower flag
     0xA44A009C,  # SH    T2, 0x009C (V0)
     0xA44A00AC,  # SH    T2, 0x00AC (V0)
     0xA44A00BC,  # SH    T2, 0x00BC (V0)
     0xA44A00CC,  # SH    T2, 0x00CC (V0)
-    0x340A8000,  # ORI   T2, R0, 0x8000
-    0x240B0001,  # ADDIU T3, R0, 0x0001
-    0x240C0040,  # ADDIU T4, R0, 0x0040
-    0x240D0080,  # ADDIU T5, R0, 0x0080
+    0x340A0000,  # ORI   T2, R0, 0x0000         <- Sub-weapons upper flags
+    0x240B0000,  # ADDIU T3, R0, 0x0000
+    0x240C0000,  # ADDIU T4, R0, 0x0000
+    0x240D0000,  # ADDIU T5, R0, 0x0000
     0xA44A00CA,  # SH    T2, 0x00CA (V0)
     0xA44B00BA,  # SH    T3, 0x00BA (V0)
     0xA44C009A,  # SH    T4, 0x009A (V0)
@@ -636,7 +618,7 @@ map_data_modifiers = [
     0x1139FF59,  # BEQ   T1, T9, [backward 0xAD]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
-    # Room of Clocks (changes 2 candle settings if applicable and sets "begging of stage" state if spawning at end)
+    # Room of Clocks (changes 2 candle settings if applicable and sets the "begging of stage" state if spawning at end)
     0x2409001B,  # ADDIU T1, R0, 0x001B
     0x15090008,  # BNE   T0, T1, [forward 0x08]
     0x24090006,  # ADDIU T1, R0, 0x0006
@@ -657,8 +639,8 @@ map_data_modifiers = [
     0x240A0027,  # ADDIU T2, R0, 0x0027
     0xA44A07C6,  # SH    T2, 0x07C6 (V0)
     0xA44A07D6,  # SH    T2, 0x07D6 (V0)
-    0x340B0004,  # ORI   T3, R0, 0x0004      <- Right Mandragora
-    0x340C0005,  # ORI   T4, R0, 0x0005      <- Left Mandragora
+    0x340B0001,  # ORI   T3, R0, 0x0001      <- Right Mandragora
+    0x340C0001,  # ORI   T4, R0, 0x0001      <- Left Mandragora
     0xA44B07C8,  # SH    T3, 0x07C8 (V0)
     0xA44C07D8,  # SH    T4, 0x07D8 (V0)
     0x240D00F5,  # ADDIU T5, R0, 0x00F5
@@ -678,8 +660,8 @@ map_data_modifiers = [
     0x24090027,  # ADDIU T1, R0, 0x0027
     0xA4490476,  # SH    T1, 0x0476 (V0)
     0xA44904A6,  # SH    T1, 0x04A6 (V0)
-    0x340A0004,  # ORI   T2, R0, 0x0004      <- Invention-side shelf
-    0x340B0005,  # ORI   T3, R0, 0x0005      <- Heinrich-side shelf
+    0x340A0001,  # ORI   T2, R0, 0x0001      <- Invention-side shelf
+    0x340B0001,  # ORI   T3, R0, 0x0001      <- Heinrich-side shelf
     0xA44A0478,  # SH    T2, 0x0478 (V0)
     0xA44B04A8,  # SH    T3, 0x04A8 (V0)
     0x24090080,  # ADDIU T1, R0, 0x0080

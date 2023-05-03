@@ -171,7 +171,7 @@ stage_info = {
                                        IName.cure_ampoule: 2,
                                        IName.powerup: 2,
                                        IName.sun_card: 2,
-                                       IName.moon_card: 1}, 25,
+                                       IName.moon_card: 1}, 27,
                                       {IName.roast_beef: 3,
                                        IName.purifying: 2,
                                        IName.cure_ampoule: 2}, 5,
