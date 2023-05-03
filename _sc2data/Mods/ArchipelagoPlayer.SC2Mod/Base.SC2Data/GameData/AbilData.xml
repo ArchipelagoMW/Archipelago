@@ -696,4 +696,56 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
+    <CAbilEffectTarget id="AP_BuildAutoTurret">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="21"/>
+        <Effect index="0" value="AP_AutoTurretRelease"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Charge Link="Abil/AutoTurret"/>
+            <Cooldown Link="Raven Build Link" Location="Unit"/>
+        </Cost>
+        <Placeholder value="AutoTurret"/>
+        <Range value="3"/>
+        <Marker Link="Abil/AutoTurret"/>
+        <ErrorAlert value="Error"/>
+        <AINotifyEffect value="AutoTurret"/>
+        <ProducedUnitArray value="AP_AutoTurret"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_AutoTurret"/>
+        <PlaceUnit value="AP_AutoTurret"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_PlacePointDefenseDrone">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="11"/>
+        <Effect index="0" value="AP_PointDefenseDroneReleaseCreateUnit"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+            <Cooldown Link="Raven Build Link" Location="Unit"/>
+        </Cost>
+        <Placeholder value="AP_PointDefenseDrone"/>
+        <Range value="3"/>
+        <ProducedUnitArray value="AP_PointDefenseDrone"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_PointDefenseDrone"/>
+        <PlaceUnit value="AP_PointDefenseDrone"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_SeekerMissile">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Effect index="0" value="AP_SeekerMissileLaunchMissile"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="125"/>
+            <Charge Link="Abil/AP_HunterSeekerMissile"/>
+            <Cooldown Link="Abil/AP_HunterSeekerMissile"/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="9"/>
+        <Arc value="29.9926"/>
+        <ArcSlop value="0"/>
+        <Marker Link="Abil/AP_HunterSeekerMissile"/>
+        <AINotifyEffect value="HunterSeekerMissile"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_HunterSeekerMissile"/>
+    </CAbilEffectTarget>
 </Catalog>

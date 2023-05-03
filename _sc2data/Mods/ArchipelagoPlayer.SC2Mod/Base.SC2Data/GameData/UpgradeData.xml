@@ -567,4 +567,38 @@
         <AffectedUnitArray value="AP_Thor"/>
         <LeaderAlias value=""/>
     </CUpgrade>
+    <CUpgrade id="AP_DurableMaterials">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-durablematerials.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Behavior,AP_AutoTurretTimedLife,Duration" Value="60.000000"/>
+        <EffectArray Reference="Behavior,AP_PointDefenseDroneTimedLife,Duration" Value="60.000000"/>
+        <EffectArray Reference="Behavior,AP_SeekerMissileTimeout,Duration" Value="5.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Raven"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HunterSeeker">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-terran-huntermissile-color.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_Raven"/>
+    </CUpgrade>
+    <CUpgrade id="AP_RavenCorvidReactor">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-corvidreactor.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Raven,EnergyStart" Value="25"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Raven"/>
+    </CUpgrade>
 </Catalog>

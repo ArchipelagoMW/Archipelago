@@ -28,7 +28,6 @@
     <CActorModel id="AP_330mmBarrageCannonsImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AP_330mmBarrageCannonsSearch.Impact" Send="Create"/>
         <HostSiteOps Ops="SOpTargetPoint AP_330mmBarrageCannonsVariance"/>
-        <Model value="AP_330mmBarrageCannonsImpact"/>
     </CActorModel>
     <CActorSiteOpRandomPointInCircle id="AP_330mmBarrageCannonsVariance">
         <Radius value="2.000000"/>
@@ -36,7 +35,6 @@
     </CActorSiteOpRandomPointInCircle>
     <CActorSound id="AP_330mmBarrageCannonsSound" parent="SoundOneShot">
         <On Terms="Effect.AP_330mmBarrageCannonsSearch.Impact" Send="Create"/>
-        <Sound value="AP_330mmBarrageCannonsSound"/>
     </CActorSound>
     <CActorRange id="AP_330mmBarrageCannonsRange" parent="RangeAbil" abil="AP_330mmBarrageCannons"/>
     <CActorSound id="AP_330mmBarrageCannonsMorph" parent="SoundOneShot">
@@ -2239,7 +2237,6 @@
     <CActorAction id="AP_ThorAAAttack" parent="GenericAttack" effectImpact="AP_JavelinMissileLaunchersDamage" effectLaunch="AP_JavelinMissileLaunchersLM">
         <LaunchAttachQuery Methods="AMFilterWeaponSetA1 AMPatternThorAA"/>
         <LaunchAssets Model="ThorAAAttackLaunch" Sound="Thor_AntiAirAttackLaunch"/>
-        <Missile value="AP_ThorAAAttackMissile"/>
         <ImpactMap index="None" Model="ThorAAAttackImpact" Sound="Thor_AntiAirAttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_ThorAAAttackMissile" parent="GenericAttackMissile" unitName="AP_ThorAAWeapon">
@@ -2308,7 +2305,8 @@
         <On Terms="ActorCreation" Send="AnimPlay Start Stand,Work,Start"/>
         <On Terms="AnimDone; AnimName Start" Send="AnimPlay Work Stand,Work PlayForever"/>
         <On Terms="AbilTransport.MedivacTransport.TransportUnload" Send="Destroy"/>
-        <On Terms="AbilTransport.AP_MedivacTransport.TransportUnload; AbilTransport AP_Thor" Send="Destroy"/> <!-- Yes, we can unload something else then Thor, should work as two Thors can't fit in -->
+        <On Terms="AbilTransport.AP_MedivacTransport.TransportUnload; AbilTransport AP_Thor" Send="Destroy"/>
+        <!-- Yes, we can unload something else then Thor, should work as two Thors can't fit in -->
         <On Terms="Signal.*.Dead" Send="Create ThorTransitDeath"/>
         <On Terms="Signal.*.Dead" Send="Destroy"/>
         <On Terms="ActorCreation; PlayerHasReward ThorCE" Send="ModelSwap ThorCETransit"/>
@@ -2323,7 +2321,8 @@
     <CActorModel id="ThorTransit">
         <!-- Override -->
         <!-- Just make it compatible with AP_Medivac -->
-        <On Terms="AbilTransport.AP_MedivacTransport.TransportUnload; AbilTransport Thor" Send="Destroy"/> <!-- Yes, we can unload something else then Thor, should work as two Thors can't fit in -->
+        <On Terms="AbilTransport.AP_MedivacTransport.TransportUnload; AbilTransport Thor" Send="Destroy"/>
+        <!-- Yes, we can unload something else then Thor, should work as two Thors can't fit in -->
     </CActorModel>
     <CActorModel id="AP_ThorTransitDeath">
         <On Terms="ActorCreation" Send="$Death"/>
@@ -2348,7 +2347,6 @@
         <GroupSoundArray index="Attack" value="ThorGroupAttack"/>
         <GroupSoundArray index="Board" value="ThorGroupBoard"/>
         <HeroIcon value="Assets\Textures\btn-unit-terran-thor.dds"/>
-        <HighlightTooltip value="Unit/Name/AP_ThorWreckage"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
         <SoundArray index="Birth" value="ThorBirth"/>
         <SoundArray index="Ready" value="Thor_Ready"/>
@@ -2364,11 +2362,267 @@
         <SoundArray index="ClickError" value="ThorClickError"/>
         <SoundArray index="Highlight" value="ThorHighlight"/>
         <UnitIcon value="Assets\Textures\btn-unit-terran-thor.dds"/>
-        <Model value="AP_ThorWreckage"/>
         <Wireframe>
             <Image value="AP\Assets\Textures\Wireframe-Terran-ThorWreckage.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorAction id="AP_AutoTurretRelease" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="AP_AutoTurretReleaseLM">
+        <LaunchAssets Sound="Raven_AutoTurretReleaseLaunch"/>
+        <Missile value="AP_AutoTurretReleaseMissile"/>
+        <ImpactSiteOps Ops="SOpAttachOrigin SOpShadow"/>
+        <ImpactMap index="None" Sound="Raven_AutoTurretReleaseImpact"/>
+        <ShieldFlashType value="None"/>
+    </CActorAction>
+    <CActorMissile id="AP_AutoTurretReleaseMissile" parent="GenericAttackMissile" unitName="AP_AutoTurretReleaseWeapon">
+        <Model value="AutoTurretReleaseWeapon"/>
+    </CActorMissile>
+    <CActorUnit id="AP_AutoTurret" parent="GenericUnitStandard" unitName="AP_AutoTurret">
+        <Aliases value="_CreepEngulfable"/>
+        <Aliases value="_UnitMedium"/>
+        <CreepHeightClass value="Small"/>
+        <DeathArray index="Normal" ModelLink="AutoTurretDeath" SoundLink="Raven_AutoTurretExplode"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Raven_AutoTurretExplode"/>
+        <On Terms="Behavior.Precursor.Off" Send="Create AP_AutoTurretReleaseMissileImpact"/>
+        <On Terms="Behavior.Precursor.Off" Send="$Birth"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimClear Birth"/>
+        <Model value="AutoTurret"/>
+        <PlacementModel value="AutoTurretPlacement"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <PlacementSound value="Terran_BuildingPlacement"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <BarOffset value="50"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <HeroIcon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-AutoTurret.dds"/>
+        </GroupIcon>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-AutoTurret.dds"/>
+        </Wireframe>
+        <SoundArray index="Birth" value="Raven_AutoTurretBirth"/>
+        <SoundArray index="Ready" value="Raven_AutoTurretReady"/>
+        <SoundArray index="What" value="Raven_AutoTurretWhat"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <ErrorArray Error="CantBuildLocationInvalid" Sound="Raven_Pissed"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <DeathCustoms ModelLink="AutoTurretDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="None"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ActorModel="SpineCrawlerHurlDeathRagdollBloodPrevent" ModelLink="AutoTurretDeathRagdoll" Name="RagdollSpineCrawlerHurl">
+            <BodySquibs Name="None"/>
+        </DeathCustoms>
+    </CActorUnit>
+    <CActorRange id="AP_AutoTurretRange" parent="RangeAbil" abil="AP_BuildAutoTurret"/>
+    <CActorTurret id="AP_AutoTurretTurret">
+        <On Terms="TurretEnable.AP_AutoTurret" Send="Create"/>
+    </CActorTurret>
+    <CActorProgress id="AP_AutoTurretConstruction">
+        <On Terms="Abil.AP_RavenBuild.BuiltStart" Send="Create"/> <!-- Looks like unused -->
+        <StageArray AnimProps="Build" BlendTime="0.000000"/>
+    </CActorProgress>
+    <CActorAction id="AP_AutoTurretAttack" parent="GenericAttack" effectAttack="AP_AutoTurret">
+        <LaunchAssets Sound="Raven_AutoTurretAttackLaunch"/>
+        <ImpactMap index="None" Sound="Raven_AutoTurretAttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+    </CActorAction>
+    <CActorModel id="AP_AutoTurretReleaseMissileImpact">
+        <!--        <On Terms="UnitDeath.AutoTurretReleaseWeapon" Send="Create"/> -->
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="AutoTurretReleaseMissileImpact"/>
+    </CActorModel>
+    <CActorAction id="AP_HunterSeekerAttack" parent="GenericAttack" effectImpact="AP_SeekerMissileDamage" effectLaunch="AP_SeekerMissileLaunchMissile">
+        <Missile value="AP_HunterSeekerAttackMissile"/>
+        <ImpactSiteOps Ops="SOpTargetPoint SOp2DRotation"/>
+        <ImpactAttachQuery Methods="Origin"/>
+        <ImpactMap index="None" Model="Invisible" Sound="Raven_HunterSeekerAttackImpact"/>
+        <ShieldFlashType value="Full"/>
+    </CActorAction>
+    <CActorModel id="AP_HunterSeekerAttackImpactModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_SeekerMissileDamage.Start" Send="Create"/>
+        <Model value="HunterSeekerAttackImpact"/>
+    </CActorModel>
+    <CActorMissile id="AP_HunterSeekerAttackMissile" parent="GenericAttackMissile" unitName="AP_HunterSeekerWeapon">
+        <On Terms="MotionPhaseStart; MotionPhase 1" Send="Create AP_HunterSeekerTrackingBeam"/>
+        <On Terms="MotionPhaseStart; MotionPhase 3" Send="Create AP_HunterSeekerHappySound"/>
+        <Model value="HunterSeekerWeapon"/>
+    </CActorMissile>
+    <CActorAction id="AP_PointDefenseDroneRelease" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="AP_PointDefenseDroneReleaseLaunchMissile">
+        <LaunchAssets Sound="Raven_PointDefenseDroneReleaseLaunch"/>
+        <Missile value="AP_PointDefenseDroneReleaseMissile"/>
+        <ImpactMap index="None" Model="PointDefenseDroneAttackBeamImpact" Sound="Raven_PointDefenseDroneReleaseImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_PointDefenseDroneReleaseMissile" parent="GenericAttackMissile" unitName="AP_PointDefenseDroneReleaseWeapon">
+        <Model value="PointDefenseDroneReleaseWeapon"/>
+    </CActorMissile>
+    <CActorUnit id="AP_PointDefenseDrone" parent="GenericUnitBase" unitName="AP_PointDefenseDrone">
+        <Model value="PointDefenseDrone"/>
+        <DeathArray index="Normal" ModelLink="PointDefenseDroneDeath" SoundLink="Raven_TargetingDroneExplode"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <PlacementModel value="PointDefenseDronePlacement"/>
+        <PlacementSound value="Terran_BuildingPlacement"/>
+        <PlacementActorModel value="AP_PointDefenseDronePlacementModel"/>
+        <PlaceholderActorModel value="AP_PointDefenseDronePlaceholderModel"/>
+        <BarWidth value="36"/>
+        <BarOffset value="20"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-targetingdrone.dds"/>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-targetingdrone.dds"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-PointDefenseDrone.dds"/>
+        </GroupIcon>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-PointDefenseDrone.dds"/>
+        </Wireframe>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <SoundArray index="What" value="Raven_PointDefenseDroneWhat"/>
+        <On Terms="Behavior.AP_PointDefenseReady.On" Send="AnimBracketStart Work Work,Start Work Work,End"/>
+        <On Terms="Behavior.AP_PointDefenseReady.Off" Send="AnimBracketStop Work"/>
+        <Aliases value="_UnitMedium"/>
+    </CActorUnit>
+    <CActorModel id="AP_PointDefenseDronePlacementModel" parent="PlacementModel">
+        <Model value="PointDefenseDronePlacementModel"/>
+        <On Terms="ActorCreation" Send="Create FlyerHelperSplat"/>
+        <HostSiteOps Ops="SOpShadowSyncAir SOpHigherBy3"/>
+    </CActorModel>
+    <CActorModel id="AP_PointDefenseDronePlaceholderModel" parent="PointDefenseDronePlacementModel">
+        <Model value="PointDefenseDronePlaceholderModel"/>
+    </CActorModel>
+    <CActorRange id="AP_PointDefenseDroneWeaponRange">
+        <Weapon value="AP_PointDefenseLaser"/>
+        <On Terms="SelectionLocalUpdate.AP_PointDefenseDrone.Start" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_PointDefenseDrone.StartEditorGround" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_PointDefenseDrone.StartEditorFlyer" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_PointDefenseDrone.Stop" Send="Destroy"/>
+        <On Terms="UnitDeath" Send="Destroy"/>
+    </CActorRange>
+    <CActorBeamSimple id="AP_PointDefenseDroneAttackBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <Model value="PointDefenseDroneAttackBeam"/>
+        <HostLaunch Subject="_Selectable" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachCenter"/>
+        <HostImpact Subject="_Missile" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+        <On Terms="Effect.AP_PointDefenseLaserDamage.Start; At Caster" Send="Create"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.125000 Die"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+    </CActorBeamSimple>
+    <CActorSound id="AP_PointDefenseDroneAttackLaunchSound" parent="SoundOneShot">
+        <Sound value="Raven_PointDefenseDroneAttackLaunch"/>
+        <Host Subject="AP_PointDefenseDrone"/>
+        <On Terms="Effect.AP_PointDefenseLaserDamage.Start; At Caster" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_PointDefenseDroneAttackImpactSound" parent="SoundOneShot">
+        <Sound value="Raven_PointDefenseDroneAttackImpact"/>
+        <Host Subject="::Creator"/>
+        <On Terms="Effect.AP_PointDefenseLaserDamage.Start; At Caster" Send="Create"/>
+    </CActorSound>
+    <CActorModel id="AP_PointDefenseBeamImpact" parent="ModelAnimationStyleContinuous">
+        <Model value="PointDefenseBeamImpact"/>
+        <Host Subject="_Missile"/>
+        <!--HostSiteOps Ops="SOpAttachCenter"/-->
+        <On Terms="Effect.AP_PointDefenseLaserDamage.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.125000 Die"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+    </CActorModel>
+    <CActorUnit id="AP_Raven" parent="GenericUnitStandard" unitName="AP_Raven">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="BuildAnim"/>
+        <Macros value="RavenSpellAnim"/>
+        <On Terms="Abil.AP_SeekerMissile.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.AP_PlacePointDefenseDrone.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.AP_BuildAutoTurret.SourceCastStart" Send="$Spell"/>
+        <HostSiteOps Ops="SOpBankerRaven"/>
+        <Model value="Raven"/>
+        <BuildModel value="Raven"/>
+        <DeathArray index="Normal" ModelLink="RavenDeath" SoundLink="Raven_Explode"/>
+        <PlacementModel value="Raven"/>
+        <PortraitModel value="RavenPortrait"/>
+        <StandAnimTurnTime value="3"/>
+        <AbilSoundArray AbilCmd="AP_BuildAutoTurret,0" Sound="Raven_AutoTurretVO"/>
+        <AbilSoundArray AbilCmd="AP_SeekerMissile,0" Sound="AP_Raven_HunterSeekerVO"/>
+        <AbilSoundArray AbilCmd="AP_PlacePointDefenseDrone,0" Sound="Raven_TargetingDroneVO"/>
+        <BarOffset value="55"/>
+        <ErrorArray Error="CantBuildLocationInvalid" Sound="e_cmdBuildTechRequirementsNotMet_Terr"/>
+        <ErrorArray Error="CantFindPlacementLocation" Sound="e_cmdBuildTechRequirementsNotMet_Terr"/>
+        <ErrorArray Error="CantBuildOnThat" Sound="e_cmdBuildTechRequirementsNotMet_Terr"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Raven.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-raven.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="Raven_Ready"/>
+        <SoundArray index="Help" value="Raven_Help"/>
+        <SoundArray index="What" value="Raven_What"/>
+        <SoundArray index="Yes" value="Raven_Yes"/>
+        <SoundArray index="Pissed" value="Raven_Pissed"/>
+        <SoundArray index="Movement" value="Raven_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-raven.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Raven.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorEventMacro id="AP_RavenSpellAnim">
+        <On Terms="Abil.AP_BuildAutoTurret.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.AP_SpiderMine.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.AP_PlaceSeismicThumper.SourceCastStart" Send="$Spell"/>
+    </CActorEventMacro>
+    <CActorRange id="AP_HunterSeekerRange" parent="RangeAbil" abil="AP_SeekerMissile"/>
+    <CActorModel id="AP_HunterSeekerFailDeath">
+        <Model value="HunterSeekerFailDeath"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <CopySource value="AP_HunterSeekerWeapon"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <On Terms="Behavior.AP_SeekerMissileTimeout.Off; ValidateUnit IsDead" Send="Create"/>
+    </CActorModel>
+    <CActorSound id="AP_HunterSeekerFailSound" parent="SoundOneShot">
+        <Sound value="Terran_ExplosionSmall"/>
+        <On Terms="Behavior.AP_SeekerMissileTimeout.Off; ValidateUnit IsDead" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_HunterSeekerHappySound" parent="SoundOneShot">
+        <Sound value="Raven_HunterSeekerTargetLock"/>
+        <Host Subject="AP_HunterSeekerTrackingBeam"/>
+    </CActorSound>
+    <CActorBeamSimple id="AP_HunterSeekerTrackingBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <Model value="HunterSeekerTrackingBeam"/>
+        <HostLaunch Subject="_Missile" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachCenter"/>
+        <!-- Note that we do not have a host here.  This is b/c SOpAttachCenter is
+             using the target unit if there is one, but doing a pass through if there isn't. -->
+        <HostImpactSiteOps Ops="SOpTargetUnit SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorSound id="AP_HunterSeekerLaunchSound" parent="SoundOneShot">
+        <On Terms="Abil.AP_SeekerMissile.SourcePrepStart" Send="Create"/>
+        <Sound value="Raven_HunterSeekerLaunch"/>
+    </CActorSound>
+    <CActorRange id="AP_PointDefenseDroneRange" parent="RangeAbil" abil="AP_PlacePointDefenseDrone"/>
     <CActorEventMacro id="UnloadDropAnim">
         <!-- Override -->
         <!-- Add AP_Medivac to common transport load/unload animations -->

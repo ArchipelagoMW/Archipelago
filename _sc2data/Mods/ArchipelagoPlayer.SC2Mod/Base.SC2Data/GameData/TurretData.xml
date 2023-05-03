@@ -28,4 +28,11 @@
         <YawArc value="90"/>
         <YawRate value="1999.8632"/>
     </CTurret>
+    <CTurret id="AP_AutoTurret" parent="FreeRotate">
+        <Idle value="Spin"/>
+        <YawIdleRate value="-45"/>
+    </CTurret>
+    <CTurret id="AP_PointDefenseDrone" parent="FreeRotate">
+        <YawRate value="2857.5"/>
+    </CTurret>
 </Catalog>

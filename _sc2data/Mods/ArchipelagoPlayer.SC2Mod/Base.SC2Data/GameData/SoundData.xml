@@ -1164,4 +1164,9 @@
         <Pitch value="0.000000,2.000000"/>
         <Volume value="-12.000000,-12.000000"/>
     </CSound>
+    <CSound id="AP_Raven_HunterSeekerVO" parent="TerranAck">
+        <AssetArray File="LocalizedData\Sounds\TerranUnitVO\Raven\Raven_HunterSeeker00.ogg" PortraitModel="RavenPortrait" Speaker="ConversationState/Characters/CharRaven"/>
+        <Chance value="25"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
 </Catalog>

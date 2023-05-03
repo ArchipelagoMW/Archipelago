@@ -315,4 +315,11 @@
         <NodeArray index="Use" Link="AP_CountUpgrade330mmBarrageCannonsCompleteOnly"/>
         <NodeArray index="Show" Link="AP_CountUpgrade330mmBarrageCannonsCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_LearnRavenEnergyUpgrade">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeRavenCorvidReactorQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="AP_SkynetMinesResearched">
+        <NodeArray index="Show" Link="AP_CountUpgradeAbdominalFortitudeCompleteOnly"/>
+    </CRequirement>
 </Catalog>

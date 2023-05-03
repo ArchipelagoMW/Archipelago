@@ -196,6 +196,40 @@
         <CombineArray value="AP_IsVanillaThor"/>
         <CombineArray value="AP_IsAPThor"/>
     </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPRaven">
+        <Value value="AP_Raven"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaRaven">
+        <Value value="Raven"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsRaven" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaRaven"/>
+        <CombineArray value="AP_IsAPRaven"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_NotVanillaPointDefenseDrone">
+        <Value value="PointDefenseDrone"/>
+        <Find value="0"/>
+        <ResultFailed value="CantTargetThatUnit,Error/CantTargetPointDefenseDrone"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotAPPointDefenseDrone">
+        <Value value="AP_PointDefenseDrone"/>
+        <Find value="0"/>
+        <ResultFailed value="CantTargetThatUnit,Error/CantTargetPointDefenseDrone"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="NotPointDefenseDrone" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_NotVanillaPointDefenseDrone"/>
+        <CombineArray value="AP_NotAPPointDefenseDrone"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_PointDefenseDroneUnitFilter">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Type value="And"/>
+        <CombineArray value="noMarkers"/>
+        <CombineArray value="MissileIsActive"/>
+        <CombineArray value="NotRoachMissile"/>
+    </CValidatorCombine>
     <!-- Vanilla IsViking works based on SelectAlias, not need to override -->
     <CValidatorUnitType id="AP_IsVanillaVikingAssault">
         <Value value="VikingAssault"/>
