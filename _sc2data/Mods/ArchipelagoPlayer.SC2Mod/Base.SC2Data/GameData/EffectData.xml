@@ -1039,7 +1039,7 @@
         <AmmoUnit value="AP_EMP2Weapon"/>
     </CEffectLaunchMissile>
     <CEffectModifyUnit id="AP_EMPModifyUnit">
-        <ValidatorArray value="empUTargetFilters"/>
+        <ValidatorArray value="AP_empUTargetFilters"/>
         <EditorCategories value="Race:Terran"/>
         <VitalArray index="Shields">
             <Change value="-100"/>
@@ -1417,13 +1417,7 @@
             <MatchFlags index="Link" value="1"/>
         </Marker>
     </CEffectModifyUnit>
-    <CEffectDamage id="PointDefenseLaserDummy">
-        <EditorCategories value="Race:Terran"/>
-        <ResponseFlags index="Acquire" value="1"/>
-        <ResponseFlags index="Flee" value="1"/>
-        <Visibility value="Visible"/>
-        <Flags index="Notification" value="1"/>
-    </CEffectDamage>
+    <CEffectDamage id="AP_PointDefenseLaserDummy"/>
     <CEffectSet id="AP_PointDefenseLaserSet">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="AP_PointDefenseLaserDamage"/>
@@ -1464,4 +1458,51 @@
         <EditorCategories value="Race:Terran"/>
         <Amount value="8"/>
     </CEffectDamage>
+    <CEffectApplyBehavior id="AP_IrradiateApplyBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value=""/>
+        <Behavior value="AP_Irradiate"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="AP_IrradiateInitialDamage">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Biological;Structure,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.5" Effect="AP_IrradiateInitialDamageApply"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="AP_IrradiateInitialDamageApply">
+        <EditorCategories value=""/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Amount value="10"/>
+        <SearchFilters value="Biological;Ally,Neutral,Structure,RawResource,HarvestableResource,Item,Dead,Hidden"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_IrradiatePeriodicDamage">
+        <EditorCategories value=""/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Amount value="8"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_IrradiateSearchArea">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <SearchFilters value="Biological;Structure,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.5" Effect="AP_IrradiatePeriodicDamage"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_IrradiateSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_IrradiateInitialDamage"/>
+        <EffectArray value="AP_IrradiateApplyBehavior"/>
+    </CEffectSet>
+    <CEffectCreateHealer id="AP_NanoRepair">
+        <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value="NotHidden"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="AP_NotThorWreckage"/>
+        <!-- ValidatorArray value="NotOdinWreckage"/> -->
+        <ValidatorArray value="NotVortexd"/>
+        <EditorCategories value="Race:Terran"/>
+        <DrainVital value="Energy"/>
+        <DrainVitalCostFactor value="0.33"/>
+        <RechargeVitalRate value="9"/>
+    </CEffectCreateHealer>
 </Catalog>

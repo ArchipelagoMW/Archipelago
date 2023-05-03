@@ -523,4 +523,21 @@
         <Duration value="15"/>
         <ExpireEffect value="Kill"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_Irradiate">
+        <Alignment value="Negative"/>
+        <InfoIcon value="AP\Assets\Textures\btn-ability-terran-irradiate.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="30"/>
+        <Period value="1"/>
+        <PeriodicEffect value="AP_IrradiateSearchArea"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ScienceVesselCloakField">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-cloakfield.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="60"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

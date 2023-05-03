@@ -381,4 +381,7 @@
         <Value value="AP_ThorWreckage"/>
         <Find value="0"/>
     </CValidatorUnitType>
+    <CValidatorUnitFilters id="AP_empUTargetFilters">
+        <Filters value="-;Stasis,Dead,Hidden"/>
+    </CValidatorUnitFilters>
 </Catalog>

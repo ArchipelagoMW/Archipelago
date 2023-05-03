@@ -110,4 +110,18 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
     </CLight>
+    <CLight id="AP_ScienceVesselPortrait" parent="default">
+        <ToDInfoArray index="0" AmbientColor="0.200000,0.184314,0.282353" OperatorHDR="3">
+            <Param index="HDRExposure" value="1.475000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.647059,0.913725,0.992157"/>
+                <ColorMultiplier value="1.000000"/>
+                <SpecColorMultiplier value="1.000000"/>
+                <Direction value="-0.058351,0.976406,-0.207912"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.313726,0.756863,1.000000" ColorMultiplier="0.933000" Direction="0.771282,-0.605415,-0.196459"/>
+            <DirectionalLight index="Back" Color="0.317647,0.874510,0.992157" ColorMultiplier="0.219000" Direction="-0.851308,0.505872,0.139173"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
+    </CLight>
 </Catalog>

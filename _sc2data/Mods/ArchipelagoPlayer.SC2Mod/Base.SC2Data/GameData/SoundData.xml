@@ -1169,4 +1169,89 @@
         <Chance value="25"/>
         <Volume value="-1.000000,-1.000000"/>
     </CSound>
+    <CSound id="AP_ScienceVessel_Attack" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Attack00.ogg" FacialAnim="ScienceVessel_Attack00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Attack01.ogg" FacialAnim="ScienceVessel_Attack01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Attack02.ogg" FacialAnim="ScienceVessel_Attack02"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Attack03.ogg" FacialAnim="ScienceVessel_Attack03"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_ScienceVessel_Attack_NP" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_NeuralParasiteAttack00.ogg" FacialAnim="ScienceVessel_NeuralParasiteAttack00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_NeuralParasiteAttack01.ogg" FacialAnim="ScienceVessel_NeuralParasiteAttack01"/>
+    </CSound>
+    <CSound id="AP_ScienceVessel_Death" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Death00.wav"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_ScienceVessel_Death_NP" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_NeuralParasiteDeath00.wav"/>
+    </CSound>
+    <CSound id="AP_ScienceVessel_EnergyLow" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_EnergyLow00.ogg" FacialAnim="ScienceVessel_EnergyLow00"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_ScienceVessel_Help" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Help00.ogg" FacialAnim="ScienceVessel_Help00"/>
+        <Category value="Alert"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_ScienceVessel_IrradiateImpact" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\ScienceVessel\ScienceVessel_IrradiateImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\ScienceVessel\AP_ScienceVessel_IrradiateImpact.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\ScienceVessel\ScienceVessel_IrradiateImpact3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\ScienceVessel\ScienceVessel_IrradiateImpact0.wav"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-4.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_ScienceVessel_Irriadiate" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Irriadiate00.ogg" FacialAnim="ScienceVessel_Irriadiate00"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_ScienceVessel_Movement" parent="Movement">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Hercules\Hercules_Movement0.wav"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_ScienceVessel_NanoRepair" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_NanoRepair00.ogg" FacialAnim="ScienceVessel_NanoRepair00"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_ScienceVessel_Pissed" parent="Pissed">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Pissed00.ogg" FacialAnim="ScienceVessel_Pissed00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Pissed01.ogg" FacialAnim="ScienceVessel_Pissed01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Pissed02.ogg" FacialAnim="ScienceVessel_Pissed02"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_ScienceVessel_Ready" parent="Ready">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Ready00.ogg" FacialAnim="ScienceVessel_Ready00"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_ScienceVessel_Ready_NP" parent="Ready">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_NeuralParasiteReady00.ogg" FacialAnim="ScienceVessel_NeuralParasiteReady00"/>
+    </CSound>
+    <CSound id="AP_ScienceVessel_What" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_What00.ogg" FacialAnim="ScienceVessel_What00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_What01.ogg" FacialAnim="ScienceVessel_What01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_What02.ogg" FacialAnim="ScienceVessel_What02"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_What03.ogg" FacialAnim="ScienceVessel_What03"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_ScienceVessel_What_NP" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_NeuralParasiteWhat00.ogg" FacialAnim="ScienceVessel_NeuralParasiteWhat00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_NeuralParasiteWhat01.ogg" FacialAnim="ScienceVessel_NeuralParasiteWhat01"/>
+    </CSound>
+    <CSound id="AP_ScienceVessel_Yes" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Yes00.ogg" FacialAnim="ScienceVessel_Yes00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Yes01.ogg" FacialAnim="ScienceVessel_Yes01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Yes02.ogg" FacialAnim="ScienceVessel_Yes02"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Yes03.ogg" FacialAnim="ScienceVessel_Yes03"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
 </Catalog>

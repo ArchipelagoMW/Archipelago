@@ -2,6 +2,7 @@
 Abil/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
 Abil/Name/AP_AssaultMode=Assault Mode
 Abil/Name/AP_BansheeCloak=Cloaking Field
+Abil/Name/AP_BuildAutoTurret=Place Auto Turret
 Abil/Name/AP_D8Charge=G-4 Charge
 Abil/Name/AP_DefensiveMatrix=Defensive Matrix
 Abil/Name/AP_EMP=EMP
@@ -14,7 +15,9 @@ Abil/Name/AP_MedivacHeal=Heal
 Abil/Name/AP_MedivacTransport=Load-Unload (Medivac)
 Abil/Name/AP_MissilePods=Hurricane Missile Pods
 Abil/Name/AP_Obliterate=Obliterate
+Abil/Name/AP_PlacePointDefenseDrone=Place Point Defense Drone
 Abil/Name/AP_RogueGhostCloak=Cloak
+Abil/Name/AP_SeekerMissile=Seeker Missile
 Abil/Name/AP_SiegeMode=Siege
 Abil/Name/AP_Snipe=Sniper
 Abil/Name/AP_SpectreHoldFire=Hold Fire
@@ -35,9 +38,8 @@ Abil/Name/AP_WraithCloak=Cloaking Field
 Abil/Name/AP_Yamato=Yamato Gun
 Abil/Name/AP_heal=Heal
 Abil/Name/AP_que1=Queue (1)
-Abil/Name/AP_BuildAutoTurret=Place Auto Turret
-Abil/Name/AP_PlacePointDefenseDrone=Place Point Defense Drone
-Abil/Name/AP_SeekerMissile=Seeker Missile
+Abil/Name/AP_Irradiate=Irradiate
+Abil/Name/AP_NanoRepair=Nano Repair
 Behavior/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Behavior/Name/AP_330mmBarrageCannons=330mm Barrage Cannon
 Behavior/Name/AP_BansheeCloak=Cloak
@@ -51,6 +53,7 @@ Behavior/Name/AP_GhostHoldFire=Hold Fire
 Behavior/Name/AP_GhostHoldFireB=Hold Fire
 Behavior/Name/AP_LockdownB=Lockdown
 Behavior/Name/AP_PersonalCloakingFree=Cloak
+Behavior/Name/AP_SeekerMissileTimeout=Seeker Missile timeout
 Behavior/Name/AP_Slow=Slow
 Behavior/Name/AP_SpectreCloaking=Cloak
 Behavior/Name/AP_SpectreCloakingFree=Cloak
@@ -61,7 +64,8 @@ Behavior/Name/AP_Stimpack=Stimpack
 Behavior/Name/AP_UltrasonicPulseStun=Ultrasonic Pulse stun
 Behavior/Name/AP_ViralPlasma=Viral Plasma
 Behavior/Name/AP_WraithCloak=Cloak
-Behavior/Name/AP_SeekerMissileTimeout=Seeker Missile timeout
+Behavior/Name/AP_Irradiate=Irradiated
+Behavior/Name/AP_ScienceVesselCloakField=Cloaking Field
 Behavior/Tooltip/AP_250mmStrikeCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_330mmBarrageCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_BansheeCloak=This unit is cloaked and will only be revealed by detectors or effects.
@@ -75,12 +79,15 @@ Behavior/Tooltip/AP_SpectreCloaking=This unit is cloaked and will only be reveal
 Behavior/Tooltip/AP_SpectreCloakingFree=This unit is cloaked and will only be revealed by detectors or effects.
 Behavior/Tooltip/AP_Stimpack=This unit moves and attacks more quickly while under the effects of Stimpack.
 Behavior/Tooltip/AP_WraithCloak=This unit is cloaked and will only be revealed by detector units or effects.
+Behavior/Tooltip/AP_Irradiate=Irradiated unit. All Biological units in or near the radiation field will take damage.
 Button/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Button/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
 Button/Name/AP_AblativeScales=Kinetic Foam
 Button/Name/AP_AdvancedHealingAI=Advanced Healing AI
 Button/Name/AP_AresClassWeaponsSystem=Ares-Class Targeting System
 Button/Name/AP_AresClassWeaponsSystemviking=Phobos-Class Weapons System
+Button/Name/AP_BuildAutoTurret=Build Auto-Turret
+Button/Name/AP_BuildPointDefenseDrone=Build Point Defense Drone
 Button/Name/AP_CerberusMines=Cerberus Mine
 Button/Name/AP_CloakOnBanshee=Cloak
 Button/Name/AP_CloakOnGhost=Cloak
@@ -95,6 +102,7 @@ Button/Name/AP_FireOnTheMove=Fire on the Move
 Button/Name/AP_G4Charge=G-4 Clusterbomb
 Button/Name/AP_GhostHoldFire=Hold Fire
 Button/Name/AP_Heal=Heal
+Button/Name/AP_HunterSeekerMissile=Seeker Missile
 Button/Name/AP_ImmortalityProtocol=Immortality Protocol
 Button/Name/AP_IncineratorNozzles=Incinerator Gauntlets
 Button/Name/AP_InfernalPreIgniter=Thermite Filaments
@@ -138,17 +146,20 @@ Button/Name/AP_WeaponsFree=Weapons Free
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_BuildAutoTurret=Build Auto-Turret
-Button/Name/AP_BuildPointDefenseDrone=Build Point Defense Drone
-Button/Name/AP_HunterSeekerMissile=Seeker Missile
+Button/Name/BuildAP_ScienceVessel=Build Science Vessel
+Button/Name/AP_Irradiate=Irradiate
+Button/Name/AP_NanoRepair=Nano-Repair
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AblativeScales=Increases Marauder life by 25.
 Button/Tooltip/AP_AdvancedHealingAI=The Medivac can heal two targets at once.
 Button/Tooltip/AP_AresClassWeaponsSystem=Increases missile range by 3 and Autocannon range by 1.
 Button/Tooltip/AP_AresClassWeaponsSystemviking=Increases missile range by 2 and Autocannon range by 1.
+Button/Tooltip/AP_AutoTurret=Automated defensive turret. <n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_Banshee=Tactical-strike aircraft.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_Battlecruiser=Powerful warship.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/AP_BuildAutoTurret=Automated defensive turret. Times out after <d ref="Behavior,AP_AutoTurretTimedLife,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/AP_BuildPointDefenseDrone=Uses a laser to shoot down enemy missiles.  <n/>Cannot target special attacks. <n/>Times out after <d ref="Behavior,AP_PointDefenseDroneTimedLife,Duration"/> seconds.<n/><n/><c val="f078ff">Each shot consumes 10 energy.</c>
 Button/Tooltip/AP_CerberusMines=Increases blast radius and trigger radius by 33%.
 Button/Tooltip/AP_CloakOnBanshee=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_BansheeCloak,Modification.VitalRegenArray[2] + Unit,AP_Banshee,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_CloakOnBansheeUpgrade=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="0.45 / Behavior,TimeScaleConversionBehavior,Duration)" precision="1"/> energy per second.</c>
@@ -170,6 +181,7 @@ Button/Tooltip/AP_GhostHoldFire=Orders selected units to holster their weapons a
 Button/Tooltip/AP_Goliath=Heavy-fire support unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_Heal=Heals a friendly biological target.<n/><n/><c val="f078ff">Heals <d ref="Effect,AP_MedivacHeal,RechargeVitalRate*Effect,AP_MedivacHeal,DrainVitalCostFactor"/> life per 1 energy.</c>
 Button/Tooltip/AP_Hellion=Fast scout. Has a flame attack that damages all enemy units in its line of fire.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_HunterSeekerMissile=Missile that chases its target. Has enough fuel for <d ref="Behavior,AP_SeekerMissileTimeout,Duration"/> seconds. Deals up to <d ref="Effect,AP_SeekerMissileDamage,Amount"/> area damage.
 Button/Tooltip/AP_ImmortalityProtocol=Allows a destroyed Thor to be rebuilt in the field.
 Button/Tooltip/AP_IncineratorNozzles=Increases the Firebat's damage radius by 40%.
 Button/Tooltip/AP_InfernalPreIgniter=Hellions do an additional 10 damage to light armor.
@@ -189,7 +201,9 @@ Button/Tooltip/AP_Obliterate=Deals 200 damage to a single target.
 Button/Tooltip/AP_OcularImplants=Increases Ghost weapon range by 2. Increases sight radius by 3.
 Button/Tooltip/AP_PermanentlyCloakedGhost=The Ghost is permanently cloaked.
 Button/Tooltip/AP_PermanentlyCloakedSpectre=The Spectre is permanently cloaked.
+Button/Tooltip/AP_PointDefenseDrone=Uses a laser to shoot down enemy missiles.  <n/>Cannot target special attacks. <n/>Times out after <d ref="Behavior,AP_PointDefenseDroneTimedLife,Duration"/> seconds.<n/><n/><c val="f078ff">Each shot consumes 10 energy.</c>
 Button/Tooltip/AP_RapidDeploymentTubes=The Medivac deploys loaded troops almost instantly.
+Button/Tooltip/AP_Raven=Aerial support unit. Can use Auto-Turret, Point Defense Drone and Seeker Missile.<n/><n/><c val="FFE303">Detector</c>
 Button/Tooltip/AP_Reaper=Raider. Capable of jumping up and down cliffs. Throws explosive mines.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_ResearchSpiderMinesSC1=Enables the Vulture to carry Spider Mines. Spider Mines burrow into the ground and become cloaked unless spotted with a detector or effect. When most types of enemy ground units pass nearby, the Spider Mine will unburrow, chase down the units, and detonate.
 Button/Tooltip/AP_RipwaveMissiles=Viking missiles deal area damage.
@@ -225,12 +239,10 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_AutoTurret=Automated defensive turret. <n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
-Button/Tooltip/AP_BuildAutoTurret=Automated defensive turret. Times out after <d ref="Behavior,AP_AutoTurretTimedLife,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
-Button/Tooltip/AP_BuildPointDefenseDrone=Uses a laser to shoot down enemy missiles.  <n/>Cannot target special attacks. <n/>Times out after <d ref="Behavior,AP_PointDefenseDroneTimedLife,Duration"/> seconds.<n/><n/><c val="f078ff">Each shot consumes 10 energy.</c>
-Button/Tooltip/AP_HunterSeekerMissile=Missile that chases its target. Has enough fuel for <d ref="Behavior,AP_SeekerMissileTimeout,Duration"/> seconds. Deals up to <d ref="Effect,AP_SeekerMissileDamage,Amount"/> area damage.
-Button/Tooltip/AP_PointDefenseDrone=Uses a laser to shoot down enemy missiles.  <n/>Cannot target special attacks. <n/>Times out after <d ref="Behavior,AP_PointDefenseDroneTimedLife,Duration"/> seconds.<n/><n/><c val="f078ff">Each shot consumes 10 energy.</c>
-Button/Tooltip/AP_Raven=Aerial support unit. Can use Auto-Turret, Point Defense Drone and Seeker Missile.<n/><n/><c val="FFE303">Detector</c>
+Button/Tooltip/BuildAP_ScienceVessel=Aerial support unit. Can use Irradiate and Nano-Repair abilities.<n/><n/><c val="FFE303">Detector</c>
+Button/Tooltip/AP_Irradiate=Irradiates a single target, causing damage over time to target and any nearby units for <d ref="Behavior,Irradiate,Duration"/> seconds. Irradiate does not damage mechanical units, but nearby biological units will take damage from an Irradiated mechanical unit.
+Button/Tooltip/AP_NanoRepair=Heals a friendly mechanical unit.<n/><n/><c val="f078ff">Heals 3 life per 1 energy.</c>
+Button/Tooltip/AP_ScienceVessel=Aerial support unit. Can use Irradiate and Nano-Repair abilities.<n/><n/><c val="FFE303">Detector</c>
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -248,6 +260,11 @@ Effect/Name/AP_ATSLaserBatteryLM=ATS Laser Battery
 Effect/Name/AP_ATSLaserBatteryU=ATS Laser Battery
 Effect/Name/AP_ArcliteShockCannonEnemyDamage=Arclite Shock Cannon (Enemy Damage)
 Effect/Name/AP_ArcliteShockCannonFriendlyDamage=Arclite Shock Cannon (Friendly Damage)
+Effect/Name/AP_AutoTurretRelease=Auto Turret Release
+Effect/Name/AP_AutoTurretReleaseLM=Auto Turret Release
+Effect/Name/AP_AutoTurretReleaseLaunch=Auto Turret Release Launch
+Effect/Name/AP_AutoTurretSet=Auto Turret (Set)
+Effect/Name/AP_AutoturretTimedLife=Auto turret Timed Life
 Effect/Name/AP_BacklashRockets=Backlash Rockets
 Effect/Name/AP_BacklashRocketsLM=Backlash Rockets
 Effect/Name/AP_BacklashRocketsU=Backlash Rockets
@@ -352,6 +369,10 @@ Effect/Name/AP_NukeSuicide=Nuke
 Effect/Name/AP_Obliterate=Obliterate
 Effect/Name/AP_P38ScytheGuassPistol=P-38 Scythe Guass Pistol
 Effect/Name/AP_P38ScytheGuassPistolBurst=P-38 Scythe Guass Pistol
+Effect/Name/AP_PointDefenseDroneReleaseCreateUnit=Point Defense Drone Release (Create Unit)
+Effect/Name/AP_PointDefenseDroneReleaseLaunchMissile=Point Defense Drone Release (Launch Missile)
+Effect/Name/AP_PointDefenseDroneReleaseSet=Point Defense Drone Release (Set)
+Effect/Name/AP_PointDefenseDroneTimedLife=Point Defense Drone (Timed Life)
 Effect/Name/AP_PunisherGrenadesLM=Punisher Grenades
 Effect/Name/AP_PunisherGrenadesSet=Punisher Grenades
 Effect/Name/AP_PunisherGrenadesSlow=Punisher Grenades
@@ -361,6 +382,8 @@ Effect/Name/AP_ScreecherMissilesCarpetBombDamage=Screecher Missiles (Carpet Bomb
 Effect/Name/AP_ScreecherMissilesCarpetBombSearchArea=Screecher Missiles (Carpet Bomb Search Area)
 Effect/Name/AP_ScreecherMissilesCreateCarpetBombPersistent=Screecher Missiles (Create Carpet Bomb Persistent)
 Effect/Name/AP_ScreecherMissilesSet=Screecher Missiles (Set)
+Effect/Name/AP_SeekerMissileDamage=Seeker (Damage)
+Effect/Name/AP_SeekerMissileLaunchMissile=Seeker (Launch Missile)
 Effect/Name/AP_SnipeDamage=Snipe (Damage)
 Effect/Name/AP_SpawnSpiderMine=Spawn Spider Mine
 Effect/Name/AP_SpawnSpiderMineSet=Spawn Spider Mine Set
@@ -401,20 +424,18 @@ Effect/Name/AP_WraithGU=Hurricane Laser
 Effect/Name/AP_Yamato=Yamato Cannon (Missile)
 Effect/Name/AP_YamatoU=Yamato Cannon (Damage)
 Effect/Name/AP_heal=Heal
-Effect/Name/AP_AutoTurretRelease=Auto Turret Release
-Effect/Name/AP_AutoTurretReleaseLM=Auto Turret Release
-Effect/Name/AP_AutoTurretReleaseLaunch=Auto Turret Release Launch
-Effect/Name/AP_AutoTurretSet=Auto Turret (Set)
-Effect/Name/AP_AutoturretTimedLife=Auto turret Timed Life
-Effect/Name/AP_PointDefenseDroneReleaseCreateUnit=Point Defense Drone Release (Create Unit)
-Effect/Name/AP_PointDefenseDroneReleaseLaunchMissile=Point Defense Drone Release (Launch Missile)
-Effect/Name/AP_PointDefenseDroneReleaseSet=Point Defense Drone Release (Set)
-Effect/Name/AP_PointDefenseDroneTimedLife=Point Defense Drone (Timed Life)
-Effect/Name/AP_SeekerMissileDamage=Seeker (Damage)
-Effect/Name/AP_SeekerMissileLaunchMissile=Seeker (Launch Missile)
+Effect/Name/AP_IrradiateApplyBehavior=Irradiate Apply Behavior
+Effect/Name/AP_IrradiateInitialDamage=Irradiate Initial Damage
+Effect/Name/AP_IrradiateInitialDamageApply=Irradiate Initial Damage Apply
+Effect/Name/AP_IrradiatePeriodicDamage=Irradiate Periodic Damage
+Effect/Name/AP_IrradiateSearchArea=Irradiate Search Area
+Effect/Name/AP_IrradiateSet=Irradiate Set
+Effect/Name/AP_NanoRepair=Nano-Repair
 UI/AP_SpiderMineBuilding=Constructing
 Unit/Name/AP_ATALaserBatteryLMWeapon=ATA Laser Battery
 Unit/Name/AP_ATSLaserBatteryLMWeapon=ATS Laser Battery
+Unit/Name/AP_AutoTurret=Auto-Turret
+Unit/Name/AP_AutoTurretReleaseWeapon=Auto Turret Release Weapon
 Unit/Name/AP_BacklashRocketsLMWeapon=Backlash Rockets
 Unit/Name/AP_Banshee=Banshee
 Unit/Name/AP_Battlecruiser=Battlecruiser
@@ -430,13 +451,17 @@ Unit/Name/AP_Ghost=Ghost
 Unit/Name/AP_Goliath=Goliath
 Unit/Name/AP_GoliathAWeapon=Goliath Air Weapon
 Unit/Name/AP_Hellion=Hellion
+Unit/Name/AP_HunterSeekerWeapon=Seeker
 Unit/Name/AP_HurricaneMissileLeft=Hurricane Missile Left
 Unit/Name/AP_HurricaneMissileRight=Hurricane Missile Right
 Unit/Name/AP_Marauder=Marauder
 Unit/Name/AP_Marine=Marine
 Unit/Name/AP_Medic=Medic
 Unit/Name/AP_Medivac=Medivac
+Unit/Name/AP_PointDefenseDrone=Point Defense Drone
+Unit/Name/AP_PointDefenseDroneReleaseWeapon=Point Defense Drone Release
 Unit/Name/AP_PunisherGrenadesLMWeapon=Punisher Grenades
+Unit/Name/AP_Raven=Raven
 Unit/Name/AP_Reaper=Reaper
 Unit/Name/AP_SiegeTank=Siege Tank
 Unit/Name/AP_SiegeTankSieged=Siege Tank
@@ -458,12 +483,7 @@ Unit/Name/AP_WraithAirWeaponLeft=Wraith Air Left
 Unit/Name/AP_WraithAirWeaponRight=Wraith Air Right
 Unit/Name/AP_WraithGroundWeapon=Wraith Ground
 Unit/Name/AP_YamatoWeapon=Yamato
-Unit/Name/AP_AutoTurret=Auto-Turret
-Unit/Name/AP_AutoTurretReleaseWeapon=Auto Turret Release Weapon
-Unit/Name/AP_HunterSeekerWeapon=Seeker
-Unit/Name/AP_PointDefenseDrone=Point Defense Drone
-Unit/Name/AP_PointDefenseDroneReleaseWeapon=Point Defense Drone Release
-Unit/Name/AP_Raven=Raven
+Unit/Name/AP_ScienceVessel=Science Vessel
 Upgrade/Name/AP_330mmBarrageCannons=330 mm Barrage Cannons
 Upgrade/Name/AP_AdvancedHealingAI=Advanced Healing AI
 Upgrade/Name/AP_AresClassWeaponsSystem=Ares-Class Targeting System
@@ -485,6 +505,7 @@ Upgrade/Name/AP_CrossSpectrumDampeners=Cross-Spectrum Dampeners
 Upgrade/Name/AP_DefensiveMatrix=Defensive Matrix
 Upgrade/Name/AP_DistortionBlasters=Distortion Blasters
 Upgrade/Name/AP_DistortionThrusters=Distortion Thrusters
+Upgrade/Name/AP_DurableMaterials=Durable Materials
 Upgrade/Name/AP_DynamicPowerRouting=Tomahawk Power Cells
 Upgrade/Name/AP_EnergyStorage=Energy Storage
 Upgrade/Name/AP_ExpandedHull=Expanded Hull
@@ -495,6 +516,7 @@ Upgrade/Name/AP_GhostMoebiusReactor=Moebius Reactor
 Upgrade/Name/AP_HALORockets=Ripwave Missiles
 Upgrade/Name/AP_HellionCampaignInfernalPreIgniter=Thermite Filaments
 Upgrade/Name/AP_HighCapacityBarrels=Infernal Pre-igniter
+Upgrade/Name/AP_HunterSeeker=Seeker Missile
 Upgrade/Name/AP_HurricaneMissiles=Missile Pods
 Upgrade/Name/AP_Hyperfluxor=Hyperfluxor
 Upgrade/Name/AP_ImpalerRounds=Impaler Rounds
@@ -514,6 +536,7 @@ Upgrade/Name/AP_PermanentCloakGhost=Permanent Cloaking
 Upgrade/Name/AP_PermanentCloakSpectre=Nyx-Class Cloaking Module
 Upgrade/Name/AP_PersonalCloaking=Personal Cloaking
 Upgrade/Name/AP_PunisherGrenades=Concussive Shells
+Upgrade/Name/AP_RavenCorvidReactor=Corvid Reactor
 Upgrade/Name/AP_ReaperD8Charge=D-8 Charge
 Upgrade/Name/AP_ReaperSpeed=Nitro Packs
 Upgrade/Name/AP_ReaperStimpack=Stimpack
@@ -536,9 +559,9 @@ Upgrade/Name/AP_VikingJotunBoosters=Jotun Boosters
 Upgrade/Name/AP_VultureAutoRepair=Auto-Repair
 Upgrade/Name/AP_WraithCloak=Wraith Cloak
 Upgrade/Name/AP_YamatoCannon=Yamato Cannon
-Upgrade/Name/AP_DurableMaterials=Durable Materials
-Upgrade/Name/AP_HunterSeeker=Seeker Missile
-Upgrade/Name/AP_RavenCorvidReactor=Corvid Reactor
+Upgrade/Name/AP_ScienceVessel=Science Vessel
+Upgrade/Name/AP_ScienceVesselEnergyManipulation=Science Vessel (Energy Manipulation)
+Upgrade/Name/AP_ScienceVesselPlasmaWeaponry=Science Vessel (Plasma Weaponry)
 Weapon/Name/AP_90mmCannons=90mm Cannons
 Weapon/Name/AP_ATALaserBattery=ATA Laser Battery
 Weapon/Name/AP_ATSLaserBattery=ATS Laser Battery

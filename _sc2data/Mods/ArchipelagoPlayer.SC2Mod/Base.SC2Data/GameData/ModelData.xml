@@ -731,4 +731,76 @@
         <SelectionRadius value="2.000000"/>
         <ShadowRadius value="2.000000"/>
     </CModel>
+    <CModel id="AP_IrradiateEffect" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Zerg\DiseaseCloud\DiseaseCloud.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ScaleMax value="2.800000,2.800000,2.800000"/>
+        <ScaleMin value="2.800000,2.800000,2.800000"/>
+    </CModel>
+    <CModel id="AP_NanoRepairBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\NanoRepairBeam\NanoRepairBeam.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_NanoRepairBeamImpact" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\NanoRepairBeamImpact\NanoRepairBeamImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_PlasmaTorpedoesImpact" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\BattlecruiserPlasmaMissile\BattlecruiserPlasmaMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Lighting value=""/>
+    </CModel>
+    <CModel id="AP_PlasmaTorpedoesWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\BattlecruiserPlasmaMissile\BattlecruiserPlasmaMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Lighting value=""/>
+    </CModel>
+    <CModel id="AP_ScienceVessel" parent="Unit">
+        <Model value="Assets\Units\Terran\ScienceVessel\ScienceVessel.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid05"/>
+        <Radius value="1.000000"/>
+        <SelectionRadius value="1.000000"/>
+        <ShadowRadius value="1.000000"/>
+        <TechPurchaseCamera value="Star2CameraMid05"/>
+        <UnitGlossaryCamera value="Star2CameraMid05"/>
+    </CModel>
+    <CModel id="AP_ScienceVesselDeath" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Units\Terran\ScienceVesselDeath\ScienceVesselDeath.m3"/>
+        <LowQualityModel value="ScienceVesselDeathLow"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranPreExplosionSmall"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranExplosionMedium"/>
+            <Type value="Sound"/>
+            <Time value="0.933000"/>
+        </Events>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_ScienceVesselDeathLow" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Effects\Terran\TerranSmallUnitDeath\TerranSmallUnitDeath_Low.m3"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranExplosionMedium"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+        </Events>
+        <Lighting value="TerranMediumUnitDeathLow"/>
+        <ScaleMax value="1.400000,1.400000,1.400000"/>
+        <ScaleMin value="1.400000,1.400000,1.400000"/>
+        <SelectionRadius value="0.263000"/>
+        <ShadowRadius value="0.263000"/>
+    </CModel>
+    <CModel id="AP_ScienceVesselPortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\ScienceVesselPortrait\ScienceVesselPortrait.m3"/>
+        <FacialController value="LocalizedData\Facial\ScienceVesselPortrait.fxa"/>
+        <Image value="Assets\Textures\ScienceVesselPortrait_Static.dds"/>
+        <Lighting value="AP_ScienceVesselPortrait"/>
+    </CModel>
 </Catalog>

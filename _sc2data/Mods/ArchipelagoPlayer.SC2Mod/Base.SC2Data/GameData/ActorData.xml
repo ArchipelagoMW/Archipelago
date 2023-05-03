@@ -2368,7 +2368,6 @@
     </CActorUnit>
     <CActorAction id="AP_AutoTurretRelease" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="AP_AutoTurretReleaseLM">
         <LaunchAssets Sound="Raven_AutoTurretReleaseLaunch"/>
-        <Missile value="AP_AutoTurretReleaseMissile"/>
         <ImpactSiteOps Ops="SOpAttachOrigin SOpShadow"/>
         <ImpactMap index="None" Sound="Raven_AutoTurretReleaseImpact"/>
         <ShieldFlashType value="None"/>
@@ -2435,7 +2434,8 @@
         <On Terms="TurretEnable.AP_AutoTurret" Send="Create"/>
     </CActorTurret>
     <CActorProgress id="AP_AutoTurretConstruction">
-        <On Terms="Abil.AP_RavenBuild.BuiltStart" Send="Create"/> <!-- Looks like unused -->
+        <On Terms="Abil.AP_RavenBuild.BuiltStart" Send="Create"/>
+        <!-- Looks like unused -->
         <StageArray AnimProps="Build" BlendTime="0.000000"/>
     </CActorProgress>
     <CActorAction id="AP_AutoTurretAttack" parent="GenericAttack" effectAttack="AP_AutoTurret">
@@ -2453,7 +2453,6 @@
         <Model value="AutoTurretReleaseMissileImpact"/>
     </CActorModel>
     <CActorAction id="AP_HunterSeekerAttack" parent="GenericAttack" effectImpact="AP_SeekerMissileDamage" effectLaunch="AP_SeekerMissileLaunchMissile">
-        <Missile value="AP_HunterSeekerAttackMissile"/>
         <ImpactSiteOps Ops="SOpTargetPoint SOp2DRotation"/>
         <ImpactAttachQuery Methods="Origin"/>
         <ImpactMap index="None" Model="Invisible" Sound="Raven_HunterSeekerAttackImpact"/>
@@ -2470,7 +2469,6 @@
     </CActorMissile>
     <CActorAction id="AP_PointDefenseDroneRelease" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="AP_PointDefenseDroneReleaseLaunchMissile">
         <LaunchAssets Sound="Raven_PointDefenseDroneReleaseLaunch"/>
-        <Missile value="AP_PointDefenseDroneReleaseMissile"/>
         <ImpactMap index="None" Model="PointDefenseDroneAttackBeamImpact" Sound="Raven_PointDefenseDroneReleaseImpact"/>
     </CActorAction>
     <CActorMissile id="AP_PointDefenseDroneReleaseMissile" parent="GenericAttackMissile" unitName="AP_PointDefenseDroneReleaseWeapon">
@@ -2623,6 +2621,173 @@
         <Sound value="Raven_HunterSeekerLaunch"/>
     </CActorSound>
     <CActorRange id="AP_PointDefenseDroneRange" parent="RangeAbil" abil="AP_PlacePointDefenseDrone"/>
+    <CActorModel id="AP_IrradiateEffect">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.AP_Irradiate.On" Send="Create"/>
+        <On Terms="Behavior.AP_Irradiate.Off" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="$Stand PlayForever"/>
+        <On Terms="ActorCreation" Send="SetTintColor 0,255,0"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.750000"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+    </CActorModel>
+    <CActorRange id="AP_IrradiateRange" parent="RangeAbil" abil="AP_Irradiate"/>
+    <CActorBeamSimple id="AP_NanoRepairBeamRev1" parent="BeamSimpleAnimationStyleContinuous">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_NanoRepair.TargetStart" Send="Create"/>
+        <On Terms="Effect.AP_NanoRepair.TargetStop" Send="Destroy"/>
+        <HostForProps Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <Model value="AP_NanoRepairBeam"/>
+        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachCenter"/>
+        <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorModel id="AP_NanoRepairModelRev1" parent="ModelAnimationStyleContinuous">
+        <On Terms="ActorCreation" Send="$Birth PlayForever"/>
+        <On Terms="Effect.AP_NanoRepair.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.AP_NanoRepair.TargetStop; At Target" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="AP_NanoRepairBeamImpact"/>
+    </CActorModel>
+    <CActorSound id="AP_NanoRepairSoundRev1" parent="SoundContinuous">
+        <On Terms="Effect.AP_NanoRepair.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.AP_NanoRepair.TargetStop; At Target" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create AP_NanoRepairSoundStart"/>
+        <On Terms="ActorDestruction" Send="Create AP_NanoRepairSoundStop"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Sound value="Medivac_HealLoop"/>
+    </CActorSound>
+    <!-- NanoRepair     -->
+    <CActorSite id="AP_NanoRepairBeamLaunchSite" parent="SiteCenter">
+        <!--On Terms="Abil.NanoRepair.SourceChannelStart" Send="Create"/-->
+        <On Terms="ActorCreation" Send="RefSet ::global.NanoRepairLaunch ::Self"/>
+        <On Terms="Signal.*.NanoModel" Send="RefSetFromMsg ::actor.NanoModel ::Sender"/>
+        <On Terms="Signal.*.NanoSound" Send="RefSetFromMsg ::actor.NanoSound ::Sender"/>
+        <On Terms="Effect.AP_NanoRepair.TargetStop" Target="::actor.NanoModel" Send="Destroy"/>
+        <On Terms="Effect.AP_NanoRepair.TargetStop" Target="::actor.NanoSound" Send="Destroy"/>
+        <On Terms="Effect.AP_NanoRepair.TargetStop" Send="Destroy"/>
+    </CActorSite>
+    <CActorSite id="AP_NanoRepairBeamImpactSite" parent="SiteCenter">
+        <!--On Terms="Abil.NanoRepair.TargetChannelStart" Send="Create"/-->
+        <On Terms="ActorCreation" Send="RefSet ::global.NanoRepairImpact ::Self"/>
+        <On Terms="Effect.AP_NanoRepair.TargetStop" Send="Destroy"/>
+    </CActorSite>
+    <CActorBeamSimple id="AP_NanoRepairBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <!--On Terms="Abil.NanoRepair.TargetChannelStart" Send="Create"/-->
+        <On Terms="Effect.AP_NanoRepair.TargetStop" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="SetTintColor 0,115,255"/>
+        <HostLaunch Subject="::global.NanoRepairLaunch"/>
+        <HostImpact Subject="::global.NanoRepairImpact"/>
+    </CActorBeamSimple>
+    <CActorModel id="AP_NanoRepairModel">
+        <Model value="AP_NanoRepairBeamImpact"/>
+        <On Terms="ActorCreation" Send="$Birth PlayForever"/>
+        <!--On Terms="Abil.NanoRepair.TargetChannelStart" Send="Create"/-->
+        <On Terms="ActorCreation" Target="::global.NanoRepairLaunch" Send="Signal NanoModel"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+    </CActorModel>
+    <CActorSound id="AP_NanoRepairSound" parent="SoundContinuous">
+        <Sound value="Medivac_HealLoop"/>
+        <!--On Terms="Abil.NanoRepair.TargetChannelStart" Send="Create"/-->
+        <On Terms="ActorCreation" Send="Create AP_NanoRepairSoundStart"/>
+        <On Terms="ActorDestruction" Send="Create AP_NanoRepairSoundStop"/>
+        <On Terms="ActorCreation" Target="::global.NanoRepairLaunch" Send="Signal NanoSound"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+    </CActorSound>
+    <CActorSound id="AP_NanoRepairSoundStop" parent="SoundOneShot">
+        <Sound value="Medivac_HealEnd"/>
+    </CActorSound>
+    <CActorSound id="AP_NanoRepairSoundStart" parent="SoundOneShot">
+        <Sound value="Medivac_HealStart"/>
+    </CActorSound>
+    <CActorSiteOpForward id="AP_SOpScienceVesselDeath">
+        <HostForward Subject="ScienceVesselRotateTurret" Actor="Find"/>
+    </CActorSiteOpForward>
+    <CActorUnit id="AP_ScienceVessel" parent="GenericUnitBase" unitName="AP_ScienceVessel">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="Abil.Irradiate.SourceCastStart" Send="$Spell"/>
+        <DeathArray index="Normal" ModelLink="AP_ScienceVesselDeath" SoundLink=""/>
+        <DeathActorModel value="AP_ScienceVesselDeathModel"/>
+        <PortraitModel value="AP_ScienceVesselPortrait"/>
+        <BarWidth value="100"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-sciencevessel.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Terran-ScienceVessel.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="AP_ScienceVessel_Ready"/>
+        <SoundArray index="Help" value="AP_ScienceVessel_Help"/>
+        <SoundArray index="What" value="AP_ScienceVessel_What"/>
+        <SoundArray index="Yes" value="AP_ScienceVessel_Yes"/>
+        <SoundArray index="Attack" value="AP_ScienceVessel_Attack"/>
+        <SoundArray index="Pissed" value="AP_ScienceVessel_Pissed"/>
+        <SoundArray index="Movement" value="AP_ScienceVessel_Movement"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Terran-ScienceVessel.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-sciencevessel.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_ScienceVesselDeathModel">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_DeathModel"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CastShadows" value="1"/>
+        <Inherits index="CreepEngulfment" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <On Terms="ActorCreation" Send="RefClear ::Host"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255 0.600000"/>
+        <On Terms="ActorCreation" Target="ModelPretargetGround" Send="Destroy"/>
+        <On Terms="ActorCreation" Target="GroundPreSelection" Send="Destroy"/>
+        <On Terms="ActorCreation; ScopeContains _RedTintDeath" Send="SetTintColor 255,0,0"/>
+        <On Terms="ActorCreation; ScopeContains _GreenTintDeath" Send="SetTintColor 0,255,0"/>
+        <On Terms="ActorCreation; ScopeContains _BlueTintDeath" Send="SetTintColor 0,0,255"/>
+        <On Terms="ActorCreation; ScopeContains _YellowTintDeath" Send="SetTintColor 255,255,0"/>
+        <On Terms="ActorCreation; ScopeContains _CyanTintDeath" Send="SetTintColor 0,255,255"/>
+        <On Terms="ActorCreation; ScopeContains _PurpleTintDeath" Send="SetTintColor 255,0,255"/>
+        <On Terms="Signal.*.ClearDeathModel" Send="Destroy"/>
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpAttachOrigin AP_SOpScienceVesselDeath"/>
+        <Model value="UnitDeathModel"/>
+        <ModelFlags index="SuppressMissingAttachErrors" value="1"/>
+        <ModelFlags index="UpdateVisibility" value="0"/>
+        <ModelFlags index="UseSyncSeed" value="1"/>
+        <EventDataSound Name="NydusCanalThud" Actor="UnitSound" Sound="NydusWorm_DeathThud"/>
+        <EventDataSound Name="ZergExplosionSlime" Actor="UnitSound" Sound="Zerg_ExplosionSlime"/>
+        <EventDataSound Name="ZergPreExplosionSmall" Actor="UnitSound" Sound="Zerg_PreExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionTiny" Actor="UnitSound" Sound="Zerg_ExplosionTiny"/>
+        <EventDataSound Name="ZergExplosionSmall" Actor="UnitSound" Sound="Zerg_ExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionMedium" Actor="UnitSound" Sound="Zerg_ExplosionMedium"/>
+        <EventDataSound Name="ZergExplosionLarge" Actor="UnitSound" Sound="Zerg_ExplosionLarge"/>
+        <EventDataSound Name="ProtossPreExplosionSmall" Actor="UnitSound" Sound="Protoss_PreExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionSmall" Actor="UnitSound" Sound="Protoss_ExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionMedium" Actor="UnitSound" Sound="Protoss_ExplosionMedium"/>
+        <EventDataSound Name="ProtossExplosionLarge" Actor="UnitSound" Sound="Protoss_ExplosionLarge"/>
+        <EventDataSound Name="TerranPreExplosionSmall" Actor="UnitSound" Sound="Terran_PreExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionSmall" Actor="UnitSound" Sound="Terran_ExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionMedium" Actor="UnitSound" Sound="Terran_ExplosionMedium"/>
+        <EventDataSound Name="TerranExplosionLarge" Actor="UnitSound" Sound="Terran_ExplosionLarge"/>
+    </CActorModel>
+    <CActorTurret id="AP_ScienceVesselRotateTurret">
+        <On Terms="TurretEnable.AP_ScienceVesselRotate" Send="Create"/>
+    </CActorTurret>
+    <CActorSound id="AP_ScienceVessel_IrradiateImpact" parent="SoundOneShot">
+        <On Terms="Behavior.AP_Irradiate.On" Send="Create"/>
+    </CActorSound>
     <CActorEventMacro id="UnloadDropAnim">
         <!-- Override -->
         <!-- Add AP_Medivac to common transport load/unload animations -->

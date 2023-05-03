@@ -387,4 +387,20 @@
     <CRequirementNot id="AP_NotCountUpgradeRavenCorvidReactorQueuedOrBetter">
         <OperandArray index="0" value="AP_CountUpgradeRavenCorvidReactorQueuedOrBetter"/>
     </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeScienceVesselCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_ScienceVessel" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeScienceVesselEnergyManipulationCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_ScienceVesselEnergyManipulation" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeScienceVesselPlasmaWeaponryCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_ScienceVesselPlasmaWeaponry" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementOr id="AP_OrCountUpgradeScienceVesselEnergyManipulationCompleteOnlyCountUpgradeScienceVesselPlasmaWeaponryCompleteOnly">
+        <OperandArray value="AP_CountUpgradeScienceVesselEnergyManipulationCompleteOnly"/>
+        <OperandArray value="AP_CountUpgradeScienceVesselPlasmaWeaponryCompleteOnly"/>
+    </CRequirementOr>
 </Catalog>

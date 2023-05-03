@@ -35,4 +35,11 @@
     <CTurret id="AP_PointDefenseDrone" parent="FreeRotate">
         <YawRate value="2857.5"/>
     </CTurret>
+    <CTurret id="AP_ScienceVesselRotate">
+        <Idle value="Spin"/>
+        <YawArc value="360"/>
+        <YawRate value="8.9648"/>
+        <YawIdleRate value="-8.9648"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
 </Catalog>

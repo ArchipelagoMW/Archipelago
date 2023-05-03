@@ -372,4 +372,22 @@
         <AlertIcon value="Assets\Textures\BTN-Ability-Terran-HunterMissile-color.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="BuildAP_ScienceVessel">
+        <Icon value="Assets\Textures\btn-unit-terran-sciencevessel.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-sciencevessel.dds"/>
+        <Hotkey value="Button/Hotkey/ScienceVessel"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value=""/>
+    </CButton>
+    <CButton id="AP_Irradiate">
+        <Icon value="AP\Assets\Textures\btn-ability-terran-irradiate.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-ability-terran-irradiate.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_NanoRepair">
+        <Icon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>
