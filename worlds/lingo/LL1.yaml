@@ -1157,6 +1157,7 @@
           - SECRET
       Salt Pepper Door:
         id: Count Up Room Area Doors/Door_salt_pepper
+        location_name: Orange Tower First Floor - Salt Pepper Door
         group: Orange Tower First Floor - Shortcuts
         panels:
           - SALT
@@ -1454,6 +1455,7 @@
           - THE MASTER
       Mastery Panels:
         skip_item: True
+        location_name: Mastery Panels
         panels:
           - room: Room Room
             panel: MASTERY
