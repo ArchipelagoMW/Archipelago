@@ -275,12 +275,12 @@ id,name,classification,groups
 4007,Weakness,trap,TRAP
 4008,Taxes,trap,TRAP
 4009,Random Teleport,trap,TRAP
-4010,Crows,trap,TRAP
+4010,The Crows,trap,TRAP
 4011,Monsters,trap,TRAP
 4012,Entrance Reshuffle,trap,"TRAP,DEPRECATED"
 4013,Debris,trap,TRAP
 4014,Shuffle,trap,TRAP
-4015,Winter for the rest of today (tomorrow?),trap,"TRAP,DEPRECATED"
+4015,Temporary Winter,trap,"TRAP,DEPRECATED"
 4016,Pariah,trap,TRAP
 4017,Drought,trap,TRAP
 5000,Resource Pack: 500 Money,useful,"BASE_RESOURCE,RESOURCE_PACK"
