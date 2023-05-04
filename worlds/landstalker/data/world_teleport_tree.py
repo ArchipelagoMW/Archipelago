@@ -1,4 +1,4 @@
-[
+WORLD_TELEPORT_TREES_JSON = [
     [
         {
             "name": "Massan tree",

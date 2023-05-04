@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, List, Optional
+from typing import Dict, NamedTuple, List
 from BaseClasses import Item, ItemClassification
 
 BASE_ITEM_ID = 4000

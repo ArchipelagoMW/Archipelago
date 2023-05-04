@@ -1,7 +1,9 @@
-import json
-from pathlib import Path
 from typing import Dict, List, NamedTuple, Optional
 from BaseClasses import MultiWorld, Region, Entrance
+from worlds.landstalker.data.world_node import WORLD_NODES_JSON
+from worlds.landstalker.data.world_path import WORLD_PATHS_JSON
+from worlds.landstalker.data.world_region import WORLD_REGIONS_JSON
+from worlds.landstalker.data.world_teleport_tree import WORLD_TELEPORT_TREES_JSON
 
 
 class LandstalkerRegion(Region):
@@ -19,7 +21,6 @@ class LandstalkerRegionData(NamedTuple):
 
 def create_regions(multiworld: MultiWorld, player: int):
     regions_table: Dict[str, LandstalkerRegion] = {}
-    script_folder = Path(__file__)
 
     # Create the hardcoded starting "Menu" region
     menu_region = LandstalkerRegion("menu", "Menu", player, multiworld)
@@ -27,19 +28,15 @@ def create_regions(multiworld: MultiWorld, player: int):
     multiworld.regions.append(menu_region)
 
     # Create regions from world_nodes
-    with open((script_folder.parent / "data/world_node.json").resolve(), "r") as file:
-        regions_data = json.load(file)
-        for code, region_data in regions_data.items():
-            region = LandstalkerRegion(code, region_data["name"], player, multiworld)
-            regions_table[code] = region
-            multiworld.regions.append(region)
+    for code, region_data in WORLD_NODES_JSON.items():
+        region = LandstalkerRegion(code, region_data["name"], player, multiworld)
+        regions_table[code] = region
+        multiworld.regions.append(region)
 
     # Create exits/entrances from world_paths
-    with open((script_folder.parent / "data/world_path.json").resolve(), "r") as file:
-        entrances_data = json.load(file)
-        for data in entrances_data:
-            two_way = data["twoWay"] if "twoWay" in data else False
-            create_entrance(data["fromId"], data["toId"], two_way, player, regions_table)
+    for data in WORLD_PATHS_JSON:
+        two_way = data["twoWay"] if "twoWay" in data else False
+        create_entrance(data["fromId"], data["toId"], two_way, player, regions_table)
 
     # Create a path between the fake Menu location and the starting location
     starting_region = get_starting_region(multiworld, player, regions_table)
@@ -104,28 +101,22 @@ def get_starting_region(multiworld: MultiWorld, player: int, regions_table: Dict
 
 def get_darkenable_regions():
     darkenable_region_ids = {}
-    script_folder = Path(__file__)
-    with open((script_folder.parent / "data/world_region.json").resolve(), "r") as file:
-        regions_data = json.load(file)
-        for data in regions_data:
-            if "darkMapIds" in data:
-                darkenable_region_ids[data["name"]] = data["nodeIds"]
+    for data in WORLD_REGIONS_JSON:
+        if "darkMapIds" in data:
+            darkenable_region_ids[data["name"]] = data["nodeIds"]
     return darkenable_region_ids
 
 
 def load_teleport_trees():
-    script_folder = Path(__file__)
-    with open((script_folder.parent / "data/world_teleport_tree.json").resolve(), "r") as file:
-        tp_tree_data = json.load(file)
-        pairs = []
-        for pair in tp_tree_data:
-            first_tree = {
-                'name': pair[0]["name"],
-                'region': pair[0]["nodeId"]
-            }
-            second_tree = {
-                'name': pair[1]["name"],
-                'region': pair[1]["nodeId"]
-            }
-            pairs.append([first_tree, second_tree])
-        return pairs
+    pairs = []
+    for pair in WORLD_TELEPORT_TREES_JSON:
+        first_tree = {
+            'name': pair[0]["name"],
+            'region': pair[0]["nodeId"]
+        }
+        second_tree = {
+            'name': pair[1]["name"],
+            'region': pair[1]["nodeId"]
+        }
+        pairs.append([first_tree, second_tree])
+    return pairs

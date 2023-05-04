@@ -1,8 +1,7 @@
-import json
-from pathlib import Path
 from typing import Dict, List
 from BaseClasses import MultiWorld, Region
 from worlds.AutoWorld import LogicMixin
+from worlds.landstalker.data.world_path import WORLD_PATHS_JSON
 
 
 class LandstalkerLogic(LogicMixin):
@@ -38,39 +37,36 @@ def add_path_requirements(multiworld: MultiWorld, player: int, regions_table: Di
                           dark_region_ids: List[str]):
     can_damage_boost = multiworld.handle_damage_boosting_in_logic[player].value
 
-    script_folder = Path(__file__)
-    with open((script_folder.parent / "data/world_path.json").resolve(), "r") as file:
-        rules_data = json.load(file)
-        for data in rules_data:
-            name = data["fromId"] + " -> " + data["toId"]
+    for data in WORLD_PATHS_JSON:
+        name = data["fromId"] + " -> " + data["toId"]
 
-            # Determine required items to reach this region
-            required_items = data["requiredItems"] if "requiredItems" in data else []
-            if "itemsPlacedWhenCrossing" in data:
-                required_items += data["itemsPlacedWhenCrossing"]
+        # Determine required items to reach this region
+        required_items = data["requiredItems"] if "requiredItems" in data else []
+        if "itemsPlacedWhenCrossing" in data:
+            required_items += data["itemsPlacedWhenCrossing"]
 
-            if data["toId"] in dark_region_ids:
-                # Make Lantern required to reach the randomly selected dark regions
-                required_items.append("Lantern")
-            if can_damage_boost:
-                # If damage boosting is handled in logic, remove all iron boots & fireproof requirements
-                required_items = [item for item in required_items if item != "Iron Boots" and item != "Fireproof"]
+        if data["toId"] in dark_region_ids:
+            # Make Lantern required to reach the randomly selected dark regions
+            required_items.append("Lantern")
+        if can_damage_boost:
+            # If damage boosting is handled in logic, remove all iron boots & fireproof requirements
+            required_items = [item for item in required_items if item != "Iron Boots" and item != "Fireproof"]
 
-            # Determine required other visited regions to reach this region
-            required_region_ids = data["requiredNodes"] if "requiredNodes" in data else []
-            required_regions = [regions_table[region_id] for region_id in required_region_ids]
+        # Determine required other visited regions to reach this region
+        required_region_ids = data["requiredNodes"] if "requiredNodes" in data else []
+        required_regions = [regions_table[region_id] for region_id in required_region_ids]
 
-            # Create the rule lambda using those requirements
-            if len(required_items) == 0 and len(required_regions) == 0:
-                continue
+        # Create the rule lambda using those requirements
+        if len(required_items) == 0 and len(required_regions) == 0:
+            continue
 
-            access_rule = make_path_requirement_lambda(player, required_items, required_regions)
-            multiworld.get_entrance(name, player).access_rule = access_rule
+        access_rule = make_path_requirement_lambda(player, required_items, required_regions)
+        multiworld.get_entrance(name, player).access_rule = access_rule
 
-            # If two-way, also apply the rule to the opposite path
-            if "twoWay" in data and data["twoWay"] is True:
-                reverse_name = data["toId"] + " -> " + data["fromId"]
-                multiworld.get_entrance(reverse_name, player).access_rule = access_rule
+        # If two-way, also apply the rule to the opposite path
+        if "twoWay" in data and data["twoWay"] is True:
+            reverse_name = data["toId"] + " -> " + data["fromId"]
+            multiworld.get_entrance(reverse_name, player).access_rule = access_rule
 
 
 def add_specific_path_requirements(multiworld: MultiWorld, player: int):

@@ -1,4 +1,4 @@
-[
+WORLD_REGIONS_JSON = [
     {
         "name": "Massan",
         "hintName": "in the village of Massan",
@@ -19,7 +19,7 @@
     },
     {
         "name": "Route between Massan and Gumi",
-        "canBeHintedAsRequired": false,
+        "canBeHintedAsRequired": False,
         "nodeIds": [
             "route_massan_gumi"
         ]
@@ -37,7 +37,7 @@
     {
         "name": "Swamp Shrine",
         "hintName": "in the swamp shrine",
-        "canBeHintedAsRequired": false,
+        "canBeHintedAsRequired": False,
         "nodeIds": [
             "swamp_shrine"
         ],
@@ -55,7 +55,7 @@
     },
     {
         "name": "Route between Gumi and Ryuma",
-        "canBeHintedAsRequired": false,
+        "canBeHintedAsRequired": False,
         "nodeIds": [
             "route_gumi_ryuma"
         ]
@@ -131,7 +131,7 @@
     {
         "name": "Mir Tower sector",
         "hintName": "near Mir Tower",
-        "canBeHintedAsRequired": false,
+        "canBeHintedAsRequired": False,
         "nodeIds": [
             "mir_tower_sector",
             "mir_tower_sector_tree_ledge",
@@ -142,7 +142,7 @@
     {
         "name": "Mir Tower",
         "hintName": "inside Mir Tower",
-        "canBeHintedAsRequired": false,
+        "canBeHintedAsRequired": False,
         "nodeIds": [
             "mir_tower_pre_garlic",
             "mir_tower_post_garlic"
@@ -162,7 +162,7 @@
     },
     {
         "name": "Verla Shore",
-        "canBeHintedAsRequired": false,
+        "canBeHintedAsRequired": False,
         "nodeIds": [
             "verla_shore",
             "verla_shore_cliff"
@@ -190,7 +190,7 @@
     },
     {
         "name": "Route between Verla and Destel",
-        "canBeHintedAsRequired": false,
+        "canBeHintedAsRequired": False,
         "nodeIds": [
             "route_verla_destel"
         ]
@@ -204,7 +204,7 @@
     },
     {
         "name": "Route after Destel",
-        "canBeHintedAsRequired": false,
+        "canBeHintedAsRequired": False,
         "nodeIds": [
             "route_after_destel"
         ]
@@ -221,7 +221,7 @@
     },
     {
         "name": "Route to Lake Shrine",
-        "canBeHintedAsRequired": false,
+        "canBeHintedAsRequired": False,
         "nodeIds": [
             "route_lake_shrine",
             "route_lake_shrine_cliff"

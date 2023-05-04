@@ -1,8 +1,8 @@
-[
+WORLD_PATHS_JSON = [
     {
         "fromId": "massan",
         "toId": "massan_cave",
-        "twoWay": true,
+        "twoWay": True,
         "requiredItems": [
             "Axe Magic"
         ]
@@ -17,17 +17,17 @@
     {
         "fromId": "massan",
         "toId": "route_massan_gumi",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "route_massan_gumi",
         "toId": "waterfall_shrine",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "route_massan_gumi",
         "toId": "swamp_shrine",
-        "twoWay": true,
+        "twoWay": True,
         "weight": 2,
         "requiredItems": [
             "Idol Stone"
@@ -36,7 +36,7 @@
     {
         "fromId": "route_massan_gumi",
         "toId": "gumi",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "gumi",
@@ -52,7 +52,7 @@
     {
         "fromId": "route_gumi_ryuma",
         "toId": "ryuma",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "ryuma",
@@ -64,7 +64,7 @@
     {
         "fromId": "ryuma",
         "toId": "ryuma_lighthouse_repaired",
-        "twoWay": true,
+        "twoWay": True,
         "requiredItems": [
             "Sun Stone"
         ]
@@ -72,7 +72,7 @@
     {
         "fromId": "ryuma",
         "toId": "thieves_hideout_pre_key",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "thieves_hideout_pre_key",
@@ -88,12 +88,12 @@
     {
         "fromId": "route_gumi_ryuma",
         "toId": "tibor",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "route_gumi_ryuma",
         "toId": "helga_hut",
-        "twoWay": true,
+        "twoWay": True,
         "requiredItems": [
             "Einstein Whistle"
         ],
@@ -104,7 +104,7 @@
     {
         "fromId": "route_gumi_ryuma",
         "toId": "mercator",
-        "twoWay": true,
+        "twoWay": True,
         "weight": 2,
         "requiredItems": [
             "Safety Pass"
@@ -113,17 +113,17 @@
     {
         "fromId": "mercator",
         "toId": "mercator_dungeon",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "mercator",
         "toId": "crypt",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "mercator",
         "toId": "mercator_special_shop",
-        "twoWay": true,
+        "twoWay": True,
         "requiredItems": [
             "Buyer Card"
         ]
@@ -131,7 +131,7 @@
     {
         "fromId": "mercator",
         "toId": "mercator_casino",
-        "twoWay": true,
+        "twoWay": True,
         "requiredItems": [
             "Casino Ticket"
         ]
@@ -139,17 +139,17 @@
     {
         "fromId": "mercator",
         "toId": "mir_tower_sector",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "mir_tower_sector",
         "toId": "twinkle_village",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "mir_tower_sector",
         "toId": "mir_tower_sector_tree_ledge",
-        "twoWay": true,
+        "twoWay": True,
         "requiredItems": [
             "Axe Magic"
         ]
@@ -157,7 +157,7 @@
     {
         "fromId": "mir_tower_sector",
         "toId": "mir_tower_sector_tree_coast",
-        "twoWay": true,
+        "twoWay": True,
         "requiredItems": [
             "Axe Magic"
         ]
@@ -221,7 +221,7 @@
     {
         "fromId": "verla_shore",
         "toId": "verla",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "verla",
@@ -229,17 +229,17 @@
         "requiredNodes": [
             "verla_mines"
         ],
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "verla_shore",
         "toId": "verla_mines",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "verla_mines",
         "toId": "verla_shore_cliff",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "verla_shore_cliff",
@@ -251,17 +251,17 @@
         "requiredNodes": [
             "verla_mines"
         ],
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "verla_mines",
         "toId": "route_verla_destel",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "verla_mines",
         "toId": "verla_mines_behind_lava",
-        "twoWay": true,
+        "twoWay": True,
         "requiredItems": [
             "Fireproof"
         ]
@@ -269,22 +269,22 @@
     {
         "fromId": "route_verla_destel",
         "toId": "destel",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "destel",
         "toId": "route_after_destel",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "destel",
         "toId": "destel_well",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "destel_well",
         "toId": "route_lake_shrine",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "route_lake_shrine",
@@ -304,7 +304,7 @@
     {
         "fromId": "greenmaze_pre_whistle",
         "toId": "mountainous_area",
-        "twoWay": true,
+        "twoWay": True,
         "requiredItems": [
             "Axe Magic"
         ]
@@ -312,7 +312,7 @@
     {
         "fromId": "mountainous_area",
         "toId": "route_lake_shrine_cliff",
-        "twoWay": true,
+        "twoWay": True,
         "requiredItems": [
             "Axe Magic"
         ]
@@ -324,7 +324,7 @@
     {
         "fromId": "mountainous_area",
         "toId": "king_nole_cave",
-        "twoWay": true,
+        "twoWay": True,
         "weight": 2,
         "requiredItems": [
             "Gola's Eye"
@@ -348,7 +348,7 @@
     {
         "fromId": "kazalt",
         "toId": "king_nole_labyrinth_pre_door",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "king_nole_labyrinth_pre_door",
@@ -425,7 +425,7 @@
     {
         "fromId": "king_nole_labyrinth_path_to_palace",
         "toId": "king_nole_palace",
-        "twoWay": true
+        "twoWay": True
     },
     {
         "fromId": "king_nole_palace",

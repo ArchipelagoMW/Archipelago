@@ -1,4 +1,4 @@
-{
+WORLD_NODES_JSON = {
     "massan": {
         "name": "Massan",
         "hints": [
