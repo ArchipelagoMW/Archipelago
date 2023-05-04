@@ -6,13 +6,15 @@ from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle
 class LandstalkerGoal(Choice):
     """
     The goal to accomplish in order to complete the seed.
-    - Beat Gola: the same as vanilla, beat the final boss to complete the game
-    - Reach Kazalt: find the jewels and take the teleporter to Kazalt to win the game
+    - Beat Gola: beat the usual final boss (same as vanilla)
+    - Reach Kazalt: find the jewels and take the teleporter to Kazalt
+    - Beat Dark Nole: the door to King Nole's fight brings you into a final dungeon with an absurdly hard boss you have to beat to win the game
     """
     display_name = "Goal"
 
     option_beat_gola = 0
     option_reach_kazalt = 1
+    option_beat_dark_nole = 2
 
     default = 0
 
@@ -103,9 +105,9 @@ class WhistleUsageBehindTrees(DefaultOnToggle):
 
 class SpawnRegion(Choice):
     """
-    List of spawn locations that can be picked by the randomizer. It is advised to keep Massan as your spawn location
-    for your first few seeds since picking a late-game location can make the seed significantly harder, both for
-    logic and combat.
+    List of spawn locations that can be picked by the randomizer.
+    It is advised to keep Massan as your spawn location for your first few seeds.
+    Picking a late-game location can make the seed significantly harder, both for logic and combat.
     """
     display_name = "Starting region"
 
