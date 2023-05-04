@@ -338,4 +338,25 @@
         <DamagePoint value="0.15"/>
         <Effect value="AP_RetributionFieldSet"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_LiberatorAGWeapon">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
+        <DisplayEffect value="AP_LiberatorAGDamage"/>
+        <TargetFilters value="Ground,Visible;Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="13"/>
+        <Arc value="360"/>
+        <Period value="1.6"/>
+        <DamagePoint value="0.125"/>
+        <Effect value="AP_LiberatorAGMissileLMSet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_LiberatorMissileLaunchers">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
+        <DisplayEffect value="AP_LiberatorMissileDamage"/>
+        <DisplayAttackCount value="2"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Period value="1.8"/>
+        <Effect value="AP_LiberatorMissileBurstPersistent"/>
+        <AllowedMovement value="Slowing"/>
+    </CWeaponLegacy>
 </Catalog>

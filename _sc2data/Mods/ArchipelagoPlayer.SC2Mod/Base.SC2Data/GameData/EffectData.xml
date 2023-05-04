@@ -1551,4 +1551,152 @@
         <EffectArray value="MakePrecursor"/>
         <EffectArray value="AP_RescuePods"/>
     </CEffectSet>
+    <CEffectDamage id="AP_LiberatorAGDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="85"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_LiberatorAGDamageSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_LiberatorTurretFace"/>
+        <EffectArray value="AP_LiberatorAGDamage"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_LiberatorAGMissileLM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_LiberatorAGDamage"/>
+        <AmmoUnit value="AP_LiberatorAGMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_LiberatorAGMissileLMSet">
+        <ValidatorArray value="AP_LiberatorAGTargets"/>
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_LiberatorAGMissileLM"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_LiberatorDamageMissileLM">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactEffect value="AP_LiberatorMissileDamage"/>
+        <AmmoUnit value="AP_LiberatorDamageMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="AP_LiberatorInterruptedMorphDelayPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <ExpireEffect value="AP_LiberatorTargetAAMorphOrderSet"/>
+        <PeriodCount value="1"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_LiberatorMissileBurstPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="Channeled" value="1"/>
+        <Flags index="RandomOffset" value="1"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_LiberatorDamageMissileLM"/>
+        <PeriodicEffectArray value="AP_LiberatorDamageMissileLM"/>
+        <PeriodicPeriodArray value="0.05"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_LiberatorMissileDamage" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="SourceUnitOrPoint"/>
+        <Visibility value="Visible"/>
+        <Amount value="7"/>
+        <Death value="Fire"/>
+        <AreaArray Radius="1.5" Fraction="1"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Air;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_LiberatorMissileDummy">
+        <EditorCategories value="Race:Terran"/>
+        <AreaArray/>
+    </CEffectEnumArea>
+    <CEffectLaunchMissile id="AP_LiberatorMissileLM">
+        <ValidatorArray index="0" value="AP_LiberatorAGTargets"/>
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactEffect value="AP_LiberatorMissileDummy"/>
+        <AmmoUnit value="AP_LiberatorMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="AP_LiberatorMissileLaunchersPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="Channeled" value="1"/>
+        <InitialEffect value="AP_LiberatorMissileBurstPersistent"/>
+        <FinalEffect value="AP_LiberatorMissileDamage"/>
+        <PeriodCount value="1"/>
+        <PeriodicPeriodArray value="0.75"/>
+    </CEffectCreatePersistent>
+    <CEffectIssueOrder id="AP_LiberatorTargetAAMorphOrder">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="AP_LiberatorMorphtoAA"/>
+        <Player Value="Source"/>
+    </CEffectIssueOrder>
+    <CEffectSet id="AP_LiberatorTargetAAMorphOrderSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_LiberatorTargetAAMorphRB"/>
+        <EffectArray value="AP_LiberatorTargetAAMorphOrder"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectRemoveBehavior id="AP_LiberatorTargetAAMorphRB">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="AP_LiberatorTargetMorphBehavior"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="AP_LiberatorTargetMorphAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_LiberatorTargetMorphBehavior"/>
+    </CEffectApplyBehavior>
+    <CEffectIssueOrder id="AP_LiberatorTargetMorphAGOrder">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="AP_LiberatorMorphtoAG"/>
+        <Player Value="Creator"/>
+        <Target Value="CasterUnit"/>
+    </CEffectIssueOrder>
+    <CEffectCreatePersistent id="AP_LiberatorTargetMorphDelayPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <ExpireEffect value="AP_LiberatorTargetMorphPersistent"/>
+        <PeriodCount value="1"/>
+        <PeriodicPeriodArray value="4"/>
+        <AINotifyEffect value="AP_LiberatorTargetMorphSearchArea"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_LiberatorTargetMorphOrderInitialSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_LiberatorTargetMorphAB"/>
+        <EffectArray value="AP_LiberatorTargetMorphAGOrder"/>
+        <EffectArray value="AP_LiberatorTargetMorphDelayPersistent"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_LiberatorTargetMorphPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <FinalEffect value="AP_LiberatorInterruptedMorphDelayPersistent"/>
+        <PeriodicValidator value="AP_LiberatorMorphValidatorCombine"/>
+        <PeriodicEffectArray value="AP_LiberatorTargetMorphSearchArea"/>
+        <PeriodicPeriodArray value="0.25"/>
+        <AINotifyEffect value="AP_LiberatorTargetMorphSearchArea"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_LiberatorTargetMorphSearchAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_LiberatorTargetMorphAGAttackable"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="AP_LiberatorTargetMorphSearchArea">
+        <EditorCategories value="Race:Terran"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <AINotifyFlags index="MinorDanger" value="1"/>
+        <SearchFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="5" Effect="AP_LiberatorTargetMorphSearchAB"/>
+    </CEffectEnumArea>
+    <CEffectModifyUnit id="AP_LiberatorTurretFace">
+        <ValidatorArray value="IsNotDisguisedChangeling"/>
+        <ValidatorArray value="IsNotNeuralParasited"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnit Value="Caster"/>
+        <ModifyTurret Turret="AP_LiberatorAG" AimCompleteEffect="AP_LiberatorAGMissileLM">
+            <Target Effect="AP_LiberatorTurretFace" Value="TargetUnit"/>
+            <Flags index="Tracking" value="1"/>
+            <Flags index="ClearTargetOnAimComplete" value="1"/>
+        </ModifyTurret>
+    </CEffectModifyUnit>
 </Catalog>

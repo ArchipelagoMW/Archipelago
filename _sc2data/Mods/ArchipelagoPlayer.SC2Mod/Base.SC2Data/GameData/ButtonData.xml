@@ -422,4 +422,39 @@
         <EditorCategories value="Race:Terran"/>
         <TintRacially value="1"/>
     </CButton>
+    <CButton id="AP_Liberator">
+        <Icon value="Assets\Textures\btn-unit-terran-liberator.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-liberator.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_LiberatorAAMode">
+        <TooltipFlags index="ShowLevel" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-terran-liberator-aamode.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-liberator-aamode.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeySet value="LiberatorModes"/>
+    </CButton>
+    <CButton id="AP_LiberatorAGMode">
+        <TooltipFlags index="ShowLevel" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-terran-liberator-agmode.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-liberator-agmode.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeySet value="LiberatorModes"/>
+    </CButton>
+    <CButton id="AP_LiberatorAGRangeUpgrade">
+        <Icon value="Assets\Textures\btn-upgrade-terran-advanceballistics.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-advanceballistics.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_ResearchLiberatorAGMode">
+        <Icon value="Assets\Textures\btn-upgrade-terran-liberator-agmode.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-liberator-agmode.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_SiegeProtocol">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-maelstromrounds.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+        <HotkeyAlias value=""/>
+    </CButton>
 </Catalog>

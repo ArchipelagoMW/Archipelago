@@ -326,4 +326,25 @@
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Show" Link="AP_CountUpgradePredatorCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveLiberatorMorph">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeLiberatorMorphCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveLiberatorRange">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeLiberatorAGRangeUpgradeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveLiberatorSiegeProtocol">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeLiberatorSiegeProtocolUpgradeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnLiberatorMorph">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeLiberatorMorphQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnLiberatorRange">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <!-- <NodeArray index="Use" Link="AP_CountUnitFusionCoreCompleteOnly"/> -->
+        <NodeArray index="Show" Link="AP_NotCountUpgradeLiberatorAGRangeUpgradeQueuedOrBetter"/>
+    </CRequirement>
 </Catalog>

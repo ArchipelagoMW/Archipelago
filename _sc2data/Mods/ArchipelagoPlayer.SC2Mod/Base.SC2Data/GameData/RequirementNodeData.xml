@@ -407,4 +407,30 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_Predator" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeLiberatorAGRangeUpgradeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_LiberatorAGRangeUpgrade" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeLiberatorAGRangeUpgradeQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_LiberatorAGRangeUpgrade" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeLiberatorMorphCompleteOnly">
+        <Count Link="AP_LiberatorMorph" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeLiberatorMorphQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_LiberatorMorph" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeLiberatorSiegeProtocolUpgradeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_LiberatorSiegeProtocol" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeLiberatorAGRangeUpgradeQueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeLiberatorAGRangeUpgradeQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeLiberatorMorphQueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeLiberatorMorphQueuedOrBetter"/>
+    </CRequirementNot>
 </Catalog>

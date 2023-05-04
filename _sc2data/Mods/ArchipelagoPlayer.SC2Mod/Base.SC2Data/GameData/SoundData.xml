@@ -1428,4 +1428,141 @@
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_Yes02.ogg" FacialAnim="Hercules_Yes02"/>
         <Volume value="-1.000000,-1.000000"/>
     </CSound>
+    <CSound id="AP_TerranFlyer_Attack" parent="TerranAck_Void">
+        <AssetArray TemplateParam="TerranFlyer_Attack00"/>
+        <AssetArray TemplateParam="TerranFlyer_Attack01"/>
+        <AssetArray TemplateParam="TerranFlyer_Attack02"/>
+        <AssetArray TemplateParam="TerranFlyer_Attack03"/>
+        <AssetArray TemplateParam="TerranFlyer_Attack04"/>
+        <AssetArray TemplateParam="TerranFlyer_Attack05"/>
+        <AssetArray TemplateParam="TerranFlyer_Attack06"/>
+        <AssetArray TemplateParam="TerranFlyer_Attack07"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_TerranFlyer_DefenderModeVO" parent="TerranAck_Void">
+        <AssetArray TemplateParam="TerranFlyer_Yes00"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes01"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes02"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes04"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes05"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Chance value="25"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_TerranFlyer_Help" parent="TerranHelp">
+        <AssetArray TemplateParam="TerranFlyer_Help00"/>
+        <AssetArray TemplateParam="TerranFlyer_Help01"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_TerranFlyer_Pissed" parent="TerranPissed">
+        <AssetArray TemplateParam="TerranFlyer_Pissed00"/>
+        <AssetArray TemplateParam="TerranFlyer_Pissed01"/>
+        <AssetArray TemplateParam="TerranFlyer_Pissed02"/>
+        <AssetArray TemplateParam="TerranFlyer_Pissed03"/>
+        <AssetArray TemplateParam="TerranFlyer_Pissed04"/>
+        <AssetArray TemplateParam="TerranFlyer_Pissed05"/>
+        <AssetArray TemplateParam="TerranFlyer_Pissed06"/>
+        <AssetArray TemplateParam="TerranFlyer_Pissed08"/>
+        <AssetArray TemplateParam="TerranFlyer_Pissed07"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_TerranFlyerAG_Attack" parent="TerranAck_Void">
+        <AssetArray TemplateParam="TerranFlyer_Attack00"/>
+        <AssetArray TemplateParam="TerranFlyer_Attack01"/>
+        <AssetArray TemplateParam="TerranFlyer_Attack02"/>
+        <AssetArray TemplateParam="TerranFlyer_Attack04"/>
+        <AssetArray TemplateParam="TerranFlyer_Attack05"/>
+        <AssetArray TemplateParam="TerranFlyer_Attack06"/>
+        <AssetArray TemplateParam="TerranFlyer_Attack07"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_TerranFlyerAG_Yes" parent="TerranAck_Void">
+        <AssetArray TemplateParam="TerranFlyer_Yes00"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes01"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes02"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes04"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes05"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_TerranFlyer_Death_NP" parent="TerranDeath_NP">
+        <AssetArray TemplateParam="TerranFlyer_Death_NP00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_TerranFlyer_DefenderModeVO_NP" parent="TerranAck_Void">
+        <AssetArray TemplateParam="TerranFlyer_Yes_NP00"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes_NP01"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Chance value="25"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_TerranFlyer_Ready" parent="TerranReady">
+        <AssetArray TemplateParam="TerranFlyer_Ready00"/>
+        <AssetArray TemplateParam="TerranFlyer_Ready01"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_TerranFlyer_Ready_NP" parent="TerranAck_Void">
+        <AssetArray TemplateParam="TerranFlyer_Ready_NP00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_TerranFlyer_What" parent="TerranAck_Void">
+        <AssetArray TemplateParam="TerranFlyer_What00"/>
+        <AssetArray TemplateParam="TerranFlyer_What01"/>
+        <AssetArray TemplateParam="TerranFlyer_What02"/>
+        <AssetArray TemplateParam="TerranFlyer_What03"/>
+        <AssetArray TemplateParam="TerranFlyer_What04"/>
+        <AssetArray TemplateParam="TerranFlyer_What05"/>
+        <AssetArray TemplateParam="TerranFlyer_What06"/>
+        <AssetArray TemplateParam="TerranFlyer_What07"/>
+        <AssetArray TemplateParam="TerranFlyer_What08"/>
+        <AssetArray TemplateParam="TerranFlyer_What09"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_TerranFlyer_What_NP" parent="TerranAck_Void">
+        <AssetArray TemplateParam="TerranFlyer_What_NP00"/>
+        <AssetArray TemplateParam="TerranFlyer_What_NP01"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_TerranFlyer_Yes" parent="TerranAck_Void">
+        <AssetArray TemplateParam="TerranFlyer_Yes00"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes01"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes02"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes03"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes04"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes05"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes06"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes07"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes08"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_TerranFlyer_Yes_NP" parent="TerranAck_Void">
+        <AssetArray TemplateParam="TerranFlyer_Yes_NP00"/>
+        <AssetArray TemplateParam="TerranFlyer_Yes_NP01"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
 </Catalog>

@@ -626,4 +626,29 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_LiberatorAGRangeUpgrade">
+        <Icon value="Assets\Textures\btn-upgrade-terran-advanceballistics.dds"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Abil,AP_LiberatorAGTarget,Range[0]" Value="3"/>
+        <EffectArray Reference="Weapon,AP_LiberatorAGWeapon,Range" Value="3"/>
+        <EffectArray Reference="Validator,AP_LiberatorAGNotOutOfRange,Range" Value="3"/>
+        <EditorCategories value="Race:Terran,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_Liberator"/>
+        <AffectedUnitArray value="AP_LiberatorAG"/>
+    </CUpgrade>
+    <CUpgrade id="AP_LiberatorMorph">
+        <Icon value="Assets\Textures\btn-upgrade-terran-liberator-agmode.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Liberator"/>
+    </CUpgrade>
+    <CUpgrade id="AP_LiberatorSiegeProtocol">
+        <Icon value="Assets\Textures\btn-upgrade-raynor-maelstromrounds.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,TargetFilters" Value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

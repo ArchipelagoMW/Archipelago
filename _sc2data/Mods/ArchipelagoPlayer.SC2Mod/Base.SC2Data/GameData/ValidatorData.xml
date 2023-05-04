@@ -137,6 +137,15 @@
         <Find value="1"/>
         <Value value="AP_HaveRewardThorSkin"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasLiberatorMorphBehavior">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_LiberatorTargetMorphBehavior"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasNoLiberatorYoink">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="YoinkTentacle"/>
+    </CValidatorUnitCompareBehaviorCount>
     <CValidatorCombine id="IsBanshee" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaBanshee"/>
@@ -217,6 +226,33 @@
         <Find value="0"/>
         <ResultFailed value="CantTargetThatUnit,Error/CantTargetPointDefenseDrone"/>
     </CValidatorUnitType>
+    <CValidatorLocationCompareRange id="AP_LiberatorAGNotOutOfRange">
+        <Compare value="LE"/>
+        <Range value="9"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorUnitCompareBehaviorCount id="AP_LiberatorAGTargets">
+        <ResultFailed value="TargetIsOutOfRange"/>
+        <Compare value="GT"/>
+        <Behavior value="AP_LiberatorTargetMorphAGAttackable"/>
+        <RequireCasterUnit Value="Caster"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_LiberatorMorphValidatorCombine">
+        <Type value="And"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="AP_HasLiberatorMorphBehavior"/>
+        <!-- <CombineArray value="AP_HasNoLiberatorYoink"/> -->
+        <CombineArray value="AP_LiberatorNotRecallingMothership"/>
+        <CombineArray value="AP_LiberatorNotRecallingMothershipCore"/>
+        <CombineArray value="AP_LiberatorAGNotOutOfRange"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_LiberatorNotRecallingMothership">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="MothershipRecalling"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_LiberatorNotRecallingMothershipCore">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="MothershipCoreRecalling"/>
+    </CValidatorUnitCompareBehaviorCount>
     <CValidatorCombine id="NotPointDefenseDrone" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_NotVanillaPointDefenseDrone"/>
