@@ -322,4 +322,8 @@
     <CRequirement id="AP_SkynetMinesResearched">
         <NodeArray index="Show" Link="AP_CountUpgradeAbdominalFortitudeCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_BuildPredator">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_CountUpgradePredatorCompleteOnly"/>
+    </CRequirement>
 </Catalog>

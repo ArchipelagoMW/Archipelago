@@ -540,4 +540,28 @@
             <StateFlags index="Cloak" value="1"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PredatorCloaking">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-cloak.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="CanSpendEnergy"/>
+        <RemoveValidatorArray value="hasEnergy"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+            <VitalRegenArray index="Energy" value="-1.4765"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RetributionField">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DamageResponse Handled="AP_RetributionFieldSearch">
+            <Kind index="Spell" value="0"/>
+            <Kind index="Ranged" value="0"/>
+            <Kind index="Splash" value="0"/>
+            <Chance value="1"/>
+            <Cost>
+                <Cooldown TimeUse="0.5"/>
+            </Cost>
+        </DamageResponse>
+    </CBehaviorBuff>
 </Catalog>

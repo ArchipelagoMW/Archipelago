@@ -403,4 +403,8 @@
         <OperandArray value="AP_CountUpgradeScienceVesselEnergyManipulationCompleteOnly"/>
         <OperandArray value="AP_CountUpgradeScienceVesselPlasmaWeaponryCompleteOnly"/>
     </CRequirementOr>
+    <CRequirementCountUpgrade id="AP_CountUpgradePredatorCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_Predator" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

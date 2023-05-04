@@ -328,4 +328,14 @@
             <MatchFlags index="Link" value="1"/>
         </Marker>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_Predator">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\BTN-Upgrade-Terran-VehicleWeaponsLevel0.dds"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.1"/>
+        <Period value="1"/>
+        <DamagePoint value="0.15"/>
+        <Effect value="AP_RetributionFieldSet"/>
+    </CWeaponLegacy>
 </Catalog>

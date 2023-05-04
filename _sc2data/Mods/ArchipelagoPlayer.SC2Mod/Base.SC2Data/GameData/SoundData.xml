@@ -1254,4 +1254,100 @@
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Yes03.ogg" FacialAnim="ScienceVessel_Yes03"/>
         <Volume value="-2.000000,-2.000000"/>
     </CSound>
+    <CSound id="AP_Predator_Attack" parent="Voice">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_Attack0.ogg"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_Attack1.ogg"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_Attack2.ogg"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_Attack3.ogg"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_Attack4.ogg"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_Attack5.ogg"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Predator_AttackImpact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Attacks\Zerg_AttackImpactLargeSlice0.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Attacks\Zerg_AttackImpactLargeSlice1.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Attacks\Zerg_AttackImpactLargeSlice2.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Attacks\Zerg_AttackImpactLargeSlice3.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Attacks\Zerg_AttackImpactLargeSlice4.wav"/>
+        <DupeDestroyCount value="4"/>
+        <Pitch value="-3.000000,-2.000000"/>
+        <Volume value="-12.000000,-12.000000"/>
+    </CSound>
+    <CSound id="AP_Predator_AttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Attacks\Zerg_AttackLaunchSmallSwing0.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Attacks\Zerg_AttackLaunchSmallSwing1.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Attacks\Zerg_AttackLaunchSmallSwing2.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Attacks\Zerg_AttackLaunchSmallSwing3.wav"/>
+        <Flags index="VariationFallback" value="0"/>
+        <DupeDestroyCount value="5"/>
+        <Pitch value="-6.000000,-5.000000"/>
+        <Volume value="-13.000000,-12.000000"/>
+    </CSound>
+    <CSound id="AP_Predator_CloakOff" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Abilities\Terran_CloakOff.wav"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_Predator_CloakOn" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Abilities\Terran_CloakOn.wav"/>
+        <DupeDestroyCount value="3"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_Predator_Explode" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium0.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium1.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium2.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium3.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium4.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium5.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium6.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium7.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium8.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionMedium9.wav" Pitch="-3.000000,3.000000"/>
+        <Flags index="Ignorable" value="0"/>
+        <Flags index="Purgable" value="1"/>
+        <Category value="Combat"/>
+        <DupeDestroyCount value="5"/>
+        <DupeMaximumMethod value="Replace"/>
+    </CSound>
+    <CSound id="AP_Predator_Ready" parent="Voice">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_Ready0.ogg"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Predator_What" parent="Voice">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_What0.ogg"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_What1.ogg"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_What2.ogg"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_What3.ogg"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_What4.ogg"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Predator_Yes" parent="Voice">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_Yes0.ogg"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_Yes1.ogg"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_Yes2.ogg"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_Yes3.ogg"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_Yes4.ogg"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_Yes5.ogg"/>
+        <AssetArray File="Assets\Sounds\Terran\Predator\Predator_Yes6.ogg"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_RetributionFieldImpactSound" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Protoss\HighTemplar\HighTemplar_PsionicStormImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\HighTemplar\HighTemplar_PsionicStormImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\HighTemplar\HighTemplar_PsionicStormImpact2.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\HighTemplar\HighTemplar_PsionicStormImpact3.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\HighTemplar\HighTemplar_PsionicStormImpact4.wav"/>
+        <DupeDestroyCount value="3"/>
+        <Volume value="-9.000000,-9.000000"/>
+    </CSound>
 </Catalog>

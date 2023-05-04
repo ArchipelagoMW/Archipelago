@@ -1505,4 +1505,28 @@
         <DrainVitalCostFactor value="0.33"/>
         <RechargeVitalRate value="9"/>
     </CEffectCreateHealer>
+    <CEffectDamage id="AP_Predator">
+        <EditorCategories value="Race:Terran"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Melee"/>
+        <Amount value="15"/>
+        <Death value="Eviscerate"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_RetributionFieldDamage">
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="20"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_RetributionFieldSearch">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="0.5" Effect="AP_RetributionFieldDamage"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_RetributionFieldSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_Predator"/>
+        <EffectArray value="AP_RetributionFieldSearch"/>
+    </CEffectSet>
 </Catalog>

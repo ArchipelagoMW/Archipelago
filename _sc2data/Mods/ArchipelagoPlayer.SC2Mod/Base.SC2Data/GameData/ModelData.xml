@@ -797,6 +797,35 @@
         <Model value="Assets\Portraits\Terran\ScienceVesselPortrait\ScienceVesselPortrait.m3"/>
         <FacialController value="LocalizedData\Facial\ScienceVesselPortrait.fxa"/>
         <Image value="Assets\Textures\ScienceVesselPortrait_Static.dds"/>
-        <Lighting value="AP_ScienceVesselPortrait"/>
+    </CModel>
+    <CModel id="AP_CyberCatPortrait" parent="Portrait">
+        <Model value="Assets\Portraits\Terran\PredatorPortrait\PredatorPortrait.m3"/>
+        <Image value="Assets\Textures\PredatorPortrait_Static.dds"/>
+    </CModel>
+    <CModel id="AP_Predator" parent="Unit">
+        <Model value="Assets\Units\Terran\Predator\Predator.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid04"/>
+        <Radius value="0.650000"/>
+        <ScaleMax value="1.300000,1.300000,1.300000"/>
+        <ScaleMin value="1.300000,1.300000,1.300000"/>
+        <SelectionRadius value="0.400000"/>
+        <ShadowRadius value="0.400000"/>
+        <TechPurchaseCamera value="Star2CameraMid04"/>
+        <UnitGlossaryCamera value="Star2CameraMid04"/>
+    </CModel>
+    <CModel id="AP_PredatorDeath" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Units\Terran\PredatorDeath\PredatorDeath.m3"/>
+        <LowQualityModel value="TerranSmallUnitDeath"/>
+    </CModel>
+    <CModel id="AP_PredatorPortrait" parent="Portrait">
+        <Model value="Assets\Portraits\Terran\PredatorPortrait\PredatorPortrait.m3"/>
+        <Image value="Assets\Textures\PredatorPortrait_Static.dds"/>
+    </CModel>
+    <CModel id="AP_RetributionFieldLaunch" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\PredatorImpactShockwave\PredatorImpactShockwave.m3"/>
+        <Radius value="1.000000"/>
+        <EditorCategories value="Race:Terran"/>
     </CModel>
 </Catalog>

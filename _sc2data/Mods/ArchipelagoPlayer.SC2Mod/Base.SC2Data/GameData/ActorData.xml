@@ -1979,10 +1979,10 @@
         <GroupIcon>
             <Image value="AP\Assets\Textures\Wireframe-Terran-Spectre.dds"/>
         </GroupIcon>
-        <HeroIcon value="Assets\Textures\btn-unit-terran-spectre.dds"/>
+        <HeroIcon value="AP\Assets\Textures\btn-unit-terran-spectre.dds"/>
         <HighlightTooltip value="Unit/Name/Spectre"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
-        <UnitIcon value="Assets\Textures\btn-unit-terran-spectre.dds"/>
+        <UnitIcon value="AP\Assets\Textures\btn-unit-terran-spectre.dds"/>
         <Wireframe>
             <Image value="AP\Assets\Textures\Wireframe-Terran-Spectre.dds"/>
         </Wireframe>
@@ -2724,13 +2724,6 @@
         </GroupIcon>
         <HeroIcon value="Assets\Textures\BTN-Unit-Terran-ScienceVessel.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
-        <SoundArray index="Ready" value="AP_ScienceVessel_Ready"/>
-        <SoundArray index="Help" value="AP_ScienceVessel_Help"/>
-        <SoundArray index="What" value="AP_ScienceVessel_What"/>
-        <SoundArray index="Yes" value="AP_ScienceVessel_Yes"/>
-        <SoundArray index="Attack" value="AP_ScienceVessel_Attack"/>
-        <SoundArray index="Pissed" value="AP_ScienceVessel_Pissed"/>
-        <SoundArray index="Movement" value="AP_ScienceVessel_Movement"/>
         <UnitIcon value="Assets\Textures\BTN-Unit-Terran-ScienceVessel.dds"/>
         <Wireframe>
             <Image value="AP\Assets\Textures\Wireframe-Terran-sciencevessel.dds"/>
@@ -2788,6 +2781,55 @@
     <CActorSound id="AP_ScienceVessel_IrradiateImpact" parent="SoundOneShot">
         <On Terms="Behavior.AP_Irradiate.On" Send="Create"/>
     </CActorSound>
+    <CActorUnit id="AP_Predator" parent="GenericUnitStandard" unitName="AP_Predator">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="UnloadDropAnim"/>
+        <Baselines index="Walk" AnimProps="Walk,Fast"/>
+        <DeathArray index="Normal" ModelLink="AP_PredatorDeath" SoundLink="AP_Predator_Explode"/>
+        <PortraitModel value="AP_CyberCatPortrait"/>
+        <BarOffset value="50"/>
+        <BarWidth value="102"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-predator.dds"/>
+        </GroupIcon>
+        <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-Predator.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="AP_Predator_Ready"/>
+        <SoundArray index="What" value="AP_Predator_What"/>
+        <SoundArray index="Yes" value="AP_Predator_Yes"/>
+        <SoundArray index="Attack" value="AP_Predator_Attack"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-Predator.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-predator.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_PredatorAttack" parent="GenericAttack" effectAttack="AP_Predator">
+        <LaunchAttachQuery Methods="Weapon"/>
+        <LaunchAssets Sound="AP_Predator_AttackLaunch"/>
+        <ImpactMap index="None" Sound="AP_Predator_AttackImpact"/>
+        <ImpactMap index="Flesh" Model="BloodTargetImpact"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorSound id="AP_Predator_CloakOff" parent="SoundOneShot">
+        <Terms value="ValidateUnit NotCloakedAndNotDead"/>
+        <On Terms="Behavior.AP_PredatorCloaking.Off" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_Predator_CloakOn" parent="SoundOneShot">
+        <Terms value="ValidateUnit NotCloaked"/>
+        <On Terms="Behavior.AP_PredatorCloaking.On" Send="Create"/>
+        <Sound value="AP_Predator_CloakOn"/>
+    </CActorSound>
+    <CActorSound id="AP_RetributionFieldImpactSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_RetributionFieldDamage.Start" Send="Create"/>
+    </CActorSound>
+    <CActorModel id="AP_RetributionFieldLaunch" parent="ModelAnimationStyleOneShot">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="Effect.AP_RetributionFieldSearch.Start; At Caster" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="AP_RetributionFieldLaunch"/>
+    </CActorModel>
     <CActorEventMacro id="UnloadDropAnim">
         <!-- Override -->
         <!-- Add AP_Medivac to common transport load/unload animations -->

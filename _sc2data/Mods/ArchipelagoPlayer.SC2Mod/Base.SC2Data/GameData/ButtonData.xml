@@ -390,4 +390,19 @@
         <AlertIcon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_CloakOnPredator">
+        <Icon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Predator">
+        <Icon value="Assets\Textures\btn-unit-terran-predator.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-predator.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_RetributionField">
+        <Icon value="Assets\Textures\btn-ability-terran-emp-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-emp-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>
