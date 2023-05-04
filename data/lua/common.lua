@@ -1,3 +1,5 @@
+print("Loading AP lua connector script")
+
 local lua_major, lua_minor = _VERSION:match("Lua (%d+)%.(%d+)")
 lua_major = tonumber(lua_major)
 lua_minor = tonumber(lua_minor)
@@ -31,6 +33,7 @@ local untestedBizhawkMessage = "Warning: this version of bizhawk is newer than w
 u8 = memory.read_u8
 wU8 = memory.write_u8
 u16 = memory.read_u16_le
+uRange = memory.readbyterange
 
 function getMaxMessageLength()
   local denominator = 12
@@ -99,4 +102,8 @@ function checkBizhawkVersion()
     print(untestedBizhawkMessage)
   end
   return true
+end
+
+function stripPrefix(s, p)
+  return (s:sub(0, #p) == p) and s:sub(#p+1) or s
 end

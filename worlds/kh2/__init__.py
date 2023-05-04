@@ -2,7 +2,7 @@ from BaseClasses import Tutorial, ItemClassification
 import logging
 
 from .Items import *
-from .Locations import all_locations, setup_locations, exclusion_table
+from .Locations import all_locations, setup_locations, exclusion_table, AllWeaponSlot
 from .Names import ItemName, LocationName
 from .OpenKH import patch_kh2
 from .Options import KH2_Options
@@ -62,8 +62,22 @@ class KH2World(World):
         self.growth_list = list()
         for x in range(4):
             self.growth_list.extend(Movement_Table.keys())
+        self.slotDataDuping = set()
+        self.localItems = dict()
 
     def fill_slot_data(self) -> dict:
+        for values in CheckDupingItems.values():
+            if isinstance(values, set):
+                self.slotDataDuping = self.slotDataDuping.union(values)
+            else:
+                for inner_values in values.values():
+                    self.slotDataDuping = self.slotDataDuping.union(inner_values)
+        self.LocalItems = {location.address: item_dictionary_table[location.item.name].code
+                           for location in self.multiworld.get_filled_locations(self.player)
+                           if location.item.player == self.player
+                           and location.item.name in self.slotDataDuping
+                           and location.name not in AllWeaponSlot}
+
         return {"hitlist":              self.hitlist,
                 "LocalItems":           self.LocalItems,
                 "Goal":                 self.multiworld.Goal[self.player].value,
@@ -132,7 +146,7 @@ class KH2World(World):
 
         # Creating filler for unfilled locations
         itempool += [self.create_filler()
-                     for _ in range(self.totalLocations-len(itempool))]
+                     for _ in range(self.totalLocations - len(itempool))]
         self.multiworld.itempool += itempool
 
     def generate_early(self) -> None:
@@ -245,13 +259,15 @@ class KH2World(World):
                    ItemName.FinishingPlus: 1}}
 
         elif self.multiworld.KeybladeAbilities[self.player] == "action":
-            self.sora_keyblade_ability_pool = {item: data for item, data in self.item_quantity_dict.items() if item in ActionAbility_Table}
+            self.sora_keyblade_ability_pool = {item: data for item, data in self.item_quantity_dict.items() if
+                                               item in ActionAbility_Table}
             # there are too little action abilities so 2 random support abilities are placed
             for _ in range(3):
-                randomSupportAbility = self.multiworld.per_slot_randoms[self.player].choice(list(SupportAbility_Table.keys()))
+                randomSupportAbility = self.multiworld.per_slot_randoms[self.player].choice(
+                        list(SupportAbility_Table.keys()))
                 while randomSupportAbility in self.sora_keyblade_ability_pool:
                     randomSupportAbility = self.multiworld.per_slot_randoms[self.player].choice(
-                        list(SupportAbility_Table.keys()))
+                            list(SupportAbility_Table.keys()))
                 self.sora_keyblade_ability_pool[randomSupportAbility] = 1
         else:
             # both action and support on keyblades.
@@ -259,7 +275,8 @@ class KH2World(World):
             self.sora_keyblade_ability_pool = {
                 **{item: data for item, data in self.item_quantity_dict.items() if item in SupportAbility_Table},
                 **{item: data for item, data in self.item_quantity_dict.items() if item in ActionAbility_Table},
-                **{ItemName.NegativeCombo: 1, ItemName.AirComboPlus: 1, ItemName.ComboPlus: 1, ItemName.FinishingPlus: 1}}
+                **{ItemName.NegativeCombo: 1, ItemName.AirComboPlus: 1, ItemName.ComboPlus: 1,
+                   ItemName.FinishingPlus: 1}}
 
         for ability in self.multiworld.BlacklistKeyblade[self.player].value:
             if ability in self.sora_keyblade_ability_pool:
@@ -267,7 +284,8 @@ class KH2World(World):
 
         # magic number for amount of keyblades
         if sum(self.sora_keyblade_ability_pool.values()) < 28:
-            raise Exception(f"{self.multiworld.get_file_safe_player_name(self.player)} has too little Keyblade Abilities in the Keyblade Pool")
+            raise Exception(
+                    f"{self.multiworld.get_file_safe_player_name(self.player)} has too little Keyblade Abilities in the Keyblade Pool")
 
         self.valid_abilities = list(self.sora_keyblade_ability_pool.keys())
         #  Kingdom Key cannot have No Experience so plandoed here instead of checking 26 times if its kingdom key
@@ -379,4 +397,5 @@ class KH2World(World):
             self.totalLocations -= 76
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice([ItemName.PowerBoost, ItemName.MagicBoost, ItemName.DefenseBoost, ItemName.APBoost])
+        return self.multiworld.random.choice(
+                [ItemName.PowerBoost, ItemName.MagicBoost, ItemName.DefenseBoost, ItemName.APBoost])

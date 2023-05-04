@@ -1,5 +1,4 @@
-from random import seed
-from typing import Dict, Optional, Callable, Tuple, List
+from typing import Dict, Optional, Callable
 
 from BaseClasses import MultiWorld, CollectionState, Region
 import unittest
@@ -13,7 +12,7 @@ class TestHelpers(unittest.TestCase):
         self.multiworld = MultiWorld(self.player)
         self.multiworld.game[self.player] = "helper_test_game"
         self.multiworld.player_name = {1: "Tester"}
-        self.multiworld.set_seed(seed)
+        self.multiworld.set_seed()
         self.multiworld.set_default_common_options()
 
     def testRegionHelpers(self) -> None:
