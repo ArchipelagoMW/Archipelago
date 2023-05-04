@@ -9,6 +9,7 @@ from .static_logic import StaticLingoLogic, Room, RoomEntrance
 from .items import LingoItem, StaticLingoItems
 from .locations import LingoLocation, StaticLingoLocations
 from .Options import lingo_options, get_option_value
+from .testing import LingoTestOptions
 from ..generic.Rules import set_rule
 from .rules import LingoLogic, set_rules
 from .player_logic import LingoPlayerLogic
@@ -50,6 +51,9 @@ class LingoWorld(World):
         if data.code is not None
     }
 
+    # This is just used for unit testing. It should remain at the default values for actual play.
+    test_options: LingoTestOptions = LingoTestOptions()
+
     def _get_slot_data(self):
         return {
             'door_ids_by_item_id': {
@@ -68,7 +72,7 @@ class LingoWorld(World):
         }
 
     def generate_early(self):
-        self.player_logic = LingoPlayerLogic(self.multiworld, self.player, self.static_logic)
+        self.player_logic = LingoPlayerLogic(self.multiworld, self.player, self.static_logic, self.test_options)
         self.topology_present = get_option_value(self.multiworld, self.player, "shuffle_paintings")
 
     def create_region(self, room: Room):
@@ -150,6 +154,11 @@ class LingoWorld(World):
             event_item = LingoItem(item, ItemClassification.progression, None, player=self.player)
             location_obj = self.multiworld.get_location(location, self.player)
             location_obj.place_locked_item(event_item)
+
+        if self.player_logic.FORCED_GOOD_ITEM != "":
+            new_item = self.create_item(self.player_logic.FORCED_GOOD_ITEM)
+            location_obj = self.multiworld.get_location("Starting Room - HI", self.player)
+            location_obj.place_locked_item(new_item)
 
         item_difference = len(self.player_logic.REAL_LOCATIONS) - len(pool)
         if item_difference > 0:

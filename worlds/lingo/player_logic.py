@@ -1,5 +1,6 @@
 from typing import Dict, List, Optional, NamedTuple
 from BaseClasses import MultiWorld
+from .testing import LingoTestOptions
 from .Options import get_option_value
 from .locations import LocationData, StaticLingoLocations
 from .static_logic import RoomAndPanel, StaticLingoLogic, Door
@@ -29,6 +30,8 @@ class LingoPlayerLogic:
 
     PAINTING_MAPPING: Dict[str, str]
 
+    FORCED_GOOD_ITEM: str
+
     def add_location(self, room: str, loc: PlayerLocation):
         self.LOCATIONS_BY_ROOM.setdefault(room, []).append(loc)
 
@@ -48,7 +51,7 @@ class LingoPlayerLogic:
         else:
             self.set_door_item(room_name, door_data.name, door_data.item_name)
 
-    def __init__(self, world: MultiWorld, player: int, static_logic: StaticLingoLogic):
+    def __init__(self, world: MultiWorld, player: int, static_logic: StaticLingoLogic, test_options: LingoTestOptions):
         self.ITEM_BY_DOOR = {}
         self.LOCATIONS_BY_ROOM = {}
         self.REAL_LOCATIONS = []
@@ -56,6 +59,7 @@ class LingoPlayerLogic:
         self.REAL_ITEMS = []
         self.VICTORY_CONDITION = ""
         self.PAINTING_MAPPING = {}
+        self.FORCED_GOOD_ITEM = ""
 
         if get_option_value(world, player, "shuffle_doors") == 0:  # no door shuffle
             for room_name, room_data in StaticLingoLogic.DOORS_BY_ROOM.items():
@@ -119,6 +123,41 @@ class LingoPlayerLogic:
             # Shuffle paintings until we get something workable.
             while not self.randomize_paintings(world, player, static_logic):
                 pass
+
+        if get_option_value(world, player, "shuffle_doors") > 0 and test_options.disable_forced_good_item is False:
+            # If shuffle doors is on, force a useful item onto the HI panel. This may not necessarily get you out of BK,
+            # but you the goal is to allow you to reach at least one more check. The non-painting ones are hardcoded
+            # right now. We only allow the entrance to the Pilgrim Room if color shuffle is off, because otherwise there
+            # are no extra checks in there. We only include the entrance to the Rhyme Room when color shuffle is off and
+            # door shuffle is on simple, because otherwise there are no extra checks in there.
+            good_item_options: List[str] = ["Starting Room - Back Right Door"]
+
+            if not get_option_value(world, player, "shuffle_colors"):
+                good_item_options.append("Pilgrim Room - Sun Painting")
+
+            if get_option_value(world, player, "shuffle_doors") == 1:
+                good_item_options += ["Entry Doors", "Welcome Back Doors"]
+
+                if not get_option_value(world, player, "shuffle_colors"):
+                    good_item_options.append("Rhyme Room Doors")
+            else:
+                good_item_options += ["Starting Room - Main Door", "Welcome Back Area - Shortcut to Starting Room"]
+
+            for painting_obj in static_logic.PAINTINGS_BY_ROOM["Starting Room"]:
+                if not painting_obj.enter_only or painting_obj.required_door is None:
+                    continue
+
+                # If painting shuffle is on, we only want to consider paintings that actually go somewhere.
+                if get_option_value(world, player, "shuffle_paintings")\
+                        and painting_obj.id not in self.PAINTING_MAPPING.keys():
+                    continue
+
+                pdoor = static_logic.DOORS_BY_ROOM[painting_obj.required_door.room][painting_obj.required_door.door]
+                good_item_options.append(pdoor.item_name)
+
+            self.FORCED_GOOD_ITEM = world.per_slot_randoms[player].choice(good_item_options)
+            self.REAL_ITEMS.remove(self.FORCED_GOOD_ITEM)
+            self.REAL_LOCATIONS.remove("Starting Room - HI")
 
     def randomize_paintings(self, world: MultiWorld, player: int, static_logic: StaticLingoLogic) -> bool:
         self.PAINTING_MAPPING.clear()
