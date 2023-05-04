@@ -123,16 +123,16 @@ class LandstalkerWorld(World):
         del required_jewels[jewel_count:]
         item_pool += [self.create_item(name) for name in required_jewels]
 
+        # Add a pre-placed fake win condition item
+        win_condition_item = LandstalkerItem("King Nole's Treasure", ItemClassification.progression, None, self.player)
+        self.multiworld.get_location("End", self.player).place_locked_item(win_condition_item)
+
         # Fill the rest of the item pool with EkeEke
         unfilled_location_count = len(self.multiworld.get_unfilled_locations(self.player))
         while len(item_pool) < unfilled_location_count:
             item_pool.append(self.create_item("EkeEke"))
 
         self.multiworld.itempool += item_pool
-
-        # Add a pre-placed fake win condition item
-        win_condition_item = LandstalkerItem("King Nole's Treasure", ItemClassification.progression, None, self.player)
-        self.multiworld.get_location("End", self.player).place_locked_item(win_condition_item)
 
     def create_teleportation_trees(self):
         self.teleport_tree_pairs = load_teleport_trees()
