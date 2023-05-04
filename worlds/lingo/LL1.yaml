@@ -1127,6 +1127,14 @@
             panel: DRAWL + RUNS
           - room: Owl Hallway
             panel: READS + RUST
+    progression:
+      Progressive Orange Tower:
+        - Second Floor
+        - Third Floor
+        - Fourth Floor
+        - Fifth Floor
+        - Sixth Floor
+        - Seventh Floor
   Orange Tower First Floor:
     entrances:
       Hub Room:

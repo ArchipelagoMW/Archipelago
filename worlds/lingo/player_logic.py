@@ -2,7 +2,7 @@ from typing import Dict, List, Optional, NamedTuple
 from BaseClasses import MultiWorld
 from .Options import get_option_value
 from .locations import LocationData, StaticLingoLocations
-from .static_logic import RoomAndPanel, StaticLingoLogic
+from .static_logic import RoomAndPanel, StaticLingoLogic, Door
 from .items import ItemData, StaticLingoItems
 
 
@@ -35,6 +35,19 @@ class LingoPlayerLogic:
     def set_door_item(self, room: str, door: str, item: str):
         self.ITEM_BY_DOOR.setdefault(room, {})[door] = item
 
+    def handle_non_grouped_door(self, room_name: str, door_data: Door, world: MultiWorld, player: int,
+                                static_logic: StaticLingoLogic):
+        if room_name in static_logic.PROGRESSION_BY_ROOM \
+                and door_data.name in static_logic.PROGRESSION_BY_ROOM[room_name]:
+            if room_name == "Orange Tower" and not get_option_value(world, player, "progressive_orange_tower"):
+                self.set_door_item(room_name, door_data.name, door_data.item_name)
+            else:
+                progressive_item_name = static_logic.PROGRESSION_BY_ROOM[room_name][door_data.name].item_name
+                self.set_door_item(room_name, door_data.name, progressive_item_name)
+                self.REAL_ITEMS.append(progressive_item_name)
+        else:
+            self.set_door_item(room_name, door_data.name, door_data.item_name)
+
     def __init__(self, world: MultiWorld, player: int, static_logic: StaticLingoLogic):
         self.ITEM_BY_DOOR = {}
         self.LOCATIONS_BY_ROOM = {}
@@ -58,26 +71,15 @@ class LingoPlayerLogic:
                     if door_data.skip_item is False and door_data.event is False:
                         if door_data.group is not None:
                             self.set_door_item(room_name, door_name, door_data.group)
-                        elif room_name in static_logic.PROGRESSION_BY_ROOM\
-                                and door_name in static_logic.PROGRESSION_BY_ROOM[room_name]:
-                            progressive_item_name = static_logic.PROGRESSION_BY_ROOM[room_name][door_name].item_name
-                            self.set_door_item(room_name, door_name, progressive_item_name)
-                            self.REAL_ITEMS.append(progressive_item_name)
                         else:
-                            self.set_door_item(room_name, door_name, door_data.item_name)
+                            self.handle_non_grouped_door(room_name, door_data, world, player, static_logic)
 
         elif get_option_value(world, player, "shuffle_doors") == 2:  # complex doors
             for room_name, room_data in StaticLingoLogic.DOORS_BY_ROOM.items():
                 for door_name, door_data in room_data.items():
                     # This line is duplicated from StaticLingoItems
                     if door_data.skip_item is False and door_data.event is False:
-                        if room_name in static_logic.PROGRESSION_BY_ROOM \
-                                and door_name in static_logic.PROGRESSION_BY_ROOM[room_name]:
-                            progressive_item_name = static_logic.PROGRESSION_BY_ROOM[room_name][door_name].item_name
-                            self.set_door_item(room_name, door_name, progressive_item_name)
-                            self.REAL_ITEMS.append(progressive_item_name)
-                        else:
-                            self.set_door_item(room_name, door_name, door_data.item_name)
+                        self.handle_non_grouped_door(room_name, door_data, world, player, static_logic)
 
         for room_name, room_data in StaticLingoLogic.DOORS_BY_ROOM.items():
             for door_name, door_data in room_data.items():

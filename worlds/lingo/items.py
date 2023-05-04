@@ -70,9 +70,7 @@ class StaticLingoItems:
                 if door.skip_item is True or door.event is True:
                     continue
 
-                if room_name == "Orange Tower":
-                    door_mode = "orange tower"
-                elif door.group is None:
+                if door.group is None:
                     door_mode = "doors"
                 else:
                     door_mode = "complex door"
@@ -80,7 +78,10 @@ class StaticLingoItems:
 
                 if room_name in StaticLingoLogic.PROGRESSION_BY_ROOM\
                         and door_name in StaticLingoLogic.PROGRESSION_BY_ROOM[room_name]:
-                    door_mode = "special"
+                    if room_name == "Orange Tower":
+                        door_mode = "orange tower"
+                    else:
+                        door_mode = "special"
 
                 self.create_item(door.item_name, False, not door.junk_item, False, door_mode, door.door_ids,
                                  door.painting_ids)
@@ -88,7 +89,6 @@ class StaticLingoItems:
         for group, group_door_ids in door_groups.items():
             self.create_item(group, False, True, False, "door group", group_door_ids, [])
 
-        self.create_item("Progressive Orange Tower", False, True, False, "special")
         self.create_item("Nothing", False, False, False)
         self.create_item("Slowness Trap", False, False, True)
         self.create_item("Iceland Trap", False, False, True)
