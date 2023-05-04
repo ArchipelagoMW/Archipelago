@@ -89,9 +89,9 @@ class StaticLingoItems:
         for group, group_door_ids in door_groups.items():
             self.create_item(group, False, True, False, "door group", group_door_ids, [])
 
-        self.create_item("Nothing", False, False, False)
-        self.create_item("Slowness Trap", False, False, True)
-        self.create_item("Iceland Trap", False, False, True)
+        self.create_item("Nothing", False, False, False, "special")
+        self.create_item("Slowness Trap", False, False, True, "special")
+        self.create_item("Iceland Trap", False, False, True, "special")
 
         for item_name in StaticLingoLogic.PROGRESSIVE_ITEMS:
             self.create_item(item_name, False, True, False, "special")
