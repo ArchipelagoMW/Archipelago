@@ -741,10 +741,6 @@
         <Model value="Assets\Effects\Terran\NanoRepairBeam\NanoRepairBeam.m3"/>
         <EditorCategories value="Race:Terran"/>
     </CModel>
-    <CModel id="AP_NanoRepairBeamImpact" parent="PersistentSpellFX">
-        <Model value="Assets\Effects\Terran\NanoRepairBeamImpact\NanoRepairBeamImpact.m3"/>
-        <EditorCategories value="Race:Terran"/>
-    </CModel>
     <CModel id="AP_PlasmaTorpedoesImpact" parent="MissileFX">
         <Model value="Assets\Effects\Terran\BattlecruiserPlasmaMissile\BattlecruiserPlasmaMissile.m3"/>
         <EditorCategories value="Race:Terran"/>
