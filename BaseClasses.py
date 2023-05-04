@@ -135,7 +135,6 @@ class MultiWorld():
             def set_player_attr(attr, val):
                 self.__dict__.setdefault(attr, {})[player] = val
 
-            set_player_attr('tech_tree_layout_prerequisites', {})
             set_player_attr('_region_cache', {})
             set_player_attr('shuffle', "vanilla")
             set_player_attr('logic', "noglitches")
@@ -741,9 +740,11 @@ class CollectionState():
         return self.prog_items[item, player] >= count
 
     def has_all(self, items: Set[str], player: int) -> bool:
+        """Returns True if each item name of items is in state at least once."""
         return all(self.prog_items[item, player] for item in items)
 
     def has_any(self, items: Set[str], player: int) -> bool:
+        """Returns True if at least one item name of items is in state at least once."""
         return any(self.prog_items[item, player] for item in items)
 
     def count(self, item: str, player: int) -> int:

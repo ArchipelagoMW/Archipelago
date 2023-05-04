@@ -59,9 +59,12 @@ class Location:
 
     def evalPostAvailable(self, smbm):
         if self.difficulty.bool == True and self.PostAvailable is not None:
-            smbm.addItem(self.itemName)
+            addAndRemoveItem = smbm.isCountItem(self.itemName) or not smbm.haveItem(self.itemName)
+            if addAndRemoveItem:
+                smbm.addItem(self.itemName)
             postAvailable = self.PostAvailable(smbm)
-            smbm.removeItem(self.itemName)
+            if addAndRemoveItem:
+                smbm.removeItem(self.itemName)
 
             self.difficulty = self.difficulty & postAvailable
             if self.locDifficulty is not None:

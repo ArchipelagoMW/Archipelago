@@ -77,6 +77,12 @@ class TLoZWorld(World):
         self.levels = None
         self.filler_items = None
 
+    @classmethod
+    def stage_assert_generate(cls, multiworld: MultiWorld):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
+
     def create_item(self, name: str):
         return TLoZItem(name, item_table[name].classification, self.item_name_to_id[name], self.player)
 

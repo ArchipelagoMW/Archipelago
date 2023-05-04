@@ -3,13 +3,12 @@
 local socket = require("socket")
 local json = require('json')
 local math = require('math')
-
+require("common")
 local STATE_OK = "Ok"
 local STATE_TENTATIVELY_CONNECTED = "Tentatively Connected"
 local STATE_INITIAL_CONNECTION_MADE = "Initial Connection Made"
 local STATE_UNINITIALIZED = "Uninitialized"
 
-local itemMessages = {}
 local consumableStacks = nil
 local prevstate = ""
 local curstate =  STATE_UNINITIALIZED
@@ -21,8 +20,6 @@ local cave_index
 local triforce_byte
 local game_state
 
-local u8 = nil
-local wU8 = nil
 local isNesHawk = false
 
 local shopsChecked = {}
@@ -420,83 +417,6 @@ local function checkCaveItemObtained()
     return returnTable
 end
 
-function table.empty (self)
-    for _, _ in pairs(self) do
-        return false
-    end
-    return true
-end
-
-function slice (tbl, s, e)
-    local pos, new = 1, {}
-    for i = s + 1, e do
-        new[pos] = tbl[i]
-        pos = pos + 1
-    end
-    return new
-end
-
-local bizhawk_version = client.getversion()
-local is23Or24Or25 = (bizhawk_version=="2.3.1") or (bizhawk_version:sub(1,3)=="2.4") or (bizhawk_version:sub(1,3)=="2.5")
-local is26To28 =  (bizhawk_version:sub(1,3)=="2.6") or (bizhawk_version:sub(1,3)=="2.7") or (bizhawk_version:sub(1,3)=="2.8")
-
-local function getMaxMessageLength()
-    if is23Or24Or25 then
-        return client.screenwidth()/11
-    elseif is26To28 then
-        return client.screenwidth()/12
-    end
-end
-
-local function drawText(x, y, message, color)
-    if is23Or24Or25 then
-        gui.addmessage(message)
-    elseif is26To28 then
-        gui.drawText(x, y, message, color, 0xB0000000, 18, "Courier New", "middle", "bottom", nil, "client")
-    end
-end
-
-local function clearScreen()
-    if is23Or24Or25 then
-        return
-    elseif is26To28 then
-        drawText(0, 0, "", "black")
-    end
-end
-
-local function drawMessages()
-    if table.empty(itemMessages) then
-        clearScreen()
-        return
-    end
-    local y = 10
-    found = false
-    maxMessageLength = getMaxMessageLength()
-    for k, v in pairs(itemMessages) do
-        if v["TTL"] > 0 then
-            message = v["message"]
-            while true do
-                drawText(5, y, message:sub(1, maxMessageLength), v["color"])
-                y = y + 16
-
-                message = message:sub(maxMessageLength + 1, message:len())
-                if message:len() == 0 then
-                    break
-                end
-            end
-            newTTL = 0
-            if is26To28 then
-                newTTL = itemMessages[k]["TTL"] - 1
-            end
-            itemMessages[k]["TTL"] = newTTL
-            found = true
-        end
-    end
-    if found == false then
-        clearScreen()
-    end
-end
-
 function generateOverworldLocationChecked()
     memDomain.ram()
     data = uRange(0x067E, 0x81)
@@ -589,18 +509,6 @@ function processBlock(block)
     end
 end
 
-function difference(a, b)
-    local aa = {}
-    for k,v in pairs(a) do aa[v]=true end
-    for k,v in pairs(b) do aa[v]=nil end
-    local ret = {}
-    local n = 0
-    for k,v in pairs(a) do
-        if aa[v] then n=n+1 ret[n]=v end
-    end
-    return ret
-end
-
 function receive()
     l, e = zeldaSocket:receive()
     if e == 'closed' then
@@ -653,8 +561,7 @@ function receive()
 end
 
 function main()
-    if (is23Or24Or25 or is26To28) == false then
-        print("Must use a version of bizhawk 2.3.1 or higher")
+    if not checkBizhawkVersion() then
         return
     end
     server, error = socket.bind('localhost', 52980)

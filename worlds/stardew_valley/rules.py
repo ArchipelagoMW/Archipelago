@@ -124,21 +124,22 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
 
     # Help Wanted Quests
     desired_number_help_wanted: int = world_options[options.HelpWantedLocations] // 7
-    for i in range(1, desired_number_help_wanted + 1):
+    for i in range(0, desired_number_help_wanted):
         prefix = "Help Wanted:"
         delivery = "Item Delivery"
-        rule = logic.received("Month End", i - 1)
+        rule = logic.received("Month End", i)
         fishing_rule = rule & logic.can_fish()
         slay_rule = rule & logic.has_any_weapon()
-        for j in range(i, i + 4):
-            MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} {delivery} {j}", player),
-                                     rule.simplify())
+        item_delivery_index = (i * 4) + 1
+        for j in range(item_delivery_index, item_delivery_index + 4):
+            location_name = f"{prefix} {delivery} {j}"
+            MultiWorldRules.set_rule(multi_world.get_location(location_name, player), rule.simplify())
 
-        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Gathering {i}", player),
+        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Gathering {i+1}", player),
                                  rule.simplify())
-        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Fishing {i}", player),
+        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Fishing {i+1}", player),
                                  fishing_rule.simplify())
-        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Slay Monsters {i}", player),
+        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Slay Monsters {i+1}", player),
                                  slay_rule.simplify())
 
     set_fishsanity_rules(all_location_names, logic, multi_world, player)
