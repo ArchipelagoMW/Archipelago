@@ -617,4 +617,13 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_RapidDeployment">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Multiply" Reference="Abil,AP_HerculesTransport,UnloadPeriod" Value="0.100000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SurvivalPods">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

@@ -782,7 +782,8 @@
         <Range value="4"/>
         <Arc value="360"/>
         <!-- Tested in vanilla that a target can be healed and nano-repaired at same time (biomech units) -->
-<!--        <Marker Link="Abil/NanoRepair"/>--> <!-- Set it in Liberty Campaign mod so a target can't be healed from both -->
+        <!--        <Marker Link="Abil/NanoRepair"/>-->
+        <!-- Set it in Liberty Campaign mod so a target can't be healed from both vanilla and AP Ability -->
         <SmartValidatorArray value="healSmartTargetFilters"/>
         <SmartValidatorArray value="NotWarpingIn"/>
         <AutoCastAcquireLevel value="Defensive"/>
@@ -796,4 +797,27 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_NanoRepair"/>
         <AcquireAttackers value="1"/>
     </CAbilEffectTarget>
+    <CAbilTransport id="AP_HerculesTransport">
+        <AbilSetId value="ULdM"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Load" DefaultButtonFace="MedivacLoad"/>
+        <CmdButtonArray index="UnloadAll">
+            <Flags index="Hidden" value="1"/>
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="UnloadAt" DefaultButtonFace="MedivacUnloadAll"/>
+        <CmdButtonArray index="UnloadUnit">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="LoadAll">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <Flags index="ShowCargoSize" value="0"/>
+        <MaxCargoCount value="30"/>
+        <MaxCargoSize value="8"/>
+        <TotalCargoSpace value="30"/>
+        <LoadCargoBehavior value="TransportDummy"/>
+        <UnloadPeriod value="0.2"/>
+        <DeathUnloadEffect value="AP_RescuePodsSet"/>
+    </CAbilTransport>
 </Catalog>

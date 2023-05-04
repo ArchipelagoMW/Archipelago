@@ -564,4 +564,16 @@
             </Cost>
         </DamageResponse>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RescuePods">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="Channeling" value="1"/>
+        <Duration value="0.5625"/>
+        <Modification Height="3.75">
+            <HeightTime index="Start" value="0.0625"/>
+            <HeightTime index="Stop" value="0.5"/>
+            <PlaneDelta index="Ground" value="-1"/>
+            <PlaneDelta index="Air" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

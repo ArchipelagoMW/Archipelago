@@ -1529,4 +1529,26 @@
         <EffectArray value="AP_Predator"/>
         <EffectArray value="AP_RetributionFieldSearch"/>
     </CEffectSet>
+    <CEffectCreatePersistent id="AP_RescuePods">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <ExpireDelay value="0.25"/>
+        <ExpireEffect value="RemovePrecursor"/>
+        <FinalEffect value="AP_RescuePodsDamage"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_RescuePodsApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_RescuePods"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_RescuePodsDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <VitalFractionMax index="Life" value="0.25"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_RescuePodsSet">
+        <ValidatorArray value="CliffLevelGE1"/>
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="MakePrecursor"/>
+        <EffectArray value="AP_RescuePods"/>
+    </CEffectSet>
 </Catalog>

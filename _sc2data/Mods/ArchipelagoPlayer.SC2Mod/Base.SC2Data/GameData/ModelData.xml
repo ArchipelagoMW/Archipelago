@@ -828,4 +828,54 @@
         <Radius value="1.000000"/>
         <EditorCategories value="Race:Terran"/>
     </CModel>
+    <CModel id="AP_Hercules" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\ColonistShip\ColonistShip.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow26"/>
+        <Radius value="1.500000"/>
+        <RadiusLoose value="2.499700"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.500000"/>
+        <SelectionRadius value="2.499700"/>
+        <ShadowRadius value="2.499700"/>
+        <TechPurchaseCamera value="Star2CameraLow26"/>
+        <UnitGlossaryCamera value="Star2CameraLow26"/>
+    </CModel>
+    <CModel id="AP_HerculesDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Terran\ColonistShipDeathFly\ColonistShipDeathFly.m3"/>
+        <LowQualityModel value="TerranLargeUnitDeathLow"/>
+        <EditorCategories value="Race:Terran"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranExplosionSmall"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranExplosionMedium"/>
+            <Type value="Sound"/>
+            <Time value="0.200000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranExplosionSmall"/>
+            <Type value="Sound"/>
+            <Time value="1.150000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranExplosionMedium"/>
+            <Type value="Sound"/>
+            <Time value="1.350000"/>
+        </Events>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_HerculesPortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\HerculesPortrait\HerculesPortrait.m3"/>
+        <FacialController value="LocalizedData\Facial\HerculesPortrait.fxa"/>
+        <Image value="Assets\Textures\HerculesPortrait_Static.dds"/>
+        <Lighting value="AP_HerculesPortrait"/>
+    </CModel>
 </Catalog>

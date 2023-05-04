@@ -1350,4 +1350,82 @@
         <DupeDestroyCount value="3"/>
         <Volume value="-9.000000,-9.000000"/>
     </CSound>
+    <CSound id="AP_Hercules_Attack_NP" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_NeuralParasiteAttack00.ogg" FacialAnim="Hercules_NeuralParasiteAttack00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_NeuralParasiteAttack01.ogg" FacialAnim="Hercules_NeuralParasiteAttack01"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Hercules_Death" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_Death00.wav"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Hercules_Death_NP" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_NeuralParasiteDeath00.wav"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Hercules_Help" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_Help00.ogg" FacialAnim="Hercules_Help00"/>
+        <Category value="Alert"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Hercules_Load" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Medivac\Medivac_Load0.wav"/>
+        <Pitch value="-1.270000,1.170000"/>
+        <Volume value="-1.460000,-1.460000"/>
+    </CSound>
+    <CSound id="AP_Hercules_LoadVO" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_Load00.ogg" FacialAnim="Hercules_Load00"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Hercules_Movement" parent="Movement">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Hercules\Hercules_Movement0.wav"/>
+    </CSound>
+    <CSound id="AP_Hercules_Pissed" parent="Pissed">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_Pissed00.ogg" FacialAnim="Hercules_Pissed00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_Pissed01.ogg" FacialAnim="Hercules_Pissed01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_Pissed02.ogg" FacialAnim="Hercules_Pissed02"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Hercules_Ready" parent="Ready">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_Ready00.ogg" FacialAnim="Hercules_Ready00"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Hercules_Ready_NP" parent="Ready">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_NeuralParasiteReady00.ogg" FacialAnim="Hercules_NeuralParasiteReady00"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Hercules_Unload" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Medivac\Medivac_Unload0.wav"/>
+        <Pitch value="-1.270000,1.170000"/>
+        <Volume value="-7.960000,-7.960000"/>
+    </CSound>
+    <CSound id="AP_Hercules_UnloadVO" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_UnLoad00.ogg" FacialAnim="Hercules_UnLoad00"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Hercules_What" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_What00.ogg" FacialAnim="Hercules_What00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_What01.ogg" FacialAnim="Hercules_What01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_What02.ogg" FacialAnim="Hercules_What02"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Hercules_What_NP" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_NeuralParasiteWhat00.ogg" FacialAnim="Hercules_NeuralParasiteWhat00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_NeuralParasiteWhat01.ogg" FacialAnim="Hercules_NeuralParasiteWhat01"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Hercules_Yes" parent="TerranAck">
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_Yes00.ogg" FacialAnim="Hercules_Yes00"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_Yes01.ogg" FacialAnim="Hercules_Yes01"/>
+        <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Hercules\Hercules_Yes02.ogg" FacialAnim="Hercules_Yes02"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
 </Catalog>

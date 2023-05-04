@@ -2231,8 +2231,9 @@
     </CActorUnit>
     <CActorUnit id="Thor">
         <!-- Override -->
-        <!-- Just make it aware about AP_Medivac -->
+        <!-- Just make it aware about AP_Medivac and AP_Hercules -->
         <On Terms="AbilTransport.AP_MedivacTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
+        <On Terms="AbilTransport.AP_HerculesTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
     </CActorUnit>
     <CActorAction id="AP_ThorAAAttack" parent="GenericAttack" effectImpact="AP_JavelinMissileLaunchersDamage" effectLaunch="AP_JavelinMissileLaunchersLM">
         <LaunchAttachQuery Methods="AMFilterWeaponSetA1 AMPatternThorAA"/>
@@ -2306,7 +2307,7 @@
         <On Terms="AnimDone; AnimName Start" Send="AnimPlay Work Stand,Work PlayForever"/>
         <On Terms="AbilTransport.MedivacTransport.TransportUnload" Send="Destroy"/>
         <On Terms="AbilTransport.AP_MedivacTransport.TransportUnload; AbilTransport AP_Thor" Send="Destroy"/>
-        <!-- Yes, we can unload something else then Thor, should work as two Thors can't fit in -->
+        <!-- Yes, we can unload something else than Thor, should work as two Thors can't fit in -->
         <On Terms="Signal.*.Dead" Send="Create ThorTransitDeath"/>
         <On Terms="Signal.*.Dead" Send="Destroy"/>
         <On Terms="ActorCreation; PlayerHasReward ThorCE" Send="ModelSwap ThorCETransit"/>
@@ -2322,7 +2323,7 @@
         <!-- Override -->
         <!-- Just make it compatible with AP_Medivac -->
         <On Terms="AbilTransport.AP_MedivacTransport.TransportUnload; AbilTransport Thor" Send="Destroy"/>
-        <!-- Yes, we can unload something else then Thor, should work as two Thors can't fit in -->
+        <!-- Yes, we can unload something else than Thor, should work as two Thors can't fit in -->
     </CActorModel>
     <CActorModel id="AP_ThorTransitDeath">
         <On Terms="ActorCreation" Send="$Death"/>
@@ -2794,10 +2795,6 @@
         </GroupIcon>
         <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-Predator.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
-        <SoundArray index="Ready" value="AP_Predator_Ready"/>
-        <SoundArray index="What" value="AP_Predator_What"/>
-        <SoundArray index="Yes" value="AP_Predator_Yes"/>
-        <SoundArray index="Attack" value="AP_Predator_Attack"/>
         <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-Predator.dds"/>
         <Wireframe>
             <Image value="AP\Assets\Textures\Wireframe-Terran-predator.dds"/>
@@ -2817,7 +2814,6 @@
     <CActorSound id="AP_Predator_CloakOn" parent="SoundOneShot">
         <Terms value="ValidateUnit NotCloaked"/>
         <On Terms="Behavior.AP_PredatorCloaking.On" Send="Create"/>
-        <Sound value="AP_Predator_CloakOn"/>
     </CActorSound>
     <CActorSound id="AP_RetributionFieldImpactSound" parent="SoundOneShot">
         <On Terms="Effect.AP_RetributionFieldDamage.Start" Send="Create"/>
@@ -2828,8 +2824,56 @@
         <On Terms="Effect.AP_RetributionFieldSearch.Start; At Caster" Send="Create"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
-        <Model value="AP_RetributionFieldLaunch"/>
     </CActorModel>
+    <CActorUnit id="AP_Hercules" parent="GenericUnitStandard" unitName="AP_Hercules">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="UnitBirth.AP_Hercules" Send="AnimGroupApply Fly Fly,Start Fly,End Instant"/>
+        <ProximityPosition value="CenterActor"/>
+        <DeathArray index="Normal" ModelLink="AP_HerculesDeath" SoundLink=""/>
+        <DeathActorModel value="UnitDeathModelNoTeamColor"/>
+        <DeathActorModelLow value="UnitDeathModelNoTeamColorUnscaled"/>
+        <PortraitModel value="AP_HerculesPortrait"/>
+        <BarOffset value="50"/>
+        <BarWidth value="102"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-hercules.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="AP_Hercules_What"/>
+        <GroupSoundArray index="Yes" value="AP_Hercules_Yes"/>
+        <GroupSoundArray index="Attack" value="AP_Hercules_Yes"/>
+        <GroupSoundArray index="Board" value="MedivacGroupBoard"/>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-hercules.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <NameOffset value="50"/>
+        <SoundArray index="Ready" value="AP_Hercules_Ready"/>
+        <SoundArray index="Help" value="AP_Hercules_Help"/>
+        <SoundArray index="What" value="AP_Hercules_What"/>
+        <SoundArray index="Yes" value="AP_Hercules_Yes"/>
+        <SoundArray index="Attack" value="AP_Hercules_Yes"/>
+        <SoundArray index="Pissed" value="AP_Hercules_Pissed"/>
+        <SoundArray index="Movement" value="AP_Hercules_Movement"/>
+        <SoundArray index="Turning" value="MedivacTurning"/>
+        <SoundArray index="Board" value="MedivacBoard"/>
+        <SoundArray index="Click" value="MedivacClick"/>
+        <SoundArray index="ClickError" value="MedivacClickError"/>
+        <SoundArray index="Highlight" value="MedivacHighlight"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-hercules.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-hercules.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSound id="AP_HerculesTransportLoadSound" parent="SoundOneShot">
+        <On Terms="AbilTransport.AP_HerculesTransport.TransportLoad" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Sound value="AP_Hercules_Load"/>
+    </CActorSound>
+    <CActorSound id="AP_HerculesTransportUnloadSound" parent="SoundOneShot">
+        <On Terms="AbilTransport.AP_HerculesTransport.TransportUnload" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Sound value="AP_Hercules_Unload"/>
+    </CActorSound>
     <CActorEventMacro id="UnloadDropAnim">
         <!-- Override -->
         <!-- Add AP_Medivac to common transport load/unload animations -->
@@ -2838,5 +2882,11 @@
         <On Terms="AbilTransport.AP_MedivacTransport.CargoUnload" Send="AnimBracketStop Unload"/>
         <On Terms="AbilTransport.AP_MedivacTransport.TransportLoad" Send="AnimBracketStart Unload IGNORE Unload Unload,End"/>
         <On Terms="AbilTransport.AP_MedivacTransport.TransportUnload" Send="AnimBracketStop Unload"/>
+        <!-- Add AP_Hercules to common transport load/unload animations -->
+        <On Terms="AbilTransport.AP_HerculesTransport.CargoLoad" Send="AnimBracketStart Unload IGNORE Unload Unload,End"/>
+        <On Terms="AbilTransport.AP_HerculesTransport.CargoLoadSuppressed" Send="AnimBracketStart Unload IGNORE Unload Unload,End"/>
+        <On Terms="AbilTransport.AP_HerculesTransport.CargoUnload" Send="AnimBracketStop Unload"/>
+        <On Terms="AbilTransport.AP_HerculesTransport.TransportLoad" Send="AnimBracketStart Unload IGNORE Unload Unload,End"/>
+        <On Terms="AbilTransport.AP_HerculesTransport.TransportUnload" Send="AnimBracketStop Unload"/>
     </CActorEventMacro>
 </Catalog>

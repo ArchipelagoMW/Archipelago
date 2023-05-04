@@ -124,4 +124,16 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
     </CLight>
+    <CLight id="AP_HerculesPortrait" parent="default">
+        <ToDInfoArray index="0" AmbientColor="0.235294,0.078431,0.078431">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.950000"/>
+            <Param index="CreepSpecularExp" value="40.000000"/>
+            <Param index="CreepHDRSpecMultiplier" value="5.900000"/>
+            <DirectionalLight index="Key" ColorMultiplier="0.519000" SpecColorMultiplier="0.708000" Direction="-0.229550,0.768539,-0.597206"/>
+            <DirectionalLight index="Fill" Color="1.000000,0.501961,0.247059" ColorMultiplier="0.000000" Direction="0.423427,0.358331,0.832051"/>
+            <DirectionalLight index="Back" Color="0.866667,0.000000,0.149020" ColorMultiplier="0.708000" Direction="0.868469,0.076287,-0.489839"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
+    </CLight>
 </Catalog>
