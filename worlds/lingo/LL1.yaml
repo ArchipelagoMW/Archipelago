@@ -1139,8 +1139,8 @@
     entrances:
       Hub Room:
         door: Shortcut to Hub Room
-      Wanderlust Tutorial:
-        room: Wanderlust Tutorial
+      Outside The Wanderer:
+        room: Outside The Wanderer
         door: Tower Entrance
       Orange Tower Second Floor:
         room: Orange Tower
@@ -1440,6 +1440,8 @@
           - room: The Red
             panel: Achievement
           - room: The Ecstatic
+            panel: Achievement
+          - room: The Wanderer
             panel: Achievement
       Mastery:
         id:
@@ -1878,7 +1880,7 @@
       Outside The Undeterred: True
       Outside The Initiated: True
       Outside The Agreeable: True
-      Wanderlust Tutorial: True
+      Outside The Wanderer: True
       Eight Alcove: True
       Orange Tower Fifth Floor:
         room: Orange Tower Fifth Floor
@@ -3456,7 +3458,7 @@
     paintings:
       - id: south_afar
         orientation: south
-  Wanderlust Tutorial:
+  Outside The Wanderer:
     entrances:
       Orange Tower First Floor:
         door: Tower Entrance
@@ -3468,15 +3470,28 @@
       WANDERLUST:
         id: Tower Room/Panel_wanderlust_1234567890
         colors: orange
-      "1234567890":
-        id: Tower Room/Panel_1234567890_wanderlust
-        colors: orange
     doors:
-      Tower Entrance:
-        id: Tower Room Area Doors/Door_wanderlust_start
+      Wanderer Entrance:
+        id: Tower Room Area Doors/Door_wanderer_entrance
+        item_name: The Wanderer - Entrance
         panels:
           - WANDERLUST
-          - "1234567890"
+      Tower Entrance:
+        id: Tower Room Area Doors/Door_wanderlust_start
+        skip_location: True
+        panels:
+          - room: The Wanderer
+            panel: Achievement
+  The Wanderer:
+    entrances:
+      Outside The Wanderer:
+        room: Outside The Wanderer
+        door: Wanderer Entrance
+    panels:
+      Achievement:
+        id: Countdown Panels/Panel_1234567890_wanderlust
+        colors: orange
+        check: True
   Art Gallery:
     entrances:
       Orange Tower Third Floor: True
