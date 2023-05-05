@@ -54,6 +54,18 @@ class VictoryCondition(Choice):
     option_the_master = 1
 
 
+class MasteryAchievements(Range):
+    """The number of achievements required to unlock THE MASTER.
+    In the base game, 21 achievements are needed.
+    If you include The Scientific and The Unchallenged, which are in the base game but are not counted for mastery, 23 would be required.
+    If you include the custom achievement (The Wanderer), 24 would be required.
+    """
+    display_name = "Mastery Achievements"
+    range_start = 1
+    range_end = 24
+    default = 21
+
+
 class TrapPercentage(Range):
     """Replaces junk items with traps, at the specified rate."""
     display_name = "Trap Percentage"
@@ -75,6 +87,7 @@ lingo_options: Dict[str, type] = {
     "shuffle_panels": ShufflePanels,
     "shuffle_paintings": ShufflePaintings,
     "victory_condition": VictoryCondition,
+    "mastery_achievements": MasteryAchievements,
     "trap_percentage": TrapPercentage,
     "death_link": DeathLink
 }

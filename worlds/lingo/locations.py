@@ -52,6 +52,7 @@ class StaticLingoLocations:
                     self.create_location(locat_name, False, room_name, [RoomAndPanel(None, panel_name)],
                                          not panel.exclude_reduce)
                 elif panel.event:
+                    # TODO: Remove this, because nothing uses it and it would be wrong if something did use it.
                     self.create_location(locat_name, True, room_name, [RoomAndPanel(None, panel_name)], True)
 
         for room_name, doors in StaticLingoLogic.DOORS_BY_ROOM.items():

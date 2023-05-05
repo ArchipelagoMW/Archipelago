@@ -46,6 +46,9 @@ class LingoLogic(LogicMixin):
                 return False
         return True
 
+    def lingo_can_use_mastery_location(self, world: MultiWorld, player: int):
+        return self.has("Mastery Achievement", player, get_option_value(world, player, "mastery_achievements"))
+
     def _lingo_can_open_door(self, start_room: str, room: str, door: str, world, player,
                              player_logic: LingoPlayerLogic):
         """
@@ -82,7 +85,10 @@ class LingoLogic(LogicMixin):
 
 def make_location_lambda(location: PlayerLocation, room_name: str, world: MultiWorld, player: int,
                          player_logic: LingoPlayerLogic):
-    return lambda state: state.lingo_can_use_location(location, room_name, world, player, player_logic)
+    if location.name == player_logic.MASTERY_LOCATION:
+        return lambda state: state.lingo_can_use_mastery_location(world, player)
+    else:
+        return lambda state: state.lingo_can_use_location(location, room_name, world, player, player_logic)
 
 
 def set_rules(world: MultiWorld, player: int, player_logic: LingoPlayerLogic):

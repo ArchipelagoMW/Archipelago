@@ -27,6 +27,7 @@ class LingoPlayerLogic:
     REAL_ITEMS: List[str]
 
     VICTORY_CONDITION: str
+    MASTERY_LOCATION: str
 
     PAINTING_MAPPING: Dict[str, str]
 
@@ -58,6 +59,7 @@ class LingoPlayerLogic:
         self.EVENT_LOC_TO_ITEM = {}
         self.REAL_ITEMS = []
         self.VICTORY_CONDITION = ""
+        self.MASTERY_LOCATION = ""
         self.PAINTING_MAPPING = {}
         self.FORCED_GOOD_ITEM = ""
 
@@ -92,13 +94,26 @@ class LingoPlayerLogic:
                     self.EVENT_LOC_TO_ITEM[door_data.item_name] = door_data.item_name + " (Opened)"
                     self.set_door_item(room_name, door_name, door_data.item_name + " (Opened)")
 
+        for room_name, room_data in StaticLingoLogic.PANELS_BY_ROOM.items():
+            for panel_name, panel_data in room_data.items():
+                if panel_data.achievement:
+                    event_name = room_name + " - " + panel_name + " (Achieved)"
+                    self.add_location(room_name, PlayerLocation(event_name, None,
+                                                                [RoomAndPanel(room_name, panel_name)]))
+                    self.EVENT_LOC_TO_ITEM[event_name] = "Mastery Achievement"
+
+        self.MASTERY_LOCATION = "Orange Tower Seventh Floor - THE MASTER"
+
         if get_option_value(world, player, "victory_condition") == 0:
             self.VICTORY_CONDITION = "Orange Tower Seventh Floor - THE END"
             self.add_location("Orange Tower Seventh Floor", PlayerLocation("The End (Solved)"))
             self.EVENT_LOC_TO_ITEM["The End (Solved)"] = "Victory"
         elif get_option_value(world, player, "victory_condition") == 1:
             self.VICTORY_CONDITION = "Orange Tower Seventh Floor - THE MASTER"
-            self.EVENT_LOC_TO_ITEM["Orange Tower Seventh Floor - Mastery Achievements"] = "Victory"
+            self.MASTERY_LOCATION = "Orange Tower Seventh Floor - Mastery Achievements"
+
+            self.add_location("Orange Tower Seventh Floor", PlayerLocation(self.MASTERY_LOCATION, None, []))
+            self.EVENT_LOC_TO_ITEM[self.MASTERY_LOCATION] = "Victory"
 
         for location_name, location_data in StaticLingoLocations.ALL_LOCATION_TABLE.items():
             if location_name != self.VICTORY_CONDITION:

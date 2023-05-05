@@ -48,6 +48,7 @@ class Panel(NamedTuple):
     event: bool
     internal_ids: List[str]
     exclude_reduce: bool
+    achievement: bool
 
 
 class Painting(NamedTuple):
@@ -181,6 +182,11 @@ class StaticLingoLogic:
                         else:
                             event = False
 
+                        if "achievement" in panel_data:
+                            achievement = panel_data["achievement"]
+                        else:
+                            achievement = False
+
                         if "exclude_reduce" in panel_data:
                             exclude_reduce = panel_data["exclude_reduce"]
                         else:
@@ -195,7 +201,7 @@ class StaticLingoLogic:
                             internal_ids = []
 
                         panel_obj = Panel(required_rooms, required_doors, colors, check, event, internal_ids,
-                                          exclude_reduce)
+                                          exclude_reduce, achievement)
                         self.PANELS[full_name] = panel_obj
                         self.PANELS_BY_ROOM[room_name][panel_name] = panel_obj
 
