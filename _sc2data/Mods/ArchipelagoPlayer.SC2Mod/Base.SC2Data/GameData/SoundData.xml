@@ -1565,4 +1565,161 @@
         <Flags index="NeedsTTS" value="1"/>
         <Volume value="-2.000000,-2.000000"/>
     </CSound>
+    <CSound id="AP_ValkyrieSCBW@Attack" BaseDir="AP\LocalizedData\Sounds" Folder="ValkyrieSCBW" Race="Terran">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Yes00"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Yes01"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Yes02"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Yes03"/>
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\TerranUnitVO\ValkyrieSCBW\^TemplateParam2^.wav"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="AP\LocalizedData\Sounds\VO\Terran\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+        <Flags index="Ignorable" value="1"/>
+        <Flags index="Stream" value="1"/>
+        <Mode value="3DWorld"/>
+        <PanLevel value="0.750000"/>
+        <ReverbBalance Room="0"/>
+        <SustainFade index="1" Time="250" Volume="-96.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_ValkyrieSCBW@Explode" BaseDir="AP\LocalizedData\Sounds" Folder="ValkyrieSCBW" Race="Terran">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Death00"/>
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\TerranUnitVO\ValkyrieSCBW\^TemplateParam2^.wav"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="AP\LocalizedData\Sounds\VO\Terran\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+        <Flags index="Ignorable" value="1"/>
+        <Category value="Death"/>
+        <Mode value="3DWorld"/>
+        <ReverbBalance Room="0"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_ValkyrieSCBW@Help" BaseDir="AP\LocalizedData\Sounds" Folder="ValkyrieSCBW" Race="Terran">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Help00"/>
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\TerranUnitVO\ValkyrieSCBW\^TemplateParam2^.wav"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="AP\LocalizedData\Sounds\VO\Terran\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+        <Flags index="Ignorable" value="1"/>
+        <Flags index="Stream" value="1"/>
+        <Category value="Alert"/>
+        <Mode value="3DWorld"/>
+        <SpeakerMix index="BackLeft" value="0.000000"/>
+        <SpeakerMix index="BackRight" value="0.000000"/>
+        <SpeakerMix index="SideLeft" value="0.000000"/>
+        <SpeakerMix index="SideRight" value="0.000000"/>
+        <SustainFade index="1" Time="250" Volume="-96.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_ValkyrieSCBW@Movement" parent="Movement">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Wraith\Wraith_Movement00.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Wraith\Wraith_Movement01.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Wraith\Wraith_Movement02.wav"/>
+    </CSound>
+    <CSound id="AP_ValkyrieSCBW@Pissed" BaseDir="AP\LocalizedData\Sounds" Folder="ValkyrieSCBW" Race="Terran">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Pissed00"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Pissed01"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Pissed02"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Pissed03"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Pissed04"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Pissed05"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Pissed06"/>
+        <AssetArrayTemplate>
+            <File value="PA\LocalizedData\Sounds\TerranUnitVO\ValkyrieSCBW\^TemplateParam2^.wav"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="AP\LocalizedData\Sounds\VO\Terran\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+        <Flags index="Download" value="0"/>
+        <Flags index="Ignorable" value="1"/>
+        <Flags index="Stream" value="1"/>
+        <Mode value="3DWorld"/>
+        <PanLevel value="0.750000"/>
+        <ReverbBalance Room="0"/>
+        <Select value="Sequential"/>
+        <SustainFade index="1" Time="250" Volume="-96.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_ValkyrieSCBW@Ready" BaseDir="AP\LocalizedData\Sounds" Folder="ValkyrieSCBW" Race="Terran">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Ready00"/>
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\TerranUnitVO\ValkyrieSCBW\^TemplateParam2^.wav"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="AP\LocalizedData\Sounds\VO\Terran\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+        <Flags index="Ignorable" value="1"/>
+        <Flags index="Stream" value="1"/>
+        <Category value="Ready"/>
+        <Mode value="3DWorld"/>
+        <ReverbBalance Room="-1500"/>
+        <SustainFade index="1" Time="250" Volume="-96.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_ValkyrieSCBW@What" BaseDir="AP\LocalizedData\Sounds" Folder="ValkyrieSCBW" Race="Terran">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@What00"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@What01"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@What02"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@What03"/>
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\TerranUnitVO\ValkyrieSCBW\^TemplateParam2^.wav"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="AP\LocalizedData\Sounds\VO\Terran\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+        <Flags index="Ignorable" value="1"/>
+        <Flags index="Stream" value="1"/>
+        <Mode value="3DWorld"/>
+        <PanLevel value="0.750000"/>
+        <ReverbBalance Room="0"/>
+        <SustainFade index="1" Time="250" Volume="-96.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_ValkyrieSCBW@Yes" BaseDir="AP\LocalizedData\Sounds" Folder="ValkyrieSCBW" Race="Terran">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Yes00"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Yes01"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Yes02"/>
+        <AssetArray TemplateParam="ValkyrieSCBW@Yes03"/>
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\TerranUnitVO\ValkyrieSCBW\^TemplateParam2^.wav"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="AP\LocalizedData\Sounds\VO\Terran\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+        <Flags index="Ignorable" value="1"/>
+        <Flags index="Stream" value="1"/>
+        <Mode value="3DWorld"/>
+        <PanLevel value="0.750000"/>
+        <ReverbBalance Room="0"/>
+        <SustainFade index="1" Time="250" Volume="-96.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_ValkyrieSCBWWeapon@Impact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\Assets\Sounds\Terran\ValkyrieSCBW\ValkyrieSCBWWeapon@Impact00.wav"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_ValkyrieSCBWWeapon@Launch" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\Assets\Sounds\Terran\ValkyrieSCBW\ValkyrieSCBWWeapon@Launch00.wav"/>
+        <Category value="Spell"/>
+        <DupeDestroyCount value="10"/>
+        <DupeMaximumMethod value="Replace"/>
+        <OverlapTimeDelta value="500"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
 </Catalog>

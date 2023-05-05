@@ -136,4 +136,19 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
     </CLight>
+    <CLight id="AP_ValkyrieSCBW@Portrait" parent="default">
+        <ToDInfoArray index="0" Id="Adjutant_CovertOps_Collection_Portrait" AmbientColor="0.113725,0.062745,0.000000">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.950000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.901961,0.992157,1.000000"/>
+                <ColorMultiplier value="1.396000"/>
+                <SpecColorMultiplier value="0.733000"/>
+                <Direction value="-0.141075,0.521039,-0.841794"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.937255,0.988235,0.988235" ColorMultiplier="0.299000" Direction="-0.351564,0.713215,0.606405"/>
+            <DirectionalLight index="Back" Color="0.117647,0.160784,0.266667" ColorMultiplier="1.580000" Direction="-0.738852,0.475064,-0.477925"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
+    </CLight>
 </Catalog>

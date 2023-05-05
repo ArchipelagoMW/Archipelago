@@ -457,4 +457,11 @@
         <TintRacially value="1"/>
         <HotkeyAlias value=""/>
     </CButton>
+    <CButton id="AP_ValkyrieSCBW">
+        <Icon value="AP\Assets\Textures\btn-unit-terran-valkyrie@scbw.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-unit-terran-valkyrie@scbw.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value=""/>
+        <DefaultButtonLayout Column="2"/>
+    </CButton>
 </Catalog>

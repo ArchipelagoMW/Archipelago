@@ -359,4 +359,16 @@
         <Effect value="AP_LiberatorMissileBurstPersistent"/>
         <AllowedMovement value="Slowing"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_ValkyrieSCBWWeapon">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
+        <DisplayEffect value="AP_ValkyrieSCBWWeapon@Damage"/>
+        <DisplayAttackCount value="8"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="7"/>
+        <RangeSlop value="0"/>
+        <Period value="3"/>
+        <Backswing value="0.25"/>
+        <Effect value="AP_ValkyrieSCBWWeapon@CP"/>
+    </CWeaponLegacy>
 </Catalog>

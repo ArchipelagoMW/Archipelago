@@ -3003,7 +3003,6 @@
     </CActorUnit>
     <CActorAction id="AP_LiberatorAGAttack" parent="GenericAttack" effectImpact="AP_LiberatorAGDamage" effectLaunch="AP_LiberatorAGMissileLM">
         <LaunchAssets Sound="Liberator_AG_Launch"/>
-        <Missile value="AP_LiberatorAGAttackMissile"/>
         <ImpactMap index="None" Model="LiberatorAGAttackImpact" Sound="Liberator_AG_Launch_Impact"/>
         <ImpactPhysics Name="RailgunImpact" MatchKeys="Basic" Physics="RailgunAttackDeathForce"/>
         <ActionFlags index="LaunchForceSite" value="1"/>
@@ -3064,7 +3063,6 @@
         <GroupIcon>
             <Image value="Assets\Textures\btn-ability-terran-liberator-agmode.dds"/>
         </GroupIcon>
-        <HighlightTooltip value="Unit/Name/AP_LiberatorAGMorphModel"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
         <SoundArray index="Ready" value="TerranFlyer_Ready"/>
         <SoundArray index="Help" value="TerranFlyer_Help"/>
@@ -3108,8 +3106,6 @@
     <CActorAction id="AP_LiberatorAttack" parent="GenericAttack" effectImpact="AP_LiberatorMissileDummy" effectLaunch="AP_LiberatorMissileLM">
         <LaunchAttachQuery Methods="AMFilterWeaponSetA0"/>
         <LaunchAssets Sound="Liberator_AA_Launch"/>
-        <Beam value="AP_LiberatorAttackBeam"/>
-        <Missile value="AP_LiberatorAttackMissile"/>
         <ImpactSiteOps Ops="SOpAttachCenter SOpRandomPointInCircle1Dot5"/>
         <ImpactMap index="None" Model="LiberatorAttackImpact" Sound="Liberator_AA_Launch_Impact"/>
         <ShieldFlashType value="Full"/>
@@ -3130,7 +3126,6 @@
     <CActorAction id="AP_LiberatorDamageAttack" parent="GenericAttack" effectImpact="AP_LiberatorMissileDamage" effectLaunch="AP_LiberatorDamageMissileLM">
         <LaunchAttachQuery Methods="AMFilterWeaponSetA0"/>
         <LaunchAssets Sound="Liberator_AA_Launch"/>
-        <Missile value="AP_LiberatorDamageAttackMissile"/>
         <ImpactSiteOps Ops="SOpAttachCenter SOpRandomPointInCircle1Dot5"/>
         <ImpactMap index="None" Model="LiberatorAttackImpact" Sound="Liberator_AA_Launch_Impact"/>
         <ShieldFlashType value="Full"/>
@@ -3240,7 +3235,6 @@
         <GroupIcon>
             <Image value="Assets\Textures\btn-ability-terran-liberator-aamode.dds"/>
         </GroupIcon>
-        <HighlightTooltip value="Unit/Name/AP_LiberatorMorphModel"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
         <SoundArray index="Ready" value="TerranFlyer_Ready"/>
         <SoundArray index="Help" value="TerranFlyer_Help"/>
@@ -3289,4 +3283,52 @@
         <On Terms="AbilTransport.AP_HerculesTransport.TransportLoad" Send="AnimBracketStart Unload IGNORE Unload Unload,End"/>
         <On Terms="AbilTransport.AP_HerculesTransport.TransportUnload" Send="AnimBracketStop Unload"/>
     </CActorEventMacro>
+    <CActorUnit id="AP_ValkyrieSCBW" parent="GenericUnitBase" unitName="AP_ValkyrieSCBW">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <HostSiteOps Ops="AP_SOpBankerWraith"/>
+        <AnimBlendTime value="0.300000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <DeathArray index="Normal" ModelLink="AP_ValkyrieSCBW@Death" SoundLink="AP_ValkyrieSCBW@Explode"/>
+        <DeathCustoms>
+            <ModelLink value="DeathVoidShadowMedium"/>
+            <SoundLink value="ShadowUnit_DeathFX"/>
+            <VoiceLink value="ShadowUnit_DeathVox"/>
+            <Name value="Shadow"/>
+        </DeathCustoms>
+        <PortraitModel value="AP_ValkyrieSCBW@Portrait"/>
+        <BarOffset value="55"/>
+        <BarWidth value="66"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\wireframe-terran-valkyrie@scbw.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="Birth" value="Wraith_Birth"/>
+        <GroupSoundArray index="Ready" value="AP_ValkyrieSCBW@Ready"/>
+        <GroupSoundArray index="Help" value="AP_ValkyrieSCBW@Help"/>
+        <GroupSoundArray index="What" value="AP_ValkyrieSCBW@What"/>
+        <GroupSoundArray index="Yes" value="AP_ValkyrieSCBW@Yes"/>
+        <GroupSoundArray index="Attack" value="AP_ValkyrieSCBW@Attack"/>
+        <GroupSoundArray index="Pissed" value="AP_ValkyrieSCBW@Pissed"/>
+        <HeroIcon value="AP\Assets\Textures\btn-unit-terran-valkyrie@scbw.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="AP_ValkyrieSCBW@Ready"/>
+        <SoundArray index="Help" value="AP_ValkyrieSCBW@Help"/>
+        <SoundArray index="What" value="AP_ValkyrieSCBW@What"/>
+        <SoundArray index="Yes" value="AP_ValkyrieSCBW@Yes"/>
+        <SoundArray index="Attack" value="AP_ValkyrieSCBW@Attack"/>
+        <SoundArray index="Pissed" value="AP_ValkyrieSCBW@Pissed"/>
+        <SoundArray index="Movement" value="AP_ValkyrieSCBW@Movement"/>
+        <UnitIcon value="AP\Assets\Textures\btn-unit-terran-valkyrie@scbw.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\wireframe-terran-valkyrie@scbw.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_ValkyrieSCBWWeapon@Action" parent="GenericAttack" effectImpact="AP_ValkyrieSCBWWeapon@Damage" effectLaunch="AP_ValkyrieSCBWWeapon@LM">
+        <LaunchAttachQuery Methods=""/>
+        <LaunchAssets Sound="AP_ValkyrieSCBWWeapon@Launch"/>
+        <Missile value="AP_ValkyrieSCBWWeapon@Missile"/>
+        <ImpactMap index="None" Model="AP_ValkyrieSCBWWeapon@Impact" Sound="AP_ValkyrieSCBWWeapon@Impact"/>
+    </CActorAction>
+    <CActorMissile id="AP_ValkyrieSCBWWeapon@Missile" parent="GenericAttackMissile" unitName="AP_ValkyrieSCBWWeapon@Missile"/>
 </Catalog>

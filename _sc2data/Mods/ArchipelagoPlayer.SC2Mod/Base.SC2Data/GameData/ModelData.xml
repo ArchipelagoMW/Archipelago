@@ -876,6 +876,51 @@
         <Model value="Assets\Portraits\Terran\HerculesPortrait\HerculesPortrait.m3"/>
         <FacialController value="LocalizedData\Facial\HerculesPortrait.fxa"/>
         <Image value="Assets\Textures\HerculesPortrait_Static.dds"/>
-        <Lighting value="AP_HerculesPortrait"/>
+    </CModel>
+    <CModel id="AP_ValkyrieSCBW" parent="Unit">
+        <Model value="AP\Assets\Units\Terran\ValkyrieSCBW\ValkyrieSCBW.m3"/>
+        <AttachProps Id="Ref_Weapon">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 01">
+            <Keys index="SetA" value="1"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 02">
+            <Keys index="SetA" value="2"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 03">
+            <Keys index="SetA" value="3"/>
+        </AttachProps>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow04"/>
+        <SelectionRadius value="0.625000"/>
+        <ShadowRadius value="0.625000"/>
+        <TechPurchaseCamera value="TechPurchaseStarship"/>
+        <Tipability value="0.750000"/>
+        <UnitGlossaryCamera value="Star2CameraLow04"/>
+    </CModel>
+    <CModel id="AP_ValkyrieSCBW@Death" parent="UnitDeath" Race="Terran">
+        <Model value="AP\Assets\Units\Terran\ValkyrieSCBW\ValkyrieSCBW@Death.m3"/>
+        <LowQualityModel value="TerranMediumUnitDeathLow"/>
+        <Radius value="0.625000"/>
+    </CModel>
+    <CModel id="AP_ValkyrieSCBW@Portrait" parent="FXAPortrait" Race="Terran">
+        <Model value="AP\Assets\Portraits\Terran\Valkyrie@PortraitSCBW\Valkyrie@PortraitSCBW.m3"/>
+        <FacialController value="LocalizedData\Facial\WraithPortrait.fxa"/>
+        <Image value="Assets\Textures\WraithPortrait_Static.dds"/>
+        <Lighting value="AP_ValkyrieSCBW@Portrait"/>
+    </CModel>
+    <CModel id="AP_ValkyrieSCBWWeapon@Impact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\WraithMissileImpact\WraithMissileImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_ValkyrieSCBWWeapon@Missile" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\Raven_Scrambler_Missile_MP\Raven_Scrambler_Missile_MP.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SelectionRadius value="0.666500"/>
+        <ShadowRadius value="0.666500"/>
     </CModel>
 </Catalog>

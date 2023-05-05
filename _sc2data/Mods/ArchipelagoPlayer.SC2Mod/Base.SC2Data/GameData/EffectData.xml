@@ -1699,4 +1699,31 @@
             <Flags index="ClearTargetOnAimComplete" value="1"/>
         </ModifyTurret>
     </CEffectModifyUnit>
+    <CEffectCreatePersistent id="AP_ValkyrieSCBWWeapon@CP">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <PeriodCount value="4"/>
+        <PeriodicEffectArray value="AP_ValkyrieSCBWWeapon@Set"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.25"/>
+        <PeriodicPeriodArray value="0.25"/>
+        <PeriodicPeriodArray value="0.25"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_ValkyrieSCBWWeapon@Damage" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="6"/>
+        <AreaArray Radius="1.5" Fraction="1"/>
+        <AreaArray Radius="2" Fraction="0.5"/>
+        <AreaArray Radius="2.5" Fraction="0.25"/>
+        <SearchFilters value="Air,Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Invulnerable,Benign,Passive"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_ValkyrieSCBWWeapon@LM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_ValkyrieSCBWWeapon@Damage"/>
+        <AmmoUnit value="AP_ValkyrieSCBWWeapon@Missile"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_ValkyrieSCBWWeapon@Set">
+        <EffectArray value="AP_ValkyrieSCBWWeapon@LM"/>
+        <EffectArray value="AP_ValkyrieSCBWWeapon@LM"/>
+    </CEffectSet>
 </Catalog>
