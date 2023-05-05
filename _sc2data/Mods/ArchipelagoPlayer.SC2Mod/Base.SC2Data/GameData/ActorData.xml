@@ -3285,8 +3285,8 @@
     </CActorEventMacro>
     <CActorUnit id="AP_ValkyrieSCBW" parent="GenericUnitBase" unitName="AP_ValkyrieSCBW">
         <Aliases value="_UnitLarge"/>
-        <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
-        <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
         <HostSiteOps Ops="AP_SOpBankerWraith"/>
         <AnimBlendTime value="0.300000"/>
         <ModelFlags index="OutlineEmitter" value="1"/>

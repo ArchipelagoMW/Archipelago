@@ -420,4 +420,12 @@
     <CValidatorUnitFilters id="AP_empUTargetFilters">
         <Filters value="-;Stasis,Dead,Hidden"/>
     </CValidatorUnitFilters>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveVoidShade">
+        <Value value="1"/>
+        <Behavior value="VoidShade"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveTerrazineShadow">
+        <Value value="1"/>
+        <Behavior value="TerrazineShadow"/>
+    </CValidatorUnitCompareBehaviorCount>
 </Catalog>
