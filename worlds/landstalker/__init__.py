@@ -1,3 +1,4 @@
+import threading
 from typing import List
 from BaseClasses import Tutorial, LocationProgressType
 from worlds.AutoWorld import WebWorld, World
@@ -36,17 +37,23 @@ class LandstalkerWorld(World):
     item_name_to_id = build_item_name_to_id_table()
     location_name_to_id = build_location_name_to_id_table()
 
+    """ This is needed to force fill_slot_data to happen after generate_output finished balancing shop prices. """
+    can_fill_slot_data: threading.Event
+
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
         self.regions_table: Dict[str, Region] = {}
         self.dark_dungeon_id = "None"
         self.dark_region_ids = []
         self.teleport_tree_pairs = []
+        self.can_fill_slot_data = threading.Event()
 
     def get_setting(self, name: str):
         return getattr(self.multiworld, name)[self.player]
 
     def fill_slot_data(self) -> dict:
+        self.can_fill_slot_data.wait()
+
         # Put options, locations' contents and some additional data inside slot data
         slot_data = {option_name: self.get_setting(option_name).value for option_name in ls_options}
         slot_data["seed"] = self.multiworld.per_slot_randoms[self.player].randint(0, 4294967295)
@@ -241,6 +248,8 @@ class LandstalkerWorld(World):
                     price -= price % 10
                     location.price = int(price)
             sphere_id += 1
+
+        self.can_fill_slot_data.set()
 
 #   def get_filler_item_name(self) -> str:
 #       fillers = get_weighted_filler_item_names()
