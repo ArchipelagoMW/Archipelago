@@ -91,8 +91,6 @@ class LandstalkerWorld(World):
         self.create_teleportation_trees()
 
     def create_item(self, name: str) -> LandstalkerItem:
-        if self.get_setting('progressive_armors').value == 1 and 'Breast' in name:
-            name = 'Progressive Armor'
         data = item_table[name]
         item = LandstalkerItem(name, data.classification, BASE_ITEM_ID + data.id, self.player)
         item.price_in_shops = data.price_in_shops
@@ -101,6 +99,9 @@ class LandstalkerWorld(World):
     def create_items(self):
         item_pool: List[LandstalkerItem] = []
         for name, data in item_table.items():
+            # If item is an armor and progressive armors are enabled, transform it into a progressive armor item
+            if self.get_setting('progressive_armors').value == 1 and 'Breast' in name:
+                name = 'Progressive Armor'
             item_pool += [self.create_item(name) for _ in range(0, data.quantity)]
 
         # If the appropriate setting is on, place one EkeEke in one shop in every town in the game

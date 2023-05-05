@@ -127,4 +127,4 @@ def add_location_rules(multiworld: MultiWorld, player: int):
 
     # Add a special rule for Fahl
     fahl_location = multiworld.get_location("Mercator: Fahl's dojo challenge reward", player)
-    fahl_location.access_rule = lambda state: state._landstalker_has_health(player, 30)
+    fahl_location.access_rule = lambda state: state._landstalker_has_health(player, 15)
