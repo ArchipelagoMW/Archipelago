@@ -1715,6 +1715,7 @@
         <AreaArray Radius="1.5" Fraction="1"/>
         <AreaArray Radius="2" Fraction="0.5"/>
         <AreaArray Radius="2.5" Fraction="0.25"/>
+        <ExcludeArray Value="Target"/>
         <SearchFilters value="Air,Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Invulnerable,Benign,Passive"/>
     </CEffectDamage>
     <CEffectLaunchMissile id="AP_ValkyrieSCBWWeapon@LM">
