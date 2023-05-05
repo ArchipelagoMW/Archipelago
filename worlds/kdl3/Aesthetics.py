@@ -56,11 +56,10 @@ def get_kirby_palette(multiworld, player):
         return None
 
 
-def rgb888_to_bgr555(color: str) -> bytes:
-    col = int(color, 16)
-    red = (col & 0xFF0000) >> 19
-    green = (col & 0x00FF00) >> 11
-    blue = (col & 0x0000FF) >> 3
+def rgb888_to_bgr555(red, green, blue) -> bytes:
+    red = red >> 3
+    green = green >> 3
+    blue = blue >> 3
     outcol = (blue << 10) + (green << 5) + red
     return struct.pack("H", outcol)
 
@@ -68,6 +67,9 @@ def rgb888_to_bgr555(color: str) -> bytes:
 def get_palette_bytes(palette, target, offset, factor):
     output_data = bytearray()
     for color in target:
-        byte_data = rgb888_to_bgr555(str(hex(int(int(palette[color], 16) * factor) + offset)))
+        colint = int(palette[color], 16)
+        col = ((colint & 0xFF0000) >> 16, (colint & 0xFF00) >> 8, colint & 0xFF)
+        col = tuple(int(int(factor*x) + offset) for x in col)
+        byte_data = rgb888_to_bgr555(col[0], col[1], col[2])
         output_data.extend(bytearray(byte_data))
     return output_data
