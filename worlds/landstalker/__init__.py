@@ -228,7 +228,7 @@ class LandstalkerWorld(World):
     def generate_output(self, output_directory: str) -> None:
         # Calculate prices for items in shops once all items have their final position
         unknown_items_price = 250
-        earlygame_price_factor = 0.5
+        earlygame_price_factor = 1.0
         endgame_price_factor = 2.0
         factor_diff = endgame_price_factor - earlygame_price_factor
 
@@ -246,7 +246,9 @@ class LandstalkerWorld(World):
                     price = location.item.price_in_shops if location.item.game == 'Landstalker' else unknown_items_price
                     price *= progression_price_factor
                     price *= global_price_factor
-                    price -= price % 10
+                    price -= price % 5
+                    if price < 5:
+                        price = 5
                     location.price = int(price)
             sphere_id += 1
 

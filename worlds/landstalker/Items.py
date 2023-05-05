@@ -81,11 +81,11 @@ item_table: Dict[str, LandstalkerItemData] = {
     # No Ring: 61
     "Life Stock":           LandstalkerItemData(62, ItemClassification.progression, 250,    0),  # Variable amount
     "No Item":              LandstalkerItemData(63, ItemClassification.filler,      0,      0),
-    "1 Gold":               LandstalkerItemData(64, ItemClassification.filler,      0,      1),
-    "20 Golds":             LandstalkerItemData(65, ItemClassification.filler,      0,      15),
-    "50 Golds":             LandstalkerItemData(66, ItemClassification.useful,      0,      7),
-    "100 Golds":            LandstalkerItemData(67, ItemClassification.useful,      0,      5),
-    "200 Golds":            LandstalkerItemData(68, ItemClassification.useful,      0,      2),
+    "1 Gold":               LandstalkerItemData(64, ItemClassification.filler,      1,      1),
+    "20 Golds":             LandstalkerItemData(65, ItemClassification.filler,      20,     15),
+    "50 Golds":             LandstalkerItemData(66, ItemClassification.useful,      50,     7),
+    "100 Golds":            LandstalkerItemData(67, ItemClassification.useful,      100,    5),
+    "200 Golds":            LandstalkerItemData(68, ItemClassification.useful,      200,    2),
 
     "Progressive Armor":    LandstalkerItemData(69, ItemClassification.useful,      250,    0)
 }
