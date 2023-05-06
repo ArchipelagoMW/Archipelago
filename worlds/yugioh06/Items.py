@@ -181,6 +181,15 @@ tier_1_opponents = (
     "Campaign Tier 1 Column 5"
 )
 
+Banlist_Items = {
+    0: "No Banlist",
+    1: "Banlist September 2003",
+    2: "Banlist March 2004",
+    3: "Banlist September 2004",
+    4: "Banlist March 2005",
+    5: "Banlist September 2005"
+}
+
 booster_packs = (
     "LEGEND OF B.E.W.D.",
     "METAL RAIDERS",
@@ -228,3 +237,10 @@ booster_packs = (
     "Direct Attack Collection",
     "Monster Destroy Collection"
 )
+
+
+excluded_items = {
+    "All at Random",
+    "Money",
+    "Remote"
+}

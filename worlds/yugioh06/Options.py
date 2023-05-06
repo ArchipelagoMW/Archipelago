@@ -11,7 +11,17 @@ class StructureDeck(Choice):
     option_warriors_triumph = 4
     option_spellcasters_judgement = 5
 
+class Banlist(Choice):
+    display_name = "Banlist"
+    option_no_banlist = 0
+    option_September_2003 = 1
+    option_March_2004 = 2
+    option_September_2004 = 3
+    option_March_2005 = 4
+    option_September_2005 = 5
+
 
 ygo06_options: typing.Dict[str, type(Option)] = {
-    "StructureDeck": StructureDeck
+    "StructureDeck": StructureDeck,
+    "Banlist": Banlist
 }
