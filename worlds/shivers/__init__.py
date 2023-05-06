@@ -5,6 +5,7 @@ from BaseClasses import Item, Tutorial, Region, Entrance, Location, ItemClassifi
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from . import Constants
+from .Options import Shivers_options
 
 client_version = 0
 
@@ -47,7 +48,7 @@ class ShiversWorld(World):
     #    item.classification = ItemClassification.progression
     #    return item
 
-    # option_definitions = Shivers_options
+    option_definitions = Shivers_options
 
     
 
@@ -84,6 +85,7 @@ class ShiversWorld(World):
         filler = []
         filler += [self.create_item("Easier Lyre") for i in range(9)]
         filler += [self.create_item("Filler Item") for i in range(5)]
+        filler += [self.create_item("Filler Item") for i in range(15)]
 
         self.multiworld.itempool += pots
         self.multiworld.itempool += keys
@@ -95,11 +97,17 @@ class ShiversWorld(World):
             librarylocation = self.multiworld.random.choice(self.multiworld.get_region("Library", self.player).locations)
         librarylocation.place_locked_item(self.create_item("Crawling"))
 
-        #Set Key for Underground Lake Room to early item
-        self.multiworld.early_items[self.player]["Key for Underground Lake Room"] = 1
+        
 
-        # Set Key for Office Elevator to Sphere 2
-        self.multiworld.early_items[self.player]["Key for Office Elevator"] = 2
+        self.multiworld.local_early_items[self.player]["Key for Underground Lake Room"] = 1
+
+        # Set Key for Office Elevator to Sphere 1
+        self.multiworld.local_early_items[self.player]["Key for Office Elevator"] = 1
+
+        #Set Key for lobby to sphere 1
+        self.multiworld.early_items[self.player]["Key for Lobby"] = 1
+
+        
 
 
     #Prefills event storage locations with duplicate pots

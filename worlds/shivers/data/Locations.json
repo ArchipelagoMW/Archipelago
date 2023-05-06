@@ -52,7 +52,22 @@
     "Final Riddle: Planets Aligned",
     "Final Riddle: Norse God Stone Message",
     "Final Riddle: Beth's Body Page 17",
-    "Final Riddle: Guillotine Dropped"
+    "Final Riddle: Guillotine Dropped",
+    "Puzzle Hint Found: Combo Lock in Mailbox",
+    "Puzzle Hint Found: Orange Symbol",
+    "Puzzle Hint Found: Silver Symbol",
+    "Puzzle Hint Found: Green Symbol",
+    "Puzzle Hint Found: White Symbol",
+    "Puzzle Hint Found: Brown Symbol",
+    "Puzzle Hint Found: Tan Symbol",
+    "Puzzle Hint Found: Basilisk Bone Fragments",
+    "Puzzle Hint Found: Atlantist Map",
+    "Puzzle Hint Found: Sirens Song Heard",
+    "Puzzle Hint Found: Egyptian Sphinx Heard",
+    "Puzzle Hint Found: Gallows Information Plaque",
+    "Puzzle Hint Found: Mastermind Information Plaque",
+    "Puzzle Hint Found: Geoffrey Elevator Writing",
+    "Puzzle Hint Found: RamTaBoBa (Security Camera)"
   ],
   "locations_by_region": {
     "Outside": [
@@ -66,7 +81,14 @@
       "Ixupi Captured Wood",
       "Ixupi Captured Crystal",
       "Ixupi Captured Sand",
-      "Ixupi Captured Metal"
+      "Ixupi Captured Metal",
+      "Puzzle Hint Found: Combo Lock in Mailbox",
+      "Puzzle Hint Found: Orange Symbol",
+      "Puzzle Hint Found: Silver Symbol",
+      "Puzzle Hint Found: Green Symbol",
+      "Puzzle Hint Found: White Symbol",
+      "Puzzle Hint Found: Brown Symbol",
+      "Puzzle Hint Found: Tan Symbol"
     ],
     "Underground Lake": [
       "Flashback Memory Obtained Windlenot's Ghost",
@@ -78,7 +100,8 @@
     ],
     "Workshop": [
       "Puzzle Solved Workshop Drawers",
-      "Accessible: Storage: Workshop Drawers"
+      "Accessible: Storage: Workshop Drawers",
+      "Puzzle Hint Found: Basilisk Bone Fragments"
     ],
     "Bedroom": [
       "Flashback Memory Obtained Professor Windlenot's Diary"
@@ -94,6 +117,9 @@
     ],
     "Maintenance Tunnels": [
       "Flashback Memory Obtained Beth's Address Book"
+    ],
+    "Three Floor Elevator": [
+      "Puzzle Hint Found: Geoffrey Elevator Writing"
     ],
     "Lobby": [
       "Puzzle Solved Theater Door",
@@ -112,7 +138,8 @@
     ],
     "Clock Tower": [
       "Flashback Memory Obtained Beth's Ghost",
-      "Accessible: Storage: Clock Tower"
+      "Accessible: Storage: Clock Tower",
+      "Puzzle Hint Found: RamTaBoBa (Security Camera)"
     ],
     "Projector Room": [
       "Flashback Memory Obtained Theater Movie"
@@ -121,7 +148,9 @@
       "Puzzle Solved Atlantist",
       "Puzzle Solved Organ",
       "Flashback Memory Obtained Museum Blueprints",
-      "Accessible: Storage: Ocean"
+      "Accessible: Storage: Ocean",
+      "Puzzle Hint Found: Atlantist Map",
+      "Puzzle Hint Found: Sirens Song Heard"
     ],
     "Maze Staircase": [
       "Puzzle Solved Maze Door"
@@ -129,7 +158,8 @@
     "Egypt": [
       "Puzzle Solved Columns of RA",
       "Puzzle Solved Burial Door",
-      "Accessible: Storage: Egypt"
+      "Accessible: Storage: Egypt",
+      "Puzzle Hint Found: Egyptian Sphinx Heard"
     ],
     "Burial": [
       "Puzzle Solved Chinese Solitaire",
@@ -171,10 +201,12 @@
     "Torture": [
       "Puzzle Solved Gallows",
       "Accessible: Storage: Hanging",
-      "Final Riddle: Guillotine Dropped"
+      "Final Riddle: Guillotine Dropped",
+      "Puzzle Hint Found: Gallows Information Plaque"
     ],
     "Puzzle Room Mastermind": [
-      "Puzzle Solved Mastermind"
+      "Puzzle Solved Mastermind",
+      "Puzzle Hint Found: Mastermind Information Plaque"
     ],
     "Puzzle Room Marbles": [
       "Puzzle Solved Marble Flipper"

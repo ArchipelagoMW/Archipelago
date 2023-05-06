@@ -12,7 +12,7 @@ class ItemData(typing.NamedTuple):
 def get_full_item_list():
     return item_table
 
-SHIVERS_ITEM_ID_OFFSET = 20000
+SHIVERS_ITEM_ID_OFFSET = 27000
 
 item_table = {
     #Pot Pieces
