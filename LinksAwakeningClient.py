@@ -438,16 +438,15 @@ class LinksAwakeningContext(CommonContext):
     found_checks = []
     last_resend = time.time()
 
-    magpie_enabled = True
+    magpie_enabled = False
     magpie = None
     magpie_task = None
     won = False
 
-    def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str], nomagpie: typing.Optional[bool]) -> None:
+    def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str], magpie: typing.Optional[bool]) -> None:
         self.client = LinksAwakeningClient()
-        if nomagpie:
-            self.magpie_enabled = False
-        else:
+        if magpie:
+            self.magpie_enabled = True
             self.magpie = MagpieBridge()
         super().__init__(server_address, password)
 
@@ -579,7 +578,7 @@ class LinksAwakeningContext(CommonContext):
 async def main():
     parser = get_base_parser(description="Link's Awakening Client.")
     parser.add_argument("--url", help="Archipelago connection url")
-    parser.add_argument("--nomagpie", default=False, action='store_true', help="Disable magpie bridge")
+    parser.add_argument("--no-magpie", dest='magpie', default=True, action='store_false', help="Disable magpie bridge")
 
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a .apladx Archipelago Binary Patch file')
@@ -601,7 +600,7 @@ async def main():
         if url.password:
             args.password = urllib.parse.unquote(url.password)
 
-    ctx = LinksAwakeningContext(args.connect, args.password, args.nomagpie)
+    ctx = LinksAwakeningContext(args.connect, args.password, args.magpie)
 
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
