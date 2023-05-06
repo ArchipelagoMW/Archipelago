@@ -4,7 +4,7 @@ import hashlib
 import os
 import struct
 from worlds.Files import APDeltaPatch
-from .Aesthetics import get_palette_bytes, kirby_target_palettes, get_kirby_palette
+from .Aesthetics import get_palette_bytes, kirby_target_palettes, get_kirby_palette, gooey_target_palettes, get_gooey_palette
 
 KDL3UHASH = "201e7658f6194458a3869dde36bf8ec2"
 KDL3JHASH = "b2f2d004ea640c3db66df958fce122b2"
@@ -234,6 +234,12 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, 
         for addr in kirby_target_palettes:
             target = kirby_target_palettes[addr]
             palette = get_kirby_palette(multiworld, player)
+            rom.write_bytes(addr, get_palette_bytes(palette, target[0], target[1], target[2]))
+
+    if multiworld.gooey_flavor_preset[player] != 0:
+        for addr in gooey_target_palettes:
+            target = gooey_target_palettes[addr]
+            palette = get_gooey_palette(multiworld,player)
             rom.write_bytes(addr, get_palette_bytes(palette, target[0], target[1], target[2]))
 
 

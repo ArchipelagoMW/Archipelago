@@ -184,6 +184,13 @@ class GooeyFlavorPreset(Choice):
     default = 0
 
 
+class GooeyFlavor(OptionDict):
+    """
+    A custom color for Gooey.
+    """
+    default = {}
+
+
 kdl3_options: typing.Dict[str, type(Option)] = {
     "death_link": DeathLink,
     "game_language": GameLanguage,
@@ -200,4 +207,5 @@ kdl3_options: typing.Dict[str, type(Option)] = {
     "kirby_flavor_preset": KirbyFlavorPreset,
     "kirby_flavor": KirbyFlavor,
     "gooey_flavor_preset": GooeyFlavorPreset,
+    "gooey_flavor": GooeyFlavor,
 }
