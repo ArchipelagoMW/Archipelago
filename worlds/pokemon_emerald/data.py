@@ -4,6 +4,7 @@ This also includes marrying automatically extracted data with manually
 defined data (like location labels or usable pokemon species), some cleanup
 and sorting, and Warp methods.
 """
+from dataclasses import dataclass
 from enum import IntEnum
 import json
 import os
@@ -124,7 +125,8 @@ class LearnsetMove(NamedTuple):
     move_id: int
 
 
-class SpeciesData(NamedTuple):
+@dataclass
+class SpeciesData:
     name: str
     label: str
     species_id: int
@@ -149,7 +151,8 @@ class EncounterTableData(NamedTuple):
     rom_address: int
 
 
-class MapData(NamedTuple):
+@dataclass
+class MapData:
     name: str
     land_encounters: Optional[EncounterTableData]
     water_encounters: Optional[EncounterTableData]
@@ -174,18 +177,21 @@ def _str_to_pokemon_data_type(string: str) -> TrainerPokemonDataTypeEnum:
         return TrainerPokemonDataTypeEnum.ITEM_CUSTOM_MOVES
 
 
-class TrainerPokemonData(NamedTuple):
+@dataclass
+class TrainerPokemonData:
     species_id: int
     moves: Optional[Tuple[int, int, int, int]]
 
 
-class TrainerPartyData(NamedTuple):
+@dataclass
+class TrainerPartyData:
     pokemon: List[TrainerPokemonData]
     pokemon_data_type: TrainerPokemonDataTypeEnum
     rom_address: int
 
 
-class TrainerData(NamedTuple):
+@dataclass
+class TrainerData:
     trainer_id: int
     party: TrainerPartyData
     rom_address: int

@@ -313,54 +313,6 @@ def _set_starters(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
     _set_bytes_little_endian(rom, address + 2, 2, starter_2)
     _set_bytes_little_endian(rom, address + 4, 2, starter_3)
 
-    # TODO: Follow evolution pattern if possible. Needs evolution data
-    # (trainer_name, starter_index_in_team, is_evolved_form)
-    rival_teams = [
-        [
-            ("TRAINER_BRENDAN_ROUTE_103_TREECKO", 0, False),
-            ("TRAINER_BRENDAN_RUSTBORO_TREECKO",  1, False),
-            ("TRAINER_BRENDAN_ROUTE_110_TREECKO", 2, True ),
-            ("TRAINER_BRENDAN_ROUTE_119_TREECKO", 2, True ),
-            ("TRAINER_BRENDAN_LILYCOVE_TREECKO",  3, True ),
-            ("TRAINER_MAY_ROUTE_103_TREECKO",     0, True ),
-            ("TRAINER_MAY_RUSTBORO_TREECKO",      1, True ),
-            ("TRAINER_MAY_ROUTE_110_TREECKO",     2, True ),
-            ("TRAINER_MAY_ROUTE_119_TREECKO",     2, True ),
-            ("TRAINER_MAY_LILYCOVE_TREECKO",      3, True )
-        ],
-        [
-            ("TRAINER_BRENDAN_ROUTE_103_TORCHIC", 0, False),
-            ("TRAINER_BRENDAN_RUSTBORO_TORCHIC",  1, False),
-            ("TRAINER_BRENDAN_ROUTE_110_TORCHIC", 2, True ),
-            ("TRAINER_BRENDAN_ROUTE_119_TORCHIC", 2, True ),
-            ("TRAINER_BRENDAN_LILYCOVE_TORCHIC",  3, True ),
-            ("TRAINER_MAY_ROUTE_103_TORCHIC",     0, True ),
-            ("TRAINER_MAY_RUSTBORO_TORCHIC",      1, True ),
-            ("TRAINER_MAY_ROUTE_110_TORCHIC",     2, True ),
-            ("TRAINER_MAY_ROUTE_119_TORCHIC",     2, True ),
-            ("TRAINER_MAY_LILYCOVE_TORCHIC",      3, True )
-        ],
-        [
-            ("TRAINER_BRENDAN_ROUTE_103_MUDKIP", 0, False),
-            ("TRAINER_BRENDAN_RUSTBORO_MUDKIP",  1, False),
-            ("TRAINER_BRENDAN_ROUTE_110_MUDKIP", 2, True ),
-            ("TRAINER_BRENDAN_ROUTE_119_MUDKIP", 2, True ),
-            ("TRAINER_BRENDAN_LILYCOVE_MUDKIP",  3, True ),
-            ("TRAINER_MAY_ROUTE_103_MUDKIP",     0, True ),
-            ("TRAINER_MAY_RUSTBORO_MUDKIP",      1, True ),
-            ("TRAINER_MAY_ROUTE_110_MUDKIP",     2, True ),
-            ("TRAINER_MAY_ROUTE_119_MUDKIP",     2, True ),
-            ("TRAINER_MAY_LILYCOVE_MUDKIP",      3, True )
-        ]
-    ]
-
-    # Force starter onto rival's teams
-    for i, starter in enumerate([starter_2, starter_3, starter_1]):
-        for trainer_name, starter_position, is_evolved in rival_teams[i]:
-            trainer_data = data.trainers[data.constants[trainer_name]]
-            pokemon_address = trainer_data.party.rom_address + (starter_position * 8) # All rivals have default moves
-            _set_bytes_little_endian(rom, pokemon_address + 0x04, 2, starter)
-
 
 def _randomize_tm_moves(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
     random = multiworld.per_slot_randoms[player]

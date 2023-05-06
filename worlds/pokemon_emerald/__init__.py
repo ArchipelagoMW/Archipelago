@@ -1,6 +1,7 @@
 """
 Archipelago World definition for Pokemon Emerald Version
 """
+import copy
 import hashlib
 import os
 from typing import Dict, List, Optional, Tuple
@@ -275,9 +276,7 @@ class PokemonEmeraldWorld(World):
     def post_fill(self):
         random = self.multiworld.random
 
-        def get_randomized_abilities() -> Dict[int, Tuple[int, int]]:
-            randomized_abilities = {}
-
+        def randomize_abilities():
             ability_label_to_value = {ability.label.lower(): ability.ability_id for ability in emerald_data.abilities}
 
             ability_blacklist_labels = set(["cacophony"])
@@ -288,22 +287,18 @@ class PokemonEmeraldWorld(World):
             ability_blacklist = set([ability_label_to_value[label] for label in ability_blacklist_labels])
             ability_whitelist = [ability.ability_id for ability in emerald_data.abilities if ability.ability_id not in ability_blacklist]
 
-            for species in emerald_data.species:
+            for species in self.modified_data.species:
                 new_abilities = (
                     0 if species.abilities[0] == 0 else random.choice(ability_whitelist),
                     0 if species.abilities[1] == 0 else random.choice(ability_whitelist)
                 )
 
-                randomized_abilities[species.species_id] = new_abilities
+                species.abilities = new_abilities
 
-            return randomized_abilities
-        
-        def get_randomized_learnsets() -> Dict[int, List[LearnsetMove]]:
-            randomized_learnsets = {}
-
+        def randomize_learnsets():
             should_start_with_four_moves = get_option_value(self.multiworld, self.player, "level_up_moves") == LevelUpMoves.option_start_with_four_moves
 
-            for species in emerald_data.species:
+            for species in self.modified_data.species:
                 old_learnset = species.learnset
                 new_learnset = []
 
@@ -326,11 +321,63 @@ class PokemonEmeraldWorld(World):
                     new_learnset.append(LearnsetMove(old_learnset[i].level, new_move))
                     i += 1
 
-                randomized_learnsets[species.species_id] = new_learnset
-            
-            return randomized_learnsets
+                species.learnset = new_learnset
 
-        def get_randomized_starters():
+        def randomize_wild_encounters():
+            should_match_bst = get_option_value(self.multiworld, self.player, "wild_pokemon") in [RandomizeWildPokemon.option_match_base_stats, RandomizeWildPokemon.option_match_base_stats_and_type]
+            should_match_type = get_option_value(self.multiworld, self.player, "wild_pokemon") in [RandomizeWildPokemon.option_match_type, RandomizeWildPokemon.option_match_base_stats_and_type]
+            should_allow_legendaries = get_option_value(self.multiworld, self.player, "allow_wild_legendaries") == Toggle.option_true
+
+            for map_data in self.modified_data.maps:
+                new_encounters = [None, None, None]
+                old_encounters = [map_data.land_encounters, map_data.water_encounters, map_data.fishing_encounters]
+
+                for i, table in enumerate(old_encounters):
+                    if table is not None:
+                        new_species = []
+                        for species_id in table.slots:
+                            original_species = get_species_by_id(species_id)
+                            target_bst = sum(original_species.base_stats) if should_match_bst else None
+                            target_type = random.choice(original_species.types) if should_match_type else None
+
+                            new_species.append(get_random_species(random, self.modified_data.species, target_bst, target_type, should_allow_legendaries).species_id)
+
+                        new_encounters[i] = EncounterTableData(new_species, table.rom_address)
+
+                map_data.land_encounters = new_encounters[0]
+                map_data.water_encounters = new_encounters[1]
+                map_data.fishing_encounters = new_encounters[2]
+
+        def randomize_opponent_parties():
+            should_match_bst = get_option_value(self.multiworld, self.player, "trainer_parties") in [RandomizeTrainerParties.option_match_base_stats, RandomizeTrainerParties.option_match_base_stats_and_type]
+            should_match_type = get_option_value(self.multiworld, self.player, "trainer_parties") in [RandomizeTrainerParties.option_match_type, RandomizeTrainerParties.option_match_base_stats_and_type]
+            should_allow_legendaries = get_option_value(self.multiworld, self.player, "allow_trainer_legendaries") == Toggle.option_true
+
+            for trainer in self.modified_data.trainers:
+                new_party = []
+                for pokemon in trainer.party.pokemon:
+                    original_species = get_species_by_id(pokemon.species_id)
+                    target_bst = sum(original_species.base_stats) if should_match_bst else None
+                    target_type = random.choice(original_species.types) if should_match_type else None
+
+                    new_species = get_random_species(random, self.modified_data.species, target_bst, target_type, should_allow_legendaries)
+
+                    # TODO: Extract level and filter movepool
+                    # TODO: Add compatible TMs to movepool
+                    # Could cache this per species
+                    movepool = list(set([move.move_id for move in new_species.learnset]))
+                    new_moves = (
+                        random.choice(movepool),
+                        random.choice(movepool),
+                        random.choice(movepool),
+                        random.choice(movepool)
+                    )
+
+                    new_party.append(TrainerPokemonData(new_species.species_id, new_moves))
+
+                trainer.party.pokemon = new_party
+
+        def randomize_starters():
             should_match_bst = get_option_value(self.multiworld, self.player, "starters") in [RandomizeStarters.option_match_base_stats, RandomizeStarters.option_match_base_stats_and_type]
             should_match_type = get_option_value(self.multiworld, self.player, "starters") in [RandomizeStarters.option_match_type, RandomizeStarters.option_match_base_stats_and_type]
             should_allow_legendaries = get_option_value(self.multiworld, self.player, "allow_starter_legendaries") == Toggle.option_true
@@ -361,110 +408,65 @@ class PokemonEmeraldWorld(World):
                 starter_2 = egg
                 starter_3 = egg
 
-            return (starter_1, starter_2, starter_3)
+            self.modified_data.starters = (starter_1, starter_2, starter_3)
 
-        def randomize_wild_encounters():
-            should_match_bst = get_option_value(self.multiworld, self.player, "wild_pokemon") in [RandomizeWildPokemon.option_match_base_stats, RandomizeWildPokemon.option_match_base_stats_and_type]
-            should_match_type = get_option_value(self.multiworld, self.player, "wild_pokemon") in [RandomizeWildPokemon.option_match_type, RandomizeWildPokemon.option_match_base_stats_and_type]
-            should_allow_legendaries = get_option_value(self.multiworld, self.player, "allow_wild_legendaries") == Toggle.option_true
+            # Putting the unchosen starter onto the rival's team
+            rival_teams = [
+                [
+                    ("TRAINER_BRENDAN_ROUTE_103_TREECKO", 0, False),
+                    ("TRAINER_BRENDAN_RUSTBORO_TREECKO",  1, False),
+                    ("TRAINER_BRENDAN_ROUTE_110_TREECKO", 2, True ),
+                    ("TRAINER_BRENDAN_ROUTE_119_TREECKO", 2, True ),
+                    ("TRAINER_BRENDAN_LILYCOVE_TREECKO",  3, True ),
+                    ("TRAINER_MAY_ROUTE_103_TREECKO",     0, True ),
+                    ("TRAINER_MAY_RUSTBORO_TREECKO",      1, True ),
+                    ("TRAINER_MAY_ROUTE_110_TREECKO",     2, True ),
+                    ("TRAINER_MAY_ROUTE_119_TREECKO",     2, True ),
+                    ("TRAINER_MAY_LILYCOVE_TREECKO",      3, True )
+                ],
+                [
+                    ("TRAINER_BRENDAN_ROUTE_103_TORCHIC", 0, False),
+                    ("TRAINER_BRENDAN_RUSTBORO_TORCHIC",  1, False),
+                    ("TRAINER_BRENDAN_ROUTE_110_TORCHIC", 2, True ),
+                    ("TRAINER_BRENDAN_ROUTE_119_TORCHIC", 2, True ),
+                    ("TRAINER_BRENDAN_LILYCOVE_TORCHIC",  3, True ),
+                    ("TRAINER_MAY_ROUTE_103_TORCHIC",     0, True ),
+                    ("TRAINER_MAY_RUSTBORO_TORCHIC",      1, True ),
+                    ("TRAINER_MAY_ROUTE_110_TORCHIC",     2, True ),
+                    ("TRAINER_MAY_ROUTE_119_TORCHIC",     2, True ),
+                    ("TRAINER_MAY_LILYCOVE_TORCHIC",      3, True )
+                ],
+                [
+                    ("TRAINER_BRENDAN_ROUTE_103_MUDKIP", 0, False),
+                    ("TRAINER_BRENDAN_RUSTBORO_MUDKIP",  1, False),
+                    ("TRAINER_BRENDAN_ROUTE_110_MUDKIP", 2, True ),
+                    ("TRAINER_BRENDAN_ROUTE_119_MUDKIP", 2, True ),
+                    ("TRAINER_BRENDAN_LILYCOVE_MUDKIP",  3, True ),
+                    ("TRAINER_MAY_ROUTE_103_MUDKIP",     0, True ),
+                    ("TRAINER_MAY_RUSTBORO_MUDKIP",      1, True ),
+                    ("TRAINER_MAY_ROUTE_110_MUDKIP",     2, True ),
+                    ("TRAINER_MAY_ROUTE_119_MUDKIP",     2, True ),
+                    ("TRAINER_MAY_LILYCOVE_MUDKIP",      3, True )
+                ]
+            ]
 
-            self.modified_data.maps = []
-            for map_data in emerald_data.maps:
-                new_encounters = [None, None, None]
-                old_encounters = [map_data.land_encounters, map_data.water_encounters, map_data.fishing_encounters]
+            for i, starter in enumerate([starter_2, starter_3, starter_1]):
+                for trainer_name, starter_position, is_evolved in rival_teams[i]:
+                    trainer_data = self.modified_data.trainers[emerald_data.constants[trainer_name]]
+                    trainer_data.party.pokemon[starter_position].species_id = starter
 
-                for i, table in enumerate(old_encounters):
-                    if table is not None:
-                        new_species = []
-                        for species_id in table.slots:
-                            original_species = get_species_by_id(species_id)
-                            target_bst = sum(original_species.base_stats) if should_match_bst else None
-                            target_type = random.choice(original_species.types) if should_match_type else None
-
-                            new_species.append(get_random_species(random, self.modified_data.species, target_bst, target_type, should_allow_legendaries).species_id)
-
-                        new_encounters[i] = EncounterTableData(new_species, table.rom_address)
-
-                self.modified_data.maps.append(MapData(
-                    map_data.name,
-                    new_encounters[0],
-                    new_encounters[1],
-                    new_encounters[2]
-                ))
-
-        def randomize_opponent_parties():
-            should_match_bst = get_option_value(self.multiworld, self.player, "trainer_parties") in [RandomizeTrainerParties.option_match_base_stats, RandomizeTrainerParties.option_match_base_stats_and_type]
-            should_match_type = get_option_value(self.multiworld, self.player, "trainer_parties") in [RandomizeTrainerParties.option_match_type, RandomizeTrainerParties.option_match_base_stats_and_type]
-            should_allow_legendaries = get_option_value(self.multiworld, self.player, "allow_trainer_legendaries") == Toggle.option_true
-
-            self.modified_data.trainers = []
-            for trainer in emerald_data.trainers:
-                new_party = []
-                for pokemon in trainer.party.pokemon:
-                    original_species = get_species_by_id(pokemon.species_id)
-                    target_bst = sum(original_species.base_stats) if should_match_bst else None
-                    target_type = random.choice(original_species.types) if should_match_type else None
-
-                    new_species = get_random_species(random, self.modified_data.species, target_bst, target_type, should_allow_legendaries)
-
-                    # TODO: Extract level and filter movepool
-                    # TODO: Add compatible TMs to movepool
-                    movepool = list(set([move.move_id for move in new_species.learnset]))
-                    new_moves = (
-                        random.choice(movepool),
-                        random.choice(movepool),
-                        random.choice(movepool),
-                        random.choice(movepool)
-                    )
-
-                    new_party.append(TrainerPokemonData(new_species.species_id, new_moves))
-                
-                self.modified_data.trainers.append(TrainerData(
-                    trainer.trainer_id,
-                    TrainerPartyData(
-                        new_party,
-                        trainer.party.pokemon_data_type,
-                        trainer.party.rom_address
-                    ),
-                    trainer.rom_address,
-                    trainer.battle_script_rom_address
-                ))
-
-        self.modified_data = PokemonEmeraldData()
+        self.modified_data = copy.deepcopy(emerald_data)
 
         # Randomize species data
+        if get_option_value(self.multiworld, self.player, "abilities") == Toggle.option_true:
+            randomize_abilities()
+
+        if get_option_value(self.multiworld, self.player, "abilities") == Toggle.option_true:
+            randomize_learnsets()
+
         min_catch_rate = min(get_option_value(self.multiworld, self.player, "min_catch_rate"), 255)
-
-        randomized_abilities = None
-        if get_option_value(self.multiworld, self.player, "abilities") == Toggle.option_true:
-            randomized_abilities = get_randomized_abilities()
-
-        randomized_learnsets = None
-        if get_option_value(self.multiworld, self.player, "abilities") == Toggle.option_true:
-            randomized_learnsets = get_randomized_learnsets()
-
-        for species in emerald_data.species:
-            modified_catch_rate = max(species.catch_rate, min_catch_rate)
-            modified_abilities = species.abilities if randomized_abilities is None else randomized_abilities[species.species_id]
-            modified_learnset = species.learnset if randomized_learnsets is None else randomized_learnsets[species.species_id]
-
-            self.modified_data.species.append(SpeciesData(
-                species.name,
-                species.label,
-                species.species_id,
-                species.national_dex_number,
-                species.base_stats,
-                species.types,
-                modified_abilities,
-                modified_catch_rate,
-                modified_learnset,
-                species.tm_hm_compatibility,
-                species.learnset_rom_address,
-                species.rom_address
-            ))
-        
-        if get_option_value(self.multiworld, self.player, "starters") != RandomizeStarters.option_vanilla:
-            self.modified_data.starters = get_randomized_starters()
+        for species in self.modified_data.species:
+            species.catch_rate = max(species.catch_rate, min_catch_rate)
 
         # Randomize wild encounters
         if get_option_value(self.multiworld, self.player, "wild_pokemon") != RandomizeWildPokemon.option_vanilla:
@@ -473,6 +475,10 @@ class PokemonEmeraldWorld(World):
         # Randomize opponents
         if get_option_value(self.multiworld, self.player, "trainer_parties") != RandomizeTrainerParties.option_vanilla:
             randomize_opponent_parties()
+
+        # Randomize starters
+        if get_option_value(self.multiworld, self.player, "starters") != RandomizeStarters.option_vanilla:
+            randomize_starters()
 
 
     def generate_output(self, output_directory: str):
