@@ -508,6 +508,15 @@ def restricted_loads(s):
     return RestrictedUnpickler(io.BytesIO(s)).load()
 
 
+class ByValue:
+    """
+    Mixin for enums to pickle value instead of name (restores pre-3.11 behavior). Use as left-most parent.
+    See https://github.com/python/cpython/pull/26658 for why this exists.
+    """
+    def __reduce_ex__(self, prot):
+        return self.__class__, (self._value_, )
+
+
 class KeyedDefaultDict(collections.defaultdict):
     """defaultdict variant that uses the missing key as argument to default_factory"""
     default_factory: typing.Callable[[typing.Any], typing.Any]
