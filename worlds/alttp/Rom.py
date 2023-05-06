@@ -279,7 +279,9 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
                 rom.write_bytes(0x307078 + (i * 0x8000), sprite.glove_palette)
 
 
-def patch_enemizer(multiworld, world, player: int, rom: LocalRom, enemizercli, output_directory):
+def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
+    player = world.player
+    multiworld = world.multiworld
     check_enemizer(enemizercli)
     randopatch_path = os.path.abspath(os.path.join(output_directory, f'enemizer_randopatch_{player}.sfc'))
     options_path = os.path.abspath(os.path.join(output_directory, f'enemizer_options_{player}.json'))

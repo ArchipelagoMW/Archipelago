@@ -481,7 +481,7 @@ class ALTTPWorld(World):
             patch_rom(multiworld, rom, player, use_enemizer)
 
             if use_enemizer:
-                patch_enemizer(multiworld, self, player, rom, self.enemizer_path, output_directory)
+                patch_enemizer(self, rom, self.enemizer_path, output_directory)
 
             if multiworld.is_race:
                 patch_race_rom(rom, multiworld, player)
