@@ -3,18 +3,18 @@ Archipelago World definition for Pokemon Emerald Version
 """
 import hashlib
 import os
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial, Counter
 from Fill import fill_restrictive
 from Options import Toggle
 from worlds.AutoWorld import WebWorld, World
 
-from .data import PokemonEmeraldData, MapData, EncounterTableData, data as emerald_data
+from .data import PokemonEmeraldData, MapData, SpeciesData, EncounterTableData, LearnsetMove, data as emerald_data
 from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification, offset_item_value
 from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
-from .options import RandomizeWildPokemon, RandomizeBadges, RandomizeHms, ItemPoolType, get_option_value, option_definitions
-from .pokemon import get_random_species, get_species_by_id
+from .options import RandomizeWildPokemon, RandomizeBadges, RandomizeHms, ItemPoolType, LevelUpMoves, get_option_value, option_definitions
+from .pokemon import get_random_species, get_species_by_id, get_random_move, get_random_damaging_move
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path
 from .rules import (set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules,
@@ -273,7 +273,64 @@ class PokemonEmeraldWorld(World):
     
 
     def post_fill(self):
-        def randomize_encounters():
+        random = self.multiworld.random
+
+        def get_randomized_abilities() -> Dict[int, Tuple[int, int]]:
+            randomized_abilities = {}
+
+            ability_label_to_value = {ability.label.lower(): ability.ability_id for ability in emerald_data.abilities}
+
+            ability_blacklist_labels = set(["cacophony"])
+            option_ability_blacklist = get_option_value(self.multiworld, self.player, "ability_blacklist")
+            if option_ability_blacklist is not None:
+                ability_blacklist_labels |= set([ability_label.lower() for ability_label in option_ability_blacklist])
+
+            ability_blacklist = set([ability_label_to_value[label] for label in ability_blacklist_labels])
+            ability_whitelist = [ability.ability_id for ability in emerald_data.abilities if ability.ability_id not in ability_blacklist]
+
+            for species in emerald_data.species:
+                new_abilities = (
+                    0 if species.abilities[0] == 0 else random.choice(ability_whitelist),
+                    0 if species.abilities[1] == 0 else random.choice(ability_whitelist)
+                )
+
+                randomized_abilities[species.species_id] = new_abilities
+
+            return randomized_abilities
+        
+        def get_randomized_learnsets() -> Dict[int, List[LearnsetMove]]:
+            randomized_learnsets = {}
+
+            should_start_with_four_moves = get_option_value(self.multiworld, self.player, "level_up_moves") == LevelUpMoves.option_start_with_four_moves
+
+            for species in emerald_data.species:
+                old_learnset = species.learnset
+                new_learnset = []
+
+                i = 0
+                # Replace filler MOVE_NONEs at start of list
+                while old_learnset[i].move_id == 0:
+                    if should_start_with_four_moves:
+                        new_move = get_random_move(random, set(new_learnset))
+                    else:
+                        new_move = 0
+                    new_learnset.append(LearnsetMove(old_learnset[i].level, new_move))
+                    i += 1
+
+                while i < len(old_learnset):
+                    # Guarantees the starter has a good damaging move
+                    if i == 3:
+                        new_move = get_random_damaging_move(random, set(new_learnset))
+                    else:
+                        new_move = get_random_move(random, set(new_learnset))
+                    new_learnset.append(LearnsetMove(old_learnset[i].level, new_move))
+                    i += 1
+
+                randomized_learnsets[species.species_id] = new_learnset
+            
+            return randomized_learnsets
+ 
+        def randomize_wild_encounters():
             should_match_bst = get_option_value(self.multiworld, self.player, "wild_pokemon") in [RandomizeWildPokemon.option_match_base_stats, RandomizeWildPokemon.option_match_base_stats_and_type]
             should_match_type = get_option_value(self.multiworld, self.player, "wild_pokemon") in [RandomizeWildPokemon.option_match_type, RandomizeWildPokemon.option_match_base_stats_and_type]
             should_allow_legendaries = get_option_value(self.multiworld, self.player, "allow_wild_legendaries") == Toggle.option_true
@@ -288,9 +345,9 @@ class PokemonEmeraldWorld(World):
                         for species_id in table.slots:
                             original_species = get_species_by_id(species_id)
                             target_bst = sum(original_species.base_stats) if should_match_bst else None
-                            target_type = self.multiworld.random.choice(original_species.types) if should_match_type else None
+                            target_type = random.choice(original_species.types) if should_match_type else None
 
-                            new_species.append(get_random_species(self.multiworld.random, target_bst, target_type, should_allow_legendaries).species_id)
+                            new_species.append(get_random_species(random, target_bst, target_type, should_allow_legendaries).species_id)
                         
                         new_encounters[i] = EncounterTableData(new_species, table.rom_address)
 
@@ -303,8 +360,38 @@ class PokemonEmeraldWorld(World):
 
         self.modified_data = PokemonEmeraldData()
 
+        min_catch_rate = min(get_option_value(self.multiworld, self.player, "min_catch_rate"), 255)
+
+        randomized_abilities = None
+        if get_option_value(self.multiworld, self.player, "abilities") == Toggle.option_true:
+            randomized_abilities = get_randomized_abilities()
+
+        randomized_learnsets = None
+        if get_option_value(self.multiworld, self.player, "abilities") == Toggle.option_true:
+            randomized_learnsets = get_randomized_learnsets()
+
+        for species in emerald_data.species:
+            modified_catch_rate = max(species.catch_rate, min_catch_rate)
+            modified_abilities = species.abilities if randomized_abilities is None else randomized_abilities[species.species_id]
+            modified_learnset = species.learnset if randomized_learnsets is None else randomized_learnsets[species.species_id]
+
+            self.modified_data.species.append(SpeciesData(
+                species.name,
+                species.label,
+                species.species_id,
+                species.national_dex_number,
+                species.base_stats,
+                species.types,
+                modified_abilities,
+                modified_catch_rate,
+                modified_learnset,
+                species.tm_hm_compatibility,
+                species.learnset_rom_address,
+                species.rom_address
+            ))
+
         if get_option_value(self.multiworld, self.player, "wild_pokemon") != RandomizeWildPokemon.option_vanilla:
-            randomize_encounters()
+            randomize_wild_encounters()
 
 
     def generate_output(self, output_directory: str):

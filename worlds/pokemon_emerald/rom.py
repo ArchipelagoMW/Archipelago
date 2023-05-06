@@ -1,7 +1,7 @@
 """
 Classes and functions related to creating a ROM patch
 """
-from typing import Dict, List
+from typing import List
 import os
 
 import bsdiff4
@@ -14,9 +14,8 @@ import Utils
 from .data import PokemonEmeraldData, SpeciesData, TrainerPokemonDataTypeEnum, data
 from .items import reverse_offset_item_value
 from .options import (RandomizeWildPokemon, RandomizeStarters, RandomizeTrainerParties, TmCompatibility,
-    HmCompatibility, LevelUpMoves, EliteFourRequirement, NormanRequirement, get_option_value)
-from .pokemon import (get_random_species, get_species_by_id, get_species_by_name,
-    get_random_damaging_move, get_random_move)
+    HmCompatibility, EliteFourRequirement, NormanRequirement, get_option_value)
+from .pokemon import get_random_species, get_species_by_id, get_species_by_name, get_random_move
 
 
 class PokemonEmeraldDeltaPatch(APDeltaPatch):
@@ -77,21 +76,16 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
         _set_bytes_little_endian(patched_rom, address + 0, 2, item)
         _set_bytes_little_endian(patched_rom, address + 2, 2, quantity)
 
-    # Randomize encounter tables
+    # Replace encounter tables
     if get_option_value(multiworld, player, "wild_pokemon") != RandomizeWildPokemon.option_vanilla:
-        _modify_encounter_tables(modified_data, patched_rom)
+        _replace_encounter_tables(modified_data, patched_rom)
 
-    # Randomize abilities
-    if get_option_value(multiworld, player, "abilities") == Toggle.option_true:
-        _randomize_abilities(multiworld, player, patched_rom)
+    # Modify species
+    _modify_species_info(modified_data, patched_rom)
 
     # Randomize TM moves
     if get_option_value(multiworld, player, "tm_moves") == Toggle.option_true:
         _randomize_tm_moves(multiworld, player, patched_rom)
-
-    # Randomize learnsets
-    if get_option_value(multiworld, player, "level_up_moves") != LevelUpMoves.option_vanilla:
-        _randomize_learnsets(multiworld, player, patched_rom)
 
     # Randomize opponents
     if get_option_value(multiworld, player, "trainer_parties") != RandomizeTrainerParties.option_vanilla:
@@ -103,9 +97,6 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     # Randomize starters
     if get_option_value(multiworld, player, "starters") != RandomizeStarters.option_vanilla:
         _randomize_starters(multiworld, player, patched_rom)
-
-    # Modify species
-    _modify_species_info(multiworld, player, patched_rom)
 
     # Modify TM/HM compatibility
     _modify_tmhm_compatibility(multiworld, player, patched_rom)
@@ -230,27 +221,34 @@ def _set_bytes_little_endian(byte_array, address, size, value) -> None:
         size -= 1
 
 
-def _modify_encounter_tables(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
-    for map_data in modified_data.maps:
-        if map_data.land_encounters is not None:
-            _replace_encounters(rom, map_data.land_encounters.rom_address, map_data.land_encounters.slots)
-        if map_data.water_encounters is not None:
-            _replace_encounters(rom, map_data.water_encounters.rom_address, map_data.water_encounters.slots)
-        if map_data.fishing_encounters is not None:
-            _replace_encounters(rom, map_data.fishing_encounters.rom_address, map_data.fishing_encounters.slots)
-
-
-def _replace_encounters(rom, table_address, encounter_slots) -> None:
-    """Encounter tables are lists of
+def _replace_encounter_tables(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+    """
+    Encounter tables are lists of
     struct {
         min_level:  0x01 bytes,
         max_level:  0x01 bytes,
         species_id: 0x02 bytes
     }
     """
-    for slot_i, species_id in enumerate(encounter_slots):
-        address = table_address + 2 + (4 * slot_i)
-        _set_bytes_little_endian(rom, address, 2, species_id)
+
+    for map_data in modified_data.maps:
+        tables = [map_data.land_encounters, map_data.water_encounters, map_data.fishing_encounters]
+        for table in tables:
+            if table is not None:
+                for i, species_id in enumerate(table.slots):
+                    address = table.rom_address + 2 + (4 * i)
+                    _set_bytes_little_endian(rom, address, 2, species_id)
+
+
+def _modify_species_info(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+    for species in modified_data.species:
+        _set_bytes_little_endian(rom, species.rom_address + 8, 1, species.catch_rate)
+        _set_bytes_little_endian(rom, species.rom_address + 22, 1, species.abilities[0])
+        _set_bytes_little_endian(rom, species.rom_address + 23, 1, species.abilities[1])
+
+        for i, learnset_move in enumerate(species.learnset):
+            level_move = learnset_move.level << 9 | learnset_move.move_id
+            _set_bytes_little_endian(rom, species.learnset_rom_address + (i * 2), 2, level_move)
 
 
 def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
@@ -407,60 +405,6 @@ def _randomize_starters(multiworld: MultiWorld, player: int, rom: bytearray) -> 
             _set_bytes_little_endian(rom, pokemon_address + 0x04, 2, starter.species_id)
 
 
-def _randomize_abilities(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
-    random = multiworld.per_slot_randoms[player]
-    ability_label_to_value = {ability.label.lower(): ability.ability_id for ability in data.abilities}
-
-    ability_blacklist_labels = set(["cacophony"])
-    option_ability_blacklist = get_option_value(multiworld, player, "ability_blacklist")
-    if option_ability_blacklist is not None:
-        ability_blacklist_labels |= set([ability_label.lower() for ability_label in option_ability_blacklist])
-
-    ability_blacklist = set([ability_label_to_value[label] for label in ability_blacklist_labels])
-    ability_whitelist = [ability.ability_id for ability in data.abilities if ability.ability_id not in ability_blacklist]
-
-    for species in data.species:
-        old_abilities = species.abilities
-        new_abilities = [random.choice(ability_whitelist), random.choice(ability_whitelist)]
-
-        if old_abilities[0] != 0:
-            _set_bytes_little_endian(rom, species.rom_address + 22, 1, new_abilities[0])
-        if old_abilities[1] != 0:
-            _set_bytes_little_endian(rom, species.rom_address + 23, 1, new_abilities[1])
-
-
-def _randomize_learnsets(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
-    random = multiworld.per_slot_randoms[player]
-
-    for species in data.species:
-        old_learnset = species.learnset
-        new_learnset: List[int] = []
-
-        i = 0
-
-        # Replace filler MOVE_NONEs at start of list
-        while old_learnset[i].move_id == 0:
-            if get_option_value(multiworld, player, "level_up_moves") == LevelUpMoves.option_start_with_four_moves:
-                new_learnset.append(get_random_move(random, set(new_learnset)))
-            else:
-                new_learnset.append(0)
-            i += 1
-
-        while i < len(old_learnset):
-            # Guarantees the starter has a move to damage wild pokemon
-            if i == 3:
-                new_move = get_random_damaging_move(random, set(new_learnset))
-            else:
-                new_move = get_random_move(random, set(new_learnset))
-
-            new_learnset.append(new_move)
-
-            i += 1
-
-        new_learnset = [old_learnset[i].level << 9 | move_id for i, move_id in enumerate(new_learnset)]
-        _replace_learnset(species.learnset_rom_address, new_learnset, rom)
-
-
 def _randomize_tm_moves(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
     random = multiworld.per_slot_randoms[player]
     tm_list_address = data.rom_addresses["sTMHMMoves"]
@@ -468,20 +412,6 @@ def _randomize_tm_moves(multiworld: MultiWorld, player: int, rom: bytearray) -> 
     for i in range(50):
         new_move = get_random_move(random)
         _set_bytes_little_endian(rom, tm_list_address + (i * 2), 2, new_move)
-
-
-
-def _replace_learnset(learnset_address: int, new_learnset: List[int], rom: bytearray) -> None:
-    for i, level_move in enumerate(new_learnset):
-        _set_bytes_little_endian(rom, learnset_address + (i * 2), 2, level_move)
-
-
-def _modify_species_info(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
-    min_catch_rate = min(get_option_value(multiworld, player, "min_catch_rate"), 255)
-
-    for species in data.species:
-        if species.catch_rate < min_catch_rate:
-            _set_bytes_little_endian(rom, species.rom_address + 8, 1, min_catch_rate)
 
 
 def _modify_tmhm_compatibility(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
