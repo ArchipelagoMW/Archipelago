@@ -129,11 +129,6 @@ class LingoPlayerLogic:
             if item.should_include(world, player):
                 self.REAL_ITEMS.append(name)
 
-        if get_option_value(world, player, "shuffle_doors") > 0 and get_option_value(world, player,
-                                                                                     "progressive_orange_tower"):
-            for i in range(0, 6):
-                self.REAL_ITEMS.append("Progressive Orange Tower")
-
         if get_option_value(world, player, "shuffle_paintings"):
             # Shuffle paintings until we get something workable.
             while not self.randomize_paintings(world, player, static_logic):
