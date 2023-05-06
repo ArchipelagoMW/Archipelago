@@ -9,12 +9,12 @@ import bsdiff4
 import Utils
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
 from worlds.AutoWorld import World, WebWorld
-from .Items import item_to_index, tier_1_opponents, booster_packs
+from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_items, Banlist_Items
 from .Locations import location_to_id
 from .Options import ygo06_options
 from .Rom import YGO06DeltaPatch, get_base_rom_path
 from worlds.generic.Rules import add_rule
-from .RomValues import structure_deck_selection
+from .RomValues import structure_deck_selection, banlist_ids
 
 
 class Yugioh06Web(WebWorld):
@@ -58,7 +58,7 @@ class Yugioh06World(World):
         start_inventory = self.multiworld.start_inventory[self.player].value.copy()
         item_pool = []
         for name in item_to_index:
-            if name == "Remote" or name == "Money" or name in start_inventory:
+            if name in excluded_items or name in start_inventory:
                 continue
             item = Yugioh2006Item(
                 name,
@@ -92,7 +92,8 @@ class Yugioh06World(World):
         self.multiworld.start_inventory[self.player].value[starting_opponent] = 1
         starting_pack = self.multiworld.random.choice(booster_packs)
         self.multiworld.start_inventory[self.player].value[starting_pack] = 1
-        self.multiworld.start_inventory[self.player].value['Banlist September 2005'] = 1
+        banlist = self.multiworld.Banlist[self.player]
+        self.multiworld.start_inventory[self.player].value[Banlist_Items.get(banlist)] = 1
 
     def apply_base_path(self, rom):
         base_patch_location = os.path.dirname(__file__) + "/patch.bsdiff4"
@@ -108,6 +109,9 @@ class Yugioh06World(World):
         structure_deck = self.multiworld.StructureDeck[self.player]
         structure_deck_data_location = 0x000fd0aa
         rom_data[structure_deck_data_location] = structure_deck_selection.get(structure_deck.value)
+        banlist = self.multiworld.Banlist[self.player]
+        banlist_data_location = 0xf4496
+        rom_data[banlist_data_location] = banlist_ids.get(banlist.value)
         randomizer_data_start = 0x0000f310
         for location in self.multiworld.get_filled_locations(self.player):
             item = location.item.name
