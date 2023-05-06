@@ -291,6 +291,8 @@ class ALTTPWorld(World):
         world.non_local_items[player].value -= item_name_groups['Pendants']
         world.non_local_items[player].value -= item_name_groups['Crystals']
 
+    create_dungeons = create_dungeons
+
     def create_regions(self):
         player = self.player
         world = self.multiworld
@@ -303,7 +305,7 @@ class ALTTPWorld(World):
         else:
             create_inverted_regions(world, player)
         create_shops(world, player)
-        create_dungeons(world, player)
+        self.create_dungeons()
 
         if world.logic[player] not in ["noglitches", "minorglitches"] and world.shuffle[player] in \
                 {"vanilla", "dungeonssimple", "dungeonsfull", "simple", "restricted", "full"}:

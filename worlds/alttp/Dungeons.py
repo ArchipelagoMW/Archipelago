@@ -13,6 +13,7 @@ from .Options import smallkey_shuffle
 
 if typing.TYPE_CHECKING:
     from .SubClasses import ALttPLocation, ALttPItem
+    from . import ALTTPWorld
 
 
 class Dungeon:
@@ -59,8 +60,10 @@ class Dungeon:
             else f'{self.name} (Player {self.player})'
 
 
-def create_dungeons(multiworld: MultiWorld, player):
-    world = multiworld.worlds[player]
+def create_dungeons(world: "ALTTPWorld"):
+    multiworld = world.multiworld
+    player = world.player
+
     def make_dungeon(name, default_boss, dungeon_regions, big_key, small_keys, dungeon_items):
         dungeon = Dungeon(name, dungeon_regions, big_key,
                           [] if multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal else small_keys,

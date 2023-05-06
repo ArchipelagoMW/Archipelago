@@ -435,7 +435,7 @@ def generate_itempool(world):
         tr_medallion = multiworld.required_medallions[player][1]
     multiworld.required_medallions[player] = (mm_medallion, tr_medallion)
 
-    place_bosses(multiworld, world, player)
+    place_bosses(world)
     set_up_shops(multiworld, player)
 
     if multiworld.shop_shuffle[player]:

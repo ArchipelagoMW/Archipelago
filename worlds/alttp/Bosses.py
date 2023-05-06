@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import logging
-from typing import Optional, Union, List, Tuple, Callable, Dict
+from typing import Optional, Union, List, Tuple, Callable, Dict, TYPE_CHECKING
 
 from Fill import FillError
 from .Options import LTTPBosses as Bosses
 from .StateHelpers import can_shoot_arrows, can_extend_magic, can_get_good_bee, has_sword, has_beam_sword, \
     has_melee_weapon, has_fire_source
+
+if TYPE_CHECKING:
+    from . import ALTTPWorld
 
 
 class Boss:
@@ -182,10 +185,10 @@ boss_location_table: List[Tuple[str, str]] = [
     ]
 
 
-def place_plando_bosses(bosses: List[str], multiworld, world, player: int) -> Tuple[List[str], List[Tuple[str, str]]]:
+def place_plando_bosses(world: "ALTTPWorld", bosses: List[str]) -> Tuple[List[str], List[Tuple[str, str]]]:
     # Most to least restrictive order
     boss_locations = boss_location_table.copy()
-    multiworld.random.shuffle(boss_locations)
+    world.multiworld.random.shuffle(boss_locations)
     boss_locations.sort(key=lambda location: -int(restrictive_boss_locations[location]))
     already_placed_bosses: List[str] = []
 
@@ -200,12 +203,12 @@ def place_plando_bosses(bosses: List[str], multiworld, world, player: int) -> Tu
                 level = loc[-1]
                 loc = " ".join(loc[:-1])
             loc = loc.title().replace("Of", "of")
-            place_boss(multiworld, world, player, boss, loc, level)
+            place_boss(world, boss, loc, level)
             already_placed_bosses.append(boss)
             boss_locations.remove((loc, level))
         else:  # boss chosen with no specified locations
             boss = boss.title()
-            boss_locations, already_placed_bosses = place_where_possible(multiworld, world, player, boss, boss_locations)
+            boss_locations, already_placed_bosses = place_where_possible(world, boss, boss_locations)
 
     return already_placed_bosses, boss_locations
 
@@ -240,18 +243,21 @@ for location in boss_location_table:
                                                for boss in boss_table if not boss.startswith("Agahnim"))
 
 
-def place_boss(multiworld, world, player: int, boss: str, location: str, level: Optional[str]) -> None:
-    if location == 'Ganons Tower' and multiworld.mode[player] == 'inverted':
+def place_boss(world: "ALTTPWorld", boss: str, location: str, level: Optional[str]) -> None:
+    player = world.player
+    if location == 'Ganons Tower' and world.multiworld.mode[player] == 'inverted':
         location = 'Inverted Ganons Tower'
     logging.debug('Placing boss %s at %s', boss, location + (' (' + level + ')' if level else ''))
     world.dungeons[location].bosses[level] = BossFactory(boss, player)
 
 
-def format_boss_location(location: str, level: str) -> str:
-    return location + (' (' + level + ')' if level else '')
+def format_boss_location(location_name: str, level: str) -> str:
+    return location_name + (' (' + level + ')' if level else '')
 
 
-def place_bosses(multiworld, world, player: int) -> None:
+def place_bosses(world: "ALTTPWorld") -> None:
+    multiworld = world.multiworld
+    player = world.player
     # will either be an int or a lower case string with ';' between options
     boss_shuffle: Union[str, int] = multiworld.boss_shuffle[player].value
     already_placed_bosses: List[str] = []
@@ -262,7 +268,7 @@ def place_bosses(multiworld, world, player: int) -> None:
         options = boss_shuffle.split(";")
         boss_shuffle = Bosses.options[options.pop()]
         # place our plando bosses
-        already_placed_bosses, remaining_locations = place_plando_bosses(options, multiworld, world, player)
+        already_placed_bosses, remaining_locations = place_plando_bosses(world, options)
     if boss_shuffle == Bosses.option_none:  # vanilla boss locations
         return
 
@@ -304,7 +310,7 @@ def place_bosses(multiworld, world, player: int) -> None:
             else:
                 raise FillError(f'Could not place boss for location {format_boss_location(loc, level)}')
 
-            place_boss(multiworld, world, player, boss, loc, level)
+            place_boss(world, boss, loc, level)
 
     elif boss_shuffle == Bosses.option_chaos:  # all bosses chosen at random
         for loc, level in remaining_locations:
@@ -314,30 +320,29 @@ def place_bosses(multiworld, world, player: int) -> None:
             except IndexError:
                 raise FillError(f'Could not place boss for location {format_boss_location(loc, level)}')
             else:
-                place_boss(multiworld, world, player, boss, loc, level)
+                place_boss(world, boss, loc, level)
 
     elif boss_shuffle == Bosses.option_singularity:
         primary_boss = multiworld.random.choice(placeable_bosses)
-        remaining_boss_locations, _ = place_where_possible(multiworld, world, player, primary_boss, remaining_locations)
+        remaining_boss_locations, _ = place_where_possible(world, primary_boss, remaining_locations)
         if remaining_boss_locations:
             # pick a boss to go into the remaining locations
             remaining_boss = multiworld.random.choice([boss for boss in placeable_bosses if all(
                 can_place_boss(boss, loc, level) for loc, level in remaining_boss_locations)])
-            remaining_boss_locations, _ = place_where_possible(multiworld, world, player, remaining_boss,
-                                                               remaining_boss_locations)
+            remaining_boss_locations, _ = place_where_possible(world, remaining_boss, remaining_boss_locations)
             if remaining_boss_locations:
                 raise Exception("Unfilled boss locations!")
     else:
         raise FillError(f"Could not find boss shuffle mode {boss_shuffle}")
 
 
-def place_where_possible(multiworld, world, player: int, boss: str, boss_locations) -> Tuple[List[Tuple[str, str]], List[str]]:
+def place_where_possible(world: "ALTTPWorld", boss: str, boss_locations) -> Tuple[List[Tuple[str, str]], List[str]]:
     remainder: List[Tuple[str, str]] = []
     placed_bosses: List[str] = []
     for loc, level in boss_locations:
         # place that boss where it can go
         if can_place_boss(boss, loc, level):
-            place_boss(multiworld, world, player, boss, loc, level)
+            place_boss(world, boss, loc, level)
             placed_bosses.append(boss)
         else:
             remainder.append((loc, level))
