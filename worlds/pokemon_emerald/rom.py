@@ -11,7 +11,7 @@ from Options import Toggle
 from Patch import APDeltaPatch
 import Utils
 
-from .data import SpeciesData, TrainerPokemonDataTypeEnum, data
+from .data import PokemonEmeraldData, SpeciesData, TrainerPokemonDataTypeEnum, data
 from .items import reverse_offset_item_value
 from .options import (RandomizeWildPokemon, RandomizeStarters, RandomizeTrainerParties, TmCompatibility,
     HmCompatibility, LevelUpMoves, EliteFourRequirement, NormanRequirement, get_option_value)
@@ -30,7 +30,7 @@ class PokemonEmeraldDeltaPatch(APDeltaPatch):
         return get_base_rom_as_bytes()
 
 
-def generate_output(multiworld: MultiWorld, player: int, output_directory: str) -> None:
+def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, player: int, output_directory: str) -> None:
     base_rom = get_base_rom_as_bytes()
     with open(os.path.join(os.path.dirname(__file__), "data/base_patch.bsdiff4"), "rb") as stream:
         base_patch = bytes(stream.read())
@@ -79,7 +79,7 @@ def generate_output(multiworld: MultiWorld, player: int, output_directory: str) 
 
     # Randomize encounter tables
     if get_option_value(multiworld, player, "wild_pokemon") != RandomizeWildPokemon.option_vanilla:
-        _randomize_encounter_tables(multiworld, player, patched_rom)
+        _modify_encounter_tables(modified_data, patched_rom)
 
     # Randomize abilities
     if get_option_value(multiworld, player, "abilities") == Toggle.option_true:
@@ -230,45 +230,14 @@ def _set_bytes_little_endian(byte_array, address, size, value) -> None:
         size -= 1
 
 
-def _randomize_encounter_tables(multiworld, player, rom) -> None:
-    """
-    For every encounter table, replace each unique species.
-    So if a table only has 2 species across multiple slots, it will
-    still have 2 species in the same respective slots after randomization.
-    """
-    for map_data in data.maps:
+def _modify_encounter_tables(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+    for map_data in modified_data.maps:
         if map_data.land_encounters is not None:
-            new_encounters = _create_randomized_encounter_table(multiworld, player, map_data.land_encounters.slots)
-            _replace_encounters(rom, map_data.land_encounters.rom_address, new_encounters)
+            _replace_encounters(rom, map_data.land_encounters.rom_address, map_data.land_encounters.slots)
         if map_data.water_encounters is not None:
-            new_encounters = _create_randomized_encounter_table(multiworld, player, map_data.water_encounters.slots)
-            _replace_encounters(rom, map_data.water_encounters.rom_address, new_encounters)
+            _replace_encounters(rom, map_data.water_encounters.rom_address, map_data.water_encounters.slots)
         if map_data.fishing_encounters is not None:
-            new_encounters = _create_randomized_encounter_table(multiworld, player, map_data.fishing_encounters.slots)
-            _replace_encounters(rom, map_data.fishing_encounters.rom_address, new_encounters)
-
-
-def _create_randomized_encounter_table(multiworld: MultiWorld, player: int, default_slots: List[int]) -> List[int]:
-    random = multiworld.per_slot_randoms[player]
-
-    should_match_bst = get_option_value(multiworld, player, "wild_pokemon") in [RandomizeWildPokemon.option_match_base_stats, RandomizeWildPokemon.option_match_base_stats_and_type]
-    should_match_type = get_option_value(multiworld, player, "wild_pokemon") in [RandomizeWildPokemon.option_match_type, RandomizeWildPokemon.option_match_base_stats_and_type]
-    should_allow_legendaries = get_option_value(multiworld, player, "allow_wild_legendaries") == Toggle.option_true
-
-    default_pokemon = [p_id for p_id in set(default_slots)]
-
-    new_pokemon_map: Dict[int, int] = {}
-    for pokemon_id in default_pokemon:
-        target_bst = sum(get_species_by_id(pokemon_id).base_stats) if should_match_bst else None
-        target_type = random.choice(get_species_by_id(pokemon_id).types) if should_match_type else None
-        new_pokemon_id = get_random_species(random, target_bst, target_type, should_allow_legendaries).species_id
-        new_pokemon_map[pokemon_id] = new_pokemon_id
-
-    new_slots: List[int] = []
-    for slot in default_slots:
-        new_slots.append(new_pokemon_map[slot])
-
-    return new_slots
+            _replace_encounters(rom, map_data.fishing_encounters.rom_address, map_data.fishing_encounters.slots)
 
 
 def _replace_encounters(rom, table_address, encounter_slots) -> None:

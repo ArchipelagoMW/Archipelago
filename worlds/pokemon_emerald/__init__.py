@@ -10,10 +10,11 @@ from Fill import fill_restrictive
 from Options import Toggle
 from worlds.AutoWorld import WebWorld, World
 
-from .data import data as emerald_data
+from .data import PokemonEmeraldData, MapData, EncounterTableData, data as emerald_data
 from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification, offset_item_value
 from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
-from .options import RandomizeBadges, RandomizeHms, ItemPoolType, get_option_value, option_definitions
+from .options import RandomizeWildPokemon, RandomizeBadges, RandomizeHms, ItemPoolType, get_option_value, option_definitions
+from .pokemon import get_random_species, get_species_by_id
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path
 from .rules import (set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules,
@@ -56,7 +57,7 @@ class PokemonEmeraldWorld(World):
 
     badge_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]] = None
     hm_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]] = None
-
+    modified_data: PokemonEmeraldData
 
     def _get_pokemon_emerald_data(self):
         return {
@@ -269,10 +270,45 @@ class PokemonEmeraldWorld(World):
 
             self.multiworld.random.shuffle(hm_items)
             fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), hm_locations, hm_items, True, True)
+    
+
+    def post_fill(self):
+        def randomize_encounters():
+            should_match_bst = get_option_value(self.multiworld, self.player, "wild_pokemon") in [RandomizeWildPokemon.option_match_base_stats, RandomizeWildPokemon.option_match_base_stats_and_type]
+            should_match_type = get_option_value(self.multiworld, self.player, "wild_pokemon") in [RandomizeWildPokemon.option_match_type, RandomizeWildPokemon.option_match_base_stats_and_type]
+            should_allow_legendaries = get_option_value(self.multiworld, self.player, "allow_wild_legendaries") == Toggle.option_true
+
+            for map_data in emerald_data.maps:
+                new_encounters = [None, None, None]
+                old_encounters = [map_data.land_encounters, map_data.water_encounters, map_data.fishing_encounters]
+
+                for i, table in enumerate(old_encounters):
+                    if table is not None:
+                        new_species = []
+                        for species_id in table.slots:
+                            original_species = get_species_by_id(species_id)
+                            target_bst = sum(original_species.base_stats) if should_match_bst else None
+                            target_type = self.multiworld.random.choice(original_species.types) if should_match_type else None
+
+                            new_species.append(get_random_species(self.multiworld.random, target_bst, target_type, should_allow_legendaries).species_id)
+                        
+                        new_encounters[i] = EncounterTableData(new_species, table.rom_address)
+
+                self.modified_data.maps.append(MapData(
+                    map_data.name,
+                    new_encounters[0],
+                    new_encounters[1],
+                    new_encounters[2]
+                ))
+
+        self.modified_data = PokemonEmeraldData()
+
+        if get_option_value(self.multiworld, self.player, "wild_pokemon") != RandomizeWildPokemon.option_vanilla:
+            randomize_encounters()
 
 
     def generate_output(self, output_directory: str):
-        generate_output(self.multiworld, self.player, output_directory)
+        generate_output(self.modified_data, self.multiworld, self.player, output_directory)
 
 
     def fill_slot_data(self):
