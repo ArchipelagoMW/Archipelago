@@ -57,12 +57,13 @@ function generateLocationsChecked()
 	events = uRange(EventFlagAddress, 0x140)
 	missables = uRange(MissableAddress, 0x20)
 	hiddenitems = uRange(HiddenItemsAddress, 0x0E)
+	rod = {u8(RodAddress)}
 	dexsanity = uRange(DexSanityAddress, 19)
-	rod = u8(RodAddress)
+	
 
-	data = {rod}
+	data = {}
 
-    categories = {events, missable, hiddenitems}
+    categories = {events, missable, hiddenitems, rod}
     if compat > 1 then
         table.insert(categories, dexsanity)
     end
