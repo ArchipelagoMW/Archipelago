@@ -3331,4 +3331,232 @@
         <ImpactMap index="None" Model="AP_ValkyrieSCBWWeapon@Impact" Sound="AP_ValkyrieSCBWWeapon@Impact"/>
     </CActorAction>
     <CActorMissile id="AP_ValkyrieSCBWWeapon@Missile" parent="GenericAttackMissile" unitName="AP_ValkyrieSCBWWeapon@Missile"/>
+    <CActorUnit id="AP_WidowMine" parent="GenericUnitStandard" unitName="AP_WidowMine">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="ZergBurrowStandardAnimMacro"/>
+        <Macros value="ZergSmallBurrowEffects"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <On Terms="UnitBirth.AP_WidowMineBurrowed" Send="Create"/>
+        <On Terms="UnitBirth.AP_WidowMineBurrowed" Send="AnimPlay Burrow Burrow PlayForever,NonLooping"/>
+        <On Terms="ActorCreation" Send="StatusSet Fired 0"/>
+        <On Terms="ActorCreation" Send="Create AP_WidowMineReadyAttach"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_WidowMineBurrowed" Send="AnimPlay Burrow Burrow PlayForever,NonLooping"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_WidowMineBurrowed" Send="AnimClear Unburrow"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_WidowMine" Send="AnimClear Burrow"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_WidowMine" Send="AnimPlay Unburrow Unburrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_WidowMine" Send="AnimClear Unburrow"/>
+        <On Terms="Abil.AP_WidowMineAttack.SourcePrepStart" Send="Create AP_WidowMineWarning"/>
+        <On Terms="Abil.AP_WidowMineAttack.SourcePrepStop" Target="AP_WidowMineWarning" Send="Destroy"/>
+        <On Terms="Abil.AP_WidowMineAttack.SourceCastStart" Send="StatusSet Fired 1"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsBuried" Send="DeathCustomize Variation0"/>
+        <On Terms="Behavior.AP_WidowMineAnimationController.On" Target="AP_WidowMineReadyAttach" Send="AnimBracketStop Work"/>
+        <On Terms="Behavior.AP_WidowMineAnimationController.Off" Target="AP_WidowMineReadyAttach" Send="AnimBracketStart Work Stand,Work,Start Stand,Work Stand,Work,End ClosingFull"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_WidowMine_Land"/>
+        <Model value="WidowMine"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="WidowMine"/>
+        <DeathArray index="Normal" ModelLink="WidowMineDeath" SoundLink="Terran_ExplosionSmall"/>
+        <DeathCustoms ModelLink="WidowMineDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="TerranSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ModelLink="WidowMineBurrowDeath" Name="Variation0"/>
+        <DeathCustoms ModelLink="Invisible" Name="Variation1"/>
+        <PlacementModel value="SpiderMinePlacement"/>
+        <PortraitModel value="WidowMinePortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="1.000000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleLargeVehicle"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2.8125"/>
+        <BarOffset value="35"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-terran-widowmine.dds"/>
+        </GroupIcon>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="10"/>
+        <SoundArray index="Ready" value="WidowMine_Ready"/>
+        <SoundArray index="What" value="WidowMine_What"/>
+        <SoundArray index="Yes" value="WidowMine_Yes"/>
+        <SoundArray index="Attack" value="WidowMine_Attack"/>
+        <SoundArray index="Pissed" value="WidowMine_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-widowmine.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-terran-widowmine.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_WidowMineAirAttack" parent="GenericAttack" effectImpact="AP_WidowMineExplodeSet" effectLaunch="AP_WidowMineLMAir">
+        <LaunchSiteOps Ops="SOpForwardPointsUp"/>
+        <LaunchAttachQuery Methods="Center"/>
+        <LaunchAssets Sound="WidowMine_Attack"/>
+        <Missile value="AP_WidowMineAirAttackMissile"/>
+        <ImpactMap index="None" Model="WidowMineAirAttackImpact" Sound="WidowMine_Death"/>
+        <ImpactPhysics Name="WidowMineImpact" MatchKeys="Basic" Physics="WidowMineAirAttackForce"/>
+        <ShieldFlashType value="Full"/>
+    </CActorAction>
+    <CActorForceSphere id="AP_WidowMineAirAttackForce">
+        <On Terms="ActorCreation" Send="Create AP_WidowMineAirAttackForceSecondary"/>
+        <HostSiteOps Ops="SOpIncomingMissileDot1"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="19.500000,4.500000"/>
+        <Radius value="2.750000"/>
+    </CActorForceSphere>
+    <CActorForceSphere id="AP_WidowMineAirAttackForceSecondary">
+        <Host Subject="_ImpactGuide"/>
+        <HostSiteOps Ops="SOpRandomPointInSphereDot5"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="22.000000,9.250000"/>
+        <Radius value="1.500000"/>
+    </CActorForceSphere>
+    <CActorMissile id="AP_WidowMineAirAttackMissile" parent="GenericAttackMissile" unitName="AP_WidowMineAirWeapon">
+        <On Terms="ActorCreation" Send="$Spell PlayForever"/>
+        <On Terms="ActorCreation" Send="Create AP_WidowMineAttackLaunch"/>
+        <Model value="TornadoMissileWeapon"/>
+    </CActorMissile>
+    <CActorAction id="AP_WidowMineAttack" parent="GenericAttack" effectImpact="AP_WidowMineExplodeSet" effectLaunch="AP_WidowMineLM">
+        <LaunchSiteOps Ops="SOpForwardPointsUp"/>
+        <LaunchAttachQuery Methods="Center"/>
+        <LaunchAssets Model="WidowMineAttackLaunch" Sound="WidowMine_Attack"/>
+        <LaunchSound value="AP_WidowMineAttackLaunchSound"/>
+        <Missile value="AP_WidowMineAttackMissile"/>
+        <ImpactMap index="None" Model="" Sound=""/>
+        <ImpactPhysics Name="WidowMineImpact" MatchKeys="Basic" Physics="WidowMineAttackForce"/>
+        <ShieldFlashType value="Full"/>
+    </CActorAction>
+    <CActorForceSphere id="AP_WidowMineAttackForce">
+        <On Terms="ActorCreation" Send="Create AP_WidowMineAttackForceSecondary"/>
+        <HostSiteOps Ops="SOpIncomingMissileDot1 SOpMoveDownByDot15"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="28.500000,4.500000"/>
+        <Radius value="2.750000"/>
+    </CActorForceSphere>
+    <CActorForceSphere id="AP_WidowMineAttackForceSecondary">
+        <Host Subject="_ImpactGuide"/>
+        <HostSiteOps Ops="SOpShadow SOpRandomPointInCircleDot35"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="22.000000,9.250000"/>
+        <Radius value="1.750000"/>
+    </CActorForceSphere>
+    <CActorModel id="AP_WidowMineAttackImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_WidowMineExplodeSplashSearch.Start" Send="Create"/>
+        <Model value="WidowMineAttackImpact"/>
+    </CActorModel>
+    <CActorModel id="AP_WidowMineAttackLaunch" parent="ModelAnimationStyleOneShot">
+        <Model value="WidowMineAttackLaunch"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+    </CActorModel>
+    <CActorSound id="AP_WidowMineAttackLaunchSound" parent="SoundOneShot">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Inherits index="Visibility" value="0"/>
+        <Sound value="GenericAttackSound"/>
+    </CActorSound>
+    <CActorMissile id="AP_WidowMineAttackMissile" parent="GenericAttackMissile" unitName="AP_WidowMineWeapon">
+        <On Terms="ActorCreation" Send="$Spell PlayForever"/>
+        <On Terms="ActorCreation" Send="Create AP_WidowMineAttackLaunch"/>
+        <Model value="TornadoMissileWeapon"/>
+    </CActorMissile>
+    <CActorRange id="AP_WidowMineAttackRange">
+        <On Terms="SelectionLocalUpdate.AP_WidowMineBurrowed.Start" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_WidowMineBurrowed.StartEditorGround" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_WidowMineBurrowed.StartEditorFlyer" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_WidowMineBurrowed.Stop" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_WidowMineBurrowed; Selected" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_WidowMine" Send="Destroy"/>
+        <Abil Link="AP_WidowMineAttack"/>
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorSplat id="AP_WidowMineBurrowedSplat" parent="BurrowedSplat" unitName="AP_WidowMine">
+        <Inherits index="Visibility" value="0"/>
+        <HostSiteOps Ops="SOpAttachHardPoint"/>
+        <Model value="WidowMineBurrowedSplat"/>
+    </CActorSplat>
+    <CActorModel id="AP_WidowMineDrillingClawsUpgrade" parent="ModelAnimationStyleContinuous">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeapon SOpPointUp"/>
+    </CActorModel>
+    <CActorModel id="AP_WidowMineReadyAttach" parent="ModelAddition">
+        <On Terms="ActorCreation" Send="AnimBracketStart Work Stand,Work,Start Stand,Work Stand,Work,End ClosingFull"/>
+        <HostSiteOps Ops="SOpAttachTarget AP_WidowMineReadyOffset"/>
+        <Model value="WidowMineReadyAttach"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorSiteOpLocalOffset id="AP_WidowMineReadyOffset">
+        <EditorCategories value=""/>
+        <LocalOffset value="0.000000,-0.020000,0.250000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorBeamSimple id="AP_WidowMineTargetingBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <On Terms="Effect.AP_WidowMineTargetingBeamDummy.Start; At Caster" Send="Create"/>
+        <On Terms="Abil.AP_WidowMineAttack.SourcePrepStop" Send="Destroy"/>
+        <Model value="WidowMineTargetingBeam"/>
+        <HostLaunch Subject="_Selectable" Scope="Caster"/>
+        <HostLaunchSiteOps Ops="SOpAttachOrigin"/>
+        <HostImpact Subject="_Selectable" Scope="Target"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorModel id="AP_WidowMineWarning" parent="ModelAnimationStyleContinuous">
+        <Filter index="Self" value="1"/>
+        <Filter index="Ally" value="1"/>
+        <Inherits index="TimeScale" value="1"/>
+        <On Terms="ActorCreation" Send="AnimPlay Warning Burrow,Stand PlayForever 0.000000 0.000000 0.000000"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="WidowMineWarning"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorSound id="AP_WidowMine_Armed" parent="SoundOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.AP_WidowMineAnimationController.Off" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <Sound value="WidowMine_Armed"/>
+    </CActorSound>
+    <CActorSound id="AP_WidowMine_ArmedBeep" parent="SoundOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.AP_WidowMineAnimationController.Off" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <Sound value="WidowMine_ArmedBeep"/>
+    </CActorSound>
+    <CActorSound id="AP_WidowMine_Burrow" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_WidowMineBurrowed" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Sound value="WidowMine_Burrow"/>
+    </CActorSound>
+    <CActorSound id="AP_WidowMine_Land" parent="SoundOneShot">
+        <Sound value="WidowMine_Land"/>
+    </CActorSound>
+    <CActorSound id="AP_WidowMine_Unburrow" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_WidowMine" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Sound value="WidowMine_Unburrow"/>
+    </CActorSound>
 </Catalog>

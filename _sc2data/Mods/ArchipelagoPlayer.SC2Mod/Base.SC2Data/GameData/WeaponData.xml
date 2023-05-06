@@ -371,4 +371,14 @@
         <Backswing value="0.25"/>
         <Effect value="AP_ValkyrieSCBWWeapon@CP"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_WidowMineDummy">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Hidden" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="AP_WidowMineExplodeDirect"/>
+        <TargetFilters value="Visible;Ally,Structure,Worker,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Arc value="360"/>
+        <Period value="1"/>
+        <Effect value="AP_WidowMineAttack"/>
+    </CWeaponLegacy>
 </Catalog>

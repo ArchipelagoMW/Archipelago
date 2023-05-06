@@ -1727,4 +1727,114 @@
         <EffectArray value="AP_ValkyrieSCBWWeapon@LM"/>
         <EffectArray value="AP_ValkyrieSCBWWeapon@LM"/>
     </CEffectSet>
+    <CEffectApplyBehavior id="AP_WidowMineApplyAnimation">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_WidowMineAnimationController"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_WidowMineAttack">
+        <ValidatorArray value="NoMineDroneCountdown"/>
+        <ValidatorArray value="NotLarva"/>
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="AP_WidowMineAttack"/>
+        <EffectArray value="AP_WidowMineLMSwitch"/>
+        <EffectArray value="AP_WidowMineApplyAnimation"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_WidowMineDelayRemoveAB">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_WidowMineDelayRemoveAB"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_WidowMineExplodeDirect" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <ShieldBonus value="35"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Spell"/>
+        <KindSplash value="Splash"/>
+        <Amount value="125"/>
+        <Death value="Blast"/>
+        <SearchFilters value="-;Self,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_WidowMineExplodeSet">
+        <EditorCategories value="Race:Terran"/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <EffectArray value="AP_WidowMineExplodeDirect"/>
+        <EffectArray value="AP_WidowMineExplodeSplashSearch"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_WidowMineExplodeSplash" parent="DU_WEAP">
+        <ValidatorArray value="AP_DontDamageOwnedWidowMines"/>
+        <EditorCategories value="Race:Terran"/>
+        <ShieldBonus value="40"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Spell"/>
+        <KindSplash value="Splash"/>
+        <Amount value="40"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_WidowMineExplodeSplashSearch">
+        <EditorCategories value="Race:Terran"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="-;Structure,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.75" Effect="AP_WidowMineExplodeSplash"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_WidowMineExplodeSplashSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_WidowMineExplodeSplashShields"/>
+        <EffectArray value="AP_WidowMineExplodeSplash"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_WidowMineExplodeSplashShields">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="Notification" value="1"/>
+        <Flags index="NoVitalAbsorbLife" value="1"/>
+        <Flags index="NoVitalAbsorbEnergy" value="1"/>
+        <KindSplash value="Splash"/>
+        <VitalBonus index="Shields" value="40"/>
+        <Death value="Blast"/>
+        <SearchFilters value="-;Self,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_WidowMineLM">
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="AP_WidowMineAttack"/>
+        <ImpactEffect value="AP_WidowMineExplodeSet"/>
+        <AmmoUnit value="AP_WidowMineWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_WidowMineLMAir">
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="AP_WidowMineAttack"/>
+        <ImpactEffect value="AP_WidowMineExplodeSet"/>
+        <AmmoUnit value="AP_WidowMineAirWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectSwitch id="AP_WidowMineLMSwitch">
+        <EditorCategories value="Race:Zerg"/>
+        <CaseArray Validator="TargetIsAir" Effect="AP_WidowMineLMAir"/>
+        <CaseDefault value="AP_WidowMineLM"/>
+    </CEffectSwitch>
+    <CEffectModifyUnit id="AP_WidowMineTargetingBeamDummy"/>
+    <CEffectDamage id="AP_MineDroneCountdownDamageDummy" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_MineDroneExplodeSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_MineDroneDirectDamage"/>
+        <EffectArray value="AP_MineDroneExplode"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_MineDroneDirectDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Splash"/>
+        <Amount value="200"/>
+        <!--ImpactLocation Value="CasterOuterUnit"/-->
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_MineDroneExplode">
+        <ExcludeArray Value="Target"/>
+        <EditorCategories value="Race:Protoss"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Structure,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="AP_MineDroneExplodeDamage"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="AP_MineDroneExplodeDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Splash"/>
+        <Amount value="50"/>
+    </CEffectDamage>
 </Catalog>

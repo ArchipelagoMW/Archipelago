@@ -433,4 +433,33 @@
     <CRequirementNot id="AP_NotCountUpgradeLiberatorMorphQueuedOrBetter">
         <OperandArray index="0" value="AP_CountUpgradeLiberatorMorphQueuedOrBetter"/>
     </CRequirementNot>
+    <CRequirementCountBehavior id="AP_CountBehaviorWidowMineArmedCompleteOnlyAtUnit">
+        <Count Link="AP_WidowMineArmed" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementCountUpgrade id="AP_CountUpgradeDrillClawsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_DrillClaws" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeDrillClawsQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_DrillClaws" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeImprovedConcealmentCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_ImprovedConcealment" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeImprovedConcealmentQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_ImprovedConcealment" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeDrillClawsQueuedOrBetter">
+        <Tooltip value=""/>
+        <OperandArray index="0" value="AP_CountUpgradeDrillClawsQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeImprovedConcealmentQueuedOrBetter">
+        <Tooltip value=""/>
+        <OperandArray index="0" value="AP_CountUpgradeImprovedConcealmentQueuedOrBetter"/>
+    </CRequirementNot>
 </Catalog>

@@ -595,4 +595,68 @@
         <RemoveValidatorArray value="AP_HasNoLiberatorYoink"/>
         <RemoveValidatorArray value="IsNotRecallingCombine"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MineDroneCountdown">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-unit-terran-widowmine.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <Duration value="10"/>
+        <Period value="5.1"/>
+        <InitialEffect value="AP_MineDroneCountdownDamageDummy"/>
+        <PeriodicEffect value="AP_MineDroneCountdownDamageDummy"/>
+        <ExpireEffect value="AP_MineDroneExplodeSet"/>
+        <Modification>
+            <ModifyFlags index="Reveal" value="1"/>
+            <ModifyFlags index="Detected" value="1"/>
+            <ModifyFlags index="ShareSight" value="1"/>
+            <AbilLinkDisableArray value="ZergBuild"/>
+            <AbilLinkDisableArray value="MorphZerglingToBaneling"/>
+            <AbilLinkDisableArray value="MorphToOverseer"/>
+            <AbilLinkDisableArray value="MorphToBroodLord"/>
+            <AbilLinkDisableArray value="ArchonWarp"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_WidowMineAnimationController">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisableValidatorArray value="NotStasis"/>
+        <DisableValidatorArray value="NotVortexd"/>
+        <DisableValidatorArray value="NotGravitonBeamd"/>
+        <DisableValidatorArray value="NotThunderCannond"/>
+        <Duration value="40"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_WidowMineArmed">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_WidowMineBurrowedCloakingBehavior">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_NotHaveWidowMineImprovedConcealmentUpgrade"/>
+        <DisableValidatorArray value="AP_WidowMineAttackOnCooldown"/>
+        <Modification>
+            <StateFlags index="SuppressCloak" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_WidowMineDelayRemoveAB">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="2"/>
+        <FinalEffect value="SuicideRemove"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="NoDraw" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_WidowMineImprovedConcealmentUpgradeTracker">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_HaveWidowMineImprovedConcealmentUpgrade"/>
+    </CBehaviorBuff>
 </Catalog>

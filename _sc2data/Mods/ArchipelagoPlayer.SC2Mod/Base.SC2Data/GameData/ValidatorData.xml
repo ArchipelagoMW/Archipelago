@@ -146,6 +146,15 @@
         <WhichUnit Value="Caster"/>
         <Behavior value="YoinkTentacle"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_DontDamageOwnedWidowMines">
+        <CombineArray value="AP_IsWidowMineOrWidowMineBurrowed"/>
+        <CombineArray value="AP_OwnedBySelf"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveWidowMineImprovedConcealmentUpgrade">
+        <Find value="1"/>
+        <Value value="AP_HaveWidowMineImprovedConcealment"/>
+    </CValidatorPlayerRequirement>
     <CValidatorCombine id="IsBanshee" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaBanshee"/>
@@ -253,6 +262,20 @@
         <WhichUnit Value="Caster"/>
         <Behavior value="MothershipCoreRecalling"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_IsWidowMine">
+        <Value value="AP_WidowMine"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsWidowMineBurrowed">
+        <Value value="AP_WidowMineBurrowed"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsWidowMineOrWidowMineBurrowed">
+        <CombineArray value="AP_IsWidowMine"/>
+        <CombineArray value="AP_IsWidowMineBurrowed"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_NotHaveWidowMineImprovedConcealmentUpgrade">
+        <CombineArray value="AP_HaveWidowMineImprovedConcealmentUpgrade"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
     <CValidatorCombine id="NotPointDefenseDrone" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_NotVanillaPointDefenseDrone"/>
@@ -428,4 +451,20 @@
         <Value value="1"/>
         <Behavior value="TerrazineShadow"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotWidowMineTarget">
+        <ResultFailed value="Error,Error/NotWidowMineTarget"/>
+        <Behavior value="AP_MineDroneCountdown"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareCooldown id="AP_WidowMineAttackNotOnCooldown">
+        <CooldownLink value="Abil/WidowMineAttack"/>
+        <Ability value="AP_WidowMineAttack"/>
+    </CValidatorUnitCompareCooldown>
+    <CValidatorUnitCompareCooldown id="AP_WidowMineAttackOnCooldown">
+        <Compare value="NE"/>
+        <CooldownLink value="Abil/AP_WidowMineAttack"/>
+        <Ability value="AP_WidowMineAttack"/>
+    </CValidatorUnitCompareCooldown>
+    <CValidatorUnitFilters id="AP_OwnedBySelf">
+        <Filters value="-;Ally,Neutral,Enemy"/>
+    </CValidatorUnitFilters>
 </Catalog>
