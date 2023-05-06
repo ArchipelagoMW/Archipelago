@@ -2,7 +2,7 @@
 Functions related to pokemon species and moves
 """
 import random
-from typing import Set, Optional
+from typing import List, Set, Optional
 
 from .data import SpeciesData, data
 
@@ -81,24 +81,23 @@ def get_species_by_name(name: str) -> Optional[SpeciesData]:
 
 def get_random_species(
         rand: random,
+        candidates: List[SpeciesData],
         nearby_bst: Optional[int] = None,
         species_type: Optional[int] = None,
         allow_legendaries: bool = True) -> SpeciesData:
-    candidate_species = data.species
-
     if nearby_bst is not None:
         def has_nearby_bst(species: SpeciesData):
             return abs(sum(species.base_stats) - nearby_bst) < nearby_bst / 10
 
-        candidate_species = list(filter(has_nearby_bst, candidate_species))
+        candidates = list(filter(has_nearby_bst, candidates))
 
     if species_type is not None:
-        candidate_species = [species for species in candidate_species if species_type in species.types]
+        candidates = [species for species in candidates if species_type in species.types]
 
     if not allow_legendaries:
-        candidate_species = [species for species in candidate_species if species.label not in _legendary_pokemon]
+        candidates = [species for species in candidates if species.label not in _legendary_pokemon]
 
-    return candidate_species[rand.randrange(0, len(candidate_species))]
+    return candidates[rand.randrange(0, len(candidates))]
 
 
 def get_random_move(rand: random, blacklist: Optional[Set[int]] = None) -> int:

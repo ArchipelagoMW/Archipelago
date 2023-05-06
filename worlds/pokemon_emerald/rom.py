@@ -11,11 +11,11 @@ from Options import Toggle
 from Patch import APDeltaPatch
 import Utils
 
-from .data import PokemonEmeraldData, SpeciesData, TrainerPokemonDataTypeEnum, data
+from .data import PokemonEmeraldData, TrainerPokemonDataTypeEnum, data
 from .items import reverse_offset_item_value
-from .options import (RandomizeWildPokemon, RandomizeStarters, RandomizeTrainerParties, TmCompatibility,
+from .options import (RandomizeWildPokemon, RandomizeTrainerParties, TmCompatibility,
     HmCompatibility, EliteFourRequirement, NormanRequirement, get_option_value)
-from .pokemon import get_random_species, get_species_by_id, get_species_by_name, get_random_move
+from .pokemon import get_random_species, get_random_move
 
 
 class PokemonEmeraldDeltaPatch(APDeltaPatch):
@@ -76,27 +76,26 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
         _set_bytes_little_endian(patched_rom, address + 0, 2, item)
         _set_bytes_little_endian(patched_rom, address + 2, 2, quantity)
 
-    # Replace encounter tables
-    if get_option_value(multiworld, player, "wild_pokemon") != RandomizeWildPokemon.option_vanilla:
-        _replace_encounter_tables(modified_data, patched_rom)
-
-    # Modify species
-    _modify_species_info(modified_data, patched_rom)
+    # Set species data
+    _set_species_info(modified_data, patched_rom)
 
     # Randomize TM moves
     if get_option_value(multiworld, player, "tm_moves") == Toggle.option_true:
         _randomize_tm_moves(multiworld, player, patched_rom)
 
-    # Randomize opponents
+    # Set encounter tables
+    if get_option_value(multiworld, player, "wild_pokemon") != RandomizeWildPokemon.option_vanilla:
+        _set_encounter_tables(modified_data, patched_rom)
+
+    # Set opponent data
     if get_option_value(multiworld, player, "trainer_parties") != RandomizeTrainerParties.option_vanilla:
-        _randomize_opponents(multiworld, player, patched_rom)
+        _set_opponents(modified_data, patched_rom)
 
     # Randomize opponent double or single
     _randomize_opponent_battle_type(multiworld, player, patched_rom)
 
-    # Randomize starters
-    if get_option_value(multiworld, player, "starters") != RandomizeStarters.option_vanilla:
-        _randomize_starters(multiworld, player, patched_rom)
+    # Set starters
+    _set_starters(modified_data, patched_rom)
 
     # Modify TM/HM compatibility
     _modify_tmhm_compatibility(multiworld, player, patched_rom)
@@ -145,7 +144,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     _set_bytes_little_endian(patched_rom, options_address + 0x06, 2, 100)
 
     # Set Birch pokemon
-    _set_bytes_little_endian(patched_rom, options_address + 0x08, 2, get_random_species(multiworld.per_slot_randoms[player]).species_id)
+    _set_bytes_little_endian(patched_rom, options_address + 0x08, 2, get_random_species(multiworld.per_slot_randoms[player], data.species).species_id)
 
     # Set guaranteed catch
     guaranteed_catch = 1 if get_option_value(multiworld, player, "guaranteed_catch") == Toggle.option_true else 0
@@ -221,7 +220,7 @@ def _set_bytes_little_endian(byte_array, address, size, value) -> None:
         size -= 1
 
 
-def _replace_encounter_tables(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+def _set_encounter_tables(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
     """
     Encounter tables are lists of
     struct {
@@ -240,7 +239,7 @@ def _replace_encounter_tables(modified_data: PokemonEmeraldData, rom: bytearray)
                     _set_bytes_little_endian(rom, address, 2, species_id)
 
 
-def _modify_species_info(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+def _set_species_info(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
     for species in modified_data.species:
         _set_bytes_little_endian(rom, species.rom_address + 8, 1, species.catch_rate)
         _set_bytes_little_endian(rom, species.rom_address + 22, 1, species.abilities[0])
@@ -251,50 +250,36 @@ def _modify_species_info(modified_data: PokemonEmeraldData, rom: bytearray) -> N
             _set_bytes_little_endian(rom, species.learnset_rom_address + (i * 2), 2, level_move)
 
 
-def _randomize_opponents(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
-    random = multiworld.per_slot_randoms[player]
-    should_match_bst = get_option_value(multiworld, player, "trainer_parties") in [RandomizeTrainerParties.option_match_base_stats, RandomizeTrainerParties.option_match_base_stats_and_type]
-    should_match_type = get_option_value(multiworld, player, "trainer_parties") in [RandomizeTrainerParties.option_match_type, RandomizeTrainerParties.option_match_base_stats_and_type]
-    should_allow_legendaries = get_option_value(multiworld, player, "allow_trainer_legendaries") == Toggle.option_true
-
-    for trainer_data in data.trainers:
-        party_address = trainer_data.party.rom_address
+def _set_opponents(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+    for trainer in modified_data.trainers:
+        party_address = trainer.party.rom_address
 
         pokemon_data_size: int
         if (
-            trainer_data.party.pokemon_data_type == TrainerPokemonDataTypeEnum.NO_ITEM_DEFAULT_MOVES or
-            trainer_data.party.pokemon_data_type == TrainerPokemonDataTypeEnum.ITEM_DEFAULT_MOVES
+            trainer.party.pokemon_data_type == TrainerPokemonDataTypeEnum.NO_ITEM_DEFAULT_MOVES or
+            trainer.party.pokemon_data_type == TrainerPokemonDataTypeEnum.ITEM_DEFAULT_MOVES
         ):
             pokemon_data_size = 8
         else: # Custom Moves
             pokemon_data_size = 16
 
-        new_party: List[SpeciesData] = []
-        for pokemon_data in trainer_data.party.pokemon:
-            target_bst = sum(get_species_by_id(pokemon_data.species_id).base_stats) if should_match_bst else None
-            target_type = random.choice(get_species_by_id(pokemon_data.species_id).types) if should_match_type else None
-            new_party.append(get_random_species(random, target_bst, target_type, should_allow_legendaries))
-
-        for i, species in enumerate(new_party):
+        for i, pokemon in enumerate(trainer.party.pokemon):
             pokemon_address = party_address + (i * pokemon_data_size)
 
-            # Replace custom moves if applicable
-            # TODO: This replaces custom moves with a random move regardless of whether that move
-            # is learnable by that species. Should eventually be able to pick and choose from
-            # the level up learnset and learnable tms/hms instead. Especially if moves aren't randomized
-            if trainer_data.party.pokemon_data_type == TrainerPokemonDataTypeEnum.NO_ITEM_CUSTOM_MOVES:
-                _set_bytes_little_endian(rom, pokemon_address + 0x06, 2, get_random_move(random))
-                _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, get_random_move(random))
-                _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, get_random_move(random))
-                _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, get_random_move(random))
-            elif trainer_data.party.pokemon_data_type == TrainerPokemonDataTypeEnum.ITEM_CUSTOM_MOVES:
-                _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, get_random_move(random))
-                _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, get_random_move(random))
-                _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, get_random_move(random))
-                _set_bytes_little_endian(rom, pokemon_address + 0x0E, 2, get_random_move(random))
-
             # Replace species
-            _set_bytes_little_endian(rom, pokemon_address + 0x04, 2, species.species_id)
+            _set_bytes_little_endian(rom, pokemon_address + 0x04, 2, pokemon.species_id)
+
+            # Replace custom moves if applicable
+            if trainer.party.pokemon_data_type == TrainerPokemonDataTypeEnum.NO_ITEM_CUSTOM_MOVES:
+                _set_bytes_little_endian(rom, pokemon_address + 0x06, 2, pokemon.moves[0])
+                _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, pokemon.moves[1])
+                _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, pokemon.moves[2])
+                _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, pokemon.moves[3])
+            elif trainer.party.pokemon_data_type == TrainerPokemonDataTypeEnum.ITEM_CUSTOM_MOVES:
+                _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, pokemon.moves[0])
+                _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, pokemon.moves[1])
+                _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, pokemon.moves[2])
+                _set_bytes_little_endian(rom, pokemon_address + 0x0E, 2, pokemon.moves[3])
 
 
 def _randomize_opponent_battle_type(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
@@ -320,10 +305,13 @@ def _randomize_opponent_battle_type(multiworld: MultiWorld, player: int, rom: by
                     _set_bytes_little_endian(rom, trainer_data.battle_script_rom_address + 1, 1, battle_type_map[original_battle_type])
 
 
-def _randomize_starters(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
-    random = multiworld.per_slot_randoms[player]
-    i = 0
-    j = 0
+def _set_starters(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+    address = data.rom_addresses["sStarterMon"]
+    (starter_1, starter_2, starter_3) = modified_data.starters
+
+    _set_bytes_little_endian(rom, address + 0, 2, starter_1)
+    _set_bytes_little_endian(rom, address + 2, 2, starter_2)
+    _set_bytes_little_endian(rom, address + 4, 2, starter_3)
 
     # TODO: Follow evolution pattern if possible. Needs evolution data
     # (trainer_name, starter_index_in_team, is_evolved_form)
@@ -366,43 +354,12 @@ def _randomize_starters(multiworld: MultiWorld, player: int, rom: bytearray) -> 
         ]
     ]
 
-    for k in multiworld.player_name[player]:
-        i += ord(k)
-        j += i * i
-
-    should_match_bst = get_option_value(multiworld, player, "starters") in [RandomizeStarters.option_match_base_stats, RandomizeStarters.option_match_base_stats_and_type]
-    should_match_type = get_option_value(multiworld, player, "starters") in [RandomizeStarters.option_match_type, RandomizeStarters.option_match_base_stats_and_type]
-    should_allow_legendaries = get_option_value(multiworld, player, "allow_starter_legendaries") == Toggle.option_true
-
-    starter_1_bst = sum(get_species_by_name("Treecko").base_stats) if should_match_bst else None
-    starter_2_bst = sum(get_species_by_name("Torchic").base_stats) if should_match_bst else None
-    starter_3_bst = sum(get_species_by_name("Mudkip").base_stats)  if should_match_bst else None
-
-    starter_1_type = random.choice(get_species_by_name("Treecko").types) if should_match_type else None
-    starter_2_type = random.choice(get_species_by_name("Torchic").types) if should_match_type else None
-    starter_3_type = random.choice(get_species_by_name("Mudkip").types)  if should_match_type else None
-
-    address = data.rom_addresses["sStarterMon"]
-    starter_1 = get_random_species(random, starter_1_bst, starter_1_type, should_allow_legendaries)
-    starter_2 = get_random_species(random, starter_2_bst, starter_2_type, should_allow_legendaries)
-    starter_3 = get_random_species(random, starter_3_bst, starter_3_type, should_allow_legendaries)
-
-    if j == 0x14E03A:
-        egg = 96 + j - (i * 0x077C)
-        starter_1 = get_species_by_id(egg)
-        starter_2 = get_species_by_id(egg)
-        starter_3 = get_species_by_id(egg)
-
-    _set_bytes_little_endian(rom, address + 0, 2, starter_1.species_id)
-    _set_bytes_little_endian(rom, address + 2, 2, starter_2.species_id)
-    _set_bytes_little_endian(rom, address + 4, 2, starter_3.species_id)
-
-    # Override starter onto rival's teams
+    # Force starter onto rival's teams
     for i, starter in enumerate([starter_2, starter_3, starter_1]):
         for trainer_name, starter_position, is_evolved in rival_teams[i]:
             trainer_data = data.trainers[data.constants[trainer_name]]
             pokemon_address = trainer_data.party.rom_address + (starter_position * 8) # All rivals have default moves
-            _set_bytes_little_endian(rom, pokemon_address + 0x04, 2, starter.species_id)
+            _set_bytes_little_endian(rom, pokemon_address + 0x04, 2, starter)
 
 
 def _randomize_tm_moves(multiworld: MultiWorld, player: int, rom: bytearray) -> None:

@@ -4,7 +4,7 @@ Option definitions for Pokemon Emerald
 from typing import Dict, List, Union
 
 from BaseClasses import MultiWorld
-from Options import Choice, DefaultOnToggle, Option, OptionSet, Range, Toggle
+from Options import Choice, DefaultOnToggle, Option, OptionSet, Range, Toggle, FreeText
 
 from .data import data
 
@@ -394,6 +394,12 @@ class ReceiveItemMessages(Choice):
     option_none = 2
 
 
+class EasterEgg(FreeText):
+    """
+    ???
+    """
+
+
 option_definitions: Dict[str, Option] = {
   "badges": RandomizeBadges,
   "hms": RandomizeHms,
@@ -437,11 +443,13 @@ option_definitions: Dict[str, Option] = {
   "better_shops": BetterShops,
   "fly_without_badge": FlyWithoutBadge,
   "turbo_a": TurboA,
-  "receive_item_messages": ReceiveItemMessages
+  "receive_item_messages": ReceiveItemMessages,
+
+  "easter_egg": EasterEgg
 }
 
 
-def get_option_value(multiworld: MultiWorld, player: int, option_name: str) -> Union[int, Dict, List]:
+def get_option_value(multiworld: MultiWorld, player: int, option_name: str) -> Union[int, str, Dict, List]:
     """
     Returns the option value for a player in a multiworld
     """

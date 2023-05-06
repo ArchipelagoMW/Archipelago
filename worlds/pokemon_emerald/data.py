@@ -193,6 +193,7 @@ class TrainerData(NamedTuple):
 
 
 class PokemonEmeraldData:
+    starters: Tuple[int, int, int]
     constants: Dict[str, int]
     rom_addresses: Dict[str, int]
     regions: Dict[str, RegionData]
@@ -206,6 +207,7 @@ class PokemonEmeraldData:
     trainers: List[TrainerData]
 
     def __init__(self):
+        self.starters = (277, 280, 283)
         self.constants = {}
         self.rom_addresses = {}
         self.regions = {}
@@ -339,7 +341,7 @@ def _init():
         data.species.append(SpeciesData(
             species_name,
             species_attributes["label"],
-            data.constants[species_name],
+            species_id,
             species_attributes["national_dex_number"],
             BaseStats(
                 individual_species_json["base_stats"][0],
