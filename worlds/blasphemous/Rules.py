@@ -143,7 +143,7 @@ class BlasphemousLogic(LogicMixin):
         return self.has_any({"Debla of the Lights", "Taranto to my Sister", "Cante Jondo of the Three Sisters", \
             "Verdiales of the Forsaken Hamlet", "Cloistered Ruby"}, player) or \
                 (self.has("Tirana of the Celestial Bastion", player) and \
-                    self.has("Fervour Upgrade"), player, 2)
+                    self.has("Fervour Upgrade", player, 2))
     
     def _blasphemous_cherub_22_23_31_32(self, player):
         return self.has_any({"Debla of the Lights", "Taranto to my Sister", "Cloistered Ruby"}, player)

@@ -1,11 +1,62 @@
+import io
 import os, json, re, random
+import pathlib
+import sys
+from typing import Any
+import zipfile
 
-from worlds.sm.variaRandomizer.utils.parameters import Knows, Settings, Controller, isKnows, isSettings, isButton
-from worlds.sm.variaRandomizer.utils.parameters import easy, medium, hard, harder, hardcore, mania, text2diff
-from worlds.sm.variaRandomizer.logic.smbool import SMBool
+from ..utils.parameters import Knows, Settings, Controller, isKnows, isSettings, isButton
+from ..utils.parameters import easy, medium, hard, harder, hardcore, mania, text2diff
+from ..logic.smbool import SMBool
+
+
+# support for AP world
+isAPWorld = ".apworld" in sys.modules[__name__].__file__
+
+def getZipFile():
+    filename = sys.modules[__name__].__file__
+    apworldExt = ".apworld"
+    zipPath = pathlib.Path(filename[:filename.index(apworldExt) + len(apworldExt)])    
+    return (zipfile.ZipFile(zipPath), zipPath.stem)
+
+def openFile(resource: str, mode: str = "r", encoding: None = None):
+    if isAPWorld:
+        (zipFile, stem) = getZipFile()
+        with zipFile as zf:
+            zipFilePath = resource[resource.index(stem + "/"):]
+            if mode == 'rb':
+                return zf.open(zipFilePath, 'r')
+            else:
+                return io.TextIOWrapper(zf.open(zipFilePath, mode), encoding)
+    else:
+        return open(resource, mode)
+    
+def listDir(resource: str):
+    if isAPWorld:
+        (zipFile, stem) = getZipFile()
+        with zipFile as zf:
+            zipFilePath = resource[resource.index(stem + "/"):]
+            path = zipfile.Path(zf, zipFilePath + "/")
+            files = [f.at[len(zipFilePath)+1:] for f in path.iterdir()]
+            return files
+    else:
+        return os.listdir(resource)    
+    
+def exists(resource: str):
+    if isAPWorld:
+        (zipFile, stem) = getZipFile()
+        with zipFile as zf:
+            if (stem in resource):
+                zipFilePath = resource[resource.index(stem + "/"):]
+                path = zipfile.Path(zf, zipFilePath)
+                return path.exists()
+            else:
+                return False
+    else:
+        return os.path.exists(resource)   
 
 def isStdPreset(preset):
-    return preset in ['newbie', 'casual', 'regular', 'veteran', 'expert', 'master', 'samus', 'solution', 'Season_Races', 'SMRAT2021']
+    return preset in ['newbie', 'casual', 'regular', 'veteran', 'expert', 'master', 'samus', 'solution', 'Season_Races', 'SMRAT2021', 'Torneio_SGPT3']
 
 def getPresetDir(preset) -> str:
     if isStdPreset(preset):
@@ -253,7 +304,7 @@ class PresetLoader(object):
 class PresetLoaderJson(PresetLoader):
     # when called from the test suite
     def __init__(self, jsonFileName):
-        with open(jsonFileName) as jsonFile:
+        with openFile(jsonFileName) as jsonFile:
             self.params = json.load(jsonFile)
         super(PresetLoaderJson, self).__init__()
 
@@ -264,7 +315,8 @@ class PresetLoaderDict(PresetLoader):
         super(PresetLoaderDict, self).__init__()
 
 def getDefaultMultiValues():
-    from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils
+    from ..graph.graph_utils import GraphUtils
+    from ..utils.objectives import Objectives
     defaultMultiValues = {
         'startLocation': GraphUtils.getStartAccessPointNames(),
         'majorsSplit': ['Full', 'FullWithHUD', 'Major', 'Chozo', 'Scavenger'],
@@ -272,7 +324,10 @@ def getDefaultMultiValues():
         'progressionDifficulty': ['easier', 'normal', 'harder'],
         'morphPlacement': ['early', 'normal'], #['early', 'late', 'normal'],
         'energyQty': ['ultra sparse', 'sparse', 'medium', 'vanilla'],
-        'gravityBehaviour': ['Vanilla', 'Balanced', 'Progressive']
+        'gravityBehaviour': ['Vanilla', 'Balanced', 'Progressive'],
+        'areaRandomization': ['off', 'full', 'light'],
+        'objective': Objectives.getAllGoals(removeNothing=True),
+        'tourian': ['Vanilla', 'Fast', 'Disabled']
     }
     return defaultMultiValues
 
@@ -312,17 +367,16 @@ def loadRandoPreset(world, player, args):
     args.noVariaTweaks = not world.varia_tweaks[player].value
     args.maxDifficulty = diffs[world.max_difficulty[player].value]
     #args.suitsRestriction = world.suits_restriction[player].value
-    #args.hideItems = world.hide_items[player].value
+    args.hideItems = world.hide_items[player].value
     args.strictMinors = world.strict_minors[player].value
     args.noLayout = not world.layout_patches[player].value
     args.gravityBehaviour = defaultMultiValues["gravityBehaviour"][world.gravity_behaviour[player].value]
     args.nerfedCharge = world.nerfed_charge[player].value
-    args.area = world.area_randomization[player].value != 0
-    if args.area:
+    args.area = world.area_randomization[player].current_key
+    if args.area != "off":
         args.areaLayoutBase = not world.area_layout[player].value
-        args.lightArea = world.area_randomization[player].value == 1
-    #args.escapeRando
-    #args.noRemoveEscapeEnemies
+    args.escapeRando = world.escape_rando[player].value
+    args.noRemoveEscapeEnemies = not world.remove_escape_enemies[player].value
     args.doorsColorsRando = world.doors_colors_rando[player].value
     args.allowGreyDoors = world.allow_grey_doors[player].value
     args.bosses = world.boss_randomization[player].value
@@ -333,7 +387,12 @@ def loadRandoPreset(world, player, args):
     if world.fun_suits[player].value:
         args.superFun.append("Suits") 
 
-    ipsPatches = {"spin_jump_restart":"spinjumprestart", "rando_speed":"rando_speed", "elevators_doors_speed":"elevators_doors_speed", "refill_before_save":"refill_before_save"}
+    ipsPatches = {  "spin_jump_restart":"spinjumprestart", 
+                    "rando_speed":"rando_speed", 
+                    "elevators_speed":"elevators_speed",
+                    "fast_doors":"fast_doors",
+                    "refill_before_save":"refill_before_save",
+                    "relaxed_round_robin_cf":"relaxed_round_robin_cf"}
     for settingName, patchName in ipsPatches.items():
         if hasattr(world, settingName) and getattr(world, settingName)[player].value:
             args.patches.append(patchName + '.ips')
@@ -348,7 +407,6 @@ def loadRandoPreset(world, player, args):
     #args.majorsSplit
     #args.scavNumLocs
     #args.scavRandomized
-    #args.scavEscape
     args.startLocation = defaultMultiValues["startLocation"][world.start_location[player].value]
     #args.progressionDifficulty
     #args.progressionSpeed
@@ -357,6 +415,8 @@ def loadRandoPreset(world, player, args):
     args.powerBombQty = world.power_bomb_qty[player].value / float(10)
     args.minorQty = world.minor_qty[player].value
     args.energyQty = defaultMultiValues["energyQty"][world.energy_qty[player].value]
+    args.objective = world.objective[player].value
+    args.tourian = defaultMultiValues["tourian"][world.tourian[player].value]
     #args.minimizerN
     #args.minimizerTourian
 
@@ -374,7 +434,6 @@ def getRandomizerDefaultParameters():
     defaultParams['majorsSplitMultiSelect'] = defaultMultiValues['majorsSplit']
     defaultParams['scavNumLocs'] = "10"
     defaultParams['scavRandomized'] = "off"
-    defaultParams['scavEscape'] = "off"
     defaultParams['startLocation'] = "Landing Site"
     defaultParams['startLocationMultiSelect'] = defaultMultiValues['startLocation']
     defaultParams['maxDifficulty'] = 'hardcore'
@@ -393,9 +452,13 @@ def getRandomizerDefaultParameters():
     defaultParams['minorQty'] = "100"
     defaultParams['energyQty'] = "vanilla"
     defaultParams['energyQtyMultiSelect'] = defaultMultiValues['energyQty']
+    defaultParams['objectiveRandom'] = "off"
+    defaultParams['nbObjective'] = "4"
+    defaultParams['objective'] = ["kill all G4"]
+    defaultParams['objectiveMultiSelect'] = defaultMultiValues['objective']
+    defaultParams['tourian'] = "Vanilla"
     defaultParams['areaRandomization'] = "off"
     defaultParams['areaLayout'] = "off"
-    defaultParams['lightAreaRandomization'] = "off"
     defaultParams['doorsColorsRando'] = "off"
     defaultParams['allowGreyDoors'] = "off"
     defaultParams['escapeRando'] = "off"
@@ -403,7 +466,6 @@ def getRandomizerDefaultParameters():
     defaultParams['bossRandomization'] = "off"
     defaultParams['minimizer'] = "off"
     defaultParams['minimizerQty'] = "45"
-    defaultParams['minimizerTourian'] = "off"
     defaultParams['funCombat'] = "off"
     defaultParams['funMovement'] = "off"
     defaultParams['funSuits'] = "off"
@@ -412,8 +474,10 @@ def getRandomizerDefaultParameters():
     defaultParams['gravityBehaviour'] = "Balanced"
     defaultParams['gravityBehaviourMultiSelect'] = defaultMultiValues['gravityBehaviour']
     defaultParams['nerfedCharge'] = "off"
+    defaultParams['relaxed_round_robin_cf'] = "off"
     defaultParams['itemsounds'] = "on"
-    defaultParams['elevators_doors_speed'] = "on"
+    defaultParams['elevators_speed'] = "on"
+    defaultParams['fast_doors'] = "on"
     defaultParams['spinjumprestart'] = "off"
     defaultParams['rando_speed'] = "off"
     defaultParams['Infinite_Space_Jump'] = "off"
@@ -445,4 +509,22 @@ def fixEnergy(items):
         items.append('{}-ETank'.format(maxETank))
         if maxReserve > 0:
             items.append('{}-Reserve'.format(maxReserve))
+    
+    
+    # keep biggest crystal flash
+    cfs = [i for i in items if i.find('CrystalFlash') != -1]
+    if len(cfs) > 1:
+        maxCf = 0
+        for cf in cfs:
+            nCf = int(cf[0:cf.find('-CrystalFlash')])
+            if nCf > maxCf:
+                maxCf = nCf
+            items.remove(cf)
+        items.append('{}-CrystalFlash'.format(maxCf))
     return items
+
+def dumpErrorMsg(outFileName, msg):
+    print("DIAG: " + msg)
+    if outFileName is not None:
+        with open(outFileName, 'w') as jsonFile:
+            json.dump({"errorMsg": msg}, jsonFile)
