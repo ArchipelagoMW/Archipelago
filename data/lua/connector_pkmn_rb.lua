@@ -60,16 +60,18 @@ function generateLocationsChecked()
 	dexsanity = uRange(DexSanityAddress, 19)
 	rod = u8(RodAddress)
 
-	data = {}
+	data = {rod}
 
-	table.foreach(events, function(k, v) table.insert(data, v) end)
-	table.foreach(missables, function(k, v) table.insert(data, v) end)
-	table.foreach(hiddenitems, function(k, v) table.insert(data, v) end)
-	table.insert(data, rod)
+    categories = {events, missable, hiddenitems}
+    if compat > 1 then
+        table.insert(categories, dexsanity)
+    end
+    for _, category in ipairs(categories) do
+        for _, v in pairs(category) do 
+            table.insert(data, v) 
+        end
+    end
 
- 	if compat > 1 then
-	    table.foreach(dexsanity, function(k, v) table.insert(data, v) end)
-     end
     return data
 end
 
