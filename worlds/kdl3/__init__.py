@@ -266,10 +266,6 @@ class KDL3World(World):
                      lambda state: state.has("Ice", self.player) and state.has("Rick", self.player))
             add_rule(self.multiworld.get_location(LocationName.sand_canyon_5_u4, self.player),
                      lambda state: state.has("Ice", self.player) and state.has("Rick", self.player))
-            add_rule(self.multiworld.get_location(LocationName.cloudy_park_4_u1, self.player),
-                     lambda state: state.has("Coo", self.player))
-            add_rule(self.multiworld.get_location(LocationName.cloudy_park_4_m1, self.player),
-                     lambda state: state.has("Coo", self.player))
             add_rule(self.multiworld.get_location(LocationName.cloudy_park_6_u1, self.player),
                      lambda state: state.has("Cutter", self.player))
 
