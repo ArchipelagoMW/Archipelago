@@ -5,6 +5,11 @@
 - [Lingo](https://store.steampowered.com/app/1814170/Lingo/)
 - [Lingo Archipelago Randomizer](https://github.com/hatkirby/lingo-archipelago/releases)
 
+## Optional Software
+
+- [Archipelago Text Client](https://github.com/ArchipelagoMW/Archipelago/releases)
+- [Lingo AP Tracker](https://github.com/hatkirby/lingo-ap-tracker/releases)
+
 ## Installation
 
 1. Download the Lingo Archipelago Randomizer from the above link.
