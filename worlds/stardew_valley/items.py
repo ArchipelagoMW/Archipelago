@@ -208,6 +208,8 @@ def create_items(item_factory: StardewItemFactory, locations_count: int, items_t
         if item in items:
             items.remove(item)
 
+    remove_buffs_if_necessary(items, locations_count)
+
     assert len(items) <= locations_count, \
         "There should be at least as many locations as there are mandatory items"
     logger.debug(f"Created {len(items)} unique items")
@@ -431,3 +433,21 @@ def fill_with_resource_packs(item_factory: StardewItemFactory, world_options: op
         items.append(item_factory(resource_pack.create_name_from_multiplier(resource_pack_multiplier)))
 
     return items
+
+
+def remove_buffs_if_necessary(items, locations_count):
+    num_items = len(items)
+    if num_items <= locations_count:
+        return
+    while num_items > locations_count:
+        for item in items:
+            if item.name == "Movement Speed Bonus":
+                items.remove(item)
+                break
+        for item in items:
+            if item.name == "Luck Bonus":
+                items.remove(item)
+                break
+        if num_items == len(items):
+            return
+        num_items = len(items)
