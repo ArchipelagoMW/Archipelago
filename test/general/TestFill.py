@@ -230,9 +230,9 @@ class TestFillRestrictive(unittest.TestCase):
         multi_world.state.sweep_for_events()  # collect everything
 
         # all of player2's locations and items should be accessible (not all of player1's)
-        for i in range(0, 3):
-            self.assertTrue(multi_world.state.has(player2.prog_items[i].name, player2.id),
-                            f'{player2.prog_items[i]} is unreachable in {player2.prog_items[i].location}')
+        for item in player2.prog_items:
+            self.assertTrue(multi_world.state.has(item.name, player2.id),
+                            f'{item} is unreachable in {item.location}')
 
     def test_reversed_fill(self):
         multi_world = generate_multi_world()
