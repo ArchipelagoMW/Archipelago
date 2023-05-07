@@ -14,7 +14,7 @@ from worlds.AutoWorld import WebWorld, World
 from .data import PokemonEmeraldData, MapData, SpeciesData, EncounterTableData, LearnsetMove, TrainerData, TrainerPartyData, TrainerPokemonData, data as emerald_data
 from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification, offset_item_value
 from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
-from .options import RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms, RandomizeStarters, ItemPoolType, LevelUpMoves, TmCompatibility, HmCompatibility, get_option_value, option_definitions
+from .options import RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms, RandomizeStarters, LevelUpMoves, ItemPoolType, LevelUpMoves, TmCompatibility, HmCompatibility, get_option_value, option_definitions
 from .pokemon import get_random_species, get_species_by_id, get_species_by_name, get_random_move, get_random_damaging_move
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path
@@ -497,7 +497,7 @@ class PokemonEmeraldWorld(World):
         if get_option_value(self.multiworld, self.player, "abilities") == Toggle.option_true:
             randomize_abilities()
 
-        if get_option_value(self.multiworld, self.player, "abilities") == Toggle.option_true:
+        if get_option_value(self.multiworld, self.player, "level_up_moves") != LevelUpMoves.option_vanilla:
             randomize_learnsets()
 
         randomize_tm_hm_compatibility()
