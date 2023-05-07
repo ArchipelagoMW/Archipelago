@@ -4,7 +4,7 @@ def dig_to_mines_floor(floor: int) -> str:
 class SVEntrance:
     to_stardew_valley = "To Stardew Valley"
     to_farmhouse = "To Farmhouse"
-    outside_to_farm = "Farmhouse to Farm"
+    farm_to_farmhouse = "Farm to Farmhouse"
     downstairs_to_cellar = "Farmhouse to Cellar"
     farm_to_backwoods = "Farm to Backwoods"
     farm_to_bus_stop = "Farm to Bus Stop"
@@ -76,6 +76,7 @@ class SVEntrance:
     enter_locker_room = "Bathhouse Entrance to Locker Room"
     enter_public_bath = "Locker Room to Public Bath"
     enter_witch_swamp = "Witch Warp Cave to Witch's Swamp"
+    enter_witch_hut = "Witch's Swamp to Witch's Hut"
     enter_quarry_mine_entrance = "Quarry to Quarry Mine Entrance"
     enter_quarry_mine = "Quarry Mine Entrance to Quarry Mine"
     enter_oasis = "Desert to Oasis"

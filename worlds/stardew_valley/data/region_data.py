@@ -28,6 +28,7 @@ class SVRegion:
     sewers = "Sewers"
     mutant_bug_lair = "Mutant Bug Lair"
     witch_swamp = "Witch's Swamp"
+    witch_hut = "Witch's Hut"
     island_south = "Island South"
     island_south_east = "Island Southeast"
     pirate_cove = "Pirate Cove"

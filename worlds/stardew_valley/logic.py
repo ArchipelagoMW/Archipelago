@@ -92,6 +92,8 @@ class StardewLogic:
         self.crop_rules.update({crop.name: self.can_grow_crop(crop) for crop in all_crops})
         self.crop_rules.update({
             "Coffee Bean": (self.has_season("Spring") | self.has_season("Summer")) & self.has_traveling_merchant(),
+            "Ancient Fruit": (self.received("Ancient Seeds") | self.received("Ancient Seeds Recipe")) &
+                             self.can_reach_region(SVRegion.greenhouse) & self.has("Seed Maker"),
         })
 
         self.item_rules.update({
@@ -117,10 +119,11 @@ class StardewLogic:
             "Broken Glasses": self.can_crab_pot(),
             "Bug Meat": self.can_mine_in_the_mines_floor_1_40(),
             "Cactus Fruit": self.can_reach_region(SVRegion.desert),
+            "Cask": self.has_house(3) & self.can_reach_region(SVRegion.cellar),
             "Cave Carrot": self.can_mine_to_floor(10),
             "Caviar": self.has("Preserves Jar") & self.has("Sturgeon Roe"),
             "Chanterelle": self.has_season("Fall") & self.can_reach_region(SVRegion.secret_woods),
-            "Cheese Press": self.has_skill_level("Farming", 6) & self.has("Hardwood") & self.has("Copper Bar"),
+            "Cheese Press": (self.has_skill_level("Farming", 6) & self.has("Hardwood") & self.has("Copper Bar")),
             "Cheese": (self.has("Cow Milk") & self.has("Cheese Press")) |
                       (self.can_reach_region(SVRegion.desert) & self.has("Emerald")),
             "Cheese Cauliflower": self.has(["Cheese", "Cauliflower"]) & self.has_relationship("Pam", 3) &
@@ -139,8 +142,8 @@ class StardewLogic:
             "Cockle": True_(),
             "Coconut": self.can_reach_region(SVRegion.desert),
             "Coffee": (self.has("Keg") & self.has("Coffee Bean")) | self.has("Coffee Maker") |
-                      self.can_spend_money(300) | self.has("Hot Java Ring"),
-            "Coffee Maker": False_(),
+                      (self.can_spend_money(300) & self.can_reach_region(SVRegion.saloon)) | self.has("Hot Java Ring"),
+            "Coffee Maker": self.received("Coffee Maker"),
             "Common Mushroom": self.has_season("Fall") |
                                (self.has_season("Spring") & self.can_reach_region(SVRegion.secret_woods)),
             "Complete Breakfast": self.can_cook() & self.has_season("Spring") & self.has_lived_months(4) &
@@ -165,6 +168,7 @@ class StardewLogic:
             "Crystal Fruit": self.has_season("Winter"),
             "Daffodil": self.has_season("Spring"),
             "Dandelion": self.has_season("Spring"),
+            "Dinosaur": self.has_building("Big Coop") & self.has("Dinosaur Egg"),
             "Dish O' The Sea": self.can_cook() & self.has_skill_level("Fishing", 3) &
                                self.has(["Sardine", "Hashbrowns"]),
             "Dorado": self.can_fish(78) & self.has_season("Summer"),
@@ -451,7 +455,7 @@ class StardewLogic:
             "Aquatic Research": self.has("Pufferfish"),
             "A Soldier's Star": self.has_relationship("Kent") & self.has("Starfruit"),
             "Mayor's Need": self.has("Truffle Oil"),
-            "Wanted: Lobster": self.has("Lobster"),
+            "Wanted: Lobster": self.has_season("Fall") & self.has("Lobster"),
             "Pam Needs Juice": self.has("Battery Pack"),
             "Fish Casserole": self.has_relationship("Jodi", 4) & self.has("Largemouth Bass"),
             "Catch A Squid": self.has("Squid"),
@@ -515,7 +519,7 @@ class StardewLogic:
                 SVRegion.beach) & self.has_year_two() & self.can_spend_money(1200),
             "Lupini: The Serpent": self.has_season("Winter") & self.can_reach_region(
                 SVRegion.beach) & self.has_year_three() & self.can_spend_money(1200),
-            "Lupini: Tropical Fish #173": self.has_season("Winter") & self.can_reach_region(
+            "Lupini: 'Tropical Fish #173'": self.has_season("Winter") & self.can_reach_region(
                 SVRegion.beach) & self.has_year_three() & self.can_spend_money(1200),
             "Lupini: Land Of Clay": self.has_season("Winter") & self.can_reach_region(
                 SVRegion.beach) & self.has_year_three() & self.can_spend_money(1200),
@@ -742,7 +746,7 @@ class StardewLogic:
         else:
             item_rule = self.received(seed.name)
         season_rule = self.has_any_season(seed.seasons)
-        region_rule = self.can_reach_any_region(seed.regions)
+        region_rule = self.can_reach_all_regions(seed.regions)
         currency_rule = True_()
         if seed.name == "Pineapple Seeds":
             currency_rule = self.has("Magma Cap")
@@ -1190,7 +1194,7 @@ class StardewLogic:
         good_fruits = ["Apple", "Banana", "Coconut", "Crystal Fruit", "Mango", "Orange", "Peach", "Pomegranate",
                        "Strawberry", "Melon", "Rhubarb", "Pineapple", "Ancient Fruit", "Starfruit", ]
         fruit_rule = Or([self.has(fruit) for fruit in good_fruits])
-        good_vegetables = ["Amaranth", "Artichoke", "Beet", "Cauliflower", "Fiddlehead Fern	", "Kale",
+        good_vegetables = ["Amaranth", "Artichoke", "Beet", "Cauliflower", "Fiddlehead Fern", "Kale",
                            "Radish", "Taro Root", "Yam", "Red Cabbage", "Pumpkin"]
         vegetable_rule = Or([self.has(vegetable) for vegetable in good_vegetables])
 

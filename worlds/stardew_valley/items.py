@@ -170,6 +170,7 @@ def create_unique_items(item_factory: StardewItemFactory, world_options: Stardew
     create_wizard_buildings(item_factory, world_options, items)
     create_carpenter_buildings(item_factory, world_options, items)
     items.append(item_factory("Beach Bridge"))
+    items.append(item_factory("Dark Talisman"))
     items.extend(create_tv_channels(item_factory))
     create_special_quest_rewards(item_factory, items)
     create_stardrops(item_factory, items)

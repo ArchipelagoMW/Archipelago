@@ -19,37 +19,7 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
               current_bundles: Dict[str, Bundle]):
     all_location_names = list(location.name for location in multi_world.get_locations(player))
 
-    for floor in range(5, 120 + 5, 5):
-        MultiWorldRules.set_rule(multi_world.get_entrance(dig_to_mines_floor(floor), player),
-                                 logic.can_mine_to_floor(floor).simplify())
-
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_tide_pools, player),
-                             logic.received("Beach Bridge").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_quarry, player),
-                             logic.received("Bridge Repair").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_secret_woods, player),
-                             logic.has_tool("Axe", "Iron").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.forest_to_sewers, player),
-                             logic.has_rusty_key().simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.town_to_sewers, player),
-                             logic.has_rusty_key().simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.take_bus_to_desert, player),
-                             logic.received("Bus Repair").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_skull_cavern, player),
-                             logic.received("Skull Key").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.mine_to_skull_cavern_floor_100, player),
-                             logic.can_mine_perfectly_in_the_skull_cavern().simplify())
-
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.use_desert_obelisk, player),
-                             logic.received("Desert Obelisk").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.use_island_obelisk, player),
-                             logic.received("Island Obelisk").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.use_farm_obelisk, player),
-                             logic.received("Farm Obelisk").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.talk_to_traveling_merchant, player),
-                             logic.has_traveling_merchant())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_greenhouse, player),
-                             logic.received("Greenhouse"))
+    set_entrance_rules(logic, multi_world, player)
 
     set_ginger_island_rules(logic, multi_world, player, world_options)
 
@@ -125,6 +95,7 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
     set_museumsanity_rules(all_location_names, logic, multi_world, player, world_options)
     set_friendsanity_rules(all_location_names, logic, multi_world, player)
     set_backpack_rules(logic, multi_world, player, world_options)
+    set_festival_rules(all_location_names, logic, multi_world, player)
 
     MultiWorldRules.add_rule(multi_world.get_location("Old Master Cannoli", player),
                              logic.has("Sweet Gem Berry").simplify())
@@ -133,6 +104,60 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
 
     set_traveling_merchant_rules(logic, multi_world, player)
     set_arcade_machine_rules(logic, multi_world, player, world_options)
+
+
+def set_entrance_rules(logic, multi_world, player):
+    for floor in range(5, 120 + 5, 5):
+        MultiWorldRules.set_rule(multi_world.get_entrance(dig_to_mines_floor(floor), player),
+                                 logic.can_mine_to_floor(floor).simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_tide_pools, player),
+                             logic.received("Beach Bridge").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_quarry, player),
+                             logic.received("Bridge Repair").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_secret_woods, player),
+                             logic.has_tool("Axe", "Iron").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.forest_to_sewers, player),
+                             logic.has_rusty_key().simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.town_to_sewers, player),
+                             logic.has_rusty_key().simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.take_bus_to_desert, player),
+                             logic.received("Bus Repair").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_skull_cavern, player),
+                             logic.received("Skull Key").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.mine_to_skull_cavern_floor_100, player),
+                             logic.can_mine_perfectly_in_the_skull_cavern().simplify())
+
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.use_desert_obelisk, player),
+                             logic.received("Desert Obelisk").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.use_island_obelisk, player),
+                             logic.received("Island Obelisk").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.use_farm_obelisk, player),
+                             logic.received("Farm Obelisk").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.talk_to_traveling_merchant, player),
+                             logic.has_traveling_merchant())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_greenhouse, player),
+                             logic.received("Greenhouse"))
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.mountain_to_adventurer_guild, player),
+                             logic.received("Adventurer's Guild"))
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.mountain_to_railroad, player),
+                             logic.has_lived_months(2))
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_witch_warp_cave, player),
+                             logic.received("Dark Talisman"))
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_witch_hut, player),
+                             logic.has("Void Mayonnaise"))
+
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_harvey_room, player),
+                             logic.has_relationship("Harvey", 2))
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.mountain_to_maru_room, player),
+                             logic.has_relationship("Maru", 2))
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.forest_to_leah_cottage, player),
+                             logic.has_relationship("Leah", 2))
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_elliott_house, player),
+                             logic.has_relationship("Elliott", 2))
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_sunroom, player),
+                             logic.has_relationship("Caroline", 2))
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_wizard_basement, player),
+                             logic.has_relationship("Wizard", 4))
 
 
 def set_ginger_island_rules(logic: StardewLogic, multi_world, player, world_options: StardewOptions):
@@ -344,6 +369,13 @@ def set_backpack_rules(logic: StardewLogic, multi_world: MultiWorld, player: int
                                  logic.can_spend_money(2000).simplify())
         MultiWorldRules.set_rule(multi_world.get_location("Deluxe Pack", player),
                                  (logic.can_spend_money(10000) & logic.received("Progressive Backpack")).simplify())
+
+
+def set_festival_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player):
+    for festival in locations.locations_by_tag[LocationTags.FESTIVAL]:
+        if festival.name in all_location_names:
+            MultiWorldRules.set_rule(multi_world.get_location(festival.name, player),
+                                     logic.festival_rules[festival.name].simplify())
 
 
 def set_traveling_merchant_rules(logic: StardewLogic, multi_world: MultiWorld, player: int):

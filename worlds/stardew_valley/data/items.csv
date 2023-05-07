@@ -150,7 +150,7 @@ id,name,classification,groups
 162,Cactus Seeds,progression,SEED_SHUFFLE
 163,Magic Rock Candy,useful,"MUSEUM,RESOURCE_PACK,RESOURCE_PACK_USEFUL"
 164,Ancient Seeds Recipe,progression,MUSEUM
-165,Ancient Seeds,useful,MUSEUM
+165,Ancient Seeds,progression,"MUSEUM,RESOURCE_PACK,RESOURCE_PACK_USEFUL"
 166,Traveling Merchant Metal Detector,progression,MUSEUM
 167,Alex: 1 <3,progression,FRIENDSANITY
 168,Elliott: 1 <3,progression,FRIENDSANITY
@@ -266,6 +266,7 @@ id,name,classification,groups
 279,The Queen of Sauce,useful,"TV_CHANNEL"
 280,Fishing Information Broadcasting Service,useful,"TV_CHANNEL"
 281,Sinister Signal,useful,"TV_CHANNEL"
+282,Dark Talisman,progression,
 4001,Burnt,trap,TRAP
 4002,Darkness,trap,TRAP
 4003,Frozen,trap,TRAP
@@ -531,3 +532,20 @@ id,name,classification,groups
 5245,Golden Walnut,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
 5246,Fairy Dust Recipe,useful,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL"
 5247,Fairy Dust,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+5248,Seed Maker,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+5249,Keg,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+5250,Cask,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+5251,Preserves Jar,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+5252,Bee House,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+5253,Garden Pot,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+5254,Cheese Press,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+5255,Mayonnaise Machine,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+5256,Loom,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+5257,Oil Maker,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+5258,Recycling Machine,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+5259,Worm Bin,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+5260,Tapper,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+5261,Heavy Tapper,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
+5262,Slime Incubator,useful,"RESOURCE_PACK"
+5263,Slime Egg-Press,useful,"RESOURCE_PACK"
+5264,Crystalarium,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL"
